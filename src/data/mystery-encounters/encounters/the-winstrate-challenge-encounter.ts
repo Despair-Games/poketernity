@@ -31,8 +31,8 @@ import { PartyHealPhase } from "#app/phases/party-heal-phase";
 import { ShowTrainerPhase } from "#app/phases/show-trainer-phase";
 import { ReturnPhase } from "#app/phases/return-phase";
 import i18next from "i18next";
-import { ModifierTier } from "#app/modifier/modifier-tier";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
+import { ModifierTier } from "#enums/modifier-tier";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PostBattleInitAbAttr } from "#app/data/ab-attrs/post-battle-init-ab-attr";
 

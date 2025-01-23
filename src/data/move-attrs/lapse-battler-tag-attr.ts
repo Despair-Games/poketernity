@@ -17,11 +17,7 @@ export class LapseBattlerTagAttr extends MoveEffectAttr {
     this.tagTypes = tagTypes;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move)) {
-      return false;
-    }
-
+  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     for (const tagType of this.tagTypes) {
       (this.selfTarget ? user : target).lapseTag(tagType);
     }

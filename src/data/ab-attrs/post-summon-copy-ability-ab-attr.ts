@@ -1,5 +1,4 @@
 import { allAbilities } from "#app/data/ability";
-import { setAbilityRevealed } from "#app/data/ability-utils";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -43,7 +42,7 @@ export class PostSummonCopyAbilityAbAttr extends PostSummonAbAttr {
       this.target = target;
       this.targetAbilityName = allAbilities[target.getAbility().id].name;
       pokemon.summonData.ability = target.getAbility().id;
-      setAbilityRevealed(target);
+      target.battleData.abilitiesRevealed.push(target.getAbility().id);
       pokemon.updateInfo();
     }
 

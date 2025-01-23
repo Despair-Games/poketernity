@@ -18,10 +18,6 @@ export class ShowAbilityPhase extends PokemonPhase {
 
     if (pokemon) {
       globalScene.abilityBar.showAbility(pokemon, this.passive);
-
-      if (pokemon.battleData) {
-        pokemon.battleData.abilityRevealed = true;
-      }
     }
 
     this.end();

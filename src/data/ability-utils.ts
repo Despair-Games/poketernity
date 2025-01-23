@@ -5,17 +5,6 @@ import { Abilities } from "#enums/abilities";
 import { Species } from "#enums/species";
 
 /**
- * Sets the ability of a Pokémon as revealed.
- *
- * @param pokemon - The Pokémon whose ability is being revealed.
- */
-export function setAbilityRevealed(pokemon: Pokemon): void {
-  if (pokemon.battleData) {
-    pokemon.battleData.abilityRevealed = true;
-  }
-}
-
-/**
  * Returns the Pokemon with weather-based forms
  */
 export function getPokemonWithWeatherBasedForms() {

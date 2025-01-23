@@ -8,7 +8,7 @@ import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-d
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { isNullOrUndefined } from "#app/utils";
 
 /**
@@ -74,7 +74,7 @@ export class PostMysteryEncounterPhase extends Phase {
         }
 
         i++;
-        ui.setMode(Mode.MESSAGE);
+        ui.setMode(UiMode.MESSAGE);
         if (title) {
           ui.showDialogue(text ?? "", title, null, nextAction, 0, i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0);
         } else {

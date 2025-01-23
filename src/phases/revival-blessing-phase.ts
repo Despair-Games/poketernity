@@ -3,8 +3,9 @@ import { globalScene } from "#app/global-scene";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
-import PartyUiHandler, { PartyUiMode } from "#app/ui/party-ui-handler";
-import { Mode } from "#app/ui/ui";
+import PartyUiHandler from "#app/ui/party-ui-handler";
+import { PartyUiMode } from "#enums/party-ui-mode";
+import { UiMode } from "#enums/ui-mode";
 import { toDmgValue } from "#app/utils";
 import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
@@ -22,7 +23,7 @@ export class RevivalBlessingPhase extends BattlePhase {
 
   public override start(): void {
     globalScene.ui.setMode(
-      Mode.PARTY,
+      UiMode.PARTY,
       PartyUiMode.REVIVAL_BLESSING,
       this.user.getFieldIndex(),
       (slotIndex: number) => {
@@ -54,7 +55,7 @@ export class RevivalBlessingPhase extends BattlePhase {
             }
           }
         }
-        globalScene.ui.setMode(Mode.MESSAGE).then(() => this.end());
+        globalScene.ui.setMode(UiMode.MESSAGE).then(() => this.end());
       },
       PartyUiHandler.FilterFainted,
     );

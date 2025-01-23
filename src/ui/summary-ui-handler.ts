@@ -1,11 +1,11 @@
-import { starterColors } from "#app/battle-scene";
+import { starterColors } from "#app/data/starter-colors";
 import { globalScene } from "#app/global-scene";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import UiHandler from "#app/ui/ui-handler";
 import {
   getLocalizedSpriteKey,
   rgbHexToRgba,
-  padInt,
+  leftPad,
   getEnumValues,
   fixedNumber,
   toReadableString,
@@ -16,7 +16,8 @@ import { getStarterValueFriendshipCap, speciesStarterCosts } from "#app/data/bal
 import { argbFromRgba } from "@material/material-color-utilities";
 import { getTypeRgb } from "#app/data/type";
 import { Type } from "#enums/type";
-import { TextStyle, addBBCodeTextObject, addTextObject, getBBCodeFrag } from "#app/ui/text";
+import { addBBCodeTextObject, addTextObject, getBBCodeFrag } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
 import type { Move } from "#app/data/move";
 import { MoveCategory } from "#enums/move-category";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
@@ -37,16 +38,12 @@ import { PlayerGender } from "#enums/player-gender";
 import { Stat, PERMANENT_STATS, getStatKey } from "#enums/stat";
 import { Nature } from "#enums/nature";
 import { settings } from "#app/system/settings/settings-manager";
+import { SummaryUiMode } from "#enums/summary-ui-mode";
 
 enum Page {
   PROFILE,
   STATS,
   MOVES,
-}
-
-export enum SummaryUiMode {
-  DEFAULT,
-  LEARN_MOVE,
 }
 
 /** Holds all objects related to an ability for each iteration */
@@ -124,7 +121,7 @@ export default class SummaryUiHandler extends UiHandler {
   private selectCallback: Function | null;
 
   constructor() {
-    super(Mode.SUMMARY);
+    super(UiMode.SUMMARY);
   }
 
   setup() {
@@ -334,7 +331,7 @@ export default class SummaryUiHandler extends UiHandler {
     this.candyIcon.setTint(argbFromRgba(rgbHexToRgba(colorScheme[0])));
     this.candyOverlay.setTint(argbFromRgba(rgbHexToRgba(colorScheme[1])));
 
-    this.numberText.setText(padInt(this.pokemon.species.speciesId, 4));
+    this.numberText.setText(leftPad(this.pokemon.species.speciesId, 4));
     this.numberText.setColor(this.getTextColor(!this.pokemon.isShiny() ? TextStyle.SUMMARY : TextStyle.SUMMARY_GOLD));
     this.numberText.setShadowColor(
       this.getTextColor(!this.pokemon.isShiny() ? TextStyle.SUMMARY : TextStyle.SUMMARY_GOLD, true),
@@ -490,7 +487,7 @@ export default class SummaryUiHandler extends UiHandler {
     }
 
     const ui = this.getUi();
-    const fromPartyMode = ui.handlers[Mode.PARTY].active;
+    const fromPartyMode = ui.handlers[UiMode.PARTY].active;
     let success = false;
     let error = false;
 
@@ -587,9 +584,9 @@ export default class SummaryUiHandler extends UiHandler {
           }
 
           if (!fromPartyMode) {
-            ui.setMode(Mode.MESSAGE);
+            ui.setMode(UiMode.MESSAGE);
           } else {
-            ui.setMode(Mode.PARTY);
+            ui.setMode(UiMode.PARTY);
           }
         }
         success = true;
@@ -1066,7 +1063,7 @@ export default class SummaryUiHandler extends UiHandler {
           ppOverlay.setOrigin(0, 1);
           this.extraMoveRowContainer.add(ppOverlay);
 
-          const pp = padInt(this.newMove?.pp!, 2, "  "); // TODO: is this bang correct?
+          const pp = leftPad(this.newMove?.pp!, 2, "  "); // TODO: is this bang correct?
           const ppText = addTextObject(173, 1, `${pp}/${pp}`, TextStyle.WINDOW);
           ppText.setOrigin(0, 1);
           this.extraMoveRowContainer.add(ppText);
@@ -1103,7 +1100,7 @@ export default class SummaryUiHandler extends UiHandler {
           if (move) {
             const maxPP = move.getMovePp();
             const pp = maxPP - move.ppUsed;
-            ppText.setText(`${padInt(pp, 2, "  ")}/${padInt(maxPP, 2, "  ")}`);
+            ppText.setText(`${leftPad(pp, 2, "  ")}/${leftPad(maxPP, 2, "  ")}`);
           }
 
           moveRowContainer.add(ppText);

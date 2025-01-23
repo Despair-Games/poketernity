@@ -32,7 +32,7 @@ import type { Egg } from "#app/data/egg";
 import { vouchers } from "#app/system/voucher";
 import { VoucherType } from "#enums/voucher-type";
 import { AES, enc } from "crypto-js";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
 import { Nature } from "#enums/nature";
 import { GameStats } from "#app/system/game-stats";
@@ -1411,7 +1411,7 @@ export class GameData {
             `Your ${dataName} data will be overridden and the page will reload. Proceed?`,
             null,
             () => {
-              globalScene.ui.setOverlayMode(Mode.CONFIRM, importDataConfirmOptions);
+              globalScene.ui.setOverlayMode(UiMode.CONFIRM, importDataConfirmOptions);
             },
           );
         };

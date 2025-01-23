@@ -1,7 +1,8 @@
 import { globalScene } from "#app/global-scene";
 import { Achv } from "#app/system/achv";
 import type { Voucher } from "#app/system/voucher";
-import { TextStyle, addTextObject } from "#app/ui/text";
+import { addTextObject } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
 
 export default class AchvBar extends Phaser.GameObjects.Container {
   private defaultWidth: number;

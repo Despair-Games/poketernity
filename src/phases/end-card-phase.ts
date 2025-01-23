@@ -1,6 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { addTextObject, TextStyle } from "#app/ui/text";
+import { addTextObject } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
 import { PlayerGender } from "#enums/player-gender";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";

@@ -49,8 +49,8 @@ import {
 import i18next from "i18next";
 import MoveInfoOverlay from "#app/ui/move-info-overlay";
 import { allMoves } from "#app/data/all-moves";
-import { ModifierTier } from "#app/modifier/modifier-tier";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
+import { ModifierTier } from "#enums/modifier-tier";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 

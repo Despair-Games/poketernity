@@ -3,15 +3,15 @@ import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { Move } from "#app/data/move";
-import { type MoveEffectAttrOptions, MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";
+import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "./chance-based-move-effect-attr";
 
 /**
  * Set of optional parameters that may be applied to stat stage changing effects
  * @extends MoveEffectAttrOptions
  * @see {@linkcode StatStageChangeAttr}
  */
-interface StatStageChangeAllOppsAttrOptions extends MoveEffectAttrOptions {
+interface StatStageChangeAllOppsAttrOptions extends ChanceBasedMoveEffectAttrOptions {
   /** If defined, needs to be met in order for the stat change to apply */
   condition?: MoveConditionFunc;
   /** `true` to display a message */
@@ -36,7 +36,7 @@ interface StatStageChangeAllOppsAttrOptions extends MoveEffectAttrOptions {
  * @extends MoveEffectAttr
  */
 
-export class StatStageChangeAllOppsAttr extends MoveEffectAttr {
+export class StatStageChangeAllOppsAttr extends ChanceBasedMoveEffectAttr {
   public stats: BattleStat[];
   public stages: number;
   public override options?: StatStageChangeAllOppsAttrOptions;
@@ -64,31 +64,26 @@ export class StatStageChangeAllOppsAttr extends MoveEffectAttr {
     return this.options?.showMessage ?? true;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (this.condition && !this.condition(user, target, move)) {
       return false;
     }
 
-    const moveChance = this.getMoveChance(user, target, move, false, true);
-    if (moveChance < 0 || moveChance === 100 || user.randSeedInt(100) < moveChance) {
-      let allOpps: Pokemon[];
-      if (target.isPlayer()) {
-        allOpps = globalScene.getPlayerField();
-      } else {
-        allOpps = globalScene.getEnemyField();
-      }
-      allOpps = allOpps.filter((p) => p.isActive(true));
-      allOpps.forEach((opp) =>
-        globalScene.unshiftPhase(
-          new StatStageChangePhase(opp.getBattlerIndex(), false, this.stats, this.stages, {
-            showMessage: this.showMessage,
-          }),
-        ),
-      );
-      return true;
+    let allOpps: Pokemon[];
+    if (target.isPlayer()) {
+      allOpps = globalScene.getPlayerField();
+    } else {
+      allOpps = globalScene.getEnemyField();
     }
-
-    return false;
+    allOpps = allOpps.filter((p) => p.isActive(true));
+    allOpps.forEach((opp) =>
+      globalScene.unshiftPhase(
+        new StatStageChangePhase(opp.getBattlerIndex(), false, this.stats, this.stages, {
+          showMessage: this.showMessage,
+        }),
+      ),
+    );
+    return true;
   }
 
   override getTargetBenefitScore(_user: Pokemon, target: Pokemon, _move: Move): number {

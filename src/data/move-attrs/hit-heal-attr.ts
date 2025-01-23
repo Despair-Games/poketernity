@@ -32,7 +32,7 @@ export class HitHealAttr extends MoveEffectAttr {
    * If the target has the {@linkcode ReverseDrainAbAttr}, all healing is instead converted
    * to damage to the user.
    */
-  override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     let healAmount = 0;
     let message = "";
     const reverseDrain = target.hasAbilityWithAttr(ReverseDrainAbAttr, false);

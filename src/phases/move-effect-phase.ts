@@ -42,6 +42,7 @@ import { Moves } from "#enums/moves";
 import i18next from "i18next";
 import { FaintPhase } from "./faint-phase";
 import { HitCheckPhase } from "./hit-check-phase";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
 
 export class MoveEffectPhase extends HitCheckPhase {
   private moveHistoryEntry: TurnMove;
@@ -360,8 +361,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     const { result: result, damage: dmg } = target.getAttackDamage(
       user,
       move,
-      false,
-      false,
+      AbilityApplyMode.DEFAULT,
       isCritical,
       false,
       effectiveness,

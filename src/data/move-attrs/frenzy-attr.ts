@@ -19,11 +19,7 @@ export class FrenzyAttr extends MoveEffectAttr {
   }
 
   /** Adds or progresses the user's {@linkcode BattlerTagType.FRENZY | Frenzy} status */
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move)) {
-      return false;
-    }
-
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (!user.getTag(BattlerTagType.FRENZY) && !user.getMoveQueue().length) {
       const turnCount = user.randSeedIntRange(1, 2);
       new Array(turnCount)

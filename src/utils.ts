@@ -20,7 +20,7 @@ export function toReadableString(str: string): string {
     .join(" ");
 }
 
-export function randomString(length: number, seeded: boolean = false) {
+export function randomString(length: number, seeded: boolean = false): string {
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let result = "";
 
@@ -32,11 +32,7 @@ export function randomString(length: number, seeded: boolean = false) {
   return result;
 }
 
-export function shiftCharCodes(str: string, shiftCount: number) {
-  if (!shiftCount) {
-    shiftCount = 0;
-  }
-
+export function shiftCharCodes(str: string, shiftCount: number = 0): string {
   let newStr = "";
 
   for (let i = 0; i < str.length; i++) {
@@ -68,10 +64,7 @@ export function randSeedGauss(stdev: number, mean: number = 0): number {
   return z * stdev + mean;
 }
 
-export function padInt(value: number, length: number, padWith?: string): string {
-  if (!padWith) {
-    padWith = "0";
-  }
+export function leftPad(value: number | string, length: number, padWith: string = "0"): string {
   let valueStr = value.toString();
   while (valueStr.length < length) {
     valueStr = `${padWith}${valueStr}`;
@@ -234,7 +227,7 @@ export function formatFancyLargeNumber(number: number, rounded: number = 3): str
   }`;
 }
 
-export function formatMoney(format: MoneyFormat, amount: number) {
+export function formatMoney(format: MoneyFormat, amount: number): string {
   if (format === MoneyFormat.ABBREVIATED) {
     return formatFancyLargeNumber(amount);
   }
@@ -335,7 +328,7 @@ export function getCookie(cName: string): string {
  * with a GET request to verify if a server is running,
  * sets isLocalServerConnected based on results
  */
-export async function localPing() {
+export async function localPing(): Promise<void> {
   if (isLocal) {
     const titleStats = await api.getGameTitleStats();
     isLocalServerConnected = !!titleStats;
@@ -376,7 +369,6 @@ export class NumberHolder {
  * and a constant or fixed number.
  * This is used in the game speed system to differentiate between a fixed game speed and a dynamic one.
  * @see `transformValue` in {@linkcode initGameSpeed}
- * @extends NumberHolder
  */
 export class FixedNumber {
   public readonly value: number;
@@ -419,7 +411,7 @@ export function toCamelCaseString(unformattedText: string): string {
     .join("");
 }
 
-export function rgbToHsv(r: number, g: number, b: number) {
+export function rgbToHsv(r: number, g: number, b: number): number[] {
   const v = Math.max(r, g, b);
   const c = v - Math.min(r, g, b);
   const h = c && (v === r ? (g - b) / c : v === g ? 2 + (b - r) / c : 4 + (r - g) / c);
@@ -442,7 +434,7 @@ export function deltaRgb(rgb1: number[], rgb2: number[]): number {
   return Math.ceil(Math.sqrt(2 * drp2 + 4 * dgp2 + 3 * dbp2 + (t * (drp2 - dbp2)) / 256));
 }
 
-export function rgbHexToRgba(hex: string) {
+export function rgbHexToRgba(hex: string): { r: number; g: number; b: number; a: number } {
   const color = hex.match(/^([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i) ?? ["000000", "00", "00", "00"];
   return {
     r: parseInt(color[1], 16),
@@ -526,7 +518,7 @@ export function printContainerList(container: Phaser.GameObjects.Container): voi
  * @param maxLength - The maximum length of the truncated string, defaults to 10.
  * @returns The truncated string with an ellipsis if it was longer than maxLength.
  */
-export function truncateString(str: String, maxLength: number = 10) {
+export function truncateString(str: string, maxLength: number = 10): string {
   // Check if the string length exceeds the maximum length
   if (str.length > maxLength) {
     // Truncate the string and add an ellipsis
@@ -543,8 +535,7 @@ export function truncateString(str: String, maxLength: number = 10) {
  * @returns A new object that is a deep copy of the input.
  */
 export function deepCopy(values: object): object {
-  // Convert the object to a JSON string and parse it back to an object to perform a deep copy
-  return JSON.parse(JSON.stringify(values));
+  return Phaser.Utils.Objects.DeepCopy(values);
 }
 
 /**
@@ -553,7 +544,7 @@ export function deepCopy(values: object): object {
  * @param input - The string to be converted.
  * @returns The converted string with words capitalized and separated by underscores.
  */
-export function reverseValueToKeySetting(input) {
+export function reverseValueToKeySetting(input: string): string {
   // Split the input string into an array of words
   const words = input.split(" ");
   // Capitalize the first letter of each word and convert the rest to lowercase
@@ -576,7 +567,7 @@ export function capitalizeString(
   sep: string,
   lowerFirstChar: boolean = true,
   returnWithSpaces: boolean = false,
-) {
+): string | null {
   if (str) {
     const splitedStr = str.toLowerCase().split(sep);
 
@@ -596,7 +587,7 @@ export function isNullOrUndefined(object: any): object is undefined | null {
 /**
  * Capitalizes the first letter of a string
  */
-export function capitalizeFirstLetter(str: string) {
+export function capitalizeFirstLetter(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
@@ -610,7 +601,7 @@ export function capitalizeFirstLetter(str: string) {
  * @param minValue - The minimum integer value to return. Defaults to 1.
  * @returns The converted value as an integer.
  */
-export function toDmgValue(value: number, minValue: number = 1) {
+export function toDmgValue(value: number, minValue: number = 1): number {
   return Math.max(Math.floor(value), minValue);
 }
 
@@ -619,7 +610,7 @@ export function toDmgValue(value: number, minValue: number = 1) {
  * @param baseKey the base key of the sprite (e.g. `type`)
  * @returns the localized sprite key
  */
-export function getLocalizedSpriteKey(baseKey: string) {
+export function getLocalizedSpriteKey(baseKey: string): string {
   return `${baseKey}${hasAllLocalizedSprites(i18next.resolvedLanguage) ? `_${i18next.resolvedLanguage}` : ""}`;
 }
 
@@ -659,17 +650,8 @@ export function camelCaseToKebabCase(str: string): string {
  * @param key The key of the language to check
  * @returns `true` if the language is supported
  */
-export function isSupportedLanguage(key: string) {
+export function isSupportedLanguage(key: string): boolean {
   return supportedLanguages.some((l) => l.key === key);
-}
-
-/**
- * Capitalizes the first letter of a string
- * @param str The string to capitalize
- * @returns The capitalized string
- */
-export function capitalize(str: string) {
-  return String(str).charAt(0).toUpperCase() + String(str).slice(1);
 }
 
 /**
@@ -685,7 +667,7 @@ export function hasTouchscreen(): boolean {
  * Check if the device is in landscape mode.
  * @returns `true` if the device is in landscape mode, otherwise `false` which means it is in portrait mode.
  */
-export function isLandscapeMode() {
+export function isLandscapeMode(): boolean {
   const { width, height } = window.screen;
   return width > height;
 }

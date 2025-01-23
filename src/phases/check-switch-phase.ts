@@ -4,7 +4,7 @@ import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { SummonMissingPhase } from "#app/phases/summon-missing-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { BattleStyle } from "#enums/battle-style";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { SwitchType } from "#enums/switch-type";
@@ -72,16 +72,16 @@ export class CheckSwitchPhase extends BattlePhase {
       () => {
         const options: ConfirmModeConfig = {
           yesHandler: () => {
-            globalScene.ui.setMode(Mode.MESSAGE);
+            globalScene.ui.setMode(UiMode.MESSAGE);
             globalScene.unshiftPhase(new SwitchPhase(SwitchType.INITIAL_SWITCH, this.fieldIndex, false, true));
             this.end();
           },
           noHandler: () => {
-            globalScene.ui.setMode(Mode.MESSAGE);
+            globalScene.ui.setMode(UiMode.MESSAGE);
             this.end();
           },
         };
-        globalScene.ui.setMode(Mode.CONFIRM, options);
+        globalScene.ui.setMode(UiMode.CONFIRM, options);
       },
     );
   }

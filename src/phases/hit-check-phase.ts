@@ -9,6 +9,7 @@ import type { TypeDamageMultiplier } from "#app/data/type";
 import type { PokemonMove, Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BooleanHolder } from "#app/utils";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
@@ -125,7 +126,13 @@ export abstract class HitCheckPhase extends PokemonPhase {
      * The effectiveness of the move against the given target.
      * Accounts for type and move immunities from defensive typing, abilities, and other effects.
      */
-    const effectiveness = target.getMoveEffectiveness(user, move, false, simulated, cancelNoEffectMessage);
+    const effectiveness = target.getMoveEffectiveness(
+      user,
+      move,
+      AbilityApplyMode.DEFAULT,
+      simulated,
+      cancelNoEffectMessage,
+    );
     if (effectiveness === 0) {
       return cancelNoEffectMessage.value
         ? [HitCheckResult.NO_EFFECT_NO_MESSAGE, effectiveness]

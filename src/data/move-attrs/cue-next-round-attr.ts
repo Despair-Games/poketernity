@@ -16,7 +16,7 @@ export class CueNextRoundAttr extends MoveEffectAttr {
     super(true, { lastHitOnly: true });
   }
 
-  override apply(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
+  override applyEffect(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const { turnManager } = globalScene.currentBattle;
     return turnManager.preemptFightCommand((tc) => {
       if (tc.move?.move === Moves.ROUND) {

@@ -23,11 +23,7 @@ export class ShiftStatAttr extends MoveEffectAttr {
     this.statToSwitchWith = statToSwitchWith;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move)) {
-      return false;
-    }
-
+  override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const firstStat = user.getStat(this.statToSwitch, false);
     const secondStat = user.getStat(this.statToSwitchWith, false);
 

@@ -1,21 +1,18 @@
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 import { getEnumKeys, executeIf } from "#app/utils";
-import { TextStyle, addTextObject } from "./text";
-import { WindowVariant, addWindow } from "./ui-theme";
+import { addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
+import { addWindow } from "./ui-theme";
+import { WindowVariant } from "#enums/window-variant";
 import { api } from "#app/plugins/api/api";
+import { ScoreboardCategory } from "#enums/scoreboard-category";
 
 export interface RankingEntry {
   rank: number;
   username: string;
   score: number;
   wave: number;
-}
-
-// Don't forget to update translations when adding a new category
-export enum ScoreboardCategory {
-  DAILY,
-  WEEKLY,
 }
 
 export class DailyRunScoreboard extends Phaser.GameObjects.Container {

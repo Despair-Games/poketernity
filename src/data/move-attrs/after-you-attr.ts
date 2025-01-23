@@ -12,7 +12,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
  * @extends MoveEffectAttr
  */
 export class AfterYouAttr extends MoveEffectAttr {
-  override apply(_user: Pokemon, target: Pokemon, _move: Move): boolean {
+  override applyEffect(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     globalScene.queueMessage(i18next.t("moveTriggers:afterYou", { targetName: getPokemonNameWithAffix(target) }));
 
     const { turnManager } = globalScene.currentBattle;

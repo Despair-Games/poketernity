@@ -4,7 +4,7 @@ import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
 // -- end tsdoc imports --
 
 import { globalScene } from "#app/global-scene";
-import { Command } from "#app/ui/command-ui-handler";
+import { BattleCommand } from "#enums/battle-command";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { FieldPhase } from "./abstract-field-phase";
@@ -79,7 +79,7 @@ export class EnemyCommandPhase extends FieldPhase {
 
             battle.turnManager.addCommand({
               pokemon: enemyPokemon,
-              command: Command.POKEMON,
+              command: BattleCommand.POKEMON,
               cursor: index,
               args: [false],
             });
@@ -97,7 +97,7 @@ export class EnemyCommandPhase extends FieldPhase {
 
     battle.turnManager.addCommand({
       pokemon: enemyPokemon,
-      command: Command.FIGHT,
+      command: BattleCommand.FIGHT,
       move: nextMove,
     });
 

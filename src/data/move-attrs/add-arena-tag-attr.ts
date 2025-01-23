@@ -1,12 +1,11 @@
 import { type Pokemon } from "#app/field/pokemon";
-import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { Move } from "../move";
 import type { MoveConditionFunc } from "../move-conditions";
-import { MoveEffectAttr, type MoveEffectAttrOptions } from "./move-effect-attr";
+import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "./chance-based-move-effect-attr";
 
-interface AddArenaTagAttrOptions extends MoveEffectAttrOptions {
+interface AddArenaTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {
   /** The number of turns the tag is in effect */
   turnCount?: number;
   /** Should the move fail if an arena tag of the same type is already on the field? */
@@ -17,9 +16,9 @@ interface AddArenaTagAttrOptions extends MoveEffectAttrOptions {
 
 /**
  * Attribute to add an arena tag to the field of a given {@linkcode ArenaTagType | type}.
- * @extends MoveEffectAttr
+ * @extends ChanceBasedMoveEffectAttr
  */
-export class AddArenaTagAttr extends MoveEffectAttr {
+export class AddArenaTagAttr extends ChanceBasedMoveEffectAttr {
   public tagType: ArenaTagType;
   protected override options?: AddArenaTagAttrOptions;
 
@@ -56,21 +55,9 @@ export class AddArenaTagAttr extends MoveEffectAttr {
     return this.options?.selfSideTarget ?? false;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move)) {
-      return false;
-    }
-
-    if (
-      (move.chance < 0 || move.chance === 100 || user.randSeedInt(100) < move.chance)
-      && user.getLastXMoves(1)[0]?.result === MoveResult.SUCCESS
-    ) {
-      const side = (this.selfSideTarget ? user : target).getArenaTagSide();
-      globalScene.arena.addTag(this.tagType, user.id, this.turnCount, move.id, side);
-      return true;
-    }
-
-    return false;
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
+    const side = (this.selfSideTarget ? user : target).getArenaTagSide();
+    return globalScene.arena.addTag(this.tagType, user.id, this.turnCount, move.id, side);
   }
 
   override getCondition(): MoveConditionFunc | null {

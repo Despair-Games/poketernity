@@ -1,10 +1,11 @@
 import type { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
-import { addBBCodeTextObject, addTextObject, getTextColor, TextStyle } from "#app/ui/text";
-import { Command } from "#app/ui/command-ui-handler";
+import { addBBCodeTextObject, addTextObject, getTextColor } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
+import { BattleCommand } from "#enums/battle-command";
 import MessageUiHandler from "#app/ui/message-ui-handler";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { BooleanHolder, toReadableString, getLocalizedSpriteKey } from "#app/utils";
 import {
   PokemonFormChangeItemModifier,
@@ -14,7 +15,8 @@ import {
 import { allMoves } from "#app/data/all-moves";
 import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
 import { StatusEffect } from "#enums/status-effect";
-import PokemonIconAnimHandler, { PokemonIconAnimMode } from "#app/ui/pokemon-icon-anim-handler";
+import PokemonIconAnimHandler from "#app/ui/pokemon-icon-anim-handler";
+import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { addWindow } from "#app/ui/ui-theme";
 import { SpeciesFormChangeItemTrigger } from "#app/data/pokemon-forms";
@@ -34,104 +36,10 @@ import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { globalScene } from "#app/global-scene";
 import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
+import { PartyUiMode } from "#enums/party-ui-mode";
+import { PartyOption } from "#enums/party-option";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
-
-/**
- * Indicates the reason why the party UI is being opened.
- */
-export enum PartyUiMode {
-  /**
-   * Indicates that the party UI is open because of a user-opted switch.  This
-   * type of switch can be cancelled.
-   */
-  SWITCH,
-  /**
-   * Indicates that the party UI is open because of a faint or other forced
-   * switch (eg, move effect). This type of switch cannot be cancelled.
-   */
-  FAINT_SWITCH,
-  /**
-   * Indicates that the party UI is open because of a start-of-encounter optional
-   * switch. This type of switch can be cancelled.
-   */
-  POST_BATTLE_SWITCH,
-  /**
-   * Indicates that the party UI is open because of the move Revival Blessing.
-   * This selection cannot be cancelled.
-   */
-  REVIVAL_BLESSING,
-  /**
-   * Indicates that the party UI is open to select a mon to apply a modifier to.
-   * This type of selection can be cancelled.
-   */
-  MODIFIER,
-  /**
-   * Indicates that the party UI is open to select a mon to apply a move
-   * modifier to (such as an Ether or PP Up).  This type of selection can be cancelled.
-   */
-  MOVE_MODIFIER,
-  /**
-   * Indicates that the party UI is open to select a mon to teach a TM.  This
-   * type of selection can be cancelled.
-   */
-  TM_MODIFIER,
-  /**
-   * Indicates that the party UI is open to select a mon to remember a move.
-   * This type of selection can be cancelled.
-   */
-  REMEMBER_MOVE_MODIFIER,
-  /**
-   * Indicates that the party UI is open to transfer items between mons.  This
-   * type of selection can be cancelled.
-   */
-  MODIFIER_TRANSFER,
-  /**
-   * Indicates that the party UI is open because of a DNA Splicer.  This
-   * type of selection can be cancelled.
-   */
-  SPLICE,
-  /**
-   * Indicates that the party UI is open to release a party member.  This
-   * type of selection can be cancelled.
-   */
-  RELEASE,
-  /**
-   * Indicates that the party UI is open to check the team.  This
-   * type of selection can be cancelled.
-   */
-  CHECK,
-  /**
-   * Indicates that the party UI is open to select a party member for an arbitrary effect.
-   * This is generally used in for Mystery Encounter or special effects that require the player to select a Pokemon
-   */
-  SELECT,
-}
-
-export enum PartyOption {
-  CANCEL = -1,
-  SEND_OUT,
-  PASS_BATON,
-  REVIVE,
-  APPLY,
-  TEACH,
-  TRANSFER,
-  SUMMARY,
-  UNPAUSE_EVOLUTION,
-  SPLICE,
-  UNSPLICE,
-  RELEASE,
-  RENAME,
-  SELECT,
-  SCROLL_UP = 1000,
-  SCROLL_DOWN = 1001,
-  FORM_CHANGE_ITEM = 2000,
-  MOVE_1 = 3000,
-  MOVE_2,
-  MOVE_3,
-  MOVE_4,
-  ALL = 4000,
-}
 
 export type PartySelectCallback = (cursor: number, option: PartyOption) => void;
 export type PartyModifierTransferSelectCallback = (
@@ -254,7 +162,7 @@ export default class PartyUiHandler extends MessageUiHandler {
   ];
 
   constructor() {
-    super(Mode.PARTY);
+    super(UiMode.PARTY);
   }
 
   setup() {
@@ -532,7 +440,7 @@ export default class PartyUiHandler extends MessageUiHandler {
                 }
               } else if (this.cursor) {
                 (globalScene.getCurrentPhase() as CommandPhase).handleCommand(
-                  Command.POKEMON,
+                  BattleCommand.POKEMON,
                   this.cursor,
                   option === PartyOption.PASS_BATON,
                 );
@@ -552,7 +460,7 @@ export default class PartyUiHandler extends MessageUiHandler {
           }
         } else if (option === PartyOption.SUMMARY) {
           ui.playSelect();
-          ui.setModeWithoutClear(Mode.SUMMARY, pokemon).then(() => this.clearOptions());
+          ui.setModeWithoutClear(UiMode.SUMMARY, pokemon).then(() => this.clearOptions());
           return true;
         } else if (option === PartyOption.UNPAUSE_EVOLUTION) {
           this.clearOptions();
@@ -584,12 +492,12 @@ export default class PartyUiHandler extends MessageUiHandler {
                   pokemon.unfuse().then(() => {
                     this.clearPartySlots();
                     this.populatePartySlots();
-                    ui.setMode(Mode.PARTY);
+                    ui.setMode(UiMode.PARTY);
                     this.showText(
                       i18next.t("partyUiHandler:wasReverted", { fusionName: fusionName, pokemonName: pokemon.name }),
                       undefined,
                       () => {
-                        ui.setMode(Mode.PARTY);
+                        ui.setMode(UiMode.PARTY);
                         this.showText("", 0);
                       },
                       null,
@@ -598,11 +506,11 @@ export default class PartyUiHandler extends MessageUiHandler {
                   });
                 },
                 noHandler: () => {
-                  ui.setMode(Mode.PARTY);
+                  ui.setMode(UiMode.PARTY);
                   this.showText("", 0);
                 },
               };
-              ui.setModeWithoutClear(Mode.CONFIRM, options);
+              ui.setModeWithoutClear(UiMode.CONFIRM, options);
             },
           );
         } else if (option === PartyOption.RELEASE) {
@@ -612,11 +520,11 @@ export default class PartyUiHandler extends MessageUiHandler {
             this.blockInput = true;
             const options: ConfirmModeConfig = {
               yesHandler: () => {
-                ui.setMode(Mode.PARTY);
+                ui.setMode(UiMode.PARTY);
                 this.tryRelease(this.cursor);
               },
               noHandler: () => {
-                ui.setMode(Mode.PARTY);
+                ui.setMode(UiMode.PARTY);
                 this.showText("", 0);
               },
             };
@@ -625,7 +533,7 @@ export default class PartyUiHandler extends MessageUiHandler {
               null,
               () => {
                 this.blockInput = false;
-                ui.setModeWithoutClear(Mode.CONFIRM, options);
+                ui.setModeWithoutClear(UiMode.CONFIRM, options);
               },
             );
           } else {
@@ -636,7 +544,7 @@ export default class PartyUiHandler extends MessageUiHandler {
           this.clearOptions();
           ui.playSelect();
           ui.setModeWithoutClear(
-            Mode.RENAME_POKEMON,
+            UiMode.RENAME_POKEMON,
             {
               buttonActions: [
                 (nickname: string) => {
@@ -645,10 +553,10 @@ export default class PartyUiHandler extends MessageUiHandler {
                   pokemon.updateInfo();
                   this.clearPartySlots();
                   this.populatePartySlots();
-                  ui.setMode(Mode.PARTY);
+                  ui.setMode(UiMode.PARTY);
                 },
                 () => {
-                  ui.setMode(Mode.PARTY);
+                  ui.setMode(UiMode.PARTY);
                 },
               ],
             },
@@ -768,7 +676,7 @@ export default class PartyUiHandler extends MessageUiHandler {
             selectCallback(6, PartyOption.CANCEL);
             ui.playSelect();
           } else {
-            ui.setMode(Mode.COMMAND, this.fieldIndex);
+            ui.setMode(UiMode.COMMAND, this.fieldIndex);
             ui.playSelect();
           }
         }

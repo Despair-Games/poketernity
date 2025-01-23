@@ -1,13 +1,14 @@
 import PokemonInfoContainer from "#app/ui/pokemon-info-container";
 import { Gender } from "#enums/gender";
 import { Type } from "#enums/type";
-import { rgbHexToRgba, padInt } from "#app/utils";
-import { TextStyle, addTextObject } from "#app/ui/text";
+import { rgbHexToRgba, leftPad } from "#app/utils";
+import { addTextObject } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { allMoves } from "#app/data/all-moves";
 import { Species } from "#enums/species";
 import { getEggTierForSpecies } from "#app/data/egg";
-import { starterColors } from "#app/battle-scene";
+import { starterColors } from "#app/data/starter-colors";
 import { globalScene } from "#app/global-scene";
 import { argbFromRgba } from "@material/material-color-utilities";
 import type { EggHatchData } from "#app/data/egg-hatch-data";
@@ -157,7 +158,7 @@ export default class PokemonHatchInfoContainer extends PokemonInfoContainer {
     this.pokemonCandyCountText.setText(`x${globalScene.gameData.starterData[species.speciesId].candyCount}`);
     this.pokemonCandyCountText.setVisible(true);
 
-    this.pokemonNumberText.setText(padInt(species.speciesId, 4));
+    this.pokemonNumberText.setText(leftPad(species.speciesId, 4));
     this.pokemonNameText.setText(species.name);
 
     const hasEggMoves = species && speciesEggMoves.hasOwnProperty(species.speciesId);

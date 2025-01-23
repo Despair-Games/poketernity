@@ -146,10 +146,11 @@ describe("Abilities - Wimp Out", () => {
   });
 
   it("Dragon Tail and Circle Throw switch out Pokémon before the Ability activates.", async () => {
-    game.override.startingLevel(69).enemyMoveset([Moves.DRAGON_TAIL]);
+    game.override.startingLevel(500).enemyMoveset([Moves.DRAGON_TAIL]);
     await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
     const wimpod = game.scene.getPlayerPokemon()!;
+    wimpod.hp *= 0.51;
 
     game.move.select(Moves.SPLASH);
     game.doSelectPartyPokemon(1);

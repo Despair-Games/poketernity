@@ -1,6 +1,7 @@
-import { starterColors } from "#app/battle-scene";
+import { starterColors } from "#app/data/starter-colors";
 import { globalScene } from "#app/global-scene";
-import { TextStyle, addTextObject } from "./text";
+import { addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
 import { argbFromRgba } from "@material/material-color-utilities";
 import { rgbHexToRgba } from "#app/utils";
 import type { Species } from "#enums/species";

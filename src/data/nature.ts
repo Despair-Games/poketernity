@@ -1,5 +1,6 @@
 import { toReadableString } from "#app/utils";
-import { TextStyle, getBBCodeFrag } from "../ui/text";
+import { getBBCodeFrag } from "../ui/text";
+import { TextStyle } from "#enums/text-style";
 import { Nature } from "#enums/nature";
 import i18next from "i18next";
 import { Stat, EFFECTIVE_STATS, getShortenedStatKey } from "#enums/stat";

@@ -1,5 +1,6 @@
 import type Phaser from "phaser";
-import { Mode, settingsUiModes } from "./ui/ui";
+import { settingsUiModes } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import type { InputsController } from "./inputs-controller";
 import type MessageUiHandler from "./ui/message-ui-handler";
 import StarterSelectUiHandler from "./ui/starter-select-ui-handler";
@@ -175,21 +176,21 @@ export class UiInputs {
       return;
     }
     switch (globalScene.ui?.getMode()) {
-      case Mode.MESSAGE:
+      case UiMode.MESSAGE:
         const messageHandler = globalScene.ui.getHandler<MessageUiHandler>();
         if (!messageHandler.pendingPrompt || messageHandler.isTextAnimationInProgress()) {
           return;
         }
-      case Mode.TITLE:
-      case Mode.COMMAND:
-      case Mode.MODIFIER_SELECT:
-      case Mode.MYSTERY_ENCOUNTER:
-        globalScene.ui.setOverlayMode(Mode.MENU);
+      case UiMode.TITLE:
+      case UiMode.COMMAND:
+      case UiMode.MODIFIER_SELECT:
+      case UiMode.MYSTERY_ENCOUNTER:
+        globalScene.ui.setOverlayMode(UiMode.MENU);
         break;
-      case Mode.STARTER_SELECT:
+      case UiMode.STARTER_SELECT:
         this.buttonTouch();
         break;
-      case Mode.MENU:
+      case UiMode.MENU:
         globalScene.ui.revertMode();
         globalScene.playSound("ui/select");
         break;
