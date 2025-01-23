@@ -120,7 +120,7 @@ export class CommandPhase extends FieldPhase {
           (moveIndex > -1 && playerPokemon.getMoveset()[moveIndex].isUsable(playerPokemon, queuedMove.ignorePP))
           || queuedMove.virtual
         ) {
-          this.handleCommand(Command.FIGHT, moveIndex, queuedMove.ignorePP, queuedMove);
+          this.handleCommand(BattleCommand.FIGHT, moveIndex, queuedMove.ignorePP, queuedMove);
         } else {
           ui.setMode(UiMode.COMMAND, this.fieldIndex);
         }
