@@ -2221,6 +2221,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 
+  /**
+   * Obtains the average matchup score for this Pokemon between each of its
+   * active opponents.
+   * @see {@linkcode getMatchupScore}
+   */
+  public getAverageMatchupScore(): number {
+    const opponents = this.getOpponents();
+    return opponents.map((opp) => this.getMatchupScore(opp)).reduce((total, mus) => total + mus) / opponents.length;
+  }
+
   getEvolution(): SpeciesFormEvolution | null {
     if (pokemonEvolutions.hasOwnProperty(this.species.speciesId)) {
       const evolutions = pokemonEvolutions[this.species.speciesId];
@@ -2983,7 +2993,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getOpponents(): Pokemon[] {
-    return this.getOpposingField().filter((p) => p.isActive());
+    return this.getOpposingField().filter((p) => p.isActive(true));
   }
 
   getOpponentDescriptor(): string {
