@@ -1,4 +1,3 @@
-import Trainer from "#app/field/trainer";
 import FieldSpritePipeline from "#app/pipelines/field-sprite";
 import MysteryEncounterIntroVisuals from "#app/field/mystery-encounter-intro";
 import { settings } from "#app/system/settings/settings-manager";
@@ -345,7 +344,7 @@ export default class SpritePipeline extends FieldSpritePipeline {
 
     const isEntityObj =
       sprite.parentContainer.type === "Pokemon"
-      || sprite.parentContainer instanceof Trainer
+      || sprite.parentContainer.type === "Trainer"
       || sprite.parentContainer instanceof MysteryEncounterIntroVisuals;
     const field = isEntityObj ? sprite.parentContainer.parentContainer : sprite.parentContainer;
     const position = isEntityObj ? [sprite.parentContainer.x, sprite.parentContainer.y] : [sprite.x, sprite.y];
@@ -438,7 +437,7 @@ export default class SpritePipeline extends FieldSpritePipeline {
     if (hasShadow) {
       const isEntityObj =
         sprite.parentContainer.type === "Pokemon"
-        || sprite.parentContainer instanceof Trainer
+        || sprite.parentContainer.type === "Trainer"
         || sprite.parentContainer instanceof MysteryEncounterIntroVisuals;
       const field = isEntityObj ? sprite.parentContainer.parentContainer : sprite.parentContainer;
       const fieldScaleRatio = field.scale / 6;
