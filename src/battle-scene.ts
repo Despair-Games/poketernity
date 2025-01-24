@@ -2928,8 +2928,11 @@ export default class BattleScene extends SceneBase {
    * @param isPlayer Whether to search the player (`true`) or the enemy (`false`); Defaults to `true`
    * @returns the list of all modifiers that passed the `modifierFilter` function
    */
-  findModifiers(modifierFilter: ModifierPredicate, isPlayer: boolean = true): PersistentModifier[] {
-    return (isPlayer ? this.modifiers : this.enemyModifiers).filter(modifierFilter);
+  findModifiers<T extends PersistentModifier = PersistentModifier>(
+    modifierFilter: ModifierPredicate,
+    isPlayer: boolean = true,
+  ): T[] {
+    return (isPlayer ? this.modifiers : this.enemyModifiers).filter(modifierFilter) as T[];
   }
 
   /**

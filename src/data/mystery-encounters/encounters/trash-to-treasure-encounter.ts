@@ -17,7 +17,7 @@ import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/myst
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { Species } from "#enums/species";
-import { type HitHealModifier, type PokemonHeldItemModifier } from "#app/modifier/modifier";
+import { type PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { applyModifierTypeToPlayerPokemon } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import i18next from "#app/plugins/i18n";
@@ -228,7 +228,7 @@ async function tryApplyDigRewardItems() {
     const heldItems = globalScene.findModifiers(
       (m) => m.isPokemonHeldItemModifier() && m.pokemonId === pokemon.id,
       true,
-    ) as PokemonHeldItemModifier[];
+    );
     const existingShellBell = heldItems.find((m) => m.isHitHealModifier());
 
     if (!existingShellBell || existingShellBell.getStackCount() < existingShellBell.getMaxStackCount()) {

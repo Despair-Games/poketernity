@@ -28,7 +28,7 @@ export default class PokemonSpriteSparkleHandler {
       if (!s.visible || (s.parentContainer.type === "Pokemon" && !s.parentContainer.parentContainer)) {
         continue;
       }
-      const pokemon = s.parentContainer.type === "Pokemon" ? (s.parentContainer as Pokemon) : null;
+      const pokemon = s.parentContainer.type === "Pokemon" ? s.parentContainer : null;
       const parent = (pokemon || s).parentContainer;
       const texture = s.texture;
       const [width, height] = [texture.source[0].width, texture.source[0].height];

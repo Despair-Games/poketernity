@@ -154,10 +154,10 @@ describe("Absolute Avarice - Mystery Encounter", () => {
 
       for (const partyPokemon of scene.getPlayerParty()) {
         const pokemonId = partyPokemon.id;
-        const pokemonItems = scene.findModifiers(
+        const pokemonItems = scene.findModifiers<PokemonHeldItemModifier>(
           (m) => m.isPokemonHeldItemModifier() && m.pokemonId === pokemonId,
           true,
-        ) as PokemonHeldItemModifier[];
+        );
         const revSeed = pokemonItems.find(
           (i) => i.type.name === i18next.t("modifierType:ModifierType.REVIVER_SEED.name"),
         );

@@ -100,7 +100,7 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
           if (this.selfTarget) {
             noEffect = !user.getMoveset().find((m) => {
               const move = m.getMove();
-              return move.isAttackMove() && move.category === MoveCategory.PHYSICAL;
+              return move.category === MoveCategory.PHYSICAL;
             });
           }
           break;

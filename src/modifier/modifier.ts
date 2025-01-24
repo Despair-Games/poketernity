@@ -58,7 +58,7 @@ import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { CommanderAbAttr } from "#app/data/ab-attrs/commander-ab-attr";
 import { globalScene } from "#app/global-scene";
 
-export type ModifierPredicate = (modifier: Modifier) => boolean;
+export type ModifierPredicate<T extends Modifier = Modifier> = (modifier: T) => boolean;
 
 const iconOverflowIndex = 24;
 
@@ -1639,7 +1639,7 @@ export class AttackTypeBoosterModifier extends PokemonHeldItemModifier {
 
   matchType(modifier: Modifier): boolean {
     if (modifier.isAttackTypeBoosterModifier()) {
-      const attackTypeBoosterModifier = modifier as AttackTypeBoosterModifier;
+      const attackTypeBoosterModifier = modifier;
       return (
         attackTypeBoosterModifier.moveType === this.moveType
         && attackTypeBoosterModifier.boostMultiplier === this.boostMultiplier
@@ -2063,7 +2063,7 @@ export class BerryModifier extends PokemonHeldItemModifier {
   }
 
   matchType(modifier: Modifier) {
-    return modifier.isBerryModifier() && (modifier as BerryModifier).berryType === this.berryType;
+    return modifier.isBerryModifier() && modifier.berryType === this.berryType;
   }
 
   clone() {

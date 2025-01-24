@@ -9,7 +9,6 @@ import { StatusEffect } from "#enums/status-effect";
 import { Type } from "#enums/type";
 import { WeatherType } from "#enums/weather-type";
 import type { PlayerPokemon } from "#app/field/pokemon";
-import type { AttackTypeBoosterModifierType } from "#app/modifier/modifier-type";
 import { isNullOrUndefined } from "#app/utils";
 import type { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
@@ -1040,7 +1039,7 @@ export class AttackTypeBoosterHeldItemTypeRequirement extends EncounterPokemonRe
             return !this.requiredHeldItemTypes.some(
               (heldItemType) =>
                 it.isAttackTypeBoosterModifier()
-                && (it.type as AttackTypeBoosterModifierType).moveType === heldItemType
+                && it.type.moveType === heldItemType
                 && (!this.requireTransferable || it.isTransferable),
             );
           }).length > 0,
@@ -1052,8 +1051,7 @@ export class AttackTypeBoosterHeldItemTypeRequirement extends EncounterPokemonRe
     const requiredItems = pokemon?.getHeldItems().filter((it) => {
       return (
         this.requiredHeldItemTypes.some(
-          (heldItemType) =>
-            it.isAttackTypeBoosterModifier() && it.type.moveType === heldItemType,
+          (heldItemType) => it.isAttackTypeBoosterModifier() && it.type.moveType === heldItemType,
         )
         && (!this.requireTransferable || it.isTransferable)
       );

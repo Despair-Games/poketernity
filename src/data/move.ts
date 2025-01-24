@@ -259,7 +259,7 @@ export abstract class Move implements Localizable {
   }
 
   isAttackMove(): this is AttackMove {
-    return false;
+    return this.category === MoveCategory.PHYSICAL || this.category === MoveCategory.SPECIAL;
   }
 
   isStatusMove(): this is StatusMove {
@@ -924,10 +924,6 @@ export class AttackMove extends Move {
     ret -= attackScore;
 
     return ret;
-  }
-
-  override isAttackMove(): this is this {
-    return true;
   }
 }
 
