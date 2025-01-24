@@ -321,10 +321,8 @@ export class TrainerConfig {
       ret = TrainerType[this.getDerivedType(this.trainerTypeDouble)].toString().toLowerCase();
     }
     if (!female && this.spriteName1) {
-      console.log("spriteName1", this.spriteName1);
       return this.spriteName1;
     } else if (female && this.spriteName2) {
-      console.log("spriteName2", this.spriteName2);
       return this.spriteName2;
     }
     return ret;
@@ -1415,7 +1413,6 @@ export class TrainerConfig {
       const isDouble = variant === TrainerVariant.DOUBLE;
       const trainerKey = this.getSpriteKey(variant === TrainerVariant.FEMALE, false);
       const partnerTrainerKey = this.getSpriteKey(true, true);
-      console.log("Sprite Keys: ", trainerKey, partnerTrainerKey);
       globalScene.loadAtlas(trainerKey, "trainer");
       if (isDouble) {
         globalScene.loadAtlas(partnerTrainerKey, "trainer");
