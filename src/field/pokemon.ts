@@ -1435,12 +1435,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   private getSimulatedMovePower(): number {
     const { waveIndex } = globalScene.currentBattle;
-    const wave = globalScene.gameMode.getWaveForDifficulty(waveIndex);
-    if (wave <= 20) {
+    if (waveIndex <= 20) {
       return 40;
-    } else if (wave <= 40) {
+    } else if (waveIndex <= 40) {
       return 60;
-    } else if (wave <= 60) {
+    } else if (waveIndex <= 60) {
       return 80;
     } else {
       return 90;
