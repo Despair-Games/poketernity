@@ -42,4 +42,6 @@ export enum MoveFlags {
   IGNORE_SUBSTITUTE = 1 << 18,
   /** Indicates a move is able to be redirected to allies in a double battle if the attacker faints */
   REDIRECT_COUNTER = 1 << 19,
+  /** Flag indicating whether a move is a G-Max Move or not */
+  G_MAX_MOVE = 1 << 20,
 }

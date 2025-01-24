@@ -615,6 +615,10 @@ export class FlinchedTag extends BattlerTag {
     super(BattlerTagType.FLINCHED, [BattlerTagLapseType.PRE_MOVE, BattlerTagLapseType.TURN_END], 0, sourceMove);
   }
 
+  override canAdd(pokemon: Pokemon): boolean {
+    return !pokemon.isMax();
+  }
+
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
@@ -1099,6 +1103,10 @@ export class EncoreTag extends MoveRestrictionBattlerTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
+    if (pokemon.isMax()) {
+      return false;
+    }
+
     const lastMoves = pokemon.getLastXMoves(1);
     if (!lastMoves.length) {
       return false;
@@ -1304,11 +1312,19 @@ export class MinimizeTag extends BattlerTag {
     super(BattlerTagType.MINIMIZED, BattlerTagLapseType.TURN_END, 1, Moves.MINIMIZE);
   }
 
+  override canAdd(pokemon: Pokemon): boolean {
+    return !pokemon.isMax();
+  }
+
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
+    //If a pokemon dynamaxes they lose minimized status
+    if (pokemon.isMax()) {
+      return false;
+    }
     return lapseType !== BattlerTagLapseType.CUSTOM || super.lapse(pokemon, lapseType);
   }
 

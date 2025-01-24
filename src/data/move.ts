@@ -571,6 +571,17 @@ export abstract class Move implements Localizable {
   }
 
   /**
+   * Sets the {@linkcode MoveFlags.G_MAX_MOVE} for the move
+   * and {@linkcode moveTarget} to NEAR_ENEMY (g-max moves cannot target allies)
+   * @returns The {@linkcode Move} that called this function
+   */
+  gMaxMove(): this {
+    this.setFlag(MoveFlags.G_MAX_MOVE, true);
+    this.moveTarget = MoveTarget.NEAR_ENEMY;
+    return this;
+  }
+
+  /**
    * Checks if the move flag applies to the pokemon(s) using/receiving the move
    * @param flag {@linkcode MoveFlags} MoveFlag to check on user and/or target
    * @param user {@linkcode Pokemon} the Pokemon using the move
