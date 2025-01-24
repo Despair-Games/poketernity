@@ -129,8 +129,6 @@ export default class PartyUiHandler extends MessageUiHandler {
     return null;
   };
 
-  public static NoEffectMessage = i18next.t("partyUiHandler:anyEffect");
-
   private localizedOptions = [
     PartyOption.SEND_OUT,
     PartyOption.SUMMARY,
