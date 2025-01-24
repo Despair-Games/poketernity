@@ -133,7 +133,7 @@ import { LoadingScene } from "#app/loading-scene";
 import { LevelCapPhase } from "#app/phases/level-cap-phase";
 import { LoginPhase } from "#app/phases/login-phase";
 import { MessagePhase } from "#app/phases/message-phase";
-import { MovePhase } from "#app/phases/move-phase";
+import type { MovePhase } from "#app/phases/move-phase";
 import { NewBiomeEncounterPhase } from "#app/phases/new-biome-encounter-phase";
 import { NextEncounterPhase } from "#app/phases/next-encounter-phase";
 import { PokemonAnimPhase } from "#app/phases/pokemon-anim-phase";
@@ -860,15 +860,14 @@ export default class BattleScene extends SceneBase {
       return;
     }
     if (allyPokemon?.isActive(true)) {
-      let targetingMovePhase: MovePhase;
+      let targetingMovePhase: MovePhase | undefined;
       do {
         targetingMovePhase = this.findPhase(
           (mp) =>
-            mp instanceof MovePhase
-            && mp.targets.length === 1
+            mp.targets.length === 1
             && mp.targets[0] === removedPokemon.getBattlerIndex()
             && mp.pokemon.isPlayer() !== allyPokemon.isPlayer(),
-        ) as MovePhase;
+        );
         if (targetingMovePhase && targetingMovePhase.targets[0] !== allyPokemon.getBattlerIndex()) {
           targetingMovePhase.targets[0] = allyPokemon.getBattlerIndex();
         }
