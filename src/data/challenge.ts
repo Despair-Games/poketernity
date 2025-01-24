@@ -7,7 +7,7 @@ import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/data/pokemon-species";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import type { FixedBattleConfig } from "#app/battle";
 import { BattleType } from "#enums/battle-type";
 import Trainer from "#app/field/trainer";

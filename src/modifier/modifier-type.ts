@@ -9,7 +9,8 @@ import { pokemonFormChanges, SpeciesFormChangeCondition, SpeciesFormChangeItemTr
 import { settings } from "#app/system/settings/settings-manager";
 import { FormChangeItem } from "#enums/form-change-item";
 import type { Pokemon } from "#app/field/pokemon";
-import type { EnemyPokemon, PlayerPokemon, PokemonMove } from "#app/field/pokemon";
+import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
+import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {

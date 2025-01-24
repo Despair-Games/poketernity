@@ -1,4 +1,5 @@
-import { type Pokemon, type PlayerPokemon, PokemonMove } from "#app/field/pokemon";
+import { type Pokemon, type PlayerPokemon } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { MovePhase } from "#app/phases/move-phase";
 import { type Move, getMoveTargets } from "#app/data/move";
