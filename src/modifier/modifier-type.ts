@@ -55,7 +55,7 @@ import {
   PokemonExpBoosterModifier,
   PokemonFormChangeItemModifier,
   PokemonFriendshipBoosterModifier,
-  PokemonHeldItemModifier,
+  type PokemonHeldItemModifier,
   PokemonHpRestoreModifier,
   PokemonIncrementingStatModifier,
   PokemonInstantReviveModifier,
@@ -372,7 +372,7 @@ export class PokemonHeldItemModifierType extends PokemonModifierType {
       (pokemon: PlayerPokemon) => {
         const dummyModifier = this.newModifier(pokemon);
         const matchingModifier = globalScene.findModifier(
-          (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === pokemon.id && m.matchType(dummyModifier),
+          (m) => m.isPokemonHeldItemModifier() && m.pokemonId === pokemon.id && m.matchType(dummyModifier),
         ) as PokemonHeldItemModifier;
         const maxStackCount = dummyModifier.getMaxStackCount();
         if (!maxStackCount) {

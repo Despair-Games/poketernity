@@ -78,7 +78,7 @@ import {
   HiddenAbilityRateBoosterModifier,
   BaseStatModifier,
   PokemonFriendshipBoosterModifier,
-  PokemonHeldItemModifier,
+  type PokemonHeldItemModifier,
   PokemonNatureWeightModifier,
   ShinyRateBoosterModifier,
   SurviveDamageModifier,
@@ -843,7 +843,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return [];
     }
     return globalScene.findModifiers(
-      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === this.id,
+      (m) => m.isPokemonHeldItemModifier() && m.pokemonId === this.id,
       this.isPlayer(),
     ) as PokemonHeldItemModifier[];
   }
@@ -5063,7 +5063,7 @@ export class PlayerPokemon extends Pokemon {
         globalScene.getPlayerParty().push(newPokemon);
         newPokemon.evolve(!isFusion ? newEvolution : new FusionSpeciesFormEvolution(this.id, newEvolution), evoSpecies);
         const modifiers = globalScene.findModifiers(
-          (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === this.id,
+          (m) => m.isPokemonHeldItemModifier() && m.pokemonId === this.id,
           true,
         ) as PokemonHeldItemModifier[];
         modifiers.forEach((m) => {
@@ -5201,7 +5201,7 @@ export class PlayerPokemon extends Pokemon {
       partyMemberIndex--;
     }
     const fusedPartyMemberHeldModifiers = globalScene.findModifiers(
-      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === pokemon.id,
+      (m) => m.isPokemonHeldItemModifier() && m.pokemonId === pokemon.id,
       true,
     ) as PokemonHeldItemModifier[];
     for (const modifier of fusedPartyMemberHeldModifiers) {

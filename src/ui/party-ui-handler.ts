@@ -9,7 +9,7 @@ import { UiMode } from "#enums/ui-mode";
 import { BooleanHolder, toReadableString, getLocalizedSpriteKey } from "#app/utils";
 import {
   PokemonFormChangeItemModifier,
-  PokemonHeldItemModifier,
+  type PokemonHeldItemModifier,
   SwitchEffectTransferModifier,
 } from "#app/modifier/modifier";
 import { allMoves } from "#app/data/all-moves";
@@ -133,7 +133,7 @@ export default class PartyUiHandler extends MessageUiHandler {
 
   public static FilterItemMaxStacks = (pokemon: PlayerPokemon, modifier: PokemonHeldItemModifier) => {
     const matchingModifier = globalScene.findModifier(
-      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === pokemon.id && m.matchType(modifier),
+      (m) => m.isPokemonHeldItemModifier() && m.pokemonId === pokemon.id && m.matchType(modifier),
     ) as PokemonHeldItemModifier;
     if (matchingModifier && matchingModifier.stackCount === matchingModifier.getMaxStackCount()) {
       return i18next.t("partyUiHandler:tooManyItems", { pokemonName: getPokemonNameWithAffix(pokemon) });
@@ -300,14 +300,14 @@ export default class PartyUiHandler extends MessageUiHandler {
             const getTransferrableItemsFromPokemon = (newPokemon: PlayerPokemon) =>
               globalScene.findModifiers(
                 (m) =>
-                  m instanceof PokemonHeldItemModifier
+                  m.isPokemonHeldItemModifier()
                   && (m as PokemonHeldItemModifier).isTransferable
                   && (m as PokemonHeldItemModifier).pokemonId === newPokemon.id,
               ) as PokemonHeldItemModifier[];
             // this next bit checks to see if the the selected item from the original transfer pokemon exists on the new pokemon [p]; this returns undefined if the new pokemon doesn't have the item at all, otherwise it returns the pokemonHeldItemModifier for that item
             const matchingModifier = globalScene.findModifier(
               (m) =>
-                m instanceof PokemonHeldItemModifier
+                m.isPokemonHeldItemModifier()
                 && m.pokemonId === newPokemon.id
                 && m.matchType(getTransferrableItemsFromPokemon(pokemon)[this.transferOptionCursor]),
             ) as PokemonHeldItemModifier;
@@ -366,7 +366,7 @@ export default class PartyUiHandler extends MessageUiHandler {
           let filterResult: string | null;
           const getTransferrableItemsFromPokemon = (pokemon: PlayerPokemon) =>
             globalScene.findModifiers(
-              (m) => m instanceof PokemonHeldItemModifier && m.isTransferable && m.pokemonId === pokemon.id,
+              (m) => m.isPokemonHeldItemModifier() && m.isTransferable && m.pokemonId === pokemon.id,
             ) as PokemonHeldItemModifier[];
           if (option !== PartyOption.TRANSFER && option !== PartyOption.SPLICE) {
             filterResult = (this.selectFilter as PokemonSelectFilter)(pokemon);
@@ -643,7 +643,7 @@ export default class PartyUiHandler extends MessageUiHandler {
             /** Initialize item quantities for the selected Pokemon */
             const itemModifiers = globalScene.findModifiers(
               (m) =>
-                m instanceof PokemonHeldItemModifier
+                m.isPokemonHeldItemModifier()
                 && m.isTransferable
                 && m.pokemonId === globalScene.getPlayerParty()[this.cursor].id,
             ) as PokemonHeldItemModifier[];
@@ -879,7 +879,7 @@ export default class PartyUiHandler extends MessageUiHandler {
     const itemModifiers =
       this.partyUiMode === PartyUiMode.MODIFIER_TRANSFER
         ? (globalScene.findModifiers(
-            (m) => m instanceof PokemonHeldItemModifier && m.isTransferable && m.pokemonId === pokemon.id,
+            (m) => m.isPokemonHeldItemModifier() && m.isTransferable && m.pokemonId === pokemon.id,
           ) as PokemonHeldItemModifier[])
         : [];
 

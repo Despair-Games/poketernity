@@ -57,15 +57,15 @@ import { applyAbAttrs } from "#app/data/ability";
 import { CommanderAbAttr } from "#app/data/ab-attrs/commander-ab-attr";
 import { globalScene } from "#app/global-scene";
 
-export type ModifierPredicate = (modifier: Modifier) => boolean;
+export type ModifierPredicate = <T extends Modifier = Modifier>(modifier: T) => boolean;
 
 const iconOverflowIndex = 24;
 
 export const modifierSortFunc = (a: Modifier, b: Modifier): number => {
   const itemNameMatch = a.type.name.localeCompare(b.type.name);
   const typeNameMatch = a.constructor.name.localeCompare(b.constructor.name);
-  const aId = a instanceof PokemonHeldItemModifier && a.pokemonId ? a.pokemonId : 4294967295;
-  const bId = b instanceof PokemonHeldItemModifier && b.pokemonId ? b.pokemonId : 4294967295;
+  const aId = a.isPokemonHeldItemModifier() && a.pokemonId ? a.pokemonId : 4294967295;
+  const bId = b.isPokemonHeldItemModifier() && b.pokemonId ? b.pokemonId : 4294967295;
 
   //First sort by pokemonID
   if (aId < bId) {
@@ -191,6 +191,10 @@ export abstract class Modifier {
   abstract apply(...args: unknown[]): boolean;
 
   isBerryModifier(): this is BerryModifier {
+    return false;
+  }
+
+  isPokemonHeldItemModifier<T extends PokemonHeldItemModifier = PokemonHeldItemModifier>(): this is T {
     return false;
   }
 }
@@ -787,6 +791,10 @@ export abstract class PokemonHeldItemModifier extends PersistentModifier {
   }
 
   abstract getMaxHeldItemCount(pokemon?: Pokemon): number;
+
+  override isPokemonHeldItemModifier<T extends PokemonHeldItemModifier = PokemonHeldItemModifier>(): this is T {
+    return true;
+  }
 }
 
 export abstract class LapsingPokemonHeldItemModifier extends PokemonHeldItemModifier {
@@ -3397,7 +3405,7 @@ export abstract class HeldItemTransferModifier extends PokemonHeldItemModifier {
 
     const transferredModifierTypes: ModifierType[] = [];
     const itemModifiers = globalScene.findModifiers(
-      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === targetPokemon.id && m.isTransferable,
+      (m) => m.isPokemonHeldItemModifier() && m.pokemonId === targetPokemon.id && m.isTransferable,
       targetPokemon.isPlayer(),
     ) as PokemonHeldItemModifier[];
     let highestItemTier = itemModifiers

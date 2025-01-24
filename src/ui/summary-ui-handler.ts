@@ -23,7 +23,7 @@ import { MoveCategory } from "#enums/move-category";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
 import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
 import { getLevelRelExp, getLevelTotalExp } from "#app/data/exp";
-import { PokemonHeldItemModifier } from "#app/modifier/modifier";
+import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { StatusEffect } from "#enums/status-effect";
 import { getBiomeName } from "#app/data/balance/biomes";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
@@ -971,7 +971,7 @@ export default class SummaryUiHandler extends UiHandler {
 
         const itemModifiers = (
           globalScene.findModifiers(
-            (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === this.pokemon?.id,
+            (m) => m.isPokemonHeldItemModifier() && m.pokemonId === this.pokemon?.id,
             this.playerParty,
           ) as PokemonHeldItemModifier[]
         ).sort(modifierSortFunc);

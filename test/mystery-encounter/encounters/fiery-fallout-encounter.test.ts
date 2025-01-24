@@ -16,7 +16,7 @@ import {
 } from "#test/mystery-encounter/encounter-test-utils";
 import { Moves } from "#enums/moves";
 import type BattleScene from "#app/battle-scene";
-import { AttackTypeBoosterModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
+import { AttackTypeBoosterModifier, type PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { Type } from "#enums/type";
 import { Status } from "#app/data/status-effect";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
@@ -183,7 +183,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
 
       const leadPokemonId = scene.getPlayerParty()?.[0].id;
       const leadPokemonItems = scene.findModifiers(
-        (m) => m instanceof PokemonHeldItemModifier && (m as PokemonHeldItemModifier).pokemonId === leadPokemonId,
+        (m) => m.isPokemonHeldItemModifier() && (m as PokemonHeldItemModifier).pokemonId === leadPokemonId,
         true,
       ) as PokemonHeldItemModifier[];
       const item = leadPokemonItems.find((i) => i instanceof AttackTypeBoosterModifier);
