@@ -9,7 +9,6 @@ import { StatusEffect } from "#enums/status-effect";
 import { Type } from "#enums/type";
 import { WeatherType } from "#enums/weather-type";
 import type { PlayerPokemon } from "#app/field/pokemon";
-import { AttackTypeBoosterModifier } from "#app/modifier/modifier";
 import type { AttackTypeBoosterModifierType } from "#app/modifier/modifier-type";
 import { isNullOrUndefined } from "#app/utils";
 import type { Abilities } from "#enums/abilities";
@@ -1025,8 +1024,8 @@ export class AttackTypeBoosterHeldItemTypeRequirement extends EncounterPokemonRe
         this.requiredHeldItemTypes.some((heldItemType) => {
           return pokemon.getHeldItems().some((it) => {
             return (
-              it instanceof AttackTypeBoosterModifier
-              && (it.type as AttackTypeBoosterModifierType).moveType === heldItemType
+              it.isAttackTypeBoosterModifier()
+              && it.type.moveType === heldItemType
               && (!this.requireTransferable || it.isTransferable)
             );
           });
@@ -1040,7 +1039,7 @@ export class AttackTypeBoosterHeldItemTypeRequirement extends EncounterPokemonRe
           pokemon.getHeldItems().filter((it) => {
             return !this.requiredHeldItemTypes.some(
               (heldItemType) =>
-                it instanceof AttackTypeBoosterModifier
+                it.isAttackTypeBoosterModifier()
                 && (it.type as AttackTypeBoosterModifierType).moveType === heldItemType
                 && (!this.requireTransferable || it.isTransferable),
             );
@@ -1054,8 +1053,7 @@ export class AttackTypeBoosterHeldItemTypeRequirement extends EncounterPokemonRe
       return (
         this.requiredHeldItemTypes.some(
           (heldItemType) =>
-            it instanceof AttackTypeBoosterModifier
-            && (it.type as AttackTypeBoosterModifierType).moveType === heldItemType,
+            it.isAttackTypeBoosterModifier() && (it.type as AttackTypeBoosterModifierType).moveType === heldItemType,
         )
         && (!this.requireTransferable || it.isTransferable)
       );

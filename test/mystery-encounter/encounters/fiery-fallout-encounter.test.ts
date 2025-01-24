@@ -16,7 +16,7 @@ import {
 } from "#test/mystery-encounter/encounter-test-utils";
 import { Moves } from "#enums/moves";
 import type BattleScene from "#app/battle-scene";
-import { AttackTypeBoosterModifier, type PokemonHeldItemModifier } from "#app/modifier/modifier";
+import { type PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { Type } from "#enums/type";
 import { Status } from "#app/data/status-effect";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
@@ -186,7 +186,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
         (m) => m.isPokemonHeldItemModifier() && (m as PokemonHeldItemModifier).pokemonId === leadPokemonId,
         true,
       ) as PokemonHeldItemModifier[];
-      const item = leadPokemonItems.find((i) => i instanceof AttackTypeBoosterModifier);
+      const item = leadPokemonItems.find((i) => i.isAttackTypeBoosterModifier());
       expect(item).toBeDefined;
     });
   });
@@ -267,7 +267,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
 
       const leadPokemonItems = scene.getPlayerParty()?.[0].getHeldItems() as PokemonHeldItemModifier[];
-      const item = leadPokemonItems.find((i) => i instanceof AttackTypeBoosterModifier);
+      const item = leadPokemonItems.find((i) => i.isAttackTypeBoosterModifier());
       expect(item).toBeDefined;
     });
 

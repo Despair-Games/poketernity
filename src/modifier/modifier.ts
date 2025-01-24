@@ -33,6 +33,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { Type } from "#enums/type";
 import i18next from "i18next";
 import {
+  type AttackTypeBoosterModifierType,
   type DoubleBattleChanceBoosterModifierType,
   type EvolutionItemModifierType,
   type FormChangeItemModifierType,
@@ -239,6 +240,10 @@ export abstract class Modifier {
   }
 
   isLapsingPersistentModifier(): this is LapsingPersistentModifier {
+    return false;
+  }
+
+  isAttackTypeBoosterModifier(): this is AttackTypeBoosterModifier {
     return false;
   }
 }
@@ -1613,6 +1618,7 @@ export class SpeciesCritBoosterModifier extends CritBoosterModifier {
  * Applies Specific Type item boosts (e.g., Magnet)
  */
 export class AttackTypeBoosterModifier extends PokemonHeldItemModifier {
+  public override type: AttackTypeBoosterModifierType;
   public moveType: Type;
   private boostMultiplier: number;
 
@@ -1624,7 +1630,7 @@ export class AttackTypeBoosterModifier extends PokemonHeldItemModifier {
   }
 
   matchType(modifier: Modifier): boolean {
-    if (modifier instanceof AttackTypeBoosterModifier) {
+    if (modifier.isAttackTypeBoosterModifier()) {
       const attackTypeBoosterModifier = modifier as AttackTypeBoosterModifier;
       return (
         attackTypeBoosterModifier.moveType === this.moveType
@@ -1688,6 +1694,10 @@ export class AttackTypeBoosterModifier extends PokemonHeldItemModifier {
 
   getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 99;
+  }
+
+  override isAttackTypeBoosterModifier(): this is this {
+    return true;
   }
 }
 
