@@ -9,7 +9,7 @@ import {
   SpeciesFormChangeTeraTrigger,
 } from "#app/data/pokemon-forms";
 import { type FormChangeItem } from "#enums/form-change-item";
-import { Pokemon, type PlayerPokemon } from "#app/field/pokemon";
+import { type Pokemon, type PlayerPokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
 import { EvolutionPhase } from "#app/phases/evolution-phase";
@@ -3444,7 +3444,7 @@ export abstract class HeldItemTransferModifier extends PokemonHeldItemModifier {
    * @returns the opponents of the source {@linkcode Pokemon}
    */
   getTargets(pokemon?: Pokemon, ..._args: unknown[]): Pokemon[] {
-    return pokemon instanceof Pokemon ? pokemon.getOpponents() : [];
+    return pokemon?.type === "Pokemon" ? pokemon.getOpponents() : [];
   }
 
   /**

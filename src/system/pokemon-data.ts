@@ -5,7 +5,7 @@ import type { Nature } from "#enums/nature";
 import type { PokeballType } from "#enums/pokeball";
 import { getPokemonSpecies } from "../data/pokemon-species";
 import { Status } from "../data/status-effect";
-import { Pokemon, EnemyPokemon, PokemonMove, PokemonSummonData } from "../field/pokemon";
+import { type Pokemon, EnemyPokemon, PokemonMove, PokemonSummonData } from "../field/pokemon";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { Variant } from "#app/data/variant";
 import { loadBattlerTag } from "../data/battler-tags";
@@ -69,7 +69,7 @@ export default class PokemonData {
   public fusionMysteryEncounterPokemonData: CustomPokemonData | null;
 
   constructor(source: Pokemon | any, forHistory: boolean = false) {
-    const sourcePokemon = source instanceof Pokemon ? source : null;
+    const sourcePokemon = source.type === "Pokemon" ? source : null;
     this.id = source.id;
     this.player = sourcePokemon ? sourcePokemon.isPlayer() : source.player;
     this.species = sourcePokemon ? sourcePokemon.species.speciesId : source.species;

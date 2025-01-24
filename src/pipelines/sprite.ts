@@ -1,4 +1,3 @@
-import { Pokemon } from "#app/field/pokemon";
 import Trainer from "#app/field/trainer";
 import FieldSpritePipeline from "#app/pipelines/field-sprite";
 import MysteryEncounterIntroVisuals from "#app/field/mystery-encounter-intro";
@@ -345,7 +344,7 @@ export default class SpritePipeline extends FieldSpritePipeline {
     const ignoreOverride = data["ignoreOverride"] as boolean;
 
     const isEntityObj =
-      sprite.parentContainer instanceof Pokemon
+      sprite.parentContainer.type === "Pokemon"
       || sprite.parentContainer instanceof Trainer
       || sprite.parentContainer instanceof MysteryEncounterIntroVisuals;
     const field = isEntityObj ? sprite.parentContainer.parentContainer : sprite.parentContainer;
@@ -438,7 +437,7 @@ export default class SpritePipeline extends FieldSpritePipeline {
     const yShadowOffset = (sprite.pipelineData["yShadowOffset"] as number) ?? 0;
     if (hasShadow) {
       const isEntityObj =
-        sprite.parentContainer instanceof Pokemon
+        sprite.parentContainer.type === "Pokemon"
         || sprite.parentContainer instanceof Trainer
         || sprite.parentContainer instanceof MysteryEncounterIntroVisuals;
       const field = isEntityObj ? sprite.parentContainer.parentContainer : sprite.parentContainer;

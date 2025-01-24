@@ -74,8 +74,7 @@ import {
   BATTLE_STATS,
   EFFECTIVE_STATS,
 } from "#enums/stat";
-import type {
-  TerastallizeModifier} from "#app/modifier/modifier";
+import type { TerastallizeModifier } from "#app/modifier/modifier";
 import {
   HiddenAbilityRateBoosterModifier,
   BaseStatModifier,
@@ -310,6 +309,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     dataSource?: Pokemon | PokemonData,
   ) {
     super(globalScene, x, y);
+    this.type = "Pokemon";
 
     if (!species.isObtainable() && this.isPlayer()) {
       throw `Cannot create a player Pokemon for species '${species.getName(formIndex)}'`;
