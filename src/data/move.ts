@@ -694,6 +694,12 @@ export abstract class Move implements Localizable {
    * conditions, and other score modifiers. ES is used to evaluate secondary
    * effects and does not factor in damage dealt, as that is accounted for by
    * {@linkcode Pokemon.getAttackScore}.
+   *
+   * ES technically doesn't have a set range, but should be implemented such
+   * that the overall move score does not exceed (+4) if the move doesn't KO.
+   * This means that the ES for an attack should rarely exceed (+1) and almost
+   * never exceed (+2). Status moves may have a higher ES in comparison but
+   * should typically be limited to (+3) or lower.
    * @param user the {@linkcode Pokemon} using the move
    * @param target the {@linkcode Pokemon} targeted by the move
    * @returns a score value accumulated from effect score modifiers.

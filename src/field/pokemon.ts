@@ -1406,7 +1406,17 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * - One move for each of the Pokemon's base type(s).
    * - The category of each move (physical or special) matches the Pokemon's
    * dominant attacking stat (or physical if the stats are tied).
-   * - The power of each move increases based on the current wave index.
+   * - The power of each move increases based on the current wave:
+   *   ```
+   *   +-------+-------+
+   *   | Wave  | Power |
+   *   +-------+-------+
+   *   | 1-20  |    40 |
+   *   | 21-40 |    60 |
+   *   | 41-60 |    80 |
+   *   | 61+   |    90 |
+   *   +-------+-------+
+   *   ```
    * - Each move has 100 accuracy
    * - Each move has 0 priority and no secondary effects.
    * @returns
@@ -1425,11 +1435,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   private getSimulatedMovePower(): number {
     const { waveIndex } = globalScene.currentBattle;
-    if (waveIndex <= 20) {
+    const wave = globalScene.gameMode.getWaveForDifficulty(waveIndex);
+    if (wave <= 20) {
       return 40;
-    } else if (waveIndex <= 40) {
+    } else if (wave <= 40) {
       return 60;
-    } else if (waveIndex <= 60) {
+    } else if (wave <= 60) {
       return 80;
     } else {
       return 90;
@@ -2134,6 +2145,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    *     - P(AS = x + 1) = y / 40
    *     - P(AS = x) = 1 - (y / 40)
    * - If the move is not forecasted to deal damage, AS = -1, denoting a move with no effect.
+   *
+   * Example: A pokemon is evaluating a move against an opponent at full HP and
+   * calculates that the move deals damage equal to 50% of the opponent's HP.
+   * The AS for that move against the opponent would be (+1) 75% of the time
+   * and (+2) 25% of the time.
    * @param opponent The {@linkcode Pokemon} to forecast the move against
    * @param move The {@linkcode Move} whose outcome is forecasted and scored
    * @returns The calculated AS for the forecasted action
@@ -2155,13 +2171,21 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       const minAttackScore = Math.floor(damagePct / 40);
       const tierUpChance = (damagePct % 40) * (100 / 40);
 
-      return this.randSeedInt(100) < tierUpChance ? minAttackScore + 1 : minAttackScore;
+      if (this.randSeedInt(100) < tierUpChance) {
+        return minAttackScore + 1;
+      } else {
+        return minAttackScore;
+      }
     }
   }
 
   /**
    * Obtains the expected value of this Pokemon's Attack Score (AS) against the
    * given opponent when using the given move
+   *
+   * Example: A pokemon is evaluating a move against an opponent at full HP and
+   * calculates that the move deals damage equal to 50% of the opponent's HP. The
+   * expected value for Attack Score (EAS) for this action would be 1.25.
    * @param opponent The {@linkcode Pokemon} to forecast the move against
    * @param move The {@linkcode Move} being scored
    * @returns The expected AS for the forecasted action
@@ -2196,27 +2220,27 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public getMatchupScore(opponent: Pokemon): number {
     const speed = this.getEffectiveStat(Stat.SPD, opponent, undefined, AbilityApplyMode.REVEALED);
     const oppSpeed = opponent.getEffectiveStat(Stat.SPD, this, undefined, AbilityApplyMode.REVEALED);
-    const outspeed = speed >= oppSpeed;
+    const userCanOutspeed = speed >= oppSpeed;
 
     const attackMoves = this.getAttackMoves(true);
     const oppAttackMoves = opponent.estimateAttackMoves();
 
-    const EAS = Math.max(...attackMoves.map((mv) => this.getExpectedAttackScore(opponent, mv)));
-    const oppEAS = Math.max(...oppAttackMoves.map((mv) => opponent.getExpectedAttackScore(this, mv)));
+    const eas = Math.max(...attackMoves.map((mv) => this.getExpectedAttackScore(opponent, mv)));
+    const oppEas = Math.max(...oppAttackMoves.map((mv) => opponent.getExpectedAttackScore(this, mv)));
 
     if (this.isActive(true)) {
-      if (EAS >= 4 && (outspeed || oppEAS < EAS)) {
+      if (eas >= 4 && (userCanOutspeed || oppEas < eas)) {
         return Infinity;
-      } else if (oppEAS >= 4 && (!outspeed || EAS < oppEAS)) {
+      } else if (oppEas >= 4 && (!userCanOutspeed || eas < oppEas)) {
         return 0;
       } else {
-        return EAS * (3 - oppEAS + (outspeed ? 1 : 0));
+        return eas * (3 - oppEas + (userCanOutspeed ? 1 : 0));
       }
     } else {
-      if (oppEAS >= 4) {
+      if (oppEas >= 4) {
         return 0;
       } else {
-        return EAS * (2 - oppEAS + (outspeed ? 1 : 0));
+        return eas * (2 - oppEas + (userCanOutspeed ? 1 : 0));
       }
     }
   }
