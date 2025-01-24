@@ -221,6 +221,10 @@ export abstract class Modifier {
   isHitHealModifier(): this is HitHealModifier {
     return false;
   }
+
+  isPreserveBerryModifier(): this is PreserveBerryModifier {
+    return false;
+  }
 }
 
 export abstract class PersistentModifier extends Modifier {
@@ -2068,7 +2072,7 @@ export class PreserveBerryModifier extends PersistentModifier {
   }
 
   override match(modifier: Modifier) {
-    return modifier instanceof PreserveBerryModifier;
+    return modifier.isPreserveBerryModifier();
   }
 
   clone() {
@@ -2101,6 +2105,10 @@ export class PreserveBerryModifier extends PersistentModifier {
 
   getMaxStackCount(): number {
     return 3;
+  }
+
+  override isPreserveBerryModifier(): this is this {
+    return true;
   }
 }
 

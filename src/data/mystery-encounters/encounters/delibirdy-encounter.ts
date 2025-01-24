@@ -25,7 +25,6 @@ import {
   HealingBoosterModifier,
   LevelIncrementBoosterModifier,
   MoneyMultiplierModifier,
-  PreserveBerryModifier,
 } from "#app/modifier/modifier";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-type";
@@ -247,7 +246,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
           }
         } else {
           // Check if the player has max stacks of that Berry Pouch already
-          const existing = globalScene.findModifier((m) => m instanceof PreserveBerryModifier) as PreserveBerryModifier;
+          const existing = globalScene.findModifier((m) => m.isPreserveBerryModifier());
 
           if (existing && existing.getStackCount() >= existing.getMaxStackCount()) {
             // At max stacks, give the first party pokemon a Shell Bell instead

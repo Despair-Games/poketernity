@@ -21,7 +21,7 @@ import {
   MoneyMultiplierModifier,
   PokemonInstantReviveModifier,
   PokemonNatureWeightModifier,
-  PreserveBerryModifier,
+  type PreserveBerryModifier,
 } from "#app/modifier/modifier";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
@@ -230,7 +230,7 @@ describe("Delibird-y - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1, optionNo: 1 });
 
       const reviverSeedAfter = scene.findModifier((m) => m instanceof PokemonInstantReviveModifier);
-      const berryPouchAfter = scene.findModifier((m) => m instanceof PreserveBerryModifier);
+      const berryPouchAfter = scene.findModifier((m) => m.isPreserveBerryModifier());
 
       expect(reviverSeedAfter).toBeUndefined();
       expect(berryPouchAfter).toBeDefined();
@@ -285,7 +285,7 @@ describe("Delibird-y - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1, optionNo: 1 });
 
       const reviverSeedAfter = scene.findModifier((m) => m instanceof PokemonInstantReviveModifier);
-      const healingCharmAfter = scene.findModifier((m) => m instanceof PreserveBerryModifier);
+      const healingCharmAfter = scene.findModifier((m) => m.isPreserveBerryModifier());
       const shellBellAfter = scene.findModifier((m) => m.isHitHealModifier());
 
       expect(reviverSeedAfter).toBeUndefined();
