@@ -3298,11 +3298,7 @@ export function initMoves() {
       .unimplemented(), // Confuses all opps, gives 100x user level as money
     new AttackMove(Moves.G_MAX_CHI_STRIKE, Type.FIGHTING, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .attr(
-        AddBattlerTagAttr,
-        BattlerTagType.CRIT_BOOST_STACKABLE,
-        true,
-      ),
+      .attr(AddBattlerTagAttr, BattlerTagType.CRIT_BOOST_STACKABLE, true),
     new AttackMove(Moves.G_MAX_TERROR, Type.GHOST, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .unimplemented(), // applies trapped to all opps
