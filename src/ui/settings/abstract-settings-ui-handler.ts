@@ -10,7 +10,7 @@ import { addTextObject } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "#app/ui/ui-theme";
-import { capitalizeFirstLetter, hasTouchscreen } from "#app/utils";
+import { capitalizeFirstLetter, hasTouchscreen, isNullOrUndefined } from "#app/utils";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
@@ -329,7 +329,10 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
       NavigationManager.getInstance().reset();
       globalScene.ui.revertMode();
     } else {
+      const { Wrap } = Phaser.Math;
       const cursor = this.cursor + this.scrollCursor;
+      const maxOptionCursor = this.optionValueLabels[cursor].length;
+
       switch (button) {
         case Button.UP:
           if (cursor) {
@@ -365,15 +368,15 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
           }
           break;
         case Button.LEFT:
-          if (this.optionCursors[cursor]) {
-            // Moves the option cursor left, if possible.
-            success = this.setOptionCursor(cursor, this.optionCursors[cursor] - 1, true);
+          if (!isNullOrUndefined(this.optionCursors[cursor])) {
+            // Moves the option cursor left (wrapping)
+            success = this.setOptionCursor(cursor, Wrap(this.optionCursors[cursor] - 1, 0, maxOptionCursor), true);
           }
           break;
         case Button.RIGHT:
-          // Moves the option cursor right, if possible.
-          if (this.optionCursors[cursor] < this.optionValueLabels[cursor].length - 1) {
-            success = this.setOptionCursor(cursor, this.optionCursors[cursor] + 1, true);
+          // Moves the option cursor right (wrapping)
+          if (!isNullOrUndefined(this.optionCursors[cursor])) {
+            success = this.setOptionCursor(cursor, Wrap(this.optionCursors[cursor] + 1, 0, maxOptionCursor), true);
           }
           break;
         case Button.CYCLE_FORM:
