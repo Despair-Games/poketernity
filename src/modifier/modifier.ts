@@ -213,6 +213,10 @@ export abstract class Modifier {
   isSwitchEffectTransferModifier(): this is SwitchEffectTransferModifier {
     return false;
   }
+
+  isCriticalCatchChanceBoosterModifier(): this is CriticalCatchChanceBoosterModifier {
+    return false;
+  }
 }
 
 export abstract class PersistentModifier extends Modifier {
@@ -3239,7 +3243,7 @@ export class CriticalCatchChanceBoosterModifier extends PersistentModifier {
   }
 
   override match(modifier: Modifier): boolean {
-    return modifier instanceof CriticalCatchChanceBoosterModifier;
+    return modifier.isCriticalCatchChanceBoosterModifier();
   }
 
   clone(): CriticalCatchChanceBoosterModifier {
@@ -3262,6 +3266,10 @@ export class CriticalCatchChanceBoosterModifier extends PersistentModifier {
 
   getMaxStackCount(): number {
     return 3;
+  }
+
+  override isCriticalCatchChanceBoosterModifier(): this is this {
+    return true;
   }
 }
 
