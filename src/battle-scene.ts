@@ -30,7 +30,7 @@ import {
   HealingBoosterModifier,
   ModifierBar,
   MultipleParticipantExpBonusModifier,
-  PersistentModifier,
+  type PersistentModifier,
   PokemonExpBoosterModifier,
   PokemonFormChangeItemModifier,
   type PokemonHeldItemModifier,
@@ -2543,7 +2543,7 @@ export default class BattleScene extends SceneBase {
     const soundName = modifier.type.soundName;
     this.validateAchvs(ModifierAchv, modifier);
     const modifiersToRemove: PersistentModifier[] = [];
-    if (modifier instanceof PersistentModifier) {
+    if (modifier.isPersistentModifier()) {
       if (modifier instanceof TerastallizeModifier) {
         modifiersToRemove.push(
           ...this.findModifiers((m) => m instanceof TerastallizeModifier && m.pokemonId === modifier.pokemonId),
@@ -2818,7 +2818,7 @@ export default class BattleScene extends SceneBase {
    * Removes all modifiers from enemy pokemon of {@linkcode PersistentModifier} type
    */
   clearEnemyModifiers(): void {
-    const modifiersToRemove = this.enemyModifiers.filter((m) => m instanceof PersistentModifier);
+    const modifiersToRemove = this.enemyModifiers.filter((m) => m.isPersistentModifier());
     for (const m of modifiersToRemove) {
       this.enemyModifiers.splice(this.enemyModifiers.indexOf(m), 1);
     }
@@ -2857,7 +2857,7 @@ export default class BattleScene extends SceneBase {
       }
     }
     for (const modifier of modifiers) {
-      if (modifier instanceof PersistentModifier) {
+      if (modifier.isPersistentModifier()) {
         (modifier as PersistentModifier).virtualStackCount = 0;
       }
     }

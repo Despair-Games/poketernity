@@ -197,6 +197,10 @@ export abstract class Modifier {
   isPokemonHeldItemModifier<T extends PokemonHeldItemModifier = PokemonHeldItemModifier>(): this is T {
     return false;
   }
+
+  isPersistentModifier<T extends PersistentModifier = PersistentModifier>(): this is T {
+    return false;
+  }
 }
 
 export abstract class PersistentModifier extends Modifier {
@@ -287,6 +291,10 @@ export abstract class PersistentModifier extends Modifier {
     text.setOrigin(0, 0);
 
     return text;
+  }
+
+  override isPersistentModifier<T extends PersistentModifier = PersistentModifier>(): this is T {
+    return true;
   }
 }
 
