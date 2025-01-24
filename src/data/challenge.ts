@@ -342,6 +342,22 @@ export abstract class Challenge {
   applyMoveWeight(_pokemon: Pokemon, _moveSource: MoveSourceType, _move: Moves, _level: NumberHolder): boolean {
     return false;
   }
+
+  isSingleGenerationChallenge(): this is SingleGenerationChallenge {
+    return false;
+  }
+
+  isSingleTypeChallenge(): this is SingleTypeChallenge {
+    return false;
+  }
+
+  isFreshStartChallenge(): this is FreshStartChallenge {
+    return false;
+  }
+
+  isInverseBattleChallenge(): this is InverseBattleChallenge {
+    return false;
+  }
 }
 
 type ChallengeCondition = (data: GameData) => boolean;
@@ -518,6 +534,10 @@ export class SingleGenerationChallenge extends Challenge {
     newChallenge.severity = source.severity;
     return newChallenge;
   }
+
+  override isSingleGenerationChallenge(): this is this {
+    return true;
+  }
 }
 
 interface monotypeOverride {
@@ -627,6 +647,10 @@ export class SingleTypeChallenge extends Challenge {
     newChallenge.severity = source.severity;
     return newChallenge;
   }
+
+  override isSingleTypeChallenge(): this is this {
+    return true;
+  }
 }
 
 /**
@@ -681,6 +705,10 @@ export class FreshStartChallenge extends Challenge {
     newChallenge.severity = source.severity;
     return newChallenge;
   }
+
+  override isFreshStartChallenge(): this is this {
+    return true;
+  }
 }
 
 /**
@@ -712,6 +740,10 @@ export class InverseBattleChallenge extends Challenge {
     }
 
     return false;
+  }
+
+  override isInverseBattleChallenge(): this is this {
+    return true;
   }
 }
 

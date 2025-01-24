@@ -5,12 +5,6 @@ import i18next from "i18next";
 import { NumberHolder } from "#app/utils";
 import { PlayerGender } from "#enums/player-gender";
 import type { Challenge } from "#app/data/challenge";
-import {
-  FreshStartChallenge,
-  SingleGenerationChallenge,
-  SingleTypeChallenge,
-  InverseBattleChallenge,
-} from "#app/data/challenge";
 import type { ConditionFn } from "#app/@types/common";
 import { Stat, getShortenedStatKey } from "#enums/stat";
 import { Challenges } from "#enums/challenges";
@@ -196,7 +190,7 @@ export class MonoGenAchv extends ChallengeAchv {
       iconImage,
       score,
       (c) =>
-        c instanceof SingleGenerationChallenge
+        c.isSingleGenerationChallenge()
         && c.value === gen
         && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
     );
@@ -210,7 +204,7 @@ export class MonoTypeAchv extends ChallengeAchv {
       iconImage,
       score,
       (c) =>
-        c instanceof SingleTypeChallenge
+        c.isSingleTypeChallenge()
         && c.value === type + 1
         && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
     );
@@ -300,7 +294,7 @@ export const achvs = {
     "reviver_seed",
     100,
     (c) =>
-      c instanceof FreshStartChallenge
+      c.isFreshStartChallenge()
       && c.value > 0
       && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
@@ -308,7 +302,7 @@ export const achvs = {
     "INVERSE_BATTLE",
     "inverse",
     100,
-    (c) => c instanceof InverseBattleChallenge && c.value > 0,
+    (c) => c.isInverseBattleChallenge() && c.value > 0,
   ),
   BREEDERS_IN_SPACE: new Achv("BREEDERS_IN_SPACE", "moon_stone", 50).setSecret(),
 };
