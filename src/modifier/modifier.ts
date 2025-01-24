@@ -195,11 +195,11 @@ export abstract class Modifier {
     return false;
   }
 
-  isPokemonHeldItemModifier<T extends PokemonHeldItemModifier = PokemonHeldItemModifier>(): this is T {
+  isPokemonHeldItemModifier(): this is PokemonHeldItemModifier {
     return false;
   }
 
-  isPersistentModifier<T extends PersistentModifier = PersistentModifier>(): this is T {
+  isPersistentModifier(): this is PersistentModifier {
     return false;
   }
 
@@ -244,6 +244,10 @@ export abstract class Modifier {
   }
 
   isAttackTypeBoosterModifier(): this is AttackTypeBoosterModifier {
+    return false;
+  }
+
+  isTurnHealModifier(): this is TurnHealModifier {
     return false;
   }
 }
@@ -338,7 +342,7 @@ export abstract class PersistentModifier extends Modifier {
     return text;
   }
 
-  override isPersistentModifier<T extends PersistentModifier = PersistentModifier>(): this is T {
+  override isPersistentModifier(): this is PersistentModifier {
     return true;
   }
 }
@@ -849,7 +853,7 @@ export abstract class PokemonHeldItemModifier extends PersistentModifier {
 
   abstract getMaxHeldItemCount(pokemon?: Pokemon): number;
 
-  override isPokemonHeldItemModifier<T extends PokemonHeldItemModifier = PokemonHeldItemModifier>(): this is T {
+  override isPokemonHeldItemModifier(): this is this {
     return true;
   }
 }
@@ -1863,7 +1867,7 @@ export class TurnHealModifier extends PokemonHeldItemModifier {
   }
 
   matchType(modifier: Modifier) {
-    return modifier instanceof TurnHealModifier;
+    return modifier.isTurnHealModifier();
   }
 
   clone() {
@@ -1893,6 +1897,10 @@ export class TurnHealModifier extends PokemonHeldItemModifier {
 
   getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 4;
+  }
+
+  override isTurnHealModifier(): this is this {
+    return true;
   }
 }
 

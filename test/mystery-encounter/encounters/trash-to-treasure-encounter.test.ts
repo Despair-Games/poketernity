@@ -16,7 +16,7 @@ import type BattleScene from "#app/battle-scene";
 import { PokemonMove } from "#app/field/pokemon";
 import { UiMode } from "#enums/ui-mode";
 import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
-import { type HitHealModifier, HealShopCostModifier, TurnHealModifier } from "#app/modifier/modifier";
+import { HealShopCostModifier } from "#app/modifier/modifier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
@@ -128,11 +128,11 @@ describe("Trash to Treasure - Mystery Encounter", () => {
       await game.phaseInterceptor.to(SelectModifierPhase, false);
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
 
-      const leftovers = scene.findModifier((m) => m instanceof TurnHealModifier) as TurnHealModifier;
+      const leftovers = scene.findModifier((m) => m.isTurnHealModifier());
       expect(leftovers).toBeDefined();
       expect(leftovers?.stackCount).toBe(2);
 
-      const shellBell = scene.findModifier((m) => m.isHitHealModifier()) as HitHealModifier;
+      const shellBell = scene.findModifier((m) => m.isHitHealModifier());
       expect(shellBell).toBeDefined();
       expect(shellBell?.stackCount).toBe(2);
 
