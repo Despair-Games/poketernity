@@ -27,7 +27,6 @@ import { EnemyPokemon, PokemonMove } from "#app/field/pokemon";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import {
   HiddenAbilityRateBoosterModifier,
-  PokemonFormChangeItemModifier,
   ShinyRateBoosterModifier,
   SpeciesStatBoosterModifier,
 } from "#app/modifier/modifier";
@@ -212,7 +211,7 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
         const receivedPokemonData: EnemyPokemon = encounter.misc.receivedPokemon;
         const modifiers = tradedPokemon
           .getHeldItems()
-          .filter((m) => !(m instanceof PokemonFormChangeItemModifier) && !(m instanceof SpeciesStatBoosterModifier));
+          .filter((m) => !m.isPokemonFormChangeItemModifier() && !(m instanceof SpeciesStatBoosterModifier));
 
         // Generate a trainer name
         const traderName = generateRandomTraderName();
@@ -333,7 +332,7 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
         const receivedPokemonData: EnemyPokemon = encounter.misc.receivedPokemon;
         const modifiers = tradedPokemon
           .getHeldItems()
-          .filter((m) => !(m instanceof PokemonFormChangeItemModifier) && !(m instanceof SpeciesStatBoosterModifier));
+          .filter((m) => !m.isPokemonFormChangeItemModifier() && !(m instanceof SpeciesStatBoosterModifier));
 
         // Generate a trainer name
         const traderName = generateRandomTraderName();

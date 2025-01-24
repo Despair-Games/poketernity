@@ -21,7 +21,7 @@ import { NumberHolder, isNullOrUndefined, randSeedInt, randSeedShuffle } from "#
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { allSpecies, getPokemonSpecies, getSpecialSpeciesList } from "#app/data/pokemon-species";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import { HiddenAbilityRateBoosterModifier, PokemonFormChangeItemModifier } from "#app/modifier/modifier";
+import { HiddenAbilityRateBoosterModifier } from "#app/modifier/modifier";
 import { achvs } from "#app/system/achv";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
@@ -345,7 +345,7 @@ function getTeamTransformations(): PokemonTransformation[] {
     const index = pokemonTransformations.findIndex((p) => p.previousPokemon.id === removed.id);
     pokemonTransformations[index].heldItems = removed
       .getHeldItems()
-      .filter((m) => !(m instanceof PokemonFormChangeItemModifier));
+      .filter((m) => !m.isPokemonFormChangeItemModifier());
 
     const bst = removed.calculateBaseStats().reduce((a, b) => a + b, 0);
     let newBstRange: [number, number];

@@ -205,6 +205,10 @@ export abstract class Modifier {
   isTerastallizeModifier(): this is TerastallizeModifier {
     return false;
   }
+
+  isPokemonFormChangeItemModifier(): this is PokemonFormChangeItemModifier {
+    return false;
+  }
 }
 
 export abstract class PersistentModifier extends Modifier {
@@ -2985,7 +2989,7 @@ export class PokemonFormChangeItemModifier extends PokemonHeldItemModifier {
   }
 
   matchType(modifier: Modifier): boolean {
-    return modifier instanceof PokemonFormChangeItemModifier && modifier.formChangeItem === this.formChangeItem;
+    return modifier.isPokemonFormChangeItemModifier() && modifier.formChangeItem === this.formChangeItem;
   }
 
   clone(): PersistentModifier {
@@ -3026,6 +3030,10 @@ export class PokemonFormChangeItemModifier extends PokemonHeldItemModifier {
 
   getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 1;
+  }
+
+  override isPokemonFormChangeItemModifier(): this is this {
+    return true;
   }
 }
 

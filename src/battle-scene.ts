@@ -32,7 +32,7 @@ import {
   MultipleParticipantExpBonusModifier,
   type PersistentModifier,
   PokemonExpBoosterModifier,
-  PokemonFormChangeItemModifier,
+  type PokemonFormChangeItemModifier,
   type PokemonHeldItemModifier,
   PokemonHpRestoreModifier,
   PokemonIncrementingStatModifier,
@@ -2549,7 +2549,7 @@ export default class BattleScene extends SceneBase {
         );
       }
       if ((modifier as PersistentModifier).add(this.modifiers, !!virtual)) {
-        if (modifier instanceof PokemonFormChangeItemModifier || modifier.isTerastallizeModifier()) {
+        if (modifier.isPokemonFormChangeItemModifier() || modifier.isTerastallizeModifier()) {
           const pokemon = this.getPokemonById(modifier.pokemonId);
           if (pokemon) {
             success = modifier.apply(pokemon, true);
@@ -2625,7 +2625,7 @@ export default class BattleScene extends SceneBase {
       );
     }
     if ((modifier as PersistentModifier).add(this.enemyModifiers, false)) {
-      if (modifier instanceof PokemonFormChangeItemModifier || modifier.isTerastallizeModifier()) {
+      if (modifier.isPokemonFormChangeItemModifier() || modifier.isTerastallizeModifier()) {
         const pokemon = this.getPokemonById(modifier.pokemonId);
         if (pokemon) {
           modifier.apply(pokemon, true);
@@ -2899,7 +2899,7 @@ export default class BattleScene extends SceneBase {
     const modifierIndex = modifiers.indexOf(modifier);
     if (modifierIndex > -1) {
       modifiers.splice(modifierIndex, 1);
-      if (modifier instanceof PokemonFormChangeItemModifier || modifier.isTerastallizeModifier()) {
+      if (modifier.isPokemonFormChangeItemModifier() || modifier.isTerastallizeModifier()) {
         const pokemon = this.getPokemonById(modifier.pokemonId);
         if (pokemon) {
           modifier.apply(pokemon, false);
@@ -3049,7 +3049,7 @@ export default class BattleScene extends SceneBase {
         // Ultra Necrozma is changing its form back, so we need to figure out into which form it devolves.
         const formChangeItemModifiers = (
           this.findModifiers(
-            (m) => m instanceof PokemonFormChangeItemModifier && m.pokemonId === pokemon.id,
+            (m) => m.isPokemonFormChangeItemModifier() && m.pokemonId === pokemon.id,
           ) as PokemonFormChangeItemModifier[]
         )
           .filter((m) => m.active)

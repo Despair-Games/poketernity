@@ -1558,10 +1558,7 @@ class FormChangeItemModifierTypeGenerator extends ModifierTypeGenerator {
                     t
                     && t.active
                     && !globalScene.findModifier(
-                      (m) =>
-                        m instanceof PokemonFormChangeItemModifier
-                        && m.pokemonId === p.id
-                        && m.formChangeItem === t.item,
+                      (m) => m.isPokemonFormChangeItemModifier() && m.pokemonId === p.id && m.formChangeItem === t.item,
                     ),
                 );
 

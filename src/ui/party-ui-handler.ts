@@ -8,7 +8,7 @@ import MessageUiHandler from "#app/ui/message-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { BooleanHolder, toReadableString, getLocalizedSpriteKey } from "#app/utils";
 import {
-  PokemonFormChangeItemModifier,
+  type PokemonFormChangeItemModifier,
   type PokemonHeldItemModifier,
   SwitchEffectTransferModifier,
 } from "#app/modifier/modifier";
@@ -1189,7 +1189,7 @@ export default class PartyUiHandler extends MessageUiHandler {
 
   getFormChangeItemsModifiers(pokemon: Pokemon) {
     let formChangeItemModifiers = globalScene.findModifiers(
-      (m) => m instanceof PokemonFormChangeItemModifier && m.pokemonId === pokemon.id,
+      (m) => m.isPokemonFormChangeItemModifier() && m.pokemonId === pokemon.id,
     ) as PokemonFormChangeItemModifier[];
     const ultraNecrozmaModifiers = formChangeItemModifiers.filter(
       (m) => m.active && m.formChangeItem === FormChangeItem.ULTRANECROZIUM_Z,
