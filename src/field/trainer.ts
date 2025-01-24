@@ -133,6 +133,14 @@ export default class Trainer extends Phaser.GameObjects.Container {
    * @returns - The formatted name of the trainer.
    **/
   getName(trainerSlot: TrainerSlot = TrainerSlot.NONE, includeTitle: boolean = false): string {
+    if (this.config.hasDouble && this.config.spriteName1 && this.config.spriteName2) {
+      if (trainerSlot === TrainerSlot.TRAINER) {
+        return this.config.name;
+      } else if (trainerSlot === TrainerSlot.TRAINER_PARTNER) {
+        return this.config.nameFemale;
+      }
+    }
+
     // Get the base title based on the trainer slot and variant.
     let name = this.config.getTitle(trainerSlot, this.variant);
 

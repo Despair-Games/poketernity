@@ -17,6 +17,7 @@ import { TrainerType } from "#enums/trainer-type";
 import Overrides from "#app/overrides";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
+import { Gender } from "#enums/gender";
 
 /** Minimum BST for Pokemon generated onto the Elite Four's teams */
 const ELITE_FOUR_MINIMUM_BST = 460;
@@ -259,6 +260,8 @@ export class TrainerConfig {
   public hasGenders: boolean = false;
   public hasDouble: boolean = false;
   public hasCharSprite: boolean = false;
+  public spriteName1: string;
+  public spriteName2: string;
   public doubleOnly: boolean = false;
   public moneyMultiplier: number = 1;
   public isBoss: boolean = false;
@@ -317,6 +320,13 @@ export class TrainerConfig {
       // Get the derived type for the double trainer since the sprite key is based on the derived type
       ret = TrainerType[this.getDerivedType(this.trainerTypeDouble)].toString().toLowerCase();
     }
+    if (!female && this.spriteName1) {
+      console.log("spriteName1", this.spriteName1);
+      return this.spriteName1;
+    } else if (female && this.spriteName2) {
+      console.log("spriteName2", this.spriteName2);
+      return this.spriteName2;
+    }
     return ret;
   }
 
@@ -344,6 +354,12 @@ export class TrainerConfig {
    */
   setHasVoucher(hasVoucher: boolean): void {
     this.hasVoucher = hasVoucher;
+  }
+
+  setSpriteNames(spriteName1: string, spriteName2: string): TrainerConfig {
+    this.spriteName1 = spriteName1;
+    this.spriteName2 = spriteName2;
+    return this;
   }
 
   setTitle(title: string): TrainerConfig {
@@ -1287,12 +1303,12 @@ export class TrainerConfig {
 
   /**
    * Initializes the trainer configuration for a Champion.
-   * @param isMale Whether the Champion is Male or Female (for localization of the title).
+   * @param gender Gender of the Champion (or Double) for title
    * @param battleBgm String representing the battle music
    * @param mixedBattleBgm String representing mixed battle music
    * @returns The updated TrainerConfig instance.
    **/
-  initForChampion(isMale: boolean, battleBgm: string, mixedBattleBgm: string): TrainerConfig {
+  initForChampion(gender: integer, battleBgm: string, mixedBattleBgm: string): TrainerConfig {
     // Check if the internationalization (i18n) system is initialized.
     if (!getIsInitialized()) {
       initI18n();
@@ -1306,11 +1322,24 @@ export class TrainerConfig {
     // Localize the trainer's name by converting it to lowercase and replacing spaces with underscores.
     const nameForCall = this.name.toLowerCase().replace(/\s/g, "_");
     this.name = i18next.t(`trainerNames:${nameForCall}`);
+    if (this.nameDouble && this.spriteName1 && this.spriteName2) {
+      const nameDoubleForCall = this.nameDouble.toLowerCase().replace(/\s/g, "_");
+      this.nameDouble = i18next.t(`trainerNames:${nameDoubleForCall}`);
+      this.name = i18next.t(`trainerNames:${this.spriteName1.toLowerCase().replace(/\s/g, "_")}`);
+      this.nameFemale = i18next.t(`trainerNames:${this.spriteName2.toLowerCase().replace(/\s/g, "_")}`);
+    }
 
     // Set the title to "champion". (this is the key in the i18n file)
-    this.setTitle("champion");
-    if (!isMale) {
-      this.setTitle("champion_female");
+    switch (gender) {
+      case Gender.FEMALE:
+        this.setTitle("champion_female");
+        break;
+      case Gender.DOUBLE:
+        this.setTitle("champion_double");
+        break;
+      // Default includes Gender.MALE
+      default:
+        this.setTitle("champion");
     }
 
     // Configure various properties for the Champion.
@@ -1387,6 +1416,7 @@ export class TrainerConfig {
       const isDouble = variant === TrainerVariant.DOUBLE;
       const trainerKey = this.getSpriteKey(variant === TrainerVariant.FEMALE, false);
       const partnerTrainerKey = this.getSpriteKey(true, true);
+      console.log("Sprite Keys: ", trainerKey, partnerTrainerKey);
       globalScene.loadAtlas(trainerKey, "trainer");
       if (isDouble) {
         globalScene.loadAtlas(partnerTrainerKey, "trainer");

@@ -2,6 +2,7 @@ import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#a
 import { TrainerSlot } from "#enums/trainer-slot";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
+import { Gender } from "#enums/gender";
 
 const DEFAULT_CHAMPION_THEME = "battle_champion_alder";
 const KANTO_CHAMPION_THEME = "battle_kanto_champion";
@@ -277,4 +278,17 @@ export const championTrainerConfigs: TrainerConfigs = {
     .setPartyMemberFunc(3, getRandomPartyMemberFunc([Species.TERAPAGOS]))
     .setPartyMemberFunc(4, getRandomPartyMemberFunc([Species.HYDRAPPLE]))
     .setPartyMemberFunc(5, getRandomPartyMemberFunc([Species.DITTO])),
+  [TrainerType.RED_BLUE]: new TrainerConfig(++t)
+    .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.ESPEON], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.UMBREON], TrainerSlot.TRAINER_PARTNER))
+    .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.SNORLAX], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(3, getRandomPartyMemberFunc([Species.MACHAMP], TrainerSlot.TRAINER_PARTNER))
+    .setPartyMemberFunc(
+      4,
+      getRandomPartyMemberFunc([Species.VENUSAUR, Species.CHARIZARD, Species.BLASTOISE], TrainerSlot.TRAINER),
+    )
+    .setPartyMemberFunc(5, getRandomPartyMemberFunc([Species.PIDGEOT], TrainerSlot.TRAINER_PARTNER))
+    .setSpriteNames("red", "blue")
+    .setHasDouble("red_blue_double")
+    .initForChampion(Gender.DOUBLE, KANTO_CHAMPION_THEME, KANTO_CHAMPION_THEME),
 };
