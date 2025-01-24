@@ -1,4 +1,5 @@
 import { globalScene } from "#app/global-scene";
+import type { SwitchPhase } from "#app/phases/switch-phase";
 
 export class Phase {
   public start(): void {
@@ -9,5 +10,9 @@ export class Phase {
 
   public end(): void {
     globalScene.shiftPhase();
+  }
+
+  isSwitchPhase(): this is SwitchPhase {
+    return false;
   }
 }
