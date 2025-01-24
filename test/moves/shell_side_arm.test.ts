@@ -103,4 +103,20 @@ describe("Moves - Shell Side Arm", () => {
 
     expect(shellSideArmAttr.apply).toHaveLastReturnedWith(false);
   });
+
+  it("should ignore abilities when forecasting damage", async () => {
+    game.override.enemySpecies(Species.SNORLAX).enemyAbility(Abilities.FUR_COAT);
+
+    await game.classicMode.startBattle([Species.MANAPHY]);
+
+    vi.spyOn(shellSideArmAttr, "apply");
+
+    const enemy = game.field.getEnemyPokemon();
+    vi.spyOn(enemy, "stats", "get").mockReturnValue([100, 100, 75, 100, 100, 100]);
+
+    game.move.select(Moves.SHELL_SIDE_ARM);
+    await game.phaseInterceptor.to("BerryPhase", false);
+
+    expect(shellSideArmAttr.apply).toHaveLastReturnedWith(true);
+  });
 });

@@ -13,9 +13,9 @@ import {
 import { PlayerGender } from "#enums/player-gender";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
 import { achvs } from "#app/system/achv";
-import { Mode } from "#app/ui/ui";
-import type { PartyOption } from "#app/ui/party-ui-handler";
-import { PartyUiMode } from "#app/ui/party-ui-handler";
+import { UiMode } from "#enums/ui-mode";
+import type { PartyOption } from "#enums/party-option";
+import { PartyUiMode } from "#enums/party-ui-mode";
 import { Species } from "#enums/species";
 import type { Type } from "#enums/type";
 import type PokemonSpecies from "#app/data/pokemon-species";
@@ -32,7 +32,7 @@ import { modifierTypes } from "#app/modifier/modifier-type";
 import { Gender } from "#enums/gender";
 import type { PermanentStat } from "#enums/stat";
 import { VictoryPhase } from "#app/phases/victory-phase";
-import { SummaryUiMode } from "#app/ui/summary-ui-handler";
+import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import type { Abilities } from "#enums/abilities";
 import type { PokeballType } from "#enums/pokeball";
@@ -708,7 +708,7 @@ export async function catchPokemon(
               {
                 label: i18next.t("partyUiHandler:SUMMARY"),
                 handler: () => {
-                  globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+                  globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
                     removePokemon();
                     end();
                   });
@@ -731,12 +731,12 @@ export async function catchPokemon(
                     pokemon,
                   );
                   globalScene.ui.setMode(
-                    Mode.SUMMARY,
+                    UiMode.SUMMARY,
                     newPokemon,
                     0,
                     SummaryUiMode.DEFAULT,
                     () => {
-                      globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+                      globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
                         promptRelease();
                       });
                     },
@@ -749,11 +749,11 @@ export async function catchPokemon(
                 label: i18next.t("menu:no"),
                 handler: () => {
                   globalScene.ui.setMode(
-                    Mode.PARTY,
+                    UiMode.PARTY,
                     PartyUiMode.RELEASE,
                     0,
                     (slotIndex: number, _option: PartyOption) => {
-                      globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+                      globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
                         if (slotIndex < 6) {
                           addToParty(slotIndex);
                         } else {
@@ -776,7 +776,7 @@ export async function catchPokemon(
               i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }),
               null,
               () => {
-                globalScene.ui.setMode(Mode.OPTION_SELECT, addToPartyMenuConfig);
+                globalScene.ui.setMode(UiMode.OPTION_SELECT, addToPartyMenuConfig);
               },
             );
           };

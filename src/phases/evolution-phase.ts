@@ -14,7 +14,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { fixedNumber } from "#app/utils";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
@@ -191,7 +191,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
                 time.delayedCall(3000, end);
               },
             };
-            ui.setOverlayMode(Mode.CONFIRM, options);
+            ui.setOverlayMode(UiMode.CONFIRM, options);
           },
         );
       },

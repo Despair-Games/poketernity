@@ -45,3 +45,9 @@ export const LANGUAGE_MAX_OPTIONS = 7;
 
 /** All available game speeds. */
 export const GAME_SPEEDS = [1, 1.25, 1.5, 2, 2.5, 3, 4, 5];
+
+/** Min - Max waves for mystery encounter in classic mode. */
+export const CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES: [min: number, max: number] = [10, 180];
+
+/** Min - Max waves for mystery encounter in challenge mode. */
+export const CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES: [min: number, max: number] = [10, 180];

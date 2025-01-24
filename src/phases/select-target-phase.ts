@@ -1,7 +1,7 @@
 import type { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/all-moves";
 import { globalScene } from "#app/global-scene";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { Moves } from "#enums/moves";
 import i18next from "i18next";
 import { PokemonPhase } from "./abstract-pokemon-phase";
@@ -21,8 +21,8 @@ export class SelectTargetPhase extends PokemonPhase {
     const turnCommand = turnCommands[this.fieldIndex];
     const move = turnCommand?.move?.move ?? Moves.NONE;
 
-    ui.setMode(Mode.TARGET_SELECT, this.fieldIndex, move, (targets: BattlerIndex[]) => {
-      ui.setMode(Mode.MESSAGE);
+    ui.setMode(UiMode.TARGET_SELECT, this.fieldIndex, move, (targets: BattlerIndex[]) => {
+      ui.setMode(UiMode.MESSAGE);
 
       const user = globalScene.getFieldPokemonByBattlerIndex(this.fieldIndex);
       const firstTarget = globalScene.getFieldPokemonByBattlerIndex(targets[0]);

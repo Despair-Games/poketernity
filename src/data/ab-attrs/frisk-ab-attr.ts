@@ -1,4 +1,3 @@
-import { setAbilityRevealed } from "#app/data/ability-utils";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -16,7 +15,7 @@ export class FriskAbAttr extends PostSummonAbAttr {
             opponentAbilityName: opponent.getAbility().name,
           }),
         );
-        setAbilityRevealed(opponent);
+        opponent.battleData.abilitiesRevealed.push(opponent.getAbility().id);
       }
     }
     return true;

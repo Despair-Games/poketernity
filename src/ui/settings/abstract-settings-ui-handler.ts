@@ -6,10 +6,11 @@ import MessageUiHandler from "#app/ui/message-ui-handler";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-handler";
 import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigationMenu";
-import { TextStyle, addTextObject } from "#app/ui/text";
-import { Mode } from "#app/ui/ui";
+import { addTextObject } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "#app/ui/ui-theme";
-import { capitalize, hasTouchscreen } from "#app/utils";
+import { capitalizeFirstLetter, hasTouchscreen } from "#app/utils";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
@@ -59,7 +60,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
     this.reloadRequired = false;
     this.rowsToDisplay = 8;
-    this.title = capitalize(category);
+    this.title = capitalizeFirstLetter(category);
   }
 
   /**
@@ -485,7 +486,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
           canBypassInputDelay: true,
         };
         globalScene.ui.showText(confirmationMessage, null, () => {
-          globalScene.ui.setOverlayMode(Mode.CONFIRM, confirmSettingOptions);
+          globalScene.ui.setOverlayMode(UiMode.CONFIRM, confirmSettingOptions);
         });
       } else {
         this.handleSaveSetting<typeof value>(uiItem, value);
@@ -621,7 +622,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
       },
     };
     this.showText(text, undefined, () => {
-      globalScene.ui.setOverlayMode(Mode.CONFIRM, config);
+      globalScene.ui.setOverlayMode(UiMode.CONFIRM, config);
     });
   }
 

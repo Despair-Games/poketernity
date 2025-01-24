@@ -1,19 +1,15 @@
-import { addTextObject, TextStyle } from "./text";
-import PartyUiHandler, { PartyUiMode } from "./party-ui-handler";
-import { Mode } from "./ui";
+import { addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
+import PartyUiHandler from "./party-ui-handler";
+import { PartyUiMode } from "#enums/party-ui-mode";
+import { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
 import i18next from "i18next";
 import { Button } from "#enums/buttons";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { CommandPhase } from "#app/phases/command-phase";
 import { globalScene } from "#app/global-scene";
-
-export enum Command {
-  FIGHT = 0,
-  BALL,
-  POKEMON,
-  RUN,
-}
+import { BattleCommand } from "#enums/battle-command";
 
 export default class CommandUiHandler extends UiHandler {
   private commandsContainer: Phaser.GameObjects.Container;
@@ -23,7 +19,7 @@ export default class CommandUiHandler extends UiHandler {
   protected cursor2: number = 0;
 
   constructor() {
-    super(Mode.COMMAND);
+    super(UiMode.COMMAND);
   }
 
   setup() {
@@ -71,8 +67,8 @@ export default class CommandUiHandler extends UiHandler {
       i18next.t("commandUiHandler:actionMessage", { pokemonName: getPokemonNameWithAffix(commandPhase.getPokemon()) }),
       0,
     );
-    if (this.getCursor() === Command.POKEMON) {
-      this.setCursor(Command.FIGHT);
+    if (this.getCursor() === BattleCommand.POKEMON) {
+      this.setCursor(BattleCommand.FIGHT);
     } else {
       this.setCursor(this.getCursor());
     }
@@ -91,19 +87,19 @@ export default class CommandUiHandler extends UiHandler {
       if (button === Button.ACTION) {
         switch (cursor) {
           // Fight
-          case Command.FIGHT:
-            ui.setMode(Mode.FIGHT, (globalScene.getCurrentPhase() as CommandPhase).getFieldIndex());
+          case BattleCommand.FIGHT:
+            ui.setMode(UiMode.FIGHT, (globalScene.getCurrentPhase() as CommandPhase).getFieldIndex());
             success = true;
             break;
           // Ball
-          case Command.BALL:
-            ui.setModeWithoutClear(Mode.BALL);
+          case BattleCommand.BALL:
+            ui.setModeWithoutClear(UiMode.BALL);
             success = true;
             break;
           // Pokemon
-          case Command.POKEMON:
+          case BattleCommand.POKEMON:
             ui.setMode(
-              Mode.PARTY,
+              UiMode.PARTY,
               PartyUiMode.SWITCH,
               (globalScene.getCurrentPhase() as CommandPhase).getPokemon().getFieldIndex(),
               null,
@@ -112,8 +108,8 @@ export default class CommandUiHandler extends UiHandler {
             success = true;
             break;
           // Run
-          case Command.RUN:
-            (globalScene.getCurrentPhase() as CommandPhase).handleCommand(Command.RUN, 0);
+          case BattleCommand.RUN:
+            (globalScene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.RUN, 0);
             success = true;
             break;
         }

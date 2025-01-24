@@ -9,7 +9,6 @@ import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-enco
 import { initPokemonForms } from "#app/data/pokemon-forms";
 import { initSpecies } from "#app/data/pokemon-species";
 import { initAchievements } from "#app/system/achv";
-import { initVouchers } from "#app/system/voucher";
 import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { setCookie } from "#app/utils";
 import { blobToString } from "#test/testUtils/gameManagerUtils";
@@ -19,6 +18,7 @@ import { mockLocalStorage } from "#test/testUtils/mocks/mockLocalStorage";
 import { MockImage } from "#test/testUtils/mocks/mocksContainer/mockImage";
 import Phaser from "phaser";
 import { manageListeners } from "./listenersManager";
+import { initVouchers } from "#app/system/init-vouchers";
 
 /**
  * An initialization function that is run at the beginning of every test file (via `beforeAll()`).

@@ -1,6 +1,5 @@
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { globalScene } from "#app/global-scene";
-import { RunDisplayMode } from "#app/ui/run-info-ui-handler";
 import { fixedNumber, formatLargeNumber, getPlayTimeString, isNullOrUndefined } from "#app/utils";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
@@ -9,17 +8,15 @@ import * as Modifier from "../modifier/modifier";
 import type PokemonData from "../system/pokemon-data";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import MessageUiHandler from "./message-ui-handler";
-import { TextStyle, addTextObject } from "./text";
-import { Mode } from "./ui";
+import { addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "./ui-theme";
+import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
+import { RunDisplayMode } from "#enums/run-display-mode";
 
 const SESSION_SLOTS_COUNT = 5;
 const SLOTS_ON_SCREEN = 3;
-
-export enum SaveSlotUiMode {
-  LOAD,
-  SAVE,
-}
 
 export type SaveSlotSelectCallback = (cursor: number) => void;
 
@@ -40,7 +37,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
   private sessionSlotsContainerInitialY: number;
 
   constructor() {
-    super(Mode.SAVE_SLOT);
+    super(UiMode.SAVE_SLOT);
   }
 
   setup() {
@@ -122,7 +119,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
                 this.saveSlotSelectCallback = null;
                 ui.revertMode();
                 ui.showText("", 0);
-                ui.setMode(Mode.MESSAGE);
+                ui.setMode(UiMode.MESSAGE);
                 originalCallback && originalCallback(cursor);
               };
               if (this.sessionSlots[cursor].hasData) {
@@ -145,7 +142,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
                   inputDelay: import.meta.env.DEV ? 300 : 2000,
                 };
                 ui.showText(i18next.t("saveSlotSelectUiHandler:overwriteData"), null, () => {
-                  ui.setOverlayMode(Mode.CONFIRM, overwriteDataOptions);
+                  ui.setOverlayMode(UiMode.CONFIRM, overwriteDataOptions);
                 });
               } else if (this.sessionSlots[cursor].hasData === false) {
                 saveAndCallback();
@@ -182,7 +179,7 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
         case Button.RIGHT:
           if (this.sessionSlots[cursorPosition].hasData && this.sessionSlots[cursorPosition].saveData) {
             globalScene.ui.setOverlayMode(
-              Mode.RUN_INFO,
+              UiMode.RUN_INFO,
               this.sessionSlots[cursorPosition].saveData,
               RunDisplayMode.SESSION_PREVIEW,
             );

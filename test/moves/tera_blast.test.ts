@@ -96,7 +96,7 @@ describe("Moves - Tera Blast", () => {
 
       game.move.select(Moves.TERA_BLAST);
       await game.phaseInterceptor.to("TurnEndPhase");
-      expect(game.scene.getEnemyPokemon()!.battleData.abilityRevealed).toBe(true);
+      expect(game.scene.getEnemyPokemon()!.battleData.abilitiesApplied).toContain(Abilities.TOXIC_DEBRIS);
     },
     20000,
   );

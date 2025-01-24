@@ -11,11 +11,17 @@ export class PostDefendAbilitySwapAbAttr extends PostDefendAbAttr {
     if (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && !attacker.getAbility().hasAttr(UnswappableAbilityAbAttr)
+      && !attacker.isMax()
     ) {
       if (!simulated) {
-        const tempAbilityId = attacker.getAbility().id;
-        attacker.summonData.ability = pokemon.getAbility().id;
-        pokemon.summonData.ability = tempAbilityId;
+        const sourceAbilityId = pokemon.getAbility().id;
+        const attackerAbilityId = attacker.getAbility().id;
+
+        attacker.summonData.ability = sourceAbilityId;
+        attacker.battleData.abilitiesRevealed.push(sourceAbilityId);
+
+        pokemon.summonData.ability = attackerAbilityId;
+        pokemon.battleData.abilitiesRevealed.push(attackerAbilityId);
       }
       return true;
     }

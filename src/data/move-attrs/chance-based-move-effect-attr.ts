@@ -53,7 +53,13 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
    * @returns The final percent chance of this attribute's effect applying. If negative, the
    * effect is guaranteed to apply.
    */
-  public getMoveChance(user: Pokemon, target: Pokemon, move: Move, selfEffect: boolean, showAbility: boolean = false): number {
+  public getMoveChance(
+    user: Pokemon,
+    target: Pokemon,
+    move: Move,
+    selfEffect: boolean,
+    showAbility: boolean = false,
+  ): number {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
     applyAbAttrs(MoveEffectChanceMultiplierAbAttr, user, false, moveChance, move, showAbility);

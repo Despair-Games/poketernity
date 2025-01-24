@@ -1,8 +1,9 @@
 import { GameModes } from "#enums/game-modes";
 import UiHandler from "./ui-handler";
 import type { SessionSaveData } from "#app/@types/SessionData";
-import { TextStyle, addTextObject, addBBCodeTextObject, getTextColor } from "./text";
-import { Mode } from "./ui";
+import { addTextObject, addBBCodeTextObject, getTextColor } from "./text";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "./ui-theme";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
 import {
@@ -28,11 +29,12 @@ import { getVariantTint } from "#app/data/variant";
 import * as Modifier from "../modifier/modifier";
 import type { Species } from "#enums/species";
 import { PlayerGender } from "#enums/player-gender";
-import { SettingKeyboard } from "#app/system/settings/settings-keyboard";
+import { SettingKeyboard } from "#enums/setting-keyboard";
 import { getBiomeName } from "#app/data/balance/biomes";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
+import { RunDisplayMode } from "#enums/run-display-mode";
 
 /**
  * RunInfoUiMode indicates possible overlays of RunInfoUiHandler.
@@ -43,11 +45,6 @@ enum RunInfoUiMode {
   MAIN,
   HALL_OF_FAME,
   ENDING_ART,
-}
-
-export enum RunDisplayMode {
-  RUN_HISTORY,
-  SESSION_PREVIEW,
 }
 
 /**
@@ -75,7 +72,7 @@ export default class RunInfoUiHandler extends UiHandler {
   private modifiersModule: any;
 
   constructor() {
-    super(Mode.RUN_INFO);
+    super(UiMode.RUN_INFO);
   }
 
   override async setup() {

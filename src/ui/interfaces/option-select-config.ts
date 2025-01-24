@@ -1,11 +1,11 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { Mode } from "#app/ui/ui";
+import type { UiMode } from "#enums/ui-mode";
 // -- end tsdoc imports --
-import type { TextStyle } from "#app/ui/text";
+import type { TextStyle } from "#enums/text-style";
 
 /**
- * Customizations options for UI's {@linkcode Mode.OPTION_SELECT}
+ * Customizations options for UI's {@linkcode UiMode.OPTION_SELECT}
  *
  * @template T the specifc type of {@linkcode OptionSelectItem} contained by this config
  */

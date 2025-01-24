@@ -12,16 +12,16 @@
 
     "preview": "vite preview",
 
-    "test": "vitest run --project main --no-isolate",
+    "test": "vitest run --no-isolate",
     "posttest": "git rev-parse --short HEAD",
 
-    "test:cov": "vitest run --project main --coverage",
+    "test:cov": "vitest run --coverage",
     "posttest:cov": "git rev-parse --short HEAD",
 
-    "test:watch": "vitest watch --project main --coverage",
+    "test:watch": "vitest watch --coverage",
     "posttest:watch": "git rev-parse --short HEAD",
 
-    "test:silent": "vitest run --project main --silent --no-isolate",
+    "test:silent": "vitest run --silent --no-isolate",
     "posttest:silent": "git rev-parse --short HEAD",
 
     "typecheck": "tsc --noEmit",
@@ -50,7 +50,7 @@
     "@types/node": "^20.12.13",
     "@typescript-eslint/eslint-plugin": "^8.0.0-alpha.54",
     "@typescript-eslint/parser": "^8.0.0-alpha.54",
-    "@vitest/coverage-istanbul": "^2.1.8",
+    "@vitest/coverage-istanbul": "^3.0.2",
     "chalk": "^5.4.1",
     "dependency-cruiser": "^16.3.10",
     "eslint": "^9.7.0",
@@ -65,7 +65,7 @@
     "typescript-eslint": "^8.0.0-alpha.54",
     "vite": "^6.0.11",
     "vite-tsconfig-paths": "^4.3.2",
-    "vitest": "^2.1.8",
+    "vitest": "^3.0.2",
     "vitest-canvas-mock": "^0.3.3"
   },
   "dependencies": {

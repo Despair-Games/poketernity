@@ -1,10 +1,12 @@
 import type { BattlerIndex } from "#enums/battler-index";
-import { CommonAnim, CommonBattleAnim } from "#app/data/battle-anims";
+import { CommonBattleAnim } from "#app/data/battle-anims";
+import { CommonAnim } from "#enums/common-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { getTextColor, TextStyle } from "#app/ui/text";
-import { Mode } from "#app/ui/ui";
+import { getTextColor } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
 import { Stat } from "#enums/stat";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
@@ -66,7 +68,7 @@ export class ScanIvsPhase extends PokemonPhase {
         () => {
           const options: ConfirmModeConfig = {
             yesHandler: () => {
-              ui.setMode(Mode.MESSAGE);
+              ui.setMode(UiMode.MESSAGE);
               ui.clearText();
               new CommonBattleAnim(CommonAnim.LOCK_ON, pokemon, pokemon).play(false, () => {
                 ui.getMessageHandler()
@@ -75,12 +77,12 @@ export class ScanIvsPhase extends PokemonPhase {
               });
             },
             noHandler: () => {
-              ui.setMode(Mode.MESSAGE);
+              ui.setMode(UiMode.MESSAGE);
               ui.clearText();
               this.end();
             },
           };
-          ui.setMode(Mode.CONFIRM, options);
+          ui.setMode(UiMode.CONFIRM, options);
         },
       );
     } else {

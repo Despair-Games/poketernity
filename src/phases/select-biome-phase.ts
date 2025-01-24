@@ -2,7 +2,7 @@ import { biomeLinks, getBiomeName } from "#app/data/balance/biomes";
 import { globalScene } from "#app/global-scene";
 import { MapModifier, MoneyInterestModifier } from "#app/modifier/modifier";
 import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { randSeedInt } from "#app/utils";
 import { Biome } from "#enums/biome";
 import { BattlePhase } from "./abstract-battle-phase";
@@ -60,7 +60,7 @@ export class SelectBiomePhase extends BattlePhase {
           const ret: OptionSelectItem = {
             label: getBiomeName(b),
             handler: () => {
-              ui.setMode(Mode.MESSAGE);
+              ui.setMode(UiMode.MESSAGE);
               setNextBiome(b);
               return true;
             },
@@ -68,7 +68,7 @@ export class SelectBiomePhase extends BattlePhase {
           return ret;
         });
 
-        ui.setMode(Mode.OPTION_SELECT, {
+        ui.setMode(UiMode.OPTION_SELECT, {
           options: biomeSelectItems,
           delay: 1000,
           yOffset: 48,

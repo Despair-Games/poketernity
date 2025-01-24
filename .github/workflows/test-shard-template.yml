@@ -3,9 +3,6 @@ name: Test Template
 on:
   workflow_call:
     inputs:
-      project:
-        required: true
-        type: string
       shard:
         required: true
         type: number
@@ -29,4 +26,4 @@ jobs:
       - name: Install Node.js dependencies
         run: npm ci
       - name: Run tests
-        run: npx vitest --project ${{ inputs.project }} --shard=${{ inputs.shard }}/${{ inputs.totalShards }} --no-isolate ${{ !runner.debug && '--silent' || '' }}
+        run: npx vitest --shard=${{ inputs.shard }}/${{ inputs.totalShards }} --no-isolate ${{ !runner.debug && '--silent' || '' }}

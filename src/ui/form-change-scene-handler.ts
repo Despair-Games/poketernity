@@ -1,6 +1,7 @@
 import MessageUiHandler from "./message-ui-handler";
-import { TextStyle, addTextObject } from "./text";
-import { Mode } from "./ui";
+import { addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
 import { Button } from "#enums/buttons";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
@@ -17,7 +18,7 @@ export default class FormChangeSceneHandler extends MessageUiHandler {
   public cancelled: boolean;
 
   constructor() {
-    super(Mode.FORM_CHANGE_SCENE);
+    super(UiMode.FORM_CHANGE_SCENE);
   }
 
   setup() {

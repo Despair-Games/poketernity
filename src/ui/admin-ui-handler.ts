@@ -4,9 +4,10 @@ import { formatText } from "#app/utils";
 import type { InputFieldConfig } from "./form-modal-ui-handler";
 import { FormModalUiHandler } from "./form-modal-ui-handler";
 import type { ModalConfig } from "./modal-ui-handler";
-import { TextStyle } from "./text";
-import { Mode } from "./ui";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
 import { globalScene } from "#app/global-scene";
+import { AdminMode } from "#enums/admin-mode";
 
 type AdminUiHandlerService = "discord" | "google";
 type AdminUiHandlerServiceMode = "Link" | "Unlink";
@@ -31,7 +32,7 @@ export default class AdminUiHandler extends FormModalUiHandler {
     return `Username and ${service} successfully ${mode.toLowerCase()}ed`;
   };
 
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
   }
 
@@ -132,10 +133,10 @@ export default class AdminUiHandler extends FormModalUiHandler {
         const adminSearchResult: AdminSearchInfo = this.convertInputsToAdmin(); // this converts the input texts into a single object for use later
         const validFields = this.areFieldsValid(this.adminMode);
         if (validFields.error) {
-          globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] }); // this is here to force a loading screen to allow the admin tool to reopen again if there's an error
+          globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] }); // this is here to force a loading screen to allow the admin tool to reopen again if there's an error
           return this.showMessage(validFields.errorMessage ?? "", adminSearchResult, true);
         }
-        globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] });
+        globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
         if (this.adminMode === AdminMode.LINK) {
           this.adminLinkUnlink(adminSearchResult, "discord", "Link") // calls server to link discord
             .then((response) => {
@@ -164,7 +165,7 @@ export default class AdminUiHandler extends FormModalUiHandler {
 
   showMessage(message: string, adminResult: AdminSearchInfo, isError: boolean) {
     globalScene.ui.setMode(
-      Mode.ADMIN,
+      UiMode.ADMIN,
       Object.assign(this.config, { errorMessage: message?.trim() }),
       this.adminMode,
       adminResult,
@@ -211,18 +212,18 @@ export default class AdminUiHandler extends FormModalUiHandler {
               const mode = adminResult[aR] === "" ? "Link" : "Unlink"; // this figures out if we're linking or unlinking a service
               const validFields = this.areFieldsValid(this.adminMode, service);
               if (validFields.error) {
-                globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] }); // this is here to force a loading screen to allow the admin tool to reopen again if there's an error
+                globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] }); // this is here to force a loading screen to allow the admin tool to reopen again if there's an error
                 return this.showMessage(validFields.errorMessage ?? "", adminResult, true);
               }
               this.adminLinkUnlink(this.convertInputsToAdmin(), service as AdminUiHandlerService, mode).then(
                 (response) => {
                   // attempts to link/unlink depending on the service
                   if (response.error) {
-                    globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] });
+                    globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
                     return this.showMessage(response.errorType, adminResult, true); // fail
                   } else {
                     // success, reload panel with new results
-                    globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] });
+                    globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
                     this.adminSearch(adminResult).then((response) => {
                       if (response.error) {
                         return this.showMessage(response.errorType, adminResult, true);
@@ -376,7 +377,7 @@ export default class AdminUiHandler extends FormModalUiHandler {
   private updateAdminPanelInfo(adminSearchResult: AdminSearchInfo, mode?: AdminMode) {
     mode = mode ?? AdminMode.ADMIN;
     globalScene.ui.setMode(
-      Mode.ADMIN,
+      UiMode.ADMIN,
       {
         buttonActions: [
           // we double revert here and below to go back 2 layers of menus
@@ -422,12 +423,6 @@ export default class AdminUiHandler extends FormModalUiHandler {
       this.modalContainer.remove(removeArray.pop(), true);
     }
   }
-}
-
-export enum AdminMode {
-  LINK,
-  SEARCH,
-  ADMIN,
 }
 
 export function getAdminModeName(adminMode: AdminMode): string {

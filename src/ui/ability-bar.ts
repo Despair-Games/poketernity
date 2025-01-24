@@ -1,7 +1,8 @@
 import { getPokemonNameWithAffix } from "#app/messages";
 import { globalScene } from "#app/global-scene";
-import type { Pokemon } from "../field/pokemon";
-import { TextStyle, addTextObject } from "./text";
+import type { Pokemon } from "#app/field/pokemon";
+import { addTextObject } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
 import i18next from "i18next";
 
 const hiddenX = -118;

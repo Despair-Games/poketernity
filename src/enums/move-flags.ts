@@ -13,7 +13,7 @@ export enum MoveFlags {
    *
    * cf https://bulbapedia.bulbagarden.net/wiki/Sound-based_move
    */
-  SOUND_BASED = 1 << 3,
+  SOUND_MOVE = 1 << 3,
   HIDE_USER = 1 << 4,
   HIDE_TARGET = 1 << 5,
   BITING_MOVE = 1 << 6,
@@ -26,7 +26,7 @@ export enum MoveFlags {
    */
   RECKLESS_MOVE = 1 << 10,
   /** Indicates a move should be affected by {@linkcode Abilities.BULLETPROOF} */
-  BALLBOMB_MOVE = 1 << 11,
+  BULLET_MOVE = 1 << 11,
   /** Grass types and pokemon with {@linkcode Abilities.OVERCOAT} are immune to powder moves */
   POWDER_MOVE = 1 << 12,
   /** Indicates a move should trigger {@linkcode Abilities.DANCER} */
@@ -42,4 +42,6 @@ export enum MoveFlags {
   IGNORE_SUBSTITUTE = 1 << 18,
   /** Indicates a move is able to be redirected to allies in a double battle if the attacker faints */
   REDIRECT_COUNTER = 1 << 19,
+  /** Flag indicating whether a move is a G-Max Move or not */
+  G_MAX_MOVE = 1 << 20,
 }
