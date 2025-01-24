@@ -15,7 +15,6 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { Moves } from "#enums/moves";
-import { ShinyRateBoosterModifier } from "#app/modifier/modifier";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import i18next from "i18next";
 import { Abilities } from "#enums/abilities";
@@ -147,7 +146,7 @@ describe("An Offer You Can't Refuse - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.AN_OFFER_YOU_CANT_REFUSE, defaultParty);
       await runMysteryEncounterToEnd(game, 1);
 
-      const itemModifier = scene.findModifier((m) => m instanceof ShinyRateBoosterModifier) as ShinyRateBoosterModifier;
+      const itemModifier = scene.findModifier((m) => m.isShinyRateBoosterModifier());
 
       expect(itemModifier).toBeDefined();
       expect(itemModifier?.stackCount).toBe(1);

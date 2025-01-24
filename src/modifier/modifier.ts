@@ -225,6 +225,10 @@ export abstract class Modifier {
   isPreserveBerryModifier(): this is PreserveBerryModifier {
     return false;
   }
+
+  isShinyRateBoosterModifier(): this is ShinyRateBoosterModifier {
+    return false;
+  }
 }
 
 export abstract class PersistentModifier extends Modifier {
@@ -3230,7 +3234,7 @@ export class ShinyRateBoosterModifier extends PersistentModifier {
   }
 
   override match(modifier: Modifier): boolean {
-    return modifier instanceof ShinyRateBoosterModifier;
+    return modifier.isShinyRateBoosterModifier();
   }
 
   clone(): ShinyRateBoosterModifier {
@@ -3250,6 +3254,10 @@ export class ShinyRateBoosterModifier extends PersistentModifier {
 
   getMaxStackCount(): number {
     return 4;
+  }
+
+  override isShinyRateBoosterModifier(): this is this {
+    return true;
   }
 }
 
