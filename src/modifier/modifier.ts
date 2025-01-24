@@ -250,6 +250,10 @@ export abstract class Modifier {
   isTurnHealModifier(): this is TurnHealModifier {
     return false;
   }
+
+  isHealShopCostModifier(): this is HealShopCostModifier {
+    return false;
+  }
 }
 
 export abstract class PersistentModifier extends Modifier {
@@ -3378,7 +3382,7 @@ export class HealShopCostModifier extends PersistentModifier {
   }
 
   override match(modifier: Modifier): boolean {
-    return modifier instanceof HealShopCostModifier;
+    return modifier.isHealShopCostModifier();
   }
 
   clone(): HealShopCostModifier {
@@ -3402,6 +3406,10 @@ export class HealShopCostModifier extends PersistentModifier {
 
   getMaxStackCount(): number {
     return 1;
+  }
+
+  override isHealShopCostModifier(): this is this {
+    return true;
   }
 }
 

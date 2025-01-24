@@ -16,7 +16,6 @@ import type BattleScene from "#app/battle-scene";
 import { PokemonMove } from "#app/field/pokemon";
 import { UiMode } from "#enums/ui-mode";
 import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
-import { HealShopCostModifier } from "#app/modifier/modifier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
@@ -136,7 +135,7 @@ describe("Trash to Treasure - Mystery Encounter", () => {
       expect(shellBell).toBeDefined();
       expect(shellBell?.stackCount).toBe(2);
 
-      const blackSludge = scene.findModifier((m) => m instanceof HealShopCostModifier) as HealShopCostModifier;
+      const blackSludge = scene.findModifier((m) => m.isHealShopCostModifier());
       expect(blackSludge).toBeDefined();
       expect(blackSludge?.stackCount).toBe(1);
     });
