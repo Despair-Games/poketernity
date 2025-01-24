@@ -233,6 +233,14 @@ export abstract class Modifier {
   isPokemonMultiHitModifier(): this is PokemonMultiHitModifier {
     return false;
   }
+
+  isLapsingPokemonHeldItemModifier(): this is LapsingPokemonHeldItemModifier {
+    return false;
+  }
+
+  isLapsingPersistentModifier(): this is LapsingPersistentModifier {
+    return false;
+  }
 }
 
 export abstract class PersistentModifier extends Modifier {
@@ -502,6 +510,10 @@ export abstract class LapsingPersistentModifier extends PersistentModifier {
   getMaxStackCount(_forThreshold?: boolean): number {
     // Must be an abitrary number greater than 1
     return 2;
+  }
+
+  override isLapsingPersistentModifier(): this is this {
+    return true;
   }
 }
 
@@ -884,6 +896,10 @@ export abstract class LapsingPokemonHeldItemModifier extends PokemonHeldItemModi
 
   override getMaxStackCount(_forThreshold?: boolean): number {
     return 1;
+  }
+
+  override isLapsingPokemonHeldItemModifier(): this is LapsingPokemonHeldItemModifier {
+    return true;
   }
 }
 
