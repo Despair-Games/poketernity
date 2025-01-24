@@ -3341,7 +3341,7 @@ export function initMoves() {
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_VOLCALITH),
     new AttackMove(Moves.G_MAX_SANDBLAST, Type.GROUND, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // applies a stronger version of sand tomb
+      .attr(TrapAttr, BattlerTagType.G_MAX_SAND_TOMB),
     new AttackMove(Moves.G_MAX_SNOOZE, Type.DARK, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .unimplemented(), // 50% of applying drowsy
@@ -3365,7 +3365,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.SPD], -2),
     new AttackMove(Moves.G_MAX_CENTIFERNO, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // applies a stronger version of fire spin
+      .attr(TrapAttr, BattlerTagType.G_MAX_FIRE_SPIN),
     new AttackMove(Moves.G_MAX_VINE_LASH, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_VINE_LASH),
