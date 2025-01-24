@@ -441,4 +441,8 @@ export class SelectModifierPhase extends BattlePhase {
       isCopy: true,
     });
   }
+
+  override isSelectModifierPhase(): this is this {
+    return true;
+  }
 }
