@@ -20,7 +20,7 @@ export function applyAbAttrs<TAttr extends AbAttr>(
  * @see {@linkcode AbAttr}
  */
 
-export function applyAbAttrsInternal<TAttr extends AbAttr>(
+function applyAbAttrsInternal<TAttr extends AbAttr>(
   abFilterOptions: AbilityFilterOptions,
   attrType: AbstractConstructor<TAttr>,
   ...params: Parameters<TAttr["apply"]>
@@ -73,4 +73,10 @@ export function applyAbAttrsInternal<TAttr extends AbAttr>(
   });
 
   return messages;
+}
+export function applyRevealedAbAttrs<TAttr extends AbAttr>(
+  attrType: AbstractConstructor<TAttr>,
+  ...params: Parameters<TAttr["apply"]>
+): string[] {
+  return applyAbAttrsInternal({ canApplyOnly: true, revealedOnly: true }, attrType, ...params);
 }

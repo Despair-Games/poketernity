@@ -17,7 +17,7 @@ import type { AbAttr } from "./ab-attrs/ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { ForceSwitchOutImmunityAbAttr } from "./ab-attrs/force-switch-out-immunity-ab-attr";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
-import { applyAbAttrs, applyAbAttrsInternal } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs, applyRevealedAbAttrs } from "#app/data/apply-ab-attrs";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -266,13 +266,6 @@ export class ForceSwitchOutHelper {
       ? i18next.t("moveTriggers:cannotBeSwitchedOut", { pokemonName: getPokemonNameWithAffix(target) })
       : null;
   }
-}
-
-export function applyRevealedAbAttrs<TAttr extends AbAttr>(
-  attrType: AbstractConstructor<TAttr>,
-  ...params: Parameters<TAttr["apply"]>
-): string[] {
-  return applyAbAttrsInternal({ canApplyOnly: true, revealedOnly: true }, attrType, ...params);
 }
 
 /**
