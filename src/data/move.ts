@@ -692,7 +692,7 @@ export abstract class Move implements Localizable {
   /**
    * Calculates the move's combined effect score (ES) from all attributes,
    * conditions, and other score modifiers. ES is used to evaluate secondary
-   * effects and is agnostic of damage dealt, as that is accounted for by
+   * effects and does not factor in damage dealt, as that is accounted for by
    * {@linkcode Pokemon.getAttackScore}.
    * @param user the {@linkcode Pokemon} using the move
    * @param target the {@linkcode Pokemon} targeted by the move
