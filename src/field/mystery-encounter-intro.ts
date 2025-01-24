@@ -82,6 +82,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
 
   constructor(encounter: MysteryEncounter) {
     super(globalScene, -72, 76);
+    this.type = "MysteryEncounterIntroVisuals";
     this.encounter = encounter;
     this.enterFromRight = encounter.enterIntroVisualsFromRight ?? false;
     // Shallow copy configs to allow visual config updates at runtime without dirtying master copy of Encounter
