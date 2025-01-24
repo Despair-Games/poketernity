@@ -122,7 +122,7 @@ export default class PartyUiHandler extends MessageUiHandler {
   public static FilterItemMaxStacks = (pokemon: PlayerPokemon, modifier: PokemonHeldItemModifier) => {
     const matchingModifier = globalScene.findModifier(
       (m) => m.isPokemonHeldItemModifier() && m.pokemonId === pokemon.id && m.matchType(modifier),
-    ) as PokemonHeldItemModifier;
+    );
     if (matchingModifier && matchingModifier.stackCount === matchingModifier.getMaxStackCount()) {
       return i18next.t("partyUiHandler:tooManyItems", { pokemonName: getPokemonNameWithAffix(pokemon) });
     }
@@ -287,16 +287,16 @@ export default class PartyUiHandler extends MessageUiHandler {
               globalScene.findModifiers(
                 (m) =>
                   m.isPokemonHeldItemModifier()
-                  && (m as PokemonHeldItemModifier).isTransferable
-                  && (m as PokemonHeldItemModifier).pokemonId === newPokemon.id,
-              ) as PokemonHeldItemModifier[];
+                  && m.isTransferable
+                  && m.pokemonId === newPokemon.id,
+              );
             // this next bit checks to see if the the selected item from the original transfer pokemon exists on the new pokemon [p]; this returns undefined if the new pokemon doesn't have the item at all, otherwise it returns the pokemonHeldItemModifier for that item
             const matchingModifier = globalScene.findModifier(
               (m) =>
                 m.isPokemonHeldItemModifier()
                 && m.pokemonId === newPokemon.id
                 && m.matchType(getTransferrableItemsFromPokemon(pokemon)[this.transferOptionCursor]),
-            ) as PokemonHeldItemModifier;
+            );
             const partySlot = this.partySlots.filter((m) => m.getPokemon() === newPokemon)[0]; // this gets pokemon [p] for us
             if (p !== this.transferCursor) {
               // this skips adding the able/not able labels on the pokemon doing the transfer
@@ -632,7 +632,7 @@ export default class PartyUiHandler extends MessageUiHandler {
                 m.isPokemonHeldItemModifier()
                 && m.isTransferable
                 && m.pokemonId === globalScene.getPlayerParty()[this.cursor].id,
-            ) as PokemonHeldItemModifier[];
+            );
             this.transferQuantities = itemModifiers.map((item) => item.getStackCount());
             this.transferQuantitiesMax = itemModifiers.map((item) => item.getStackCount());
           }

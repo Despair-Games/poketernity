@@ -1,4 +1,4 @@
-import { applyAbAttrs } from "../apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";

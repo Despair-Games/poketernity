@@ -229,7 +229,7 @@ async function tryApplyDigRewardItems() {
       (m) => m.isPokemonHeldItemModifier() && m.pokemonId === pokemon.id,
       true,
     ) as PokemonHeldItemModifier[];
-    const existingShellBell = heldItems.find((m) => m.isHitHealModifier()) as HitHealModifier;
+    const existingShellBell = heldItems.find((m) => m.isHitHealModifier());
 
     if (!existingShellBell || existingShellBell.getStackCount() < existingShellBell.getMaxStackCount()) {
       await applyModifierTypeToPlayerPokemon(pokemon, shellBell);
@@ -243,7 +243,7 @@ async function tryApplyDigRewardItems() {
       (m) => m.isPokemonHeldItemModifier() && m.pokemonId === pokemon.id,
       true,
     ) as PokemonHeldItemModifier[];
-    const existingShellBell = heldItems.find((m) => m.isHitHealModifier()) as HitHealModifier;
+    const existingShellBell = heldItems.find((m) => m.isHitHealModifier());
 
     if (!existingShellBell || existingShellBell.getStackCount() < existingShellBell.getMaxStackCount()) {
       await applyModifierTypeToPlayerPokemon(pokemon, shellBell);

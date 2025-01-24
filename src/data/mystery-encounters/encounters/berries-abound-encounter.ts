@@ -305,7 +305,7 @@ function tryGiveBerry(prioritizedPokemon?: PlayerPokemon) {
   if (prioritizedPokemon) {
     const heldBerriesOfType = globalScene.findModifier(
       (m) =>
-        m.isBerryModifier() && m.pokemonId === prioritizedPokemon.id && (m as BerryModifier).berryType === berryType,
+        m.isBerryModifier() && m.pokemonId === prioritizedPokemon.id && m.berryType === berryType,
       true,
     ) as BerryModifier;
 
@@ -318,7 +318,7 @@ function tryGiveBerry(prioritizedPokemon?: PlayerPokemon) {
   // Iterate over the party until berry was successfully given
   for (const pokemon of party) {
     const heldBerriesOfType = globalScene.findModifier(
-      (m) => m.isBerryModifier() && m.pokemonId === pokemon.id && (m as BerryModifier).berryType === berryType,
+      (m) => m.isBerryModifier() && m.pokemonId === pokemon.id && m.berryType === berryType,
       true,
     ) as BerryModifier;
 

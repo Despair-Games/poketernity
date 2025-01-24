@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { type BerryModifier, PreserveBerryModifier } from "#app/modifier/modifier";
 import { BooleanHolder } from "#app/utils";
 import { HealFromBerryUseAbAttr } from "#app/data/ab-attrs/heal-from-berry-use-ab-attr";
-import { applyAbAttrs } from "../apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { getBerryEffectFunc } from "#app/data/berry";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";

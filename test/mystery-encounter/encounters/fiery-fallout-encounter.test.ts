@@ -183,7 +183,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
 
       const leadPokemonId = scene.getPlayerParty()?.[0].id;
       const leadPokemonItems = scene.findModifiers(
-        (m) => m.isPokemonHeldItemModifier() && (m as PokemonHeldItemModifier).pokemonId === leadPokemonId,
+        (m) => m.isPokemonHeldItemModifier() && m.pokemonId === leadPokemonId,
         true,
       ) as PokemonHeldItemModifier[];
       const item = leadPokemonItems.find((i) => i.isAttackTypeBoosterModifier());

@@ -11,7 +11,7 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import { HitResult } from "#enums/hit-result";
 import { StatusEffect } from "#enums/status-effect";
 import type { BattlerIndex } from "#enums/battler-index";
-import { applyAbAttrs } from "./apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { InfiltratorAbAttr } from "./ab-attrs/infiltrator-ab-attr";
 import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-ab-attr";
 import { Stat } from "#enums/stat";

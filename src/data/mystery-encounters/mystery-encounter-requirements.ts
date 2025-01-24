@@ -1053,7 +1053,7 @@ export class AttackTypeBoosterHeldItemTypeRequirement extends EncounterPokemonRe
       return (
         this.requiredHeldItemTypes.some(
           (heldItemType) =>
-            it.isAttackTypeBoosterModifier() && (it.type as AttackTypeBoosterModifierType).moveType === heldItemType,
+            it.isAttackTypeBoosterModifier() && it.type.moveType === heldItemType,
         )
         && (!this.requireTransferable || it.isTransferable)
       );
