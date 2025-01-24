@@ -145,14 +145,13 @@ import { TitlePhase } from "#app/phases/title-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { allMysteryEncounters, mysteryEncountersByBiome } from "#app/data/mystery-encounters/mystery-encounters";
 import {
-  allMysteryEncounters,
-  ANTI_VARIANCE_WEIGHT_MODIFIER,
-  AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
-  BASE_MYSTERY_ENCOUNTER_SPAWN_WEIGHT,
+  MYSTERY_ENCOUNTER_ANTI_VARIANCE_WEIGHT_MODIFIER,
+  MYSTERY_ENCOUNTER_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
+  MYSTERY_ENCOUNTER_BASE_SPAWN_WEIGHT,
   MYSTERY_ENCOUNTER_SPAWN_MAX_WEIGHT,
-  mysteryEncountersByBiome,
-} from "#app/data/mystery-encounters/mystery-encounters";
+} from "./constants";
 import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -1324,7 +1323,7 @@ export default class BattleScene extends SceneBase {
       if (this.isWaveMysteryEncounter(newBattleType, newWaveIndex) || newBattleType === BattleType.MYSTERY_ENCOUNTER) {
         newBattleType = BattleType.MYSTERY_ENCOUNTER;
         // Reset to base spawn weight
-        this.mysteryEncounterSaveData.encounterSpawnChance = BASE_MYSTERY_ENCOUNTER_SPAWN_WEIGHT;
+        this.mysteryEncounterSaveData.encounterSpawnChance = MYSTERY_ENCOUNTER_BASE_SPAWN_WEIGHT;
       }
     }
 
@@ -3410,12 +3409,16 @@ export default class BattleScene extends SceneBase {
       // Reduces occurrence of runs with total encounters significantly different from AVERAGE_ENCOUNTERS_PER_RUN_TARGET
       // Favored rate changes can never exceed 50%. So if base rate is 15/256 and favored rate would add 200/256, result will be (15 + 128)/256
       const expectedEncountersByFloor =
-        (AVERAGE_ENCOUNTERS_PER_RUN_TARGET / (highestMysteryEncounterWave - lowestMysteryEncounterWave))
+        (MYSTERY_ENCOUNTER_AVERAGE_ENCOUNTERS_PER_RUN_TARGET
+          / (highestMysteryEncounterWave - lowestMysteryEncounterWave))
         * (waveIndex - lowestMysteryEncounterWave);
       const currentRunDiffFromAvg = expectedEncountersByFloor - encounteredEvents.length;
       const favoredEncounterRate =
         sessionEncounterRate
-        + Math.min(currentRunDiffFromAvg * ANTI_VARIANCE_WEIGHT_MODIFIER, MYSTERY_ENCOUNTER_SPAWN_MAX_WEIGHT / 2);
+        + Math.min(
+          currentRunDiffFromAvg * MYSTERY_ENCOUNTER_ANTI_VARIANCE_WEIGHT_MODIFIER,
+          MYSTERY_ENCOUNTER_SPAWN_MAX_WEIGHT / 2,
+        );
 
       const successRate = isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE)
         ? favoredEncounterRate
