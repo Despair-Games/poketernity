@@ -1,7 +1,7 @@
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { EvolutionItem } from "#enums/evolution-item";
 import { tmPoolTiers, tmSpecies } from "#app/data/balance/tms";
-import { selfStatLowerMoves } from "#app/data/move";
+import { selfStatLowerMoves } from "#app/data/self-stat-lower-moves";
 import { allMoves } from "#app/data/all-moves";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { getPokeballCatchMultiplier, getPokeballName, MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";

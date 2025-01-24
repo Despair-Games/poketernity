@@ -1168,5 +1168,3 @@ export function getMoveTargets(user: Pokemon, move: Moves): MoveTargetSet {
     multiple,
   };
 }
-
-export const selfStatLowerMoves: Moves[] = [];
