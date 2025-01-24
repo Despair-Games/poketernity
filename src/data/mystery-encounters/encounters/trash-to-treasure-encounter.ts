@@ -17,7 +17,7 @@ import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/myst
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { Species } from "#enums/species";
-import { HitHealModifier, type PokemonHeldItemModifier, TurnHealModifier } from "#app/modifier/modifier";
+import { type HitHealModifier, type PokemonHeldItemModifier, TurnHealModifier } from "#app/modifier/modifier";
 import { applyModifierTypeToPlayerPokemon } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import i18next from "#app/plugins/i18n";
@@ -229,7 +229,7 @@ async function tryApplyDigRewardItems() {
       (m) => m.isPokemonHeldItemModifier() && m.pokemonId === pokemon.id,
       true,
     ) as PokemonHeldItemModifier[];
-    const existingShellBell = heldItems.find((m) => m instanceof HitHealModifier) as HitHealModifier;
+    const existingShellBell = heldItems.find((m) => m.isHitHealModifier()) as HitHealModifier;
 
     if (!existingShellBell || existingShellBell.getStackCount() < existingShellBell.getMaxStackCount()) {
       await applyModifierTypeToPlayerPokemon(pokemon, shellBell);
@@ -243,7 +243,7 @@ async function tryApplyDigRewardItems() {
       (m) => m.isPokemonHeldItemModifier() && m.pokemonId === pokemon.id,
       true,
     ) as PokemonHeldItemModifier[];
-    const existingShellBell = heldItems.find((m) => m instanceof HitHealModifier) as HitHealModifier;
+    const existingShellBell = heldItems.find((m) => m.isHitHealModifier()) as HitHealModifier;
 
     if (!existingShellBell || existingShellBell.getStackCount() < existingShellBell.getMaxStackCount()) {
       await applyModifierTypeToPlayerPokemon(pokemon, shellBell);

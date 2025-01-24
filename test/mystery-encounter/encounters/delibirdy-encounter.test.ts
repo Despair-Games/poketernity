@@ -17,7 +17,6 @@ import type { MoneyRequirement } from "#app/data/mystery-encounters/mystery-enco
 import {
   type BerryModifier,
   HealingBoosterModifier,
-  HitHealModifier,
   LevelIncrementBoosterModifier,
   MoneyMultiplierModifier,
   PokemonInstantReviveModifier,
@@ -140,7 +139,7 @@ describe("Delibird-y - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1);
 
       const amuletCoinAfter = scene.findModifier((m) => m instanceof MoneyMultiplierModifier);
-      const shellBellAfter = scene.findModifier((m) => m instanceof HitHealModifier);
+      const shellBellAfter = scene.findModifier((m) => m.isHitHealModifier());
 
       expect(amuletCoinAfter).toBeDefined();
       expect(amuletCoinAfter?.stackCount).toBe(5);
@@ -258,7 +257,7 @@ describe("Delibird-y - Mystery Encounter", () => {
 
       const sitrusAfter = scene.findModifier((m) => m.isBerryModifier());
       const candyJarAfter = scene.findModifier((m) => m instanceof LevelIncrementBoosterModifier);
-      const shellBellAfter = scene.findModifier((m) => m instanceof HitHealModifier);
+      const shellBellAfter = scene.findModifier((m) => m.isHitHealModifier());
 
       expect(sitrusAfter?.stackCount).toBe(1);
       expect(candyJarAfter).toBeDefined();
@@ -287,7 +286,7 @@ describe("Delibird-y - Mystery Encounter", () => {
 
       const reviverSeedAfter = scene.findModifier((m) => m instanceof PokemonInstantReviveModifier);
       const healingCharmAfter = scene.findModifier((m) => m instanceof PreserveBerryModifier);
-      const shellBellAfter = scene.findModifier((m) => m instanceof HitHealModifier);
+      const shellBellAfter = scene.findModifier((m) => m.isHitHealModifier());
 
       expect(reviverSeedAfter).toBeUndefined();
       expect(healingCharmAfter).toBeDefined();
@@ -420,7 +419,7 @@ describe("Delibird-y - Mystery Encounter", () => {
 
       const soulDewAfter = scene.findModifier((m) => m instanceof PokemonNatureWeightModifier);
       const healingCharmAfter = scene.findModifier((m) => m instanceof HealingBoosterModifier);
-      const shellBellAfter = scene.findModifier((m) => m instanceof HitHealModifier);
+      const shellBellAfter = scene.findModifier((m) => m.isHitHealModifier());
 
       expect(soulDewAfter).toBeUndefined();
       expect(healingCharmAfter).toBeDefined();

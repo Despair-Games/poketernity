@@ -217,6 +217,10 @@ export abstract class Modifier {
   isCriticalCatchChanceBoosterModifier(): this is CriticalCatchChanceBoosterModifier {
     return false;
   }
+
+  isHitHealModifier(): this is HitHealModifier {
+    return false;
+  }
 }
 
 export abstract class PersistentModifier extends Modifier {
@@ -1919,7 +1923,7 @@ export class HitHealModifier extends PokemonHeldItemModifier {
   }
 
   matchType(modifier: Modifier) {
-    return modifier instanceof HitHealModifier;
+    return modifier.isHitHealModifier();
   }
 
   clone() {
@@ -1952,6 +1956,10 @@ export class HitHealModifier extends PokemonHeldItemModifier {
 
   getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 4;
+  }
+
+  override isHitHealModifier(): this is this {
+    return true;
   }
 }
 
