@@ -1319,7 +1319,6 @@ export class TrainerConfig {
     this.setStaticParty();
     this.setHasVoucher(true);
     this.setVictoryBgm("victory_champion");
-    this.setGenModifiersFunc((party) => getRandomTeraModifiers(party, 3));
 
     return this;
   }
