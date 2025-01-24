@@ -189,6 +189,10 @@ export abstract class Modifier {
    * @param args collection of all passed parameters
    */
   abstract apply(...args: unknown[]): boolean;
+
+  isBerryModifier(): this is BerryModifier {
+    return false;
+  }
 }
 
 export abstract class PersistentModifier extends Modifier {
@@ -1965,7 +1969,7 @@ export class BerryModifier extends PokemonHeldItemModifier {
   }
 
   matchType(modifier: Modifier) {
-    return modifier instanceof BerryModifier && (modifier as BerryModifier).berryType === this.berryType;
+    return modifier.isBerryModifier() && (modifier as BerryModifier).berryType === this.berryType;
   }
 
   clone() {
@@ -2007,6 +2011,10 @@ export class BerryModifier extends PokemonHeldItemModifier {
       return 2;
     }
     return 3;
+  }
+
+  override isBerryModifier(): this is this {
+    return true;
   }
 }
 

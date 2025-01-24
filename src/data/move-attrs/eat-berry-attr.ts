@@ -1,6 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { BerryModifier, PreserveBerryModifier } from "#app/modifier/modifier";
+import { type BerryModifier, PreserveBerryModifier } from "#app/modifier/modifier";
 import { BooleanHolder } from "#app/utils";
 import { HealFromBerryUseAbAttr } from "#app/data/ab-attrs/heal-from-berry-use-ab-attr";
 import { applyAbAttrs } from "#app/data/ability";
@@ -39,7 +39,7 @@ export class EatBerryAttr extends MoveEffectAttr {
 
   getTargetHeldBerries(target: Pokemon): BerryModifier[] {
     return globalScene.findModifiers(
-      (m) => m instanceof BerryModifier && (m as BerryModifier).pokemonId === target.id,
+      (m) => m.isBerryModifier() && (m as BerryModifier).pokemonId === target.id,
       target.isPlayer(),
     ) as BerryModifier[];
   }

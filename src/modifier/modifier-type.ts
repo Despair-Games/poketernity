@@ -2278,7 +2278,7 @@ const modifierPool: ModifierPool = {
           party.filter(
             (p) =>
               p.hp
-              && !p.getHeldItems().some((m) => m instanceof BerryModifier && m.berryType === BerryType.LEPPA)
+              && !p.getHeldItems().some((m) => m.isBerryModifier() && m.berryType === BerryType.LEPPA)
               && p
                 .getMoveset()
                 .filter((m) => m.ppUsed && m.getMovePp() - m.ppUsed <= 5 && m.ppUsed > Math.floor(m.getMovePp() / 2))
@@ -2297,7 +2297,7 @@ const modifierPool: ModifierPool = {
           party.filter(
             (p) =>
               p.hp
-              && !p.getHeldItems().some((m) => m instanceof BerryModifier && m.berryType === BerryType.LEPPA)
+              && !p.getHeldItems().some((m) => m.isBerryModifier() && m.berryType === BerryType.LEPPA)
               && p
                 .getMoveset()
                 .filter((m) => m.ppUsed && m.getMovePp() - m.ppUsed <= 5 && m.ppUsed > Math.floor(m.getMovePp() / 2))
@@ -2419,7 +2419,7 @@ const modifierPool: ModifierPool = {
           party.filter(
             (p) =>
               p.hp
-              && !p.getHeldItems().some((m) => m instanceof BerryModifier && m.berryType === BerryType.LEPPA)
+              && !p.getHeldItems().some((m) => m.isBerryModifier() && m.berryType === BerryType.LEPPA)
               && p
                 .getMoveset()
                 .filter((m) => m.ppUsed && m.getMovePp() - m.ppUsed <= 5 && m.ppUsed > Math.floor(m.getMovePp() / 2))
@@ -2438,7 +2438,7 @@ const modifierPool: ModifierPool = {
           party.filter(
             (p) =>
               p.hp
-              && !p.getHeldItems().some((m) => m instanceof BerryModifier && m.berryType === BerryType.LEPPA)
+              && !p.getHeldItems().some((m) => m.isBerryModifier() && m.berryType === BerryType.LEPPA)
               && p
                 .getMoveset()
                 .filter((m) => m.ppUsed && m.getMovePp() - m.ppUsed <= 5 && m.ppUsed > Math.floor(m.getMovePp() / 2))

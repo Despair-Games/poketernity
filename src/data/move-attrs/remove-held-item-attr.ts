@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BerryModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
+import { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { BlockItemTheftAbAttr } from "#app/data/ab-attrs/block-item-theft-ab-attr";
@@ -43,7 +43,7 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
     let heldItems = this.getTargetHeldItems(target).filter((i) => i.isTransferable);
 
     if (this.berriesOnly) {
-      heldItems = heldItems.filter((m) => m instanceof BerryModifier && m.pokemonId === target.id, target.isPlayer());
+      heldItems = heldItems.filter((m) => m.isBerryModifier() && m.pokemonId === target.id, target.isPlayer());
     }
 
     if (heldItems.length) {

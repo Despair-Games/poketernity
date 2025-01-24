@@ -20,7 +20,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { PokemonMove } from "#app/field/pokemon";
 import { UiMode } from "#enums/ui-mode";
 import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
-import { BerryModifier, PokemonBaseStatTotalModifier } from "#app/modifier/modifier";
+import { PokemonBaseStatTotalModifier } from "#app/modifier/modifier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
@@ -201,19 +201,11 @@ describe("The Strong Stuff - Mystery Encounter", () => {
       expect(enemyField[0].summonData.statStages).toEqual([0, 2, 0, 2, 0, 0, 0]);
       const shuckleItems = enemyField[0].getHeldItems();
       expect(shuckleItems.length).toBe(5);
-      expect(shuckleItems.find((m) => m instanceof BerryModifier && m.berryType === BerryType.SITRUS)?.stackCount).toBe(
-        1,
-      );
-      expect(shuckleItems.find((m) => m instanceof BerryModifier && m.berryType === BerryType.ENIGMA)?.stackCount).toBe(
-        1,
-      );
-      expect(shuckleItems.find((m) => m instanceof BerryModifier && m.berryType === BerryType.GANLON)?.stackCount).toBe(
-        1,
-      );
-      expect(shuckleItems.find((m) => m instanceof BerryModifier && m.berryType === BerryType.APICOT)?.stackCount).toBe(
-        1,
-      );
-      expect(shuckleItems.find((m) => m instanceof BerryModifier && m.berryType === BerryType.LUM)?.stackCount).toBe(2);
+      expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.SITRUS)?.stackCount).toBe(1);
+      expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.ENIGMA)?.stackCount).toBe(1);
+      expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.GANLON)?.stackCount).toBe(1);
+      expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.APICOT)?.stackCount).toBe(1);
+      expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.LUM)?.stackCount).toBe(2);
       expect(enemyField[0].moveset).toEqual([
         new PokemonMove(Moves.INFESTATION),
         new PokemonMove(Moves.SALT_CURE),

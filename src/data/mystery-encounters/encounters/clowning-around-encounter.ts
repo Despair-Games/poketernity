@@ -36,7 +36,6 @@ import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
 import { Ability } from "#app/data/ability";
-import { BerryModifier } from "#app/modifier/modifier";
 import { BerryType } from "#enums/berry-type";
 import { BattlerIndex } from "#enums/battler-index";
 import { Moves } from "#enums/moves";
@@ -272,13 +271,13 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
         let mostHeldItemsPokemon = party[0];
         let count = mostHeldItemsPokemon
           .getHeldItems()
-          .filter((m) => m.isTransferable && !(m instanceof BerryModifier))
+          .filter((m) => m.isTransferable && !m.isBerryModifier())
           .reduce((v, m) => v + m.stackCount, 0);
 
         party.forEach((pokemon) => {
           const nextCount = pokemon
             .getHeldItems()
-            .filter((m) => m.isTransferable && !(m instanceof BerryModifier))
+            .filter((m) => m.isTransferable && !m.isBerryModifier())
             .reduce((v, m) => v + m.stackCount, 0);
           if (nextCount > count) {
             mostHeldItemsPokemon = pokemon;
@@ -293,7 +292,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
         // Shuffles Berries (if they have any)
         let numBerries = 0;
         items
-          .filter((m) => m instanceof BerryModifier)
+          .filter((m) => m.isBerryModifier())
           .forEach((m) => {
             numBerries += m.stackCount;
             globalScene.removeModifier(m);
@@ -307,7 +306,7 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
         let numUltra = 0;
         let numEpic = 0;
         items
-          .filter((m) => m.isTransferable && !(m instanceof BerryModifier))
+          .filter((m) => m.isTransferable && !m.isBerryModifier())
           .forEach((m) => {
             const type = m.type.withTierFromPool(ModifierPoolType.PLAYER, party);
             const tier = type.tier ?? ModifierTier.ULTRA;

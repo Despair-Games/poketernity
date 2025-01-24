@@ -15,7 +15,7 @@ import { DelibirdyEncounter } from "#app/data/mystery-encounters/encounters/deli
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import type { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import {
-  BerryModifier,
+  type BerryModifier,
   HealingBoosterModifier,
   HitHealModifier,
   LevelIncrementBoosterModifier,
@@ -209,7 +209,7 @@ describe("Delibird-y - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1, optionNo: 1 });
 
-      const sitrusAfter = scene.findModifier((m) => m instanceof BerryModifier);
+      const sitrusAfter = scene.findModifier((m) => m.isBerryModifier());
       const candyJarAfter = scene.findModifier((m) => m instanceof LevelIncrementBoosterModifier);
 
       expect(sitrusAfter?.stackCount).toBe(1);
@@ -256,7 +256,7 @@ describe("Delibird-y - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1, optionNo: 1 });
 
-      const sitrusAfter = scene.findModifier((m) => m instanceof BerryModifier);
+      const sitrusAfter = scene.findModifier((m) => m.isBerryModifier());
       const candyJarAfter = scene.findModifier((m) => m instanceof LevelIncrementBoosterModifier);
       const shellBellAfter = scene.findModifier((m) => m instanceof HitHealModifier);
 

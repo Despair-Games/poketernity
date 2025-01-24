@@ -12,7 +12,7 @@ import type BattleScene from "#app/battle-scene";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { BerryModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
+import { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { BerryType } from "#enums/berry-type";
 import { AbsoluteAvariceEncounter } from "#app/data/mystery-encounters/encounters/absolute-avarice-encounter";
 import { Moves } from "#enums/moves";
@@ -197,7 +197,7 @@ describe("Absolute Avarice - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 2);
 
-      const berriesAfter = scene.findModifiers((m) => m instanceof BerryModifier);
+      const berriesAfter = scene.findModifiers((m) => m.isBerryModifier());
       const berryCountAfter = berriesAfter.reduce((a, b) => a + b.stackCount, 0);
       expect(berriesAfter).toBeDefined();
       expect(berryCountAfter).toBe(3);
@@ -217,7 +217,7 @@ describe("Absolute Avarice - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 2);
 
-      const berriesAfter = scene.findModifiers((m) => m instanceof BerryModifier);
+      const berriesAfter = scene.findModifiers((m) => m.isBerryModifier());
       const berryCountAfter = berriesAfter.reduce((a, b) => a + b.stackCount, 0);
       expect(berriesAfter).toBeDefined();
       expect(berryCountAfter).toBe(2);

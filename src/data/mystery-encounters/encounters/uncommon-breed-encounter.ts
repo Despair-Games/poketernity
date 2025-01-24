@@ -33,7 +33,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { PokeballType } from "#enums/pokeball";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import { BerryModifier } from "#app/modifier/modifier";
+import type { BerryModifier } from "#app/modifier/modifier";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { Stat } from "#enums/stat";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
@@ -209,9 +209,7 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
 
         // Remove 4 random berries from player's party
         // Get all player berry items, remove from party, and store reference
-        const berryItems: BerryModifier[] = globalScene.findModifiers(
-          (m) => m instanceof BerryModifier,
-        ) as BerryModifier[];
+        const berryItems: BerryModifier[] = globalScene.findModifiers((m) => m.isBerryModifier()) as BerryModifier[];
         for (let i = 0; i < 4; i++) {
           const index = randSeedInt(berryItems.length);
           const randBerry = berryItems[index];

@@ -21,7 +21,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import type { PokemonHeldItemModifier, PokemonInstantReviveModifier } from "#app/modifier/modifier";
 import {
-  BerryModifier,
+  type BerryModifier,
   HealingBoosterModifier,
   LevelIncrementBoosterModifier,
   MoneyMultiplierModifier,
@@ -225,7 +225,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
         const chosenPokemon: PlayerPokemon = encounter.misc.chosenPokemon;
 
         // Give the player a Candy Jar if they gave a Berry, and a Berry Pouch for Reviver Seed
-        if (modifier instanceof BerryModifier) {
+        if (modifier.isBerryModifier()) {
           // Check if the player has max stacks of that Candy Jar already
           const existing = globalScene.findModifier(
             (m) => m instanceof LevelIncrementBoosterModifier,

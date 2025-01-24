@@ -1,7 +1,6 @@
 import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BerryModifier } from "#app/modifier/modifier";
 import { BattleCommand } from "#enums/battle-command";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -2870,7 +2869,7 @@ export function initMoves() {
       .attr(EatBerryAttr, true)
       .attr(StatStageChangeAttr, [Stat.DEF], 2, true)
       .condition((user) => {
-        const userBerries = globalScene.findModifiers((m) => m instanceof BerryModifier, user.isPlayer());
+        const userBerries = globalScene.findModifiers((m) => m.isBerryModifier(), user.isPlayer());
         return userBerries.length > 0;
       })
       .edgeCase(), // Stuff Cheeks should not be selectable when the user does not have a berry, see wiki
