@@ -57,7 +57,7 @@ import { applyAbAttrs } from "#app/data/ability";
 import { CommanderAbAttr } from "#app/data/ab-attrs/commander-ab-attr";
 import { globalScene } from "#app/global-scene";
 
-export type ModifierPredicate = <T extends Modifier = Modifier>(modifier: T) => boolean;
+export type ModifierPredicate = (modifier: Modifier) => boolean;
 
 const iconOverflowIndex = 24;
 
