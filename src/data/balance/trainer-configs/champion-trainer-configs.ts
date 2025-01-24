@@ -281,14 +281,125 @@ export const championTrainerConfigs: TrainerConfigs = {
   [TrainerType.RED_BLUE]: new TrainerConfig(++t)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.ESPEON], TrainerSlot.TRAINER))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.UMBREON], TrainerSlot.TRAINER_PARTNER))
-    .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.SNORLAX], TrainerSlot.TRAINER))
-    .setPartyMemberFunc(3, getRandomPartyMemberFunc([Species.MACHAMP], TrainerSlot.TRAINER_PARTNER))
+    .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.PIKACHU], TrainerSlot.TRAINER)) // G-MAX
+    .setPartyMemberFunc(3, getRandomPartyMemberFunc([Species.MACHAMP], TrainerSlot.TRAINER_PARTNER)) // G-MAX
     .setPartyMemberFunc(
       4,
-      getRandomPartyMemberFunc([Species.VENUSAUR, Species.CHARIZARD, Species.BLASTOISE], TrainerSlot.TRAINER),
+      getRandomPartyMemberFunc([Species.VENUSAUR, Species.CHARIZARD, Species.BLASTOISE], TrainerSlot.TRAINER), // MEGA
     )
-    .setPartyMemberFunc(5, getRandomPartyMemberFunc([Species.PIDGEOT], TrainerSlot.TRAINER_PARTNER))
+    .setPartyMemberFunc(5, getRandomPartyMemberFunc([Species.ALAKAZAM], TrainerSlot.TRAINER_PARTNER)) // MEGA
     .setSpriteNames("red", "blue")
     .setHasDouble("red_blue_double")
-    .initForChampion(Gender.DOUBLE, KANTO_CHAMPION_THEME, KANTO_CHAMPION_THEME),
+    .initForChampion(Gender.DOUBLE, KANTO_CHAMPION_THEME, KANTO_CHAMPION_THEME), // Technically Red should have Johto Champion theme but since blue doesnt get his own entry, we'll just use Kanto Champion theme
+  [TrainerType.LANCE_CLAIR]: new TrainerConfig(++t)
+    .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.DRAGONITE], TrainerSlot.TRAINER)) // (They both use Dragonite - even if their only ever mainline battle together is in the Johto games. So i like the idea of them fighting together with Dragonite)
+    .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.DRAGONITE], TrainerSlot.TRAINER_PARTNER))
+    .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.CHARIZARD], TrainerSlot.TRAINER)) // MEGA-X
+    .setPartyMemberFunc(3, getRandomPartyMemberFunc([Species.ALTARIA], TrainerSlot.TRAINER_PARTNER)) // MEGA
+    .setPartyMemberFunc(4, getRandomPartyMemberFunc([Species.HO_OH], TrainerSlot.TRAINER)) // Dragonite would be the signature, but we gave ho-oh to him in his single battle so i like for him to have it here too
+    .setPartyMemberFunc(5, getRandomPartyMemberFunc([Species.KINGDRA], TrainerSlot.TRAINER_PARTNER)) // Signature
+    .setSpriteNames("lance", "clair")
+    .setHasDouble("lance_clair_double")
+    .initForChampion(Gender.DOUBLE, JOHTO_CHAMPION_THEME, JOHTO_CHAMPION_THEME),
+  [TrainerType.STEVEN_WALLACE]: new TrainerConfig(++t)
+    .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.SKARMORY], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.WHISCASH], TrainerSlot.TRAINER_PARTNER))
+    .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.METAGROSS], TrainerSlot.TRAINER)) // MEGA
+    .setPartyMemberFunc(3, getRandomPartyMemberFunc([Species.MILOTIC], TrainerSlot.TRAINER_PARTNER)) // Does he need a mega/gmax? If so Milotic would go to slot 1. I would then probably give him Urshifu GMAX in slot 3
+    .setPartyMemberFunc(4, getRandomPartyMemberFunc([Species.LATIAS], TrainerSlot.TRAINER)) // They are not mega on purpose. So they arent THAT strong
+    .setPartyMemberFunc(5, getRandomPartyMemberFunc([Species.LATIOS], TrainerSlot.TRAINER_PARTNER))
+    .setSpriteNames("steven", "wallace")
+    .setHasDouble("steven_wallace_double")
+    .initForChampion(Gender.DOUBLE, HOENN5_CHAMPION_THEME, HOENN6_CHAMPION_THEME),
+  [TrainerType.CYNTHIA_CAITLIN]: new TrainerConfig(++t)
+    .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.ROSERADE], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.REUNICLUS], TrainerSlot.TRAINER_PARTNER))
+    .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.GARCHOMP], TrainerSlot.TRAINER)) // MEGA
+    .setPartyMemberFunc(3, getRandomPartyMemberFunc([Species.SABLEYE], TrainerSlot.TRAINER_PARTNER)) // MEGA
+    .setPartyMemberFunc(4, getRandomPartyMemberFunc([Species.GIRATINA], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(5, getRandomPartyMemberFunc([Species.CRESSELIA], TrainerSlot.TRAINER_PARTNER))
+    .setSpriteNames("cynthia", "caitlin")
+    .setHasDouble("cynthia_caitlin_double")
+    .initForChampion(Gender.DOUBLE, SINNOH_CHAMPION_THEME, SINNOH_CHAMPION_THEME),
+  [TrainerType.IRIS_ALDER]: new TrainerConfig(++t)
+    .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.HAXORUS], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.VOLCARONA], TrainerSlot.TRAINER_PARTNER))
+    .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.LAPRAS, Species.AGGRON], TrainerSlot.TRAINER)) // GMAX/Mega (same fromindex)
+    .setPartyMemberFunc(
+      3,
+      getRandomPartyMemberFunc([Species.ACCELGOR, Species.ESCAVALIER], TrainerSlot.TRAINER_PARTNER),
+    ) // This slot needs something better. Just can not find anything
+    .setPartyMemberFunc(4, getRandomPartyMemberFunc([Species.RESHIRAM], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(5, getRandomPartyMemberFunc([Species.ZEKROM], TrainerSlot.TRAINER_PARTNER))
+    .setSpriteNames("iris", "alder")
+    .setHasDouble("iris_alder_double")
+    .initForChampion(Gender.DOUBLE, IRIS_CHAMPION_THEME, IRIS_CHAMPION_THEME),
+  [TrainerType.DIANTHA_LYSANDRE]: new TrainerConfig(++t)
+    .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.GOODRA], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.PYROAR], TrainerSlot.TRAINER_PARTNER))
+    .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.GARDEVOIR], TrainerSlot.TRAINER)) // MEGA
+    .setPartyMemberFunc(3, getRandomPartyMemberFunc([Species.GYARADOS], TrainerSlot.TRAINER_PARTNER)) // MEGA
+    .setPartyMemberFunc(4, getRandomPartyMemberFunc([Species.XERNEAS], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(5, getRandomPartyMemberFunc([Species.YVELTAL], TrainerSlot.TRAINER_PARTNER))
+    .setSpriteNames("diantha", "lysandre")
+    .setHasDouble("diantha_lysandre_double")
+    .initForChampion(Gender.DOUBLE, KALOS_CHAMPION_THEME, KALOS_CHAMPION_THEME),
+  [TrainerType.HAU_KUKUI]: new TrainerConfig(++t)
+    .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.ALOLA_RAICHU], TrainerSlot.TRAINER)) // Signature
+    .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.LYCANROC], TrainerSlot.TRAINER_PARTNER)) // Signature
+    .setPartyMemberFunc(
+      2,
+      getRandomPartyMemberFunc(
+        [Species.TAPU_BULU, Species.TAPU_FINI, Species.TAPU_KOKO, Species.TAPU_LELE],
+        TrainerSlot.TRAINER,
+      ),
+    ) // One of the Tapus
+    .setPartyMemberFunc(
+      3,
+      getRandomPartyMemberFunc([Species.DECIDUEYE, Species.PRIMARINA, Species.INCINEROAR], TrainerSlot.TRAINER_PARTNER),
+    ) // Uses one in his Alola-League fight
+    .setPartyMemberFunc(4, getRandomPartyMemberFunc([Species.SOLGALEO], TrainerSlot.TRAINER)) // Those two are up for debate. They are pretty strong but iconic. But maybe if too strong we do UB?
+    .setPartyMemberFunc(5, getRandomPartyMemberFunc([Species.LUNALA], TrainerSlot.TRAINER_PARTNER))
+    .setSpriteNames("hau", "kukui")
+    .setHasDouble("hau_kukui_double")
+    .initForChampion(Gender.DOUBLE, ALOLA_CHAMPION_THEME, ALOLA_CHAMPION_THEME),
+  [TrainerType.LEON_HOP]: new TrainerConfig(++t)
+    .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.DRAGAPULT], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.DUBWOOL], TrainerSlot.TRAINER_PARTNER))
+    .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.CHARIZARD], TrainerSlot.TRAINER)) // GMAX
+    .setPartyMemberFunc(
+      3,
+      getRandomPartyMemberFunc([Species.RILLABOOM, Species.CINDERACE, Species.INTELEON], TrainerSlot.TRAINER_PARTNER),
+    ) // GMAX
+    .setPartyMemberFunc(4, getRandomPartyMemberFunc([Species.ZAMAZENTA], TrainerSlot.TRAINER)) // Zamazenta to fit with hop. If thats too strong lets to one of the GALAR Regis?
+    .setPartyMemberFunc(5, getRandomPartyMemberFunc([Species.ZACIAN], TrainerSlot.TRAINER_PARTNER)) // Hop NEEDS to have Zacian because of the story and he gets a TCG card with it
+    .setSpriteNames("leon", "hop")
+    .setHasDouble("leon_hop_double")
+    .initForChampion(Gender.DOUBLE, GALAR_CHAMPION_THEME, GALAR_CHAMPION_THEME),
+  [TrainerType.GEETA_NEMONA]: new TrainerConfig(++t)
+    .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.GLIMMORA], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.PAWMOT], TrainerSlot.TRAINER_PARTNER))
+    .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.KINGAMBIT], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(
+      3,
+      getRandomPartyMemberFunc(
+        [Species.MEOWSCARADA, Species.SKELEDIRGE, Species.QUAQUAVAL],
+        TrainerSlot.TRAINER_PARTNER,
+      ),
+    )
+    .setPartyMemberFunc(4, getRandomPartyMemberFunc([Species.KORAIDON], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(5, getRandomPartyMemberFunc([Species.MIRAIDON], TrainerSlot.TRAINER_PARTNER))
+    .setSpriteNames("geeta", "nemona")
+    .setHasDouble("geeta_nemona_double")
+    .initForChampion(Gender.DOUBLE, GEETA_CHAMPION_THEME, NEMONA_CHAMPION_THEME),
+  [TrainerType.KIERAN_CARMINE]: new TrainerConfig(++t)
+    .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.POLIWRATH, Species.POLITOED], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.SINISTCHA], TrainerSlot.TRAINER_PARTNER))
+    .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.HYDRAPPLE, Species.PORYGON_Z], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(3, getRandomPartyMemberFunc([Species.MIGHTYENA], TrainerSlot.TRAINER_PARTNER)) // Maybe something different? She doesnt use much good pokemon
+    .setPartyMemberFunc(4, getRandomPartyMemberFunc([Species.TERAPAGOS], TrainerSlot.TRAINER))
+    .setPartyMemberFunc(5, getRandomPartyMemberFunc([Species.OGERPON], TrainerSlot.TRAINER_PARTNER)) // Yes she doesnt use it but i wanted to include it because of the story (and otherwise she would be way worse then her brother)
+    .setSpriteNames("kieran", "carmine")
+    .setHasDouble("kieran_carmine_double")
+    .initForChampion(Gender.DOUBLE, KIERAN_CHAMPION_THEME, KIERAN_CHAMPION_THEME),
 };
