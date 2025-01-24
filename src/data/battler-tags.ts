@@ -3401,12 +3401,16 @@ export function getBattlerTag(
       return new WrapTag(turnCount, sourceId);
     case BattlerTagType.FIRE_SPIN:
       return new FireSpinTag(turnCount, sourceId);
+    case BattlerTagType.G_MAX_FIRE_SPIN:
+      return new GMaxFireSpinTag(turnCount, sourceId);
     case BattlerTagType.WHIRLPOOL:
       return new WhirlpoolTag(turnCount, sourceId);
     case BattlerTagType.CLAMP:
       return new ClampTag(turnCount, sourceId);
     case BattlerTagType.SAND_TOMB:
       return new SandTombTag(turnCount, sourceId);
+    case BattlerTagType.G_MAX_SAND_TOMB:
+      return new GMaxSandTombTag(turnCount, sourceId);
     case BattlerTagType.MAGMA_STORM:
       return new MagmaStormTag(turnCount, sourceId);
     case BattlerTagType.SNAP_TRAP:
