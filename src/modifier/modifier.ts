@@ -229,6 +229,10 @@ export abstract class Modifier {
   isShinyRateBoosterModifier(): this is ShinyRateBoosterModifier {
     return false;
   }
+
+  isPokemonMultiHitModifier(): this is PokemonMultiHitModifier {
+    return false;
+  }
 }
 
 export abstract class PersistentModifier extends Modifier {
@@ -2923,7 +2927,7 @@ export class PokemonMultiHitModifier extends PokemonHeldItemModifier {
   }
 
   matchType(modifier: Modifier): boolean {
-    return modifier instanceof PokemonMultiHitModifier;
+    return modifier.isPokemonMultiHitModifier();
   }
 
   clone(): PersistentModifier {
@@ -2995,6 +2999,10 @@ export class PokemonMultiHitModifier extends PokemonHeldItemModifier {
 
   getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 2;
+  }
+
+  override isPokemonMultiHitModifier(): this is this {
+    return true;
   }
 }
 

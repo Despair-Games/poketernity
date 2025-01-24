@@ -3,11 +3,7 @@ import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";
 import { getPokemonNameWithAffix } from "#app/messages";
-import {
-  PokemonMoveAccuracyBoosterModifier,
-  PokemonMultiHitModifier,
-  AttackTypeBoosterModifier,
-} from "#app/modifier/modifier";
+import { PokemonMoveAccuracyBoosterModifier, AttackTypeBoosterModifier } from "#app/modifier/modifier";
 import type { AbstractConstructor, Constructor, nil } from "#app/utils";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
@@ -761,7 +757,7 @@ export abstract class Move implements Localizable {
       && power.value < 60
       && this.priority <= 0
       && !this.hasAttr(MultiHitAttr)
-      && !globalScene.findModifier((m) => m instanceof PokemonMultiHitModifier && m.pokemonId === source.id)
+      && !globalScene.findModifier((m) => m.isPokemonMultiHitModifier() && m.pokemonId === source.id)
     ) {
       power.value = 60;
     }
