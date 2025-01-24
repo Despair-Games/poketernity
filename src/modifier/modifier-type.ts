@@ -91,7 +91,8 @@ import Overrides from "#app/overrides";
 import { Unlockables } from "#enums/unlockables";
 import { getVoucherTypeIcon, getVoucherTypeName } from "#app/system/voucher";
 import { VoucherType } from "#enums/voucher-type";
-import type { PokemonMoveSelectFilter, PokemonSelectFilter } from "#app/ui/party-ui-handler";
+import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilter";
+import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
 import PartyUiHandler from "#app/ui/party-ui-handler";
 import { getModifierTierTextTint } from "#app/ui/text";
 import {

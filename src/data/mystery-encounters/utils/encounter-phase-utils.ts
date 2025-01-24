@@ -29,7 +29,7 @@ import { MysteryEncounterBattleStartCleanupPhase } from "#app/phases/mystery-enc
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import type PokemonData from "#app/system/pokemon-data";
 import type { OptionSelectModeConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
-import type { PokemonSelectFilter } from "#app/ui/party-ui-handler";
+import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
 import type { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { UiMode } from "#enums/ui-mode";

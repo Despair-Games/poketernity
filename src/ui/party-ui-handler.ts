@@ -34,23 +34,14 @@ import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { PartyOption } from "#enums/party-option";
+import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
+import type { PartySelectCallback } from "#app/@types/PartySelectCallback";
+import type { PartyModifierTransferSelectCallback } from "#app/@types/PartyModifierTransferSelectCallback";
+import type { PartyModifierSpliceSelectCallback } from "#app/@types/PartyModifierSpliceSelectCallback";
+import type { PokemonModifierTransferSelectFilter } from "#app/@types/PokemonModifierTransferSelectFilter";
+import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilter";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
-
-export type PartySelectCallback = (cursor: number, option: PartyOption) => void;
-export type PartyModifierTransferSelectCallback = (
-  fromCursor: number,
-  index: number,
-  itemQuantity?: number,
-  toCursor?: number,
-) => void;
-export type PartyModifierSpliceSelectCallback = (fromCursor: number, toCursor?: number) => void;
-export type PokemonSelectFilter = (pokemon: PlayerPokemon) => string | null;
-export type PokemonModifierTransferSelectFilter = (
-  pokemon: PlayerPokemon,
-  modifier: PokemonHeldItemModifier,
-) => string | null;
-export type PokemonMoveSelectFilter = (pokemonMove: PokemonMove) => string | null;
 
 export default class PartyUiHandler extends MessageUiHandler {
   private partyUiMode: PartyUiMode;
