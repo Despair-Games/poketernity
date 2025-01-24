@@ -599,4 +599,8 @@ export class MovePhase extends BattlePhase {
   public showFailedText(failedText?: string): void {
     globalScene.queueMessage(failedText ?? i18next.t("battle:attackFailed"));
   }
+
+  override isMovePhase(): this is this {
+    return true;
+  }
 }

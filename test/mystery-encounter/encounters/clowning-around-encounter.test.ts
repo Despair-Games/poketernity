@@ -34,7 +34,7 @@ import { BerryType } from "#enums/berry-type";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { Type } from "#enums/type";
 import { CommandPhase } from "#app/phases/command-phase";
-import { MovePhase } from "#app/phases/move-phase";
+import type { MovePhase } from "#app/phases/move-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
 
@@ -191,7 +191,7 @@ describe("Clowning Around - Mystery Encounter", () => {
       ]);
 
       // Should have used moves pre-battle
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].isMovePhase()).map((p) => p[0]);
       expect(movePhases.length).toBe(3);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === Moves.ROLE_PLAY).length).toBe(1);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === Moves.TAUNT).length).toBe(2);

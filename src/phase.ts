@@ -1,4 +1,5 @@
 import { globalScene } from "#app/global-scene";
+import type { MovePhase } from "#app/phases/move-phase";
 import type { SwitchPhase } from "#app/phases/switch-phase";
 
 export class Phase {
@@ -13,6 +14,10 @@ export class Phase {
   }
 
   isSwitchPhase(): this is SwitchPhase {
+    return false;
+  }
+
+  isMovePhase(): this is MovePhase {
     return false;
   }
 }

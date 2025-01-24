@@ -17,7 +17,7 @@ import { BerryType } from "#enums/berry-type";
 import { AbsoluteAvariceEncounter } from "#app/data/mystery-encounters/encounters/absolute-avarice-encounter";
 import { Moves } from "#enums/moves";
 import { CommandPhase } from "#app/phases/command-phase";
-import { MovePhase } from "#app/phases/move-phase";
+import type { MovePhase } from "#app/phases/move-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import i18next from "i18next";
 
@@ -140,7 +140,7 @@ describe("Absolute Avarice - Mystery Encounter", () => {
       expect(moveset?.length).toBe(4);
       expect(moveset).toEqual([Moves.THRASH, Moves.BODY_PRESS, Moves.STUFF_CHEEKS, Moves.CRUNCH]);
 
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].isMovePhase()).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === Moves.STUFF_CHEEKS).length).toBe(1); // Stuff Cheeks used before battle
     });

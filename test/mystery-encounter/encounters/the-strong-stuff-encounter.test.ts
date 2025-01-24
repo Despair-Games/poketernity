@@ -26,7 +26,7 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { CommandPhase } from "#app/phases/command-phase";
-import { MovePhase } from "#app/phases/move-phase";
+import type { MovePhase } from "#app/phases/move-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { Abilities } from "#enums/abilities";
 
@@ -222,7 +222,7 @@ describe("The Strong Stuff - Mystery Encounter", () => {
       ]);
 
       // Should have used moves pre-battle
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].isMovePhase()).map((p) => p[0]);
       expect(movePhases.length).toBe(2);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === Moves.GASTRO_ACID).length).toBe(1);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === Moves.STEALTH_ROCK).length).toBe(1);

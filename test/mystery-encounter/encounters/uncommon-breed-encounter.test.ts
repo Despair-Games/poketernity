@@ -19,7 +19,7 @@ import { generateModifierType } from "#app/data/mystery-encounters/utils/encount
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { CommandPhase } from "#app/phases/command-phase";
 import { UncommonBreedEncounter } from "#app/data/mystery-encounters/encounters/uncommon-breed-encounter";
-import { MovePhase } from "#app/phases/move-phase";
+import type { MovePhase } from "#app/phases/move-phase";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { BerryType } from "#enums/berry-type";
@@ -133,7 +133,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       expect(statStagePhases.stats).toEqual([Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD]);
 
       // Should have used its egg move pre-battle
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].isMovePhase()).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
       const eggMoves: Moves[] = speciesEggMoves[getPokemonSpecies(speciesToSpawn).getRootSpeciesId()];
       const usedMove = (movePhases[0] as MovePhase).move.moveId;
@@ -162,7 +162,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       expect(statStagePhases.stats).toEqual([Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD]);
 
       // Should have used its egg move pre-battle
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].isMovePhase()).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
       const eggMoves: Moves[] = speciesEggMoves[getPokemonSpecies(speciesToSpawn).getRootSpeciesId()];
       const usedMove = (movePhases[0] as MovePhase).move.moveId;

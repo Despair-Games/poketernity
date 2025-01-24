@@ -24,7 +24,7 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
 import { CommandPhase } from "#app/phases/command-phase";
-import { MovePhase } from "#app/phases/move-phase";
+import type { MovePhase } from "#app/phases/move-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Abilities } from "#enums/abilities";
@@ -169,7 +169,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       expect(enemyField[1].species.speciesId).toBe(Species.VOLCARONA);
       expect(enemyField[0].gender).not.toEqual(enemyField[1].gender); // Should be opposite gender
 
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].isMovePhase()).map((p) => p[0]);
       expect(movePhases.length).toBe(2);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === Moves.FIRE_SPIN).length).toBe(2); // Fire spin used twice before battle
     });

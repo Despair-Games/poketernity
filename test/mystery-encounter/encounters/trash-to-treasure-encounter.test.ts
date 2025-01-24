@@ -24,7 +24,7 @@ import { TrashToTreasureEncounter } from "#app/data/mystery-encounters/encounter
 import { ModifierTier } from "#enums/modifier-tier";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { CommandPhase } from "#app/phases/command-phase";
-import { MovePhase } from "#app/phases/move-phase";
+import type { MovePhase } from "#app/phases/move-phase";
 
 const namespace = "mysteryEncounters/trashToTreasure";
 const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
@@ -185,7 +185,7 @@ describe("Trash to Treasure - Mystery Encounter", () => {
       ]);
 
       // Should have used moves pre-battle
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].isMovePhase()).map((p) => p[0]);
       expect(movePhases.length).toBe(2);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === Moves.TOXIC).length).toBe(1);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === Moves.AMNESIA).length).toBe(1);
