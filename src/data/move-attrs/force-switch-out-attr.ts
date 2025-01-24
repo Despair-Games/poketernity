@@ -222,7 +222,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
 
         const blockedByAbility = new BooleanHolder(false);
         applyAbAttrs(ForceSwitchOutImmunityAbAttr, target, false, blockedByAbility);
-        return !blockedByAbility.value;
+        return !blockedByAbility.value && !target.isMax();
       }
 
       if (!player && globalScene.currentBattle.battleType === BattleType.WILD) {

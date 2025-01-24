@@ -11,6 +11,7 @@ export class PostDefendAbilitySwapAbAttr extends PostDefendAbAttr {
     if (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && !attacker.getAbility().hasAttr(UnswappableAbilityAbAttr)
+      && !attacker.isMax()
     ) {
       if (!simulated) {
         const sourceAbilityId = pokemon.getAbility().id;
