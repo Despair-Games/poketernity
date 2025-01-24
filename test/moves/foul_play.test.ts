@@ -48,8 +48,8 @@ describe("Moves - Foul Play", () => {
 
     const { damage: postDamage } = enemy.getAttackDamage(player, foulPlay);
 
-    // 1.7 is the estimated lower bound with damage spread (2 * 0.85)
-    expect(postDamage).toBeGreaterThan(1.7 * preDamage);
+    expect(postDamage).toBeGreaterThan(2 * preDamage - 3);
+    expect(postDamage).toBeLessThan(2 * preDamage + 3);
   });
 
   it("should use the target's Attack stat stages during damage calculation", async () => {
@@ -67,7 +67,8 @@ describe("Moves - Foul Play", () => {
 
     const { damage: postDamage } = player.getAttackDamage(enemy, foulPlay);
 
-    expect(postDamage).toBeGreaterThan(1.7 * preDamage);
+    expect(postDamage).toBeGreaterThan(2 * preDamage - 3);
+    expect(postDamage).toBeLessThan(2 * preDamage + 3);
   });
 
   it("should only apply the user's Attack stat multipliers from abilities for damage", async () => {
@@ -83,9 +84,33 @@ describe("Moves - Foul Play", () => {
 
     const { damage: postDamage } = enemy.getAttackDamage(player, foulPlay);
 
-    // 1.275 is the estimated lower bound based on damage spread
-    // if only Hustle applies (1.5 * 0.85)
-    expect(postDamage).toBeGreaterThan(1.275 * preDamage);
-    expect(postDamage).toBeLessThan(1.7 * preDamage);
+    expect(postDamage).toBeGreaterThan(1.5 * preDamage - 3);
+    expect(postDamage).toBeLessThan(1.5 * preDamage + 3);
+  });
+
+  it("should apply damage reduction from the user's burn and not the target's", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS]);
+    const foulPlay = allMoves[Moves.FOUL_PLAY];
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    const { damage: preDamage } = enemy.getAttackDamage(player, foulPlay);
+
+    game.move.use(Moves.SIZZLY_SLIDE);
+    await game.toNextTurn();
+
+    const { damage: oppBurnedDamage } = enemy.getAttackDamage(player, foulPlay);
+
+    expect(oppBurnedDamage).toBe(preDamage);
+
+    game.move.use(Moves.SPLASH);
+    await game.move.forceEnemyMove(Moves.SIZZLY_SLIDE);
+    await game.toNextTurn();
+
+    const { damage: userBurnedDamage } = enemy.getAttackDamage(player, foulPlay);
+
+    expect(userBurnedDamage).toBeGreaterThan(0.5 * preDamage - 3);
+    expect(userBurnedDamage).toBeLessThan(0.5 * preDamage + 3);
   });
 });

@@ -49,9 +49,8 @@ describe("Moves - Body Press", () => {
 
     const { damage: postDamage } = enemy.getAttackDamage(player, bodyPress);
 
-    // 1.7 is the estimated lower bound based on random damage spread (2 * 0.85).
-    // It might be generous, but it avoids flakiness from rounding error.
-    expect(postDamage).toBeGreaterThan(1.7 * preDamage);
+    expect(postDamage).toBeGreaterThan(2 * preDamage - 3);
+    expect(postDamage).toBeLessThan(2 * preDamage + 3);
   });
 
   it("should use Defense stat stages during damage calculation", async () => {
@@ -69,7 +68,8 @@ describe("Moves - Body Press", () => {
 
     const { damage: postDamage } = enemy.getAttackDamage(player, bodyPress);
 
-    expect(postDamage).toBeGreaterThan(1.7 * preDamage);
+    expect(postDamage).toBeGreaterThan(2 * preDamage - 3);
+    expect(postDamage).toBeLessThan(2 * preDamage + 3);
   });
 
   it("should only apply Attack stat multipliers from abilities for damage", async () => {
@@ -85,9 +85,7 @@ describe("Moves - Body Press", () => {
 
     const { damage: postDamage } = enemy.getAttackDamage(player, bodyPress);
 
-    // 1.275 is the estimated lower bound based on damage spread
-    // if only Hustle applies (1.5 * 0.85)
-    expect(postDamage).toBeGreaterThan(1.275 * preDamage);
-    expect(postDamage).toBeLessThan(1.7 * preDamage);
+    expect(postDamage).toBeGreaterThan(1.5 * preDamage - 3);
+    expect(postDamage).toBeLessThan(1.5 * preDamage + 3);
   });
 });

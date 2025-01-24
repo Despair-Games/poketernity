@@ -58,6 +58,7 @@ describe("Moves - Psyshock", () => {
 
     const { damage: postDamage } = enemy.getAttackDamage(player, psyshock);
 
-    expect(postDamage).toBeGreaterThan(1.7 * preDamage);
+    expect(postDamage).toBeGreaterThan(2 * preDamage - 3);
+    expect(postDamage).toBeLessThan(2 * preDamage + 3);
   });
 });
