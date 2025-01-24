@@ -102,6 +102,8 @@ export const failOnGravityCondition: MoveConditionFunc = (_user, _target, _move)
 
 export const failOnBossCondition: MoveConditionFunc = (_user, target, _move) => !target.isBossImmune();
 
+export const failOnMaxCondition: MoveConditionFunc = (_user, target, _move) => !target.isMax();
+
 export const failIfSingleBattle: MoveConditionFunc = (_user, _target, _move) => globalScene.currentBattle.double;
 
 /** @todo Add simulated support */

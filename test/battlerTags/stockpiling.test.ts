@@ -149,10 +149,6 @@ describe("BattlerTag - StockpilingTag", () => {
       subject.onOverlap(mockPokemon);
       expect(subject.stockpiledCount).toBe(3);
 
-      vi.spyOn(game.scene, "unshiftPhase").mockImplementationOnce((_phase) => {
-        throw new Error("Should not be called a fourth time");
-      });
-
       // fourth stack should not be applied
       subject.onOverlap(mockPokemon);
       expect(subject.stockpiledCount).toBe(3);
@@ -166,7 +162,7 @@ describe("BattlerTag - StockpilingTag", () => {
       });
 
       subject.onRemove(mockPokemon);
-      expect(game.scene.unshiftPhase).toHaveBeenCalledOnce(); // note that re-spying each add/overlap has been refreshing call count
+      expect(game.scene.unshiftPhase).toHaveBeenCalledTimes(4);
     });
   });
 });

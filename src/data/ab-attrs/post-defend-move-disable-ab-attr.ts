@@ -18,6 +18,7 @@ export class PostDefendMoveDisableAbAttr extends PostDefendAbAttr {
       if (
         move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
         && (this.chance === -1 || pokemon.randSeedInt(100) < this.chance)
+        && !attacker.isMax()
       ) {
         if (simulated) {
           return true;

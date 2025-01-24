@@ -234,6 +234,7 @@ import {
   failIfSingleBattle,
   unknownTypeCondition,
   UpperHandCondition,
+  failOnMaxCondition,
 } from "./move-conditions";
 import { SelfStatusMove } from "./move";
 import { isNonVolatileStatusEffect, getNonVolatileStatusEffects } from "./status-effect";
@@ -365,17 +366,18 @@ export function initMoves() {
     new AttackMove(Moves.BITE, Type.DARK, MoveCategory.PHYSICAL, 60, 100, 25, 30, 0, 1).attr(FlinchAttr).bitingMove(),
     new StatusMove(Moves.GROWL, Type.NORMAL, 100, 40, -1, 0, 1)
       .attr(StatStageChangeAttr, [Stat.ATK], -1)
-      .soundBased()
+      .soundMove()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new StatusMove(Moves.ROAR, Type.NORMAL, -1, 20, -1, -6, 1)
       .attr(ForceSwitchOutAttr, false, SwitchType.FORCE_SWITCH)
-      .soundBased()
+      .soundMove()
       .hidesTarget(),
-    new StatusMove(Moves.SING, Type.NORMAL, 55, 15, -1, 0, 1).attr(StatusEffectAttr, StatusEffect.SLEEP).soundBased(),
-    new StatusMove(Moves.SUPERSONIC, Type.NORMAL, 55, 20, -1, 0, 1).attr(ConfuseAttr).soundBased(),
+    new StatusMove(Moves.SING, Type.NORMAL, 55, 15, -1, 0, 1).attr(StatusEffectAttr, StatusEffect.SLEEP).soundMove(),
+    new StatusMove(Moves.SUPERSONIC, Type.NORMAL, 55, 20, -1, 0, 1).attr(ConfuseAttr).soundMove(),
     new AttackMove(Moves.SONIC_BOOM, Type.NORMAL, MoveCategory.SPECIAL, -1, 90, 20, -1, 0, 1).attr(FixedDamageAttr, 20),
     new StatusMove(Moves.DISABLE, Type.NORMAL, 100, 20, -1, 0, 1)
       .attr(AddBattlerTagAttr, BattlerTagType.DISABLED, false, { failOnOverlap: true })
+      .condition(failOnMaxCondition)
       .condition(
         (_user, target, _move) =>
           target
@@ -430,7 +432,9 @@ export function initMoves() {
     new AttackMove(Moves.SUBMISSION, Type.FIGHTING, MoveCategory.PHYSICAL, 80, 80, 20, -1, 0, 1)
       .attr(RecoilAttr)
       .recklessMove(),
-    new AttackMove(Moves.LOW_KICK, Type.FIGHTING, MoveCategory.PHYSICAL, -1, 100, 20, -1, 0, 1).attr(WeightPowerAttr),
+    new AttackMove(Moves.LOW_KICK, Type.FIGHTING, MoveCategory.PHYSICAL, -1, 100, 20, -1, 0, 1)
+      .condition(failOnMaxCondition)
+      .attr(WeightPowerAttr),
     new AttackMove(Moves.COUNTER, Type.FIGHTING, MoveCategory.PHYSICAL, -1, 100, 20, -1, -5, 1)
       .attr(CounterDamageAttr, (move: Move) => move.category === MoveCategory.PHYSICAL, 2)
       .target(MoveTarget.ATTACKER),
@@ -538,7 +542,7 @@ export function initMoves() {
       .attr(MovesetCopyMoveAttr)
       .ignoresSubstitute()
       .ignoresVirtual(),
-    new StatusMove(Moves.SCREECH, Type.NORMAL, 85, 40, -1, 0, 1).attr(StatStageChangeAttr, [Stat.DEF], -2).soundBased(),
+    new StatusMove(Moves.SCREECH, Type.NORMAL, 85, 40, -1, 0, 1).attr(StatStageChangeAttr, [Stat.DEF], -2).soundMove(),
     new SelfStatusMove(Moves.DOUBLE_TEAM, Type.NORMAL, -1, 15, -1, 0, 1).attr(StatStageChangeAttr, [Stat.EVA], 1, true),
     new SelfStatusMove(Moves.RECOVER, Type.NORMAL, -1, 5, -1, 0, 1).attr(HealAttr, 0.5).triageMove(),
     new SelfStatusMove(Moves.HARDEN, Type.NORMAL, -1, 30, -1, 0, 1).attr(StatStageChangeAttr, [Stat.DEF], 1, true),
@@ -581,7 +585,7 @@ export function initMoves() {
       .target(MoveTarget.ALL_NEAR_OTHERS),
     new AttackMove(Moves.EGG_BOMB, Type.NORMAL, MoveCategory.PHYSICAL, 100, 75, 10, -1, 0, 1)
       .makesContact(false)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.LICK, Type.GHOST, MoveCategory.PHYSICAL, 30, 100, 30, 30, 0, 1).attr(
       StatusEffectAttr,
       StatusEffect.PARALYSIS,
@@ -640,7 +644,7 @@ export function initMoves() {
     new AttackMove(Moves.BARRAGE, Type.NORMAL, MoveCategory.PHYSICAL, 15, 85, 20, -1, 0, 1)
       .attr(MultiHitAttr)
       .makesContact(false)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.LEECH_LIFE, Type.BUG, MoveCategory.PHYSICAL, 80, 100, 10, -1, 0, 1)
       .attr(HitHealAttr)
       .triageMove(),
@@ -736,7 +740,7 @@ export function initMoves() {
       .attr(BypassSleepAttr)
       .attr(FlinchAttr)
       .condition(userSleptOrComatoseCondition)
-      .soundBased(),
+      .soundMove(),
     new StatusMove(Moves.CURSE, Type.GHOST, -1, 10, -1, 0, 2)
       .attr(CurseAttr)
       .ignoresSubstitute()
@@ -780,7 +784,7 @@ export function initMoves() {
     ),
     new AttackMove(Moves.SLUDGE_BOMB, Type.POISON, MoveCategory.SPECIAL, 90, 100, 10, 30, 0, 2)
       .attr(StatusEffectAttr, StatusEffect.POISON)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.MUD_SLAP, Type.GROUND, MoveCategory.SPECIAL, 20, 100, 10, 100, 0, 2).attr(
       StatStageChangeAttr,
       [Stat.ACC],
@@ -788,13 +792,13 @@ export function initMoves() {
     ),
     new AttackMove(Moves.OCTAZOOKA, Type.WATER, MoveCategory.SPECIAL, 65, 85, 10, 50, 0, 2)
       .attr(StatStageChangeAttr, [Stat.ACC], -1)
-      .ballBombMove(),
+      .bulletMove(),
     new StatusMove(Moves.SPIKES, Type.GROUND, -1, 20, -1, 0, 2)
       .attr(AddArenaTrapTagAttr, ArenaTagType.SPIKES)
       .target(MoveTarget.ENEMY_SIDE),
     new AttackMove(Moves.ZAP_CANNON, Type.ELECTRIC, MoveCategory.SPECIAL, 120, 50, 5, 100, 0, 2)
       .attr(StatusEffectAttr, StatusEffect.PARALYSIS)
-      .ballBombMove(),
+      .bulletMove(),
     new StatusMove(Moves.FORESIGHT, Type.NORMAL, -1, 40, -1, 0, 2)
       .attr(ExposedMoveAttr, BattlerTagType.IGNORE_GHOST)
       .ignoresSubstitute(),
@@ -815,7 +819,7 @@ export function initMoves() {
     new StatusMove(Moves.PERISH_SONG, Type.NORMAL, -1, 5, -1, 0, 2)
       .attr(FaintCountdownAttr)
       .ignoresProtect()
-      .soundBased()
+      .soundMove()
       .condition(failOnBossCondition)
       .target(MoveTarget.ALL),
     new AttackMove(Moves.ICY_WIND, Type.ICE, MoveCategory.SPECIAL, 55, 95, 15, 100, 0, 2)
@@ -881,7 +885,7 @@ export function initMoves() {
       .ignoresVirtual(),
     new StatusMove(Moves.HEAL_BELL, Type.NORMAL, -1, 5, -1, 0, 2)
       .attr(PartyStatusCureAttr, i18next.t("moveTriggers:bellChimed"), Abilities.SOUNDPROOF)
-      .soundBased()
+      .soundMove()
       .target(MoveTarget.PARTY),
     new AttackMove(Moves.RETURN, Type.NORMAL, MoveCategory.PHYSICAL, -1, 100, 20, -1, 0, 2).attr(FriendshipPowerAttr),
     new AttackMove(Moves.PRESENT, Type.NORMAL, MoveCategory.PHYSICAL, -1, 90, 15, -1, 0, 2)
@@ -995,7 +999,7 @@ export function initMoves() {
     ),
     new AttackMove(Moves.SHADOW_BALL, Type.GHOST, MoveCategory.SPECIAL, 80, 100, 15, 20, 0, 2)
       .attr(StatStageChangeAttr, [Stat.SPDEF], -1)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.FUTURE_SIGHT, Type.PSYCHIC, MoveCategory.SPECIAL, 120, 100, 10, -1, 0, 2)
       .partial() // hits immediately when called by Metronome/etc, should not apply abilities or held items if user is off the field
       .ignoresProtect()
@@ -1021,7 +1025,7 @@ export function initMoves() {
       .condition(new FirstMoveCondition()),
     new AttackMove(Moves.UPROAR, Type.NORMAL, MoveCategory.SPECIAL, 90, 100, 10, -1, 0, 3)
       .ignoresVirtual()
-      .soundBased()
+      .soundMove()
       .target(MoveTarget.RANDOM_NEAR_ENEMY)
       .partial(), // Does not lock the user, does not stop Pokemon from sleeping
     new SelfStatusMove(Moves.STOCKPILE, Type.NORMAL, -1, 20, -1, 0, 3)
@@ -1133,7 +1137,10 @@ export function initMoves() {
     new AttackMove(Moves.ERUPTION, Type.FIRE, MoveCategory.SPECIAL, 150, 100, 5, -1, 0, 3)
       .attr(HpPowerAttr)
       .target(MoveTarget.ALL_NEAR_ENEMIES),
-    new StatusMove(Moves.SKILL_SWAP, Type.PSYCHIC, -1, 10, -1, 0, 3).ignoresSubstitute().attr(SwitchAbilitiesAttr),
+    new StatusMove(Moves.SKILL_SWAP, Type.PSYCHIC, -1, 10, -1, 0, 3)
+      .condition(failOnMaxCondition)
+      .ignoresSubstitute()
+      .attr(SwitchAbilitiesAttr),
     new StatusMove(Moves.IMPRISON, Type.PSYCHIC, 100, 10, -1, 0, 3)
       .ignoresSubstitute()
       .attr(AddArenaTagAttr, ArenaTagType.IMPRISON, { failOnOverlap: true })
@@ -1175,7 +1182,7 @@ export function initMoves() {
     ),
     new AttackMove(Moves.MIST_BALL, Type.PSYCHIC, MoveCategory.SPECIAL, 95, 100, 5, 50, 0, 3)
       .attr(StatStageChangeAttr, [Stat.SPATK], -1)
-      .ballBombMove(),
+      .bulletMove(),
     new StatusMove(Moves.FEATHER_DANCE, Type.FLYING, 100, 15, -1, 0, 3)
       .attr(StatStageChangeAttr, [Stat.ATK], -2)
       .danceMove(),
@@ -1193,11 +1200,11 @@ export function initMoves() {
     new AttackMove(Moves.ICE_BALL, Type.ICE, MoveCategory.PHYSICAL, 30, 90, 20, -1, 0, 3)
       .partial() // Does not lock the user properly, does not increase damage correctly
       .attr(ConsecutiveUseDoublePowerAttr, 5, true, true, Moves.DEFENSE_CURL)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.NEEDLE_ARM, Type.GRASS, MoveCategory.PHYSICAL, 60, 100, 15, 30, 0, 3).attr(FlinchAttr),
     new SelfStatusMove(Moves.SLACK_OFF, Type.NORMAL, -1, 5, -1, 0, 3).attr(HealAttr, 0.5).triageMove(),
     new AttackMove(Moves.HYPER_VOICE, Type.NORMAL, MoveCategory.SPECIAL, 90, 100, 10, -1, 0, 3)
-      .soundBased()
+      .soundMove()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new AttackMove(Moves.POISON_FANG, Type.POISON, MoveCategory.PHYSICAL, 50, 100, 15, 50, 0, 3)
       .attr(StatusEffectAttr, StatusEffect.TOXIC)
@@ -1235,7 +1242,7 @@ export function initMoves() {
         }
         return 1;
       })
-      .ballBombMove(),
+      .bulletMove(),
     new StatusMove(Moves.AROMATHERAPY, Type.GRASS, -1, 5, -1, 0, 3)
       .attr(PartyStatusCureAttr, i18next.t("moveTriggers:soothingAromaWaftedThroughArea"), Abilities.SAP_SIPPER)
       .target(MoveTarget.PARTY),
@@ -1259,10 +1266,10 @@ export function initMoves() {
       .windMove(),
     new StatusMove(Moves.METAL_SOUND, Type.STEEL, 85, 40, -1, 0, 3)
       .attr(StatStageChangeAttr, [Stat.SPDEF], -2)
-      .soundBased(),
+      .soundMove(),
     new StatusMove(Moves.GRASS_WHISTLE, Type.GRASS, 55, 15, -1, 0, 3)
       .attr(StatusEffectAttr, StatusEffect.SLEEP)
-      .soundBased(),
+      .soundMove(),
     new StatusMove(Moves.TICKLE, Type.NORMAL, 100, 20, -1, 0, 3).attr(StatStageChangeAttr, [Stat.ATK, Stat.DEF], -1),
     new SelfStatusMove(Moves.COSMIC_POWER, Type.PSYCHIC, -1, 20, -1, 0, 3).attr(
       StatStageChangeAttr,
@@ -1293,7 +1300,7 @@ export function initMoves() {
     new AttackMove(Moves.BULLET_SEED, Type.GRASS, MoveCategory.PHYSICAL, 25, 100, 30, -1, 0, 3)
       .attr(MultiHitAttr)
       .makesContact(false)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.AERIAL_ACE, Type.FLYING, MoveCategory.PHYSICAL, 60, -1, 20, -1, 0, 3).slicingMove(),
     new AttackMove(Moves.ICICLE_SPEAR, Type.ICE, MoveCategory.PHYSICAL, 25, 100, 30, -1, 0, 3)
       .attr(MultiHitAttr)
@@ -1305,7 +1312,7 @@ export function initMoves() {
       .ignoresProtect(),
     new StatusMove(Moves.HOWL, Type.NORMAL, -1, 40, -1, 0, 3)
       .attr(StatStageChangeAttr, [Stat.ATK], 1)
-      .soundBased()
+      .soundMove()
       .target(MoveTarget.USER_AND_ALLIES),
     new AttackMove(Moves.DRAGON_CLAW, Type.DRAGON, MoveCategory.PHYSICAL, 80, 100, 15, -1, 0, 3),
     new AttackMove(Moves.FRENZY_PLANT, Type.GRASS, MoveCategory.SPECIAL, 150, 90, 5, -1, 0, 3).attr(RechargeAttr),
@@ -1357,7 +1364,7 @@ export function initMoves() {
     new AttackMove(Moves.ROCK_BLAST, Type.ROCK, MoveCategory.PHYSICAL, 25, 90, 10, -1, 0, 3)
       .attr(MultiHitAttr)
       .makesContact(false)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.SHOCK_WAVE, Type.ELECTRIC, MoveCategory.SPECIAL, 60, -1, 20, -1, 0, 3),
     new AttackMove(Moves.WATER_PULSE, Type.WATER, MoveCategory.SPECIAL, 60, 100, 20, 20, 0, 3)
       .attr(ConfuseAttr)
@@ -1397,7 +1404,7 @@ export function initMoves() {
       .punchingMove(),
     new AttackMove(Moves.GYRO_BALL, Type.STEEL, MoveCategory.PHYSICAL, -1, 100, 5, -1, 0, 4)
       .attr(GyroBallPowerAttr)
-      .ballBombMove(),
+      .bulletMove(),
     new SelfStatusMove(Moves.HEALING_WISH, Type.PSYCHIC, -1, 10, -1, 0, 4)
       .attr(SacrificialFullRestoreAttr, false, "moveTriggers:sacrificialFullRestore")
       .triageMove()
@@ -1548,7 +1555,7 @@ export function initMoves() {
     ),
     new AttackMove(Moves.AURA_SPHERE, Type.FIGHTING, MoveCategory.SPECIAL, 80, -1, 20, -1, 0, 4)
       .pulseMove()
-      .ballBombMove(),
+      .bulletMove(),
     new SelfStatusMove(Moves.ROCK_POLISH, Type.ROCK, -1, 20, -1, 0, 4).attr(StatStageChangeAttr, [Stat.SPD], 2, true),
     new AttackMove(Moves.POISON_JAB, Type.POISON, MoveCategory.PHYSICAL, 80, 100, 20, 30, 0, 4).attr(
       StatusEffectAttr,
@@ -1563,14 +1570,14 @@ export function initMoves() {
     new AttackMove(Moves.AQUA_TAIL, Type.WATER, MoveCategory.PHYSICAL, 90, 90, 10, -1, 0, 4),
     new AttackMove(Moves.SEED_BOMB, Type.GRASS, MoveCategory.PHYSICAL, 80, 100, 15, -1, 0, 4)
       .makesContact(false)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.AIR_SLASH, Type.FLYING, MoveCategory.SPECIAL, 75, 95, 15, 30, 0, 4)
       .attr(FlinchAttr)
       .slicingMove(),
     new AttackMove(Moves.X_SCISSOR, Type.BUG, MoveCategory.PHYSICAL, 80, 100, 15, -1, 0, 4).slicingMove(),
     new AttackMove(Moves.BUG_BUZZ, Type.BUG, MoveCategory.SPECIAL, 90, 100, 10, 10, 0, 4)
       .attr(StatStageChangeAttr, [Stat.SPDEF], -1)
-      .soundBased(),
+      .soundMove(),
     new AttackMove(Moves.DRAGON_PULSE, Type.DRAGON, MoveCategory.SPECIAL, 85, 100, 10, -1, 0, 4).pulseMove(),
     new AttackMove(Moves.DRAGON_RUSH, Type.DRAGON, MoveCategory.PHYSICAL, 100, 75, 10, 20, 0, 4)
       .attr(AlwaysHitMinimizeAttr)
@@ -1584,10 +1591,10 @@ export function initMoves() {
     new AttackMove(Moves.VACUUM_WAVE, Type.FIGHTING, MoveCategory.SPECIAL, 40, 100, 30, -1, 1, 4),
     new AttackMove(Moves.FOCUS_BLAST, Type.FIGHTING, MoveCategory.SPECIAL, 120, 70, 5, 10, 0, 4)
       .attr(StatStageChangeAttr, [Stat.SPDEF], -1)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.ENERGY_BALL, Type.GRASS, MoveCategory.SPECIAL, 90, 100, 10, 10, 0, 4)
       .attr(StatStageChangeAttr, [Stat.SPDEF], -1)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.BRAVE_BIRD, Type.FLYING, MoveCategory.PHYSICAL, 120, 100, 15, -1, 0, 4)
       .attr(RecoilAttr, false, 0.33)
       .recklessMove(),
@@ -1620,7 +1627,7 @@ export function initMoves() {
     new AttackMove(Moves.SHADOW_SNEAK, Type.GHOST, MoveCategory.PHYSICAL, 40, 100, 30, -1, 1, 4),
     new AttackMove(Moves.MUD_BOMB, Type.GROUND, MoveCategory.SPECIAL, 65, 85, 10, 30, 0, 4)
       .attr(StatStageChangeAttr, [Stat.ACC], -1)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.PSYCHO_CUT, Type.PSYCHIC, MoveCategory.PHYSICAL, 70, 100, 20, -1, 0, 4)
       .attr(HighCritAttr)
       .slicingMove()
@@ -1670,7 +1677,7 @@ export function initMoves() {
     new AttackMove(Moves.ROCK_WRECKER, Type.ROCK, MoveCategory.PHYSICAL, 150, 90, 5, -1, 0, 4)
       .attr(RechargeAttr)
       .makesContact(false)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.CROSS_POISON, Type.POISON, MoveCategory.PHYSICAL, 70, 100, 20, 10, 0, 4)
       .attr(HighCritAttr)
       .attr(StatusEffectAttr, StatusEffect.POISON)
@@ -1681,7 +1688,7 @@ export function initMoves() {
     new AttackMove(Moves.IRON_HEAD, Type.STEEL, MoveCategory.PHYSICAL, 80, 100, 15, 30, 0, 4).attr(FlinchAttr),
     new AttackMove(Moves.MAGNET_BOMB, Type.STEEL, MoveCategory.PHYSICAL, 60, -1, 20, -1, 0, 4)
       .makesContact(false)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.STONE_EDGE, Type.ROCK, MoveCategory.PHYSICAL, 100, 80, 5, -1, 0, 4)
       .attr(HighCritAttr)
       .makesContact(false),
@@ -1693,11 +1700,12 @@ export function initMoves() {
       .attr(AddArenaTrapTagAttr, ArenaTagType.STEALTH_ROCK)
       .target(MoveTarget.ENEMY_SIDE),
     new AttackMove(Moves.GRASS_KNOT, Type.GRASS, MoveCategory.SPECIAL, -1, 100, 20, -1, 0, 4)
+      .condition(failOnMaxCondition)
       .attr(WeightPowerAttr)
       .makesContact(),
     new AttackMove(Moves.CHATTER, Type.FLYING, MoveCategory.SPECIAL, 65, 100, 20, 100, 0, 4)
       .attr(ConfuseAttr)
-      .soundBased(),
+      .soundMove(),
     new AttackMove(Moves.JUDGMENT, Type.NORMAL, MoveCategory.SPECIAL, 100, 100, 10, -1, 0, 4).attr(
       FormChangeItemTypeAttr,
     ),
@@ -1846,6 +1854,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.SPATK, Stat.SPDEF, Stat.SPD], 1, true)
       .danceMove(),
     new AttackMove(Moves.HEAVY_SLAM, Type.STEEL, MoveCategory.PHYSICAL, -1, 100, 10, -1, 0, 5)
+      .condition(failOnMaxCondition)
       .attr(AlwaysHitMinimizeAttr)
       .attr(CompareWeightPowerAttr)
       .attr(HitsTagForDoubleDamageAttr, BattlerTagType.MINIMIZED),
@@ -1855,7 +1864,7 @@ export function initMoves() {
       .attr(HitsSameTypeAttr),
     new AttackMove(Moves.ELECTRO_BALL, Type.ELECTRIC, MoveCategory.SPECIAL, -1, 100, 10, -1, 0, 5)
       .attr(ElectroBallPowerAttr)
-      .ballBombMove(),
+      .bulletMove(),
     new StatusMove(Moves.SOAK, Type.WATER, 100, 20, -1, 0, 5).attr(ChangeTypeAttr, Type.WATER),
     new AttackMove(Moves.FLAME_CHARGE, Type.FIRE, MoveCategory.PHYSICAL, 50, 100, 20, 100, 0, 5).attr(
       StatStageChangeAttr,
@@ -1876,12 +1885,14 @@ export function initMoves() {
     ),
     new AttackMove(Moves.ACID_SPRAY, Type.POISON, MoveCategory.SPECIAL, 40, 100, 20, 100, 0, 5)
       .attr(StatStageChangeAttr, [Stat.SPDEF], -2)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.FOUL_PLAY, Type.DARK, MoveCategory.PHYSICAL, 95, 100, 15, -1, 0, 5)
       .attr(TargetAtkUserAtkAttr)
       .edgeCase(), // Does not consider Huge Power/other attack stat modifiers correctly + disables Unaware during use
     new StatusMove(Moves.SIMPLE_BEAM, Type.NORMAL, 100, 15, -1, 0, 5).attr(AbilityChangeAttr, Abilities.SIMPLE),
-    new StatusMove(Moves.ENTRAINMENT, Type.NORMAL, 100, 15, -1, 0, 5).attr(AbilityGiveAttr),
+    new StatusMove(Moves.ENTRAINMENT, Type.NORMAL, 100, 15, -1, 0, 5)
+      .condition(failOnMaxCondition)
+      .attr(AbilityGiveAttr),
     new StatusMove(Moves.AFTER_YOU, Type.NORMAL, -1, 15, -1, 0, 5)
       .ignoresProtect()
       .ignoresSubstitute()
@@ -1892,10 +1903,10 @@ export function initMoves() {
     new AttackMove(Moves.ROUND, Type.NORMAL, MoveCategory.SPECIAL, 60, 100, 15, -1, 0, 5)
       .attr(CueNextRoundAttr)
       .attr(RoundPowerAttr)
-      .soundBased(),
+      .soundMove(),
     new AttackMove(Moves.ECHOED_VOICE, Type.NORMAL, MoveCategory.SPECIAL, 40, 100, 15, -1, 0, 5)
       .attr(ConsecutiveUseMultiBasePowerAttr, 5, false)
-      .soundBased(),
+      .soundMove(),
     new AttackMove(Moves.CHIP_AWAY, Type.NORMAL, MoveCategory.PHYSICAL, 70, 100, 20, -1, 0, 5).attr(
       IgnoreOpponentStatStagesAttr,
     ),
@@ -2049,6 +2060,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.DEF], -1)
       .slicingMove(),
     new AttackMove(Moves.HEAT_CRASH, Type.FIRE, MoveCategory.PHYSICAL, -1, 100, 10, -1, 0, 5)
+      .condition(failOnMaxCondition)
       .attr(AlwaysHitMinimizeAttr)
       .attr(CompareWeightPowerAttr)
       .attr(HitsTagForDoubleDamageAttr, BattlerTagType.MINIMIZED),
@@ -2086,14 +2098,14 @@ export function initMoves() {
     ),
     new AttackMove(Moves.SEARING_SHOT, Type.FIRE, MoveCategory.SPECIAL, 100, 100, 5, 30, 0, 5)
       .attr(StatusEffectAttr, StatusEffect.BURN)
-      .ballBombMove()
+      .bulletMove()
       .target(MoveTarget.ALL_NEAR_OTHERS),
     new AttackMove(Moves.TECHNO_BLAST, Type.NORMAL, MoveCategory.SPECIAL, 120, 100, 5, -1, 0, 5).attr(
       TechnoBlastTypeAttr,
     ),
     new AttackMove(Moves.RELIC_SONG, Type.NORMAL, MoveCategory.SPECIAL, 75, 100, 10, 10, 0, 5)
       .attr(StatusEffectAttr, StatusEffect.SLEEP)
-      .soundBased()
+      .soundMove()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new AttackMove(Moves.SECRET_SWORD, Type.FIGHTING, MoveCategory.SPECIAL, 85, 100, 10, -1, 0, 5)
       .attr(DealsPhysicalDamageAttr)
@@ -2122,7 +2134,7 @@ export function initMoves() {
       .ignoresVirtual(),
     new AttackMove(Moves.SNARL, Type.DARK, MoveCategory.SPECIAL, 55, 95, 15, 100, 0, 5)
       .attr(StatStageChangeAttr, [Stat.SPATK], -1)
-      .soundBased()
+      .soundMove()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new AttackMove(Moves.ICICLE_CRASH, Type.ICE, MoveCategory.PHYSICAL, 85, 90, 10, 30, 0, 5)
       .attr(FlinchAttr)
@@ -2180,7 +2192,7 @@ export function initMoves() {
     new StatusMove(Moves.TRICK_OR_TREAT, Type.GHOST, 100, 20, -1, 0, 6).attr(AddTypeAttr, Type.GHOST),
     new StatusMove(Moves.NOBLE_ROAR, Type.NORMAL, 100, 30, -1, 0, 6)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], -1)
-      .soundBased(),
+      .soundMove(),
     new StatusMove(Moves.ION_DELUGE, Type.ELECTRIC, -1, 25, -1, 1, 6)
       .attr(AddArenaTagAttr, ArenaTagType.ION_DELUGE, { turnCount: 1 })
       .target(MoveTarget.BOTH_SIDES),
@@ -2197,12 +2209,12 @@ export function initMoves() {
       .attr(StatusEffectAttr, StatusEffect.FREEZE)
       .attr(FreezeDryAttr),
     new AttackMove(Moves.DISARMING_VOICE, Type.FAIRY, MoveCategory.SPECIAL, 40, -1, 15, -1, 0, 6)
-      .soundBased()
+      .soundMove()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new StatusMove(Moves.PARTING_SHOT, Type.DARK, 100, 20, -1, 0, 6)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], -1, false, { trigger: MoveEffectTrigger.PRE_APPLY })
       .attr(ForceSwitchOutAttr, true)
-      .soundBased(),
+      .soundMove(),
     new StatusMove(Moves.TOPSY_TURVY, Type.DARK, -1, 20, -1, 0, 6).attr(InvertStatsAttr),
     new AttackMove(Moves.DRAINING_KISS, Type.FAIRY, MoveCategory.SPECIAL, 50, 100, 10, -1, 0, 6)
       .attr(HitHealAttr, 0.75)
@@ -2242,7 +2254,7 @@ export function initMoves() {
       -1,
     ),
     new AttackMove(Moves.BOOMBURST, Type.NORMAL, MoveCategory.SPECIAL, 140, 100, 10, -1, 0, 6)
-      .soundBased()
+      .soundMove()
       .target(MoveTarget.ALL_NEAR_OTHERS),
     new StatusMove(Moves.FAIRY_LOCK, Type.FAIRY, -1, 10, -1, 0, 6)
       .ignoresSubstitute()
@@ -2257,7 +2269,7 @@ export function initMoves() {
       .ignoresSubstitute(),
     new StatusMove(Moves.CONFIDE, Type.NORMAL, -1, 20, -1, 0, 6)
       .attr(StatStageChangeAttr, [Stat.SPATK], -1)
-      .soundBased(),
+      .soundMove(),
     new AttackMove(Moves.DIAMOND_STORM, Type.ROCK, MoveCategory.PHYSICAL, 100, 95, 5, 50, 0, 6)
       .attr(StatStageChangeAttr, [Stat.DEF], 2, true, { firstTargetOnly: true })
       .makesContact(false)
@@ -2506,7 +2518,7 @@ export function initMoves() {
     ),
     new AttackMove(Moves.SPARKLING_ARIA, Type.WATER, MoveCategory.SPECIAL, 90, 100, 10, 100, 0, 7)
       .attr(HealStatusEffectAttr, false, StatusEffect.BURN)
-      .soundBased()
+      .soundMove()
       .target(MoveTarget.ALL_NEAR_OTHERS),
     new AttackMove(Moves.ICE_HAMMER, Type.ICE, MoveCategory.PHYSICAL, 100, 90, 10, -1, 0, 7)
       .attr(StatStageChangeAttr, [Stat.SPD], -1, true)
@@ -2564,7 +2576,7 @@ export function initMoves() {
     new AttackMove(Moves.POLLEN_PUFF, Type.BUG, MoveCategory.SPECIAL, 90, 100, 15, -1, 0, 7)
       .attr(StatusCategoryOnAllyAttr)
       .attr(HealOnAllyAttr, 0.5, true, false)
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.ANCHOR_SHOT, Type.STEEL, MoveCategory.PHYSICAL, 80, 100, 20, 100, 0, 7).attr(
       AddBattlerTagAttr,
       BattlerTagType.TRAPPED,
@@ -2625,11 +2637,11 @@ export function initMoves() {
     new StatusMove(Moves.INSTRUCT, Type.PSYCHIC, -1, 15, -1, 0, 7).ignoresSubstitute().attr(RepeatMoveAttr).edgeCase(), // incorrect interactions with Gigaton Hammer, Blood Moon & Torment
     new AttackMove(Moves.BEAK_BLAST, Type.FLYING, MoveCategory.PHYSICAL, 100, 100, 15, -1, -3, 7)
       .attr(BeakBlastHeaderAttr)
-      .ballBombMove()
+      .bulletMove()
       .makesContact(false),
     new AttackMove(Moves.CLANGING_SCALES, Type.DRAGON, MoveCategory.SPECIAL, 110, 100, 5, -1, 0, 7)
       .attr(StatStageChangeAttr, [Stat.DEF], -1, true, { firstTargetOnly: true })
-      .soundBased()
+      .soundMove()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new AttackMove(Moves.DRAGON_HAMMER, Type.DRAGON, MoveCategory.PHYSICAL, 90, 100, 15, -1, 0, 7),
     new AttackMove(Moves.BRUTAL_SWING, Type.DARK, MoveCategory.PHYSICAL, 60, 100, 20, -1, 0, 7).target(
@@ -2776,7 +2788,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD], 1, true, {
         firstTargetOnly: true,
       })
-      .soundBased()
+      .soundMove()
       .unimplemented()
       .target(MoveTarget.ALL_NEAR_ENEMIES)
       .edgeCase() // I assume it needs clanging scales and Kommo-O
@@ -2976,7 +2988,7 @@ export function initMoves() {
     /* End Unused */
     new SelfStatusMove(Moves.CLANGOROUS_SOUL, Type.DRAGON, 100, 5, -1, 0, 8)
       .attr(CutHpStatStageBoostAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD], 1, 3)
-      .soundBased()
+      .soundMove()
       .danceMove(),
     new AttackMove(Moves.BODY_PRESS, Type.FIGHTING, MoveCategory.PHYSICAL, 80, 100, 10, -1, 0, 8)
       .attr(DefAtkAttr)
@@ -2994,7 +3006,7 @@ export function initMoves() {
     new AttackMove(Moves.PYRO_BALL, Type.FIRE, MoveCategory.PHYSICAL, 120, 90, 5, 10, 0, 8)
       .attr(HealStatusEffectAttr, true, StatusEffect.FREEZE)
       .attr(StatusEffectAttr, StatusEffect.BURN)
-      .ballBombMove()
+      .bulletMove()
       .makesContact(false),
     new AttackMove(Moves.BEHEMOTH_BLADE, Type.STEEL, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 8).slicingMove(),
     new AttackMove(Moves.BEHEMOTH_BASH, Type.STEEL, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 8),
@@ -3007,7 +3019,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.ATK], -1),
     new AttackMove(Moves.BRANCH_POKE, Type.GRASS, MoveCategory.PHYSICAL, 40, 100, 40, -1, 0, 8),
     new AttackMove(Moves.OVERDRIVE, Type.ELECTRIC, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 8)
-      .soundBased()
+      .soundMove()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new AttackMove(Moves.APPLE_ACID, Type.GRASS, MoveCategory.SPECIAL, 80, 100, 10, 100, 0, 8).attr(
       StatStageChangeAttr,
@@ -3164,7 +3176,7 @@ export function initMoves() {
     ),
     new AttackMove(Moves.EERIE_SPELL, Type.PSYCHIC, MoveCategory.SPECIAL, 80, 100, 5, 100, 0, 8)
       .attr(AttackReducePpMoveAttr, 3)
-      .soundBased(),
+      .soundMove(),
     new AttackMove(Moves.DIRE_CLAW, Type.POISON, MoveCategory.PHYSICAL, 80, 100, 15, 50, 0, 8).attr(
       MultiStatusEffectAttr,
       [StatusEffect.POISON, StatusEffect.PARALYSIS, StatusEffect.SLEEP],
@@ -3473,7 +3485,7 @@ export function initMoves() {
       .makesContact(false),
     new AttackMove(Moves.TORCH_SONG, Type.FIRE, MoveCategory.SPECIAL, 80, 100, 10, 100, 0, 9)
       .attr(StatStageChangeAttr, [Stat.SPATK], 1, true)
-      .soundBased(),
+      .soundMove(),
     new AttackMove(Moves.AQUA_STEP, Type.WATER, MoveCategory.PHYSICAL, 80, 100, 10, 100, 0, 9)
       .attr(StatStageChangeAttr, [Stat.SPD], 1, true)
       .makesContact()
@@ -3622,7 +3634,7 @@ export function initMoves() {
       .triageMove(),
     new AttackMove(Moves.SYRUP_BOMB, Type.GRASS, MoveCategory.SPECIAL, 60, 85, 10, 100, 0, 9)
       .attr(AddBattlerTagAttr, BattlerTagType.SYRUP_BOMB, false, { turnCountMin: 3 })
-      .ballBombMove(),
+      .bulletMove(),
     new AttackMove(Moves.IVY_CUDGEL, Type.GRASS, MoveCategory.PHYSICAL, 100, 100, 10, -1, 0, 9)
       .attr(IvyCudgelTypeAttr)
       .attr(HighCritAttr)
@@ -3676,7 +3688,7 @@ export function initMoves() {
       .target(MoveTarget.NEAR_ALLY),
     new AttackMove(Moves.ALLURING_VOICE, Type.FAIRY, MoveCategory.SPECIAL, 80, 100, 10, 100, 0, 9)
       .attr(AddBattlerTagIfBoostedAttr, BattlerTagType.CONFUSED)
-      .soundBased(),
+      .soundMove(),
     new AttackMove(Moves.TEMPER_FLARE, Type.FIRE, MoveCategory.PHYSICAL, 75, 100, 10, -1, 0, 9).attr(
       MovePowerMultiplierAttr,
       (user, _target, _move) =>
@@ -3689,7 +3701,7 @@ export function initMoves() {
       .attr(NoEffectAttr, crashDamageFunc)
       .recklessMove(),
     new AttackMove(Moves.PSYCHIC_NOISE, Type.PSYCHIC, MoveCategory.SPECIAL, 75, 100, 10, 100, 0, 9)
-      .soundBased()
+      .soundMove()
       .attr(AddBattlerTagAttr, BattlerTagType.HEAL_BLOCK, false, { turnCountMin: 2 }),
     new AttackMove(Moves.UPPER_HAND, Type.FIGHTING, MoveCategory.PHYSICAL, 65, 100, 15, 100, 3, 9)
       .attr(FlinchAttr)
