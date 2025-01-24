@@ -1,7 +1,6 @@
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { EvolutionItem } from "#enums/evolution-item";
 import { tmPoolTiers, tmSpecies } from "#app/data/balance/tms";
-import { getBerryEffectDescription, getBerryName } from "#app/data/berry";
 import { selfStatLowerMoves } from "#app/data/move";
 import { allMoves } from "#app/data/all-moves";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
@@ -118,6 +117,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { Type } from "#enums/type";
 import i18next from "i18next";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
+import { getBerryEffectDescription, getBerryName } from "#app/utils/berry-utils";
 
 const outputModifierData = false;
 const useMaxWeightForOutput = false;

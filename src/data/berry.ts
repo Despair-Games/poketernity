@@ -14,14 +14,7 @@ import { Stat, type BattleStat } from "#enums/stat";
 import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { globalScene } from "#app/global-scene";
-
-export function getBerryName(berryType: BerryType): string {
-  return i18next.t(`berry:${BerryType[berryType]}.name`);
-}
-
-export function getBerryEffectDescription(berryType: BerryType): string {
-  return i18next.t(`berry:${BerryType[berryType]}.effect`);
-}
+import { getBerryName } from "#app/utils/berry-utils";
 
 export type BerryPredicate = (pokemon: Pokemon) => boolean;
 
