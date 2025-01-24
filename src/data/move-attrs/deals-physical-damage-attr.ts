@@ -14,8 +14,8 @@ export class DealsPhysicalDamageAttr extends VariableDefAttr {
     super();
   }
 
-  override apply(user: Pokemon, target: Pokemon, _move: Move, defendingStat: NumberHolder): boolean {
-    defendingStat.value = target.getEffectiveStat(Stat.DEF, user);
+  override apply(_user: Pokemon, _target: Pokemon, _move: Move, defendingStat: NumberHolder): boolean {
+    defendingStat.value = Stat.DEF;
     return true;
   }
 }
