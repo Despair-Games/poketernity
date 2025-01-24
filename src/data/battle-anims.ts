@@ -1,8 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { allMoves } from "#app/data/all-moves";
 import { BeakBlastHeaderAttr } from "./move-attrs/beak-blast-header-attr";
-import { SelfStatusMove } from "./move";
-import { AttackMove } from "./move";
+import { type Move } from "./move";
 import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import { getFrameMs, getEnumKeys, getEnumValues, animationFileName, isNullOrUndefined } from "#app/utils";
@@ -473,12 +472,11 @@ export function initMoveAnim(move: Moves): Promise<void> {
       }
     } else {
       moveAnims.set(move, null);
-      const defaultMoveAnim =
-        allMoves[move] instanceof AttackMove
-          ? Moves.TACKLE
-          : allMoves[move] instanceof SelfStatusMove
-            ? Moves.FOCUS_ENERGY
-            : Moves.TAIL_WHIP;
+      const defaultMoveAnim = allMoves[move].isAttackMove()
+        ? Moves.TACKLE
+        : (allMoves[move] as Move).isSelfStatusMove()
+          ? Moves.FOCUS_ENERGY
+          : Moves.TAIL_WHIP;
 
       const fetchAnimAndResolve = (move: Moves) => {
         globalScene

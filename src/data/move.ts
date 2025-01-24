@@ -262,6 +262,18 @@ export abstract class Move implements Localizable {
     return false;
   }
 
+  isAttackMove(): this is AttackMove {
+    return false;
+  }
+
+  isStatusMove(): this is StatusMove {
+    return false;
+  }
+
+  isSelfStatusMove(): this is SelfStatusMove {
+    return true;
+  }
+
   /**
    * Checks if the move is immune to certain types.
    * Currently looks at cases of Grass types with powder moves and Dark types with moves affected by Prankster.
@@ -906,6 +918,10 @@ export class AttackMove extends Move {
 
     return ret;
   }
+
+  override isAttackMove(): this is this {
+    return true;
+  }
 }
 
 export class StatusMove extends Move {
@@ -920,6 +936,10 @@ export class StatusMove extends Move {
   ) {
     super(id, type, MoveCategory.STATUS, MoveTarget.NEAR_OTHER, -1, accuracy, pp, chance, priority, generation);
   }
+
+  override isStatusMove(): this is this {
+    return true;
+  }
 }
 
 export class SelfStatusMove extends Move {
@@ -933,6 +953,10 @@ export class SelfStatusMove extends Move {
     generation: number,
   ) {
     super(id, type, MoveCategory.STATUS, MoveTarget.USER, -1, accuracy, pp, chance, priority, generation);
+  }
+
+  override isSelfStatusMove(): this is this {
+    return true;
   }
 }
 

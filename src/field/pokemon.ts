@@ -31,7 +31,6 @@ import { CritOnlyAttr } from "#app/data/move-attrs/crit-only-attr";
 import { HighCritAttr } from "#app/data/move-attrs/high-crit-attr";
 import { IgnoreOpponentStatStagesAttr } from "#app/data/move-attrs/ignore-opponent-stat-stages-attr";
 import { RespectAttackTypeImmunityAttr } from "#app/data/move-attrs/respect-attack-type-immunity-attr";
-import { AttackMove } from "#app/data/move";
 import { MoveTarget } from "#enums/move-target";
 import { MoveCategory } from "#enums/move-category";
 import type { PokemonSpeciesForm } from "#app/data/pokemon-species";
@@ -5521,7 +5520,7 @@ export class EnemyPokemon extends Pokemon {
                 && ![Moves.SUCKER_PUNCH, Moves.UPPER_HAND, Moves.THUNDERCLAP].includes(move.id)
               ) {
                 targetScore = -20;
-              } else if (move instanceof AttackMove) {
+              } else if (move.isAttackMove()) {
                 /**
                  * Attack moves are given extra multipliers to their base benefit score based on
                  * the move's type effectiveness against the target and whether the move is a STAB move.

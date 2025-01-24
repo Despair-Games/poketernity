@@ -1,7 +1,4 @@
 import type { BattlerIndex } from "#enums/battler-index";
-import { SelfStatusMove } from "../move";
-import { StatusMove } from "../move";
-import { AttackMove } from "../move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -35,10 +32,10 @@ export class PostDancingMoveAbAttr extends PostMoveUsedAbAttr {
     ) {
       if (!simulated) {
         // If the move is an AttackMove or a StatusMove the Dancer must replicate the move on the source of the Dance
-        if (move.getMove() instanceof AttackMove || move.getMove() instanceof StatusMove) {
+        if (move.getMove().isAttackMove() || move.getMove().isStatusMove()) {
           const target = this.getTarget(pokemon, source, targets);
           globalScene.unshiftPhase(new MovePhase(pokemon, target, move, true, true));
-        } else if (move.getMove() instanceof SelfStatusMove) {
+        } else if (move.getMove().isSelfStatusMove()) {
           // If the move is a SelfStatusMove (ie. Swords Dance) the Dancer should replicate it on itself
           globalScene.unshiftPhase(new MovePhase(pokemon, [pokemon.getBattlerIndex()], move, true, true));
         }

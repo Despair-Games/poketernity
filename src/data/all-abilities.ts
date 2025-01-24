@@ -132,7 +132,6 @@ import { FlinchAttr } from "./move-attrs/flinch-attr";
 import { VariableMoveTypeAttr } from "./move-attrs/variable-move-type-attr";
 import { VariablePowerAttr } from "./move-attrs/variable-power-attr";
 import { OneHitKOAttr } from "./move-attrs/one-hit-ko-attr";
-import { AttackMove } from "./move";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveCategory } from "#enums/move-category";
 import { getNonVolatileStatusEffects } from "./status-effect";
@@ -261,7 +260,7 @@ function getAnticipationCondition(): AbAttrCondition {
         }
         // the move's base type (not accounting for variable type changes) is super effective
         if (
-          move.getMove() instanceof AttackMove
+          move.getMove().isAttackMove()
           && pokemon.getAttackTypeEffectiveness(move.getMove().type, opponent, true, undefined, move.getMove()) >= 2
         ) {
           return true;
@@ -798,10 +797,7 @@ export function initAbilities() {
       )
       .edgeCase(), // Cannot recover berries used up by fling or natural gift (unimplemented)
     new Ability(Abilities.TELEPATHY, 5)
-      .attr(
-        MoveImmunityAbAttr,
-        (pokemon, attacker, move) => pokemon.getAlly() === attacker && move instanceof AttackMove,
-      )
+      .attr(MoveImmunityAbAttr, (pokemon, attacker, move) => pokemon.getAlly() === attacker && move.isAttackMove())
       .ignorable(),
     new Ability(Abilities.MOODY, 5).attr(MoodyAbAttr),
     new Ability(Abilities.OVERCOAT, 5)

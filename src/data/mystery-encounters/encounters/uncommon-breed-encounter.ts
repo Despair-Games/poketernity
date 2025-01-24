@@ -30,7 +30,6 @@ import PokemonData from "#app/system/pokemon-data";
 import { isNullOrUndefined, randSeedInt } from "#app/utils";
 import type { Moves } from "#enums/moves";
 import { BattlerIndex } from "#enums/battler-index";
-import { SelfStatusMove } from "#app/data/move";
 import { PokeballType } from "#enums/pokeball";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
@@ -178,7 +177,7 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
         // Check what type of move the egg move is to determine target
         const pokemonMove = new PokemonMove(eggMove);
         const move = pokemonMove.getMove();
-        const target = move instanceof SelfStatusMove ? BattlerIndex.ENEMY : BattlerIndex.PLAYER;
+        const target = move.isSelfStatusMove() ? BattlerIndex.ENEMY : BattlerIndex.PLAYER;
 
         encounter.startOfBattleEffects.push({
           sourceBattlerIndex: BattlerIndex.ENEMY,

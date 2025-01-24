@@ -1,5 +1,4 @@
 import { OneHitKOAttr } from "../move-attrs/one-hit-ko-attr";
-import { StatusMove } from "../move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -14,7 +13,7 @@ export class ForewarnAbAttr extends PostSummonAbAttr {
     let movePower = 0;
     for (const opponent of pokemon.getOpponents()) {
       for (const move of opponent.moveset) {
-        if (move.getMove() instanceof StatusMove) {
+        if (move.getMove().isStatusMove()) {
           movePower = 1;
         } else if (move.getMove().hasAttr(OneHitKOAttr)) {
           movePower = 150;

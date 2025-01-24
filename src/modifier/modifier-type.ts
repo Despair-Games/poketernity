@@ -4,7 +4,6 @@ import { tmPoolTiers, tmSpecies } from "#app/data/balance/tms";
 import { getBerryEffectDescription, getBerryName } from "#app/data/berry";
 import { selfStatLowerMoves } from "#app/data/move";
 import { allMoves } from "#app/data/all-moves";
-import { AttackMove } from "#app/data/move";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { getPokeballCatchMultiplier, getPokeballName, MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
 import { pokemonFormChanges, SpeciesFormChangeCondition, SpeciesFormChangeItemTrigger } from "#app/data/pokemon-forms";
@@ -1273,7 +1272,7 @@ class AttackTypeBoosterModifierTypeGenerator extends ModifierTypeGenerator {
           p
             .getMoveset()
             .map((m) => m.getMove())
-            .filter((m) => m instanceof AttackMove)
+            .filter((m) => m.isAttackMove())
             .map((m) => m.type),
         )
         .flat();
