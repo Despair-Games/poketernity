@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
 import { MoveEffectChanceMultiplierAbAttr } from "#app/data/ab-attrs/move-effect-chance-multiplier-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";

@@ -5,7 +5,7 @@ import { PokemonTypeChangeAbAttr } from "#app/data/ab-attrs/pokemon-type-change-
 import { PostMoveUsedAbAttr } from "#app/data/ab-attrs/post-move-used-ab-attr";
 import { RedirectMoveAbAttr } from "#app/data/ab-attrs/redirect-move-ab-attr";
 import { ReduceSleepDurationAbAttr } from "#app/data/ab-attrs/reduce-sleep-duration-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { allMoves } from "#app/data/all-moves";
 import { CommonAnim } from "#enums/common-anim";
 import { CenterOfAttentionTag, SkyDropTag } from "#app/data/battler-tags";

@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { BypassSpeedChanceAbAttr } from "#app/data/ab-attrs/bypass-speed-chance-ab-attr";
 import { PreventBypassSpeedChanceAbAttr } from "#app/data/ab-attrs/prevent-bypass-speed-chance-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { allMoves } from "#app/data/all-moves";
 import { TrickRoomTag } from "#app/data/arena-tag";
 import { MoveHeaderAttr } from "#app/data/move-attrs/move-header-attr";

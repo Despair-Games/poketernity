@@ -3,7 +3,7 @@ import { PostStatStageChangeAbAttr } from "#app/data/ab-attrs/post-stat-stage-ch
 import { ProtectStatAbAttr } from "#app/data/ab-attrs/protect-stat-ab-attr";
 import { StatStageChangeCopyAbAttr } from "#app/data/ab-attrs/stat-stage-change-copy-ab-attr";
 import { StatStageChangeMultiplierAbAttr } from "#app/data/ab-attrs/stat-stage-change-multiplier-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { MistTag } from "#app/data/arena-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

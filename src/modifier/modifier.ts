@@ -54,7 +54,7 @@ import {
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { Color, ShadowColor } from "#enums/color";
 import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { CommanderAbAttr } from "#app/data/ab-attrs/commander-ab-attr";
 import { globalScene } from "#app/global-scene";
 

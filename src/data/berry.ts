@@ -3,7 +3,7 @@ import type { Pokemon } from "../field/pokemon";
 import { HitResult } from "#enums/hit-result";
 import { getStatusEffectHealText } from "./status-effect";
 import { NumberHolder, toDmgValue, randSeedInt } from "#app/utils";
-import { applyAbAttrs } from "./ability";
+import { applyAbAttrs } from "./apply-ab-attrs";
 import { ReduceBerryUseThresholdAbAttr } from "./ab-attrs/reduce-berry-use-threshold-ab-attr";
 import { DoubleBerryEffectAbAttr } from "./ab-attrs/double-berry-effect-ab-attr";
 import { PostItemLostAbAttr } from "./ab-attrs/post-item-lost-ab-attr";

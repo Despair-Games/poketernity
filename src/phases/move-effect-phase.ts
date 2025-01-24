@@ -4,7 +4,7 @@ import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-a
 import { PostAttackAbAttr } from "#app/data/ab-attrs/post-attack-ab-attr";
 import { PostDamageAbAttr } from "#app/data/ab-attrs/post-damage-ab-attr";
 import { PostDefendAbAttr } from "#app/data/ab-attrs/post-defend-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { MoveAnim } from "#app/data/battle-anims";
 import { SkyDropTag, SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";

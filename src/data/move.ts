@@ -27,7 +27,7 @@ import { MoveTypeChangeAbAttr } from "./ab-attrs/move-type-change-ab-attr";
 import { UserFieldMoveTypePowerBoostAbAttr } from "./ab-attrs/user-field-move-type-power-boost-ab-attr";
 import { VariableMovePowerAbAttr } from "./ab-attrs/variable-move-power-ab-attr";
 import { WonderSkinAbAttr } from "./ab-attrs/wonder-skin-ab-attr";
-import { applyAbAttrs } from "./ability";
+import { applyAbAttrs } from "./apply-ab-attrs";
 import { WeakenMoveTypeTag } from "./arena-tag";
 import { HelpingHandTag, TypeBoostTag } from "./battler-tags";
 import { IncrementMovePriorityAttr } from "./move-attrs/increment-move-priority-attr";

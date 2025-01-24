@@ -7,7 +7,7 @@ import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { StatusEffect } from "#enums/status-effect";
 import { Type } from "#enums/type";
-import { applyAbAttrs } from "./ability";
+import { applyAbAttrs } from "./apply-ab-attrs";
 import { StockpilingTag } from "./battler-tags";
 import { type Move } from "./move";
 import { allMoves } from "#app/data/all-moves";

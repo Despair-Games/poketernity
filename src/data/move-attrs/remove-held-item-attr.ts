@@ -5,7 +5,7 @@ import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { BlockItemTheftAbAttr } from "#app/data/ab-attrs/block-item-theft-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "../apply-ab-attrs";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 

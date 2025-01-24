@@ -1,5 +1,5 @@
 import { PreSwitchOutAbAttr } from "#app/data/ab-attrs/pre-switch-out-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { SubstituteTag } from "#app/data/battler-tags";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";

@@ -10,7 +10,7 @@ import { BattleType } from "#enums/battle-type";
 import { PostFaintAbAttr } from "#app/data/ab-attrs/post-faint-ab-attr";
 import { PostKnockOutAbAttr } from "#app/data/ab-attrs/post-knock-out-ab-attr";
 import { PostVictoryAbAttr } from "#app/data/ab-attrs/post-victory-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { allMoves } from "#app/data/all-moves";
 import { FRIENDSHIP_LOSS_FROM_FAINT } from "#app/data/balance/starters";
 import { type DestinyBondTag, type GrudgeTag } from "#app/data/battler-tags";
