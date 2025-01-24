@@ -209,6 +209,10 @@ export abstract class Modifier {
   isPokemonFormChangeItemModifier(): this is PokemonFormChangeItemModifier {
     return false;
   }
+
+  isSwitchEffectTransferModifier(): this is SwitchEffectTransferModifier {
+    return false;
+  }
 }
 
 export abstract class PersistentModifier extends Modifier {
@@ -3359,7 +3363,7 @@ export class SwitchEffectTransferModifier extends PokemonHeldItemModifier {
   }
 
   matchType(modifier: Modifier): boolean {
-    return modifier instanceof SwitchEffectTransferModifier;
+    return modifier.isSwitchEffectTransferModifier();
   }
 
   clone(): SwitchEffectTransferModifier {
@@ -3376,6 +3380,10 @@ export class SwitchEffectTransferModifier extends PokemonHeldItemModifier {
 
   getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 1;
+  }
+
+  override isSwitchEffectTransferModifier(): this is SwitchEffectTransferModifier {
+    return true;
   }
 }
 

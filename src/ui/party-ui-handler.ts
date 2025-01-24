@@ -7,11 +7,7 @@ import { BattleCommand } from "#enums/battle-command";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { BooleanHolder, toReadableString, getLocalizedSpriteKey } from "#app/utils";
-import {
-  type PokemonFormChangeItemModifier,
-  type PokemonHeldItemModifier,
-  SwitchEffectTransferModifier,
-} from "#app/modifier/modifier";
+import { type PokemonFormChangeItemModifier, type PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { allMoves } from "#app/data/all-moves";
 import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
 import { StatusEffect } from "#enums/status-effect";
@@ -905,8 +901,8 @@ export default class PartyUiHandler extends MessageUiHandler {
               this.partyUiMode !== PartyUiMode.FAINT_SWITCH
               && globalScene.findModifier(
                 (m) =>
-                  m instanceof SwitchEffectTransferModifier
-                  && (m as SwitchEffectTransferModifier).pokemonId === globalScene.getPlayerField()[this.fieldIndex].id,
+                  m.isSwitchEffectTransferModifier()
+                  && m.pokemonId === globalScene.getPlayerField()[this.fieldIndex].id,
               );
 
             const moveHistory = globalScene.getPlayerField()[this.fieldIndex].getMoveHistory();
