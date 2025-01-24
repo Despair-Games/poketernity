@@ -3313,7 +3313,7 @@ export function initMoves() {
       .unimplemented(), // 50% of replenishing user and ally's berries (like recycle)
     new AttackMove(Moves.G_MAX_MALODOR, Type.POISON, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .attr(StatusEffectAttr, StatusEffect.PARALYSIS),
+      .attr(StatusEffectAttr, StatusEffect.POISON),
     new AttackMove(Moves.G_MAX_STONESURGE, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .attr(AddArenaTrapTagAttr, ArenaTagType.STEALTH_ROCK),
