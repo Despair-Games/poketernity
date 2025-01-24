@@ -37,7 +37,6 @@ import {
   PokemonHpRestoreModifier,
   PokemonIncrementingStatModifier,
   RememberMoveModifier,
-  TerastallizeModifier,
 } from "./modifier/modifier";
 import { PokeballType } from "#enums/pokeball";
 import {
@@ -2544,13 +2543,13 @@ export default class BattleScene extends SceneBase {
     this.validateAchvs(ModifierAchv, modifier);
     const modifiersToRemove: PersistentModifier[] = [];
     if (modifier.isPersistentModifier()) {
-      if (modifier instanceof TerastallizeModifier) {
+      if (modifier.isTerastallizeModifier()) {
         modifiersToRemove.push(
-          ...this.findModifiers((m) => m instanceof TerastallizeModifier && m.pokemonId === modifier.pokemonId),
+          ...this.findModifiers((m) => m.isTerastallizeModifier() && m.pokemonId === modifier.pokemonId),
         );
       }
       if ((modifier as PersistentModifier).add(this.modifiers, !!virtual)) {
-        if (modifier instanceof PokemonFormChangeItemModifier || modifier instanceof TerastallizeModifier) {
+        if (modifier instanceof PokemonFormChangeItemModifier || modifier.isTerastallizeModifier()) {
           const pokemon = this.getPokemonById(modifier.pokemonId);
           if (pokemon) {
             success = modifier.apply(pokemon, true);
@@ -2620,13 +2619,13 @@ export default class BattleScene extends SceneBase {
 
   addEnemyModifier(modifier: PersistentModifier, ignoreUpdate?: boolean, instant?: boolean): void {
     const modifiersToRemove: PersistentModifier[] = [];
-    if (modifier instanceof TerastallizeModifier) {
+    if (modifier.isTerastallizeModifier()) {
       modifiersToRemove.push(
-        ...this.findModifiers((m) => m instanceof TerastallizeModifier && m.pokemonId === modifier.pokemonId, false),
+        ...this.findModifiers((m) => m.isTerastallizeModifier() && m.pokemonId === modifier.pokemonId, false),
       );
     }
     if ((modifier as PersistentModifier).add(this.enemyModifiers, false)) {
-      if (modifier instanceof PokemonFormChangeItemModifier || modifier instanceof TerastallizeModifier) {
+      if (modifier instanceof PokemonFormChangeItemModifier || modifier.isTerastallizeModifier()) {
         const pokemon = this.getPokemonById(modifier.pokemonId);
         if (pokemon) {
           modifier.apply(pokemon, true);
@@ -2900,7 +2899,7 @@ export default class BattleScene extends SceneBase {
     const modifierIndex = modifiers.indexOf(modifier);
     if (modifierIndex > -1) {
       modifiers.splice(modifierIndex, 1);
-      if (modifier instanceof PokemonFormChangeItemModifier || modifier instanceof TerastallizeModifier) {
+      if (modifier instanceof PokemonFormChangeItemModifier || modifier.isTerastallizeModifier()) {
         const pokemon = this.getPokemonById(modifier.pokemonId);
         if (pokemon) {
           modifier.apply(pokemon, false);

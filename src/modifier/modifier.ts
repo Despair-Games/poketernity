@@ -201,6 +201,10 @@ export abstract class Modifier {
   isPersistentModifier<T extends PersistentModifier = PersistentModifier>(): this is T {
     return false;
   }
+
+  isTerastallizeModifier(): this is TerastallizeModifier {
+    return false;
+  }
 }
 
 export abstract class PersistentModifier extends Modifier {
@@ -873,7 +877,7 @@ export class TerastallizeModifier extends LapsingPokemonHeldItemModifier {
   }
 
   matchType(modifier: Modifier): boolean {
-    if (modifier instanceof TerastallizeModifier && modifier.teraType === this.teraType) {
+    if (modifier.isTerastallizeModifier() && modifier.teraType === this.teraType) {
       return true;
     }
     return false;
@@ -924,6 +928,10 @@ export class TerastallizeModifier extends LapsingPokemonHeldItemModifier {
 
   getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 1;
+  }
+
+  override isTerastallizeModifier(): this is this {
+    return true;
   }
 }
 

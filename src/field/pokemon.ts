@@ -74,6 +74,8 @@ import {
   BATTLE_STATS,
   EFFECTIVE_STATS,
 } from "#enums/stat";
+import type {
+  TerastallizeModifier} from "#app/modifier/modifier";
 import {
   HiddenAbilityRateBoosterModifier,
   BaseStatModifier,
@@ -86,7 +88,6 @@ import {
   TempCritBoosterModifier,
   StatBoosterModifier,
   CritBoosterModifier,
-  TerastallizeModifier,
   PokemonBaseStatFlatModifier,
   PokemonBaseStatTotalModifier,
   PokemonIncrementingStatModifier,
@@ -1795,7 +1796,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return Type.UNKNOWN;
     }
     const teraModifier = globalScene.findModifier(
-      (m) => m instanceof TerastallizeModifier && m.pokemonId === this.id && m.getBattlesLeft() > 0,
+      (m) => m.isTerastallizeModifier() && m.pokemonId === this.id && m.getBattlesLeft() > 0,
       this.isPlayer(),
     ) as TerastallizeModifier;
     return teraModifier?.teraType ?? Type.UNKNOWN;

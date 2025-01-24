@@ -1,4 +1,4 @@
-import { PokemonFormChangeItemModifier, TerastallizeModifier } from "../modifier/modifier";
+import { PokemonFormChangeItemModifier } from "../modifier/modifier";
 import type { Pokemon } from "../field/pokemon";
 import { StatusEffect } from "#enums/status-effect";
 import { allMoves } from "#app/data/all-moves";
@@ -297,7 +297,7 @@ export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeTrigger {
    */
   override canChange(pokemon: Pokemon): boolean {
     return !!globalScene.findModifier(
-      (m) => m instanceof TerastallizeModifier && m.pokemonId === pokemon.id && m.teraType === this.teraType,
+      (m) => m.isTerastallizeModifier() && m.pokemonId === pokemon.id && m.teraType === this.teraType,
     );
   }
 }
@@ -309,7 +309,7 @@ export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeTrigger {
  */
 export class SpeciesFormChangeLapseTeraTrigger extends SpeciesFormChangeTrigger {
   override canChange(pokemon: Pokemon): boolean {
-    return !!globalScene.findModifier((m) => m instanceof TerastallizeModifier && m.pokemonId === pokemon.id);
+    return !!globalScene.findModifier((m) => m.isTerastallizeModifier() && m.pokemonId === pokemon.id);
   }
 }
 
