@@ -321,7 +321,9 @@ export class MoveEffectPhase extends HitCheckPhase {
    */
   private applyGMaxUserEffects(user: Pokemon, target: Pokemon, firstTarget: boolean) {
     this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, true);
-    if (user.getAlly()?.isActive(true)) {
+
+    // G-Max Gold Rush should not give money twice for double battles
+    if (this.move.getMove().id !== Moves.G_MAX_GOLD_RUSH && user.getAlly()?.isActive(true)) {
       this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user.getAlly(), target, firstTarget, true);
     }
   }

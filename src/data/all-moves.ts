@@ -3345,7 +3345,8 @@ export function initMoves() {
       .unimplemented(), // applies a stronger version of sand tomb
     new AttackMove(Moves.G_MAX_SNOOZE, Type.DARK, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .attr(AddBattlerTagAttr, BattlerTagType.DROWSY), // TODO: change activation chance to 50 in seperate PR
+      .attr(AddBattlerTagAttr, BattlerTagType.DROWSY, false, { effectChanceOverride: 50 })
+      .edgeCase(), // The 50% chance incorrectly gets overridden by Shield Dust, Sheer Force, etc.
     new AttackMove(Moves.G_MAX_TARTNESS, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .attr(StatStageChangeAttr, [Stat.EVA], -1),
