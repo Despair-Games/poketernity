@@ -3295,28 +3295,28 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       );
     }
 
-    /** If damage is nullified by a form-ability (Eiscue's Ice Face, Mimikyu's Disguise), then damage is set to 0 */
-    if (receivedDamageMultiplier.value > 0) {
-      damage.value = toDmgValue(
-        baseDamage
-          * targetMultiplier
-          * multiStrikeEnhancementMultiplier.value
-          * arenaAttackTypeMultiplier.value
-          * glaiveRushMultiplier.value
-          * criticalMultiplier.value
-          * randomMultiplier
-          * stabMultiplier.value
-          * typeMultiplier
-          * burnMultiplier.value
-          * screenMultiplier.value
-          * hitsTagMultiplier.value
-          * mistyTerrainMultiplier
-          * tintedLensMultiplier.value
-          * receivedDamageMultiplier.value
-          * alliedFieldDamageMultiplier.value,
-      );
-    } else {
+    damage.value =
+      baseDamage
+      * targetMultiplier
+      * multiStrikeEnhancementMultiplier.value
+      * arenaAttackTypeMultiplier.value
+      * glaiveRushMultiplier.value
+      * criticalMultiplier.value
+      * randomMultiplier
+      * stabMultiplier.value
+      * typeMultiplier
+      * burnMultiplier.value
+      * screenMultiplier.value
+      * hitsTagMultiplier.value
+      * mistyTerrainMultiplier
+      * tintedLensMultiplier.value
+      * receivedDamageMultiplier.value
+      * alliedFieldDamageMultiplier.value;
+    /** If damage is nullified by a form-ability (Eiscue's Ice Face, Mimikyu's Disguise) or the attack has a non-damaging outcome (Present), then damage is set to 0 instead */
+    if (damage.value <= 0) {
       damage.value = 0;
+    } else {
+      damage.value = toDmgValue(damage.value);
     }
 
     // This attribute may modify damage arbitrarily, so be careful about changing its order of application.
