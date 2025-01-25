@@ -98,7 +98,7 @@ import { GulpMissileTagAttr } from "./move-attrs/gulp-missile-tag-attr";
 import { GyroBallPowerAttr } from "./move-attrs/gyro-ball-power-attr";
 import { HalfSacrificialAttr } from "./move-attrs/half-sacrificial-attr";
 import { HealAttr } from "./move-attrs/heal-attr";
-import { HealOnAllyAttr } from "./move-attrs/heal-on-ally-attr";
+import { ConditionalHealAttr } from "./move-attrs/heal-on-ally-attr";
 import { HealStatusEffectAttr } from "./move-attrs/heal-status-effect-attr";
 import { HiddenPowerTypeAttr } from "./move-attrs/hidden-power-type-attr";
 import { HighCritAttr } from "./move-attrs/high-crit-attr";
@@ -181,7 +181,7 @@ import { ShiftStatAttr } from "./move-attrs/shift-stat-attr";
 import { SketchAttr } from "./move-attrs/sketch-attr";
 import { SpitUpPowerAttr } from "./move-attrs/spit-up-power-attr";
 import { StatStageChangeAttr } from "./move-attrs/stat-stage-change-attr";
-import { StatusCategoryOnAllyAttr } from "./move-attrs/status-category-on-ally-attr";
+import { ChangeToStatusCategoryAttr } from "./move-attrs/change-to-status-category-attr";
 import { StatusEffectAttr } from "./move-attrs/status-effect-attr";
 import { StatusIfBoostedAttr } from "./move-attrs/status-if-boosted-attr";
 import { StealEatBerryAttr } from "./move-attrs/steal-eat-berry-attr";
@@ -888,6 +888,23 @@ export function initMoves() {
       .target(MoveTarget.PARTY),
     new AttackMove(Moves.RETURN, Type.NORMAL, MoveCategory.PHYSICAL, -1, 100, 20, -1, 0, 2).attr(FriendshipPowerAttr),
     new AttackMove(Moves.PRESENT, Type.NORMAL, MoveCategory.PHYSICAL, -1, 90, 15, -1, 0, 2)
+      .attr(
+        ChangeToStatusCategoryAttr,
+        (user, _target, move) => {
+          const isFirstTurn = user.turnData.hitCount === user.turnData.hitsLeft;
+          move.chance = user.randSeedInt(isFirstTurn ? 100 : 80);
+          return isFirstTurn ? move.chance >= 80 : false;
+        },
+        (user, _target, _move) => {
+          user.turnData.hitCount = 1;
+          user.turnData.hitsLeft = 1;
+        },
+      )
+      .attr(ConditionalHealAttr, 0.25, false, (_user, _target, move) => {
+        const shouldHeal = move.chance >= 80;
+        move.chance = 0;
+        return shouldHeal;
+      })
       .attr(PresentPowerAttr)
       .makesContact(false),
     new AttackMove(Moves.FRUSTRATION, Type.NORMAL, MoveCategory.PHYSICAL, -1, 100, 20, -1, 0, 2).attr(
@@ -2557,8 +2574,8 @@ export function initMoves() {
       BattlerTagType.THROAT_CHOPPED,
     ),
     new AttackMove(Moves.POLLEN_PUFF, Type.BUG, MoveCategory.SPECIAL, 90, 100, 15, -1, 0, 7)
-      .attr(StatusCategoryOnAllyAttr)
-      .attr(HealOnAllyAttr, 0.5, true, false)
+      .attr(ChangeToStatusCategoryAttr, (user, target, _move) => user.getAlly() === target)
+      .attr(ConditionalHealAttr, 0.5, false, (user, target, _move) => user.getAlly() === target)
       .bulletMove(),
     new AttackMove(Moves.ANCHOR_SHOT, Type.STEEL, MoveCategory.PHYSICAL, 80, 100, 20, 100, 0, 7).attr(
       AddBattlerTagAttr,
