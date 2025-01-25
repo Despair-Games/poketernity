@@ -4,7 +4,8 @@ import type BattleScene from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import type { Variant } from "#app/data/variant";
 import { variantData } from "#app/data/variant";
-import BattleInfo, { PlayerBattleInfo, EnemyBattleInfo } from "#app/ui/battle-info";
+import type BattleInfo from "#app/ui/battle-info";
+import { PlayerBattleInfo, EnemyBattleInfo } from "#app/ui/battle-info";
 import type { Move } from "#app/data/move";
 import { applyMoveAttrs, getMoveTargets } from "#app/data/move";
 import { allMoves } from "#app/data/all-moves";
@@ -2751,7 +2752,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       const otherBattleInfo = globalScene.fieldUI
         .getAll()
         .slice(0, 4)
-        .filter((ui) => ui instanceof BattleInfo && (ui as BattleInfo) instanceof PlayerBattleInfo === this.isPlayer())
+        .filter((ui) => ui.type === "BattleInfo" && (ui as BattleInfo) instanceof PlayerBattleInfo === this.isPlayer())
         .find(() => true);
       if (!otherBattleInfo || !this.getFieldIndex()) {
         globalScene.fieldUI.sendToBack(this.battleInfo);
