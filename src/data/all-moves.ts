@@ -117,7 +117,6 @@ import { IncrementMovePriorityAttr } from "./move-attrs/increment-move-priority-
 import { InvertStatsAttr } from "./move-attrs/invert-stats-attr";
 import { IvyCudgelTypeAttr } from "./move-attrs/ivy-cudgel-type-attr";
 import { JawLockAttr } from "./move-attrs/jaw-lock-attr";
-import { LapseBattlerTagAttr } from "./move-attrs/lapse-battler-tag-attr";
 import { LastMoveDoublePowerAttr } from "./move-attrs/last-move-double-power-attr";
 import { LastResortAttr } from "./move-attrs/last-resort-attr";
 import { LeechSeedAttr } from "./move-attrs/leech-seed-attr";
