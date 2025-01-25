@@ -2,5 +2,5 @@ export enum Gender {
   GENDERLESS = -1,
   MALE,
   FEMALE,
-  DOUBLE,
+  DOUBLE, // Used for double named trainer battles (champs/gym leaders)
 }

@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import type { EnemyPokemon } from "#app/field/pokemon";
-import { toReadableString, randSeedItem } from "#app/utils";
+import { toReadableString, randSeedItem, randInt } from "#app/utils";
 import type { PokemonSpeciesFilter } from "#app/data/pokemon-species";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
@@ -18,6 +18,7 @@ import Overrides from "#app/overrides";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { Gender } from "#enums/gender";
+import Phaser from "phaser";
 
 /** Minimum BST for Pokemon generated onto the Elite Four's teams */
 const ELITE_FOUR_MINIMUM_BST = 460;
@@ -206,6 +207,11 @@ export const trainerPartyTemplates = {
     new TrainerPartyTemplate(2, PartyMemberStrength.STRONGER),
   ),
 
+  CHAMPION_DOUBLE: new TrainerPartyCompoundTemplate(
+    new TrainerPartyTemplate(2, PartyMemberStrength.STRONG),
+    new TrainerPartyTemplate(4, PartyMemberStrength.STRONGER),
+  ),
+
   RIVAL: new TrainerPartyCompoundTemplate(
     new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
     new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
@@ -260,8 +266,8 @@ export class TrainerConfig {
   public hasGenders: boolean = false;
   public hasDouble: boolean = false;
   public hasCharSprite: boolean = false;
-  public spriteName1: string;
-  public spriteName2: string;
+  public spriteNameLeft: string;
+  public spriteNameRight: string;
   public doubleOnly: boolean = false;
   public moneyMultiplier: number = 1;
   public isBoss: boolean = false;
@@ -299,8 +305,8 @@ export class TrainerConfig {
   constructor(trainerType: TrainerType, allowLegendaries?: boolean) {
     this.trainerType = trainerType;
     this.name = toReadableString(TrainerType[this.getDerivedType()]);
-    this.battleBgm = "battle_trainer";
-    this.mixedBattleBgm = "battle_trainer";
+    this.battleBgm = ["battle_trainer"];
+    this.mixedBattleBgm = ["battle_trainer"];
     this.victoryBgm = "victory_trainer";
     this.partyTemplates = [trainerPartyTemplates.TWO_AVG];
     this.speciesFilter = (species) => (allowLegendaries || !species.isLegendLike()) && !species.isTrainerForbidden();
@@ -320,10 +326,10 @@ export class TrainerConfig {
       // Get the derived type for the double trainer since the sprite key is based on the derived type
       ret = TrainerType[this.getDerivedType(this.trainerTypeDouble)].toString().toLowerCase();
     }
-    if (!female && this.spriteName1) {
-      return this.spriteName1;
-    } else if (female && this.spriteName2) {
-      return this.spriteName2;
+    if (!female && this.spriteNameLeft) {
+      return this.spriteNameLeft;
+    } else if (female && this.spriteNameRight) {
+      return this.spriteNameRight;
     }
     return ret;
   }
@@ -354,9 +360,9 @@ export class TrainerConfig {
     this.hasVoucher = hasVoucher;
   }
 
-  setSpriteNames(spriteName1: string, spriteName2: string): TrainerConfig {
-    this.spriteName1 = spriteName1;
-    this.spriteName2 = spriteName2;
+  setSpriteNames(spriteNameLeft: string, spriteNameRight: string): TrainerConfig {
+    this.spriteNameLeft = spriteNameLeft;
+    this.spriteNameRight = spriteNameRight;
     return this;
   }
 
@@ -368,10 +374,8 @@ export class TrainerConfig {
 
     // Make the title lowercase and replace spaces with underscores
     title = title.toLowerCase().replace(/\s/g, "_");
-
     // Get the title from the i18n file
     this.title = i18next.t(`titles:${title}`);
-
     return this;
   }
 
@@ -1141,7 +1145,12 @@ export class TrainerConfig {
    * @param mixedBattleBgm the string representation of the mixed battle bgm
    * @returns The updated TrainerConfig instance.
    * **/
-  initForEvilTeamLeader(title: string, name: string, rematch: boolean = false, mixedBattleBgm: string): TrainerConfig {
+  initForEvilTeamLeader(
+    title: string,
+    name: string,
+    rematch: boolean = false,
+    mixedBattleBgm: string[],
+  ): TrainerConfig {
     if (!getIsInitialized()) {
       initI18n();
     }
@@ -1306,38 +1315,56 @@ export class TrainerConfig {
    * @param mixedBattleBgm String representing mixed battle music
    * @returns The updated TrainerConfig instance.
    **/
-  initForChampion(gender: integer, battleBgm: string, mixedBattleBgm: string): TrainerConfig {
+  initForChampion(gender: Gender, battleBgm: string[], mixedBattleBgm: string[]): TrainerConfig {
     // Check if the internationalization (i18n) system is initialized.
     if (!getIsInitialized()) {
       initI18n();
     }
-    this.setBattleBgm(battleBgm);
-    this.setMixedBattleBgm(mixedBattleBgm);
+
+    let battleBgmToSet = battleBgm[0];
+    if (battleBgm.length > 1) {
+      battleBgmToSet = battleBgm[randInt(battleBgm.length, 0)];
+    }
+
+    let mixedBattleBgmToSet = mixedBattleBgm[0];
+    if (mixedBattleBgm.length > 1) {
+      mixedBattleBgmToSet = mixedBattleBgm[randInt(mixedBattleBgm.length, 0)];
+    }
+
+    this.setBattleBgm(battleBgmToSet);
+    this.setMixedBattleBgm(mixedBattleBgmToSet);
 
     // Set the party templates for the Champion.
-    this.setPartyTemplates(trainerPartyTemplates.CHAMPION);
+    let partyTemplate = trainerPartyTemplates.CHAMPION;
+    if (gender === Gender.DOUBLE) {
+      partyTemplate = trainerPartyTemplates.CHAMPION_DOUBLE;
+    }
+    this.setPartyTemplates(partyTemplate);
 
     // Localize the trainer's name by converting it to lowercase and replacing spaces with underscores.
     const nameForCall = this.name.toLowerCase().replace(/\s/g, "_");
     this.name = i18next.t(`trainerNames:${nameForCall}`);
-    if (this.nameDouble && this.spriteName1 && this.spriteName2) {
+    if (this.nameDouble && this.spriteNameLeft && this.spriteNameRight) {
       const nameDoubleForCall = this.nameDouble.toLowerCase().replace(/\s/g, "_");
       this.nameDouble = i18next.t(`trainerNames:${nameDoubleForCall}`);
-      this.name = i18next.t(`trainerNames:${this.spriteName1.toLowerCase().replace(/\s/g, "_")}`);
-      this.nameFemale = i18next.t(`trainerNames:${this.spriteName2.toLowerCase().replace(/\s/g, "_")}`);
+      this.name = i18next.t(`trainerNames:${this.spriteNameLeft.toLowerCase().replace(/\s/g, "_")}`);
+      this.nameFemale = i18next.t(`trainerNames:${this.spriteNameRight.toLowerCase().replace(/\s/g, "_")}`);
     }
 
-    // Set the title to "champion". (this is the key in the i18n file)
-    switch (gender) {
-      case Gender.FEMALE:
-        this.setTitle("champion_female");
-        break;
-      case Gender.DOUBLE:
-        this.setTitle("champion_double");
-        break;
-      // Default includes Gender.MALE
-      default:
-        this.setTitle("champion");
+    // Only do this if the title is not already set
+    if (!this.title) {
+      // Set the title to "champion". (this is the key in the i18n file)
+      switch (gender) {
+        case Gender.FEMALE:
+          this.setTitle("champion_female");
+          break;
+        case Gender.DOUBLE:
+          this.setTitle("champion_double");
+          break;
+        // Default includes Gender.MALE
+        default:
+          this.setTitle("champion");
+      }
     }
 
     // Configure various properties for the Champion.
