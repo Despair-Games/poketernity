@@ -1,3 +1,8 @@
+/**
+ * Remember to add the appropriate score to
+ * {@linkcode getTagTargetBenefitScore}
+ */
+
 export enum BattlerTagType {
   NONE,
   RECHARGING,
