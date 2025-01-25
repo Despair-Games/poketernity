@@ -3272,10 +3272,10 @@ export function initMoves() {
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_WILDFIRE),
     new AttackMove(Moves.G_MAX_BEFUDDLE, Type.BUG, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // All opps become poisoned, paralyzed, or asleep
+      .attr(MultiStatusEffectAttr, [StatusEffect.POISON, StatusEffect.PARALYSIS, StatusEffect.SLEEP]),
     new AttackMove(Moves.G_MAX_VOLT_CRASH, Type.ELECTRIC, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // All opps become paralyze
+      .attr(StatusEffectAttr, StatusEffect.PARALYSIS),
     new AttackMove(Moves.G_MAX_GOLD_RUSH, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .unimplemented(), // Confuses all opps, gives 100x user level as money
@@ -3296,7 +3296,7 @@ export function initMoves() {
       .unimplemented(), // 50% of replenishing user and ally's berries (like recycle)
     new AttackMove(Moves.G_MAX_MALODOR, Type.POISON, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // applies poison to all opps
+      .attr(StatusEffectAttr, StatusEffect.POISON),
     new AttackMove(Moves.G_MAX_STONESURGE, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .attr(AddArenaTrapTagAttr, ArenaTagType.STEALTH_ROCK),
@@ -3309,7 +3309,7 @@ export function initMoves() {
       .attr(RemoveArenaTagsAttr, [ArenaTagType.SAFEGUARD, ArenaTagType.MIST], ArenaTagRelativeSide.TARGET),
     new AttackMove(Moves.G_MAX_STUN_SHOCK, Type.ELECTRIC, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // each opp becomes either paralyzed or poisoned
+      .attr(MultiStatusEffectAttr, [StatusEffect.POISON, StatusEffect.PARALYSIS]),
     new AttackMove(Moves.G_MAX_FINALE, Type.FAIRY, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .unimplemented(), // heal user and ally by 1/6
