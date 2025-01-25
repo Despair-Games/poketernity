@@ -2752,7 +2752,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       const otherBattleInfo = globalScene.fieldUI
         .getAll()
         .slice(0, 4)
-        .filter((ui) => ui.type === "BattleInfo" && (ui as BattleInfo) instanceof PlayerBattleInfo === this.isPlayer())
+        .filter((ui) => ui.type === "PlayerBattleInfo" && this.isPlayer())
         .find(() => true);
       if (!otherBattleInfo || !this.getFieldIndex()) {
         globalScene.fieldUI.sendToBack(this.battleInfo);
