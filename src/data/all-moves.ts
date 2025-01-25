@@ -3436,7 +3436,7 @@ export function initMoves() {
       MultiHitType._3,
     ),
     new AttackMove(Moves.MORTAL_SPIN, Type.POISON, MoveCategory.PHYSICAL, 30, 100, 15, 100, 0, 9)
-      .attr(LapseBattlerTagAttr, rapidSpinRemoveTags, true)
+      .attr(RemoveBattlerTagAttr, rapidSpinRemoveTags, true)
       .attr(StatusEffectAttr, StatusEffect.POISON)
       .attr(RemoveArenaTrapAttr)
       .target(MoveTarget.ALL_NEAR_ENEMIES),

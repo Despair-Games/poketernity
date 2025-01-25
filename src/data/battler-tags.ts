@@ -1467,6 +1467,10 @@ export class GMaxFireSpinTag extends FireSpinTag {
   override isSourceLinked(): boolean {
     return false;
   }
+
+  override canAdd(pokemon: Pokemon): boolean {
+    return !pokemon.getTag(TrappedTag);
+  }
 }
 
 export class WhirlpoolTag extends VortexTrapTag {
@@ -1514,6 +1518,10 @@ export class GMaxSandTombTag extends SandTombTag {
 
   override isSourceLinked(): boolean {
     return false;
+  }
+
+  override canAdd(pokemon: Pokemon): boolean {
+    return !pokemon.getTag(TrappedTag);
   }
 }
 
