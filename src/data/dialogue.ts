@@ -1579,11 +1579,6 @@ export const trainerTypeDialogue: TrainerTypeDialogue = {
     victory: ["dialogue:geeta_nemona.victory.1"],
     defeat: ["dialogue:geeta_nemona.defeat.1"],
   },
-  [TrainerType.GEETA_NEMONA]: {
-    encounter: ["dialogue:geeta_nemona.encounter.1"],
-    victory: ["dialogue:geeta_nemona.victory.1"],
-    defeat: ["dialogue:geeta_nemona.defeat.1"],
-  },
   [TrainerType.KIERAN_CARMINE]: {
     encounter: ["dialogue:kieran_carmine.encounter.1"],
     victory: ["dialogue:kieran_carmine.victory.1"],

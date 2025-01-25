@@ -305,8 +305,8 @@ export class TrainerConfig {
   constructor(trainerType: TrainerType, allowLegendaries?: boolean) {
     this.trainerType = trainerType;
     this.name = toReadableString(TrainerType[this.getDerivedType()]);
-    this.battleBgm = ["battle_trainer"];
-    this.mixedBattleBgm = ["battle_trainer"];
+    this.battleBgm = "battle_trainer";
+    this.mixedBattleBgm = "battle_trainer";
     this.victoryBgm = "victory_trainer";
     this.partyTemplates = [trainerPartyTemplates.TWO_AVG];
     this.speciesFilter = (species) => (allowLegendaries || !species.isLegendLike()) && !species.isTrainerForbidden();
