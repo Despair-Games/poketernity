@@ -3064,11 +3064,18 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     );
     applyMoveAttrs(VariableDefAttr, source, this, move, targetDef);
 
+    /** This prevents a move with negative power from possibly dealing positive damage.
+     * The issue can occur because the base damage is the result of the below equation plus 2.
+     */
+    const damageCalculation = (levelMultiplier * power * sourceAtk.value) / targetDef.value / 50;
+    if (damageCalculation < 0) {
+      return damageCalculation;
+    }
     /**
      * The attack's base damage, as determined by the source's level, move power
      * and Attack stat as well as this Pokemon's Defense stat
      */
-    const baseDamage = (levelMultiplier * power * sourceAtk.value) / targetDef.value / 50 + 2;
+    const baseDamage = damageCalculation + 2;
 
     /** Debug message for non-simulated calls (i.e. when damage is actually dealt) */
     if (!simulated) {
