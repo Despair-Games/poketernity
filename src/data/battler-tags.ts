@@ -8,9 +8,9 @@ import { ChargeAnim } from "#enums/charge-anim";
 import type { Move } from "#app/data/move";
 import { applyMoveAttrs } from "#app/data/move";
 import { allMoves } from "#app/data/all-moves";
-import { ChangeToStatusCategoryAttr } from "./move-attrs/change-to-status-category-attr";
+import { StatusCategoryOnAllyAttr } from "./move-attrs/status-category-on-ally-attr";
 import { ConsecutiveUseDoublePowerAttr } from "./move-attrs/consecutive-use-double-power-attr";
-import { ConditionalHealAttr } from "./move-attrs/heal-on-ally-attr";
+import { HealOnAllyAttr } from "./move-attrs/heal-on-ally-attr";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveCategory } from "#enums/move-category";
 import { SpeciesFormChangeManualTrigger } from "#app/data/pokemon-forms";
@@ -2740,8 +2740,8 @@ export class HealBlockTag extends MoveRestrictionBattlerTag {
    */
   override isMoveTargetRestricted(move: Moves, user: Pokemon, target: Pokemon) {
     const moveCategory = new NumberHolder(allMoves[move].category);
-    applyMoveAttrs(ChangeToStatusCategoryAttr, user, target, allMoves[move], moveCategory);
-    if (allMoves[move].hasAttr(ConditionalHealAttr) && moveCategory.value === MoveCategory.STATUS) {
+    applyMoveAttrs(StatusCategoryOnAllyAttr, user, target, allMoves[move], moveCategory);
+    if (allMoves[move].hasAttr(HealOnAllyAttr) && moveCategory.value === MoveCategory.STATUS) {
       return true;
     }
     return false;

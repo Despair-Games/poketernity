@@ -51,7 +51,6 @@ export class HealAttr extends MoveEffectAttr {
       new PokemonHealPhase(target.getBattlerIndex(), toDmgValue(target.getMaxHp() * healRatio), {
         message: i18next.t("moveTriggers:healHp", { pokemonName: getPokemonNameWithAffix(target) }),
         skipAnim: !this.showAnim,
-        showFullHpMessage: target.isFullHp(),
       }),
     );
   }
