@@ -1145,12 +1145,7 @@ export class TrainerConfig {
    * @param mixedBattleBgm the string representation of the mixed battle bgm
    * @returns The updated TrainerConfig instance.
    * **/
-  initForEvilTeamLeader(
-    title: string,
-    name: string,
-    rematch: boolean = false,
-    mixedBattleBgm: string[],
-  ): TrainerConfig {
+  initForEvilTeamLeader(title: string, name: string, rematch: boolean = false, mixedBattleBgm: string): TrainerConfig {
     if (!getIsInitialized()) {
       initI18n();
     }
