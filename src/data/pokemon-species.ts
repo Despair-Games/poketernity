@@ -17,11 +17,7 @@ import { pokemonEvolutions, pokemonPrevolutions } from "#app/data/balance/pokemo
 import { SpeciesWildEvolutionDelay } from "#enums/species-wild-evolution-delay";
 import { Type } from "#enums/type";
 import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
-import {
-  pokemonFormLevelMoves,
-  pokemonFormLevelMoves as pokemonSpeciesFormLevelMoves,
-  pokemonSpeciesLevelMoves,
-} from "#app/data/balance/pokemon-level-moves";
+import { pokemonFormLevelMoves, pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";
 import type { Stat } from "#enums/stat";
 import type { Variant, VariantSet } from "#app/data/variant";
 import { variantData } from "#app/data/variant";
@@ -272,10 +268,10 @@ export abstract class PokemonSpeciesForm {
 
   getLevelMoves(): LevelMoves {
     if (
-      pokemonSpeciesFormLevelMoves.hasOwnProperty(this.speciesId)
-      && pokemonSpeciesFormLevelMoves[this.speciesId].hasOwnProperty(this.formIndex)
+      pokemonFormLevelMoves.hasOwnProperty(this.speciesId)
+      && pokemonFormLevelMoves[this.speciesId].hasOwnProperty(this.formIndex)
     ) {
-      return pokemonSpeciesFormLevelMoves[this.speciesId][this.formIndex].slice(0);
+      return pokemonFormLevelMoves[this.speciesId][this.formIndex].slice(0);
     }
     return pokemonSpeciesLevelMoves[this.speciesId].slice(0);
   }
