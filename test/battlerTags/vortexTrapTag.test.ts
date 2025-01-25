@@ -54,6 +54,8 @@ describe("BattlerTag - VortexTrapTag", () => {
 
       expect(enemy0.getTag(BattlerTagType.FIRE_SPIN)).toBeDefined();
       expect(enemy1.getTag(BattlerTagType.FIRE_SPIN)).toBeUndefined();
+      expect(enemy0.isTrapped()).toBe(true);
+      expect(enemy1.isTrapped()).toBe(false);
 
       const enemy0turnTwoHp = enemy0.hp;
       const enemy1turnTwoHp = enemy1.hp;
@@ -66,11 +68,42 @@ describe("BattlerTag - VortexTrapTag", () => {
 
       expect(enemy0.getTag(BattlerTagType.FIRE_SPIN)).toBeUndefined();
       expect(enemy1.getTag(BattlerTagType.FIRE_SPIN)).toBeUndefined();
+      expect(enemy0.isTrapped()).toBe(false);
+      expect(enemy1.isTrapped()).toBe(false);
 
       const enemy0turnThreeHp = enemy0.hp;
       const enemy1turnThreeHp = enemy1.hp;
       expect(enemy0turnTwoHp - enemy0turnThreeHp).toBe(0);
       expect(enemy1turnTwoHp - enemy1turnThreeHp).toBe(0);
+    });
+
+    it("Fire spin cannot trap ghost types but still damages them", async () => {
+      game.override.enemySpecies(Species.GENGAR);
+      await game.classicMode.startBattle([Species.SUNKERN, Species.SUNKERN]);
+
+      game.move.select(Moves.FIRE_SPIN, 0, BattlerIndex.ENEMY);
+      game.move.select(Moves.SPLASH, 1);
+
+      await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+      await game.phaseInterceptor.to("MoveEndPhase", false);
+
+      const enemyParty = game.scene.getEnemyParty();
+      const enemy0 = enemyParty[0];
+      const enemy1 = enemyParty[1];
+
+      const enemy0StartingHp = enemy0.hp;
+      const enemy1StartingHp = enemy1.hp;
+      await game.toNextTurn();
+
+      expect(enemy0.getTag(BattlerTagType.FIRE_SPIN)).toBeDefined();
+      expect(enemy1.getTag(BattlerTagType.FIRE_SPIN)).toBeUndefined();
+      expect(enemy0.isTrapped()).toBe(false);
+      expect(enemy1.isTrapped()).toBe(false);
+
+      const enemy0turnTwoHp = enemy0.hp;
+      const enemy1turnTwoHp = enemy1.hp;
+      expect(enemy0StartingHp - enemy0turnTwoHp).toBe(toDmgValue(enemy0.getMaxHp() / 8));
+      expect(enemy1StartingHp - enemy1turnTwoHp).toBe(0);
     });
 
     it("Fire spin cannot damage magic guard but still traps them", async () => {
@@ -93,6 +126,8 @@ describe("BattlerTag - VortexTrapTag", () => {
 
       expect(enemy0.getTag(BattlerTagType.FIRE_SPIN)).toBeDefined();
       expect(enemy1.getTag(BattlerTagType.FIRE_SPIN)).toBeUndefined();
+      expect(enemy0.isTrapped()).toBe(true);
+      expect(enemy1.isTrapped()).toBe(false);
 
       const enemy0turnTwoHp = enemy0.hp;
       const enemy1turnTwoHp = enemy1.hp;
@@ -119,6 +154,8 @@ describe("BattlerTag - VortexTrapTag", () => {
 
       expect(enemy0.getTag(BattlerTagType.G_MAX_FIRE_SPIN)).toBeDefined();
       expect(enemy1.getTag(BattlerTagType.G_MAX_FIRE_SPIN)).toBeDefined();
+      expect(enemy0.isTrapped()).toBe(true);
+      expect(enemy1.isTrapped()).toBe(true);
 
       const enemy0turnTwoHp = enemy0.hp;
       const enemy1turnTwoHp = enemy1.hp;
@@ -131,6 +168,8 @@ describe("BattlerTag - VortexTrapTag", () => {
 
       expect(enemy0.getTag(BattlerTagType.G_MAX_FIRE_SPIN)).toBeDefined();
       expect(enemy1.getTag(BattlerTagType.G_MAX_FIRE_SPIN)).toBeDefined();
+      expect(enemy0.isTrapped()).toBe(true);
+      expect(enemy1.isTrapped()).toBe(true);
 
       const enemy0turnThreeHp = enemy0.hp;
       const enemy1turnThreeHp = enemy1.hp;

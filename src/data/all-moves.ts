@@ -161,7 +161,7 @@ import { ReducePpMoveAttr } from "./move-attrs/reduce-pp-move-attr";
 import { RemoveAllSubstitutesAttr } from "./move-attrs/remove-all-substitutes-attr";
 import { RemoveArenaTagsAttr } from "./move-attrs/remove-arena-tags-attr";
 import { RemoveArenaTrapAttr } from "./move-attrs/remove-arena-trap-attr";
-import { RemoveBattlerTagAttr } from "./move-attrs/remove-battler-tag-attr";
+import { rapidSpinRemoveTags, RemoveBattlerTagAttr } from "./move-attrs/remove-battler-tag-attr";
 import { RemoveHeldItemAttr } from "./move-attrs/remove-held-item-attr";
 import { RemoveScreensAttr } from "./move-attrs/remove-screens-attr";
 import { RemoveTypeAttr } from "./move-attrs/remove-type-attr";
@@ -931,23 +931,7 @@ export function initMoves() {
     new AttackMove(Moves.PURSUIT, Type.DARK, MoveCategory.PHYSICAL, 40, 100, 20, -1, 0, 2).partial(), // No effect implemented
     new AttackMove(Moves.RAPID_SPIN, Type.NORMAL, MoveCategory.PHYSICAL, 50, 100, 40, 100, 0, 2)
       .attr(StatStageChangeAttr, [Stat.SPD], 1, true)
-      .attr(
-        RemoveBattlerTagAttr,
-        [
-          BattlerTagType.BIND,
-          BattlerTagType.WRAP,
-          BattlerTagType.FIRE_SPIN,
-          BattlerTagType.WHIRLPOOL,
-          BattlerTagType.CLAMP,
-          BattlerTagType.SAND_TOMB,
-          BattlerTagType.MAGMA_STORM,
-          BattlerTagType.SNAP_TRAP,
-          BattlerTagType.THUNDER_CAGE,
-          BattlerTagType.SEEDED,
-          BattlerTagType.INFESTATION,
-        ],
-        true,
-      )
+      .attr(RemoveBattlerTagAttr, rapidSpinRemoveTags, true)
       .attr(RemoveArenaTrapAttr),
     new StatusMove(Moves.SWEET_SCENT, Type.NORMAL, 100, 20, -1, 0, 2)
       .attr(StatStageChangeAttr, [Stat.EVA], -2)
@@ -3452,23 +3436,7 @@ export function initMoves() {
       MultiHitType._3,
     ),
     new AttackMove(Moves.MORTAL_SPIN, Type.POISON, MoveCategory.PHYSICAL, 30, 100, 15, 100, 0, 9)
-      .attr(
-        LapseBattlerTagAttr,
-        [
-          BattlerTagType.BIND,
-          BattlerTagType.WRAP,
-          BattlerTagType.FIRE_SPIN,
-          BattlerTagType.WHIRLPOOL,
-          BattlerTagType.CLAMP,
-          BattlerTagType.SAND_TOMB,
-          BattlerTagType.MAGMA_STORM,
-          BattlerTagType.SNAP_TRAP,
-          BattlerTagType.THUNDER_CAGE,
-          BattlerTagType.SEEDED,
-          BattlerTagType.INFESTATION,
-        ],
-        true,
-      )
+      .attr(LapseBattlerTagAttr, rapidSpinRemoveTags, true)
       .attr(StatusEffectAttr, StatusEffect.POISON)
       .attr(RemoveArenaTrapAttr)
       .target(MoveTarget.ALL_NEAR_ENEMIES),
