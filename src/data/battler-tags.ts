@@ -1453,6 +1453,26 @@ export class FireSpinTag extends VortexTrapTag {
   }
 }
 
+/**
+ * Used for G-Max Centiferno that leaves a fire spin
+ * that persists even on the user leaving the field
+ */
+export class GMaxFireSpinTag extends FireSpinTag {
+  constructor(turnCount: number, sourceId: number) {
+    super(turnCount, sourceId);
+    this.tagType = BattlerTagType.G_MAX_FIRE_SPIN;
+    this.sourceMove = Moves.G_MAX_CENTIFERNO;
+  }
+
+  override isSourceLinked(): boolean {
+    return false;
+  }
+
+  override canAdd(pokemon: Pokemon): boolean {
+    return !pokemon.getTag(TrappedTag);
+  }
+}
+
 export class WhirlpoolTag extends VortexTrapTag {
   constructor(turnCount: number, sourceId: number) {
     super(BattlerTagType.WHIRLPOOL, CommonAnim.WHIRLPOOL, turnCount, Moves.WHIRLPOOL, sourceId);
@@ -1482,6 +1502,26 @@ export class SandTombTag extends DamagingTrapTag {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       moveName: this.getMoveName(),
     });
+  }
+}
+
+/**
+ * Used for G-Max Sandblast that leaves a sand tomb
+ * that persists even on the user leaving the field
+ */
+export class GMaxSandTombTag extends SandTombTag {
+  constructor(turnCount: number, sourceId: number) {
+    super(turnCount, sourceId);
+    this.tagType = BattlerTagType.G_MAX_SAND_TOMB;
+    this.sourceMove = Moves.G_MAX_SANDBLAST;
+  }
+
+  override isSourceLinked(): boolean {
+    return false;
+  }
+
+  override canAdd(pokemon: Pokemon): boolean {
+    return !pokemon.getTag(TrappedTag);
   }
 }
 
@@ -3369,12 +3409,16 @@ export function getBattlerTag(
       return new WrapTag(turnCount, sourceId);
     case BattlerTagType.FIRE_SPIN:
       return new FireSpinTag(turnCount, sourceId);
+    case BattlerTagType.G_MAX_FIRE_SPIN:
+      return new GMaxFireSpinTag(turnCount, sourceId);
     case BattlerTagType.WHIRLPOOL:
       return new WhirlpoolTag(turnCount, sourceId);
     case BattlerTagType.CLAMP:
       return new ClampTag(turnCount, sourceId);
     case BattlerTagType.SAND_TOMB:
       return new SandTombTag(turnCount, sourceId);
+    case BattlerTagType.G_MAX_SAND_TOMB:
+      return new GMaxSandTombTag(turnCount, sourceId);
     case BattlerTagType.MAGMA_STORM:
       return new MagmaStormTag(turnCount, sourceId);
     case BattlerTagType.SNAP_TRAP:

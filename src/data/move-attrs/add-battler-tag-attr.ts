@@ -89,9 +89,11 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.BIND:
       case BattlerTagType.WRAP:
       case BattlerTagType.FIRE_SPIN:
+      case BattlerTagType.G_MAX_FIRE_SPIN:
       case BattlerTagType.WHIRLPOOL:
       case BattlerTagType.CLAMP:
       case BattlerTagType.SAND_TOMB:
+      case BattlerTagType.G_MAX_SAND_TOMB:
       case BattlerTagType.MAGMA_STORM:
       case BattlerTagType.SNAP_TRAP:
       case BattlerTagType.THUNDER_CAGE:

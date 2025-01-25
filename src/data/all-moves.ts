@@ -117,7 +117,6 @@ import { IncrementMovePriorityAttr } from "./move-attrs/increment-move-priority-
 import { InvertStatsAttr } from "./move-attrs/invert-stats-attr";
 import { IvyCudgelTypeAttr } from "./move-attrs/ivy-cudgel-type-attr";
 import { JawLockAttr } from "./move-attrs/jaw-lock-attr";
-import { LapseBattlerTagAttr } from "./move-attrs/lapse-battler-tag-attr";
 import { LastMoveDoublePowerAttr } from "./move-attrs/last-move-double-power-attr";
 import { LastResortAttr } from "./move-attrs/last-resort-attr";
 import { LeechSeedAttr } from "./move-attrs/leech-seed-attr";
@@ -161,7 +160,7 @@ import { ReducePpMoveAttr } from "./move-attrs/reduce-pp-move-attr";
 import { RemoveAllSubstitutesAttr } from "./move-attrs/remove-all-substitutes-attr";
 import { RemoveArenaTagsAttr } from "./move-attrs/remove-arena-tags-attr";
 import { RemoveArenaTrapAttr } from "./move-attrs/remove-arena-trap-attr";
-import { RemoveBattlerTagAttr } from "./move-attrs/remove-battler-tag-attr";
+import { rapidSpinRemoveTags, RemoveBattlerTagAttr } from "./move-attrs/remove-battler-tag-attr";
 import { RemoveHeldItemAttr } from "./move-attrs/remove-held-item-attr";
 import { RemoveScreensAttr } from "./move-attrs/remove-screens-attr";
 import { RemoveTypeAttr } from "./move-attrs/remove-type-attr";
@@ -931,23 +930,7 @@ export function initMoves() {
     new AttackMove(Moves.PURSUIT, Type.DARK, MoveCategory.PHYSICAL, 40, 100, 20, -1, 0, 2).partial(), // No effect implemented
     new AttackMove(Moves.RAPID_SPIN, Type.NORMAL, MoveCategory.PHYSICAL, 50, 100, 40, 100, 0, 2)
       .attr(StatStageChangeAttr, [Stat.SPD], 1, true)
-      .attr(
-        RemoveBattlerTagAttr,
-        [
-          BattlerTagType.BIND,
-          BattlerTagType.WRAP,
-          BattlerTagType.FIRE_SPIN,
-          BattlerTagType.WHIRLPOOL,
-          BattlerTagType.CLAMP,
-          BattlerTagType.SAND_TOMB,
-          BattlerTagType.MAGMA_STORM,
-          BattlerTagType.SNAP_TRAP,
-          BattlerTagType.THUNDER_CAGE,
-          BattlerTagType.SEEDED,
-          BattlerTagType.INFESTATION,
-        ],
-        true,
-      )
+      .attr(RemoveBattlerTagAttr, rapidSpinRemoveTags, true)
       .attr(RemoveArenaTrapAttr),
     new StatusMove(Moves.SWEET_SCENT, Type.NORMAL, 100, 20, -1, 0, 2)
       .attr(StatStageChangeAttr, [Stat.EVA], -2)
@@ -3289,10 +3272,10 @@ export function initMoves() {
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_WILDFIRE),
     new AttackMove(Moves.G_MAX_BEFUDDLE, Type.BUG, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // All opps become poisoned, paralyzed, or asleep
+      .attr(MultiStatusEffectAttr, [StatusEffect.POISON, StatusEffect.PARALYSIS, StatusEffect.SLEEP]),
     new AttackMove(Moves.G_MAX_VOLT_CRASH, Type.ELECTRIC, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // All opps become paralyze
+      .attr(StatusEffectAttr, StatusEffect.PARALYSIS),
     new AttackMove(Moves.G_MAX_GOLD_RUSH, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .unimplemented(), // Confuses all opps, gives 100x user level as money
@@ -3313,7 +3296,7 @@ export function initMoves() {
       .unimplemented(), // 50% of replenishing user and ally's berries (like recycle)
     new AttackMove(Moves.G_MAX_MALODOR, Type.POISON, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // applies poison to all opps
+      .attr(StatusEffectAttr, StatusEffect.POISON),
     new AttackMove(Moves.G_MAX_STONESURGE, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .attr(AddArenaTrapTagAttr, ArenaTagType.STEALTH_ROCK),
@@ -3326,7 +3309,7 @@ export function initMoves() {
       .attr(RemoveArenaTagsAttr, [ArenaTagType.SAFEGUARD, ArenaTagType.MIST], ArenaTagRelativeSide.TARGET),
     new AttackMove(Moves.G_MAX_STUN_SHOCK, Type.ELECTRIC, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // each opp becomes either paralyzed or poisoned
+      .attr(MultiStatusEffectAttr, [StatusEffect.POISON, StatusEffect.PARALYSIS]),
     new AttackMove(Moves.G_MAX_FINALE, Type.FAIRY, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .unimplemented(), // heal user and ally by 1/6
@@ -3341,7 +3324,7 @@ export function initMoves() {
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_VOLCALITH),
     new AttackMove(Moves.G_MAX_SANDBLAST, Type.GROUND, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // applies a stronger version of sand tomb
+      .attr(TrapAttr, BattlerTagType.G_MAX_SAND_TOMB),
     new AttackMove(Moves.G_MAX_SNOOZE, Type.DARK, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .unimplemented(), // 50% of applying drowsy
@@ -3365,7 +3348,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.SPD], -2),
     new AttackMove(Moves.G_MAX_CENTIFERNO, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // applies a stronger version of fire spin
+      .attr(TrapAttr, BattlerTagType.G_MAX_FIRE_SPIN),
     new AttackMove(Moves.G_MAX_VINE_LASH, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_VINE_LASH),
@@ -3452,23 +3435,7 @@ export function initMoves() {
       MultiHitType._3,
     ),
     new AttackMove(Moves.MORTAL_SPIN, Type.POISON, MoveCategory.PHYSICAL, 30, 100, 15, 100, 0, 9)
-      .attr(
-        LapseBattlerTagAttr,
-        [
-          BattlerTagType.BIND,
-          BattlerTagType.WRAP,
-          BattlerTagType.FIRE_SPIN,
-          BattlerTagType.WHIRLPOOL,
-          BattlerTagType.CLAMP,
-          BattlerTagType.SAND_TOMB,
-          BattlerTagType.MAGMA_STORM,
-          BattlerTagType.SNAP_TRAP,
-          BattlerTagType.THUNDER_CAGE,
-          BattlerTagType.SEEDED,
-          BattlerTagType.INFESTATION,
-        ],
-        true,
-      )
+      .attr(RemoveBattlerTagAttr, rapidSpinRemoveTags, true)
       .attr(StatusEffectAttr, StatusEffect.POISON)
       .attr(RemoveArenaTrapAttr)
       .target(MoveTarget.ALL_NEAR_ENEMIES),
