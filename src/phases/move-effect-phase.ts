@@ -341,7 +341,8 @@ export class MoveEffectPhase extends HitCheckPhase {
       this.applyOnTargetEffects(user, target, hitResult, firstTarget);
     }
 
-    if (target.getAlly()?.isActive(true)) {
+    // G-Max Snooze is the only G-Max move to only apply its effect on a single target
+    if (move.id !== Moves.G_MAX_SNOOZE && target.getAlly()?.isActive(true)) {
       this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target.getAlly(), firstTarget, false);
     }
   }
