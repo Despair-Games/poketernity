@@ -242,6 +242,7 @@ import { crashDamageFunc, frenzyMissFunc } from "./move-utils";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { NoDamageAgainstFlyingAttr } from "./move-attrs/no-damage-against-flying-attr";
 import { SkyDropAttr } from "./move-attrs/sky-drop-attr";
+import { GMaxPowerAttr } from "./move-attrs/gmax-power-attr";
 
 // Initialized as being empty; it will be filled during `initMoves()`
 export const allMoves: { [moveId in Moves]: Move } = {} as any;
@@ -3269,7 +3270,8 @@ export function initMoves() {
       ]),
     new AttackMove(Moves.G_MAX_WILDFIRE, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .attr(AddArenaTagAttr, ArenaTagType.G_MAX_WILDFIRE),
+      .attr(AddArenaTagAttr, ArenaTagType.G_MAX_WILDFIRE)
+      .attr(GMaxPowerAttr, Species.CHARIZARD),
     new AttackMove(Moves.G_MAX_BEFUDDLE, Type.BUG, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .attr(MultiStatusEffectAttr, [StatusEffect.POISON, StatusEffect.PARALYSIS, StatusEffect.SLEEP]),

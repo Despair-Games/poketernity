@@ -578,6 +578,7 @@ export abstract class Move implements Localizable {
   gMaxMove(): this {
     this.setFlag(MoveFlags.G_MAX_MOVE, true);
     this.moveTarget = MoveTarget.NEAR_ENEMY;
+    this.makesContact(false);
     return this;
   }
 
