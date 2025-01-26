@@ -22,7 +22,7 @@ export class PresentPowerAttr extends VariablePowerAttr {
      * If this move is multi-hit, and this attribute is applied to any hit
      * other than the first, this move cannot result in a heal.
      */
-    const isFirstHit = user.turnData.hitCount === user.turnData.hitsLeft;
+    const isFirstHit = user.turnData.hitCount === user.turnData.hitsLeft && user.turnData.hitsLeft > 0;
 
     const powerSeed = user.randSeedInt(isFirstHit ? 100 : 80);
     if (powerSeed < 40) {
