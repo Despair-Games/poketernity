@@ -352,7 +352,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setPartyMemberFunc(
       2,
       getRandomPartyMemberFunc([Species.KINGAMBIT], TrainerSlot.TRAINER, true, (p) => {
-        p.setBoss(true, 3); // 3 because they dont have a gmax or mega in their team
+        p.setBoss(true, 2);
         p.generateName();
         p.generateAndPopulateMoveset();
       }),
@@ -364,7 +364,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
         TrainerSlot.TRAINER_PARTNER,
         true,
         (p) => {
-          p.setBoss(true, 3); // 3 because they dont have a gmax or mega in their team
+          p.setBoss(true, 2);
           p.generateName();
           p.generateAndPopulateMoveset();
         },
@@ -400,7 +400,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setPartyMemberFunc(
       2,
       getRandomPartyMemberFunc([Species.HYDRAPPLE], TrainerSlot.TRAINER, true, (p) => {
-        p.setBoss(true, 3); // 3 because they dont have a gmax or mega in their team
+        p.setBoss(true, 2);
         p.generateName();
         p.generateAndPopulateMoveset();
       }),
@@ -408,7 +408,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setPartyMemberFunc(
       3,
       getRandomPartyMemberFunc([Species.MIGHTYENA], TrainerSlot.TRAINER_PARTNER, true, (p) => {
-        p.setBoss(true, 3); // 3 because they dont have a gmax or mega in their team
+        p.setBoss(true, 2);
         p.generateName();
         p.generateAndPopulateMoveset();
       }),
