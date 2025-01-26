@@ -15,6 +15,7 @@ import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import type { EggLapsePhase } from "./egg-lapse-phase";
 import type { EggHatchData } from "#app/data/egg-hatch-data";
+import type { GameSprite } from "#app/game-sprite";
 
 /**
  * Class that represents egg hatching
@@ -42,15 +43,15 @@ export class EggHatchPhase extends Phase {
   /** The phaser container that holds the egg */
   private eggContainer: Phaser.GameObjects.Container;
   /** The phaser sprite of the egg */
-  private eggSprite: Phaser.GameObjects.Sprite;
+  private eggSprite: GameSprite;
   /** The phaser sprite of the cracks in an egg */
-  private eggCrackSprite: Phaser.GameObjects.Sprite;
+  private eggCrackSprite: GameSprite;
   /** The phaser sprite that represents the overlaid light rays */
-  private eggLightraysOverlay: Phaser.GameObjects.Sprite;
+  private eggLightraysOverlay: GameSprite;
   /** The phaser sprite of the hatched Pokemon */
-  private pokemonSprite: Phaser.GameObjects.Sprite;
+  private pokemonSprite: GameSprite;
   /** The phaser sprite for shiny sparkles */
-  private pokemonShinySparkle: Phaser.GameObjects.Sprite;
+  private pokemonShinySparkle: GameSprite;
 
   /** The {@link PokemonInfoContainer} of the newly hatched Pokemon */
   private infoContainer: PokemonInfoContainer;
@@ -128,7 +129,7 @@ export class EggHatchPhase extends Phase {
       this.eggCounterContainer = new EggCounterContainer(this.eggsToHatchCount);
       this.eggHatchContainer.add(this.eggCounterContainer);
 
-      const getPokemonSprite = (): Phaser.GameObjects.Sprite => {
+      const getPokemonSprite = (): GameSprite => {
         const ret = globalScene.add.sprite(
           this.eggHatchBg.displayWidth / 2,
           this.eggHatchBg.displayHeight / 2,
@@ -351,11 +352,7 @@ export class EggHatchPhase extends Phase {
     this.eggContainer.setVisible(false);
 
     const spriteKey = this.pokemon.getSpriteKey(true);
-    try {
-      this.pokemonSprite.play(spriteKey);
-    } catch (err: unknown) {
-      console.error(`Failed to play animation for ${spriteKey}`, err);
-    }
+    this.pokemonSprite.play(spriteKey);
 
     this.pokemonSprite.setPipelineData("ignoreTimeTint", true);
     this.pokemonSprite.setPipelineData("spriteKey", this.pokemon.getSpriteKey());

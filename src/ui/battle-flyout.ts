@@ -11,6 +11,7 @@ import { Moves } from "#enums/moves";
 import { UiTheme } from "#enums/ui-theme";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { settings } from "#app/system/settings/settings-manager";
+import type { GameSprite } from "#app/game-sprite";
 
 /** Container for info about a {@linkcode Move} */
 interface MoveInfo {
@@ -45,8 +46,8 @@ export default class BattleFlyout extends Phaser.GameObjects.Container {
 
   /** The initial container which defines where the flyout should be attached */
   private flyoutParent: Phaser.GameObjects.Container;
-  /** The background {@linkcode Phaser.GameObjects.Sprite;} for the flyout */
-  private flyoutBackground: Phaser.GameObjects.Sprite;
+  /** The background {@linkcode GameSprite;} for the flyout */
+  private flyoutBackground: GameSprite;
 
   /** The container which defines the drawable dimensions of the flyout */
   private flyoutContainer: Phaser.GameObjects.Container;

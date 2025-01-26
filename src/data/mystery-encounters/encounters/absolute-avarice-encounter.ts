@@ -39,6 +39,7 @@ import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { Stat } from "#enums/stat";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import i18next from "i18next";
+import type { GameSprite } from "#app/game-sprite";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/absoluteAvarice";
@@ -522,7 +523,7 @@ function doBerrySpritePile(isEat: boolean = false) {
   const encounter = globalScene.currentBattle.mysteryEncounter!;
   animationOrder.forEach((berry, i) => {
     const introVisualsIndex = encounter.spriteConfigs.findIndex((config) => config.spriteKey?.includes(berry));
-    let sprite: Phaser.GameObjects.Sprite, tintSprite: Phaser.GameObjects.Sprite;
+    let sprite: GameSprite, tintSprite: GameSprite;
     const sprites = encounter.introVisuals?.getSpriteAtIndex(introVisualsIndex);
     if (sprites) {
       sprite = sprites[0];
@@ -546,7 +547,7 @@ function doBerrySpritePile(isEat: boolean = false) {
   });
 }
 
-function doBerryBounce(berrySprites: Phaser.GameObjects.Sprite[], yd: number, baseBounceDuration: number) {
+function doBerryBounce(berrySprites: GameSprite[], yd: number, baseBounceDuration: number) {
   let bouncePower = 1;
   let bounceYOffset = yd;
 

@@ -6,6 +6,7 @@ import { TextStyle } from "#enums/text-style";
 import { addWindow } from "#app/ui/ui-theme";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
+import type { GameSprite } from "#app/game-sprite";
 
 const LEFT = "LEFT";
 const RIGHT = "RIGHT";
@@ -135,7 +136,7 @@ export default class NavigationMenu extends Phaser.GameObjects.Container {
     iconNextTab.setPositionRelative(headerBg, headerBg.width - 20, 4);
     this.navigationIcons["BUTTON_CYCLE_SHINY"] = iconNextTab;
 
-    let relative: Phaser.GameObjects.Sprite | Phaser.GameObjects.Text = iconPreviousTab;
+    let relative: GameSprite | Phaser.GameObjects.Text = iconPreviousTab;
     let relativeWidth: number = iconPreviousTab.width * 6;
     for (const label of navigationManager.labels) {
       const labelText = addTextObject(0, 0, label, TextStyle.SETTINGS_LABEL);

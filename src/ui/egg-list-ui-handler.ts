@@ -10,6 +10,7 @@ import i18next from "i18next";
 import ScrollableGridUiHandler from "#app/ui/scrollable-grid-handler";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import { globalScene } from "#app/global-scene";
+import type { GameSprite } from "#app/game-sprite";
 
 export default class EggListUiHandler extends MessageUiHandler {
   private readonly ROWS = 9;
@@ -17,8 +18,8 @@ export default class EggListUiHandler extends MessageUiHandler {
 
   private eggListContainer: Phaser.GameObjects.Container;
   private eggListIconContainer: Phaser.GameObjects.Container;
-  private eggIcons: Phaser.GameObjects.Sprite[];
-  private eggSprite: Phaser.GameObjects.Sprite;
+  private eggIcons: GameSprite[];
+  private eggSprite: GameSprite;
   private eggNameText: Phaser.GameObjects.Text;
   private eggDateText: Phaser.GameObjects.Text;
   private eggHatchWavesText: Phaser.GameObjects.Text;

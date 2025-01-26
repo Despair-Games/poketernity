@@ -16,6 +16,7 @@ import { DelayedAttackAttr } from "./move-attrs/delayed-attack-attr";
 import { AnimFrameTarget } from "#enums/anim-frame-target";
 import { ChargeAnim } from "#enums/charge-anim";
 import { CommonAnim } from "#enums/common-anim";
+import type { GameSprite } from "#app/game-sprite";
 
 enum AnimFocus {
   TARGET = 1,
@@ -747,13 +748,13 @@ function isReversed(src1: number, src2: number, dst1: number, dst2: number) {
 }
 
 interface SpriteCache {
-  [key: number]: Phaser.GameObjects.Sprite[];
+  [key: number]: GameSprite[];
 }
 
 export abstract class BattleAnim {
   public user: Pokemon | null;
   public target: Pokemon | null;
-  public sprites: Phaser.GameObjects.Sprite[];
+  public sprites: GameSprite[];
   public bgSprite: Phaser.GameObjects.TileSprite | Phaser.GameObjects.Rectangle;
   /**
    * Will attempt to play as much of an animation as possible, even if not all targets are on the field.
@@ -1029,7 +1030,7 @@ export abstract class BattleAnim {
           } else {
             const sprites = spriteCache[AnimFrameTarget.GRAPHIC];
             if (g === sprites.length) {
-              const newSprite: Phaser.GameObjects.Sprite = globalScene.addFieldSprite(0, 0, anim!.graphic, 1); // TODO: is the bang correct?
+              const newSprite: GameSprite = globalScene.addFieldSprite(0, 0, anim!.graphic, 1); // TODO: is the bang correct?
               sprites.push(newSprite);
               globalScene.field.add(newSprite);
               spritePriorities.push(1);
@@ -1250,7 +1251,7 @@ export abstract class BattleAnim {
 
           const sprites = spriteCache[AnimFrameTarget.GRAPHIC];
           if (graphicFrameCount === sprites.length) {
-            const newSprite: Phaser.GameObjects.Sprite = globalScene.addFieldSprite(0, 0, anim!.graphic, 1);
+            const newSprite: GameSprite = globalScene.addFieldSprite(0, 0, anim!.graphic, 1);
             sprites.push(newSprite);
             globalScene.field.add(newSprite);
           }

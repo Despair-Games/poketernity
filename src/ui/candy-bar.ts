@@ -5,11 +5,12 @@ import { TextStyle } from "#enums/text-style";
 import { argbFromRgba } from "@material/material-color-utilities";
 import { rgbHexToRgba } from "#app/utils";
 import type { Species } from "#enums/species";
+import type { GameSprite } from "#app/game-sprite";
 
 export default class CandyBar extends Phaser.GameObjects.Container {
   private bg: Phaser.GameObjects.NineSlice;
-  private candyIcon: Phaser.GameObjects.Sprite;
-  private candyOverlayIcon: Phaser.GameObjects.Sprite;
+  private candyIcon: GameSprite;
+  private candyOverlayIcon: GameSprite;
   private countText: Phaser.GameObjects.Text;
   private speciesId: Species;
 

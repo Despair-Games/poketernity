@@ -4,21 +4,22 @@ import { BattleSceneEventType } from "#enums/battle-scene-event-type";
 import { EaseType } from "#enums/ease-type";
 import { TimeOfDay } from "#enums/time-of-day";
 import { settings } from "#app/system/settings/settings-manager";
+import type { GameSprite } from "#app/game-sprite";
 
 /** A small self contained UI element that displays the time of day as an icon */
 export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
-  /** The {@linkcode Phaser.GameObjects.Sprite} that represents the foreground of the current time of day */
-  private readonly timeOfDayIconFgs: Phaser.GameObjects.Sprite[] = new Array(2);
-  /** The {@linkcode Phaser.GameObjects.Sprite} that represents the middle-ground of the current time of day */
-  private readonly timeOfDayIconMgs: Phaser.GameObjects.Sprite[] = new Array(2);
-  /** The {@linkcode Phaser.GameObjects.Sprite} that represents the background of the current time of day */
-  private readonly timeOfDayIconBgs: Phaser.GameObjects.Sprite[] = new Array(2);
+  /** The {@linkcode GameSprite} that represents the foreground of the current time of day */
+  private readonly timeOfDayIconFgs: GameSprite[] = new Array(2);
+  /** The {@linkcode GameSprite} that represents the middle-ground of the current time of day */
+  private readonly timeOfDayIconMgs: GameSprite[] = new Array(2);
+  /** The {@linkcode GameSprite} that represents the background of the current time of day */
+  private readonly timeOfDayIconBgs: GameSprite[] = new Array(2);
 
   /** An array containing all timeOfDayIcon objects for easier iteration */
-  private timeOfDayIcons: Phaser.GameObjects.Sprite[];
+  private timeOfDayIcons: GameSprite[];
 
   /** A map containing all timeOfDayIcon arrays with a matching string key for easier iteration */
-  private timeOfDayIconPairs: Map<string, Phaser.GameObjects.Sprite[]> = new Map([
+  private timeOfDayIconPairs: Map<string, GameSprite[]> = new Map([
     ["bg", this.timeOfDayIconBgs],
     ["mg", this.timeOfDayIconMgs],
     ["fg", this.timeOfDayIconFgs],

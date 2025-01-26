@@ -13,6 +13,7 @@ import { Color, ShadowColor } from "#enums/color";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { TitlePhase } from "#app/phases/title-phase";
 import { globalScene } from "#app/global-scene";
+import type { GameSprite } from "#app/game-sprite";
 
 /**
  * Handles all the UI for choosing optional challenges.
@@ -35,7 +36,7 @@ export default class GameChallengesUiHandler extends UiHandler {
     leftArrow: Phaser.GameObjects.Image;
     rightArrow: Phaser.GameObjects.Image;
   }>;
-  private monoTypeValue: Phaser.GameObjects.Sprite;
+  private monoTypeValue: GameSprite;
 
   private cursorObj: Phaser.GameObjects.NineSlice | null;
 

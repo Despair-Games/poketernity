@@ -13,6 +13,7 @@ import i18next from "i18next";
 import { UiTheme } from "#enums/ui-theme";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
+import type { GameSprite } from "#app/game-sprite";
 
 interface DisplayStat {
   label_key?: string;
@@ -222,8 +223,8 @@ export default class GameStatsUiHandler extends UiHandler {
   private statLabels: Phaser.GameObjects.Text[];
   private statValues: Phaser.GameObjects.Text[];
 
-  private arrowUp: Phaser.GameObjects.Sprite;
-  private arrowDown: Phaser.GameObjects.Sprite;
+  private arrowUp: GameSprite;
+  private arrowDown: GameSprite;
 
   constructor(mode: UiMode | null = null) {
     super(mode);

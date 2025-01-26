@@ -17,6 +17,7 @@ import { WindowVariant } from "#enums/window-variant";
 import i18next from "i18next";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { settings } from "#app/system/settings/settings-manager";
+import type { GameSprite } from "#app/game-sprite";
 
 export default class BattleInfo extends Phaser.GameObjects.Container {
   public static readonly EXP_GAINS_DURATION_BASE = 1650;
@@ -40,24 +41,24 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
   private lastLevelCapped: boolean;
   private lastStats: string;
 
-  private box: Phaser.GameObjects.Sprite;
+  private box: GameSprite;
   private nameText: Phaser.GameObjects.Text;
   private genderText: Phaser.GameObjects.Text;
-  private ownedIcon: Phaser.GameObjects.Sprite;
-  private championRibbon: Phaser.GameObjects.Sprite;
-  private teraIcon: Phaser.GameObjects.Sprite;
-  private shinyIcon: Phaser.GameObjects.Sprite;
-  private fusionShinyIcon: Phaser.GameObjects.Sprite;
-  private splicedIcon: Phaser.GameObjects.Sprite;
-  private statusIndicator: Phaser.GameObjects.Sprite;
+  private ownedIcon: GameSprite;
+  private championRibbon: GameSprite;
+  private teraIcon: GameSprite;
+  private shinyIcon: GameSprite;
+  private fusionShinyIcon: GameSprite;
+  private splicedIcon: GameSprite;
+  private statusIndicator: GameSprite;
   private levelContainer: Phaser.GameObjects.Container;
   private hpBar: Phaser.GameObjects.Image;
   private hpBarSegmentDividers: Phaser.GameObjects.Rectangle[];
   private levelNumbersContainer: Phaser.GameObjects.Container;
   private hpNumbersContainer: Phaser.GameObjects.Container;
-  private type1Icon: Phaser.GameObjects.Sprite;
-  private type2Icon: Phaser.GameObjects.Sprite;
-  private type3Icon: Phaser.GameObjects.Sprite;
+  private type1Icon: GameSprite;
+  private type2Icon: GameSprite;
+  private type3Icon: GameSprite;
   private expBar: Phaser.GameObjects.Image;
 
   // #region Type effectiveness hint objects
@@ -70,9 +71,9 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
   public expMaskRect: Phaser.GameObjects.Graphics;
 
   private statsContainer: Phaser.GameObjects.Container;
-  private statsBox: Phaser.GameObjects.Sprite;
+  private statsBox: GameSprite;
   private statValuesContainer: Phaser.GameObjects.Container;
-  private statNumbers: Phaser.GameObjects.Sprite[];
+  private statNumbers: GameSprite[];
 
   public flyoutMenu?: BattleFlyout;
 
@@ -226,7 +227,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     this.statsBox.setOrigin(1, 0.5);
     this.statsContainer.add(this.statsBox);
 
-    const statLabels: Phaser.GameObjects.Sprite[] = [];
+    const statLabels: GameSprite[] = [];
     this.statNumbers = [];
 
     this.statValuesContainer = globalScene.add.container(0, 0);

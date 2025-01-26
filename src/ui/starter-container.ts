@@ -2,10 +2,11 @@ import { globalScene } from "#app/global-scene";
 import type PokemonSpecies from "../data/pokemon-species";
 import { addTextObject } from "./text";
 import { TextStyle } from "#enums/text-style";
+import type { GameSprite } from "#app/game-sprite";
 
 export class StarterContainer extends Phaser.GameObjects.Container {
   public species: PokemonSpecies;
-  public icon: Phaser.GameObjects.Sprite;
+  public icon: GameSprite;
   public shinyIcons: Phaser.GameObjects.Image[] = [];
   public label: Phaser.GameObjects.Text;
   public starterPassiveBgs: Phaser.GameObjects.Image;

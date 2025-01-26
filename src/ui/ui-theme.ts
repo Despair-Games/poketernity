@@ -2,6 +2,7 @@ import { legacyCompatibleImages } from "#app/scene-base";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
 import { WindowVariant } from "#enums/window-variant";
+import { GameSprite } from "#app/game-sprite";
 
 export function getWindowVariantSuffix(windowVariant: WindowVariant): string {
   switch (windowVariant) {
@@ -95,7 +96,7 @@ export function updateWindowType(windowTypeIndex: number): void {
       } else if (object.texture?.key === "namebox") {
         themedObjects.push(object);
       }
-    } else if (object instanceof Phaser.GameObjects.Sprite) {
+    } else if (object instanceof GameSprite) {
       if (object.texture?.key === "bg") {
         themedObjects.push(object);
       }
@@ -147,13 +148,13 @@ export function addUiThemeOverrides(): void {
     y: number,
     texture: string | Phaser.Textures.Texture,
     frame?: string | number,
-  ): Phaser.GameObjects.Sprite {
+  ): GameSprite {
     let legacy = false;
     if (typeof texture === "string" && settings.display.uiTheme && legacyCompatibleImages.includes(texture)) {
       legacy = true;
       texture += "_legacy";
     }
-    const ret: Phaser.GameObjects.Sprite = originalAddSprite.apply(this, [x, y, texture, frame]);
+    const ret: GameSprite = originalAddSprite.apply(this, [x, y, texture, frame]);
     if (legacy) {
       const originalSetTexture = ret.setTexture;
       ret.setTexture = function (key: string, frame?: string | number) {

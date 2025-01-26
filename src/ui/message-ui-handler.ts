@@ -2,6 +2,7 @@ import AwaitableUiHandler from "./awaitable-ui-handler";
 import type { UiMode } from "#enums/ui-mode";
 import { getFrameMs } from "#app/utils";
 import { globalScene } from "#app/global-scene";
+import type { GameSprite } from "#app/game-sprite";
 
 export default abstract class MessageUiHandler extends AwaitableUiHandler {
   protected textTimer: Phaser.Time.TimerEvent | null;
@@ -9,7 +10,7 @@ export default abstract class MessageUiHandler extends AwaitableUiHandler {
   public pendingPrompt: boolean;
 
   public message: Phaser.GameObjects.Text;
-  public prompt: Phaser.GameObjects.Sprite;
+  public prompt: GameSprite;
 
   constructor(mode: UiMode | null = null) {
     super(mode);

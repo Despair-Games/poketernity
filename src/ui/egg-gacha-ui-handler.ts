@@ -18,6 +18,7 @@ import i18next from "i18next";
 import { EggTier } from "#enums/egg-type";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
+import type { GameSprite } from "#app/game-sprite";
 
 export default class EggGachaUiHandler extends MessageUiHandler {
   private eggGachaContainer: Phaser.GameObjects.Container;
@@ -26,8 +27,8 @@ export default class EggGachaUiHandler extends MessageUiHandler {
   private eggGachaOptionSelectBg: Phaser.GameObjects.NineSlice;
 
   private gachaContainers: Phaser.GameObjects.Container[];
-  private gachaKnobs: Phaser.GameObjects.Sprite[];
-  private gachaHatches: Phaser.GameObjects.Sprite[];
+  private gachaKnobs: GameSprite[];
+  private gachaHatches: GameSprite[];
   private gachaInfoContainers: Phaser.GameObjects.Container[];
   private eggGachaOverlay: Phaser.GameObjects.Rectangle;
   private eggGachaSummaryContainer: Phaser.GameObjects.Container;
@@ -596,7 +597,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     switch (gachaType as GachaType) {
       case GachaType.LEGENDARY:
         const species = getPokemonSpecies(getLegendaryGachaSpeciesForTimestamp(new Date().getTime()));
-        const pokemonIcon = infoContainer.getAt(1) as Phaser.GameObjects.Sprite;
+        const pokemonIcon = infoContainer.getAt(1) as GameSprite;
         pokemonIcon.setTexture(species.getIconAtlasKey(), species.getIconId(false));
         break;
     }

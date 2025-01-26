@@ -2,6 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { getTerrainColor } from "#app/data/terrain";
 import { TerrainType } from "#enums/terrain-type";
 import { getCurrentTime } from "#app/utils";
+import type { GameSprite } from "#app/game-sprite";
 
 const spriteFragShader = `
 #ifdef GL_FRAGMENT_PRECISION_HIGH
@@ -229,7 +230,7 @@ export default class FieldSpritePipeline extends Phaser.Renderer.WebGL.Pipelines
   override onBind(gameObject: Phaser.GameObjects.GameObject): void {
     super.onBind();
 
-    const sprite = gameObject as Phaser.GameObjects.Sprite | Phaser.GameObjects.NineSlice;
+    const sprite = gameObject as GameSprite | Phaser.GameObjects.NineSlice;
 
     const data = sprite.pipelineData;
     const ignoreTimeTint = data["ignoreTimeTint"] as boolean;

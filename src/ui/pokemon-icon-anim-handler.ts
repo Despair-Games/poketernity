@@ -1,8 +1,9 @@
+import type { GameSprite } from "#app/game-sprite";
 import { globalScene } from "#app/global-scene";
 import { fixedNumber } from "#app/utils";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 
-type PokemonIcon = Phaser.GameObjects.Container | Phaser.GameObjects.Sprite;
+type PokemonIcon = Phaser.GameObjects.Container | GameSprite;
 
 export default class PokemonIconAnimHandler {
   private icons: Map<PokemonIcon, PokemonIconAnimMode>;

@@ -12,9 +12,10 @@ import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
+import type { GameSprite } from "#app/game-sprite";
 
 export interface InputsIcons {
-  [key: string]: Phaser.GameObjects.Sprite;
+  [key: string]: GameSprite;
 }
 
 export interface LayoutConfig {

@@ -9,6 +9,7 @@ import { MoveCategory } from "#enums/move-category";
 import { Type } from "#enums/type";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
+import type { GameSprite } from "#app/game-sprite";
 
 export interface MoveInfoOverlaySettings {
   delayVisibility?: boolean; // if true, showing the overlay will only set it to active and populate the fields and the handler using this field has to manually call setVisible later.
@@ -44,8 +45,8 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
   private pp: Phaser.GameObjects.Text;
   private pow: Phaser.GameObjects.Text;
   private acc: Phaser.GameObjects.Text;
-  private typ: Phaser.GameObjects.Sprite;
-  private cat: Phaser.GameObjects.Sprite;
+  private typ: GameSprite;
+  private cat: GameSprite;
   private descBg: Phaser.GameObjects.NineSlice;
 
   private options: MoveInfoOverlaySettings;

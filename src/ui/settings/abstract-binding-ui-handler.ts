@@ -7,6 +7,7 @@ import { Button } from "#enums/buttons";
 import { NavigationManager } from "#app/ui/settings/navigationMenu";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
+import type { GameSprite } from "#app/game-sprite";
 
 type CancelFn = (succes?: boolean) => boolean;
 
@@ -34,8 +35,8 @@ export default abstract class AbstractBindingUiHandler extends UiHandler {
   protected buttonPressed: number | null = null;
 
   // Icons for displaying current and new button assignments.
-  protected newButtonIcon: Phaser.GameObjects.Sprite;
-  protected targetButtonIcon: Phaser.GameObjects.Sprite;
+  protected newButtonIcon: GameSprite;
+  protected targetButtonIcon: GameSprite;
 
   // Function to call on cancel or completion of binding.
   protected cancelFn: CancelFn | null;

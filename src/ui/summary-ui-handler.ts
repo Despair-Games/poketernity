@@ -39,6 +39,7 @@ import { Stat, PERMANENT_STATS, getStatKey } from "#enums/stat";
 import { Nature } from "#enums/nature";
 import { settings } from "#app/system/settings/settings-manager";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
+import type { GameSprite } from "#app/game-sprite";
 
 enum Page {
   PROFILE,
@@ -62,20 +63,20 @@ export default class SummaryUiHandler extends UiHandler {
   private summaryUiMode: SummaryUiMode;
 
   private summaryContainer: Phaser.GameObjects.Container;
-  private tabSprite: Phaser.GameObjects.Sprite;
+  private tabSprite: GameSprite;
   private shinyOverlay: Phaser.GameObjects.Image;
   private numberText: Phaser.GameObjects.Text;
-  private pokemonSprite: Phaser.GameObjects.Sprite;
+  private pokemonSprite: GameSprite;
   private nameText: Phaser.GameObjects.Text;
-  private splicedIcon: Phaser.GameObjects.Sprite;
-  private pokeball: Phaser.GameObjects.Sprite;
+  private splicedIcon: GameSprite;
+  private pokeball: GameSprite;
   private levelText: Phaser.GameObjects.Text;
   private genderText: Phaser.GameObjects.Text;
   private shinyIcon: Phaser.GameObjects.Image;
   private fusionShinyIcon: Phaser.GameObjects.Image;
-  private candyShadow: Phaser.GameObjects.Sprite;
-  private candyIcon: Phaser.GameObjects.Sprite;
-  private candyOverlay: Phaser.GameObjects.Sprite;
+  private candyShadow: GameSprite;
+  private candyIcon: GameSprite;
+  private candyOverlay: GameSprite;
   private candyCountText: Phaser.GameObjects.Text;
   private championRibbon: Phaser.GameObjects.Image;
   private statusContainer: Phaser.GameObjects.Container;
@@ -89,19 +90,19 @@ export default class SummaryUiHandler extends UiHandler {
   private summaryPageContainer: Phaser.GameObjects.Container;
   private movesContainer: Phaser.GameObjects.Container;
   private moveDescriptionText: Phaser.GameObjects.Text;
-  private moveCursorObj: Phaser.GameObjects.Sprite | null;
-  private selectedMoveCursorObj: Phaser.GameObjects.Sprite | null;
+  private moveCursorObj: GameSprite | null;
+  private selectedMoveCursorObj: GameSprite | null;
   private moveRowsContainer: Phaser.GameObjects.Container;
   private extraMoveRowContainer: Phaser.GameObjects.Container;
   private moveEffectContainer: Phaser.GameObjects.Container;
   private movePowerText: Phaser.GameObjects.Text;
   private moveAccuracyText: Phaser.GameObjects.Text;
-  private moveCategoryIcon: Phaser.GameObjects.Sprite;
+  private moveCategoryIcon: GameSprite;
   private summaryPageTransitionContainer: Phaser.GameObjects.Container;
-  private friendshipShadow: Phaser.GameObjects.Sprite;
+  private friendshipShadow: GameSprite;
   private friendshipText: Phaser.GameObjects.Text;
-  private friendshipIcon: Phaser.GameObjects.Sprite;
-  private friendshipOverlay: Phaser.GameObjects.Sprite;
+  private friendshipIcon: GameSprite;
+  private friendshipOverlay: GameSprite;
 
   private descriptionScrollTween: Phaser.Tweens.Tween | null;
   private moveCursorBlinkTimer: Phaser.Time.TimerEvent | null;
@@ -337,11 +338,7 @@ export default class SummaryUiHandler extends UiHandler {
       this.getTextColor(!this.pokemon.isShiny() ? TextStyle.SUMMARY : TextStyle.SUMMARY_GOLD, true),
     );
     const spriteKey = this.pokemon.getSpriteKey(true);
-    try {
-      this.pokemonSprite.play(spriteKey);
-    } catch (err: unknown) {
-      console.error(`Failed to play animation for ${spriteKey}`, err);
-    }
+    this.pokemonSprite.play(spriteKey);
     this.pokemonSprite.setPipelineData("teraColor", getTypeRgb(this.pokemon.getTeraType()));
     this.pokemonSprite.setPipelineData("ignoreTimeTint", true);
     this.pokemonSprite.setPipelineData("spriteKey", this.pokemon.getSpriteKey());
@@ -768,7 +765,7 @@ export default class SummaryUiHandler extends UiHandler {
       });
       pageContainer.removeBetween(1, undefined, true);
     }
-    const pageBg = pageContainer.getAt(0) as Phaser.GameObjects.Sprite;
+    const pageBg = pageContainer.getAt(0) as GameSprite;
     pageBg.setTexture(this.getPageKey(page));
 
     if (this.descriptionScrollTween) {

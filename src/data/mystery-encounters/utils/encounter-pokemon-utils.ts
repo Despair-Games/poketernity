@@ -39,6 +39,7 @@ import type { PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { settings } from "#app/system/settings/settings-manager";
+import type { GameSprite } from "#app/game-sprite";
 
 /** Will give +1 level every 10 waves */
 export const STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER = 1;
@@ -454,7 +455,7 @@ export function trainerThrowPokeball(
 
   const fpOffset = pokemon.getFieldPositionOffset();
   const pokeballAtlasKey = getPokeballAtlasKey(pokeballType);
-  const pokeball: Phaser.GameObjects.Sprite = globalScene.addFieldSprite(16 + 75, 80 + 25, "pb", pokeballAtlasKey);
+  const pokeball: GameSprite = globalScene.addFieldSprite(16 + 75, 80 + 25, "pb", pokeballAtlasKey);
   pokeball.setOrigin(0.5, 0.625);
   globalScene.field.add(pokeball);
 
@@ -584,12 +585,7 @@ export function trainerThrowPokeball(
  * @param pokeball - The sprite of the Pokeball
  * @param pokeballType - The Pokeball type
  */
-function failCatch(
-  pokemon: EnemyPokemon,
-  originalY: number,
-  pokeball: Phaser.GameObjects.Sprite,
-  pokeballType: PokeballType,
-) {
+function failCatch(pokemon: EnemyPokemon, originalY: number, pokeball: GameSprite, pokeballType: PokeballType) {
   return new Promise<void>((resolve) => {
     globalScene.playSound("se/pb_rel");
     pokemon.setY(originalY);
@@ -635,7 +631,7 @@ function failCatch(
  */
 export async function catchPokemon(
   pokemon: EnemyPokemon,
-  pokeball: Phaser.GameObjects.Sprite | null,
+  pokeball: GameSprite | null,
   pokeballType: PokeballType,
   showCatchObtainMessage: boolean = true,
   isObtain: boolean = false,
@@ -807,7 +803,7 @@ export async function catchPokemon(
  * Animates pokeball disappearing then destroys the object
  * @param pokeball the Pokeball sprite
  */
-function removePb(pokeball: Phaser.GameObjects.Sprite) {
+function removePb(pokeball: GameSprite) {
   if (pokeball) {
     globalScene.tweens.add({
       targets: pokeball,

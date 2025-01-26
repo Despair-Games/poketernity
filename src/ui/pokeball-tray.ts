@@ -1,3 +1,4 @@
+import type { GameSprite } from "#app/game-sprite";
 import { globalScene } from "#app/global-scene";
 import type { Pokemon } from "../field/pokemon";
 
@@ -5,7 +6,7 @@ export default class PokeballTray extends Phaser.GameObjects.Container {
   private player: boolean;
 
   private bg: Phaser.GameObjects.NineSlice;
-  private balls: Phaser.GameObjects.Sprite[];
+  private balls: GameSprite[];
 
   public shown: boolean;
 

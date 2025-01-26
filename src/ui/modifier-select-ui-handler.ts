@@ -21,6 +21,7 @@ import Phaser from "phaser";
 import { PokeballType } from "#enums/pokeball";
 import { ModifierTier } from "#enums/modifier-tier";
 import { settings } from "#app/system/settings/settings-manager";
+import type { GameSprite } from "#app/game-sprite";
 
 export const SHOP_OPTIONS_ROW_LIMIT = 7;
 const SINGLE_SHOP_ROW_YOFFSET = 12;
@@ -711,11 +712,11 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
 
 class ModifierOption extends Phaser.GameObjects.Container {
   public modifierTypeOption: ModifierTypeOption;
-  private pb: Phaser.GameObjects.Sprite;
-  private pbTint: Phaser.GameObjects.Sprite;
+  private pb: GameSprite;
+  private pbTint: GameSprite;
   private itemContainer: Phaser.GameObjects.Container;
-  private item: Phaser.GameObjects.Sprite;
-  private itemTint: Phaser.GameObjects.Sprite;
+  private item: GameSprite;
+  private itemTint: GameSprite;
   private itemText: Phaser.GameObjects.Text;
   private itemCostText: Phaser.GameObjects.Text;
 
@@ -729,7 +730,7 @@ class ModifierOption extends Phaser.GameObjects.Container {
 
   setup() {
     if (!this.modifierTypeOption.cost) {
-      const getPb = (): Phaser.GameObjects.Sprite => {
+      const getPb = (): GameSprite => {
         const pb = globalScene.add.sprite(0, -182, "pb", this.getPbAtlasKey(-this.modifierTypeOption.upgradeCount));
         pb.setScale(2);
         return pb;

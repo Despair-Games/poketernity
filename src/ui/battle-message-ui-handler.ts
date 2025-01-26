@@ -10,6 +10,7 @@ import i18next from "i18next";
 import type { Stat } from "#enums/stat";
 import { PERMANENT_STATS, getStatKey } from "#enums/stat";
 import { settings } from "#app/system/settings/settings-manager";
+import type { GameSprite } from "#app/game-sprite";
 
 export default class BattleMessageUiHandler extends MessageUiHandler {
   private readonly wordWrapWidth: number = 1780;
@@ -20,7 +21,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
   private nameBox: Phaser.GameObjects.NineSlice;
   private nameText: Phaser.GameObjects.Text;
 
-  public bg: Phaser.GameObjects.Sprite;
+  public bg: GameSprite;
   public commandWindow: Phaser.GameObjects.NineSlice;
   public movesWindowContainer: Phaser.GameObjects.Container;
   public nameBoxContainer: Phaser.GameObjects.Container;

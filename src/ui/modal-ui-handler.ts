@@ -6,6 +6,7 @@ import { addWindow } from "./ui-theme";
 import { WindowVariant } from "#enums/window-variant";
 import type { Button } from "#enums/buttons";
 import { globalScene } from "#app/global-scene";
+import type { GameSprite } from "#app/game-sprite";
 
 export interface ModalConfig {
   buttonActions: Function[];
@@ -186,7 +187,7 @@ export abstract class ModalUiHandler extends UiHandler {
    * @param gameObject the game object to add hover events/effects to
    */
   protected addInteractionHoverEffect(
-    gameObject: Phaser.GameObjects.Image | Phaser.GameObjects.NineSlice | Phaser.GameObjects.Sprite,
+    gameObject: Phaser.GameObjects.Image | Phaser.GameObjects.NineSlice | GameSprite,
   ) {
     gameObject.on("pointerover", () => {
       this.setMouseCursorStyle("pointer");

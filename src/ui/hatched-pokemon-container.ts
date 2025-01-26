@@ -6,6 +6,7 @@ import { globalScene } from "#app/global-scene";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import type PokemonIconAnimHandler from "./pokemon-icon-anim-handler";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
+import type { GameSprite } from "#app/game-sprite";
 
 /**
  * A container for a Pokemon's sprite and icons to get displayed in the egg summary screen
@@ -14,7 +15,7 @@ import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
  */
 export class HatchedPokemonContainer extends Phaser.GameObjects.Container {
   public species: PokemonSpecies;
-  public icon: Phaser.GameObjects.Sprite;
+  public icon: GameSprite;
   public shinyIcon: Phaser.GameObjects.Image;
   public hiddenAbilityIcon: Phaser.GameObjects.Image;
   public pokeballIcon: Phaser.GameObjects.Image;

@@ -1,5 +1,6 @@
 import { SubstituteTag } from "#app/data/battler-tags";
 import type { Pokemon } from "#app/field/pokemon";
+import type { GameSprite } from "#app/game-sprite";
 import { globalScene } from "#app/global-scene";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { isNullOrUndefined } from "#app/utils";
@@ -13,9 +14,9 @@ export class PokemonAnimPhase extends BattlePhase {
   /** The Pokemon to which this animation applies */
   protected readonly pokemon: Pokemon;
   /** Any other field sprites affected by this animation */
-  protected readonly fieldAssets: Phaser.GameObjects.Sprite[];
+  protected readonly fieldAssets: GameSprite[];
 
-  constructor(key: PokemonAnimType, pokemon: Pokemon, fieldAssets: Phaser.GameObjects.Sprite[] = []) {
+  constructor(key: PokemonAnimType, pokemon: Pokemon, fieldAssets: GameSprite[] = []) {
     super();
 
     this.key = key;
@@ -58,7 +59,7 @@ export class PokemonAnimPhase extends BattlePhase {
       return this.end();
     }
 
-    const getSprite = (): Phaser.GameObjects.Sprite => {
+    const getSprite = (): GameSprite => {
       const sprite = globalScene.addFieldSprite(
         this.pokemon.x + this.pokemon.getSprite().x,
         this.pokemon.y + this.pokemon.getSprite().y,
@@ -186,7 +187,7 @@ export class PokemonAnimPhase extends BattlePhase {
       return this.end();
     }
 
-    const getSprite = (): Phaser.GameObjects.Sprite => {
+    const getSprite = (): GameSprite => {
       const sprite = globalScene.addFieldSprite(
         subSprite.x,
         subSprite.y,
@@ -261,7 +262,7 @@ export class PokemonAnimPhase extends BattlePhase {
     const tatsugiriX = this.pokemon.x + this.pokemon.getSprite().x;
     const tatsugiriY = this.pokemon.y + this.pokemon.getSprite().y;
 
-    const getSourceSprite = (): Phaser.GameObjects.Sprite => {
+    const getSourceSprite = (): GameSprite => {
       const sprite = globalScene.addPokemonSprite(
         this.pokemon,
         tatsugiriX,

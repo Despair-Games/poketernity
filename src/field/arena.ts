@@ -33,6 +33,7 @@ import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { WeatherType } from "#enums/weather-type";
 import { TerrainEventTypeChangeAbAttr } from "#app/data/ab-attrs/terrain-event-type-change-ab-attr";
+import type { GameSprite } from "#app/game-sprite";
 
 export class Arena {
   public biomeType: Biome;
@@ -894,8 +895,8 @@ export class ArenaBase extends Phaser.GameObjects.Container {
   public player: boolean;
   public biome: Biome;
   public propValue: number;
-  public base: Phaser.GameObjects.Sprite;
-  public props: Phaser.GameObjects.Sprite[];
+  public base: GameSprite;
+  public props: GameSprite[];
 
   constructor(player: boolean) {
     super(globalScene, 0, 0);

@@ -20,6 +20,7 @@ import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import { TrainerVariant } from "#enums/trainer-variant";
+import type { GameSprite } from "#app/game-sprite";
 
 export default class Trainer extends Phaser.GameObjects.Container {
   public config: TrainerConfig;
@@ -644,16 +645,16 @@ export default class Trainer extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Attempts to animate a given set of {@linkcode Phaser.GameObjects.Sprite}
-   * @see {@linkcode Phaser.GameObjects.Sprite.play}
-   * @param sprite {@linkcode Phaser.GameObjects.Sprite} to animate
-   * @param tintSprite {@linkcode Phaser.GameObjects.Sprite} placed on top of the sprite to add a color tint
-   * @param animConfig {@linkcode Phaser.Types.Animations.PlayAnimationConfig} to pass to {@linkcode Phaser.GameObjects.Sprite.play}
+   * Attempts to animate a given set of {@linkcode GameSprite}
+   * @see {@linkcode GameSprite.play}
+   * @param sprite {@linkcode GameSprite} to animate
+   * @param tintSprite {@linkcode GameSprite} placed on top of the sprite to add a color tint
+   * @param animConfig {@linkcode Phaser.Types.Animations.PlayAnimationConfig} to pass to {@linkcode GameSprite.play}
    * @returns true if the sprite was able to be animated
    */
   tryPlaySprite(
-    sprite: Phaser.GameObjects.Sprite,
-    tintSprite: Phaser.GameObjects.Sprite,
+    sprite: GameSprite,
+    tintSprite: GameSprite,
     animConfig: Phaser.Types.Animations.PlayAnimationConfig,
   ): boolean {
     // Show an error in the console if there isn't a texture loaded
@@ -698,16 +699,16 @@ export default class Trainer extends Phaser.GameObjects.Container {
     }
   }
 
-  getSprites(): Phaser.GameObjects.Sprite[] {
-    const ret: Phaser.GameObjects.Sprite[] = [this.getAt(0)];
+  getSprites(): GameSprite[] {
+    const ret: GameSprite[] = [this.getAt(0)];
     if (this.variant === TrainerVariant.DOUBLE && !this.config.doubleOnly) {
       ret.push(this.getAt(2));
     }
     return ret;
   }
 
-  getTintSprites(): Phaser.GameObjects.Sprite[] {
-    const ret: Phaser.GameObjects.Sprite[] = [this.getAt(1)];
+  getTintSprites(): GameSprite[] {
+    const ret: GameSprite[] = [this.getAt(1)];
     if (this.variant === TrainerVariant.DOUBLE && !this.config.doubleOnly) {
       ret.push(this.getAt(3));
     }

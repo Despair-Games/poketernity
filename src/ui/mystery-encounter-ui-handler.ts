@@ -17,6 +17,7 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import { globalScene } from "#app/global-scene";
+import type { GameSprite } from "#app/game-sprite";
 
 export default class MysteryEncounterUiHandler extends UiHandler {
   private cursorContainer: Phaser.GameObjects.Container;
@@ -33,7 +34,7 @@ export default class MysteryEncounterUiHandler extends UiHandler {
   private descriptionWindow: Phaser.GameObjects.NineSlice;
   private descriptionContainer: Phaser.GameObjects.Container;
   private descriptionScrollTween?: Phaser.Tweens.Tween;
-  private rarityBall: Phaser.GameObjects.Sprite;
+  private rarityBall: GameSprite;
 
   private dexProgressWindow: Phaser.GameObjects.NineSlice;
   private dexProgressContainer: Phaser.GameObjects.Container;

@@ -5,6 +5,7 @@ import type { Species } from "#enums/species";
 import { isNullOrUndefined } from "#app/utils";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { Variant } from "#app/data/variant";
+import type { GameSprite } from "#app/game-sprite";
 import PlayAnimationConfig = Phaser.Types.Animations.PlayAnimationConfig;
 
 type KnownFileRoot =
@@ -78,7 +79,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
   public encounter: MysteryEncounter;
   public spriteConfigs: MysteryEncounterSpriteConfig[];
   public enterFromRight: boolean;
-  private shinySparkleSprites: { sprite: Phaser.GameObjects.Sprite; variant: Variant }[];
+  private shinySparkleSprites: { sprite: GameSprite; variant: Variant }[];
 
   constructor(encounter: MysteryEncounter) {
     super(globalScene, -72, 76);
@@ -140,7 +141,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
 
       let sprite: GameObjects.Sprite;
       let tintSprite: GameObjects.Sprite;
-      let pokemonShinySparkle: Phaser.GameObjects.Sprite | undefined;
+      let pokemonShinySparkle: GameSprite | undefined;
 
       if (isItem) {
         sprite = getItemSprite(spriteKey, hasShadow, yShadow);
@@ -308,16 +309,16 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
   }
 
   /**
-   * Attempts to animate a given set of {@linkcode Phaser.GameObjects.Sprite}
-   * @see {@linkcode Phaser.GameObjects.Sprite.play}
-   * @param sprite {@linkcode Phaser.GameObjects.Sprite} to animate
-   * @param tintSprite {@linkcode Phaser.GameObjects.Sprite} placed on top of the sprite to add a color tint
-   * @param animConfig {@linkcode Phaser.Types.Animations.PlayAnimationConfig} to pass to {@linkcode Phaser.GameObjects.Sprite.play}
+   * Attempts to animate a given set of {@linkcode GameSprite}
+   * @see {@linkcode GameSprite.play}
+   * @param sprite {@linkcode GameSprite} to animate
+   * @param tintSprite {@linkcode GameSprite} placed on top of the sprite to add a color tint
+   * @param animConfig {@linkcode Phaser.Types.Animations.PlayAnimationConfig} to pass to {@linkcode GameSprite.play}
    * @returns true if the sprite was able to be animated
    */
   tryPlaySprite(
-    sprite: Phaser.GameObjects.Sprite,
-    tintSprite: Phaser.GameObjects.Sprite,
+    sprite: GameSprite,
+    tintSprite: GameSprite,
     animConfig: Phaser.Types.Animations.PlayAnimationConfig,
   ): boolean {
     // Show an error in the console if there isn't a texture loaded
@@ -377,12 +378,12 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
    * Returns a Sprite/TintSprite pair
    * @param index
    */
-  getSpriteAtIndex(index: number): Phaser.GameObjects.Sprite[] {
+  getSpriteAtIndex(index: number): GameSprite[] {
     if (!this.spriteConfigs) {
       return [];
     }
 
-    const ret: Phaser.GameObjects.Sprite[] = [];
+    const ret: GameSprite[] = [];
     ret.push(this.getAt(index * 2)); // Sprite
     ret.push(this.getAt(index * 2 + 1)); // Tint Sprite
 
@@ -392,12 +393,12 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
   /**
    * Gets all non-tint sprites (these are the "real" unmodified sprites)
    */
-  getSprites(): Phaser.GameObjects.Sprite[] {
+  getSprites(): GameSprite[] {
     if (!this.spriteConfigs) {
       return [];
     }
 
-    const ret: Phaser.GameObjects.Sprite[] = [];
+    const ret: GameSprite[] = [];
     this.spriteConfigs.forEach((_config, i) => {
       ret.push(this.getAt(i * 2));
     });
@@ -407,12 +408,12 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
   /**
    * Gets all tint sprites (duplicate sprites that have different alpha and fill values)
    */
-  getTintSprites(): Phaser.GameObjects.Sprite[] {
+  getTintSprites(): GameSprite[] {
     if (!this.spriteConfigs) {
       return [];
     }
 
-    const ret: Phaser.GameObjects.Sprite[] = [];
+    const ret: GameSprite[] = [];
     this.spriteConfigs.forEach((_config, i) => {
       ret.push(this.getAt(i * 2 + 1));
     });

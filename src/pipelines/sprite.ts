@@ -3,6 +3,7 @@ import Trainer from "#app/field/trainer";
 import FieldSpritePipeline from "#app/pipelines/field-sprite";
 import MysteryEncounterIntroVisuals from "#app/field/mystery-encounter-intro";
 import { settings } from "#app/system/settings/settings-manager";
+import type { GameSprite } from "#app/game-sprite";
 
 const spriteFragShader = `
 #ifdef GL_FRAGMENT_PRECISION_HIGH
@@ -334,7 +335,7 @@ export default class SpritePipeline extends FieldSpritePipeline {
   override onBind(gameObject: Phaser.GameObjects.GameObject): void {
     super.onBind(gameObject);
 
-    const sprite = gameObject as Phaser.GameObjects.Sprite;
+    const sprite = gameObject as GameSprite;
 
     const data = sprite.pipelineData;
     const tone = data["tone"] as number[];
@@ -430,7 +431,7 @@ export default class SpritePipeline extends FieldSpritePipeline {
     texture?: Phaser.Renderer.WebGL.Wrappers.WebGLTextureWrapper,
     unit?: number,
   ): boolean {
-    const sprite = gameObject as Phaser.GameObjects.Sprite;
+    const sprite = gameObject as GameSprite;
 
     this.set1f("vCutoff", v1);
 

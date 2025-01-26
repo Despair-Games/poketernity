@@ -177,6 +177,7 @@ import { allTrainerConfigs } from "./data/balance/trainer-configs/all-trainer-co
 import { eventBus } from "./event-bus";
 import { Animation } from "./animations";
 import { resetStarterColors, starterColors } from "./data/starter-colors";
+import { GameSprite } from "#app/game-sprite";
 
 const DEBUG_RNG = false;
 
@@ -232,8 +233,8 @@ export default class BattleScene extends SceneBase {
   public abilityBar: AbilityBar;
   public partyExpBar: PartyExpBar;
   public candyBar: CandyBar;
-  public arenaBg: Phaser.GameObjects.Sprite;
-  public arenaBgTransition: Phaser.GameObjects.Sprite;
+  public arenaBg: GameSprite;
+  public arenaBgTransition: GameSprite;
   public arenaPlayer: ArenaBase;
   public arenaPlayerTransition: ArenaBase;
   public arenaEnemy: ArenaBase;
@@ -242,7 +243,7 @@ export default class BattleScene extends SceneBase {
   public gameMode: GameMode;
   public score: number;
   public lockModifierTiers: boolean;
-  public trainer: Phaser.GameObjects.Sprite;
+  public trainer: GameSprite;
   public lastEnemyTrainer: Trainer | null;
   public currentBattle: Battle;
   public pokeballCounts: PokeballCounts;
@@ -616,7 +617,7 @@ export default class BattleScene extends SceneBase {
     this.arenaNextEnemy.setVisible(false);
 
     [this.arenaPlayer, this.arenaPlayerTransition, this.arenaEnemy, this.arenaNextEnemy].forEach((a) => {
-      if (a instanceof Phaser.GameObjects.Sprite) {
+      if (a instanceof GameSprite) {
         a.setOrigin(0, 0);
       }
       field.add(a);
@@ -1743,7 +1744,7 @@ export default class BattleScene extends SceneBase {
     texture: string | Phaser.Textures.Texture,
     frame?: string | number,
     terrainColorRatio: number = 0,
-  ): Phaser.GameObjects.Sprite {
+  ): GameSprite {
     const ret = this.add.sprite(x, y, texture, frame);
     ret.setPipeline(this.fieldSpritePipeline);
     if (terrainColorRatio) {
@@ -1761,18 +1762,18 @@ export default class BattleScene extends SceneBase {
     frame?: string | number,
     hasShadow: boolean = false,
     ignoreOverride: boolean = false,
-  ): Phaser.GameObjects.Sprite {
+  ): GameSprite {
     const ret = this.addFieldSprite(x, y, texture, frame);
     this.initPokemonSprite(ret, pokemon, hasShadow, ignoreOverride);
     return ret;
   }
 
   initPokemonSprite(
-    sprite: Phaser.GameObjects.Sprite,
+    sprite: GameSprite,
     pokemon?: Pokemon,
     hasShadow: boolean = false,
     ignoreOverride: boolean = false,
-  ): Phaser.GameObjects.Sprite {
+  ): GameSprite {
     sprite.setPipeline(this.spritePipeline, {
       tone: [0.0, 0.0, 0.0, 0.0],
       hasShadow: hasShadow,
@@ -3090,7 +3091,7 @@ export default class BattleScene extends SceneBase {
   triggerPokemonBattleAnim(
     pokemon: Pokemon,
     battleAnimType: PokemonAnimType,
-    fieldAssets?: Phaser.GameObjects.Sprite[],
+    fieldAssets?: GameSprite[],
     delayed: boolean = false,
   ): boolean {
     const phase: Phase = new PokemonAnimPhase(battleAnimType, pokemon, fieldAssets);

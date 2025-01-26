@@ -13,6 +13,7 @@ import { ScrollBar } from "#app/ui/scroll-bar";
 import { PlayerGender } from "#enums/player-gender";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
+import { GameSprite } from "#app/game-sprite";
 
 enum Page {
   ACHIEVEMENTS,
@@ -39,10 +40,10 @@ export default class AchvsUiHandler extends MessageUiHandler {
   private headerBg: Phaser.GameObjects.NineSlice;
   private headerText: Phaser.GameObjects.Text;
   private headerActionText: Phaser.GameObjects.Text;
-  private headerActionButton: Phaser.GameObjects.Sprite;
+  private headerActionButton: GameSprite;
   private headerBgX: number;
   private iconsBg: Phaser.GameObjects.NineSlice;
-  private icons: Phaser.GameObjects.Sprite[];
+  private icons: GameSprite[];
 
   private titleBg: Phaser.GameObjects.NineSlice;
   private titleText: Phaser.GameObjects.Text;
@@ -85,7 +86,7 @@ export default class AchvsUiHandler extends MessageUiHandler {
     this.headerText = addTextObject(0, 0, "", TextStyle.SETTINGS_LABEL);
     this.headerText.setOrigin(0, 0);
     this.headerText.setPositionRelative(this.headerBg, 8, 4);
-    this.headerActionButton = new Phaser.GameObjects.Sprite(globalScene, 0, 0, "keyboard", "ACTION.png");
+    this.headerActionButton = new GameSprite(globalScene, 0, 0, "keyboard", "ACTION.png");
     this.headerActionButton.setOrigin(0, 0);
     this.headerActionButton.setPositionRelative(this.headerBg, 236, 6);
     this.headerActionText = addTextObject(0, 0, "", TextStyle.WINDOW, { fontSize: "60px" });

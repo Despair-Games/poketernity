@@ -38,6 +38,7 @@ import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { PartyOption } from "#enums/party-option";
+import type { GameSprite } from "#app/game-sprite";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
 
@@ -1267,10 +1268,10 @@ class PartySlot extends Phaser.GameObjects.Container {
   private pokemon: PlayerPokemon;
 
   private slotBg: Phaser.GameObjects.Image;
-  private slotPb: Phaser.GameObjects.Sprite;
+  private slotPb: GameSprite;
   public slotName: Phaser.GameObjects.Text;
   public slotHpBar: Phaser.GameObjects.Image;
-  public slotHpOverlay: Phaser.GameObjects.Sprite;
+  public slotHpOverlay: GameSprite;
   public slotHpText: Phaser.GameObjects.Text;
   public slotDescriptionLabel: Phaser.GameObjects.Text; // this is used to show text instead of the HP bar i.e. for showing "Able"/"Not Able" for TMs when you try to learn them
 
@@ -1535,8 +1536,8 @@ class PartySlot extends Phaser.GameObjects.Container {
 class PartyCancelButton extends Phaser.GameObjects.Container {
   private selected: boolean;
 
-  private partyCancelBg: Phaser.GameObjects.Sprite;
-  private partyCancelPb: Phaser.GameObjects.Sprite;
+  private partyCancelBg: GameSprite;
+  private partyCancelPb: GameSprite;
 
   constructor(x: number, y: number) {
     super(globalScene, x, y);

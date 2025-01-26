@@ -7,6 +7,7 @@ import { addWindow } from "./ui-theme";
 import { WindowVariant } from "#enums/window-variant";
 import { api } from "#app/plugins/api/api";
 import { ScoreboardCategory } from "#enums/scoreboard-category";
+import type { GameSprite } from "#app/game-sprite";
 
 export interface RankingEntry {
   rank: number;
@@ -19,11 +20,11 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
   private loadingLabel: Phaser.GameObjects.Text;
   private titleLabel: Phaser.GameObjects.Text;
   private rankingsContainer: Phaser.GameObjects.Container;
-  private prevCategoryButton: Phaser.GameObjects.Sprite;
-  private nextCategoryButton: Phaser.GameObjects.Sprite;
-  private prevPageButton: Phaser.GameObjects.Sprite;
+  private prevCategoryButton: GameSprite;
+  private nextCategoryButton: GameSprite;
+  private prevPageButton: GameSprite;
   private pageNumberLabel: Phaser.GameObjects.Text;
-  private nextPageButton: Phaser.GameObjects.Sprite;
+  private nextPageButton: GameSprite;
 
   private pageCount: number;
   private page: number;

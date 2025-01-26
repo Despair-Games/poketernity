@@ -44,6 +44,7 @@ import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { addPokemonDataToDexAndValidateAchievements } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { PokeballType } from "#enums/pokeball";
 import { settings } from "#app/system/settings/settings-manager";
+import type { GameSprite } from "#app/game-sprite";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/globalTradeSystem";
@@ -625,10 +626,10 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
     const tradeContainer = globalScene.fieldUI.getByName("Trade Background") as Phaser.GameObjects.Container;
     const tradeBaseBg = tradeContainer.getByName("Trade Background Image") as Phaser.GameObjects.Image;
 
-    let tradedPokemonSprite: Phaser.GameObjects.Sprite;
-    let tradedPokemonTintSprite: Phaser.GameObjects.Sprite;
-    let receivedPokemonSprite: Phaser.GameObjects.Sprite;
-    let receivedPokemonTintSprite: Phaser.GameObjects.Sprite;
+    let tradedPokemonSprite: GameSprite;
+    let tradedPokemonTintSprite: GameSprite;
+    let receivedPokemonSprite: GameSprite;
+    let receivedPokemonTintSprite: GameSprite;
 
     const getPokemonSprite = () => {
       const ret = globalScene.addPokemonSprite(
@@ -655,11 +656,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
 
     [tradedPokemonSprite, tradedPokemonTintSprite].map((sprite) => {
       const spriteKey = tradedPokemon.getSpriteKey(true);
-      try {
-        sprite.play(spriteKey);
-      } catch (err: unknown) {
-        console.error(`Failed to play animation for ${spriteKey}`, err);
-      }
+      sprite.play(spriteKey);
 
       sprite.setPipeline(globalScene.spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
@@ -678,12 +675,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
 
     [receivedPokemonSprite, receivedPokemonTintSprite].map((sprite) => {
       const spriteKey = receivedPokemon.getSpriteKey(true);
-      try {
-        sprite.play(spriteKey);
-      } catch (err: unknown) {
-        console.error(`Failed to play animation for ${spriteKey}`, err);
-      }
-
+      sprite.play(spriteKey);
       sprite.setPipeline(globalScene.spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
         hasShadow: false,
@@ -701,7 +693,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
 
     // Traded pokemon pokeball
     const tradedPbAtlasKey = getPokeballAtlasKey(tradedPokemon.pokeball);
-    const tradedPokeball: Phaser.GameObjects.Sprite = globalScene.add.sprite(
+    const tradedPokeball: GameSprite = globalScene.add.sprite(
       tradeBaseBg.displayWidth / 2,
       tradeBaseBg.displayHeight / 2,
       "pb",
@@ -712,7 +704,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
 
     // Received pokemon pokeball
     const receivedPbAtlasKey = getPokeballAtlasKey(receivedPokemon.pokeball);
-    const receivedPokeball: Phaser.GameObjects.Sprite = globalScene.add.sprite(
+    const receivedPokeball: GameSprite = globalScene.add.sprite(
       tradeBaseBg.displayWidth / 2,
       tradeBaseBg.displayHeight / 2,
       "pb",
@@ -802,10 +794,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
   });
 }
 
-function doPokemonTradeFlyBySequence(
-  tradedPokemonSprite: Phaser.GameObjects.Sprite,
-  receivedPokemonSprite: Phaser.GameObjects.Sprite,
-) {
+function doPokemonTradeFlyBySequence(tradedPokemonSprite: GameSprite, receivedPokemonSprite: GameSprite) {
   return new Promise<void>((resolve) => {
     const tradeContainer = globalScene.fieldUI.getByName("Trade Background") as Phaser.GameObjects.Container;
     const tradeBaseBg = tradeContainer.getByName("Trade Background Image") as Phaser.GameObjects.Image;
@@ -890,9 +879,9 @@ function doPokemonTradeFlyBySequence(
 
 function doTradeReceivedSequence(
   receivedPokemon: PlayerPokemon,
-  receivedPokemonSprite: Phaser.GameObjects.Sprite,
-  receivedPokemonTintSprite: Phaser.GameObjects.Sprite,
-  receivedPokeballSprite: Phaser.GameObjects.Sprite,
+  receivedPokemonSprite: GameSprite,
+  receivedPokemonTintSprite: GameSprite,
+  receivedPokeballSprite: GameSprite,
   receivedPbAtlasKey: string,
 ) {
   return new Promise<void>((resolve) => {
@@ -911,7 +900,7 @@ function doTradeReceivedSequence(
     receivedPokeballSprite.y = tradeBaseBg.displayHeight / 2 - 100;
 
     // Received pokemon sparkles
-    let pokemonShinySparkle: Phaser.GameObjects.Sprite;
+    let pokemonShinySparkle: GameSprite;
     if (receivedPokemon.shiny) {
       pokemonShinySparkle = globalScene.add.sprite(receivedPokemonSprite.x, receivedPokemonSprite.y, "shiny");
       pokemonShinySparkle.setVisible(false);

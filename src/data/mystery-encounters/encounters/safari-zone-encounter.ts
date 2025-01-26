@@ -34,6 +34,7 @@ import { SummonPhase } from "#app/phases/summon-phase";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { settings } from "#app/system/settings/settings-manager";
+import type { GameSprite } from "#app/game-sprite";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/safariZone";
@@ -357,7 +358,7 @@ async function throwBait(pokemon: EnemyPokemon): Promise<boolean> {
   const originalY: number = pokemon.y;
 
   const fpOffset = pokemon.getFieldPositionOffset();
-  const bait: Phaser.GameObjects.Sprite = globalScene.addFieldSprite(16 + 75, 80 + 25, "safari_zone_bait", "0001.png");
+  const bait: GameSprite = globalScene.addFieldSprite(16 + 75, 80 + 25, "safari_zone_bait", "0001.png");
   bait.setOrigin(0.5, 0.625);
   globalScene.field.add(bait);
 
@@ -426,7 +427,7 @@ async function throwMud(pokemon: EnemyPokemon): Promise<boolean> {
   const originalY: number = pokemon.y;
 
   const fpOffset = pokemon.getFieldPositionOffset();
-  const mud: Phaser.GameObjects.Sprite = globalScene.addFieldSprite(16 + 75, 80 + 35, "safari_zone_mud", "0001.png");
+  const mud: GameSprite = globalScene.addFieldSprite(16 + 75, 80 + 35, "safari_zone_mud", "0001.png");
   mud.setOrigin(0.5, 0.625);
   globalScene.field.add(mud);
 

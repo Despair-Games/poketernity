@@ -1,5 +1,6 @@
 import { getTypeRgb } from "#app/data/type";
 import type { PlayerPokemon } from "#app/field/pokemon";
+import type { GameSprite } from "#app/game-sprite";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import type FormChangeSceneHandler from "#app/ui/form-change-scene-handler";
@@ -19,10 +20,10 @@ export abstract class FormChangeBasePhase extends Phase {
   protected bgVideo: Phaser.GameObjects.Video;
   protected bgOverlay: Phaser.GameObjects.Rectangle;
   protected overlay: Phaser.GameObjects.Rectangle;
-  protected pokemonSprite: Phaser.GameObjects.Sprite;
-  protected pokemonTintSprite: Phaser.GameObjects.Sprite;
-  protected pokemonNewFormSprite: Phaser.GameObjects.Sprite;
-  protected pokemonNewFormTintSprite: Phaser.GameObjects.Sprite;
+  protected pokemonSprite: GameSprite;
+  protected pokemonTintSprite: GameSprite;
+  protected pokemonNewFormSprite: GameSprite;
+  protected pokemonNewFormTintSprite: GameSprite;
 
   constructor(pokemon: PlayerPokemon) {
     super();
@@ -69,7 +70,7 @@ export abstract class FormChangeBasePhase extends Phase {
       this.bgOverlay.setAlpha(0);
       this.container.add(this.bgOverlay);
 
-      const getPokemonSprite = (): Phaser.GameObjects.Sprite => {
+      const getPokemonSprite = (): GameSprite => {
         const ret = globalScene.addPokemonSprite(
           this.pokemon,
           this.baseBgImg.displayWidth / 2,
@@ -99,11 +100,7 @@ export abstract class FormChangeBasePhase extends Phase {
       [this.pokemonSprite, this.pokemonTintSprite, this.pokemonNewFormSprite, this.pokemonNewFormTintSprite].map(
         (sprite) => {
           const spriteKey = this.pokemon.getSpriteKey(true);
-          try {
-            sprite.play(spriteKey);
-          } catch (err: unknown) {
-            console.error(`Failed to play animation for ${spriteKey}`, err);
-          }
+          sprite.play(spriteKey);
 
           sprite.setPipeline(spritePipeline, {
             tone: [0.0, 0.0, 0.0, 0.0],

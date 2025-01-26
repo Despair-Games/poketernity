@@ -1,3 +1,4 @@
+import type { GameSprite } from "#app/game-sprite";
 import { globalScene } from "#app/global-scene";
 import { CriticalCatchChanceBoosterModifier } from "#app/modifier/modifier";
 import { NumberHolder } from "#app/utils";
@@ -95,7 +96,7 @@ export function getCriticalCaptureChance(modifiedCatchRate: number): number {
 }
 
 export function doPokeballBounceAnim(
-  pokeball: Phaser.GameObjects.Sprite,
+  pokeball: GameSprite,
   y1: number,
   y2: number,
   baseBounceDuration: number,

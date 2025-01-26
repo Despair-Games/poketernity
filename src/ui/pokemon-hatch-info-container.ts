@@ -14,23 +14,24 @@ import { argbFromRgba } from "@material/material-color-utilities";
 import type { EggHatchData } from "#app/data/egg-hatch-data";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { getPokemonSpeciesForm } from "#app/data/pokemon-species";
+import type { GameSprite } from "#app/game-sprite";
 
 /**
  * Class for the hatch info summary of each pokemon
  * Holds an info container as well as an additional egg sprite, name, egg moves and main sprite
  */
 export default class PokemonHatchInfoContainer extends PokemonInfoContainer {
-  private currentPokemonSprite: Phaser.GameObjects.Sprite;
+  private currentPokemonSprite: GameSprite;
   private pokemonNumberText: Phaser.GameObjects.Text;
   private pokemonNameText: Phaser.GameObjects.Text;
   private pokemonEggMovesContainer: Phaser.GameObjects.Container;
   private pokemonEggMoveContainers: Phaser.GameObjects.Container[];
   private pokemonEggMoveBgs: Phaser.GameObjects.NineSlice[];
   private pokemonEggMoveLabels: Phaser.GameObjects.Text[];
-  private pokemonHatchedIcon: Phaser.GameObjects.Sprite;
+  private pokemonHatchedIcon: GameSprite;
   private pokemonListContainer: Phaser.GameObjects.Container;
-  private pokemonCandyIcon: Phaser.GameObjects.Sprite;
-  private pokemonCandyOverlayIcon: Phaser.GameObjects.Sprite;
+  private pokemonCandyIcon: GameSprite;
+  private pokemonCandyOverlayIcon: GameSprite;
   private pokemonCandyCountText: Phaser.GameObjects.Text;
 
   constructor(listContainer: Phaser.GameObjects.Container, x: number = 115, y: number = 9) {

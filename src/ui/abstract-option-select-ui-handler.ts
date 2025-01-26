@@ -11,6 +11,7 @@ import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbc
 import type { UIOptionSelectItem } from "./interfaces/option-select-ui-item";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import type { GameSprite } from "#app/game-sprite";
 
 const SCROLLBAR_PADDING = 5;
 const SCROLLBAR_WIDTH = 3;
@@ -42,7 +43,7 @@ export default abstract class AbstractOptionSelectUiHandler<T extends OptionSele
   protected optionSelectContainer: Phaser.GameObjects.Container;
   protected optionSelectBg: Phaser.GameObjects.NineSlice;
   protected optionSelectText: BBCodeText;
-  protected optionSelectIcons: Phaser.GameObjects.Sprite[];
+  protected optionSelectIcons: GameSprite[];
   protected cursorObj: Phaser.GameObjects.Image | null;
   protected scrollBar: ScrollBar | null;
 
@@ -223,11 +224,7 @@ export default abstract class AbstractOptionSelectUiHandler<T extends OptionSele
    * @param singleSpaceWidth the width of a single space, used to offset the label if there is a icon to show
    * @param tempSprite a Sprite object that can be used to measure the needed space of the item's icon, if any
    */
-  protected initializeOption(
-    option: UIOptionSelectItem & T,
-    singleSpaceWidth: number,
-    tempSprite: Phaser.GameObjects.Sprite,
-  ) {
+  protected initializeOption(option: UIOptionSelectItem & T, singleSpaceWidth: number, tempSprite: GameSprite) {
     let label = option.displayLabel ?? option.label;
 
     // Measure the width of the icon(s) to show before the label

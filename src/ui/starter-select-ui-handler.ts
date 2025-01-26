@@ -85,6 +85,7 @@ import { DropDownColumn } from "#enums/drop-down-column";
 import { DropDownType } from "#enums/drop-down-type";
 import { SortCriteria } from "#enums/sort-criteria";
 import { SettingKeyboard } from "#enums/setting-keyboard";
+import { GameSprite } from "#app/game-sprite";
 
 export type StarterSelectCallback = (starters: Starter[]) => void;
 
@@ -252,12 +253,12 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
   private filteredStarterContainers: StarterContainer[] = [];
   private validStarterContainers: StarterContainer[] = [];
   private pokemonNumberText: Phaser.GameObjects.Text;
-  private pokemonSprite: Phaser.GameObjects.Sprite;
+  private pokemonSprite: GameSprite;
   private pokemonNameText: Phaser.GameObjects.Text;
   private pokemonGrowthRateLabelText: Phaser.GameObjects.Text;
   private pokemonGrowthRateText: Phaser.GameObjects.Text;
-  private type1Icon: Phaser.GameObjects.Sprite;
-  private type2Icon: Phaser.GameObjects.Sprite;
+  private type1Icon: GameSprite;
+  private type2Icon: GameSprite;
   private pokemonLuckLabelText: Phaser.GameObjects.Text;
   private pokemonLuckText: Phaser.GameObjects.Text;
   private pokemonGenderText: Phaser.GameObjects.Text;
@@ -278,28 +279,28 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
   private pokemonEggMoveBgs: Phaser.GameObjects.NineSlice[];
   private pokemonEggMoveLabels: Phaser.GameObjects.Text[];
   private pokemonCandyContainer: Phaser.GameObjects.Container;
-  private pokemonCandyIcon: Phaser.GameObjects.Sprite;
-  private pokemonCandyDarknessOverlay: Phaser.GameObjects.Sprite;
-  private pokemonCandyOverlayIcon: Phaser.GameObjects.Sprite;
+  private pokemonCandyIcon: GameSprite;
+  private pokemonCandyDarknessOverlay: GameSprite;
+  private pokemonCandyOverlayIcon: GameSprite;
   private pokemonCandyCountText: Phaser.GameObjects.Text;
   private pokemonCaughtHatchedContainer: Phaser.GameObjects.Container;
   private pokemonCaughtCountText: Phaser.GameObjects.Text;
   private pokemonFormText: Phaser.GameObjects.Text;
-  private pokemonHatchedIcon: Phaser.GameObjects.Sprite;
+  private pokemonHatchedIcon: GameSprite;
   private pokemonHatchedCountText: Phaser.GameObjects.Text;
-  private pokemonShinyIcon: Phaser.GameObjects.Sprite;
-  private pokemonPassiveDisabledIcon: Phaser.GameObjects.Sprite;
-  private pokemonPassiveLockedIcon: Phaser.GameObjects.Sprite;
+  private pokemonShinyIcon: GameSprite;
+  private pokemonPassiveDisabledIcon: GameSprite;
+  private pokemonPassiveLockedIcon: GameSprite;
 
   private activeTooltip: "ABILITY" | "PASSIVE" | "CANDY" | undefined;
   private instructionsContainer: Phaser.GameObjects.Container;
   private filterInstructionsContainer: Phaser.GameObjects.Container;
-  private shinyIconElement: Phaser.GameObjects.Sprite;
-  private formIconElement: Phaser.GameObjects.Sprite;
-  private abilityIconElement: Phaser.GameObjects.Sprite;
-  private genderIconElement: Phaser.GameObjects.Sprite;
-  private natureIconElement: Phaser.GameObjects.Sprite;
-  private goFilterIconElement: Phaser.GameObjects.Sprite;
+  private shinyIconElement: GameSprite;
+  private formIconElement: GameSprite;
+  private abilityIconElement: GameSprite;
+  private genderIconElement: GameSprite;
+  private natureIconElement: GameSprite;
+  private goFilterIconElement: GameSprite;
   private shinyLabel: Phaser.GameObjects.Text;
   private formLabel: Phaser.GameObjects.Text;
   private genderLabel: Phaser.GameObjects.Text;
@@ -346,7 +347,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
   public cursorObj: Phaser.GameObjects.Image;
   private starterCursorObjs: Phaser.GameObjects.Image[];
   private pokerusCursorObjs: Phaser.GameObjects.Image[];
-  private starterIcons: Phaser.GameObjects.Sprite[];
+  private starterIcons: GameSprite[];
   private starterIconsCursorObj: Phaser.GameObjects.Image;
   private valueLimitLabel: Phaser.GameObjects.Text;
   private startCursorObj: Phaser.GameObjects.NineSlice;
@@ -937,7 +938,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
     // instruction rows that will be pushed into the container dynamically based on need
     // creating new sprites since they will be added to the scene later
-    this.shinyIconElement = new Phaser.GameObjects.Sprite(
+    this.shinyIconElement = new GameSprite(
       globalScene,
       this.instructionRowX,
       this.instructionRowY,
@@ -956,13 +957,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     );
     this.shinyLabel.setName("text-shiny-label");
 
-    this.formIconElement = new Phaser.GameObjects.Sprite(
-      globalScene,
-      this.instructionRowX,
-      this.instructionRowY,
-      "keyboard",
-      "F.png",
-    );
+    this.formIconElement = new GameSprite(globalScene, this.instructionRowX, this.instructionRowY, "keyboard", "F.png");
     this.formIconElement.setName("sprite-form-icon-element");
     this.formIconElement.setScale(0.675);
     this.formIconElement.setOrigin(0.0, 0.0);
@@ -975,7 +970,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     );
     this.formLabel.setName("text-form-label");
 
-    this.genderIconElement = new Phaser.GameObjects.Sprite(
+    this.genderIconElement = new GameSprite(
       globalScene,
       this.instructionRowX,
       this.instructionRowY,
@@ -994,7 +989,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     );
     this.genderLabel.setName("text-gender-label");
 
-    this.abilityIconElement = new Phaser.GameObjects.Sprite(
+    this.abilityIconElement = new GameSprite(
       globalScene,
       this.instructionRowX,
       this.instructionRowY,
@@ -1013,7 +1008,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     );
     this.abilityLabel.setName("text-ability-label");
 
-    this.natureIconElement = new Phaser.GameObjects.Sprite(
+    this.natureIconElement = new GameSprite(
       globalScene,
       this.instructionRowX,
       this.instructionRowY,
@@ -1032,7 +1027,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     );
     this.natureLabel.setName("text-nature-label");
 
-    this.goFilterIconElement = new Phaser.GameObjects.Sprite(
+    this.goFilterIconElement = new GameSprite(
       globalScene,
       this.filterInstructionRowX,
       this.filterInstructionRowY,
@@ -2655,7 +2650,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     // this updates icons for previously saved pokemon
     for (let i = 0; i < this.validStarterContainers.length; i++) {
       const currentFilteredContainer = this.validStarterContainers[i];
-      const starterSprite = currentFilteredContainer.icon as Phaser.GameObjects.Sprite;
+      const starterSprite = currentFilteredContainer.icon as GameSprite;
 
       const currentDexAttr = this.getCurrentDexProps(currentFilteredContainer.species.speciesId);
       const props = globalScene.gameData.getSpeciesDexAttrProps(currentFilteredContainer.species, currentDexAttr);
@@ -3411,7 +3406,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           (p) => p.species.speciesId === species.speciesId,
         );
         if (currentFilteredContainer) {
-          const starterSprite = currentFilteredContainer.icon as Phaser.GameObjects.Sprite;
+          const starterSprite = currentFilteredContainer.icon as GameSprite;
           starterSprite.setTexture(
             species.getIconAtlasKey(formIndex, shiny, variant),
             species.getIconId(female!, formIndex, shiny, variant),
@@ -3790,7 +3785,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     for (let s = 0; s < this.allSpecies.length; s++) {
       /** Cost of pokemon species */
       const speciesStarterValue = globalScene.gameData.getSpeciesStarterValue(this.allSpecies[s].speciesId);
-      /** {@linkcode Phaser.GameObjects.Sprite} object of Pokémon for setting the alpha value */
+      /** {@linkcode GameSprite} object of Pokémon for setting the alpha value */
       const speciesSprite = this.starterContainers[s].icon;
 
       /**
@@ -4100,7 +4095,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
   }
 
   checkIconId(
-    icon: Phaser.GameObjects.Sprite,
+    icon: GameSprite,
     species: PokemonSpecies,
     female: boolean,
     formIndex: number,

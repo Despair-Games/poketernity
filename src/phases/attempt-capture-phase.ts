@@ -24,6 +24,7 @@ import { type PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
+import type { GameSprite } from "#app/game-sprite";
 
 /**
  * Handles catching a pokemon after the player throws a ball
@@ -31,7 +32,7 @@ import { globalScene } from "#app/global-scene";
  */
 export class AttemptCapturePhase extends PokemonPhase {
   private readonly pokeballType: PokeballType;
-  private pokeball: Phaser.GameObjects.Sprite;
+  private pokeball: GameSprite;
   private originalY: number;
 
   constructor(targetIndex: number, pokeballType: PokeballType) {

@@ -2,6 +2,7 @@ import type { PlayerPokemon } from "#app/field/pokemon";
 import { getTypeRgb } from "#app/data/type";
 import { globalScene } from "#app/global-scene";
 import { TransformationScreenPosition } from "#enums/transformation-screen-position";
+import type { GameSprite } from "#app/game-sprite";
 
 /**
  * Initiates an "evolution-like" animation to transform a previousPokemon (presumably from the player's party) into a new one, not necessarily an evolution species.
@@ -21,10 +22,10 @@ export function doPokemonTransformationSequence(
     transformationBaseBg.setVisible(false);
     transformationContainer.add(transformationBaseBg);
 
-    let pokemonSprite: Phaser.GameObjects.Sprite;
-    let pokemonTintSprite: Phaser.GameObjects.Sprite;
-    let pokemonEvoSprite: Phaser.GameObjects.Sprite;
-    let pokemonEvoTintSprite: Phaser.GameObjects.Sprite;
+    let pokemonSprite: GameSprite;
+    let pokemonTintSprite: GameSprite;
+    let pokemonEvoSprite: GameSprite;
+    let pokemonEvoTintSprite: GameSprite;
 
     const xOffset =
       screenPosition === TransformationScreenPosition.CENTER
@@ -60,11 +61,7 @@ export function doPokemonTransformationSequence(
 
     [pokemonSprite, pokemonTintSprite, pokemonEvoSprite, pokemonEvoTintSprite].map((sprite) => {
       const spriteKey = previousPokemon.getSpriteKey(true);
-      try {
-        sprite.play(spriteKey);
-      } catch (err: unknown) {
-        console.error(`Failed to play animation for ${spriteKey}`, err);
-      }
+      sprite.play(spriteKey);
 
       sprite.setPipeline(globalScene.spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
@@ -83,11 +80,7 @@ export function doPokemonTransformationSequence(
 
     [pokemonEvoSprite, pokemonEvoTintSprite].map((sprite) => {
       const spriteKey = transformPokemon.getSpriteKey(true);
-      try {
-        sprite.play(spriteKey);
-      } catch (err: unknown) {
-        console.error(`Failed to play animation for ${spriteKey}`, err);
-      }
+      sprite.play(spriteKey);
 
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", transformPokemon.getSpriteKey());

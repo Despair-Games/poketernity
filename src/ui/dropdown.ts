@@ -4,6 +4,7 @@ import { TextStyle } from "#enums/text-style";
 import { addWindow } from "./ui-theme";
 import { WindowVariant } from "#enums/window-variant";
 import i18next from "i18next";
+import type { GameSprite } from "#app/game-sprite";
 
 export enum DropDownState {
   ON,
@@ -36,9 +37,9 @@ export enum SortCriteria {
 export class DropDownLabel {
   public state: DropDownState;
   public text: string;
-  public sprite?: Phaser.GameObjects.Sprite;
+  public sprite?: GameSprite;
 
-  constructor(label: string, sprite?: Phaser.GameObjects.Sprite, state: DropDownState = DropDownState.OFF) {
+  constructor(label: string, sprite?: GameSprite, state: DropDownState = DropDownState.OFF) {
     this.text = label || "";
     this.sprite = sprite;
     this.state = state;
@@ -47,7 +48,7 @@ export class DropDownLabel {
 
 export class DropDownOption extends Phaser.GameObjects.Container {
   public override state: DropDownState = DropDownState.ON;
-  public toggle: Phaser.GameObjects.Sprite;
+  public toggle: GameSprite;
   public text: Phaser.GameObjects.Text;
   public val: any;
   public dir: SortDirection = SortDirection.ASC;

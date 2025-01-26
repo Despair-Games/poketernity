@@ -11,6 +11,7 @@ import { Stat } from "#enums/stat";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
 import { PokemonPhase } from "./abstract-pokemon-phase";
+import type { GameSprite } from "#app/game-sprite";
 
 export class ScanIvsPhase extends PokemonPhase {
   private readonly shownIvs: number;
@@ -33,8 +34,8 @@ export class ScanIvsPhase extends PokemonPhase {
     const pokemon = this.getPokemon();
 
     let enemyIvs: number[] = [];
-    let statsContainer: Phaser.GameObjects.Sprite[] = [];
-    let statsContainerLabels: Phaser.GameObjects.Sprite[] = [];
+    let statsContainer: GameSprite[] = [];
+    let statsContainerLabels: GameSprite[] = [];
 
     const enemyField = globalScene.getEnemyField();
     const uiTheme = settings.display.uiTheme; // Assuming uiTheme is accessible
@@ -44,7 +45,7 @@ export class ScanIvsPhase extends PokemonPhase {
       const currentIvs = gameData.dexData[enemyField[e].species.getRootSpeciesId()].ivs;
       const ivsToShow = ui.getMessageHandler().getTopIvs(enemyIvs, this.shownIvs);
 
-      statsContainer = enemyField[e].getBattleInfo().getStatsValueContainer().list as Phaser.GameObjects.Sprite[];
+      statsContainer = enemyField[e].getBattleInfo().getStatsValueContainer().list as GameSprite[];
       statsContainerLabels = statsContainer.filter((m) => m.name.indexOf("icon_stat_label") >= 0);
 
       for (let s = 0; s < statsContainerLabels.length; s++) {

@@ -35,6 +35,7 @@ import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
 import { RunDisplayMode } from "#enums/run-display-mode";
+import { GameSprite } from "#app/game-sprite";
 
 /**
  * RunInfoUiMode indicates possible overlays of RunInfoUiHandler.
@@ -186,11 +187,11 @@ export default class RunInfoUiHandler extends UiHandler {
         fontSize: "34px",
       });
       const gamepadType = this.getUi().getGamepadType();
-      let abilityButtonElement: Phaser.GameObjects.Sprite;
+      let abilityButtonElement: GameSprite;
       if (gamepadType === "touch") {
-        abilityButtonElement = new Phaser.GameObjects.Sprite(globalScene, 0, 2, "keyboard", "E.png");
+        abilityButtonElement = new GameSprite(globalScene, 0, 2, "keyboard", "E.png");
       } else {
-        abilityButtonElement = new Phaser.GameObjects.Sprite(
+        abilityButtonElement = new GameSprite(
           globalScene,
           0,
           2,
@@ -243,20 +244,20 @@ export default class RunInfoUiHandler extends UiHandler {
         fontSize: "65px",
       });
       const gamepadType = this.getUi().getGamepadType();
-      let shinyButtonElement: Phaser.GameObjects.Sprite;
-      let formButtonElement: Phaser.GameObjects.Sprite;
+      let shinyButtonElement: GameSprite;
+      let formButtonElement: GameSprite;
       if (gamepadType === "touch") {
-        shinyButtonElement = new Phaser.GameObjects.Sprite(globalScene, 0, 4, "keyboard", "R.png");
-        formButtonElement = new Phaser.GameObjects.Sprite(globalScene, 0, 16, "keyboard", "F.png");
+        shinyButtonElement = new GameSprite(globalScene, 0, 4, "keyboard", "R.png");
+        formButtonElement = new GameSprite(globalScene, 0, 16, "keyboard", "F.png");
       } else {
-        shinyButtonElement = new Phaser.GameObjects.Sprite(
+        shinyButtonElement = new GameSprite(
           globalScene,
           0,
           4,
           gamepadType,
           globalScene.inputController?.getIconForLatestInputRecorded(SettingKeyboard.Button_Cycle_Shiny),
         );
-        formButtonElement = new Phaser.GameObjects.Sprite(
+        formButtonElement = new GameSprite(
           globalScene,
           0,
           16,
@@ -542,8 +543,8 @@ export default class RunInfoUiHandler extends UiHandler {
       const enemyIcon = globalScene.addPokemonIcon(enemy, 0, 0, 0, 0);
       // Applying Terastallizing Type tint to Pokemon icon
       // If the Pokemon is a fusion, it has two sprites and so, the tint has to be applied to each icon separately
-      const enemySprite1 = enemyIcon.list[0] as Phaser.GameObjects.Sprite;
-      const enemySprite2 = enemyIcon.list.length > 1 ? (enemyIcon.list[1] as Phaser.GameObjects.Sprite) : undefined;
+      const enemySprite1 = enemyIcon.list[0] as GameSprite;
+      const enemySprite2 = enemyIcon.list.length > 1 ? (enemyIcon.list[1] as GameSprite) : undefined;
       if (teraPokemon[enemyData.id]) {
         const teraTint = getTypeRgb(teraPokemon[enemyData.id]);
         const teraColor = new Phaser.Display.Color(teraTint[0], teraTint[1], teraTint[2]);
@@ -1039,7 +1040,7 @@ export default class RunInfoUiHandler extends UiHandler {
       const formIndex = pkmn.formIndex;
       const variant = pkmn.variant;
       const species = pkmn.getSpeciesForm();
-      const pokemonSprite: Phaser.GameObjects.Sprite = globalScene.add.sprite(60 + 40 * i, 40 + row * 80, "pkmn__sub");
+      const pokemonSprite: GameSprite = globalScene.add.sprite(60 + 40 * i, 40 + row * 80, "pkmn__sub");
       pokemonSprite.setPipeline(globalScene.spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], ignoreTimeTint: true });
       this.hallofFameContainer.add(pokemonSprite);
       const speciesLoaded: Map<Species, boolean> = new Map<Species, boolean>();

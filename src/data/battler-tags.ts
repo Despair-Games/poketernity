@@ -41,6 +41,7 @@ import { WeatherType } from "#enums/weather-type";
 import { ReverseDrainAbAttr } from "./ab-attrs/reverse-drain-ab-attr";
 import Overrides from "#app/overrides";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
+import type { GameSprite } from "#app/game-sprite";
 
 export class BattlerTag {
   public tagType: BattlerTagType;
@@ -2867,7 +2868,7 @@ export class SubstituteTag extends BattlerTag {
   /** The substitute's remaining HP. If HP is depleted, the Substitute fades. */
   public hp: number;
   /** A reference to the sprite representing the Substitute doll */
-  public sprite: Phaser.GameObjects.Sprite;
+  public sprite: GameSprite;
   /** Is the source Pokemon "in focus," i.e. is it fully visible on the field? */
   public sourceInFocus: boolean;
 

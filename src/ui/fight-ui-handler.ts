@@ -18,13 +18,14 @@ import MoveInfoOverlay from "./move-info-overlay";
 import { BattleType } from "#enums/battle-type";
 import { settings } from "#app/system/settings/settings-manager";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import type { GameSprite } from "#app/game-sprite";
 
 export default class FightUiHandler extends UiHandler implements InfoToggle {
   public static readonly MOVES_CONTAINER_NAME = "moves";
 
   private movesContainer: Phaser.GameObjects.Container;
   private moveInfoContainer: Phaser.GameObjects.Container;
-  private typeIcon: Phaser.GameObjects.Sprite;
+  private typeIcon: GameSprite;
   private ppLabel: Phaser.GameObjects.Text;
   private ppText: Phaser.GameObjects.Text;
   private powerLabel: Phaser.GameObjects.Text;
@@ -32,7 +33,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
   private accuracyLabel: Phaser.GameObjects.Text;
   private accuracyText: Phaser.GameObjects.Text;
   private cursorObj: Phaser.GameObjects.Image | null;
-  private moveCategoryIcon: Phaser.GameObjects.Sprite;
+  private moveCategoryIcon: GameSprite;
   private moveInfoOverlay: MoveInfoOverlay;
 
   protected fieldIndex: number = 0;

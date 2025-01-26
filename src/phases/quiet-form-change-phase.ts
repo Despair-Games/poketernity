@@ -1,6 +1,7 @@
 import { getSpeciesFormChangeMessage, type SpeciesFormChange } from "#app/data/pokemon-forms";
 import { getTypeRgb } from "#app/data/type";
 import { type Pokemon } from "#app/field/pokemon";
+import type { GameSprite } from "#app/game-sprite";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -44,7 +45,7 @@ export class QuietFormChangePhase extends BattlePhase {
       return;
     }
 
-    const getPokemonSprite = (): Phaser.GameObjects.Sprite => {
+    const getPokemonSprite = (): GameSprite => {
       const sprite = globalScene.addPokemonSprite(
         this.pokemon,
         this.pokemon.x + this.pokemon.getSprite().x,
@@ -54,11 +55,7 @@ export class QuietFormChangePhase extends BattlePhase {
       sprite.setOrigin(0.5, 1);
 
       const spriteKey = this.pokemon.getBattleSpriteKey();
-      try {
-        sprite.play(spriteKey).stop();
-      } catch (err: unknown) {
-        console.error(`Failed to play animation for ${spriteKey}`, err);
-      }
+      sprite.play(spriteKey).stop();
 
       sprite.setPipeline(spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
@@ -105,11 +102,7 @@ export class QuietFormChangePhase extends BattlePhase {
           pokemonFormTintSprite.setScale(0.01);
 
           const spriteKey = this.pokemon.getBattleSpriteKey();
-          try {
-            pokemonFormTintSprite.play(spriteKey).stop();
-          } catch (err: unknown) {
-            console.error(`Failed to play animation for ${spriteKey}`, err);
-          }
+          pokemonFormTintSprite.play(spriteKey).stop();
 
           pokemonFormTintSprite.setVisible(true);
 

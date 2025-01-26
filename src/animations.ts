@@ -7,6 +7,7 @@ import { PokeballType } from "#enums/pokeball";
 import type { Variant } from "./data/variant";
 import type BattleScene from "./battle-scene";
 import { settings } from "#app/system/settings/settings-manager";
+import type { GameSprite } from "#app/game-sprite";
 
 /**
  * Class for handling general animations such as particle effects.
@@ -96,8 +97,8 @@ export class Animation {
   public doCycle(
     l: number,
     lastCycle: number,
-    pokemonTintSprite: Phaser.GameObjects.Sprite,
-    pokemonNewFormTintSprite: Phaser.GameObjects.Sprite,
+    pokemonTintSprite: GameSprite,
+    pokemonNewFormTintSprite: GameSprite,
   ): Promise<boolean> {
     return new Promise((resolve) => {
       const isLastCycle = l === lastCycle;
@@ -200,7 +201,7 @@ export class Animation {
     }
   }
 
-  public addPokeballCaptureStars(pokeball: Phaser.GameObjects.Sprite): void {
+  public addPokeballCaptureStars(pokeball: GameSprite): void {
     const addParticle = () => {
       const particle = this.scene.add.sprite(pokeball.x, pokeball.y, "pb_particles", "4.png");
       particle.setOrigin(pokeball.originX, pokeball.originY);
@@ -248,7 +249,7 @@ export class Animation {
    * @param sparkleSprite the Sprite to play the animation on
    * @param variant which shiny {@linkcode variant} to play the animation for
    */
-  public doShinySparkleAnim(sparkleSprite: Phaser.GameObjects.Sprite, variant: Variant): void {
+  public doShinySparkleAnim(sparkleSprite: GameSprite, variant: Variant): void {
     const keySuffix = variant ? `_${variant + 1}` : "";
     const spriteKey = `shiny${keySuffix}`;
     const animationKey = `sparkle${keySuffix}`;

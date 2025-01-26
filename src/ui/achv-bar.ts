@@ -1,3 +1,4 @@
+import type { GameSprite } from "#app/game-sprite";
 import { globalScene } from "#app/global-scene";
 import { Achv } from "#app/system/achv";
 import type { Voucher } from "#app/system/voucher";
@@ -9,7 +10,7 @@ export default class AchvBar extends Phaser.GameObjects.Container {
   private defaultHeight: number;
 
   private bg: Phaser.GameObjects.NineSlice;
-  private icon: Phaser.GameObjects.Sprite;
+  private icon: GameSprite;
   private titleText: Phaser.GameObjects.Text;
   private scoreText: Phaser.GameObjects.Text;
   private descriptionText: Phaser.GameObjects.Text;

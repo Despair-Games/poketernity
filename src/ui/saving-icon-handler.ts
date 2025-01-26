@@ -1,8 +1,9 @@
+import type { GameSprite } from "#app/game-sprite";
 import { globalScene } from "#app/global-scene";
 import { fixedNumber } from "#app/utils";
 
 export default class SavingIconHandler extends Phaser.GameObjects.Container {
-  private icon: Phaser.GameObjects.Sprite;
+  private icon: GameSprite;
 
   private animActive: boolean;
   private shown: boolean;
