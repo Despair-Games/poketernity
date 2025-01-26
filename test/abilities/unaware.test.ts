@@ -158,16 +158,12 @@ describe("Abilities - Unaware", () => {
     expect(enemyPokemon.isFullHp()).toBe(false);
 
     // Check that each Pokemon's most recently computed stat is either their boosted Atk or their boosted Def
-    try {
-      expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(expectedPlayerAtk);
-    } catch {
-      expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(expectedPlayerDef);
-    }
-    try {
-      expect(enemyPokemon.getEffectiveStat).toHaveLastReturnedWith(expectedEnemyAtk);
-    } catch {
-      expect(enemyPokemon.getEffectiveStat).toHaveLastReturnedWith(expectedEnemyDef);
-    }
+    expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(
+      expect.toBeOneOf([expectedPlayerAtk, expectedPlayerDef]),
+    );
+    expect(enemyPokemon.getEffectiveStat).toHaveLastReturnedWith(
+      expect.toBeOneOf([expectedEnemyAtk, expectedEnemyDef]),
+    );
   });
 
   it("should not ignore an opponent's physical damage reduction from a Burn status", async () => {
