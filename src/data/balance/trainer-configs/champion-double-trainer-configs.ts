@@ -35,9 +35,9 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     )
     .setPartyMemberFunc(
       3,
-      getRandomPartyMemberFunc([Species.PIKACHU], TrainerSlot.TRAINER_PARTNER, true, (p) => {
+      getRandomPartyMemberFunc([Species.SNORLAX], TrainerSlot.TRAINER_PARTNER, true, (p) => {
         p.setBoss(true, 2);
-        p.formIndex = 8; // G-MAX Pikachu
+        p.formIndex = 1; // G-Max Snorlax
         p.generateName();
         p.generateAndPopulateMoveset();
       }),
