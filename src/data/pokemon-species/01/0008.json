@@ -1,1 +1,19 @@
-{"speciesId":8,"generation":1,"types":[10],"defaultAbilities":[67,67],"hiddenAbility":44,"baseStats":[59,63,80,65,80,58],"baseExp":142,"baseFriendship":50,"group":0,"weight":22.5,"height":1,"genderDiffs":false,"malePercentage":87.5,"catchRate":45,"bodyColor":0,"biomes":[],"forms":[]}
+{
+  "speciesId": 8,
+  "generation": 1,
+  "types": [10],
+  "defaultAbilities": [67, 67],
+  "hiddenAbility": 44,
+  "baseStats": [59, 63, 80, 65, 80, 58],
+  "baseExp": 142,
+  "baseFriendship": 50,
+  "group": 0,
+  "weight": 22.5,
+  "height": 1,
+  "genderDiffs": false,
+  "malePercentage": 87.5,
+  "catchRate": 45,
+  "bodyColor": 0,
+  "biomes": [],
+  "forms": []
+}
