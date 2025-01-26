@@ -25,6 +25,8 @@ import { speciesStarterCosts, POKERUS_STARTER_COUNT } from "#app/data/balance/st
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { PokemonRegion } from "#enums/pokemon-regions";
+import type { Biome } from "#enums/biome";
+import { writeFile } from "fs";
 
 /**
  * Gets the {@linkcode PokemonSpecies} object associated with the {@linkcode Species} enum given
@@ -1185,6 +1187,72 @@ export class PokemonForm extends PokemonSpeciesForm {
   getFormSpriteKey(_formIndex?: number) {
     return this.formSpriteKey !== null ? this.formSpriteKey : this.formKey;
   }
+}
+
+type speciesObj = {
+  speciesId?: number;
+  generation?: number;
+  types?: Type[];
+  defaultAbilities?: Abilities[];
+  hiddenAbility?: Abilities;
+  baseStats?: number[];
+  catchRate?: number;
+  malePercentage?: number;
+  baseFriendship?: number;
+  baseExp?: number;
+  genderDiffs?: boolean;
+  group?: SpeciesGroups;
+  region?: PokemonRegion;
+  isStarterSelectable?: boolean;
+  weight?: number;
+  height?: number;
+  bodyColor?: number;
+  biomes?: Biome[];
+  forms?: speciesObj[];
+};
+
+export async function speciesToJSON() {
+  const generation1 = allSpecies.filter((sp) => sp.generation === 1 && sp.speciesId < 10);
+  generation1.forEach((sp) => {
+    const speciesFile = sp.speciesId.toString().padStart(4, "0");
+    const fileName = "./src/data/pokemon-species/01/" + speciesFile + ".json";
+
+    const spData: speciesObj = {};
+    spData.speciesId = sp.speciesId;
+    spData.generation = sp.generation;
+    spData.types = [sp.type1];
+    if (sp.type2) {
+      spData.types.push(sp.type2);
+    }
+    spData.defaultAbilities = [sp.ability1];
+    if (sp.ability2 !== Abilities.NONE) {
+      spData.defaultAbilities.push(sp.ability2);
+    }
+    if (sp.abilityHidden !== Abilities.NONE) {
+      spData.hiddenAbility = sp.abilityHidden;
+    }
+    spData.baseStats = sp.baseStats;
+    spData.baseExp = sp.baseExp;
+    spData.baseFriendship = sp.baseFriendship;
+    spData.group = sp.group;
+    spData.weight = sp.weight;
+    spData.height = sp.height;
+    spData.genderDiffs = sp.genderDiffs;
+    if (sp.malePercent) {
+      spData.malePercentage = sp.malePercent;
+    }
+    spData.catchRate = sp.catchRate;
+
+    spData.bodyColor = 0;
+    spData.biomes = [];
+    spData.forms = [];
+
+    const dataToWrite = JSON.stringify(spData);
+
+    writeFile(fileName, dataToWrite, () => {
+      console.log("File Written");
+    });
+  });
 }
 
 export const noStarterFormKeys: string[] = [
