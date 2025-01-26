@@ -1225,7 +1225,7 @@ export async function speciesToJSON() {
       spData.types.push(sp.type2);
     }
     spData.defaultAbilities = [sp.ability1];
-    if (sp.ability2 !== Abilities.NONE) {
+    if (sp.ability2 !== sp.ability1) {
       spData.defaultAbilities.push(sp.ability2);
     }
     if (sp.abilityHidden !== Abilities.NONE) {
