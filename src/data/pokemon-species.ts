@@ -1270,6 +1270,13 @@ function parseSpeciesForm(form: PokemonForm, root: PokemonSpecies) {
   if (form.formKey !== "" && JSON.stringify(form.baseStats) !== JSON.stringify(root.baseStats)) {
     formData.defaultAbilities = [Abilities[form.ability1]];
     formData.baseStats = form.baseStats;
+    if (form.type1 !== root.type1 && form.type2 !== root.type2) {
+      formData.types = [];
+      formData.types.push(Type[form.type1]);
+      if (form.type2) {
+        formData.types.push(Type[form.type2]);
+      }
+    }
   }
   return formData;
 }
