@@ -17,5 +17,9 @@
   "bodyColor": 0,
   "biomes": [],
   "evolution": [],
-  "forms": []
+  "forms": [
+    { "formName": "Normal" },
+    { "formName": "Mega", "defaultAbilities": ["THICK_FAT"], "baseStats": [80, 100, 123, 122, 120, 80] },
+    { "formName": "G-Max" }
+  ]
 }

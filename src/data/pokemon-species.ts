@@ -1211,6 +1211,7 @@ type speciesObj = {
   biomes?: Biome[];
   evolution?: any[];
   forms?: speciesObj[];
+  formName?: string;
 };
 
 export async function speciesToJSON() {
@@ -1251,12 +1252,26 @@ export async function speciesToJSON() {
     spData.evolution = [];
     spData.forms = [];
 
+    sp.forms.forEach((pkform) => {
+      spData.forms?.push(parseSpeciesForm(pkform, sp));
+    });
+
     const dataToWrite = JSON.stringify(spData);
 
     writeFile(fileName, dataToWrite, () => {
       console.log("File Written");
     });
   });
+}
+
+function parseSpeciesForm(form: PokemonForm, root: PokemonSpecies) {
+  const formData: speciesObj = {};
+  formData.formName = form.formName;
+  if (form.formKey !== "" && JSON.stringify(form.baseStats) !== JSON.stringify(root.baseStats)) {
+    formData.defaultAbilities = [Abilities[form.ability1]];
+    formData.baseStats = form.baseStats;
+  }
+  return formData;
 }
 
 export const noStarterFormKeys: string[] = [

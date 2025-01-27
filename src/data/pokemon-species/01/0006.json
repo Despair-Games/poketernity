@@ -17,5 +17,10 @@
   "bodyColor": 0,
   "biomes": [],
   "evolution": [],
-  "forms": []
+  "forms": [
+    { "formName": "Normal" },
+    { "formName": "Mega X", "defaultAbilities": ["TOUGH_CLAWS"], "baseStats": [78, 130, 111, 130, 85, 100] },
+    { "formName": "Mega Y", "defaultAbilities": ["DROUGHT"], "baseStats": [78, 104, 78, 159, 115, 100] },
+    { "formName": "G-Max" }
+  ]
 }
