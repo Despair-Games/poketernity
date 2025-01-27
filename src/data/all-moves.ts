@@ -572,7 +572,9 @@ export function initMoves() {
       .target(MoveTarget.USER)
       .unimplemented(),
     new SelfStatusMove(Moves.METRONOME, Type.NORMAL, -1, 10, -1, 0, 1).attr(RandomMoveAttr, invalidMetronomeMoves),
-    new StatusMove(Moves.MIRROR_MOVE, Type.FLYING, -1, 20, -1, 0, 1).attr(CopyMoveAttr, true),
+    new StatusMove(Moves.MIRROR_MOVE, Type.FLYING, -1, 20, -1, 0, 1)
+      .attr(CopyMoveAttr, true)
+      .edgeCase(), // Need to find out which moves are not copyable by Mirror Move
     new AttackMove(Moves.SELF_DESTRUCT, Type.NORMAL, MoveCategory.PHYSICAL, 200, 100, 5, -1, 0, 1)
       .attr(SacrificialAttr)
       .makesContact(false)
