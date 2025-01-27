@@ -876,13 +876,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param tintSprite - {@linkcode Phaser.GameObjects.Sprite} placed on top of the sprite to add a color tint
    * @param key - animation key to pass to {@linkcode Phaser.GameObjects.Sprite.play}
    */
-  tryPlaySprite(sprite: Phaser.GameObjects.Sprite, tintSprite: Phaser.GameObjects.Sprite | null, key: string): void {
+  playSprite(sprite: Phaser.GameObjects.Sprite, tintSprite: Phaser.GameObjects.Sprite | null, key: string): void {
     sprite.play(key);
     tintSprite?.play(key);
   }
 
   playAnim(): void {
-    this.tryPlaySprite(this.getSprite(), this.getTintSprite(), this.getBattleSpriteKey());
+    this.playSprite(this.getSprite(), this.getTintSprite(), this.getBattleSpriteKey());
   }
 
   getFieldPositionOffset(): [number, number] {
