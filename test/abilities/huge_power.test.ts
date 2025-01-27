@@ -60,7 +60,7 @@ describe("Abilities - Huge Power/Pure Power", () => {
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
-    expect(playerPokemon.getEffectiveStat).toHaveReturnedWith(playerPokemon.getStat(Stat.ATK) * 2);
+    expect(playerPokemon.getEffectiveStat).toHaveReturnedWith(playerPokemon.getStat(Stat.DEF) * 2);
   });
   // Note: Huge Power/Pure Power's interaction with Foul Play is tested in moves/foul_play.test.ts
 
