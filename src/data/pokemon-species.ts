@@ -26,7 +26,9 @@ import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { PokemonRegion } from "#enums/pokemon-regions";
 import type { Biome } from "#enums/biome";
-import { writeFile } from "fs";
+import { readFileSync, writeFile } from "fs";
+import { PokemonColors } from "#enums/pokemon-colors";
+import { PokemonShapes } from "#enums/pokemon-shapes";
 
 /**
  * Gets the {@linkcode PokemonSpecies} object associated with the {@linkcode Species} enum given
@@ -351,13 +353,17 @@ export abstract class PokemonSpeciesForm {
     const showGenderDiffs =
       this.genderDiffs && female && ![SpeciesFormKey.MEGA, SpeciesFormKey.GIGANTAMAX].find((k) => formSpriteKey === k);
 
-    const baseSpriteKey = `${showGenderDiffs ? "female__" : ""}${this.speciesId}${formSpriteKey ? `-${formSpriteKey}` : ""}`;
+    const baseSpriteKey = `${showGenderDiffs ? "female__" : ""}${this.speciesId}${
+      formSpriteKey ? `-${formSpriteKey}` : ""
+    }`;
 
     let config = variantData;
     `${back ? "back__" : ""}${baseSpriteKey}`.split("__").map((p) => (config ? (config = config[p]) : null));
     const variantSet = config as VariantSet;
 
-    return `${back ? "back__" : ""}${shiny && (!variantSet || (!variant && !variantSet[variant || 0])) ? "shiny__" : ""}${baseSpriteKey}${shiny && variantSet && variantSet[variant] === 2 ? `_${variant + 1}` : ""}`;
+    return `${back ? "back__" : ""}${
+      shiny && (!variantSet || (!variant && !variantSet[variant || 0])) ? "shiny__" : ""
+    }${baseSpriteKey}${shiny && variantSet && variantSet[variant] === 2 ? `_${variant + 1}` : ""}`;
   }
 
   getSpriteKey(female: boolean, formIndex?: number, shiny?: boolean, variant?: number): string {
@@ -467,7 +473,9 @@ export abstract class PokemonSpeciesForm {
     if (forms.length) {
       if (formIndex !== undefined && formIndex >= forms.length) {
         console.warn(
-          `Attempted accessing form with index ${formIndex} of species ${getPokemonSpecies(speciesId).getName()} with only ${forms.length || 0} forms`,
+          `Attempted accessing form with index ${formIndex} of species ${getPokemonSpecies(
+            speciesId,
+          ).getName()} with only ${forms.length || 0} forms`,
         );
         formIndex = Math.min(formIndex, forms.length - 1);
       }
@@ -1074,7 +1082,9 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
   getFormSpriteKey(formIndex?: number) {
     if (this.forms.length && formIndex !== undefined && formIndex >= this.forms.length) {
       console.warn(
-        `Attempted accessing form with index ${formIndex} of species ${this.getName()} with only ${this.forms.length || 0} forms`,
+        `Attempted accessing form with index ${formIndex} of species ${this.getName()} with only ${
+          this.forms.length || 0
+        } forms`,
       );
       formIndex = Math.min(formIndex, this.forms.length - 1);
     }
@@ -1207,7 +1217,8 @@ type speciesObj = {
   isStarterSelectable?: boolean;
   weight?: number;
   height?: number;
-  bodyColor?: number;
+  shape?: string;
+  bodyColor?: string;
   biomes?: Biome[];
   evolution?: any[];
   forms?: speciesObj[];
@@ -1215,50 +1226,59 @@ type speciesObj = {
 };
 
 export async function speciesToJSON() {
-  const generation = allSpecies.filter((sp) => sp.generation === 9);
-  const fileName = "./src/data/pokemon-species/09.json";
-  const toWrite: speciesObj[] = [];
-  generation.forEach((sp) => {
-    const spData: speciesObj = {};
-    spData.name = sp.name;
-    spData.speciesId = sp.speciesId;
-    spData.generation = sp.generation;
-    spData.types = [Type[sp.type1]];
-    if (sp.type2) {
-      spData.types.push(Type[sp.type2]);
-    }
-    spData.defaultAbilities = [Abilities[sp.ability1]];
-    if (sp.ability2 !== sp.ability1) {
-      spData.defaultAbilities.push(Abilities[sp.ability2]);
-    }
-    if (sp.abilityHidden !== Abilities.NONE) {
-      spData.hiddenAbility = Abilities[sp.abilityHidden];
-    }
-    spData.baseStats = sp.baseStats;
-    spData.baseExp = sp.baseExp;
-    spData.baseFriendship = sp.baseFriendship;
-    spData.group = SpeciesGroups[sp.group];
-    spData.weight = sp.weight;
-    spData.height = sp.height;
-    spData.genderDiffs = sp.genderDiffs;
-    if (sp.malePercent) {
-      spData.malePercentage = sp.malePercent;
-    }
-    spData.catchRate = sp.catchRate;
+  const pokeApiData = JSON.parse(
+    readFileSync("/Users/joannekim/Games/poketernity/test/data/pokeapi_species.json", "utf-8"),
+  );
+  for (let x = 1; x <= 9; x++) {
+    const generation = allSpecies.filter((sp) => sp.generation === x);
+    const fileName = "./src/data/pokemon-species/0" + x.toString() + ".json";
+    const toWrite: speciesObj[] = [];
+    generation.forEach((sp) => {
+      const spData: speciesObj = {};
+      const pokeApiSp = pokeApiData[sp.speciesId - 1];
+      spData.name = sp.name;
+      spData.speciesId = sp.speciesId;
+      spData.generation = sp.generation;
+      spData.types = [Type[sp.type1]];
+      if (sp.type2) {
+        spData.types.push(Type[sp.type2]);
+      }
+      spData.defaultAbilities = [Abilities[sp.ability1]];
+      if (sp.ability2 !== sp.ability1) {
+        spData.defaultAbilities.push(Abilities[sp.ability2]);
+      }
+      if (sp.abilityHidden !== Abilities.NONE) {
+        spData.hiddenAbility = Abilities[sp.abilityHidden];
+      }
+      spData.baseStats = sp.baseStats;
+      spData.baseExp = sp.baseExp;
+      spData.baseFriendship = sp.baseFriendship;
+      spData.group = SpeciesGroups[sp.group];
+      spData.weight = sp.weight;
+      spData.height = sp.height;
+      if (pokeApiSp) {
+        spData.bodyColor = PokemonColors[pokeApiSp["color_id"]];
+        spData.shape = PokemonShapes[pokeApiSp["shape_id"]];
+      }
+      spData.genderDiffs = sp.genderDiffs;
+      if (sp.malePercent) {
+        spData.malePercentage = sp.malePercent;
+      }
+      spData.catchRate = sp.catchRate;
 
-    spData.bodyColor = 0;
-    spData.biomes = [];
-    spData.evolution = [];
-    spData.forms = [];
+      spData.biomes = [];
+      spData.evolution = [];
+      spData.forms = [];
 
-    sp.forms.forEach((pkform) => {
-      spData.forms?.push(parseSpeciesForm(pkform, sp));
+      sp.forms.forEach((pkform) => {
+        spData.forms?.push(parseSpeciesForm(pkform, sp));
+      });
+
+      toWrite.push(spData);
     });
 
-    toWrite.push(spData);
-  });
-
-  writeFile(fileName, JSON.stringify(toWrite), {}, () => console.log("File Written"));
+    writeFile(fileName, JSON.stringify(toWrite), {}, () => console.log("File Written"));
+  }
 }
 
 function parseSpeciesForm(form: PokemonForm, root: PokemonSpecies) {
@@ -1273,6 +1293,12 @@ function parseSpeciesForm(form: PokemonForm, root: PokemonSpecies) {
       if (form.type2) {
         formData.types.push(Type[form.type2]);
       }
+    }
+    if (root.weight !== form.weight) {
+      formData.weight = form.weight;
+    }
+    if (root.height !== form.height) {
+      formData.height = form.height;
     }
   }
   return formData;
