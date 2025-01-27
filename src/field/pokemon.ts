@@ -123,6 +123,7 @@ import {
   AutotomizedTag,
   PowerTrickTag,
   SkyDropTag,
+  CritBoostStackableTag,
 } from "../data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { WeatherType } from "#enums/weather-type";
@@ -1111,6 +1112,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       } else {
         critStage.value += 2;
       }
+    }
+
+    const critBoostStackableTag = source.getTag(CritBoostStackableTag);
+    if (critBoostStackableTag) {
+      critStage.value += critBoostStackableTag.stackCount;
     }
 
     console.log(`crit stage: +${critStage.value}`);
