@@ -27,11 +27,11 @@ export class PresentPowerAttr extends VariablePowerAttr {
     const powerSeed = user.randSeedInt(isFirstHit ? 100 : 80);
     if (powerSeed < 40) {
       power.value = 40;
-    } else if (40 <= powerSeed && powerSeed < 70) {
+    } else if (powerSeed < 70) {
       power.value = 80;
-    } else if (70 <= powerSeed && powerSeed < 80) {
+    } else if (powerSeed < 80) {
       power.value = 120;
-    } else if (80 <= powerSeed && powerSeed <= 100) {
+    } else if (powerSeed < 100) {
       // If this move is multi-hit, disable all other hits
       user.turnData.hitCount = 1;
       user.turnData.hitsLeft = 1;
