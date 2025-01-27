@@ -3278,22 +3278,23 @@ export function initMoves() {
       .attr(StatusEffectAttr, StatusEffect.PARALYSIS),
     new AttackMove(Moves.G_MAX_GOLD_RUSH, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // Confuses all opps, gives 100x user level as money
+      .attr(ConfuseAttr)
+      .attr(MoneyAttr), // should gives 100x user level (20x as effective as payday) as money. Rebalance later
     new AttackMove(Moves.G_MAX_CHI_STRIKE, Type.FIGHTING, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .unimplemented(),
     new AttackMove(Moves.G_MAX_TERROR, Type.GHOST, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // applies trapped to all opps
+      .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED),
     new AttackMove(Moves.G_MAX_RESONANCE, Type.ICE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .attr(AddArenaTagAttr, ArenaTagType.AURORA_VEIL, { turnCount: 5, selfSideTarget: true }),
     new AttackMove(Moves.G_MAX_CUDDLE, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // tries to apply attract to all opps
+      .attr(AddBattlerTagAttr, BattlerTagType.INFATUATED),
     new AttackMove(Moves.G_MAX_REPLENISH, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // 50% of replenishing user and ally's berries (like recycle)
+      .partial(), // 50% of replenishing user and ally's berries (like recycle)
     new AttackMove(Moves.G_MAX_MALODOR, Type.POISON, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .attr(StatusEffectAttr, StatusEffect.POISON),
@@ -3312,10 +3313,10 @@ export function initMoves() {
       .attr(MultiStatusEffectAttr, [StatusEffect.POISON, StatusEffect.PARALYSIS]),
     new AttackMove(Moves.G_MAX_FINALE, Type.FAIRY, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // heal user and ally by 1/6
+      .attr(HealAttr, 1 / 6),
     new AttackMove(Moves.G_MAX_DEPLETION, Type.DRAGON, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // needs to spite both opponents
+      .attr(AttackReducePpMoveAttr, 2),
     new AttackMove(Moves.G_MAX_GRAVITAS, Type.PSYCHIC, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, { turnCount: 5 }),
@@ -3327,22 +3328,23 @@ export function initMoves() {
       .attr(TrapAttr, BattlerTagType.G_MAX_SAND_TOMB),
     new AttackMove(Moves.G_MAX_SNOOZE, Type.DARK, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // 50% of applying drowsy
+      .attr(AddBattlerTagAttr, BattlerTagType.DROWSY, false, { effectChanceOverride: 50 })
+      .edgeCase(), // The 50% chance incorrectly gets overridden by Shield Dust, Sheer Force, etc.
     new AttackMove(Moves.G_MAX_TARTNESS, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .attr(StatStageChangeAttr, [Stat.EVA], -1),
     new AttackMove(Moves.G_MAX_SWEETNESS, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // heals user and ally of status condition
+      .attr(HealStatusEffectAttr, true, getNonVolatileStatusEffects()),
     new AttackMove(Moves.G_MAX_SMITE, Type.FAIRY, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // applies confuse to all opps
+      .attr(ConfuseAttr),
     new AttackMove(Moves.G_MAX_STEELSURGE, Type.STEEL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .attr(AddArenaTrapTagAttr, ArenaTagType.SHARP_STEEL),
     new AttackMove(Moves.G_MAX_MELTDOWN, Type.STEEL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(), // applies torment to all opps
+      .attr(AddBattlerTagAttr, BattlerTagType.TORMENT),
     new AttackMove(Moves.G_MAX_FOAM_BURST, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .attr(StatStageChangeAttr, [Stat.SPD], -2),

@@ -109,11 +109,7 @@ describe("Abilities - Unaware", () => {
     expect(punishmentMove.calculateBattlePower).toHaveLastReturnedWith(180);
   });
 
-  /**
-   * Body Press currently ignores all Abilities in its stat calculation.
-   * @todo fix this interaction to pass this test.
-   */
-  it.todo("should cause the opponent's Body Press to ignore the opponent's Defense stages", async () => {
+  it("should cause the opponent's Body Press to ignore the opponent's Defense stages", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const enemyPokemon = game.field.getEnemyPokemon();
@@ -158,16 +154,12 @@ describe("Abilities - Unaware", () => {
     expect(enemyPokemon.isFullHp()).toBe(false);
 
     // Check that each Pokemon's most recently computed stat is either their boosted Atk or their boosted Def
-    try {
-      expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(expectedPlayerAtk);
-    } catch {
-      expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(expectedPlayerDef);
-    }
-    try {
-      expect(enemyPokemon.getEffectiveStat).toHaveLastReturnedWith(expectedEnemyAtk);
-    } catch {
-      expect(enemyPokemon.getEffectiveStat).toHaveLastReturnedWith(expectedEnemyDef);
-    }
+    expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(
+      expect.toBeOneOf([expectedPlayerAtk, expectedPlayerDef]),
+    );
+    expect(enemyPokemon.getEffectiveStat).toHaveLastReturnedWith(
+      expect.toBeOneOf([expectedEnemyAtk, expectedEnemyDef]),
+    );
   });
 
   it("should not ignore an opponent's physical damage reduction from a Burn status", async () => {
