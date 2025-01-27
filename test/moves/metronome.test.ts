@@ -1,7 +1,6 @@
 import { allMoves } from "#app/data/all-moves";
 import { RechargingTag, SemiInvulnerableTag } from "#app/data/battler-tags";
 import { RandomMoveAttr } from "#app/data/move-attrs/random-move-attr";
-import { CommandPhase } from "#app/phases/command-phase";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
@@ -86,7 +85,6 @@ describe("Moves - Metronome", () => {
     vi.spyOn(randomMoveAttr, "getMoveOverride").mockReturnValue(Moves.AROMATIC_MIST);
 
     game.move.select(Moves.METRONOME, 0);
-    await game.phaseInterceptor.to(CommandPhase);
     game.move.select(Moves.SPLASH, 1);
     await game.toNextTurn();
 

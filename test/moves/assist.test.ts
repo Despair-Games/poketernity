@@ -79,7 +79,6 @@ describe("Moves - Assist", () => {
     // Player uses Sketch to copy Swords Dance, Player_2 stalls a turn. Player will attempt Assist and should have no usable moves
     await game.toNextTurn();
     game.move.select(Moves.ASSIST, 0);
-    await game.phaseInterceptor.to("CommandPhase");
     game.move.select(Moves.PROTECT, 1);
     await game.toNextTurn();
 
@@ -93,7 +92,6 @@ describe("Moves - Assist", () => {
     const [feebas] = game.scene.getPlayerField();
 
     game.move.select(Moves.ASSIST, 0);
-    await game.phaseInterceptor.to("CommandPhase");
     game.move.select(Moves.ASSIST, 1);
     await game.toNextTurn();
 
