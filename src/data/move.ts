@@ -50,6 +50,9 @@ import { StatusEffect } from "#enums/status-effect";
 import { HealStatusEffectAttr } from "./move-attrs/heal-status-effect-attr";
 import { ChargeAnim } from "#enums/charge-anim";
 import { allMoves } from "#app/data/all-moves";
+import { PhotonGeyserCategoryAttr } from "./move-attrs/photon-geyser-category-attr";
+import { GMaxPowerAttr } from "./move-attrs/gmax-power-attr";
+import type { Species } from "#enums/species";
 
 export abstract class Move implements Localizable {
   public id: Moves;
@@ -572,12 +575,17 @@ export abstract class Move implements Localizable {
   /**
    * Sets the {@linkcode MoveFlags.G_MAX_MOVE} for the move
    * and {@linkcode moveTarget} to NEAR_ENEMY (g-max moves cannot target allies)
+   * and make the move not make contact
+   * and have the {@linkcode PhotonGeyserCategoryAttr} to use the higher of the attacking stat
+   * and have the move use the {@linkcode GMaxPowerAttr}
    * @returns The {@linkcode Move} that called this function
    */
-  gMaxMove(): this {
+  gMaxMove(signatureSpecies: Species): this {
     this.setFlag(MoveFlags.G_MAX_MOVE, true);
     this.moveTarget = MoveTarget.NEAR_ENEMY;
     this.makesContact(false);
+    this.attr(PhotonGeyserCategoryAttr);
+    this.attr(GMaxPowerAttr, signatureSpecies);
     return this;
   }
 

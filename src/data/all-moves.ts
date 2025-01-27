@@ -242,7 +242,6 @@ import { crashDamageFunc, frenzyMissFunc } from "./move-utils";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { NoDamageAgainstFlyingAttr } from "./move-attrs/no-damage-against-flying-attr";
 import { SkyDropAttr } from "./move-attrs/sky-drop-attr";
-import { GMaxPowerAttr } from "./move-attrs/gmax-power-attr";
 
 // Initialized as being empty; it will be filled during `initMoves()`
 export const allMoves: { [moveId in Moves]: Move } = {} as any;
@@ -3268,111 +3267,110 @@ export function initMoves() {
         StatusEffect.BURN,
         StatusEffect.SLEEP,
       ]),
-    new AttackMove(Moves.G_MAX_WILDFIRE, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
-      .attr(AddArenaTagAttr, ArenaTagType.G_MAX_WILDFIRE)
-      .attr(GMaxPowerAttr, Species.CHARIZARD),
-    new AttackMove(Moves.G_MAX_BEFUDDLE, Type.BUG, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_WILDFIRE, Type.FIRE, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.CHARIZARD)
+      .attr(AddArenaTagAttr, ArenaTagType.G_MAX_WILDFIRE),
+    new AttackMove(Moves.G_MAX_BEFUDDLE, Type.BUG, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.BUTTERFREE)
       .attr(MultiStatusEffectAttr, [StatusEffect.POISON, StatusEffect.PARALYSIS, StatusEffect.SLEEP]),
-    new AttackMove(Moves.G_MAX_VOLT_CRASH, Type.ELECTRIC, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_VOLT_CRASH, Type.ELECTRIC, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.PIKACHU)
       .attr(StatusEffectAttr, StatusEffect.PARALYSIS),
-    new AttackMove(Moves.G_MAX_GOLD_RUSH, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_GOLD_RUSH, Type.NORMAL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.MEOWTH)
       .attr(ConfuseAttr)
       .attr(MoneyAttr), // should gives 100x user level (20x as effective as payday) as money. Rebalance later
-    new AttackMove(Moves.G_MAX_CHI_STRIKE, Type.FIGHTING, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_CHI_STRIKE, Type.FIGHTING, MoveCategory.PHYSICAL, 60, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.MACHAMP)
       .attr(AddBattlerTagAttr, BattlerTagType.CRIT_BOOST_STACKABLE, true),
-    new AttackMove(Moves.G_MAX_TERROR, Type.GHOST, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_TERROR, Type.GHOST, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.GENGAR)
       .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED),
-    new AttackMove(Moves.G_MAX_RESONANCE, Type.ICE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_RESONANCE, Type.ICE, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.LAPRAS)
       .attr(AddArenaTagAttr, ArenaTagType.AURORA_VEIL, { turnCount: 5, selfSideTarget: true }),
-    new AttackMove(Moves.G_MAX_CUDDLE, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_CUDDLE, Type.NORMAL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.EEVEE)
       .attr(AddBattlerTagAttr, BattlerTagType.INFATUATED),
-    new AttackMove(Moves.G_MAX_REPLENISH, Type.NORMAL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_REPLENISH, Type.NORMAL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.SNORLAX)
       .partial(), // 50% of replenishing user and ally's berries (like recycle)
-    new AttackMove(Moves.G_MAX_MALODOR, Type.POISON, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_MALODOR, Type.POISON, MoveCategory.PHYSICAL, 60, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.GARBODOR)
       .attr(StatusEffectAttr, StatusEffect.POISON),
-    new AttackMove(Moves.G_MAX_STONESURGE, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_STONESURGE, Type.WATER, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.DREDNAW)
       .attr(AddArenaTrapTagAttr, ArenaTagType.STEALTH_ROCK),
-    new AttackMove(Moves.G_MAX_WIND_RAGE, Type.FLYING, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_WIND_RAGE, Type.FLYING, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.CORVIKNIGHT)
       .attr(ClearWeatherAttr, WeatherType.FOG)
       .attr(ClearTerrainAttr)
       .attr(RemoveScreensAttr, false)
       .attr(RemoveArenaTrapAttr, true)
       .attr(RemoveArenaTagsAttr, [ArenaTagType.SAFEGUARD, ArenaTagType.MIST], ArenaTagRelativeSide.TARGET),
-    new AttackMove(Moves.G_MAX_STUN_SHOCK, Type.ELECTRIC, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_STUN_SHOCK, Type.ELECTRIC, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.TOXTRICITY)
       .attr(MultiStatusEffectAttr, [StatusEffect.POISON, StatusEffect.PARALYSIS]),
-    new AttackMove(Moves.G_MAX_FINALE, Type.FAIRY, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_FINALE, Type.FAIRY, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.ALCREMIE)
       .attr(HealAttr, 1 / 6),
-    new AttackMove(Moves.G_MAX_DEPLETION, Type.DRAGON, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_DEPLETION, Type.DRAGON, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.DURALUDON)
       .attr(AttackReducePpMoveAttr, 2),
-    new AttackMove(Moves.G_MAX_GRAVITAS, Type.PSYCHIC, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_GRAVITAS, Type.PSYCHIC, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.ORBEETLE)
       .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, { turnCount: 5 }),
-    new AttackMove(Moves.G_MAX_VOLCALITH, Type.ROCK, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_VOLCALITH, Type.ROCK, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.COALOSSAL)
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_VOLCALITH),
-    new AttackMove(Moves.G_MAX_SANDBLAST, Type.GROUND, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_SANDBLAST, Type.GROUND, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.SANDACONDA)
       .attr(TrapAttr, BattlerTagType.G_MAX_SAND_TOMB),
-    new AttackMove(Moves.G_MAX_SNOOZE, Type.DARK, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_SNOOZE, Type.DARK, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.GRIMMSNARL)
       .attr(AddBattlerTagAttr, BattlerTagType.DROWSY, false, { effectChanceOverride: 50 })
       .edgeCase(), // The 50% chance incorrectly gets overridden by Shield Dust, Sheer Force, etc.
-    new AttackMove(Moves.G_MAX_TARTNESS, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_TARTNESS, Type.GRASS, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.FLAPPLE)
       .attr(StatStageChangeAttr, [Stat.EVA], -1),
-    new AttackMove(Moves.G_MAX_SWEETNESS, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_SWEETNESS, Type.GRASS, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.APPLETUN)
       .attr(HealStatusEffectAttr, true, getNonVolatileStatusEffects()),
-    new AttackMove(Moves.G_MAX_SMITE, Type.FAIRY, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_SMITE, Type.FAIRY, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.HATTERENE)
       .attr(ConfuseAttr),
-    new AttackMove(Moves.G_MAX_STEELSURGE, Type.STEEL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_STEELSURGE, Type.STEEL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.COPPERAJAH)
       .attr(AddArenaTrapTagAttr, ArenaTagType.SHARP_STEEL),
-    new AttackMove(Moves.G_MAX_MELTDOWN, Type.STEEL, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_MELTDOWN, Type.STEEL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.MELMETAL)
       .attr(AddBattlerTagAttr, BattlerTagType.TORMENT),
-    new AttackMove(Moves.G_MAX_FOAM_BURST, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_FOAM_BURST, Type.WATER, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.KINGLER)
       .attr(StatStageChangeAttr, [Stat.SPD], -2),
-    new AttackMove(Moves.G_MAX_CENTIFERNO, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_CENTIFERNO, Type.FIRE, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.CENTISKORCH)
       .attr(TrapAttr, BattlerTagType.G_MAX_FIRE_SPIN),
-    new AttackMove(Moves.G_MAX_VINE_LASH, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_VINE_LASH, Type.GRASS, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.VENUSAUR)
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_VINE_LASH),
-    new AttackMove(Moves.G_MAX_CANNONADE, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_CANNONADE, Type.WATER, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.BLASTOISE)
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_CANNONADE),
-    new AttackMove(Moves.G_MAX_DRUM_SOLO, Type.GRASS, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_DRUM_SOLO, Type.GRASS, MoveCategory.PHYSICAL, 100, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.RILLABOOM)
       .ignoresAbilities(),
-    new AttackMove(Moves.G_MAX_FIREBALL, Type.FIRE, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_FIREBALL, Type.FIRE, MoveCategory.PHYSICAL, 100, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.CINDERACE)
       .ignoresAbilities(),
-    new AttackMove(Moves.G_MAX_HYDROSNIPE, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_HYDROSNIPE, Type.WATER, MoveCategory.SPECIAL, 100, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.INTELEON)
       .ignoresAbilities(),
-    new AttackMove(Moves.G_MAX_ONE_BLOW, Type.DARK, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_ONE_BLOW, Type.DARK, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.URSHIFU)
       .ignoresProtect(),
-    new AttackMove(Moves.G_MAX_RAPID_FLOW, Type.WATER, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
-      .gMaxMove()
+    new AttackMove(Moves.G_MAX_RAPID_FLOW, Type.WATER, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
+      .gMaxMove(Species.URSHIFU)
       .ignoresProtect(),
     new AttackMove(Moves.TERA_BLAST, Type.NORMAL, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 9)
       .attr(TeraMoveCategoryAttr)
