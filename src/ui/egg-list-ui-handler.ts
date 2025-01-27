@@ -37,15 +37,15 @@ export default class EggListUiHandler extends MessageUiHandler {
   setup() {
     const ui = this.getUi();
 
-    this.eggListContainer = globalScene.add.container(0, -globalScene.game.canvas.height / 6);
+    this.eggListContainer = globalScene.add.container(0, -globalScene.scaledCanvas.height);
     this.eggListContainer.setVisible(false);
     ui.add(this.eggListContainer);
 
     const bgColor = globalScene.add.rectangle(
       0,
       0,
-      globalScene.game.canvas.width / 6,
-      globalScene.game.canvas.height / 6,
+      globalScene.scaledCanvas.width,
+      globalScene.scaledCanvas.height,
       0x006860,
     );
     bgColor.setOrigin(0, 0);
@@ -96,7 +96,7 @@ export default class EggListUiHandler extends MessageUiHandler {
       .withUpdateGridCallBack(() => this.updateEggIcons())
       .withUpdateSingleElementCallback((i: number) => this.setEggDetails(i));
 
-    this.eggListMessageBoxContainer = globalScene.add.container(0, globalScene.game.canvas.height / 6);
+    this.eggListMessageBoxContainer = globalScene.add.container(0, globalScene.scaledCanvas.height);
     this.eggListMessageBoxContainer.setVisible(false);
     this.eggListContainer.add(this.eggListMessageBoxContainer);
 

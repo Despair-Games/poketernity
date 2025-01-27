@@ -75,15 +75,13 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
     ui.bgmBar = this.bgmBar;
 
-    const { width, height } = globalScene.scaledCanvas;
-
     // Background overlay that sits below everything in the menu
     this.menuOverlay = new Phaser.GameObjects.Rectangle(
       globalScene,
-      -width - 1,
-      -height - 1,
-      width + 2,
-      height + 2,
+      -globalScene.scaledCanvas.width - 1,
+      -globalScene.scaledCanvas.height - 1,
+      globalScene.scaledCanvas.width + 2,
+      globalScene.scaledCanvas.height + 2,
       0xffffff,
       0.3,
     );
@@ -91,7 +89,10 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     this.menuOverlay.setOrigin(0, 0);
     this.optionSelectContainer.addAt(this.menuOverlay, 0);
 
-    this.menuContainer = globalScene.add.container(2 - width, 2 - height);
+    this.menuContainer = globalScene.add.container(
+      2 - globalScene.scaledCanvas.width,
+      2 - globalScene.scaledCanvas.height,
+    );
     this.menuContainer.setName("menu");
     this.menuContainer.add(this.bgmBar);
 
@@ -99,7 +100,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     this.menuMessageBoxContainer.setName("menu-message-box");
     this.menuMessageBoxContainer.setVisible(false);
 
-    this.menuMessageBox = addWindow(0, 0, width, 48);
+    this.menuMessageBox = addWindow(0, 0, globalScene.scaledCanvas.width, 48);
     this.menuMessageBox.setOrigin(0, 0);
     this.menuMessageBoxContainer.add(this.menuMessageBox);
 

@@ -20,6 +20,7 @@ export default class BallUiHandler extends UiHandler {
 
   private cursorObj: Phaser.GameObjects.Image | null;
 
+  // TODO scaling: find a way to improve this. currently needed for japanese
   private scale: number = 0.1666666667;
 
   constructor() {
@@ -41,7 +42,7 @@ export default class BallUiHandler extends UiHandler {
     const optionsText = addTextObject(0, 0, optionsTextContent, TextStyle.WINDOW, { align: "right", maxLines: 6 });
     const optionsTextWidth = optionsText.displayWidth;
     this.pokeballSelectContainer = globalScene.add.container(
-      globalScene.game.canvas.width / 6 - 51 - Math.max(64, optionsTextWidth),
+      globalScene.scaledCanvas.width - 51 - Math.max(64, optionsTextWidth),
       -49,
     );
     this.pokeballSelectContainer.setVisible(false);

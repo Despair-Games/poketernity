@@ -72,14 +72,14 @@ export default class AchvsUiHandler extends MessageUiHandler {
   setup() {
     const ui = this.getUi();
 
-    this.mainContainer = globalScene.add.container(1, -(globalScene.game.canvas.height / 6) + 1);
+    this.mainContainer = globalScene.add.container(1, -globalScene.scaledCanvas.height + 1);
 
     this.mainContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 6, globalScene.game.canvas.height / 6),
+      new Phaser.Geom.Rectangle(0, 0, globalScene.scaledCanvas.width, globalScene.scaledCanvas.height),
       Phaser.Geom.Rectangle.Contains,
     );
 
-    this.headerBg = addWindow(0, 0, globalScene.game.canvas.width / 6 - 2, 24);
+    this.headerBg = addWindow(0, 0, globalScene.scaledCanvas.width - 2, 24);
     this.headerBg.setOrigin(0, 0);
 
     this.headerText = addTextObject(0, 0, "", TextStyle.SETTINGS_LABEL);
@@ -102,8 +102,8 @@ export default class AchvsUiHandler extends MessageUiHandler {
     this.iconsBg = addWindow(
       0,
       this.headerBg.height,
-      globalScene.game.canvas.width / 6 - 2,
-      globalScene.game.canvas.height / 6 - this.headerBg.height - 68,
+      globalScene.scaledCanvas.width - 2,
+      globalScene.scaledCanvas.height - this.headerBg.height - 68,
     );
     this.iconsBg.setOrigin(0, 0);
 
@@ -160,7 +160,7 @@ export default class AchvsUiHandler extends MessageUiHandler {
     this.unlockText.setOrigin(0.5, 0.5);
     this.unlockText.setPositionRelative(unlockBg, unlockBg.width / 2, unlockBg.height / 2);
 
-    const descriptionBg = addWindow(0, titleBg.y + titleBg.height, globalScene.game.canvas.width / 6 - 2, 42);
+    const descriptionBg = addWindow(0, titleBg.y + titleBg.height, globalScene.scaledCanvas.width - 2, 42);
     descriptionBg.setOrigin(0, 0);
 
     const descriptionText = addTextObject(0, 0, "", TextStyle.WINDOW, { maxLines: 2 });

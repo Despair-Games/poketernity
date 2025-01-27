@@ -117,7 +117,7 @@ export default class NavigationMenu extends Phaser.GameObjects.Container {
    */
   setup() {
     const navigationManager = NavigationManager.getInstance();
-    const headerBg = addWindow(0, 0, globalScene.game.canvas.width / 6 - 2, 24);
+    const headerBg = addWindow(0, 0, globalScene.scaledCanvas.width - 2, 24);
     headerBg.setOrigin(0, 0);
     this.add(headerBg);
     this.width = headerBg.width;
@@ -136,15 +136,15 @@ export default class NavigationMenu extends Phaser.GameObjects.Container {
     this.navigationIcons["BUTTON_CYCLE_SHINY"] = iconNextTab;
 
     let relative: Phaser.GameObjects.Sprite | Phaser.GameObjects.Text = iconPreviousTab;
-    let relativeWidth: number = iconPreviousTab.width * 6;
+    let relativeWidth: number = iconPreviousTab.displayWidth;
     for (const label of navigationManager.labels) {
       const labelText = addTextObject(0, 0, label, TextStyle.SETTINGS_LABEL);
       labelText.setOrigin(0, 0);
-      labelText.setPositionRelative(relative, 6 + relativeWidth / 6, 0);
+      labelText.setPositionRelative(relative, 6 + relativeWidth, 0);
       this.add(labelText);
       this.headerTitles.push(labelText);
       relative = labelText;
-      relativeWidth = labelText.width;
+      relativeWidth = labelText.displayWidth;
     }
 
     this.add(iconPreviousTab);

@@ -35,6 +35,7 @@ import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
 import { RunDisplayMode } from "#enums/run-display-mode";
+import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 
 /**
  * RunInfoUiMode indicates possible overlays of RunInfoUiHandler.
@@ -76,7 +77,7 @@ export default class RunInfoUiHandler extends UiHandler {
   }
 
   override async setup() {
-    this.runContainer = globalScene.add.container(1, -(globalScene.game.canvas.height / 6) + 1);
+    this.runContainer = globalScene.add.container(1, -globalScene.scaledCanvas.height + 1);
     // The import of the modifiersModule is loaded here to sidestep async/await issues.
     this.modifiersModule = Modifier;
     this.runContainer.setVisible(false);
@@ -97,15 +98,15 @@ export default class RunInfoUiHandler extends UiHandler {
   override show(args: any[]): boolean {
     super.show(args);
 
-    const gameStatsBg = globalScene.add.rectangle(
-      0,
-      0,
-      globalScene.game.canvas.width,
-      globalScene.game.canvas.height,
+    const runInfoBg = globalScene.add.rectangle(
+      -1,
+      -1,
+      globalScene.scaledCanvas.width,
+      globalScene.scaledCanvas.height,
       0x006860,
     );
-    gameStatsBg.setOrigin(0, 0);
-    this.runContainer.add(gameStatsBg);
+    runInfoBg.setOrigin(0, 0);
+    this.runContainer.add(runInfoBg);
 
     const run = args[0];
     this.runDisplayMode = args[1];
@@ -122,7 +123,7 @@ export default class RunInfoUiHandler extends UiHandler {
     // Creates Header and adds to this.runContainer
     this.addHeader();
 
-    this.statsBgWidth = (globalScene.game.canvas.width / 6 - 2) / 3;
+    this.statsBgWidth = (globalScene.scaledCanvas.width - 2) / 3;
 
     // Creates Run Result Container
     this.runResultContainer = globalScene.add.container(0, 24);
@@ -149,7 +150,7 @@ export default class RunInfoUiHandler extends UiHandler {
     this.showParty(true);
 
     this.runContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 6, globalScene.game.canvas.height / 6),
+      new Phaser.Geom.Rectangle(0, 0, globalScene.scaledCanvas.width, globalScene.scaledCanvas.height),
       Phaser.Geom.Rectangle.Contains,
     );
     this.getUi().bringToTop(this.runContainer);
@@ -176,7 +177,7 @@ export default class RunInfoUiHandler extends UiHandler {
    * It does not check if the run has any PokemonHeldItemModifiers though.
    */
   private addHeader() {
-    const headerBg = addWindow(0, 0, globalScene.game.canvas.width / 6 - 2, 24);
+    const headerBg = addWindow(0, 0, globalScene.scaledCanvas.width - 2, 24);
     headerBg.setOrigin(0, 0);
     this.runContainer.add(headerBg);
     if (this.runInfo.modifiers.length !== 0) {
@@ -739,7 +740,7 @@ export default class RunInfoUiHandler extends UiHandler {
   private parsePartyInfo(): void {
     const party = this.runInfo.party;
     const currentLanguage = i18next.resolvedLanguage ?? "en";
-    const windowHeight = (globalScene.game.canvas.height / 6 - 23) / 6;
+    const windowHeight = (globalScene.scaledCanvas.height - 23) / PLAYER_PARTY_MAX_SIZE;
 
     party.forEach((p: PokemonData, i: number) => {
       const pokemonInfoWindow = new RoundRectangle(globalScene, 0, 14, this.statsBgWidth * 2 + 10, windowHeight - 2, 3);
@@ -987,8 +988,8 @@ export default class RunInfoUiHandler extends UiHandler {
     endCard.setOrigin(0);
     endCard.setScale(0.5);
     const text = addTextObject(
-      globalScene.game.canvas.width / 12,
-      globalScene.game.canvas.height / 6 - 16,
+      globalScene.scaledCanvas.width / 2,
+      globalScene.scaledCanvas.height - 16,
       i18next.t("battle:congratulations"),
       TextStyle.SUMMARY,
       { fontSize: "128px" },
@@ -1017,6 +1018,7 @@ export default class RunInfoUiHandler extends UiHandler {
     const endCardCoords = endCard.getBottomCenter();
     const overlayColor = isFemale ? "red" : "blue";
     const hallofFameBg = globalScene.add.image(0, 0, "hall_of_fame_" + overlayColor);
+    // TODO scaling why this position and is the width/height correct?
     hallofFameBg.setPosition(159, 89);
     hallofFameBg.setSize(globalScene.game.canvas.width, globalScene.game.canvas.height + 10);
     hallofFameBg.setAlpha(0.8);

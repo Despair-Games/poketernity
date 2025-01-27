@@ -66,7 +66,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
   private buildExternalPartyContainer() {
     this.externalPartyContainer = globalScene.add.container(0, 0);
     this.externalPartyContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 12, globalScene.game.canvas.height / 12),
+      new Phaser.Geom.Rectangle(0, 0, globalScene.scaledCanvas.width / 2, globalScene.scaledCanvas.height / 2),
       Phaser.Geom.Rectangle.Contains,
     );
     this.externalPartyTitle = addTextObject(0, 4, "", TextStyle.SETTINGS_LABEL);
@@ -231,13 +231,13 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
             },
           });
         }
-        const { ui, scaledCanvas } = globalScene;
-        ui.setOverlayMode(UiMode.OPTION_SELECT, {
+        globalScene.ui.setOverlayMode(UiMode.OPTION_SELECT, {
           options: options,
           delay: 1000,
-          xOffset: scaledCanvas.width,
-          yOffset: scaledCanvas.height - this.usernameInfoImage.displayHeight - 16 * dataKeys.length - 22,
+          xOffset: globalScene.scaledCanvas.width,
+          yOffset: globalScene.scaledCanvas.height - this.usernameInfoImage.displayHeight - 16 * dataKeys.length - 22,
         });
+        // TODO scaling is that full size needed?
         this.infoContainer.setInteractive(
           new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width, globalScene.game.canvas.height),
           Phaser.Geom.Rectangle.Contains,

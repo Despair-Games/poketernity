@@ -50,6 +50,7 @@ export default abstract class AbstractOptionSelectUiHandler<T extends OptionSele
 
   protected scrollCursor: number = 0;
 
+  // TODO scaling: find a way to improve this. currently needed for languages with different text size like japanese
   protected scale: number = 0.1666666667;
 
   constructor(mode: UiMode = UiMode.OPTION_SELECT) {
@@ -76,7 +77,8 @@ export default abstract class AbstractOptionSelectUiHandler<T extends OptionSele
     this.optionSelectBg.setOrigin(1, 1);
     this.optionSelectContainer.add(this.optionSelectBg);
 
-    this.optionSelectText = addBBCodeTextObject(0, 0, "", DEFAULT_TEXT_STYLE, { lineSpacing: this.scale * 72 });
+    this.optionSelectText = addBBCodeTextObject(0, 0, "", DEFAULT_TEXT_STYLE);
+    this.optionSelectText.setLineSpacing(this.scale * 72);
     this.optionSelectText.setOrigin(0, 0);
     this.optionSelectText.setName("text-option-select");
     this.optionSelectContainer.add(this.optionSelectText);
@@ -404,9 +406,9 @@ export default abstract class AbstractOptionSelectUiHandler<T extends OptionSele
     if (!this.cursorObj) {
       this.cursorObj = globalScene.add.image(0, 0, "cursor");
       this.optionSelectContainer.add(this.cursorObj);
-      this.cursorObj.setScale(this.scale * 6);
     }
 
+    this.cursorObj.setScale(this.scale * 6);
     this.cursorObj.setPositionRelative(
       this.optionSelectBg,
       10,

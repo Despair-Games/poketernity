@@ -950,7 +950,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
 
 export class PlayerBattleInfo extends BattleInfo {
   constructor() {
-    super(Math.floor(globalScene.game.canvas.width / 6) - 10, -72, true);
+    super(Math.floor(globalScene.scaledCanvas.width) - 10, -72, true);
   }
 }
 

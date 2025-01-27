@@ -235,24 +235,24 @@ export default class GameStatsUiHandler extends UiHandler {
   setup() {
     const ui = this.getUi();
 
-    this.gameStatsContainer = globalScene.add.container(1, -(globalScene.game.canvas.height / 6) + 1);
+    this.gameStatsContainer = globalScene.add.container(1, -globalScene.scaledCanvas.height + 1);
 
     this.gameStatsContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 6, globalScene.game.canvas.height / 6),
+      new Phaser.Geom.Rectangle(0, 0, globalScene.scaledCanvas.width, globalScene.scaledCanvas.height),
       Phaser.Geom.Rectangle.Contains,
     );
 
-    const headerBg = addWindow(0, 0, globalScene.game.canvas.width / 6 - 2, 24);
+    const headerBg = addWindow(0, 0, globalScene.scaledCanvas.width - 2, 24);
     headerBg.setOrigin(0, 0);
 
     const headerText = addTextObject(0, 0, i18next.t("gameStatsUiHandler:stats"), TextStyle.SETTINGS_LABEL);
     headerText.setOrigin(0, 0);
     headerText.setPositionRelative(headerBg, 8, 4);
 
-    const statsBgWidth = (globalScene.game.canvas.width / 6 - 2) / 2;
+    const statsBgWidth = (globalScene.scaledCanvas.width - 2) / 2;
     const [statsBgLeft, statsBgRight] = new Array(2).fill(null).map((_, i) => {
       const width = statsBgWidth + 2;
-      const height = Math.floor(globalScene.game.canvas.height / 6 - headerBg.height - 2);
+      const height = Math.floor(globalScene.scaledCanvas.height - headerBg.height - 2);
       const statsBg = addWindow(
         (statsBgWidth - 2) * i,
         headerBg.height,
@@ -296,7 +296,7 @@ export default class GameStatsUiHandler extends UiHandler {
     const isLegacyTheme = settings.display.uiTheme === UiTheme.LEGACY;
     this.arrowDown = globalScene.add.sprite(
       statsBgWidth,
-      globalScene.game.canvas.height / 6 - (isLegacyTheme ? 9 : 5),
+      globalScene.scaledCanvas.height - (isLegacyTheme ? 9 : 5),
       "prompt",
     );
     this.gameStatsContainer.add(this.arrowDown);

@@ -33,12 +33,12 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
 
     const ui = this.getUi();
 
-    this.titleContainer = globalScene.add.container(0, -(globalScene.game.canvas.height / 6));
+    this.titleContainer = globalScene.add.container(0, -globalScene.scaledCanvas.height);
     this.titleContainer.setName("title");
     this.titleContainer.setAlpha(0);
     ui.add(this.titleContainer);
 
-    const logo = globalScene.add.image(globalScene.game.canvas.width / 6 / 2, 8, "logo");
+    const logo = globalScene.add.image(globalScene.scaledCanvas.width / 2, 8, "logo");
     logo.setOrigin(0.5, 0);
     this.titleContainer.add(logo);
 
@@ -49,8 +49,8 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
     }
 
     this.playerCountLabel = addTextObject(
-      globalScene.game.canvas.width / 6 - 2,
-      globalScene.game.canvas.height / 6
+      globalScene.scaledCanvas.width - 2,
+      globalScene.scaledCanvas.height
         - 13
         - 576 * getTextStyleOptions(TextStyle.WINDOW, settings.display.uiTheme).scale,
       `? ${i18next.t("menu:playersOnline")}`,

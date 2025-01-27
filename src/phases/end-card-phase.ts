@@ -18,7 +18,7 @@ export class EndCardPhase extends Phase {
   public override start(): void {
     super.start();
 
-    const { field, game, ui } = globalScene;
+    const { field, ui } = globalScene;
 
     ui.getMessageHandler().bg.setVisible(false);
     ui.getMessageHandler().nameBoxContainer.setVisible(false);
@@ -33,8 +33,8 @@ export class EndCardPhase extends Phase {
     field.add(this.endCard);
 
     this.text = addTextObject(
-      game.canvas.width / 12,
-      game.canvas.height / 6 - 16,
+      globalScene.scaledCanvas.width / 2,
+      globalScene.scaledCanvas.height - 16,
       i18next.t("battle:congratulations"),
       TextStyle.SUMMARY,
       { fontSize: "128px" },

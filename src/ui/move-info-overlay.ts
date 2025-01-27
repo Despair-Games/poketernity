@@ -9,6 +9,7 @@ import { MoveCategory } from "#enums/move-category";
 import { Type } from "#enums/type";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
+import { GAME_SCALE } from "#app/ui-constants";
 
 export interface MoveInfoOverlaySettings {
   delayVisibility?: boolean; // if true, showing the overlay will only set it to active and populate the fields and the handler using this field has to manually call setVisible later.
@@ -30,7 +31,6 @@ const EFF_HEIGHT = 48;
 const EFF_WIDTH = 82;
 const DESC_HEIGHT = 48;
 const BORDER = 8;
-const GLOBAL_SCALE = 6;
 
 export default class MoveInfoOverlay extends Phaser.GameObjects.Container implements InfoToggle {
   public override active: boolean = false;
@@ -76,7 +76,7 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
       (options?.top ? EFF_HEIGHT : 0) + BORDER - 2,
       "",
       TextStyle.BATTLE_INFO,
-      { wordWrap: { width: (width - (BORDER - 2) * 2 - (options?.onSide ? EFF_WIDTH : 0)) * GLOBAL_SCALE } },
+      { wordWrap: { width: (width - (BORDER - 2) * 2 - (options?.onSide ? EFF_WIDTH : 0)) * GAME_SCALE } },
     );
     this.desc.setLineSpacing(i18next.resolvedLanguage === "ja" ? 25 : 5);
 
@@ -86,10 +86,10 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
       y: options?.y || 0,
     };
     if (maskPointOrigin.x < 0) {
-      maskPointOrigin.x += globalScene.game.canvas.width / GLOBAL_SCALE;
+      maskPointOrigin.x += globalScene.scaledCanvas.width;
     }
     if (maskPointOrigin.y < 0) {
-      maskPointOrigin.y += globalScene.game.canvas.height / GLOBAL_SCALE;
+      maskPointOrigin.y += globalScene.scaledCanvas.height;
     }
 
     const moveDescriptionTextMaskRect = globalScene.make.graphics();
@@ -232,7 +232,7 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
 
   // width of this element
   static getWidth(_scale: number): number {
-    return globalScene.game.canvas.width / GLOBAL_SCALE / 2;
+    return globalScene.scaledCanvas.width / 2;
   }
 
   // height of this element
