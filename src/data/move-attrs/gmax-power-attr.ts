@@ -10,6 +10,7 @@ import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
  * |                 | default bp | max bp | max and signature |
  * |-----------------|------------|--------|-------------------|
  * | Poison/Fighting | 60         | 90     | 100               |
+ * | Gen 8 starter   | 100        | 150    | 160               |
  * | All other types | 80         | 120    | 130               |
  * ```
  * @extends VariablePowerAttr
