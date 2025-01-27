@@ -67,7 +67,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
 
     const ui = this.getUi();
 
-    this.eggGachaContainer = globalScene.add.container(0, -globalScene.scaledCanvas.height);
+    this.eggGachaContainer = globalScene.add.container(0, -GAME_HEIGHT);
     this.eggGachaContainer.setVisible(false);
     ui.add(this.eggGachaContainer);
 
@@ -212,7 +212,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
 
     this.eggGachaOptionsContainer = globalScene.add.container();
 
-    this.eggGachaOptionsContainer = globalScene.add.container(globalScene.scaledCanvas.width, 148);
+    this.eggGachaOptionsContainer = globalScene.add.container(GAME_WIDTH, 148);
     this.eggGachaContainer.add(this.eggGachaOptionsContainer);
 
     this.eggGachaOptionSelectBg = addWindow(0, 0, 96, 16 + 576 * this.scale);
@@ -282,7 +282,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     this.eggGachaContainer.add(this.eggGachaOptionsContainer);
 
     new Array(getEnumKeys(VoucherType).length).fill(null).map((_, i) => {
-      const container = globalScene.add.container(globalScene.scaledCanvas.width - 56 * i, 0);
+      const container = globalScene.add.container(GAME_WIDTH - 56 * i, 0);
 
       const bg = addWindow(0, 0, 56, 22);
       bg.setOrigin(1, 0);

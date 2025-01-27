@@ -9,6 +9,7 @@ import { Button } from "#enums/buttons";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
+import { GAME_WIDTH } from "#app/ui-constants";
 
 /**
  * TODO: This should extend AbstractOptionSelectUiHandler
@@ -41,10 +42,7 @@ export default class BallUiHandler extends UiHandler {
     optionsTextContent += "Cancel";
     const optionsText = addTextObject(0, 0, optionsTextContent, TextStyle.WINDOW, { align: "right", maxLines: 6 });
     const optionsTextWidth = optionsText.displayWidth;
-    this.pokeballSelectContainer = globalScene.add.container(
-      globalScene.scaledCanvas.width - 51 - Math.max(64, optionsTextWidth),
-      -49,
-    );
+    this.pokeballSelectContainer = globalScene.add.container(GAME_WIDTH - 51 - Math.max(64, optionsTextWidth), -49);
     this.pokeballSelectContainer.setVisible(false);
     ui.add(this.pokeballSelectContainer);
 

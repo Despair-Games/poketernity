@@ -484,8 +484,8 @@ export default class BattleScene extends SceneBase {
 
     this.uiContainer = uiContainer;
 
-    const overlayWidth = this.scaledCanvas.width;
-    const overlayHeight = this.scaledCanvas.height - 48;
+    const overlayWidth = GAME_WIDTH;
+    const overlayHeight = GAME_HEIGHT - 48;
     this.fieldOverlay = this.add.rectangle(0, overlayHeight * -1 - 48, overlayWidth, overlayHeight, 0x424242);
     this.fieldOverlay.setName("rect-field-overlay");
     this.fieldOverlay.setOrigin(0, 0);
@@ -543,34 +543,30 @@ export default class BattleScene extends SceneBase {
     this.candyBar.setup();
     this.fieldUI.add(this.candyBar);
 
-    this.biomeWaveText = addTextObject(this.scaledCanvas.width - 2, 0, startingWave.toString(), TextStyle.BATTLE_INFO);
+    this.biomeWaveText = addTextObject(GAME_WIDTH - 2, 0, startingWave.toString(), TextStyle.BATTLE_INFO);
     this.biomeWaveText.setName("text-biome-wave");
     this.biomeWaveText.setOrigin(1, 0.5);
     this.fieldUI.add(this.biomeWaveText);
 
-    this.moneyText = addTextObject(this.scaledCanvas.width - 2, 0, "", TextStyle.MONEY);
+    this.moneyText = addTextObject(GAME_WIDTH - 2, 0, "", TextStyle.MONEY);
     this.moneyText.setName("text-money");
     this.moneyText.setOrigin(1, 0.5);
     this.fieldUI.add(this.moneyText);
 
-    this.scoreText = addTextObject(this.scaledCanvas.width - 2, 0, "", TextStyle.PARTY, { fontSize: "54px" });
+    this.scoreText = addTextObject(GAME_WIDTH - 2, 0, "", TextStyle.PARTY, { fontSize: "54px" });
     this.scoreText.setName("text-score");
     this.scoreText.setOrigin(1, 0.5);
     this.fieldUI.add(this.scoreText);
 
-    this.luckText = addTextObject(this.scaledCanvas.width - 2, 0, "", TextStyle.PARTY, { fontSize: "54px" });
+    this.luckText = addTextObject(GAME_WIDTH - 2, 0, "", TextStyle.PARTY, { fontSize: "54px" });
     this.luckText.setName("text-luck");
     this.luckText.setOrigin(1, 0.5);
     this.luckText.setVisible(false);
     this.fieldUI.add(this.luckText);
 
-    this.luckLabelText = addTextObject(
-      this.scaledCanvas.width - 2,
-      0,
-      i18next.t("common:luckIndicator"),
-      TextStyle.PARTY,
-      { fontSize: "54px" },
-    );
+    this.luckLabelText = addTextObject(GAME_WIDTH - 2, 0, i18next.t("common:luckIndicator"), TextStyle.PARTY, {
+      fontSize: "54px",
+    });
     this.luckLabelText.setName("text-luck-label");
     this.luckLabelText.setOrigin(1, 0.5);
     this.luckLabelText.setVisible(false);
@@ -587,7 +583,7 @@ export default class BattleScene extends SceneBase {
     this.spriteSparkleHandler = new PokemonSpriteSparkleHandler();
     this.spriteSparkleHandler.setup();
 
-    this.pokemonInfoContainer = new PokemonInfoContainer(this.scaledCanvas.width + 52, -this.scaledCanvas.height + 66);
+    this.pokemonInfoContainer = new PokemonInfoContainer(GAME_WIDTH + 52, -GAME_HEIGHT + 66);
     this.pokemonInfoContainer.setup();
 
     this.fieldUI.add(this.pokemonInfoContainer);
@@ -1906,7 +1902,7 @@ export default class BattleScene extends SceneBase {
     } else {
       this.luckText.setTint(0xffef5c, 0x47ff69, 0x6b6bff, 0xff6969);
     }
-    this.luckLabelText.setX(this.scaledCanvas.width - 2 - (this.luckText.displayWidth + 2));
+    this.luckLabelText.setX(GAME_WIDTH - 2 - (this.luckText.displayWidth + 2));
     this.tweens.add({
       targets: labels,
       duration: duration,
@@ -1936,9 +1932,7 @@ export default class BattleScene extends SceneBase {
     const enemyModifierCount = this.enemyModifiers.filter((m) => m.isIconVisible()).length;
     const biomeWaveTextHeight = this.biomeWaveText.getBottomLeft().y - this.biomeWaveText.getTopLeft().y;
     this.biomeWaveText.setY(
-      -this.scaledCanvas.height
-        + (enemyModifierCount ? (enemyModifierCount <= 12 ? 15 : 24) : 0)
-        + biomeWaveTextHeight / 2,
+      -GAME_HEIGHT + (enemyModifierCount ? (enemyModifierCount <= 12 ? 15 : 24) : 0) + biomeWaveTextHeight / 2,
     );
     this.moneyText.setY(this.biomeWaveText.y + 10);
     this.scoreText.setY(this.moneyText.y + 10);
@@ -1948,7 +1942,7 @@ export default class BattleScene extends SceneBase {
     const offsetY = (this.scoreText.visible ? this.scoreText : this.moneyText).y + 15;
     this.partyExpBar.setY(offsetY);
     this.candyBar.setY(offsetY + 15);
-    this.ui?.achvBar.setY(this.scaledCanvas.height + offsetY);
+    this.ui?.achvBar.setY(GAME_HEIGHT + offsetY);
   }
 
   /**

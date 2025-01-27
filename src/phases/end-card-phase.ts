@@ -5,6 +5,7 @@ import { TextStyle } from "#enums/text-style";
 import { PlayerGender } from "#enums/player-gender";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
+import { GAME_WIDTH, GAME_HEIGHT } from "#app/ui-constants";
 
 /**
  * Displays the End Card after a classic run ends in victory.
@@ -33,8 +34,8 @@ export class EndCardPhase extends Phase {
     field.add(this.endCard);
 
     this.text = addTextObject(
-      globalScene.scaledCanvas.width / 2,
-      globalScene.scaledCanvas.height - 16,
+      GAME_WIDTH / 2,
+      GAME_HEIGHT - 16,
       i18next.t("battle:congratulations"),
       TextStyle.SUMMARY,
       { fontSize: "128px" },

@@ -13,6 +13,7 @@ import i18next from "i18next";
 import { UiTheme } from "#enums/ui-theme";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 interface DisplayStat {
   label_key?: string;
@@ -235,24 +236,24 @@ export default class GameStatsUiHandler extends UiHandler {
   setup() {
     const ui = this.getUi();
 
-    this.gameStatsContainer = globalScene.add.container(1, -globalScene.scaledCanvas.height + 1);
+    this.gameStatsContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
 
     this.gameStatsContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.scaledCanvas.width, globalScene.scaledCanvas.height),
+      new Phaser.Geom.Rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT),
       Phaser.Geom.Rectangle.Contains,
     );
 
-    const headerBg = addWindow(0, 0, globalScene.scaledCanvas.width - 2, 24);
+    const headerBg = addWindow(0, 0, GAME_WIDTH - 2, 24);
     headerBg.setOrigin(0, 0);
 
     const headerText = addTextObject(0, 0, i18next.t("gameStatsUiHandler:stats"), TextStyle.SETTINGS_LABEL);
     headerText.setOrigin(0, 0);
     headerText.setPositionRelative(headerBg, 8, 4);
 
-    const statsBgWidth = (globalScene.scaledCanvas.width - 2) / 2;
+    const statsBgWidth = (GAME_WIDTH - 2) / 2;
     const [statsBgLeft, statsBgRight] = new Array(2).fill(null).map((_, i) => {
       const width = statsBgWidth + 2;
-      const height = Math.floor(globalScene.scaledCanvas.height - headerBg.height - 2);
+      const height = Math.floor(GAME_HEIGHT - headerBg.height - 2);
       const statsBg = addWindow(
         (statsBgWidth - 2) * i,
         headerBg.height,
@@ -294,11 +295,7 @@ export default class GameStatsUiHandler extends UiHandler {
 
     // arrows to show that we can scroll through the stats
     const isLegacyTheme = settings.display.uiTheme === UiTheme.LEGACY;
-    this.arrowDown = globalScene.add.sprite(
-      statsBgWidth,
-      globalScene.scaledCanvas.height - (isLegacyTheme ? 9 : 5),
-      "prompt",
-    );
+    this.arrowDown = globalScene.add.sprite(statsBgWidth, GAME_HEIGHT - (isLegacyTheme ? 9 : 5), "prompt");
     this.gameStatsContainer.add(this.arrowDown);
     this.arrowUp = globalScene.add.sprite(statsBgWidth, headerBg.height + (isLegacyTheme ? 7 : 3), "prompt");
     this.arrowUp.flipY = true;

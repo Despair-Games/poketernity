@@ -11,6 +11,7 @@ import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbc
 import type { UIOptionSelectItem } from "./interfaces/option-select-ui-item";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import { GAME_WIDTH } from "#app/ui-constants";
 
 const SCROLLBAR_PADDING = 5;
 const SCROLLBAR_WIDTH = 3;
@@ -67,7 +68,7 @@ export default abstract class AbstractOptionSelectUiHandler<T extends OptionSele
 
     this.scale = getTextStyleOptions(DEFAULT_TEXT_STYLE, settings.display.uiTheme).scale;
 
-    this.optionSelectContainer = globalScene.add.container(globalScene.scaledCanvas.width - 1, -1);
+    this.optionSelectContainer = globalScene.add.container(GAME_WIDTH - 1, -1);
     this.optionSelectContainer.setName(`option-select-${this.mode ? UiMode[this.mode] : "UNKNOWN"}`);
     this.optionSelectContainer.setVisible(false);
     ui.add(this.optionSelectContainer);
@@ -167,10 +168,10 @@ export default abstract class AbstractOptionSelectUiHandler<T extends OptionSele
     const yOffset = Math.abs(this.config?.yOffset ?? 0);
 
     // Make sure the window is not larger than the screen
-    const bgWidth = Math.min(maxWidth, globalScene.scaledCanvas.width - 2);
+    const bgWidth = Math.min(maxWidth, GAME_WIDTH - 2);
     const bgHeight = this.computeWindowHeight();
     // Make sure the window doesn't go past the left side of the screen
-    const xPosition = Math.max(bgWidth + 1, globalScene.scaledCanvas.width - 1 - xOffset);
+    const xPosition = Math.max(bgWidth + 1, GAME_WIDTH - 1 - xOffset);
 
     this.optionSelectContainer.setPosition(xPosition, -yOffset);
     this.optionSelectText.setPosition(

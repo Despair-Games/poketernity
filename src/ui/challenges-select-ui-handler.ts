@@ -13,7 +13,7 @@ import { Color, ShadowColor } from "#enums/color";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { TitlePhase } from "#app/phases/title-phase";
 import { globalScene } from "#app/global-scene";
-import { GAME_SCALE } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_SCALE, GAME_WIDTH } from "#app/ui-constants";
 
 /**
  * Handles all the UI for choosing optional challenges.
@@ -61,28 +61,21 @@ export default class GameChallengesUiHandler extends UiHandler {
 
     this.widestTextBox = 0;
 
-    this.challengesContainer = globalScene.add.container(1, -globalScene.scaledCanvas.height + 1);
+    this.challengesContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
     this.challengesContainer.setName("challenges");
 
     this.challengesContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.scaledCanvas.width, globalScene.scaledCanvas.height),
+      new Phaser.Geom.Rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT),
       Phaser.Geom.Rectangle.Contains,
     );
 
-    const bgOverlay = globalScene.add.rectangle(
-      -1,
-      -1,
-      globalScene.scaledCanvas.width,
-      globalScene.scaledCanvas.height,
-      0x424242,
-      0.8,
-    );
+    const bgOverlay = globalScene.add.rectangle(-1, -1, GAME_WIDTH, GAME_HEIGHT, 0x424242, 0.8);
     bgOverlay.setName("rect-challenge-overlay");
     bgOverlay.setOrigin(0, 0);
     this.challengesContainer.add(bgOverlay);
 
     // TODO: Change this back to /9 when adding in difficulty
-    const headerBg = addWindow(0, 0, globalScene.scaledCanvas.width, 24);
+    const headerBg = addWindow(0, 0, GAME_WIDTH, 24);
     headerBg.setName("window-header-bg");
     headerBg.setOrigin(0, 0);
 
@@ -91,21 +84,16 @@ export default class GameChallengesUiHandler extends UiHandler {
     headerText.setOrigin(0, 0);
     headerText.setPositionRelative(headerBg, 8, 4);
 
-    this.optionsWidth = globalScene.scaledCanvas.width * 0.6;
-    this.optionsBg = addWindow(
-      0,
-      headerBg.height,
-      this.optionsWidth,
-      globalScene.scaledCanvas.height - headerBg.height - 2,
-    );
+    this.optionsWidth = GAME_WIDTH * 0.6;
+    this.optionsBg = addWindow(0, headerBg.height, this.optionsWidth, GAME_HEIGHT - headerBg.height - 2);
     this.optionsBg.setName("window-options-bg");
     this.optionsBg.setOrigin(0, 0);
 
     const descriptionBg = addWindow(
       0,
       headerBg.height,
-      globalScene.scaledCanvas.width - this.optionsWidth,
-      globalScene.scaledCanvas.height - headerBg.height - 26,
+      GAME_WIDTH - this.optionsWidth,
+      GAME_HEIGHT - headerBg.height - 26,
     );
     descriptionBg.setName("window-desc-bg");
     descriptionBg.setOrigin(0, 0);

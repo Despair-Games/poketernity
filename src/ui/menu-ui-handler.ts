@@ -21,6 +21,7 @@ import type AwaitableUiHandler from "./awaitable-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { TextStyle } from "#enums/text-style";
 import { AdminMode } from "#enums/admin-mode";
+import { GAME_WIDTH, GAME_HEIGHT } from "#app/ui-constants";
 
 enum MenuOptions {
   GAME_SETTINGS,
@@ -78,10 +79,10 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     // Background overlay that sits below everything in the menu
     this.menuOverlay = new Phaser.GameObjects.Rectangle(
       globalScene,
-      -globalScene.scaledCanvas.width - 1,
-      -globalScene.scaledCanvas.height - 1,
-      globalScene.scaledCanvas.width + 2,
-      globalScene.scaledCanvas.height + 2,
+      -GAME_WIDTH - 1,
+      -GAME_HEIGHT - 1,
+      GAME_WIDTH + 2,
+      GAME_HEIGHT + 2,
       0xffffff,
       0.3,
     );
@@ -89,10 +90,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     this.menuOverlay.setOrigin(0, 0);
     this.optionSelectContainer.addAt(this.menuOverlay, 0);
 
-    this.menuContainer = globalScene.add.container(
-      2 - globalScene.scaledCanvas.width,
-      2 - globalScene.scaledCanvas.height,
-    );
+    this.menuContainer = globalScene.add.container(2 - GAME_WIDTH, 2 - GAME_HEIGHT);
     this.menuContainer.setName("menu");
     this.menuContainer.add(this.bgmBar);
 
@@ -100,7 +98,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     this.menuMessageBoxContainer.setName("menu-message-box");
     this.menuMessageBoxContainer.setVisible(false);
 
-    this.menuMessageBox = addWindow(0, 0, globalScene.scaledCanvas.width, 48);
+    this.menuMessageBox = addWindow(0, 0, GAME_WIDTH, 48);
     this.menuMessageBox.setOrigin(0, 0);
     this.menuMessageBoxContainer.add(this.menuMessageBox);
 
@@ -167,13 +165,13 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
         this.initCommunityMenuOptions();
         this.initManageDataOptions();
         // Resize the message box so that it does not go over the menu
-        this.menuMessageBox.setSize(globalScene.scaledCanvas.width - w - 2, 48);
+        this.menuMessageBox.setSize(GAME_WIDTH - w - 2, 48);
       },
     };
   }
 
   override computeWindowHeight(): number {
-    return globalScene.scaledCanvas.height - 2; // always fill the screen
+    return GAME_HEIGHT - 2; // always fill the screen
   }
 
   private initManageDataOptions(): void {

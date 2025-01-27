@@ -9,7 +9,7 @@ import { MoveCategory } from "#enums/move-category";
 import { Type } from "#enums/type";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
-import { GAME_SCALE } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_SCALE, GAME_WIDTH } from "#app/ui-constants";
 
 export interface MoveInfoOverlaySettings {
   delayVisibility?: boolean; // if true, showing the overlay will only set it to active and populate the fields and the handler using this field has to manually call setVisible later.
@@ -86,10 +86,10 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
       y: options?.y || 0,
     };
     if (maskPointOrigin.x < 0) {
-      maskPointOrigin.x += globalScene.scaledCanvas.width;
+      maskPointOrigin.x += GAME_WIDTH;
     }
     if (maskPointOrigin.y < 0) {
-      maskPointOrigin.y += globalScene.scaledCanvas.height;
+      maskPointOrigin.y += GAME_HEIGHT;
     }
 
     const moveDescriptionTextMaskRect = globalScene.make.graphics();
@@ -232,7 +232,7 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
 
   // width of this element
   static getWidth(_scale: number): number {
-    return globalScene.scaledCanvas.width / 2;
+    return GAME_WIDTH / 2;
   }
 
   // height of this element

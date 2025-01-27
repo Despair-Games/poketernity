@@ -36,6 +36,7 @@ import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 /**
  * RunInfoUiMode indicates possible overlays of RunInfoUiHandler.
@@ -77,7 +78,7 @@ export default class RunInfoUiHandler extends UiHandler {
   }
 
   override async setup() {
-    this.runContainer = globalScene.add.container(1, -globalScene.scaledCanvas.height + 1);
+    this.runContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
     // The import of the modifiersModule is loaded here to sidestep async/await issues.
     this.modifiersModule = Modifier;
     this.runContainer.setVisible(false);
@@ -98,13 +99,7 @@ export default class RunInfoUiHandler extends UiHandler {
   override show(args: any[]): boolean {
     super.show(args);
 
-    const runInfoBg = globalScene.add.rectangle(
-      -1,
-      -1,
-      globalScene.scaledCanvas.width,
-      globalScene.scaledCanvas.height,
-      0x006860,
-    );
+    const runInfoBg = globalScene.add.rectangle(-1, -1, GAME_WIDTH, GAME_HEIGHT, 0x006860);
     runInfoBg.setOrigin(0, 0);
     this.runContainer.add(runInfoBg);
 
@@ -123,7 +118,7 @@ export default class RunInfoUiHandler extends UiHandler {
     // Creates Header and adds to this.runContainer
     this.addHeader();
 
-    this.statsBgWidth = (globalScene.scaledCanvas.width - 2) / 3;
+    this.statsBgWidth = (GAME_WIDTH - 2) / 3;
 
     // Creates Run Result Container
     this.runResultContainer = globalScene.add.container(0, 24);
@@ -150,7 +145,7 @@ export default class RunInfoUiHandler extends UiHandler {
     this.showParty(true);
 
     this.runContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.scaledCanvas.width, globalScene.scaledCanvas.height),
+      new Phaser.Geom.Rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT),
       Phaser.Geom.Rectangle.Contains,
     );
     this.getUi().bringToTop(this.runContainer);
@@ -177,7 +172,7 @@ export default class RunInfoUiHandler extends UiHandler {
    * It does not check if the run has any PokemonHeldItemModifiers though.
    */
   private addHeader() {
-    const headerBg = addWindow(0, 0, globalScene.scaledCanvas.width - 2, 24);
+    const headerBg = addWindow(0, 0, GAME_WIDTH - 2, 24);
     headerBg.setOrigin(0, 0);
     this.runContainer.add(headerBg);
     if (this.runInfo.modifiers.length !== 0) {
@@ -740,7 +735,7 @@ export default class RunInfoUiHandler extends UiHandler {
   private parsePartyInfo(): void {
     const party = this.runInfo.party;
     const currentLanguage = i18next.resolvedLanguage ?? "en";
-    const windowHeight = (globalScene.scaledCanvas.height - 23) / PLAYER_PARTY_MAX_SIZE;
+    const windowHeight = (GAME_HEIGHT - 23) / PLAYER_PARTY_MAX_SIZE;
 
     party.forEach((p: PokemonData, i: number) => {
       const pokemonInfoWindow = new RoundRectangle(globalScene, 0, 14, this.statsBgWidth * 2 + 10, windowHeight - 2, 3);
@@ -988,8 +983,8 @@ export default class RunInfoUiHandler extends UiHandler {
     endCard.setOrigin(0);
     endCard.setScale(0.5);
     const text = addTextObject(
-      globalScene.scaledCanvas.width / 2,
-      globalScene.scaledCanvas.height - 16,
+      GAME_WIDTH / 2,
+      GAME_HEIGHT - 16,
       i18next.t("battle:congratulations"),
       TextStyle.SUMMARY,
       { fontSize: "128px" },

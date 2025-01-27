@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { fixedNumber } from "#app/utils";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 export default class SavingIconHandler extends Phaser.GameObjects.Container {
   private icon: Phaser.GameObjects.Sprite;
@@ -8,7 +9,7 @@ export default class SavingIconHandler extends Phaser.GameObjects.Container {
   private shown: boolean;
 
   constructor() {
-    super(globalScene, globalScene.scaledCanvas.width - 4, globalScene.scaledCanvas.height - 4);
+    super(globalScene, GAME_WIDTH - 4, GAME_HEIGHT - 4);
   }
 
   setup(): void {

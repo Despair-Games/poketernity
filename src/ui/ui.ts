@@ -56,7 +56,7 @@ import MysteryEncounterUiHandler from "./mystery-encounter-ui-handler";
 import { settings } from "#app/system/settings/settings-manager";
 import FormChangeSceneHandler from "./form-change-scene-handler";
 import { UiMode } from "#enums/ui-mode";
-import { GAME_SCALE } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_SCALE, GAME_WIDTH } from "#app/ui-constants";
 
 /** All modes that are part of the settings UI. */
 export const settingsUiModes = [
@@ -127,7 +127,7 @@ export default class UI extends Phaser.GameObjects.Container {
   private overlayActive: boolean;
 
   constructor() {
-    super(globalScene, 0, globalScene.scaledCanvas.height);
+    super(globalScene, 0, GAME_HEIGHT);
 
     this.mode = UiMode.MESSAGE;
     this.modeChain = [];
@@ -183,7 +183,7 @@ export default class UI extends Phaser.GameObjects.Container {
     for (const handler of this.handlers) {
       handler.setup();
     }
-    this.overlay = globalScene.add.rectangle(0, 0, globalScene.scaledCanvas.width, globalScene.scaledCanvas.height, 0);
+    this.overlay = globalScene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0);
     this.overlay.setName("rect-ui-overlay");
     this.overlay.setOrigin(0, 0);
     globalScene.uiContainer.add(this.overlay);
@@ -408,16 +408,16 @@ export default class UI extends Phaser.GameObjects.Container {
 
       if (isTouch) {
         // If we are in the top left quadrant on mobile, move the tooltip to the top right corner
-        if (pointerX <= globalScene.scaledCanvas.width / 2 && pointerY <= globalScene.scaledCanvas.height / 2) {
-          x = globalScene.scaledCanvas.width - tooltipWidth - padding;
+        if (pointerX <= GAME_WIDTH / 2 && pointerY <= GAME_HEIGHT / 2) {
+          x = GAME_WIDTH - tooltipWidth - padding;
         }
       } else {
         // If the tooltip would go offscreen on the right, or is close to it, move to the left of the cursor
-        if (x + tooltipWidth + padding > globalScene.scaledCanvas.width) {
+        if (x + tooltipWidth + padding > GAME_WIDTH) {
           x = Math.max(padding, pointerX - tooltipWidth - padding);
         }
         // If the tooltip would go offscreen at the bottom, or is close to it, move above the cursor
-        if (y + tooltipHeight + padding > globalScene.scaledCanvas.height) {
+        if (y + tooltipHeight + padding > GAME_HEIGHT) {
           y = Math.max(padding, pointerY - tooltipHeight - padding);
         }
       }

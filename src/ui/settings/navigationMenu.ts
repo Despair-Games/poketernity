@@ -6,6 +6,7 @@ import { TextStyle } from "#enums/text-style";
 import { addWindow } from "#app/ui/ui-theme";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
+import { GAME_WIDTH } from "#app/ui-constants";
 
 const LEFT = "LEFT";
 const RIGHT = "RIGHT";
@@ -117,7 +118,7 @@ export default class NavigationMenu extends Phaser.GameObjects.Container {
    */
   setup() {
     const navigationManager = NavigationManager.getInstance();
-    const headerBg = addWindow(0, 0, globalScene.scaledCanvas.width - 2, 24);
+    const headerBg = addWindow(0, 0, GAME_WIDTH - 2, 24);
     headerBg.setOrigin(0, 0);
     this.add(headerBg);
     this.width = headerBg.width;

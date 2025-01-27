@@ -14,6 +14,7 @@ import { capitalizeFirstLetter, hasTouchscreen } from "#app/utils";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 /**
  * Abstract class for handling UI elements related to settings.
@@ -69,10 +70,10 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
   setup() {
     const ui = this.getUi();
 
-    this.settingsContainer = globalScene.add.container(1, -globalScene.scaledCanvas.height + 1);
+    this.settingsContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
     this.settingsContainer.setName(`settings-${this.title}`);
     this.settingsContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.scaledCanvas.width, globalScene.scaledCanvas.height - 20),
+      new Phaser.Geom.Rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT - 20),
       Phaser.Geom.Rectangle.Contains,
     );
 
@@ -83,18 +84,13 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     this.optionsBg = addWindow(
       0,
       this.navigationContainer.height,
-      globalScene.scaledCanvas.width - 2,
-      globalScene.scaledCanvas.height - 16 - this.navigationContainer.height - 2,
+      GAME_WIDTH - 2,
+      GAME_HEIGHT - 16 - this.navigationContainer.height - 2,
     );
     this.optionsBg.setName("window-options-bg");
     this.optionsBg.setOrigin(0, 0);
 
-    const actionsBg = addWindow(
-      0,
-      globalScene.scaledCanvas.height - this.navigationContainer.height,
-      globalScene.scaledCanvas.width - 2,
-      22,
-    );
+    const actionsBg = addWindow(0, GAME_HEIGHT - this.navigationContainer.height, GAME_WIDTH - 2, 22);
     actionsBg.setOrigin(0, 0);
 
     const iconAction = globalScene.add.sprite(0, 0, "keyboard");
@@ -208,11 +204,11 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     this.scrollBar.setTotalRows(this.uiItems.length);
 
     // Two-lines message box
-    this.messageBoxContainer = globalScene.add.container(0, globalScene.scaledCanvas.height);
+    this.messageBoxContainer = globalScene.add.container(0, GAME_HEIGHT);
     this.messageBoxContainer.setName("settings-message-box");
     this.messageBoxContainer.setVisible(false);
 
-    const settingsMessageBox = addWindow(0, -1, globalScene.scaledCanvas.width - 2, 48);
+    const settingsMessageBox = addWindow(0, -1, GAME_WIDTH - 2, 48);
     settingsMessageBox.setOrigin(0, 1);
     this.messageBoxContainer.add(settingsMessageBox);
 
@@ -406,7 +402,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     const ret = super.setCursor(cursor);
 
     if (!this.cursorObj) {
-      const cursorWidth = globalScene.scaledCanvas.width - (this.scrollBar.visible ? 16 : 10);
+      const cursorWidth = GAME_WIDTH - (this.scrollBar.visible ? 16 : 10);
       this.cursorObj = globalScene.add.nineslice(0, 0, "summary_moves_cursor", undefined, cursorWidth, 16, 1, 1, 1, 1);
       this.cursorObj.setOrigin(0, 0);
       this.optionsContainer.add(this.cursorObj);

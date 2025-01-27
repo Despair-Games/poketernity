@@ -12,6 +12,7 @@ import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 export interface InputsIcons {
   [key: string]: Phaser.GameObjects.Sprite;
@@ -95,11 +96,11 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
     const ui = this.getUi();
     this.navigationIcons = {};
 
-    this.settingsContainer = globalScene.add.container(1, -globalScene.scaledCanvas.height + 1);
+    this.settingsContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
     this.settingsContainer.setName(`settings-${this.titleSelected}`);
 
     this.settingsContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.scaledCanvas.width, globalScene.scaledCanvas.height),
+      new Phaser.Geom.Rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT),
       Phaser.Geom.Rectangle.Contains,
     );
 
@@ -108,17 +109,12 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
     this.optionsBg = addWindow(
       0,
       this.navigationContainer.height,
-      globalScene.scaledCanvas.width - 2,
-      globalScene.scaledCanvas.height - 16 - this.navigationContainer.height - 2,
+      GAME_WIDTH - 2,
+      GAME_HEIGHT - 16 - this.navigationContainer.height - 2,
     );
     this.optionsBg.setOrigin(0, 0);
 
-    this.actionsBg = addWindow(
-      0,
-      globalScene.scaledCanvas.height - this.navigationContainer.height,
-      globalScene.scaledCanvas.width - 2,
-      22,
-    );
+    this.actionsBg = addWindow(0, GAME_HEIGHT - this.navigationContainer.height, GAME_WIDTH - 2, 22);
     this.actionsBg.setOrigin(0, 0);
 
     const iconAction = globalScene.add.sprite(0, 0, "keyboard");
@@ -586,7 +582,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
 
     // Check if the cursor object exists, if not, create it.
     if (!this.cursorObj) {
-      const cursorWidth = globalScene.scaledCanvas.width - (this.scrollBar.visible ? 16 : 10);
+      const cursorWidth = GAME_WIDTH - (this.scrollBar.visible ? 16 : 10);
       this.cursorObj = globalScene.add.nineslice(0, 0, "summary_moves_cursor", undefined, cursorWidth, 16, 1, 1, 1, 1);
       this.cursorObj.setOrigin(0, 0); // Set the origin to the top-left corner.
       this.optionsContainer.add(this.cursorObj); // Add the cursor to the options container.

@@ -12,6 +12,7 @@ import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
 import JSZip from "jszip";
 import { APP_ABBREVIATION, SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#app/constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 interface BuildInteractableImageOpts {
   scale?: number;
@@ -66,7 +67,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
   private buildExternalPartyContainer() {
     this.externalPartyContainer = globalScene.add.container(0, 0);
     this.externalPartyContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.scaledCanvas.width / 2, globalScene.scaledCanvas.height / 2),
+      new Phaser.Geom.Rectangle(0, 0, GAME_WIDTH / 2, GAME_HEIGHT / 2),
       Phaser.Geom.Rectangle.Contains,
     );
     this.externalPartyTitle = addTextObject(0, 4, "", TextStyle.SETTINGS_LABEL);
@@ -234,8 +235,8 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
         globalScene.ui.setOverlayMode(UiMode.OPTION_SELECT, {
           options: options,
           delay: 1000,
-          xOffset: globalScene.scaledCanvas.width,
-          yOffset: globalScene.scaledCanvas.height - this.usernameInfoImage.displayHeight - 16 * dataKeys.length - 22,
+          xOffset: GAME_WIDTH,
+          yOffset: GAME_HEIGHT - this.usernameInfoImage.displayHeight - 16 * dataKeys.length - 22,
         });
         // TODO scaling is that full size needed?
         this.infoContainer.setInteractive(

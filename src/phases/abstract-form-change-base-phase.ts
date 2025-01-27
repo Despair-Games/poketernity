@@ -4,6 +4,7 @@ import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import type FormChangeSceneHandler from "#app/ui/form-change-scene-handler";
 import { UiMode } from "#enums/ui-mode";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 /**
  * A base phase for handling Pokemon form changes, including evolutions
@@ -63,7 +64,7 @@ export abstract class FormChangeBasePhase extends Phase {
       this.bgVideo.setVisible(false);
       this.container.add(this.bgVideo);
 
-      this.bgOverlay = add.rectangle(0, 0, globalScene.scaledCanvas.width, globalScene.scaledCanvas.height, 0x262626);
+      this.bgOverlay = add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x262626);
       this.bgOverlay.setOrigin(0, 0);
       this.bgOverlay.setAlpha(0);
       this.container.add(this.bgOverlay);
@@ -90,13 +91,7 @@ export abstract class FormChangeBasePhase extends Phase {
       this.pokemonNewFormTintSprite.setVisible(false);
       this.pokemonNewFormTintSprite.setTintFill(0xffffff);
 
-      this.overlay = add.rectangle(
-        0,
-        -globalScene.scaledCanvas.height,
-        globalScene.scaledCanvas.width,
-        globalScene.scaledCanvas.height - 48,
-        0xffffff,
-      );
+      this.overlay = add.rectangle(0, -GAME_HEIGHT, GAME_WIDTH, GAME_HEIGHT - 48, 0xffffff);
       this.overlay.setOrigin(0, 0);
       this.overlay.setAlpha(0);
       ui.add(this.overlay);
