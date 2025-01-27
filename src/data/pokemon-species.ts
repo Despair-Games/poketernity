@@ -1190,24 +1190,26 @@ export class PokemonForm extends PokemonSpeciesForm {
 }
 
 type speciesObj = {
+  name?: string;
   speciesId?: number;
   generation?: number;
-  types?: Type[];
-  defaultAbilities?: Abilities[];
-  hiddenAbility?: Abilities;
+  types?: string[];
+  defaultAbilities?: string[];
+  hiddenAbility?: string;
   baseStats?: number[];
   catchRate?: number;
   malePercentage?: number;
   baseFriendship?: number;
   baseExp?: number;
   genderDiffs?: boolean;
-  group?: SpeciesGroups;
+  group?: string;
   region?: PokemonRegion;
   isStarterSelectable?: boolean;
   weight?: number;
   height?: number;
   bodyColor?: number;
   biomes?: Biome[];
+  evolution?: any[];
   forms?: speciesObj[];
 };
 
@@ -1218,23 +1220,24 @@ export async function speciesToJSON() {
     const fileName = "./src/data/pokemon-species/01/" + speciesFile + ".json";
 
     const spData: speciesObj = {};
+    spData.name = sp.name;
     spData.speciesId = sp.speciesId;
     spData.generation = sp.generation;
-    spData.types = [sp.type1];
+    spData.types = [Type[sp.type1]];
     if (sp.type2) {
-      spData.types.push(sp.type2);
+      spData.types.push(Type[sp.type2]);
     }
-    spData.defaultAbilities = [sp.ability1];
+    spData.defaultAbilities = [Abilities[sp.ability1]];
     if (sp.ability2 !== sp.ability1) {
-      spData.defaultAbilities.push(sp.ability2);
+      spData.defaultAbilities.push(Abilities[sp.ability2]);
     }
     if (sp.abilityHidden !== Abilities.NONE) {
-      spData.hiddenAbility = sp.abilityHidden;
+      spData.hiddenAbility = Abilities[sp.abilityHidden];
     }
     spData.baseStats = sp.baseStats;
     spData.baseExp = sp.baseExp;
     spData.baseFriendship = sp.baseFriendship;
-    spData.group = sp.group;
+    spData.group = SpeciesGroups[sp.group];
     spData.weight = sp.weight;
     spData.height = sp.height;
     spData.genderDiffs = sp.genderDiffs;
@@ -1245,6 +1248,7 @@ export async function speciesToJSON() {
 
     spData.bodyColor = 0;
     spData.biomes = [];
+    spData.evolution = [];
     spData.forms = [];
 
     const dataToWrite = JSON.stringify(spData);

@@ -1,13 +1,14 @@
 {
+  "name": "Charizard",
   "speciesId": 6,
   "generation": 1,
-  "types": [9, 2],
-  "defaultAbilities": [66],
-  "hiddenAbility": 94,
+  "types": ["FIRE", "FLYING"],
+  "defaultAbilities": ["BLAZE"],
+  "hiddenAbility": "SOLAR_POWER",
   "baseStats": [78, 84, 78, 109, 85, 100],
   "baseExp": 267,
   "baseFriendship": 50,
-  "group": 0,
+  "group": "COMMON",
   "weight": 90.5,
   "height": 1.7,
   "genderDiffs": false,
@@ -15,5 +16,6 @@
   "catchRate": 45,
   "bodyColor": 0,
   "biomes": [],
+  "evolution": [],
   "forms": []
 }

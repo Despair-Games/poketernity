@@ -1,13 +1,14 @@
 {
+  "name": "Charmeleon",
   "speciesId": 5,
   "generation": 1,
-  "types": [9],
-  "defaultAbilities": [66],
-  "hiddenAbility": 94,
+  "types": ["FIRE"],
+  "defaultAbilities": ["BLAZE"],
+  "hiddenAbility": "SOLAR_POWER",
   "baseStats": [58, 64, 58, 80, 65, 80],
   "baseExp": 142,
   "baseFriendship": 50,
-  "group": 0,
+  "group": "COMMON",
   "weight": 19,
   "height": 1.1,
   "genderDiffs": false,
@@ -15,5 +16,6 @@
   "catchRate": 45,
   "bodyColor": 0,
   "biomes": [],
+  "evolution": [],
   "forms": []
 }

@@ -1,13 +1,14 @@
 {
+  "name": "Bulbasaur",
   "speciesId": 1,
   "generation": 1,
-  "types": [11, 3],
-  "defaultAbilities": [65],
-  "hiddenAbility": 34,
+  "types": ["GRASS", "POISON"],
+  "defaultAbilities": ["OVERGROW"],
+  "hiddenAbility": "CHLOROPHYLL",
   "baseStats": [45, 49, 49, 65, 65, 45],
   "baseExp": 64,
   "baseFriendship": 50,
-  "group": 0,
+  "group": "COMMON",
   "weight": 6.9,
   "height": 0.7,
   "genderDiffs": false,
@@ -15,5 +16,6 @@
   "catchRate": 45,
   "bodyColor": 0,
   "biomes": [],
+  "evolution": [],
   "forms": []
 }

@@ -1,13 +1,14 @@
 {
+  "name": "Blastoise",
   "speciesId": 9,
   "generation": 1,
-  "types": [10],
-  "defaultAbilities": [67],
-  "hiddenAbility": 44,
+  "types": ["WATER"],
+  "defaultAbilities": ["TORRENT"],
+  "hiddenAbility": "RAIN_DISH",
   "baseStats": [79, 83, 100, 85, 105, 78],
   "baseExp": 265,
   "baseFriendship": 50,
-  "group": 0,
+  "group": "COMMON",
   "weight": 85.5,
   "height": 1.6,
   "genderDiffs": false,
@@ -15,5 +16,6 @@
   "catchRate": 45,
   "bodyColor": 0,
   "biomes": [],
+  "evolution": [],
   "forms": []
 }

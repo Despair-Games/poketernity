@@ -1,13 +1,14 @@
 {
+  "name": "Squirtle",
   "speciesId": 7,
   "generation": 1,
-  "types": [10],
-  "defaultAbilities": [67],
-  "hiddenAbility": 44,
+  "types": ["WATER"],
+  "defaultAbilities": ["TORRENT"],
+  "hiddenAbility": "RAIN_DISH",
   "baseStats": [44, 48, 65, 50, 64, 43],
   "baseExp": 63,
   "baseFriendship": 50,
-  "group": 0,
+  "group": "COMMON",
   "weight": 9,
   "height": 0.5,
   "genderDiffs": false,
@@ -15,5 +16,6 @@
   "catchRate": 45,
   "bodyColor": 0,
   "biomes": [],
+  "evolution": [],
   "forms": []
 }
