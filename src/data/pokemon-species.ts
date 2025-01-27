@@ -1226,9 +1226,7 @@ type speciesObj = {
 };
 
 export async function speciesToJSON() {
-  const pokeApiData = JSON.parse(
-    readFileSync("/Users/joannekim/Games/poketernity/test/data/pokeapi_species.json", "utf-8"),
-  );
+  const pokeApiData = JSON.parse(readFileSync("put_file_path_here", "utf-8"));
   for (let x = 1; x <= 9; x++) {
     const generation = allSpecies.filter((sp) => sp.generation === x);
     const fileName = "./src/data/pokemon-species/0" + x.toString() + ".json";
