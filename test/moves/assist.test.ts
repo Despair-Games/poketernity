@@ -52,7 +52,7 @@ describe("Moves - Assist", () => {
     // Player_2 uses Sketch, copies Swords Dance, Player_1 uses Assist, uses Player_2's Sketched Swords Dance
     await game.toNextTurn();
 
-    expect(game.scene.getPlayerPokemon()!.getStatStage(Stat.ATK)).toBe(2); // Stat raised from Assist -> Swords Dance
+    expect(feebas.getStatStage(Stat.ATK)).toBe(2); // Stat raised from Assist -> Swords Dance
   });
 
   it("should fail if there are no allies", async () => {
@@ -63,7 +63,7 @@ describe("Moves - Assist", () => {
 
     game.move.select(Moves.ASSIST, 0);
     await game.toNextTurn();
-    expect(game.scene.getPlayerPokemon()!.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
+    expect(feebas.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
   });
 
   it("should fail if ally has no usable moves and user has usable moves", async () => {
@@ -84,7 +84,7 @@ describe("Moves - Assist", () => {
     game.move.select(Moves.PROTECT, 1);
     await game.toNextTurn();
 
-    expect(game.scene.getPlayerPokemon()!.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
+    expect(feebas.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
   });
 
   it("should apply secondary effects of a move", async () => {
@@ -100,6 +100,6 @@ describe("Moves - Assist", () => {
     game.move.select(Moves.ASSIST, 1);
     await game.toNextTurn();
 
-    expect(game.scene.getPlayerPokemon()!.isFullHp()).toBeFalsy(); // should receive recoil damage from Wood Hammer
+    expect(feebas.isFullHp()).toBeFalsy(); // should receive recoil damage from Wood Hammer
   });
 });
