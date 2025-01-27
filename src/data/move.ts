@@ -48,7 +48,6 @@ import { MoveCondition } from "./move-conditions";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { HealStatusEffectAttr } from "./move-attrs/heal-status-effect-attr";
-import { VariableAtkAttr } from "./move-attrs/variable-atk-attr";
 import { ChargeAnim } from "#enums/charge-anim";
 import { allMoves } from "#app/data/all-moves";
 
@@ -885,7 +884,6 @@ export class AttackMove extends Move {
     if (attackScore) {
       if (this.category === MoveCategory.PHYSICAL) {
         const atk = new NumberHolder(user.getEffectiveStat(Stat.ATK, target));
-        applyMoveAttrs(VariableAtkAttr, user, target, move, atk);
         if (atk.value > user.getEffectiveStat(Stat.SPATK, target)) {
           const statRatio = user.getEffectiveStat(Stat.SPATK, target) / atk.value;
           if (statRatio <= 0.75) {
@@ -896,7 +894,6 @@ export class AttackMove extends Move {
         }
       } else {
         const spAtk = new NumberHolder(user.getEffectiveStat(Stat.SPATK, target));
-        applyMoveAttrs(VariableAtkAttr, user, target, move, spAtk);
         if (spAtk.value > user.getEffectiveStat(Stat.ATK, target)) {
           const statRatio = user.getEffectiveStat(Stat.ATK, target) / spAtk.value;
           if (statRatio <= 0.75) {

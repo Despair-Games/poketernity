@@ -557,7 +557,7 @@ export class TrappedTag extends BattlerTag {
     const isTrapped = pokemon.getTag(TrappedTag);
     const hasSubstitute = move.hitsSubstitute(source, pokemon);
 
-    return !isTrapped && !isGhost && !hasSubstitute;
+    return !isTrapped && !isGhost && (this.sourceMove === Moves.G_MAX_TERROR || !hasSubstitute);
   }
 
   override onAdd(pokemon: Pokemon): void {
