@@ -42,6 +42,7 @@ import { Moves } from "#enums/moves";
 import i18next from "i18next";
 import { FaintPhase } from "./faint-phase";
 import { HitCheckPhase } from "./hit-check-phase";
+import { MoveFlags } from "#enums/move-flags";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 
 export class MoveEffectPhase extends HitCheckPhase {
@@ -301,8 +302,15 @@ export class MoveEffectPhase extends HitCheckPhase {
 
     const hitResult = this.applyMove(target, effectiveness);
 
-    this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, true);
-    if (!move.hitsSubstitute(user, target)) {
+    if (move.checkFlag(MoveFlags.G_MAX_MOVE, user, target)) {
+      this.applyGMaxUserEffects(user, target, firstTarget);
+    } else {
+      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, true);
+    }
+
+    if (move.checkFlag(MoveFlags.G_MAX_MOVE, user, target)) {
+      this.applyGMaxTargetEffects(user, target, hitResult, firstTarget);
+    } else if (!move.hitsSubstitute(user, target)) {
       this.applyOnTargetEffects(user, target, hitResult, firstTarget);
     }
     if (this.lastHit) {
@@ -312,6 +320,39 @@ export class MoveEffectPhase extends HitCheckPhase {
       if (user.turnData.hitCount > 1) {
         applyAbAttrs(PostDamageAbAttr, target, false, 0, user);
       }
+    }
+  }
+
+  /**
+   * G-Max Moves applying positive effects to both the user and their active ally
+   */
+  private applyGMaxUserEffects(user: Pokemon, target: Pokemon, firstTarget: boolean) {
+    this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, true);
+
+    // G-Max Gold Rush should not give money twice for double battles
+    if (this.move.getMove().id !== Moves.G_MAX_GOLD_RUSH && user.getAlly()?.isActive(true)) {
+      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user.getAlly(), target, firstTarget, true);
+    }
+  }
+
+  /**
+   * G-Max Moves apply their effects to both opponents (even if the target faints) and also
+   * ignores substitutes
+   *
+   * @todo: G-Max move edge cases like G-max Snooze
+   */
+  private applyGMaxTargetEffects(user: Pokemon, target: Pokemon, hitResult: HitResult, firstTarget: boolean) {
+    const move = this.move.getMove();
+
+    if (move.hitsSubstitute(user, target)) {
+      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, false);
+    } else {
+      this.applyOnTargetEffects(user, target, hitResult, firstTarget);
+    }
+
+    // G-Max Snooze is the only G-Max move to only apply its effect on a single target
+    if (move.id !== Moves.G_MAX_SNOOZE && target.getAlly()?.isActive(true)) {
+      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target.getAlly(), firstTarget, false);
     }
   }
 

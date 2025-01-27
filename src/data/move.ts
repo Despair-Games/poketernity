@@ -48,7 +48,6 @@ import { MoveCondition } from "./move-conditions";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { HealStatusEffectAttr } from "./move-attrs/heal-status-effect-attr";
-import { VariableAtkAttr } from "./move-attrs/variable-atk-attr";
 import { ChargeAnim } from "#enums/charge-anim";
 import { allMoves } from "#app/data/all-moves";
 
@@ -561,6 +560,17 @@ export abstract class Move implements Localizable {
   }
 
   /**
+   * Sets the {@linkcode MoveFlags.G_MAX_MOVE} for the move
+   * and {@linkcode moveTarget} to NEAR_ENEMY (g-max moves cannot target allies)
+   * @returns The {@linkcode Move} that called this function
+   */
+  gMaxMove(): this {
+    this.setFlag(MoveFlags.G_MAX_MOVE, true);
+    this.moveTarget = MoveTarget.NEAR_ENEMY;
+    return this;
+  }
+
+  /**
    * Checks if the move flag applies to the pokemon(s) using/receiving the move
    * @param flag {@linkcode MoveFlags} MoveFlag to check on user and/or target
    * @param user {@linkcode Pokemon} the Pokemon using the move
@@ -864,7 +874,6 @@ export class AttackMove extends Move {
     if (attackScore) {
       if (this.category === MoveCategory.PHYSICAL) {
         const atk = new NumberHolder(user.getEffectiveStat(Stat.ATK, target));
-        applyMoveAttrs(VariableAtkAttr, user, target, move, atk);
         if (atk.value > user.getEffectiveStat(Stat.SPATK, target)) {
           const statRatio = user.getEffectiveStat(Stat.SPATK, target) / atk.value;
           if (statRatio <= 0.75) {
@@ -875,7 +884,6 @@ export class AttackMove extends Move {
         }
       } else {
         const spAtk = new NumberHolder(user.getEffectiveStat(Stat.SPATK, target));
-        applyMoveAttrs(VariableAtkAttr, user, target, move, spAtk);
         if (spAtk.value > user.getEffectiveStat(Stat.ATK, target)) {
           const statRatio = user.getEffectiveStat(Stat.ATK, target) / spAtk.value;
           if (statRatio <= 0.75) {
