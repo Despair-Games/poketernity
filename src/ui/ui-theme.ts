@@ -161,6 +161,18 @@ export function addUiThemeOverrides(): void {
         return originalSetTexture.apply(this, [key, frame]);
       };
     }
+    const originalPlay = ret.play;
+    ret.play = function (
+      key: string | Phaser.Animations.Animation | Phaser.Types.Animations.PlayAnimationConfig,
+      ignoreIfPlaying?: boolean,
+    ): Phaser.GameObjects.Sprite {
+      try {
+        return originalPlay(key, ignoreIfPlaying);
+      } catch (err: unknown) {
+        console.error(`Failed to play animation for ${key}`, err);
+        return this;
+      }
+    };
     return ret;
   };
 

@@ -99,11 +99,7 @@ export abstract class FormChangeBasePhase extends Phase {
       [this.pokemonSprite, this.pokemonTintSprite, this.pokemonNewFormSprite, this.pokemonNewFormTintSprite].map(
         (sprite) => {
           const spriteKey = this.pokemon.getSpriteKey(true);
-          try {
-            sprite.play(spriteKey);
-          } catch (err: unknown) {
-            console.error(`Failed to play animation for ${spriteKey}`, err);
-          }
+          sprite.play(spriteKey);
 
           sprite.setPipeline(spritePipeline, {
             tone: [0.0, 0.0, 0.0, 0.0],
