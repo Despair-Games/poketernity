@@ -1215,11 +1215,10 @@ type speciesObj = {
 };
 
 export async function speciesToJSON() {
-  const generation1 = allSpecies.filter((sp) => sp.generation === 1 && sp.speciesId < 10);
-  generation1.forEach((sp) => {
-    const speciesFile = sp.speciesId.toString().padStart(4, "0");
-    const fileName = "./src/data/pokemon-species/01/" + speciesFile + ".json";
-
+  const generation = allSpecies.filter((sp) => sp.generation === 9);
+  const fileName = "./src/data/pokemon-species/09.json";
+  const toWrite: speciesObj[] = [];
+  generation.forEach((sp) => {
     const spData: speciesObj = {};
     spData.name = sp.name;
     spData.speciesId = sp.speciesId;
@@ -1256,12 +1255,10 @@ export async function speciesToJSON() {
       spData.forms?.push(parseSpeciesForm(pkform, sp));
     });
 
-    const dataToWrite = JSON.stringify(spData);
-
-    writeFile(fileName, dataToWrite, () => {
-      console.log("File Written");
-    });
+    toWrite.push(spData);
   });
+
+  writeFile(fileName, JSON.stringify(toWrite), {}, () => console.log("File Written"));
 }
 
 function parseSpeciesForm(form: PokemonForm, root: PokemonSpecies) {
@@ -1270,7 +1267,7 @@ function parseSpeciesForm(form: PokemonForm, root: PokemonSpecies) {
   if (form.formKey !== "" && JSON.stringify(form.baseStats) !== JSON.stringify(root.baseStats)) {
     formData.defaultAbilities = [Abilities[form.ability1]];
     formData.baseStats = form.baseStats;
-    if (form.type1 !== root.type1 && form.type2 !== root.type2) {
+    if (form.type1 !== root.type1 || form.type2 !== root.type2) {
       formData.types = [];
       formData.types.push(Type[form.type1]);
       if (form.type2) {
