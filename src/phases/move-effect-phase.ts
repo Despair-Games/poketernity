@@ -321,7 +321,9 @@ export class MoveEffectPhase extends HitCheckPhase {
    */
   private applyGMaxUserEffects(user: Pokemon, target: Pokemon, firstTarget: boolean) {
     this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, true);
-    if (user.getAlly()?.isActive(true)) {
+
+    // G-Max Gold Rush should not give money twice for double battles
+    if (this.move.getMove().id !== Moves.G_MAX_GOLD_RUSH && user.getAlly()?.isActive(true)) {
       this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user.getAlly(), target, firstTarget, true);
     }
   }
@@ -341,7 +343,8 @@ export class MoveEffectPhase extends HitCheckPhase {
       this.applyOnTargetEffects(user, target, hitResult, firstTarget);
     }
 
-    if (target.getAlly()?.isActive(true)) {
+    // G-Max Snooze is the only G-Max move to only apply its effect on a single target
+    if (move.id !== Moves.G_MAX_SNOOZE && target.getAlly()?.isActive(true)) {
       this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target.getAlly(), firstTarget, false);
     }
   }
