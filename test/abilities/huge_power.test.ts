@@ -6,7 +6,10 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { Stat } from "#enums/stat";
 
-describe("Abilities - Huge Power/Pure Power", () => {
+describe.each([
+  { abilityName: "Huge Power", ability: Abilities.HUGE_POWER },
+  { abilityName: "Pure Power", ability: Abilities.PURE_POWER },
+])("Abilities - $abilityName", ({ ability }) => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
@@ -23,6 +26,7 @@ describe("Abilities - Huge Power/Pure Power", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
+      .ability(ability)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
@@ -31,11 +35,8 @@ describe("Abilities - Huge Power/Pure Power", () => {
       .enemyMoveset(Moves.SPLASH);
   });
 
-  it.each([
-    { abilityName: "Huge Power", ability: Abilities.HUGE_POWER },
-    { abilityName: "Pure Power", ability: Abilities.PURE_POWER },
-  ])("$abilityName should double the attack stat of the ability-holder", async ({ ability }) => {
-    game.override.ability(ability).moveset(Moves.TACKLE);
+  it("should double the attack stat of the ability-holder", async () => {
+    game.override.moveset(Moves.TACKLE);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getEffectiveStat");
@@ -47,10 +48,7 @@ describe("Abilities - Huge Power/Pure Power", () => {
     expect(playerPokemon.getEffectiveStat).toHaveReturnedWith(playerPokemon.getStat(Stat.ATK) * 2);
   });
 
-  it.each([
-    { abilityName: "Huge Power", ability: Abilities.HUGE_POWER },
-    { abilityName: "Pure Power", ability: Abilities.PURE_POWER },
-  ])("$abilityName should double the attack stat when using Body Press", async ({ ability }) => {
+  it("should double the attack stat when using Body Press", async () => {
     game.override.ability(ability).moveset(Moves.BODY_PRESS);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
@@ -64,10 +62,7 @@ describe("Abilities - Huge Power/Pure Power", () => {
   });
   // Note: Huge Power/Pure Power's interaction with Foul Play is tested in moves/foul_play.test.ts
 
-  it.each([
-    { abilityName: "Huge Power", ability: Abilities.HUGE_POWER },
-    { abilityName: "Pure Power", ability: Abilities.PURE_POWER },
-  ])("$abilityName should not double the attack stat when calculating confusion damage", async ({ ability }) => {
+  it("should not double the attack stat when calculating confusion damage", async () => {
     game.override.ability(ability).moveset(Moves.SPLASH).enemyMoveset(Moves.SUPERSONIC).statusActivation(true);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
