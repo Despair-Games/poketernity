@@ -49,7 +49,7 @@ describe("All Moves", async () => {
    * - Court Change : Accuracy is set to 100 in PKTY, not -1
    */
 
-  const filename = resolve("./test/moves/all_moves.json");
+  const filename = resolve("./test/data/all_moves.json");
   const file = readFileSync(filename, { encoding: "utf-8" });
   const moveData: MoveData[] = JSON.parse(file);
 
