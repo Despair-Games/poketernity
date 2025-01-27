@@ -167,7 +167,7 @@ export function addUiThemeOverrides(): void {
       ignoreIfPlaying?: boolean,
     ): Phaser.GameObjects.Sprite {
       try {
-        return originalPlay(key, ignoreIfPlaying);
+        return originalPlay.apply(this, [key, ignoreIfPlaying]);
       } catch (err: unknown) {
         console.error(`Failed to play animation for ${key}`, err);
         return this;
