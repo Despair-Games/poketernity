@@ -48,22 +48,21 @@ describe("Abilities - Huge Power/Pure Power", () => {
   });
 
   it.each([
-    { abilityName: "Huge Power", ability: Abilities.HUGE_POWER, moveName: "Body Press", move: Moves.BODY_PRESS },
-    { abilityName: "Pure Power", ability: Abilities.PURE_POWER, moveName: "Body Press", move: Moves.BODY_PRESS },
-    { abilityName: "Huge Power", ability: Abilities.HUGE_POWER, moveName: "Foul Play", move: Moves.FOUL_PLAY },
-    { abilityName: "Pure Power", ability: Abilities.PURE_POWER, moveName: "Foul Play", move: Moves.FOUL_PLAY },
-  ])("$abilityName should double the attack stat when using $moveName", async ({ ability, move }) => {
-    game.override.ability(ability).moveset(move);
+    { abilityName: "Huge Power", ability: Abilities.HUGE_POWER },
+    { abilityName: "Pure Power", ability: Abilities.PURE_POWER },
+  ])("$abilityName should double the attack stat when using Body Press", async ({ ability }) => {
+    game.override.ability(ability).moveset(Moves.BODY_PRESS);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getEffectiveStat");
 
-    game.move.select(move);
+    game.move.select(Moves.BODY_PRESS);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(playerPokemon.getEffectiveStat).toHaveReturnedWith(playerPokemon.getStat(Stat.ATK) * 2);
   });
+  // Note: Huge Power/Pure Power's interaction with Foul Play is tested in moves/foul_play.test.ts
 
   it.each([
     { abilityName: "Huge Power", ability: Abilities.HUGE_POWER },
