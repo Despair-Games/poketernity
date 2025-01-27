@@ -2986,7 +2986,6 @@ export function initMoves() {
       .attr(ClearTerrainAttr)
       .makesContact(false),
     new AttackMove(Moves.CLANGOROUS_SOULBLAZE, Type.DRAGON, MoveCategory.SPECIAL, 185, -1, 1, 100, 0, 7)
-      .unimplemented()
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD], 1, true, {
         firstTargetOnly: true,
       })
