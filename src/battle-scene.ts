@@ -386,12 +386,63 @@ export default class BattleScene extends SceneBase {
       const originalRealInRange = Phaser.Math.RND.realInRange;
       Phaser.Math.RND.realInRange = (min: number, max: number): number => {
         const ret = originalRealInRange.apply(Phaser.Math.RND, [min, max]);
-        const args = ["RNG", ++this.rngCounter, ret / (max - min), `min: ${min} / max: ${max}`];
-        args.push(`seed: ${this.rngSeedOverride || this.waveSeed || this.seed}`);
+        const rngInfo = [
+          "RNG",
+          ++this.rngCounter,
+          `raw: ${ret / (max - min)}`,
+          `min: ${min} / max: ${max}`,
+          `output: ${ret}`,
+          `seed: ${this.rngSeedOverride || this.waveSeed || this.seed}`,
+        ];
         if (this.rngOffset) {
-          args.push(`offset: ${this.rngOffset}`);
+          rngInfo.push(`offset: ${this.rngOffset}`);
         }
-        console.log(...args);
+
+        const stack = Error().stack?.split("\n") as string[];
+
+        for (const line of stack) {
+          // On Chrome, each line is of the form "at <functionName> (.../<fileName>.ts?t=<timestamp>:<lineNumbers>)"
+          const chromeRegex = RegExp("at (.*?(\\w+)) \\(.*\\/(.*\\.ts).*:(\\d*:\\d*)\\)");
+          // On Firefox, each line is of the form "<functionName>@.../<fileName>.ts?t=<timestamp>:<lineNumbers>",
+          // or "<functionName>/<@.../<fileName>.ts?t=<timestamp>:<lineNumbers>"
+          const firefoxRegex = RegExp("(.*?(\\w+))(?:\\/<|)@.*\\/(.*\\.ts).*:(\\d*:\\d*)");
+          const match = line.match(chromeRegex) ?? line.match(firefoxRegex);
+          if (match) {
+            /**
+             * A list of functions that we ignore because they do not convey why the RNG call is being made.
+             * Feel free to add to this list as needed.
+             */
+            const excludedList = [
+              "realInRange",
+              "integerInRange",
+              "pick",
+              "weightedPick",
+              "shuffle",
+              "between",
+              "randSeedItem",
+              "randSeedWeightedItem",
+              "randSeedInt",
+              "randSeedIntRange",
+              "randSeedGauss",
+              "randSeedShuffle",
+              "randBattleSeedInt",
+              "randomString",
+              "executeWithSeedOffset",
+              "newBattle",
+            ];
+
+            const fullFunctionName = match[1]; // e.g., "BattleScene.getGeneratedOffsetGym"
+            const rootFunctionName = match[2]; // e.g., "getGeneratedOffsetGym"
+            const fileName = match[3]; // e.g., "battle-scene.ts"
+            // const _lineNumbers = match[4]; // e.g., "1216:10". However, this is bugged due to the browser removing empty lines from TS files.
+            if (!excludedList.includes(rootFunctionName)) {
+              rngInfo.push(`\n\nat ${fullFunctionName} (${fileName})\n `);
+              break;
+            }
+          }
+        }
+
+        console.log(...rngInfo);
         return ret;
       };
     }
@@ -956,7 +1007,7 @@ export default class BattleScene extends SceneBase {
     }
 
     if (boss && !dataSource) {
-      const secondaryIvs = getIvsFromId(randSeedInt(4294967296));
+      const secondaryIvs = getIvsFromId();
 
       for (let s = 0; s < pokemon.ivs.length; s++) {
         pokemon.ivs[s] = Math.round(
