@@ -57,6 +57,7 @@ export class RandomMovesetMoveAttr extends CallMoveAttr {
         return false;
       }
 
+      moves.sort((a, b) => a.moveId - b.moveId);
       this.moveId = moves[user.randSeedInt(moves.length)].moveId;
       return true;
     };
