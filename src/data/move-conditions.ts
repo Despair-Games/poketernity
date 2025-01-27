@@ -133,18 +133,3 @@ export const failIfLastInPartyCondition: MoveConditionFunc = (user: Pokemon, _ta
 
 export const failIfGhostTypeCondition: MoveConditionFunc = (_user: Pokemon, target: Pokemon, _move: Move) =>
   !target.isOfType(Type.GHOST);
-
-export const lastMoveCopiableCondition: MoveConditionFunc = (_user, _target, _move) => {
-  const copiableMove = globalScene.currentBattle.lastMove;
-
-  if (!copiableMove) {
-    return false;
-  }
-
-  if (allMoves[copiableMove].isChargingMove()) {
-    return false;
-  }
-
-  // TODO: Add last turn of Bide
-  return true;
-};
