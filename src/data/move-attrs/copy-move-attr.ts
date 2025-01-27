@@ -5,7 +5,7 @@ import { type MoveConditionFunc } from "#app/data/move-conditions";
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { BooleanHolder } from "#app/utils";
-import type { Moves } from "#enums/moves";
+import { Moves } from "#enums/moves";
 
 /**
  * Attribute used to copy a previously-used move.
@@ -41,3 +41,51 @@ export class CopyMoveAttr extends CallMoveAttr {
     };
   }
 }
+
+export const invalidCopycatMoves = [
+  Moves.ASSIST,
+  Moves.BANEFUL_BUNKER,
+  Moves.BEAK_BLAST,
+  Moves.BEHEMOTH_BASH,
+  Moves.BEHEMOTH_BLADE,
+  Moves.BESTOW,
+  Moves.CELEBRATE,
+  Moves.CHATTER,
+  Moves.CIRCLE_THROW,
+  Moves.COPYCAT,
+  Moves.COUNTER,
+  Moves.COVET,
+  Moves.DESTINY_BOND,
+  Moves.DETECT,
+  Moves.DRAGON_TAIL,
+  Moves.DYNAMAX_CANNON,
+  Moves.ENDURE,
+  Moves.FEINT,
+  Moves.FOCUS_PUNCH,
+  Moves.FOLLOW_ME,
+  Moves.HELPING_HAND,
+  Moves.HOLD_HANDS,
+  Moves.KINGS_SHIELD,
+  Moves.MAT_BLOCK,
+  Moves.ME_FIRST,
+  Moves.METRONOME,
+  Moves.MIMIC,
+  Moves.MIRROR_COAT,
+  Moves.MIRROR_MOVE,
+  Moves.NONE,
+  Moves.PROTECT,
+  Moves.RAGE_POWDER,
+  Moves.ROAR,
+  Moves.SHELL_TRAP,
+  Moves.SKETCH,
+  Moves.SLEEP_TALK,
+  Moves.SNATCH,
+  Moves.SPIKY_SHIELD,
+  Moves.SPOTLIGHT,
+  Moves.STRUGGLE,
+  Moves.SWITCHEROO,
+  Moves.THIEF,
+  Moves.TRANSFORM,
+  Moves.TRICK,
+  Moves.WHIRLWIND,
+];
