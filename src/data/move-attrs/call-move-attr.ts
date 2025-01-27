@@ -29,7 +29,7 @@ export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
   public readonly callsOtherMoves: boolean = true;
 
   override apply(user: Pokemon, target: Pokemon, move: Move, overridden: BooleanHolder): boolean {
-    const replaceMoveTarget = move.moveTarget === MoveTarget.NEAR_OTHER ? MoveTarget.NEAR_ENEMY : undefined;
+    const replaceMoveTarget = [MoveTarget.NEAR_OTHER, MoveTarget.DRAGON_DARTS].includes(move.moveTarget) ? MoveTarget.NEAR_ENEMY : undefined;
     const moveTargets = getMoveTargets(user, move.id, replaceMoveTarget);
 
     if (moveTargets.targets.length === 0) {
