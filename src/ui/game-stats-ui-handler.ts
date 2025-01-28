@@ -1,4 +1,4 @@
-import Phaser from "phaser";
+import type Phaser from "phaser";
 import { addTextObject } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
@@ -237,11 +237,6 @@ export default class GameStatsUiHandler extends UiHandler {
     const ui = this.getUi();
 
     this.gameStatsContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
-
-    this.gameStatsContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT),
-      Phaser.Geom.Rectangle.Contains,
-    );
 
     const headerBg = addWindow(0, 0, GAME_WIDTH - 2, 24);
     headerBg.setOrigin(0, 0);

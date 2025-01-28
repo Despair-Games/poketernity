@@ -144,10 +144,6 @@ export default class RunInfoUiHandler extends UiHandler {
     this.parsePartyInfo();
     this.showParty(true);
 
-    this.runContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT),
-      Phaser.Geom.Rectangle.Contains,
-    );
     this.getUi().bringToTop(this.runContainer);
     this.runContainer.setVisible(true);
 

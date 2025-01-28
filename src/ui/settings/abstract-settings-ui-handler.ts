@@ -72,10 +72,6 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
     this.settingsContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
     this.settingsContainer.setName(`settings-${this.title}`);
-    this.settingsContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT - 20),
-      Phaser.Geom.Rectangle.Contains,
-    );
 
     this.navigationIcons = {};
 

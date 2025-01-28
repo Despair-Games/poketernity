@@ -116,7 +116,7 @@ export function getTextStyleOptions(
   const lang = i18next.resolvedLanguage;
   let shadowXpos = 4;
   let shadowYpos = 5;
-  // TODO: figure this out
+  // TODO scaling: figure this out
   let scale = 0.1666666667;
   const defaultFontSize = 96;
 

@@ -61,7 +61,6 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     this.infoContainer.add(this.saveDownloadImage);
     this.getUi().add(this.infoContainer);
     this.infoContainer.setVisible(false);
-    this.infoContainer.disableInteractive();
   }
 
   private buildExternalPartyContainer() {
@@ -220,14 +219,13 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
       const localStorageKeys = Object.keys(localStorage); // this gets the keys for localStorage
       const keyToFind = "data_";
       const dataKeys = localStorageKeys.filter((ls) => ls.indexOf(keyToFind) >= 0);
-      if (dataKeys.length > 0 && dataKeys.length <= 12) {
+      if (dataKeys.length > 0 && dataKeys.length <= 2) {
         const options: OptionSelectItem[] = [];
         for (let i = 0; i < dataKeys.length; i++) {
           options.push({
             label: dataKeys[i].replace(keyToFind, ""),
             handler: () => {
               globalScene.ui.revertMode();
-              this.infoContainer.disableInteractive();
               return true;
             },
           });
@@ -238,11 +236,6 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
           xOffset: GAME_WIDTH,
           yOffset: GAME_HEIGHT - this.usernameInfoImage.displayHeight - 16 * dataKeys.length - 22,
         });
-        // TODO scaling is that full size needed?
-        this.infoContainer.setInteractive(
-          new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width, globalScene.game.canvas.height),
-          Phaser.Geom.Rectangle.Contains,
-        );
       } else {
         if (dataKeys.length > 2) {
           return onFail(this.ERR_TOO_MANY_SAVES);

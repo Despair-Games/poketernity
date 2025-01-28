@@ -75,11 +75,6 @@ export default class AchvsUiHandler extends MessageUiHandler {
 
     this.mainContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
 
-    this.mainContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT),
-      Phaser.Geom.Rectangle.Contains,
-    );
-
     this.headerBg = addWindow(0, 0, GAME_WIDTH - 2, 24);
     this.headerBg.setOrigin(0, 0);
 

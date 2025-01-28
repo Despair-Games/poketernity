@@ -99,11 +99,6 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
     this.settingsContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
     this.settingsContainer.setName(`settings-${this.titleSelected}`);
 
-    this.settingsContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT),
-      Phaser.Geom.Rectangle.Contains,
-    );
-
     this.navigationContainer = new NavigationMenu(0, 0);
 
     this.optionsBg = addWindow(
