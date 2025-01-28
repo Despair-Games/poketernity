@@ -123,6 +123,7 @@ import {
   AutotomizedTag,
   PowerTrickTag,
   SkyDropTag,
+  CritBoostStackableTag,
 } from "../data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { WeatherType } from "#enums/weather-type";
@@ -1101,6 +1102,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       } else {
         critStage.value += 2;
       }
+    }
+
+    const critBoostStackableTag = source.getTag(CritBoostStackableTag);
+    if (critBoostStackableTag) {
+      critStage.value += critBoostStackableTag.stackCount;
     }
 
     console.log(`crit stage: +${critStage.value}`);
@@ -3103,12 +3109,18 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      */
     const targetDef = this.getEffectiveStat(defendingStat.value, source, move, abilityApplyMode, isCritical, simulated);
 
+    /** This prevents a move with negative power from possibly dealing positive damage.
+     * The issue can occur because the base damage is the result of the below equation plus 2.
+     */
+    const damageCalculation = (levelMultiplier * power * sourceAtk) / targetDef/ 50;
+    if (damageCalculation < 0) {
+      return damageCalculation;
+    }
     /**
      * The attack's base damage, as determined by the source's level, move power
      * and Attack stat as well as this Pokemon's Defense stat
      */
-    const baseDamage = (levelMultiplier * power * sourceAtk) / targetDef / 50 + 2;
-
+    const baseDamage = damageCalculation + 2;
     /** Debug message for non-simulated calls (i.e. when damage is actually dealt) */
     if (!simulated) {
       console.log("base damage", baseDamage, move.name, power, sourceAtk, targetDef);
@@ -3334,28 +3346,28 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       );
     }
 
-    /** If damage is nullified by a form-ability (Eiscue's Ice Face, Mimikyu's Disguise), then damage is set to 0 */
-    if (receivedDamageMultiplier.value > 0) {
-      damage.value = toDmgValue(
-        baseDamage
-          * targetMultiplier
-          * multiStrikeEnhancementMultiplier.value
-          * arenaAttackTypeMultiplier.value
-          * glaiveRushMultiplier.value
-          * criticalMultiplier.value
-          * randomMultiplier
-          * stabMultiplier.value
-          * typeMultiplier
-          * burnMultiplier.value
-          * screenMultiplier.value
-          * hitsTagMultiplier.value
-          * mistyTerrainMultiplier
-          * tintedLensMultiplier.value
-          * receivedDamageMultiplier.value
-          * alliedFieldDamageMultiplier.value,
-      );
-    } else {
+    damage.value =
+      baseDamage
+      * targetMultiplier
+      * multiStrikeEnhancementMultiplier.value
+      * arenaAttackTypeMultiplier.value
+      * glaiveRushMultiplier.value
+      * criticalMultiplier.value
+      * randomMultiplier
+      * stabMultiplier.value
+      * typeMultiplier
+      * burnMultiplier.value
+      * screenMultiplier.value
+      * hitsTagMultiplier.value
+      * mistyTerrainMultiplier
+      * tintedLensMultiplier.value
+      * receivedDamageMultiplier.value
+      * alliedFieldDamageMultiplier.value;
+    /** If damage is nullified by a form-ability (Eiscue's Ice Face, Mimikyu's Disguise) or the attack has a non-damaging outcome (Present), then damage is set to 0 instead */
+    if (damage.value <= 0) {
       damage.value = 0;
+    } else {
+      damage.value = toDmgValue(damage.value);
     }
 
     // This attribute may modify damage arbitrarily, so be careful about changing its order of application.

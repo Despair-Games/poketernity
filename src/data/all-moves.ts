@@ -3282,7 +3282,7 @@ export function initMoves() {
       .attr(MoneyAttr), // should gives 100x user level (20x as effective as payday) as money. Rebalance later
     new AttackMove(Moves.G_MAX_CHI_STRIKE, Type.FIGHTING, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
-      .unimplemented(),
+      .attr(AddBattlerTagAttr, BattlerTagType.CRIT_BOOST_STACKABLE, true),
     new AttackMove(Moves.G_MAX_TERROR, Type.GHOST, MoveCategory.PHYSICAL, 10, -1, 10, -1, 0, 8)
       .gMaxMove()
       .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED),
