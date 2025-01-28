@@ -437,7 +437,7 @@ export default class BattleScene extends SceneBase {
       a.setPipeline(this.fieldSpritePipeline);
       a.setScale(GAME_SCALE);
       a.setOrigin(0);
-      a.setSize(GAME_WIDTH, (GAME_HEIGHT * 4) / 3); // TODO scaling ???
+      a.setSize(GAME_WIDTH, (GAME_HEIGHT * 4) / 3);
     });
 
     const field = this.add.container(0, 0);
@@ -446,7 +446,6 @@ export default class BattleScene extends SceneBase {
 
     this.field = field;
 
-    // TODO scaling, is that correct?
     const fieldUI = this.add.container(0, GAME_HEIGHT * GAME_SCALE);
     fieldUI.setName("field-ui");
     fieldUI.setDepth(1);
@@ -1485,7 +1484,6 @@ export default class BattleScene extends SceneBase {
         return resolve();
       }
 
-      // TODO scaling 132?? arenaBg.width??
       const defaultWidth = this.arenaBg.width * GAME_SCALE;
       const defaultHeight = 132 * GAME_SCALE;
       const scaledWidth = this.arenaBg.width * scale;
