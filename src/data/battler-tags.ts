@@ -41,6 +41,7 @@ import { WeatherType } from "#enums/weather-type";
 import { ReverseDrainAbAttr } from "./ab-attrs/reverse-drain-ab-attr";
 import Overrides from "#app/overrides";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
 
 export class BattlerTag {
   public tagType: BattlerTagType;
@@ -740,8 +741,8 @@ export class ConfusedTag extends BattlerTag {
       (pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE && Overrides.STATUS_ACTIVATION_OVERRIDE !== false)
       || Overrides.STATUS_ACTIVATION_OVERRIDE === true
     ) {
-      const atk = pokemon.getEffectiveStat(Stat.ATK);
-      const def = pokemon.getEffectiveStat(Stat.DEF);
+      const atk = pokemon.getEffectiveStat(Stat.ATK, undefined, undefined, AbilityApplyMode.IGNORE);
+      const def = pokemon.getEffectiveStat(Stat.DEF, undefined, undefined, AbilityApplyMode.IGNORE);
       return toDmgValue(
         ((((2 * pokemon.level) / 5 + 2) * 40 * atk) / def / 50 + 2) * (pokemon.randSeedIntRange(85, 100) / 100),
       );
