@@ -331,7 +331,10 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     } else {
       const { Wrap } = Phaser.Math;
       const cursor = this.cursor + this.scrollCursor;
-      const maxOptionCursor = this.optionValueLabels[cursor].length;
+      const optionCursor = this.optionCursors[cursor];
+      const optionLabels = this.optionValueLabels[cursor];
+      const maxOptionCursor = optionLabels.length;
+      const uiItem = this.uiItems[cursor];
 
       switch (button) {
         case Button.UP:
@@ -368,15 +371,23 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
           }
           break;
         case Button.LEFT:
-          if (!isNullOrUndefined(this.optionCursors[cursor])) {
+          if (!isNullOrUndefined(optionCursor)) {
             // Moves the option cursor left (wrapping)
-            success = this.setOptionCursor(cursor, Wrap(this.optionCursors[cursor] - 1, 0, maxOptionCursor), true);
+            if (uiItem.doWrap) {
+              success = this.setOptionCursor(cursor, Wrap(optionCursor - 1, 0, maxOptionCursor), true);
+            } else if (optionCursor > 0) {
+              success = this.setOptionCursor(cursor, optionCursor - 1, true);
+            }
           }
           break;
         case Button.RIGHT:
           // Moves the option cursor right (wrapping)
-          if (!isNullOrUndefined(this.optionCursors[cursor])) {
-            success = this.setOptionCursor(cursor, Wrap(this.optionCursors[cursor] + 1, 0, maxOptionCursor), true);
+          if (!isNullOrUndefined(optionCursor)) {
+            if (uiItem.doWrap) {
+              success = this.setOptionCursor(cursor, Wrap(optionCursor + 1, 0, maxOptionCursor), true);
+            } else if (optionCursor < optionLabels.length - 1) {
+              success = this.setOptionCursor(cursor, optionCursor + 1, true);
+            }
           }
           break;
         case Button.CYCLE_FORM:
