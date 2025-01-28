@@ -447,7 +447,7 @@ export default class BattleScene extends SceneBase {
     this.field = field;
 
     // TODO scaling, is that correct?
-    const fieldUI = this.add.container(0, this.game.canvas.height);
+    const fieldUI = this.add.container(0, GAME_HEIGHT * GAME_SCALE);
     fieldUI.setName("field-ui");
     fieldUI.setDepth(1);
     fieldUI.setScale(GAME_SCALE);

@@ -979,9 +979,8 @@ export default class RunInfoUiHandler extends UiHandler {
     this.endCardContainer = globalScene.add.container(0, 0);
     const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
     const isFemale = genderIndex === PlayerGender.FEMALE;
-    const endCard = globalScene.add.image(0, 0, `end_${isFemale ? "f" : "m"}`);
+    const endCard = globalScene.add.image(-1, -1, `end_${isFemale ? "f" : "m"}`);
     endCard.setOrigin(0);
-    endCard.setScale(0.5);
     const text = addTextObject(
       GAME_WIDTH / 2,
       GAME_HEIGHT - 16,
@@ -1006,27 +1005,18 @@ export default class RunInfoUiHandler extends UiHandler {
     // As an alternative, the icons of the second/bottom fused Pokemon have been placed next to their fellow fused Pokemon in Hall of Fame
     this.hallofFameContainer = globalScene.add.container(0, 0);
     // Thank you Hayuna for the code
-    const endCard = globalScene.add.image(0, 0, `end_${isFemale ? "f" : "m"}`);
-    endCard.setOrigin(0);
-    endCard.setPosition(-1, -1);
-    endCard.setScale(0.5);
-    const endCardCoords = endCard.getBottomCenter();
     const overlayColor = isFemale ? "red" : "blue";
-    const hallofFameBg = globalScene.add.image(0, 0, "hall_of_fame_" + overlayColor);
-    // TODO scaling why this position and is the width/height correct?
-    hallofFameBg.setPosition(159, 89);
-    hallofFameBg.setSize(globalScene.game.canvas.width, globalScene.game.canvas.height + 10);
-    hallofFameBg.setAlpha(0.8);
-    this.hallofFameContainer.add(endCard);
+    const hallofFameBg = globalScene.add.image(-1, -1, "hall_of_fame_" + overlayColor);
+    hallofFameBg.setOrigin(0, 0);
     this.hallofFameContainer.add(hallofFameBg);
-
     const hallofFameText = addTextObject(
       0,
       0,
       i18next.t("runHistory:hallofFameText", { context: genderStr }),
       TextStyle.WINDOW,
     );
-    hallofFameText.setPosition(endCardCoords.x - hallofFameText.displayWidth / 2, 164);
+    hallofFameText.setOrigin(0.5);
+    hallofFameText.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - 16);
     this.hallofFameContainer.add(hallofFameText);
     this.runInfo.party.forEach((p, i) => {
       const pkmn = p.toPokemon();
