@@ -47,7 +47,7 @@ export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler 
           },
         ],
         maxOptions: LANGUAGE_MAX_OPTIONS,
-        yOffset: i18next.resolvedLanguage === "ja" ? 51 : 29,
+        yOffset: 48,
       });
     });
   }

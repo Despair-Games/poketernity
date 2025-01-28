@@ -209,8 +209,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     this.messageBoxContainer.add(settingsMessageBox);
 
     const messageText = addTextObject(8, -40, "", TextStyle.WINDOW, { maxLines: 2 });
-    // TODO scaling is that correct?
-    messageText.setWordWrapWidth(globalScene.game.canvas.width - 60);
+    messageText.setWordWrapWidth((GAME_WIDTH - 10) / messageText.scale);
     messageText.setName("settings-message");
     messageText.setOrigin(0, 0);
 
