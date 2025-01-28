@@ -21,7 +21,7 @@ import Phaser from "phaser";
 import { PokeballType } from "#enums/pokeball";
 import { ModifierTier } from "#enums/modifier-tier";
 import { settings } from "#app/system/settings/settings-manager";
-import { GAME_HEIGHT, GAME_SCALE, GAME_WIDTH } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 export const SHOP_OPTIONS_ROW_LIMIT = 7;
 const SINGLE_SHOP_ROW_YOFFSET = 12;
@@ -73,13 +73,13 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
 
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
-    const styleOptions = getTextStyleOptions(TextStyle.PARTY, settings.display.uiTheme).styleOptions;
+    const { styleOptions, scale } = getTextStyleOptions(TextStyle.PARTY, settings.display.uiTheme);
 
     if (context) {
       context.font = styleOptions.fontSize + "px " + styleOptions.fontFamily;
-      // TODO scaling apparently this is a way to measure text size. is it reliable?
-      this.transferButtonWidth = context.measureText(i18next.t("modifierSelectUiHandler:transfer")).width / GAME_SCALE;
-      this.checkButtonWidth = context.measureText(i18next.t("modifierSelectUiHandler:checkTeam")).width / GAME_SCALE;
+      // TODO scaling: replace this with using displayWidth once text scaling is changed?
+      this.transferButtonWidth = context.measureText(i18next.t("modifierSelectUiHandler:transfer")).width * scale;
+      this.checkButtonWidth = context.measureText(i18next.t("modifierSelectUiHandler:checkTeam")).width * scale;
     }
 
     this.transferButtonContainer = globalScene.add.container(
@@ -248,10 +248,9 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
         row ? undefined : SHOP_OPTIONS_ROW_LIMIT,
       );
       const sliceWidth = GAME_WIDTH / (rowOptions.length + 2);
-      // TODO scaling what is that / 32
       const option = new ModifierOption(
         sliceWidth * (col + 1) + sliceWidth * 0.5,
-        -GAME_HEIGHT / 2 - (GAME_HEIGHT * GAME_SCALE) / 32 - (42 - (28 * row - 1)),
+        -GAME_HEIGHT / 2 - GAME_HEIGHT / 6 - (46 - (28 * row - 1)),
         shopTypeOptions[m],
       );
       option.setScale(0.375);
@@ -522,12 +521,9 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
         );
       } else {
         // Cursor on paying items
-        // TODO scaling what is that /32
         this.cursorObj.setPosition(
           sliceWidth * (cursor + 1) + sliceWidth * 0.5 - 16,
-          -GAME_HEIGHT / 2
-            - (GAME_HEIGHT * GAME_SCALE) / 32
-            - (-14 + 28 * (this.rowCursor - (this.shopOptionsRows.length - 1))),
+          -GAME_HEIGHT / 2 - GAME_HEIGHT / 6 - (-10 + 28 * (this.rowCursor - (this.shopOptionsRows.length - 1))),
         );
       }
 
