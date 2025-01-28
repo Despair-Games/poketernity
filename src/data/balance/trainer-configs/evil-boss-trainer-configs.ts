@@ -532,7 +532,17 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
         p.pokeball = PokeballType.ULTRA_BALL;
       }),
     )
-    .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.SCIZOR, Species.KLEAVOR]))
+    .setPartyMemberFunc(
+      1,
+      getRandomPartyMemberFunc([Species.SCIZOR, Species.KLEAVOR], TrainerSlot.TRAINER, true, (p) => {
+        //Technician Scizor, Sharpness Kleavor
+        if (p.species.speciesId === Species.SCIZOR) {
+          p.abilityIndex = 1;
+        } else if (p.species.speciesId === Species.KLEAVOR) {
+          p.abilityIndex = 2;
+        }
+      }),
+    )
     .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.TOXAPEX]))
     .setPartyMemberFunc(
       3,
@@ -594,19 +604,6 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       }),
     )
     .setPartyMemberFunc(3, getRandomPartyMemberFunc([Species.MELMETAL]))
-    .setPartyMemberFunc(
-      4,
-      getRandomPartyMemberFunc(
-        [Species.GALAR_ARTICUNO, Species.GALAR_ZAPDOS, Species.GALAR_MOLTRES],
-        TrainerSlot.TRAINER,
-        true,
-        (p) => {
-          p.setBoss(true, 2);
-          p.generateAndPopulateMoveset();
-          p.pokeball = PokeballType.ULTRA_BALL;
-        },
-      ),
-    )
     .setPartyMemberFunc(
       4,
       getRandomPartyMemberFunc([Species.COPPERAJAH], TrainerSlot.TRAINER, true, (p) => {
