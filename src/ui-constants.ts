@@ -12,3 +12,5 @@ export const GAME_HEIGHT = 180;
  * rather than `width` and `height`
  */
 export const GAME_SCALE = 6;
+/** Temporary value to use for adjusting scale of images/sprites to the previous scale */
+export const TEMP_SCALE_ADJUSTEMENT = GAME_SCALE / 6;
