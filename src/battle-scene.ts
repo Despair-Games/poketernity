@@ -177,6 +177,7 @@ import { allTrainerConfigs } from "./data/balance/trainer-configs/all-trainer-co
 import { eventBus } from "./event-bus";
 import { Animation } from "./animations";
 import { resetStarterColors, starterColors } from "./data/starter-colors";
+import { CallSourceLogger } from "#app/loggers";
 
 const DEBUG_RNG = false;
 
@@ -382,7 +383,31 @@ export default class BattleScene extends SceneBase {
   }
 
   async preload() {
+    // TODO: Move all RNG-related code outside of `battle-scene.ts`.
     if (DEBUG_RNG) {
+      /**
+       * A list of functions that we ignore because they do not convey why the RNG call is being made.
+       * Feel free to add to this list as needed.
+       */
+      const ignoredRngFunctions = [
+        "realInRange",
+        "integerInRange",
+        "pick",
+        "weightedPick",
+        "shuffle",
+        "between",
+        "randSeedItem",
+        "randSeedWeightedItem",
+        "randSeedInt",
+        "randSeedIntRange",
+        "randSeedGauss",
+        "randSeedShuffle",
+        "randBattleSeedInt",
+        "randomString",
+        "executeWithSeedOffset",
+        "newBattle",
+      ];
+      const rngLogger = new CallSourceLogger(ignoredRngFunctions);
       const originalRealInRange = Phaser.Math.RND.realInRange;
       Phaser.Math.RND.realInRange = (min: number, max: number): number => {
         const ret = originalRealInRange.apply(Phaser.Math.RND, [min, max]);
@@ -398,51 +423,7 @@ export default class BattleScene extends SceneBase {
           rngInfo.push(`offset: ${this.rngOffset}`);
         }
 
-        const stack = Error().stack?.split("\n") as string[];
-
-        for (const line of stack) {
-          // On Chrome, each line is of the form "at <functionName> (.../<fileName>.ts?t=<timestamp>:<lineNumbers>)"
-          const chromeRegex = RegExp("at (.*?(\\w+)) \\(.*\\/(.*\\.ts).*:(\\d*:\\d*)\\)");
-          // On Firefox, each line is of the form "<functionName>@.../<fileName>.ts?t=<timestamp>:<lineNumbers>",
-          // or "<functionName>/<@.../<fileName>.ts?t=<timestamp>:<lineNumbers>"
-          const firefoxRegex = RegExp("(.*?(\\w+))(?:\\/<|)@.*\\/(.*\\.ts).*:(\\d*:\\d*)");
-          const match = line.match(chromeRegex) ?? line.match(firefoxRegex);
-          if (match) {
-            /**
-             * A list of functions that we ignore because they do not convey why the RNG call is being made.
-             * Feel free to add to this list as needed.
-             */
-            const excludedList = [
-              "realInRange",
-              "integerInRange",
-              "pick",
-              "weightedPick",
-              "shuffle",
-              "between",
-              "randSeedItem",
-              "randSeedWeightedItem",
-              "randSeedInt",
-              "randSeedIntRange",
-              "randSeedGauss",
-              "randSeedShuffle",
-              "randBattleSeedInt",
-              "randomString",
-              "executeWithSeedOffset",
-              "newBattle",
-            ];
-
-            const fullFunctionName = match[1]; // e.g., "BattleScene.getGeneratedOffsetGym"
-            const rootFunctionName = match[2]; // e.g., "getGeneratedOffsetGym"
-            const fileName = match[3]; // e.g., "battle-scene.ts"
-            // const _lineNumbers = match[4]; // e.g., "1216:10". However, this is bugged due to the browser removing empty lines from TS files.
-            if (!excludedList.includes(rootFunctionName)) {
-              rngInfo.push(`\n\nat ${fullFunctionName} (${fileName})\n `);
-              break;
-            }
-          }
-        }
-
-        console.log(...rngInfo);
+        rngLogger.log(...rngInfo);
         return ret;
       };
     }
