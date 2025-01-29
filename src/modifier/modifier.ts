@@ -346,7 +346,7 @@ export abstract class PersistentModifier extends Modifier {
     return text;
   }
 
-  override isPersistentModifier(): this is PersistentModifier {
+  override isPersistentModifier(): this is this {
     return true;
   }
 }

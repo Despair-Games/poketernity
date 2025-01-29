@@ -13,7 +13,7 @@ export default class ModifierData {
   public className: string;
 
   constructor(source: PersistentModifier | any, player: boolean) {
-    const sourceModifier = source.isPersistentModifier() ? source : null;
+    const sourceModifier = source.isPersistentModifier?.() ? source : null;
     this.player = player;
     this.typeId = sourceModifier ? sourceModifier.type.id : source.typeId;
     if (sourceModifier) {
