@@ -1039,7 +1039,7 @@ export function initAbilities() {
       .partial(), // Meteor form should protect against status effects and yawn
     new Ability(Abilities.STAKEOUT, 7).attr(
       MovePowerBoostAbAttr,
-      (_user, target, _move) => !!target?.turnData.switchedInThisTurn,
+      (_user, target, _move) => !!target?.turnData?.switchedInThisTurn,
       2,
     ),
     new Ability(Abilities.WATER_BUBBLE, 7)
