@@ -4,7 +4,6 @@ import BattleScene from "#app/battle-scene";
 import { getMoveTargets } from "#app/data/move";
 import { settings } from "#app/system/settings/settings-manager";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
-import Trainer from "#app/field/trainer";
 import { getGameMode } from "#app/game-mode";
 import { GameModes } from "#enums/game-modes";
 import { ModifierTypeOption, modifierTypes } from "#app/modifier/modifier-type";
@@ -61,6 +60,7 @@ import { expect, vi } from "vitest";
 import { globalScene } from "#app/global-scene";
 import type StarterSelectUiHandler from "#app/ui/starter-select-ui-handler";
 import { MockFetch } from "#test/testUtils/mocks/mockFetch";
+import { BattleCommand } from "#enums/battle-command";
 
 /**
  * Class to manage the game state and transitions between phases.
@@ -409,15 +409,20 @@ export class GameManager {
     await this.phaseInterceptor.to(EnemyCommandPhase);
   }
 
-  forceEnemyToSwitch() {
-    const originalMatchupScore = Trainer.prototype.getPartyMemberMatchupScores;
-    Trainer.prototype.getPartyMemberMatchupScores = () => {
-      Trainer.prototype.getPartyMemberMatchupScores = originalMatchupScore;
-      return [
-        [1, 100],
-        [1, 100],
-      ];
-    };
+  async forceEnemyToSwitch(partyMemberIndex: number = 1, baton: boolean = false) {
+    // Make sure the party member to switch in exists and is allowed in battle
+    expect(partyMemberIndex).toBeLessThan(this.scene.getEnemyParty().length);
+    expect(this.scene.getEnemyParty()[partyMemberIndex]?.isAllowedInBattle()).toBeTruthy();
+
+    // Wait for the next EnemyCommandPhase to start
+    await this.phaseInterceptor.to(EnemyCommandPhase, false);
+    const enemy = this.scene.getEnemyField()[(this.scene.getCurrentPhase() as EnemyCommandPhase).getFieldIndex()];
+
+    vi.spyOn(enemy, "getNextCommand").mockReturnValueOnce({
+      command: BattleCommand.POKEMON,
+      cursor: partyMemberIndex,
+      args: [baton],
+    });
   }
 
   /** Transition to the first {@linkcode CommandPhase} of the next turn. */

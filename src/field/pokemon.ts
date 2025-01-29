@@ -5611,7 +5611,7 @@ export class EnemyPokemon extends Pokemon {
     if (
       trainer
       && !this.isTrapped()
-      && this.getParty().some((p) => !p.isActive(true))
+      && this.getParty().some((p) => p.isActive() && !p.isOnField())
       && this.getMoveQueue().length === 0
     ) {
       const switchCommand = this.getSwitchCommand();
@@ -5636,7 +5636,7 @@ export class EnemyPokemon extends Pokemon {
    * @todo Finalize the MUS threshold for switching
    */
   public getSwitchCommand(): TurnCommand | undefined {
-    const nonActiveParty = this.getParty().filter((p) => !p.isActive(true));
+    const nonActiveParty = this.getParty().filter((p) => p.isActive() && !p.isOnField());
     const matchupScore = this.getAverageMatchupScore();
 
     // If this Pokemon can KO at least 1 opponent, it gains an average MUS
