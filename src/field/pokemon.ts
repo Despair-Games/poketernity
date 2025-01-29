@@ -316,11 +316,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       throw `Cannot create a player Pokemon for species '${species.getName(formIndex)}'`;
     }
 
-    const hiddenAbilityChance = new NumberHolder(BASE_HIDDEN_ABILITY_CHANCE);
-    if (!this.hasTrainer()) {
-      globalScene.applyModifiers(HiddenAbilityRateBoosterModifier, true, hiddenAbilityChance);
-    }
-
     this.species = species;
     this.pokeball = dataSource?.pokeball || PokeballType.POKEBALL;
     this.level = level;
@@ -331,15 +326,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.abilityIndex = abilityIndex; // Use the provided ability index if it is defined
     } else {
       // If abilityIndex is not provided, determine it based on species and hidden ability
-      const hasHiddenAbility = !randSeedInt(hiddenAbilityChance.value);
-      const randAbilityIndex = randSeedInt(2);
-      if (species.abilityHidden && hasHiddenAbility) {
-        // If the species has a hidden ability and the hidden ability is present
-        this.abilityIndex = 2;
-      } else {
-        // If there is no hidden ability or species does not have a hidden ability
-        this.abilityIndex = species.ability2 !== species.ability1 ? randAbilityIndex : 0; // Use random ability index if species has a second ability, otherwise use 0
-      }
+      this.generateRandomAbility();
     }
     if (formIndex !== undefined) {
       this.formIndex = formIndex;
@@ -394,7 +381,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.usedTMs = dataSource.usedTMs ?? [];
       this.customPokemonData = new CustomPokemonData(dataSource.customPokemonData);
     } else {
-      this.id = randSeedInt(4294967296);
+      this.generateId();
       this.ivs = ivs || getIvsFromId(this.id);
 
       if (this.gender === undefined) {
@@ -448,6 +435,33 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     if (!dataSource) {
       this.calculateStats();
+    }
+  }
+
+  /**
+   * Sets this Pokemon's ID to be a random integer from 0 to 2^32 - 1, inclusive.
+   */
+  generateId(): void {
+    this.id = randSeedInt(4294967296);
+  }
+
+  /**
+   * Sets this Pokemon to have a random ability, including a small chance of generating its Hidden Ability.
+   */
+  generateRandomAbility(): void {
+    const hiddenAbilityChance = new NumberHolder(BASE_HIDDEN_ABILITY_CHANCE);
+    if (!this.hasTrainer()) {
+      globalScene.applyModifiers(HiddenAbilityRateBoosterModifier, true, hiddenAbilityChance);
+    }
+
+    const hasHiddenAbility = !randSeedInt(hiddenAbilityChance.value);
+    const randAbilityIndex = randSeedInt(2);
+    if (this.species.abilityHidden && hasHiddenAbility) {
+      // If the species has a hidden ability and the hidden ability is present
+      this.abilityIndex = 2;
+    } else {
+      // If there is no hidden ability or species does not have a hidden ability
+      this.abilityIndex = this.species.ability2 !== this.species.ability1 ? randAbilityIndex : 0; // Use random ability index if species has a second ability, otherwise use 0
     }
   }
 
@@ -3108,7 +3122,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     /** This prevents a move with negative power from possibly dealing positive damage.
      * The issue can occur because the base damage is the result of the below equation plus 2.
      */
-    const damageCalculation = (levelMultiplier * power * sourceAtk) / targetDef/ 50;
+    const damageCalculation = (levelMultiplier * power * sourceAtk) / targetDef / 50;
     if (damageCalculation < 0) {
       return damageCalculation;
     }

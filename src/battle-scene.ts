@@ -177,7 +177,8 @@ import { allTrainerConfigs } from "./data/balance/trainer-configs/all-trainer-co
 import { eventBus } from "./event-bus";
 import { Animation } from "./animations";
 import { resetStarterColors, starterColors } from "./data/starter-colors";
-import { GAME_HEIGHT, GAME_SCALE, GAME_WIDTH } from "./ui-constants";
+import { CallSourceLogger } from "#app/loggers";
+import { GAME_HEIGHT, GAME_SCALE, GAME_WIDTH } from "#app/ui-constants";
 
 const DEBUG_RNG = false;
 
@@ -383,16 +384,47 @@ export default class BattleScene extends SceneBase {
   }
 
   async preload() {
+    // TODO: Move all RNG-related code outside of `battle-scene.ts`.
     if (DEBUG_RNG) {
+      /**
+       * A list of functions that we ignore because they do not convey why the RNG call is being made.
+       * Feel free to add to this list as needed.
+       */
+      const ignoredRngFunctions = [
+        "realInRange",
+        "integerInRange",
+        "pick",
+        "weightedPick",
+        "shuffle",
+        "between",
+        "randSeedItem",
+        "randSeedWeightedItem",
+        "randSeedInt",
+        "randSeedIntRange",
+        "randSeedGauss",
+        "randSeedShuffle",
+        "randBattleSeedInt",
+        "randomString",
+        "executeWithSeedOffset",
+        "newBattle",
+      ];
+      const rngLogger = new CallSourceLogger(ignoredRngFunctions);
       const originalRealInRange = Phaser.Math.RND.realInRange;
       Phaser.Math.RND.realInRange = (min: number, max: number): number => {
         const ret = originalRealInRange.apply(Phaser.Math.RND, [min, max]);
-        const args = ["RNG", ++this.rngCounter, ret / (max - min), `min: ${min} / max: ${max}`];
-        args.push(`seed: ${this.rngSeedOverride || this.waveSeed || this.seed}`);
+        const rngInfo = [
+          "RNG",
+          ++this.rngCounter,
+          `raw: ${ret / (max - min)}`,
+          `min: ${min} / max: ${max}`,
+          `output: ${ret}`,
+          `seed: ${this.rngSeedOverride || this.waveSeed || this.seed}`,
+        ];
         if (this.rngOffset) {
-          args.push(`offset: ${this.rngOffset}`);
+          rngInfo.push(`offset: ${this.rngOffset}`);
         }
-        console.log(...args);
+
+        rngLogger.log(...rngInfo);
         return ret;
       };
     }
@@ -945,7 +977,7 @@ export default class BattleScene extends SceneBase {
     }
 
     if (boss && !dataSource) {
-      const secondaryIvs = getIvsFromId(randSeedInt(4294967296));
+      const secondaryIvs = getIvsFromId();
 
       for (let s = 0; s < pokemon.ivs.length; s++) {
         pokemon.ivs[s] = Math.round(
