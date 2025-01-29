@@ -23,7 +23,7 @@ import { Moves } from "#enums/moves";
 import { BattlerIndex } from "#enums/battler-index";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { AiType } from "#enums/ai-type";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";

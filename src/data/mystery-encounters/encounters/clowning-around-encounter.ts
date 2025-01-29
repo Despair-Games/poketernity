@@ -21,7 +21,7 @@ import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-en
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { Abilities } from "#enums/abilities";
 import {
   applyAbilityOverrideToPokemon,

@@ -4,7 +4,7 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import * as BattleAnims from "#app/data/battle-anims";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";

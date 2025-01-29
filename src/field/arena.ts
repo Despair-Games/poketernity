@@ -4,7 +4,7 @@ import { biomePokemonPools, biomeTrainerPools } from "#app/data/balance/biomes";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { type AbstractConstructor, randSeedInt } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#app/data/weather";
 import { CommonAnim } from "#enums/common-anim";
 import type { Type } from "#enums/type";

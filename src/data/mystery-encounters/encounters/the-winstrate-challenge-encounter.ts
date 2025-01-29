@@ -17,7 +17,7 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { TrainerType } from "#enums/trainer-type";
 import { Species } from "#enums/species";
 import { Abilities } from "#enums/abilities";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { Moves } from "#enums/moves";
 import { Nature } from "#enums/nature";
 import { Type } from "#enums/type";

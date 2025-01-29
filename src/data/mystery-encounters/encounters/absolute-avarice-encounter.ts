@@ -22,7 +22,7 @@ import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encoun
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { type BerryModifier, PokemonInstantReviveModifier } from "#app/modifier/modifier";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { Moves } from "#enums/moves";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { randInt } from "#app/utils";

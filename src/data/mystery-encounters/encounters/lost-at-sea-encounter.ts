@@ -1,4 +1,4 @@
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";

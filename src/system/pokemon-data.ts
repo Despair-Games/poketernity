@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import type { Gender } from "#enums/gender";
 import type { Nature } from "#enums/nature";
 import type { PokeballType } from "#enums/pokeball";
-import { getPokemonSpecies } from "../data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { Status } from "../data/status-effect";
 import { type Pokemon, EnemyPokemon, PokemonSummonData } from "../field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";

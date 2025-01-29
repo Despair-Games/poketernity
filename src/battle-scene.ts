@@ -2,9 +2,10 @@ import Phaser from "phaser";
 import UI from "#app/ui/ui";
 import type { Pokemon } from "#app/field/pokemon";
 import { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
-import type { PokemonSpeciesFilter } from "#app/data/pokemon-species";
+import type { PokemonSpeciesFilter } from "./@types/PokemonSpeciesFilter";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { allSpecies, getPokemonSpecies } from "#app/data/pokemon-species";
+import { allSpecies } from "./data/all-species";
+import { getPokemonSpecies } from "./utils/pokemon-species-utils";
 import {
   fixedNumber,
   getIvsFromId,

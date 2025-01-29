@@ -19,7 +19,7 @@ import { PartyUiMode } from "#enums/party-ui-mode";
 import { Species } from "#enums/species";
 import type { Type } from "#enums/type";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import {
   getEncounterText,

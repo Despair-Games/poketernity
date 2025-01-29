@@ -34,13 +34,11 @@ import { IgnoreOpponentStatStagesAttr } from "#app/data/move-attrs/ignore-oppone
 import { RespectAttackTypeImmunityAttr } from "#app/data/move-attrs/respect-attack-type-immunity-attr";
 import { MoveTarget } from "#enums/move-target";
 import { MoveCategory } from "#enums/move-category";
-import type { PokemonSpeciesForm } from "#app/data/pokemon-species";
-import {
-  default as PokemonSpecies,
-  getFusedSpeciesName,
-  getPokemonSpecies,
-  getPokemonSpeciesForm,
-} from "#app/data/pokemon-species";
+import type { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
+import { default as PokemonSpecies } from "#app/data/pokemon-species";
+import { getFusedSpeciesName } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import {
   CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER,
   getStarterValueFriendshipCap,
@@ -3125,7 +3123,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     /** This prevents a move with negative power from possibly dealing positive damage.
      * The issue can occur because the base damage is the result of the below equation plus 2.
      */
-    const damageCalculation = (levelMultiplier * power * sourceAtk) / targetDef/ 50;
+    const damageCalculation = (levelMultiplier * power * sourceAtk) / targetDef / 50;
     if (damageCalculation < 0) {
       return damageCalculation;
     }

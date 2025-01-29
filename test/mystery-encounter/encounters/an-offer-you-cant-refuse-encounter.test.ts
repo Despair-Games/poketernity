@@ -14,7 +14,7 @@ import { AnOfferYouCantRefuseEncounter } from "#app/data/mystery-encounters/enco
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { Moves } from "#enums/moves";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import i18next from "i18next";
