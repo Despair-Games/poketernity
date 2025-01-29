@@ -930,7 +930,7 @@ export class StatusMove extends Move {
   }
 }
 
-export class SelfStatusMove extends Move {
+export class SelfStatusMove extends StatusMove {
   constructor(
     id: Moves,
     type: Type,
@@ -940,7 +940,8 @@ export class SelfStatusMove extends Move {
     priority: number,
     generation: number,
   ) {
-    super(id, type, MoveCategory.STATUS, MoveTarget.USER, -1, accuracy, pp, chance, priority, generation);
+    super(id, type, accuracy, pp, chance, priority, generation);
+    this.target(MoveTarget.USER);
   }
 }
 
