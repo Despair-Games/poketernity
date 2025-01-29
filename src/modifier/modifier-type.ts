@@ -118,7 +118,7 @@ import { Type } from "#enums/type";
 import i18next from "i18next";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { getBerryEffectDescription, getBerryName } from "#app/utils/berry-utils";
-import { PARTY_UI_NO_EFFECT_MSG } from "#app/constants";
+import { PARTY_UI_NO_EFFECT_MSG_i18N_KEY } from "#app/constants";
 
 const outputModifierData = false;
 const useMaxWeightForOutput = false;
@@ -433,7 +433,7 @@ export class PokemonHpRestoreModifierType extends PokemonModifierType {
             || (pokemon.isFullHp()
               && (!this.healStatus || (!pokemon.status && !pokemon.getTag(BattlerTagType.CONFUSED))))
           ) {
-            return PARTY_UI_NO_EFFECT_MSG;
+            return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
           }
           return null;
         }),
@@ -469,7 +469,7 @@ export class PokemonReviveModifierType extends PokemonHpRestoreModifierType {
         new PokemonHpRestoreModifier(this, (args[0] as PlayerPokemon).id, 0, this.restorePercent, false, true),
       (pokemon: PlayerPokemon) => {
         if (!pokemon.isFainted()) {
-          return PARTY_UI_NO_EFFECT_MSG;
+          return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
         }
         return null;
       },
@@ -478,7 +478,7 @@ export class PokemonReviveModifierType extends PokemonHpRestoreModifierType {
 
     this.selectFilter = (pokemon: PlayerPokemon) => {
       if (pokemon.hp) {
-        return PARTY_UI_NO_EFFECT_MSG;
+        return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
       }
       return null;
     };
@@ -499,7 +499,7 @@ export class PokemonStatusHealModifierType extends PokemonModifierType {
       (_type, args) => new PokemonStatusHealModifier(this, (args[0] as PlayerPokemon).id),
       (pokemon: PlayerPokemon) => {
         if (!pokemon.hp || (!pokemon.status && !pokemon.getTag(BattlerTagType.CONFUSED))) {
-          return PARTY_UI_NO_EFFECT_MSG;
+          return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
         }
         return null;
       },
@@ -542,7 +542,7 @@ export class PokemonPpRestoreModifierType extends PokemonMoveModifierType {
       },
       (pokemonMove: PokemonMove) => {
         if (!pokemonMove.ppUsed) {
-          return PARTY_UI_NO_EFFECT_MSG;
+          return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
         }
         return null;
       },
@@ -571,7 +571,7 @@ export class PokemonAllMovePpRestoreModifierType extends PokemonModifierType {
       (_type, args) => new PokemonAllMovePpRestoreModifier(this, (args[0] as PlayerPokemon).id, this.restorePoints),
       (pokemon: PlayerPokemon) => {
         if (!pokemon.getMoveset().filter((m) => m.ppUsed).length) {
-          return PARTY_UI_NO_EFFECT_MSG;
+          return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
         }
         return null;
       },
@@ -603,7 +603,7 @@ export class PokemonPpUpModifierType extends PokemonMoveModifierType {
       },
       (pokemonMove: PokemonMove) => {
         if (pokemonMove.getMove().pp < 5 || pokemonMove.ppUp >= 3 || pokemonMove.maxPpOverride) {
-          return PARTY_UI_NO_EFFECT_MSG;
+          return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
         }
         return null;
       },
@@ -632,7 +632,7 @@ export class PokemonNatureChangeModifierType extends PokemonModifierType {
       (_type, args) => new PokemonNatureChangeModifier(this, (args[0] as PlayerPokemon).id, this.nature),
       (pokemon: PlayerPokemon) => {
         if (pokemon.getNature() === this.nature) {
-          return PARTY_UI_NO_EFFECT_MSG;
+          return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
         }
         return null;
       },
@@ -663,7 +663,7 @@ export class RememberMoveModifierType extends PokemonModifierType {
       (type, args) => new RememberMoveModifier(type, (args[0] as PlayerPokemon).id, args[1] as number),
       (pokemon: PlayerPokemon) => {
         if (!pokemon.getLearnableLevelMoves().length) {
-          return PARTY_UI_NO_EFFECT_MSG;
+          return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
         }
         return null;
       },
@@ -1110,7 +1110,7 @@ export class TmModifierType extends PokemonModifierType {
           pokemon.compatibleTms.indexOf(moveId) === -1
           || pokemon.getMoveset().filter((m) => m.moveId === moveId).length
         ) {
-          return PARTY_UI_NO_EFFECT_MSG;
+          return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
         }
         return null;
       },
@@ -1172,7 +1172,7 @@ export class EvolutionItemModifierType extends PokemonModifierType implements Ge
           return null;
         }
 
-        return PARTY_UI_NO_EFFECT_MSG;
+        return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
       },
     );
 
@@ -1221,7 +1221,7 @@ export class FormChangeItemModifierType extends PokemonModifierType implements G
           return null;
         }
 
-        return PARTY_UI_NO_EFFECT_MSG;
+        return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
       },
     );
 
@@ -1249,7 +1249,7 @@ export class FusePokemonModifierType extends PokemonModifierType {
       (_type, args) => new FusePokemonModifier(this, (args[0] as PlayerPokemon).id, (args[1] as PlayerPokemon).id),
       (pokemon: PlayerPokemon) => {
         if (pokemon.isFusion()) {
-          return PARTY_UI_NO_EFFECT_MSG;
+          return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
         }
         return null;
       },

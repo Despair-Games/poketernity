@@ -1,5 +1,3 @@
-import { t } from "i18next";
-
 /** Abbreviated name of the application/game. */
 export const APP_ABBREVIATION: string = import.meta.env.VITE_APP_ABBREVIATION ?? "game";
 
@@ -94,4 +92,4 @@ export const MYSTERY_ENCOUNTER_AVERAGE_ENCOUNTERS_PER_RUN_TARGET = 12;
  */
 export const MYSTERY_ENCOUNTER_ANTI_VARIANCE_WEIGHT_MODIFIER = 15;
 
-export const PARTY_UI_NO_EFFECT_MSG = t("partyUiHandler:anyEffect");
+export const PARTY_UI_NO_EFFECT_MSG_i18N_KEY = "partyUiHandler:anyEffect";
