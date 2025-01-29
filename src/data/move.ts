@@ -727,7 +727,7 @@ export abstract class Move implements Localizable {
     /** The combined score from all conditions of the move */
     const conditionScores = this.conditions.map((cond) => cond.getConditionScore(user, target, this));
 
-    const totalScore = attrScores.concat(conditionScores).reduce((total, score) => total + score);
+    const totalScore = attrScores.concat(conditionScores).reduce((total, score) => total + score, 0);
 
     // @todo apply low accuracy penalty + ally target penalty to totalScore
 
