@@ -123,6 +123,7 @@ import {
   AutotomizedTag,
   PowerTrickTag,
   SkyDropTag,
+  CritBoostStackableTag,
 } from "../data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { WeatherType } from "#enums/weather-type";
@@ -318,11 +319,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       throw `Cannot create a player Pokemon for species '${species.getName(formIndex)}'`;
     }
 
-    const hiddenAbilityChance = new NumberHolder(BASE_HIDDEN_ABILITY_CHANCE);
-    if (!this.hasTrainer()) {
-      globalScene.applyModifiers(HiddenAbilityRateBoosterModifier, true, hiddenAbilityChance);
-    }
-
     this.species = species;
     this.pokeball = dataSource?.pokeball || PokeballType.POKEBALL;
     this.level = level;
@@ -333,15 +329,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.abilityIndex = abilityIndex; // Use the provided ability index if it is defined
     } else {
       // If abilityIndex is not provided, determine it based on species and hidden ability
-      const hasHiddenAbility = !randSeedInt(hiddenAbilityChance.value);
-      const randAbilityIndex = randSeedInt(2);
-      if (species.abilityHidden && hasHiddenAbility) {
-        // If the species has a hidden ability and the hidden ability is present
-        this.abilityIndex = 2;
-      } else {
-        // If there is no hidden ability or species does not have a hidden ability
-        this.abilityIndex = species.ability2 !== species.ability1 ? randAbilityIndex : 0; // Use random ability index if species has a second ability, otherwise use 0
-      }
+      this.generateRandomAbility();
     }
     if (formIndex !== undefined) {
       this.formIndex = formIndex;
@@ -396,7 +384,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.usedTMs = dataSource.usedTMs ?? [];
       this.customPokemonData = new CustomPokemonData(dataSource.customPokemonData);
     } else {
-      this.id = randSeedInt(4294967296);
+      this.generateId();
       this.ivs = ivs || getIvsFromId(this.id);
 
       if (this.gender === undefined) {
@@ -450,6 +438,33 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     if (!dataSource) {
       this.calculateStats();
+    }
+  }
+
+  /**
+   * Sets this Pokemon's ID to be a random integer from 0 to 2^32 - 1, inclusive.
+   */
+  generateId(): void {
+    this.id = randSeedInt(4294967296);
+  }
+
+  /**
+   * Sets this Pokemon to have a random ability, including a small chance of generating its Hidden Ability.
+   */
+  generateRandomAbility(): void {
+    const hiddenAbilityChance = new NumberHolder(BASE_HIDDEN_ABILITY_CHANCE);
+    if (!this.hasTrainer()) {
+      globalScene.applyModifiers(HiddenAbilityRateBoosterModifier, true, hiddenAbilityChance);
+    }
+
+    const hasHiddenAbility = !randSeedInt(hiddenAbilityChance.value);
+    const randAbilityIndex = randSeedInt(2);
+    if (this.species.abilityHidden && hasHiddenAbility) {
+      // If the species has a hidden ability and the hidden ability is present
+      this.abilityIndex = 2;
+    } else {
+      // If there is no hidden ability or species does not have a hidden ability
+      this.abilityIndex = this.species.ability2 !== this.species.ability1 ? randAbilityIndex : 0; // Use random ability index if species has a second ability, otherwise use 0
     }
   }
 
@@ -1100,6 +1115,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       } else {
         critStage.value += 2;
       }
+    }
+
+    const critBoostStackableTag = source.getTag(CritBoostStackableTag);
+    if (critBoostStackableTag) {
+      critStage.value += critBoostStackableTag.stackCount;
     }
 
     console.log(`crit stage: +${critStage.value}`);
@@ -3102,12 +3122,18 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      */
     const targetDef = this.getEffectiveStat(defendingStat.value, source, move, abilityApplyMode, isCritical, simulated);
 
+    /** This prevents a move with negative power from possibly dealing positive damage.
+     * The issue can occur because the base damage is the result of the below equation plus 2.
+     */
+    const damageCalculation = (levelMultiplier * power * sourceAtk) / targetDef/ 50;
+    if (damageCalculation < 0) {
+      return damageCalculation;
+    }
     /**
      * The attack's base damage, as determined by the source's level, move power
      * and Attack stat as well as this Pokemon's Defense stat
      */
-    const baseDamage = (levelMultiplier * power * sourceAtk) / targetDef / 50 + 2;
-
+    const baseDamage = damageCalculation + 2;
     /** Debug message for non-simulated calls (i.e. when damage is actually dealt) */
     if (!simulated) {
       console.log("base damage", baseDamage, move.name, power, sourceAtk, targetDef);
@@ -3333,28 +3359,28 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       );
     }
 
-    /** If damage is nullified by a form-ability (Eiscue's Ice Face, Mimikyu's Disguise), then damage is set to 0 */
-    if (receivedDamageMultiplier.value > 0) {
-      damage.value = toDmgValue(
-        baseDamage
-          * targetMultiplier
-          * multiStrikeEnhancementMultiplier.value
-          * arenaAttackTypeMultiplier.value
-          * glaiveRushMultiplier.value
-          * criticalMultiplier.value
-          * randomMultiplier
-          * stabMultiplier.value
-          * typeMultiplier
-          * burnMultiplier.value
-          * screenMultiplier.value
-          * hitsTagMultiplier.value
-          * mistyTerrainMultiplier
-          * tintedLensMultiplier.value
-          * receivedDamageMultiplier.value
-          * alliedFieldDamageMultiplier.value,
-      );
-    } else {
+    damage.value =
+      baseDamage
+      * targetMultiplier
+      * multiStrikeEnhancementMultiplier.value
+      * arenaAttackTypeMultiplier.value
+      * glaiveRushMultiplier.value
+      * criticalMultiplier.value
+      * randomMultiplier
+      * stabMultiplier.value
+      * typeMultiplier
+      * burnMultiplier.value
+      * screenMultiplier.value
+      * hitsTagMultiplier.value
+      * mistyTerrainMultiplier
+      * tintedLensMultiplier.value
+      * receivedDamageMultiplier.value
+      * alliedFieldDamageMultiplier.value;
+    /** If damage is nullified by a form-ability (Eiscue's Ice Face, Mimikyu's Disguise) or the attack has a non-damaging outcome (Present), then damage is set to 0 instead */
+    if (damage.value <= 0) {
       damage.value = 0;
+    } else {
+      damage.value = toDmgValue(damage.value);
     }
 
     // This attribute may modify damage arbitrarily, so be careful about changing its order of application.
