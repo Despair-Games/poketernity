@@ -175,7 +175,6 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
       { requiresConfirmation: true, confirmationMessage: t("settings:confirmDisableTouch") },
     ),
     touchscreenOnly: true,
-    doWrap: true,
   },
   {
     key: "moveTouchControls",
