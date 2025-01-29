@@ -5608,7 +5608,12 @@ export class EnemyPokemon extends Pokemon {
       return undefined;
     }
 
-    if (trainer && !this.isTrapped() && this.getMoveQueue().length === 0) {
+    if (
+      trainer
+      && !this.isTrapped()
+      && this.getParty().some((p) => !p.isActive(true))
+      && this.getMoveQueue().length === 0
+    ) {
       const switchCommand = this.getSwitchCommand();
       if (switchCommand) {
         return switchCommand;
@@ -5731,7 +5736,7 @@ export class EnemyPokemon extends Pokemon {
         const averageScore =
           this.getOpponents()
             .map((p) => this.getMoveScore(p, mv.getMove()))
-            .reduce((total, score) => total + score) / this.getOpponents.length;
+            .reduce((total, score) => total + score, 0) / this.getOpponents.length;
 
         return {
           move: mv.moveId,
