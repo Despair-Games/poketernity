@@ -58,8 +58,6 @@ import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { CommanderAbAttr } from "#app/data/ab-attrs/commander-ab-attr";
 import { globalScene } from "#app/global-scene";
 
-export type ModifierPredicate<T extends Modifier = Modifier> = (modifier: T) => boolean;
-
 const iconOverflowIndex = 24;
 
 export const modifierSortFunc = (a: Modifier, b: Modifier): number => {
@@ -911,7 +909,7 @@ export abstract class LapsingPokemonHeldItemModifier extends PokemonHeldItemModi
     return 1;
   }
 
-  override isLapsingPokemonHeldItemModifier(): this is LapsingPokemonHeldItemModifier {
+  override isLapsingPokemonHeldItemModifier(): this is this {
     return true;
   }
 }

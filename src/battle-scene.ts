@@ -19,7 +19,8 @@ import {
   randItem,
   type AbstractConstructor,
 } from "#app/utils";
-import type { Modifier, ModifierPredicate, TurnHeldItemTransferModifier } from "./modifier/modifier";
+import type { Modifier, TurnHeldItemTransferModifier } from "./modifier/modifier";
+import type { ModifierPredicate } from "./@types/ModifierPredicate";
 import {
   ConsumableModifier,
   ConsumablePokemonModifier,

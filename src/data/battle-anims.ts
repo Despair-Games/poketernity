@@ -474,7 +474,7 @@ export function initMoveAnim(move: Moves): Promise<void> {
       moveAnims.set(move, null);
       const defaultMoveAnim = allMoves[move].isAttackMove()
         ? Moves.TACKLE
-        : (allMoves[move] as Move).isSelfStatusMove()
+        : (allMoves[move] as Move).isSelfStatusMove() // as Move is necessary for the ts-compiler
           ? Moves.FOCUS_ENERGY
           : Moves.TAIL_WHIP;
 

@@ -37,11 +37,11 @@ export class EatBerryAttr extends MoveEffectAttr {
     return true;
   }
 
-  getTargetHeldBerries(target: Pokemon): BerryModifier[] {
-    return globalScene.findModifiers(
-      (m) => m.isBerryModifier() && (m as BerryModifier).pokemonId === target.id,
+  getTargetHeldBerries(target: Pokemon) {
+    return globalScene.findModifiers<BerryModifier>(
+      (m) => m.isBerryModifier() && m.pokemonId === target.id,
       target.isPlayer(),
-    ) as BerryModifier[];
+    );
   }
 
   reduceBerryModifier(target: Pokemon) {

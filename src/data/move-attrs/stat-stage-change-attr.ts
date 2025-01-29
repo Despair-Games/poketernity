@@ -98,34 +98,22 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
       switch (stat) {
         case Stat.ATK:
           if (this.selfTarget) {
-            noEffect = !user.getMoveset().find((m) => {
-              const move = m.getMove();
-              return move.category === MoveCategory.PHYSICAL;
-            });
+            noEffect = !user.getMoveset().find((m) => m.getMove().category === MoveCategory.PHYSICAL);
           }
           break;
         case Stat.DEF:
           if (!this.selfTarget) {
-            noEffect = !user.getMoveset().find((m) => {
-              const move = m.getMove();
-              return move.isAttackMove() && move.category === MoveCategory.PHYSICAL;
-            });
+            noEffect = !user.getMoveset().find((m) => m.getMove().category === MoveCategory.PHYSICAL);
           }
           break;
         case Stat.SPATK:
           if (this.selfTarget) {
-            noEffect = !user.getMoveset().find((m) => {
-              const move = m.getMove();
-              return move.isAttackMove() && move.category === MoveCategory.SPECIAL;
-            });
+            noEffect = !user.getMoveset().find((m) => m.getMove().category === MoveCategory.SPECIAL);
           }
           break;
         case Stat.SPDEF:
           if (!this.selfTarget) {
-            noEffect = !user.getMoveset().find((m) => {
-              const move = m.getMove();
-              return move.isAttackMove() && move.category === MoveCategory.SPECIAL;
-            });
+            noEffect = !user.getMoveset().find((m) => m.getMove().category === MoveCategory.SPECIAL);
           }
           break;
       }

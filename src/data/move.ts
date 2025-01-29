@@ -262,11 +262,11 @@ export abstract class Move implements Localizable {
   }
 
   isStatusMove(): this is StatusMove {
-    return false;
+    return this.category === MoveCategory.STATUS && this.moveTarget !== MoveTarget.USER;
   }
 
   isSelfStatusMove(): this is SelfStatusMove {
-    return true;
+    return this.category === MoveCategory.STATUS && this.moveTarget === MoveTarget.USER;
   }
 
   /**
@@ -936,10 +936,6 @@ export class StatusMove extends Move {
   ) {
     super(id, type, MoveCategory.STATUS, MoveTarget.NEAR_OTHER, -1, accuracy, pp, chance, priority, generation);
   }
-
-  override isStatusMove(): this is this {
-    return true;
-  }
 }
 
 export class SelfStatusMove extends StatusMove {
@@ -954,10 +950,6 @@ export class SelfStatusMove extends StatusMove {
   ) {
     super(id, type, accuracy, pp, chance, priority, generation);
     this.target(MoveTarget.USER);
-  }
-
-  override isSelfStatusMove(): this is this {
-    return true;
   }
 }
 
