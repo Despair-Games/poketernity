@@ -1000,7 +1000,6 @@ export default class RunInfoUiHandler extends UiHandler {
     // Issue Note (08-05-2024): It seems as if fused pokemon do not appear with the averaged color b/c pokemonData's loadAsset requires there to be some active battle?
     // As an alternative, the icons of the second/bottom fused Pokemon have been placed next to their fellow fused Pokemon in Hall of Fame
     this.hallofFameContainer = globalScene.add.container(0, 0);
-    // Thank you Hayuna for the code
     const overlayColor = isFemale ? "red" : "blue";
     const hallofFameBg = globalScene.add.image(-1, -1, "hall_of_fame_" + overlayColor);
     hallofFameBg.setOrigin(0, 0);

@@ -30,7 +30,6 @@ export class EndCardPhase extends Phase {
       `end_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}`,
     );
     this.endCard.setOrigin(0);
-    this.endCard.setScale(0.5);
     field.add(this.endCard);
 
     this.text = addTextObject(

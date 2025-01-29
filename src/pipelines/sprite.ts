@@ -443,7 +443,7 @@ export default class SpritePipeline extends FieldSpritePipeline {
         || sprite.parentContainer instanceof Trainer
         || sprite.parentContainer instanceof MysteryEncounterIntroVisuals;
       const field = isEntityObj ? sprite.parentContainer.parentContainer : sprite.parentContainer;
-      // TODO scaling is using the game scale needed here? Seems like overall it's doing value * game_scale / game_scale
+      // TODO scaling: is using the game scale needed here? Seems like overall it's doing value * game_scale / game_scale
       const fieldScaleRatio = field.scale / GAME_SCALE;
       const baseY =
         ((isEntityObj ? sprite.parentContainer.y : sprite.y + sprite.height) * GAME_SCALE) / fieldScaleRatio;
