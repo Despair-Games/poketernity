@@ -20,7 +20,6 @@ import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { isNullOrUndefined } from "#app/utils";
 import { type Move } from "./move";
-import { selfStatLowerMoves } from "./self-stat-lower-moves";
 import { AttackMove } from "./move";
 import { ChargeAnim } from "#enums/charge-anim";
 import { EncoreTag, StockpilingTag, SemiInvulnerableTag, ShellTrapTag, TrappedTag } from "./battler-tags";
@@ -3682,10 +3681,7 @@ export function initMoves() {
   ];
 
   for (const move of rawAllMoves) {
-    // Make sure `allMoves` assigns correct ID to every move, and check if the move is a self-stat-lowering move
+    // Make sure `allMoves` assigns correct ID to every move
     allMoves[move.id] = move;
-    if (move.getAttrs(StatStageChangeAttr).some((a) => a.selfTarget && a.stages < 0)) {
-      selfStatLowerMoves.push(move.id);
-    }
   }
 }

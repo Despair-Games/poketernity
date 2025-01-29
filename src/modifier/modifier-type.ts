@@ -1,7 +1,6 @@
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { EvolutionItem } from "#enums/evolution-item";
 import { tmPoolTiers, tmSpecies } from "#app/data/balance/tms";
-import { selfStatLowerMoves } from "#app/data/self-stat-lower-moves";
 import { allMoves } from "#app/data/all-moves";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { getPokeballCatchMultiplier, getPokeballName, MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
@@ -2648,7 +2647,7 @@ const modifierPool: ModifierPool = {
               .getHeldItems()
               .some((i) => i instanceof ResetNegativeStatStageModifier && i.stackCount >= i.getMaxHeldItemCount(p))
             && (checkedAbilities.some((a) => p.hasAbility(a, false, true))
-              || p.getMoveset(true).some((m) => m && selfStatLowerMoves.includes(m.moveId))),
+              || p.getMoveset(true).some((m) => m && m.getMove().isSelfStatLowering())),
         ).length;
         // If a party member has one of the above moves or abilities and doesn't have max herbs, the herb will appear more frequently
         return 0 * (weightMultiplier ? 2 : 1) + (weightMultiplier ? weightMultiplier * 0 : 0);

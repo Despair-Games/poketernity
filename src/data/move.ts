@@ -46,6 +46,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { HealStatusEffectAttr } from "./move-attrs/heal-status-effect-attr";
 import { ChargeAnim } from "#enums/charge-anim";
 import { allMoves } from "#app/data/all-moves";
+import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
 
 export abstract class Move implements Localizable {
   public id: Moves;
@@ -262,7 +263,7 @@ export abstract class Move implements Localizable {
   }
 
   isStatusMove(): this is StatusMove {
-    return this.category === MoveCategory.STATUS && this.moveTarget !== MoveTarget.USER;
+    return this.category === MoveCategory.STATUS;
   }
 
   isSelfStatusMove(): this is SelfStatusMove {
@@ -856,6 +857,14 @@ export abstract class Move implements Localizable {
       && !exceptMoves.some((id) => this.id === id)
       && this.category !== MoveCategory.STATUS
     );
+  }
+
+  /**
+   * Checks if the move lowers the stat of the user
+   * @returns `true` if the move is a self stat lowering move
+   */
+  isSelfStatLowering(): boolean {
+    return this.getAttrs(StatStageChangeAttr).some((a) => a.selfTarget && a.stages < 0);
   }
 }
 
