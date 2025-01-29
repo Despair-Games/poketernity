@@ -68,7 +68,7 @@ export abstract class MoveAttr {
     return 0;
   }
 
-  getEffectScore(_user: Pokemon, _target: Pokemon, _move: Move): number {
+  getEffectScore(_user: Pokemon, _target?: Pokemon, _move?: Move): number {
     return 0;
   }
 }

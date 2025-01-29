@@ -715,9 +715,9 @@ export abstract class Move implements Localizable {
    * @returns a score value accumulated from effect score modifiers.
    * @todo Add Low Accuracy Penalty and Ally Target Penalty
    */
-  public getEffectScore(user: EnemyPokemon, target: Pokemon): number {
+  public getEffectScore(user: EnemyPokemon, target?: Pokemon): number {
     // penalize targeting Pokemon that are hidden by Commander
-    if (target.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === target) {
+    if (target && target.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === target) {
       return -20;
     }
 

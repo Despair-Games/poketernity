@@ -5766,16 +5766,42 @@ export class EnemyPokemon extends Pokemon {
 
     /**
      * Contains the "optimal" action for each move in this Pokemon's move pool.
-     * This accumulates scores and resolves move targeting.
+     * This accumulates scores and resolves move targeting based on those scores.
      * @todo Resolve issues with {@linkcode BattlerIndex.ATTACKER} targeting
      */
     const moveActions = movePool.map((mv) => {
+      const move = mv.getMove();
+
+      if (move.moveTarget === MoveTarget.ATTACKER) {
+        /**
+         * Counter-attacks (e.g. Metal Burst) are scored entirely
+         * based on their effect score.
+         */
+        const score = mv.getMove().getEffectScore(this);
+
+        return {
+          move: mv.moveId,
+          targets: [BattlerIndex.ATTACKER],
+          score,
+        };
+      }
+
       const { targets, multiple } = getMoveTargets(this, mv.moveId);
+
       /**
        * The {@linkcode BattlerIndex | BattlerIndexes} of active Pokemon that
        * can legally be targeted with this move.
        */
       const activeTargets = targets.filter((bi) => !isNullOrUndefined(globalScene.getFieldPokemonByBattlerIndex(bi)));
+      if (activeTargets.length === 0) {
+        /** Moves with no valid targets are given a "fail penalty" of (-5). */
+        return {
+          move: mv.moveId,
+          targets: [],
+          score: -5,
+        };
+      }
+
       /**
        * A mapping between {@linkcode BattlerIndex} and the move score for this
        * move against the Pokemon at that index.
