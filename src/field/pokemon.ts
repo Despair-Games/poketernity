@@ -5684,6 +5684,9 @@ export class EnemyPokemon extends Pokemon {
     }
 
     const nextMove = this.getNextMove();
+    console.log(
+      `${BattlerIndex[this.getBattlerIndex()]}: selecting ${Moves[nextMove.move]} against ${nextMove.targets.map((i) => BattlerIndex[i])}`,
+    );
 
     return {
       command: BattleCommand.FIGHT,
@@ -5791,9 +5794,9 @@ export class EnemyPokemon extends Pokemon {
           targets: targets,
           score: targetScores.map((ts) => ts[1]).reduce((total, score) => total + score),
         };
-      } else if (mv.getMove().target(MoveTarget.RANDOM_NEAR_ENEMY)) {
+      } else if (mv.getMove().moveTarget === MoveTarget.RANDOM_NEAR_ENEMY) {
         /**
-         * Moves with random targeting are used against the original target,
+         * Moves with random targeting resolve their final target within {@linkcode getMoveTargets},
          * but calculate score based on the average move score between all legal targets
          */
         const averageScore =
