@@ -9,7 +9,9 @@ export function applyAbAttrs<TAttr extends AbAttr>(
   ...params: Parameters<TAttr["apply"]>
 ): string[] {
   return applyAbAttrsInternal({ canApplyOnly: true }, attrType, ...params);
-} /**
+}
+
+/**
  * Applies a Pokemon's ability attributes of matching type
  * @param attrType The type of attribute to apply
  * @param params The parameters for the given attribute's `apply` function. This should include:
@@ -19,7 +21,6 @@ export function applyAbAttrs<TAttr extends AbAttr>(
  * @returns The message(s) displayed when the ability applies
  * @see {@linkcode AbAttr}
  */
-
 function applyAbAttrsInternal<TAttr extends AbAttr>(
   abFilterOptions: AbilityFilterOptions,
   attrType: AbstractConstructor<TAttr>,
@@ -74,6 +75,7 @@ function applyAbAttrsInternal<TAttr extends AbAttr>(
 
   return messages;
 }
+
 export function applyRevealedAbAttrs<TAttr extends AbAttr>(
   attrType: AbstractConstructor<TAttr>,
   ...params: Parameters<TAttr["apply"]>
