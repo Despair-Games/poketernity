@@ -1,10 +1,11 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { SkyDropTag, type BattlerTag } from "#app/data/battler-tags";
+import { type BattlerTag } from "#app/data/battler-tags";
 import { type MovePhase } from "#app/phases/move-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
+import { type SkyDropTag } from "#app/data/battler-tags";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattleType } from "#enums/battle-type";
 import { PostFaintAbAttr } from "#app/data/ab-attrs/post-faint-ab-attr";
@@ -104,7 +105,7 @@ export class FaintPhase extends PokemonPhase {
       }
     }
 
-    faintPokemon.getTag(SkyDropTag)?.clearSkyDropEffects();
+    faintPokemon.getTag<SkyDropTag>(BattlerTagType.SKY_DROP)?.clearSkyDropEffects();
     faintPokemon.destroySubstitute();
     faintPokemon.lapseTag(BattlerTagType.COMMANDED);
     faintPokemon.resetSummonData();

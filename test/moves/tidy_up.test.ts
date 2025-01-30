@@ -8,7 +8,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { SubstituteTag } from "#app/data/battler-tags";
+import { BattlerTagType } from "#enums/battler-tag-type";
 
 describe("Moves - Tidy Up", () => {
   let phaserGame: Phaser.Game;
@@ -99,7 +99,7 @@ describe("Moves - Tidy Up", () => {
     const pokemon = [game.scene.getPlayerPokemon()!, game.scene.getEnemyPokemon()!];
     pokemon.forEach((p) => {
       expect(p).toBeDefined();
-      expect(p!.getTag(SubstituteTag)).toBeUndefined();
+      expect(p!.getTag(BattlerTagType.SUBSTITUTE)).toBeUndefined();
     });
   }, 20000);
 

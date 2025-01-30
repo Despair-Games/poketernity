@@ -1,6 +1,6 @@
 import { AlwaysHitAbAttr } from "#app/data/ab-attrs/always-hit-ab-attr";
 import { MaxMultiHitAbAttr } from "#app/data/ab-attrs/max-multi-hit-ab-attr";
-import { SemiInvulnerableTag, SkyDropTag, ProtectedTag } from "#app/data/battler-tags";
+import { ProtectedTag } from "#app/data/battler-tags";
 import { HitsTagAttr } from "#app/data/move-attrs/hits-tag-attr";
 import { OneHitKOAttr } from "#app/data/move-attrs/one-hit-ko-attr";
 import { ToxicAccuracyAttr } from "#app/data/move-attrs/toxic-accuracy-attr";
@@ -10,6 +10,7 @@ import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { BooleanHolder } from "#app/utils";
 import { ConditionalProtectArenaTagTypes } from "#app/utils/arena-tag-type-utils";
+import { SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -80,7 +81,8 @@ export abstract class HitCheckPhase extends PokemonPhase {
         && (user.getLastXMoves()[0]?.targets ?? []).indexOf(target.getBattlerIndex()) !== -1)
       || !!target.getTag(BattlerTagType.ALWAYS_GET_HIT);
 
-    const semiInvulnerableTag = target.getTag(SemiInvulnerableTag) ?? target.getTag(SkyDropTag);
+    const semiInvulnerableTag =
+      target.getTag(SemiInvulnerableBattlerTagTypes) ?? target.getTag(BattlerTagType.SKY_DROP);
     /** Should the move miss due to the target's semi-invulnerability? */
     const targetIsSemiInvulnerable =
       !!semiInvulnerableTag

@@ -1,13 +1,13 @@
 import { globalScene } from "#app/global-scene";
 import { allMoves } from "#app/data/all-moves";
-import { BeakBlastHeaderAttr } from "./move-attrs/beak-blast-header-attr";
+import { BeakBlastHeaderAttr } from "#app/data/move-attrs/beak-blast-header-attr";
 import { type Move } from "#app/data/move";
 import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import { getFrameMs, getEnumKeys, getEnumValues, animationFileName, isNullOrUndefined } from "#app/utils";
 import { BattlerIndex } from "#enums/battler-index";
 import { Moves } from "#enums/moves";
-import { SubstituteTag } from "./battler-tags";
+import { type SubstituteTag } from "#app/data/battler-tags";
 import Phaser from "phaser";
 import { EncounterAnim } from "#enums/encounter-anims";
 import { settings } from "#app/system/settings/settings-manager";
@@ -15,6 +15,7 @@ import { DelayedAttackAttr } from "./move-attrs/delayed-attack-attr";
 import { AnimFrameTarget } from "#enums/anim-frame-target";
 import { ChargeAnim } from "#enums/charge-anim";
 import { CommonAnim } from "#enums/common-anim";
+import { BattlerTagType } from "#enums/battler-tag-type";
 
 enum AnimFocus {
   TARGET = 1,
@@ -796,7 +797,8 @@ export abstract class BattleAnim {
     const user = !isOppAnim ? this.user : this.target;
     const target = !isOppAnim ? this.target : this.user;
 
-    const targetSubstitute = onSubstitute && user !== target ? target!.getTag(SubstituteTag) : null;
+    const targetSubstitute =
+      onSubstitute && user !== target ? target!.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE) : null;
 
     const userInitialX = user!.x; // TODO: is this bang correct?
     const userInitialY = user!.y; // TODO: is this bang correct?
@@ -867,7 +869,8 @@ export abstract class BattleAnim {
       return;
     }
 
-    const targetSubstitute = !!onSubstitute && user !== target ? target.getTag(SubstituteTag) : null;
+    const targetSubstitute =
+      !!onSubstitute && user !== target ? target.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE) : null;
 
     const userSprite = user.getSprite();
     const targetSprite = targetSubstitute?.sprite ?? target.getSprite();

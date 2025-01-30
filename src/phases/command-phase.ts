@@ -4,7 +4,7 @@ import { type FairyLockTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import type { EncoreTag } from "#app/data/battler-tags";
-import { SkyDropTag, TrappedTag } from "#app/data/battler-tags";
+import { type SkyDropTag, type TrappedTag } from "#app/data/battler-tags";
 import { getMoveTargets, type MoveTargetSet } from "#app/data/move";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { FieldPosition } from "#enums/field-position";
@@ -23,6 +23,7 @@ import { Moves } from "#enums/moves";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PokeballType } from "#enums/pokeball";
 import i18next from "i18next";
+import { TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 
 /**
  * Handles the player's start-of-turn actions (`Fight/Ball/Pokemon/Run`) during a battle
@@ -345,7 +346,9 @@ export class CommandPhase extends FieldPhase {
           }
           showNoEscapeText(trappedAbMessages[0]);
         } else {
-          const trapTag = playerPokemon.getTag(TrappedTag) ?? playerPokemon.getTag(SkyDropTag);
+          const trapTag =
+            playerPokemon.getTag<TrappedTag>(TrappedBattlerTagTypes)
+            ?? playerPokemon.getTag<SkyDropTag>(BattlerTagType.SKY_DROP);
           const fairyLockTag = arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER);
 
           if (!isSwitch) {

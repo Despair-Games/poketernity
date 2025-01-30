@@ -29,7 +29,7 @@ import { UserFieldMoveTypePowerBoostAbAttr } from "#app/data/ab-attrs/user-field
 import { VariableMovePowerAbAttr } from "#app/data/ab-attrs/variable-move-power-ab-attr";
 import { WonderSkinAbAttr } from "#app/data/ab-attrs/wonder-skin-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { HelpingHandTag, TypeBoostTag } from "#app/data/battler-tags";
+import { TypeBoostTag } from "#app/data/battler-tags";
 import { IncrementMovePriorityAttr } from "#app/data/move-attrs/increment-move-priority-attr";
 import type { MoveAttr } from "#app/data/move-attrs/move-attr";
 import { MultiHitAttr } from "#app/data/move-attrs/multi-hit-attr";
@@ -812,7 +812,7 @@ export abstract class Move implements Localizable {
       globalScene.applyModifiers(AttackTypeBoosterModifier, source.isPlayer(), source, this.type, power);
     }
 
-    if (source.getTag(HelpingHandTag)) {
+    if (source.getTag(BattlerTagType.HELPING_HAND)) {
       power.value *= 1.5;
     }
 

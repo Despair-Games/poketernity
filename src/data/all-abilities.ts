@@ -123,7 +123,6 @@ import { PostDefendTerrainChangeAbAttr } from "./ab-attrs/post-defend-terrain-ch
 import { PostDefendApplyArenaTrapTagAbAttr } from "./ab-attrs/post-defend-apply-arena-trap-tag-ab-attr";
 import { PostDefendHpGatedStatStageChangeAbAttr } from "./ab-attrs/post-defend-hp-gated-stat-tage-change-ab-attr";
 import { PostDefendStatStageChangeAbAttr } from "./ab-attrs/post-defend-stat-stage-change-ab-attr";
-import { GroundedTag } from "./battler-tags";
 import type { Move } from "./move";
 import { applyMoveAttrs } from "./move";
 import { allMoves } from "#app/data/all-moves";
@@ -404,7 +403,8 @@ export function initAbilities() {
       .attr(
         AttackTypeImmunityAbAttr,
         Type.GROUND,
-        (pokemon: Pokemon) => !pokemon.getTag(GroundedTag) && !globalScene.arena.getTag(ArenaTagType.GRAVITY),
+        (pokemon: Pokemon) =>
+          !pokemon.getTag(BattlerTagType.IGNORE_FLYING) && !globalScene.arena.getTag(ArenaTagType.GRAVITY),
       )
       .ignorable(),
     new Ability(Abilities.EFFECT_SPORE, 3).attr(EffectSporeAbAttr),

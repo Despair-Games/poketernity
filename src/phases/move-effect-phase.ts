@@ -6,7 +6,7 @@ import { PostDamageAbAttr } from "#app/data/ab-attrs/post-damage-ab-attr";
 import { PostDefendAbAttr } from "#app/data/ab-attrs/post-defend-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { MoveAnim } from "#app/data/battle-anims";
-import { SkyDropTag, SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
+import { type SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { applyFilteredMoveAttrs, applyMoveAttrs } from "#app/data/move";
 import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
@@ -99,7 +99,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     // Lapse `MOVE_EFFECT` effects (i.e. semi-invulnerability) when applicable
     user.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
     globalScene.getField(true).forEach((p) => {
-      const skyDropTag = p.getTag(SkyDropTag);
+      const skyDropTag = p.getTag(BattlerTagType.SKY_DROP);
       if (skyDropTag?.sourceId === user.id) {
         p.removeTag(BattlerTagType.SKY_DROP);
       }
@@ -424,7 +424,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     if (dmg) {
       target.lapseTags(BattlerTagLapseType.HIT);
 
-      const substitute = target.getTag(SubstituteTag);
+      const substitute = target.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
       const isBlockedBySubstitute = !!substitute && move.hitsSubstitute(user, target);
       if (isBlockedBySubstitute) {
         substitute.hp -= dmg;
@@ -628,7 +628,7 @@ export class MoveEffectPhase extends HitCheckPhase {
   protected updateSubstitutes(): void {
     const targets = this.getTargets();
     targets.forEach((target) => {
-      const substitute = target.getTag(SubstituteTag);
+      const substitute = target.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
       if (substitute && substitute.hp <= 0) {
         target.lapseTag(BattlerTagType.SUBSTITUTE);
       }

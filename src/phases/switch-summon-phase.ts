@@ -1,6 +1,6 @@
 import { PreSwitchOutAbAttr } from "#app/data/ab-attrs/pre-switch-out-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { SubstituteTag } from "#app/data/battler-tags";
+import { type SubstituteTag } from "#app/data/battler-tags";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
 import { TrainerSlot } from "#enums/trainer-slot";
@@ -10,8 +10,9 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { SwitchEffectTransferModifier } from "#app/modifier/modifier";
 import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
-import { PostSummonPhase } from "./post-summon-phase";
-import { SummonPhase } from "./summon-phase";
+import { PostSummonPhase } from "#app/phases/post-summon-phase";
+import { SummonPhase } from "#app/phases/summon-phase";
+import { BattlerTagType } from "#enums/battler-tag-type";
 
 export class SwitchSummonPhase extends SummonPhase {
   private readonly switchType: SwitchType;
@@ -70,7 +71,7 @@ export class SwitchSummonPhase extends SummonPhase {
     this.getOpposingField().forEach((opposingPokemon: Pokemon) => opposingPokemon.removeTagsBySourceId(pokemon.id));
 
     if (this.switchType === SwitchType.SWITCH || this.switchType === SwitchType.INITIAL_SWITCH) {
-      const substitute = pokemon.getTag(SubstituteTag);
+      const substitute = pokemon.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
       if (substitute) {
         tweens.add({
           targets: substitute.sprite,
@@ -157,7 +158,7 @@ export class SwitchSummonPhase extends SummonPhase {
          * Otherwise, clear any persisting tags on the returned Pokemon.
          */
         if ([SwitchType.BATON_PASS, SwitchType.SHED_TAIL].includes(this.switchType)) {
-          const substitute = this.lastPokemon.getTag(SubstituteTag);
+          const substitute = this.lastPokemon.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
           if (substitute) {
             switchedInPokemon.x += this.lastPokemon.getSubstituteOffset()[0];
             switchedInPokemon.y += this.lastPokemon.getSubstituteOffset()[1];
@@ -203,7 +204,7 @@ export class SwitchSummonPhase extends SummonPhase {
     if (this.switchType === SwitchType.BATON_PASS) {
       pokemon.transferSummon(this.lastPokemon);
     } else if (this.switchType === SwitchType.SHED_TAIL) {
-      const subTag = this.lastPokemon.getTag(SubstituteTag);
+      const subTag = this.lastPokemon.getTag(BattlerTagType.SUBSTITUTE);
       if (subTag) {
         pokemon.summonData.tags.push(subTag);
       }

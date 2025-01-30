@@ -7,13 +7,14 @@ import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { StatusEffect } from "#enums/status-effect";
 import { Type } from "#enums/type";
-import { applyAbAttrs } from "./apply-ab-attrs";
-import { StockpilingTag } from "./battler-tags";
-import { type Move } from "./move";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { type StockpilingTag } from "#app/data/battler-tags";
+import { type Move } from "#app/data/move";
 import { allMoves } from "#app/data/all-moves";
 import { MoveCategory } from "#enums/move-category";
 import { BattleCommand } from "#enums/battle-command";
-import { FieldPreventExplosionLikeAbAttr } from "./ab-attrs/field-prevent-explosion-like-ab-attr";
+import { FieldPreventExplosionLikeAbAttr } from "#app/data/ab-attrs/field-prevent-explosion-like-ab-attr";
+import { BattlerTagType } from "#enums/battler-tag-type";
 
 export type MoveConditionFunc = (user: Pokemon, target: Pokemon, move: Move) => boolean;
 export type UserMoveConditionFunc = (user: Pokemon, move: Move) => boolean;
@@ -71,7 +72,7 @@ export const unknownTypeCondition: MoveConditionFunc = (user, _target, _move) =>
   !user.getTypes().includes(Type.UNKNOWN);
 
 export const hasStockpileStacksCondition: MoveConditionFunc = (user) => {
-  const hasStockpilingTag = user.getTag(StockpilingTag);
+  const hasStockpilingTag = user.getTag<StockpilingTag>(BattlerTagType.STOCKPILING);
   return !!hasStockpilingTag && hasStockpilingTag.stockpiledCount > 0;
 };
 

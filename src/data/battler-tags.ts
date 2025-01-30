@@ -43,6 +43,11 @@ import { ReverseDrainAbAttr } from "./ab-attrs/reverse-drain-ab-attr";
 import Overrides from "#app/overrides";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import {
+  RemoveTypeBattlerTagTypes,
+  SemiInvulnerableBattlerTagTypes,
+  TrappedBattlerTagTypes,
+} from "#app/utils/battler-tag-type-utils";
 
 export class BattlerTag {
   public tagType: BattlerTagType;
@@ -361,7 +366,7 @@ export class GorillaTacticsTag extends MoveRestrictionBattlerTag {
    * @returns `true` if the pokemon has a valid move and no existing {@linkcode GorillaTacticsTag}; `false` otherwise
    */
   override canAdd(pokemon: Pokemon): boolean {
-    return this.getLastValidMove(pokemon) !== undefined && !pokemon.getTag(GorillaTacticsTag);
+    return this.getLastValidMove(pokemon) !== undefined && !pokemon.getTag(BattlerTagType.GORILLA_TACTICS);
   }
 
   /**
@@ -556,7 +561,7 @@ export class TrappedTag extends BattlerTag {
     const move = allMoves[this.sourceMove];
 
     const isGhost = pokemon.isOfType(Type.GHOST);
-    const isTrapped = pokemon.getTag(TrappedTag);
+    const isTrapped = pokemon.getTag(TrappedBattlerTagTypes);
     const hasSubstitute = move.hitsSubstitute(source, pokemon);
 
     return !isTrapped && !isGhost && (this.sourceMove === Moves.G_MAX_TERROR || !hasSubstitute);
@@ -605,7 +610,7 @@ class NoRetreatTag extends TrappedTag {
 
   /** overrides {@linkcode TrappedTag.apply}, removing the Ghost-type condition */
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.getTag(TrappedTag);
+    return !pokemon.getTag(TrappedBattlerTagTypes);
   }
 }
 
@@ -1385,7 +1390,7 @@ export abstract class DamagingTrapTag extends TrappedTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.getTag(TrappedTag) && !pokemon.getTag(BattlerTagType.SUBSTITUTE);
+    return !pokemon.getTag(TrappedBattlerTagTypes) && !pokemon.getTag(BattlerTagType.SUBSTITUTE);
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
@@ -1471,7 +1476,7 @@ export class GMaxFireSpinTag extends FireSpinTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.getTag(TrappedTag);
+    return !pokemon.getTag(TrappedBattlerTagTypes);
   }
 }
 
@@ -1523,7 +1528,7 @@ export class GMaxSandTombTag extends SandTombTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.getTag(TrappedTag);
+    return !pokemon.getTag(TrappedBattlerTagTypes);
   }
 }
 
@@ -2363,7 +2368,7 @@ export class GroundedTag extends BattlerTag {
       pokemon.isOfType(Type.FLYING, true, true)
       || pokemon.hasAbility(Abilities.LEVITATE)
       || pokemon.getTag(BattlerTagType.FLOATING)
-      || pokemon.getTag(SemiInvulnerableTag);
+      || pokemon.getTag(SemiInvulnerableBattlerTagTypes);
 
     if (isSmackDownOrThousandArrows && wasNotGrounded) {
       globalScene.queueMessage(
@@ -2425,7 +2430,7 @@ export class RoostedTag extends BattlerTag {
       if (this.isBasePureFlying && !isCurrentlyDualType) {
         modifiedTypes = [Type.NORMAL];
       } else {
-        if (!!pokemon.getTag(RemovedTypeTag) && isOriginallyDualType && !isCurrentlyDualType) {
+        if (!!pokemon.getTag(RemoveTypeBattlerTagTypes) && isOriginallyDualType && !isCurrentlyDualType) {
           modifiedTypes = [Type.UNKNOWN];
         } else {
           modifiedTypes = currentTypes.filter((type) => type !== Type.FLYING);

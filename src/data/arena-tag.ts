@@ -30,7 +30,7 @@ import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ProtectStatAbAttr } from "./ab-attrs/protect-stat-ab-attr";
 import { MoveFlags } from "#enums/move-flags";
 import { ArenaTagSide } from "#enums/arena-tag-side";
-import { SkyDropTag } from "./battler-tags";
+import { type SkyDropTag } from "./battler-tags";
 
 export abstract class ArenaTag {
   constructor(
@@ -1137,7 +1137,7 @@ export class GravityTag extends ArenaTag {
         if (pokemon.getTag(BattlerTagType.FLYING)) {
           pokemon.addTag(BattlerTagType.INTERRUPTED);
         }
-        pokemon.getTag(SkyDropTag)?.clearSkyDropEffects();
+        pokemon.getTag<SkyDropTag>(BattlerTagType.SKY_DROP)?.clearSkyDropEffects();
       }
     });
   }

@@ -8,7 +8,7 @@ import { ReduceSleepDurationAbAttr } from "#app/data/ab-attrs/reduce-sleep-durat
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { allMoves } from "#app/data/all-moves";
 import { CommonAnim } from "#enums/common-anim";
-import { CenterOfAttentionTag, SkyDropTag } from "#app/data/battler-tags";
+import { type CenterOfAttentionTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { applyMoveAttrs } from "#app/data/move";
 import { BypassRedirectAttr } from "#app/data/move-attrs/bypass-redirect-attr";
@@ -140,7 +140,7 @@ export class MovePhase extends BattlePhase {
     super.start();
 
     // If the user is affected by another Pokemon's Sky Drop, skip the user's turn
-    const skyDropTag = this.pokemon.getTag(SkyDropTag);
+    const skyDropTag = this.pokemon.getTag(BattlerTagType.SKY_DROP);
     if (skyDropTag && skyDropTag.sourceId !== this.pokemon.id) {
       return this.end();
     }
@@ -467,7 +467,7 @@ export class MovePhase extends BattlePhase {
 
       // check for center-of-attention tags (note that this will override redirect abilities)
       this.pokemon.getOpponents().forEach((p) => {
-        const redirectTag = p.getTag(CenterOfAttentionTag);
+        const redirectTag = p.getTag<CenterOfAttentionTag>(BattlerTagType.CENTER_OF_ATTENTION);
 
         // TODO: don't hardcode this interaction.
         // Handle interaction between the rage powder center-of-attention tag and moves used by grass types/overcoat-havers (which are immune to RP's redirect)
