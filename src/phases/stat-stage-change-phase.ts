@@ -4,7 +4,6 @@ import { ProtectStatAbAttr } from "#app/data/ab-attrs/protect-stat-ab-attr";
 import { StatStageChangeCopyAbAttr } from "#app/data/ab-attrs/stat-stage-change-copy-ab-attr";
 import { StatStageChangeMultiplierAbAttr } from "#app/data/ab-attrs/stat-stage-change-multiplier-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { MistTag } from "#app/data/arena-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -16,6 +15,7 @@ import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } f
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
 import { PokemonPhase } from "./abstract-pokemon-phase";
+import { ArenaTagType } from "#enums/arena-tag-type";
 
 export type StatStageChangeCallback = (changed: BattleStat[], relativeChanges: number[], target?: Pokemon) => void;
 
@@ -88,7 +88,7 @@ export class StatStageChangePhase extends PokemonPhase {
 
       if (!this.selfTarget && stages.value < 0) {
         // TODO: add a reference to the source of the stat change to fix Infiltrator interaction
-        arena.applyTagsForSide(MistTag, pokemon.getArenaTagSide(), false, null, cancelled);
+        arena.applyTagsForSide(ArenaTagType.MIST, pokemon.getArenaTagSide(), false, null, cancelled);
       }
 
       if (!cancelled.value && !this.selfTarget && stages.value < 0) {
