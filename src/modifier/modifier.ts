@@ -3462,7 +3462,7 @@ export class SwitchEffectTransferModifier extends PokemonHeldItemModifier {
     return 1;
   }
 
-  override isSwitchEffectTransferModifier(): this is SwitchEffectTransferModifier {
+  override isSwitchEffectTransferModifier(): this is this {
     return true;
   }
 }

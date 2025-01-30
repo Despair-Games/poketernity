@@ -36,9 +36,7 @@ import { MoveTarget } from "#enums/move-target";
 import { MoveCategory } from "#enums/move-category";
 import type { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
 import { default as PokemonSpecies } from "#app/data/pokemon-species";
-import { getFusedSpeciesName } from "#app/utils/pokemon-species-utils";
-import { getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { getFusedSpeciesName, getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
 import {
   CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER,
   getStarterValueFriendshipCap,

@@ -324,9 +324,7 @@ export abstract class PokemonSpeciesForm {
     if (this.speciesId > 2000) {
       switch (this.speciesId) {
         case Species.GALAR_SLOWPOKE:
-          break;
         case Species.ETERNAL_FLOETTE:
-          break;
         case Species.BLOODMOON_URSALUNA:
           break;
         default:

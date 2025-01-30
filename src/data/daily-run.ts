@@ -7,7 +7,7 @@ import { randSeedGauss, randSeedInt, randSeedItem } from "#app/utils";
 import type { PokemonSpeciesForm } from "./pokemon-species-form";
 import PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
-import { getPokemonSpecies } from "../utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import { api } from "#app/plugins/api/api";
 

@@ -5,7 +5,7 @@ import type { EnemyPokemon } from "#app/field/pokemon";
 import { toReadableString, randSeedItem } from "#app/utils";
 import type { PokemonSpeciesFilter } from "#app/@types/PokemonSpeciesFilter";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies } from "../utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import type { Type } from "#enums/type";
 import type { PersistentModifier } from "#app/modifier/modifier";
 import { TrainerVariant } from "#enums/trainer-variant";

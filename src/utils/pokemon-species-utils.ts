@@ -26,6 +26,7 @@ export function getPokemonSpecies(species: Species | Species[] | undefined): Pok
   }
   return allSpecies[species - 1];
 }
+
 export function getPokemonSpeciesForm(species: Species, formIndex: number): PokemonSpeciesForm {
   const retSpecies: PokemonSpecies =
     species >= 2000
@@ -36,6 +37,7 @@ export function getPokemonSpeciesForm(species: Species, formIndex: number): Poke
   }
   return retSpecies;
 }
+
 export function getFusedSpeciesName(speciesAName: string, speciesBName: string): string {
   const fragAPattern = /([a-z]{2}.*?[aeiou(?:y$)\-\']+)(.*?)$/i;
   const fragBPattern = /([a-z]{2}.*?[aeiou(?:y$)\-\'])(.*?)$/i;
@@ -101,13 +103,13 @@ export function getFusedSpeciesName(speciesAName: string, speciesBName: string):
 
   return `${speciesAPrefix || speciesBPrefix}${fragA}${fragB}${speciesBSuffix || speciesASuffix}`;
 }
+
 /**
  * Returns a list of Pokemon in a specific group (ex. Mythical, UB, etc.)
  * @param group the group used to make the list
  * @param includeLegends if `true`, AND if `group` is `PARADOX` or `ULTRA_BEAST`, then also include legendaries in the returned list
  * @returns a list of species IDs belonging to the group
  */
-
 export function getSpecialSpeciesList(group: SpeciesGroups, includeLegends?: boolean): Species[] {
   const speciesList = allSpecies
     .map((s) => {
@@ -123,11 +125,11 @@ export function getSpecialSpeciesList(group: SpeciesGroups, includeLegends?: boo
   }
   return speciesList as Species[];
 }
+
 /**
  * Method to get the daily list of starters with Pokerus.
  * @returns A list of starters with Pokerus
  */
-
 export function getPokerusStarters(): PokemonSpecies[] {
   const pokerusStarters: PokemonSpecies[] = [];
   const date = new Date();

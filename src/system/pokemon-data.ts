@@ -5,7 +5,7 @@ import type { Nature } from "#enums/nature";
 import type { PokeballType } from "#enums/pokeball";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { Status } from "../data/status-effect";
-import { type Pokemon, EnemyPokemon, PokemonSummonData } from "../field/pokemon";
+import { type Pokemon, EnemyPokemon, PokemonSummonData } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { Variant } from "#app/data/variant";
