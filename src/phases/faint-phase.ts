@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { type BattlerTag } from "#app/data/battler-tags";
 import { type MovePhase } from "#app/phases/move-phase";
+import { type GameOverPhase } from "./game-over-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -30,7 +31,6 @@ import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
 import { PokemonPhase } from "./abstract-pokemon-phase";
 import { DamageAnimPhase } from "./damage-anim-phase";
-import { GameOverPhase } from "./game-over-phase";
 import { SwitchPhase } from "./switch-phase";
 import { SwitchSummonPhase } from "./switch-summon-phase";
 import { ToggleDoublePositionPhase } from "./toggle-double-position-phase";
@@ -190,7 +190,7 @@ export class FaintPhase extends PokemonPhase {
       /** The total number of legal player Pokemon that aren't currently on the field */
       const legalPlayerPartyPokemon = legalPlayerPokemon.filter((p) => !p.isActive(true));
       if (!legalPlayerPokemon.length) {
-        globalScene.unshiftPhase(new GameOverPhase());
+        globalScene.gameOver();
       } else if (double && legalPlayerPokemon.length === 1 && legalPlayerPartyPokemon.length === 0) {
         /**
          * If the player has exactly one Pokemon in total at this point in a double battle, and that Pokemon
