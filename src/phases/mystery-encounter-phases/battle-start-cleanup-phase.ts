@@ -9,7 +9,6 @@ import { type TurnEndPhase } from "#app/phases/turn-end-phase";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { GameOverPhase } from "#app/phases/game-over-phase";
 import { PostTurnStatusEffectPhase } from "#app/phases/post-turn-status-effect-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
@@ -62,7 +61,7 @@ export class MysteryEncounterBattleStartCleanupPhase extends Phase {
     /** The total number of legal player Pokemon that aren't currently on the field */
     const legalPlayerPartyPokemon = legalPlayerPokemon.filter((p) => !p.isActive(true));
     if (!legalPlayerPokemon.length) {
-      globalScene.unshiftPhase(new GameOverPhase());
+      globalScene.gameOver();
       return this.end();
     }
 
