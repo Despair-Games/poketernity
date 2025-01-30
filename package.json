@@ -24,6 +24,9 @@
     "test:silent": "vitest run --silent --no-isolate",
     "posttest:silent": "git rev-parse --short HEAD",
 
+    "test:full": "tsc --noEmit && vitest run --silent --no-isolate",
+    "posttest:full": "git rev-parse --short HEAD",
+
     "typecheck": "tsc --noEmit",
     "posttypecheck": "git rev-parse --short HEAD",
 
