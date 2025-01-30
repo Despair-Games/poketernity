@@ -14,6 +14,7 @@ import { settings } from "#app/system/settings/settings-manager";
  */
 export class Animation {
   private scene: BattleScene;
+  private evolutionCancelled: boolean = false;
   constructor(scene: BattleScene) {
     this.scene = scene;
   }
@@ -115,6 +116,10 @@ export class Animation {
         duration: 500 / l,
         yoyo: !isLastCycle,
         onComplete: () => {
+          if (this.evolutionCancelled) {
+            this.setEvolutionCancelled(false);
+            return resolve(false);
+          }
           if (l < lastCycle) {
             this.doCycle(l + 0.5, lastCycle, pokemonTintSprite, pokemonNewFormTintSprite).then((success) =>
               resolve(success),
@@ -591,5 +596,12 @@ export class Animation {
     };
 
     updateParticle();
+  }
+
+  /**
+   * @param cancelled If `true`, stop evolution-related anims because the player cancelled evolution.
+   */
+  public setEvolutionCancelled(cancelled: boolean) {
+    this.evolutionCancelled = cancelled;
   }
 }

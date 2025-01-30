@@ -15,7 +15,6 @@ export default class FormChangeSceneHandler extends MessageUiHandler {
   public messageBg: Phaser.GameObjects.Image;
   public messageContainer: Phaser.GameObjects.Container;
   public canCancel: boolean;
-  public cancelled: boolean;
 
   constructor() {
     super(UiMode.FORM_CHANGE_SCENE);
@@ -23,7 +22,7 @@ export default class FormChangeSceneHandler extends MessageUiHandler {
 
   setup() {
     this.canCancel = false;
-    this.cancelled = false;
+    globalScene.animations.setEvolutionCancelled(false);
 
     const ui = this.getUi();
 
@@ -67,8 +66,9 @@ export default class FormChangeSceneHandler extends MessageUiHandler {
   }
 
   processInput(button: Button): boolean {
-    if (this.canCancel && !this.cancelled && button === Button.CANCEL) {
-      this.cancelled = true;
+    if (this.canCancel && button === Button.CANCEL) {
+      this.canCancel = false;
+      globalScene.animations.setEvolutionCancelled(true);
       return true;
     }
 
@@ -91,7 +91,7 @@ export default class FormChangeSceneHandler extends MessageUiHandler {
   override clear() {
     this.clearText();
     this.canCancel = false;
-    this.cancelled = false;
+    globalScene.animations.setEvolutionCancelled(false);
     this.container.removeAll(true);
     this.messageContainer.setVisible(false);
     this.messageBg.setVisible(false);
