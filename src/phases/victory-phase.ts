@@ -6,7 +6,6 @@ import { modifierTypes, type CustomModifierSettings } from "#app/modifier/modifi
 import { PokemonPhase } from "./abstract-pokemon-phase";
 import { BattleEndPhase } from "./battle-end-phase";
 import { EggLapsePhase } from "./egg-lapse-phase";
-import { GameOverPhase } from "./game-over-phase";
 import { ModifierRewardPhase } from "./modifier-reward-phase";
 import { NewBattlePhase } from "./new-battle-phase";
 import { SelectModifierPhase } from "./select-modifier-phase";
@@ -108,7 +107,7 @@ export class VictoryPhase extends PokemonPhase {
         currentBattle.battleType = BattleType.CLEAR;
         globalScene.score += gameMode.getClearScoreBonus();
         globalScene.updateScoreText();
-        globalScene.pushPhase(new GameOverPhase(true));
+        globalScene.gameOver(true);
       }
     }
 
