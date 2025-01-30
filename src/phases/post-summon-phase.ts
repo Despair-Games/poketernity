@@ -2,7 +2,6 @@ import type { BattlerIndex } from "#enums/battler-index";
 import { CommanderAbAttr } from "#app/data/ab-attrs/commander-ab-attr";
 import { PostSummonAbAttr } from "#app/data/ab-attrs/post-summon-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { MysteryEncounterPostSummonTag } from "#app/data/battler-tags";
 import { globalScene } from "#app/global-scene";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { StatusEffect } from "#enums/status-effect";
@@ -27,7 +26,7 @@ export class PostSummonPhase extends PokemonPhase {
     // If this is mystery encounter and has post summon phase tag, apply post summon effects
     if (
       globalScene.currentBattle.isBattleMysteryEncounter()
-      && pokemon.findTags((t) => t instanceof MysteryEncounterPostSummonTag).length > 0
+      && pokemon.findTags((t) => t.isMysteryEncounterPostSummonTag()).length > 0
     ) {
       pokemon.lapseTag(BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON);
     }

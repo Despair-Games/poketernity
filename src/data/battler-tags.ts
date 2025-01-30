@@ -121,6 +121,10 @@ export class BattlerTag {
   public getSourcePokemon(): Pokemon | null {
     return this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
   }
+
+  isMysteryEncounterPostSummonTag(): this is MysteryEncounterPostSummonTag {
+    return false;
+  }
 }
 
 export interface WeatherBattlerTag {
@@ -3048,6 +3052,10 @@ export class MysteryEncounterPostSummonTag extends BattlerTag {
   /** Event when tag is removed */
   override onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
+  }
+
+  override isMysteryEncounterPostSummonTag(): this is this {
+    return true;
   }
 }
 
