@@ -125,6 +125,10 @@ export class BattlerTag {
   isMysteryEncounterPostSummonTag(): this is MysteryEncounterPostSummonTag {
     return false;
   }
+
+  isTypeBoostTag(): this is TypeBoostTag {
+    return false;
+  }
 }
 
 export interface WeatherBattlerTag {
@@ -2134,6 +2138,10 @@ export class TypeBoostTag extends BattlerTag {
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     return lapseType !== BattlerTagLapseType.CUSTOM || super.lapse(pokemon, lapseType);
+  }
+
+  override isTypeBoostTag(): this is this {
+    return true;
   }
 }
 
