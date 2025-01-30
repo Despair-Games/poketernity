@@ -23,8 +23,8 @@ export class RepeatMoveAttr extends MoveEffectAttr {
 
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     // get the last move used (excluding status based failures) as well as the corresponding moveset slot
-    const lastMove = target.getLastXMoves(-1).find((m) => m.move !== MoveId.NONE)!;
-    const movesetMove = target.getMoveset().find((m) => m?.moveId === lastMove.move)!;
+    const lastMove = target.getLastXMoves(-1).find((m) => m.moveId !== MoveId.NONE)!;
+    const movesetMove = target.getMoveset().find((m) => m?.moveId === lastMove.moveId)!;
     const moveTargets = lastMove.targets ?? [];
 
     globalScene.queueMessage(
@@ -33,7 +33,7 @@ export class RepeatMoveAttr extends MoveEffectAttr {
         targetPokemonName: getPokemonNameWithAffix(target),
       }),
     );
-    target.getMoveQueue().unshift({ move: lastMove.move, targets: moveTargets, ignorePP: false });
+    target.getMoveQueue().unshift({ moveId: lastMove.moveId, targets: moveTargets, ignorePP: false });
     target.turnData.extraTurns++;
     globalScene.appendToPhase(new MovePhase(target, moveTargets, movesetMove), MoveEndPhase);
     return true;
@@ -42,8 +42,8 @@ export class RepeatMoveAttr extends MoveEffectAttr {
   override getCondition(): MoveConditionFunc {
     return (_user, target, _move) => {
       // TODO: Confirm behavior of instructing move known by target but called by another move
-      const lastMove = target.getLastXMoves(-1).find((m) => m.move !== MoveId.NONE);
-      const movesetMove = target.getMoveset().find((m) => m?.moveId === lastMove?.move);
+      const lastMove = target.getLastXMoves(-1).find((m) => m.moveId !== MoveId.NONE);
+      const movesetMove = target.getMoveset().find((m) => m?.moveId === lastMove?.moveId);
       const moveTargets = lastMove?.targets ?? [];
       // TODO: Add a way of adding moves to list procedurally rather than a pre-defined blacklist
       const unrepeatablemoves = [
@@ -104,9 +104,9 @@ export class RepeatMoveAttr extends MoveEffectAttr {
       if (
         !movesetMove // called move not in target's moveset (dancer, forgetting the move, etc.)
         || movesetMove.ppUsed === movesetMove.getMovePp() // move out of pp
-        || allMoves[lastMove?.move ?? MoveId.NONE].isChargingMove() // called move is a charging/recharging move
+        || allMoves[lastMove?.moveId ?? MoveId.NONE].isChargingMove() // called move is a charging/recharging move
         || !moveTargets.length // called move has no targets
-        || unrepeatablemoves.includes(lastMove?.move ?? MoveId.NONE)
+        || unrepeatablemoves.includes(lastMove?.moveId ?? MoveId.NONE)
       ) {
         // called move is explicitly in the banlist
         return false;

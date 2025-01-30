@@ -41,20 +41,26 @@ describe("Abilities - Infiltrator", () => {
   });
 
   it.each([
-    { effectName: "Light Screen", tagType: ArenaTagType.LIGHT_SCREEN, move: MoveId.WATER_GUN },
-    { effectName: "Reflect", tagType: ArenaTagType.REFLECT, move: MoveId.TACKLE },
-    { effectName: "Aurora Veil", tagType: ArenaTagType.AURORA_VEIL, move: MoveId.TACKLE },
-  ])("should bypass the target's $effectName", async ({ tagType, move }) => {
+    { effectName: "Light Screen", tagType: ArenaTagType.LIGHT_SCREEN, moveId: MoveId.WATER_GUN },
+    { effectName: "Reflect", tagType: ArenaTagType.REFLECT, moveId: MoveId.TACKLE },
+    { effectName: "Aurora Veil", tagType: ArenaTagType.AURORA_VEIL, moveId: MoveId.TACKLE },
+  ])("should bypass the target's $effectName", async ({ tagType, moveId }) => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    const preScreenDmg = enemy.getAttackDamage(player, allMoves[move], AbilityApplyMode.DEFAULT, false, false).damage;
+    const preScreenDmg = enemy.getAttackDamage(player, allMoves[moveId], AbilityApplyMode.DEFAULT, false, false).damage;
 
     game.scene.arena.addTag(tagType, enemy.id, 1, MoveId.NONE, ArenaTagSide.ENEMY, true);
 
-    const postScreenDmg = enemy.getAttackDamage(player, allMoves[move], AbilityApplyMode.DEFAULT, false, false).damage;
+    const postScreenDmg = enemy.getAttackDamage(
+      player,
+      allMoves[moveId],
+      AbilityApplyMode.DEFAULT,
+      false,
+      false,
+    ).damage;
 
     expect(postScreenDmg).toBe(preScreenDmg);
     expect(player.battleData.abilitiesApplied[0]).toBe(Abilities.INFILTRATOR);

@@ -75,7 +75,7 @@ describe("Moves - Stockpile", () => {
           expect(stockpilingTag.stockpiledCount).toBe(3);
           expect(user.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
             result: MoveResult.FAIL,
-            move: MoveId.STOCKPILE,
+            moveId: MoveId.STOCKPILE,
           });
         }
       }

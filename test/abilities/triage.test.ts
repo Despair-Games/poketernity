@@ -37,33 +37,33 @@ describe("Abilities - Triage", () => {
 
   // Note: All affected moves have been verified to have the TRIAGE_MOVE flag by all_moves
   it.each([
-    { move: MoveId.RECOVER, moveName: "Recover" },
-    { move: MoveId.HEALING_WISH, moveName: "Healing Wish (P)" },
-    { move: MoveId.BITTER_BLADE, moveName: "Bitter Blade" },
-  ])("should increase the priority of HP-recovery moves by 3", async ({ move }) => {
-    game.override.moveset(move);
+    { moveId: MoveId.RECOVER, moveName: "Recover" },
+    { moveId: MoveId.HEALING_WISH, moveName: "Healing Wish (P)" },
+    { moveId: MoveId.BITTER_BLADE, moveName: "Bitter Blade" },
+  ])("should increase the priority of HP-recovery moves by 3", async ({ moveId }) => {
+    game.override.moveset(moveId);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    const moveToUse = allMoves[move];
+    const moveToUse = allMoves[moveId];
     const originalPriority = moveToUse.priority;
     expect(moveToUse.checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(true);
     expect(moveToUse.getPriority(playerPokemon)).toBe(originalPriority + 3);
   });
 
   it.each([
-    { move: MoveId.AQUA_RING, moveName: "Aqua Ring" },
-    { move: MoveId.INGRAIN, moveName: "Ingrain" },
-    { move: MoveId.GRASSY_TERRAIN, moveName: "Grassy Terrain" },
-    { move: MoveId.LEECH_SEED, moveName: "Leech Seed" },
-    { move: MoveId.SAPPY_SEED, moveName: "Sappy Seed" },
-    { move: MoveId.PAIN_SPLIT, moveName: "Pain Split" },
-  ])("should not increase the priority of $moveName", async ({ move }) => {
-    game.override.moveset(move);
+    { moveId: MoveId.AQUA_RING, moveName: "Aqua Ring" },
+    { moveId: MoveId.INGRAIN, moveName: "Ingrain" },
+    { moveId: MoveId.GRASSY_TERRAIN, moveName: "Grassy Terrain" },
+    { moveId: MoveId.LEECH_SEED, moveName: "Leech Seed" },
+    { moveId: MoveId.SAPPY_SEED, moveName: "Sappy Seed" },
+    { moveId: MoveId.PAIN_SPLIT, moveName: "Pain Split" },
+  ])("should not increase the priority of $moveName", async ({ moveId }) => {
+    game.override.moveset(moveId);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    const moveToUse = allMoves[move];
+    const moveToUse = allMoves[moveId];
     const originalPriority = moveToUse.priority;
     expect(moveToUse.checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(false);
     expect(moveToUse.getPriority(playerPokemon)).toBe(originalPriority);

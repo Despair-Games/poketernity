@@ -1408,9 +1408,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       if (!this.isPlayer()) {
         this.moveset = [];
       }
-      overrideArray.forEach((move: MoveId, index: number) => {
+      overrideArray.forEach((moveId: MoveId, index: number) => {
         const ppUsed = this.moveset[index]?.ppUsed ?? 0;
-        this.moveset[index] = new PokemonMove(move, Math.min(ppUsed, allMoves[move].pp));
+        this.moveset[index] = new PokemonMove(moveId, Math.min(ppUsed, allMoves[moveId].pp));
       });
     }
 
@@ -5465,12 +5465,12 @@ export class EnemyPokemon extends Pokemon {
   getNextMove(): QueuedMove {
     // If this Pokemon has a move already queued, return it.
     const queuedMove = this.getMoveQueue().length
-      ? this.getMoveset().find((m) => m.moveId === this.getMoveQueue()[0].move)
+      ? this.getMoveset().find((m) => m.moveId === this.getMoveQueue()[0].moveId)
       : null;
     if (queuedMove) {
       if (queuedMove.isUsable(this, this.getMoveQueue()[0].ignorePP)) {
         return {
-          move: queuedMove.moveId,
+          moveId: queuedMove.moveId,
           targets: this.getMoveQueue()[0].targets,
           ignorePP: this.getMoveQueue()[0].ignorePP,
         };
@@ -5486,20 +5486,20 @@ export class EnemyPokemon extends Pokemon {
     if (movePool.length) {
       // If there's only 1 move in the move pool, use it.
       if (movePool.length === 1) {
-        return { move: movePool[0].moveId, targets: this.getNextTargets(movePool[0].moveId) };
+        return { moveId: movePool[0].moveId, targets: this.getNextTargets(movePool[0].moveId) };
       }
       // If a move is forced because of Encore, use it.
       const encoreTag = this.getTag(EncoreTag) as EncoreTag;
       if (encoreTag) {
         const encoreMove = movePool.find((m) => m.moveId === encoreTag.moveId);
         if (encoreMove) {
-          return { move: encoreMove.moveId, targets: this.getNextTargets(encoreMove.moveId) };
+          return { moveId: encoreMove.moveId, targets: this.getNextTargets(encoreMove.moveId) };
         }
       }
       switch (this.aiType) {
         case AiType.RANDOM: // No enemy should spawn with this AI type in-game
           const moveId = movePool[globalScene.randBattleSeedInt(movePool.length)].moveId;
-          return { move: moveId, targets: this.getNextTargets(moveId) };
+          return { moveId: moveId, targets: this.getNextTargets(moveId) };
         case AiType.SMART_RANDOM:
         case AiType.SMART:
           /**
@@ -5650,11 +5650,11 @@ export class EnemyPokemon extends Pokemon {
             r,
             sortedMovePool.map((m) => m.getName()),
           );
-          return { move: sortedMovePool[r]!.moveId, targets: moveTargets[sortedMovePool[r]!.moveId] };
+          return { moveId: sortedMovePool[r]!.moveId, targets: moveTargets[sortedMovePool[r]!.moveId] };
       }
     }
 
-    return { move: MoveId.STRUGGLE, targets: this.getNextTargets(MoveId.STRUGGLE) };
+    return { moveId: MoveId.STRUGGLE, targets: this.getNextTargets(MoveId.STRUGGLE) };
   }
 
   /**
@@ -5952,7 +5952,7 @@ interface AbilityData {
 }
 
 export interface TurnMove {
-  move: MoveId;
+  moveId: MoveId;
   targets?: BattlerIndex[];
   result: MoveResult;
   virtual?: boolean;
@@ -5960,13 +5960,13 @@ export interface TurnMove {
 }
 
 export interface QueuedMove {
-  move: MoveId;
+  moveId: MoveId;
   targets: BattlerIndex[];
   ignorePP?: boolean;
 }
 
 export interface AttackMoveResult {
-  move: MoveId;
+  moveId: MoveId;
   result: DamageResult;
   damage: number;
   isCritical: boolean;

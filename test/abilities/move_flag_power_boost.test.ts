@@ -36,62 +36,62 @@ describe("Abilities - Move Flag Power Boost Ability Attr", () => {
     {
       ability: Abilities.MEGA_LAUNCHER,
       abilityName: "Mega Launcher",
-      move: MoveId.DARK_PULSE,
+      moveId: MoveId.DARK_PULSE,
       moveFlag: MoveFlags.PULSE_MOVE,
       factor: 1.5,
     },
     {
       ability: Abilities.IRON_FIST,
       abilityName: "Iron Fist",
-      move: MoveId.FIRE_PUNCH,
+      moveId: MoveId.FIRE_PUNCH,
       moveFlag: MoveFlags.PUNCHING_MOVE,
       factor: 1.2,
     },
     {
       ability: Abilities.TOUGH_CLAWS,
       abilityName: "Tough Claws",
-      move: MoveId.TACKLE,
+      moveId: MoveId.TACKLE,
       moveFlag: MoveFlags.MAKES_CONTACT,
       factor: 1.3,
     },
     {
       ability: Abilities.PUNK_ROCK,
       abilityName: "Punk Rock",
-      move: MoveId.UPROAR,
+      moveId: MoveId.UPROAR,
       moveFlag: MoveFlags.SOUND_MOVE,
       factor: 1.3,
     },
     {
       ability: Abilities.STRONG_JAW,
       abilityName: "Strong Jaw",
-      move: MoveId.FIRE_FANG,
+      moveId: MoveId.FIRE_FANG,
       moveFlag: MoveFlags.BITING_MOVE,
       factor: 1.5,
     },
     {
       ability: Abilities.RECKLESS,
       abilityName: "Reckless",
-      move: MoveId.TAKE_DOWN,
+      moveId: MoveId.TAKE_DOWN,
       moveFlag: MoveFlags.RECKLESS_MOVE,
       factor: 1.2,
     },
     {
       ability: Abilities.SHARPNESS,
       abilityName: "Sharpness",
-      move: MoveId.CUT,
+      moveId: MoveId.CUT,
       moveFlag: MoveFlags.SLICING_MOVE,
       factor: 1.5,
     },
   ])(
     "$abilityName should boost the damage of specific moves by a factor of $factor",
-    async ({ ability, move, moveFlag, factor }) => {
-      game.override.moveset(move).ability(ability);
+    async ({ ability, moveId, moveFlag, factor }) => {
+      game.override.moveset(moveId).ability(ability);
       await game.classicMode.startBattle([Species.FEEBAS]);
       const playerPokemon = game.scene.getPlayerPokemon()!;
-      const moveUsed = allMoves[move];
+      const moveUsed = allMoves[moveId];
       vi.spyOn(moveUsed, "calculateBattlePower");
 
-      game.move.select(move);
+      game.move.select(moveId);
       await game.move.forceHit();
       await game.phaseInterceptor.to("BerryPhase");
 

@@ -146,7 +146,7 @@ export class NaturePowerAttr extends OverrideMoveEffectAttr {
         break;
     }
 
-    user.getMoveQueue().push({ move: moveId, targets: [target.getBattlerIndex()], ignorePP: true });
+    user.getMoveQueue().push({ moveId: moveId, targets: [target.getBattlerIndex()], ignorePP: true });
     globalScene.unshiftPhase(new LoadMoveAnimPhase(moveId));
     globalScene.unshiftPhase(
       new MovePhase(user, [target.getBattlerIndex()], new PokemonMove(moveId, 0, 0, true), true),

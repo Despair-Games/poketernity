@@ -38,22 +38,22 @@ describe("Ability Attribute - Move Flag Immunity", () => {
       abilityName: "Soundproof",
       ability: Abilities.SOUNDPROOF,
       moveFlag: MoveFlags.SOUND_MOVE,
-      enemyMove: MoveId.UPROAR,
+      enemyMoveId: MoveId.UPROAR,
     },
     {
       abilityName: "Overcoat",
       ability: Abilities.OVERCOAT,
       moveFlag: MoveFlags.POWDER_MOVE,
-      enemyMove: MoveId.STUN_SPORE,
+      enemyMoveId: MoveId.STUN_SPORE,
     },
     {
       abilityName: "Bulletproof",
       ability: Abilities.BULLETPROOF,
       moveFlag: MoveFlags.BULLET_MOVE,
-      enemyMove: MoveId.AURA_SPHERE,
+      enemyMoveId: MoveId.AURA_SPHERE,
     },
-  ])("$abilityName should provide immunity against the flagged moves", async ({ ability, moveFlag, enemyMove }) => {
-    game.override.ability(ability).enemyMoveset(enemyMove);
+  ])("$abilityName should provide immunity against the flagged moves", async ({ ability, moveFlag, enemyMoveId }) => {
+    game.override.ability(ability).enemyMoveset(enemyMoveId);
 
     await game.classicMode.startBattle([Species.FEEBAS]);
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -64,6 +64,6 @@ describe("Ability Attribute - Move Flag Immunity", () => {
 
     const lastEnemyMove = enemyPokemon.getLastXMoves()[0];
     expect(lastEnemyMove.result).toBe(MoveResult.FAIL);
-    expect(allMoves[enemyMove].checkFlag(moveFlag, enemyPokemon, null)).toBe(true);
+    expect(allMoves[enemyMoveId].checkFlag(moveFlag, enemyPokemon, null)).toBe(true);
   });
 });

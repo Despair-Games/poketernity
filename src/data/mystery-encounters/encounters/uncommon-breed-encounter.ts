@@ -79,15 +79,15 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
     const eggMoves = pokemon.getEggMoves();
     if (eggMoves) {
       const eggMoveIndex = randSeedInt(4);
-      const randomEggMove: MoveId = eggMoves[eggMoveIndex];
+      const randomEggMoveId: MoveId = eggMoves[eggMoveIndex];
       encounter.misc = {
-        eggMove: randomEggMove,
+        eggMove: randomEggMoveId,
         pokemon: pokemon,
       };
       if (pokemon.moveset.length < 4) {
-        pokemon.moveset.push(new PokemonMove(randomEggMove));
+        pokemon.moveset.push(new PokemonMove(randomEggMoveId));
       } else {
-        pokemon.moveset[0] = new PokemonMove(randomEggMove);
+        pokemon.moveset[0] = new PokemonMove(randomEggMoveId);
       }
     } else {
       encounter.misc.pokemon = pokemon;
@@ -276,17 +276,17 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
   )
   .build();
 
-function givePokemonExtraEggMove(pokemon: EnemyPokemon, previousEggMove: MoveId) {
+function givePokemonExtraEggMove(pokemon: EnemyPokemon, previousEggMoveId: MoveId) {
   const eggMoves = pokemon.getEggMoves();
   if (eggMoves) {
-    let randomEggMove: MoveId = eggMoves[randSeedInt(4)];
-    while (randomEggMove === previousEggMove) {
-      randomEggMove = eggMoves[randSeedInt(4)];
+    let randomEggMoveId: MoveId = eggMoves[randSeedInt(4)];
+    while (randomEggMoveId === previousEggMoveId) {
+      randomEggMoveId = eggMoves[randSeedInt(4)];
     }
     if (pokemon.moveset.length < 4) {
-      pokemon.moveset.push(new PokemonMove(randomEggMove));
+      pokemon.moveset.push(new PokemonMove(randomEggMoveId));
     } else {
-      pokemon.moveset[1] = new PokemonMove(randomEggMove);
+      pokemon.moveset[1] = new PokemonMove(randomEggMoveId);
     }
   }
 }

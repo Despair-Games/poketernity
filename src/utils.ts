@@ -631,10 +631,10 @@ export function isBetween(num: number, min: number, max: number): boolean {
 /**
  * Helper method to return the animation filename for a given move
  *
- * @param move the move for which the animation filename is needed
+ * @param moveId the move for which the animation filename is needed
  */
-export function animationFileName(move: MoveId): string {
-  return MoveId[move].toLowerCase().replace(/\_/g, "-");
+export function animationFileName(moveId: MoveId): string {
+  return MoveId[moveId].toLowerCase().replace(/\_/g, "-");
 }
 
 /**

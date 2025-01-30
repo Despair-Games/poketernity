@@ -52,7 +52,7 @@ describe("Moves - Encore", () => {
     // forced into using Splash.
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    expect(enemyPokemon.getLastXMoves().every((turnMove) => turnMove.move === MoveId.SPLASH)).toBeTruthy();
+    expect(enemyPokemon.getLastXMoves().every((turnMove) => turnMove.moveId === MoveId.SPLASH)).toBeTruthy();
   });
 
   describe("should fail against the following moves:", () => {
@@ -109,6 +109,6 @@ describe("Moves - Encore", () => {
     await game.setTurnOrder(turnOrder);
     await game.phaseInterceptor.to("BerryPhase");
     const lastMove = enemyPokemon?.getLastXMoves()[0];
-    expect(lastMove?.move).toBe(MoveId.STRUGGLE);
+    expect(lastMove?.moveId).toBe(MoveId.STRUGGLE);
   });
 });

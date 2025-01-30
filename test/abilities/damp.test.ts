@@ -30,18 +30,18 @@ describe("Abilities - Damp", () => {
   });
 
   it.each([
-    { moveName: "Explosion", move: MoveId.EXPLOSION },
-    { moveName: "Self-Destruct", move: MoveId.SELF_DESTRUCT },
-    { moveName: "Misty Explosion", move: MoveId.MISTY_EXPLOSION },
-    { moveName: "Mind Blown", move: MoveId.MIND_BLOWN },
-  ])("should prevent the move $moveName from being used", async ({ move }) => {
-    game.override.moveset([MoveId.SPLASH, move]).battleType("double").enemyMoveset(move);
+    { moveName: "Explosion", moveId: MoveId.EXPLOSION },
+    { moveName: "Self-Destruct", moveId: MoveId.SELF_DESTRUCT },
+    { moveName: "Misty Explosion", moveId: MoveId.MISTY_EXPLOSION },
+    { moveName: "Mind Blown", moveId: MoveId.MIND_BLOWN },
+  ])("should prevent the move $moveName from being used", async ({ moveId }) => {
+    game.override.moveset([MoveId.SPLASH, moveId]).battleType("double").enemyMoveset(moveId);
     await game.classicMode.startBattle([Species.FEEBAS, Species.ABRA]);
     const playerPokemon2 = game.scene.getPlayerField()[1];
     const enemyPokemon1 = game.scene.getEnemyField()[0];
 
     game.move.select(MoveId.SPLASH);
-    game.move.select(move, 1);
+    game.move.select(moveId, 1);
     await game.phaseInterceptor.to("BerryPhase");
 
     const player2MoveResult = playerPokemon2.getMoveHistory()[0];

@@ -199,7 +199,7 @@ export class MovePhase extends BattlePhase {
     const targets = this.getActiveTargetPokemon();
     const moveQueue = this.pokemon.getMoveQueue();
 
-    if (targets.length === 0 || (moveQueue.length && moveQueue[0].move === MoveId.NONE)) {
+    if (targets.length === 0 || (moveQueue.length && moveQueue[0].moveId === MoveId.NONE)) {
       this.showMoveText();
       this.showFailedText();
       this.cancel();
@@ -307,7 +307,7 @@ export class MovePhase extends BattlePhase {
       this.ignorePp = moveQueue.shift()?.ignorePP ?? false;
     }
 
-    if (this.pokemon.getTag(BattlerTagType.CHARGING)?.sourceMove === this.move.moveId) {
+    if (this.pokemon.getTag(BattlerTagType.CHARGING)?.sourceMoveId === this.move.moveId) {
       this.pokemon.lapseTag(BattlerTagType.CHARGING);
     }
 
@@ -321,7 +321,7 @@ export class MovePhase extends BattlePhase {
 
     // Update the battle's "last move" pointer, unless we're currently mimicking a move.
     if (!allMoves[this.move.moveId].hasAttr(CopyMoveAttr)) {
-      globalScene.currentBattle.lastMove = this.move.moveId;
+      globalScene.currentBattle.lastMoveId = this.move.moveId;
     }
 
     /**
@@ -362,7 +362,7 @@ export class MovePhase extends BattlePhase {
       }
 
       this.pokemon.pushMoveHistory({
-        move: this.move.moveId,
+        moveId: this.move.moveId,
         targets: this.targets,
         result: MoveResult.FAIL,
         virtual: this.move.virtual,
@@ -405,7 +405,7 @@ export class MovePhase extends BattlePhase {
       globalScene.unshiftPhase(new MoveChargePhase(this.pokemon.getBattlerIndex(), this.targets, this.move));
     } else {
       this.pokemon.pushMoveHistory({
-        move: this.move.moveId,
+        moveId: this.move.moveId,
         targets: this.targets,
         result: MoveResult.FAIL,
         virtual: this.move.virtual,
@@ -564,7 +564,7 @@ export class MovePhase extends BattlePhase {
         frenzyMissFunc(this.pokemon, this.move.getMove());
       }
 
-      this.pokemon.pushMoveHistory({ move: MoveId.NONE, result: MoveResult.FAIL });
+      this.pokemon.pushMoveHistory({ moveId: MoveId.NONE, result: MoveResult.FAIL });
 
       this.pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
       this.pokemon.lapseTags(BattlerTagLapseType.AFTER_MOVE);

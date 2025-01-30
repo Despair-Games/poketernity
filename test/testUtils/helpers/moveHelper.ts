@@ -45,12 +45,12 @@ export class MoveHelper extends GameManagerHelper {
 
   /**
    * Select the move to be used by the given Pokemon(-index). Triggers during the next {@linkcode CommandPhase}
-   * @param move - the move to use
+   * @param moveId - the move to use
    * @param pkmIndex - the pokemon index. Relevant for double-battles only (defaults to 0)
    * @param targetIndex - (optional) The {@linkcode BattlerIndex} of the Pokemon to target for single-target moves, or `null` if a manual call to `selectTarget()` is required
    */
-  public select(move: MoveId, pkmIndex: 0 | 1 = 0, targetIndex?: BattlerIndex | null): void {
-    const movePosition = getMovePosition(this.game.scene, pkmIndex, move);
+  public select(moveId: MoveId, pkmIndex: 0 | 1 = 0, targetIndex?: BattlerIndex | null): void {
+    const movePosition = getMovePosition(this.game.scene, pkmIndex, moveId);
 
     this.game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
       this.game.scene.ui.setMode(UiMode.FIGHT, (this.game.scene.getCurrentPhase() as CommandPhase).getFieldIndex());
@@ -72,11 +72,11 @@ export class MoveHelper extends GameManagerHelper {
    *
    * Note: If you need to check for changes in the player's moveset as part of the test, it may be
    * best to use {@linkcode changeMoveset} and {@linkcode select} instead.
-   * @param move - the move to use
+   * @param moveId - the move to use
    * @param pkmIndex - the pokemon index. Relevant for double-battles only (defaults to 0)
    * @param targetIndex - (optional) The {@linkcode BattlerIndex} of the Pokemon to target for single-target moves, or `null` if a manual call to `selectTarget()` is required
    */
-  public use(move: MoveId, pkmIndex: 0 | 1 = 0, targetIndex?: BattlerIndex | null): void {
+  public use(moveId: MoveId, pkmIndex: 0 | 1 = 0, targetIndex?: BattlerIndex | null): void {
     const movesetOverride = Array.isArray(Overrides.MOVESET_OVERRIDE)
       ? Overrides.MOVESET_OVERRIDE
       : [Overrides.MOVESET_OVERRIDE];
@@ -88,9 +88,9 @@ export class MoveHelper extends GameManagerHelper {
     }
 
     const pokemon = this.game.scene.getPlayerField()[pkmIndex];
-    pokemon.moveset = [new PokemonMove(move)];
+    pokemon.moveset = [new PokemonMove(moveId)];
 
-    this.select(move, pkmIndex, targetIndex);
+    this.select(moveId, pkmIndex, targetIndex);
   }
 
   /**
@@ -135,7 +135,7 @@ export class MoveHelper extends GameManagerHelper {
     const legalTargets = getMoveTargets(enemy, moveId);
 
     vi.spyOn(enemy, "getNextMove").mockReturnValueOnce({
-      move: moveId,
+      moveId: moveId,
       targets:
         target !== undefined && !legalTargets.multiple && legalTargets.targets.includes(target)
           ? [target]
@@ -179,7 +179,7 @@ export class MoveHelper extends GameManagerHelper {
     const legalTargets = getMoveTargets(enemy, moveId);
 
     vi.spyOn(enemy, "getNextMove").mockReturnValueOnce({
-      move: moveId,
+      moveId: moveId,
       targets:
         target !== undefined && !legalTargets.multiple && legalTargets.targets.includes(target)
           ? [target]

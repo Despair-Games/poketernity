@@ -32,14 +32,14 @@ describe("Moves - Whirlwind", () => {
   });
 
   it.each([
-    { move: MoveId.FLY, name: "Fly" },
-    { move: MoveId.BOUNCE, name: "Bounce" },
-  ])("should not hit a flying target: $name (=$move)", async ({ move }) => {
+    { moveId: MoveId.FLY, name: "Fly" },
+    { moveId: MoveId.BOUNCE, name: "Bounce" },
+  ])("should not hit a flying target: $name (=$move)", async ({ moveId }) => {
     await game.classicMode.startBattle([Species.STARAPTOR]);
 
     const staraptor = game.field.getPlayerPokemon();
 
-    game.move.use(move);
+    game.move.use(moveId);
     await game.move.forceEnemyMove(MoveId.WHIRLWIND);
 
     await game.phaseInterceptor.to("BerryPhase", false);

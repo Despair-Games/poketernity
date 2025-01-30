@@ -50,10 +50,10 @@ describe("Moves - Upper Hand", () => {
   });
 
   it.each([
-    { descriptor: "non-priority attack", move: MoveId.TACKLE },
-    { descriptor: "status move", move: MoveId.BABY_DOLL_EYES },
-  ])("should fail when the opponent selects a $descriptor", async ({ move }) => {
-    game.override.enemyMoveset(move);
+    { descriptor: "non-priority attack", moveId: MoveId.TACKLE },
+    { descriptor: "status move", moveId: MoveId.BABY_DOLL_EYES },
+  ])("should fail when the opponent selects a $descriptor", async ({ moveId }) => {
+    game.override.enemyMoveset(moveId);
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 

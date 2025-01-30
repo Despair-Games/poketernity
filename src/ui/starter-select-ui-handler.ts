@@ -2394,12 +2394,12 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.checkIconId(this.starterIcons[index], species, props.female, props.formIndex, props.shiny, props.variant);
   }
 
-  switchMoveHandler(i: number, newMove: MoveId, move: MoveId) {
+  switchMoveHandler(i: number, newMoveId: MoveId, moveId: MoveId) {
     const speciesId = this.lastSpecies.speciesId;
-    const existingMoveIndex = this.starterMoveset?.indexOf(newMove)!; // TODO: is this bang correct?
-    this.starterMoveset![i] = newMove; // TODO: is this bang correct?
+    const existingMoveIndex = this.starterMoveset?.indexOf(newMoveId)!; // TODO: is this bang correct?
+    this.starterMoveset![i] = newMoveId; // TODO: is this bang correct?
     if (existingMoveIndex > -1) {
-      this.starterMoveset![existingMoveIndex] = move; // TODO: is this bang correct?
+      this.starterMoveset![existingMoveIndex] = moveId; // TODO: is this bang correct?
     }
     const props: DexAttrProps = globalScene.gameData.getSpeciesDexAttrProps(this.lastSpecies, this.dexAttrCursor);
     // species has different forms
@@ -2425,7 +2425,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       // does the species' starter move data have its form's starter moves and has it been updated
       if (starterMoveData.hasOwnProperty(props.formIndex)) {
         // active form move hasn't been updated
-        if (starterMoveData[props.formIndex][existingMoveIndex] !== newMove) {
+        if (starterMoveData[props.formIndex][existingMoveIndex] !== newMoveId) {
           globalScene.gameData.starterData[speciesId].moveset[props.formIndex] = this.starterMoveset?.slice(
             0,
           ) as StarterMoveset;

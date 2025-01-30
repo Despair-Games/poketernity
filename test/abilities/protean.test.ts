@@ -292,10 +292,10 @@ describe("Abilities - Protean", () => {
   });
 });
 
-function testPokemonTypeMatchesDefaultMoveType(pokemon: PlayerPokemon, move: MoveId) {
+function testPokemonTypeMatchesDefaultMoveType(pokemon: PlayerPokemon, moveId: MoveId) {
   expect(pokemon.summonData.abilitiesApplied).toContain(Abilities.PROTEAN);
   expect(pokemon.getTypes()).toHaveLength(1);
   const pokemonType = Type[pokemon.getTypes()[0]],
-    moveType = Type[allMoves[move].type];
+    moveType = Type[allMoves[moveId].type];
   expect(pokemonType).toBe(moveType);
 }

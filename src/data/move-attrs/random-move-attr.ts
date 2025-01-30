@@ -38,7 +38,7 @@ export class RandomMoveAttr extends OverrideMoveEffectAttr {
         : moveTargets.targets.indexOf(target.getBattlerIndex()) > -1
           ? [target.getBattlerIndex()]
           : [moveTargets.targets[user.randSeedInt(moveTargets.targets.length)]];
-    user.getMoveQueue().push({ move: moveId, targets: targets, ignorePP: true });
+    user.getMoveQueue().push({ moveId: moveId, targets: targets, ignorePP: true });
     globalScene.unshiftPhase(new LoadMoveAnimPhase(moveId));
     globalScene.unshiftPhase(new MovePhase(user, targets, new PokemonMove(moveId, 0, 0, true), true));
     return true;

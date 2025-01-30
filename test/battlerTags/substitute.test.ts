@@ -135,7 +135,7 @@ describe("BattlerTag - SubstituteTag", () => {
         getLastXMoves: vi
           .fn()
           .mockReturnValue([
-            { move: MoveId.TACKLE, result: MoveResult.SUCCESS } as TurnMove,
+            { moveId: MoveId.TACKLE, result: MoveResult.SUCCESS } as TurnMove,
           ]) as Pokemon["getLastXMoves"],
       } as unknown as Pokemon;
 

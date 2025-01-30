@@ -452,17 +452,17 @@ export function initCommonAnims(): Promise<void> {
   });
 }
 
-export function initMoveAnim(move: MoveId): Promise<void> {
+export function initMoveAnim(moveId: MoveId): Promise<void> {
   return new Promise((resolve) => {
-    if (moveAnims.has(move)) {
-      if (moveAnims.get(move) !== null) {
+    if (moveAnims.has(moveId)) {
+      if (moveAnims.get(moveId) !== null) {
         resolve();
       } else {
         const loadedCheckTimer = setInterval(() => {
-          if (moveAnims.get(move) !== null) {
-            const chargeAnimSource = allMoves[move].isChargingMove()
-              ? allMoves[move]
-              : (allMoves[move].getAttrs(DelayedAttackAttr)[0] ?? allMoves[move].getAttrs(BeakBlastHeaderAttr)[0]);
+          if (moveAnims.get(moveId) !== null) {
+            const chargeAnimSource = allMoves[moveId].isChargingMove()
+              ? allMoves[moveId]
+              : (allMoves[moveId].getAttrs(DelayedAttackAttr)[0] ?? allMoves[moveId].getAttrs(BeakBlastHeaderAttr)[0]);
             if (chargeAnimSource && chargeAnims.get(chargeAnimSource.chargeAnim) === null) {
               return;
             }
@@ -472,36 +472,36 @@ export function initMoveAnim(move: MoveId): Promise<void> {
         }, 50);
       }
     } else {
-      moveAnims.set(move, null);
+      moveAnims.set(moveId, null);
       const defaultMoveAnim =
-        allMoves[move] instanceof AttackMove
+        allMoves[moveId] instanceof AttackMove
           ? MoveId.TACKLE
-          : allMoves[move] instanceof SelfStatusMove
+          : allMoves[moveId] instanceof SelfStatusMove
             ? MoveId.FOCUS_ENERGY
             : MoveId.TAIL_WHIP;
 
-      const fetchAnimAndResolve = (move: MoveId) => {
+      const fetchAnimAndResolve = (moveId: MoveId) => {
         globalScene
-          .cachedFetch(`./battle-anims/${animationFileName(move)}.json`)
+          .cachedFetch(`./battle-anims/${animationFileName(moveId)}.json`)
           .then((response) => {
             const contentType = response.headers.get("content-type");
             if (!response.ok || contentType?.indexOf("application/json") === -1) {
-              useDefaultAnim(move, defaultMoveAnim);
-              logMissingMoveAnim(move, response.status, response.statusText);
+              useDefaultAnim(moveId, defaultMoveAnim);
+              logMissingMoveAnim(moveId, response.status, response.statusText);
               return resolve();
             }
             return response.json();
           })
           .then((ba) => {
             if (Array.isArray(ba)) {
-              populateMoveAnim(move, ba[0]);
-              populateMoveAnim(move, ba[1]);
+              populateMoveAnim(moveId, ba[0]);
+              populateMoveAnim(moveId, ba[1]);
             } else {
-              populateMoveAnim(move, ba);
+              populateMoveAnim(moveId, ba);
             }
-            const chargeAnimSource = allMoves[move].isChargingMove()
-              ? allMoves[move]
-              : (allMoves[move].getAttrs(DelayedAttackAttr)[0] ?? allMoves[move].getAttrs(BeakBlastHeaderAttr)[0]);
+            const chargeAnimSource = allMoves[moveId].isChargingMove()
+              ? allMoves[moveId]
+              : (allMoves[moveId].getAttrs(DelayedAttackAttr)[0] ?? allMoves[moveId].getAttrs(BeakBlastHeaderAttr)[0]);
             if (chargeAnimSource) {
               initMoveChargeAnim(chargeAnimSource.chargeAnim).then(() => resolve());
             } else {
@@ -509,12 +509,12 @@ export function initMoveAnim(move: MoveId): Promise<void> {
             }
           })
           .catch((error) => {
-            useDefaultAnim(move, defaultMoveAnim);
-            logMissingMoveAnim(move, error);
+            useDefaultAnim(moveId, defaultMoveAnim);
+            logMissingMoveAnim(moveId, error);
             return resolve();
           });
       };
-      fetchAnimAndResolve(move);
+      fetchAnimAndResolve(moveId);
     }
   });
 }
@@ -522,23 +522,23 @@ export function initMoveAnim(move: MoveId): Promise<void> {
 /**
  * Populates the default animation for the given move.
  *
- * @param move the move to populate an animation for
- * @param defaultMoveAnim the move to use as the default animation
+ * @param moveId the move to populate an animation for
+ * @param defaultMoveId the move to use as the default animation
  */
-function useDefaultAnim(move: MoveId, defaultMoveAnim: MoveId) {
-  populateMoveAnim(move, moveAnims.get(defaultMoveAnim));
+function useDefaultAnim(moveId: MoveId, defaultMoveId: MoveId) {
+  populateMoveAnim(moveId, moveAnims.get(defaultMoveId));
 }
 
 /**
  * Helper method for printing a warning to the console when a move animation is missing.
  *
- * @param move the move to populate an animation for
+ * @param moveId the move to populate an animation for
  * @param optionalParams parameters to add to the error logging
  *
  * @remarks use {@linkcode useDefaultAnim} to use a default animation
  */
-function logMissingMoveAnim(move: MoveId, ...optionalParams: any[]) {
-  const moveName = animationFileName(move);
+function logMissingMoveAnim(moveId: MoveId, ...optionalParams: any[]) {
+  const moveName = animationFileName(moveId);
   console.warn(`Could not load animation file for move '${moveName}'`, ...optionalParams);
 }
 
@@ -595,13 +595,13 @@ export function initMoveChargeAnim(chargeAnim: ChargeAnim): Promise<void> {
   });
 }
 
-function populateMoveAnim(move: MoveId, animSource: any): void {
+function populateMoveAnim(moveId: MoveId, animSource: any): void {
   const moveAnim = new AnimConfig(animSource);
-  if (moveAnims.get(move) === null) {
-    moveAnims.set(move, moveAnim);
+  if (moveAnims.get(moveId) === null) {
+    moveAnims.set(moveId, moveAnim);
     return;
   }
-  moveAnims.set(move, [moveAnims.get(move) as AnimConfig, moveAnim]);
+  moveAnims.set(moveId, [moveAnims.get(moveId) as AnimConfig, moveAnim]);
 }
 
 function populateMoveChargeAnim(chargeAnim: ChargeAnim, animSource: any) {
@@ -1352,30 +1352,30 @@ export class CommonBattleAnim extends BattleAnim {
 }
 
 export class MoveAnim extends BattleAnim {
-  public move: MoveId;
+  public moveId: MoveId;
 
-  constructor(move: MoveId, user: Pokemon, targetIndex: BattlerIndex, playOnEmptyField: boolean = false) {
+  constructor(moveId: MoveId, user: Pokemon, targetIndex: BattlerIndex, playOnEmptyField: boolean = false) {
     super(user, globalScene.getFieldPokemonByBattlerIndex(targetIndex), playOnEmptyField);
 
-    this.move = move;
+    this.moveId = moveId;
   }
 
   getAnim(): AnimConfig {
-    return moveAnims.get(this.move) instanceof AnimConfig
-      ? (moveAnims.get(this.move) as AnimConfig)
-      : (moveAnims.get(this.move)?.[this.user?.isPlayer() ? 0 : 1] as AnimConfig);
+    return moveAnims.get(this.moveId) instanceof AnimConfig
+      ? (moveAnims.get(this.moveId) as AnimConfig)
+      : (moveAnims.get(this.moveId)?.[this.user?.isPlayer() ? 0 : 1] as AnimConfig);
   }
 
   isOppAnim(): boolean {
-    return !this.user?.isPlayer() && Array.isArray(moveAnims.get(this.move));
+    return !this.user?.isPlayer() && Array.isArray(moveAnims.get(this.moveId));
   }
 
   protected override isHideUser(): boolean {
-    return allMoves[this.move].hasFlag(MoveFlags.HIDE_USER);
+    return allMoves[this.moveId].hasFlag(MoveFlags.HIDE_USER);
   }
 
   protected override isHideTarget(): boolean {
-    return allMoves[this.move].hasFlag(MoveFlags.HIDE_TARGET);
+    return allMoves[this.moveId].hasFlag(MoveFlags.HIDE_TARGET);
   }
 }
 
@@ -1385,8 +1385,8 @@ export class MoveChargeAnim extends MoveAnim {
   /**
    * **Note:** The default for {@linkcode targetIndex} being {@linkcode BattlerIndex.PLAYER} is due to `MoveChargeAnim` originally not supporting a target argument.
    */
-  constructor(chargeAnim: ChargeAnim, move: MoveId, user: Pokemon, targetIndex: BattlerIndex = BattlerIndex.PLAYER) {
-    super(move, user, targetIndex);
+  constructor(chargeAnim: ChargeAnim, moveId: MoveId, user: Pokemon, targetIndex: BattlerIndex = BattlerIndex.PLAYER) {
+    super(moveId, user, targetIndex);
 
     this.chargeAnim = chargeAnim;
   }

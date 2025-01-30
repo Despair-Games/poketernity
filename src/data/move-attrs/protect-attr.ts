@@ -26,7 +26,10 @@ export class ProtectAttr extends AddBattlerTagAttr {
 
       while (moveHistory.length) {
         turnMove = moveHistory.shift();
-        if (!allMoves[turnMove?.move ?? MoveId.NONE].hasAttr(ProtectAttr) || turnMove?.result !== MoveResult.SUCCESS) {
+        if (
+          !allMoves[turnMove?.moveId ?? MoveId.NONE].hasAttr(ProtectAttr)
+          || turnMove?.result !== MoveResult.SUCCESS
+        ) {
           break;
         }
         timesUsed++;

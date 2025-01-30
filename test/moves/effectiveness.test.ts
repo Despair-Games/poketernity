@@ -13,7 +13,7 @@ import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
 function testMoveEffectiveness(
   game: GameManager,
-  move: MoveId,
+  moveId: MoveId,
   targetSpecies: Species,
   expected: number,
   targetAbility: Abilities = Abilities.BALL_FETCH,
@@ -30,7 +30,7 @@ function testMoveEffectiveness(
     overrideHeldItems(target, false);
   }
 
-  expect(target.getMoveEffectiveness(user, allMoves[move])).toBe(expected);
+  expect(target.getMoveEffectiveness(user, allMoves[moveId])).toBe(expected);
   user.destroy();
   target.destroy();
 }

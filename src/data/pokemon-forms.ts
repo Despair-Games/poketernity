@@ -204,17 +204,17 @@ export class SpeciesFormChangeStatusEffectTrigger extends SpeciesFormChangeTrigg
 }
 
 export class SpeciesFormChangeMoveLearnedTrigger extends SpeciesFormChangeTrigger {
-  public move: MoveId;
+  public moveId: MoveId;
   public known: boolean;
 
-  constructor(move: MoveId, known: boolean = true) {
+  constructor(moveId: MoveId, known: boolean = true) {
     super();
-    this.move = move;
+    this.moveId = moveId;
     this.known = known;
   }
 
   override canChange(pokemon: Pokemon): boolean {
-    return !!pokemon.moveset.filter((m) => m.moveId === this.move).length === this.known;
+    return !!pokemon.moveset.filter((m) => m.moveId === this.moveId).length === this.known;
   }
 }
 
@@ -222,9 +222,9 @@ export abstract class SpeciesFormChangeMoveTrigger extends SpeciesFormChangeTrig
   public movePredicate: (m: MoveId) => boolean;
   public used: boolean;
 
-  constructor(move: MoveId | ((m: MoveId) => boolean), used: boolean = true) {
+  constructor(moveId: MoveId | ((m: MoveId) => boolean), used: boolean = true) {
     super();
-    this.movePredicate = typeof move === "function" ? move : (m: MoveId) => m === move;
+    this.movePredicate = typeof moveId === "function" ? moveId : (m: MoveId) => m === moveId;
     this.used = used;
   }
 }
@@ -232,14 +232,14 @@ export abstract class SpeciesFormChangeMoveTrigger extends SpeciesFormChangeTrig
 export class SpeciesFormChangePreMoveTrigger extends SpeciesFormChangeMoveTrigger {
   override canChange(pokemon: Pokemon): boolean {
     const command = globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()];
-    return !!command?.move && this.movePredicate(command.move.move) === this.used;
+    return !!command?.move && this.movePredicate(command.move.moveId) === this.used;
   }
 }
 
 export class SpeciesFormChangePostMoveTrigger extends SpeciesFormChangeMoveTrigger {
   override canChange(pokemon: Pokemon): boolean {
     return (
-      pokemon.summonData && !!pokemon.getLastXMoves(1).filter((m) => this.movePredicate(m.move)).length === this.used
+      pokemon.summonData && !!pokemon.getLastXMoves(1).filter((m) => this.movePredicate(m.moveId)).length === this.used
     );
   }
 }

@@ -6,8 +6,8 @@ import type { MoveId } from "#enums/move-id";
 import { AbAttr } from "./ab-attr";
 
 export class RedirectMoveAbAttr extends AbAttr {
-  override apply(pokemon: Pokemon, _simulated: boolean, move: MoveId, target: NumberHolder): boolean {
-    if (this.canRedirect(move)) {
+  override apply(pokemon: Pokemon, _simulated: boolean, moveId: MoveId, target: NumberHolder): boolean {
+    if (this.canRedirect(moveId)) {
       const newTarget = pokemon.getBattlerIndex();
       if (target.value !== newTarget) {
         target.value = newTarget;

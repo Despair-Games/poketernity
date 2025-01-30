@@ -620,11 +620,11 @@ export class MoveRequirement extends EncounterPokemonRequirement {
 export class CompatibleMoveRequirement extends EncounterPokemonRequirement {
   requiredMoves: MoveId[];
 
-  constructor(learnableMove: MoveId | MoveId[], minNumberOfPokemon: number = 1, invertQuery: boolean = false) {
+  constructor(learnableMoveId: MoveId | MoveId[], minNumberOfPokemon: number = 1, invertQuery: boolean = false) {
     super();
     this.minNumberOfPokemon = minNumberOfPokemon;
     this.invertQuery = invertQuery;
-    this.requiredMoves = Array.isArray(learnableMove) ? learnableMove : [learnableMove];
+    this.requiredMoves = Array.isArray(learnableMoveId) ? learnableMoveId : [learnableMoveId];
   }
 
   override meetsRequirement(): boolean {

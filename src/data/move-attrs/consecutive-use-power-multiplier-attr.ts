@@ -18,8 +18,8 @@ export abstract class ConsecutiveUsePowerMultiplierAttr extends MovePowerMultipl
       let turnMove: TurnMove | undefined;
 
       while (
-        ((turnMove = moveHistory.shift())?.move === move.id
-          || (comboMoves.length && comboMoves.includes(turnMove?.move ?? MoveId.NONE)))
+        ((turnMove = moveHistory.shift())?.moveId === move.id
+          || (comboMoves.length && comboMoves.includes(turnMove?.moveId ?? MoveId.NONE)))
         && (!resetOnFail || turnMove?.result === MoveResult.SUCCESS)
       ) {
         if (count < limit - 1) {

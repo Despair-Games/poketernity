@@ -1088,15 +1088,15 @@ export type MoveTargetSet = {
   multiple: boolean;
 };
 
-export function getMoveTargets(user: Pokemon, move: MoveId): MoveTargetSet {
+export function getMoveTargets(user: Pokemon, moveId: MoveId): MoveTargetSet {
   const variableTarget = new NumberHolder(0);
-  user.getOpponents().forEach((p) => applyMoveAttrs(VariableTargetAttr, user, p, allMoves[move], variableTarget));
+  user.getOpponents().forEach((p) => applyMoveAttrs(VariableTargetAttr, user, p, allMoves[moveId], variableTarget));
 
-  const moveTarget = allMoves[move].hasAttr(VariableTargetAttr)
+  const moveTarget = allMoves[moveId].hasAttr(VariableTargetAttr)
     ? variableTarget.value
-    : move
-      ? allMoves[move].moveTarget
-      : move === undefined
+    : moveId
+      ? allMoves[moveId].moveTarget
+      : moveId === undefined
         ? MoveTarget.NEAR_ENEMY
         : [];
   const opponents = user.getOpponents();

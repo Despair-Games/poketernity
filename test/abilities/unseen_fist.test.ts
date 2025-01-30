@@ -69,12 +69,12 @@ describe("Abilities - Unseen Fist", () => {
 
 async function testUnseenFistHitResult(
   game: GameManager,
-  attackMove: MoveId,
-  protectMove: MoveId,
+  attackMoveId: MoveId,
+  protectMoveId: MoveId,
   shouldSucceed: boolean = true,
 ): Promise<void> {
-  game.override.moveset([attackMove]);
-  game.override.enemyMoveset([protectMove, protectMove, protectMove, protectMove]);
+  game.override.moveset([attackMoveId]);
+  game.override.enemyMoveset([protectMoveId, protectMoveId, protectMoveId, protectMoveId]);
 
   await game.startBattle();
 
@@ -86,7 +86,7 @@ async function testUnseenFistHitResult(
 
   const enemyStartingHp = enemyPokemon.hp;
 
-  game.move.select(attackMove);
+  game.move.select(attackMoveId);
   await game.phaseInterceptor.to(TurnEndPhase, false);
 
   if (shouldSucceed) {

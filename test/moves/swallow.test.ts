@@ -135,7 +135,10 @@ describe("Moves - Swallow", () => {
     game.move.select(MoveId.SWALLOW);
     await game.phaseInterceptor.to(TurnInitPhase);
 
-    expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({ move: MoveId.SWALLOW, result: MoveResult.FAIL });
+    expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
+      moveId: MoveId.SWALLOW,
+      result: MoveResult.FAIL,
+    });
   });
 
   describe("restores stat stage boosts granted by stacks", () => {
@@ -157,7 +160,7 @@ describe("Moves - Swallow", () => {
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-        move: MoveId.SWALLOW,
+        moveId: MoveId.SWALLOW,
         result: MoveResult.SUCCESS,
       });
 
@@ -187,7 +190,7 @@ describe("Moves - Swallow", () => {
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-        move: MoveId.SWALLOW,
+        moveId: MoveId.SWALLOW,
         result: MoveResult.SUCCESS,
       });
 

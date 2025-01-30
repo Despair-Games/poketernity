@@ -36,7 +36,7 @@ export abstract class ArenaTag {
   constructor(
     public tagType: ArenaTagType,
     public turnCount: number,
-    public sourceMove?: MoveId,
+    public sourceMoveId?: MoveId,
     public sourceId?: number,
     public side: ArenaTagSide = ArenaTagSide.BOTH,
   ) {}
@@ -65,7 +65,7 @@ export abstract class ArenaTag {
   }
 
   getMoveName(): string | null {
-    return this.sourceMove ? allMoves[this.sourceMove].name : null;
+    return this.sourceMoveId ? allMoves[this.sourceMoveId].name : null;
   }
 
   /**
@@ -75,7 +75,7 @@ export abstract class ArenaTag {
    */
   loadTag(source: ArenaTag | any): void {
     this.turnCount = source.turnCount;
-    this.sourceMove = source.sourceMove;
+    this.sourceMoveId = source.sourceMove;
     this.sourceId = source.sourceId;
     this.side = source.side;
   }
@@ -173,7 +173,7 @@ export abstract class WeakenMoveScreenTag extends ArenaTag {
    *
    * @param tagType - The type of the arena tag.
    * @param turnCount - The number of turns the tag is active.
-   * @param sourceMove - The move that created the tag.
+   * @param sourceMoveId - The move that created the tag.
    * @param sourceId - The ID of the source of the tag.
    * @param side - The side (player or enemy) the tag affects.
    * @param weakenedCategories - The categories of moves that are weakened by this tag.
@@ -181,12 +181,12 @@ export abstract class WeakenMoveScreenTag extends ArenaTag {
   constructor(
     tagType: ArenaTagType,
     turnCount: number,
-    sourceMove: MoveId,
+    sourceMoveId: MoveId,
     sourceId: number,
     side: ArenaTagSide,
     weakenedCategories: MoveCategory[],
   ) {
-    super(tagType, turnCount, sourceMove, sourceId, side);
+    super(tagType, turnCount, sourceMoveId, sourceId, side);
 
     this.weakenedCategories = weakenedCategories;
   }
@@ -298,13 +298,13 @@ export abstract class ConditionalProtectTag extends ArenaTag {
 
   constructor(
     tagType: ArenaTagType,
-    sourceMove: MoveId,
+    sourceMoveId: MoveId,
     sourceId: number,
     side: ArenaTagSide,
     condition: ProtectConditionFunc,
     ignoresBypass: boolean = false,
   ) {
-    super(tagType, 1, sourceMove, sourceId, side);
+    super(tagType, 1, sourceMoveId, sourceId, side);
 
     this.protectConditionFunc = condition;
     this.ignoresBypass = ignoresBypass;
@@ -499,12 +499,12 @@ export class NoCritTag extends ArenaTag {
   /**
    * Constructor method for the NoCritTag class
    * @param turnCount `number` the number of turns this effect lasts
-   * @param sourceMove {@linkcode MoveId} the move that created this effect
+   * @param sourceMoveId {@linkcode MoveId} the move that created this effect
    * @param sourceId `number` the ID of the {@linkcode Pokemon} that created this effect
    * @param side {@linkcode ArenaTagSide} the side to which this effect belongs
    */
-  constructor(turnCount: number, sourceMove: MoveId, sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.NO_CRIT, turnCount, sourceMove, sourceId, side);
+  constructor(turnCount: number, sourceMoveId: MoveId, sourceId: number, side: ArenaTagSide) {
+    super(ArenaTagType.NO_CRIT, turnCount, sourceMoveId, sourceId, side);
   }
 
   /** Queues a message upon adding this effect to the field */
@@ -577,11 +577,11 @@ export abstract class WeakenMoveTypeTag extends ArenaTag {
    * @param tagType - The type of the arena tag.
    * @param turnCount - The number of turns the tag is active.
    * @param type - The type being weakened from this tag.
-   * @param sourceMove - The move that created the tag.
+   * @param sourceMoveId - The move that created the tag.
    * @param sourceId - The ID of the source of the tag.
    */
-  constructor(tagType: ArenaTagType, turnCount: number, type: Type, sourceMove: MoveId, sourceId: number) {
-    super(tagType, turnCount, sourceMove, sourceId);
+  constructor(tagType: ArenaTagType, turnCount: number, type: Type, sourceMoveId: MoveId, sourceId: number) {
+    super(tagType, turnCount, sourceMoveId, sourceId);
 
     this.weakenedType = type;
   }
@@ -645,8 +645,8 @@ class WaterSportTag extends WeakenMoveTypeTag {
  * Converts Normal-type moves to Electric type for the rest of the turn.
  */
 export class IonDelugeTag extends ArenaTag {
-  constructor(sourceMove?: MoveId) {
-    super(ArenaTagType.ION_DELUGE, 1, sourceMove);
+  constructor(sourceMoveId?: MoveId) {
+    super(ArenaTagType.ION_DELUGE, 1, sourceMoveId);
   }
 
   /** Queues an on-add message */
@@ -683,13 +683,13 @@ export abstract class ArenaTrapTag extends ArenaTag {
    * Creates a new instance of the ArenaTrapTag class.
    *
    * @param tagType - The type of the arena tag.
-   * @param sourceMove - The move that created the tag.
+   * @param sourceMoveId - The move that created the tag.
    * @param sourceId - The ID of the source of the tag.
    * @param side - The side (player or enemy) the tag affects.
    * @param maxLayers - The maximum amount of layers this tag can have.
    */
-  constructor(tagType: ArenaTagType, sourceMove: MoveId, sourceId: number, side: ArenaTagSide, maxLayers: number) {
-    super(tagType, 0, sourceMove, sourceId, side);
+  constructor(tagType: ArenaTagType, sourceMoveId: MoveId, sourceId: number, side: ArenaTagSide, maxLayers: number) {
+    super(tagType, 0, sourceMoveId, sourceId, side);
 
     this.layers = 1;
     this.maxLayers = maxLayers;
@@ -867,7 +867,7 @@ class ToxicSpikesTag extends ArenaTrapTag {
  */
 interface DelayedAttack {
   sourceId: number;
-  move: MoveId;
+  moveId: MoveId;
   targetIndex: BattlerIndex;
   turnCount: number;
 }
@@ -888,8 +888,8 @@ export class DelayedAttackTag extends ArenaTag {
     this.delayedAttacks = [];
   }
 
-  public addAttack(source: Pokemon, move: MoveId, targetIndex: BattlerIndex): void {
-    this.delayedAttacks.push({ sourceId: source.id, move, targetIndex, turnCount: 3 });
+  public addAttack(source: Pokemon, moveId: MoveId, targetIndex: BattlerIndex): void {
+    this.delayedAttacks.push({ sourceId: source.id, moveId: moveId, targetIndex, turnCount: 3 });
   }
 
   override lapse(_arena: Arena): boolean {
@@ -900,12 +900,12 @@ export class DelayedAttackTag extends ArenaTag {
         const target = globalScene.getField(true).find((p) => attack.targetIndex === p.getBattlerIndex());
         if (target) {
           globalScene.unshiftPhase(
-            new MoveEffectPhase(attack.sourceId, [attack.targetIndex], new PokemonMove(attack.move, 0, 0, true)),
+            new MoveEffectPhase(attack.sourceId, [attack.targetIndex], new PokemonMove(attack.moveId, 0, 0, true)),
           );
         } else if (globalScene.currentBattle.double) {
           const redirectIndex = attack.targetIndex + (attack.targetIndex % 2 === 0 ? 1 : -1);
           globalScene.unshiftPhase(
-            new MoveEffectPhase(attack.sourceId, [redirectIndex], new PokemonMove(attack.move, 0, 0, true)),
+            new MoveEffectPhase(attack.sourceId, [redirectIndex], new PokemonMove(attack.moveId, 0, 0, true)),
           );
         }
       }
@@ -940,11 +940,11 @@ class TypeHazardTag extends ArenaTrapTag {
     damagingType: Type,
     sourceId: number,
     side: ArenaTagSide,
-    sourceMove: MoveId,
+    sourceMoveId: MoveId,
     onAddKey: string,
     activateTrapKey: string,
   ) {
-    super(arenaTagType, sourceMove, sourceId, side, 1);
+    super(arenaTagType, sourceMoveId, sourceId, side, 1);
     this.damagingType = damagingType;
     this.onAddKey = onAddKey;
     this.activateTrapKey = activateTrapKey;
@@ -1426,8 +1426,8 @@ class GrassWaterPledgeTag extends ArenaTag {
 export class TypeImmuneDamageOverTimeTag extends ArenaTag {
   private immuneType: Type;
 
-  constructor(tagType, sourceMove: MoveId, sourceId: number, side: ArenaTagSide, immuneType: Type) {
-    super(tagType, 4, sourceMove, sourceId, side);
+  constructor(tagType, sourceMoveId: MoveId, sourceId: number, side: ArenaTagSide, immuneType: Type) {
+    super(tagType, 4, sourceMoveId, sourceId, side);
     this.immuneType = immuneType;
   }
 
@@ -1509,7 +1509,7 @@ export function getArenaTag(
   tagType: ArenaTagType,
   sourceId: number,
   turnCount: number,
-  sourceMove?: MoveId,
+  sourceMoveId?: MoveId,
   side: ArenaTagSide = ArenaTagSide.BOTH,
 ): ArenaTag | null {
   switch (tagType) {
@@ -1524,13 +1524,13 @@ export function getArenaTag(
     case ArenaTagType.CRAFTY_SHIELD:
       return new CraftyShieldTag(sourceId, side);
     case ArenaTagType.NO_CRIT:
-      return new NoCritTag(turnCount, sourceMove!, sourceId, side); // TODO: is this bang correct?
+      return new NoCritTag(turnCount, sourceMoveId!, sourceId, side); // TODO: is this bang correct?
     case ArenaTagType.MUD_SPORT:
       return new MudSportTag(turnCount, sourceId);
     case ArenaTagType.WATER_SPORT:
       return new WaterSportTag(turnCount, sourceId);
     case ArenaTagType.ION_DELUGE:
-      return new IonDelugeTag(sourceMove);
+      return new IonDelugeTag(sourceMoveId);
     case ArenaTagType.SPIKES:
       return new SpikesTag(sourceId, side);
     case ArenaTagType.TOXIC_SPIKES:

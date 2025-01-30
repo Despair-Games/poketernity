@@ -41,8 +41,8 @@ describe("Abilities - Toxic Chain", () => {
   /**
    * Checks that the enemy Pokemon is badly poisoned after using a given move against it.
    */
-  async function checkSucceedPoison(move: MoveId, enemyPokemon: EnemyPokemon) {
-    game.move.select(move);
+  async function checkSucceedPoison(moveId: MoveId, enemyPokemon: EnemyPokemon) {
+    game.move.select(moveId);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
     expect(enemyPokemon.status?.effect).toBe(StatusEffect.TOXIC);
@@ -51,8 +51,8 @@ describe("Abilities - Toxic Chain", () => {
   /**
    * Checks that the enemy Pokemon is not statused after using a given move against it.
    */
-  async function checkFailPoison(move: MoveId, enemyPokemon: EnemyPokemon) {
-    game.move.select(move);
+  async function checkFailPoison(moveId: MoveId, enemyPokemon: EnemyPokemon) {
+    game.move.select(moveId);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
     expect(enemyPokemon.status?.effect).toBeUndefined();

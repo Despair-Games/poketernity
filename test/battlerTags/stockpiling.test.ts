@@ -1,3 +1,4 @@
+import type { StockpilingStatStageChangeCount } from "#app/@types/StockpilingStatStageChange";
 import { StockpilingTag } from "#app/data/battler-tags";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonSummonData } from "#app/field/pokemon";
@@ -152,7 +153,10 @@ describe("BattlerTag - StockpilingTag", () => {
       // fourth stack should not be applied
       subject.onOverlap(mockPokemon);
       expect(subject.stockpiledCount).toBe(3);
-      expect(subject.statChangeCounts).toMatchObject({ [Stat.DEF]: 0, [Stat.SPDEF]: 2 });
+      expect(subject.statChangeCounts).toMatchObject<StockpilingStatStageChangeCount>({
+        [Stat.DEF]: 0,
+        [Stat.SPDEF]: 2,
+      });
 
       // removing tag should reverse stat changes
       vi.spyOn(game.scene, "unshiftPhase").mockImplementationOnce((phase) => {

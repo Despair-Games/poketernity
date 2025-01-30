@@ -385,7 +385,7 @@ export function initMoves() {
           target
             .getMoveHistory()
             .reverse()
-            .find((m) => m.move !== MoveId.NONE && m.move !== MoveId.STRUGGLE && !m.virtual) !== undefined,
+            .find((m) => m.moveId !== MoveId.NONE && m.moveId !== MoveId.STRUGGLE && !m.virtual) !== undefined,
       )
       .ignoresSubstitute(),
     new AttackMove(MoveId.ACID, Type.POISON, MoveCategory.SPECIAL, 40, 100, 30, 10, 0, 1)
@@ -820,7 +820,9 @@ export function initMoves() {
         // - the previous move used was not destiny bond
         // - the previous move was unsuccessful
         return (
-          lastTurnMove.length === 0 || lastTurnMove[0].move !== move.id || lastTurnMove[0].result !== MoveResult.SUCCESS
+          lastTurnMove.length === 0
+          || lastTurnMove[0].moveId !== move.id
+          || lastTurnMove[0].result !== MoveResult.SUCCESS
         );
       }),
     new StatusMove(MoveId.PERISH_SONG, Type.NORMAL, -1, 5, -1, 0, 2)
@@ -1523,7 +1525,7 @@ export function initMoves() {
         return (
           turnCommand.command === BattleCommand.FIGHT
           && !target.turnData.acted
-          && allMoves[turnCommand.move.move].category !== MoveCategory.STATUS
+          && allMoves[turnCommand.move.moveId].category !== MoveCategory.STATUS
         );
       },
     ),
@@ -2897,7 +2899,7 @@ export function initMoves() {
     new SelfStatusMove(MoveId.NO_RETREAT, Type.FIGHTING, -1, 5, -1, 0, 8)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD], 1, true)
       .attr(AddBattlerTagAttr, BattlerTagType.NO_RETREAT, true)
-      .condition((user, _target, _move) => user.getTag(TrappedTag)?.sourceMove !== MoveId.NO_RETREAT), // fails if the user is currently trapped by No Retreat
+      .condition((user, _target, _move) => user.getTag(TrappedTag)?.sourceMoveId !== MoveId.NO_RETREAT), // fails if the user is currently trapped by No Retreat
     new StatusMove(MoveId.TAR_SHOT, Type.ROCK, 100, 15, -1, 0, 8)
       .attr(StatStageChangeAttr, [Stat.SPD], -1)
       .attr(AddBattlerTagAttr, BattlerTagType.TAR_SHOT, false),
@@ -3589,7 +3591,7 @@ export function initMoves() {
       .makesContact(false)
       .condition((user, _target, move) => {
         const turnMove = user.getLastXMoves(1);
-        return !turnMove.length || turnMove[0].move !== move.id || turnMove[0].result !== MoveResult.SUCCESS;
+        return !turnMove.length || turnMove[0].moveId !== move.id || turnMove[0].result !== MoveResult.SUCCESS;
       }), // TODO Add Instruct/Encore interaction
     new AttackMove(MoveId.COMEUPPANCE, Type.DARK, MoveCategory.PHYSICAL, -1, 100, 10, -1, 0, 9)
       .attr(
@@ -3621,7 +3623,7 @@ export function initMoves() {
     new AttackMove(MoveId.BLOOD_MOON, Type.NORMAL, MoveCategory.SPECIAL, 140, 100, 5, -1, 0, 9).condition(
       (user, _target, move) => {
         const turnMove = user.getLastXMoves(1);
-        return !turnMove.length || turnMove[0].move !== move.id || turnMove[0].result !== MoveResult.SUCCESS;
+        return !turnMove.length || turnMove[0].moveId !== move.id || turnMove[0].result !== MoveResult.SUCCESS;
       },
     ), // TODO Add Instruct/Encore interaction
     new AttackMove(MoveId.MATCHA_GOTCHA, Type.GRASS, MoveCategory.SPECIAL, 80, 90, 15, 20, 0, 9)
@@ -3668,7 +3670,7 @@ export function initMoves() {
         return (
           turnCommand.command === BattleCommand.FIGHT
           && !target.turnData.acted
-          && allMoves[turnCommand.move.move].category !== MoveCategory.STATUS
+          && allMoves[turnCommand.move.moveId].category !== MoveCategory.STATUS
         );
       },
     ),

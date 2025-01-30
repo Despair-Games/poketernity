@@ -295,12 +295,12 @@ export class MysteryEncounterOptionBuilder implements Partial<IMysteryEncounterO
   /**
    * Player is required to have a pokemon that can learn a certain move/moveset
    *
-   * @param move the required move/moves
+   * @param moveId the required move/moves
    * @param options see {@linkcode CanLearnMoveRequirementOptions}
    * @returns
    */
-  withPokemonCanLearnMoveRequirement(move: MoveId | MoveId[], options?: CanLearnMoveRequirementOptions) {
-    return this.withPrimaryPokemonRequirement(new CanLearnMoveRequirement(move, options));
+  withPokemonCanLearnMoveRequirement(moveId: MoveId | MoveId[], options?: CanLearnMoveRequirementOptions) {
+    return this.withPrimaryPokemonRequirement(new CanLearnMoveRequirement(moveId, options));
   }
 
   /**

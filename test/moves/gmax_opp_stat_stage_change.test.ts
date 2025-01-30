@@ -35,12 +35,12 @@ describe("Moves - G-Max debuff both opponents", () => {
   });
 
   it.each([
-    { gmaxMove: MoveId.G_MAX_FOAM_BURST, statDropped: Stat.SPD, statChangeAmt: -2 },
-    { gmaxMove: MoveId.G_MAX_TARTNESS, statDropped: Stat.EVA, statChangeAmt: -1 },
-  ])("G-Max moves should debuff both opponents", async ({ gmaxMove, statDropped, statChangeAmt }) => {
+    { gmaxMoveId: MoveId.G_MAX_FOAM_BURST, statDropped: Stat.SPD, statChangeAmt: -2 },
+    { gmaxMoveId: MoveId.G_MAX_TARTNESS, statDropped: Stat.EVA, statChangeAmt: -1 },
+  ])("G-Max moves should debuff both opponents", async ({ gmaxMoveId, statDropped, statChangeAmt }) => {
     await game.classicMode.startBattle([Species.SUNKERN, Species.SUNKERN]);
 
-    game.move.select(gmaxMove, 0, BattlerIndex.ENEMY);
+    game.move.select(gmaxMoveId, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
