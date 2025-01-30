@@ -435,7 +435,7 @@ export function initMoves() {
       .condition(failOnMaxCondition)
       .attr(WeightPowerAttr),
     new AttackMove(Moves.COUNTER, Type.FIGHTING, MoveCategory.PHYSICAL, -1, 100, 20, -1, -5, 1)
-      .attr(CounterDamageAttr, (move: Move) => move.category === MoveCategory.PHYSICAL, 2)
+      .attr(CounterDamageAttr, (move) => allMoves[move].category === MoveCategory.PHYSICAL, 2)
       .target(MoveTarget.ATTACKER),
     new AttackMove(Moves.SEISMIC_TOSS, Type.FIGHTING, MoveCategory.PHYSICAL, -1, 100, 20, -1, 0, 1).attr(
       LevelDamageAttr,
@@ -967,7 +967,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.DEF], -1)
       .bitingMove(),
     new AttackMove(Moves.MIRROR_COAT, Type.PSYCHIC, MoveCategory.SPECIAL, -1, 100, 20, -1, -5, 2)
-      .attr(CounterDamageAttr, (move: Move) => move.category === MoveCategory.SPECIAL, 2)
+      .attr(CounterDamageAttr, (moveId) => allMoves[moveId].category === MoveCategory.SPECIAL, 2)
       .target(MoveTarget.ATTACKER),
     new StatusMove(Moves.PSYCH_UP, Type.NORMAL, -1, 10, -1, 0, 2).ignoresSubstitute().attr(CopyStatsAttr),
     new AttackMove(Moves.EXTREME_SPEED, Type.NORMAL, MoveCategory.PHYSICAL, 80, 100, 5, -1, 2, 2),
@@ -1417,7 +1417,8 @@ export function initMoves() {
     new AttackMove(Moves.METAL_BURST, Type.STEEL, MoveCategory.PHYSICAL, -1, 100, 10, -1, 0, 4)
       .attr(
         CounterDamageAttr,
-        (move: Move) => move.category === MoveCategory.PHYSICAL || move.category === MoveCategory.SPECIAL,
+        (moveId) =>
+          allMoves[moveId].category === MoveCategory.PHYSICAL || allMoves[moveId].category === MoveCategory.SPECIAL,
         1.5,
       )
       .redirectCounter()
@@ -3561,7 +3562,8 @@ export function initMoves() {
     new AttackMove(Moves.COMEUPPANCE, Type.DARK, MoveCategory.PHYSICAL, -1, 100, 10, -1, 0, 9)
       .attr(
         CounterDamageAttr,
-        (move: Move) => move.category === MoveCategory.PHYSICAL || move.category === MoveCategory.SPECIAL,
+        (moveId) =>
+          allMoves[moveId].category === MoveCategory.PHYSICAL || allMoves[moveId].category === MoveCategory.SPECIAL,
         1.5,
       )
       .redirectCounter()
