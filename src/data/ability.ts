@@ -1,19 +1,9 @@
-import { BattleType } from "#enums/battle-type";
-import { SwitchType } from "#enums/switch-type";
-import type { Pokemon, EnemyPokemon } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
-import { SwitchPhase } from "#app/phases/switch-phase";
-import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import type { AbstractConstructor, Constructor } from "#app/utils";
-import { BooleanHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import i18next from "i18next";
-import { getPokemonNameWithAffix } from "../messages";
 import type { AbAttr } from "./ab-attrs/ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
-import { ForceSwitchOutImmunityAbAttr } from "./ab-attrs/force-switch-out-immunity-ab-attr";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { applyAbAttrs, applyRevealedAbAttrs } from "#app/data/apply-ab-attrs";
 
@@ -122,146 +112,6 @@ export class Ability implements Localizable {
    */
   edgeCase(): this {
     return this;
-  }
-}
-
-export class ForceSwitchOutHelper {
-  constructor(private switchType: SwitchType) {}
-
-  /**
-   * Handles the logic for switching out a Pokémon based on battle conditions, HP, and the switch type.
-   *
-   * @param pokemon The {@linkcode Pokemon} attempting to switch out.
-   * @returns `true` if the switch is successful
-   */
-  public switchOutLogic(pokemon: Pokemon): boolean {
-    const switchOutTarget = pokemon;
-    /**
-     * If the switch-out target is a player-controlled Pokémon, the function checks:
-     * - Whether there are available party members to switch in.
-     * - If the Pokémon is still alive (hp > 0), and if so, it leaves the field and a new SwitchPhase is initiated.
-     */
-    if (switchOutTarget.isPlayer()) {
-      if (globalScene.getPlayerParty().filter((p) => p.isAllowedInBattle() && !p.isOnField()).length < 1) {
-        return false;
-      }
-
-      if (switchOutTarget.hp > 0) {
-        switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-        globalScene.prependToPhase(
-          new SwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
-          MoveEndPhase,
-        );
-        return true;
-      }
-      /**
-       * For non-wild battles, it checks if the opposing party has any available Pokémon to switch in.
-       * If yes, the Pokémon leaves the field and a new SwitchSummonPhase is initiated.
-       */
-    } else if (globalScene.currentBattle.battleType !== BattleType.WILD) {
-      if (globalScene.getEnemyParty().filter((p) => p.isAllowedInBattle() && !p.isOnField()).length < 1) {
-        return false;
-      }
-      if (switchOutTarget.hp > 0) {
-        switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-        const summonIndex = globalScene.currentBattle.trainer
-          ? globalScene.currentBattle.trainer.getNextSummonIndex((switchOutTarget as EnemyPokemon).trainerSlot)
-          : 0;
-        globalScene.prependToPhase(
-          new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), summonIndex, false, false),
-          MoveEndPhase,
-        );
-        return true;
-      }
-      /**
-       * For wild Pokémon battles, the Pokémon will flee if the conditions are met (waveIndex and double battles).
-       * It will not flee if it is a Mystery Encounter with fleeing disabled (checked in `getSwitchOutCondition()`) or if it is a wave 10x wild boss
-       */
-    } else {
-      if (!globalScene.currentBattle.waveIndex || globalScene.currentBattle.waveIndex % 10 === 0) {
-        return false;
-      }
-
-      if (switchOutTarget.hp > 0) {
-        switchOutTarget.leaveField(false);
-        globalScene.queueMessage(
-          i18next.t("moveTriggers:fled", { pokemonName: getPokemonNameWithAffix(switchOutTarget) }),
-          null,
-          true,
-          500,
-        );
-
-        if (globalScene.currentBattle.double) {
-          const allyPokemon = switchOutTarget.getAlly();
-          globalScene.redirectPokemonMoves(switchOutTarget, allyPokemon);
-        }
-      }
-
-      if (!switchOutTarget.getAlly()?.isActive(true)) {
-        globalScene.clearEnemyHeldItemModifiers();
-
-        if (switchOutTarget.hp) {
-          globalScene.nextBattle(false);
-        }
-      }
-    }
-    return false;
-  }
-
-  /**
-   * Determines if a Pokémon can switch out based on its status, the opponent's status, and battle conditions.
-   *
-   * @param pokemon The Pokémon attempting to switch out.
-   * @param opponent The opponent Pokémon.
-   * @returns `true` if the switch-out condition is met
-   */
-  public getSwitchOutCondition(pokemon: Pokemon, _opponent: Pokemon): boolean {
-    const switchOutTarget = pokemon;
-    const player = switchOutTarget.isPlayer();
-
-    if (player) {
-      const blockedByAbility = new BooleanHolder(false);
-      applyAbAttrs(ForceSwitchOutImmunityAbAttr, pokemon, false, blockedByAbility);
-      return !blockedByAbility.value;
-    }
-
-    if (!player && globalScene.currentBattle.battleType === BattleType.WILD) {
-      if (!globalScene.currentBattle.waveIndex && globalScene.currentBattle.waveIndex % 10 === 0) {
-        return false;
-      }
-    }
-
-    if (
-      !player
-      && globalScene.currentBattle.isBattleMysteryEncounter()
-      && !globalScene.currentBattle.mysteryEncounter?.fleeAllowed
-    ) {
-      return false;
-    }
-
-    const party = player ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
-    return (
-      (!player && globalScene.currentBattle.battleType === BattleType.WILD)
-      || party.filter(
-        (p) =>
-          p.isAllowedInBattle()
-          && (player || (p as EnemyPokemon).trainerSlot === (switchOutTarget as EnemyPokemon).trainerSlot),
-      ).length > globalScene.currentBattle.getBattlerCount()
-    );
-  }
-
-  /**
-   * Returns a message if the switch-out attempt fails due to ability effects.
-   *
-   * @param target The target Pokémon.
-   * @returns The failure message, or `null` if no failure.
-   */
-  public getFailedText(target: Pokemon): string | null {
-    const blockedByAbility = new BooleanHolder(false);
-    applyAbAttrs(ForceSwitchOutImmunityAbAttr, target, false, blockedByAbility);
-    return blockedByAbility.value
-      ? i18next.t("moveTriggers:cannotBeSwitchedOut", { pokemonName: getPokemonNameWithAffix(target) })
-      : null;
   }
 }
 
