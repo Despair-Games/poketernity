@@ -10,7 +10,7 @@ import { Type } from "#enums/type";
 const DEFAULT_CHAMPION_THEME = "battle_champion_alder";
 const KANTO_CHAMPION_THEME = "battle_kanto_champion";
 const JOHTO_CHAMPION_THEME = "battle_johto_champion";
-//const HOENN5_CHAMPION_THEME = "battle_hoenn_champion_g5";
+const HOENN5_CHAMPION_THEME = "battle_hoenn_champion_g5";
 const HOENN6_CHAMPION_THEME = "battle_hoenn_champion_g6";
 const SINNOH_CHAMPION_THEME = "battle_sinnoh_champion";
 const IRIS_CHAMPION_THEME = "battle_champion_iris";
@@ -127,7 +127,7 @@ export const championTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.STEVEN]: new TrainerConfig(++t)
-    .initForChampion(true, HOENN6_CHAMPION_THEME)
+    .initForChampion(true, HOENN5_CHAMPION_THEME)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.SKARMORY]))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.AGGRON]))
     .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.ARMALDO, Species.CRADILY]))
