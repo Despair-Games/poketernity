@@ -105,7 +105,6 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     this.message = addTextObject(this.textPadding, this.textPadding, "", TextStyle.WINDOW, { maxLines: 2 });
     this.message.setName("menu-message");
     this.message.setOrigin(0, 0);
-    this.message.setWordWrapWidth(1224);
     this.menuMessageBoxContainer.add(this.message);
 
     this.initTutorialOverlay(this.menuContainer);
@@ -166,6 +165,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
         this.initManageDataOptions();
         // Resize the message box so that it does not go over the menu
         this.menuMessageBox.setSize(GAME_WIDTH - w - 2, 48);
+        this.message.setWordWrapWidth((GAME_WIDTH - w - 10) / this.message.scale);
       },
     };
   }
