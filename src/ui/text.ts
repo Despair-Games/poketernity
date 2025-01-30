@@ -216,6 +216,11 @@ export function getTextStyleOptions(
       shadowXpos = 3;
       shadowYpos = 3;
       break;
+    case TextStyle.CHALLENGE_DESCRIPTION:
+      styleOptions.fontSize = defaultFontSize - 12;
+      shadowXpos = 4;
+      shadowYpos = 5;
+      break;
   }
 
   const shadowColor = getTextColor(style, true, uiTheme);
@@ -353,6 +358,7 @@ export function getTextColor(textStyle: TextStyle, shadow?: boolean, uiTheme: Ui
       return !shadow ? "#78c850" : "#306850";
     case TextStyle.SETTINGS_LABEL:
     case TextStyle.PERFECT_IV:
+    case TextStyle.CHALLENGE_DESCRIPTION:
       return !shadow ? "#f8b050" : "#c07800";
     case TextStyle.SETTINGS_SELECTED:
       return !shadow ? "#f88880" : "#f83018";
