@@ -130,6 +130,14 @@ export class GameManager {
     // Disables Mystery Encounters on all tests (can be overridden at test level)
     this.override.mysteryEncounterChance(0);
 
+    /**
+     * Prevents Enemy Trainers from switching for all tests.
+     * This can be overridden at test level by
+     * - calling `game.override.disableEnemySwitching(false)` at the start of a test
+     * - using {@linkcode forceEnemyToSwitch} to force an individual enemy to switch
+     */
+    this.override.disableEnemySwitching();
+
     global.fetch = vi.fn(MockFetch) as any;
   }
 

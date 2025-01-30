@@ -26,7 +26,7 @@ describe("Moves - Chilly Reception", () => {
     game.override
       .battleType("single")
       .moveset([Moves.CHILLY_RECEPTION, Moves.SNOWSCAPE])
-      .enemyMoveset(Array(4).fill(Moves.SPLASH))
+      .enemyMoveset(Moves.SPLASH)
       .enemyAbility(Abilities.NONE)
       .ability(Abilities.NONE);
   });
@@ -88,7 +88,7 @@ describe("Moves - Chilly Reception", () => {
     game.override
       .battleType("single")
       .startingWave(8)
-      .enemyMoveset(Array(4).fill(Moves.CHILLY_RECEPTION))
+      .enemyMoveset(Moves.CHILLY_RECEPTION)
       .enemyAbility(Abilities.NONE)
       .enemySpecies(Species.MAGIKARP)
       .moveset([Moves.SPLASH, Moves.THUNDERBOLT]);

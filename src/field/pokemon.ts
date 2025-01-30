@@ -2242,11 +2242,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         return eas * (3 - oppEas + (userCanOutspeed ? 1 : 0));
       }
     } else {
-      if (oppEas >= 4) {
-        return 0;
-      } else {
-        return eas * (2 - oppEas + (userCanOutspeed ? 1 : 0));
-      }
+      return Math.max(eas * (2 - oppEas + (userCanOutspeed ? 1 : 0)), 0);
     }
   }
 
@@ -5576,7 +5572,7 @@ export class EnemyPokemon extends Pokemon {
 
     const attackScore = this.getAttackScore(opponent, move);
 
-    if (!meetsConditions || attackScore === -1) {
+    if (!meetsConditions || attackScore <= -1) {
       return -5;
     }
 
@@ -5639,10 +5635,14 @@ export class EnemyPokemon extends Pokemon {
    * @todo Finalize the MUS threshold for switching
    */
   public getSwitchCommand(): TurnCommand | undefined {
+    if (Overrides.DISABLE_ENEMY_SWITCHING_OVERRIDE) {
+      return undefined;
+    }
+
     const nonActiveParty = this.getParty().filter((p) => p.isActive() && !p.isOnField());
     const matchupScore = this.getAverageMatchupScore();
 
-    // If this Pokemon can KO at least 1 opponent, it gains an average MUS
+    // If this Pokemon can safely KO at least 1 opponent, it gains an average MUS
     // of Infinity and should never switch out.
     if (matchupScore === Infinity) {
       return undefined;
@@ -5650,7 +5650,7 @@ export class EnemyPokemon extends Pokemon {
 
     // The switch candidate is the inactive Pokemon with the highest average MUS.
     const [candIndex, candScore] = nonActiveParty
-      .map((p, i) => [i, p.getAverageMatchupScore()])
+      .map((p) => [this.getParty().indexOf(p), p.getAverageMatchupScore()])
       .reduce((cand, entry) => (cand[1] < entry[1] ? entry : cand));
 
     // To qualify for switching in, the candidate must have an MUS that exceeds
@@ -5706,88 +5706,7 @@ export class EnemyPokemon extends Pokemon {
      * This accumulates scores and resolves move targeting based on those scores.
      * @todo Resolve issues with {@linkcode BattlerIndex.ATTACKER} targeting
      */
-    const moveActions = movePool.map((mv) => {
-      const move = mv.getMove();
-
-      if (move.moveTarget === MoveTarget.ATTACKER) {
-        /**
-         * Counter-attacks (e.g. Metal Burst) are scored entirely
-         * based on their effect score.
-         */
-        const score = mv.getMove().getEffectScore(this);
-
-        return {
-          move: mv.moveId,
-          targets: [BattlerIndex.ATTACKER],
-          score,
-        };
-      }
-
-      const { targets, multiple } = getMoveTargets(this, mv.moveId);
-
-      /**
-       * The {@linkcode BattlerIndex | BattlerIndexes} of active Pokemon that
-       * can legally be targeted with this move.
-       */
-      const activeTargets = targets.filter((bi) => !isNullOrUndefined(globalScene.getFieldPokemonByBattlerIndex(bi)));
-      if (activeTargets.length === 0) {
-        /** Moves with no valid targets are given a "fail penalty" of (-5). */
-        return {
-          move: mv.moveId,
-          targets: [],
-          score: -5,
-        };
-      }
-
-      /**
-       * A mapping between {@linkcode BattlerIndex} and the move score for this
-       * move against the Pokemon at that index.
-       */
-      const targetScores = activeTargets.map(
-        (bi) => [bi, this.getMoveScore(globalScene.getFieldPokemonByBattlerIndex(bi)!, mv.getMove())], // TODO: find a way to get rid of this bang
-      );
-
-      if (multiple) {
-        /**
-         * Multi-targeted moves use the full target set and the sum of move scores
-         * for each target.
-         */
-        return {
-          move: mv.moveId,
-          targets: targets,
-          score: targetScores.map((ts) => ts[1]).reduce((total, score) => total + score),
-        };
-      } else if (mv.getMove().moveTarget === MoveTarget.RANDOM_NEAR_ENEMY) {
-        /**
-         * Moves with random targeting resolve their final target within {@linkcode getMoveTargets},
-         * but calculate score based on the average move score between all legal targets
-         */
-        const averageScore =
-          this.getOpponents()
-            .map((p) => this.getMoveScore(p, mv.getMove()))
-            .reduce((total, score) => total + score, 0) / this.getOpponents.length;
-
-        return {
-          move: mv.moveId,
-          targets: targets,
-          score: averageScore,
-        };
-      } else {
-        /**
-         * Single-target moves form an optimal move action with the highest-scoring
-         * {@linkcode BattlerIndex}. {@linkcode targetScores} is shuffled here so
-         * that a target is randomly selected from the highest-scoring indexes in
-         * the event of a tie.
-         */
-        const optTarget = randSeedShuffle(targetScores).sort((aScore, bScore) => bScore[1] - aScore[1])[0];
-
-        return {
-          move: mv.moveId,
-          targets: [optTarget[0]],
-          score: optTarget[1],
-        };
-      }
-    });
+    const moveActions = movePool.map((mv) => this.getOptimalMoveAction(mv.getMove()));
 
     /**
      * Following similar logic to finding {@linkcode optTarget}, this shuffles
@@ -5800,6 +5719,97 @@ export class EnemyPokemon extends Pokemon {
       move: optMoveAction.move,
       targets: optMoveAction.targets,
     };
+  }
+
+  /**
+   * Calculates the optimal use case for the given move among
+   * all valid targets on the current field.
+   * @param move the {@linkcode Move} being evaluated
+   * @returns A {@linkcode TargetScoreData} object with the following data:
+   * - `move`: The {@linkcode Moves | identifier} for the evaluated move
+   * - `targets`: The {@linkcode BattlerIndex} of the target(s) for which
+   * the evaluated move scores highest.
+   * - `score`: The {@linkcode getMoveScore | score} corresponding to the optimal target(s)
+   */
+  private getOptimalMoveAction(move: Move): TargetScoreData {
+    if (move.moveTarget === MoveTarget.ATTACKER) {
+      /**
+       * Counter-attacks (e.g. Metal Burst) are scored entirely
+       * based on their effect score.
+       */
+      const score = move.getEffectScore(this);
+
+      return {
+        move: move.id,
+        targets: [BattlerIndex.ATTACKER],
+        score,
+      };
+    }
+
+    const { targets, multiple } = getMoveTargets(this, move.id);
+
+    /**
+     * The {@linkcode BattlerIndex | BattlerIndexes} of active Pokemon that
+     * can legally be targeted with this move.
+     */
+    const activeTargets = targets.filter((bi) => !isNullOrUndefined(globalScene.getFieldPokemonByBattlerIndex(bi)));
+    if (activeTargets.length === 0) {
+      /** Moves with no valid targets are given a "fail penalty" of (-5). */
+      return {
+        move: move.id,
+        targets: [],
+        score: -5,
+      };
+    }
+
+    /**
+     * A mapping between {@linkcode BattlerIndex} and the move score for this
+     * move against the Pokemon at that index.
+     */
+    const targetScores = activeTargets.map(
+      (bi) => [bi, this.getMoveScore(globalScene.getFieldPokemonByBattlerIndex(bi)!, move)], // TODO: find a way to get rid of this bang
+    );
+
+    if (multiple) {
+      /**
+       * Multi-targeted moves use the full target set and the sum of move scores
+       * for each target.
+       */
+      return {
+        move: move.id,
+        targets: targets,
+        score: targetScores.map((ts) => ts[1]).reduce((total, score) => total + score),
+      };
+    } else if (move.moveTarget === MoveTarget.RANDOM_NEAR_ENEMY) {
+      /**
+       * Moves with random targeting resolve their final target within {@linkcode getMoveTargets},
+       * but calculate score based on the average move score between all legal targets
+       */
+      const averageScore =
+        this.getOpponents()
+          .map((p) => this.getMoveScore(p, move))
+          .reduce((total, score) => total + score, 0) / this.getOpponents.length;
+
+      return {
+        move: move.id,
+        targets: targets,
+        score: averageScore,
+      };
+    } else {
+      /**
+       * Single-target moves form an optimal move action with the highest-scoring
+       * {@linkcode BattlerIndex}. {@linkcode targetScores} is shuffled here so
+       * that a target is randomly selected from the highest-scoring indexes in
+       * the event of a tie.
+       */
+      const optTarget = randSeedShuffle(targetScores).sort((aScore, bScore) => bScore[1] - aScore[1])[0];
+
+      return {
+        move: move.id,
+        targets: [optTarget[0]],
+        score: optTarget[1],
+      };
+    }
   }
 
   /**
@@ -6096,6 +6106,12 @@ export class EnemyPokemon extends Pokemon {
 interface AbilityData {
   ability: Ability;
   passive: boolean;
+}
+
+interface TargetScoreData {
+  move: Moves;
+  targets: BattlerIndex[];
+  score: number;
 }
 
 export interface TurnMove {
