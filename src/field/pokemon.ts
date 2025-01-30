@@ -149,7 +149,6 @@ import type PokemonData from "#app/system/pokemon-data";
 import { BattlerIndex } from "#enums/battler-index";
 import { UiMode } from "#enums/ui-mode";
 import type { PartyOption } from "#enums/party-option";
-import PartyUiHandler from "#app/ui/party-ui-handler";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
@@ -230,6 +229,7 @@ import {
   SemiInvulnerableBattlerTagTypes,
   TrappedBattlerTagTypes,
 } from "#app/utils/battler-tag-type-utils";
+import { PartyFilterNonFainted } from "#app/utils/party-utils";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -4903,7 +4903,7 @@ export class PlayerPokemon extends Pokemon {
           }
           globalScene.ui.setMode(UiMode.MESSAGE).then(resolve);
         },
-        PartyUiHandler.FilterNonFainted,
+        PartyFilterNonFainted,
       );
     });
   }

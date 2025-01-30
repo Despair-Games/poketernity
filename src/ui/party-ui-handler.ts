@@ -1,5 +1,4 @@
 import type { PlayerPokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
 import type { Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
 import { addBBCodeTextObject, addTextObject, getTextColor } from "#app/ui/text";
@@ -40,6 +39,8 @@ import type { PartyModifierTransferSelectCallback } from "#app/@types/PartyModif
 import type { PartyModifierSpliceSelectCallback } from "#app/@types/PartyModifierSpliceSelectCallback";
 import type { PokemonModifierTransferSelectFilter } from "#app/@types/PokemonModifierTransferSelectFilter";
 import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilter";
+import { PartyFilterAll } from "#app/utils/party-utils";
+import { FilterAllMoves } from "#app/utils/move-utils";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
 
@@ -87,22 +88,6 @@ export default class PartyUiHandler extends MessageUiHandler {
 
   private blockInput: boolean;
 
-  private static FilterAll = (_pokemon: PlayerPokemon) => null;
-
-  public static FilterNonFainted = (pokemon: PlayerPokemon) => {
-    if (pokemon.isFainted()) {
-      return i18next.t("partyUiHandler:noEnergy", { pokemonName: getPokemonNameWithAffix(pokemon) });
-    }
-    return null;
-  };
-
-  public static FilterFainted = (pokemon: PlayerPokemon) => {
-    if (!pokemon.isFainted()) {
-      return i18next.t("partyUiHandler:hasEnergy", { pokemonName: getPokemonNameWithAffix(pokemon) });
-    }
-    return null;
-  };
-
   /**
    * For consistency reasons, this looks like the above filters. However this is used only internally and is always enforced for switching.
    * @param pokemon The pokemon to check.
@@ -116,8 +101,6 @@ export default class PartyUiHandler extends MessageUiHandler {
     }
     return null;
   };
-
-  private static FilterAllMoves = (_pokemonMove: PokemonMove) => null;
 
   public static FilterItemMaxStacks = (pokemon: PlayerPokemon, modifier: PokemonHeldItemModifier) => {
     const matchingModifier = globalScene.findModifier(
@@ -234,11 +217,9 @@ export default class PartyUiHandler extends MessageUiHandler {
 
     this.selectCallback = args.length > 2 && args[2] instanceof Function ? args[2] : undefined;
     this.selectFilter =
-      args.length > 3 && args[3] instanceof Function ? (args[3] as PokemonSelectFilter) : PartyUiHandler.FilterAll;
+      args.length > 3 && args[3] instanceof Function ? (args[3] as PokemonSelectFilter) : PartyFilterAll;
     this.moveSelectFilter =
-      args.length > 4 && args[4] instanceof Function
-        ? (args[4] as PokemonMoveSelectFilter)
-        : PartyUiHandler.FilterAllMoves;
+      args.length > 4 && args[4] instanceof Function ? (args[4] as PokemonMoveSelectFilter) : FilterAllMoves;
     this.tmMoveId = args.length > 5 && args[5] ? args[5] : Moves.NONE;
     this.showMovePp = args.length > 6 && args[6];
 

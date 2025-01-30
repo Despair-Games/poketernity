@@ -27,13 +27,13 @@ import Overrides from "#app/overrides";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
 import { SHOP_OPTIONS_ROW_LIMIT } from "#app/ui/modifier-select-ui-handler";
-import PartyUiHandler from "#app/ui/party-ui-handler";
 import { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { UiMode } from "#enums/ui-mode";
 import { NumberHolder } from "#app/utils";
 import i18next from "i18next";
 import { BattlePhase } from "./abstract-battle-phase";
+import { FilterItemMaxStacks } from "#app/utils/item-utils";
 
 interface SelectModifierPhaseOptions {
   rerollCount?: number;
@@ -189,7 +189,7 @@ export class SelectModifierPhase extends BattlePhase {
                     );
                   }
                 },
-                PartyUiHandler.FilterItemMaxStacks,
+                FilterItemMaxStacks,
               );
               break;
             case 2:

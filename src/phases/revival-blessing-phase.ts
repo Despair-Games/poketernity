@@ -3,12 +3,12 @@ import { globalScene } from "#app/global-scene";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
-import PartyUiHandler from "#app/ui/party-ui-handler";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { UiMode } from "#enums/ui-mode";
 import { toDmgValue } from "#app/utils";
 import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
+import { PartyFilterFainted } from "#app/utils/party-utils";
 
 /**
  * Sets the Party UI and handles the effect of Revival Blessing
@@ -57,7 +57,7 @@ export class RevivalBlessingPhase extends BattlePhase {
         }
         globalScene.ui.setMode(UiMode.MESSAGE).then(() => this.end());
       },
-      PartyUiHandler.FilterFainted,
+      PartyFilterFainted,
     );
   }
 }
