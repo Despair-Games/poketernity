@@ -3,7 +3,6 @@ import { BypassSpeedChanceAbAttr } from "#app/data/ab-attrs/bypass-speed-chance-
 import { PreventBypassSpeedChanceAbAttr } from "#app/data/ab-attrs/prevent-bypass-speed-chance-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { allMoves } from "#app/data/all-moves";
-import { TrickRoomTag } from "#app/data/arena-tag";
 import { MoveHeaderAttr } from "#app/data/move-attrs/move-header-attr";
 import { type Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
@@ -24,6 +23,7 @@ import { MovePhase } from "./move-phase";
 import { SwitchSummonPhase } from "./switch-summon-phase";
 import { TurnEndPhase } from "./turn-end-phase";
 import { WeatherEffectPhase } from "./weather-effect-phase";
+import { ArenaTagType } from "#enums/arena-tag-type";
 
 export class TurnStartPhase extends FieldPhase {
   /**
@@ -49,7 +49,7 @@ export class TurnStartPhase extends FieldPhase {
 
     // Next, a check for Trick Room is applied to determine sort order.
     const speedReversed = new BooleanHolder(false);
-    globalScene.arena.applyTags(TrickRoomTag, false, speedReversed);
+    globalScene.arena.applyTags(ArenaTagType.TRICK_ROOM, false, speedReversed);
 
     // Adjust the sort function based on whether Trick Room is active.
     orderedTargets.sort((a: Pokemon, b: Pokemon) => {

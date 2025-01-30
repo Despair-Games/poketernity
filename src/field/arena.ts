@@ -610,8 +610,10 @@ export class Arena {
    * @param simulated if `true`, this applies arena tags without changing game state
    * @param args array of parameters that the called upon tags may need
    */
-  applyTags(tagType: ArenaTagType | AbstractConstructor<ArenaTag>, simulated: boolean, ...args: unknown[]): void {
-    this.applyTagsForSide(tagType, ArenaTagSide.BOTH, simulated, ...args);
+  applyTags(tagType: ArenaTagType | ArenaTagType[], simulated: boolean, ...args: unknown[]): void {
+    const tagTypeArr = Array.isArray(tagType) ? tagType : [tagType];
+
+    tagTypeArr.forEach((t) => this.applyTagsForSide(t, ArenaTagSide.BOTH, simulated, ...args));
   }
 
   /**

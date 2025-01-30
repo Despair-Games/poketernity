@@ -8,6 +8,7 @@ import type { AbstractConstructor, Constructor, nil } from "#app/utils";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
+import { WeakenMoveTypeArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
@@ -28,7 +29,6 @@ import { UserFieldMoveTypePowerBoostAbAttr } from "#app/data/ab-attrs/user-field
 import { VariableMovePowerAbAttr } from "#app/data/ab-attrs/variable-move-power-ab-attr";
 import { WonderSkinAbAttr } from "#app/data/ab-attrs/wonder-skin-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { WeakenMoveTypeTag } from "#app/data/arena-tag";
 import { HelpingHandTag, TypeBoostTag } from "#app/data/battler-tags";
 import { IncrementMovePriorityAttr } from "#app/data/move-attrs/increment-move-priority-attr";
 import type { MoveAttr } from "#app/data/move-attrs/move-attr";
@@ -808,7 +808,7 @@ export abstract class Move implements Localizable {
     applyMoveAttrs(VariablePowerAttr, source, target, this, power);
 
     if (!this.hasAttr(TypelessAttr)) {
-      globalScene.arena.applyTags(WeakenMoveTypeTag, simulated, this.type, power);
+      globalScene.arena.applyTags(WeakenMoveTypeArenaTagTypes, simulated, this.type, power);
       globalScene.applyModifiers(AttackTypeBoosterModifier, source.isPlayer(), source, this.type, power);
     }
 

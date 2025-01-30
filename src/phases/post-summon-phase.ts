@@ -2,12 +2,12 @@ import type { BattlerIndex } from "#enums/battler-index";
 import { CommanderAbAttr } from "#app/data/ab-attrs/commander-ab-attr";
 import { PostSummonAbAttr } from "#app/data/ab-attrs/post-summon-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { ArenaTrapTag } from "#app/data/arena-tag";
 import { MysteryEncounterPostSummonTag } from "#app/data/battler-tags";
 import { globalScene } from "#app/global-scene";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { StatusEffect } from "#enums/status-effect";
 import { PokemonPhase } from "./abstract-pokemon-phase";
+import { ArenaTrapArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 
 export class PostSummonPhase extends PokemonPhase {
   constructor(battlerIndex: BattlerIndex) {
@@ -22,7 +22,7 @@ export class PostSummonPhase extends PokemonPhase {
     if (pokemon.status?.effect === StatusEffect.TOXIC) {
       pokemon.status.toxicTurnCount = 0;
     }
-    globalScene.arena.applyTags(ArenaTrapTag, false, pokemon);
+    globalScene.arena.applyTags(ArenaTrapArenaTagTypes, false, pokemon);
 
     // If this is mystery encounter and has post summon phase tag, apply post summon effects
     if (
