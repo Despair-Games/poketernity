@@ -41,6 +41,7 @@ import { WeatherType } from "#enums/weather-type";
 import { ReverseDrainAbAttr } from "./ab-attrs/reverse-drain-ab-attr";
 import Overrides from "#app/overrides";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
 
 export class BattlerTag {
   public tagType: BattlerTagType;
@@ -740,8 +741,8 @@ export class ConfusedTag extends BattlerTag {
       (pokemon.randSeedInt(100) < this.ACTIVATION_CHANCE && Overrides.STATUS_ACTIVATION_OVERRIDE !== false)
       || Overrides.STATUS_ACTIVATION_OVERRIDE === true
     ) {
-      const atk = pokemon.getEffectiveStat(Stat.ATK);
-      const def = pokemon.getEffectiveStat(Stat.DEF);
+      const atk = pokemon.getEffectiveStat(Stat.ATK, undefined, undefined, AbilityApplyMode.IGNORE);
+      const def = pokemon.getEffectiveStat(Stat.DEF, undefined, undefined, AbilityApplyMode.IGNORE);
       return toDmgValue(
         ((((2 * pokemon.level) / 5 + 2) * 40 * atk) / def / 50 + 2) * (pokemon.randSeedIntRange(85, 100) / 100),
       );
@@ -2157,9 +2158,15 @@ export class TypeBoostTag extends BattlerTag {
   }
 }
 
+/**
+ * Tag to denote a nonstackable boost to crit rate. Granted by:
+ * Focus Energy (+2), Dragon Cheer (+2 if dragon, +1 otherwise),
+ * and Lansat Berry (+2)
+ * @extends BattlerTag
+ */
 export class CritBoostTag extends BattlerTag {
   constructor(tagType: BattlerTagType, sourceMove: Moves) {
-    super(tagType, BattlerTagLapseType.TURN_END, 1, sourceMove, undefined, true);
+    super(tagType, BattlerTagLapseType.CUSTOM, 1, sourceMove, undefined, true);
   }
 
   override onAdd(pokemon: Pokemon): void {
@@ -2180,6 +2187,35 @@ export class CritBoostTag extends BattlerTag {
     globalScene.queueMessage(
       i18next.t("battlerTags:critBoostOnRemove", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
+  }
+}
+
+/**
+ * A stackable instance of crit boost granted by G-Max Chi Strike
+ * @extends BattlerTag
+ */
+export class CritBoostStackableTag extends BattlerTag {
+  public stackCount: number = 0;
+
+  constructor() {
+    super(BattlerTagType.CRIT_BOOST_STACKABLE, BattlerTagLapseType.CUSTOM, 1, Moves.G_MAX_CHI_STRIKE, undefined);
+  }
+
+  override onAdd(pokemon: Pokemon): void {
+    this.stackCount += 1;
+    // This actually does not have any messages in the mainline games
+    globalScene.queueMessage(
+      i18next.t("battlerTags:critBoostOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+    );
+  }
+
+  override onOverlap(pokemon: Pokemon): void {
+    this.onAdd(pokemon);
+  }
+
+  override loadTag(source: BattlerTag | any): void {
+    super.loadTag(source);
+    this.stackCount = source.stackCount ?? 0;
   }
 }
 
@@ -2534,7 +2570,7 @@ export class StockpilingTag extends BattlerTag {
 
   override loadTag(source: BattlerTag | any): void {
     super.loadTag(source);
-    this.stockpiledCount = source.stockpiledCount || 0;
+    this.stockpiledCount = source.stockpiledCount ?? 0;
     this.statChangeCounts = {
       [Stat.DEF]: source.statChangeCounts?.[Stat.DEF] ?? 0,
       [Stat.SPDEF]: source.statChangeCounts?.[Stat.SPDEF] ?? 0,
@@ -3477,6 +3513,8 @@ export function getBattlerTag(
       return new CritBoostTag(tagType, sourceMove);
     case BattlerTagType.DRAGON_CHEER:
       return new DragonCheerTag();
+    case BattlerTagType.CRIT_BOOST_STACKABLE:
+      return new CritBoostStackableTag();
     case BattlerTagType.ALWAYS_CRIT:
     case BattlerTagType.IGNORE_ACCURACY:
       return new BattlerTag(tagType, BattlerTagLapseType.TURN_END, 2, sourceMove);

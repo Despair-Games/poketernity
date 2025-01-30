@@ -74,6 +74,13 @@ interface TurnCommands {
   [key: number]: TurnCommand | null;
 }
 
+/**
+ * Uses the global RNG seed to generate a second seed to be used for in-battle RNG rolls.
+ */
+function generateBattleSeed() {
+  return randomString(16, true);
+}
+
 export default class Battle {
   protected gameMode: GameMode;
   public waveIndex: number;
@@ -93,7 +100,7 @@ export default class Battle {
   public postBattleLoot: PokemonHeldItemModifier[] = [];
   public escapeAttempts: number = 0;
   public lastMove: Moves;
-  public battleSeed: string = randomString(16, true);
+  public battleSeed: string = generateBattleSeed();
   private battleSeedState: string | null = null;
   public moneyScattered: number = 0;
   public lastUsedPokeball: PokeballType | null = null;

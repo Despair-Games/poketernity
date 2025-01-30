@@ -69,11 +69,6 @@ describe("Abilities - Triage", () => {
     expect(moveToUse.getPriority(playerPokemon)).toBe(originalPriority);
   });
 
-  it.todo("should not increase the priority of Present if it heals the target", async () => {
-    game.override.moveset(Moves.PRESENT);
-    await game.classicMode.startBattle([Species.FEEBAS]);
-  });
-
   it("should not increase the priority of Pollen Puff if it heals the user's ally", async () => {
     game.override
       .moveset([Moves.POLLEN_PUFF, Moves.SPLASH])

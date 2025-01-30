@@ -282,7 +282,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
 
       // Generate new id, reset status and HP in case using data source
       if (config.dataSource) {
-        enemyPokemon.id = randSeedInt(4294967296);
+        enemyPokemon.generateId();
       }
 
       // Set form
