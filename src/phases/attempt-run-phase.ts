@@ -3,8 +3,6 @@ import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type { EnemyPokemon, PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
-import { BattleEndPhase } from "#app/phases/battle-end-phase";
-import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { NumberHolder } from "#app/utils";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
@@ -59,8 +57,7 @@ export class AttemptRunPhase extends PokemonPhase {
         enemyPokemon.trySetStatus(StatusEffect.FAINT);
       });
 
-      globalScene.pushPhase(new BattleEndPhase(false));
-      globalScene.pushPhase(new NewBattlePhase());
+      globalScene.nextBattle(false);
     } else {
       playerPokemon.turnData.failedRunAway = true;
       globalScene.queueMessage(i18next.t("battle:runAwayCannotEscape"), null, true, 500);

@@ -3,7 +3,6 @@ import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
 import type { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#app/modifier/modifier";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
-import { GameOverPhase } from "#app/phases/game-over-phase";
 
 /**
  * Handles the effects that need to trigger after a battle ends (game stats updates, reducing item turn count, etc)
@@ -39,8 +38,7 @@ export class BattleEndPhase extends BattlePhase {
 
     // Endless graceful end
     if (gameMode.isEndless && currentBattle.waveIndex >= 5850) {
-      globalScene.clearPhaseQueue();
-      globalScene.unshiftPhase(new GameOverPhase(true));
+      globalScene.gameOver(true);
     }
 
     for (const pokemon of globalScene.getField()) {

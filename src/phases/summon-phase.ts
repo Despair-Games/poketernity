@@ -10,7 +10,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { settings } from "#app/system/settings/settings-manager";
 import i18next from "i18next";
 import { PartyMemberPokemonPhase } from "./abstract-party-member-pokemon-phase";
-import { GameOverPhase } from "./game-over-phase";
 import { PostSummonPhase } from "./post-summon-phase";
 import { ShinySparklePhase } from "./shiny-sparkle-phase";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
@@ -59,7 +58,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
         console.error("Party Details:\n", party);
         console.error("All available Pokemon were fainted or illegal!");
         globalScene.clearPhaseQueue();
-        globalScene.unshiftPhase(new GameOverPhase());
+        globalScene.gameOver();
         return this.end();
       }
 

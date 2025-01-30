@@ -17,7 +17,6 @@ import {
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { ModifierTier } from "#enums/modifier-tier";
-import { GameOverPhase } from "#app/phases/game-over-phase";
 import { randSeedInt } from "#app/utils";
 import { Moves } from "#enums/moves";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -188,8 +187,7 @@ export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilde
           const allowedPokemon = globalScene.getPokemonAllowedInBattle();
           if (allowedPokemon.length === 0) {
             // If there are no longer any legal pokemon in the party, game over.
-            globalScene.clearPhaseQueue();
-            globalScene.unshiftPhase(new GameOverPhase());
+            globalScene.gameOver();
           } else {
             // Show which Pokemon was KOed, then start battle against Gimmighoul
             await transitionMysteryEncounterIntroVisuals(true, true, 500);

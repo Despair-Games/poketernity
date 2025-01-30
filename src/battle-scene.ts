@@ -178,6 +178,9 @@ import { eventBus } from "./event-bus";
 import { Animation } from "./animations";
 import { resetStarterColors, starterColors } from "./data/starter-colors";
 import { CallSourceLogger } from "#app/loggers";
+import { BattleEndPhase } from "#app/phases/battle-end-phase";
+import { NewBattlePhase } from "#app/phases/new-battle-phase";
+import { GameOverPhase } from "#app/phases/game-over-phase";
 
 const DEBUG_RNG = false;
 
@@ -3644,5 +3647,15 @@ export default class BattleScene extends SceneBase {
     encounter = new MysteryEncounter(encounter);
     encounter.populateDialogueTokensFromRequirements();
     return encounter;
+  }
+
+  nextBattle(isVictory: boolean): void {
+    this.pushPhase(new BattleEndPhase(isVictory));
+    this.pushPhase(new NewBattlePhase());
+  }
+
+  gameOver(isVictory?: boolean): void {
+    this.clearPhaseQueue();
+    this.pushPhase(new GameOverPhase(isVictory));
   }
 }
