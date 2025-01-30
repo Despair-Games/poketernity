@@ -21,7 +21,7 @@ import i18next from "i18next";
 import { isNullOrUndefined } from "#app/utils";
 import { type Move, AttackMove } from "#app/data/move";
 import { ChargeAnim } from "#enums/charge-anim";
-import { EncoreTag, type StockpilingTag, type ShellTrapTag } from "./battler-tags";
+import { type StockpilingTag, type ShellTrapTag } from "./battler-tags";
 import { ChargingAttackMove, ChargingSelfStatusMove } from "./move";
 import { AbilityChangeAttr } from "./move-attrs/ability-change-attr";
 import { AbilityCopyAttr } from "./move-attrs/ability-copy-attr";
@@ -241,6 +241,7 @@ import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { NoDamageAgainstFlyingAttr } from "./move-attrs/no-damage-against-flying-attr";
 import { SkyDropAttr } from "./move-attrs/sky-drop-attr";
 import { SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { EncoreAttr } from "#app/data/move-attrs/encore-attr";
 
 // Initialized as being empty; it will be filled during `initMoves()`
 export const allMoves: { [moveId in Moves]: Move } = {} as any;
@@ -922,10 +923,7 @@ export function initMoves() {
       .attr(ForceSwitchOutAttr, true, SwitchType.BATON_PASS)
       .condition(failIfLastInPartyCondition)
       .hidesUser(),
-    new StatusMove(Moves.ENCORE, Type.NORMAL, 100, 5, -1, 0, 2)
-      .attr(AddBattlerTagAttr, BattlerTagType.ENCORE, false, { failOnOverlap: true })
-      .ignoresSubstitute()
-      .condition((user, target, _move) => new EncoreTag(user.id).canAdd(target)),
+    new StatusMove(Moves.ENCORE, Type.NORMAL, 100, 5, -1, 0, 2).attr(EncoreAttr).ignoresSubstitute(),
     new AttackMove(Moves.PURSUIT, Type.DARK, MoveCategory.PHYSICAL, 40, 100, 20, -1, 0, 2).partial(), // No effect implemented
     new AttackMove(Moves.RAPID_SPIN, Type.NORMAL, MoveCategory.PHYSICAL, 50, 100, 40, 100, 0, 2)
       .attr(StatStageChangeAttr, [Stat.SPD], 1, true)

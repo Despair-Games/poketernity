@@ -1113,40 +1113,9 @@ export class EncoreTag extends MoveRestrictionBattlerTag {
     this.moveId = source.moveId as Moves;
   }
 
-  override canAdd(pokemon: Pokemon): boolean {
-    if (pokemon.isMax()) {
-      return false;
-    }
-
-    const lastMoves = pokemon.getLastXMoves(1);
-    if (!lastMoves.length) {
-      return false;
-    }
-
-    const repeatableMove = lastMoves[0];
-
-    if (!repeatableMove.move || repeatableMove.virtual) {
-      return false;
-    }
-
-    switch (repeatableMove.move) {
-      case Moves.MIMIC:
-      case Moves.MIRROR_MOVE:
-      case Moves.TRANSFORM:
-      case Moves.STRUGGLE:
-      case Moves.SKETCH:
-      case Moves.SLEEP_TALK:
-      case Moves.ENCORE:
-        return false;
-    }
-
-    this.moveId = repeatableMove.move;
-
-    return true;
-  }
-
   override onAdd(pokemon: Pokemon): void {
     super.onRemove(pokemon);
+    this.moveId = pokemon.getLastXMoves(1)[0].move;
 
     globalScene.queueMessage(
       i18next.t("battlerTags:encoreOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
