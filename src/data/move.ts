@@ -717,7 +717,10 @@ export abstract class Move implements Localizable {
    */
   public getEffectScore(user: EnemyPokemon, target?: Pokemon): number {
     // penalize targeting Pokemon that are hidden by Commander
-    if (target && target.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === target) {
+    if (
+      (target && target.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === target)
+      || target === user.getAlly()
+    ) {
       return -20;
     }
 
