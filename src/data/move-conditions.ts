@@ -4,7 +4,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
-import { ArenaTagType } from "#enums/arena-tag-type";
 import { StatusEffect } from "#enums/status-effect";
 import { Type } from "#enums/type";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
@@ -96,9 +95,6 @@ export const targetMoveCopiableCondition: MoveConditionFunc = (_user, target, _m
   // TODO: Add last turn of Bide
   return true;
 };
-
-export const failOnGravityCondition: MoveConditionFunc = (_user, _target, _move) =>
-  !globalScene.arena.getTag(ArenaTagType.GRAVITY);
 
 export const failOnBossCondition: MoveConditionFunc = (_user, target, _move) => !target.isBossImmune();
 

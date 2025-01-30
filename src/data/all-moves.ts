@@ -218,7 +218,6 @@ import { WeatherChangeAttr } from "./move-attrs/weather-change-attr";
 import { WeatherInstantChargeAttr } from "./move-attrs/weather-instant-charge-attr";
 import { WeightPowerAttr } from "./move-attrs/weight-power-attr";
 import {
-  failOnGravityCondition,
   failIfDampCondition,
   targetSleptOrComatoseCondition,
   failIfGhostTypeCondition,
@@ -233,6 +232,7 @@ import {
   UpperHandCondition,
   failOnMaxCondition,
 } from "./move-conditions";
+import { failOnGravityCondition } from "./move-conditions/fail-on-gravity-condition";
 import { SelfStatusMove } from "./move";
 import { isNonVolatileStatusEffect, getNonVolatileStatusEffects } from "./status-effect";
 import { StatusMove } from "./move";
