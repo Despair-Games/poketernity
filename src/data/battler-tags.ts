@@ -23,7 +23,7 @@ import { MoveResult } from "#enums/move-result";
 import { HitResult } from "#enums/hit-result";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
-import { MoveEffectPhase } from "#app/phases/move-effect-phase";
+import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
@@ -2646,7 +2646,7 @@ export class GulpMissileTag extends BattlerTag {
     }
 
     const moveEffectPhase = globalScene.getCurrentPhase();
-    if (moveEffectPhase instanceof MoveEffectPhase) {
+    if (moveEffectPhase?.isMoveEffectPhase()) {
       const attacker = moveEffectPhase.getUserPokemon();
 
       if (!attacker) {
@@ -2990,7 +2990,7 @@ export class SubstituteTag extends BattlerTag {
   /** If the Substitute redirects damage, queue a message to indicate it. */
   onHit(pokemon: Pokemon): void {
     const moveEffectPhase = globalScene.getCurrentPhase();
-    if (moveEffectPhase instanceof MoveEffectPhase) {
+    if (moveEffectPhase?.isMoveEffectPhase()) {
       const attacker = moveEffectPhase.getUserPokemon();
       if (!attacker) {
         return;
@@ -3628,7 +3628,7 @@ export function loadBattlerTag(source: BattlerTag | any): BattlerTag {
  */
 function getMoveEffectPhaseData(_pokemon: Pokemon): { phase: MoveEffectPhase; attacker: Pokemon; move: Move } | null {
   const phase = globalScene.getCurrentPhase();
-  if (phase instanceof MoveEffectPhase) {
+  if (phase?.isMoveEffectPhase()) {
     return {
       phase: phase,
       attacker: phase.getPokemon(),

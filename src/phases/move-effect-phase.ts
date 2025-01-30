@@ -649,4 +649,8 @@ export class MoveEffectPhase extends HitCheckPhase {
   protected getNewHitPhase(): MoveEffectPhase {
     return new MoveEffectPhase(this.battlerIndex, this.targets, this.move);
   }
+
+  override isMoveEffectPhase(): this is this {
+    return true;
+  }
 }

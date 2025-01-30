@@ -1,4 +1,5 @@
 import { globalScene } from "#app/global-scene";
+import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import type { MovePhase } from "#app/phases/move-phase";
 import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import type { SwitchPhase } from "#app/phases/switch-phase";
@@ -23,6 +24,10 @@ export class Phase {
   }
 
   isSelectModifierPhase(): this is SelectModifierPhase {
+    return false;
+  }
+
+  isMoveEffectPhase(): this is MoveEffectPhase {
     return false;
   }
 }
