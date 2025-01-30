@@ -1,6 +1,5 @@
 import { AlwaysHitAbAttr } from "#app/data/ab-attrs/always-hit-ab-attr";
 import { MaxMultiHitAbAttr } from "#app/data/ab-attrs/max-multi-hit-ab-attr";
-import { ConditionalProtectTag } from "#app/data/arena-tag";
 import { SemiInvulnerableTag, SkyDropTag, ProtectedTag } from "#app/data/battler-tags";
 import { HitsTagAttr } from "#app/data/move-attrs/hits-tag-attr";
 import { OneHitKOAttr } from "#app/data/move-attrs/one-hit-ko-attr";
@@ -10,6 +9,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { BooleanHolder } from "#app/utils";
+import { ConditionalProtectArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -102,7 +102,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
     /** If the move is not targeting a Pokemon on the user's side, try to apply conditional protection effects */
     if (!this.move.getMove().isAllyTarget()) {
       globalScene.arena.applyTagsForSide(
-        ConditionalProtectTag,
+        ConditionalProtectArenaTagTypes,
         targetSide,
         simulated,
         hasConditionalProtectApplied,

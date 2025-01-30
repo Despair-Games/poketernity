@@ -123,7 +123,7 @@ import {
 } from "../data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { WeatherType } from "#enums/weather-type";
-import { NoCritTag, WeakenMoveScreenTag } from "#app/data/arena-tag";
+import { NoCritTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { Ability } from "#app/data/ability";
 import { allAbilities, getAbApplyFunc } from "#app/data/ability";
@@ -231,6 +231,7 @@ import { ArenaTrapAbAttr } from "#app/data/ab-attrs/arena-trap-ab-attr";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import type { AbilityFilterOptions } from "#app/data/ability-filter-options";
 import { PokemonMove } from "#app/field/pokemon-move";
+import { WeakenMoveScreenArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -3303,7 +3304,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     /** Reduces damage if this Pokemon has a relevant screen (e.g. Light Screen for special attacks) */
     const screenMultiplier = new NumberHolder(1);
     globalScene.arena.applyTagsForSide(
-      WeakenMoveScreenTag,
+      WeakenMoveScreenArenaTagTypes,
       defendingSide,
       simulated,
       source,

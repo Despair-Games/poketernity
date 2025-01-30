@@ -10,3 +10,16 @@ export const ArenaTrapArenaTagTypes = [
   ArenaTagType.STICKY_WEB,
   ArenaTagType.IMPRISON,
 ];
+
+export const WeakenMoveScreenArenaTagTypes = [
+  ArenaTagType.REFLECT,
+  ArenaTagType.AURORA_VEIL,
+  ArenaTagType.LIGHT_SCREEN,
+];
+
+export const ConditionalProtectArenaTagTypes = [
+  ArenaTagType.QUICK_GUARD,
+  ArenaTagType.WIDE_GUARD,
+  ArenaTagType.MAT_BLOCK,
+  ArenaTagType.CRAFTY_SHIELD,
+];

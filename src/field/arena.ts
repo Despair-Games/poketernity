@@ -588,15 +588,13 @@ export class Arena {
    * @param args array of parameters that the called upon tags may need
    */
   applyTagsForSide(
-    tagType: ArenaTagType | AbstractConstructor<ArenaTag>,
+    tagType: ArenaTagType | ArenaTagType[],
     side: ArenaTagSide,
     simulated: boolean,
     ...args: unknown[]
   ): void {
-    let tags =
-      typeof tagType === "number"
-        ? this.tags.filter((t) => t.tagType === tagType)
-        : this.tags.filter((t) => t instanceof tagType);
+    const tagTypeArr = Array.isArray(tagType) ? tagType : [tagType];
+    let tags = this.tags.filter((t) => tagTypeArr.includes(t.tagType));
     if (side !== ArenaTagSide.BOTH) {
       tags = tags.filter((t) => t.side === side);
     }
@@ -611,9 +609,7 @@ export class Arena {
    * @param args array of parameters that the called upon tags may need
    */
   applyTags(tagType: ArenaTagType | ArenaTagType[], simulated: boolean, ...args: unknown[]): void {
-    const tagTypeArr = Array.isArray(tagType) ? tagType : [tagType];
-
-    tagTypeArr.forEach((t) => this.applyTagsForSide(t, ArenaTagSide.BOTH, simulated, ...args));
+    this.applyTagsForSide(tagType, ArenaTagSide.BOTH, simulated, ...args);
   }
 
   /**
