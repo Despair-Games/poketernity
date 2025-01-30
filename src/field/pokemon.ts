@@ -35,7 +35,7 @@ import { RespectAttackTypeImmunityAttr } from "#app/data/move-attrs/respect-atta
 import { MoveTarget } from "#enums/move-target";
 import { MoveCategory } from "#enums/move-category";
 import type { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
-import { default as PokemonSpecies } from "#app/data/pokemon-species";
+import type PokemonSpecies from "#app/data/pokemon-species";
 import { getFusedSpeciesName, getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
 import {
   CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER,
@@ -363,12 +363,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.pauseEvolutions = dataSource.pauseEvolutions;
       this.pokerus = !!dataSource.pokerus;
       this.evoCounter = dataSource.evoCounter ?? 0;
-      this.fusionSpecies =
-        dataSource.fusionSpecies instanceof PokemonSpecies
-          ? dataSource.fusionSpecies
-          : dataSource.fusionSpecies
-            ? getPokemonSpecies(dataSource.fusionSpecies)
-            : null;
+      this.fusionSpecies = null;
+
+      if (dataSource.fusionSpecies) {
+        if (typeof dataSource.fusionSpecies === "number") {
+          this.fusionSpecies = getPokemonSpecies(dataSource.fusionSpecies);
+        } else {
+          this.fusionSpecies = dataSource.fusionSpecies;
+        }
+      }
       this.fusionFormIndex = dataSource.fusionFormIndex;
       this.fusionAbilityIndex = dataSource.fusionAbilityIndex;
       this.fusionShiny = dataSource.fusionShiny;

@@ -21,7 +21,15 @@ import type { Stat } from "#enums/stat";
 import type { Type } from "#enums/type";
 import { argbFromRgba, QuantizerCelebi, rgbaFromArgb } from "@material/material-color-utilities";
 
+//#region Types
+
+type PokemonSpeciesFormType = "PokemonSpeciesForm" | "PokemonForm" | "PokemonSpecies";
+
+//#endregion
+
 export abstract class PokemonSpeciesForm {
+  /** Identifier for the class. HAS NOTHING TO DO WITH {@linkcode type1} and {@linkcode type2}. The name is derived from {@linkcode Phaser.GameObjects.Container} */
+  public type: PokemonSpeciesFormType;
   public speciesId: Species;
   protected _formIndex: number;
   protected _generation: number;
@@ -61,6 +69,7 @@ export abstract class PokemonSpeciesForm {
     genderDiffs: boolean,
     isStarterSelectable: boolean,
   ) {
+    this.type = "PokemonSpeciesForm";
     this.type1 = type1;
     this.type2 = type2;
     this.height = height;
