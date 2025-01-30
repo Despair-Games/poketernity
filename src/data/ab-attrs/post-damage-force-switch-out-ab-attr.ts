@@ -1,7 +1,7 @@
 import { type Pokemon } from "#app/field/pokemon";
 import { toDmgValue, type BooleanHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { SwitchType } from "#enums/switch-type";
 import { PostDamageAbAttr } from "./post-damage-ab-attr";
 import { ForceSwitchOutHelper } from "#app/data/ability";
@@ -44,7 +44,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
   public override apply(pokemon: Pokemon, _simulated: boolean, damage: number, source?: Pokemon): boolean {
     const moveHistory = pokemon.getMoveHistory();
     // Will not activate when the Pokémon's HP is lowered by cutting its own HP
-    const forbiddenAttackingMoves = [Moves.BELLY_DRUM, Moves.SUBSTITUTE, Moves.CURSE, Moves.PAIN_SPLIT];
+    const forbiddenAttackingMoves = [MoveId.BELLY_DRUM, MoveId.SUBSTITUTE, MoveId.CURSE, MoveId.PAIN_SPLIT];
     if (moveHistory.length > 0) {
       const lastMoveUsed = moveHistory[moveHistory.length - 1];
       if (forbiddenAttackingMoves.includes(lastMoveUsed.move)) {
@@ -53,7 +53,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
     }
 
     // Dragon Tail and Circle Throw switch out Pokémon before the Ability activates.
-    const forbiddenDefendingMoves = [Moves.DRAGON_TAIL, Moves.CIRCLE_THROW];
+    const forbiddenDefendingMoves = [MoveId.DRAGON_TAIL, MoveId.CIRCLE_THROW];
     if (source) {
       const enemyMoveHistory = source.getMoveHistory();
       if (enemyMoveHistory.length > 0) {

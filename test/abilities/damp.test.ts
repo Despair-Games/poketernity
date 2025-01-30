@@ -1,6 +1,6 @@
 import { MoveResult } from "#enums/move-result";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -30,17 +30,17 @@ describe("Abilities - Damp", () => {
   });
 
   it.each([
-    { moveName: "Explosion", move: Moves.EXPLOSION },
-    { moveName: "Self-Destruct", move: Moves.SELF_DESTRUCT },
-    { moveName: "Misty Explosion", move: Moves.MISTY_EXPLOSION },
-    { moveName: "Mind Blown", move: Moves.MIND_BLOWN },
+    { moveName: "Explosion", move: MoveId.EXPLOSION },
+    { moveName: "Self-Destruct", move: MoveId.SELF_DESTRUCT },
+    { moveName: "Misty Explosion", move: MoveId.MISTY_EXPLOSION },
+    { moveName: "Mind Blown", move: MoveId.MIND_BLOWN },
   ])("should prevent the move $moveName from being used", async ({ move }) => {
-    game.override.moveset([Moves.SPLASH, move]).battleType("double").enemyMoveset(move);
+    game.override.moveset([MoveId.SPLASH, move]).battleType("double").enemyMoveset(move);
     await game.classicMode.startBattle([Species.FEEBAS, Species.ABRA]);
     const playerPokemon2 = game.scene.getPlayerField()[1];
     const enemyPokemon1 = game.scene.getEnemyField()[0];
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     game.move.select(move, 1);
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -53,15 +53,15 @@ describe("Abilities - Damp", () => {
   it("should prevent damage from the ability Aftermath", async () => {
     game.override
       .startingLevel(100)
-      .moveset(Moves.TACKLE)
+      .moveset(MoveId.TACKLE)
       .battleType("single")
-      .enemyMoveset([Moves.SPLASH])
+      .enemyMoveset([MoveId.SPLASH])
       .enemyAbility(Abilities.AFTERMATH);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon();
     const enemyPokemon = game.scene.getEnemyPokemon();
 
-    game.move.select(Moves.TACKLE);
+    game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(playerPokemon?.isFullHp()).toBe(true);

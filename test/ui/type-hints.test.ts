@@ -1,5 +1,5 @@
 import { Button } from "#enums/buttons";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { CommandPhase } from "#app/phases/command-phase";
 import FightUiHandler from "#app/ui/fight-ui-handler";
@@ -27,7 +27,7 @@ describe("UI - Type Hints", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     game.settings.typeHints(true); //activate type hints
-    game.override.battleType("single").startingLevel(100).startingWave(1).enemyMoveset(Moves.SPLASH);
+    game.override.battleType("single").startingLevel(100).startingWave(1).enemyMoveset(MoveId.SPLASH);
   });
 
   it("check immunity color", async () => {
@@ -36,8 +36,8 @@ describe("UI - Type Hints", () => {
       .startingLevel(100)
       .startingWave(1)
       .enemySpecies(Species.FLORGES)
-      .enemyMoveset(Moves.SPLASH)
-      .moveset([Moves.DRAGON_CLAW]);
+      .enemyMoveset(MoveId.SPLASH)
+      .moveset([MoveId.DRAGON_CLAW]);
     game.settings.typeHints(true); //activate type hints
 
     await game.startBattle([Species.RAYQUAZA]);
@@ -63,7 +63,7 @@ describe("UI - Type Hints", () => {
   });
 
   it("check status move color", async () => {
-    game.override.enemySpecies(Species.FLORGES).moveset([Moves.GROWL]);
+    game.override.enemySpecies(Species.FLORGES).moveset([MoveId.GROWL]);
 
     await game.startBattle([Species.RAYQUAZA]);
 

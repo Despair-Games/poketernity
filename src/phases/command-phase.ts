@@ -19,7 +19,7 @@ import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Biome } from "#enums/biome";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PokeballType } from "#enums/pokeball";
 import i18next from "i18next";
@@ -76,7 +76,7 @@ export class CommandPhase extends FieldPhase {
     ) {
       currentBattle.turnCommands[this.fieldIndex] = {
         command: BattleCommand.FIGHT,
-        move: { move: Moves.NONE, targets: [] },
+        move: { move: MoveId.NONE, targets: [] },
         skip: true,
       };
     }
@@ -190,8 +190,8 @@ export class CommandPhase extends FieldPhase {
           const moveId = !useStruggle
             ? cursor > -1
               ? playerPokemon.getMoveset()[cursor].moveId
-              : Moves.NONE
-            : Moves.STRUGGLE;
+              : MoveId.NONE
+            : MoveId.STRUGGLE;
           const turnCommand: TurnCommand = {
             command: BattleCommand.FIGHT,
             cursor: cursor,

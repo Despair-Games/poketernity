@@ -10,7 +10,7 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import type { Variant } from "#app/data/variant";
 import { loadBattlerTag } from "../data/battler-tags";
 import type { Biome } from "#enums/biome";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type { Species } from "#enums/species";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 
@@ -43,7 +43,7 @@ export default class PokemonData {
   public luck: number;
   public pauseEvolutions: boolean;
   public pokerus: boolean;
-  public usedTMs: Moves[];
+  public usedTMs: MoveId[];
   public evoCounter: number;
 
   public fusionSpecies: Species;
@@ -141,7 +141,7 @@ export default class PokemonData {
         }
       }
     } else {
-      this.moveset = (source.moveset || [new PokemonMove(Moves.TACKLE), new PokemonMove(Moves.GROWL)])
+      this.moveset = (source.moveset || [new PokemonMove(MoveId.TACKLE), new PokemonMove(MoveId.GROWL)])
         .filter((m) => m)
         .map((m: any) => new PokemonMove(m.moveId, m.ppUsed, m.ppUp, m.virtual, m.maxPpOverride));
       if (!forHistory) {

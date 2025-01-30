@@ -6,7 +6,7 @@ import { MoveCategory } from "#enums/move-category";
 import { Type } from "#enums/type";
 import type { AbstractConstructor, nil } from "#app/utils";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import type { TimeOfDay } from "#enums/time-of-day";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -204,10 +204,10 @@ export class SpeciesFormChangeStatusEffectTrigger extends SpeciesFormChangeTrigg
 }
 
 export class SpeciesFormChangeMoveLearnedTrigger extends SpeciesFormChangeTrigger {
-  public move: Moves;
+  public move: MoveId;
   public known: boolean;
 
-  constructor(move: Moves, known: boolean = true) {
+  constructor(move: MoveId, known: boolean = true) {
     super();
     this.move = move;
     this.known = known;
@@ -219,12 +219,12 @@ export class SpeciesFormChangeMoveLearnedTrigger extends SpeciesFormChangeTrigge
 }
 
 export abstract class SpeciesFormChangeMoveTrigger extends SpeciesFormChangeTrigger {
-  public movePredicate: (m: Moves) => boolean;
+  public movePredicate: (m: MoveId) => boolean;
   public used: boolean;
 
-  constructor(move: Moves | ((m: Moves) => boolean), used: boolean = true) {
+  constructor(move: MoveId | ((m: MoveId) => boolean), used: boolean = true) {
     super();
-    this.movePredicate = typeof move === "function" ? move : (m: Moves) => m === move;
+    this.movePredicate = typeof move === "function" ? move : (m: MoveId) => m === move;
     this.used = used;
   }
 }
@@ -1256,13 +1256,13 @@ export const pokemonFormChanges: PokemonFormChanges = {
       Species.KELDEO,
       "ordinary",
       "resolute",
-      new SpeciesFormChangeMoveLearnedTrigger(Moves.SECRET_SWORD),
+      new SpeciesFormChangeMoveLearnedTrigger(MoveId.SECRET_SWORD),
     ),
     new SpeciesFormChange(
       Species.KELDEO,
       "resolute",
       "ordinary",
-      new SpeciesFormChangeMoveLearnedTrigger(Moves.SECRET_SWORD, false),
+      new SpeciesFormChangeMoveLearnedTrigger(MoveId.SECRET_SWORD, false),
     ),
   ],
   [Species.MELOETTA]: [
@@ -1270,14 +1270,14 @@ export const pokemonFormChanges: PokemonFormChanges = {
       Species.MELOETTA,
       "aria",
       "pirouette",
-      new MeloettaFormChangePostMoveTrigger(Moves.RELIC_SONG),
+      new MeloettaFormChangePostMoveTrigger(MoveId.RELIC_SONG),
       true,
     ),
     new SpeciesFormChange(
       Species.MELOETTA,
       "pirouette",
       "aria",
-      new MeloettaFormChangePostMoveTrigger(Moves.RELIC_SONG),
+      new MeloettaFormChangePostMoveTrigger(MoveId.RELIC_SONG),
       true,
     ),
   ],
@@ -1300,7 +1300,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       Species.AEGISLASH,
       "blade",
       "shield",
-      new SpeciesFormChangePreMoveTrigger(Moves.KINGS_SHIELD),
+      new SpeciesFormChangePreMoveTrigger(MoveId.KINGS_SHIELD),
       true,
       new SpeciesFormChangeCondition((p) => p.hasAbility(Abilities.STANCE_CHANGE)),
     ),

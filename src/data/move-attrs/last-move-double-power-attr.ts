@@ -1,4 +1,4 @@
-import type { Moves } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 import { type Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
@@ -14,9 +14,9 @@ import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
  */
 export class LastMoveDoublePowerAttr extends VariablePowerAttr {
   /** The move that must precede the current move */
-  private move: Moves;
+  private move: MoveId;
 
-  constructor(move: Moves) {
+  constructor(move: MoveId) {
     super();
 
     this.move = move;

@@ -38,7 +38,7 @@ import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveCategory } from "#enums/move-category";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
 import { MoveTarget } from "#enums/move-target";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 import { FaintPhase } from "./faint-phase";
 import { HitCheckPhase } from "./hit-check-phase";
@@ -216,7 +216,7 @@ export class MoveEffectPhase extends HitCheckPhase {
             this.applyMoveEffects(target, effectiveness);
             break;
           case HitCheckResult.NO_EFFECT:
-            if (move.id === Moves.SHEER_COLD) {
+            if (move.id === MoveId.SHEER_COLD) {
               globalScene.queueMessage(
                 i18next.t("battle:hitResultImmune", { pokemonName: getPokemonNameWithAffix(target) }),
               );
@@ -323,7 +323,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, true);
 
     // G-Max Gold Rush should not give money twice for double battles
-    if (this.move.getMove().id !== Moves.G_MAX_GOLD_RUSH && user.getAlly()?.isActive(true)) {
+    if (this.move.getMove().id !== MoveId.G_MAX_GOLD_RUSH && user.getAlly()?.isActive(true)) {
       this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user.getAlly(), target, firstTarget, true);
     }
   }
@@ -344,7 +344,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     }
 
     // G-Max Snooze is the only G-Max move to only apply its effect on a single target
-    if (move.id !== Moves.G_MAX_SNOOZE && target.getAlly()?.isActive(true)) {
+    if (move.id !== MoveId.G_MAX_SNOOZE && target.getAlly()?.isActive(true)) {
       this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target.getAlly(), firstTarget, false);
     }
   }

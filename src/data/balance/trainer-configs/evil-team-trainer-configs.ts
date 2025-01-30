@@ -7,7 +7,7 @@ import {
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { PokemonMove } from "#app/field/pokemon";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 
@@ -627,10 +627,10 @@ export const evilTeamTrainerConfigsConfigs: TrainerConfigs = {
       getRandomPartyMemberFunc([Species.REVAVROOM], TrainerSlot.TRAINER, true, (p) => {
         p.formIndex = 1; // Segin Starmobile
         p.moveset = [
-          new PokemonMove(Moves.WICKED_TORQUE),
-          new PokemonMove(Moves.SPIN_OUT),
-          new PokemonMove(Moves.SHIFT_GEAR),
-          new PokemonMove(Moves.HIGH_HORSEPOWER),
+          new PokemonMove(MoveId.WICKED_TORQUE),
+          new PokemonMove(MoveId.SPIN_OUT),
+          new PokemonMove(MoveId.SHIFT_GEAR),
+          new PokemonMove(MoveId.HIGH_HORSEPOWER),
         ];
       }),
     ),
@@ -647,10 +647,10 @@ export const evilTeamTrainerConfigsConfigs: TrainerConfigs = {
       getRandomPartyMemberFunc([Species.REVAVROOM], TrainerSlot.TRAINER, true, (p) => {
         p.formIndex = 2; // Schedar Starmobile
         p.moveset = [
-          new PokemonMove(Moves.BLAZING_TORQUE),
-          new PokemonMove(Moves.SPIN_OUT),
-          new PokemonMove(Moves.SHIFT_GEAR),
-          new PokemonMove(Moves.HIGH_HORSEPOWER),
+          new PokemonMove(MoveId.BLAZING_TORQUE),
+          new PokemonMove(MoveId.SPIN_OUT),
+          new PokemonMove(MoveId.SHIFT_GEAR),
+          new PokemonMove(MoveId.HIGH_HORSEPOWER),
         ];
       }),
     ),
@@ -667,10 +667,10 @@ export const evilTeamTrainerConfigsConfigs: TrainerConfigs = {
       getRandomPartyMemberFunc([Species.REVAVROOM], TrainerSlot.TRAINER, true, (p) => {
         p.formIndex = 3; // Navi Starmobile
         p.moveset = [
-          new PokemonMove(Moves.NOXIOUS_TORQUE),
-          new PokemonMove(Moves.SPIN_OUT),
-          new PokemonMove(Moves.SHIFT_GEAR),
-          new PokemonMove(Moves.HIGH_HORSEPOWER),
+          new PokemonMove(MoveId.NOXIOUS_TORQUE),
+          new PokemonMove(MoveId.SPIN_OUT),
+          new PokemonMove(MoveId.SHIFT_GEAR),
+          new PokemonMove(MoveId.HIGH_HORSEPOWER),
         ];
       }),
     ),
@@ -687,10 +687,10 @@ export const evilTeamTrainerConfigsConfigs: TrainerConfigs = {
       getRandomPartyMemberFunc([Species.REVAVROOM], TrainerSlot.TRAINER, true, (p) => {
         p.formIndex = 4; // Ruchbah Starmobile
         p.moveset = [
-          new PokemonMove(Moves.MAGICAL_TORQUE),
-          new PokemonMove(Moves.SPIN_OUT),
-          new PokemonMove(Moves.SHIFT_GEAR),
-          new PokemonMove(Moves.HIGH_HORSEPOWER),
+          new PokemonMove(MoveId.MAGICAL_TORQUE),
+          new PokemonMove(MoveId.SPIN_OUT),
+          new PokemonMove(MoveId.SHIFT_GEAR),
+          new PokemonMove(MoveId.HIGH_HORSEPOWER),
         ];
       }),
     ),
@@ -707,10 +707,10 @@ export const evilTeamTrainerConfigsConfigs: TrainerConfigs = {
       getRandomPartyMemberFunc([Species.REVAVROOM], TrainerSlot.TRAINER, true, (p) => {
         p.formIndex = 5; // Caph Starmobile
         p.moveset = [
-          new PokemonMove(Moves.COMBAT_TORQUE),
-          new PokemonMove(Moves.SPIN_OUT),
-          new PokemonMove(Moves.SHIFT_GEAR),
-          new PokemonMove(Moves.HIGH_HORSEPOWER),
+          new PokemonMove(MoveId.COMBAT_TORQUE),
+          new PokemonMove(MoveId.SPIN_OUT),
+          new PokemonMove(MoveId.SHIFT_GEAR),
+          new PokemonMove(MoveId.HIGH_HORSEPOWER),
         ];
       }),
     ),

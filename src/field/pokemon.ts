@@ -188,7 +188,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { BerryType } from "#enums/berry-type";
 import { Biome } from "#enums/biome";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import { FaintPhase } from "#app/phases/faint-phase";
@@ -292,7 +292,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public maskEnabled: boolean;
   public maskSprite: Phaser.GameObjects.Sprite | null;
 
-  public usedTMs: Moves[];
+  public usedTMs: MoveId[];
 
   private shinySparkle: Phaser.GameObjects.Sprite;
 
@@ -1398,7 +1398,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const ret = !baseOnly && this.summonData?.moveset ? this.summonData.moveset : this.moveset;
 
     // Overrides moveset based on arrays specified in overrides.ts
-    let overrideArray: Moves | Array<Moves> = this.isPlayer()
+    let overrideArray: MoveId | Array<MoveId> = this.isPlayer()
       ? Overrides.MOVESET_OVERRIDE
       : Overrides.ENEMY_MOVESET_OVERRIDE;
     if (!Array.isArray(overrideArray)) {
@@ -1408,7 +1408,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       if (!this.isPlayer()) {
         this.moveset = [];
       }
-      overrideArray.forEach((move: Moves, index: number) => {
+      overrideArray.forEach((move: MoveId, index: number) => {
         const ppUsed = this.moveset[index]?.ppUsed ?? 0;
         this.moveset[index] = new PokemonMove(move, Math.min(ppUsed, allMoves[move].pp));
       });
@@ -1421,11 +1421,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * Checks which egg moves have been unlocked for the {@linkcode Pokemon} based
    * on the species it was met at or by the first {@linkcode Pokemon} in its evolution
    * line that can act as a starter and provides those egg moves.
-   * @returns an array of {@linkcode Moves}, the length of which is determined by how many
+   * @returns an array of {@linkcode MoveId}, the length of which is determined by how many
    * egg moves are unlocked for that species.
    */
-  getUnlockedEggMoves(): Moves[] {
-    const moves: Moves[] = [];
+  getUnlockedEggMoves(): MoveId[] {
+    const moves: MoveId[] = [];
     const species =
       this.metSpecies in speciesEggMoves ? this.metSpecies : this.getSpeciesForm(true).getRootSpeciesId(true);
     if (species in speciesEggMoves) {
@@ -1444,10 +1444,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    *
    * Available egg moves are only included if the {@linkcode Pokemon} was
    * in the starting party of the run and if Fresh Start is not active.
-   * @returns an array of {@linkcode Moves}, the length of which is determined
+   * @returns an array of {@linkcode MoveId}, the length of which is determined
    * by how many learnable moves there are for the {@linkcode Pokemon}.
    */
-  public getLearnableLevelMoves(): Moves[] {
+  public getLearnableLevelMoves(): MoveId[] {
     let levelMoves = this.getLevelMoves(1, true, false, true).map((lm) => lm[1]);
     if (this.metBiome === -1 && !globalScene.gameMode.isFreshStartChallenge() && !globalScene.gameMode.isDaily) {
       levelMoves = this.getUnlockedEggMoves().concat(levelMoves);
@@ -2324,7 +2324,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param ret the output array to be pushed into.
    */
   private getUniqueMoves(levelMoves: LevelMoves, ret: LevelMoves): void {
-    const uniqueMoves: Moves[] = [];
+    const uniqueMoves: MoveId[] = [];
     for (const lm of levelMoves) {
       if (!uniqueMoves.find((m) => m === lm[1])) {
         uniqueMoves.push(lm[1]);
@@ -2338,12 +2338,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    *
    * @returns list of egg moves
    */
-  getEggMoves(): Moves[] | undefined {
+  getEggMoves(): MoveId[] | undefined {
     return speciesEggMoves[this.getSpeciesForm().getRootSpeciesId()];
   }
 
-  setMove(moveIndex: number, moveId: Moves): void {
-    if (moveId === Moves.NONE) {
+  setMove(moveIndex: number, moveId: MoveId): void {
+    if (moveId === MoveId.NONE) {
       return;
     }
     const move = new PokemonMove(moveId);
@@ -2555,7 +2555,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   /** Generates a semi-random moveset for a Pokemon */
   public generateAndPopulateMoveset(): void {
     this.moveset = [];
-    let movePool: [Moves, number][] = [];
+    let movePool: [MoveId, number][] = [];
     const allLevelMoves = this.getLevelMoves(1, true, true);
     if (!allLevelMoves) {
       console.warn("Error encountered trying to generate moveset for:", this.species.name);
@@ -2584,7 +2584,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (this.hasTrainer()) {
       const tms = Object.keys(tmSpecies);
       for (const tm of tms) {
-        const moveId = parseInt(tm) as Moves;
+        const moveId = parseInt(tm) as MoveId;
         let compatible = false;
         for (const p of tmSpecies[tm]) {
           if (Array.isArray(p)) {
@@ -2703,7 +2703,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (this.isBoss()) {
       weightMultiplier += 0.4;
     }
-    const baseWeights: [Moves, number][] = movePool.map((m) => [
+    const baseWeights: [MoveId, number][] = movePool.map((m) => [
       m[0],
       Math.ceil(Math.pow(m[1], weightMultiplier) * 100),
     ]);
@@ -3122,7 +3122,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     /** This prevents a move with negative power from possibly dealing positive damage.
      * The issue can occur because the base damage is the result of the below equation plus 2.
      */
-    const damageCalculation = (levelMultiplier * power * sourceAtk) / targetDef/ 50;
+    const damageCalculation = (levelMultiplier * power * sourceAtk) / targetDef / 50;
     if (damageCalculation < 0) {
       return damageCalculation;
     }
@@ -3195,7 +3195,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (cancelled.value || isTypeImmune) {
       return {
         cancelled: cancelled.value,
-        result: move.id === Moves.SHEER_COLD ? HitResult.IMMUNE : HitResult.NO_EFFECT,
+        result: move.id === MoveId.SHEER_COLD ? HitResult.IMMUNE : HitResult.NO_EFFECT,
         damage: 0,
       };
     }
@@ -3564,7 +3564,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return !cancelled.value;
   }
 
-  addTag(tagType: BattlerTagType, turnCount: number = 0, sourceMove?: Moves, sourceId?: number): boolean {
+  addTag(tagType: BattlerTagType, turnCount: number = 0, sourceMove?: MoveId, sourceId?: number): boolean {
     const existingTag = this.getTag(tagType);
     if (existingTag) {
       existingTag.onOverlap(this);
@@ -3719,19 +3719,19 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   /**
    * Gets whether the given move is currently disabled for this Pokemon.
    *
-   * @param moveId ID of the {@linkcode Moves | move} to check
+   * @param moveId ID of the {@linkcode MoveId | move} to check
    * @returns `true` if the move is disabled for this Pokemon, otherwise `false`
    *
    * @see {@linkcode MoveRestrictionBattlerTag}
    */
-  public isMoveRestricted(moveId: Moves, pokemon?: Pokemon): boolean {
+  public isMoveRestricted(moveId: MoveId, pokemon?: Pokemon): boolean {
     return this.getRestrictingTag(moveId, pokemon) !== null;
   }
 
   /**
    * Gets whether the given move is currently disabled for the user based on the player's target selection
    *
-   * @param moveId ID of the {@linkcode Moves | move} to check
+   * @param moveId ID of the {@linkcode MoveId | move} to check
    * @param user {@linkcode Pokemon} using the move
    * @param target the {@linkcode Pokemon | target} of the move
    *
@@ -3739,7 +3739,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    *
    * @see {@linkcode MoveRestrictionBattlerTag}
    */
-  isMoveTargetRestricted(moveId: Moves, user: Pokemon, target: Pokemon): boolean {
+  isMoveTargetRestricted(moveId: MoveId, user: Pokemon, target: Pokemon): boolean {
     for (const tag of this.findTags((t) => t instanceof MoveRestrictionBattlerTag)) {
       if ((tag as MoveRestrictionBattlerTag).isMoveTargetRestricted(moveId, user, target)) {
         return (tag as MoveRestrictionBattlerTag) !== null;
@@ -3751,12 +3751,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   /**
    * Gets the {@link MoveRestrictionBattlerTag} that is restricting a move, if it exists.
    *
-   * @param moveId ID of the {@linkcode Moves | move} to check
+   * @param moveId ID of the {@linkcode MoveId | move} to check
    * @param user {@linkcode Pokemon} using the move, used when the target is a factor in the move's restricted status
    * @param target the {@linkcode Pokemon | target} of the move, used when the target is a factor in the move's restricted status
    * @returns the first {@linkcode MoveRestrictionBattlerTag | tag} on this Pokemon that restricts the move, or `null` if the move is not restricted.
    */
-  getRestrictingTag(moveId: Moves, user?: Pokemon, target?: Pokemon): MoveRestrictionBattlerTag | null {
+  getRestrictingTag(moveId: MoveId, user?: Pokemon, target?: Pokemon): MoveRestrictionBattlerTag | null {
     for (const tag of this.findTags((t) => t instanceof MoveRestrictionBattlerTag)) {
       if ((tag as MoveRestrictionBattlerTag).isMoveRestricted(moveId, user)) {
         return tag as MoveRestrictionBattlerTag;
@@ -4761,7 +4761,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 }
 
 export class PlayerPokemon extends Pokemon {
-  public compatibleTms: Moves[];
+  public compatibleTms: MoveId[];
 
   constructor(
     species: PokemonSpecies,
@@ -4836,7 +4836,7 @@ export class PlayerPokemon extends Pokemon {
 
     const tms = Object.keys(tmSpecies);
     for (const tm of tms) {
-      const moveId = parseInt(tm) as Moves;
+      const moveId = parseInt(tm) as MoveId;
       let compatible = false;
       for (const p of tmSpecies[tm]) {
         if (Array.isArray(p)) {
@@ -5427,28 +5427,28 @@ export class EnemyPokemon extends Pokemon {
     switch (true) {
       case this.species.speciesId === Species.SMEARGLE:
         this.moveset = [
-          new PokemonMove(Moves.SKETCH),
-          new PokemonMove(Moves.SKETCH),
-          new PokemonMove(Moves.SKETCH),
-          new PokemonMove(Moves.SKETCH),
+          new PokemonMove(MoveId.SKETCH),
+          new PokemonMove(MoveId.SKETCH),
+          new PokemonMove(MoveId.SKETCH),
+          new PokemonMove(MoveId.SKETCH),
         ];
         break;
       case this.species.speciesId === Species.ETERNATUS:
         this.moveset = (formIndex !== undefined ? formIndex : this.formIndex)
           ? [
-              new PokemonMove(Moves.DYNAMAX_CANNON),
-              new PokemonMove(Moves.CROSS_POISON),
-              new PokemonMove(Moves.FLAMETHROWER),
-              new PokemonMove(Moves.RECOVER, 0, -4),
+              new PokemonMove(MoveId.DYNAMAX_CANNON),
+              new PokemonMove(MoveId.CROSS_POISON),
+              new PokemonMove(MoveId.FLAMETHROWER),
+              new PokemonMove(MoveId.RECOVER, 0, -4),
             ]
           : [
-              new PokemonMove(Moves.ETERNABEAM),
-              new PokemonMove(Moves.SLUDGE_BOMB),
-              new PokemonMove(Moves.FLAMETHROWER),
-              new PokemonMove(Moves.COSMIC_POWER),
+              new PokemonMove(MoveId.ETERNABEAM),
+              new PokemonMove(MoveId.SLUDGE_BOMB),
+              new PokemonMove(MoveId.FLAMETHROWER),
+              new PokemonMove(MoveId.COSMIC_POWER),
             ];
         if (globalScene.gameMode.hasChallenge(Challenges.INVERSE_BATTLE)) {
-          this.moveset[2] = new PokemonMove(Moves.THUNDERBOLT);
+          this.moveset[2] = new PokemonMove(MoveId.THUNDERBOLT);
         }
         break;
       default:
@@ -5528,7 +5528,7 @@ export class EnemyPokemon extends Pokemon {
               && moveTargets.some((p) => {
                 const doesNotFail =
                   move.applyConditions(this, p, move)
-                  || [Moves.SUCKER_PUNCH, Moves.UPPER_HAND, Moves.THUNDERCLAP].includes(move.id);
+                  || [MoveId.SUCKER_PUNCH, MoveId.UPPER_HAND, MoveId.THUNDERCLAP].includes(move.id);
                 return (
                   doesNotFail && p.getAttackDamage(this, move, AbilityApplyMode.REVEALED, isCritical).damage >= p.hp
                 );
@@ -5579,7 +5579,7 @@ export class EnemyPokemon extends Pokemon {
                */
               if (
                 (move.name.endsWith(" (N)") || !move.applyConditions(this, target, move))
-                && ![Moves.SUCKER_PUNCH, Moves.UPPER_HAND, Moves.THUNDERCLAP].includes(move.id)
+                && ![MoveId.SUCKER_PUNCH, MoveId.UPPER_HAND, MoveId.THUNDERCLAP].includes(move.id)
               ) {
                 targetScore = -20;
               } else if (move instanceof AttackMove) {
@@ -5654,15 +5654,15 @@ export class EnemyPokemon extends Pokemon {
       }
     }
 
-    return { move: Moves.STRUGGLE, targets: this.getNextTargets(Moves.STRUGGLE) };
+    return { move: MoveId.STRUGGLE, targets: this.getNextTargets(MoveId.STRUGGLE) };
   }
 
   /**
    * Determines the Pokemon the given move would target if used by this Pokemon
-   * @param moveId {@linkcode Moves} The move to be used
+   * @param moveId {@linkcode MoveId} The move to be used
    * @returns The indexes of the Pokemon the given move would target
    */
-  getNextTargets(moveId: Moves): BattlerIndex[] {
+  getNextTargets(moveId: MoveId): BattlerIndex[] {
     const moveTargets = getMoveTargets(this, moveId);
     const targets = globalScene.getField(true).filter((p) => moveTargets.targets.indexOf(p.getBattlerIndex()) > -1);
     // If the move is multi-target, return all targets' indexes
@@ -5952,7 +5952,7 @@ interface AbilityData {
 }
 
 export interface TurnMove {
-  move: Moves;
+  move: MoveId;
   targets?: BattlerIndex[];
   result: MoveResult;
   virtual?: boolean;
@@ -5960,13 +5960,13 @@ export interface TurnMove {
 }
 
 export interface QueuedMove {
-  move: Moves;
+  move: MoveId;
   targets: BattlerIndex[];
   ignorePP?: boolean;
 }
 
 export interface AttackMoveResult {
-  move: Moves;
+  move: MoveId;
   result: DamageResult;
   damage: number;
   isCritical: boolean;
@@ -6038,7 +6038,7 @@ export class PokemonTurnData {
   public statStagesIncreased: boolean = false;
   public statStagesDecreased: boolean = false;
   public moveEffectiveness: TypeDamageMultiplier | null = null;
-  public combiningPledge?: Moves;
+  public combiningPledge?: MoveId;
   public switchedInThisTurn: boolean = false;
   public failedRunAway: boolean = false;
   public joinedRound: boolean = false;
@@ -6080,7 +6080,7 @@ export interface DamageCalculationResult {
  * @see {@linkcode getName} - returns name of {@linkcode Move}.
  **/
 export class PokemonMove {
-  public moveId: Moves;
+  public moveId: MoveId;
   public ppUsed: number;
   public ppUp: number;
   public virtual: boolean;
@@ -6091,7 +6091,7 @@ export class PokemonMove {
    */
   public maxPpOverride?: number;
 
-  constructor(moveId: Moves, ppUsed: number = 0, ppUp: number = 0, virtual: boolean = false, maxPpOverride?: number) {
+  constructor(moveId: MoveId, ppUsed: number = 0, ppUp: number = 0, virtual: boolean = false, maxPpOverride?: number) {
     this.moveId = moveId;
     this.ppUsed = ppUsed;
     this.ppUp = ppUp;

@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -28,7 +28,7 @@ describe("Abilities - Move Flag Power Boost Ability Attr", () => {
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   // Note: All affected moves have been verified to have the flag required by all_moves
@@ -36,49 +36,49 @@ describe("Abilities - Move Flag Power Boost Ability Attr", () => {
     {
       ability: Abilities.MEGA_LAUNCHER,
       abilityName: "Mega Launcher",
-      move: Moves.DARK_PULSE,
+      move: MoveId.DARK_PULSE,
       moveFlag: MoveFlags.PULSE_MOVE,
       factor: 1.5,
     },
     {
       ability: Abilities.IRON_FIST,
       abilityName: "Iron Fist",
-      move: Moves.FIRE_PUNCH,
+      move: MoveId.FIRE_PUNCH,
       moveFlag: MoveFlags.PUNCHING_MOVE,
       factor: 1.2,
     },
     {
       ability: Abilities.TOUGH_CLAWS,
       abilityName: "Tough Claws",
-      move: Moves.TACKLE,
+      move: MoveId.TACKLE,
       moveFlag: MoveFlags.MAKES_CONTACT,
       factor: 1.3,
     },
     {
       ability: Abilities.PUNK_ROCK,
       abilityName: "Punk Rock",
-      move: Moves.UPROAR,
+      move: MoveId.UPROAR,
       moveFlag: MoveFlags.SOUND_MOVE,
       factor: 1.3,
     },
     {
       ability: Abilities.STRONG_JAW,
       abilityName: "Strong Jaw",
-      move: Moves.FIRE_FANG,
+      move: MoveId.FIRE_FANG,
       moveFlag: MoveFlags.BITING_MOVE,
       factor: 1.5,
     },
     {
       ability: Abilities.RECKLESS,
       abilityName: "Reckless",
-      move: Moves.TAKE_DOWN,
+      move: MoveId.TAKE_DOWN,
       moveFlag: MoveFlags.RECKLESS_MOVE,
       factor: 1.2,
     },
     {
       ability: Abilities.SHARPNESS,
       abilityName: "Sharpness",
-      move: Moves.CUT,
+      move: MoveId.CUT,
       moveFlag: MoveFlags.SLICING_MOVE,
       factor: 1.5,
     },

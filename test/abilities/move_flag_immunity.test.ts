@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -25,7 +25,7 @@ describe("Ability Attribute - Move Flag Immunity", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SPLASH])
+      .moveset([MoveId.SPLASH])
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
@@ -38,19 +38,19 @@ describe("Ability Attribute - Move Flag Immunity", () => {
       abilityName: "Soundproof",
       ability: Abilities.SOUNDPROOF,
       moveFlag: MoveFlags.SOUND_MOVE,
-      enemyMove: Moves.UPROAR,
+      enemyMove: MoveId.UPROAR,
     },
     {
       abilityName: "Overcoat",
       ability: Abilities.OVERCOAT,
       moveFlag: MoveFlags.POWDER_MOVE,
-      enemyMove: Moves.STUN_SPORE,
+      enemyMove: MoveId.STUN_SPORE,
     },
     {
       abilityName: "Bulletproof",
       ability: Abilities.BULLETPROOF,
       moveFlag: MoveFlags.BULLET_MOVE,
-      enemyMove: Moves.AURA_SPHERE,
+      enemyMove: MoveId.AURA_SPHERE,
     },
   ])("$abilityName should provide immunity against the flagged moves", async ({ ability, moveFlag, enemyMove }) => {
     game.override.ability(ability).enemyMoveset(enemyMove);
@@ -58,7 +58,7 @@ describe("Ability Attribute - Move Flag Immunity", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 

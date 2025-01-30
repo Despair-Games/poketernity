@@ -21,7 +21,7 @@ import i18next from "i18next";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
@@ -36,7 +36,7 @@ export abstract class ArenaTag {
   constructor(
     public tagType: ArenaTagType,
     public turnCount: number,
-    public sourceMove?: Moves,
+    public sourceMove?: MoveId,
     public sourceId?: number,
     public side: ArenaTagSide = ArenaTagSide.BOTH,
   ) {}
@@ -111,7 +111,7 @@ export abstract class ArenaTag {
  */
 export class MistTag extends ArenaTag {
   constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.MIST, turnCount, Moves.MIST, sourceId, side);
+    super(ArenaTagType.MIST, turnCount, MoveId.MIST, sourceId, side);
   }
 
   override onAdd(arena: Arena, quiet: boolean = false): void {
@@ -181,7 +181,7 @@ export abstract class WeakenMoveScreenTag extends ArenaTag {
   constructor(
     tagType: ArenaTagType,
     turnCount: number,
-    sourceMove: Moves,
+    sourceMove: MoveId,
     sourceId: number,
     side: ArenaTagSide,
     weakenedCategories: MoveCategory[],
@@ -223,11 +223,11 @@ export abstract class WeakenMoveScreenTag extends ArenaTag {
 
 /**
  * Reduces the damage of physical moves.
- * Used by {@linkcode Moves.REFLECT}
+ * Used by {@linkcode MoveId.REFLECT}
  */
 class ReflectTag extends WeakenMoveScreenTag {
   constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.REFLECT, turnCount, Moves.REFLECT, sourceId, side, [MoveCategory.PHYSICAL]);
+    super(ArenaTagType.REFLECT, turnCount, MoveId.REFLECT, sourceId, side, [MoveCategory.PHYSICAL]);
   }
 
   override onAdd(_arena: Arena, quiet: boolean = false): void {
@@ -243,11 +243,11 @@ class ReflectTag extends WeakenMoveScreenTag {
 
 /**
  * Reduces the damage of special moves.
- * Used by {@linkcode Moves.LIGHT_SCREEN}
+ * Used by {@linkcode MoveId.LIGHT_SCREEN}
  */
 class LightScreenTag extends WeakenMoveScreenTag {
   constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.LIGHT_SCREEN, turnCount, Moves.LIGHT_SCREEN, sourceId, side, [MoveCategory.SPECIAL]);
+    super(ArenaTagType.LIGHT_SCREEN, turnCount, MoveId.LIGHT_SCREEN, sourceId, side, [MoveCategory.SPECIAL]);
   }
 
   override onAdd(_arena: Arena, quiet: boolean = false): void {
@@ -263,11 +263,11 @@ class LightScreenTag extends WeakenMoveScreenTag {
 
 /**
  * Reduces the damage of physical and special moves.
- * Used by {@linkcode Moves.AURORA_VEIL}
+ * Used by {@linkcode MoveId.AURORA_VEIL}
  */
 class AuroraVeilTag extends WeakenMoveScreenTag {
   constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.AURORA_VEIL, turnCount, Moves.AURORA_VEIL, sourceId, side, [
+    super(ArenaTagType.AURORA_VEIL, turnCount, MoveId.AURORA_VEIL, sourceId, side, [
       MoveCategory.SPECIAL,
       MoveCategory.PHYSICAL,
     ]);
@@ -284,7 +284,7 @@ class AuroraVeilTag extends WeakenMoveScreenTag {
   }
 }
 
-type ProtectConditionFunc = (arena: Arena, moveId: Moves) => boolean;
+type ProtectConditionFunc = (arena: Arena, moveId: MoveId) => boolean;
 
 /**
  * Class to implement conditional team protection
@@ -298,7 +298,7 @@ export abstract class ConditionalProtectTag extends ArenaTag {
 
   constructor(
     tagType: ArenaTagType,
-    sourceMove: Moves,
+    sourceMove: MoveId,
     sourceId: number,
     side: ArenaTagSide,
     condition: ProtectConditionFunc,
@@ -330,7 +330,7 @@ export abstract class ConditionalProtectTag extends ArenaTag {
    * @param isProtected a {@linkcode BooleanHolder} used to flag if the move is protected against
    * @param attacker the attacking {@linkcode Pokemon}
    * @param defender the defending {@linkcode Pokemon}
-   * @param moveId the {@linkcode Moves | identifier} for the move being used
+   * @param moveId the {@linkcode MoveId | identifier} for the move being used
    * @param ignoresProtectBypass a {@linkcode BooleanHolder} used to flag if a protection effect supercedes effects that ignore protection
    * @returns `true` if this tag protected against the attack; `false` otherwise
    */
@@ -340,7 +340,7 @@ export abstract class ConditionalProtectTag extends ArenaTag {
     isProtected: BooleanHolder,
     attacker: Pokemon,
     defender: Pokemon,
-    moveId: Moves,
+    moveId: MoveId,
   ): boolean {
     if (
       (this.side === ArenaTagSide.PLAYER) === defender.isPlayer()
@@ -369,7 +369,7 @@ export abstract class ConditionalProtectTag extends ArenaTag {
  * Condition function for {@link https://bulbapedia.bulbagarden.net/wiki/Quick_Guard_(move) Quick Guard's}
  * protection effect.
  * @param _arena {@linkcode Arena} The arena containing the protection effect
- * @param moveId {@linkcode Moves} The move to check against this condition
+ * @param moveId {@linkcode MoveId} The move to check against this condition
  * @returns `true` if the incoming move's priority is greater than 0.
  *   This includes moves with modified priorities from abilities (e.g. Prankster)
  */
@@ -392,7 +392,7 @@ const QuickGuardConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
  */
 class QuickGuardTag extends ConditionalProtectTag {
   constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.QUICK_GUARD, Moves.QUICK_GUARD, sourceId, side, QuickGuardConditionFunc);
+    super(ArenaTagType.QUICK_GUARD, MoveId.QUICK_GUARD, sourceId, side, QuickGuardConditionFunc);
   }
 }
 
@@ -400,7 +400,7 @@ class QuickGuardTag extends ConditionalProtectTag {
  * Condition function for {@link https://bulbapedia.bulbagarden.net/wiki/Wide_Guard_(move) Wide Guard's}
  * protection effect.
  * @param _arena {@linkcode Arena} The arena containing the protection effect
- * @param moveId {@linkcode Moves} The move to check against this condition
+ * @param moveId {@linkcode MoveId} The move to check against this condition
  * @returns `true` if the incoming move is multi-targeted (even if it's only used against one Pokemon).
  */
 const WideGuardConditionFunc: ProtectConditionFunc = (_arena, moveId): boolean => {
@@ -423,7 +423,7 @@ const WideGuardConditionFunc: ProtectConditionFunc = (_arena, moveId): boolean =
  */
 class WideGuardTag extends ConditionalProtectTag {
   constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.WIDE_GUARD, Moves.WIDE_GUARD, sourceId, side, WideGuardConditionFunc);
+    super(ArenaTagType.WIDE_GUARD, MoveId.WIDE_GUARD, sourceId, side, WideGuardConditionFunc);
   }
 }
 
@@ -431,7 +431,7 @@ class WideGuardTag extends ConditionalProtectTag {
  * Condition function for {@link https://bulbapedia.bulbagarden.net/wiki/Mat_Block_(move) Mat Block's}
  * protection effect.
  * @param _arena {@linkcode Arena} The arena containing the protection effect.
- * @param moveId {@linkcode Moves} The move to check against this condition.
+ * @param moveId {@linkcode MoveId} The move to check against this condition.
  * @returns `true` if the incoming move is not a Status move.
  */
 const MatBlockConditionFunc: ProtectConditionFunc = (_arena, moveId): boolean => {
@@ -445,7 +445,7 @@ const MatBlockConditionFunc: ProtectConditionFunc = (_arena, moveId): boolean =>
  */
 class MatBlockTag extends ConditionalProtectTag {
   constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.MAT_BLOCK, Moves.MAT_BLOCK, sourceId, side, MatBlockConditionFunc);
+    super(ArenaTagType.MAT_BLOCK, MoveId.MAT_BLOCK, sourceId, side, MatBlockConditionFunc);
   }
 
   override onAdd(_arena: Arena) {
@@ -466,7 +466,7 @@ class MatBlockTag extends ConditionalProtectTag {
  * Condition function for {@link https://bulbapedia.bulbagarden.net/wiki/Crafty_Shield_(move) Crafty Shield's}
  * protection effect.
  * @param _arena {@linkcode Arena} The arena containing the protection effect
- * @param moveId {@linkcode Moves} The move to check against this condition
+ * @param moveId {@linkcode MoveId} The move to check against this condition
  * @returns `true` if the incoming move is a Status move, is not a hazard, and does not target all
  * Pokemon or sides of the field.
  */
@@ -487,7 +487,7 @@ const CraftyShieldConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
  */
 class CraftyShieldTag extends ConditionalProtectTag {
   constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.CRAFTY_SHIELD, Moves.CRAFTY_SHIELD, sourceId, side, CraftyShieldConditionFunc, true);
+    super(ArenaTagType.CRAFTY_SHIELD, MoveId.CRAFTY_SHIELD, sourceId, side, CraftyShieldConditionFunc, true);
   }
 }
 
@@ -499,11 +499,11 @@ export class NoCritTag extends ArenaTag {
   /**
    * Constructor method for the NoCritTag class
    * @param turnCount `number` the number of turns this effect lasts
-   * @param sourceMove {@linkcode Moves} the move that created this effect
+   * @param sourceMove {@linkcode MoveId} the move that created this effect
    * @param sourceId `number` the ID of the {@linkcode Pokemon} that created this effect
    * @param side {@linkcode ArenaTagSide} the side to which this effect belongs
    */
-  constructor(turnCount: number, sourceMove: Moves, sourceId: number, side: ArenaTagSide) {
+  constructor(turnCount: number, sourceMove: MoveId, sourceId: number, side: ArenaTagSide) {
     super(ArenaTagType.NO_CRIT, turnCount, sourceMove, sourceId, side);
   }
 
@@ -538,7 +538,7 @@ class WishTag extends ArenaTag {
   private healHp: number;
 
   constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.WISH, turnCount, Moves.WISH, sourceId, side);
+    super(ArenaTagType.WISH, turnCount, MoveId.WISH, sourceId, side);
   }
 
   override onAdd(_arena: Arena): void {
@@ -580,7 +580,7 @@ export abstract class WeakenMoveTypeTag extends ArenaTag {
    * @param sourceMove - The move that created the tag.
    * @param sourceId - The ID of the source of the tag.
    */
-  constructor(tagType: ArenaTagType, turnCount: number, type: Type, sourceMove: Moves, sourceId: number) {
+  constructor(tagType: ArenaTagType, turnCount: number, type: Type, sourceMove: MoveId, sourceId: number) {
     super(tagType, turnCount, sourceMove, sourceId);
 
     this.weakenedType = type;
@@ -609,7 +609,7 @@ export abstract class WeakenMoveTypeTag extends ArenaTag {
  */
 class MudSportTag extends WeakenMoveTypeTag {
   constructor(turnCount: number, sourceId: number) {
-    super(ArenaTagType.MUD_SPORT, turnCount, Type.ELECTRIC, Moves.MUD_SPORT, sourceId);
+    super(ArenaTagType.MUD_SPORT, turnCount, Type.ELECTRIC, MoveId.MUD_SPORT, sourceId);
   }
 
   override onAdd(_arena: Arena): void {
@@ -627,7 +627,7 @@ class MudSportTag extends WeakenMoveTypeTag {
  */
 class WaterSportTag extends WeakenMoveTypeTag {
   constructor(turnCount: number, sourceId: number) {
-    super(ArenaTagType.WATER_SPORT, turnCount, Type.FIRE, Moves.WATER_SPORT, sourceId);
+    super(ArenaTagType.WATER_SPORT, turnCount, Type.FIRE, MoveId.WATER_SPORT, sourceId);
   }
 
   override onAdd(_arena: Arena): void {
@@ -645,7 +645,7 @@ class WaterSportTag extends WeakenMoveTypeTag {
  * Converts Normal-type moves to Electric type for the rest of the turn.
  */
 export class IonDelugeTag extends ArenaTag {
-  constructor(sourceMove?: Moves) {
+  constructor(sourceMove?: MoveId) {
     super(ArenaTagType.ION_DELUGE, 1, sourceMove);
   }
 
@@ -688,7 +688,7 @@ export abstract class ArenaTrapTag extends ArenaTag {
    * @param side - The side (player or enemy) the tag affects.
    * @param maxLayers - The maximum amount of layers this tag can have.
    */
-  constructor(tagType: ArenaTagType, sourceMove: Moves, sourceId: number, side: ArenaTagSide, maxLayers: number) {
+  constructor(tagType: ArenaTagType, sourceMove: MoveId, sourceId: number, side: ArenaTagSide, maxLayers: number) {
     super(tagType, 0, sourceMove, sourceId, side);
 
     this.layers = 1;
@@ -742,7 +742,7 @@ export abstract class ArenaTrapTag extends ArenaTag {
  */
 class SpikesTag extends ArenaTrapTag {
   constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.SPIKES, Moves.SPIKES, sourceId, side, 3);
+    super(ArenaTagType.SPIKES, MoveId.SPIKES, sourceId, side, 3);
   }
 
   override onAdd(arena: Arena, quiet: boolean = false): void {
@@ -797,7 +797,7 @@ class ToxicSpikesTag extends ArenaTrapTag {
   private neutralized: boolean;
 
   constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.TOXIC_SPIKES, Moves.TOXIC_SPIKES, sourceId, side, 2);
+    super(ArenaTagType.TOXIC_SPIKES, MoveId.TOXIC_SPIKES, sourceId, side, 2);
     this.neutralized = false;
   }
 
@@ -867,7 +867,7 @@ class ToxicSpikesTag extends ArenaTrapTag {
  */
 interface DelayedAttack {
   sourceId: number;
-  move: Moves;
+  move: MoveId;
   targetIndex: BattlerIndex;
   turnCount: number;
 }
@@ -888,7 +888,7 @@ export class DelayedAttackTag extends ArenaTag {
     this.delayedAttacks = [];
   }
 
-  public addAttack(source: Pokemon, move: Moves, targetIndex: BattlerIndex): void {
+  public addAttack(source: Pokemon, move: MoveId, targetIndex: BattlerIndex): void {
     this.delayedAttacks.push({ sourceId: source.id, move, targetIndex, turnCount: 3 });
   }
 
@@ -940,7 +940,7 @@ class TypeHazardTag extends ArenaTrapTag {
     damagingType: Type,
     sourceId: number,
     side: ArenaTagSide,
-    sourceMove: Moves,
+    sourceMove: MoveId,
     onAddKey: string,
     activateTrapKey: string,
   ) {
@@ -1005,7 +1005,7 @@ class StealthRockTag extends TypeHazardTag {
       Type.ROCK,
       sourceId,
       side,
-      Moves.STEALTH_ROCK,
+      MoveId.STEALTH_ROCK,
       "arenaTag:stealthRockOnAdd",
       "arenaTag:stealthRockActivateTrap",
     );
@@ -1019,7 +1019,7 @@ class SharpSteelTag extends TypeHazardTag {
       Type.STEEL,
       sourceId,
       side,
-      Moves.G_MAX_STEELSURGE,
+      MoveId.G_MAX_STEELSURGE,
       "arenaTag:sharpSteelOnAdd",
       "arenaTag:sharpSteelActivateTrap",
     );
@@ -1033,7 +1033,7 @@ class SharpSteelTag extends TypeHazardTag {
  */
 class StickyWebTag extends ArenaTrapTag {
   constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.STICKY_WEB, Moves.STICKY_WEB, sourceId, side, 1);
+    super(ArenaTagType.STICKY_WEB, MoveId.STICKY_WEB, sourceId, side, 1);
   }
 
   override onAdd(arena: Arena, quiet: boolean = false): void {
@@ -1088,7 +1088,7 @@ class StickyWebTag extends ArenaTrapTag {
  */
 export class TrickRoomTag extends ArenaTag {
   constructor(turnCount: number, sourceId: number) {
-    super(ArenaTagType.TRICK_ROOM, turnCount, Moves.TRICK_ROOM, sourceId);
+    super(ArenaTagType.TRICK_ROOM, turnCount, MoveId.TRICK_ROOM, sourceId);
   }
 
   /**
@@ -1125,7 +1125,7 @@ export class TrickRoomTag extends ArenaTag {
  */
 export class GravityTag extends ArenaTag {
   constructor(turnCount: number) {
-    super(ArenaTagType.GRAVITY, turnCount, Moves.GRAVITY);
+    super(ArenaTagType.GRAVITY, turnCount, MoveId.GRAVITY);
   }
 
   override onAdd(_arena: Arena): void {
@@ -1154,7 +1154,7 @@ export class GravityTag extends ArenaTag {
  */
 class TailwindTag extends ArenaTag {
   constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.TAILWIND, turnCount, Moves.TAILWIND, sourceId, side);
+    super(ArenaTagType.TAILWIND, turnCount, MoveId.TAILWIND, sourceId, side);
   }
 
   override onAdd(_arena: Arena, quiet: boolean = false): void {
@@ -1201,11 +1201,11 @@ class TailwindTag extends ArenaTag {
 
 /**
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Happy_Hour_(move) Happy Hour}.
- * Doubles the prize money from trainers and money moves like {@linkcode Moves.PAY_DAY} and {@linkcode Moves.MAKE_IT_RAIN}.
+ * Doubles the prize money from trainers and money moves like {@linkcode MoveId.PAY_DAY} and {@linkcode MoveId.MAKE_IT_RAIN}.
  */
 class HappyHourTag extends ArenaTag {
   constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.HAPPY_HOUR, 0, Moves.HAPPY_HOUR, sourceId, side);
+    super(ArenaTagType.HAPPY_HOUR, 0, MoveId.HAPPY_HOUR, sourceId, side);
   }
 
   override onAdd(_arena: Arena): void {
@@ -1219,7 +1219,7 @@ class HappyHourTag extends ArenaTag {
 
 class SafeguardTag extends ArenaTag {
   constructor(turnCount: number, sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.SAFEGUARD, turnCount, Moves.SAFEGUARD, sourceId, side);
+    super(ArenaTagType.SAFEGUARD, turnCount, MoveId.SAFEGUARD, sourceId, side);
   }
 
   override onAdd(_arena: Arena): void {
@@ -1251,7 +1251,7 @@ class NoneTag extends ArenaTag {
  */
 class ImprisonTag extends ArenaTrapTag {
   constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.IMPRISON, Moves.IMPRISON, sourceId, side, 1);
+    super(ArenaTagType.IMPRISON, MoveId.IMPRISON, sourceId, side, 1);
   }
 
   /**
@@ -1264,7 +1264,7 @@ class ImprisonTag extends ArenaTrapTag {
       const party = this.getAffectedPokemon();
       party?.forEach((p: Pokemon) => {
         if (p.isAllowedInBattle()) {
-          p.addTag(BattlerTagType.IMPRISON, 1, Moves.IMPRISON, this.sourceId);
+          p.addTag(BattlerTagType.IMPRISON, 1, MoveId.IMPRISON, this.sourceId);
         }
       });
       globalScene.queueMessage(
@@ -1291,7 +1291,7 @@ class ImprisonTag extends ArenaTrapTag {
   override activateTrap(pokemon: Pokemon): boolean {
     const source = this.getSourcePokemon();
     if (source && source.isActive(true) && pokemon.isAllowedInBattle()) {
-      pokemon.addTag(BattlerTagType.IMPRISON, 1, Moves.IMPRISON, this.sourceId);
+      pokemon.addTag(BattlerTagType.IMPRISON, 1, MoveId.IMPRISON, this.sourceId);
     }
     return true;
   }
@@ -1317,7 +1317,7 @@ class ImprisonTag extends ArenaTrapTag {
  */
 class FireGrassPledgeTag extends ArenaTag {
   constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.FIRE_GRASS_PLEDGE, 4, Moves.FIRE_PLEDGE, sourceId, side);
+    super(ArenaTagType.FIRE_GRASS_PLEDGE, 4, MoveId.FIRE_PLEDGE, sourceId, side);
   }
 
   override onAdd(_arena: Arena): void {
@@ -1366,7 +1366,7 @@ class FireGrassPledgeTag extends ArenaTag {
  */
 class WaterFirePledgeTag extends ArenaTag {
   constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.WATER_FIRE_PLEDGE, 4, Moves.WATER_PLEDGE, sourceId, side);
+    super(ArenaTagType.WATER_FIRE_PLEDGE, 4, MoveId.WATER_PLEDGE, sourceId, side);
   }
 
   override onAdd(_arena: Arena): void {
@@ -1400,7 +1400,7 @@ class WaterFirePledgeTag extends ArenaTag {
  */
 class GrassWaterPledgeTag extends ArenaTag {
   constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.GRASS_WATER_PLEDGE, 4, Moves.GRASS_PLEDGE, sourceId, side);
+    super(ArenaTagType.GRASS_WATER_PLEDGE, 4, MoveId.GRASS_PLEDGE, sourceId, side);
   }
 
   override onAdd(_arena: Arena): void {
@@ -1426,7 +1426,7 @@ class GrassWaterPledgeTag extends ArenaTag {
 export class TypeImmuneDamageOverTimeTag extends ArenaTag {
   private immuneType: Type;
 
-  constructor(tagType, sourceMove: Moves, sourceId: number, side: ArenaTagSide, immuneType: Type) {
+  constructor(tagType, sourceMove: MoveId, sourceId: number, side: ArenaTagSide, immuneType: Type) {
     super(tagType, 4, sourceMove, sourceId, side);
     this.immuneType = immuneType;
   }
@@ -1496,7 +1496,7 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
  */
 export class FairyLockTag extends ArenaTag {
   constructor(turnCount: number, sourceId: number) {
-    super(ArenaTagType.FAIRY_LOCK, turnCount, Moves.FAIRY_LOCK, sourceId);
+    super(ArenaTagType.FAIRY_LOCK, turnCount, MoveId.FAIRY_LOCK, sourceId);
   }
 
   override onAdd(_arena: Arena): void {
@@ -1509,7 +1509,7 @@ export function getArenaTag(
   tagType: ArenaTagType,
   sourceId: number,
   turnCount: number,
-  sourceMove?: Moves,
+  sourceMove?: MoveId,
   side: ArenaTagSide = ArenaTagSide.BOTH,
 ): ArenaTag | null {
   switch (tagType) {
@@ -1572,7 +1572,7 @@ export function getArenaTag(
     case ArenaTagType.G_MAX_VINE_LASH:
       return new TypeImmuneDamageOverTimeTag(
         ArenaTagType.G_MAX_VINE_LASH,
-        Moves.G_MAX_VINE_LASH,
+        MoveId.G_MAX_VINE_LASH,
         sourceId,
         side,
         Type.GRASS,
@@ -1580,7 +1580,7 @@ export function getArenaTag(
     case ArenaTagType.G_MAX_WILDFIRE:
       return new TypeImmuneDamageOverTimeTag(
         ArenaTagType.G_MAX_WILDFIRE,
-        Moves.G_MAX_WILDFIRE,
+        MoveId.G_MAX_WILDFIRE,
         sourceId,
         side,
         Type.FIRE,
@@ -1588,7 +1588,7 @@ export function getArenaTag(
     case ArenaTagType.G_MAX_CANNONADE:
       return new TypeImmuneDamageOverTimeTag(
         ArenaTagType.G_MAX_CANNONADE,
-        Moves.G_MAX_CANNONADE,
+        MoveId.G_MAX_CANNONADE,
         sourceId,
         side,
         Type.WATER,
@@ -1596,7 +1596,7 @@ export function getArenaTag(
     case ArenaTagType.G_MAX_VOLCALITH:
       return new TypeImmuneDamageOverTimeTag(
         ArenaTagType.G_MAX_VOLCALITH,
-        Moves.G_MAX_VOLCALITH,
+        MoveId.G_MAX_VOLCALITH,
         sourceId,
         side,
         Type.ROCK,

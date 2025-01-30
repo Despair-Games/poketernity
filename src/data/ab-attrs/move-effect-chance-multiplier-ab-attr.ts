@@ -1,7 +1,7 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { AbAttr } from "./ab-attr";
 
 /**
@@ -18,7 +18,7 @@ export class MoveEffectChanceMultiplierAbAttr extends AbAttr {
   }
   /**
    * @param args [0]: {@linkcode NumberHolder} Move additional effect chance. Has to be higher than or equal to 0.
-   *             [1]: {@linkcode Moves} Move used by the ability user.
+   *             [1]: {@linkcode MoveId} Move used by the ability user.
    *             [4]: Whether to show the ability flyout or not
    */
   override apply(
@@ -30,7 +30,7 @@ export class MoveEffectChanceMultiplierAbAttr extends AbAttr {
   ): boolean {
     this.showAbility = showAbility;
 
-    const exceptMoves = [Moves.ORDER_UP, Moves.ELECTRO_SHOT];
+    const exceptMoves = [MoveId.ORDER_UP, MoveId.ELECTRO_SHOT];
     if (moveChance.value <= 0 || exceptMoves.includes(move.id)) {
       return false;
     }
