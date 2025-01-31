@@ -14,7 +14,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { isNullOrUndefined, NumberHolder, randSeedInt, toDmgValue } from "#app/utils";
 import i18next from "i18next";
 import { Ability, allAbilities } from "./ability";
-import { PostDamageForceSwitchAbAttr } from "./ab-attrs/post-damage-force-switch-out-ab-attr";
+import { PostDamageForceSwitchAbAttr } from "./ab-attrs/post-damage-force-switch-ab-attr";
 import { PreventBypassSpeedChanceAbAttr } from "./ab-attrs/prevent-bypass-speed-chance-ab-attr";
 import { FormBlockDamageAbAttr } from "./ab-attrs/form-block-damage-ab-attr";
 import { PostSummonStatStageChangeOnArenaAbAttr } from "./ab-attrs/post-summon-stat-stage-change-on-arena-ab-attr";

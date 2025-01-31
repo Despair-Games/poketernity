@@ -1,6 +1,5 @@
 import type { BattlerIndex } from "#enums/battler-index";
 import { AddSecondStrikeAbAttr } from "#app/data/ab-attrs/add-second-strike-ab-attr";
-import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
 import { PostAttackAbAttr } from "#app/data/ab-attrs/post-attack-ab-attr";
 import { PostDamageAbAttr } from "#app/data/ab-attrs/post-damage-ab-attr";
 import { PostDefendAbAttr } from "#app/data/ab-attrs/post-defend-ab-attr";
@@ -43,6 +42,7 @@ import i18next from "i18next";
 import { HitCheckPhase } from "./hit-check-phase";
 import { MoveFlags } from "#enums/move-flags";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import { AbAttrId } from "#enums/ab-attr-id";
 
 export class MoveEffectPhase extends HitCheckPhase {
   private moveHistoryEntry: TurnMove;
@@ -602,7 +602,7 @@ export class MoveEffectPhase extends HitCheckPhase {
 
     if (
       dealsDamage
-      && !target.hasAbilityWithAttr(IgnoreMoveEffectsAbAttr)
+      && !target.hasAbilityWithAttr(AbAttrId.IGNORE_MOVE_EFFECTS)
       && !this.move.getMove().hitsSubstitute(user, target)
     ) {
       const flinched = new BooleanHolder(false);

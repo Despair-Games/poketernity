@@ -5,6 +5,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 import { HitHealAttr } from "../move-attrs/hit-heal-attr";
+import { AbAttrId } from "#enums/ab-attr-id";
 
 /**
  * Class for abilities that make drain moves deal damage to user instead of healing them.
@@ -12,6 +13,11 @@ import { HitHealAttr } from "../move-attrs/hit-heal-attr";
  * @see {@linkcode applyPostDefend}
  */
 export class ReverseDrainAbAttr extends PostDefendAbAttr {
+  constructor() {
+    super();
+    this._id = AbAttrId.REVERSE_DRAIN;
+  }
+
   /**
    * Determines if a damage and draining move was used to check if this ability should stop the healing.
    * Examples include: Absorb, Draining Kiss, Bitter Blade, etc.

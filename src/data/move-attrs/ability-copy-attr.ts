@@ -2,12 +2,11 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
-import { UncopiableAbilityAbAttr } from "#app/data/ab-attrs/uncopiable-ability-ab-attr";
-import { UnsuppressableAbilityAbAttr } from "#app/data/ab-attrs/unsuppressable-ability-ab-attr";
 import { allAbilities } from "#app/data/ability";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";
+import { AbAttrId } from "#enums/ab-attr-id";
 
 /**
  * Attribute to copy the target's ability onto the user (and, optionally, the user's ally).
@@ -52,10 +51,10 @@ export class AbilityCopyAttr extends MoveEffectAttr {
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) => {
       let ret =
-        !target.getAbility().hasAttr(UncopiableAbilityAbAttr)
-        && !user.getAbility().hasAttr(UnsuppressableAbilityAbAttr);
+        !target.getAbility().hasAttr(AbAttrId.UNCOPIABLE_ABILITY)
+        && !user.getAbility().hasAttr(AbAttrId.UNSUPPRESSABLE_ABILITY);
       if (this.copyToPartner && globalScene.currentBattle?.double) {
-        ret = ret && (!user.getAlly().hp || !user.getAlly().getAbility().hasAttr(UnsuppressableAbilityAbAttr));
+        ret = ret && (!user.getAlly().hp || !user.getAlly().getAbility().hasAttr(AbAttrId.UNSUPPRESSABLE_ABILITY));
       } else {
         ret = ret && user.getAbility().id !== target.getAbility().id;
       }

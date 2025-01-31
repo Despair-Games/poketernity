@@ -13,10 +13,10 @@ import { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { ForceSwitchOutImmunityAbAttr } from "#app/data/ab-attrs/force-switch-out-immunity-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { PostDamageForceSwitchAbAttr } from "#app/data/ab-attrs/post-damage-force-switch-out-ab-attr";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";
+import { AbAttrId } from "#enums/ab-attr-id";
 
 /**
  * Attribute to force either the user (e.g. {@link https://bulbapedia.bulbagarden.net/wiki/U-turn_(move) | U-turn})
@@ -55,7 +55,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
        * If it did, the user of U-turn or Volt Switch will not be switched out.
        */
       if (
-        target.getAbility().hasAttr(PostDamageForceSwitchAbAttr)
+        target.getAbility().hasAttr(AbAttrId.POST_DAMAGE_FORCE_SWITCH)
         && [Moves.U_TURN, Moves.VOLT_SWITCH, Moves.FLIP_TURN].includes(move.id)
       ) {
         if (this.hpDroppedBelowHalf(target)) {
@@ -138,7 +138,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
        * If it did, the user of U-turn or Volt Switch will not be switched out.
        */
       if (
-        target.getAbility().hasAttr(PostDamageForceSwitchAbAttr)
+        target.getAbility().hasAttr(AbAttrId.POST_DAMAGE_FORCE_SWITCH)
         && [Moves.U_TURN, Moves.VOLT_SWITCH, Moves.FLIP_TURN].includes(move.id)
       ) {
         if (this.hpDroppedBelowHalf(target)) {

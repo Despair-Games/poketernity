@@ -1,6 +1,4 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { BlockRedirectAbAttr } from "#app/data/ab-attrs/block-redirect-ab-attr";
-import { IncreasePpAbAttr } from "#app/data/ab-attrs/increase-pp-ab-attr";
 import { PokemonTypeChangeAbAttr } from "#app/data/ab-attrs/pokemon-type-change-ab-attr";
 import { PostMoveUsedAbAttr } from "#app/data/ab-attrs/post-move-used-ab-attr";
 import { RedirectMoveAbAttr } from "#app/data/ab-attrs/redirect-move-ab-attr";
@@ -41,6 +39,7 @@ import { Moves } from "#enums/moves";
 import { StatusEffect } from "#enums/status-effect";
 import { ElementType } from "#enums/element-type";
 import i18next from "i18next";
+import { AbAttrId } from "#enums/ab-attr-id";
 
 /**
  * Resolves the following:
@@ -442,7 +441,7 @@ export class MovePhase extends BattlePhase {
   public getPpIncreaseFromPressure(targets: Pokemon[]): number {
     const foesWithPressure = this.pokemon
       .getOpponents()
-      .filter((o) => targets.includes(o) && o.isActive(true) && o.hasAbilityWithAttr(IncreasePpAbAttr));
+      .filter((o) => targets.includes(o) && o.isActive(true) && o.hasAbilityWithAttr(AbAttrId.INCREASE_PP));
     return foesWithPressure.length;
   }
 
@@ -489,12 +488,12 @@ export class MovePhase extends BattlePhase {
           }
         });
 
-        if (this.pokemon.hasAbilityWithAttr(BlockRedirectAbAttr)) {
+        if (this.pokemon.hasAbilityWithAttr(AbAttrId.BLOCK_REDIRECT)) {
           redirectTarget.value = currentTarget;
           globalScene.unshiftPhase(
             new ShowAbilityPhase(
               this.pokemon.getBattlerIndex(),
-              this.pokemon.getPassiveAbility().hasAttr(BlockRedirectAbAttr),
+              this.pokemon.getPassiveAbility().hasAttr(AbAttrId.BLOCK_REDIRECT),
             ),
           );
         }

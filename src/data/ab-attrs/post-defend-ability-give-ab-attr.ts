@@ -5,21 +5,22 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { Abilities } from "#enums/abilities";
 import i18next from "i18next";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
-import { UnsuppressableAbilityAbAttr } from "./unsuppressable-ability-ab-attr";
+import { AbAttrId } from "#enums/ab-attr-id";
 
 export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
   private readonly ability: Abilities;
 
   constructor(ability: Abilities) {
     super();
+    this._id = AbAttrId.POST_DEFEND_ABILITY_GIVE;
     this.ability = ability;
   }
 
   override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
-      && !attacker.getAbility().hasAttr(UnsuppressableAbilityAbAttr)
-      && !attacker.getAbility().hasAttr(PostDefendAbilityGiveAbAttr)
+      && !attacker.getAbility().hasAttr(AbAttrId.UNSUPPRESSABLE_ABILITY)
+      && !attacker.getAbility().hasAttr(AbAttrId.POST_DEFEND_ABILITY_GIVE)
       && !attacker.isMax()
     ) {
       if (!simulated) {

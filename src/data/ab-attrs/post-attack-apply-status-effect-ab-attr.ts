@@ -2,8 +2,8 @@ import type { Move } from "#app/data/move";
 import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import type { StatusEffect } from "#enums/status-effect";
-import { IgnoreMoveEffectsAbAttr } from "./ignore-move-effect-ab-attr";
 import { PostAttackAbAttr } from "./post-attack-ab-attr";
+import { AbAttrId } from "#enums/ab-attr-id";
 
 /**
  * Ability attribute that inflicts a status on a Pokemon that gets hit by the ability user's attacks.
@@ -45,7 +45,7 @@ export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
      * Note: Status inflicted by abilities post attacking are also considered additional effects of moves.
      */
     if (
-      !target.hasAbilityWithAttr(IgnoreMoveEffectsAbAttr)
+      !target.hasAbilityWithAttr(AbAttrId.IGNORE_MOVE_EFFECTS)
       && target.id !== attacker.id
       && (!this.contactRequired || move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, target))
       && target.randSeedInt(100) < this.chance

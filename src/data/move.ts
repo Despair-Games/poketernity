@@ -20,8 +20,6 @@ import i18next from "i18next";
 import { AllyMoveCategoryPowerBoostAbAttr } from "#app/data/ab-attrs/ally-move-category-power-boost-ab-attr";
 import { ChangeMovePriorityAbAttr } from "#app/data/ab-attrs/change-move-priority-ab-attr";
 import { FieldMoveTypePowerBoostAbAttr } from "#app/data/ab-attrs/field-move-type-power-boost-ab-attr";
-import { IgnoreContactAbAttr } from "#app/data/ab-attrs/ignore-contact-ab-attr";
-import { IgnoreProtectOnContactAbAttr } from "#app/data/ab-attrs/ignore-protect-on-contact-ab-attr";
 import { InfiltratorAbAttr } from "#app/data/ab-attrs/infiltrator-ab-attr";
 import { MoveAbilityBypassAbAttr } from "#app/data/ab-attrs/move-ability-bypass-ab-attr";
 import { MoveTypeChangeAbAttr } from "#app/data/ab-attrs/move-type-change-ab-attr";
@@ -47,6 +45,7 @@ import { HealStatusEffectAttr } from "#app/data/move-attrs/heal-status-effect-at
 import { ChargeAnim } from "#enums/charge-anim";
 import { allMoves } from "#app/data/all-moves";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
+import { AbAttrId } from "#enums/ab-attr-id";
 
 export abstract class Move implements Localizable {
   public id: Moves;
@@ -600,12 +599,12 @@ export abstract class Move implements Localizable {
     // special cases below, eg: if the move flag is MAKES_CONTACT, and the user pokemon has an ability that ignores contact (like "Long Reach"), then overrides and move does not make contact
     switch (flag) {
       case MoveFlags.MAKES_CONTACT:
-        if (user.hasAbilityWithAttr(IgnoreContactAbAttr) || this.hitsSubstitute(user, target)) {
+        if (user.hasAbilityWithAttr(AbAttrId.IGNORE_CONTACT) || this.hitsSubstitute(user, target)) {
           return false;
         }
         break;
       case MoveFlags.IGNORE_ABILITIES:
-        if (user.hasAbilityWithAttr(MoveAbilityBypassAbAttr)) {
+        if (user.hasAbilityWithAttr(AbAttrId.MOVE_ABILITY_BYPASS)) {
           const abilityEffectsIgnored = new BooleanHolder(false);
           applyAbAttrs(MoveAbilityBypassAbAttr, user, false, abilityEffectsIgnored, this);
           if (abilityEffectsIgnored.value) {
@@ -615,7 +614,7 @@ export abstract class Move implements Localizable {
         break;
       case MoveFlags.IGNORE_PROTECT:
         if (
-          user.hasAbilityWithAttr(IgnoreProtectOnContactAbAttr)
+          user.hasAbilityWithAttr(AbAttrId.IGNORE_PROTECT_ON_CONTACT)
           && this.checkFlag(MoveFlags.MAKES_CONTACT, user, null)
         ) {
           return true;

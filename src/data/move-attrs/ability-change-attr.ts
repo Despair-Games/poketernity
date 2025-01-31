@@ -3,12 +3,12 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
-import { UnsuppressableAbilityAbAttr } from "#app/data/ab-attrs/unsuppressable-ability-ab-attr";
 import { allAbilities } from "#app/data/ability";
 import type { Move } from "#app/data/move";
 import { SpeciesFormChangeRevertWeatherFormTrigger } from "#app/data/pokemon-forms";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";
+import { AbAttrId } from "#enums/ab-attr-id";
 
 /**
  * Attribute to change a target's ability to a set ability.
@@ -43,7 +43,7 @@ export class AbilityChangeAttr extends MoveEffectAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) =>
-      !(this.selfTarget ? user : target).getAbility().hasAttr(UnsuppressableAbilityAbAttr)
+      !(this.selfTarget ? user : target).getAbility().hasAttr(AbAttrId.UNSUPPRESSABLE_ABILITY)
       && (this.selfTarget ? user : target).getAbility().id !== this.ability;
   }
 }

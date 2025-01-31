@@ -6,6 +6,7 @@ import type { AbAttr } from "./ab-attrs/ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { applyAbAttrs, applyRevealedAbAttrs } from "#app/data/apply-ab-attrs";
+import type { AbAttrId } from "#enums/ab-attr-id";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -55,8 +56,8 @@ export class Ability implements Localizable {
    * @param attrType any attribute that extends {@linkcode AbAttr}
    * @returns true if the ability has attribute `attrType`
    */
-  hasAttr<T extends AbAttr>(attrType: AbstractConstructor<T>): boolean {
-    return this.attrs.some((attr) => attr instanceof attrType);
+  hasAttr(id: AbAttrId): boolean {
+    return this.attrs.some((attr) => attr.id === id);
   }
 
   attr<T extends Constructor<AbAttr>>(AttrType: T, ...args: ConstructorParameters<T>): Ability {

@@ -1,6 +1,7 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
+import { AbAttrId } from "#enums/ab-attr-id";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
 /**
@@ -9,6 +10,11 @@ import { PreDefendAbAttr } from "./pre-defend-ab-attr";
  * @see {@linkcode applyPreDefend}
  */
 export class IgnoreMoveEffectsAbAttr extends PreDefendAbAttr {
+  constructor() {
+    super();
+    this._id = AbAttrId.IGNORE_MOVE_EFFECTS;
+  }
+
   /**
    * @param effectChance {@linkcode NumberHolder} Move additional effect chance.
    */

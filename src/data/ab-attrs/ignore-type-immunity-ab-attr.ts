@@ -1,5 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
+import { AbAttrId } from "#enums/ab-attr-id";
 import type { ElementType } from "#enums/element-type";
 import { AbAttr } from "./ab-attr";
 
@@ -9,6 +10,7 @@ export class IgnoreTypeImmunityAbAttr extends AbAttr {
 
   constructor(defenderType: ElementType, allowedMoveTypes: ElementType[]) {
     super(true);
+    this._id = AbAttrId.IGNORE_TYPE_IMMUNITY;
     this.defenderType = defenderType;
     this.allowedMoveTypes = allowedMoveTypes;
   }

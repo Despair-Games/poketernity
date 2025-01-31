@@ -1,16 +1,23 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { type Pokemon } from "#app/field/pokemon";
 import type { Ability } from "#app/data/ability";
+import { AbAttrId } from "#enums/ab-attr-id";
 
 export abstract class AbAttr {
+  protected _id: AbAttrId;
   public source: Ability;
   public showAbility: boolean;
   public showAbilityInstant: boolean;
   private extraCondition: AbAttrCondition;
 
   constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    this._id = AbAttrId.UNSPECIFIED;
     this.showAbility = showAbility;
     this.showAbilityInstant = showAbilityInstant;
+  }
+
+  get id() {
+    return this._id;
   }
 
   /**

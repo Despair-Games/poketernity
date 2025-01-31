@@ -1,6 +1,7 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
+import { AbAttrId } from "#enums/ab-attr-id";
 import { AbAttr } from "./ab-attr";
 
 export class MoveAbilityBypassAbAttr extends AbAttr {
@@ -8,6 +9,7 @@ export class MoveAbilityBypassAbAttr extends AbAttr {
 
   constructor(moveIgnoreFunc?: (pokemon: Pokemon, move: Move) => boolean) {
     super(false);
+    this._id = AbAttrId.MOVE_ABILITY_BYPASS;
 
     this.moveIgnoreFunc = moveIgnoreFunc ?? ((_pokemon, _move) => true);
   }

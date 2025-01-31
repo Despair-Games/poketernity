@@ -38,7 +38,6 @@ import { Species } from "#enums/species";
 import { EFFECTIVE_STATS, getStatKey, Stat, type BattleStat, type EffectiveStat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
-import { ReverseDrainAbAttr } from "./ab-attrs/reverse-drain-ab-attr";
 import Overrides from "#app/overrides";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
@@ -47,6 +46,7 @@ import {
   SemiInvulnerableBattlerTagTypes,
   TrappedBattlerTagTypes,
 } from "#app/utils/battler-tag-type-utils";
+import { AbAttrId } from "#enums/ab-attr-id";
 
 export class BattlerTag {
   public tagType: BattlerTagType;
@@ -947,7 +947,7 @@ export class SeedTag extends BattlerTag {
           );
 
           const damage = pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
-          const reverseDrain = pokemon.hasAbilityWithAttr(ReverseDrainAbAttr, false);
+          const reverseDrain = pokemon.hasAbilityWithAttr(AbAttrId.REVERSE_DRAIN, false);
 
           globalScene.queuePokemonHeal(true, source.getBattlerIndex(), !reverseDrain ? damage : damage * -1, {
             message: !reverseDrain
@@ -1615,7 +1615,7 @@ export class ContactDamageProtectedTag extends ProtectedTag {
     }
 
     if (!simulated && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, null)) {
-      if (!attacker.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)) {
+      if (!attacker.hasAbilityWithAttr(AbAttrId.BLOCK_NON_DIRECT_DAMAGE)) {
         attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), HitResult.OTHER);
       }
     }

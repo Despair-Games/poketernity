@@ -4,13 +4,13 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import { PostKnockOutAbAttr } from "./post-knock-out-ab-attr";
-import { UncopiableAbilityAbAttr } from "./uncopiable-ability-ab-attr";
+import { AbAttrId } from "#enums/ab-attr-id";
 
 export class CopyFaintedAllyAbilityAbAttr extends PostKnockOutAbAttr {
   override apply(pokemon: Pokemon, simulated: boolean, knockedOutPokemon: Pokemon): boolean {
     if (
       pokemon.isPlayer() === knockedOutPokemon.isPlayer()
-      && !knockedOutPokemon.getAbility().hasAttr(UncopiableAbilityAbAttr)
+      && !knockedOutPokemon.getAbility().hasAttr(AbAttrId.UNCOPIABLE_ABILITY)
     ) {
       if (!simulated) {
         const knockedOutAllyAb = knockedOutPokemon.getAbility().id;

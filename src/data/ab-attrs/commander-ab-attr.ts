@@ -7,6 +7,7 @@ import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { Species } from "#enums/species";
 import { AbAttr } from "./ab-attr";
 import { type SkyDropTag } from "../battler-tags";
+import { AbAttrId } from "#enums/ab-attr-id";
 
 /**
  * Attribute implementing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Commander_(Ability) | Commander}.
@@ -15,6 +16,11 @@ import { type SkyDropTag } from "../battler-tags";
  * causing attacks that target the source to always miss.
  */
 export class CommanderAbAttr extends AbAttr {
+  constructor() {
+    super();
+    this._id = AbAttrId.COMMANDER;
+  }
+
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
     // TODO: Should this work with X + Dondozo fusions?
     if (globalScene.currentBattle?.double && pokemon.getAlly()?.species.speciesId === Species.DONDOZO) {

@@ -16,6 +16,7 @@ import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { BattleType } from "#enums/battle-type";
 import i18next from "i18next";
+import { AbAttrId } from "#enums/ab-attr-id";
 
 /**
  * Ability attribute for forcing a Pokémon to switch out after its health drops below half.
@@ -34,6 +35,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
 
   constructor(hpRatio: number = 0.5) {
     super();
+    this._id = AbAttrId.POST_DAMAGE_FORCE_SWITCH;
     this.hpRatio = hpRatio;
   }
 

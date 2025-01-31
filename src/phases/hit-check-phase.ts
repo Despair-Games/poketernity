@@ -1,5 +1,3 @@
-import { AlwaysHitAbAttr } from "#app/data/ab-attrs/always-hit-ab-attr";
-import { MaxMultiHitAbAttr } from "#app/data/ab-attrs/max-multi-hit-ab-attr";
 import { ProtectedTag } from "#app/data/battler-tags";
 import { HitsTagAttr } from "#app/data/move-attrs/hits-tag-attr";
 import { OneHitKOAttr } from "#app/data/move-attrs/one-hit-ko-attr";
@@ -19,6 +17,7 @@ import { MoveFlags } from "#enums/move-flags";
 import { MoveTarget } from "#enums/move-target";
 import { ElementType } from "#enums/element-type";
 import { PokemonPhase } from "./abstract-pokemon-phase";
+import { AbAttrId } from "#enums/ab-attr-id";
 
 type HitCheckEntry = [HitCheckResult, TypeDamageMultiplier];
 
@@ -76,7 +75,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
 
     /** Is there an effect that causes the move to bypass accuracy checks, including semi-invulnerability? */
     const alwaysHit =
-      [user, target].some((p) => p.hasAbilityWithAttr(AlwaysHitAbAttr))
+      [user, target].some((p) => p.hasAbilityWithAttr(AbAttrId.ALWAYS_HIT))
       || (user.getTag(BattlerTagType.IGNORE_ACCURACY)
         && (user.getLastXMoves()[0]?.targets ?? []).indexOf(target.getBattlerIndex()) !== -1)
       || !!target.getTag(BattlerTagType.ALWAYS_GET_HIT);
@@ -145,7 +144,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
     // Strikes after the first in a multi-strike move are guaranteed to hit,
     // unless the move is flagged to check all hits and the user does not have Skill Link.
     if (user.turnData.hitsLeft < user.turnData.hitCount) {
-      if (!move.hasFlag(MoveFlags.CHECK_ALL_HITS) || user.hasAbilityWithAttr(MaxMultiHitAbAttr)) {
+      if (!move.hasFlag(MoveFlags.CHECK_ALL_HITS) || user.hasAbilityWithAttr(AbAttrId.MAX_MULTI_HIT)) {
         return [HitCheckResult.HIT, effectiveness];
       }
     }

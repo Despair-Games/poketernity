@@ -123,8 +123,6 @@ import type { Ability } from "#app/data/ability";
 import { allAbilities, getAbApplyFunc } from "#app/data/ability";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { IgnoreTypeImmunityAbAttr } from "#app/data/ab-attrs/ignore-type-immunity-ab-attr";
-import { NoFusionAbilityAbAttr } from "#app/data/ab-attrs/no-fusion-ability-ab-attr";
-import { UnsuppressableAbilityAbAttr } from "#app/data/ab-attrs/unsuppressable-ability-ab-attr";
 import { InfiltratorAbAttr } from "#app/data/ab-attrs/infiltrator-ab-attr";
 import { SuppressFieldAbilitiesAbAttr } from "#app/data/ab-attrs/suppress-field-abilities-ab-attr";
 import { WeightMultiplierAbAttr } from "#app/data/ab-attrs/weight-multiplier-ab-attr";
@@ -138,7 +136,6 @@ import { UserFieldBattlerTagImmunityAbAttr } from "#app/data/ab-attrs/user-field
 import { BattlerTagImmunityAbAttr } from "#app/data/ab-attrs/battler-tag-immunity-ab-attr";
 import { UserFieldStatusEffectImmunityAbAttr } from "#app/data/ab-attrs/user-field-status-effect-immunity-ab-attr";
 import { StatusEffectImmunityAbAttr } from "#app/data/ab-attrs/status-effect-immunity-ab-attr";
-import { CommanderAbAttr } from "#app/data/ab-attrs/commander-ab-attr";
 import { IgnoreOpponentStatStagesAbAttr } from "#app/data/ab-attrs/ignore-opponent-stat-stages-ab-attr";
 import { StatMultiplierAbAttr } from "#app/data/ab-attrs/stat-multiplier-ab-attr";
 import { DamageBoostAbAttr } from "#app/data/ab-attrs/damage-boost-ab-attr";
@@ -228,6 +225,7 @@ import {
 } from "#app/utils/battler-tag-type-utils";
 import { PartyFilterNonFainted } from "#app/utils/party-utils";
 import { PokemonSummonData } from "#app/field/pokemon-summon-data";
+import { AbAttrId } from "#enums/ab-attr-id";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -1736,28 +1734,28 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return false;
     }
     const ability = !passive ? this.getAbility() : this.getPassiveAbility();
-    if (this.isFusion() && ability.hasAttr(NoFusionAbilityAbAttr)) {
+    if (this.isFusion() && ability.hasAttr(AbAttrId.NO_FUSION_ABILITY)) {
       return false;
     }
     const arena = globalScene?.arena;
     if (arena.ignoreAbilities && arena.ignoringEffectSource !== this.getBattlerIndex() && ability.isIgnorable) {
       return false;
     }
-    if (this.summonData?.abilitySuppressed && !ability.hasAttr(UnsuppressableAbilityAbAttr)) {
+    if (this.summonData?.abilitySuppressed && !ability.hasAttr(AbAttrId.UNSUPPRESSABLE_ABILITY)) {
       return false;
     }
-    if (this.isOnField() && !ability.hasAttr(SuppressFieldAbilitiesAbAttr)) {
+    if (this.isOnField() && !ability.hasAttr(AbAttrId.SUPPRESS_FIELD_ABILITIES)) {
       const suppressed = new BooleanHolder(false);
       globalScene
         .getField(true)
         .filter((p) => p !== this)
         .map((p) => {
-          if (p.getAbility().hasAttr(SuppressFieldAbilitiesAbAttr) && p.canApplyAbility()) {
+          if (p.getAbility().hasAttr(AbAttrId.SUPPRESS_FIELD_ABILITIES) && p.canApplyAbility()) {
             p.getAbility()
               .getAttrs(SuppressFieldAbilitiesAbAttr)
               .map((a) => a.apply(this, false, suppressed, ability));
           }
-          if (p.getPassiveAbility().hasAttr(SuppressFieldAbilitiesAbAttr) && p.canApplyAbility(true)) {
+          if (p.getPassiveAbility().hasAttr(AbAttrId.SUPPRESS_FIELD_ABILITIES) && p.canApplyAbility(true)) {
             p.getPassiveAbility()
               .getAttrs(SuppressFieldAbilitiesAbAttr)
               .map((a) => a.apply(this, false, suppressed, ability));
@@ -1794,20 +1792,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * Accounts for all the various effects which can affect whether an ability will be present or
    * in effect, and both passive and non-passive. This is one of the two primary ways to check
    * whether a pokemon has a particular ability.
-   * @param attrType The {@linkcode AbAttr | ability attribute} to check for
+   * @param abAttrId The {@linkcode AbAttrId | ability attribute ID} to check for
    * @param canApply If false, it doesn't check whether the ability is currently active
    * @param baseOnly If true, it ignores ability changing effects
    * @returns Whether an ability with that attribute is present and active
    */
-  public hasAbilityWithAttr(
-    attrType: AbstractConstructor<AbAttr>,
-    canApply: boolean = true,
-    baseOnly?: boolean,
-  ): boolean {
-    if ((!canApply || this.canApplyAbility()) && this.getAbility(baseOnly).hasAttr(attrType)) {
+  public hasAbilityWithAttr(abAttrId: AbAttrId, canApply: boolean = true, baseOnly?: boolean): boolean {
+    if ((!canApply || this.canApplyAbility()) && this.getAbility(baseOnly).hasAttr(abAttrId)) {
       return true;
     }
-    if (this.hasPassive() && (!canApply || this.canApplyAbility(true)) && this.getPassiveAbility().hasAttr(attrType)) {
+    if (this.hasPassive() && (!canApply || this.canApplyAbility(true)) && this.getPassiveAbility().hasAttr(abAttrId)) {
       return true;
     }
     return false;
@@ -2063,7 +2057,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         }
         if (source) {
           const ignoreImmunity = new BooleanHolder(false);
-          if (source.isActive(true) && source.hasAbilityWithAttr(IgnoreTypeImmunityAbAttr)) {
+          if (source.isActive(true) && source.hasAbilityWithAttr(AbAttrId.IGNORE_TYPE_IMMUNITY)) {
             applyAbAttrs(IgnoreTypeImmunityAbAttr, source, simulated, ignoreImmunity, moveType, defType);
           }
           if (ignoreImmunity.value) {
@@ -4262,7 +4256,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
       // If this Pokemon has Commander and Dondozo as an active ally, hide this Pokemon's sprite.
       if (
-        this.hasAbilityWithAttr(CommanderAbAttr)
+        this.hasAbilityWithAttr(AbAttrId.COMMANDER)
         && globalScene.currentBattle.double
         && this.getAlly()?.species.speciesId === Species.DONDOZO
       ) {
