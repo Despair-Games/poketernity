@@ -1,5 +1,4 @@
 import { type Pokemon, type PlayerPokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { MovePhase } from "#app/phases/move-phase";
 import { type Move, getMoveTargets } from "#app/data/move";
@@ -29,9 +28,7 @@ export class CopyMoveAttr extends OverrideMoveEffectAttr {
           : [moveTargets.targets[user.randSeedInt(moveTargets.targets.length)]];
     user.getMoveQueue().push({ move: lastMove, targets: targets, ignorePP: true });
 
-    globalScene.unshiftPhase(
-      new MovePhase(user as PlayerPokemon, targets, new PokemonMove(lastMove, 0, 0, true), true),
-    );
+    globalScene.unshiftPhase(new MovePhase(user as PlayerPokemon, targets, lastMove, true));
 
     return true;
   }

@@ -2,7 +2,6 @@ import { Biome } from "#enums/biome";
 import { Moves } from "#enums/moves";
 import { TerrainType } from "#enums/terrain-type";
 import { type Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { LoadMoveAnimPhase } from "#app/phases/load-move-anim-phase";
 import { MovePhase } from "#app/phases/move-phase";
@@ -149,9 +148,7 @@ export class NaturePowerAttr extends OverrideMoveEffectAttr {
 
     user.getMoveQueue().push({ move: moveId, targets: [target.getBattlerIndex()], ignorePP: true });
     globalScene.unshiftPhase(new LoadMoveAnimPhase(moveId));
-    globalScene.unshiftPhase(
-      new MovePhase(user, [target.getBattlerIndex()], new PokemonMove(moveId, 0, 0, true), true),
-    );
+    globalScene.unshiftPhase(new MovePhase(user, [target.getBattlerIndex()], moveId, true));
     return true;
   }
 }

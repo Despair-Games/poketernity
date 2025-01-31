@@ -22,7 +22,7 @@ import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/dat
 import { getTerrainBlockMessage } from "#app/data/terrain";
 import { MoveUsedEvent } from "#app/events/battle-scene";
 import { type Pokemon } from "#app/field/pokemon";
-import { type PokemonMove } from "#app/field/pokemon-move";
+import { PokemonMove } from "#app/field/pokemon-move";
 import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -100,7 +100,7 @@ export class MovePhase extends BattlePhase {
   constructor(
     pokemon: Pokemon,
     targets: BattlerIndex[],
-    move: PokemonMove,
+    move: PokemonMove | Moves,
     followUp: boolean = false,
     ignorePp: boolean = false,
   ) {
@@ -108,7 +108,7 @@ export class MovePhase extends BattlePhase {
 
     this.pokemon = pokemon;
     this.targets = targets;
-    this.move = move;
+    this.move = typeof move === "number" ? new PokemonMove(move, 0, 0, true) : move;
     this.followUp = followUp;
     this.ignorePp = ignorePp;
   }

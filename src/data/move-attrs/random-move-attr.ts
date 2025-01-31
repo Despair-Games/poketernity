@@ -1,7 +1,6 @@
 import { MoveFlags } from "#enums/move-flags";
 import { Moves } from "#enums/moves";
 import { type Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { LoadMoveAnimPhase } from "#app/phases/load-move-anim-phase";
 import { MovePhase } from "#app/phases/move-phase";
@@ -41,7 +40,7 @@ export class RandomMoveAttr extends OverrideMoveEffectAttr {
           : [moveTargets.targets[user.randSeedInt(moveTargets.targets.length)]];
     user.getMoveQueue().push({ move: moveId, targets: targets, ignorePP: true });
     globalScene.unshiftPhase(new LoadMoveAnimPhase(moveId));
-    globalScene.unshiftPhase(new MovePhase(user, targets, new PokemonMove(moveId, 0, 0, true), true));
+    globalScene.unshiftPhase(new MovePhase(user, targets, moveId, true));
     return true;
   }
 }
