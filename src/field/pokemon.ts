@@ -5851,7 +5851,7 @@ export class EnemyPokemon extends Pokemon {
       const averageScore =
         this.getOpponents()
           .map((p) => this.getMoveScore(p, move))
-          .reduce((total, score) => total + score, 0) / this.getOpponents.length;
+          .reduce((total, score) => total + score, 0) / this.getOpponents().length;
 
       return {
         move: move.id,
