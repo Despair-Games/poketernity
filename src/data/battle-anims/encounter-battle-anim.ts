@@ -1,7 +1,8 @@
 import type { AnimConfig } from "#app/data/anim-config";
 import { BattleAnim } from "#app/data/battle-anims";
 import type { Pokemon } from "#app/field/pokemon";
-import { type EncounterAnim, encounterAnims } from "#enums/encounter-anims";
+import { type EncounterAnim } from "#enums/encounter-anims";
+import { encounterAnims } from "../encounter-anims";
 
 export class EncounterBattleAnim extends BattleAnim {
   public encounterAnim: EncounterAnim;

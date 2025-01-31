@@ -1,4 +1,4 @@
-import { encounterAnims } from "#enums/encounter-anims";
+import { encounterAnims } from "#app/data/encounter-anims";
 import { loadAnimAssets } from "./anim-utils";
 
 /**
