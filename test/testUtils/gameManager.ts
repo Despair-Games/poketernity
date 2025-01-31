@@ -110,7 +110,7 @@ export class GameManager {
 
       // This part, in particular, must not be run before the PhaseInterceptor has been initialized.
       this.scene.pushPhase(new LoginPhase());
-      this.scene.pushPhase(new TitlePhase());
+      this.scene.toTitleScreen();
       this.scene.shiftPhase();
 
       this.gameWrapper.scene = this.scene;

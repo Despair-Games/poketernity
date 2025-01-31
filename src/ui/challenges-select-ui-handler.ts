@@ -11,7 +11,6 @@ import { Challenges } from "#enums/challenges";
 import BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import { Color, ShadowColor } from "#enums/color";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
-import { TitlePhase } from "#app/phases/title-phase";
 import { globalScene } from "#app/global-scene";
 
 /**
@@ -385,7 +384,7 @@ export default class GameChallengesUiHandler extends UiHandler {
         this.updateChallengeArrows(this.startCursor.visible);
       } else {
         globalScene.clearPhaseQueue();
-        globalScene.pushPhase(new TitlePhase());
+        globalScene.toTitleScreen({ clearPhaseQueue: true });
         globalScene.getCurrentPhase()?.end();
       }
       success = true;

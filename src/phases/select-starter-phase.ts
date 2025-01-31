@@ -6,7 +6,6 @@ import { globalScene } from "#app/global-scene";
 import { overrideHeldItems, overrideModifiers } from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
-import { TitlePhase } from "#app/phases/title-phase";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import type { Starter } from "#app/ui/starter-select-ui-handler";
 import { UiMode } from "#enums/ui-mode";
@@ -23,8 +22,7 @@ export class SelectStarterPhase extends Phase {
       globalScene.ui.clearText();
       globalScene.ui.setMode(UiMode.SAVE_SLOT, SaveSlotUiMode.SAVE, (slotId: number) => {
         if (slotId === -1) {
-          globalScene.clearPhaseQueue();
-          globalScene.pushPhase(new TitlePhase());
+          globalScene.toTitleScreen({ clearPhaseQueue: true });
           return this.end();
         }
         globalScene.sessionSlotId = slotId;

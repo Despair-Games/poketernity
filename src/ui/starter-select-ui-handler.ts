@@ -35,7 +35,6 @@ import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { EncounterPhase } from "#app/phases/encounter-phase";
 import { SelectChallengePhase } from "#app/phases/select-challenge-phase";
-import { TitlePhase } from "#app/phases/title-phase";
 import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#app/system/game-data";
 import { StarterPrefs } from "#app/system/game-data";
 import { Tutorial } from "#enums/tutorial";
@@ -3856,7 +3855,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         globalScene.pushPhase(new SelectChallengePhase());
         globalScene.pushPhase(new EncounterPhase());
       } else {
-        globalScene.pushPhase(new TitlePhase());
+        globalScene.toTitleScreen();
       }
       this.clearText();
       globalScene.getCurrentPhase()?.end();

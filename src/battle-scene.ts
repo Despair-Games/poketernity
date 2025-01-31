@@ -202,6 +202,13 @@ interface PokemonFaintInit {
   source?: Pokemon;
 }
 
+interface ToTitleScreenInit {
+  /** Whether to add the {@linkcode TitlePhase} to the front of the phase queue or defer it. */
+  eager?: boolean;
+  /** Whether to clear the phase queue before adding the {@linkcode TitlePhase}. */
+  clearPhaseQueue?: boolean;
+}
+
 //#endregion
 //#region Constants
 
@@ -720,7 +727,7 @@ export default class BattleScene extends SceneBase {
       this.initStarterColors(),
     ]).then(() => {
       this.pushPhase(new LoginPhase());
-      this.pushPhase(new TitlePhase());
+      this.toTitleScreen();
 
       this.shiftPhase();
     });
@@ -3703,6 +3710,22 @@ export default class BattleScene extends SceneBase {
       this.unshiftPhase(pokemonHealPhase);
     } else {
       this.pushPhase(pokemonHealPhase, true);
+    }
+  }
+
+  /**
+   * Returns the game to the title screen(/phase).
+   * @param init Optional {@linkcode ToTitleScreenInit} arguments
+   */
+  toTitleScreen({ eager, clearPhaseQueue }: ToTitleScreenInit = {}): void {
+    if (clearPhaseQueue) {
+      this.clearPhaseQueue();
+    }
+
+    if (eager) {
+      this.unshiftPhase(new TitlePhase());
+    } else {
+      this.pushPhase(new TitlePhase());
     }
   }
 }
