@@ -3,11 +3,8 @@ import { chargeAnims, moveAnims } from "#app/data/battle-anims";
 import { AnimConfig } from "#app/data/anim-config";
 import { BeakBlastHeaderAttr } from "#app/data/move-attrs/beak-blast-header-attr";
 import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
-import { globalScene } from "#app/global-scene";
 import type { Moves } from "#enums/moves";
-import Phaser from "phaser";
-
-//#region Exports
+import { loadAnimAssets } from "#app/utils/anim-utils";
 
 export function loadMoveAnimAssets(moveIds: Moves[], startLoad?: boolean): Promise<void> {
   return new Promise((resolve) => {
@@ -27,42 +24,3 @@ export function loadMoveAnimAssets(moveIds: Moves[], startLoad?: boolean): Promi
     loadAnimAssets(moveAnimations, startLoad).then(() => resolve());
   });
 }
-
-export function loadAnimAssets(anims: AnimConfig[], startLoad?: boolean): Promise<void> {
-  return new Promise((resolve) => {
-    const backgrounds = new Set<string>();
-    const sounds = new Set<string>();
-    for (const a of anims) {
-      if (!a.frames?.length) {
-        continue;
-      }
-      const animSounds = a.getSoundResourceNames();
-      for (const ms of animSounds) {
-        sounds.add(ms);
-      }
-      const animBackgrounds = a.getBackgroundResourceNames();
-      for (const abg of animBackgrounds) {
-        backgrounds.add(abg);
-      }
-      if (a.graphic) {
-        globalScene.loadSpritesheet(a.graphic, "battle_anims", 96);
-      }
-    }
-    for (const bg of backgrounds) {
-      globalScene.loadImage(bg, "battle_anims");
-    }
-    for (const s of sounds) {
-      globalScene.loadSe(s, "battle_anims", s);
-    }
-    if (startLoad) {
-      globalScene.load.once(Phaser.Loader.Events.COMPLETE, () => resolve());
-      if (!globalScene.load.isLoading()) {
-        globalScene.load.start();
-      }
-    } else {
-      resolve();
-    }
-  });
-}
-
-//#endregion

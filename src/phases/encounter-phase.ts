@@ -10,7 +10,7 @@ import { BattleType } from "#enums/battle-type";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { SyncEncounterNatureAbAttr } from "#app/data/ab-attrs/sync-encounter-nature-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { loadEncounterAnimAssets } from "#app/data/battle-anims";
+import { loadEncounterAnimAssets } from "#app/utils/encounter-anim-utils";
 import { initEncounterAnims } from "#app/data/init-encounter-anims";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import { ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants";

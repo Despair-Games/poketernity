@@ -13,7 +13,6 @@ import { AnimFrameTarget } from "#enums/anim-frame-target";
 import { ChargeAnim } from "#enums/charge-anim";
 import { CommonAnim } from "#enums/common-anim";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { loadAnimAssets } from "#app/utils/move-anim-utils";
 import {
   AnimConfig,
   AnimFrame,
@@ -29,15 +28,6 @@ export const moveAnims = new Map<Moves, AnimConfig | [AnimConfig, AnimConfig] | 
 export const chargeAnims = new Map<ChargeAnim, AnimConfig | [AnimConfig, AnimConfig] | null>();
 export const commonAnims = new Map<CommonAnim, AnimConfig>();
 export const encounterAnims = new Map<EncounterAnim, AnimConfig>();
-
-/**
- * Loads encounter animation assets to scene
- * MUST be called after {@linkcode initEncounterAnims()} to load all required animations properly
- * @param startLoad
- */
-export async function loadEncounterAnimAssets(startLoad?: boolean): Promise<void> {
-  await loadAnimAssets(Array.from(encounterAnims.values()), startLoad);
-}
 
 interface GraphicFrameData {
   x: number;
