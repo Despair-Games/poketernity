@@ -1,4 +1,4 @@
-import { applyChallenges } from "#app/data/challenge";
+import { applyChallenges } from "#app/utils/challenge-utils";
 import { ChallengeType } from "#enums/challenge-type";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/species-form-change-triggers/species-form-change-move-learned-trigger";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";

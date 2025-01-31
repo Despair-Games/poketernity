@@ -17,7 +17,7 @@ import {
   getValueReductionCandyCounts,
   speciesStarterCosts,
 } from "#app/data/balance/starters";
-import * as Challenge from "#app/data/challenge";
+import { applyChallenges } from "#app/utils/challenge-utils";
 import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
 import { Egg, getEggTierForSpecies } from "#app/data/egg";
 import { GrowthRate } from "#enums/growth-rates";
@@ -1535,7 +1535,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           const isPartyValid = this.isPartyValid();
           const isValidForChallenge = new BooleanHolder(true);
 
-          Challenge.applyChallenges(
+          applyChallenges(
             globalScene.gameMode,
             ChallengeType.STARTER_CHOICE,
             this.lastSpecies,
@@ -2591,7 +2591,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         valueLimit.value = 10;
     }
 
-    Challenge.applyChallenges(globalScene.gameMode, ChallengeType.STARTER_POINTS, valueLimit);
+    applyChallenges(globalScene.gameMode, ChallengeType.STARTER_POINTS, valueLimit);
 
     return valueLimit.value;
   }
@@ -2618,7 +2618,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
              */
             const tempFormProps = BigInt(Math.pow(2, i)) * DexAttr.DEFAULT_FORM;
             const isValidForChallenge = new BooleanHolder(true);
-            Challenge.applyChallenges(
+            applyChallenges(
               globalScene.gameMode,
               ChallengeType.STARTER_CHOICE,
               container.species,
@@ -2630,7 +2630,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           }
         } else {
           const isValidForChallenge = new BooleanHolder(true);
-          Challenge.applyChallenges(
+          applyChallenges(
             globalScene.gameMode,
             ChallengeType.STARTER_CHOICE,
             container.species,
@@ -3400,7 +3400,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         }
 
         const isValidForChallenge = new BooleanHolder(true);
-        Challenge.applyChallenges(
+        applyChallenges(
           globalScene.gameMode,
           ChallengeType.STARTER_CHOICE,
           species,
@@ -3775,7 +3775,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       // this does a check to see if the pokemon being added is valid; if so, it will update the isPartyValid boolean
       const isNewPokemonValid = new BooleanHolder(true);
       const species = this.filteredStarterContainers[this.cursor].species;
-      Challenge.applyChallenges(
+      applyChallenges(
         globalScene.gameMode,
         ChallengeType.STARTER_CHOICE,
         species,
@@ -3808,7 +3808,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
        * we change to can AddParty value to true since the user has enough cost to choose this pokemon and this pokemon registered too.
        */
       const isValidForChallenge = new BooleanHolder(true);
-      Challenge.applyChallenges(
+      applyChallenges(
         globalScene.gameMode,
         ChallengeType.STARTER_CHOICE,
         this.allSpecies[s],
@@ -3950,7 +3950,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     for (let s = 0; s < this.starterSpecies.length; s++) {
       const isValidForChallenge = new BooleanHolder(true);
       const species = this.starterSpecies[s];
-      Challenge.applyChallenges(
+      applyChallenges(
         globalScene.gameMode,
         ChallengeType.STARTER_CHOICE,
         species,

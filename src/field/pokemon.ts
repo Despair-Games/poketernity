@@ -169,7 +169,7 @@ import Overrides from "#app/overrides";
 import i18next from "i18next";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { ModifierTier } from "#enums/modifier-tier";
-import { applyChallenges } from "#app/data/challenge";
+import { applyChallenges } from "#app/utils/challenge-utils";
 import { ChallengeType } from "#enums/challenge-type";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";

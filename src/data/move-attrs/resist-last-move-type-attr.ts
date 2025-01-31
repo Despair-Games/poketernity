@@ -5,7 +5,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { toReadableString, NumberHolder } from "#app/utils";
 import i18next from "i18next";
-import { applyChallenges } from "#app/data/challenge";
+import { applyChallenges } from "#app/utils/challenge-utils";
 import { ChallengeType } from "#enums/challenge-type";
 import { type Move } from "#app/data/move";
 import { allMoves } from "#app/data/all-moves";

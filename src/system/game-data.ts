@@ -50,7 +50,7 @@ import type { Device } from "#enums/devices";
 import { GameDataType } from "#enums/game-data-type";
 import { PlayerGender } from "#enums/player-gender";
 import type { Species } from "#enums/species";
-import { applyChallenges } from "#app/data/challenge";
+import { applyChallenges } from "#app/utils/challenge-utils";
 import { ChallengeType } from "#enums/challenge-type";
 import { WeatherType } from "#enums/weather-type";
 import { TerrainType } from "#enums/terrain-type";

@@ -19,7 +19,7 @@ import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-trig
 import { FormChangeItem } from "#enums/form-change-item";
 import { getVariantTint } from "#app/data/variant";
 import { Button } from "#enums/buttons";
-import { applyChallenges } from "#app/data/challenge";
+import { applyChallenges } from "#app/utils/challenge-utils";
 import { ChallengeType } from "#enums/challenge-type";
 import MoveInfoOverlay from "#app/ui/move-info-overlay";
 import i18next from "i18next";
