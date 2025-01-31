@@ -40,7 +40,6 @@ import { MoveEffectTrigger } from "#enums/move-effect-trigger";
 import { MoveTarget } from "#enums/move-target";
 import { Moves } from "#enums/moves";
 import i18next from "i18next";
-import { FaintPhase } from "./faint-phase";
 import { HitCheckPhase } from "./hit-check-phase";
 import { MoveFlags } from "#enums/move-flags";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
@@ -491,9 +490,12 @@ export class MoveEffectPhase extends HitCheckPhase {
     }
 
     if (target.isFainted()) {
-      // set splice index here, so future scene queues happen before FaintedPhase
-      globalScene.setPhaseQueueSplice();
-      globalScene.unshiftPhase(new FaintPhase(target.getBattlerIndex(), isOneHitKo, destinyTag, grudgeTag, user));
+      globalScene.faintBattler(target.getBattlerIndex(), {
+        preventEndure: isOneHitKo,
+        destinyTag,
+        grudgeTag,
+        source: user,
+      });
     }
 
     return result;

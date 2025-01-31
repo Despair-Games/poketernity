@@ -179,7 +179,6 @@ import { Biome } from "#enums/biome";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
-import { FaintPhase } from "#app/phases/faint-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { ObtainStatusEffectPhase } from "#app/phases/obtain-status-effect-phase";
@@ -3478,15 +3477,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     damage = Math.min(damage, this.hp);
     this.hp = this.hp - damage;
     if (this.isFainted() && !ignoreFaintPhase) {
-      /**
-       * When adding the FaintPhase, want to toggle future unshiftPhase() and queueMessage() calls
-       * to appear before the FaintPhase (as FaintPhase will potentially end the encounter and add Phases such as
-       * GameOverPhase, VictoryPhase, etc.. that will interfere with anything else that happens during this MoveEffectPhase)
-       *
-       * Once the MoveEffectPhase is over (and calls it's .end() function, shiftPhase() will reset the PhaseQueueSplice via clearPhaseQueueSplice() )
-       */
-      globalScene.setPhaseQueueSplice();
-      globalScene.unshiftPhase(new FaintPhase(this.getBattlerIndex(), preventEndure));
+      globalScene.faintBattler(this.getBattlerIndex(), { preventEndure });
     }
     return damage;
   }

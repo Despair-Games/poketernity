@@ -180,16 +180,10 @@ import { CallSourceLogger } from "#app/loggers";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { GameOverPhase } from "#app/phases/game-over-phase";
+import { FaintPhase } from "#app/phases/faint-phase";
+import type { DestinyBondTag, GrudgeTag } from "#app/data/battler-tags";
 
-const DEBUG_RNG = false;
-
-const ENEMY_IVS_OVERRIDE_VALIDATED: number[] = (
-  Array.isArray(Overrides.ENEMY_IVS_OVERRIDE)
-    ? Overrides.ENEMY_IVS_OVERRIDE
-    : new Array(6).fill(Overrides.ENEMY_IVS_OVERRIDE)
-).map((iv) => (isNaN(iv) || iv === null || iv > 31 ? -1 : iv));
-
-export const startingWave = Overrides.STARTING_WAVE_OVERRIDE || 1;
+//#region Types
 
 export interface PokeballCounts {
   [pb: string]: number;
@@ -201,6 +195,28 @@ export interface InfoToggle {
   toggleInfo(force?: boolean): void;
   isActive(): boolean;
 }
+
+interface PokemonFaintInit {
+  preventEndure?: boolean;
+  destinyTag?: DestinyBondTag | null;
+  grudgeTag?: GrudgeTag | null;
+  source?: Pokemon;
+}
+
+//#endregion
+//#region Constants
+
+const DEBUG_RNG = false;
+
+const ENEMY_IVS_OVERRIDE_VALIDATED: number[] = (
+  Array.isArray(Overrides.ENEMY_IVS_OVERRIDE)
+    ? Overrides.ENEMY_IVS_OVERRIDE
+    : new Array(6).fill(Overrides.ENEMY_IVS_OVERRIDE)
+).map((iv) => (isNaN(iv) || iv === null || iv > 31 ? -1 : iv));
+
+export const startingWave = Overrides.STARTING_WAVE_OVERRIDE || 1;
+
+//#endregion
 
 export default class BattleScene extends SceneBase {
   public rexUI: UIPlugin;
@@ -3656,5 +3672,25 @@ export default class BattleScene extends SceneBase {
   gameOver(isVictory?: boolean): void {
     if (!isVictory) this.clearPhaseQueue();
     this.pushPhase(new GameOverPhase(isVictory));
+  }
+
+  /**
+   * Unshifts a new {@linkcode FaintPhase} for the given {@linkcode BattlerIndex} to faint.
+   *
+   * @param battlerIndex The {@linkcode BattlerIndex} to faint
+   * @param init Optional {@linkcode PokemonFaintInit} arguments
+   *
+   * **Regarding {@linkcode setPhaseQueueSplice} call:**\
+   * _When adding the FaintPhase, want to toggle future unshiftPhase() and queueMessage() calls
+   * to appear before the FaintPhase (as FaintPhase will potentially end the encounter and add Phases such as
+   * GameOverPhase, VictoryPhase, etc.. that will interfere with anything else that happens during this MoveEffectPhase).
+   * Once the MoveEffectPhase is over (and calls it's .end() function, shiftPhase() will reset the PhaseQueueSplice via clearPhaseQueueSplice() )_
+   */
+  faintBattler(
+    battlerIndex: BattlerIndex,
+    { preventEndure = false, destinyTag = null, grudgeTag = null, source }: PokemonFaintInit,
+  ): void {
+    this.setPhaseQueueSplice();
+    this.unshiftPhase(new FaintPhase(battlerIndex, preventEndure, destinyTag, grudgeTag, source));
   }
 }
