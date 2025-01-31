@@ -8,6 +8,7 @@ import { FieryFalloutEncounter } from "#app/data/mystery-encounters/encounters/f
 import { Gender } from "#enums/gender";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import * as BattleAnims from "#app/data/battle-anims";
+import * as InitMoveAnim from "#app/data/init-move-anim";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
   runMysteryEncounterToEnd,
@@ -102,7 +103,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
     initSceneWithoutEncounterPhase(scene, defaultParty);
     scene.currentBattle.mysteryEncounter = FieryFalloutEncounter;
     const weatherSpy = vi.spyOn(scene.arena, "trySetWeather").mockReturnValue(true);
-    const moveInitSpy = vi.spyOn(BattleAnims, "initMoveAnim");
+    const moveInitSpy = vi.spyOn(InitMoveAnim, "initMoveAnim");
     const moveLoadSpy = vi.spyOn(BattleAnims, "loadMoveAnimAssets");
 
     const { onInit } = FieryFalloutEncounter;

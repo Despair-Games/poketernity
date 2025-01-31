@@ -1,4 +1,5 @@
-import { initMoveAnim, loadMoveAnimAssets } from "#app/data/battle-anims";
+import { loadMoveAnimAssets } from "#app/data/battle-anims";
+import { initMoveAnim } from "#app/data/init-move-anim";
 import { Phase } from "#app/phase";
 import type { Moves } from "#enums/moves";
 
