@@ -10,6 +10,8 @@ import { type AnimConfig, type AnimFrame } from "#app/data/anim-config";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimFocus } from "#enums/anim-focus";
 
+//#region Types
+
 interface GraphicFrameData {
   x: number;
   y: number;
@@ -18,63 +20,20 @@ interface GraphicFrameData {
   angle: number;
 }
 
+interface SpriteCache {
+  [key: number]: Phaser.GameObjects.Sprite[];
+}
+
+//#endregion
+//#region Constants
+
 const userFocusX = 106;
 const userFocusY = 148 - 32;
 const targetFocusX = 234;
 const targetFocusY = 84 - 32;
 
-function transformPoint(
-  x1: number,
-  y1: number,
-  x2: number,
-  y2: number,
-  x3: number,
-  y3: number,
-  x4: number,
-  y4: number,
-  px: number,
-  py: number,
-): [x: number, y: number] {
-  const yIntersect = yAxisIntersect(x1, y1, x2, y2, px, py);
-  return repositionY(x3, y3, x4, y4, yIntersect[0], yIntersect[1]);
-}
-
-function yAxisIntersect(
-  x1: number,
-  y1: number,
-  x2: number,
-  y2: number,
-  px: number,
-  py: number,
-): [x: number, y: number] {
-  const dx = x2 - x1;
-  const dy = y2 - y1;
-  const x = dx === 0 ? 0 : (px - x1) / dx;
-  const y = dy === 0 ? 0 : (py - y1) / dy;
-  return [x, y];
-}
-
-function repositionY(x1: number, y1: number, x2: number, y2: number, tx: number, ty: number): [x: number, y: number] {
-  const dx = x2 - x1;
-  const dy = y2 - y1;
-  const x = x1 + tx * dx;
-  const y = y1 + ty * dy;
-  return [x, y];
-}
-
-function isReversed(src1: number, src2: number, dst1: number, dst2: number) {
-  if (src1 === src2) {
-    return false;
-  }
-  if (src1 < src2) {
-    return dst1 > dst2;
-  }
-  return dst1 < dst2;
-}
-
-interface SpriteCache {
-  [key: number]: Phaser.GameObjects.Sprite[];
-}
+//#endregion
+//#region Export
 
 export abstract class BattleAnim {
   public user: Pokemon | null;
@@ -660,3 +619,57 @@ export abstract class BattleAnim {
     });
   }
 }
+
+//#endregion
+//#region Helpers
+
+function transformPoint(
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  x3: number,
+  y3: number,
+  x4: number,
+  y4: number,
+  px: number,
+  py: number,
+): [x: number, y: number] {
+  const yIntersect = yAxisIntersect(x1, y1, x2, y2, px, py);
+  return repositionY(x3, y3, x4, y4, yIntersect[0], yIntersect[1]);
+}
+
+function yAxisIntersect(
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  px: number,
+  py: number,
+): [x: number, y: number] {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const x = dx === 0 ? 0 : (px - x1) / dx;
+  const y = dy === 0 ? 0 : (py - y1) / dy;
+  return [x, y];
+}
+
+function repositionY(x1: number, y1: number, x2: number, y2: number, tx: number, ty: number): [x: number, y: number] {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const x = x1 + tx * dx;
+  const y = y1 + ty * dy;
+  return [x, y];
+}
+
+function isReversed(src1: number, src2: number, dst1: number, dst2: number) {
+  if (src1 === src2) {
+    return false;
+  }
+  if (src1 < src2) {
+    return dst1 > dst2;
+  }
+  return dst1 < dst2;
+}
+
+//#endregion
