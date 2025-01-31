@@ -9,10 +9,8 @@ import {
   MYSTERY_ENCOUNTER_WEIGHT_INCREMENT_ON_SPAWN_MISS,
 } from "#app/constants";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import { type PlayerPokemon, type Pokemon, PokemonSummonData } from "#app/field/pokemon";
 import type { AiType } from "#enums/ai-type";
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonSummonData } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { FieldPosition } from "#enums/field-position";
 import type { CustomModifierSettings, ModifierType } from "#app/modifier/modifier-type";
