@@ -183,7 +183,7 @@ module.exports = {
     },
   ],
   options: {
-    exclude: ["src/plugins/vite/*"],
+    exclude: ["src/plugins/vite/*", "src/vite.env.d.ts"],
     /* Which modules not to follow further when encountered */
     doNotFollow: {
       /* path: an array of regular expressions in strings to match against */
@@ -223,7 +223,7 @@ module.exports = {
        true: also detect dependencies that only exist before typescript-to-javascript compilation
        "specify": for each dependency identify whether it only exists before compilation or also after
      */
-    // tsPreCompilationDeps: false,
+    tsPreCompilationDeps: true,
 
     /* list of extensions to scan that aren't javascript or compile-to-javascript.
        Empty by default. Only put extensions in here that you want to take into
