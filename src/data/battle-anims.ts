@@ -432,24 +432,6 @@ export const chargeAnims = new Map<ChargeAnim, AnimConfig | [AnimConfig, AnimCon
 export const commonAnims = new Map<CommonAnim, AnimConfig>();
 export const encounterAnims = new Map<EncounterAnim, AnimConfig>();
 
-export function initCommonAnims(): Promise<void> {
-  return new Promise((resolve) => {
-    const commonAnimNames = getEnumKeys(CommonAnim);
-    const commonAnimIds = getEnumValues(CommonAnim);
-    const commonAnimFetches: Promise<Map<CommonAnim, AnimConfig>>[] = [];
-    for (let ca = 0; ca < commonAnimIds.length; ca++) {
-      const commonAnimId = commonAnimIds[ca];
-      commonAnimFetches.push(
-        globalScene
-          .cachedFetch(`./battle-anims/common-${commonAnimNames[ca].toLowerCase().replace(/\_/g, "-")}.json`)
-          .then((response) => response.json())
-          .then((cas) => commonAnims.set(commonAnimId, new AnimConfig(cas))),
-      );
-    }
-    Promise.allSettled(commonAnimFetches).then(() => resolve());
-  });
-}
-
 /**
  * Fetches animation configs to be used in a Mystery Encounter
  * @param encounterAnim one or more animations to fetch
