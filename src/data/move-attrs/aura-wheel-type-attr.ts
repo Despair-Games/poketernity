@@ -1,5 +1,5 @@
 import { Species } from "#enums/species";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
@@ -21,10 +21,10 @@ export class AuraWheelTypeAttr extends VariableMoveTypeAttr {
 
       switch (form) {
         case 1: // Hangry Mode
-          moveType.value = Type.DARK;
+          moveType.value = ElementType.DARK;
           break;
         default: // Full Belly Mode
-          moveType.value = Type.ELECTRIC;
+          moveType.value = ElementType.ELECTRIC;
           break;
       }
       return true;

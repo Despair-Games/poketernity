@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
@@ -83,7 +83,7 @@ describe("Moves - Tar Shot", () => {
   });
 
   it("does not double the effectiveness of Fire-type moves against a Pokémon that is Terastallized", async () => {
-    game.override.enemyHeldItems([{ name: "TERA_SHARD", type: Type.GRASS }]).enemySpecies(Species.SPRIGATITO);
+    game.override.enemyHeldItems([{ name: "TERA_SHARD", type: ElementType.GRASS }]).enemySpecies(Species.SPRIGATITO);
     await game.classicMode.startBattle([Species.PIKACHU]);
 
     const enemy = game.scene.getEnemyPokemon()!;
@@ -119,7 +119,7 @@ describe("Moves - Tar Shot", () => {
 
     await game.toNextTurn();
 
-    game.override.enemyHeldItems([{ name: "TERA_SHARD", type: Type.GRASS }]);
+    game.override.enemyHeldItems([{ name: "TERA_SHARD", type: ElementType.GRASS }]);
 
     game.move.select(Moves.FIRE_PUNCH);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);

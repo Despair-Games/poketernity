@@ -3,7 +3,7 @@ import { MoveResult } from "#enums/move-result";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -302,7 +302,7 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should not strike the user on the second hit if the user's ally faints to the first", async () => {
-    game.override.startingHeldItems([{ name: "ATTACK_TYPE_BOOSTER", type: Type.DRAGON, count: 99 }]);
+    game.override.startingHeldItems([{ name: "ATTACK_TYPE_BOOSTER", type: ElementType.DRAGON, count: 99 }]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 

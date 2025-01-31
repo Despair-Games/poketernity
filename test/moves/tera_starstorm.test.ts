@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
@@ -30,7 +30,7 @@ describe("Moves - Tera Starstorm", () => {
       .enemyMoveset(Moves.SPLASH)
       .enemyLevel(30)
       .enemySpecies(Species.MAGIKARP)
-      .startingHeldItems([{ name: "TERA_SHARD", type: Type.FIRE }]);
+      .startingHeldItems([{ name: "TERA_SHARD", type: ElementType.FIRE }]);
   });
 
   it("changes type to Stellar when used by Terapagos in its Stellar Form", async () => {
@@ -45,7 +45,7 @@ describe("Moves - Tera Starstorm", () => {
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(terapagos.isTerastallized()).toBe(true);
-    expect(terapagos.getMoveType).toHaveReturnedWith(Type.STELLAR);
+    expect(terapagos.getMoveType).toHaveReturnedWith(ElementType.STELLAR);
   });
 
   it("targets both opponents in a double battle when used by Terapagos in its Stellar Form", async () => {
@@ -92,7 +92,7 @@ describe("Moves - Tera Starstorm", () => {
     expect(fusionedMon.isFusion()).toBe(true);
     expect(fusionedMon.isTerastallized()).toBe(true);
     // Move effects should be applied
-    expect(fusionedMon.getMoveType).toHaveReturnedWith(Type.STELLAR);
+    expect(fusionedMon.getMoveType).toHaveReturnedWith(ElementType.STELLAR);
     expect(game.scene.getEnemyField().every((pokemon) => pokemon.isFullHp())).toBe(false);
   });
 });

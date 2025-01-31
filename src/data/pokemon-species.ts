@@ -9,14 +9,14 @@ import type { GrowthRate } from "#enums/growth-rates";
 import type { EvolutionLevel } from "#app/data/balance/pokemon-evolutions";
 import { pokemonEvolutions, pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import { SpeciesWildEvolutionDelay } from "#enums/species-wild-evolution-delay";
-import type { Type } from "#enums/type";
+import type { ElementType } from "#enums/element-type";
 import { variantData } from "#app/data/variant";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import type { PokemonSpeciesFilter } from "#app/@types/PokemonSpeciesFilter";
 import { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
 import type { PokemonForm } from "#app/data/pokemon-form";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import type { PokemonSpeciesFilter } from "#app/@types/PokemonSpeciesFilter";
 
 export default class PokemonSpecies extends PokemonSpeciesForm implements Localizable {
   public name: string;
@@ -32,8 +32,8 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     id: Species,
     generation: number,
     group: SpeciesGroups,
-    type1: Type,
-    type2: Type | null,
+    type1: ElementType,
+    type2: ElementType | null,
     height: number,
     weight: number,
     ability1: Abilities,

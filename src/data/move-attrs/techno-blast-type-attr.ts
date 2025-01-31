@@ -1,5 +1,5 @@
 import { Species } from "#enums/species";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
@@ -17,19 +17,19 @@ export class TechnoBlastTypeAttr extends VariableMoveTypeAttr {
 
       switch (form) {
         case 1: // Shock Drive
-          moveType.value = Type.ELECTRIC;
+          moveType.value = ElementType.ELECTRIC;
           break;
         case 2: // Burn Drive
-          moveType.value = Type.FIRE;
+          moveType.value = ElementType.FIRE;
           break;
         case 3: // Chill Drive
-          moveType.value = Type.ICE;
+          moveType.value = ElementType.ICE;
           break;
         case 4: // Douse Drive
-          moveType.value = Type.WATER;
+          moveType.value = ElementType.WATER;
           break;
         default:
-          moveType.value = Type.NORMAL;
+          moveType.value = ElementType.NORMAL;
           break;
       }
       return true;

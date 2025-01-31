@@ -1,12 +1,12 @@
 import { allMoves } from "#app/data/all-moves";
 import type { Moves } from "#enums/moves";
-import type { Type } from "#enums/type";
+import type { ElementType } from "#enums/element-type";
 import { RedirectMoveAbAttr } from "./redirect-move-ab-attr";
 
 export class RedirectTypeMoveAbAttr extends RedirectMoveAbAttr {
-  public readonly type: Type;
+  public readonly type: ElementType;
 
-  constructor(type: Type) {
+  constructor(type: ElementType) {
     super();
     this.type = type;
   }

@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
@@ -50,7 +50,7 @@ describe("Moves - Plasma Fists", () => {
     await game.phaseInterceptor.to("BerryPhase", false);
 
     field.forEach((p) => {
-      expect(p.getMoveType).toHaveLastReturnedWith(Type.ELECTRIC);
+      expect(p.getMoveType).toHaveLastReturnedWith(ElementType.ELECTRIC);
       expect(p.hp).toBeLessThan(p.getMaxHp());
     });
   });
@@ -69,7 +69,7 @@ describe("Moves - Plasma Fists", () => {
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    expect(enemyPokemon.getMoveType).toHaveLastReturnedWith(Type.FAIRY);
+    expect(enemyPokemon.getMoveType).toHaveLastReturnedWith(ElementType.FAIRY);
     expect(playerPokemon.hp).toBeLessThan(playerPokemon.getMaxHp());
   });
 
@@ -87,7 +87,7 @@ describe("Moves - Plasma Fists", () => {
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    expect(enemyPokemon.getMoveType).toHaveLastReturnedWith(Type.ELECTRIC);
+    expect(enemyPokemon.getMoveType).toHaveLastReturnedWith(ElementType.ELECTRIC);
     expect(playerPokemon.hp).toBeLessThan(playerPokemon.getMaxHp());
   });
 });
