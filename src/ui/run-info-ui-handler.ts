@@ -733,7 +733,7 @@ export default class RunInfoUiHandler extends UiHandler {
 
   /**
    * Parses and displays the run's player party.
-   * Default Information: Icon, Level, Nature, Ability, Passive, Shiny Status, Fusion Status, Stats, and MoveId
+   * Default Information: Icon, Level, Nature, Ability, Passive, Shiny Status, Fusion Status, Stats, and Moves.
    * B-Side Information: Icon + Held Items (Can be displayed to the user through pressing the abilityButton)
    */
   private parsePartyInfo(): void {

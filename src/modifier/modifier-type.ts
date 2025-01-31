@@ -2566,7 +2566,7 @@ const modifierPool: ModifierPool = {
           // Moves that take advantage of being able to give the target a status orb
           // TODO: Take moves from comment they are implemented
           const hasItemMoves = [
-            /* MoveIdTRICK, MoveIdFLING, MoveIdSWITCHEROO */
+            /* Moves.TRICK, Moves.FLING, Moves.SWITCHEROO */
           ].some((m) => moveset.includes(m));
           // Abilities that take advantage of obtaining the actual status effect
           const hasRelevantAbilities = [
@@ -2608,7 +2608,7 @@ const modifierPool: ModifierPool = {
           // Moves that take advantage of being able to give the target a status orb
           // TODO: Take moves from comment they are implemented
           const hasItemMoves = [
-            /* MoveIdTRICK, MoveIdFLING, MoveIdSWITCHEROO */
+            /* Moves.TRICK, Moves.FLING, Moves.SWITCHEROO */
           ].some((m) => moveset.includes(m));
           // Abilities that take advantage of obtaining the actual status effect
           const hasRelevantAbilities = [

@@ -609,7 +609,7 @@ function parseEggMoves(content: string): void {
     }
 
     if (eggMoves.find((m) => m !== MoveId.NONE)) {
-      output += `[Species.${Species[species]}]: [ ${eggMoves.map((m) => `MoveId.${MoveId[m]}`).join(", ")} ],\n`;
+      output += `[Species.${Species[species]}]: [ ${eggMoves.map((m) => `Moves.${MoveId[m]}`).join(", ")} ],\n`;
     }
   });
 
