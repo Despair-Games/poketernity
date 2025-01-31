@@ -228,6 +228,7 @@ import {
   TrappedBattlerTagTypes,
 } from "#app/utils/battler-tag-type-utils";
 import { PartyFilterNonFainted } from "#app/utils/party-utils";
+import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -5979,26 +5980,6 @@ export interface AttackMoveResult {
   isCritical: boolean;
   sourceId: number;
   sourceBattlerIndex: BattlerIndex;
-}
-
-export class PokemonSummonData {
-  /** [Atk, Def, SpAtk, SpDef, Spd, Acc, Eva] */
-  public statStages: number[] = [0, 0, 0, 0, 0, 0, 0];
-  public moveQueue: QueuedMove[] = [];
-  public tags: BattlerTag[] = [];
-  public abilitySuppressed: boolean = false;
-  public abilitiesApplied: Abilities[] = [];
-  public speciesForm: PokemonSpeciesForm | null;
-  public fusionSpeciesForm: PokemonSpeciesForm;
-  public ability: Abilities = Abilities.NONE;
-  public passiveAbility: Abilities = Abilities.NONE;
-  public gender: Gender;
-  public fusionGender: Gender;
-  public stats: number[] = [0, 0, 0, 0, 0, 0];
-  public moveset: PokemonMove[];
-  // If not initialized this value will not be populated from save data.
-  public types: ElementType[] = [];
-  public addedType: ElementType | null = null;
 }
 
 /** Container for Pokemon-specific data that resets at the end of each wave. */
