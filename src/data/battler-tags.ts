@@ -1268,7 +1268,9 @@ export class OctolockTag extends TrappedTag {
     const shouldLapse = lapseType !== BattlerTagLapseType.CUSTOM || super.lapse(pokemon, lapseType);
 
     if (shouldLapse) {
-      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), false, [Stat.DEF, Stat.SPDEF], -1));
+      globalScene.unshiftPhase(
+        new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.DEF, Stat.SPDEF], -1),
+      );
       return true;
     }
 
@@ -1677,7 +1679,7 @@ export class ContactStatStageChangeProtectedTag extends DamageProtectedTag {
     }
 
     if (!simulated && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, null)) {
-      globalScene.unshiftPhase(new StatStageChangePhase(attacker.getBattlerIndex(), false, [this.stat], this.levels));
+      globalScene.unshiftPhase(new StatStageChangePhase(attacker.getBattlerIndex(), pokemon, [this.stat], this.levels));
     }
     return true;
   }
@@ -2523,7 +2525,7 @@ export class CommandedTag extends BattlerTag {
     globalScene.unshiftPhase(
       new StatStageChangePhase(
         pokemon.getBattlerIndex(),
-        true,
+        pokemon,
         [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD],
         2,
       ),
@@ -2604,7 +2606,7 @@ export class StockpilingTag extends BattlerTag {
 
       // Attempt to increase DEF and SPDEF by one stage, keeping track of successful changes.
       globalScene.unshiftPhase(
-        new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPDEF, Stat.DEF], 1, {
+        new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.SPDEF, Stat.DEF], 1, {
           onChange: this.onStatStagesChanged,
         }),
       );
@@ -2624,11 +2626,13 @@ export class StockpilingTag extends BattlerTag {
     const spDefChange = this.statChangeCounts[Stat.SPDEF];
 
     if (defChange) {
-      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.DEF], -defChange));
+      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.DEF], -defChange));
     }
 
     if (spDefChange) {
-      globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPDEF], -spDefChange));
+      globalScene.unshiftPhase(
+        new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.SPDEF], -spDefChange),
+      );
     }
   }
 }
@@ -2667,7 +2671,7 @@ export class GulpMissileTag extends BattlerTag {
       }
 
       if (this.tagType === BattlerTagType.GULP_MISSILE_ARROKUDA) {
-        globalScene.unshiftPhase(new StatStageChangePhase(attacker.getBattlerIndex(), false, [Stat.DEF], -1));
+        globalScene.unshiftPhase(new StatStageChangePhase(attacker.getBattlerIndex(), pokemon, [Stat.DEF], -1));
       } else {
         attacker.trySetStatus(StatusEffect.PARALYSIS, true, pokemon);
       }
@@ -3257,7 +3261,7 @@ export class SyrupBombTag extends BattlerTag {
     globalScene.queueMessage(
       i18next.t("battlerTags:syrupBombLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
-    globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPD], -1));
+    globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.SPD], -1));
     return --this.turnCount > 0;
   }
 }

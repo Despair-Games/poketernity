@@ -178,7 +178,7 @@ export const DancingLessonsEncounter: MysteryEncounter = MysteryEncounterBuilder
             globalScene.unshiftPhase(
               new StatStageChangePhase(
                 pokemon.getBattlerIndex(),
-                true,
+                pokemon,
                 [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF],
                 1,
               ),
