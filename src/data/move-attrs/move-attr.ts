@@ -2,6 +2,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import type { MoveCondition, MoveConditionFunc } from "../move-conditions";
+import type { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
 
 /**
  * Base class defining all {@linkcode Move} Attributes
@@ -66,5 +67,9 @@ export abstract class MoveAttr {
    */
   getTargetBenefitScore(_user: Pokemon, _target: Pokemon, _move: Move): number {
     return 0;
+  }
+
+  isCopyMoveAttr(): this is CopyMoveAttr {
+    return false;
   }
 }

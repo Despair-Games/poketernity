@@ -36,4 +36,8 @@ export class CopyMoveAttr extends OverrideMoveEffectAttr {
   override getCondition(): MoveConditionFunc {
     return lastMoveCopiableCondition;
   }
+
+  override isCopyMoveAttr(): this is this {
+    return true;
+  }
 }

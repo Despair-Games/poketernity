@@ -1,14 +1,13 @@
+import { PreAttackAbAttr } from "#app/data/ab-attrs/pre-attack-ab-attr";
 import type { Move } from "#app/data/move";
-import { CopyMoveAttr } from "../move-attrs/copy-move-attr";
-import { NaturePowerAttr } from "../move-attrs/nature-power-attr";
-import { RandomMoveAttr } from "../move-attrs/random-move-attr";
-import { RandomMovesetMoveAttr } from "../move-attrs/random-moveset-move-attr";
+import { NaturePowerAttr } from "#app/data/move-attrs/nature-power-attr";
+import { RandomMoveAttr } from "#app/data/move-attrs/random-move-attr";
+import { RandomMovesetMoveAttr } from "#app/data/move-attrs/random-moveset-move-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { Moves } from "#enums/moves";
 import { ElementType } from "#enums/element-type";
+import { Moves } from "#enums/moves";
 import i18next from "i18next";
-import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 
 /**
  * Ability attribute for changing a pokemon's type before using a move
@@ -30,7 +29,7 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
           attr instanceof RandomMovesetMoveAttr
           || attr instanceof RandomMoveAttr
           || attr instanceof NaturePowerAttr
-          || attr instanceof CopyMoveAttr,
+          || attr.isCopyMoveAttr(),
       )
     ) {
       const moveType = pokemon.getMoveType(move);
