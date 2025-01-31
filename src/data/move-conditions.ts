@@ -60,9 +60,9 @@ export class UpperHandCondition extends MoveCondition {
         !!targetCommand
         && targetCommand.command === BattleCommand.FIGHT
         && !target.turnData.acted
-        && !!targetCommand.move?.move
-        && allMoves[targetCommand.move.move].category !== MoveCategory.STATUS
-        && allMoves[targetCommand.move.move].getPriority(target) > 0
+        && !!targetCommand.move?.moveId
+        && allMoves[targetCommand.move.moveId].category !== MoveCategory.STATUS
+        && allMoves[targetCommand.move.moveId].getPriority(target) > 0
       );
     });
   }
@@ -85,11 +85,11 @@ export const targetMoveCopiableCondition: MoveConditionFunc = (_user, target, _m
 
   const copiableMove = targetMoves[0];
 
-  if (!copiableMove.move) {
+  if (!copiableMove.moveId) {
     return false;
   }
 
-  if (allMoves[copiableMove.move].isChargingMove() && copiableMove.result === MoveResult.OTHER) {
+  if (allMoves[copiableMove.moveId].isChargingMove() && copiableMove.result === MoveResult.OTHER) {
     return false;
   }
 
@@ -135,7 +135,7 @@ export const failIfGhostTypeCondition: MoveConditionFunc = (_user: Pokemon, targ
   !target.isOfType(ElementType.GHOST);
 
 export const lastMoveCopiableCondition: MoveConditionFunc = (_user, _target, _move) => {
-  const copiableMove = globalScene.currentBattle.lastMove;
+  const copiableMove = globalScene.currentBattle.lastMoveId;
 
   if (!copiableMove) {
     return false;

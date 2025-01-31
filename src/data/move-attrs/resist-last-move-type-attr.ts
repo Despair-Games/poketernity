@@ -33,7 +33,7 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
       return false;
     }
 
-    const moveData = allMoves[targetMove.move];
+    const moveData = allMoves[targetMove.moveId];
     if (moveData.type === ElementType.STELLAR || moveData.type === ElementType.UNKNOWN) {
       return false;
     }
