@@ -14,7 +14,7 @@ import { ConsecutiveUseDoublePowerAttr } from "./move-attrs/consecutive-use-doub
 import { HealOnAllyAttr } from "./move-attrs/heal-on-ally-attr";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveCategory } from "#enums/move-category";
-import { SpeciesFormChangeManualTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeManualTrigger } from "./species-form-change-triggers/species-form-change-manual-trigger";
 import { getStatusEffectHealText } from "#app/data/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import { ElementType } from "#enums/element-type";

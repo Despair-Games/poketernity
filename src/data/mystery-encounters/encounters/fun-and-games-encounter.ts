@@ -25,7 +25,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { PlayerGender } from "#enums/player-gender";
 import { getPokeballAtlasKey, getPokeballTintColor } from "#app/data/pokeball";
 import { ShinySparklePhase } from "#app/phases/shiny-sparkle-phase";
-import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
 import { PostSummonPhase } from "#app/phases/post-summon-phase";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { Nature } from "#enums/nature";

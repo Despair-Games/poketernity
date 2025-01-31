@@ -98,12 +98,11 @@ import type UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
 import { addUiThemeOverrides, updateWindowType } from "#app/ui/ui-theme";
 import type PokemonData from "#app/system/pokemon-data";
 import { Nature } from "#enums/nature";
-import type { SpeciesFormChange, SpeciesFormChangeTrigger } from "#app/data/pokemon-forms";
-import {
-  pokemonFormChanges,
-  SpeciesFormChangeManualTrigger,
-  SpeciesFormChangeTimeOfDayTrigger,
-} from "#app/data/pokemon-forms";
+import type { SpeciesFormChange } from "#app/data/pokemon-forms";
+import type { SpeciesFormChangeTrigger } from "./data/species-form-change-triggers/species-form-change-trigger";
+import { pokemonFormChanges } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeTimeOfDayTrigger } from "./data/species-form-change-triggers/species-form-change-time-of-day-trigger";
+import { SpeciesFormChangeManualTrigger } from "./data/species-form-change-triggers/species-form-change-manual-trigger";
 import { FormChangeItem } from "#enums/form-change-item";
 import { FormChangePhase } from "#app/phases/form-change-phase";
 import { getTypeRgb } from "#app/data/type";

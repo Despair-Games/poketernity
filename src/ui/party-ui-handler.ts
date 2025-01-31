@@ -15,7 +15,7 @@ import PokemonIconAnimHandler from "#app/ui/pokemon-icon-anim-handler";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { addWindow } from "#app/ui/ui-theme";
-import { SpeciesFormChangeItemTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
 import { FormChangeItem } from "#enums/form-change-item";
 import { getVariantTint } from "#app/data/variant";
 import { Button } from "#enums/buttons";

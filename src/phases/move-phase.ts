@@ -17,7 +17,7 @@ import { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
 import { HealStatusEffectAttr } from "#app/data/move-attrs/heal-status-effect-attr";
 import { PreMoveMessageAttr } from "#app/data/move-attrs/pre-move-message-attr";
 import { frenzyMissFunc } from "#app/data/move-utils";
-import { SpeciesFormChangePreMoveTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangePreMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-pre-move-trigger";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/data/status-effect";
 import { getTerrainBlockMessage } from "#app/data/terrain";
 import { MoveUsedEvent } from "#app/events/battle-scene";

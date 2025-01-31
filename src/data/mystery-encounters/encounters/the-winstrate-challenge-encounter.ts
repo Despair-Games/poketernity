@@ -23,7 +23,7 @@ import { Nature } from "#enums/nature";
 import { ElementType } from "#enums/element-type";
 import { BerryType } from "#enums/berry-type";
 import { Stat } from "#enums/stat";
-import { SpeciesFormChangeManualTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { showEncounterDialogue, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";

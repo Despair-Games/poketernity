@@ -159,12 +159,10 @@ import { DexAttr } from "#app/data/dex-attributes";
 import { QuantizerCelebi, argbFromRgba, rgbaFromArgb } from "@material/material-color-utilities";
 import { getNatureStatMultiplier } from "#app/data/nature";
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";
-import {
-  SpeciesFormChangeActiveTrigger,
-  SpeciesFormChangeMoveLearnedTrigger,
-  SpeciesFormChangePostMoveTrigger,
-  SpeciesFormChangeStatusEffectTrigger,
-} from "#app/data/pokemon-forms";
+import { SpeciesFormChangePostMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-post-move-trigger";
+import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/species-form-change-triggers/species-form-change-move-learned-trigger";
+import { SpeciesFormChangeStatusEffectTrigger } from "#app/data/species-form-change-triggers/species-form-change-status-effect-trigger";
+import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
 import { TerrainType } from "#enums/terrain-type";
 import type { TrainerSlot } from "#enums/trainer-slot";
 import Overrides from "#app/overrides";

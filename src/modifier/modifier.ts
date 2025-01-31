@@ -3,11 +3,8 @@ import { getBerryEffectFunc, getBerryPredicate } from "#app/data/berry";
 import { getLevelTotalExp } from "#app/data/exp";
 import { allMoves } from "#app/data/all-moves";
 import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
-import {
-  SpeciesFormChangeItemTrigger,
-  SpeciesFormChangeLapseTeraTrigger,
-  SpeciesFormChangeTeraTrigger,
-} from "#app/data/pokemon-forms";
+import { SpeciesFormChangeLapseTeraTrigger, SpeciesFormChangeTeraTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
 import { type FormChangeItem } from "#enums/form-change-item";
 import { type Pokemon, type PlayerPokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";

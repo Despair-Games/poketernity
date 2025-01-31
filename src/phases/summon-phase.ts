@@ -1,6 +1,6 @@
 import { BattleType } from "#enums/battle-type";
 import { getPokeballAtlasKey, getPokeballTintColor } from "#app/data/pokeball";
-import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { PlayerGender } from "#enums/player-gender";
 import { type Pokemon } from "#app/field/pokemon";

@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/all-moves";
 import { initMoveAnim, loadMoveAnimAssets } from "#app/data/battle-anims";
 import type { Move } from "#app/data/move";
-import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/species-form-change-triggers/species-form-change-move-learned-trigger";
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";

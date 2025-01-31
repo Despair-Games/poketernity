@@ -2,7 +2,7 @@ import { PreSwitchOutAbAttr } from "#app/data/ab-attrs/pre-switch-out-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { type SubstituteTag } from "#app/data/battler-tags";
 import { getPokeballTintColor } from "#app/data/pokeball";
-import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

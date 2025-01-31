@@ -17,7 +17,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import { MultiHitAttr } from "#app/data/move-attrs/multi-hit-attr";
 import { NoEffectAttr } from "#app/data/move-attrs/no-effect-attr";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
-import { SpeciesFormChangePostMoveTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangePostMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-post-move-trigger";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import type { DamageResult, Pokemon, TurnMove } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
