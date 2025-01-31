@@ -1,6 +1,6 @@
 import type { AbAttr } from "#app/data/ab-attrs/ab-attr";
 import type { AbilityFilterOptions } from "#app/data/ability-filter-options";
-import { queueShowAbility } from "#app/data/ability-utils";
+import { queueShowAbility } from "#app/utils/ability-utils";
 import { globalScene } from "#app/global-scene";
 import type { AbstractConstructor } from "#app/utils";
 
