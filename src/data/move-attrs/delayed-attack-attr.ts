@@ -6,7 +6,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { MoveAnimPhase } from "#app/phases/move-anim-phase";
 import type { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
-import { MoveChargeAnim } from "#app/data/battle-anims";
+import { MoveChargeAnim } from "../battle-anims/move-charge-anim";
 import { type ChargeAnim } from "#enums/charge-anim";
 import type { Move } from "#app/data/move";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";

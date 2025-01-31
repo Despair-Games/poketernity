@@ -3,21 +3,19 @@ import { allMoves } from "#app/data/all-moves";
 import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import { getFrameMs, getEnumValues, isNullOrUndefined } from "#app/utils";
-import { BattlerIndex } from "#enums/battler-index";
+import { type BattlerIndex } from "#enums/battler-index";
 import { type Moves } from "#enums/moves";
 import { type SubstituteTag } from "#app/data/battler-tags";
 import Phaser from "phaser";
 import { encounterAnims, type EncounterAnim } from "#enums/encounter-anims";
 import { settings } from "#app/system/settings/settings-manager";
 import { AnimFrameTarget } from "#enums/anim-frame-target";
-import { type ChargeAnim } from "#enums/charge-anim";
 import { type CommonAnim } from "#enums/common-anim";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { AnimConfig, type AnimFrame } from "#app/data/anim-config";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimFocus } from "#enums/anim-focus";
 import { moveAnims } from "#app/data/move-anims";
-import { chargeAnims } from "#app/data/charge-anims";
 import { commonAnims } from "#app/data/common-anims";
 
 interface GraphicFrameData {
@@ -714,29 +712,6 @@ export class MoveAnim extends BattleAnim {
 
   protected override isHideTarget(): boolean {
     return allMoves[this.move].hasFlag(MoveFlags.HIDE_TARGET);
-  }
-}
-
-export class MoveChargeAnim extends MoveAnim {
-  private chargeAnim: ChargeAnim;
-
-  /**
-   * **Note:** The default for {@linkcode targetIndex} being {@linkcode BattlerIndex.PLAYER} is due to `MoveChargeAnim` originally not supporting a target argument.
-   */
-  constructor(chargeAnim: ChargeAnim, move: Moves, user: Pokemon, targetIndex: BattlerIndex = BattlerIndex.PLAYER) {
-    super(move, user, targetIndex);
-
-    this.chargeAnim = chargeAnim;
-  }
-
-  override isOppAnim(): boolean {
-    return !this.user?.isPlayer() && Array.isArray(chargeAnims.get(this.chargeAnim));
-  }
-
-  override getAnim(): AnimConfig {
-    return chargeAnims.get(this.chargeAnim) instanceof AnimConfig
-      ? (chargeAnims.get(this.chargeAnim) as AnimConfig)
-      : (chargeAnims.get(this.chargeAnim)?.[this.user?.isPlayer() ? 0 : 1] as AnimConfig);
   }
 }
 
