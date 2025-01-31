@@ -18,8 +18,6 @@ export class MoveEffectChanceMultiplierAbAttr extends AbAttr {
   }
   /**
    * @param args [0]: {@linkcode NumberHolder} Move additional effect chance. Has to be higher than or equal to 0.
-   *             [1]: {@linkcode MoveId} Move used by the ability user.
-   *             [4]: Whether to show the ability flyout or not
    */
   override apply(
     _pokemon: Pokemon,
