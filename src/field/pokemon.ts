@@ -120,7 +120,7 @@ import { WeatherType } from "#enums/weather-type";
 import { NoCritTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { Ability } from "#app/data/ability";
-import { getAbApplyFunc } from "#app/data/ability";
+import { getAbApplyFunc } from "#app/data/apply-ab-attrs";
 import { allAbilities } from "#app/data/all-abilities";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { IgnoreTypeImmunityAbAttr } from "#app/data/ab-attrs/ignore-type-immunity-ab-attr";

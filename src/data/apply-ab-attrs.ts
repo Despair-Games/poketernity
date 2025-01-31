@@ -3,6 +3,9 @@ import type { AbilityFilterOptions } from "#app/data/ability-filter-options";
 import { queueShowAbility } from "#app/utils/ability-utils";
 import { globalScene } from "#app/global-scene";
 import type { AbstractConstructor } from "#app/utils";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
+
+//#region Exports
 
 export function applyAbAttrs<TAttr extends AbAttr>(
   attrType: AbstractConstructor<TAttr>,
@@ -10,6 +13,31 @@ export function applyAbAttrs<TAttr extends AbAttr>(
 ): string[] {
   return applyAbAttrsInternal({ canApplyOnly: true }, attrType, ...params);
 }
+
+/**
+ * Obtains the function to apply abilities corresponding to the given mode
+ * @param mode the {@linkcode AbilityApplyMode} determining how abilities are applied:
+ * @returns the function to apply abilities based on the mode:
+ * - {@linkcode AbilityApplyMode.DEFAULT} applies abilities without restriction
+ * (as long as they meet conditions to apply).
+ * - {@linkcode AbilityApplyMode.REVEALED} only applies abilities that have
+ * previously applied in the current battle.
+ * - {@linkcode AbilityApplyMode.IGNORE} does nothing and returns an empty
+ * message array.
+ */
+export function getAbApplyFunc(mode: AbilityApplyMode) {
+  switch (mode) {
+    case AbilityApplyMode.DEFAULT:
+      return applyAbAttrs;
+    case AbilityApplyMode.REVEALED:
+      return applyRevealedAbAttrs;
+    case AbilityApplyMode.IGNORE:
+      return () => [];
+  }
+}
+
+//#endregion
+//#region Helpers
 
 /**
  * Applies a Pokemon's ability attributes of matching type
@@ -76,9 +104,11 @@ function applyAbAttrsInternal<TAttr extends AbAttr>(
   return messages;
 }
 
-export function applyRevealedAbAttrs<TAttr extends AbAttr>(
+function applyRevealedAbAttrs<TAttr extends AbAttr>(
   attrType: AbstractConstructor<TAttr>,
   ...params: Parameters<TAttr["apply"]>
 ): string[] {
   return applyAbAttrsInternal({ canApplyOnly: true, revealedOnly: true }, attrType, ...params);
 }
+
+//#endregion
