@@ -4,7 +4,7 @@ import { NeutralDamageAgainstFlyingTypeMultiplierAttr } from "../move-attrs/neut
 import { MoveCategory } from "#enums/move-category";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
-import type { Type } from "#enums/type";
+import type { ElementType } from "#enums/element-type";
 import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
 
 /**
@@ -15,7 +15,7 @@ import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
  * @extends TypeImmunityAbAttr
  */
 export class AttackTypeImmunityAbAttr extends TypeImmunityAbAttr {
-  constructor(immuneType: Type, condition?: AbAttrCondition) {
+  constructor(immuneType: ElementType, condition?: AbAttrCondition) {
     super(immuneType, condition);
   }
 

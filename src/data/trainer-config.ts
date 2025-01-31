@@ -6,7 +6,7 @@ import { toReadableString, randSeedItem } from "#app/utils";
 import type { PokemonSpeciesFilter } from "#app/data/pokemon-species";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
-import type { Type } from "#enums/type";
+import type { ElementType } from "#enums/element-type";
 import type { PersistentModifier } from "#app/modifier/modifier";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
@@ -278,7 +278,7 @@ export class TrainerConfig {
   public partyMemberFuncs: PartyMemberFuncs = {};
   public speciesPools: TrainerTierPools;
   public speciesFilter: PokemonSpeciesFilter;
-  public specialtyTypes: Type[] = [];
+  public specialtyTypes: ElementType[] = [];
   public hasVoucher: boolean = false;
 
   public encounterMessages: string[] = [];
@@ -619,7 +619,7 @@ export class TrainerConfig {
     return this;
   }
 
-  setSpecialtyTypes(...specialtyTypes: Type[]): TrainerConfig {
+  setSpecialtyTypes(...specialtyTypes: ElementType[]): TrainerConfig {
     this.specialtyTypes = specialtyTypes;
     return this;
   }
@@ -1088,7 +1088,7 @@ export class TrainerConfig {
   initForStatTrainer(
     signatureSpecies: (Species | Species[])[],
     _isMale: boolean,
-    ...specialtyTypes: Type[]
+    ...specialtyTypes: ElementType[]
   ): TrainerConfig {
     if (!getIsInitialized()) {
       initI18n();
@@ -1160,7 +1160,7 @@ export class TrainerConfig {
   initForGymLeader(
     signatureSpecies: (Species | Species[])[],
     isMale: boolean,
-    ...specialtyTypes: Type[]
+    ...specialtyTypes: ElementType[]
   ): TrainerConfig {
     // Check if the internationalization (i18n) system is initialized.
     if (!getIsInitialized()) {
@@ -1233,7 +1233,7 @@ export class TrainerConfig {
   initForEliteFour(
     signatureSpecies: (Species | Species[])[],
     isMale: boolean,
-    ...specialtyTypes: Type[]
+    ...specialtyTypes: ElementType[]
   ): TrainerConfig {
     // Check if the internationalization (i18n) system is initialized.
     if (!getIsInitialized()) {
@@ -1603,7 +1603,7 @@ export function getSpeciesFilterRandomPartyMemberFunc(
   };
 }
 
-function getRandomTeraModifiers(party: EnemyPokemon[], count: number, types?: Type[]): PersistentModifier[] {
+function getRandomTeraModifiers(party: EnemyPokemon[], count: number, types?: ElementType[]): PersistentModifier[] {
   const ret: PersistentModifier[] = [];
   const partyMemberIndexes = new Array(party.length).fill(null).map((_, i) => i);
   for (let t = 0; t < Math.min(count, party.length); t++) {
