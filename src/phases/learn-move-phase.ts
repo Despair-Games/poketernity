@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/all-moves";
-import { loadMoveAnimAssets } from "#app/data/battle-anims";
+import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
 import { initMoveAnim } from "#app/data/init-move-anim";
 import type { Move } from "#app/data/move";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/species-form-change-triggers/species-form-change-move-learned-trigger";

@@ -41,7 +41,8 @@ import {
   RememberMoveModifier,
 } from "./modifier/modifier";
 import { PokeballType } from "#enums/pokeball";
-import { initCommonAnims, loadCommonAnimAssets, loadMoveAnimAssets, populateAnims } from "#app/data/battle-anims";
+import { initCommonAnims, loadCommonAnimAssets, populateAnims } from "#app/data/battle-anims";
+import { loadMoveAnimAssets } from "./utils/move-anim-utils";
 import { initMoveAnim } from "./data/init-move-anim";
 import type { Phase } from "#app/phase";
 import { initGameSpeed } from "#app/system/game-speed";

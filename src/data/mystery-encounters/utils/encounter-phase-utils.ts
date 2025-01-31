@@ -39,7 +39,7 @@ import { TrainerVariant } from "#enums/trainer-variant";
 import type { Gender } from "#enums/gender";
 import type { Nature } from "#enums/nature";
 import type { Moves } from "#enums/moves";
-import { loadMoveAnimAssets } from "#app/data/battle-anims";
+import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
 import { initMoveAnim } from "#app/data/init-move-anim";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { Status } from "#app/data/status-effect";

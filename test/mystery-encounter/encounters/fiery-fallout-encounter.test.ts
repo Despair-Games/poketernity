@@ -7,7 +7,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 import { FieryFalloutEncounter } from "#app/data/mystery-encounters/encounters/fiery-fallout-encounter";
 import { Gender } from "#enums/gender";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import * as BattleAnims from "#app/data/battle-anims";
+import * as MoveAnimUtils from "#app/utils/move-anim-utils";
 import * as InitMoveAnim from "#app/data/init-move-anim";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
@@ -104,7 +104,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
     scene.currentBattle.mysteryEncounter = FieryFalloutEncounter;
     const weatherSpy = vi.spyOn(scene.arena, "trySetWeather").mockReturnValue(true);
     const moveInitSpy = vi.spyOn(InitMoveAnim, "initMoveAnim");
-    const moveLoadSpy = vi.spyOn(BattleAnims, "loadMoveAnimAssets");
+    const moveLoadSpy = vi.spyOn(MoveAnimUtils, "loadMoveAnimAssets");
 
     const { onInit } = FieryFalloutEncounter;
 
