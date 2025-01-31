@@ -1,20 +1,15 @@
 import { globalScene } from "#app/global-scene";
-import { allMoves } from "#app/data/all-moves";
-import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import { getFrameMs, getEnumValues, isNullOrUndefined } from "#app/utils";
-import { type BattlerIndex } from "#enums/battler-index";
-import { type Moves } from "#enums/moves";
 import { type SubstituteTag } from "#app/data/battler-tags";
 import Phaser from "phaser";
 import { encounterAnims, type EncounterAnim } from "#enums/encounter-anims";
 import { settings } from "#app/system/settings/settings-manager";
 import { AnimFrameTarget } from "#enums/anim-frame-target";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { AnimConfig, type AnimFrame } from "#app/data/anim-config";
+import { type AnimConfig, type AnimFrame } from "#app/data/anim-config";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimFocus } from "#enums/anim-focus";
-import { moveAnims } from "#app/data/move-anims";
 
 interface GraphicFrameData {
   x: number;
@@ -664,34 +659,6 @@ export abstract class BattleAnim {
         }
       },
     });
-  }
-}
-
-export class MoveAnim extends BattleAnim {
-  public move: Moves;
-
-  constructor(move: Moves, user: Pokemon, targetIndex: BattlerIndex, playOnEmptyField: boolean = false) {
-    super(user, globalScene.getFieldPokemonByBattlerIndex(targetIndex), playOnEmptyField);
-
-    this.move = move;
-  }
-
-  getAnim(): AnimConfig {
-    return moveAnims.get(this.move) instanceof AnimConfig
-      ? (moveAnims.get(this.move) as AnimConfig)
-      : (moveAnims.get(this.move)?.[this.user?.isPlayer() ? 0 : 1] as AnimConfig);
-  }
-
-  isOppAnim(): boolean {
-    return !this.user?.isPlayer() && Array.isArray(moveAnims.get(this.move));
-  }
-
-  protected override isHideUser(): boolean {
-    return allMoves[this.move].hasFlag(MoveFlags.HIDE_USER);
-  }
-
-  protected override isHideTarget(): boolean {
-    return allMoves[this.move].hasFlag(MoveFlags.HIDE_TARGET);
   }
 }
 

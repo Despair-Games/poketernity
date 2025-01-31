@@ -1,4 +1,4 @@
-import type { MoveAnim } from "#app/data/battle-anims";
+import type { MoveAnim } from "#app/data/battle-anims/move-anim";
 import { Phase } from "#app/phase";
 
 /**
