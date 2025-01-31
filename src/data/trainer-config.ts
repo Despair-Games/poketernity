@@ -17,7 +17,6 @@ import { TrainerType } from "#enums/trainer-type";
 import Overrides from "#app/overrides";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
-import { Gender } from "#enums/gender";
 import Phaser from "phaser";
 
 /** Minimum BST for Pokemon generated onto the Elite Four's teams */
@@ -1305,12 +1304,12 @@ export class TrainerConfig {
 
   /**
    * Initializes the trainer configuration for a Champion.
-   * @param gender Gender of the Champion (or Double) for title
+   * @param variant The variant of the Champion (used for localization of the title).
    * @param battleBgm String representing the battle music
    * @param mixedBattleBgm String representing mixed battle music
    * @returns The updated TrainerConfig instance.
    **/
-  initForChampion(gender: Gender, battleBgm: string[], mixedBattleBgm: string[]): TrainerConfig {
+  initForChampion(variant: TrainerVariant, battleBgm: string[], mixedBattleBgm: string[]): TrainerConfig {
     // Check if the internationalization (i18n) system is initialized.
     if (!getIsInitialized()) {
       initI18n();
@@ -1331,7 +1330,7 @@ export class TrainerConfig {
 
     // Set the party templates for the Champion.
     let partyTemplate = trainerPartyTemplates.CHAMPION;
-    if (gender === Gender.DOUBLE) {
+    if (variant === TrainerVariant.DOUBLE) {
       partyTemplate = trainerPartyTemplates.CHAMPION_DOUBLE;
     }
     this.setPartyTemplates(partyTemplate);
@@ -1349,11 +1348,11 @@ export class TrainerConfig {
     // Only do this if the title is not already set
     if (!this.title) {
       // Set the title to "champion". (this is the key in the i18n file)
-      switch (gender) {
-        case Gender.FEMALE:
+      switch (variant) {
+        case TrainerVariant.FEMALE:
           this.setTitle("champion_female");
           break;
-        case Gender.DOUBLE:
+        case TrainerVariant.DOUBLE:
           this.setTitle("champion_double");
           break;
         // Default includes Gender.MALE

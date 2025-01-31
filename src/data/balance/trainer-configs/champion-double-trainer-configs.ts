@@ -2,8 +2,8 @@ import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#a
 import { TrainerSlot } from "#enums/trainer-slot";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
-import { Gender } from "#enums/gender";
 import { randInt } from "#app/utils";
+import { TrainerVariant } from "#enums/trainer-variant";
 
 const DEFAULT_CHAMPION_THEME = "battle_champion_alder";
 const KANTO_CHAMPION_THEME = "battle_kanto_champion";
@@ -73,7 +73,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setHasDouble("blue_red_double")
     .setTitle("old_rivals")
     .initForChampion(
-      Gender.DOUBLE,
+      TrainerVariant.DOUBLE,
       [KANTO_CHAMPION_THEME, JOHTO_CHAMPION_THEME],
       [KANTO_CHAMPION_THEME, JOHTO_CHAMPION_THEME],
     ),
@@ -117,7 +117,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setSpriteNames("lance", "clair")
     .setHasDouble("lance_clair_double")
     .setTitle("dragon_tamers")
-    .initForChampion(Gender.DOUBLE, [JOHTO_CHAMPION_THEME], [JOHTO_CHAMPION_THEME]),
+    .initForChampion(TrainerVariant.DOUBLE, [JOHTO_CHAMPION_THEME], [JOHTO_CHAMPION_THEME]),
   [TrainerType.STEVEN_WALLACE]: new TrainerConfig(++t)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.SKARMORY], TrainerSlot.TRAINER))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.WHISCASH], TrainerSlot.TRAINER_PARTNER))
@@ -157,7 +157,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setSpriteNames("steven", "wallace")
     .setHasDouble("steven_wallace_double")
     .setTitle("hoenn_champions")
-    .initForChampion(Gender.DOUBLE, [HOENN5_CHAMPION_THEME], [HOENN6_CHAMPION_THEME]),
+    .initForChampion(TrainerVariant.DOUBLE, [HOENN5_CHAMPION_THEME], [HOENN6_CHAMPION_THEME]),
   [TrainerType.CYNTHIA_DIANTHA]: new TrainerConfig(++t)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.TOGEKISS], TrainerSlot.TRAINER))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.GOODRA], TrainerSlot.TRAINER_PARTNER))
@@ -200,7 +200,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setHasDouble("cynthia_diantha_double")
     .setTitle("champion_friends")
     .initForChampion(
-      Gender.DOUBLE,
+      TrainerVariant.DOUBLE,
       [SINNOH_CHAMPION_THEME, KALOS_CHAMPION_THEME],
       [SINNOH_CHAMPION_THEME, KALOS_CHAMPION_THEME],
     ),
@@ -244,7 +244,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setHasDouble("iris_alder_double")
     .setTitle("unovas_best")
     .initForChampion(
-      Gender.DOUBLE,
+      TrainerVariant.DOUBLE,
       [DEFAULT_CHAMPION_THEME, IRIS_CHAMPION_THEME],
       [IRIS_CHAMPION_THEME, DEFAULT_CHAMPION_THEME],
     ),
@@ -297,7 +297,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setSpriteNames("hau", "kukui")
     .setHasDouble("hau_kukui_double")
     .setTitle("masters_of_alola")
-    .initForChampion(Gender.DOUBLE, [ALOLA_CHAMPION_THEME], [ALOLA_CHAMPION_THEME]),
+    .initForChampion(TrainerVariant.DOUBLE, [ALOLA_CHAMPION_THEME], [ALOLA_CHAMPION_THEME]),
   [TrainerType.LEON_HOP]: new TrainerConfig(++t)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.DRAGAPULT], TrainerSlot.TRAINER))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.DUBWOOL], TrainerSlot.TRAINER_PARTNER))
@@ -345,7 +345,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setSpriteNames("leon", "hop")
     .setHasDouble("leon_hop_double")
     .setTitle("galar_stars")
-    .initForChampion(Gender.DOUBLE, [GALAR_CHAMPION_THEME], [GALAR_CHAMPION_THEME]),
+    .initForChampion(TrainerVariant.DOUBLE, [GALAR_CHAMPION_THEME], [GALAR_CHAMPION_THEME]),
   [TrainerType.GEETA_NEMONA]: new TrainerConfig(++t)
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.GLIMMORA], TrainerSlot.TRAINER))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.PAWMOT], TrainerSlot.TRAINER_PARTNER))
@@ -390,7 +390,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setHasDouble("geeta_nemona_double")
     .setTitle("top_champs")
     .initForChampion(
-      Gender.DOUBLE,
+      TrainerVariant.DOUBLE,
       [GEETA_CHAMPION_THEME, NEMONA_CHAMPION_THEME],
       [NEMONA_CHAMPION_THEME, GEETA_CHAMPION_THEME],
     ),
@@ -432,5 +432,5 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
     .setSpriteNames("kieran", "carmine")
     .setHasDouble("kieran_carmine_double")
     .setTitle("blueberry_siblings")
-    .initForChampion(Gender.DOUBLE, [KIERAN_CHAMPION_THEME], [KIERAN_CHAMPION_THEME]),
+    .initForChampion(TrainerVariant.DOUBLE, [KIERAN_CHAMPION_THEME], [KIERAN_CHAMPION_THEME]),
 };
