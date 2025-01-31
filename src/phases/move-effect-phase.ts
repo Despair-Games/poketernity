@@ -19,7 +19,7 @@ import { NoEffectAttr } from "#app/data/move-attrs/no-effect-attr";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/pokemon-forms";
 import type { TypeDamageMultiplier } from "#app/data/type";
-import type { DamageResult, Pokemon, TurnMove } from "#app/field/pokemon";
+import type { AttackMoveResult, DamageResult, Pokemon, TurnMove } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
 import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
@@ -455,8 +455,8 @@ export class MoveEffectPhase extends HitCheckPhase {
         target.turnData.damageTaken += damage;
         target.battleData.hitCount++;
 
-        const attackResult = {
-          move: move.id,
+        const attackResult: AttackMoveResult = {
+          moveId: move.id,
           result: result as DamageResult,
           damage: damage,
           isCritical: isCritical,
