@@ -149,10 +149,10 @@ import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { allMysteryEncounters, mysteryEncountersByBiome } from "#app/data/mystery-encounters/mystery-encounters";
 import {
-  MYSTERY_ENCOUNTER_ANTI_VARIANCE_WEIGHT_MODIFIER,
-  MYSTERY_ENCOUNTER_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
-  MYSTERY_ENCOUNTER_BASE_SPAWN_WEIGHT,
-  MYSTERY_ENCOUNTER_SPAWN_MAX_WEIGHT,
+  ME_ANTI_VARIANCE_WEIGHT_MODIFIER,
+  ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
+  ME_BASE_SPAWN_WEIGHT,
+  ME_SPAWN_MAX_WEIGHT,
 } from "./constants";
 import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
@@ -1378,7 +1378,7 @@ export default class BattleScene extends SceneBase {
       if (this.isWaveMysteryEncounter(newBattleType, newWaveIndex) || newBattleType === BattleType.MYSTERY_ENCOUNTER) {
         newBattleType = BattleType.MYSTERY_ENCOUNTER;
         // Reset to base spawn weight
-        this.mysteryEncounterSaveData.encounterSpawnChance = MYSTERY_ENCOUNTER_BASE_SPAWN_WEIGHT;
+        this.mysteryEncounterSaveData.encounterSpawnChance = ME_BASE_SPAWN_WEIGHT;
       }
     }
 
@@ -3467,16 +3467,12 @@ export default class BattleScene extends SceneBase {
       // Reduces occurrence of runs with total encounters significantly different from AVERAGE_ENCOUNTERS_PER_RUN_TARGET
       // Favored rate changes can never exceed 50%. So if base rate is 15/256 and favored rate would add 200/256, result will be (15 + 128)/256
       const expectedEncountersByFloor =
-        (MYSTERY_ENCOUNTER_AVERAGE_ENCOUNTERS_PER_RUN_TARGET
-          / (highestMysteryEncounterWave - lowestMysteryEncounterWave))
+        (ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET / (highestMysteryEncounterWave - lowestMysteryEncounterWave))
         * (waveIndex - lowestMysteryEncounterWave);
       const currentRunDiffFromAvg = expectedEncountersByFloor - encounteredEvents.length;
       const favoredEncounterRate =
         sessionEncounterRate
-        + Math.min(
-          currentRunDiffFromAvg * MYSTERY_ENCOUNTER_ANTI_VARIANCE_WEIGHT_MODIFIER,
-          MYSTERY_ENCOUNTER_SPAWN_MAX_WEIGHT / 2,
-        );
+        + Math.min(currentRunDiffFromAvg * ME_ANTI_VARIANCE_WEIGHT_MODIFIER, ME_SPAWN_MAX_WEIGHT / 2);
 
       const successRate = isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE)
         ? favoredEncounterRate
@@ -3489,11 +3485,11 @@ export default class BattleScene extends SceneBase {
         || !isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE);
 
       if (canSpawn) {
-        let roll = MYSTERY_ENCOUNTER_SPAWN_MAX_WEIGHT;
+        let roll = ME_SPAWN_MAX_WEIGHT;
         // Always rolls the check on the same offset to ensure no RNG changes from reloading session
         this.executeWithSeedOffset(
           () => {
-            roll = randSeedInt(MYSTERY_ENCOUNTER_SPAWN_MAX_WEIGHT);
+            roll = randSeedInt(ME_SPAWN_MAX_WEIGHT);
           },
           waveIndex * 3 * 1000,
         );
