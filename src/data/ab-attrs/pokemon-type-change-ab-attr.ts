@@ -1,8 +1,5 @@
 import { PreAttackAbAttr } from "#app/data/ab-attrs/pre-attack-ab-attr";
 import type { Move } from "#app/data/move";
-import { NaturePowerAttr } from "#app/data/move-attrs/nature-power-attr";
-import { RandomMoveAttr } from "#app/data/move-attrs/random-move-attr";
-import { RandomMovesetMoveAttr } from "#app/data/move-attrs/random-moveset-move-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { ElementType } from "#enums/element-type";
@@ -26,9 +23,9 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
        */
       && !move.findAttr(
         (attr) =>
-          attr instanceof RandomMovesetMoveAttr
-          || attr instanceof RandomMoveAttr
-          || attr instanceof NaturePowerAttr
+          attr.isRandomMovesetMoveAttr()
+          || attr.isRandomMoveAttr()
+          || attr.isNaturePowerAttr()
           || attr.isCopyMoveAttr(),
       )
     ) {

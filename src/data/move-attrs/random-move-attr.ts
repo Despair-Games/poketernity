@@ -43,4 +43,8 @@ export class RandomMoveAttr extends OverrideMoveEffectAttr {
     globalScene.unshiftPhase(new MovePhase(user, targets, moveId, true));
     return true;
   }
+
+  override isRandomMoveAttr(): this is this {
+    return true;
+  }
 }

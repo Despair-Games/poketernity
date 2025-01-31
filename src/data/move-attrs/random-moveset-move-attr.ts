@@ -64,4 +64,8 @@ export class RandomMovesetMoveAttr extends OverrideMoveEffectAttr {
 
     return false;
   }
+
+  override isRandomMovesetMoveAttr(): this is this {
+    return true;
+  }
 }

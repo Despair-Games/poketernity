@@ -3,6 +3,9 @@ import type { BooleanHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import type { MoveCondition, MoveConditionFunc } from "../move-conditions";
 import type { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
+import type { NaturePowerAttr } from "#app/data/move-attrs/nature-power-attr";
+import type { RandomMoveAttr } from "#app/data/move-attrs/random-move-attr";
+import type { RandomMovesetMoveAttr } from "#app/data/move-attrs/random-moveset-move-attr";
 
 /**
  * Base class defining all {@linkcode Move} Attributes
@@ -70,6 +73,18 @@ export abstract class MoveAttr {
   }
 
   isCopyMoveAttr(): this is CopyMoveAttr {
+    return false;
+  }
+
+  isNaturePowerAttr(): this is NaturePowerAttr {
+    return false;
+  }
+
+  isRandomMovesetMoveAttr(): this is RandomMovesetMoveAttr {
+    return false;
+  }
+
+  isRandomMoveAttr(): this is RandomMoveAttr {
     return false;
   }
 }

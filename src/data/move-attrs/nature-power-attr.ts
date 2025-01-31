@@ -151,4 +151,8 @@ export class NaturePowerAttr extends OverrideMoveEffectAttr {
     globalScene.unshiftPhase(new MovePhase(user, [target.getBattlerIndex()], moveId, true));
     return true;
   }
+
+  override isNaturePowerAttr(): this is this {
+    return true;
+  }
 }
