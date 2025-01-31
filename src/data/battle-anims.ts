@@ -3,7 +3,6 @@ import type { Pokemon } from "#app/field/pokemon";
 import { getFrameMs, getEnumValues, isNullOrUndefined } from "#app/utils";
 import { type SubstituteTag } from "#app/data/battler-tags";
 import Phaser from "phaser";
-import { encounterAnims, type EncounterAnim } from "#enums/encounter-anims";
 import { settings } from "#app/system/settings/settings-manager";
 import { AnimFrameTarget } from "#enums/anim-frame-target";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -659,25 +658,5 @@ export abstract class BattleAnim {
         }
       },
     });
-  }
-}
-
-export class EncounterBattleAnim extends BattleAnim {
-  public encounterAnim: EncounterAnim;
-  public oppAnim: boolean;
-
-  constructor(encounterAnim: EncounterAnim, user: Pokemon, target?: Pokemon, oppAnim?: boolean) {
-    super(user, target ?? user, true);
-
-    this.encounterAnim = encounterAnim;
-    this.oppAnim = oppAnim ?? false;
-  }
-
-  getAnim(): AnimConfig | null {
-    return encounterAnims.get(this.encounterAnim) ?? null;
-  }
-
-  isOppAnim(): boolean {
-    return this.oppAnim;
   }
 }
