@@ -41,7 +41,7 @@ import {
   RememberMoveModifier,
 } from "./modifier/modifier";
 import { PokeballType } from "#enums/pokeball";
-import { populateAnims } from "#app/data/battle-anims";
+import { populateAnims } from "./data/populate-anims";
 import { loadCommonAnimAssets } from "./utils/common-anim-utils";
 import { initCommonAnims } from "./data/init-common-anims";
 import { loadMoveAnimAssets } from "./utils/move-anim-utils";
