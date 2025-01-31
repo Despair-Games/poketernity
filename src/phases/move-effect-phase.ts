@@ -38,7 +38,7 @@ import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveCategory } from "#enums/move-category";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
 import { MoveTarget } from "#enums/move-target";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 import { FaintPhase } from "./faint-phase";
 import { HitCheckPhase } from "./hit-check-phase";

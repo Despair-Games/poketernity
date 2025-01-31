@@ -13,7 +13,7 @@ import { AttackTypeBoosterModifier } from "#app/modifier/modifier";
 import type { AttackTypeBoosterModifierType } from "#app/modifier/modifier-type";
 import { isNullOrUndefined } from "#app/utils";
 import type { Abilities } from "#enums/abilities";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { SpeciesFormKey } from "#enums/species-form-key";

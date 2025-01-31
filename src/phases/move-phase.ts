@@ -36,7 +36,7 @@ import { BooleanHolder, NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveFlags } from "#enums/move-flags";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { StatusEffect } from "#enums/status-effect";
 import { ElementType } from "#enums/element-type";
 import i18next from "i18next";

@@ -7,7 +7,7 @@ import type { Move } from "#app/data/move";
 import type { BerryUsedEvent, MoveUsedEvent } from "../events/battle-scene";
 import { BattleSceneEventType } from "#enums/battle-scene-event-type";
 import { BerryType } from "#enums/berry-type";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { UiTheme } from "#enums/ui-theme";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { settings } from "#app/system/settings/settings-manager";

@@ -1,4 +1,4 @@
-import type { MoveId } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 
 /**
  * Data for a single starter species

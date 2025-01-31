@@ -2,7 +2,7 @@ import { BypassSpeedChanceAbAttr } from "#app/data/ab-attrs/bypass-speed-chance-
 import { allAbilities } from "#app/data/ability";
 import { FaintPhase } from "#app/phases/faint-phase";
 import { Abilities } from "#enums/abilities";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";

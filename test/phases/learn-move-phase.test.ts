@@ -2,7 +2,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import Phaser from "phaser";
 import { GameManager } from "#test/testUtils/gameManager";
 import { Species } from "#enums/species";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 
 describe("Learn Move Phase", () => {

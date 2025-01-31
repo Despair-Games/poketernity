@@ -19,7 +19,7 @@ import {
   setEncounterRewards,
 } from "../utils/encounter-phase-utils";
 import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { PokemonMove } from "#app/field/pokemon";
 import { AiType } from "#enums/ai-type";

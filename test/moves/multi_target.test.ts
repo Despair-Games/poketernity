@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { Abilities } from "#enums/abilities";
 import { Species } from "#enums/species";
 import { toDmgValue } from "#app/utils";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";

@@ -1,6 +1,6 @@
 import { allMoves } from "#app/data/all-moves";
 import { getEnumKeys, getEnumValues } from "#app/utils";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 
 export const speciesEggMoves = {

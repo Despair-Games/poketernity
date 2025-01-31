@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/all-moves";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { MoveResult } from "#enums/move-result";
 import { BerryPhase } from "#app/phases/berry-phase";

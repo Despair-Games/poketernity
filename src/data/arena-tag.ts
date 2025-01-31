@@ -21,7 +21,7 @@ import i18next from "i18next";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";

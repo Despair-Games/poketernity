@@ -3,7 +3,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vi
 import { GameManager } from "#test/testUtils/gameManager";
 import { Species } from "#enums/species";
 import { Abilities } from "#enums/abilities";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 import { allMoves } from "#app/data/all-moves";
 import { ArenaTrapTag } from "#app/data/arena-tag";

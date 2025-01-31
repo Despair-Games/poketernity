@@ -1,4 +1,4 @@
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { type Pokemon, type TurnMove } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
 import type { Move } from "#app/data/move";

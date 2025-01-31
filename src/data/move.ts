@@ -16,7 +16,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveTarget } from "#enums/move-target";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { ElementType } from "#enums/element-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";

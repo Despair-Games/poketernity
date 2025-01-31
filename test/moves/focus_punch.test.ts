@@ -4,7 +4,7 @@ import { MoveHeaderPhase } from "#app/phases/move-header-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { TurnStartPhase } from "#app/phases/turn-start-phase";
 import { Abilities } from "#enums/abilities";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";

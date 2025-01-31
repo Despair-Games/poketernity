@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/all-moves";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { BerryPhase } from "#app/phases/berry-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";

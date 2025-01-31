@@ -6,7 +6,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { NumberHolder } from "#app/utils";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";

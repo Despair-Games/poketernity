@@ -3,7 +3,7 @@ import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { ElementType } from "#enums/element-type";
 import { Abilities } from "#enums/abilities";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import * as Messages from "#app/messages";
 import { TerastallizeModifier, overrideHeldItems } from "#app/modifier/modifier";

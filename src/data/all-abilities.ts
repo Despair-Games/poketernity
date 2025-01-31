@@ -2,7 +2,7 @@ import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Gender } from "#enums/gender";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { EFFECTIVE_STATS, getStatKey, Stat, type EffectiveStat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";

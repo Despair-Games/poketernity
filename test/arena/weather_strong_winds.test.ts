@@ -2,7 +2,7 @@ import { allMoves } from "#app/data/all-moves";
 import { StatusEffect } from "#enums/status-effect";
 import { TurnStartPhase } from "#app/phases/turn-start-phase";
 import { Abilities } from "#enums/abilities";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";

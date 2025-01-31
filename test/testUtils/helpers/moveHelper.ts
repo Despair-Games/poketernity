@@ -7,7 +7,7 @@ import type { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { BattleCommand } from "#enums/battle-command";
 import { UiMode } from "#enums/ui-mode";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { getMovePosition } from "#test/testUtils/gameManagerUtils";
 import { GameManagerHelper } from "#test/testUtils/helpers/gameManagerHelper";
 import { vi } from "vitest";

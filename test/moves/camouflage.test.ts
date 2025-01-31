@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { TerrainType } from "#enums/terrain-type";
 import { ElementType } from "#enums/element-type";

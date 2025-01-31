@@ -2,7 +2,7 @@ import type { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/all-moves";
 import { globalScene } from "#app/global-scene";
 import { UiMode } from "#enums/ui-mode";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 import { PokemonPhase } from "./abstract-pokemon-phase";
 import { CommandPhase } from "./command-phase";

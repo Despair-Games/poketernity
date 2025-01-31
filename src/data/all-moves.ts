@@ -9,7 +9,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
 import { MoveTarget } from "#enums/move-target";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { MultiHitType } from "#enums/multi-hit-type";
 import { Species } from "#enums/species";
 import { Stat, getStatKey, BATTLE_STATS } from "#enums/stat";

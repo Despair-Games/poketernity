@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { MoveResult } from "#enums/move-result";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { Species } from "#enums/species";
 import type { EffectiveStat } from "#enums/stat";

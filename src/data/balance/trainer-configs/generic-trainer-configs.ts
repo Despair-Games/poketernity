@@ -8,7 +8,7 @@ import {
 } from "#app/data/trainer-config";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 import { ElementType } from "#enums/element-type";

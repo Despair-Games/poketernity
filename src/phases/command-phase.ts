@@ -19,7 +19,7 @@ import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Biome } from "#enums/biome";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PokeballType } from "#enums/pokeball";
 import i18next from "i18next";

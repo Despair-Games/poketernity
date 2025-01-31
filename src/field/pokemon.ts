@@ -188,7 +188,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { BerryType } from "#enums/berry-type";
 import { Biome } from "#enums/biome";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import { FaintPhase } from "#app/phases/faint-phase";

@@ -1,7 +1,7 @@
 import { type TurnMove } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { allMoves } from "#app/data/all-moves";
 import type { MoveConditionFunc } from "../move-conditions";
 import { AddBattlerTagAttr } from "./add-battler-tag-attr";

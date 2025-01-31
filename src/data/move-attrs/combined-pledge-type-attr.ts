@@ -1,4 +1,4 @@
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { ElementType } from "#enums/element-type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";

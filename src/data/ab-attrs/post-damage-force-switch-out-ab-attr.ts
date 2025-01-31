@@ -1,7 +1,7 @@
 import { type Pokemon } from "#app/field/pokemon";
 import { toDmgValue, type BooleanHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { SwitchType } from "#enums/switch-type";
 import { PostDamageAbAttr } from "./post-damage-ab-attr";
 import { ForceSwitchOutHelper } from "#app/data/ability";

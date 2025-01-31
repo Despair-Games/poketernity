@@ -3,7 +3,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { MovePhase } from "#app/phases/move-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { Species } from "#enums/species";
 import { AbAttr } from "./ab-attr";

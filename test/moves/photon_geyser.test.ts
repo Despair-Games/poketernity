@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/all-moves";
 import { PhotonGeyserCategoryAttr } from "#app/data/move-attrs/photon-geyser-category-attr";
 import { Abilities } from "#enums/abilities";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";

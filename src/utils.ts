@@ -4,7 +4,7 @@ import type { initGameSpeed } from "#app/system/game-speed";
 // -- end tsdoc imports --
 import { api } from "#app/plugins/api/api";
 import { MoneyFormat } from "#enums/money-format";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 import { supportedLanguages } from "./system/settings/supported-languages";
 

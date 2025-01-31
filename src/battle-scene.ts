@@ -122,7 +122,7 @@ import { UiInputs } from "#app/ui-inputs";
 import { NewArenaEvent } from "#app/events/battle-scene";
 import { ArenaFlyout } from "#app/ui/arena-flyout";
 import { Biome } from "#enums/biome";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { PlayerGender } from "#enums/player-gender";
 import { Species } from "#enums/species";
 import { TimedEventManager } from "#app/timed-event-manager";

@@ -2,7 +2,7 @@ import { ReceivedMoveDamageMultiplierAbAttr } from "#app/data/ab-attrs/received-
 import { allMoves } from "#app/data/all-moves";
 import { Abilities } from "#enums/abilities";
 import { MoveFlags } from "#enums/move-flags";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import type { NumberHolder } from "#app/utils";

@@ -3,7 +3,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest
 import { GameManager } from "#test/testUtils/gameManager";
 import { Species } from "#enums/species";
 import { Abilities } from "#enums/abilities";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 
 describe("Moves - Wide Guard", () => {

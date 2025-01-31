@@ -12,7 +12,7 @@ import { UiMode } from "#enums/ui-mode";
 import { shiftCharCodes } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { Button } from "#enums/buttons";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";

@@ -3,7 +3,7 @@ import { PostAttackApplyStatusEffectAbAttr } from "#app/data/ab-attrs/post-attac
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { Abilities } from "#enums/abilities";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";

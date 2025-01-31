@@ -21,7 +21,7 @@ import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/myst
 import { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { FunAndGamesEncounter } from "#app/data/mystery-encounters/encounters/fun-and-games-encounter";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { BattleCommand } from "#enums/battle-command";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 

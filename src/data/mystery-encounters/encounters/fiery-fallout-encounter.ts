@@ -27,7 +27,7 @@ import { ElementType } from "#enums/element-type";
 import { BattlerIndex } from "#enums/battler-index";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { EncounterBattleAnim } from "#app/data/battle-anims";
 import { WeatherType } from "#enums/weather-type";
 import { isNullOrUndefined, randSeedInt } from "#app/utils";

@@ -4,7 +4,7 @@ import UiHandler from "./ui-handler";
 import { isNullOrUndefined, fixedNumber } from "#app/utils";
 import { getMoveTargets } from "../data/move";
 import { Button } from "#enums/buttons";
-import type { MoveId } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#app/field/pokemon";
 import type { ModifierBar } from "#app/modifier/modifier";
 import { SubstituteTag } from "#app/data/battler-tags";

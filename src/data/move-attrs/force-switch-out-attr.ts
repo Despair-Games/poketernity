@@ -1,7 +1,7 @@
 import { BattleType } from "#enums/battle-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { SwitchType } from "#enums/switch-type";
 import type { Pokemon, EnemyPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

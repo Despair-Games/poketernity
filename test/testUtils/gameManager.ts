@@ -36,7 +36,7 @@ import { Button } from "#enums/buttons";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { ExpNotification } from "#enums/exp-notification";
 import { HpBarSpeed } from "#enums/hp-bar-speed";
-import type { MoveId } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PlayerGender } from "#enums/player-gender";
 import type { Species } from "#enums/species";

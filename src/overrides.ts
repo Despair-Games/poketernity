@@ -7,7 +7,7 @@ import { Unlockables } from "#enums/unlockables";
 import { Abilities } from "#enums/abilities";
 import { Biome } from "#enums/biome";
 import { EggTier } from "#enums/egg-type";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PokeballType } from "#enums/pokeball";

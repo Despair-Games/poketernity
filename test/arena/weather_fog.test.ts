@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/all-moves";
 import { Abilities } from "#enums/abilities";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/testUtils/gameManager";

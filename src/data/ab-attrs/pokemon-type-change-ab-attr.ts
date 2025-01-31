@@ -5,7 +5,7 @@ import { RandomMoveAttr } from "../move-attrs/random-move-attr";
 import { RandomMovesetMoveAttr } from "../move-attrs/random-moveset-move-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { ElementType } from "#enums/element-type";
 import i18next from "i18next";
 import { PreAttackAbAttr } from "./pre-attack-ab-attr";

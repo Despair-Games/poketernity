@@ -8,7 +8,7 @@ import {
 } from "#app/data/status-effect";
 import { MoveResult } from "#enums/move-result";
 import { Abilities } from "#enums/abilities";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";

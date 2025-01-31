@@ -1,7 +1,7 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { AbAttr } from "./ab-attr";
 
 /**

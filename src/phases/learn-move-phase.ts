@@ -12,7 +12,7 @@ import FormChangeSceneHandler from "#app/ui/form-change-scene-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { UiMode } from "#enums/ui-mode";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 import { LearnMoveType } from "#enums/learn-move-type";
 

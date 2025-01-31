@@ -24,7 +24,7 @@ import { addTextObject } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { BooleanHolder, hslToHex, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
 import { BerryType } from "#enums/berry-type";
-import type { MoveId } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 import type { Nature } from "#enums/nature";
 import type { PokeballType } from "#enums/pokeball";
 import { Species } from "#enums/species";

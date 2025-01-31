@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";

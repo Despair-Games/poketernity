@@ -1,4 +1,4 @@
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

@@ -3,7 +3,7 @@ import type { PokemonTurnData, TurnMove, PokemonMove } from "#app/field/pokemon"
 import type { Pokemon } from "#app/field/pokemon";
 import type BattleScene from "#app/battle-scene";
 import { BindTag, SubstituteTag } from "#app/data/battler-tags";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import * as messages from "#app/messages";
 import { allMoves } from "#app/data/all-moves";

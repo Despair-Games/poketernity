@@ -10,7 +10,7 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import type { Variant } from "#app/data/variant";
 import { loadBattlerTag } from "../data/battler-tags";
 import type { Biome } from "#enums/biome";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type { Species } from "#enums/species";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 

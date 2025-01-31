@@ -1,4 +1,4 @@
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { GameManager } from "#test/testUtils/gameManager";

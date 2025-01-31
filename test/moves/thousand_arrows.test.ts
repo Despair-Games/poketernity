@@ -2,7 +2,7 @@ import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryPhase } from "#app/phases/berry-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";

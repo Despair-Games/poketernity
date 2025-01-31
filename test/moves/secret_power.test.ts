@@ -1,6 +1,6 @@
 import { Abilities } from "#enums/abilities";
 import { Biome } from "#enums/biome";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 import { allMoves } from "#app/data/all-moves";
 import { Species } from "#enums/species";

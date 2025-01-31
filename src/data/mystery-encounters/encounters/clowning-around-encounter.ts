@@ -39,7 +39,7 @@ import { Ability } from "#app/data/ability";
 import { BerryModifier } from "#app/modifier/modifier";
 import { BerryType } from "#enums/berry-type";
 import { BattlerIndex } from "#enums/battler-index";
-import { MoveId } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { EncounterBattleAnim } from "#app/data/battle-anims";
 import { MoveCategory } from "#enums/move-category";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";

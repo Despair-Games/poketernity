@@ -70,7 +70,7 @@ import { ChallengeType } from "#enums/challenge-type";
 import { Device } from "#enums/devices";
 import { EggSourceType } from "#enums/egg-source-types";
 import { Gender } from "#enums/gender";
-import type { MoveId } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 import type { Nature } from "#enums/nature";
 import { Passive as PassiveAttr } from "#enums/passive";
 import { Species } from "#enums/species";

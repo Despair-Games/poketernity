@@ -3,7 +3,7 @@ import { resolve } from "path";
 import { readFileSync } from "fs";
 import { describe, expect, it } from "vitest";
 import type { MoveCategory } from "#enums/move-category";
-import type { MoveId } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 import type { Move } from "#app/data/move";
 import { MoveFlags } from "#enums/move-flags";
 
