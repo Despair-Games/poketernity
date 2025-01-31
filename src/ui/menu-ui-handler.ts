@@ -12,7 +12,7 @@ import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interface
 import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 import { addTextObject } from "#app/ui/text";
 import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber, getCookie, getEnumKeys, isBeta, isLocal } from "#app/utils";
+import { fixedNumber, getCookie, getEnumKeys, isBeta } from "#app/utils";
 import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";
 import i18next from "i18next";
@@ -215,7 +215,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
       });
     };
     // Import Session
-    if (isLocal || isBeta) {
+    if (api.isLocal || isBeta) {
       manageDataOptions.push({
         label: i18next.t("menuUiHandler:importSession"),
         handler: () => {
@@ -273,7 +273,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
       keepOpen: true,
     });
     // Import Data
-    if (isLocal || isBeta) {
+    if (api.isLocal || isBeta) {
       manageDataOptions.push({
         label: i18next.t("menuUiHandler:importData"),
         handler: () => {
@@ -312,7 +312,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     );
 
     // TODO: fully remove test dialogue option and related handlers
-    if (isLocal || isBeta) {
+    if (api.isLocal || isBeta) {
       // this should make sure we don't have this option in live
       manageDataOptions.push({
         label: "Test Dialogue",

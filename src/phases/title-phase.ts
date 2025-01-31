@@ -19,7 +19,6 @@ import { vouchers } from "#app/system/voucher";
 import type { OptionSelectModeConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { UiMode } from "#enums/ui-mode";
-import { isLocal, isLocalServerConnected } from "#app/utils";
 import { Gender } from "#enums/gender";
 import i18next from "i18next";
 import { CheckSwitchPhase } from "./check-switch-phase";
@@ -27,6 +26,7 @@ import { EncounterPhase } from "./encounter-phase";
 import { SelectChallengePhase } from "./select-challenge-phase";
 import { SelectStarterPhase } from "./select-starter-phase";
 import { SummonPhase } from "./summon-phase";
+import { api } from "#app/plugins/api/api";
 
 export class TitlePhase extends Phase {
   private loaded: boolean = false;
@@ -285,7 +285,7 @@ export class TitlePhase extends Phase {
       };
 
       // If Online, calls seed fetch from db to generate daily run. If Offline, generates a daily run based on current date.
-      if (!isLocal || isLocalServerConnected) {
+      if (!api.isLocal || api.isConnected) {
         fetchDailyRunSeed()
           .then((seed) => {
             if (seed) {

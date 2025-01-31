@@ -12,7 +12,6 @@ import { speciesStarterCosts } from "#app/data/balance/starters";
 import {
   randInt,
   getEnumKeys,
-  isLocal,
   executeIf,
   fixedNumber,
   randSeedItem,
@@ -474,7 +473,7 @@ export class GameData {
    * At the moment, only retrievable from locale cache
    */
   async getRunHistoryData(): Promise<RunHistoryData> {
-    if (!isLocal) {
+    if (!api.isLocal) {
       /**
        * Networking Code DO NOT DELETE!
        * Note: Might have to be migrated to `api.ts`

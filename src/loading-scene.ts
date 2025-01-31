@@ -5,7 +5,7 @@ import { SceneBase } from "#app/scene-base";
 import { getWindowVariantSuffix } from "#app/ui/ui-theme";
 import { WindowVariant } from "#enums/window-variant";
 import { isMobile } from "#app/touch-controls";
-import { localPing, getEnumValues, hasAllLocalizedSprites, getEnumKeys } from "#app/utils";
+import { getEnumValues, hasAllLocalizedSprites, getEnumKeys } from "#app/utils";
 import { initPokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import { initBiomes } from "#app/data/balance/biomes";
 import { initEggMoves } from "#app/data/balance/egg-moves";
@@ -21,6 +21,7 @@ import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-enco
 import { initMoves } from "#app/data/all-moves";
 import { initVouchers } from "#app/system/init-vouchers";
 import { initAbilities } from "#app/data/init-abilities";
+import { api } from "#app/plugins/api/api";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";
@@ -34,7 +35,7 @@ export class LoadingScene extends SceneBase {
   }
 
   preload() {
-    localPing();
+    api.ping();
     this.load["manifest"] = this.game["manifest"];
 
     this.loadImage("loading_bg", "arenas");

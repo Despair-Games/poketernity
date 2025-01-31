@@ -24,7 +24,6 @@ import { settings } from "#app/system/settings/settings-manager";
 import TrainerData from "#app/system/trainer-data";
 import { Unlockables } from "#enums/unlockables";
 import { UiMode } from "#enums/ui-mode";
-import { isLocal, isLocalServerConnected } from "#app/utils";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
@@ -225,7 +224,7 @@ export class GameOverPhase extends BattlePhase {
      * If Online, execute apiFetch as intended
      * If Offline, execute offlineNewClear() only for victory, a localStorage implementation of newClear daily run checks
      */
-    if (!isLocal || isLocalServerConnected) {
+    if (!api.isLocal || api.isConnected) {
       api.savedata.session
         .newclear({ slot: globalScene.sessionSlotId, isVictory: this.isVictory, clientSessionId: clientSessionId })
         .then((success) => doGameOver(success));
