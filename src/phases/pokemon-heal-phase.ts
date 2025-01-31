@@ -14,7 +14,7 @@ import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { CommonAnimPhase } from "./common-anim-phase";
 
-interface PokemonHealPhaseOptions {
+export interface PokemonHealPhaseOptions {
   message?: string;
   showFullHpMessage?: boolean;
   skipAnim?: boolean;

@@ -10,7 +10,6 @@ import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { FieldPhase } from "./abstract-field-phase";
-import { PokemonHealPhase } from "./pokemon-heal-phase";
 
 export class TurnEndPhase extends FieldPhase {
   public override start(): void {
@@ -29,11 +28,9 @@ export class TurnEndPhase extends FieldPhase {
         globalScene.applyModifiers(TurnHealModifier, pokemon.isPlayer(), pokemon);
 
         if (terrain?.terrainType === TerrainType.GRASSY && pokemon.isGrounded()) {
-          globalScene.unshiftPhase(
-            new PokemonHealPhase(pokemon.getBattlerIndex(), Math.max(pokemon.getMaxHp() >> 4, 1), {
-              message: i18next.t("battle:turnEndHpRestore", { pokemonName: getPokemonNameWithAffix(pokemon) }),
-            }),
-          );
+          globalScene.queuePokemonHeal(true, pokemon.getBattlerIndex(), Math.max(pokemon.getMaxHp() >> 4, 1), {
+            message: i18next.t("battle:turnEndHpRestore", { pokemonName: getPokemonNameWithAffix(pokemon) }),
+          });
         }
         applyAbAttrs(PostTurnAbAttr, pokemon, false);
       }

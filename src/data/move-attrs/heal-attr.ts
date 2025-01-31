@@ -1,7 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { toDmgValue } from "#app/utils";
 import i18next from "i18next";
 import type { Move } from "#app/data/move";
@@ -47,12 +46,10 @@ export class HealAttr extends MoveEffectAttr {
    * This heals the target and shows the appropriate message.
    */
   addHealPhase(target: Pokemon, healRatio: number) {
-    globalScene.unshiftPhase(
-      new PokemonHealPhase(target.getBattlerIndex(), toDmgValue(target.getMaxHp() * healRatio), {
-        message: i18next.t("moveTriggers:healHp", { pokemonName: getPokemonNameWithAffix(target) }),
-        skipAnim: !this.showAnim,
-      }),
-    );
+    globalScene.queuePokemonHeal(true, target.getBattlerIndex(), toDmgValue(target.getMaxHp() * healRatio), {
+      message: i18next.t("moveTriggers:healHp", { pokemonName: getPokemonNameWithAffix(target) }),
+      skipAnim: !this.showAnim,
+    });
   }
 
   override getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {

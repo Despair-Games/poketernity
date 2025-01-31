@@ -11,7 +11,6 @@ import i18next from "i18next";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
 import { Stat, type BattleStat } from "#enums/stat";
-import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { globalScene } from "#app/global-scene";
 import { getBerryName } from "#app/utils/berry-utils";
@@ -72,14 +71,12 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
         }
         const hpHealed = new NumberHolder(toDmgValue(pokemon.getMaxHp() / 4));
         applyAbAttrs(DoubleBerryEffectAbAttr, pokemon, false, hpHealed);
-        globalScene.unshiftPhase(
-          new PokemonHealPhase(pokemon.getBattlerIndex(), hpHealed.value, {
-            message: i18next.t("battle:hpHealBerry", {
-              pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-              berryName: getBerryName(berryType),
-            }),
+        globalScene.queuePokemonHeal(true, pokemon.getBattlerIndex(), hpHealed.value, {
+          message: i18next.t("battle:hpHealBerry", {
+            pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+            berryName: getBerryName(berryType),
           }),
-        );
+        });
         applyAbAttrs(PostItemLostAbAttr, berryOwner ?? pokemon, false);
       };
     case BerryType.LUM:

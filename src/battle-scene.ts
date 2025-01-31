@@ -182,6 +182,7 @@ import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { GameOverPhase } from "#app/phases/game-over-phase";
 import { FaintPhase } from "#app/phases/faint-phase";
 import type { DestinyBondTag, GrudgeTag } from "#app/data/battler-tags";
+import { PokemonHealPhase, type PokemonHealPhaseOptions } from "#app/phases/pokemon-heal-phase";
 
 //#region Types
 
@@ -3692,5 +3693,22 @@ export default class BattleScene extends SceneBase {
   ): void {
     this.setPhaseQueueSplice();
     this.unshiftPhase(new FaintPhase(battlerIndex, preventEndure, destinyTag, grudgeTag, source));
+  }
+
+  /**
+   * Queues a new {@linkcode PokemonHealPhase} for the given {@linkcode BattlerIndex}.
+   * @param eager Whether to add the {@linkcode PokemonHealPhase} to the front of the phase queue or defer it
+   * @param battlerIndex The {@linkcode BattlerIndex} to heal
+   * @param hp The amount of HP to heal
+   * @param options Optional {@linkcode PokemonHealPhaseOptions}
+   */
+  queuePokemonHeal(eager: boolean, battlerIndex: BattlerIndex, hp: number, options?: PokemonHealPhaseOptions) {
+    const pokemonHealPhase = new PokemonHealPhase(battlerIndex, hp, options);
+
+    if (eager) {
+      this.unshiftPhase(pokemonHealPhase);
+    } else {
+      this.pushPhase(pokemonHealPhase, true);
+    }
   }
 }

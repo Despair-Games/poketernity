@@ -2,7 +2,6 @@ import type { EffectiveStat } from "#enums/stat";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { toDmgValue } from "#app/utils";
 import i18next from "i18next";
 import { BlockNonDirectDamageAbAttr } from "#app/data/ab-attrs/block-non-direct-damage-ab-attr";
@@ -55,13 +54,11 @@ export class HitHealAttr extends MoveEffectAttr {
         message = "";
       }
     }
-    globalScene.unshiftPhase(
-      new PokemonHealPhase(user.getBattlerIndex(), healAmount, {
-        message,
-        showFullHpMessage: false,
-        skipAnim: true,
-      }),
-    );
+    globalScene.queuePokemonHeal(true, user.getBattlerIndex(), healAmount, {
+      message,
+      showFullHpMessage: false,
+      skipAnim: true,
+    });
     return true;
   }
 
