@@ -105,7 +105,7 @@ import {
 import { FormChangeItem } from "#enums/form-change-item";
 import { FormChangePhase } from "#app/phases/form-change-phase";
 import { getTypeRgb } from "#app/data/type";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import PokemonSpriteSparkleHandler from "#app/field/pokemon-sprite-sparkle-handler";
 import CharSprite from "#app/ui/char-sprite";
 import DamageNumberHandler from "#app/field/damage-number-handler";
@@ -177,6 +177,7 @@ import { allTrainerConfigs } from "./data/balance/trainer-configs/all-trainer-co
 import { eventBus } from "./event-bus";
 import { Animation } from "./animations";
 import { resetStarterColors, starterColors } from "./data/starter-colors";
+import { CallSourceLogger } from "#app/loggers";
 
 const DEBUG_RNG = false;
 
@@ -382,16 +383,47 @@ export default class BattleScene extends SceneBase {
   }
 
   async preload() {
+    // TODO: Move all RNG-related code outside of `battle-scene.ts`.
     if (DEBUG_RNG) {
+      /**
+       * A list of functions that we ignore because they do not convey why the RNG call is being made.
+       * Feel free to add to this list as needed.
+       */
+      const ignoredRngFunctions = [
+        "realInRange",
+        "integerInRange",
+        "pick",
+        "weightedPick",
+        "shuffle",
+        "between",
+        "randSeedItem",
+        "randSeedWeightedItem",
+        "randSeedInt",
+        "randSeedIntRange",
+        "randSeedGauss",
+        "randSeedShuffle",
+        "randBattleSeedInt",
+        "randomString",
+        "executeWithSeedOffset",
+        "newBattle",
+      ];
+      const rngLogger = new CallSourceLogger(ignoredRngFunctions);
       const originalRealInRange = Phaser.Math.RND.realInRange;
       Phaser.Math.RND.realInRange = (min: number, max: number): number => {
         const ret = originalRealInRange.apply(Phaser.Math.RND, [min, max]);
-        const args = ["RNG", ++this.rngCounter, ret / (max - min), `min: ${min} / max: ${max}`];
-        args.push(`seed: ${this.rngSeedOverride || this.waveSeed || this.seed}`);
+        const rngInfo = [
+          "RNG",
+          ++this.rngCounter,
+          `raw: ${ret / (max - min)}`,
+          `min: ${min} / max: ${max}`,
+          `output: ${ret}`,
+          `seed: ${this.rngSeedOverride || this.waveSeed || this.seed}`,
+        ];
         if (this.rngOffset) {
-          args.push(`offset: ${this.rngOffset}`);
+          rngInfo.push(`offset: ${this.rngOffset}`);
         }
-        console.log(...args);
+
+        rngLogger.log(...rngInfo);
         return ret;
       };
     }
@@ -956,7 +988,7 @@ export default class BattleScene extends SceneBase {
     }
 
     if (boss && !dataSource) {
-      const secondaryIvs = getIvsFromId(randSeedInt(4294967296));
+      const secondaryIvs = getIvsFromId();
 
       for (let s = 0; s < pokemon.ivs.length; s++) {
         pokemon.ivs[s] = Math.round(
@@ -3147,8 +3179,8 @@ export default class BattleScene extends SceneBase {
             return {
               name: p.name,
               form: p.getFormKey(),
-              types: p.getTypes().map((type) => Type[type]),
-              teraType: p.getTeraType() !== Type.UNKNOWN ? Type[p.getTeraType()] : "",
+              types: p.getTypes().map((type) => ElementType[type]),
+              teraType: p.getTeraType() !== ElementType.UNKNOWN ? ElementType[p.getTeraType()] : "",
               level: p.level,
               currentHP: p.hp,
               maxHP: p.getMaxHp(),

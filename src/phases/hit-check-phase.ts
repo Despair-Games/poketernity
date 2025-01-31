@@ -15,7 +15,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveTarget } from "#enums/move-target";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import { PokemonPhase } from "./abstract-pokemon-phase";
 
 type HitCheckEntry = [HitCheckResult, TypeDamageMultiplier];
@@ -87,7 +87,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
         .getMove()
         .getAttrs(HitsTagAttr)
         .some((hta) => hta.tagType === semiInvulnerableTag.tagType)
-      && !(this.move.getMove().hasAttr(ToxicAccuracyAttr) && user.isOfType(Type.POISON));
+      && !(this.move.getMove().hasAttr(ToxicAccuracyAttr) && user.isOfType(ElementType.POISON));
 
     if (targetIsSemiInvulnerable && !alwaysHit) {
       return [HitCheckResult.MISS, 0];

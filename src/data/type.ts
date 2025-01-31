@@ -1,266 +1,266 @@
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 
 export type TypeDamageMultiplier = 0 | 0.125 | 0.25 | 0.5 | 1 | 2 | 4 | 8;
 
-export function getTypeDamageMultiplier(attackType: Type, defType: Type): TypeDamageMultiplier {
-  if (attackType === Type.UNKNOWN || defType === Type.UNKNOWN) {
+export function getTypeDamageMultiplier(attackType: ElementType, defType: ElementType): TypeDamageMultiplier {
+  if (attackType === ElementType.UNKNOWN || defType === ElementType.UNKNOWN) {
     return 1;
   }
 
   switch (defType) {
-    case Type.NORMAL:
+    case ElementType.NORMAL:
       switch (attackType) {
-        case Type.FIGHTING:
+        case ElementType.FIGHTING:
           return 2;
-        case Type.GHOST:
+        case ElementType.GHOST:
           return 0;
         default:
           return 1;
       }
-    case Type.FIGHTING:
+    case ElementType.FIGHTING:
       switch (attackType) {
-        case Type.FLYING:
-        case Type.PSYCHIC:
-        case Type.FAIRY:
+        case ElementType.FLYING:
+        case ElementType.PSYCHIC:
+        case ElementType.FAIRY:
           return 2;
-        case Type.ROCK:
-        case Type.BUG:
-        case Type.DARK:
+        case ElementType.ROCK:
+        case ElementType.BUG:
+        case ElementType.DARK:
           return 0.5;
         default:
           return 1;
       }
-    case Type.FLYING:
+    case ElementType.FLYING:
       switch (attackType) {
-        case Type.ROCK:
-        case Type.ELECTRIC:
-        case Type.ICE:
+        case ElementType.ROCK:
+        case ElementType.ELECTRIC:
+        case ElementType.ICE:
           return 2;
-        case Type.FIGHTING:
-        case Type.BUG:
-        case Type.GRASS:
+        case ElementType.FIGHTING:
+        case ElementType.BUG:
+        case ElementType.GRASS:
           return 0.5;
-        case Type.GROUND:
+        case ElementType.GROUND:
           return 0;
         default:
           return 1;
       }
-    case Type.POISON:
+    case ElementType.POISON:
       switch (attackType) {
-        case Type.GROUND:
-        case Type.PSYCHIC:
+        case ElementType.GROUND:
+        case ElementType.PSYCHIC:
           return 2;
-        case Type.FIGHTING:
-        case Type.POISON:
-        case Type.BUG:
-        case Type.GRASS:
-        case Type.FAIRY:
+        case ElementType.FIGHTING:
+        case ElementType.POISON:
+        case ElementType.BUG:
+        case ElementType.GRASS:
+        case ElementType.FAIRY:
           return 0.5;
         default:
           return 1;
       }
-    case Type.GROUND:
+    case ElementType.GROUND:
       switch (attackType) {
-        case Type.WATER:
-        case Type.GRASS:
-        case Type.ICE:
+        case ElementType.WATER:
+        case ElementType.GRASS:
+        case ElementType.ICE:
           return 2;
-        case Type.POISON:
-        case Type.ROCK:
+        case ElementType.POISON:
+        case ElementType.ROCK:
           return 0.5;
-        case Type.ELECTRIC:
+        case ElementType.ELECTRIC:
           return 0;
         default:
           return 1;
       }
-    case Type.ROCK:
+    case ElementType.ROCK:
       switch (attackType) {
-        case Type.FIGHTING:
-        case Type.GROUND:
-        case Type.STEEL:
-        case Type.WATER:
-        case Type.GRASS:
+        case ElementType.FIGHTING:
+        case ElementType.GROUND:
+        case ElementType.STEEL:
+        case ElementType.WATER:
+        case ElementType.GRASS:
           return 2;
-        case Type.NORMAL:
-        case Type.FLYING:
-        case Type.POISON:
-        case Type.FIRE:
+        case ElementType.NORMAL:
+        case ElementType.FLYING:
+        case ElementType.POISON:
+        case ElementType.FIRE:
           return 0.5;
         default:
           return 1;
       }
-    case Type.BUG:
+    case ElementType.BUG:
       switch (attackType) {
-        case Type.FLYING:
-        case Type.ROCK:
-        case Type.FIRE:
+        case ElementType.FLYING:
+        case ElementType.ROCK:
+        case ElementType.FIRE:
           return 2;
-        case Type.FIGHTING:
-        case Type.GROUND:
-        case Type.GRASS:
+        case ElementType.FIGHTING:
+        case ElementType.GROUND:
+        case ElementType.GRASS:
           return 0.5;
         default:
           return 1;
       }
-    case Type.GHOST:
+    case ElementType.GHOST:
       switch (attackType) {
-        case Type.GHOST:
-        case Type.DARK:
+        case ElementType.GHOST:
+        case ElementType.DARK:
           return 2;
-        case Type.POISON:
-        case Type.BUG:
+        case ElementType.POISON:
+        case ElementType.BUG:
           return 0.5;
-        case Type.NORMAL:
-        case Type.FIGHTING:
+        case ElementType.NORMAL:
+        case ElementType.FIGHTING:
           return 0;
         default:
           return 1;
       }
-    case Type.STEEL:
+    case ElementType.STEEL:
       switch (attackType) {
-        case Type.FIGHTING:
-        case Type.GROUND:
-        case Type.FIRE:
+        case ElementType.FIGHTING:
+        case ElementType.GROUND:
+        case ElementType.FIRE:
           return 2;
-        case Type.NORMAL:
-        case Type.FLYING:
-        case Type.ROCK:
-        case Type.BUG:
-        case Type.STEEL:
-        case Type.GRASS:
-        case Type.PSYCHIC:
-        case Type.ICE:
-        case Type.DRAGON:
-        case Type.FAIRY:
+        case ElementType.NORMAL:
+        case ElementType.FLYING:
+        case ElementType.ROCK:
+        case ElementType.BUG:
+        case ElementType.STEEL:
+        case ElementType.GRASS:
+        case ElementType.PSYCHIC:
+        case ElementType.ICE:
+        case ElementType.DRAGON:
+        case ElementType.FAIRY:
           return 0.5;
-        case Type.POISON:
+        case ElementType.POISON:
           return 0;
         default:
           return 1;
       }
-    case Type.FIRE:
+    case ElementType.FIRE:
       switch (attackType) {
-        case Type.GROUND:
-        case Type.ROCK:
-        case Type.WATER:
+        case ElementType.GROUND:
+        case ElementType.ROCK:
+        case ElementType.WATER:
           return 2;
-        case Type.BUG:
-        case Type.STEEL:
-        case Type.FIRE:
-        case Type.GRASS:
-        case Type.ICE:
-        case Type.FAIRY:
+        case ElementType.BUG:
+        case ElementType.STEEL:
+        case ElementType.FIRE:
+        case ElementType.GRASS:
+        case ElementType.ICE:
+        case ElementType.FAIRY:
           return 0.5;
         default:
           return 1;
       }
-    case Type.WATER:
+    case ElementType.WATER:
       switch (attackType) {
-        case Type.GRASS:
-        case Type.ELECTRIC:
+        case ElementType.GRASS:
+        case ElementType.ELECTRIC:
           return 2;
-        case Type.STEEL:
-        case Type.FIRE:
-        case Type.WATER:
-        case Type.ICE:
+        case ElementType.STEEL:
+        case ElementType.FIRE:
+        case ElementType.WATER:
+        case ElementType.ICE:
           return 0.5;
         default:
           return 1;
       }
-    case Type.GRASS:
+    case ElementType.GRASS:
       switch (attackType) {
-        case Type.FLYING:
-        case Type.POISON:
-        case Type.BUG:
-        case Type.FIRE:
-        case Type.ICE:
+        case ElementType.FLYING:
+        case ElementType.POISON:
+        case ElementType.BUG:
+        case ElementType.FIRE:
+        case ElementType.ICE:
           return 2;
-        case Type.GROUND:
-        case Type.WATER:
-        case Type.GRASS:
-        case Type.ELECTRIC:
+        case ElementType.GROUND:
+        case ElementType.WATER:
+        case ElementType.GRASS:
+        case ElementType.ELECTRIC:
           return 0.5;
         default:
           return 1;
       }
-    case Type.ELECTRIC:
+    case ElementType.ELECTRIC:
       switch (attackType) {
-        case Type.GROUND:
+        case ElementType.GROUND:
           return 2;
-        case Type.FLYING:
-        case Type.STEEL:
-        case Type.ELECTRIC:
+        case ElementType.FLYING:
+        case ElementType.STEEL:
+        case ElementType.ELECTRIC:
           return 0.5;
         default:
           return 1;
       }
-    case Type.PSYCHIC:
+    case ElementType.PSYCHIC:
       switch (attackType) {
-        case Type.BUG:
-        case Type.GHOST:
-        case Type.DARK:
+        case ElementType.BUG:
+        case ElementType.GHOST:
+        case ElementType.DARK:
           return 2;
-        case Type.FIGHTING:
-        case Type.PSYCHIC:
+        case ElementType.FIGHTING:
+        case ElementType.PSYCHIC:
           return 0.5;
         default:
           return 1;
       }
-    case Type.ICE:
+    case ElementType.ICE:
       switch (attackType) {
-        case Type.FIGHTING:
-        case Type.ROCK:
-        case Type.STEEL:
-        case Type.FIRE:
+        case ElementType.FIGHTING:
+        case ElementType.ROCK:
+        case ElementType.STEEL:
+        case ElementType.FIRE:
           return 2;
-        case Type.ICE:
+        case ElementType.ICE:
           return 0.5;
         default:
           return 1;
       }
-    case Type.DRAGON:
+    case ElementType.DRAGON:
       switch (attackType) {
-        case Type.ICE:
-        case Type.DRAGON:
-        case Type.FAIRY:
+        case ElementType.ICE:
+        case ElementType.DRAGON:
+        case ElementType.FAIRY:
           return 2;
-        case Type.FIRE:
-        case Type.WATER:
-        case Type.GRASS:
-        case Type.ELECTRIC:
+        case ElementType.FIRE:
+        case ElementType.WATER:
+        case ElementType.GRASS:
+        case ElementType.ELECTRIC:
           return 0.5;
         default:
           return 1;
       }
-    case Type.DARK:
+    case ElementType.DARK:
       switch (attackType) {
-        case Type.FIGHTING:
-        case Type.BUG:
-        case Type.FAIRY:
+        case ElementType.FIGHTING:
+        case ElementType.BUG:
+        case ElementType.FAIRY:
           return 2;
-        case Type.GHOST:
-        case Type.DARK:
+        case ElementType.GHOST:
+        case ElementType.DARK:
           return 0.5;
-        case Type.PSYCHIC:
+        case ElementType.PSYCHIC:
           return 0;
         default:
           return 1;
       }
-    case Type.FAIRY:
+    case ElementType.FAIRY:
       switch (attackType) {
-        case Type.POISON:
-        case Type.STEEL:
+        case ElementType.POISON:
+        case ElementType.STEEL:
           return 2;
-        case Type.FIGHTING:
-        case Type.BUG:
-        case Type.DARK:
+        case ElementType.FIGHTING:
+        case ElementType.BUG:
+        case ElementType.DARK:
           return 0.5;
-        case Type.DRAGON:
+        case ElementType.DRAGON:
           return 0;
         default:
           return 1;
       }
-    case Type.STELLAR:
+    case ElementType.STELLAR:
       return 1;
   }
 
@@ -316,45 +316,45 @@ export function getTypeDamageMultiplierColor(
   }
 }
 
-export function getTypeRgb(type: Type): [number, number, number] {
+export function getTypeRgb(type: ElementType): [number, number, number] {
   switch (type) {
-    case Type.NORMAL:
+    case ElementType.NORMAL:
       return [168, 168, 120];
-    case Type.FIGHTING:
+    case ElementType.FIGHTING:
       return [192, 48, 40];
-    case Type.FLYING:
+    case ElementType.FLYING:
       return [168, 144, 240];
-    case Type.POISON:
+    case ElementType.POISON:
       return [160, 64, 160];
-    case Type.GROUND:
+    case ElementType.GROUND:
       return [224, 192, 104];
-    case Type.ROCK:
+    case ElementType.ROCK:
       return [184, 160, 56];
-    case Type.BUG:
+    case ElementType.BUG:
       return [168, 184, 32];
-    case Type.GHOST:
+    case ElementType.GHOST:
       return [112, 88, 152];
-    case Type.STEEL:
+    case ElementType.STEEL:
       return [184, 184, 208];
-    case Type.FIRE:
+    case ElementType.FIRE:
       return [240, 128, 48];
-    case Type.WATER:
+    case ElementType.WATER:
       return [104, 144, 240];
-    case Type.GRASS:
+    case ElementType.GRASS:
       return [120, 200, 80];
-    case Type.ELECTRIC:
+    case ElementType.ELECTRIC:
       return [248, 208, 48];
-    case Type.PSYCHIC:
+    case ElementType.PSYCHIC:
       return [248, 88, 136];
-    case Type.ICE:
+    case ElementType.ICE:
       return [152, 216, 216];
-    case Type.DRAGON:
+    case ElementType.DRAGON:
       return [112, 56, 248];
-    case Type.DARK:
+    case ElementType.DARK:
       return [112, 88, 72];
-    case Type.FAIRY:
+    case ElementType.FAIRY:
       return [232, 136, 200];
-    case Type.STELLAR:
+    case ElementType.STELLAR:
       return [255, 255, 255];
     default:
       return [0, 0, 0];

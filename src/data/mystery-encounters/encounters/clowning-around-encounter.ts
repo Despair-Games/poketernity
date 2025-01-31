@@ -27,7 +27,7 @@ import {
   applyAbilityOverrideToPokemon,
   applyModifierTypeToPlayerPokemon,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import type { Type } from "#enums/type";
+import type { ElementType } from "#enums/element-type";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { randSeedInt, randSeedShuffle } from "#app/utils";
@@ -377,12 +377,12 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
           }
 
           const newTypes = [originalTypes[0]];
-          let secondType: Type | null = null;
+          let secondType: ElementType | null = null;
           while (secondType === null || secondType === newTypes[0] || originalTypes.includes(secondType)) {
             if (priorityTypes.length > 0) {
               secondType = priorityTypes.pop() ?? null;
             } else {
-              secondType = randSeedInt(18) as Type;
+              secondType = randSeedInt(18) as ElementType;
             }
           }
           newTypes.push(secondType);

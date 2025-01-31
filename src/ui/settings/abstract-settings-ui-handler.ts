@@ -10,7 +10,7 @@ import { addTextObject } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "#app/ui/ui-theme";
-import { capitalizeFirstLetter, hasTouchscreen } from "#app/utils";
+import { capitalizeFirstLetter, hasTouchscreen, isNullOrUndefined } from "#app/utils";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
@@ -329,7 +329,13 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
       NavigationManager.getInstance().reset();
       globalScene.ui.revertMode();
     } else {
+      const { Wrap } = Phaser.Math;
       const cursor = this.cursor + this.scrollCursor;
+      const optionCursor = this.optionCursors[cursor];
+      const optionLabels = this.optionValueLabels[cursor];
+      const maxOptionCursor = optionLabels.length;
+      const uiItem = this.uiItems[cursor];
+
       switch (button) {
         case Button.UP:
           if (cursor) {
@@ -365,15 +371,23 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
           }
           break;
         case Button.LEFT:
-          if (this.optionCursors[cursor]) {
-            // Moves the option cursor left, if possible.
-            success = this.setOptionCursor(cursor, this.optionCursors[cursor] - 1, true);
+          if (!isNullOrUndefined(optionCursor)) {
+            // Moves the option cursor left (wrapping)
+            if (uiItem.doWrap) {
+              success = this.setOptionCursor(cursor, Wrap(optionCursor - 1, 0, maxOptionCursor), true);
+            } else if (optionCursor > 0) {
+              success = this.setOptionCursor(cursor, optionCursor - 1, true);
+            }
           }
           break;
         case Button.RIGHT:
-          // Moves the option cursor right, if possible.
-          if (this.optionCursors[cursor] < this.optionValueLabels[cursor].length - 1) {
-            success = this.setOptionCursor(cursor, this.optionCursors[cursor] + 1, true);
+          // Moves the option cursor right (wrapping)
+          if (!isNullOrUndefined(optionCursor)) {
+            if (uiItem.doWrap) {
+              success = this.setOptionCursor(cursor, Wrap(optionCursor + 1, 0, maxOptionCursor), true);
+            } else if (optionCursor < optionLabels.length - 1) {
+              success = this.setOptionCursor(cursor, optionCursor + 1, true);
+            }
           }
           break;
         case Button.CYCLE_FORM:
