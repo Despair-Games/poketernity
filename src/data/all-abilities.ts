@@ -197,24 +197,12 @@ import { TerrainEventTypeChangeAbAttr } from "./ab-attrs/terrain-event-type-chan
 import { WeatherBasedSpeedDoublerAbAttr } from "./ab-attrs/weather-based-speed-doubler-ab-attr";
 import { MoveFlagPowerBoostAbAttr } from "./ab-attrs/move-flag-power-boost-ab-attr";
 import { MoveFlagImmunityAbAttr } from "./ab-attrs/move-flag-immunity-ab-attr";
+import { getWeatherCondition } from "#app/utils/ability-utils";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
     const terrainType = globalScene.arena.terrain?.terrainType;
     return !!terrainType && terrainTypes.indexOf(terrainType) > -1;
-  };
-}
-
-export function getWeatherCondition(...weatherTypes: WeatherType[]): AbAttrCondition {
-  return () => {
-    if (!globalScene?.arena) {
-      return false;
-    }
-    if (globalScene.arena.weather?.isEffectSuppressed()) {
-      return false;
-    }
-    const weatherType = globalScene.arena.weather?.weatherType;
-    return !!weatherType && weatherTypes.indexOf(weatherType) > -1;
   };
 }
 
