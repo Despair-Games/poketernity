@@ -15,7 +15,7 @@ import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { InfiltratorAbAttr } from "./ab-attrs/infiltrator-ab-attr";
 import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-ab-attr";
 import { Stat } from "#enums/stat";
-import { CommonBattleAnim } from "#app/data/battle-anims";
+import { CommonBattleAnim } from "./battle-anims/common-battle-anim";
 import { CommonAnim } from "#enums/common-anim";
 import i18next from "i18next";
 import { Abilities } from "#enums/abilities";

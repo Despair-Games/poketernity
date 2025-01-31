@@ -4,7 +4,7 @@ import { BlockStatusDamageAbAttr } from "#app/data/ab-attrs/block-status-damage-
 import { PostDamageAbAttr } from "#app/data/ab-attrs/post-damage-ab-attr";
 import { ReduceBurnDamageAbAttr } from "#app/data/ab-attrs/reduce-burn-damage-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { CommonBattleAnim } from "#app/data/battle-anims";
+import { CommonBattleAnim } from "#app/data/battle-anims/common-battle-anim";
 import { CommonAnim } from "#enums/common-anim";
 import { getStatusEffectActivationText } from "#app/data/status-effect";
 import { globalScene } from "#app/global-scene";

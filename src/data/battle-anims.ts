@@ -10,13 +10,11 @@ import Phaser from "phaser";
 import { encounterAnims, type EncounterAnim } from "#enums/encounter-anims";
 import { settings } from "#app/system/settings/settings-manager";
 import { AnimFrameTarget } from "#enums/anim-frame-target";
-import { type CommonAnim } from "#enums/common-anim";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { AnimConfig, type AnimFrame } from "#app/data/anim-config";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimFocus } from "#enums/anim-focus";
 import { moveAnims } from "#app/data/move-anims";
-import { commonAnims } from "#app/data/common-anims";
 
 interface GraphicFrameData {
   x: number;
@@ -666,24 +664,6 @@ export abstract class BattleAnim {
         }
       },
     });
-  }
-}
-
-export class CommonBattleAnim extends BattleAnim {
-  public commonAnim: CommonAnim | null;
-
-  constructor(commonAnim: CommonAnim | null, user: Pokemon, target?: Pokemon, playOnEmptyField: boolean = false) {
-    super(user, target || user, playOnEmptyField);
-
-    this.commonAnim = commonAnim;
-  }
-
-  getAnim(): AnimConfig | null {
-    return this.commonAnim ? (commonAnims.get(this.commonAnim) ?? null) : null;
-  }
-
-  isOppAnim(): boolean {
-    return false;
   }
 }
 
