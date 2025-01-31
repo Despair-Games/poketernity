@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { allAbilities } from "#app/data/ability";
+import { allAbilities } from "./all-abilities";
 import { applyAbAttrs } from "./apply-ab-attrs";
 import { FlinchEffectAbAttr } from "./ab-attrs/flinch-effect-ab-attr";
 import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-ab-attr";

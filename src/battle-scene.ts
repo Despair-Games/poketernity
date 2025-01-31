@@ -68,7 +68,7 @@ import {
 } from "#app/modifier/modifier-type";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import AbilityBar from "#app/ui/ability-bar";
-import { allAbilities } from "#app/data/ability";
+import { allAbilities } from "./data/all-abilities";
 import { applyAbAttrs } from "./data/apply-ab-attrs";
 import { PostItemLostAbAttr } from "./data/ab-attrs/post-item-lost-ab-attr";
 import type { FixedBattleConfig } from "#app/battle";

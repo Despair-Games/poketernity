@@ -11,7 +11,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { BattlerIndex } from "#enums/battler-index";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { ArenaTagSide } from "#enums/arena-tag-side";
-import { allAbilities } from "#app/data/ability";
+import { allAbilities } from "#app/data/all-abilities";
 import { MoveEffectChanceMultiplierAbAttr } from "#app/data/ab-attrs/move-effect-chance-multiplier-ab-attr";
 
 describe("Moves - Secret Power", () => {

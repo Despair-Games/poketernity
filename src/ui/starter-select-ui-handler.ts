@@ -2,7 +2,7 @@ import type { DexEntry } from "#app/@types/DexData";
 import type { StarterMoveset } from "#app/@types/StarterData";
 import { starterColors } from "#app/data/starter-colors";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
-import { allAbilities } from "#app/data/ability";
+import { allAbilities } from "#app/data/all-abilities";
 import { allMoves } from "#app/data/all-moves";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { starterPassiveAbilities } from "#app/data/balance/passives";

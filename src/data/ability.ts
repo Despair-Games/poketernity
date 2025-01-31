@@ -137,5 +137,3 @@ export function getAbApplyFunc(mode: AbilityApplyMode) {
       return () => [];
   }
 }
-
-export const allAbilities = [new Ability(Abilities.NONE, 3)];
