@@ -18,8 +18,8 @@ import { PokemonRegion } from "#enums/pokemon-regions";
 import { Species } from "#enums/species";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import type { Stat } from "#enums/stat";
-import type { Type } from "#enums/type";
 import { argbFromRgba, QuantizerCelebi, rgbaFromArgb } from "@material/material-color-utilities";
+import type { ElementType } from "#enums/element-type";
 
 //#region Types
 
@@ -33,8 +33,8 @@ export abstract class PokemonSpeciesForm {
   public speciesId: Species;
   protected _formIndex: number;
   protected _generation: number;
-  readonly type1: Type;
-  readonly type2: Type | null;
+  readonly type1: ElementType;
+  readonly type2: ElementType | null;
   readonly height: number;
   readonly weight: number;
   readonly ability1: Abilities;
@@ -49,8 +49,8 @@ export abstract class PokemonSpeciesForm {
   readonly isStarterSelectable: boolean;
 
   constructor(
-    type1: Type,
-    type2: Type | null,
+    type1: ElementType,
+    type2: ElementType | null,
     height: number,
     weight: number,
     ability1: Abilities,

@@ -1,6 +1,6 @@
 import { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
 import type { Abilities } from "#enums/abilities";
-import type { Type } from "#enums/type";
+import type { ElementType } from "#enums/element-type";
 
 export class PokemonForm extends PokemonSpeciesForm {
   public formName: string;
@@ -25,8 +25,8 @@ export class PokemonForm extends PokemonSpeciesForm {
   constructor(
     formName: string,
     formKey: string,
-    type1: Type,
-    type2: Type | null,
+    type1: ElementType,
+    type2: ElementType | null,
     height: number,
     weight: number,
     ability1: Abilities,

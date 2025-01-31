@@ -1,5 +1,5 @@
 import { Species } from "#enums/species";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
@@ -23,7 +23,7 @@ export class FormChangeItemTypeAttr extends VariableMoveTypeAttr {
           ? user.formIndex
           : user.fusionSpecies?.formIndex!;
 
-      moveType.value = Type[Type[form]];
+      moveType.value = ElementType[ElementType[form]];
       return true;
     }
 

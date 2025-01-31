@@ -1,4 +1,4 @@
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -22,7 +22,7 @@ export class FirstMoveTypeAttr extends MoveEffectAttr {
     globalScene.queueMessage(
       i18next.t("battle:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
-        type: i18next.t(`pokemonInfo:Type.${Type[firstMoveType]}`),
+        type: i18next.t(`pokemonInfo:Type.${ElementType[firstMoveType]}`),
       }),
     );
 

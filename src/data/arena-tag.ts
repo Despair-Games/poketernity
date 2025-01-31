@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import type { Arena } from "#app/field/arena";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import { BooleanHolder, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
 import { allMoves } from "#app/data/all-moves";
 import { MoveTarget } from "#enums/move-target";
@@ -569,7 +569,7 @@ class WishTag extends ArenaTag {
  * Abstract class to implement weakened moves of a specific type.
  */
 export abstract class WeakenMoveTypeTag extends ArenaTag {
-  private weakenedType: Type;
+  private weakenedType: ElementType;
 
   /**
    * Creates a new instance of the WeakenMoveTypeTag class.
@@ -580,7 +580,7 @@ export abstract class WeakenMoveTypeTag extends ArenaTag {
    * @param sourceMove - The move that created the tag.
    * @param sourceId - The ID of the source of the tag.
    */
-  constructor(tagType: ArenaTagType, turnCount: number, type: Type, sourceMove: Moves, sourceId: number) {
+  constructor(tagType: ArenaTagType, turnCount: number, type: ElementType, sourceMove: Moves, sourceId: number) {
     super(tagType, turnCount, sourceMove, sourceId);
 
     this.weakenedType = type;
@@ -590,11 +590,11 @@ export abstract class WeakenMoveTypeTag extends ArenaTag {
    * Reduces an attack's power by 0.33x if it matches this tag's weakened type.
    * @param _arena n/a
    * @param _simulated n/a
-   * @param type the attack's {@linkcode Type}
+   * @param type the attack's {@linkcode ElementType}
    * @param power a {@linkcode NumberHolder} containing the attack's power
    * @returns `true` if the attack's power was reduced; `false` otherwise.
    */
-  override apply(_arena: Arena, _simulated: boolean, type: Type, power: NumberHolder): boolean {
+  override apply(_arena: Arena, _simulated: boolean, type: ElementType, power: NumberHolder): boolean {
     if (type === this.weakenedType) {
       power.value *= 0.33;
       return true;
@@ -609,7 +609,7 @@ export abstract class WeakenMoveTypeTag extends ArenaTag {
  */
 class MudSportTag extends WeakenMoveTypeTag {
   constructor(turnCount: number, sourceId: number) {
-    super(ArenaTagType.MUD_SPORT, turnCount, Type.ELECTRIC, Moves.MUD_SPORT, sourceId);
+    super(ArenaTagType.MUD_SPORT, turnCount, ElementType.ELECTRIC, Moves.MUD_SPORT, sourceId);
   }
 
   override onAdd(_arena: Arena): void {
@@ -627,7 +627,7 @@ class MudSportTag extends WeakenMoveTypeTag {
  */
 class WaterSportTag extends WeakenMoveTypeTag {
   constructor(turnCount: number, sourceId: number) {
-    super(ArenaTagType.WATER_SPORT, turnCount, Type.FIRE, Moves.WATER_SPORT, sourceId);
+    super(ArenaTagType.WATER_SPORT, turnCount, ElementType.FIRE, Moves.WATER_SPORT, sourceId);
   }
 
   override onAdd(_arena: Arena): void {
@@ -660,12 +660,12 @@ export class IonDelugeTag extends ArenaTag {
    * Converts Normal-type moves to Electric type
    * @param _arena n/a
    * @param _simulated n/a
-   * @param moveType a {@linkcode NumberHolder} containing a move's {@linkcode Type}
+   * @param moveType a {@linkcode NumberHolder} containing a move's {@linkcode ElementType}
    * @returns `true` if the given move type changed; `false` otherwise.
    */
   override apply(_arena: Arena, _simulated: boolean, moveType: NumberHolder): boolean {
-    if (moveType.value === Type.NORMAL) {
-      moveType.value = Type.ELECTRIC;
+    if (moveType.value === ElementType.NORMAL) {
+      moveType.value = ElementType.ELECTRIC;
       return true;
     }
     return false;
@@ -826,7 +826,7 @@ class ToxicSpikesTag extends ArenaTrapTag {
       if (simulated) {
         return true;
       }
-      if (pokemon.isOfType(Type.POISON)) {
+      if (pokemon.isOfType(ElementType.POISON)) {
         this.neutralized = true;
         if (globalScene.arena.removeTag(this.tagType)) {
           globalScene.queueMessage(
@@ -854,7 +854,7 @@ class ToxicSpikesTag extends ArenaTrapTag {
     if (pokemon.isGrounded() || !pokemon.canSetStatus(StatusEffect.POISON, true)) {
       return 1;
     }
-    if (pokemon.isOfType(Type.POISON)) {
+    if (pokemon.isOfType(ElementType.POISON)) {
       return 1.25;
     }
     return super.getMatchupScoreMultiplier(pokemon);
@@ -931,13 +931,13 @@ export class DelayedAttackTag extends ArenaTag {
  * Sharp steel (produced by G-Max steelsurge)
  */
 class TypeHazardTag extends ArenaTrapTag {
-  public readonly damagingType: Type;
+  public readonly damagingType: ElementType;
   public readonly onAddKey: string;
   public readonly activateTrapKey: string;
 
   constructor(
     arenaTagType: ArenaTagType,
-    damagingType: Type,
+    damagingType: ElementType,
     sourceId: number,
     side: ArenaTagSide,
     sourceMove: Moves,
@@ -1002,7 +1002,7 @@ class StealthRockTag extends TypeHazardTag {
   constructor(sourceId: number, side: ArenaTagSide) {
     super(
       ArenaTagType.STEALTH_ROCK,
-      Type.ROCK,
+      ElementType.ROCK,
       sourceId,
       side,
       Moves.STEALTH_ROCK,
@@ -1016,7 +1016,7 @@ class SharpSteelTag extends TypeHazardTag {
   constructor(sourceId: number, side: ArenaTagSide) {
     super(
       ArenaTagType.SHARP_STEEL,
-      Type.STEEL,
+      ElementType.STEEL,
       sourceId,
       side,
       Moves.G_MAX_STEELSURGE,
@@ -1334,7 +1334,7 @@ class FireGrassPledgeTag extends ArenaTag {
       this.side === ArenaTagSide.PLAYER ? globalScene.getPlayerField() : globalScene.getEnemyField();
 
     field
-      .filter((pokemon) => !pokemon.isOfType(Type.FIRE) && !pokemon.switchOutStatus)
+      .filter((pokemon) => !pokemon.isOfType(ElementType.FIRE) && !pokemon.switchOutStatus)
       .forEach((pokemon) => {
         const cancelled = new BooleanHolder(false);
         applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
@@ -1424,22 +1424,22 @@ class GrassWaterPledgeTag extends ArenaTag {
  * G-Max Volcalith: Rock
  */
 export class TypeImmuneDamageOverTimeTag extends ArenaTag {
-  private immuneType: Type;
+  private immuneType: ElementType;
 
-  constructor(tagType, sourceMove: Moves, sourceId: number, side: ArenaTagSide, immuneType: Type) {
+  constructor(tagType, sourceMove: Moves, sourceId: number, side: ArenaTagSide, immuneType: ElementType) {
     super(tagType, 4, sourceMove, sourceId, side);
     this.immuneType = immuneType;
   }
 
   private getAnimationForType() {
     switch (this.immuneType) {
-      case Type.GRASS:
+      case ElementType.GRASS:
         return CommonAnim.WRAP;
-      case Type.FIRE:
+      case ElementType.FIRE:
         return CommonAnim.FIRE_SPIN;
-      case Type.WATER:
+      case ElementType.WATER:
         return CommonAnim.WHIRLPOOL;
-      case Type.ROCK:
+      case ElementType.ROCK:
         return CommonAnim.SALT_CURE;
       default:
         return CommonAnim.WRAP;
@@ -1453,7 +1453,7 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
     } else {
       localeKey = localeKey.concat("Enemy");
     }
-    localeKey = localeKey.concat(Type[this.immuneType]);
+    localeKey = localeKey.concat(ElementType[this.immuneType]);
 
     globalScene.queueMessage(i18next.t(localeKey));
   }
@@ -1472,7 +1472,7 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
         }
 
         globalScene.queueMessage(
-          i18next.t(`arenaTag:TypeImmuneDamageOverTimeLapse${Type[this.immuneType]}`, {
+          i18next.t(`arenaTag:TypeImmuneDamageOverTimeLapse${ElementType[this.immuneType]}`, {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
           }),
         );
@@ -1575,7 +1575,7 @@ export function getArenaTag(
         Moves.G_MAX_VINE_LASH,
         sourceId,
         side,
-        Type.GRASS,
+        ElementType.GRASS,
       );
     case ArenaTagType.G_MAX_WILDFIRE:
       return new TypeImmuneDamageOverTimeTag(
@@ -1583,7 +1583,7 @@ export function getArenaTag(
         Moves.G_MAX_WILDFIRE,
         sourceId,
         side,
-        Type.FIRE,
+        ElementType.FIRE,
       );
     case ArenaTagType.G_MAX_CANNONADE:
       return new TypeImmuneDamageOverTimeTag(
@@ -1591,7 +1591,7 @@ export function getArenaTag(
         Moves.G_MAX_CANNONADE,
         sourceId,
         side,
-        Type.WATER,
+        ElementType.WATER,
       );
     case ArenaTagType.G_MAX_VOLCALITH:
       return new TypeImmuneDamageOverTimeTag(
@@ -1599,7 +1599,7 @@ export function getArenaTag(
         Moves.G_MAX_VOLCALITH,
         sourceId,
         side,
-        Type.ROCK,
+        ElementType.ROCK,
       );
     case ArenaTagType.SHARP_STEEL:
       return new SharpSteelTag(sourceId, side);

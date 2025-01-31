@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { Gender } from "#enums/gender";
 import { PokeballType } from "#enums/pokeball";
 import type { Pokemon } from "#app/field/pokemon";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import { randSeedInt } from "#app/utils";
 import { WeatherType } from "#enums/weather-type";
 import { Nature } from "#enums/nature";
@@ -608,7 +608,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
       32,
       null,
       new SpeciesEvolutionCondition(
-        (_p) => !!globalScene.getPlayerParty().find((p) => p.getTypes(false, false, true).indexOf(Type.DARK) > -1),
+        (_p) =>
+          !!globalScene.getPlayerParty().find((p) => p.getTypes(false, false, true).indexOf(ElementType.DARK) > -1),
       ),
       SpeciesWildEvolutionDelay.MEDIUM,
     ),
@@ -1103,7 +1104,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       null,
       new SpeciesFriendshipEvolutionCondition(
         120,
-        (p) => !!p.getMoveset().find((m) => m.getMove().type === Type.FAIRY),
+        (p) => !!p.getMoveset().find((m) => m.getMove().type === ElementType.FAIRY),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1115,7 +1116,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       null,
       new SpeciesFriendshipEvolutionCondition(
         120,
-        (p) => !!p.getMoveset().find((m) => m.getMove().type === Type.FAIRY),
+        (p) => !!p.getMoveset().find((m) => m.getMove().type === ElementType.FAIRY),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1813,7 +1814,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.STEELIX,
       1,
       EvolutionItem.LINKING_CORD,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.getMove().type === Type.STEEL).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.getMove().type === ElementType.STEEL).length > 0),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),
   ],
@@ -1828,7 +1829,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.SCIZOR,
       1,
       EvolutionItem.LINKING_CORD,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.getMove().type === Type.STEEL).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.getMove().type === ElementType.STEEL).length > 0),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),
     new SpeciesEvolution(Species.KLEAVOR, 1, EvolutionItem.BLACK_AUGURITE, null, SpeciesWildEvolutionDelay.VERY_LONG),
