@@ -7,7 +7,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { Moves } from "#enums/moves";
 import { type SubstituteTag } from "#app/data/battler-tags";
 import Phaser from "phaser";
-import { EncounterAnim } from "#enums/encounter-anims";
+import { type EncounterAnim } from "#enums/encounter-anims";
 import { settings } from "#app/system/settings/settings-manager";
 import { AnimFrameTarget } from "#enums/anim-frame-target";
 import { ChargeAnim } from "#enums/charge-anim";
@@ -29,28 +29,6 @@ export const moveAnims = new Map<Moves, AnimConfig | [AnimConfig, AnimConfig] | 
 export const chargeAnims = new Map<ChargeAnim, AnimConfig | [AnimConfig, AnimConfig] | null>();
 export const commonAnims = new Map<CommonAnim, AnimConfig>();
 export const encounterAnims = new Map<EncounterAnim, AnimConfig>();
-
-/**
- * Fetches animation configs to be used in a Mystery Encounter
- * @param encounterAnim one or more animations to fetch
- */
-export async function initEncounterAnims(encounterAnim: EncounterAnim | EncounterAnim[]): Promise<void> {
-  const anims = Array.isArray(encounterAnim) ? encounterAnim : [encounterAnim];
-  const encounterAnimNames = getEnumKeys(EncounterAnim);
-  const encounterAnimFetches: Promise<Map<EncounterAnim, AnimConfig>>[] = [];
-  for (const anim of anims) {
-    if (encounterAnims.has(anim) && !isNullOrUndefined(encounterAnims.get(anim))) {
-      continue;
-    }
-    encounterAnimFetches.push(
-      globalScene
-        .cachedFetch(`./battle-anims/encounter-${encounterAnimNames[anim].toLowerCase().replace(/\_/g, "-")}.json`)
-        .then((response) => response.json())
-        .then((cas) => encounterAnims.set(anim, new AnimConfig(cas))),
-    );
-  }
-  await Promise.allSettled(encounterAnimFetches);
-}
 
 export function loadCommonAnimAssets(startLoad?: boolean): Promise<void> {
   return new Promise((resolve) => {
