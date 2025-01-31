@@ -1,5 +1,6 @@
 import { allMoves } from "#app/data/all-moves";
-import { AnimConfig, chargeAnims, moveAnims } from "#app/data/battle-anims";
+import { chargeAnims, moveAnims } from "#app/data/battle-anims";
+import { AnimConfig } from "#app/data/anim-config";
 import { BeakBlastHeaderAttr } from "#app/data/move-attrs/beak-blast-header-attr";
 import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 import { globalScene } from "#app/global-scene";

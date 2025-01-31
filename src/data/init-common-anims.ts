@@ -1,4 +1,5 @@
-import { AnimConfig, commonAnims } from "#app/data/battle-anims";
+import { commonAnims } from "#app/data/battle-anims";
+import { AnimConfig } from "./anim-config";
 import { globalScene } from "#app/global-scene";
 import { getEnumKeys, getEnumValues } from "#app/utils";
 import { CommonAnim } from "#enums/common-anim";

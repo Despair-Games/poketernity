@@ -1,4 +1,5 @@
-import { AnimConfig, chargeAnims } from "#app/data/battle-anims";
+import { chargeAnims } from "#app/data/battle-anims";
+import { AnimConfig } from "./anim-config";
 import { globalScene } from "#app/global-scene";
 import { ChargeAnim } from "#enums/charge-anim";
 
