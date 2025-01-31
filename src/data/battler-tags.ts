@@ -985,16 +985,16 @@ export class PowderTag extends BattlerTag {
    */
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     if (lapseType === BattlerTagLapseType.PRE_MOVE) {
-      const movePhase = globalScene.getCurrentPhase();
-      if (movePhase?.isMovePhase()) {
-        const move = movePhase.move.getMove();
+      const currPhase = globalScene.getCurrentPhase();
+      if (currPhase?.isMovePhase()) {
+        const move = currPhase.move.getMove();
         const weather = globalScene.arena.weather;
         if (
           pokemon.getMoveType(move) === ElementType.FIRE
           && !(weather && weather.weatherType === WeatherType.HEAVY_RAIN && !weather.isEffectSuppressed())
         ) {
-          movePhase.fail();
-          movePhase.showMoveText();
+          currPhase.fail();
+          currPhase.showMoveText();
 
           globalScene.unshiftPhase(
             new CommonAnimPhase(pokemon.getBattlerIndex(), pokemon.getBattlerIndex(), CommonAnim.POWDER),

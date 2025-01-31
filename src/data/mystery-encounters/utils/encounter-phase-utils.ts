@@ -4,10 +4,7 @@ import { BattleType } from "#enums/battle-type";
 import { biomeLinks } from "#app/data/balance/biomes";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
-import {
-  MYSTERY_ENCOUNTER_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
-  MYSTERY_ENCOUNTER_WEIGHT_INCREMENT_ON_SPAWN_MISS,
-} from "#app/constants";
+import { ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET, ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { AiType } from "#enums/ai-type";
@@ -1087,7 +1084,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
 
       // If total number of encounters is lower than expected for the run, slightly favor a new encounter
       // Do the reverse as well
-      const expectedEncountersByFloor = (MYSTERY_ENCOUNTER_AVERAGE_ENCOUNTERS_PER_RUN_TARGET / (180 - 10)) * (i - 10);
+      const expectedEncountersByFloor = (ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET / (180 - 10)) * (i - 10);
       const currentRunDiffFromAvg = expectedEncountersByFloor - numEncounters.reduce((a, b) => a + b);
       const favoredEncounterRate = encounterRate + currentRunDiffFromAvg * 15;
 
@@ -1121,7 +1118,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
               : ++numEncounters[3];
         encountersByBiome.set(Biome[currentBiome], (encountersByBiome.get(Biome[currentBiome]) ?? 0) + 1);
       } else {
-        encounterRate += MYSTERY_ENCOUNTER_WEIGHT_INCREMENT_ON_SPAWN_MISS;
+        encounterRate += ME_WEIGHT_INCREMENT_ON_SPAWN_MISS;
       }
     }
 

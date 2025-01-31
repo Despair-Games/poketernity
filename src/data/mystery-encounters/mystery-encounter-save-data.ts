@@ -1,5 +1,5 @@
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { MYSTERY_ENCOUNTER_BASE_SPAWN_WEIGHT } from "#app/constants";
+import { ME_BASE_SPAWN_WEIGHT } from "#app/constants";
 import { isNullOrUndefined } from "#app/utils";
 import type { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 
@@ -24,7 +24,7 @@ export interface QueuedEncounter {
 
 export class MysteryEncounterSaveData {
   encounteredEvents: SeenEncounterData[] = [];
-  encounterSpawnChance: number = MYSTERY_ENCOUNTER_BASE_SPAWN_WEIGHT;
+  encounterSpawnChance: number = ME_BASE_SPAWN_WEIGHT;
   queuedEncounters: QueuedEncounter[] = [];
 
   constructor(data?: MysteryEncounterSaveData) {
