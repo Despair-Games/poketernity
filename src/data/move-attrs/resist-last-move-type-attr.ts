@@ -20,7 +20,7 @@ import type { MoveConditionFunc } from "../move-conditions";
  * Fails if the type is unknown or stellar
  *
  * TODO:
- * If a move has its type changed (e.g. {@linkcode Moves.HIDDEN_POWER}), it will check the new type.
+ * If a move has its type changed (e.g. {@linkcode MoveIdHIDDEN_POWER}), it will check the new type.
  */
 export class ResistLastMoveTypeAttr extends MoveEffectAttr {
   constructor() {
