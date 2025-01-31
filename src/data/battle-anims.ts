@@ -30,12 +30,6 @@ export const chargeAnims = new Map<ChargeAnim, AnimConfig | [AnimConfig, AnimCon
 export const commonAnims = new Map<CommonAnim, AnimConfig>();
 export const encounterAnims = new Map<EncounterAnim, AnimConfig>();
 
-export function loadCommonAnimAssets(startLoad?: boolean): Promise<void> {
-  return new Promise((resolve) => {
-    loadAnimAssets(Array.from(commonAnims.values()), startLoad).then(() => resolve());
-  });
-}
-
 /**
  * Loads encounter animation assets to scene
  * MUST be called after {@linkcode initEncounterAnims()} to load all required animations properly
