@@ -1,5 +1,6 @@
 import { allMoves } from "#app/data/all-moves";
-import { moveAnims, chargeAnims } from "#app/data/battle-anims";
+import { chargeAnims } from "./charge-anims";
+import { moveAnims } from "./move-anims";
 import { AnimConfig } from "./anim-config";
 import { initMoveChargeAnim } from "./init-move-charge-anim";
 import type { Move } from "#app/data/move";

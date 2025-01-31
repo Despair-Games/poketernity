@@ -7,7 +7,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { type Moves } from "#enums/moves";
 import { type SubstituteTag } from "#app/data/battler-tags";
 import Phaser from "phaser";
-import { type EncounterAnim } from "#enums/encounter-anims";
+import { encounterAnims, type EncounterAnim } from "#enums/encounter-anims";
 import { settings } from "#app/system/settings/settings-manager";
 import { AnimFrameTarget } from "#enums/anim-frame-target";
 import { type ChargeAnim } from "#enums/charge-anim";
@@ -16,11 +16,9 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { AnimConfig, type AnimFrame } from "#app/data/anim-config";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimFocus } from "#enums/anim-focus";
-
-export const moveAnims = new Map<Moves, AnimConfig | [AnimConfig, AnimConfig] | null>();
-export const chargeAnims = new Map<ChargeAnim, AnimConfig | [AnimConfig, AnimConfig] | null>();
-export const commonAnims = new Map<CommonAnim, AnimConfig>();
-export const encounterAnims = new Map<EncounterAnim, AnimConfig>();
+import { moveAnims } from "#app/data/move-anims";
+import { chargeAnims } from "#app/data/charge-anims";
+import { commonAnims } from "#app/data/common-anims";
 
 interface GraphicFrameData {
   x: number;

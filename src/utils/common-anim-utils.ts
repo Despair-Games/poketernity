@@ -1,4 +1,4 @@
-import { commonAnims } from "#app/data/battle-anims";
+import { commonAnims } from "#app/data/common-anims";
 import { loadAnimAssets } from "./anim-utils";
 
 export function loadCommonAnimAssets(startLoad?: boolean): Promise<void> {

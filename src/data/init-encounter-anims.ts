@@ -1,5 +1,5 @@
 import { AnimConfig } from "#app/data/anim-config";
-import { encounterAnims } from "#app/data/battle-anims";
+import { encounterAnims } from "#enums/encounter-anims";
 import { globalScene } from "#app/global-scene";
 import { getEnumKeys, isNullOrUndefined } from "#app/utils";
 import { EncounterAnim } from "#enums/encounter-anims";

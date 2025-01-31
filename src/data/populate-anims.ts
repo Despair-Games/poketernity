@@ -6,7 +6,9 @@ import {
   AnimTimedAddBgEvent,
   AnimTimedUpdateBgEvent,
 } from "#app/data/anim-config";
-import { commonAnims, chargeAnims, moveAnims } from "#app/data/battle-anims";
+import { commonAnims } from "./common-anims";
+import { chargeAnims } from "./charge-anims";
+import { moveAnims } from "./move-anims";
 import { getEnumKeys, getEnumValues } from "#app/utils";
 import type { AnimFocus } from "#enums/anim-focus";
 import { ChargeAnim } from "#enums/charge-anim";

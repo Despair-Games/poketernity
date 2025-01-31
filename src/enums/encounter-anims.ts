@@ -1,3 +1,5 @@
+import type { AnimConfig } from "#app/data/anim-config";
+
 /**
  * Animations used for Mystery Encounters
  * These are custom animations that may or may not work in any other circumstance
@@ -9,3 +11,4 @@ export enum EncounterAnim {
   SMOKESCREEN,
   DANCE,
 }
+export const encounterAnims = new Map<EncounterAnim, AnimConfig>();
