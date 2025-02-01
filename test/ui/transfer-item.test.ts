@@ -1,12 +1,10 @@
+import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
+import PartyUiHandler from "#app/ui/party-ui-handler";
 import { BerryType } from "#enums/berry-type";
 import { Button } from "#enums/buttons";
 import { Moves } from "#enums/moves";
-import { Species } from "#enums/species";
-import { BattleEndPhase } from "#app/phases/battle-end-phase";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
-import PartyUiHandler from "#app/ui/party-ui-handler";
 import { PartyUiMode } from "#enums/party-ui-mode";
+import { Species } from "#enums/species";
 import { UiMode } from "#enums/ui-mode";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -41,7 +39,7 @@ describe("UI - Transfer Items", () => {
     game.override.enemySpecies(Species.MAGIKARP);
     game.override.enemyMoveset([Moves.SPLASH]);
 
-    await game.startBattle([Species.RAYQUAZA, Species.RAYQUAZA, Species.RAYQUAZA]);
+    await game.classicMode.startBattle([Species.RAYQUAZA, Species.RAYQUAZA, Species.RAYQUAZA]);
 
     game.move.select(Moves.DRAGON_CLAW);
 
@@ -52,10 +50,10 @@ describe("UI - Transfer Items", () => {
       handler.setCursor(1);
       handler.processInput(Button.ACTION);
 
-      game.scene.ui.setModeWithoutClear(UiMode.PARTY, PartyUiMode.MODIFIER_TRANSFER);
+      void game.scene.ui.setModeWithoutClear(UiMode.PARTY, PartyUiMode.MODIFIER_TRANSFER);
     });
 
-    await game.phaseInterceptor.to(BattleEndPhase);
+    await game.phaseInterceptor.to("BattleEndPhase");
   });
 
   it("check red tint for held item limit in transfer menu", async () => {
@@ -80,7 +78,7 @@ describe("UI - Transfer Items", () => {
       game.phaseInterceptor.unlock();
     });
 
-    await game.phaseInterceptor.to(SelectModifierPhase);
+    await game.phaseInterceptor.to("SelectModifierPhase");
   }, 20000);
 
   it("check transfer option for pokemon to transfer to", async () => {
@@ -101,6 +99,6 @@ describe("UI - Transfer Items", () => {
       game.phaseInterceptor.unlock();
     });
 
-    await game.phaseInterceptor.to(SelectModifierPhase);
+    await game.phaseInterceptor.to("SelectModifierPhase");
   }, 20000);
 });
