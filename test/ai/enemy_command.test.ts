@@ -120,4 +120,18 @@ describe("Enemy Commands - Move Selection", () => {
     expect(moveChoices[Moves.SPLASH]).toBe(0);
     expect(moveChoices[Moves.COVET]).toBe(0);
   });
+
+  it("should not crash from an off-field enemy Pokemon simulating every move", async () => {
+    game.override.startingWave(5);
+    await game.classicMode.startBattle([Species.FEEBAS]);
+    
+    const player = game.field.getPlayerPokemon();
+    const offFieldEnemy = game.scene.getEnemyParty()[1];
+
+    for (const move of Object.values(allMoves)) {
+      const eas = offFieldEnemy.getExpectedAttackScore(player, move);
+      expect(eas).toBeGreaterThanOrEqual(-1);
+      expect(eas).toBeLessThanOrEqual(4);
+    }
+  });
 });
