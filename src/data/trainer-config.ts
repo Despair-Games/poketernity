@@ -1347,7 +1347,6 @@ export class TrainerConfig {
 
     // Only do this if the title is not already set
     if (!this.title) {
-      // Set the title to "champion". (this is the key in the i18n file)
       switch (variant) {
         case TrainerVariant.FEMALE:
           this.setTitle("champion_female");
