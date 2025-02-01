@@ -265,8 +265,8 @@ export class TrainerConfig {
   public hasGenders: boolean = false;
   public hasDouble: boolean = false;
   public hasCharSprite: boolean = false;
-  public spriteNameLeft: string;
-  public spriteNameRight: string;
+  public spriteNameLeft?: string;
+  public spriteNameRight?: string;
   public doubleOnly: boolean = false;
   public moneyMultiplier: number = 1;
   public isBoss: boolean = false;
