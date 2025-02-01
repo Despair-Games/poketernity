@@ -7,14 +7,14 @@ import pkg from "../package.json";
 import InvertPostFX from "./pipelines/invert";
 import { LoadingScene } from "./loading-scene";
 import BattleScene from "./battle-scene";
-import { GAME_HEIGHT, GAME_SCALE, GAME_WIDTH } from "./ui-constants";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "./ui-constants";
 
 export const game = new Phaser.Game({
   type: Phaser.WEBGL,
   parent: "app",
   scale: {
-    width: GAME_WIDTH * GAME_SCALE,
-    height: GAME_HEIGHT * GAME_SCALE,
+    width: GAME_WIDTH * CANVAS_SCALE,
+    height: GAME_HEIGHT * CANVAS_SCALE,
     mode: Phaser.Scale.FIT,
   },
   plugins: {

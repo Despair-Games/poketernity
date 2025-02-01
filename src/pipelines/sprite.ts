@@ -3,7 +3,7 @@ import Trainer from "#app/field/trainer";
 import FieldSpritePipeline from "#app/pipelines/field-sprite";
 import MysteryEncounterIntroVisuals from "#app/field/mystery-encounter-intro";
 import { settings } from "#app/system/settings/settings-manager";
-import { GAME_SCALE } from "#app/ui-constants";
+import { CANVAS_SCALE } from "#app/ui-constants";
 
 const spriteFragShader = `
 #ifdef GL_FRAGMENT_PRECISION_HIGH
@@ -443,12 +443,12 @@ export default class SpritePipeline extends FieldSpritePipeline {
         || sprite.parentContainer instanceof Trainer
         || sprite.parentContainer instanceof MysteryEncounterIntroVisuals;
       const field = isEntityObj ? sprite.parentContainer.parentContainer : sprite.parentContainer;
-      // TODO scaling: is using the game scale needed here? Seems like overall it's doing value * game_scale / game_scale
-      const fieldScaleRatio = field.scale / GAME_SCALE;
+      // TODO scaling: is using the canvas scale needed here? Seems like overall it's doing value * canvas_scale / canvas_scale
+      const fieldScaleRatio = field.scale / CANVAS_SCALE;
       const baseY =
-        ((isEntityObj ? sprite.parentContainer.y : sprite.y + sprite.height) * GAME_SCALE) / fieldScaleRatio;
+        ((isEntityObj ? sprite.parentContainer.y : sprite.y + sprite.height) * CANVAS_SCALE) / fieldScaleRatio;
       const bottomPadding =
-        (Math.ceil(sprite.height * 0.05 + Math.max(yShadowOffset, 0)) * GAME_SCALE) / fieldScaleRatio;
+        (Math.ceil(sprite.height * 0.05 + Math.max(yShadowOffset, 0)) * CANVAS_SCALE) / fieldScaleRatio;
       const yDelta = (baseY - y1) / field.scale;
       y2 = y1 = baseY + bottomPadding;
       const pixelHeight =

@@ -2,7 +2,7 @@ import { legacyCompatibleImages } from "#app/scene-base";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
 import { WindowVariant } from "#enums/window-variant";
-import { GAME_SCALE } from "#app/ui-constants";
+import { CANVAS_SCALE } from "#app/ui-constants";
 
 export function getWindowVariantSuffix(windowVariant: WindowVariant): string {
   switch (windowVariant) {
@@ -55,14 +55,14 @@ export function addWindow(
      */
     const maskRect = new Phaser.GameObjects.Rectangle(
       globalScene,
-      GAME_SCALE * (x - (mergeMaskLeft ? 2 : 0) - (maskOffsetX || 0)),
-      GAME_SCALE * (y + (mergeMaskTop ? 2 : 0) + (maskOffsetY || 0)),
+      CANVAS_SCALE * (x - (mergeMaskLeft ? 2 : 0) - (maskOffsetX || 0)),
+      CANVAS_SCALE * (y + (mergeMaskTop ? 2 : 0) + (maskOffsetY || 0)),
       width - (mergeMaskLeft ? 2 : 0),
       height - (mergeMaskTop ? 2 : 0),
       0xffffff,
     );
     maskRect.setOrigin(0);
-    maskRect.setScale(GAME_SCALE);
+    maskRect.setScale(CANVAS_SCALE);
     const mask = maskRect.createGeometryMask();
     window.setMask(mask);
   }

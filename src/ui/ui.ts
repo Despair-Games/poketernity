@@ -56,7 +56,7 @@ import MysteryEncounterUiHandler from "./mystery-encounter-ui-handler";
 import { settings } from "#app/system/settings/settings-manager";
 import FormChangeSceneHandler from "./form-change-scene-handler";
 import { UiMode } from "#enums/ui-mode";
-import { GAME_HEIGHT, GAME_SCALE, GAME_WIDTH } from "#app/ui-constants";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 /** All modes that are part of the settings UI. */
 export const settingsUiModes = [
@@ -396,8 +396,8 @@ export default class UI extends Phaser.GameObjects.Container {
   override update(): void {
     if (this.tooltipContainer.visible) {
       const isTouch = globalScene.inputMethod === "touch";
-      const pointerX = globalScene.game.input.activePointer.x / GAME_SCALE;
-      const pointerY = globalScene.game.input.activePointer.y / GAME_SCALE;
+      const pointerX = globalScene.game.input.activePointer.x / CANVAS_SCALE;
+      const pointerY = globalScene.game.input.activePointer.y / CANVAS_SCALE;
       const tooltipWidth = this.tooltipBg.width;
       const tooltipHeight = this.tooltipBg.height;
       const padding = 2;

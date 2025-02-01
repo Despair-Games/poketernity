@@ -17,7 +17,7 @@ import { WindowVariant } from "#enums/window-variant";
 import i18next from "i18next";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { settings } from "#app/system/settings/settings-manager";
-import { GAME_SCALE, GAME_WIDTH } from "#app/ui-constants";
+import { CANVAS_SCALE, GAME_WIDTH } from "#app/ui-constants";
 
 export default class BattleInfo extends Phaser.GameObjects.Container {
   public static readonly EXP_GAINS_DURATION_BASE = 1650;
@@ -204,7 +204,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
       this.add(expBar);
 
       const expMaskRect = globalScene.make.graphics({});
-      expMaskRect.setScale(GAME_SCALE);
+      expMaskRect.setScale(CANVAS_SCALE);
       expMaskRect.fillStyle(0xffffff);
       expMaskRect.beginPath();
       expMaskRect.fillRect(127, 126, 85, 2);
@@ -482,7 +482,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
 
     if (this.player) {
       this.expMaskRect.x =
-        (pokemon.levelExp / getLevelTotalExp(pokemon.level, pokemon.species.growthRate)) * 85 * GAME_SCALE;
+        (pokemon.levelExp / getLevelTotalExp(pokemon.level, pokemon.species.growthRate)) * 85 * CANVAS_SCALE;
       this.lastExp = pokemon.exp;
       this.lastLevelExp = pokemon.levelExp;
 
@@ -847,7 +847,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
       globalScene.tweens.add({
         targets: this.expMaskRect,
         ease: "Sine.easeIn",
-        x: ratio * 85 * GAME_SCALE,
+        x: ratio * 85 * CANVAS_SCALE,
         duration: duration,
         onComplete: () => {
           if (!globalScene) {

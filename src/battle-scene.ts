@@ -178,7 +178,7 @@ import { eventBus } from "./event-bus";
 import { Animation } from "./animations";
 import { resetStarterColors, starterColors } from "./data/starter-colors";
 import { CallSourceLogger } from "#app/loggers";
-import { GAME_HEIGHT, GAME_SCALE, GAME_WIDTH } from "#app/ui-constants";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 const DEBUG_RNG = false;
 
@@ -467,21 +467,21 @@ export default class BattleScene extends SceneBase {
 
     [this.arenaBgTransition, this.arenaBg].forEach((a) => {
       a.setPipeline(this.fieldSpritePipeline);
-      a.setScale(GAME_SCALE);
+      a.setScale(CANVAS_SCALE);
       a.setOrigin(0);
       a.setSize(GAME_WIDTH, (GAME_HEIGHT * 4) / 3);
     });
 
     const field = this.add.container(0, 0);
     field.setName("field");
-    field.setScale(GAME_SCALE);
+    field.setScale(CANVAS_SCALE);
 
     this.field = field;
 
-    const fieldUI = this.add.container(0, GAME_HEIGHT * GAME_SCALE);
+    const fieldUI = this.add.container(0, GAME_HEIGHT * CANVAS_SCALE);
     fieldUI.setName("field-ui");
     fieldUI.setDepth(1);
-    fieldUI.setScale(GAME_SCALE);
+    fieldUI.setScale(CANVAS_SCALE);
 
     this.fieldUI = fieldUI;
 
@@ -489,7 +489,7 @@ export default class BattleScene extends SceneBase {
       {
         x: 0,
         y: 0,
-        scale: GAME_SCALE,
+        scale: CANVAS_SCALE,
         key: "loading_bg",
         origin: { x: 0, y: 0 },
       },
@@ -511,7 +511,7 @@ export default class BattleScene extends SceneBase {
     const uiContainer = this.add.container(0, 0);
     uiContainer.setName("ui");
     uiContainer.setDepth(2);
-    uiContainer.setScale(GAME_SCALE);
+    uiContainer.setScale(CANVAS_SCALE);
 
     this.uiContainer = uiContainer;
 
@@ -1511,13 +1511,13 @@ export default class BattleScene extends SceneBase {
 
   setFieldScale(scale: number, instant: boolean = false): Promise<void> {
     return new Promise((resolve) => {
-      scale *= GAME_SCALE;
+      scale *= CANVAS_SCALE;
       if (this.field.scale === scale) {
         return resolve();
       }
 
-      const defaultWidth = this.arenaBg.width * GAME_SCALE;
-      const defaultHeight = 132 * GAME_SCALE;
+      const defaultWidth = this.arenaBg.width * CANVAS_SCALE;
+      const defaultHeight = 132 * CANVAS_SCALE;
       const scaledWidth = this.arenaBg.width * scale;
       const scaledHeight = 132 * scale;
 

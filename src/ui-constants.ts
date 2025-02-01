@@ -13,7 +13,7 @@ export const GAME_HEIGHT = 180;
  * As such, when getting an object's dimensions `displayWidth` and `displayHeight` should be used
  * rather than `width` and `height`
  */
-export const GAME_SCALE = 6;
+export const CANVAS_SCALE = 6;
 
 /** Temporary value to use for adjusting scale of images/sprites to the legacy x6 scale */
-export const TEMP_SCALE_ADJUSTEMENT = GAME_SCALE / 6;
+export const TEMP_SCALE_ADJUSTEMENT = CANVAS_SCALE / 6;

@@ -21,7 +21,7 @@ import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-enco
 import { initAbilities } from "#app/data/all-abilities";
 import { initMoves } from "#app/data/all-moves";
 import { initVouchers } from "#app/system/init-vouchers";
-import { GAME_HEIGHT, GAME_SCALE, GAME_WIDTH, TEMP_SCALE_ADJUSTEMENT } from "./ui-constants";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTEMENT } from "./ui-constants";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";
@@ -377,7 +377,7 @@ export class LoadingScene extends SceneBase {
 
     const bg = this.add.image(0, 0, "");
     bg.setOrigin(0, 0);
-    bg.setScale(GAME_SCALE);
+    bg.setScale(CANVAS_SCALE);
     bg.setVisible(false);
 
     const graphics = this.add.graphics();
@@ -390,8 +390,8 @@ export class LoadingScene extends SceneBase {
     progressBox.lineStyle(5, 0xff00ff, 1.0);
     progressBox.fillStyle(0x222222, 0.8);
 
-    const width = GAME_SCALE * GAME_WIDTH;
-    const height = GAME_SCALE * GAME_HEIGHT;
+    const width = CANVAS_SCALE * GAME_WIDTH;
+    const height = CANVAS_SCALE * GAME_HEIGHT;
 
     const midWidth = width / 2;
     const midHeight = height / 2;
@@ -404,7 +404,7 @@ export class LoadingScene extends SceneBase {
 
     const percentText = this.make.text({
       x: midWidth,
-      y: midHeight - 4 * GAME_SCALE,
+      y: midHeight - 4 * CANVAS_SCALE,
       scale: TEMP_SCALE_ADJUSTEMENT,
       text: "0%",
       style: {
@@ -416,7 +416,7 @@ export class LoadingScene extends SceneBase {
 
     const assetText = this.make.text({
       x: midWidth,
-      y: midHeight + 8 * GAME_SCALE,
+      y: midHeight + 8 * CANVAS_SCALE,
       scale: TEMP_SCALE_ADJUSTEMENT,
       text: "",
       style: {
@@ -428,7 +428,7 @@ export class LoadingScene extends SceneBase {
 
     const disclaimerText = this.make.text({
       x: midWidth,
-      y: assetText.y + 25 * GAME_SCALE,
+      y: assetText.y + 25 * CANVAS_SCALE,
       scale: TEMP_SCALE_ADJUSTEMENT,
       text: i18next.t("menu:disclaimer"),
       style: {
@@ -440,7 +440,7 @@ export class LoadingScene extends SceneBase {
 
     const disclaimerDescriptionText = this.make.text({
       x: midWidth,
-      y: disclaimerText.y + 20 * GAME_SCALE,
+      y: disclaimerText.y + 20 * CANVAS_SCALE,
       scale: TEMP_SCALE_ADJUSTEMENT,
       text: i18next.t("menu:disclaimerDescription"),
       style: {
@@ -474,7 +474,7 @@ export class LoadingScene extends SceneBase {
     });
 
     const progressBarWidth = width / 3;
-    const progressBarHeight = 10 * GAME_SCALE;
+    const progressBarHeight = 10 * CANVAS_SCALE;
     this.load.on(this.LOAD_EVENTS.PROGRESS, (progress: number) => {
       percentText.setText(`${Math.floor(progress * 100)}%`);
       progressBar.clear();
