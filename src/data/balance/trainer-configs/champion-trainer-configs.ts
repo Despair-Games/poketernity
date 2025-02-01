@@ -5,7 +5,7 @@ import { TrainerType } from "#enums/trainer-type";
 import { PokeballType } from "#enums/pokeball";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import type { PersistentModifier } from "#app/modifier/modifier";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { ElementType } from "#enums/element-type";
 
