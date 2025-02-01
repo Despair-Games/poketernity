@@ -1,10 +1,10 @@
-import { AbAttrId } from "#enums/ab-attr-id";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 
 /** Attribute for abilities that allow moves that make contact to ignore protection (i.e. Unseen Fist) */
 export class IgnoreProtectOnContactAbAttr extends AbAttr {
-  constructor() {
-    super();
-    this._id = AbAttrId.IGNORE_PROTECT_ON_CONTACT;
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.IGNORE_PROTECT_ON_CONTACT);
   }
 }

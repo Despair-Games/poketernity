@@ -1,4 +1,3 @@
-import { PreSwitchOutAbAttr } from "#app/data/ab-attrs/pre-switch-out-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { type SubstituteTag } from "#app/data/battler-tags";
 import { getPokeballTintColor } from "#app/data/pokeball";
@@ -13,6 +12,7 @@ import i18next from "i18next";
 import { PostSummonPhase } from "#app/phases/post-summon-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class SwitchSummonPhase extends SummonPhase {
   private readonly switchType: SwitchType;
@@ -111,7 +111,7 @@ export class SwitchSummonPhase extends SummonPhase {
     const party = this.getAlliedParty();
     const switchedInPokemon = party[this.slotIndex];
     this.lastPokemon = this.getPokemon();
-    applyAbAttrs(PreSwitchOutAbAttr, this.lastPokemon, false);
+    applyAbAttrs(AbAttrFlag.PRE_SWITCH_OUT, this.lastPokemon, false);
     if (this.switchType === SwitchType.BATON_PASS && switchedInPokemon) {
       this.getOpposingField().forEach((opposingPokemon: Pokemon) =>
         opposingPokemon.transferTagsBySourceId(this.lastPokemon.id, switchedInPokemon.id),

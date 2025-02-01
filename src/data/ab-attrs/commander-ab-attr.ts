@@ -7,7 +7,7 @@ import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { Species } from "#enums/species";
 import { AbAttr } from "./ab-attr";
 import { type SkyDropTag } from "../battler-tags";
-import { AbAttrId } from "#enums/ab-attr-id";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Attribute implementing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Commander_(Ability) | Commander}.
@@ -16,9 +16,9 @@ import { AbAttrId } from "#enums/ab-attr-id";
  * causing attacks that target the source to always miss.
  */
 export class CommanderAbAttr extends AbAttr {
-  constructor() {
-    super();
-    this._id = AbAttrId.COMMANDER;
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.COMMANDER);
   }
 
   override apply(pokemon: Pokemon, simulated: boolean): boolean {

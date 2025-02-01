@@ -1,4 +1,3 @@
-import { PostTurnAbAttr } from "#app/data/ab-attrs/post-turn-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { TurnEndEvent } from "#app/events/battle-scene";
@@ -10,6 +9,7 @@ import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { FieldPhase } from "./abstract-field-phase";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class TurnEndPhase extends FieldPhase {
   public override start(): void {
@@ -32,7 +32,7 @@ export class TurnEndPhase extends FieldPhase {
             message: i18next.t("battle:turnEndHpRestore", { pokemonName: getPokemonNameWithAffix(pokemon) }),
           });
         }
-        applyAbAttrs(PostTurnAbAttr, pokemon, false);
+        applyAbAttrs(AbAttrFlag.POST_TURN, pokemon, false);
       }
 
       globalScene.applyModifiers(TurnStatusEffectModifier, pokemon.isPlayer(), pokemon);

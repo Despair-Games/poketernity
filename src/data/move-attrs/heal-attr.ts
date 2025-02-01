@@ -7,7 +7,7 @@ import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { NumberHolder } from "#app/utils";
-import { RecoveryBoostAbAttr } from "../ab-attrs/recovery-boost-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Heals the user or target by {@linkcode healRatio} depending on the value of {@linkcode selfTarget}
@@ -37,7 +37,7 @@ export class HealAttr extends MoveEffectAttr {
    */
   protected getHealRatio(user: Pokemon, target: Pokemon, move: Move): number {
     const healRatio = new NumberHolder(this.healRatio);
-    applyAbAttrs(RecoveryBoostAbAttr, user, false, move, target, healRatio);
+    applyAbAttrs(AbAttrFlag.RECOVERY_BOOST, user, false, move, target, healRatio);
     return healRatio.value;
   }
 

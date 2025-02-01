@@ -4,15 +4,15 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder, toDmgValue } from "#app/utils";
 import i18next from "i18next";
-import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-ab-attr";
 import { applyAbAttrs } from "./apply-ab-attrs";
 import type { Move } from "./move";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { UserMoveConditionFunc } from "./move-conditions";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export const crashDamageFunc = (user: Pokemon, _move: Move) => {
   const cancelled = new BooleanHolder(false);
-  applyAbAttrs(BlockNonDirectDamageAbAttr, user, false, cancelled);
+  applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, user, false, cancelled);
   if (cancelled.value) {
     return false;
   }

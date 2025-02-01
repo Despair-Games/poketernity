@@ -1,10 +1,10 @@
 import type { Localizable } from "#app/interfaces/locales";
-import type { AbstractConstructor, Constructor } from "#app/utils";
+import type { Constructor } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import i18next from "i18next";
 import type { AbAttr } from "./ab-attrs/ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
-import type { AbAttrId } from "#enums/ab-attr-id";
+import type { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -41,21 +41,21 @@ export class Ability implements Localizable {
   }
 
   /**
-   * Get all ability attributes that match `attrType`
-   * @param attrType any attribute that extends {@linkcode AbAttr}
-   * @returns Array of attributes that match `attrType`, Empty Array if none match.
+   * Get all ability attributes that match the given {@linkcode flag}
+   * @param flag The {@linkcode AbAttrFlag} to check for
+   * @returns Array of attributes that match the given {@linkcode flag}, Empty Array if none match.
    */
-  getAttrs<T extends AbAttr>(attrType: AbstractConstructor<T>): T[] {
-    return this.attrs.filter((a): a is T => a instanceof attrType);
+  getAttrs<T extends AbAttr>(flag: AbAttrFlag): T[] {
+    return this.attrs.filter((abAttr): abAttr is T => abAttr.hasFlag(flag));
   }
 
   /**
-   * Check if an ability has an attribute that matches `attrType`
-   * @param attrType any attribute that extends {@linkcode AbAttr}
-   * @returns true if the ability has attribute `attrType`
+   * Check if an ability has an attribute that matches {@linkcode flag}
+   * @param flag The {@linkcode AbAttrFlag} to check
+   * @returns true if the ability has an attribute with the given {@linkcode flag}
    */
-  hasAttr(id: AbAttrId): boolean {
-    return this.attrs.some((attr) => attr.id === id);
+  hasAttr(flag: AbAttrFlag): boolean {
+    return this.attrs.some((abAttr) => abAttr.hasFlag(flag));
   }
 
   attr<T extends Constructor<AbAttr>>(AttrType: T, ...args: ConstructorParameters<T>): Ability {

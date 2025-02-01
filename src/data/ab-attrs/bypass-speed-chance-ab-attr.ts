@@ -7,6 +7,7 @@ import { BattleCommand } from "#enums/battle-command";
 import type { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { AbAttr } from "./ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * If a Pokémon with this Ability selects a damaging move, it has a 30% chance of going first in its priority bracket. If the Ability activates, this is announced at the start of the turn (after move selection).
@@ -21,6 +22,7 @@ export class BypassSpeedChanceAbAttr extends AbAttr {
    */
   constructor(chance: number) {
     super(true);
+    this._flags.add(AbAttrFlag.BYPASS_SPEED_CHANCE);
     this.chance = chance;
   }
 

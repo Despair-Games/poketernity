@@ -68,7 +68,6 @@ import { ModifierPoolType } from "#enums/modifier-pool-type";
 import AbilityBar from "#app/ui/ability-bar";
 import { allAbilities } from "./data/all-abilities";
 import { applyAbAttrs } from "./data/apply-ab-attrs";
-import { PostItemLostAbAttr } from "./data/ab-attrs/post-item-lost-ab-attr";
 import type { FixedBattleConfig } from "#app/battle";
 import type { BattlerIndex } from "#enums/battler-index";
 import Battle from "#app/battle";
@@ -163,9 +162,6 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
 import { StatusEffect } from "#enums/status-effect";
 import { initGlobalScene } from "#app/global-scene";
-import { BlockItemTheftAbAttr } from "./data/ab-attrs/block-item-theft-ab-attr";
-import { DoubleBattleChanceAbAttr } from "./data/ab-attrs/double-battle-chance-ab-attr";
-import { PostBattleInitAbAttr } from "./data/ab-attrs/post-battle-init-ab-attr";
 import { settings } from "./system/settings/settings-manager";
 import type { AnySettingKey, SettingsUpdateEventArgs } from "./@types/Settings";
 import { PRSFX_SOUND_ADJUSTMENT_RATIO } from "./constants";
@@ -181,6 +177,7 @@ import { GameOverPhase } from "#app/phases/game-over-phase";
 import { FaintPhase } from "#app/phases/faint-phase";
 import type { DestinyBondTag, GrudgeTag } from "#app/data/battler-tags";
 import { PokemonHealPhase, type PokemonHealPhaseOptions } from "#app/phases/pokemon-heal-phase";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 //#region Types
 
@@ -1308,7 +1305,7 @@ export default class BattleScene extends SceneBase {
   getDoubleBattleChance(newWaveIndex: number, playerField: PlayerPokemon[]) {
     const doubleChance = new NumberHolder(newWaveIndex % 10 === 0 ? 32 : 8);
     this.applyModifiers(DoubleBattleChanceBoosterModifier, true, doubleChance);
-    playerField.forEach((p) => applyAbAttrs(DoubleBattleChanceAbAttr, p, false, doubleChance));
+    playerField.forEach((p) => applyAbAttrs(AbAttrFlag.DOUBLE_BATTLE_CHANCE, p, false, doubleChance));
     return Math.max(doubleChance.value, 1);
   }
 
@@ -1491,7 +1488,7 @@ export default class BattleScene extends SceneBase {
 
         for (const pokemon of this.getPlayerParty()) {
           pokemon.resetBattleData();
-          applyAbAttrs(PostBattleInitAbAttr, pokemon, false);
+          applyAbAttrs(AbAttrFlag.POST_BATTLE_INIT, pokemon, false);
         }
 
         if (!this.trainer.visible) {
@@ -2726,7 +2723,7 @@ export default class BattleScene extends SceneBase {
     const cancelled = new BooleanHolder(false);
 
     if (source && source.isPlayer() !== target.isPlayer()) {
-      applyAbAttrs(BlockItemTheftAbAttr, source, false, cancelled);
+      applyAbAttrs(AbAttrFlag.BLOCK_ITEM_THEFT, source, false, cancelled);
     }
 
     if (cancelled.value) {
@@ -2766,13 +2763,13 @@ export default class BattleScene extends SceneBase {
           if (target.isPlayer()) {
             this.addModifier(newItemModifier, ignoreUpdate, playSound, false, instant);
             if (source && itemLost) {
-              applyAbAttrs(PostItemLostAbAttr, source, false);
+              applyAbAttrs(AbAttrFlag.POST_ITEM_LOST, source, false);
             }
             return true;
           } else {
             this.addEnemyModifier(newItemModifier, ignoreUpdate, instant);
             if (source && itemLost) {
-              applyAbAttrs(PostItemLostAbAttr, source, false);
+              applyAbAttrs(AbAttrFlag.POST_ITEM_LOST, source, false);
             }
             return true;
           }

@@ -1,6 +1,4 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { BypassSpeedChanceAbAttr } from "#app/data/ab-attrs/bypass-speed-chance-ab-attr";
-import { PreventBypassSpeedChanceAbAttr } from "#app/data/ab-attrs/prevent-bypass-speed-chance-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { allMoves } from "#app/data/all-moves";
 import { MoveHeaderAttr } from "#app/data/move-attrs/move-header-attr";
@@ -24,6 +22,7 @@ import { SwitchSummonPhase } from "./switch-summon-phase";
 import { TurnEndPhase } from "./turn-end-phase";
 import { WeatherEffectPhase } from "./weather-effect-phase";
 import { ArenaTagType } from "#enums/arena-tag-type";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class TurnStartPhase extends FieldPhase {
   /**
@@ -80,8 +79,8 @@ export class TurnStartPhase extends FieldPhase {
       .map((p) => {
         const bypassSpeed = new BooleanHolder(false);
         const canCheckHeldItems = new BooleanHolder(true);
-        applyAbAttrs(BypassSpeedChanceAbAttr, p, false, bypassSpeed);
-        applyAbAttrs(PreventBypassSpeedChanceAbAttr, p, false, bypassSpeed, canCheckHeldItems);
+        applyAbAttrs(AbAttrFlag.BYPASS_SPEED_CHANCE, p, false, bypassSpeed);
+        applyAbAttrs(AbAttrFlag.PREVENT_BYPASS_SPEED_CHANCE, p, false, bypassSpeed, canCheckHeldItems);
         if (canCheckHeldItems.value) {
           globalScene.applyModifiers(BypassSpeedChanceModifier, p.isPlayer(), p, bypassSpeed);
         }

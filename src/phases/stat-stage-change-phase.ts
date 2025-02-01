@@ -1,8 +1,4 @@
 import type { BattlerIndex } from "#enums/battler-index";
-import { PostStatStageChangeAbAttr } from "#app/data/ab-attrs/post-stat-stage-change-ab-attr";
-import { ProtectStatAbAttr } from "#app/data/ab-attrs/protect-stat-ab-attr";
-import { StatStageChangeCopyAbAttr } from "#app/data/ab-attrs/stat-stage-change-copy-ab-attr";
-import { StatStageChangeMultiplierAbAttr } from "#app/data/ab-attrs/stat-stage-change-multiplier-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -16,6 +12,7 @@ import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
 import { PokemonPhase } from "./abstract-pokemon-phase";
 import { ArenaTagType } from "#enums/arena-tag-type";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export type StatStageChangeCallback = (changed: BattleStat[], relativeChanges: number[], target?: Pokemon) => void;
 
@@ -78,7 +75,7 @@ export class StatStageChangePhase extends PokemonPhase {
     const stages = new NumberHolder(this.stages);
 
     if (!this.ignoreAbilities) {
-      applyAbAttrs(StatStageChangeMultiplierAbAttr, pokemon, false, stages);
+      applyAbAttrs(AbAttrFlag.STAT_STAGE_CHANGE_MULTIPLIER, pokemon, false, stages);
     }
 
     let simulate = false;
@@ -92,7 +89,7 @@ export class StatStageChangePhase extends PokemonPhase {
       }
 
       if (!cancelled.value && !this.selfTarget && stages.value < 0) {
-        applyAbAttrs(ProtectStatAbAttr, pokemon, simulate, stat, cancelled);
+        applyAbAttrs(AbAttrFlag.PROTECT_STAT, pokemon, simulate, stat, cancelled);
       }
 
       // If one stat stage decrease is cancelled, simulate the rest of the applications
@@ -150,11 +147,11 @@ export class StatStageChangePhase extends PokemonPhase {
 
       if (stages.value > 0 && this.canBeCopied) {
         for (const opponent of pokemon.getOpponents()) {
-          applyAbAttrs(StatStageChangeCopyAbAttr, opponent, false, this.stats, stages.value);
+          applyAbAttrs(AbAttrFlag.STAT_STAGE_CHANGE_COPY, opponent, false, this.stats, stages.value);
         }
       }
 
-      applyAbAttrs(PostStatStageChangeAbAttr, pokemon, false, filteredStats, this.stages, this.selfTarget);
+      applyAbAttrs(AbAttrFlag.POST_STAT_STAGE_CHANGE, pokemon, false, filteredStats, this.stages, this.selfTarget);
 
       // Look for any other stat change phases; if this is the last one, do White Herb check
       const existingPhase = globalScene.findPhase(

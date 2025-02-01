@@ -16,8 +16,6 @@ import type { BattlerIndex } from "#enums/battler-index";
 import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
 import { TerrainType } from "#enums/terrain-type";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { PostTerrainChangeAbAttr } from "#app/data/ab-attrs/post-terrain-change-ab-attr";
-import { PostWeatherChangeAbAttr } from "#app/data/ab-attrs/post-weather-change-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import Overrides from "#app/overrides";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
@@ -32,7 +30,7 @@ import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrig
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { WeatherType } from "#enums/weather-type";
-import { TerrainEventTypeChangeAbAttr } from "#app/data/ab-attrs/terrain-event-type-change-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class Arena {
   public biomeType: Biome;
@@ -324,7 +322,7 @@ export class Arena {
         pokemon.findAndRemoveTags(
           (t) => "weatherTypes" in t && !(t.weatherTypes as WeatherType[]).find((t) => t === weather),
         );
-        applyAbAttrs(PostWeatherChangeAbAttr, pokemon, false, weather);
+        applyAbAttrs(AbAttrFlag.POST_WEATHER_CHANGE, pokemon, false, weather);
       });
 
     return true;
@@ -390,8 +388,8 @@ export class Arena {
         pokemon.findAndRemoveTags(
           (t) => "terrainTypes" in t && !(t.terrainTypes as TerrainType[]).find((t) => t === terrain),
         );
-        applyAbAttrs(PostTerrainChangeAbAttr, pokemon, false, terrain);
-        applyAbAttrs(TerrainEventTypeChangeAbAttr, pokemon, false, false);
+        applyAbAttrs(AbAttrFlag.POST_TERRAIN_CHANGE, pokemon, false, terrain);
+        applyAbAttrs(AbAttrFlag.TERRAIN_EVENT_TYPE_CHANGE, pokemon, false, false);
       });
 
     return true;

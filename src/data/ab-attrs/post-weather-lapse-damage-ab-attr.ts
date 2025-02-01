@@ -7,7 +7,7 @@ import { toDmgValue } from "#app/utils";
 import type { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { PostWeatherLapseAbAttr } from "./post-weather-lapse-ab-attr";
-import { AbAttrId } from "#enums/ab-attr-id";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
   private readonly damageFactor: number;
@@ -19,7 +19,7 @@ export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
   }
 
   override apply(pokemon: Pokemon, simulated: boolean, _weather: Weather): boolean {
-    if (pokemon.hasAbilityWithAttr(AbAttrId.BLOCK_NON_DIRECT_DAMAGE)) {
+    if (pokemon.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)) {
       return false;
     }
 

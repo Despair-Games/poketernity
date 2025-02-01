@@ -6,7 +6,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { toDmgValue } from "#app/utils";
 import i18next from "i18next";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
-import { AbAttrId } from "#enums/ab-attr-id";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
   private readonly damageRatio: number;
@@ -21,7 +21,7 @@ export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
     if (
       !simulated
       && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
-      && !attacker.hasAbilityWithAttr(AbAttrId.BLOCK_NON_DIRECT_DAMAGE)
+      && !attacker.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)
     ) {
       attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), HitResult.OTHER);
       // TODO: This should be handled by `damage()`

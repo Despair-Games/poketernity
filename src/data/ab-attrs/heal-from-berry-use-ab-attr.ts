@@ -4,6 +4,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { toDmgValue } from "#app/utils";
 import i18next from "i18next";
 import { AbAttr } from "./ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * A Pokemon with this ability heals by a percentage of their maximum hp after eating a berry
@@ -16,6 +17,7 @@ export class HealFromBerryUseAbAttr extends AbAttr {
 
   constructor(healPercent: number) {
     super();
+    this._flags.add(AbAttrFlag.HEAL_FROM_BERRY_USE);
 
     // Clamp healPercent so its between [0,1].
     this.healPercent = Phaser.Math.Clamp(healPercent, 0, 1);

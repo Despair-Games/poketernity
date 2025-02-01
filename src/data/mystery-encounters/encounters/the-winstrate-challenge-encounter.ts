@@ -34,7 +34,7 @@ import i18next from "i18next";
 import { ModifierTier } from "#enums/modifier-tier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { PostBattleInitAbAttr } from "#app/data/ab-attrs/post-battle-init-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/theWinstrateChallenge";
@@ -214,7 +214,7 @@ function endTrainerBattleAndShowDialogue(): Promise<void> {
         }
 
         pokemon.resetBattleData();
-        applyAbAttrs(PostBattleInitAbAttr, pokemon, false);
+        applyAbAttrs(AbAttrFlag.POST_BATTLE_INIT, pokemon, false);
       }
 
       globalScene.unshiftPhase(new ShowTrainerPhase());

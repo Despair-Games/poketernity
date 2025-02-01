@@ -9,9 +9,6 @@ import { type GameOverPhase } from "./game-over-phase";
 import { type SkyDropTag } from "#app/data/battler-tags";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattleType } from "#enums/battle-type";
-import { PostFaintAbAttr } from "#app/data/ab-attrs/post-faint-ab-attr";
-import { PostKnockOutAbAttr } from "#app/data/ab-attrs/post-knock-out-ab-attr";
-import { PostVictoryAbAttr } from "#app/data/ab-attrs/post-victory-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { allMoves } from "#app/data/all-moves";
 import { FRIENDSHIP_LOSS_FROM_FAINT } from "#app/data/balance/starters";
@@ -36,6 +33,7 @@ import { SwitchSummonPhase } from "./switch-summon-phase";
 import { ToggleDoublePositionPhase } from "./toggle-double-position-phase";
 import { VictoryPhase } from "./victory-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Handles the effects of a pokemon fainting:
@@ -161,18 +159,18 @@ export class FaintPhase extends PokemonPhase {
 
     if (this.source && pokemon.turnData?.attacksReceived?.length) {
       const lastAttack = pokemon.turnData.attacksReceived[0];
-      applyAbAttrs(PostFaintAbAttr, pokemon, false, this.source, allMoves[lastAttack.move]);
+      applyAbAttrs(AbAttrFlag.POST_FAINT, pokemon, false, this.source, allMoves[lastAttack.move]);
     } else {
       //If killed by indirect damage, apply post-faint abilities without providing the source of fatal damage
-      applyAbAttrs(PostFaintAbAttr, pokemon, false);
+      applyAbAttrs(AbAttrFlag.POST_FAINT, pokemon, false);
     }
 
     const alivePlayField = globalScene.getField(true);
-    alivePlayField.forEach((p) => applyAbAttrs(PostKnockOutAbAttr, p, false, pokemon));
+    alivePlayField.forEach((p) => applyAbAttrs(AbAttrFlag.POST_KNOCK_OUT, p, false, pokemon));
     if (pokemon.turnData?.attacksReceived?.length) {
       const defeatSource = globalScene.getPokemonById(pokemon.turnData.attacksReceived[0].sourceId);
       if (defeatSource?.isOnField()) {
-        applyAbAttrs(PostVictoryAbAttr, defeatSource, false);
+        applyAbAttrs(AbAttrFlag.POST_VICTORY, defeatSource, false);
         // TODO: Refactor Fell Stinger
         const pvmove = allMoves[pokemon.turnData.attacksReceived[0].move];
         const pvattrs = pvmove.getAttrs(PostVictoryStatStageChangeAttr);

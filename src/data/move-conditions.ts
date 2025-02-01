@@ -12,8 +12,8 @@ import { type Move } from "#app/data/move";
 import { allMoves } from "#app/data/all-moves";
 import { MoveCategory } from "#enums/move-category";
 import { BattleCommand } from "#enums/battle-command";
-import { FieldPreventExplosionLikeAbAttr } from "#app/data/ab-attrs/field-prevent-explosion-like-ab-attr";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export type MoveConditionFunc = (user: Pokemon, target: Pokemon, move: Move) => boolean;
 export type UserMoveConditionFunc = (user: Pokemon, move: Move) => boolean;
@@ -108,7 +108,14 @@ export const failIfDampCondition: MoveConditionFunc = (user, _target, move) => {
   globalScene
     .getField(true)
     .map((p) =>
-      applyAbAttrs(FieldPreventExplosionLikeAbAttr, p, false, cancelled, getPokemonNameWithAffix(user), move.name),
+      applyAbAttrs(
+        AbAttrFlag.FIELD_PREVENT_EXPLOSION_LIKE,
+        p,
+        false,
+        cancelled,
+        getPokemonNameWithAffix(user),
+        move.name,
+      ),
     );
   return !cancelled.value;
 };

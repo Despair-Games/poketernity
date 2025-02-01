@@ -1,9 +1,9 @@
-import { AbAttrId } from "#enums/ab-attr-id";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 
 export class UnswappableAbilityAbAttr extends AbAttr {
   constructor() {
     super(false);
-    this._id = AbAttrId.UNSWAPPABLE_ABILITY;
+    this._flags.add(AbAttrFlag.UNSWAPPABLE_ABILITY);
   }
 }

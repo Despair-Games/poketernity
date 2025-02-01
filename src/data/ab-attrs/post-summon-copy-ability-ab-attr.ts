@@ -6,7 +6,7 @@ import { randSeedItem } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import i18next from "i18next";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
-import { AbAttrId } from "#enums/ab-attr-id";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Attempts to copy a pokemon's ability. Used by Trace.
@@ -31,7 +31,7 @@ export class PostSummonCopyAbilityAbAttr extends PostSummonAbAttr {
     }
 
     if (
-      target.getAbility().hasAttr(AbAttrId.UNCOPIABLE_ABILITY)
+      target.getAbility().hasAttr(AbAttrFlag.UNCOPIABLE_ABILITY)
       // Wonder Guard is normally uncopiable so has the attribute, but Trace specifically can copy it
       && !(pokemon.hasAbility(Abilities.TRACE) && target.getAbility().id === Abilities.WONDER_GUARD)
     ) {

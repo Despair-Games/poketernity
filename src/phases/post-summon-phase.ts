@@ -1,12 +1,11 @@
 import type { BattlerIndex } from "#enums/battler-index";
-import { CommanderAbAttr } from "#app/data/ab-attrs/commander-ab-attr";
-import { PostSummonAbAttr } from "#app/data/ab-attrs/post-summon-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { StatusEffect } from "#enums/status-effect";
 import { PokemonPhase } from "./abstract-pokemon-phase";
 import { ArenaTrapArenaTagTypes } from "#app/utils/arena-tag-type-utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class PostSummonPhase extends PokemonPhase {
   constructor(battlerIndex: BattlerIndex) {
@@ -31,9 +30,9 @@ export class PostSummonPhase extends PokemonPhase {
       pokemon.lapseTag(BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON);
     }
 
-    applyAbAttrs(PostSummonAbAttr, pokemon, false);
+    applyAbAttrs(AbAttrFlag.POST_SUMMON, pokemon, false);
     const field = pokemon.getField();
-    field.forEach((p) => applyAbAttrs(CommanderAbAttr, p, false));
+    field.forEach((p) => applyAbAttrs(AbAttrFlag.COMMANDER, p, false));
 
     this.end();
   }

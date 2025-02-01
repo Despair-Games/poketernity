@@ -8,7 +8,6 @@ import type { NextEncounterPhase } from "#app/phases/next-encounter-phase";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattleType } from "#enums/battle-type";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
-import { SyncEncounterNatureAbAttr } from "#app/data/ab-attrs/sync-encounter-nature-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { loadEncounterAnimAssets } from "#app/utils/encounter-anim-utils";
 import { initEncounterAnims } from "#app/data/init-encounter-anims";
@@ -55,6 +54,7 @@ import { PlayerGender } from "#enums/player-gender";
 import { Species } from "#enums/species";
 import i18next from "i18next";
 import { MysteryEncounterPhase } from "./mystery-encounter-phases/mystery-encounter-phase";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Starts the first encounter (wave 1) of a new run. Subsequent encounters are handled by
@@ -159,7 +159,7 @@ export class EncounterPhase extends BattlePhase {
             .slice(0, !double ? 1 : 2)
             .reverse()
             .forEach((playerPokemon) => {
-              applyAbAttrs(SyncEncounterNatureAbAttr, playerPokemon, false, currentBattle.enemyParty[e]);
+              applyAbAttrs(AbAttrFlag.SYNC_ENCOUNTER_NATURE, playerPokemon, false, currentBattle.enemyParty[e]);
             });
         }
       }

@@ -1,5 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { StatusEffect } from "#enums/status-effect";
 import { AbAttr } from "./ab-attr";
 
@@ -13,6 +14,7 @@ export class BlockStatusDamageAbAttr extends AbAttr {
 
   constructor(...effects: StatusEffect[]) {
     super(false);
+    this._flags.add(AbAttrFlag.BLOCK_STATUS_DAMAGE);
 
     this.effects = effects;
   }

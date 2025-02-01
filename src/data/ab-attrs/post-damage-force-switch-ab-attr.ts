@@ -8,7 +8,6 @@ import { allMoves } from "#app/data/all-moves";
 import type { Move } from "#app/data/move";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { globalScene } from "#app/global-scene";
-import { ForceSwitchOutImmunityAbAttr } from "#app/data/ab-attrs/force-switch-out-immunity-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
@@ -16,7 +15,7 @@ import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { BattleType } from "#enums/battle-type";
 import i18next from "i18next";
-import { AbAttrId } from "#enums/ab-attr-id";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Ability attribute for forcing a Pokémon to switch out after its health drops below half.
@@ -35,7 +34,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
 
   constructor(hpRatio: number = 0.5) {
     super();
-    this._id = AbAttrId.POST_DAMAGE_FORCE_SWITCH;
+    this._flags.add(AbAttrFlag.POST_DAMAGE_FORCE_SWITCH);
     this.hpRatio = hpRatio;
   }
 
@@ -223,7 +222,7 @@ class ForceSwitchOutHelper {
 
     if (player) {
       const blockedByAbility = new BooleanHolder(false);
-      applyAbAttrs(ForceSwitchOutImmunityAbAttr, pokemon, false, blockedByAbility);
+      applyAbAttrs(AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY, pokemon, false, blockedByAbility);
       return !blockedByAbility.value;
     }
 
@@ -260,7 +259,7 @@ class ForceSwitchOutHelper {
    */
   public getFailedText(target: Pokemon): string | null {
     const blockedByAbility = new BooleanHolder(false);
-    applyAbAttrs(ForceSwitchOutImmunityAbAttr, target, false, blockedByAbility);
+    applyAbAttrs(AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY, target, false, blockedByAbility);
     return blockedByAbility.value
       ? i18next.t("moveTriggers:cannotBeSwitchedOut", { pokemonName: getPokemonNameWithAffix(target) })
       : null;

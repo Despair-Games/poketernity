@@ -5,7 +5,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 import { HitHealAttr } from "../move-attrs/hit-heal-attr";
-import { AbAttrId } from "#enums/ab-attr-id";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Class for abilities that make drain moves deal damage to user instead of healing them.
@@ -13,9 +13,9 @@ import { AbAttrId } from "#enums/ab-attr-id";
  * @see {@linkcode applyPostDefend}
  */
 export class ReverseDrainAbAttr extends PostDefendAbAttr {
-  constructor() {
-    super();
-    this._id = AbAttrId.REVERSE_DRAIN;
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.REVERSE_DRAIN);
   }
 
   /**

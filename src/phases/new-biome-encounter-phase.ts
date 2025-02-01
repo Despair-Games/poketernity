@@ -1,7 +1,7 @@
-import { PostBiomeChangeAbAttr } from "#app/data/ab-attrs/post-biome-change-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { getRandomWeatherType } from "#app/data/weather";
 import { globalScene } from "#app/global-scene";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { NextEncounterPhase } from "./next-encounter-phase";
 
 /**
@@ -21,7 +21,7 @@ export class NewBiomeEncounterPhase extends NextEncounterPhase {
     }
 
     for (const pokemon of globalScene.getPlayerParty().filter((p) => p.isOnField())) {
-      applyAbAttrs(PostBiomeChangeAbAttr, pokemon, false);
+      applyAbAttrs(AbAttrFlag.POST_BIOME_CHANGE, pokemon, false);
     }
 
     const enemyField = globalScene.getEnemyField();

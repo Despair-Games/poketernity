@@ -1,4 +1,3 @@
-import { RunSuccessAbAttr } from "#app/data/ab-attrs/run-success-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type { EnemyPokemon, PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -8,6 +7,7 @@ import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { ArenaTagType } from "#enums/arena-tag-type";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Handles the player attempting to run away from a wild battle
@@ -33,7 +33,7 @@ export class AttemptRunPhase extends PokemonPhase {
 
     this.attemptRunAway(playerField, enemyField, escapeChance);
 
-    applyAbAttrs(RunSuccessAbAttr, playerPokemon, false, escapeChance);
+    applyAbAttrs(AbAttrFlag.RUN_SUCCESS, playerPokemon, false, escapeChance);
 
     if (playerPokemon.randSeedInt(100) < escapeChance.value && !this.forceFailEscape) {
       globalScene.playSound("se/flee");
