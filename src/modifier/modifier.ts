@@ -248,6 +248,22 @@ export abstract class Modifier {
   isHealShopCostModifier(): this is HealShopCostModifier {
     return false;
   }
+
+  isDamageMoneyRewardModifier(): this is DamageMoneyRewardModifier {
+    return false;
+  }
+
+  isMoneyMultiplierModifier(): this is MoneyMultiplierModifier {
+    return false;
+  }
+
+  isExtraModifierModifier(): this is ExtraModifierModifier {
+    return false;
+  }
+
+  isTempExtraModifierModifier(): this is TempExtraModifierModifier {
+    return false;
+  }
 }
 
 export abstract class PersistentModifier extends Modifier {
@@ -3168,6 +3184,10 @@ export class MoneyMultiplierModifier extends PersistentModifier {
   getMaxStackCount(): number {
     return 5;
   }
+
+  override isMoneyMultiplierModifier(): this is this {
+    return true;
+  }
 }
 
 export class DamageMoneyRewardModifier extends PokemonHeldItemModifier {
@@ -3199,6 +3219,10 @@ export class DamageMoneyRewardModifier extends PokemonHeldItemModifier {
 
   getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 5;
+  }
+
+  override isDamageMoneyRewardModifier(): this is this {
+    return true;
   }
 }
 
@@ -3699,6 +3723,10 @@ export class ExtraModifierModifier extends PersistentModifier {
   getMaxStackCount(): number {
     return 3;
   }
+
+  override isExtraModifierModifier(): this is this {
+    return true;
+  }
 }
 
 /**
@@ -3750,6 +3778,10 @@ export class TempExtraModifierModifier extends LapsingPersistentModifier {
    */
   apply(count: NumberHolder): boolean {
     count.value += this.getStackCount();
+    return true;
+  }
+
+  override isTempExtraModifierModifier(): this is this {
     return true;
   }
 }

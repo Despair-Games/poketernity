@@ -10,12 +10,6 @@ import { Biome } from "#enums/biome";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { TimeOfDay } from "#enums/time-of-day";
-import {
-  DamageMoneyRewardModifier,
-  ExtraModifierModifier,
-  MoneyMultiplierModifier,
-  TempExtraModifierModifier,
-} from "#app/modifier/modifier";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { EvolutionItem } from "#enums/evolution-item";
 import { SpeciesWildEvolutionDelay } from "#enums/species-wild-evolution-delay";
@@ -2121,12 +2115,9 @@ export const pokemonEvolutions: PokemonEvolutions = {
       new SpeciesEvolutionCondition(
         (p) =>
           p.evoCounter
-            + p.getHeldItems().filter((m) => m instanceof DamageMoneyRewardModifier).length
+            + p.getHeldItems().filter((m) => m.isDamageMoneyRewardModifier()).length
             + globalScene.findModifiers(
-              (m) =>
-                m instanceof MoneyMultiplierModifier
-                || m instanceof ExtraModifierModifier
-                || m instanceof TempExtraModifierModifier,
+              (m) => m.isMoneyMultiplierModifier() || m.isExtraModifierModifier() || m.isTempExtraModifierModifier(),
             ).length
           > 9,
       ),
@@ -2141,12 +2132,9 @@ export const pokemonEvolutions: PokemonEvolutions = {
       new SpeciesEvolutionCondition(
         (p) =>
           p.evoCounter
-            + p.getHeldItems().filter((m) => m instanceof DamageMoneyRewardModifier).length
+            + p.getHeldItems().filter((m) => m.isDamageMoneyRewardModifier()).length
             + globalScene.findModifiers(
-              (m) =>
-                m instanceof MoneyMultiplierModifier
-                || m instanceof ExtraModifierModifier
-                || m instanceof TempExtraModifierModifier,
+              (m) => m.isMoneyMultiplierModifier() || m.isExtraModifierModifier() || m.isTempExtraModifierModifier(),
             ).length
           > 9,
       ),
