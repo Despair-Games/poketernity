@@ -211,9 +211,9 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
       2,
       getRandomPartyMemberFunc([Species.LAPRAS, Species.AGGRON], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
+        p.formIndex = 1; // Mega Aggron or GMAX Lapras
         p.generateName();
         p.generateAndPopulateMoveset();
-        p.formIndex = 1; // Mega Aggron or GMAX Lapras
       }),
     ) // GMAX/Mega (same fromindex)
     .setPartyMemberFunc(
@@ -289,9 +289,9 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
       5,
       getRandomPartyMemberFunc([Species.ROTOM], TrainerSlot.TRAINER_PARTNER, true, (p) => {
         p.setBoss(true, 2);
+        p.formIndex = randInt(p.getFormAmount(), 0); // Random Rotom form since he is the one introducing the rotom phone
         p.generateName();
         p.generateAndPopulateMoveset();
-        p.formIndex = randInt(p.getFormAmount(), 0); // Random Rotom form since he is the one introducing the rotom phone
       }),
     )
     .setSpriteNames("hau", "kukui")
@@ -309,7 +309,7 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
         p.generateName();
         p.generateAndPopulateMoveset();
       }),
-    ) // GMAX
+    )
     .setPartyMemberFunc(
       3,
       getRandomPartyMemberFunc(
@@ -318,28 +318,28 @@ export const championDoubleTrainerConfigs: TrainerConfigs = {
         true,
         (p) => {
           p.setBoss(true, 2);
+          p.formIndex = 1; // GMAX
           p.generateName();
           p.generateAndPopulateMoveset();
-          p.formIndex = 1; // GMAX
         },
       ),
-    ) // GMAX
+    )
     .setPartyMemberFunc(
       4,
       getRandomPartyMemberFunc([Species.ZAMAZENTA], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
+        p.formIndex = 1; // Crowned (maybe too strong?)
         p.generateName();
         p.generateAndPopulateMoveset();
-        p.formIndex = 1; // Crowned (maybe too strong?)
       }),
     ) // Zamazenta to fit with hop. If thats too strong lets to one of the GALAR Regis?
     .setPartyMemberFunc(
       5,
       getRandomPartyMemberFunc([Species.ZACIAN], TrainerSlot.TRAINER_PARTNER, true, (p) => {
         p.setBoss(true, 2);
+        p.formIndex = 1; // Crowned (maybe too strong?)
         p.generateName();
         p.generateAndPopulateMoveset();
-        p.formIndex = 1; // Crowned (maybe too strong?)
       }),
     ) // Hop NEEDS to have Zacian because of the story and he gets a TCG card with it
     .setSpriteNames("leon", "hop")
