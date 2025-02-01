@@ -1104,7 +1104,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       critStage.value += 1;
     }
 
-    const critBoostTag = source.getTag(CritBoostBattlerTagTypes);
+    const critBoostTag = source.getTag(...CritBoostBattlerTagTypes);
     if (critBoostTag) {
       if (critBoostTag instanceof DragonCheerTag) {
         critStage.value += critBoostTag.typesOnAdd.includes(ElementType.DRAGON) ? 2 : 1;
@@ -1856,13 +1856,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       || (!this.isOfType(ElementType.FLYING, true, true)
         && !this.hasAbility(Abilities.LEVITATE)
         && !this.getTag(BattlerTagType.FLOATING)
-        && !this.getTag(SemiInvulnerableBattlerTagTypes)
+        && !this.getTag(...SemiInvulnerableBattlerTagTypes)
         && !this.getTag(BattlerTagType.SKY_DROP))
     );
   }
 
   public isSemiInvulnerable(): boolean {
-    return !!this.getTag(SemiInvulnerableBattlerTagTypes) || !!this.getTag(BattlerTagType.SKY_DROP);
+    return !!this.getTag(...SemiInvulnerableBattlerTagTypes) || !!this.getTag(BattlerTagType.SKY_DROP);
   }
 
   /**
@@ -1902,7 +1902,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const side = this.getArenaTagSide();
     return (
       trappedByAbility.value
-      || !!this.getTag(TrappedBattlerTagTypes)
+      || !!this.getTag(...TrappedBattlerTagTypes)
       || !!globalScene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, side)
     );
   }
@@ -3578,21 +3578,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return false;
   }
 
-  /** @overload */
-  getTag<T extends BattlerTag>(tagType: BattlerTagType | BattlerTagType[]): T | nil;
-
-  /** @overload */
-  getTag<T extends BattlerTag>(tagTypes: BattlerTagType[]): T | nil;
-
-  /** @overload */
-  // getTag<T extends BattlerTag>(tagType: AbstractConstructor<T>): T | nil;
-
-  getTag<T extends BattlerTag>(tagType: BattlerTagType | BattlerTagType[]): T | nil {
+  getTag<T extends BattlerTag>(...tagTypes: BattlerTagType[]): T | nil {
     if (!this.summonData) {
       return null;
     }
-    const tagTypeArr = Array.isArray(tagType) ? tagType : [tagType];
-    const result = this.summonData.tags.find((t) => tagTypeArr.includes(t.tagType));
+    const result = this.summonData.tags.find((t) => tagTypes.includes(t.tagType));
 
     return result ? (result as T) : (result as nil);
   }

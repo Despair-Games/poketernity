@@ -2374,7 +2374,7 @@ export function initMoves() {
       .target(MoveTarget.ALL)
       .attr(StatStageChangeAttr, [Stat.DEF], 1, false, {
         condition: (_user, target, _move) =>
-          target.getTypes().includes(ElementType.GRASS) && !target.getTag(SemiInvulnerableBattlerTagTypes),
+          target.getTypes().includes(ElementType.GRASS) && !target.getTag(...SemiInvulnerableBattlerTagTypes),
       }),
     new StatusMove(Moves.GRASSY_TERRAIN, ElementType.GRASS, -1, 10, -1, 0, 6)
       .attr(TerrainChangeAttr, TerrainType.GRASSY)

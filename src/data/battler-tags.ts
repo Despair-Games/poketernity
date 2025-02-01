@@ -569,7 +569,7 @@ export class TrappedTag extends BattlerTag {
     const move = allMoves[this.sourceMove];
 
     const isGhost = pokemon.isOfType(ElementType.GHOST);
-    const isTrapped = pokemon.getTag(TrappedBattlerTagTypes);
+    const isTrapped = pokemon.getTag(...TrappedBattlerTagTypes);
     const hasSubstitute = move.hitsSubstitute(source, pokemon);
 
     return !isTrapped && !isGhost && (this.sourceMove === Moves.G_MAX_TERROR || !hasSubstitute);
@@ -618,7 +618,7 @@ class NoRetreatTag extends TrappedTag {
 
   /** overrides {@linkcode TrappedTag.apply}, removing the Ghost-type condition */
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.getTag(TrappedBattlerTagTypes);
+    return !pokemon.getTag(...TrappedBattlerTagTypes);
   }
 }
 
@@ -1362,7 +1362,7 @@ export abstract class DamagingTrapTag extends TrappedTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.getTag(TrappedBattlerTagTypes) && !pokemon.getTag(BattlerTagType.SUBSTITUTE);
+    return !pokemon.getTag(...TrappedBattlerTagTypes) && !pokemon.getTag(BattlerTagType.SUBSTITUTE);
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
@@ -1448,7 +1448,7 @@ export class GMaxFireSpinTag extends FireSpinTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.getTag(TrappedBattlerTagTypes);
+    return !pokemon.getTag(...TrappedBattlerTagTypes);
   }
 }
 
@@ -1500,7 +1500,7 @@ export class GMaxSandTombTag extends SandTombTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.getTag(TrappedBattlerTagTypes);
+    return !pokemon.getTag(...TrappedBattlerTagTypes);
   }
 }
 
@@ -2350,7 +2350,7 @@ export class GroundedTag extends BattlerTag {
       pokemon.isOfType(ElementType.FLYING, true, true)
       || pokemon.hasAbility(Abilities.LEVITATE)
       || pokemon.getTag(BattlerTagType.FLOATING)
-      || pokemon.getTag(SemiInvulnerableBattlerTagTypes);
+      || pokemon.getTag(...SemiInvulnerableBattlerTagTypes);
 
     if (isSmackDownOrThousandArrows && wasNotGrounded) {
       globalScene.queueMessage(
@@ -2414,7 +2414,7 @@ export class RoostedTag extends BattlerTag {
       if (this.isBasePureFlying && !isCurrentlyDualType) {
         modifiedTypes = [ElementType.NORMAL];
       } else {
-        if (!!pokemon.getTag(RemoveTypeBattlerTagTypes) && isOriginallyDualType && !isCurrentlyDualType) {
+        if (!!pokemon.getTag(...RemoveTypeBattlerTagTypes) && isOriginallyDualType && !isCurrentlyDualType) {
           modifiedTypes = [ElementType.UNKNOWN];
         } else {
           modifiedTypes = currentTypes.filter((type) => type !== ElementType.FLYING);

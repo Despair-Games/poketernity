@@ -35,6 +35,6 @@ export class GulpMissileTagAttr extends MoveEffectAttr {
 
   override getUserBenefitScore(user: Pokemon, _target: Pokemon, _move: Move): number {
     const isCramorant = user.hasAbility(Abilities.GULP_MISSILE) && user.species.speciesId === Species.CRAMORANT;
-    return isCramorant && !user.getTag(GulpMissleBattlerTagTypes) ? 10 : 0;
+    return isCramorant && !user.getTag(...GulpMissleBattlerTagTypes) ? 10 : 0;
   }
 }

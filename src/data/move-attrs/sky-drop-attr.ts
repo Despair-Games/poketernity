@@ -41,7 +41,7 @@ export class SkyDropAttr extends MoveEffectAttr {
       && target.isPlayer() !== user.isPlayer()
       && target.species.weight < 200
       && !target.getTag(BattlerTagType.SUBSTITUTE)
-      && !target.getTag(SemiInvulnerableBattlerTagTypes)
+      && !target.getTag(...SemiInvulnerableBattlerTagTypes)
       && target.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon()?.id !== target.id
       && (!target.getTag(BattlerTagType.SKY_DROP) || target.getTag(BattlerTagType.SKY_DROP)?.sourceId === user.id);
   }

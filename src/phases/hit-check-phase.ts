@@ -81,7 +81,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
       || !!target.getTag(BattlerTagType.ALWAYS_GET_HIT);
 
     const semiInvulnerableTag =
-      target.getTag(SemiInvulnerableBattlerTagTypes) ?? target.getTag(BattlerTagType.SKY_DROP);
+      target.getTag(...SemiInvulnerableBattlerTagTypes) ?? target.getTag(BattlerTagType.SKY_DROP);
     /** Should the move miss due to the target's semi-invulnerability? */
     const targetIsSemiInvulnerable =
       !!semiInvulnerableTag

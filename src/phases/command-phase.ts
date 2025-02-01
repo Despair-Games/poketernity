@@ -347,7 +347,7 @@ export class CommandPhase extends FieldPhase {
           showNoEscapeText(trappedAbMessages[0]);
         } else {
           const trapTag =
-            playerPokemon.getTag<TrappedTag>(TrappedBattlerTagTypes)
+            playerPokemon.getTag<TrappedTag>(...TrappedBattlerTagTypes)
             ?? playerPokemon.getTag<SkyDropTag>(BattlerTagType.SKY_DROP);
           const fairyLockTag = arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER);
 

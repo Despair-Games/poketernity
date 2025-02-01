@@ -15,7 +15,7 @@ export class JawLockAttr extends AddBattlerTagAttr {
 
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     // If either the user or the target already has the tag, do not apply
-    if (user.getTag(TrappedBattlerTagTypes) || target.getTag(TrappedBattlerTagTypes)) {
+    if (user.getTag(...TrappedBattlerTagTypes) || target.getTag(...TrappedBattlerTagTypes)) {
       return false;
     }
 

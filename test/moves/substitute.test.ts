@@ -262,7 +262,7 @@ describe("Moves - Substitute", () => {
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    expect(leadPokemon.getTag(TrappedBattlerTagTypes)).toBeUndefined();
+    expect(leadPokemon.getTag(...TrappedBattlerTagTypes)).toBeUndefined();
   });
 
   it("should prevent the user's stats from being lowered", async () => {
