@@ -87,7 +87,7 @@ import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import PokeballTray from "#app/ui/pokeball-tray";
 import InvertPostFX from "#app/pipelines/invert";
 import type { Achv } from "#app/system/achv";
-import { achvs, ModifierAchv, MoneyAchv } from "#app/system/achv";
+import { achvs } from "#app/system/achv";
 import type { Voucher } from "#app/system/voucher";
 import { vouchers } from "#app/system/voucher";
 import { Gender } from "#enums/gender";
@@ -180,6 +180,7 @@ import { PokemonHealPhase, type PokemonHealPhaseOptions } from "#app/phases/poke
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveChargePhase } from "#app/phases/move-charge-phase";
 import type { PokemonMove } from "#app/field/pokemon-move";
+import { AchvCategory } from "#enums/achv-flag";
 
 //#region Types
 
@@ -2567,7 +2568,7 @@ export default class BattleScene extends SceneBase {
     this.money = Math.min(this.money + amount, Number.MAX_SAFE_INTEGER);
     this.updateMoneyText();
     this.animateMoneyChanged(true);
-    this.validateAchvs(MoneyAchv);
+    this.validateAchvs(AchvCategory.MONEY);
   }
 
   /**
@@ -2605,7 +2606,7 @@ export default class BattleScene extends SceneBase {
     }
     let success = false;
     const soundName = modifier.type.soundName;
-    this.validateAchvs(ModifierAchv, modifier);
+    this.validateAchvs(AchvCategory.MODIFIER, modifier);
     const modifiersToRemove: PersistentModifier[] = [];
     if (modifier.isPersistentModifier()) {
       if (modifier.isTerastallizeModifier()) {
@@ -3167,8 +3168,8 @@ export default class BattleScene extends SceneBase {
     return true;
   }
 
-  validateAchvs(achvType: AbstractConstructor<Achv>, ...args: unknown[]): void {
-    const filteredAchvs = Object.values(achvs).filter((a) => a instanceof achvType);
+  validateAchvs(achvFlag: AchvCategory, ...args: unknown[]): void {
+    const filteredAchvs = Object.values(achvs).filter((a) => a.flag === achvFlag);
     for (const achv of filteredAchvs) {
       this.validateAchv(achv, ...args);
     }

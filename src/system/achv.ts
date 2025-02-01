@@ -12,8 +12,10 @@ import { globalScene } from "#app/global-scene";
 import { settings } from "./settings/settings-manager";
 import { AchvTier } from "#enums/achv-tier";
 import { ElementType } from "#enums/element-type";
+import { AchvCategory } from "#enums/achv-flag";
 
 export class Achv {
+  protected _category: AchvCategory;
   protected readonly localizationKey: string;
   protected descriptionKey: string;
   protected descriptionLocArgs: Record<string, unknown>;
@@ -28,11 +30,16 @@ export class Achv {
   private conditionFunc?: ConditionFn;
 
   constructor(localizationKey: string, iconImage: string, score: number, conditionFunc?: ConditionFn) {
+    this._category = AchvCategory.UNSPECIFIED;
     this.localizationKey = localizationKey;
     this.descriptionKey = localizationKey;
     this._iconImage = iconImage;
     this.score = score;
     this.conditionFunc = conditionFunc;
+  }
+
+  get flag(): AchvCategory {
+    return this._category;
   }
 
   /**
@@ -93,6 +100,7 @@ export class MoneyAchv extends Achv {
 
   constructor(localizationKey: string, moneyAmount: number, iconImage: string, score: number) {
     super(localizationKey, iconImage, score, () => globalScene.money >= this.moneyAmount);
+    this._category = AchvCategory.MONEY;
     this.moneyAmount = moneyAmount;
     this.descriptionKey = "MoneyAchv";
     this.descriptionLocArgs = { moneyAmount: moneyAmount.toLocaleString(i18next.resolvedLanguage ?? "en-US") };
@@ -120,6 +128,7 @@ export class DamageAchv extends Achv {
       score,
       (damage: number | NumberHolder) => (damage instanceof NumberHolder ? damage.value : damage) >= this.damageAmount,
     );
+    this._category = AchvCategory.DAMAGE;
     this.damageAmount = damageAmount;
     this.descriptionKey = "DamageAchv";
     this.descriptionLocArgs = { damageAmount: damageAmount.toLocaleString(i18next.resolvedLanguage ?? "en-US") };
@@ -136,6 +145,7 @@ export class HealAchv extends Achv {
       score,
       (heal: number | NumberHolder) => (heal instanceof NumberHolder ? heal.value : heal) >= this.healAmount,
     );
+    this._category = AchvCategory.HEAL;
     this.healAmount = healAmount;
     this.descriptionKey = "HealAchv";
     this.descriptionLocArgs = {
@@ -155,6 +165,7 @@ export class LevelAchv extends Achv {
       score,
       (level: number | NumberHolder) => (level instanceof NumberHolder ? level.value : level) >= this.level,
     );
+    this._category = AchvCategory.LEVEL;
     this.level = level;
     this.descriptionKey = "LevelAchv";
     this.descriptionLocArgs = { level: level };
@@ -169,6 +180,7 @@ export class ModifierAchv extends Achv {
     modifierFunc: (modifier: Modifier) => boolean,
   ) {
     super(localizationKey, iconImage, score, (modifier: Modifier) => modifierFunc(modifier));
+    this._category = AchvCategory.MODIFIER;
   }
 }
 
@@ -180,6 +192,7 @@ export class ChallengeAchv extends Achv {
     challengeFunc: (challenge: Challenge) => boolean,
   ) {
     super(localizationKey, iconImage, score, (challenge: Challenge) => challengeFunc(challenge));
+    this._category = AchvCategory.CHALLENGE;
   }
 }
 

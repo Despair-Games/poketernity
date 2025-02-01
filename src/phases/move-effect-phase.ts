@@ -26,7 +26,6 @@ import {
   HitHealModifier,
   PokemonMultiHitModifier,
 } from "#app/modifier/modifier";
-import { DamageAchv } from "#app/system/achv";
 import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
@@ -39,6 +38,7 @@ import { HitCheckPhase } from "./hit-check-phase";
 import { MoveFlags } from "#enums/move-flags";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { AchvCategory } from "#enums/achv-flag";
 
 export class MoveEffectPhase extends HitCheckPhase {
   private moveHistoryEntry: TurnMove;
@@ -440,7 +440,7 @@ export class MoveEffectPhase extends HitCheckPhase {
 
       if (damage > 0) {
         if (user.isPlayer()) {
-          globalScene.validateAchvs(DamageAchv, new NumberHolder(damage));
+          globalScene.validateAchvs(AchvCategory.DAMAGE, new NumberHolder(damage));
           if (damage > globalScene.gameData.gameStats.highestDamage) {
             globalScene.gameData.gameStats.highestDamage = damage;
           }

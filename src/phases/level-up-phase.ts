@@ -4,11 +4,11 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { PlayerPartyMemberPokemonPhase } from "#app/phases/abstract-player-party-member-pokemon-phase";
 import { EvolutionPhase } from "#app/phases/evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
-import { LevelAchv } from "#app/system/achv";
 import { NumberHolder } from "#app/utils";
 import { ExpNotification } from "#enums/exp-notification";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
+import { AchvCategory } from "#enums/achv-flag";
 
 /**
  * Handles the effects of a pokemon levelling up:
@@ -41,7 +41,7 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
       gameData.gameStats.highestLevel = this.level;
     }
 
-    globalScene.validateAchvs(LevelAchv, new NumberHolder(this.level));
+    globalScene.validateAchvs(AchvCategory.LEVEL, new NumberHolder(this.level));
 
     const prevStats = this.pokemon.stats.slice(0);
     this.pokemon.calculateStats();
