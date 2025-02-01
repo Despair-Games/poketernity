@@ -2020,9 +2020,9 @@ export function initMoves() {
     new AttackMove(Moves.ACID_SPRAY, ElementType.POISON, MoveCategory.SPECIAL, 40, 100, 20, 100, 0, 5)
       .attr(StatStageChangeAttr, [Stat.SPDEF], -2)
       .bulletMove(),
-    new AttackMove(Moves.FOUL_PLAY, ElementType.DARK, MoveCategory.PHYSICAL, 95, 100, 15, -1, 0, 5)
-      .attr(TargetAtkUserAtkAttr)
-      .edgeCase(), // Does not consider Huge Power/other attack stat modifiers correctly + disables Unaware during use
+    new AttackMove(Moves.FOUL_PLAY, ElementType.DARK, MoveCategory.PHYSICAL, 95, 100, 15, -1, 0, 5).attr(
+      TargetAtkUserAtkAttr,
+    ),
     new StatusMove(Moves.SIMPLE_BEAM, ElementType.NORMAL, 100, 15, -1, 0, 5).attr(AbilityChangeAttr, Abilities.SIMPLE),
     new StatusMove(Moves.ENTRAINMENT, ElementType.NORMAL, 100, 15, -1, 0, 5)
       .condition(failOnMaxCondition)
@@ -3185,9 +3185,9 @@ export function initMoves() {
       .attr(CutHpStatStageBoostAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD], 1, 3)
       .soundMove()
       .danceMove(),
-    new AttackMove(Moves.BODY_PRESS, ElementType.FIGHTING, MoveCategory.PHYSICAL, 80, 100, 10, -1, 0, 8)
-      .attr(DefAtkAttr)
-      .edgeCase(), // Does not consider Huge Power or other attack stat modifiers correctly + disables Unaware during use
+    new AttackMove(Moves.BODY_PRESS, ElementType.FIGHTING, MoveCategory.PHYSICAL, 80, 100, 10, -1, 0, 8).attr(
+      DefAtkAttr,
+    ),
     new StatusMove(Moves.DECORATE, ElementType.FAIRY, -1, 15, -1, 0, 8)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], 2)
       .ignoresProtect(),
