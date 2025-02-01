@@ -1304,7 +1304,7 @@ export class TrainerConfig {
 
   /**
    * Initializes the trainer configuration for a Champion.
-   * @param variant The variant of the Champion (used for localization of the title).
+   * @param variant The {@linkcode TrainerVariant} of the Champion (used for localization of the title).
    * @param battleBgm String representing the battle music
    * @param mixedBattleBgm String representing mixed battle music
    * @returns The updated TrainerConfig instance.
