@@ -2,281 +2,281 @@ import { signatureSpecies } from "#app/data/balance/signatureSpecies";
 import type { TrainerConfigs } from "#app/data/trainer-config";
 import { TrainerConfig } from "#app/data/trainer-config";
 import { TrainerType } from "#enums/trainer-type";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 
 let t = TrainerType.BROCK;
 export const gymLeaderTrainerConfigs: TrainerConfigs = {
   [TrainerType.BROCK]: new TrainerConfig(t)
-    .initForGymLeader(signatureSpecies["BROCK"], true, Type.ROCK)
+    .initForGymLeader(signatureSpecies["BROCK"], true, ElementType.ROCK)
     .setBattleBgm("battle_kanto_gym")
     .setMixedBattleBgm("battle_kanto_gym"),
   [TrainerType.MISTY]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["MISTY"], false, Type.WATER)
+    .initForGymLeader(signatureSpecies["MISTY"], false, ElementType.WATER)
     .setBattleBgm("battle_kanto_gym")
     .setMixedBattleBgm("battle_kanto_gym"),
   [TrainerType.LT_SURGE]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["LT_SURGE"], true, Type.ELECTRIC)
+    .initForGymLeader(signatureSpecies["LT_SURGE"], true, ElementType.ELECTRIC)
     .setBattleBgm("battle_kanto_gym")
     .setMixedBattleBgm("battle_kanto_gym"),
   [TrainerType.ERIKA]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["ERIKA"], false, Type.GRASS)
+    .initForGymLeader(signatureSpecies["ERIKA"], false, ElementType.GRASS)
     .setBattleBgm("battle_kanto_gym")
     .setMixedBattleBgm("battle_kanto_gym"),
   [TrainerType.JANINE]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["JANINE"], false, Type.POISON)
+    .initForGymLeader(signatureSpecies["JANINE"], false, ElementType.POISON)
     .setBattleBgm("battle_kanto_gym")
     .setMixedBattleBgm("battle_kanto_gym"),
   [TrainerType.SABRINA]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["SABRINA"], false, Type.PSYCHIC)
+    .initForGymLeader(signatureSpecies["SABRINA"], false, ElementType.PSYCHIC)
     .setBattleBgm("battle_kanto_gym")
     .setMixedBattleBgm("battle_kanto_gym"),
   [TrainerType.BLAINE]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["BLAINE"], true, Type.FIRE)
+    .initForGymLeader(signatureSpecies["BLAINE"], true, ElementType.FIRE)
     .setBattleBgm("battle_kanto_gym")
     .setMixedBattleBgm("battle_kanto_gym"),
   [TrainerType.GIOVANNI]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["GIOVANNI"], true, Type.GROUND)
+    .initForGymLeader(signatureSpecies["GIOVANNI"], true, ElementType.GROUND)
     .setBattleBgm("battle_kanto_gym")
     .setMixedBattleBgm("battle_kanto_gym"),
   [TrainerType.FALKNER]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["FALKNER"], true, Type.FLYING)
+    .initForGymLeader(signatureSpecies["FALKNER"], true, ElementType.FLYING)
     .setBattleBgm("battle_johto_gym")
     .setMixedBattleBgm("battle_johto_gym"),
   [TrainerType.BUGSY]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["BUGSY"], true, Type.BUG)
+    .initForGymLeader(signatureSpecies["BUGSY"], true, ElementType.BUG)
     .setBattleBgm("battle_johto_gym")
     .setMixedBattleBgm("battle_johto_gym"),
   [TrainerType.WHITNEY]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["WHITNEY"], false, Type.NORMAL)
+    .initForGymLeader(signatureSpecies["WHITNEY"], false, ElementType.NORMAL)
     .setBattleBgm("battle_johto_gym")
     .setMixedBattleBgm("battle_johto_gym"),
   [TrainerType.MORTY]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["MORTY"], true, Type.GHOST)
+    .initForGymLeader(signatureSpecies["MORTY"], true, ElementType.GHOST)
     .setBattleBgm("battle_johto_gym")
     .setMixedBattleBgm("battle_johto_gym"),
   [TrainerType.CHUCK]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["CHUCK"], true, Type.FIGHTING)
+    .initForGymLeader(signatureSpecies["CHUCK"], true, ElementType.FIGHTING)
     .setBattleBgm("battle_johto_gym")
     .setMixedBattleBgm("battle_johto_gym"),
   [TrainerType.JASMINE]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["JASMINE"], false, Type.STEEL)
+    .initForGymLeader(signatureSpecies["JASMINE"], false, ElementType.STEEL)
     .setBattleBgm("battle_johto_gym")
     .setMixedBattleBgm("battle_johto_gym"),
   [TrainerType.PRYCE]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["PRYCE"], true, Type.ICE)
+    .initForGymLeader(signatureSpecies["PRYCE"], true, ElementType.ICE)
     .setBattleBgm("battle_johto_gym")
     .setMixedBattleBgm("battle_johto_gym"),
   [TrainerType.CLAIR]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["CLAIR"], false, Type.DRAGON)
+    .initForGymLeader(signatureSpecies["CLAIR"], false, ElementType.DRAGON)
     .setBattleBgm("battle_johto_gym")
     .setMixedBattleBgm("battle_johto_gym"),
   [TrainerType.ROXANNE]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["ROXANNE"], false, Type.ROCK)
+    .initForGymLeader(signatureSpecies["ROXANNE"], false, ElementType.ROCK)
     .setBattleBgm("battle_hoenn_gym")
     .setMixedBattleBgm("battle_hoenn_gym"),
   [TrainerType.BRAWLY]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["BRAWLY"], true, Type.FIGHTING)
+    .initForGymLeader(signatureSpecies["BRAWLY"], true, ElementType.FIGHTING)
     .setBattleBgm("battle_hoenn_gym")
     .setMixedBattleBgm("battle_hoenn_gym"),
   [TrainerType.WATTSON]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["WATTSON"], true, Type.ELECTRIC)
+    .initForGymLeader(signatureSpecies["WATTSON"], true, ElementType.ELECTRIC)
     .setBattleBgm("battle_hoenn_gym")
     .setMixedBattleBgm("battle_hoenn_gym"),
   [TrainerType.FLANNERY]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["FLANNERY"], false, Type.FIRE)
+    .initForGymLeader(signatureSpecies["FLANNERY"], false, ElementType.FIRE)
     .setBattleBgm("battle_hoenn_gym")
     .setMixedBattleBgm("battle_hoenn_gym"),
   [TrainerType.NORMAN]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["NORMAN"], true, Type.NORMAL)
+    .initForGymLeader(signatureSpecies["NORMAN"], true, ElementType.NORMAL)
     .setBattleBgm("battle_hoenn_gym")
     .setMixedBattleBgm("battle_hoenn_gym"),
   [TrainerType.WINONA]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["WINONA"], false, Type.FLYING)
+    .initForGymLeader(signatureSpecies["WINONA"], false, ElementType.FLYING)
     .setBattleBgm("battle_hoenn_gym")
     .setMixedBattleBgm("battle_hoenn_gym"),
   [TrainerType.TATE]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["TATE"], true, Type.PSYCHIC)
+    .initForGymLeader(signatureSpecies["TATE"], true, ElementType.PSYCHIC)
     .setBattleBgm("battle_hoenn_gym")
     .setMixedBattleBgm("battle_hoenn_gym")
     .setHasDouble("tate_liza_double")
     .setDoubleTrainerType(TrainerType.LIZA)
     .setDoubleTitle("gym_leader_double"),
   [TrainerType.LIZA]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["LIZA"], false, Type.PSYCHIC)
+    .initForGymLeader(signatureSpecies["LIZA"], false, ElementType.PSYCHIC)
     .setBattleBgm("battle_hoenn_gym")
     .setMixedBattleBgm("battle_hoenn_gym")
     .setHasDouble("liza_tate_double")
     .setDoubleTrainerType(TrainerType.TATE)
     .setDoubleTitle("gym_leader_double"),
   [TrainerType.JUAN]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["JUAN"], true, Type.WATER)
+    .initForGymLeader(signatureSpecies["JUAN"], true, ElementType.WATER)
     .setBattleBgm("battle_hoenn_gym")
     .setMixedBattleBgm("battle_hoenn_gym"),
   [TrainerType.ROARK]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["ROARK"], true, Type.ROCK)
+    .initForGymLeader(signatureSpecies["ROARK"], true, ElementType.ROCK)
     .setBattleBgm("battle_sinnoh_gym")
     .setMixedBattleBgm("battle_sinnoh_gym"),
   [TrainerType.GARDENIA]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["GARDENIA"], false, Type.GRASS)
+    .initForGymLeader(signatureSpecies["GARDENIA"], false, ElementType.GRASS)
     .setBattleBgm("battle_sinnoh_gym")
     .setMixedBattleBgm("battle_sinnoh_gym"),
   [TrainerType.MAYLENE]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["MAYLENE"], false, Type.FIGHTING)
+    .initForGymLeader(signatureSpecies["MAYLENE"], false, ElementType.FIGHTING)
     .setBattleBgm("battle_sinnoh_gym")
     .setMixedBattleBgm("battle_sinnoh_gym"),
   [TrainerType.CRASHER_WAKE]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["CRASHER_WAKE"], true, Type.WATER)
+    .initForGymLeader(signatureSpecies["CRASHER_WAKE"], true, ElementType.WATER)
     .setBattleBgm("battle_sinnoh_gym")
     .setMixedBattleBgm("battle_sinnoh_gym"),
   [TrainerType.FANTINA]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["FANTINA"], false, Type.GHOST)
+    .initForGymLeader(signatureSpecies["FANTINA"], false, ElementType.GHOST)
     .setBattleBgm("battle_sinnoh_gym")
     .setMixedBattleBgm("battle_sinnoh_gym"),
   [TrainerType.BYRON]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["BYRON"], true, Type.STEEL)
+    .initForGymLeader(signatureSpecies["BYRON"], true, ElementType.STEEL)
     .setBattleBgm("battle_sinnoh_gym")
     .setMixedBattleBgm("battle_sinnoh_gym"),
   [TrainerType.CANDICE]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["CANDICE"], false, Type.ICE)
+    .initForGymLeader(signatureSpecies["CANDICE"], false, ElementType.ICE)
     .setBattleBgm("battle_sinnoh_gym")
     .setMixedBattleBgm("battle_sinnoh_gym"),
   [TrainerType.VOLKNER]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["VOLKNER"], true, Type.ELECTRIC)
+    .initForGymLeader(signatureSpecies["VOLKNER"], true, ElementType.ELECTRIC)
     .setBattleBgm("battle_sinnoh_gym")
     .setMixedBattleBgm("battle_sinnoh_gym"),
   [TrainerType.CILAN]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["CILAN"], true, Type.GRASS)
+    .initForGymLeader(signatureSpecies["CILAN"], true, ElementType.GRASS)
     .setMixedBattleBgm("battle_unova_gym"),
   [TrainerType.CHILI]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["CHILI"], true, Type.FIRE)
+    .initForGymLeader(signatureSpecies["CHILI"], true, ElementType.FIRE)
     .setMixedBattleBgm("battle_unova_gym"),
   [TrainerType.CRESS]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["CRESS"], true, Type.WATER)
+    .initForGymLeader(signatureSpecies["CRESS"], true, ElementType.WATER)
     .setMixedBattleBgm("battle_unova_gym"),
   [TrainerType.CHEREN]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["CHEREN"], true, Type.NORMAL)
+    .initForGymLeader(signatureSpecies["CHEREN"], true, ElementType.NORMAL)
     .setMixedBattleBgm("battle_unova_gym"),
   [TrainerType.LENORA]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["LENORA"], false, Type.NORMAL)
+    .initForGymLeader(signatureSpecies["LENORA"], false, ElementType.NORMAL)
     .setMixedBattleBgm("battle_unova_gym"),
   [TrainerType.ROXIE]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["ROXIE"], false, Type.POISON)
+    .initForGymLeader(signatureSpecies["ROXIE"], false, ElementType.POISON)
     .setMixedBattleBgm("battle_unova_gym"),
   [TrainerType.BURGH]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["BURGH"], true, Type.BUG)
+    .initForGymLeader(signatureSpecies["BURGH"], true, ElementType.BUG)
     .setMixedBattleBgm("battle_unova_gym"),
   [TrainerType.ELESA]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["ELESA"], false, Type.ELECTRIC)
+    .initForGymLeader(signatureSpecies["ELESA"], false, ElementType.ELECTRIC)
     .setMixedBattleBgm("battle_unova_gym"),
   [TrainerType.CLAY]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["CLAY"], true, Type.GROUND)
+    .initForGymLeader(signatureSpecies["CLAY"], true, ElementType.GROUND)
     .setMixedBattleBgm("battle_unova_gym"),
   [TrainerType.SKYLA]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["SKYLA"], false, Type.FLYING)
+    .initForGymLeader(signatureSpecies["SKYLA"], false, ElementType.FLYING)
     .setMixedBattleBgm("battle_unova_gym"),
   [TrainerType.BRYCEN]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["BRYCEN"], true, Type.ICE)
+    .initForGymLeader(signatureSpecies["BRYCEN"], true, ElementType.ICE)
     .setMixedBattleBgm("battle_unova_gym"),
   [TrainerType.DRAYDEN]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["DRAYDEN"], true, Type.DRAGON)
+    .initForGymLeader(signatureSpecies["DRAYDEN"], true, ElementType.DRAGON)
     .setMixedBattleBgm("battle_unova_gym"),
   [TrainerType.MARLON]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["MARLON"], true, Type.WATER)
+    .initForGymLeader(signatureSpecies["MARLON"], true, ElementType.WATER)
     .setMixedBattleBgm("battle_unova_gym"),
   [TrainerType.VIOLA]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["VIOLA"], false, Type.BUG)
+    .initForGymLeader(signatureSpecies["VIOLA"], false, ElementType.BUG)
     .setMixedBattleBgm("battle_kalos_gym"),
   [TrainerType.GRANT]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["GRANT"], true, Type.ROCK)
+    .initForGymLeader(signatureSpecies["GRANT"], true, ElementType.ROCK)
     .setMixedBattleBgm("battle_kalos_gym"),
   [TrainerType.KORRINA]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["KORRINA"], false, Type.FIGHTING)
+    .initForGymLeader(signatureSpecies["KORRINA"], false, ElementType.FIGHTING)
     .setMixedBattleBgm("battle_kalos_gym"),
   [TrainerType.RAMOS]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["RAMOS"], true, Type.GRASS)
+    .initForGymLeader(signatureSpecies["RAMOS"], true, ElementType.GRASS)
     .setMixedBattleBgm("battle_kalos_gym"),
   [TrainerType.CLEMONT]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["CLEMONT"], true, Type.ELECTRIC)
+    .initForGymLeader(signatureSpecies["CLEMONT"], true, ElementType.ELECTRIC)
     .setMixedBattleBgm("battle_kalos_gym"),
   [TrainerType.VALERIE]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["VALERIE"], false, Type.FAIRY)
+    .initForGymLeader(signatureSpecies["VALERIE"], false, ElementType.FAIRY)
     .setMixedBattleBgm("battle_kalos_gym"),
   [TrainerType.OLYMPIA]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["OLYMPIA"], false, Type.PSYCHIC)
+    .initForGymLeader(signatureSpecies["OLYMPIA"], false, ElementType.PSYCHIC)
     .setMixedBattleBgm("battle_kalos_gym"),
   [TrainerType.WULFRIC]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["WULFRIC"], true, Type.ICE)
+    .initForGymLeader(signatureSpecies["WULFRIC"], true, ElementType.ICE)
     .setMixedBattleBgm("battle_kalos_gym"),
   [TrainerType.MILO]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["MILO"], true, Type.GRASS)
+    .initForGymLeader(signatureSpecies["MILO"], true, ElementType.GRASS)
     .setMixedBattleBgm("battle_galar_gym"),
   [TrainerType.NESSA]: new TrainerConfig(++t)
     .setName("Nessa")
-    .initForGymLeader(signatureSpecies["NESSA"], false, Type.WATER)
+    .initForGymLeader(signatureSpecies["NESSA"], false, ElementType.WATER)
     .setMixedBattleBgm("battle_galar_gym"),
   [TrainerType.KABU]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["KABU"], true, Type.FIRE)
+    .initForGymLeader(signatureSpecies["KABU"], true, ElementType.FIRE)
     .setMixedBattleBgm("battle_galar_gym"),
   [TrainerType.BEA]: new TrainerConfig(++t)
     .setName("Bea")
-    .initForGymLeader(signatureSpecies["BEA"], false, Type.FIGHTING)
+    .initForGymLeader(signatureSpecies["BEA"], false, ElementType.FIGHTING)
     .setMixedBattleBgm("battle_galar_gym"),
   [TrainerType.ALLISTER]: new TrainerConfig(++t)
     .setName("Allister")
-    .initForGymLeader(signatureSpecies["ALLISTER"], true, Type.GHOST)
+    .initForGymLeader(signatureSpecies["ALLISTER"], true, ElementType.GHOST)
     .setMixedBattleBgm("battle_galar_gym"),
   [TrainerType.OPAL]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["OPAL"], false, Type.FAIRY)
+    .initForGymLeader(signatureSpecies["OPAL"], false, ElementType.FAIRY)
     .setMixedBattleBgm("battle_galar_gym"),
   [TrainerType.BEDE]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["BEDE"], true, Type.FAIRY)
+    .initForGymLeader(signatureSpecies["BEDE"], true, ElementType.FAIRY)
     .setMixedBattleBgm("battle_galar_gym"),
   [TrainerType.GORDIE]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["GORDIE"], true, Type.ROCK)
+    .initForGymLeader(signatureSpecies["GORDIE"], true, ElementType.ROCK)
     .setMixedBattleBgm("battle_galar_gym"),
   [TrainerType.MELONY]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["MELONY"], false, Type.ICE)
+    .initForGymLeader(signatureSpecies["MELONY"], false, ElementType.ICE)
     .setMixedBattleBgm("battle_galar_gym"),
   [TrainerType.PIERS]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["PIERS"], true, Type.DARK)
+    .initForGymLeader(signatureSpecies["PIERS"], true, ElementType.DARK)
     .setHasDouble("piers_marnie_double")
     .setDoubleTrainerType(TrainerType.MARNIE)
     .setDoubleTitle("gym_leader_double")
     .setMixedBattleBgm("battle_galar_gym"),
   [TrainerType.MARNIE]: new TrainerConfig(++t)
     .setName("Marnie")
-    .initForGymLeader(signatureSpecies["MARNIE"], false, Type.DARK)
+    .initForGymLeader(signatureSpecies["MARNIE"], false, ElementType.DARK)
     .setHasDouble("marnie_piers_double")
     .setDoubleTrainerType(TrainerType.PIERS)
     .setDoubleTitle("gym_leader_double")
     .setMixedBattleBgm("battle_galar_gym"),
   [TrainerType.RAIHAN]: new TrainerConfig(++t)
     .setName("Raihan")
-    .initForGymLeader(signatureSpecies["RAIHAN"], true, Type.DRAGON)
+    .initForGymLeader(signatureSpecies["RAIHAN"], true, ElementType.DRAGON)
     .setMixedBattleBgm("battle_galar_gym"),
   [TrainerType.KATY]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["KATY"], false, Type.BUG)
+    .initForGymLeader(signatureSpecies["KATY"], false, ElementType.BUG)
     .setMixedBattleBgm("battle_paldea_gym"),
   [TrainerType.BRASSIUS]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["BRASSIUS"], true, Type.GRASS)
+    .initForGymLeader(signatureSpecies["BRASSIUS"], true, ElementType.GRASS)
     .setMixedBattleBgm("battle_paldea_gym"),
   [TrainerType.IONO]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["IONO"], false, Type.ELECTRIC)
+    .initForGymLeader(signatureSpecies["IONO"], false, ElementType.ELECTRIC)
     .setMixedBattleBgm("battle_paldea_gym"),
   [TrainerType.KOFU]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["KOFU"], true, Type.WATER)
+    .initForGymLeader(signatureSpecies["KOFU"], true, ElementType.WATER)
     .setMixedBattleBgm("battle_paldea_gym"),
   [TrainerType.LARRY]: new TrainerConfig(++t)
     .setName("Larry")
-    .initForGymLeader(signatureSpecies["LARRY"], true, Type.NORMAL)
+    .initForGymLeader(signatureSpecies["LARRY"], true, ElementType.NORMAL)
     .setMixedBattleBgm("battle_paldea_gym"),
   [TrainerType.RYME]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["RYME"], false, Type.GHOST)
+    .initForGymLeader(signatureSpecies["RYME"], false, ElementType.GHOST)
     .setMixedBattleBgm("battle_paldea_gym"),
   [TrainerType.TULIP]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["TULIP"], false, Type.PSYCHIC)
+    .initForGymLeader(signatureSpecies["TULIP"], false, ElementType.PSYCHIC)
     .setMixedBattleBgm("battle_paldea_gym"),
   [TrainerType.GRUSHA]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["GRUSHA"], true, Type.ICE)
+    .initForGymLeader(signatureSpecies["GRUSHA"], true, ElementType.ICE)
     .setMixedBattleBgm("battle_paldea_gym"),
 };

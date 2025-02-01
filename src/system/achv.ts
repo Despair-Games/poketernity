@@ -17,7 +17,7 @@ import { Challenges } from "#enums/challenges";
 import { globalScene } from "#app/global-scene";
 import { settings } from "./settings/settings-manager";
 import { AchvTier } from "#enums/achv-tier";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 
 export class Achv {
   protected readonly localizationKey: string;
@@ -204,9 +204,9 @@ export class MonoGenAchv extends ChallengeAchv {
 }
 
 export class MonoTypeAchv extends ChallengeAchv {
-  constructor(type: Type, iconImage: string, score: number) {
+  constructor(type: ElementType, iconImage: string, score: number) {
     super(
-      "MONO_" + Type[type],
+      "MONO_" + ElementType[type],
       iconImage,
       score,
       (c) =>
@@ -215,7 +215,7 @@ export class MonoTypeAchv extends ChallengeAchv {
         && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
     );
     this.descriptionKey = "MonoType";
-    this.descriptionLocArgs = { type: i18next.t(`pokemonInfo:Type.${Type[type]}`) };
+    this.descriptionLocArgs = { type: i18next.t(`pokemonInfo:Type.${ElementType[type]}`) };
   }
 }
 
@@ -277,24 +277,24 @@ export const achvs = {
   MONO_GEN_SEVEN_VICTORY: new MonoGenAchv("MONO_GEN_SEVEN", 7, "ribbon_gen7", 100),
   MONO_GEN_EIGHT_VICTORY: new MonoGenAchv("MONO_GEN_EIGHT", 8, "ribbon_gen8", 100),
   MONO_GEN_NINE_VICTORY: new MonoGenAchv("MONO_GEN_NINE", 9, "ribbon_gen9", 100),
-  MONO_NORMAL: new MonoTypeAchv(Type.NORMAL, "silk_scarf", 100),
-  MONO_FIGHTING: new MonoTypeAchv(Type.FIGHTING, "black_belt", 100),
-  MONO_FLYING: new MonoTypeAchv(Type.FLYING, "sharp_beak", 100),
-  MONO_POISON: new MonoTypeAchv(Type.POISON, "poison_barb", 100),
-  MONO_GROUND: new MonoTypeAchv(Type.GROUND, "soft_sand", 100),
-  MONO_ROCK: new MonoTypeAchv(Type.ROCK, "hard_stone", 100),
-  MONO_BUG: new MonoTypeAchv(Type.BUG, "silver_powder", 100),
-  MONO_GHOST: new MonoTypeAchv(Type.GHOST, "spell_tag", 100),
-  MONO_STEEL: new MonoTypeAchv(Type.STEEL, "metal_coat", 100),
-  MONO_FIRE: new MonoTypeAchv(Type.FIRE, "charcoal", 100),
-  MONO_WATER: new MonoTypeAchv(Type.WATER, "mystic_water", 100),
-  MONO_GRASS: new MonoTypeAchv(Type.GRASS, "miracle_seed", 100),
-  MONO_ELECTRIC: new MonoTypeAchv(Type.ELECTRIC, "magnet", 100),
-  MONO_PSYCHIC: new MonoTypeAchv(Type.PSYCHIC, "twisted_spoon", 100),
-  MONO_ICE: new MonoTypeAchv(Type.ICE, "never_melt_ice", 100),
-  MONO_DRAGON: new MonoTypeAchv(Type.DRAGON, "dragon_fang", 100),
-  MONO_DARK: new MonoTypeAchv(Type.DARK, "black_glasses", 100),
-  MONO_FAIRY: new MonoTypeAchv(Type.FAIRY, "fairy_feather", 100),
+  MONO_NORMAL: new MonoTypeAchv(ElementType.NORMAL, "silk_scarf", 100),
+  MONO_FIGHTING: new MonoTypeAchv(ElementType.FIGHTING, "black_belt", 100),
+  MONO_FLYING: new MonoTypeAchv(ElementType.FLYING, "sharp_beak", 100),
+  MONO_POISON: new MonoTypeAchv(ElementType.POISON, "poison_barb", 100),
+  MONO_GROUND: new MonoTypeAchv(ElementType.GROUND, "soft_sand", 100),
+  MONO_ROCK: new MonoTypeAchv(ElementType.ROCK, "hard_stone", 100),
+  MONO_BUG: new MonoTypeAchv(ElementType.BUG, "silver_powder", 100),
+  MONO_GHOST: new MonoTypeAchv(ElementType.GHOST, "spell_tag", 100),
+  MONO_STEEL: new MonoTypeAchv(ElementType.STEEL, "metal_coat", 100),
+  MONO_FIRE: new MonoTypeAchv(ElementType.FIRE, "charcoal", 100),
+  MONO_WATER: new MonoTypeAchv(ElementType.WATER, "mystic_water", 100),
+  MONO_GRASS: new MonoTypeAchv(ElementType.GRASS, "miracle_seed", 100),
+  MONO_ELECTRIC: new MonoTypeAchv(ElementType.ELECTRIC, "magnet", 100),
+  MONO_PSYCHIC: new MonoTypeAchv(ElementType.PSYCHIC, "twisted_spoon", 100),
+  MONO_ICE: new MonoTypeAchv(ElementType.ICE, "never_melt_ice", 100),
+  MONO_DRAGON: new MonoTypeAchv(ElementType.DRAGON, "dragon_fang", 100),
+  MONO_DARK: new MonoTypeAchv(ElementType.DARK, "black_glasses", 100),
+  MONO_FAIRY: new MonoTypeAchv(ElementType.FAIRY, "fairy_feather", 100),
   FRESH_START: new ChallengeAchv(
     "FRESH_START",
     "reviver_seed",

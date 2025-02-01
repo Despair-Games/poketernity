@@ -116,7 +116,7 @@ import { SpeciesFormKey } from "#enums/species-form-key";
 import type { PermanentStat, TempBattleStat } from "#enums/stat";
 import { getStatKey, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import i18next from "i18next";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 
@@ -769,10 +769,10 @@ enum AttackTypeBoosterItem {
 export class AttackTypeBoosterModifierType
   extends PokemonHeldItemModifierType
   implements GeneratedPersistentModifierType {
-  public moveType: Type;
+  public moveType: ElementType;
   public boostPercent: number;
 
-  constructor(moveType: Type, boostPercent: number) {
+  constructor(moveType: ElementType, boostPercent: number) {
     super(
       "",
       `${AttackTypeBoosterItem[moveType]?.toLowerCase()}`,
@@ -790,7 +790,7 @@ export class AttackTypeBoosterModifierType
   override getDescription(): string {
     // TODO: Need getTypeName?
     return i18next.t("modifierType:ModifierType.AttackTypeBoosterModifierType.description", {
-      moveType: i18next.t(`pokemonInfo:Type.${Type[this.moveType]}`),
+      moveType: i18next.t(`pokemonInfo:Type.${ElementType[this.moveType]}`),
     });
   }
 
@@ -1103,7 +1103,7 @@ export class TmModifierType extends PokemonModifierType {
   constructor(moveId: Moves) {
     super(
       "",
-      `tm_${Type[allMoves[moveId].type].toLowerCase()}`,
+      `tm_${ElementType[allMoves[moveId].type].toLowerCase()}`,
       (_type, args) => new TmModifier(this, (args[0] as PlayerPokemon).id),
       (pokemon: PlayerPokemon) => {
         if (
@@ -1264,8 +1264,8 @@ export class FusePokemonModifierType extends PokemonModifierType {
 class AttackTypeBoosterModifierTypeGenerator extends ModifierTypeGenerator {
   constructor() {
     super((party: Pokemon[], pregenArgs?: any[]) => {
-      if (pregenArgs && pregenArgs.length === 1 && pregenArgs[0] in Type) {
-        return new AttackTypeBoosterModifierType(pregenArgs[0] as Type, 20);
+      if (pregenArgs && pregenArgs.length === 1 && pregenArgs[0] in ElementType) {
+        return new AttackTypeBoosterModifierType(pregenArgs[0] as ElementType, 20);
       }
 
       const attackMoveTypes = party
@@ -1281,7 +1281,7 @@ class AttackTypeBoosterModifierTypeGenerator extends ModifierTypeGenerator {
         return null;
       }
 
-      const attackMoveTypeWeights = new Map<Type, number>();
+      const attackMoveTypeWeights = new Map<ElementType, number>();
       let totalWeight = 0;
       for (const t of attackMoveTypes) {
         if (attackMoveTypeWeights.has(t)) {
@@ -1301,7 +1301,7 @@ class AttackTypeBoosterModifierTypeGenerator extends ModifierTypeGenerator {
         return null;
       }
 
-      let type: Type;
+      let type: ElementType;
 
       const randInt = randSeedInt(totalWeight);
       let weight = 0;
@@ -1612,12 +1612,12 @@ class FormChangeItemModifierTypeGenerator extends ModifierTypeGenerator {
 }
 
 export class TerastallizeModifierType extends PokemonHeldItemModifierType implements GeneratedPersistentModifierType {
-  private teraType: Type;
+  private teraType: ElementType;
 
-  constructor(teraType: Type) {
+  constructor(teraType: ElementType) {
     super(
       "",
-      `${Type[teraType].toLowerCase()}_tera_shard`,
+      `${ElementType[teraType].toLowerCase()}_tera_shard`,
       (type, args) => new TerastallizeModifier(type as TerastallizeModifierType, (args[0] as Pokemon).id, teraType),
       "tera_shard",
     );
@@ -1627,13 +1627,13 @@ export class TerastallizeModifierType extends PokemonHeldItemModifierType implem
 
   override get name(): string {
     return i18next.t("modifierType:ModifierType.TerastallizeModifierType.name", {
-      teraType: i18next.t(`pokemonInfo:Type.${Type[this.teraType]}`),
+      teraType: i18next.t(`pokemonInfo:Type.${ElementType[this.teraType]}`),
     });
   }
 
   override getDescription(): string {
     return i18next.t("modifierType:ModifierType.TerastallizeModifierType.description", {
-      teraType: i18next.t(`pokemonInfo:Type.${Type[this.teraType]}`),
+      teraType: i18next.t(`pokemonInfo:Type.${ElementType[this.teraType]}`),
     });
   }
 
@@ -1773,7 +1773,7 @@ export type GeneratorModifierOverride = {
     }
   | {
       name: keyof Pick<typeof modifierTypes, "ATTACK_TYPE_BOOSTER" | "TERA_SHARD">;
-      type?: Type;
+      type?: ElementType;
     }
   | {
       name: keyof Pick<typeof modifierTypes, "BERRY">;
@@ -1914,18 +1914,18 @@ export const modifierTypes = {
 
   TERA_SHARD: () =>
     new ModifierTypeGenerator((party: Pokemon[], pregenArgs?: any[]) => {
-      if (pregenArgs && pregenArgs.length === 1 && pregenArgs[0] in Type) {
-        return new TerastallizeModifierType(pregenArgs[0] as Type);
+      if (pregenArgs && pregenArgs.length === 1 && pregenArgs[0] in ElementType) {
+        return new TerastallizeModifierType(pregenArgs[0] as ElementType);
       }
       if (!globalScene.getModifiers(TerastallizeAccessModifier).length) {
         return null;
       }
-      let type: Type;
+      let type: ElementType;
       if (!randSeedInt(3)) {
         const partyMemberTypes = party.map((p) => p.getTypes(false, false, true)).flat();
         type = randSeedItem(partyMemberTypes);
       } else {
-        type = randSeedInt(64) ? (randSeedInt(18) as Type) : Type.STELLAR;
+        type = randSeedInt(64) ? (randSeedInt(18) as ElementType) : ElementType.STELLAR;
       }
       return new TerastallizeModifierType(type);
     }),

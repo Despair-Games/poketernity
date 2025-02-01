@@ -1,10 +1,8 @@
-import { Stat } from "#enums/stat";
-import { Species } from "#enums/species";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
-import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
+import { Species } from "#enums/species";
+import { Stat } from "#enums/stat";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -28,27 +26,22 @@ describe("Moves - Fissure", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
 
-    game.override.battleType("single");
-    game.override.disableCrits();
+    game.override
+      .battleType("single")
+      .disableCrits()
+      .starterSpecies(Species.SNORLAX)
+      .ability(Abilities.BALL_FETCH)
+      .moveset([Moves.FISSURE])
+      .startingLevel(100)
+      .enemySpecies(Species.SNORLAX)
+      .enemyMoveset(Moves.SPLASH)
+      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyLevel(100);
 
-    game.override.starterSpecies(Species.SNORLAX);
-    game.override.moveset([Moves.FISSURE]);
-    game.override.passiveAbility(Abilities.BALL_FETCH);
-    game.override.startingLevel(100);
+    await game.classicMode.startBattle();
 
-    game.override.enemySpecies(Species.SNORLAX);
-    game.override.enemyMoveset(Moves.SPLASH);
-    game.override.enemyPassiveAbility(Abilities.BALL_FETCH);
-    game.override.enemyLevel(100);
-
-    await game.startBattle();
-
-    partyPokemon = game.scene.getPlayerParty()[0];
-    enemyPokemon = game.scene.getEnemyPokemon()!;
-
-    // remove berries
-    game.scene.removePartyMemberModifiers(0);
-    game.scene.clearEnemyHeldItemModifiers();
+    partyPokemon = game.field.getPlayerPokemon();
+    enemyPokemon = game.field.getEnemyPokemon();
   });
 
   it("ignores damage modification from abilities, for example FUR_COAT", async () => {
@@ -56,7 +49,7 @@ describe("Moves - Fissure", () => {
     game.override.enemyAbility(Abilities.FUR_COAT);
 
     game.move.select(Moves.FISSURE);
-    await game.phaseInterceptor.to(DamageAnimPhase, true);
+    await game.phaseInterceptor.to("BerryPhase");
 
     expect(enemyPokemon.isFainted()).toBe(true);
   });
@@ -69,7 +62,7 @@ describe("Moves - Fissure", () => {
     game.move.select(Moves.FISSURE);
 
     // wait for TurnEndPhase instead of DamagePhase as fissure might not actually inflict damage
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(partyPokemon.getAccuracyMultiplier).toHaveReturnedWith(1);
   });
@@ -82,7 +75,7 @@ describe("Moves - Fissure", () => {
     game.move.select(Moves.FISSURE);
 
     // wait for TurnEndPhase instead of DamagePhase as fissure might not actually inflict damage
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(partyPokemon.getAccuracyMultiplier).toHaveReturnedWith(1);
   });

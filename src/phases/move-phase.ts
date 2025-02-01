@@ -38,7 +38,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveFlags } from "#enums/move-flags";
 import { Moves } from "#enums/moves";
 import { StatusEffect } from "#enums/status-effect";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import i18next from "i18next";
 
 /**
@@ -473,7 +473,7 @@ export class MovePhase extends BattlePhase {
         if (
           redirectTag
           && (!redirectTag.powder
-            || (!this.pokemon.isOfType(Type.GRASS) && !this.pokemon.hasAbility(Abilities.OVERCOAT)))
+            || (!this.pokemon.isOfType(ElementType.GRASS) && !this.pokemon.hasAbility(Abilities.OVERCOAT)))
         ) {
           redirectTarget.value = p.getBattlerIndex();
           redirectedByAbility = false;

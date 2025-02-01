@@ -1,4 +1,4 @@
-import type { Type } from "#enums/type";
+import type { ElementType } from "#enums/element-type";
 import { FieldMovePowerBoostAbAttr } from "./field-move-power-boost-ab-attr";
 
 /**
@@ -8,7 +8,7 @@ import { FieldMovePowerBoostAbAttr } from "./field-move-power-boost-ab-attr";
  * @extends FieldMovePowerBoostAbAttr
  */
 export class PreAttackFieldMoveTypePowerBoostAbAttr extends FieldMovePowerBoostAbAttr {
-  constructor(boostedType: Type, powerMultiplier: number = 1.5) {
+  constructor(boostedType: ElementType, powerMultiplier: number = 1.5) {
     super((pokemon, _defender, move) => !!move && pokemon?.getMoveType(move) === boostedType, powerMultiplier);
   }
 }
