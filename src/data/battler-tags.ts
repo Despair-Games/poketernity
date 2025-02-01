@@ -1269,7 +1269,7 @@ export class OctolockTag extends TrappedTag {
 
     if (shouldLapse) {
       globalScene.unshiftPhase(
-        new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.DEF, Stat.SPDEF], -1),
+        new StatStageChangePhase(pokemon.getBattlerIndex(), null, [Stat.DEF, Stat.SPDEF], -1, { bypassReflect: true }),
       );
       return true;
     }
@@ -3261,7 +3261,9 @@ export class SyrupBombTag extends BattlerTag {
     globalScene.queueMessage(
       i18next.t("battlerTags:syrupBombLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
-    globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.SPD], -1));
+    globalScene.unshiftPhase(
+      new StatStageChangePhase(pokemon.getBattlerIndex(), null, [Stat.SPD], -1, { bypassReflect: true }),
+    );
     return --this.turnCount > 0;
   }
 }

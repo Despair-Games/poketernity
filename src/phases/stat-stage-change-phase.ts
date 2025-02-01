@@ -24,6 +24,7 @@ interface SSCPhaseOptions {
   showMessage?: boolean;
   ignoreAbilities?: boolean;
   canBeCopied?: boolean;
+  bypassReflect?: boolean;
   onChange?: StatStageChangeCallback;
 }
 
@@ -34,6 +35,7 @@ export class StatStageChangePhase extends PokemonPhase {
   protected readonly showMessage: boolean;
   protected readonly ignoreAbilities: boolean;
   protected readonly canBeCopied: boolean;
+  protected readonly bypassReflect: boolean;
   protected readonly onChange?: StatStageChangeCallback;
   private readonly options?: SSCPhaseOptions;
 
@@ -52,6 +54,7 @@ export class StatStageChangePhase extends PokemonPhase {
     this.showMessage = options?.showMessage ?? true;
     this.ignoreAbilities = options?.ignoreAbilities ?? false;
     this.canBeCopied = options?.canBeCopied ?? true;
+    this.bypassReflect = options?.bypassReflect ?? false;
     this.onChange = options?.onChange;
     this.options = options;
   }
@@ -66,7 +69,7 @@ export class StatStageChangePhase extends PokemonPhase {
       return super.end();
     }
 
-    if (!this.ignoreAbilities) {
+    if (!this.ignoreAbilities && !this.bypassReflect) {
       const reflected = new BooleanHolder(false);
       applyAbAttrs(ReflectStatStageChangeAbAttr, pokemon, false, this.source, this.stats, this.stages, reflected);
       if (reflected.value) {
