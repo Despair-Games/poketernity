@@ -142,7 +142,7 @@ export class MistTag extends ArenaTag {
   override apply(_arena: Arena, simulated: boolean, attacker: Pokemon, cancelled: BooleanHolder): boolean {
     // `StatStageChangePhase` currently doesn't have a reference to the source of stat drops,
     // so this code currently has no effect on gameplay.
-    if (attacker) {
+    if (attacker?.isActive(true)) {
       const bypassed = new BooleanHolder(false);
       // TODO: Allow this to be simulated
       applyAbAttrs(InfiltratorAbAttr, attacker, simulated, bypassed);

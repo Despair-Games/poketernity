@@ -16,6 +16,7 @@ import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } f
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
 import { PokemonPhase } from "./abstract-pokemon-phase";
+import { ReflectStatStageChangeAbAttr } from "#app/data/ab-attrs/reflect-stat-stage-change-ab-attr";
 
 export type StatStageChangeCallback = (changed: BattleStat[], relativeChanges: number[], target?: Pokemon) => void;
 
@@ -65,6 +66,14 @@ export class StatStageChangePhase extends PokemonPhase {
       return super.end();
     }
 
+    if (!this.ignoreAbilities) {
+      const reflected = new BooleanHolder(false);
+      applyAbAttrs(ReflectStatStageChangeAbAttr, pokemon, false, this.source, this.stats, this.stages, reflected);
+      if (reflected.value) {
+        return super.end();
+      }
+    }
+
     // Check if multiple stats are being changed at the same time, then run SSCPhase for each of them
     if (this.stats.length > 1) {
       for (let i = 0; i < this.stats.length; i++) {
@@ -89,7 +98,7 @@ export class StatStageChangePhase extends PokemonPhase {
 
       if (!selfTarget && stages.value < 0) {
         // TODO: add a reference to the source of the stat change to fix Infiltrator interaction
-        arena.applyTagsForSide(MistTag, pokemon.getArenaTagSide(), false, null, cancelled);
+        arena.applyTagsForSide(MistTag, pokemon.getArenaTagSide(), false, this.source, cancelled);
       }
 
       if (!cancelled.value && !selfTarget && stages.value < 0) {
