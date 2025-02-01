@@ -1,12 +1,13 @@
-import { addTextObject, TextStyle } from "../text";
-import type { Mode } from "../ui";
+import { addTextObject } from "../text";
+import { TextStyle } from "#enums/text-style";
+import type { UiMode } from "#enums/ui-mode";
 import {
   setSettingGamepad,
-  SettingGamepad,
   settingGamepadBlackList,
   settingGamepadDefaults,
   settingGamepadOptions,
 } from "../../system/settings/settings-gamepad";
+import { SettingGamepad } from "#enums/setting-gamepad";
 import pad_xbox360 from "#app/configs/inputs/pad_xbox360";
 import pad_dualshock from "#app/configs/inputs/pad_dualshock";
 import pad_unlicensedSNES from "#app/configs/inputs/pad_unlicensedSNES";
@@ -16,6 +17,7 @@ import { Device } from "#enums/devices";
 import { truncateString } from "#app/utils";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
+import { MAPPING_CONFIG_LS_KEY } from "#app/constants";
 
 /**
  * Class representing the settings UI handler for gamepads.
@@ -29,7 +31,7 @@ export default class SettingsGamepadUiHandler extends AbstractControlSettingsUiH
    *
    * @param mode - The UI mode, optional.
    */
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
     this.titleSelected = "Gamepad";
     this.setting = SettingGamepad;
@@ -37,7 +39,7 @@ export default class SettingsGamepadUiHandler extends AbstractControlSettingsUiH
     this.settingDeviceOptions = settingGamepadOptions;
     this.configs = [pad_xbox360, pad_dualshock, pad_unlicensedSNES];
     this.commonSettingsCount = 2;
-    this.localStoragePropertyName = "settingsGamepad";
+    this.localStoragePropertyName = MAPPING_CONFIG_LS_KEY;
     this.settingBlacklisted = settingGamepadBlackList;
     this.device = Device.GAMEPAD;
   }
@@ -110,24 +112,6 @@ export default class SettingsGamepadUiHandler extends AbstractControlSettingsUiH
           );
         }
       }
-    }
-  }
-
-  /**
-   * Save the setting to local storage.
-   *
-   * @param settingName - The setting to save.
-   * @param cursor - The cursor position to save.
-   */
-  saveSettingToLocalStorage(settingName, cursor): void {
-    if (this.setting[settingName] !== this.setting.Controller) {
-      globalScene.gameData.saveControlSetting(
-        this.device,
-        this.localStoragePropertyName,
-        settingName,
-        this.settingDeviceDefaults,
-        cursor,
-      );
     }
   }
 }

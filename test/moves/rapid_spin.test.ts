@@ -1,5 +1,5 @@
-import { BattlerIndex } from "#app/battle";
-import { ArenaTagSide } from "#app/data/arena-tag";
+import { BattlerIndex } from "#enums/battler-index";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -71,7 +71,7 @@ describe("Moves - Rapid Spin", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     [ArenaTagSide.PLAYER, ArenaTagSide.ENEMY].forEach((side) =>
-      game.scene.arena.addTag(tagType, 1, Moves.NONE, 0, side),
+      game.scene.arena.addTag(tagType, 0, 1, Moves.NONE, side),
     );
 
     game.move.select(Moves.RAPID_SPIN);

@@ -1,12 +1,14 @@
-import { addBBCodeTextObject, getBBCodeFrag, TextStyle } from "./text";
-import { Mode } from "./ui";
+import { addBBCodeTextObject, getBBCodeFrag } from "./text";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
 import { Button } from "#enums/buttons";
-import { addWindow, WindowVariant } from "./ui-theme";
+import { addWindow } from "./ui-theme";
+import { WindowVariant } from "#enums/window-variant";
 import type { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
-import { PartyUiMode } from "./party-ui-handler";
+import { PartyUiMode } from "#enums/party-ui-mode";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
-import { fixedInt, isNullOrUndefined } from "#app/utils";
+import { fixedNumber, isNullOrUndefined } from "#app/utils";
 import { getPokeballAtlasKey } from "../data/pokeball";
 import type { OptionSelectSettings } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
@@ -47,7 +49,7 @@ export default class MysteryEncounterUiHandler extends UiHandler {
   protected blockInput: boolean = true;
 
   constructor() {
-    super(Mode.MYSTERY_ENCOUNTER);
+    super(UiMode.MYSTERY_ENCOUNTER);
   }
 
   override setup() {
@@ -141,8 +143,8 @@ export default class MysteryEncounterUiHandler extends UiHandler {
             ...this.overrideSettings,
             slideInDescription: false,
           };
-          globalScene.ui.setMode(Mode.PARTY, PartyUiMode.CHECK, -1, () => {
-            globalScene.ui.setMode(Mode.MYSTERY_ENCOUNTER, overrideSettings);
+          globalScene.ui.setMode(UiMode.PARTY, PartyUiMode.CHECK, -1, () => {
+            globalScene.ui.setMode(UiMode.MYSTERY_ENCOUNTER, overrideSettings);
             setTimeout(() => {
               this.setCursor(this.viewPartyIndex);
               this.unblockInput();
@@ -453,10 +455,10 @@ export default class MysteryEncounterUiHandler extends UiHandler {
       if (optionTextWidth > nonScrollWidth) {
         this.optionScrollTweens[i] = globalScene.tweens.add({
           targets: optionText,
-          delay: fixedInt(2000),
+          delay: fixedNumber(2000),
           loop: -1,
-          hold: fixedInt(2000),
-          duration: fixedInt(((optionTextWidth - nonScrollWidth) / 15) * 2000),
+          hold: fixedNumber(2000),
+          duration: fixedNumber(((optionTextWidth - nonScrollWidth) / 15) * 2000),
           x: `-=${optionTextWidth - nonScrollWidth}`,
         });
       }
@@ -524,10 +526,10 @@ export default class MysteryEncounterUiHandler extends UiHandler {
     if (descriptionLineCount > 6) {
       this.descriptionScrollTween = globalScene.tweens.add({
         targets: descriptionTextObject,
-        delay: fixedInt(2000),
+        delay: fixedNumber(2000),
         loop: -1,
-        hold: fixedInt(2000),
-        duration: fixedInt((descriptionLineCount - 6) * 2000),
+        hold: fixedNumber(2000),
+        duration: fixedNumber((descriptionLineCount - 6) * 2000),
         y: `-=${10 * (descriptionLineCount - 6)}`,
       });
     }
@@ -634,10 +636,10 @@ export default class MysteryEncounterUiHandler extends UiHandler {
       if (tooltipLineCount > 3) {
         this.tooltipScrollTween = globalScene.tweens.add({
           targets: tooltipTextObject,
-          delay: fixedInt(1200),
+          delay: fixedNumber(1200),
           loop: -1,
-          hold: fixedInt(1200),
-          duration: fixedInt((tooltipLineCount - 3) * 1200),
+          hold: fixedNumber(1200),
+          duration: fixedNumber((tooltipLineCount - 3) * 1200),
           y: `-=${11.2 * (tooltipLineCount - 3)}`,
         });
       }

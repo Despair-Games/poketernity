@@ -1,20 +1,19 @@
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { BlockRedirectAbAttr } from "#app/data/ab-attrs/block-redirect-ab-attr";
 import { IncreasePpAbAttr } from "#app/data/ab-attrs/increase-pp-ab-attr";
 import { PokemonTypeChangeAbAttr } from "#app/data/ab-attrs/pokemon-type-change-ab-attr";
 import { PostMoveUsedAbAttr } from "#app/data/ab-attrs/post-move-used-ab-attr";
 import { RedirectMoveAbAttr } from "#app/data/ab-attrs/redirect-move-ab-attr";
-import { ReduceStatusEffectDurationAbAttr } from "#app/data/ab-attrs/reduce-status-effect-duration-ab-attr";
-import { applyAbAttrs, applyPostMoveUsedAbAttrs, applyPreAttackAbAttrs } from "#app/data/ability";
+import { ReduceSleepDurationAbAttr } from "#app/data/ab-attrs/reduce-sleep-duration-ab-attr";
+import { applyAbAttrs } from "#app/data/ability";
 import { allMoves } from "#app/data/all-moves";
-import type { DelayedAttackTag } from "#app/data/arena-tag";
-import { CommonAnim } from "#app/data/battle-anims";
-import { BattlerTagLapseType, CenterOfAttentionTag } from "#app/data/battler-tags";
+import { CommonAnim } from "#enums/common-anim";
+import { CenterOfAttentionTag, SkyDropTag } from "#app/data/battler-tags";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { applyMoveAttrs } from "#app/data/move";
 import { BypassRedirectAttr } from "#app/data/move-attrs/bypass-redirect-attr";
 import { BypassSleepAttr } from "#app/data/move-attrs/bypass-sleep-attr";
 import { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
-import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 import { HealStatusEffectAttr } from "#app/data/move-attrs/heal-status-effect-attr";
 import { PreMoveMessageAttr } from "#app/data/move-attrs/pre-move-message-attr";
 import { frenzyMissFunc } from "#app/data/move-utils";
@@ -22,7 +21,8 @@ import { SpeciesFormChangePreMoveTrigger } from "#app/data/pokemon-forms";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/data/status-effect";
 import { getTerrainBlockMessage } from "#app/data/terrain";
 import { MoveUsedEvent } from "#app/events/battle-scene";
-import { MoveResult, type Pokemon, type PokemonMove } from "#app/field/pokemon";
+import { type Pokemon, type PokemonMove } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
@@ -34,12 +34,11 @@ import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
-import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveFlags } from "#enums/move-flags";
 import { Moves } from "#enums/moves";
 import { StatusEffect } from "#enums/status-effect";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import i18next from "i18next";
 
 /**
@@ -122,22 +121,28 @@ export class MovePhase extends BattlePhase {
     return (
       this.pokemon.isActive(true)
       && this.move.isUsable(this.pokemon, this.ignorePp, ignoreDisableTags)
-      && !!this.targets.length
+      && this.targets.length > 0
     );
   }
 
-  /**Signifies the current move should fail but still use PP */
+  /** Signifies the current move should fail but still use PP */
   public fail(): void {
     this.failed = true;
   }
 
-  /**Signifies the current move should cancel and retain PP */
+  /** Signifies the current move should cancel and retain PP */
   public cancel(): void {
     this.cancelled = true;
   }
 
   public override start(): void {
     super.start();
+
+    // If the user is affected by another Pokemon's Sky Drop, skip the user's turn
+    const skyDropTag = this.pokemon.getTag(SkyDropTag);
+    if (skyDropTag && skyDropTag.sourceId !== this.pokemon.id) {
+      return this.end();
+    }
 
     console.log(Moves[this.move.moveId]);
 
@@ -228,13 +233,7 @@ export class MovePhase extends BattlePhase {
         case StatusEffect.SLEEP:
           applyMoveAttrs(BypassSleepAttr, this.pokemon, null, this.move.getMove());
           const turnsRemaining = new NumberHolder(this.pokemon.status.sleepTurnsRemaining ?? 0);
-          applyAbAttrs(
-            ReduceStatusEffectDurationAbAttr,
-            this.pokemon,
-            false,
-            this.pokemon.status.effect,
-            turnsRemaining,
-          );
+          applyAbAttrs(ReduceSleepDurationAbAttr, this.pokemon, false, this.pokemon.status.effect, turnsRemaining);
           if (Overrides.STATUS_ACTIVATION_OVERRIDE === true) {
             turnsRemaining.value = Math.max(turnsRemaining.value, 1);
           } else if (Overrides.STATUS_ACTIVATION_OVERRIDE === false) {
@@ -301,32 +300,6 @@ export class MovePhase extends BattlePhase {
     // form changes happen even before we know that the move wll execute.
     globalScene.triggerPokemonFormChange(this.pokemon, SpeciesFormChangePreMoveTrigger);
 
-    const isDelayedAttack = this.move.getMove().hasAttr(DelayedAttackAttr);
-    if (isDelayedAttack) {
-      // Check the player side arena if future sight is active
-      const futureSightTags = globalScene.arena.findTags((t) => t.tagType === ArenaTagType.FUTURE_SIGHT);
-      const doomDesireTags = globalScene.arena.findTags((t) => t.tagType === ArenaTagType.DOOM_DESIRE);
-      let fail = false;
-      const currentTargetIndex = targets[0].getBattlerIndex();
-      for (const tag of futureSightTags) {
-        if ((tag as DelayedAttackTag).targetIndex === currentTargetIndex) {
-          fail = true;
-          break;
-        }
-      }
-      for (const tag of doomDesireTags) {
-        if ((tag as DelayedAttackTag).targetIndex === currentTargetIndex) {
-          fail = true;
-          break;
-        }
-      }
-      if (fail) {
-        this.showMoveText();
-        this.showFailedText();
-        return this.end();
-      }
-    }
-
     this.showMoveText();
 
     if (moveQueue.length > 0) {
@@ -381,11 +354,11 @@ export class MovePhase extends BattlePhase {
      * if the move fails.
      */
     if (success) {
-      applyPreAttackAbAttrs(PokemonTypeChangeAbAttr, this.pokemon, null, this.move.getMove());
+      applyAbAttrs(PokemonTypeChangeAbAttr, this.pokemon, false, this.move.getMove());
       globalScene.unshiftPhase(new MoveEffectPhase(this.pokemon.getBattlerIndex(), this.targets, this.move));
     } else {
       if ([Moves.ROAR, Moves.WHIRLWIND, Moves.TRICK_OR_TREAT, Moves.FORESTS_CURSE].includes(this.move.moveId)) {
-        applyPreAttackAbAttrs(PokemonTypeChangeAbAttr, this.pokemon, null, this.move.getMove());
+        applyAbAttrs(PokemonTypeChangeAbAttr, this.pokemon, false, this.move.getMove());
       }
 
       this.pokemon.pushMoveHistory({
@@ -414,7 +387,7 @@ export class MovePhase extends BattlePhase {
     // Note that the `!this.followUp` check here prevents an infinite Dancer loop.
     if (this.move.getMove().hasFlag(MoveFlags.DANCE_MOVE) && !this.followUp) {
       globalScene.getField(true).forEach((pokemon) => {
-        applyPostMoveUsedAbAttrs(PostMoveUsedAbAttr, pokemon, this.move, this.pokemon, this.targets);
+        applyAbAttrs(PostMoveUsedAbAttr, pokemon, false, this.move, this.pokemon, this.targets);
       });
     }
   }
@@ -426,10 +399,10 @@ export class MovePhase extends BattlePhase {
 
     if (move.applyConditions(this.pokemon, targets[0], move)) {
       // Protean and Libero apply on the charging turn of charge moves
-      applyPreAttackAbAttrs(PokemonTypeChangeAbAttr, this.pokemon, null, this.move.getMove());
+      applyAbAttrs(PokemonTypeChangeAbAttr, this.pokemon, false, this.move.getMove());
 
       this.showMoveText();
-      globalScene.unshiftPhase(new MoveChargePhase(this.pokemon.getBattlerIndex(), this.targets[0], this.move));
+      globalScene.unshiftPhase(new MoveChargePhase(this.pokemon.getBattlerIndex(), this.targets, this.move));
     } else {
       this.pokemon.pushMoveHistory({
         move: this.move.moveId,
@@ -500,7 +473,7 @@ export class MovePhase extends BattlePhase {
         if (
           redirectTag
           && (!redirectTag.powder
-            || (!this.pokemon.isOfType(Type.GRASS) && !this.pokemon.hasAbility(Abilities.OVERCOAT)))
+            || (!this.pokemon.isOfType(ElementType.GRASS) && !this.pokemon.hasAbility(Abilities.OVERCOAT)))
         ) {
           redirectTarget.value = p.getBattlerIndex();
           redirectedByAbility = false;

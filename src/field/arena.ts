@@ -1,19 +1,21 @@
 import { globalScene } from "#app/global-scene";
 import type { BiomeTierTrainerPools, PokemonPools } from "#app/data/balance/biomes";
-import { biomePokemonPools, BiomePoolTier, biomeTrainerPools } from "#app/data/balance/biomes";
-import { type Constructor, randSeedInt } from "#app/utils";
+import { biomePokemonPools, biomeTrainerPools } from "#app/data/balance/biomes";
+import { BiomePoolTier } from "#enums/biome-pool-tier";
+import { type AbstractConstructor, randSeedInt } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#app/data/weather";
-import { CommonAnim } from "#app/data/battle-anims";
-import type { Type } from "#enums/type";
+import { CommonAnim } from "#enums/common-anim";
+import type { ElementType } from "#enums/element-type";
 import type { Move } from "#app/data/move";
 import type { ArenaTag } from "#app/data/arena-tag";
-import { ArenaTagSide, ArenaTrapTag, getArenaTag } from "#app/data/arena-tag";
-import type { BattlerIndex } from "#app/battle";
+import { ArenaTrapTag, getArenaTag } from "#app/data/arena-tag";
+import { ArenaTagSide } from "#enums/arena-tag-side";
+import type { BattlerIndex } from "#enums/battler-index";
 import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
 import { TerrainType } from "#enums/terrain-type";
-import { applyAbAttrs, applyPostTerrainChangeAbAttrs, applyPostWeatherChangeAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/ability";
 import { PostTerrainChangeAbAttr } from "#app/data/ab-attrs/post-terrain-change-ab-attr";
 import { PostWeatherChangeAbAttr } from "#app/data/ab-attrs/post-weather-change-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
@@ -322,7 +324,7 @@ export class Arena {
         pokemon.findAndRemoveTags(
           (t) => "weatherTypes" in t && !(t.weatherTypes as WeatherType[]).find((t) => t === weather),
         );
-        applyPostWeatherChangeAbAttrs(PostWeatherChangeAbAttr, pokemon, weather);
+        applyAbAttrs(PostWeatherChangeAbAttr, pokemon, false, weather);
       });
 
     return true;
@@ -388,8 +390,8 @@ export class Arena {
         pokemon.findAndRemoveTags(
           (t) => "terrainTypes" in t && !(t.terrainTypes as TerrainType[]).find((t) => t === terrain),
         );
-        applyPostTerrainChangeAbAttrs(PostTerrainChangeAbAttr, pokemon, terrain);
-        applyAbAttrs(TerrainEventTypeChangeAbAttr, pokemon, false);
+        applyAbAttrs(PostTerrainChangeAbAttr, pokemon, false, terrain);
+        applyAbAttrs(TerrainEventTypeChangeAbAttr, pokemon, false, false);
       });
 
     return true;
@@ -407,7 +409,7 @@ export class Arena {
     return this.terrain?.terrainType ?? TerrainType.NONE;
   }
 
-  getAttackTypeMultiplier(attackType: Type, grounded: boolean): number {
+  getAttackTypeMultiplier(attackType: ElementType, grounded: boolean): number {
     let weatherMultiplier = 1;
     if (this.weather && !this.weather.isEffectSuppressed()) {
       weatherMultiplier = this.weather.getAttackTypeMultiplier(attackType);
@@ -586,13 +588,13 @@ export class Arena {
    * @param args array of parameters that the called upon tags may need
    */
   applyTagsForSide(
-    tagType: ArenaTagType | Constructor<ArenaTag>,
+    tagType: ArenaTagType | AbstractConstructor<ArenaTag>,
     side: ArenaTagSide,
     simulated: boolean,
     ...args: unknown[]
   ): void {
     let tags =
-      typeof tagType === "string"
+      typeof tagType === "number"
         ? this.tags.filter((t) => t.tagType === tagType)
         : this.tags.filter((t) => t instanceof tagType);
     if (side !== ArenaTagSide.BOTH) {
@@ -608,7 +610,7 @@ export class Arena {
    * @param simulated if `true`, this applies arena tags without changing game state
    * @param args array of parameters that the called upon tags may need
    */
-  applyTags(tagType: ArenaTagType | Constructor<ArenaTag>, simulated: boolean, ...args: unknown[]): void {
+  applyTags(tagType: ArenaTagType | AbstractConstructor<ArenaTag>, simulated: boolean, ...args: unknown[]): void {
     this.applyTagsForSide(tagType, ArenaTagSide.BOTH, simulated, ...args);
   }
 
@@ -625,12 +627,11 @@ export class Arena {
    */
   addTag(
     tagType: ArenaTagType,
-    turnCount: number,
-    sourceMove: Moves | undefined,
     sourceId: number,
+    turnCount: number = 0,
+    sourceMove?: Moves,
     side: ArenaTagSide = ArenaTagSide.BOTH,
     quiet: boolean = false,
-    targetIndex?: BattlerIndex,
   ): boolean {
     const existingTag = this.getTagOnSide(tagType, side);
     if (existingTag) {
@@ -645,7 +646,7 @@ export class Arena {
     }
 
     // creates a new tag object
-    const newTag = getArenaTag(tagType, turnCount || 0, sourceMove, sourceId, targetIndex, side);
+    const newTag = getArenaTag(tagType, sourceId, turnCount, sourceMove, side);
     if (newTag) {
       this.tags.push(newTag);
       newTag.onAdd(this, quiet);
@@ -665,7 +666,7 @@ export class Arena {
    * @param tagType The {@linkcode ArenaTagType} or {@linkcode ArenaTag} to get
    * @returns either the {@linkcode ArenaTag}, or `undefined` if it isn't there
    */
-  getTag(tagType: ArenaTagType | Constructor<ArenaTag>): ArenaTag | undefined {
+  getTag(tagType: ArenaTagType | AbstractConstructor<ArenaTag>): ArenaTag | undefined {
     return this.getTagOnSide(tagType, ArenaTagSide.BOTH);
   }
 
@@ -681,8 +682,8 @@ export class Arena {
    * @param side The {@linkcode ArenaTagSide} to look at
    * @returns either the {@linkcode ArenaTag}, or `undefined` if it isn't there
    */
-  getTagOnSide(tagType: ArenaTagType | Constructor<ArenaTag>, side: ArenaTagSide): ArenaTag | undefined {
-    return typeof tagType === "string"
+  getTagOnSide(tagType: ArenaTagType | AbstractConstructor<ArenaTag>, side: ArenaTagSide): ArenaTag | undefined {
+    return typeof tagType === "number"
       ? this.tags.find(
           (t) =>
             t.tagType === tagType && (side === ArenaTagSide.BOTH || t.side === ArenaTagSide.BOTH || t.side === side),

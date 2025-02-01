@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { ModifierPoolType } from "#app/modifier/modifier-type";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import i18next from "i18next";
 import type { Move } from "#app/data/move";
@@ -13,14 +13,14 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
  * - "If Knock Off causes a Pokémon with the Sticky Hold Ability to faint, it can now remove that Pokémon's held item."
  */
 export class StealHeldItemChanceAttr extends MoveEffectAttr {
-  private chance: number;
+  public readonly chance: number;
 
   constructor(chance: number) {
-    super(false);
+    super(true);
     this.chance = chance;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (move.hitsSubstitute(user, target)) {
       return false;
     }

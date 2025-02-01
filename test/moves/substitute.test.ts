@@ -1,12 +1,9 @@
-import { BattlerIndex } from "#app/battle";
-import { ArenaTagSide } from "#app/data/arena-tag";
 import { SubstituteTag, TrappedTag } from "#app/data/battler-tags";
 import { allMoves } from "#app/data/all-moves";
-import { MoveResult } from "#app/field/pokemon";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { GameManager } from "#test/testUtils/gameManager";
-import { Command } from "#app/ui/command-ui-handler";
-import { Mode } from "#app/ui/ui";
+import { BattleCommand } from "#enums/battle-command";
+import { UiMode } from "#enums/ui-mode";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -18,6 +15,9 @@ import { StatusEffect } from "#enums/status-effect";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { StealHeldItemChanceAttr } from "#app/data/move-attrs/steal-held-item-chance-attr";
+import { MoveResult } from "#enums/move-result";
+import { BattlerIndex } from "#enums/battler-index";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 
 describe("Moves - Substitute", () => {
   let phaserGame: Phaser.Game;
@@ -399,8 +399,8 @@ describe("Moves - Substitute", () => {
     leadPokemon.addTag(BattlerTagType.SUBSTITUTE, 0, Moves.NONE, leadPokemon.id);
 
     // Simulate a Baton switch for the player this turn
-    game.onNextPrompt("CommandPhase", Mode.COMMAND, () => {
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.POKEMON, 1, true);
+    game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.POKEMON, 1, true);
     });
 
     await game.phaseInterceptor.to("MovePhase", false);

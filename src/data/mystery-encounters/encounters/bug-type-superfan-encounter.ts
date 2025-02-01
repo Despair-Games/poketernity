@@ -26,7 +26,7 @@ import { PokemonMove } from "#app/field/pokemon";
 import { getEncounterText, showEncounterDialogue } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { Moves } from "#enums/moves";
-import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
+import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import {
@@ -35,7 +35,7 @@ import {
   HeldItemRequirement,
   TypeRequirement,
 } from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import type { AttackTypeBoosterModifierType, ModifierTypeOption } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
@@ -49,8 +49,8 @@ import {
 import i18next from "i18next";
 import MoveInfoOverlay from "#app/ui/move-info-overlay";
 import { allMoves } from "#app/data/all-moves";
-import { ModifierTier } from "#app/modifier/modifier-tier";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
+import { ModifierTier } from "#enums/modifier-tier";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 
@@ -182,8 +182,8 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
     CombinationPokemonRequirement.Some(
       // Must have at least 1 Bug type on team, OR have a bug item somewhere on the team
       new HeldItemRequirement(["BypassSpeedChanceModifier", "ContactHeldItemTransferChanceModifier"], 1),
-      new AttackTypeBoosterHeldItemTypeRequirement(Type.BUG, 1),
-      new TypeRequirement(Type.BUG, false, 1),
+      new AttackTypeBoosterHeldItemTypeRequirement(ElementType.BUG, 1),
+      new TypeRequirement(ElementType.BUG, false, 1),
     ),
   )
   .withMaxAllowedEncounters(1)
@@ -257,7 +257,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
     const requiredItems = [
       generateModifierType(modifierTypes.QUICK_CLAW),
       generateModifierType(modifierTypes.GRIP_CLAW),
-      generateModifierType(modifierTypes.ATTACK_TYPE_BOOSTER, [Type.BUG]),
+      generateModifierType(modifierTypes.ATTACK_TYPE_BOOSTER, [ElementType.BUG]),
     ];
 
     const requiredItemString = requiredItems.map((m) => m?.name ?? "unknown").join("/");
@@ -305,7 +305,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
   )
   .withOption(
     MysteryEncounterOptionBuilder.newOptionWithMode(MysteryEncounterOptionMode.DISABLED_OR_DEFAULT)
-      .withPrimaryPokemonRequirement(new TypeRequirement(Type.BUG, false, 1)) // Must have 1 Bug type on team
+      .withPrimaryPokemonRequirement(new TypeRequirement(ElementType.BUG, false, 1)) // Must have 1 Bug type on team
       .withDialogue({
         buttonLabel: `${namespace}:option.2.label`,
         buttonTooltip: `${namespace}:option.2.tooltip`,
@@ -316,7 +316,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
         const encounter = globalScene.currentBattle.mysteryEncounter!;
 
         // Player gets different rewards depending on the number of bug types they have
-        const numBugTypes = globalScene.getPlayerParty().filter((p) => p.isOfType(Type.BUG, true)).length;
+        const numBugTypes = globalScene.getPlayerParty().filter((p) => p.isOfType(ElementType.BUG, true)).length;
         const numBugTypesText = i18next.t(`${namespace}:numBugTypes`, { count: numBugTypes });
         encounter.setDialogueToken("numBugTypes", numBugTypesText);
 
@@ -406,7 +406,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
         CombinationPokemonRequirement.Some(
           // Meets one or both of the below reqs
           new HeldItemRequirement(["BypassSpeedChanceModifier", "ContactHeldItemTransferChanceModifier"], 1),
-          new AttackTypeBoosterHeldItemTypeRequirement(Type.BUG, 1),
+          new AttackTypeBoosterHeldItemTypeRequirement(ElementType.BUG, 1),
         ),
       )
       .withDialogue({
@@ -434,7 +434,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
               (item instanceof BypassSpeedChanceModifier
                 || item instanceof ContactHeldItemTransferChanceModifier
                 || (item instanceof AttackTypeBoosterModifier
-                  && (item.type as AttackTypeBoosterModifierType).moveType === Type.BUG))
+                  && (item.type as AttackTypeBoosterModifierType).moveType === ElementType.BUG))
               && item.isTransferable
             );
           });
@@ -463,7 +463,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
               item instanceof BypassSpeedChanceModifier
               || item instanceof ContactHeldItemTransferChanceModifier
               || (item instanceof AttackTypeBoosterModifier
-                && (item.type as AttackTypeBoosterModifierType).moveType === Type.BUG)
+                && (item.type as AttackTypeBoosterModifierType).moveType === ElementType.BUG)
             );
           });
           if (!hasValidItem) {

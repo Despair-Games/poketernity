@@ -6,24 +6,19 @@ import {
   getStatusEffectObtainText,
   getStatusEffectOverlapText,
 } from "#app/data/status-effect";
-import { MoveResult } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
 import { mockI18next } from "#test/testUtils/testUtils";
-import i18next from "i18next";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const pokemonName = "PKM";
 const sourceText = "SOURCE";
 
 describe("Status Effect Messages", () => {
-  beforeAll(() => {
-    i18next.init();
-  });
-
   describe("NONE", () => {
     const statusEffect = StatusEffect.NONE;
 
@@ -31,7 +26,6 @@ describe("Status Effect Messages", () => {
       mockI18next();
 
       const text = getStatusEffectObtainText(statusEffect, pokemonName);
-      console.log("text:", text);
       expect(text).toBe("");
 
       const emptySourceText = getStatusEffectObtainText(statusEffect, pokemonName, "");
@@ -398,6 +392,44 @@ describe("Status Effects", () => {
 
       expect(player.status?.effect).toBeUndefined();
       expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
+    });
+  });
+
+  describe("Behavior", () => {
+    let phaserGame: Phaser.Game;
+    let game: GameManager;
+
+    beforeAll(() => {
+      phaserGame = new Phaser.Game({
+        type: Phaser.HEADLESS,
+      });
+    });
+
+    afterEach(() => {
+      game.phaseInterceptor.restoreOg();
+    });
+
+    beforeEach(() => {
+      game = new GameManager(phaserGame);
+      game.override
+        .moveset([Moves.SPLASH])
+        .ability(Abilities.BALL_FETCH)
+        .battleType("single")
+        .disableCrits()
+        .enemySpecies(Species.MAGIKARP)
+        .enemyAbility(Abilities.BALL_FETCH)
+        .enemyMoveset(Moves.NUZZLE)
+        .enemyLevel(2000);
+    });
+
+    it("should not inflict a 0 HP mon with a status", async () => {
+      await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+
+      const player = game.field.getPlayerPokemon();
+      player.hp = 0;
+
+      expect(player.trySetStatus(StatusEffect.BURN)).toBe(false);
+      expect(player.status?.effect).not.toBe(StatusEffect.BURN);
     });
   });
 });

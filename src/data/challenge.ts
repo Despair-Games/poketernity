@@ -9,10 +9,11 @@ import { speciesStarterCosts } from "#app/data/balance/starters";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
 import type { FixedBattleConfig } from "#app/battle";
-import { BattleType } from "#app/battle";
-import Trainer, { TrainerVariant } from "#app/field/trainer";
+import { BattleType } from "#enums/battle-type";
+import Trainer from "#app/field/trainer";
+import { TrainerVariant } from "#enums/trainer-variant";
 import type { GameMode } from "#app/game-mode";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import { Challenges } from "#enums/challenges";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
@@ -21,88 +22,11 @@ import type { Moves } from "#enums/moves";
 import { TypeColor, TypeShadow } from "#enums/color";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
+import type { MoveSourceType } from "#enums/move-source-type";
+import { ChallengeType } from "#enums/challenge-type";
 
 /** A constant for the default max cost of the starting party before a run */
 const DEFAULT_PARTY_MAX_COST = 10;
-
-/**
- * An enum for all the challenge types. The parameter entries on these describe the
- * parameters to use when calling the applyChallenges function.
- */
-export enum ChallengeType {
-  /**
-   * Challenges which modify what starters you can choose
-   * @see {@linkcode Challenge.applyStarterChoice}
-   */
-  STARTER_CHOICE,
-  /**
-   * Challenges which modify how many starter points you have
-   * @see {@linkcode Challenge.applyStarterPoints}
-   */
-  STARTER_POINTS,
-  /**
-   * Challenges which modify how many starter points you have
-   * @see {@linkcode Challenge.applyStarterPointCost}
-   */
-  STARTER_COST,
-  /**
-   * Challenges which modify your starters in some way
-   * @see {@linkcode Challenge.applyStarterModify}
-   */
-  STARTER_MODIFY,
-  /**
-   * Challenges which limit which pokemon you can have in battle.
-   * @see {@linkcode Challenge.applyPokemonInBattle}
-   */
-  POKEMON_IN_BATTLE,
-  /**
-   * Adds or modifies the fixed battles in a run
-   * @see {@linkcode Challenge.applyFixedBattle}
-   */
-  FIXED_BATTLES,
-  /**
-   * Modifies the effectiveness of Type matchups in battle
-   * @see {@linkcode Challenge.applyTypeEffectiveness}
-   */
-  TYPE_EFFECTIVENESS,
-  /**
-   * Modifies what level the AI pokemon are. UNIMPLEMENTED.
-   */
-  AI_LEVEL,
-  /**
-   * Modifies how many move slots the AI has. UNIMPLEMENTED.
-   */
-  AI_MOVE_SLOTS,
-  /**
-   * Modifies if a pokemon has its passive. UNIMPLEMENTED.
-   */
-  PASSIVE_ACCESS,
-  /**
-   * Modifies the game mode settings in some way. UNIMPLEMENTED.
-   */
-  GAME_MODE_MODIFY,
-  /**
-   * Modifies what level AI pokemon can access a move. UNIMPLEMENTED.
-   */
-  MOVE_ACCESS,
-  /**
-   * Modifies what weight AI pokemon have when generating movesets. UNIMPLEMENTED.
-   */
-  MOVE_WEIGHT,
-}
-
-/**
- * Used for challenge types that modify movesets, these denote the various sources of moves for pokemon.
- */
-export enum MoveSourceType {
-  LEVEL_UP, // Currently unimplemented for move access
-  RELEARNER, // Relearner moves currently unimplemented
-  COMMON_TM,
-  GREAT_TM,
-  ULTRA_TM,
-  COMMON_EGG,
-  RARE_EGG,
-}
 
 /**
  * A challenge object. Exists only to serve as a base class.
@@ -600,7 +524,7 @@ interface monotypeOverride {
   /** The species to override */
   species: Species;
   /** The type to count as */
-  type: Type;
+  type: ElementType;
   /** If part of a fusion, should we check the fused species instead of the base species? */
   fusion: boolean;
 }
@@ -609,7 +533,9 @@ interface monotypeOverride {
  * Implements a mono type challenge.
  */
 export class SingleTypeChallenge extends Challenge {
-  private static TYPE_OVERRIDES: monotypeOverride[] = [{ species: Species.CASTFORM, type: Type.NORMAL, fusion: false }];
+  private static TYPE_OVERRIDES: monotypeOverride[] = [
+    { species: Species.CASTFORM, type: ElementType.NORMAL, fusion: false },
+  ];
   private static SPECIES_OVERRIDES: Species[] = [Species.MELOETTA];
 
   constructor() {
@@ -680,7 +606,7 @@ export class SingleTypeChallenge extends Challenge {
    */
   override getValue(overrideValue?: number): string {
     const value = overrideValue ?? this.value;
-    return Type[value - 1].toLowerCase();
+    return ElementType[value - 1].toLowerCase();
   }
 
   /**
@@ -690,8 +616,8 @@ export class SingleTypeChallenge extends Challenge {
    */
   override getDescription(overrideValue?: number): string {
     const value = overrideValue ?? this.value;
-    const type = i18next.t(`pokemonInfo:Type.${Type[value - 1]}`);
-    const typeColor = `[color=${TypeColor[Type[value - 1]]}][shadow=${TypeShadow[Type[value - 1]]}]${type}[/shadow][/color]`;
+    const type = i18next.t(`pokemonInfo:Type.${ElementType[value - 1]}`);
+    const typeColor = `[color=${TypeColor[ElementType[value - 1]]}][shadow=${TypeShadow[ElementType[value - 1]]}]${type}[/shadow][/color]`;
     const defaultDesc = i18next.t(`challenges:${this.geti18nKey()}.desc_default`);
     const typeDesc = i18next.t(`challenges:${this.geti18nKey()}.desc`, { type: typeColor });
     return value === 0 ? defaultDesc : typeDesc;

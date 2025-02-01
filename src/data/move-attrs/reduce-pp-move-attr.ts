@@ -19,7 +19,7 @@ export class ReducePpMoveAttr extends MoveEffectAttr {
     this.reduction = reduction;
   }
 
-  override apply(_user: Pokemon, target: Pokemon, _move: Move): boolean {
+  override applyEffect(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     const lastMove = target.getLastXMoves()[0];
     const movesetMove = target.getMoveset().find((m) => m.moveId === lastMove.move)!;
     const lastPpUsed = movesetMove.ppUsed;

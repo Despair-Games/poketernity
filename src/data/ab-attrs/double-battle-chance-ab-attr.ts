@@ -17,7 +17,7 @@ export class DoubleBattleChanceAbAttr extends AbAttr {
    * @param doubleBattleChance {@linkcode NumberHolder} for double battle chance
    * @returns true if the ability was applied
    */
-  override apply(_pokemon: Pokemon, _passive: boolean, _simulated: boolean, doubleBattleChance: NumberHolder): boolean {
+  override apply(_pokemon: Pokemon, _simulated: boolean, doubleBattleChance: NumberHolder): boolean {
     // This is divided because the chance is generated as a number from 0 to doubleBattleChance.value using Utils.randSeedInt
     // A double battle will initiate if the generated number is 0
     doubleBattleChance.value = doubleBattleChance.value / 4;

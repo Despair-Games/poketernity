@@ -2,9 +2,9 @@ import { PokemonFormChangeItemModifier, TerastallizeModifier } from "../modifier
 import type { Pokemon } from "../field/pokemon";
 import { StatusEffect } from "#enums/status-effect";
 import { allMoves } from "#app/data/all-moves";
-import { MoveCategory } from "../enums/move-category";
-import { Type } from "#enums/type";
-import type { Constructor, nil } from "#app/utils";
+import { MoveCategory } from "#enums/move-category";
+import { ElementType } from "#enums/element-type";
+import type { AbstractConstructor, nil } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
@@ -12,129 +12,10 @@ import type { TimeOfDay } from "#enums/time-of-day";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import { WeatherType } from "#enums/weather-type";
-import { Challenges } from "#app/enums/challenges";
+import { Challenges } from "#enums/challenges";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { globalScene } from "#app/global-scene";
-
-export enum FormChangeItem {
-  NONE,
-
-  ABOMASITE,
-  ABSOLITE,
-  AERODACTYLITE,
-  AGGRONITE,
-  ALAKAZITE,
-  ALTARIANITE,
-  AMPHAROSITE,
-  AUDINITE,
-  BANETTITE,
-  BEEDRILLITE,
-  BLASTOISINITE,
-  BLAZIKENITE,
-  CAMERUPTITE,
-  CHARIZARDITE_X,
-  CHARIZARDITE_Y,
-  DIANCITE,
-  GALLADITE,
-  GARCHOMPITE,
-  GARDEVOIRITE,
-  GENGARITE,
-  GLALITITE,
-  GYARADOSITE,
-  HERACRONITE,
-  HOUNDOOMINITE,
-  KANGASKHANITE,
-  LATIASITE,
-  LATIOSITE,
-  LOPUNNITE,
-  LUCARIONITE,
-  MANECTITE,
-  MAWILITE,
-  MEDICHAMITE,
-  METAGROSSITE,
-  MEWTWONITE_X,
-  MEWTWONITE_Y,
-  PIDGEOTITE,
-  PINSIRITE,
-  RAYQUAZITE,
-  SABLENITE,
-  SALAMENCITE,
-  SCEPTILITE,
-  SCIZORITE,
-  SHARPEDONITE,
-  SLOWBRONITE,
-  STEELIXITE,
-  SWAMPERTITE,
-  TYRANITARITE,
-  VENUSAURITE,
-
-  BLUE_ORB = 50,
-  RED_ORB,
-  ADAMANT_CRYSTAL,
-  LUSTROUS_GLOBE,
-  GRISEOUS_CORE,
-  REVEAL_GLASS,
-  MAX_MUSHROOMS,
-  DARK_STONE,
-  LIGHT_STONE,
-  PRISON_BOTTLE,
-  RUSTED_SWORD,
-  RUSTED_SHIELD,
-  ICY_REINS_OF_UNITY,
-  SHADOW_REINS_OF_UNITY,
-  ULTRANECROZIUM_Z,
-
-  SHARP_METEORITE = 100,
-  HARD_METEORITE,
-  SMOOTH_METEORITE,
-  GRACIDEA,
-  SHOCK_DRIVE,
-  BURN_DRIVE,
-  CHILL_DRIVE,
-  DOUSE_DRIVE,
-  N_SOLARIZER,
-  N_LUNARIZER,
-  WELLSPRING_MASK,
-  HEARTHFLAME_MASK,
-  CORNERSTONE_MASK,
-  FIST_PLATE,
-  SKY_PLATE,
-  TOXIC_PLATE,
-  EARTH_PLATE,
-  STONE_PLATE,
-  INSECT_PLATE,
-  SPOOKY_PLATE,
-  IRON_PLATE,
-  FLAME_PLATE,
-  SPLASH_PLATE,
-  MEADOW_PLATE,
-  ZAP_PLATE,
-  MIND_PLATE,
-  ICICLE_PLATE,
-  DRACO_PLATE,
-  DREAD_PLATE,
-  PIXIE_PLATE,
-  BLANK_PLATE, // TODO: Find a potential use for this
-  LEGEND_PLATE, // TODO: Find a potential use for this
-  FIGHTING_MEMORY,
-  FLYING_MEMORY,
-  POISON_MEMORY,
-  GROUND_MEMORY,
-  ROCK_MEMORY,
-  BUG_MEMORY,
-  GHOST_MEMORY,
-  STEEL_MEMORY,
-  FIRE_MEMORY,
-  WATER_MEMORY,
-  GRASS_MEMORY,
-  ELECTRIC_MEMORY,
-  PSYCHIC_MEMORY,
-  ICE_MEMORY,
-  DRAGON_MEMORY,
-  DARK_MEMORY,
-  FAIRY_MEMORY,
-  NORMAL_MEMORY, // TODO: Find a potential use for this
-}
+import { FormChangeItem } from "#enums/form-change-item";
 
 export type SpeciesFormChangeConditionPredicate = (p: Pokemon) => boolean;
 export type SpeciesFormChangeConditionEnforceFunc = (p: Pokemon) => void;
@@ -194,7 +75,7 @@ export class SpeciesFormChange {
     return true;
   }
 
-  findTrigger(triggerType: Constructor<SpeciesFormChangeTrigger>): SpeciesFormChangeTrigger | nil {
+  findTrigger(triggerType: AbstractConstructor<SpeciesFormChangeTrigger>): SpeciesFormChangeTrigger | nil {
     if (!this.trigger.hasTriggerType(triggerType)) {
       return null;
     }
@@ -224,7 +105,7 @@ export abstract class SpeciesFormChangeTrigger {
     return true;
   }
 
-  hasTriggerType(triggerType: Constructor<SpeciesFormChangeTrigger>): boolean {
+  hasTriggerType(triggerType: AbstractConstructor<SpeciesFormChangeTrigger>): boolean {
     return this instanceof triggerType;
   }
 }
@@ -252,7 +133,7 @@ export class SpeciesFormChangeCompoundTrigger {
     return true;
   }
 
-  hasTriggerType(triggerType: Constructor<SpeciesFormChangeTrigger>): boolean {
+  hasTriggerType(triggerType: AbstractConstructor<SpeciesFormChangeTrigger>): boolean {
     return !!this.triggers.find((t) => t.hasTriggerType(triggerType));
   }
 }
@@ -402,9 +283,9 @@ export class SpeciesDefaultFormMatchTrigger extends SpeciesFormChangeTrigger {
  */
 export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeTrigger {
   /** The Tera type that triggers the form change */
-  private teraType: Type;
+  private teraType: ElementType;
 
-  constructor(teraType: Type) {
+  constructor(teraType: ElementType) {
     super();
     this.teraType = teraType;
   }
@@ -1942,20 +1823,25 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "cornerstone-mask",
       new SpeciesFormChangeItemTrigger(FormChangeItem.CORNERSTONE_MASK),
     ),
-    new SpeciesFormChange(Species.OGERPON, "teal-mask", "teal-mask-tera", new SpeciesFormChangeTeraTrigger(Type.GRASS)),
+    new SpeciesFormChange(
+      Species.OGERPON,
+      "teal-mask",
+      "teal-mask-tera",
+      new SpeciesFormChangeTeraTrigger(ElementType.GRASS),
+    ),
     new SpeciesFormChange(
       Species.OGERPON,
       "teal-mask-tera",
       "teal-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== Type.GRASS),
+      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementType.GRASS),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
       "wellspring-mask",
       "wellspring-mask-tera",
-      new SpeciesFormChangeTeraTrigger(Type.WATER),
+      new SpeciesFormChangeTeraTrigger(ElementType.WATER),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
@@ -1963,13 +1849,13 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "wellspring-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== Type.WATER),
+      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementType.WATER),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
       "hearthflame-mask",
       "hearthflame-mask-tera",
-      new SpeciesFormChangeTeraTrigger(Type.FIRE),
+      new SpeciesFormChangeTeraTrigger(ElementType.FIRE),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
@@ -1977,13 +1863,13 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "hearthflame-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== Type.FIRE),
+      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementType.FIRE),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
       "cornerstone-mask",
       "cornerstone-mask-tera",
-      new SpeciesFormChangeTeraTrigger(Type.ROCK),
+      new SpeciesFormChangeTeraTrigger(ElementType.ROCK),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
@@ -1991,19 +1877,24 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "cornerstone-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== Type.ROCK),
+      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementType.ROCK),
     ),
   ],
   [Species.TERAPAGOS]: [
     new SpeciesFormChange(Species.TERAPAGOS, "", "terastal", new SpeciesFormChangeManualTrigger(), true),
-    new SpeciesFormChange(Species.TERAPAGOS, "terastal", "stellar", new SpeciesFormChangeTeraTrigger(Type.STELLAR)),
+    new SpeciesFormChange(
+      Species.TERAPAGOS,
+      "terastal",
+      "stellar",
+      new SpeciesFormChangeTeraTrigger(ElementType.STELLAR),
+    ),
     new SpeciesFormChange(
       Species.TERAPAGOS,
       "stellar",
       "terastal",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== Type.STELLAR),
+      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementType.STELLAR),
     ),
   ],
   [Species.GALAR_DARMANITAN]: [

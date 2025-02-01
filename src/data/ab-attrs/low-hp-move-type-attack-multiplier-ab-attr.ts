@@ -1,4 +1,4 @@
-import type { Type } from "#enums/type";
+import type { ElementType } from "#enums/element-type";
 import { StatMultiplierAbAttr } from "./stat-multiplier-ab-attr";
 import type { BattleStat } from "#enums/stat";
 import { Stat } from "#enums/stat";
@@ -26,16 +26,15 @@ export class LowHpMoveTypeAttackMultiplierAbAttr extends StatMultiplierAbAttr {
   /**
    * The constructor defaults to Stat.ATK since at the moment of the attribute's construction, the game does not know what move will be used.
    */
-  constructor(boostedType: Type) {
+  constructor(boostedType: ElementType) {
     const condition = (pokemon: Pokemon, _target: Pokemon, move: Move): boolean => {
       return move && pokemon.getHpRatio() <= 1 / 3 && pokemon.getMoveType(move) === boostedType;
     };
     super(Stat.ATK, 1.5, condition);
   }
 
-  override applyStatStage(
+  override apply(
     pokemon: Pokemon,
-    passive: boolean,
     simulated: boolean,
     stat: BattleStat,
     statValue: NumberHolder,
@@ -45,6 +44,6 @@ export class LowHpMoveTypeAttackMultiplierAbAttr extends StatMultiplierAbAttr {
     const category =
       !isNullOrUndefined(move) && !isNullOrUndefined(target) ? pokemon.getMoveCategory(target, move) : move?.category;
     this.stat = category === MoveCategory.SPECIAL ? Stat.SPATK : Stat.ATK;
-    return super.applyStatStage(pokemon, passive, simulated, stat, statValue, move, target);
+    return super.apply(pokemon, simulated, stat, statValue, move, target);
   }
 }

@@ -1,7 +1,12 @@
+// -- start tsdoc imports --
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { initGameSpeed } from "#app/system/game-speed";
+// -- end tsdoc imports --
+import { api } from "#app/plugins/api/api";
 import { MoneyFormat } from "#enums/money-format";
 import { Moves } from "#enums/moves";
 import i18next from "i18next";
-import { api } from "#app/plugins/api/api";
+import { supportedLanguages } from "./system/settings/supported-languages";
 
 export type nil = null | undefined;
 
@@ -15,7 +20,7 @@ export function toReadableString(str: string): string {
     .join(" ");
 }
 
-export function randomString(length: number, seeded: boolean = false) {
+export function randomString(length: number, seeded: boolean = false): string {
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let result = "";
 
@@ -27,11 +32,7 @@ export function randomString(length: number, seeded: boolean = false) {
   return result;
 }
 
-export function shiftCharCodes(str: string, shiftCount: number) {
-  if (!shiftCount) {
-    shiftCount = 0;
-  }
-
+export function shiftCharCodes(str: string, shiftCount: number = 0): string {
   let newStr = "";
 
   for (let i = 0; i < str.length; i++) {
@@ -63,10 +64,7 @@ export function randSeedGauss(stdev: number, mean: number = 0): number {
   return z * stdev + mean;
 }
 
-export function padInt(value: number, length: number, padWith?: string): string {
-  if (!padWith) {
-    padWith = "0";
-  }
+export function leftPad(value: number | string, length: number, padWith: string = "0"): string {
   let valueStr = value.toString();
   while (valueStr.length < length) {
     valueStr = `${padWith}${valueStr}`;
@@ -163,7 +161,10 @@ export function getPlayTimeString(totalSeconds: number): string {
  * @param id 32-bit number
  * @returns An array of six numbers corresponding to 5-bit chunks from {@linkcode id}
  */
-export function getIvsFromId(id: number): number[] {
+export function getIvsFromId(id?: number): number[] {
+  if (isNullOrUndefined(id)) {
+    id = randSeedInt(4294967296);
+  }
   return [
     (id & 0x3e000000) >>> 25,
     (id & 0x01f00000) >>> 20,
@@ -224,10 +225,12 @@ export function formatFancyLargeNumber(number: number, rounded: number = 3): str
     number /= Math.pow(1000, exponent);
   }
 
-  return `${exponent === 0 || number % 1 === 0 ? number : number.toFixed(rounded)}${AbbreviationsLargeNumber[exponent]}`;
+  return `${exponent === 0 || number % 1 === 0 ? number : number.toFixed(rounded)}${
+    AbbreviationsLargeNumber[exponent]
+  }`;
 }
 
-export function formatMoney(format: MoneyFormat, amount: number) {
+export function formatMoney(format: MoneyFormat, amount: number): string {
   if (format === MoneyFormat.ABBREVIATED) {
     return formatFancyLargeNumber(amount);
   }
@@ -289,7 +292,9 @@ export const isBeta = import.meta.env.MODE === "beta"; // this checks to see if 
 export function setCookie(cName: string, cValue: string): void {
   const expiration = new Date();
   expiration.setTime(new Date().getTime() + 3600000 * 24 * 30 * 3 /*7*/);
-  document.cookie = `${cName}=${cValue};Secure;SameSite=Strict;Domain=${window.location.hostname};Path=/;Expires=${expiration.toUTCString()}`;
+  document.cookie = `${cName}=${cValue};Secure;SameSite=Strict;Domain=${
+    window.location.hostname
+  };Path=/;Expires=${expiration.toUTCString()}`;
 }
 
 export function removeCookie(cName: string): void {
@@ -326,7 +331,7 @@ export function getCookie(cName: string): string {
  * with a GET request to verify if a server is running,
  * sets isLocalServerConnected based on results
  */
-export async function localPing() {
+export async function localPing(): Promise<void> {
   if (isLocal) {
     const titleStats = await api.getGameTitleStats();
     isLocalServerConnected = !!titleStats;
@@ -334,8 +339,17 @@ export async function localPing() {
   }
 }
 
-/** Alias for the constructor of a class */
+/**
+ * Alias for the constructor of a class.
+ * Can be used to build an object of templated type.
+ * Use {@linkcode AbstractConstructor} instead if comparing types
+ */
 export type Constructor<T> = new (...args: unknown[]) => T;
+/**
+ * Alias for an abstract constructor of a class.
+ * Should be used when comparing types, e.g. with `instanceof`.
+ */
+export type AbstractConstructor<T> = abstract new (...args: unknown[]) => T;
 
 export class BooleanHolder {
   public value: boolean;
@@ -353,23 +367,26 @@ export class NumberHolder {
   }
 }
 
-/** @deprecated Use {@linkcode NumberHolder} */
-export class IntegerHolder extends NumberHolder {
+/**
+ * Holds a fixed number value, this is solely used to differentiate between a regular number
+ * and a constant or fixed number.
+ * This is used in the game speed system to differentiate between a fixed game speed and a dynamic one.
+ * @see `transformValue` in {@linkcode initGameSpeed}
+ */
+export class FixedNumber {
+  public readonly value: number;
+
   constructor(value: number) {
-    super(value);
+    this.value = value;
   }
 }
 
-/** @deprecated Use {@linkcode NumberHolder}*/
-export class FixedInt extends IntegerHolder {
-  constructor(value: number) {
-    super(value);
-  }
-}
-
-/** @deprecated */
-export function fixedInt(value: number): number {
-  return new FixedInt(value) as unknown as number;
+/**
+ * Helper method to create a {@linkcode FixedNumber}
+ * @param value - The value to be stored in the {@linkcode FixedNumber}
+ */
+export function fixedNumber(value: number): number {
+  return new FixedNumber(value) as unknown as number;
 }
 
 /**
@@ -397,7 +414,7 @@ export function toCamelCaseString(unformattedText: string): string {
     .join("");
 }
 
-export function rgbToHsv(r: number, g: number, b: number) {
+export function rgbToHsv(r: number, g: number, b: number): number[] {
   const v = Math.max(r, g, b);
   const c = v - Math.min(r, g, b);
   const h = c && (v === r ? (g - b) / c : v === g ? 2 + (b - r) / c : 4 + (r - g) / c);
@@ -420,7 +437,7 @@ export function deltaRgb(rgb1: number[], rgb2: number[]): number {
   return Math.ceil(Math.sqrt(2 * drp2 + 4 * dgp2 + 3 * dbp2 + (t * (drp2 - dbp2)) / 256));
 }
 
-export function rgbHexToRgba(hex: string) {
+export function rgbHexToRgba(hex: string): { r: number; g: number; b: number; a: number } {
   const color = hex.match(/^([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i) ?? ["000000", "00", "00", "00"];
   return {
     r: parseInt(color[1], 16),
@@ -504,7 +521,7 @@ export function printContainerList(container: Phaser.GameObjects.Container): voi
  * @param maxLength - The maximum length of the truncated string, defaults to 10.
  * @returns The truncated string with an ellipsis if it was longer than maxLength.
  */
-export function truncateString(str: String, maxLength: number = 10) {
+export function truncateString(str: string, maxLength: number = 10): string {
   // Check if the string length exceeds the maximum length
   if (str.length > maxLength) {
     // Truncate the string and add an ellipsis
@@ -521,8 +538,7 @@ export function truncateString(str: String, maxLength: number = 10) {
  * @returns A new object that is a deep copy of the input.
  */
 export function deepCopy(values: object): object {
-  // Convert the object to a JSON string and parse it back to an object to perform a deep copy
-  return JSON.parse(JSON.stringify(values));
+  return Phaser.Utils.Objects.DeepCopy(values);
 }
 
 /**
@@ -531,7 +547,7 @@ export function deepCopy(values: object): object {
  * @param input - The string to be converted.
  * @returns The converted string with words capitalized and separated by underscores.
  */
-export function reverseValueToKeySetting(input) {
+export function reverseValueToKeySetting(input: string): string {
   // Split the input string into an array of words
   const words = input.split(" ");
   // Capitalize the first letter of each word and convert the rest to lowercase
@@ -554,7 +570,7 @@ export function capitalizeString(
   sep: string,
   lowerFirstChar: boolean = true,
   returnWithSpaces: boolean = false,
-) {
+): string | null {
   if (str) {
     const splitedStr = str.toLowerCase().split(sep);
 
@@ -574,7 +590,7 @@ export function isNullOrUndefined(object: any): object is undefined | null {
 /**
  * Capitalizes the first letter of a string
  */
-export function capitalizeFirstLetter(str: string) {
+export function capitalizeFirstLetter(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
@@ -588,7 +604,7 @@ export function capitalizeFirstLetter(str: string) {
  * @param minValue - The minimum integer value to return. Defaults to 1.
  * @returns The converted value as an integer.
  */
-export function toDmgValue(value: number, minValue: number = 1) {
+export function toDmgValue(value: number, minValue: number = 1): number {
   return Math.max(Math.floor(value), minValue);
 }
 
@@ -597,7 +613,7 @@ export function toDmgValue(value: number, minValue: number = 1) {
  * @param baseKey the base key of the sprite (e.g. `type`)
  * @returns the localized sprite key
  */
-export function getLocalizedSpriteKey(baseKey: string) {
+export function getLocalizedSpriteKey(baseKey: string): string {
   return `${baseKey}${hasAllLocalizedSprites(i18next.resolvedLanguage) ? `_${i18next.resolvedLanguage}` : ""}`;
 }
 
@@ -630,4 +646,31 @@ export function animationFileName(move: Moves): string {
  */
 export function camelCaseToKebabCase(str: string): string {
   return str.replace(/[A-Z]+(?![a-z])|[A-Z]/g, (s, o) => (o ? "-" : "") + s.toLowerCase());
+}
+
+/**
+ * Check if a language is supported
+ * @param key The key of the language to check
+ * @returns `true` if the language is supported
+ */
+export function isSupportedLanguage(key: string): boolean {
+  return supportedLanguages.some((l) => l.key === key);
+}
+
+/**
+ * Check if the device has a touchscreen.
+ *
+ * @returns `true` if the device has a touchscreen, otherwise `false`.
+ */
+export function hasTouchscreen(): boolean {
+  return window.matchMedia("(hover: none), (pointer: coarse)").matches;
+}
+
+/**
+ * Check if the device is in landscape mode.
+ * @returns `true` if the device is in landscape mode, otherwise `false` which means it is in portrait mode.
+ */
+export function isLandscapeMode(): boolean {
+  const { width, height } = window.screen;
+  return width > height;
 }

@@ -1,14 +1,16 @@
 import { updateUserInfo } from "#app/account";
-import { bypassLogin } from "#app/battle-scene";
+import { bypassLogin } from "#app/constants";
 import { SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { handleTutorial, Tutorial } from "#app/tutorial";
-import { Mode } from "#app/ui/ui";
+import { handleTutorial } from "#app/tutorial";
+import { Tutorial } from "#enums/tutorial";
+import { UiMode } from "#enums/ui-mode";
 import { executeIf, getCookie, removeCookie } from "#app/utils";
 import i18next from "i18next";
 import { SelectGenderPhase } from "./select-gender-phase";
 import { UnavailablePhase } from "./unavailable-phase";
+import { settings } from "#app/system/settings/settings-manager";
 
 export class LoginPhase extends Phase {
   private readonly showText: boolean;
@@ -26,7 +28,7 @@ export class LoginPhase extends Phase {
 
     const hasSession = !!getCookie(SESSION_ID_COOKIE);
 
-    ui.setMode(Mode.LOADING, { buttonActions: [] });
+    ui.setMode(UiMode.LOADING, { buttonActions: [] });
     executeIf(bypassLogin || hasSession, updateUserInfo).then((response) => {
       const success = response ? response[0] : false;
       const statusCode = response ? response[1] : null;
@@ -49,7 +51,7 @@ export class LoginPhase extends Phase {
             });
           };
 
-          ui.setMode(Mode.LOGIN_FORM, {
+          ui.setMode(UiMode.LOGIN_FORM, {
             buttonActions: [
               (): void => {
                 ui.playSelect();
@@ -57,7 +59,7 @@ export class LoginPhase extends Phase {
               },
               (): void => {
                 globalScene.playSound("menu_open");
-                ui.setMode(Mode.REGISTRATION_FORM, {
+                ui.setMode(UiMode.REGISTRATION_FORM, {
                   buttonActions: [
                     (): void => {
                       ui.playSelect();
@@ -104,7 +106,7 @@ export class LoginPhase extends Phase {
           if (success || bypassLogin) {
             this.end();
           } else {
-            ui.setMode(Mode.MESSAGE);
+            ui.setMode(UiMode.MESSAGE);
             ui.showText(i18next.t("menu:failedToLoadSaveData"));
           }
         });
@@ -113,12 +115,12 @@ export class LoginPhase extends Phase {
   }
 
   public override end(): void {
-    globalScene.ui.setMode(Mode.MESSAGE);
+    globalScene.ui.setMode(UiMode.MESSAGE);
 
-    if (!globalScene.gameData.gender) {
+    if (!settings.display.playerGender) {
       globalScene.unshiftPhase(new SelectGenderPhase());
     }
 
-    handleTutorial(Tutorial.Intro).then(() => super.end());
+    handleTutorial(Tutorial.INTRO).then(() => super.end());
   }
 }

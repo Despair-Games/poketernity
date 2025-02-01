@@ -1,16 +1,18 @@
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import type { Achv } from "#app/system/achv";
-import { achvs, getAchievementDescription } from "#app/system/achv";
+import { achvs } from "#app/system/achv";
 import type { Voucher } from "#app/system/voucher";
 import { getVoucherTypeIcon, getVoucherTypeName, vouchers } from "#app/system/voucher";
 import MessageUiHandler from "#app/ui/message-ui-handler";
-import { addTextObject, TextStyle } from "#app/ui/text";
-import type { Mode } from "#app/ui/ui";
+import { addTextObject } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
+import type { UiMode } from "#enums/ui-mode";
 import { addWindow } from "#app/ui/ui-theme";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import { PlayerGender } from "#enums/player-gender";
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
 
 enum Page {
   ACHIEVEMENTS,
@@ -59,7 +61,7 @@ export default class AchvsUiHandler extends MessageUiHandler {
   private cursorObj: Phaser.GameObjects.NineSlice | null;
   private currentPage: Page;
 
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
 
     this.achvsTotal = Object.keys(achvs).length;
@@ -91,7 +93,7 @@ export default class AchvsUiHandler extends MessageUiHandler {
     this.headerActionText.setPositionRelative(this.headerBg, 264, 8);
 
     // We need to get the player gender from the game data to add the correct prefix to the achievement name
-    const genderIndex = globalScene.gameData.gender ?? PlayerGender.MALE;
+    const genderIndex = settings.display.playerGender ?? PlayerGender.MALE;
     const genderStr = PlayerGender[genderIndex].toLowerCase();
 
     this.achvsName = i18next.t("achv:Achievements.name", { context: genderStr });
@@ -210,12 +212,6 @@ export default class AchvsUiHandler extends MessageUiHandler {
   }
 
   protected showAchv(achv: Achv) {
-    // We need to get the player gender from the game data to add the correct prefix to the achievement name
-    const genderIndex = globalScene.gameData.gender ?? PlayerGender.MALE;
-    const genderStr = PlayerGender[genderIndex].toLowerCase();
-
-    achv.name = i18next.t(`achv:${achv.localizationKey}.name`, { context: genderStr });
-    achv.description = getAchievementDescription(achv.localizationKey);
     const achvUnlocks = globalScene.gameData.achvUnlocks;
     const unlocked = achvUnlocks.hasOwnProperty(achv.id);
     const hidden = !unlocked && achv.secret && (!achv.parentId || !achvUnlocks.hasOwnProperty(achv.parentId));

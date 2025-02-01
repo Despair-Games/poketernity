@@ -1,11 +1,32 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { ArenaTagType } from "#enums/arena-tag-type";
+import { ArenaTagType } from "#enums/arena-tag-type";
 import i18next from "i18next";
-import { ArenaTagSide } from "../arena-tag";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { Move } from "../move";
 import { MoveEffectAttr } from "./move-effect-attr";
+
+export const courtChangeArenaTags = [
+  ArenaTagType.AURORA_VEIL,
+  ArenaTagType.LIGHT_SCREEN,
+  ArenaTagType.MIST,
+  ArenaTagType.REFLECT,
+  ArenaTagType.SPIKES,
+  ArenaTagType.STEALTH_ROCK,
+  ArenaTagType.SHARP_STEEL,
+  ArenaTagType.STICKY_WEB,
+  ArenaTagType.TAILWIND,
+  ArenaTagType.TOXIC_SPIKES,
+  ArenaTagType.SAFEGUARD,
+  ArenaTagType.GRASS_WATER_PLEDGE,
+  ArenaTagType.FIRE_GRASS_PLEDGE,
+  ArenaTagType.WATER_FIRE_PLEDGE,
+  ArenaTagType.G_MAX_VINE_LASH,
+  ArenaTagType.G_MAX_WILDFIRE,
+  ArenaTagType.G_MAX_CANNONADE,
+  ArenaTagType.G_MAX_VOLCALITH,
+];
 
 /**
  * Swaps arena effects between the player and enemy side.
@@ -20,11 +41,7 @@ export class SwapArenaTagsAttr extends MoveEffectAttr {
     this.swappableTags = SwapTags;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move)) {
-      return false;
-    }
-
+  override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const tagPlayerTemp = globalScene.arena.findTagsOnSide(
       (t) => this.swappableTags.includes(t.tagType),
       ArenaTagSide.PLAYER,
@@ -39,9 +56,9 @@ export class SwapArenaTagsAttr extends MoveEffectAttr {
         globalScene.arena.removeTagOnSide(swapTagsType.tagType, ArenaTagSide.PLAYER, true);
         globalScene.arena.addTag(
           swapTagsType.tagType,
+          swapTagsType.sourceId!,
           swapTagsType.turnCount,
           swapTagsType.sourceMove,
-          swapTagsType.sourceId!,
           ArenaTagSide.ENEMY,
           true,
         ); // TODO: is the bang correct?
@@ -52,9 +69,9 @@ export class SwapArenaTagsAttr extends MoveEffectAttr {
         globalScene.arena.removeTagOnSide(swapTagsType.tagType, ArenaTagSide.ENEMY, true);
         globalScene.arena.addTag(
           swapTagsType.tagType,
+          swapTagsType.sourceId!,
           swapTagsType.turnCount,
           swapTagsType.sourceMove,
-          swapTagsType.sourceId!,
           ArenaTagSide.PLAYER,
           true,
         ); // TODO: is the bang correct?

@@ -23,8 +23,8 @@ import {
 import { Species } from "#enums/species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { Gender } from "#enums/gender";
-import { Type } from "#enums/type";
-import { BattlerIndex } from "#app/battle";
+import { ElementType } from "#enums/element-type";
+import { BattlerIndex } from "#enums/battler-index";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
 import { Moves } from "#enums/moves";
@@ -41,7 +41,7 @@ import {
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { EncounterAnim } from "#enums/encounter-anims";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
@@ -219,7 +219,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
       const encounter = globalScene.currentBattle.mysteryEncounter!;
       const nonFireTypes = globalScene
         .getPlayerParty()
-        .filter((p) => p.isAllowedInBattle() && !p.getTypes().includes(Type.FIRE));
+        .filter((p) => p.isAllowedInBattle() && !p.getTypes().includes(ElementType.FIRE));
 
       for (const pkm of nonFireTypes) {
         const percentage = DAMAGE_PERCENTAGE / 100;
@@ -254,7 +254,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
     MysteryEncounterOptionBuilder.newOptionWithMode(MysteryEncounterOptionMode.DISABLED_OR_SPECIAL)
       .withPrimaryPokemonRequirement(
         CombinationPokemonRequirement.Some(
-          new TypeRequirement(Type.FIRE, true, 1),
+          new TypeRequirement(ElementType.FIRE, true, 1),
           new AbilityRequirement(FIRE_RESISTANT_ABILITIES, true),
         ),
       ) // Will set option3PrimaryName dialogue token automatically
@@ -297,7 +297,7 @@ function giveLeadPokemonAttackTypeBoostItem() {
     let boosterModifierType = generateModifierType(modifierTypes.ATTACK_TYPE_BOOSTER) as AttackTypeBoosterModifierType;
     if (!boosterModifierType) {
       boosterModifierType = generateModifierType(modifierTypes.ATTACK_TYPE_BOOSTER, [
-        Type.FIRE,
+        ElementType.FIRE,
       ]) as AttackTypeBoosterModifierType;
     }
     applyModifierTypeToPlayerPokemon(leadPokemon, boosterModifierType);

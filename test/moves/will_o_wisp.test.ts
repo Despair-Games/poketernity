@@ -1,4 +1,4 @@
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
@@ -35,7 +35,7 @@ describe("Moves - Will-O-Wisp", () => {
   it("should burn the opponent", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    const enemy = game.pokemonHelper.getEnemyPokemon();
+    const enemy = game.field.getEnemyPokemon();
 
     game.move.use(Moves.WILL_O_WISP);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);

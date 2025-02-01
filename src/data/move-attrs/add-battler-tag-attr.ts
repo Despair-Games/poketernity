@@ -2,9 +2,9 @@ import type { Pokemon } from "#app/field/pokemon";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Move } from "../move";
 import type { MoveConditionFunc } from "../move-conditions";
-import { type MoveEffectAttrOptions, MoveEffectAttr } from "./move-effect-attr";
+import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "./chance-based-move-effect-attr";
 
-interface AddBattlerTagAttrOptions extends MoveEffectAttrOptions {
+interface AddBattlerTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {
   /** Should the move fail if the target already has a tag of the same type? */
   failOnOverlap?: boolean;
   /** The minimum number of turns the tag is active */
@@ -15,10 +15,10 @@ interface AddBattlerTagAttrOptions extends MoveEffectAttrOptions {
 
 /**
  * Attribute to add a battler tag to a Pokemon of a given {@linkcode BattlerTagType | type}.
- * @extends MoveEffectAttr
+ * @extends ChanceBasedMoveEffectAttr
  * @see {@linkcode BattlerTag}
  */
-export class AddBattlerTagAttr extends MoveEffectAttr {
+export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
   public tagType: BattlerTagType;
   protected override options?: AddBattlerTagAttrOptions;
 
@@ -54,22 +54,13 @@ export class AddBattlerTagAttr extends MoveEffectAttr {
     return this.options?.turnCountMax ?? this.turnCountMin;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move)) {
-      return false;
-    }
-
-    const moveChance = this.getMoveChance(user, target, move, this.selfTarget, true);
-    if (moveChance < 0 || moveChance === 100 || user.randSeedInt(100) < moveChance) {
-      return (this.selfTarget ? user : target).addTag(
-        this.tagType,
-        user.randSeedIntRange(this.turnCountMin, this.turnCountMax),
-        move.id,
-        user.id,
-      );
-    }
-
-    return false;
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
+    return (this.selfTarget ? user : target).addTag(
+      this.tagType,
+      user.randSeedIntRange(this.turnCountMin, this.turnCountMax),
+      move.id,
+      user.id,
+    );
   }
 
   override getCondition(): MoveConditionFunc | null {
@@ -98,9 +89,11 @@ export class AddBattlerTagAttr extends MoveEffectAttr {
       case BattlerTagType.BIND:
       case BattlerTagType.WRAP:
       case BattlerTagType.FIRE_SPIN:
+      case BattlerTagType.G_MAX_FIRE_SPIN:
       case BattlerTagType.WHIRLPOOL:
       case BattlerTagType.CLAMP:
       case BattlerTagType.SAND_TOMB:
+      case BattlerTagType.G_MAX_SAND_TOMB:
       case BattlerTagType.MAGMA_STORM:
       case BattlerTagType.SNAP_TRAP:
       case BattlerTagType.THUNDER_CAGE:
@@ -118,6 +111,7 @@ export class AddBattlerTagAttr extends MoveEffectAttr {
       case BattlerTagType.PROTECTED:
       case BattlerTagType.FLYING:
       case BattlerTagType.CRIT_BOOST:
+      case BattlerTagType.CRIT_BOOST_STACKABLE:
       case BattlerTagType.ALWAYS_CRIT:
         return 5;
       default:

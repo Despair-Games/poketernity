@@ -8,9 +8,9 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { StatusEffect } from "#enums/status-effect";
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { ArenaTagSide } from "#app/data/arena-tag";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { allAbilities } from "#app/data/ability";
 import { MoveEffectChanceMultiplierAbAttr } from "#app/data/ab-attrs/move-effect-chance-multiplier-ab-attr";
 
@@ -68,13 +68,13 @@ describe("Moves - Secret Power", () => {
       .battleType("double");
     await game.classicMode.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
 
-    const sereneGraceAttr = allAbilities[Abilities.SERENE_GRACE].getAttrs(MoveEffectChanceMultiplierAbAttr)[0];
-    vi.spyOn(sereneGraceAttr, "apply");
-
     game.move.select(Moves.WATER_PLEDGE, 0, BattlerIndex.ENEMY);
     game.move.select(Moves.FIRE_PLEDGE, 1, BattlerIndex.ENEMY_2);
 
     await game.phaseInterceptor.to("TurnEndPhase");
+
+    const sereneGraceAttr = allAbilities[Abilities.SERENE_GRACE].getAttrs(MoveEffectChanceMultiplierAbAttr)[0];
+    vi.spyOn(sereneGraceAttr, "apply");
 
     let rainbowEffect = game.scene.arena.getTagOnSide(ArenaTagType.WATER_FIRE_PLEDGE, ArenaTagSide.PLAYER);
     expect(rainbowEffect).toBeDefined();

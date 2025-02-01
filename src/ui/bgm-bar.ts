@@ -1,7 +1,9 @@
-import { addTextObject, TextStyle } from "./text";
+import { addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
 import i18next from "i18next";
 import { formatText } from "#app/utils";
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
 
 const hiddenX = -150;
 const shownX = 0;
@@ -83,7 +85,7 @@ export default class BgmBar extends Phaser.GameObjects.Container {
       return;
     }
 
-    if (!globalScene.showBgmBar) {
+    if (!settings.display.showBgmBar) {
       this.setVisible(false);
       return;
     }

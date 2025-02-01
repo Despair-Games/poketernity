@@ -1,10 +1,11 @@
-import type { BattlerIndex } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
 import { BlockNonDirectDamageAbAttr } from "#app/data/ab-attrs/block-non-direct-damage-ab-attr";
 import { BlockStatusDamageAbAttr } from "#app/data/ab-attrs/block-status-damage-ab-attr";
 import { PostDamageAbAttr } from "#app/data/ab-attrs/post-damage-ab-attr";
 import { ReduceBurnDamageAbAttr } from "#app/data/ab-attrs/reduce-burn-damage-ab-attr";
-import { applyAbAttrs, applyPostDamageAbAttrs } from "#app/data/ability";
-import { CommonAnim, CommonBattleAnim } from "#app/data/battle-anims";
+import { applyAbAttrs } from "#app/data/ability";
+import { CommonBattleAnim } from "#app/data/battle-anims";
+import { CommonAnim } from "#enums/common-anim";
 import { getStatusEffectActivationText } from "#app/data/status-effect";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -50,7 +51,7 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
           // Set preventEndure flag to avoid pokemon surviving thanks to focus band, sturdy, endure ...
           globalScene.damageNumberHandler.add(this.getPokemon(), pokemon.damage(damage.value, false, true));
           pokemon.updateInfo();
-          applyPostDamageAbAttrs(PostDamageAbAttr, pokemon, damage.value, pokemon.hasPassive(), false, []);
+          applyAbAttrs(PostDamageAbAttr, pokemon, false, damage.value);
         }
 
         new CommonBattleAnim(CommonAnim.POISON + (pokemon.status.effect - 1), pokemon).play(false, () => this.end());

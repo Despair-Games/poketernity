@@ -1,4 +1,4 @@
-import type { BattlerIndex } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";
@@ -8,7 +8,7 @@ import {
   PokemonMultiHitModifier,
   AttackTypeBoosterModifier,
 } from "#app/modifier/modifier";
-import type { Constructor, nil } from "#app/utils";
+import type { AbstractConstructor, Constructor, nil } from "#app/utils";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -17,7 +17,7 @@ import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveTarget } from "#enums/move-target";
 import { Moves } from "#enums/moves";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { AllyMoveCategoryPowerBoostAbAttr } from "./ab-attrs/ally-move-category-power-boost-ab-attr";
@@ -31,7 +31,7 @@ import { MoveTypeChangeAbAttr } from "./ab-attrs/move-type-change-ab-attr";
 import { UserFieldMoveTypePowerBoostAbAttr } from "./ab-attrs/user-field-move-type-power-boost-ab-attr";
 import { VariableMovePowerAbAttr } from "./ab-attrs/variable-move-power-ab-attr";
 import { WonderSkinAbAttr } from "./ab-attrs/wonder-skin-ab-attr";
-import { applyAbAttrs, applyPreAttackAbAttrs, applyPreDefendAbAttrs } from "./ability";
+import { applyAbAttrs } from "./ability";
 import { WeakenMoveTypeTag } from "./arena-tag";
 import { HelpingHandTag, TypeBoostTag } from "./battler-tags";
 import { IncrementMovePriorityAttr } from "./move-attrs/increment-move-priority-attr";
@@ -39,7 +39,6 @@ import type { MoveAttr } from "./move-attrs/move-attr";
 import { MultiHitAttr } from "./move-attrs/multi-hit-attr";
 import { OneHitKOAccuracyAttr } from "./move-attrs/one-hit-ko-accuracy-attr";
 import { SacrificialAttr } from "./move-attrs/sacrificial-attr";
-import { SacrificialAttrOnHit } from "./move-attrs/sacrificial-attr-on-hit";
 import { TypelessAttr } from "./move-attrs/typeless-attr";
 import { VariableAccuracyAttr } from "./move-attrs/variable-accuracy-attr";
 import { VariablePowerAttr } from "./move-attrs/variable-power-attr";
@@ -49,14 +48,13 @@ import { MoveCondition } from "./move-conditions";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { HealStatusEffectAttr } from "./move-attrs/heal-status-effect-attr";
-import { VariableAtkAttr } from "./move-attrs/variable-atk-attr";
-import { ChargeAnim } from "./battle-anims";
+import { ChargeAnim } from "#enums/charge-anim";
 import { allMoves } from "#app/data/all-moves";
 
 export abstract class Move implements Localizable {
   public id: Moves;
   public name: string;
-  private _type: Type;
+  private _type: ElementType;
   private _category: MoveCategory;
   public moveTarget: MoveTarget;
   public power: number;
@@ -68,14 +66,14 @@ export abstract class Move implements Localizable {
   public priority: number;
   public generation: number;
   public attrs: MoveAttr[] = [];
-  private conditions: MoveCondition[] = [];
+  protected conditions: MoveCondition[] = [];
   /** The move's {@linkcode MoveFlags} */
   private flags: number = 0;
   private nameAppend: string = "";
 
   constructor(
     id: Moves,
-    type: Type,
+    type: ElementType,
     category: MoveCategory,
     defaultMoveTarget: MoveTarget,
     power: number,
@@ -129,7 +127,7 @@ export abstract class Move implements Localizable {
    * @param attrType any attribute that extends {@linkcode MoveAttr}
    * @returns Array of attributes that match `attrType`, Empty Array if none match.
    */
-  getAttrs<T extends MoveAttr>(attrType: Constructor<T>): T[] {
+  getAttrs<T extends MoveAttr>(attrType: AbstractConstructor<T>): T[] {
     return this.attrs.filter((a): a is T => a instanceof attrType);
   }
 
@@ -138,7 +136,7 @@ export abstract class Move implements Localizable {
    * @param attrType any attribute that extends {@linkcode MoveAttr}
    * @returns true if the move has attribute `attrType`
    */
-  hasAttr<T extends MoveAttr>(attrType: Constructor<T>): boolean {
+  hasAttr<T extends MoveAttr>(attrType: AbstractConstructor<T>): boolean {
     return this.attrs.some((attr) => attr instanceof attrType);
   }
 
@@ -271,18 +269,18 @@ export abstract class Move implements Localizable {
    * @param type the type of the move's target
    * @returns boolean
    */
-  isTypeImmune(user: Pokemon, target: Pokemon, type: Type): boolean {
+  isTypeImmune(user: Pokemon, target: Pokemon, type: ElementType): boolean {
     if (this.moveTarget === MoveTarget.USER) {
       return false;
     }
 
     switch (type) {
-      case Type.GRASS:
+      case ElementType.GRASS:
         if (this.hasFlag(MoveFlags.POWDER_MOVE)) {
           return true;
         }
         break;
-      case Type.DARK:
+      case ElementType.DARK:
         if (
           user.hasAbility(Abilities.PRANKSTER)
           && this.category === MoveCategory.STATUS
@@ -313,7 +311,7 @@ export abstract class Move implements Localizable {
     // TODO: Allow this to be simulated
     applyAbAttrs(InfiltratorAbAttr, user, false, bypassed);
 
-    return !bypassed.value && !this.hasFlag(MoveFlags.SOUND_BASED) && !this.hasFlag(MoveFlags.IGNORE_SUBSTITUTE);
+    return !bypassed.value && !this.hasFlag(MoveFlags.SOUND_MOVE) && !this.hasFlag(MoveFlags.IGNORE_SUBSTITUTE);
   }
 
   /**
@@ -359,13 +357,13 @@ export abstract class Move implements Localizable {
   /**
    * Sets the flags of the move
    * @param flag {@linkcode MoveFlags}
-   * @param on a boolean, if True, then "ORs" the flag onto existing ones, if False then "XORs" the flag onto existing ones
+   * @param on If `true`, sets the move to have the flag; if `false`, sets the move to NOT have the flag.
    */
   private setFlag(flag: MoveFlags, on: boolean): void {
     // bitwise OR and bitwise XOR respectively
     if (on) {
       this.flags |= flag;
-    } else {
+    } else if (this.hasFlag(flag)) {
       this.flags ^= flag;
     }
   }
@@ -402,12 +400,12 @@ export abstract class Move implements Localizable {
   }
 
   /**
-   * Sets the {@linkcode MoveFlags.SOUND_BASED} flag for the calling Move
+   * Sets the {@linkcode MoveFlags.SOUND_MOVE} flag for the calling Move
    * @see {@linkcode Moves.UPROAR}
    * @returns The {@linkcode Move} that called this function
    */
-  soundBased(): this {
-    this.setFlag(MoveFlags.SOUND_BASED, true);
+  soundMove(): this {
+    this.setFlag(MoveFlags.SOUND_MOVE, true);
     return this;
   }
 
@@ -482,12 +480,12 @@ export abstract class Move implements Localizable {
   }
 
   /**
-   * Sets the {@linkcode MoveFlags.BALLBOMB_MOVE} flag for the calling Move
+   * Sets the {@linkcode MoveFlags.BULLET_MOVE} flag for the calling Move
    * @see {@linkcode Moves.ELECTRO_BALL}
    * @returns The {@linkcode Move} that called this function
    */
-  ballBombMove(): this {
-    this.setFlag(MoveFlags.BALLBOMB_MOVE, true);
+  bulletMove(): this {
+    this.setFlag(MoveFlags.BULLET_MOVE, true);
     return this;
   }
 
@@ -568,6 +566,17 @@ export abstract class Move implements Localizable {
    */
   redirectCounter(): this {
     this.setFlag(MoveFlags.REDIRECT_COUNTER, true);
+    return this;
+  }
+
+  /**
+   * Sets the {@linkcode MoveFlags.G_MAX_MOVE} for the move
+   * and {@linkcode moveTarget} to NEAR_ENEMY (g-max moves cannot target allies)
+   * @returns The {@linkcode Move} that called this function
+   */
+  gMaxMove(): this {
+    this.setFlag(MoveFlags.G_MAX_MOVE, true);
+    this.moveTarget = MoveTarget.NEAR_ENEMY;
     return this;
   }
 
@@ -699,7 +708,7 @@ export abstract class Move implements Localizable {
     const moveAccuracy = new NumberHolder(this.accuracy);
 
     applyMoveAttrs(VariableAccuracyAttr, user, target, this, moveAccuracy);
-    applyPreDefendAbAttrs(WonderSkinAbAttr, target, user, this, { value: false }, simulated, moveAccuracy);
+    applyAbAttrs(WonderSkinAbAttr, target, simulated, user, this, moveAccuracy);
 
     if (moveAccuracy.value === -1) {
       return moveAccuracy.value;
@@ -741,11 +750,11 @@ export abstract class Move implements Localizable {
     const power = new NumberHolder(this.power);
     const typeChangeMovePowerMultiplier = new NumberHolder(1);
 
-    applyPreAttackAbAttrs(MoveTypeChangeAbAttr, source, target, this, true, null, typeChangeMovePowerMultiplier);
+    applyAbAttrs(MoveTypeChangeAbAttr, source, true, this, target, undefined, typeChangeMovePowerMultiplier);
 
     const sourceTeraType = source.getTeraType();
     if (
-      sourceTeraType !== Type.UNKNOWN
+      sourceTeraType !== ElementType.UNKNOWN
       && sourceTeraType === this.type
       && power.value < 60
       && this.priority <= 0
@@ -755,10 +764,10 @@ export abstract class Move implements Localizable {
       power.value = 60;
     }
 
-    applyPreAttackAbAttrs(VariableMovePowerAbAttr, source, target, this, simulated, power);
+    applyAbAttrs(VariableMovePowerAbAttr, source, simulated, this, target, power);
 
     if (source.getAlly()) {
-      applyPreAttackAbAttrs(AllyMoveCategoryPowerBoostAbAttr, source.getAlly(), target, this, simulated, power);
+      applyAbAttrs(AllyMoveCategoryPowerBoostAbAttr, source.getAlly(), simulated, this, target, power);
     }
 
     const fieldAuras = new Set(
@@ -774,13 +783,11 @@ export abstract class Move implements Localizable {
         .flat(),
     );
     for (const aura of fieldAuras) {
-      aura.applyPreAttack(source, null, simulated, target, this, power);
+      aura.apply(source, simulated, this, target, power);
     }
 
     const alliedField: Pokemon[] = source.getField();
-    alliedField.forEach((p) =>
-      applyPreAttackAbAttrs(UserFieldMoveTypePowerBoostAbAttr, p, target, this, simulated, power),
-    );
+    alliedField.forEach((p) => applyAbAttrs(UserFieldMoveTypePowerBoostAbAttr, p, simulated, this, target, power));
 
     power.value *= typeChangeMovePowerMultiplier.value;
 
@@ -806,6 +813,8 @@ export abstract class Move implements Localizable {
   getPriority(user: Pokemon, simulated: boolean = true) {
     const priority = new NumberHolder(this.priority);
 
+    // TODO: Let this attribute accept null targets
+    // @ts-ignore
     applyMoveAttrs(IncrementMovePriorityAttr, user, null, this, priority);
     applyAbAttrs(ChangeMovePriorityAbAttr, user, simulated, this, priority);
 
@@ -827,7 +836,7 @@ export abstract class Move implements Localizable {
     const isMultiTarget = multiple && targets.length > 1;
 
     // ...cannot enhance multi-hit or sacrificial moves
-    const exceptAttrs: Constructor<MoveAttr>[] = [MultiHitAttr, SacrificialAttr, SacrificialAttrOnHit];
+    const exceptAttrs: AbstractConstructor<MoveAttr>[] = [MultiHitAttr, SacrificialAttr];
 
     // ...and cannot enhance these specific moves.
     const exceptMoves: Moves[] = [Moves.FLING, Moves.UPROAR, Moves.ROLLOUT, Moves.ICE_BALL, Moves.ENDEAVOR];
@@ -845,7 +854,7 @@ export abstract class Move implements Localizable {
 export class AttackMove extends Move {
   constructor(
     id: Moves,
-    type: Type,
+    type: ElementType,
     category: MoveCategory,
     power: number,
     accuracy: number,
@@ -860,7 +869,7 @@ export class AttackMove extends Move {
      * {@link https://bulbapedia.bulbagarden.net/wiki/Freeze_(status_condition)}
      * > All damaging Fire-type moves can now thaw a frozen target, regardless of whether or not they have a chance to burn;
      */
-    if (this.type === Type.FIRE) {
+    if (this.type === ElementType.FIRE) {
       this.addAttr(new HealStatusEffectAttr(false, StatusEffect.FREEZE));
     }
   }
@@ -875,7 +884,6 @@ export class AttackMove extends Move {
     if (attackScore) {
       if (this.category === MoveCategory.PHYSICAL) {
         const atk = new NumberHolder(user.getEffectiveStat(Stat.ATK, target));
-        applyMoveAttrs(VariableAtkAttr, user, target, move, atk);
         if (atk.value > user.getEffectiveStat(Stat.SPATK, target)) {
           const statRatio = user.getEffectiveStat(Stat.SPATK, target) / atk.value;
           if (statRatio <= 0.75) {
@@ -886,7 +894,6 @@ export class AttackMove extends Move {
         }
       } else {
         const spAtk = new NumberHolder(user.getEffectiveStat(Stat.SPATK, target));
-        applyMoveAttrs(VariableAtkAttr, user, target, move, spAtk);
         if (spAtk.value > user.getEffectiveStat(Stat.ATK, target)) {
           const statRatio = user.getEffectiveStat(Stat.ATK, target) / spAtk.value;
           if (statRatio <= 0.75) {
@@ -912,7 +919,7 @@ export class AttackMove extends Move {
 export class StatusMove extends Move {
   constructor(
     id: Moves,
-    type: Type,
+    type: ElementType,
     accuracy: number,
     pp: number,
     chance: number,
@@ -923,17 +930,18 @@ export class StatusMove extends Move {
   }
 }
 
-export class SelfStatusMove extends Move {
+export class SelfStatusMove extends StatusMove {
   constructor(
     id: Moves,
-    type: Type,
+    type: ElementType,
     accuracy: number,
     pp: number,
     chance: number,
     priority: number,
     generation: number,
   ) {
-    super(id, type, MoveCategory.STATUS, MoveTarget.USER, -1, accuracy, pp, chance, priority, generation);
+    super(id, type, accuracy, pp, chance, priority, generation);
+    this.target(MoveTarget.USER);
   }
 }
 
@@ -948,6 +956,8 @@ function ChargeMove<TBase extends SubMove>(Base: TBase) {
 
     /** Move attributes that apply during the move's charging phase */
     public chargeAttrs: MoveAttr[] = [];
+    /** Does the move calculate its hit check during its charging phase? */
+    public hitCheckOnCharge: boolean = false;
 
     override isChargingMove(): this is ChargingMove {
       return true;
@@ -984,7 +994,7 @@ function ChargeMove<TBase extends SubMove>(Base: TBase) {
      * @returns Array of attributes that match `attrType`, or an empty array if
      * no matches are found.
      */
-    getChargeAttrs<T extends MoveAttr>(attrType: Constructor<T>): T[] {
+    getChargeAttrs<T extends MoveAttr>(attrType: AbstractConstructor<T>): T[] {
       return this.chargeAttrs.filter((attr): attr is T => attr instanceof attrType);
     }
 
@@ -993,7 +1003,7 @@ function ChargeMove<TBase extends SubMove>(Base: TBase) {
      * @param attrType any attribute that extends {@linkcode MoveAttr}
      * @returns `true` if a matching attribute is found; `false` otherwise
      */
-    hasChargeAttr<T extends MoveAttr>(attrType: Constructor<T>): boolean {
+    hasChargeAttr<T extends MoveAttr>(attrType: AbstractConstructor<T>): boolean {
       return this.chargeAttrs.some((attr) => attr instanceof attrType);
     }
 
@@ -1006,7 +1016,22 @@ function ChargeMove<TBase extends SubMove>(Base: TBase) {
     chargeAttr<T extends Constructor<MoveAttr>>(ChargeAttrType: T, ...args: ConstructorParameters<T>): this {
       const chargeAttr = new ChargeAttrType(...args);
       this.chargeAttrs.push(chargeAttr);
+      let attrCondition = chargeAttr.getCondition();
+      if (attrCondition) {
+        if (typeof attrCondition === "function") {
+          attrCondition = new MoveCondition(attrCondition);
+        }
+        this.conditions.push(attrCondition);
+      }
+      return this;
+    }
 
+    /**
+     * Causes the move's hit check to also be calculated during its charging phase.
+     * @returns this {@linkcode Move} (for chaining API purposes)
+     */
+    doesHitCheckOnCharge(): this {
+      this.hitCheckOnCharge = true;
       return this;
     }
   };
@@ -1019,54 +1044,43 @@ export type ChargingMove = ChargingAttackMove | ChargingSelfStatusMove;
 
 export type MoveAttrFilter = (attr: MoveAttr) => boolean;
 
-function applyMoveAttrsInternal(
+function applyMoveAttrsInternal<TAttr extends MoveAttr>(
   attrFilter: MoveAttrFilter,
-  user: Pokemon | null,
-  target: Pokemon | null,
-  move: Move,
-  ...args: unknown[]
+  ...params: Parameters<TAttr["apply"]>
 ): void {
+  const [user, target, move, ...args] = params;
   move.attrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, ...args));
 }
 
-function applyMoveChargeAttrsInternal(
+function applyMoveChargeAttrsInternal<TAttr extends MoveAttr>(
   attrFilter: MoveAttrFilter,
-  user: Pokemon | null,
-  target: Pokemon | null,
-  move: ChargingMove,
-  ...args: unknown[]
+  ...params: Parameters<TAttr["apply"]>
 ): void {
-  move.chargeAttrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, ...args));
+  const [user, target, move, ...args] = params;
+  if (move instanceof ChargingAttackMove || move instanceof ChargingSelfStatusMove) {
+    move.chargeAttrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, ...args));
+  }
 }
 
-export function applyMoveAttrs(
-  attrType: Constructor<MoveAttr>,
-  user: Pokemon | null,
-  target: Pokemon | null,
-  move: Move,
-  ...args: unknown[]
+export function applyMoveAttrs<TAttr extends MoveAttr>(
+  attrType: AbstractConstructor<TAttr>,
+  ...params: Parameters<TAttr["apply"]>
 ): void {
-  applyMoveAttrsInternal((attr: MoveAttr) => attr instanceof attrType, user, target, move, ...args);
+  applyMoveAttrsInternal((attr: MoveAttr) => attr instanceof attrType, ...params);
 }
 
-export function applyFilteredMoveAttrs(
+export function applyFilteredMoveAttrs<TAttr extends MoveAttr>(
   attrFilter: MoveAttrFilter,
-  user: Pokemon,
-  target: Pokemon | null,
-  move: Move,
-  ...args: unknown[]
+  ...params: Parameters<TAttr["apply"]>
 ): void {
-  applyMoveAttrsInternal(attrFilter, user, target, move, ...args);
+  applyMoveAttrsInternal(attrFilter, ...params);
 }
 
-export function applyMoveChargeAttrs(
-  attrType: Constructor<MoveAttr>,
-  user: Pokemon | null,
-  target: Pokemon | null,
-  move: ChargingMove,
-  ...args: unknown[]
+export function applyMoveChargeAttrs<TAttr extends MoveAttr>(
+  attrType: AbstractConstructor<TAttr>,
+  ...params: Parameters<TAttr["apply"]>
 ): void {
-  applyMoveChargeAttrsInternal((attr: MoveAttr) => attr instanceof attrType, user, target, move, ...args);
+  applyMoveChargeAttrsInternal((attr: MoveAttr) => attr instanceof attrType, ...params);
 }
 
 export type MoveTargetSet = {
@@ -1131,7 +1145,7 @@ export function getMoveTargets(user: Pokemon, move: Moves): MoveTargetSet {
       multiple = true;
       break;
     case MoveTarget.CURSE:
-      set = user.getTypes(true).includes(Type.GHOST) ? opponents.concat([user.getAlly()]) : [user];
+      set = user.getTypes(true).includes(ElementType.GHOST) ? opponents.concat([user.getAlly()]) : [user];
       break;
   }
 

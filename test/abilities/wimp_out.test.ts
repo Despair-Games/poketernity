@@ -1,6 +1,6 @@
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/all-moves";
-import { ArenaTagSide } from "#app/data/arena-tag";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -146,10 +146,11 @@ describe("Abilities - Wimp Out", () => {
   });
 
   it("Dragon Tail and Circle Throw switch out Pokémon before the Ability activates.", async () => {
-    game.override.startingLevel(69).enemyMoveset([Moves.DRAGON_TAIL]);
+    game.override.startingLevel(500).enemyMoveset([Moves.DRAGON_TAIL]);
     await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
     const wimpod = game.scene.getPlayerPokemon()!;
+    wimpod.hp *= 0.51;
 
     game.move.select(Moves.SPLASH);
     game.doSelectPartyPokemon(1);
@@ -324,8 +325,8 @@ describe("Abilities - Wimp Out", () => {
   });
 
   it("Magic Guard passive should not allow indirect damage to trigger Wimp Out", async () => {
-    game.scene.arena.addTag(ArenaTagType.STEALTH_ROCK, 1, Moves.STEALTH_ROCK, 0, ArenaTagSide.ENEMY);
-    game.scene.arena.addTag(ArenaTagType.SPIKES, 1, Moves.SPIKES, 0, ArenaTagSide.ENEMY);
+    game.scene.arena.addTag(ArenaTagType.STEALTH_ROCK, 0, 1, Moves.STEALTH_ROCK, ArenaTagSide.ENEMY);
+    game.scene.arena.addTag(ArenaTagType.SPIKES, 0, 1, Moves.SPIKES, ArenaTagSide.ENEMY);
     game.override
       .passiveAbility(Abilities.MAGIC_GUARD)
       .enemyMoveset([Moves.LEECH_SEED])
@@ -380,8 +381,8 @@ describe("Abilities - Wimp Out", () => {
   });
 
   it("Activates due to entry hazards", async () => {
-    game.scene.arena.addTag(ArenaTagType.STEALTH_ROCK, 1, Moves.STEALTH_ROCK, 0, ArenaTagSide.ENEMY);
-    game.scene.arena.addTag(ArenaTagType.SPIKES, 1, Moves.SPIKES, 0, ArenaTagSide.ENEMY);
+    game.scene.arena.addTag(ArenaTagType.STEALTH_ROCK, 0, 1, Moves.STEALTH_ROCK, ArenaTagSide.ENEMY);
+    game.scene.arena.addTag(ArenaTagType.SPIKES, 0, 1, Moves.SPIKES, ArenaTagSide.ENEMY);
     game.override.enemySpecies(Species.CENTISKORCH).enemyAbility(Abilities.WIMP_OUT).startingWave(4);
     await game.classicMode.startBattle([Species.TYRUNT]);
 
@@ -445,6 +446,7 @@ describe("Abilities - Wimp Out", () => {
     expect(enemyPokemon.turnData.hitCount).toBe(2);
     confirmSwitch();
   });
+
   it("triggers after last hit of Parental Bond", async () => {
     game.override.enemyMoveset(Moves.TACKLE).enemyAbility(Abilities.PARENTAL_BOND);
     await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
@@ -499,6 +501,7 @@ describe("Abilities - Wimp Out", () => {
     const hasFled = enemyPokemon.switchOutStatus;
     expect(isVisible && !hasFled).toBe(true);
   });
+
   it("wimp out will not skip battles when triggered in a double battle", async () => {
     const wave = 2;
     game.override
@@ -525,5 +528,38 @@ describe("Abilities - Wimp Out", () => {
 
     await game.toNextWave();
     expect(game.scene.currentBattle.waveIndex).toBe(wave + 1);
+  });
+
+  it("wimp out will not activate if the source is carried by Sky Drop", async () => {
+    game.override
+      .battleType("double")
+      .enemySpecies(Species.WIMPOD)
+      .enemyAbility(Abilities.WIMP_OUT)
+      .enemyMoveset(Moves.SPLASH)
+      .ability(Abilities.NO_GUARD)
+      .passiveAbility(Abilities.PURE_POWER)
+      .moveset([Moves.SKY_DROP, Moves.FALSE_SWIPE])
+      .startingLevel(100)
+      .enemyLevel(10);
+
+    await game.classicMode.startBattle([Species.HAPPINY, Species.KARTANA]);
+
+    const player1 = game.scene.getPlayerField()[0];
+    const enemy1 = game.scene.getEnemyField()[0];
+
+    game.move.select(Moves.SKY_DROP, 0, BattlerIndex.ENEMY);
+    game.move.select(Moves.FALSE_SWIPE, 1, BattlerIndex.PLAYER);
+
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+
+    await game.phaseInterceptor.to("MoveEndPhase");
+    [player1, enemy1].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());
+
+    await game.phaseInterceptor.to("MoveEndPhase");
+
+    expect(player1.getHpRatio()).toBeLessThanOrEqual(0.5);
+    expect(game.phaseInterceptor.log).not.toContain("SwitchSummonPhase");
+    expect(enemy1.isActive(true)).toBeTruthy();
+    expect(enemy1.battleData.abilitiesApplied.includes(Abilities.WIMP_OUT)).toBeFalsy();
   });
 });

@@ -1,10 +1,10 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { type Move } from "#app/data/move";
 import { NeutralDamageAgainstFlyingTypeMultiplierAttr } from "../move-attrs/neutral-damage-against-flying-type-multiplier-attr";
-import { MoveCategory } from "../../enums/move-category";
+import { MoveCategory } from "#enums/move-category";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
-import type { Type } from "#enums/type";
+import type { ElementType } from "#enums/element-type";
 import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
 
 /**
@@ -15,13 +15,12 @@ import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
  * @extends TypeImmunityAbAttr
  */
 export class AttackTypeImmunityAbAttr extends TypeImmunityAbAttr {
-  constructor(immuneType: Type, condition?: AbAttrCondition) {
+  constructor(immuneType: ElementType, condition?: AbAttrCondition) {
     super(immuneType, condition);
   }
 
-  override applyPreDefend(
+  override apply(
     pokemon: Pokemon,
-    passive: boolean,
     simulated: boolean,
     attacker: Pokemon,
     move: Move,
@@ -33,7 +32,7 @@ export class AttackTypeImmunityAbAttr extends TypeImmunityAbAttr {
       attacker.getMoveCategory(pokemon, move) !== MoveCategory.STATUS
       && !move.hasAttr(NeutralDamageAgainstFlyingTypeMultiplierAttr)
     ) {
-      return super.applyPreDefend(pokemon, passive, simulated, attacker, move, cancelled, typeMultiplier);
+      return super.apply(pokemon, simulated, attacker, move, cancelled, typeMultiplier);
     }
     return false;
   }

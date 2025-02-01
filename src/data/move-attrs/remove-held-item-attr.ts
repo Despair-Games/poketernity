@@ -25,14 +25,15 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
     this.berriesOnly = berriesOnly;
   }
 
-  override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     if (!this.berriesOnly && target.isPlayer()) {
       // "Wild Pokemon cannot knock off Player Pokemon's held items" (See Bulbapedia)
       return false;
     }
 
     const cancelled = new BooleanHolder(false);
-    applyAbAttrs(BlockItemTheftAbAttr, target, false, cancelled); // Check for abilities that block item theft
+
+    applyAbAttrs(BlockItemTheftAbAttr, target, false, cancelled);
 
     if (cancelled.value === true) {
       return false;

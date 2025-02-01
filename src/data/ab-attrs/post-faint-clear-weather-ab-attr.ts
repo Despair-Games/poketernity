@@ -1,6 +1,5 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { Abilities } from "#enums/abilities";
 import { WeatherType } from "#enums/weather-type";
@@ -11,23 +10,7 @@ import { PostFaintAbAttr } from "./post-faint-ab-attr";
  * @extends PostFaintAbAttr
  */
 export class PostFaintClearWeatherAbAttr extends PostFaintAbAttr {
-  /**
-   * @param pokemon The {@linkcode Pokemon} with the ability
-   * @param _passive N/A
-   * @param _attacker N/A
-   * @param _move N/A
-   * @param _hitResult N/A
-   * @param _args N/A
-   * @returns Returns true if the weather clears, otherwise false.
-   */
-  override applyPostFaint(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    _attacker?: Pokemon,
-    _move?: Move,
-    _hitResult?: HitResult,
-  ): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, _attacker?: Pokemon, _move?: Move): boolean {
     const weatherType = globalScene.arena.weather?.weatherType;
     let turnOffWeather = false;
     let weatherAbility: Abilities | null = null;

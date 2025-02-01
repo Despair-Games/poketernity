@@ -1,4 +1,4 @@
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
@@ -13,7 +13,7 @@ export class MatchUserTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
     const userTypes = user.getTypes(true);
 
-    if (userTypes.includes(Type.STELLAR)) {
+    if (userTypes.includes(ElementType.STELLAR)) {
       // will not change to stellar type
       const nonTeraTypes = user.getTypes();
       moveType.value = nonTeraTypes[0];

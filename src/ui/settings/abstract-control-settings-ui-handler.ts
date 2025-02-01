@@ -1,8 +1,9 @@
 import UiHandler from "#app/ui/ui-handler";
-import type { Mode } from "#app/ui/ui";
+import type { UiMode } from "#enums/ui-mode";
 import type { InterfaceConfig } from "#app/inputs-controller";
 import { addWindow } from "#app/ui/ui-theme";
-import { addTextObject, TextStyle } from "#app/ui/text";
+import { addTextObject } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import { getIconWithSettingName } from "#app/configs/inputs/configHandler";
 import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigationMenu";
@@ -10,6 +11,7 @@ import type { Device } from "#enums/devices";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
 
 export interface InputsIcons {
   [key: string]: Phaser.GameObjects.Sprite;
@@ -49,10 +51,10 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
   protected inputsIcons: InputsIcons;
   protected navigationIcons: InputsIcons;
   // list all the setting keys used in the selected layout (because dualshock has more buttons than xbox)
-  protected keys: Array<String>;
+  protected keys: Array<string>;
 
   // Store the specific settings related to key bindings for the current gamepad configuration.
-  protected bindingSettings: Array<String>;
+  protected bindingSettings: Array<string>;
 
   protected setting;
   protected settingBlacklisted;
@@ -66,7 +68,6 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
   protected rowsToDisplay: number;
   protected device: Device;
 
-  abstract saveSettingToLocalStorage(setting, cursor): void;
   abstract setSetting(setting, value: number): boolean;
 
   /**
@@ -74,17 +75,9 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
    *
    * @param mode - The UI mode.
    */
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
     this.rowsToDisplay = 8;
-  }
-
-  getLocalStorageSetting(): object {
-    // Retrieve the settings from local storage or use an empty object if none exist.
-    const settings: object = localStorage.hasOwnProperty(this.localStoragePropertyName)
-      ? JSON.parse(localStorage.getItem(this.localStoragePropertyName)!)
-      : {}; // TODO: is this bang correct?
-    return settings;
   }
 
   private camelize(string: string): string {
@@ -342,15 +335,11 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
       return;
     }
 
-    // Retrieve the gamepad settings from local storage or use an empty object if none exist.
-    const settings: object = this.getLocalStorageSetting();
-
     // Update the cursor for each key based on the stored settings or default cursors.
     this.keys.forEach((key, index) => {
-      this.setOptionCursor(
-        index,
-        settings.hasOwnProperty(key as string) ? settings[key as string] : this.optionCursors[index],
-      );
+      if (["enabled"].includes(key)) {
+        this.setOptionCursor(index, settings.gamepad[key] ? Number(!settings.gamepad[key]) : this.optionCursors[index]);
+      }
     });
 
     // If the active configuration has no custom bindings set, exit the function early.
@@ -652,7 +641,8 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
     // Check if the setting is not part of the bindings (i.e., it's a regular setting).
     if (!this.bindingSettings.includes(setting) && !setting.includes("BUTTON_")) {
       // Get the label of the last selected option and revert its color to the default.
-      const lastValueLabel = this.optionValueLabels[settingIndex][lastCursor];
+      const lastValueLabel =
+        this.optionValueLabels[settingIndex][lastCursor] ?? this.optionValueLabels[settingIndex][0];
       lastValueLabel.setColor(this.getTextColor(TextStyle.WINDOW));
       lastValueLabel.setShadowColor(this.getTextColor(TextStyle.WINDOW, true));
 
@@ -660,14 +650,15 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
       this.optionCursors[settingIndex] = cursor;
 
       // Change the color of the new selected option to indicate it's selected.
-      const newValueLabel = this.optionValueLabels[settingIndex][cursor];
+      const newValueLabel = this.optionValueLabels[settingIndex][cursor] ?? this.optionValueLabels[settingIndex][0];
+
       newValueLabel.setColor(this.getTextColor(TextStyle.SETTINGS_SELECTED));
       newValueLabel.setShadowColor(this.getTextColor(TextStyle.SETTINGS_SELECTED, true));
     }
 
     // If the save flag is set, save the setting to local storage
     if (save) {
-      this.saveSettingToLocalStorage(setting, cursor);
+      this.setSetting(setting, cursor);
     }
 
     return true; // Return true to indicate the cursor was successfully updated.

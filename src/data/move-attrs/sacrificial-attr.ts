@@ -1,5 +1,6 @@
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
-import { type Pokemon, HitResult } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { HitResult } from "#enums/hit-result";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
@@ -8,11 +9,11 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
  * @extends MoveEffectAttr
  */
 export class SacrificialAttr extends MoveEffectAttr {
-  constructor() {
-    super(true, { trigger: MoveEffectTrigger.POST_TARGET });
+  constructor(onHit: boolean = false) {
+    super(true, { trigger: onHit ? MoveEffectTrigger.POST_APPLY : MoveEffectTrigger.POST_TARGET });
   }
 
-  override apply(user: Pokemon, _target: Pokemon, _move: Move): boolean {
+  override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     user.damageAndUpdate(user.hp, HitResult.OTHER, false, true, true);
     user.turnData.damageTaken += user.hp;
 

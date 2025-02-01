@@ -1,12 +1,14 @@
 import { getPokeballName } from "../data/pokeball";
-import { addTextObject, getTextStyleOptions, TextStyle } from "./text";
-import { Command } from "./command-ui-handler";
-import { Mode } from "./ui";
+import { addTextObject, getTextStyleOptions } from "./text";
+import { TextStyle } from "#enums/text-style";
+import { BattleCommand } from "#enums/battle-command";
+import { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
 import { addWindow } from "./ui-theme";
 import { Button } from "#enums/buttons";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
 
 /**
  * TODO: This should extend AbstractOptionSelectUiHandler
@@ -21,13 +23,13 @@ export default class BallUiHandler extends UiHandler {
   private scale: number = 0.1666666667;
 
   constructor() {
-    super(Mode.BALL);
+    super(UiMode.BALL);
   }
 
   setup() {
     const ui = this.getUi();
 
-    this.scale = getTextStyleOptions(TextStyle.WINDOW, globalScene.uiTheme).scale;
+    this.scale = getTextStyleOptions(TextStyle.WINDOW, settings.display.uiTheme).scale;
 
     let optionsTextContent = "";
     const pokeballTypeCount = Object.keys(globalScene.pokeballCounts).length;
@@ -88,16 +90,16 @@ export default class BallUiHandler extends UiHandler {
       success = true;
       if (button === Button.ACTION && this.cursor < pokeballTypeCount) {
         if (globalScene.pokeballCounts[this.cursor]) {
-          if (commandPhase.handleCommand(Command.BALL, this.cursor)) {
-            globalScene.ui.setMode(Mode.COMMAND, commandPhase.getFieldIndex());
-            globalScene.ui.setMode(Mode.MESSAGE);
+          if (commandPhase.handleCommand(BattleCommand.BALL, this.cursor)) {
+            globalScene.ui.setMode(UiMode.COMMAND, commandPhase.getFieldIndex());
+            globalScene.ui.setMode(UiMode.MESSAGE);
             success = true;
           }
         } else {
           ui.playError();
         }
       } else {
-        ui.setMode(Mode.COMMAND, commandPhase.getFieldIndex());
+        ui.setMode(UiMode.COMMAND, commandPhase.getFieldIndex());
         success = true;
       }
     } else {

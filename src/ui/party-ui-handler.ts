@@ -1,11 +1,12 @@
 import type { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { MoveResult } from "#app/field/pokemon";
-import { addBBCodeTextObject, addTextObject, getTextColor, TextStyle } from "#app/ui/text";
-import { Command } from "#app/ui/command-ui-handler";
+import { MoveResult } from "#enums/move-result";
+import { addBBCodeTextObject, addTextObject, getTextColor } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
+import { BattleCommand } from "#enums/battle-command";
 import MessageUiHandler from "#app/ui/message-ui-handler";
-import { Mode } from "#app/ui/ui";
-import { BooleanHolder, toReadableString, randInt, getLocalizedSpriteKey } from "#app/utils";
+import { UiMode } from "#enums/ui-mode";
+import { BooleanHolder, toReadableString, getLocalizedSpriteKey } from "#app/utils";
 import {
   PokemonFormChangeItemModifier,
   PokemonHeldItemModifier,
@@ -14,13 +15,16 @@ import {
 import { allMoves } from "#app/data/all-moves";
 import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
 import { StatusEffect } from "#enums/status-effect";
-import PokemonIconAnimHandler, { PokemonIconAnimMode } from "#app/ui/pokemon-icon-anim-handler";
+import PokemonIconAnimHandler from "#app/ui/pokemon-icon-anim-handler";
+import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { addWindow } from "#app/ui/ui-theme";
-import { SpeciesFormChangeItemTrigger, FormChangeItem } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeItemTrigger } from "#app/data/pokemon-forms";
+import { FormChangeItem } from "#enums/form-change-item";
 import { getVariantTint } from "#app/data/variant";
 import { Button } from "#enums/buttons";
-import { applyChallenges, ChallengeType } from "#app/data/challenge";
+import { applyChallenges } from "#app/data/challenge";
+import { ChallengeType } from "#enums/challenge-type";
 import MoveInfoOverlay from "#app/ui/move-info-overlay";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
@@ -31,104 +35,11 @@ import type { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { globalScene } from "#app/global-scene";
 import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
+import { PartyUiMode } from "#enums/party-ui-mode";
+import { PartyOption } from "#enums/party-option";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
-
-/**
- * Indicates the reason why the party UI is being opened.
- */
-export enum PartyUiMode {
-  /**
-   * Indicates that the party UI is open because of a user-opted switch.  This
-   * type of switch can be cancelled.
-   */
-  SWITCH,
-  /**
-   * Indicates that the party UI is open because of a faint or other forced
-   * switch (eg, move effect). This type of switch cannot be cancelled.
-   */
-  FAINT_SWITCH,
-  /**
-   * Indicates that the party UI is open because of a start-of-encounter optional
-   * switch. This type of switch can be cancelled.
-   */
-  POST_BATTLE_SWITCH,
-  /**
-   * Indicates that the party UI is open because of the move Revival Blessing.
-   * This selection cannot be cancelled.
-   */
-  REVIVAL_BLESSING,
-  /**
-   * Indicates that the party UI is open to select a mon to apply a modifier to.
-   * This type of selection can be cancelled.
-   */
-  MODIFIER,
-  /**
-   * Indicates that the party UI is open to select a mon to apply a move
-   * modifier to (such as an Ether or PP Up).  This type of selection can be cancelled.
-   */
-  MOVE_MODIFIER,
-  /**
-   * Indicates that the party UI is open to select a mon to teach a TM.  This
-   * type of selection can be cancelled.
-   */
-  TM_MODIFIER,
-  /**
-   * Indicates that the party UI is open to select a mon to remember a move.
-   * This type of selection can be cancelled.
-   */
-  REMEMBER_MOVE_MODIFIER,
-  /**
-   * Indicates that the party UI is open to transfer items between mons.  This
-   * type of selection can be cancelled.
-   */
-  MODIFIER_TRANSFER,
-  /**
-   * Indicates that the party UI is open because of a DNA Splicer.  This
-   * type of selection can be cancelled.
-   */
-  SPLICE,
-  /**
-   * Indicates that the party UI is open to release a party member.  This
-   * type of selection can be cancelled.
-   */
-  RELEASE,
-  /**
-   * Indicates that the party UI is open to check the team.  This
-   * type of selection can be cancelled.
-   */
-  CHECK,
-  /**
-   * Indicates that the party UI is open to select a party member for an arbitrary effect.
-   * This is generally used in for Mystery Encounter or special effects that require the player to select a Pokemon
-   */
-  SELECT,
-}
-
-export enum PartyOption {
-  CANCEL = -1,
-  SEND_OUT,
-  PASS_BATON,
-  REVIVE,
-  APPLY,
-  TEACH,
-  TRANSFER,
-  SUMMARY,
-  UNPAUSE_EVOLUTION,
-  SPLICE,
-  UNSPLICE,
-  RELEASE,
-  RENAME,
-  SELECT,
-  SCROLL_UP = 1000,
-  SCROLL_DOWN = 1001,
-  FORM_CHANGE_ITEM = 2000,
-  MOVE_1 = 3000,
-  MOVE_2,
-  MOVE_3,
-  MOVE_4,
-  ALL = 4000,
-}
 
 export type PartySelectCallback = (cursor: number, option: PartyOption) => void;
 export type PartyModifierTransferSelectCallback = (
@@ -251,7 +162,7 @@ export default class PartyUiHandler extends MessageUiHandler {
   ];
 
   constructor() {
-    super(Mode.PARTY);
+    super(UiMode.PARTY);
   }
 
   setup() {
@@ -510,7 +421,7 @@ export default class PartyUiHandler extends MessageUiHandler {
                 }
                 this.clearOptions();
               } else if (option === PartyOption.RELEASE) {
-                this.doRelease(this.cursor);
+                this.tryRelease(this.cursor);
               } else {
                 const selectCallback = this.selectCallback;
                 this.selectCallback = null;
@@ -529,7 +440,7 @@ export default class PartyUiHandler extends MessageUiHandler {
                 }
               } else if (this.cursor) {
                 (globalScene.getCurrentPhase() as CommandPhase).handleCommand(
-                  Command.POKEMON,
+                  BattleCommand.POKEMON,
                   this.cursor,
                   option === PartyOption.PASS_BATON,
                 );
@@ -549,7 +460,7 @@ export default class PartyUiHandler extends MessageUiHandler {
           }
         } else if (option === PartyOption.SUMMARY) {
           ui.playSelect();
-          ui.setModeWithoutClear(Mode.SUMMARY, pokemon).then(() => this.clearOptions());
+          ui.setModeWithoutClear(UiMode.SUMMARY, pokemon).then(() => this.clearOptions());
           return true;
         } else if (option === PartyOption.UNPAUSE_EVOLUTION) {
           this.clearOptions();
@@ -575,19 +486,18 @@ export default class PartyUiHandler extends MessageUiHandler {
             }),
             null,
             () => {
-              ui.setModeWithoutClear(
-                Mode.CONFIRM,
-                () => {
+              const options: ConfirmModeConfig = {
+                yesHandler: () => {
                   const fusionName = pokemon.name;
                   pokemon.unfuse().then(() => {
                     this.clearPartySlots();
                     this.populatePartySlots();
-                    ui.setMode(Mode.PARTY);
+                    ui.setMode(UiMode.PARTY);
                     this.showText(
                       i18next.t("partyUiHandler:wasReverted", { fusionName: fusionName, pokemonName: pokemon.name }),
                       undefined,
                       () => {
-                        ui.setMode(Mode.PARTY);
+                        ui.setMode(UiMode.PARTY);
                         this.showText("", 0);
                       },
                       null,
@@ -595,11 +505,12 @@ export default class PartyUiHandler extends MessageUiHandler {
                     );
                   });
                 },
-                () => {
-                  ui.setMode(Mode.PARTY);
+                noHandler: () => {
+                  ui.setMode(UiMode.PARTY);
                   this.showText("", 0);
                 },
-              );
+              };
+              ui.setModeWithoutClear(UiMode.CONFIRM, options);
             },
           );
         } else if (option === PartyOption.RELEASE) {
@@ -607,22 +518,22 @@ export default class PartyUiHandler extends MessageUiHandler {
           ui.playSelect();
           if (this.cursor >= globalScene.currentBattle.getBattlerCount() || !pokemon.isAllowedInBattle()) {
             this.blockInput = true;
+            const options: ConfirmModeConfig = {
+              yesHandler: () => {
+                ui.setMode(UiMode.PARTY);
+                this.tryRelease(this.cursor);
+              },
+              noHandler: () => {
+                ui.setMode(UiMode.PARTY);
+                this.showText("", 0);
+              },
+            };
             this.showText(
               i18next.t("partyUiHandler:releaseConfirmation", { pokemonName: getPokemonNameWithAffix(pokemon) }),
               null,
               () => {
                 this.blockInput = false;
-                ui.setModeWithoutClear(
-                  Mode.CONFIRM,
-                  () => {
-                    ui.setMode(Mode.PARTY);
-                    this.doRelease(this.cursor);
-                  },
-                  () => {
-                    ui.setMode(Mode.PARTY);
-                    this.showText("", 0);
-                  },
-                );
+                ui.setModeWithoutClear(UiMode.CONFIRM, options);
               },
             );
           } else {
@@ -633,7 +544,7 @@ export default class PartyUiHandler extends MessageUiHandler {
           this.clearOptions();
           ui.playSelect();
           ui.setModeWithoutClear(
-            Mode.RENAME_POKEMON,
+            UiMode.RENAME_POKEMON,
             {
               buttonActions: [
                 (nickname: string) => {
@@ -642,10 +553,10 @@ export default class PartyUiHandler extends MessageUiHandler {
                   pokemon.updateInfo();
                   this.clearPartySlots();
                   this.populatePartySlots();
-                  ui.setMode(Mode.PARTY);
+                  ui.setMode(UiMode.PARTY);
                 },
                 () => {
-                  ui.setMode(Mode.PARTY);
+                  ui.setMode(UiMode.PARTY);
                 },
               ],
             },
@@ -765,7 +676,7 @@ export default class PartyUiHandler extends MessageUiHandler {
             selectCallback(6, PartyOption.CANCEL);
             ui.playSelect();
           } else {
-            ui.setMode(Mode.COMMAND, this.fieldIndex);
+            ui.setMode(UiMode.COMMAND, this.fieldIndex);
             ui.playSelect();
           }
         }
@@ -1249,53 +1160,34 @@ export default class PartyUiHandler extends MessageUiHandler {
     }
   }
 
-  doRelease(slotIndex: number): void {
-    this.showText(
-      this.getReleaseMessage(getPokemonNameWithAffix(globalScene.getPlayerParty()[slotIndex])),
-      null,
-      () => {
-        this.clearPartySlots();
-        globalScene.removePartyMemberModifiers(slotIndex);
-        const releasedPokemon = globalScene.getPlayerParty().splice(slotIndex, 1)[0];
-        releasedPokemon.destroy();
-        this.populatePartySlots();
-        if (this.cursor >= globalScene.getPlayerParty().length) {
-          this.setCursor(this.cursor - 1);
-        }
-        if (this.partyUiMode === PartyUiMode.RELEASE) {
-          const selectCallback = this.selectCallback;
-          this.selectCallback = null;
-          selectCallback && selectCallback(this.cursor, PartyOption.RELEASE);
-        }
-        this.showText("", 0);
-      },
-      null,
-      true,
-    );
-  }
-
-  getReleaseMessage(pokemonName: string): string {
-    const rand = randInt(128);
-    if (rand < 20) {
-      return i18next.t("partyUiHandler:goodbye", { pokemonName: pokemonName });
-    } else if (rand < 40) {
-      return i18next.t("partyUiHandler:byebye", { pokemonName: pokemonName });
-    } else if (rand < 60) {
-      return i18next.t("partyUiHandler:farewell", { pokemonName: pokemonName });
-    } else if (rand < 80) {
-      return i18next.t("partyUiHandler:soLong", { pokemonName: pokemonName });
-    } else if (rand < 100) {
-      return i18next.t("partyUiHandler:thisIsWhereWePart", { pokemonName: pokemonName });
-    } else if (rand < 108) {
-      return i18next.t("partyUiHandler:illMissYou", { pokemonName: pokemonName });
-    } else if (rand < 116) {
-      return i18next.t("partyUiHandler:illNeverForgetYou", { pokemonName: pokemonName });
-    } else if (rand < 124) {
-      return i18next.t("partyUiHandler:untilWeMeetAgain", { pokemonName: pokemonName });
-    } else if (rand < 127) {
-      return i18next.t("partyUiHandler:sayonara", { pokemonName: pokemonName });
+  /**
+   * Function that attempts to release a selected Pokemon in the party and displays a different message based on its success
+   * @param slotIndex the position of the selected Pokemon with the party
+   */
+  tryRelease(slotIndex: number): void {
+    if (globalScene.canReleasePokemon(slotIndex)) {
+      this.showText(
+        globalScene.getReleaseMessage(getPokemonNameWithAffix(globalScene.getPlayerParty()[slotIndex])),
+        null,
+        () => {
+          globalScene.releasePokemon(slotIndex);
+          this.clearPartySlots();
+          this.populatePartySlots();
+          if (this.cursor >= globalScene.getPlayerParty().length) {
+            this.setCursor(this.cursor - 1);
+          }
+          if (this.partyUiMode === PartyUiMode.RELEASE) {
+            const { selectCallback, cursor } = this;
+            selectCallback && selectCallback(cursor, PartyOption.RELEASE);
+            this.selectCallback = null;
+          }
+          this.showText("", 0);
+        },
+        null,
+        true,
+      );
     } else {
-      return i18next.t("partyUiHandler:smellYaLater", { pokemonName: pokemonName });
+      this.showText(i18next.t("partyUihandler:cannotReleasePokemon"), null, () => this.showText("", 0), null, true);
     }
   }
 

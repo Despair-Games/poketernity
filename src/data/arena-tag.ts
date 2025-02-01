@@ -1,20 +1,22 @@
 import { globalScene } from "#app/global-scene";
 import type { Arena } from "#app/field/arena";
-import { Type } from "#enums/type";
-import { BooleanHolder, NumberHolder, toDmgValue } from "#app/utils";
+import { ElementType } from "#enums/element-type";
+import { BooleanHolder, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
 import { allMoves } from "#app/data/all-moves";
-import { MoveTarget } from "../enums/move-target";
-import { MoveCategory } from "../enums/move-category";
+import { MoveTarget } from "#enums/move-target";
+import { MoveCategory } from "#enums/move-category";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { Pokemon } from "#app/field/pokemon";
-import { HitResult, PokemonMove } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon";
+import { HitResult } from "#enums/hit-result";
 import { StatusEffect } from "#enums/status-effect";
-import type { BattlerIndex } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
 import { applyAbAttrs } from "#app/data/ability";
 import { InfiltratorAbAttr } from "./ab-attrs/infiltrator-ab-attr";
 import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-ab-attr";
 import { Stat } from "#enums/stat";
-import { CommonAnim, CommonBattleAnim } from "#app/data/battle-anims";
+import { CommonBattleAnim } from "#app/data/battle-anims";
+import { CommonAnim } from "#enums/common-anim";
 import i18next from "i18next";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -27,12 +29,8 @@ import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ProtectStatAbAttr } from "./ab-attrs/protect-stat-ab-attr";
 import { MoveFlags } from "#enums/move-flags";
-
-export enum ArenaTagSide {
-  BOTH,
-  PLAYER,
-  ENEMY,
-}
+import { ArenaTagSide } from "#enums/arena-tag-side";
+import { SkyDropTag } from "./battler-tags";
 
 export abstract class ArenaTag {
   constructor(
@@ -167,7 +165,7 @@ export class MistTag extends ArenaTag {
  * Reduces the damage of specific move categories in the arena.
  * @extends ArenaTag
  */
-export class WeakenMoveScreenTag extends ArenaTag {
+export abstract class WeakenMoveScreenTag extends ArenaTag {
   protected weakenedCategories: MoveCategory[];
 
   /**
@@ -292,7 +290,7 @@ type ProtectConditionFunc = (arena: Arena, moveId: Moves) => boolean;
  * Class to implement conditional team protection
  * applies protection based on the attributes of incoming moves
  */
-export class ConditionalProtectTag extends ArenaTag {
+export abstract class ConditionalProtectTag extends ArenaTag {
   /** The condition function to determine which moves are negated */
   protected protectConditionFunc: ProtectConditionFunc;
   /** Does this apply to all moves, including those that ignore other forms of protection? */
@@ -570,8 +568,8 @@ class WishTag extends ArenaTag {
 /**
  * Abstract class to implement weakened moves of a specific type.
  */
-export class WeakenMoveTypeTag extends ArenaTag {
-  private weakenedType: Type;
+export abstract class WeakenMoveTypeTag extends ArenaTag {
+  private weakenedType: ElementType;
 
   /**
    * Creates a new instance of the WeakenMoveTypeTag class.
@@ -582,7 +580,7 @@ export class WeakenMoveTypeTag extends ArenaTag {
    * @param sourceMove - The move that created the tag.
    * @param sourceId - The ID of the source of the tag.
    */
-  constructor(tagType: ArenaTagType, turnCount: number, type: Type, sourceMove: Moves, sourceId: number) {
+  constructor(tagType: ArenaTagType, turnCount: number, type: ElementType, sourceMove: Moves, sourceId: number) {
     super(tagType, turnCount, sourceMove, sourceId);
 
     this.weakenedType = type;
@@ -592,11 +590,11 @@ export class WeakenMoveTypeTag extends ArenaTag {
    * Reduces an attack's power by 0.33x if it matches this tag's weakened type.
    * @param _arena n/a
    * @param _simulated n/a
-   * @param type the attack's {@linkcode Type}
+   * @param type the attack's {@linkcode ElementType}
    * @param power a {@linkcode NumberHolder} containing the attack's power
    * @returns `true` if the attack's power was reduced; `false` otherwise.
    */
-  override apply(_arena: Arena, _simulated: boolean, type: Type, power: NumberHolder): boolean {
+  override apply(_arena: Arena, _simulated: boolean, type: ElementType, power: NumberHolder): boolean {
     if (type === this.weakenedType) {
       power.value *= 0.33;
       return true;
@@ -611,7 +609,7 @@ export class WeakenMoveTypeTag extends ArenaTag {
  */
 class MudSportTag extends WeakenMoveTypeTag {
   constructor(turnCount: number, sourceId: number) {
-    super(ArenaTagType.MUD_SPORT, turnCount, Type.ELECTRIC, Moves.MUD_SPORT, sourceId);
+    super(ArenaTagType.MUD_SPORT, turnCount, ElementType.ELECTRIC, Moves.MUD_SPORT, sourceId);
   }
 
   override onAdd(_arena: Arena): void {
@@ -629,7 +627,7 @@ class MudSportTag extends WeakenMoveTypeTag {
  */
 class WaterSportTag extends WeakenMoveTypeTag {
   constructor(turnCount: number, sourceId: number) {
-    super(ArenaTagType.WATER_SPORT, turnCount, Type.FIRE, Moves.WATER_SPORT, sourceId);
+    super(ArenaTagType.WATER_SPORT, turnCount, ElementType.FIRE, Moves.WATER_SPORT, sourceId);
   }
 
   override onAdd(_arena: Arena): void {
@@ -662,12 +660,12 @@ export class IonDelugeTag extends ArenaTag {
    * Converts Normal-type moves to Electric type
    * @param _arena n/a
    * @param _simulated n/a
-   * @param moveType a {@linkcode NumberHolder} containing a move's {@linkcode Type}
+   * @param moveType a {@linkcode NumberHolder} containing a move's {@linkcode ElementType}
    * @returns `true` if the given move type changed; `false` otherwise.
    */
   override apply(_arena: Arena, _simulated: boolean, moveType: NumberHolder): boolean {
-    if (moveType.value === Type.NORMAL) {
-      moveType.value = Type.ELECTRIC;
+    if (moveType.value === ElementType.NORMAL) {
+      moveType.value = ElementType.ELECTRIC;
       return true;
     }
     return false;
@@ -677,7 +675,7 @@ export class IonDelugeTag extends ArenaTag {
 /**
  * Abstract class to implement arena traps.
  */
-export class ArenaTrapTag extends ArenaTag {
+export abstract class ArenaTrapTag extends ArenaTag {
   public layers: number;
   public maxLayers: number;
 
@@ -713,7 +711,7 @@ export class ArenaTrapTag extends ArenaTag {
    * @returns `true` if this hazard affects the given Pokemon; `false` otherwise.
    */
   override apply(_arena: Arena, simulated: boolean, pokemon: Pokemon): boolean {
-    if ((this.side === ArenaTagSide.PLAYER) !== pokemon.isPlayer()) {
+    if (this.side !== ArenaTagSide.BOTH && (this.side === ArenaTagSide.PLAYER) !== pokemon.isPlayer()) {
       return false;
     }
 
@@ -828,7 +826,7 @@ class ToxicSpikesTag extends ArenaTrapTag {
       if (simulated) {
         return true;
       }
-      if (pokemon.isOfType(Type.POISON)) {
+      if (pokemon.isOfType(ElementType.POISON)) {
         this.neutralized = true;
         if (globalScene.arena.removeTag(this.tagType)) {
           globalScene.queueMessage(
@@ -856,7 +854,7 @@ class ToxicSpikesTag extends ArenaTrapTag {
     if (pokemon.isGrounded() || !pokemon.canSetStatus(StatusEffect.POISON, true)) {
       return 1;
     }
-    if (pokemon.isOfType(Type.POISON)) {
+    if (pokemon.isOfType(ElementType.POISON)) {
       return 1.25;
     }
     return super.getMatchupScoreMultiplier(pokemon);
@@ -864,49 +862,92 @@ class ToxicSpikesTag extends ArenaTrapTag {
 }
 
 /**
- * Arena Tag class for delayed attacks, such as {@linkcode Moves.FUTURE_SIGHT} or {@linkcode Moves.DOOM_DESIRE}.
- * Delays the attack's effect by a set amount of turns, usually 3 (including the turn the move is used),
- * and deals damage after the turn count is reached.
+ * Interface representing a delayed attack command.
+ * @see {@linkcode DelayedAttackTag}
  */
-export class DelayedAttackTag extends ArenaTag {
-  public targetIndex: BattlerIndex;
-
-  constructor(
-    tagType: ArenaTagType,
-    sourceMove: Moves | undefined,
-    sourceId: number,
-    targetIndex: BattlerIndex,
-    side: ArenaTagSide = ArenaTagSide.BOTH,
-  ) {
-    super(tagType, 3, sourceMove, sourceId, side);
-
-    this.targetIndex = targetIndex;
-    this.side = side;
-  }
-
-  override lapse(arena: Arena): boolean {
-    const ret = super.lapse(arena);
-
-    if (!ret) {
-      globalScene.unshiftPhase(
-        new MoveEffectPhase(this.sourceId!, [this.targetIndex], new PokemonMove(this.sourceMove!, 0, 0, true)),
-      ); // TODO: are those bangs correct?
-    }
-
-    return ret;
-  }
-
-  override onRemove(_arena: Arena): void {}
+interface DelayedAttack {
+  sourceId: number;
+  move: Moves;
+  targetIndex: BattlerIndex;
+  turnCount: number;
 }
 
 /**
- * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Stealth_Rock_(move) Stealth Rock}.
- * Applies up to 1 layer of Stealth Rocks, dealing percentage-based damage to any Pokémon
- * who is summoned into the trap, based on the Rock type's type effectiveness.
+ * Arena Tag class for delayed attacks from {@link https://bulbapedia.bulbagarden.net/wiki/Future_Sight_(move) Future Sight}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Doom_Desire_(move) Doom Desire}.
+ * Delays the attack's effect by 3 turns (including the turn the move is used),
+ * and deals damage after the turn count is reached.
  */
-class StealthRockTag extends ArenaTrapTag {
-  constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.STEALTH_ROCK, Moves.STEALTH_ROCK, sourceId, side, 1);
+export class DelayedAttackTag extends ArenaTag {
+  /** Contains all queued delayed attacks on the field */
+  public delayedAttacks: DelayedAttack[];
+
+  constructor() {
+    super(ArenaTagType.DELAYED_ATTACK, 0);
+
+    this.delayedAttacks = [];
+  }
+
+  public addAttack(source: Pokemon, move: Moves, targetIndex: BattlerIndex): void {
+    this.delayedAttacks.push({ sourceId: source.id, move, targetIndex, turnCount: 3 });
+  }
+
+  override lapse(_arena: Arena): boolean {
+    this.delayedAttacks.forEach((attack) => {
+      attack.turnCount--;
+
+      if (!isNullOrUndefined(globalScene.getPokemonById(attack.sourceId)) && attack.turnCount <= 0) {
+        const target = globalScene.getField(true).find((p) => attack.targetIndex === p.getBattlerIndex());
+        if (target) {
+          globalScene.unshiftPhase(
+            new MoveEffectPhase(attack.sourceId, [attack.targetIndex], new PokemonMove(attack.move, 0, 0, true)),
+          );
+        } else if (globalScene.currentBattle.double) {
+          const redirectIndex = attack.targetIndex + (attack.targetIndex % 2 === 0 ? 1 : -1);
+          globalScene.unshiftPhase(
+            new MoveEffectPhase(attack.sourceId, [redirectIndex], new PokemonMove(attack.move, 0, 0, true)),
+          );
+        }
+      }
+    });
+
+    this.delayedAttacks = this.delayedAttacks.filter(
+      (attack) => !isNullOrUndefined(globalScene.getPokemonById(attack.sourceId)) && attack.turnCount > 0,
+    );
+    return this.delayedAttacks.length > 0;
+  }
+
+  override onRemove(_arena: Arena): void {}
+
+  override loadTag(source: ArenaTag | any): void {
+    super.loadTag(source);
+    this.delayedAttacks = source.delayedAttacks;
+  }
+}
+
+/**
+ * Class used for hazards that damage based on type. The two existing ones are
+ * Stealth rock (produced by stealth rock and stone axe) and
+ * Sharp steel (produced by G-Max steelsurge)
+ */
+class TypeHazardTag extends ArenaTrapTag {
+  public readonly damagingType: ElementType;
+  public readonly onAddKey: string;
+  public readonly activateTrapKey: string;
+
+  constructor(
+    arenaTagType: ArenaTagType,
+    damagingType: ElementType,
+    sourceId: number,
+    side: ArenaTagSide,
+    sourceMove: Moves,
+    onAddKey: string,
+    activateTrapKey: string,
+  ) {
+    super(arenaTagType, sourceMove, sourceId, side, 1);
+    this.damagingType = damagingType;
+    this.onAddKey = onAddKey;
+    this.activateTrapKey = activateTrapKey;
   }
 
   override onAdd(arena: Arena, quiet: boolean = false): void {
@@ -914,39 +955,13 @@ class StealthRockTag extends ArenaTrapTag {
 
     const source = this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
     if (!quiet && source) {
-      globalScene.queueMessage(
-        i18next.t("arenaTag:stealthRockOnAdd", { opponentDesc: source.getOpponentDescriptor() }),
-      );
+      globalScene.queueMessage(i18next.t(this.onAddKey, { opponentDesc: source.getOpponentDescriptor() }));
     }
   }
 
   getDamageHpRatio(pokemon: Pokemon): number {
-    const effectiveness = pokemon.getAttackTypeEffectiveness(Type.ROCK, undefined, true);
-
-    let damageHpRatio: number = 0;
-
-    switch (effectiveness) {
-      case 0:
-        damageHpRatio = 0;
-        break;
-      case 0.25:
-        damageHpRatio = 0.03125;
-        break;
-      case 0.5:
-        damageHpRatio = 0.0625;
-        break;
-      case 1:
-        damageHpRatio = 0.125;
-        break;
-      case 2:
-        damageHpRatio = 0.25;
-        break;
-      case 4:
-        damageHpRatio = 0.5;
-        break;
-    }
-
-    return damageHpRatio;
+    const effectiveness = pokemon.getAttackTypeEffectiveness(this.damagingType, undefined, true);
+    return effectiveness * 0.125;
   }
 
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
@@ -965,7 +980,7 @@ class StealthRockTag extends ArenaTrapTag {
       }
       const damage = toDmgValue(pokemon.getMaxHp() * damageHpRatio);
       globalScene.queueMessage(
-        i18next.t("arenaTag:stealthRockActivateTrap", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+        i18next.t(this.activateTrapKey, { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
       pokemon.damageAndUpdate(damage, HitResult.OTHER);
       if (pokemon.turnData) {
@@ -980,6 +995,34 @@ class StealthRockTag extends ArenaTrapTag {
   override getMatchupScoreMultiplier(pokemon: Pokemon): number {
     const damageHpRatio = this.getDamageHpRatio(pokemon);
     return Phaser.Math.Linear(super.getMatchupScoreMultiplier(pokemon), 1, 1 - Math.pow(damageHpRatio, damageHpRatio));
+  }
+}
+
+class StealthRockTag extends TypeHazardTag {
+  constructor(sourceId: number, side: ArenaTagSide) {
+    super(
+      ArenaTagType.STEALTH_ROCK,
+      ElementType.ROCK,
+      sourceId,
+      side,
+      Moves.STEALTH_ROCK,
+      "arenaTag:stealthRockOnAdd",
+      "arenaTag:stealthRockActivateTrap",
+    );
+  }
+}
+
+class SharpSteelTag extends TypeHazardTag {
+  constructor(sourceId: number, side: ArenaTagSide) {
+    super(
+      ArenaTagType.SHARP_STEEL,
+      ElementType.STEEL,
+      sourceId,
+      side,
+      Moves.G_MAX_STEELSURGE,
+      "arenaTag:sharpSteelOnAdd",
+      "arenaTag:sharpSteelActivateTrap",
+    );
   }
 }
 
@@ -1018,7 +1061,7 @@ class StickyWebTag extends ArenaTrapTag {
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.isGrounded()) {
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(ProtectStatAbAttr, pokemon, simulated, cancelled);
+      applyAbAttrs(ProtectStatAbAttr, pokemon, simulated, Stat.SPD, cancelled);
 
       if (simulated) {
         return !cancelled.value;
@@ -1088,12 +1131,13 @@ export class GravityTag extends ArenaTag {
   override onAdd(_arena: Arena): void {
     globalScene.queueMessage(i18next.t("arenaTag:gravityOnAdd"));
     globalScene.getField(true).forEach((pokemon) => {
-      if (pokemon !== null) {
+      if (pokemon) {
         pokemon.removeTag(BattlerTagType.FLOATING);
         pokemon.removeTag(BattlerTagType.TELEKINESIS);
         if (pokemon.getTag(BattlerTagType.FLYING)) {
           pokemon.addTag(BattlerTagType.INTERRUPTED);
         }
+        pokemon.getTag(SkyDropTag)?.clearSkyDropEffects();
       }
     });
   }
@@ -1290,8 +1334,14 @@ class FireGrassPledgeTag extends ArenaTag {
       this.side === ArenaTagSide.PLAYER ? globalScene.getPlayerField() : globalScene.getEnemyField();
 
     field
-      .filter((pokemon) => !pokemon.isOfType(Type.FIRE) && !pokemon.switchOutStatus)
+      .filter((pokemon) => !pokemon.isOfType(ElementType.FIRE) && !pokemon.switchOutStatus)
       .forEach((pokemon) => {
+        const cancelled = new BooleanHolder(false);
+        applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
+        if (cancelled.value) {
+          return;
+        }
+
         // "{pokemonNameWithAffix} was hurt by the sea of fire!"
         globalScene.queueMessage(
           i18next.t("arenaTag:fireGrassPledgeLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
@@ -1364,6 +1414,80 @@ class GrassWaterPledgeTag extends ArenaTag {
 }
 
 /**
+ * Class to describe the field effect of G-Max moves that damage all Pokemon that
+ * are not immune by 1/6th of their health
+ *
+ * Used in:
+ * G-Max Vine Lash: Grass
+ * G-Max Wildfire: Fire
+ * G-Max Cannonade: Water
+ * G-Max Volcalith: Rock
+ */
+export class TypeImmuneDamageOverTimeTag extends ArenaTag {
+  private immuneType: ElementType;
+
+  constructor(tagType, sourceMove: Moves, sourceId: number, side: ArenaTagSide, immuneType: ElementType) {
+    super(tagType, 4, sourceMove, sourceId, side);
+    this.immuneType = immuneType;
+  }
+
+  private getAnimationForType() {
+    switch (this.immuneType) {
+      case ElementType.GRASS:
+        return CommonAnim.WRAP;
+      case ElementType.FIRE:
+        return CommonAnim.FIRE_SPIN;
+      case ElementType.WATER:
+        return CommonAnim.WHIRLPOOL;
+      case ElementType.ROCK:
+        return CommonAnim.SALT_CURE;
+      default:
+        return CommonAnim.WRAP;
+    }
+  }
+
+  override onAdd(_arena: Arena) {
+    let localeKey = "arenaTag:TypeImmuneDamageOverTimeOnAdd";
+    if (this.side === ArenaTagSide.PLAYER) {
+      localeKey = localeKey.concat("Player");
+    } else {
+      localeKey = localeKey.concat("Enemy");
+    }
+    localeKey = localeKey.concat(ElementType[this.immuneType]);
+
+    globalScene.queueMessage(i18next.t(localeKey));
+  }
+
+  override lapse(arena: Arena): boolean {
+    const field: Pokemon[] =
+      this.side === ArenaTagSide.PLAYER ? globalScene.getPlayerField() : globalScene.getEnemyField();
+
+    field
+      .filter((pokemon) => !pokemon.isOfType(this.immuneType) && !pokemon.switchOutStatus)
+      .forEach((pokemon) => {
+        const cancelled = new BooleanHolder(false);
+        applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
+        if (cancelled.value) {
+          return;
+        }
+
+        globalScene.queueMessage(
+          i18next.t(`arenaTag:TypeImmuneDamageOverTimeLapse${ElementType[this.immuneType]}`, {
+            pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+          }),
+        );
+        // TODO: Replace this with a proper animation
+        globalScene.unshiftPhase(
+          new CommonAnimPhase(pokemon.getBattlerIndex(), pokemon.getBattlerIndex(), this.getAnimationForType()),
+        );
+        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 6));
+      });
+
+    return super.lapse(arena);
+  }
+}
+
+/**
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Fairy_Lock_(move) Fairy Lock}.
  * Fairy Lock prevents all Pokémon (except Ghost types) on the field from switching out or
  * fleeing during their next turn.
@@ -1383,10 +1507,9 @@ export class FairyLockTag extends ArenaTag {
 // TODO: swap `sourceMove` and `sourceId` and make `sourceMove` an optional parameter
 export function getArenaTag(
   tagType: ArenaTagType,
-  turnCount: number,
-  sourceMove: Moves | undefined,
   sourceId: number,
-  targetIndex?: BattlerIndex,
+  turnCount: number,
+  sourceMove?: Moves,
   side: ArenaTagSide = ArenaTagSide.BOTH,
 ): ArenaTag | null {
   switch (tagType) {
@@ -1412,9 +1535,8 @@ export function getArenaTag(
       return new SpikesTag(sourceId, side);
     case ArenaTagType.TOXIC_SPIKES:
       return new ToxicSpikesTag(sourceId, side);
-    case ArenaTagType.FUTURE_SIGHT:
-    case ArenaTagType.DOOM_DESIRE:
-      return new DelayedAttackTag(tagType, sourceMove, sourceId, targetIndex!, side); // TODO:questionable bang
+    case ArenaTagType.DELAYED_ATTACK:
+      return new DelayedAttackTag();
     case ArenaTagType.WISH:
       return new WishTag(turnCount, sourceId, side);
     case ArenaTagType.STEALTH_ROCK:
@@ -1447,6 +1569,40 @@ export function getArenaTag(
       return new GrassWaterPledgeTag(sourceId, side);
     case ArenaTagType.FAIRY_LOCK:
       return new FairyLockTag(turnCount, sourceId);
+    case ArenaTagType.G_MAX_VINE_LASH:
+      return new TypeImmuneDamageOverTimeTag(
+        ArenaTagType.G_MAX_VINE_LASH,
+        Moves.G_MAX_VINE_LASH,
+        sourceId,
+        side,
+        ElementType.GRASS,
+      );
+    case ArenaTagType.G_MAX_WILDFIRE:
+      return new TypeImmuneDamageOverTimeTag(
+        ArenaTagType.G_MAX_WILDFIRE,
+        Moves.G_MAX_WILDFIRE,
+        sourceId,
+        side,
+        ElementType.FIRE,
+      );
+    case ArenaTagType.G_MAX_CANNONADE:
+      return new TypeImmuneDamageOverTimeTag(
+        ArenaTagType.G_MAX_CANNONADE,
+        Moves.G_MAX_CANNONADE,
+        sourceId,
+        side,
+        ElementType.WATER,
+      );
+    case ArenaTagType.G_MAX_VOLCALITH:
+      return new TypeImmuneDamageOverTimeTag(
+        ArenaTagType.G_MAX_VOLCALITH,
+        Moves.G_MAX_VOLCALITH,
+        sourceId,
+        side,
+        ElementType.ROCK,
+      );
+    case ArenaTagType.SHARP_STEEL:
+      return new SharpSteelTag(sourceId, side);
     default:
       return null;
   }
@@ -1459,8 +1615,7 @@ export function getArenaTag(
  */
 export function loadArenaTag(source: ArenaTag | any): ArenaTag {
   const tag =
-    getArenaTag(source.tagType, source.turnCount, source.sourceMove, source.sourceId, source.targetIndex, source.side)
-    ?? new NoneTag();
+    getArenaTag(source.tagType, source.sourceId, source.turnCount, source.sourceMove, source.side) ?? new NoneTag();
   tag.loadTag(source);
   return tag;
 }

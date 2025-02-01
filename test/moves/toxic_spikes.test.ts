@@ -1,6 +1,6 @@
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import type { ArenaTrapTag } from "#app/data/arena-tag";
-import { ArenaTagSide } from "#app/data/arena-tag";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { Moves } from "#enums/moves";
@@ -105,9 +105,11 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("shouldn't create multiple layers per use in doubles", async () => {
+    game.override.battleType("double");
     await game.classicMode.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
 
-    game.move.select(Moves.TOXIC_SPIKES);
+    game.move.select(Moves.TOXIC_SPIKES, 0);
+    game.move.select(Moves.SPLASH, 1);
     await game.toNextTurn();
 
     const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
@@ -136,7 +138,7 @@ describe("Moves - Toxic Spikes", () => {
   it("should apply even if the target is fainted", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    const enemyPokemon = game.pokemonHelper.getEnemyPokemon();
+    const enemyPokemon = game.field.getEnemyPokemon();
 
     game.move.use(Moves.TOXIC_SPIKES);
     await game.move.forceEnemyMove(Moves.MEMENTO);

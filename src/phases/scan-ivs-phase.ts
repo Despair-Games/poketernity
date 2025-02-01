@@ -1,11 +1,15 @@
-import type { BattlerIndex } from "#app/battle";
-import { CommonAnim, CommonBattleAnim } from "#app/data/battle-anims";
+import type { BattlerIndex } from "#enums/battler-index";
+import { CommonBattleAnim } from "#app/data/battle-anims";
+import { CommonAnim } from "#enums/common-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { getTextColor, TextStyle } from "#app/ui/text";
-import { Mode } from "#app/ui/ui";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
+import { getTextColor } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
 import { Stat } from "#enums/stat";
 import i18next from "i18next";
+import { settings } from "#app/system/settings/settings-manager";
 import { PokemonPhase } from "./abstract-pokemon-phase";
 
 export class ScanIvsPhase extends PokemonPhase {
@@ -20,7 +24,7 @@ export class ScanIvsPhase extends PokemonPhase {
   public override start(): void {
     super.start();
 
-    const { gameData, hideIvs, ui, uiTheme } = globalScene;
+    const { gameData, ui } = globalScene;
 
     if (!this.shownIvs) {
       return this.end();
@@ -33,6 +37,7 @@ export class ScanIvsPhase extends PokemonPhase {
     let statsContainerLabels: Phaser.GameObjects.Sprite[] = [];
 
     const enemyField = globalScene.getEnemyField();
+    const uiTheme = settings.display.uiTheme; // Assuming uiTheme is accessible
     for (let e = 0; e < enemyField.length; e++) {
       enemyIvs = enemyField[e].ivs;
       // we are using getRootSpeciesId() here because we want to check against the baby form, not the mid form if it exists
@@ -56,15 +61,14 @@ export class ScanIvsPhase extends PokemonPhase {
       }
     }
 
-    if (!hideIvs) {
+    if (!settings.general.hideIvScanner) {
       ui.showText(
         i18next.t("battle:ivScannerUseQuestion", { pokemonName: getPokemonNameWithAffix(pokemon) }),
         null,
         () => {
-          ui.setMode(
-            Mode.CONFIRM,
-            () => {
-              ui.setMode(Mode.MESSAGE);
+          const options: ConfirmModeConfig = {
+            yesHandler: () => {
+              ui.setMode(UiMode.MESSAGE);
               ui.clearText();
               new CommonBattleAnim(CommonAnim.LOCK_ON, pokemon, pokemon).play(false, () => {
                 ui.getMessageHandler()
@@ -72,12 +76,13 @@ export class ScanIvsPhase extends PokemonPhase {
                   .then(() => this.end());
               });
             },
-            () => {
-              ui.setMode(Mode.MESSAGE);
+            noHandler: () => {
+              ui.setMode(UiMode.MESSAGE);
               ui.clearText();
               this.end();
             },
-          );
+          };
+          ui.setMode(UiMode.CONFIRM, options);
         },
       );
     } else {

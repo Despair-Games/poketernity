@@ -10,7 +10,7 @@ import { AbAttr } from "./ab-attr";
  * @extends AbAttr
  */
 export class BlockCritAbAttr extends AbAttr {
-  override apply(_pokemon: Pokemon, _passive: boolean, _simulated: boolean, isCritical: BooleanHolder): boolean {
+  override apply(_pokemon: Pokemon, _simulated: boolean, isCritical: BooleanHolder): boolean {
     if (isCritical.value) {
       isCritical.value = false;
       return true;

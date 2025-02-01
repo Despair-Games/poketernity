@@ -1,6 +1,6 @@
 import { AttemptRunPhase } from "#app/phases/attempt-run-phase";
 import type { CommandPhase } from "#app/phases/command-phase";
-import { Command } from "#app/ui/command-ui-handler";
+import { BattleCommand } from "#enums/battle-command";
 import { NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { Species } from "#enums/species";
@@ -41,7 +41,7 @@ describe("Escape chance calculations", () => {
     vi.spyOn(enemyField[0], "stats", "get").mockReturnValue([20, 20, 20, 20, 20, enemySpeed]);
 
     const commandPhase = game.scene.getCurrentPhase() as CommandPhase;
-    commandPhase.handleCommand(Command.RUN, 0);
+    commandPhase.handleCommand(BattleCommand.RUN, 0);
 
     await game.phaseInterceptor.to(AttemptRunPhase, false);
     const phase = game.scene.getCurrentPhase() as AttemptRunPhase;
@@ -110,7 +110,7 @@ describe("Escape chance calculations", () => {
     vi.spyOn(enemyField[1], "stats", "get").mockReturnValue([20, 20, 20, 20, 20, enemyBSpeed]);
 
     const commandPhase = game.scene.getCurrentPhase() as CommandPhase;
-    commandPhase.handleCommand(Command.RUN, 0);
+    commandPhase.handleCommand(BattleCommand.RUN, 0);
 
     await game.phaseInterceptor.to(AttemptRunPhase, false);
     const phase = game.scene.getCurrentPhase() as AttemptRunPhase;
@@ -185,7 +185,7 @@ describe("Escape chance calculations", () => {
     vi.spyOn(enemyField[0], "stats", "get").mockReturnValue([20, 20, 20, 20, 20, enemySpeed]);
 
     const commandPhase = game.scene.getCurrentPhase() as CommandPhase;
-    commandPhase.handleCommand(Command.RUN, 0);
+    commandPhase.handleCommand(BattleCommand.RUN, 0);
 
     await game.phaseInterceptor.to(AttemptRunPhase, false);
     const phase = game.scene.getCurrentPhase() as AttemptRunPhase;
@@ -268,7 +268,7 @@ describe("Escape chance calculations", () => {
     vi.spyOn(enemyField[1], "stats", "get").mockReturnValue([20, 20, 20, 20, 20, enemyBSpeed]);
 
     const commandPhase = game.scene.getCurrentPhase() as CommandPhase;
-    commandPhase.handleCommand(Command.RUN, 0);
+    commandPhase.handleCommand(BattleCommand.RUN, 0);
 
     await game.phaseInterceptor.to(AttemptRunPhase, false);
     const phase = game.scene.getCurrentPhase() as AttemptRunPhase;

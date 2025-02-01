@@ -16,12 +16,7 @@ export class PostTerrainChangeAddBattlerTagAttr extends PostTerrainChangeAbAttr 
     this.terrainTypes = terrainTypes;
   }
 
-  override applyPostTerrainChange(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    terrain: TerrainType,
-  ): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, terrain: TerrainType): boolean {
     if (!this.terrainTypes.find((t) => t === terrain)) {
       return false;
     }

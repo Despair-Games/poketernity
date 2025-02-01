@@ -1,17 +1,11 @@
 import { PostTurnAbAttr } from "#app/data/ab-attrs/post-turn-ab-attr";
-import { applyPostTurnAbAttrs } from "#app/data/ability";
-import { BattlerTagLapseType } from "#app/data/battler-tags";
+import { applyAbAttrs } from "#app/data/ability";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { TurnEndEvent } from "#app/events/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import {
-  EnemyStatusEffectHealChanceModifier,
-  EnemyTurnHealModifier,
-  TurnHealModifier,
-  TurnHeldItemTransferModifier,
-  TurnStatusEffectModifier,
-} from "#app/modifier/modifier";
+import { TurnHealModifier, TurnHeldItemTransferModifier, TurnStatusEffectModifier } from "#app/modifier/modifier";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
@@ -41,13 +35,7 @@ export class TurnEndPhase extends FieldPhase {
             }),
           );
         }
-
-        if (!pokemon.isPlayer()) {
-          globalScene.applyModifiers(EnemyTurnHealModifier, false, pokemon);
-          globalScene.applyModifier(EnemyStatusEffectHealChanceModifier, false, pokemon);
-        }
-
-        applyPostTurnAbAttrs(PostTurnAbAttr, pokemon);
+        applyAbAttrs(PostTurnAbAttr, pokemon, false);
       }
 
       globalScene.applyModifiers(TurnStatusEffectModifier, pokemon.isPlayer(), pokemon);

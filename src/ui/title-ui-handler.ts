@@ -1,13 +1,15 @@
-import OptionSelectUiHandler from "./settings/option-select-ui-handler";
-import { Mode } from "./ui";
-import { fixedInt, randItem } from "#app/utils";
-import { TextStyle, addTextObject, getTextStyleOptions } from "./text";
-import { getSplashMessages } from "../data/splash-messages";
+import { UiMode } from "#enums/ui-mode";
+import { fixedNumber, randItem } from "#app/utils";
+import { addTextObject, getTextStyleOptions } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
+import { getSplashMessages } from "#app/data/splash-messages";
 import i18next from "i18next";
 import { TimedEventDisplay } from "#app/timed-event-manager";
 import { version } from "../../package.json";
 import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
+import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
+import { settings } from "#app/system/settings/settings-manager";
 
 export default class TitleUiHandler extends OptionSelectUiHandler {
   /** If the stats can not be retrieved, use this fallback value */
@@ -22,7 +24,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
 
   private titleStatsTimer: NodeJS.Timeout | null;
 
-  constructor(mode: Mode = Mode.TITLE) {
+  constructor(mode: UiMode = UiMode.TITLE) {
     super(mode);
   }
 
@@ -48,7 +50,9 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
 
     this.playerCountLabel = addTextObject(
       globalScene.game.canvas.width / 6 - 2,
-      globalScene.game.canvas.height / 6 - 13 - 576 * getTextStyleOptions(TextStyle.WINDOW, globalScene.uiTheme).scale,
+      globalScene.game.canvas.height / 6
+        - 13
+        - 576 * getTextStyleOptions(TextStyle.WINDOW, settings.display.uiTheme).scale,
       `? ${i18next.t("menu:playersOnline")}`,
       TextStyle.MESSAGE,
       { fontSize: "54px" },
@@ -67,7 +71,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
 
     globalScene.tweens.add({
       targets: this.splashMessageText,
-      duration: fixedInt(350),
+      duration: fixedNumber(350),
       scale: originalSplashMessageScale * 1.25,
       loop: -1,
       yoyo: true,
@@ -121,7 +125,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
 
       globalScene.tweens.add({
         targets: [this.titleContainer, ui.getMessageHandler().bg],
-        duration: fixedInt(325),
+        duration: fixedNumber(325),
         alpha: (target: any) => (target === this.titleContainer ? 1 : 0),
         ease: "Sine.easeInOut",
       });
@@ -142,7 +146,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
 
     globalScene.tweens.add({
       targets: [this.titleContainer, ui.getMessageHandler().bg],
-      duration: fixedInt(325),
+      duration: fixedNumber(325),
       alpha: (target: any) => (target === this.titleContainer ? 0 : 1),
       ease: "Sine.easeInOut",
     });

@@ -1,4 +1,4 @@
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -16,21 +16,21 @@ import type { MoveConditionFunc } from "../move-conditions";
  * @extends MoveEffectAttr
  */
 export class AddTypeAttr extends MoveEffectAttr {
-  private type: Type;
+  private type: ElementType;
 
-  constructor(type: Type) {
+  constructor(type: ElementType) {
     super(false);
 
     this.type = type;
   }
 
-  override apply(_user: Pokemon, target: Pokemon, _move: Move): boolean {
+  override applyEffect(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     target.summonData.addedType = this.type;
     target.updateInfo();
 
     globalScene.queueMessage(
       i18next.t("moveTriggers:addType", {
-        typeName: i18next.t(`pokemonInfo:Type.${Type[this.type]}`),
+        typeName: i18next.t(`pokemonInfo:Type.${ElementType[this.type]}`),
         pokemonName: getPokemonNameWithAffix(target),
       }),
     );

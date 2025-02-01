@@ -1,9 +1,9 @@
 import type { OptionTextDisplay } from "#app/data/mystery-encounters/mystery-encounter-dialogue";
-import type { Moves } from "#app/enums/moves";
+import type { Moves } from "#enums/moves";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { Type } from "#enums/type";
+import type { ElementType } from "#enums/element-type";
 import {
   EncounterPokemonRequirement,
   EncounterSceneRequirement,
@@ -282,7 +282,7 @@ export class MysteryEncounterOptionBuilder implements Partial<IMysteryEncounterO
    * @returns
    */
   withPokemonTypeRequirement(
-    type: Type | Type[],
+    type: ElementType | ElementType[],
     excludeFainted?: boolean,
     minNumberOfPokemon?: number,
     invertQuery?: boolean,

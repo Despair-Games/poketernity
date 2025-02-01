@@ -1,12 +1,7 @@
-import { UiTheme } from "#enums/ui-theme";
 import { legacyCompatibleImages } from "#app/scene-base";
 import { globalScene } from "#app/global-scene";
-
-export enum WindowVariant {
-  NORMAL,
-  THIN,
-  XTHIN,
-}
+import { settings } from "#app/system/settings/settings-manager";
+import { WindowVariant } from "#enums/window-variant";
 
 export function getWindowVariantSuffix(windowVariant: WindowVariant): string {
   switch (windowVariant) {
@@ -18,23 +13,6 @@ export function getWindowVariantSuffix(windowVariant: WindowVariant): string {
       return "";
   }
 }
-
-const windowTypeControlColors = {
-  [UiTheme.DEFAULT]: {
-    0: ["#6b5a73", "#DD5748", "#7E4955"],
-    1: ["#6b5a73", "#48DDAA", "#4D7574"],
-    2: ["#6b5a73", "#C5C5C5", "#766D7E"],
-    3: ["#6b5a73", "#EBC07C", "#836C66"],
-    4: ["#686868", "#E8E8E8", "#919191"],
-  },
-  [UiTheme.LEGACY]: {
-    0: ["#706880", "#8888c8", "#484868"],
-    1: ["#d04028", "#e0a028", "#902008"],
-    2: ["#48b840", "#88d880", "#089040"],
-    3: ["#2068d0", "#80b0e0", "#104888"],
-    4: ["#706880", "#8888c8", "#484868"],
-  },
-};
 
 export function addWindow(
   x: number,
@@ -51,12 +29,12 @@ export function addWindow(
     windowVariant = WindowVariant.NORMAL;
   }
 
-  const borderSize = globalScene.uiTheme ? 6 : 8;
+  const borderSize = settings.display.uiTheme ? 6 : 8;
 
   const window = globalScene.add.nineslice(
     x,
     y,
-    `window_${globalScene.windowType}${getWindowVariantSuffix(windowVariant)}`,
+    `window_${settings.display.uiWindowType}${getWindowVariantSuffix(windowVariant)}`,
     undefined,
     width,
     height,
@@ -126,12 +104,7 @@ export function updateWindowType(windowTypeIndex: number): void {
 
   traverse(globalScene);
 
-  globalScene.windowType = windowTypeIndex;
-
-  const rootStyle = document.documentElement.style;
-  ["base", "light", "dark"].map((k, i) =>
-    rootStyle.setProperty(`--color-${k}`, windowTypeControlColors[globalScene.uiTheme][windowTypeIndex - 1][i]),
-  );
+  settings.display.uiWindowType = windowTypeIndex;
 
   const windowKey = `window_${windowTypeIndex}`;
 
@@ -153,7 +126,7 @@ export function addUiThemeOverrides(): void {
     frame?: string | number,
   ): Phaser.GameObjects.Image {
     let legacy = false;
-    if (typeof texture === "string" && globalScene.uiTheme && legacyCompatibleImages.includes(texture)) {
+    if (typeof texture === "string" && settings.display.uiTheme && legacyCompatibleImages.includes(texture)) {
       legacy = true;
       texture += "_legacy";
     }
@@ -176,7 +149,7 @@ export function addUiThemeOverrides(): void {
     frame?: string | number,
   ): Phaser.GameObjects.Sprite {
     let legacy = false;
-    if (typeof texture === "string" && globalScene.uiTheme && legacyCompatibleImages.includes(texture)) {
+    if (typeof texture === "string" && settings.display.uiTheme && legacyCompatibleImages.includes(texture)) {
       legacy = true;
       texture += "_legacy";
     }
@@ -205,7 +178,7 @@ export function addUiThemeOverrides(): void {
     bottomHeight?: number,
   ): Phaser.GameObjects.NineSlice {
     let legacy = false;
-    if (typeof texture === "string" && globalScene.uiTheme && legacyCompatibleImages.includes(texture)) {
+    if (typeof texture === "string" && settings.display.uiTheme && legacyCompatibleImages.includes(texture)) {
       legacy = true;
       texture += "_legacy";
     }

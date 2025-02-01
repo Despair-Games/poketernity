@@ -1,5 +1,6 @@
-import type { BattlerIndex } from "#app/battle";
-import { CommonAnim, CommonBattleAnim } from "#app/data/battle-anims";
+import type { BattlerIndex } from "#enums/battler-index";
+import { CommonBattleAnim } from "#app/data/battle-anims";
+import { CommonAnim } from "#enums/common-anim";
 import { getStatusEffectObtainText, getStatusEffectOverlapText } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -12,15 +13,14 @@ import { PokemonPhase } from "./abstract-pokemon-phase";
  * @extends PokemonPhase
  */
 export class ObtainStatusEffectPhase extends PokemonPhase {
-  // TODO: Should this be able to be undefined? Early return if so?
-  private readonly statusEffect?: StatusEffect;
+  private readonly statusEffect: StatusEffect;
   private readonly turnsRemaining?: number;
   private readonly sourceText?: string | null;
   private readonly sourcePokemon?: Pokemon | null;
 
   constructor(
     battlerIndex: BattlerIndex,
-    statusEffect?: StatusEffect,
+    statusEffect: StatusEffect,
     turnsRemaining?: number,
     sourceText?: string | null,
     sourcePokemon?: Pokemon | null,

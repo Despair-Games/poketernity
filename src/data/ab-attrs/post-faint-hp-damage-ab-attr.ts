@@ -1,6 +1,6 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#app/field/pokemon";
+import { HitResult } from "#enums/hit-result";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import { PostFaintAbAttr } from "./post-faint-ab-attr";
@@ -10,14 +10,7 @@ import { PostFaintAbAttr } from "./post-faint-ab-attr";
  * @extends PostFaintAbAttr
  */
 export class PostFaintHPDamageAbAttr extends PostFaintAbAttr {
-  override applyPostFaint(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker?: Pokemon,
-    move?: Move,
-    _hitResult?: HitResult,
-  ): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, attacker?: Pokemon, move?: Move): boolean {
     if (!move || !attacker || !attacker.isOnField()) {
       return false;
     }

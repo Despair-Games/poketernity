@@ -1,4 +1,4 @@
-import type { Type } from "#enums/type";
+import type { ElementType } from "#enums/element-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { globalScene } from "#app/global-scene";
@@ -28,14 +28,12 @@ import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import i18next from "#app/plugins/i18n";
-import {
-  doPokemonTransformationSequence,
-  TransformationScreenPosition,
-} from "#app/data/mystery-encounters/utils/encounter-transformation-sequence";
+import { doPokemonTransformationSequence } from "#app/data/mystery-encounters/utils/encounter-transformation-sequence";
+import { TransformationScreenPosition } from "#enums/transformation-screen-position";
 import { getLevelTotalExp } from "#app/data/exp";
 import { Stat } from "#enums/stat";
 import { Challenges } from "#enums/challenges";
-import { ModifierTier } from "#app/modifier/modifier-tier";
+import { ModifierTier } from "#enums/modifier-tier";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import PokemonData from "#app/system/pokemon-data";
@@ -45,6 +43,7 @@ import { TrainerPartyTemplate } from "#app/data/trainer-config";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { settings } from "#app/system/settings/settings-manager";
 
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/weirdDream";
@@ -244,7 +243,7 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
         enemyPokemonConfigs.push(enemyConfig);
       }
 
-      const genderIndex = globalScene.gameData.gender ?? PlayerGender.UNSET;
+      const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
       const trainerConfig =
         allTrainerConfigs[
           genderIndex === PlayerGender.FEMALE ? TrainerType.FUTURE_SELF_F : TrainerType.FUTURE_SELF_M
@@ -541,9 +540,9 @@ async function postProcessTransformedPokemon(
   // Randomize the second type of the pokemon
   // If the pokemon does not normally have a second type, it will gain 1
   const newTypes = [newPokemon.getTypes()[0]];
-  let newType = randSeedInt(18) as Type;
+  let newType = randSeedInt(18) as ElementType;
   while (newType === newTypes[0]) {
-    newType = randSeedInt(18) as Type;
+    newType = randSeedInt(18) as ElementType;
   }
   newTypes.push(newType);
   if (!newPokemon.customPokemonData) {

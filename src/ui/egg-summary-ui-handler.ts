@@ -1,5 +1,6 @@
-import { Mode } from "./ui";
-import PokemonIconAnimHandler, { PokemonIconAnimMode } from "./pokemon-icon-anim-handler";
+import { UiMode } from "#enums/ui-mode";
+import PokemonIconAnimHandler from "./pokemon-icon-anim-handler";
+import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 import MessageUiHandler from "./message-ui-handler";
 import { getEggTierForSpecies } from "../data/egg";
 import { Button } from "#enums/buttons";
@@ -10,6 +11,8 @@ import ScrollableGridUiHandler from "./scrollable-grid-handler";
 import { HatchedPokemonContainer } from "./hatched-pokemon-container";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
+import { EggSkipPreference } from "#enums/egg-skip-preference";
 
 const iconContainerX = 112;
 const iconContainerY = 9;
@@ -54,7 +57,7 @@ export default class EggSummaryUiHandler extends MessageUiHandler {
   public readonly eventTarget: EventTarget = new EventTarget();
 
   constructor() {
-    super(Mode.EGG_HATCH_SUMMARY);
+    super(UiMode.EGG_HATCH_SUMMARY);
   }
 
   setup() {
@@ -180,7 +183,7 @@ export default class EggSummaryUiHandler extends MessageUiHandler {
 
     // Prevent exiting the egg summary for 2 seconds if the egg hatching
     // was skipped automatically and for 1 second otherwise
-    const exitBlockingDuration = globalScene.eggSkipPreference === 2 ? 2000 : 1000;
+    const exitBlockingDuration = settings.general.eggSkipPreference === EggSkipPreference.ALWAYS ? 2000 : 1000;
     this.blockExit = true;
     globalScene.time.delayedCall(exitBlockingDuration, () => (this.blockExit = false));
 

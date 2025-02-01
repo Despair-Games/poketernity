@@ -8,7 +8,7 @@ import { PreAttackAbAttr } from "./pre-attack-ab-attr";
  * Boosts the power of a Pokémon's move under certain conditions.
  * @extends AbAttr
  */
-export class FieldMovePowerBoostAbAttr extends PreAttackAbAttr {
+export abstract class FieldMovePowerBoostAbAttr extends PreAttackAbAttr {
   private readonly condition: PokemonAttackCondition;
   private readonly powerMultiplier: number;
 
@@ -22,12 +22,11 @@ export class FieldMovePowerBoostAbAttr extends PreAttackAbAttr {
     this.powerMultiplier = powerMultiplier;
   }
 
-  override applyPreAttack(
-    pokemon: Pokemon | null,
-    _passive: boolean | null,
+  override apply(
+    pokemon: Pokemon,
     _simulated: boolean,
-    defender: Pokemon | null,
     move: Move,
+    defender: Pokemon,
     movePower: NumberHolder,
   ): boolean {
     if (this.condition(pokemon, defender, move)) {

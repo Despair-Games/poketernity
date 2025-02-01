@@ -1,18 +1,20 @@
-import type { BattlerIndex } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
 import { PostStatStageChangeAbAttr } from "#app/data/ab-attrs/post-stat-stage-change-ab-attr";
 import { ProtectStatAbAttr } from "#app/data/ab-attrs/protect-stat-ab-attr";
 import { StatStageChangeCopyAbAttr } from "#app/data/ab-attrs/stat-stage-change-copy-ab-attr";
 import { StatStageChangeMultiplierAbAttr } from "#app/data/ab-attrs/stat-stage-change-multiplier-ab-attr";
-import { applyAbAttrs, applyPostStatStageChangeAbAttrs, applyPreStatStageChangeAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/ability";
 import { MistTag } from "#app/data/arena-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { ResetNegativeStatStageModifier } from "#app/modifier/modifier";
-import { handleTutorial, Tutorial } from "#app/tutorial";
+import { handleTutorial } from "#app/tutorial";
+import { Tutorial } from "#enums/tutorial";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } from "#enums/stat";
 import i18next from "i18next";
+import { settings } from "#app/system/settings/settings-manager";
 import { PokemonPhase } from "./abstract-pokemon-phase";
 
 export type StatStageChangeCallback = (changed: BattleStat[], relativeChanges: number[], target?: Pokemon) => void;
@@ -56,7 +58,7 @@ export class StatStageChangePhase extends PokemonPhase {
   public override start(): void {
     const pokemon = this.getPokemon();
 
-    const { add, arena, field, fieldSpritePipeline, moveAnimations, tweens, time } = globalScene;
+    const { add, arena, field, fieldSpritePipeline, tweens, time } = globalScene;
 
     if (!pokemon.isActive(true)) {
       return super.end();
@@ -90,7 +92,7 @@ export class StatStageChangePhase extends PokemonPhase {
       }
 
       if (!cancelled.value && !this.selfTarget && stages.value < 0) {
-        applyPreStatStageChangeAbAttrs(ProtectStatAbAttr, pokemon, stat, cancelled, simulate);
+        applyAbAttrs(ProtectStatAbAttr, pokemon, simulate, stat, cancelled);
       }
 
       // If one stat stage decrease is cancelled, simulate the rest of the applications
@@ -152,7 +154,7 @@ export class StatStageChangePhase extends PokemonPhase {
         }
       }
 
-      applyPostStatStageChangeAbAttrs(PostStatStageChangeAbAttr, pokemon, filteredStats, this.stages, this.selfTarget);
+      applyAbAttrs(PostStatStageChangeAbAttr, pokemon, false, filteredStats, this.stages, this.selfTarget);
 
       // Look for any other stat change phases; if this is the last one, do White Herb check
       const existingPhase = globalScene.findPhase(
@@ -174,10 +176,10 @@ export class StatStageChangePhase extends PokemonPhase {
 
       pokemon.updateInfo();
 
-      handleTutorial(Tutorial.Stat_Change).then(() => super.end());
+      handleTutorial(Tutorial.STAT_CHANGE).then(() => super.end());
     };
 
-    if (relLevels.filter((l) => l).length && moveAnimations) {
+    if (relLevels.filter((l) => l).length && settings.display.enableMoveAnimations) {
       pokemon.enableMask();
       const pokemonMaskSprite = pokemon.maskSprite;
 

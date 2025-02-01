@@ -14,7 +14,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { AbilityAttr } from "#app/data/dex-attributes";
 import PokemonData from "#app/system/pokemon-data";
-import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
+import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { isNullOrUndefined, randSeedShuffle } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
@@ -28,7 +28,7 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import type HeldModifierConfig from "#app/interfaces/held-modifier-config";
 import i18next from "i18next";
 import { getStatKey } from "#enums/stat";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { isPokemonValidForEncounterOptionSelection } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { Nature } from "#enums/nature";
 
@@ -188,7 +188,7 @@ export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilde
           // Return the options for nature selection
           return natures.map((nature: Nature) => {
             const option: OptionSelectItem = {
-              label: getNatureName(nature, true, true, true, globalScene.uiTheme),
+              label: getNatureName(nature, true, true, true),
               handler: () => {
                 // Pokemon and second option selected
                 encounter.setDialogueToken("nature", getNatureName(nature));

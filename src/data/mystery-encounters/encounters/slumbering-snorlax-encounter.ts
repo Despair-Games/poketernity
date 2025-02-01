@@ -20,13 +20,14 @@ import {
 } from "../utils/encounter-phase-utils";
 import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { Moves } from "#enums/moves";
-import { BattlerIndex } from "#app/battle";
-import { AiType, PokemonMove } from "#app/field/pokemon";
+import { BattlerIndex } from "#enums/battler-index";
+import { PokemonMove } from "#app/field/pokemon";
+import { AiType } from "#enums/ai-type";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { BerryType } from "#enums/berry-type";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 

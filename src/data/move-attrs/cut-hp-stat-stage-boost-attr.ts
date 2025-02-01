@@ -1,5 +1,6 @@
 import type { BattleStat } from "#enums/stat";
-import { type Pokemon, HitResult } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { HitResult } from "#enums/hit-result";
 import { toDmgValue } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
@@ -28,10 +29,10 @@ export class CutHpStatStageBoostAttr extends StatStageChangeAttr {
     this.messageCallback = messageCallback;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     user.damageAndUpdate(toDmgValue(user.getMaxHp() / this.cutRatio), HitResult.OTHER, false, true);
     user.updateInfo();
-    const ret = super.apply(user, target, move);
+    const ret = super.applyEffect(user, target, move);
     if (this.messageCallback) {
       this.messageCallback(user);
     }

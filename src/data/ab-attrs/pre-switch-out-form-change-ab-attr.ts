@@ -17,14 +17,7 @@ export class PreSwitchOutFormChangeAbAttr extends PreSwitchOutAbAttr {
     this.formFunc = formFunc;
   }
 
-  /**
-   * On switch out, trigger the form change to the one defined in the ability
-   * @param pokemon The pokemon switching out and changing form {@linkcode Pokemon}
-   * @param _passive N/A
-   * @param _args N/A
-   * @returns true if the form change was successful
-   */
-  override applyPreSwitchOut(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const formIndex = this.formFunc(pokemon);
     if (formIndex !== pokemon.formIndex) {
       if (!simulated) {

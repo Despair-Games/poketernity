@@ -16,23 +16,23 @@ import { Moves } from "#enums/moves";
 import type BattleScene from "#app/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
-import { ModifierTier } from "#app/modifier/modifier-tier";
+import { ModifierTier } from "#enums/modifier-tier";
 import { ClowningAroundEncounter } from "#app/data/mystery-encounters/encounters/clowning-around-encounter";
 import { TrainerType } from "#enums/trainer-type";
 import { Abilities } from "#enums/abilities";
 import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/post-mystery-encounter-phase";
 import { Button } from "#enums/buttons";
 import type PartyUiHandler from "#app/ui/party-ui-handler";
-import type OptionSelectUiHandler from "#app/ui/settings/option-select-ui-handler";
+import type ConfirmUiHandler from "#app/ui/confirm-ui-handler";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { BerryType } from "#enums/berry-type";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import { CommandPhase } from "#app/phases/command-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
@@ -206,23 +206,23 @@ describe("Clowning Around - Mystery Encounter", () => {
       await game.phaseInterceptor.run(SelectModifierPhase);
       const abilityToTrain = scene.currentBattle.mysteryEncounter?.misc.ability;
 
-      game.onNextPrompt("PostMysteryEncounterPhase", Mode.MESSAGE, () => {
+      game.onNextPrompt("PostMysteryEncounterPhase", UiMode.MESSAGE, () => {
         game.scene.ui.getHandler().processInput(Button.ACTION);
       });
 
       // Run to ability train option selection
-      const optionSelectUiHandler = game.scene.ui.handlers[Mode.OPTION_SELECT] as OptionSelectUiHandler;
-      vi.spyOn(optionSelectUiHandler, "show");
-      const partyUiHandler = game.scene.ui.handlers[Mode.PARTY] as PartyUiHandler;
+      const confirmUiHandler = game.scene.ui.handlers[UiMode.CONFIRM] as ConfirmUiHandler;
+      vi.spyOn(confirmUiHandler, "show");
+      const partyUiHandler = game.scene.ui.handlers[UiMode.PARTY] as PartyUiHandler;
       vi.spyOn(partyUiHandler, "show");
       game.endPhase();
       await game.phaseInterceptor.to(PostMysteryEncounterPhase);
       expect(scene.getCurrentPhase()?.constructor.name).toBe(PostMysteryEncounterPhase.name);
 
       // Wait for Yes/No confirmation to appear
-      await vi.waitFor(() => expect(optionSelectUiHandler.show).toHaveBeenCalled());
+      await vi.waitFor(() => expect(confirmUiHandler.show).toHaveBeenCalled());
       // Select "Yes" on train ability
-      optionSelectUiHandler.processInput(Button.ACTION);
+      confirmUiHandler.processInput(Button.ACTION);
       // Select first pokemon in party to train
       await vi.waitFor(() => expect(partyUiHandler.show).toHaveBeenCalled());
       partyUiHandler.processInput(Button.ACTION);
@@ -361,15 +361,15 @@ describe("Clowning Around - Mystery Encounter", () => {
       const thirdTypesAfter = scene.getPlayerParty()[2].customPokemonData?.types;
 
       expect(leadTypesAfter.length).toBe(2);
-      expect(leadTypesAfter[0]).toBe(Type.WATER);
-      expect([Type.WATER, Type.ICE].includes(leadTypesAfter[1])).toBeFalsy();
+      expect(leadTypesAfter[0]).toBe(ElementType.WATER);
+      expect([ElementType.WATER, ElementType.ICE].includes(leadTypesAfter[1])).toBeFalsy();
       expect(secondaryTypesAfter.length).toBe(2);
-      expect(secondaryTypesAfter[0]).toBe(Type.GHOST);
-      expect([Type.GHOST, Type.POISON].includes(secondaryTypesAfter[1])).toBeFalsy();
-      expect([Type.GRASS, Type.ELECTRIC].includes(secondaryTypesAfter[1])).toBeTruthy();
+      expect(secondaryTypesAfter[0]).toBe(ElementType.GHOST);
+      expect([ElementType.GHOST, ElementType.POISON].includes(secondaryTypesAfter[1])).toBeFalsy();
+      expect([ElementType.GRASS, ElementType.ELECTRIC].includes(secondaryTypesAfter[1])).toBeTruthy();
       expect(thirdTypesAfter.length).toBe(2);
-      expect(thirdTypesAfter[0]).toBe(Type.PSYCHIC);
-      expect(secondaryTypesAfter[1]).not.toBe(Type.PSYCHIC);
+      expect(thirdTypesAfter[0]).toBe(ElementType.PSYCHIC);
+      expect(secondaryTypesAfter[1]).not.toBe(ElementType.PSYCHIC);
     });
 
     it("should leave encounter without battle", async () => {

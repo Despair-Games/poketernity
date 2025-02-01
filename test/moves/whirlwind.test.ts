@@ -1,7 +1,7 @@
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Challenges } from "#enums/challenges";
-import { Type } from "#enums/type";
-import { MoveResult } from "#app/field/pokemon";
+import { ElementType } from "#enums/element-type";
+import { MoveResult } from "#enums/move-result";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
@@ -10,6 +10,7 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { Status } from "#app/data/status-effect";
 import { StatusEffect } from "#enums/status-effect";
+import { BattlerIndex } from "#enums/battler-index";
 
 describe("Moves - Whirlwind", () => {
   let phaserGame: Phaser.Game;
@@ -33,11 +34,10 @@ describe("Moves - Whirlwind", () => {
   it.each([
     { move: Moves.FLY, name: "Fly" },
     { move: Moves.BOUNCE, name: "Bounce" },
-    { move: Moves.SKY_DROP, name: "Sky Drop" },
   ])("should not hit a flying target: $name (=$move)", async ({ move }) => {
     await game.classicMode.startBattle([Species.STARAPTOR]);
 
-    const staraptor = game.pokemonHelper.getPlayerPokemon();
+    const staraptor = game.field.getPlayerPokemon();
 
     game.move.use(move);
     await game.move.forceEnemyMove(Moves.WHIRLWIND);
@@ -46,6 +46,25 @@ describe("Moves - Whirlwind", () => {
 
     expect(staraptor.findTag((t) => t.tagType === BattlerTagType.FLYING)).toBeDefined();
     expect(game.scene.getEnemyPokemon()!.getLastXMoves(1)[0].result).toBe(MoveResult.MISS);
+  });
+
+  it("should not hit a target carried by Sky Drop", async () => {
+    game.override.battleType("double").moveset([Moves.SKY_DROP, Moves.WHIRLWIND]).enemyMoveset(Moves.SPLASH);
+
+    await game.classicMode.startBattle([Species.STARAPTOR, Species.PIDGEOT]);
+
+    const [staraptor, pidgeot] = game.scene.getPlayerField()!;
+    const enemyPokemon = game.scene.getEnemyField();
+
+    game.move.select(Moves.SKY_DROP, 0, BattlerIndex.ENEMY);
+    game.move.select(Moves.WHIRLWIND, 1, BattlerIndex.ENEMY);
+
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+
+    await game.phaseInterceptor.to("BerryPhase", false);
+
+    [staraptor, enemyPokemon[0]].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());
+    expect(pidgeot.getLastXMoves()[0]?.result).toBe(MoveResult.MISS);
   });
 
   it("should force switches randomly", async () => {
@@ -80,7 +99,7 @@ describe("Moves - Whirlwind", () => {
 
   it("should not force a switch to a challenge-ineligible Pokemon", async () => {
     // Mono-Water challenge, Eevee is ineligible
-    game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, Type.WATER + 1, 0);
+    game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, ElementType.WATER + 1, 0);
     await game.challengeMode.startBattle([Species.LAPRAS, Species.EEVEE, Species.TOXAPEX, Species.PRIMARINA]);
 
     const [lapras, eevee, toxapex, primarina] = game.scene.getPlayerParty();

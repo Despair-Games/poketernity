@@ -1,6 +1,6 @@
 import type { Weather } from "#app/data/weather";
 import type { Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#app/field/pokemon";
+import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { toDmgValue } from "#app/utils";
@@ -18,13 +18,13 @@ export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
     this.damageFactor = damageFactor;
   }
 
-  override applyPostWeatherLapse(pokemon: Pokemon, passive: boolean, simulated: boolean, _weather: Weather): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, _weather: Weather): boolean {
     if (pokemon.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)) {
       return false;
     }
 
     if (!simulated) {
-      const abilityName = (!passive ? pokemon.getAbility() : pokemon.getPassiveAbility()).name;
+      const abilityName = this.source.name;
       globalScene.queueMessage(
         i18next.t("abilityTriggers:postWeatherLapseDamage", {
           pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),

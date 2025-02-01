@@ -3,7 +3,7 @@ import { type PokeballCounts } from "#app/battle-scene";
 import { Gender } from "#enums/gender";
 import { Variant } from "#app/data/variant";
 import { type ModifierOverride } from "#app/modifier/modifier-type";
-import { Unlockables } from "#app/system/unlockables";
+import { Unlockables } from "#enums/unlockables";
 import { Abilities } from "#enums/abilities";
 import { Biome } from "#enums/biome";
 import { EggTier } from "#enums/egg-type";
@@ -45,19 +45,23 @@ class DefaultOverrides {
   // -----------------
   // OVERALL OVERRIDES
   // -----------------
+
   /** a specific seed (default: a random string of 24 characters) */
   readonly SEED_OVERRIDE: string = "";
   readonly WEATHER_OVERRIDE: WeatherType = WeatherType.NONE;
   /**
-   * If `null`, ignore this override.
+   * Determines the override for battle types.
    *
-   * If `"single"`, set every non-trainer battle to be a single battle.
-   *
-   * If `"double"`, set every battle (including trainer battles) to be a double battle.
-   *
-   * If `"even-doubles"`, follow the `"double"` rule on even wave numbers, and follow the `"single"` rule on odd wave numbers.
-   *
-   * If `"odd-doubles"`, follow the `"double"` rule on odd wave numbers, and follow the `"single"` rule on even wave numbers.
+   * Possible values:
+   * - `null`: Ignore this override.
+   * - `"single"`: Set every non-trainer battle to be a single battle.
+   * - `"double"`: Set every battle (including trainer battles) to be a double battle.
+   * - `"even-doubles"`:
+   *      - On even wave numbers, apply the `"double"` rule.
+   *      - On odd wave numbers, apply the `"single"` rule.
+   * - `"odd-doubles"`:
+   *      - On odd wave numbers, apply the `"double"` rule.
+   *      - On even wave numbers, apply the `"single"` rule.
    */
   readonly BATTLE_TYPE_OVERRIDE: BattleStyle | null = null;
   readonly STARTING_WAVE_OVERRIDE: number = 0;
@@ -68,10 +72,9 @@ class DefaultOverrides {
   readonly NEVER_CRIT_OVERRIDE: boolean = false;
   /** default 1000 */
   readonly STARTING_MONEY_OVERRIDE: number = 0;
-  /** Sets all shop item prices to 0 */
+  /** Sets all shop item prices and reroll cost to 0 */
   readonly WAIVE_SHOP_FEES_OVERRIDE: boolean = false;
-  /** Sets reroll price to 0 */
-  readonly WAIVE_ROLL_FEE_OVERRIDE: boolean = false;
+  /** Sets all candy upgrades cost to 0 in starter selection */
   readonly FREE_CANDY_UPGRADE_OVERRIDE: boolean = false;
   readonly POKEBALL_OVERRIDE: { active: boolean; pokeballs: PokeballCounts } = {
     active: false,
@@ -100,6 +103,7 @@ class DefaultOverrides {
   // ----------------
   // PLAYER OVERRIDES
   // ----------------
+
   /**
    * Set the form index of any starter in the party whose `speciesId` is inside this override
    * @see {@link allSpecies} in `src/data/pokemon-species.ts` for form indexes
@@ -121,13 +125,9 @@ class DefaultOverrides {
    * @example SPECIES_OVERRIDE = Species.Bulbasaur;
    */
   readonly STARTER_SPECIES_OVERRIDE: Species | number = 0;
-  /**
-   * This will force your starter to be a random fusion
-   */
+  /** This will force your starter to be a random fusion */
   readonly STARTER_FUSION_OVERRIDE: boolean = false;
-  /**
-   * This will override the species of the fusion
-   */
+  /** This will override the species of the fusion */
   readonly STARTER_FUSION_SPECIES_OVERRIDE: Species | number = 0;
   readonly ABILITY_OVERRIDE: Abilities = Abilities.NONE;
   readonly PASSIVE_ABILITY_OVERRIDE: Abilities = Abilities.NONE;
@@ -138,27 +138,24 @@ class DefaultOverrides {
   readonly VARIANT_OVERRIDE: Variant | null = null;
 
   // --------------------------
-  // OPPONENT / ENEMY OVERRIDES
+  // ENEMY OVERRIDES
   // --------------------------
-  readonly OPP_SPECIES_OVERRIDE: Species | number = 0;
-  /**
-   * This will make all opponents fused Pokemon
-   */
-  readonly OPP_FUSION_OVERRIDE: boolean = false;
-  /**
-   * This will override the species of the fusion only when the opponent is already a fusion
-   */
-  readonly OPP_FUSION_SPECIES_OVERRIDE: Species | number = 0;
-  readonly OPP_LEVEL_OVERRIDE: number = 0;
-  readonly OPP_ABILITY_OVERRIDE: Abilities = Abilities.NONE;
-  readonly OPP_PASSIVE_ABILITY_OVERRIDE: Abilities = Abilities.NONE;
-  readonly OPP_STATUS_OVERRIDE: StatusEffect = StatusEffect.NONE;
-  readonly OPP_GENDER_OVERRIDE: Gender | null = null;
-  readonly OPP_MOVESET_OVERRIDE: Moves | Array<Moves> = [];
-  readonly OPP_SHINY_OVERRIDE: boolean | null = null;
-  readonly OPP_VARIANT_OVERRIDE: Variant | null = null;
-  readonly OPP_IVS_OVERRIDE: number | number[] = [];
-  readonly OPP_FORM_OVERRIDES: Partial<Record<Species, number>> = {};
+
+  readonly ENEMY_SPECIES_OVERRIDE: Species | number = 0;
+  /** This will make all enemys be fused Pokemon */
+  readonly ENEMY_FUSION_OVERRIDE: boolean = false;
+  /** This will override the species of the fusion only when the enemy is already a fusion */
+  readonly ENEMY_FUSION_SPECIES_OVERRIDE: Species | number = 0;
+  readonly ENEMY_LEVEL_OVERRIDE: number = 0;
+  readonly ENEMY_ABILITY_OVERRIDE: Abilities = Abilities.NONE;
+  readonly ENEMY_PASSIVE_ABILITY_OVERRIDE: Abilities = Abilities.NONE;
+  readonly ENEMY_STATUS_OVERRIDE: StatusEffect = StatusEffect.NONE;
+  readonly ENEMY_GENDER_OVERRIDE: Gender | null = null;
+  readonly ENEMY_MOVESET_OVERRIDE: Moves | Array<Moves> = [];
+  readonly ENEMY_SHINY_OVERRIDE: boolean | null = null;
+  readonly ENEMY_VARIANT_OVERRIDE: Variant | null = null;
+  readonly ENEMY_IVS_OVERRIDE: number | number[] = [];
+  readonly ENEMY_FORM_OVERRIDES: Partial<Record<Species, number>> = {};
   /**
    * Override to give the enemy Pokemon a given amount of health segments
    *
@@ -166,11 +163,12 @@ class DefaultOverrides {
    * 1: the Pokemon will have a single health segment and therefore will not be a boss
    * 2+: the Pokemon will be a boss with the given number of health segments
    */
-  readonly OPP_HEALTH_SEGMENTS_OVERRIDE: number = 0;
+  readonly ENEMY_HEALTH_SEGMENTS_OVERRIDE: number = 0;
 
   // -------------
   // EGG OVERRIDES
   // -------------
+
   readonly EGG_IMMEDIATE_HATCH_OVERRIDE: boolean = false;
   readonly EGG_TIER_OVERRIDE: EggTier | null = null;
   readonly EGG_SHINY_OVERRIDE: boolean = false;
@@ -228,12 +226,12 @@ class DefaultOverrides {
    *
    * Note that any previous modifiers are cleared.
    */
-  readonly OPP_MODIFIER_OVERRIDE: ModifierOverride[] = [];
+  readonly ENEMY_MODIFIER_OVERRIDE: ModifierOverride[] = [];
 
   /** Override array of {@linkcode ModifierOverride}s used to provide held items to first party member when starting a new game. */
   readonly STARTING_HELD_ITEMS_OVERRIDE: ModifierOverride[] = [];
   /** Override array of {@linkcode ModifierOverride}s used to provide held items to enemies on spawn. */
-  readonly OPP_HELD_ITEMS_OVERRIDE: ModifierOverride[] = [];
+  readonly ENEMY_HELD_ITEMS_OVERRIDE: ModifierOverride[] = [];
 
   /**
    * Override array of {@linkcode ModifierOverride}s used to replace the generated item rolls after a wave.
@@ -244,13 +242,16 @@ class DefaultOverrides {
    * Note that, for all items in the array, `count` is not used.
    */
   readonly ITEM_REWARD_OVERRIDE: ModifierOverride[] = [];
+
+  /** If `true`, disable all non-scripted enemy trainer encounters. */
+  readonly DISABLE_RANDOM_TRAINERS_OVERRIDE: boolean = false;
 }
 
 export const defaultOverrides = new DefaultOverrides();
 
 export default {
   ...defaultOverrides,
-  ...overrides
+  ...overrides,
 } satisfies InstanceType<typeof DefaultOverrides>;
 
 export type BattleStyle = "double" | "single" | "even-doubles" | "odd-doubles";

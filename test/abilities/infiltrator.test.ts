@@ -1,4 +1,4 @@
-import { ArenaTagSide } from "#app/data/arena-tag";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { allMoves } from "#app/data/all-moves";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -10,6 +10,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
 
 describe("Abilities - Infiltrator", () => {
   let phaserGame: Phaser.Game;
@@ -49,11 +50,11 @@ describe("Abilities - Infiltrator", () => {
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    const preScreenDmg = enemy.getAttackDamage(player, allMoves[move], false, false, false, false).damage;
+    const preScreenDmg = enemy.getAttackDamage(player, allMoves[move], AbilityApplyMode.DEFAULT, false, false).damage;
 
-    game.scene.arena.addTag(tagType, 1, Moves.NONE, enemy.id, ArenaTagSide.ENEMY, true);
+    game.scene.arena.addTag(tagType, enemy.id, 1, Moves.NONE, ArenaTagSide.ENEMY, true);
 
-    const postScreenDmg = enemy.getAttackDamage(player, allMoves[move], false, false, false, false).damage;
+    const postScreenDmg = enemy.getAttackDamage(player, allMoves[move], AbilityApplyMode.DEFAULT, false, false).damage;
 
     expect(postScreenDmg).toBe(preScreenDmg);
     expect(player.battleData.abilitiesApplied[0]).toBe(Abilities.INFILTRATOR);
@@ -65,7 +66,7 @@ describe("Abilities - Infiltrator", () => {
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.scene.arena.addTag(ArenaTagType.SAFEGUARD, 1, Moves.NONE, enemy.id, ArenaTagSide.ENEMY, true);
+    game.scene.arena.addTag(ArenaTagType.SAFEGUARD, enemy.id, 1, Moves.NONE, ArenaTagSide.ENEMY, true);
 
     game.move.select(Moves.SPORE);
 
@@ -81,7 +82,7 @@ describe("Abilities - Infiltrator", () => {
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.scene.arena.addTag(ArenaTagType.MIST, 1, Moves.NONE, enemy.id, ArenaTagSide.ENEMY, true);
+    game.scene.arena.addTag(ArenaTagType.MIST, enemy.id, 1, Moves.NONE, ArenaTagSide.ENEMY, true);
 
     game.move.select(Moves.BABY_DOLL_EYES);
 

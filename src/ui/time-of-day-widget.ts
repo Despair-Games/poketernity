@@ -1,8 +1,9 @@
-import { fixedInt } from "#app/utils";
+import { fixedNumber } from "#app/utils";
 import { globalScene } from "#app/global-scene";
-import { BattleSceneEventType } from "../events/battle-scene";
+import { BattleSceneEventType } from "#enums/battle-scene-event-type";
 import { EaseType } from "#enums/ease-type";
 import { TimeOfDay } from "#enums/time-of-day";
+import { settings } from "#app/system/settings/settings-manager";
 
 /** A small self contained UI element that displays the time of day as an icon */
 export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
@@ -49,8 +50,8 @@ export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
   constructor(x: number = 0, y: number = 0) {
     super(globalScene, x, y);
 
-    this.setVisible(globalScene.showTimeOfDayWidget);
-    if (!globalScene.showTimeOfDayWidget) {
+    this.setVisible(settings.display.showTimeOfDayWidget);
+    if (!settings.display.showTimeOfDayWidget) {
       return;
     }
 
@@ -75,14 +76,14 @@ export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
     const rotate = {
       targets: [this.timeOfDayIconMgs[0], this.timeOfDayIconMgs[1]],
       angle: "+=90",
-      duration: fixedInt(1500),
+      duration: fixedNumber(1500),
       ease: "Back.easeOut",
       paused: !this.parentVisible,
     };
     const fade = {
       targets: [this.timeOfDayIconBgs[1], this.timeOfDayIconMgs[1], this.timeOfDayIconFgs[1]],
       alpha: 0,
-      duration: fixedInt(500),
+      duration: fixedNumber(500),
       ease: "Linear",
       paused: !this.parentVisible,
     };
@@ -98,14 +99,14 @@ export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
     const bounce = {
       targets: [this.timeOfDayIconMgs[0], this.timeOfDayIconMgs[1]],
       angle: "+=90",
-      duration: fixedInt(2000),
+      duration: fixedNumber(2000),
       ease: "Bounce.easeOut",
       paused: !this.parentVisible,
     };
     const fade = {
       targets: [this.timeOfDayIconBgs[1], this.timeOfDayIconMgs[1], this.timeOfDayIconFgs[1]],
       alpha: 0,
-      duration: fixedInt(800),
+      duration: fixedNumber(800),
       ease: "Linear",
       paused: !this.parentVisible,
     };
@@ -135,8 +136,8 @@ export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
     this.resetIcons();
 
     // Tween based on the player setting
-    (globalScene.timeOfDayAnimation === EaseType.BACK ? this.getBackTween() : this.getBounceTween()).forEach((tween) =>
-      globalScene.tweens.add(tween),
+    (settings.display.timeOfDayAnimation === EaseType.BACK ? this.getBackTween() : this.getBounceTween()).forEach(
+      (tween) => globalScene.tweens.add(tween),
     );
 
     // Swaps all elements of the icon arrays by shifting the first element onto the end of the array

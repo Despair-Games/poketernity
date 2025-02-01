@@ -1,9 +1,9 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { type Move } from "#app/data/move";
-import { MoveTarget } from "../../enums/move-target";
+import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
-import type { Type } from "#enums/type";
+import type { ElementType } from "#enums/element-type";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
 /**
@@ -13,10 +13,10 @@ import { PreDefendAbAttr } from "./pre-defend-ab-attr";
  * @see {@linkcode getCondition}
  */
 export class TypeImmunityAbAttr extends PreDefendAbAttr {
-  private readonly immuneType: Type | null;
+  private readonly immuneType: ElementType | null;
   private readonly condition: AbAttrCondition | null;
 
-  constructor(immuneType: Type | null, condition?: AbAttrCondition) {
+  constructor(immuneType: ElementType | null, condition?: AbAttrCondition) {
     super();
 
     this.immuneType = immuneType;
@@ -26,15 +26,14 @@ export class TypeImmunityAbAttr extends PreDefendAbAttr {
   /**
    * Applies immunity if this ability grants immunity to the type of the given move.
    * @param pokemon - The defending {@linkcode Pokemon}
-   * @param _passive - N/A
+   * @param simulated - N/A
    * @param attacker - The attacking {@linkcode Pokemon}
    * @param move The used {@linkcode Move}
-   * @param _cancelled N/A
+   * @param cancelled N/A
    * @param typeMultiplier {@linkcode NumberHolder} gets set to `0` if the pokemon is immune
    */
-  override applyPreDefend(
+  override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     attacker: Pokemon,
     move: Move,
@@ -52,7 +51,7 @@ export class TypeImmunityAbAttr extends PreDefendAbAttr {
     return false;
   }
 
-  getImmuneType(): Type | null {
+  getImmuneType(): ElementType | null {
     return this.immuneType;
   }
 

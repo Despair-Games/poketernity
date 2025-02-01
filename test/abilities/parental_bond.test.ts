@@ -1,4 +1,4 @@
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
@@ -10,7 +10,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { allMoves } from "#app/data/all-moves";
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 
 describe("Abilities - Parental Bond", () => {
   let phaserGame: Phaser.Game;
@@ -231,11 +231,11 @@ describe("Abilities - Parental Bond", () => {
 
     expect(leadPokemon.turnData.hitCount).toBe(2);
     expect(enemyPokemon.hp).toBeGreaterThan(0);
-    expect(leadPokemon.isOfType(Type.FIRE)).toBe(true);
+    expect(leadPokemon.isOfType(ElementType.FIRE)).toBe(true);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    expect(leadPokemon.isOfType(Type.FIRE)).toBe(false);
+    expect(leadPokemon.isOfType(ElementType.FIRE)).toBe(false);
   });
 
   it("Moves boosted by this ability and Multi-Lens should strike 3 times", async () => {

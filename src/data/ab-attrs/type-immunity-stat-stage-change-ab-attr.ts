@@ -5,30 +5,29 @@ import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
 import type { BattleStat } from "#enums/stat";
-import type { Type } from "#enums/type";
+import type { ElementType } from "#enums/element-type";
 import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
 
 export class TypeImmunityStatStageChangeAbAttr extends TypeImmunityAbAttr {
   private readonly stat: BattleStat;
   private readonly stages: number;
 
-  constructor(immuneType: Type, stat: BattleStat, stages: number, condition?: AbAttrCondition) {
+  constructor(immuneType: ElementType, stat: BattleStat, stages: number, condition?: AbAttrCondition) {
     super(immuneType, condition);
 
     this.stat = stat;
     this.stages = stages;
   }
 
-  override applyPreDefend(
+  override apply(
     pokemon: Pokemon,
-    passive: boolean,
     simulated: boolean,
     attacker: Pokemon,
     move: Move,
     cancelled: BooleanHolder,
     typeMultiplier: NumberHolder,
   ): boolean {
-    const ret = super.applyPreDefend(pokemon, passive, simulated, attacker, move, cancelled, typeMultiplier);
+    const ret = super.apply(pokemon, simulated, attacker, move, cancelled, typeMultiplier);
 
     if (ret) {
       cancelled.value = true; // Suppresses "No Effect" message

@@ -1,29 +1,27 @@
 import type { Move } from "#app/data/move";
-import { MoveFlags } from "../../enums/move-flags";
+import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
-import type { HitResult } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 import { UnswappableAbilityAbAttr } from "./unswappable-ability-ab-attr";
 
 export class PostDefendAbilitySwapAbAttr extends PostDefendAbAttr {
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-  ): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && !attacker.getAbility().hasAttr(UnswappableAbilityAbAttr)
+      && !attacker.isMax()
     ) {
       if (!simulated) {
-        const tempAbilityId = attacker.getAbility().id;
-        attacker.summonData.ability = pokemon.getAbility().id;
-        pokemon.summonData.ability = tempAbilityId;
+        const sourceAbilityId = pokemon.getAbility().id;
+        const attackerAbilityId = attacker.getAbility().id;
+
+        attacker.summonData.ability = sourceAbilityId;
+        attacker.battleData.abilitiesRevealed.push(sourceAbilityId);
+
+        pokemon.summonData.ability = attackerAbilityId;
+        pokemon.battleData.abilitiesRevealed.push(attackerAbilityId);
       }
       return true;
     }

@@ -1,7 +1,6 @@
 import { getPokemonWithWeatherBasedForms } from "#app/data/ability-utils";
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { PostFaintAbAttr } from "./post-faint-ab-attr";
 
@@ -11,24 +10,7 @@ import { PostFaintAbAttr } from "./post-faint-ab-attr";
  * @extends PostFaintAbAttr
  */
 export class PostFaintUnsuppressedWeatherFormChangeAbAttr extends PostFaintAbAttr {
-  /**
-   * Triggers {@linkcode Arena.triggerWeatherBasedFormChanges | triggerWeatherBasedFormChanges}
-   * when the user of the ability faints
-   * @param _pokemon the fainted {@linkcode Pokemon}
-   * @param _passive n/a
-   * @param _attacker n/a
-   * @param _move n/a
-   * @param _hitResult n/a
-   * @returns whether the form change was triggered
-   */
-  override applyPostFaint(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    _attacker: Pokemon,
-    _move: Move,
-    _hitResult: HitResult,
-  ): boolean {
+  override apply(_pokemon: Pokemon, simulated: boolean, _attacker: Pokemon, _move: Move): boolean {
     const pokemonToTransform = getPokemonWithWeatherBasedForms();
 
     if (pokemonToTransform.length < 1) {

@@ -1,4 +1,4 @@
-import type { ScoreboardCategory } from "#app/ui/daily-run-scoreboard";
+import type { ScoreboardCategory } from "#enums/scoreboard-category";
 
 export interface GetDailyRankingsRequest {
   category: ScoreboardCategory;

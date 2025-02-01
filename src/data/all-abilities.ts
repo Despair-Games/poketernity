@@ -1,20 +1,21 @@
-import { Abilities } from "#app/enums/abilities";
-import { ArenaTagType } from "#app/enums/arena-tag-type";
-import { BattlerTagType } from "#app/enums/battler-tag-type";
-import { Gender } from "#app/enums/gender";
-import { Moves } from "#app/enums/moves";
-import { EFFECTIVE_STATS, getStatKey, Stat, type EffectiveStat } from "#app/enums/stat";
-import { StatusEffect } from "#app/enums/status-effect";
-import { TerrainType } from "#app/enums/terrain-type";
-import { Type } from "#app/enums/type";
-import { WeatherType } from "#app/enums/weather-type";
+import { Abilities } from "#enums/abilities";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { Gender } from "#enums/gender";
+import { Moves } from "#enums/moves";
+import { EFFECTIVE_STATS, getStatKey, Stat, type EffectiveStat } from "#enums/stat";
+import { StatusEffect } from "#enums/status-effect";
+import { TerrainType } from "#enums/terrain-type";
+import { ElementType } from "#enums/element-type";
+import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { MovePhase } from "#app/phases/move-phase";
 import { isNullOrUndefined, NumberHolder, randSeedInt, toDmgValue } from "#app/utils";
 import i18next from "i18next";
-import { Ability, allAbilities, PostDamageForceSwitchAbAttr } from "./ability";
+import { Ability, allAbilities } from "./ability";
+import { PostDamageForceSwitchAbAttr } from "./ab-attrs/post-damage-force-switch-out-ab-attr";
 import { PreventBypassSpeedChanceAbAttr } from "./ab-attrs/prevent-bypass-speed-chance-ab-attr";
 import { FormBlockDamageAbAttr } from "./ab-attrs/form-block-damage-ab-attr";
 import { PostSummonStatStageChangeOnArenaAbAttr } from "./ab-attrs/post-summon-stat-stage-change-on-arena-ab-attr";
@@ -36,7 +37,7 @@ import { ReduceBerryUseThresholdAbAttr } from "./ab-attrs/reduce-berry-use-thres
 import { ForceSwitchOutImmunityAbAttr } from "./ab-attrs/force-switch-out-immunity-ab-attr";
 import { IncreasePpAbAttr } from "./ab-attrs/increase-pp-ab-attr";
 import { FlinchStatStageChangeAbAttr } from "./ab-attrs/flinch-stat-stage-change-ab-attr";
-import { ReduceStatusEffectDurationAbAttr } from "./ab-attrs/reduce-status-effect-duration-ab-attr";
+import { ReduceSleepDurationAbAttr } from "./ab-attrs/reduce-sleep-duration-ab-attr";
 import { BlockRedirectAbAttr } from "./ab-attrs/block-redirect-ab-attr";
 import { RedirectTypeMoveAbAttr } from "./ab-attrs/redirect-type-move-ab-attr";
 import { PostFaintClearWeatherAbAttr } from "./ab-attrs/post-faint-clear-weather-ab-attr";
@@ -132,9 +133,10 @@ import { VariableMoveTypeAttr } from "./move-attrs/variable-move-type-attr";
 import { VariablePowerAttr } from "./move-attrs/variable-power-attr";
 import { OneHitKOAttr } from "./move-attrs/one-hit-ko-attr";
 import { AttackMove } from "./move";
-import { MoveFlags } from "../enums/move-flags";
-import { MoveCategory } from "../enums/move-category";
+import { MoveFlags } from "#enums/move-flags";
+import { MoveCategory } from "#enums/move-category";
 import { getNonVolatileStatusEffects } from "./status-effect";
+import { RecoveryBoostAbAttr } from "./ab-attrs/recovery-boost-ab-attr";
 import { IgnoreTypeStatusEffectImmunityAbAttr } from "./ab-attrs/ignore-type-status-effect-immunity-ab-attr";
 import { BlockItemTheftAbAttr } from "./ab-attrs/block-item-theft-ab-attr";
 import { BlockRecoilDamageAttr } from "./ab-attrs/block-recoil-damage-ab-attr";
@@ -196,6 +198,8 @@ import { PostFaintHPDamageAbAttr } from "./ab-attrs/post-faint-hp-damage-ab-attr
 import { BypassSpeedChanceAbAttr } from "./ab-attrs/bypass-speed-chance-ab-attr";
 import { TerrainEventTypeChangeAbAttr } from "./ab-attrs/terrain-event-type-change-ab-attr";
 import { WeatherBasedSpeedDoublerAbAttr } from "./ab-attrs/weather-based-speed-doubler-ab-attr";
+import { MoveFlagPowerBoostAbAttr } from "./ab-attrs/move-flag-power-boost-ab-attr";
+import { MoveFlagImmunityAbAttr } from "./ab-attrs/move-flag-immunity-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
@@ -280,22 +284,22 @@ function getAnticipationCondition(): AbAttrCondition {
           );
 
           const type = [
-            Type.FIGHTING,
-            Type.FLYING,
-            Type.POISON,
-            Type.GROUND,
-            Type.ROCK,
-            Type.BUG,
-            Type.GHOST,
-            Type.STEEL,
-            Type.FIRE,
-            Type.WATER,
-            Type.GRASS,
-            Type.ELECTRIC,
-            Type.PSYCHIC,
-            Type.ICE,
-            Type.DRAGON,
-            Type.DARK,
+            ElementType.FIGHTING,
+            ElementType.FLYING,
+            ElementType.POISON,
+            ElementType.GROUND,
+            ElementType.ROCK,
+            ElementType.BUG,
+            ElementType.GHOST,
+            ElementType.STEEL,
+            ElementType.FIRE,
+            ElementType.WATER,
+            ElementType.GRASS,
+            ElementType.ELECTRIC,
+            ElementType.PSYCHIC,
+            ElementType.ICE,
+            ElementType.DRAGON,
+            ElementType.DARK,
           ][iv_val];
 
           if (pokemon.getAttackTypeEffectiveness(type, opponent) >= 2) {
@@ -353,8 +357,8 @@ export function initAbilities() {
     new Ability(Abilities.STATIC, 3)
       .attr(PostDefendContactApplyStatusEffectAbAttr, 30, StatusEffect.PARALYSIS)
       .bypassFaint(),
-    new Ability(Abilities.VOLT_ABSORB, 3).attr(TypeImmunityHealAbAttr, Type.ELECTRIC).ignorable(),
-    new Ability(Abilities.WATER_ABSORB, 3).attr(TypeImmunityHealAbAttr, Type.WATER).ignorable(),
+    new Ability(Abilities.VOLT_ABSORB, 3).attr(TypeImmunityHealAbAttr, ElementType.ELECTRIC).ignorable(),
+    new Ability(Abilities.WATER_ABSORB, 3).attr(TypeImmunityHealAbAttr, ElementType.WATER).ignorable(),
     new Ability(Abilities.OBLIVIOUS, 3)
       .attr(BattlerTagImmunityAbAttr, [BattlerTagType.INFATUATED, BattlerTagType.TAUNT])
       .attr(IntimidateImmunityAbAttr)
@@ -377,7 +381,7 @@ export function initAbilities() {
       .attr(StatusEffectImmunityAbAttr, StatusEffect.POISON, StatusEffect.TOXIC)
       .ignorable(),
     new Ability(Abilities.FLASH_FIRE, 3)
-      .attr(TypeImmunityAddBattlerTagAbAttr, Type.FIRE, BattlerTagType.FIRE_BOOST, 1)
+      .attr(TypeImmunityAddBattlerTagAbAttr, ElementType.FIRE, BattlerTagType.FIRE_BOOST, 1)
       .ignorable(),
     new Ability(Abilities.SHIELD_DUST, 3).attr(IgnoreMoveEffectsAbAttr).ignorable(),
     new Ability(Abilities.OWN_TEMPO, 3)
@@ -401,7 +405,7 @@ export function initAbilities() {
     new Ability(Abilities.LEVITATE, 3)
       .attr(
         AttackTypeImmunityAbAttr,
-        Type.GROUND,
+        ElementType.GROUND,
         (pokemon: Pokemon) => !pokemon.getTag(GroundedTag) && !globalScene.arena.getTag(ArenaTagType.GRAVITY),
       )
       .ignorable(),
@@ -410,8 +414,8 @@ export function initAbilities() {
     new Ability(Abilities.CLEAR_BODY, 3).attr(ProtectStatAbAttr).ignorable(),
     new Ability(Abilities.NATURAL_CURE, 3).attr(PreSwitchOutResetStatusAbAttr),
     new Ability(Abilities.LIGHTNING_ROD, 3)
-      .attr(RedirectTypeMoveAbAttr, Type.ELECTRIC)
-      .attr(TypeImmunityStatStageChangeAbAttr, Type.ELECTRIC, Stat.SPATK, 1)
+      .attr(RedirectTypeMoveAbAttr, ElementType.ELECTRIC)
+      .attr(TypeImmunityStatStageChangeAbAttr, ElementType.ELECTRIC, Stat.SPATK, 1)
       .ignorable(),
     new Ability(Abilities.SERENE_GRACE, 3).attr(MoveEffectChanceMultiplierAbAttr, 2),
     new Ability(Abilities.SWIFT_SWIM, 3).attr(WeatherBasedSpeedDoublerAbAttr, [
@@ -440,19 +444,14 @@ export function initAbilities() {
     new Ability(Abilities.WATER_VEIL, 3).attr(StatusEffectImmunityAbAttr, StatusEffect.BURN).ignorable(),
     new Ability(Abilities.MAGNET_PULL, 3).attr(ArenaTrapAbAttr, (_user, target) => {
       if (
-        target.getTypes(true).includes(Type.STEEL)
-        || (target.getTypes(true).includes(Type.STELLAR) && target.getTypes().includes(Type.STEEL))
+        target.getTypes(true).includes(ElementType.STEEL)
+        || (target.getTypes(true).includes(ElementType.STELLAR) && target.getTypes().includes(ElementType.STEEL))
       ) {
         return true;
       }
       return false;
     }),
-    new Ability(Abilities.SOUNDPROOF, 3)
-      .attr(
-        MoveImmunityAbAttr,
-        (pokemon, attacker, move) => pokemon !== attacker && move.hasFlag(MoveFlags.SOUND_BASED),
-      )
-      .ignorable(),
+    new Ability(Abilities.SOUNDPROOF, 3).attr(MoveFlagImmunityAbAttr, MoveFlags.SOUND_MOVE).ignorable(),
     new Ability(Abilities.RAIN_DISH, 3).attr(PostWeatherLapseHealAbAttr, 1, WeatherType.RAIN, WeatherType.HEAVY_RAIN),
     new Ability(Abilities.SAND_STREAM, 3)
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.SANDSTORM)
@@ -463,10 +462,10 @@ export function initAbilities() {
         i18next.t("abilityTriggers:postSummonPressure", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       ),
     new Ability(Abilities.THICK_FAT, 3)
-      .attr(ReceivedTypeDamageMultiplierAbAttr, Type.FIRE, 0.5)
-      .attr(ReceivedTypeDamageMultiplierAbAttr, Type.ICE, 0.5)
+      .attr(ReceivedTypeDamageMultiplierAbAttr, ElementType.FIRE, 0.5)
+      .attr(ReceivedTypeDamageMultiplierAbAttr, ElementType.ICE, 0.5)
       .ignorable(),
-    new Ability(Abilities.EARLY_BIRD, 3).attr(ReduceStatusEffectDurationAbAttr, StatusEffect.SLEEP),
+    new Ability(Abilities.EARLY_BIRD, 3).attr(ReduceSleepDurationAbAttr),
     new Ability(Abilities.FLAME_BODY, 3)
       .attr(PostDefendContactApplyStatusEffectAbAttr, 30, StatusEffect.BURN)
       .bypassFaint(),
@@ -477,7 +476,7 @@ export function initAbilities() {
     new Ability(Abilities.TRUANT, 3).attr(PostSummonAddBattlerTagAbAttr, BattlerTagType.TRUANT, 1, false),
     new Ability(Abilities.HUSTLE, 3)
       .attr(StatMultiplierAbAttr, Stat.ATK, 1.5)
-      .attr(StatMultiplierAbAttr, Stat.ACC, 0.8, (_user, _target, move) => move.category === MoveCategory.PHYSICAL),
+      .attr(StatMultiplierAbAttr, Stat.ACC, 0.8, (_user, _target, move) => move?.category === MoveCategory.PHYSICAL),
     new Ability(Abilities.CUTE_CHARM, 3).attr(PostDefendContactApplyTagChanceAbAttr, 30, BattlerTagType.INFATUATED),
     new Ability(Abilities.PLUS, 3).conditionalAttr(
       (p) =>
@@ -522,10 +521,10 @@ export function initAbilities() {
       )
       .ignorable(),
     new Ability(Abilities.LIQUID_OOZE, 3).attr(ReverseDrainAbAttr),
-    new Ability(Abilities.OVERGROW, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, Type.GRASS),
-    new Ability(Abilities.BLAZE, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, Type.FIRE),
-    new Ability(Abilities.TORRENT, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, Type.WATER),
-    new Ability(Abilities.SWARM, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, Type.BUG),
+    new Ability(Abilities.OVERGROW, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, ElementType.GRASS),
+    new Ability(Abilities.BLAZE, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, ElementType.FIRE),
+    new Ability(Abilities.TORRENT, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, ElementType.WATER),
+    new Ability(Abilities.SWARM, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, ElementType.BUG),
     new Ability(Abilities.ROCK_HEAD, 3).attr(BlockRecoilDamageAttr),
     new Ability(Abilities.DROUGHT, 3)
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.SUNNY)
@@ -555,7 +554,7 @@ export function initAbilities() {
       .conditionalAttr((pokemon) => !!pokemon.getTag(BattlerTagType.CONFUSED), StatMultiplierAbAttr, Stat.EVA, 2)
       .ignorable(),
     new Ability(Abilities.MOTOR_DRIVE, 4)
-      .attr(TypeImmunityStatStageChangeAbAttr, Type.ELECTRIC, Stat.SPD, 1)
+      .attr(TypeImmunityStatStageChangeAbAttr, ElementType.ELECTRIC, Stat.SPD, 1)
       .ignorable(),
     new Ability(Abilities.RIVALRY, 4)
       .attr(
@@ -584,22 +583,18 @@ export function initAbilities() {
       .bypassFaint() // Allows reviver seed to activate Unburden
       .edgeCase(), // Should not restore Unburden boost if Pokemon loses then regains Unburden ability
     new Ability(Abilities.HEATPROOF, 4)
-      .attr(ReceivedTypeDamageMultiplierAbAttr, Type.FIRE, 0.5)
+      .attr(ReceivedTypeDamageMultiplierAbAttr, ElementType.FIRE, 0.5)
       .attr(ReduceBurnDamageAbAttr, 0.5)
       .ignorable(),
     new Ability(Abilities.SIMPLE, 4).attr(StatStageChangeMultiplierAbAttr, 2).ignorable(),
     new Ability(Abilities.DRY_SKIN, 4)
       .attr(PostWeatherLapseDamageAbAttr, 2, WeatherType.SUNNY, WeatherType.HARSH_SUN)
       .attr(PostWeatherLapseHealAbAttr, 2, WeatherType.RAIN, WeatherType.HEAVY_RAIN)
-      .attr(ReceivedTypeDamageMultiplierAbAttr, Type.FIRE, 1.25)
-      .attr(TypeImmunityHealAbAttr, Type.WATER)
+      .attr(ReceivedTypeDamageMultiplierAbAttr, ElementType.FIRE, 1.25)
+      .attr(TypeImmunityHealAbAttr, ElementType.WATER)
       .ignorable(),
     new Ability(Abilities.DOWNLOAD, 4).attr(DownloadAbAttr),
-    new Ability(Abilities.IRON_FIST, 4).attr(
-      MovePowerBoostAbAttr,
-      (_user, _target, move) => move.hasFlag(MoveFlags.PUNCHING_MOVE),
-      1.2,
-    ),
+    new Ability(Abilities.IRON_FIST, 4).attr(MoveFlagPowerBoostAbAttr, MoveFlags.PUNCHING_MOVE, 1.2),
     new Ability(Abilities.POISON_HEAL, 4)
       .attr(PostTurnStatusHealAbAttr, StatusEffect.TOXIC, StatusEffect.POISON)
       .attr(BlockStatusDamageAbAttr, StatusEffect.TOXIC, StatusEffect.POISON),
@@ -625,9 +620,12 @@ export function initAbilities() {
         Stat.SPD,
         1.5,
       ),
-    new Ability(Abilities.NORMALIZE, 4).attr(MoveTypeChangeAbAttr, Type.NORMAL, 1.2, (_user, _target, move) => {
-      return ![Moves.HIDDEN_POWER, Moves.WEATHER_BALL, Moves.NATURAL_GIFT, Moves.JUDGMENT, Moves.TECHNO_BLAST].includes(
-        move.id,
+    new Ability(Abilities.NORMALIZE, 4).attr(MoveTypeChangeAbAttr, ElementType.NORMAL, 1.2, (_user, _target, move) => {
+      return (
+        !!move
+        && ![Moves.HIDDEN_POWER, Moves.WEATHER_BALL, Moves.NATURAL_GIFT, Moves.JUDGMENT, Moves.TECHNO_BLAST].includes(
+          move.id,
+        )
       );
     }),
     new Ability(Abilities.SNIPER, 4).attr(MultCritAbAttr, 1.5),
@@ -637,6 +635,9 @@ export function initAbilities() {
     new Ability(Abilities.TECHNICIAN, 4).attr(
       MovePowerBoostAbAttr,
       (user, target, move) => {
+        if (!move || !user || !target) {
+          return false;
+        }
         const power = new NumberHolder(move.power);
         applyMoveAttrs(VariablePowerAttr, user, target, move, power);
         return power.value <= 60;
@@ -665,11 +666,12 @@ export function initAbilities() {
     new Ability(Abilities.UNAWARE, 4)
       .attr(IgnoreOpponentStatStagesAbAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.ACC, Stat.EVA])
       .ignorable(),
-    new Ability(Abilities.TINTED_LENS, 4).attr(
-      DamageBoostAbAttr,
-      2,
-      (user, target, move) => (target?.getMoveEffectiveness(user!, move) ?? 1) <= 0.5,
-    ),
+    new Ability(Abilities.TINTED_LENS, 4).attr(DamageBoostAbAttr, 2, (user, target, move) => {
+      if (!user || !target || !move) {
+        return false;
+      }
+      return target.getMoveEffectiveness(user, move) <= 0.5;
+    }),
     new Ability(Abilities.FILTER, 4)
       .attr(
         ReceivedMoveDamageMultiplierAbAttr,
@@ -679,11 +681,11 @@ export function initAbilities() {
       .ignorable(),
     new Ability(Abilities.SLOW_START, 4).attr(PostSummonAddBattlerTagAbAttr, BattlerTagType.SLOW_START, 5),
     new Ability(Abilities.SCRAPPY, 4)
-      .attr(IgnoreTypeImmunityAbAttr, Type.GHOST, [Type.NORMAL, Type.FIGHTING])
+      .attr(IgnoreTypeImmunityAbAttr, ElementType.GHOST, [ElementType.NORMAL, ElementType.FIGHTING])
       .attr(IntimidateImmunityAbAttr),
     new Ability(Abilities.STORM_DRAIN, 4)
-      .attr(RedirectTypeMoveAbAttr, Type.WATER)
-      .attr(TypeImmunityStatStageChangeAbAttr, Type.WATER, Stat.SPATK, 1)
+      .attr(RedirectTypeMoveAbAttr, ElementType.WATER)
+      .attr(TypeImmunityStatStageChangeAbAttr, ElementType.WATER, Stat.SPATK, 1)
       .ignorable(),
     new Ability(Abilities.ICE_BODY, 4)
       .attr(BlockWeatherDamageAttr, WeatherType.HAIL)
@@ -700,11 +702,7 @@ export function initAbilities() {
       .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.SNOW),
     new Ability(Abilities.HONEY_GATHER, 4).attr(MoneyAbAttr),
     new Ability(Abilities.FRISK, 4).attr(FriskAbAttr),
-    new Ability(Abilities.RECKLESS, 4).attr(
-      MovePowerBoostAbAttr,
-      (_user, _target, move) => move.hasFlag(MoveFlags.RECKLESS_MOVE),
-      1.2,
-    ),
+    new Ability(Abilities.RECKLESS, 4).attr(MoveFlagPowerBoostAbAttr, MoveFlags.RECKLESS_MOVE, 1.2),
     new Ability(Abilities.MULTITYPE, 4)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
@@ -743,16 +741,13 @@ export function initAbilities() {
       .attr(PostDefendStealHeldItemAbAttr, (_target, _user, move) => move.hasFlag(MoveFlags.MAKES_CONTACT))
       .condition(getSheerForceHitDisableAbCondition()),
     new Ability(Abilities.SHEER_FORCE, 5)
-      .attr(MovePowerBoostAbAttr, (_user, _target, move) => move.chance >= 1, 5461 / 4096)
+      .attr(MovePowerBoostAbAttr, (_user, _target, move) => !!move && move.chance >= 1, 5461 / 4096)
       .attr(MoveEffectChanceMultiplierAbAttr, 0), // Should disable life orb, eject button, red card, kee/maranga berry if they get implemented
     new Ability(Abilities.CONTRARY, 5).attr(StatStageChangeMultiplierAbAttr, -1).ignorable(),
     new Ability(Abilities.UNNERVE, 5).attr(PreventBerryUseAbAttr),
-    new Ability(Abilities.DEFIANT, 5).attr(
-      PostStatStageChangeStatStageChangeAbAttr,
-      (_target, _statsChanged, stages) => stages < 0,
-      [Stat.ATK],
-      2,
-    ),
+    new Ability(Abilities.DEFIANT, 5)
+      .attr(PostStatStageChangeStatStageChangeAbAttr, (_target, _statsChanged, stages) => stages < 0, [Stat.ATK], 2)
+      .edgeCase(), // Should not boost stats if switching into court changed sticky web
     new Ability(Abilities.DEFEATIST, 5)
       .attr(StatMultiplierAbAttr, Stat.ATK, 0.5)
       .attr(StatMultiplierAbAttr, Stat.SPATK, 0.5)
@@ -785,13 +780,13 @@ export function initAbilities() {
     new Ability(Abilities.TOXIC_BOOST, 5).attr(
       MovePowerBoostAbAttr,
       (user, _target, move) =>
-        move.category === MoveCategory.PHYSICAL
+        move?.category === MoveCategory.PHYSICAL
         && (user?.status?.effect === StatusEffect.POISON || user?.status?.effect === StatusEffect.TOXIC),
       1.5,
     ),
     new Ability(Abilities.FLARE_BOOST, 5).attr(
       MovePowerBoostAbAttr,
-      (user, _target, move) => move.category === MoveCategory.SPECIAL && user?.status?.effect === StatusEffect.BURN,
+      (user, _target, move) => move?.category === MoveCategory.SPECIAL && user?.status?.effect === StatusEffect.BURN,
       1.5,
     ),
     new Ability(Abilities.HARVEST, 5)
@@ -810,11 +805,8 @@ export function initAbilities() {
       .ignorable(),
     new Ability(Abilities.MOODY, 5).attr(MoodyAbAttr),
     new Ability(Abilities.OVERCOAT, 5)
-      .attr(BlockWeatherDamageAttr)
-      .attr(
-        MoveImmunityAbAttr,
-        (pokemon, attacker, move) => pokemon !== attacker && move.hasFlag(MoveFlags.POWDER_MOVE),
-      )
+      .attr(BlockWeatherDamageAttr, WeatherType.HAIL, WeatherType.SANDSTORM)
+      .attr(MoveFlagImmunityAbAttr, MoveFlags.POWDER_MOVE)
       .ignorable(),
     new Ability(Abilities.POISON_TOUCH, 5)
       .attr(PostAttackApplyStatusEffectAbAttr, true, 30, StatusEffect.POISON)
@@ -840,7 +832,7 @@ export function initAbilities() {
     new Ability(Abilities.MOXIE, 5).attr(PostVictoryStatStageChangeAbAttr, Stat.ATK, 1),
     new Ability(Abilities.JUSTIFIED, 5).attr(
       PostDefendStatStageChangeAbAttr,
-      (_target, user, move) => user.getMoveType(move) === Type.DARK && move.category !== MoveCategory.STATUS,
+      (_target, user, move) => user.getMoveType(move) === ElementType.DARK && move.category !== MoveCategory.STATUS,
       Stat.ATK,
       1,
     ),
@@ -851,7 +843,7 @@ export function initAbilities() {
           const moveType = user.getMoveType(move);
           return (
             move.category !== MoveCategory.STATUS
-            && (moveType === Type.DARK || moveType === Type.BUG || moveType === Type.GHOST)
+            && (moveType === ElementType.DARK || moveType === ElementType.BUG || moveType === ElementType.GHOST)
           );
         },
         Stat.SPD,
@@ -859,16 +851,18 @@ export function initAbilities() {
       )
       .attr(PostIntimidateStatStageChangeAbAttr, [Stat.SPD], 1),
     new Ability(Abilities.MAGIC_BOUNCE, 5).ignorable().unimplemented(),
-    new Ability(Abilities.SAP_SIPPER, 5).attr(TypeImmunityStatStageChangeAbAttr, Type.GRASS, Stat.ATK, 1).ignorable(),
+    new Ability(Abilities.SAP_SIPPER, 5)
+      .attr(TypeImmunityStatStageChangeAbAttr, ElementType.GRASS, Stat.ATK, 1)
+      .ignorable(),
     new Ability(Abilities.PRANKSTER, 5).attr(
       ChangeMovePriorityAbAttr,
       (_pokemon, move: Move) => move.category === MoveCategory.STATUS,
       1,
     ),
     new Ability(Abilities.SAND_FORCE, 5)
-      .attr(MoveTypePowerBoostAbAttr, Type.ROCK, 1.3)
-      .attr(MoveTypePowerBoostAbAttr, Type.GROUND, 1.3)
-      .attr(MoveTypePowerBoostAbAttr, Type.STEEL, 1.3)
+      .attr(MoveTypePowerBoostAbAttr, ElementType.ROCK, 1.3)
+      .attr(MoveTypePowerBoostAbAttr, ElementType.GROUND, 1.3)
+      .attr(MoveTypePowerBoostAbAttr, ElementType.STEEL, 1.3)
       .attr(BlockWeatherDamageAttr, WeatherType.SANDSTORM)
       .condition(getWeatherCondition(WeatherType.SANDSTORM)),
     new Ability(Abilities.IRON_BARBS, 5).attr(PostDefendContactDamageAbAttr, 8).bypassFaint(),
@@ -905,32 +899,18 @@ export function initAbilities() {
     new Ability(Abilities.CHEEK_POUCH, 6).attr(HealFromBerryUseAbAttr, 1 / 3),
     new Ability(Abilities.PROTEAN, 6).attr(PokemonTypeChangeAbAttr),
     //.condition((p) => !p.summonData?.abilitiesApplied.includes(Abilities.PROTEAN)), //Gen 9 Implementation
-    new Ability(Abilities.FUR_COAT, 6)
-      .attr(ReceivedMoveDamageMultiplierAbAttr, (_target, _user, move) => move.category === MoveCategory.PHYSICAL, 0.5)
-      .ignorable(),
+    new Ability(Abilities.FUR_COAT, 6).attr(StatMultiplierAbAttr, Stat.DEF, 2, (_user, target) => !!target).ignorable(),
     new Ability(Abilities.MAGICIAN, 6).attr(PostAttackStealHeldItemAbAttr),
-    new Ability(Abilities.BULLETPROOF, 6)
-      .attr(
-        MoveImmunityAbAttr,
-        (pokemon, attacker, move) => pokemon !== attacker && move.hasFlag(MoveFlags.BALLBOMB_MOVE),
-      )
-      .ignorable(),
-    new Ability(Abilities.COMPETITIVE, 6).attr(
-      PostStatStageChangeStatStageChangeAbAttr,
-      (_target, _statsChanged, stages) => stages < 0,
-      [Stat.SPATK],
-      2,
-    ),
-    new Ability(Abilities.STRONG_JAW, 6).attr(
-      MovePowerBoostAbAttr,
-      (_user, _target, move) => move.hasFlag(MoveFlags.BITING_MOVE),
-      1.5,
-    ),
+    new Ability(Abilities.BULLETPROOF, 6).attr(MoveFlagImmunityAbAttr, MoveFlags.BULLET_MOVE).ignorable(),
+    new Ability(Abilities.COMPETITIVE, 6)
+      .attr(PostStatStageChangeStatStageChangeAbAttr, (_target, _statsChanged, stages) => stages < 0, [Stat.SPATK], 2)
+      .edgeCase(), // Should not boost stats if switching into court changed sticky web
+    new Ability(Abilities.STRONG_JAW, 6).attr(MoveFlagPowerBoostAbAttr, MoveFlags.BITING_MOVE, 1.5),
     new Ability(Abilities.REFRIGERATE, 6).attr(
       MoveTypeChangeAbAttr,
-      Type.ICE,
+      ElementType.ICE,
       1.2,
-      (_user, _target, move) => move.type === Type.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
+      (_user, _target, move) => move?.type === ElementType.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
     ),
     new Ability(Abilities.SWEET_VEIL, 6)
       .attr(UserFieldStatusEffectImmunityAbAttr, StatusEffect.SLEEP)
@@ -944,28 +924,26 @@ export function initAbilities() {
       .attr(NoFusionAbilityAbAttr),
     new Ability(Abilities.GALE_WINGS, 6).attr(
       ChangeMovePriorityAbAttr,
-      (pokemon, move) => pokemon.isFullHp() && pokemon.getMoveType(move) === Type.FLYING,
+      (pokemon, move) => pokemon.isFullHp() && move.type === ElementType.FLYING,
       1,
     ),
-    new Ability(Abilities.MEGA_LAUNCHER, 6).attr(
-      MovePowerBoostAbAttr,
-      (_user, _target, move) => move.hasFlag(MoveFlags.PULSE_MOVE),
-      1.5,
-    ),
+    new Ability(Abilities.MEGA_LAUNCHER, 6)
+      .attr(MoveFlagPowerBoostAbAttr, MoveFlags.PULSE_MOVE, 1.5)
+      .attr(
+        RecoveryBoostAbAttr,
+        (pokemon, _target, move) => !!pokemon && !!move?.checkFlag(MoveFlags.PULSE_MOVE, pokemon, null),
+        1.5,
+      ),
     new Ability(Abilities.GRASS_PELT, 6)
       .conditionalAttr(getTerrainCondition(TerrainType.GRASSY), StatMultiplierAbAttr, Stat.DEF, 1.5)
       .ignorable(),
     new Ability(Abilities.SYMBIOSIS, 6).unimplemented(),
-    new Ability(Abilities.TOUGH_CLAWS, 6).attr(
-      MovePowerBoostAbAttr,
-      (_user, _target, move) => move.hasFlag(MoveFlags.MAKES_CONTACT),
-      1.3,
-    ),
+    new Ability(Abilities.TOUGH_CLAWS, 6).attr(MoveFlagPowerBoostAbAttr, MoveFlags.MAKES_CONTACT, 1.3),
     new Ability(Abilities.PIXILATE, 6).attr(
       MoveTypeChangeAbAttr,
-      Type.FAIRY,
+      ElementType.FAIRY,
       1.2,
-      (_user, _target, move) => move.type === Type.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
+      (_user, _target, move) => move?.type === ElementType.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
     ),
     new Ability(Abilities.GOOEY, 6).attr(
       PostDefendStatStageChangeAbAttr,
@@ -976,33 +954,33 @@ export function initAbilities() {
     ),
     new Ability(Abilities.AERILATE, 6).attr(
       MoveTypeChangeAbAttr,
-      Type.FLYING,
+      ElementType.FLYING,
       1.2,
-      (_user, _target, move) => move.type === Type.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
+      (_user, _target, move) => move?.type === ElementType.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
     ),
     new Ability(Abilities.PARENTAL_BOND, 6).attr(AddSecondStrikeAbAttr, 0.25),
     new Ability(Abilities.DARK_AURA, 6)
       .attr(PostSummonMessageAbAttr, (pokemon: Pokemon) =>
         i18next.t("abilityTriggers:postSummonDarkAura", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       )
-      .attr(FieldMoveTypePowerBoostAbAttr, Type.DARK, 4 / 3),
+      .attr(FieldMoveTypePowerBoostAbAttr, ElementType.DARK, 4 / 3),
     new Ability(Abilities.FAIRY_AURA, 6)
       .attr(PostSummonMessageAbAttr, (pokemon: Pokemon) =>
         i18next.t("abilityTriggers:postSummonFairyAura", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       )
-      .attr(FieldMoveTypePowerBoostAbAttr, Type.FAIRY, 4 / 3),
+      .attr(FieldMoveTypePowerBoostAbAttr, ElementType.FAIRY, 4 / 3),
     new Ability(Abilities.AURA_BREAK, 6)
       .ignorable()
       .conditionalAttr(
         (_pokemon) => globalScene.getField(true).some((p) => p.hasAbility(Abilities.DARK_AURA)),
         FieldMoveTypePowerBoostAbAttr,
-        Type.DARK,
+        ElementType.DARK,
         9 / 16,
       )
       .conditionalAttr(
         (_pokemon) => globalScene.getField(true).some((p) => p.hasAbility(Abilities.FAIRY_AURA)),
         FieldMoveTypePowerBoostAbAttr,
-        Type.FAIRY,
+        ElementType.FAIRY,
         9 / 16,
       )
       .conditionalAttr(
@@ -1042,7 +1020,7 @@ export function initAbilities() {
     new Ability(Abilities.EMERGENCY_EXIT, 7).attr(PostDamageForceSwitchAbAttr).edgeCase(), // Should not trigger when hurting itself in confusion, causes Fake Out to fail turn 1 and succeed turn 2 if pokemon is switched out before battle start via playing in Switch Mode
     new Ability(Abilities.WATER_COMPACTION, 7).attr(
       PostDefendStatStageChangeAbAttr,
-      (_target, user, move) => user.getMoveType(move) === Type.WATER && move.category !== MoveCategory.STATUS,
+      (_target, user, move) => user.getMoveType(move) === ElementType.WATER && move.category !== MoveCategory.STATUS,
       Stat.DEF,
       2,
     ),
@@ -1067,11 +1045,11 @@ export function initAbilities() {
       2,
     ),
     new Ability(Abilities.WATER_BUBBLE, 7)
-      .attr(ReceivedTypeDamageMultiplierAbAttr, Type.FIRE, 0.5)
-      .attr(MoveTypePowerBoostAbAttr, Type.WATER, 2)
+      .attr(ReceivedTypeDamageMultiplierAbAttr, ElementType.FIRE, 0.5)
+      .attr(MoveTypePowerBoostAbAttr, ElementType.WATER, 2)
       .attr(StatusEffectImmunityAbAttr, StatusEffect.BURN)
       .ignorable(),
-    new Ability(Abilities.STEELWORKER, 7).attr(MoveTypePowerBoostAbAttr, Type.STEEL),
+    new Ability(Abilities.STEELWORKER, 7).attr(MoveTypePowerBoostAbAttr, ElementType.STEEL),
     new Ability(Abilities.BERSERK, 7)
       .attr(
         PostDefendHpGatedStatStageChangeAbAttr,
@@ -1083,19 +1061,22 @@ export function initAbilities() {
       .condition(getSheerForceHitDisableAbCondition()),
     new Ability(Abilities.SLUSH_RUSH, 7).attr(WeatherBasedSpeedDoublerAbAttr, [WeatherType.HAIL, WeatherType.SNOW]),
     new Ability(Abilities.LONG_REACH, 7).attr(IgnoreContactAbAttr),
-    new Ability(Abilities.LIQUID_VOICE, 7).attr(MoveTypeChangeAbAttr, Type.WATER, 1, (_user, _target, move) =>
-      move.hasFlag(MoveFlags.SOUND_BASED),
+    new Ability(Abilities.LIQUID_VOICE, 7).attr(
+      MoveTypeChangeAbAttr,
+      ElementType.WATER,
+      1,
+      (_user, _target, move) => !!move?.hasFlag(MoveFlags.SOUND_MOVE),
     ),
     new Ability(Abilities.TRIAGE, 7).attr(
       ChangeMovePriorityAbAttr,
-      (_pokemon, move) => move.hasFlag(MoveFlags.TRIAGE_MOVE),
+      (pokemon, move) => move.checkFlag(MoveFlags.TRIAGE_MOVE, pokemon, null),
       3,
     ),
     new Ability(Abilities.GALVANIZE, 7).attr(
       MoveTypeChangeAbAttr,
-      Type.ELECTRIC,
+      ElementType.ELECTRIC,
       1.2,
-      (_user, _target, move) => move.type === Type.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
+      (_user, _target, move) => move?.type === ElementType.NORMAL && !move.hasAttr(VariableMoveTypeAttr),
     ),
     new Ability(Abilities.SURGE_SURFER, 7).conditionalAttr(
       getTerrainCondition(TerrainType.ELECTRIC),
@@ -1186,7 +1167,11 @@ export function initAbilities() {
       .attr(NoFusionAbilityAbAttr)
       .bypassFaint(),
     new Ability(Abilities.CORROSION, 7)
-      .attr(IgnoreTypeStatusEffectImmunityAbAttr, [StatusEffect.POISON, StatusEffect.TOXIC], [Type.STEEL, Type.POISON])
+      .attr(
+        IgnoreTypeStatusEffectImmunityAbAttr,
+        [StatusEffect.POISON, StatusEffect.TOXIC],
+        [ElementType.STEEL, ElementType.POISON],
+      )
       .edgeCase(), // Should interact correctly with magic coat/bounce (not yet implemented) + fling with toxic orb (not implemented yet)
     new Ability(Abilities.COMATOSE, 7)
       .attr(UncopiableAbilityAbAttr)
@@ -1204,7 +1189,7 @@ export function initAbilities() {
         (target, user, move) => move.checkFlag(MoveFlags.MAKES_CONTACT, user, target),
         0.5,
       )
-      .attr(ReceivedTypeDamageMultiplierAbAttr, Type.FIRE, 2)
+      .attr(ReceivedTypeDamageMultiplierAbAttr, ElementType.FIRE, 2)
       .ignorable(),
     new Ability(Abilities.DAZZLING, 7).attr(FieldPriorityMoveImmunityAbAttr).ignorable(),
     new Ability(Abilities.SOUL_HEART, 7).attr(PostKnockOutStatStageChangeAbAttr, Stat.SPATK, 1),
@@ -1258,12 +1243,22 @@ export function initAbilities() {
     ),
     new Ability(Abilities.PRISM_ARMOR, 7).attr(
       ReceivedMoveDamageMultiplierAbAttr,
-      (target, user, move) => target.getMoveEffectiveness(user, move) >= 2,
+      (user, target, move) => {
+        if (!user || !target || !move) {
+          return false;
+        }
+        return target.getMoveEffectiveness(user, move) >= 2;
+      },
       0.75,
     ),
     new Ability(Abilities.NEUROFORCE, 7).attr(
       MovePowerBoostAbAttr,
-      (user, target, move) => (target?.getMoveEffectiveness(user!, move) ?? 1) >= 2,
+      (user, target, move) => {
+        if (!user || !target || !move) {
+          return false;
+        }
+        return target.getMoveEffectiveness(user, move) >= 2;
+      },
       1.25,
     ),
     new Ability(Abilities.INTREPID_SWORD, 8).attr(PostSummonStatStageChangeAbAttr, [Stat.ATK], 1, true),
@@ -1303,14 +1298,16 @@ export function initAbilities() {
       PostDefendStatStageChangeAbAttr,
       (_target, user, move) => {
         const moveType = user.getMoveType(move);
-        return move.category !== MoveCategory.STATUS && (moveType === Type.FIRE || moveType === Type.WATER);
+        return (
+          move.category !== MoveCategory.STATUS && (moveType === ElementType.FIRE || moveType === ElementType.WATER)
+        );
       },
       Stat.SPD,
       6,
     ),
     new Ability(Abilities.PUNK_ROCK, 8)
-      .attr(MovePowerBoostAbAttr, (_user, _target, move) => move.hasFlag(MoveFlags.SOUND_BASED), 1.3)
-      .attr(ReceivedMoveDamageMultiplierAbAttr, (_target, _user, move) => move.hasFlag(MoveFlags.SOUND_BASED), 0.5)
+      .attr(MoveFlagPowerBoostAbAttr, MoveFlags.SOUND_MOVE, 1.3)
+      .attr(ReceivedMoveDamageMultiplierAbAttr, (_target, _user, move) => move.hasFlag(MoveFlags.SOUND_MOVE), 0.5)
       .ignorable(),
     new Ability(Abilities.SAND_SPIT, 8).attr(
       PostDefendWeatherChangeAbAttr,
@@ -1369,7 +1366,7 @@ export function initAbilities() {
       ArenaTagType.LIGHT_SCREEN,
       ArenaTagType.REFLECT,
     ]),
-    new Ability(Abilities.STEELY_SPIRIT, 8).attr(UserFieldMoveTypePowerBoostAbAttr, Type.STEEL),
+    new Ability(Abilities.STEELY_SPIRIT, 8).attr(UserFieldMoveTypePowerBoostAbAttr, ElementType.STEEL),
     new Ability(Abilities.PERISH_BODY, 8).attr(PostDefendPerishSongAbAttr, 4),
     new Ability(Abilities.WANDERING_SPIRIT, 8).attr(PostDefendAbilitySwapAbAttr).bypassFaint().edgeCase(), //  interacts incorrectly with rock head. It's meant to switch abilities before recoil would apply so that a pokemon with rock head would lose rock head first and still take the recoil
     new Ability(Abilities.GORILLA_TACTICS, 8).attr(GorillaTacticsAbAttr),
@@ -1399,8 +1396,8 @@ export function initAbilities() {
     new Ability(Abilities.QUICK_DRAW, 8).attr(BypassSpeedChanceAbAttr, 30),
     new Ability(Abilities.UNSEEN_FIST, 8).attr(IgnoreProtectOnContactAbAttr),
     new Ability(Abilities.CURIOUS_MEDICINE, 8).attr(PostSummonClearAllyStatStagesAbAttr),
-    new Ability(Abilities.TRANSISTOR, 8).attr(MoveTypePowerBoostAbAttr, Type.ELECTRIC),
-    new Ability(Abilities.DRAGONS_MAW, 8).attr(MoveTypePowerBoostAbAttr, Type.DRAGON),
+    new Ability(Abilities.TRANSISTOR, 8).attr(MoveTypePowerBoostAbAttr, ElementType.ELECTRIC),
+    new Ability(Abilities.DRAGONS_MAW, 8).attr(MoveTypePowerBoostAbAttr, ElementType.DRAGON),
     new Ability(Abilities.CHILLING_NEIGH, 8).attr(PostVictoryStatStageChangeAbAttr, Stat.ATK, 1),
     new Ability(Abilities.GRIM_NEIGH, 8).attr(PostVictoryStatStageChangeAbAttr, Stat.SPATK, 1),
     new Ability(Abilities.AS_ONE_GLASTRIER, 8)
@@ -1432,7 +1429,7 @@ export function initAbilities() {
     new Ability(Abilities.THERMAL_EXCHANGE, 9)
       .attr(
         PostDefendStatStageChangeAbAttr,
-        (_target, user, move) => user.getMoveType(move) === Type.FIRE && move.category !== MoveCategory.STATUS,
+        (_target, user, move) => user.getMoveType(move) === ElementType.FIRE && move.category !== MoveCategory.STATUS,
         Stat.ATK,
         1,
       )
@@ -1456,10 +1453,10 @@ export function initAbilities() {
       .condition(getSheerForceHitDisableAbCondition()),
     new Ability(Abilities.PURIFYING_SALT, 9)
       .attr(StatusEffectImmunityAbAttr)
-      .attr(ReceivedTypeDamageMultiplierAbAttr, Type.GHOST, 0.5)
+      .attr(ReceivedTypeDamageMultiplierAbAttr, ElementType.GHOST, 0.5)
       .ignorable(),
     new Ability(Abilities.WELL_BAKED_BODY, 9)
-      .attr(TypeImmunityStatStageChangeAbAttr, Type.FIRE, Stat.DEF, 2)
+      .attr(TypeImmunityStatStageChangeAbAttr, ElementType.FIRE, Stat.DEF, 2)
       .ignorable(),
     new Ability(Abilities.WIND_RIDER, 9)
       .attr(
@@ -1475,7 +1472,7 @@ export function initAbilities() {
       .attr(PostIntimidateStatStageChangeAbAttr, [Stat.ATK], 1, true)
       .attr(ForceSwitchOutImmunityAbAttr)
       .ignorable(),
-    new Ability(Abilities.ROCKY_PAYLOAD, 9).attr(MoveTypePowerBoostAbAttr, Type.ROCK),
+    new Ability(Abilities.ROCKY_PAYLOAD, 9).attr(MoveTypePowerBoostAbAttr, ElementType.ROCK),
     new Ability(Abilities.WIND_POWER, 9).attr(
       PostDefendApplyBattlerTagAbAttr,
       (_target, _user, move) => move.hasFlag(MoveFlags.WIND_MOVE),
@@ -1589,11 +1586,7 @@ export function initAbilities() {
       .conditionalAttr(getTerrainCondition(TerrainType.ELECTRIC), StatMultiplierAbAttr, Stat.SPATK, 4 / 3),
     new Ability(Abilities.OPPORTUNIST, 9).attr(StatStageChangeCopyAbAttr),
     new Ability(Abilities.CUD_CHEW, 9).unimplemented(),
-    new Ability(Abilities.SHARPNESS, 9).attr(
-      MovePowerBoostAbAttr,
-      (_user, _target, move) => move.hasFlag(MoveFlags.SLICING_MOVE),
-      1.5,
-    ),
+    new Ability(Abilities.SHARPNESS, 9).attr(MoveFlagPowerBoostAbAttr, MoveFlags.SLICING_MOVE, 1.5),
     new Ability(Abilities.SUPREME_OVERLORD, 9)
       .attr(
         VariableMovePowerBoostAbAttr,
@@ -1615,13 +1608,13 @@ export function initAbilities() {
       )
       .bypassFaint(),
     new Ability(Abilities.ARMOR_TAIL, 9).attr(FieldPriorityMoveImmunityAbAttr).ignorable(),
-    new Ability(Abilities.EARTH_EATER, 9).attr(TypeImmunityHealAbAttr, Type.GROUND).ignorable(),
+    new Ability(Abilities.EARTH_EATER, 9).attr(TypeImmunityHealAbAttr, ElementType.GROUND).ignorable(),
     new Ability(Abilities.MYCELIUM_MIGHT, 9)
       .attr(ChangeMovePriorityAbAttr, (_pokemon, move) => move.category === MoveCategory.STATUS, -0.2)
       .attr(PreventBypassSpeedChanceAbAttr, (_pokemon, move) => move.category === MoveCategory.STATUS)
       .attr(MoveAbilityBypassAbAttr, (_pokemon, move: Move) => move.category === MoveCategory.STATUS),
     new Ability(Abilities.MINDS_EYE, 9)
-      .attr(IgnoreTypeImmunityAbAttr, Type.GHOST, [Type.NORMAL, Type.FIGHTING])
+      .attr(IgnoreTypeImmunityAbAttr, ElementType.GHOST, [ElementType.NORMAL, ElementType.FIGHTING])
       .attr(ProtectStatAbAttr, Stat.ACC)
       .attr(IgnoreOpponentStatStagesAbAttr, [Stat.EVA])
       .ignorable(),

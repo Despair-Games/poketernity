@@ -1,14 +1,16 @@
 import { BattleStyle } from "#enums/battle-style";
 import type { Species } from "#enums/species";
-import { GameModes, getGameMode } from "#app/game-mode";
+import { getGameMode } from "#app/game-mode";
+import { GameModes } from "#enums/game-modes";
 import overrides from "#app/overrides";
 import { CommandPhase } from "#app/phases/command-phase";
 import { EncounterPhase } from "#app/phases/encounter-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { generateStarter } from "#test/testUtils/gameManagerUtils";
 import { GameManagerHelper } from "#test/testUtils/helpers/gameManagerHelper";
+import { settings } from "#app/system/settings/settings-manager";
 
 /**
  * Helper to handle classic mode specifics
@@ -26,7 +28,7 @@ export class ClassicModeHelper extends GameManagerHelper {
       this.game.override.shiny(false).enemyShiny(false);
     }
 
-    this.game.onNextPrompt("TitlePhase", Mode.TITLE, () => {
+    this.game.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
       this.game.scene.gameMode = getGameMode(GameModes.CLASSIC);
       const starters = generateStarter(this.game.scene, species);
       const selectStarterPhase = new SelectStarterPhase();
@@ -35,7 +37,7 @@ export class ClassicModeHelper extends GameManagerHelper {
     });
 
     await this.game.phaseInterceptor.to(EncounterPhase);
-    if (overrides.OPP_HELD_ITEMS_OVERRIDE.length === 0 && this.game.override.removeEnemyStartingItems) {
+    if (overrides.ENEMY_HELD_ITEMS_OVERRIDE.length === 0 && this.game.override.removeEnemyStartingItems) {
       this.game.removeEnemyHeldItems();
     }
   }
@@ -48,12 +50,12 @@ export class ClassicModeHelper extends GameManagerHelper {
   async startBattle(species?: Species[]): Promise<void> {
     await this.runToSummon(species);
 
-    if (this.game.scene.battleStyle === BattleStyle.SWITCH) {
+    if (settings.general.battleStyle === BattleStyle.SWITCH) {
       this.game.onNextPrompt(
         "CheckSwitchPhase",
-        Mode.CONFIRM,
+        UiMode.CONFIRM,
         () => {
-          this.game.setMode(Mode.MESSAGE);
+          this.game.setMode(UiMode.MESSAGE);
           this.game.endPhase();
         },
         () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),
@@ -61,9 +63,9 @@ export class ClassicModeHelper extends GameManagerHelper {
 
       this.game.onNextPrompt(
         "CheckSwitchPhase",
-        Mode.CONFIRM,
+        UiMode.CONFIRM,
         () => {
-          this.game.setMode(Mode.MESSAGE);
+          this.game.setMode(UiMode.MESSAGE);
           this.game.endPhase();
         },
         () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),

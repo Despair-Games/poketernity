@@ -1,10 +1,11 @@
-import { type Pokemon, HitResult } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Stat } from "#enums/stat";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import i18next from "i18next";
 import type { Move } from "../move";
 import { MoveEffectAttr } from "./move-effect-attr";
@@ -19,8 +20,8 @@ import { MoveEffectAttr } from "./move-effect-attr";
  * @extends MoveEffectAttr
  */
 export class CurseAttr extends MoveEffectAttr {
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (user.getTypes(true).includes(Type.GHOST)) {
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (user.getTypes(true).includes(ElementType.GHOST)) {
       if (target.getTag(BattlerTagType.CURSED)) {
         globalScene.queueMessage(i18next.t("battle:attackFailed"));
         return false;

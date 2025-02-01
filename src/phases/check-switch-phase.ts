@@ -3,10 +3,12 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { SummonMissingPhase } from "#app/phases/summon-missing-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
-import { Mode } from "#app/ui/ui";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
+import { UiMode } from "#enums/ui-mode";
 import { BattleStyle } from "#enums/battle-style";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { SwitchType } from "#enums/switch-type";
+import { settings } from "#app/system/settings/settings-manager";
 import i18next from "i18next";
 
 /**
@@ -33,8 +35,8 @@ export class CheckSwitchPhase extends BattlePhase {
     // End this phase early...
 
     // ...if the user is playing in Set Mode
-    if (globalScene.battleStyle === BattleStyle.SET) {
-      return this.end();
+    if (settings.general.battleStyle === BattleStyle.SET) {
+      return super.end();
     }
 
     // ...if the checked Pokemon is somehow not on the field
@@ -68,18 +70,18 @@ export class CheckSwitchPhase extends BattlePhase {
       }),
       null,
       () => {
-        globalScene.ui.setMode(
-          Mode.CONFIRM,
-          () => {
-            globalScene.ui.setMode(Mode.MESSAGE);
+        const options: ConfirmModeConfig = {
+          yesHandler: () => {
+            globalScene.ui.setMode(UiMode.MESSAGE);
             globalScene.unshiftPhase(new SwitchPhase(SwitchType.INITIAL_SWITCH, this.fieldIndex, false, true));
             this.end();
           },
-          () => {
-            globalScene.ui.setMode(Mode.MESSAGE);
+          noHandler: () => {
+            globalScene.ui.setMode(UiMode.MESSAGE);
             this.end();
           },
-        );
+        };
+        globalScene.ui.setMode(UiMode.CONFIRM, options);
       },
     );
   }

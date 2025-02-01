@@ -10,7 +10,7 @@ import {
   runSelectMysteryEncounterOption,
 } from "#test/mystery-encounter/encounter-test-utils";
 import type BattleScene from "#app/battle-scene";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
@@ -22,7 +22,7 @@ import { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { FunAndGamesEncounter } from "#app/data/mystery-encounters/encounters/fun-and-games-encounter";
 import { Moves } from "#enums/moves";
-import { Command } from "#app/ui/command-ui-handler";
+import { BattleCommand } from "#enums/battle-command";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 
 const namespace = "mysteryEncounters/funAndGames";
@@ -147,20 +147,20 @@ describe("Fun And Games! - Mystery Encounter", () => {
       expect(scene.getEnemyPokemon()?.ivs).toEqual([0, 0, 0, 0, 0, 0]);
       expect(scene.getEnemyPokemon()?.nature).toBe(Nature.MILD);
 
-      game.onNextPrompt("MessagePhase", Mode.MESSAGE, () => {
+      game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
         game.endPhase();
       });
 
       // Turn 1
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, 0, false);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
       await game.phaseInterceptor.to(CommandPhase);
 
       // Turn 2
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, 0, false);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
       await game.phaseInterceptor.to(CommandPhase);
 
       // Turn 3
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, 0, false);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
       await game.phaseInterceptor.to(SelectModifierPhase, false);
 
       // Rewards
@@ -173,20 +173,20 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
 
       expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
-      game.onNextPrompt("MessagePhase", Mode.MESSAGE, () => {
+      game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
         game.endPhase();
       });
 
       // Skip minigame
       scene.currentBattle.mysteryEncounter!.misc.turnsRemaining = 0;
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, 0, false);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
       await game.phaseInterceptor.to(SelectModifierPhase, false);
 
       // Rewards
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
       await game.phaseInterceptor.run(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
@@ -200,7 +200,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
 
       expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
-      game.onNextPrompt("MessagePhase", Mode.MESSAGE, () => {
+      game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
         game.endPhase();
       });
 
@@ -208,14 +208,14 @@ describe("Fun And Games! - Mystery Encounter", () => {
       const wobbuffet = scene.getEnemyPokemon()!;
       wobbuffet.hp = Math.floor(0.2 * wobbuffet.getMaxHp());
       scene.currentBattle.mysteryEncounter!.misc.turnsRemaining = 0;
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, 0, false);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
       await game.phaseInterceptor.to(SelectModifierPhase, false);
 
       // Rewards
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
       await game.phaseInterceptor.run(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
@@ -230,7 +230,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
 
       expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
-      game.onNextPrompt("MessagePhase", Mode.MESSAGE, () => {
+      game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
         game.endPhase();
       });
 
@@ -238,14 +238,14 @@ describe("Fun And Games! - Mystery Encounter", () => {
       const wobbuffet = scene.getEnemyPokemon()!;
       wobbuffet.hp = Math.floor(0.1 * wobbuffet.getMaxHp());
       scene.currentBattle.mysteryEncounter!.misc.turnsRemaining = 0;
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, 0, false);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
       await game.phaseInterceptor.to(SelectModifierPhase, false);
 
       // Rewards
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
       await game.phaseInterceptor.run(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
@@ -260,7 +260,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
 
       expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
-      game.onNextPrompt("MessagePhase", Mode.MESSAGE, () => {
+      game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
         game.endPhase();
       });
 
@@ -268,14 +268,14 @@ describe("Fun And Games! - Mystery Encounter", () => {
       const wobbuffet = scene.getEnemyPokemon()!;
       wobbuffet.hp = 1;
       scene.currentBattle.mysteryEncounter!.misc.turnsRemaining = 0;
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, 0, false);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
       await game.phaseInterceptor.to(SelectModifierPhase, false);
 
       // Rewards
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
       await game.phaseInterceptor.run(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;

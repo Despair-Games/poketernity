@@ -1,8 +1,8 @@
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#app/field/pokemon";
-import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { VariableAtkAttr } from "#app/data/move-attrs/variable-atk-attr";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
 
 /**
  * Attribute to set the offensive stat used for the move's attack to the target's Attack stat.
@@ -14,8 +14,7 @@ export class TargetAtkUserAtkAttr extends VariableAtkAttr {
     super();
   }
 
-  override apply(_user: Pokemon, target: Pokemon, _move: Move, attackingStat: NumberHolder): boolean {
-    attackingStat.value = target.getEffectiveStat(Stat.ATK, target);
-    return true;
+  override getStatOverride(user: Pokemon, target: Pokemon, move: Move, isCritical: boolean) {
+    return target.getStageMultipliedStat(Stat.ATK, user, move, AbilityApplyMode.DEFAULT, isCritical);
   }
 }

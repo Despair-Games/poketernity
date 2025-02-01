@@ -1,9 +1,9 @@
 import { allMoves } from "#app/data/all-moves";
-import { MoveCategory } from "../../enums/move-category";
+import { MoveCategory } from "#enums/move-category";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { Command } from "#app/ui/command-ui-handler";
+import { BattleCommand } from "#enums/battle-command";
 import type { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { AbAttr } from "./ab-attr";
@@ -27,18 +27,18 @@ export class BypassSpeedChanceAbAttr extends AbAttr {
   /**
    * bypass move order in their priority bracket when pokemon choose damaging move
    * @param pokemon {@linkcode Pokemon} applying this ability
-   * @param _passive N/A
-   * @param args [0] {@linkcode BooleanHolder} set to true when the ability activated
+   * @param simulated if `true`, suppresses changes to game state
+   * @param bypassSpeed {@linkcode BooleanHolder} set to true when the ability activated
    * @returns whether the ability was activated
    */
-  override apply(pokemon: Pokemon, _passive: boolean, simulated: boolean, bypassSpeed: BooleanHolder): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, bypassSpeed: BooleanHolder): boolean {
     if (simulated) {
       return false;
     }
 
     if (!bypassSpeed.value && pokemon.randSeedInt(100) < this.chance) {
       const turnCommand = globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()];
-      const isCommandFight = turnCommand?.command === Command.FIGHT;
+      const isCommandFight = turnCommand?.command === BattleCommand.FIGHT;
       const move = turnCommand?.move?.move ? allMoves[turnCommand.move.move] : null;
       const isDamageMove = move?.category === MoveCategory.PHYSICAL || move?.category === MoveCategory.SPECIAL;
 

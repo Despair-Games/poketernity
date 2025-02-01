@@ -5,7 +5,6 @@ import type { Species } from "#enums/species";
 import { isNullOrUndefined } from "#app/utils";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { Variant } from "#app/data/variant";
-import { doShinySparkleAnim } from "#app/field/anims";
 import PlayAnimationConfig = Phaser.Types.Animations.PlayAnimationConfig;
 
 type KnownFileRoot =
@@ -346,7 +345,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
   playShinySparkles() {
     for (const sparkleConfig of this.shinySparkleSprites) {
       globalScene.time.delayedCall(500, () => {
-        doShinySparkleAnim(sparkleConfig.sprite, sparkleConfig.variant);
+        globalScene.animations.doShinySparkleAnim(sparkleConfig.sprite, sparkleConfig.variant);
       });
     }
   }

@@ -1,12 +1,12 @@
-import type { BattlerIndex } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
 import { getMoveTargets } from "#app/data/move";
 import { PokemonMove, type Pokemon } from "#app/field/pokemon";
 import Overrides from "#app/overrides";
 import type { CommandPhase } from "#app/phases/command-phase";
 import type { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { Command } from "#app/ui/command-ui-handler";
-import { Mode } from "#app/ui/ui";
+import { BattleCommand } from "#enums/battle-command";
+import { UiMode } from "#enums/ui-mode";
 import { Moves } from "#enums/moves";
 import { getMovePosition } from "#test/testUtils/gameManagerUtils";
 import { GameManagerHelper } from "#test/testUtils/helpers/gameManagerHelper";
@@ -52,11 +52,11 @@ export class MoveHelper extends GameManagerHelper {
   public select(move: Moves, pkmIndex: 0 | 1 = 0, targetIndex?: BattlerIndex | null): void {
     const movePosition = getMovePosition(this.game.scene, pkmIndex, move);
 
-    this.game.onNextPrompt("CommandPhase", Mode.COMMAND, () => {
-      this.game.scene.ui.setMode(Mode.FIGHT, (this.game.scene.getCurrentPhase() as CommandPhase).getFieldIndex());
+    this.game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
+      this.game.scene.ui.setMode(UiMode.FIGHT, (this.game.scene.getCurrentPhase() as CommandPhase).getFieldIndex());
     });
-    this.game.onNextPrompt("CommandPhase", Mode.FIGHT, () => {
-      (this.game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, movePosition, false);
+    this.game.onNextPrompt("CommandPhase", UiMode.FIGHT, () => {
+      (this.game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, movePosition, false);
     });
 
     if (targetIndex !== null) {
@@ -166,11 +166,11 @@ export class MoveHelper extends GameManagerHelper {
     const enemy =
       this.game.scene.getEnemyField()[(this.game.scene.getCurrentPhase() as EnemyCommandPhase).getFieldIndex()];
 
-    const movesetOverride = Array.isArray(Overrides.OPP_MOVESET_OVERRIDE)
-      ? Overrides.OPP_MOVESET_OVERRIDE
-      : [Overrides.OPP_MOVESET_OVERRIDE];
+    const movesetOverride = Array.isArray(Overrides.ENEMY_MOVESET_OVERRIDE)
+      ? Overrides.ENEMY_MOVESET_OVERRIDE
+      : [Overrides.ENEMY_MOVESET_OVERRIDE];
     if (movesetOverride.length > 0) {
-      vi.spyOn(Overrides, "OPP_MOVESET_OVERRIDE", "get").mockReturnValue([]);
+      vi.spyOn(Overrides, "ENEMY_MOVESET_OVERRIDE", "get").mockReturnValue([]);
       console.warn(
         "Warning: Enemy moveset override disabled! Do not use the moveset override when using this function!",
       );

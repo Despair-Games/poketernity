@@ -1,10 +1,12 @@
 import { globalScene } from "#app/global-scene";
 import { allAbilities } from "#app/data/ability";
-import { EvolutionItem, pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import { EvolutionItem } from "#enums/evolution-item";
 import { Nature } from "#enums/nature";
-import { FormChangeItem, pokemonFormChanges, SpeciesFormChangeItemTrigger } from "#app/data/pokemon-forms";
+import { pokemonFormChanges, SpeciesFormChangeItemTrigger } from "#app/data/pokemon-forms";
+import { FormChangeItem } from "#enums/form-change-item";
 import { StatusEffect } from "#enums/status-effect";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import { WeatherType } from "#enums/weather-type";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { AttackTypeBoosterModifier } from "#app/modifier/modifier";
@@ -506,11 +508,11 @@ export class NatureRequirement extends EncounterPokemonRequirement {
 }
 
 export class TypeRequirement extends EncounterPokemonRequirement {
-  requiredType: Type[];
+  requiredType: ElementType[];
   excludeFainted: boolean;
 
   constructor(
-    type: Type | Type[],
+    type: ElementType | ElementType[],
     excludeFainted: boolean = true,
     minNumberOfPokemon: number = 1,
     invertQuery: boolean = false,
@@ -552,7 +554,7 @@ export class TypeRequirement extends EncounterPokemonRequirement {
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
     const includedTypes = this.requiredType.filter((ty) => pokemon?.getTypes().includes(ty));
     if (includedTypes.length > 0) {
-      return ["type", Type[includedTypes[0]]];
+      return ["type", ElementType[includedTypes[0]]];
     }
     return ["type", ""];
   }
@@ -993,11 +995,11 @@ export class HeldItemRequirement extends EncounterPokemonRequirement {
 }
 
 export class AttackTypeBoosterHeldItemTypeRequirement extends EncounterPokemonRequirement {
-  requiredHeldItemTypes: Type[];
+  requiredHeldItemTypes: ElementType[];
   requireTransferable: boolean;
 
   constructor(
-    heldItemTypes: Type | Type[],
+    heldItemTypes: ElementType | ElementType[],
     minNumberOfPokemon: number = 1,
     invertQuery: boolean = false,
     requireTransferable: boolean = true,

@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import { Gender } from "#enums/gender";
 import { PokeballType } from "#enums/pokeball";
 import type { Pokemon } from "#app/field/pokemon";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import { randSeedInt } from "#app/utils";
 import { WeatherType } from "#enums/weather-type";
 import { Nature } from "#enums/nature";
@@ -17,64 +17,8 @@ import {
   TempExtraModifierModifier,
 } from "#app/modifier/modifier";
 import { SpeciesFormKey } from "#enums/species-form-key";
-
-export enum SpeciesWildEvolutionDelay {
-  NONE,
-  SHORT,
-  MEDIUM,
-  LONG,
-  VERY_LONG,
-  NEVER,
-}
-
-export enum EvolutionItem {
-  NONE,
-
-  LINKING_CORD,
-  SUN_STONE,
-  MOON_STONE,
-  LEAF_STONE,
-  FIRE_STONE,
-  WATER_STONE,
-  THUNDER_STONE,
-  ICE_STONE,
-  DUSK_STONE,
-  DAWN_STONE,
-  SHINY_STONE,
-  CRACKED_POT,
-  SWEET_APPLE,
-  TART_APPLE,
-  STRAWBERRY_SWEET,
-  UNREMARKABLE_TEACUP,
-  UPGRADE,
-  DUBIOUS_DISC,
-  DRAGON_SCALE,
-  PRISM_SCALE,
-  RAZOR_CLAW,
-  RAZOR_FANG,
-  REAPER_CLOTH,
-  ELECTIRIZER,
-  MAGMARIZER,
-  PROTECTOR,
-  SACHET,
-  WHIPPED_DREAM,
-  SYRUPY_APPLE,
-  CHIPPED_POT,
-  GALARICA_CUFF,
-  GALARICA_WREATH,
-  AUSPICIOUS_ARMOR,
-  MALICIOUS_ARMOR,
-  MASTERPIECE_TEACUP,
-  SUN_FLUTE,
-  MOON_FLUTE,
-
-  BLACK_AUGURITE = 51,
-  PEAT_BLOCK,
-  METAL_ALLOY,
-  SCROLL_OF_DARKNESS,
-  SCROLL_OF_WATERS,
-  LEADERS_CREST,
-}
+import { EvolutionItem } from "#enums/evolution-item";
+import { SpeciesWildEvolutionDelay } from "#enums/species-wild-evolution-delay";
 
 /**
  * Pokemon Evolution tuple type consisting of:
@@ -664,7 +608,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
       32,
       null,
       new SpeciesEvolutionCondition(
-        (_p) => !!globalScene.getPlayerParty().find((p) => p.getTypes(false, false, true).indexOf(Type.DARK) > -1),
+        (_p) =>
+          !!globalScene.getPlayerParty().find((p) => p.getTypes(false, false, true).indexOf(ElementType.DARK) > -1),
       ),
       SpeciesWildEvolutionDelay.MEDIUM,
     ),
@@ -1159,7 +1104,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       null,
       new SpeciesFriendshipEvolutionCondition(
         120,
-        (p) => !!p.getMoveset().find((m) => m.getMove().type === Type.FAIRY),
+        (p) => !!p.getMoveset().find((m) => m.getMove().type === ElementType.FAIRY),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1171,7 +1116,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       null,
       new SpeciesFriendshipEvolutionCondition(
         120,
-        (p) => !!p.getMoveset().find((m) => m.getMove().type === Type.FAIRY),
+        (p) => !!p.getMoveset().find((m) => m.getMove().type === ElementType.FAIRY),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1869,7 +1814,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.STEELIX,
       1,
       EvolutionItem.LINKING_CORD,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.getMove().type === Type.STEEL).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.getMove().type === ElementType.STEEL).length > 0),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),
   ],
@@ -1884,7 +1829,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.SCIZOR,
       1,
       EvolutionItem.LINKING_CORD,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.getMove().type === Type.STEEL).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.getMove().type === ElementType.STEEL).length > 0),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),
     new SpeciesEvolution(Species.KLEAVOR, 1, EvolutionItem.BLACK_AUGURITE, null, SpeciesWildEvolutionDelay.VERY_LONG),

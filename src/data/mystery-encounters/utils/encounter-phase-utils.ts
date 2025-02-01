@@ -1,38 +1,44 @@
 import type Battle from "#app/battle";
-import { BattlerIndex, BattleType } from "#app/battle";
-import { biomeLinks, BiomePoolTier } from "#app/data/balance/biomes";
+import { BattlerIndex } from "#enums/battler-index";
+import { BattleType } from "#enums/battle-type";
+import { biomeLinks } from "#app/data/balance/biomes";
+import { BiomePoolTier } from "#enums/biome-pool-tier";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
 import {
   AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
   WEIGHT_INCREMENT_ON_SPAWN_MISS,
 } from "#app/data/mystery-encounters/mystery-encounters";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import type { AiType, PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/pokemon";
+import type { AiType } from "#enums/ai-type";
 import type { Pokemon } from "#app/field/pokemon";
-import { FieldPosition, PokemonMove, PokemonSummonData } from "#app/field/pokemon";
+import { PokemonMove, PokemonSummonData } from "#app/field/pokemon";
+import { FieldPosition } from "#enums/field-position";
 import type { CustomModifierSettings, ModifierType } from "#app/modifier/modifier-type";
 import {
-  ModifierPoolType,
   ModifierTypeGenerator,
   ModifierTypeOption,
   modifierTypes,
   regenerateModifierPoolThresholds,
 } from "#app/modifier/modifier-type";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { MysteryEncounterBattlePhase } from "#app/phases/mystery-encounter-phases/battle-phase";
 import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
 import { MysteryEncounterBattleStartCleanupPhase } from "#app/phases/mystery-encounter-phases/battle-start-cleanup-phase";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import type PokemonData from "#app/system/pokemon-data";
-import type { OptionSelectConfig, OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
-import type { PartyOption, PokemonSelectFilter } from "#app/ui/party-ui-handler";
-import { PartyUiMode } from "#app/ui/party-ui-handler";
-import { Mode } from "#app/ui/ui";
+import type { OptionSelectModeConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
+import type { PokemonSelectFilter } from "#app/ui/party-ui-handler";
+import type { PartyOption } from "#enums/party-option";
+import { PartyUiMode } from "#enums/party-ui-mode";
+import { UiMode } from "#enums/ui-mode";
 import { isNullOrUndefined, randSeedInt, randomString } from "#app/utils";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { Biome } from "#enums/biome";
 import type { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
-import Trainer, { TrainerVariant } from "#app/field/trainer";
+import Trainer from "#app/field/trainer";
+import { TrainerVariant } from "#enums/trainer-variant";
 import type { Gender } from "#enums/gender";
 import type { Nature } from "#enums/nature";
 import type { Moves } from "#enums/moves";
@@ -276,7 +282,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
 
       // Generate new id, reset status and HP in case using data source
       if (config.dataSource) {
-        enemyPokemon.id = randSeedInt(4294967296);
+        enemyPokemon.generateId();
       }
 
       // Set form
@@ -518,7 +524,7 @@ export function selectPokemonForOption(
 
     // Open party screen to choose pokemon
     globalScene.ui.setMode(
-      Mode.PARTY,
+      UiMode.PARTY,
       PartyUiMode.SELECT,
       -1,
       (slotIndex: number, _option: PartyOption) => {
@@ -536,12 +542,13 @@ export function selectPokemonForOption(
             }
 
             // There is a second option to choose after selecting the Pokemon
-            globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+            globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
               const displayOptions = () => {
                 // Always appends a cancel option to bottom of options
                 const fullOptions = secondaryOptions
                   .map((option) => {
                     // Update handler to resolve promise
+                    // TODO: don't update the handler like this
                     const onSelect = option.handler;
                     option.handler = () => {
                       onSelect();
@@ -567,18 +574,17 @@ export function selectPokemonForOption(
                     },
                   });
 
-                const config: OptionSelectConfig = {
+                const config: OptionSelectModeConfig = {
                   options: fullOptions,
                   maxOptions: 7,
-                  yOffset: 0,
-                  supportHover: true,
+                  yOffset: 48,
                 };
 
                 // Do hover over the starting selection option
                 if (fullOptions[0].onHover) {
                   fullOptions[0].onHover();
                 }
-                globalScene.ui.setModeWithoutClear(Mode.OPTION_SELECT, config, null, true);
+                globalScene.ui.setModeWithoutClear(UiMode.OPTION_SELECT, config);
               };
 
               const textPromptKey =
@@ -629,21 +635,21 @@ export function selectOptionThenPokemon(
   return new Promise<PokemonAndOptionSelected | null>((resolve) => {
     const modeToSetOnExit = globalScene.ui.getMode();
 
-    const displayOptions = (config: OptionSelectConfig) => {
-      globalScene.ui.setMode(Mode.MESSAGE).then(() => {
+    const displayOptions = (config: OptionSelectModeConfig) => {
+      globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
         if (!optionSelectPromptKey) {
           // Do hover over the starting selection option
           if (fullOptions[0].onHover) {
             fullOptions[0].onHover();
           }
-          globalScene.ui.setMode(Mode.OPTION_SELECT, config);
+          globalScene.ui.setMode(UiMode.OPTION_SELECT, config);
         } else {
           showEncounterText(optionSelectPromptKey).then(() => {
             // Do hover over the starting selection option
             if (fullOptions[0].onHover) {
               fullOptions[0].onHover();
             }
-            globalScene.ui.setMode(Mode.OPTION_SELECT, config);
+            globalScene.ui.setMode(UiMode.OPTION_SELECT, config);
           });
         }
       });
@@ -652,7 +658,7 @@ export function selectOptionThenPokemon(
     const selectPokemonAfterOption = (selectedOptionIndex: number) => {
       // Open party screen to choose a Pokemon
       globalScene.ui.setMode(
-        Mode.PARTY,
+        UiMode.PARTY,
         PartyUiMode.SELECT,
         -1,
         (slotIndex: number, _option: PartyOption) => {
@@ -678,6 +684,7 @@ export function selectOptionThenPokemon(
     const fullOptions = options
       .map((option, index) => {
         // Update handler to resolve promise
+        // TODO: don't update the handler like this
         const onSelect = option.handler;
         option.handler = () => {
           onSelect();
@@ -702,11 +709,10 @@ export function selectOptionThenPokemon(
         },
       });
 
-    const config: OptionSelectConfig = {
+    const config: OptionSelectModeConfig = {
       options: fullOptions,
       maxOptions: 7,
-      yOffset: 0,
-      supportHover: true,
+      yOffset: 48,
     };
 
     displayOptions(config);

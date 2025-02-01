@@ -1,19 +1,14 @@
 import type { DropDown } from "./dropdown";
-import { DropDownType } from "./dropdown";
+import { DropDownType } from "#enums/drop-down-type";
 import type { StarterContainer } from "./starter-container";
-import { addTextObject, getTextColor, TextStyle } from "./text";
+import { addTextObject, getTextColor } from "./text";
+import { TextStyle } from "#enums/text-style";
 import type { UiTheme } from "#enums/ui-theme";
-import { addWindow, WindowVariant } from "./ui-theme";
+import { addWindow } from "./ui-theme";
+import { WindowVariant } from "#enums/window-variant";
 import { globalScene } from "#app/global-scene";
-
-export enum DropDownColumn {
-  GEN,
-  TYPES,
-  CAUGHT,
-  UNLOCKS,
-  MISC,
-  SORT,
-}
+import { settings } from "#app/system/settings/settings-manager";
+import type { DropDownColumn } from "#enums/drop-down-column";
 
 export class FilterBar extends Phaser.GameObjects.Container {
   private window: Phaser.GameObjects.NineSlice;
@@ -41,7 +36,7 @@ export class FilterBar extends Phaser.GameObjects.Container {
     this.cursorObj.setOrigin(0, 0);
     this.add(this.cursorObj);
 
-    this.uiTheme = globalScene.uiTheme;
+    this.uiTheme = settings.display.uiTheme;
   }
 
   /**

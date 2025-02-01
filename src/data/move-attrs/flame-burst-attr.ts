@@ -1,4 +1,5 @@
-import { type Pokemon, HitResult } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { HitResult } from "#enums/hit-result";
 import { BooleanHolder } from "#app/utils";
 import { BlockNonDirectDamageAbAttr } from "#app/data/ab-attrs/block-non-direct-damage-ab-attr";
 import { applyAbAttrs } from "#app/data/ability";
@@ -20,7 +21,7 @@ export class FlameBurstAttr extends MoveEffectAttr {
     super(true);
   }
 
-  override apply(_user: Pokemon, target: Pokemon, _move: Move): boolean {
+  override applyEffect(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     const targetAlly = target.getAlly();
     const cancelled = new BooleanHolder(false);
 

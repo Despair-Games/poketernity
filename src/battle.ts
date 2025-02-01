@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import type { Command } from "./ui/command-ui-handler";
+import type { BattleCommand } from "#enums/battle-command";
 import {
   randomString,
   getEnumValues,
@@ -10,7 +10,8 @@ import {
   randInt,
   isBetween,
 } from "#app/utils";
-import Trainer, { TrainerVariant } from "./field/trainer";
+import { TrainerVariant } from "#enums/trainer-variant";
+import Trainer from "./field/trainer";
 import type { GameMode } from "./game-mode";
 import { MoneyMultiplierModifier, PokemonHeldItemModifier } from "./modifier/modifier";
 import type { PokeballType } from "#enums/pokeball";
@@ -20,40 +21,43 @@ import type { Pokemon } from "#app/field/pokemon";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { Moves } from "#enums/moves";
 import { PlayerGender } from "#enums/player-gender";
-import { MusicPreference } from "#app/system/settings/settings";
+import { MusicPreference } from "#enums/music-preference";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "#app/plugins/i18n";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import type { CustomModifierSettings } from "#app/modifier/modifier-type";
-import { ModifierTier } from "#app/modifier/modifier-tier";
+import { ModifierTier } from "#enums/modifier-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
-
-export enum ClassicFixedBossWaves {
-  // TODO: other fixed wave battles should be added here
-  EVIL_BOSS_1 = 115,
-  EVIL_BOSS_2 = 165,
-}
-
-export enum BattleType {
-  WILD,
-  TRAINER,
-  CLEAR,
-  MYSTERY_ENCOUNTER,
-}
-
-export enum BattlerIndex {
-  ATTACKER = -1,
-  PLAYER,
-  PLAYER_2,
-  ENEMY,
-  ENEMY_2,
-}
+import { settings } from "./system/settings/settings-manager";
+import { BattleType } from "#enums/battle-type";
+import { BattlerIndex } from "#enums/battler-index";
+import {
+  CHAMPION_WAVE,
+  ELITE_FOUR_1_WAVE,
+  ELITE_FOUR_2_WAVE,
+  ELITE_FOUR_3_WAVE,
+  ELITE_FOUR_4_WAVE,
+  EVIL_ADMIN_1_WAVE,
+  EVIL_ADMIN_2_WAVE,
+  EVIL_BOSS_1_WAVE,
+  EVIL_BOSS_2_WAVE,
+  EVIL_GRUNT_1_WAVE,
+  EVIL_GRUNT_2_WAVE,
+  EVIL_GRUNT_3_WAVE,
+  EVIL_GRUNT_4_WAVE,
+  RIVAL2_WAVE,
+  RIVAL3_WAVE,
+  RIVAL4_WAVE,
+  RIVAL5_WAVE,
+  RIVAL_WAVE,
+  TUTORIAL_BATTLE_WAVE,
+} from "./data/special-waves";
 
 export interface TurnCommand {
-  command: Command;
+  command: BattleCommand;
   cursor?: number;
   move?: QueuedMove;
   targets?: BattlerIndex[];
@@ -68,6 +72,13 @@ export interface FaintLogEntry {
 
 interface TurnCommands {
   [key: number]: TurnCommand | null;
+}
+
+/**
+ * Uses the global RNG seed to generate a second seed to be used for in-battle RNG rolls.
+ */
+function generateBattleSeed() {
+  return randomString(16, true);
 }
 
 export default class Battle {
@@ -89,7 +100,7 @@ export default class Battle {
   public postBattleLoot: PokemonHeldItemModifier[] = [];
   public escapeAttempts: number = 0;
   public lastMove: Moves;
-  public battleSeed: string = randomString(16, true);
+  public battleSeed: string = generateBattleSeed();
   private battleSeedState: string | null = null;
   public moneyScattered: number = 0;
   public lastUsedPokeball: PokeballType | null = null;
@@ -238,7 +249,7 @@ export default class Battle {
       if (!this.started && this.trainer?.config.encounterBgm && this.trainer?.getEncounterMessages()?.length) {
         return `encounter_${this.trainer?.getEncounterBgm()}`;
       }
-      if (globalScene.musicPreference === MusicPreference.GENFIVE) {
+      if (settings.audio.musicPreference === MusicPreference.GENFIVE) {
         return this.trainer?.getBattleBgm() ?? null;
       } else {
         return this.trainer?.getMixedBattleBgm() ?? null;
@@ -255,7 +266,7 @@ export default class Battle {
         return "battle_final_encounter";
       }
       if (pokemon.species.isLegendLike()) {
-        if (globalScene.musicPreference === MusicPreference.GENFIVE) {
+        if (settings.audio.musicPreference === MusicPreference.GENFIVE) {
           switch (pokemon.species.speciesId) {
             case Species.REGIROCK:
             case Species.REGICE:
@@ -272,7 +283,7 @@ export default class Battle {
               }
               return "battle_legendary_unova";
           }
-        } else if (globalScene.musicPreference === MusicPreference.ALLGENS) {
+        } else if (settings.audio.musicPreference === MusicPreference.ALLGENS) {
           switch (pokemon.species.speciesId) {
             case Species.ARTICUNO:
             case Species.ZAPDOS:
@@ -568,43 +579,38 @@ export interface FixedBattleConfigs {
   [key: number]: FixedBattleConfig;
 }
 /**
- * Youngster/Lass on 5
- * Rival on 8, 55, 95, 145, 195
- * Evil team grunts on 35, 62, 64, and 112
- * Evil team admin on 66 and 114
- * Evil leader on 115, 165
- * E4 on 182, 184, 186, 188
- * Champion on 190
+
+ * See {@link TUTORIAL_BATTLE_WAVE}
  */
 export const classicFixedBattles: FixedBattleConfigs = {
-  [5]: new FixedBattleConfig()
+  [TUTORIAL_BATTLE_WAVE]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
     .setGetTrainerFunc(
       () => new Trainer(TrainerType.YOUNGSTER, randSeedInt(2) ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT),
     ),
-  [8]: new FixedBattleConfig()
+  [RIVAL_WAVE]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
     .setGetTrainerFunc(
       () =>
         new Trainer(
           TrainerType.RIVAL,
-          globalScene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
+          settings.display.playerGender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
         ),
     ),
-  [25]: new FixedBattleConfig()
+  [RIVAL2_WAVE]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
     .setGetTrainerFunc(
       () =>
         new Trainer(
           TrainerType.RIVAL_2,
-          globalScene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
+          settings.display.playerGender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
         ),
     )
     .setCustomModifierRewards({
       guaranteedModifierTiers: [ModifierTier.ULTRA, ModifierTier.GREAT, ModifierTier.GREAT],
       allowLuckUpgrades: false,
     }),
-  [35]: new FixedBattleConfig()
+  [EVIL_GRUNT_1_WAVE]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
     .setGetTrainerFunc(
       getRandomTrainerFunc(
@@ -623,22 +629,22 @@ export const classicFixedBattles: FixedBattleConfigs = {
         true,
       ),
     ),
-  [55]: new FixedBattleConfig()
+  [RIVAL3_WAVE]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
     .setGetTrainerFunc(
       () =>
         new Trainer(
           TrainerType.RIVAL_3,
-          globalScene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
+          settings.display.playerGender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
         ),
     )
     .setCustomModifierRewards({
       guaranteedModifierTiers: [ModifierTier.ULTRA, ModifierTier.ULTRA, ModifierTier.GREAT, ModifierTier.GREAT],
       allowLuckUpgrades: false,
     }),
-  [62]: new FixedBattleConfig()
+  [EVIL_GRUNT_2_WAVE]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
-    .setSeedOffsetWave(35)
+    .setSeedOffsetWave(EVIL_GRUNT_1_WAVE)
     .setGetTrainerFunc(
       getRandomTrainerFunc(
         [
@@ -656,9 +662,9 @@ export const classicFixedBattles: FixedBattleConfigs = {
         true,
       ),
     ),
-  [64]: new FixedBattleConfig()
+  [EVIL_GRUNT_3_WAVE]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
-    .setSeedOffsetWave(35)
+    .setSeedOffsetWave(EVIL_GRUNT_1_WAVE)
     .setGetTrainerFunc(
       getRandomTrainerFunc(
         [
@@ -676,9 +682,9 @@ export const classicFixedBattles: FixedBattleConfigs = {
         true,
       ),
     ),
-  [66]: new FixedBattleConfig()
+  [EVIL_ADMIN_1_WAVE]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
-    .setSeedOffsetWave(35)
+    .setSeedOffsetWave(EVIL_GRUNT_1_WAVE)
     .setGetTrainerFunc(
       getRandomTrainerFunc(
         [
@@ -696,22 +702,22 @@ export const classicFixedBattles: FixedBattleConfigs = {
         true,
       ),
     ),
-  [95]: new FixedBattleConfig()
+  [RIVAL4_WAVE]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
     .setGetTrainerFunc(
       () =>
         new Trainer(
           TrainerType.RIVAL_4,
-          globalScene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
+          settings.display.playerGender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
         ),
     )
     .setCustomModifierRewards({
       guaranteedModifierTiers: [ModifierTier.ULTRA, ModifierTier.ULTRA, ModifierTier.ULTRA, ModifierTier.ULTRA],
       allowLuckUpgrades: false,
     }),
-  [112]: new FixedBattleConfig()
+  [EVIL_GRUNT_4_WAVE]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
-    .setSeedOffsetWave(35)
+    .setSeedOffsetWave(EVIL_GRUNT_1_WAVE)
     .setGetTrainerFunc(
       getRandomTrainerFunc(
         [
@@ -729,9 +735,9 @@ export const classicFixedBattles: FixedBattleConfigs = {
         true,
       ),
     ),
-  [114]: new FixedBattleConfig()
+  [EVIL_ADMIN_2_WAVE]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
-    .setSeedOffsetWave(35)
+    .setSeedOffsetWave(EVIL_GRUNT_1_WAVE)
     .setGetTrainerFunc(
       getRandomTrainerFunc(
         [
@@ -750,9 +756,9 @@ export const classicFixedBattles: FixedBattleConfigs = {
         1,
       ),
     ),
-  [ClassicFixedBossWaves.EVIL_BOSS_1]: new FixedBattleConfig()
+  [EVIL_BOSS_1_WAVE]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
-    .setSeedOffsetWave(35)
+    .setSeedOffsetWave(EVIL_GRUNT_1_WAVE)
     .setGetTrainerFunc(
       getRandomTrainerFunc([
         TrainerType.ROCKET_BOSS_GIOVANNI_1,
@@ -777,13 +783,13 @@ export const classicFixedBattles: FixedBattleConfigs = {
       ],
       allowLuckUpgrades: false,
     }),
-  [145]: new FixedBattleConfig()
+  [RIVAL5_WAVE]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
     .setGetTrainerFunc(
       () =>
         new Trainer(
           TrainerType.RIVAL_5,
-          globalScene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
+          settings.display.playerGender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
         ),
     )
     .setCustomModifierRewards({
@@ -796,9 +802,9 @@ export const classicFixedBattles: FixedBattleConfigs = {
       ],
       allowLuckUpgrades: false,
     }),
-  [ClassicFixedBossWaves.EVIL_BOSS_2]: new FixedBattleConfig()
+  [EVIL_BOSS_2_WAVE]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
-    .setSeedOffsetWave(35)
+    .setSeedOffsetWave(EVIL_GRUNT_1_WAVE)
     .setGetTrainerFunc(
       getRandomTrainerFunc([
         TrainerType.ROCKET_BOSS_GIOVANNI_2,
@@ -824,7 +830,7 @@ export const classicFixedBattles: FixedBattleConfigs = {
       ],
       allowLuckUpgrades: false,
     }),
-  [182]: new FixedBattleConfig()
+  [ELITE_FOUR_1_WAVE]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
     .setGetTrainerFunc(
       getRandomTrainerFunc([
@@ -840,9 +846,9 @@ export const classicFixedBattles: FixedBattleConfigs = {
         TrainerType.CRISPIN,
       ]),
     ),
-  [184]: new FixedBattleConfig()
+  [ELITE_FOUR_2_WAVE]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
-    .setSeedOffsetWave(182)
+    .setSeedOffsetWave(ELITE_FOUR_1_WAVE)
     .setGetTrainerFunc(
       getRandomTrainerFunc([
         TrainerType.BRUNO,
@@ -857,9 +863,9 @@ export const classicFixedBattles: FixedBattleConfigs = {
         TrainerType.AMARYS,
       ]),
     ),
-  [186]: new FixedBattleConfig()
+  [ELITE_FOUR_3_WAVE]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
-    .setSeedOffsetWave(182)
+    .setSeedOffsetWave(ELITE_FOUR_1_WAVE)
     .setGetTrainerFunc(
       getRandomTrainerFunc([
         TrainerType.AGATHA,
@@ -874,9 +880,9 @@ export const classicFixedBattles: FixedBattleConfigs = {
         TrainerType.LACEY,
       ]),
     ),
-  [188]: new FixedBattleConfig()
+  [ELITE_FOUR_4_WAVE]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
-    .setSeedOffsetWave(182)
+    .setSeedOffsetWave(ELITE_FOUR_1_WAVE)
     .setGetTrainerFunc(
       getRandomTrainerFunc([
         TrainerType.LANCE,
@@ -891,9 +897,9 @@ export const classicFixedBattles: FixedBattleConfigs = {
         TrainerType.DRAYTON,
       ]),
     ),
-  [190]: new FixedBattleConfig()
+  [CHAMPION_WAVE]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
-    .setSeedOffsetWave(182)
+    .setSeedOffsetWave(ELITE_FOUR_1_WAVE)
     .setGetTrainerFunc(
       getRandomTrainerFunc([
         TrainerType.BLUE,
@@ -914,7 +920,7 @@ export const classicFixedBattles: FixedBattleConfigs = {
       () =>
         new Trainer(
           TrainerType.RIVAL_6,
-          globalScene.gameData.gender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
+          settings.display.playerGender === PlayerGender.MALE ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT,
         ),
     )
     .setCustomModifierRewards({

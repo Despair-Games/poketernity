@@ -6,18 +6,16 @@ import { AttackMove } from "./move";
 import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import { getFrameMs, getEnumKeys, getEnumValues, animationFileName, isNullOrUndefined } from "#app/utils";
-import type { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import { Moves } from "#enums/moves";
 import { SubstituteTag } from "./battler-tags";
 import Phaser from "phaser";
 import { EncounterAnim } from "#enums/encounter-anims";
+import { settings } from "#app/system/settings/settings-manager";
 import { DelayedAttackAttr } from "./move-attrs/delayed-attack-attr";
-
-export enum AnimFrameTarget {
-  USER,
-  TARGET,
-  GRAPHIC,
-}
+import { AnimFrameTarget } from "#enums/anim-frame-target";
+import { ChargeAnim } from "#enums/charge-anim";
+import { CommonAnim } from "#enums/common-anim";
 
 enum AnimFocus {
   TARGET = 1,
@@ -30,82 +28,6 @@ enum AnimBlendType {
   NORMAL,
   ADD,
   SUBTRACT,
-}
-
-export enum ChargeAnim {
-  FLY_CHARGING = 1000,
-  BOUNCE_CHARGING,
-  DIG_CHARGING,
-  FUTURE_SIGHT_CHARGING,
-  DIVE_CHARGING,
-  SOLAR_BEAM_CHARGING,
-  SHADOW_FORCE_CHARGING,
-  SKULL_BASH_CHARGING,
-  FREEZE_SHOCK_CHARGING,
-  SKY_DROP_CHARGING,
-  SKY_ATTACK_CHARGING,
-  ICE_BURN_CHARGING,
-  DOOM_DESIRE_CHARGING,
-  RAZOR_WIND_CHARGING,
-  PHANTOM_FORCE_CHARGING,
-  GEOMANCY_CHARGING,
-  SHADOW_BLADE_CHARGING,
-  SOLAR_BLADE_CHARGING,
-  BEAK_BLAST_CHARGING,
-  METEOR_BEAM_CHARGING,
-  ELECTRO_SHOT_CHARGING,
-}
-
-export enum CommonAnim {
-  USE_ITEM = 2000,
-  HEALTH_UP,
-  POISON = 2010,
-  TOXIC,
-  PARALYSIS,
-  SLEEP,
-  FROZEN,
-  BURN,
-  CONFUSION,
-  ATTRACT,
-  BIND,
-  WRAP,
-  CURSE_NO_GHOST,
-  LEECH_SEED,
-  FIRE_SPIN,
-  PROTECT,
-  COVET,
-  WHIRLPOOL,
-  BIDE,
-  SAND_TOMB,
-  QUICK_GUARD,
-  WIDE_GUARD,
-  CURSE,
-  MAGMA_STORM,
-  CLAMP,
-  SNAP_TRAP,
-  THUNDER_CAGE,
-  INFESTATION,
-  ORDER_UP_CURLY,
-  ORDER_UP_DROOPY,
-  ORDER_UP_STRETCHY,
-  RAGING_BULL_FIRE,
-  RAGING_BULL_WATER,
-  SALT_CURE,
-  POWDER,
-  SUNNY = 2100,
-  RAIN,
-  SANDSTORM,
-  HAIL,
-  SNOW,
-  WIND,
-  HEAVY_RAIN,
-  HARSH_SUN,
-  STRONG_WINDS,
-  MISTY_TERRAIN = 2110,
-  ELECTRIC_TERRAIN,
-  GRASSY_TERRAIN,
-  PSYCHIC_TERRAIN,
-  LOCK_ON = 2120,
 }
 
 export class AnimConfig {
@@ -1007,7 +929,7 @@ export abstract class BattleAnim {
       }
     };
 
-    if (!globalScene.moveAnimations && !this.playRegardlessOfIssues) {
+    if (!settings.display.enableMoveAnimations && !this.playRegardlessOfIssues) {
       return cleanUpAndComplete();
     }
 
@@ -1294,7 +1216,7 @@ export abstract class BattleAnim {
       }
     };
 
-    if (!globalScene.moveAnimations && !this.playRegardlessOfIssues) {
+    if (!settings.display.enableMoveAnimations && !this.playRegardlessOfIssues) {
       return cleanUpAndComplete();
     }
 
@@ -1432,8 +1354,8 @@ export class CommonBattleAnim extends BattleAnim {
 export class MoveAnim extends BattleAnim {
   public move: Moves;
 
-  constructor(move: Moves, user: Pokemon, target: BattlerIndex, playOnEmptyField: boolean = false) {
-    super(user, globalScene.getFieldPokemonByBattlerIndex(target), playOnEmptyField);
+  constructor(move: Moves, user: Pokemon, targetIndex: BattlerIndex, playOnEmptyField: boolean = false) {
+    super(user, globalScene.getFieldPokemonByBattlerIndex(targetIndex), playOnEmptyField);
 
     this.move = move;
   }
@@ -1460,8 +1382,11 @@ export class MoveAnim extends BattleAnim {
 export class MoveChargeAnim extends MoveAnim {
   private chargeAnim: ChargeAnim;
 
-  constructor(chargeAnim: ChargeAnim, move: Moves, user: Pokemon) {
-    super(move, user, 0);
+  /**
+   * **Note:** The default for {@linkcode targetIndex} being {@linkcode BattlerIndex.PLAYER} is due to `MoveChargeAnim` originally not supporting a target argument.
+   */
+  constructor(chargeAnim: ChargeAnim, move: Moves, user: Pokemon, targetIndex: BattlerIndex = BattlerIndex.PLAYER) {
+    super(move, user, targetIndex);
 
     this.chargeAnim = chargeAnim;
   }

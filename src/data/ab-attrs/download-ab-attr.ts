@@ -1,6 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { type BattleStat, Stat } from "#enums/stat";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
 
@@ -9,7 +10,6 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
  * it will raise Attack if the foe's current Defense is lower than its current Special Defense stat;
  * otherwise, it will raise Special Attack.
  * @extends PostSummonAbAttr
- * @see {@linkcode applyPostSummon}
  */
 export class DownloadAbAttr extends PostSummonAbAttr {
   private enemyDef: number;
@@ -20,13 +20,13 @@ export class DownloadAbAttr extends PostSummonAbAttr {
    * @param pokemon The {@linkcode Pokemon} with this ability
    * @returns Returns `true` if ability is used successful, `false` if not.
    */
-  override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     this.enemyDef = 0;
     this.enemySpDef = 0;
 
     for (const opponent of pokemon.getOpponents()) {
-      this.enemyDef += opponent.getEffectiveStat(Stat.DEF);
-      this.enemySpDef += opponent.getEffectiveStat(Stat.SPDEF);
+      this.enemyDef += opponent.getEffectiveStat(Stat.DEF, undefined, undefined, AbilityApplyMode.IGNORE);
+      this.enemySpDef += opponent.getEffectiveStat(Stat.SPDEF, undefined, undefined, AbilityApplyMode.IGNORE);
     }
 
     if (this.enemyDef < this.enemySpDef) {

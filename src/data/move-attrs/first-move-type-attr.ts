@@ -1,4 +1,4 @@
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -16,17 +16,13 @@ export class FirstMoveTypeAttr extends MoveEffectAttr {
     super(true);
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (!super.apply(user, target, move)) {
-      return false;
-    }
-
+  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const firstMoveType = target.getMoveset()[0].getMove().type;
     user.summonData.types = [firstMoveType];
     globalScene.queueMessage(
       i18next.t("battle:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
-        type: i18next.t(`pokemonInfo:Type.${Type[firstMoveType]}`),
+        type: i18next.t(`pokemonInfo:Type.${ElementType[firstMoveType]}`),
       }),
     );
 

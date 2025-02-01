@@ -1,4 +1,5 @@
-import { MoveResult, type Pokemon } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { MovePhase } from "#app/phases/move-phase";
@@ -6,13 +7,13 @@ import { BooleanHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { StatusEffect } from "#enums/status-effect";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import { applyAbAttrs } from "./ability";
 import { StockpilingTag } from "./battler-tags";
 import { type Move } from "./move";
 import { allMoves } from "#app/data/all-moves";
 import { MoveCategory } from "#enums/move-category";
-import { Command } from "#app/ui/command-ui-handler";
+import { BattleCommand } from "#enums/battle-command";
 import { FieldPreventExplosionLikeAbAttr } from "./ab-attrs/field-prevent-explosion-like-ab-attr";
 
 export type MoveConditionFunc = (user: Pokemon, target: Pokemon, move: Move) => boolean;
@@ -57,7 +58,7 @@ export class UpperHandCondition extends MoveCondition {
 
       return (
         !!targetCommand
-        && targetCommand.command === Command.FIGHT
+        && targetCommand.command === BattleCommand.FIGHT
         && !target.turnData.acted
         && !!targetCommand.move?.move
         && allMoves[targetCommand.move.move].category !== MoveCategory.STATUS
@@ -68,7 +69,7 @@ export class UpperHandCondition extends MoveCondition {
 }
 
 export const unknownTypeCondition: MoveConditionFunc = (user, _target, _move) =>
-  !user.getTypes().includes(Type.UNKNOWN);
+  !user.getTypes().includes(ElementType.UNKNOWN);
 
 export const hasStockpileStacksCondition: MoveConditionFunc = (user) => {
   const hasStockpilingTag = user.getTag(StockpilingTag);
@@ -101,14 +102,17 @@ export const failOnGravityCondition: MoveConditionFunc = (_user, _target, _move)
 
 export const failOnBossCondition: MoveConditionFunc = (_user, target, _move) => !target.isBossImmune();
 
+export const failOnMaxCondition: MoveConditionFunc = (_user, target, _move) => !target.isMax();
+
 export const failIfSingleBattle: MoveConditionFunc = (_user, _target, _move) => globalScene.currentBattle.double;
 
+/** @todo Add simulated support */
 export const failIfDampCondition: MoveConditionFunc = (user, _target, move) => {
   const cancelled = new BooleanHolder(false);
   globalScene
     .getField(true)
     .map((p) =>
-      applyAbAttrs(FieldPreventExplosionLikeAbAttr, p, undefined, cancelled, getPokemonNameWithAffix(user), move.name),
+      applyAbAttrs(FieldPreventExplosionLikeAbAttr, p, false, cancelled, getPokemonNameWithAffix(user), move.name),
     );
   return !cancelled.value;
 };
@@ -128,7 +132,7 @@ export const failIfLastInPartyCondition: MoveConditionFunc = (user: Pokemon, _ta
 };
 
 export const failIfGhostTypeCondition: MoveConditionFunc = (_user: Pokemon, target: Pokemon, _move: Move) =>
-  !target.isOfType(Type.GHOST);
+  !target.isOfType(ElementType.GHOST);
 
 export const lastMoveCopiableCondition: MoveConditionFunc = (_user, _target, _move) => {
   const copiableMove = globalScene.currentBattle.lastMove;

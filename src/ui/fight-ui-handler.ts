@@ -1,20 +1,23 @@
 import type { InfoToggle } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
-import { addTextObject, TextStyle } from "./text";
+import { addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
 import { getTypeDamageMultiplierColor } from "#app/data/type";
-import { Type } from "#enums/type";
-import { Command } from "./command-ui-handler";
-import { Mode } from "./ui";
+import { ElementType } from "#enums/element-type";
+import { BattleCommand } from "#enums/battle-command";
+import { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
-import { getLocalizedSpriteKey, fixedInt, padInt } from "#app/utils";
-import { MoveCategory } from "#app/enums/move-category";
+import { getLocalizedSpriteKey, fixedNumber, leftPad } from "#app/utils";
+import { MoveCategory } from "#enums/move-category";
 import i18next from "i18next";
 import { Button } from "#enums/buttons";
 import type { PokemonMove } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import type { CommandPhase } from "#app/phases/command-phase";
 import MoveInfoOverlay from "./move-info-overlay";
-import { BattleType } from "#app/battle";
+import { BattleType } from "#enums/battle-type";
+import { settings } from "#app/system/settings/settings-manager";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
 
 export default class FightUiHandler extends UiHandler implements InfoToggle {
   public static readonly MOVES_CONTAINER_NAME = "moves";
@@ -36,7 +39,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
   protected cursor2: number = 0;
 
   constructor() {
-    super(Mode.FIGHT);
+    super(UiMode.FIGHT);
   }
 
   setup() {
@@ -145,7 +148,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
 
     if (button === Button.CANCEL || button === Button.ACTION) {
       if (button === Button.ACTION) {
-        if ((globalScene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, cursor, false)) {
+        if ((globalScene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, cursor, false)) {
           success = true;
         } else {
           ui.playError();
@@ -154,7 +157,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
         // Cannot back out of fight menu if skipToFightInput is enabled
         const { battleType, mysteryEncounter } = globalScene.currentBattle;
         if (battleType !== BattleType.MYSTERY_ENCOUNTER || !mysteryEncounter?.skipToFightInput) {
-          ui.setMode(Mode.COMMAND, this.fieldIndex);
+          ui.setMode(UiMode.COMMAND, this.fieldIndex);
           success = true;
         }
       }
@@ -197,7 +200,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     }
     globalScene.tweens.add({
       targets: [this.movesContainer, this.cursorObj],
-      duration: fixedInt(125),
+      duration: fixedNumber(125),
       ease: "Sine.easeInOut",
       alpha: visible ? 0 : 1,
     });
@@ -242,7 +245,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
       const pokemonMove = moveset[cursor];
       const moveType = pokemon.getMoveType(pokemonMove.getMove());
       const textureKey = getLocalizedSpriteKey("types");
-      this.typeIcon.setTexture(textureKey, Type[moveType].toLowerCase()).setScale(0.8);
+      this.typeIcon.setTexture(textureKey, ElementType[moveType].toLowerCase()).setScale(0.8);
 
       const moveCategory = pokemonMove.getMove().category;
       this.moveCategoryIcon.setTexture("categories", MoveCategory[moveCategory].toLowerCase()).setScale(1.0);
@@ -251,8 +254,8 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
       const maxPP = pokemonMove.getMovePp();
       const pp = maxPP - pokemonMove.ppUsed;
 
-      const ppLeftStr = padInt(pp, 2, "  ");
-      const ppMaxStr = padInt(maxPP, 2, "  ");
+      const ppLeftStr = leftPad(pp, 2, "  ");
+      const ppMaxStr = leftPad(maxPP, 2, "  ");
       this.ppText.setText(`${ppLeftStr}/${ppMaxStr}`);
       this.powerText.setText(`${power >= 0 ? power : "---"}`);
       this.accuracyText.setText(`${accuracy >= 0 ? accuracy : "---"}`);
@@ -298,11 +301,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
    * Returns undefined if it's a status move
    */
   private getEffectivenessText(pokemon: Pokemon, opponent: Pokemon, pokemonMove: PokemonMove): string | undefined {
-    const effectiveness = opponent.getMoveEffectiveness(
-      pokemon,
-      pokemonMove.getMove(),
-      !opponent.battleData?.abilityRevealed,
-    );
+    const effectiveness = opponent.getMoveEffectiveness(pokemon, pokemonMove.getMove(), AbilityApplyMode.REVEALED);
     if (effectiveness === undefined) {
       return undefined;
     }
@@ -335,7 +334,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
    * @returns A color or undefined if the default color should be used
    */
   private getMoveColor(pokemon: Pokemon, pokemonMove: PokemonMove): string | undefined {
-    if (!globalScene.typeHints) {
+    if (!settings.display.enableTypeHints) {
       return undefined;
     }
 
@@ -345,9 +344,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     }
 
     const moveColors = opponents
-      .map((opponent) =>
-        opponent.getMoveEffectiveness(pokemon, pokemonMove.getMove(), !opponent.battleData.abilityRevealed),
-      )
+      .map((opponent) => opponent.getMoveEffectiveness(pokemon, pokemonMove.getMove(), AbilityApplyMode.REVEALED))
       .sort((a, b) => b - a)
       .map((effectiveness) => getTypeDamageMultiplierColor(effectiveness ?? 0, "offense"));
 

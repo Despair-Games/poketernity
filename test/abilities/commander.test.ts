@@ -1,5 +1,5 @@
-import { BattlerIndex } from "#app/battle";
-import { MoveResult } from "#app/field/pokemon";
+import { BattlerIndex } from "#enums/battler-index";
+import { MoveResult } from "#enums/move-result";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Moves } from "#enums/moves";
@@ -105,7 +105,7 @@ describe("Abilities - Commander", () => {
 
     await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("FaintPhase", false);
+    await game.phaseInterceptor.to("FaintPhase");
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeUndefined();
     expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(dondozo, PokemonAnimType.COMMANDER_REMOVE);
 

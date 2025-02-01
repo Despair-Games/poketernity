@@ -2,22 +2,25 @@ import { globalScene } from "#app/global-scene";
 import type { ModifierTypeOption } from "../modifier/modifier-type";
 import { getPlayerShopModifierTypeOptionsForWave, TmModifierType } from "../modifier/modifier-type";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
-import { addTextObject, getTextStyleOptions, getModifierTierTextTint, getTextColor, TextStyle } from "./text";
+import { addTextObject, getTextStyleOptions, getModifierTierTextTint, getTextColor } from "./text";
+import { TextStyle } from "#enums/text-style";
 import AwaitableUiHandler from "./awaitable-ui-handler";
-import { Mode } from "./ui";
+import { UiMode } from "#enums/ui-mode";
 import { LockModifierTiersModifier, PokemonHeldItemModifier, HealShopCostModifier } from "../modifier/modifier";
-import { handleTutorial, Tutorial } from "../tutorial";
+import { handleTutorial } from "../tutorial";
+import { Tutorial } from "#enums/tutorial";
 import { Button } from "#enums/buttons";
 import MoveInfoOverlay from "./move-info-overlay";
 import { allMoves } from "#app/data/all-moves";
 import { formatMoney } from "#app/utils";
 import Overrides from "#app/overrides";
 import i18next from "i18next";
-import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
+import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { NumberHolder } from "#app/utils";
 import Phaser from "phaser";
 import { PokeballType } from "#enums/pokeball";
-import { ModifierTier } from "#app/modifier/modifier-tier";
+import { ModifierTier } from "#enums/modifier-tier";
+import { settings } from "#app/system/settings/settings-manager";
 
 export const SHOP_OPTIONS_ROW_LIMIT = 7;
 const SINGLE_SHOP_ROW_YOFFSET = 12;
@@ -51,8 +54,11 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
 
   private cursorObj: Phaser.GameObjects.Image | null;
 
+  /**
+   * @todo Why does it use {@linkcode UiMode.CONFIRM} and not {@linkcode UiMode.MODIFIER_SELECT} (for the `super` call)?
+   */
   constructor() {
-    super(Mode.CONFIRM);
+    super(UiMode.CONFIRM);
 
     this.options = [];
     this.shopOptionsRows = [];
@@ -66,7 +72,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
 
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
-    const styleOptions = getTextStyleOptions(TextStyle.PARTY, globalScene.uiTheme).styleOptions;
+    const styleOptions = getTextStyleOptions(TextStyle.PARTY, settings.display.uiTheme).styleOptions;
 
     if (context) {
       context.font = styleOptions.fontSize + "px " + styleOptions.fontFamily;
@@ -269,7 +275,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     globalScene.getModifierBar().updateModifiers(globalScene.modifiers, true);
 
     /* Multiplies the appearance duration by the speed parameter so that it is always constant, and avoids "flashbangs" at game speed x5 */
-    globalScene.showShopOverlay(750 * globalScene.gameSpeed);
+    globalScene.showShopOverlay(750 * settings.general.gameSpeed);
     globalScene.updateAndShowText(750);
     globalScene.updateBiomeWaveText();
     globalScene.updateMoneyText();
@@ -332,21 +338,21 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
       });
 
       const updateCursorTarget = () => {
-        if (globalScene.shopCursorTarget === ShopCursorTarget.CHECK_TEAM) {
+        if (settings.display.shopCursorTarget === ShopCursorTarget.CHECK_TEAM) {
           this.setRowCursor(0);
           this.setCursor(2);
-        } else if (globalScene.shopCursorTarget === ShopCursorTarget.SHOP && globalScene.gameMode.hasNoShop) {
+        } else if (settings.display.shopCursorTarget === ShopCursorTarget.SHOP && globalScene.gameMode.hasNoShop) {
           this.setRowCursor(ShopCursorTarget.REWARDS);
           this.setCursor(0);
         } else {
-          this.setRowCursor(globalScene.shopCursorTarget);
+          this.setRowCursor(settings.display.shopCursorTarget);
           this.setCursor(0);
         }
       };
 
       updateCursorTarget();
 
-      handleTutorial(Tutorial.Select_Item).then((res) => {
+      handleTutorial(Tutorial.SELECT_ITEM).then((res) => {
         if (res) {
           updateCursorTarget();
         }
@@ -624,7 +630,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     }
     const canReroll = globalScene.money >= this.rerollCost;
 
-    const formattedMoney = formatMoney(globalScene.moneyFormat, this.rerollCost);
+    const formattedMoney = formatMoney(settings.display.moneyFormat, this.rerollCost);
 
     this.rerollCostText.setText(i18next.t("modifierSelectUiHandler:rerollCost", { formattedMoney }));
     this.rerollCostText.setColor(this.getTextColor(canReroll ? TextStyle.MONEY : TextStyle.PARTY_RED));
@@ -652,7 +658,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.rowCursor = 0;
 
     /* Multiplies the fade time duration by the speed parameter so that it is always constant, and avoids "flashbangs" at game speed x5 */
-    globalScene.hideShopOverlay(750 * globalScene.gameSpeed);
+    globalScene.hideShopOverlay(750 * settings.general.gameSpeed);
     globalScene.hideLuckText(250);
 
     /* Normally already called just after the shop, but not sure if it happens in 100% of cases */
@@ -932,13 +938,13 @@ class ModifierOption extends Phaser.GameObjects.Container {
   }
 
   updateCostText(): void {
-    const cost = Overrides.WAIVE_ROLL_FEE_OVERRIDE ? 0 : this.modifierTypeOption.cost;
+    const cost = Overrides.WAIVE_SHOP_FEES_OVERRIDE ? 0 : this.modifierTypeOption.cost;
     const textStyle = cost <= globalScene.money ? TextStyle.MONEY : TextStyle.PARTY_RED;
 
-    const formattedMoney = formatMoney(globalScene.moneyFormat, cost);
+    const formattedMoney = formatMoney(settings.display.moneyFormat, cost);
 
     this.itemCostText.setText(i18next.t("modifierSelectUiHandler:itemCost", { formattedMoney }));
-    this.itemCostText.setColor(getTextColor(textStyle, false, globalScene.uiTheme));
-    this.itemCostText.setShadowColor(getTextColor(textStyle, true, globalScene.uiTheme));
+    this.itemCostText.setColor(getTextColor(textStyle, false, settings.display.uiTheme));
+    this.itemCostText.setShadowColor(getTextColor(textStyle, true, settings.display.uiTheme));
   }
 }

@@ -1,4 +1,4 @@
-import { BattlerTagLapseType } from "#app/data/battler-tags";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { MovePhase } from "#app/phases/move-phase";
@@ -7,6 +7,7 @@ import { Moves } from "#enums/moves";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { Species } from "#enums/species";
 import { AbAttr } from "./ab-attr";
+import { SkyDropTag } from "../battler-tags";
 
 /**
  * Attribute implementing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Commander_(Ability) | Commander}.
@@ -15,7 +16,7 @@ import { AbAttr } from "./ab-attr";
  * causing attacks that target the source to always miss.
  */
 export class CommanderAbAttr extends AbAttr {
-  override apply(pokemon: Pokemon, _passive: boolean, simulated: boolean): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     // TODO: Should this work with X + Dondozo fusions?
     if (globalScene.currentBattle?.double && pokemon.getAlly()?.species.speciesId === Species.DONDOZO) {
       // If the ally Dondozo is fainted or was previously "commanded" by
@@ -27,6 +28,8 @@ export class CommanderAbAttr extends AbAttr {
       if (!simulated) {
         // Lapse the source's semi-invulnerable tags (to avoid visual inconsistencies)
         pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
+        // Remove Sky Drop's effect from the source and whoever else is affected.
+        pokemon.getTag(SkyDropTag)?.clearSkyDropEffects();
         // Play an animation of the source jumping into the ally Dondozo's mouth
         globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.COMMANDER_APPLY);
         // Apply boosts from this effect to the ally Dondozo

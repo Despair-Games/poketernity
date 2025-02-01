@@ -1,12 +1,12 @@
 import { allMoves } from "#app/data/all-moves";
-import { MoveTarget } from "../../enums/move-target";
+import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import type { Moves } from "#enums/moves";
 import { AbAttr } from "./ab-attr";
 
 export class RedirectMoveAbAttr extends AbAttr {
-  override apply(pokemon: Pokemon, _passive: boolean, _simulated: boolean, move: Moves, target: NumberHolder): boolean {
+  override apply(pokemon: Pokemon, _simulated: boolean, move: Moves, target: NumberHolder): boolean {
     if (this.canRedirect(move)) {
       const newTarget = pokemon.getBattlerIndex();
       if (target.value !== newTarget) {

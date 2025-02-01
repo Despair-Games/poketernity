@@ -1,6 +1,6 @@
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { clientSessionId } from "#app/account";
-import { BattleType } from "#app/battle";
+import { BattleType } from "#enums/battle-type";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
@@ -20,13 +20,15 @@ import { SummonPhase } from "#app/phases/summon-phase";
 import { UnlockPhase } from "#app/phases/unlock-phase";
 import { api } from "#app/plugins/api/api";
 import { achvs, ChallengeAchv } from "#app/system/achv";
+import { settings } from "#app/system/settings/settings-manager";
 import TrainerData from "#app/system/trainer-data";
-import { Unlockables } from "#app/system/unlockables";
-import { Mode } from "#app/ui/ui";
+import { Unlockables } from "#enums/unlockables";
+import { UiMode } from "#enums/ui-mode";
 import { isLocal, isLocalServerConnected } from "#app/utils";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 
 /**
  * Handles the effects of the player ending a run:
@@ -62,7 +64,7 @@ export class GameOverPhase extends BattlePhase {
     }
 
     if (this.isVictory && gameMode.isEndless) {
-      const genderIndex = gameData.gender ?? PlayerGender.UNSET;
+      const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
       const genderStr = PlayerGender[genderIndex].toLowerCase();
       ui.showDialogue(
         i18next.t("miscDialogue:ending_endless", { context: genderStr }),
@@ -70,7 +72,7 @@ export class GameOverPhase extends BattlePhase {
         0,
         () => this.handleGameOver(),
       );
-    } else if (this.isVictory || !globalScene.enableRetries) {
+    } else if (this.isVictory || !settings.general.enableRetries) {
       this.handleGameOver();
     } else {
       const reloadGame = (): void => {
@@ -101,15 +103,14 @@ export class GameOverPhase extends BattlePhase {
       };
 
       ui.showText(i18next.t("battle:retryBattle"), null, () => {
-        ui.setMode(
-          Mode.CONFIRM,
-          () => reloadGame(),
-          () => this.handleGameOver(),
-          false,
-          0,
-          0,
-          1000,
-        );
+        const retryOptions: ConfirmModeConfig = {
+          yesHandler: reloadGame,
+          noHandler: () => {
+            this.handleGameOver();
+          },
+          inputDelay: 1000,
+        };
+        ui.setMode(UiMode.CONFIRM, retryOptions);
       });
     }
   }
@@ -182,20 +183,21 @@ export class GameOverPhase extends BattlePhase {
               clear(endCardPhase);
             };
 
+            const playerGender = settings.display.playerGender;
             if (!ui.shouldSkipDialogue(dialogueKey)) {
               ui.fadeIn(500).then(() => {
-                const genderIndex = gameData.gender ?? PlayerGender.UNSET;
+                const genderIndex = playerGender ?? PlayerGender.UNSET;
                 const genderStr = PlayerGender[genderIndex].toLowerCase();
                 // Dialogue has to be retrieved so that the rival's expressions can be loaded and shown via getCharVariantFromDialogue
                 const dialogue = i18next.t(dialogueKey, { context: genderStr });
                 const rivalName =
-                  gameData.gender === PlayerGender.FEMALE
+                  playerGender === PlayerGender.FEMALE
                     ? allTrainerConfigs[TrainerType.RIVAL].name
                     : allTrainerConfigs[TrainerType.RIVAL].nameFemale;
 
                 globalScene.charSprite
                   .showCharacter(
-                    `rival_${gameData.gender === PlayerGender.FEMALE ? "m" : "f"}`,
+                    `rival_${playerGender === PlayerGender.FEMALE ? "m" : "f"}`,
                     getCharVariantFromDialogue(dialogue),
                   )
                   .then(() => {
