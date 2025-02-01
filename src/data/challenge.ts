@@ -13,7 +13,7 @@ import { BattleType } from "#enums/battle-type";
 import Trainer from "#app/field/trainer";
 import { TrainerVariant } from "#enums/trainer-variant";
 import type { GameMode } from "#app/game-mode";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import { Challenges } from "#enums/challenges";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
@@ -524,7 +524,7 @@ interface monotypeOverride {
   /** The species to override */
   species: Species;
   /** The type to count as */
-  type: Type;
+  type: ElementType;
   /** If part of a fusion, should we check the fused species instead of the base species? */
   fusion: boolean;
 }
@@ -533,7 +533,9 @@ interface monotypeOverride {
  * Implements a mono type challenge.
  */
 export class SingleTypeChallenge extends Challenge {
-  private static TYPE_OVERRIDES: monotypeOverride[] = [{ species: Species.CASTFORM, type: Type.NORMAL, fusion: false }];
+  private static TYPE_OVERRIDES: monotypeOverride[] = [
+    { species: Species.CASTFORM, type: ElementType.NORMAL, fusion: false },
+  ];
   private static SPECIES_OVERRIDES: Species[] = [Species.MELOETTA];
 
   constructor() {
@@ -604,7 +606,7 @@ export class SingleTypeChallenge extends Challenge {
    */
   override getValue(overrideValue?: number): string {
     const value = overrideValue ?? this.value;
-    return Type[value - 1].toLowerCase();
+    return ElementType[value - 1].toLowerCase();
   }
 
   /**
@@ -614,8 +616,8 @@ export class SingleTypeChallenge extends Challenge {
    */
   override getDescription(overrideValue?: number): string {
     const value = overrideValue ?? this.value;
-    const type = i18next.t(`pokemonInfo:Type.${Type[value - 1]}`);
-    const typeColor = `[color=${TypeColor[Type[value - 1]]}][shadow=${TypeShadow[Type[value - 1]]}]${type}[/shadow][/color]`;
+    const type = i18next.t(`pokemonInfo:Type.${ElementType[value - 1]}`);
+    const typeColor = `[color=${TypeColor[ElementType[value - 1]]}][shadow=${TypeShadow[ElementType[value - 1]]}]${type}[/shadow][/color]`;
     const defaultDesc = i18next.t(`challenges:${this.geti18nKey()}.desc_default`);
     const typeDesc = i18next.t(`challenges:${this.geti18nKey()}.desc`, { type: typeColor });
     return value === 0 ? defaultDesc : typeDesc;

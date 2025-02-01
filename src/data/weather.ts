@@ -1,7 +1,7 @@
 import { Biome } from "#enums/biome";
 import { getPokemonNameWithAffix } from "../messages";
 import type { Pokemon } from "../field/pokemon";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import type { Move } from "./move";
 import { AttackMove } from "./move";
 import { randSeedInt } from "#app/utils";
@@ -73,15 +73,15 @@ export class Weather {
    * Checks if the weather will deal damage to a type
    * Rock/Ground/Steel types are immune to sandstorm
    * Ice is immune to hail
-   * @param type - the {@linkcode Type} of the Pokemon being checked
+   * @param type - the {@linkcode ElementType} of the Pokemon being checked
    * @returns true if damage will be dealt, false otherwise
    */
-  isTypeDamageImmune(type: Type): boolean {
+  isTypeDamageImmune(type: ElementType): boolean {
     switch (this.weatherType) {
       case WeatherType.SANDSTORM:
-        return type === Type.GROUND || type === Type.ROCK || type === Type.STEEL;
+        return type === ElementType.GROUND || type === ElementType.ROCK || type === ElementType.STEEL;
       case WeatherType.HAIL:
-        return type === Type.ICE;
+        return type === ElementType.ICE;
     }
 
     return false;
@@ -91,26 +91,26 @@ export class Weather {
    * Function to return a multiplier for specific types
    * Harsh/normal sun boosts fire by 50% and reduces water by 50%
    * Heavy/normal rain boosts water by 50% and reduces fire by 50%
-   * @param attackType - the {@linkcode Type} being checked
+   * @param attackType - the {@linkcode ElementType} being checked
    * @returns a multiplier (0.5, 1.5, or 1)
    */
-  getAttackTypeMultiplier(attackType: Type): number {
+  getAttackTypeMultiplier(attackType: ElementType): number {
     switch (this.weatherType) {
       case WeatherType.SUNNY:
       case WeatherType.HARSH_SUN:
-        if (attackType === Type.FIRE) {
+        if (attackType === ElementType.FIRE) {
           return 1.5;
         }
-        if (attackType === Type.WATER) {
+        if (attackType === ElementType.WATER) {
           return 0.5;
         }
         break;
       case WeatherType.RAIN:
       case WeatherType.HEAVY_RAIN:
-        if (attackType === Type.FIRE) {
+        if (attackType === ElementType.FIRE) {
           return 0.5;
         }
-        if (attackType === Type.WATER) {
+        if (attackType === ElementType.WATER) {
           return 1.5;
         }
         break;
@@ -132,9 +132,9 @@ export class Weather {
 
     switch (this.weatherType) {
       case WeatherType.HARSH_SUN:
-        return move instanceof AttackMove && moveType === Type.WATER;
+        return move instanceof AttackMove && moveType === ElementType.WATER;
       case WeatherType.HEAVY_RAIN:
-        return move instanceof AttackMove && moveType === Type.FIRE;
+        return move instanceof AttackMove && moveType === ElementType.FIRE;
     }
 
     return false;

@@ -25,7 +25,7 @@ describe("Abilities - Dancer", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("double")
-      .moveset([Moves.SWORDS_DANCE, Moves.SPLASH])
+      .moveset([Moves.FEATHER_DANCE, Moves.SPLASH])
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.DANCER)
       .enemyMoveset([Moves.VICTORY_DANCE]);
@@ -39,20 +39,22 @@ describe("Abilities - Dancer", () => {
     const [oricorio] = game.scene.getPlayerField();
 
     game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SWORDS_DANCE, 1);
+    game.move.select(Moves.FEATHER_DANCE, 1, BattlerIndex.ENEMY);
     await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("MovePhase");
-    // immediately copies ally move
+    // immediately copies ally move Feather Dance, and uses it on opponent
     await game.phaseInterceptor.to("MovePhase", false);
     let currentPhase = game.scene.getCurrentPhase() as MovePhase;
     expect(currentPhase.pokemon).toBe(oricorio);
-    expect(currentPhase.move.moveId).toBe(Moves.SWORDS_DANCE);
+    expect(currentPhase.targets).toEqual([BattlerIndex.ENEMY]);
+    expect(currentPhase.move.moveId).toBe(Moves.FEATHER_DANCE);
     await game.phaseInterceptor.to("MoveEndPhase");
     await game.phaseInterceptor.to("MovePhase");
-    // immediately copies enemy move
+    // immediately copies enemy move Victory Dance, and uses it on itself
     await game.phaseInterceptor.to("MovePhase", false);
     currentPhase = game.scene.getCurrentPhase() as MovePhase;
     expect(currentPhase.pokemon).toBe(oricorio);
+    expect(currentPhase.targets).toEqual([BattlerIndex.PLAYER]);
     expect(currentPhase.move.moveId).toBe(Moves.VICTORY_DANCE);
     await game.phaseInterceptor.to("BerryPhase");
 

@@ -2,12 +2,12 @@ import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition"
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
-import type { Type } from "#enums/type";
+import type { ElementType } from "#enums/element-type";
 import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 
 export class MoveTypeChangeAbAttr extends PreAttackAbAttr {
   constructor(
-    private readonly newType: Type,
+    private readonly newType: ElementType,
     private readonly powerMultiplier: number,
     private readonly condition?: PokemonAttackCondition,
   ) {

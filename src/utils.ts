@@ -161,7 +161,10 @@ export function getPlayTimeString(totalSeconds: number): string {
  * @param id 32-bit number
  * @returns An array of six numbers corresponding to 5-bit chunks from {@linkcode id}
  */
-export function getIvsFromId(id: number): number[] {
+export function getIvsFromId(id?: number): number[] {
+  if (isNullOrUndefined(id)) {
+    id = randSeedInt(4294967296);
+  }
   return [
     (id & 0x3e000000) >>> 25,
     (id & 0x01f00000) >>> 20,

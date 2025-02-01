@@ -30,7 +30,7 @@ import type { PokeballType } from "#enums/pokeball";
 import { Species } from "#enums/species";
 import { type PermanentStat, type TempBattleStat, BATTLE_STATS, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import i18next from "i18next";
 import {
   type DoubleBattleChanceBoosterModifierType,
@@ -837,13 +837,13 @@ export abstract class LapsingPokemonHeldItemModifier extends PokemonHeldItemModi
 
 export class TerastallizeModifier extends LapsingPokemonHeldItemModifier {
   public override type: TerastallizeModifierType;
-  public teraType: Type;
+  public teraType: ElementType;
   public override isTransferable: boolean = false;
 
   constructor(
     type: TerastallizeModifierType,
     pokemonId: number,
-    teraType: Type,
+    teraType: ElementType,
     battlesLeft?: number,
     stackCount?: number,
   ) {
@@ -876,7 +876,7 @@ export class TerastallizeModifier extends LapsingPokemonHeldItemModifier {
     if (pokemon.isPlayer()) {
       globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeTeraTrigger);
       globalScene.validateAchv(achvs.TERASTALLIZE);
-      if (this.teraType === Type.STELLAR) {
+      if (this.teraType === ElementType.STELLAR) {
         globalScene.validateAchv(achvs.STELLAR_TERASTALLIZE);
       }
     }
@@ -1541,10 +1541,10 @@ export class SpeciesCritBoosterModifier extends CritBoosterModifier {
  * Applies Specific Type item boosts (e.g., Magnet)
  */
 export class AttackTypeBoosterModifier extends PokemonHeldItemModifier {
-  public moveType: Type;
+  public moveType: ElementType;
   private boostMultiplier: number;
 
-  constructor(type: ModifierType, pokemonId: number, moveType: Type, boostPercent: number, stackCount?: number) {
+  constructor(type: ModifierType, pokemonId: number, moveType: ElementType, boostPercent: number, stackCount?: number) {
     super(type, pokemonId, stackCount);
 
     this.moveType = moveType;
@@ -1580,11 +1580,11 @@ export class AttackTypeBoosterModifier extends PokemonHeldItemModifier {
   /**
    * Checks if {@linkcode AttackTypeBoosterModifier} should be applied
    * @param pokemon the {@linkcode Pokemon} that holds the held item
-   * @param moveType the {@linkcode Type} of the move being used
+   * @param moveType the {@linkcode ElementType} of the move being used
    * @param movePower the {@linkcode NumberHolder} that holds the power of the move
    * @returns `true` if boosts should be applied to the move.
    */
-  override shouldApply(pokemon?: Pokemon, moveType?: Type, movePower?: NumberHolder): boolean {
+  override shouldApply(pokemon?: Pokemon, moveType?: ElementType, movePower?: NumberHolder): boolean {
     return (
       super.shouldApply(pokemon, moveType, movePower)
       && typeof moveType === "number"
@@ -1595,11 +1595,11 @@ export class AttackTypeBoosterModifier extends PokemonHeldItemModifier {
   /**
    * Applies {@linkcode AttackTypeBoosterModifier}
    * @param pokemon {@linkcode Pokemon} that holds the held item
-   * @param moveType {@linkcode Type} of the move being used
+   * @param moveType {@linkcode ElementType} of the move being used
    * @param movePower {@linkcode NumberHolder} that holds the power of the move
    * @returns `true` if boosts have been applied to the move.
    */
-  override apply(_pokemon: Pokemon, moveType: Type, movePower: NumberHolder): boolean {
+  override apply(_pokemon: Pokemon, moveType: ElementType, movePower: NumberHolder): boolean {
     if (moveType === this.moveType && movePower.value >= 1) {
       (movePower as NumberHolder).value = Math.floor(
         (movePower as NumberHolder).value * (1 + this.getStackCount() * this.boostMultiplier),
