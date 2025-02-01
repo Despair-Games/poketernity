@@ -23,7 +23,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
-import { MoveChargePhase } from "#app/phases/move-charge-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
@@ -404,7 +403,7 @@ export class MovePhase extends BattlePhase {
       applyAbAttrs(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
 
       this.showMoveText();
-      globalScene.unshiftPhase(new MoveChargePhase(this.pokemon.getBattlerIndex(), this.targets, this.move));
+      globalScene.chargeMove(this.pokemon.getBattlerIndex(), this.targets, this.move);
     } else {
       this.pokemon.pushMoveHistory({
         move: this.move.moveId,

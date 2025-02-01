@@ -178,6 +178,8 @@ import { FaintPhase } from "#app/phases/faint-phase";
 import type { DestinyBondTag, GrudgeTag } from "#app/data/battler-tags";
 import { PokemonHealPhase, type PokemonHealPhaseOptions } from "#app/phases/pokemon-heal-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { MoveChargePhase } from "#app/phases/move-charge-phase";
+import type { PokemonMove } from "#app/field/pokemon-move";
 
 //#region Types
 
@@ -3724,5 +3726,15 @@ export default class BattleScene extends SceneBase {
     } else {
       this.pushPhase(new TitlePhase());
     }
+  }
+
+  /**
+   * Adds a new {@linkcode MoveChargePhase} to the phase queue.
+   * @param battlerIndex The users {@linkcode BattlerIndex}
+   * @param targets The targets {@linkcode BattlerIndex}
+   * @param move The {@linkcode PokemonMove} being used
+   */
+  chargeMove(battlerIndex: BattlerIndex, targets: BattlerIndex[], move: PokemonMove): void {
+    this.unshiftPhase(new MoveChargePhase(battlerIndex, targets, move));
   }
 }
