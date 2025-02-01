@@ -824,7 +824,7 @@ export function handleMysteryEncounterVictory(addHealPhase: boolean = false, doN
   const allowedPkm = globalScene.getPlayerParty().filter((pkm) => pkm.isAllowedInBattle());
 
   if (allowedPkm.length === 0) {
-    globalScene.gameOver();
+    globalScene.gameOver({ clearPhaseQueue: true });
     return;
   }
 
@@ -866,7 +866,7 @@ export function handleMysteryEncounterBattleFailed(addHealPhase: boolean = false
   const allowedPkm = globalScene.getPlayerParty().filter((pkm) => pkm.isAllowedInBattle());
 
   if (allowedPkm.length === 0) {
-    globalScene.gameOver();
+    globalScene.gameOver({ clearPhaseQueue: true });
     return;
   }
 

@@ -61,7 +61,7 @@ export class MysteryEncounterBattleStartCleanupPhase extends Phase {
     /** The total number of legal player Pokemon that aren't currently on the field */
     const legalPlayerPartyPokemon = legalPlayerPokemon.filter((p) => !p.isActive(true));
     if (!legalPlayerPokemon.length) {
-      globalScene.gameOver();
+      globalScene.gameOver({ clearPhaseQueue: true });
       return this.end();
     }
 

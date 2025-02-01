@@ -107,7 +107,7 @@ export class VictoryPhase extends PokemonPhase {
         currentBattle.battleType = BattleType.CLEAR;
         globalScene.score += gameMode.getClearScoreBonus();
         globalScene.updateScoreText();
-        globalScene.gameOver(true);
+        globalScene.gameOver({ isVictory: true });
       }
     }
 

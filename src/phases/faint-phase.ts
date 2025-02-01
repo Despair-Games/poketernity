@@ -188,7 +188,7 @@ export class FaintPhase extends PokemonPhase {
       /** The total number of legal player Pokemon that aren't currently on the field */
       const legalPlayerPartyPokemon = legalPlayerPokemon.filter((p) => !p.isActive(true));
       if (!legalPlayerPokemon.length) {
-        globalScene.gameOver();
+        globalScene.gameOver({ clearPhaseQueue: true });
       } else if (double && legalPlayerPokemon.length === 1 && legalPlayerPartyPokemon.length === 0) {
         /**
          * If the player has exactly one Pokemon in total at this point in a double battle, and that Pokemon

@@ -202,6 +202,11 @@ interface PokemonFaintInit {
   source?: Pokemon;
 }
 
+interface GameOverInit {
+  isVictory?: boolean;
+  clearPhaseQueue?: boolean;
+}
+
 interface ToTitleScreenInit {
   /** Whether to add the {@linkcode TitlePhase} to the front of the phase queue or defer it. */
   eager?: boolean;
@@ -3678,8 +3683,8 @@ export default class BattleScene extends SceneBase {
     this.pushPhase(new NewBattlePhase());
   }
 
-  gameOver(isVictory?: boolean): void {
-    if (!isVictory) this.clearPhaseQueue();
+  gameOver({ isVictory, clearPhaseQueue }: GameOverInit = {}): void {
+    if (clearPhaseQueue) this.clearPhaseQueue();
     this.pushPhase(new GameOverPhase(isVictory));
   }
 

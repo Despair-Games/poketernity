@@ -38,7 +38,7 @@ export class BattleEndPhase extends BattlePhase {
 
     // Endless graceful end
     if (gameMode.isEndless && currentBattle.waveIndex >= 5850) {
-      globalScene.gameOver(true);
+      globalScene.gameOver({ isVictory: true });
     }
 
     for (const pokemon of globalScene.getField()) {

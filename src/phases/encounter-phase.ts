@@ -35,7 +35,6 @@ import { ModifierPoolType } from "#enums/modifier-pool-type";
 import Overrides from "#app/overrides";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { CheckSwitchPhase } from "#app/phases/check-switch-phase";
-import { GameOverPhase } from "#app/phases/game-over-phase";
 import { PostSummonPhase } from "#app/phases/post-summon-phase";
 import { ReturnPhase } from "#app/phases/return-phase";
 import { ScanIvsPhase } from "#app/phases/scan-ivs-phase";
@@ -87,7 +86,7 @@ export class EncounterPhase extends BattlePhase {
 
     // Failsafe if players somehow skip floor 200 in classic mode
     if (gameMode.isClassic && waveIndex > 200) {
-      globalScene.unshiftPhase(new GameOverPhase());
+      globalScene.gameOver({ clearPhaseQueue: false });
     }
 
     const loadEnemyAssets: Promise<void>[] = [];
