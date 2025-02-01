@@ -1306,7 +1306,7 @@ export class TrainerConfig {
    * Initializes the trainer configuration for a Champion.
    * @param variant The {@linkcode TrainerVariant} of the Champion (used for localization of the title).
    * @param battleBgm String representing the battle music
-   * @param mixedBattleBgm String representing mixed battle music
+   * @param mixedBattleBgm []String array representing the mixed battle music. If more then one are in the array a random one will be choosen on game init
    * @returns The updated TrainerConfig instance.
    **/
   initForChampion(variant: TrainerVariant, battleBgm: string[], mixedBattleBgm: string[]): TrainerConfig {
