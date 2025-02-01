@@ -132,6 +132,9 @@ describe("Enemy Commands - Move Selection", () => {
       const eas = offFieldEnemy.getExpectedAttackScore(player, move);
       expect(eas).toBeGreaterThanOrEqual(-1);
       expect(eas).toBeLessThanOrEqual(4);
+      const eas2 = player.getExpectedAttackScore(offFieldEnemy, move);
+      expect(eas2).toBeGreaterThanOrEqual(-1);
+      expect(eas2).toBeLessThanOrEqual(4);
     }
   });
 });
