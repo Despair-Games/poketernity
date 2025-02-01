@@ -208,6 +208,13 @@ interface ToTitleScreenInit {
   clearPhaseQueue?: boolean;
 }
 
+interface ToLoginScreenInit {
+  /** Whether to show text. @default true*/
+  showText?: boolean;
+  /** Whether to add the {@linkcode LoginPhase} to the front of the phase queue or defer it. */
+  defer?: boolean;
+}
+
 //#endregion
 //#region Constants
 
@@ -725,7 +732,7 @@ export default class BattleScene extends SceneBase {
       ),
       this.initStarterColors(),
     ]).then(() => {
-      this.pushPhase(new LoginPhase());
+      this.toLoginScreen();
       this.toTitleScreen();
 
       this.shiftPhase();
@@ -3736,5 +3743,19 @@ export default class BattleScene extends SceneBase {
    */
   chargeMove(battlerIndex: BattlerIndex, targets: BattlerIndex[], move: PokemonMove): void {
     this.unshiftPhase(new MoveChargePhase(battlerIndex, targets, move));
+  }
+
+  /**
+   * Sends the player to the login screen.
+   * @param showText Whether to show text
+   */
+  toLoginScreen({ defer, showText = true }: ToLoginScreenInit = {}): void {
+    const loginPhase = new LoginPhase(showText);
+
+    if (defer) {
+      this.pushPhase(loginPhase);
+    } else {
+      this.unshiftPhase(loginPhase);
+    }
   }
 }

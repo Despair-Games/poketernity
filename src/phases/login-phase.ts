@@ -73,7 +73,7 @@ export class LoginPhase extends Phase {
                       });
                     },
                     (): void => {
-                      globalScene.unshiftPhase(new LoginPhase(false));
+                      globalScene.toLoginScreen({ showText: false });
                       this.end();
                     },
                   ],
