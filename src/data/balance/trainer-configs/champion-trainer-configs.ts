@@ -7,7 +7,6 @@ import { modifierTypes } from "#app/modifier/modifier-type";
 import type { PersistentModifier } from "#app/modifier/modifier";
 import { ElementType } from "#enums/element-type";
 import { TrainerVariant } from "#enums/trainer-variant";
-import { ElementType } from "#enums/element-type";
 
 const DEFAULT_CHAMPION_THEME = "battle_champion_alder";
 const KANTO_CHAMPION_THEME = "battle_kanto_champion";
