@@ -4,12 +4,12 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { type BooleanHolder, type NumberHolder, toDmgValue } from "#app/utils";
-import type { Type } from "#enums/type";
+import type { ElementType } from "#enums/element-type";
 import i18next from "i18next";
 import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
 
 export class TypeImmunityHealAbAttr extends TypeImmunityAbAttr {
-  constructor(immuneType: Type) {
+  constructor(immuneType: ElementType) {
     super(immuneType);
   }
 

@@ -2,7 +2,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import i18next from "i18next";
 import { AbAttr } from "./ab-attr";
 
@@ -35,8 +35,9 @@ export class ArenaTrapAbAttr extends AbAttr {
   override apply(pokemon: Pokemon, _simulated: boolean, trapped: BooleanHolder, trappedPokemon: Pokemon): boolean {
     if (this.arenaTrapCondition(pokemon, trappedPokemon)) {
       if (
-        trappedPokemon.getTypes(true).includes(Type.GHOST)
-        || (trappedPokemon.getTypes(true).includes(Type.STELLAR) && trappedPokemon.getTypes().includes(Type.GHOST))
+        trappedPokemon.getTypes(true).includes(ElementType.GHOST)
+        || (trappedPokemon.getTypes(true).includes(ElementType.STELLAR)
+          && trappedPokemon.getTypes().includes(ElementType.GHOST))
       ) {
         trapped.value = false;
         return false;

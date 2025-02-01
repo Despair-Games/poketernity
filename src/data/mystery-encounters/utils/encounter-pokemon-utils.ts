@@ -17,7 +17,7 @@ import { UiMode } from "#enums/ui-mode";
 import type { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { Species } from "#enums/species";
-import type { Type } from "#enums/type";
+import type { ElementType } from "#enums/element-type";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { speciesStarterCosts } from "#app/data/balance/starters";
@@ -257,7 +257,7 @@ export function getHighestStatTotalPlayerPokemon(
 export function getRandomSpeciesByStarterCost(
   starterTiers: number | [number, number],
   excludedSpecies?: Species[],
-  types?: Type[],
+  types?: ElementType[],
   allowSubLegendary: boolean = true,
   allowLegendary: boolean = true,
   allowMythical: boolean = true,

@@ -1,5 +1,5 @@
 import { Species } from "#enums/species";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
@@ -18,13 +18,13 @@ export class RagingBullTypeAttr extends VariableMoveTypeAttr {
 
       switch (form) {
         case 1: // Blaze breed
-          moveType.value = Type.FIRE;
+          moveType.value = ElementType.FIRE;
           break;
         case 2: // Aqua breed
-          moveType.value = Type.WATER;
+          moveType.value = ElementType.WATER;
           break;
         default:
-          moveType.value = Type.FIGHTING;
+          moveType.value = ElementType.FIGHTING;
           break;
       }
       return true;

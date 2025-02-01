@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
@@ -107,7 +107,7 @@ describe("Abilities - Sheer Force", () => {
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    expect(enemyPokemon?.getTypes()[0]).toBe(Type.WATER);
+    expect(enemyPokemon?.getTypes()[0]).toBe(ElementType.WATER);
     expect(headbuttMove.calculateBattlePower).toHaveLastReturnedWith(headbuttMove.power * SHEER_FORCE_MULT);
     expect(headbuttFlinchAttr.getMoveChance).toHaveLastReturnedWith(0);
   });
