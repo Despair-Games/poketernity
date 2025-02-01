@@ -1,12 +1,12 @@
-import { speciesToJSON } from "#app/data/pokemon-species";
 import { Abilities } from "#enums/abilities";
 import { Moves } from "#enums/moves";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, it } from "vitest";
+import { Pokedex } from "./smogon_data";
 
-describe("Moves - Pokemon Species", () => {
+describe("Data - Pokemon Species", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
@@ -32,11 +32,19 @@ describe("Moves - Pokemon Species", () => {
       .enemyMoveset(Moves.SPLASH);
   });
 
+  const enum GrowthRate_PokeAPI {
+    SLOW = 1,
+    MEDIUM,
+    FAST,
+    MEDIUM_SLOW,
+    SLOW_THEN_VERY_FAST,
+    FAST_THEN_VERY_SLOW,
+  }
+
+  // From PokeAPI, growth rate, shape, capture rate, base friendship
+
   it("should do X", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
-
-    await speciesToJSON();
-
-    expect(true).toBe(true);
+    console.log(Object.keys(Pokedex));
+    console.log(GrowthRate_PokeAPI["SLOW"]);
   });
 });
