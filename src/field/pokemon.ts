@@ -3930,7 +3930,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   public getMoveHistory(): TurnMove[] {
-    return this.battleSummonData.moveHistory;
+    return this.battleSummonData?.moveHistory ?? [];
   }
 
   public pushMoveHistory(turnMove: TurnMove): void {
