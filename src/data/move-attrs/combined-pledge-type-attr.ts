@@ -16,7 +16,7 @@ import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-at
  */
 export class CombinedPledgeTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, move: Move, moveType: NumberHolder): boolean {
-    const combinedPledgeMove = user.turnData.combiningPledge;
+    const combinedPledgeMove = user.turnData?.combiningPledge;
     if (!combinedPledgeMove) {
       return false;
     }

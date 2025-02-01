@@ -1566,7 +1566,7 @@ export function initMoves() {
     ),
     new AttackMove(Moves.ASSURANCE, ElementType.DARK, MoveCategory.PHYSICAL, 60, 100, 10, -1, 0, 4).attr(
       MovePowerMultiplierAttr,
-      (_user, target, _move) => (target.turnData.damageTaken > 0 ? 2 : 1),
+      (_user, target, _move) => (target.turnData?.damageTaken > 0 ? 2 : 1),
     ),
     new StatusMove(Moves.EMBARGO, ElementType.DARK, 100, 15, -1, 0, 4).unimplemented(),
     new AttackMove(Moves.FLING, ElementType.DARK, MoveCategory.PHYSICAL, -1, 100, 10, -1, 0, 4)
@@ -1626,7 +1626,7 @@ export function initMoves() {
         }
         return (
           turnCommand.command === BattleCommand.FIGHT
-          && !target.turnData.acted
+          && !target.turnData?.acted
           && allMoves[turnCommand.move.move].category !== MoveCategory.STATUS
         );
       },
@@ -2032,7 +2032,7 @@ export function initMoves() {
       .ignoresSubstitute()
       .target(MoveTarget.NEAR_OTHER)
       .condition(failIfSingleBattle)
-      .condition((_user, target, _move) => !target.turnData.acted)
+      .condition((_user, target, _move) => !target.turnData?.acted)
       .attr(AfterYouAttr),
     new AttackMove(Moves.ROUND, ElementType.NORMAL, MoveCategory.SPECIAL, 60, 100, 15, -1, 0, 5)
       .attr(CueNextRoundAttr)
@@ -3308,7 +3308,7 @@ export function initMoves() {
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new AttackMove(Moves.LASH_OUT, ElementType.DARK, MoveCategory.PHYSICAL, 75, 100, 5, -1, 0, 8).attr(
       MovePowerMultiplierAttr,
-      (user, _target, _move) => (user.turnData.statStagesDecreased ? 2 : 1),
+      (user, _target, _move) => (user.turnData?.statStagesDecreased ? 2 : 1),
     ),
     new AttackMove(Moves.POLTERGEIST, ElementType.GHOST, MoveCategory.PHYSICAL, 110, 90, 5, -1, 0, 8)
       .attr(AttackedByItemAttr)
@@ -3872,7 +3872,7 @@ export function initMoves() {
         }
         return (
           turnCommand.command === BattleCommand.FIGHT
-          && !target.turnData.acted
+          && !target.turnData?.acted
           && allMoves[turnCommand.move.move].category !== MoveCategory.STATUS
         );
       },

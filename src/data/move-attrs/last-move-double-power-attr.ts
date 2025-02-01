@@ -26,7 +26,7 @@ export class LastMoveDoublePowerAttr extends VariablePowerAttr {
     const enemy = user.getOpponent(0);
     const pokemonActed: Pokemon[] = [];
 
-    if (enemy?.turnData.acted) {
+    if (enemy?.turnData?.acted) {
       pokemonActed.push(enemy);
     }
 
@@ -34,10 +34,10 @@ export class LastMoveDoublePowerAttr extends VariablePowerAttr {
       const userAlly = user.getAlly();
       const enemyAlly = enemy?.getAlly();
 
-      if (userAlly && userAlly.turnData.acted) {
+      if (userAlly?.turnData?.acted) {
         pokemonActed.push(userAlly);
       }
-      if (enemyAlly && enemyAlly.turnData.acted) {
+      if (enemyAlly?.turnData?.acted) {
         pokemonActed.push(enemyAlly);
       }
     }
