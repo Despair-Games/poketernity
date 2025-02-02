@@ -1,7 +1,7 @@
 import { allAbilities } from "#app/data/ability";
 import { Abilities } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat, type BattleStat } from "#enums/stat";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -30,7 +30,7 @@ describe("Abilities - Mirror Armor", () => {
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.MIRROR_ARMOR)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
   });
@@ -41,7 +41,7 @@ describe("Abilities - Mirror Armor", () => {
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
 
-    game.move.use(Moves.GROWL);
+    game.move.use(MoveId.GROWL);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -67,8 +67,8 @@ describe("Abilities - Mirror Armor", () => {
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
 
-    game.move.use(Moves.SPLASH);
-    await game.move.forceEnemyMove(Moves.OVERHEAT);
+    game.move.use(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.OVERHEAT);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.move.forceHit();
 
@@ -83,7 +83,7 @@ describe("Abilities - Mirror Armor", () => {
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
 
-    game.move.use(Moves.SPICY_EXTRACT);
+    game.move.use(MoveId.SPICY_EXTRACT);
 
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(enemy.getStatStage(Stat.ATK)).toBe(2);
@@ -98,7 +98,7 @@ describe("Abilities - Mirror Armor", () => {
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
 
-    game.move.use(Moves.OCTOLOCK);
+    game.move.use(MoveId.OCTOLOCK);
 
     await game.toNextTurn();
     [Stat.DEF, Stat.SPDEF].forEach((stat: BattleStat) => {
@@ -115,7 +115,7 @@ describe("Abilities - Mirror Armor", () => {
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
 
-    game.move.use(Moves.GROWL);
+    game.move.use(MoveId.GROWL);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -128,8 +128,8 @@ describe("Abilities - Mirror Armor", () => {
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.use(Moves.STICKY_WEB);
-    await game.move.forceEnemyMove(Moves.U_TURN);
+    game.move.use(MoveId.STICKY_WEB);
+    await game.move.forceEnemyMove(MoveId.U_TURN);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
@@ -146,11 +146,11 @@ describe("Abilities - Mirror Armor", () => {
 
     await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 
-    game.move.use(Moves.STICKY_WEB);
+    game.move.use(MoveId.STICKY_WEB);
     await game.toNextTurn();
 
-    game.move.use(Moves.U_TURN);
-    await game.move.forceEnemyMove(Moves.U_TURN);
+    game.move.use(MoveId.U_TURN);
+    await game.move.forceEnemyMove(MoveId.U_TURN);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     game.doSelectPartyPokemon(1, "SwitchPhase");
 
@@ -173,8 +173,8 @@ describe("Abilities - Mirror Armor", () => {
 
     const [player] = game.scene.getPlayerField();
 
-    game.move.use(Moves.GROWL, 0);
-    game.move.use(Moves.SPLASH, 1);
+    game.move.use(MoveId.GROWL, 0);
+    game.move.use(MoveId.SPLASH, 1);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
