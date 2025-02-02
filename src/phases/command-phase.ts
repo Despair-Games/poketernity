@@ -11,7 +11,6 @@ import { FieldPosition } from "#enums/field-position";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { FieldPhase } from "#app/phases/abstract-field-phase";
-import { SelectTargetPhase } from "#app/phases/select-target-phase";
 import { BattleCommand } from "#enums/battle-command";
 import { UiMode } from "#enums/ui-mode";
 import { isNullOrUndefined } from "#app/utils";
@@ -207,7 +206,7 @@ export class CommandPhase extends FieldPhase {
 
           console.log(moveTargets, getPokemonNameWithAffix(playerPokemon));
           if (moveTargets.targets.length > 1 && moveTargets.multiple) {
-            globalScene.unshiftPhase(new SelectTargetPhase(this.fieldIndex));
+            globalScene.selectTarget(this.fieldIndex);
           }
           if (turnCommand.move && (moveTargets.targets.length <= 1 || moveTargets.multiple)) {
             turnCommand.move.targets = moveTargets.targets;
@@ -218,7 +217,7 @@ export class CommandPhase extends FieldPhase {
           ) {
             turnCommand.move.targets = playerPokemon.getMoveQueue()[0].targets;
           } else {
-            globalScene.unshiftPhase(new SelectTargetPhase(this.fieldIndex));
+            globalScene.selectTarget(this.fieldIndex);
           }
 
           currentBattle.turnCommands[this.fieldIndex] = turnCommand;

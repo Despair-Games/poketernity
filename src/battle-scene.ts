@@ -181,6 +181,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveChargePhase } from "#app/phases/move-charge-phase";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { AchvCategory } from "#enums/achv-flag";
+import { SelectTargetPhase } from "#app/phases/select-target-phase";
 
 //#region Types
 
@@ -3763,5 +3764,13 @@ export default class BattleScene extends SceneBase {
     } else {
       this.unshiftPhase(loginPhase);
     }
+  }
+
+  /**
+   * Inserts a new {@linkcode SelectTargetPhase} to the phase queue.
+   * @param battlerIndex The selected targets {@linkcode BattlerIndex}
+   */
+  selectTarget(battlerIndex: BattlerIndex): void {
+    this.unshiftPhase(new SelectTargetPhase(battlerIndex));
   }
 }
