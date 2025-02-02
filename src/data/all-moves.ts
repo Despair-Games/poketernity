@@ -218,7 +218,7 @@ import { unknownTypeCondition } from "./move-conditions/unknown-type-condition";
 import { UpperHandCondition } from "./move-conditions/upper-hand-condition";
 import { FirstMoveCondition } from "./move-conditions/first-move-condition";
 import { failOnGravityCondition } from "#app/data/move-conditions/fail-on-gravity-condition";
-import { crashDamageFunc, frenzyMissFunc } from "#app/data/move-utils";
+import { crashDamageFunc, frenzyMissFunc } from "#app/utils/move-utils";
 import { getNonVolatileStatusEffects, isNonVolatileStatusEffect } from "#app/data/status-effect";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
