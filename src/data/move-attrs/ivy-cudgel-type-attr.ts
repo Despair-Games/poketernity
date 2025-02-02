@@ -1,5 +1,5 @@
 import { Species } from "#enums/species";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
@@ -19,19 +19,19 @@ export class IvyCudgelTypeAttr extends VariableMoveTypeAttr {
       switch (form) {
         case 1: // Wellspring Mask
         case 5: // Wellspring Mask Tera
-          moveType.value = Type.WATER;
+          moveType.value = ElementType.WATER;
           break;
         case 2: // Hearthflame Mask
         case 6: // Hearthflame Mask Tera
-          moveType.value = Type.FIRE;
+          moveType.value = ElementType.FIRE;
           break;
         case 3: // Cornerstone Mask
         case 7: // Cornerstone Mask Tera
-          moveType.value = Type.ROCK;
+          moveType.value = ElementType.ROCK;
           break;
         case 4: // Teal Mask Tera
         default:
-          moveType.value = Type.GRASS;
+          moveType.value = ElementType.GRASS;
           break;
       }
       return true;

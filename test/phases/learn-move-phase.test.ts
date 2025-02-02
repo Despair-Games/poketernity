@@ -2,7 +2,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import Phaser from "phaser";
 import { GameManager } from "#test/testUtils/gameManager";
 import { Species } from "#enums/species";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 
 describe("Learn Move Phase", () => {
@@ -25,11 +25,11 @@ describe("Learn Move Phase", () => {
   });
 
   it("If Pokemon has less than 4 moves, its newest move will be added to the lowest empty index", async () => {
-    game.override.moveset([Moves.SPLASH]);
+    game.override.moveset([MoveId.SPLASH]);
     await game.startBattle([Species.BULBASAUR]);
     const pokemon = game.scene.getPlayerPokemon()!;
     const newMovePos = pokemon?.getMoveset().length;
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.doKillOpponents();
     await game.phaseInterceptor.to(LearnMovePhase);
     const levelMove = pokemon.getLevelMoves(5)[0];

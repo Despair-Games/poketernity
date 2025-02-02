@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -30,7 +30,7 @@ describe("Evolution Phase", () => {
       .enemyLevel(1000)
       .enemySpecies(Species.BLISSEY)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should evolve the Pokemon by exactly 1 stage", async () => {
@@ -42,7 +42,7 @@ describe("Evolution Phase", () => {
 
     vi.spyOn(pokemon, "getLevelMoves").mockReturnValue([]); // Do not attempt to learn level-up moves
 
-    game.move.use(Moves.SPLASH);
+    game.move.use(MoveId.SPLASH);
     await game.doKillOpponents();
     await game.toNextWave();
 
@@ -67,7 +67,7 @@ describe("Evolution Phase", () => {
       return originalDoCycle.apply(game.scene.animations, args);
     });
 
-    game.move.use(Moves.SPLASH);
+    game.move.use(MoveId.SPLASH);
     await game.doKillOpponents();
 
     // Repeatedly press "Cancel" to cancel evolution and say "No" to pausing evolutions

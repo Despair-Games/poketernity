@@ -4,7 +4,7 @@ import { MoveHeaderPhase } from "#app/phases/move-header-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { TurnStartPhase } from "#app/phases/turn-start-phase";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -29,10 +29,10 @@ describe("Moves - Focus Punch", () => {
     game.override
       .battleType("single")
       .ability(Abilities.UNNERVE)
-      .moveset([Moves.FOCUS_PUNCH])
+      .moveset([MoveId.FOCUS_PUNCH])
       .enemySpecies(Species.GROUDON)
       .enemyAbility(Abilities.INSOMNIA)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
   });
@@ -45,7 +45,7 @@ describe("Moves - Focus Punch", () => {
 
     const enemyStartingHp = enemyPokemon.hp;
 
-    game.move.select(Moves.FOCUS_PUNCH);
+    game.move.select(MoveId.FOCUS_PUNCH);
 
     await game.phaseInterceptor.to(MessagePhase);
 
@@ -60,7 +60,7 @@ describe("Moves - Focus Punch", () => {
   });
 
   it("should fail if the user is hit", async () => {
-    game.override.enemyMoveset([Moves.TACKLE]);
+    game.override.enemyMoveset([MoveId.TACKLE]);
 
     await game.startBattle([Species.CHARIZARD]);
 
@@ -69,7 +69,7 @@ describe("Moves - Focus Punch", () => {
 
     const enemyStartingHp = enemyPokemon.hp;
 
-    game.move.select(Moves.FOCUS_PUNCH);
+    game.move.select(MoveId.FOCUS_PUNCH);
 
     await game.phaseInterceptor.to(MessagePhase);
 
@@ -84,14 +84,14 @@ describe("Moves - Focus Punch", () => {
   });
 
   it("should be cancelled if the user falls asleep mid-turn", async () => {
-    game.override.enemyMoveset([Moves.SPORE]);
+    game.override.enemyMoveset([MoveId.SPORE]);
 
     await game.startBattle([Species.CHARIZARD]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.FOCUS_PUNCH);
+    game.move.select(MoveId.FOCUS_PUNCH);
 
     await game.phaseInterceptor.to(MessagePhase); // Header message
 
@@ -110,7 +110,7 @@ describe("Moves - Focus Punch", () => {
     await game.startBattle([Species.CHARIZARD]);
 
     game.forceEnemyToSwitch();
-    game.move.select(Moves.FOCUS_PUNCH);
+    game.move.select(MoveId.FOCUS_PUNCH);
 
     await game.phaseInterceptor.to(TurnStartPhase);
 

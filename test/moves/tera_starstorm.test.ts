@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -24,13 +24,13 @@ describe("Moves - Tera Starstorm", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.TERA_STARSTORM, Moves.SPLASH])
+      .moveset([MoveId.TERA_STARSTORM, MoveId.SPLASH])
       .battleType("double")
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .enemyLevel(30)
       .enemySpecies(Species.MAGIKARP)
-      .startingHeldItems([{ name: "TERA_SHARD", type: Type.FIRE }]);
+      .startingHeldItems([{ name: "TERA_SHARD", type: ElementType.FIRE }]);
   });
 
   it("changes type to Stellar when used by Terapagos in its Stellar Form", async () => {
@@ -41,18 +41,18 @@ describe("Moves - Tera Starstorm", () => {
 
     vi.spyOn(terapagos, "getMoveType");
 
-    game.move.select(Moves.TERA_STARSTORM);
+    game.move.select(MoveId.TERA_STARSTORM);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(terapagos.isTerastallized()).toBe(true);
-    expect(terapagos.getMoveType).toHaveReturnedWith(Type.STELLAR);
+    expect(terapagos.getMoveType).toHaveReturnedWith(ElementType.STELLAR);
   });
 
   it("targets both opponents in a double battle when used by Terapagos in its Stellar Form", async () => {
     await game.classicMode.startBattle([Species.MAGIKARP, Species.TERAPAGOS]);
 
-    game.move.select(Moves.TERA_STARSTORM, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.TERA_STARSTORM, 1);
+    game.move.select(MoveId.TERA_STARSTORM, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.TERA_STARSTORM, 1);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
@@ -84,15 +84,15 @@ describe("Moves - Tera Starstorm", () => {
 
     vi.spyOn(fusionedMon, "getMoveType");
 
-    game.move.select(Moves.TERA_STARSTORM, 0);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.TERA_STARSTORM, 0);
+    game.move.select(MoveId.SPLASH, 1);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     // Fusion and terastallized
     expect(fusionedMon.isFusion()).toBe(true);
     expect(fusionedMon.isTerastallized()).toBe(true);
     // Move effects should be applied
-    expect(fusionedMon.getMoveType).toHaveReturnedWith(Type.STELLAR);
+    expect(fusionedMon.getMoveType).toHaveReturnedWith(ElementType.STELLAR);
     expect(game.scene.getEnemyField().every((pokemon) => pokemon.isFullHp())).toBe(false);
   });
 });

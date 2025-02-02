@@ -1,7 +1,7 @@
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -25,13 +25,13 @@ describe("Moves - Defog", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.DEFOG])
+      .moveset([MoveId.DEFOG])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should lower the target's Evasion stat", async () => {
@@ -39,7 +39,7 @@ describe("Moves - Defog", () => {
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DEFOG);
+    game.move.select(MoveId.DEFOG);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(enemy.getStatStage(Stat.EVA)).toBe(-1);
@@ -54,10 +54,10 @@ describe("Moves - Defog", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     [ArenaTagSide.PLAYER, ArenaTagSide.ENEMY].forEach((side) =>
-      game.scene.arena.addTag(tagType, 0, 2, Moves.NONE, side, true),
+      game.scene.arena.addTag(tagType, 0, 2, MoveId.NONE, side, true),
     );
 
-    game.move.select(Moves.DEFOG);
+    game.move.select(MoveId.DEFOG);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -76,10 +76,10 @@ describe("Moves - Defog", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     [ArenaTagSide.PLAYER, ArenaTagSide.ENEMY].forEach((side) =>
-      game.scene.arena.addTag(tagType, 0, 2, Moves.NONE, side, true),
+      game.scene.arena.addTag(tagType, 0, 2, MoveId.NONE, side, true),
     );
 
-    game.move.select(Moves.DEFOG);
+    game.move.select(MoveId.DEFOG);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 

@@ -57,7 +57,7 @@ export class RandomMovesetMoveAttr extends OverrideMoveEffectAttr {
         }
       }
       const targets = selectTargets;
-      user.getMoveQueue().push({ move: move.moveId, targets: targets, ignorePP: true });
+      user.getMoveQueue().push({ moveId: move.moveId, targets: targets, ignorePP: true });
       globalScene.unshiftPhase(new MovePhase(user, targets, moveset[moveIndex], true));
       return true;
     }

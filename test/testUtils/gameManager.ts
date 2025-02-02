@@ -36,7 +36,7 @@ import { Button } from "#enums/buttons";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { ExpNotification } from "#enums/exp-notification";
 import { HpBarSpeed } from "#enums/hp-bar-speed";
-import type { Moves } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PlayerGender } from "#enums/player-gender";
 import type { Species } from "#enums/species";
@@ -381,20 +381,20 @@ export class GameManager {
   /**
    * Forces the next enemy selecting a move to use the given move in its moveset against the
    * given target (if applicable).
-   * @param moveId {@linkcode Moves} the move the enemy will use
+   * @param moveId {@linkcode MoveId} the move the enemy will use
    * @param target {@linkcode BattlerIndex} the target on which the enemy will use the given move
    * @deprecated Use {@linkcode MoveHelper.selectEnemyMove | this.move.selectEnemyMove} instead for
    * identical functionality, or {@linkcode MoveHelper.forceEnemyMove | this.move.forceEnemyMove} which will
    * overwrite the enemy pokemon's moveset (and disable the global moveset override if it's active)
    */
-  async forceEnemyMove(moveId: Moves, target?: BattlerIndex) {
+  async forceEnemyMove(moveId: MoveId, target?: BattlerIndex) {
     // Wait for the next EnemyCommandPhase to start
     await this.phaseInterceptor.to(EnemyCommandPhase, false);
     const enemy = this.scene.getEnemyField()[(this.scene.getCurrentPhase() as EnemyCommandPhase).getFieldIndex()];
     const legalTargets = getMoveTargets(enemy, moveId);
 
     vi.spyOn(enemy, "getNextMove").mockReturnValueOnce({
-      move: moveId,
+      moveId: moveId,
       targets:
         target !== undefined && !legalTargets.multiple && legalTargets.targets.includes(target)
           ? [target]

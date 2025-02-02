@@ -23,11 +23,11 @@ import {
 import { Species } from "#enums/species";
 import { getPokemonSpecies } from "#app/data/pokemon-species";
 import { Gender } from "#enums/gender";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import { BattlerIndex } from "#enums/battler-index";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { EncounterBattleAnim } from "#app/data/battle-anims";
 import { WeatherType } from "#enums/weather-type";
 import { isNullOrUndefined, randSeedInt } from "#app/utils";
@@ -137,7 +137,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
     ];
 
     // Load animations/sfx for Volcarona moves
-    loadCustomMovesForEncounter([Moves.FIRE_SPIN, Moves.QUIVER_DANCE]);
+    loadCustomMovesForEncounter([MoveId.FIRE_SPIN, MoveId.QUIVER_DANCE]);
 
     globalScene.arena.trySetWeather(WeatherType.SUNNY, true);
 
@@ -191,13 +191,13 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
         {
           sourceBattlerIndex: BattlerIndex.ENEMY,
           targets: [BattlerIndex.PLAYER],
-          move: new PokemonMove(Moves.FIRE_SPIN),
+          move: new PokemonMove(MoveId.FIRE_SPIN),
           ignorePp: true,
         },
         {
           sourceBattlerIndex: BattlerIndex.ENEMY_2,
           targets: [BattlerIndex.PLAYER_2],
-          move: new PokemonMove(Moves.FIRE_SPIN),
+          move: new PokemonMove(MoveId.FIRE_SPIN),
           ignorePp: true,
         },
       );
@@ -219,7 +219,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
       const encounter = globalScene.currentBattle.mysteryEncounter!;
       const nonFireTypes = globalScene
         .getPlayerParty()
-        .filter((p) => p.isAllowedInBattle() && !p.getTypes().includes(Type.FIRE));
+        .filter((p) => p.isAllowedInBattle() && !p.getTypes().includes(ElementType.FIRE));
 
       for (const pkm of nonFireTypes) {
         const percentage = DAMAGE_PERCENTAGE / 100;
@@ -254,7 +254,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
     MysteryEncounterOptionBuilder.newOptionWithMode(MysteryEncounterOptionMode.DISABLED_OR_SPECIAL)
       .withPrimaryPokemonRequirement(
         CombinationPokemonRequirement.Some(
-          new TypeRequirement(Type.FIRE, true, 1),
+          new TypeRequirement(ElementType.FIRE, true, 1),
           new AbilityRequirement(FIRE_RESISTANT_ABILITIES, true),
         ),
       ) // Will set option3PrimaryName dialogue token automatically
@@ -297,7 +297,7 @@ function giveLeadPokemonAttackTypeBoostItem() {
     let boosterModifierType = generateModifierType(modifierTypes.ATTACK_TYPE_BOOSTER) as AttackTypeBoosterModifierType;
     if (!boosterModifierType) {
       boosterModifierType = generateModifierType(modifierTypes.ATTACK_TYPE_BOOSTER, [
-        Type.FIRE,
+        ElementType.FIRE,
       ]) as AttackTypeBoosterModifierType;
     }
     applyModifierTypeToPlayerPokemon(leadPokemon, boosterModifierType);

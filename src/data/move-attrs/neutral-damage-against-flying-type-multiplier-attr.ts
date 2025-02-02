@@ -1,5 +1,5 @@
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
@@ -15,7 +15,7 @@ export class NeutralDamageAgainstFlyingTypeMultiplierAttr extends VariableMoveTy
   override apply(_user: Pokemon, target: Pokemon, _move: Move, multiplier: NumberHolder): boolean {
     if (!target.getTag(BattlerTagType.IGNORE_FLYING)) {
       //When a flying type is hit, the first hit is always 1x multiplier.
-      if (target.isOfType(Type.FLYING)) {
+      if (target.isOfType(ElementType.FLYING)) {
         multiplier.value = 1;
       }
       return true;

@@ -1,4 +1,4 @@
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
@@ -15,7 +15,7 @@ export class SheerColdAccuracyAttr extends OneHitKOAccuracyAttr {
     if (user.level < target.level) {
       accuracy.value = 0;
     } else {
-      const baseAccuracy = user.isOfType(Type.ICE) ? 30 : 20;
+      const baseAccuracy = user.isOfType(ElementType.ICE) ? 30 : 20;
       accuracy.value = Math.min(Math.max(baseAccuracy + 100 * (1 - target.level / user.level), 0), 100);
     }
     return true;

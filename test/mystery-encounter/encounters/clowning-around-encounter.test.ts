@@ -12,7 +12,7 @@ import {
   runMysteryEncounterToEnd,
   skipBattleRunMysteryEncounterRewardsPhase,
 } from "#test/mystery-encounter/encounter-test-utils";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type BattleScene from "#app/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
@@ -32,7 +32,7 @@ import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { BerryType } from "#enums/berry-type";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import { CommandPhase } from "#app/phases/command-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
@@ -117,13 +117,13 @@ describe("Clowning Around - Mystery Encounter", () => {
     expect(config.pokemonConfigs?.[0]).toEqual({
       species: getPokemonSpecies(Species.MR_MIME),
       isBoss: true,
-      moveSet: [Moves.TEETER_DANCE, Moves.ALLY_SWITCH, Moves.DAZZLING_GLEAM, Moves.PSYCHIC],
+      moveSet: [MoveId.TEETER_DANCE, MoveId.ALLY_SWITCH, MoveId.DAZZLING_GLEAM, MoveId.PSYCHIC],
     });
     expect(config.pokemonConfigs?.[1]).toEqual({
       species: getPokemonSpecies(Species.BLACEPHALON),
       customPokemonData: expect.anything(),
       isBoss: true,
-      moveSet: [Moves.TRICK, Moves.HYPNOSIS, Moves.SHADOW_BALL, Moves.MIND_BLOWN],
+      moveSet: [MoveId.TRICK, MoveId.HYPNOSIS, MoveId.SHADOW_BALL, MoveId.MIND_BLOWN],
     });
     expect(config.pokemonConfigs?.[1].customPokemonData?.types.length).toBe(2);
     expect([
@@ -177,24 +177,24 @@ describe("Clowning Around - Mystery Encounter", () => {
       expect(enemyField.length).toBe(2);
       expect(enemyField[0].species.speciesId).toBe(Species.MR_MIME);
       expect(enemyField[0].moveset).toEqual([
-        new PokemonMove(Moves.TEETER_DANCE),
-        new PokemonMove(Moves.ALLY_SWITCH),
-        new PokemonMove(Moves.DAZZLING_GLEAM),
-        new PokemonMove(Moves.PSYCHIC),
+        new PokemonMove(MoveId.TEETER_DANCE),
+        new PokemonMove(MoveId.ALLY_SWITCH),
+        new PokemonMove(MoveId.DAZZLING_GLEAM),
+        new PokemonMove(MoveId.PSYCHIC),
       ]);
       expect(enemyField[1].species.speciesId).toBe(Species.BLACEPHALON);
       expect(enemyField[1].moveset).toEqual([
-        new PokemonMove(Moves.TRICK),
-        new PokemonMove(Moves.HYPNOSIS),
-        new PokemonMove(Moves.SHADOW_BALL),
-        new PokemonMove(Moves.MIND_BLOWN),
+        new PokemonMove(MoveId.TRICK),
+        new PokemonMove(MoveId.HYPNOSIS),
+        new PokemonMove(MoveId.SHADOW_BALL),
+        new PokemonMove(MoveId.MIND_BLOWN),
       ]);
 
       // Should have used moves pre-battle
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
       expect(movePhases.length).toBe(3);
-      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === Moves.ROLE_PLAY).length).toBe(1);
-      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === Moves.TAUNT).length).toBe(2);
+      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.ROLE_PLAY).length).toBe(1);
+      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.TAUNT).length).toBe(2);
     });
 
     it("should let the player gain the ability after battle completion", async () => {
@@ -264,7 +264,7 @@ describe("Clowning Around - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.CLOWNING_AROUND, defaultParty);
 
       // Set some moves on party for attack type booster generation
-      scene.getPlayerParty()[0].moveset = [new PokemonMove(Moves.TACKLE), new PokemonMove(Moves.THIEF)];
+      scene.getPlayerParty()[0].moveset = [new PokemonMove(MoveId.TACKLE), new PokemonMove(MoveId.THIEF)];
 
       // 2 Sitrus Berries on lead
       scene.modifiers = [];
@@ -349,9 +349,9 @@ describe("Clowning Around - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.CLOWNING_AROUND, defaultParty);
 
       // Same type moves on lead
-      scene.getPlayerParty()[0].moveset = [new PokemonMove(Moves.ICE_BEAM), new PokemonMove(Moves.SURF)];
+      scene.getPlayerParty()[0].moveset = [new PokemonMove(MoveId.ICE_BEAM), new PokemonMove(MoveId.SURF)];
       // Different type moves on second
-      scene.getPlayerParty()[1].moveset = [new PokemonMove(Moves.GRASS_KNOT), new PokemonMove(Moves.ELECTRO_BALL)];
+      scene.getPlayerParty()[1].moveset = [new PokemonMove(MoveId.GRASS_KNOT), new PokemonMove(MoveId.ELECTRO_BALL)];
       // No moves on third
       scene.getPlayerParty()[2].moveset = [];
       await runMysteryEncounterToEnd(game, 3);
@@ -361,15 +361,15 @@ describe("Clowning Around - Mystery Encounter", () => {
       const thirdTypesAfter = scene.getPlayerParty()[2].customPokemonData?.types;
 
       expect(leadTypesAfter.length).toBe(2);
-      expect(leadTypesAfter[0]).toBe(Type.WATER);
-      expect([Type.WATER, Type.ICE].includes(leadTypesAfter[1])).toBeFalsy();
+      expect(leadTypesAfter[0]).toBe(ElementType.WATER);
+      expect([ElementType.WATER, ElementType.ICE].includes(leadTypesAfter[1])).toBeFalsy();
       expect(secondaryTypesAfter.length).toBe(2);
-      expect(secondaryTypesAfter[0]).toBe(Type.GHOST);
-      expect([Type.GHOST, Type.POISON].includes(secondaryTypesAfter[1])).toBeFalsy();
-      expect([Type.GRASS, Type.ELECTRIC].includes(secondaryTypesAfter[1])).toBeTruthy();
+      expect(secondaryTypesAfter[0]).toBe(ElementType.GHOST);
+      expect([ElementType.GHOST, ElementType.POISON].includes(secondaryTypesAfter[1])).toBeFalsy();
+      expect([ElementType.GRASS, ElementType.ELECTRIC].includes(secondaryTypesAfter[1])).toBeTruthy();
       expect(thirdTypesAfter.length).toBe(2);
-      expect(thirdTypesAfter[0]).toBe(Type.PSYCHIC);
-      expect(secondaryTypesAfter[1]).not.toBe(Type.PSYCHIC);
+      expect(thirdTypesAfter[0]).toBe(ElementType.PSYCHIC);
+      expect(secondaryTypesAfter[1]).not.toBe(ElementType.PSYCHIC);
     });
 
     it("should leave encounter without battle", async () => {

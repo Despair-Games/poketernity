@@ -1,10 +1,10 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { Type } from "#enums/type";
+import { ElementType } from "#enums/element-type";
 import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { Button } from "#enums/buttons";
@@ -26,13 +26,13 @@ describe("Form Change Phase", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SPLASH])
+      .moveset([MoveId.SPLASH])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should not be cancellable", async () => {
@@ -41,7 +41,7 @@ describe("Form Change Phase", () => {
     // Before the form change: Should be Hero form
     const zacian = game.scene.getPlayerParty()[0];
     expect(zacian.getFormKey()).toBe("hero-of-many-battles");
-    expect(zacian.getTypes()).toStrictEqual([Type.FAIRY]);
+    expect(zacian.getTypes()).toStrictEqual([ElementType.FAIRY]);
     expect(zacian.calculateBaseStats()).toStrictEqual([92, 120, 115, 80, 115, 138]);
 
     // Prevent form change from finishing instantly, so that the player can attempt to cancel it
@@ -56,7 +56,7 @@ describe("Form Change Phase", () => {
     const rustedSword = rustedSwordType.newModifier(zacian);
     game.scene.addModifier(rustedSword);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("FormChangePhase", false);
 
     // Repeatedly press "Cancel" to attempt to cancel form change
@@ -68,7 +68,7 @@ describe("Form Change Phase", () => {
     // After the form change: Should be Crowned form
     expect(game.phaseInterceptor.log.includes("FormChangePhase")).toBe(true);
     expect(zacian.getFormKey()).toBe("crowned");
-    expect(zacian.getTypes()).toStrictEqual([Type.FAIRY, Type.STEEL]);
+    expect(zacian.getTypes()).toStrictEqual([ElementType.FAIRY, ElementType.STEEL]);
     expect(zacian.calculateBaseStats()).toStrictEqual([92, 150, 115, 80, 115, 148]);
   });
 });

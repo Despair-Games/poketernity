@@ -39,7 +39,7 @@ export class BypassSpeedChanceAbAttr extends AbAttr {
     if (!bypassSpeed.value && pokemon.randSeedInt(100) < this.chance) {
       const turnCommand = globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()];
       const isCommandFight = turnCommand?.command === BattleCommand.FIGHT;
-      const move = turnCommand?.move?.move ? allMoves[turnCommand.move.move] : null;
+      const move = turnCommand?.move?.moveId ? allMoves[turnCommand.move.moveId] : null;
       const isDamageMove = move?.category === MoveCategory.PHYSICAL || move?.category === MoveCategory.SPECIAL;
 
       if (isCommandFight && isDamageMove) {
