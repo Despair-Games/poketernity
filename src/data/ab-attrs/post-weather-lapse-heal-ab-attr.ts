@@ -24,8 +24,8 @@ export class PostWeatherLapseHealAbAttr extends PostWeatherLapseAbAttr {
   private readonly healRatio: number;
 
   /**
-   * @param healRatio the amount of HP restored to the user
-   * @param weatherTypes the weather conditions during which the ability activates
+   * @param healRatio - Multiplied with the user's max HP to determine how much HP is healed
+   * @param weatherTypes - the {@linkcode WeatherType | weather} conditions during which the ability activates
    */
   constructor(healRatio: number, ...weatherTypes: WeatherType[]) {
     super(...weatherTypes);
