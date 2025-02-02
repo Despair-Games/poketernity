@@ -1,5 +1,5 @@
 import { Stat } from "#enums/stat";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { Biome } from "#enums/biome";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { Abilities } from "#enums/abilities";
@@ -55,7 +55,7 @@ describe("Moves - Flower Shield", () => {
     await game.classicMode.startBattle([Species.CHERRIM, Species.MAGIKARP]);
     const field = game.scene.getField(true);
 
-    const grassPokemons = field.filter((p) => p.getTypes().includes(ElementType.GRASS));
+    const grassPokemons = field.filter((p) => p.getTypes().includes(ElementalType.GRASS));
     const nonGrassPokemons = field.filter((pokemon) => !grassPokemons.includes(pokemon));
 
     grassPokemons.forEach((p) => expect(p.getStatStage(Stat.DEF)).toBe(0));

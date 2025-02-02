@@ -3,7 +3,7 @@ import type { MoveId } from "#enums/move-id";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import type { ElementType } from "#enums/element-type";
+import type { ElementalType } from "#enums/elemental-type";
 import {
   EncounterPokemonRequirement,
   EncounterSceneRequirement,
@@ -282,7 +282,7 @@ export class MysteryEncounterOptionBuilder implements Partial<IMysteryEncounterO
    * @returns
    */
   withPokemonTypeRequirement(
-    type: ElementType | ElementType[],
+    type: ElementalType | ElementalType[],
     excludeFainted?: boolean,
     minNumberOfPokemon?: number,
     invertQuery?: boolean,

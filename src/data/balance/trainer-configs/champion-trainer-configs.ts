@@ -5,7 +5,7 @@ import { TrainerType } from "#enums/trainer-type";
 import { PokeballType } from "#enums/pokeball";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import type { PersistentModifier } from "#app/modifier/modifier";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 
 const DEFAULT_CHAMPION_THEME = "battle_champion_alder";
 const KANTO_CHAMPION_THEME = "battle_kanto_champion";
@@ -236,7 +236,7 @@ export const championTrainerConfigs: TrainerConfigs = {
       return [
         modifierTypes
           .TERA_SHARD()
-          .generateType([], [ElementType.FIRE])!
+          .generateType([], [ElementalType.FIRE])!
           .withIdFromFunc(modifierTypes.TERA_SHARD)
           .newModifier(teraPokemon) as PersistentModifier,
       ]; //TODO: is the bang correct?
@@ -322,16 +322,16 @@ export const championTrainerConfigs: TrainerConfigs = {
     )
     .setGenModifiersFunc((party) => {
       const teraPokemon = party[4];
-      let teraType: ElementType;
+      let teraType: ElementalType;
       switch (teraPokemon.species.speciesId) {
         case Species.DECIDUEYE:
-          teraType = ElementType.GHOST;
+          teraType = ElementalType.GHOST;
           break;
         case Species.INCINEROAR:
-          teraType = ElementType.DARK;
+          teraType = ElementalType.DARK;
           break;
         default:
-          teraType = ElementType.WATER;
+          teraType = ElementalType.WATER;
       }
       return [
         modifierTypes
@@ -390,7 +390,7 @@ export const championTrainerConfigs: TrainerConfigs = {
       return [
         modifierTypes
           .TERA_SHARD()
-          .generateType([], [ElementType.FLYING])!
+          .generateType([], [ElementalType.FLYING])!
           .withIdFromFunc(modifierTypes.TERA_SHARD)
           .newModifier(teraPokemon) as PersistentModifier,
       ]; //TODO: is the bang correct?
@@ -430,16 +430,16 @@ export const championTrainerConfigs: TrainerConfigs = {
     )
     .setGenModifiersFunc((party) => {
       const teraPokemon = party[4];
-      let teraType: ElementType;
+      let teraType: ElementalType;
       switch (teraPokemon.species.speciesId) {
         case Species.MEOWSCARADA:
-          teraType = ElementType.GRASS;
+          teraType = ElementalType.GRASS;
           break;
         case Species.SKELEDIRGE:
-          teraType = ElementType.FIRE;
+          teraType = ElementalType.FIRE;
           break;
         default:
-          teraType = ElementType.WATER;
+          teraType = ElementalType.WATER;
       }
       return [
         modifierTypes

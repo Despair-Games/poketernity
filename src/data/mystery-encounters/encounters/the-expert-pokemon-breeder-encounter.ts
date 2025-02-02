@@ -29,7 +29,7 @@ import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/myst
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-type";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
@@ -457,7 +457,7 @@ function getPartyConfig(): EnemyPartyConfig {
         modifierConfigs: [
           {
             modifier: generateModifierType(modifierTypes.TERA_SHARD, [
-              ElementType.STEEL,
+              ElementalType.STEEL,
             ]) as PokemonHeldItemModifierType,
           },
         ],

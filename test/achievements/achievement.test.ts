@@ -18,7 +18,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { InverseBattleChallenge, SingleGenerationChallenge, SingleTypeChallenge } from "#app/data/challenge";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 
 describe("Achv", () => {
   let achv: Achv;
@@ -280,7 +280,7 @@ describe("MonoTypeAchv", () => {
   });
 
   it("should create an instance of MonoTypeAchv", () => {
-    const monoTypeAchv = new MonoTypeAchv(ElementType.STELLAR, "monotype_icon", 10);
+    const monoTypeAchv = new MonoTypeAchv(ElementalType.STELLAR, "monotype_icon", 10);
     expect(monoTypeAchv).toBeInstanceOf(MonoTypeAchv);
     expect(monoTypeAchv instanceof Achv).toBe(true);
     expect(monoTypeAchv.name).toBe("MONO_STELLAR.name");
@@ -288,7 +288,7 @@ describe("MonoTypeAchv", () => {
   });
 
   it("should validate the achievement based on the challenge value and type", () => {
-    const monoTypeAchv = new MonoTypeAchv(ElementType.ROCK, "monotype_icon", 10);
+    const monoTypeAchv = new MonoTypeAchv(ElementalType.ROCK, "monotype_icon", 10);
     const challenge = new SingleTypeChallenge();
     challenge.value = 1;
     expect(monoTypeAchv.validate(challenge)).toBe(false);
@@ -301,7 +301,7 @@ describe("MonoTypeAchv", () => {
   });
 
   it("should not validate the achievement if inverse challenge is active", () => {
-    const monoTypeAchv = new MonoTypeAchv(ElementType.ROCK, "monotype_icon", 10);
+    const monoTypeAchv = new MonoTypeAchv(ElementalType.ROCK, "monotype_icon", 10);
     const challenge = new SingleTypeChallenge();
     challenge.value = 6;
     const inverseChallenge = new InverseBattleChallenge();

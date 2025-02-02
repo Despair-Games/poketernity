@@ -1,4 +1,4 @@
-import type { ElementType } from "#enums/element-type";
+import type { ElementalType } from "#enums/elemental-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { globalScene } from "#app/global-scene";
@@ -541,9 +541,9 @@ async function postProcessTransformedPokemon(
   // Randomize the second type of the pokemon
   // If the pokemon does not normally have a second type, it will gain 1
   const newTypes = [newPokemon.getTypes()[0]];
-  let newType = randSeedInt(18) as ElementType;
+  let newType = randSeedInt(18) as ElementalType;
   while (newType === newTypes[0]) {
-    newType = randSeedInt(18) as ElementType;
+    newType = randSeedInt(18) as ElementalType;
   }
   newTypes.push(newType);
   if (!newPokemon.customPokemonData) {
