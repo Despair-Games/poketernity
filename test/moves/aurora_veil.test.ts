@@ -6,7 +6,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -36,16 +36,16 @@ describe("Moves - Aurora Veil", () => {
     globalScene = game.scene;
     game.override.battleType("single");
     game.override.ability(Abilities.NONE);
-    game.override.moveset([Moves.ABSORB, Moves.ROCK_SLIDE, Moves.TACKLE]);
+    game.override.moveset([MoveId.ABSORB, MoveId.ROCK_SLIDE, MoveId.TACKLE]);
     game.override.enemyLevel(100);
     game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyMoveset([Moves.AURORA_VEIL, Moves.AURORA_VEIL, Moves.AURORA_VEIL, Moves.AURORA_VEIL]);
+    game.override.enemyMoveset([MoveId.AURORA_VEIL, MoveId.AURORA_VEIL, MoveId.AURORA_VEIL, MoveId.AURORA_VEIL]);
     game.override.disableCrits();
     game.override.weather(WeatherType.HAIL);
   });
 
   it("reduces damage of physical attacks by half in a single battle", async () => {
-    const moveToUse = Moves.TACKLE;
+    const moveToUse = MoveId.TACKLE;
     await game.startBattle([Species.SHUCKLE]);
 
     game.move.select(moveToUse);
@@ -63,7 +63,7 @@ describe("Moves - Aurora Veil", () => {
   it("reduces damage of physical attacks by a third in a double battle", async () => {
     game.override.battleType("double");
 
-    const moveToUse = Moves.ROCK_SLIDE;
+    const moveToUse = MoveId.ROCK_SLIDE;
     await game.startBattle([Species.SHUCKLE, Species.SHUCKLE]);
 
     game.move.select(moveToUse);
@@ -80,7 +80,7 @@ describe("Moves - Aurora Veil", () => {
   });
 
   it("reduces damage of special attacks by half in a single battle", async () => {
-    const moveToUse = Moves.ABSORB;
+    const moveToUse = MoveId.ABSORB;
     await game.startBattle([Species.SHUCKLE]);
 
     game.move.select(moveToUse);
@@ -99,7 +99,7 @@ describe("Moves - Aurora Veil", () => {
   it("reduces damage of special attacks by a third in a double battle", async () => {
     game.override.battleType("double");
 
-    const moveToUse = Moves.DAZZLING_GLEAM;
+    const moveToUse = MoveId.DAZZLING_GLEAM;
     await game.startBattle([Species.SHUCKLE, Species.SHUCKLE]);
 
     game.move.select(moveToUse);
@@ -117,7 +117,7 @@ describe("Moves - Aurora Veil", () => {
 });
 
 /**
- * Calculates the damage of a move multiplied by screen's multiplier, Auroa Veil in this case {@linkcode Moves.AURORA_VEIL}.
+ * Calculates the damage of a move multiplied by screen's multiplier, Auroa Veil in this case {@linkcode MoveId.AURORA_VEIL}.
  * Please note this does not consider other damage calculations except the screen multiplier.
  *
  * @param defender - The defending Pokémon.

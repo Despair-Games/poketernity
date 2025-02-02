@@ -3,7 +3,7 @@ import { ElementType } from "#enums/element-type";
 import { Biome } from "#enums/biome";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -28,8 +28,8 @@ describe("Moves - Flower Shield", () => {
     game.override.ability(Abilities.NONE);
     game.override.enemyAbility(Abilities.NONE);
     game.override.battleType("single");
-    game.override.moveset([Moves.FLOWER_SHIELD, Moves.SPLASH]);
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.override.moveset([MoveId.FLOWER_SHIELD, MoveId.SPLASH]);
+    game.override.enemyMoveset(MoveId.SPLASH);
   });
 
   it("raises DEF stat stage by 1 for all Grass-type Pokemon on the field by one stage - single battle", async () => {
@@ -42,7 +42,7 @@ describe("Moves - Flower Shield", () => {
     expect(magikarp.getStatStage(Stat.DEF)).toBe(0);
     expect(cherrim.getStatStage(Stat.DEF)).toBe(0);
 
-    game.move.select(Moves.FLOWER_SHIELD);
+    game.move.select(MoveId.FLOWER_SHIELD);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(magikarp.getStatStage(Stat.DEF)).toBe(0);
@@ -61,8 +61,8 @@ describe("Moves - Flower Shield", () => {
     grassPokemons.forEach((p) => expect(p.getStatStage(Stat.DEF)).toBe(0));
     nonGrassPokemons.forEach((p) => expect(p.getStatStage(Stat.DEF)).toBe(0));
 
-    game.move.select(Moves.FLOWER_SHIELD);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.FLOWER_SHIELD);
+    game.move.select(MoveId.SPLASH, 1);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     grassPokemons.forEach((p) => expect(p.getStatStage(Stat.DEF)).toBe(1));
@@ -74,7 +74,7 @@ describe("Moves - Flower Shield", () => {
    */
   it("does not raise DEF stat stage for a Pokemon in semi-vulnerable state", async () => {
     game.override.enemySpecies(Species.PARAS);
-    game.override.enemyMoveset(Moves.DIG);
+    game.override.enemyMoveset(MoveId.DIG);
     game.override.enemyLevel(50);
 
     await game.classicMode.startBattle([Species.CHERRIM]);
@@ -85,7 +85,7 @@ describe("Moves - Flower Shield", () => {
     expect(cherrim.getStatStage(Stat.DEF)).toBe(0);
     expect(paras.isSemiInvulnerable()).toBeFalsy();
 
-    game.move.select(Moves.FLOWER_SHIELD);
+    game.move.select(MoveId.FLOWER_SHIELD);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(paras.isSemiInvulnerable()).toBeTruthy();
@@ -103,7 +103,7 @@ describe("Moves - Flower Shield", () => {
     expect(enemy.getStatStage(Stat.DEF)).toBe(0);
     expect(ally.getStatStage(Stat.DEF)).toBe(0);
 
-    game.move.select(Moves.FLOWER_SHIELD);
+    game.move.select(MoveId.FLOWER_SHIELD);
     await game.phaseInterceptor.to(TurnEndPhase);
 
     expect(enemy.getStatStage(Stat.DEF)).toBe(0);

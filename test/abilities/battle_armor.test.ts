@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -24,12 +24,12 @@ describe("Abilities - Battle Armor/Shell Armor", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SPLASH])
+      .moveset([MoveId.SPLASH])
       .startingLevel(50)
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.WICKED_BLOW);
+      .enemyMoveset(MoveId.WICKED_BLOW);
   });
 
   it.each([
@@ -40,7 +40,7 @@ describe("Abilities - Battle Armor/Shell Armor", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon();
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.move.forceHit();
     await game.setTurnOrder[(BattlerIndex.ENEMY, BattlerIndex.PLAYER)];
     await game.phaseInterceptor.to("BerryPhase");

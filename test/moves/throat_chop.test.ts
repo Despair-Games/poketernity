@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { Abilities } from "#enums/abilities";
@@ -23,11 +23,11 @@ describe("Moves - Throat Chop", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset(Array(4).fill(Moves.GROWL))
+      .moveset(Array(4).fill(MoveId.GROWL))
       .battleType("single")
       .ability(Abilities.BALL_FETCH)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Array(4).fill(Moves.THROAT_CHOP))
+      .enemyMoveset(Array(4).fill(MoveId.THROAT_CHOP))
       .enemySpecies(Species.MAGIKARP);
   });
 
@@ -36,7 +36,7 @@ describe("Moves - Throat Chop", () => {
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.GROWL);
+    game.move.select(MoveId.GROWL);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     // First turn, move is interrupted
@@ -46,7 +46,7 @@ describe("Moves - Throat Chop", () => {
     // Second turn, struggle if no valid moves
     await game.toNextTurn();
 
-    game.move.select(Moves.GROWL);
+    game.move.select(MoveId.GROWL);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");

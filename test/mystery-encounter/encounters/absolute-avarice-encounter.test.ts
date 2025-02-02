@@ -15,7 +15,7 @@ import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encount
 import { BerryModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { BerryType } from "#enums/berry-type";
 import { AbsoluteAvariceEncounter } from "#app/data/mystery-encounters/encounters/absolute-avarice-encounter";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { CommandPhase } from "#app/phases/command-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
@@ -138,11 +138,11 @@ describe("Absolute Avarice - Mystery Encounter", () => {
       expect(enemyField[0].species.speciesId).toBe(Species.GREEDENT);
       const moveset = enemyField[0].moveset.map((m) => m.moveId);
       expect(moveset?.length).toBe(4);
-      expect(moveset).toEqual([Moves.THRASH, Moves.BODY_PRESS, Moves.STUFF_CHEEKS, Moves.CRUNCH]);
+      expect(moveset).toEqual([MoveId.THRASH, MoveId.BODY_PRESS, MoveId.STUFF_CHEEKS, MoveId.CRUNCH]);
 
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
-      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === Moves.STUFF_CHEEKS).length).toBe(1); // Stuff Cheeks used before battle
+      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.STUFF_CHEEKS).length).toBe(1); // Stuff Cheeks used before battle
     });
 
     it("should give reviver seed to each pokemon after battle", async () => {
@@ -261,7 +261,7 @@ describe("Absolute Avarice - Mystery Encounter", () => {
       expect(greedent.species.speciesId).toBe(Species.GREEDENT);
       const moveset = greedent.moveset.map((m) => m.moveId);
       expect(moveset?.length).toBe(4);
-      expect(moveset).toEqual([Moves.THRASH, Moves.BODY_PRESS, Moves.STUFF_CHEEKS, Moves.SLACK_OFF]);
+      expect(moveset).toEqual([MoveId.THRASH, MoveId.BODY_PRESS, MoveId.STUFF_CHEEKS, MoveId.SLACK_OFF]);
     });
 
     it("should leave encounter without battle", async () => {

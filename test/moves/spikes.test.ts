@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -26,17 +26,17 @@ describe("Moves - Spikes", () => {
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
       .ability(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH)
-      .moveset([Moves.SPIKES, Moves.SPLASH, Moves.ROAR]);
+      .enemyMoveset(MoveId.SPLASH)
+      .moveset([MoveId.SPIKES, MoveId.SPLASH, MoveId.ROAR]);
   });
 
   it("should not damage the team that set them", async () => {
     await game.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
 
-    game.move.select(Moves.SPIKES);
+    game.move.select(MoveId.SPIKES);
     await game.toNextTurn();
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
     game.doSwitchPokemon(1);
@@ -53,10 +53,10 @@ describe("Moves - Spikes", () => {
     game.override.startingWave(5);
     await game.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
 
-    game.move.select(Moves.SPIKES);
+    game.move.select(MoveId.SPIKES);
     await game.toNextTurn();
 
-    game.move.select(Moves.ROAR);
+    game.move.select(MoveId.ROAR);
     await game.toNextTurn();
 
     const enemy = game.scene.getEnemyParty()[0];
@@ -67,10 +67,10 @@ describe("Moves - Spikes", () => {
     game.override.startingWave(5);
     await game.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
 
-    game.move.select(Moves.SPIKES);
+    game.move.select(MoveId.SPIKES);
     await game.toNextTurn();
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     game.forceEnemyToSwitch();
     await game.toNextTurn();
 

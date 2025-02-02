@@ -2,7 +2,7 @@ import { allMoves } from "#app/data/all-moves";
 import { StealHeldItemChanceAttr } from "#app/data/move-attrs/steal-held-item-chance-attr";
 import { Abilities } from "#enums/abilities";
 import { BerryType } from "#enums/berry-type";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -35,25 +35,27 @@ describe("Abilities - Sticky Hold", () => {
       .enemyLevel(100);
   });
 
-  it.each([Moves.THIEF, Moves.PLUCK, Moves.INCINERATE, Moves.KNOCK_OFF].map((move) => ({ move, name: Moves[move] })))(
-    "should prevent the user from losing a held item when hit by the move $name",
-    async ({ move }) => {
-      // Force item removal RNG calls to succeed
-      if (move === Moves.THIEF) {
-        vi.spyOn(allMoves[move].getAttrs(StealHeldItemChanceAttr)[0], "chance", "get").mockReturnValue(1.0);
-      }
-      vi.spyOn(allMoves[move], "chance", "get").mockReturnValue(-1);
+  it.each(
+    [MoveId.THIEF, MoveId.PLUCK, MoveId.INCINERATE, MoveId.KNOCK_OFF].map((moveId) => ({
+      moveId,
+      name: MoveId[moveId],
+    })),
+  )("should prevent the user from losing a held item when hit by the move $name", async ({ moveId: move }) => {
+    // Force item removal RNG calls to succeed
+    if (move === MoveId.THIEF) {
+      vi.spyOn(allMoves[move].getAttrs(StealHeldItemChanceAttr)[0], "chance", "get").mockReturnValue(1.0);
+    }
+    vi.spyOn(allMoves[move], "chance", "get").mockReturnValue(-1);
 
-      await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([Species.FEEBAS]);
 
-      game.move.use(move);
-      await game.move.forceEnemyMove(Moves.SPLASH);
-      await game.toNextTurn();
+    game.move.use(move);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
+    await game.toNextTurn();
 
-      const enemyPokemon = game.field.getEnemyPokemon();
-      expect(enemyPokemon.getHeldItems().length).toBe(1);
-    },
-  );
+    const enemyPokemon = game.field.getEnemyPokemon();
+    expect(enemyPokemon.getHeldItems().length).toBe(1);
+  });
 
   // TODO: Enable this test, and add it to the above test block, once Corrosive Gas is implemented
   it.todo("should prevent the user from losing a held item when hit by the move 'CORROSIVE_GAS'", () => {});
@@ -64,8 +66,8 @@ describe("Abilities - Sticky Hold", () => {
       game.override.ability(ability);
       await game.classicMode.startBattle([Species.FEEBAS]);
 
-      game.move.use(Moves.FALSE_SWIPE);
-      await game.move.forceEnemyMove(Moves.FALSE_SWIPE);
+      game.move.use(MoveId.FALSE_SWIPE);
+      await game.move.forceEnemyMove(MoveId.FALSE_SWIPE);
       await game.toNextTurn();
 
       const enemyPokemon = game.field.getEnemyPokemon();

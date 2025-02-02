@@ -1,6 +1,6 @@
 import { allMoves } from "#app/data/all-moves";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -27,26 +27,26 @@ describe("Arena - Grassy Terrain", () => {
       .enemyLevel(1)
       .enemySpecies(Species.SHUCKLE)
       .enemyAbility(Abilities.STURDY)
-      .enemyMoveset(Moves.FLY)
-      .moveset([Moves.GRASSY_TERRAIN, Moves.EARTHQUAKE])
+      .enemyMoveset(MoveId.FLY)
+      .moveset([MoveId.GRASSY_TERRAIN, MoveId.EARTHQUAKE])
       .ability(Abilities.NO_GUARD);
   });
 
   it("halves the damage of Earthquake", async () => {
     await game.classicMode.startBattle([Species.TAUROS]);
 
-    const eq = allMoves[Moves.EARTHQUAKE];
+    const eq = allMoves[MoveId.EARTHQUAKE];
     vi.spyOn(eq, "calculateBattlePower");
 
-    game.move.select(Moves.EARTHQUAKE);
+    game.move.select(MoveId.EARTHQUAKE);
     await game.toNextTurn();
 
     expect(eq.calculateBattlePower).toHaveReturnedWith(100);
 
-    game.move.select(Moves.GRASSY_TERRAIN);
+    game.move.select(MoveId.GRASSY_TERRAIN);
     await game.toNextTurn();
 
-    game.move.select(Moves.EARTHQUAKE);
+    game.move.select(MoveId.EARTHQUAKE);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(eq.calculateBattlePower).toHaveReturnedWith(50);
@@ -55,13 +55,13 @@ describe("Arena - Grassy Terrain", () => {
   it("Does not halve the damage of Earthquake if opponent is not grounded", async () => {
     await game.classicMode.startBattle([Species.NINJASK]);
 
-    const eq = allMoves[Moves.EARTHQUAKE];
+    const eq = allMoves[MoveId.EARTHQUAKE];
     vi.spyOn(eq, "calculateBattlePower");
 
-    game.move.select(Moves.GRASSY_TERRAIN);
+    game.move.select(MoveId.GRASSY_TERRAIN);
     await game.toNextTurn();
 
-    game.move.select(Moves.EARTHQUAKE);
+    game.move.select(MoveId.EARTHQUAKE);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(eq.calculateBattlePower).toHaveReturnedWith(100);

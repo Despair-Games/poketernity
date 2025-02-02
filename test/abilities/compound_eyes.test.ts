@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -27,28 +27,28 @@ describe("Abilities - Compound Eyes", () => {
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should multiply the accuracy of a move by 1.3", async () => {
-    game.override.moveset(Moves.HYPNOSIS);
+    game.override.moveset(MoveId.HYPNOSIS);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(pokemon, "getAccuracyMultiplier");
 
-    game.move.select(Moves.HYPNOSIS);
+    game.move.select(MoveId.HYPNOSIS);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(pokemon.getAccuracyMultiplier).toHaveLastReturnedWith(1.3);
   });
 
   it("should not affect the accuracy of one-hit KO moves", async () => {
-    game.override.moveset(Moves.SHEER_COLD);
+    game.override.moveset(MoveId.SHEER_COLD);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(pokemon, "getAccuracyMultiplier");
 
-    game.move.select(Moves.SHEER_COLD);
+    game.move.select(MoveId.SHEER_COLD);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(pokemon.getAccuracyMultiplier).toHaveLastReturnedWith(1);

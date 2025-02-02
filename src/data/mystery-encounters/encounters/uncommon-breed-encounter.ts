@@ -28,7 +28,7 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import PokemonData from "#app/system/pokemon-data";
 import { isNullOrUndefined, randSeedInt } from "#app/utils";
-import type { Moves } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { SelfStatusMove } from "#app/data/move";
 import { PokeballType } from "#enums/pokeball";
@@ -79,15 +79,15 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
     const eggMoves = pokemon.getEggMoves();
     if (eggMoves) {
       const eggMoveIndex = randSeedInt(4);
-      const randomEggMove: Moves = eggMoves[eggMoveIndex];
+      const randomEggMoveId: MoveId = eggMoves[eggMoveIndex];
       encounter.misc = {
-        eggMove: randomEggMove,
+        eggMove: randomEggMoveId,
         pokemon: pokemon,
       };
       if (pokemon.moveset.length < 4) {
-        pokemon.moveset.push(new PokemonMove(randomEggMove));
+        pokemon.moveset.push(new PokemonMove(randomEggMoveId));
       } else {
-        pokemon.moveset[0] = new PokemonMove(randomEggMove);
+        pokemon.moveset[0] = new PokemonMove(randomEggMoveId);
       }
     } else {
       encounter.misc.pokemon = pokemon;
@@ -276,17 +276,17 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
   )
   .build();
 
-function givePokemonExtraEggMove(pokemon: EnemyPokemon, previousEggMove: Moves) {
+function givePokemonExtraEggMove(pokemon: EnemyPokemon, previousEggMoveId: MoveId) {
   const eggMoves = pokemon.getEggMoves();
   if (eggMoves) {
-    let randomEggMove: Moves = eggMoves[randSeedInt(4)];
-    while (randomEggMove === previousEggMove) {
-      randomEggMove = eggMoves[randSeedInt(4)];
+    let randomEggMoveId: MoveId = eggMoves[randSeedInt(4)];
+    while (randomEggMoveId === previousEggMoveId) {
+      randomEggMoveId = eggMoves[randSeedInt(4)];
     }
     if (pokemon.moveset.length < 4) {
-      pokemon.moveset.push(new PokemonMove(randomEggMove));
+      pokemon.moveset.push(new PokemonMove(randomEggMoveId));
     } else {
-      pokemon.moveset[1] = new PokemonMove(randomEggMove);
+      pokemon.moveset[1] = new PokemonMove(randomEggMoveId);
     }
   }
 }

@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/all-moves";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -28,22 +28,22 @@ describe("Moves - Lash Out", () => {
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.FUR_COAT)
-      .enemyMoveset([Moves.GROWL])
+      .enemyMoveset([MoveId.GROWL])
       .startingLevel(10)
       .enemyLevel(10)
       .starterSpecies(Species.FEEBAS)
       .ability(Abilities.BALL_FETCH)
-      .moveset([Moves.LASH_OUT]);
+      .moveset([MoveId.LASH_OUT]);
   });
 
   it("should deal double damage if the user's stat stages were lowered this turn", async () => {
-    vi.spyOn(allMoves[Moves.LASH_OUT], "calculateBattlePower");
+    vi.spyOn(allMoves[MoveId.LASH_OUT], "calculateBattlePower");
     await game.classicMode.startBattle();
 
-    game.move.select(Moves.LASH_OUT);
+    game.move.select(MoveId.LASH_OUT);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase");
 
-    expect(allMoves[Moves.LASH_OUT].calculateBattlePower).toHaveReturnedWith(150);
+    expect(allMoves[MoveId.LASH_OUT].calculateBattlePower).toHaveReturnedWith(150);
   });
 });

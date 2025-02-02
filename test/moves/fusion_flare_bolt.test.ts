@@ -5,7 +5,7 @@ import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { MovePhase } from "#app/phases/move-phase";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -31,13 +31,13 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    fusionFlare = allMoves[Moves.FUSION_FLARE];
-    fusionBolt = allMoves[Moves.FUSION_BOLT];
+    fusionFlare = allMoves[MoveId.FUSION_FLARE];
+    fusionBolt = allMoves[MoveId.FUSION_BOLT];
     game.override.moveset([fusionFlare.id, fusionBolt.id]);
     game.override.startingLevel(1);
 
     game.override.enemySpecies(Species.RESHIRAM);
-    game.override.enemyMoveset([Moves.REST, Moves.REST, Moves.REST, Moves.REST]);
+    game.override.enemyMoveset([MoveId.REST, MoveId.REST, MoveId.REST, MoveId.REST]);
 
     game.override.battleType("double");
     game.override.startingWave(97);
@@ -113,7 +113,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
   }, 20000);
 
   it("FUSION_FLARE should not double power of subsequent FUSION_BOLT if a move succeeded in between", async () => {
-    game.override.enemyMoveset([Moves.SPLASH, Moves.SPLASH, Moves.SPLASH, Moves.SPLASH]);
+    game.override.enemyMoveset([MoveId.SPLASH, MoveId.SPLASH, MoveId.SPLASH, MoveId.SPLASH]);
     await game.startBattle([Species.ZEKROM, Species.ZEKROM]);
 
     game.move.select(fusionFlare.id, 0, BattlerIndex.ENEMY);

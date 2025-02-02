@@ -44,6 +44,7 @@ import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { addPokemonDataToDexAndValidateAchievements } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { PokeballType } from "#enums/pokeball";
 import { settings } from "#app/system/settings/settings-manager";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/globalTradeSystem";
@@ -561,16 +562,10 @@ function generateTradeOption(alreadyUsedSpecies: PokemonSpecies[], originalBst?:
 
 function showTradeBackground() {
   return new Promise<void>((resolve) => {
-    const tradeContainer = globalScene.add.container(0, -globalScene.game.canvas.height / 6);
+    const tradeContainer = globalScene.add.container(0, -GAME_HEIGHT);
     tradeContainer.setName("Trade Background");
 
-    const flyByStaticBg = globalScene.add.rectangle(
-      0,
-      0,
-      globalScene.game.canvas.width / 6,
-      globalScene.game.canvas.height / 6,
-      0,
-    );
+    const flyByStaticBg = globalScene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0);
     flyByStaticBg.setName("Black Background");
     flyByStaticBg.setOrigin(0, 0);
     flyByStaticBg.setVisible(false);

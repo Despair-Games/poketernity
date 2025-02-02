@@ -41,7 +41,7 @@ import Trainer from "#app/field/trainer";
 import { TrainerVariant } from "#enums/trainer-variant";
 import type { Gender } from "#enums/gender";
 import type { Nature } from "#enums/nature";
-import type { Moves } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 import { initMoveAnim, loadMoveAnimAssets } from "#app/data/battle-anims";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { Status } from "#app/data/status-effect";
@@ -102,7 +102,7 @@ export interface EnemyPokemonConfig {
   level?: number;
   gender?: Gender;
   passive?: boolean;
-  moveSet?: Moves[];
+  moveSet?: MoveId[];
   nature?: Nature;
   ivs?: [number, number, number, number, number, number];
   shiny?: boolean;
@@ -435,11 +435,11 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
  * See: [startOfBattleEffects](IMysteryEncounter.startOfBattleEffects) for more details
  *
  * This promise does not need to be awaited on if called in an encounter onInit (will just load lazily)
- * @param moves The move or moves the Pokemon uses at the start of the encounter
+ * @param moveIds The move or moves the Pokemon uses at the start of the encounter
  */
-export function loadCustomMovesForEncounter(moves: Moves | Moves[]) {
-  moves = Array.isArray(moves) ? moves : [moves];
-  return Promise.all(moves.map((move) => initMoveAnim(move))).then(() => loadMoveAnimAssets(moves));
+export function loadCustomMovesForEncounter(moveIds: MoveId | MoveId[]) {
+  moveIds = Array.isArray(moveIds) ? moveIds : [moveIds];
+  return Promise.all(moveIds.map((moveId) => initMoveAnim(moveId))).then(() => loadMoveAnimAssets(moveIds));
 }
 
 /**

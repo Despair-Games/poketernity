@@ -2,7 +2,7 @@ import { allMoves } from "#app/data/all-moves";
 import { PresentPowerAttr } from "#app/data/move-attrs/present-power-attr";
 import { NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -30,14 +30,14 @@ describe("Moves - Present", () => {
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it.each([
     { descriptor: "first hit", hitsLeft: 2, totalOutcomes: 100, expectedHeals: 20 },
     { descriptor: "subsequent hits", hitsLeft: 1, totalOutcomes: 80, expectedHeals: 0 },
   ])("should have correct probabilities on $descriptor", async ({ hitsLeft, totalOutcomes, expectedHeals }) => {
-    const presentAttr = allMoves[Moves.PRESENT].getAttrs(PresentPowerAttr)[0];
+    const presentAttr = allMoves[MoveId.PRESENT].getAttrs(PresentPowerAttr)[0];
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 
@@ -60,7 +60,7 @@ describe("Moves - Present", () => {
       rngSweepProgress = (2 * i + 1) / (2 * totalOutcomes);
 
       const power = new NumberHolder(-1);
-      presentAttr.apply(player, enemy, allMoves[Moves.PRESENT], power);
+      presentAttr.apply(player, enemy, allMoves[MoveId.PRESENT], power);
       switch (power.value) {
         case 40:
           count40power++;
@@ -99,7 +99,7 @@ describe("Moves - Present", () => {
     });
 
     enemy.hp = 1;
-    game.move.use(Moves.PRESENT);
+    game.move.use(MoveId.PRESENT);
     await game.toNextTurn();
 
     expect(enemy.hp).toBe(1 + Math.floor(enemy.getMaxHp() / 4));

@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveResult } from "#enums/move-result";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { ElementType } from "#enums/element-type";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -25,13 +25,13 @@ describe("Moves - Dragon Darts", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SPLASH, Moves.DRAGON_DARTS, Moves.FOLLOW_ME])
+      .moveset([MoveId.SPLASH, MoveId.DRAGON_DARTS, MoveId.FOLLOW_ME])
       .ability(Abilities.BALL_FETCH)
       .battleType("double")
       .disableCrits()
       .enemySpecies(Species.SNORLAX)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
   });
@@ -44,7 +44,7 @@ describe("Moves - Dragon Darts", () => {
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DRAGON_DARTS);
+    game.move.select(MoveId.DRAGON_DARTS);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     for (let i = 0; i < 2; i++) {
@@ -62,8 +62,8 @@ describe("Moves - Dragon Darts", () => {
     const player = game.scene.getPlayerField()[0];
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.SPLASH, 1);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
@@ -79,8 +79,8 @@ describe("Moves - Dragon Darts", () => {
     const [player1, player2] = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.PLAYER_2);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.DRAGON_DARTS, 0, BattlerIndex.PLAYER_2);
+    game.move.select(MoveId.SPLASH, 1);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
@@ -95,18 +95,18 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should hit an opponent twice if the other opponent is type immune", async () => {
-    game.override.enemyMoveset([Moves.DRAGON_DARTS, Moves.SPLASH]);
+    game.override.enemyMoveset([MoveId.DRAGON_DARTS, MoveId.SPLASH]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.CLEFFA]);
 
     const [magikarp, cleffa] = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.SPLASH, 0);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.SPLASH, 0);
+    game.move.select(MoveId.SPLASH, 1);
 
-    await game.forceEnemyMove(Moves.DRAGON_DARTS, BattlerIndex.PLAYER_2);
-    await game.forceEnemyMove(Moves.SPLASH);
+    await game.forceEnemyMove(MoveId.DRAGON_DARTS, BattlerIndex.PLAYER_2);
+    await game.forceEnemyMove(MoveId.SPLASH);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
@@ -121,18 +121,18 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should hit an enemy twice if the other enemy is protected", async () => {
-    game.override.enemyMoveset([Moves.PROTECT, Moves.SPLASH]);
+    game.override.enemyMoveset([MoveId.PROTECT, MoveId.SPLASH]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
     const magikarp = game.scene.getPlayerField()[0];
     const enemy2 = game.scene.getEnemyField()[1];
 
-    game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.SPLASH, 1);
 
-    await game.forceEnemyMove(Moves.PROTECT);
-    await game.forceEnemyMove(Moves.SPLASH);
+    await game.forceEnemyMove(MoveId.PROTECT);
+    await game.forceEnemyMove(MoveId.SPLASH);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("MoveEffectPhase");
@@ -147,18 +147,18 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should hit an enemy twice if the other enemy is semi-invulnerable", async () => {
-    game.override.enemyMoveset([Moves.DIG, Moves.SPLASH]);
+    game.override.enemyMoveset([MoveId.DIG, MoveId.SPLASH]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
     const magikarp = game.scene.getPlayerField()[0];
     const enemy2 = game.scene.getEnemyField()[1];
 
-    game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.SPLASH, 1);
 
-    await game.forceEnemyMove(Moves.DIG, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(Moves.SPLASH);
+    await game.forceEnemyMove(MoveId.DIG, BattlerIndex.PLAYER);
+    await game.forceEnemyMove(MoveId.SPLASH);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
@@ -171,7 +171,7 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should hit Dondozo twice if its ally is a commanding Tatsugiri", async () => {
-    game.override.enemyMoveset([Moves.DRAGON_DARTS, Moves.SPLASH]).ability(Abilities.COMMANDER);
+    game.override.enemyMoveset([MoveId.DRAGON_DARTS, MoveId.SPLASH]).ability(Abilities.COMMANDER);
     vi.spyOn(game.scene, "triggerPokemonBattleAnim").mockReturnValue(true);
 
     await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
@@ -179,10 +179,10 @@ describe("Moves - Dragon Darts", () => {
     const [tatsugiri, dondozo] = game.scene.getPlayerField();
     const enemy1 = game.scene.getEnemyField()[0];
 
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.SPLASH, 1);
 
-    await game.forceEnemyMove(Moves.DRAGON_DARTS, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(Moves.SPLASH);
+    await game.forceEnemyMove(MoveId.DRAGON_DARTS, BattlerIndex.PLAYER);
+    await game.forceEnemyMove(MoveId.SPLASH);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
@@ -201,8 +201,8 @@ describe("Moves - Dragon Darts", () => {
     const magikarp = game.scene.getPlayerField()[0];
     const [enemy1, enemy2] = game.scene.getEnemyField();
 
-    game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.SPLASH, 1);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
@@ -218,18 +218,18 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should not be protected against by Wide Guard", async () => {
-    game.override.enemyMoveset([Moves.WIDE_GUARD, Moves.SPLASH]);
+    game.override.enemyMoveset([MoveId.WIDE_GUARD, MoveId.SPLASH]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
     const player = game.scene.getPlayerField()[0];
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.SPLASH, 1);
 
-    await game.forceEnemyMove(Moves.WIDE_GUARD);
-    await game.forceEnemyMove(Moves.SPLASH);
+    await game.forceEnemyMove(MoveId.WIDE_GUARD);
+    await game.forceEnemyMove(MoveId.SPLASH);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
@@ -240,18 +240,18 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should not redirect if the original target has the Center of Attention status", async () => {
-    game.override.enemyMoveset([Moves.DRAGON_DARTS, Moves.SPLASH]);
+    game.override.enemyMoveset([MoveId.DRAGON_DARTS, MoveId.SPLASH]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.CLEFFA]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemy1 = game.scene.getEnemyField()[0];
 
-    game.move.select(Moves.SPLASH, 0);
-    game.move.select(Moves.FOLLOW_ME, 1);
+    game.move.select(MoveId.SPLASH, 0);
+    game.move.select(MoveId.FOLLOW_ME, 1);
 
-    await game.forceEnemyMove(Moves.DRAGON_DARTS, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(Moves.SPLASH);
+    await game.forceEnemyMove(MoveId.DRAGON_DARTS, BattlerIndex.PLAYER);
+    await game.forceEnemyMove(MoveId.SPLASH);
 
     await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
 
@@ -262,7 +262,7 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should not trigger ability effects when redirecting", async () => {
-    game.override.enemyAbility(Abilities.VOLT_ABSORB).moveset([Moves.DRAGON_DARTS, Moves.ELECTRIFY]);
+    game.override.enemyAbility(Abilities.VOLT_ABSORB).moveset([MoveId.DRAGON_DARTS, MoveId.ELECTRIFY]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
@@ -270,8 +270,8 @@ describe("Moves - Dragon Darts", () => {
     enemyPokemon.forEach((p) => (p.hp = 100));
     const enemyStartingHp = enemyPokemon.map((p) => p.hp);
 
-    game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.ELECTRIFY, 1, BattlerIndex.PLAYER);
+    game.move.select(MoveId.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.ELECTRIFY, 1, BattlerIndex.PLAYER);
 
     await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
@@ -290,8 +290,8 @@ describe("Moves - Dragon Darts", () => {
     const player = game.scene.getPlayerField()[0];
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.DRAGON_DARTS, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.SPLASH, 1);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
@@ -309,8 +309,8 @@ describe("Moves - Dragon Darts", () => {
     const [player1, player2] = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.DRAGON_DARTS, 0, BattlerIndex.PLAYER_2);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.DRAGON_DARTS, 0, BattlerIndex.PLAYER_2);
+    game.move.select(MoveId.SPLASH, 1);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -320,10 +320,10 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should not crash when used in a 1v2 battle", async () => {
-    game.override.enemyMoveset(Moves.DRAGON_DARTS);
+    game.override.enemyMoveset(MoveId.DRAGON_DARTS);
     await game.classicMode.startBattle([Species.SHUCKLE]);
 
-    game.move.select(Moves.DRAGON_DARTS);
+    game.move.select(MoveId.DRAGON_DARTS);
 
     await game.toNextTurn();
 
