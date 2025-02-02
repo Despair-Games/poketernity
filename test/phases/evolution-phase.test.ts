@@ -5,6 +5,8 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { Button } from "#enums/buttons";
+import type { EvolutionPhase } from "#app/phases/evolution-phase";
+import { UiMode } from "#enums/ui-mode";
 
 describe("Evolution Phase", () => {
   let phaserGame: Phaser.Game;
@@ -77,6 +79,44 @@ describe("Evolution Phase", () => {
     clearInterval(pressCancelInterval);
 
     expect(pokemon.level).toBeGreaterThan(32);
+    expect(pokemon.species.getName()).toBe("Bulbasaur");
+    expect(pokemon.calculateBaseStats()).toStrictEqual([45, 49, 49, 65, 65, 45]);
+  });
+
+  it("should allow to pause evolutions after cancelling them", async () => {
+    await game.classicMode.startBattle([Species.BULBASAUR]);
+
+    const pokemon = game.field.getPlayerPokemon();
+    expect(pokemon.species.getName()).toBe("Bulbasaur");
+    expect(pokemon.calculateBaseStats()).toStrictEqual([45, 49, 49, 65, 65, 45]);
+    expect(pokemon.pauseEvolutions).toBeFalsy();
+
+    vi.spyOn(pokemon, "getLevelMoves").mockReturnValue([]); // Do not attempt to learn level-up moves
+
+    game.move.use(MoveId.SPLASH);
+    await game.doKillOpponents();
+    await game.phaseInterceptor.to("EvolutionPhase", false);
+
+    // Cancel the evolution
+    (game.scene.getCurrentPhase() as EvolutionPhase).cancelEvolution();
+
+    // Say yes to pausing the evolution
+    game.onNextPrompt("EvolutionPhase", UiMode.CONFIRM, () => game.scene.ui.processInput(Button.ACTION));
+    await game.toNextWave();
+
+    const lastLevel = pokemon.level;
+    expect(pokemon.pauseEvolutions).toBeTruthy();
+    expect(lastLevel).toBeGreaterThan(32);
+    expect(pokemon.species.getName()).toBe("Bulbasaur");
+    expect(pokemon.calculateBaseStats()).toStrictEqual([45, 49, 49, 65, 65, 45]);
+
+    game.move.use(MoveId.SPLASH);
+    await game.doKillOpponents();
+    await game.toNextWave();
+
+    // Should not have a second EvolutionPhase after pausing
+    expect(game.phaseInterceptor.log.filter((phase) => phase === "EvolutionPhase").length).toBe(1);
+    expect(pokemon.level).toBeGreaterThan(lastLevel);
     expect(pokemon.species.getName()).toBe("Bulbasaur");
     expect(pokemon.calculateBaseStats()).toStrictEqual([45, 49, 49, 65, 65, 45]);
   });

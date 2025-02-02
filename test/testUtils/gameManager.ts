@@ -437,7 +437,7 @@ export class GameManager {
         this.setMode(UiMode.MESSAGE);
         this.endPhase();
       },
-      () => this.isCurrentPhase(TurnInitPhase),
+      () => this.isCurrentPhase(TurnInitPhase) || this.isCurrentPhase(CommandPhase),
     );
 
     await this.toNextTurn();
