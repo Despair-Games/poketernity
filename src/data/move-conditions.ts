@@ -2,13 +2,12 @@ import { type Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { MovePhase } from "#app/phases/move-phase";
 import { BooleanHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { StatusEffect } from "#enums/status-effect";
 import { ElementType } from "#enums/element-type";
-import { applyAbAttrs } from "./ability";
+import { applyAbAttrs } from "./apply-ab-attrs";
 import { StockpilingTag } from "./battler-tags";
 import { type Move } from "./move";
 import { allMoves } from "#app/data/all-moves";
@@ -124,7 +123,7 @@ export const targetSleptOrComatoseCondition: MoveConditionFunc = (_user: Pokemon
   target.status?.effect === StatusEffect.SLEEP || target.hasAbility(Abilities.COMATOSE);
 
 export const failIfLastCondition: MoveConditionFunc = (_user: Pokemon, _target: Pokemon, _move: Move) =>
-  globalScene.phaseQueue.find((phase) => phase instanceof MovePhase) !== undefined;
+  globalScene.phaseQueue.find((phase) => phase.isMovePhase()) !== undefined;
 
 export const failIfLastInPartyCondition: MoveConditionFunc = (user: Pokemon, _target: Pokemon, _move: Move) => {
   const party: Pokemon[] = user.getParty();

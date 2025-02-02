@@ -29,7 +29,6 @@ import RegistrationFormUiHandler from "./registration-form-ui-handler";
 import LoadingModalUiHandler from "./loading-modal-ui-handler";
 import { executeIf } from "#app/utils";
 import GameStatsUiHandler from "./game-stats-ui-handler";
-import AwaitableUiHandler from "./awaitable-ui-handler";
 import SaveSlotSelectUiHandler from "./save-slot-select-ui-handler";
 import TitleUiHandler from "./title-ui-handler";
 import SavingIconHandler from "./saving-icon-handler";
@@ -262,7 +261,7 @@ export default class UI extends Phaser.GameObjects.Container {
 
     const handler = this.getHandler();
 
-    if (handler instanceof AwaitableUiHandler && handler.tutorialActive) {
+    if (handler.isAwaitableUiHandler() && handler.tutorialActive) {
       return handler.processTutorialInput(button);
     }
 

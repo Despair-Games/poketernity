@@ -5,7 +5,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder, toDmgValue } from "#app/utils";
 import i18next from "i18next";
 import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-ab-attr";
-import { applyAbAttrs } from "./ability";
+import { applyAbAttrs } from "./apply-ab-attrs";
 import type { Move } from "./move";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { UserMoveConditionFunc } from "./move-conditions";

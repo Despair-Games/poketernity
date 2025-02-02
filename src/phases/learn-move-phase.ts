@@ -7,7 +7,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
 import { PlayerPartyMemberPokemonPhase } from "#app/phases/abstract-player-party-member-pokemon-phase";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import FormChangeSceneHandler from "#app/ui/form-change-scene-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
@@ -198,7 +197,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
         pokemon.usedTMs = [];
       }
       pokemon.usedTMs.push(this.moveId);
-      globalScene.tryRemovePhase((phase) => phase instanceof SelectModifierPhase);
+      globalScene.tryRemovePhase((phase) => phase.isSelectModifierPhase());
     } else if (this.learnMoveType === LearnMoveType.MEMORY) {
       if (this.cost !== -1) {
         if (!Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
@@ -208,7 +207,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
         }
         globalScene.playSound("se/buy");
       } else {
-        globalScene.tryRemovePhase((phase) => phase instanceof SelectModifierPhase);
+        globalScene.tryRemovePhase((phase) => phase.isSelectModifierPhase());
       }
     }
 

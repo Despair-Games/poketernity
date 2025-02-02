@@ -1,5 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import { Pokemon } from "./pokemon";
 import { fixedNumber, randInt } from "#app/utils";
 
 export default class PokemonSpriteSparkleHandler {
@@ -26,10 +25,10 @@ export default class PokemonSpriteSparkleHandler {
       if (!s.pipelineData["teraColor"] || !(s.pipelineData["teraColor"] as number[]).find((c) => c)) {
         continue;
       }
-      if (!s.visible || (s.parentContainer instanceof Pokemon && !s.parentContainer.parentContainer)) {
+      if (!s.visible || (s.parentContainer.type === "Pokemon" && !s.parentContainer.parentContainer)) {
         continue;
       }
-      const pokemon = s.parentContainer instanceof Pokemon ? (s.parentContainer as Pokemon) : null;
+      const pokemon = s.parentContainer.type === "Pokemon" ? s.parentContainer : null;
       const parent = (pokemon || s).parentContainer;
       const texture = s.texture;
       const [width, height] = [texture.source[0].width, texture.source[0].height];

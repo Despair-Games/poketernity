@@ -16,18 +16,19 @@ import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-en
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { Species } from "#enums/species";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { allSpecies, getPokemonSpecies } from "#app/data/pokemon-species";
+import { allSpecies } from "#app/data/all-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { getTypeRgb } from "#app/data/type";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { NumberHolder, isNullOrUndefined, randInt, randSeedInt, randSeedShuffle } from "#app/utils";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { EnemyPokemon, PokemonMove } from "#app/field/pokemon";
+import { EnemyPokemon } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import {
   HiddenAbilityRateBoosterModifier,
-  PokemonFormChangeItemModifier,
   ShinyRateBoosterModifier,
   SpeciesStatBoosterModifier,
 } from "#app/modifier/modifier";
@@ -213,7 +214,7 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
         const receivedPokemonData: EnemyPokemon = encounter.misc.receivedPokemon;
         const modifiers = tradedPokemon
           .getHeldItems()
-          .filter((m) => !(m instanceof PokemonFormChangeItemModifier) && !(m instanceof SpeciesStatBoosterModifier));
+          .filter((m) => !m.isPokemonFormChangeItemModifier() && !(m instanceof SpeciesStatBoosterModifier));
 
         // Generate a trainer name
         const traderName = generateRandomTraderName();
@@ -334,7 +335,7 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
         const receivedPokemonData: EnemyPokemon = encounter.misc.receivedPokemon;
         const modifiers = tradedPokemon
           .getHeldItems()
-          .filter((m) => !(m instanceof PokemonFormChangeItemModifier) && !(m instanceof SpeciesStatBoosterModifier));
+          .filter((m) => !m.isPokemonFormChangeItemModifier() && !(m instanceof SpeciesStatBoosterModifier));
 
         // Generate a trainer name
         const traderName = generateRandomTraderName();

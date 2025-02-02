@@ -4,7 +4,7 @@ import { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { BlockItemTheftAbAttr } from "#app/data/ab-attrs/block-item-theft-ab-attr";
 import { PostItemLostAbAttr } from "#app/data/ab-attrs/post-item-lost-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type { Move } from "#app/data/move";
 import { EatBerryAttr } from "#app/data/move-attrs/eat-berry-attr";
 

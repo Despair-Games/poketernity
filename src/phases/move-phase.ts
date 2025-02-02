@@ -5,7 +5,7 @@ import { PokemonTypeChangeAbAttr } from "#app/data/ab-attrs/pokemon-type-change-
 import { PostMoveUsedAbAttr } from "#app/data/ab-attrs/post-move-used-ab-attr";
 import { RedirectMoveAbAttr } from "#app/data/ab-attrs/redirect-move-ab-attr";
 import { ReduceSleepDurationAbAttr } from "#app/data/ab-attrs/reduce-sleep-duration-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { allMoves } from "#app/data/all-moves";
 import { CommonAnim } from "#enums/common-anim";
 import { CenterOfAttentionTag, SkyDropTag } from "#app/data/battler-tags";
@@ -21,7 +21,8 @@ import { SpeciesFormChangePreMoveTrigger } from "#app/data/pokemon-forms";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/data/status-effect";
 import { getTerrainBlockMessage } from "#app/data/terrain";
 import { MoveUsedEvent } from "#app/events/battle-scene";
-import { type Pokemon, type PokemonMove } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { type PokemonMove } from "#app/field/pokemon-move";
 import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -598,5 +599,9 @@ export class MovePhase extends BattlePhase {
 
   public showFailedText(failedText?: string): void {
     globalScene.queueMessage(failedText ?? i18next.t("battle:attackFailed"));
+  }
+
+  override isMovePhase(): this is this {
+    return true;
   }
 }

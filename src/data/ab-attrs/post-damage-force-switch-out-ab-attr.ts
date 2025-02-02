@@ -8,7 +8,6 @@ import { ForceSwitchOutHelper } from "#app/data/ability";
 import { allMoves } from "#app/data/all-moves";
 import type { Move } from "#app/data/move";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { HitHealModifier } from "#app/modifier/modifier";
 
 /**
  * Ability attribute for forcing a Pokémon to switch out after its health drops below half.
@@ -109,7 +108,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
  */
 
 export function calculateShellBellRecovery(pokemon: Pokemon): number {
-  const shellBellModifier = pokemon.getHeldItems().find((m) => m instanceof HitHealModifier);
+  const shellBellModifier = pokemon.getHeldItems().find((m) => m.isHitHealModifier());
   if (shellBellModifier) {
     return toDmgValue(pokemon.turnData.totalDamageDealt / 8) * shellBellModifier.stackCount;
   }

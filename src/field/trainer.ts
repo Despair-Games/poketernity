@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import type { TrainerConfig, TrainerPartyTemplate } from "#app/data/trainer-config";
 import { TrainerPartyCompoundTemplate, trainerPartyTemplates } from "#app/data/trainer-config";
 import { TrainerSlot } from "#enums/trainer-slot";
@@ -37,6 +37,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
     trainerConfigOverride?: TrainerConfig,
   ) {
     super(globalScene, -72, 80);
+    this.type = "Trainer";
     this.config = allTrainerConfigs.hasOwnProperty(trainerType)
       ? allTrainerConfigs[trainerType]
       : allTrainerConfigs[TrainerType.ACE_TRAINER];

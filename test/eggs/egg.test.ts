@@ -1,7 +1,7 @@
 import { EVERYTHING_SAVE_FILE_PATH } from "#test/testUtils/testUtils";
 import { speciesEggTiers } from "#app/data/balance/species-egg-tiers";
 import { Egg, getLegendaryGachaSpeciesForTimestamp, getValidLegendaryGachaSpecies } from "#app/data/egg";
-import { allSpecies } from "#app/data/pokemon-species";
+import { allSpecies } from "#app/data/all-species";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
 import { VariantTier } from "#enums/variant-tier";

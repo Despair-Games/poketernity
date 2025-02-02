@@ -5,7 +5,7 @@ import { Species } from "#enums/species";
 import { MoveResult } from "#enums/move-result";
 import { BerryPhase } from "#app/phases/berry-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
-import { MovePhase } from "#app/phases/move-phase";
+import type { MovePhase } from "#app/phases/move-phase";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -51,7 +51,7 @@ describe("Moves - Shell Trap", () => {
     await game.phaseInterceptor.to(MoveEndPhase);
 
     const movePhase = game.scene.getCurrentPhase();
-    expect(movePhase instanceof MovePhase).toBeTruthy();
+    expect(movePhase?.isMovePhase()).toBeTruthy();
     expect((movePhase as MovePhase).pokemon).toBe(playerPokemon[1]);
 
     await game.phaseInterceptor.to(MoveEndPhase);
@@ -74,7 +74,7 @@ describe("Moves - Shell Trap", () => {
     await game.phaseInterceptor.to(MoveEndPhase);
 
     const movePhase = game.scene.getCurrentPhase();
-    expect(movePhase instanceof MovePhase).toBeTruthy();
+    expect(movePhase?.isMovePhase()).toBeTruthy();
     expect((movePhase as MovePhase).pokemon).not.toBe(playerPokemon[1]);
 
     await game.phaseInterceptor.to(BerryPhase, false);
@@ -97,7 +97,7 @@ describe("Moves - Shell Trap", () => {
     await game.phaseInterceptor.to(MoveEndPhase);
 
     const movePhase = game.scene.getCurrentPhase();
-    expect(movePhase instanceof MovePhase).toBeTruthy();
+    expect(movePhase?.isMovePhase()).toBeTruthy();
     expect((movePhase as MovePhase).pokemon).not.toBe(playerPokemon[1]);
 
     await game.phaseInterceptor.to(BerryPhase, false);
@@ -118,7 +118,7 @@ describe("Moves - Shell Trap", () => {
     await game.phaseInterceptor.to(MoveEndPhase);
 
     const movePhase = game.scene.getCurrentPhase();
-    expect(movePhase instanceof MovePhase).toBeTruthy();
+    expect(movePhase?.isMovePhase()).toBeTruthy();
     expect((movePhase as MovePhase).pokemon).not.toBe(playerPokemon[1]);
 
     const enemyStartingHp = enemyPokemon.map((p) => p.hp);

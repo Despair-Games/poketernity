@@ -2,7 +2,6 @@ import { loggedInUser, updateUserInfo } from "#app/account";
 import { bypassLogin } from "#app/constants";
 import { SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { api } from "#app/plugins/api/api";
 import { handleTutorial } from "#app/tutorial";
 import { Tutorial } from "#enums/tutorial";
@@ -58,7 +57,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
     this.excludedMenus = () => [
       {
-        excluded: globalScene.getCurrentPhase() instanceof SelectModifierPhase,
+        excluded: globalScene.getCurrentPhase()?.isSelectModifierPhase() ?? false,
         options: [MenuOptions.EGG_GACHA, MenuOptions.EGG_LIST],
       },
       { excluded: bypassLogin, options: [MenuOptions.LOG_OUT] },
