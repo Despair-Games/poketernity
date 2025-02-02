@@ -2,7 +2,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { BattleAnim } from "./data/battle-anims";
 // -- end tsdoc imports --
-import { getFrameMs, randGauss, randInt } from "#app/utils";
+import { getFrameMs, randGauss, randInt, type BooleanHolder } from "#app/utils";
 import { PokeballType } from "#enums/pokeball";
 import type { Variant } from "./data/variant";
 import type BattleScene from "./battle-scene";
@@ -14,7 +14,6 @@ import { settings } from "#app/system/settings/settings-manager";
  */
 export class Animation {
   private scene: BattleScene;
-  private evolutionCancelled: boolean = false;
   constructor(scene: BattleScene) {
     this.scene = scene;
   }
@@ -93,13 +92,15 @@ export class Animation {
    * @param lastCycle - Number representing how many times to recursively cycle the animation
    * @param pokemonTintSprite - The tinted sprite of the Pokemon
    * @param pokemonNewFormTintSprite - The tinted sprite of the Pokemon's new form
+   * @param cancelled - If its value is set to `true` by external code during the animation, then cancel the animation.
    */
   public doCycle(
     l: number,
     lastCycle: number,
     pokemonTintSprite: Phaser.GameObjects.Sprite,
     pokemonNewFormTintSprite: Phaser.GameObjects.Sprite,
-  ): Promise<boolean> {
+    cancelled?: BooleanHolder,
+  ): Promise<void> {
     return new Promise((resolve) => {
       const isLastCycle = l === lastCycle;
       this.scene.tweens.add({
@@ -116,17 +117,14 @@ export class Animation {
         duration: 500 / l,
         yoyo: !isLastCycle,
         onComplete: () => {
-          if (this.evolutionCancelled) {
-            this.setEvolutionCancelled(false);
-            return resolve(false);
+          if (cancelled?.value) {
+            return resolve();
           }
           if (l < lastCycle) {
-            this.doCycle(l + 0.5, lastCycle, pokemonTintSprite, pokemonNewFormTintSprite).then((success) =>
-              resolve(success),
-            );
+            this.doCycle(l + 0.5, lastCycle, pokemonTintSprite, pokemonNewFormTintSprite, cancelled).then(resolve);
           } else {
             pokemonTintSprite.setVisible(false);
-            resolve(true);
+            resolve();
           }
         },
       });
@@ -596,12 +594,5 @@ export class Animation {
     };
 
     updateParticle();
-  }
-
-  /**
-   * @param cancelled If `true`, stop evolution-related anims because the player cancelled evolution.
-   */
-  public setEvolutionCancelled(cancelled: boolean) {
-    this.evolutionCancelled = cancelled;
   }
 }

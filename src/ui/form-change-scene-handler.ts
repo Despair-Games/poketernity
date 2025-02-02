@@ -22,7 +22,6 @@ export default class FormChangeSceneHandler extends MessageUiHandler {
 
   setup() {
     this.canCancel = false;
-    globalScene.animations.setEvolutionCancelled(false);
 
     const ui = this.getUi();
 
@@ -68,7 +67,10 @@ export default class FormChangeSceneHandler extends MessageUiHandler {
   processInput(button: Button): boolean {
     if (this.canCancel && button === Button.CANCEL) {
       this.canCancel = false;
-      globalScene.animations.setEvolutionCancelled(true);
+      const currentPhase = globalScene.getCurrentPhase();
+      if (currentPhase?.isEvolutionPhase()) {
+        currentPhase.cancelEvolution();
+      }
       return true;
     }
 
@@ -91,7 +93,6 @@ export default class FormChangeSceneHandler extends MessageUiHandler {
   override clear() {
     this.clearText();
     this.canCancel = false;
-    globalScene.animations.setEvolutionCancelled(false);
     this.container.removeAll(true);
     this.messageContainer.setVisible(false);
     this.messageBg.setVisible(false);
