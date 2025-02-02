@@ -6,7 +6,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
-describe("Abilities - Post Weather Lapse Heal", () => {
+describe("Ability Attribute - Post Weather Lapse Heal", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
