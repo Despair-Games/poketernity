@@ -2,6 +2,7 @@ import type { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
 import { Button } from "#enums/buttons";
 import { globalScene } from "#app/global-scene";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 export default abstract class AwaitableUiHandler extends UiHandler {
   protected awaitingActionInput: boolean;
@@ -36,8 +37,8 @@ export default abstract class AwaitableUiHandler extends UiHandler {
         globalScene,
         -1,
         -1,
-        globalScene.scaledCanvas.width + 2,
-        globalScene.scaledCanvas.height + 2,
+        GAME_WIDTH + 2,
+        GAME_HEIGHT + 2,
         0x070707,
       );
       this.tutorialOverlay.setName("tutorial-overlay");

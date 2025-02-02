@@ -8,6 +8,7 @@ import type { BattlerIndex } from "#enums/battler-index";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
 import { DamageNumbersMode } from "#enums/damage-numbers-mode";
+import { GAME_HEIGHT } from "#app/ui-constants";
 
 type TextAndShadowArr = [string | null, string | null];
 
@@ -29,13 +30,14 @@ export default class DamageNumberHandler {
     }
 
     const battlerIndex = target.getBattlerIndex();
-    const baseScale = target.getSpriteScale() / 6;
     const damageNumber = addTextObject(
       target.x,
-      -(globalScene.game.canvas.height / 6) + target.y - target.getSprite().height / 2,
+      -GAME_HEIGHT + target.y - target.getSprite().height / 2,
       formatStat(amount, true),
       TextStyle.SUMMARY,
     );
+    const baseScale = target.getSpriteScale() * damageNumber.scale;
+
     damageNumber.setName("text-damage-number");
     damageNumber.setOrigin(0.5, 1);
     damageNumber.setScale(baseScale);

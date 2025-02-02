@@ -40,6 +40,7 @@ import type { PartyModifierTransferSelectCallback } from "#app/@types/PartyModif
 import type { PartyModifierSpliceSelectCallback } from "#app/@types/PartyModifierSpliceSelectCallback";
 import type { PokemonModifierTransferSelectFilter } from "#app/@types/PokemonModifierTransferSelectFilter";
 import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilter";
+import { GAME_WIDTH } from "#app/ui-constants";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
 
@@ -196,7 +197,7 @@ export default class PartyUiHandler extends MessageUiHandler {
 
     this.partyCancelButton = partyCancelButton;
 
-    this.optionsContainer = globalScene.add.container(globalScene.game.canvas.width / 6 - 1, -1);
+    this.optionsContainer = globalScene.add.container(GAME_WIDTH - 1, -1);
     partyContainer.add(this.optionsContainer);
 
     this.iconAnimHandler = new PokemonIconAnimHandler();
@@ -209,7 +210,7 @@ export default class PartyUiHandler extends MessageUiHandler {
       top: true,
       x: 1,
       y: -MoveInfoOverlay.getHeight(overlayScale) - 1,
-      width: globalScene.game.canvas.width / 12 - 30,
+      width: GAME_WIDTH / 2 - 30,
     });
     ui.add(this.moveInfoOverlay);
 

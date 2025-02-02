@@ -86,6 +86,7 @@ import { DropDownColumn } from "#enums/drop-down-column";
 import { DropDownType } from "#enums/drop-down-type";
 import { SortCriteria } from "#enums/sort-criteria";
 import { SettingKeyboard } from "#enums/setting-keyboard";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 export type StarterSelectCallback = (starters: Starter[]) => void;
 
@@ -377,17 +378,11 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     const langSettingKey = Object.keys(languageSettings).find((lang) => currentLanguage.includes(lang)) ?? "en";
     const textSettings = languageSettings[langSettingKey];
 
-    this.starterSelectContainer = globalScene.add.container(0, -globalScene.game.canvas.height / 6);
+    this.starterSelectContainer = globalScene.add.container(0, -GAME_HEIGHT);
     this.starterSelectContainer.setVisible(false);
     ui.add(this.starterSelectContainer);
 
-    const bgColor = globalScene.add.rectangle(
-      0,
-      0,
-      globalScene.game.canvas.width / 6,
-      globalScene.game.canvas.height / 6,
-      0x006860,
-    );
+    const bgColor = globalScene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x006860);
     bgColor.setOrigin(0, 0);
     this.starterSelectContainer.add(bgColor);
 
@@ -1058,7 +1053,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.filterInstructionsContainer.setVisible(true);
     this.starterSelectContainer.add(this.filterInstructionsContainer);
 
-    this.starterSelectMessageBoxContainer = globalScene.add.container(0, globalScene.game.canvas.height / 6);
+    this.starterSelectMessageBoxContainer = globalScene.add.container(0, GAME_HEIGHT);
     this.starterSelectMessageBoxContainer.setVisible(false);
     this.starterSelectContainer.add(this.starterSelectMessageBoxContainer);
 
@@ -1087,7 +1082,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       scale: overlayScale,
       top: true,
       x: 1,
-      y: globalScene.game.canvas.height / 6 - MoveInfoOverlay.getHeight(overlayScale) - 29,
+      y: GAME_HEIGHT - MoveInfoOverlay.getHeight(overlayScale) - 29,
     });
     this.starterSelectContainer.add(this.moveInfoOverlay);
 
@@ -1274,7 +1269,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       this.starterSelectMessageBoxContainer.setY(0);
       this.message.setY(4);
     } else {
-      this.starterSelectMessageBoxContainer.setY(globalScene.game.canvas.height / 6);
+      this.starterSelectMessageBoxContainer.setY(GAME_HEIGHT);
       this.starterSelectMessageBox.setOrigin(0, 1);
       this.message.setY(singleLine ? -22 : -37);
     }
