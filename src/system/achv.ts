@@ -1,5 +1,4 @@
-import type { Modifier } from "typescript";
-import { TurnHeldItemTransferModifier } from "../modifier/modifier";
+import { type Modifier } from "#app/modifier/modifier";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import i18next from "i18next";
 import { NumberHolder } from "#app/utils";
@@ -9,7 +8,7 @@ import type { ConditionFn } from "#app/@types/common";
 import { Stat, getShortenedStatKey } from "#enums/stat";
 import { Challenges } from "#enums/challenges";
 import { globalScene } from "#app/global-scene";
-import { settings } from "./settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 import { AchvTier } from "#enums/achv-tier";
 import { ElementType } from "#enums/element-type";
 import { AchvCategory } from "#enums/achv-flag";
@@ -254,11 +253,8 @@ export const achvs = {
   TERASTALLIZE: new Achv("TERASTALLIZE", "tera_orb", 25),
   STELLAR_TERASTALLIZE: new Achv("STELLAR_TERASTALLIZE", "stellar_tera_shard", 25).setSecret(true),
   SPLICE: new Achv("SPLICE", "dna_splicers", 10),
-  MINI_BLACK_HOLE: new ModifierAchv(
-    "MINI_BLACK_HOLE",
-    "mini_black_hole",
-    25,
-    (modifier) => modifier instanceof TurnHeldItemTransferModifier,
+  MINI_BLACK_HOLE: new ModifierAchv("MINI_BLACK_HOLE", "mini_black_hole", 25, (modifier) =>
+    modifier.isTurnHeldItemTransferModifier(),
   ).setSecret(),
   CATCH_MYTHICAL: new Achv("CATCH_MYTHICAL", "strange_ball", 50).setSecret(),
   CATCH_SUB_LEGENDARY: new Achv("CATCH_SUB_LEGENDARY", "rb", 75).setSecret(),

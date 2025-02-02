@@ -264,6 +264,10 @@ export abstract class Modifier {
   isTempExtraModifierModifier(): this is TempExtraModifierModifier {
     return false;
   }
+
+  isTurnHeldItemTransferModifier(): this is TurnHeldItemTransferModifier {
+    return false;
+  }
 }
 
 export abstract class PersistentModifier extends Modifier {
@@ -3612,6 +3616,10 @@ export class TurnHeldItemTransferModifier extends HeldItemTransferModifier {
 
   setTransferrableFalse(): void {
     this.isTransferable = false;
+  }
+
+  override isTurnHeldItemTransferModifier(): this is this {
+    return true;
   }
 }
 
