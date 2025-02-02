@@ -153,7 +153,7 @@ import {
   ME_ANTI_VARIANCE_WEIGHT_MODIFIER,
   ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
   ME_BASE_SPAWN_WEIGHT,
-  ME_SPAWN_MAX_WEIGHT,
+  ME_MAX_SPAWN_WEIGHT,
 } from "./constants";
 import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
@@ -3453,7 +3453,7 @@ export default class BattleScene extends SceneBase {
       const currentRunDiffFromAvg = expectedEncountersByFloor - encounteredEvents.length;
       const favoredEncounterRate =
         sessionEncounterRate
-        + Math.min(currentRunDiffFromAvg * ME_ANTI_VARIANCE_WEIGHT_MODIFIER, ME_SPAWN_MAX_WEIGHT / 2);
+        + Math.min(currentRunDiffFromAvg * ME_ANTI_VARIANCE_WEIGHT_MODIFIER, ME_MAX_SPAWN_WEIGHT / 2);
 
       const successRate = isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE)
         ? favoredEncounterRate
@@ -3466,11 +3466,11 @@ export default class BattleScene extends SceneBase {
         || !isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE);
 
       if (canSpawn) {
-        let roll = ME_SPAWN_MAX_WEIGHT;
+        let roll = ME_MAX_SPAWN_WEIGHT;
         // Always rolls the check on the same offset to ensure no RNG changes from reloading session
         this.executeWithSeedOffset(
           () => {
-            roll = randSeedInt(ME_SPAWN_MAX_WEIGHT);
+            roll = randSeedInt(ME_MAX_SPAWN_WEIGHT);
           },
           waveIndex * 3 * 1000,
         );
