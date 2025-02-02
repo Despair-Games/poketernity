@@ -9,7 +9,7 @@ import { getGameMode } from "#app/game-mode";
 import { GameModes } from "#enums/game-modes";
 import type { StarterMoveset } from "#app/@types/StarterData";
 import type { Starter } from "#app/ui/starter-select-ui-handler";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type { Species } from "#enums/species";
 
 /** Function to convert Blob to string */
@@ -53,7 +53,7 @@ export function generateStarter(scene: BattleScene, species?: Species[]): Starte
       undefined,
       starter.nature,
     );
-    const moveset: Moves[] = [];
+    const moveset: MoveId[] = [];
     starterPokemon.moveset.forEach((move) => {
       moveset.push(move!.getMove().id);
     });
@@ -98,11 +98,11 @@ export function waitUntil(truth): Promise<unknown> {
 }
 
 /** Get the index of `move` from the moveset of the pokemon on the player's field at location `pokemonIndex` */
-export function getMovePosition(scene: BattleScene, pokemonIndex: 0 | 1, move: Moves): number {
+export function getMovePosition(scene: BattleScene, pokemonIndex: 0 | 1, moveId: MoveId): number {
   const playerPokemon = scene.getPlayerField()[pokemonIndex];
   const moveSet = playerPokemon.getMoveset();
-  const index = moveSet.findIndex((m) => m.moveId === move && m.ppUsed < m.getMovePp());
-  console.log(`Move position for ${Moves[move]} (=${move}):`, index);
+  const index = moveSet.findIndex((m) => m.moveId === moveId && m.ppUsed < m.getMovePp());
+  console.log(`Move position for ${MoveId[moveId]} (=${moveId}):`, index);
   return index;
 }
 

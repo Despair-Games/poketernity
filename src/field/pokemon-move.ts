@@ -2,7 +2,7 @@ import { allMoves } from "#app/data/all-moves";
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { toDmgValue } from "#app/utils";
-import type { Moves } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 
 /**
  * Wrapper class for the {@linkcode Move} class for Pokemon to interact with.
@@ -19,7 +19,7 @@ import type { Moves } from "#enums/moves";
  **/
 
 export class PokemonMove {
-  public moveId: Moves;
+  public moveId: MoveId;
   public ppUsed: number;
   public ppUp: number;
   public virtual: boolean;
@@ -30,7 +30,7 @@ export class PokemonMove {
    */
   public maxPpOverride?: number;
 
-  constructor(moveId: Moves, ppUsed: number = 0, ppUp: number = 0, virtual: boolean = false, maxPpOverride?: number) {
+  constructor(moveId: MoveId, ppUsed: number = 0, ppUp: number = 0, virtual: boolean = false, maxPpOverride?: number) {
     this.moveId = moveId;
     this.ppUsed = ppUsed;
     this.ppUp = ppUp;

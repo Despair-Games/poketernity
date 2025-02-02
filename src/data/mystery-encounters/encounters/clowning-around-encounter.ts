@@ -38,7 +38,7 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import { Ability } from "#app/data/ability";
 import { BerryType } from "#enums/berry-type";
 import { BattlerIndex } from "#enums/battler-index";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { EncounterBattleAnim } from "#app/data/battle-anims";
 import { MoveCategory } from "#enums/move-category";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
@@ -146,21 +146,21 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
         {
           species: getPokemonSpecies(Species.MR_MIME),
           isBoss: true,
-          moveSet: [Moves.TEETER_DANCE, Moves.ALLY_SWITCH, Moves.DAZZLING_GLEAM, Moves.PSYCHIC],
+          moveSet: [MoveId.TEETER_DANCE, MoveId.ALLY_SWITCH, MoveId.DAZZLING_GLEAM, MoveId.PSYCHIC],
         },
         {
           // Blacephalon has the random ability from pool, and 2 entirely random types to fit with the theme of the encounter
           species: getPokemonSpecies(Species.BLACEPHALON),
           customPokemonData: new CustomPokemonData({ ability: ability, types: [randSeedInt(18), randSeedInt(18)] }),
           isBoss: true,
-          moveSet: [Moves.TRICK, Moves.HYPNOSIS, Moves.SHADOW_BALL, Moves.MIND_BLOWN],
+          moveSet: [MoveId.TRICK, MoveId.HYPNOSIS, MoveId.SHADOW_BALL, MoveId.MIND_BLOWN],
         },
       ],
       doubleBattle: true,
     });
 
     // Load animations/sfx for start of fight moves
-    loadCustomMovesForEncounter([Moves.ROLE_PLAY, Moves.TAUNT]);
+    loadCustomMovesForEncounter([MoveId.ROLE_PLAY, MoveId.TAUNT]);
 
     encounter.setDialogueToken("blacephalonName", getPokemonSpecies(Species.BLACEPHALON).getName());
 
@@ -195,19 +195,19 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
             // Mr. Mime copies the Blacephalon's random ability
             sourceBattlerIndex: BattlerIndex.ENEMY,
             targets: [BattlerIndex.ENEMY_2],
-            move: new PokemonMove(Moves.ROLE_PLAY),
+            move: new PokemonMove(MoveId.ROLE_PLAY),
             ignorePp: true,
           },
           {
             sourceBattlerIndex: BattlerIndex.ENEMY_2,
             targets: [BattlerIndex.PLAYER],
-            move: new PokemonMove(Moves.TAUNT),
+            move: new PokemonMove(MoveId.TAUNT),
             ignorePp: true,
           },
           {
             sourceBattlerIndex: BattlerIndex.ENEMY_2,
             targets: [BattlerIndex.PLAYER_2],
-            move: new PokemonMove(Moves.TAUNT),
+            move: new PokemonMove(MoveId.TAUNT),
             ignorePp: true,
           },
         );

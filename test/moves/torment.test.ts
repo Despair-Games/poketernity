@@ -1,4 +1,4 @@
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Abilities } from "#enums/abilities";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -26,10 +26,10 @@ describe("Moves - Torment", () => {
     game.override
       .battleType("single")
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset([Moves.TORMENT, Moves.SPLASH])
+      .enemyMoveset([MoveId.TORMENT, MoveId.SPLASH])
       .enemySpecies(Species.SHUCKLE)
       .enemyLevel(30)
-      .moveset([Moves.TACKLE])
+      .moveset([MoveId.TACKLE])
       .ability(Abilities.BALL_FETCH);
   });
 
@@ -39,26 +39,26 @@ describe("Moves - Torment", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
     // First turn, Player Pokemon uses Tackle successfully
-    game.move.select(Moves.TACKLE);
-    await game.forceEnemyMove(Moves.TORMENT);
+    game.move.select(MoveId.TACKLE);
+    await game.forceEnemyMove(MoveId.TORMENT);
     await game.toNextTurn();
     const move1 = playerPokemon.getLastXMoves(1)[0]!;
-    expect(move1.move).toBe(Moves.TACKLE);
+    expect(move1.moveId).toBe(MoveId.TACKLE);
     expect(move1.result).toBe(MoveResult.SUCCESS);
     expect(playerPokemon?.getTag(BattlerTagType.TORMENT)).toBeDefined();
 
     // Second turn, Torment forces Struggle to occur
-    game.move.select(Moves.TACKLE);
-    await game.forceEnemyMove(Moves.SPLASH);
+    game.move.select(MoveId.TACKLE);
+    await game.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
     const move2 = playerPokemon.getLastXMoves(1)[0]!;
-    expect(move2.move).toBe(Moves.STRUGGLE);
+    expect(move2.moveId).toBe(MoveId.STRUGGLE);
 
     // Third turn, Tackle can be used.
-    game.move.select(Moves.TACKLE);
-    await game.forceEnemyMove(Moves.SPLASH);
+    game.move.select(MoveId.TACKLE);
+    await game.forceEnemyMove(MoveId.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase);
     const move3 = playerPokemon.getLastXMoves(1)[0]!;
-    expect(move3.move).toBe(Moves.TACKLE);
+    expect(move3.moveId).toBe(MoveId.TACKLE);
   });
 });

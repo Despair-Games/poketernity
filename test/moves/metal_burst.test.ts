@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveResult } from "#enums/move-result";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -24,14 +24,14 @@ describe("Moves - Metal Burst", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.METAL_BURST, Moves.FISSURE, Moves.PRECIPICE_BLADES])
+      .moveset([MoveId.METAL_BURST, MoveId.FISSURE, MoveId.PRECIPICE_BLADES])
       .ability(Abilities.PURE_POWER)
       .startingLevel(10)
       .battleType("double")
       .disableCrits()
       .enemySpecies(Species.PICHU)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.TACKLE);
+      .enemyMoveset(MoveId.TACKLE);
   });
 
   it("should redirect target if intended target faints", async () => {
@@ -39,11 +39,11 @@ describe("Moves - Metal Burst", () => {
 
     const [, enemy2] = game.scene.getEnemyField();
 
-    game.move.select(Moves.METAL_BURST);
-    game.move.select(Moves.FISSURE, 1, BattlerIndex.ENEMY);
+    game.move.select(MoveId.METAL_BURST);
+    game.move.select(MoveId.FISSURE, 1, BattlerIndex.ENEMY);
 
-    await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER_2);
+    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
+    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER_2);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
 
@@ -60,11 +60,11 @@ describe("Moves - Metal Burst", () => {
 
     const [enemy1, enemy2] = game.scene.getEnemyField();
 
-    game.move.select(Moves.METAL_BURST);
-    game.move.select(Moves.PRECIPICE_BLADES, 1);
+    game.move.select(MoveId.METAL_BURST);
+    game.move.select(MoveId.PRECIPICE_BLADES, 1);
 
-    await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER_2);
+    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
+    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER_2);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
 

@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/all-moves";
 import { ElementType } from "#enums/element-type";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -29,10 +29,10 @@ describe("Abilities - Galvanize", () => {
       .battleType("single")
       .startingLevel(100)
       .ability(Abilities.GALVANIZE)
-      .moveset([Moves.TACKLE, Moves.REVELATION_DANCE, Moves.FURY_SWIPES])
+      .moveset([MoveId.TACKLE, MoveId.REVELATION_DANCE, MoveId.FURY_SWIPES])
       .enemySpecies(Species.DUSCLOPS)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .enemyLevel(100);
   });
 
@@ -45,10 +45,10 @@ describe("Abilities - Galvanize", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
 
-    const move = allMoves[Moves.TACKLE];
+    const move = allMoves[MoveId.TACKLE];
     vi.spyOn(move, "calculateBattlePower");
 
-    game.move.select(Moves.TACKLE);
+    game.move.select(MoveId.TACKLE);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -71,7 +71,7 @@ describe("Abilities - Galvanize", () => {
 
     enemyPokemon.hp = Math.floor(enemyPokemon.getMaxHp() * 0.8);
 
-    game.move.select(Moves.TACKLE);
+    game.move.select(MoveId.TACKLE);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -91,7 +91,7 @@ describe("Abilities - Galvanize", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
 
-    game.move.select(Moves.REVELATION_DANCE);
+    game.move.select(MoveId.REVELATION_DANCE);
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(playerPokemon.getMoveType).not.toHaveLastReturnedWith(ElementType.ELECTRIC);
@@ -108,7 +108,7 @@ describe("Abilities - Galvanize", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
 
-    game.move.select(Moves.FURY_SWIPES);
+    game.move.select(MoveId.FURY_SWIPES);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
 

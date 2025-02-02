@@ -2,7 +2,7 @@ import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveResult } from "#enums/move-result";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -25,20 +25,20 @@ describe("Moves - Future Sight", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.FUTURE_SIGHT, Moves.SPLASH, Moves.DOOM_DESIRE])
+      .moveset([MoveId.FUTURE_SIGHT, MoveId.SPLASH, MoveId.DOOM_DESIRE])
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
   });
 
   const passTurns = async (numTurns: number, double: boolean = false) => {
     for (let i = 0; i < numTurns; i++) {
-      game.move.select(Moves.SPLASH, 0);
+      game.move.select(MoveId.SPLASH, 0);
       if (double) {
-        game.move.select(Moves.SPLASH, 1);
+        game.move.select(MoveId.SPLASH, 1);
         await game.phaseInterceptor.to("TurnEndPhase");
       }
       await game.toNextTurn();
@@ -50,7 +50,7 @@ describe("Moves - Future Sight", () => {
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.FUTURE_SIGHT);
+    game.move.select(MoveId.FUTURE_SIGHT);
     await game.toNextTurn();
 
     expect(enemy.isFullHp()).toBeTruthy();
@@ -64,7 +64,7 @@ describe("Moves - Future Sight", () => {
   it("should not be cancelled after the user switches out", async () => {
     await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
 
-    game.move.select(Moves.FUTURE_SIGHT);
+    game.move.select(MoveId.FUTURE_SIGHT);
     await game.toNextTurn();
 
     game.doSwitchPokemon(1);
@@ -80,7 +80,7 @@ describe("Moves - Future Sight", () => {
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
-    game.move.select(Moves.FUTURE_SIGHT);
+    game.move.select(MoveId.FUTURE_SIGHT);
     await game.toNextTurn();
 
     expect(game.scene.arena.getTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
@@ -96,7 +96,7 @@ describe("Moves - Future Sight", () => {
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
-    game.move.select(Moves.FUTURE_SIGHT);
+    game.move.select(MoveId.FUTURE_SIGHT);
     await game.toNextTurn();
 
     expect(game.scene.arena.getTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
@@ -112,7 +112,7 @@ describe("Moves - Future Sight", () => {
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.select(Moves.FUTURE_SIGHT);
+    game.move.select(MoveId.FUTURE_SIGHT);
     await game.toNextTurn();
 
     expect(game.scene.arena.getTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
@@ -131,8 +131,8 @@ describe("Moves - Future Sight", () => {
 
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.FUTURE_SIGHT, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.FUTURE_SIGHT, 1, BattlerIndex.ENEMY_2);
+    game.move.select(MoveId.FUTURE_SIGHT, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.FUTURE_SIGHT, 1, BattlerIndex.ENEMY_2);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(game.scene.arena.getTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
@@ -150,8 +150,8 @@ describe("Moves - Future Sight", () => {
 
     const playerPokemon = game.scene.getPlayerField();
 
-    game.move.select(Moves.FUTURE_SIGHT, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.FUTURE_SIGHT, 1, BattlerIndex.ENEMY);
+    game.move.select(MoveId.FUTURE_SIGHT, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.FUTURE_SIGHT, 1, BattlerIndex.ENEMY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -166,8 +166,8 @@ describe("Moves - Future Sight", () => {
 
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.DOOM_DESIRE, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.FUTURE_SIGHT, 1, BattlerIndex.ENEMY_2);
+    game.move.select(MoveId.DOOM_DESIRE, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.FUTURE_SIGHT, 1, BattlerIndex.ENEMY_2);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     enemyPokemon.forEach((p) => expect(p.isFullHp()).toBeTruthy());
@@ -179,22 +179,22 @@ describe("Moves - Future Sight", () => {
   });
 
   it("should redirect damage if no Pokemon is active in the original targeted index", async () => {
-    game.override.battleType("double").enemyLevel(1).moveset([Moves.FUTURE_SIGHT, Moves.SPLASH, Moves.HEADBUTT]);
+    game.override.battleType("double").enemyLevel(1).moveset([MoveId.FUTURE_SIGHT, MoveId.SPLASH, MoveId.HEADBUTT]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.FUTURE_SIGHT, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.FUTURE_SIGHT, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.SPLASH, 1);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(game.scene.arena.getTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
 
     await passTurns(1, true);
 
-    game.move.select(Moves.HEADBUTT, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.HEADBUTT, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.SPLASH, 1);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(enemyPokemon[0].isFainted()).toBeTruthy();
@@ -205,21 +205,21 @@ describe("Moves - Future Sight", () => {
   });
 
   it("doesn't crash if the user leaves the field and the hit triggers Destiny Bond", async () => {
-    game.override.enemyMoveset([Moves.DESTINY_BOND, Moves.SPLASH]).enemyAbility(Abilities.BALL_FETCH).enemyLevel(1);
+    game.override.enemyMoveset([MoveId.DESTINY_BOND, MoveId.SPLASH]).enemyAbility(Abilities.BALL_FETCH).enemyLevel(1);
     await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
 
     const [feebas, milotic] = game.scene.getPlayerParty();
 
-    game.move.select(Moves.FUTURE_SIGHT);
-    await game.forceEnemyMove(Moves.SPLASH);
+    game.move.select(MoveId.FUTURE_SIGHT);
+    await game.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
     game.doSwitchPokemon(1);
-    await game.forceEnemyMove(Moves.SPLASH);
+    await game.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
-    game.move.select(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.DESTINY_BOND);
+    game.move.select(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.DESTINY_BOND);
     await game.phaseInterceptor.to("SelectModifierPhase", false);
 
     expect(game.scene.getPlayerPokemon()!.species.speciesId).toBe(Species.MILOTIC);
@@ -233,13 +233,13 @@ describe("Moves - Future Sight", () => {
 
     const [feebas, milotic] = game.scene.getPlayerParty();
 
-    game.move.select(Moves.FUTURE_SIGHT);
+    game.move.select(MoveId.FUTURE_SIGHT);
     await game.toNextTurn();
 
     game.doSwitchPokemon(1);
     await game.toNextTurn();
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("SelectModifierPhase", false);
 
     expect(game.scene.getPlayerPokemon()!.species.speciesId).toBe(Species.MILOTIC);

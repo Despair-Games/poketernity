@@ -2,7 +2,7 @@ import { allMoves } from "#app/data/all-moves";
 import { Abilities } from "#enums/abilities";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveResult } from "#enums/move-result";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -30,18 +30,18 @@ describe("Abilities - Soundproof", () => {
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should not provide immunity to the ability holder's own sound moves", async () => {
-    game.override.moveset(Moves.CLANGOROUS_SOUL);
+    game.override.moveset(MoveId.CLANGOROUS_SOUL);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.CLANGOROUS_SOUL);
+    game.move.select(MoveId.CLANGOROUS_SOUL);
     await game.phaseInterceptor.to("BerryPhase");
 
-    const soundMove = allMoves[Moves.CLANGOROUS_SOUL];
+    const soundMove = allMoves[MoveId.CLANGOROUS_SOUL];
     const lastMove = playerPokemon.getLastXMoves()[0];
 
     expect(lastMove.result).toBe(MoveResult.SUCCESS);

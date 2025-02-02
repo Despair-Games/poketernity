@@ -27,7 +27,7 @@ export const crashDamageFunc = (user: Pokemon, _move: Move) => {
 };
 
 export const frenzyMissFunc: UserMoveConditionFunc = (user: Pokemon, move: Move) => {
-  while (user.getMoveQueue().length && user.getMoveQueue()[0].move === move.id) {
+  while (user.getMoveQueue().length && user.getMoveQueue()[0].moveId === move.id) {
     user.getMoveQueue().shift();
   }
   user.removeTag(BattlerTagType.FRENZY); // FRENZY tag should be disrupted on miss/no effect

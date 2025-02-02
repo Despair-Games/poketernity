@@ -12,7 +12,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveTarget } from "#enums/move-target";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { ElementType } from "#enums/element-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
@@ -49,7 +49,7 @@ import { allMoves } from "#app/data/all-moves";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
 
 export abstract class Move implements Localizable {
-  public id: Moves;
+  public id: MoveId;
   public name: string;
   private _type: ElementType;
   private _category: MoveCategory;
@@ -69,7 +69,7 @@ export abstract class Move implements Localizable {
   private nameAppend: string = "";
 
   constructor(
-    id: Moves,
+    id: MoveId,
     type: ElementType,
     category: MoveCategory,
     defaultMoveTarget: MoveTarget,
@@ -109,7 +109,7 @@ export abstract class Move implements Localizable {
   }
 
   localize(): void {
-    const i18nKey = Moves[this.id]
+    const i18nKey = MoveId[this.id]
       .split("_")
       .filter((f) => f)
       .map((f, i) => (i ? `${f[0]}${f.slice(1).toLowerCase()}` : f.toLowerCase()))
@@ -390,7 +390,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.IGNORE_PROTECT} flag for the calling Move
-   * @see {@linkcode Moves.CURSE}
+   * @see {@linkcode MoveId.CURSE}
    * @returns The {@linkcode Move} that called this function
    */
   ignoresProtect(): this {
@@ -400,7 +400,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.IGNORE_VIRTUAL} flag for the calling Move
-   * @see {@linkcode Moves.NATURE_POWER}
+   * @see {@linkcode MoveId.NATURE_POWER}
    * @returns The {@linkcode Move} that called this function
    */
   ignoresVirtual(): this {
@@ -410,7 +410,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.SOUND_MOVE} flag for the calling Move
-   * @see {@linkcode Moves.UPROAR}
+   * @see {@linkcode MoveId.UPROAR}
    * @returns The {@linkcode Move} that called this function
    */
   soundMove(): this {
@@ -420,7 +420,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.HIDE_USER} flag for the calling Move
-   * @see {@linkcode Moves.TELEPORT}
+   * @see {@linkcode MoveId.TELEPORT}
    * @returns The {@linkcode Move} that called this function
    */
   hidesUser(): this {
@@ -430,7 +430,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.HIDE_TARGET} flag for the calling Move
-   * @see {@linkcode Moves.WHIRLWIND}
+   * @see {@linkcode MoveId.WHIRLWIND}
    * @returns The {@linkcode Move} that called this function
    */
   hidesTarget(): this {
@@ -440,7 +440,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.BITING_MOVE} flag for the calling Move
-   * @see {@linkcode Moves.BITE}
+   * @see {@linkcode MoveId.BITE}
    * @returns The {@linkcode Move} that called this function
    */
   bitingMove(): this {
@@ -450,7 +450,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.PULSE_MOVE} flag for the calling Move
-   * @see {@linkcode Moves.WATER_PULSE}
+   * @see {@linkcode MoveId.WATER_PULSE}
    * @returns The {@linkcode Move} that called this function
    */
   pulseMove(): this {
@@ -460,7 +460,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.PUNCHING_MOVE} flag for the calling Move
-   * @see {@linkcode Moves.DRAIN_PUNCH}
+   * @see {@linkcode MoveId.DRAIN_PUNCH}
    * @returns The {@linkcode Move} that called this function
    */
   punchingMove(): this {
@@ -470,7 +470,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.SLICING_MOVE} flag for the calling Move
-   * @see {@linkcode Moves.X_SCISSOR}
+   * @see {@linkcode MoveId.X_SCISSOR}
    * @returns The {@linkcode Move} that called this function
    */
   slicingMove(): this {
@@ -490,7 +490,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.BULLET_MOVE} flag for the calling Move
-   * @see {@linkcode Moves.ELECTRO_BALL}
+   * @see {@linkcode MoveId.ELECTRO_BALL}
    * @returns The {@linkcode Move} that called this function
    */
   bulletMove(): this {
@@ -500,7 +500,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.POWDER_MOVE} flag for the calling Move
-   * @see {@linkcode Moves.STUN_SPORE}
+   * @see {@linkcode MoveId.STUN_SPORE}
    * @returns The {@linkcode Move} that called this function
    */
   powderMove(): this {
@@ -510,7 +510,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.DANCE_MOVE} flag for the calling Move
-   * @see {@linkcode Moves.PETAL_DANCE}
+   * @see {@linkcode MoveId.PETAL_DANCE}
    * @returns The {@linkcode Move} that called this function
    */
   danceMove(): this {
@@ -520,7 +520,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.WIND_MOVE} flag for the calling Move
-   * @see {@linkcode Moves.HURRICANE}
+   * @see {@linkcode MoveId.HURRICANE}
    * @returns The {@linkcode Move} that called this function
    */
   windMove(): this {
@@ -530,7 +530,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.TRIAGE_MOVE} flag for the calling Move
-   * @see {@linkcode Moves.ABSORB}
+   * @see {@linkcode MoveId.ABSORB}
    * @returns The {@linkcode Move} that called this function
    */
   triageMove(): this {
@@ -540,7 +540,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.IGNORE_ABILITIES} flag for the calling Move
-   * @see {@linkcode Moves.SUNSTEEL_STRIKE}
+   * @see {@linkcode MoveId.SUNSTEEL_STRIKE}
    * @returns The {@linkcode Move} that called this function
    */
   ignoresAbilities(): this {
@@ -550,7 +550,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.CHECK_ALL_HITS} flag for the calling Move
-   * @see {@linkcode Moves.TRIPLE_AXEL}
+   * @see {@linkcode MoveId.TRIPLE_AXEL}
    * @returns The {@linkcode Move} that called this function
    */
   checkAllHits(): this {
@@ -560,7 +560,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.IGNORE_SUBSTITUTE} flag for the calling Move
-   * @see {@linkcode Moves.WHIRLWIND}
+   * @see {@linkcode MoveId.WHIRLWIND}
    * @returns The {@linkcode Move} that called this function
    */
   ignoresSubstitute(): this {
@@ -570,7 +570,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.REDIRECT_COUNTER} flag for the calling Move
-   * @see {@linkcode Moves.METAL_BURST}
+   * @see {@linkcode MoveId.METAL_BURST}
    * @returns The {@linkcode Move} that called this function
    */
   redirectCounter(): this {
@@ -848,7 +848,7 @@ export abstract class Move implements Localizable {
     const exceptAttrs: AbstractConstructor<MoveAttr>[] = [MultiHitAttr, SacrificialAttr];
 
     // ...and cannot enhance these specific moves.
-    const exceptMoves: Moves[] = [Moves.FLING, Moves.UPROAR, Moves.ROLLOUT, Moves.ICE_BALL, Moves.ENDEAVOR];
+    const exceptMoves: MoveId[] = [MoveId.FLING, MoveId.UPROAR, MoveId.ROLLOUT, MoveId.ICE_BALL, MoveId.ENDEAVOR];
 
     return (
       !isMultiTarget
@@ -870,7 +870,7 @@ export abstract class Move implements Localizable {
 
 export class AttackMove extends Move {
   constructor(
-    id: Moves,
+    id: MoveId,
     type: ElementType,
     category: MoveCategory,
     power: number,
@@ -935,7 +935,7 @@ export class AttackMove extends Move {
 
 export class StatusMove extends Move {
   constructor(
-    id: Moves,
+    id: MoveId,
     type: ElementType,
     accuracy: number,
     pp: number,
@@ -949,7 +949,7 @@ export class StatusMove extends Move {
 
 export class SelfStatusMove extends StatusMove {
   constructor(
-    id: Moves,
+    id: MoveId,
     type: ElementType,
     accuracy: number,
     pp: number,
@@ -967,7 +967,7 @@ type SubMove = new (...args: any[]) => Move;
 function ChargeMove<TBase extends SubMove>(Base: TBase) {
   return class extends Base {
     /** The animation to play during the move's charging phase */
-    public readonly chargeAnim: ChargeAnim = ChargeAnim[`${Moves[this.id]}_CHARGING`];
+    public readonly chargeAnim: ChargeAnim = ChargeAnim[`${MoveId[this.id]}_CHARGING`];
     /** The message to show during the move's charging phase */
     private _chargeText: string;
 
@@ -1105,15 +1105,15 @@ export type MoveTargetSet = {
   multiple: boolean;
 };
 
-export function getMoveTargets(user: Pokemon, move: Moves): MoveTargetSet {
+export function getMoveTargets(user: Pokemon, moveId: MoveId): MoveTargetSet {
   const variableTarget = new NumberHolder(0);
-  user.getOpponents().forEach((p) => applyMoveAttrs(VariableTargetAttr, user, p, allMoves[move], variableTarget));
+  user.getOpponents().forEach((p) => applyMoveAttrs(VariableTargetAttr, user, p, allMoves[moveId], variableTarget));
 
-  const moveTarget = allMoves[move].hasAttr(VariableTargetAttr)
+  const moveTarget = allMoves[moveId].hasAttr(VariableTargetAttr)
     ? variableTarget.value
-    : move
-      ? allMoves[move].moveTarget
-      : move === undefined
+    : moveId
+      ? allMoves[moveId].moveTarget
+      : moveId === undefined
         ? MoveTarget.NEAR_ENEMY
         : [];
   const opponents = user.getOpponents();

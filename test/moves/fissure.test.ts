@@ -1,6 +1,6 @@
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -31,10 +31,10 @@ describe("Moves - Fissure", () => {
       .disableCrits()
       .starterSpecies(Species.SNORLAX)
       .ability(Abilities.BALL_FETCH)
-      .moveset([Moves.FISSURE])
+      .moveset([MoveId.FISSURE])
       .startingLevel(100)
       .enemySpecies(Species.SNORLAX)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyLevel(100);
 
@@ -48,7 +48,7 @@ describe("Moves - Fissure", () => {
     game.override.ability(Abilities.NO_GUARD);
     game.override.enemyAbility(Abilities.FUR_COAT);
 
-    game.move.select(Moves.FISSURE);
+    game.move.select(MoveId.FISSURE);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(enemyPokemon.isFainted()).toBe(true);
@@ -59,7 +59,7 @@ describe("Moves - Fissure", () => {
 
     partyPokemon.setStatStage(Stat.ACC, -6);
 
-    game.move.select(Moves.FISSURE);
+    game.move.select(MoveId.FISSURE);
 
     // wait for TurnEndPhase instead of DamagePhase as fissure might not actually inflict damage
     await game.phaseInterceptor.to("TurnEndPhase");
@@ -72,7 +72,7 @@ describe("Moves - Fissure", () => {
 
     enemyPokemon.setStatStage(Stat.EVA, 6);
 
-    game.move.select(Moves.FISSURE);
+    game.move.select(MoveId.FISSURE);
 
     // wait for TurnEndPhase instead of DamagePhase as fissure might not actually inflict damage
     await game.phaseInterceptor.to("TurnEndPhase");
