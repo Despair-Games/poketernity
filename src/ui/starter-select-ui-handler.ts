@@ -80,14 +80,12 @@ import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { settings } from "#app/system/settings/settings-manager";
 import { DropDownState } from "#enums/drop-down-state";
 import { DropDownColumn } from "#enums/drop-down-column";
 import { DropDownType } from "#enums/drop-down-type";
 import { SortCriteria } from "#enums/sort-criteria";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
-import { UiTheme } from "#enums/ui-theme";
 
 export type StarterSelectCallback = (starters: Starter[]) => void;
 
@@ -565,10 +563,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
     // Offset the generation filter dropdown to avoid covering the filtered pokemon
     this.filterBar.offsetHybridFilters();
-
-    if (settings.display.uiTheme === UiTheme.LEGACY) {
-      starterContainerWindow.setVisible(false);
-    }
 
     this.iconAnimHandler = new PokemonIconAnimHandler();
     this.iconAnimHandler.setup();

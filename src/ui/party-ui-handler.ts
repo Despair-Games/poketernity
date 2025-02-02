@@ -1247,7 +1247,6 @@ class PartySlot extends Phaser.GameObjects.Container {
   private pokemon: PlayerPokemon;
 
   private slotBg: Phaser.GameObjects.Image;
-  private slotPb: Phaser.GameObjects.Sprite;
   public slotName: Phaser.GameObjects.Text;
   public slotHpBar: Phaser.GameObjects.Image;
   public slotHpOverlay: Phaser.GameObjects.Sprite;
@@ -1295,16 +1294,10 @@ class PartySlot extends Phaser.GameObjects.Container {
 
     this.add(slotBg);
 
-    const slotPb = globalScene.add.sprite(
-      this.slotIndex >= battlerCount ? -85.5 : -51,
-      this.slotIndex >= battlerCount ? 0 : -20.5,
-      "party_pb",
-    );
-    this.slotPb = slotPb;
-
-    this.add(slotPb);
-
-    this.pokemonIcon = globalScene.addPokemonIcon(this.pokemon, slotPb.x, slotPb.y, 0.5, 0.5, true);
+    // TODO: positions/sizes should not use decimal values
+    const iconX = this.slotIndex >= battlerCount ? -85.5 : -51;
+    const iconY = this.slotIndex >= battlerCount ? 0 : -20.5;
+    this.pokemonIcon = globalScene.addPokemonIcon(this.pokemon, iconX, iconY, 0.5, 0.5, true);
 
     this.add(this.pokemonIcon);
 
@@ -1479,7 +1472,6 @@ class PartySlot extends Phaser.GameObjects.Container {
     this.iconAnimHandler.addOrUpdate(this.pokemonIcon, PokemonIconAnimMode.ACTIVE);
 
     this.updateSlotTexture();
-    this.slotPb.setFrame("party_pb_sel");
   }
 
   deselect(): void {
@@ -1491,7 +1483,6 @@ class PartySlot extends Phaser.GameObjects.Container {
     this.iconAnimHandler.addOrUpdate(this.pokemonIcon, PokemonIconAnimMode.PASSIVE);
 
     this.updateSlotTexture();
-    this.slotPb.setFrame("party_pb");
   }
 
   setTransfer(transfer: boolean): void {
@@ -1516,7 +1507,6 @@ class PartyCancelButton extends Phaser.GameObjects.Container {
   private selected: boolean;
 
   private partyCancelBg: Phaser.GameObjects.Sprite;
-  private partyCancelPb: Phaser.GameObjects.Sprite;
 
   constructor(x: number, y: number) {
     super(globalScene, x, y);
@@ -1530,11 +1520,6 @@ class PartyCancelButton extends Phaser.GameObjects.Container {
 
     this.partyCancelBg = partyCancelBg;
 
-    const partyCancelPb = globalScene.add.sprite(-17, 0, "party_pb");
-    this.add(partyCancelPb);
-
-    this.partyCancelPb = partyCancelPb;
-
     const partyCancelText = addTextObject(-8, -7, i18next.t("partyUiHandler:cancel"), TextStyle.PARTY);
     this.add(partyCancelText);
   }
@@ -1547,7 +1532,6 @@ class PartyCancelButton extends Phaser.GameObjects.Container {
     this.selected = true;
 
     this.partyCancelBg.setFrame("party_cancel_sel");
-    this.partyCancelPb.setFrame("party_pb_sel");
   }
 
   deselect() {
@@ -1558,6 +1542,5 @@ class PartyCancelButton extends Phaser.GameObjects.Container {
     this.selected = false;
 
     this.partyCancelBg.setFrame("party_cancel");
-    this.partyCancelPb.setFrame("party_pb");
   }
 }

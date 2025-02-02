@@ -31,7 +31,7 @@ export function addWindow(
     windowVariant = WindowVariant.NORMAL;
   }
 
-  const borderSize = settings.display.uiTheme === UiTheme.DEFAULT ? 8 : 6;
+  const borderSize = 6;
 
   const window = globalScene.add.nineslice(
     x,
