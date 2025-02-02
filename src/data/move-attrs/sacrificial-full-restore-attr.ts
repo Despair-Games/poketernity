@@ -4,7 +4,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import type { Move } from "#app/data/move";
 import { SacrificialAttr } from "#app/data/move-attrs/sacrificial-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
 /**
  * Attr used for moves that faint the user but revive a different Pokemon

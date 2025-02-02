@@ -11,7 +11,7 @@ import { type Move } from "#app/data/move";
 import { allMoves } from "#app/data/all-moves";
 import { getTypeDamageMultiplier } from "#app/data/type";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
 /**
  * Attribute used for Conversion 2, to convert the user's type to a random type that resists the target's last used move.

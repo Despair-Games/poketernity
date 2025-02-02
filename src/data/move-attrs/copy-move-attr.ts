@@ -3,7 +3,8 @@ import { globalScene } from "#app/global-scene";
 import { MovePhase } from "#app/phases/move-phase";
 import { type Move, getMoveTargets } from "#app/data/move";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
-import { lastMoveCopiableCondition, type MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { lastMoveCopiableCondition } from "../move-conditions/last-move-copiable-condition";
 
 /**
  * Attribute to copy the last move used in battle and invoke it against random target(s).

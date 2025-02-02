@@ -204,21 +204,19 @@ import { WeatherBallTypeAttr } from "#app/data/move-attrs/weather-ball-type-attr
 import { WeatherChangeAttr } from "#app/data/move-attrs/weather-change-attr";
 import { WeatherInstantChargeAttr } from "#app/data/move-attrs/weather-instant-charge-attr";
 import { WeightPowerAttr } from "#app/data/move-attrs/weight-power-attr";
-import {
-  failIfDampCondition,
-  failIfGhostTypeCondition,
-  failIfLastCondition,
-  failIfLastInPartyCondition,
-  failIfSingleBattle,
-  failOnBossCondition,
-  failOnMaxCondition,
-  FirstMoveCondition,
-  hasStockpileStacksCondition,
-  targetSleptOrComatoseCondition,
-  unknownTypeCondition,
-  UpperHandCondition,
-  userSleptOrComatoseCondition,
-} from "#app/data/move-conditions";
+import { failIfGhostTypeCondition } from "./move-conditions/fail-if-ghost-type-condition";
+import { failIfLastInPartyCondition } from "./move-conditions/fail-if-last-in-party-condition";
+import { failIfLastCondition } from "./move-conditions/fail-if-last-condition";
+import { targetSleptOrComatoseCondition } from "./move-conditions/target-slept-or-comatose-condition";
+import { userSleptOrComatoseCondition } from "./move-conditions/user-slept-or-comatose-condition";
+import { failIfDampCondition } from "./move-conditions/fail-if-damp-condition";
+import { failIfSingleBattle } from "./move-conditions/fail-if-single-battle-condition";
+import { failOnMaxCondition } from "./move-conditions/fail-on-max-condition";
+import { failOnBossCondition } from "./move-conditions/fail-on-boss-condition";
+import { hasStockpileStacksCondition } from "./move-conditions/has-stockpile-stacks-condition";
+import { unknownTypeCondition } from "./move-conditions/unknown-type-condition";
+import { UpperHandCondition } from "./move-conditions/upper-hand-condition";
+import { FirstMoveCondition } from "./move-conditions/first-move-condition";
 import { failOnGravityCondition } from "#app/data/move-conditions/fail-on-gravity-condition";
 import { crashDamageFunc, frenzyMissFunc } from "#app/data/move-utils";
 import { getNonVolatileStatusEffects, isNonVolatileStatusEffect } from "#app/data/status-effect";

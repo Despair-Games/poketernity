@@ -7,7 +7,7 @@ import { allAbilities } from "../all-abilities";
 import type { Move } from "#app/data/move";
 import { SpeciesFormChangeRevertWeatherFormTrigger } from "#app/data/pokemon-forms";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**

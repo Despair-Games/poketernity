@@ -1,4 +1,4 @@
-import type { MoveConditionFunc } from "#app/data/move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { globalScene } from "#app/global-scene";
 import { ArenaTagType } from "#enums/arena-tag-type";
 

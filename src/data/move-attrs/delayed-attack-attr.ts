@@ -11,7 +11,7 @@ import { type ChargeAnim } from "#enums/charge-anim";
 import type { Move } from "#app/data/move";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
 import type { DelayedAttackTag } from "#app/data/arena-tag";
-import type { MoveConditionFunc } from "#app/data/move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
 /**
  * Attack Move that doesn't hit the turn it is played and doesn't allow for multiple uses on the same target.

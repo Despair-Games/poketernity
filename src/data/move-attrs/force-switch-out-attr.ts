@@ -14,7 +14,7 @@ import i18next from "i18next";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**

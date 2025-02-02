@@ -3,7 +3,7 @@ import { MoveResult } from "#enums/move-result";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Moves } from "#enums/moves";
 import { allMoves } from "#app/data/all-moves";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { AddBattlerTagAttr } from "./add-battler-tag-attr";
 
 /**

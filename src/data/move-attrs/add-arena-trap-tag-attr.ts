@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import type { ArenaTrapTag } from "../arena-tag";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { AddArenaTagAttr } from "./add-arena-tag-attr";
 
 /**

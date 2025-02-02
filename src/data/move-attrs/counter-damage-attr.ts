@@ -2,7 +2,7 @@ import type { Pokemon, AttackMoveResult } from "#app/field/pokemon";
 import { type NumberHolder, toDmgValue } from "#app/utils";
 import { type Move } from "#app/data/move";
 import { FixedDamageAttr } from "#app/data/move-attrs/fixed-damage-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import type { Moves } from "#enums/moves";
 
 type MoveFilter = (moveId: Moves) => boolean;

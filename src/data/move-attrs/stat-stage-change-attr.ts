@@ -4,7 +4,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { Move } from "#app/data/move";
-import type { MoveConditionFunc } from "#app/data/move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "./chance-based-move-effect-attr";
 
 /**

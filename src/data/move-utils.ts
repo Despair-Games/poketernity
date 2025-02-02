@@ -7,7 +7,7 @@ import i18next from "i18next";
 import { applyAbAttrs } from "./apply-ab-attrs";
 import type { Move } from "./move";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import type { UserMoveConditionFunc } from "./move-conditions";
+import type { UserMoveConditionFunc } from "../@types/UserMoveConditionFunc";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export const crashDamageFunc = (user: Pokemon, _move: Move) => {

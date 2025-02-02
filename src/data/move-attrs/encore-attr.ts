@@ -1,5 +1,5 @@
 import { AddBattlerTagAttr } from "#app/data/move-attrs/add-battler-tag-attr";
-import type { MoveConditionFunc } from "#app/data/move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Moves } from "#enums/moves";
 
