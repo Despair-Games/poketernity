@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { Abilities } from "#enums/abilities";
@@ -25,10 +25,10 @@ describe("Abilities - Gorilla Tactics", () => {
     game.override
       .battleType("single")
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset([Moves.SPLASH, Moves.DISABLE])
+      .enemyMoveset([MoveId.SPLASH, MoveId.DISABLE])
       .enemySpecies(Species.MAGIKARP)
       .enemyLevel(30)
-      .moveset([Moves.SPLASH, Moves.TACKLE, Moves.GROWL])
+      .moveset([MoveId.SPLASH, MoveId.TACKLE, MoveId.GROWL])
       .ability(Abilities.GORILLA_TACTICS);
   });
 
@@ -38,15 +38,15 @@ describe("Abilities - Gorilla Tactics", () => {
     const darmanitan = game.scene.getPlayerPokemon()!;
     const initialAtkStat = darmanitan.getStat(Stat.ATK);
 
-    game.move.select(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.SPLASH);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(darmanitan.getStat(Stat.ATK, false)).toBeCloseTo(initialAtkStat * 1.5);
     // Other moves should be restricted
-    expect(darmanitan.isMoveRestricted(Moves.TACKLE)).toBe(true);
-    expect(darmanitan.isMoveRestricted(Moves.SPLASH)).toBe(false);
+    expect(darmanitan.isMoveRestricted(MoveId.TACKLE)).toBe(true);
+    expect(darmanitan.isMoveRestricted(MoveId.SPLASH)).toBe(false);
   });
 
   it("should struggle if the only usable move is disabled", async () => {
@@ -56,14 +56,14 @@ describe("Abilities - Gorilla Tactics", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     // First turn, lock move to Growl
-    game.move.select(Moves.GROWL);
-    await game.forceEnemyMove(Moves.SPLASH);
+    game.move.select(MoveId.GROWL);
+    await game.forceEnemyMove(MoveId.SPLASH);
 
     // Second turn, Growl is interrupted by Disable
     await game.toNextTurn();
 
-    game.move.select(Moves.GROWL);
-    await game.forceEnemyMove(Moves.DISABLE);
+    game.move.select(MoveId.GROWL);
+    await game.forceEnemyMove(MoveId.DISABLE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("TurnEndPhase");
@@ -72,7 +72,7 @@ describe("Abilities - Gorilla Tactics", () => {
     // Third turn, Struggle is used
     await game.toNextTurn();
 
-    game.move.select(Moves.TACKLE);
+    game.move.select(MoveId.TACKLE);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");

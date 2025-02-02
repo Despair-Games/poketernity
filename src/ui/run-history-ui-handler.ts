@@ -15,6 +15,7 @@ import { PlayerGender } from "#enums/player-gender";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { settings } from "#app/system/settings/settings-manager";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 export type RunSelectCallback = (cursor: number) => void;
 
@@ -52,17 +53,11 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
     this.runSelectContainer.setVisible(false);
     ui.add(this.runSelectContainer);
 
-    const loadSessionBg = globalScene.add.rectangle(
-      0,
-      0,
-      globalScene.game.canvas.width / 6,
-      -globalScene.game.canvas.height / 6,
-      0x006860,
-    );
+    const loadSessionBg = globalScene.add.rectangle(0, 0, GAME_WIDTH, -GAME_HEIGHT, 0x006860);
     loadSessionBg.setOrigin(0, 0);
     this.runSelectContainer.add(loadSessionBg);
 
-    this.runContainerInitialY = -globalScene.game.canvas.height / 6 + 8;
+    this.runContainerInitialY = -GAME_HEIGHT + 8;
 
     this.runsContainer = globalScene.add.container(8, this.runContainerInitialY);
     this.runSelectContainer.add(this.runsContainer);

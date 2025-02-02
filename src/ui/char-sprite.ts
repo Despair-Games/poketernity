@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { MissingTextureKey } from "#app/utils";
+import { GAME_WIDTH } from "#app/ui-constants";
 
 export default class CharSprite extends Phaser.GameObjects.Container {
   private sprite: Phaser.GameObjects.Sprite;
@@ -10,7 +11,7 @@ export default class CharSprite extends Phaser.GameObjects.Container {
   public shown: boolean;
 
   constructor() {
-    super(globalScene, globalScene.game.canvas.width / 6 + 32, -42);
+    super(globalScene, GAME_WIDTH + 32, -42);
   }
 
   setup(): void {
@@ -49,7 +50,7 @@ export default class CharSprite extends Phaser.GameObjects.Container {
 
       globalScene.tweens.add({
         targets: this,
-        x: globalScene.game.canvas.width / 6 - 102,
+        x: GAME_WIDTH - 102,
         duration: 750,
         ease: "Cubic.easeOut",
         onComplete: () => {
@@ -95,7 +96,7 @@ export default class CharSprite extends Phaser.GameObjects.Container {
 
       globalScene.tweens.add({
         targets: this,
-        x: globalScene.game.canvas.width / 6 + 32,
+        x: GAME_WIDTH + 32,
         duration: 750,
         ease: "Cubic.easeIn",
         onComplete: () => {

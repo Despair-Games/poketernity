@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveResult } from "#enums/move-result";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -25,13 +25,13 @@ describe("Moves - Sky Drop", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SKY_DROP, Moves.TACKLE, Moves.SPLASH])
+      .moveset([MoveId.SKY_DROP, MoveId.TACKLE, MoveId.SPLASH])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
   });
@@ -42,13 +42,13 @@ describe("Moves - Sky Drop", () => {
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SKY_DROP);
+    game.move.select(MoveId.SKY_DROP);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("BerryPhase");
 
     [player, enemy].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());
     expect(player.getTag(BattlerTagType.CHARGING)).toBeDefined();
-    expect(player.getMoveQueue()[0].move).toBe(Moves.SKY_DROP);
+    expect(player.getMoveQueue()[0].moveId).toBe(MoveId.SKY_DROP);
     expect(enemy.turnData.acted).toBeFalsy();
 
     await game.toNextTurn();
@@ -71,13 +71,13 @@ describe("Moves - Sky Drop", () => {
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SKY_DROP);
+    game.move.select(MoveId.SKY_DROP);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("BerryPhase");
 
     [player, enemy].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());
     expect(player.getTag(BattlerTagType.CHARGING)).toBeDefined();
-    expect(player.getMoveQueue()[0].move).toBe(Moves.SKY_DROP);
+    expect(player.getMoveQueue()[0].moveId).toBe(MoveId.SKY_DROP);
     expect(enemy.turnData.acted).toBeFalsy();
 
     await game.toNextTurn();
@@ -94,18 +94,18 @@ describe("Moves - Sky Drop", () => {
   });
 
   it("should make both the user and target semi-invulnerable", async () => {
-    game.override.battleType("double").enemyMoveset([Moves.SPLASH, Moves.TACKLE]);
+    game.override.battleType("double").enemyMoveset([MoveId.SPLASH, MoveId.TACKLE]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.SKY_DROP, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.TACKLE, 1, BattlerIndex.ENEMY);
+    game.move.select(MoveId.SKY_DROP, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.TACKLE, 1, BattlerIndex.ENEMY);
 
-    await game.forceEnemyMove(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER);
+    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
@@ -116,18 +116,18 @@ describe("Moves - Sky Drop", () => {
   });
 
   it("No Guard should allow Pokemon to hit other Pokemon under Sky Drop's effect", async () => {
-    game.override.battleType("double").enemyAbility(Abilities.NO_GUARD).enemyMoveset([Moves.SPLASH, Moves.TACKLE]);
+    game.override.battleType("double").enemyAbility(Abilities.NO_GUARD).enemyMoveset([MoveId.SPLASH, MoveId.TACKLE]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.SKY_DROP, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.TACKLE, 1, BattlerIndex.ENEMY);
+    game.move.select(MoveId.SKY_DROP, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.TACKLE, 1, BattlerIndex.ENEMY);
 
-    await game.forceEnemyMove(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER);
+    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
@@ -138,18 +138,18 @@ describe("Moves - Sky Drop", () => {
   });
 
   it("Lock On should allow Pokemon to hit other Pokemon under Sky Drop's effect", async () => {
-    game.override.battleType("double").enemyMoveset([Moves.LOCK_ON, Moves.SPLASH, Moves.TACKLE]);
+    game.override.battleType("double").enemyMoveset([MoveId.LOCK_ON, MoveId.SPLASH, MoveId.TACKLE]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.SKY_DROP, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.SKY_DROP, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.SPLASH, 1);
 
-    await game.forceEnemyMove(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.LOCK_ON, BattlerIndex.PLAYER);
+    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.LOCK_ON, BattlerIndex.PLAYER);
 
     await game.setTurnOrder([BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2]);
 
@@ -161,10 +161,10 @@ describe("Moves - Sky Drop", () => {
     await game.toNextTurn();
 
     // the first player should be locked into Sky Drop.
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.SPLASH, 1);
 
-    await game.forceEnemyMove(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.TACKLE, BattlerIndex.PLAYER);
+    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
 
     await game.setTurnOrder([BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2]);
 
@@ -177,7 +177,7 @@ describe("Moves - Sky Drop", () => {
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.select(Moves.SKY_DROP);
+    game.move.select(MoveId.SKY_DROP);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("BerryPhase");
@@ -189,11 +189,11 @@ describe("Moves - Sky Drop", () => {
   });
 
   it("should do nothing against protected targets", async () => {
-    game.override.enemyMoveset(Moves.PROTECT);
+    game.override.enemyMoveset(MoveId.PROTECT);
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.select(Moves.SKY_DROP);
+    game.move.select(MoveId.SKY_DROP);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("BerryPhase");
@@ -211,8 +211,8 @@ describe("Moves - Sky Drop", () => {
 
     const [player1, player2] = game.scene.getPlayerField();
 
-    game.move.select(Moves.SKY_DROP, 0, BattlerIndex.PLAYER_2);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.SKY_DROP, 0, BattlerIndex.PLAYER_2);
+    game.move.select(MoveId.SPLASH, 1);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
@@ -231,7 +231,7 @@ describe("Moves - Sky Drop", () => {
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SKY_DROP);
+    game.move.select(MoveId.SKY_DROP);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -241,14 +241,14 @@ describe("Moves - Sky Drop", () => {
   });
 
   it("should fail when the target has an active substitute", async () => {
-    game.override.enemyMoveset(Moves.SUBSTITUTE);
+    game.override.enemyMoveset(MoveId.SUBSTITUTE);
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SKY_DROP);
+    game.move.select(MoveId.SKY_DROP);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase");
@@ -265,10 +265,10 @@ describe("Moves - Sky Drop", () => {
     const enemy1 = game.field.getEnemyPokemon();
     enemy1.hp = 1;
 
-    game.move.use(Moves.SKY_DROP, 0, BattlerIndex.ENEMY);
-    game.move.use(Moves.TOXIC, 1, BattlerIndex.ENEMY);
-    await game.move.forceEnemyMove(Moves.SPLASH);
-    await game.move.forceEnemyMove(Moves.SPLASH);
+    game.move.use(MoveId.SKY_DROP, 0, BattlerIndex.ENEMY);
+    game.move.use(MoveId.TOXIC, 1, BattlerIndex.ENEMY);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -285,8 +285,8 @@ describe("Moves - Sky Drop", () => {
     const enemyPokemon = game.field.getEnemyPokemon();
     enemyPokemon.hp = 1;
 
-    game.move.use(Moves.TOXIC);
-    await game.move.forceEnemyMove(Moves.SKY_DROP);
+    game.move.use(MoveId.TOXIC);
+    await game.move.forceEnemyMove(MoveId.SKY_DROP);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -296,15 +296,15 @@ describe("Moves - Sky Drop", () => {
   });
 
   it("should be cancelled when another Pokemon uses Gravity", async () => {
-    game.override.battleType("double").moveset([Moves.SKY_DROP, Moves.GRAVITY]);
+    game.override.battleType("double").moveset([MoveId.SKY_DROP, MoveId.GRAVITY]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
     const player1 = game.scene.getPlayerField()[0];
     const enemy1 = game.scene.getEnemyField()[0];
 
-    game.move.select(Moves.SKY_DROP, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.GRAVITY, 1);
+    game.move.select(MoveId.SKY_DROP, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.GRAVITY, 1);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
@@ -325,18 +325,18 @@ describe("Moves - Sky Drop", () => {
   });
 
   it("should bypass the effects of the 'Center of Attention' status", async () => {
-    game.override.battleType("double").enemyMoveset([Moves.FOLLOW_ME, Moves.SPLASH]);
+    game.override.battleType("double").enemyMoveset([MoveId.FOLLOW_ME, MoveId.SPLASH]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
     const player1 = game.scene.getPlayerField()[0];
     const enemy1 = game.scene.getEnemyField()[0];
 
-    game.move.select(Moves.SKY_DROP, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.SKY_DROP, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.SPLASH, 1);
 
-    await game.forceEnemyMove(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.FOLLOW_ME);
+    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.FOLLOW_ME);
 
     await game.setTurnOrder([BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2]);
 
@@ -350,9 +350,9 @@ describe("Moves - Sky Drop", () => {
   it("should be cancelled when the target jumps into an ally Dondozo with Commander", async () => {
     game.override
       .battleType("double")
-      .enemyMoveset([Moves.SKY_DROP, Moves.SPLASH])
+      .enemyMoveset([MoveId.SKY_DROP, MoveId.SPLASH])
       .ability(Abilities.COMMANDER)
-      .moveset([Moves.SPLASH, Moves.FLIP_TURN]);
+      .moveset([MoveId.SPLASH, MoveId.FLIP_TURN]);
 
     vi.spyOn(game.scene, "triggerPokemonBattleAnim").mockReturnValue(true);
 
@@ -361,11 +361,11 @@ describe("Moves - Sky Drop", () => {
     const tatsugiri = game.scene.getPlayerField()[1];
     const enemy1 = game.scene.getEnemyField()[0];
 
-    game.move.select(Moves.FLIP_TURN, 0, BattlerIndex.ENEMY_2);
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.FLIP_TURN, 0, BattlerIndex.ENEMY_2);
+    game.move.select(MoveId.SPLASH);
 
-    await game.forceEnemyMove(Moves.SKY_DROP, BattlerIndex.PLAYER_2);
-    await game.forceEnemyMove(Moves.SPLASH);
+    await game.forceEnemyMove(MoveId.SKY_DROP, BattlerIndex.PLAYER_2);
+    await game.forceEnemyMove(MoveId.SPLASH);
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
 
@@ -392,10 +392,10 @@ describe("Moves - Sky Drop", () => {
 
     await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
 
-    game.move.use(Moves.SPLASH, 0);
-    game.move.use(Moves.SPLASH, 1);
-    await game.move.forceEnemyMove(Moves.SKY_DROP, BattlerIndex.PLAYER);
-    await game.move.forceEnemyMove(Moves.SKY_DROP, BattlerIndex.PLAYER);
+    game.move.use(MoveId.SPLASH, 0);
+    game.move.use(MoveId.SPLASH, 1);
+    await game.move.forceEnemyMove(MoveId.SKY_DROP, BattlerIndex.PLAYER);
+    await game.move.forceEnemyMove(MoveId.SKY_DROP, BattlerIndex.PLAYER);
 
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -408,8 +408,8 @@ describe("Moves - Sky Drop", () => {
   it("should not allow the target to switch out or flee", async () => {
     await game.classicMode.startBattle([Species.GASTLY]);
 
-    game.move.use(Moves.SPLASH);
-    await game.move.forceEnemyMove(Moves.SKY_DROP);
+    game.move.use(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.SKY_DROP);
     await game.toNextTurn();
 
     for (const pokemon of game.scene.getField()) {
@@ -424,8 +424,8 @@ describe("Moves - Sky Drop", () => {
       pokemon.hp = 1;
     }
 
-    game.move.use(Moves.GRASSY_TERRAIN);
-    await game.move.forceEnemyMove(Moves.SKY_DROP);
+    game.move.use(MoveId.GRASSY_TERRAIN);
+    await game.move.forceEnemyMove(MoveId.SKY_DROP);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 

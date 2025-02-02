@@ -3,6 +3,7 @@ import UiHandler from "./ui-handler";
 import { Button } from "#enums/buttons";
 import { EggHatchPhase } from "#app/phases/egg-hatch-phase";
 import { globalScene } from "#app/global-scene";
+import { GAME_HEIGHT } from "#app/ui-constants";
 
 export default class EggHatchSceneHandler extends UiHandler {
   public eggHatchContainer: Phaser.GameObjects.Container;
@@ -20,7 +21,7 @@ export default class EggHatchSceneHandler extends UiHandler {
   }
 
   setup() {
-    this.eggHatchContainer = globalScene.add.container(0, -globalScene.game.canvas.height / 6);
+    this.eggHatchContainer = globalScene.add.container(0, -GAME_HEIGHT);
     globalScene.fieldUI.add(this.eggHatchContainer);
 
     const eggLightraysAnimFrames = globalScene.anims.generateFrameNames("egg_lightrays", { start: 0, end: 3 });

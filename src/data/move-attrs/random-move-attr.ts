@@ -1,5 +1,5 @@
 import { MoveFlags } from "#enums/move-flags";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { type Pokemon, PokemonMove } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { LoadMoveAnimPhase } from "#app/phases/load-move-anim-phase";
@@ -18,12 +18,12 @@ export class RandomMoveAttr extends OverrideMoveEffectAttr {
   /**
    * This function exists solely to allow tests to override the randomly selected move by mocking this function.
    */
-  public getMoveOverride(): Moves | null {
+  public getMoveOverride(): MoveId | null {
     return null;
   }
 
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
-    const moveIds = getEnumValues(Moves).filter(
+    const moveIds = getEnumValues(MoveId).filter(
       (m) => !allMoves[m].hasFlag(MoveFlags.IGNORE_VIRTUAL) && !allMoves[m].name.endsWith(" (N)"),
     );
     const moveId = this.getMoveOverride() ?? moveIds[user.randSeedInt(moveIds.length)];
@@ -38,7 +38,7 @@ export class RandomMoveAttr extends OverrideMoveEffectAttr {
         : moveTargets.targets.indexOf(target.getBattlerIndex()) > -1
           ? [target.getBattlerIndex()]
           : [moveTargets.targets[user.randSeedInt(moveTargets.targets.length)]];
-    user.getMoveQueue().push({ move: moveId, targets: targets, ignorePP: true });
+    user.getMoveQueue().push({ moveId: moveId, targets: targets, ignorePP: true });
     globalScene.unshiftPhase(new LoadMoveAnimPhase(moveId));
     globalScene.unshiftPhase(new MovePhase(user, targets, new PokemonMove(moveId, 0, 0, true), true));
     return true;

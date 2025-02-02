@@ -1,4 +1,4 @@
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { MovePhase } from "#app/phases/move-phase";
@@ -19,7 +19,7 @@ export class CueNextRoundAttr extends MoveEffectAttr {
 
   override applyEffect(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const nextRoundPhase = globalScene.findPhase<MovePhase>(
-      (phase) => phase instanceof MovePhase && phase.move.moveId === Moves.ROUND,
+      (phase) => phase instanceof MovePhase && phase.move.moveId === MoveId.ROUND,
     );
 
     if (!nextRoundPhase) {

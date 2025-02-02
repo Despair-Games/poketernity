@@ -1,6 +1,6 @@
 import { Abilities } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -24,34 +24,34 @@ describe("Moves - G-Max Chi Strike grants a stackable crit boost", () => {
     game = new GameManager(phaserGame);
     game.override
       .startingLevel(100)
-      .moveset([Moves.G_MAX_CHI_STRIKE, Moves.BITE, Moves.FOCUS_ENERGY, Moves.BATON_PASS])
+      .moveset([MoveId.G_MAX_CHI_STRIKE, MoveId.BITE, MoveId.FOCUS_ENERGY, MoveId.BATON_PASS])
       .enemySpecies(Species.BLISSEY)
       .enemyLevel(100)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it("G-Max chi strike should grant a non-expiring stackable crit boost", async () => {
-    game.override.enemyAbility(Abilities.PRANKSTER).enemyMoveset([Moves.SUBSTITUTE]);
+    game.override.enemyAbility(Abilities.PRANKSTER).enemyMoveset([MoveId.SUBSTITUTE]);
     await game.classicMode.startBattle([Species.MACHAMP]);
 
     const enemy = game.scene.getEnemyField()[0];
     vi.spyOn(enemy, "getCritStage");
 
-    game.move.select(Moves.G_MAX_CHI_STRIKE);
+    game.move.select(MoveId.G_MAX_CHI_STRIKE);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.getCritStage).toHaveReturnedWith(0); // getCritStage is called on defender
     await game.toNextTurn();
 
-    game.move.select(Moves.G_MAX_CHI_STRIKE);
+    game.move.select(MoveId.G_MAX_CHI_STRIKE);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.getCritStage).toHaveReturnedWith(1);
     await game.toNextTurn();
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
-    game.move.select(Moves.BITE);
+    game.move.select(MoveId.BITE);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.getCritStage).toHaveReturnedWith(2);
   });
@@ -63,10 +63,10 @@ describe("Moves - G-Max Chi Strike grants a stackable crit boost", () => {
     const enemy = game.scene.getEnemyField()[0];
     vi.spyOn(enemy, "getCritStage");
 
-    game.move.select(Moves.G_MAX_CHI_STRIKE);
+    game.move.select(MoveId.G_MAX_CHI_STRIKE);
     await game.toNextTurn();
 
-    game.move.select(Moves.BITE);
+    game.move.select(MoveId.BITE);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.getCritStage).toHaveReturnedWith(0);
   });
@@ -75,48 +75,48 @@ describe("Moves - G-Max Chi Strike grants a stackable crit boost", () => {
     game.override
       .battleType("double")
       .enemyAbility(Abilities.PRANKSTER)
-      .moveset([Moves.G_MAX_CHI_STRIKE, Moves.BITE, Moves.SPLASH, Moves.DRAGON_CHEER])
-      .enemyMoveset([Moves.SUBSTITUTE]);
+      .moveset([MoveId.G_MAX_CHI_STRIKE, MoveId.BITE, MoveId.SPLASH, MoveId.DRAGON_CHEER])
+      .enemyMoveset([MoveId.SUBSTITUTE]);
     await game.classicMode.startBattle([Species.MACHAMP, Species.SHUCKLE]);
 
     const enemy = game.scene.getEnemyField()[0];
     vi.spyOn(enemy, "getCritStage");
 
-    game.move.select(Moves.G_MAX_CHI_STRIKE, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.G_MAX_CHI_STRIKE, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.SPLASH, 1);
     await game.toNextTurn();
 
-    game.move.select(Moves.SPLASH, 0);
-    game.move.select(Moves.BITE, 1, BattlerIndex.ENEMY);
+    game.move.select(MoveId.SPLASH, 0);
+    game.move.select(MoveId.BITE, 1, BattlerIndex.ENEMY);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.getCritStage).toHaveReturnedWith(1);
 
-    game.move.select(Moves.DRAGON_CHEER);
-    game.move.select(Moves.BITE, 1, BattlerIndex.ENEMY);
+    game.move.select(MoveId.DRAGON_CHEER);
+    game.move.select(MoveId.BITE, 1, BattlerIndex.ENEMY);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.getCritStage).toHaveReturnedWith(2);
   });
 
   it("G-Max chi strike crit boost is not baton passable", async () => {
-    game.override.enemyAbility(Abilities.PRANKSTER).enemyMoveset([Moves.SUBSTITUTE]);
+    game.override.enemyAbility(Abilities.PRANKSTER).enemyMoveset([MoveId.SUBSTITUTE]);
     await game.classicMode.startBattle([Species.MACHAMP, Species.SHUCKLE]);
 
     const enemy = game.scene.getEnemyField()[0];
     vi.spyOn(enemy, "getCritStage");
 
-    game.move.select(Moves.G_MAX_CHI_STRIKE);
+    game.move.select(MoveId.G_MAX_CHI_STRIKE);
     await game.toNextTurn();
 
-    game.move.select(Moves.BATON_PASS);
+    game.move.select(MoveId.BATON_PASS);
     game.doSelectPartyPokemon(1);
     await game.phaseInterceptor.to("TurnEndPhase");
 
-    game.move.select(Moves.G_MAX_CHI_STRIKE);
+    game.move.select(MoveId.G_MAX_CHI_STRIKE);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.getCritStage).toHaveReturnedWith(0);
     await game.toNextTurn();
 
-    game.move.select(Moves.BITE);
+    game.move.select(MoveId.BITE);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemy.getCritStage).toHaveReturnedWith(1);
   });

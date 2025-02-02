@@ -1,5 +1,5 @@
 import { Biome } from "#enums/biome";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { TerrainType } from "#enums/terrain-type";
 import { type Pokemon, PokemonMove } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -16,137 +16,137 @@ import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effec
  */
 export class NaturePowerAttr extends OverrideMoveEffectAttr {
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
-    let moveId: Moves;
+    let moveId: MoveId;
     switch (globalScene.arena.getTerrainType()) {
       // this allows terrains to 'override' the biome move
       case TerrainType.NONE:
         switch (globalScene.arena.biomeType) {
           case Biome.TOWN:
-            moveId = Moves.ROUND;
+            moveId = MoveId.ROUND;
             break;
           case Biome.METROPOLIS:
-            moveId = Moves.TRI_ATTACK;
+            moveId = MoveId.TRI_ATTACK;
             break;
           case Biome.SLUM:
-            moveId = Moves.SLUDGE_BOMB;
+            moveId = MoveId.SLUDGE_BOMB;
             break;
           case Biome.PLAINS:
-            moveId = Moves.SILVER_WIND;
+            moveId = MoveId.SILVER_WIND;
             break;
           case Biome.GRASS:
-            moveId = Moves.GRASS_KNOT;
+            moveId = MoveId.GRASS_KNOT;
             break;
           case Biome.TALL_GRASS:
-            moveId = Moves.POLLEN_PUFF;
+            moveId = MoveId.POLLEN_PUFF;
             break;
           case Biome.MEADOW:
-            moveId = Moves.GIGA_DRAIN;
+            moveId = MoveId.GIGA_DRAIN;
             break;
           case Biome.FOREST:
-            moveId = Moves.BUG_BUZZ;
+            moveId = MoveId.BUG_BUZZ;
             break;
           case Biome.JUNGLE:
-            moveId = Moves.LEAF_STORM;
+            moveId = MoveId.LEAF_STORM;
             break;
           case Biome.SEA:
-            moveId = Moves.HYDRO_PUMP;
+            moveId = MoveId.HYDRO_PUMP;
             break;
           case Biome.SWAMP:
-            moveId = Moves.MUD_BOMB;
+            moveId = MoveId.MUD_BOMB;
             break;
           case Biome.BEACH:
-            moveId = Moves.SCALD;
+            moveId = MoveId.SCALD;
             break;
           case Biome.LAKE:
-            moveId = Moves.BUBBLE_BEAM;
+            moveId = MoveId.BUBBLE_BEAM;
             break;
           case Biome.SEABED:
-            moveId = Moves.BRINE;
+            moveId = MoveId.BRINE;
             break;
           case Biome.ISLAND:
-            moveId = Moves.LEAF_TORNADO;
+            moveId = MoveId.LEAF_TORNADO;
             break;
           case Biome.MOUNTAIN:
-            moveId = Moves.AIR_SLASH;
+            moveId = MoveId.AIR_SLASH;
             break;
           case Biome.BADLANDS:
-            moveId = Moves.EARTH_POWER;
+            moveId = MoveId.EARTH_POWER;
             break;
           case Biome.DESERT:
-            moveId = Moves.SCORCHING_SANDS;
+            moveId = MoveId.SCORCHING_SANDS;
             break;
           case Biome.WASTELAND:
-            moveId = Moves.DRAGON_PULSE;
+            moveId = MoveId.DRAGON_PULSE;
             break;
           case Biome.CONSTRUCTION_SITE:
-            moveId = Moves.STEEL_BEAM;
+            moveId = MoveId.STEEL_BEAM;
             break;
           case Biome.CAVE:
-            moveId = Moves.POWER_GEM;
+            moveId = MoveId.POWER_GEM;
             break;
           case Biome.ICE_CAVE:
-            moveId = Moves.ICE_BEAM;
+            moveId = MoveId.ICE_BEAM;
             break;
           case Biome.SNOWY_FOREST:
-            moveId = Moves.FROST_BREATH;
+            moveId = MoveId.FROST_BREATH;
             break;
           case Biome.VOLCANO:
-            moveId = Moves.LAVA_PLUME;
+            moveId = MoveId.LAVA_PLUME;
             break;
           case Biome.GRAVEYARD:
-            moveId = Moves.SHADOW_BALL;
+            moveId = MoveId.SHADOW_BALL;
             break;
           case Biome.RUINS:
-            moveId = Moves.ANCIENT_POWER;
+            moveId = MoveId.ANCIENT_POWER;
             break;
           case Biome.TEMPLE:
-            moveId = Moves.EXTRASENSORY;
+            moveId = MoveId.EXTRASENSORY;
             break;
           case Biome.DOJO:
-            moveId = Moves.FOCUS_BLAST;
+            moveId = MoveId.FOCUS_BLAST;
             break;
           case Biome.FAIRY_CAVE:
-            moveId = Moves.ALLURING_VOICE;
+            moveId = MoveId.ALLURING_VOICE;
             break;
           case Biome.ABYSS:
-            moveId = Moves.OMINOUS_WIND;
+            moveId = MoveId.OMINOUS_WIND;
             break;
           case Biome.SPACE:
-            moveId = Moves.DRACO_METEOR;
+            moveId = MoveId.DRACO_METEOR;
             break;
           case Biome.FACTORY:
-            moveId = Moves.FLASH_CANNON;
+            moveId = MoveId.FLASH_CANNON;
             break;
           case Biome.LABORATORY:
-            moveId = Moves.ZAP_CANNON;
+            moveId = MoveId.ZAP_CANNON;
             break;
           case Biome.POWER_PLANT:
-            moveId = Moves.CHARGE_BEAM;
+            moveId = MoveId.CHARGE_BEAM;
             break;
           case Biome.END:
-            moveId = Moves.ETERNABEAM;
+            moveId = MoveId.ETERNABEAM;
             break;
         }
         break;
       case TerrainType.MISTY:
-        moveId = Moves.MOONBLAST;
+        moveId = MoveId.MOONBLAST;
         break;
       case TerrainType.ELECTRIC:
-        moveId = Moves.THUNDERBOLT;
+        moveId = MoveId.THUNDERBOLT;
         break;
       case TerrainType.GRASSY:
-        moveId = Moves.ENERGY_BALL;
+        moveId = MoveId.ENERGY_BALL;
         break;
       case TerrainType.PSYCHIC:
-        moveId = Moves.PSYCHIC;
+        moveId = MoveId.PSYCHIC;
         break;
       default:
         // Just in case there's no match
-        moveId = Moves.TRI_ATTACK;
+        moveId = MoveId.TRI_ATTACK;
         break;
     }
 
-    user.getMoveQueue().push({ move: moveId, targets: [target.getBattlerIndex()], ignorePP: true });
+    user.getMoveQueue().push({ moveId: moveId, targets: [target.getBattlerIndex()], ignorePP: true });
     globalScene.unshiftPhase(new LoadMoveAnimPhase(moveId));
     globalScene.unshiftPhase(
       new MovePhase(user, [target.getBattlerIndex()], new PokemonMove(moveId, 0, 0, true), true),

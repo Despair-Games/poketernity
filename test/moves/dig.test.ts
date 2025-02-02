@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/all-moves";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { MoveResult } from "#enums/move-result";
@@ -26,13 +26,13 @@ describe("Moves - Dig", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset(Moves.DIG)
+      .moveset(MoveId.DIG)
       .battleType("single")
       .startingLevel(100)
       .enemySpecies(Species.SNORLAX)
       .enemyLevel(100)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.TACKLE);
+      .enemyMoveset(MoveId.TACKLE);
   });
 
   it("should make the user semi-invulnerable, then attack over 2 turns", async () => {
@@ -41,21 +41,21 @@ describe("Moves - Dig", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DIG);
+    game.move.select(MoveId.DIG);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.getTag(BattlerTagType.UNDERGROUND)).toBeDefined();
     expect(enemyPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.MISS);
     expect(playerPokemon.hp).toBe(playerPokemon.getMaxHp());
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
-    expect(playerPokemon.getMoveQueue()[0].move).toBe(Moves.DIG);
+    expect(playerPokemon.getMoveQueue()[0].moveId).toBe(MoveId.DIG);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.getTag(BattlerTagType.UNDERGROUND)).toBeUndefined();
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveHistory()).toHaveLength(2);
 
-    const playerDig = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === Moves.DIG);
+    const playerDig = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === MoveId.DIG);
     expect(playerDig?.ppUsed).toBe(1);
   });
 
@@ -67,7 +67,7 @@ describe("Moves - Dig", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DIG);
+    game.move.select(MoveId.DIG);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.hp).toBeLessThan(playerPokemon.getMaxHp());
@@ -75,19 +75,19 @@ describe("Moves - Dig", () => {
   });
 
   it("should not expend PP when the attack phase is cancelled", async () => {
-    game.override.enemyAbility(Abilities.NO_GUARD).enemyMoveset(Moves.SPORE);
+    game.override.enemyAbility(Abilities.NO_GUARD).enemyMoveset(MoveId.SPORE);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.DIG);
+    game.move.select(MoveId.DIG);
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.getTag(BattlerTagType.UNDERGROUND)).toBeUndefined();
     expect(playerPokemon.status?.effect).toBe(StatusEffect.SLEEP);
 
-    const playerDig = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === Moves.DIG);
+    const playerDig = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === MoveId.DIG);
     expect(playerDig?.ppUsed).toBe(0);
   });
 
@@ -97,14 +97,14 @@ describe("Moves - Dig", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    const preDigEarthquakeDmg = playerPokemon.getAttackDamage(enemyPokemon, allMoves[Moves.EARTHQUAKE]).damage;
+    const preDigEarthquakeDmg = playerPokemon.getAttackDamage(enemyPokemon, allMoves[MoveId.EARTHQUAKE]).damage;
 
-    game.move.select(Moves.DIG);
+    game.move.select(MoveId.DIG);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEffectPhase");
 
-    const postDigEarthquakeDmg = playerPokemon.getAttackDamage(enemyPokemon, allMoves[Moves.EARTHQUAKE]).damage;
+    const postDigEarthquakeDmg = playerPokemon.getAttackDamage(enemyPokemon, allMoves[MoveId.EARTHQUAKE]).damage;
     // these hopefully get avoid rounding errors :shrug:
     expect(postDigEarthquakeDmg).toBeGreaterThanOrEqual(2 * preDigEarthquakeDmg);
     expect(postDigEarthquakeDmg).toBeLessThan(2 * (preDigEarthquakeDmg + 1));

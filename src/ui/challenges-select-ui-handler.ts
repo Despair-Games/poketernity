@@ -1,4 +1,4 @@
-import { addTextObject } from "./text";
+import { addBBCodeTextObject, addTextObject } from "./text";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
@@ -8,11 +8,12 @@ import i18next from "i18next";
 import type { Challenge } from "#app/data/challenge";
 import { getLocalizedSpriteKey } from "#app/utils";
 import { Challenges } from "#enums/challenges";
-import BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
+import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import { Color, ShadowColor } from "#enums/color";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { TitlePhase } from "#app/phases/title-phase";
 import { globalScene } from "#app/global-scene";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 /**
  * Handles all the UI for choosing optional challenges.
@@ -24,8 +25,6 @@ export default class GameChallengesUiHandler extends UiHandler {
   private scrollCursor: number;
 
   private optionsBg: Phaser.GameObjects.NineSlice;
-
-  // private difficultyText: Phaser.GameObjects.Text;
 
   private descriptionText: BBCodeText;
 
@@ -60,28 +59,21 @@ export default class GameChallengesUiHandler extends UiHandler {
 
     this.widestTextBox = 0;
 
-    this.challengesContainer = globalScene.add.container(1, -(globalScene.game.canvas.height / 6) + 1);
+    this.challengesContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
     this.challengesContainer.setName("challenges");
 
     this.challengesContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 6, globalScene.game.canvas.height / 6),
+      new Phaser.Geom.Rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT),
       Phaser.Geom.Rectangle.Contains,
     );
 
-    const bgOverlay = globalScene.add.rectangle(
-      -1,
-      -1,
-      globalScene.scaledCanvas.width,
-      globalScene.scaledCanvas.height,
-      0x424242,
-      0.8,
-    );
+    const bgOverlay = globalScene.add.rectangle(-1, -1, GAME_WIDTH, GAME_HEIGHT, 0x424242, 0.8);
     bgOverlay.setName("rect-challenge-overlay");
     bgOverlay.setOrigin(0, 0);
     this.challengesContainer.add(bgOverlay);
 
     // TODO: Change this back to /9 when adding in difficulty
-    const headerBg = addWindow(0, 0, globalScene.game.canvas.width / 6, 24);
+    const headerBg = addWindow(0, 0, GAME_WIDTH - 2, 24);
     headerBg.setName("window-header-bg");
     headerBg.setOrigin(0, 0);
 
@@ -90,43 +82,31 @@ export default class GameChallengesUiHandler extends UiHandler {
     headerText.setOrigin(0, 0);
     headerText.setPositionRelative(headerBg, 8, 4);
 
-    this.optionsWidth = globalScene.scaledCanvas.width * 0.6;
-    this.optionsBg = addWindow(
-      0,
-      headerBg.height,
-      this.optionsWidth,
-      globalScene.scaledCanvas.height - headerBg.height - 2,
-    );
+    this.optionsWidth = Math.floor(GAME_WIDTH * 0.6);
+    this.optionsBg = addWindow(0, headerBg.height, this.optionsWidth, GAME_HEIGHT - headerBg.height - 2);
     this.optionsBg.setName("window-options-bg");
     this.optionsBg.setOrigin(0, 0);
 
     const descriptionBg = addWindow(
       0,
       headerBg.height,
-      globalScene.scaledCanvas.width - this.optionsWidth,
-      globalScene.scaledCanvas.height - headerBg.height - 26,
+      GAME_WIDTH - this.optionsWidth - 2,
+      GAME_HEIGHT - headerBg.height - 26,
     );
     descriptionBg.setName("window-desc-bg");
     descriptionBg.setOrigin(0, 0);
     descriptionBg.setPositionRelative(this.optionsBg, this.optionsBg.width, 0);
 
-    this.descriptionText = new BBCodeText(globalScene, descriptionBg.x + 6, descriptionBg.y + 4, "", {
-      fontFamily: "emerald",
-      fontSize: 84,
-      color: Color.ORANGE,
-      padding: {
-        bottom: 6,
-      },
-      wrap: {
-        mode: "word",
-        width: (descriptionBg.width - 12) * 6,
-      },
-    });
+    this.descriptionText = addBBCodeTextObject(
+      descriptionBg.x + 6,
+      descriptionBg.y + 4,
+      "",
+      TextStyle.CHALLENGE_DESCRIPTION,
+    );
     this.descriptionText.setName("text-desc");
-    globalScene.add.existing(this.descriptionText);
-    this.descriptionText.setScale(1 / 6);
-    this.descriptionText.setShadow(4, 5, ShadowColor.ORANGE);
     this.descriptionText.setOrigin(0, 0);
+    this.descriptionText.setWrapMode("word");
+    this.descriptionText.setWordWrapWidth((descriptionBg.width - 10) / this.descriptionText.scale);
 
     this.startBg = addWindow(0, 0, descriptionBg.width, 24);
     this.startBg.setName("window-start-bg");

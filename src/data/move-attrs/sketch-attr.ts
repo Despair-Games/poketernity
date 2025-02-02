@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 import { type Move } from "../move";
 import { allMoves } from "#app/data/all-moves";
@@ -9,7 +9,7 @@ import { targetMoveCopiableCondition, type MoveConditionFunc } from "../move-con
 import { MoveEffectAttr } from "./move-effect-attr";
 
 /**
- * Attribute for {@linkcode Moves.SKETCH} that causes the user to copy the opponent's last used move.
+ * Attribute for {@linkcode MoveId.SKETCH} that causes the user to copy the opponent's last used move.
  * This move copies the last used non-virtual move
  * e.g. if Metronome is used, it copies Metronome itself, not the virtual move called by Metronome.
  *
@@ -27,12 +27,12 @@ export class SketchAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     const targetMove = target
       .getLastXMoves(-1)
-      .find((m) => m.move !== Moves.NONE && m.move !== Moves.STRUGGLE && !m.virtual);
+      .find((m) => m.moveId !== MoveId.NONE && m.moveId !== MoveId.STRUGGLE && !m.virtual);
     if (!targetMove) {
       return false;
     }
 
-    const sketchedMove = allMoves[targetMove.move];
+    const sketchedMove = allMoves[targetMove.moveId];
     const sketchIndex = user.getMoveset().findIndex((m) => m.moveId === move.id);
     if (sketchIndex === -1) {
       return false;
@@ -65,22 +65,22 @@ export class SketchAttr extends MoveEffectAttr {
       }
 
       const unsketchableMoves = [
-        Moves.CHATTER,
-        Moves.MIRROR_MOVE,
-        Moves.SLEEP_TALK,
-        Moves.STRUGGLE,
-        Moves.SKETCH,
-        Moves.REVIVAL_BLESSING,
-        Moves.TERA_STARSTORM,
-        Moves.BREAKNECK_BLITZ__PHYSICAL,
-        Moves.BREAKNECK_BLITZ__SPECIAL,
+        MoveId.CHATTER,
+        MoveId.MIRROR_MOVE,
+        MoveId.SLEEP_TALK,
+        MoveId.STRUGGLE,
+        MoveId.SKETCH,
+        MoveId.REVIVAL_BLESSING,
+        MoveId.TERA_STARSTORM,
+        MoveId.BREAKNECK_BLITZ__PHYSICAL,
+        MoveId.BREAKNECK_BLITZ__SPECIAL,
       ];
 
-      if (unsketchableMoves.includes(targetMove.move)) {
+      if (unsketchableMoves.includes(targetMove.moveId)) {
         return false;
       }
 
-      if (user.getMoveset().find((m) => m.moveId === targetMove.move)) {
+      if (user.getMoveset().find((m) => m.moveId === targetMove.moveId)) {
         return false;
       }
 

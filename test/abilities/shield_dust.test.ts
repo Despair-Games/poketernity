@@ -5,7 +5,7 @@ import { applyAbAttrs } from "#app/data/ability";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -32,8 +32,8 @@ describe("Abilities - Shield Dust", () => {
     game.override.enemySpecies(Species.ONIX);
     game.override.enemyAbility(Abilities.SHIELD_DUST);
     game.override.startingLevel(100);
-    game.override.moveset(Moves.AIR_SLASH);
-    game.override.enemyMoveset(Moves.TACKLE);
+    game.override.moveset(MoveId.AIR_SLASH);
+    game.override.enemyMoveset(MoveId.TACKLE);
   });
 
   it("Shield Dust", async () => {
@@ -42,7 +42,7 @@ describe("Abilities - Shield Dust", () => {
     game.scene.getEnemyPokemon()!.stats[Stat.SPDEF] = 10000;
     expect(game.scene.getPlayerPokemon()!.formIndex).toBe(0);
 
-    game.move.select(Moves.AIR_SLASH);
+    game.move.select(MoveId.AIR_SLASH);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to(MoveEffectPhase, false);
@@ -50,7 +50,7 @@ describe("Abilities - Shield Dust", () => {
     // Shield Dust negates secondary effect
     const phase = game.scene.getCurrentPhase() as MoveEffectPhase;
     const move = phase.move.getMove();
-    expect(move.id).toBe(Moves.AIR_SLASH);
+    expect(move.id).toBe(MoveId.AIR_SLASH);
 
     const chance = new NumberHolder(move.chance);
     applyAbAttrs(MoveEffectChanceMultiplierAbAttr, phase.getUserPokemon()!, false, chance, move, false);

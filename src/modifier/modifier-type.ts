@@ -108,7 +108,7 @@ import {
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Nature } from "#enums/nature";
 import { PokeballType } from "#enums/pokeball";
 import { Species } from "#enums/species";
@@ -1098,9 +1098,9 @@ export class PokemonMultiHitModifierType extends PokemonHeldItemModifierType {
 }
 
 export class TmModifierType extends PokemonModifierType {
-  public moveId: Moves;
+  public moveId: MoveId;
 
-  constructor(moveId: Moves) {
+  constructor(moveId: MoveId) {
     super(
       "",
       `tm_${ElementType[allMoves[moveId].type].toLowerCase()}`,
@@ -1391,7 +1391,7 @@ class SpeciesStatBoosterModifierTypeGenerator extends ModifierTypeGenerator {
       for (const p of party) {
         const speciesId = p.getSpeciesForm(true).speciesId;
         const fusionSpeciesId = p.isFusion() ? p.getFusionSpeciesForm(true).speciesId : null;
-        const hasFling = p.getMoveset(true).some((m) => m.moveId === Moves.FLING);
+        const hasFling = p.getMoveset(true).some((m) => m.moveId === MoveId.FLING);
 
         for (const i in values) {
           const checkedSpecies = values[i].species;
@@ -1446,8 +1446,8 @@ class SpeciesStatBoosterModifierTypeGenerator extends ModifierTypeGenerator {
 class TmModifierTypeGenerator extends ModifierTypeGenerator {
   constructor(tier: ModifierTier) {
     super((party: Pokemon[], pregenArgs?: any[]) => {
-      if (pregenArgs && pregenArgs.length === 1 && pregenArgs[0] in Moves) {
-        return new TmModifierType(pregenArgs[0] as Moves);
+      if (pregenArgs && pregenArgs.length === 1 && pregenArgs[0] in MoveId) {
+        return new TmModifierType(pregenArgs[0] as MoveId);
       }
       const partyMemberCompatibleTms = party.map((p) =>
         (p as PlayerPokemon).compatibleTms.filter((tm) => !p.moveset.find((m) => m.moveId === tm)),
@@ -1789,7 +1789,7 @@ export type GeneratorModifierOverride = {
     }
   | {
       name: keyof Pick<typeof modifierTypes, "TM_COMMON" | "TM_GREAT" | "TM_ULTRA">;
-      type?: Moves;
+      type?: MoveId;
     }
 );
 
@@ -2562,11 +2562,11 @@ const modifierPool: ModifierPool = {
           const isHoldingOrb = p.getHeldItems().some((i) => i.type.id === "FLAME_ORB" || i.type.id === "TOXIC_ORB");
 
           // Moves that take advantage of obtaining the actual status effect
-          const hasStatusMoves = [Moves.FACADE, Moves.PSYCHO_SHIFT].some((m) => moveset.includes(m));
+          const hasStatusMoves = [MoveId.FACADE, MoveId.PSYCHO_SHIFT].some((m) => moveset.includes(m));
           // Moves that take advantage of being able to give the target a status orb
           // TODO: Take moves from comment they are implemented
           const hasItemMoves = [
-            /* Moves.TRICK, Moves.FLING, Moves.SWITCHEROO */
+            /* MoveId.TRICK, MoveId.FLING, MoveId.SWITCHEROO */
           ].some((m) => moveset.includes(m));
           // Abilities that take advantage of obtaining the actual status effect
           const hasRelevantAbilities = [
@@ -2604,11 +2604,11 @@ const modifierPool: ModifierPool = {
           const isHoldingOrb = p.getHeldItems().some((i) => i.type.id === "FLAME_ORB" || i.type.id === "TOXIC_ORB");
 
           // Moves that take advantage of obtaining the actual status effect
-          const hasStatusMoves = [Moves.FACADE, Moves.PSYCHO_SHIFT].some((m) => moveset.includes(m));
+          const hasStatusMoves = [MoveId.FACADE, MoveId.PSYCHO_SHIFT].some((m) => moveset.includes(m));
           // Moves that take advantage of being able to give the target a status orb
           // TODO: Take moves from comment they are implemented
           const hasItemMoves = [
-            /* Moves.TRICK, Moves.FLING, Moves.SWITCHEROO */
+            /* MoveId.TRICK, MoveId.FLING, MoveId.SWITCHEROO */
           ].some((m) => moveset.includes(m));
           // Abilities that take advantage of obtaining the actual status effect
           const hasRelevantAbilities = [

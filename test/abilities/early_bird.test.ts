@@ -1,6 +1,6 @@
 import { MoveResult } from "#enums/move-result";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -24,13 +24,13 @@ describe("Abilities - Early Bird", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.REST, Moves.BELLY_DRUM, Moves.SPLASH])
+      .moveset([MoveId.REST, MoveId.BELLY_DRUM, MoveId.SPLASH])
       .ability(Abilities.EARLY_BIRD)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it("reduces Rest's sleep time to 1 turn", async () => {
@@ -38,20 +38,20 @@ describe("Abilities - Early Bird", () => {
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.BELLY_DRUM);
+    game.move.select(MoveId.BELLY_DRUM);
     await game.toNextTurn();
-    game.move.select(Moves.REST);
+    game.move.select(MoveId.REST);
     await game.toNextTurn();
 
     expect(player.status?.effect).toBe(StatusEffect.SLEEP);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
     expect(player.status?.effect).toBe(StatusEffect.SLEEP);
     expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
     expect(player.status?.effect).toBeUndefined();
@@ -64,7 +64,7 @@ describe("Abilities - Early Bird", () => {
     const player = game.scene.getPlayerPokemon()!;
     player.trySetStatus(StatusEffect.SLEEP, false, null, 3);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
     expect(player.status?.effect).toBe(StatusEffect.SLEEP);
@@ -77,7 +77,7 @@ describe("Abilities - Early Bird", () => {
     const player = game.scene.getPlayerPokemon()!;
     player.trySetStatus(StatusEffect.SLEEP, false, null, 1);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
     expect(player.status?.effect).toBeUndefined();

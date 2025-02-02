@@ -2,7 +2,7 @@ import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Gender } from "#enums/gender";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { EFFECTIVE_STATS, getStatKey, Stat, type EffectiveStat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
@@ -245,7 +245,7 @@ function getSheerForceHitDisableAbCondition(): AbAttrCondition {
 
     /**if the last move chance is greater than or equal to cero, and the last attacker's ability is sheer force*/
     const SheerForceAffected =
-      allMoves[lastReceivedAttack.move].chance >= 0 && lastAttacker.hasAbility(Abilities.SHEER_FORCE);
+      allMoves[lastReceivedAttack.moveId].chance >= 0 && lastAttacker.hasAbility(Abilities.SHEER_FORCE);
 
     return !SheerForceAffected;
   };
@@ -271,7 +271,7 @@ function getAnticipationCondition(): AbAttrCondition {
           return true;
         }
         // edge case for hidden power, type is computed
-        if (move.getMove().id === Moves.HIDDEN_POWER) {
+        if (move.getMove().id === MoveId.HIDDEN_POWER) {
           const iv_val = Math.floor(
             (((opponent.ivs[Stat.HP] & 1)
               + (opponent.ivs[Stat.ATK] & 1) * 2
@@ -623,9 +623,13 @@ export function initAbilities() {
     new Ability(Abilities.NORMALIZE, 4).attr(MoveTypeChangeAbAttr, ElementType.NORMAL, 1.2, (_user, _target, move) => {
       return (
         !!move
-        && ![Moves.HIDDEN_POWER, Moves.WEATHER_BALL, Moves.NATURAL_GIFT, Moves.JUDGMENT, Moves.TECHNO_BLAST].includes(
-          move.id,
-        )
+        && ![
+          MoveId.HIDDEN_POWER,
+          MoveId.WEATHER_BALL,
+          MoveId.NATURAL_GIFT,
+          MoveId.JUDGMENT,
+          MoveId.TECHNO_BLAST,
+        ].includes(move.id)
       );
     }),
     new Ability(Abilities.SNIPER, 4).attr(MultCritAbAttr, 1.5),

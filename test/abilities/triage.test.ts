@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/all-moves";
 import { Abilities } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import { TurnStartPhase } from "#app/phases/turn-start-phase";
@@ -26,44 +26,44 @@ describe("Abilities - Triage", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SPLASH])
+      .moveset([MoveId.SPLASH])
       .ability(Abilities.TRIAGE)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   // Note: All affected moves have been verified to have the TRIAGE_MOVE flag by all_moves
   it.each([
-    { move: Moves.RECOVER, moveName: "Recover" },
-    { move: Moves.HEALING_WISH, moveName: "Healing Wish (P)" },
-    { move: Moves.BITTER_BLADE, moveName: "Bitter Blade" },
-  ])("should increase the priority of HP-recovery moves by 3", async ({ move }) => {
-    game.override.moveset(move);
+    { moveId: MoveId.RECOVER, moveName: "Recover" },
+    { moveId: MoveId.HEALING_WISH, moveName: "Healing Wish (P)" },
+    { moveId: MoveId.BITTER_BLADE, moveName: "Bitter Blade" },
+  ])("should increase the priority of HP-recovery moves by 3", async ({ moveId }) => {
+    game.override.moveset(moveId);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    const moveToUse = allMoves[move];
+    const moveToUse = allMoves[moveId];
     const originalPriority = moveToUse.priority;
     expect(moveToUse.checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(true);
     expect(moveToUse.getPriority(playerPokemon)).toBe(originalPriority + 3);
   });
 
   it.each([
-    { move: Moves.AQUA_RING, moveName: "Aqua Ring" },
-    { move: Moves.INGRAIN, moveName: "Ingrain" },
-    { move: Moves.GRASSY_TERRAIN, moveName: "Grassy Terrain" },
-    { move: Moves.LEECH_SEED, moveName: "Leech Seed" },
-    { move: Moves.SAPPY_SEED, moveName: "Sappy Seed" },
-    { move: Moves.PAIN_SPLIT, moveName: "Pain Split" },
-  ])("should not increase the priority of $moveName", async ({ move }) => {
-    game.override.moveset(move);
+    { moveId: MoveId.AQUA_RING, moveName: "Aqua Ring" },
+    { moveId: MoveId.INGRAIN, moveName: "Ingrain" },
+    { moveId: MoveId.GRASSY_TERRAIN, moveName: "Grassy Terrain" },
+    { moveId: MoveId.LEECH_SEED, moveName: "Leech Seed" },
+    { moveId: MoveId.SAPPY_SEED, moveName: "Sappy Seed" },
+    { moveId: MoveId.PAIN_SPLIT, moveName: "Pain Split" },
+  ])("should not increase the priority of $moveName", async ({ moveId }) => {
+    game.override.moveset(moveId);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    const moveToUse = allMoves[move];
+    const moveToUse = allMoves[moveId];
     const originalPriority = moveToUse.priority;
     expect(moveToUse.checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(false);
     expect(moveToUse.getPriority(playerPokemon)).toBe(originalPriority);
@@ -71,23 +71,23 @@ describe("Abilities - Triage", () => {
 
   it("should not increase the priority of Pollen Puff if it heals the user's ally", async () => {
     game.override
-      .moveset([Moves.POLLEN_PUFF, Moves.SPLASH])
+      .moveset([MoveId.POLLEN_PUFF, MoveId.SPLASH])
       .battleType("double")
       .startingLevel(10)
-      .enemyMoveset(Moves.QUICK_ATTACK);
+      .enemyMoveset(MoveId.QUICK_ATTACK);
     await game.classicMode.startBattle([Species.FEEBAS, Species.GOLDEEN]);
 
     const playerPokemon = game.scene.getPlayerField()[0];
 
-    game.move.select(Moves.POLLEN_PUFF, 0, BattlerIndex.PLAYER_2);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.POLLEN_PUFF, 0, BattlerIndex.PLAYER_2);
+    game.move.select(MoveId.SPLASH, 1);
 
     await game.phaseInterceptor.to(TurnStartPhase, false);
     const phase = game.scene.getCurrentPhase() as TurnStartPhase;
     const healingPokemonIndex = phase.getCommandOrder().indexOf(BattlerIndex.PLAYER);
 
     // The Pokemon using Pollen Puff on its ally should be after the enemy Pokemon using Quick Attack
-    expect(allMoves[Moves.POLLEN_PUFF].checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(false);
+    expect(allMoves[MoveId.POLLEN_PUFF].checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(false);
     expect(healingPokemonIndex).toBeGreaterThanOrEqual(2);
   });
 });

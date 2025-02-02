@@ -70,7 +70,7 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
 
     const deleteText = addTextObject(0, 0, i18next.t("settings:delete"), TextStyle.SETTINGS_LABEL);
     deleteText.setOrigin(0, 0.15);
-    deleteText.setPositionRelative(iconDelete, -deleteText.width / 6 - 2, 0);
+    deleteText.setPositionRelative(iconDelete, -deleteText.displayWidth - 2, 0);
 
     this.settingsContainer.add(iconDelete);
     this.settingsContainer.add(deleteText);

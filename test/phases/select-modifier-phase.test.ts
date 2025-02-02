@@ -12,7 +12,7 @@ import { UiMode } from "#enums/ui-mode";
 import { shiftCharCodes } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { Button } from "#enums/buttons";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
@@ -35,7 +35,7 @@ describe("SelectModifierPhase", () => {
     scene = game.scene;
 
     game.override
-      .moveset([Moves.FISSURE, Moves.SPLASH])
+      .moveset([MoveId.FISSURE, MoveId.SPLASH])
       .ability(Abilities.NO_GUARD)
       .startingLevel(200)
       .enemySpecies(Species.MAGIKARP);
@@ -58,7 +58,7 @@ describe("SelectModifierPhase", () => {
 
   it("should generate random modifiers", async () => {
     await game.classicMode.startBattle([Species.ABRA, Species.VOLCARONA]);
-    game.move.select(Moves.FISSURE);
+    game.move.select(MoveId.FISSURE);
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
@@ -96,7 +96,7 @@ describe("SelectModifierPhase", () => {
     scene.money = 1000000;
     settings.update("display", "shopCursorTarget", ShopCursorTarget.REROLL);
 
-    game.move.select(Moves.FISSURE);
+    game.move.select(MoveId.FISSURE);
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     // TODO: nagivate the ui to reroll somehow
@@ -126,7 +126,7 @@ describe("SelectModifierPhase", () => {
       scene.rngCounter = 0;
     });
 
-    game.move.select(Moves.FISSURE);
+    game.move.select(MoveId.FISSURE);
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
@@ -169,7 +169,7 @@ describe("SelectModifierPhase", () => {
     };
     const selectModifierPhase = new SelectModifierPhase({ customModifierSettings: customModifiers });
     scene.unshiftPhase(selectModifierPhase);
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
@@ -206,7 +206,7 @@ describe("SelectModifierPhase", () => {
 
     const selectModifierPhase = new SelectModifierPhase({ customModifierSettings: customModifiers });
     scene.unshiftPhase(selectModifierPhase);
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("SelectModifierPhase");
 
     expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
@@ -245,7 +245,7 @@ describe("SelectModifierPhase", () => {
     };
     const selectModifierPhase = new SelectModifierPhase({ customModifierSettings: customModifiers });
     scene.unshiftPhase(selectModifierPhase);
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.run(SelectModifierPhase);
 
     expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
@@ -269,7 +269,7 @@ describe("SelectModifierPhase", () => {
     };
     const selectModifierPhase = new SelectModifierPhase({ customModifierSettings: customModifiers });
     scene.unshiftPhase(selectModifierPhase);
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.run(SelectModifierPhase);
 
     expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);

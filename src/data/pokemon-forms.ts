@@ -6,7 +6,7 @@ import { MoveCategory } from "#enums/move-category";
 import { ElementType } from "#enums/element-type";
 import type { AbstractConstructor, nil } from "#app/utils";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import type { TimeOfDay } from "#enums/time-of-day";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -204,27 +204,27 @@ export class SpeciesFormChangeStatusEffectTrigger extends SpeciesFormChangeTrigg
 }
 
 export class SpeciesFormChangeMoveLearnedTrigger extends SpeciesFormChangeTrigger {
-  public move: Moves;
+  public moveId: MoveId;
   public known: boolean;
 
-  constructor(move: Moves, known: boolean = true) {
+  constructor(moveId: MoveId, known: boolean = true) {
     super();
-    this.move = move;
+    this.moveId = moveId;
     this.known = known;
   }
 
   override canChange(pokemon: Pokemon): boolean {
-    return !!pokemon.moveset.filter((m) => m.moveId === this.move).length === this.known;
+    return !!pokemon.moveset.filter((m) => m.moveId === this.moveId).length === this.known;
   }
 }
 
 export abstract class SpeciesFormChangeMoveTrigger extends SpeciesFormChangeTrigger {
-  public movePredicate: (m: Moves) => boolean;
+  public movePredicate: (m: MoveId) => boolean;
   public used: boolean;
 
-  constructor(move: Moves | ((m: Moves) => boolean), used: boolean = true) {
+  constructor(moveId: MoveId | ((m: MoveId) => boolean), used: boolean = true) {
     super();
-    this.movePredicate = typeof move === "function" ? move : (m: Moves) => m === move;
+    this.movePredicate = typeof moveId === "function" ? moveId : (m: MoveId) => m === moveId;
     this.used = used;
   }
 }
@@ -232,14 +232,14 @@ export abstract class SpeciesFormChangeMoveTrigger extends SpeciesFormChangeTrig
 export class SpeciesFormChangePreMoveTrigger extends SpeciesFormChangeMoveTrigger {
   override canChange(pokemon: Pokemon): boolean {
     const command = globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()];
-    return !!command?.move && this.movePredicate(command.move.move) === this.used;
+    return !!command?.move && this.movePredicate(command.move.moveId) === this.used;
   }
 }
 
 export class SpeciesFormChangePostMoveTrigger extends SpeciesFormChangeMoveTrigger {
   override canChange(pokemon: Pokemon): boolean {
     return (
-      pokemon.summonData && !!pokemon.getLastXMoves(1).filter((m) => this.movePredicate(m.move)).length === this.used
+      pokemon.summonData && !!pokemon.getLastXMoves(1).filter((m) => this.movePredicate(m.moveId)).length === this.used
     );
   }
 }
@@ -1256,13 +1256,13 @@ export const pokemonFormChanges: PokemonFormChanges = {
       Species.KELDEO,
       "ordinary",
       "resolute",
-      new SpeciesFormChangeMoveLearnedTrigger(Moves.SECRET_SWORD),
+      new SpeciesFormChangeMoveLearnedTrigger(MoveId.SECRET_SWORD),
     ),
     new SpeciesFormChange(
       Species.KELDEO,
       "resolute",
       "ordinary",
-      new SpeciesFormChangeMoveLearnedTrigger(Moves.SECRET_SWORD, false),
+      new SpeciesFormChangeMoveLearnedTrigger(MoveId.SECRET_SWORD, false),
     ),
   ],
   [Species.MELOETTA]: [
@@ -1270,14 +1270,14 @@ export const pokemonFormChanges: PokemonFormChanges = {
       Species.MELOETTA,
       "aria",
       "pirouette",
-      new MeloettaFormChangePostMoveTrigger(Moves.RELIC_SONG),
+      new MeloettaFormChangePostMoveTrigger(MoveId.RELIC_SONG),
       true,
     ),
     new SpeciesFormChange(
       Species.MELOETTA,
       "pirouette",
       "aria",
-      new MeloettaFormChangePostMoveTrigger(Moves.RELIC_SONG),
+      new MeloettaFormChangePostMoveTrigger(MoveId.RELIC_SONG),
       true,
     ),
   ],
@@ -1300,7 +1300,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       Species.AEGISLASH,
       "blade",
       "shield",
-      new SpeciesFormChangePreMoveTrigger(Moves.KINGS_SHIELD),
+      new SpeciesFormChangePreMoveTrigger(MoveId.KINGS_SHIELD),
       true,
       new SpeciesFormChangeCondition((p) => p.hasAbility(Abilities.STANCE_CHANGE)),
     ),

@@ -8,7 +8,7 @@ import {
 } from "#app/data/trainer-config";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 import { ElementType } from "#enums/element-type";
@@ -213,11 +213,11 @@ export const genericTrainerConfigs: TrainerConfigs = {
     .setHasDouble("Medical Team")
     .setMoneyMultiplier(3)
     .setEncounterBgm(TrainerType.CLERK)
-    .setSpeciesFilter((s) => !!s.getLevelMoves().find((plm) => plm[1] === Moves.HEAL_PULSE)),
+    .setSpeciesFilter((s) => !!s.getLevelMoves().find((plm) => plm[1] === MoveId.HEAL_PULSE)),
   [TrainerType.FIREBREATHER]: new TrainerConfig(++t)
     .setMoneyMultiplier(1.4)
     .setEncounterBgm(TrainerType.ROUGHNECK)
-    .setSpeciesFilter((s) => !!s.getLevelMoves().find((plm) => plm[1] === Moves.SMOG) || s.isOfType(ElementType.FIRE)),
+    .setSpeciesFilter((s) => !!s.getLevelMoves().find((plm) => plm[1] === MoveId.SMOG) || s.isOfType(ElementType.FIRE)),
   [TrainerType.FISHERMAN]: new TrainerConfig(++t)
     .setMoneyMultiplier(1.25)
     .setEncounterBgm(TrainerType.BACKPACKER)
@@ -275,7 +275,7 @@ export const genericTrainerConfigs: TrainerConfigs = {
     .setSpeciesFilter((s) => s.isOfType(ElementType.ELECTRIC)),
   [TrainerType.HARLEQUIN]: new TrainerConfig(++t)
     .setEncounterBgm(TrainerType.PSYCHIC)
-    .setSpeciesFilter((s) => tmSpecies[Moves.TRICK_ROOM].indexOf(s.speciesId) > -1),
+    .setSpeciesFilter((s) => tmSpecies[MoveId.TRICK_ROOM].indexOf(s.speciesId) > -1),
   [TrainerType.HIKER]: new TrainerConfig(++t)
     .setEncounterBgm(TrainerType.BACKPACKER)
     .setPartyTemplates(
@@ -332,7 +332,7 @@ export const genericTrainerConfigs: TrainerConfigs = {
   [TrainerType.MAID]: new TrainerConfig(++t).setMoneyMultiplier(1.6).setEncounterBgm(TrainerType.RICH),
   [TrainerType.MUSICIAN]: new TrainerConfig(++t)
     .setEncounterBgm(TrainerType.ROUGHNECK)
-    .setSpeciesFilter((s) => !!s.getLevelMoves().find((plm) => plm[1] === Moves.SING)),
+    .setSpeciesFilter((s) => !!s.getLevelMoves().find((plm) => plm[1] === MoveId.SING)),
   [TrainerType.HEX_MANIAC]: new TrainerConfig(++t)
     .setMoneyMultiplier(1.5)
     .setEncounterBgm(TrainerType.PSYCHIC)
@@ -376,7 +376,7 @@ export const genericTrainerConfigs: TrainerConfigs = {
     .setSpeciesFilter((s) => s.isOfType(ElementType.WATER)),
   [TrainerType.PILOT]: new TrainerConfig(++t)
     .setEncounterBgm(TrainerType.CLERK)
-    .setSpeciesFilter((s) => tmSpecies[Moves.FLY].indexOf(s.speciesId) > -1),
+    .setSpeciesFilter((s) => tmSpecies[MoveId.FLY].indexOf(s.speciesId) > -1),
   [TrainerType.POKEFAN]: new TrainerConfig(++t)
     .setMoneyMultiplier(1.4)
     .setName("PokéFan")
