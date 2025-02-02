@@ -668,6 +668,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     });
   }
 
+  getFormAmount(): number {
+    return this.species.forms.length;
+  }
+
   getFormKey(): string {
     if (!this.species.forms.length || this.species.forms.length <= this.formIndex) {
       return "";
