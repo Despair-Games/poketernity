@@ -21,6 +21,7 @@ import Phaser from "phaser";
 import { PokeballType } from "#enums/pokeball";
 import { ModifierTier } from "#enums/modifier-tier";
 import { settings } from "#app/system/settings/settings-manager";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 export const SHOP_OPTIONS_ROW_LIMIT = 7;
 const SINGLE_SHOP_ROW_YOFFSET = 12;
@@ -72,16 +73,17 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
 
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
-    const styleOptions = getTextStyleOptions(TextStyle.PARTY, settings.display.uiTheme).styleOptions;
+    const { styleOptions, scale } = getTextStyleOptions(TextStyle.PARTY, settings.display.uiTheme);
 
     if (context) {
       context.font = styleOptions.fontSize + "px " + styleOptions.fontFamily;
-      this.transferButtonWidth = context.measureText(i18next.t("modifierSelectUiHandler:transfer")).width;
-      this.checkButtonWidth = context.measureText(i18next.t("modifierSelectUiHandler:checkTeam")).width;
+      // TODO scaling: replace this with using displayWidth once text scaling is changed?
+      this.transferButtonWidth = context.measureText(i18next.t("modifierSelectUiHandler:transfer")).width * scale;
+      this.checkButtonWidth = context.measureText(i18next.t("modifierSelectUiHandler:checkTeam")).width * scale;
     }
 
     this.transferButtonContainer = globalScene.add.container(
-      (globalScene.game.canvas.width - this.checkButtonWidth) / 6 - 21,
+      GAME_WIDTH - this.checkButtonWidth - 21,
       OPTION_BUTTON_YPOSITION,
     );
     this.transferButtonContainer.setName("transfer-btn");
@@ -93,10 +95,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     transferButtonText.setOrigin(1, 0);
     this.transferButtonContainer.add(transferButtonText);
 
-    this.checkButtonContainer = globalScene.add.container(
-      globalScene.game.canvas.width / 6 - 1,
-      OPTION_BUTTON_YPOSITION,
-    );
+    this.checkButtonContainer = globalScene.add.container(GAME_WIDTH - 1, OPTION_BUTTON_YPOSITION);
     this.checkButtonContainer.setName("use-btn");
     this.checkButtonContainer.setVisible(false);
     ui.add(this.checkButtonContainer);
@@ -135,10 +134,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.lockRarityButtonText.setOrigin(0, 0);
     this.lockRarityButtonContainer.add(this.lockRarityButtonText);
 
-    this.continueButtonContainer = globalScene.add.container(
-      globalScene.game.canvas.width / 12,
-      -(globalScene.game.canvas.height / 12),
-    );
+    this.continueButtonContainer = globalScene.add.container(GAME_WIDTH / 2, -(GAME_HEIGHT / 2));
     this.continueButtonContainer.setVisible(false);
     ui.add(this.continueButtonContainer);
 
@@ -161,7 +157,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
       right: true,
       x: 1,
       y: -MoveInfoOverlay.getHeight(overlayScale, true) - 1,
-      width: globalScene.game.canvas.width / 6 - 2,
+      width: GAME_WIDTH - 2,
     });
     ui.add(this.moveInfoOverlay);
     // register the overlay to receive toggle events
@@ -227,10 +223,10 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
       shopTypeOptions.length > SHOP_OPTIONS_ROW_LIMIT ? -SINGLE_SHOP_ROW_YOFFSET : -DOUBLE_SHOP_ROW_YOFFSET;
 
     for (let m = 0; m < typeOptions.length; m++) {
-      const sliceWidth = globalScene.game.canvas.width / 6 / (typeOptions.length + 2);
+      const sliceWidth = GAME_WIDTH / (typeOptions.length + 2);
       const option = new ModifierOption(
         sliceWidth * (m + 1) + sliceWidth * 0.5,
-        -globalScene.game.canvas.height / 12 + optionsYOffset,
+        -GAME_HEIGHT / 2 + optionsYOffset,
         typeOptions[m],
       );
       option.setScale(0.5);
@@ -251,10 +247,10 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
         row ? SHOP_OPTIONS_ROW_LIMIT : 0,
         row ? undefined : SHOP_OPTIONS_ROW_LIMIT,
       );
-      const sliceWidth = globalScene.game.canvas.width / 6 / (rowOptions.length + 2);
+      const sliceWidth = GAME_WIDTH / (rowOptions.length + 2);
       const option = new ModifierOption(
         sliceWidth * (col + 1) + sliceWidth * 0.5,
-        -globalScene.game.canvas.height / 12 - globalScene.game.canvas.height / 32 - (42 - (28 * row - 1)),
+        -GAME_HEIGHT / 2 - GAME_HEIGHT / 6 - (46 - (28 * row - 1)),
         shopTypeOptions[m],
       );
       option.setScale(0.375);
@@ -507,29 +503,27 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
         // Continue button when no shop items
         this.cursorObj.setScale(1.25);
         this.cursorObj.setPosition(
-          globalScene.game.canvas.width / 18 + 23,
-          -globalScene.game.canvas.height / 12
+          GAME_WIDTH / 3 + 23,
+          -GAME_HEIGHT / 2
             - (this.shopOptionsRows.length > 1 ? SINGLE_SHOP_ROW_YOFFSET - 2 : DOUBLE_SHOP_ROW_YOFFSET - 2),
         );
         ui.showText(i18next.t("modifierSelectUiHandler:continueNextWaveDescription"));
         return ret;
       }
 
-      const sliceWidth = globalScene.game.canvas.width / 6 / (options.length + 2);
+      const sliceWidth = GAME_WIDTH / (options.length + 2);
       if (this.rowCursor < 2) {
         // Cursor on free items
         this.cursorObj.setPosition(
           sliceWidth * (cursor + 1) + sliceWidth * 0.5 - 20,
-          -globalScene.game.canvas.height / 12
+          -GAME_HEIGHT / 2
             - (this.shopOptionsRows.length > 1 ? SINGLE_SHOP_ROW_YOFFSET - 2 : DOUBLE_SHOP_ROW_YOFFSET - 2),
         );
       } else {
         // Cursor on paying items
         this.cursorObj.setPosition(
           sliceWidth * (cursor + 1) + sliceWidth * 0.5 - 16,
-          -globalScene.game.canvas.height / 12
-            - globalScene.game.canvas.height / 32
-            - (-14 + 28 * (this.rowCursor - (this.shopOptionsRows.length - 1))),
+          -GAME_HEIGHT / 2 - GAME_HEIGHT / 6 - (-10 + 28 * (this.rowCursor - (this.shopOptionsRows.length - 1))),
         );
       }
 
@@ -547,15 +541,12 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
       ui.showText(i18next.t("modifierSelectUiHandler:rerollDesc"));
     } else if (cursor === 1) {
       this.cursorObj.setPosition(
-        (globalScene.game.canvas.width - this.transferButtonWidth - this.checkButtonWidth) / 6 - 30,
+        GAME_WIDTH - this.transferButtonWidth - this.checkButtonWidth - 30,
         OPTION_BUTTON_YPOSITION + 4,
       );
       ui.showText(i18next.t("modifierSelectUiHandler:transferDesc"));
     } else if (cursor === 2) {
-      this.cursorObj.setPosition(
-        (globalScene.game.canvas.width - this.checkButtonWidth) / 6 - 10,
-        OPTION_BUTTON_YPOSITION + 4,
-      );
+      this.cursorObj.setPosition(GAME_WIDTH - this.checkButtonWidth - 10, OPTION_BUTTON_YPOSITION + 4);
       ui.showText(i18next.t("modifierSelectUiHandler:checkTeamDesc"));
     } else {
       this.cursorObj.setPosition(6, OPTION_BUTTON_YPOSITION + 4);

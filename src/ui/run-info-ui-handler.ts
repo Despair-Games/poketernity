@@ -35,6 +35,8 @@ import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
 import { RunDisplayMode } from "#enums/run-display-mode";
+import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 /**
  * RunInfoUiMode indicates possible overlays of RunInfoUiHandler.
@@ -76,7 +78,7 @@ export default class RunInfoUiHandler extends UiHandler {
   }
 
   override async setup() {
-    this.runContainer = globalScene.add.container(1, -(globalScene.game.canvas.height / 6) + 1);
+    this.runContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
     // The import of the modifiersModule is loaded here to sidestep async/await issues.
     this.modifiersModule = Modifier;
     this.runContainer.setVisible(false);
@@ -97,15 +99,9 @@ export default class RunInfoUiHandler extends UiHandler {
   override show(args: any[]): boolean {
     super.show(args);
 
-    const gameStatsBg = globalScene.add.rectangle(
-      0,
-      0,
-      globalScene.game.canvas.width,
-      globalScene.game.canvas.height,
-      0x006860,
-    );
-    gameStatsBg.setOrigin(0, 0);
-    this.runContainer.add(gameStatsBg);
+    const runInfoBg = globalScene.add.rectangle(-1, -1, GAME_WIDTH, GAME_HEIGHT, 0x006860);
+    runInfoBg.setOrigin(0, 0);
+    this.runContainer.add(runInfoBg);
 
     const run = args[0];
     this.runDisplayMode = args[1];
@@ -122,7 +118,7 @@ export default class RunInfoUiHandler extends UiHandler {
     // Creates Header and adds to this.runContainer
     this.addHeader();
 
-    this.statsBgWidth = (globalScene.game.canvas.width / 6 - 2) / 3;
+    this.statsBgWidth = (GAME_WIDTH - 2) / 3;
 
     // Creates Run Result Container
     this.runResultContainer = globalScene.add.container(0, 24);
@@ -148,10 +144,6 @@ export default class RunInfoUiHandler extends UiHandler {
     this.parsePartyInfo();
     this.showParty(true);
 
-    this.runContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 6, globalScene.game.canvas.height / 6),
-      Phaser.Geom.Rectangle.Contains,
-    );
     this.getUi().bringToTop(this.runContainer);
     this.runContainer.setVisible(true);
 
@@ -176,7 +168,7 @@ export default class RunInfoUiHandler extends UiHandler {
    * It does not check if the run has any PokemonHeldItemModifiers though.
    */
   private addHeader() {
-    const headerBg = addWindow(0, 0, globalScene.game.canvas.width / 6 - 2, 24);
+    const headerBg = addWindow(0, 0, GAME_WIDTH - 2, 24);
     headerBg.setOrigin(0, 0);
     this.runContainer.add(headerBg);
     if (this.runInfo.modifiers.length !== 0) {
@@ -739,7 +731,7 @@ export default class RunInfoUiHandler extends UiHandler {
   private parsePartyInfo(): void {
     const party = this.runInfo.party;
     const currentLanguage = i18next.resolvedLanguage ?? "en";
-    const windowHeight = (globalScene.game.canvas.height / 6 - 23) / 6;
+    const windowHeight = (GAME_HEIGHT - 23) / PLAYER_PARTY_MAX_SIZE;
 
     party.forEach((p: PokemonData, i: number) => {
       const pokemonInfoWindow = new RoundRectangle(globalScene, 0, 14, this.statsBgWidth * 2 + 10, windowHeight - 2, 3);
@@ -983,12 +975,11 @@ export default class RunInfoUiHandler extends UiHandler {
     this.endCardContainer = globalScene.add.container(0, 0);
     const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
     const isFemale = genderIndex === PlayerGender.FEMALE;
-    const endCard = globalScene.add.image(0, 0, `end_${isFemale ? "f" : "m"}`);
+    const endCard = globalScene.add.image(-1, -1, `end_${isFemale ? "f" : "m"}`);
     endCard.setOrigin(0);
-    endCard.setScale(0.5);
     const text = addTextObject(
-      globalScene.game.canvas.width / 12,
-      globalScene.game.canvas.height / 6 - 16,
+      GAME_WIDTH / 2,
+      GAME_HEIGHT - 16,
       i18next.t("battle:congratulations"),
       TextStyle.SUMMARY,
       { fontSize: "128px" },
@@ -1009,27 +1000,18 @@ export default class RunInfoUiHandler extends UiHandler {
     // Issue Note (08-05-2024): It seems as if fused pokemon do not appear with the averaged color b/c pokemonData's loadAsset requires there to be some active battle?
     // As an alternative, the icons of the second/bottom fused Pokemon have been placed next to their fellow fused Pokemon in Hall of Fame
     this.hallofFameContainer = globalScene.add.container(0, 0);
-    // Thank you Hayuna for the code
-    const endCard = globalScene.add.image(0, 0, `end_${isFemale ? "f" : "m"}`);
-    endCard.setOrigin(0);
-    endCard.setPosition(-1, -1);
-    endCard.setScale(0.5);
-    const endCardCoords = endCard.getBottomCenter();
     const overlayColor = isFemale ? "red" : "blue";
-    const hallofFameBg = globalScene.add.image(0, 0, "hall_of_fame_" + overlayColor);
-    hallofFameBg.setPosition(159, 89);
-    hallofFameBg.setSize(globalScene.game.canvas.width, globalScene.game.canvas.height + 10);
-    hallofFameBg.setAlpha(0.8);
-    this.hallofFameContainer.add(endCard);
+    const hallofFameBg = globalScene.add.image(-1, -1, "hall_of_fame_" + overlayColor);
+    hallofFameBg.setOrigin(0, 0);
     this.hallofFameContainer.add(hallofFameBg);
-
     const hallofFameText = addTextObject(
       0,
       0,
       i18next.t("runHistory:hallofFameText", { context: genderStr }),
       TextStyle.WINDOW,
     );
-    hallofFameText.setPosition(endCardCoords.x - hallofFameText.displayWidth / 2, 164);
+    hallofFameText.setOrigin(0.5);
+    hallofFameText.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - 16);
     this.hallofFameContainer.add(hallofFameText);
     this.runInfo.party.forEach((p, i) => {
       const pkmn = p.toPokemon();

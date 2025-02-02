@@ -38,6 +38,7 @@ import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { PartyOption } from "#enums/party-option";
+import { GAME_WIDTH } from "#app/ui-constants";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
 
@@ -211,7 +212,7 @@ export default class PartyUiHandler extends MessageUiHandler {
 
     this.partyCancelButton = partyCancelButton;
 
-    this.optionsContainer = globalScene.add.container(globalScene.game.canvas.width / 6 - 1, -1);
+    this.optionsContainer = globalScene.add.container(GAME_WIDTH - 1, -1);
     partyContainer.add(this.optionsContainer);
 
     this.iconAnimHandler = new PokemonIconAnimHandler();
@@ -224,7 +225,7 @@ export default class PartyUiHandler extends MessageUiHandler {
       top: true,
       x: 1,
       y: -MoveInfoOverlay.getHeight(overlayScale) - 1,
-      width: globalScene.game.canvas.width / 12 - 30,
+      width: GAME_WIDTH / 2 - 30,
     });
     ui.add(this.moveInfoOverlay);
 

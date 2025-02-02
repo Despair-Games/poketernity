@@ -53,6 +53,7 @@ import { ModifierTier } from "#enums/modifier-tier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { GAME_WIDTH } from "#app/ui-constants";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/bugTypeSuperfan";
@@ -719,7 +720,7 @@ function doBugTypeMoveTutor(): Promise<void> {
       right: true,
       x: 1,
       y: -MoveInfoOverlay.getHeight(overlayScale, true) - 1,
-      width: globalScene.game.canvas.width / 6 - 2,
+      width: GAME_WIDTH - 2,
     });
     globalScene.ui.add(moveInfoOverlay);
 

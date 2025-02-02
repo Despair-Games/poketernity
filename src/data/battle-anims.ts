@@ -363,6 +363,7 @@ class AnimTimedUpdateBgEvent extends AnimTimedBgEvent {
     super(frameIndex, resourceName, source);
   }
 
+  // TODO scaling: look at these 320 and 284 numbers
   execute(moveAnim: MoveAnim, _priority?: number): number {
     const tweenProps = {};
     if (this.bgX !== undefined) {

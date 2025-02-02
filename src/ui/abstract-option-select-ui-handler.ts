@@ -11,6 +11,7 @@ import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbc
 import type { UIOptionSelectItem } from "./interfaces/option-select-ui-item";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
+import { GAME_WIDTH } from "#app/ui-constants";
 
 const SCROLLBAR_PADDING = 5;
 const SCROLLBAR_WIDTH = 3;
@@ -50,6 +51,7 @@ export default abstract class AbstractOptionSelectUiHandler<T extends OptionSele
 
   protected scrollCursor: number = 0;
 
+  // TODO scaling: find a way to improve this. currently needed for languages with different text size like japanese
   protected scale: number = 0.1666666667;
 
   constructor(mode: UiMode = UiMode.OPTION_SELECT) {
@@ -66,7 +68,7 @@ export default abstract class AbstractOptionSelectUiHandler<T extends OptionSele
 
     this.scale = getTextStyleOptions(DEFAULT_TEXT_STYLE, settings.display.uiTheme).scale;
 
-    this.optionSelectContainer = globalScene.add.container(globalScene.scaledCanvas.width - 1, -1);
+    this.optionSelectContainer = globalScene.add.container(GAME_WIDTH - 1, -1);
     this.optionSelectContainer.setName(`option-select-${this.mode ? UiMode[this.mode] : "UNKNOWN"}`);
     this.optionSelectContainer.setVisible(false);
     ui.add(this.optionSelectContainer);
@@ -76,7 +78,8 @@ export default abstract class AbstractOptionSelectUiHandler<T extends OptionSele
     this.optionSelectBg.setOrigin(1, 1);
     this.optionSelectContainer.add(this.optionSelectBg);
 
-    this.optionSelectText = addBBCodeTextObject(0, 0, "", DEFAULT_TEXT_STYLE, { lineSpacing: this.scale * 72 });
+    this.optionSelectText = addBBCodeTextObject(0, 0, "", DEFAULT_TEXT_STYLE);
+    this.optionSelectText.setLineSpacing(this.scale * 72);
     this.optionSelectText.setOrigin(0, 0);
     this.optionSelectText.setName("text-option-select");
     this.optionSelectContainer.add(this.optionSelectText);
@@ -165,10 +168,10 @@ export default abstract class AbstractOptionSelectUiHandler<T extends OptionSele
     const yOffset = Math.abs(this.config?.yOffset ?? 0);
 
     // Make sure the window is not larger than the screen
-    const bgWidth = Math.min(maxWidth, globalScene.scaledCanvas.width - 2);
+    const bgWidth = Math.min(maxWidth, GAME_WIDTH - 2);
     const bgHeight = this.computeWindowHeight();
     // Make sure the window doesn't go past the left side of the screen
-    const xPosition = Math.max(bgWidth + 1, globalScene.scaledCanvas.width - 1 - xOffset);
+    const xPosition = Math.max(bgWidth + 1, GAME_WIDTH - 1 - xOffset);
 
     this.optionSelectContainer.setPosition(xPosition, -yOffset);
     this.optionSelectText.setPosition(
@@ -404,9 +407,9 @@ export default abstract class AbstractOptionSelectUiHandler<T extends OptionSele
     if (!this.cursorObj) {
       this.cursorObj = globalScene.add.image(0, 0, "cursor");
       this.optionSelectContainer.add(this.cursorObj);
-      this.cursorObj.setScale(this.scale * 6);
     }
 
+    this.cursorObj.setScale(this.scale * 6);
     this.cursorObj.setPositionRelative(
       this.optionSelectBg,
       10,
