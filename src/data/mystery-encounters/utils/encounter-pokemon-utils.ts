@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import i18next from "i18next";
 import { isNullOrUndefined, randSeedInt } from "#app/utils";
-import { PokemonHeldItemModifier } from "#app/modifier/modifier";
+import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import {
@@ -19,7 +19,7 @@ import { PartyUiMode } from "#enums/party-ui-mode";
 import { Species } from "#enums/species";
 import type { ElementType } from "#enums/element-type";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import {
   getEncounterText,
@@ -404,10 +404,7 @@ export async function applyModifierTypeToPlayerPokemon(
   const modifier = modType.newModifier(pokemon);
   const existing = globalScene.findModifier(
     (m) =>
-      m instanceof PokemonHeldItemModifier
-      && m.type.id === modType.id
-      && m.pokemonId === pokemon.id
-      && m.matchType(modifier),
+      m.isPokemonHeldItemModifier() && m.type.id === modType.id && m.pokemonId === pokemon.id && m.matchType(modifier),
   ) as PokemonHeldItemModifier;
 
   // At max stacks
@@ -687,7 +684,7 @@ export async function catchPokemon(
       };
       const addToParty = (slotIndex?: number) => {
         const newPokemon = pokemon.addToParty(pokeballType, slotIndex);
-        const modifiers = globalScene.findModifiers((m) => m instanceof PokemonHeldItemModifier, false);
+        const modifiers = globalScene.findModifiers((m) => m.isPokemonHeldItemModifier(), false);
         if (globalScene.getPlayerParty().filter((p) => p.isShiny()).length === 6) {
           globalScene.validateAchv(achvs.SHINY_PARTY);
         }

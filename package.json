@@ -13,19 +13,16 @@
     "preview": "vite preview",
 
     "test": "vitest run --no-isolate",
-    "posttest": "git rev-parse --short HEAD",
 
     "test:cov": "vitest run --coverage",
-    "posttest:cov": "git rev-parse --short HEAD",
 
     "test:watch": "vitest watch --coverage",
-    "posttest:watch": "git rev-parse --short HEAD",
 
     "test:silent": "vitest run --silent --no-isolate",
-    "posttest:silent": "git rev-parse --short HEAD",
+
+    "test:full": "tsc --noEmit && vitest run --silent --no-isolate",
 
     "typecheck": "tsc --noEmit",
-    "posttypecheck": "git rev-parse --short HEAD",
 
     "eslint": "eslint --fix .",
     "eslint-ci": "eslint .",

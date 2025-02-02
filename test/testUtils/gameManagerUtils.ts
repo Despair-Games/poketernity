@@ -3,7 +3,7 @@ import { BattleType } from "#enums/battle-type";
 import type BattleScene from "#app/battle-scene";
 import { getDailyRunStarters } from "#app/data/daily-run";
 import { Gender } from "#enums/gender";
-import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/data/pokemon-species";
+import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
 import { PlayerPokemon } from "#app/field/pokemon";
 import { getGameMode } from "#app/game-mode";
 import { GameModes } from "#enums/game-modes";

@@ -3,7 +3,7 @@ import type { Pokemon } from "../field/pokemon";
 import { HitResult } from "#enums/hit-result";
 import { getStatusEffectHealText } from "./status-effect";
 import { NumberHolder, toDmgValue, randSeedInt } from "#app/utils";
-import { applyAbAttrs } from "./ability";
+import { applyAbAttrs } from "./apply-ab-attrs";
 import { ReduceBerryUseThresholdAbAttr } from "./ab-attrs/reduce-berry-use-threshold-ab-attr";
 import { DoubleBerryEffectAbAttr } from "./ab-attrs/double-berry-effect-ab-attr";
 import { PostItemLostAbAttr } from "./ab-attrs/post-item-lost-ab-attr";
@@ -14,14 +14,7 @@ import { Stat, type BattleStat } from "#enums/stat";
 import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { globalScene } from "#app/global-scene";
-
-export function getBerryName(berryType: BerryType): string {
-  return i18next.t(`berry:${BerryType[berryType]}.name`);
-}
-
-export function getBerryEffectDescription(berryType: BerryType): string {
-  return i18next.t(`berry:${BerryType[berryType]}.effect`);
-}
+import { getBerryName } from "#app/utils/berry-utils";
 
 export type BerryPredicate = (pokemon: Pokemon) => boolean;
 

@@ -7,7 +7,7 @@ import { BooleanHolder, toDmgValue } from "#app/utils";
 import i18next from "i18next";
 import { BlockNonDirectDamageAbAttr } from "#app/data/ab-attrs/block-non-direct-damage-ab-attr";
 import { BlockRecoilDamageAttr } from "#app/data/ab-attrs/block-recoil-damage-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 

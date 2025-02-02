@@ -7,7 +7,7 @@ import type { IEggOptions } from "../data/egg";
 import { Egg, getLegendaryGachaSpeciesForTimestamp } from "../data/egg";
 import { getVoucherTypeIcon } from "../system/voucher";
 import { VoucherType } from "#enums/voucher-type";
-import { getPokemonSpecies } from "../data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { addWindow } from "./ui-theme";
 import { handleTutorial } from "../tutorial";
 import { Tutorial } from "#enums/tutorial";

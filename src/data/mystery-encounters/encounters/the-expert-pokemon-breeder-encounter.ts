@@ -16,7 +16,7 @@ import { Biome } from "#enums/biome";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
 import { Species } from "#enums/species";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import { Nature } from "#enums/nature";
 import { MoveId } from "#enums/move-id";

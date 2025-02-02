@@ -19,11 +19,12 @@ import {
   getEncounterPokemonLevelForWave,
   STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { EnemyPokemon, PokemonMove } from "#app/field/pokemon";
+import { EnemyPokemon } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";

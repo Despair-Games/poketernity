@@ -9,7 +9,7 @@ import {
   SpeciesFormChangeTeraTrigger,
 } from "#app/data/pokemon-forms";
 import { type FormChangeItem } from "#enums/form-change-item";
-import { Pokemon, type PlayerPokemon } from "#app/field/pokemon";
+import { type Pokemon, type PlayerPokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
 import { EvolutionPhase } from "#app/phases/evolution-phase";
@@ -33,6 +33,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { ElementType } from "#enums/element-type";
 import i18next from "i18next";
 import {
+  type AttackTypeBoosterModifierType,
   type DoubleBattleChanceBoosterModifierType,
   type EvolutionItemModifierType,
   type FormChangeItemModifierType,
@@ -53,19 +54,17 @@ import {
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { Color, ShadowColor } from "#enums/color";
 import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { CommanderAbAttr } from "#app/data/ab-attrs/commander-ab-attr";
 import { globalScene } from "#app/global-scene";
-
-export type ModifierPredicate = (modifier: Modifier) => boolean;
 
 const iconOverflowIndex = 24;
 
 export const modifierSortFunc = (a: Modifier, b: Modifier): number => {
   const itemNameMatch = a.type.name.localeCompare(b.type.name);
   const typeNameMatch = a.constructor.name.localeCompare(b.constructor.name);
-  const aId = a instanceof PokemonHeldItemModifier && a.pokemonId ? a.pokemonId : 4294967295;
-  const bId = b instanceof PokemonHeldItemModifier && b.pokemonId ? b.pokemonId : 4294967295;
+  const aId = a.isPokemonHeldItemModifier() && a.pokemonId ? a.pokemonId : 4294967295;
+  const bId = b.isPokemonHeldItemModifier() && b.pokemonId ? b.pokemonId : 4294967295;
 
   //First sort by pokemonID
   if (aId < bId) {
@@ -189,6 +188,70 @@ export abstract class Modifier {
    * @param args collection of all passed parameters
    */
   abstract apply(...args: unknown[]): boolean;
+
+  isBerryModifier(): this is BerryModifier {
+    return false;
+  }
+
+  isPokemonHeldItemModifier(): this is PokemonHeldItemModifier {
+    return false;
+  }
+
+  isPersistentModifier(): this is PersistentModifier {
+    return false;
+  }
+
+  isTerastallizeModifier(): this is TerastallizeModifier {
+    return false;
+  }
+
+  isPokemonFormChangeItemModifier(): this is PokemonFormChangeItemModifier {
+    return false;
+  }
+
+  isSwitchEffectTransferModifier(): this is SwitchEffectTransferModifier {
+    return false;
+  }
+
+  isCriticalCatchChanceBoosterModifier(): this is CriticalCatchChanceBoosterModifier {
+    return false;
+  }
+
+  isHitHealModifier(): this is HitHealModifier {
+    return false;
+  }
+
+  isPreserveBerryModifier(): this is PreserveBerryModifier {
+    return false;
+  }
+
+  isShinyRateBoosterModifier(): this is ShinyRateBoosterModifier {
+    return false;
+  }
+
+  isPokemonMultiHitModifier(): this is PokemonMultiHitModifier {
+    return false;
+  }
+
+  isLapsingPokemonHeldItemModifier(): this is LapsingPokemonHeldItemModifier {
+    return false;
+  }
+
+  isLapsingPersistentModifier(): this is LapsingPersistentModifier {
+    return false;
+  }
+
+  isAttackTypeBoosterModifier(): this is AttackTypeBoosterModifier {
+    return false;
+  }
+
+  isTurnHealModifier(): this is TurnHealModifier {
+    return false;
+  }
+
+  isHealShopCostModifier(): this is HealShopCostModifier {
+    return false;
+  }
 }
 
 export abstract class PersistentModifier extends Modifier {
@@ -279,6 +342,10 @@ export abstract class PersistentModifier extends Modifier {
     text.setOrigin(0, 0);
 
     return text;
+  }
+
+  override isPersistentModifier(): this is this {
+    return true;
   }
 }
 
@@ -454,6 +521,10 @@ export abstract class LapsingPersistentModifier extends PersistentModifier {
   getMaxStackCount(_forThreshold?: boolean): number {
     // Must be an abitrary number greater than 1
     return 2;
+  }
+
+  override isLapsingPersistentModifier(): this is this {
+    return true;
   }
 }
 
@@ -783,6 +854,10 @@ export abstract class PokemonHeldItemModifier extends PersistentModifier {
   }
 
   abstract getMaxHeldItemCount(pokemon?: Pokemon): number;
+
+  override isPokemonHeldItemModifier(): this is this {
+    return true;
+  }
 }
 
 export abstract class LapsingPokemonHeldItemModifier extends PokemonHeldItemModifier {
@@ -833,6 +908,10 @@ export abstract class LapsingPokemonHeldItemModifier extends PokemonHeldItemModi
   override getMaxStackCount(_forThreshold?: boolean): number {
     return 1;
   }
+
+  override isLapsingPokemonHeldItemModifier(): this is this {
+    return true;
+  }
 }
 
 export class TerastallizeModifier extends LapsingPokemonHeldItemModifier {
@@ -853,7 +932,7 @@ export class TerastallizeModifier extends LapsingPokemonHeldItemModifier {
   }
 
   matchType(modifier: Modifier): boolean {
-    if (modifier instanceof TerastallizeModifier && modifier.teraType === this.teraType) {
+    if (modifier.isTerastallizeModifier() && modifier.teraType === this.teraType) {
       return true;
     }
     return false;
@@ -904,6 +983,10 @@ export class TerastallizeModifier extends LapsingPokemonHeldItemModifier {
 
   getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 1;
+  }
+
+  override isTerastallizeModifier(): this is this {
+    return true;
   }
 }
 
@@ -1541,6 +1624,7 @@ export class SpeciesCritBoosterModifier extends CritBoosterModifier {
  * Applies Specific Type item boosts (e.g., Magnet)
  */
 export class AttackTypeBoosterModifier extends PokemonHeldItemModifier {
+  public override type: AttackTypeBoosterModifierType;
   public moveType: ElementType;
   private boostMultiplier: number;
 
@@ -1552,8 +1636,8 @@ export class AttackTypeBoosterModifier extends PokemonHeldItemModifier {
   }
 
   matchType(modifier: Modifier): boolean {
-    if (modifier instanceof AttackTypeBoosterModifier) {
-      const attackTypeBoosterModifier = modifier as AttackTypeBoosterModifier;
+    if (modifier.isAttackTypeBoosterModifier()) {
+      const attackTypeBoosterModifier = modifier;
       return (
         attackTypeBoosterModifier.moveType === this.moveType
         && attackTypeBoosterModifier.boostMultiplier === this.boostMultiplier
@@ -1616,6 +1700,10 @@ export class AttackTypeBoosterModifier extends PokemonHeldItemModifier {
 
   getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 99;
+  }
+
+  override isAttackTypeBoosterModifier(): this is this {
+    return true;
   }
 }
 
@@ -1781,7 +1869,7 @@ export class TurnHealModifier extends PokemonHeldItemModifier {
   }
 
   matchType(modifier: Modifier) {
-    return modifier instanceof TurnHealModifier;
+    return modifier.isTurnHealModifier();
   }
 
   clone() {
@@ -1811,6 +1899,10 @@ export class TurnHealModifier extends PokemonHeldItemModifier {
 
   getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 4;
+  }
+
+  override isTurnHealModifier(): this is this {
+    return true;
   }
 }
 
@@ -1879,7 +1971,7 @@ export class HitHealModifier extends PokemonHeldItemModifier {
   }
 
   matchType(modifier: Modifier) {
-    return modifier instanceof HitHealModifier;
+    return modifier.isHitHealModifier();
   }
 
   clone() {
@@ -1912,6 +2004,10 @@ export class HitHealModifier extends PokemonHeldItemModifier {
 
   getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 4;
+  }
+
+  override isHitHealModifier(): this is this {
+    return true;
   }
 }
 
@@ -1965,7 +2061,7 @@ export class BerryModifier extends PokemonHeldItemModifier {
   }
 
   matchType(modifier: Modifier) {
-    return modifier instanceof BerryModifier && (modifier as BerryModifier).berryType === this.berryType;
+    return modifier.isBerryModifier() && modifier.berryType === this.berryType;
   }
 
   clone() {
@@ -2008,6 +2104,10 @@ export class BerryModifier extends PokemonHeldItemModifier {
     }
     return 3;
   }
+
+  override isBerryModifier(): this is this {
+    return true;
+  }
 }
 
 export class PreserveBerryModifier extends PersistentModifier {
@@ -2016,7 +2116,7 @@ export class PreserveBerryModifier extends PersistentModifier {
   }
 
   override match(modifier: Modifier) {
-    return modifier instanceof PreserveBerryModifier;
+    return modifier.isPreserveBerryModifier();
   }
 
   clone() {
@@ -2049,6 +2149,10 @@ export class PreserveBerryModifier extends PersistentModifier {
 
   getMaxStackCount(): number {
     return 3;
+  }
+
+  override isPreserveBerryModifier(): this is this {
+    return true;
   }
 }
 
@@ -2859,7 +2963,7 @@ export class PokemonMultiHitModifier extends PokemonHeldItemModifier {
   }
 
   matchType(modifier: Modifier): boolean {
-    return modifier instanceof PokemonMultiHitModifier;
+    return modifier.isPokemonMultiHitModifier();
   }
 
   clone(): PersistentModifier {
@@ -2932,6 +3036,10 @@ export class PokemonMultiHitModifier extends PokemonHeldItemModifier {
   getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 2;
   }
+
+  override isPokemonMultiHitModifier(): this is this {
+    return true;
+  }
 }
 
 export class PokemonFormChangeItemModifier extends PokemonHeldItemModifier {
@@ -2953,7 +3061,7 @@ export class PokemonFormChangeItemModifier extends PokemonHeldItemModifier {
   }
 
   matchType(modifier: Modifier): boolean {
-    return modifier instanceof PokemonFormChangeItemModifier && modifier.formChangeItem === this.formChangeItem;
+    return modifier.isPokemonFormChangeItemModifier() && modifier.formChangeItem === this.formChangeItem;
   }
 
   clone(): PersistentModifier {
@@ -2994,6 +3102,10 @@ export class PokemonFormChangeItemModifier extends PokemonHeldItemModifier {
 
   getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 1;
+  }
+
+  override isPokemonFormChangeItemModifier(): this is this {
+    return true;
   }
 }
 
@@ -3166,7 +3278,7 @@ export class ShinyRateBoosterModifier extends PersistentModifier {
   }
 
   override match(modifier: Modifier): boolean {
-    return modifier instanceof ShinyRateBoosterModifier;
+    return modifier.isShinyRateBoosterModifier();
   }
 
   clone(): ShinyRateBoosterModifier {
@@ -3187,6 +3299,10 @@ export class ShinyRateBoosterModifier extends PersistentModifier {
   getMaxStackCount(): number {
     return 4;
   }
+
+  override isShinyRateBoosterModifier(): this is this {
+    return true;
+  }
 }
 
 export class CriticalCatchChanceBoosterModifier extends PersistentModifier {
@@ -3195,7 +3311,7 @@ export class CriticalCatchChanceBoosterModifier extends PersistentModifier {
   }
 
   override match(modifier: Modifier): boolean {
-    return modifier instanceof CriticalCatchChanceBoosterModifier;
+    return modifier.isCriticalCatchChanceBoosterModifier();
   }
 
   clone(): CriticalCatchChanceBoosterModifier {
@@ -3218,6 +3334,10 @@ export class CriticalCatchChanceBoosterModifier extends PersistentModifier {
 
   getMaxStackCount(): number {
     return 3;
+  }
+
+  override isCriticalCatchChanceBoosterModifier(): this is this {
+    return true;
   }
 }
 
@@ -3260,7 +3380,7 @@ export class HealShopCostModifier extends PersistentModifier {
   }
 
   override match(modifier: Modifier): boolean {
-    return modifier instanceof HealShopCostModifier;
+    return modifier.isHealShopCostModifier();
   }
 
   clone(): HealShopCostModifier {
@@ -3284,6 +3404,10 @@ export class HealShopCostModifier extends PersistentModifier {
 
   getMaxStackCount(): number {
     return 1;
+  }
+
+  override isHealShopCostModifier(): this is this {
+    return true;
   }
 }
 
@@ -3319,7 +3443,7 @@ export class SwitchEffectTransferModifier extends PokemonHeldItemModifier {
   }
 
   matchType(modifier: Modifier): boolean {
-    return modifier instanceof SwitchEffectTransferModifier;
+    return modifier.isSwitchEffectTransferModifier();
   }
 
   clone(): SwitchEffectTransferModifier {
@@ -3336,6 +3460,10 @@ export class SwitchEffectTransferModifier extends PokemonHeldItemModifier {
 
   getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 1;
+  }
+
+  override isSwitchEffectTransferModifier(): this is this {
+    return true;
   }
 }
 
@@ -3356,7 +3484,7 @@ export abstract class HeldItemTransferModifier extends PokemonHeldItemModifier {
    * @returns the opponents of the source {@linkcode Pokemon}
    */
   getTargets(pokemon?: Pokemon, ..._args: unknown[]): Pokemon[] {
-    return pokemon instanceof Pokemon ? pokemon.getOpponents() : [];
+    return pokemon?.type === "Pokemon" ? pokemon.getOpponents() : [];
   }
 
   /**
@@ -3389,7 +3517,7 @@ export abstract class HeldItemTransferModifier extends PokemonHeldItemModifier {
 
     const transferredModifierTypes: ModifierType[] = [];
     const itemModifiers = globalScene.findModifiers(
-      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === targetPokemon.id && m.isTransferable,
+      (m) => m.isPokemonHeldItemModifier() && m.pokemonId === targetPokemon.id && m.isTransferable,
       targetPokemon.isPlayer(),
     ) as PokemonHeldItemModifier[];
     let highestItemTier = itemModifiers

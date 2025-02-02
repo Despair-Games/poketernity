@@ -12,12 +12,12 @@ import type BattleScene from "#app/battle-scene";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { BerryModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
+import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { BerryType } from "#enums/berry-type";
 import { AbsoluteAvariceEncounter } from "#app/data/mystery-encounters/encounters/absolute-avarice-encounter";
 import { MoveId } from "#enums/move-id";
 import { CommandPhase } from "#app/phases/command-phase";
-import { MovePhase } from "#app/phases/move-phase";
+import type { MovePhase } from "#app/phases/move-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import i18next from "i18next";
 
@@ -140,7 +140,7 @@ describe("Absolute Avarice - Mystery Encounter", () => {
       expect(moveset?.length).toBe(4);
       expect(moveset).toEqual([MoveId.THRASH, MoveId.BODY_PRESS, MoveId.STUFF_CHEEKS, MoveId.CRUNCH]);
 
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].isMovePhase()).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.STUFF_CHEEKS).length).toBe(1); // Stuff Cheeks used before battle
     });
@@ -154,10 +154,10 @@ describe("Absolute Avarice - Mystery Encounter", () => {
 
       for (const partyPokemon of scene.getPlayerParty()) {
         const pokemonId = partyPokemon.id;
-        const pokemonItems = scene.findModifiers(
-          (m) => m instanceof PokemonHeldItemModifier && (m as PokemonHeldItemModifier).pokemonId === pokemonId,
+        const pokemonItems = scene.findModifiers<PokemonHeldItemModifier>(
+          (m) => m.isPokemonHeldItemModifier() && m.pokemonId === pokemonId,
           true,
-        ) as PokemonHeldItemModifier[];
+        );
         const revSeed = pokemonItems.find(
           (i) => i.type.name === i18next.t("modifierType:ModifierType.REVIVER_SEED.name"),
         );
@@ -197,7 +197,7 @@ describe("Absolute Avarice - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 2);
 
-      const berriesAfter = scene.findModifiers((m) => m instanceof BerryModifier);
+      const berriesAfter = scene.findModifiers((m) => m.isBerryModifier());
       const berryCountAfter = berriesAfter.reduce((a, b) => a + b.stackCount, 0);
       expect(berriesAfter).toBeDefined();
       expect(berryCountAfter).toBe(3);
@@ -217,7 +217,7 @@ describe("Absolute Avarice - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 2);
 
-      const berriesAfter = scene.findModifiers((m) => m instanceof BerryModifier);
+      const berriesAfter = scene.findModifiers((m) => m.isBerryModifier());
       const berryCountAfter = berriesAfter.reduce((a, b) => a + b.stackCount, 0);
       expect(berriesAfter).toBeDefined();
       expect(berryCountAfter).toBe(2);

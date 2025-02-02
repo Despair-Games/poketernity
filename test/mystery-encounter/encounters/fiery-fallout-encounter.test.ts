@@ -6,7 +6,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { FieryFalloutEncounter } from "#app/data/mystery-encounters/encounters/fiery-fallout-encounter";
 import { Gender } from "#enums/gender";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import * as BattleAnims from "#app/data/battle-anims";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
@@ -16,7 +16,7 @@ import {
 } from "#test/mystery-encounter/encounter-test-utils";
 import { MoveId } from "#enums/move-id";
 import type BattleScene from "#app/battle-scene";
-import { AttackTypeBoosterModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
+import { type PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { ElementType } from "#enums/element-type";
 import { Status } from "#app/data/status-effect";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
@@ -24,7 +24,7 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
 import { CommandPhase } from "#app/phases/command-phase";
-import { MovePhase } from "#app/phases/move-phase";
+import type { MovePhase } from "#app/phases/move-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Abilities } from "#enums/abilities";
@@ -169,7 +169,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       expect(enemyField[1].species.speciesId).toBe(Species.VOLCARONA);
       expect(enemyField[0].gender).not.toEqual(enemyField[1].gender); // Should be opposite gender
 
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].isMovePhase()).map((p) => p[0]);
       expect(movePhases.length).toBe(2);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.FIRE_SPIN).length).toBe(2); // Fire spin used twice before battle
     });
@@ -182,11 +182,11 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
 
       const leadPokemonId = scene.getPlayerParty()?.[0].id;
-      const leadPokemonItems = scene.findModifiers(
-        (m) => m instanceof PokemonHeldItemModifier && (m as PokemonHeldItemModifier).pokemonId === leadPokemonId,
+      const leadPokemonItems = scene.findModifiers<PokemonHeldItemModifier>(
+        (m) => m.isPokemonHeldItemModifier() && m.pokemonId === leadPokemonId,
         true,
-      ) as PokemonHeldItemModifier[];
-      const item = leadPokemonItems.find((i) => i instanceof AttackTypeBoosterModifier);
+      );
+      const item = leadPokemonItems.find((i) => i.isAttackTypeBoosterModifier());
       expect(item).toBeDefined;
     });
   });
@@ -270,8 +270,8 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       await game.phaseInterceptor.to(SelectModifierPhase, false);
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
 
-      const leadPokemonItems = scene.getPlayerParty()?.[0].getHeldItems() as PokemonHeldItemModifier[];
-      const item = leadPokemonItems.find((i) => i instanceof AttackTypeBoosterModifier);
+      const leadPokemonItems = scene.getPlayerParty()?.[0].getHeldItems();
+      const item = leadPokemonItems.find((i) => i.isAttackTypeBoosterModifier());
       expect(item).toBeDefined;
     });
 

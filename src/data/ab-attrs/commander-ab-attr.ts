@@ -1,7 +1,6 @@
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { MovePhase } from "#app/phases/move-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
@@ -35,7 +34,7 @@ export class CommanderAbAttr extends AbAttr {
         // Apply boosts from this effect to the ally Dondozo
         pokemon.getAlly().addTag(BattlerTagType.COMMANDED, 0, MoveId.NONE, pokemon.id);
         // Cancel the source Pokemon's next move (if a move is queued)
-        globalScene.tryRemovePhase((phase) => phase instanceof MovePhase && phase.pokemon === pokemon);
+        globalScene.tryRemovePhase((phase) => phase.isMovePhase() && phase.pokemon === pokemon);
       }
       return true;
     }

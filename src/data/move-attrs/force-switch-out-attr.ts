@@ -14,7 +14,7 @@ import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { ForceSwitchOutImmunityAbAttr } from "#app/data/ab-attrs/force-switch-out-immunity-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { PostDamageForceSwitchAbAttr } from "#app/data/ab-attrs/post-damage-force-switch-out-ab-attr";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";

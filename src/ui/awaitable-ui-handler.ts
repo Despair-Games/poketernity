@@ -50,4 +50,8 @@ export default abstract class AwaitableUiHandler extends UiHandler {
       container.add(this.tutorialOverlay);
     }
   }
+
+  override isAwaitableUiHandler(): this is this {
+    return true;
+  }
 }

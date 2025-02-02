@@ -4,7 +4,8 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-type";
-import { getPokemonSpecies, getSpecialSpeciesList } from "#app/data/pokemon-species";
+import { getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
@@ -18,7 +19,6 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { ModifierRewardPhase } from "#app/phases/modifier-reward-phase";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import { PokemonFormChangeItemModifier } from "#app/modifier/modifier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { Challenges } from "#enums/challenges";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
@@ -84,7 +84,7 @@ export const DarkDealEncounter: MysteryEncounter = MysteryEncounterBuilder.withE
         const removedPokemon = getRandomPlayerPokemon(true, false, true);
 
         // Get all the pokemon's held items
-        const modifiers = removedPokemon.getHeldItems().filter((m) => !(m instanceof PokemonFormChangeItemModifier));
+        const modifiers = removedPokemon.getHeldItems().filter((m) => !m.isPokemonFormChangeItemModifier());
         globalScene.removePokemonFromPlayerParty(removedPokemon);
 
         const encounter = globalScene.currentBattle.mysteryEncounter!;

@@ -4,11 +4,11 @@ import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-a
 import { PostAttackAbAttr } from "#app/data/ab-attrs/post-attack-ab-attr";
 import { PostDamageAbAttr } from "#app/data/ab-attrs/post-damage-ab-attr";
 import { PostDefendAbAttr } from "#app/data/ab-attrs/post-defend-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { MoveAnim } from "#app/data/battle-anims";
 import { SkyDropTag, SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import { applyFilteredMoveAttrs, applyMoveAttrs, AttackMove } from "#app/data/move";
+import { applyFilteredMoveAttrs, applyMoveAttrs } from "#app/data/move";
 import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
 import { MissEffectAttr } from "#app/data/move-attrs/miss-effect-attr";
@@ -524,7 +524,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     applyAbAttrs(PostAttackAbAttr, user, false, target, move);
 
     // Apply Grip Claw's chance to steal an item from the target
-    if (move instanceof AttackMove) {
+    if (move.isAttackMove()) {
       globalScene.applyModifiers(ContactHeldItemTransferChanceModifier, this.isPlayer, user, target);
     }
   }

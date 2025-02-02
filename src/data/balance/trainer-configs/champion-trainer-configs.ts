@@ -6,6 +6,7 @@ import { PokeballType } from "#enums/pokeball";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import type { PersistentModifier } from "#app/modifier/modifier";
 import { ElementType } from "#enums/element-type";
+import { TrainerVariant } from "#enums/trainer-variant";
 
 const DEFAULT_CHAMPION_THEME = "battle_champion_alder";
 const KANTO_CHAMPION_THEME = "battle_kanto_champion";
@@ -24,7 +25,7 @@ const KIERAN_CHAMPION_THEME = "battle_champion_kieran";
 let t = TrainerType.BLUE;
 export const championTrainerConfigs: TrainerConfigs = {
   [TrainerType.BLUE]: new TrainerConfig(t)
-    .initForChampion(true, KANTO_CHAMPION_THEME, KANTO_CHAMPION_THEME)
+    .initForChampion(TrainerVariant.DEFAULT, [KANTO_CHAMPION_THEME], [KANTO_CHAMPION_THEME])
     .setPartyMemberFunc(
       0,
       getRandomPartyMemberFunc(
@@ -59,7 +60,7 @@ export const championTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.RED]: new TrainerConfig(++t)
-    .initForChampion(true, JOHTO_CHAMPION_THEME, JOHTO_CHAMPION_THEME)
+    .initForChampion(TrainerVariant.DEFAULT, [JOHTO_CHAMPION_THEME], [JOHTO_CHAMPION_THEME])
     .setPartyMemberFunc(
       0,
       getRandomPartyMemberFunc([Species.PIKACHU], TrainerSlot.TRAINER, true, (p) => {
@@ -99,7 +100,7 @@ export const championTrainerConfigs: TrainerConfigs = {
     ),
   [TrainerType.LANCE_CHAMPION]: new TrainerConfig(++t)
     .setName("Lance")
-    .initForChampion(true, JOHTO_CHAMPION_THEME, JOHTO_CHAMPION_THEME)
+    .initForChampion(TrainerVariant.DEFAULT, [JOHTO_CHAMPION_THEME], [JOHTO_CHAMPION_THEME])
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.GYARADOS]))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.SALAMENCE, Species.GARCHOMP]))
     .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.KINGDRA]))
@@ -127,7 +128,7 @@ export const championTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.STEVEN]: new TrainerConfig(++t)
-    .initForChampion(true, HOENN5_CHAMPION_THEME, HOENN6_CHAMPION_THEME)
+    .initForChampion(TrainerVariant.DEFAULT, [HOENN5_CHAMPION_THEME], [HOENN6_CHAMPION_THEME])
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.SKARMORY]))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.AGGRON]))
     .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.ARMALDO, Species.CRADILY]))
@@ -150,7 +151,7 @@ export const championTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.WALLACE]: new TrainerConfig(++t)
-    .initForChampion(true, HOENN5_CHAMPION_THEME, HOENN6_CHAMPION_THEME)
+    .initForChampion(TrainerVariant.DEFAULT, [HOENN5_CHAMPION_THEME], [HOENN6_CHAMPION_THEME])
     .setPartyMemberFunc(
       0,
       getRandomPartyMemberFunc([Species.PELIPPER], TrainerSlot.TRAINER, true, (p) => {
@@ -184,7 +185,7 @@ export const championTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.CYNTHIA]: new TrainerConfig(++t)
-    .initForChampion(false, SINNOH_CHAMPION_THEME, SINNOH_CHAMPION_THEME)
+    .initForChampion(TrainerVariant.FEMALE, [SINNOH_CHAMPION_THEME], [SINNOH_CHAMPION_THEME])
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.SPIRITOMB]))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.TOGEKISS]))
     .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.ROSERADE, Species.GASTRODON]))
@@ -207,7 +208,7 @@ export const championTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.ALDER]: new TrainerConfig(++t)
-    .initForChampion(true, DEFAULT_CHAMPION_THEME, DEFAULT_CHAMPION_THEME)
+    .initForChampion(TrainerVariant.DEFAULT, [DEFAULT_CHAMPION_THEME], [DEFAULT_CHAMPION_THEME])
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.BOUFFALANT, Species.BRAVIARY]))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.VANILLUXE]))
     .setPartyMemberFunc(
@@ -242,7 +243,7 @@ export const championTrainerConfigs: TrainerConfigs = {
       ]; //TODO: is the bang correct?
     }),
   [TrainerType.IRIS]: new TrainerConfig(++t)
-    .initForChampion(false, IRIS_CHAMPION_THEME, IRIS_CHAMPION_THEME)
+    .initForChampion(TrainerVariant.FEMALE, [IRIS_CHAMPION_THEME], [IRIS_CHAMPION_THEME])
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.HYDREIGON]))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.ARCHEOPS]))
     .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.DRUDDIGON]))
@@ -269,7 +270,7 @@ export const championTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.DIANTHA]: new TrainerConfig(++t)
-    .initForChampion(false, DEFAULT_CHAMPION_THEME, KALOS_CHAMPION_THEME)
+    .initForChampion(TrainerVariant.FEMALE, [DEFAULT_CHAMPION_THEME], [KALOS_CHAMPION_THEME])
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.GOURGEIST]))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.TYRANTRUM, Species.AURORUS]))
     .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.GOODRA]))
@@ -292,7 +293,7 @@ export const championTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.HAU]: new TrainerConfig(++t)
-    .initForChampion(true, DEFAULT_CHAMPION_THEME, ALOLA_CHAMPION_THEME)
+    .initForChampion(TrainerVariant.DEFAULT, [DEFAULT_CHAMPION_THEME], [ALOLA_CHAMPION_THEME])
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.ALOLA_RAICHU]))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.NOIVERN]))
     .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.CRABOMINABLE]))
@@ -342,7 +343,7 @@ export const championTrainerConfigs: TrainerConfigs = {
       ]; //TODO: is the bang correct?
     }),
   [TrainerType.LEON]: new TrainerConfig(++t)
-    .initForChampion(true, DEFAULT_CHAMPION_THEME, GALAR_CHAMPION_THEME)
+    .initForChampion(TrainerVariant.DEFAULT, [DEFAULT_CHAMPION_THEME], [GALAR_CHAMPION_THEME])
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.RILLABOOM, Species.CINDERACE, Species.INTELEON]))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.MR_RIME]))
     .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.DRAGAPULT]))
@@ -364,7 +365,7 @@ export const championTrainerConfigs: TrainerConfigs = {
       }),
     ),
   [TrainerType.GEETA]: new TrainerConfig(++t)
-    .initForChampion(false, DEFAULT_CHAMPION_THEME, GEETA_CHAMPION_THEME)
+    .initForChampion(TrainerVariant.FEMALE, [DEFAULT_CHAMPION_THEME], [GEETA_CHAMPION_THEME])
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.GLIMMORA]))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.ESPATHRA, Species.VELUZA]))
     .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.AVALUGG, Species.HISUI_AVALUGG]))
@@ -396,7 +397,7 @@ export const championTrainerConfigs: TrainerConfigs = {
       ]; //TODO: is the bang correct?
     }),
   [TrainerType.NEMONA]: new TrainerConfig(++t)
-    .initForChampion(false, DEFAULT_CHAMPION_THEME, NEMONA_CHAMPION_THEME)
+    .initForChampion(TrainerVariant.FEMALE, [DEFAULT_CHAMPION_THEME], [NEMONA_CHAMPION_THEME])
     .setPartyMemberFunc(
       0,
       getRandomPartyMemberFunc([Species.LYCANROC], TrainerSlot.TRAINER, true, (p) => {
@@ -450,7 +451,7 @@ export const championTrainerConfigs: TrainerConfigs = {
       ]; //TODO: is the bang correct?
     }),
   [TrainerType.KIERAN]: new TrainerConfig(++t)
-    .initForChampion(true, DEFAULT_CHAMPION_THEME, KIERAN_CHAMPION_THEME)
+    .initForChampion(TrainerVariant.DEFAULT, [DEFAULT_CHAMPION_THEME], [KIERAN_CHAMPION_THEME])
     .setPartyMemberFunc(0, getRandomPartyMemberFunc([Species.POLIWRATH, Species.POLITOED]))
     .setPartyMemberFunc(1, getRandomPartyMemberFunc([Species.PORYGON_Z, Species.YANMEGA]))
     .setPartyMemberFunc(2, getRandomPartyMemberFunc([Species.DRAGONITE]))

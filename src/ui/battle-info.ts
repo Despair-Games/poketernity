@@ -83,6 +83,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
 
   constructor(x: number, y: number, player: boolean) {
     super(globalScene, x, y);
+    this.type = "BattleInfo";
     this.baseY = y;
     this.player = player;
     this.mini = !player;
@@ -955,6 +956,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
 export class PlayerBattleInfo extends BattleInfo {
   constructor() {
     super(Math.floor(GAME_WIDTH) - 10, -72, true);
+    this.type = "PlayerBattleInfo";
   }
 }
 

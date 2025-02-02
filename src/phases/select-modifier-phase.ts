@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import {
   ExtraModifierModifier,
   HealShopCostModifier,
-  PokemonHeldItemModifier,
+  type PokemonHeldItemModifier,
   TempExtraModifierModifier,
   type Modifier,
 } from "#app/modifier/modifier";
@@ -167,9 +167,7 @@ export class SelectModifierPhase extends BattlePhase {
                   ) {
                     const itemModifiers = globalScene.findModifiers(
                       (m) =>
-                        m instanceof PokemonHeldItemModifier
-                        && m.isTransferable
-                        && m.pokemonId === party[fromSlotIndex].id,
+                        m.isPokemonHeldItemModifier() && m.isTransferable && m.pokemonId === party[fromSlotIndex].id,
                     ) as PokemonHeldItemModifier[];
                     const itemModifier = itemModifiers[itemIndex];
                     globalScene.tryTransferHeldItemModifier(
@@ -440,5 +438,9 @@ export class SelectModifierPhase extends BattlePhase {
       },
       isCopy: true,
     });
+  }
+
+  override isSelectModifierPhase(): this is this {
+    return true;
   }
 }
