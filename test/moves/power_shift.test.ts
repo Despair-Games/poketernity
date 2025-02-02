@@ -1,4 +1,4 @@
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { Abilities } from "#enums/abilities";
@@ -22,11 +22,11 @@ describe("Moves - Power Shift", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.POWER_SHIFT, Moves.BULK_UP])
+      .moveset([MoveId.POWER_SHIFT, MoveId.BULK_UP])
       .battleType("single")
       .ability(Abilities.BALL_FETCH)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it("switches the user's raw Attack stat with its raw Defense stat", async () => {
@@ -37,7 +37,7 @@ describe("Moves - Power Shift", () => {
     playerPokemon.setStat(Stat.ATK, 10, false);
     playerPokemon.setStat(Stat.DEF, 20, false);
 
-    game.move.select(Moves.BULK_UP);
+    game.move.select(MoveId.BULK_UP);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
@@ -47,7 +47,7 @@ describe("Moves - Power Shift", () => {
 
     await game.toNextTurn();
 
-    game.move.select(Moves.POWER_SHIFT);
+    game.move.select(MoveId.POWER_SHIFT);
 
     await game.phaseInterceptor.to("TurnEndPhase");
 

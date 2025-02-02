@@ -25,7 +25,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon";
 import { getEncounterText, showEncounterDialogue } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -144,25 +144,31 @@ const POOL_3_POKEMON: { species: Species; formIndex?: number }[] = [
 const POOL_4_POKEMON = [Species.GENESECT, Species.SLITHER_WING, Species.BUZZWOLE, Species.PHEROMOSA];
 
 const PHYSICAL_TUTOR_MOVES = [
-  Moves.MEGAHORN,
-  Moves.X_SCISSOR,
-  Moves.ATTACK_ORDER,
-  Moves.PIN_MISSILE,
-  Moves.FIRST_IMPRESSION,
+  MoveId.MEGAHORN,
+  MoveId.X_SCISSOR,
+  MoveId.ATTACK_ORDER,
+  MoveId.PIN_MISSILE,
+  MoveId.FIRST_IMPRESSION,
 ];
 
-const SPECIAL_TUTOR_MOVES = [Moves.SILVER_WIND, Moves.BUG_BUZZ, Moves.SIGNAL_BEAM, Moves.POLLEN_PUFF];
+const SPECIAL_TUTOR_MOVES = [MoveId.SILVER_WIND, MoveId.BUG_BUZZ, MoveId.SIGNAL_BEAM, MoveId.POLLEN_PUFF];
 
-const STATUS_TUTOR_MOVES = [Moves.STRING_SHOT, Moves.STICKY_WEB, Moves.SILK_TRAP, Moves.RAGE_POWDER, Moves.HEAL_ORDER];
+const STATUS_TUTOR_MOVES = [
+  MoveId.STRING_SHOT,
+  MoveId.STICKY_WEB,
+  MoveId.SILK_TRAP,
+  MoveId.RAGE_POWDER,
+  MoveId.HEAL_ORDER,
+];
 
 const MISC_TUTOR_MOVES = [
-  Moves.BUG_BITE,
-  Moves.LEECH_LIFE,
-  Moves.DEFEND_ORDER,
-  Moves.QUIVER_DANCE,
-  Moves.TAIL_GLOW,
-  Moves.INFESTATION,
-  Moves.U_TURN,
+  MoveId.BUG_BITE,
+  MoveId.LEECH_LIFE,
+  MoveId.DEFEND_ORDER,
+  MoveId.QUIVER_DANCE,
+  MoveId.TAIL_GLOW,
+  MoveId.INFESTATION,
+  MoveId.U_TURN,
 ];
 
 /**

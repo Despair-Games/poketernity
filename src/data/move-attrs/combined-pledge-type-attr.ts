@@ -1,4 +1,4 @@
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { ElementType } from "#enums/element-type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
@@ -22,20 +22,20 @@ export class CombinedPledgeTypeAttr extends VariableMoveTypeAttr {
     }
 
     switch (move.id) {
-      case Moves.FIRE_PLEDGE:
-        if (combinedPledgeMove === Moves.WATER_PLEDGE) {
+      case MoveId.FIRE_PLEDGE:
+        if (combinedPledgeMove === MoveId.WATER_PLEDGE) {
           moveType.value = ElementType.WATER;
           return true;
         }
         return false;
-      case Moves.WATER_PLEDGE:
-        if (combinedPledgeMove === Moves.GRASS_PLEDGE) {
+      case MoveId.WATER_PLEDGE:
+        if (combinedPledgeMove === MoveId.GRASS_PLEDGE) {
           moveType.value = ElementType.GRASS;
           return true;
         }
         return false;
-      case Moves.GRASS_PLEDGE:
-        if (combinedPledgeMove === Moves.FIRE_PLEDGE) {
+      case MoveId.GRASS_PLEDGE:
+        if (combinedPledgeMove === MoveId.FIRE_PLEDGE) {
           moveType.value = ElementType.FIRE;
           return true;
         }

@@ -4,7 +4,7 @@ import type OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { Biome } from "#enums/biome";
 import { Button } from "#enums/buttons";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import type { MockClock } from "#test/testUtils/mocks/mockClock";
@@ -48,12 +48,12 @@ describe("Reload", () => {
       .battleType("single")
       .startingLevel(100) // Avoid levelling up
       .disableTrainerWaves()
-      .moveset([Moves.SPLASH])
-      .enemyMoveset(Moves.SPLASH);
+      .moveset([MoveId.SPLASH])
+      .enemyMoveset(MoveId.SPLASH);
     await game.dailyMode.startBattle();
 
     // Transition from Wave 10 to Wave 11 in order to trigger biome switch
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.doKillOpponents();
     game.onNextPrompt("SelectBiomePhase", UiMode.OPTION_SELECT, () => {
       (game.scene.time as MockClock).overrideDelay = null;
@@ -81,12 +81,12 @@ describe("Reload", () => {
       .battleType("single")
       .startingLevel(100) // Avoid levelling up
       .disableTrainerWaves()
-      .moveset([Moves.SPLASH])
-      .enemyMoveset(Moves.SPLASH);
+      .moveset([MoveId.SPLASH])
+      .enemyMoveset(MoveId.SPLASH);
     await game.classicMode.startBattle(); // Apparently daily mode would override the biome
 
     // Transition from Wave 10 to Wave 11 in order to trigger biome switch
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.doKillOpponents();
     await game.toNextWave();
     expect(game.phaseInterceptor.log).toContain("NewBiomeEncounterPhase");

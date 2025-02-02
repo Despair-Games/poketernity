@@ -1,5 +1,5 @@
 import { TurnStartPhase } from "#app/phases/turn-start-phase";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -10,7 +10,7 @@ describe("Moves - Fusion Flare", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
-  const fusionFlare = Moves.FUSION_FLARE;
+  const fusionFlare = MoveId.FUSION_FLARE;
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({
@@ -28,7 +28,7 @@ describe("Moves - Fusion Flare", () => {
     game.override.startingLevel(1);
 
     game.override.enemySpecies(Species.RATTATA);
-    game.override.enemyMoveset([Moves.REST, Moves.REST, Moves.REST, Moves.REST]);
+    game.override.enemyMoveset([MoveId.REST, MoveId.REST, MoveId.REST, MoveId.REST]);
 
     game.override.battleType("single");
     game.override.startingWave(97);

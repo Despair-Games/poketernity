@@ -11,7 +11,7 @@ import {
   runMysteryEncounterToEnd,
   skipBattleRunMysteryEncounterRewardsPhase,
 } from "#test/mystery-encounter/encounter-test-utils";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type BattleScene from "#app/battle-scene";
 import { PokemonMove } from "#app/field/pokemon";
 import { UiMode } from "#enums/ui-mode";
@@ -96,7 +96,7 @@ describe("Trash to Treasure - Mystery Encounter", () => {
             shiny: false,
             formIndex: 1,
             bossSegmentModifier: 1,
-            moveSet: [Moves.PAYBACK, Moves.GUNK_SHOT, Moves.STOMPING_TANTRUM, Moves.DRAIN_PUNCH],
+            moveSet: [MoveId.PAYBACK, MoveId.GUNK_SHOT, MoveId.STOMPING_TANTRUM, MoveId.DRAIN_PUNCH],
           },
         ],
       },
@@ -178,17 +178,17 @@ describe("Trash to Treasure - Mystery Encounter", () => {
       expect(enemyField.length).toBe(1);
       expect(enemyField[0].species.speciesId).toBe(Species.GARBODOR);
       expect(enemyField[0].moveset).toEqual([
-        new PokemonMove(Moves.PAYBACK),
-        new PokemonMove(Moves.GUNK_SHOT),
-        new PokemonMove(Moves.STOMPING_TANTRUM),
-        new PokemonMove(Moves.DRAIN_PUNCH),
+        new PokemonMove(MoveId.PAYBACK),
+        new PokemonMove(MoveId.GUNK_SHOT),
+        new PokemonMove(MoveId.STOMPING_TANTRUM),
+        new PokemonMove(MoveId.DRAIN_PUNCH),
       ]);
 
       // Should have used moves pre-battle
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
       expect(movePhases.length).toBe(2);
-      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === Moves.TOXIC).length).toBe(1);
-      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === Moves.AMNESIA).length).toBe(1);
+      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.TOXIC).length).toBe(1);
+      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.AMNESIA).length).toBe(1);
     });
 
     it("should have 2 Epic, 1 Ultra, 1 Great in rewards", async () => {

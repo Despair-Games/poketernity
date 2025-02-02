@@ -7,7 +7,7 @@ import { randSeedInt } from "#app/utils";
 import { WeatherType } from "#enums/weather-type";
 import { Nature } from "#enums/nature";
 import { Biome } from "#enums/biome";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { TimeOfDay } from "#enums/time-of-day";
 import {
@@ -193,8 +193,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
         (p) =>
           p
             .getMoveset(true)
-            .find((move) => move && [Moves.LOW_SWEEP, Moves.MACH_PUNCH, Moves.RAPID_SPIN].includes(move?.moveId))
-            ?.moveId === Moves.LOW_SWEEP,
+            .find((move) => move && [MoveId.LOW_SWEEP, MoveId.MACH_PUNCH, MoveId.RAPID_SPIN].includes(move?.moveId))
+            ?.moveId === MoveId.LOW_SWEEP,
       ),
     ),
     new SpeciesEvolution(
@@ -205,8 +205,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
         (p) =>
           p
             .getMoveset(true)
-            .find((move) => move && [Moves.LOW_SWEEP, Moves.MACH_PUNCH, Moves.RAPID_SPIN].includes(move?.moveId))
-            ?.moveId === Moves.MACH_PUNCH,
+            .find((move) => move && [MoveId.LOW_SWEEP, MoveId.MACH_PUNCH, MoveId.RAPID_SPIN].includes(move?.moveId))
+            ?.moveId === MoveId.MACH_PUNCH,
       ),
     ),
     new SpeciesEvolution(
@@ -217,8 +217,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
         (p) =>
           p
             .getMoveset(true)
-            .find((move) => move && [Moves.LOW_SWEEP, Moves.MACH_PUNCH, Moves.RAPID_SPIN].includes(move?.moveId))
-            ?.moveId === Moves.RAPID_SPIN,
+            .find((move) => move && [MoveId.LOW_SWEEP, MoveId.MACH_PUNCH, MoveId.RAPID_SPIN].includes(move?.moveId))
+            ?.moveId === MoveId.RAPID_SPIN,
       ),
     ),
   ],
@@ -1079,7 +1079,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.TANGROWTH,
       34,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.ANCIENT_POWER).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.ANCIENT_POWER).length > 0),
       SpeciesWildEvolutionDelay.LONG,
     ),
   ],
@@ -1088,7 +1088,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.LICKILICKY,
       32,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.ROLLOUT).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.ROLLOUT).length > 0),
       SpeciesWildEvolutionDelay.LONG,
     ),
   ],
@@ -1247,7 +1247,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.AMBIPOM,
       32,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.DOUBLE_HIT).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.DOUBLE_HIT).length > 0),
       SpeciesWildEvolutionDelay.LONG,
     ),
   ],
@@ -1259,7 +1259,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.YANMEGA,
       33,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.ANCIENT_POWER).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.ANCIENT_POWER).length > 0),
       SpeciesWildEvolutionDelay.LONG,
     ),
   ],
@@ -1274,7 +1274,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.FARIGIRAF,
       32,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.TWIN_BEAM).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.TWIN_BEAM).length > 0),
       SpeciesWildEvolutionDelay.LONG,
     ),
   ],
@@ -1287,7 +1287,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       null,
       new SpeciesEvolutionCondition((p) => {
         let ret = false;
-        if (p.moveset.filter((m) => m.moveId === Moves.HYPER_DRILL).length > 0) {
+        if (p.moveset.filter((m) => m.moveId === MoveId.HYPER_DRILL).length > 0) {
           globalScene.executeWithSeedOffset(() => (ret = !randSeedInt(4)), p.id);
         }
         return ret;
@@ -1298,7 +1298,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.DUDUNSPARCE,
       32,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.HYPER_DRILL).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.HYPER_DRILL).length > 0),
       SpeciesWildEvolutionDelay.LONG,
     ),
   ],
@@ -1336,7 +1336,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.MAMOSWINE,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.ANCIENT_POWER).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.ANCIENT_POWER).length > 0),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),
   ],
@@ -1345,7 +1345,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.WYRDEER,
       25,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.PSYSHIELD_BASH).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.PSYSHIELD_BASH).length > 0),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),
   ],
@@ -1369,7 +1369,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.SUDOWOODO,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.MIMIC).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.MIMIC).length > 0),
       SpeciesWildEvolutionDelay.MEDIUM,
     ),
   ],
@@ -1380,7 +1380,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       null,
       new SpeciesEvolutionCondition(
         (p) =>
-          p.moveset.filter((m) => m.moveId === Moves.MIMIC).length > 0
+          p.moveset.filter((m) => m.moveId === MoveId.MIMIC).length > 0
           && (globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK
             || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT),
       ),
@@ -1392,7 +1392,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       null,
       new SpeciesEvolutionCondition(
         (p) =>
-          p.moveset.filter((m) => m.moveId === Moves.MIMIC).length > 0
+          p.moveset.filter((m) => m.moveId === MoveId.MIMIC).length > 0
           && (globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN
             || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY),
       ),
@@ -1507,7 +1507,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.TSAREENA,
       28,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.STOMP).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.STOMP).length > 0),
       SpeciesWildEvolutionDelay.LONG,
     ),
   ],
@@ -1516,7 +1516,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.NAGANADEL,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.DRAGON_PULSE).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.DRAGON_PULSE).length > 0),
       SpeciesWildEvolutionDelay.LONG,
     ),
   ],
@@ -1537,7 +1537,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       35,
       null,
       new SpeciesEvolutionCondition(
-        (p) => p.moveset.filter((m) => m.moveId === Moves.TAUNT).length > 0,
+        (p) => p.moveset.filter((m) => m.moveId === MoveId.TAUNT).length > 0,
       ) /*Once Taunt is implemented, change evo level to 1 and delay to LONG*/,
     ),
   ],
@@ -1738,7 +1738,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.OVERQWIL,
       28,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.BARB_BARRAGE).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.BARB_BARRAGE).length > 0),
       SpeciesWildEvolutionDelay.LONG,
     ),
   ],
@@ -1793,7 +1793,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.HYDRAPPLE,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.DRAGON_CHEER).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.DRAGON_CHEER).length > 0),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),
   ],
@@ -1918,7 +1918,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.ANNIHILAPE,
       35,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === Moves.RAGE_FIST).length > 0),
+      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.RAGE_FIST).length > 0),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),
   ],

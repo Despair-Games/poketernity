@@ -1,4 +1,4 @@
-import type { Moves } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 import { type Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
@@ -14,12 +14,12 @@ import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
  */
 export class LastMoveDoublePowerAttr extends VariablePowerAttr {
   /** The move that must precede the current move */
-  private move: Moves;
+  private moveId: MoveId;
 
-  constructor(move: Moves) {
+  constructor(moveId: MoveId) {
     super();
 
-    this.move = move;
+    this.moveId = moveId;
   }
 
   override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
@@ -47,7 +47,7 @@ export class LastMoveDoublePowerAttr extends VariablePowerAttr {
     for (const p of pokemonActed) {
       const [lastMove] = p.getLastXMoves(1);
       if (lastMove?.result !== MoveResult.FAIL) {
-        if (lastMove?.result === MoveResult.SUCCESS && lastMove?.move === this.move) {
+        if (lastMove?.result === MoveResult.SUCCESS && lastMove?.moveId === this.moveId) {
           power.value *= 2;
           return true;
         } else {

@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -25,12 +25,12 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SPLASH])
+      .moveset([MoveId.SPLASH])
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset([Moves.TACKLE, Moves.WATER_GUN]);
+      .enemyMoveset([MoveId.TACKLE, MoveId.WATER_GUN]);
   });
 
   it.each([
@@ -49,8 +49,8 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
       "get",
     ).mockReturnValue(100);
 
-    game.move.select(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.TACKLE);
+    game.move.select(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.TACKLE);
     await game.phaseInterceptor.to("BerryPhase");
 
     const attacker = game.scene.getEnemyPokemon();
@@ -73,8 +73,8 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
       "get",
     ).mockReturnValue(100);
 
-    game.move.select(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.WATER_GUN);
+    game.move.select(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.WATER_GUN);
     await game.phaseInterceptor.to("BerryPhase");
 
     const attacker = game.scene.getEnemyPokemon();
@@ -93,8 +93,8 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
       "get",
     ).mockReturnValue(100);
 
-    game.move.select(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.TACKLE);
+    game.move.select(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.TACKLE);
     await game.phaseInterceptor.to("BerryPhase");
 
     const attacker = game.scene.getEnemyPokemon();

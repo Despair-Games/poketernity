@@ -2,7 +2,7 @@ import { allAbilities } from "#app/data/ability";
 import { allMoves } from "#app/data/all-moves";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -25,32 +25,32 @@ describe("Abilities - Wonder Skin", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
-    game.override.moveset([Moves.TACKLE, Moves.CHARM]);
+    game.override.moveset([MoveId.TACKLE, MoveId.CHARM]);
     game.override.ability(Abilities.BALL_FETCH);
     game.override.enemySpecies(Species.SHUCKLE);
     game.override.enemyAbility(Abilities.WONDER_SKIN);
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.override.enemyMoveset(MoveId.SPLASH);
   });
 
   it("lowers accuracy of status moves to 50%", async () => {
-    const moveToCheck = allMoves[Moves.CHARM];
+    const moveToCheck = allMoves[MoveId.CHARM];
 
     vi.spyOn(moveToCheck, "calculateBattleAccuracy");
 
     await game.startBattle([Species.PIKACHU]);
-    game.move.select(Moves.CHARM);
+    game.move.select(MoveId.CHARM);
     await game.phaseInterceptor.to(MoveEffectPhase);
 
     expect(moveToCheck.calculateBattleAccuracy).toHaveReturnedWith(50);
   });
 
   it("does not lower accuracy of non-status moves", async () => {
-    const moveToCheck = allMoves[Moves.TACKLE];
+    const moveToCheck = allMoves[MoveId.TACKLE];
 
     vi.spyOn(moveToCheck, "calculateBattleAccuracy");
 
     await game.startBattle([Species.PIKACHU]);
-    game.move.select(Moves.TACKLE);
+    game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to(MoveEffectPhase);
 
     expect(moveToCheck.calculateBattleAccuracy).toHaveReturnedWith(100);
@@ -60,13 +60,13 @@ describe("Abilities - Wonder Skin", () => {
 
   bypassAbilities.forEach((ability) => {
     it(`does not affect pokemon with ${allAbilities[ability].name}`, async () => {
-      const moveToCheck = allMoves[Moves.CHARM];
+      const moveToCheck = allMoves[MoveId.CHARM];
 
       game.override.ability(ability);
       vi.spyOn(moveToCheck, "calculateBattleAccuracy");
 
       await game.startBattle([Species.PIKACHU]);
-      game.move.select(Moves.CHARM);
+      game.move.select(MoveId.CHARM);
       await game.phaseInterceptor.to(MoveEffectPhase);
 
       expect(moveToCheck.calculateBattleAccuracy).toHaveReturnedWith(100);

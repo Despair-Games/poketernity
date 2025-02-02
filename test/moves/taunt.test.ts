@@ -1,4 +1,4 @@
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Abilities } from "#enums/abilities";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -25,9 +25,9 @@ describe("Moves - Taunt", () => {
     game.override
       .battleType("single")
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset([Moves.TAUNT, Moves.SPLASH])
+      .enemyMoveset([MoveId.TAUNT, MoveId.SPLASH])
       .enemySpecies(Species.SHUCKLE)
-      .moveset([Moves.GROWL]);
+      .moveset([MoveId.GROWL]);
   });
 
   it("Pokemon should not be able to use Status Moves", async () => {
@@ -36,19 +36,19 @@ describe("Moves - Taunt", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
     // First turn, Player Pokemon succeeds using Growl without Taunt
-    game.move.select(Moves.GROWL);
-    await game.forceEnemyMove(Moves.TAUNT);
+    game.move.select(MoveId.GROWL);
+    await game.forceEnemyMove(MoveId.TAUNT);
     await game.toNextTurn();
     const move1 = playerPokemon.getLastXMoves(1)[0]!;
-    expect(move1.move).toBe(Moves.GROWL);
+    expect(move1.moveId).toBe(MoveId.GROWL);
     expect(move1.result).toBe(MoveResult.SUCCESS);
     expect(playerPokemon?.getTag(BattlerTagType.TAUNT)).toBeDefined();
 
     // Second turn, Taunt forces Struggle to occur
-    game.move.select(Moves.GROWL);
-    await game.forceEnemyMove(Moves.SPLASH);
+    game.move.select(MoveId.GROWL);
+    await game.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
     const move2 = playerPokemon.getLastXMoves(1)[0]!;
-    expect(move2.move).toBe(Moves.STRUGGLE);
+    expect(move2.moveId).toBe(MoveId.STRUGGLE);
   });
 });

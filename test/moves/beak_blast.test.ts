@@ -4,7 +4,7 @@ import { BerryPhase } from "#app/phases/berry-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -29,10 +29,10 @@ describe("Moves - Beak Blast", () => {
     game.override
       .battleType("single")
       .ability(Abilities.UNNERVE)
-      .moveset([Moves.BEAK_BLAST])
+      .moveset([MoveId.BEAK_BLAST])
       .enemySpecies(Species.SNORLAX)
       .enemyAbility(Abilities.INSOMNIA)
-      .enemyMoveset([Moves.TACKLE])
+      .enemyMoveset([MoveId.TACKLE])
       .startingLevel(100)
       .enemyLevel(100);
   });
@@ -43,7 +43,7 @@ describe("Moves - Beak Blast", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.BEAK_BLAST);
+    game.move.select(MoveId.BEAK_BLAST);
 
     await game.phaseInterceptor.to(MovePhase, false);
     expect(leadPokemon.getTag(BattlerTagType.BEAK_BLAST_CHARGING)).toBeDefined();
@@ -60,7 +60,7 @@ describe("Moves - Beak Blast", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.BEAK_BLAST);
+    game.move.select(MoveId.BEAK_BLAST);
 
     await game.phaseInterceptor.to(MovePhase, false);
     expect(leadPokemon.getTag(BattlerTagType.BEAK_BLAST_CHARGING)).toBeDefined();
@@ -70,14 +70,14 @@ describe("Moves - Beak Blast", () => {
   });
 
   it("should not burn attackers that don't make contact", async () => {
-    game.override.enemyMoveset([Moves.WATER_GUN]);
+    game.override.enemyMoveset([MoveId.WATER_GUN]);
 
     await game.startBattle([Species.BLASTOISE]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.BEAK_BLAST);
+    game.move.select(MoveId.BEAK_BLAST);
 
     await game.phaseInterceptor.to(MovePhase, false);
     expect(leadPokemon.getTag(BattlerTagType.BEAK_BLAST_CHARGING)).toBeDefined();
@@ -93,21 +93,21 @@ describe("Moves - Beak Blast", () => {
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.BEAK_BLAST);
+    game.move.select(MoveId.BEAK_BLAST);
 
     await game.phaseInterceptor.to(BerryPhase, false);
     expect(leadPokemon.turnData.hitCount).toBe(2);
   });
 
   it("should be blocked by Protect", async () => {
-    game.override.enemyMoveset([Moves.PROTECT]);
+    game.override.enemyMoveset([MoveId.PROTECT]);
 
     await game.startBattle([Species.BLASTOISE]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.BEAK_BLAST);
+    game.move.select(MoveId.BEAK_BLAST);
 
     await game.phaseInterceptor.to(MovePhase, false);
     expect(leadPokemon.getTag(BattlerTagType.BEAK_BLAST_CHARGING)).toBeDefined();

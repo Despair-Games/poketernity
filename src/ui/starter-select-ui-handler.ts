@@ -70,7 +70,7 @@ import { ChallengeType } from "#enums/challenge-type";
 import { Device } from "#enums/devices";
 import { EggSourceType } from "#enums/egg-source-types";
 import { Gender } from "#enums/gender";
-import type { Moves } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 import type { Nature } from "#enums/nature";
 import { Passive as PassiveAttr } from "#enums/passive";
 import { Species } from "#enums/species";
@@ -334,7 +334,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
   private starterNatures: Nature[] = [];
   private starterMovesets: StarterMoveset[] = [];
   private speciesStarterDexEntry: DexEntry | null;
-  private speciesStarterMoves: Moves[];
+  private speciesStarterMoves: MoveId[];
   private canToggleShiny: boolean;
   private canCycleForm: boolean;
   private canCycleGender: boolean;
@@ -1626,7 +1626,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
                   ui.setModeWithoutClear(UiMode.OPTION_SELECT, {
                     options: moveset
-                      .map((m: Moves, i: number) => {
+                      .map((m: MoveId, i: number) => {
                         const option: OptionSelectItem = {
                           label: allMoves[m].name,
                           handler: () => {
@@ -1636,7 +1636,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                                 `${i18next.t("starterSelectUiHandler:selectMoveSwapWith")} ${allMoves[m].name}.`,
                                 null,
                                 () => {
-                                  const possibleMoves = this.speciesStarterMoves.filter((sm: Moves) => sm !== m);
+                                  const possibleMoves = this.speciesStarterMoves.filter((sm: MoveId) => sm !== m);
                                   this.moveInfoOverlay.show(allMoves[possibleMoves[0]]);
 
                                   ui.setModeWithoutClear(UiMode.OPTION_SELECT, {
@@ -2394,12 +2394,12 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.checkIconId(this.starterIcons[index], species, props.female, props.formIndex, props.shiny, props.variant);
   }
 
-  switchMoveHandler(i: number, newMove: Moves, move: Moves) {
+  switchMoveHandler(i: number, newMoveId: MoveId, moveId: MoveId) {
     const speciesId = this.lastSpecies.speciesId;
-    const existingMoveIndex = this.starterMoveset?.indexOf(newMove)!; // TODO: is this bang correct?
-    this.starterMoveset![i] = newMove; // TODO: is this bang correct?
+    const existingMoveIndex = this.starterMoveset?.indexOf(newMoveId)!; // TODO: is this bang correct?
+    this.starterMoveset![i] = newMoveId; // TODO: is this bang correct?
     if (existingMoveIndex > -1) {
-      this.starterMoveset![existingMoveIndex] = move; // TODO: is this bang correct?
+      this.starterMoveset![existingMoveIndex] = moveId; // TODO: is this bang correct?
     }
     const props: DexAttrProps = globalScene.gameData.getSpeciesDexAttrProps(this.lastSpecies, this.dexAttrCursor);
     // species has different forms
@@ -2425,7 +2425,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       // does the species' starter move data have its form's starter moves and has it been updated
       if (starterMoveData.hasOwnProperty(props.formIndex)) {
         // active form move hasn't been updated
-        if (starterMoveData[props.formIndex][existingMoveIndex] !== newMove) {
+        if (starterMoveData[props.formIndex][existingMoveIndex] !== newMoveId) {
           globalScene.gameData.starterData[speciesId].moveset[props.formIndex] = this.starterMoveset?.slice(
             0,
           ) as StarterMoveset;
