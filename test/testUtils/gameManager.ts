@@ -136,7 +136,7 @@ export class GameManager {
      * - calling `game.override.disableEnemySwitching(false)` at the start of a test
      * - using {@linkcode forceEnemyToSwitch} to force an individual enemy to switch
      */
-    this.override.disableEnemySwitching();
+    this.override.enemyDisableSwitching();
 
     global.fetch = vi.fn(MockFetch) as any;
   }

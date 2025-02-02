@@ -435,8 +435,8 @@ export class OverridesHelper extends GameManagerHelper {
    * @param disable If `true`, prevents the enemy Trainer from switching.
    * @returns `this`
    */
-  public disableEnemySwitching(disable: boolean = true): this {
-    vi.spyOn(Overrides, "DISABLE_ENEMY_SWITCHING_OVERRIDE", "get").mockReturnValue(disable);
+  public enemyDisableSwitching(disable: boolean = true): this {
+    vi.spyOn(Overrides, "ENEMY_DISABLE_SWITCHING_OVERRIDE", "get").mockReturnValue(disable);
     this.log(`Enemy Trainer switching ${disable ? "disabled" : "enabled"}!`);
     return this;
   }

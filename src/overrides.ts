@@ -169,7 +169,7 @@ class DefaultOverrides {
    * Setting this to `true` is highly recommended if you are overriding the
    * enemy's moveset with only status moves.
    */
-  readonly DISABLE_ENEMY_SWITCHING_OVERRIDE: boolean = false;
+  readonly ENEMY_DISABLE_SWITCHING_OVERRIDE: boolean = false;
 
   // -------------
   // EGG OVERRIDES
