@@ -295,7 +295,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
     });
   }
 
-  public override isEvolutionPhase(): this is this {
+  override isEvolutionPhase(): this is this {
     return true;
   }
 }

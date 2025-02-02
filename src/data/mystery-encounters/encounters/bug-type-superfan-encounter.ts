@@ -22,7 +22,7 @@ import { TrainerType } from "#enums/trainer-type";
 import { Species } from "#enums/species";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import { getEncounterText, showEncounterDialogue } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { MoveId } from "#enums/move-id";
@@ -40,7 +40,6 @@ import type { AttackTypeBoosterModifierType, ModifierTypeOption } from "#app/mod
 import { modifierTypes } from "#app/modifier/modifier-type";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import {
-  AttackTypeBoosterModifier,
   BypassSpeedChanceModifier,
   ContactHeldItemTransferChanceModifier,
   GigantamaxAccessModifier,
@@ -53,6 +52,7 @@ import { ModifierTier } from "#enums/modifier-tier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { GAME_WIDTH } from "#app/ui-constants";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/bugTypeSuperfan";
@@ -439,7 +439,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
             return (
               (item instanceof BypassSpeedChanceModifier
                 || item instanceof ContactHeldItemTransferChanceModifier
-                || (item instanceof AttackTypeBoosterModifier
+                || (item.isAttackTypeBoosterModifier()
                   && (item.type as AttackTypeBoosterModifierType).moveType === ElementType.BUG))
               && item.isTransferable
             );
@@ -468,7 +468,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
             return (
               item instanceof BypassSpeedChanceModifier
               || item instanceof ContactHeldItemTransferChanceModifier
-              || (item instanceof AttackTypeBoosterModifier
+              || (item.isAttackTypeBoosterModifier()
                 && (item.type as AttackTypeBoosterModifierType).moveType === ElementType.BUG)
             );
           });
@@ -719,7 +719,7 @@ function doBugTypeMoveTutor(): Promise<void> {
       right: true,
       x: 1,
       y: -MoveInfoOverlay.getHeight(overlayScale, true) - 1,
-      width: globalScene.game.canvas.width / 6 - 2,
+      width: GAME_WIDTH - 2,
     });
     globalScene.ui.add(moveInfoOverlay);
 

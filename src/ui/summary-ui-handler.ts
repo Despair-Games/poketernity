@@ -11,7 +11,8 @@ import {
   toReadableString,
   formatStat,
 } from "#app/utils";
-import type { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PokemonMove } from "#app/field/pokemon-move";
 import { getStarterValueFriendshipCap, speciesStarterCosts } from "#app/data/balance/starters";
 import { argbFromRgba } from "@material/material-color-utilities";
 import { getTypeRgb } from "#app/data/type";
@@ -23,7 +24,7 @@ import { MoveCategory } from "#enums/move-category";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
 import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
 import { getLevelRelExp, getLevelTotalExp } from "#app/data/exp";
-import { PokemonHeldItemModifier } from "#app/modifier/modifier";
+import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { StatusEffect } from "#enums/status-effect";
 import { getBiomeName } from "#app/data/balance/biomes";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
@@ -39,6 +40,7 @@ import { Stat, PERMANENT_STATS, getStatKey } from "#enums/stat";
 import { Nature } from "#enums/nature";
 import { settings } from "#app/system/settings/settings-manager";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
+import { CANVAS_SCALE } from "#app/ui-constants";
 
 enum Page {
   PROFILE,
@@ -886,7 +888,7 @@ export default class SummaryUiHandler extends UiHandler {
 
           // Sets up the mask that hides the description text to give an illusion of scrolling
           const descriptionTextMaskRect = globalScene.make.graphics({});
-          descriptionTextMaskRect.setScale(6);
+          descriptionTextMaskRect.setScale(CANVAS_SCALE);
           descriptionTextMaskRect.fillStyle(0xffffff);
           descriptionTextMaskRect.beginPath();
           descriptionTextMaskRect.fillRect(110, 90.5, 206, 31);
@@ -971,7 +973,7 @@ export default class SummaryUiHandler extends UiHandler {
 
         const itemModifiers = (
           globalScene.findModifiers(
-            (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === this.pokemon?.id,
+            (m) => m.isPokemonHeldItemModifier() && m.pokemonId === this.pokemon?.id,
             this.playerParty,
           ) as PokemonHeldItemModifier[]
         ).sort(modifierSortFunc);
@@ -1017,7 +1019,7 @@ export default class SummaryUiHandler extends UiHandler {
         statsContainer.add(expOverlay);
 
         const expMaskRect = globalScene.make.graphics({});
-        expMaskRect.setScale(6);
+        expMaskRect.setScale(CANVAS_SCALE);
         expMaskRect.fillStyle(0xffffff);
         expMaskRect.beginPath();
         expMaskRect.fillRect(140 + pageContainer.x, 145 + pageContainer.y + 21, Math.floor(expRatio * 64), 3);
@@ -1110,7 +1112,7 @@ export default class SummaryUiHandler extends UiHandler {
         this.movesContainer.add(this.moveDescriptionText);
 
         const moveDescriptionTextMaskRect = globalScene.make.graphics({});
-        moveDescriptionTextMaskRect.setScale(6);
+        moveDescriptionTextMaskRect.setScale(CANVAS_SCALE);
         moveDescriptionTextMaskRect.fillStyle(0xffffff);
         moveDescriptionTextMaskRect.beginPath();
         moveDescriptionTextMaskRect.fillRect(112, 130, 202, 46);

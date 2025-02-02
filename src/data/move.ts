@@ -3,11 +3,7 @@ import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";
 import { getPokemonNameWithAffix } from "#app/messages";
-import {
-  PokemonMoveAccuracyBoosterModifier,
-  PokemonMultiHitModifier,
-  AttackTypeBoosterModifier,
-} from "#app/modifier/modifier";
+import { PokemonMoveAccuracyBoosterModifier, AttackTypeBoosterModifier } from "#app/modifier/modifier";
 import type { AbstractConstructor, Constructor, nil } from "#app/utils";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
@@ -31,7 +27,7 @@ import { MoveTypeChangeAbAttr } from "./ab-attrs/move-type-change-ab-attr";
 import { UserFieldMoveTypePowerBoostAbAttr } from "./ab-attrs/user-field-move-type-power-boost-ab-attr";
 import { VariableMovePowerAbAttr } from "./ab-attrs/variable-move-power-ab-attr";
 import { WonderSkinAbAttr } from "./ab-attrs/wonder-skin-ab-attr";
-import { applyAbAttrs } from "./ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { WeakenMoveTypeTag } from "./arena-tag";
 import { HelpingHandTag, TypeBoostTag } from "./battler-tags";
 import { IncrementMovePriorityAttr } from "./move-attrs/increment-move-priority-attr";
@@ -50,6 +46,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { HealStatusEffectAttr } from "./move-attrs/heal-status-effect-attr";
 import { ChargeAnim } from "#enums/charge-anim";
 import { allMoves } from "#app/data/all-moves";
+import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
 
 export abstract class Move implements Localizable {
   public id: MoveId;
@@ -259,6 +256,18 @@ export abstract class Move implements Localizable {
 
   isChargingMove(): this is ChargingMove {
     return false;
+  }
+
+  isAttackMove(): this is AttackMove {
+    return this.category === MoveCategory.PHYSICAL || this.category === MoveCategory.SPECIAL;
+  }
+
+  isStatusMove(): this is StatusMove {
+    return this.category === MoveCategory.STATUS;
+  }
+
+  isSelfStatusMove(): this is SelfStatusMove {
+    return this.category === MoveCategory.STATUS && this.moveTarget === MoveTarget.USER;
   }
 
   /**
@@ -759,7 +768,7 @@ export abstract class Move implements Localizable {
       && power.value < 60
       && this.priority <= 0
       && !this.hasAttr(MultiHitAttr)
-      && !globalScene.findModifier((m) => m instanceof PokemonMultiHitModifier && m.pokemonId === source.id)
+      && !globalScene.findModifier((m) => m.isPokemonMultiHitModifier() && m.pokemonId === source.id)
     ) {
       power.value = 60;
     }
@@ -848,6 +857,14 @@ export abstract class Move implements Localizable {
       && !exceptMoves.some((id) => this.id === id)
       && this.category !== MoveCategory.STATUS
     );
+  }
+
+  /**
+   * Checks if the move lowers the stat of the user
+   * @returns `true` if the move is a self stat lowering move
+   */
+  isSelfStatLowering(): boolean {
+    return this.getAttrs(StatStageChangeAttr).some((a) => a.selfTarget && a.stages < 0);
   }
 }
 
@@ -1157,5 +1174,3 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId): MoveTargetSet {
     multiple,
   };
 }
-
-export const selfStatLowerMoves: MoveId[] = [];

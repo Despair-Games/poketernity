@@ -5,7 +5,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import { ConfusionOnStatusEffectAbAttr } from "#app/data/ab-attrs/confusion-on-status-effect-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type { Move } from "#app/data/move";
 import { ChanceBasedMoveEffectAttr } from "./chance-based-move-effect-attr";
 

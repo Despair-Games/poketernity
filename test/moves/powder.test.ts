@@ -5,7 +5,7 @@ import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { BerryPhase } from "#app/phases/berry-phase";
-import { PokemonMove } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import { MoveResult } from "#enums/move-result";
 import { ElementType } from "#enums/element-type";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";

@@ -1,6 +1,7 @@
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
-import { type Pokemon, PokemonMove } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { LoadMoveAnimPhase } from "#app/phases/load-move-anim-phase";
 import { MovePhase } from "#app/phases/move-phase";

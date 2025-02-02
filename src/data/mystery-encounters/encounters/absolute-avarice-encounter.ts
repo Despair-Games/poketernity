@@ -7,7 +7,8 @@ import {
   transitionMysteryEncounterIntroVisuals,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import type { Pokemon } from "#app/field/pokemon";
-import { EnemyPokemon, PokemonMove } from "#app/field/pokemon";
+import { EnemyPokemon } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import type { BerryModifierType, PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
@@ -20,8 +21,8 @@ import { PersistentModifierRequirement } from "#app/data/mystery-encounters/myst
 import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { BerryModifier, PokemonInstantReviveModifier } from "#app/modifier/modifier";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { type BerryModifier, PokemonInstantReviveModifier } from "#app/modifier/modifier";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { MoveId } from "#enums/move-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { randInt } from "#app/utils";
@@ -191,7 +192,7 @@ export const AbsoluteAvariceEncounter: MysteryEncounter = MysteryEncounterBuilde
     globalScene.loadSe("Follow Me", "battle_anims", "Follow Me.mp3");
 
     // Get all player berry items, remove from party, and store reference
-    const berryItems = globalScene.findModifiers((m) => m instanceof BerryModifier) as BerryModifier[];
+    const berryItems = globalScene.findModifiers((m) => m.isBerryModifier()) as BerryModifier[];
 
     // Sort berries by party member ID to more easily re-add later if necessary
     const berryItemsMap = new Map<number, BerryModifier[]>();
@@ -256,7 +257,7 @@ export const AbsoluteAvariceEncounter: MysteryEncounter = MysteryEncounterBuilde
 
     // Remove the berries from the party
     // Session has been safely saved at this point, so data won't be lost
-    const berryItems = globalScene.findModifiers((m) => m instanceof BerryModifier) as BerryModifier[];
+    const berryItems = globalScene.findModifiers((m) => m.isBerryModifier()) as BerryModifier[];
     berryItems.forEach((berryMod) => {
       globalScene.removeModifier(berryMod);
     });

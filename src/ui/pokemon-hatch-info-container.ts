@@ -13,7 +13,7 @@ import { globalScene } from "#app/global-scene";
 import { argbFromRgba } from "@material/material-color-utilities";
 import type { EggHatchData } from "#app/data/egg-hatch-data";
 import type { PlayerPokemon } from "#app/field/pokemon";
-import { getPokemonSpeciesForm } from "#app/data/pokemon-species";
+import { getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
 
 /**
  * Class for the hatch info summary of each pokemon
