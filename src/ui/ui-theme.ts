@@ -3,6 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
 import { WindowVariant } from "#enums/window-variant";
 import { CANVAS_SCALE } from "#app/ui-constants";
+import { UiTheme } from "#enums/ui-theme";
 
 export function getWindowVariantSuffix(windowVariant: WindowVariant): string {
   switch (windowVariant) {
@@ -30,7 +31,7 @@ export function addWindow(
     windowVariant = WindowVariant.NORMAL;
   }
 
-  const borderSize = settings.display.uiTheme ? 6 : 8;
+  const borderSize = settings.display.uiTheme === UiTheme.DEFAULT ? 8 : 6;
 
   const window = globalScene.add.nineslice(
     x,
@@ -127,7 +128,11 @@ export function addUiThemeOverrides(): void {
     frame?: string | number,
   ): Phaser.GameObjects.Image {
     let legacy = false;
-    if (typeof texture === "string" && settings.display.uiTheme && legacyCompatibleImages.includes(texture)) {
+    if (
+      typeof texture === "string"
+      && settings.display.uiTheme === UiTheme.LEGACY
+      && legacyCompatibleImages.includes(texture)
+    ) {
       legacy = true;
       texture += "_legacy";
     }
@@ -150,7 +155,11 @@ export function addUiThemeOverrides(): void {
     frame?: string | number,
   ): Phaser.GameObjects.Sprite {
     let legacy = false;
-    if (typeof texture === "string" && settings.display.uiTheme && legacyCompatibleImages.includes(texture)) {
+    if (
+      typeof texture === "string"
+      && settings.display.uiTheme === UiTheme.LEGACY
+      && legacyCompatibleImages.includes(texture)
+    ) {
       legacy = true;
       texture += "_legacy";
     }
@@ -179,7 +188,11 @@ export function addUiThemeOverrides(): void {
     bottomHeight?: number,
   ): Phaser.GameObjects.NineSlice {
     let legacy = false;
-    if (typeof texture === "string" && settings.display.uiTheme && legacyCompatibleImages.includes(texture)) {
+    if (
+      typeof texture === "string"
+      && settings.display.uiTheme === UiTheme.LEGACY
+      && legacyCompatibleImages.includes(texture)
+    ) {
       legacy = true;
       texture += "_legacy";
     }

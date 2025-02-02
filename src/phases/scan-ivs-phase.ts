@@ -37,7 +37,6 @@ export class ScanIvsPhase extends PokemonPhase {
     let statsContainerLabels: Phaser.GameObjects.Sprite[] = [];
 
     const enemyField = globalScene.getEnemyField();
-    const uiTheme = settings.display.uiTheme; // Assuming uiTheme is accessible
     for (let e = 0; e < enemyField.length; e++) {
       enemyIvs = enemyField[e].ivs;
       // we are using getRootSpeciesId() here because we want to check against the baby form, not the mid form if it exists
@@ -52,8 +51,8 @@ export class ScanIvsPhase extends PokemonPhase {
         if (enemyIvs[ivStat] > currentIvs[ivStat] && ivsToShow.indexOf(Number(ivStat)) >= 0) {
           const hexColour =
             enemyIvs[ivStat] === 31
-              ? getTextColor(TextStyle.PERFECT_IV, false, uiTheme)
-              : getTextColor(TextStyle.SUMMARY_GREEN, false, uiTheme);
+              ? getTextColor(TextStyle.PERFECT_IV, false)
+              : getTextColor(TextStyle.SUMMARY_GREEN, false);
           const hexTextColour = Phaser.Display.Color.HexStringToColor(hexColour).color;
           statsContainerLabels[s].setTint(hexTextColour);
         }

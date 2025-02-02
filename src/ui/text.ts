@@ -24,11 +24,7 @@ export function addTextObject(
   style: TextStyle,
   extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle,
 ): Phaser.GameObjects.Text {
-  const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(
-    style,
-    settings.display.uiTheme,
-    extraStyleOptions,
-  );
+  const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(style, extraStyleOptions);
 
   const ret = globalScene.add.text(x, y, content, styleOptions);
   ret.setScale(scale);
@@ -49,11 +45,7 @@ export function setTextStyle(
   style: TextStyle,
   extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle,
 ) {
-  const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(
-    style,
-    settings.display.uiTheme,
-    extraStyleOptions,
-  );
+  const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(style, extraStyleOptions);
   obj.setScale(scale);
   obj.setShadow(shadowXpos, shadowYpos, shadowColor);
   if (!(styleOptions as Phaser.Types.GameObjects.Text.TextStyle).lineSpacing) {
@@ -72,11 +64,7 @@ export function addBBCodeTextObject(
   style: TextStyle,
   extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle,
 ): BBCodeText {
-  const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(
-    style,
-    settings.display.uiTheme,
-    extraStyleOptions,
-  );
+  const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(style, extraStyleOptions);
 
   const ret = globalScene.add.rexBBCodeText(x, y, content, styleOptions as BBCodeText.TextStyle);
   ret.setScale(scale);
@@ -100,7 +88,7 @@ export function addTextInputObject(
   style: TextStyle,
   extraStyleOptions?: InputText.IConfig,
 ): InputText {
-  const { scale, styleOptions } = getTextStyleOptions(style, settings.display.uiTheme, extraStyleOptions);
+  const { scale, styleOptions } = getTextStyleOptions(style, extraStyleOptions);
 
   const ret = globalScene.add.rexInputText(x, y, width, height, styleOptions as InputText.IConfig);
   ret.setScale(scale);
@@ -110,7 +98,6 @@ export function addTextInputObject(
 
 export function getTextStyleOptions(
   style: TextStyle,
-  uiTheme: UiTheme,
   extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle,
 ): TextStyleOptions {
   const lang = i18next.resolvedLanguage;
@@ -123,7 +110,7 @@ export function getTextStyleOptions(
   let styleOptions: Phaser.Types.GameObjects.Text.TextStyle = {
     fontFamily: "emerald",
     fontSize: 96,
-    color: getTextColor(style, false, uiTheme),
+    color: getTextColor(style, false),
     padding: {
       bottom: 6,
     },
@@ -223,7 +210,7 @@ export function getTextStyleOptions(
       break;
   }
 
-  const shadowColor = getTextColor(style, true, uiTheme);
+  const shadowColor = getTextColor(style, true);
 
   if (extraStyleOptions) {
     if (extraStyleOptions.fontSize) {
@@ -239,8 +226,7 @@ export function getTextStyleOptions(
 }
 
 export function getBBCodeFrag(content: string, textStyle: TextStyle, closeFragment: boolean = false): string {
-  const uiTheme = settings.display.uiTheme ?? UiTheme.DEFAULT;
-  const openingFragment = `[color=${getTextColor(textStyle, false, uiTheme)}][shadow=${getTextColor(textStyle, true, uiTheme)}]`;
+  const openingFragment = `[color=${getTextColor(textStyle, false)}][shadow=${getTextColor(textStyle, true)}]`;
   const closingFragment = closeFragment ? "[/color][/shadow]" : "";
   return `${openingFragment}${content}${closingFragment}`;
 }
@@ -282,8 +268,8 @@ export function getTextWithColors(content: string, primaryStyle: TextStyle, forW
   return text.replace(/\[color=[^\[]*\]\[shadow=[^\[]*\]\[\/color\]\[\/shadow\]/gi, "");
 }
 
-export function getTextColor(textStyle: TextStyle, shadow?: boolean, uiTheme: UiTheme = UiTheme.DEFAULT): string {
-  const isLegacyTheme = uiTheme === UiTheme.LEGACY;
+export function getTextColor(textStyle: TextStyle, shadow?: boolean): string {
+  const isLegacyTheme = settings.display.uiTheme === UiTheme.LEGACY;
   switch (textStyle) {
     case TextStyle.MESSAGE:
       return !shadow ? "#f8f8f8" : "#6b5a73";

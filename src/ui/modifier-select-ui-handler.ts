@@ -73,7 +73,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
 
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
-    const { styleOptions, scale } = getTextStyleOptions(TextStyle.PARTY, settings.display.uiTheme);
+    const { styleOptions, scale } = getTextStyleOptions(TextStyle.PARTY);
 
     if (context) {
       context.font = styleOptions.fontSize + "px " + styleOptions.fontFamily;
@@ -623,14 +623,14 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     const formattedMoney = formatMoney(settings.display.moneyFormat, this.rerollCost);
 
     this.rerollCostText.setText(i18next.t("modifierSelectUiHandler:rerollCost", { formattedMoney }));
-    this.rerollCostText.setColor(this.getTextColor(canReroll ? TextStyle.MONEY : TextStyle.PARTY_RED));
-    this.rerollCostText.setShadowColor(this.getTextColor(canReroll ? TextStyle.MONEY : TextStyle.PARTY_RED, true));
+    this.rerollCostText.setColor(getTextColor(canReroll ? TextStyle.MONEY : TextStyle.PARTY_RED));
+    this.rerollCostText.setShadowColor(getTextColor(canReroll ? TextStyle.MONEY : TextStyle.PARTY_RED, true));
   }
 
   updateLockRaritiesText(): void {
     const textStyle = globalScene.lockModifierTiers ? TextStyle.SUMMARY_BLUE : TextStyle.PARTY;
-    this.lockRarityButtonText.setColor(this.getTextColor(textStyle));
-    this.lockRarityButtonText.setShadowColor(this.getTextColor(textStyle, true));
+    this.lockRarityButtonText.setColor(getTextColor(textStyle));
+    this.lockRarityButtonText.setShadowColor(getTextColor(textStyle, true));
   }
 
   override clear() {
@@ -934,7 +934,7 @@ class ModifierOption extends Phaser.GameObjects.Container {
     const formattedMoney = formatMoney(settings.display.moneyFormat, cost);
 
     this.itemCostText.setText(i18next.t("modifierSelectUiHandler:itemCost", { formattedMoney }));
-    this.itemCostText.setColor(getTextColor(textStyle, false, settings.display.uiTheme));
-    this.itemCostText.setShadowColor(getTextColor(textStyle, true, settings.display.uiTheme));
+    this.itemCostText.setColor(getTextColor(textStyle, false));
+    this.itemCostText.setShadowColor(getTextColor(textStyle, true));
   }
 }

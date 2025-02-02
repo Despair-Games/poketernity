@@ -9,7 +9,6 @@ import { version } from "../../package.json";
 import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
 import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
-import { settings } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 export default class TitleUiHandler extends OptionSelectUiHandler {
@@ -51,7 +50,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
 
     this.playerCountLabel = addTextObject(
       GAME_WIDTH - 2,
-      GAME_HEIGHT - 13 - 576 * getTextStyleOptions(TextStyle.WINDOW, settings.display.uiTheme).scale,
+      GAME_HEIGHT - 13 - 576 * getTextStyleOptions(TextStyle.WINDOW).scale,
       `? ${i18next.t("menu:playersOnline")}`,
       TextStyle.MESSAGE,
       { fontSize: "54px" },

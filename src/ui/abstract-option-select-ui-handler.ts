@@ -1,5 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/system/settings/settings-manager";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { ScrollBar } from "#app/ui/scroll-bar";
@@ -66,7 +65,7 @@ export default abstract class AbstractOptionSelectUiHandler<T extends OptionSele
   override setup() {
     const ui = this.getUi();
 
-    this.scale = getTextStyleOptions(DEFAULT_TEXT_STYLE, settings.display.uiTheme).scale;
+    this.scale = getTextStyleOptions(DEFAULT_TEXT_STYLE).scale;
 
     this.optionSelectContainer = globalScene.add.container(GAME_WIDTH - 1, -1);
     this.optionSelectContainer.setName(`option-select-${this.mode ? UiMode[this.mode] : "UNKNOWN"}`);

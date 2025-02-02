@@ -29,6 +29,7 @@ export default class FormChangeSceneHandler extends MessageUiHandler {
     this.container = globalScene.add.container(0, -GAME_HEIGHT);
     ui.add(this.container);
 
+    // TODO theme does this get updated properly when window type changes?
     const messageBg = globalScene.add.sprite(0, 0, "bg", settings.display.uiWindowType);
     messageBg.setOrigin(0, 1);
     messageBg.setVisible(false);

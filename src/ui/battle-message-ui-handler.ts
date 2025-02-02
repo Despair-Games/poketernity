@@ -36,6 +36,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     this.textTimer = null;
     this.textCallbackTimer = null;
 
+    // TODO theme does this get updated properly when window type changes?
     this.bg = globalScene.add.sprite(0, 0, "bg", settings.display.uiWindowType);
     this.bg.setName("sprite-battle-msg-bg");
     this.bg.setOrigin(0, 1);
@@ -254,7 +255,6 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
   getIvDescriptor(value: number, typeIv: number, pokemonId: number): string {
     const starterSpecies = globalScene.getPokemonById(pokemonId)!.species.getRootSpeciesId(); // we are using getRootSpeciesId() here because we want to check against the baby form, not the mid form if it exists
     const starterIvs: number[] = globalScene.gameData.dexData[starterSpecies].ivs;
-    const uiTheme = settings.display.uiTheme; // Assuming uiTheme is accessible
 
     // Function to wrap text in color based on comparison
     const coloredText = (text: string, isBetter: boolean, ivValue) => {
@@ -268,8 +268,8 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
       } else {
         textStyle = TextStyle.WINDOW;
       }
-      const color = getTextColor(textStyle, false, uiTheme);
-      return `[color=${color}][shadow=${getTextColor(textStyle, true, uiTheme)}]${text}[/shadow][/color]`;
+      const color = getTextColor(textStyle, false);
+      return `[color=${color}][shadow=${getTextColor(textStyle, true)}]${text}[/shadow][/color]`;
     };
 
     if (value > 30) {

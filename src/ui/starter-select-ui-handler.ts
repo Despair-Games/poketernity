@@ -50,7 +50,7 @@ import { ScrollBar } from "#app/ui/scroll-bar";
 import { StarterContainer } from "#app/ui/starter-container";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 import { StatsContainer } from "#app/ui/stats-container";
-import { addBBCodeTextObject, addTextObject } from "#app/ui/text";
+import { addBBCodeTextObject, addTextObject, getTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "#app/ui/ui-theme";
@@ -87,6 +87,7 @@ import { DropDownType } from "#enums/drop-down-type";
 import { SortCriteria } from "#enums/sort-criteria";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { UiTheme } from "#enums/ui-theme";
 
 export type StarterSelectCallback = (starters: Starter[]) => void;
 
@@ -565,7 +566,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     // Offset the generation filter dropdown to avoid covering the filtered pokemon
     this.filterBar.offsetHybridFilters();
 
-    if (!settings.display.uiTheme) {
+    if (settings.display.uiTheme === UiTheme.LEGACY) {
       starterContainerWindow.setVisible(false);
     }
 
@@ -3361,10 +3362,8 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       }
 
       this.shinyOverlay.setVisible(shiny ?? false); // TODO: is false the correct default?
-      this.pokemonNumberText.setColor(this.getTextColor(shiny ? TextStyle.SUMMARY_GOLD : TextStyle.SUMMARY, false));
-      this.pokemonNumberText.setShadowColor(
-        this.getTextColor(shiny ? TextStyle.SUMMARY_GOLD : TextStyle.SUMMARY, true),
-      );
+      this.pokemonNumberText.setColor(getTextColor(shiny ? TextStyle.SUMMARY_GOLD : TextStyle.SUMMARY, false));
+      this.pokemonNumberText.setShadowColor(getTextColor(shiny ? TextStyle.SUMMARY_GOLD : TextStyle.SUMMARY, true));
 
       if (forSeen ? this.speciesStarterDexEntry?.seenAttr : this.speciesStarterDexEntry?.caughtAttr) {
         const starterIndex = this.starterSpecies.indexOf(species);
@@ -3465,9 +3464,9 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         this.pokemonAbilityText.setText(ability.name);
 
         const isHidden = abilityIndex === (this.lastSpecies.ability2 ? 2 : 1);
-        this.pokemonAbilityText.setColor(this.getTextColor(!isHidden ? TextStyle.SUMMARY_ALT : TextStyle.SUMMARY_GOLD));
+        this.pokemonAbilityText.setColor(getTextColor(!isHidden ? TextStyle.SUMMARY_ALT : TextStyle.SUMMARY_GOLD));
         this.pokemonAbilityText.setShadowColor(
-          this.getTextColor(!isHidden ? TextStyle.SUMMARY_ALT : TextStyle.SUMMARY_GOLD, true),
+          getTextColor(!isHidden ? TextStyle.SUMMARY_ALT : TextStyle.SUMMARY_GOLD, true),
         );
 
         const passiveAttr = globalScene.gameData.starterData[species.speciesId].passiveAttr;
@@ -3496,13 +3495,13 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           const textAlpha = isUnlocked && isEnabled ? 1 : 0.5;
 
           this.pokemonPassiveLabelText.setVisible(true);
-          this.pokemonPassiveLabelText.setColor(this.getTextColor(TextStyle.SUMMARY_ALT));
-          this.pokemonPassiveLabelText.setShadowColor(this.getTextColor(TextStyle.SUMMARY_ALT, true));
+          this.pokemonPassiveLabelText.setColor(getTextColor(TextStyle.SUMMARY_ALT));
+          this.pokemonPassiveLabelText.setShadowColor(getTextColor(TextStyle.SUMMARY_ALT, true));
           this.pokemonPassiveText.setVisible(true);
           this.pokemonPassiveText.setText(passiveAbility.name);
-          this.pokemonPassiveText.setColor(this.getTextColor(textStyle));
+          this.pokemonPassiveText.setColor(getTextColor(textStyle));
           this.pokemonPassiveText.setAlpha(textAlpha);
-          this.pokemonPassiveText.setShadowColor(this.getTextColor(textStyle, true));
+          this.pokemonPassiveText.setShadowColor(getTextColor(textStyle, true));
 
           if (this.activeTooltip === "PASSIVE") {
             globalScene.ui.editTooltip(`${passiveAbility.name}`, `${passiveAbility.description}`);
@@ -3603,8 +3602,8 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       }
     } else {
       this.shinyOverlay.setVisible(false);
-      this.pokemonNumberText.setColor(this.getTextColor(TextStyle.SUMMARY));
-      this.pokemonNumberText.setShadowColor(this.getTextColor(TextStyle.SUMMARY, true));
+      this.pokemonNumberText.setColor(getTextColor(TextStyle.SUMMARY));
+      this.pokemonNumberText.setShadowColor(getTextColor(TextStyle.SUMMARY, true));
       this.pokemonGenderText.setText("");
       this.pokemonAbilityText.setText("");
       this.pokemonPassiveText.setText("");
@@ -3736,8 +3735,8 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         break;
     }
     if (baseStarterValue - starterValue > 0) {
-      starter.label.setColor(this.getTextColor(textStyle));
-      starter.label.setShadowColor(this.getTextColor(textStyle, true));
+      starter.label.setColor(getTextColor(textStyle));
+      starter.label.setShadowColor(getTextColor(textStyle, true));
     }
   }
 
@@ -3757,9 +3756,9 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       newValueStr = newValueStr.slice(1);
     }
     this.valueLimitLabel.setText(`${newValueStr}/${valueLimit}`);
-    this.valueLimitLabel.setColor(this.getTextColor(!overLimit ? TextStyle.TOOLTIP_CONTENT : TextStyle.SUMMARY_PINK));
+    this.valueLimitLabel.setColor(getTextColor(!overLimit ? TextStyle.TOOLTIP_CONTENT : TextStyle.SUMMARY_PINK));
     this.valueLimitLabel.setShadowColor(
-      this.getTextColor(!overLimit ? TextStyle.TOOLTIP_CONTENT : TextStyle.SUMMARY_PINK, true),
+      getTextColor(!overLimit ? TextStyle.TOOLTIP_CONTENT : TextStyle.SUMMARY_PINK, true),
     );
     if (overLimit) {
       globalScene.time.delayedCall(fixedNumber(500), () => this.tryUpdateValue());

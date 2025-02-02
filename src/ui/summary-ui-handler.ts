@@ -17,7 +17,7 @@ import { getStarterValueFriendshipCap, speciesStarterCosts } from "#app/data/bal
 import { argbFromRgba } from "@material/material-color-utilities";
 import { getTypeRgb } from "#app/data/type";
 import { ElementType } from "#enums/element-type";
-import { addBBCodeTextObject, addTextObject, getBBCodeFrag } from "#app/ui/text";
+import { addBBCodeTextObject, addTextObject, getBBCodeFrag, getTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import type { Move } from "#app/data/move";
 import { MoveCategory } from "#enums/move-category";
@@ -334,9 +334,9 @@ export default class SummaryUiHandler extends UiHandler {
     this.candyOverlay.setTint(argbFromRgba(rgbHexToRgba(colorScheme[1])));
 
     this.numberText.setText(leftPad(this.pokemon.species.speciesId, 4));
-    this.numberText.setColor(this.getTextColor(!this.pokemon.isShiny() ? TextStyle.SUMMARY : TextStyle.SUMMARY_GOLD));
+    this.numberText.setColor(getTextColor(!this.pokemon.isShiny() ? TextStyle.SUMMARY : TextStyle.SUMMARY_GOLD));
     this.numberText.setShadowColor(
-      this.getTextColor(!this.pokemon.isShiny() ? TextStyle.SUMMARY : TextStyle.SUMMARY_GOLD, true),
+      getTextColor(!this.pokemon.isShiny() ? TextStyle.SUMMARY : TextStyle.SUMMARY_GOLD, true),
     );
     const spriteKey = this.pokemon.getSpriteKey(true);
     try {

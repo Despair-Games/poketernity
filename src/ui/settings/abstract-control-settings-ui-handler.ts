@@ -2,7 +2,7 @@ import UiHandler from "#app/ui/ui-handler";
 import type { UiMode } from "#enums/ui-mode";
 import type { InterfaceConfig } from "#app/inputs-controller";
 import { addWindow } from "#app/ui/ui-theme";
-import { addTextObject } from "#app/ui/text";
+import { addTextObject, getTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import { getIconWithSettingName } from "#app/configs/inputs/configHandler";
@@ -634,8 +634,8 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
       // Get the label of the last selected option and revert its color to the default.
       const lastValueLabel =
         this.optionValueLabels[settingIndex][lastCursor] ?? this.optionValueLabels[settingIndex][0];
-      lastValueLabel.setColor(this.getTextColor(TextStyle.WINDOW));
-      lastValueLabel.setShadowColor(this.getTextColor(TextStyle.WINDOW, true));
+      lastValueLabel.setColor(getTextColor(TextStyle.WINDOW));
+      lastValueLabel.setShadowColor(getTextColor(TextStyle.WINDOW, true));
 
       // Update the cursor for the setting to the new position.
       this.optionCursors[settingIndex] = cursor;
@@ -643,8 +643,8 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
       // Change the color of the new selected option to indicate it's selected.
       const newValueLabel = this.optionValueLabels[settingIndex][cursor] ?? this.optionValueLabels[settingIndex][0];
 
-      newValueLabel.setColor(this.getTextColor(TextStyle.SETTINGS_SELECTED));
-      newValueLabel.setShadowColor(this.getTextColor(TextStyle.SETTINGS_SELECTED, true));
+      newValueLabel.setColor(getTextColor(TextStyle.SETTINGS_SELECTED));
+      newValueLabel.setShadowColor(getTextColor(TextStyle.SETTINGS_SELECTED, true));
     }
 
     // If the save flag is set, save the setting to local storage

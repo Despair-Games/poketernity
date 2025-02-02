@@ -1,12 +1,12 @@
 import type { InfoToggle } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
-import { addTextObject } from "./text";
+import { addTextObject, getTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { getTypeDamageMultiplierColor } from "#app/data/type";
 import { ElementType } from "#enums/element-type";
 import { BattleCommand } from "#enums/battle-command";
 import { UiMode } from "#enums/ui-mode";
-import UiHandler from "./ui-handler";
+import UiHandler from "#app/ui/ui-handler";
 import { getLocalizedSpriteKey, fixedNumber, leftPad } from "#app/utils";
 import { MoveCategory } from "#enums/move-category";
 import i18next from "i18next";
@@ -14,7 +14,7 @@ import { Button } from "#enums/buttons";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { CommandPhase } from "#app/phases/command-phase";
-import MoveInfoOverlay from "./move-info-overlay";
+import MoveInfoOverlay from "#app/ui/move-info-overlay";
 import { BattleType } from "#enums/battle-type";
 import { settings } from "#app/system/settings/settings-manager";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
@@ -269,8 +269,8 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
       }
 
       //** Changes the text color and shadow according to the determined TextStyle */
-      this.ppText.setColor(this.getTextColor(ppColorStyle, false));
-      this.ppText.setShadowColor(this.getTextColor(ppColorStyle, true));
+      this.ppText.setColor(getTextColor(ppColorStyle, false));
+      this.ppText.setShadowColor(getTextColor(ppColorStyle, true));
       this.moveInfoOverlay.show(pokemonMove.getMove());
 
       pokemon.getOpponents().forEach((opponent) => {

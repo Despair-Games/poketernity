@@ -624,7 +624,7 @@ export default class RunInfoUiHandler extends UiHandler {
     const runTime = getPlayTimeString(this.runInfo.playTime);
     runInfoText.appendText(`${i18next.t("runHistory:runLength")}: ${runTime}`, false);
     const runMoney = formatMoney(settings.display.moneyFormat, this.runInfo.money);
-    const moneyTextColor = getTextColor(TextStyle.MONEY_WINDOW, false, settings.display.uiTheme);
+    const moneyTextColor = getTextColor(TextStyle.MONEY_WINDOW, false);
     runInfoText.appendText(
       `[color=${moneyTextColor}]${i18next.t("battleScene:moneyOwned", { formattedMoney: runMoney })}[/color]`,
     );
