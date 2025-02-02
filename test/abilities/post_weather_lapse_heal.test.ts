@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -23,13 +23,13 @@ describe("Abilities - Post Weather Lapse Heal", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SPLASH])
+      .moveset([MoveId.SPLASH])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it.each([
@@ -42,7 +42,7 @@ describe("Abilities - Post Weather Lapse Heal", () => {
     const expectedHeal = Math.floor((playerPokemon.hp * 1) / 16);
     playerPokemon.hp = 1;
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(playerPokemon.hp).toBe(expectedHeal + 1);
@@ -58,7 +58,7 @@ describe("Abilities - Post Weather Lapse Heal", () => {
     const expectedHeal = Math.floor((playerPokemon.hp * 1) / 8);
     playerPokemon.hp = 1;
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(playerPokemon.hp).toBe(expectedHeal + 1);
@@ -74,7 +74,7 @@ describe("Abilities - Post Weather Lapse Heal", () => {
     const expectedHeal = Math.floor((playerPokemon.hp * 1) / 16);
     playerPokemon.hp = 1;
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(playerPokemon.hp).toBe(expectedHeal + 1);
