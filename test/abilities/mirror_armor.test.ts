@@ -64,6 +64,7 @@ describe("Abilities - Mirror Armor", () => {
   it("should not divert self-targeted stat-lowering effects", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
+    const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
 
     game.move.use(Moves.SPLASH);
@@ -73,6 +74,7 @@ describe("Abilities - Mirror Armor", () => {
 
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(enemy.getStatStage(Stat.SPATK)).toBe(-2);
+    expect(player.getStatStage(Stat.SPATK)).toBe(0);
   });
 
   it("should only reflect stat-lowering effects from Spicy Extract", async () => {

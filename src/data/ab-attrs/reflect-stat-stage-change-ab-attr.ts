@@ -18,7 +18,7 @@ export class ReflectStatStageChangeAbAttr extends AbAttr {
    * with the same stat stage changes.
    * @param pokemon the {@linkcode Pokemon} with this ability
    * @param simulated if `true`, suppresses changes to game state
-   * @param source the {@linkcode Pokemon} applying the stat change
+   * @param source the {@linkcode Pokemon} applying the original stat change
    * @param stats the {@linkcode Stat | stats} being changed
    * @param stages the stages by which {@linkcode stats} will change
    * @param reflected a {@linkcode BooleanHolder} which, if set to `true`, cancels the current
