@@ -122,7 +122,7 @@ export class MovePhase extends BattlePhase {
     return (
       this.pokemon.isActive(true)
       && this.move.isUsable(this.pokemon, this.ignorePp, ignoreDisableTags)
-      && this.targets.length > 0
+      && (this.targets.length > 0 || this.move.getMove().isFieldTarget())
     );
   }
 
@@ -195,12 +195,15 @@ export class MovePhase extends BattlePhase {
     this.end();
   }
 
-  /** Check for cancellation edge cases - no targets remaining, or {@linkcode MoveId.NONE} is in the queue */
+  /**
+   * Check for cancellation edge cases.
+   * Currently only checks if {@linkcode MoveId.NONE}
+   * is in the user's move queue
+   */
   protected resolveFinalPreMoveCancellationChecks(): void {
-    const targets = this.getActiveTargetPokemon();
     const moveQueue = this.pokemon.getMoveQueue();
 
-    if (targets.length === 0 || (moveQueue.length && moveQueue[0].moveId === MoveId.NONE)) {
+    if (moveQueue.length && moveQueue[0].moveId === MoveId.NONE) {
       this.showMoveText();
       this.showFailedText();
       this.cancel();
@@ -342,7 +345,7 @@ export class MovePhase extends BattlePhase {
      * Move conditions assume the move has a single target
      * TODO: is this sustainable?
      */
-    const passesConditions = move.applyConditions(this.pokemon, targets[0], move);
+    const passesConditions = move.applyConditions(this.pokemon, targets[0] ?? null, move);
     const failedDueToWeather: boolean = globalScene.arena.isMoveWeatherCancelled(this.pokemon, move);
     const failedDueToTerrain: boolean = globalScene.arena.isMoveTerrainCancelled(this.pokemon, this.targets, move);
 

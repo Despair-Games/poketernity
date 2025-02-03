@@ -1,6 +1,9 @@
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
+import { MoveTarget } from "#enums/move-target";
 import type { Move } from "../move";
 import type { MoveConditionFunc } from "../move-conditions";
 import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "./chance-based-move-effect-attr";
@@ -10,8 +13,6 @@ interface AddArenaTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {
   turnCount?: number;
   /** Should the move fail if an arena tag of the same type is already on the field? */
   failOnOverlap?: boolean;
-  /** Should the effect be placed on the user's side of the field instead of the target's side? */
-  selfSideTarget?: boolean;
 }
 
 /**
@@ -19,13 +20,19 @@ interface AddArenaTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {
  * @extends ChanceBasedMoveEffectAttr
  */
 export class AddArenaTagAttr extends ChanceBasedMoveEffectAttr {
-  public tagType: ArenaTagType;
+  protected readonly tagType: ArenaTagType;
+  protected readonly relativeSide: ArenaTagRelativeSide;
   protected override options?: AddArenaTagAttrOptions;
 
-  constructor(tagType: ArenaTagType, options?: AddArenaTagAttrOptions) {
+  constructor(
+    tagType: ArenaTagType,
+    relativeSide: ArenaTagRelativeSide = ArenaTagRelativeSide.TARGET,
+    options?: AddArenaTagAttrOptions,
+  ) {
     super(true);
 
     this.tagType = tagType;
+    this.relativeSide = relativeSide;
     this.options = options;
   }
 
@@ -46,23 +53,34 @@ export class AddArenaTagAttr extends ChanceBasedMoveEffectAttr {
     return this.options?.failOnOverlap ?? false;
   }
 
-  /**
-   * If `true`, places the arena tag on the user's side of the field
-   * instead of the target's side.
-   * @default false
-   */
-  public get selfSideTarget() {
-    return this.options?.selfSideTarget ?? false;
+  protected getTagSide(user: Pokemon, move: Move): ArenaTagSide {
+    switch (move.moveTarget) {
+      case MoveTarget.USER_SIDE:
+        return user.getArenaTagSide();
+      case MoveTarget.ENEMY_SIDE:
+        return user.getOpposingArenaTagSide();
+      case MoveTarget.BOTH_SIDES:
+        return ArenaTagSide.BOTH;
+    }
+
+    switch (this.relativeSide) {
+      case ArenaTagRelativeSide.USER:
+        return user.getArenaTagSide();
+      case ArenaTagRelativeSide.TARGET:
+        return user.getOpposingArenaTagSide();
+      case ArenaTagRelativeSide.ALL:
+        return ArenaTagSide.BOTH;
+    }
   }
 
-  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
-    const side = (this.selfSideTarget ? user : target).getArenaTagSide();
+  override applyEffect(user: Pokemon, _target: null, move: Move): boolean {
+    const side = this.getTagSide(user, move);
     return globalScene.arena.addTag(this.tagType, user.id, this.turnCount, move.id, side);
   }
 
   override getCondition(): MoveConditionFunc | null {
     return this.failOnOverlap
-      ? (_user, target, _move) => !globalScene.arena.getTagOnSide(this.tagType, target.getArenaTagSide())
+      ? (user, _target, move) => !globalScene.arena.getTagOnSide(this.tagType, this.getTagSide(user, move))
       : null;
   }
 }

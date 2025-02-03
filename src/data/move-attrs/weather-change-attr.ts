@@ -13,7 +13,7 @@ export class WeatherChangeAttr extends MoveEffectAttr {
   private weatherType: WeatherType;
 
   constructor(weatherType: WeatherType) {
-    super();
+    super(true);
 
     this.weatherType = weatherType;
   }

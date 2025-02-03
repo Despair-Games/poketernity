@@ -5669,6 +5669,13 @@ export class EnemyPokemon extends Pokemon {
    */
   getNextTargets(moveId: MoveId): BattlerIndex[] {
     const moveTargets = getMoveTargets(this, moveId);
+    if (
+      moveTargets.targets.some((t) =>
+        [BattlerIndex.ATTACKER, BattlerIndex.PLAYER_SIDE, BattlerIndex.ENEMY_SIDE, BattlerIndex.BOTH_SIDES].includes(t),
+      )
+    ) {
+      return moveTargets.targets;
+    }
     const targets = globalScene.getField(true).filter((p) => moveTargets.targets.indexOf(p.getBattlerIndex()) > -1);
     // If the move is multi-target, return all targets' indexes
     if (moveTargets.multiple) {
