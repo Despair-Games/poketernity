@@ -16,7 +16,7 @@ import type { PokemonMove } from "#app/field/pokemon-move";
 import { getStarterValueFriendshipCap, speciesStarterCosts } from "#app/data/balance/starters";
 import { argbFromRgba } from "@material/material-color-utilities";
 import { getTypeRgb } from "#app/data/type";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { addBBCodeTextObject, addTextObject, getBBCodeFrag } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import type { Move } from "#app/data/move";
@@ -801,10 +801,10 @@ export default class SummaryUiHandler extends UiHandler {
         typeLabel.setOrigin(0, 0);
         profileContainer.add(typeLabel);
 
-        const getTypeIcon = (index: number, type: ElementType, tera: boolean = false) => {
+        const getTypeIcon = (index: number, type: ElementalType, tera: boolean = false) => {
           const xCoord = typeLabel.width * typeLabel.scale + 9 + 34 * index;
           const typeIcon = !tera
-            ? globalScene.add.sprite(xCoord, 42, getLocalizedSpriteKey("types"), ElementType[type].toLowerCase())
+            ? globalScene.add.sprite(xCoord, 42, getLocalizedSpriteKey("types"), ElementalType[type].toLowerCase())
             : globalScene.add.sprite(xCoord, 42, "type_tera");
           if (tera) {
             typeIcon.setScale(0.5);
@@ -1057,7 +1057,7 @@ export default class SummaryUiHandler extends UiHandler {
           if (this.newMove && this.pokemon) {
             const spriteKey = getLocalizedSpriteKey("types");
             const moveType = this.pokemon.getMoveType(this.newMove);
-            const newMoveTypeIcon = globalScene.add.sprite(0, 0, spriteKey, ElementType[moveType].toLowerCase());
+            const newMoveTypeIcon = globalScene.add.sprite(0, 0, spriteKey, ElementalType[moveType].toLowerCase());
             newMoveTypeIcon.setOrigin(0, 1);
             this.extraMoveRowContainer.add(newMoveTypeIcon);
           }
@@ -1083,7 +1083,7 @@ export default class SummaryUiHandler extends UiHandler {
           if (move && this.pokemon) {
             const spriteKey = getLocalizedSpriteKey("types");
             const moveType = this.pokemon.getMoveType(move.getMove());
-            const typeIcon = globalScene.add.sprite(0, 0, spriteKey, ElementType[moveType].toLowerCase());
+            const typeIcon = globalScene.add.sprite(0, 0, spriteKey, ElementalType[moveType].toLowerCase());
             typeIcon.setOrigin(0, 1);
             moveRowContainer.add(typeIcon);
           }

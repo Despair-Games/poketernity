@@ -1,5 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import type { Move } from "#app/data/move";
 import { ModifiedDamageAttr } from "./modified-damage-attr";
 
@@ -9,6 +9,6 @@ import { ModifiedDamageAttr } from "./modified-damage-attr";
  */
 export class NoDamageAgainstFlyingAttr extends ModifiedDamageAttr {
   override getModifiedDamage(_user: Pokemon, target: Pokemon, _move: Move, damage: number): number {
-    return target.isOfType(ElementType.FLYING, true, true) ? 0 : damage;
+    return target.isOfType(ElementalType.FLYING, true, true) ? 0 : damage;
   }
 }

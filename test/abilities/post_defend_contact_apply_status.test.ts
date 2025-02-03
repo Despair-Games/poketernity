@@ -6,7 +6,7 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { PostDefendContactApplyStatusEffectAbAttr } from "#app/data/ab-attrs/post-defend-contact-apply-status-effect-ab-attr";
 import { StatusEffect } from "#enums/status-effect";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 
 describe("Abilities - Flame Body/Poison Point/Static", () => {
   let phaserGame: Phaser.Game;
@@ -98,7 +98,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     await game.phaseInterceptor.to("BerryPhase");
 
     const attacker = game.scene.getEnemyPokemon();
-    expect(attacker?.getTypes()).toContain(ElementType.GROUND);
+    expect(attacker?.getTypes()).toContain(ElementalType.GROUND);
     expect(attacker?.status?.effect).toBe(StatusEffect.PARALYSIS);
   });
 });

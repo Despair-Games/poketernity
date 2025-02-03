@@ -3,7 +3,7 @@ import { type Move } from "#app/data/move";
 import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
-import type { ElementType } from "#enums/element-type";
+import type { ElementalType } from "#enums/elemental-type";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
 /**
@@ -13,10 +13,10 @@ import { PreDefendAbAttr } from "./pre-defend-ab-attr";
  * @see {@linkcode getCondition}
  */
 export class TypeImmunityAbAttr extends PreDefendAbAttr {
-  private readonly immuneType: ElementType | null;
+  private readonly immuneType: ElementalType | null;
   private readonly condition: AbAttrCondition | null;
 
-  constructor(immuneType: ElementType | null, condition?: AbAttrCondition) {
+  constructor(immuneType: ElementalType | null, condition?: AbAttrCondition) {
     super();
 
     this.immuneType = immuneType;
@@ -51,7 +51,7 @@ export class TypeImmunityAbAttr extends PreDefendAbAttr {
     return false;
   }
 
-  getImmuneType(): ElementType | null {
+  getImmuneType(): ElementalType | null {
     return this.immuneType;
   }
 

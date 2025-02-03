@@ -6,7 +6,7 @@ import { addWindow } from "./ui-theme";
 import { getLocalizedSpriteKey, fixedNumber } from "#app/utils";
 import type { Move } from "../data/move";
 import { MoveCategory } from "#enums/move-category";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
@@ -173,7 +173,7 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
     this.pow.setText(move.power >= 0 ? move.power.toString() : "---");
     this.acc.setText(move.accuracy >= 0 ? move.accuracy.toString() : "---");
     this.pp.setText(move.pp >= 0 ? move.pp.toString() : "---");
-    this.typ.setTexture(getLocalizedSpriteKey("types"), ElementType[move.type].toLowerCase());
+    this.typ.setTexture(getLocalizedSpriteKey("types"), ElementalType[move.type].toLowerCase());
     this.cat.setFrame(MoveCategory[move.category].toLowerCase());
 
     this.desc.setText(move?.effect || "");

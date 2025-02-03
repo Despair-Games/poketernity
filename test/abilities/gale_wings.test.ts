@@ -5,7 +5,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 
 describe("Abilities - Gale Wings", () => {
   let phaserGame: Phaser.Game;
@@ -77,7 +77,7 @@ describe("Abilities - Gale Wings", () => {
 
     expect(playerPokemon.isFullHp()).toBe(true);
     expect(flyingMove.getPriority).toHaveLastReturnedWith(flyingMove.priority);
-    expect(playerPokemon.getMoveType(flyingMove)).toBe(ElementType.FLYING);
+    expect(playerPokemon.getMoveType(flyingMove)).toBe(ElementalType.FLYING);
   });
 
   it("should not boost the priority of originally Normal-type moves transformed by Aerilate", async () => {
@@ -93,6 +93,6 @@ describe("Abilities - Gale Wings", () => {
 
     expect(playerPokemon.isFullHp()).toBe(true);
     expect(flyingMove.getPriority).toHaveLastReturnedWith(flyingMove.priority);
-    expect(playerPokemon.getMoveType(flyingMove)).toBe(ElementType.FLYING);
+    expect(playerPokemon.getMoveType(flyingMove)).toBe(ElementalType.FLYING);
   });
 });

@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { Stat } from "#enums/stat";
 import { allMoves } from "#app/data/all-moves";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -33,7 +33,7 @@ describe("Moves - Tera Blast", () => {
       .starterSpecies(Species.FEEBAS)
       .moveset([MoveId.TERA_BLAST])
       .ability(Abilities.BALL_FETCH)
-      .startingHeldItems([{ name: "TERA_SHARD", type: ElementType.FIRE }])
+      .startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.FIRE }])
       .enemySpecies(Species.MAGIKARP)
       .enemyMoveset(MoveId.SPLASH)
       .enemyAbility(Abilities.BALL_FETCH)
@@ -43,7 +43,9 @@ describe("Moves - Tera Blast", () => {
   });
 
   it("changes type to match user's tera type", async () => {
-    game.override.enemySpecies(Species.FURRET).startingHeldItems([{ name: "TERA_SHARD", type: ElementType.FIGHTING }]);
+    game.override
+      .enemySpecies(Species.FURRET)
+      .startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.FIGHTING }]);
     await game.classicMode.startBattle();
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
@@ -56,7 +58,7 @@ describe("Moves - Tera Blast", () => {
   }, 20000);
 
   it("increases power if user is Stellar tera type", async () => {
-    game.override.startingHeldItems([{ name: "TERA_SHARD", type: ElementType.STELLAR }]);
+    game.override.startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.STELLAR }]);
 
     await game.classicMode.startBattle();
 
@@ -68,7 +70,7 @@ describe("Moves - Tera Blast", () => {
   }, 20000);
 
   it("is super effective against terastallized targets if user is Stellar tera type", async () => {
-    game.override.startingHeldItems([{ name: "TERA_SHARD", type: ElementType.STELLAR }]);
+    game.override.startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.STELLAR }]);
 
     await game.classicMode.startBattle();
 
@@ -102,7 +104,7 @@ describe("Moves - Tera Blast", () => {
   );
 
   it("causes stat drops if user is Stellar tera type", async () => {
-    game.override.startingHeldItems([{ name: "TERA_SHARD", type: ElementType.STELLAR }]);
+    game.override.startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.STELLAR }]);
     await game.classicMode.startBattle();
 
     const playerPokemon = game.scene.getPlayerPokemon()!;

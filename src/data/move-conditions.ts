@@ -6,7 +6,7 @@ import { BooleanHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { StatusEffect } from "#enums/status-effect";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { applyAbAttrs } from "./apply-ab-attrs";
 import { StockpilingTag } from "./battler-tags";
 import { type Move } from "./move";
@@ -68,7 +68,7 @@ export class UpperHandCondition extends MoveCondition {
 }
 
 export const unknownTypeCondition: MoveConditionFunc = (user, _target, _move) =>
-  !user.getTypes().includes(ElementType.UNKNOWN);
+  !user.getTypes().includes(ElementalType.UNKNOWN);
 
 export const hasStockpileStacksCondition: MoveConditionFunc = (user) => {
   const hasStockpilingTag = user.getTag(StockpilingTag);
@@ -131,7 +131,7 @@ export const failIfLastInPartyCondition: MoveConditionFunc = (user: Pokemon, _ta
 };
 
 export const failIfGhostTypeCondition: MoveConditionFunc = (_user: Pokemon, target: Pokemon, _move: Move) =>
-  !target.isOfType(ElementType.GHOST);
+  !target.isOfType(ElementalType.GHOST);
 
 export const lastMoveCopiableCondition: MoveConditionFunc = (_user, _target, _move) => {
   const copiableMove = globalScene.currentBattle.lastMoveId;

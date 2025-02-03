@@ -6,7 +6,7 @@ import { RandomMovesetMoveAttr } from "../move-attrs/random-moveset-move-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { MoveId } from "#enums/move-id";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";
 import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 
@@ -15,7 +15,7 @@ import { PreAttackAbAttr } from "./pre-attack-ab-attr";
  * @extends PreAttackAbAttr
  */
 export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
-  private moveType: ElementType;
+  private moveType: ElementalType;
 
   override apply(pokemon: Pokemon, simulated: boolean, move: Move): boolean {
     if (
@@ -52,7 +52,7 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
   override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]): string {
     return i18next.t("abilityTriggers:pokemonTypeChange", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      moveType: i18next.t(`pokemonInfo:Type.${ElementType[this.moveType]}`),
+      moveType: i18next.t(`pokemonInfo:Type.${ElementalType[this.moveType]}`),
     });
   }
 }
