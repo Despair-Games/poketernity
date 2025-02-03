@@ -41,7 +41,7 @@ import { FullHpResistTypeAbAttr } from "#app/data/ab-attrs/full-hp-resist-type-a
 import { GorillaTacticsAbAttr } from "#app/data/ab-attrs/gorilla-tactics-ab-attr";
 import { HealFromBerryUseAbAttr } from "#app/data/ab-attrs/heal-from-berry-use-ab-attr";
 import { IgnoreContactAbAttr } from "#app/data/ab-attrs/ignore-contact-ab-attr";
-import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
+import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effects-ab-attr";
 import { IgnoreOpponentStatStagesAbAttr } from "#app/data/ab-attrs/ignore-opponent-stat-stages-ab-attr";
 import { IgnoreProtectOnContactAbAttr } from "#app/data/ab-attrs/ignore-protect-on-contact-ab-attr";
 import { IgnoreTypeImmunityAbAttr } from "#app/data/ab-attrs/ignore-type-immunity-ab-attr";

@@ -54,7 +54,7 @@ export class Ability implements Localizable {
    * @param flag The {@linkcode AbAttrFlag} to check
    * @returns true if the ability has an attribute with the given {@linkcode flag}
    */
-  hasAttr(flag: AbAttrFlag): boolean {
+  hasAttrFlag(flag: AbAttrFlag): boolean {
     return this.attrs.some((abAttr) => abAttr.hasFlag(flag));
   }
 

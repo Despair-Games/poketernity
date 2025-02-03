@@ -10,7 +10,7 @@ export class CopyFaintedAllyAbilityAbAttr extends PostKnockOutAbAttr {
   override apply(pokemon: Pokemon, simulated: boolean, knockedOutPokemon: Pokemon): boolean {
     if (
       pokemon.isPlayer() === knockedOutPokemon.isPlayer()
-      && !knockedOutPokemon.getAbility().hasAttr(AbAttrFlag.UNCOPIABLE_ABILITY)
+      && !knockedOutPokemon.getAbility().hasAttrFlag(AbAttrFlag.UNCOPIABLE_ABILITY)
     ) {
       if (!simulated) {
         const knockedOutAllyAb = knockedOutPokemon.getAbility().id;

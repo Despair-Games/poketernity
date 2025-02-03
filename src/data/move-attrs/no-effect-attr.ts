@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
-import type { UserMoveConditionFunc } from "../../@types/UserMoveConditionFunc";
+import type { UserMoveConditionFunc } from "#app/@types/UserMoveConditionFunc";
 
 /**
  * Attribute to apply an effect when a move has no effect on the target.

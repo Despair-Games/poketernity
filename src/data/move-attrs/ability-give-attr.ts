@@ -29,8 +29,8 @@ export class AbilityGiveAttr extends MoveEffectAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) =>
-      !user.getAbility().hasAttr(AbAttrFlag.UNCOPIABLE_ABILITY)
-      && !target.getAbility().hasAttr(AbAttrFlag.UNSUPPRESSABLE_ABILITY)
+      !user.getAbility().hasAttrFlag(AbAttrFlag.UNCOPIABLE_ABILITY)
+      && !target.getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY)
       && user.getAbility().id !== target.getAbility().id;
   }
 }

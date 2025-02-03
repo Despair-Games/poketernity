@@ -457,7 +457,7 @@ export function initMoves() {
       .condition(failOnMaxCondition)
       .attr(WeightPowerAttr),
     new AttackMove(MoveId.COUNTER, ElementalType.FIGHTING, MoveCategory.PHYSICAL, -1, 100, 20, -1, -5, 1)
-      .attr(CounterDamageAttr, (move) => allMoves[move].category === MoveCategory.PHYSICAL, 2)
+      .attr(CounterDamageAttr, (moveId) => allMoves[moveId].category === MoveCategory.PHYSICAL, 2)
       .target(MoveTarget.ATTACKER),
     new AttackMove(MoveId.SEISMIC_TOSS, ElementalType.FIGHTING, MoveCategory.PHYSICAL, -1, 100, 20, -1, 0, 1).attr(
       LevelDamageAttr,
@@ -1596,12 +1596,7 @@ export function initMoves() {
       .attr(AcupressureStatStageChangeAttr)
       .target(MoveTarget.USER_OR_NEAR_ALLY),
     new AttackMove(MoveId.METAL_BURST, ElementalType.STEEL, MoveCategory.PHYSICAL, -1, 100, 10, -1, 0, 4)
-      .attr(
-        CounterDamageAttr,
-        (moveId) =>
-          allMoves[moveId].category === MoveCategory.PHYSICAL || allMoves[moveId].category === MoveCategory.SPECIAL,
-        1.5,
-      )
+      .attr(CounterDamageAttr, (moveId) => allMoves[moveId].isAttackMove(), 1.5)
       .redirectCounter()
       .makesContact(false)
       .target(MoveTarget.ATTACKER),
@@ -3955,12 +3950,7 @@ export function initMoves() {
         return !turnMove.length || turnMove[0].moveId !== move.id || turnMove[0].result !== MoveResult.SUCCESS;
       }), // TODO Add Instruct/Encore interaction
     new AttackMove(MoveId.COMEUPPANCE, ElementalType.DARK, MoveCategory.PHYSICAL, -1, 100, 10, -1, 0, 9)
-      .attr(
-        CounterDamageAttr,
-        (moveId) =>
-          allMoves[moveId].category === MoveCategory.PHYSICAL || allMoves[moveId].category === MoveCategory.SPECIAL,
-        1.5,
-      )
+      .attr(CounterDamageAttr, (moveId) => allMoves[moveId].isAttackMove(), 1.5)
       .redirectCounter()
       .target(MoveTarget.ATTACKER),
     new AttackMove(MoveId.AQUA_CUTTER, ElementalType.WATER, MoveCategory.PHYSICAL, 70, 100, 20, -1, 0, 9)

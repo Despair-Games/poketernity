@@ -51,10 +51,11 @@ export class AbilityCopyAttr extends MoveEffectAttr {
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) => {
       let ret =
-        !target.getAbility().hasAttr(AbAttrFlag.UNCOPIABLE_ABILITY)
-        && !user.getAbility().hasAttr(AbAttrFlag.UNSUPPRESSABLE_ABILITY);
+        !target.getAbility().hasAttrFlag(AbAttrFlag.UNCOPIABLE_ABILITY)
+        && !user.getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY);
       if (this.copyToPartner && globalScene.currentBattle?.double) {
-        ret = ret && (!user.getAlly().hp || !user.getAlly().getAbility().hasAttr(AbAttrFlag.UNSUPPRESSABLE_ABILITY));
+        ret =
+          ret && (!user.getAlly().hp || !user.getAlly().getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY));
       } else {
         ret = ret && user.getAbility().id !== target.getAbility().id;
       }

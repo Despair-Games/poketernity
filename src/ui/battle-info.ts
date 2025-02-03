@@ -17,7 +17,7 @@ import { WindowVariant } from "#enums/window-variant";
 import i18next from "i18next";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { settings } from "#app/system/settings/settings-manager";
-import { CANVAS_SCALE } from "#app/ui-constants";
+import { CANVAS_SCALE, GAME_WIDTH } from "#app/ui-constants";
 
 export default class BattleInfo extends Phaser.GameObjects.Container {
   public static readonly EXP_GAINS_DURATION_BASE = 1650;
@@ -955,7 +955,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
 
 export class PlayerBattleInfo extends BattleInfo {
   constructor() {
-    super(Math.floor(globalScene.game.canvas.width / 6) - 10, -72, true);
+    super(GAME_WIDTH - 10, -72, true);
     this.type = "PlayerBattleInfo";
   }
 }

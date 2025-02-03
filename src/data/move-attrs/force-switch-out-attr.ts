@@ -54,7 +54,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
        * If it did, the user of U-turn or Volt Switch will not be switched out.
        */
       if (
-        target.getAbility().hasAttr(AbAttrFlag.POST_DAMAGE_FORCE_SWITCH)
+        target.getAbility().hasAttrFlag(AbAttrFlag.POST_DAMAGE_FORCE_SWITCH)
         && [MoveId.U_TURN, MoveId.VOLT_SWITCH, MoveId.FLIP_TURN].includes(move.id)
       ) {
         if (this.hpDroppedBelowHalf(target)) {
@@ -137,7 +137,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
        * If it did, the user of U-turn or Volt Switch will not be switched out.
        */
       if (
-        target.getAbility().hasAttr(AbAttrFlag.POST_DAMAGE_FORCE_SWITCH)
+        target.getAbility().hasAttrFlag(AbAttrFlag.POST_DAMAGE_FORCE_SWITCH)
         && [MoveId.U_TURN, MoveId.VOLT_SWITCH, MoveId.FLIP_TURN].includes(move.id)
       ) {
         if (this.hpDroppedBelowHalf(target)) {

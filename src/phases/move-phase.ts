@@ -498,7 +498,7 @@ export class MovePhase extends BattlePhase {
           globalScene.unshiftPhase(
             new ShowAbilityPhase(
               this.pokemon.getBattlerIndex(),
-              this.pokemon.getPassiveAbility().hasAttr(AbAttrFlag.BLOCK_REDIRECT),
+              this.pokemon.getPassiveAbility().hasAttrFlag(AbAttrFlag.BLOCK_REDIRECT),
             ),
           );
         }

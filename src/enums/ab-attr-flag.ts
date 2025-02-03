@@ -29,7 +29,7 @@ import { type ForceSwitchOutImmunityAbAttr } from "#app/data/ab-attrs/force-swit
 import { type FullHpResistTypeAbAttr } from "#app/data/ab-attrs/full-hp-resist-type-ab-attr";
 import { type HealFromBerryUseAbAttr } from "#app/data/ab-attrs/heal-from-berry-use-ab-attr";
 import { type IgnoreContactAbAttr } from "#app/data/ab-attrs/ignore-contact-ab-attr";
-import { type IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
+import { type IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effects-ab-attr";
 import { type IgnoreOpponentStatStagesAbAttr } from "#app/data/ab-attrs/ignore-opponent-stat-stages-ab-attr";
 import { type IgnoreProtectOnContactAbAttr } from "#app/data/ab-attrs/ignore-protect-on-contact-ab-attr";
 import { type IgnoreTypeImmunityAbAttr } from "#app/data/ab-attrs/ignore-type-immunity-ab-attr";

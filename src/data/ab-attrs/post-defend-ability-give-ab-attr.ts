@@ -19,8 +19,8 @@ export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
   override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
-      && !attacker.getAbility().hasAttr(AbAttrFlag.UNSUPPRESSABLE_ABILITY)
-      && !attacker.getAbility().hasAttr(AbAttrFlag.POST_DEFEND_ABILITY_GIVE)
+      && !attacker.getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY)
+      && !attacker.getAbility().hasAttrFlag(AbAttrFlag.POST_DEFEND_ABILITY_GIVE)
       && !attacker.isMax()
     ) {
       if (!simulated) {

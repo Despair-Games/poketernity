@@ -3687,7 +3687,9 @@ export default class BattleScene extends SceneBase {
   }
 
   gameOver({ isVictory, clearPhaseQueue }: GameOverInit = {}): void {
-    if (clearPhaseQueue) this.clearPhaseQueue();
+    if (clearPhaseQueue) {
+      this.clearPhaseQueue();
+    }
     this.pushPhase(new GameOverPhase(isVictory));
   }
 

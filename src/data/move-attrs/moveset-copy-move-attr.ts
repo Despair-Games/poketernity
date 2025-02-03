@@ -21,7 +21,6 @@ export class MovesetCopyMoveAttr extends OverrideMoveEffectAttr {
       return false;
     }
 
-    // const copiedMove = allMoves[targetMoves[0].moveId];
     const copiedMove = targetMoves[0];
 
     const thisMoveIndex = user.getMoveset().findIndex((m) => m.moveId === move.id);

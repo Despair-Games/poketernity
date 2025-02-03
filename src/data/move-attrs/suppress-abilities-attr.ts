@@ -28,6 +28,6 @@ export class SuppressAbilitiesAttr extends MoveEffectAttr {
   /** Causes the effect to fail when the target's ability is unsupressable or already suppressed. */
   override getCondition(): MoveConditionFunc {
     return (_user, target, _move) =>
-      !target.getAbility().hasAttr(AbAttrFlag.UNSUPPRESSABLE_ABILITY) && !target.summonData.abilitySuppressed;
+      !target.getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY) && !target.summonData.abilitySuppressed;
   }
 }

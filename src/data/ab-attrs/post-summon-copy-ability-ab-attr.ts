@@ -31,7 +31,7 @@ export class PostSummonCopyAbilityAbAttr extends PostSummonAbAttr {
     }
 
     if (
-      target.getAbility().hasAttr(AbAttrFlag.UNCOPIABLE_ABILITY)
+      target.getAbility().hasAttrFlag(AbAttrFlag.UNCOPIABLE_ABILITY)
       // Wonder Guard is normally uncopiable so has the attribute, but Trace specifically can copy it
       && !(pokemon.hasAbility(Abilities.TRACE) && target.getAbility().id === Abilities.WONDER_GUARD)
     ) {

@@ -39,7 +39,7 @@ import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#app/s
 import { StarterPrefs } from "#app/system/game-data";
 import { Tutorial } from "#enums/tutorial";
 import { handleTutorial } from "#app/tutorial";
-import { DropDown, DropDownLabel, DropDownOption } from "#app/ui/dropdown";
+import { DropDown, DropDownLabel, DropDownOption } from "#app/ui/drop-down";
 import { FilterBar } from "#app/ui/filter-bar";
 import type { OptionSelectIconConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import MessageUiHandler from "#app/ui/message-ui-handler";

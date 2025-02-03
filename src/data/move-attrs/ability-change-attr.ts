@@ -43,7 +43,7 @@ export class AbilityChangeAttr extends MoveEffectAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) =>
-      !(this.selfTarget ? user : target).getAbility().hasAttr(AbAttrFlag.UNSUPPRESSABLE_ABILITY)
+      !(this.selfTarget ? user : target).getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY)
       && (this.selfTarget ? user : target).getAbility().id !== this.ability;
   }
 }

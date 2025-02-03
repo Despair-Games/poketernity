@@ -31,7 +31,7 @@ export class SwitchAbilitiesAttr extends MoveEffectAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) =>
-      !user.getAbility().hasAttr(AbAttrFlag.UNSWAPPABLE_ABILITY)
-      && !target.getAbility().hasAttr(AbAttrFlag.UNSWAPPABLE_ABILITY);
+      !user.getAbility().hasAttrFlag(AbAttrFlag.UNSWAPPABLE_ABILITY)
+      && !target.getAbility().hasAttrFlag(AbAttrFlag.UNSWAPPABLE_ABILITY);
   }
 }

@@ -363,7 +363,6 @@ export default class GameChallengesUiHandler extends UiHandler {
         this.cursorObj?.setVisible(true);
         this.updateChallengeArrows(this.startCursor.visible);
       } else {
-        globalScene.clearPhaseQueue();
         globalScene.toTitleScreen({ clearPhaseQueue: true });
         globalScene.getCurrentPhase()?.end();
       }

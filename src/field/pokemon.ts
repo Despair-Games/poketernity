@@ -1708,28 +1708,28 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return false;
     }
     const ability = !passive ? this.getAbility() : this.getPassiveAbility();
-    if (this.isFusion() && ability.hasAttr(AbAttrFlag.NO_FUSION_ABILITY)) {
+    if (this.isFusion() && ability.hasAttrFlag(AbAttrFlag.NO_FUSION_ABILITY)) {
       return false;
     }
     const arena = globalScene?.arena;
     if (arena.ignoreAbilities && arena.ignoringEffectSource !== this.getBattlerIndex() && ability.isIgnorable) {
       return false;
     }
-    if (this.summonData?.abilitySuppressed && !ability.hasAttr(AbAttrFlag.UNSUPPRESSABLE_ABILITY)) {
+    if (this.summonData?.abilitySuppressed && !ability.hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY)) {
       return false;
     }
-    if (this.isOnField() && !ability.hasAttr(AbAttrFlag.SUPPRESS_FIELD_ABILITIES)) {
+    if (this.isOnField() && !ability.hasAttrFlag(AbAttrFlag.SUPPRESS_FIELD_ABILITIES)) {
       const suppressed = new BooleanHolder(false);
       globalScene
         .getField(true)
         .filter((p) => p !== this)
         .map((p) => {
-          if (p.getAbility().hasAttr(AbAttrFlag.SUPPRESS_FIELD_ABILITIES) && p.canApplyAbility()) {
+          if (p.getAbility().hasAttrFlag(AbAttrFlag.SUPPRESS_FIELD_ABILITIES) && p.canApplyAbility()) {
             p.getAbility()
               .getAttrs(AbAttrFlag.SUPPRESS_FIELD_ABILITIES)
               .map((a) => a.apply(this, false, suppressed, ability));
           }
-          if (p.getPassiveAbility().hasAttr(AbAttrFlag.SUPPRESS_FIELD_ABILITIES) && p.canApplyAbility(true)) {
+          if (p.getPassiveAbility().hasAttrFlag(AbAttrFlag.SUPPRESS_FIELD_ABILITIES) && p.canApplyAbility(true)) {
             p.getPassiveAbility()
               .getAttrs(AbAttrFlag.SUPPRESS_FIELD_ABILITIES)
               .map((a) => a.apply(this, false, suppressed, ability));
@@ -1772,13 +1772,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns Whether an ability with that attribute is present and active
    */
   public hasAbilityWithAttr(abAttrFlag: AbAttrFlag, canApply: boolean = true, baseOnly?: boolean): boolean {
-    if ((!canApply || this.canApplyAbility()) && this.getAbility(baseOnly).hasAttr(abAttrFlag)) {
+    if ((!canApply || this.canApplyAbility()) && this.getAbility(baseOnly).hasAttrFlag(abAttrFlag)) {
       return true;
     }
     if (
       this.hasPassive()
       && (!canApply || this.canApplyAbility(true))
-      && this.getPassiveAbility().hasAttr(abAttrFlag)
+      && this.getPassiveAbility().hasAttrFlag(abAttrFlag)
     ) {
       return true;
     }

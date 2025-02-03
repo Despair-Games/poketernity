@@ -8,14 +8,14 @@ import type { MoveId } from "#enums/move-id";
  * Wrapper class for the {@linkcode MoveId} class for Pokemon to interact with.
  * These are the moves assigned to a {@linkcode Pokemon} object.
  * It links to {@linkcode MoveId} class via the move ID.
- * Compared to {@linkcode MoveId}, this class also tracks if a move has received.
+ * Compared to {@linkcode Move}, this class also tracks if a move has received
  * PP Ups, amount of PP used, and things like that.
  * @see {@linkcode isUsable} - checks if move is restricted, out of PP, or not implemented.
- * @see {@linkcode getMove} - returns {@linkcode MoveId} object by looking it up via ID.
+ * @see {@linkcode getMove} - returns {@linkcode Move} object by looking it up via ID.
  * @see {@linkcode usePp} - removes a point of PP from the move.
  * @see {@linkcode getMovePp} - returns amount of PP a move currently has.
  * @see {@linkcode getPpRatio} - returns the current PP amount / max PP amount.
- * @see {@linkcode getName} - returns name of {@linkcode MoveId}.
+ * @see {@linkcode getName} - returns name of the {@linkcode Move}.
  **/
 
 export class PokemonMove {

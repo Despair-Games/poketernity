@@ -78,7 +78,7 @@ export const ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET = 12;
 /**
  * Will increase/decrease the chance of spawning a ME based on the current run's total MEs encountered vs {@linkcode ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET}
  * @example:
- * Average-Encounters-Per-Run = 12 (expects avg 1 ME every 10 floors)
+ * Average-Encounters-Per-Run = 17 (expects avg 1 ME every 10 floors)
  * Anti-Variance-Weight = 15
  *
  * On wave 20, if 1 ME has been encountered, the difference from expected average is 0 MEs.
