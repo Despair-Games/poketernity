@@ -4,7 +4,7 @@ import { allMoves } from "#app/data/all-moves";
 import { CommonAnim } from "#enums/common-anim";
 import { type CenterOfAttentionTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import { applyMoveAttrs } from "#app/data/move";
+import { applyMoveAttrs } from "#app/utils/move-utils";
 import { BypassRedirectAttr } from "#app/data/move-attrs/bypass-redirect-attr";
 import { BypassSleepAttr } from "#app/data/move-attrs/bypass-sleep-attr";
 import { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";

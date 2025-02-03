@@ -6,7 +6,7 @@ import { MoveChargeAnim } from "./battle-anims/move-charge-anim";
 import { CommonAnim } from "#enums/common-anim";
 import { ChargeAnim } from "#enums/charge-anim";
 import type { Move } from "#app/data/move";
-import { applyMoveAttrs } from "#app/data/move";
+import { applyMoveAttrs } from "#app/utils/move-utils";
 import { allMoves } from "#app/data/all-moves";
 import { StatusCategoryOnAllyAttr } from "./move-attrs/status-category-on-ally-attr";
 import { ConsecutiveUseDoublePowerAttr } from "./move-attrs/consecutive-use-double-power-attr";

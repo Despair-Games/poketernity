@@ -1,11 +1,12 @@
 import type { UserMoveConditionFunc } from "#app/@types/UserMoveConditionFunc";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import type { Move } from "#app/data/move";
+import { ChargingAttackMove, ChargingSelfStatusMove, type Move, type MoveAttrFilter } from "#app/data/move";
+import type { MoveAttr } from "#app/data/move-attrs/move-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BooleanHolder, toDmgValue } from "#app/utils";
+import { BooleanHolder, toDmgValue, type AbstractConstructor } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
@@ -37,5 +38,47 @@ export const frenzyMissFunc: UserMoveConditionFunc = (user: Pokemon, move: Move)
 
   return true;
 };
+
+export function applyMoveAttrs<TAttr extends MoveAttr>(
+  attrType: AbstractConstructor<TAttr>,
+  ...params: Parameters<TAttr["apply"]>
+): void {
+  applyMoveAttrsInternal((attr: MoveAttr) => attr instanceof attrType, ...params);
+}
+
+export function applyFilteredMoveAttrs<TAttr extends MoveAttr>(
+  attrFilter: MoveAttrFilter,
+  ...params: Parameters<TAttr["apply"]>
+): void {
+  applyMoveAttrsInternal(attrFilter, ...params);
+}
+
+export function applyMoveChargeAttrs<TAttr extends MoveAttr>(
+  attrType: AbstractConstructor<TAttr>,
+  ...params: Parameters<TAttr["apply"]>
+): void {
+  applyMoveChargeAttrsInternal((attr: MoveAttr) => attr instanceof attrType, ...params);
+}
+
+//#endregion
+//#region Helpers
+
+function applyMoveAttrsInternal<TAttr extends MoveAttr>(
+  attrFilter: MoveAttrFilter,
+  ...params: Parameters<TAttr["apply"]>
+): void {
+  const [user, target, move, ...args] = params;
+  move.attrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, ...args));
+}
+
+function applyMoveChargeAttrsInternal<TAttr extends MoveAttr>(
+  attrFilter: MoveAttrFilter,
+  ...params: Parameters<TAttr["apply"]>
+): void {
+  const [user, target, move, ...args] = params;
+  if (move instanceof ChargingAttackMove || move instanceof ChargingSelfStatusMove) {
+    move.chargeAttrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, ...args));
+  }
+}
 
 //#endregion

@@ -1,5 +1,5 @@
 import { MoveChargeAnim } from "#app/data/battle-anims/move-charge-anim";
-import { applyMoveChargeAttrs } from "#app/data/move";
+import { applyMoveChargeAttrs } from "#app/utils/move-utils";
 import { InstantChargeAttr } from "#app/data/move-attrs/instant-charge-attr";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import { MoveResult } from "#enums/move-result";

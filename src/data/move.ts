@@ -38,6 +38,7 @@ import { ChargeAnim } from "#enums/charge-anim";
 import { allMoves } from "#app/data/all-moves";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { applyMoveAttrs } from "#app/utils/move-utils";
 
 export abstract class Move implements Localizable {
   public id: MoveId;
@@ -1053,45 +1054,6 @@ export class ChargingSelfStatusMove extends ChargeMove(SelfStatusMove) {}
 export type ChargingMove = ChargingAttackMove | ChargingSelfStatusMove;
 
 export type MoveAttrFilter = (attr: MoveAttr) => boolean;
-
-function applyMoveAttrsInternal<TAttr extends MoveAttr>(
-  attrFilter: MoveAttrFilter,
-  ...params: Parameters<TAttr["apply"]>
-): void {
-  const [user, target, move, ...args] = params;
-  move.attrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, ...args));
-}
-
-function applyMoveChargeAttrsInternal<TAttr extends MoveAttr>(
-  attrFilter: MoveAttrFilter,
-  ...params: Parameters<TAttr["apply"]>
-): void {
-  const [user, target, move, ...args] = params;
-  if (move instanceof ChargingAttackMove || move instanceof ChargingSelfStatusMove) {
-    move.chargeAttrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, ...args));
-  }
-}
-
-export function applyMoveAttrs<TAttr extends MoveAttr>(
-  attrType: AbstractConstructor<TAttr>,
-  ...params: Parameters<TAttr["apply"]>
-): void {
-  applyMoveAttrsInternal((attr: MoveAttr) => attr instanceof attrType, ...params);
-}
-
-export function applyFilteredMoveAttrs<TAttr extends MoveAttr>(
-  attrFilter: MoveAttrFilter,
-  ...params: Parameters<TAttr["apply"]>
-): void {
-  applyMoveAttrsInternal(attrFilter, ...params);
-}
-
-export function applyMoveChargeAttrs<TAttr extends MoveAttr>(
-  attrType: AbstractConstructor<TAttr>,
-  ...params: Parameters<TAttr["apply"]>
-): void {
-  applyMoveChargeAttrsInternal((attr: MoveAttr) => attr instanceof attrType, ...params);
-}
 
 export type MoveTargetSet = {
   targets: BattlerIndex[];

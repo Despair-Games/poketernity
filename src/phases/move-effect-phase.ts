@@ -3,7 +3,7 @@ import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { MoveAnim } from "#app/data/battle-anims/move-anim";
 import { type SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import { applyFilteredMoveAttrs, applyMoveAttrs } from "#app/data/move";
+import { applyFilteredMoveAttrs, applyMoveAttrs } from "#app/utils/move-utils";
 import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
 import { MissEffectAttr } from "#app/data/move-attrs/miss-effect-attr";
