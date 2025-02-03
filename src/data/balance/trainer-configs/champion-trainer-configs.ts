@@ -7,20 +7,21 @@ import { modifierTypes } from "#app/modifier/modifier-type";
 import type { PersistentModifier } from "#app/modifier/modifier";
 import { ElementalType } from "#enums/elemental-type";
 import { TrainerVariant } from "#enums/trainer-variant";
-
-const DEFAULT_CHAMPION_THEME = "battle_champion_alder";
-const KANTO_CHAMPION_THEME = "battle_kanto_champion";
-const JOHTO_CHAMPION_THEME = "battle_johto_champion";
-const HOENN5_CHAMPION_THEME = "battle_hoenn_champion_g5";
-const HOENN6_CHAMPION_THEME = "battle_hoenn_champion_g6";
-const SINNOH_CHAMPION_THEME = "battle_sinnoh_champion";
-const IRIS_CHAMPION_THEME = "battle_champion_iris";
-const KALOS_CHAMPION_THEME = "battle_kalos_champion";
-const ALOLA_CHAMPION_THEME = "battle_alola_champion";
-const GALAR_CHAMPION_THEME = "battle_galar_champion";
-const GEETA_CHAMPION_THEME = "battle_champion_geeta";
-const NEMONA_CHAMPION_THEME = "battle_champion_nemona";
-const KIERAN_CHAMPION_THEME = "battle_champion_kieran";
+import {
+  KANTO_CHAMPION_THEME,
+  JOHTO_CHAMPION_THEME,
+  HOENN5_CHAMPION_THEME,
+  HOENN6_CHAMPION_THEME,
+  SINNOH_CHAMPION_THEME,
+  DEFAULT_CHAMPION_THEME,
+  IRIS_CHAMPION_THEME,
+  KALOS_CHAMPION_THEME,
+  ALOLA_CHAMPION_THEME,
+  GALAR_CHAMPION_THEME,
+  GEETA_CHAMPION_THEME,
+  NEMONA_CHAMPION_THEME,
+  KIERAN_CHAMPION_THEME,
+} from "#app/data/music-constants";
 
 let t = TrainerType.BLUE;
 export const championTrainerConfigs: TrainerConfigs = {
