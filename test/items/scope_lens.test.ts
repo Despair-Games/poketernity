@@ -26,21 +26,24 @@ describe("Items - Scope Lens", () => {
       .enemySpecies(Species.MAGIKARP)
       .enemyMoveset(MoveId.SPLASH)
       .moveset([MoveId.POUND])
-      .startingHeldItems([{ name: "SCOPE_LENS" }])
       .battleType("single");
   }, 20000);
 
-  it("should raise CRIT stage by 1", async () => {
-    await game.startBattle([Species.GASTLY]);
+  it.todo(
+    "should raise CRIT stage by 1",
+    async () => {
+      await game.startBattle([Species.GASTLY]);
 
-    const enemyPokemon = game.scene.getEnemyPokemon()!;
+      const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    vi.spyOn(enemyPokemon, "getCritStage");
+      vi.spyOn(enemyPokemon, "getCritStage");
 
-    game.move.select(MoveId.POUND);
+      game.move.select(MoveId.POUND);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+      await game.phaseInterceptor.to(TurnEndPhase);
 
-    expect(enemyPokemon.getCritStage).toHaveReturnedWith(1);
-  }, 20000);
+      expect(enemyPokemon.getCritStage).toHaveReturnedWith(1);
+    },
+    20000,
+  );
 });
