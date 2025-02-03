@@ -7,6 +7,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { StatusEffect } from "#enums/status-effect";
 import { PokemonPhase } from "./abstract-pokemon-phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Applies a status effect to a pokemon
@@ -26,6 +27,7 @@ export class ObtainStatusEffectPhase extends PokemonPhase {
     sourcePokemon?: Pokemon | null,
   ) {
     super(battlerIndex);
+    this._id = PhaseId.OBTAIN_STATUS_EFFECT;
 
     this.statusEffect = statusEffect;
     this.turnsRemaining = turnsRemaining;

@@ -9,6 +9,7 @@ import { toDmgValue } from "#app/utils";
 import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
 import { PartyFilterFainted } from "#app/utils/party-utils";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Sets the Party UI and handles the effect of Revival Blessing
@@ -19,6 +20,7 @@ import { PartyFilterFainted } from "#app/utils/party-utils";
 export class RevivalBlessingPhase extends BattlePhase {
   constructor(protected readonly user: PlayerPokemon) {
     super();
+    this._id = PhaseId.REVIVAL_BLESSING;
   }
 
   public override start(): void {

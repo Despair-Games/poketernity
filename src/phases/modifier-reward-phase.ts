@@ -2,6 +2,7 @@ import { globalScene } from "#app/global-scene";
 import type { ModifierType, ModifierTypeFunc } from "#app/modifier/modifier-type";
 import { getModifierType } from "#app/modifier/modifier-type";
 import { Phase } from "#app/phase";
+import { PhaseId } from "#enums/phase-id";
 import i18next from "i18next";
 
 export class ModifierRewardPhase extends Phase {
@@ -9,6 +10,7 @@ export class ModifierRewardPhase extends Phase {
 
   constructor(modifierTypeFunc: ModifierTypeFunc) {
     super();
+    this._id = PhaseId.MODIFIER_REWARD;
 
     this.modifierType = getModifierType(modifierTypeFunc);
   }

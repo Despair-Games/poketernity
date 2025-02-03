@@ -1,11 +1,12 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { MovePhase } from "#app/phases/move-phase";
+import { type MovePhase } from "#app/phases/move-phase";
 import type { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import type { Move } from "#app/data/move";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Attribute that cancels the associated move's effects when set to be combined
@@ -45,7 +46,7 @@ export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
         const allyMovePhaseIndex = globalScene.phaseQueue.indexOf(allyMovePhase);
         const firstMovePhaseIndex = globalScene.phaseQueue.findIndex((phase) => phase.isMovePhase());
         if (allyMovePhaseIndex !== firstMovePhaseIndex) {
-          globalScene.prependToPhase(globalScene.phaseQueue.splice(allyMovePhaseIndex, 1)[0], MovePhase);
+          globalScene.prependToPhase(globalScene.phaseQueue.splice(allyMovePhaseIndex, 1)[0], PhaseId.MOVE);
         }
 
         overridden.value = true;

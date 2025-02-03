@@ -1,6 +1,7 @@
 import type { EggHatchData } from "#app/data/egg-hatch-data";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
+import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 
 /**
@@ -15,6 +16,7 @@ export class EggSummaryPhase extends Phase {
 
   constructor(eggHatchData: EggHatchData[]) {
     super();
+    this._id = PhaseId.EGG_SUMMARY;
     this.eggHatchData = eggHatchData;
   }
 

@@ -16,6 +16,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
 import { EndEvolutionPhase } from "./end-evolution-phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * A phase for handling Pokemon form changes, this does not cover evolutions
@@ -28,6 +29,7 @@ export class FormChangePhase extends FormChangeBasePhase {
 
   constructor(pokemon: PlayerPokemon, formChange: SpeciesFormChange, modal: boolean) {
     super(pokemon);
+    this._id = PhaseId.FORM_CHANGE;
 
     this.formChange = formChange;
     this.modal = modal;

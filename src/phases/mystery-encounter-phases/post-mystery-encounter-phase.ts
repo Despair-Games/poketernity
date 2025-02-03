@@ -10,6 +10,7 @@ import { Phase } from "#app/phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { UiMode } from "#enums/ui-mode";
 import { isNullOrUndefined } from "#app/utils";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Will handle (in order):
@@ -30,6 +31,7 @@ export class PostMysteryEncounterPhase extends Phase {
    */
   public override start(): void {
     super.start();
+    this._id = PhaseId.ME_POST;
 
     const { mysteryEncounter } = globalScene.currentBattle;
 

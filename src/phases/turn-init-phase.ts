@@ -11,8 +11,14 @@ import { CommandPhase } from "./command-phase";
 import { EnemyCommandPhase } from "./enemy-command-phase";
 import { ToggleDoublePositionPhase } from "./toggle-double-position-phase";
 import { TurnStartPhase } from "./turn-start-phase";
+import { PhaseId } from "#enums/phase-id";
 
 export class TurnInitPhase extends FieldPhase {
+  constructor() {
+    super();
+    this._id = PhaseId.TURN_INIT;
+  }
+
   public override start(): void {
     super.start();
 

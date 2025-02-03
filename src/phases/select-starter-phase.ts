@@ -11,8 +11,14 @@ import type { Starter } from "#app/ui/starter-select-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { Gender } from "#enums/gender";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
+import { PhaseId } from "#enums/phase-id";
 
 export class SelectStarterPhase extends Phase {
+  constructor() {
+    super();
+    this._id = PhaseId.SELECT_STARTER;
+  }
+
   public override start(): void {
     super.start();
 

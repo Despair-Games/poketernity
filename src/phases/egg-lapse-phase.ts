@@ -13,6 +13,7 @@ import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { EggHatchPhase } from "./egg-hatch-phase";
 import { EggSummaryPhase } from "./egg-summary-phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Phase that handles updating eggs, and hatching any ready eggs.
@@ -23,6 +24,11 @@ import { EggSummaryPhase } from "./egg-summary-phase";
 export class EggLapsePhase extends Phase {
   private eggHatchData: EggHatchData[] = [];
   private readonly minEggsToSkip: number = 2;
+
+  constructor() {
+    super();
+    this._id = PhaseId.EGG_LAPSE;
+  }
 
   public override start(): void {
     super.start();

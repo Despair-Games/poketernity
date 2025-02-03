@@ -186,6 +186,7 @@ import { SelectTargetPhase } from "#app/phases/select-target-phase";
 import { MoveAnimPhase } from "#app/phases/move-anim-phase";
 import type { ChargeAnim } from "#enums/charge-anim";
 import { MoveChargeAnim } from "#app/data/battle-anims/move-charge-anim";
+import type { PhaseId } from "#enums/phase-id";
 
 //#region Types
 
@@ -2501,11 +2502,11 @@ export default class BattleScene extends SceneBase {
   /**
    * Tries to add the input phase to index before target phase in the phaseQueue, else simply calls unshiftPhase()
    * @param phase {@linkcode Phase} the phase to be added
-   * @param targetPhase {@linkcode Phase} the type of phase to search for in phaseQueue
+   * @param targetPhaseId {@linkcode PhaseId} of phase to search for in phaseQueue
    * @returns boolean if a targetPhase was found and added
    */
-  prependToPhase(phase: Phase, targetPhase: AbstractConstructor<Phase>): boolean {
-    const targetIndex = this.phaseQueue.findIndex((ph) => ph instanceof targetPhase);
+  prependToPhase(phase: Phase, targetPhaseId: PhaseId): boolean {
+    const targetIndex = this.phaseQueue.findIndex(({ id }) => id === targetPhaseId);
 
     if (targetIndex !== -1) {
       this.phaseQueue.splice(targetIndex, 0, phase);

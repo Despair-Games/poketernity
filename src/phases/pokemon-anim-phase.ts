@@ -4,6 +4,7 @@ import { globalScene } from "#app/global-scene";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { isNullOrUndefined } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { PhaseId } from "#enums/phase-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { Species } from "#enums/species";
 
@@ -18,6 +19,7 @@ export class PokemonAnimPhase extends BattlePhase {
 
   constructor(key: PokemonAnimType, pokemon: Pokemon, fieldAssets: Phaser.GameObjects.Sprite[] = []) {
     super();
+    this._id = PhaseId.POKEMON_ANIM;
 
     this.key = key;
     this.pokemon = pokemon;

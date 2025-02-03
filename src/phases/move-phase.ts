@@ -35,6 +35,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Resolves the following:
@@ -99,6 +100,7 @@ export class MovePhase extends BattlePhase {
     ignorePp: boolean = false,
   ) {
     super();
+    this._id = PhaseId.MOVE;
 
     this.pokemon = pokemon;
     this.targets = targets;

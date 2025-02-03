@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
+import { PhaseId } from "#enums/phase-id";
 import type { EndCardPhase } from "./end-card-phase";
 
 export class PostGameOverPhase extends Phase {
@@ -7,6 +8,7 @@ export class PostGameOverPhase extends Phase {
 
   constructor(endCardPhase?: EndCardPhase) {
     super();
+    this._id = PhaseId.POST_GAME_OVER;
 
     this.endCardPhase = endCardPhase;
   }

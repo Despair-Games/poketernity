@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
+import { PhaseId } from "#enums/phase-id";
 
 export class MessagePhase extends Phase {
   private text: string;
@@ -16,6 +17,7 @@ export class MessagePhase extends Phase {
     speaker?: string,
   ) {
     super();
+    this._id = PhaseId.MESSAGE;
 
     this.text = text;
     this.callbackDelay = callbackDelay;

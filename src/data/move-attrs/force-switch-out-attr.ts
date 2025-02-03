@@ -6,7 +6,6 @@ import { SwitchType } from "#enums/switch-type";
 import type { Pokemon, EnemyPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { BooleanHolder } from "#app/utils";
@@ -16,6 +15,7 @@ import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Attribute to force either the user (e.g. {@link https://bulbapedia.bulbagarden.net/wiki/U-turn_(move) | U-turn})
@@ -80,13 +80,13 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
           const slotIndex = eligibleNewIndices[user.randSeedInt(eligibleNewIndices.length)];
           globalScene.prependToPhase(
             new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), slotIndex, false, true),
-            MoveEndPhase,
+            PhaseId.MOVE_END,
           );
         } else {
           switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
           globalScene.prependToPhase(
             new SwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
-            MoveEndPhase,
+            PhaseId.MOVE_END,
           );
           return true;
         }
@@ -112,7 +112,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
           const slotIndex = eligibleNewIndices[user.randSeedInt(eligibleNewIndices.length)];
           globalScene.prependToPhase(
             new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), slotIndex, false, false),
-            MoveEndPhase,
+            PhaseId.MOVE_END,
           );
         } else {
           switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
@@ -126,7 +126,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
               false,
               false,
             ),
-            MoveEndPhase,
+            PhaseId.MOVE_END,
           );
         }
       }

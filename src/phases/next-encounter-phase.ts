@@ -1,4 +1,5 @@
 import { globalScene } from "#app/global-scene";
+import { PhaseId } from "#enums/phase-id";
 import { EncounterPhase } from "./encounter-phase";
 
 /**
@@ -6,6 +7,11 @@ import { EncounterPhase } from "./encounter-phase";
  * @extends EncounterPhase
  */
 export class NextEncounterPhase extends EncounterPhase {
+  constructor(loaded: boolean = false) {
+    super(loaded);
+    this._id = PhaseId.NEXT_ENCOUNTER;
+  }
+
   protected override doEncounter(): void {
     const { arena, arenaEnemy, arenaNextEnemy, currentBattle, field, lastEnemyTrainer, lastMysteryEncounter, tweens } =
       globalScene;

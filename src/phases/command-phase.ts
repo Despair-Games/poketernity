@@ -23,6 +23,7 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PokeballType } from "#enums/pokeball";
 import i18next from "i18next";
 import { TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Handles the player's start-of-turn actions (`Fight/Ball/Pokemon/Run`) during a battle
@@ -35,6 +36,7 @@ export class CommandPhase extends FieldPhase {
 
   constructor(fieldIndex: number) {
     super();
+    this._id = PhaseId.COMMAND;
 
     this.fieldIndex = fieldIndex;
   }

@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Provides EXP to the player's party *without* doing any Pokemon defeated checks or queueing extraneous post-battle phases.
@@ -15,6 +16,7 @@ export class PartyExpPhase extends Phase {
 
   constructor(expValue: number, useWaveIndexMultiplier?: boolean, pokemonParticipantIds?: Set<number>) {
     super();
+    this._id = PhaseId.PARTY_EXP;
 
     this.expValue = expValue;
     this.useWaveIndexMultiplier = useWaveIndexMultiplier;

@@ -14,6 +14,7 @@ import { SwitchPhase } from "#app/phases/switch-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { SwitchType } from "#enums/switch-type";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Runs at the beginning of an Encounter's battle.
@@ -27,6 +28,11 @@ import { SwitchType } from "#enums/switch-type";
  * @extends Phase
  */
 export class MysteryEncounterBattleStartCleanupPhase extends Phase {
+  constructor() {
+    super();
+    this._id = PhaseId.ME_BATTLE_START_CLEANUP;
+  }
+
   /**
    * Cleans up `TURN_END` tags, any {@linkcode PostTurnStatusEffectPhase}s, checks for Pokemon switches, then continues
    */

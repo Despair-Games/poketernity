@@ -10,6 +10,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { SwitchType } from "#enums/switch-type";
 import { settings } from "#app/system/settings/settings-manager";
 import i18next from "i18next";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Handles the prompt to switch pokemon at the start of a battle when the player is playing in Switch mode
@@ -22,6 +23,7 @@ export class CheckSwitchPhase extends BattlePhase {
 
   constructor(fieldIndex: number, useName: boolean) {
     super();
+    this._id = PhaseId.CHECK_SWITCH;
 
     this.fieldIndex = fieldIndex;
     this.useName = useName;

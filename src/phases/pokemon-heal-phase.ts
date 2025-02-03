@@ -13,6 +13,7 @@ import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { CommonAnimPhase } from "./common-anim-phase";
 import { AchvCategory } from "#enums/achv-category";
+import { PhaseId } from "#enums/phase-id";
 
 export interface PokemonHealPhaseOptions {
   message?: string;
@@ -36,6 +37,7 @@ export class PokemonHealPhase extends CommonAnimPhase {
 
   constructor(battlerIndex: BattlerIndex, hpHealed: number, options?: PokemonHealPhaseOptions) {
     super(battlerIndex, undefined, CommonAnim.HEALTH_UP);
+    this._id = PhaseId.POKEMON_HEAL;
 
     this.hpHealed = hpHealed;
     this.message = options?.message;

@@ -6,10 +6,12 @@ import { StatusEffect } from "#enums/status-effect";
 import { PokemonPhase } from "./abstract-pokemon-phase";
 import { ArenaTrapArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 export class PostSummonPhase extends PokemonPhase {
   constructor(battlerIndex: BattlerIndex) {
     super(battlerIndex);
+    this._id = PhaseId.POST_SUMMON;
   }
 
   public override start(): void {

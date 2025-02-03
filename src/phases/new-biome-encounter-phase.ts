@@ -2,6 +2,7 @@ import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { getRandomWeatherType } from "#app/data/weather";
 import { globalScene } from "#app/global-scene";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 import { NextEncounterPhase } from "./next-encounter-phase";
 
 /**
@@ -9,6 +10,11 @@ import { NextEncounterPhase } from "./next-encounter-phase";
  * @extends NextEncounterPhase
  */
 export class NewBiomeEncounterPhase extends NextEncounterPhase {
+  constructor(loaded: boolean = false) {
+    super(loaded);
+    this._id = PhaseId.NEW_BIOME_ENCOUNTER;
+  }
+
   protected override doEncounter(): void {
     const { arenaEnemy, currentBattle, tweens } = globalScene;
 

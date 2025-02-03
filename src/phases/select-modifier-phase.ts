@@ -34,6 +34,7 @@ import { NumberHolder } from "#app/utils";
 import i18next from "i18next";
 import { BattlePhase } from "./abstract-battle-phase";
 import { FilterItemMaxStacks } from "#app/utils/item-utils";
+import { PhaseId } from "#enums/phase-id";
 
 interface SelectModifierPhaseOptions {
   rerollCount?: number;
@@ -52,6 +53,7 @@ export class SelectModifierPhase extends BattlePhase {
 
   constructor(options?: SelectModifierPhaseOptions) {
     super();
+    this._id = PhaseId.SELECT_MODIFIER;
 
     this.rerollCount = options?.rerollCount ?? 0;
     this.modifierTiers = options?.modifierTiers;

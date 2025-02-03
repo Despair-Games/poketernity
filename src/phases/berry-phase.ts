@@ -9,12 +9,18 @@ import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * The phase after attacks where the pokemon eat berries
  * @extends FieldPhase
  */
 export class BerryPhase extends FieldPhase {
+  constructor() {
+    super();
+    this._id = PhaseId.BERRY;
+  }
+
   public override start(): void {
     super.start();
 

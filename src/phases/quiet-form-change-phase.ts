@@ -4,6 +4,7 @@ import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { PhaseId } from "#enums/phase-id";
 import { BattlePhase } from "./abstract-battle-phase";
 import type { MovePhase } from "./move-phase";
 
@@ -13,6 +14,7 @@ export class QuietFormChangePhase extends BattlePhase {
 
   constructor(pokemon: Pokemon, formChange: SpeciesFormChange) {
     super();
+    this._id = PhaseId.QUIET_FORM_CHANGE;
     this.pokemon = pokemon;
     this.formChange = formChange;
   }

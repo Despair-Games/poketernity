@@ -13,6 +13,7 @@ import { PostSummonPhase } from "#app/phases/post-summon-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 export class SwitchSummonPhase extends SummonPhase {
   private readonly switchType: SwitchType;
@@ -31,6 +32,7 @@ export class SwitchSummonPhase extends SummonPhase {
    */
   constructor(switchType: SwitchType, fieldIndex: number, slotIndex: number, doReturn: boolean, player?: boolean) {
     super(fieldIndex, player !== undefined ? player : true);
+    this._id = PhaseId.SWITCH_SUMMON;
 
     this.switchType = switchType;
     this.slotIndex = slotIndex;

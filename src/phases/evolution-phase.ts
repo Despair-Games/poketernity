@@ -19,6 +19,7 @@ import { BooleanHolder, fixedNumber } from "#app/utils";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * A phase for handling Pokemon evolution
@@ -42,6 +43,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
 
   constructor(pokemon: PlayerPokemon, evolution: SpeciesFormEvolution | null, lastLevel: number) {
     super(pokemon);
+    this._id = PhaseId.EVOLUTION;
 
     this.pokemon = pokemon;
     this.evolution = evolution;

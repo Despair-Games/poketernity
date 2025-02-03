@@ -11,8 +11,14 @@ import { BattlePhase } from "./abstract-battle-phase";
 import { ModifierRewardPhase } from "./modifier-reward-phase";
 import { MoneyRewardPhase } from "./money-reward-phase";
 import { TrainerSlot } from "#enums/trainer-slot";
+import { PhaseId } from "#enums/phase-id";
 
 export class TrainerVictoryPhase extends BattlePhase {
+  constructor() {
+    super();
+    this._id = PhaseId.TRAINER_VICTORY;
+  }
+
   public override start(): void {
     const { arena, charSprite, currentBattle, eventManager, ui } = globalScene;
     const { trainer, waveIndex } = currentBattle;

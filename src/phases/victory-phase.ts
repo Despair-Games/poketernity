@@ -12,6 +12,7 @@ import { SelectModifierPhase } from "./select-modifier-phase";
 import { TrainerVictoryPhase } from "./trainer-victory-phase";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { EVIL_BOSS_2_WAVE } from "#app/data/special-waves";
+import { PhaseId } from "#enums/phase-id";
 
 export class VictoryPhase extends PokemonPhase {
   /** If true, indicates that the phase is intended for EXP purposes only, and not to continue a battle to next phase */
@@ -19,6 +20,7 @@ export class VictoryPhase extends PokemonPhase {
 
   constructor(battlerIndex: BattlerIndex | number, isExpOnly: boolean = false) {
     super(battlerIndex);
+    this._id = PhaseId.VICTORY;
 
     this.isExpOnly = isExpOnly;
   }

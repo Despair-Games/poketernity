@@ -9,13 +9,13 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { globalScene } from "#app/global-scene";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { BattleType } from "#enums/battle-type";
 import i18next from "i18next";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveId } from "#enums/move-id";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Ability attribute for forcing a Pokémon to switch out after its health drops below half.
@@ -149,7 +149,7 @@ class ForceSwitchOutHelper {
         switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
         globalScene.prependToPhase(
           new SwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
-          MoveEndPhase,
+          PhaseId.MOVE_END,
         );
         return true;
       }
@@ -168,7 +168,7 @@ class ForceSwitchOutHelper {
           : 0;
         globalScene.prependToPhase(
           new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), summonIndex, false, false),
-          MoveEndPhase,
+          PhaseId.MOVE_END,
         );
         return true;
       }

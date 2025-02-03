@@ -46,6 +46,7 @@ import {
   TrappedBattlerTagTypes,
 } from "#app/utils/battler-tag-type-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 export class BattlerTag {
   public tagType: BattlerTagType;
@@ -542,7 +543,7 @@ export class ShellTrapTag extends BattlerTag {
         // Only shift MovePhase timing if it's not already next up
         if (shellTrapPhaseIndex !== -1 && shellTrapPhaseIndex !== firstMovePhaseIndex) {
           const shellTrapMovePhase = globalScene.phaseQueue.splice(shellTrapPhaseIndex, 1)[0];
-          globalScene.prependToPhase(shellTrapMovePhase, MovePhase);
+          globalScene.prependToPhase(shellTrapMovePhase, PhaseId.MOVE);
         }
 
         this.activated = true;

@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { fixedNumber } from "#app/utils";
+import { PhaseId } from "#enums/phase-id";
 import { BattlePhase } from "./abstract-battle-phase";
 
 /**
@@ -11,6 +12,7 @@ export class PartyHealPhase extends BattlePhase {
 
   constructor(resumeBgm: boolean) {
     super();
+    this._id = PhaseId.PARTY_HEAL;
 
     this.resumeBgm = resumeBgm;
   }

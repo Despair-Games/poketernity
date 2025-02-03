@@ -4,8 +4,14 @@ import { settings } from "#app/system/settings/settings-manager";
 import { UiMode } from "#enums/ui-mode";
 import { PlayerGender } from "#enums/player-gender";
 import i18next from "i18next";
+import { PhaseId } from "#enums/phase-id";
 
 export class SelectGenderPhase extends Phase {
+  constructor() {
+    super();
+    this._id = PhaseId.SELECT_GENDER;
+  }
+
   public override start(): void {
     super.start();
 

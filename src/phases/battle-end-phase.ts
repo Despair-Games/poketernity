@@ -3,6 +3,7 @@ import { globalScene } from "#app/global-scene";
 import type { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#app/modifier/modifier";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Handles the effects that need to trigger after a battle ends (game stats updates, reducing item turn count, etc)
@@ -14,6 +15,7 @@ export class BattleEndPhase extends BattlePhase {
 
   constructor(isVictory: boolean) {
     super();
+    this._id = PhaseId.BATTLE_END;
 
     this.isVictory = isVictory;
   }

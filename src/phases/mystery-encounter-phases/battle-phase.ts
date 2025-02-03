@@ -17,6 +17,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import i18next from "i18next";
 import { TrainerSlot } from "#enums/trainer-slot";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Will handle (in order):
@@ -32,6 +33,7 @@ export class MysteryEncounterBattlePhase extends Phase {
 
   constructor(disableSwitch: boolean = false) {
     super();
+    this._id = PhaseId.ME_BATTLE;
     this.disableSwitch = disableSwitch;
   }
 

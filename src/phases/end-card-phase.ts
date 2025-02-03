@@ -6,6 +6,7 @@ import { PlayerGender } from "#enums/player-gender";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
 import { GAME_WIDTH, GAME_HEIGHT } from "#app/ui-constants";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Displays the End Card after a classic run ends in victory.
@@ -15,6 +16,11 @@ import { GAME_WIDTH, GAME_HEIGHT } from "#app/ui-constants";
 export class EndCardPhase extends Phase {
   public endCard: Phaser.GameObjects.Image;
   public text: Phaser.GameObjects.Text;
+
+  constructor() {
+    super();
+    this._id = PhaseId.END_CARD;
+  }
 
   public override start(): void {
     super.start();

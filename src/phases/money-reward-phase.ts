@@ -4,6 +4,7 @@ import { NumberHolder } from "#app/utils";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import i18next from "i18next";
 import { BattlePhase } from "./abstract-battle-phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Grants the player money at the end of a wave
@@ -14,6 +15,7 @@ export class MoneyRewardPhase extends BattlePhase {
 
   constructor(moneyMultiplier: number) {
     super();
+    this._id = PhaseId.MONEY_REWARD;
 
     this.moneyMultiplier = moneyMultiplier;
   }

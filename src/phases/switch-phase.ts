@@ -7,6 +7,7 @@ import { BattlePhase } from "./abstract-battle-phase";
 import { PostSummonPhase } from "./post-summon-phase";
 import { SwitchSummonPhase } from "./switch-summon-phase";
 import { PartyFilterNonFainted } from "#app/utils/party-utils";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Opens the party selector UI and transitions into a {@linkcode SwitchSummonPhase}
@@ -31,6 +32,7 @@ export class SwitchPhase extends BattlePhase {
    */
   constructor(switchType: SwitchType, fieldIndex: number, isModal: boolean, doReturn: boolean) {
     super();
+    this._id = PhaseId.SWITCH;
 
     this.switchType = switchType;
     this.fieldIndex = fieldIndex;

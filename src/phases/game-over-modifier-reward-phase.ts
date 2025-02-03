@@ -3,6 +3,7 @@ import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { ModifierRewardPhase } from "./modifier-reward-phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Used to grant vouchers to the player after they finish a classic run
@@ -11,6 +12,7 @@ import { ModifierRewardPhase } from "./modifier-reward-phase";
 export class GameOverModifierRewardPhase extends ModifierRewardPhase {
   constructor(modifierTypeFunc: ModifierTypeFunc) {
     super(modifierTypeFunc);
+    this._id = PhaseId.GAME_OVER_MODIFIER_REWARD;
   }
 
   public override doReward(): Promise<void> {

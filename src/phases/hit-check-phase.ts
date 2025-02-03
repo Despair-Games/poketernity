@@ -18,6 +18,7 @@ import { MoveTarget } from "#enums/move-target";
 import { ElementalType } from "#enums/elemental-type";
 import { PokemonPhase } from "./abstract-pokemon-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 type HitCheckEntry = [HitCheckResult, TypeDamageMultiplier];
 
@@ -34,6 +35,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
 
   constructor(battlerIndex: BattlerIndex, targets: BattlerIndex[], move: PokemonMove) {
     super(battlerIndex);
+    this._id = PhaseId.HIT_CHECK;
 
     this.move = move;
     this.targets = targets;

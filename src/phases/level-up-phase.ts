@@ -9,6 +9,7 @@ import { ExpNotification } from "#enums/exp-notification";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
 import { AchvCategory } from "#enums/achv-category";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Handles the effects of a pokemon levelling up:
@@ -28,6 +29,7 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
 
   constructor(partyMemberIndex: number, lastLevel: number, level: number) {
     super(partyMemberIndex);
+    this._id = PhaseId.LEVEL_UP;
 
     this.lastLevel = lastLevel;
     this.level = level;

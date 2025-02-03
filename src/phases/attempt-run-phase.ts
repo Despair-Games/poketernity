@@ -8,6 +8,7 @@ import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Handles the player attempting to run away from a wild battle
@@ -19,6 +20,7 @@ export class AttemptRunPhase extends PokemonPhase {
 
   constructor(fieldIndex: number) {
     super(fieldIndex);
+    this._id = PhaseId.ATTEMPT_RUN;
   }
 
   public override start(): void {

@@ -54,6 +54,7 @@ import { Species } from "#enums/species";
 import i18next from "i18next";
 import { MysteryEncounterPhase } from "./mystery-encounter-phases/mystery-encounter-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Starts the first encounter (wave 1) of a new run. Subsequent encounters are handled by
@@ -67,6 +68,7 @@ export class EncounterPhase extends BattlePhase {
 
   constructor(loaded: boolean = false) {
     super();
+    this._id = PhaseId.ENCOUNTER;
 
     this.loaded = loaded;
   }

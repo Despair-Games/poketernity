@@ -7,6 +7,7 @@ import type { OptionPhaseCallback } from "#app/data/mystery-encounters/mystery-e
 import { transitionMysteryEncounterIntroVisuals } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Will handle (in order):
@@ -19,6 +20,11 @@ import { Phase } from "#app/phase";
  * @extends Phase
  */
 export class MysteryEncounterOptionSelectedPhase extends Phase {
+  constructor() {
+    super();
+    this._id = PhaseId.ME_OPTION_SELECTED;
+  }
+
   protected onOptionSelect: OptionPhaseCallback =
     globalScene.currentBattle.mysteryEncounter!.selectedOption!.onOptionPhase;
 

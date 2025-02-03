@@ -24,6 +24,7 @@ import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Handles catching a pokemon after the player throws a ball
@@ -36,6 +37,7 @@ export class AttemptCapturePhase extends PokemonPhase {
 
   constructor(targetIndex: number, pokeballType: PokeballType) {
     super(BattlerIndex.ENEMY + targetIndex);
+    this._id = PhaseId.ATTEMPT_CAPTURE;
 
     this.pokeballType = pokeballType;
   }

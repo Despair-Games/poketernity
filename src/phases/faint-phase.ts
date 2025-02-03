@@ -34,6 +34,7 @@ import { ToggleDoublePositionPhase } from "./toggle-double-position-phase";
 import { VictoryPhase } from "./victory-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Handles the effects of a pokemon fainting:
@@ -81,6 +82,7 @@ export class FaintPhase extends PokemonPhase {
     source?: Pokemon,
   ) {
     super(battlerIndex);
+    this._id = PhaseId.FAINT;
 
     this.preventEndure = preventEndure;
     this.destinyTag = destinyTag;

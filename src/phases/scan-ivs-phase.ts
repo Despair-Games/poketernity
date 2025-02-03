@@ -11,12 +11,14 @@ import { Stat } from "#enums/stat";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
 import { PokemonPhase } from "./abstract-pokemon-phase";
+import { PhaseId } from "#enums/phase-id";
 
 export class ScanIvsPhase extends PokemonPhase {
   private readonly shownIvs: number;
 
   constructor(battlerIndex: BattlerIndex, shownIvs: number) {
     super(battlerIndex);
+    this._id = PhaseId.SCAN_IVS;
 
     this.shownIvs = shownIvs;
   }

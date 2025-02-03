@@ -29,6 +29,7 @@ import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { AchvCategory } from "#enums/achv-category";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Handles the effects of the player ending a run:
@@ -43,6 +44,7 @@ export class GameOverPhase extends BattlePhase {
 
   constructor(isVictory: boolean = false) {
     super();
+    this._id = PhaseId.GAME_OVER;
 
     this.isVictory = isVictory;
   }

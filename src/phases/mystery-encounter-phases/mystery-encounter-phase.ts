@@ -14,6 +14,7 @@ import { Phase } from "#app/phase";
 import { UiMode } from "#enums/ui-mode";
 import { isNullOrUndefined } from "#app/utils";
 import { MysteryEncounterOptionSelectedPhase } from "./option-selected-phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Will handle (in order):
@@ -36,6 +37,7 @@ export class MysteryEncounterPhase extends Phase {
    */
   constructor(optionSelectSettings?: OptionSelectSettings) {
     super();
+    this._id = PhaseId.ME_ENCOUNTER;
     this.optionSelectSettings = optionSelectSettings;
   }
 

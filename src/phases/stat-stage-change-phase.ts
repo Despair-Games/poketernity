@@ -14,6 +14,7 @@ import { PokemonPhase } from "./abstract-pokemon-phase";
 import { CANVAS_SCALE } from "#app/ui-constants";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 export type StatStageChangeCallback = (changed: BattleStat[], relativeChanges: number[], target?: Pokemon) => void;
 
@@ -42,6 +43,7 @@ export class StatStageChangePhase extends PokemonPhase {
     options?: SSCPhaseOptions,
   ) {
     super(battlerIndex);
+    this._id = PhaseId.STAT_STAGE_CHANGE;
 
     this.selfTarget = selfTarget;
     this.stats = stats;

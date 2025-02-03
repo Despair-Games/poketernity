@@ -9,6 +9,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { WeatherType } from "#enums/weather-type";
 import { CommonAnimPhase } from "./common-anim-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 export class WeatherEffectPhase extends CommonAnimPhase {
   public weather: Weather | null;
@@ -19,6 +20,7 @@ export class WeatherEffectPhase extends CommonAnimPhase {
       undefined,
       CommonAnim.SUNNY + ((globalScene?.arena?.weather?.weatherType ?? WeatherType.NONE) - 1),
     );
+    this._id = PhaseId.WEATHER_EFFECT;
     this.weather = globalScene?.arena?.weather;
   }
 

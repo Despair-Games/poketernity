@@ -15,6 +15,7 @@ import { UiMode } from "#enums/ui-mode";
 import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 import { LearnMoveType } from "#enums/learn-move-type";
+import { PhaseId } from "#enums/phase-id";
 
 export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
   private readonly moveId: MoveId;
@@ -29,6 +30,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
     cost: number = -1,
   ) {
     super(partyMemberIndex);
+    this._id = PhaseId.LEARN_MOVE;
     this.moveId = moveId;
     this.learnMoveType = learnMoveType;
     this.cost = cost;

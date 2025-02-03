@@ -13,12 +13,14 @@ import { PartyMemberPokemonPhase } from "./abstract-party-member-pokemon-phase";
 import { PostSummonPhase } from "./post-summon-phase";
 import { ShinySparklePhase } from "./shiny-sparkle-phase";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
+import { PhaseId } from "#enums/phase-id";
 
 export class SummonPhase extends PartyMemberPokemonPhase {
   private readonly loaded: boolean;
 
   constructor(fieldIndex: number, player: boolean = true, loaded: boolean = false) {
     super(fieldIndex, player);
+    this._id = PhaseId.SUMMON;
 
     this.loaded = loaded;
   }

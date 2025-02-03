@@ -12,12 +12,14 @@ import { SelectGenderPhase } from "./select-gender-phase";
 import { UnavailablePhase } from "./unavailable-phase";
 import { settings } from "#app/system/settings/settings-manager";
 import { PlayerGender } from "#enums/player-gender";
+import { PhaseId } from "#enums/phase-id";
 
 export class LoginPhase extends Phase {
   private readonly showText: boolean;
 
   constructor(showText: boolean = true) {
     super();
+    this._id = PhaseId.LOGIN;
 
     this.showText = showText;
   }

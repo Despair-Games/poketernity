@@ -4,12 +4,14 @@ import { getUnlockableName } from "#app/system/unlockables";
 import { type Unlockables } from "#enums/unlockables";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
+import { PhaseId } from "#enums/phase-id";
 
 export class UnlockPhase extends Phase {
   private readonly unlockable: Unlockables;
 
   constructor(unlockable: Unlockables) {
     super();
+    this._id = PhaseId.UNLOCK;
 
     this.unlockable = unlockable;
   }

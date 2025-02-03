@@ -9,10 +9,12 @@ import { BooleanHolder, NumberHolder } from "#app/utils";
 import { StatusEffect } from "#enums/status-effect";
 import { PokemonPhase } from "./abstract-pokemon-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 export class PostTurnStatusEffectPhase extends PokemonPhase {
   constructor(battlerIndex: BattlerIndex) {
     super(battlerIndex);
+    this._id = PhaseId.POST_TURN_STATUS_EFFECT;
   }
 
   public override start(): void {

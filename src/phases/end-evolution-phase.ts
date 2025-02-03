@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
+import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 
 /**
@@ -8,6 +9,11 @@ import { UiMode } from "#enums/ui-mode";
  * @extends Phase
  */
 export class EndEvolutionPhase extends Phase {
+  constructor() {
+    super();
+    this._id = PhaseId.END_EVOLUTION;
+  }
+
   public override start(): void {
     super.start();
 

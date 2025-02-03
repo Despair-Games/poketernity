@@ -158,7 +158,6 @@ import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { ObtainStatusEffectPhase } from "#app/phases/obtain-status-effect-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
@@ -195,6 +194,7 @@ import {
 import { PartyFilterNonFainted } from "#app/utils/party-utils";
 import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -4875,7 +4875,7 @@ export class PlayerPokemon extends Pokemon {
           if (slotIndex >= globalScene.currentBattle.getBattlerCount() && slotIndex < 6) {
             globalScene.prependToPhase(
               new SwitchSummonPhase(switchType, this.getFieldIndex(), slotIndex, false),
-              MoveEndPhase,
+              PhaseId.MOVE_END,
             );
           }
           globalScene.ui.setMode(UiMode.MESSAGE).then(resolve);

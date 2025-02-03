@@ -27,8 +27,15 @@ import { SelectChallengePhase } from "./select-challenge-phase";
 import { SelectStarterPhase } from "./select-starter-phase";
 import { SummonPhase } from "./summon-phase";
 import { api } from "#app/plugins/api/api";
+import { PhaseId } from "#enums/phase-id";
 
 export class TitlePhase extends Phase {
+  constructor() {
+    super();
+
+    this._id = PhaseId.TITLE;
+  }
+
   private loaded: boolean = false;
   private lastSessionData: SessionSaveData;
   public gameMode: GameModes;

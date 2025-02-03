@@ -1,9 +1,10 @@
 import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { MovePhase } from "#app/phases/move-phase";
+import { type MovePhase } from "#app/phases/move-phase";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Attribute for the "combo" effect of {@link https://bulbapedia.bulbagarden.net/wiki/Round_(move) | Round}.
@@ -30,7 +31,7 @@ export class CueNextRoundAttr extends MoveEffectAttr {
     const nextRoundIndex = globalScene.phaseQueue.indexOf(nextRoundPhase);
     const nextMoveIndex = globalScene.phaseQueue.findIndex((phase) => phase.isMovePhase());
     if (nextRoundIndex !== nextMoveIndex) {
-      globalScene.prependToPhase(globalScene.phaseQueue.splice(nextRoundIndex, 1)[0], MovePhase);
+      globalScene.prependToPhase(globalScene.phaseQueue.splice(nextRoundIndex, 1)[0], PhaseId.MOVE);
     }
 
     // Mark the corresponding Pokemon as having "joined the Round" (for doubling power later)

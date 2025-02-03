@@ -6,6 +6,7 @@ import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounte
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import { PhaseId } from "#enums/phase-id";
 import { PostMysteryEncounterPhase } from "./post-mystery-encounter-phase";
 
 /**
@@ -26,6 +27,7 @@ export class MysteryEncounterRewardsPhase extends Phase {
 
   constructor(addHealPhase: boolean = false) {
     super();
+    this._id = PhaseId.ME_REWARDS;
     this.addHealPhase = addHealPhase;
   }
 
