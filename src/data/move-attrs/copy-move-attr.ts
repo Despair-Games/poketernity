@@ -13,9 +13,9 @@ import { lastMoveCopiableCondition } from "#app/data/move-conditions/last-move-c
  */
 export class CopyMoveAttr extends OverrideMoveEffectAttr {
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
-    const lastMove = globalScene.currentBattle.lastMoveId;
+    const lastMove = globalScene.currentBattle.lastMove;
 
-    const moveTargets = getMoveTargets(user, lastMove);
+    const moveTargets = getMoveTargets(user, lastMove.id);
     if (!moveTargets.targets.length) {
       return false;
     }
@@ -26,9 +26,9 @@ export class CopyMoveAttr extends OverrideMoveEffectAttr {
         : moveTargets.targets.indexOf(target.getBattlerIndex()) > -1
           ? [target.getBattlerIndex()]
           : [moveTargets.targets[user.randSeedInt(moveTargets.targets.length)]];
-    user.getMoveQueue().push({ moveId: lastMove, targets: targets, ignorePP: true });
+    user.getMoveQueue().push({ moveId: lastMove.id, targets: targets, ignorePP: true });
 
-    globalScene.useMove({ pokemon: user, targets, move: lastMove, followUp: true, when: "eager" });
+    globalScene.useMove({ pokemon: user, targets, move: lastMove.id, followUp: true, when: "eager" });
 
     return true;
   }

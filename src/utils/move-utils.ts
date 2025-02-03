@@ -1,8 +1,6 @@
 import type { UserMoveConditionFunc } from "#app/@types/UserMoveConditionFunc";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { type Move, type MoveAttrFilter } from "#app/data/move";
-import { ChargingSelfStatusMove } from "#app/data/moves/charging-self-status-move";
-import { ChargingAttackMove } from "#app/data/moves/charging-attack-move";
 import type { MoveAttr } from "#app/data/move-attrs/move-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
@@ -78,7 +76,7 @@ function applyMoveChargeAttrsInternal<TAttr extends MoveAttr>(
   ...params: Parameters<TAttr["apply"]>
 ): void {
   const [user, target, move, ...args] = params;
-  if (move instanceof ChargingAttackMove || move instanceof ChargingSelfStatusMove) {
+  if (move.isChargingAttackMove() || move.isChargingSelfStatusMove()) {
     move.chargeAttrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, ...args));
   }
 }

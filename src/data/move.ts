@@ -860,6 +860,14 @@ export abstract class Move implements Localizable {
   isSelfStatLowering(): boolean {
     return this.getAttrs(StatStageChangeAttr).some((a) => a.selfTarget && a.stages < 0);
   }
+
+  isChargingSelfStatusMove(): this is ChargingSelfStatusMove {
+    return false;
+  }
+
+  isChargingAttackMove(): this is ChargingAttackMove {
+    return false;
+  }
 }
 
 export class AttackMove extends Move {

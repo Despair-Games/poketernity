@@ -3799,6 +3799,7 @@ export default class BattleScene extends SceneBase {
         break;
       case "after":
         this.appendToPhase(movePhase, phaseId!);
+        break;
       default:
         throw new Error(`Unknown useMove.when: ${when}`);
     }
