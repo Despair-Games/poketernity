@@ -3,10 +3,10 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
-import { type Move } from "../move";
+import { type Move } from "#app/data/move";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { targetMoveCopiableCondition } from "../move-conditions/target-move-copiable-condition";
-import { OverrideMoveEffectAttr } from "./override-move-effect-attr";
+import { targetMoveCopiableCondition } from "#app/data/move-conditions/target-move-copiable-condition";
+import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
 
 /**
  * Attribute to copy the target's last used move into the user's moveset,
