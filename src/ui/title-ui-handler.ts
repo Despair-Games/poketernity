@@ -4,13 +4,14 @@ import { addTextObject, getTextStyleOptions } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { getSplashMessages } from "#app/data/splash-messages";
 import i18next from "i18next";
-import { TimedEventDisplay } from "#app/timed-event-manager";
+import { TimedEventDisplay } from "#app/ui/timed-event-display";
 import { version } from "../../package.json";
 import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
 import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 import { settings } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { eventManager } from "#app/timed-event-manager";
 
 export default class TitleUiHandler extends OptionSelectUiHandler {
   /** If the stats can not be retrieved, use this fallback value */
@@ -43,8 +44,8 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
     logo.setOrigin(0.5, 0);
     this.titleContainer.add(logo);
 
-    if (globalScene.eventManager.isEventActive()) {
-      this.eventDisplay = new TimedEventDisplay(0, 0, globalScene.eventManager.activeEvent());
+    if (eventManager.isEventActive()) {
+      this.eventDisplay = new TimedEventDisplay(0, 0, eventManager.activeEvent());
       this.eventDisplay.setup();
       this.titleContainer.add(this.eventDisplay);
     }
@@ -111,7 +112,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
 
       const ui = this.getUi();
 
-      if (globalScene.eventManager.isEventActive()) {
+      if (eventManager.isEventActive()) {
         this.eventDisplay.setWidth(GAME_WIDTH - this.optionSelectBg.width - this.optionSelectBg.x);
         this.eventDisplay.show();
       }

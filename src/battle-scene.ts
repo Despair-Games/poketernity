@@ -127,7 +127,6 @@ import { Biome } from "#enums/biome";
 import { MoveId } from "#enums/move-id";
 import { PlayerGender } from "#enums/player-gender";
 import { Species } from "#enums/species";
-import { TimedEventManager } from "#app/timed-event-manager";
 import type { PokemonAnimType } from "#enums/pokemon-anim-type";
 import i18next from "i18next";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
@@ -179,6 +178,7 @@ import { Animation } from "./animations";
 import { resetStarterColors, starterColors } from "./data/starter-colors";
 import { CallSourceLogger } from "#app/loggers";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { eventManager } from "./timed-event-manager";
 
 const DEBUG_RNG = false;
 
@@ -297,8 +297,6 @@ export default class BattleScene extends SceneBase {
   public inputMethod: string;
   private infoToggles: InfoToggle[] = [];
 
-  public eventManager: TimedEventManager;
-
   /** Handler for general {@linkcode Animation | animations} */
   public animations: Animation;
 
@@ -320,7 +318,6 @@ export default class BattleScene extends SceneBase {
     this.conditionalQueue = [];
     this.phaseQueuePrependSpliceIndex = -1;
     this.nextCommandPhaseQueue = [];
-    this.eventManager = new TimedEventManager();
     this.updateGameInfo();
     this.animations = new Animation(this);
     initGlobalScene(this);
@@ -969,6 +966,9 @@ export default class BattleScene extends SceneBase {
       species = getPokemonSpecies(Overrides.ENEMY_SPECIES_OVERRIDE);
       // The fact that a Pokemon is a boss or not can change based on its Species and level
       boss = this.getEncounterBossSegments(this.currentBattle.waveIndex, level, species) > 1;
+    }
+    if (eventManager.activeEvent()) {
+      species = getPokemonSpecies(Species.MAGIKARP);
     }
 
     const pokemon = new EnemyPokemon(species, level, trainerSlot, boss, shinyLock, dataSource);

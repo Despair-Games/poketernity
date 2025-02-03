@@ -18,6 +18,15 @@ vi.mock("#app/overrides", async (importOriginal) => {
   } satisfies typeof import("#app/overrides"); // eslint-disable-line
 });
 
+/** Mock the timed event manager to never have an ongoing event. */
+vi.mock("#app/timed-event-manager", async () => {
+   
+  const { MockTimedEventManager } = await import("#test/testUtils/mocks/mockTimedEventManager");
+  return {
+    eventManager: new MockTimedEventManager(),
+  } satisfies typeof import("#app/timed-event-manager"); // eslint-disable-line
+});
+
 /**
  * This is a hacky way to mock the i18n backend requests (with the help of {@link https://mswjs.io/ | msw}).
  * The reason to put it inside of a mock is to elevate it.

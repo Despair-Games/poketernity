@@ -231,6 +231,7 @@ import { ArenaTrapAbAttr } from "#app/data/ab-attrs/arena-trap-ab-attr";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import type { AbilityFilterOptions } from "#app/data/ability-filter-options";
 import { PokemonMove } from "#app/field/pokemon-move";
+import { eventManager } from "#app/timed-event-manager";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -2381,8 +2382,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     const shinyThreshold = new NumberHolder(BASE_SHINY_CHANCE);
     if (thresholdOverride === undefined) {
-      if (globalScene.eventManager.isEventActive()) {
-        shinyThreshold.value *= globalScene.eventManager.getShinyMultiplier();
+      if (eventManager.isEventActive()) {
+        shinyThreshold.value *= eventManager.getShinyMultiplier();
       }
       if (!this.hasTrainer()) {
         globalScene.applyModifiers(ShinyRateBoosterModifier, true, shinyThreshold);
@@ -2416,8 +2417,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       if (thresholdOverride !== undefined && applyModifiersToOverride) {
         shinyThreshold.value = thresholdOverride;
       }
-      if (globalScene.eventManager.isEventActive()) {
-        shinyThreshold.value *= globalScene.eventManager.getShinyMultiplier();
+      if (eventManager.isEventActive()) {
+        shinyThreshold.value *= eventManager.getShinyMultiplier();
       }
       if (!this.hasTrainer()) {
         globalScene.applyModifiers(ShinyRateBoosterModifier, true, shinyThreshold);
@@ -4922,8 +4923,8 @@ export class PlayerPokemon extends Pokemon {
       const amount = new NumberHolder(friendship);
       globalScene.applyModifier(PokemonFriendshipBoosterModifier, true, this, amount);
       let candyFriendshipMultiplier = CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER;
-      if (globalScene.eventManager.isEventActive()) {
-        candyFriendshipMultiplier *= globalScene.eventManager.getFriendshipMultiplier();
+      if (eventManager.isEventActive()) {
+        candyFriendshipMultiplier *= eventManager.getFriendshipMultiplier();
       }
       const starterAmount = new NumberHolder(
         Math.floor(
