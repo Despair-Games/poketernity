@@ -3,6 +3,7 @@ import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/testUtils/gameManager";
+import { toDmgValue } from "#app/utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -39,7 +40,7 @@ describe("Ability Attribute - Post Weather Lapse Heal", () => {
     game.override.ability(Abilities.RAIN_DISH).weather(weatherType);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    const expectedHeal = Math.floor((playerPokemon.hp * 1) / 16);
+    const expectedHeal = toDmgValue(playerPokemon.hp / 16);
     playerPokemon.hp = 1;
 
     game.move.select(MoveId.SPLASH);
@@ -55,7 +56,7 @@ describe("Ability Attribute - Post Weather Lapse Heal", () => {
     game.override.ability(Abilities.DRY_SKIN).weather(weatherType);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    const expectedHeal = Math.floor((playerPokemon.hp * 1) / 8);
+    const expectedHeal = toDmgValue(playerPokemon.hp / 8);
     playerPokemon.hp = 1;
 
     game.move.select(MoveId.SPLASH);
@@ -71,7 +72,7 @@ describe("Ability Attribute - Post Weather Lapse Heal", () => {
     game.override.ability(Abilities.ICE_BODY).weather(weatherType);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    const expectedHeal = Math.floor((playerPokemon.hp * 1) / 16);
+    const expectedHeal = toDmgValue(playerPokemon.hp / 16);
     playerPokemon.hp = 1;
 
     game.move.select(MoveId.SPLASH);
