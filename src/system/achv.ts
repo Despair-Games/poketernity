@@ -11,7 +11,7 @@ import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
 import { AchvTier } from "#enums/achv-tier";
 import { ElementalType } from "#enums/elemental-type";
-import { AchvCategory } from "#enums/achv-flag";
+import { AchvCategory } from "#enums/achv-category";
 
 export class Achv {
   protected _category: AchvCategory;

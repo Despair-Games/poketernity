@@ -181,7 +181,7 @@ import { PokemonHealPhase, type PokemonHealPhaseOptions } from "#app/phases/poke
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { MoveChargePhase } from "#app/phases/move-charge-phase";
 import type { PokemonMove } from "#app/field/pokemon-move";
-import { AchvCategory } from "#enums/achv-flag";
+import { AchvCategory } from "#enums/achv-category";
 import { SelectTargetPhase } from "#app/phases/select-target-phase";
 import { MoveAnimPhase } from "#app/phases/move-anim-phase";
 import type { ChargeAnim } from "#enums/charge-anim";

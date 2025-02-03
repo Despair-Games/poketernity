@@ -8,7 +8,7 @@ import { NumberHolder } from "#app/utils";
 import { ExpNotification } from "#enums/exp-notification";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
-import { AchvCategory } from "#enums/achv-flag";
+import { AchvCategory } from "#enums/achv-category";
 
 /**
  * Handles the effects of a pokemon levelling up:

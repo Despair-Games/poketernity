@@ -28,7 +28,7 @@ import { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { AchvCategory } from "#enums/achv-flag";
+import { AchvCategory } from "#enums/achv-category";
 
 /**
  * Handles the effects of the player ending a run:

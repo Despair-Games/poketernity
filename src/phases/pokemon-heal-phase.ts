@@ -12,7 +12,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { CommonAnimPhase } from "./common-anim-phase";
-import { AchvCategory } from "#enums/achv-flag";
+import { AchvCategory } from "#enums/achv-category";
 
 export interface PokemonHealPhaseOptions {
   message?: string;

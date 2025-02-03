@@ -38,7 +38,7 @@ import { HitCheckPhase } from "./hit-check-phase";
 import { MoveFlags } from "#enums/move-flags";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AchvCategory } from "#enums/achv-flag";
+import { AchvCategory } from "#enums/achv-category";
 
 export class MoveEffectPhase extends HitCheckPhase {
   private moveHistoryEntry: TurnMove;
