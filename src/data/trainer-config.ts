@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import type { EnemyPokemon } from "#app/field/pokemon";
-import { toReadableString, randSeedItem } from "#app/utils";
+import { toReadableString, randSeedItem, randItem } from "#app/utils";
 import type { PokemonSpeciesFilter } from "#app/@types/PokemonSpeciesFilter";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
@@ -1301,7 +1301,8 @@ export class TrainerConfig {
       initI18n();
     }
 
-    this.setBattleBgm(randSeedItem(battleBgm));
+    // TODO: make this seeded
+    this.setBattleBgm(randItem(battleBgm));
 
     // Set the party templates for the Champion.
     let partyTemplate = trainerPartyTemplates.CHAMPION;
