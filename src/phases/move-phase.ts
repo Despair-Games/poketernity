@@ -323,6 +323,7 @@ export class MovePhase extends BattlePhase {
     // Update the battle's "last move" pointer, unless we're currently mimicking a move.
     if (!allMoves[this.move.moveId].hasAttr(CopyMoveAttr)) {
       globalScene.currentBattle.lastMoveId = this.move.moveId;
+      globalScene.currentBattle.lastMove = this.move.getMove();
     }
 
     /**

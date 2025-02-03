@@ -55,6 +55,7 @@ import {
   RIVAL_WAVE,
   TUTORIAL_BATTLE_WAVE,
 } from "./data/special-waves";
+import type { Move } from "#app/data/move";
 
 export interface TurnCommand {
   command: BattleCommand;
@@ -100,6 +101,7 @@ export default class Battle {
   public postBattleLoot: PokemonHeldItemModifier[] = [];
   public escapeAttempts: number = 0;
   public lastMoveId: MoveId;
+  public lastMove: Move;
   public battleSeed: string = generateBattleSeed();
   private battleSeedState: string | null = null;
   public moneyScattered: number = 0;
