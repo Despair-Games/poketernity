@@ -3,11 +3,10 @@ import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/testUtils/gameManager";
-import { toDmgValue } from "#app/utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
-describe("Ability Attribute - Post Weather Lapse Heal", () => {
+describe("Ability Attribute - Weather Heal", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
@@ -24,6 +23,7 @@ describe("Ability Attribute - Post Weather Lapse Heal", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
+      .startingLevel(100)
       .moveset([MoveId.SPLASH])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
@@ -33,14 +33,20 @@ describe("Ability Attribute - Post Weather Lapse Heal", () => {
       .enemyMoveset(MoveId.SPLASH);
   });
 
+  // prettier-ignore
   it.each([
-    { weather: "Rain", weatherType: WeatherType.RAIN },
-    { weather: "Heavy Rain", weatherType: WeatherType.HEAVY_RAIN },
-  ])("Rain Dish should restore 1/16 of the ability holder's HP in $weather", async ({ weatherType }) => {
-    game.override.ability(Abilities.RAIN_DISH).weather(weatherType);
+    { ability: Abilities.RAIN_DISH, abilityName: "Rain Dish", healRatio: 1/16, healStr: "1/16", weather: "Rain", weatherType: WeatherType.RAIN },
+    { ability: Abilities.RAIN_DISH, abilityName: "Rain Dish", healRatio: 1/16, healStr: "1/16", weather: "Heavy Rain", weatherType: WeatherType.HEAVY_RAIN },
+    { ability: Abilities.DRY_SKIN, abilityName: "Dry Skin", healRatio: 1/8, healStr: "1/8", weather: "Rain", weatherType: WeatherType.RAIN },
+    { ability: Abilities.DRY_SKIN, abilityName: "Dry Skin", healRatio: 1/8, healStr: "1/8", weather: "Heavy Rain", weatherType: WeatherType.HEAVY_RAIN },
+    { ability: Abilities.ICE_BODY, abilityName: "Ice Body", healRatio: 1/16, healStr: "1/16", weather: "Snow", weatherType: WeatherType.SNOW },
+    { ability: Abilities.ICE_BODY, abilityName: "Ice Body", healRatio: 1/16, healStr: "1/16", weather: "Hail", weatherType: WeatherType.HAIL },
+    { ability: Abilities.ICE_BODY, abilityName: "Ice Body", healRatio: 0, healStr: "0", weather: "Rain", weatherType: WeatherType.RAIN },
+  ])("should make $abilityName restore $healStr of the user's HP in $weather", async ({ ability, healRatio, weatherType }) => {
+    game.override.ability(ability).weather(weatherType);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    const expectedHeal = toDmgValue(playerPokemon.hp / 16);
+    const expectedHeal = Math.floor(playerPokemon.hp * healRatio);
     playerPokemon.hp = 1;
 
     game.move.select(MoveId.SPLASH);
@@ -49,35 +55,17 @@ describe("Ability Attribute - Post Weather Lapse Heal", () => {
     expect(playerPokemon.hp).toBe(expectedHeal + 1);
   });
 
-  it.each([
-    { weather: "Rain", weatherType: WeatherType.RAIN },
-    { weather: "Heavy Rain", weatherType: WeatherType.HEAVY_RAIN },
-  ])("Dry Skin should restore 1/8 of the ability holder's HP in $weather", async ({ weatherType }) => {
-    game.override.ability(Abilities.DRY_SKIN).weather(weatherType);
+  it("should not activate if Cloud Nine is active", async () => {
+    game.override.ability(Abilities.RAIN_DISH).weather(WeatherType.RAIN).enemyAbility(Abilities.CLOUD_NINE);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    const expectedHeal = toDmgValue(playerPokemon.hp / 8);
     playerPokemon.hp = 1;
 
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("BerryPhase");
 
-    expect(playerPokemon.hp).toBe(expectedHeal + 1);
+    expect(playerPokemon.hp).toBe(1);
   });
 
-  it.each([
-    { weather: "Hail", weatherType: WeatherType.HAIL },
-    { weather: "Snow", weatherType: WeatherType.SNOW },
-  ])("Ice Body should restore 1/16 of the ability holder's HP in $weather", async ({ weatherType }) => {
-    game.override.ability(Abilities.ICE_BODY).weather(weatherType);
-    await game.classicMode.startBattle([Species.FEEBAS]);
-    const playerPokemon = game.scene.getPlayerPokemon()!;
-    const expectedHeal = toDmgValue(playerPokemon.hp / 16);
-    playerPokemon.hp = 1;
-
-    game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("BerryPhase");
-
-    expect(playerPokemon.hp).toBe(expectedHeal + 1);
-  });
+  // Interaction with Heal Block already tested in the Heal Block tests
 });

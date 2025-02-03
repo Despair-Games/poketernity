@@ -31,40 +31,17 @@ describe("Ability Attribute - Block Weather Damage", () => {
       .enemyMoveset(MoveId.SPLASH);
   });
 
+  // prettier-ignore
   it.each([
-    { weatherName: "Sandstorm", weather: WeatherType.SANDSTORM },
-    { weatherName: "Hail", weather: WeatherType.HAIL },
-  ])("Overcoat should prevent damage from $weatherName", async ({ weather }) => {
-    game.override.weather(weather).ability(Abilities.OVERCOAT);
-    await game.classicMode.startBattle([Species.FEEBAS]);
-
-    game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("BerryPhase");
-
-    const playerPokemon = game.scene.getPlayerPokemon()!;
-    expect(playerPokemon.isFullHp()).toBe(true);
-  });
-
-  it.each([
-    { abilityName: "Sand Rush", ability: Abilities.SAND_RUSH },
-    { abilityName: "Sand Veil", ability: Abilities.SAND_VEIL },
-    { abilityName: "Sand Force", ability: Abilities.SAND_FORCE },
-  ])("$abilityName should prevent sandstorm damage", async ({ ability }) => {
-    game.override.weather(WeatherType.SANDSTORM).ability(ability);
-    await game.classicMode.startBattle([Species.FEEBAS]);
-
-    game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("BerryPhase");
-
-    const playerPokemon = game.scene.getPlayerPokemon()!;
-    expect(playerPokemon.isFullHp()).toBe(true);
-  });
-
-  it.each([
-    { abilityName: "Ice Body", ability: Abilities.ICE_BODY },
-    { abilityName: "Snow Cloak", ability: Abilities.SNOW_CLOAK },
-  ])("$abilityName should prevent hail damage", async ({ ability }) => {
-    game.override.weather(WeatherType.HAIL).ability(ability);
+    { ability: Abilities.OVERCOAT, abilityName: "Overcoat", weatherName: "Sandstorm", weather: WeatherType.SANDSTORM },
+    { ability: Abilities.OVERCOAT, abilityName: "Overcoat", weatherName: "Hail", weather: WeatherType.HAIL },
+    { ability: Abilities.SAND_RUSH, abilityName: "Sand Rush", weatherName: "Sandstorm", weather: WeatherType.SANDSTORM },
+    { ability: Abilities.SAND_VEIL, abilityName: "Sand Veil", weatherName: "Sandstorm", weather: WeatherType.SANDSTORM },
+    { ability: Abilities.SAND_FORCE, abilityName: "Sand Force", weatherName: "Sandstorm", weather: WeatherType.SANDSTORM },
+    { ability: Abilities.ICE_BODY, abilityName: "Ice Body", weatherName: "Hail", weather: WeatherType.HAIL },
+    { ability: Abilities.SNOW_CLOAK, abilityName: "Snow Cloak", weatherName: "Hail", weather: WeatherType.HAIL },
+  ])("$abilityName should prevent damage from $weatherName", async ({ ability, weather }) => {
+    game.override.weather(weather).ability(ability);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.SPLASH);
