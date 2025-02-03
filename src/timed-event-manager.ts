@@ -3,14 +3,11 @@ import type { TimedEvent } from "#app/@types/TimedEvent";
 
 const timedEvents: TimedEvent[] = [
   {
-    name: "Halloween Update",
-    eventType: EventType.SHINY,
-    shinyMultiplier: 2,
-    friendshipMultiplier: 2,
-    startDate: new Date(Date.UTC(2024, 9, 27, 0)),
-    endDate: new Date(Date.UTC(2025, 10, 4, 0)),
-    bannerKey: "halloween2024-event-",
-    scale: 0.21,
+    name: "Welcome to Pokéternity",
+    eventType: EventType.NO_TIMER_DISPLAY,
+    startDate: new Date(Date.UTC(2025, 0, 1, 0)),
+    endDate: new Date(Date.UTC(2025, 5, 30, 0)),
+    bannerKey: "welcome-",
   },
 ];
 

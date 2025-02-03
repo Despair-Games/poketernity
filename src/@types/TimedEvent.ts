@@ -4,7 +4,7 @@ interface EventBanner {
   bannerKey?: string;
   xOffset?: number;
   yOffset?: number;
-  scale?: number;
+  bannerScale?: number;
   availableLangs?: string[];
 }
 
