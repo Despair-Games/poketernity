@@ -725,10 +725,6 @@ export abstract class Move implements Localizable {
 
     const isOhko = this.hasAttr(OneHitKOAccuracyAttr);
 
-    if (!isOhko) {
-      globalScene.applyModifiers(PokemonMoveAccuracyBoosterModifier, user.isPlayer(), user, moveAccuracy);
-    }
-
     if (globalScene.arena.weather?.weatherType === WeatherType.FOG) {
       /**
        *  The 0.9 multiplier is Game-specific implementation, Bulbapedia uses 3/5
