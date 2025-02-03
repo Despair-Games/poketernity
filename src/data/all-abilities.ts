@@ -11,7 +11,6 @@ import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { MovePhase } from "#app/phases/move-phase";
 import { isNullOrUndefined, NumberHolder, randSeedInt, toDmgValue } from "#app/utils";
 import i18next from "i18next";
 import { Ability, allAbilities } from "./ability";
@@ -132,7 +131,6 @@ import { FlinchAttr } from "./move-attrs/flinch-attr";
 import { VariableMoveTypeAttr } from "./move-attrs/variable-move-type-attr";
 import { VariablePowerAttr } from "./move-attrs/variable-power-attr";
 import { OneHitKOAttr } from "./move-attrs/one-hit-ko-attr";
-import { AttackMove } from "./move";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveCategory } from "#enums/move-category";
 import { getNonVolatileStatusEffects } from "./status-effect";
@@ -261,7 +259,7 @@ function getAnticipationCondition(): AbAttrCondition {
         }
         // the move's base type (not accounting for variable type changes) is super effective
         if (
-          move.getMove() instanceof AttackMove
+          move.getMove().isAttackMove()
           && pokemon.getAttackTypeEffectiveness(move.getMove().type, opponent, true, undefined, move.getMove()) >= 2
         ) {
           return true;
@@ -807,10 +805,7 @@ export function initAbilities() {
       )
       .edgeCase(), // Cannot recover berries used up by fling or natural gift (unimplemented)
     new Ability(Abilities.TELEPATHY, 5)
-      .attr(
-        MoveImmunityAbAttr,
-        (pokemon, attacker, move) => pokemon.getAlly() === attacker && move instanceof AttackMove,
-      )
+      .attr(MoveImmunityAbAttr, (pokemon, attacker, move) => pokemon.getAlly() === attacker && move.isAttackMove())
       .ignorable(),
     new Ability(Abilities.MOODY, 5).attr(MoodyAbAttr),
     new Ability(Abilities.OVERCOAT, 5)
@@ -829,7 +824,7 @@ export function initAbilities() {
     new Ability(Abilities.ANALYTIC, 5).attr(
       MovePowerBoostAbAttr,
       (user, _target, _move) => {
-        const movePhase = globalScene.findPhase((phase) => phase instanceof MovePhase && phase.pokemon.id !== user?.id);
+        const movePhase = globalScene.findPhase((phase) => phase.isMovePhase() && phase.pokemon.id !== user?.id);
         return isNullOrUndefined(movePhase);
       },
       1.3,
@@ -1376,7 +1371,7 @@ export function initAbilities() {
       ArenaTagType.REFLECT,
     ]),
     new Ability(Abilities.STEELY_SPIRIT, 8).attr(UserFieldMoveTypePowerBoostAbAttr, ElementType.STEEL),
-    new Ability(Abilities.PERISH_BODY, 8).attr(PostDefendPerishSongAbAttr, 4),
+    new Ability(Abilities.PERISH_BODY, 8).attr(PostDefendPerishSongAbAttr),
     new Ability(Abilities.WANDERING_SPIRIT, 8).attr(PostDefendAbilitySwapAbAttr).bypassFaint().edgeCase(), //  interacts incorrectly with rock head. It's meant to switch abilities before recoil would apply so that a pokemon with rock head would lose rock head first and still take the recoil
     new Ability(Abilities.GORILLA_TACTICS, 8).attr(GorillaTacticsAbAttr),
     new Ability(Abilities.NEUTRALIZING_GAS, 8)

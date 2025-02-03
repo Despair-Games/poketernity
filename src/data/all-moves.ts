@@ -1,7 +1,6 @@
 import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BerryModifier } from "#app/modifier/modifier";
 import { BattleCommand } from "#enums/battle-command";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -20,8 +19,7 @@ import { ElementType } from "#enums/element-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { isNullOrUndefined } from "#app/utils";
-import { selfStatLowerMoves, type Move } from "./move";
-import { AttackMove } from "./move";
+import { type Move, AttackMove } from "#app/data/move";
 import { ChargeAnim } from "#enums/charge-anim";
 import { EncoreTag, StockpilingTag, SemiInvulnerableTag, ShellTrapTag, TrappedTag } from "./battler-tags";
 import { ChargingAttackMove, ChargingSelfStatusMove } from "./move";
@@ -3120,7 +3118,7 @@ export function initMoves() {
       .attr(EatBerryAttr, true)
       .attr(StatStageChangeAttr, [Stat.DEF], 2, true)
       .condition((user) => {
-        const userBerries = globalScene.findModifiers((m) => m instanceof BerryModifier, user.isPlayer());
+        const userBerries = globalScene.findModifiers((m) => m.isBerryModifier(), user.isPlayer());
         return userBerries.length > 0;
       })
       .edgeCase(), // Stuff Cheeks should not be selectable when the user does not have a berry, see wiki
@@ -3977,10 +3975,7 @@ export function initMoves() {
   ];
 
   for (const move of rawAllMoves) {
-    // Make sure `allMoves` assigns correct ID to every move, and check if the move is a self-stat-lowering move
+    // Make sure `allMoves` assigns correct ID to every move
     allMoves[move.id] = move;
-    if (move.getAttrs(StatStageChangeAttr).some((a) => a.selfTarget && a.stages < 0)) {
-      selfStatLowerMoves.push(move.id);
-    }
   }
 }

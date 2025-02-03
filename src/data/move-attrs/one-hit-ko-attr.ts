@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { BooleanHolder } from "#app/utils";
 import { BlockOneHitKOAbAttr } from "#app/data/ab-attrs/block-one-hit-ko-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 import type { MoveConditionFunc } from "../move-conditions";

@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
-import { allAbilities, applyAbAttrs } from "#app/data/ability";
+import { allAbilities } from "#app/data/ability";
+import { applyAbAttrs } from "./apply-ab-attrs";
 import { FlinchEffectAbAttr } from "./ab-attrs/flinch-effect-ab-attr";
 import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-ab-attr";
 import { CommonBattleAnim, MoveChargeAnim } from "#app/data/battle-anims";
@@ -523,9 +524,9 @@ export class ShellTrapTag extends BattlerTag {
       // Trap should only be triggered by opponent's Physical moves
       if (phaseData?.move.category === MoveCategory.PHYSICAL && pokemon.isOpponent(phaseData.attacker)) {
         const shellTrapPhaseIndex = globalScene.phaseQueue.findIndex(
-          (phase) => phase instanceof MovePhase && phase.pokemon === pokemon,
+          (phase) => phase.isMovePhase() && phase.pokemon === pokemon,
         );
-        const firstMovePhaseIndex = globalScene.phaseQueue.findIndex((phase) => phase instanceof MovePhase);
+        const firstMovePhaseIndex = globalScene.phaseQueue.findIndex((phase) => phase.isMovePhase());
 
         // Only shift MovePhase timing if it's not already next up
         if (shellTrapPhaseIndex !== -1 && shellTrapPhaseIndex !== firstMovePhaseIndex) {
@@ -988,16 +989,16 @@ export class PowderTag extends BattlerTag {
    */
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     if (lapseType === BattlerTagLapseType.PRE_MOVE) {
-      const movePhase = globalScene.getCurrentPhase();
-      if (movePhase instanceof MovePhase) {
-        const move = movePhase.move.getMove();
+      const currPhase = globalScene.getCurrentPhase();
+      if (currPhase?.isMovePhase()) {
+        const move = currPhase.move.getMove();
         const weather = globalScene.arena.weather;
         if (
           pokemon.getMoveType(move) === ElementType.FIRE
           && !(weather && weather.weatherType === WeatherType.HEAVY_RAIN && !weather.isEffectSuppressed())
         ) {
-          movePhase.fail();
-          movePhase.showMoveText();
+          currPhase.fail();
+          currPhase.showMoveText();
 
           globalScene.unshiftPhase(
             new CommonAnimPhase(pokemon.getBattlerIndex(), pokemon.getBattlerIndex(), CommonAnim.POWDER),
@@ -1146,13 +1147,13 @@ export class EncoreTag extends MoveRestrictionBattlerTag {
       i18next.t("battlerTags:encoreOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
 
-    const movePhase = globalScene.findPhase((m) => m instanceof MovePhase && m.pokemon === pokemon);
+    const movePhase = globalScene.findPhase((m) => m.isMovePhase() && m.pokemon === pokemon);
     if (movePhase) {
       const movesetMove = pokemon.getMoveset().find((m) => m.moveId === this.moveId);
       if (movesetMove) {
         const lastMove = pokemon.getLastXMoves(1)[0];
         globalScene.tryReplacePhase(
-          (m) => m instanceof MovePhase && m.pokemon === pokemon,
+          (m) => m.isMovePhase() && m.pokemon === pokemon,
           new MovePhase(pokemon, lastMove.targets ?? [], movesetMove),
         );
       }
@@ -2086,7 +2087,7 @@ export class SkyDropTag extends BattlerTag {
       if (pokemon?.getTag(BattlerTagType.SKY_DROP)?.sourceId === this.sourceId) {
         // Cancel the Sky Drop user's next use of Sky Drop
         if (this.sourceId === pokemon.id) {
-          globalScene.tryRemovePhase((phase) => phase instanceof MovePhase && phase.pokemon.id === pokemon.id);
+          globalScene.tryRemovePhase((phase) => phase.isMovePhase() && phase.pokemon.id === pokemon.id);
           pokemon.getMoveQueue().shift();
           pokemon.removeTag(BattlerTagType.CHARGING);
         }

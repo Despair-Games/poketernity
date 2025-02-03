@@ -6,7 +6,7 @@ import { addTextObject, getTextStyleOptions, getModifierTierTextTint, getTextCol
 import { TextStyle } from "#enums/text-style";
 import AwaitableUiHandler from "./awaitable-ui-handler";
 import { UiMode } from "#enums/ui-mode";
-import { LockModifierTiersModifier, PokemonHeldItemModifier, HealShopCostModifier } from "../modifier/modifier";
+import { LockModifierTiersModifier, HealShopCostModifier } from "../modifier/modifier";
 import { handleTutorial } from "../tutorial";
 import { Tutorial } from "#enums/tutorial";
 import { Button } from "#enums/buttons";
@@ -187,8 +187,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.player = args[0];
 
     const partyHasHeldItem =
-      this.player
-      && !!globalScene.findModifiers((m) => m instanceof PokemonHeldItemModifier && m.isTransferable).length;
+      this.player && !!globalScene.findModifiers((m) => m.isPokemonHeldItemModifier() && m.isTransferable).length;
     const canLockRarities = !!globalScene.findModifier((m) => m instanceof LockModifierTiersModifier);
 
     this.transferButtonContainer.setVisible(false);

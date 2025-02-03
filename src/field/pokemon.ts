@@ -4,7 +4,8 @@ import type BattleScene from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import type { Variant } from "#app/data/variant";
 import { variantData } from "#app/data/variant";
-import BattleInfo, { PlayerBattleInfo, EnemyBattleInfo } from "#app/ui/battle-info";
+import type BattleInfo from "#app/ui/battle-info";
+import { PlayerBattleInfo, EnemyBattleInfo } from "#app/ui/battle-info";
 import type { Move } from "#app/data/move";
 import { applyMoveAttrs, getMoveTargets } from "#app/data/move";
 import { allMoves } from "#app/data/all-moves";
@@ -31,16 +32,11 @@ import { CritOnlyAttr } from "#app/data/move-attrs/crit-only-attr";
 import { HighCritAttr } from "#app/data/move-attrs/high-crit-attr";
 import { IgnoreOpponentStatStagesAttr } from "#app/data/move-attrs/ignore-opponent-stat-stages-attr";
 import { RespectAttackTypeImmunityAttr } from "#app/data/move-attrs/respect-attack-type-immunity-attr";
-import { AttackMove } from "#app/data/move";
 import { MoveTarget } from "#enums/move-target";
 import { MoveCategory } from "#enums/move-category";
-import type { PokemonSpeciesForm } from "#app/data/pokemon-species";
-import {
-  default as PokemonSpecies,
-  getFusedSpeciesName,
-  getPokemonSpecies,
-  getPokemonSpeciesForm,
-} from "#app/data/pokemon-species";
+import type { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
+import { default as PokemonSpecies } from "#app/data/pokemon-species";
+import { getFusedSpeciesName, getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
 import {
   CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER,
   getStarterValueFriendshipCap,
@@ -75,11 +71,12 @@ import {
   BATTLE_STATS,
   EFFECTIVE_STATS,
 } from "#enums/stat";
+import type { TerastallizeModifier } from "#app/modifier/modifier";
 import {
   HiddenAbilityRateBoosterModifier,
   BaseStatModifier,
   PokemonFriendshipBoosterModifier,
-  PokemonHeldItemModifier,
+  type PokemonHeldItemModifier,
   PokemonNatureWeightModifier,
   ShinyRateBoosterModifier,
   SurviveDamageModifier,
@@ -87,7 +84,6 @@ import {
   TempCritBoosterModifier,
   StatBoosterModifier,
   CritBoosterModifier,
-  TerastallizeModifier,
   PokemonBaseStatFlatModifier,
   PokemonBaseStatTotalModifier,
   PokemonIncrementingStatModifier,
@@ -130,7 +126,8 @@ import { WeatherType } from "#enums/weather-type";
 import { NoCritTag, WeakenMoveScreenTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { Ability } from "#app/data/ability";
-import { allAbilities, applyAbAttrs, getAbApplyFunc } from "#app/data/ability";
+import { allAbilities, getAbApplyFunc } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { IgnoreTypeImmunityAbAttr } from "#app/data/ab-attrs/ignore-type-immunity-ab-attr";
 import { NoFusionAbilityAbAttr } from "#app/data/ab-attrs/no-fusion-ability-ab-attr";
 import { UnsuppressableAbilityAbAttr } from "#app/data/ab-attrs/unsuppressable-ability-ab-attr";
@@ -233,6 +230,7 @@ import { FieldPosition } from "#enums/field-position";
 import { ArenaTrapAbAttr } from "#app/data/ab-attrs/arena-trap-ab-attr";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import type { AbilityFilterOptions } from "#app/data/ability-filter-options";
+import { PokemonMove } from "#app/field/pokemon-move";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -311,6 +309,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     dataSource?: Pokemon | PokemonData,
   ) {
     super(globalScene, x, y);
+    this.type = "Pokemon";
 
     if (!species.isObtainable() && this.isPlayer()) {
       throw `Cannot create a player Pokemon for species '${species.getName(formIndex)}'`;
@@ -669,6 +668,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     });
   }
 
+  getFormAmount(): number {
+    return this.species.forms.length;
+  }
+
   getFormKey(): string {
     if (!this.species.forms.length || this.species.forms.length <= this.formIndex) {
       return "";
@@ -859,7 +862,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return [];
     }
     return globalScene.findModifiers(
-      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === this.id,
+      (m) => m.isPokemonHeldItemModifier() && m.pokemonId === this.id,
       this.isPlayer(),
     ) as PokemonHeldItemModifier[];
   }
@@ -1843,7 +1846,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return ElementType.UNKNOWN;
     }
     const teraModifier = globalScene.findModifier(
-      (m) => m instanceof TerastallizeModifier && m.pokemonId === this.id && m.getBattlesLeft() > 0,
+      (m) => m.isTerastallizeModifier() && m.pokemonId === this.id && m.getBattlesLeft() > 0,
       this.isPlayer(),
     ) as TerastallizeModifier;
     return teraModifier?.teraType ?? ElementType.UNKNOWN;
@@ -2796,7 +2799,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       const otherBattleInfo = globalScene.fieldUI
         .getAll()
         .slice(0, 4)
-        .filter((ui) => ui instanceof BattleInfo && (ui as BattleInfo) instanceof PlayerBattleInfo === this.isPlayer())
+        .filter((ui) => ui.type === "PlayerBattleInfo" && this.isPlayer())
         .find(() => true);
       if (!otherBattleInfo || !this.getFieldIndex()) {
         globalScene.fieldUI.sendToBack(this.battleInfo);
@@ -5127,7 +5130,7 @@ export class PlayerPokemon extends Pokemon {
         globalScene.getPlayerParty().push(newPokemon);
         newPokemon.evolve(!isFusion ? newEvolution : new FusionSpeciesFormEvolution(this.id, newEvolution), evoSpecies);
         const modifiers = globalScene.findModifiers(
-          (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === this.id,
+          (m) => m.isPokemonHeldItemModifier() && m.pokemonId === this.id,
           true,
         ) as PokemonHeldItemModifier[];
         modifiers.forEach((m) => {
@@ -5265,7 +5268,7 @@ export class PlayerPokemon extends Pokemon {
       partyMemberIndex--;
     }
     const fusedPartyMemberHeldModifiers = globalScene.findModifiers(
-      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === pokemon.id,
+      (m) => m.isPokemonHeldItemModifier() && m.pokemonId === pokemon.id,
       true,
     ) as PokemonHeldItemModifier[];
     for (const modifier of fusedPartyMemberHeldModifiers) {
@@ -5584,7 +5587,7 @@ export class EnemyPokemon extends Pokemon {
                 && ![MoveId.SUCKER_PUNCH, MoveId.UPPER_HAND, MoveId.THUNDERCLAP].includes(move.id)
               ) {
                 targetScore = -20;
-              } else if (move instanceof AttackMove) {
+              } else if (move.isAttackMove()) {
                 /**
                  * Attack moves are given extra multipliers to their base benefit score based on
                  * the move's type effectiveness against the target and whether the move is a STAB move.
@@ -6066,92 +6069,4 @@ export interface DamageCalculationResult {
   result: HitResult;
   /** The damage dealt by the move */
   damage: number;
-}
-
-/**
- * Wrapper class for the {@linkcode Move} class for Pokemon to interact with.
- * These are the moves assigned to a {@linkcode Pokemon} object.
- * It links to {@linkcode Move} class via the move ID.
- * Compared to {@linkcode Move}, this class also tracks if a move has received.
- * PP Ups, amount of PP used, and things like that.
- * @see {@linkcode isUsable} - checks if move is restricted, out of PP, or not implemented.
- * @see {@linkcode getMove} - returns {@linkcode Move} object by looking it up via ID.
- * @see {@linkcode usePp} - removes a point of PP from the move.
- * @see {@linkcode getMovePp} - returns amount of PP a move currently has.
- * @see {@linkcode getPpRatio} - returns the current PP amount / max PP amount.
- * @see {@linkcode getName} - returns name of {@linkcode Move}.
- **/
-export class PokemonMove {
-  public moveId: MoveId;
-  public ppUsed: number;
-  public ppUp: number;
-  public virtual: boolean;
-
-  /**
-   * If defined and nonzero, overrides the maximum PP of the move (e.g., due to move being copied by Transform).
-   * This also nullifies all effects of `ppUp`.
-   */
-  public maxPpOverride?: number;
-
-  constructor(moveId: MoveId, ppUsed: number = 0, ppUp: number = 0, virtual: boolean = false, maxPpOverride?: number) {
-    this.moveId = moveId;
-    this.ppUsed = ppUsed;
-    this.ppUp = ppUp;
-    this.virtual = virtual;
-    this.maxPpOverride = maxPpOverride;
-  }
-
-  /**
-   * Checks whether the move can be selected or performed by a Pokemon, without consideration for the move's targets.
-   * The move is unusable if it is out of PP, restricted by an effect, or unimplemented.
-   *
-   * @param pokemon {@linkcode Pokemon} that would be using this move
-   * @param ignorePp If `true`, skips the PP check
-   * @param ignoreRestrictionTags If `true`, skips the check for move restriction tags (see {@link MoveRestrictionBattlerTag})
-   * @returns `true` if the move can be selected and used by the Pokemon, otherwise `false`.
-   */
-  isUsable(pokemon: Pokemon, ignorePp: boolean = false, ignoreRestrictionTags: boolean = false): boolean {
-    if (this.moveId && !ignoreRestrictionTags && pokemon.isMoveRestricted(this.moveId, pokemon)) {
-      return false;
-    }
-
-    if (this.getMove().name.endsWith(" (N)")) {
-      return false;
-    }
-
-    return ignorePp || this.ppUsed < this.getMovePp() || this.getMove().pp === -1;
-  }
-
-  getMove(): Move {
-    return allMoves[this.moveId];
-  }
-
-  /**
-   * Sets {@link ppUsed} for this move and ensures the value does not exceed {@link getMovePp}
-   * @param count Amount of PP to use
-   */
-  usePp(count: number = 1) {
-    this.ppUsed = Math.min(this.ppUsed + count, this.getMovePp());
-  }
-
-  getMovePp(): number {
-    return this.maxPpOverride || this.getMove().pp + this.ppUp * toDmgValue(this.getMove().pp / 5);
-  }
-
-  getPpRatio(): number {
-    return 1 - this.ppUsed / this.getMovePp();
-  }
-
-  getName(): string {
-    return this.getMove().name;
-  }
-
-  /**
-   * Copies an existing move or creates a valid PokemonMove object from json representing one
-   * @param source The data for the {@linkcode PokemonMove | move} to copy
-   * @return A valid {@linkcode PokemonMove} object
-   */
-  static loadMove(source: PokemonMove | any): PokemonMove {
-    return new PokemonMove(source.moveId, source.ppUsed, source.ppUp, source.virtual, source.maxPpOverride);
-  }
 }

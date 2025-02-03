@@ -1,6 +1,6 @@
 import { HealFromBerryUseAbAttr } from "#app/data/ab-attrs/heal-from-berry-use-ab-attr";
 import { PreventBerryUseAbAttr } from "#app/data/ab-attrs/prevent-berry-use-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { CommonAnim } from "#enums/common-anim";
 import { BerryUsedEvent } from "#app/events/battle-scene";
 import { globalScene } from "#app/global-scene";
@@ -21,7 +21,7 @@ export class BerryPhase extends FieldPhase {
 
     this.executeForAll((pokemon) => {
       const hasUsableBerry = !!globalScene.findModifier((m) => {
-        return m instanceof BerryModifier && m.shouldApply(pokemon);
+        return m.isBerryModifier() && m.shouldApply(pokemon);
       }, pokemon.isPlayer());
 
       if (hasUsableBerry) {

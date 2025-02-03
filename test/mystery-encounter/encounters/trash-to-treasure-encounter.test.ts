@@ -4,7 +4,7 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import * as BattleAnims from "#app/data/battle-anims";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
@@ -13,10 +13,9 @@ import {
 } from "#test/mystery-encounter/encounter-test-utils";
 import { MoveId } from "#enums/move-id";
 import type BattleScene from "#app/battle-scene";
-import { PokemonMove } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import { UiMode } from "#enums/ui-mode";
 import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
-import { HitHealModifier, HealShopCostModifier, TurnHealModifier } from "#app/modifier/modifier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
@@ -24,7 +23,7 @@ import { TrashToTreasureEncounter } from "#app/data/mystery-encounters/encounter
 import { ModifierTier } from "#enums/modifier-tier";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { CommandPhase } from "#app/phases/command-phase";
-import { MovePhase } from "#app/phases/move-phase";
+import type { MovePhase } from "#app/phases/move-phase";
 
 const namespace = "mysteryEncounters/trashToTreasure";
 const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
@@ -128,15 +127,15 @@ describe("Trash to Treasure - Mystery Encounter", () => {
       await game.phaseInterceptor.to(SelectModifierPhase, false);
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
 
-      const leftovers = scene.findModifier((m) => m instanceof TurnHealModifier) as TurnHealModifier;
+      const leftovers = scene.findModifier((m) => m.isTurnHealModifier());
       expect(leftovers).toBeDefined();
       expect(leftovers?.stackCount).toBe(2);
 
-      const shellBell = scene.findModifier((m) => m instanceof HitHealModifier) as HitHealModifier;
+      const shellBell = scene.findModifier((m) => m.isHitHealModifier());
       expect(shellBell).toBeDefined();
       expect(shellBell?.stackCount).toBe(2);
 
-      const blackSludge = scene.findModifier((m) => m instanceof HealShopCostModifier) as HealShopCostModifier;
+      const blackSludge = scene.findModifier((m) => m.isHealShopCostModifier());
       expect(blackSludge).toBeDefined();
       expect(blackSludge?.stackCount).toBe(1);
     });
@@ -185,7 +184,7 @@ describe("Trash to Treasure - Mystery Encounter", () => {
       ]);
 
       // Should have used moves pre-battle
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].isMovePhase()).map((p) => p[0]);
       expect(movePhases.length).toBe(2);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.TOXIC).length).toBe(1);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.AMNESIA).length).toBe(1);

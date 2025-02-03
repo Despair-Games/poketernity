@@ -16,12 +16,12 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import { NumberHolder, isNullOrUndefined, randSeedInt, randSeedShuffle } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { allSpecies, getPokemonSpecies, getSpecialSpeciesList } from "#app/data/pokemon-species";
-import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import { HiddenAbilityRateBoosterModifier, PokemonFormChangeItemModifier } from "#app/modifier/modifier";
+import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
+import { allSpecies } from "#app/data/all-species";
+import { HiddenAbilityRateBoosterModifier, type PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { achvs } from "#app/system/achv";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
@@ -346,7 +346,7 @@ function getTeamTransformations(): PokemonTransformation[] {
     const index = pokemonTransformations.findIndex((p) => p.previousPokemon.id === removed.id);
     pokemonTransformations[index].heldItems = removed
       .getHeldItems()
-      .filter((m) => !(m instanceof PokemonFormChangeItemModifier));
+      .filter((m) => !m.isPokemonFormChangeItemModifier());
 
     const bst = removed.calculateBaseStats().reduce((a, b) => a + b, 0);
     let newBstRange: [number, number];

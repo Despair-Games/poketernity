@@ -17,15 +17,15 @@ import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/myst
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { Species } from "#enums/species";
-import { HitHealModifier, PokemonHeldItemModifier, TurnHealModifier } from "#app/modifier/modifier";
+import { type PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { applyModifierTypeToPlayerPokemon } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import i18next from "#app/plugins/i18n";
 import { ModifierTier } from "#enums/modifier-tier";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { MoveId } from "#enums/move-id";
 import { BattlerIndex } from "#enums/battler-index";
-import { PokemonMove } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 
 /** the i18n namespace for this encounter */
@@ -190,10 +190,10 @@ async function tryApplyDigRewardItems() {
   // First leftovers
   for (const pokemon of party) {
     const heldItems = globalScene.findModifiers(
-      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === pokemon.id,
+      (m) => m.isPokemonHeldItemModifier() && m.pokemonId === pokemon.id,
       true,
-    ) as PokemonHeldItemModifier[];
-    const existingLeftovers = heldItems.find((m) => m instanceof TurnHealModifier) as TurnHealModifier;
+    );
+    const existingLeftovers = heldItems.find((m) => m.isTurnHealModifier());
 
     if (!existingLeftovers || existingLeftovers.getStackCount() < existingLeftovers.getMaxStackCount()) {
       await applyModifierTypeToPlayerPokemon(pokemon, leftovers);
@@ -204,10 +204,10 @@ async function tryApplyDigRewardItems() {
   // Second leftovers
   for (const pokemon of party) {
     const heldItems = globalScene.findModifiers(
-      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === pokemon.id,
+      (m) => m.isPokemonHeldItemModifier() && m.pokemonId === pokemon.id,
       true,
-    ) as PokemonHeldItemModifier[];
-    const existingLeftovers = heldItems.find((m) => m instanceof TurnHealModifier) as TurnHealModifier;
+    );
+    const existingLeftovers = heldItems.find((m) => m.isTurnHealModifier());
 
     if (!existingLeftovers || existingLeftovers.getStackCount() < existingLeftovers.getMaxStackCount()) {
       await applyModifierTypeToPlayerPokemon(pokemon, leftovers);
@@ -226,10 +226,10 @@ async function tryApplyDigRewardItems() {
   // First Shell bell
   for (const pokemon of party) {
     const heldItems = globalScene.findModifiers(
-      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === pokemon.id,
+      (m) => m.isPokemonHeldItemModifier() && m.pokemonId === pokemon.id,
       true,
-    ) as PokemonHeldItemModifier[];
-    const existingShellBell = heldItems.find((m) => m instanceof HitHealModifier) as HitHealModifier;
+    );
+    const existingShellBell = heldItems.find((m) => m.isHitHealModifier());
 
     if (!existingShellBell || existingShellBell.getStackCount() < existingShellBell.getMaxStackCount()) {
       await applyModifierTypeToPlayerPokemon(pokemon, shellBell);
@@ -240,10 +240,10 @@ async function tryApplyDigRewardItems() {
   // Second Shell bell
   for (const pokemon of party) {
     const heldItems = globalScene.findModifiers(
-      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === pokemon.id,
+      (m) => m.isPokemonHeldItemModifier() && m.pokemonId === pokemon.id,
       true,
     ) as PokemonHeldItemModifier[];
-    const existingShellBell = heldItems.find((m) => m instanceof HitHealModifier) as HitHealModifier;
+    const existingShellBell = heldItems.find((m) => m.isHitHealModifier());
 
     if (!existingShellBell || existingShellBell.getStackCount() < existingShellBell.getMaxStackCount()) {
       await applyModifierTypeToPlayerPokemon(pokemon, shellBell);

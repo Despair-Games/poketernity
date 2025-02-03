@@ -1,13 +1,9 @@
 import { GameModes } from "#enums/game-modes";
 import { api } from "#app/plugins/api/api";
-import type OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
-import { UiMode } from "#enums/ui-mode";
 import { Biome } from "#enums/biome";
-import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
-import type { MockClock } from "#test/testUtils/mocks/mockClock";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Reload", () => {
@@ -55,13 +51,6 @@ describe("Reload", () => {
     // Transition from Wave 10 to Wave 11 in order to trigger biome switch
     game.move.select(MoveId.SPLASH);
     await game.doKillOpponents();
-    game.onNextPrompt("SelectBiomePhase", UiMode.OPTION_SELECT, () => {
-      (game.scene.time as MockClock).overrideDelay = null;
-      const optionSelectUiHandler = game.scene.ui.getHandler() as OptionSelectUiHandler;
-      game.scene.time.delayedCall(1010, () => optionSelectUiHandler.processInput(Button.ACTION));
-      game.endPhase();
-      (game.scene.time as MockClock).overrideDelay = 1;
-    });
     await game.toNextWave();
     expect(game.phaseInterceptor.log).toContain("NewBiomeEncounterPhase");
 

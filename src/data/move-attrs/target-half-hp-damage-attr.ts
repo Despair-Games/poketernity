@@ -1,5 +1,4 @@
 import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMultiHitModifier } from "#app/modifier/modifier";
 import { type NumberHolder, toDmgValue } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { FixedDamageAttr } from "#app/data/move-attrs/fixed-damage-attr";
@@ -25,7 +24,7 @@ export class TargetHalfHpDamageAttr extends FixedDamageAttr {
     const lensCount =
       user
         .getHeldItems()
-        .find((i) => i instanceof PokemonMultiHitModifier)
+        .find((i) => i.isPokemonMultiHitModifier())
         ?.getStackCount() ?? 0;
     if (lensCount <= 0) {
       // no multi lenses; we can just halve the target's hp and call it a day

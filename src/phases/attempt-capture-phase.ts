@@ -11,7 +11,6 @@ import {
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
 import { type EnemyPokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { VictoryPhase } from "#app/phases/victory-phase";
 import { achvs } from "#app/system/achv";
@@ -278,7 +277,7 @@ export class AttemptCapturePhase extends PokemonPhase {
         };
         const addToParty = (slotIndex?: number): void => {
           const newPokemon = pokemon.addToParty(this.pokeballType, slotIndex);
-          const modifiers = globalScene.findModifiers((m) => m instanceof PokemonHeldItemModifier, false);
+          const modifiers = globalScene.findModifiers((m) => m.isPokemonHeldItemModifier(), false);
           if (globalScene.getPlayerParty().filter((p) => p.isShiny()).length === PLAYER_PARTY_MAX_SIZE) {
             globalScene.validateAchv(achvs.SHINY_PARTY);
           }

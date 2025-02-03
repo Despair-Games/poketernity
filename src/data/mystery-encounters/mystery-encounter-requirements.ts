@@ -9,8 +9,6 @@ import { StatusEffect } from "#enums/status-effect";
 import { ElementType } from "#enums/element-type";
 import { WeatherType } from "#enums/weather-type";
 import type { PlayerPokemon } from "#app/field/pokemon";
-import { AttackTypeBoosterModifier } from "#app/modifier/modifier";
-import type { AttackTypeBoosterModifierType } from "#app/modifier/modifier-type";
 import { isNullOrUndefined } from "#app/utils";
 import type { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
@@ -1025,8 +1023,8 @@ export class AttackTypeBoosterHeldItemTypeRequirement extends EncounterPokemonRe
         this.requiredHeldItemTypes.some((heldItemType) => {
           return pokemon.getHeldItems().some((it) => {
             return (
-              it instanceof AttackTypeBoosterModifier
-              && (it.type as AttackTypeBoosterModifierType).moveType === heldItemType
+              it.isAttackTypeBoosterModifier()
+              && it.type.moveType === heldItemType
               && (!this.requireTransferable || it.isTransferable)
             );
           });
@@ -1040,8 +1038,8 @@ export class AttackTypeBoosterHeldItemTypeRequirement extends EncounterPokemonRe
           pokemon.getHeldItems().filter((it) => {
             return !this.requiredHeldItemTypes.some(
               (heldItemType) =>
-                it instanceof AttackTypeBoosterModifier
-                && (it.type as AttackTypeBoosterModifierType).moveType === heldItemType
+                it.isAttackTypeBoosterModifier()
+                && it.type.moveType === heldItemType
                 && (!this.requireTransferable || it.isTransferable),
             );
           }).length > 0,
@@ -1053,9 +1051,7 @@ export class AttackTypeBoosterHeldItemTypeRequirement extends EncounterPokemonRe
     const requiredItems = pokemon?.getHeldItems().filter((it) => {
       return (
         this.requiredHeldItemTypes.some(
-          (heldItemType) =>
-            it instanceof AttackTypeBoosterModifier
-            && (it.type as AttackTypeBoosterModifierType).moveType === heldItemType,
+          (heldItemType) => it.isAttackTypeBoosterModifier() && it.type.moveType === heldItemType,
         )
         && (!this.requireTransferable || it.isTransferable)
       );

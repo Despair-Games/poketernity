@@ -13,7 +13,7 @@ import {
 import { TrainerVariant } from "#enums/trainer-variant";
 import Trainer from "./field/trainer";
 import type { GameMode } from "./game-mode";
-import { MoneyMultiplierModifier, PokemonHeldItemModifier } from "./modifier/modifier";
+import { MoneyMultiplierModifier, type PokemonHeldItemModifier } from "./modifier/modifier";
 import type { PokeballType } from "#enums/pokeball";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import type { EnemyPokemon, PlayerPokemon, QueuedMove } from "#app/field/pokemon";
@@ -185,7 +185,7 @@ export default class Battle {
     this.postBattleLoot.push(
       ...globalScene
         .findModifiers(
-          (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === enemyPokemon.id && m.isTransferable,
+          (m) => m.isPokemonHeldItemModifier() && m.pokemonId === enemyPokemon.id && m.isTransferable,
           false,
         )
         .map((i) => {

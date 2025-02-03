@@ -22,7 +22,7 @@ import { TrainerType } from "#enums/trainer-type";
 import { Species } from "#enums/species";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import { getEncounterText, showEncounterDialogue } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { MoveId } from "#enums/move-id";
@@ -40,7 +40,6 @@ import type { AttackTypeBoosterModifierType, ModifierTypeOption } from "#app/mod
 import { modifierTypes } from "#app/modifier/modifier-type";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import {
-  AttackTypeBoosterModifier,
   BypassSpeedChanceModifier,
   ContactHeldItemTransferChanceModifier,
   GigantamaxAccessModifier,
@@ -440,7 +439,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
             return (
               (item instanceof BypassSpeedChanceModifier
                 || item instanceof ContactHeldItemTransferChanceModifier
-                || (item instanceof AttackTypeBoosterModifier
+                || (item.isAttackTypeBoosterModifier()
                   && (item.type as AttackTypeBoosterModifierType).moveType === ElementType.BUG))
               && item.isTransferable
             );
@@ -469,7 +468,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
             return (
               item instanceof BypassSpeedChanceModifier
               || item instanceof ContactHeldItemTransferChanceModifier
-              || (item instanceof AttackTypeBoosterModifier
+              || (item.isAttackTypeBoosterModifier()
                 && (item.type as AttackTypeBoosterModifierType).moveType === ElementType.BUG)
             );
           });

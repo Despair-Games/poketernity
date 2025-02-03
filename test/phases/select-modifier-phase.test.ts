@@ -1,5 +1,5 @@
 import type BattleScene from "#app/battle-scene";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { settings } from "#app/system/settings/settings-manager";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { PlayerPokemon } from "#app/field/pokemon";
