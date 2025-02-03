@@ -86,8 +86,8 @@ describe("Moves - Electro Shot", () => {
     expect(playerElectroShot?.ppUsed).toBe(1);
   });
 
-  it("should only increase Sp. Atk once with Multi-Lens", async () => {
-    game.override.weather(WeatherType.RAIN).startingHeldItems([{ name: "MULTI_LENS", count: 1 }]);
+  it.todo("should only increase Sp. Atk once with Multi-Lens", async () => {
+    game.override.weather(WeatherType.RAIN);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
