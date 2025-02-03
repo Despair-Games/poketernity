@@ -593,8 +593,8 @@ export function initAbilities() {
     new Ability(Abilities.DRY_SKIN, 4)
       .attr(PostWeatherLapseDamageAbAttr, 2, WeatherType.SUNNY, WeatherType.HARSH_SUN)
       .attr(PostWeatherLapseHealAbAttr, 1 / 8, WeatherType.RAIN, WeatherType.HEAVY_RAIN)
-      .attr(ReceivedTypeDamageMultiplierAbAttr, ElementType.FIRE, 1.25)
-      .attr(TypeImmunityHealAbAttr, ElementType.WATER)
+      .attr(ReceivedTypeDamageMultiplierAbAttr, ElementalType.FIRE, 1.25)
+      .attr(TypeImmunityHealAbAttr, ElementalType.WATER)
       .ignorable(),
     new Ability(Abilities.DOWNLOAD, 4).attr(DownloadAbAttr),
     new Ability(Abilities.IRON_FIST, 4).attr(MoveFlagPowerBoostAbAttr, MoveFlags.PUNCHING_MOVE, 1.2),
