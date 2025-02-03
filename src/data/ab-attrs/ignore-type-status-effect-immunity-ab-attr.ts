@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
 import type { StatusEffect } from "#enums/status-effect";
-import type { ElementType } from "#enums/element-type";
+import type { ElementalType } from "#enums/elemental-type";
 import { AbAttr } from "./ab-attr";
 
 /**
@@ -11,9 +11,9 @@ import { AbAttr } from "./ab-attr";
  */
 export class IgnoreTypeStatusEffectImmunityAbAttr extends AbAttr {
   private readonly statusEffect: StatusEffect[];
-  private readonly defenderType: ElementType[];
+  private readonly defenderType: ElementalType[];
 
-  constructor(statusEffect: StatusEffect[], defenderType: ElementType[]) {
+  constructor(statusEffect: StatusEffect[], defenderType: ElementalType[]) {
     super(true);
 
     this.statusEffect = statusEffect;
@@ -25,7 +25,7 @@ export class IgnoreTypeStatusEffectImmunityAbAttr extends AbAttr {
     _simulated: boolean,
     cancelled: BooleanHolder,
     effect: StatusEffect,
-    defType: ElementType,
+    defType: ElementalType,
   ): boolean {
     if (this.statusEffect.includes(effect) && this.defenderType.includes(defType)) {
       cancelled.value = true;

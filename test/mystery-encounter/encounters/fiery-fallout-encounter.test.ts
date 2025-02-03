@@ -17,7 +17,7 @@ import {
 import { MoveId } from "#enums/move-id";
 import type BattleScene from "#app/battle-scene";
 import { type PokemonHeldItemModifier } from "#app/modifier/modifier";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { Status } from "#app/data/status-effect";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -219,10 +219,10 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 2);
 
       const burnablePokemon = party.filter(
-        (pkm) => pkm.isAllowedInBattle() && !pkm.getTypes().includes(ElementType.FIRE),
+        (pkm) => pkm.isAllowedInBattle() && !pkm.getTypes().includes(ElementalType.FIRE),
       );
       const notBurnablePokemon = party.filter(
-        (pkm) => !pkm.isAllowedInBattle() || pkm.getTypes().includes(ElementType.FIRE),
+        (pkm) => !pkm.isAllowedInBattle() || pkm.getTypes().includes(ElementalType.FIRE),
       );
       expect(scene.currentBattle.mysteryEncounter?.dialogueTokens["burnedPokemon"]).toBe(i18next.t("pokemon:gengar"));
       burnablePokemon.forEach((pkm) => {
