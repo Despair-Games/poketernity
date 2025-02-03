@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
 import type { MovePhase } from "#app/phases/move-phase";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -25,10 +25,10 @@ describe("Abilities - Dancer", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("double")
-      .moveset([Moves.FEATHER_DANCE, Moves.SPLASH])
+      .moveset([MoveId.FEATHER_DANCE, MoveId.SPLASH])
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.DANCER)
-      .enemyMoveset([Moves.VICTORY_DANCE]);
+      .enemyMoveset([MoveId.VICTORY_DANCE]);
   });
 
   // Reference Link: https://bulbapedia.bulbagarden.net/wiki/Dancer_(Ability)
@@ -38,8 +38,8 @@ describe("Abilities - Dancer", () => {
 
     const [oricorio] = game.scene.getPlayerField();
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.FEATHER_DANCE, 1, BattlerIndex.ENEMY);
+    game.move.select(MoveId.SPLASH);
+    game.move.select(MoveId.FEATHER_DANCE, 1, BattlerIndex.ENEMY);
     await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("MovePhase");
     // immediately copies ally move Feather Dance, and uses it on opponent
@@ -47,7 +47,7 @@ describe("Abilities - Dancer", () => {
     let currentPhase = game.scene.getCurrentPhase() as MovePhase;
     expect(currentPhase.pokemon).toBe(oricorio);
     expect(currentPhase.targets).toEqual([BattlerIndex.ENEMY]);
-    expect(currentPhase.move.moveId).toBe(Moves.FEATHER_DANCE);
+    expect(currentPhase.move.moveId).toBe(MoveId.FEATHER_DANCE);
     await game.phaseInterceptor.to("MoveEndPhase");
     await game.phaseInterceptor.to("MovePhase");
     // immediately copies enemy move Victory Dance, and uses it on itself
@@ -55,7 +55,7 @@ describe("Abilities - Dancer", () => {
     currentPhase = game.scene.getCurrentPhase() as MovePhase;
     expect(currentPhase.pokemon).toBe(oricorio);
     expect(currentPhase.targets).toEqual([BattlerIndex.PLAYER]);
-    expect(currentPhase.move.moveId).toBe(Moves.VICTORY_DANCE);
+    expect(currentPhase.move.moveId).toBe(MoveId.VICTORY_DANCE);
     await game.phaseInterceptor.to("BerryPhase");
 
     // doesn't use PP if copied move is also in moveset

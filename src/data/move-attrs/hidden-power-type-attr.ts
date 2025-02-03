@@ -1,5 +1,5 @@
 import { Stat } from "#enums/stat";
-import { Type } from "#enums/type";
+import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
@@ -24,22 +24,22 @@ export class HiddenPowerTypeAttr extends VariableMoveTypeAttr {
     );
 
     moveType.value = [
-      Type.FIGHTING,
-      Type.FLYING,
-      Type.POISON,
-      Type.GROUND,
-      Type.ROCK,
-      Type.BUG,
-      Type.GHOST,
-      Type.STEEL,
-      Type.FIRE,
-      Type.WATER,
-      Type.GRASS,
-      Type.ELECTRIC,
-      Type.PSYCHIC,
-      Type.ICE,
-      Type.DRAGON,
-      Type.DARK,
+      ElementalType.FIGHTING,
+      ElementalType.FLYING,
+      ElementalType.POISON,
+      ElementalType.GROUND,
+      ElementalType.ROCK,
+      ElementalType.BUG,
+      ElementalType.GHOST,
+      ElementalType.STEEL,
+      ElementalType.FIRE,
+      ElementalType.WATER,
+      ElementalType.GRASS,
+      ElementalType.ELECTRIC,
+      ElementalType.PSYCHIC,
+      ElementalType.ICE,
+      ElementalType.DRAGON,
+      ElementalType.DARK,
     ][iv_val];
 
     return true;

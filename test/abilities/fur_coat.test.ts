@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -24,20 +24,20 @@ describe("Abilities - Fur Coat", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.TACKLE, Moves.PSYSHOCK, Moves.SWEET_KISS, Moves.SPLASH])
+      .moveset([MoveId.TACKLE, MoveId.PSYSHOCK, MoveId.SWEET_KISS, MoveId.SPLASH])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.FUR_COAT)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should double the ability holder's defense", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getEffectiveStat");
-    game.move.select(Moves.TACKLE);
+    game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(enemyPokemon.getEffectiveStat).toHaveReturnedWith(enemyPokemon.stats[Stat.DEF] * 2);
@@ -47,7 +47,7 @@ describe("Abilities - Fur Coat", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getEffectiveStat");
-    game.move.select(Moves.PSYSHOCK);
+    game.move.select(MoveId.PSYSHOCK);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(enemyPokemon.getEffectiveStat).toHaveReturnedWith(enemyPokemon.getStat(Stat.DEF) * 2);
@@ -59,7 +59,7 @@ describe("Abilities - Fur Coat", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getEffectiveStat");
 
-    game.move.select(Moves.SWEET_KISS);
+    game.move.select(MoveId.SWEET_KISS);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
@@ -68,12 +68,12 @@ describe("Abilities - Fur Coat", () => {
   });
 
   it("should not affect the Defense stat when using the move Body Press", async () => {
-    game.override.enemyMoveset(Moves.BODY_PRESS);
+    game.override.enemyMoveset(MoveId.BODY_PRESS);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getEffectiveStat");
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");

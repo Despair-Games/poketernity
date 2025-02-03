@@ -2,7 +2,7 @@ import { allMoves } from "#app/data/all-moves";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -11,7 +11,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 describe("Moves - Triple Arrows", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
-  const tripleArrows = allMoves[Moves.TRIPLE_ARROWS];
+  const tripleArrows = allMoves[MoveId.TRIPLE_ARROWS];
   const flinchAttr = tripleArrows.getAttrs(FlinchAttr)[0];
   const defDropAttr = tripleArrows.getAttrs(StatStageChangeAttr)[0];
 
@@ -29,11 +29,11 @@ describe("Moves - Triple Arrows", () => {
     game = new GameManager(phaserGame);
     game.override
       .ability(Abilities.BALL_FETCH)
-      .moveset([Moves.TRIPLE_ARROWS])
+      .moveset([MoveId.TRIPLE_ARROWS])
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.STURDY)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
 
     vi.spyOn(flinchAttr, "getMoveChance");
     vi.spyOn(defDropAttr, "getMoveChance");
@@ -42,7 +42,7 @@ describe("Moves - Triple Arrows", () => {
   it("has a 30% flinch chance and 50% defense drop chance", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.select(Moves.TRIPLE_ARROWS);
+    game.move.select(MoveId.TRIPLE_ARROWS);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(flinchAttr.getMoveChance).toHaveReturnedWith(30);
@@ -53,7 +53,7 @@ describe("Moves - Triple Arrows", () => {
     game.override.ability(Abilities.SERENE_GRACE);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.select(Moves.TRIPLE_ARROWS);
+    game.move.select(MoveId.TRIPLE_ARROWS);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(flinchAttr.getMoveChance).toHaveReturnedWith(60);

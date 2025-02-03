@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -23,13 +23,13 @@ describe("Abilities - Overcoat", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SPLASH])
+      .moveset([MoveId.SPLASH])
       .ability(Abilities.OVERCOAT)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it.each([
@@ -39,7 +39,7 @@ describe("Abilities - Overcoat", () => {
     game.override.weather(weather);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("BerryPhase");
 
     const playerPokemon = game.scene.getPlayerPokemon()!;

@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryPhase } from "#app/phases/berry-phase";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -29,12 +29,12 @@ describe("Moves - Alluring Voice", () => {
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.ICE_SCALES)
-      .enemyMoveset([Moves.HOWL])
+      .enemyMoveset([MoveId.HOWL])
       .startingLevel(10)
       .enemyLevel(10)
       .starterSpecies(Species.FEEBAS)
       .ability(Abilities.BALL_FETCH)
-      .moveset([Moves.ALLURING_VOICE]);
+      .moveset([MoveId.ALLURING_VOICE]);
   });
 
   it("should confuse the opponent if their stat stages were raised", async () => {
@@ -42,7 +42,7 @@ describe("Moves - Alluring Voice", () => {
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.ALLURING_VOICE);
+    game.move.select(MoveId.ALLURING_VOICE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to(BerryPhase);
 

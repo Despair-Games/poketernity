@@ -1,7 +1,7 @@
 import { type TurnMove } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { allMoves } from "#app/data/all-moves";
 import type { MoveConditionFunc } from "../move-conditions";
 import { AddBattlerTagAttr } from "./add-battler-tag-attr";
@@ -26,7 +26,10 @@ export class ProtectAttr extends AddBattlerTagAttr {
 
       while (moveHistory.length) {
         turnMove = moveHistory.shift();
-        if (!allMoves[turnMove?.move ?? Moves.NONE].hasAttr(ProtectAttr) || turnMove?.result !== MoveResult.SUCCESS) {
+        if (
+          !allMoves[turnMove?.moveId ?? MoveId.NONE].hasAttr(ProtectAttr)
+          || turnMove?.result !== MoveResult.SUCCESS
+        ) {
           break;
         }
         timesUsed++;

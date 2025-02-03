@@ -1,7 +1,6 @@
 import type { BattlerIndex } from "#enums/battler-index";
-import { SelfStatusMove } from "../move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon";
+import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { MovePhase } from "#app/phases/move-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -32,7 +31,7 @@ export class PostDancingMoveAbAttr extends PostMoveUsedAbAttr {
       && !pokemon.summonData.tags.some((tag) => forbiddenTags.includes(tag.tagType))
     ) {
       if (!simulated) {
-        if (move.getMove() instanceof SelfStatusMove) {
+        if (move.getMove().isSelfStatusMove()) {
           // If the move is a SelfStatusMove (ie. Swords Dance), the Dancer should replicate it on itself
           globalScene.unshiftPhase(new MovePhase(pokemon, [pokemon.getBattlerIndex()], move, true, true));
         } else {

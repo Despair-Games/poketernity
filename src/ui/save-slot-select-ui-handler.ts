@@ -14,6 +14,7 @@ import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "./ui-theme";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { RunDisplayMode } from "#enums/run-display-mode";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 const SESSION_SLOTS_COUNT = 5;
 const SLOTS_ON_SCREEN = 3;
@@ -47,17 +48,11 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
     this.saveSlotSelectContainer.setVisible(false);
     ui.add(this.saveSlotSelectContainer);
 
-    const loadSessionBg = globalScene.add.rectangle(
-      0,
-      0,
-      globalScene.game.canvas.width / 6,
-      -globalScene.game.canvas.height / 6,
-      0x006860,
-    );
+    const loadSessionBg = globalScene.add.rectangle(0, 0, GAME_WIDTH, -GAME_HEIGHT, 0x006860);
     loadSessionBg.setOrigin(0, 0);
     this.saveSlotSelectContainer.add(loadSessionBg);
 
-    this.sessionSlotsContainerInitialY = -globalScene.game.canvas.height / 6 + 8;
+    this.sessionSlotsContainerInitialY = -GAME_HEIGHT + 8;
 
     this.sessionSlotsContainer = globalScene.add.container(8, this.sessionSlotsContainerInitialY);
     this.saveSlotSelectContainer.add(this.sessionSlotsContainer);

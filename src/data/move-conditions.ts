@@ -2,13 +2,12 @@ import { type Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { MovePhase } from "#app/phases/move-phase";
 import { BooleanHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { StatusEffect } from "#enums/status-effect";
-import { Type } from "#enums/type";
-import { applyAbAttrs } from "./ability";
+import { ElementalType } from "#enums/elemental-type";
+import { applyAbAttrs } from "./apply-ab-attrs";
 import { StockpilingTag } from "./battler-tags";
 import { type Move } from "./move";
 import { allMoves } from "#app/data/all-moves";
@@ -60,16 +59,16 @@ export class UpperHandCondition extends MoveCondition {
         !!targetCommand
         && targetCommand.command === BattleCommand.FIGHT
         && !target.turnData.acted
-        && !!targetCommand.move?.move
-        && allMoves[targetCommand.move.move].category !== MoveCategory.STATUS
-        && allMoves[targetCommand.move.move].getPriority(target) > 0
+        && !!targetCommand.move?.moveId
+        && allMoves[targetCommand.move.moveId].category !== MoveCategory.STATUS
+        && allMoves[targetCommand.move.moveId].getPriority(target) > 0
       );
     });
   }
 }
 
 export const unknownTypeCondition: MoveConditionFunc = (user, _target, _move) =>
-  !user.getTypes().includes(Type.UNKNOWN);
+  !user.getTypes().includes(ElementalType.UNKNOWN);
 
 export const hasStockpileStacksCondition: MoveConditionFunc = (user) => {
   const hasStockpilingTag = user.getTag(StockpilingTag);
@@ -85,11 +84,11 @@ export const targetMoveCopiableCondition: MoveConditionFunc = (_user, target, _m
 
   const copiableMove = targetMoves[0];
 
-  if (!copiableMove.move) {
+  if (!copiableMove.moveId) {
     return false;
   }
 
-  if (allMoves[copiableMove.move].isChargingMove() && copiableMove.result === MoveResult.OTHER) {
+  if (allMoves[copiableMove.moveId].isChargingMove() && copiableMove.result === MoveResult.OTHER) {
     return false;
   }
 
@@ -124,7 +123,7 @@ export const targetSleptOrComatoseCondition: MoveConditionFunc = (_user: Pokemon
   target.status?.effect === StatusEffect.SLEEP || target.hasAbility(Abilities.COMATOSE);
 
 export const failIfLastCondition: MoveConditionFunc = (_user: Pokemon, _target: Pokemon, _move: Move) =>
-  globalScene.phaseQueue.find((phase) => phase instanceof MovePhase) !== undefined;
+  globalScene.phaseQueue.find((phase) => phase.isMovePhase()) !== undefined;
 
 export const failIfLastInPartyCondition: MoveConditionFunc = (user: Pokemon, _target: Pokemon, _move: Move) => {
   const party: Pokemon[] = user.getParty();
@@ -132,10 +131,10 @@ export const failIfLastInPartyCondition: MoveConditionFunc = (user: Pokemon, _ta
 };
 
 export const failIfGhostTypeCondition: MoveConditionFunc = (_user: Pokemon, target: Pokemon, _move: Move) =>
-  !target.isOfType(Type.GHOST);
+  !target.isOfType(ElementalType.GHOST);
 
 export const lastMoveCopiableCondition: MoveConditionFunc = (_user, _target, _move) => {
-  const copiableMove = globalScene.currentBattle.lastMove;
+  const copiableMove = globalScene.currentBattle.lastMoveId;
 
   if (!copiableMove) {
     return false;

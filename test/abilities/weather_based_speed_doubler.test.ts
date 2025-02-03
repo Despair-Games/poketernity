@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -24,12 +24,12 @@ describe("Abilities - Chlorophyll/Swift Swim/Sand Rush/Slush Rush", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SPLASH])
+      .moveset([MoveId.SPLASH])
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it.each([

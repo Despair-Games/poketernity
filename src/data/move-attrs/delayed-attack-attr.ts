@@ -49,7 +49,7 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
           .replace("{TARGET}", getPokemonNameWithAffix(target))
           .replace("{USER}", getPokemonNameWithAffix(user)),
       );
-      user.pushMoveHistory({ move: move.id, targets: [target.getBattlerIndex()], result: MoveResult.OTHER });
+      user.pushMoveHistory({ moveId: move.id, targets: [target.getBattlerIndex()], result: MoveResult.OTHER });
       // Add a Delayed Attack tag to the arena if it doesn't already exist
       globalScene.arena.addTag(ArenaTagType.DELAYED_ATTACK, user.id);
       // Queue an attack on the added (or existing) tag

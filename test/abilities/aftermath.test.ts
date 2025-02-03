@@ -1,6 +1,6 @@
 import { Abilities } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -30,7 +30,7 @@ describe("Abilities - Aftermath", () => {
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.AFTERMATH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should cause the attacker to take damage equal to 25% of their max HP when fainted by a contact move", async () => {
@@ -38,7 +38,7 @@ describe("Abilities - Aftermath", () => {
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.use(Moves.GRASS_KNOT);
+    game.move.use(MoveId.GRASS_KNOT);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(player.hp).toBe(Math.ceil((player.getMaxHp() * 3) / 4));
@@ -49,7 +49,7 @@ describe("Abilities - Aftermath", () => {
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.use(Moves.EARTHQUAKE);
+    game.move.use(MoveId.EARTHQUAKE);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(player.isFullHp()).toBe(true);
@@ -61,7 +61,7 @@ describe("Abilities - Aftermath", () => {
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.use(Moves.WATERFALL);
+    game.move.use(MoveId.WATERFALL);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(player.isFullHp()).toBe(true);
@@ -74,8 +74,8 @@ describe("Abilities - Aftermath", () => {
     const [feebas, milotic] = game.scene.getPlayerParty();
     const enemy1 = game.field.getEnemyPokemon();
 
-    game.move.use(Moves.SPLASH, 0);
-    game.move.use(Moves.TACKLE, 1, BattlerIndex.ENEMY_2);
+    game.move.use(MoveId.SPLASH, 0);
+    game.move.use(MoveId.TACKLE, 1, BattlerIndex.ENEMY_2);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(milotic.hp).toBe(Math.ceil((milotic.getMaxHp() * 3) / 4));
@@ -88,7 +88,7 @@ describe("Abilities - Aftermath", () => {
 
     const [feebas, milotic] = game.scene.getPlayerParty();
 
-    game.move.use(Moves.U_TURN);
+    game.move.use(MoveId.U_TURN);
     game.doSelectPartyPokemon(1);
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -105,7 +105,7 @@ describe("Abilities - Aftermath", () => {
     const [feebas, milotic] = game.scene.getPlayerParty();
     feebas.hp = 1;
 
-    game.move.use(Moves.GRASS_KNOT);
+    game.move.use(MoveId.GRASS_KNOT);
     game.doSelectPartyPokemon(1);
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -120,8 +120,8 @@ describe("Abilities - Aftermath", () => {
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
 
-    game.move.use(Moves.FALSE_SWIPE);
-    await game.move.forceEnemyMove(Moves.SELF_DESTRUCT);
+    game.move.use(MoveId.FALSE_SWIPE);
+    await game.move.forceEnemyMove(MoveId.SELF_DESTRUCT);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(player.isFullHp()).toBe(true);
@@ -135,8 +135,8 @@ describe("Abilities - Aftermath", () => {
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
 
-    game.move.use(Moves.FALSE_SWIPE);
-    await game.move.forceEnemyMove(Moves.SPLASH);
+    game.move.use(MoveId.FALSE_SWIPE);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(player.isFullHp()).toBe(true);

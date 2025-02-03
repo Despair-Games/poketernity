@@ -1539,6 +1539,51 @@ export const trainerTypeDialogue: TrainerTypeDialogue = {
     victory: ["dialogue:kieran.victory.1"],
     defeat: ["dialogue:kieran.defeat.1"],
   },
+  [TrainerType.BLUE_RED]: {
+    encounter: ["dialogue:blue_red.encounter.1"],
+    victory: ["dialogue:blue_red.victory.1"],
+    defeat: ["dialogue:blue_red.defeat.1"],
+  },
+  [TrainerType.LANCE_CLAIR]: {
+    encounter: ["dialogue:lance_clair.encounter.1"],
+    victory: ["dialogue:lance_clair.victory.1"],
+    defeat: ["dialogue:lance_clair.defeat.1"],
+  },
+  [TrainerType.STEVEN_WALLACE]: {
+    encounter: ["dialogue:steven_wallace.encounter.1"],
+    victory: ["dialogue:steven_wallace.victory.1"],
+    defeat: ["dialogue:steven_wallace.defeat.1"],
+  },
+  [TrainerType.CYNTHIA_DIANTHA]: {
+    encounter: ["dialogue:cynthia_diantha.encounter.1"],
+    victory: ["dialogue:cynthia_diantha.victory.1"],
+    defeat: ["dialogue:cynthia_diantha.defeat.1"],
+  },
+  [TrainerType.IRIS_ALDER]: {
+    encounter: ["dialogue:iris_alder.encounter.1"],
+    victory: ["dialogue:iris_alder.victory.1"],
+    defeat: ["dialogue:iris_alder.defeat.1"],
+  },
+  [TrainerType.HAU_KUKUI]: {
+    encounter: ["dialogue:hau_kukui.encounter.1"],
+    victory: ["dialogue:hau_kukui.victory.1"],
+    defeat: ["dialogue:hau_kukui.defeat.1"],
+  },
+  [TrainerType.LEON_HOP]: {
+    encounter: ["dialogue:leon_hop.encounter.1"],
+    victory: ["dialogue:leon_hop.victory.1"],
+    defeat: ["dialogue:leon_hop.defeat.1"],
+  },
+  [TrainerType.GEETA_NEMONA]: {
+    encounter: ["dialogue:geeta_nemona.encounter.1"],
+    victory: ["dialogue:geeta_nemona.victory.1"],
+    defeat: ["dialogue:geeta_nemona.defeat.1"],
+  },
+  [TrainerType.KIERAN_CARMINE]: {
+    encounter: ["dialogue:kieran_carmine.encounter.1"],
+    victory: ["dialogue:kieran_carmine.victory.1"],
+    defeat: ["dialogue:kieran_carmine.defeat.1"],
+  },
   [TrainerType.RIVAL]: [
     {
       encounter: ["dialogue:rival.encounter.1"],
@@ -1604,50 +1649,6 @@ export const trainerTypeDialogue: TrainerTypeDialogue = {
     },
   ],
 };
-
-export const doubleBattleDialogue = {
-  blue_red_double: {
-    encounter: ["doubleBattleDialogue:blue_red_double.encounter.1"],
-    victory: ["doubleBattleDialogue:blue_red_double.victory.1"],
-  },
-  red_blue_double: {
-    encounter: ["doubleBattleDialogue:red_blue_double.encounter.1"],
-    victory: ["doubleBattleDialogue:red_blue_double.victory.1"],
-  },
-  tate_liza_double: {
-    encounter: ["doubleBattleDialogue:tate_liza_double.encounter.1"],
-    victory: ["doubleBattleDialogue:tate_liza_double.victory.1"],
-  },
-  liza_tate_double: {
-    encounter: ["doubleBattleDialogue:liza_tate_double.encounter.1"],
-    victory: ["doubleBattleDialogue:liza_tate_double.victory.1"],
-  },
-  wallace_steven_double: {
-    encounter: ["doubleBattleDialogue:wallace_steven_double.encounter.1"],
-    victory: ["doubleBattleDialogue:wallace_steven_double.victory.1"],
-  },
-  steven_wallace_double: {
-    encounter: ["doubleBattleDialogue:steven_wallace_double.encounter.1"],
-    victory: ["doubleBattleDialogue:steven_wallace_double.victory.1"],
-  },
-  alder_iris_double: {
-    encounter: ["doubleBattleDialogue:alder_iris_double.encounter.1"],
-    victory: ["doubleBattleDialogue:alder_iris_double.victory.1"],
-  },
-  iris_alder_double: {
-    encounter: ["doubleBattleDialogue:iris_alder_double.encounter.1"],
-    victory: ["doubleBattleDialogue:iris_alder_double.victory.1"],
-  },
-  marnie_piers_double: {
-    encounter: ["doubleBattleDialogue:marnie_piers_double.encounter.1"],
-    victory: ["doubleBattleDialogue:marnie_piers_double.victory.1"],
-  },
-  piers_marnie_double: {
-    encounter: ["doubleBattleDialogue:piers_marnie_double.encounter.1"],
-    victory: ["doubleBattleDialogue:piers_marnie_double.victory.1"],
-  },
-};
-
 export const classicFinalBossDialogue = {
   encounter: "battleSpecDialogue:encounter",
   firstStageWin: "battleSpecDialogue:firstStageWin",

@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -22,21 +22,21 @@ describe("Abilities - Pickpocket", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SPLASH, Moves.SUBSTITUTE])
+      .moveset([MoveId.SPLASH, MoveId.SUBSTITUTE])
       .ability(Abilities.PICKPOCKET)
       .startingLevel(20)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.TACKLE)
+      .enemyMoveset(MoveId.TACKLE)
       .enemyHeldItems([{ name: "LEFTOVERS" }]);
   });
 
   it("should steal the enemy's held item when hit by a contact move", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(game.scene.getEnemyPokemon()!.getHeldItems().length).toBe(0);
@@ -44,10 +44,10 @@ describe("Abilities - Pickpocket", () => {
   });
 
   it("should not steal the enemy's held item when hit by a non-contact move", async () => {
-    game.override.enemyMoveset(Moves.EMBER);
+    game.override.enemyMoveset(MoveId.EMBER);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(game.scene.getEnemyPokemon()!.getHeldItems().length).toBe(1);
@@ -57,7 +57,7 @@ describe("Abilities - Pickpocket", () => {
   it("shouldn't trigger when the enemy hits a substitute", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.select(Moves.SUBSTITUTE);
+    game.move.select(MoveId.SUBSTITUTE);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(game.scene.getEnemyPokemon()!.getHeldItems().length).toBe(1);

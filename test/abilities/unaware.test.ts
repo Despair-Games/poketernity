@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/all-moves";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { EFFECTIVE_STATS, Stat } from "#enums/stat";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -37,8 +37,8 @@ describe("Abilities - Unaware", () => {
   it("should ignore the opponent's stat stages, except for speed", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.use(Moves.SPLASH);
-    await game.move.forceEnemyMove(Moves.SHELL_SMASH);
+    game.move.use(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.SHELL_SMASH);
     await game.toNextTurn();
 
     const playerPokemon = game.field.getPlayerPokemon();
@@ -57,8 +57,8 @@ describe("Abilities - Unaware", () => {
   it("should not ignore the user's stat stages", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.use(Moves.SHELL_SMASH);
-    await game.move.forceEnemyMove(Moves.SPLASH);
+    game.move.use(MoveId.SHELL_SMASH);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
     const playerPokemon = game.field.getPlayerPokemon();
@@ -77,33 +77,33 @@ describe("Abilities - Unaware", () => {
   });
 
   it("should not cause the opponent's Stored Power to ignore the opponent's stat stages", async () => {
-    const storedPowerMove = allMoves[Moves.STORED_POWER];
+    const storedPowerMove = allMoves[MoveId.STORED_POWER];
     vi.spyOn(storedPowerMove, "calculateBattlePower");
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.use(Moves.SPLASH);
-    await game.move.forceEnemyMove(Moves.SHELL_SMASH);
+    game.move.use(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.SHELL_SMASH);
     await game.toNextTurn();
-    game.move.use(Moves.SPLASH);
-    await game.move.forceEnemyMove(Moves.STORED_POWER);
+    game.move.use(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.STORED_POWER);
     await game.toNextTurn();
 
     expect(storedPowerMove.calculateBattlePower).toHaveLastReturnedWith(140);
   });
 
   it("should not cause the move Punishment to ignore the opponent's stat stages", async () => {
-    const punishmentMove = allMoves[Moves.PUNISHMENT];
+    const punishmentMove = allMoves[MoveId.PUNISHMENT];
     vi.spyOn(punishmentMove, "calculateBattlePower");
 
     game.override.startingLevel(5).enemyLevel(100);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.use(Moves.SPLASH);
-    await game.move.forceEnemyMove(Moves.SHELL_SMASH);
+    game.move.use(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.SHELL_SMASH);
     await game.toNextTurn();
-    game.move.use(Moves.PUNISHMENT);
-    await game.move.forceEnemyMove(Moves.SPLASH);
+    game.move.use(MoveId.PUNISHMENT);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
     expect(punishmentMove.calculateBattlePower).toHaveLastReturnedWith(180);
@@ -116,11 +116,11 @@ describe("Abilities - Unaware", () => {
     vi.spyOn(enemyPokemon, "getEffectiveStat");
     const expectedDef = enemyPokemon.getStat(Stat.DEF);
 
-    game.move.use(Moves.SPLASH);
-    await game.move.forceEnemyMove(Moves.IRON_DEFENSE);
+    game.move.use(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.IRON_DEFENSE);
     await game.toNextTurn();
-    game.move.use(Moves.SPLASH);
-    await game.move.forceEnemyMove(Moves.BODY_PRESS);
+    game.move.use(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.BODY_PRESS);
     await game.toNextTurn();
 
     expect(enemyPokemon.getEffectiveStat).toHaveLastReturnedWith(expectedDef);
@@ -139,15 +139,15 @@ describe("Abilities - Unaware", () => {
     const expectedPlayerDef = Math.floor(playerPokemon.getStat(Stat.DEF) * (3 / 2));
     const expectedEnemyDef = Math.floor(enemyPokemon.getStat(Stat.DEF) * (3 / 2));
 
-    game.move.use(Moves.VICTORY_DANCE);
-    await game.move.forceEnemyMove(Moves.VICTORY_DANCE);
+    game.move.use(MoveId.VICTORY_DANCE);
+    await game.move.forceEnemyMove(MoveId.VICTORY_DANCE);
     await game.toNextTurn();
 
     playerPokemon.addTag(BattlerTagType.CONFUSED);
     enemyPokemon.addTag(BattlerTagType.CONFUSED);
 
-    game.move.use(Moves.SPLASH);
-    await game.move.forceEnemyMove(Moves.SPLASH);
+    game.move.use(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
     expect(playerPokemon.isFullHp()).toBe(false);
@@ -164,22 +164,22 @@ describe("Abilities - Unaware", () => {
 
   it("should not ignore an opponent's physical damage reduction from a Burn status", async () => {
     // TODO: Is there a more direct way to test for Burn damage reduction?
-    vi.spyOn(allMoves[Moves.WILL_O_WISP], "accuracy", "get").mockReturnValue(-1);
+    vi.spyOn(allMoves[MoveId.WILL_O_WISP], "accuracy", "get").mockReturnValue(-1);
     game.override.startingLevel(1000).enemyLevel(1000);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.field.getPlayerPokemon();
     const hpAmounts = [playerPokemon.hp];
 
-    game.move.use(Moves.WILL_O_WISP);
-    await game.move.forceEnemyMove(Moves.TACKLE);
+    game.move.use(MoveId.WILL_O_WISP);
+    await game.move.forceEnemyMove(MoveId.TACKLE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     hpAmounts.push(playerPokemon.hp);
 
-    game.move.use(Moves.WILL_O_WISP);
-    await game.move.forceEnemyMove(Moves.TACKLE);
+    game.move.use(MoveId.WILL_O_WISP);
+    await game.move.forceEnemyMove(MoveId.TACKLE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 

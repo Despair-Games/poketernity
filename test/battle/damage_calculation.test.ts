@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/all-moves";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -27,11 +27,11 @@ describe("Battle Mechanics - Damage Calculation", () => {
       .battleType("single")
       .enemySpecies(Species.SNORLAX)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100)
       .disableCrits()
-      .moveset([Moves.TACKLE, Moves.DRAGON_RAGE, Moves.FISSURE, Moves.JUMP_KICK]);
+      .moveset([MoveId.TACKLE, MoveId.DRAGON_RAGE, MoveId.FISSURE, MoveId.JUMP_KICK]);
   });
 
   it("Tackle deals expected base damage", async () => {
@@ -45,7 +45,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
 
     // expected base damage = [(2*level/5 + 2) * power * playerATK / enemyDEF / 50] + 2
     //                      = 31.8666...
-    expect(enemyPokemon.getAttackDamage(playerPokemon, allMoves[Moves.TACKLE]).damage).toBeCloseTo(31);
+    expect(enemyPokemon.getAttackDamage(playerPokemon, allMoves[MoveId.TACKLE]).damage).toBeCloseTo(31);
   });
 
   it("Attacks deal 1 damage at minimum", async () => {
@@ -55,7 +55,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
 
     const aggron = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.TACKLE);
+    game.move.select(MoveId.TACKLE);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -71,7 +71,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
     const magikarp = game.scene.getPlayerPokemon()!;
     const dragonite = game.scene.getEnemyPokemon()!;
 
-    expect(dragonite.getAttackDamage(magikarp, allMoves[Moves.DRAGON_RAGE]).damage).toBe(40);
+    expect(dragonite.getAttackDamage(magikarp, allMoves[MoveId.DRAGON_RAGE]).damage).toBe(40);
   });
 
   it("One-hit KO moves ignore damage multipliers", async () => {
@@ -82,7 +82,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
     const magikarp = game.scene.getPlayerPokemon()!;
     const aggron = game.scene.getEnemyPokemon()!;
 
-    expect(aggron.getAttackDamage(magikarp, allMoves[Moves.FISSURE]).damage).toBe(aggron.hp);
+    expect(aggron.getAttackDamage(magikarp, allMoves[MoveId.FISSURE]).damage).toBe(aggron.hp);
   });
 
   it("When the user fails to use Jump Kick with Wonder Guard ability, the damage should be 1.", async () => {
@@ -92,7 +92,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
 
     const shedinja = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.JUMP_KICK);
+    game.move.select(MoveId.JUMP_KICK);
 
     await game.phaseInterceptor.to("DamageAnimPhase");
 
@@ -100,7 +100,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
   });
 
   it("Charizard with odd HP survives Stealth Rock damage twice", async () => {
-    game.scene.arena.addTag(ArenaTagType.STEALTH_ROCK, 0, 1, Moves.STEALTH_ROCK);
+    game.scene.arena.addTag(ArenaTagType.STEALTH_ROCK, 0, 1, MoveId.STEALTH_ROCK);
     game.override.seed("Charizard Stealth Rock test").enemySpecies(Species.CHARIZARD).enemyAbility(Abilities.BLAZE);
 
     await game.classicMode.startBattle([Species.PIKACHU]);

@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/all-moves";
 import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -25,13 +25,13 @@ describe("Moves - Round", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SPLASH, Moves.ROUND])
+      .moveset([MoveId.SPLASH, MoveId.ROUND])
       .ability(Abilities.BALL_FETCH)
       .battleType("double")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset([Moves.SPLASH, Moves.ROUND])
+      .enemyMoveset([MoveId.SPLASH, MoveId.ROUND])
       .startingLevel(100)
       .enemyLevel(100);
   });
@@ -39,14 +39,14 @@ describe("Moves - Round", () => {
   it("should cue other instances of Round together in Speed order", async () => {
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
-    const round = allMoves[Moves.ROUND];
+    const round = allMoves[MoveId.ROUND];
     const spy = vi.spyOn(round, "calculateBattlePower");
 
-    game.move.select(Moves.ROUND, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.ROUND, 1, BattlerIndex.ENEMY_2);
+    game.move.select(MoveId.ROUND, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.ROUND, 1, BattlerIndex.ENEMY_2);
 
-    await game.forceEnemyMove(Moves.ROUND, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(Moves.SPLASH);
+    await game.forceEnemyMove(MoveId.ROUND, BattlerIndex.PLAYER);
+    await game.forceEnemyMove(MoveId.SPLASH);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY]);
 

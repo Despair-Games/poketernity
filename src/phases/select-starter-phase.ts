@@ -1,7 +1,7 @@
 import { applyChallenges } from "#app/data/challenge";
 import { ChallengeType } from "#enums/challenge-type";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/pokemon-forms";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { globalScene } from "#app/global-scene";
 import { overrideHeldItems, overrideModifiers } from "#app/modifier/modifier";
 import Overrides from "#app/overrides";

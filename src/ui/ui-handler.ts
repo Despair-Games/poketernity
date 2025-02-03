@@ -4,6 +4,7 @@ import { getTextColor } from "./text";
 import type { UiMode } from "#enums/ui-mode";
 import type { Button } from "#enums/buttons";
 import { settings } from "#app/system/settings/settings-manager";
+import type AwaitableUiHandler from "#app/ui/awaitable-ui-handler";
 
 /**
  * A basic abstract class to act as a holder and processor for UI elements.
@@ -62,5 +63,9 @@ export default abstract class UiHandler {
 
   clear() {
     this.active = false;
+  }
+
+  isAwaitableUiHandler(): this is AwaitableUiHandler {
+    return false;
   }
 }

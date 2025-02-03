@@ -1,5 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import AwaitableUiHandler from "./ui/awaitable-ui-handler";
 import type UiHandler from "./ui/ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
@@ -130,7 +129,7 @@ export async function handleTutorial(tutorial: Tutorial): Promise<boolean> {
 
   // starting tutorial, disable menu
   globalScene.disableMenu = true;
-  if (handler instanceof AwaitableUiHandler) {
+  if (handler.isAwaitableUiHandler()) {
     handler.tutorialActive = true;
   }
 
@@ -141,7 +140,7 @@ export async function handleTutorial(tutorial: Tutorial): Promise<boolean> {
   // tutorial finished and overlay gone, re-enable menu, save tutorial as seen
   globalScene.disableMenu = isMenuDisabled;
   globalScene.gameData.saveTutorialAsSeen(tutorial);
-  if (handler instanceof AwaitableUiHandler) {
+  if (handler.isAwaitableUiHandler()) {
     handler.tutorialActive = false;
   }
 
@@ -154,7 +153,7 @@ export async function handleTutorial(tutorial: Tutorial): Promise<boolean> {
  * @returns `true` once the overlay has finished appearing, or if there is no overlay
  */
 async function showTutorialOverlay(handler: UiHandler) {
-  if (handler instanceof AwaitableUiHandler && handler.tutorialOverlay) {
+  if (handler.isAwaitableUiHandler() && handler.tutorialOverlay) {
     globalScene.tweens.add({
       targets: handler.tutorialOverlay,
       alpha: 0.75,
@@ -175,7 +174,7 @@ async function showTutorialOverlay(handler: UiHandler) {
  * @returns `true` once the overlay has finished disappearing, or if there is no overlay
  */
 async function hideTutorialOverlay(handler: UiHandler) {
-  if (handler instanceof AwaitableUiHandler && handler.tutorialOverlay) {
+  if (handler.isAwaitableUiHandler() && handler.tutorialOverlay) {
     globalScene.tweens.add({
       targets: handler.tutorialOverlay,
       alpha: 0,
