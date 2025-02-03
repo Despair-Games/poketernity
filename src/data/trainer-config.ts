@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import type { EnemyPokemon } from "#app/field/pokemon";
-import { toReadableString, randSeedItem, randInt } from "#app/utils";
+import { toReadableString, randSeedItem } from "#app/utils";
 import type { PokemonSpeciesFilter } from "#app/@types/PokemonSpeciesFilter";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
@@ -1131,10 +1131,10 @@ export class TrainerConfig {
    * @param title the string representation of the evil team leader's title
    * @param name the string representation of the evil team leader's name
    * @param rematch Whether or not this is the rematch fight
-   * @param mixedBattleBgm the string representation of the mixed battle bgm
+   * @param battleBgm the string representation of the battle bgm
    * @returns The updated TrainerConfig instance.
    * **/
-  initForEvilTeamLeader(title: string, name: string, rematch: boolean = false, mixedBattleBgm: string): TrainerConfig {
+  initForEvilTeamLeader(title: string, name: string, rematch: boolean = false, battleBgm: string): TrainerConfig {
     if (!getIsInitialized()) {
       initI18n();
     }
@@ -1150,7 +1150,7 @@ export class TrainerConfig {
     this.setBoss();
     this.setStaticParty();
     this.setHasVoucher(true);
-    this.setBattleBgm(mixedBattleBgm);
+    this.setBattleBgm(battleBgm);
     this.setVictoryBgm("victory_team_plasma");
 
     return this;
@@ -1301,12 +1301,7 @@ export class TrainerConfig {
       initI18n();
     }
 
-    let battleBgmToSet = battleBgm[0];
-    if (battleBgm.length > 1) {
-      battleBgmToSet = battleBgm[randInt(battleBgm.length, 0)];
-    }
-
-    this.setBattleBgm(battleBgmToSet);
+    this.setBattleBgm(randSeedItem(battleBgm));
 
     // Set the party templates for the Champion.
     let partyTemplate = trainerPartyTemplates.CHAMPION;
