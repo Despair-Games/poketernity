@@ -190,6 +190,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
   }
 
   toggleInfo(visible: boolean): void {
+    visible = visible && settings.display.enableMoveInfo;
     if (visible) {
       this.movesContainer.setVisible(false);
       this.cursorObj?.setVisible(false);
