@@ -5,7 +5,7 @@ import { SceneBase } from "#app/scene-base";
 import { getWindowVariantSuffix } from "#app/ui/ui-theme";
 import { WindowVariant } from "#enums/window-variant";
 import { isMobile } from "#app/touch-controls";
-import { localPing, getEnumValues, hasAllLocalizedSprites, getEnumKeys } from "#app/utils";
+import { localPing, getEnumValues, getEnumKeys } from "#app/utils";
 import { initPokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import { initBiomes } from "#app/data/balance/biomes";
 import { initEggMoves } from "#app/data/balance/egg-moves";
@@ -228,23 +228,12 @@ export class LoadingScene extends SceneBase {
 
     this.loadAtlas("pb", "");
     this.loadAtlas("items", "");
-    this.loadAtlas("types", "");
 
-    // Get current lang and load the types atlas for it. English will only load types while all other languages will load types and types_<lang>
-    const lang = i18next.resolvedLanguage;
-    if (lang !== "en") {
-      if (hasAllLocalizedSprites(lang)) {
-        this.loadAtlas(`statuses_${lang}`, "");
-        this.loadAtlas(`types_${lang}`, "");
-      } else {
-        // Fallback to English
-        this.loadAtlas("statuses", "");
-        this.loadAtlas("types", "");
-      }
-    } else {
-      this.loadAtlas("statuses", "");
-      this.loadAtlas("types", "");
-    }
+    // Get current language and load the different localized images and atlases for it
+    const lang = i18next.resolvedLanguage ?? "en";
+    this.loadLocalizedAtlas("statuses", "", lang);
+    this.loadLocalizedAtlas("types", "", lang);
+
     const availableLangs = ["en", "de", "it", "fr", "ja", "ko", "es-ES", "pt-BR", "zh-CN"];
     if (lang && availableLangs.includes(lang)) {
       this.loadImage("halloween2024-event-" + lang, "events");
@@ -252,7 +241,6 @@ export class LoadingScene extends SceneBase {
       this.loadImage("halloween2024-event-en", "events");
     }
 
-    this.loadAtlas("statuses", "");
     this.loadAtlas("categories", "");
 
     this.loadAtlas("egg", "egg");

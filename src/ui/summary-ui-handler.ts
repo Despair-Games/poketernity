@@ -2,15 +2,7 @@ import { starterColors } from "#app/data/starter-colors";
 import { globalScene } from "#app/global-scene";
 import { UiMode } from "#enums/ui-mode";
 import UiHandler from "#app/ui/ui-handler";
-import {
-  getLocalizedSpriteKey,
-  rgbHexToRgba,
-  leftPad,
-  getEnumValues,
-  fixedNumber,
-  toReadableString,
-  formatStat,
-} from "#app/utils";
+import { rgbHexToRgba, leftPad, getEnumValues, fixedNumber, toReadableString, formatStat } from "#app/utils";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { getStarterValueFriendshipCap, speciesStarterCosts } from "#app/data/balance/starters";
@@ -255,7 +247,7 @@ export default class SummaryUiHandler extends UiHandler {
 
     this.statusContainer.add(statusLabel);
 
-    this.status = globalScene.add.sprite(91, 4, getLocalizedSpriteKey("statuses"));
+    this.status = globalScene.add.sprite(91, 4, "statuses");
     this.status.setOrigin(0.5, 0);
 
     this.statusContainer.add(this.status);
@@ -804,7 +796,7 @@ export default class SummaryUiHandler extends UiHandler {
         const getTypeIcon = (index: number, type: ElementType, tera: boolean = false) => {
           const xCoord = typeLabel.width * typeLabel.scale + 9 + 34 * index;
           const typeIcon = !tera
-            ? globalScene.add.sprite(xCoord, 42, getLocalizedSpriteKey("types"), ElementType[type].toLowerCase())
+            ? globalScene.add.sprite(xCoord, 42, "types", ElementType[type].toLowerCase())
             : globalScene.add.sprite(xCoord, 42, "type_tera");
           if (tera) {
             typeIcon.setScale(0.5);
@@ -1055,9 +1047,8 @@ export default class SummaryUiHandler extends UiHandler {
           this.extraMoveRowContainer.setVisible(true);
 
           if (this.newMove && this.pokemon) {
-            const spriteKey = getLocalizedSpriteKey("types");
             const moveType = this.pokemon.getMoveType(this.newMove);
-            const newMoveTypeIcon = globalScene.add.sprite(0, 0, spriteKey, ElementType[moveType].toLowerCase());
+            const newMoveTypeIcon = globalScene.add.sprite(0, 0, "types", ElementType[moveType].toLowerCase());
             newMoveTypeIcon.setOrigin(0, 1);
             this.extraMoveRowContainer.add(newMoveTypeIcon);
           }
@@ -1081,9 +1072,8 @@ export default class SummaryUiHandler extends UiHandler {
           this.moveRowsContainer.add(moveRowContainer);
 
           if (move && this.pokemon) {
-            const spriteKey = getLocalizedSpriteKey("types");
             const moveType = this.pokemon.getMoveType(move.getMove());
-            const typeIcon = globalScene.add.sprite(0, 0, spriteKey, ElementType[moveType].toLowerCase());
+            const typeIcon = globalScene.add.sprite(0, 0, "types", ElementType[moveType].toLowerCase());
             typeIcon.setOrigin(0, 1);
             moveRowContainer.add(typeIcon);
           }

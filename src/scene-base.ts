@@ -1,3 +1,5 @@
+import { getLocalizedFilename } from "#app/utils";
+
 export const legacyCompatibleImages: string[] = [];
 
 export class SceneBase extends Phaser.Scene {
@@ -50,23 +52,32 @@ export class SceneBase extends Phaser.Scene {
     if (!filenameRoot) {
       filenameRoot = key;
     }
-    if (folder) {
-      folder += "/";
-    }
     this.load.atlas(
       key,
-      this.getCachedUrl(`images/${folder}${filenameRoot}.png`),
-      this.getCachedUrl(`images/${folder}${filenameRoot}.json`),
+      this.getCachedUrl(`images/${folder}/${filenameRoot}.png`),
+      this.getCachedUrl(`images/${folder}/${filenameRoot}.json`),
     );
     if (folder.startsWith("ui")) {
       legacyCompatibleImages.push(key);
       folder = folder.replace("ui", "ui/legacy");
       this.load.atlas(
         `${key}_legacy`,
-        this.getCachedUrl(`images/${folder}${filenameRoot}.png`),
-        this.getCachedUrl(`images/${folder}${filenameRoot}.json`),
+        this.getCachedUrl(`images/${folder}/${filenameRoot}.png`),
+        this.getCachedUrl(`images/${folder}/${filenameRoot}.json`),
       );
     }
+  }
+
+  loadLocalizedImage(key: string, folder: string, languageKey: string) {
+    this.loadImage(key, folder, getLocalizedFilename(key, languageKey));
+  }
+
+  loadLocalizedSpritesheet(key: string, folder: string, size: number, languageKey: string) {
+    this.loadSpritesheet(key, folder, size, getLocalizedFilename(key, languageKey));
+  }
+
+  loadLocalizedAtlas(key: string, folder: string, languageKey: string) {
+    this.loadAtlas(key, folder, getLocalizedFilename(key, languageKey));
   }
 
   loadSe(key: string, folder?: string, filenames?: string | string[]) {

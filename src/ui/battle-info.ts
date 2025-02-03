@@ -1,6 +1,6 @@
 import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
 import { getLevelRelExp } from "#app/data/exp";
-import { getLocalizedSpriteKey, fixedNumber } from "#app/utils";
+import { fixedNumber } from "#app/utils";
 import { addTextObject } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { getGenderSymbol, getGenderColor } from "#app/data/gender";
@@ -169,7 +169,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     this.splicedIcon.setInteractive(new Phaser.Geom.Rectangle(0, 0, 12, 15), Phaser.Geom.Rectangle.Contains);
     this.add(this.splicedIcon);
 
-    this.statusIndicator = globalScene.add.sprite(0, 0, getLocalizedSpriteKey("statuses"));
+    this.statusIndicator = globalScene.add.sprite(0, 0, "statuses");
     this.statusIndicator.setName("icon_status");
     this.statusIndicator.setVisible(false);
     this.statusIndicator.setOrigin(0, 0);
