@@ -32,11 +32,11 @@ export class PostDancingMoveAbAttr extends PostMoveUsedAbAttr {
       if (!simulated) {
         if (move.getMove().isSelfStatusMove()) {
           // If the move is a SelfStatusMove (ie. Swords Dance), the Dancer should replicate it on itself
-          globalScene.useMove({ pokemon, targets: [pokemon.getBattlerIndex()], move, followUp: true, eager: true });
+          globalScene.useMove({ pokemon, targets: [pokemon.getBattlerIndex()], move, followUp: true, when: "eager" });
         } else {
           // Otherwise, the Dancer must replicate the move on the source of the Dance
           const target = this.getTarget(pokemon, source, targets);
-          globalScene.useMove({ pokemon, targets: target, move, followUp: true, eager: true });
+          globalScene.useMove({ pokemon, targets: target, move, followUp: true, when: "eager" });
         }
       }
       return true;

@@ -152,7 +152,7 @@ export class NaturePowerAttr extends OverrideMoveEffectAttr {
       targets: [target.getBattlerIndex()],
       move: moveId,
       followUp: true,
-      eager: true,
+      when: "eager",
     });
     return true;
   }

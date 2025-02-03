@@ -171,7 +171,7 @@ export class TurnStartPhase extends FieldPhase {
           }
           if (pokemon.isPlayer()) {
             if (turnCommand.cursor === -1) {
-              globalScene.useMove({ pokemon, targets: turnCommand.targets ?? queuedMove.targets, move, eager: false });
+              globalScene.useMove({ pokemon, targets: turnCommand.targets ?? queuedMove.targets, move, when: "defer" });
             } else {
               globalScene.useMove({
                 pokemon,
@@ -179,7 +179,7 @@ export class TurnStartPhase extends FieldPhase {
                 move,
                 followUp: false,
                 ignorePp: queuedMove.ignorePP,
-                eager: false,
+                when: "defer",
               });
             }
           } else {
@@ -189,7 +189,7 @@ export class TurnStartPhase extends FieldPhase {
               move,
               followUp: false,
               ignorePp: queuedMove.ignorePP,
-              eager: false,
+              when: "defer",
             });
           }
           break;

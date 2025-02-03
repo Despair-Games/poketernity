@@ -186,7 +186,7 @@ import { SelectTargetPhase } from "#app/phases/select-target-phase";
 import { MoveAnimPhase } from "#app/phases/move-anim-phase";
 import type { ChargeAnim } from "#enums/charge-anim";
 import { MoveChargeAnim } from "#app/data/battle-anims/move-charge-anim";
-import type { PhaseId } from "#enums/phase-id";
+import { type PhaseId } from "#enums/phase-id";
 
 //#region Types
 
@@ -232,7 +232,8 @@ interface UseMoveInit {
   targets: BattlerIndex[];
   move: PokemonMove | MoveId;
   /** Whether to add the {@linkcode MovePhase} to the front of the phase queue or defer it. */
-  eager: boolean;
+  when: "eager" | "defer" | "before" | "after";
+  phaseId?: PhaseId;
   followUp?: boolean;
   ignorePp?: boolean;
 }
@@ -2520,11 +2521,11 @@ export default class BattleScene extends SceneBase {
   /**
    * Tries to add the input phase to index after target phase in the {@linkcode phaseQueue}, else simply calls {@linkcode unshiftPhase()}
    * @param phase {@linkcode Phase} the phase to be added
-   * @param targetPhase {@linkcode Phase} the type of phase to search for in {@linkcode phaseQueue}
+   * @param targetPhaseId {@linkcode PhaseId} the type of phase to search for in {@linkcode phaseQueue}
    * @returns `true` if a `targetPhase` was found to append to
    */
-  appendToPhase(phase: Phase, targetPhase: AbstractConstructor<Phase>): boolean {
-    const targetIndex = this.phaseQueue.findIndex((ph) => ph instanceof targetPhase);
+  appendToPhase(phase: Phase, targetPhaseId: PhaseId): boolean {
+    const targetIndex = this.phaseQueue.findIndex(({ id }) => id === targetPhaseId);
 
     if (targetIndex !== -1 && this.phaseQueue.length > targetIndex) {
       this.phaseQueue.splice(targetIndex + 1, 0, phase);
@@ -3779,13 +3780,27 @@ export default class BattleScene extends SceneBase {
     this.unshiftPhase(new MoveAnimPhase(new MoveChargeAnim(chargeAnim, moveId, user)));
   }
 
-  useMove({ pokemon, targets, move, followUp = false, ignorePp = false, eager }: UseMoveInit) {
+  useMove({ pokemon, targets, move, followUp = false, ignorePp = false, when, phaseId }: UseMoveInit) {
     const movePhase = new MovePhase(pokemon, targets, move, followUp, ignorePp);
 
-    if (eager) {
-      this.unshiftPhase(movePhase);
-    } else {
-      this.pushPhase(movePhase);
+    if ((when === "before" || when === "after") && !phaseId) {
+      throw new Error("phaseId is required for useMove.when === 'before'");
+    }
+
+    switch (when) {
+      case "eager":
+        this.unshiftPhase(movePhase);
+        break;
+      case "defer":
+        this.pushPhase(movePhase);
+        break;
+      case "before":
+        this.prependToPhase(movePhase, phaseId!);
+        break;
+      case "after":
+        this.appendToPhase(movePhase, phaseId!);
+      default:
+        throw new Error(`Unknown useMove.when: ${when}`);
     }
   }
 }

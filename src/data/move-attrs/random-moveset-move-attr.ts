@@ -57,7 +57,7 @@ export class RandomMovesetMoveAttr extends OverrideMoveEffectAttr {
       }
       const targets = selectTargets;
       user.getMoveQueue().push({ moveId: move.moveId, targets: targets, ignorePP: true });
-      globalScene.useMove({ pokemon: user, targets, move: moveset[moveIndex], followUp: true, eager: true });
+      globalScene.useMove({ pokemon: user, targets, move: moveset[moveIndex], followUp: true, when: "eager" });
       return true;
     }
 

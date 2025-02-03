@@ -39,7 +39,7 @@ export class RandomMoveAttr extends OverrideMoveEffectAttr {
           : [moveTargets.targets[user.randSeedInt(moveTargets.targets.length)]];
     user.getMoveQueue().push({ moveId: moveId, targets: targets, ignorePP: true });
     globalScene.unshiftPhase(new LoadMoveAnimPhase(moveId));
-    globalScene.useMove({ pokemon: user, targets, move: moveId, followUp: true, eager: true });
+    globalScene.useMove({ pokemon: user, targets, move: moveId, followUp: true, when: "eager" });
     return true;
   }
 

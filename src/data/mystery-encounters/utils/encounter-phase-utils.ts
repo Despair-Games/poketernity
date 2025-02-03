@@ -977,7 +977,7 @@ export function handleMysteryEncounterBattleStartEffects() {
         move: effect.move,
         followUp: effect.followUp,
         ignorePp: effect.ignorePp,
-        eager: false,
+        when: "defer",
       });
     });
 

@@ -28,7 +28,7 @@ export class CopyMoveAttr extends OverrideMoveEffectAttr {
           : [moveTargets.targets[user.randSeedInt(moveTargets.targets.length)]];
     user.getMoveQueue().push({ moveId: lastMove, targets: targets, ignorePP: true });
 
-    globalScene.useMove({ pokemon: user, targets, move: lastMove, followUp: true, eager: true });
+    globalScene.useMove({ pokemon: user, targets, move: lastMove, followUp: true, when: "eager" });
 
     return true;
   }

@@ -3,13 +3,12 @@ import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
-import { MovePhase } from "#app/phases/move-phase";
 import i18next from "i18next";
 import { type Move } from "#app/data/move";
 import { allMoves } from "#app/data/all-moves";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Attribute used for moves that causes the target to repeat their last used move.
@@ -35,7 +34,13 @@ export class RepeatMoveAttr extends MoveEffectAttr {
     );
     target.getMoveQueue().unshift({ moveId: lastMove.moveId, targets: moveTargets, ignorePP: false });
     target.turnData.extraTurns++;
-    globalScene.appendToPhase(new MovePhase(target, moveTargets, movesetMove), MoveEndPhase);
+    globalScene.useMove({
+      pokemon: target,
+      targets: moveTargets,
+      move: movesetMove,
+      when: "after",
+      phaseId: PhaseId.MOVE_END,
+    });
     return true;
   }
 

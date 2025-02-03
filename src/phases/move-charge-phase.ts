@@ -80,7 +80,7 @@ export class MoveChargePhase extends HitCheckPhase {
         // this MoveEndPhase will be duplicated by the queued MovePhase if not removed
         globalScene.tryRemovePhase((phase) => phase instanceof MoveEndPhase && phase.getPokemon() === user);
         // queue a new MovePhase for this move's attack phase
-        globalScene.useMove({ pokemon: user, targets: this.targets, move: this.move, followUp: false, eager: true });
+        globalScene.useMove({ pokemon: user, targets: this.targets, move: this.move, followUp: false, when: "eager" });
       } else {
         user.getMoveQueue().push({ moveId: move.id, targets: this.targets });
       }
