@@ -1,3 +1,7 @@
+// -- start tsdoc imports --
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { type UiWindowType } from "#enums/ui-window-type";
+// -- end tsdoc imports --
 import { GachaType } from "#enums/gacha-types";
 import { getBiomeHasProps } from "#app/field/arena";
 import CacheBustedLoaderPlugin from "#app/plugins/cache-busted-loader-plugin";
@@ -41,8 +45,16 @@ export class LoadingScene extends SceneBase {
     this.loadImage("loading_bg", "arenas");
     this.loadImage("logo", "");
 
+    /** UI Elements that change based on the {@linkcode UiWindowType} */
+    for (const windowVariant of getEnumValues(WindowVariant)) {
+      this.loadSpritesheet(`window${getWindowVariantSuffix(windowVariant)}`, "ui/windows", 24, 24, {
+        windowTypeDependant: true,
+      });
+    }
+    this.loadSpritesheet("trainer_namebox", "ui", 20, 20, { windowTypeDependant: true });
+    this.loadSpritesheet("battle_message_box", "ui", 320, 48, { windowTypeDependant: true });
+
     // Load menu images
-    this.loadAtlas("bg", "ui");
     this.loadAtlas("prompt", "ui");
     this.loadImage("candy", "ui");
     this.loadImage("candy_overlay", "ui");
@@ -50,12 +62,7 @@ export class LoadingScene extends SceneBase {
     this.loadImage("friendship_overlay", "ui");
     this.loadImage("cursor", "ui");
     this.loadImage("cursor_reverse", "ui");
-    for (const wv of getEnumValues(WindowVariant)) {
-      for (let w = 1; w <= 5; w++) {
-        this.loadImage(`window_${w}${getWindowVariantSuffix(wv)}`, "ui/windows");
-      }
-    }
-    this.loadAtlas("namebox", "ui");
+
     this.loadImage("pbinfo_player", "ui");
     this.loadImage("pbinfo_player_stats", "ui");
     this.loadImage("pbinfo_player_mini", "ui");
@@ -88,20 +95,20 @@ export class LoadingScene extends SceneBase {
     this.loadImage("achv_bar_3", "ui");
     this.loadImage("achv_bar_4", "ui");
     this.loadImage("achv_bar_5", "ui");
-    this.loadImage("shiny_star", "ui", "shiny.png");
-    this.loadImage("shiny_star_1", "ui", "shiny_1.png");
-    this.loadImage("shiny_star_2", "ui", "shiny_2.png");
-    this.loadImage("shiny_star_small", "ui", "shiny_small.png");
-    this.loadImage("shiny_star_small_1", "ui", "shiny_small_1.png");
-    this.loadImage("shiny_star_small_2", "ui", "shiny_small_2.png");
-    this.loadImage("favorite", "ui", "favorite.png");
-    this.loadImage("passive_bg", "ui", "passive_bg.png");
+    this.loadImage("shiny_star", "ui", { filenameRoot: "shiny" });
+    this.loadImage("shiny_star_1", "ui", { filenameRoot: "shiny_1" });
+    this.loadImage("shiny_star_2", "ui", { filenameRoot: "shiny_2" });
+    this.loadImage("shiny_star_small", "ui", { filenameRoot: "shiny_small" });
+    this.loadImage("shiny_star_small_1", "ui", { filenameRoot: "shiny_small_1" });
+    this.loadImage("shiny_star_small_2", "ui", { filenameRoot: "shiny_small_2" });
+    this.loadImage("favorite", "ui");
+    this.loadImage("passive_bg", "ui");
     this.loadAtlas("shiny_icons", "ui");
-    this.loadImage("ha_capsule", "ui", "ha_capsule.png");
-    this.loadImage("champion_ribbon", "ui", "champion_ribbon.png");
+    this.loadImage("ha_capsule", "ui");
+    this.loadImage("champion_ribbon", "ui");
     this.loadImage("icon_spliced", "ui");
-    this.loadImage("icon_lock", "ui", "icon_lock.png");
-    this.loadImage("icon_stop", "ui", "icon_stop.png");
+    this.loadImage("icon_lock", "ui");
+    this.loadImage("icon_stop", "ui");
     this.loadImage("icon_tera", "ui");
     this.loadImage("type_tera", "ui");
     this.loadAtlas("type_bgs", "ui");
@@ -150,6 +157,9 @@ export class LoadingScene extends SceneBase {
     for (let t = 1; t <= 3; t++) {
       this.loadImage(`summary_tabs_${t}`, "ui");
     }
+
+    this.loadImage("egg_list_bg", "ui");
+    this.loadImage("egg_summary_bg", "ui");
 
     this.loadImage("scroll_bar", "ui");
     this.loadImage("scroll_bar_handle", "ui");
@@ -210,12 +220,12 @@ export class LoadingScene extends SceneBase {
     this.loadAtlas("trainer_f_back_pb", "trainer");
 
     // Load character sprites
-    this.loadAtlas("c_rival_m", "character", "rival_m");
-    this.loadAtlas("c_rival_f", "character", "rival_f");
+    this.loadAtlas("c_rival_m", "character", { filenameRoot: "rival_m" });
+    this.loadAtlas("c_rival_f", "character", { filenameRoot: "rival_f" });
 
     // Load pokemon-related images
-    this.loadImage("pkmn__back__sub", "pokemon/back", "sub.png");
-    this.loadImage("pkmn__sub", "pokemon", "sub.png");
+    this.loadImage("pkmn__back__sub", "pokemon/back", { filenameRoot: "sub" });
+    this.loadImage("pkmn__sub", "pokemon", { filenameRoot: "sub" });
     this.loadAtlas("battle_stats", "effects");
     this.loadAtlas("shiny", "effects");
     this.loadAtlas("shiny_2", "effects");
@@ -228,11 +238,12 @@ export class LoadingScene extends SceneBase {
 
     this.loadAtlas("pb", "");
     this.loadAtlas("items", "");
+    this.loadAtlas("categories", "");
 
     // Get current language and load the different localized images and atlases for it
     const lang = i18next.resolvedLanguage ?? "en";
-    this.loadLocalizedAtlas("statuses", "", lang);
-    this.loadLocalizedAtlas("types", "", lang);
+    this.loadAtlas("statuses", "", { languageKey: lang });
+    this.loadAtlas("types", "", { languageKey: lang });
 
     const availableLangs = ["en", "de", "it", "fr", "ja", "ko", "es-ES", "pt-BR", "zh-CN"];
     if (lang && availableLangs.includes(lang)) {
@@ -240,8 +251,6 @@ export class LoadingScene extends SceneBase {
     } else {
       this.loadImage("halloween2024-event-en", "events");
     }
-
-    this.loadAtlas("categories", "");
 
     this.loadAtlas("egg", "egg");
     this.loadAtlas("egg_crack", "egg");
@@ -257,9 +266,6 @@ export class LoadingScene extends SceneBase {
     this.loadImage("gacha_eggs", "egg");
     this.loadAtlas("gacha_hatch", "egg");
     this.loadImage("gacha_knob", "egg");
-
-    this.loadImage("egg_list_bg", "ui");
-    this.loadImage("egg_summary_bg", "ui");
 
     this.loadImage("end_m", "cg");
     this.loadImage("end_f", "cg");

@@ -1,6 +1,4 @@
 export enum UiWindowType {
-  /** @deprecated `0` is not set, window-types start at `1` */
-  INVALID,
   /** @hex #c73625 */
   RED_ORANGE,
   /** @hex #20B098 */

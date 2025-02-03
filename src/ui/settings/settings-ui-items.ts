@@ -224,7 +224,7 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
   {
     key: "uiWindowType",
     label: t("settings:windowType"),
-    options: Array.from({ length: 5 }).map((_, i) => ({ value: i + 1, label: `${i + 1}` })),
+    options: Array.from({ length: 5 }).map((_, i) => ({ value: i, label: `${i + 1}` })),
     doWrap: true,
   },
   {

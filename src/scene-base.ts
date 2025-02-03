@@ -1,6 +1,45 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { UiTheme } from "#enums/ui-theme";
+import { UiWindowType } from "#enums/ui-window-type";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import { getLocalizedFilename } from "#app/utils";
 
+// TODO: remove
 export const legacyCompatibleImages: string[] = [];
+// TODO: move elsewhere
+export const windowTypeDependantAtlases: string[] = [];
+
+/**
+ * Additional parameters that can be used when loading Images, Spritesheets or Atlases.
+ * They allow to automatically handle textures with a file for each language,
+ * atlases/spritesheets that need to be updated live when the {@linkcode UiWindowType} is changed
+ * and UI elements that depend on the current {@linkcode UiTheme}.
+ */
+interface TextureLoadingParams {
+  /**
+   * Optional filename, without the extension. Allows to use a texture key different from the name of the file to load.
+   */
+  filenameRoot?: string;
+  /**
+   * If provided, the languageKey will be checked for compatibility with localized images, or be replaced with "en".
+   * In this case, `_{languageKey}` will be appended to the filename before loading, e.g. "banner_zh-CW.png".
+   */
+  languageKey?: string;
+  /**
+   * If set to `true`, will automatically update any object using this texture when the window type is changed.
+   * Only works for atlases with keys corresponding to each {@linkcode UiWindowType} (starting at "0"), or spritesheets.
+   */
+  windowTypeDependant?: boolean;
+  /**
+   * If set to `true`, will load the filename corresponding to the current {@linkcode UiTheme} (and not the other themes).
+   * Elements that use these need to have `-{uitheme}` at the end of their filename, e.g. "window-dark.png", for each theme.
+   * This is applied before any language specific postfix (e.g. "image-dark_de.png" is correct, "image_de-dark.png" is not).
+   */
+  uiThemeDependant?: boolean;
+}
 
 export class SceneBase extends Phaser.Scene {
   constructor(config?: string | Phaser.Types.Scenes.SettingsConfig) {
@@ -18,40 +57,32 @@ export class SceneBase extends Phaser.Scene {
     return url;
   }
 
-  loadImage(key: string, folder: string, filename?: string) {
-    if (!filename) {
-      filename = `${key}.png`;
-    }
-    this.load.image(key, this.getCachedUrl(`images/${folder}/${filename}`));
+  loadImage(key: string, folder: string, params?: TextureLoadingParams) {
+    const filenameRoot = params ? this.getFilenameRoot(key, params) : key;
+    this.load.image(key, this.getCachedUrl(`images/${folder}/${filenameRoot}.png`));
     if (folder.startsWith("ui")) {
       legacyCompatibleImages.push(key);
       folder = folder.replace("ui", "ui/legacy");
-      this.load.image(`${key}_legacy`, this.getCachedUrl(`images/${folder}/${filename}`));
+      this.load.image(`${key}_legacy`, this.getCachedUrl(`images/${folder}/${filenameRoot}.png`));
     }
   }
 
-  loadSpritesheet(key: string, folder: string, size: number, filename?: string) {
-    if (!filename) {
-      filename = `${key}.png`;
+  loadSpritesheet(key: string, folder: string, width: number, height?: number, params?: TextureLoadingParams) {
+    if (params?.windowTypeDependant) {
+      windowTypeDependantAtlases.push(key);
     }
-    this.load.spritesheet(key, this.getCachedUrl(`images/${folder}/${filename}`), {
-      frameWidth: size,
-      frameHeight: size,
+    const filenameRoot = params ? this.getFilenameRoot(key, params) : key;
+    this.load.spritesheet(key, this.getCachedUrl(`images/${folder}/${filenameRoot}.png`), {
+      frameWidth: width,
+      frameHeight: height ?? width,
     });
-    if (folder.startsWith("ui")) {
-      legacyCompatibleImages.push(key);
-      folder = folder.replace("ui", "ui/legacy");
-      this.load.spritesheet(`${key}_legacy`, this.getCachedUrl(`images/${folder}/${filename}`), {
-        frameWidth: size,
-        frameHeight: size,
-      });
-    }
   }
 
-  loadAtlas(key: string, folder: string, filenameRoot?: string) {
-    if (!filenameRoot) {
-      filenameRoot = key;
+  loadAtlas(key: string, folder: string, params?: TextureLoadingParams) {
+    if (params?.windowTypeDependant) {
+      windowTypeDependantAtlases.push(key);
     }
+    const filenameRoot = params ? this.getFilenameRoot(key, params) : key;
     this.load.atlas(
       key,
       this.getCachedUrl(`images/${folder}/${filenameRoot}.png`),
@@ -68,16 +99,18 @@ export class SceneBase extends Phaser.Scene {
     }
   }
 
-  loadLocalizedImage(key: string, folder: string, languageKey: string) {
-    this.loadImage(key, folder, getLocalizedFilename(key, languageKey));
-  }
-
-  loadLocalizedSpritesheet(key: string, folder: string, size: number, languageKey: string) {
-    this.loadSpritesheet(key, folder, size, getLocalizedFilename(key, languageKey));
-  }
-
-  loadLocalizedAtlas(key: string, folder: string, languageKey: string) {
-    this.loadAtlas(key, folder, getLocalizedFilename(key, languageKey));
+  private getFilenameRoot(
+    key: string,
+    params: { filenameRoot?: string; languageKey?: string; windowTypeDependant?: boolean; uiThemeDependant?: boolean },
+  ) {
+    let filenameRoot = params.filenameRoot ?? key;
+    if (params.uiThemeDependant) {
+      // TODO
+    }
+    if (params.languageKey) {
+      filenameRoot = getLocalizedFilename(filenameRoot, params.languageKey);
+    }
+    return filenameRoot;
   }
 
   loadSe(key: string, folder?: string, filenames?: string | string[]) {

@@ -36,8 +36,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     this.textTimer = null;
     this.textCallbackTimer = null;
 
-    // TODO theme does this get updated properly when window type changes?
-    this.bg = globalScene.add.sprite(0, 0, "bg", settings.display.uiWindowType);
+    this.bg = globalScene.add.sprite(0, 0, "battle_message_box", settings.display.uiWindowType);
     this.bg.setName("sprite-battle-msg-bg");
     this.bg.setOrigin(0, 1);
     ui.add(this.bg);
@@ -79,7 +78,18 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     this.nameBoxContainer = globalScene.add.container(0, -16);
     this.nameBoxContainer.setVisible(false);
 
-    this.nameBox = globalScene.add.nineslice(0, 0, "namebox", settings.display.uiWindowType, 72, 16, 8, 8, 5, 5);
+    this.nameBox = globalScene.add.nineslice(
+      0,
+      0,
+      "trainer_namebox",
+      settings.display.uiWindowType,
+      72,
+      16,
+      8,
+      8,
+      5,
+      5,
+    );
     this.nameBox.setOrigin(0, 0);
 
     this.nameText = addTextObject(8, 0, "Rival", TextStyle.MESSAGE, { maxLines: 1 });
