@@ -6,8 +6,8 @@ import {
   loadCustomMovesForEncounter,
   selectPokemonForOption,
   setEncounterRewards,
-  transitionMysteryEncounterIntroVisuals,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 import { TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#app/data/trainer-config";
 import { ModifierTier } from "#enums/modifier-tier";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";

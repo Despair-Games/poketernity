@@ -7,8 +7,8 @@ import {
   selectOptionThenPokemon,
   selectPokemonForOption,
   setEncounterRewards,
-  transitionMysteryEncounterIntroVisuals,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 import { getRandomPartyMemberFunc, TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#app/data/trainer-config";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
