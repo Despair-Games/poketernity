@@ -74,7 +74,7 @@ export class LoginPhase extends Phase {
                       });
                     },
                     (): void => {
-                      globalScene.toLoginScreen({ showText: false });
+                      globalScene.toLoginScreen({ showText: false, eager: true });
                       this.end();
                     },
                   ],

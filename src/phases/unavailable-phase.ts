@@ -5,7 +5,7 @@ import { UiMode } from "#enums/ui-mode";
 export class UnavailablePhase extends Phase {
   public override start(): void {
     globalScene.ui.setMode(UiMode.UNAVAILABLE, () => {
-      globalScene.toLoginScreen({ showText: true });
+      globalScene.toLoginScreen({ showText: true, eager: true });
       this.end();
     });
   }

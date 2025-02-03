@@ -27,7 +27,6 @@ import { MoveId } from "#enums/move-id";
  * @extends PostDamageAbAttr
  * @see {@linkcode applyPostDamage}
  */
-
 export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
   private helper: ForceSwitchOutHelper = new ForceSwitchOutHelper(SwitchType.SWITCH);
   private hpRatio: number;
@@ -115,7 +114,6 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
  * @param pokemon - The Pokémon whose Shell Bell recovery is being calculated.
  * @returns The amount of health recovered by Shell Bell.
  */
-
 export function calculateShellBellRecovery(pokemon: Pokemon): number {
   const shellBellModifier = pokemon.getHeldItems().find((m) => m.isHitHealModifier());
   if (shellBellModifier) {

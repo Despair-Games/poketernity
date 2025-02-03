@@ -213,17 +213,17 @@ interface GameOverInit {
 }
 
 interface ToTitleScreenInit {
-  /** Whether to add the {@linkcode TitlePhase} to the front of the phase queue or defer it. */
-  eager?: boolean;
   /** Whether to clear the phase queue before adding the {@linkcode TitlePhase}. */
   clearPhaseQueue?: boolean;
+  /** Whether to add the {@linkcode TitlePhase} to the front of the phase queue or defer it. */
+  eager?: boolean;
 }
 
 interface ToLoginScreenInit {
   /** Whether to show text. @default true*/
   showText?: boolean;
   /** Whether to add the {@linkcode LoginPhase} to the front of the phase queue or defer it. */
-  defer?: boolean;
+  eager?: boolean;
 }
 
 //#endregion
@@ -3746,13 +3746,13 @@ export default class BattleScene extends SceneBase {
    * Sends the player to the login screen.
    * @param showText Whether to show text
    */
-  toLoginScreen({ defer, showText = true }: ToLoginScreenInit = {}): void {
+  toLoginScreen({ eager, showText = true }: ToLoginScreenInit = {}): void {
     const loginPhase = new LoginPhase(showText);
 
-    if (defer) {
-      this.pushPhase(loginPhase);
-    } else {
+    if (eager) {
       this.unshiftPhase(loginPhase);
+    } else {
+      this.pushPhase(loginPhase);
     }
   }
 
