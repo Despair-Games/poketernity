@@ -153,7 +153,7 @@ export class Weather {
         AbAttrFlag.SUPPRESS_WEATHER_EFFECT,
       );
 
-      if (suppressWeatherEffectAbAttr.some((attr) => !this.isImmutable() || attr.affectsImmutable)) {
+      if (suppressWeatherEffectAbAttr.some((attr) => attr.affectsImmutable) && !this.isImmutable()) {
         return true;
       }
     }
