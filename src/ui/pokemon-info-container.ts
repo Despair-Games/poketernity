@@ -4,7 +4,7 @@ import { globalScene } from "#app/global-scene";
 import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
 import { Gender } from "#enums/gender";
 import { getNatureName } from "../data/nature";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "../field/pokemon";
 import i18next from "i18next";
 import { DexAttr } from "#app/data/dex-attributes";
@@ -437,7 +437,9 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
 
       for (let m = 0; m < 4; m++) {
         const move = m < pokemon.moveset.length && pokemon.moveset[m] ? pokemon.moveset[m]!.getMove() : null;
-        this.pokemonMoveBgs[m].setFrame(ElementType[move ? move.type : ElementType.UNKNOWN].toString().toLowerCase());
+        this.pokemonMoveBgs[m].setFrame(
+          ElementalType[move ? move.type : ElementalType.UNKNOWN].toString().toLowerCase(),
+        );
         this.pokemonMoveLabels[m].setText(move ? move.name : "-");
         this.pokemonMovesContainers[m].setVisible(!!move);
       }

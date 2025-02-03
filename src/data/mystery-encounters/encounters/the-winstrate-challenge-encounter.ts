@@ -20,7 +20,7 @@ import { Abilities } from "#enums/abilities";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { MoveId } from "#enums/move-id";
 import { Nature } from "#enums/nature";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { BerryType } from "#enums/berry-type";
 import { Stat } from "#enums/stat";
 import { SpeciesFormChangeManualTrigger } from "#app/data/pokemon-forms";
@@ -316,14 +316,14 @@ function getVictoriaTrainerConfig(): EnemyPartyConfig {
         modifierConfigs: [
           {
             modifier: generateModifierType(modifierTypes.ATTACK_TYPE_BOOSTER, [
-              ElementType.PSYCHIC,
+              ElementalType.PSYCHIC,
             ]) as PokemonHeldItemModifierType,
             stackCount: 1,
             isTransferable: false,
           },
           {
             modifier: generateModifierType(modifierTypes.ATTACK_TYPE_BOOSTER, [
-              ElementType.FAIRY,
+              ElementalType.FAIRY,
             ]) as PokemonHeldItemModifierType,
             stackCount: 1,
             isTransferable: false,

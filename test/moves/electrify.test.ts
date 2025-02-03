@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -45,7 +45,7 @@ describe("Moves - Electrify", () => {
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
-    expect(enemyPokemon.getMoveType).toHaveLastReturnedWith(ElementType.ELECTRIC);
+    expect(enemyPokemon.getMoveType).toHaveLastReturnedWith(ElementalType.ELECTRIC);
     expect(playerPokemon.hp).toBe(playerPokemon.getMaxHp());
   });
 
@@ -63,7 +63,7 @@ describe("Moves - Electrify", () => {
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
-    expect(enemyPokemon.getMoveType).toHaveLastReturnedWith(ElementType.ELECTRIC);
+    expect(enemyPokemon.getMoveType).toHaveLastReturnedWith(ElementalType.ELECTRIC);
     expect(playerPokemon.hp).toBe(playerPokemon.getMaxHp());
   });
 });

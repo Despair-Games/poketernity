@@ -1,4 +1,4 @@
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { randSeedInt, getEnumValues } from "#app/utils";
 import type { SpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
@@ -9,7 +9,6 @@ import { TimeOfDay } from "#enums/time-of-day";
 import { TrainerType } from "#enums/trainer-type";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { uncatchableSpecies } from "./uncatchable-species";
-// import beautify from "json-beautify";
 
 export function getBiomeName(biome: Biome | -1) {
   if (biome === -1) {
@@ -3992,69 +3991,69 @@ export const biomeTrainerPools: BiomeTrainerPools = {
 
 export function initBiomes() {
   const pokemonBiomes = [
-    [Species.BULBASAUR, ElementType.GRASS, ElementType.POISON, [[Biome.GRASS, BiomePoolTier.RARE]]],
-    [Species.IVYSAUR, ElementType.GRASS, ElementType.POISON, [[Biome.GRASS, BiomePoolTier.RARE]]],
+    [Species.BULBASAUR, ElementalType.GRASS, ElementalType.POISON, [[Biome.GRASS, BiomePoolTier.RARE]]],
+    [Species.IVYSAUR, ElementalType.GRASS, ElementalType.POISON, [[Biome.GRASS, BiomePoolTier.RARE]]],
     [
       Species.VENUSAUR,
-      ElementType.GRASS,
-      ElementType.POISON,
+      ElementalType.GRASS,
+      ElementalType.POISON,
       [
         [Biome.GRASS, BiomePoolTier.RARE],
         [Biome.GRASS, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.CHARMANDER, ElementType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
-    [Species.CHARMELEON, ElementType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
+    [Species.CHARMANDER, ElementalType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
+    [Species.CHARMELEON, ElementalType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
     [
       Species.CHARIZARD,
-      ElementType.FIRE,
-      ElementType.FLYING,
+      ElementalType.FIRE,
+      ElementalType.FLYING,
       [
         [Biome.VOLCANO, BiomePoolTier.RARE],
         [Biome.VOLCANO, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.SQUIRTLE, ElementType.WATER, -1, [[Biome.LAKE, BiomePoolTier.RARE]]],
-    [Species.WARTORTLE, ElementType.WATER, -1, [[Biome.LAKE, BiomePoolTier.RARE]]],
+    [Species.SQUIRTLE, ElementalType.WATER, -1, [[Biome.LAKE, BiomePoolTier.RARE]]],
+    [Species.WARTORTLE, ElementalType.WATER, -1, [[Biome.LAKE, BiomePoolTier.RARE]]],
     [
       Species.BLASTOISE,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.LAKE, BiomePoolTier.RARE],
         [Biome.LAKE, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.CATERPIE, ElementType.BUG, -1, [[Biome.TOWN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
-    [Species.METAPOD, ElementType.BUG, -1, [[Biome.TOWN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
+    [Species.CATERPIE, ElementalType.BUG, -1, [[Biome.TOWN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
+    [Species.METAPOD, ElementalType.BUG, -1, [[Biome.TOWN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
     [
       Species.BUTTERFREE,
-      ElementType.BUG,
-      ElementType.FLYING,
+      ElementalType.BUG,
+      ElementalType.FLYING,
       [[Biome.FOREST, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.WEEDLE,
-      ElementType.BUG,
-      ElementType.POISON,
+      ElementalType.BUG,
+      ElementalType.POISON,
       [[Biome.TOWN, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.KAKUNA,
-      ElementType.BUG,
-      ElementType.POISON,
+      ElementalType.BUG,
+      ElementalType.POISON,
       [[Biome.TOWN, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.BEEDRILL,
-      ElementType.BUG,
-      ElementType.POISON,
+      ElementalType.BUG,
+      ElementalType.POISON,
       [[Biome.FOREST, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.PIDGEY,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.TOWN, BiomePoolTier.COMMON],
         [Biome.PLAINS, BiomePoolTier.UNCOMMON],
@@ -4063,8 +4062,8 @@ export function initBiomes() {
     ],
     [
       Species.PIDGEOTTO,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.PLAINS, BiomePoolTier.UNCOMMON],
         [Biome.MOUNTAIN, BiomePoolTier.COMMON],
@@ -4072,8 +4071,8 @@ export function initBiomes() {
     ],
     [
       Species.PIDGEOT,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.PLAINS, BiomePoolTier.UNCOMMON],
         [Biome.MOUNTAIN, BiomePoolTier.COMMON],
@@ -4082,7 +4081,7 @@ export function initBiomes() {
     ],
     [
       Species.RATTATA,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.COMMON],
@@ -4092,7 +4091,7 @@ export function initBiomes() {
     ],
     [
       Species.RATICATE,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.METROPOLIS, BiomePoolTier.COMMON],
@@ -4101,8 +4100,8 @@ export function initBiomes() {
     ],
     [
       Species.SPEAROW,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.TOWN, BiomePoolTier.COMMON],
         [Biome.PLAINS, BiomePoolTier.UNCOMMON],
@@ -4111,8 +4110,8 @@ export function initBiomes() {
     ],
     [
       Species.FEAROW,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.PLAINS, BiomePoolTier.UNCOMMON],
         [Biome.MOUNTAIN, BiomePoolTier.COMMON],
@@ -4121,7 +4120,7 @@ export function initBiomes() {
     ],
     [
       Species.EKANS,
-      ElementType.POISON,
+      ElementalType.POISON,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -4132,7 +4131,7 @@ export function initBiomes() {
     ],
     [
       Species.ARBOK,
-      ElementType.POISON,
+      ElementalType.POISON,
       -1,
       [
         [Biome.FOREST, BiomePoolTier.UNCOMMON],
@@ -4143,7 +4142,7 @@ export function initBiomes() {
     ],
     [
       Species.PIKACHU,
-      ElementType.ELECTRIC,
+      ElementalType.ELECTRIC,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.UNCOMMON],
@@ -4151,10 +4150,10 @@ export function initBiomes() {
         [Biome.POWER_PLANT, BiomePoolTier.COMMON],
       ],
     ],
-    [Species.RAICHU, ElementType.ELECTRIC, -1, [[Biome.POWER_PLANT, BiomePoolTier.BOSS]]],
+    [Species.RAICHU, ElementalType.ELECTRIC, -1, [[Biome.POWER_PLANT, BiomePoolTier.BOSS]]],
     [
       Species.SANDSHREW,
-      ElementType.GROUND,
+      ElementalType.GROUND,
       -1,
       [
         [Biome.BADLANDS, BiomePoolTier.UNCOMMON],
@@ -4163,7 +4162,7 @@ export function initBiomes() {
     ],
     [
       Species.SANDSLASH,
-      ElementType.GROUND,
+      ElementalType.GROUND,
       -1,
       [
         [Biome.BADLANDS, BiomePoolTier.UNCOMMON],
@@ -4173,55 +4172,60 @@ export function initBiomes() {
     ],
     [
       Species.NIDORAN_F,
-      ElementType.POISON,
+      ElementalType.POISON,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON, TimeOfDay.DAY],
         [Biome.TALL_GRASS, BiomePoolTier.COMMON, TimeOfDay.DAY],
       ],
     ],
-    [Species.NIDORINA, ElementType.POISON, -1, [[Biome.TALL_GRASS, BiomePoolTier.COMMON, TimeOfDay.DAY]]],
+    [Species.NIDORINA, ElementalType.POISON, -1, [[Biome.TALL_GRASS, BiomePoolTier.COMMON, TimeOfDay.DAY]]],
     [
       Species.NIDOQUEEN,
-      ElementType.POISON,
-      ElementType.GROUND,
+      ElementalType.POISON,
+      ElementalType.GROUND,
       [[Biome.TALL_GRASS, BiomePoolTier.BOSS, TimeOfDay.DAY]],
     ],
     [
       Species.NIDORAN_M,
-      ElementType.POISON,
+      ElementalType.POISON,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON, TimeOfDay.DAY],
         [Biome.TALL_GRASS, BiomePoolTier.COMMON, TimeOfDay.DAY],
       ],
     ],
-    [Species.NIDORINO, ElementType.POISON, -1, [[Biome.TALL_GRASS, BiomePoolTier.COMMON, TimeOfDay.DAY]]],
-    [Species.NIDOKING, ElementType.POISON, ElementType.GROUND, [[Biome.TALL_GRASS, BiomePoolTier.BOSS, TimeOfDay.DAY]]],
+    [Species.NIDORINO, ElementalType.POISON, -1, [[Biome.TALL_GRASS, BiomePoolTier.COMMON, TimeOfDay.DAY]]],
+    [
+      Species.NIDOKING,
+      ElementalType.POISON,
+      ElementalType.GROUND,
+      [[Biome.TALL_GRASS, BiomePoolTier.BOSS, TimeOfDay.DAY]],
+    ],
     [
       Species.CLEFAIRY,
-      ElementType.FAIRY,
+      ElementalType.FAIRY,
       -1,
       [
         [Biome.FAIRY_CAVE, BiomePoolTier.UNCOMMON],
         [Biome.SPACE, BiomePoolTier.COMMON],
       ],
     ],
-    [Species.CLEFABLE, ElementType.FAIRY, -1, [[Biome.SPACE, BiomePoolTier.BOSS]]],
+    [Species.CLEFABLE, ElementalType.FAIRY, -1, [[Biome.SPACE, BiomePoolTier.BOSS]]],
     [
       Species.VULPIX,
-      ElementType.FIRE,
+      ElementalType.FIRE,
       -1,
       [
         [Biome.TALL_GRASS, BiomePoolTier.UNCOMMON],
         [Biome.VOLCANO, BiomePoolTier.COMMON],
       ],
     ],
-    [Species.NINETALES, ElementType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.BOSS]]],
+    [Species.NINETALES, ElementalType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.BOSS]]],
     [
       Species.JIGGLYPUFF,
-      ElementType.NORMAL,
-      ElementType.FAIRY,
+      ElementalType.NORMAL,
+      ElementalType.FAIRY,
       [
         [Biome.MEADOW, BiomePoolTier.UNCOMMON],
         [Biome.FAIRY_CAVE, BiomePoolTier.COMMON],
@@ -4229,8 +4233,8 @@ export function initBiomes() {
     ],
     [
       Species.WIGGLYTUFF,
-      ElementType.NORMAL,
-      ElementType.FAIRY,
+      ElementalType.NORMAL,
+      ElementalType.FAIRY,
       [
         [Biome.MEADOW, BiomePoolTier.UNCOMMON],
         [Biome.FAIRY_CAVE, BiomePoolTier.COMMON],
@@ -4239,8 +4243,8 @@ export function initBiomes() {
     ],
     [
       Species.ZUBAT,
-      ElementType.POISON,
-      ElementType.FLYING,
+      ElementalType.POISON,
+      ElementalType.FLYING,
       [
         [Biome.PLAINS, BiomePoolTier.COMMON, TimeOfDay.NIGHT],
         [Biome.CAVE, BiomePoolTier.COMMON],
@@ -4248,8 +4252,8 @@ export function initBiomes() {
     ],
     [
       Species.GOLBAT,
-      ElementType.POISON,
-      ElementType.FLYING,
+      ElementalType.POISON,
+      ElementalType.FLYING,
       [
         [Biome.PLAINS, BiomePoolTier.COMMON, TimeOfDay.NIGHT],
         [Biome.CAVE, BiomePoolTier.COMMON],
@@ -4257,8 +4261,8 @@ export function initBiomes() {
     ],
     [
       Species.ODDISH,
-      ElementType.GRASS,
-      ElementType.POISON,
+      ElementalType.GRASS,
+      ElementalType.POISON,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.TALL_GRASS, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -4266,20 +4270,20 @@ export function initBiomes() {
     ],
     [
       Species.GLOOM,
-      ElementType.GRASS,
-      ElementType.POISON,
+      ElementalType.GRASS,
+      ElementalType.POISON,
       [[Biome.TALL_GRASS, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.VILEPLUME,
-      ElementType.GRASS,
-      ElementType.POISON,
+      ElementalType.GRASS,
+      ElementalType.POISON,
       [[Biome.TALL_GRASS, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.PARAS,
-      ElementType.BUG,
-      ElementType.GRASS,
+      ElementalType.BUG,
+      ElementalType.GRASS,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON, TimeOfDay.NIGHT],
         [Biome.TALL_GRASS, BiomePoolTier.UNCOMMON, TimeOfDay.NIGHT],
@@ -4288,8 +4292,8 @@ export function initBiomes() {
     ],
     [
       Species.PARASECT,
-      ElementType.BUG,
-      ElementType.GRASS,
+      ElementalType.BUG,
+      ElementalType.GRASS,
       [
         [Biome.TALL_GRASS, BiomePoolTier.UNCOMMON, TimeOfDay.NIGHT],
         [Biome.CAVE, BiomePoolTier.COMMON],
@@ -4298,8 +4302,8 @@ export function initBiomes() {
     ],
     [
       Species.VENONAT,
-      ElementType.BUG,
-      ElementType.POISON,
+      ElementalType.BUG,
+      ElementalType.POISON,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON, TimeOfDay.NIGHT],
         [Biome.TALL_GRASS, BiomePoolTier.UNCOMMON, TimeOfDay.NIGHT],
@@ -4308,18 +4312,18 @@ export function initBiomes() {
     ],
     [
       Species.VENOMOTH,
-      ElementType.BUG,
-      ElementType.POISON,
+      ElementalType.BUG,
+      ElementalType.POISON,
       [
         [Biome.TALL_GRASS, BiomePoolTier.UNCOMMON, TimeOfDay.NIGHT],
         [Biome.FOREST, BiomePoolTier.COMMON, TimeOfDay.NIGHT],
         [Biome.FOREST, BiomePoolTier.BOSS, TimeOfDay.NIGHT],
       ],
     ],
-    [Species.DIGLETT, ElementType.GROUND, -1, [[Biome.BADLANDS, BiomePoolTier.COMMON]]],
+    [Species.DIGLETT, ElementalType.GROUND, -1, [[Biome.BADLANDS, BiomePoolTier.COMMON]]],
     [
       Species.DUGTRIO,
-      ElementType.GROUND,
+      ElementalType.GROUND,
       -1,
       [
         [Biome.BADLANDS, BiomePoolTier.COMMON],
@@ -4328,7 +4332,7 @@ export function initBiomes() {
     ],
     [
       Species.MEOWTH,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -4337,7 +4341,7 @@ export function initBiomes() {
     ],
     [
       Species.PERSIAN,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -4346,7 +4350,7 @@ export function initBiomes() {
     ],
     [
       Species.PSYDUCK,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SWAMP, BiomePoolTier.UNCOMMON],
@@ -4355,7 +4359,7 @@ export function initBiomes() {
     ],
     [
       Species.GOLDUCK,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SWAMP, BiomePoolTier.UNCOMMON],
@@ -4365,7 +4369,7 @@ export function initBiomes() {
     ],
     [
       Species.MANKEY,
-      ElementType.FIGHTING,
+      ElementalType.FIGHTING,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -4374,7 +4378,7 @@ export function initBiomes() {
     ],
     [
       Species.PRIMEAPE,
-      ElementType.FIGHTING,
+      ElementalType.FIGHTING,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -4383,17 +4387,17 @@ export function initBiomes() {
     ],
     [
       Species.GROWLITHE,
-      ElementType.FIRE,
+      ElementalType.FIRE,
       -1,
       [
         [Biome.GRASS, BiomePoolTier.RARE],
         [Biome.VOLCANO, BiomePoolTier.COMMON],
       ],
     ],
-    [Species.ARCANINE, ElementType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.BOSS]]],
+    [Species.ARCANINE, ElementalType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.BOSS]]],
     [
       Species.POLIWAG,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SEA, BiomePoolTier.UNCOMMON],
@@ -4402,17 +4406,17 @@ export function initBiomes() {
     ],
     [
       Species.POLIWHIRL,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SEA, BiomePoolTier.UNCOMMON],
         [Biome.SWAMP, BiomePoolTier.COMMON],
       ],
     ],
-    [Species.POLIWRATH, ElementType.WATER, ElementType.FIGHTING, [[Biome.SWAMP, BiomePoolTier.BOSS]]],
+    [Species.POLIWRATH, ElementalType.WATER, ElementalType.FIGHTING, [[Biome.SWAMP, BiomePoolTier.BOSS]]],
     [
       Species.ABRA,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.RARE],
@@ -4422,17 +4426,17 @@ export function initBiomes() {
     ],
     [
       Species.KADABRA,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.RARE],
         [Biome.RUINS, BiomePoolTier.UNCOMMON],
       ],
     ],
-    [Species.ALAKAZAM, ElementType.PSYCHIC, -1, [[Biome.RUINS, BiomePoolTier.BOSS]]],
+    [Species.ALAKAZAM, ElementalType.PSYCHIC, -1, [[Biome.RUINS, BiomePoolTier.BOSS]]],
     [
       Species.MACHOP,
-      ElementType.FIGHTING,
+      ElementalType.FIGHTING,
       -1,
       [
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON],
@@ -4442,7 +4446,7 @@ export function initBiomes() {
     ],
     [
       Species.MACHOKE,
-      ElementType.FIGHTING,
+      ElementalType.FIGHTING,
       -1,
       [
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON],
@@ -4450,11 +4454,11 @@ export function initBiomes() {
         [Biome.CONSTRUCTION_SITE, BiomePoolTier.COMMON],
       ],
     ],
-    [Species.MACHAMP, ElementType.FIGHTING, -1, [[Biome.CONSTRUCTION_SITE, BiomePoolTier.BOSS]]],
+    [Species.MACHAMP, ElementalType.FIGHTING, -1, [[Biome.CONSTRUCTION_SITE, BiomePoolTier.BOSS]]],
     [
       Species.BELLSPROUT,
-      ElementType.GRASS,
-      ElementType.POISON,
+      ElementalType.GRASS,
+      ElementalType.POISON,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.FOREST, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -4462,20 +4466,20 @@ export function initBiomes() {
     ],
     [
       Species.WEEPINBELL,
-      ElementType.GRASS,
-      ElementType.POISON,
+      ElementalType.GRASS,
+      ElementalType.POISON,
       [[Biome.FOREST, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.VICTREEBEL,
-      ElementType.GRASS,
-      ElementType.POISON,
+      ElementalType.GRASS,
+      ElementalType.POISON,
       [[Biome.FOREST, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.TENTACOOL,
-      ElementType.WATER,
-      ElementType.POISON,
+      ElementalType.WATER,
+      ElementalType.POISON,
       [
         [Biome.SEA, BiomePoolTier.COMMON],
         [Biome.SEABED, BiomePoolTier.UNCOMMON],
@@ -4483,8 +4487,8 @@ export function initBiomes() {
     ],
     [
       Species.TENTACRUEL,
-      ElementType.WATER,
-      ElementType.POISON,
+      ElementalType.WATER,
+      ElementalType.POISON,
       [
         [Biome.SEA, BiomePoolTier.COMMON],
         [Biome.SEA, BiomePoolTier.BOSS],
@@ -4493,8 +4497,8 @@ export function initBiomes() {
     ],
     [
       Species.GEODUDE,
-      ElementType.ROCK,
-      ElementType.GROUND,
+      ElementalType.ROCK,
+      ElementalType.GROUND,
       [
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON],
         [Biome.BADLANDS, BiomePoolTier.COMMON],
@@ -4503,18 +4507,18 @@ export function initBiomes() {
     ],
     [
       Species.GRAVELER,
-      ElementType.ROCK,
-      ElementType.GROUND,
+      ElementalType.ROCK,
+      ElementalType.GROUND,
       [
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON],
         [Biome.BADLANDS, BiomePoolTier.COMMON],
         [Biome.CAVE, BiomePoolTier.UNCOMMON],
       ],
     ],
-    [Species.GOLEM, ElementType.ROCK, ElementType.GROUND, [[Biome.BADLANDS, BiomePoolTier.BOSS]]],
+    [Species.GOLEM, ElementalType.ROCK, ElementalType.GROUND, [[Biome.BADLANDS, BiomePoolTier.BOSS]]],
     [
       Species.PONYTA,
-      ElementType.FIRE,
+      ElementalType.FIRE,
       -1,
       [
         [Biome.MEADOW, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -4523,7 +4527,7 @@ export function initBiomes() {
     ],
     [
       Species.RAPIDASH,
-      ElementType.FIRE,
+      ElementalType.FIRE,
       -1,
       [
         [Biome.MEADOW, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -4533,8 +4537,8 @@ export function initBiomes() {
     ],
     [
       Species.SLOWPOKE,
-      ElementType.WATER,
-      ElementType.PSYCHIC,
+      ElementalType.WATER,
+      ElementalType.PSYCHIC,
       [
         [Biome.SEA, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.SEA, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -4543,8 +4547,8 @@ export function initBiomes() {
     ],
     [
       Species.SLOWBRO,
-      ElementType.WATER,
-      ElementType.PSYCHIC,
+      ElementalType.WATER,
+      ElementalType.PSYCHIC,
       [
         [Biome.SEA, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.SEA, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -4554,8 +4558,8 @@ export function initBiomes() {
     ],
     [
       Species.MAGNEMITE,
-      ElementType.ELECTRIC,
-      ElementType.STEEL,
+      ElementalType.ELECTRIC,
+      ElementalType.STEEL,
       [
         [Biome.POWER_PLANT, BiomePoolTier.COMMON],
         [Biome.FACTORY, BiomePoolTier.COMMON],
@@ -4565,8 +4569,8 @@ export function initBiomes() {
     ],
     [
       Species.MAGNETON,
-      ElementType.ELECTRIC,
-      ElementType.STEEL,
+      ElementalType.ELECTRIC,
+      ElementalType.STEEL,
       [
         [Biome.POWER_PLANT, BiomePoolTier.COMMON],
         [Biome.FACTORY, BiomePoolTier.COMMON],
@@ -4576,8 +4580,8 @@ export function initBiomes() {
     ],
     [
       Species.FARFETCHD,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.PLAINS, BiomePoolTier.SUPER_RARE],
         [Biome.PLAINS, BiomePoolTier.BOSS_RARE],
@@ -4585,24 +4589,24 @@ export function initBiomes() {
     ],
     [
       Species.DODUO,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [[Biome.PLAINS, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.DODRIO,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.PLAINS, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.PLAINS, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
       ],
     ],
-    [Species.SEEL, ElementType.WATER, -1, [[Biome.ICE_CAVE, BiomePoolTier.COMMON]]],
+    [Species.SEEL, ElementalType.WATER, -1, [[Biome.ICE_CAVE, BiomePoolTier.COMMON]]],
     [
       Species.DEWGONG,
-      ElementType.WATER,
-      ElementType.ICE,
+      ElementalType.WATER,
+      ElementalType.ICE,
       [
         [Biome.ICE_CAVE, BiomePoolTier.COMMON],
         [Biome.ICE_CAVE, BiomePoolTier.BOSS],
@@ -4610,7 +4614,7 @@ export function initBiomes() {
     ],
     [
       Species.GRIMER,
-      ElementType.POISON,
+      ElementalType.POISON,
       -1,
       [
         [Biome.SLUM, BiomePoolTier.COMMON],
@@ -4620,7 +4624,7 @@ export function initBiomes() {
     ],
     [
       Species.MUK,
-      ElementType.POISON,
+      ElementalType.POISON,
       -1,
       [
         [Biome.CONSTRUCTION_SITE, BiomePoolTier.UNCOMMON],
@@ -4632,7 +4636,7 @@ export function initBiomes() {
     ],
     [
       Species.SHELLDER,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SEA, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -4642,14 +4646,14 @@ export function initBiomes() {
     ],
     [
       Species.CLOYSTER,
-      ElementType.WATER,
-      ElementType.ICE,
+      ElementalType.WATER,
+      ElementalType.ICE,
       [[Biome.BEACH, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.GASTLY,
-      ElementType.GHOST,
-      ElementType.POISON,
+      ElementalType.GHOST,
+      ElementalType.POISON,
       [
         [Biome.GRAVEYARD, BiomePoolTier.COMMON],
         [Biome.TEMPLE, BiomePoolTier.COMMON],
@@ -4657,18 +4661,18 @@ export function initBiomes() {
     ],
     [
       Species.HAUNTER,
-      ElementType.GHOST,
-      ElementType.POISON,
+      ElementalType.GHOST,
+      ElementalType.POISON,
       [
         [Biome.GRAVEYARD, BiomePoolTier.COMMON],
         [Biome.TEMPLE, BiomePoolTier.COMMON],
       ],
     ],
-    [Species.GENGAR, ElementType.GHOST, ElementType.POISON, [[Biome.GRAVEYARD, BiomePoolTier.BOSS]]],
+    [Species.GENGAR, ElementalType.GHOST, ElementalType.POISON, [[Biome.GRAVEYARD, BiomePoolTier.BOSS]]],
     [
       Species.ONIX,
-      ElementType.ROCK,
-      ElementType.GROUND,
+      ElementalType.ROCK,
+      ElementalType.GROUND,
       [
         [Biome.BADLANDS, BiomePoolTier.RARE],
         [Biome.CAVE, BiomePoolTier.RARE],
@@ -4676,20 +4680,20 @@ export function initBiomes() {
         [Biome.CONSTRUCTION_SITE, BiomePoolTier.RARE],
       ],
     ],
-    [Species.DROWZEE, ElementType.PSYCHIC, -1, [[Biome.RUINS, BiomePoolTier.COMMON]]],
+    [Species.DROWZEE, ElementalType.PSYCHIC, -1, [[Biome.RUINS, BiomePoolTier.COMMON]]],
     [
       Species.HYPNO,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [
         [Biome.RUINS, BiomePoolTier.COMMON],
         [Biome.RUINS, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.KRABBY, ElementType.WATER, -1, [[Biome.BEACH, BiomePoolTier.COMMON]]],
+    [Species.KRABBY, ElementalType.WATER, -1, [[Biome.BEACH, BiomePoolTier.COMMON]]],
     [
       Species.KINGLER,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.BEACH, BiomePoolTier.COMMON],
@@ -4698,7 +4702,7 @@ export function initBiomes() {
     ],
     [
       Species.VOLTORB,
-      ElementType.ELECTRIC,
+      ElementalType.ELECTRIC,
       -1,
       [
         [Biome.POWER_PLANT, BiomePoolTier.COMMON],
@@ -4708,7 +4712,7 @@ export function initBiomes() {
     ],
     [
       Species.ELECTRODE,
-      ElementType.ELECTRIC,
+      ElementalType.ELECTRIC,
       -1,
       [
         [Biome.POWER_PLANT, BiomePoolTier.COMMON],
@@ -4719,8 +4723,8 @@ export function initBiomes() {
     ],
     [
       Species.EXEGGCUTE,
-      ElementType.GRASS,
-      ElementType.PSYCHIC,
+      ElementalType.GRASS,
+      ElementalType.PSYCHIC,
       [
         [Biome.FOREST, BiomePoolTier.RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.JUNGLE, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -4728,13 +4732,13 @@ export function initBiomes() {
     ],
     [
       Species.EXEGGUTOR,
-      ElementType.GRASS,
-      ElementType.PSYCHIC,
+      ElementalType.GRASS,
+      ElementalType.PSYCHIC,
       [[Biome.JUNGLE, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.CUBONE,
-      ElementType.GROUND,
+      ElementalType.GROUND,
       -1,
       [
         [Biome.BADLANDS, BiomePoolTier.COMMON, TimeOfDay.NIGHT],
@@ -4744,7 +4748,7 @@ export function initBiomes() {
     ],
     [
       Species.MAROWAK,
-      ElementType.GROUND,
+      ElementalType.GROUND,
       -1,
       [
         [Biome.BADLANDS, BiomePoolTier.COMMON, TimeOfDay.NIGHT],
@@ -4756,7 +4760,7 @@ export function initBiomes() {
     ],
     [
       Species.HITMONLEE,
-      ElementType.FIGHTING,
+      ElementalType.FIGHTING,
       -1,
       [
         [Biome.DOJO, BiomePoolTier.RARE],
@@ -4766,7 +4770,7 @@ export function initBiomes() {
     ],
     [
       Species.HITMONCHAN,
-      ElementType.FIGHTING,
+      ElementalType.FIGHTING,
       -1,
       [
         [Biome.DOJO, BiomePoolTier.RARE],
@@ -4774,10 +4778,10 @@ export function initBiomes() {
         [Biome.CONSTRUCTION_SITE, BiomePoolTier.RARE],
       ],
     ],
-    [Species.LICKITUNG, ElementType.NORMAL, -1, [[Biome.PLAINS, BiomePoolTier.SUPER_RARE]]],
+    [Species.LICKITUNG, ElementalType.NORMAL, -1, [[Biome.PLAINS, BiomePoolTier.SUPER_RARE]]],
     [
       Species.KOFFING,
-      ElementType.POISON,
+      ElementalType.POISON,
       -1,
       [
         [Biome.SLUM, BiomePoolTier.COMMON],
@@ -4786,7 +4790,7 @@ export function initBiomes() {
     ],
     [
       Species.WEEZING,
-      ElementType.POISON,
+      ElementalType.POISON,
       -1,
       [
         [Biome.SLUM, BiomePoolTier.COMMON],
@@ -4796,8 +4800,8 @@ export function initBiomes() {
     ],
     [
       Species.RHYHORN,
-      ElementType.GROUND,
-      ElementType.ROCK,
+      ElementalType.GROUND,
+      ElementalType.ROCK,
       [
         [Biome.MOUNTAIN, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -4807,8 +4811,8 @@ export function initBiomes() {
     ],
     [
       Species.RHYDON,
-      ElementType.GROUND,
-      ElementType.ROCK,
+      ElementalType.GROUND,
+      ElementalType.ROCK,
       [
         [Biome.MOUNTAIN, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -4818,7 +4822,7 @@ export function initBiomes() {
     ],
     [
       Species.CHANSEY,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.SUPER_RARE],
@@ -4827,24 +4831,24 @@ export function initBiomes() {
     ],
     [
       Species.TANGELA,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [[Biome.JUNGLE, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.KANGASKHAN,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.JUNGLE, BiomePoolTier.SUPER_RARE],
         [Biome.JUNGLE, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.HORSEA, ElementType.WATER, -1, [[Biome.SEA, BiomePoolTier.UNCOMMON]]],
-    [Species.SEADRA, ElementType.WATER, -1, [[Biome.SEA, BiomePoolTier.UNCOMMON]]],
+    [Species.HORSEA, ElementalType.WATER, -1, [[Biome.SEA, BiomePoolTier.UNCOMMON]]],
+    [Species.SEADRA, ElementalType.WATER, -1, [[Biome.SEA, BiomePoolTier.UNCOMMON]]],
     [
       Species.GOLDEEN,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.LAKE, BiomePoolTier.COMMON],
@@ -4853,7 +4857,7 @@ export function initBiomes() {
     ],
     [
       Species.SEAKING,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.LAKE, BiomePoolTier.COMMON],
@@ -4863,7 +4867,7 @@ export function initBiomes() {
     ],
     [
       Species.STARYU,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.BEACH, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -4872,8 +4876,8 @@ export function initBiomes() {
     ],
     [
       Species.STARMIE,
-      ElementType.WATER,
-      ElementType.PSYCHIC,
+      ElementalType.WATER,
+      ElementalType.PSYCHIC,
       [
         [Biome.BEACH, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.BEACH, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -4882,8 +4886,8 @@ export function initBiomes() {
     ],
     [
       Species.MR_MIME,
-      ElementType.PSYCHIC,
-      ElementType.FAIRY,
+      ElementalType.PSYCHIC,
+      ElementalType.FAIRY,
       [
         [Biome.RUINS, BiomePoolTier.RARE],
         [Biome.RUINS, BiomePoolTier.BOSS_RARE],
@@ -4891,8 +4895,8 @@ export function initBiomes() {
     ],
     [
       Species.SCYTHER,
-      ElementType.BUG,
-      ElementType.FLYING,
+      ElementalType.BUG,
+      ElementalType.FLYING,
       [
         [Biome.TALL_GRASS, BiomePoolTier.SUPER_RARE],
         [Biome.FOREST, BiomePoolTier.RARE, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -4901,18 +4905,18 @@ export function initBiomes() {
     ],
     [
       Species.JYNX,
-      ElementType.ICE,
-      ElementType.PSYCHIC,
+      ElementalType.ICE,
+      ElementalType.PSYCHIC,
       [
         [Biome.ICE_CAVE, BiomePoolTier.RARE],
         [Biome.ICE_CAVE, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.ELECTABUZZ, ElementType.ELECTRIC, -1, [[Biome.POWER_PLANT, BiomePoolTier.UNCOMMON]]],
-    [Species.MAGMAR, ElementType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.UNCOMMON]]],
+    [Species.ELECTABUZZ, ElementalType.ELECTRIC, -1, [[Biome.POWER_PLANT, BiomePoolTier.UNCOMMON]]],
+    [Species.MAGMAR, ElementalType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.UNCOMMON]]],
     [
       Species.PINSIR,
-      ElementType.BUG,
+      ElementalType.BUG,
       -1,
       [
         [Biome.TALL_GRASS, BiomePoolTier.RARE],
@@ -4921,7 +4925,7 @@ export function initBiomes() {
     ],
     [
       Species.TAUROS,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.MEADOW, BiomePoolTier.RARE],
@@ -4930,7 +4934,7 @@ export function initBiomes() {
     ],
     [
       Species.MAGIKARP,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SEA, BiomePoolTier.COMMON],
@@ -4939,8 +4943,8 @@ export function initBiomes() {
     ],
     [
       Species.GYARADOS,
-      ElementType.WATER,
-      ElementType.FLYING,
+      ElementalType.WATER,
+      ElementalType.FLYING,
       [
         [Biome.SEA, BiomePoolTier.COMMON],
         [Biome.LAKE, BiomePoolTier.COMMON],
@@ -4949,8 +4953,8 @@ export function initBiomes() {
     ],
     [
       Species.LAPRAS,
-      ElementType.WATER,
-      ElementType.ICE,
+      ElementalType.WATER,
+      ElementalType.ICE,
       [
         [Biome.SEA, BiomePoolTier.RARE],
         [Biome.ICE_CAVE, BiomePoolTier.RARE],
@@ -4959,7 +4963,7 @@ export function initBiomes() {
     ],
     [
       Species.DITTO,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.ULTRA_RARE],
@@ -4971,7 +4975,7 @@ export function initBiomes() {
     ],
     [
       Species.EEVEE,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.SUPER_RARE],
@@ -4982,7 +4986,7 @@ export function initBiomes() {
     ],
     [
       Species.VAPOREON,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.LAKE, BiomePoolTier.SUPER_RARE],
@@ -4991,7 +4995,7 @@ export function initBiomes() {
     ],
     [
       Species.JOLTEON,
-      ElementType.ELECTRIC,
+      ElementalType.ELECTRIC,
       -1,
       [
         [Biome.POWER_PLANT, BiomePoolTier.SUPER_RARE],
@@ -5000,7 +5004,7 @@ export function initBiomes() {
     ],
     [
       Species.FLAREON,
-      ElementType.FIRE,
+      ElementalType.FIRE,
       -1,
       [
         [Biome.VOLCANO, BiomePoolTier.SUPER_RARE],
@@ -5009,7 +5013,7 @@ export function initBiomes() {
     ],
     [
       Species.PORYGON,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.FACTORY, BiomePoolTier.RARE],
@@ -5017,21 +5021,21 @@ export function initBiomes() {
         [Biome.LABORATORY, BiomePoolTier.RARE],
       ],
     ],
-    [Species.OMANYTE, ElementType.ROCK, ElementType.WATER, [[Biome.SEABED, BiomePoolTier.SUPER_RARE]]],
+    [Species.OMANYTE, ElementalType.ROCK, ElementalType.WATER, [[Biome.SEABED, BiomePoolTier.SUPER_RARE]]],
     [
       Species.OMASTAR,
-      ElementType.ROCK,
-      ElementType.WATER,
+      ElementalType.ROCK,
+      ElementalType.WATER,
       [
         [Biome.SEABED, BiomePoolTier.SUPER_RARE],
         [Biome.SEABED, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.KABUTO, ElementType.ROCK, ElementType.WATER, [[Biome.SEABED, BiomePoolTier.SUPER_RARE]]],
+    [Species.KABUTO, ElementalType.ROCK, ElementalType.WATER, [[Biome.SEABED, BiomePoolTier.SUPER_RARE]]],
     [
       Species.KABUTOPS,
-      ElementType.ROCK,
-      ElementType.WATER,
+      ElementalType.ROCK,
+      ElementalType.WATER,
       [
         [Biome.SEABED, BiomePoolTier.SUPER_RARE],
         [Biome.SEABED, BiomePoolTier.BOSS_RARE],
@@ -5039,8 +5043,8 @@ export function initBiomes() {
     ],
     [
       Species.AERODACTYL,
-      ElementType.ROCK,
-      ElementType.FLYING,
+      ElementalType.ROCK,
+      ElementalType.FLYING,
       [
         [Biome.WASTELAND, BiomePoolTier.SUPER_RARE],
         [Biome.WASTELAND, BiomePoolTier.BOSS_RARE],
@@ -5048,7 +5052,7 @@ export function initBiomes() {
     ],
     [
       Species.SNORLAX,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.SUPER_RARE],
@@ -5057,55 +5061,60 @@ export function initBiomes() {
     ],
     [
       Species.ARTICUNO,
-      ElementType.ICE,
-      ElementType.FLYING,
+      ElementalType.ICE,
+      ElementalType.FLYING,
       [
         [Biome.ICE_CAVE, BiomePoolTier.ULTRA_RARE],
         [Biome.ICE_CAVE, BiomePoolTier.BOSS_SUPER_RARE],
       ],
     ],
-    [Species.ZAPDOS, ElementType.ELECTRIC, ElementType.FLYING, [[Biome.POWER_PLANT, BiomePoolTier.BOSS_SUPER_RARE]]],
-    [Species.MOLTRES, ElementType.FIRE, ElementType.FLYING, [[Biome.VOLCANO, BiomePoolTier.BOSS_SUPER_RARE]]],
-    [Species.DRATINI, ElementType.DRAGON, -1, [[Biome.WASTELAND, BiomePoolTier.RARE]]],
-    [Species.DRAGONAIR, ElementType.DRAGON, -1, [[Biome.WASTELAND, BiomePoolTier.RARE]]],
+    [
+      Species.ZAPDOS,
+      ElementalType.ELECTRIC,
+      ElementalType.FLYING,
+      [[Biome.POWER_PLANT, BiomePoolTier.BOSS_SUPER_RARE]],
+    ],
+    [Species.MOLTRES, ElementalType.FIRE, ElementalType.FLYING, [[Biome.VOLCANO, BiomePoolTier.BOSS_SUPER_RARE]]],
+    [Species.DRATINI, ElementalType.DRAGON, -1, [[Biome.WASTELAND, BiomePoolTier.RARE]]],
+    [Species.DRAGONAIR, ElementalType.DRAGON, -1, [[Biome.WASTELAND, BiomePoolTier.RARE]]],
     [
       Species.DRAGONITE,
-      ElementType.DRAGON,
-      ElementType.FLYING,
+      ElementalType.DRAGON,
+      ElementalType.FLYING,
       [
         [Biome.WASTELAND, BiomePoolTier.RARE],
         [Biome.WASTELAND, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.MEWTWO, ElementType.PSYCHIC, -1, [[Biome.LABORATORY, BiomePoolTier.BOSS_ULTRA_RARE]]],
-    [Species.MEW, ElementType.PSYCHIC, -1, []],
-    [Species.CHIKORITA, ElementType.GRASS, -1, [[Biome.TALL_GRASS, BiomePoolTier.RARE]]],
-    [Species.BAYLEEF, ElementType.GRASS, -1, [[Biome.TALL_GRASS, BiomePoolTier.RARE]]],
+    [Species.MEWTWO, ElementalType.PSYCHIC, -1, [[Biome.LABORATORY, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [Species.MEW, ElementalType.PSYCHIC, -1, []],
+    [Species.CHIKORITA, ElementalType.GRASS, -1, [[Biome.TALL_GRASS, BiomePoolTier.RARE]]],
+    [Species.BAYLEEF, ElementalType.GRASS, -1, [[Biome.TALL_GRASS, BiomePoolTier.RARE]]],
     [
       Species.MEGANIUM,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [
         [Biome.TALL_GRASS, BiomePoolTier.RARE],
         [Biome.TALL_GRASS, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.CYNDAQUIL, ElementType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
-    [Species.QUILAVA, ElementType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
+    [Species.CYNDAQUIL, ElementalType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
+    [Species.QUILAVA, ElementalType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
     [
       Species.TYPHLOSION,
-      ElementType.FIRE,
+      ElementalType.FIRE,
       -1,
       [
         [Biome.VOLCANO, BiomePoolTier.RARE],
         [Biome.VOLCANO, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.TOTODILE, ElementType.WATER, -1, [[Biome.SWAMP, BiomePoolTier.RARE]]],
-    [Species.CROCONAW, ElementType.WATER, -1, [[Biome.SWAMP, BiomePoolTier.RARE]]],
+    [Species.TOTODILE, ElementalType.WATER, -1, [[Biome.SWAMP, BiomePoolTier.RARE]]],
+    [Species.CROCONAW, ElementalType.WATER, -1, [[Biome.SWAMP, BiomePoolTier.RARE]]],
     [
       Species.FERALIGATR,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SWAMP, BiomePoolTier.RARE],
@@ -5114,7 +5123,7 @@ export function initBiomes() {
     ],
     [
       Species.SENTRET,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -5123,7 +5132,7 @@ export function initBiomes() {
     ],
     [
       Species.FURRET,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -5132,8 +5141,8 @@ export function initBiomes() {
     ],
     [
       Species.HOOTHOOT,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.TOWN, BiomePoolTier.COMMON, TimeOfDay.NIGHT],
         [Biome.FOREST, BiomePoolTier.UNCOMMON, TimeOfDay.NIGHT],
@@ -5141,8 +5150,8 @@ export function initBiomes() {
     ],
     [
       Species.NOCTOWL,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.FOREST, BiomePoolTier.UNCOMMON, TimeOfDay.NIGHT],
         [Biome.FOREST, BiomePoolTier.BOSS, TimeOfDay.NIGHT],
@@ -5150,8 +5159,8 @@ export function initBiomes() {
     ],
     [
       Species.LEDYBA,
-      ElementType.BUG,
-      ElementType.FLYING,
+      ElementalType.BUG,
+      ElementalType.FLYING,
       [
         [Biome.TOWN, BiomePoolTier.COMMON, TimeOfDay.DAWN],
         [Biome.MEADOW, BiomePoolTier.COMMON, TimeOfDay.DAWN],
@@ -5159,8 +5168,8 @@ export function initBiomes() {
     ],
     [
       Species.LEDIAN,
-      ElementType.BUG,
-      ElementType.FLYING,
+      ElementalType.BUG,
+      ElementalType.FLYING,
       [
         [Biome.MEADOW, BiomePoolTier.COMMON, TimeOfDay.DAWN],
         [Biome.MEADOW, BiomePoolTier.BOSS, TimeOfDay.DAWN],
@@ -5168,8 +5177,8 @@ export function initBiomes() {
     ],
     [
       Species.SPINARAK,
-      ElementType.BUG,
-      ElementType.POISON,
+      ElementalType.BUG,
+      ElementalType.POISON,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON, TimeOfDay.DUSK],
         [Biome.TOWN, BiomePoolTier.COMMON, TimeOfDay.NIGHT],
@@ -5182,8 +5191,8 @@ export function initBiomes() {
     ],
     [
       Species.ARIADOS,
-      ElementType.BUG,
-      ElementType.POISON,
+      ElementalType.BUG,
+      ElementalType.POISON,
       [
         [Biome.TALL_GRASS, BiomePoolTier.UNCOMMON, TimeOfDay.NIGHT],
         [Biome.FOREST, BiomePoolTier.UNCOMMON, TimeOfDay.DUSK],
@@ -5193,11 +5202,11 @@ export function initBiomes() {
         [Biome.JUNGLE, BiomePoolTier.COMMON, TimeOfDay.NIGHT],
       ],
     ],
-    [Species.CROBAT, ElementType.POISON, ElementType.FLYING, [[Biome.CAVE, BiomePoolTier.BOSS]]],
+    [Species.CROBAT, ElementalType.POISON, ElementalType.FLYING, [[Biome.CAVE, BiomePoolTier.BOSS]]],
     [
       Species.CHINCHOU,
-      ElementType.WATER,
-      ElementType.ELECTRIC,
+      ElementalType.WATER,
+      ElementalType.ELECTRIC,
       [
         [Biome.SEA, BiomePoolTier.UNCOMMON, TimeOfDay.NIGHT],
         [Biome.SEABED, BiomePoolTier.COMMON],
@@ -5205,23 +5214,23 @@ export function initBiomes() {
     ],
     [
       Species.LANTURN,
-      ElementType.WATER,
-      ElementType.ELECTRIC,
+      ElementalType.WATER,
+      ElementalType.ELECTRIC,
       [
         [Biome.SEA, BiomePoolTier.UNCOMMON, TimeOfDay.NIGHT],
         [Biome.SEABED, BiomePoolTier.COMMON],
         [Biome.SEABED, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.PICHU, ElementType.ELECTRIC, -1, []],
-    [Species.CLEFFA, ElementType.FAIRY, -1, []],
-    [Species.IGGLYBUFF, ElementType.NORMAL, ElementType.FAIRY, []],
-    [Species.TOGEPI, ElementType.FAIRY, -1, []],
-    [Species.TOGETIC, ElementType.FAIRY, ElementType.FLYING, [[Biome.FAIRY_CAVE, BiomePoolTier.UNCOMMON]]],
+    [Species.PICHU, ElementalType.ELECTRIC, -1, []],
+    [Species.CLEFFA, ElementalType.FAIRY, -1, []],
+    [Species.IGGLYBUFF, ElementalType.NORMAL, ElementalType.FAIRY, []],
+    [Species.TOGEPI, ElementalType.FAIRY, -1, []],
+    [Species.TOGETIC, ElementalType.FAIRY, ElementalType.FLYING, [[Biome.FAIRY_CAVE, BiomePoolTier.UNCOMMON]]],
     [
       Species.NATU,
-      ElementType.PSYCHIC,
-      ElementType.FLYING,
+      ElementalType.PSYCHIC,
+      ElementalType.FLYING,
       [
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON],
         [Biome.RUINS, BiomePoolTier.COMMON],
@@ -5230,8 +5239,8 @@ export function initBiomes() {
     ],
     [
       Species.XATU,
-      ElementType.PSYCHIC,
-      ElementType.FLYING,
+      ElementalType.PSYCHIC,
+      ElementalType.FLYING,
       [
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON],
         [Biome.RUINS, BiomePoolTier.COMMON],
@@ -5241,7 +5250,7 @@ export function initBiomes() {
     ],
     [
       Species.MAREEP,
-      ElementType.ELECTRIC,
+      ElementalType.ELECTRIC,
       -1,
       [
         [Biome.MEADOW, BiomePoolTier.UNCOMMON],
@@ -5250,7 +5259,7 @@ export function initBiomes() {
     ],
     [
       Species.FLAAFFY,
-      ElementType.ELECTRIC,
+      ElementalType.ELECTRIC,
       -1,
       [
         [Biome.MEADOW, BiomePoolTier.UNCOMMON],
@@ -5259,7 +5268,7 @@ export function initBiomes() {
     ],
     [
       Species.AMPHAROS,
-      ElementType.ELECTRIC,
+      ElementalType.ELECTRIC,
       -1,
       [
         [Biome.MEADOW, BiomePoolTier.UNCOMMON],
@@ -5268,14 +5277,14 @@ export function initBiomes() {
     ],
     [
       Species.BELLOSSOM,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [[Biome.TALL_GRASS, BiomePoolTier.BOSS_RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.MARILL,
-      ElementType.WATER,
-      ElementType.FAIRY,
+      ElementalType.WATER,
+      ElementalType.FAIRY,
       [
         [Biome.LAKE, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.FAIRY_CAVE, BiomePoolTier.COMMON],
@@ -5283,8 +5292,8 @@ export function initBiomes() {
     ],
     [
       Species.AZUMARILL,
-      ElementType.WATER,
-      ElementType.FAIRY,
+      ElementalType.WATER,
+      ElementalType.FAIRY,
       [
         [Biome.LAKE, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.LAKE, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -5293,7 +5302,7 @@ export function initBiomes() {
     ],
     [
       Species.SUDOWOODO,
-      ElementType.ROCK,
+      ElementalType.ROCK,
       -1,
       [
         [Biome.GRASS, BiomePoolTier.SUPER_RARE],
@@ -5302,7 +5311,7 @@ export function initBiomes() {
     ],
     [
       Species.POLITOED,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SWAMP, BiomePoolTier.SUPER_RARE],
@@ -5311,8 +5320,8 @@ export function initBiomes() {
     ],
     [
       Species.HOPPIP,
-      ElementType.GRASS,
-      ElementType.FLYING,
+      ElementalType.GRASS,
+      ElementalType.FLYING,
       [
         [Biome.TOWN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.GRASS, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -5320,32 +5329,32 @@ export function initBiomes() {
     ],
     [
       Species.SKIPLOOM,
-      ElementType.GRASS,
-      ElementType.FLYING,
+      ElementalType.GRASS,
+      ElementalType.FLYING,
       [[Biome.GRASS, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.JUMPLUFF,
-      ElementType.GRASS,
-      ElementType.FLYING,
+      ElementalType.GRASS,
+      ElementalType.FLYING,
       [[Biome.GRASS, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
-    [Species.AIPOM, ElementType.NORMAL, -1, [[Biome.JUNGLE, BiomePoolTier.COMMON]]],
+    [Species.AIPOM, ElementalType.NORMAL, -1, [[Biome.JUNGLE, BiomePoolTier.COMMON]]],
     [
       Species.SUNKERN,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.GRASS, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
       ],
     ],
-    [Species.SUNFLORA, ElementType.GRASS, -1, [[Biome.GRASS, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
-    [Species.YANMA, ElementType.BUG, ElementType.FLYING, [[Biome.JUNGLE, BiomePoolTier.RARE]]],
+    [Species.SUNFLORA, ElementalType.GRASS, -1, [[Biome.GRASS, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
+    [Species.YANMA, ElementalType.BUG, ElementalType.FLYING, [[Biome.JUNGLE, BiomePoolTier.RARE]]],
     [
       Species.WOOPER,
-      ElementType.WATER,
-      ElementType.GROUND,
+      ElementalType.WATER,
+      ElementalType.GROUND,
       [
         [Biome.LAKE, BiomePoolTier.UNCOMMON],
         [Biome.SWAMP, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -5353,8 +5362,8 @@ export function initBiomes() {
     ],
     [
       Species.QUAGSIRE,
-      ElementType.WATER,
-      ElementType.GROUND,
+      ElementalType.WATER,
+      ElementalType.GROUND,
       [
         [Biome.LAKE, BiomePoolTier.UNCOMMON],
         [Biome.SWAMP, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -5363,7 +5372,7 @@ export function initBiomes() {
     ],
     [
       Species.ESPEON,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [
         [Biome.RUINS, BiomePoolTier.SUPER_RARE, TimeOfDay.DAY],
@@ -5372,7 +5381,7 @@ export function initBiomes() {
     ],
     [
       Species.UMBREON,
-      ElementType.DARK,
+      ElementalType.DARK,
       -1,
       [
         [Biome.ABYSS, BiomePoolTier.SUPER_RARE],
@@ -5381,8 +5390,8 @@ export function initBiomes() {
     ],
     [
       Species.MURKROW,
-      ElementType.DARK,
-      ElementType.FLYING,
+      ElementalType.DARK,
+      ElementalType.FLYING,
       [
         [Biome.MOUNTAIN, BiomePoolTier.RARE, TimeOfDay.NIGHT],
         [Biome.ABYSS, BiomePoolTier.COMMON],
@@ -5390,47 +5399,47 @@ export function initBiomes() {
     ],
     [
       Species.SLOWKING,
-      ElementType.WATER,
-      ElementType.PSYCHIC,
+      ElementalType.WATER,
+      ElementalType.PSYCHIC,
       [
         [Biome.LAKE, BiomePoolTier.SUPER_RARE],
         [Biome.LAKE, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.MISDREAVUS, ElementType.GHOST, -1, [[Biome.GRAVEYARD, BiomePoolTier.RARE]]],
-    [Species.UNOWN, ElementType.PSYCHIC, -1, [[Biome.RUINS, BiomePoolTier.COMMON]]],
+    [Species.MISDREAVUS, ElementalType.GHOST, -1, [[Biome.GRAVEYARD, BiomePoolTier.RARE]]],
+    [Species.UNOWN, ElementalType.PSYCHIC, -1, [[Biome.RUINS, BiomePoolTier.COMMON]]],
     [
       Species.WOBBUFFET,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [
         [Biome.RUINS, BiomePoolTier.RARE],
         [Biome.RUINS, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.GIRAFARIG, ElementType.NORMAL, ElementType.PSYCHIC, [[Biome.TALL_GRASS, BiomePoolTier.RARE]]],
-    [Species.PINECO, ElementType.BUG, -1, [[Biome.FOREST, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]]],
+    [Species.GIRAFARIG, ElementalType.NORMAL, ElementalType.PSYCHIC, [[Biome.TALL_GRASS, BiomePoolTier.RARE]]],
+    [Species.PINECO, ElementalType.BUG, -1, [[Biome.FOREST, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]]],
     [
       Species.FORRETRESS,
-      ElementType.BUG,
-      ElementType.STEEL,
+      ElementalType.BUG,
+      ElementalType.STEEL,
       [
         [Biome.FOREST, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.FOREST, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
       ],
     ],
-    [Species.DUNSPARCE, ElementType.NORMAL, -1, [[Biome.PLAINS, BiomePoolTier.SUPER_RARE]]],
-    [Species.GLIGAR, ElementType.GROUND, ElementType.FLYING, [[Biome.BADLANDS, BiomePoolTier.RARE]]],
-    [Species.STEELIX, ElementType.STEEL, ElementType.GROUND, [[Biome.BADLANDS, BiomePoolTier.BOSS_RARE]]],
+    [Species.DUNSPARCE, ElementalType.NORMAL, -1, [[Biome.PLAINS, BiomePoolTier.SUPER_RARE]]],
+    [Species.GLIGAR, ElementalType.GROUND, ElementalType.FLYING, [[Biome.BADLANDS, BiomePoolTier.RARE]]],
+    [Species.STEELIX, ElementalType.STEEL, ElementalType.GROUND, [[Biome.BADLANDS, BiomePoolTier.BOSS_RARE]]],
     [
       Species.SNUBBULL,
-      ElementType.FAIRY,
+      ElementalType.FAIRY,
       -1,
       [[Biome.MEADOW, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.GRANBULL,
-      ElementType.FAIRY,
+      ElementalType.FAIRY,
       -1,
       [
         [Biome.MEADOW, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -5439,18 +5448,18 @@ export function initBiomes() {
     ],
     [
       Species.QWILFISH,
-      ElementType.WATER,
-      ElementType.POISON,
+      ElementalType.WATER,
+      ElementalType.POISON,
       [
         [Biome.SEABED, BiomePoolTier.RARE],
         [Biome.SEABED, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.SCIZOR, ElementType.BUG, ElementType.STEEL, [[Biome.JUNGLE, BiomePoolTier.BOSS_RARE]]],
+    [Species.SCIZOR, ElementalType.BUG, ElementalType.STEEL, [[Biome.JUNGLE, BiomePoolTier.BOSS_RARE]]],
     [
       Species.SHUCKLE,
-      ElementType.BUG,
-      ElementType.ROCK,
+      ElementalType.BUG,
+      ElementalType.ROCK,
       [
         [Biome.CAVE, BiomePoolTier.SUPER_RARE],
         [Biome.CAVE, BiomePoolTier.BOSS_RARE],
@@ -5458,8 +5467,8 @@ export function initBiomes() {
     ],
     [
       Species.HERACROSS,
-      ElementType.BUG,
-      ElementType.FIGHTING,
+      ElementalType.BUG,
+      ElementalType.FIGHTING,
       [
         [Biome.FOREST, BiomePoolTier.RARE],
         [Biome.FOREST, BiomePoolTier.BOSS_RARE],
@@ -5467,8 +5476,8 @@ export function initBiomes() {
     ],
     [
       Species.SNEASEL,
-      ElementType.DARK,
-      ElementType.ICE,
+      ElementalType.DARK,
+      ElementalType.ICE,
       [
         [Biome.ICE_CAVE, BiomePoolTier.UNCOMMON],
         [Biome.SNOWY_FOREST, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -5477,7 +5486,7 @@ export function initBiomes() {
     ],
     [
       Species.TEDDIURSA,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.FOREST, BiomePoolTier.UNCOMMON],
@@ -5488,7 +5497,7 @@ export function initBiomes() {
     ],
     [
       Species.URSARING,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.FOREST, BiomePoolTier.UNCOMMON],
@@ -5500,7 +5509,7 @@ export function initBiomes() {
     ],
     [
       Species.SLUGMA,
-      ElementType.FIRE,
+      ElementalType.FIRE,
       -1,
       [
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON],
@@ -5509,8 +5518,8 @@ export function initBiomes() {
     ],
     [
       Species.MAGCARGO,
-      ElementType.FIRE,
-      ElementType.ROCK,
+      ElementalType.FIRE,
+      ElementalType.ROCK,
       [
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON],
         [Biome.VOLCANO, BiomePoolTier.COMMON],
@@ -5519,8 +5528,8 @@ export function initBiomes() {
     ],
     [
       Species.SWINUB,
-      ElementType.ICE,
-      ElementType.GROUND,
+      ElementalType.ICE,
+      ElementalType.GROUND,
       [
         [Biome.ICE_CAVE, BiomePoolTier.COMMON],
         [Biome.SNOWY_FOREST, BiomePoolTier.COMMON],
@@ -5528,8 +5537,8 @@ export function initBiomes() {
     ],
     [
       Species.PILOSWINE,
-      ElementType.ICE,
-      ElementType.GROUND,
+      ElementalType.ICE,
+      ElementalType.GROUND,
       [
         [Biome.ICE_CAVE, BiomePoolTier.COMMON],
         [Biome.SNOWY_FOREST, BiomePoolTier.COMMON],
@@ -5537,17 +5546,17 @@ export function initBiomes() {
     ],
     [
       Species.CORSOLA,
-      ElementType.WATER,
-      ElementType.ROCK,
+      ElementalType.WATER,
+      ElementalType.ROCK,
       [
         [Biome.SEABED, BiomePoolTier.RARE],
         [Biome.SEABED, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.REMORAID, ElementType.WATER, -1, [[Biome.SEABED, BiomePoolTier.COMMON]]],
+    [Species.REMORAID, ElementalType.WATER, -1, [[Biome.SEABED, BiomePoolTier.COMMON]]],
     [
       Species.OCTILLERY,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SEABED, BiomePoolTier.RARE],
@@ -5556,8 +5565,8 @@ export function initBiomes() {
     ],
     [
       Species.DELIBIRD,
-      ElementType.ICE,
-      ElementType.FLYING,
+      ElementalType.ICE,
+      ElementalType.FLYING,
       [
         [Biome.ICE_CAVE, BiomePoolTier.SUPER_RARE],
         [Biome.SNOWY_FOREST, BiomePoolTier.RARE],
@@ -5565,8 +5574,8 @@ export function initBiomes() {
     ],
     [
       Species.MANTINE,
-      ElementType.WATER,
-      ElementType.FLYING,
+      ElementalType.WATER,
+      ElementalType.FLYING,
       [
         [Biome.SEABED, BiomePoolTier.RARE],
         [Biome.SEABED, BiomePoolTier.BOSS],
@@ -5574,8 +5583,8 @@ export function initBiomes() {
     ],
     [
       Species.SKARMORY,
-      ElementType.STEEL,
-      ElementType.FLYING,
+      ElementalType.STEEL,
+      ElementalType.FLYING,
       [
         [Biome.MOUNTAIN, BiomePoolTier.RARE],
         [Biome.MOUNTAIN, BiomePoolTier.BOSS],
@@ -5583,8 +5592,8 @@ export function initBiomes() {
     ],
     [
       Species.HOUNDOUR,
-      ElementType.DARK,
-      ElementType.FIRE,
+      ElementalType.DARK,
+      ElementalType.FIRE,
       [
         [Biome.METROPOLIS, BiomePoolTier.COMMON, TimeOfDay.NIGHT],
         [Biome.ABYSS, BiomePoolTier.COMMON],
@@ -5592,8 +5601,8 @@ export function initBiomes() {
     ],
     [
       Species.HOUNDOOM,
-      ElementType.DARK,
-      ElementType.FIRE,
+      ElementalType.DARK,
+      ElementalType.FIRE,
       [
         [Biome.METROPOLIS, BiomePoolTier.COMMON, TimeOfDay.NIGHT],
         [Biome.ABYSS, BiomePoolTier.COMMON],
@@ -5602,17 +5611,22 @@ export function initBiomes() {
     ],
     [
       Species.KINGDRA,
-      ElementType.WATER,
-      ElementType.DRAGON,
+      ElementalType.WATER,
+      ElementalType.DRAGON,
       [
         [Biome.SEA, BiomePoolTier.SUPER_RARE],
         [Biome.SEA, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.PHANPY, ElementType.GROUND, -1, [[Biome.BADLANDS, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
+    [
+      Species.PHANPY,
+      ElementalType.GROUND,
+      -1,
+      [[Biome.BADLANDS, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
+    ],
     [
       Species.DONPHAN,
-      ElementType.GROUND,
+      ElementalType.GROUND,
       -1,
       [
         [Biome.BADLANDS, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -5621,7 +5635,7 @@ export function initBiomes() {
     ],
     [
       Species.PORYGON2,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.FACTORY, BiomePoolTier.RARE],
@@ -5631,7 +5645,7 @@ export function initBiomes() {
     ],
     [
       Species.STANTLER,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.FOREST, BiomePoolTier.RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -5639,11 +5653,11 @@ export function initBiomes() {
         [Biome.SNOWY_FOREST, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
       ],
     ],
-    [Species.SMEARGLE, ElementType.NORMAL, -1, [[Biome.METROPOLIS, BiomePoolTier.SUPER_RARE]]],
-    [Species.TYROGUE, ElementType.FIGHTING, -1, []],
+    [Species.SMEARGLE, ElementalType.NORMAL, -1, [[Biome.METROPOLIS, BiomePoolTier.SUPER_RARE]]],
+    [Species.TYROGUE, ElementalType.FIGHTING, -1, []],
     [
       Species.HITMONTOP,
-      ElementType.FIGHTING,
+      ElementalType.FIGHTING,
       -1,
       [
         [Biome.DOJO, BiomePoolTier.SUPER_RARE],
@@ -5651,22 +5665,22 @@ export function initBiomes() {
         [Biome.CONSTRUCTION_SITE, BiomePoolTier.SUPER_RARE],
       ],
     ],
-    [Species.SMOOCHUM, ElementType.ICE, ElementType.PSYCHIC, []],
-    [Species.ELEKID, ElementType.ELECTRIC, -1, []],
-    [Species.MAGBY, ElementType.FIRE, -1, []],
+    [Species.SMOOCHUM, ElementalType.ICE, ElementalType.PSYCHIC, []],
+    [Species.ELEKID, ElementalType.ELECTRIC, -1, []],
+    [Species.MAGBY, ElementalType.FIRE, -1, []],
     [
       Species.MILTANK,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.MEADOW, BiomePoolTier.RARE],
         [Biome.MEADOW, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.BLISSEY, ElementType.NORMAL, -1, [[Biome.MEADOW, BiomePoolTier.BOSS_RARE]]],
+    [Species.BLISSEY, ElementalType.NORMAL, -1, [[Biome.MEADOW, BiomePoolTier.BOSS_RARE]]],
     [
       Species.RAIKOU,
-      ElementType.ELECTRIC,
+      ElementalType.ELECTRIC,
       -1,
       [
         [Biome.POWER_PLANT, BiomePoolTier.ULTRA_RARE],
@@ -5675,7 +5689,7 @@ export function initBiomes() {
     ],
     [
       Species.ENTEI,
-      ElementType.FIRE,
+      ElementalType.FIRE,
       -1,
       [
         [Biome.VOLCANO, BiomePoolTier.ULTRA_RARE],
@@ -5684,7 +5698,7 @@ export function initBiomes() {
     ],
     [
       Species.SUICUNE,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.LAKE, BiomePoolTier.ULTRA_RARE],
@@ -5693,8 +5707,8 @@ export function initBiomes() {
     ],
     [
       Species.LARVITAR,
-      ElementType.ROCK,
-      ElementType.GROUND,
+      ElementalType.ROCK,
+      ElementalType.GROUND,
       [
         [Biome.MOUNTAIN, BiomePoolTier.SUPER_RARE],
         [Biome.WASTELAND, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -5702,8 +5716,8 @@ export function initBiomes() {
     ],
     [
       Species.PUPITAR,
-      ElementType.ROCK,
-      ElementType.GROUND,
+      ElementalType.ROCK,
+      ElementalType.GROUND,
       [
         [Biome.MOUNTAIN, BiomePoolTier.SUPER_RARE],
         [Biome.WASTELAND, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -5711,44 +5725,44 @@ export function initBiomes() {
     ],
     [
       Species.TYRANITAR,
-      ElementType.ROCK,
-      ElementType.DARK,
+      ElementalType.ROCK,
+      ElementalType.DARK,
       [
         [Biome.WASTELAND, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.WASTELAND, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
       ],
     ],
-    [Species.LUGIA, ElementType.PSYCHIC, ElementType.FLYING, [[Biome.SEA, BiomePoolTier.BOSS_ULTRA_RARE]]],
-    [Species.HO_OH, ElementType.FIRE, ElementType.FLYING, [[Biome.MOUNTAIN, BiomePoolTier.BOSS_ULTRA_RARE]]],
-    [Species.CELEBI, ElementType.PSYCHIC, ElementType.GRASS, []],
-    [Species.TREECKO, ElementType.GRASS, -1, [[Biome.FOREST, BiomePoolTier.RARE]]],
-    [Species.GROVYLE, ElementType.GRASS, -1, [[Biome.FOREST, BiomePoolTier.RARE]]],
+    [Species.LUGIA, ElementalType.PSYCHIC, ElementalType.FLYING, [[Biome.SEA, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [Species.HO_OH, ElementalType.FIRE, ElementalType.FLYING, [[Biome.MOUNTAIN, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [Species.CELEBI, ElementalType.PSYCHIC, ElementalType.GRASS, []],
+    [Species.TREECKO, ElementalType.GRASS, -1, [[Biome.FOREST, BiomePoolTier.RARE]]],
+    [Species.GROVYLE, ElementalType.GRASS, -1, [[Biome.FOREST, BiomePoolTier.RARE]]],
     [
       Species.SCEPTILE,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [
         [Biome.FOREST, BiomePoolTier.RARE],
         [Biome.FOREST, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.TORCHIC, ElementType.FIRE, -1, [[Biome.MOUNTAIN, BiomePoolTier.RARE]]],
-    [Species.COMBUSKEN, ElementType.FIRE, ElementType.FIGHTING, [[Biome.MOUNTAIN, BiomePoolTier.RARE]]],
+    [Species.TORCHIC, ElementalType.FIRE, -1, [[Biome.MOUNTAIN, BiomePoolTier.RARE]]],
+    [Species.COMBUSKEN, ElementalType.FIRE, ElementalType.FIGHTING, [[Biome.MOUNTAIN, BiomePoolTier.RARE]]],
     [
       Species.BLAZIKEN,
-      ElementType.FIRE,
-      ElementType.FIGHTING,
+      ElementalType.FIRE,
+      ElementalType.FIGHTING,
       [
         [Biome.MOUNTAIN, BiomePoolTier.RARE],
         [Biome.MOUNTAIN, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.MUDKIP, ElementType.WATER, -1, [[Biome.SWAMP, BiomePoolTier.RARE]]],
-    [Species.MARSHTOMP, ElementType.WATER, ElementType.GROUND, [[Biome.SWAMP, BiomePoolTier.RARE]]],
+    [Species.MUDKIP, ElementalType.WATER, -1, [[Biome.SWAMP, BiomePoolTier.RARE]]],
+    [Species.MARSHTOMP, ElementalType.WATER, ElementalType.GROUND, [[Biome.SWAMP, BiomePoolTier.RARE]]],
     [
       Species.SWAMPERT,
-      ElementType.WATER,
-      ElementType.GROUND,
+      ElementalType.WATER,
+      ElementalType.GROUND,
       [
         [Biome.SWAMP, BiomePoolTier.RARE],
         [Biome.SWAMP, BiomePoolTier.BOSS_RARE],
@@ -5756,7 +5770,7 @@ export function initBiomes() {
     ],
     [
       Species.POOCHYENA,
-      ElementType.DARK,
+      ElementalType.DARK,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -5767,7 +5781,7 @@ export function initBiomes() {
     ],
     [
       Species.MIGHTYENA,
-      ElementType.DARK,
+      ElementalType.DARK,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -5777,7 +5791,7 @@ export function initBiomes() {
     ],
     [
       Species.ZIGZAGOON,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.COMMON],
@@ -5787,7 +5801,7 @@ export function initBiomes() {
     ],
     [
       Species.LINOONE,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.COMMON],
@@ -5795,22 +5809,22 @@ export function initBiomes() {
         [Biome.METROPOLIS, BiomePoolTier.COMMON],
       ],
     ],
-    [Species.WURMPLE, ElementType.BUG, -1, [[Biome.TOWN, BiomePoolTier.COMMON]]],
-    [Species.SILCOON, ElementType.BUG, -1, [[Biome.TOWN, BiomePoolTier.COMMON, TimeOfDay.DAY]]],
+    [Species.WURMPLE, ElementalType.BUG, -1, [[Biome.TOWN, BiomePoolTier.COMMON]]],
+    [Species.SILCOON, ElementalType.BUG, -1, [[Biome.TOWN, BiomePoolTier.COMMON, TimeOfDay.DAY]]],
     [
       Species.BEAUTIFLY,
-      ElementType.BUG,
-      ElementType.FLYING,
+      ElementalType.BUG,
+      ElementalType.FLYING,
       [
         [Biome.FOREST, BiomePoolTier.COMMON, TimeOfDay.DAY],
         [Biome.FOREST, BiomePoolTier.BOSS, TimeOfDay.DAY],
       ],
     ],
-    [Species.CASCOON, ElementType.BUG, -1, [[Biome.TOWN, BiomePoolTier.COMMON, TimeOfDay.NIGHT]]],
+    [Species.CASCOON, ElementalType.BUG, -1, [[Biome.TOWN, BiomePoolTier.COMMON, TimeOfDay.NIGHT]]],
     [
       Species.DUSTOX,
-      ElementType.BUG,
-      ElementType.POISON,
+      ElementalType.BUG,
+      ElementalType.POISON,
       [
         [Biome.FOREST, BiomePoolTier.COMMON, TimeOfDay.NIGHT],
         [Biome.FOREST, BiomePoolTier.BOSS, TimeOfDay.NIGHT],
@@ -5818,8 +5832,8 @@ export function initBiomes() {
     ],
     [
       Species.LOTAD,
-      ElementType.WATER,
-      ElementType.GRASS,
+      ElementalType.WATER,
+      ElementalType.GRASS,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.LAKE, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -5828,8 +5842,8 @@ export function initBiomes() {
     ],
     [
       Species.LOMBRE,
-      ElementType.WATER,
-      ElementType.GRASS,
+      ElementalType.WATER,
+      ElementalType.GRASS,
       [
         [Biome.LAKE, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.SWAMP, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -5837,13 +5851,13 @@ export function initBiomes() {
     ],
     [
       Species.LUDICOLO,
-      ElementType.WATER,
-      ElementType.GRASS,
+      ElementalType.WATER,
+      ElementalType.GRASS,
       [[Biome.SWAMP, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.SEEDOT,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -5853,8 +5867,8 @@ export function initBiomes() {
     ],
     [
       Species.NUZLEAF,
-      ElementType.GRASS,
-      ElementType.DARK,
+      ElementalType.GRASS,
+      ElementalType.DARK,
       [
         [Biome.GRASS, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.FOREST, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -5862,14 +5876,14 @@ export function initBiomes() {
     ],
     [
       Species.SHIFTRY,
-      ElementType.GRASS,
-      ElementType.DARK,
+      ElementalType.GRASS,
+      ElementalType.DARK,
       [[Biome.FOREST, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.TAILLOW,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.TOWN, BiomePoolTier.COMMON],
         [Biome.MOUNTAIN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -5877,8 +5891,8 @@ export function initBiomes() {
     ],
     [
       Species.SWELLOW,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.MOUNTAIN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.MOUNTAIN, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -5886,14 +5900,14 @@ export function initBiomes() {
     ],
     [
       Species.WINGULL,
-      ElementType.WATER,
-      ElementType.FLYING,
+      ElementalType.WATER,
+      ElementalType.FLYING,
       [[Biome.SEA, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.PELIPPER,
-      ElementType.WATER,
-      ElementType.FLYING,
+      ElementalType.WATER,
+      ElementalType.FLYING,
       [
         [Biome.SEA, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.SEA, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -5901,8 +5915,8 @@ export function initBiomes() {
     ],
     [
       Species.RALTS,
-      ElementType.PSYCHIC,
-      ElementType.FAIRY,
+      ElementalType.PSYCHIC,
+      ElementalType.FAIRY,
       [
         [Biome.TOWN, BiomePoolTier.SUPER_RARE],
         [Biome.MEADOW, BiomePoolTier.UNCOMMON],
@@ -5911,8 +5925,8 @@ export function initBiomes() {
     ],
     [
       Species.KIRLIA,
-      ElementType.PSYCHIC,
-      ElementType.FAIRY,
+      ElementalType.PSYCHIC,
+      ElementalType.FAIRY,
       [
         [Biome.MEADOW, BiomePoolTier.UNCOMMON],
         [Biome.FAIRY_CAVE, BiomePoolTier.UNCOMMON],
@@ -5920,8 +5934,8 @@ export function initBiomes() {
     ],
     [
       Species.GARDEVOIR,
-      ElementType.PSYCHIC,
-      ElementType.FAIRY,
+      ElementalType.PSYCHIC,
+      ElementalType.FAIRY,
       [
         [Biome.MEADOW, BiomePoolTier.UNCOMMON],
         [Biome.MEADOW, BiomePoolTier.BOSS],
@@ -5930,8 +5944,8 @@ export function initBiomes() {
     ],
     [
       Species.SURSKIT,
-      ElementType.BUG,
-      ElementType.WATER,
+      ElementalType.BUG,
+      ElementalType.WATER,
       [
         [Biome.TOWN, BiomePoolTier.RARE],
         [Biome.LAKE, BiomePoolTier.UNCOMMON],
@@ -5939,8 +5953,8 @@ export function initBiomes() {
     ],
     [
       Species.MASQUERAIN,
-      ElementType.BUG,
-      ElementType.FLYING,
+      ElementalType.BUG,
+      ElementalType.FLYING,
       [
         [Biome.LAKE, BiomePoolTier.UNCOMMON],
         [Biome.LAKE, BiomePoolTier.BOSS],
@@ -5948,7 +5962,7 @@ export function initBiomes() {
     ],
     [
       Species.SHROOMISH,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -5959,8 +5973,8 @@ export function initBiomes() {
     ],
     [
       Species.BRELOOM,
-      ElementType.GRASS,
-      ElementType.FIGHTING,
+      ElementalType.GRASS,
+      ElementalType.FIGHTING,
       [
         [Biome.GRASS, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.FOREST, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -5968,11 +5982,11 @@ export function initBiomes() {
         [Biome.JUNGLE, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
       ],
     ],
-    [Species.SLAKOTH, ElementType.NORMAL, -1, [[Biome.JUNGLE, BiomePoolTier.RARE]]],
-    [Species.VIGOROTH, ElementType.NORMAL, -1, [[Biome.JUNGLE, BiomePoolTier.RARE]]],
+    [Species.SLAKOTH, ElementalType.NORMAL, -1, [[Biome.JUNGLE, BiomePoolTier.RARE]]],
+    [Species.VIGOROTH, ElementalType.NORMAL, -1, [[Biome.JUNGLE, BiomePoolTier.RARE]]],
     [
       Species.SLAKING,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.JUNGLE, BiomePoolTier.RARE],
@@ -5981,8 +5995,8 @@ export function initBiomes() {
     ],
     [
       Species.NINCADA,
-      ElementType.BUG,
-      ElementType.GROUND,
+      ElementalType.BUG,
+      ElementalType.GROUND,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON],
         [Biome.TALL_GRASS, BiomePoolTier.COMMON],
@@ -5990,27 +6004,27 @@ export function initBiomes() {
     ],
     [
       Species.NINJASK,
-      ElementType.BUG,
-      ElementType.FLYING,
+      ElementalType.BUG,
+      ElementalType.FLYING,
       [
         [Biome.TALL_GRASS, BiomePoolTier.COMMON],
         [Biome.TALL_GRASS, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.SHEDINJA, ElementType.BUG, ElementType.GHOST, [[Biome.TALL_GRASS, BiomePoolTier.SUPER_RARE]]],
+    [Species.SHEDINJA, ElementalType.BUG, ElementalType.GHOST, [[Biome.TALL_GRASS, BiomePoolTier.SUPER_RARE]]],
     [
       Species.WHISMUR,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON],
         [Biome.CAVE, BiomePoolTier.COMMON],
       ],
     ],
-    [Species.LOUDRED, ElementType.NORMAL, -1, [[Biome.CAVE, BiomePoolTier.COMMON]]],
+    [Species.LOUDRED, ElementalType.NORMAL, -1, [[Biome.CAVE, BiomePoolTier.COMMON]]],
     [
       Species.EXPLOUD,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.CAVE, BiomePoolTier.COMMON],
@@ -6019,7 +6033,7 @@ export function initBiomes() {
     ],
     [
       Species.MAKUHITA,
-      ElementType.FIGHTING,
+      ElementalType.FIGHTING,
       -1,
       [
         [Biome.CAVE, BiomePoolTier.UNCOMMON],
@@ -6028,7 +6042,7 @@ export function initBiomes() {
     ],
     [
       Species.HARIYAMA,
-      ElementType.FIGHTING,
+      ElementalType.FIGHTING,
       -1,
       [
         [Biome.CAVE, BiomePoolTier.UNCOMMON],
@@ -6036,11 +6050,11 @@ export function initBiomes() {
         [Biome.DOJO, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.AZURILL, ElementType.NORMAL, ElementType.FAIRY, []],
-    [Species.NOSEPASS, ElementType.ROCK, -1, [[Biome.CAVE, BiomePoolTier.UNCOMMON]]],
+    [Species.AZURILL, ElementalType.NORMAL, ElementalType.FAIRY, []],
+    [Species.NOSEPASS, ElementalType.ROCK, -1, [[Biome.CAVE, BiomePoolTier.UNCOMMON]]],
     [
       Species.SKITTY,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -6049,7 +6063,7 @@ export function initBiomes() {
     ],
     [
       Species.DELCATTY,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.MEADOW, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -6058,8 +6072,8 @@ export function initBiomes() {
     ],
     [
       Species.SABLEYE,
-      ElementType.DARK,
-      ElementType.GHOST,
+      ElementalType.DARK,
+      ElementalType.GHOST,
       [
         [Biome.ABYSS, BiomePoolTier.COMMON],
         [Biome.ABYSS, BiomePoolTier.BOSS],
@@ -6067,8 +6081,8 @@ export function initBiomes() {
     ],
     [
       Species.MAWILE,
-      ElementType.STEEL,
-      ElementType.FAIRY,
+      ElementalType.STEEL,
+      ElementalType.FAIRY,
       [
         [Biome.FAIRY_CAVE, BiomePoolTier.COMMON],
         [Biome.FAIRY_CAVE, BiomePoolTier.BOSS],
@@ -6076,8 +6090,8 @@ export function initBiomes() {
     ],
     [
       Species.ARON,
-      ElementType.STEEL,
-      ElementType.ROCK,
+      ElementalType.STEEL,
+      ElementalType.ROCK,
       [
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.MOUNTAIN, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -6085,8 +6099,8 @@ export function initBiomes() {
     ],
     [
       Species.LAIRON,
-      ElementType.STEEL,
-      ElementType.ROCK,
+      ElementalType.STEEL,
+      ElementalType.ROCK,
       [
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.MOUNTAIN, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -6094,51 +6108,51 @@ export function initBiomes() {
     ],
     [
       Species.AGGRON,
-      ElementType.STEEL,
-      ElementType.ROCK,
+      ElementalType.STEEL,
+      ElementalType.ROCK,
       [
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.MOUNTAIN, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.MOUNTAIN, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.MEDITITE, ElementType.FIGHTING, ElementType.PSYCHIC, [[Biome.DOJO, BiomePoolTier.COMMON]]],
+    [Species.MEDITITE, ElementalType.FIGHTING, ElementalType.PSYCHIC, [[Biome.DOJO, BiomePoolTier.COMMON]]],
     [
       Species.MEDICHAM,
-      ElementType.FIGHTING,
-      ElementType.PSYCHIC,
+      ElementalType.FIGHTING,
+      ElementalType.PSYCHIC,
       [
         [Biome.DOJO, BiomePoolTier.COMMON],
         [Biome.DOJO, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.ELECTRIKE, ElementType.ELECTRIC, -1, [[Biome.POWER_PLANT, BiomePoolTier.COMMON]]],
+    [Species.ELECTRIKE, ElementalType.ELECTRIC, -1, [[Biome.POWER_PLANT, BiomePoolTier.COMMON]]],
     [
       Species.MANECTRIC,
-      ElementType.ELECTRIC,
+      ElementalType.ELECTRIC,
       -1,
       [
         [Biome.POWER_PLANT, BiomePoolTier.COMMON],
         [Biome.POWER_PLANT, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.PLUSLE, ElementType.ELECTRIC, -1, [[Biome.POWER_PLANT, BiomePoolTier.UNCOMMON]]],
-    [Species.MINUN, ElementType.ELECTRIC, -1, [[Biome.POWER_PLANT, BiomePoolTier.UNCOMMON]]],
-    [Species.VOLBEAT, ElementType.BUG, -1, [[Biome.MEADOW, BiomePoolTier.RARE, TimeOfDay.NIGHT]]],
-    [Species.ILLUMISE, ElementType.BUG, -1, [[Biome.MEADOW, BiomePoolTier.RARE, TimeOfDay.NIGHT]]],
+    [Species.PLUSLE, ElementalType.ELECTRIC, -1, [[Biome.POWER_PLANT, BiomePoolTier.UNCOMMON]]],
+    [Species.MINUN, ElementalType.ELECTRIC, -1, [[Biome.POWER_PLANT, BiomePoolTier.UNCOMMON]]],
+    [Species.VOLBEAT, ElementalType.BUG, -1, [[Biome.MEADOW, BiomePoolTier.RARE, TimeOfDay.NIGHT]]],
+    [Species.ILLUMISE, ElementalType.BUG, -1, [[Biome.MEADOW, BiomePoolTier.RARE, TimeOfDay.NIGHT]]],
     [
       Species.ROSELIA,
-      ElementType.GRASS,
-      ElementType.POISON,
+      ElementalType.GRASS,
+      ElementalType.POISON,
       [
         [Biome.FOREST, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.MEADOW, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
       ],
     ],
-    [Species.GULPIN, ElementType.POISON, -1, [[Biome.SWAMP, BiomePoolTier.COMMON]]],
+    [Species.GULPIN, ElementalType.POISON, -1, [[Biome.SWAMP, BiomePoolTier.COMMON]]],
     [
       Species.SWALOT,
-      ElementType.POISON,
+      ElementalType.POISON,
       -1,
       [
         [Biome.SWAMP, BiomePoolTier.COMMON],
@@ -6147,14 +6161,14 @@ export function initBiomes() {
     ],
     [
       Species.CARVANHA,
-      ElementType.WATER,
-      ElementType.DARK,
+      ElementalType.WATER,
+      ElementalType.DARK,
       [[Biome.SEA, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.SHARPEDO,
-      ElementType.WATER,
-      ElementType.DARK,
+      ElementalType.WATER,
+      ElementalType.DARK,
       [
         [Biome.SEA, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.SEA, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -6162,7 +6176,7 @@ export function initBiomes() {
     ],
     [
       Species.WAILMER,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SEA, BiomePoolTier.UNCOMMON],
@@ -6171,7 +6185,7 @@ export function initBiomes() {
     ],
     [
       Species.WAILORD,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SEA, BiomePoolTier.UNCOMMON],
@@ -6181,8 +6195,8 @@ export function initBiomes() {
     ],
     [
       Species.NUMEL,
-      ElementType.FIRE,
-      ElementType.GROUND,
+      ElementalType.FIRE,
+      ElementalType.GROUND,
       [
         [Biome.BADLANDS, BiomePoolTier.UNCOMMON],
         [Biome.VOLCANO, BiomePoolTier.COMMON],
@@ -6190,8 +6204,8 @@ export function initBiomes() {
     ],
     [
       Species.CAMERUPT,
-      ElementType.FIRE,
-      ElementType.GROUND,
+      ElementalType.FIRE,
+      ElementalType.GROUND,
       [
         [Biome.BADLANDS, BiomePoolTier.UNCOMMON],
         [Biome.VOLCANO, BiomePoolTier.COMMON],
@@ -6200,7 +6214,7 @@ export function initBiomes() {
     ],
     [
       Species.TORKOAL,
-      ElementType.FIRE,
+      ElementalType.FIRE,
       -1,
       [
         [Biome.VOLCANO, BiomePoolTier.UNCOMMON],
@@ -6209,7 +6223,7 @@ export function initBiomes() {
     ],
     [
       Species.SPOINK,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [
         [Biome.MOUNTAIN, BiomePoolTier.RARE],
@@ -6218,7 +6232,7 @@ export function initBiomes() {
     ],
     [
       Species.GRUMPIG,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [
         [Biome.MOUNTAIN, BiomePoolTier.RARE],
@@ -6226,12 +6240,17 @@ export function initBiomes() {
         [Biome.RUINS, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.SPINDA, ElementType.NORMAL, -1, [[Biome.MEADOW, BiomePoolTier.RARE]]],
-    [Species.TRAPINCH, ElementType.GROUND, -1, [[Biome.DESERT, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
+    [Species.SPINDA, ElementalType.NORMAL, -1, [[Biome.MEADOW, BiomePoolTier.RARE]]],
+    [
+      Species.TRAPINCH,
+      ElementalType.GROUND,
+      -1,
+      [[Biome.DESERT, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
+    ],
     [
       Species.VIBRAVA,
-      ElementType.GROUND,
-      ElementType.DRAGON,
+      ElementalType.GROUND,
+      ElementalType.DRAGON,
       [
         [Biome.DESERT, BiomePoolTier.RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.WASTELAND, BiomePoolTier.COMMON],
@@ -6239,19 +6258,24 @@ export function initBiomes() {
     ],
     [
       Species.FLYGON,
-      ElementType.GROUND,
-      ElementType.DRAGON,
+      ElementalType.GROUND,
+      ElementalType.DRAGON,
       [
         [Biome.DESERT, BiomePoolTier.RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.WASTELAND, BiomePoolTier.COMMON],
         [Biome.WASTELAND, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.CACNEA, ElementType.GRASS, -1, [[Biome.DESERT, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]]],
+    [
+      Species.CACNEA,
+      ElementalType.GRASS,
+      -1,
+      [[Biome.DESERT, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
+    ],
     [
       Species.CACTURNE,
-      ElementType.GRASS,
-      ElementType.DARK,
+      ElementalType.GRASS,
+      ElementalType.DARK,
       [
         [Biome.DESERT, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.DESERT, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -6259,8 +6283,8 @@ export function initBiomes() {
     ],
     [
       Species.SWABLU,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.MOUNTAIN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.WASTELAND, BiomePoolTier.UNCOMMON],
@@ -6268,8 +6292,8 @@ export function initBiomes() {
     ],
     [
       Species.ALTARIA,
-      ElementType.DRAGON,
-      ElementType.FLYING,
+      ElementalType.DRAGON,
+      ElementalType.FLYING,
       [
         [Biome.MOUNTAIN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.MOUNTAIN, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -6278,7 +6302,7 @@ export function initBiomes() {
     ],
     [
       Species.ZANGOOSE,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.TALL_GRASS, BiomePoolTier.RARE],
@@ -6287,7 +6311,7 @@ export function initBiomes() {
     ],
     [
       Species.SEVIPER,
-      ElementType.POISON,
+      ElementalType.POISON,
       -1,
       [
         [Biome.JUNGLE, BiomePoolTier.RARE],
@@ -6296,8 +6320,8 @@ export function initBiomes() {
     ],
     [
       Species.LUNATONE,
-      ElementType.ROCK,
-      ElementType.PSYCHIC,
+      ElementalType.ROCK,
+      ElementalType.PSYCHIC,
       [
         [Biome.SPACE, BiomePoolTier.COMMON, TimeOfDay.NIGHT],
         [Biome.SPACE, BiomePoolTier.BOSS, TimeOfDay.NIGHT],
@@ -6305,28 +6329,28 @@ export function initBiomes() {
     ],
     [
       Species.SOLROCK,
-      ElementType.ROCK,
-      ElementType.PSYCHIC,
+      ElementalType.ROCK,
+      ElementalType.PSYCHIC,
       [
         [Biome.SPACE, BiomePoolTier.COMMON, TimeOfDay.DAY],
         [Biome.SPACE, BiomePoolTier.BOSS, TimeOfDay.DAY],
       ],
     ],
-    [Species.BARBOACH, ElementType.WATER, ElementType.GROUND, [[Biome.SWAMP, BiomePoolTier.UNCOMMON]]],
+    [Species.BARBOACH, ElementalType.WATER, ElementalType.GROUND, [[Biome.SWAMP, BiomePoolTier.UNCOMMON]]],
     [
       Species.WHISCASH,
-      ElementType.WATER,
-      ElementType.GROUND,
+      ElementalType.WATER,
+      ElementalType.GROUND,
       [
         [Biome.SWAMP, BiomePoolTier.UNCOMMON],
         [Biome.SWAMP, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.CORPHISH, ElementType.WATER, -1, [[Biome.BEACH, BiomePoolTier.COMMON]]],
+    [Species.CORPHISH, ElementalType.WATER, -1, [[Biome.BEACH, BiomePoolTier.COMMON]]],
     [
       Species.CRAWDAUNT,
-      ElementType.WATER,
-      ElementType.DARK,
+      ElementalType.WATER,
+      ElementalType.DARK,
       [
         [Biome.BEACH, BiomePoolTier.COMMON],
         [Biome.BEACH, BiomePoolTier.BOSS],
@@ -6334,8 +6358,8 @@ export function initBiomes() {
     ],
     [
       Species.BALTOY,
-      ElementType.GROUND,
-      ElementType.PSYCHIC,
+      ElementalType.GROUND,
+      ElementalType.PSYCHIC,
       [
         [Biome.RUINS, BiomePoolTier.COMMON],
         [Biome.SPACE, BiomePoolTier.UNCOMMON],
@@ -6344,8 +6368,8 @@ export function initBiomes() {
     ],
     [
       Species.CLAYDOL,
-      ElementType.GROUND,
-      ElementType.PSYCHIC,
+      ElementalType.GROUND,
+      ElementalType.PSYCHIC,
       [
         [Biome.RUINS, BiomePoolTier.COMMON],
         [Biome.RUINS, BiomePoolTier.BOSS],
@@ -6353,31 +6377,31 @@ export function initBiomes() {
         [Biome.TEMPLE, BiomePoolTier.UNCOMMON],
       ],
     ],
-    [Species.LILEEP, ElementType.ROCK, ElementType.GRASS, [[Biome.DESERT, BiomePoolTier.SUPER_RARE]]],
+    [Species.LILEEP, ElementalType.ROCK, ElementalType.GRASS, [[Biome.DESERT, BiomePoolTier.SUPER_RARE]]],
     [
       Species.CRADILY,
-      ElementType.ROCK,
-      ElementType.GRASS,
+      ElementalType.ROCK,
+      ElementalType.GRASS,
       [
         [Biome.DESERT, BiomePoolTier.SUPER_RARE],
         [Biome.DESERT, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.ANORITH, ElementType.ROCK, ElementType.BUG, [[Biome.DESERT, BiomePoolTier.SUPER_RARE]]],
+    [Species.ANORITH, ElementalType.ROCK, ElementalType.BUG, [[Biome.DESERT, BiomePoolTier.SUPER_RARE]]],
     [
       Species.ARMALDO,
-      ElementType.ROCK,
-      ElementType.BUG,
+      ElementalType.ROCK,
+      ElementalType.BUG,
       [
         [Biome.DESERT, BiomePoolTier.SUPER_RARE],
         [Biome.DESERT, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.FEEBAS, ElementType.WATER, -1, [[Biome.SEABED, BiomePoolTier.ULTRA_RARE]]],
-    [Species.MILOTIC, ElementType.WATER, -1, [[Biome.SEABED, BiomePoolTier.BOSS_SUPER_RARE]]],
+    [Species.FEEBAS, ElementalType.WATER, -1, [[Biome.SEABED, BiomePoolTier.ULTRA_RARE]]],
+    [Species.MILOTIC, ElementalType.WATER, -1, [[Biome.SEABED, BiomePoolTier.BOSS_SUPER_RARE]]],
     [
       Species.CASTFORM,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.METROPOLIS, BiomePoolTier.ULTRA_RARE],
@@ -6386,17 +6410,17 @@ export function initBiomes() {
     ],
     [
       Species.KECLEON,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.TALL_GRASS, BiomePoolTier.RARE],
         [Biome.TALL_GRASS, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.SHUPPET, ElementType.GHOST, -1, [[Biome.GRAVEYARD, BiomePoolTier.COMMON]]],
+    [Species.SHUPPET, ElementalType.GHOST, -1, [[Biome.GRAVEYARD, BiomePoolTier.COMMON]]],
     [
       Species.BANETTE,
-      ElementType.GHOST,
+      ElementalType.GHOST,
       -1,
       [
         [Biome.GRAVEYARD, BiomePoolTier.COMMON],
@@ -6405,7 +6429,7 @@ export function initBiomes() {
     ],
     [
       Species.DUSKULL,
-      ElementType.GHOST,
+      ElementalType.GHOST,
       -1,
       [
         [Biome.GRAVEYARD, BiomePoolTier.COMMON],
@@ -6414,7 +6438,7 @@ export function initBiomes() {
     ],
     [
       Species.DUSCLOPS,
-      ElementType.GHOST,
+      ElementalType.GHOST,
       -1,
       [
         [Biome.GRAVEYARD, BiomePoolTier.COMMON],
@@ -6423,8 +6447,8 @@ export function initBiomes() {
     ],
     [
       Species.TROPIUS,
-      ElementType.GRASS,
-      ElementType.FLYING,
+      ElementalType.GRASS,
+      ElementalType.FLYING,
       [
         [Biome.TALL_GRASS, BiomePoolTier.RARE],
         [Biome.FOREST, BiomePoolTier.RARE],
@@ -6434,7 +6458,7 @@ export function initBiomes() {
     ],
     [
       Species.CHIMECHO,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [
         [Biome.TEMPLE, BiomePoolTier.UNCOMMON],
@@ -6443,42 +6467,42 @@ export function initBiomes() {
     ],
     [
       Species.ABSOL,
-      ElementType.DARK,
+      ElementalType.DARK,
       -1,
       [
         [Biome.ABYSS, BiomePoolTier.RARE],
         [Biome.ABYSS, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.WYNAUT, ElementType.PSYCHIC, -1, []],
-    [Species.SNORUNT, ElementType.ICE, -1, [[Biome.ICE_CAVE, BiomePoolTier.UNCOMMON]]],
+    [Species.WYNAUT, ElementalType.PSYCHIC, -1, []],
+    [Species.SNORUNT, ElementalType.ICE, -1, [[Biome.ICE_CAVE, BiomePoolTier.UNCOMMON]]],
     [
       Species.GLALIE,
-      ElementType.ICE,
+      ElementalType.ICE,
       -1,
       [
         [Biome.ICE_CAVE, BiomePoolTier.UNCOMMON],
         [Biome.ICE_CAVE, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.SPHEAL, ElementType.ICE, ElementType.WATER, [[Biome.ICE_CAVE, BiomePoolTier.UNCOMMON]]],
-    [Species.SEALEO, ElementType.ICE, ElementType.WATER, [[Biome.ICE_CAVE, BiomePoolTier.UNCOMMON]]],
+    [Species.SPHEAL, ElementalType.ICE, ElementalType.WATER, [[Biome.ICE_CAVE, BiomePoolTier.UNCOMMON]]],
+    [Species.SEALEO, ElementalType.ICE, ElementalType.WATER, [[Biome.ICE_CAVE, BiomePoolTier.UNCOMMON]]],
     [
       Species.WALREIN,
-      ElementType.ICE,
-      ElementType.WATER,
+      ElementalType.ICE,
+      ElementalType.WATER,
       [
         [Biome.ICE_CAVE, BiomePoolTier.UNCOMMON],
         [Biome.ICE_CAVE, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.CLAMPERL, ElementType.WATER, -1, [[Biome.SEABED, BiomePoolTier.COMMON]]],
-    [Species.HUNTAIL, ElementType.WATER, -1, [[Biome.SEABED, BiomePoolTier.BOSS]]],
-    [Species.GOREBYSS, ElementType.WATER, -1, [[Biome.SEABED, BiomePoolTier.BOSS]]],
+    [Species.CLAMPERL, ElementalType.WATER, -1, [[Biome.SEABED, BiomePoolTier.COMMON]]],
+    [Species.HUNTAIL, ElementalType.WATER, -1, [[Biome.SEABED, BiomePoolTier.BOSS]]],
+    [Species.GOREBYSS, ElementalType.WATER, -1, [[Biome.SEABED, BiomePoolTier.BOSS]]],
     [
       Species.RELICANTH,
-      ElementType.WATER,
-      ElementType.ROCK,
+      ElementalType.WATER,
+      ElementalType.ROCK,
       [
         [Biome.SEABED, BiomePoolTier.SUPER_RARE],
         [Biome.SEABED, BiomePoolTier.BOSS_RARE],
@@ -6486,24 +6510,29 @@ export function initBiomes() {
     ],
     [
       Species.LUVDISC,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SEABED, BiomePoolTier.UNCOMMON],
         [Biome.SEABED, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.BAGON, ElementType.DRAGON, -1, [[Biome.WASTELAND, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
+    [
+      Species.BAGON,
+      ElementalType.DRAGON,
+      -1,
+      [[Biome.WASTELAND, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
+    ],
     [
       Species.SHELGON,
-      ElementType.DRAGON,
+      ElementalType.DRAGON,
       -1,
       [[Biome.WASTELAND, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.SALAMENCE,
-      ElementType.DRAGON,
-      ElementType.FLYING,
+      ElementalType.DRAGON,
+      ElementalType.FLYING,
       [
         [Biome.WASTELAND, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.WASTELAND, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -6511,8 +6540,8 @@ export function initBiomes() {
     ],
     [
       Species.BELDUM,
-      ElementType.STEEL,
-      ElementType.PSYCHIC,
+      ElementalType.STEEL,
+      ElementalType.PSYCHIC,
       [
         [Biome.FACTORY, BiomePoolTier.SUPER_RARE],
         [Biome.SPACE, BiomePoolTier.RARE],
@@ -6520,8 +6549,8 @@ export function initBiomes() {
     ],
     [
       Species.METANG,
-      ElementType.STEEL,
-      ElementType.PSYCHIC,
+      ElementalType.STEEL,
+      ElementalType.PSYCHIC,
       [
         [Biome.FACTORY, BiomePoolTier.SUPER_RARE],
         [Biome.SPACE, BiomePoolTier.RARE],
@@ -6529,8 +6558,8 @@ export function initBiomes() {
     ],
     [
       Species.METAGROSS,
-      ElementType.STEEL,
-      ElementType.PSYCHIC,
+      ElementalType.STEEL,
+      ElementalType.PSYCHIC,
       [
         [Biome.FACTORY, BiomePoolTier.SUPER_RARE],
         [Biome.SPACE, BiomePoolTier.RARE],
@@ -6539,7 +6568,7 @@ export function initBiomes() {
     ],
     [
       Species.REGIROCK,
-      ElementType.ROCK,
+      ElementalType.ROCK,
       -1,
       [
         [Biome.DESERT, BiomePoolTier.ULTRA_RARE],
@@ -6548,7 +6577,7 @@ export function initBiomes() {
     ],
     [
       Species.REGICE,
-      ElementType.ICE,
+      ElementalType.ICE,
       -1,
       [
         [Biome.ICE_CAVE, BiomePoolTier.ULTRA_RARE],
@@ -6557,7 +6586,7 @@ export function initBiomes() {
     ],
     [
       Species.REGISTEEL,
-      ElementType.STEEL,
+      ElementalType.STEEL,
       -1,
       [
         [Biome.RUINS, BiomePoolTier.ULTRA_RARE],
@@ -6566,8 +6595,8 @@ export function initBiomes() {
     ],
     [
       Species.LATIAS,
-      ElementType.DRAGON,
-      ElementType.PSYCHIC,
+      ElementalType.DRAGON,
+      ElementalType.PSYCHIC,
       [
         [Biome.PLAINS, BiomePoolTier.ULTRA_RARE],
         [Biome.PLAINS, BiomePoolTier.BOSS_SUPER_RARE],
@@ -6575,46 +6604,46 @@ export function initBiomes() {
     ],
     [
       Species.LATIOS,
-      ElementType.DRAGON,
-      ElementType.PSYCHIC,
+      ElementalType.DRAGON,
+      ElementalType.PSYCHIC,
       [
         [Biome.PLAINS, BiomePoolTier.ULTRA_RARE],
         [Biome.PLAINS, BiomePoolTier.BOSS_SUPER_RARE],
       ],
     ],
-    [Species.KYOGRE, ElementType.WATER, -1, [[Biome.SEABED, BiomePoolTier.BOSS_ULTRA_RARE]]],
-    [Species.GROUDON, ElementType.GROUND, -1, [[Biome.BADLANDS, BiomePoolTier.BOSS_ULTRA_RARE]]],
-    [Species.RAYQUAZA, ElementType.DRAGON, ElementType.FLYING, [[Biome.SPACE, BiomePoolTier.BOSS_ULTRA_RARE]]],
-    [Species.JIRACHI, ElementType.STEEL, ElementType.PSYCHIC, []],
-    [Species.DEOXYS, ElementType.PSYCHIC, -1, []],
-    [Species.TURTWIG, ElementType.GRASS, -1, [[Biome.GRASS, BiomePoolTier.RARE]]],
-    [Species.GROTLE, ElementType.GRASS, -1, [[Biome.GRASS, BiomePoolTier.RARE]]],
+    [Species.KYOGRE, ElementalType.WATER, -1, [[Biome.SEABED, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [Species.GROUDON, ElementalType.GROUND, -1, [[Biome.BADLANDS, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [Species.RAYQUAZA, ElementalType.DRAGON, ElementalType.FLYING, [[Biome.SPACE, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [Species.JIRACHI, ElementalType.STEEL, ElementalType.PSYCHIC, []],
+    [Species.DEOXYS, ElementalType.PSYCHIC, -1, []],
+    [Species.TURTWIG, ElementalType.GRASS, -1, [[Biome.GRASS, BiomePoolTier.RARE]]],
+    [Species.GROTLE, ElementalType.GRASS, -1, [[Biome.GRASS, BiomePoolTier.RARE]]],
     [
       Species.TORTERRA,
-      ElementType.GRASS,
-      ElementType.GROUND,
+      ElementalType.GRASS,
+      ElementalType.GROUND,
       [
         [Biome.GRASS, BiomePoolTier.RARE],
         [Biome.GRASS, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.CHIMCHAR, ElementType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
-    [Species.MONFERNO, ElementType.FIRE, ElementType.FIGHTING, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
+    [Species.CHIMCHAR, ElementalType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
+    [Species.MONFERNO, ElementalType.FIRE, ElementalType.FIGHTING, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
     [
       Species.INFERNAPE,
-      ElementType.FIRE,
-      ElementType.FIGHTING,
+      ElementalType.FIRE,
+      ElementalType.FIGHTING,
       [
         [Biome.VOLCANO, BiomePoolTier.RARE],
         [Biome.VOLCANO, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.PIPLUP, ElementType.WATER, -1, [[Biome.SEA, BiomePoolTier.RARE]]],
-    [Species.PRINPLUP, ElementType.WATER, -1, [[Biome.SEA, BiomePoolTier.RARE]]],
+    [Species.PIPLUP, ElementalType.WATER, -1, [[Biome.SEA, BiomePoolTier.RARE]]],
+    [Species.PRINPLUP, ElementalType.WATER, -1, [[Biome.SEA, BiomePoolTier.RARE]]],
     [
       Species.EMPOLEON,
-      ElementType.WATER,
-      ElementType.STEEL,
+      ElementalType.WATER,
+      ElementalType.STEEL,
       [
         [Biome.SEA, BiomePoolTier.RARE],
         [Biome.SEA, BiomePoolTier.BOSS_RARE],
@@ -6622,8 +6651,8 @@ export function initBiomes() {
     ],
     [
       Species.STARLY,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.TOWN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.PLAINS, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -6632,8 +6661,8 @@ export function initBiomes() {
     ],
     [
       Species.STARAVIA,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.PLAINS, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.MOUNTAIN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -6641,8 +6670,8 @@ export function initBiomes() {
     ],
     [
       Species.STARAPTOR,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.PLAINS, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.MOUNTAIN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -6651,7 +6680,7 @@ export function initBiomes() {
     ],
     [
       Species.BIDOOF,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.COMMON],
@@ -6660,8 +6689,8 @@ export function initBiomes() {
     ],
     [
       Species.BIBAREL,
-      ElementType.NORMAL,
-      ElementType.WATER,
+      ElementalType.NORMAL,
+      ElementalType.WATER,
       [
         [Biome.PLAINS, BiomePoolTier.COMMON],
         [Biome.PLAINS, BiomePoolTier.BOSS],
@@ -6669,7 +6698,7 @@ export function initBiomes() {
     ],
     [
       Species.KRICKETOT,
-      ElementType.BUG,
+      ElementalType.BUG,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -6678,7 +6707,7 @@ export function initBiomes() {
     ],
     [
       Species.KRICKETUNE,
-      ElementType.BUG,
+      ElementalType.BUG,
       -1,
       [
         [Biome.TALL_GRASS, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -6687,7 +6716,7 @@ export function initBiomes() {
     ],
     [
       Species.SHINX,
-      ElementType.ELECTRIC,
+      ElementalType.ELECTRIC,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.RARE, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -6696,7 +6725,7 @@ export function initBiomes() {
     ],
     [
       Species.LUXIO,
-      ElementType.ELECTRIC,
+      ElementalType.ELECTRIC,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.RARE, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -6705,7 +6734,7 @@ export function initBiomes() {
     ],
     [
       Species.LUXRAY,
-      ElementType.ELECTRIC,
+      ElementalType.ELECTRIC,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.RARE, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -6713,28 +6742,28 @@ export function initBiomes() {
         [Biome.POWER_PLANT, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.BUDEW, ElementType.GRASS, ElementType.POISON, []],
+    [Species.BUDEW, ElementalType.GRASS, ElementalType.POISON, []],
     [
       Species.ROSERADE,
-      ElementType.GRASS,
-      ElementType.POISON,
+      ElementalType.GRASS,
+      ElementalType.POISON,
       [[Biome.MEADOW, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
-    [Species.CRANIDOS, ElementType.ROCK, -1, [[Biome.MOUNTAIN, BiomePoolTier.SUPER_RARE]]],
+    [Species.CRANIDOS, ElementalType.ROCK, -1, [[Biome.MOUNTAIN, BiomePoolTier.SUPER_RARE]]],
     [
       Species.RAMPARDOS,
-      ElementType.ROCK,
+      ElementalType.ROCK,
       -1,
       [
         [Biome.MOUNTAIN, BiomePoolTier.SUPER_RARE],
         [Biome.MOUNTAIN, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.SHIELDON, ElementType.ROCK, ElementType.STEEL, [[Biome.MOUNTAIN, BiomePoolTier.SUPER_RARE]]],
+    [Species.SHIELDON, ElementalType.ROCK, ElementalType.STEEL, [[Biome.MOUNTAIN, BiomePoolTier.SUPER_RARE]]],
     [
       Species.BASTIODON,
-      ElementType.ROCK,
-      ElementType.STEEL,
+      ElementalType.ROCK,
+      ElementalType.STEEL,
       [
         [Biome.MOUNTAIN, BiomePoolTier.SUPER_RARE],
         [Biome.MOUNTAIN, BiomePoolTier.BOSS_RARE],
@@ -6742,7 +6771,7 @@ export function initBiomes() {
     ],
     [
       Species.BURMY,
-      ElementType.BUG,
+      ElementalType.BUG,
       -1,
       [
         [Biome.FOREST, BiomePoolTier.UNCOMMON],
@@ -6752,8 +6781,8 @@ export function initBiomes() {
     ],
     [
       Species.WORMADAM,
-      ElementType.BUG,
-      ElementType.GRASS,
+      ElementalType.BUG,
+      ElementalType.GRASS,
       [
         [Biome.FOREST, BiomePoolTier.UNCOMMON],
         [Biome.FOREST, BiomePoolTier.BOSS],
@@ -6765,8 +6794,8 @@ export function initBiomes() {
     ],
     [
       Species.MOTHIM,
-      ElementType.BUG,
-      ElementType.FLYING,
+      ElementalType.BUG,
+      ElementalType.FLYING,
       [
         [Biome.FOREST, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.FOREST, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -6774,8 +6803,8 @@ export function initBiomes() {
     ],
     [
       Species.COMBEE,
-      ElementType.BUG,
-      ElementType.FLYING,
+      ElementalType.BUG,
+      ElementalType.FLYING,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.GRASS, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -6785,8 +6814,8 @@ export function initBiomes() {
     ],
     [
       Species.VESPIQUEN,
-      ElementType.BUG,
-      ElementType.FLYING,
+      ElementalType.BUG,
+      ElementalType.FLYING,
       [
         [Biome.GRASS, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.FOREST, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -6794,11 +6823,11 @@ export function initBiomes() {
         [Biome.JUNGLE, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
       ],
     ],
-    [Species.PACHIRISU, ElementType.ELECTRIC, -1, [[Biome.POWER_PLANT, BiomePoolTier.UNCOMMON]]],
-    [Species.BUIZEL, ElementType.WATER, -1, [[Biome.SEA, BiomePoolTier.COMMON]]],
+    [Species.PACHIRISU, ElementalType.ELECTRIC, -1, [[Biome.POWER_PLANT, BiomePoolTier.UNCOMMON]]],
+    [Species.BUIZEL, ElementalType.WATER, -1, [[Biome.SEA, BiomePoolTier.COMMON]]],
     [
       Species.FLOATZEL,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SEA, BiomePoolTier.COMMON],
@@ -6807,7 +6836,7 @@ export function initBiomes() {
     ],
     [
       Species.CHERUBI,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -6817,7 +6846,7 @@ export function initBiomes() {
     ],
     [
       Species.CHERRIM,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [
         [Biome.GRASS, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -6827,7 +6856,7 @@ export function initBiomes() {
     ],
     [
       Species.SHELLOS,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SWAMP, BiomePoolTier.COMMON],
@@ -6836,40 +6865,40 @@ export function initBiomes() {
     ],
     [
       Species.GASTRODON,
-      ElementType.WATER,
-      ElementType.GROUND,
+      ElementalType.WATER,
+      ElementalType.GROUND,
       [
         [Biome.SWAMP, BiomePoolTier.COMMON],
         [Biome.SWAMP, BiomePoolTier.BOSS],
         [Biome.SEABED, BiomePoolTier.UNCOMMON],
       ],
     ],
-    [Species.AMBIPOM, ElementType.NORMAL, -1, [[Biome.JUNGLE, BiomePoolTier.BOSS]]],
-    [Species.DRIFLOON, ElementType.GHOST, ElementType.FLYING, [[Biome.GRAVEYARD, BiomePoolTier.COMMON]]],
+    [Species.AMBIPOM, ElementalType.NORMAL, -1, [[Biome.JUNGLE, BiomePoolTier.BOSS]]],
+    [Species.DRIFLOON, ElementalType.GHOST, ElementalType.FLYING, [[Biome.GRAVEYARD, BiomePoolTier.COMMON]]],
     [
       Species.DRIFBLIM,
-      ElementType.GHOST,
-      ElementType.FLYING,
+      ElementalType.GHOST,
+      ElementalType.FLYING,
       [
         [Biome.GRAVEYARD, BiomePoolTier.COMMON],
         [Biome.GRAVEYARD, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.BUNEARY, ElementType.NORMAL, -1, [[Biome.PLAINS, BiomePoolTier.RARE]]],
+    [Species.BUNEARY, ElementalType.NORMAL, -1, [[Biome.PLAINS, BiomePoolTier.RARE]]],
     [
       Species.LOPUNNY,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.RARE],
         [Biome.PLAINS, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.MISMAGIUS, ElementType.GHOST, -1, [[Biome.GRAVEYARD, BiomePoolTier.BOSS]]],
-    [Species.HONCHKROW, ElementType.DARK, ElementType.FLYING, [[Biome.ABYSS, BiomePoolTier.BOSS]]],
+    [Species.MISMAGIUS, ElementalType.GHOST, -1, [[Biome.GRAVEYARD, BiomePoolTier.BOSS]]],
+    [Species.HONCHKROW, ElementalType.DARK, ElementalType.FLYING, [[Biome.ABYSS, BiomePoolTier.BOSS]]],
     [
       Species.GLAMEOW,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.METROPOLIS, BiomePoolTier.UNCOMMON],
@@ -6878,7 +6907,7 @@ export function initBiomes() {
     ],
     [
       Species.PURUGLY,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.METROPOLIS, BiomePoolTier.UNCOMMON],
@@ -6886,17 +6915,17 @@ export function initBiomes() {
         [Biome.MEADOW, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.CHINGLING, ElementType.PSYCHIC, -1, [[Biome.TEMPLE, BiomePoolTier.UNCOMMON]]],
+    [Species.CHINGLING, ElementalType.PSYCHIC, -1, [[Biome.TEMPLE, BiomePoolTier.UNCOMMON]]],
     [
       Species.STUNKY,
-      ElementType.POISON,
-      ElementType.DARK,
+      ElementalType.POISON,
+      ElementalType.DARK,
       [[Biome.SLUM, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.SKUNTANK,
-      ElementType.POISON,
-      ElementType.DARK,
+      ElementalType.POISON,
+      ElementalType.DARK,
       [
         [Biome.SLUM, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.SLUM, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -6904,8 +6933,8 @@ export function initBiomes() {
     ],
     [
       Species.BRONZOR,
-      ElementType.STEEL,
-      ElementType.PSYCHIC,
+      ElementalType.STEEL,
+      ElementalType.PSYCHIC,
       [
         [Biome.FACTORY, BiomePoolTier.UNCOMMON],
         [Biome.SPACE, BiomePoolTier.COMMON],
@@ -6914,8 +6943,8 @@ export function initBiomes() {
     ],
     [
       Species.BRONZONG,
-      ElementType.STEEL,
-      ElementType.PSYCHIC,
+      ElementalType.STEEL,
+      ElementalType.PSYCHIC,
       [
         [Biome.FACTORY, BiomePoolTier.UNCOMMON],
         [Biome.SPACE, BiomePoolTier.COMMON],
@@ -6924,14 +6953,14 @@ export function initBiomes() {
         [Biome.LABORATORY, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.BONSLY, ElementType.ROCK, -1, []],
-    [Species.MIME_JR, ElementType.PSYCHIC, ElementType.FAIRY, []],
-    [Species.HAPPINY, ElementType.NORMAL, -1, []],
-    [Species.CHATOT, ElementType.NORMAL, ElementType.FLYING, [[Biome.JUNGLE, BiomePoolTier.SUPER_RARE]]],
+    [Species.BONSLY, ElementalType.ROCK, -1, []],
+    [Species.MIME_JR, ElementalType.PSYCHIC, ElementalType.FAIRY, []],
+    [Species.HAPPINY, ElementalType.NORMAL, -1, []],
+    [Species.CHATOT, ElementalType.NORMAL, ElementalType.FLYING, [[Biome.JUNGLE, BiomePoolTier.SUPER_RARE]]],
     [
       Species.SPIRITOMB,
-      ElementType.GHOST,
-      ElementType.DARK,
+      ElementalType.GHOST,
+      ElementalType.DARK,
       [
         [Biome.GRAVEYARD, BiomePoolTier.SUPER_RARE],
         [Biome.ABYSS, BiomePoolTier.RARE],
@@ -6940,8 +6969,8 @@ export function initBiomes() {
     ],
     [
       Species.GIBLE,
-      ElementType.DRAGON,
-      ElementType.GROUND,
+      ElementalType.DRAGON,
+      ElementalType.GROUND,
       [
         [Biome.MOUNTAIN, BiomePoolTier.SUPER_RARE],
         [Biome.WASTELAND, BiomePoolTier.COMMON],
@@ -6949,8 +6978,8 @@ export function initBiomes() {
     ],
     [
       Species.GABITE,
-      ElementType.DRAGON,
-      ElementType.GROUND,
+      ElementalType.DRAGON,
+      ElementalType.GROUND,
       [
         [Biome.MOUNTAIN, BiomePoolTier.SUPER_RARE],
         [Biome.WASTELAND, BiomePoolTier.COMMON],
@@ -6958,20 +6987,20 @@ export function initBiomes() {
     ],
     [
       Species.GARCHOMP,
-      ElementType.DRAGON,
-      ElementType.GROUND,
+      ElementalType.DRAGON,
+      ElementalType.GROUND,
       [
         [Biome.MOUNTAIN, BiomePoolTier.SUPER_RARE],
         [Biome.WASTELAND, BiomePoolTier.COMMON],
         [Biome.WASTELAND, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.MUNCHLAX, ElementType.NORMAL, -1, []],
-    [Species.RIOLU, ElementType.FIGHTING, -1, []],
+    [Species.MUNCHLAX, ElementalType.NORMAL, -1, []],
+    [Species.RIOLU, ElementalType.FIGHTING, -1, []],
     [
       Species.LUCARIO,
-      ElementType.FIGHTING,
-      ElementType.STEEL,
+      ElementalType.FIGHTING,
+      ElementalType.STEEL,
       [
         [Biome.DOJO, BiomePoolTier.RARE],
         [Biome.DOJO, BiomePoolTier.BOSS],
@@ -6979,13 +7008,13 @@ export function initBiomes() {
     ],
     [
       Species.HIPPOPOTAS,
-      ElementType.GROUND,
+      ElementalType.GROUND,
       -1,
       [[Biome.DESERT, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.HIPPOWDON,
-      ElementType.GROUND,
+      ElementalType.GROUND,
       -1,
       [
         [Biome.DESERT, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -6994,8 +7023,8 @@ export function initBiomes() {
     ],
     [
       Species.SKORUPI,
-      ElementType.POISON,
-      ElementType.BUG,
+      ElementalType.POISON,
+      ElementalType.BUG,
       [
         [Biome.SWAMP, BiomePoolTier.UNCOMMON],
         [Biome.DESERT, BiomePoolTier.COMMON],
@@ -7004,8 +7033,8 @@ export function initBiomes() {
     ],
     [
       Species.DRAPION,
-      ElementType.POISON,
-      ElementType.DARK,
+      ElementalType.POISON,
+      ElementalType.DARK,
       [
         [Biome.SWAMP, BiomePoolTier.UNCOMMON],
         [Biome.DESERT, BiomePoolTier.COMMON],
@@ -7015,8 +7044,8 @@ export function initBiomes() {
     ],
     [
       Species.CROAGUNK,
-      ElementType.POISON,
-      ElementType.FIGHTING,
+      ElementalType.POISON,
+      ElementalType.FIGHTING,
       [
         [Biome.SWAMP, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.DOJO, BiomePoolTier.UNCOMMON],
@@ -7024,8 +7053,8 @@ export function initBiomes() {
     ],
     [
       Species.TOXICROAK,
-      ElementType.POISON,
-      ElementType.FIGHTING,
+      ElementalType.POISON,
+      ElementalType.FIGHTING,
       [
         [Biome.SWAMP, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.DOJO, BiomePoolTier.UNCOMMON],
@@ -7034,28 +7063,28 @@ export function initBiomes() {
     ],
     [
       Species.CARNIVINE,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [
         [Biome.JUNGLE, BiomePoolTier.RARE],
         [Biome.JUNGLE, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.FINNEON, ElementType.WATER, -1, [[Biome.SEA, BiomePoolTier.COMMON, TimeOfDay.NIGHT]]],
+    [Species.FINNEON, ElementalType.WATER, -1, [[Biome.SEA, BiomePoolTier.COMMON, TimeOfDay.NIGHT]]],
     [
       Species.LUMINEON,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SEA, BiomePoolTier.COMMON, TimeOfDay.NIGHT],
         [Biome.SEA, BiomePoolTier.BOSS, TimeOfDay.NIGHT],
       ],
     ],
-    [Species.MANTYKE, ElementType.WATER, ElementType.FLYING, [[Biome.SEABED, BiomePoolTier.RARE]]],
+    [Species.MANTYKE, ElementalType.WATER, ElementalType.FLYING, [[Biome.SEABED, BiomePoolTier.RARE]]],
     [
       Species.SNOVER,
-      ElementType.GRASS,
-      ElementType.ICE,
+      ElementalType.GRASS,
+      ElementalType.ICE,
       [
         [Biome.ICE_CAVE, BiomePoolTier.COMMON],
         [Biome.SNOWY_FOREST, BiomePoolTier.COMMON],
@@ -7063,38 +7092,43 @@ export function initBiomes() {
     ],
     [
       Species.ABOMASNOW,
-      ElementType.GRASS,
-      ElementType.ICE,
+      ElementalType.GRASS,
+      ElementalType.ICE,
       [
         [Biome.ICE_CAVE, BiomePoolTier.COMMON],
         [Biome.SNOWY_FOREST, BiomePoolTier.COMMON],
         [Biome.SNOWY_FOREST, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.WEAVILE, ElementType.DARK, ElementType.ICE, [[Biome.ICE_CAVE, BiomePoolTier.BOSS]]],
+    [Species.WEAVILE, ElementalType.DARK, ElementalType.ICE, [[Biome.ICE_CAVE, BiomePoolTier.BOSS]]],
     [
       Species.MAGNEZONE,
-      ElementType.ELECTRIC,
-      ElementType.STEEL,
+      ElementalType.ELECTRIC,
+      ElementalType.STEEL,
       [
         [Biome.POWER_PLANT, BiomePoolTier.BOSS],
         [Biome.LABORATORY, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.LICKILICKY, ElementType.NORMAL, -1, [[Biome.PLAINS, BiomePoolTier.BOSS_RARE]]],
-    [Species.RHYPERIOR, ElementType.GROUND, ElementType.ROCK, [[Biome.BADLANDS, BiomePoolTier.BOSS]]],
-    [Species.TANGROWTH, ElementType.GRASS, -1, [[Biome.JUNGLE, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]]],
-    [Species.ELECTIVIRE, ElementType.ELECTRIC, -1, [[Biome.POWER_PLANT, BiomePoolTier.BOSS]]],
-    [Species.MAGMORTAR, ElementType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.BOSS]]],
-    [Species.TOGEKISS, ElementType.FAIRY, ElementType.FLYING, [[Biome.FAIRY_CAVE, BiomePoolTier.BOSS]]],
-    [Species.YANMEGA, ElementType.BUG, ElementType.FLYING, [[Biome.JUNGLE, BiomePoolTier.BOSS]]],
-    [Species.LEAFEON, ElementType.GRASS, -1, [[Biome.JUNGLE, BiomePoolTier.BOSS_RARE]]],
-    [Species.GLACEON, ElementType.ICE, -1, [[Biome.ICE_CAVE, BiomePoolTier.BOSS_RARE]]],
-    [Species.GLISCOR, ElementType.GROUND, ElementType.FLYING, [[Biome.BADLANDS, BiomePoolTier.BOSS]]],
-    [Species.MAMOSWINE, ElementType.ICE, ElementType.GROUND, [[Biome.ICE_CAVE, BiomePoolTier.BOSS]]],
+    [Species.LICKILICKY, ElementalType.NORMAL, -1, [[Biome.PLAINS, BiomePoolTier.BOSS_RARE]]],
+    [Species.RHYPERIOR, ElementalType.GROUND, ElementalType.ROCK, [[Biome.BADLANDS, BiomePoolTier.BOSS]]],
+    [
+      Species.TANGROWTH,
+      ElementalType.GRASS,
+      -1,
+      [[Biome.JUNGLE, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
+    ],
+    [Species.ELECTIVIRE, ElementalType.ELECTRIC, -1, [[Biome.POWER_PLANT, BiomePoolTier.BOSS]]],
+    [Species.MAGMORTAR, ElementalType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.BOSS]]],
+    [Species.TOGEKISS, ElementalType.FAIRY, ElementalType.FLYING, [[Biome.FAIRY_CAVE, BiomePoolTier.BOSS]]],
+    [Species.YANMEGA, ElementalType.BUG, ElementalType.FLYING, [[Biome.JUNGLE, BiomePoolTier.BOSS]]],
+    [Species.LEAFEON, ElementalType.GRASS, -1, [[Biome.JUNGLE, BiomePoolTier.BOSS_RARE]]],
+    [Species.GLACEON, ElementalType.ICE, -1, [[Biome.ICE_CAVE, BiomePoolTier.BOSS_RARE]]],
+    [Species.GLISCOR, ElementalType.GROUND, ElementalType.FLYING, [[Biome.BADLANDS, BiomePoolTier.BOSS]]],
+    [Species.MAMOSWINE, ElementalType.ICE, ElementalType.GROUND, [[Biome.ICE_CAVE, BiomePoolTier.BOSS]]],
     [
       Species.PORYGON_Z,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.SPACE, BiomePoolTier.BOSS_RARE],
@@ -7103,19 +7137,19 @@ export function initBiomes() {
     ],
     [
       Species.GALLADE,
-      ElementType.PSYCHIC,
-      ElementType.FIGHTING,
+      ElementalType.PSYCHIC,
+      ElementalType.FIGHTING,
       [
         [Biome.DOJO, BiomePoolTier.SUPER_RARE],
         [Biome.DOJO, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.PROBOPASS, ElementType.ROCK, ElementType.STEEL, [[Biome.CAVE, BiomePoolTier.BOSS]]],
-    [Species.DUSKNOIR, ElementType.GHOST, -1, [[Biome.GRAVEYARD, BiomePoolTier.BOSS]]],
+    [Species.PROBOPASS, ElementalType.ROCK, ElementalType.STEEL, [[Biome.CAVE, BiomePoolTier.BOSS]]],
+    [Species.DUSKNOIR, ElementalType.GHOST, -1, [[Biome.GRAVEYARD, BiomePoolTier.BOSS]]],
     [
       Species.FROSLASS,
-      ElementType.ICE,
-      ElementType.GHOST,
+      ElementalType.ICE,
+      ElementalType.GHOST,
       [
         [Biome.ICE_CAVE, BiomePoolTier.RARE],
         [Biome.ICE_CAVE, BiomePoolTier.BOSS],
@@ -7123,8 +7157,8 @@ export function initBiomes() {
     ],
     [
       Species.ROTOM,
-      ElementType.ELECTRIC,
-      ElementType.GHOST,
+      ElementalType.ELECTRIC,
+      ElementalType.GHOST,
       [
         [Biome.LABORATORY, BiomePoolTier.SUPER_RARE],
         [Biome.LABORATORY, BiomePoolTier.BOSS_SUPER_RARE],
@@ -7142,7 +7176,7 @@ export function initBiomes() {
     ],
     [
       Species.UXIE,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [
         [Biome.CAVE, BiomePoolTier.ULTRA_RARE],
@@ -7151,7 +7185,7 @@ export function initBiomes() {
     ],
     [
       Species.MESPRIT,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [
         [Biome.LAKE, BiomePoolTier.ULTRA_RARE],
@@ -7160,76 +7194,76 @@ export function initBiomes() {
     ],
     [
       Species.AZELF,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [
         [Biome.SWAMP, BiomePoolTier.ULTRA_RARE],
         [Biome.SWAMP, BiomePoolTier.BOSS_SUPER_RARE],
       ],
     ],
-    [Species.DIALGA, ElementType.STEEL, ElementType.DRAGON, [[Biome.WASTELAND, BiomePoolTier.BOSS_ULTRA_RARE]]],
-    [Species.PALKIA, ElementType.WATER, ElementType.DRAGON, [[Biome.ABYSS, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [Species.DIALGA, ElementalType.STEEL, ElementalType.DRAGON, [[Biome.WASTELAND, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [Species.PALKIA, ElementalType.WATER, ElementalType.DRAGON, [[Biome.ABYSS, BiomePoolTier.BOSS_ULTRA_RARE]]],
     [
       Species.HEATRAN,
-      ElementType.FIRE,
-      ElementType.STEEL,
+      ElementalType.FIRE,
+      ElementalType.STEEL,
       [
         [Biome.VOLCANO, BiomePoolTier.ULTRA_RARE],
         [Biome.VOLCANO, BiomePoolTier.BOSS_SUPER_RARE],
       ],
     ],
-    [Species.REGIGIGAS, ElementType.NORMAL, -1, [[Biome.TEMPLE, BiomePoolTier.BOSS_ULTRA_RARE]]],
-    [Species.GIRATINA, ElementType.GHOST, ElementType.DRAGON, [[Biome.GRAVEYARD, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [Species.REGIGIGAS, ElementalType.NORMAL, -1, [[Biome.TEMPLE, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [Species.GIRATINA, ElementalType.GHOST, ElementalType.DRAGON, [[Biome.GRAVEYARD, BiomePoolTier.BOSS_ULTRA_RARE]]],
     [
       Species.CRESSELIA,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [
         [Biome.BEACH, BiomePoolTier.ULTRA_RARE],
         [Biome.BEACH, BiomePoolTier.BOSS_SUPER_RARE],
       ],
     ],
-    [Species.PHIONE, ElementType.WATER, -1, []],
-    [Species.MANAPHY, ElementType.WATER, -1, []],
+    [Species.PHIONE, ElementalType.WATER, -1, []],
+    [Species.MANAPHY, ElementalType.WATER, -1, []],
     [
       Species.DARKRAI,
-      ElementType.DARK,
+      ElementalType.DARK,
       -1,
       [
         [Biome.ABYSS, BiomePoolTier.ULTRA_RARE],
         [Biome.ABYSS, BiomePoolTier.BOSS_SUPER_RARE],
       ],
     ],
-    [Species.SHAYMIN, ElementType.GRASS, -1, [[Biome.MEADOW, BiomePoolTier.BOSS_ULTRA_RARE]]],
-    [Species.ARCEUS, ElementType.NORMAL, -1, []],
-    [Species.VICTINI, ElementType.PSYCHIC, ElementType.FIRE, []],
-    [Species.SNIVY, ElementType.GRASS, -1, [[Biome.JUNGLE, BiomePoolTier.RARE]]],
-    [Species.SERVINE, ElementType.GRASS, -1, [[Biome.JUNGLE, BiomePoolTier.RARE]]],
+    [Species.SHAYMIN, ElementalType.GRASS, -1, [[Biome.MEADOW, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [Species.ARCEUS, ElementalType.NORMAL, -1, []],
+    [Species.VICTINI, ElementalType.PSYCHIC, ElementalType.FIRE, []],
+    [Species.SNIVY, ElementalType.GRASS, -1, [[Biome.JUNGLE, BiomePoolTier.RARE]]],
+    [Species.SERVINE, ElementalType.GRASS, -1, [[Biome.JUNGLE, BiomePoolTier.RARE]]],
     [
       Species.SERPERIOR,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [
         [Biome.JUNGLE, BiomePoolTier.RARE],
         [Biome.JUNGLE, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.TEPIG, ElementType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
-    [Species.PIGNITE, ElementType.FIRE, ElementType.FIGHTING, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
+    [Species.TEPIG, ElementalType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
+    [Species.PIGNITE, ElementalType.FIRE, ElementalType.FIGHTING, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
     [
       Species.EMBOAR,
-      ElementType.FIRE,
-      ElementType.FIGHTING,
+      ElementalType.FIRE,
+      ElementalType.FIGHTING,
       [
         [Biome.VOLCANO, BiomePoolTier.RARE],
         [Biome.VOLCANO, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.OSHAWOTT, ElementType.WATER, -1, [[Biome.LAKE, BiomePoolTier.RARE]]],
-    [Species.DEWOTT, ElementType.WATER, -1, [[Biome.LAKE, BiomePoolTier.RARE]]],
+    [Species.OSHAWOTT, ElementalType.WATER, -1, [[Biome.LAKE, BiomePoolTier.RARE]]],
+    [Species.DEWOTT, ElementalType.WATER, -1, [[Biome.LAKE, BiomePoolTier.RARE]]],
     [
       Species.SAMUROTT,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.LAKE, BiomePoolTier.RARE],
@@ -7238,7 +7272,7 @@ export function initBiomes() {
     ],
     [
       Species.PATRAT,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -7250,7 +7284,7 @@ export function initBiomes() {
     ],
     [
       Species.WATCHOG,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.METROPOLIS, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -7261,17 +7295,17 @@ export function initBiomes() {
     ],
     [
       Species.LILLIPUP,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.COMMON],
         [Biome.METROPOLIS, BiomePoolTier.COMMON],
       ],
     ],
-    [Species.HERDIER, ElementType.NORMAL, -1, [[Biome.METROPOLIS, BiomePoolTier.COMMON]]],
+    [Species.HERDIER, ElementalType.NORMAL, -1, [[Biome.METROPOLIS, BiomePoolTier.COMMON]]],
     [
       Species.STOUTLAND,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.METROPOLIS, BiomePoolTier.COMMON],
@@ -7280,7 +7314,7 @@ export function initBiomes() {
     ],
     [
       Species.PURRLOIN,
-      ElementType.DARK,
+      ElementalType.DARK,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -7290,7 +7324,7 @@ export function initBiomes() {
     ],
     [
       Species.LIEPARD,
-      ElementType.DARK,
+      ElementalType.DARK,
       -1,
       [
         [Biome.ABYSS, BiomePoolTier.COMMON],
@@ -7300,7 +7334,7 @@ export function initBiomes() {
     ],
     [
       Species.PANSAGE,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [
         [Biome.FOREST, BiomePoolTier.UNCOMMON],
@@ -7309,7 +7343,7 @@ export function initBiomes() {
     ],
     [
       Species.SIMISAGE,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [
         [Biome.FOREST, BiomePoolTier.UNCOMMON],
@@ -7319,7 +7353,7 @@ export function initBiomes() {
     ],
     [
       Species.PANSEAR,
-      ElementType.FIRE,
+      ElementalType.FIRE,
       -1,
       [
         [Biome.VOLCANO, BiomePoolTier.UNCOMMON],
@@ -7328,7 +7362,7 @@ export function initBiomes() {
     ],
     [
       Species.SIMISEAR,
-      ElementType.FIRE,
+      ElementalType.FIRE,
       -1,
       [
         [Biome.VOLCANO, BiomePoolTier.UNCOMMON],
@@ -7338,7 +7372,7 @@ export function initBiomes() {
     ],
     [
       Species.PANPOUR,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SEA, BiomePoolTier.UNCOMMON],
@@ -7347,7 +7381,7 @@ export function initBiomes() {
     ],
     [
       Species.SIMIPOUR,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SEA, BiomePoolTier.UNCOMMON],
@@ -7355,10 +7389,10 @@ export function initBiomes() {
         [Biome.JUNGLE, BiomePoolTier.UNCOMMON],
       ],
     ],
-    [Species.MUNNA, ElementType.PSYCHIC, -1, [[Biome.SPACE, BiomePoolTier.COMMON]]],
+    [Species.MUNNA, ElementalType.PSYCHIC, -1, [[Biome.SPACE, BiomePoolTier.COMMON]]],
     [
       Species.MUSHARNA,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [
         [Biome.SPACE, BiomePoolTier.COMMON],
@@ -7367,8 +7401,8 @@ export function initBiomes() {
     ],
     [
       Species.PIDOVE,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.TOWN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.PLAINS, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -7377,8 +7411,8 @@ export function initBiomes() {
     ],
     [
       Species.TRANQUILL,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.PLAINS, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.MOUNTAIN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -7386,8 +7420,8 @@ export function initBiomes() {
     ],
     [
       Species.UNFEZANT,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.PLAINS, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.MOUNTAIN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -7396,7 +7430,7 @@ export function initBiomes() {
     ],
     [
       Species.BLITZLE,
-      ElementType.ELECTRIC,
+      ElementalType.ELECTRIC,
       -1,
       [
         [Biome.MEADOW, BiomePoolTier.COMMON],
@@ -7405,7 +7439,7 @@ export function initBiomes() {
     ],
     [
       Species.ZEBSTRIKA,
-      ElementType.ELECTRIC,
+      ElementalType.ELECTRIC,
       -1,
       [
         [Biome.MEADOW, BiomePoolTier.COMMON],
@@ -7415,7 +7449,7 @@ export function initBiomes() {
     ],
     [
       Species.ROGGENROLA,
-      ElementType.ROCK,
+      ElementalType.ROCK,
       -1,
       [
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -7426,7 +7460,7 @@ export function initBiomes() {
     ],
     [
       Species.BOLDORE,
-      ElementType.ROCK,
+      ElementalType.ROCK,
       -1,
       [
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -7435,12 +7469,12 @@ export function initBiomes() {
         [Biome.CAVE, BiomePoolTier.COMMON],
       ],
     ],
-    [Species.GIGALITH, ElementType.ROCK, -1, [[Biome.CAVE, BiomePoolTier.BOSS]]],
-    [Species.WOOBAT, ElementType.PSYCHIC, ElementType.FLYING, [[Biome.CAVE, BiomePoolTier.COMMON]]],
+    [Species.GIGALITH, ElementalType.ROCK, -1, [[Biome.CAVE, BiomePoolTier.BOSS]]],
+    [Species.WOOBAT, ElementalType.PSYCHIC, ElementalType.FLYING, [[Biome.CAVE, BiomePoolTier.COMMON]]],
     [
       Species.SWOOBAT,
-      ElementType.PSYCHIC,
-      ElementType.FLYING,
+      ElementalType.PSYCHIC,
+      ElementalType.FLYING,
       [
         [Biome.CAVE, BiomePoolTier.COMMON],
         [Biome.CAVE, BiomePoolTier.BOSS],
@@ -7448,7 +7482,7 @@ export function initBiomes() {
     ],
     [
       Species.DRILBUR,
-      ElementType.GROUND,
+      ElementalType.GROUND,
       -1,
       [
         [Biome.BADLANDS, BiomePoolTier.COMMON],
@@ -7457,8 +7491,8 @@ export function initBiomes() {
     ],
     [
       Species.EXCADRILL,
-      ElementType.GROUND,
-      ElementType.STEEL,
+      ElementalType.GROUND,
+      ElementalType.STEEL,
       [
         [Biome.BADLANDS, BiomePoolTier.COMMON],
         [Biome.BADLANDS, BiomePoolTier.BOSS],
@@ -7467,7 +7501,7 @@ export function initBiomes() {
     ],
     [
       Species.AUDINO,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.FAIRY_CAVE, BiomePoolTier.RARE],
@@ -7476,7 +7510,7 @@ export function initBiomes() {
     ],
     [
       Species.TIMBURR,
-      ElementType.FIGHTING,
+      ElementalType.FIGHTING,
       -1,
       [
         [Biome.FACTORY, BiomePoolTier.COMMON],
@@ -7485,20 +7519,20 @@ export function initBiomes() {
     ],
     [
       Species.GURDURR,
-      ElementType.FIGHTING,
+      ElementalType.FIGHTING,
       -1,
       [
         [Biome.FACTORY, BiomePoolTier.COMMON],
         [Biome.CONSTRUCTION_SITE, BiomePoolTier.COMMON],
       ],
     ],
-    [Species.CONKELDURR, ElementType.FIGHTING, -1, [[Biome.CONSTRUCTION_SITE, BiomePoolTier.BOSS]]],
-    [Species.TYMPOLE, ElementType.WATER, -1, [[Biome.SWAMP, BiomePoolTier.COMMON]]],
-    [Species.PALPITOAD, ElementType.WATER, ElementType.GROUND, [[Biome.SWAMP, BiomePoolTier.COMMON]]],
+    [Species.CONKELDURR, ElementalType.FIGHTING, -1, [[Biome.CONSTRUCTION_SITE, BiomePoolTier.BOSS]]],
+    [Species.TYMPOLE, ElementalType.WATER, -1, [[Biome.SWAMP, BiomePoolTier.COMMON]]],
+    [Species.PALPITOAD, ElementalType.WATER, ElementalType.GROUND, [[Biome.SWAMP, BiomePoolTier.COMMON]]],
     [
       Species.SEISMITOAD,
-      ElementType.WATER,
-      ElementType.GROUND,
+      ElementalType.WATER,
+      ElementalType.GROUND,
       [
         [Biome.SWAMP, BiomePoolTier.COMMON],
         [Biome.SWAMP, BiomePoolTier.BOSS],
@@ -7506,7 +7540,7 @@ export function initBiomes() {
     ],
     [
       Species.THROH,
-      ElementType.FIGHTING,
+      ElementalType.FIGHTING,
       -1,
       [
         [Biome.DOJO, BiomePoolTier.RARE],
@@ -7515,7 +7549,7 @@ export function initBiomes() {
     ],
     [
       Species.SAWK,
-      ElementType.FIGHTING,
+      ElementalType.FIGHTING,
       -1,
       [
         [Biome.DOJO, BiomePoolTier.RARE],
@@ -7524,8 +7558,8 @@ export function initBiomes() {
     ],
     [
       Species.SEWADDLE,
-      ElementType.BUG,
-      ElementType.GRASS,
+      ElementalType.BUG,
+      ElementalType.GRASS,
       [
         [Biome.FOREST, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.JUNGLE, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -7533,8 +7567,8 @@ export function initBiomes() {
     ],
     [
       Species.SWADLOON,
-      ElementType.BUG,
-      ElementType.GRASS,
+      ElementalType.BUG,
+      ElementalType.GRASS,
       [
         [Biome.FOREST, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.JUNGLE, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -7542,8 +7576,8 @@ export function initBiomes() {
     ],
     [
       Species.LEAVANNY,
-      ElementType.BUG,
-      ElementType.GRASS,
+      ElementalType.BUG,
+      ElementalType.GRASS,
       [
         [Biome.FOREST, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.JUNGLE, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -7552,8 +7586,8 @@ export function initBiomes() {
     ],
     [
       Species.VENIPEDE,
-      ElementType.BUG,
-      ElementType.POISON,
+      ElementalType.BUG,
+      ElementalType.POISON,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.FOREST, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -7561,14 +7595,14 @@ export function initBiomes() {
     ],
     [
       Species.WHIRLIPEDE,
-      ElementType.BUG,
-      ElementType.POISON,
+      ElementalType.BUG,
+      ElementalType.POISON,
       [[Biome.FOREST, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.SCOLIPEDE,
-      ElementType.BUG,
-      ElementType.POISON,
+      ElementalType.BUG,
+      ElementalType.POISON,
       [
         [Biome.FOREST, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.FOREST, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -7576,8 +7610,8 @@ export function initBiomes() {
     ],
     [
       Species.COTTONEE,
-      ElementType.GRASS,
-      ElementType.FAIRY,
+      ElementalType.GRASS,
+      ElementalType.FAIRY,
       [
         [Biome.TOWN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.GRASS, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -7586,25 +7620,25 @@ export function initBiomes() {
     ],
     [
       Species.WHIMSICOTT,
-      ElementType.GRASS,
-      ElementType.FAIRY,
+      ElementalType.GRASS,
+      ElementalType.FAIRY,
       [[Biome.GRASS, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.PETILIL,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [
         [Biome.GRASS, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.FOREST, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
       ],
     ],
-    [Species.LILLIGANT, ElementType.GRASS, -1, [[Biome.FOREST, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
-    [Species.BASCULIN, ElementType.WATER, -1, [[Biome.SEABED, BiomePoolTier.COMMON]]],
+    [Species.LILLIGANT, ElementalType.GRASS, -1, [[Biome.FOREST, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
+    [Species.BASCULIN, ElementalType.WATER, -1, [[Biome.SEABED, BiomePoolTier.COMMON]]],
     [
       Species.SANDILE,
-      ElementType.GROUND,
-      ElementType.DARK,
+      ElementalType.GROUND,
+      ElementalType.DARK,
       [
         [Biome.DESERT, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.DESERT, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -7612,8 +7646,8 @@ export function initBiomes() {
     ],
     [
       Species.KROKOROK,
-      ElementType.GROUND,
-      ElementType.DARK,
+      ElementalType.GROUND,
+      ElementalType.DARK,
       [
         [Biome.DESERT, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.DESERT, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -7621,18 +7655,18 @@ export function initBiomes() {
     ],
     [
       Species.KROOKODILE,
-      ElementType.GROUND,
-      ElementType.DARK,
+      ElementalType.GROUND,
+      ElementalType.DARK,
       [
         [Biome.DESERT, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.DESERT, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.DESERT, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
       ],
     ],
-    [Species.DARUMAKA, ElementType.FIRE, -1, [[Biome.DESERT, BiomePoolTier.RARE]]],
+    [Species.DARUMAKA, ElementalType.FIRE, -1, [[Biome.DESERT, BiomePoolTier.RARE]]],
     [
       Species.DARMANITAN,
-      ElementType.FIRE,
+      ElementalType.FIRE,
       -1,
       [
         [Biome.DESERT, BiomePoolTier.RARE],
@@ -7641,18 +7675,18 @@ export function initBiomes() {
     ],
     [
       Species.MARACTUS,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [
         [Biome.DESERT, BiomePoolTier.UNCOMMON],
         [Biome.DESERT, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.DWEBBLE, ElementType.BUG, ElementType.ROCK, [[Biome.BEACH, BiomePoolTier.COMMON]]],
+    [Species.DWEBBLE, ElementalType.BUG, ElementalType.ROCK, [[Biome.BEACH, BiomePoolTier.COMMON]]],
     [
       Species.CRUSTLE,
-      ElementType.BUG,
-      ElementType.ROCK,
+      ElementalType.BUG,
+      ElementalType.ROCK,
       [
         [Biome.BEACH, BiomePoolTier.COMMON],
         [Biome.BEACH, BiomePoolTier.BOSS],
@@ -7660,8 +7694,8 @@ export function initBiomes() {
     ],
     [
       Species.SCRAGGY,
-      ElementType.DARK,
-      ElementType.FIGHTING,
+      ElementalType.DARK,
+      ElementalType.FIGHTING,
       [
         [Biome.DOJO, BiomePoolTier.UNCOMMON],
         [Biome.CONSTRUCTION_SITE, BiomePoolTier.UNCOMMON],
@@ -7669,8 +7703,8 @@ export function initBiomes() {
     ],
     [
       Species.SCRAFTY,
-      ElementType.DARK,
-      ElementType.FIGHTING,
+      ElementalType.DARK,
+      ElementalType.FIGHTING,
       [
         [Biome.DOJO, BiomePoolTier.UNCOMMON],
         [Biome.DOJO, BiomePoolTier.BOSS],
@@ -7679,8 +7713,8 @@ export function initBiomes() {
     ],
     [
       Species.SIGILYPH,
-      ElementType.PSYCHIC,
-      ElementType.FLYING,
+      ElementalType.PSYCHIC,
+      ElementalType.FLYING,
       [
         [Biome.RUINS, BiomePoolTier.UNCOMMON],
         [Biome.RUINS, BiomePoolTier.BOSS],
@@ -7689,7 +7723,7 @@ export function initBiomes() {
     ],
     [
       Species.YAMASK,
-      ElementType.GHOST,
+      ElementalType.GHOST,
       -1,
       [
         [Biome.GRAVEYARD, BiomePoolTier.UNCOMMON],
@@ -7698,7 +7732,7 @@ export function initBiomes() {
     ],
     [
       Species.COFAGRIGUS,
-      ElementType.GHOST,
+      ElementalType.GHOST,
       -1,
       [
         [Biome.GRAVEYARD, BiomePoolTier.UNCOMMON],
@@ -7708,8 +7742,8 @@ export function initBiomes() {
     ],
     [
       Species.TIRTOUGA,
-      ElementType.WATER,
-      ElementType.ROCK,
+      ElementalType.WATER,
+      ElementalType.ROCK,
       [
         [Biome.SEA, BiomePoolTier.SUPER_RARE],
         [Biome.BEACH, BiomePoolTier.SUPER_RARE],
@@ -7717,39 +7751,39 @@ export function initBiomes() {
     ],
     [
       Species.CARRACOSTA,
-      ElementType.WATER,
-      ElementType.ROCK,
+      ElementalType.WATER,
+      ElementalType.ROCK,
       [
         [Biome.SEA, BiomePoolTier.SUPER_RARE],
         [Biome.BEACH, BiomePoolTier.SUPER_RARE],
         [Biome.BEACH, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.ARCHEN, ElementType.ROCK, ElementType.FLYING, [[Biome.RUINS, BiomePoolTier.SUPER_RARE]]],
+    [Species.ARCHEN, ElementalType.ROCK, ElementalType.FLYING, [[Biome.RUINS, BiomePoolTier.SUPER_RARE]]],
     [
       Species.ARCHEOPS,
-      ElementType.ROCK,
-      ElementType.FLYING,
+      ElementalType.ROCK,
+      ElementalType.FLYING,
       [
         [Biome.MOUNTAIN, BiomePoolTier.SUPER_RARE],
         [Biome.RUINS, BiomePoolTier.SUPER_RARE],
         [Biome.RUINS, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.TRUBBISH, ElementType.POISON, -1, [[Biome.SLUM, BiomePoolTier.COMMON]]],
+    [Species.TRUBBISH, ElementalType.POISON, -1, [[Biome.SLUM, BiomePoolTier.COMMON]]],
     [
       Species.GARBODOR,
-      ElementType.POISON,
+      ElementalType.POISON,
       -1,
       [
         [Biome.SLUM, BiomePoolTier.COMMON],
         [Biome.SLUM, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.ZORUA, ElementType.DARK, -1, [[Biome.ABYSS, BiomePoolTier.RARE]]],
+    [Species.ZORUA, ElementalType.DARK, -1, [[Biome.ABYSS, BiomePoolTier.RARE]]],
     [
       Species.ZOROARK,
-      ElementType.DARK,
+      ElementalType.DARK,
       -1,
       [
         [Biome.ABYSS, BiomePoolTier.RARE],
@@ -7758,19 +7792,19 @@ export function initBiomes() {
     ],
     [
       Species.MINCCINO,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.MEADOW, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
       ],
     ],
-    [Species.CINCCINO, ElementType.NORMAL, -1, [[Biome.MEADOW, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
-    [Species.GOTHITA, ElementType.PSYCHIC, -1, [[Biome.RUINS, BiomePoolTier.RARE]]],
-    [Species.GOTHORITA, ElementType.PSYCHIC, -1, [[Biome.RUINS, BiomePoolTier.RARE]]],
+    [Species.CINCCINO, ElementalType.NORMAL, -1, [[Biome.MEADOW, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
+    [Species.GOTHITA, ElementalType.PSYCHIC, -1, [[Biome.RUINS, BiomePoolTier.RARE]]],
+    [Species.GOTHORITA, ElementalType.PSYCHIC, -1, [[Biome.RUINS, BiomePoolTier.RARE]]],
     [
       Species.GOTHITELLE,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [
         [Biome.RUINS, BiomePoolTier.RARE],
@@ -7779,7 +7813,7 @@ export function initBiomes() {
     ],
     [
       Species.SOLOSIS,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [
         [Biome.SPACE, BiomePoolTier.RARE],
@@ -7788,7 +7822,7 @@ export function initBiomes() {
     ],
     [
       Species.DUOSION,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [
         [Biome.SPACE, BiomePoolTier.RARE],
@@ -7797,7 +7831,7 @@ export function initBiomes() {
     ],
     [
       Species.REUNICLUS,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [
         [Biome.SPACE, BiomePoolTier.RARE],
@@ -7808,24 +7842,24 @@ export function initBiomes() {
     ],
     [
       Species.DUCKLETT,
-      ElementType.WATER,
-      ElementType.FLYING,
+      ElementalType.WATER,
+      ElementalType.FLYING,
       [[Biome.LAKE, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.SWANNA,
-      ElementType.WATER,
-      ElementType.FLYING,
+      ElementalType.WATER,
+      ElementalType.FLYING,
       [
         [Biome.LAKE, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.LAKE, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
       ],
     ],
-    [Species.VANILLITE, ElementType.ICE, -1, [[Biome.ICE_CAVE, BiomePoolTier.COMMON]]],
-    [Species.VANILLISH, ElementType.ICE, -1, [[Biome.ICE_CAVE, BiomePoolTier.COMMON]]],
+    [Species.VANILLITE, ElementalType.ICE, -1, [[Biome.ICE_CAVE, BiomePoolTier.COMMON]]],
+    [Species.VANILLISH, ElementalType.ICE, -1, [[Biome.ICE_CAVE, BiomePoolTier.COMMON]]],
     [
       Species.VANILLUXE,
-      ElementType.ICE,
+      ElementalType.ICE,
       -1,
       [
         [Biome.ICE_CAVE, BiomePoolTier.COMMON],
@@ -7834,26 +7868,26 @@ export function initBiomes() {
     ],
     [
       Species.DEERLING,
-      ElementType.NORMAL,
-      ElementType.GRASS,
+      ElementalType.NORMAL,
+      ElementalType.GRASS,
       [[Biome.FOREST, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.SAWSBUCK,
-      ElementType.NORMAL,
-      ElementType.GRASS,
+      ElementalType.NORMAL,
+      ElementalType.GRASS,
       [
         [Biome.FOREST, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.FOREST, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
       ],
     ],
-    [Species.EMOLGA, ElementType.ELECTRIC, ElementType.FLYING, [[Biome.POWER_PLANT, BiomePoolTier.UNCOMMON]]],
-    [Species.KARRABLAST, ElementType.BUG, -1, [[Biome.FOREST, BiomePoolTier.RARE]]],
-    [Species.ESCAVALIER, ElementType.BUG, ElementType.STEEL, [[Biome.FOREST, BiomePoolTier.BOSS_RARE]]],
+    [Species.EMOLGA, ElementalType.ELECTRIC, ElementalType.FLYING, [[Biome.POWER_PLANT, BiomePoolTier.UNCOMMON]]],
+    [Species.KARRABLAST, ElementalType.BUG, -1, [[Biome.FOREST, BiomePoolTier.RARE]]],
+    [Species.ESCAVALIER, ElementalType.BUG, ElementalType.STEEL, [[Biome.FOREST, BiomePoolTier.BOSS_RARE]]],
     [
       Species.FOONGUS,
-      ElementType.GRASS,
-      ElementType.POISON,
+      ElementalType.GRASS,
+      ElementalType.POISON,
       [
         [Biome.GRASS, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.JUNGLE, BiomePoolTier.RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -7862,8 +7896,8 @@ export function initBiomes() {
     ],
     [
       Species.AMOONGUSS,
-      ElementType.GRASS,
-      ElementType.POISON,
+      ElementalType.GRASS,
+      ElementalType.POISON,
       [
         [Biome.GRASS, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.JUNGLE, BiomePoolTier.RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -7872,11 +7906,11 @@ export function initBiomes() {
         [Biome.JUNGLE, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
       ],
     ],
-    [Species.FRILLISH, ElementType.WATER, ElementType.GHOST, [[Biome.SEABED, BiomePoolTier.COMMON]]],
+    [Species.FRILLISH, ElementalType.WATER, ElementalType.GHOST, [[Biome.SEABED, BiomePoolTier.COMMON]]],
     [
       Species.JELLICENT,
-      ElementType.WATER,
-      ElementType.GHOST,
+      ElementalType.WATER,
+      ElementalType.GHOST,
       [
         [Biome.SEABED, BiomePoolTier.COMMON],
         [Biome.SEABED, BiomePoolTier.BOSS],
@@ -7884,28 +7918,28 @@ export function initBiomes() {
     ],
     [
       Species.ALOMOMOLA,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SEABED, BiomePoolTier.RARE],
         [Biome.SEABED, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.JOLTIK, ElementType.BUG, ElementType.ELECTRIC, [[Biome.JUNGLE, BiomePoolTier.UNCOMMON]]],
+    [Species.JOLTIK, ElementalType.BUG, ElementalType.ELECTRIC, [[Biome.JUNGLE, BiomePoolTier.UNCOMMON]]],
     [
       Species.GALVANTULA,
-      ElementType.BUG,
-      ElementType.ELECTRIC,
+      ElementalType.BUG,
+      ElementalType.ELECTRIC,
       [
         [Biome.JUNGLE, BiomePoolTier.UNCOMMON],
         [Biome.JUNGLE, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.FERROSEED, ElementType.GRASS, ElementType.STEEL, [[Biome.CAVE, BiomePoolTier.RARE]]],
+    [Species.FERROSEED, ElementalType.GRASS, ElementalType.STEEL, [[Biome.CAVE, BiomePoolTier.RARE]]],
     [
       Species.FERROTHORN,
-      ElementType.GRASS,
-      ElementType.STEEL,
+      ElementalType.GRASS,
+      ElementalType.STEEL,
       [
         [Biome.CAVE, BiomePoolTier.RARE],
         [Biome.CAVE, BiomePoolTier.BOSS_RARE],
@@ -7913,7 +7947,7 @@ export function initBiomes() {
     ],
     [
       Species.KLINK,
-      ElementType.STEEL,
+      ElementalType.STEEL,
       -1,
       [
         [Biome.FACTORY, BiomePoolTier.COMMON],
@@ -7922,7 +7956,7 @@ export function initBiomes() {
     ],
     [
       Species.KLANG,
-      ElementType.STEEL,
+      ElementalType.STEEL,
       -1,
       [
         [Biome.FACTORY, BiomePoolTier.COMMON],
@@ -7931,7 +7965,7 @@ export function initBiomes() {
     ],
     [
       Species.KLINKLANG,
-      ElementType.STEEL,
+      ElementalType.STEEL,
       -1,
       [
         [Biome.FACTORY, BiomePoolTier.COMMON],
@@ -7940,12 +7974,12 @@ export function initBiomes() {
         [Biome.LABORATORY, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.TYNAMO, ElementType.ELECTRIC, -1, [[Biome.SEABED, BiomePoolTier.RARE]]],
-    [Species.EELEKTRIK, ElementType.ELECTRIC, -1, [[Biome.SEABED, BiomePoolTier.RARE]]],
-    [Species.EELEKTROSS, ElementType.ELECTRIC, -1, [[Biome.SEABED, BiomePoolTier.BOSS_RARE]]],
+    [Species.TYNAMO, ElementalType.ELECTRIC, -1, [[Biome.SEABED, BiomePoolTier.RARE]]],
+    [Species.EELEKTRIK, ElementalType.ELECTRIC, -1, [[Biome.SEABED, BiomePoolTier.RARE]]],
+    [Species.EELEKTROSS, ElementalType.ELECTRIC, -1, [[Biome.SEABED, BiomePoolTier.BOSS_RARE]]],
     [
       Species.ELGYEM,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [
         [Biome.RUINS, BiomePoolTier.COMMON],
@@ -7954,7 +7988,7 @@ export function initBiomes() {
     ],
     [
       Species.BEHEEYEM,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [
         [Biome.RUINS, BiomePoolTier.COMMON],
@@ -7964,8 +7998,8 @@ export function initBiomes() {
     ],
     [
       Species.LITWICK,
-      ElementType.GHOST,
-      ElementType.FIRE,
+      ElementalType.GHOST,
+      ElementalType.FIRE,
       [
         [Biome.GRAVEYARD, BiomePoolTier.COMMON],
         [Biome.TEMPLE, BiomePoolTier.UNCOMMON],
@@ -7973,17 +8007,17 @@ export function initBiomes() {
     ],
     [
       Species.LAMPENT,
-      ElementType.GHOST,
-      ElementType.FIRE,
+      ElementalType.GHOST,
+      ElementalType.FIRE,
       [
         [Biome.GRAVEYARD, BiomePoolTier.COMMON],
         [Biome.TEMPLE, BiomePoolTier.UNCOMMON],
       ],
     ],
-    [Species.CHANDELURE, ElementType.GHOST, ElementType.FIRE, [[Biome.GRAVEYARD, BiomePoolTier.BOSS]]],
+    [Species.CHANDELURE, ElementalType.GHOST, ElementalType.FIRE, [[Biome.GRAVEYARD, BiomePoolTier.BOSS]]],
     [
       Species.AXEW,
-      ElementType.DRAGON,
+      ElementalType.DRAGON,
       -1,
       [
         [Biome.MOUNTAIN, BiomePoolTier.SUPER_RARE],
@@ -7992,7 +8026,7 @@ export function initBiomes() {
     ],
     [
       Species.FRAXURE,
-      ElementType.DRAGON,
+      ElementalType.DRAGON,
       -1,
       [
         [Biome.MOUNTAIN, BiomePoolTier.SUPER_RARE],
@@ -8001,17 +8035,17 @@ export function initBiomes() {
     ],
     [
       Species.HAXORUS,
-      ElementType.DRAGON,
+      ElementalType.DRAGON,
       -1,
       [
         [Biome.WASTELAND, BiomePoolTier.COMMON],
         [Biome.WASTELAND, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.CUBCHOO, ElementType.ICE, -1, [[Biome.ICE_CAVE, BiomePoolTier.COMMON]]],
+    [Species.CUBCHOO, ElementalType.ICE, -1, [[Biome.ICE_CAVE, BiomePoolTier.COMMON]]],
     [
       Species.BEARTIC,
-      ElementType.ICE,
+      ElementalType.ICE,
       -1,
       [
         [Biome.ICE_CAVE, BiomePoolTier.COMMON],
@@ -8020,28 +8054,28 @@ export function initBiomes() {
     ],
     [
       Species.CRYOGONAL,
-      ElementType.ICE,
+      ElementalType.ICE,
       -1,
       [
         [Biome.ICE_CAVE, BiomePoolTier.RARE],
         [Biome.ICE_CAVE, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.SHELMET, ElementType.BUG, -1, [[Biome.FOREST, BiomePoolTier.RARE]]],
-    [Species.ACCELGOR, ElementType.BUG, -1, [[Biome.FOREST, BiomePoolTier.BOSS_RARE]]],
+    [Species.SHELMET, ElementalType.BUG, -1, [[Biome.FOREST, BiomePoolTier.RARE]]],
+    [Species.ACCELGOR, ElementalType.BUG, -1, [[Biome.FOREST, BiomePoolTier.BOSS_RARE]]],
     [
       Species.STUNFISK,
-      ElementType.GROUND,
-      ElementType.ELECTRIC,
+      ElementalType.GROUND,
+      ElementalType.ELECTRIC,
       [
         [Biome.SWAMP, BiomePoolTier.UNCOMMON],
         [Biome.SWAMP, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.MIENFOO, ElementType.FIGHTING, -1, [[Biome.DOJO, BiomePoolTier.UNCOMMON]]],
+    [Species.MIENFOO, ElementalType.FIGHTING, -1, [[Biome.DOJO, BiomePoolTier.UNCOMMON]]],
     [
       Species.MIENSHAO,
-      ElementType.FIGHTING,
+      ElementalType.FIGHTING,
       -1,
       [
         [Biome.DOJO, BiomePoolTier.UNCOMMON],
@@ -8050,28 +8084,28 @@ export function initBiomes() {
     ],
     [
       Species.DRUDDIGON,
-      ElementType.DRAGON,
+      ElementalType.DRAGON,
       -1,
       [
         [Biome.WASTELAND, BiomePoolTier.SUPER_RARE],
         [Biome.WASTELAND, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.GOLETT, ElementType.GROUND, ElementType.GHOST, [[Biome.TEMPLE, BiomePoolTier.COMMON]]],
+    [Species.GOLETT, ElementalType.GROUND, ElementalType.GHOST, [[Biome.TEMPLE, BiomePoolTier.COMMON]]],
     [
       Species.GOLURK,
-      ElementType.GROUND,
-      ElementType.GHOST,
+      ElementalType.GROUND,
+      ElementalType.GHOST,
       [
         [Biome.TEMPLE, BiomePoolTier.COMMON],
         [Biome.TEMPLE, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.PAWNIARD, ElementType.DARK, ElementType.STEEL, [[Biome.ABYSS, BiomePoolTier.COMMON]]],
-    [Species.BISHARP, ElementType.DARK, ElementType.STEEL, [[Biome.ABYSS, BiomePoolTier.COMMON]]],
+    [Species.PAWNIARD, ElementalType.DARK, ElementalType.STEEL, [[Biome.ABYSS, BiomePoolTier.COMMON]]],
+    [Species.BISHARP, ElementalType.DARK, ElementalType.STEEL, [[Biome.ABYSS, BiomePoolTier.COMMON]]],
     [
       Species.BOUFFALANT,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.MEADOW, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -8080,14 +8114,14 @@ export function initBiomes() {
     ],
     [
       Species.RUFFLET,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [[Biome.MOUNTAIN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.BRAVIARY,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.MOUNTAIN, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -8095,14 +8129,14 @@ export function initBiomes() {
     ],
     [
       Species.VULLABY,
-      ElementType.DARK,
-      ElementType.FLYING,
+      ElementalType.DARK,
+      ElementalType.FLYING,
       [[Biome.MOUNTAIN, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.MANDIBUZZ,
-      ElementType.DARK,
-      ElementType.FLYING,
+      ElementalType.DARK,
+      ElementalType.FLYING,
       [
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.MOUNTAIN, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -8110,7 +8144,7 @@ export function initBiomes() {
     ],
     [
       Species.HEATMOR,
-      ElementType.FIRE,
+      ElementalType.FIRE,
       -1,
       [
         [Biome.VOLCANO, BiomePoolTier.UNCOMMON],
@@ -8119,8 +8153,8 @@ export function initBiomes() {
     ],
     [
       Species.DURANT,
-      ElementType.BUG,
-      ElementType.STEEL,
+      ElementalType.BUG,
+      ElementalType.STEEL,
       [
         [Biome.FOREST, BiomePoolTier.SUPER_RARE],
         [Biome.FOREST, BiomePoolTier.BOSS_RARE],
@@ -8128,8 +8162,8 @@ export function initBiomes() {
     ],
     [
       Species.DEINO,
-      ElementType.DARK,
-      ElementType.DRAGON,
+      ElementalType.DARK,
+      ElementalType.DRAGON,
       [
         [Biome.WASTELAND, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.ABYSS, BiomePoolTier.RARE],
@@ -8137,8 +8171,8 @@ export function initBiomes() {
     ],
     [
       Species.ZWEILOUS,
-      ElementType.DARK,
-      ElementType.DRAGON,
+      ElementalType.DARK,
+      ElementalType.DRAGON,
       [
         [Biome.WASTELAND, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.ABYSS, BiomePoolTier.RARE],
@@ -8146,19 +8180,19 @@ export function initBiomes() {
     ],
     [
       Species.HYDREIGON,
-      ElementType.DARK,
-      ElementType.DRAGON,
+      ElementalType.DARK,
+      ElementalType.DRAGON,
       [
         [Biome.WASTELAND, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.ABYSS, BiomePoolTier.RARE],
         [Biome.ABYSS, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.LARVESTA, ElementType.BUG, ElementType.FIRE, [[Biome.VOLCANO, BiomePoolTier.SUPER_RARE]]],
+    [Species.LARVESTA, ElementalType.BUG, ElementalType.FIRE, [[Biome.VOLCANO, BiomePoolTier.SUPER_RARE]]],
     [
       Species.VOLCARONA,
-      ElementType.BUG,
-      ElementType.FIRE,
+      ElementalType.BUG,
+      ElementalType.FIRE,
       [
         [Biome.VOLCANO, BiomePoolTier.SUPER_RARE],
         [Biome.VOLCANO, BiomePoolTier.BOSS_RARE],
@@ -8166,8 +8200,8 @@ export function initBiomes() {
     ],
     [
       Species.COBALION,
-      ElementType.STEEL,
-      ElementType.FIGHTING,
+      ElementalType.STEEL,
+      ElementalType.FIGHTING,
       [
         [Biome.CONSTRUCTION_SITE, BiomePoolTier.ULTRA_RARE],
         [Biome.CONSTRUCTION_SITE, BiomePoolTier.BOSS_SUPER_RARE],
@@ -8175,8 +8209,8 @@ export function initBiomes() {
     ],
     [
       Species.TERRAKION,
-      ElementType.ROCK,
-      ElementType.FIGHTING,
+      ElementalType.ROCK,
+      ElementalType.FIGHTING,
       [
         [Biome.DOJO, BiomePoolTier.ULTRA_RARE],
         [Biome.DOJO, BiomePoolTier.BOSS_SUPER_RARE],
@@ -8184,8 +8218,8 @@ export function initBiomes() {
     ],
     [
       Species.VIRIZION,
-      ElementType.GRASS,
-      ElementType.FIGHTING,
+      ElementalType.GRASS,
+      ElementalType.FIGHTING,
       [
         [Biome.GRASS, BiomePoolTier.ULTRA_RARE],
         [Biome.GRASS, BiomePoolTier.BOSS_SUPER_RARE],
@@ -8193,7 +8227,7 @@ export function initBiomes() {
     ],
     [
       Species.TORNADUS,
-      ElementType.FLYING,
+      ElementalType.FLYING,
       -1,
       [
         [Biome.MOUNTAIN, BiomePoolTier.ULTRA_RARE],
@@ -8202,29 +8236,34 @@ export function initBiomes() {
     ],
     [
       Species.THUNDURUS,
-      ElementType.ELECTRIC,
-      ElementType.FLYING,
+      ElementalType.ELECTRIC,
+      ElementalType.FLYING,
       [
         [Biome.POWER_PLANT, BiomePoolTier.ULTRA_RARE],
         [Biome.POWER_PLANT, BiomePoolTier.BOSS_SUPER_RARE],
       ],
     ],
-    [Species.RESHIRAM, ElementType.DRAGON, ElementType.FIRE, [[Biome.VOLCANO, BiomePoolTier.BOSS_ULTRA_RARE]]],
-    [Species.ZEKROM, ElementType.DRAGON, ElementType.ELECTRIC, [[Biome.POWER_PLANT, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [Species.RESHIRAM, ElementalType.DRAGON, ElementalType.FIRE, [[Biome.VOLCANO, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [
+      Species.ZEKROM,
+      ElementalType.DRAGON,
+      ElementalType.ELECTRIC,
+      [[Biome.POWER_PLANT, BiomePoolTier.BOSS_ULTRA_RARE]],
+    ],
     [
       Species.LANDORUS,
-      ElementType.GROUND,
-      ElementType.FLYING,
+      ElementalType.GROUND,
+      ElementalType.FLYING,
       [
         [Biome.BADLANDS, BiomePoolTier.ULTRA_RARE],
         [Biome.BADLANDS, BiomePoolTier.BOSS_SUPER_RARE],
       ],
     ],
-    [Species.KYUREM, ElementType.DRAGON, ElementType.ICE, [[Biome.ICE_CAVE, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [Species.KYUREM, ElementalType.DRAGON, ElementalType.ICE, [[Biome.ICE_CAVE, BiomePoolTier.BOSS_ULTRA_RARE]]],
     [
       Species.KELDEO,
-      ElementType.WATER,
-      ElementType.FIGHTING,
+      ElementalType.WATER,
+      ElementalType.FIGHTING,
       [
         [Biome.BEACH, BiomePoolTier.ULTRA_RARE],
         [Biome.BEACH, BiomePoolTier.BOSS_SUPER_RARE],
@@ -8232,8 +8271,8 @@ export function initBiomes() {
     ],
     [
       Species.MELOETTA,
-      ElementType.NORMAL,
-      ElementType.PSYCHIC,
+      ElementalType.NORMAL,
+      ElementalType.PSYCHIC,
       [
         [Biome.MEADOW, BiomePoolTier.ULTRA_RARE],
         [Biome.MEADOW, BiomePoolTier.BOSS_SUPER_RARE],
@@ -8241,51 +8280,51 @@ export function initBiomes() {
     ],
     [
       Species.GENESECT,
-      ElementType.BUG,
-      ElementType.STEEL,
+      ElementalType.BUG,
+      ElementalType.STEEL,
       [
         [Biome.FACTORY, BiomePoolTier.ULTRA_RARE],
         [Biome.FACTORY, BiomePoolTier.BOSS_SUPER_RARE],
       ],
     ],
-    [Species.CHESPIN, ElementType.GRASS, -1, [[Biome.FOREST, BiomePoolTier.RARE]]],
-    [Species.QUILLADIN, ElementType.GRASS, -1, [[Biome.FOREST, BiomePoolTier.RARE]]],
+    [Species.CHESPIN, ElementalType.GRASS, -1, [[Biome.FOREST, BiomePoolTier.RARE]]],
+    [Species.QUILLADIN, ElementalType.GRASS, -1, [[Biome.FOREST, BiomePoolTier.RARE]]],
     [
       Species.CHESNAUGHT,
-      ElementType.GRASS,
-      ElementType.FIGHTING,
+      ElementalType.GRASS,
+      ElementalType.FIGHTING,
       [
         [Biome.FOREST, BiomePoolTier.RARE],
         [Biome.FOREST, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.FENNEKIN, ElementType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
-    [Species.BRAIXEN, ElementType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
+    [Species.FENNEKIN, ElementalType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
+    [Species.BRAIXEN, ElementalType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
     [
       Species.DELPHOX,
-      ElementType.FIRE,
-      ElementType.PSYCHIC,
+      ElementalType.FIRE,
+      ElementalType.PSYCHIC,
       [
         [Biome.VOLCANO, BiomePoolTier.RARE],
         [Biome.VOLCANO, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.FROAKIE, ElementType.WATER, -1, [[Biome.LAKE, BiomePoolTier.RARE]]],
-    [Species.FROGADIER, ElementType.WATER, -1, [[Biome.LAKE, BiomePoolTier.RARE]]],
+    [Species.FROAKIE, ElementalType.WATER, -1, [[Biome.LAKE, BiomePoolTier.RARE]]],
+    [Species.FROGADIER, ElementalType.WATER, -1, [[Biome.LAKE, BiomePoolTier.RARE]]],
     [
       Species.GRENINJA,
-      ElementType.WATER,
-      ElementType.DARK,
+      ElementalType.WATER,
+      ElementalType.DARK,
       [
         [Biome.LAKE, BiomePoolTier.RARE],
         [Biome.LAKE, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.BUNNELBY, ElementType.NORMAL, -1, [[Biome.CAVE, BiomePoolTier.COMMON]]],
+    [Species.BUNNELBY, ElementalType.NORMAL, -1, [[Biome.CAVE, BiomePoolTier.COMMON]]],
     [
       Species.DIGGERSBY,
-      ElementType.NORMAL,
-      ElementType.GROUND,
+      ElementalType.NORMAL,
+      ElementalType.GROUND,
       [
         [Biome.CAVE, BiomePoolTier.COMMON],
         [Biome.CAVE, BiomePoolTier.BOSS],
@@ -8293,8 +8332,8 @@ export function initBiomes() {
     ],
     [
       Species.FLETCHLING,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.TOWN, BiomePoolTier.COMMON],
         [Biome.PLAINS, BiomePoolTier.UNCOMMON],
@@ -8303,8 +8342,8 @@ export function initBiomes() {
     ],
     [
       Species.FLETCHINDER,
-      ElementType.FIRE,
-      ElementType.FLYING,
+      ElementalType.FIRE,
+      ElementalType.FLYING,
       [
         [Biome.PLAINS, BiomePoolTier.UNCOMMON],
         [Biome.MOUNTAIN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -8312,39 +8351,39 @@ export function initBiomes() {
     ],
     [
       Species.TALONFLAME,
-      ElementType.FIRE,
-      ElementType.FLYING,
+      ElementalType.FIRE,
+      ElementalType.FLYING,
       [
         [Biome.PLAINS, BiomePoolTier.UNCOMMON],
         [Biome.MOUNTAIN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.MOUNTAIN, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
       ],
     ],
-    [Species.SCATTERBUG, ElementType.BUG, -1, [[Biome.TOWN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
-    [Species.SPEWPA, ElementType.BUG, -1, [[Biome.TOWN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
+    [Species.SCATTERBUG, ElementalType.BUG, -1, [[Biome.TOWN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
+    [Species.SPEWPA, ElementalType.BUG, -1, [[Biome.TOWN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
     [
       Species.VIVILLON,
-      ElementType.BUG,
-      ElementType.FLYING,
+      ElementalType.BUG,
+      ElementalType.FLYING,
       [[Biome.FOREST, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
-    [Species.LITLEO, ElementType.FIRE, ElementType.NORMAL, [[Biome.JUNGLE, BiomePoolTier.UNCOMMON]]],
+    [Species.LITLEO, ElementalType.FIRE, ElementalType.NORMAL, [[Biome.JUNGLE, BiomePoolTier.UNCOMMON]]],
     [
       Species.PYROAR,
-      ElementType.FIRE,
-      ElementType.NORMAL,
+      ElementalType.FIRE,
+      ElementalType.NORMAL,
       [
         [Biome.JUNGLE, BiomePoolTier.UNCOMMON],
         [Biome.JUNGLE, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.FLABEBE, ElementType.FAIRY, -1, [[Biome.MEADOW, BiomePoolTier.COMMON]]],
-    [Species.FLOETTE, ElementType.FAIRY, -1, [[Biome.MEADOW, BiomePoolTier.COMMON]]],
-    [Species.FLORGES, ElementType.FAIRY, -1, [[Biome.MEADOW, BiomePoolTier.BOSS]]],
-    [Species.SKIDDO, ElementType.GRASS, -1, [[Biome.MOUNTAIN, BiomePoolTier.COMMON]]],
+    [Species.FLABEBE, ElementalType.FAIRY, -1, [[Biome.MEADOW, BiomePoolTier.COMMON]]],
+    [Species.FLOETTE, ElementalType.FAIRY, -1, [[Biome.MEADOW, BiomePoolTier.COMMON]]],
+    [Species.FLORGES, ElementalType.FAIRY, -1, [[Biome.MEADOW, BiomePoolTier.BOSS]]],
+    [Species.SKIDDO, ElementalType.GRASS, -1, [[Biome.MOUNTAIN, BiomePoolTier.COMMON]]],
     [
       Species.GOGOAT,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [
         [Biome.MOUNTAIN, BiomePoolTier.COMMON],
@@ -8353,7 +8392,7 @@ export function initBiomes() {
     ],
     [
       Species.PANCHAM,
-      ElementType.FIGHTING,
+      ElementalType.FIGHTING,
       -1,
       [
         [Biome.DOJO, BiomePoolTier.RARE],
@@ -8362,8 +8401,8 @@ export function initBiomes() {
     ],
     [
       Species.PANGORO,
-      ElementType.FIGHTING,
-      ElementType.DARK,
+      ElementalType.FIGHTING,
+      ElementalType.DARK,
       [
         [Biome.DOJO, BiomePoolTier.RARE],
         [Biome.DOJO, BiomePoolTier.BOSS_RARE],
@@ -8373,7 +8412,7 @@ export function initBiomes() {
     ],
     [
       Species.FURFROU,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.METROPOLIS, BiomePoolTier.UNCOMMON],
@@ -8382,36 +8421,36 @@ export function initBiomes() {
     ],
     [
       Species.ESPURR,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [[Biome.METROPOLIS, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.MEOWSTIC,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [
         [Biome.METROPOLIS, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.METROPOLIS, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
       ],
     ],
-    [Species.HONEDGE, ElementType.STEEL, ElementType.GHOST, [[Biome.TEMPLE, BiomePoolTier.COMMON]]],
-    [Species.DOUBLADE, ElementType.STEEL, ElementType.GHOST, [[Biome.TEMPLE, BiomePoolTier.COMMON]]],
-    [Species.AEGISLASH, ElementType.STEEL, ElementType.GHOST, [[Biome.TEMPLE, BiomePoolTier.BOSS]]],
-    [Species.SPRITZEE, ElementType.FAIRY, -1, [[Biome.FAIRY_CAVE, BiomePoolTier.COMMON]]],
+    [Species.HONEDGE, ElementalType.STEEL, ElementalType.GHOST, [[Biome.TEMPLE, BiomePoolTier.COMMON]]],
+    [Species.DOUBLADE, ElementalType.STEEL, ElementalType.GHOST, [[Biome.TEMPLE, BiomePoolTier.COMMON]]],
+    [Species.AEGISLASH, ElementalType.STEEL, ElementalType.GHOST, [[Biome.TEMPLE, BiomePoolTier.BOSS]]],
+    [Species.SPRITZEE, ElementalType.FAIRY, -1, [[Biome.FAIRY_CAVE, BiomePoolTier.COMMON]]],
     [
       Species.AROMATISSE,
-      ElementType.FAIRY,
+      ElementalType.FAIRY,
       -1,
       [
         [Biome.FAIRY_CAVE, BiomePoolTier.COMMON],
         [Biome.FAIRY_CAVE, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.SWIRLIX, ElementType.FAIRY, -1, [[Biome.FAIRY_CAVE, BiomePoolTier.COMMON]]],
+    [Species.SWIRLIX, ElementalType.FAIRY, -1, [[Biome.FAIRY_CAVE, BiomePoolTier.COMMON]]],
     [
       Species.SLURPUFF,
-      ElementType.FAIRY,
+      ElementalType.FAIRY,
       -1,
       [
         [Biome.FAIRY_CAVE, BiomePoolTier.COMMON],
@@ -8420,43 +8459,43 @@ export function initBiomes() {
     ],
     [
       Species.INKAY,
-      ElementType.DARK,
-      ElementType.PSYCHIC,
+      ElementalType.DARK,
+      ElementalType.PSYCHIC,
       [[Biome.SEA, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.MALAMAR,
-      ElementType.DARK,
-      ElementType.PSYCHIC,
+      ElementalType.DARK,
+      ElementalType.PSYCHIC,
       [
         [Biome.SEA, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.SEA, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
       ],
     ],
-    [Species.BINACLE, ElementType.ROCK, ElementType.WATER, [[Biome.BEACH, BiomePoolTier.COMMON]]],
+    [Species.BINACLE, ElementalType.ROCK, ElementalType.WATER, [[Biome.BEACH, BiomePoolTier.COMMON]]],
     [
       Species.BARBARACLE,
-      ElementType.ROCK,
-      ElementType.WATER,
+      ElementalType.ROCK,
+      ElementalType.WATER,
       [
         [Biome.BEACH, BiomePoolTier.COMMON],
         [Biome.BEACH, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.SKRELP, ElementType.POISON, ElementType.WATER, [[Biome.SEABED, BiomePoolTier.UNCOMMON]]],
+    [Species.SKRELP, ElementalType.POISON, ElementalType.WATER, [[Biome.SEABED, BiomePoolTier.UNCOMMON]]],
     [
       Species.DRAGALGE,
-      ElementType.POISON,
-      ElementType.DRAGON,
+      ElementalType.POISON,
+      ElementalType.DRAGON,
       [
         [Biome.SEABED, BiomePoolTier.UNCOMMON],
         [Biome.SEABED, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.CLAUNCHER, ElementType.WATER, -1, [[Biome.BEACH, BiomePoolTier.UNCOMMON]]],
+    [Species.CLAUNCHER, ElementalType.WATER, -1, [[Biome.BEACH, BiomePoolTier.UNCOMMON]]],
     [
       Species.CLAWITZER,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.BEACH, BiomePoolTier.UNCOMMON],
@@ -8465,31 +8504,31 @@ export function initBiomes() {
     ],
     [
       Species.HELIOPTILE,
-      ElementType.ELECTRIC,
-      ElementType.NORMAL,
+      ElementalType.ELECTRIC,
+      ElementalType.NORMAL,
       [[Biome.DESERT, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.HELIOLISK,
-      ElementType.ELECTRIC,
-      ElementType.NORMAL,
+      ElementalType.ELECTRIC,
+      ElementalType.NORMAL,
       [[Biome.DESERT, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
-    [Species.TYRUNT, ElementType.ROCK, ElementType.DRAGON, [[Biome.WASTELAND, BiomePoolTier.SUPER_RARE]]],
+    [Species.TYRUNT, ElementalType.ROCK, ElementalType.DRAGON, [[Biome.WASTELAND, BiomePoolTier.SUPER_RARE]]],
     [
       Species.TYRANTRUM,
-      ElementType.ROCK,
-      ElementType.DRAGON,
+      ElementalType.ROCK,
+      ElementalType.DRAGON,
       [
         [Biome.WASTELAND, BiomePoolTier.SUPER_RARE],
         [Biome.WASTELAND, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.AMAURA, ElementType.ROCK, ElementType.ICE, [[Biome.ICE_CAVE, BiomePoolTier.SUPER_RARE]]],
+    [Species.AMAURA, ElementalType.ROCK, ElementalType.ICE, [[Biome.ICE_CAVE, BiomePoolTier.SUPER_RARE]]],
     [
       Species.AURORUS,
-      ElementType.ROCK,
-      ElementType.ICE,
+      ElementalType.ROCK,
+      ElementalType.ICE,
       [
         [Biome.ICE_CAVE, BiomePoolTier.SUPER_RARE],
         [Biome.ICE_CAVE, BiomePoolTier.BOSS_RARE],
@@ -8497,7 +8536,7 @@ export function initBiomes() {
     ],
     [
       Species.SYLVEON,
-      ElementType.FAIRY,
+      ElementalType.FAIRY,
       -1,
       [
         [Biome.MEADOW, BiomePoolTier.SUPER_RARE],
@@ -8506,8 +8545,8 @@ export function initBiomes() {
     ],
     [
       Species.HAWLUCHA,
-      ElementType.FIGHTING,
-      ElementType.FLYING,
+      ElementalType.FIGHTING,
+      ElementalType.FLYING,
       [
         [Biome.MOUNTAIN, BiomePoolTier.RARE],
         [Biome.MOUNTAIN, BiomePoolTier.BOSS_RARE],
@@ -8515,8 +8554,8 @@ export function initBiomes() {
     ],
     [
       Species.DEDENNE,
-      ElementType.ELECTRIC,
-      ElementType.FAIRY,
+      ElementalType.ELECTRIC,
+      ElementalType.FAIRY,
       [
         [Biome.POWER_PLANT, BiomePoolTier.COMMON],
         [Biome.POWER_PLANT, BiomePoolTier.BOSS],
@@ -8524,24 +8563,29 @@ export function initBiomes() {
     ],
     [
       Species.CARBINK,
-      ElementType.ROCK,
-      ElementType.FAIRY,
+      ElementalType.ROCK,
+      ElementalType.FAIRY,
       [
         [Biome.CAVE, BiomePoolTier.RARE],
         [Biome.FAIRY_CAVE, BiomePoolTier.UNCOMMON],
         [Biome.FAIRY_CAVE, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.GOOMY, ElementType.DRAGON, -1, [[Biome.WASTELAND, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
+    [
+      Species.GOOMY,
+      ElementalType.DRAGON,
+      -1,
+      [[Biome.WASTELAND, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
+    ],
     [
       Species.SLIGGOO,
-      ElementType.DRAGON,
+      ElementalType.DRAGON,
       -1,
       [[Biome.WASTELAND, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.GOODRA,
-      ElementType.DRAGON,
+      ElementalType.DRAGON,
       -1,
       [
         [Biome.WASTELAND, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -8550,44 +8594,44 @@ export function initBiomes() {
     ],
     [
       Species.KLEFKI,
-      ElementType.STEEL,
-      ElementType.FAIRY,
+      ElementalType.STEEL,
+      ElementalType.FAIRY,
       [
         [Biome.FACTORY, BiomePoolTier.UNCOMMON],
         [Biome.FACTORY, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.PHANTUMP, ElementType.GHOST, ElementType.GRASS, [[Biome.GRAVEYARD, BiomePoolTier.COMMON]]],
-    [Species.TREVENANT, ElementType.GHOST, ElementType.GRASS, [[Biome.GRAVEYARD, BiomePoolTier.BOSS]]],
-    [Species.PUMPKABOO, ElementType.GHOST, ElementType.GRASS, [[Biome.GRAVEYARD, BiomePoolTier.COMMON]]],
-    [Species.GOURGEIST, ElementType.GHOST, ElementType.GRASS, [[Biome.GRAVEYARD, BiomePoolTier.BOSS]]],
-    [Species.BERGMITE, ElementType.ICE, -1, [[Biome.ICE_CAVE, BiomePoolTier.COMMON]]],
+    [Species.PHANTUMP, ElementalType.GHOST, ElementalType.GRASS, [[Biome.GRAVEYARD, BiomePoolTier.COMMON]]],
+    [Species.TREVENANT, ElementalType.GHOST, ElementalType.GRASS, [[Biome.GRAVEYARD, BiomePoolTier.BOSS]]],
+    [Species.PUMPKABOO, ElementalType.GHOST, ElementalType.GRASS, [[Biome.GRAVEYARD, BiomePoolTier.COMMON]]],
+    [Species.GOURGEIST, ElementalType.GHOST, ElementalType.GRASS, [[Biome.GRAVEYARD, BiomePoolTier.BOSS]]],
+    [Species.BERGMITE, ElementalType.ICE, -1, [[Biome.ICE_CAVE, BiomePoolTier.COMMON]]],
     [
       Species.AVALUGG,
-      ElementType.ICE,
+      ElementalType.ICE,
       -1,
       [
         [Biome.ICE_CAVE, BiomePoolTier.COMMON],
         [Biome.ICE_CAVE, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.NOIBAT, ElementType.FLYING, ElementType.DRAGON, [[Biome.CAVE, BiomePoolTier.UNCOMMON]]],
+    [Species.NOIBAT, ElementalType.FLYING, ElementalType.DRAGON, [[Biome.CAVE, BiomePoolTier.UNCOMMON]]],
     [
       Species.NOIVERN,
-      ElementType.FLYING,
-      ElementType.DRAGON,
+      ElementalType.FLYING,
+      ElementalType.DRAGON,
       [
         [Biome.CAVE, BiomePoolTier.UNCOMMON],
         [Biome.CAVE, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.XERNEAS, ElementType.FAIRY, -1, [[Biome.FAIRY_CAVE, BiomePoolTier.BOSS_ULTRA_RARE]]],
-    [Species.YVELTAL, ElementType.DARK, ElementType.FLYING, [[Biome.ABYSS, BiomePoolTier.BOSS_ULTRA_RARE]]],
-    [Species.ZYGARDE, ElementType.DRAGON, ElementType.GROUND, [[Biome.LABORATORY, BiomePoolTier.BOSS_SUPER_RARE]]],
+    [Species.XERNEAS, ElementalType.FAIRY, -1, [[Biome.FAIRY_CAVE, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [Species.YVELTAL, ElementalType.DARK, ElementalType.FLYING, [[Biome.ABYSS, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [Species.ZYGARDE, ElementalType.DRAGON, ElementalType.GROUND, [[Biome.LABORATORY, BiomePoolTier.BOSS_SUPER_RARE]]],
     [
       Species.DIANCIE,
-      ElementType.ROCK,
-      ElementType.FAIRY,
+      ElementalType.ROCK,
+      ElementalType.FAIRY,
       [
         [Biome.FAIRY_CAVE, BiomePoolTier.ULTRA_RARE],
         [Biome.FAIRY_CAVE, BiomePoolTier.BOSS_SUPER_RARE],
@@ -8595,8 +8639,8 @@ export function initBiomes() {
     ],
     [
       Species.HOOPA,
-      ElementType.PSYCHIC,
-      ElementType.GHOST,
+      ElementalType.PSYCHIC,
+      ElementalType.GHOST,
       [
         [Biome.TEMPLE, BiomePoolTier.ULTRA_RARE],
         [Biome.TEMPLE, BiomePoolTier.BOSS_SUPER_RARE],
@@ -8604,52 +8648,52 @@ export function initBiomes() {
     ],
     [
       Species.VOLCANION,
-      ElementType.FIRE,
-      ElementType.WATER,
+      ElementalType.FIRE,
+      ElementalType.WATER,
       [
         [Biome.VOLCANO, BiomePoolTier.ULTRA_RARE],
         [Biome.VOLCANO, BiomePoolTier.BOSS_SUPER_RARE],
       ],
     ],
-    [Species.ROWLET, ElementType.GRASS, ElementType.FLYING, [[Biome.FOREST, BiomePoolTier.RARE]]],
-    [Species.DARTRIX, ElementType.GRASS, ElementType.FLYING, [[Biome.FOREST, BiomePoolTier.RARE]]],
+    [Species.ROWLET, ElementalType.GRASS, ElementalType.FLYING, [[Biome.FOREST, BiomePoolTier.RARE]]],
+    [Species.DARTRIX, ElementalType.GRASS, ElementalType.FLYING, [[Biome.FOREST, BiomePoolTier.RARE]]],
     [
       Species.DECIDUEYE,
-      ElementType.GRASS,
-      ElementType.GHOST,
+      ElementalType.GRASS,
+      ElementalType.GHOST,
       [
         [Biome.FOREST, BiomePoolTier.RARE],
         [Biome.FOREST, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.LITTEN, ElementType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
-    [Species.TORRACAT, ElementType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
+    [Species.LITTEN, ElementalType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
+    [Species.TORRACAT, ElementalType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
     [
       Species.INCINEROAR,
-      ElementType.FIRE,
-      ElementType.DARK,
+      ElementalType.FIRE,
+      ElementalType.DARK,
       [
         [Biome.VOLCANO, BiomePoolTier.RARE],
         [Biome.VOLCANO, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.POPPLIO, ElementType.WATER, -1, [[Biome.SEA, BiomePoolTier.RARE]]],
-    [Species.BRIONNE, ElementType.WATER, -1, [[Biome.SEA, BiomePoolTier.RARE]]],
+    [Species.POPPLIO, ElementalType.WATER, -1, [[Biome.SEA, BiomePoolTier.RARE]]],
+    [Species.BRIONNE, ElementalType.WATER, -1, [[Biome.SEA, BiomePoolTier.RARE]]],
     [
       Species.PRIMARINA,
-      ElementType.WATER,
-      ElementType.FAIRY,
+      ElementalType.WATER,
+      ElementalType.FAIRY,
       [
         [Biome.SEA, BiomePoolTier.RARE],
         [Biome.SEA, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.PIKIPEK, ElementType.NORMAL, ElementType.FLYING, [[Biome.JUNGLE, BiomePoolTier.COMMON]]],
-    [Species.TRUMBEAK, ElementType.NORMAL, ElementType.FLYING, [[Biome.JUNGLE, BiomePoolTier.COMMON]]],
+    [Species.PIKIPEK, ElementalType.NORMAL, ElementalType.FLYING, [[Biome.JUNGLE, BiomePoolTier.COMMON]]],
+    [Species.TRUMBEAK, ElementalType.NORMAL, ElementalType.FLYING, [[Biome.JUNGLE, BiomePoolTier.COMMON]]],
     [
       Species.TOUCANNON,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.JUNGLE, BiomePoolTier.COMMON],
         [Biome.JUNGLE, BiomePoolTier.BOSS],
@@ -8657,7 +8701,7 @@ export function initBiomes() {
     ],
     [
       Species.YUNGOOS,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -8666,22 +8710,22 @@ export function initBiomes() {
     ],
     [
       Species.GUMSHOOS,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.PLAINS, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
       ],
     ],
-    [Species.GRUBBIN, ElementType.BUG, -1, [[Biome.POWER_PLANT, BiomePoolTier.COMMON]]],
-    [Species.CHARJABUG, ElementType.BUG, ElementType.ELECTRIC, [[Biome.POWER_PLANT, BiomePoolTier.COMMON]]],
-    [Species.VIKAVOLT, ElementType.BUG, ElementType.ELECTRIC, [[Biome.POWER_PLANT, BiomePoolTier.BOSS]]],
-    [Species.CRABRAWLER, ElementType.FIGHTING, -1, [[Biome.ICE_CAVE, BiomePoolTier.COMMON]]],
-    [Species.CRABOMINABLE, ElementType.FIGHTING, ElementType.ICE, [[Biome.ICE_CAVE, BiomePoolTier.BOSS]]],
+    [Species.GRUBBIN, ElementalType.BUG, -1, [[Biome.POWER_PLANT, BiomePoolTier.COMMON]]],
+    [Species.CHARJABUG, ElementalType.BUG, ElementalType.ELECTRIC, [[Biome.POWER_PLANT, BiomePoolTier.COMMON]]],
+    [Species.VIKAVOLT, ElementalType.BUG, ElementalType.ELECTRIC, [[Biome.POWER_PLANT, BiomePoolTier.BOSS]]],
+    [Species.CRABRAWLER, ElementalType.FIGHTING, -1, [[Biome.ICE_CAVE, BiomePoolTier.COMMON]]],
+    [Species.CRABOMINABLE, ElementalType.FIGHTING, ElementalType.ICE, [[Biome.ICE_CAVE, BiomePoolTier.BOSS]]],
     [
       Species.ORICORIO,
-      ElementType.FIRE,
-      ElementType.FLYING,
+      ElementalType.FIRE,
+      ElementalType.FLYING,
       [
         [Biome.MEADOW, BiomePoolTier.UNCOMMON],
         [Biome.ISLAND, BiomePoolTier.COMMON],
@@ -8690,8 +8734,8 @@ export function initBiomes() {
     ],
     [
       Species.CUTIEFLY,
-      ElementType.BUG,
-      ElementType.FAIRY,
+      ElementalType.BUG,
+      ElementalType.FAIRY,
       [
         [Biome.MEADOW, BiomePoolTier.COMMON],
         [Biome.FAIRY_CAVE, BiomePoolTier.COMMON],
@@ -8699,8 +8743,8 @@ export function initBiomes() {
     ],
     [
       Species.RIBOMBEE,
-      ElementType.BUG,
-      ElementType.FAIRY,
+      ElementalType.BUG,
+      ElementalType.FAIRY,
       [
         [Biome.MEADOW, BiomePoolTier.COMMON],
         [Biome.MEADOW, BiomePoolTier.BOSS],
@@ -8710,7 +8754,7 @@ export function initBiomes() {
     ],
     [
       Species.ROCKRUFF,
-      ElementType.ROCK,
+      ElementalType.ROCK,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.UNCOMMON, TimeOfDay.DAY],
@@ -8720,7 +8764,7 @@ export function initBiomes() {
     ],
     [
       Species.LYCANROC,
-      ElementType.ROCK,
+      ElementalType.ROCK,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.UNCOMMON, TimeOfDay.DAY],
@@ -8733,7 +8777,7 @@ export function initBiomes() {
     ],
     [
       Species.WISHIWASHI,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.LAKE, BiomePoolTier.UNCOMMON],
@@ -8742,8 +8786,8 @@ export function initBiomes() {
     ],
     [
       Species.MAREANIE,
-      ElementType.POISON,
-      ElementType.WATER,
+      ElementalType.POISON,
+      ElementalType.WATER,
       [
         [Biome.BEACH, BiomePoolTier.COMMON],
         [Biome.SWAMP, BiomePoolTier.UNCOMMON],
@@ -8751,8 +8795,8 @@ export function initBiomes() {
     ],
     [
       Species.TOXAPEX,
-      ElementType.POISON,
-      ElementType.WATER,
+      ElementalType.POISON,
+      ElementalType.WATER,
       [
         [Biome.BEACH, BiomePoolTier.COMMON],
         [Biome.BEACH, BiomePoolTier.BOSS],
@@ -8760,10 +8804,10 @@ export function initBiomes() {
         [Biome.SWAMP, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.MUDBRAY, ElementType.GROUND, -1, [[Biome.BADLANDS, BiomePoolTier.COMMON]]],
+    [Species.MUDBRAY, ElementalType.GROUND, -1, [[Biome.BADLANDS, BiomePoolTier.COMMON]]],
     [
       Species.MUDSDALE,
-      ElementType.GROUND,
+      ElementalType.GROUND,
       -1,
       [
         [Biome.BADLANDS, BiomePoolTier.COMMON],
@@ -8772,14 +8816,14 @@ export function initBiomes() {
     ],
     [
       Species.DEWPIDER,
-      ElementType.WATER,
-      ElementType.BUG,
+      ElementalType.WATER,
+      ElementalType.BUG,
       [[Biome.LAKE, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.ARAQUANID,
-      ElementType.WATER,
-      ElementType.BUG,
+      ElementalType.WATER,
+      ElementalType.BUG,
       [
         [Biome.LAKE, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.LAKE, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -8787,7 +8831,7 @@ export function initBiomes() {
     ],
     [
       Species.FOMANTIS,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [
         [Biome.TALL_GRASS, BiomePoolTier.COMMON],
@@ -8796,7 +8840,7 @@ export function initBiomes() {
     ],
     [
       Species.LURANTIS,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [
         [Biome.TALL_GRASS, BiomePoolTier.COMMON],
@@ -8805,31 +8849,31 @@ export function initBiomes() {
         [Biome.JUNGLE, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.MORELULL, ElementType.GRASS, ElementType.FAIRY, [[Biome.FAIRY_CAVE, BiomePoolTier.COMMON]]],
+    [Species.MORELULL, ElementalType.GRASS, ElementalType.FAIRY, [[Biome.FAIRY_CAVE, BiomePoolTier.COMMON]]],
     [
       Species.SHIINOTIC,
-      ElementType.GRASS,
-      ElementType.FAIRY,
+      ElementalType.GRASS,
+      ElementalType.FAIRY,
       [
         [Biome.FAIRY_CAVE, BiomePoolTier.COMMON],
         [Biome.FAIRY_CAVE, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.SALANDIT, ElementType.POISON, ElementType.FIRE, [[Biome.VOLCANO, BiomePoolTier.COMMON]]],
+    [Species.SALANDIT, ElementalType.POISON, ElementalType.FIRE, [[Biome.VOLCANO, BiomePoolTier.COMMON]]],
     [
       Species.SALAZZLE,
-      ElementType.POISON,
-      ElementType.FIRE,
+      ElementalType.POISON,
+      ElementalType.FIRE,
       [
         [Biome.VOLCANO, BiomePoolTier.COMMON],
         [Biome.VOLCANO, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.STUFFUL, ElementType.NORMAL, ElementType.FIGHTING, [[Biome.DOJO, BiomePoolTier.COMMON]]],
+    [Species.STUFFUL, ElementalType.NORMAL, ElementalType.FIGHTING, [[Biome.DOJO, BiomePoolTier.COMMON]]],
     [
       Species.BEWEAR,
-      ElementType.NORMAL,
-      ElementType.FIGHTING,
+      ElementalType.NORMAL,
+      ElementalType.FIGHTING,
       [
         [Biome.DOJO, BiomePoolTier.COMMON],
         [Biome.DOJO, BiomePoolTier.BOSS],
@@ -8837,19 +8881,19 @@ export function initBiomes() {
     ],
     [
       Species.BOUNSWEET,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [[Biome.TALL_GRASS, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.STEENEE,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [[Biome.TALL_GRASS, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.TSAREENA,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [
         [Biome.TALL_GRASS, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -8858,7 +8902,7 @@ export function initBiomes() {
     ],
     [
       Species.COMFEY,
-      ElementType.FAIRY,
+      ElementalType.FAIRY,
       -1,
       [
         [Biome.FAIRY_CAVE, BiomePoolTier.UNCOMMON],
@@ -8867,31 +8911,31 @@ export function initBiomes() {
     ],
     [
       Species.ORANGURU,
-      ElementType.NORMAL,
-      ElementType.PSYCHIC,
+      ElementalType.NORMAL,
+      ElementalType.PSYCHIC,
       [[Biome.JUNGLE, BiomePoolTier.RARE, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.PASSIMIAN,
-      ElementType.FIGHTING,
+      ElementalType.FIGHTING,
       -1,
       [[Biome.JUNGLE, BiomePoolTier.RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
-    [Species.WIMPOD, ElementType.BUG, ElementType.WATER, [[Biome.CAVE, BiomePoolTier.UNCOMMON]]],
+    [Species.WIMPOD, ElementalType.BUG, ElementalType.WATER, [[Biome.CAVE, BiomePoolTier.UNCOMMON]]],
     [
       Species.GOLISOPOD,
-      ElementType.BUG,
-      ElementType.WATER,
+      ElementalType.BUG,
+      ElementalType.WATER,
       [
         [Biome.CAVE, BiomePoolTier.UNCOMMON],
         [Biome.CAVE, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.SANDYGAST, ElementType.GHOST, ElementType.GROUND, [[Biome.BEACH, BiomePoolTier.UNCOMMON]]],
+    [Species.SANDYGAST, ElementalType.GHOST, ElementalType.GROUND, [[Biome.BEACH, BiomePoolTier.UNCOMMON]]],
     [
       Species.PALOSSAND,
-      ElementType.GHOST,
-      ElementType.GROUND,
+      ElementalType.GHOST,
+      ElementalType.GROUND,
       [
         [Biome.BEACH, BiomePoolTier.UNCOMMON],
         [Biome.BEACH, BiomePoolTier.BOSS],
@@ -8899,19 +8943,19 @@ export function initBiomes() {
     ],
     [
       Species.PYUKUMUKU,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SEABED, BiomePoolTier.SUPER_RARE],
         [Biome.SEABED, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.TYPE_NULL, ElementType.NORMAL, -1, [[Biome.LABORATORY, BiomePoolTier.ULTRA_RARE]]],
-    [Species.SILVALLY, ElementType.NORMAL, -1, [[Biome.LABORATORY, BiomePoolTier.BOSS_SUPER_RARE]]],
+    [Species.TYPE_NULL, ElementalType.NORMAL, -1, [[Biome.LABORATORY, BiomePoolTier.ULTRA_RARE]]],
+    [Species.SILVALLY, ElementalType.NORMAL, -1, [[Biome.LABORATORY, BiomePoolTier.BOSS_SUPER_RARE]]],
     [
       Species.MINIOR,
-      ElementType.ROCK,
-      ElementType.FLYING,
+      ElementalType.ROCK,
+      ElementalType.FLYING,
       [
         [Biome.SPACE, BiomePoolTier.COMMON],
         [Biome.SPACE, BiomePoolTier.BOSS],
@@ -8919,7 +8963,7 @@ export function initBiomes() {
     ],
     [
       Species.KOMALA,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.JUNGLE, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -8928,8 +8972,8 @@ export function initBiomes() {
     ],
     [
       Species.TURTONATOR,
-      ElementType.FIRE,
-      ElementType.DRAGON,
+      ElementalType.FIRE,
+      ElementalType.DRAGON,
       [
         [Biome.VOLCANO, BiomePoolTier.UNCOMMON],
         [Biome.VOLCANO, BiomePoolTier.BOSS],
@@ -8937,8 +8981,8 @@ export function initBiomes() {
     ],
     [
       Species.TOGEDEMARU,
-      ElementType.ELECTRIC,
-      ElementType.STEEL,
+      ElementalType.ELECTRIC,
+      ElementalType.STEEL,
       [
         [Biome.POWER_PLANT, BiomePoolTier.UNCOMMON],
         [Biome.POWER_PLANT, BiomePoolTier.BOSS],
@@ -8946,8 +8990,8 @@ export function initBiomes() {
     ],
     [
       Species.MIMIKYU,
-      ElementType.GHOST,
-      ElementType.FAIRY,
+      ElementalType.GHOST,
+      ElementalType.FAIRY,
       [
         [Biome.GRAVEYARD, BiomePoolTier.RARE],
         [Biome.GRAVEYARD, BiomePoolTier.BOSS],
@@ -8955,8 +8999,8 @@ export function initBiomes() {
     ],
     [
       Species.BRUXISH,
-      ElementType.WATER,
-      ElementType.PSYCHIC,
+      ElementalType.WATER,
+      ElementalType.PSYCHIC,
       [
         [Biome.ISLAND, BiomePoolTier.UNCOMMON],
         [Biome.ISLAND, BiomePoolTier.BOSS],
@@ -8964,8 +9008,8 @@ export function initBiomes() {
     ],
     [
       Species.DRAMPA,
-      ElementType.NORMAL,
-      ElementType.DRAGON,
+      ElementalType.NORMAL,
+      ElementalType.DRAGON,
       [
         [Biome.WASTELAND, BiomePoolTier.UNCOMMON],
         [Biome.WASTELAND, BiomePoolTier.BOSS],
@@ -8973,8 +9017,8 @@ export function initBiomes() {
     ],
     [
       Species.DHELMISE,
-      ElementType.GHOST,
-      ElementType.GRASS,
+      ElementalType.GHOST,
+      ElementalType.GRASS,
       [
         [Biome.SEABED, BiomePoolTier.RARE],
         [Biome.SEABED, BiomePoolTier.BOSS_RARE],
@@ -8982,20 +9026,20 @@ export function initBiomes() {
     ],
     [
       Species.JANGMO_O,
-      ElementType.DRAGON,
+      ElementalType.DRAGON,
       -1,
       [[Biome.WASTELAND, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.HAKAMO_O,
-      ElementType.DRAGON,
-      ElementType.FIGHTING,
+      ElementalType.DRAGON,
+      ElementalType.FIGHTING,
       [[Biome.WASTELAND, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.KOMMO_O,
-      ElementType.DRAGON,
-      ElementType.FIGHTING,
+      ElementalType.DRAGON,
+      ElementalType.FIGHTING,
       [
         [Biome.WASTELAND, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.WASTELAND, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -9003,8 +9047,8 @@ export function initBiomes() {
     ],
     [
       Species.TAPU_KOKO,
-      ElementType.ELECTRIC,
-      ElementType.FAIRY,
+      ElementalType.ELECTRIC,
+      ElementalType.FAIRY,
       [
         [Biome.TEMPLE, BiomePoolTier.ULTRA_RARE],
         [Biome.TEMPLE, BiomePoolTier.BOSS_SUPER_RARE],
@@ -9012,8 +9056,8 @@ export function initBiomes() {
     ],
     [
       Species.TAPU_LELE,
-      ElementType.PSYCHIC,
-      ElementType.FAIRY,
+      ElementalType.PSYCHIC,
+      ElementalType.FAIRY,
       [
         [Biome.JUNGLE, BiomePoolTier.ULTRA_RARE],
         [Biome.JUNGLE, BiomePoolTier.BOSS_SUPER_RARE],
@@ -9021,8 +9065,8 @@ export function initBiomes() {
     ],
     [
       Species.TAPU_BULU,
-      ElementType.GRASS,
-      ElementType.FAIRY,
+      ElementalType.GRASS,
+      ElementalType.FAIRY,
       [
         [Biome.DESERT, BiomePoolTier.ULTRA_RARE],
         [Biome.DESERT, BiomePoolTier.BOSS_SUPER_RARE],
@@ -9030,31 +9074,31 @@ export function initBiomes() {
     ],
     [
       Species.TAPU_FINI,
-      ElementType.WATER,
-      ElementType.FAIRY,
+      ElementalType.WATER,
+      ElementalType.FAIRY,
       [
         [Biome.BEACH, BiomePoolTier.ULTRA_RARE],
         [Biome.BEACH, BiomePoolTier.BOSS_SUPER_RARE],
       ],
     ],
-    [Species.COSMOG, ElementType.PSYCHIC, -1, [[Biome.SPACE, BiomePoolTier.ULTRA_RARE]]],
-    [Species.COSMOEM, ElementType.PSYCHIC, -1, [[Biome.SPACE, BiomePoolTier.ULTRA_RARE]]],
+    [Species.COSMOG, ElementalType.PSYCHIC, -1, [[Biome.SPACE, BiomePoolTier.ULTRA_RARE]]],
+    [Species.COSMOEM, ElementalType.PSYCHIC, -1, [[Biome.SPACE, BiomePoolTier.ULTRA_RARE]]],
     [
       Species.SOLGALEO,
-      ElementType.PSYCHIC,
-      ElementType.STEEL,
+      ElementalType.PSYCHIC,
+      ElementalType.STEEL,
       [[Biome.SPACE, BiomePoolTier.BOSS_ULTRA_RARE, TimeOfDay.DAY]],
     ],
     [
       Species.LUNALA,
-      ElementType.PSYCHIC,
-      ElementType.GHOST,
+      ElementalType.PSYCHIC,
+      ElementalType.GHOST,
       [[Biome.SPACE, BiomePoolTier.BOSS_ULTRA_RARE, TimeOfDay.NIGHT]],
     ],
     [
       Species.NIHILEGO,
-      ElementType.ROCK,
-      ElementType.POISON,
+      ElementalType.ROCK,
+      ElementalType.POISON,
       [
         [Biome.SEABED, BiomePoolTier.ULTRA_RARE],
         [Biome.SEABED, BiomePoolTier.BOSS_SUPER_RARE],
@@ -9062,8 +9106,8 @@ export function initBiomes() {
     ],
     [
       Species.BUZZWOLE,
-      ElementType.BUG,
-      ElementType.FIGHTING,
+      ElementalType.BUG,
+      ElementalType.FIGHTING,
       [
         [Biome.JUNGLE, BiomePoolTier.ULTRA_RARE],
         [Biome.JUNGLE, BiomePoolTier.BOSS_SUPER_RARE],
@@ -9071,8 +9115,8 @@ export function initBiomes() {
     ],
     [
       Species.PHEROMOSA,
-      ElementType.BUG,
-      ElementType.FIGHTING,
+      ElementalType.BUG,
+      ElementalType.FIGHTING,
       [
         [Biome.DESERT, BiomePoolTier.ULTRA_RARE],
         [Biome.DESERT, BiomePoolTier.BOSS_SUPER_RARE],
@@ -9080,7 +9124,7 @@ export function initBiomes() {
     ],
     [
       Species.XURKITREE,
-      ElementType.ELECTRIC,
+      ElementalType.ELECTRIC,
       -1,
       [
         [Biome.POWER_PLANT, BiomePoolTier.ULTRA_RARE],
@@ -9089,8 +9133,8 @@ export function initBiomes() {
     ],
     [
       Species.CELESTEELA,
-      ElementType.STEEL,
-      ElementType.FLYING,
+      ElementalType.STEEL,
+      ElementalType.FLYING,
       [
         [Biome.SPACE, BiomePoolTier.ULTRA_RARE],
         [Biome.SPACE, BiomePoolTier.BOSS_SUPER_RARE],
@@ -9098,8 +9142,8 @@ export function initBiomes() {
     ],
     [
       Species.KARTANA,
-      ElementType.GRASS,
-      ElementType.STEEL,
+      ElementalType.GRASS,
+      ElementalType.STEEL,
       [
         [Biome.FOREST, BiomePoolTier.ULTRA_RARE],
         [Biome.FOREST, BiomePoolTier.BOSS_SUPER_RARE],
@@ -9107,18 +9151,18 @@ export function initBiomes() {
     ],
     [
       Species.GUZZLORD,
-      ElementType.DARK,
-      ElementType.DRAGON,
+      ElementalType.DARK,
+      ElementalType.DRAGON,
       [
         [Biome.SLUM, BiomePoolTier.ULTRA_RARE],
         [Biome.SLUM, BiomePoolTier.BOSS_SUPER_RARE],
       ],
     ],
-    [Species.NECROZMA, ElementType.PSYCHIC, -1, [[Biome.SPACE, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [Species.NECROZMA, ElementalType.PSYCHIC, -1, [[Biome.SPACE, BiomePoolTier.BOSS_ULTRA_RARE]]],
     [
       Species.MAGEARNA,
-      ElementType.STEEL,
-      ElementType.FAIRY,
+      ElementalType.STEEL,
+      ElementalType.FAIRY,
       [
         [Biome.FACTORY, BiomePoolTier.ULTRA_RARE],
         [Biome.FACTORY, BiomePoolTier.BOSS_SUPER_RARE],
@@ -9126,19 +9170,19 @@ export function initBiomes() {
     ],
     [
       Species.MARSHADOW,
-      ElementType.FIGHTING,
-      ElementType.GHOST,
+      ElementalType.FIGHTING,
+      ElementalType.GHOST,
       [
         [Biome.GRAVEYARD, BiomePoolTier.ULTRA_RARE],
         [Biome.GRAVEYARD, BiomePoolTier.BOSS_SUPER_RARE],
       ],
     ],
-    [Species.POIPOLE, ElementType.POISON, -1, [[Biome.SWAMP, BiomePoolTier.ULTRA_RARE]]],
-    [Species.NAGANADEL, ElementType.POISON, ElementType.DRAGON, [[Biome.SWAMP, BiomePoolTier.BOSS_SUPER_RARE]]],
+    [Species.POIPOLE, ElementalType.POISON, -1, [[Biome.SWAMP, BiomePoolTier.ULTRA_RARE]]],
+    [Species.NAGANADEL, ElementalType.POISON, ElementalType.DRAGON, [[Biome.SWAMP, BiomePoolTier.BOSS_SUPER_RARE]]],
     [
       Species.STAKATAKA,
-      ElementType.ROCK,
-      ElementType.STEEL,
+      ElementalType.ROCK,
+      ElementalType.STEEL,
       [
         [Biome.CONSTRUCTION_SITE, BiomePoolTier.ULTRA_RARE],
         [Biome.CONSTRUCTION_SITE, BiomePoolTier.BOSS_SUPER_RARE],
@@ -9146,8 +9190,8 @@ export function initBiomes() {
     ],
     [
       Species.BLACEPHALON,
-      ElementType.FIRE,
-      ElementType.GHOST,
+      ElementalType.FIRE,
+      ElementalType.GHOST,
       [
         [Biome.ISLAND, BiomePoolTier.ULTRA_RARE],
         [Biome.ISLAND, BiomePoolTier.BOSS_SUPER_RARE],
@@ -9155,42 +9199,42 @@ export function initBiomes() {
     ],
     [
       Species.ZERAORA,
-      ElementType.ELECTRIC,
+      ElementalType.ELECTRIC,
       -1,
       [
         [Biome.POWER_PLANT, BiomePoolTier.ULTRA_RARE],
         [Biome.POWER_PLANT, BiomePoolTier.BOSS_SUPER_RARE],
       ],
     ],
-    [Species.MELTAN, ElementType.STEEL, -1, []],
-    [Species.MELMETAL, ElementType.STEEL, -1, []],
-    [Species.GROOKEY, ElementType.GRASS, -1, [[Biome.JUNGLE, BiomePoolTier.RARE]]],
-    [Species.THWACKEY, ElementType.GRASS, -1, [[Biome.JUNGLE, BiomePoolTier.RARE]]],
+    [Species.MELTAN, ElementalType.STEEL, -1, []],
+    [Species.MELMETAL, ElementalType.STEEL, -1, []],
+    [Species.GROOKEY, ElementalType.GRASS, -1, [[Biome.JUNGLE, BiomePoolTier.RARE]]],
+    [Species.THWACKEY, ElementalType.GRASS, -1, [[Biome.JUNGLE, BiomePoolTier.RARE]]],
     [
       Species.RILLABOOM,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [
         [Biome.JUNGLE, BiomePoolTier.RARE],
         [Biome.JUNGLE, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.SCORBUNNY, ElementType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
-    [Species.RABOOT, ElementType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
+    [Species.SCORBUNNY, ElementalType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
+    [Species.RABOOT, ElementalType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
     [
       Species.CINDERACE,
-      ElementType.FIRE,
+      ElementalType.FIRE,
       -1,
       [
         [Biome.VOLCANO, BiomePoolTier.RARE],
         [Biome.VOLCANO, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.SOBBLE, ElementType.WATER, -1, [[Biome.LAKE, BiomePoolTier.RARE]]],
-    [Species.DRIZZILE, ElementType.WATER, -1, [[Biome.LAKE, BiomePoolTier.RARE]]],
+    [Species.SOBBLE, ElementalType.WATER, -1, [[Biome.LAKE, BiomePoolTier.RARE]]],
+    [Species.DRIZZILE, ElementalType.WATER, -1, [[Biome.LAKE, BiomePoolTier.RARE]]],
     [
       Species.INTELEON,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.LAKE, BiomePoolTier.RARE],
@@ -9199,7 +9243,7 @@ export function initBiomes() {
     ],
     [
       Species.SKWOVET,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -9208,7 +9252,7 @@ export function initBiomes() {
     ],
     [
       Species.GREEDENT,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -9217,7 +9261,7 @@ export function initBiomes() {
     ],
     [
       Species.ROOKIDEE,
-      ElementType.FLYING,
+      ElementalType.FLYING,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.RARE],
@@ -9227,7 +9271,7 @@ export function initBiomes() {
     ],
     [
       Species.CORVISQUIRE,
-      ElementType.FLYING,
+      ElementalType.FLYING,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.RARE],
@@ -9236,45 +9280,45 @@ export function initBiomes() {
     ],
     [
       Species.CORVIKNIGHT,
-      ElementType.FLYING,
-      ElementType.STEEL,
+      ElementalType.FLYING,
+      ElementalType.STEEL,
       [
         [Biome.PLAINS, BiomePoolTier.RARE],
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.MOUNTAIN, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
       ],
     ],
-    [Species.BLIPBUG, ElementType.BUG, -1, [[Biome.TOWN, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]]],
+    [Species.BLIPBUG, ElementalType.BUG, -1, [[Biome.TOWN, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]]],
     [
       Species.DOTTLER,
-      ElementType.BUG,
-      ElementType.PSYCHIC,
+      ElementalType.BUG,
+      ElementalType.PSYCHIC,
       [[Biome.FOREST, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.ORBEETLE,
-      ElementType.BUG,
-      ElementType.PSYCHIC,
+      ElementalType.BUG,
+      ElementalType.PSYCHIC,
       [
         [Biome.FOREST, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.FOREST, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
       ],
     ],
-    [Species.NICKIT, ElementType.DARK, -1, [[Biome.ABYSS, BiomePoolTier.COMMON]]],
+    [Species.NICKIT, ElementalType.DARK, -1, [[Biome.ABYSS, BiomePoolTier.COMMON]]],
     [
       Species.THIEVUL,
-      ElementType.DARK,
+      ElementalType.DARK,
       -1,
       [
         [Biome.ABYSS, BiomePoolTier.COMMON],
         [Biome.ABYSS, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.GOSSIFLEUR, ElementType.GRASS, -1, [[Biome.MEADOW, BiomePoolTier.COMMON]]],
-    [Species.ELDEGOSS, ElementType.GRASS, -1, [[Biome.MEADOW, BiomePoolTier.COMMON]]],
+    [Species.GOSSIFLEUR, ElementalType.GRASS, -1, [[Biome.MEADOW, BiomePoolTier.COMMON]]],
+    [Species.ELDEGOSS, ElementalType.GRASS, -1, [[Biome.MEADOW, BiomePoolTier.COMMON]]],
     [
       Species.WOOLOO,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.COMMON],
@@ -9283,18 +9327,18 @@ export function initBiomes() {
     ],
     [
       Species.DUBWOOL,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.MEADOW, BiomePoolTier.COMMON],
         [Biome.MEADOW, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.CHEWTLE, ElementType.WATER, -1, [[Biome.LAKE, BiomePoolTier.COMMON]]],
+    [Species.CHEWTLE, ElementalType.WATER, -1, [[Biome.LAKE, BiomePoolTier.COMMON]]],
     [
       Species.DREDNAW,
-      ElementType.WATER,
-      ElementType.ROCK,
+      ElementalType.WATER,
+      ElementalType.ROCK,
       [
         [Biome.LAKE, BiomePoolTier.COMMON],
         [Biome.LAKE, BiomePoolTier.BOSS],
@@ -9302,37 +9346,37 @@ export function initBiomes() {
     ],
     [
       Species.YAMPER,
-      ElementType.ELECTRIC,
+      ElementalType.ELECTRIC,
       -1,
       [[Biome.METROPOLIS, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.BOLTUND,
-      ElementType.ELECTRIC,
+      ElementalType.ELECTRIC,
       -1,
       [
         [Biome.METROPOLIS, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.METROPOLIS, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
       ],
     ],
-    [Species.ROLYCOLY, ElementType.ROCK, -1, [[Biome.VOLCANO, BiomePoolTier.COMMON]]],
-    [Species.CARKOL, ElementType.ROCK, ElementType.FIRE, [[Biome.VOLCANO, BiomePoolTier.COMMON]]],
+    [Species.ROLYCOLY, ElementalType.ROCK, -1, [[Biome.VOLCANO, BiomePoolTier.COMMON]]],
+    [Species.CARKOL, ElementalType.ROCK, ElementalType.FIRE, [[Biome.VOLCANO, BiomePoolTier.COMMON]]],
     [
       Species.COALOSSAL,
-      ElementType.ROCK,
-      ElementType.FIRE,
+      ElementalType.ROCK,
+      ElementalType.FIRE,
       [
         [Biome.VOLCANO, BiomePoolTier.COMMON],
         [Biome.VOLCANO, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.APPLIN, ElementType.GRASS, ElementType.DRAGON, [[Biome.MEADOW, BiomePoolTier.RARE]]],
-    [Species.FLAPPLE, ElementType.GRASS, ElementType.DRAGON, [[Biome.MEADOW, BiomePoolTier.BOSS_RARE]]],
-    [Species.APPLETUN, ElementType.GRASS, ElementType.DRAGON, [[Biome.MEADOW, BiomePoolTier.BOSS_RARE]]],
-    [Species.SILICOBRA, ElementType.GROUND, -1, [[Biome.DESERT, BiomePoolTier.COMMON]]],
+    [Species.APPLIN, ElementalType.GRASS, ElementalType.DRAGON, [[Biome.MEADOW, BiomePoolTier.RARE]]],
+    [Species.FLAPPLE, ElementalType.GRASS, ElementalType.DRAGON, [[Biome.MEADOW, BiomePoolTier.BOSS_RARE]]],
+    [Species.APPLETUN, ElementalType.GRASS, ElementalType.DRAGON, [[Biome.MEADOW, BiomePoolTier.BOSS_RARE]]],
+    [Species.SILICOBRA, ElementalType.GROUND, -1, [[Biome.DESERT, BiomePoolTier.COMMON]]],
     [
       Species.SANDACONDA,
-      ElementType.GROUND,
+      ElementalType.GROUND,
       -1,
       [
         [Biome.DESERT, BiomePoolTier.COMMON],
@@ -9341,28 +9385,28 @@ export function initBiomes() {
     ],
     [
       Species.CRAMORANT,
-      ElementType.FLYING,
-      ElementType.WATER,
+      ElementalType.FLYING,
+      ElementalType.WATER,
       [
         [Biome.SEA, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.SEA, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
       ],
     ],
-    [Species.ARROKUDA, ElementType.WATER, -1, [[Biome.SEABED, BiomePoolTier.COMMON]]],
+    [Species.ARROKUDA, ElementalType.WATER, -1, [[Biome.SEABED, BiomePoolTier.COMMON]]],
     [
       Species.BARRASKEWDA,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SEABED, BiomePoolTier.COMMON],
         [Biome.SEABED, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.TOXEL, ElementType.ELECTRIC, ElementType.POISON, []],
+    [Species.TOXEL, ElementalType.ELECTRIC, ElementalType.POISON, []],
     [
       Species.TOXTRICITY,
-      ElementType.ELECTRIC,
-      ElementType.POISON,
+      ElementalType.ELECTRIC,
+      ElementalType.POISON,
       [
         [Biome.SLUM, BiomePoolTier.RARE, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.SLUM, BiomePoolTier.BOSS_RARE, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -9370,56 +9414,56 @@ export function initBiomes() {
     ],
     [
       Species.SIZZLIPEDE,
-      ElementType.FIRE,
-      ElementType.BUG,
+      ElementalType.FIRE,
+      ElementalType.BUG,
       [[Biome.BADLANDS, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.CENTISKORCH,
-      ElementType.FIRE,
-      ElementType.BUG,
+      ElementalType.FIRE,
+      ElementalType.BUG,
       [
         [Biome.BADLANDS, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.BADLANDS, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
       ],
     ],
-    [Species.CLOBBOPUS, ElementType.FIGHTING, -1, [[Biome.DOJO, BiomePoolTier.COMMON]]],
+    [Species.CLOBBOPUS, ElementalType.FIGHTING, -1, [[Biome.DOJO, BiomePoolTier.COMMON]]],
     [
       Species.GRAPPLOCT,
-      ElementType.FIGHTING,
+      ElementalType.FIGHTING,
       -1,
       [
         [Biome.DOJO, BiomePoolTier.COMMON],
         [Biome.DOJO, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.SINISTEA, ElementType.GHOST, -1, [[Biome.GRAVEYARD, BiomePoolTier.UNCOMMON]]],
+    [Species.SINISTEA, ElementalType.GHOST, -1, [[Biome.GRAVEYARD, BiomePoolTier.UNCOMMON]]],
     [
       Species.POLTEAGEIST,
-      ElementType.GHOST,
+      ElementalType.GHOST,
       -1,
       [
         [Biome.GRAVEYARD, BiomePoolTier.UNCOMMON],
         [Biome.GRAVEYARD, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.HATENNA, ElementType.PSYCHIC, -1, [[Biome.FAIRY_CAVE, BiomePoolTier.UNCOMMON]]],
-    [Species.HATTREM, ElementType.PSYCHIC, -1, [[Biome.FAIRY_CAVE, BiomePoolTier.UNCOMMON]]],
+    [Species.HATENNA, ElementalType.PSYCHIC, -1, [[Biome.FAIRY_CAVE, BiomePoolTier.UNCOMMON]]],
+    [Species.HATTREM, ElementalType.PSYCHIC, -1, [[Biome.FAIRY_CAVE, BiomePoolTier.UNCOMMON]]],
     [
       Species.HATTERENE,
-      ElementType.PSYCHIC,
-      ElementType.FAIRY,
+      ElementalType.PSYCHIC,
+      ElementalType.FAIRY,
       [
         [Biome.FAIRY_CAVE, BiomePoolTier.UNCOMMON],
         [Biome.FAIRY_CAVE, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.IMPIDIMP, ElementType.DARK, ElementType.FAIRY, [[Biome.ABYSS, BiomePoolTier.COMMON]]],
-    [Species.MORGREM, ElementType.DARK, ElementType.FAIRY, [[Biome.ABYSS, BiomePoolTier.COMMON]]],
+    [Species.IMPIDIMP, ElementalType.DARK, ElementalType.FAIRY, [[Biome.ABYSS, BiomePoolTier.COMMON]]],
+    [Species.MORGREM, ElementalType.DARK, ElementalType.FAIRY, [[Biome.ABYSS, BiomePoolTier.COMMON]]],
     [
       Species.GRIMMSNARL,
-      ElementType.DARK,
-      ElementType.FAIRY,
+      ElementalType.DARK,
+      ElementalType.FAIRY,
       [
         [Biome.ABYSS, BiomePoolTier.COMMON],
         [Biome.ABYSS, BiomePoolTier.BOSS],
@@ -9427,8 +9471,8 @@ export function initBiomes() {
     ],
     [
       Species.OBSTAGOON,
-      ElementType.DARK,
-      ElementType.NORMAL,
+      ElementalType.DARK,
+      ElementalType.NORMAL,
       [
         [Biome.SLUM, BiomePoolTier.RARE, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.SLUM, BiomePoolTier.BOSS_RARE, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -9436,7 +9480,7 @@ export function initBiomes() {
     ],
     [
       Species.PERRSERKER,
-      ElementType.STEEL,
+      ElementalType.STEEL,
       -1,
       [
         [Biome.CONSTRUCTION_SITE, BiomePoolTier.RARE, TimeOfDay.DUSK],
@@ -9445,18 +9489,18 @@ export function initBiomes() {
     ],
     [
       Species.CURSOLA,
-      ElementType.GHOST,
+      ElementalType.GHOST,
       -1,
       [
         [Biome.SEABED, BiomePoolTier.SUPER_RARE],
         [Biome.SEABED, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.SIRFETCHD, ElementType.FIGHTING, -1, [[Biome.DOJO, BiomePoolTier.BOSS_RARE]]],
+    [Species.SIRFETCHD, ElementalType.FIGHTING, -1, [[Biome.DOJO, BiomePoolTier.BOSS_RARE]]],
     [
       Species.MR_RIME,
-      ElementType.ICE,
-      ElementType.PSYCHIC,
+      ElementalType.ICE,
+      ElementalType.PSYCHIC,
       [
         [Biome.SNOWY_FOREST, BiomePoolTier.SUPER_RARE],
         [Biome.SNOWY_FOREST, BiomePoolTier.BOSS_RARE],
@@ -9464,17 +9508,17 @@ export function initBiomes() {
     ],
     [
       Species.RUNERIGUS,
-      ElementType.GROUND,
-      ElementType.GHOST,
+      ElementalType.GROUND,
+      ElementalType.GHOST,
       [
         [Biome.RUINS, BiomePoolTier.SUPER_RARE, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.RUINS, BiomePoolTier.BOSS_RARE, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
       ],
     ],
-    [Species.MILCERY, ElementType.FAIRY, -1, [[Biome.FAIRY_CAVE, BiomePoolTier.COMMON]]],
+    [Species.MILCERY, ElementalType.FAIRY, -1, [[Biome.FAIRY_CAVE, BiomePoolTier.COMMON]]],
     [
       Species.ALCREMIE,
-      ElementType.FAIRY,
+      ElementalType.FAIRY,
       -1,
       [
         [Biome.FAIRY_CAVE, BiomePoolTier.COMMON],
@@ -9483,18 +9527,18 @@ export function initBiomes() {
     ],
     [
       Species.FALINKS,
-      ElementType.FIGHTING,
+      ElementalType.FIGHTING,
       -1,
       [
         [Biome.JUNGLE, BiomePoolTier.UNCOMMON],
         [Biome.JUNGLE, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.PINCURCHIN, ElementType.ELECTRIC, -1, [[Biome.SEABED, BiomePoolTier.UNCOMMON]]],
+    [Species.PINCURCHIN, ElementalType.ELECTRIC, -1, [[Biome.SEABED, BiomePoolTier.UNCOMMON]]],
     [
       Species.SNOM,
-      ElementType.ICE,
-      ElementType.BUG,
+      ElementalType.ICE,
+      ElementalType.BUG,
       [
         [Biome.ICE_CAVE, BiomePoolTier.COMMON],
         [Biome.SNOWY_FOREST, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -9502,18 +9546,18 @@ export function initBiomes() {
     ],
     [
       Species.FROSMOTH,
-      ElementType.ICE,
-      ElementType.BUG,
+      ElementalType.ICE,
+      ElementalType.BUG,
       [
         [Biome.ICE_CAVE, BiomePoolTier.COMMON],
         [Biome.SNOWY_FOREST, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.SNOWY_FOREST, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
       ],
     ],
-    [Species.STONJOURNER, ElementType.ROCK, -1, [[Biome.RUINS, BiomePoolTier.RARE]]],
+    [Species.STONJOURNER, ElementalType.ROCK, -1, [[Biome.RUINS, BiomePoolTier.RARE]]],
     [
       Species.EISCUE,
-      ElementType.ICE,
+      ElementalType.ICE,
       -1,
       [
         [Biome.ICE_CAVE, BiomePoolTier.UNCOMMON],
@@ -9522,20 +9566,20 @@ export function initBiomes() {
     ],
     [
       Species.INDEEDEE,
-      ElementType.PSYCHIC,
-      ElementType.NORMAL,
+      ElementalType.PSYCHIC,
+      ElementalType.NORMAL,
       [[Biome.METROPOLIS, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.MORPEKO,
-      ElementType.ELECTRIC,
-      ElementType.DARK,
+      ElementalType.ELECTRIC,
+      ElementalType.DARK,
       [[Biome.METROPOLIS, BiomePoolTier.RARE, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
-    [Species.CUFANT, ElementType.STEEL, -1, [[Biome.BADLANDS, BiomePoolTier.UNCOMMON]]],
+    [Species.CUFANT, ElementalType.STEEL, -1, [[Biome.BADLANDS, BiomePoolTier.UNCOMMON]]],
     [
       Species.COPPERAJAH,
-      ElementType.STEEL,
+      ElementalType.STEEL,
       -1,
       [
         [Biome.BADLANDS, BiomePoolTier.UNCOMMON],
@@ -9544,8 +9588,8 @@ export function initBiomes() {
     ],
     [
       Species.DRACOZOLT,
-      ElementType.ELECTRIC,
-      ElementType.DRAGON,
+      ElementalType.ELECTRIC,
+      ElementalType.DRAGON,
       [
         [Biome.WASTELAND, BiomePoolTier.SUPER_RARE],
         [Biome.WASTELAND, BiomePoolTier.BOSS_RARE],
@@ -9553,8 +9597,8 @@ export function initBiomes() {
     ],
     [
       Species.ARCTOZOLT,
-      ElementType.ELECTRIC,
-      ElementType.ICE,
+      ElementalType.ELECTRIC,
+      ElementalType.ICE,
       [
         [Biome.SNOWY_FOREST, BiomePoolTier.SUPER_RARE],
         [Biome.SNOWY_FOREST, BiomePoolTier.BOSS_RARE],
@@ -9562,8 +9606,8 @@ export function initBiomes() {
     ],
     [
       Species.DRACOVISH,
-      ElementType.WATER,
-      ElementType.DRAGON,
+      ElementalType.WATER,
+      ElementalType.DRAGON,
       [
         [Biome.WASTELAND, BiomePoolTier.SUPER_RARE],
         [Biome.WASTELAND, BiomePoolTier.BOSS_RARE],
@@ -9571,44 +9615,44 @@ export function initBiomes() {
     ],
     [
       Species.ARCTOVISH,
-      ElementType.WATER,
-      ElementType.ICE,
+      ElementalType.WATER,
+      ElementalType.ICE,
       [
         [Biome.SEABED, BiomePoolTier.SUPER_RARE],
         [Biome.SEABED, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.DURALUDON, ElementType.STEEL, ElementType.DRAGON, [[Biome.CONSTRUCTION_SITE, BiomePoolTier.RARE]]],
+    [Species.DURALUDON, ElementalType.STEEL, ElementalType.DRAGON, [[Biome.CONSTRUCTION_SITE, BiomePoolTier.RARE]]],
     [
       Species.DREEPY,
-      ElementType.DRAGON,
-      ElementType.GHOST,
+      ElementalType.DRAGON,
+      ElementalType.GHOST,
       [[Biome.WASTELAND, BiomePoolTier.RARE, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.DRAKLOAK,
-      ElementType.DRAGON,
-      ElementType.GHOST,
+      ElementalType.DRAGON,
+      ElementalType.GHOST,
       [[Biome.WASTELAND, BiomePoolTier.RARE, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.DRAGAPULT,
-      ElementType.DRAGON,
-      ElementType.GHOST,
+      ElementalType.DRAGON,
+      ElementalType.GHOST,
       [
         [Biome.WASTELAND, BiomePoolTier.RARE, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.WASTELAND, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
       ],
     ],
-    [Species.ZACIAN, ElementType.FAIRY, -1, [[Biome.SNOWY_FOREST, BiomePoolTier.BOSS_ULTRA_RARE]]],
-    [Species.ZAMAZENTA, ElementType.FIGHTING, -1, [[Biome.DOJO, BiomePoolTier.BOSS_ULTRA_RARE]]],
-    [Species.ETERNATUS, ElementType.POISON, ElementType.DRAGON, [[Biome.END, BiomePoolTier.BOSS]]],
-    [Species.KUBFU, ElementType.FIGHTING, -1, [[Biome.DOJO, BiomePoolTier.ULTRA_RARE]]],
-    [Species.URSHIFU, ElementType.FIGHTING, ElementType.DARK, [[Biome.DOJO, BiomePoolTier.BOSS_SUPER_RARE]]],
+    [Species.ZACIAN, ElementalType.FAIRY, -1, [[Biome.SNOWY_FOREST, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [Species.ZAMAZENTA, ElementalType.FIGHTING, -1, [[Biome.DOJO, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [Species.ETERNATUS, ElementalType.POISON, ElementalType.DRAGON, [[Biome.END, BiomePoolTier.BOSS]]],
+    [Species.KUBFU, ElementalType.FIGHTING, -1, [[Biome.DOJO, BiomePoolTier.ULTRA_RARE]]],
+    [Species.URSHIFU, ElementalType.FIGHTING, ElementalType.DARK, [[Biome.DOJO, BiomePoolTier.BOSS_SUPER_RARE]]],
     [
       Species.ZARUDE,
-      ElementType.DARK,
-      ElementType.GRASS,
+      ElementalType.DARK,
+      ElementalType.GRASS,
       [
         [Biome.JUNGLE, BiomePoolTier.ULTRA_RARE],
         [Biome.JUNGLE, BiomePoolTier.BOSS_SUPER_RARE],
@@ -9616,7 +9660,7 @@ export function initBiomes() {
     ],
     [
       Species.REGIELEKI,
-      ElementType.ELECTRIC,
+      ElementalType.ELECTRIC,
       -1,
       [
         [Biome.POWER_PLANT, BiomePoolTier.ULTRA_RARE],
@@ -9625,7 +9669,7 @@ export function initBiomes() {
     ],
     [
       Species.REGIDRAGO,
-      ElementType.DRAGON,
+      ElementalType.DRAGON,
       -1,
       [
         [Biome.WASTELAND, BiomePoolTier.ULTRA_RARE],
@@ -9634,7 +9678,7 @@ export function initBiomes() {
     ],
     [
       Species.GLASTRIER,
-      ElementType.ICE,
+      ElementalType.ICE,
       -1,
       [
         [Biome.SNOWY_FOREST, BiomePoolTier.ULTRA_RARE],
@@ -9643,75 +9687,75 @@ export function initBiomes() {
     ],
     [
       Species.SPECTRIER,
-      ElementType.GHOST,
+      ElementalType.GHOST,
       -1,
       [
         [Biome.GRAVEYARD, BiomePoolTier.ULTRA_RARE],
         [Biome.GRAVEYARD, BiomePoolTier.BOSS_SUPER_RARE],
       ],
     ],
-    [Species.CALYREX, ElementType.PSYCHIC, ElementType.GRASS, [[Biome.FOREST, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [Species.CALYREX, ElementalType.PSYCHIC, ElementalType.GRASS, [[Biome.FOREST, BiomePoolTier.BOSS_ULTRA_RARE]]],
     [
       Species.WYRDEER,
-      ElementType.NORMAL,
-      ElementType.PSYCHIC,
+      ElementalType.NORMAL,
+      ElementalType.PSYCHIC,
       [[Biome.SNOWY_FOREST, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.KLEAVOR,
-      ElementType.BUG,
-      ElementType.ROCK,
+      ElementalType.BUG,
+      ElementalType.ROCK,
       [
         [Biome.JUNGLE, BiomePoolTier.SUPER_RARE],
         [Biome.JUNGLE, BiomePoolTier.BOSS_ULTRA_RARE],
       ],
     ],
-    [Species.URSALUNA, ElementType.GROUND, ElementType.NORMAL, [[Biome.SNOWY_FOREST, BiomePoolTier.BOSS]]],
-    [Species.BASCULEGION, ElementType.WATER, ElementType.GHOST, [[Biome.SEABED, BiomePoolTier.BOSS_RARE]]],
+    [Species.URSALUNA, ElementalType.GROUND, ElementalType.NORMAL, [[Biome.SNOWY_FOREST, BiomePoolTier.BOSS]]],
+    [Species.BASCULEGION, ElementalType.WATER, ElementalType.GHOST, [[Biome.SEABED, BiomePoolTier.BOSS_RARE]]],
     [
       Species.SNEASLER,
-      ElementType.FIGHTING,
-      ElementType.POISON,
+      ElementalType.FIGHTING,
+      ElementalType.POISON,
       [[Biome.SNOWY_FOREST, BiomePoolTier.BOSS_RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
-    [Species.OVERQWIL, ElementType.DARK, ElementType.POISON, [[Biome.SEABED, BiomePoolTier.BOSS_RARE]]],
+    [Species.OVERQWIL, ElementalType.DARK, ElementalType.POISON, [[Biome.SEABED, BiomePoolTier.BOSS_RARE]]],
     [
       Species.ENAMORUS,
-      ElementType.FAIRY,
-      ElementType.FLYING,
+      ElementalType.FAIRY,
+      ElementalType.FLYING,
       [
         [Biome.FAIRY_CAVE, BiomePoolTier.ULTRA_RARE],
         [Biome.FAIRY_CAVE, BiomePoolTier.BOSS_SUPER_RARE],
       ],
     ],
-    [Species.SPRIGATITO, ElementType.GRASS, -1, [[Biome.MEADOW, BiomePoolTier.RARE]]],
-    [Species.FLORAGATO, ElementType.GRASS, -1, [[Biome.MEADOW, BiomePoolTier.RARE]]],
+    [Species.SPRIGATITO, ElementalType.GRASS, -1, [[Biome.MEADOW, BiomePoolTier.RARE]]],
+    [Species.FLORAGATO, ElementalType.GRASS, -1, [[Biome.MEADOW, BiomePoolTier.RARE]]],
     [
       Species.MEOWSCARADA,
-      ElementType.GRASS,
-      ElementType.DARK,
+      ElementalType.GRASS,
+      ElementalType.DARK,
       [
         [Biome.MEADOW, BiomePoolTier.RARE],
         [Biome.MEADOW, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.FUECOCO, ElementType.FIRE, -1, [[Biome.GRAVEYARD, BiomePoolTier.RARE]]],
-    [Species.CROCALOR, ElementType.FIRE, -1, [[Biome.GRAVEYARD, BiomePoolTier.RARE]]],
+    [Species.FUECOCO, ElementalType.FIRE, -1, [[Biome.GRAVEYARD, BiomePoolTier.RARE]]],
+    [Species.CROCALOR, ElementalType.FIRE, -1, [[Biome.GRAVEYARD, BiomePoolTier.RARE]]],
     [
       Species.SKELEDIRGE,
-      ElementType.FIRE,
-      ElementType.GHOST,
+      ElementalType.FIRE,
+      ElementalType.GHOST,
       [
         [Biome.GRAVEYARD, BiomePoolTier.RARE],
         [Biome.GRAVEYARD, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.QUAXLY, ElementType.WATER, -1, [[Biome.BEACH, BiomePoolTier.RARE]]],
-    [Species.QUAXWELL, ElementType.WATER, -1, [[Biome.BEACH, BiomePoolTier.RARE]]],
+    [Species.QUAXLY, ElementalType.WATER, -1, [[Biome.BEACH, BiomePoolTier.RARE]]],
+    [Species.QUAXWELL, ElementalType.WATER, -1, [[Biome.BEACH, BiomePoolTier.RARE]]],
     [
       Species.QUAQUAVAL,
-      ElementType.WATER,
-      ElementType.FIGHTING,
+      ElementalType.WATER,
+      ElementalType.FIGHTING,
       [
         [Biome.BEACH, BiomePoolTier.RARE],
         [Biome.BEACH, BiomePoolTier.BOSS_RARE],
@@ -9719,7 +9763,7 @@ export function initBiomes() {
     ],
     [
       Species.LECHONK,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.COMMON],
@@ -9728,17 +9772,17 @@ export function initBiomes() {
     ],
     [
       Species.OINKOLOGNE,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.COMMON],
         [Biome.PLAINS, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.TAROUNTULA, ElementType.BUG, -1, [[Biome.FOREST, BiomePoolTier.COMMON]]],
+    [Species.TAROUNTULA, ElementalType.BUG, -1, [[Biome.FOREST, BiomePoolTier.COMMON]]],
     [
       Species.SPIDOPS,
-      ElementType.BUG,
+      ElementalType.BUG,
       -1,
       [
         [Biome.FOREST, BiomePoolTier.COMMON],
@@ -9747,7 +9791,7 @@ export function initBiomes() {
     ],
     [
       Species.NYMBLE,
-      ElementType.BUG,
+      ElementalType.BUG,
       -1,
       [
         [Biome.TALL_GRASS, BiomePoolTier.COMMON],
@@ -9756,8 +9800,8 @@ export function initBiomes() {
     ],
     [
       Species.LOKIX,
-      ElementType.BUG,
-      ElementType.DARK,
+      ElementalType.BUG,
+      ElementalType.DARK,
       [
         [Biome.TALL_GRASS, BiomePoolTier.COMMON],
         [Biome.TALL_GRASS, BiomePoolTier.BOSS],
@@ -9767,7 +9811,7 @@ export function initBiomes() {
     ],
     [
       Species.PAWMI,
-      ElementType.ELECTRIC,
+      ElementalType.ELECTRIC,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -9777,8 +9821,8 @@ export function initBiomes() {
     ],
     [
       Species.PAWMO,
-      ElementType.ELECTRIC,
-      ElementType.FIGHTING,
+      ElementalType.ELECTRIC,
+      ElementalType.FIGHTING,
       [
         [Biome.PLAINS, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.POWER_PLANT, BiomePoolTier.COMMON],
@@ -9786,8 +9830,8 @@ export function initBiomes() {
     ],
     [
       Species.PAWMOT,
-      ElementType.ELECTRIC,
-      ElementType.FIGHTING,
+      ElementalType.ELECTRIC,
+      ElementalType.FIGHTING,
       [
         [Biome.PLAINS, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.PLAINS, BiomePoolTier.BOSS_RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -9797,7 +9841,7 @@ export function initBiomes() {
     ],
     [
       Species.TANDEMAUS,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -9806,7 +9850,7 @@ export function initBiomes() {
     ],
     [
       Species.MAUSHOLD,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.METROPOLIS, BiomePoolTier.RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -9815,7 +9859,7 @@ export function initBiomes() {
     ],
     [
       Species.FIDOUGH,
-      ElementType.FAIRY,
+      ElementalType.FAIRY,
       -1,
       [
         [Biome.TOWN, BiomePoolTier.UNCOMMON],
@@ -9824,7 +9868,7 @@ export function initBiomes() {
     ],
     [
       Species.DACHSBUN,
-      ElementType.FAIRY,
+      ElementalType.FAIRY,
       -1,
       [
         [Biome.METROPOLIS, BiomePoolTier.UNCOMMON],
@@ -9833,20 +9877,20 @@ export function initBiomes() {
     ],
     [
       Species.SMOLIV,
-      ElementType.GRASS,
-      ElementType.NORMAL,
+      ElementalType.GRASS,
+      ElementalType.NORMAL,
       [[Biome.MEADOW, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.DOLLIV,
-      ElementType.GRASS,
-      ElementType.NORMAL,
+      ElementalType.GRASS,
+      ElementalType.NORMAL,
       [[Biome.MEADOW, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.ARBOLIVA,
-      ElementType.GRASS,
-      ElementType.NORMAL,
+      ElementalType.GRASS,
+      ElementalType.NORMAL,
       [
         [Biome.MEADOW, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.MEADOW, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -9854,8 +9898,8 @@ export function initBiomes() {
     ],
     [
       Species.SQUAWKABILLY,
-      ElementType.NORMAL,
-      ElementType.FLYING,
+      ElementalType.NORMAL,
+      ElementalType.FLYING,
       [
         [Biome.METROPOLIS, BiomePoolTier.UNCOMMON],
         [Biome.FOREST, BiomePoolTier.RARE],
@@ -9863,7 +9907,7 @@ export function initBiomes() {
     ],
     [
       Species.NACLI,
-      ElementType.ROCK,
+      ElementalType.ROCK,
       -1,
       [
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON],
@@ -9872,7 +9916,7 @@ export function initBiomes() {
     ],
     [
       Species.NACLSTACK,
-      ElementType.ROCK,
+      ElementalType.ROCK,
       -1,
       [
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON],
@@ -9881,7 +9925,7 @@ export function initBiomes() {
     ],
     [
       Species.GARGANACL,
-      ElementType.ROCK,
+      ElementalType.ROCK,
       -1,
       [
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON],
@@ -9890,11 +9934,11 @@ export function initBiomes() {
         [Biome.CAVE, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.CHARCADET, ElementType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
+    [Species.CHARCADET, ElementalType.FIRE, -1, [[Biome.VOLCANO, BiomePoolTier.RARE]]],
     [
       Species.ARMAROUGE,
-      ElementType.FIRE,
-      ElementType.PSYCHIC,
+      ElementalType.FIRE,
+      ElementalType.PSYCHIC,
       [
         [Biome.VOLCANO, BiomePoolTier.RARE],
         [Biome.VOLCANO, BiomePoolTier.BOSS_RARE],
@@ -9902,94 +9946,94 @@ export function initBiomes() {
     ],
     [
       Species.CERULEDGE,
-      ElementType.FIRE,
-      ElementType.GHOST,
+      ElementalType.FIRE,
+      ElementalType.GHOST,
       [
         [Biome.GRAVEYARD, BiomePoolTier.RARE],
         [Biome.GRAVEYARD, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.TADBULB, ElementType.ELECTRIC, -1, [[Biome.POWER_PLANT, BiomePoolTier.COMMON]]],
+    [Species.TADBULB, ElementalType.ELECTRIC, -1, [[Biome.POWER_PLANT, BiomePoolTier.COMMON]]],
     [
       Species.BELLIBOLT,
-      ElementType.ELECTRIC,
+      ElementalType.ELECTRIC,
       -1,
       [
         [Biome.POWER_PLANT, BiomePoolTier.COMMON],
         [Biome.POWER_PLANT, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.WATTREL, ElementType.ELECTRIC, ElementType.FLYING, [[Biome.SEA, BiomePoolTier.UNCOMMON]]],
+    [Species.WATTREL, ElementalType.ELECTRIC, ElementalType.FLYING, [[Biome.SEA, BiomePoolTier.UNCOMMON]]],
     [
       Species.KILOWATTREL,
-      ElementType.ELECTRIC,
-      ElementType.FLYING,
+      ElementalType.ELECTRIC,
+      ElementalType.FLYING,
       [
         [Biome.SEA, BiomePoolTier.UNCOMMON],
         [Biome.SEA, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.MASCHIFF, ElementType.DARK, -1, [[Biome.ABYSS, BiomePoolTier.COMMON]]],
+    [Species.MASCHIFF, ElementalType.DARK, -1, [[Biome.ABYSS, BiomePoolTier.COMMON]]],
     [
       Species.MABOSSTIFF,
-      ElementType.DARK,
+      ElementalType.DARK,
       -1,
       [
         [Biome.ABYSS, BiomePoolTier.COMMON],
         [Biome.ABYSS, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.SHROODLE, ElementType.POISON, ElementType.NORMAL, [[Biome.FOREST, BiomePoolTier.COMMON]]],
+    [Species.SHROODLE, ElementalType.POISON, ElementalType.NORMAL, [[Biome.FOREST, BiomePoolTier.COMMON]]],
     [
       Species.GRAFAIAI,
-      ElementType.POISON,
-      ElementType.NORMAL,
+      ElementalType.POISON,
+      ElementalType.NORMAL,
       [
         [Biome.FOREST, BiomePoolTier.COMMON],
         [Biome.FOREST, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.BRAMBLIN, ElementType.GRASS, ElementType.GHOST, [[Biome.DESERT, BiomePoolTier.UNCOMMON]]],
+    [Species.BRAMBLIN, ElementalType.GRASS, ElementalType.GHOST, [[Biome.DESERT, BiomePoolTier.UNCOMMON]]],
     [
       Species.BRAMBLEGHAST,
-      ElementType.GRASS,
-      ElementType.GHOST,
+      ElementalType.GRASS,
+      ElementalType.GHOST,
       [
         [Biome.DESERT, BiomePoolTier.UNCOMMON],
         [Biome.DESERT, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.TOEDSCOOL, ElementType.GROUND, ElementType.GRASS, [[Biome.FOREST, BiomePoolTier.RARE]]],
+    [Species.TOEDSCOOL, ElementalType.GROUND, ElementalType.GRASS, [[Biome.FOREST, BiomePoolTier.RARE]]],
     [
       Species.TOEDSCRUEL,
-      ElementType.GROUND,
-      ElementType.GRASS,
+      ElementalType.GROUND,
+      ElementalType.GRASS,
       [
         [Biome.FOREST, BiomePoolTier.RARE],
         [Biome.FOREST, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.KLAWF, ElementType.ROCK, -1, [[Biome.MOUNTAIN, BiomePoolTier.RARE]]],
+    [Species.KLAWF, ElementalType.ROCK, -1, [[Biome.MOUNTAIN, BiomePoolTier.RARE]]],
     [
       Species.CAPSAKID,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [[Biome.BADLANDS, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.SCOVILLAIN,
-      ElementType.GRASS,
-      ElementType.FIRE,
+      ElementalType.GRASS,
+      ElementalType.FIRE,
       [
         [Biome.BADLANDS, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.BADLANDS, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
       ],
     ],
-    [Species.RELLOR, ElementType.BUG, -1, [[Biome.DESERT, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
+    [Species.RELLOR, ElementalType.BUG, -1, [[Biome.DESERT, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
     [
       Species.RABSCA,
-      ElementType.BUG,
-      ElementType.PSYCHIC,
+      ElementalType.BUG,
+      ElementalType.PSYCHIC,
       [
         [Biome.DESERT, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.DESERT, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -9997,42 +10041,42 @@ export function initBiomes() {
     ],
     [
       Species.FLITTLE,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [[Biome.MOUNTAIN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.ESPATHRA,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [
         [Biome.MOUNTAIN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.MOUNTAIN, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
       ],
     ],
-    [Species.TINKATINK, ElementType.FAIRY, ElementType.STEEL, [[Biome.RUINS, BiomePoolTier.UNCOMMON]]],
-    [Species.TINKATUFF, ElementType.FAIRY, ElementType.STEEL, [[Biome.RUINS, BiomePoolTier.UNCOMMON]]],
+    [Species.TINKATINK, ElementalType.FAIRY, ElementalType.STEEL, [[Biome.RUINS, BiomePoolTier.UNCOMMON]]],
+    [Species.TINKATUFF, ElementalType.FAIRY, ElementalType.STEEL, [[Biome.RUINS, BiomePoolTier.UNCOMMON]]],
     [
       Species.TINKATON,
-      ElementType.FAIRY,
-      ElementType.STEEL,
+      ElementalType.FAIRY,
+      ElementalType.STEEL,
       [
         [Biome.RUINS, BiomePoolTier.UNCOMMON],
         [Biome.RUINS, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.WIGLETT, ElementType.WATER, -1, [[Biome.BEACH, BiomePoolTier.COMMON]]],
-    [Species.WUGTRIO, ElementType.WATER, -1, [[Biome.BEACH, BiomePoolTier.COMMON]]],
+    [Species.WIGLETT, ElementalType.WATER, -1, [[Biome.BEACH, BiomePoolTier.COMMON]]],
+    [Species.WUGTRIO, ElementalType.WATER, -1, [[Biome.BEACH, BiomePoolTier.COMMON]]],
     [
       Species.BOMBIRDIER,
-      ElementType.FLYING,
-      ElementType.DARK,
+      ElementalType.FLYING,
+      ElementalType.DARK,
       [[Biome.MOUNTAIN, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
-    [Species.FINIZEN, ElementType.WATER, -1, [[Biome.SEA, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
+    [Species.FINIZEN, ElementalType.WATER, -1, [[Biome.SEA, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]]]],
     [
       Species.PALAFIN,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SEA, BiomePoolTier.COMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -10041,8 +10085,8 @@ export function initBiomes() {
     ],
     [
       Species.VAROOM,
-      ElementType.STEEL,
-      ElementType.POISON,
+      ElementalType.STEEL,
+      ElementalType.POISON,
       [
         [Biome.METROPOLIS, BiomePoolTier.RARE],
         [Biome.SLUM, BiomePoolTier.RARE],
@@ -10050,8 +10094,8 @@ export function initBiomes() {
     ],
     [
       Species.REVAVROOM,
-      ElementType.STEEL,
-      ElementType.POISON,
+      ElementalType.STEEL,
+      ElementalType.POISON,
       [
         [Biome.METROPOLIS, BiomePoolTier.RARE],
         [Biome.METROPOLIS, BiomePoolTier.BOSS_RARE],
@@ -10059,54 +10103,54 @@ export function initBiomes() {
         [Biome.SLUM, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.CYCLIZAR, ElementType.DRAGON, ElementType.NORMAL, [[Biome.WASTELAND, BiomePoolTier.UNCOMMON]]],
-    [Species.ORTHWORM, ElementType.STEEL, -1, [[Biome.DESERT, BiomePoolTier.UNCOMMON]]],
-    [Species.GLIMMET, ElementType.ROCK, ElementType.POISON, [[Biome.CAVE, BiomePoolTier.RARE]]],
+    [Species.CYCLIZAR, ElementalType.DRAGON, ElementalType.NORMAL, [[Biome.WASTELAND, BiomePoolTier.UNCOMMON]]],
+    [Species.ORTHWORM, ElementalType.STEEL, -1, [[Biome.DESERT, BiomePoolTier.UNCOMMON]]],
+    [Species.GLIMMET, ElementalType.ROCK, ElementalType.POISON, [[Biome.CAVE, BiomePoolTier.RARE]]],
     [
       Species.GLIMMORA,
-      ElementType.ROCK,
-      ElementType.POISON,
+      ElementalType.ROCK,
+      ElementalType.POISON,
       [
         [Biome.CAVE, BiomePoolTier.RARE],
         [Biome.CAVE, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.GREAVARD, ElementType.GHOST, -1, [[Biome.GRAVEYARD, BiomePoolTier.COMMON]]],
+    [Species.GREAVARD, ElementalType.GHOST, -1, [[Biome.GRAVEYARD, BiomePoolTier.COMMON]]],
     [
       Species.HOUNDSTONE,
-      ElementType.GHOST,
+      ElementalType.GHOST,
       -1,
       [
         [Biome.GRAVEYARD, BiomePoolTier.COMMON],
         [Biome.GRAVEYARD, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.FLAMIGO, ElementType.FLYING, ElementType.FIGHTING, [[Biome.LAKE, BiomePoolTier.UNCOMMON]]],
-    [Species.CETODDLE, ElementType.ICE, -1, [[Biome.ICE_CAVE, BiomePoolTier.UNCOMMON]]],
+    [Species.FLAMIGO, ElementalType.FLYING, ElementalType.FIGHTING, [[Biome.LAKE, BiomePoolTier.UNCOMMON]]],
+    [Species.CETODDLE, ElementalType.ICE, -1, [[Biome.ICE_CAVE, BiomePoolTier.UNCOMMON]]],
     [
       Species.CETITAN,
-      ElementType.ICE,
+      ElementalType.ICE,
       -1,
       [
         [Biome.ICE_CAVE, BiomePoolTier.UNCOMMON],
         [Biome.ICE_CAVE, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.VELUZA, ElementType.WATER, ElementType.PSYCHIC, [[Biome.SEABED, BiomePoolTier.COMMON]]],
+    [Species.VELUZA, ElementalType.WATER, ElementalType.PSYCHIC, [[Biome.SEABED, BiomePoolTier.COMMON]]],
     [
       Species.DONDOZO,
-      ElementType.WATER,
+      ElementalType.WATER,
       -1,
       [
         [Biome.SEABED, BiomePoolTier.UNCOMMON],
         [Biome.SEABED, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.TATSUGIRI, ElementType.DRAGON, ElementType.WATER, [[Biome.BEACH, BiomePoolTier.RARE]]],
+    [Species.TATSUGIRI, ElementalType.DRAGON, ElementalType.WATER, [[Biome.BEACH, BiomePoolTier.RARE]]],
     [
       Species.ANNIHILAPE,
-      ElementType.FIGHTING,
-      ElementType.GHOST,
+      ElementalType.FIGHTING,
+      ElementalType.GHOST,
       [
         [Biome.PLAINS, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.DOJO, BiomePoolTier.COMMON],
@@ -10115,8 +10159,8 @@ export function initBiomes() {
     ],
     [
       Species.CLODSIRE,
-      ElementType.POISON,
-      ElementType.GROUND,
+      ElementalType.POISON,
+      ElementalType.GROUND,
       [
         [Biome.SWAMP, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.SWAMP, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -10124,8 +10168,8 @@ export function initBiomes() {
     ],
     [
       Species.FARIGIRAF,
-      ElementType.NORMAL,
-      ElementType.PSYCHIC,
+      ElementalType.NORMAL,
+      ElementalType.PSYCHIC,
       [
         [Biome.TALL_GRASS, BiomePoolTier.RARE],
         [Biome.TALL_GRASS, BiomePoolTier.BOSS_RARE],
@@ -10133,7 +10177,7 @@ export function initBiomes() {
     ],
     [
       Species.DUDUNSPARCE,
-      ElementType.NORMAL,
+      ElementalType.NORMAL,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.SUPER_RARE],
@@ -10142,41 +10186,41 @@ export function initBiomes() {
     ],
     [
       Species.KINGAMBIT,
-      ElementType.DARK,
-      ElementType.STEEL,
+      ElementalType.DARK,
+      ElementalType.STEEL,
       [
         [Biome.ABYSS, BiomePoolTier.COMMON],
         [Biome.ABYSS, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.GREAT_TUSK, ElementType.GROUND, ElementType.FIGHTING, [[Biome.END, BiomePoolTier.COMMON]]],
-    [Species.SCREAM_TAIL, ElementType.FAIRY, ElementType.PSYCHIC, [[Biome.END, BiomePoolTier.COMMON]]],
-    [Species.BRUTE_BONNET, ElementType.GRASS, ElementType.DARK, [[Biome.END, BiomePoolTier.COMMON]]],
-    [Species.FLUTTER_MANE, ElementType.GHOST, ElementType.FAIRY, [[Biome.END, BiomePoolTier.COMMON]]],
-    [Species.SLITHER_WING, ElementType.BUG, ElementType.FIGHTING, [[Biome.END, BiomePoolTier.COMMON]]],
-    [Species.SANDY_SHOCKS, ElementType.ELECTRIC, ElementType.GROUND, [[Biome.END, BiomePoolTier.COMMON]]],
-    [Species.IRON_TREADS, ElementType.GROUND, ElementType.STEEL, [[Biome.END, BiomePoolTier.COMMON]]],
-    [Species.IRON_BUNDLE, ElementType.ICE, ElementType.WATER, [[Biome.END, BiomePoolTier.COMMON]]],
-    [Species.IRON_HANDS, ElementType.FIGHTING, ElementType.ELECTRIC, [[Biome.END, BiomePoolTier.COMMON]]],
-    [Species.IRON_JUGULIS, ElementType.DARK, ElementType.FLYING, [[Biome.END, BiomePoolTier.COMMON]]],
-    [Species.IRON_MOTH, ElementType.FIRE, ElementType.POISON, [[Biome.END, BiomePoolTier.COMMON]]],
-    [Species.IRON_THORNS, ElementType.ROCK, ElementType.ELECTRIC, [[Biome.END, BiomePoolTier.COMMON]]],
-    [Species.FRIGIBAX, ElementType.DRAGON, ElementType.ICE, [[Biome.WASTELAND, BiomePoolTier.RARE]]],
-    [Species.ARCTIBAX, ElementType.DRAGON, ElementType.ICE, [[Biome.WASTELAND, BiomePoolTier.RARE]]],
+    [Species.GREAT_TUSK, ElementalType.GROUND, ElementalType.FIGHTING, [[Biome.END, BiomePoolTier.COMMON]]],
+    [Species.SCREAM_TAIL, ElementalType.FAIRY, ElementalType.PSYCHIC, [[Biome.END, BiomePoolTier.COMMON]]],
+    [Species.BRUTE_BONNET, ElementalType.GRASS, ElementalType.DARK, [[Biome.END, BiomePoolTier.COMMON]]],
+    [Species.FLUTTER_MANE, ElementalType.GHOST, ElementalType.FAIRY, [[Biome.END, BiomePoolTier.COMMON]]],
+    [Species.SLITHER_WING, ElementalType.BUG, ElementalType.FIGHTING, [[Biome.END, BiomePoolTier.COMMON]]],
+    [Species.SANDY_SHOCKS, ElementalType.ELECTRIC, ElementalType.GROUND, [[Biome.END, BiomePoolTier.COMMON]]],
+    [Species.IRON_TREADS, ElementalType.GROUND, ElementalType.STEEL, [[Biome.END, BiomePoolTier.COMMON]]],
+    [Species.IRON_BUNDLE, ElementalType.ICE, ElementalType.WATER, [[Biome.END, BiomePoolTier.COMMON]]],
+    [Species.IRON_HANDS, ElementalType.FIGHTING, ElementalType.ELECTRIC, [[Biome.END, BiomePoolTier.COMMON]]],
+    [Species.IRON_JUGULIS, ElementalType.DARK, ElementalType.FLYING, [[Biome.END, BiomePoolTier.COMMON]]],
+    [Species.IRON_MOTH, ElementalType.FIRE, ElementalType.POISON, [[Biome.END, BiomePoolTier.COMMON]]],
+    [Species.IRON_THORNS, ElementalType.ROCK, ElementalType.ELECTRIC, [[Biome.END, BiomePoolTier.COMMON]]],
+    [Species.FRIGIBAX, ElementalType.DRAGON, ElementalType.ICE, [[Biome.WASTELAND, BiomePoolTier.RARE]]],
+    [Species.ARCTIBAX, ElementalType.DRAGON, ElementalType.ICE, [[Biome.WASTELAND, BiomePoolTier.RARE]]],
     [
       Species.BAXCALIBUR,
-      ElementType.DRAGON,
-      ElementType.ICE,
+      ElementalType.DRAGON,
+      ElementalType.ICE,
       [
         [Biome.WASTELAND, BiomePoolTier.RARE],
         [Biome.WASTELAND, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.GIMMIGHOUL, ElementType.GHOST, -1, [[Biome.TEMPLE, BiomePoolTier.RARE]]],
+    [Species.GIMMIGHOUL, ElementalType.GHOST, -1, [[Biome.TEMPLE, BiomePoolTier.RARE]]],
     [
       Species.GHOLDENGO,
-      ElementType.STEEL,
-      ElementType.GHOST,
+      ElementalType.STEEL,
+      ElementalType.GHOST,
       [
         [Biome.TEMPLE, BiomePoolTier.RARE],
         [Biome.TEMPLE, BiomePoolTier.BOSS_RARE],
@@ -10184,8 +10228,8 @@ export function initBiomes() {
     ],
     [
       Species.WO_CHIEN,
-      ElementType.DARK,
-      ElementType.GRASS,
+      ElementalType.DARK,
+      ElementalType.GRASS,
       [
         [Biome.FOREST, BiomePoolTier.ULTRA_RARE],
         [Biome.FOREST, BiomePoolTier.BOSS_SUPER_RARE],
@@ -10193,8 +10237,8 @@ export function initBiomes() {
     ],
     [
       Species.CHIEN_PAO,
-      ElementType.DARK,
-      ElementType.ICE,
+      ElementalType.DARK,
+      ElementalType.ICE,
       [
         [Biome.SNOWY_FOREST, BiomePoolTier.ULTRA_RARE],
         [Biome.SNOWY_FOREST, BiomePoolTier.BOSS_SUPER_RARE],
@@ -10202,8 +10246,8 @@ export function initBiomes() {
     ],
     [
       Species.TING_LU,
-      ElementType.DARK,
-      ElementType.GROUND,
+      ElementalType.DARK,
+      ElementalType.GROUND,
       [
         [Biome.MOUNTAIN, BiomePoolTier.ULTRA_RARE],
         [Biome.MOUNTAIN, BiomePoolTier.BOSS_SUPER_RARE],
@@ -10211,25 +10255,30 @@ export function initBiomes() {
     ],
     [
       Species.CHI_YU,
-      ElementType.DARK,
-      ElementType.FIRE,
+      ElementalType.DARK,
+      ElementalType.FIRE,
       [
         [Biome.VOLCANO, BiomePoolTier.ULTRA_RARE],
         [Biome.VOLCANO, BiomePoolTier.BOSS_SUPER_RARE],
       ],
     ],
-    [Species.ROARING_MOON, ElementType.DRAGON, ElementType.DARK, [[Biome.END, BiomePoolTier.UNCOMMON]]],
-    [Species.IRON_VALIANT, ElementType.FAIRY, ElementType.FIGHTING, [[Biome.END, BiomePoolTier.UNCOMMON]]],
-    [Species.KORAIDON, ElementType.FIGHTING, ElementType.DRAGON, [[Biome.RUINS, BiomePoolTier.BOSS_ULTRA_RARE]]],
-    [Species.MIRAIDON, ElementType.ELECTRIC, ElementType.DRAGON, [[Biome.LABORATORY, BiomePoolTier.BOSS_ULTRA_RARE]]],
-    [Species.WALKING_WAKE, ElementType.WATER, ElementType.DRAGON, [[Biome.END, BiomePoolTier.RARE]]],
-    [Species.IRON_LEAVES, ElementType.GRASS, ElementType.PSYCHIC, [[Biome.END, BiomePoolTier.RARE]]],
-    [Species.DIPPLIN, ElementType.GRASS, ElementType.DRAGON, [[Biome.MEADOW, BiomePoolTier.RARE]]],
-    [Species.POLTCHAGEIST, ElementType.GRASS, ElementType.GHOST, [[Biome.BADLANDS, BiomePoolTier.RARE]]],
+    [Species.ROARING_MOON, ElementalType.DRAGON, ElementalType.DARK, [[Biome.END, BiomePoolTier.UNCOMMON]]],
+    [Species.IRON_VALIANT, ElementalType.FAIRY, ElementalType.FIGHTING, [[Biome.END, BiomePoolTier.UNCOMMON]]],
+    [Species.KORAIDON, ElementalType.FIGHTING, ElementalType.DRAGON, [[Biome.RUINS, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [
+      Species.MIRAIDON,
+      ElementalType.ELECTRIC,
+      ElementalType.DRAGON,
+      [[Biome.LABORATORY, BiomePoolTier.BOSS_ULTRA_RARE]],
+    ],
+    [Species.WALKING_WAKE, ElementalType.WATER, ElementalType.DRAGON, [[Biome.END, BiomePoolTier.RARE]]],
+    [Species.IRON_LEAVES, ElementalType.GRASS, ElementalType.PSYCHIC, [[Biome.END, BiomePoolTier.RARE]]],
+    [Species.DIPPLIN, ElementalType.GRASS, ElementalType.DRAGON, [[Biome.MEADOW, BiomePoolTier.RARE]]],
+    [Species.POLTCHAGEIST, ElementalType.GRASS, ElementalType.GHOST, [[Biome.BADLANDS, BiomePoolTier.RARE]]],
     [
       Species.SINISTCHA,
-      ElementType.GRASS,
-      ElementType.GHOST,
+      ElementalType.GRASS,
+      ElementalType.GHOST,
       [
         [Biome.BADLANDS, BiomePoolTier.RARE],
         [Biome.BADLANDS, BiomePoolTier.BOSS_RARE],
@@ -10237,8 +10286,8 @@ export function initBiomes() {
     ],
     [
       Species.OKIDOGI,
-      ElementType.POISON,
-      ElementType.FIGHTING,
+      ElementalType.POISON,
+      ElementalType.FIGHTING,
       [
         [Biome.BADLANDS, BiomePoolTier.ULTRA_RARE],
         [Biome.BADLANDS, BiomePoolTier.BOSS_SUPER_RARE],
@@ -10246,8 +10295,8 @@ export function initBiomes() {
     ],
     [
       Species.MUNKIDORI,
-      ElementType.POISON,
-      ElementType.PSYCHIC,
+      ElementalType.POISON,
+      ElementalType.PSYCHIC,
       [
         [Biome.JUNGLE, BiomePoolTier.ULTRA_RARE],
         [Biome.JUNGLE, BiomePoolTier.BOSS_SUPER_RARE],
@@ -10255,8 +10304,8 @@ export function initBiomes() {
     ],
     [
       Species.FEZANDIPITI,
-      ElementType.POISON,
-      ElementType.FAIRY,
+      ElementalType.POISON,
+      ElementalType.FAIRY,
       [
         [Biome.RUINS, BiomePoolTier.ULTRA_RARE],
         [Biome.RUINS, BiomePoolTier.BOSS_SUPER_RARE],
@@ -10264,31 +10313,36 @@ export function initBiomes() {
     ],
     [
       Species.OGERPON,
-      ElementType.GRASS,
+      ElementalType.GRASS,
       -1,
       [
         [Biome.MOUNTAIN, BiomePoolTier.ULTRA_RARE],
         [Biome.MOUNTAIN, BiomePoolTier.BOSS_SUPER_RARE],
       ],
     ],
-    [Species.ARCHALUDON, ElementType.STEEL, ElementType.DRAGON, [[Biome.CONSTRUCTION_SITE, BiomePoolTier.BOSS_RARE]]],
-    [Species.HYDRAPPLE, ElementType.GRASS, ElementType.DRAGON, [[Biome.MEADOW, BiomePoolTier.BOSS_RARE]]],
-    [Species.GOUGING_FIRE, ElementType.FIRE, ElementType.DRAGON, [[Biome.END, BiomePoolTier.RARE]]],
-    [Species.RAGING_BOLT, ElementType.ELECTRIC, ElementType.DRAGON, [[Biome.END, BiomePoolTier.RARE]]],
-    [Species.IRON_BOULDER, ElementType.ROCK, ElementType.PSYCHIC, [[Biome.END, BiomePoolTier.RARE]]],
-    [Species.IRON_CROWN, ElementType.STEEL, ElementType.PSYCHIC, [[Biome.END, BiomePoolTier.RARE]]],
-    [Species.TERAPAGOS, ElementType.NORMAL, -1, [[Biome.CAVE, BiomePoolTier.BOSS_ULTRA_RARE]]],
-    [Species.PECHARUNT, ElementType.POISON, ElementType.GHOST, []],
+    [
+      Species.ARCHALUDON,
+      ElementalType.STEEL,
+      ElementalType.DRAGON,
+      [[Biome.CONSTRUCTION_SITE, BiomePoolTier.BOSS_RARE]],
+    ],
+    [Species.HYDRAPPLE, ElementalType.GRASS, ElementalType.DRAGON, [[Biome.MEADOW, BiomePoolTier.BOSS_RARE]]],
+    [Species.GOUGING_FIRE, ElementalType.FIRE, ElementalType.DRAGON, [[Biome.END, BiomePoolTier.RARE]]],
+    [Species.RAGING_BOLT, ElementalType.ELECTRIC, ElementalType.DRAGON, [[Biome.END, BiomePoolTier.RARE]]],
+    [Species.IRON_BOULDER, ElementalType.ROCK, ElementalType.PSYCHIC, [[Biome.END, BiomePoolTier.RARE]]],
+    [Species.IRON_CROWN, ElementalType.STEEL, ElementalType.PSYCHIC, [[Biome.END, BiomePoolTier.RARE]]],
+    [Species.TERAPAGOS, ElementalType.NORMAL, -1, [[Biome.CAVE, BiomePoolTier.BOSS_ULTRA_RARE]]],
+    [Species.PECHARUNT, ElementalType.POISON, ElementalType.GHOST, []],
     [
       Species.ALOLA_RATTATA,
-      ElementType.DARK,
-      ElementType.NORMAL,
+      ElementalType.DARK,
+      ElementalType.NORMAL,
       [[Biome.ISLAND, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.ALOLA_RATICATE,
-      ElementType.DARK,
-      ElementType.NORMAL,
+      ElementalType.DARK,
+      ElementalType.NORMAL,
       [
         [Biome.ISLAND, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.ISLAND, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -10296,8 +10350,8 @@ export function initBiomes() {
     ],
     [
       Species.ALOLA_RAICHU,
-      ElementType.ELECTRIC,
-      ElementType.PSYCHIC,
+      ElementalType.ELECTRIC,
+      ElementalType.PSYCHIC,
       [
         [Biome.ISLAND, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.ISLAND, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -10305,8 +10359,8 @@ export function initBiomes() {
     ],
     [
       Species.ALOLA_SANDSHREW,
-      ElementType.ICE,
-      ElementType.STEEL,
+      ElementalType.ICE,
+      ElementalType.STEEL,
       [
         [Biome.ISLAND, BiomePoolTier.COMMON],
         [Biome.SNOWY_FOREST, BiomePoolTier.RARE],
@@ -10314,8 +10368,8 @@ export function initBiomes() {
     ],
     [
       Species.ALOLA_SANDSLASH,
-      ElementType.ICE,
-      ElementType.STEEL,
+      ElementalType.ICE,
+      ElementalType.STEEL,
       [
         [Biome.ISLAND, BiomePoolTier.COMMON],
         [Biome.ISLAND, BiomePoolTier.BOSS],
@@ -10325,7 +10379,7 @@ export function initBiomes() {
     ],
     [
       Species.ALOLA_VULPIX,
-      ElementType.ICE,
+      ElementalType.ICE,
       -1,
       [
         [Biome.ISLAND, BiomePoolTier.COMMON],
@@ -10334,8 +10388,8 @@ export function initBiomes() {
     ],
     [
       Species.ALOLA_NINETALES,
-      ElementType.ICE,
-      ElementType.FAIRY,
+      ElementalType.ICE,
+      ElementalType.FAIRY,
       [
         [Biome.ISLAND, BiomePoolTier.COMMON],
         [Biome.ISLAND, BiomePoolTier.BOSS],
@@ -10343,11 +10397,11 @@ export function initBiomes() {
         [Biome.SNOWY_FOREST, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.ALOLA_DIGLETT, ElementType.GROUND, ElementType.STEEL, [[Biome.ISLAND, BiomePoolTier.COMMON]]],
+    [Species.ALOLA_DIGLETT, ElementalType.GROUND, ElementalType.STEEL, [[Biome.ISLAND, BiomePoolTier.COMMON]]],
     [
       Species.ALOLA_DUGTRIO,
-      ElementType.GROUND,
-      ElementType.STEEL,
+      ElementalType.GROUND,
+      ElementalType.STEEL,
       [
         [Biome.ISLAND, BiomePoolTier.COMMON],
         [Biome.ISLAND, BiomePoolTier.BOSS],
@@ -10355,35 +10409,35 @@ export function initBiomes() {
     ],
     [
       Species.ALOLA_MEOWTH,
-      ElementType.DARK,
+      ElementalType.DARK,
       -1,
       [[Biome.ISLAND, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.ALOLA_PERSIAN,
-      ElementType.DARK,
+      ElementalType.DARK,
       -1,
       [
         [Biome.ISLAND, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.ISLAND, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
       ],
     ],
-    [Species.ALOLA_GEODUDE, ElementType.ROCK, ElementType.ELECTRIC, [[Biome.ISLAND, BiomePoolTier.COMMON]]],
-    [Species.ALOLA_GRAVELER, ElementType.ROCK, ElementType.ELECTRIC, [[Biome.ISLAND, BiomePoolTier.COMMON]]],
+    [Species.ALOLA_GEODUDE, ElementalType.ROCK, ElementalType.ELECTRIC, [[Biome.ISLAND, BiomePoolTier.COMMON]]],
+    [Species.ALOLA_GRAVELER, ElementalType.ROCK, ElementalType.ELECTRIC, [[Biome.ISLAND, BiomePoolTier.COMMON]]],
     [
       Species.ALOLA_GOLEM,
-      ElementType.ROCK,
-      ElementType.ELECTRIC,
+      ElementalType.ROCK,
+      ElementalType.ELECTRIC,
       [
         [Biome.ISLAND, BiomePoolTier.COMMON],
         [Biome.ISLAND, BiomePoolTier.BOSS],
       ],
     ],
-    [Species.ALOLA_GRIMER, ElementType.POISON, ElementType.DARK, [[Biome.ISLAND, BiomePoolTier.COMMON]]],
+    [Species.ALOLA_GRIMER, ElementalType.POISON, ElementalType.DARK, [[Biome.ISLAND, BiomePoolTier.COMMON]]],
     [
       Species.ALOLA_MUK,
-      ElementType.POISON,
-      ElementType.DARK,
+      ElementalType.POISON,
+      ElementalType.DARK,
       [
         [Biome.ISLAND, BiomePoolTier.COMMON],
         [Biome.ISLAND, BiomePoolTier.BOSS],
@@ -10391,8 +10445,8 @@ export function initBiomes() {
     ],
     [
       Species.ALOLA_EXEGGUTOR,
-      ElementType.GRASS,
-      ElementType.DRAGON,
+      ElementalType.GRASS,
+      ElementalType.DRAGON,
       [
         [Biome.ISLAND, BiomePoolTier.UNCOMMON, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.ISLAND, BiomePoolTier.BOSS, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -10400,8 +10454,8 @@ export function initBiomes() {
     ],
     [
       Species.ALOLA_MAROWAK,
-      ElementType.FIRE,
-      ElementType.GHOST,
+      ElementalType.FIRE,
+      ElementalType.GHOST,
       [
         [Biome.ISLAND, BiomePoolTier.UNCOMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.ISLAND, BiomePoolTier.BOSS, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -10409,19 +10463,19 @@ export function initBiomes() {
     ],
     [
       Species.ETERNAL_FLOETTE,
-      ElementType.FAIRY,
+      ElementalType.FAIRY,
       -1,
       [
         [Biome.FAIRY_CAVE, BiomePoolTier.RARE],
         [Biome.FAIRY_CAVE, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.GALAR_MEOWTH, ElementType.STEEL, -1, [[Biome.CONSTRUCTION_SITE, BiomePoolTier.RARE, TimeOfDay.DUSK]]],
-    [Species.GALAR_PONYTA, ElementType.PSYCHIC, -1, [[Biome.JUNGLE, BiomePoolTier.RARE, TimeOfDay.DAWN]]],
+    [Species.GALAR_MEOWTH, ElementalType.STEEL, -1, [[Biome.CONSTRUCTION_SITE, BiomePoolTier.RARE, TimeOfDay.DUSK]]],
+    [Species.GALAR_PONYTA, ElementalType.PSYCHIC, -1, [[Biome.JUNGLE, BiomePoolTier.RARE, TimeOfDay.DAWN]]],
     [
       Species.GALAR_RAPIDASH,
-      ElementType.PSYCHIC,
-      ElementType.FAIRY,
+      ElementalType.PSYCHIC,
+      ElementalType.FAIRY,
       [
         [Biome.JUNGLE, BiomePoolTier.RARE, TimeOfDay.DAWN],
         [Biome.JUNGLE, BiomePoolTier.BOSS_RARE, TimeOfDay.DAWN],
@@ -10429,26 +10483,26 @@ export function initBiomes() {
     ],
     [
       Species.GALAR_SLOWPOKE,
-      ElementType.PSYCHIC,
+      ElementalType.PSYCHIC,
       -1,
       [[Biome.SWAMP, BiomePoolTier.SUPER_RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.GALAR_SLOWBRO,
-      ElementType.POISON,
-      ElementType.PSYCHIC,
+      ElementalType.POISON,
+      ElementalType.PSYCHIC,
       [
         [Biome.SWAMP, BiomePoolTier.SUPER_RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.SWAMP, BiomePoolTier.BOSS_RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]],
       ],
     ],
-    [Species.GALAR_FARFETCHD, ElementType.FIGHTING, -1, [[Biome.DOJO, BiomePoolTier.SUPER_RARE]]],
-    [Species.GALAR_WEEZING, ElementType.POISON, ElementType.FAIRY, [[Biome.SLUM, BiomePoolTier.BOSS_RARE]]],
-    [Species.GALAR_MR_MIME, ElementType.ICE, ElementType.PSYCHIC, [[Biome.SNOWY_FOREST, BiomePoolTier.SUPER_RARE]]],
+    [Species.GALAR_FARFETCHD, ElementalType.FIGHTING, -1, [[Biome.DOJO, BiomePoolTier.SUPER_RARE]]],
+    [Species.GALAR_WEEZING, ElementalType.POISON, ElementalType.FAIRY, [[Biome.SLUM, BiomePoolTier.BOSS_RARE]]],
+    [Species.GALAR_MR_MIME, ElementalType.ICE, ElementalType.PSYCHIC, [[Biome.SNOWY_FOREST, BiomePoolTier.SUPER_RARE]]],
     [
       Species.GALAR_ARTICUNO,
-      ElementType.PSYCHIC,
-      ElementType.FLYING,
+      ElementalType.PSYCHIC,
+      ElementalType.FLYING,
       [
         [Biome.SNOWY_FOREST, BiomePoolTier.ULTRA_RARE],
         [Biome.SNOWY_FOREST, BiomePoolTier.BOSS_ULTRA_RARE],
@@ -10456,8 +10510,8 @@ export function initBiomes() {
     ],
     [
       Species.GALAR_ZAPDOS,
-      ElementType.FIGHTING,
-      ElementType.FLYING,
+      ElementalType.FIGHTING,
+      ElementalType.FLYING,
       [
         [Biome.DOJO, BiomePoolTier.ULTRA_RARE],
         [Biome.DOJO, BiomePoolTier.BOSS_ULTRA_RARE],
@@ -10465,8 +10519,8 @@ export function initBiomes() {
     ],
     [
       Species.GALAR_MOLTRES,
-      ElementType.DARK,
-      ElementType.FLYING,
+      ElementalType.DARK,
+      ElementalType.FLYING,
       [
         [Biome.ABYSS, BiomePoolTier.ULTRA_RARE],
         [Biome.ABYSS, BiomePoolTier.BOSS_ULTRA_RARE],
@@ -10474,32 +10528,32 @@ export function initBiomes() {
     ],
     [
       Species.GALAR_SLOWKING,
-      ElementType.POISON,
-      ElementType.PSYCHIC,
+      ElementalType.POISON,
+      ElementalType.PSYCHIC,
       [[Biome.SWAMP, BiomePoolTier.BOSS_RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
-    [Species.GALAR_CORSOLA, ElementType.GHOST, -1, [[Biome.SEABED, BiomePoolTier.SUPER_RARE]]],
+    [Species.GALAR_CORSOLA, ElementalType.GHOST, -1, [[Biome.SEABED, BiomePoolTier.SUPER_RARE]]],
     [
       Species.GALAR_ZIGZAGOON,
-      ElementType.DARK,
-      ElementType.NORMAL,
+      ElementalType.DARK,
+      ElementalType.NORMAL,
       [[Biome.SLUM, BiomePoolTier.RARE, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.GALAR_LINOONE,
-      ElementType.DARK,
-      ElementType.NORMAL,
+      ElementalType.DARK,
+      ElementalType.NORMAL,
       [[Biome.SLUM, BiomePoolTier.RARE, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.GALAR_DARUMAKA,
-      ElementType.ICE,
+      ElementalType.ICE,
       -1,
       [[Biome.SNOWY_FOREST, BiomePoolTier.RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.GALAR_DARMANITAN,
-      ElementType.ICE,
+      ElementalType.ICE,
       -1,
       [
         [Biome.SNOWY_FOREST, BiomePoolTier.RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -10508,48 +10562,58 @@ export function initBiomes() {
     ],
     [
       Species.GALAR_YAMASK,
-      ElementType.GROUND,
-      ElementType.GHOST,
+      ElementalType.GROUND,
+      ElementalType.GHOST,
       [[Biome.RUINS, BiomePoolTier.SUPER_RARE, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.GALAR_STUNFISK,
-      ElementType.GROUND,
-      ElementType.STEEL,
+      ElementalType.GROUND,
+      ElementalType.STEEL,
       [
         [Biome.SWAMP, BiomePoolTier.SUPER_RARE],
         [Biome.SWAMP, BiomePoolTier.BOSS_RARE],
       ],
     ],
-    [Species.HISUI_GROWLITHE, ElementType.FIRE, ElementType.ROCK, [[Biome.VOLCANO, BiomePoolTier.SUPER_RARE]]],
-    [Species.HISUI_ARCANINE, ElementType.FIRE, ElementType.ROCK, [[Biome.VOLCANO, BiomePoolTier.BOSS_RARE]]],
-    [Species.HISUI_VOLTORB, ElementType.ELECTRIC, ElementType.GRASS, [[Biome.POWER_PLANT, BiomePoolTier.SUPER_RARE]]],
-    [Species.HISUI_ELECTRODE, ElementType.ELECTRIC, ElementType.GRASS, [[Biome.POWER_PLANT, BiomePoolTier.BOSS_RARE]]],
-    [Species.HISUI_TYPHLOSION, ElementType.FIRE, ElementType.GHOST, [[Biome.GRAVEYARD, BiomePoolTier.BOSS_RARE]]],
-    [Species.HISUI_QWILFISH, ElementType.DARK, ElementType.POISON, [[Biome.SEABED, BiomePoolTier.SUPER_RARE]]],
+    [Species.HISUI_GROWLITHE, ElementalType.FIRE, ElementalType.ROCK, [[Biome.VOLCANO, BiomePoolTier.SUPER_RARE]]],
+    [Species.HISUI_ARCANINE, ElementalType.FIRE, ElementalType.ROCK, [[Biome.VOLCANO, BiomePoolTier.BOSS_RARE]]],
+    [
+      Species.HISUI_VOLTORB,
+      ElementalType.ELECTRIC,
+      ElementalType.GRASS,
+      [[Biome.POWER_PLANT, BiomePoolTier.SUPER_RARE]],
+    ],
+    [
+      Species.HISUI_ELECTRODE,
+      ElementalType.ELECTRIC,
+      ElementalType.GRASS,
+      [[Biome.POWER_PLANT, BiomePoolTier.BOSS_RARE]],
+    ],
+    [Species.HISUI_TYPHLOSION, ElementalType.FIRE, ElementalType.GHOST, [[Biome.GRAVEYARD, BiomePoolTier.BOSS_RARE]]],
+    [Species.HISUI_QWILFISH, ElementalType.DARK, ElementalType.POISON, [[Biome.SEABED, BiomePoolTier.SUPER_RARE]]],
     [
       Species.HISUI_SNEASEL,
-      ElementType.FIGHTING,
-      ElementType.POISON,
+      ElementalType.FIGHTING,
+      ElementalType.POISON,
       [[Biome.SNOWY_FOREST, BiomePoolTier.SUPER_RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
-    [Species.HISUI_SAMUROTT, ElementType.WATER, ElementType.DARK, [[Biome.ABYSS, BiomePoolTier.BOSS_RARE]]],
+    [Species.HISUI_SAMUROTT, ElementalType.WATER, ElementalType.DARK, [[Biome.ABYSS, BiomePoolTier.BOSS_RARE]]],
     [
       Species.HISUI_LILLIGANT,
-      ElementType.GRASS,
-      ElementType.FIGHTING,
+      ElementalType.GRASS,
+      ElementalType.FIGHTING,
       [[Biome.MEADOW, BiomePoolTier.BOSS_RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.HISUI_ZORUA,
-      ElementType.NORMAL,
-      ElementType.GHOST,
+      ElementalType.NORMAL,
+      ElementalType.GHOST,
       [[Biome.SNOWY_FOREST, BiomePoolTier.SUPER_RARE, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.HISUI_ZOROARK,
-      ElementType.NORMAL,
-      ElementType.GHOST,
+      ElementalType.NORMAL,
+      ElementalType.GHOST,
       [
         [Biome.SNOWY_FOREST, BiomePoolTier.SUPER_RARE, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
         [Biome.SNOWY_FOREST, BiomePoolTier.BOSS_RARE, [TimeOfDay.DUSK, TimeOfDay.NIGHT]],
@@ -10557,30 +10621,30 @@ export function initBiomes() {
     ],
     [
       Species.HISUI_BRAVIARY,
-      ElementType.PSYCHIC,
-      ElementType.FLYING,
+      ElementalType.PSYCHIC,
+      ElementalType.FLYING,
       [[Biome.MOUNTAIN, BiomePoolTier.BOSS_RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.HISUI_SLIGGOO,
-      ElementType.STEEL,
-      ElementType.DRAGON,
+      ElementalType.STEEL,
+      ElementalType.DRAGON,
       [[Biome.SWAMP, BiomePoolTier.SUPER_RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]]],
     ],
     [
       Species.HISUI_GOODRA,
-      ElementType.STEEL,
-      ElementType.DRAGON,
+      ElementalType.STEEL,
+      ElementalType.DRAGON,
       [
         [Biome.SWAMP, BiomePoolTier.SUPER_RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]],
         [Biome.SWAMP, BiomePoolTier.BOSS_RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]],
       ],
     ],
-    [Species.HISUI_AVALUGG, ElementType.ICE, ElementType.ROCK, [[Biome.SNOWY_FOREST, BiomePoolTier.SUPER_RARE]]],
-    [Species.HISUI_DECIDUEYE, ElementType.GRASS, ElementType.FIGHTING, [[Biome.DOJO, BiomePoolTier.BOSS_RARE]]],
+    [Species.HISUI_AVALUGG, ElementalType.ICE, ElementalType.ROCK, [[Biome.SNOWY_FOREST, BiomePoolTier.SUPER_RARE]]],
+    [Species.HISUI_DECIDUEYE, ElementalType.GRASS, ElementalType.FIGHTING, [[Biome.DOJO, BiomePoolTier.BOSS_RARE]]],
     [
       Species.PALDEA_TAUROS,
-      ElementType.FIGHTING,
+      ElementalType.FIGHTING,
       -1,
       [
         [Biome.PLAINS, BiomePoolTier.RARE, [TimeOfDay.DAWN, TimeOfDay.DAY]],
@@ -10589,14 +10653,14 @@ export function initBiomes() {
     ],
     [
       Species.PALDEA_WOOPER,
-      ElementType.POISON,
-      ElementType.GROUND,
+      ElementalType.POISON,
+      ElementalType.GROUND,
       [[Biome.SWAMP, BiomePoolTier.COMMON, [TimeOfDay.DUSK, TimeOfDay.NIGHT]]],
     ],
     [
       Species.BLOODMOON_URSALUNA,
-      ElementType.GROUND,
-      ElementType.NORMAL,
+      ElementalType.GROUND,
+      ElementalType.NORMAL,
       [
         [Biome.FOREST, BiomePoolTier.SUPER_RARE, TimeOfDay.NIGHT],
         [Biome.FOREST, BiomePoolTier.BOSS_RARE, TimeOfDay.NIGHT],
@@ -11079,86 +11143,5 @@ export function initBiomes() {
       const biomeTierPool = biomeTrainerPools[biome][tier];
       biomeTierPool.push(trainerType);
     }
-    //outputPools();
   }
-
-  // used in a commented code
-  // function outputPools() {
-  //   const pokemonOutput = {};
-  //   const trainerOutput = {};
-
-  //   for (const b of Object.keys(biomePokemonPools)) {
-  //     const biome = Biome[b];
-  //     pokemonOutput[biome] = {};
-  //     trainerOutput[biome] = {};
-
-  //     for (const t of Object.keys(biomePokemonPools[b])) {
-  //       const tier = BiomePoolTier[t];
-
-  //       pokemonOutput[biome][tier] = {};
-
-  //       for (const tod of Object.keys(biomePokemonPools[b][t])) {
-  //         const timeOfDay = TimeOfDay[tod];
-
-  //         pokemonOutput[biome][tier][timeOfDay] = [];
-
-  //         for (const f of biomePokemonPools[b][t][tod]) {
-  //           if (typeof f === "number") {
-  //             pokemonOutput[biome][tier][timeOfDay].push(Species[f]);
-  //           } else {
-  //             const tree = {};
-
-  //             for (const l of Object.keys(f)) {
-  //               tree[l] = f[l].map(s => Species[s]);
-  //             }
-
-  //             pokemonOutput[biome][tier][timeOfDay].push(tree);
-  //           }
-  //         }
-
-  //       }
-  //     }
-
-  //     for (const t of Object.keys(biomeTrainerPools[b])) {
-  //       const tier = BiomePoolTier[t];
-
-  //       trainerOutput[biome][tier] = [];
-
-  //       for (const f of biomeTrainerPools[b][t]) {
-  //         trainerOutput[biome][tier].push(TrainerType[f]);
-  //       }
-  //     }
-  //   }
-
-  //   console.log(beautify(pokemonOutput, null, 2, 180).replace(/(        |        (?:\{ "\d+": \[ )?|    "(?:.*?)": \[ |(?:,|\[) (?:"\w+": \[ |(?:\{ )?"\d+": \[ )?)"(\w+)"(?= |,|\n)/g, "$1Species.$2").replace(/"(\d+)": /g, "$1: ").replace(/((?:      )|(?:(?!\n)    "(?:.*?)": \{) |\[(?: .*? )?\], )"(\w+)"/g, "$1[TimeOfDay.$2]").replace(/(    )"(.*?)"/g, "$1[BiomePoolTier.$2]").replace(/(  )"(.*?)"/g, "$1[Biome.$2]"));
-  //   console.log(beautify(trainerOutput, null, 2, 120).replace(/(      |      (?:\{ "\d+": \[ )?|    "(?:.*?)": \[ |, (?:(?:\{ )?"\d+": \[ )?)"(.*?)"/g, "$1TrainerType.$2").replace(/"(\d+)": /g, "$1: ").replace(/(    )"(.*?)"/g, "$1[BiomePoolTier.$2]").replace(/(  )"(.*?)"/g, "$1[Biome.$2]"));
-  // }
-
-  /*for (let pokemon of allSpecies) {
-    if (pokemon.speciesId >= Species.XERNEAS)
-      break;
-    pokemonBiomes[pokemon.speciesId - 1][0] = Species[pokemonBiomes[pokemon.speciesId - 1][0]];
-    pokemonBiomes[pokemon.speciesId - 1][1] = Type[pokemonBiomes[pokemon.speciesId - 1][1]];
-    if (pokemonBiomes[pokemon.speciesId - 1][2] > -1)
-      pokemonBiomes[pokemon.speciesId - 1][2] = Type[pokemonBiomes[pokemon.speciesId - 1][2]];
-    for (let b of Utils.getEnumValues(Biome)) {
-      if (biomePools.hasOwnProperty(b)) {
-        let poolTier = -1;
-        for (let t of Object.keys(biomePools[b])) {
-          for (let p = 0; p < biomePools[b][t].length; p++) {
-            if (biomePools[b][t][p] === pokemon.speciesId) {
-              poolTier = parseInt(t) as BiomePoolTier;
-              break;
-            }
-          }
-        }
-        if (poolTier > -1)
-          pokemonBiomes[pokemon.speciesId - 1][3].push([ Biome[b], BiomePoolTier[poolTier] ]);
-      } else if (biomePoolPredicates[b](pokemon)) {
-        pokemonBiomes[pokemon.speciesId - 1][3].push([ Biome[b], BiomePoolTier[BiomePoolTier.COMMON] ]);
-      }
-    }
-  }
-
-  console.log(JSON.stringify(pokemonBiomes, null, '  '));*/
 }
