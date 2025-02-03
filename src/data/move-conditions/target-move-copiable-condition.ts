@@ -1,5 +1,4 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { allMoves } from "#app/data/all-moves";
 import { MoveResult } from "#enums/move-result";
 
 /**
@@ -17,7 +16,7 @@ export const targetMoveCopiableCondition: MoveConditionFunc = (_user, target, _m
     return false;
   }
 
-  if (allMoves[copiableMove.moveId].isChargingMove() && copiableMove.result === MoveResult.OTHER) {
+  if (copiableMove.move?.isChargingMove() && copiableMove.result === MoveResult.OTHER) {
     return false;
   }
 
