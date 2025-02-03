@@ -149,15 +149,11 @@ export class Weather {
     const field = globalScene.getField(true);
 
     for (const pokemon of field) {
-      let suppressWeatherEffectAbAttr: SuppressWeatherEffectAbAttr | null = pokemon
-        .getAbility()
-        .getAttrs<SuppressWeatherEffectAbAttr>(AbAttrFlag.SUPPRESS_WEATHER_EFFECT)[0];
-      if (!suppressWeatherEffectAbAttr) {
-        suppressWeatherEffectAbAttr = pokemon.hasPassive()
-          ? pokemon.getPassiveAbility().getAttrs<SuppressWeatherEffectAbAttr>(AbAttrFlag.SUPPRESS_WEATHER_EFFECT)[0]
-          : null;
-      }
-      if (suppressWeatherEffectAbAttr && (!this.isImmutable() || suppressWeatherEffectAbAttr.affectsImmutable)) {
+      const suppressWeatherEffectAbAttr = pokemon.getAbilityAttrs<SuppressWeatherEffectAbAttr>(
+        AbAttrFlag.SUPPRESS_WEATHER_EFFECT,
+      );
+
+      if (suppressWeatherEffectAbAttr.some((attr) => attr.affectsImmutable) && !this.isImmutable()) {
         return true;
       }
     }
