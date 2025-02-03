@@ -89,7 +89,6 @@ const namespaceMap = {
   battlePokemonForm: "pokemon-form-battle",
   miscDialogue: "dialogue-misc",
   battleSpecDialogue: "dialogue-final-boss",
-  doubleBattleDialogue: "dialogue-double-battle",
   splashMessages: "splash-texts",
   mysteryEncounterMessages: "mystery-encounter-texts",
 };
@@ -208,7 +207,6 @@ export async function initI18n(): Promise<void> {
       "dialogue",
       "battleSpecDialogue",
       "miscDialogue",
-      "doubleBattleDialogue",
       "egg",
       "fightUiHandler",
       "filterBar",
