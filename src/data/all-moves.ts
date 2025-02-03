@@ -1,13 +1,8 @@
 import { NoDamageAgainstFlyingAttr } from "#app/data//move-attrs/no-damage-against-flying-attr";
 import { type ShellTrapTag, type StockpilingTag } from "#app/data/battler-tags";
-import {
-  type Move,
-  AttackMove,
-  ChargingAttackMove,
-  ChargingSelfStatusMove,
-  SelfStatusMove,
-  StatusMove,
-} from "#app/data/move";
+import { type Move, AttackMove, SelfStatusMove, StatusMove } from "#app/data/move";
+import { ChargingSelfStatusMove } from "./moves/charging-self-status-move";
+import { ChargingAttackMove } from "./moves/charging-attack-move";
 import { AbilityChangeAttr } from "#app/data/move-attrs/ability-change-attr";
 import { AbilityCopyAttr } from "#app/data/move-attrs/ability-copy-attr";
 import { AbilityGiveAttr } from "#app/data/move-attrs/ability-give-attr";

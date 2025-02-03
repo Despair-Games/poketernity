@@ -1,6 +1,8 @@
 import type { UserMoveConditionFunc } from "#app/@types/UserMoveConditionFunc";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { ChargingAttackMove, ChargingSelfStatusMove, type Move, type MoveAttrFilter } from "#app/data/move";
+import { type Move, type MoveAttrFilter } from "#app/data/move";
+import { ChargingSelfStatusMove } from "#app/data/moves/charging-self-status-move";
+import { ChargingAttackMove } from "#app/data/moves/charging-attack-move";
 import type { MoveAttr } from "#app/data/move-attrs/move-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
