@@ -7,6 +7,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { Move } from "#app/data/move";
 
 describe("Moves - Instruct", () => {
   let phaserGame: Phaser.Game;
@@ -214,7 +215,13 @@ describe("Moves - Instruct", () => {
     const player = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     enemyPokemon.battleSummonData.moveHistory = [
-      { moveId: MoveId.SONIC_BOOM, targets: [BattlerIndex.PLAYER], result: MoveResult.SUCCESS, virtual: false },
+      {
+        moveId: MoveId.SONIC_BOOM,
+        move: expect.any(Move),
+        targets: [BattlerIndex.PLAYER],
+        result: MoveResult.SUCCESS,
+        virtual: false,
+      },
     ];
 
     game.move.select(MoveId.INSTRUCT);

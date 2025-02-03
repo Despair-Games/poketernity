@@ -11,6 +11,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { Move } from "#app/data/move";
 
 describe("Moves - Stockpile", () => {
   describe("integration tests", () => {
@@ -76,6 +77,7 @@ describe("Moves - Stockpile", () => {
           expect(stockpilingTag.stockpiledCount).toBe(3);
           expect(user.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
             result: MoveResult.FAIL,
+            move: expect.any(Move),
             moveId: MoveId.STOCKPILE,
           });
         }

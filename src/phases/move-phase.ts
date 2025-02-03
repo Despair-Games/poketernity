@@ -364,6 +364,7 @@ export class MovePhase extends BattlePhase {
 
       this.pokemon.pushMoveHistory({
         moveId: this.move.moveId,
+        move: this.move.getMove(),
         targets: this.targets,
         result: MoveResult.FAIL,
         virtual: this.move.virtual,
@@ -407,6 +408,7 @@ export class MovePhase extends BattlePhase {
     } else {
       this.pokemon.pushMoveHistory({
         moveId: this.move.moveId,
+        move: this.move.getMove(),
         targets: this.targets,
         result: MoveResult.FAIL,
         virtual: this.move.virtual,
@@ -565,7 +567,7 @@ export class MovePhase extends BattlePhase {
         frenzyMissFunc(this.pokemon, this.move.getMove());
       }
 
-      this.pokemon.pushMoveHistory({ moveId: MoveId.NONE, result: MoveResult.FAIL });
+      this.pokemon.pushMoveHistory({ moveId: MoveId.NONE, move: undefined, result: MoveResult.FAIL });
 
       this.pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
       this.pokemon.lapseTags(BattlerTagLapseType.AFTER_MOVE);

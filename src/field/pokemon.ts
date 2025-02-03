@@ -5932,6 +5932,7 @@ interface AbilityData {
 
 export interface TurnMove {
   moveId: MoveId;
+  move: Move | undefined;
   targets?: BattlerIndex[];
   result: MoveResult;
   virtual?: boolean;

@@ -164,6 +164,7 @@ export class MoveEffectPhase extends HitCheckPhase {
      */
     this.moveHistoryEntry = {
       moveId: this.move.moveId,
+      move: this.move.getMove(),
       targets: this.adjustedTargets ?? this.targets,
       result: MoveResult.PENDING,
       virtual: this.move.virtual,

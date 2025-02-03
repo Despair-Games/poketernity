@@ -79,7 +79,12 @@ export class MoveChargePhase extends HitCheckPhase {
       }
 
       // Add this move's charging phase to the user's move history
-      user.pushMoveHistory({ moveId: this.move.moveId, targets: this.targets, result: MoveResult.OTHER });
+      user.pushMoveHistory({
+        moveId: this.move.moveId,
+        move: this.move.getMove(),
+        targets: this.targets,
+        result: MoveResult.OTHER,
+      });
     }
     this.end();
   }

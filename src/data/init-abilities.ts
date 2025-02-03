@@ -495,14 +495,23 @@ export function initAbilities() {
         Stat.SPD,
         1.5,
       ),
-    new Ability(Abilities.NORMALIZE, 4).attr(MoveTypeChangeAbAttr, ElementalType.NORMAL, 1.2, (_user, _target, move) => {
-      return (
-        !!move
-        && ![MoveId.HIDDEN_POWER, MoveId.WEATHER_BALL, MoveId.NATURAL_GIFT, MoveId.JUDGMENT, MoveId.TECHNO_BLAST].includes(
-          move.id,
-        )
-      );
-    }),
+    new Ability(Abilities.NORMALIZE, 4).attr(
+      MoveTypeChangeAbAttr,
+      ElementalType.NORMAL,
+      1.2,
+      (_user, _target, move) => {
+        return (
+          !!move
+          && ![
+            MoveId.HIDDEN_POWER,
+            MoveId.WEATHER_BALL,
+            MoveId.NATURAL_GIFT,
+            MoveId.JUDGMENT,
+            MoveId.TECHNO_BLAST,
+          ].includes(move.id)
+        );
+      },
+    ),
     new Ability(Abilities.SNIPER, 4).attr(MultCritAbAttr, 1.5),
     new Ability(Abilities.MAGIC_GUARD, 4).attr(BlockNonDirectDamageAbAttr),
     new Ability(Abilities.NO_GUARD, 4).attr(AlwaysHitAbAttr).attr(DoubleBattleChanceAbAttr),

@@ -4,7 +4,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import { type Move } from "../move";
-import { allMoves } from "#app/data/all-moves";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { targetMoveCopiableCondition } from "../move-conditions/target-move-copiable-condition";
 import { OverrideMoveEffectAttr } from "./override-move-effect-attr";
@@ -22,7 +21,8 @@ export class MovesetCopyMoveAttr extends OverrideMoveEffectAttr {
       return false;
     }
 
-    const copiedMove = allMoves[targetMoves[0].moveId];
+    // const copiedMove = allMoves[targetMoves[0].moveId];
+    const copiedMove = targetMoves[0];
 
     const thisMoveIndex = user.getMoveset().findIndex((m) => m.moveId === move.id);
 
@@ -31,10 +31,13 @@ export class MovesetCopyMoveAttr extends OverrideMoveEffectAttr {
     }
 
     user.summonData.moveset = user.getMoveset().slice(0);
-    user.summonData.moveset[thisMoveIndex] = new PokemonMove(copiedMove.id, 0, 0);
+    user.summonData.moveset[thisMoveIndex] = new PokemonMove(copiedMove.moveId, 0, 0);
 
     globalScene.queueMessage(
-      i18next.t("moveTriggers:copiedMove", { pokemonName: getPokemonNameWithAffix(user), moveName: copiedMove.name }),
+      i18next.t("moveTriggers:copiedMove", {
+        pokemonName: getPokemonNameWithAffix(user),
+        moveName: copiedMove.move?.name,
+      }),
     );
 
     return true;

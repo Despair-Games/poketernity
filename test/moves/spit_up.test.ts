@@ -12,6 +12,7 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { MovePhase } from "#app/phases/move-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
+import { Move } from "#app/data/move";
 
 describe("Moves - Spit Up", () => {
   let phaserGame: Phaser.Game;
@@ -127,6 +128,7 @@ describe("Moves - Spit Up", () => {
 
     expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
       moveId: MoveId.SPIT_UP,
+      move: expect.any(Move),
       result: MoveResult.FAIL,
     });
 
@@ -153,6 +155,7 @@ describe("Moves - Spit Up", () => {
 
       expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
         moveId: MoveId.SPIT_UP,
+        move: expect.any(Move),
         result: MoveResult.SUCCESS,
       });
 
@@ -184,6 +187,7 @@ describe("Moves - Spit Up", () => {
 
       expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
         moveId: MoveId.SPIT_UP,
+        move: expect.any(Move),
         result: MoveResult.SUCCESS,
       });
 

@@ -11,6 +11,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { Move } from "#app/data/move";
 
 describe("Moves - Swallow", () => {
   let phaserGame: Phaser.Game;
@@ -137,6 +138,7 @@ describe("Moves - Swallow", () => {
 
     expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
       moveId: MoveId.SWALLOW,
+      move: expect.any(Move),
       result: MoveResult.FAIL,
     });
   });
@@ -161,6 +163,7 @@ describe("Moves - Swallow", () => {
 
       expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
         moveId: MoveId.SWALLOW,
+        move: expect.any(Move),
         result: MoveResult.SUCCESS,
       });
 
@@ -191,6 +194,7 @@ describe("Moves - Swallow", () => {
 
       expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
         moveId: MoveId.SWALLOW,
+        move: expect.any(Move),
         result: MoveResult.SUCCESS,
       });
 

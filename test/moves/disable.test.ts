@@ -6,6 +6,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import type { TurnMove } from "#app/field/pokemon";
+import { Move } from "#app/data/move";
 
 describe("Moves - Disable", () => {
   let phaserGame: Phaser.Game;
@@ -56,7 +57,11 @@ describe("Moves - Disable", () => {
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
-    expect(playerMon.getMoveHistory()[0]).toMatchObject<TurnMove>({ moveId: MoveId.DISABLE, result: MoveResult.FAIL });
+    expect(playerMon.getMoveHistory()[0]).toMatchObject<TurnMove>({
+      moveId: MoveId.DISABLE,
+      move: expect.any(Move),
+      result: MoveResult.FAIL,
+    });
     expect(enemyMon.isMoveRestricted(MoveId.SPLASH)).toBe(false);
   }, 20000);
 
@@ -109,7 +114,11 @@ describe("Moves - Disable", () => {
 
     const enemyHistory = enemyMon.getMoveHistory();
     expect(enemyHistory).toHaveLength(2);
-    expect(enemyHistory[0]).toMatchObject<TurnMove>({ moveId: MoveId.SPLASH, result: MoveResult.SUCCESS });
+    expect(enemyHistory[0]).toMatchObject<TurnMove>({
+      moveId: MoveId.SPLASH,
+      move: expect.any(Move),
+      result: MoveResult.SUCCESS,
+    });
     expect(enemyHistory[1].result).toBe(MoveResult.FAIL);
   }, 20000);
 
