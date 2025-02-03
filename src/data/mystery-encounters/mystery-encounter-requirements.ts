@@ -7,12 +7,12 @@ import { pokemonFormChanges } from "#app/data/pokemon-forms";
 import { SpeciesFormChangeItemTrigger } from "../species-form-change-triggers/species-form-change-item-trigger";
 import { FormChangeItem } from "#enums/form-change-item";
 import { StatusEffect } from "#enums/status-effect";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { WeatherType } from "#enums/weather-type";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { isNullOrUndefined } from "#app/utils";
 import type { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { SpeciesFormKey } from "#enums/species-form-key";
@@ -507,11 +507,11 @@ export class NatureRequirement extends EncounterPokemonRequirement {
 }
 
 export class TypeRequirement extends EncounterPokemonRequirement {
-  requiredType: ElementType[];
+  requiredType: ElementalType[];
   excludeFainted: boolean;
 
   constructor(
-    type: ElementType | ElementType[],
+    type: ElementalType | ElementalType[],
     excludeFainted: boolean = true,
     minNumberOfPokemon: number = 1,
     invertQuery: boolean = false,
@@ -553,18 +553,18 @@ export class TypeRequirement extends EncounterPokemonRequirement {
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
     const includedTypes = this.requiredType.filter((ty) => pokemon?.getTypes().includes(ty));
     if (includedTypes.length > 0) {
-      return ["type", ElementType[includedTypes[0]]];
+      return ["type", ElementalType[includedTypes[0]]];
     }
     return ["type", ""];
   }
 }
 
 export class MoveRequirement extends EncounterPokemonRequirement {
-  requiredMoves: Moves[] = [];
+  requiredMoves: MoveId[] = [];
   excludeDisallowedPokemon: boolean;
 
   constructor(
-    moves: Moves | Moves[],
+    moves: MoveId | MoveId[],
     excludeDisallowedPokemon: boolean,
     minNumberOfPokemon: number = 1,
     invertQuery: boolean = false,
@@ -617,13 +617,13 @@ export class MoveRequirement extends EncounterPokemonRequirement {
  * NOTE: If the Pokemon already knows the move, this requirement will fail, since it's not technically learnable.
  */
 export class CompatibleMoveRequirement extends EncounterPokemonRequirement {
-  requiredMoves: Moves[];
+  requiredMoves: MoveId[];
 
-  constructor(learnableMove: Moves | Moves[], minNumberOfPokemon: number = 1, invertQuery: boolean = false) {
+  constructor(learnableMoveId: MoveId | MoveId[], minNumberOfPokemon: number = 1, invertQuery: boolean = false) {
     super();
     this.minNumberOfPokemon = minNumberOfPokemon;
     this.invertQuery = invertQuery;
-    this.requiredMoves = Array.isArray(learnableMove) ? learnableMove : [learnableMove];
+    this.requiredMoves = Array.isArray(learnableMoveId) ? learnableMoveId : [learnableMoveId];
   }
 
   override meetsRequirement(): boolean {
@@ -658,7 +658,7 @@ export class CompatibleMoveRequirement extends EncounterPokemonRequirement {
       pokemon?.compatibleTms.filter((tm) => !pokemon.moveset.find((m) => m.moveId === tm)).includes(reqMove),
     );
     if (includedCompatMoves.length > 0) {
-      return ["compatibleMove", Moves[includedCompatMoves[0]]];
+      return ["compatibleMove", MoveId[includedCompatMoves[0]]];
     }
     return ["compatibleMove", ""];
   }
@@ -994,11 +994,11 @@ export class HeldItemRequirement extends EncounterPokemonRequirement {
 }
 
 export class AttackTypeBoosterHeldItemTypeRequirement extends EncounterPokemonRequirement {
-  requiredHeldItemTypes: ElementType[];
+  requiredHeldItemTypes: ElementalType[];
   requireTransferable: boolean;
 
   constructor(
-    heldItemTypes: ElementType | ElementType[],
+    heldItemTypes: ElementalType | ElementalType[],
     minNumberOfPokemon: number = 1,
     invertQuery: boolean = false,
     requireTransferable: boolean = true,

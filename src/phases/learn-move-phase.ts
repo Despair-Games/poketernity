@@ -12,19 +12,19 @@ import FormChangeSceneHandler from "#app/ui/form-change-scene-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { UiMode } from "#enums/ui-mode";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 import { LearnMoveType } from "#enums/learn-move-type";
 
 export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
-  private readonly moveId: Moves;
+  private readonly moveId: MoveId;
   private messageMode: UiMode;
   private readonly learnMoveType: LearnMoveType;
   private readonly cost: number;
 
   constructor(
     partyMemberIndex: number,
-    moveId: Moves,
+    moveId: MoveId,
     learnMoveType: LearnMoveType = LearnMoveType.LEARN_MOVE,
     cost: number = -1,
   ) {
@@ -43,7 +43,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
     const currentMoveset = pokemon.getMoveset();
 
     // The game first checks if the Pokemon already has the move and ends the phase if it does.
-    const hasMoveAlready = currentMoveset.some((m) => m.moveId === move.id) && this.moveId !== Moves.SKETCH;
+    const hasMoveAlready = currentMoveset.some((m) => m.moveId === move.id) && this.moveId !== MoveId.SKETCH;
     if (hasMoveAlready) {
       return this.end();
     }

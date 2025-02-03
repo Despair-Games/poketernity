@@ -14,6 +14,7 @@ import { capitalizeFirstLetter, hasTouchscreen, isNullOrUndefined } from "#app/u
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 /**
  * Abstract class for handling UI elements related to settings.
@@ -69,12 +70,8 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
   setup() {
     const ui = this.getUi();
 
-    this.settingsContainer = globalScene.add.container(1, -(globalScene.game.canvas.height / 6) + 1);
+    this.settingsContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
     this.settingsContainer.setName(`settings-${this.title}`);
-    this.settingsContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 6, globalScene.game.canvas.height / 6 - 20),
-      Phaser.Geom.Rectangle.Contains,
-    );
 
     this.navigationIcons = {};
 
@@ -83,18 +80,13 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     this.optionsBg = addWindow(
       0,
       this.navigationContainer.height,
-      globalScene.game.canvas.width / 6 - 2,
-      globalScene.game.canvas.height / 6 - 16 - this.navigationContainer.height - 2,
+      GAME_WIDTH - 2,
+      GAME_HEIGHT - 16 - this.navigationContainer.height - 2,
     );
     this.optionsBg.setName("window-options-bg");
     this.optionsBg.setOrigin(0, 0);
 
-    const actionsBg = addWindow(
-      0,
-      globalScene.game.canvas.height / 6 - this.navigationContainer.height,
-      globalScene.game.canvas.width / 6 - 2,
-      22,
-    );
+    const actionsBg = addWindow(0, GAME_HEIGHT - this.navigationContainer.height, GAME_WIDTH - 2, 22);
     actionsBg.setOrigin(0, 0);
 
     const iconAction = globalScene.add.sprite(0, 0, "keyboard");
@@ -104,7 +96,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
     const actionText = addTextObject(0, 0, i18next.t("settings:action"), TextStyle.SETTINGS_LABEL);
     actionText.setOrigin(0, 0.15);
-    actionText.setPositionRelative(iconAction, -actionText.width / 6 - 2, 0);
+    actionText.setPositionRelative(iconAction, -actionText.displayWidth - 2, 0);
 
     const iconCancel = globalScene.add.sprite(0, 0, "keyboard");
     iconCancel.setOrigin(0, -0.1);
@@ -113,7 +105,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
     const cancelText = addTextObject(0, 0, i18next.t("settings:back"), TextStyle.SETTINGS_LABEL);
     cancelText.setOrigin(0, 0.15);
-    cancelText.setPositionRelative(iconCancel, -cancelText.width / 6 - 2, 0);
+    cancelText.setPositionRelative(iconCancel, -cancelText.displayWidth - 2, 0);
 
     const requiresReloadInfoText = addTextObject(
       0,
@@ -160,18 +152,20 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
         }),
       );
 
-      const totalWidth = this.optionValueLabels[i].map((o) => o.width).reduce((total, width) => (total += width), 0);
+      const totalWidth = this.optionValueLabels[i]
+        .map((o) => o.displayWidth)
+        .reduce((total, width) => (total += width), 0);
 
       const labelWidth = Math.max(78, this.settingLabels[i].displayWidth + 8);
 
-      const totalSpace = 297 - labelWidth - totalWidth / 6;
+      const totalSpace = 297 - labelWidth - totalWidth;
       const optionSpacing = Math.floor(totalSpace / (this.optionValueLabels[i].length - 1));
 
       let xOffset = 0;
 
       for (const value of this.optionValueLabels[i]) {
         value.setPositionRelative(this.settingLabels[i], labelWidth + xOffset, 0);
-        xOffset += value.width / 6 + optionSpacing;
+        xOffset += value.displayWidth + optionSpacing;
       }
     });
 
@@ -206,16 +200,16 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     this.scrollBar.setTotalRows(this.uiItems.length);
 
     // Two-lines message box
-    this.messageBoxContainer = globalScene.add.container(0, globalScene.scaledCanvas.height);
+    this.messageBoxContainer = globalScene.add.container(0, GAME_HEIGHT);
     this.messageBoxContainer.setName("settings-message-box");
     this.messageBoxContainer.setVisible(false);
 
-    const settingsMessageBox = addWindow(0, -1, globalScene.scaledCanvas.width - 2, 48);
+    const settingsMessageBox = addWindow(0, -1, GAME_WIDTH - 2, 48);
     settingsMessageBox.setOrigin(0, 1);
     this.messageBoxContainer.add(settingsMessageBox);
 
     const messageText = addTextObject(8, -40, "", TextStyle.WINDOW, { maxLines: 2 });
-    messageText.setWordWrapWidth(globalScene.game.canvas.width - 60);
+    messageText.setWordWrapWidth((GAME_WIDTH - 10) / messageText.scale);
     messageText.setName("settings-message");
     messageText.setOrigin(0, 0);
 
@@ -417,7 +411,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     const ret = super.setCursor(cursor);
 
     if (!this.cursorObj) {
-      const cursorWidth = globalScene.game.canvas.width / 6 - (this.scrollBar.visible ? 16 : 10);
+      const cursorWidth = GAME_WIDTH - (this.scrollBar.visible ? 16 : 10);
       this.cursorObj = globalScene.add.nineslice(0, 0, "summary_moves_cursor", undefined, cursorWidth, 16, 1, 1, 1, 1);
       this.cursorObj.setOrigin(0, 0);
       this.optionsContainer.add(this.cursorObj);

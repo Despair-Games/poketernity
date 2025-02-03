@@ -13,7 +13,7 @@ import { getEnumKeys, getEnumValues } from "#app/utils";
 import type { AnimFocus } from "#enums/anim-focus";
 import { ChargeAnim } from "#enums/charge-anim";
 import { CommonAnim } from "#enums/common-anim";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 
 export async function populateAnims() {
   const commonAnimNames = getEnumKeys(CommonAnim).map((k) => k.toLowerCase());
@@ -24,8 +24,8 @@ export async function populateAnims() {
   const chargeAnimIds = getEnumValues(ChargeAnim) as ChargeAnim[];
   const commonNamePattern = /name: (?:Common:)?(Opp )?(.*)/;
   const moveNameToId = {};
-  for (const move of getEnumValues(Moves).slice(1)) {
-    const moveName = Moves[move].toUpperCase().replace(/\_/g, "");
+  for (const move of getEnumValues(MoveId).slice(1)) {
+    const moveName = MoveId[move].toUpperCase().replace(/\_/g, "");
     moveNameToId[moveName] = move;
   }
 

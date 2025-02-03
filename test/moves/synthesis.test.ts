@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -23,13 +23,13 @@ describe("Moves - Synthesis", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SYNTHESIS])
+      .moveset([MoveId.SYNTHESIS])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
   });
@@ -47,7 +47,7 @@ describe("Moves - Synthesis", () => {
     vi.spyOn(player, "getMaxHp").mockReturnValue(100);
     player.hp = 1;
 
-    game.move.select(Moves.SYNTHESIS);
+    game.move.select(MoveId.SYNTHESIS);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 

@@ -1,7 +1,7 @@
 import { AddBattlerTagAttr } from "#app/data/move-attrs/add-battler-tag-attr";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 
 export class EncoreAttr extends AddBattlerTagAttr {
   constructor() {
@@ -21,18 +21,18 @@ export class EncoreAttr extends AddBattlerTagAttr {
 
       const repeatableMove = lastMoves[0];
 
-      if (!repeatableMove.move || repeatableMove.virtual) {
+      if (!repeatableMove.moveId || repeatableMove.virtual) {
         return false;
       }
 
-      switch (repeatableMove.move) {
-        case Moves.MIMIC:
-        case Moves.MIRROR_MOVE:
-        case Moves.TRANSFORM:
-        case Moves.STRUGGLE:
-        case Moves.SKETCH:
-        case Moves.SLEEP_TALK:
-        case Moves.ENCORE:
+      switch (repeatableMove.moveId) {
+        case MoveId.MIMIC:
+        case MoveId.MIRROR_MOVE:
+        case MoveId.TRANSFORM:
+        case MoveId.STRUGGLE:
+        case MoveId.SKETCH:
+        case MoveId.SLEEP_TALK:
+        case MoveId.ENCORE:
           return false;
       }
 

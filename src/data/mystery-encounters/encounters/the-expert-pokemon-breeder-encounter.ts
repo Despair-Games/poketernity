@@ -19,7 +19,7 @@ import { Species } from "#enums/species";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import { Nature } from "#enums/nature";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import type { IEggOptions } from "#app/data/egg";
@@ -29,7 +29,7 @@ import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/myst
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-type";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
@@ -452,12 +452,12 @@ function getPartyConfig(): EnemyPartyConfig {
         abilityIndex: 1, // Magic Guard
         shiny: false,
         nature: Nature.ADAMANT,
-        moveSet: [Moves.METEOR_MASH, Moves.FIRE_PUNCH, Moves.ICE_PUNCH, Moves.THUNDER_PUNCH],
+        moveSet: [MoveId.METEOR_MASH, MoveId.FIRE_PUNCH, MoveId.ICE_PUNCH, MoveId.THUNDER_PUNCH],
         ivs: [31, 31, 31, 31, 31, 31],
         modifierConfigs: [
           {
             modifier: generateModifierType(modifierTypes.TERA_SHARD, [
-              ElementType.STEEL,
+              ElementalType.STEEL,
             ]) as PokemonHeldItemModifierType,
           },
         ],
@@ -478,7 +478,7 @@ function getPartyConfig(): EnemyPartyConfig {
         shiny: true,
         variant: 1,
         nature: Nature.MODEST,
-        moveSet: [Moves.MOONBLAST, Moves.MYSTICAL_FIRE, Moves.ICE_BEAM, Moves.THUNDERBOLT],
+        moveSet: [MoveId.MOONBLAST, MoveId.MYSTICAL_FIRE, MoveId.ICE_BEAM, MoveId.THUNDERBOLT],
         ivs: [31, 31, 31, 31, 31, 31],
       },
       {
@@ -491,7 +491,7 @@ function getPartyConfig(): EnemyPartyConfig {
         shiny: true,
         variant: 2,
         nature: Nature.BOLD,
-        moveSet: [Moves.TRI_ATTACK, Moves.STORED_POWER, Moves.TAKE_HEART, Moves.MOONLIGHT],
+        moveSet: [MoveId.TRI_ATTACK, MoveId.STORED_POWER, MoveId.TAKE_HEART, MoveId.MOONLIGHT],
         ivs: [31, 31, 31, 31, 31, 31],
       },
     );

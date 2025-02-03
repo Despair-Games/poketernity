@@ -1,7 +1,7 @@
 import { TUTORIAL_BATTLE_WAVE } from "#app/data/special-waves";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -31,13 +31,13 @@ describe("Abilities - Poison Puppeteer", () => {
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyLevel(100)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should confuse the target if the user poisons the target directly", async () => {
     await game.classicMode.startBattle([Species.MAREANIE]);
 
-    game.move.use(Moves.MORTAL_SPIN);
+    game.move.use(MoveId.MORTAL_SPIN);
     await game.phaseInterceptor.to("BerryPhase");
 
     const enemyPokemon = game.field.getEnemyPokemon();
@@ -48,7 +48,7 @@ describe("Abilities - Poison Puppeteer", () => {
   it("should confuse the target if the user badly poisons the target directly", async () => {
     await game.classicMode.startBattle([Species.MAREANIE]);
 
-    game.move.use(Moves.TOXIC);
+    game.move.use(MoveId.TOXIC);
     await game.phaseInterceptor.to("BerryPhase");
 
     const enemyPokemon = game.field.getEnemyPokemon();
@@ -60,10 +60,10 @@ describe("Abilities - Poison Puppeteer", () => {
     game.override.startingWave(TUTORIAL_BATTLE_WAVE);
     await game.classicMode.startBattle([Species.MAREANIE]);
 
-    game.move.use(Moves.TOXIC_SPIKES);
+    game.move.use(MoveId.TOXIC_SPIKES);
     await game.toNextTurn();
 
-    game.move.use(Moves.SPLASH);
+    game.move.use(MoveId.SPLASH);
     await game.forceEnemyToSwitch();
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -75,7 +75,7 @@ describe("Abilities - Poison Puppeteer", () => {
   it("should not confuse the target if the user paralyzes the target", async () => {
     await game.classicMode.startBattle([Species.MAREANIE]);
 
-    game.move.use(Moves.NUZZLE);
+    game.move.use(MoveId.NUZZLE);
     await game.phaseInterceptor.to("BerryPhase");
 
     const enemyPokemon = game.field.getEnemyPokemon();

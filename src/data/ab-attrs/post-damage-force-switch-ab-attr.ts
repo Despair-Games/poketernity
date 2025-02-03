@@ -1,7 +1,6 @@
 import { type EnemyPokemon, type Pokemon } from "#app/field/pokemon";
 import { BooleanHolder, toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
 import { SwitchType } from "#enums/switch-type";
 import { PostDamageAbAttr } from "./post-damage-ab-attr";
 import { allMoves } from "#app/data/all-moves";
@@ -16,6 +15,7 @@ import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { BattleType } from "#enums/battle-type";
 import i18next from "i18next";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { MoveId } from "#enums/move-id";
 
 /**
  * Ability attribute for forcing a Pokémon to switch out after its health drops below half.
@@ -52,25 +52,25 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
   public override apply(pokemon: Pokemon, _simulated: boolean, damage: number, source?: Pokemon): boolean {
     const moveHistory = pokemon.getMoveHistory();
     // Will not activate when the Pokémon's HP is lowered by cutting its own HP
-    const forbiddenAttackingMoves = [Moves.BELLY_DRUM, Moves.SUBSTITUTE, Moves.CURSE, Moves.PAIN_SPLIT];
+    const forbiddenAttackingMoves = [MoveId.BELLY_DRUM, MoveId.SUBSTITUTE, MoveId.CURSE, MoveId.PAIN_SPLIT];
     if (moveHistory.length > 0) {
       const lastMoveUsed = moveHistory[moveHistory.length - 1];
-      if (forbiddenAttackingMoves.includes(lastMoveUsed.move)) {
+      if (forbiddenAttackingMoves.includes(lastMoveUsed.moveId)) {
         return false;
       }
     }
 
     // Dragon Tail and Circle Throw switch out Pokémon before the Ability activates.
-    const forbiddenDefendingMoves = [Moves.DRAGON_TAIL, Moves.CIRCLE_THROW];
+    const forbiddenDefendingMoves = [MoveId.DRAGON_TAIL, MoveId.CIRCLE_THROW];
     if (source) {
       const enemyMoveHistory = source.getMoveHistory();
       if (enemyMoveHistory.length > 0) {
         const enemyLastMoveUsed = enemyMoveHistory[enemyMoveHistory.length - 1];
         // Will not activate if the Pokémon's HP falls below half while it is in the air during Sky Drop.
-        if (forbiddenDefendingMoves.includes(enemyLastMoveUsed.move) || pokemon.getTag(BattlerTagType.SKY_DROP)) {
+        if (forbiddenDefendingMoves.includes(enemyLastMoveUsed.moveId) || pokemon.getTag(BattlerTagType.SKY_DROP)) {
           return false;
           // Will not activate if the Pokémon's HP falls below half by a move affected by Sheer Force.
-        } else if (allMoves[enemyLastMoveUsed.move].chance >= 0 && source.hasAbility(Abilities.SHEER_FORCE)) {
+        } else if (allMoves[enemyLastMoveUsed.moveId].chance >= 0 && source.hasAbility(Abilities.SHEER_FORCE)) {
           return false;
           // Activate only after the last hit of multistrike moves
         } else if (source.turnData.hitsLeft > 1) {

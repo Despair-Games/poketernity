@@ -103,7 +103,7 @@ import { SpeciesFormChangeManualTrigger } from "./data/species-form-change-trigg
 import { FormChangeItem } from "#enums/form-change-item";
 import { FormChangePhase } from "#app/phases/form-change-phase";
 import { getTypeRgb } from "#app/data/type";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import PokemonSpriteSparkleHandler from "#app/field/pokemon-sprite-sparkle-handler";
 import CharSprite from "#app/ui/char-sprite";
 import DamageNumberHandler from "#app/field/damage-number-handler";
@@ -120,7 +120,7 @@ import { UiInputs } from "#app/ui-inputs";
 import { NewArenaEvent } from "#app/events/battle-scene";
 import { ArenaFlyout } from "#app/ui/arena-flyout";
 import { Biome } from "#enums/biome";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { PlayerGender } from "#enums/player-gender";
 import { Species } from "#enums/species";
 import { TimedEventManager } from "#app/timed-event-manager";
@@ -149,7 +149,7 @@ import {
   ME_ANTI_VARIANCE_WEIGHT_MODIFIER,
   ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
   ME_BASE_SPAWN_WEIGHT,
-  ME_SPAWN_MAX_WEIGHT,
+  ME_MAX_SPAWN_WEIGHT,
 } from "./constants";
 import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
@@ -171,6 +171,7 @@ import { eventBus } from "./event-bus";
 import { Animation } from "./animations";
 import { resetStarterColors, starterColors } from "./data/starter-colors";
 import { CallSourceLogger } from "#app/loggers";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { GameOverPhase } from "#app/phases/game-over-phase";
@@ -503,21 +504,21 @@ export default class BattleScene extends SceneBase {
 
     [this.arenaBgTransition, this.arenaBg].forEach((a) => {
       a.setPipeline(this.fieldSpritePipeline);
-      a.setScale(6);
+      a.setScale(CANVAS_SCALE);
       a.setOrigin(0);
-      a.setSize(320, 240);
+      a.setSize(GAME_WIDTH, (GAME_HEIGHT * 4) / 3);
     });
 
     const field = this.add.container(0, 0);
     field.setName("field");
-    field.setScale(6);
+    field.setScale(CANVAS_SCALE);
 
     this.field = field;
 
-    const fieldUI = this.add.container(0, this.game.canvas.height);
+    const fieldUI = this.add.container(0, GAME_HEIGHT * CANVAS_SCALE);
     fieldUI.setName("field-ui");
     fieldUI.setDepth(1);
-    fieldUI.setScale(6);
+    fieldUI.setScale(CANVAS_SCALE);
 
     this.fieldUI = fieldUI;
 
@@ -525,7 +526,7 @@ export default class BattleScene extends SceneBase {
       {
         x: 0,
         y: 0,
-        scale: 6,
+        scale: CANVAS_SCALE,
         key: "loading_bg",
         origin: { x: 0, y: 0 },
       },
@@ -547,12 +548,12 @@ export default class BattleScene extends SceneBase {
     const uiContainer = this.add.container(0, 0);
     uiContainer.setName("ui");
     uiContainer.setDepth(2);
-    uiContainer.setScale(6);
+    uiContainer.setScale(CANVAS_SCALE);
 
     this.uiContainer = uiContainer;
 
-    const overlayWidth = this.game.canvas.width / 6;
-    const overlayHeight = this.game.canvas.height / 6 - 48;
+    const overlayWidth = GAME_WIDTH;
+    const overlayHeight = GAME_HEIGHT - 48;
     this.fieldOverlay = this.add.rectangle(0, overlayHeight * -1 - 48, overlayWidth, overlayHeight, 0x424242);
     this.fieldOverlay.setName("rect-field-overlay");
     this.fieldOverlay.setOrigin(0, 0);
@@ -610,39 +611,30 @@ export default class BattleScene extends SceneBase {
     this.candyBar.setup();
     this.fieldUI.add(this.candyBar);
 
-    this.biomeWaveText = addTextObject(
-      this.game.canvas.width / 6 - 2,
-      0,
-      startingWave.toString(),
-      TextStyle.BATTLE_INFO,
-    );
+    this.biomeWaveText = addTextObject(GAME_WIDTH - 2, 0, startingWave.toString(), TextStyle.BATTLE_INFO);
     this.biomeWaveText.setName("text-biome-wave");
     this.biomeWaveText.setOrigin(1, 0.5);
     this.fieldUI.add(this.biomeWaveText);
 
-    this.moneyText = addTextObject(this.game.canvas.width / 6 - 2, 0, "", TextStyle.MONEY);
+    this.moneyText = addTextObject(GAME_WIDTH - 2, 0, "", TextStyle.MONEY);
     this.moneyText.setName("text-money");
     this.moneyText.setOrigin(1, 0.5);
     this.fieldUI.add(this.moneyText);
 
-    this.scoreText = addTextObject(this.game.canvas.width / 6 - 2, 0, "", TextStyle.PARTY, { fontSize: "54px" });
+    this.scoreText = addTextObject(GAME_WIDTH - 2, 0, "", TextStyle.PARTY, { fontSize: "54px" });
     this.scoreText.setName("text-score");
     this.scoreText.setOrigin(1, 0.5);
     this.fieldUI.add(this.scoreText);
 
-    this.luckText = addTextObject(this.game.canvas.width / 6 - 2, 0, "", TextStyle.PARTY, { fontSize: "54px" });
+    this.luckText = addTextObject(GAME_WIDTH - 2, 0, "", TextStyle.PARTY, { fontSize: "54px" });
     this.luckText.setName("text-luck");
     this.luckText.setOrigin(1, 0.5);
     this.luckText.setVisible(false);
     this.fieldUI.add(this.luckText);
 
-    this.luckLabelText = addTextObject(
-      this.game.canvas.width / 6 - 2,
-      0,
-      i18next.t("common:luckIndicator"),
-      TextStyle.PARTY,
-      { fontSize: "54px" },
-    );
+    this.luckLabelText = addTextObject(GAME_WIDTH - 2, 0, i18next.t("common:luckIndicator"), TextStyle.PARTY, {
+      fontSize: "54px",
+    });
     this.luckLabelText.setName("text-luck-label");
     this.luckLabelText.setOrigin(1, 0.5);
     this.luckLabelText.setVisible(false);
@@ -659,10 +651,7 @@ export default class BattleScene extends SceneBase {
     this.spriteSparkleHandler = new PokemonSpriteSparkleHandler();
     this.spriteSparkleHandler.setup();
 
-    this.pokemonInfoContainer = new PokemonInfoContainer(
-      this.game.canvas.width / 6 + 52,
-      -(this.game.canvas.height / 6) + 66,
-    );
+    this.pokemonInfoContainer = new PokemonInfoContainer(GAME_WIDTH + 52, -GAME_HEIGHT + 66);
     this.pokemonInfoContainer.setup();
 
     this.fieldUI.add(this.pokemonInfoContainer);
@@ -729,14 +718,14 @@ export default class BattleScene extends SceneBase {
 
     ui.setup();
 
-    const defaultMoves = [Moves.TACKLE, Moves.TAIL_WHIP, Moves.FOCUS_ENERGY, Moves.STRUGGLE];
+    const defaultMoves = [MoveId.TACKLE, MoveId.TAIL_WHIP, MoveId.FOCUS_ENERGY, MoveId.STRUGGLE];
 
     Promise.all([
       Promise.all(loadPokemonAssets),
       initCommonAnims().then(() => loadCommonAnimAssets(true)),
-      Promise.all([Moves.TACKLE, Moves.TAIL_WHIP, Moves.FOCUS_ENERGY, Moves.STRUGGLE].map((m) => initMoveAnim(m))).then(
-        () => loadMoveAnimAssets(defaultMoves, true),
-      ),
+      Promise.all(
+        [MoveId.TACKLE, MoveId.TAIL_WHIP, MoveId.FOCUS_ENERGY, MoveId.STRUGGLE].map((m) => initMoveAnim(m)),
+      ).then(() => loadMoveAnimAssets(defaultMoves, true)),
       this.initStarterColors(),
     ]).then(() => {
       this.toLoginScreen();
@@ -1559,13 +1548,13 @@ export default class BattleScene extends SceneBase {
 
   setFieldScale(scale: number, instant: boolean = false): Promise<void> {
     return new Promise((resolve) => {
-      scale *= 6;
+      scale *= CANVAS_SCALE;
       if (this.field.scale === scale) {
         return resolve();
       }
 
-      const defaultWidth = this.arenaBg.width * 6;
-      const defaultHeight = 132 * 6;
+      const defaultWidth = this.arenaBg.width * CANVAS_SCALE;
+      const defaultHeight = 132 * CANVAS_SCALE;
       const scaledWidth = this.arenaBg.width * scale;
       const scaledHeight = 132 * scale;
 
@@ -1980,7 +1969,7 @@ export default class BattleScene extends SceneBase {
     } else {
       this.luckText.setTint(0xffef5c, 0x47ff69, 0x6b6bff, 0xff6969);
     }
-    this.luckLabelText.setX(this.game.canvas.width / 6 - 2 - (this.luckText.displayWidth + 2));
+    this.luckLabelText.setX(GAME_WIDTH - 2 - (this.luckText.displayWidth + 2));
     this.tweens.add({
       targets: labels,
       duration: duration,
@@ -2010,9 +1999,7 @@ export default class BattleScene extends SceneBase {
     const enemyModifierCount = this.enemyModifiers.filter((m) => m.isIconVisible()).length;
     const biomeWaveTextHeight = this.biomeWaveText.getBottomLeft().y - this.biomeWaveText.getTopLeft().y;
     this.biomeWaveText.setY(
-      -(this.game.canvas.height / 6)
-        + (enemyModifierCount ? (enemyModifierCount <= 12 ? 15 : 24) : 0)
-        + biomeWaveTextHeight / 2,
+      -GAME_HEIGHT + (enemyModifierCount ? (enemyModifierCount <= 12 ? 15 : 24) : 0) + biomeWaveTextHeight / 2,
     );
     this.moneyText.setY(this.biomeWaveText.y + 10);
     this.scoreText.setY(this.moneyText.y + 10);
@@ -2022,7 +2009,7 @@ export default class BattleScene extends SceneBase {
     const offsetY = (this.scoreText.visible ? this.scoreText : this.moneyText).y + 15;
     this.partyExpBar.setY(offsetY);
     this.candyBar.setY(offsetY + 15);
-    this.ui?.achvBar.setY(this.game.canvas.height / 6 + offsetY);
+    this.ui?.achvBar.setY(GAME_HEIGHT + offsetY);
   }
 
   /**
@@ -3219,8 +3206,8 @@ export default class BattleScene extends SceneBase {
             return {
               name: p.name,
               form: p.getFormKey(),
-              types: p.getTypes().map((type) => ElementType[type]),
-              teraType: p.getTeraType() !== ElementType.UNKNOWN ? ElementType[p.getTeraType()] : "",
+              types: p.getTypes().map((type) => ElementalType[type]),
+              teraType: p.getTeraType() !== ElementalType.UNKNOWN ? ElementalType[p.getTeraType()] : "",
               level: p.level,
               currentHP: p.hp,
               maxHP: p.getMaxHp(),
@@ -3490,7 +3477,7 @@ export default class BattleScene extends SceneBase {
       const currentRunDiffFromAvg = expectedEncountersByFloor - encounteredEvents.length;
       const favoredEncounterRate =
         sessionEncounterRate
-        + Math.min(currentRunDiffFromAvg * ME_ANTI_VARIANCE_WEIGHT_MODIFIER, ME_SPAWN_MAX_WEIGHT / 2);
+        + Math.min(currentRunDiffFromAvg * ME_ANTI_VARIANCE_WEIGHT_MODIFIER, ME_MAX_SPAWN_WEIGHT / 2);
 
       const successRate = isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE)
         ? favoredEncounterRate
@@ -3503,11 +3490,11 @@ export default class BattleScene extends SceneBase {
         || !isNullOrUndefined(Overrides.MYSTERY_ENCOUNTER_RATE_OVERRIDE);
 
       if (canSpawn) {
-        let roll = ME_SPAWN_MAX_WEIGHT;
+        let roll = ME_MAX_SPAWN_WEIGHT;
         // Always rolls the check on the same offset to ensure no RNG changes from reloading session
         this.executeWithSeedOffset(
           () => {
-            roll = randSeedInt(ME_SPAWN_MAX_WEIGHT);
+            roll = randSeedInt(ME_MAX_SPAWN_WEIGHT);
           },
           waveIndex * 3 * 1000,
         );

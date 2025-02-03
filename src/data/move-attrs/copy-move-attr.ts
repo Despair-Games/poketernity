@@ -14,7 +14,7 @@ import { lastMoveCopiableCondition } from "../move-conditions/last-move-copiable
  */
 export class CopyMoveAttr extends OverrideMoveEffectAttr {
   override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
-    const lastMove = globalScene.currentBattle.lastMove;
+    const lastMove = globalScene.currentBattle.lastMoveId;
 
     const moveTargets = getMoveTargets(user, lastMove);
     if (!moveTargets.targets.length) {
@@ -27,7 +27,7 @@ export class CopyMoveAttr extends OverrideMoveEffectAttr {
         : moveTargets.targets.indexOf(target.getBattlerIndex()) > -1
           ? [target.getBattlerIndex()]
           : [moveTargets.targets[user.randSeedInt(moveTargets.targets.length)]];
-    user.getMoveQueue().push({ move: lastMove, targets: targets, ignorePP: true });
+    user.getMoveQueue().push({ moveId: lastMove, targets: targets, ignorePP: true });
 
     globalScene.unshiftPhase(new MovePhase(user as PlayerPokemon, targets, lastMove, true));
 

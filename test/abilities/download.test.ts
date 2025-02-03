@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -23,12 +23,12 @@ describe("Abilities - Download", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SPLASH])
+      .moveset([MoveId.SPLASH])
       .ability(Abilities.DOWNLOAD)
       .battleType("single")
       .disableCrits()
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should boost special attack if the enemy's defense is higher", async () => {
@@ -37,7 +37,7 @@ describe("Abilities - Download", () => {
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("TurnStartPhase");
 
     expect(player.getStatStage(Stat.SPATK)).toBe(1);
@@ -49,7 +49,7 @@ describe("Abilities - Download", () => {
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("TurnStartPhase");
 
     expect(player.getStatStage(Stat.ATK)).toBe(1);

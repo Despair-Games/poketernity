@@ -53,15 +53,15 @@ export const CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES: [min: number, max: number] = 
 export const CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES: [min: number, max: number] = [10, 180];
 
 /**
- * Spawn chance: ({@linkcode ME_BASE_SPAWN_WEIGHT} + {@linkcode ME_WEIGHT_INCREMENT_ON_SPAWN_MISS} * <number of missed spawns>) / {@linkcode ME_SPAWN_MAX_WEIGHT}
+ * Spawn chance: ({@linkcode ME_BASE_SPAWN_WEIGHT} + {@linkcode ME_WEIGHT_INCREMENT_ON_SPAWN_MISS} * <number of missed spawns>) / {@linkcode ME_MAX_SPAWN_WEIGHT}
  */
 export const ME_BASE_SPAWN_WEIGHT = 3;
 
 /**
  * The divisor for determining ME spawns, defines the "maximum" weight required for a spawn
- * If spawn_weight === {@linkcode ME_SPAWN_MAX_WEIGHT}, 100% chance to spawn a ME
+ * If spawn_weight === {@linkcode ME_MAX_SPAWN_WEIGHT}, 100% chance to spawn a ME
  */
-export const ME_SPAWN_MAX_WEIGHT = 256;
+export const ME_MAX_SPAWN_WEIGHT = 256;
 
 /**
  * When an ME spawn roll fails, {@linkcode ME_WEIGHT_INCREMENT_ON_SPAWN_MISS} is added to future rolls for ME spawn checks.

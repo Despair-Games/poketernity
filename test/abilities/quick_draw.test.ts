@@ -3,7 +3,7 @@ import { allAbilities } from "#app/data/all-abilities";
 import { FaintPhase } from "#app/phases/faint-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -29,12 +29,12 @@ describe("Abilities - Quick Draw", () => {
 
     game.override.starterSpecies(Species.MAGIKARP);
     game.override.ability(Abilities.QUICK_DRAW);
-    game.override.moveset([Moves.TACKLE, Moves.TAIL_WHIP]);
+    game.override.moveset([MoveId.TACKLE, MoveId.TAIL_WHIP]);
 
     game.override.enemyLevel(100);
     game.override.enemySpecies(Species.MAGIKARP);
     game.override.enemyAbility(Abilities.BALL_FETCH);
-    game.override.enemyMoveset([Moves.TACKLE]);
+    game.override.enemyMoveset([MoveId.TACKLE]);
 
     vi.spyOn(
       allAbilities[Abilities.QUICK_DRAW].getAttrs<BypassSpeedChanceAbAttr>(AbAttrFlag.BYPASS_SPEED_CHANCE)[0],
@@ -52,7 +52,7 @@ describe("Abilities - Quick Draw", () => {
     pokemon.hp = 1;
     enemy.hp = 1;
 
-    game.move.select(Moves.TACKLE);
+    game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to(FaintPhase, false);
 
     expect(pokemon.isFainted()).toBe(false);
@@ -74,7 +74,7 @@ describe("Abilities - Quick Draw", () => {
       pokemon.hp = 1;
       enemy.hp = 1;
 
-      game.move.select(Moves.TAIL_WHIP);
+      game.move.select(MoveId.TAIL_WHIP);
       await game.phaseInterceptor.to(FaintPhase, false);
 
       expect(pokemon.isFainted()).toBe(true);
@@ -84,7 +84,7 @@ describe("Abilities - Quick Draw", () => {
   );
 
   test("does not increase priority", async () => {
-    game.override.enemyMoveset([Moves.EXTREME_SPEED]);
+    game.override.enemyMoveset([MoveId.EXTREME_SPEED]);
 
     await game.startBattle();
 
@@ -94,7 +94,7 @@ describe("Abilities - Quick Draw", () => {
     pokemon.hp = 1;
     enemy.hp = 1;
 
-    game.move.select(Moves.TACKLE);
+    game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to(FaintPhase, false);
 
     expect(pokemon.isFainted()).toBe(true);

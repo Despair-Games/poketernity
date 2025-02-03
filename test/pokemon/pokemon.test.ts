@@ -3,7 +3,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { GameManager } from "#test/testUtils/gameManager";
 import { PokeballType } from "#enums/pokeball";
 import type BattleScene from "#app/battle-scene";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Abilities } from "#enums/abilities";
 
 describe("Spec - Pokemon", () => {
@@ -64,8 +64,8 @@ describe("Spec - Pokemon", () => {
 
     const fanRotom = game.scene.getPlayerPokemon()!;
 
-    expect(fanRotom.compatibleTms).not.toContain(Moves.BLIZZARD);
-    expect(fanRotom.compatibleTms).toContain(Moves.AIR_SLASH);
+    expect(fanRotom.compatibleTms).not.toContain(MoveId.BLIZZARD);
+    expect(fanRotom.compatibleTms).toContain(MoveId.AIR_SLASH);
   });
 
   it("should provide Eevee with 3 defined abilities", async () => {

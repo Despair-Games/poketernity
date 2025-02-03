@@ -24,7 +24,7 @@ export class FrenzyAttr extends MoveEffectAttr {
       const turnCount = user.randSeedIntRange(1, 2);
       new Array(turnCount)
         .fill(null)
-        .map(() => user.getMoveQueue().push({ move: move.id, targets: [target.getBattlerIndex()], ignorePP: true }));
+        .map(() => user.getMoveQueue().push({ moveId: move.id, targets: [target.getBattlerIndex()], ignorePP: true }));
       user.addTag(BattlerTagType.FRENZY, turnCount, move.id, user.id);
     } else {
       applyMoveAttrs(AddBattlerTagAttr, user, target, move);

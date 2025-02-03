@@ -3,12 +3,12 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { type BooleanHolder, type NumberHolder, toDmgValue } from "#app/utils";
-import type { ElementType } from "#enums/element-type";
+import type { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";
 import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
 
 export class TypeImmunityHealAbAttr extends TypeImmunityAbAttr {
-  constructor(immuneType: ElementType) {
+  constructor(immuneType: ElementalType) {
     super(immuneType);
   }
 

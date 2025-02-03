@@ -4,7 +4,7 @@ import { chargeAnims } from "#app/data/charge-anims";
 import type { Pokemon } from "#app/field/pokemon";
 import { BattlerIndex } from "#enums/battler-index";
 import type { ChargeAnim } from "#enums/charge-anim";
-import type { Moves } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 
 export class MoveChargeAnim extends MoveAnim {
   private chargeAnim: ChargeAnim;
@@ -12,8 +12,8 @@ export class MoveChargeAnim extends MoveAnim {
   /**
    * **Note:** The default for {@linkcode targetIndex} being {@linkcode BattlerIndex.PLAYER} is due to `MoveChargeAnim` originally not supporting a target argument.
    */
-  constructor(chargeAnim: ChargeAnim, move: Moves, user: Pokemon, targetIndex: BattlerIndex = BattlerIndex.PLAYER) {
-    super(move, user, targetIndex);
+  constructor(chargeAnim: ChargeAnim, moveId: MoveId, user: Pokemon, targetIndex: BattlerIndex = BattlerIndex.PLAYER) {
+    super(moveId, user, targetIndex);
 
     this.chargeAnim = chargeAnim;
   }

@@ -1,8 +1,8 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/all-moves";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -29,10 +29,10 @@ describe("Abilities - Galvanize", () => {
       .battleType("single")
       .startingLevel(100)
       .ability(Abilities.GALVANIZE)
-      .moveset([Moves.TACKLE, Moves.REVELATION_DANCE, Moves.FURY_SWIPES])
+      .moveset([MoveId.TACKLE, MoveId.REVELATION_DANCE, MoveId.FURY_SWIPES])
       .enemySpecies(Species.DUSCLOPS)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .enemyLevel(100);
   });
 
@@ -45,14 +45,14 @@ describe("Abilities - Galvanize", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
 
-    const move = allMoves[Moves.TACKLE];
+    const move = allMoves[MoveId.TACKLE];
     vi.spyOn(move, "calculateBattlePower");
 
-    game.move.select(Moves.TACKLE);
+    game.move.select(MoveId.TACKLE);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    expect(playerPokemon.getMoveType).toHaveLastReturnedWith(ElementType.ELECTRIC);
+    expect(playerPokemon.getMoveType).toHaveLastReturnedWith(ElementalType.ELECTRIC);
     expect(enemyPokemon.getMoveEffectiveness).toHaveReturnedWith(1);
     expect(move.calculateBattlePower).toHaveReturnedWith(48);
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
@@ -71,11 +71,11 @@ describe("Abilities - Galvanize", () => {
 
     enemyPokemon.hp = Math.floor(enemyPokemon.getMaxHp() * 0.8);
 
-    game.move.select(Moves.TACKLE);
+    game.move.select(MoveId.TACKLE);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    expect(playerPokemon.getMoveType).toHaveLastReturnedWith(ElementType.ELECTRIC);
+    expect(playerPokemon.getMoveType).toHaveLastReturnedWith(ElementalType.ELECTRIC);
     expect(enemyPokemon.getMoveEffectiveness).toHaveReturnedWith(1);
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
   });
@@ -91,10 +91,10 @@ describe("Abilities - Galvanize", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
 
-    game.move.select(Moves.REVELATION_DANCE);
+    game.move.select(MoveId.REVELATION_DANCE);
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    expect(playerPokemon.getMoveType).not.toHaveLastReturnedWith(ElementType.ELECTRIC);
+    expect(playerPokemon.getMoveType).not.toHaveLastReturnedWith(ElementalType.ELECTRIC);
     expect(enemyPokemon.getMoveEffectiveness).toHaveReturnedWith(0);
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
   });
@@ -108,7 +108,7 @@ describe("Abilities - Galvanize", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
 
-    game.move.select(Moves.FURY_SWIPES);
+    game.move.select(MoveId.FURY_SWIPES);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
 
@@ -120,7 +120,7 @@ describe("Abilities - Galvanize", () => {
       const enemyStartingHp = enemyPokemon.hp;
       await game.phaseInterceptor.to("MoveEffectPhase");
 
-      expect(playerPokemon.getMoveType).toHaveLastReturnedWith(ElementType.ELECTRIC);
+      expect(playerPokemon.getMoveType).toHaveLastReturnedWith(ElementalType.ELECTRIC);
       expect(enemyPokemon.hp).toBeLessThan(enemyStartingHp);
     }
 

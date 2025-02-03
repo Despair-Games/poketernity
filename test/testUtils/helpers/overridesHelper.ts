@@ -6,7 +6,7 @@ import type { BattleStyle } from "#app/overrides";
 import Overrides, { defaultOverrides } from "#app/overrides";
 import type { Unlockables } from "#enums/unlockables";
 import { Biome } from "#enums/biome";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
@@ -160,16 +160,16 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
-   * Override the player (pokemon) {@linkcode Moves | moves}set
-   * @param moveset the {@linkcode Moves | moves}set to set
+   * Override the player (pokemon) {@linkcode MoveId | moves}set
+   * @param moveset the {@linkcode MoveId | moves}set to set
    * @returns `this`
    */
-  public moveset(moveset: Moves | Moves[]): this {
+  public moveset(moveset: MoveId | MoveId[]): this {
     vi.spyOn(Overrides, "MOVESET_OVERRIDE", "get").mockReturnValue(moveset);
     if (!Array.isArray(moveset)) {
       moveset = [moveset];
     }
-    const movesetStr = moveset.map((moveId) => Moves[moveId]).join(", ");
+    const movesetStr = moveset.map((moveId) => MoveId[moveId]).join(", ");
     this.log(`Player Pokemon moveset set to ${movesetStr} (=[${moveset.join(", ")}])!`);
     return this;
   }
@@ -296,16 +296,16 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
-   * Override the enemy (pokemon) {@linkcode Moves | moves}set
-   * @param moveset the {@linkcode Moves | moves}set to set
+   * Override the enemy (pokemon) {@linkcode MoveId | moves}set
+   * @param moveset the {@linkcode MoveId | moves}set to set
    * @returns `this`
    */
-  public enemyMoveset(moveset: Moves | Moves[]): this {
+  public enemyMoveset(moveset: MoveId | MoveId[]): this {
     vi.spyOn(Overrides, "ENEMY_MOVESET_OVERRIDE", "get").mockReturnValue(moveset);
     if (!Array.isArray(moveset)) {
       moveset = [moveset];
     }
-    const movesetStr = moveset.map((moveId) => Moves[moveId]).join(", ");
+    const movesetStr = moveset.map((moveId) => MoveId[moveId]).join(", ");
     this.log(`Enemy Pokemon moveset set to ${movesetStr} (=[${moveset.join(", ")}])!`);
     return this;
   }

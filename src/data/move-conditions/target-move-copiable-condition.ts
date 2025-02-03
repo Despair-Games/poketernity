@@ -13,11 +13,11 @@ export const targetMoveCopiableCondition: MoveConditionFunc = (_user, target, _m
 
   const copiableMove = targetMoves[0];
 
-  if (!copiableMove.move) {
+  if (!copiableMove.moveId) {
     return false;
   }
 
-  if (allMoves[copiableMove.move].isChargingMove() && copiableMove.result === MoveResult.OTHER) {
+  if (allMoves[copiableMove.moveId].isChargingMove() && copiableMove.result === MoveResult.OTHER) {
     return false;
   }
 

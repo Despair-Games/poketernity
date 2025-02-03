@@ -3,7 +3,7 @@ import type { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
 import type { QueuedMove } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { Abilities } from "#enums/abilities";
-import type { ElementType } from "#enums/element-type";
+import type { ElementalType } from "#enums/elemental-type";
 import type { Gender } from "#enums/gender";
 
 export class PokemonSummonData {
@@ -22,6 +22,6 @@ export class PokemonSummonData {
   public stats: number[] = [0, 0, 0, 0, 0, 0];
   public moveset: PokemonMove[];
   // If not initialized this value will not be populated from save data.
-  public types: ElementType[] = [];
-  public addedType: ElementType | null = null;
+  public types: ElementalType[] = [];
+  public addedType: ElementalType | null = null;
 }

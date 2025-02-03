@@ -15,10 +15,10 @@ import {
   runSelectMysteryEncounterOption,
   skipBattleRunMysteryEncounterRewardsPhase,
 } from "#test/mystery-encounter/encounter-test-utils";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type BattleScene from "#app/battle-scene";
 import { type PokemonHeldItemModifier } from "#app/modifier/modifier";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { Status } from "#app/data/status-effect";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -55,7 +55,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       .startingWave(defaultWave)
       .startingBiome(defaultBiome)
       .disableTrainerWaves()
-      .moveset([Moves.PAYBACK, Moves.THUNDERBOLT]); // Required for attack type booster item generation
+      .moveset([MoveId.PAYBACK, MoveId.THUNDERBOLT]); // Required for attack type booster item generation
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
       new Map<Biome, MysteryEncounterType[]>([
@@ -172,7 +172,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
 
       const movePhases = phaseSpy.mock.calls.filter((p) => p[0].isMovePhase()).map((p) => p[0]);
       expect(movePhases.length).toBe(2);
-      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === Moves.FIRE_SPIN).length).toBe(2); // Fire spin used twice before battle
+      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.FIRE_SPIN).length).toBe(2); // Fire spin used twice before battle
     });
 
     it("should give attack type boosting item to lead pokemon", async () => {
@@ -220,10 +220,10 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 2);
 
       const burnablePokemon = party.filter(
-        (pkm) => pkm.isAllowedInBattle() && !pkm.getTypes().includes(ElementType.FIRE),
+        (pkm) => pkm.isAllowedInBattle() && !pkm.getTypes().includes(ElementalType.FIRE),
       );
       const notBurnablePokemon = party.filter(
-        (pkm) => !pkm.isAllowedInBattle() || pkm.getTypes().includes(ElementType.FIRE),
+        (pkm) => !pkm.isAllowedInBattle() || pkm.getTypes().includes(ElementalType.FIRE),
       );
       expect(scene.currentBattle.mysteryEncounter?.dialogueTokens["burnedPokemon"]).toBe(i18next.t("pokemon:gengar"));
       burnablePokemon.forEach((pkm) => {

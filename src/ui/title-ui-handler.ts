@@ -10,6 +10,7 @@ import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
 import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 import { settings } from "#app/system/settings/settings-manager";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 export default class TitleUiHandler extends OptionSelectUiHandler {
   /** If the stats can not be retrieved, use this fallback value */
@@ -33,12 +34,12 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
 
     const ui = this.getUi();
 
-    this.titleContainer = globalScene.add.container(0, -(globalScene.game.canvas.height / 6));
+    this.titleContainer = globalScene.add.container(0, -GAME_HEIGHT);
     this.titleContainer.setName("title");
     this.titleContainer.setAlpha(0);
     ui.add(this.titleContainer);
 
-    const logo = globalScene.add.image(globalScene.game.canvas.width / 6 / 2, 8, "logo");
+    const logo = globalScene.add.image(GAME_WIDTH / 2, 8, "logo");
     logo.setOrigin(0.5, 0);
     this.titleContainer.add(logo);
 
@@ -49,10 +50,8 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
     }
 
     this.playerCountLabel = addTextObject(
-      globalScene.game.canvas.width / 6 - 2,
-      globalScene.game.canvas.height / 6
-        - 13
-        - 576 * getTextStyleOptions(TextStyle.WINDOW, settings.display.uiTheme).scale,
+      GAME_WIDTH - 2,
+      GAME_HEIGHT - 13 - 576 * getTextStyleOptions(TextStyle.WINDOW, settings.display.uiTheme).scale,
       `? ${i18next.t("menu:playersOnline")}`,
       TextStyle.MESSAGE,
       { fontSize: "54px" },
@@ -113,7 +112,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
       const ui = this.getUi();
 
       if (globalScene.eventManager.isEventActive()) {
-        this.eventDisplay.setWidth(globalScene.scaledCanvas.width - this.optionSelectBg.width - this.optionSelectBg.x);
+        this.eventDisplay.setWidth(GAME_WIDTH - this.optionSelectBg.width - this.optionSelectBg.x);
         this.eventDisplay.show();
       }
 

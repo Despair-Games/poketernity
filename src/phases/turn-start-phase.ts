@@ -101,8 +101,8 @@ export class TurnStartPhase extends FieldPhase {
           return -1;
         }
       } else if (aCommand?.command === BattleCommand.FIGHT) {
-        const aMove = allMoves[aCommand.move!.move];
-        const bMove = allMoves[bCommand!.move!.move];
+        const aMove = allMoves[aCommand.move!.moveId];
+        const bMove = allMoves[bCommand!.move!.moveId];
 
         const aUser = globalScene.getField(true).find((p) => p.getBattlerIndex() === a)!;
         const bUser = globalScene.getField(true).find((p) => p.getBattlerIndex() === b)!;
@@ -160,8 +160,8 @@ export class TurnStartPhase extends FieldPhase {
             continue;
           }
           const move =
-            pokemon.getMoveset().find((m) => m.moveId === queuedMove.move && m.ppUsed < m.getMovePp())
-            ?? new PokemonMove(queuedMove.move);
+            pokemon.getMoveset().find((m) => m.moveId === queuedMove.moveId && m.ppUsed < m.getMovePp())
+            ?? new PokemonMove(queuedMove.moveId);
           if (move.getMove().hasAttr(MoveHeaderAttr)) {
             globalScene.unshiftPhase(new MoveHeaderPhase(pokemon, move));
           }

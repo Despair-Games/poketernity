@@ -2,24 +2,24 @@ import { allMoves } from "#app/data/all-moves";
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { toDmgValue } from "#app/utils";
-import type { Moves } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 
 /**
- * Wrapper class for the {@linkcode Move} class for Pokemon to interact with.
+ * Wrapper class for the {@linkcode MoveId} class for Pokemon to interact with.
  * These are the moves assigned to a {@linkcode Pokemon} object.
- * It links to {@linkcode Move} class via the move ID.
- * Compared to {@linkcode Move}, this class also tracks if a move has received.
+ * It links to {@linkcode MoveId} class via the move ID.
+ * Compared to {@linkcode MoveId}, this class also tracks if a move has received.
  * PP Ups, amount of PP used, and things like that.
  * @see {@linkcode isUsable} - checks if move is restricted, out of PP, or not implemented.
- * @see {@linkcode getMove} - returns {@linkcode Move} object by looking it up via ID.
+ * @see {@linkcode getMove} - returns {@linkcode MoveId} object by looking it up via ID.
  * @see {@linkcode usePp} - removes a point of PP from the move.
  * @see {@linkcode getMovePp} - returns amount of PP a move currently has.
  * @see {@linkcode getPpRatio} - returns the current PP amount / max PP amount.
- * @see {@linkcode getName} - returns name of {@linkcode Move}.
+ * @see {@linkcode getName} - returns name of {@linkcode MoveId}.
  **/
 
 export class PokemonMove {
-  public moveId: Moves;
+  public moveId: MoveId;
   public ppUsed: number;
   public ppUp: number;
   public virtual: boolean;
@@ -30,7 +30,7 @@ export class PokemonMove {
    */
   public maxPpOverride?: number;
 
-  constructor(moveId: Moves, ppUsed: number = 0, ppUp: number = 0, virtual: boolean = false, maxPpOverride?: number) {
+  constructor(moveId: MoveId, ppUsed: number = 0, ppUp: number = 0, virtual: boolean = false, maxPpOverride?: number) {
     this.moveId = moveId;
     this.ppUsed = ppUsed;
     this.ppUp = ppUp;

@@ -1,12 +1,12 @@
 import { SpeciesFormChangeTrigger } from "#app/data/species-form-change-triggers/species-form-change-trigger";
 import type { Pokemon } from "#app/field/pokemon";
-import type { Moves } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 
 export class SpeciesFormChangeMoveLearnedTrigger extends SpeciesFormChangeTrigger {
-  public move: Moves;
+  public move: MoveId;
   public known: boolean;
 
-  constructor(move: Moves, known: boolean = true) {
+  constructor(move: MoveId, known: boolean = true) {
     super();
     this.move = move;
     this.known = known;

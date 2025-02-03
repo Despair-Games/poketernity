@@ -1,5 +1,5 @@
 import type { Abilities } from "#enums/abilities";
-import type { ElementType } from "#enums/element-type";
+import type { ElementalType } from "#enums/elemental-type";
 import { isNullOrUndefined } from "#app/utils";
 import type { Nature } from "#enums/nature";
 
@@ -12,7 +12,7 @@ export class CustomPokemonData {
   public ability: Abilities | -1;
   public passive: Abilities | -1;
   public nature: Nature | -1;
-  public types: ElementType[];
+  public types: ElementalType[];
 
   constructor(data?: CustomPokemonData | Partial<CustomPokemonData>) {
     if (!isNullOrUndefined(data)) {

@@ -1,4 +1,4 @@
-import type { ElementType } from "#enums/element-type";
+import type { ElementalType } from "#enums/elemental-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { globalScene } from "#app/global-scene";
@@ -45,6 +45,7 @@ import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import { settings } from "#app/system/settings/settings-manager";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/weirdDream";
@@ -541,9 +542,9 @@ async function postProcessTransformedPokemon(
   // Randomize the second type of the pokemon
   // If the pokemon does not normally have a second type, it will gain 1
   const newTypes = [newPokemon.getTypes()[0]];
-  let newType = randSeedInt(18) as ElementType;
+  let newType = randSeedInt(18) as ElementalType;
   while (newType === newTypes[0]) {
-    newType = randSeedInt(18) as ElementType;
+    newType = randSeedInt(18) as ElementalType;
   }
   newTypes.push(newType);
   if (!newPokemon.customPokemonData) {
@@ -644,17 +645,11 @@ function getTransformedSpecies(
 }
 
 function doShowDreamBackground() {
-  const transformationContainer = globalScene.add.container(0, -globalScene.game.canvas.height / 6);
+  const transformationContainer = globalScene.add.container(0, -GAME_HEIGHT);
   transformationContainer.name = "Dream Background";
 
   // In case it takes a bit for video to load
-  const transformationStaticBg = globalScene.add.rectangle(
-    0,
-    0,
-    globalScene.game.canvas.width / 6,
-    globalScene.game.canvas.height / 6,
-    0,
-  );
+  const transformationStaticBg = globalScene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0);
   transformationStaticBg.setName("Black Background");
   transformationStaticBg.setOrigin(0, 0);
   transformationContainer.add(transformationStaticBg);

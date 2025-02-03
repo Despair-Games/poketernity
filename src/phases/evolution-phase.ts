@@ -15,7 +15,7 @@ import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { UiMode } from "#enums/ui-mode";
-import { fixedNumber } from "#app/utils";
+import { BooleanHolder, fixedNumber } from "#app/utils";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
@@ -34,6 +34,11 @@ export class EvolutionPhase extends FormChangeBasePhase {
   private evolutionBgm: AnySound;
   /** `true` if the secondary species of a fused pokemon is evolving */
   private readonly fusionSpeciesEvolved: boolean;
+
+  /**
+   * A {@linecode BooleanHolder} whose value indicates whether or not the player has cancelled the evolution.
+   */
+  private cancelled: BooleanHolder = new BooleanHolder(false);
 
   constructor(pokemon: PlayerPokemon, evolution: SpeciesFormEvolution | null, lastLevel: number) {
     super(pokemon);
@@ -118,9 +123,9 @@ export class EvolutionPhase extends FormChangeBasePhase {
                         this.pokemonNewFormTintSprite.setVisible(true);
                         this.handler.canCancel = true;
                         animations
-                          .doCycle(1, 15, this.pokemonTintSprite, this.pokemonNewFormTintSprite)
-                          .then((success) => {
-                            if (success) {
+                          .doCycle(1, 15, this.pokemonTintSprite, this.pokemonNewFormTintSprite, this.cancelled)
+                          .then(() => {
+                            if (!this.cancelled.value) {
                               this.handleSuccessEvolution(evolvedPokemon);
                             } else {
                               this.handleFailedEvolution(evolvedPokemon);
@@ -137,6 +142,13 @@ export class EvolutionPhase extends FormChangeBasePhase {
       },
       1000,
     );
+  }
+
+  /**
+   * Cancels the evolution and its animation.
+   */
+  public cancelEvolution(): void {
+    this.cancelled.value = true;
   }
 
   /**
@@ -281,5 +293,9 @@ export class EvolutionPhase extends FormChangeBasePhase {
         });
       });
     });
+  }
+
+  override isEvolutionPhase(): this is this {
+    return true;
   }
 }

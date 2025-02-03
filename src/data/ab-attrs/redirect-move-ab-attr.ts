@@ -2,7 +2,7 @@ import { allMoves } from "#app/data/all-moves";
 import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
-import type { Moves } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 import { AbAttr } from "./ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
@@ -12,8 +12,8 @@ export class RedirectMoveAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.REDIRECT_MOVE);
   }
 
-  override apply(pokemon: Pokemon, _simulated: boolean, move: Moves, target: NumberHolder): boolean {
-    if (this.canRedirect(move)) {
+  override apply(pokemon: Pokemon, _simulated: boolean, moveId: MoveId, target: NumberHolder): boolean {
+    if (this.canRedirect(moveId)) {
       const newTarget = pokemon.getBattlerIndex();
       if (target.value !== newTarget) {
         target.value = newTarget;
@@ -24,7 +24,7 @@ export class RedirectMoveAbAttr extends AbAttr {
     return false;
   }
 
-  canRedirect(moveId: Moves): boolean {
+  canRedirect(moveId: MoveId): boolean {
     const move = allMoves[moveId];
     return !![MoveTarget.NEAR_OTHER, MoveTarget.OTHER].find((t) => move.moveTarget === t);
   }

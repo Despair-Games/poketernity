@@ -1,7 +1,7 @@
 import { BattleType } from "#enums/battle-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { SwitchType } from "#enums/switch-type";
 import type { Pokemon, EnemyPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -55,7 +55,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
        */
       if (
         target.getAbility().hasAttr(AbAttrFlag.POST_DAMAGE_FORCE_SWITCH)
-        && [Moves.U_TURN, Moves.VOLT_SWITCH, Moves.FLIP_TURN].includes(move.id)
+        && [MoveId.U_TURN, MoveId.VOLT_SWITCH, MoveId.FLIP_TURN].includes(move.id)
       ) {
         if (this.hpDroppedBelowHalf(target)) {
           return false;
@@ -138,7 +138,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
        */
       if (
         target.getAbility().hasAttr(AbAttrFlag.POST_DAMAGE_FORCE_SWITCH)
-        && [Moves.U_TURN, Moves.VOLT_SWITCH, Moves.FLIP_TURN].includes(move.id)
+        && [MoveId.U_TURN, MoveId.VOLT_SWITCH, MoveId.FLIP_TURN].includes(move.id)
       ) {
         if (this.hpDroppedBelowHalf(target)) {
           return false;

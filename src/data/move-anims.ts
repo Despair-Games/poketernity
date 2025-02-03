@@ -1,4 +1,4 @@
 import type { AnimConfig } from "#app/data/anim-config";
-import type { Moves } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 
-export const moveAnims = new Map<Moves, AnimConfig | [AnimConfig, AnimConfig] | null>();
+export const moveAnims = new Map<MoveId, AnimConfig | [AnimConfig, AnimConfig] | null>();

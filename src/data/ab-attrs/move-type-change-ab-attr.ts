@@ -3,12 +3,12 @@ import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import type { ElementType } from "#enums/element-type";
+import type { ElementalType } from "#enums/elemental-type";
 import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 
 export class MoveTypeChangeAbAttr extends PreAttackAbAttr {
   constructor(
-    private readonly newType: ElementType,
+    private readonly newType: ElementalType,
     private readonly powerMultiplier: number,
     private readonly condition?: PokemonAttackCondition,
   ) {

@@ -4,7 +4,7 @@ import { toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveCategory } from "#enums/move-category";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -27,13 +27,13 @@ describe("Moves - Brick Break", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.BRICK_BREAK])
+      .moveset([MoveId.BRICK_BREAK])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
   });
@@ -46,10 +46,10 @@ describe("Moves - Brick Break", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     [ArenaTagSide.PLAYER, ArenaTagSide.ENEMY].forEach((side) =>
-      game.scene.arena.addTag(tagType, 0, 2, Moves.NONE, side),
+      game.scene.arena.addTag(tagType, 0, 2, MoveId.NONE, side),
     );
 
-    game.move.select(Moves.BRICK_BREAK);
+    game.move.select(MoveId.BRICK_BREAK);
 
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(game.scene.arena.getTagOnSide(tagType, ArenaTagSide.PLAYER)).toBeDefined();
@@ -59,18 +59,18 @@ describe("Moves - Brick Break", () => {
   it("Reflect should not reduce Brick Break's damage when removed", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.scene.arena.addTag(ArenaTagType.REFLECT, 0, 2, Moves.NONE, ArenaTagSide.ENEMY);
+    game.scene.arena.addTag(ArenaTagType.REFLECT, 0, 2, MoveId.NONE, ArenaTagSide.ENEMY);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
     const spy = vi.spyOn(enemy, "getAttackDamage");
 
-    game.move.select(Moves.BRICK_BREAK);
+    game.move.select(MoveId.BRICK_BREAK);
     await game.phaseInterceptor.to("BerryPhase", false);
 
     const damage = spy.mock.results.at(-1)?.value.damage;
 
-    expect(damage).toBe(toDmgValue(enemy.getBaseDamage(player, allMoves[Moves.BRICK_BREAK], MoveCategory.PHYSICAL)));
+    expect(damage).toBe(toDmgValue(enemy.getBaseDamage(player, allMoves[MoveId.BRICK_BREAK], MoveCategory.PHYSICAL)));
   });
 
   it("should not remove screens if the move has no effect", async () => {
@@ -78,9 +78,9 @@ describe("Moves - Brick Break", () => {
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.scene.arena.addTag(ArenaTagType.REFLECT, 0, 2, Moves.NONE, ArenaTagSide.ENEMY);
+    game.scene.arena.addTag(ArenaTagType.REFLECT, 0, 2, MoveId.NONE, ArenaTagSide.ENEMY);
 
-    game.move.select(Moves.BRICK_BREAK);
+    game.move.select(MoveId.BRICK_BREAK);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 

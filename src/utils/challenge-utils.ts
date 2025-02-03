@@ -5,8 +5,8 @@ import type { GameMode } from "#app/game-mode";
 import type { DexAttrProps } from "#app/system/game-data";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
 import { ChallengeType } from "#enums/challenge-type";
+import type { MoveId } from "#enums/move-id";
 import type { MoveSourceType } from "#enums/move-source-type";
-import type { Moves } from "#enums/moves";
 import type { Species } from "#enums/species";
 
 /**
@@ -175,7 +175,7 @@ export function applyChallenges(gameMode: GameMode, challengeType: ChallengeType
  * @param challengeType {@linkcode ChallengeType.MOVE_ACCESS}
  * @param pokemon What {@linkcode Pokemon} would learn the move.
  * @param moveSource {@linkcode MoveSourceType} What source the pokemon would get the move from.
- * @param move {@linkcode Moves} The move in question.
+ * @param moveId {@linkcode MoveId} The move in question.
  * @param level {@linkcode NumberHolder} The level threshold for access.
  * @returns `true` if any challenge was successfully applied.
  */
@@ -184,7 +184,7 @@ export function applyChallenges(
   challengeType: ChallengeType.MOVE_ACCESS,
   pokemon: Pokemon,
   moveSource: MoveSourceType,
-  move: Moves,
+  moveId: MoveId,
   level: NumberHolder,
 ): boolean;
 
@@ -194,7 +194,7 @@ export function applyChallenges(
  * @param challengeType {@linkcode ChallengeType.MOVE_WEIGHT}
  * @param pokemon What {@linkcode Pokemon} would learn the move.
  * @param moveSource {@linkcode MoveSourceType} What source the pokemon would get the move from.
- * @param move {@linkcode Moves} The move in question.
+ * @param moveId {@linkcode MoveId} The move in question.
  * @param weight {@linkcode NumberHolder} The weight of the move.
  * @returns `true` if any challenge was successfully applied.
  */
@@ -203,7 +203,7 @@ export function applyChallenges(
   challengeType: ChallengeType.MOVE_WEIGHT,
   pokemon: Pokemon,
   moveSource: MoveSourceType,
-  move: Moves,
+  moveId: MoveId,
   weight: NumberHolder,
 ): boolean;
 

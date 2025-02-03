@@ -1,6 +1,6 @@
 import PokemonInfoContainer from "#app/ui/pokemon-info-container";
 import { Gender } from "#enums/gender";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { rgbHexToRgba, leftPad } from "#app/utils";
 import { addTextObject } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
@@ -167,7 +167,7 @@ export default class PokemonHatchInfoContainer extends PokemonInfoContainer {
       const eggMove = hasEggMoves ? allMoves[speciesEggMoves[species.speciesId][em]] : null;
       const eggMoveUnlocked = eggMove && globalScene.gameData.starterData[species.speciesId].eggMoves & Math.pow(2, em);
       this.pokemonEggMoveBgs[em].setFrame(
-        ElementType[eggMove ? eggMove.type : ElementType.UNKNOWN].toString().toLowerCase(),
+        ElementalType[eggMove ? eggMove.type : ElementalType.UNKNOWN].toString().toLowerCase(),
       );
 
       this.pokemonEggMoveLabels[em].setText(eggMove && eggMoveUnlocked ? eggMove.name : "???");

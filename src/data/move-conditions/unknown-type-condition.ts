@@ -1,5 +1,5 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 
 export const unknownTypeCondition: MoveConditionFunc = (user, _target, _move) =>
-  !user.getTypes().includes(ElementType.UNKNOWN);
+  !user.getTypes().includes(ElementalType.UNKNOWN);

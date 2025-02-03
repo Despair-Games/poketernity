@@ -3,7 +3,7 @@ import { allMoves } from "#app/data/all-moves";
 import { globalScene } from "#app/global-scene";
 
 export const lastMoveCopiableCondition: MoveConditionFunc = (_user, _target, _move) => {
-  const copiableMove = globalScene.currentBattle.lastMove;
+  const copiableMove = globalScene.currentBattle.lastMoveId;
 
   if (!copiableMove) {
     return false;

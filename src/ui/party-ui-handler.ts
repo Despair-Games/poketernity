@@ -24,7 +24,7 @@ import { ChallengeType } from "#enums/challenge-type";
 import MoveInfoOverlay from "#app/ui/move-info-overlay";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { CommandPhase } from "#app/phases/command-phase";
@@ -41,6 +41,7 @@ import type { PokemonModifierTransferSelectFilter } from "#app/@types/PokemonMod
 import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilter";
 import { PartyFilterAll } from "#app/utils/party-utils";
 import { FilterAllMoves } from "#app/utils/move-utils";
+import { GAME_WIDTH } from "#app/ui-constants";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
 
@@ -81,7 +82,7 @@ export default class PartyUiHandler extends MessageUiHandler {
   private selectCallback: PartySelectCallback | PartyModifierTransferSelectCallback | null;
   private selectFilter: PokemonSelectFilter | PokemonModifierTransferSelectFilter;
   private moveSelectFilter: PokemonMoveSelectFilter;
-  private tmMoveId: Moves;
+  private tmMoveId: MoveId;
   private showMovePp: boolean;
 
   private iconAnimHandler: PokemonIconAnimHandler;
@@ -179,7 +180,7 @@ export default class PartyUiHandler extends MessageUiHandler {
 
     this.partyCancelButton = partyCancelButton;
 
-    this.optionsContainer = globalScene.add.container(globalScene.game.canvas.width / 6 - 1, -1);
+    this.optionsContainer = globalScene.add.container(GAME_WIDTH - 1, -1);
     partyContainer.add(this.optionsContainer);
 
     this.iconAnimHandler = new PokemonIconAnimHandler();
@@ -192,7 +193,7 @@ export default class PartyUiHandler extends MessageUiHandler {
       top: true,
       x: 1,
       y: -MoveInfoOverlay.getHeight(overlayScale) - 1,
-      width: globalScene.game.canvas.width / 12 - 30,
+      width: GAME_WIDTH / 2 - 30,
     });
     ui.add(this.moveInfoOverlay);
 
@@ -220,7 +221,7 @@ export default class PartyUiHandler extends MessageUiHandler {
       args.length > 3 && args[3] instanceof Function ? (args[3] as PokemonSelectFilter) : PartyFilterAll;
     this.moveSelectFilter =
       args.length > 4 && args[4] instanceof Function ? (args[4] as PokemonMoveSelectFilter) : FilterAllMoves;
-    this.tmMoveId = args.length > 5 && args[5] ? args[5] : Moves.NONE;
+    this.tmMoveId = args.length > 5 && args[5] ? args[5] : MoveId.NONE;
     this.showMovePp = args.length > 6 && args[6];
 
     this.partyContainer.setVisible(true);
@@ -877,7 +878,7 @@ export default class PartyUiHandler extends MessageUiHandler {
             const isBatonPassMove =
               this.partyUiMode === PartyUiMode.FAINT_SWITCH
               && moveHistory.length
-              && allMoves[moveHistory[moveHistory.length - 1].move].getAttrs(ForceSwitchOutAttr)[0]?.isBatonPass()
+              && allMoves[moveHistory[moveHistory.length - 1].moveId].getAttrs(ForceSwitchOutAttr)[0]?.isBatonPass()
               && moveHistory[moveHistory.length - 1].result === MoveResult.SUCCESS;
 
             // isBatonPassMove and allowBatonModifierSwitch shouldn't ever be true
@@ -1242,7 +1243,7 @@ class PartySlot extends Phaser.GameObjects.Container {
     pokemon: PlayerPokemon,
     iconAnimHandler: PokemonIconAnimHandler,
     partyUiMode: PartyUiMode,
-    tmMoveId: Moves,
+    tmMoveId: MoveId,
   ) {
     super(
       globalScene,
@@ -1265,7 +1266,7 @@ class PartySlot extends Phaser.GameObjects.Container {
     return this.pokemon;
   }
 
-  setup(partyUiMode: PartyUiMode, tmMoveId: Moves) {
+  setup(partyUiMode: PartyUiMode, tmMoveId: MoveId) {
     const battlerCount = globalScene.currentBattle.getBattlerCount();
 
     const slotKey = `party_slot${this.slotIndex >= battlerCount ? "" : "_main"}`;

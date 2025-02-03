@@ -1,10 +1,10 @@
 import type { Pokemon } from "../field/pokemon";
 import { allMoves } from "#app/data/all-moves";
 import { MoveCategory } from "#enums/move-category";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import type { AbstractConstructor, nil } from "#app/utils";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
@@ -129,9 +129,9 @@ export class SpeciesDefaultFormMatchTrigger extends SpeciesFormChangeTrigger {
  */
 export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeTrigger {
   /** The Tera type that triggers the form change */
-  private teraType: ElementType;
+  private teraType: ElementalType;
 
-  constructor(teraType: ElementType) {
+  constructor(teraType: ElementalType) {
     super();
     this.teraType = teraType;
   }
@@ -1102,13 +1102,13 @@ export const pokemonFormChanges: PokemonFormChanges = {
       Species.KELDEO,
       "ordinary",
       "resolute",
-      new SpeciesFormChangeMoveLearnedTrigger(Moves.SECRET_SWORD),
+      new SpeciesFormChangeMoveLearnedTrigger(MoveId.SECRET_SWORD),
     ),
     new SpeciesFormChange(
       Species.KELDEO,
       "resolute",
       "ordinary",
-      new SpeciesFormChangeMoveLearnedTrigger(Moves.SECRET_SWORD, false),
+      new SpeciesFormChangeMoveLearnedTrigger(MoveId.SECRET_SWORD, false),
     ),
   ],
   [Species.MELOETTA]: [
@@ -1116,14 +1116,14 @@ export const pokemonFormChanges: PokemonFormChanges = {
       Species.MELOETTA,
       "aria",
       "pirouette",
-      new MeloettaFormChangePostMoveTrigger(Moves.RELIC_SONG),
+      new MeloettaFormChangePostMoveTrigger(MoveId.RELIC_SONG),
       true,
     ),
     new SpeciesFormChange(
       Species.MELOETTA,
       "pirouette",
       "aria",
-      new MeloettaFormChangePostMoveTrigger(Moves.RELIC_SONG),
+      new MeloettaFormChangePostMoveTrigger(MoveId.RELIC_SONG),
       true,
     ),
   ],
@@ -1146,7 +1146,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       Species.AEGISLASH,
       "blade",
       "shield",
-      new SpeciesFormChangePreMoveTrigger(Moves.KINGS_SHIELD),
+      new SpeciesFormChangePreMoveTrigger(MoveId.KINGS_SHIELD),
       true,
       new SpeciesFormChangeCondition((p) => p.hasAbility(Abilities.STANCE_CHANGE)),
     ),
@@ -1673,7 +1673,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       Species.OGERPON,
       "teal-mask",
       "teal-mask-tera",
-      new SpeciesFormChangeTeraTrigger(ElementType.GRASS),
+      new SpeciesFormChangeTeraTrigger(ElementalType.GRASS),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
@@ -1681,13 +1681,13 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "teal-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementType.GRASS),
+      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.GRASS),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
       "wellspring-mask",
       "wellspring-mask-tera",
-      new SpeciesFormChangeTeraTrigger(ElementType.WATER),
+      new SpeciesFormChangeTeraTrigger(ElementalType.WATER),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
@@ -1695,13 +1695,13 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "wellspring-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementType.WATER),
+      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.WATER),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
       "hearthflame-mask",
       "hearthflame-mask-tera",
-      new SpeciesFormChangeTeraTrigger(ElementType.FIRE),
+      new SpeciesFormChangeTeraTrigger(ElementalType.FIRE),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
@@ -1709,13 +1709,13 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "hearthflame-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementType.FIRE),
+      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.FIRE),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
       "cornerstone-mask",
       "cornerstone-mask-tera",
-      new SpeciesFormChangeTeraTrigger(ElementType.ROCK),
+      new SpeciesFormChangeTeraTrigger(ElementalType.ROCK),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
@@ -1723,7 +1723,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "cornerstone-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementType.ROCK),
+      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.ROCK),
     ),
   ],
   [Species.TERAPAGOS]: [
@@ -1732,7 +1732,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       Species.TERAPAGOS,
       "terastal",
       "stellar",
-      new SpeciesFormChangeTeraTrigger(ElementType.STELLAR),
+      new SpeciesFormChangeTeraTrigger(ElementalType.STELLAR),
     ),
     new SpeciesFormChange(
       Species.TERAPAGOS,
@@ -1740,7 +1740,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "terastal",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementType.STELLAR),
+      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.STELLAR),
     ),
   ],
   [Species.GALAR_DARMANITAN]: [

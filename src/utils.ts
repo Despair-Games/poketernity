@@ -3,7 +3,7 @@
 import type { initGameSpeed } from "#app/system/game-speed";
 // -- end tsdoc imports --
 import { MoneyFormat } from "#enums/money-format";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 import { supportedLanguages } from "./system/settings/supported-languages";
 
@@ -602,10 +602,10 @@ export function isBetween(num: number, min: number, max: number): boolean {
 /**
  * Helper method to return the animation filename for a given move
  *
- * @param move the move for which the animation filename is needed
+ * @param moveId the move for which the animation filename is needed
  */
-export function animationFileName(move: Moves): string {
-  return Moves[move].toLowerCase().replace(/\_/g, "-");
+export function animationFileName(moveId: MoveId): string {
+  return MoveId[moveId].toLowerCase().replace(/\_/g, "-");
 }
 
 /**

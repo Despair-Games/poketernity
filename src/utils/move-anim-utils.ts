@@ -4,10 +4,10 @@ import { moveAnims } from "#app/data/move-anims";
 import { AnimConfig } from "#app/data/anim-config";
 import { BeakBlastHeaderAttr } from "#app/data/move-attrs/beak-blast-header-attr";
 import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
-import type { Moves } from "#enums/moves";
 import { loadAnimAssets } from "#app/utils/anim-utils";
+import type { MoveId } from "#enums/move-id";
 
-export function loadMoveAnimAssets(moveIds: Moves[], startLoad?: boolean): Promise<void> {
+export function loadMoveAnimAssets(moveIds: MoveId[], startLoad?: boolean): Promise<void> {
   return new Promise((resolve) => {
     const moveAnimations = moveIds.map((m) => moveAnims.get(m) as AnimConfig).flat();
     for (const moveId of moveIds) {

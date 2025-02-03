@@ -2,7 +2,7 @@ import { Status } from "#app/data/status-effect";
 import { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -24,11 +24,11 @@ describe("Abilities - POWER CONSTRUCT", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    const moveToUse = Moves.SPLASH;
+    const moveToUse = MoveId.SPLASH;
     game.override.battleType("single");
     game.override.ability(Abilities.POWER_CONSTRUCT);
     game.override.moveset([moveToUse]);
-    game.override.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
+    game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
   });
 
   test("check if fainted 50% Power Construct Pokemon switches to base form on arena reset", async () => {
@@ -49,7 +49,7 @@ describe("Abilities - POWER CONSTRUCT", () => {
     zygarde!.status = new Status(StatusEffect.FAINT);
     expect(zygarde!.isFainted()).toBe(true);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.doKillOpponents();
     await game.phaseInterceptor.to(TurnEndPhase);
     game.doSelectModifier();
@@ -76,7 +76,7 @@ describe("Abilities - POWER CONSTRUCT", () => {
     zygarde!.status = new Status(StatusEffect.FAINT);
     expect(zygarde!.isFainted()).toBe(true);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.doKillOpponents();
     await game.phaseInterceptor.to(TurnEndPhase);
     game.doSelectModifier();

@@ -11,6 +11,7 @@ import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } f
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
 import { PokemonPhase } from "./abstract-pokemon-phase";
+import { CANVAS_SCALE } from "#app/ui-constants";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
@@ -192,7 +193,7 @@ export class StatStageChangePhase extends PokemonPhase {
       const statSprite = add.tileSprite(tileX, tileY, tileWidth, tileHeight, "battle_stats", spriteColor);
       statSprite.setPipeline(fieldSpritePipeline);
       statSprite.setAlpha(0);
-      statSprite.setScale(6);
+      statSprite.setScale(CANVAS_SCALE);
       statSprite.setOrigin(0.5, 1);
 
       globalScene.playSound(`se/stat_${stages.value >= 1 ? "up" : "down"}`);

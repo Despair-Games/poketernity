@@ -6,32 +6,32 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#enums/battler-index";
 import { MoveFlags } from "#enums/move-flags";
-import type { Moves } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 
 export class MoveAnim extends BattleAnim {
-  public move: Moves;
+  public moveId: MoveId;
 
-  constructor(move: Moves, user: Pokemon, targetIndex: BattlerIndex, playOnEmptyField: boolean = false) {
+  constructor(move: MoveId, user: Pokemon, targetIndex: BattlerIndex, playOnEmptyField: boolean = false) {
     super(user, globalScene.getFieldPokemonByBattlerIndex(targetIndex), playOnEmptyField);
 
-    this.move = move;
+    this.moveId = move;
   }
 
   getAnim(): AnimConfig {
-    return moveAnims.get(this.move) instanceof AnimConfig
-      ? (moveAnims.get(this.move) as AnimConfig)
-      : (moveAnims.get(this.move)?.[this.user?.isPlayer() ? 0 : 1] as AnimConfig);
+    return moveAnims.get(this.moveId) instanceof AnimConfig
+      ? (moveAnims.get(this.moveId) as AnimConfig)
+      : (moveAnims.get(this.moveId)?.[this.user?.isPlayer() ? 0 : 1] as AnimConfig);
   }
 
   isOppAnim(): boolean {
-    return !this.user?.isPlayer() && Array.isArray(moveAnims.get(this.move));
+    return !this.user?.isPlayer() && Array.isArray(moveAnims.get(this.moveId));
   }
 
   protected override isHideUser(): boolean {
-    return allMoves[this.move].hasFlag(MoveFlags.HIDE_USER);
+    return allMoves[this.moveId].hasFlag(MoveFlags.HIDE_USER);
   }
 
   protected override isHideTarget(): boolean {
-    return allMoves[this.move].hasFlag(MoveFlags.HIDE_TARGET);
+    return allMoves[this.moveId].hasFlag(MoveFlags.HIDE_TARGET);
   }
 }

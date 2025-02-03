@@ -1,5 +1,5 @@
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -23,8 +23,8 @@ export class RepeatMoveAttr extends MoveEffectAttr {
 
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     // get the last move used (excluding status based failures) as well as the corresponding moveset slot
-    const lastMove = target.getLastXMoves(-1).find((m) => m.move !== Moves.NONE)!;
-    const movesetMove = target.getMoveset().find((m) => m?.moveId === lastMove.move)!;
+    const lastMove = target.getLastXMoves(-1).find((m) => m.moveId !== MoveId.NONE)!;
+    const movesetMove = target.getMoveset().find((m) => m?.moveId === lastMove.moveId)!;
     const moveTargets = lastMove.targets ?? [];
 
     globalScene.queueMessage(
@@ -33,7 +33,7 @@ export class RepeatMoveAttr extends MoveEffectAttr {
         targetPokemonName: getPokemonNameWithAffix(target),
       }),
     );
-    target.getMoveQueue().unshift({ move: lastMove.move, targets: moveTargets, ignorePP: false });
+    target.getMoveQueue().unshift({ moveId: lastMove.moveId, targets: moveTargets, ignorePP: false });
     target.turnData.extraTurns++;
     globalScene.appendToPhase(new MovePhase(target, moveTargets, movesetMove), MoveEndPhase);
     return true;
@@ -42,71 +42,71 @@ export class RepeatMoveAttr extends MoveEffectAttr {
   override getCondition(): MoveConditionFunc {
     return (_user, target, _move) => {
       // TODO: Confirm behavior of instructing move known by target but called by another move
-      const lastMove = target.getLastXMoves(-1).find((m) => m.move !== Moves.NONE);
-      const movesetMove = target.getMoveset().find((m) => m?.moveId === lastMove?.move);
+      const lastMove = target.getLastXMoves(-1).find((m) => m.moveId !== MoveId.NONE);
+      const movesetMove = target.getMoveset().find((m) => m?.moveId === lastMove?.moveId);
       const moveTargets = lastMove?.targets ?? [];
       // TODO: Add a way of adding moves to list procedurally rather than a pre-defined blacklist
       const unrepeatablemoves = [
         // Locking/Continually Executed moves
-        Moves.OUTRAGE,
-        Moves.RAGING_FURY,
-        Moves.ROLLOUT,
-        Moves.PETAL_DANCE,
-        Moves.THRASH,
-        Moves.ICE_BALL,
+        MoveId.OUTRAGE,
+        MoveId.RAGING_FURY,
+        MoveId.ROLLOUT,
+        MoveId.PETAL_DANCE,
+        MoveId.THRASH,
+        MoveId.ICE_BALL,
         // Multi-turn Moves
-        Moves.BIDE,
-        Moves.SHELL_TRAP,
-        Moves.BEAK_BLAST,
-        Moves.FOCUS_PUNCH,
+        MoveId.BIDE,
+        MoveId.SHELL_TRAP,
+        MoveId.BEAK_BLAST,
+        MoveId.FOCUS_PUNCH,
         // "First Turn Only" moves
-        Moves.FAKE_OUT,
-        Moves.FIRST_IMPRESSION,
-        Moves.MAT_BLOCK,
+        MoveId.FAKE_OUT,
+        MoveId.FIRST_IMPRESSION,
+        MoveId.MAT_BLOCK,
         // Moves with a recharge turn
-        Moves.HYPER_BEAM,
-        Moves.ETERNABEAM,
-        Moves.FRENZY_PLANT,
-        Moves.BLAST_BURN,
-        Moves.HYDRO_CANNON,
-        Moves.GIGA_IMPACT,
-        Moves.PRISMATIC_LASER,
-        Moves.ROAR_OF_TIME,
-        Moves.ROCK_WRECKER,
-        Moves.METEOR_ASSAULT,
+        MoveId.HYPER_BEAM,
+        MoveId.ETERNABEAM,
+        MoveId.FRENZY_PLANT,
+        MoveId.BLAST_BURN,
+        MoveId.HYDRO_CANNON,
+        MoveId.GIGA_IMPACT,
+        MoveId.PRISMATIC_LASER,
+        MoveId.ROAR_OF_TIME,
+        MoveId.ROCK_WRECKER,
+        MoveId.METEOR_ASSAULT,
         // Charging & 2-turn moves
-        Moves.DIG,
-        Moves.FLY,
-        Moves.BOUNCE,
-        Moves.SHADOW_FORCE,
-        Moves.PHANTOM_FORCE,
-        Moves.DIVE,
-        Moves.ELECTRO_SHOT,
-        Moves.ICE_BURN,
-        Moves.GEOMANCY,
-        Moves.FREEZE_SHOCK,
-        Moves.SKY_DROP,
-        Moves.SKY_ATTACK,
-        Moves.SKULL_BASH,
-        Moves.SOLAR_BEAM,
-        Moves.SOLAR_BLADE,
-        Moves.METEOR_BEAM,
+        MoveId.DIG,
+        MoveId.FLY,
+        MoveId.BOUNCE,
+        MoveId.SHADOW_FORCE,
+        MoveId.PHANTOM_FORCE,
+        MoveId.DIVE,
+        MoveId.ELECTRO_SHOT,
+        MoveId.ICE_BURN,
+        MoveId.GEOMANCY,
+        MoveId.FREEZE_SHOCK,
+        MoveId.SKY_DROP,
+        MoveId.SKY_ATTACK,
+        MoveId.SKULL_BASH,
+        MoveId.SOLAR_BEAM,
+        MoveId.SOLAR_BLADE,
+        MoveId.METEOR_BEAM,
         // Other moves
-        Moves.INSTRUCT,
-        Moves.KINGS_SHIELD,
-        Moves.SKETCH,
-        Moves.TRANSFORM,
-        Moves.MIMIC,
-        Moves.STRUGGLE,
+        MoveId.INSTRUCT,
+        MoveId.KINGS_SHIELD,
+        MoveId.SKETCH,
+        MoveId.TRANSFORM,
+        MoveId.MIMIC,
+        MoveId.STRUGGLE,
         // TODO: Add Max/G-Move blockage if or when they are implemented
       ];
 
       if (
         !movesetMove // called move not in target's moveset (dancer, forgetting the move, etc.)
         || movesetMove.ppUsed === movesetMove.getMovePp() // move out of pp
-        || allMoves[lastMove?.move ?? Moves.NONE].isChargingMove() // called move is a charging/recharging move
+        || allMoves[lastMove?.moveId ?? MoveId.NONE].isChargingMove() // called move is a charging/recharging move
         || !moveTargets.length // called move has no targets
-        || unrepeatablemoves.includes(lastMove?.move ?? Moves.NONE)
+        || unrepeatablemoves.includes(lastMove?.moveId ?? MoveId.NONE)
       ) {
         // called move is explicitly in the banlist
         return false;

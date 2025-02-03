@@ -3,9 +3,9 @@ import { type NumberHolder, toDmgValue } from "#app/utils";
 import { type Move } from "#app/data/move";
 import { FixedDamageAttr } from "#app/data/move-attrs/fixed-damage-attr";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import type { Moves } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 
-type MoveFilter = (moveId: Moves) => boolean;
+type MoveFilter = (moveId: MoveId) => boolean;
 
 /**
  * Attribute to modify damage based on the damage received by the user from attacks
@@ -27,7 +27,7 @@ export class CounterDamageAttr extends FixedDamageAttr {
 
   override apply(user: Pokemon, _target: Pokemon, _move: Move, damage: NumberHolder): boolean {
     const damageTaken = user.turnData.attacksReceived
-      .filter((ar) => this.moveFilter(ar.move))
+      .filter((ar) => this.moveFilter(ar.moveId))
       .reduce((total: number, ar: AttackMoveResult) => total + ar.damage, 0);
     damage.value = toDmgValue(damageTaken * this.multiplier);
 
@@ -35,6 +35,6 @@ export class CounterDamageAttr extends FixedDamageAttr {
   }
 
   override getCondition(): MoveConditionFunc {
-    return (user, _target, _move) => !!user.turnData.attacksReceived.filter((ar) => this.moveFilter(ar.move)).length;
+    return (user, _target, _move) => !!user.turnData.attacksReceived.filter((ar) => this.moveFilter(ar.moveId)).length;
   }
 }

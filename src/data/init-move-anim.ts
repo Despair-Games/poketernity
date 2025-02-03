@@ -8,11 +8,11 @@ import { BeakBlastHeaderAttr } from "#app/data/move-attrs/beak-blast-header-attr
 import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 import { globalScene } from "#app/global-scene";
 import { animationFileName } from "#app/utils";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 
 //#region Exports
 
-export function initMoveAnim(move: Moves): Promise<void> {
+export function initMoveAnim(move: MoveId): Promise<void> {
   return new Promise((resolve) => {
     if (moveAnims.has(move)) {
       if (moveAnims.get(move) !== null) {
@@ -34,12 +34,12 @@ export function initMoveAnim(move: Moves): Promise<void> {
     } else {
       moveAnims.set(move, null);
       const defaultMoveAnim = allMoves[move].isAttackMove()
-        ? Moves.TACKLE
+        ? MoveId.TACKLE
         : (allMoves[move] as Move).isSelfStatusMove() // as Move is necessary for the ts-compiler
-          ? Moves.FOCUS_ENERGY
-          : Moves.TAIL_WHIP;
+          ? MoveId.FOCUS_ENERGY
+          : MoveId.TAIL_WHIP;
 
-      const fetchAnimAndResolve = (move: Moves) => {
+      const fetchAnimAndResolve = (move: MoveId) => {
         globalScene
           .cachedFetch(`./battle-anims/${animationFileName(move)}.json`)
           .then((response) => {
@@ -87,7 +87,7 @@ export function initMoveAnim(move: Moves): Promise<void> {
  * @param move the move to populate an animation for
  * @param defaultMoveAnim the move to use as the default animation
  */
-function useDefaultAnim(move: Moves, defaultMoveAnim: Moves) {
+function useDefaultAnim(move: MoveId, defaultMoveAnim: MoveId) {
   populateMoveAnim(move, moveAnims.get(defaultMoveAnim));
 }
 
@@ -99,12 +99,12 @@ function useDefaultAnim(move: Moves, defaultMoveAnim: Moves) {
  *
  * @remarks use {@linkcode useDefaultAnim} to use a default animation
  */
-function logMissingMoveAnim(move: Moves, ...optionalParams: any[]) {
+function logMissingMoveAnim(move: MoveId, ...optionalParams: any[]) {
   const moveName = animationFileName(move);
   console.warn(`Could not load animation file for move '${moveName}'`, ...optionalParams);
 }
 
-function populateMoveAnim(move: Moves, animSource: any): void {
+function populateMoveAnim(move: MoveId, animSource: any): void {
   const moveAnim = new AnimConfig(animSource);
   if (moveAnims.get(move) === null) {
     moveAnims.set(move, moveAnim);

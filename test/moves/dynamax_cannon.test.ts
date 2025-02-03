@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/all-moves";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -12,7 +12,7 @@ describe("Moves - Dynamax Cannon", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
-  const dynamaxCannon = allMoves[Moves.DYNAMAX_CANNON];
+  const dynamaxCannon = allMoves[MoveId.DYNAMAX_CANNON];
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({
@@ -36,7 +36,7 @@ describe("Moves - Dynamax Cannon", () => {
     game.override.disableCrits();
 
     game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyMoveset([Moves.SPLASH, Moves.SPLASH, Moves.SPLASH, Moves.SPLASH]);
+    game.override.enemyMoveset([MoveId.SPLASH, MoveId.SPLASH, MoveId.SPLASH, MoveId.SPLASH]);
 
     vi.spyOn(dynamaxCannon, "calculateBattlePower");
   });
