@@ -4,7 +4,6 @@ import { TerrainType } from "#enums/terrain-type";
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { LoadMoveAnimPhase } from "#app/phases/load-move-anim-phase";
-import { MovePhase } from "#app/phases/move-phase";
 import type { Move } from "#app/data/move";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
 
@@ -148,7 +147,13 @@ export class NaturePowerAttr extends OverrideMoveEffectAttr {
 
     user.getMoveQueue().push({ moveId: moveId, targets: [target.getBattlerIndex()], ignorePP: true });
     globalScene.unshiftPhase(new LoadMoveAnimPhase(moveId));
-    globalScene.unshiftPhase(new MovePhase(user, [target.getBattlerIndex()], moveId, true));
+    globalScene.useMove({
+      pokemon: user,
+      targets: [target.getBattlerIndex()],
+      move: moveId,
+      followUp: true,
+      eager: true,
+    });
     return true;
   }
 

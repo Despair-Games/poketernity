@@ -11,7 +11,6 @@ import { HitCheckResult } from "#enums/hit-check-result";
 import i18next from "i18next";
 import { HitCheckPhase } from "./hit-check-phase";
 import { MoveEndPhase } from "./move-end-phase";
-import { MovePhase } from "./move-phase";
 
 /**
  * Phase for the "charging turn" of two-turn moves (e.g. Dig).
@@ -73,7 +72,7 @@ export class MoveChargePhase extends HitCheckPhase {
         // this MoveEndPhase will be duplicated by the queued MovePhase if not removed
         globalScene.tryRemovePhase((phase) => phase instanceof MoveEndPhase && phase.getPokemon() === user);
         // queue a new MovePhase for this move's attack phase
-        globalScene.unshiftPhase(new MovePhase(user, this.targets, this.move, false));
+        globalScene.useMove({ pokemon: user, targets: this.targets, move: this.move, followUp: false, eager: true });
       } else {
         user.getMoveQueue().push({ moveId: move.id, targets: this.targets });
       }

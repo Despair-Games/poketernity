@@ -3,7 +3,6 @@ import { MoveId } from "#enums/move-id";
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { LoadMoveAnimPhase } from "#app/phases/load-move-anim-phase";
-import { MovePhase } from "#app/phases/move-phase";
 import { getEnumValues } from "#app/utils";
 import { type Move, getMoveTargets } from "#app/data/move";
 import { allMoves } from "#app/data/all-moves";
@@ -40,7 +39,7 @@ export class RandomMoveAttr extends OverrideMoveEffectAttr {
           : [moveTargets.targets[user.randSeedInt(moveTargets.targets.length)]];
     user.getMoveQueue().push({ moveId: moveId, targets: targets, ignorePP: true });
     globalScene.unshiftPhase(new LoadMoveAnimPhase(moveId));
-    globalScene.unshiftPhase(new MovePhase(user, targets, moveId, true));
+    globalScene.useMove({ pokemon: user, targets, move: moveId, followUp: true, eager: true });
     return true;
   }
 

@@ -50,7 +50,6 @@ import type { IEggOptions } from "#app/data/egg";
 import { Egg } from "#app/data/egg";
 import type { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import type HeldModifierConfig from "#app/interfaces/held-modifier-config";
-import { MovePhase } from "#app/phases/move-phase";
 import { EggLapsePhase } from "#app/phases/egg-lapse-phase";
 import { TrainerVictoryPhase } from "#app/phases/trainer-victory-phase";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
@@ -972,7 +971,14 @@ export function handleMysteryEncounterBattleStartEffects() {
       } else {
         source = globalScene.getEnemyField()[0];
       }
-      globalScene.pushPhase(new MovePhase(source, effect.targets, effect.move, effect.followUp, effect.ignorePp));
+      globalScene.useMove({
+        pokemon: source,
+        targets: effect.targets,
+        move: effect.move,
+        followUp: effect.followUp,
+        ignorePp: effect.ignorePp,
+        eager: false,
+      });
     });
 
     // Pseudo turn end phase to reset flinch states, Endure, etc.

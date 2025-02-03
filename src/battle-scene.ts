@@ -131,7 +131,7 @@ import { LoadingScene } from "#app/loading-scene";
 import { LevelCapPhase } from "#app/phases/level-cap-phase";
 import { LoginPhase } from "#app/phases/login-phase";
 import { MessagePhase } from "#app/phases/message-phase";
-import type { MovePhase } from "#app/phases/move-phase";
+import { MovePhase } from "#app/phases/move-phase";
 import { NewBiomeEncounterPhase } from "#app/phases/new-biome-encounter-phase";
 import { NextEncounterPhase } from "#app/phases/next-encounter-phase";
 import { PokemonAnimPhase } from "#app/phases/pokemon-anim-phase";
@@ -224,6 +224,16 @@ interface ToLoginScreenInit {
   showText?: boolean;
   /** Whether to add the {@linkcode LoginPhase} to the front of the phase queue or defer it. */
   eager?: boolean;
+}
+
+interface UseMoveInit {
+  pokemon: Pokemon;
+  targets: BattlerIndex[];
+  move: PokemonMove | MoveId;
+  /** Whether to add the {@linkcode MovePhase} to the front of the phase queue or defer it. */
+  eager: boolean;
+  followUp?: boolean;
+  ignorePp?: boolean;
 }
 
 //#endregion
@@ -3766,5 +3776,15 @@ export default class BattleScene extends SceneBase {
 
   queueMoveChargeAnimation(chargeAnim: ChargeAnim, moveId: MoveId, user: Pokemon) {
     this.unshiftPhase(new MoveAnimPhase(new MoveChargeAnim(chargeAnim, moveId, user)));
+  }
+
+  useMove({ pokemon, targets, move, followUp = false, ignorePp = false, eager }: UseMoveInit) {
+    const movePhase = new MovePhase(pokemon, targets, move, followUp, ignorePp);
+
+    if (eager) {
+      this.unshiftPhase(movePhase);
+    } else {
+      this.pushPhase(movePhase);
+    }
   }
 }

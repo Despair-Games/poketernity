@@ -17,7 +17,6 @@ import { AttemptCapturePhase } from "./attempt-capture-phase";
 import { AttemptRunPhase } from "./attempt-run-phase";
 import { BerryPhase } from "./berry-phase";
 import { MoveHeaderPhase } from "./move-header-phase";
-import { MovePhase } from "./move-phase";
 import { SwitchSummonPhase } from "./switch-summon-phase";
 import { TurnEndPhase } from "./turn-end-phase";
 import { WeatherEffectPhase } from "./weather-effect-phase";
@@ -167,21 +166,26 @@ export class TurnStartPhase extends FieldPhase {
           }
           if (pokemon.isPlayer()) {
             if (turnCommand.cursor === -1) {
-              globalScene.pushPhase(new MovePhase(pokemon, turnCommand.targets ?? queuedMove.targets, move));
+              globalScene.useMove({ pokemon, targets: turnCommand.targets ?? queuedMove.targets, move, eager: false });
             } else {
-              const playerPhase = new MovePhase(
+              globalScene.useMove({
                 pokemon,
-                turnCommand.targets ?? queuedMove.targets,
+                targets: turnCommand.targets ?? queuedMove.targets,
                 move,
-                false,
-                queuedMove.ignorePP,
-              );
-              globalScene.pushPhase(playerPhase);
+                followUp: false,
+                ignorePp: queuedMove.ignorePP,
+                eager: false,
+              });
             }
           } else {
-            globalScene.pushPhase(
-              new MovePhase(pokemon, turnCommand.targets ?? queuedMove.targets, move, false, queuedMove.ignorePP),
-            );
+            globalScene.useMove({
+              pokemon,
+              targets: turnCommand.targets ?? queuedMove.targets,
+              move,
+              followUp: false,
+              ignorePp: queuedMove.ignorePP,
+              eager: false,
+            });
           }
           break;
         case BattleCommand.BALL:
