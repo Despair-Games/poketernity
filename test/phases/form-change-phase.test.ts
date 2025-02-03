@@ -4,7 +4,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { Button } from "#enums/buttons";
@@ -41,7 +41,7 @@ describe("Form Change Phase", () => {
     // Before the form change: Should be Hero form
     const zacian = game.scene.getPlayerParty()[0];
     expect(zacian.getFormKey()).toBe("hero-of-many-battles");
-    expect(zacian.getTypes()).toStrictEqual([ElementType.FAIRY]);
+    expect(zacian.getTypes()).toStrictEqual([ElementalType.FAIRY]);
     expect(zacian.calculateBaseStats()).toStrictEqual([92, 120, 115, 80, 115, 138]);
 
     // Prevent form change from finishing instantly, so that the player can attempt to cancel it
@@ -68,7 +68,7 @@ describe("Form Change Phase", () => {
     // After the form change: Should be Crowned form
     expect(game.phaseInterceptor.log.includes("FormChangePhase")).toBe(true);
     expect(zacian.getFormKey()).toBe("crowned");
-    expect(zacian.getTypes()).toStrictEqual([ElementType.FAIRY, ElementType.STEEL]);
+    expect(zacian.getTypes()).toStrictEqual([ElementalType.FAIRY, ElementalType.STEEL]);
     expect(zacian.calculateBaseStats()).toStrictEqual([92, 150, 115, 80, 115, 148]);
   });
 });

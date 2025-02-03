@@ -9,7 +9,7 @@ import type { GrowthRate } from "#enums/growth-rates";
 import type { EvolutionLevel } from "#app/data/balance/pokemon-evolutions";
 import { pokemonEvolutions, pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import { SpeciesWildEvolutionDelay } from "#enums/species-wild-evolution-delay";
-import type { ElementType } from "#enums/element-type";
+import type { ElementalType } from "#enums/elemental-type";
 import { variantData } from "#app/data/variant";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
@@ -32,8 +32,8 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     id: Species,
     generation: number,
     group: SpeciesGroups,
-    type1: ElementType,
-    type2: ElementType | null,
+    type1: ElementalType,
+    type2: ElementalType | null,
     height: number,
     weight: number,
     ability1: Abilities,

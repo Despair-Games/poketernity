@@ -3,7 +3,7 @@ import { globalScene } from "#app/global-scene";
 import { addTextObject, getTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { getTypeDamageMultiplierColor } from "#app/data/type";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { BattleCommand } from "#enums/battle-command";
 import { UiMode } from "#enums/ui-mode";
 import UiHandler from "#app/ui/ui-handler";
@@ -190,6 +190,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
   }
 
   toggleInfo(visible: boolean): void {
+    visible = visible && settings.display.enableMoveInfo;
     if (visible) {
       this.movesContainer.setVisible(false);
       this.cursorObj?.setVisible(false);
@@ -240,7 +241,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     if (hasMove) {
       const pokemonMove = moveset[cursor];
       const moveType = pokemon.getMoveType(pokemonMove.getMove());
-      this.typeIcon.setTexture("types", ElementType[moveType].toLowerCase()).setScale(0.8);
+      this.typeIcon.setTexture("types", ElementalType[moveType].toLowerCase()).setScale(0.8);
 
       const moveCategory = pokemonMove.getMove().category;
       this.moveCategoryIcon.setTexture("categories", MoveCategory[moveCategory].toLowerCase()).setScale(1.0);

@@ -60,7 +60,7 @@ import {
 } from "#app/utils";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import { getTypeDamageMultiplier, getTypeRgb } from "#app/data/type";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { getLevelTotalExp } from "#app/data/exp";
 import {
   Stat,
@@ -1111,7 +1111,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const critBoostTag = source.getTag(CritBoostTag);
     if (critBoostTag) {
       if (critBoostTag instanceof DragonCheerTag) {
-        critStage.value += critBoostTag.typesOnAdd.includes(ElementType.DRAGON) ? 2 : 1;
+        critStage.value += critBoostTag.typesOnAdd.includes(ElementalType.DRAGON) ? 2 : 1;
       } else {
         critStage.value += 2;
       }
@@ -1198,14 +1198,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         }
         break;
       case Stat.DEF:
-        if (this.isOfType(ElementType.ICE) && globalScene.arena.weather?.weatherType === WeatherType.SNOW) {
+        if (this.isOfType(ElementalType.ICE) && globalScene.arena.weather?.weatherType === WeatherType.SNOW) {
           ret *= 1.5;
         }
         break;
       case Stat.SPATK:
         break;
       case Stat.SPDEF:
-        if (this.isOfType(ElementType.ROCK) && globalScene.arena.weather?.weatherType === WeatherType.SANDSTORM) {
+        if (this.isOfType(ElementalType.ROCK) && globalScene.arena.weather?.weatherType === WeatherType.SANDSTORM) {
           ret *= 1.5;
         }
         break;
@@ -1467,14 +1467,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param includeTeraType - `true` to include tera-formed type; Default: `false`
    * @param forDefend - `true` if the pokemon is defending from an attack; Default: `false`
    * @param baseOnly - If `true`, ignore ability changing effects; Default: `false`
-   * @returns array of {@linkcode ElementType}
+   * @returns array of {@linkcode ElementalType}
    */
-  public getTypes(includeTeraType = false, forDefend: boolean = false, baseOnly: boolean = false): ElementType[] {
-    const types: ElementType[] = [];
+  public getTypes(includeTeraType = false, forDefend: boolean = false, baseOnly: boolean = false): ElementalType[] {
+    const types: ElementalType[] = [];
 
     if (includeTeraType) {
       const teraType = this.getTeraType();
-      if (teraType !== ElementType.UNKNOWN) {
+      if (teraType !== ElementalType.UNKNOWN) {
         types.push(teraType);
         if (forDefend) {
           return types;
@@ -1537,12 +1537,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     // become UNKNOWN if no types are present
     if (!types.length) {
-      types.push(ElementType.UNKNOWN);
+      types.push(ElementalType.UNKNOWN);
     }
 
     // remove UNKNOWN if other types are present
-    if (types.length > 1 && types.includes(ElementType.UNKNOWN)) {
-      const index = types.indexOf(ElementType.UNKNOWN);
+    if (types.length > 1 && types.includes(ElementalType.UNKNOWN)) {
+      const index = types.indexOf(ElementalType.UNKNOWN);
       if (index !== -1) {
         types.splice(index, 1);
       }
@@ -1563,14 +1563,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Checks if the pokemon's typing includes the specified type
-   * @param type - {@linkcode ElementType} to check
+   * @param type - {@linkcode ElementalType} to check
    * @param includeTeraType - `true` to include tera-formed type; Default: `true`
    * @param forDefend - `true` if the pokemon is defending from an attack; Default: `false`
    * @param baseOnly - If `true`, ignore ability changing effects; Default: `false`
    * @returns `true` if the Pokemon's type matches
    */
   public isOfType(
-    type: ElementType,
+    type: ElementalType,
     includeTeraType: boolean = true,
     forDefend: boolean = false,
     baseOnly: boolean = false,
@@ -1837,23 +1837,23 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * @returns the pokemon's current tera {@linkcode ElementType}, or `Type.UNKNOWN` if the pokemon is not terastallized
+   * @returns the pokemon's current tera {@linkcode ElementalType}, or `Type.UNKNOWN` if the pokemon is not terastallized
    */
-  public getTeraType(): ElementType {
+  public getTeraType(): ElementalType {
     // I don't think this should be possible anymore, please report if you encounter this. --NightKev
     if (globalScene === undefined) {
       console.warn("Pokemon.getTeraType(): Global scene is not defined!");
-      return ElementType.UNKNOWN;
+      return ElementalType.UNKNOWN;
     }
     const teraModifier = globalScene.findModifier(
       (m) => m.isTerastallizeModifier() && m.pokemonId === this.id && m.getBattlesLeft() > 0,
       this.isPlayer(),
     ) as TerastallizeModifier;
-    return teraModifier?.teraType ?? ElementType.UNKNOWN;
+    return teraModifier?.teraType ?? ElementalType.UNKNOWN;
   }
 
   public isTerastallized(): boolean {
-    return this.getTeraType() !== ElementType.UNKNOWN;
+    return this.getTeraType() !== ElementalType.UNKNOWN;
   }
 
   public isGrounded(): boolean {
@@ -1861,7 +1861,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     // was grounded before receiving the `GroundedTag`.
     return (
       !!this.getTag(GroundedTag)
-      || (!this.isOfType(ElementType.FLYING, true, true)
+      || (!this.isOfType(ElementalType.FLYING, true, true)
         && !this.hasAbility(Abilities.LEVITATE)
         && !this.getTag(BattlerTagType.FLOATING)
         && !this.getTag(SemiInvulnerableTag)
@@ -1891,7 +1891,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return true;
     }
 
-    if (this.isOfType(ElementType.GHOST)) {
+    if (this.isOfType(ElementalType.GHOST)) {
       return false;
     }
 
@@ -1920,9 +1920,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * type-changing move and ability attributes have applied.
    * @param move - The {@linkcode Move} being used.
    * @param simulated - If `true`, prevents showing abilities applied in this calculation.
-   * @returns The {@linkcode ElementType} of the move after attributes are applied
+   * @returns The {@linkcode ElementalType} of the move after attributes are applied
    */
-  public getMoveType(move: Move, simulated: boolean = true): ElementType {
+  public getMoveType(move: Move, simulated: boolean = true): ElementalType {
     const moveTypeHolder = new NumberHolder(move.type);
 
     applyMoveAttrs(VariableMoveTypeAttr, this, null, move, moveTypeHolder);
@@ -1930,10 +1930,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     globalScene.arena.applyTags(ArenaTagType.ION_DELUGE, simulated, moveTypeHolder);
     if (this.getTag(BattlerTagType.ELECTRIFIED)) {
-      moveTypeHolder.value = ElementType.ELECTRIC;
+      moveTypeHolder.value = ElementalType.ELECTRIC;
     }
 
-    return moveTypeHolder.value as ElementType;
+    return moveTypeHolder.value as ElementalType;
   }
 
   /**
@@ -1989,7 +1989,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       typeMultiplier.value = 0;
     }
 
-    if (this.getTag(TarShotTag) && this.getMoveType(move) === ElementType.FIRE) {
+    if (this.getTag(TarShotTag) && this.getMoveType(move) === ElementalType.FIRE) {
       typeMultiplier.value *= 2;
     }
 
@@ -2030,7 +2030,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Calculates the move's type effectiveness multiplier based on the target's type/s.
-   * @param moveType {@linkcode ElementType} the type of the move being used
+   * @param moveType {@linkcode ElementalType} the type of the move being used
    * @param source {@linkcode Pokemon} the Pokemon using the move
    * @param ignoreStrongWinds whether or not this ignores strong winds (anticipation, forewarn, stealth rocks)
    * @param simulated tag to only apply the strong winds effect message when the move is used
@@ -2038,21 +2038,21 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns a multiplier for the type effectiveness
    */
   getAttackTypeEffectiveness(
-    moveType: ElementType,
+    moveType: ElementalType,
     source?: Pokemon,
     ignoreStrongWinds: boolean = false,
     simulated: boolean = true,
     move?: Move,
   ): TypeDamageMultiplier {
-    if (moveType === ElementType.STELLAR) {
+    if (moveType === ElementalType.STELLAR) {
       return this.isTerastallized() ? 2 : 1;
     }
     const types = this.getTypes(true, true);
     const arena = globalScene.arena;
 
     // Handle flying v ground type immunity without removing flying type so effective types are still effective
-    if (moveType === ElementType.GROUND && (this.isGrounded() || arena.hasTag(ArenaTagType.GRAVITY))) {
-      const flyingIndex = types.indexOf(ElementType.FLYING);
+    if (moveType === ElementalType.GROUND && (this.isGrounded() || arena.hasTag(ArenaTagType.GRAVITY))) {
+      const flyingIndex = types.indexOf(ElementalType.FLYING);
       if (flyingIndex > -1) {
         types.splice(flyingIndex, 1);
       }
@@ -2087,14 +2087,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       })
       .reduce((acc, cur) => acc * cur, 1) as TypeDamageMultiplier;
 
-    const typeMultiplierAgainstFlying = new NumberHolder(getTypeDamageMultiplier(moveType, ElementType.FLYING));
+    const typeMultiplierAgainstFlying = new NumberHolder(getTypeDamageMultiplier(moveType, ElementalType.FLYING));
     applyChallenges(globalScene.gameMode, ChallengeType.TYPE_EFFECTIVENESS, typeMultiplierAgainstFlying);
     // Handle strong winds lowering effectiveness of types super effective against pure flying
     if (
       !ignoreStrongWinds
       && arena.weather?.weatherType === WeatherType.STRONG_WINDS
       && !arena.weather.isEffectSuppressed()
-      && this.isOfType(ElementType.FLYING)
+      && this.isOfType(ElementalType.FLYING)
       && typeMultiplierAgainstFlying.value === 2
     ) {
       multiplier /= 2;
@@ -3284,7 +3284,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       stabMultiplier.value += 0.5;
     }
     applyMoveAttrs(CombinedPledgeStabBoostAttr, source, this, move, stabMultiplier);
-    if (sourceTeraType !== ElementType.UNKNOWN && sourceTeraType === moveType) {
+    if (sourceTeraType !== ElementalType.UNKNOWN && sourceTeraType === moveType) {
       stabMultiplier.value += 0.5;
     }
 
@@ -3335,7 +3335,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const mistyTerrainMultiplier =
       globalScene.arena.terrain?.terrainType === TerrainType.MISTY
       && this.isGrounded()
-      && moveType === ElementType.DRAGON
+      && moveType === ElementalType.DRAGON
         ? 0.5
         : 1;
 
@@ -4060,7 +4060,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         // Check if the Pokemon is immune to Poison/Toxic or if the source pokemon is canceling the immunity
         const poisonImmunity = types.map((defType) => {
           // Check if the Pokemon is not immune to Poison/Toxic
-          if (defType !== ElementType.POISON && defType !== ElementType.STEEL) {
+          if (defType !== ElementalType.POISON && defType !== ElementalType.STEEL) {
             return false;
           }
 
@@ -4076,14 +4076,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           return true;
         });
 
-        if (this.isOfType(ElementType.POISON) || this.isOfType(ElementType.STEEL)) {
+        if (this.isOfType(ElementalType.POISON) || this.isOfType(ElementalType.STEEL)) {
           if (poisonImmunity.includes(true)) {
             return false;
           }
         }
         break;
       case StatusEffect.PARALYSIS:
-        if (this.isOfType(ElementType.ELECTRIC)) {
+        if (this.isOfType(ElementalType.ELECTRIC)) {
           return false;
         }
         break;
@@ -4094,7 +4094,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         break;
       case StatusEffect.FREEZE:
         if (
-          this.isOfType(ElementType.ICE)
+          this.isOfType(ElementalType.ICE)
           || (!ignoreField
             && globalScene?.arena?.weather?.weatherType
             && [WeatherType.SUNNY, WeatherType.HARSH_SUN].includes(globalScene.arena.weather.weatherType))
@@ -4103,7 +4103,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         }
         break;
       case StatusEffect.BURN:
-        if (this.isOfType(ElementType.FIRE)) {
+        if (this.isOfType(ElementalType.FIRE)) {
           return false;
         }
         break;
@@ -5995,8 +5995,8 @@ export class PokemonSummonData {
   public stats: number[] = [0, 0, 0, 0, 0, 0];
   public moveset: PokemonMove[];
   // If not initialized this value will not be populated from save data.
-  public types: ElementType[] = [];
-  public addedType: ElementType | null = null;
+  public types: ElementalType[] = [];
+  public addedType: ElementalType | null = null;
 }
 
 /** Container for Pokemon-specific data that resets at the end of each wave. */

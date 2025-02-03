@@ -5,7 +5,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Stat } from "#enums/stat";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";
 import type { Move } from "../move";
 import { MoveEffectAttr } from "./move-effect-attr";
@@ -21,7 +21,7 @@ import { MoveEffectAttr } from "./move-effect-attr";
  */
 export class CurseAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
-    if (user.getTypes(true).includes(ElementType.GHOST)) {
+    if (user.getTypes(true).includes(ElementalType.GHOST)) {
       if (target.getTag(BattlerTagType.CURSED)) {
         globalScene.queueMessage(i18next.t("battle:attackFailed"));
         return false;

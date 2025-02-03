@@ -6,7 +6,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
-describe("Abilities - Overcoat", () => {
+describe("Ability Attribute - Block Weather Damage", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
@@ -24,7 +24,6 @@ describe("Abilities - Overcoat", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.SPLASH])
-      .ability(Abilities.OVERCOAT)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
@@ -32,11 +31,17 @@ describe("Abilities - Overcoat", () => {
       .enemyMoveset(MoveId.SPLASH);
   });
 
+  // prettier-ignore
   it.each([
-    { weatherName: "Sandstorm", weather: WeatherType.SANDSTORM },
-    { weatherName: "Hail", weather: WeatherType.HAIL },
-  ])("should prevent damage from $weatherName", async ({ weather }) => {
-    game.override.weather(weather);
+    { ability: Abilities.OVERCOAT, abilityName: "Overcoat", weatherName: "Sandstorm", weather: WeatherType.SANDSTORM },
+    { ability: Abilities.OVERCOAT, abilityName: "Overcoat", weatherName: "Hail", weather: WeatherType.HAIL },
+    { ability: Abilities.SAND_RUSH, abilityName: "Sand Rush", weatherName: "Sandstorm", weather: WeatherType.SANDSTORM },
+    { ability: Abilities.SAND_VEIL, abilityName: "Sand Veil", weatherName: "Sandstorm", weather: WeatherType.SANDSTORM },
+    { ability: Abilities.SAND_FORCE, abilityName: "Sand Force", weatherName: "Sandstorm", weather: WeatherType.SANDSTORM },
+    { ability: Abilities.ICE_BODY, abilityName: "Ice Body", weatherName: "Hail", weather: WeatherType.HAIL },
+    { ability: Abilities.SNOW_CLOAK, abilityName: "Snow Cloak", weatherName: "Hail", weather: WeatherType.HAIL },
+  ])("$abilityName should prevent damage from $weatherName", async ({ ability, weather }) => {
+    game.override.weather(weather).ability(ability);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.SPLASH);

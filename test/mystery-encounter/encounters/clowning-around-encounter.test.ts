@@ -32,7 +32,7 @@ import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import { BerryType } from "#enums/berry-type";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { CommandPhase } from "#app/phases/command-phase";
 import type { MovePhase } from "#app/phases/move-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
@@ -361,15 +361,15 @@ describe("Clowning Around - Mystery Encounter", () => {
       const thirdTypesAfter = scene.getPlayerParty()[2].customPokemonData?.types;
 
       expect(leadTypesAfter.length).toBe(2);
-      expect(leadTypesAfter[0]).toBe(ElementType.WATER);
-      expect([ElementType.WATER, ElementType.ICE].includes(leadTypesAfter[1])).toBeFalsy();
+      expect(leadTypesAfter[0]).toBe(ElementalType.WATER);
+      expect([ElementalType.WATER, ElementalType.ICE].includes(leadTypesAfter[1])).toBeFalsy();
       expect(secondaryTypesAfter.length).toBe(2);
-      expect(secondaryTypesAfter[0]).toBe(ElementType.GHOST);
-      expect([ElementType.GHOST, ElementType.POISON].includes(secondaryTypesAfter[1])).toBeFalsy();
-      expect([ElementType.GRASS, ElementType.ELECTRIC].includes(secondaryTypesAfter[1])).toBeTruthy();
+      expect(secondaryTypesAfter[0]).toBe(ElementalType.GHOST);
+      expect([ElementalType.GHOST, ElementalType.POISON].includes(secondaryTypesAfter[1])).toBeFalsy();
+      expect([ElementalType.GRASS, ElementalType.ELECTRIC].includes(secondaryTypesAfter[1])).toBeTruthy();
       expect(thirdTypesAfter.length).toBe(2);
-      expect(thirdTypesAfter[0]).toBe(ElementType.PSYCHIC);
-      expect(secondaryTypesAfter[1]).not.toBe(ElementType.PSYCHIC);
+      expect(thirdTypesAfter[0]).toBe(ElementalType.PSYCHIC);
+      expect(secondaryTypesAfter[1]).not.toBe(ElementalType.PSYCHIC);
     });
 
     it("should leave encounter without battle", async () => {
