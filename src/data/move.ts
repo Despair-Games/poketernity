@@ -1120,7 +1120,7 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId): MoveTargetSet {
   const opponents = user.getOpponents();
 
   let set: Pokemon[] = [];
-  let targets: BattlerIndex[] | undefined = undefined;
+  let targets: BattlerIndex[] | undefined;
   let multiple = false;
 
   switch (moveTarget) {
