@@ -3,10 +3,8 @@ import { type Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { MoveAnimPhase } from "#app/phases/move-anim-phase";
 import type { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
-import { MoveChargeAnim } from "../battle-anims/move-charge-anim";
 import { type ChargeAnim } from "#enums/charge-anim";
 import type { Move } from "#app/data/move";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
@@ -43,7 +41,7 @@ export class DelayedAttackAttr extends OverrideMoveEffectAttr {
 
     if (!virtual) {
       overridden.value = true;
-      globalScene.unshiftPhase(new MoveAnimPhase(new MoveChargeAnim(this.chargeAnim, move.id, user)));
+      globalScene.queueMoveChargeAnimation(this.chargeAnim, move.id, user);
       globalScene.queueMessage(
         this.chargeText
           .replace("{TARGET}", getPokemonNameWithAffix(target))

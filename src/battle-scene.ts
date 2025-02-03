@@ -183,6 +183,9 @@ import { MoveChargePhase } from "#app/phases/move-charge-phase";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { AchvCategory } from "#enums/achv-flag";
 import { SelectTargetPhase } from "#app/phases/select-target-phase";
+import { MoveAnimPhase } from "#app/phases/move-anim-phase";
+import type { ChargeAnim } from "#enums/charge-anim";
+import { MoveChargeAnim } from "#app/data/battle-anims/move-charge-anim";
 
 //#region Types
 
@@ -3759,5 +3762,9 @@ export default class BattleScene extends SceneBase {
    */
   selectTarget(battlerIndex: BattlerIndex): void {
     this.unshiftPhase(new SelectTargetPhase(battlerIndex));
+  }
+
+  queueMoveChargeAnimation(chargeAnim: ChargeAnim, moveId: MoveId, user: Pokemon) {
+    this.unshiftPhase(new MoveAnimPhase(new MoveChargeAnim(chargeAnim, moveId, user)));
   }
 }
