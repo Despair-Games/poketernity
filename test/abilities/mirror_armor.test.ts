@@ -188,7 +188,7 @@ describe("Abilities - Mirror Armor", () => {
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
-    enemy.summonData.statStages[0] = -6; // Set Attack to -6 stages
+    enemy.setStatStage(Stat.ATK, -6);
 
     game.move.use(MoveId.NOBLE_ROAR);
     await game.phaseInterceptor.to("BerryPhase", false);
