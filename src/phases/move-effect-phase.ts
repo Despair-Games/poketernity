@@ -123,6 +123,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       applyMoveAttrs(MultiHitAttr, user, targets[0], move, hitCount);
       // If Parental Bond is applicable, add another hit
       applyAbAttrs(AddSecondStrikeAbAttr, user, false, move, targets[0], hitCount);
+      // TODO: re-add multi-lens calculation
       // Set the user's relevant turnData fields to reflect the final hit count
       user.turnData.hitCount = hitCount.value;
       user.turnData.hitsLeft = hitCount.value;
