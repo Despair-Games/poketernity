@@ -7,7 +7,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { TurnHealModifier, TurnHeldItemTransferModifier, TurnStatusEffectModifier } from "#app/modifier/modifier";
 import { TerrainType } from "#enums/terrain-type";
-import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { FieldPhase } from "./abstract-field-phase";
 import { PokemonHealPhase } from "./pokemon-heal-phase";
@@ -17,7 +16,7 @@ export class TurnEndPhase extends FieldPhase {
     super.start();
 
     const { arena, currentBattle, eventTarget } = globalScene;
-    const { terrain, weather } = arena;
+    const { terrain } = arena;
 
     currentBattle.incrementTurn();
     eventTarget.dispatchEvent(new TurnEndEvent(currentBattle.turn));
@@ -46,11 +45,6 @@ export class TurnEndPhase extends FieldPhase {
     this.executeForAll(handlePokemon);
 
     arena.lapseTags();
-
-    if (weather && !weather.lapse()) {
-      arena.trySetWeather(WeatherType.NONE, false);
-      arena.triggerWeatherBasedFormChangesToNormal();
-    }
 
     if (terrain && !terrain.lapse()) {
       arena.trySetTerrain(TerrainType.NONE, false);
