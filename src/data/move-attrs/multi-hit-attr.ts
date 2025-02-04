@@ -3,7 +3,7 @@ import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { NumberHolder } from "#app/utils";
 import { MaxMultiHitAbAttr } from "#app/data/ab-attrs/max-multi-hit-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { type Move, applyMoveAttrs } from "#app/data/move";
 import { ChangeMultiHitTypeAttr } from "#app/data/move-attrs/change-multi-hit-type-attr";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";

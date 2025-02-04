@@ -1,4 +1,5 @@
-import { type Pokemon, PokemonMove } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
@@ -20,7 +21,7 @@ export class MovesetCopyMoveAttr extends OverrideMoveEffectAttr {
       return false;
     }
 
-    const copiedMove = allMoves[targetMoves[0].move];
+    const copiedMove = allMoves[targetMoves[0].moveId];
 
     const thisMoveIndex = user.getMoveset().findIndex((m) => m.moveId === move.id);
 

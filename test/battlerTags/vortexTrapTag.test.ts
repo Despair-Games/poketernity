@@ -1,6 +1,6 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { GameManager } from "#test/testUtils/gameManager";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Abilities } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
@@ -27,19 +27,19 @@ describe("BattlerTag - VortexTrapTag", () => {
       game.override
         .battleType("double")
         .startingLevel(1)
-        .moveset([Moves.FIRE_SPIN, Moves.G_MAX_CENTIFERNO, Moves.MEMENTO, Moves.SPLASH])
+        .moveset([MoveId.FIRE_SPIN, MoveId.G_MAX_CENTIFERNO, MoveId.MEMENTO, MoveId.SPLASH])
         .ability(Abilities.NO_GUARD)
         .enemySpecies(Species.SHUCKLE)
         .enemyLevel(100)
         .enemyAbility(Abilities.BALL_FETCH)
-        .enemyMoveset(Moves.SPLASH);
+        .enemyMoveset(MoveId.SPLASH);
     });
 
     it("Fire spin should trap and damage a single target until the user leaves", async () => {
       await game.classicMode.startBattle([Species.SUNKERN, Species.SUNKERN]);
 
-      game.move.select(Moves.FIRE_SPIN, 0, BattlerIndex.ENEMY);
-      game.move.select(Moves.SPLASH, 1);
+      game.move.select(MoveId.FIRE_SPIN, 0, BattlerIndex.ENEMY);
+      game.move.select(MoveId.SPLASH, 1);
 
       await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
       await game.phaseInterceptor.to("MoveEndPhase", false);
@@ -62,8 +62,8 @@ describe("BattlerTag - VortexTrapTag", () => {
       expect(enemy0StartingHp - enemy0turnTwoHp).toBe(toDmgValue(enemy0.getMaxHp() / 8));
       expect(enemy1StartingHp - enemy1turnTwoHp).toBe(0);
 
-      game.move.select(Moves.MEMENTO, 0, BattlerIndex.ENEMY);
-      game.move.select(Moves.SPLASH, 1);
+      game.move.select(MoveId.MEMENTO, 0, BattlerIndex.ENEMY);
+      game.move.select(MoveId.SPLASH, 1);
       await game.toNextTurn();
 
       expect(enemy0.getTag(BattlerTagType.FIRE_SPIN)).toBeUndefined();
@@ -81,8 +81,8 @@ describe("BattlerTag - VortexTrapTag", () => {
       game.override.enemySpecies(Species.GENGAR);
       await game.classicMode.startBattle([Species.SUNKERN, Species.SUNKERN]);
 
-      game.move.select(Moves.FIRE_SPIN, 0, BattlerIndex.ENEMY);
-      game.move.select(Moves.SPLASH, 1);
+      game.move.select(MoveId.FIRE_SPIN, 0, BattlerIndex.ENEMY);
+      game.move.select(MoveId.SPLASH, 1);
 
       await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
       await game.phaseInterceptor.to("MoveEndPhase", false);
@@ -110,8 +110,8 @@ describe("BattlerTag - VortexTrapTag", () => {
       game.override.enemyAbility(Abilities.MAGIC_GUARD);
       await game.classicMode.startBattle([Species.SUNKERN, Species.SUNKERN]);
 
-      game.move.select(Moves.FIRE_SPIN, 0, BattlerIndex.ENEMY);
-      game.move.select(Moves.SPLASH, 1);
+      game.move.select(MoveId.FIRE_SPIN, 0, BattlerIndex.ENEMY);
+      game.move.select(MoveId.SPLASH, 1);
 
       await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
       await game.phaseInterceptor.to("MoveEndPhase", false);
@@ -138,8 +138,8 @@ describe("BattlerTag - VortexTrapTag", () => {
     it("G-Max centiferno affects both enemies and even after user leaves", async () => {
       await game.classicMode.startBattle([Species.SUNKERN, Species.SUNKERN]);
 
-      game.move.select(Moves.G_MAX_CENTIFERNO, 0, BattlerIndex.ENEMY);
-      game.move.select(Moves.SPLASH, 1);
+      game.move.select(MoveId.G_MAX_CENTIFERNO, 0, BattlerIndex.ENEMY);
+      game.move.select(MoveId.SPLASH, 1);
 
       await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
       await game.phaseInterceptor.to("MoveEndPhase", false);
@@ -162,8 +162,8 @@ describe("BattlerTag - VortexTrapTag", () => {
       expect(enemy0StartingHp - enemy0turnTwoHp).toBe(toDmgValue(enemy0.getMaxHp() / 8));
       expect(enemy1StartingHp - enemy1turnTwoHp).toBe(toDmgValue(enemy1.getMaxHp() / 8));
 
-      game.move.select(Moves.MEMENTO, 0, BattlerIndex.ENEMY);
-      game.move.select(Moves.SPLASH, 1);
+      game.move.select(MoveId.MEMENTO, 0, BattlerIndex.ENEMY);
+      game.move.select(MoveId.SPLASH, 1);
       await game.toNextTurn();
 
       expect(enemy0.getTag(BattlerTagType.G_MAX_FIRE_SPIN)).toBeDefined();

@@ -1,7 +1,7 @@
 import { SubstituteTag } from "#app/data/battler-tags";
 import { MoveResult } from "#enums/move-result";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -24,11 +24,11 @@ describe("Moves - Shed Tail", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SHED_TAIL])
+      .moveset([MoveId.SHED_TAIL])
       .battleType("single")
       .enemySpecies(Species.SNORLAX)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it("transfers a Substitute doll to the switched in Pokemon", async () => {
@@ -36,7 +36,7 @@ describe("Moves - Shed Tail", () => {
 
     const magikarp = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SHED_TAIL);
+    game.move.select(MoveId.SHED_TAIL);
     game.doSelectPartyPokemon(1);
 
     await game.phaseInterceptor.to("TurnEndPhase", false);
@@ -61,7 +61,7 @@ describe("Moves - Shed Tail", () => {
     const magikarp = game.scene.getPlayerPokemon()!;
     expect(game.scene.getPlayerParty().length).toBe(1);
 
-    game.move.select(Moves.SHED_TAIL);
+    game.move.select(MoveId.SHED_TAIL);
 
     await game.phaseInterceptor.to("TurnEndPhase", false);
 

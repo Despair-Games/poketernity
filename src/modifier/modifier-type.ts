@@ -1,17 +1,15 @@
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { EvolutionItem } from "#enums/evolution-item";
 import { tmPoolTiers, tmSpecies } from "#app/data/balance/tms";
-import { getBerryEffectDescription, getBerryName } from "#app/data/berry";
-import { selfStatLowerMoves } from "#app/data/move";
 import { allMoves } from "#app/data/all-moves";
-import { AttackMove } from "#app/data/move";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { getPokeballCatchMultiplier, getPokeballName, MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
 import { pokemonFormChanges, SpeciesFormChangeCondition, SpeciesFormChangeItemTrigger } from "#app/data/pokemon-forms";
 import { settings } from "#app/system/settings/settings-manager";
 import { FormChangeItem } from "#enums/form-change-item";
 import type { Pokemon } from "#app/field/pokemon";
-import type { EnemyPokemon, PlayerPokemon, PokemonMove } from "#app/field/pokemon";
+import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
+import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
@@ -56,7 +54,7 @@ import {
   PokemonExpBoosterModifier,
   PokemonFormChangeItemModifier,
   PokemonFriendshipBoosterModifier,
-  PokemonHeldItemModifier,
+  type PokemonHeldItemModifier,
   PokemonHpRestoreModifier,
   PokemonIncrementingStatModifier,
   PokemonInstantReviveModifier,
@@ -92,8 +90,8 @@ import Overrides from "#app/overrides";
 import { Unlockables } from "#enums/unlockables";
 import { getVoucherTypeIcon, getVoucherTypeName } from "#app/system/voucher";
 import { VoucherType } from "#enums/voucher-type";
-import type { PokemonMoveSelectFilter, PokemonSelectFilter } from "#app/ui/party-ui-handler";
-import PartyUiHandler from "#app/ui/party-ui-handler";
+import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilter";
+import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
 import { getModifierTierTextTint } from "#app/ui/text";
 import {
   formatMoney,
@@ -108,7 +106,7 @@ import {
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Nature } from "#enums/nature";
 import { PokeballType } from "#enums/pokeball";
 import { Species } from "#enums/species";
@@ -116,9 +114,11 @@ import { SpeciesFormKey } from "#enums/species-form-key";
 import type { PermanentStat, TempBattleStat } from "#enums/stat";
 import { getStatKey, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
+import { getBerryEffectDescription, getBerryName } from "#app/utils/berry-utils";
+import { PARTY_UI_NO_EFFECT_MSG_i18N_KEY } from "#app/constants";
 
 const outputModifierData = false;
 const useMaxWeightForOutput = false;
@@ -373,7 +373,7 @@ export class PokemonHeldItemModifierType extends PokemonModifierType {
       (pokemon: PlayerPokemon) => {
         const dummyModifier = this.newModifier(pokemon);
         const matchingModifier = globalScene.findModifier(
-          (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === pokemon.id && m.matchType(dummyModifier),
+          (m) => m.isPokemonHeldItemModifier() && m.pokemonId === pokemon.id && m.matchType(dummyModifier),
         ) as PokemonHeldItemModifier;
         const maxStackCount = dummyModifier.getMaxStackCount();
         if (!maxStackCount) {
@@ -433,7 +433,7 @@ export class PokemonHpRestoreModifierType extends PokemonModifierType {
             || (pokemon.isFullHp()
               && (!this.healStatus || (!pokemon.status && !pokemon.getTag(BattlerTagType.CONFUSED))))
           ) {
-            return PartyUiHandler.NoEffectMessage;
+            return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
           }
           return null;
         }),
@@ -469,7 +469,7 @@ export class PokemonReviveModifierType extends PokemonHpRestoreModifierType {
         new PokemonHpRestoreModifier(this, (args[0] as PlayerPokemon).id, 0, this.restorePercent, false, true),
       (pokemon: PlayerPokemon) => {
         if (!pokemon.isFainted()) {
-          return PartyUiHandler.NoEffectMessage;
+          return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
         }
         return null;
       },
@@ -478,7 +478,7 @@ export class PokemonReviveModifierType extends PokemonHpRestoreModifierType {
 
     this.selectFilter = (pokemon: PlayerPokemon) => {
       if (pokemon.hp) {
-        return PartyUiHandler.NoEffectMessage;
+        return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
       }
       return null;
     };
@@ -499,7 +499,7 @@ export class PokemonStatusHealModifierType extends PokemonModifierType {
       (_type, args) => new PokemonStatusHealModifier(this, (args[0] as PlayerPokemon).id),
       (pokemon: PlayerPokemon) => {
         if (!pokemon.hp || (!pokemon.status && !pokemon.getTag(BattlerTagType.CONFUSED))) {
-          return PartyUiHandler.NoEffectMessage;
+          return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
         }
         return null;
       },
@@ -542,7 +542,7 @@ export class PokemonPpRestoreModifierType extends PokemonMoveModifierType {
       },
       (pokemonMove: PokemonMove) => {
         if (!pokemonMove.ppUsed) {
-          return PartyUiHandler.NoEffectMessage;
+          return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
         }
         return null;
       },
@@ -571,7 +571,7 @@ export class PokemonAllMovePpRestoreModifierType extends PokemonModifierType {
       (_type, args) => new PokemonAllMovePpRestoreModifier(this, (args[0] as PlayerPokemon).id, this.restorePoints),
       (pokemon: PlayerPokemon) => {
         if (!pokemon.getMoveset().filter((m) => m.ppUsed).length) {
-          return PartyUiHandler.NoEffectMessage;
+          return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
         }
         return null;
       },
@@ -603,7 +603,7 @@ export class PokemonPpUpModifierType extends PokemonMoveModifierType {
       },
       (pokemonMove: PokemonMove) => {
         if (pokemonMove.getMove().pp < 5 || pokemonMove.ppUp >= 3 || pokemonMove.maxPpOverride) {
-          return PartyUiHandler.NoEffectMessage;
+          return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
         }
         return null;
       },
@@ -632,7 +632,7 @@ export class PokemonNatureChangeModifierType extends PokemonModifierType {
       (_type, args) => new PokemonNatureChangeModifier(this, (args[0] as PlayerPokemon).id, this.nature),
       (pokemon: PlayerPokemon) => {
         if (pokemon.getNature() === this.nature) {
-          return PartyUiHandler.NoEffectMessage;
+          return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
         }
         return null;
       },
@@ -663,7 +663,7 @@ export class RememberMoveModifierType extends PokemonModifierType {
       (type, args) => new RememberMoveModifier(type, (args[0] as PlayerPokemon).id, args[1] as number),
       (pokemon: PlayerPokemon) => {
         if (!pokemon.getLearnableLevelMoves().length) {
-          return PartyUiHandler.NoEffectMessage;
+          return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
         }
         return null;
       },
@@ -769,10 +769,10 @@ enum AttackTypeBoosterItem {
 export class AttackTypeBoosterModifierType
   extends PokemonHeldItemModifierType
   implements GeneratedPersistentModifierType {
-  public moveType: ElementType;
+  public moveType: ElementalType;
   public boostPercent: number;
 
-  constructor(moveType: ElementType, boostPercent: number) {
+  constructor(moveType: ElementalType, boostPercent: number) {
     super(
       "",
       `${AttackTypeBoosterItem[moveType]?.toLowerCase()}`,
@@ -790,7 +790,7 @@ export class AttackTypeBoosterModifierType
   override getDescription(): string {
     // TODO: Need getTypeName?
     return i18next.t("modifierType:ModifierType.AttackTypeBoosterModifierType.description", {
-      moveType: i18next.t(`pokemonInfo:Type.${ElementType[this.moveType]}`),
+      moveType: i18next.t(`pokemonInfo:Type.${ElementalType[this.moveType]}`),
     });
   }
 
@@ -1098,19 +1098,19 @@ export class PokemonMultiHitModifierType extends PokemonHeldItemModifierType {
 }
 
 export class TmModifierType extends PokemonModifierType {
-  public moveId: Moves;
+  public moveId: MoveId;
 
-  constructor(moveId: Moves) {
+  constructor(moveId: MoveId) {
     super(
       "",
-      `tm_${ElementType[allMoves[moveId].type].toLowerCase()}`,
+      `tm_${ElementalType[allMoves[moveId].type].toLowerCase()}`,
       (_type, args) => new TmModifier(this, (args[0] as PlayerPokemon).id),
       (pokemon: PlayerPokemon) => {
         if (
           pokemon.compatibleTms.indexOf(moveId) === -1
           || pokemon.getMoveset().filter((m) => m.moveId === moveId).length
         ) {
-          return PartyUiHandler.NoEffectMessage;
+          return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
         }
         return null;
       },
@@ -1172,7 +1172,7 @@ export class EvolutionItemModifierType extends PokemonModifierType implements Ge
           return null;
         }
 
-        return PartyUiHandler.NoEffectMessage;
+        return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
       },
     );
 
@@ -1221,7 +1221,7 @@ export class FormChangeItemModifierType extends PokemonModifierType implements G
           return null;
         }
 
-        return PartyUiHandler.NoEffectMessage;
+        return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
       },
     );
 
@@ -1249,7 +1249,7 @@ export class FusePokemonModifierType extends PokemonModifierType {
       (_type, args) => new FusePokemonModifier(this, (args[0] as PlayerPokemon).id, (args[1] as PlayerPokemon).id),
       (pokemon: PlayerPokemon) => {
         if (pokemon.isFusion()) {
-          return PartyUiHandler.NoEffectMessage;
+          return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
         }
         return null;
       },
@@ -1264,8 +1264,8 @@ export class FusePokemonModifierType extends PokemonModifierType {
 class AttackTypeBoosterModifierTypeGenerator extends ModifierTypeGenerator {
   constructor() {
     super((party: Pokemon[], pregenArgs?: any[]) => {
-      if (pregenArgs && pregenArgs.length === 1 && pregenArgs[0] in ElementType) {
-        return new AttackTypeBoosterModifierType(pregenArgs[0] as ElementType, 20);
+      if (pregenArgs && pregenArgs.length === 1 && pregenArgs[0] in ElementalType) {
+        return new AttackTypeBoosterModifierType(pregenArgs[0] as ElementalType, 20);
       }
 
       const attackMoveTypes = party
@@ -1273,7 +1273,7 @@ class AttackTypeBoosterModifierTypeGenerator extends ModifierTypeGenerator {
           p
             .getMoveset()
             .map((m) => m.getMove())
-            .filter((m) => m instanceof AttackMove)
+            .filter((m) => m.isAttackMove())
             .map((m) => m.type),
         )
         .flat();
@@ -1281,7 +1281,7 @@ class AttackTypeBoosterModifierTypeGenerator extends ModifierTypeGenerator {
         return null;
       }
 
-      const attackMoveTypeWeights = new Map<ElementType, number>();
+      const attackMoveTypeWeights = new Map<ElementalType, number>();
       let totalWeight = 0;
       for (const t of attackMoveTypes) {
         if (attackMoveTypeWeights.has(t)) {
@@ -1301,7 +1301,7 @@ class AttackTypeBoosterModifierTypeGenerator extends ModifierTypeGenerator {
         return null;
       }
 
-      let type: ElementType;
+      let type: ElementalType;
 
       const randInt = randSeedInt(totalWeight);
       let weight = 0;
@@ -1391,7 +1391,7 @@ class SpeciesStatBoosterModifierTypeGenerator extends ModifierTypeGenerator {
       for (const p of party) {
         const speciesId = p.getSpeciesForm(true).speciesId;
         const fusionSpeciesId = p.isFusion() ? p.getFusionSpeciesForm(true).speciesId : null;
-        const hasFling = p.getMoveset(true).some((m) => m.moveId === Moves.FLING);
+        const hasFling = p.getMoveset(true).some((m) => m.moveId === MoveId.FLING);
 
         for (const i in values) {
           const checkedSpecies = values[i].species;
@@ -1446,8 +1446,8 @@ class SpeciesStatBoosterModifierTypeGenerator extends ModifierTypeGenerator {
 class TmModifierTypeGenerator extends ModifierTypeGenerator {
   constructor(tier: ModifierTier) {
     super((party: Pokemon[], pregenArgs?: any[]) => {
-      if (pregenArgs && pregenArgs.length === 1 && pregenArgs[0] in Moves) {
-        return new TmModifierType(pregenArgs[0] as Moves);
+      if (pregenArgs && pregenArgs.length === 1 && pregenArgs[0] in MoveId) {
+        return new TmModifierType(pregenArgs[0] as MoveId);
       }
       const partyMemberCompatibleTms = party.map((p) =>
         (p as PlayerPokemon).compatibleTms.filter((tm) => !p.moveset.find((m) => m.moveId === tm)),
@@ -1559,10 +1559,7 @@ class FormChangeItemModifierTypeGenerator extends ModifierTypeGenerator {
                     t
                     && t.active
                     && !globalScene.findModifier(
-                      (m) =>
-                        m instanceof PokemonFormChangeItemModifier
-                        && m.pokemonId === p.id
-                        && m.formChangeItem === t.item,
+                      (m) => m.isPokemonFormChangeItemModifier() && m.pokemonId === p.id && m.formChangeItem === t.item,
                     ),
                 );
 
@@ -1612,12 +1609,12 @@ class FormChangeItemModifierTypeGenerator extends ModifierTypeGenerator {
 }
 
 export class TerastallizeModifierType extends PokemonHeldItemModifierType implements GeneratedPersistentModifierType {
-  private teraType: ElementType;
+  private teraType: ElementalType;
 
-  constructor(teraType: ElementType) {
+  constructor(teraType: ElementalType) {
     super(
       "",
-      `${ElementType[teraType].toLowerCase()}_tera_shard`,
+      `${ElementalType[teraType].toLowerCase()}_tera_shard`,
       (type, args) => new TerastallizeModifier(type as TerastallizeModifierType, (args[0] as Pokemon).id, teraType),
       "tera_shard",
     );
@@ -1627,13 +1624,13 @@ export class TerastallizeModifierType extends PokemonHeldItemModifierType implem
 
   override get name(): string {
     return i18next.t("modifierType:ModifierType.TerastallizeModifierType.name", {
-      teraType: i18next.t(`pokemonInfo:Type.${ElementType[this.teraType]}`),
+      teraType: i18next.t(`pokemonInfo:Type.${ElementalType[this.teraType]}`),
     });
   }
 
   override getDescription(): string {
     return i18next.t("modifierType:ModifierType.TerastallizeModifierType.description", {
-      teraType: i18next.t(`pokemonInfo:Type.${ElementType[this.teraType]}`),
+      teraType: i18next.t(`pokemonInfo:Type.${ElementalType[this.teraType]}`),
     });
   }
 
@@ -1773,7 +1770,7 @@ export type GeneratorModifierOverride = {
     }
   | {
       name: keyof Pick<typeof modifierTypes, "ATTACK_TYPE_BOOSTER" | "TERA_SHARD">;
-      type?: ElementType;
+      type?: ElementalType;
     }
   | {
       name: keyof Pick<typeof modifierTypes, "BERRY">;
@@ -1789,7 +1786,7 @@ export type GeneratorModifierOverride = {
     }
   | {
       name: keyof Pick<typeof modifierTypes, "TM_COMMON" | "TM_GREAT" | "TM_ULTRA">;
-      type?: Moves;
+      type?: MoveId;
     }
 );
 
@@ -1914,18 +1911,18 @@ export const modifierTypes = {
 
   TERA_SHARD: () =>
     new ModifierTypeGenerator((party: Pokemon[], pregenArgs?: any[]) => {
-      if (pregenArgs && pregenArgs.length === 1 && pregenArgs[0] in ElementType) {
-        return new TerastallizeModifierType(pregenArgs[0] as ElementType);
+      if (pregenArgs && pregenArgs.length === 1 && pregenArgs[0] in ElementalType) {
+        return new TerastallizeModifierType(pregenArgs[0] as ElementalType);
       }
       if (!globalScene.getModifiers(TerastallizeAccessModifier).length) {
         return null;
       }
-      let type: ElementType;
+      let type: ElementalType;
       if (!randSeedInt(3)) {
         const partyMemberTypes = party.map((p) => p.getTypes(false, false, true)).flat();
         type = randSeedItem(partyMemberTypes);
       } else {
-        type = randSeedInt(64) ? (randSeedInt(18) as ElementType) : ElementType.STELLAR;
+        type = randSeedInt(64) ? (randSeedInt(18) as ElementalType) : ElementalType.STELLAR;
       }
       return new TerastallizeModifierType(type);
     }),
@@ -2279,7 +2276,7 @@ const modifierPool: ModifierPool = {
           party.filter(
             (p) =>
               p.hp
-              && !p.getHeldItems().some((m) => m instanceof BerryModifier && m.berryType === BerryType.LEPPA)
+              && !p.getHeldItems().some((m) => m.isBerryModifier() && m.berryType === BerryType.LEPPA)
               && p
                 .getMoveset()
                 .filter((m) => m.ppUsed && m.getMovePp() - m.ppUsed <= 5 && m.ppUsed > Math.floor(m.getMovePp() / 2))
@@ -2298,7 +2295,7 @@ const modifierPool: ModifierPool = {
           party.filter(
             (p) =>
               p.hp
-              && !p.getHeldItems().some((m) => m instanceof BerryModifier && m.berryType === BerryType.LEPPA)
+              && !p.getHeldItems().some((m) => m.isBerryModifier() && m.berryType === BerryType.LEPPA)
               && p
                 .getMoveset()
                 .filter((m) => m.ppUsed && m.getMovePp() - m.ppUsed <= 5 && m.ppUsed > Math.floor(m.getMovePp() / 2))
@@ -2420,7 +2417,7 @@ const modifierPool: ModifierPool = {
           party.filter(
             (p) =>
               p.hp
-              && !p.getHeldItems().some((m) => m instanceof BerryModifier && m.berryType === BerryType.LEPPA)
+              && !p.getHeldItems().some((m) => m.isBerryModifier() && m.berryType === BerryType.LEPPA)
               && p
                 .getMoveset()
                 .filter((m) => m.ppUsed && m.getMovePp() - m.ppUsed <= 5 && m.ppUsed > Math.floor(m.getMovePp() / 2))
@@ -2439,7 +2436,7 @@ const modifierPool: ModifierPool = {
           party.filter(
             (p) =>
               p.hp
-              && !p.getHeldItems().some((m) => m instanceof BerryModifier && m.berryType === BerryType.LEPPA)
+              && !p.getHeldItems().some((m) => m.isBerryModifier() && m.berryType === BerryType.LEPPA)
               && p
                 .getMoveset()
                 .filter((m) => m.ppUsed && m.getMovePp() - m.ppUsed <= 5 && m.ppUsed > Math.floor(m.getMovePp() / 2))
@@ -2562,11 +2559,11 @@ const modifierPool: ModifierPool = {
           const isHoldingOrb = p.getHeldItems().some((i) => i.type.id === "FLAME_ORB" || i.type.id === "TOXIC_ORB");
 
           // Moves that take advantage of obtaining the actual status effect
-          const hasStatusMoves = [Moves.FACADE, Moves.PSYCHO_SHIFT].some((m) => moveset.includes(m));
+          const hasStatusMoves = [MoveId.FACADE, MoveId.PSYCHO_SHIFT].some((m) => moveset.includes(m));
           // Moves that take advantage of being able to give the target a status orb
           // TODO: Take moves from comment they are implemented
           const hasItemMoves = [
-            /* Moves.TRICK, Moves.FLING, Moves.SWITCHEROO */
+            /* MoveId.TRICK, MoveId.FLING, MoveId.SWITCHEROO */
           ].some((m) => moveset.includes(m));
           // Abilities that take advantage of obtaining the actual status effect
           const hasRelevantAbilities = [
@@ -2604,11 +2601,11 @@ const modifierPool: ModifierPool = {
           const isHoldingOrb = p.getHeldItems().some((i) => i.type.id === "FLAME_ORB" || i.type.id === "TOXIC_ORB");
 
           // Moves that take advantage of obtaining the actual status effect
-          const hasStatusMoves = [Moves.FACADE, Moves.PSYCHO_SHIFT].some((m) => moveset.includes(m));
+          const hasStatusMoves = [MoveId.FACADE, MoveId.PSYCHO_SHIFT].some((m) => moveset.includes(m));
           // Moves that take advantage of being able to give the target a status orb
           // TODO: Take moves from comment they are implemented
           const hasItemMoves = [
-            /* Moves.TRICK, Moves.FLING, Moves.SWITCHEROO */
+            /* MoveId.TRICK, MoveId.FLING, MoveId.SWITCHEROO */
           ].some((m) => moveset.includes(m));
           // Abilities that take advantage of obtaining the actual status effect
           const hasRelevantAbilities = [
@@ -2650,7 +2647,7 @@ const modifierPool: ModifierPool = {
               .getHeldItems()
               .some((i) => i instanceof ResetNegativeStatStageModifier && i.stackCount >= i.getMaxHeldItemCount(p))
             && (checkedAbilities.some((a) => p.hasAbility(a, false, true))
-              || p.getMoveset(true).some((m) => m && selfStatLowerMoves.includes(m.moveId))),
+              || p.getMoveset(true).some((m) => m && m.getMove().isSelfStatLowering())),
         ).length;
         // If a party member has one of the above moves or abilities and doesn't have max herbs, the herb will appear more frequently
         return 0 * (weightMultiplier ? 2 : 1) + (weightMultiplier ? weightMultiplier * 0 : 0);

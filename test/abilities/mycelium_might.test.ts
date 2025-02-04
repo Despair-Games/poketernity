@@ -3,7 +3,7 @@ import { TurnStartPhase } from "#app/phases/turn-start-phase";
 import { GameManager } from "#test/testUtils/gameManager";
 import { Abilities } from "#enums/abilities";
 import { Stat } from "#enums/stat";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -28,9 +28,9 @@ describe("Abilities - Mycelium Might", () => {
     game.override.disableCrits();
     game.override.enemySpecies(Species.SHUCKLE);
     game.override.enemyAbility(Abilities.CLEAR_BODY);
-    game.override.enemyMoveset([Moves.QUICK_ATTACK, Moves.QUICK_ATTACK, Moves.QUICK_ATTACK, Moves.QUICK_ATTACK]);
+    game.override.enemyMoveset([MoveId.QUICK_ATTACK, MoveId.QUICK_ATTACK, MoveId.QUICK_ATTACK, MoveId.QUICK_ATTACK]);
     game.override.ability(Abilities.MYCELIUM_MIGHT);
-    game.override.moveset([Moves.QUICK_ATTACK, Moves.BABY_DOLL_EYES]);
+    game.override.moveset([MoveId.QUICK_ATTACK, MoveId.BABY_DOLL_EYES]);
   });
 
   /**
@@ -47,7 +47,7 @@ describe("Abilities - Mycelium Might", () => {
     const playerIndex = game.scene.getPlayerPokemon()?.getBattlerIndex();
     const enemyIndex = enemyPokemon?.getBattlerIndex();
 
-    game.move.select(Moves.BABY_DOLL_EYES);
+    game.move.select(MoveId.BABY_DOLL_EYES);
 
     await game.phaseInterceptor.to(TurnStartPhase, false);
     const phase = game.scene.getCurrentPhase() as TurnStartPhase;
@@ -64,14 +64,14 @@ describe("Abilities - Mycelium Might", () => {
   }, 20000);
 
   it("will still go first if a status move that is in a higher priority bracket than the opponent's move is used", async () => {
-    game.override.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
+    game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
     await game.startBattle([Species.REGIELEKI]);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     const playerIndex = game.scene.getPlayerPokemon()?.getBattlerIndex();
     const enemyIndex = enemyPokemon?.getBattlerIndex();
 
-    game.move.select(Moves.BABY_DOLL_EYES);
+    game.move.select(MoveId.BABY_DOLL_EYES);
 
     await game.phaseInterceptor.to(TurnStartPhase, false);
     const phase = game.scene.getCurrentPhase() as TurnStartPhase;
@@ -92,7 +92,7 @@ describe("Abilities - Mycelium Might", () => {
     const playerIndex = game.scene.getPlayerPokemon()!.getBattlerIndex();
     const enemyIndex = game.scene.getEnemyPokemon()!.getBattlerIndex();
 
-    game.move.select(Moves.QUICK_ATTACK);
+    game.move.select(MoveId.QUICK_ATTACK);
 
     await game.phaseInterceptor.to(TurnStartPhase, false);
     const phase = game.scene.getCurrentPhase() as TurnStartPhase;

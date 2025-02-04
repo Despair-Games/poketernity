@@ -6,7 +6,7 @@ import { MoveResult } from "#enums/move-result";
 import { MovePhase } from "#app/phases/move-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -30,11 +30,11 @@ describe("Moves - Swallow", () => {
     game.override.battleType("single");
 
     game.override.enemySpecies(Species.RATTATA);
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.override.enemyMoveset(MoveId.SPLASH);
     game.override.enemyAbility(Abilities.NONE);
     game.override.enemyLevel(2000);
 
-    game.override.moveset([Moves.SWALLOW, Moves.SWALLOW, Moves.SWALLOW, Moves.SWALLOW]);
+    game.override.moveset([MoveId.SWALLOW, MoveId.SWALLOW, MoveId.SWALLOW, MoveId.SWALLOW]);
     game.override.ability(Abilities.NONE);
   });
 
@@ -57,7 +57,7 @@ describe("Moves - Swallow", () => {
 
       vi.spyOn(pokemon, "heal");
 
-      game.move.select(Moves.SWALLOW);
+      game.move.select(MoveId.SWALLOW);
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(pokemon.heal).toHaveBeenCalledOnce();
@@ -85,7 +85,7 @@ describe("Moves - Swallow", () => {
 
       vi.spyOn(pokemon, "heal");
 
-      game.move.select(Moves.SWALLOW);
+      game.move.select(MoveId.SWALLOW);
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(pokemon.heal).toHaveBeenCalledOnce();
@@ -114,7 +114,7 @@ describe("Moves - Swallow", () => {
 
       vi.spyOn(pokemon, "heal");
 
-      game.move.select(Moves.SWALLOW);
+      game.move.select(MoveId.SWALLOW);
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(pokemon.heal).toHaveBeenCalledOnce();
@@ -132,10 +132,13 @@ describe("Moves - Swallow", () => {
     const stockpilingTag = pokemon.getTag(StockpilingTag)!;
     expect(stockpilingTag).toBeUndefined();
 
-    game.move.select(Moves.SWALLOW);
+    game.move.select(MoveId.SWALLOW);
     await game.phaseInterceptor.to(TurnInitPhase);
 
-    expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({ move: Moves.SWALLOW, result: MoveResult.FAIL });
+    expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
+      moveId: MoveId.SWALLOW,
+      result: MoveResult.FAIL,
+    });
   });
 
   describe("restores stat stage boosts granted by stacks", () => {
@@ -148,7 +151,7 @@ describe("Moves - Swallow", () => {
       const stockpilingTag = pokemon.getTag(StockpilingTag)!;
       expect(stockpilingTag).toBeDefined();
 
-      game.move.select(Moves.SWALLOW);
+      game.move.select(MoveId.SWALLOW);
       await game.phaseInterceptor.to(MovePhase);
 
       expect(pokemon.getStatStage(Stat.DEF)).toBe(1);
@@ -157,7 +160,7 @@ describe("Moves - Swallow", () => {
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-        move: Moves.SWALLOW,
+        moveId: MoveId.SWALLOW,
         result: MoveResult.SUCCESS,
       });
 
@@ -182,12 +185,12 @@ describe("Moves - Swallow", () => {
         [Stat.SPDEF]: 2,
       };
 
-      game.move.select(Moves.SWALLOW);
+      game.move.select(MoveId.SWALLOW);
 
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-        move: Moves.SWALLOW,
+        moveId: MoveId.SWALLOW,
         result: MoveResult.SUCCESS,
       });
 

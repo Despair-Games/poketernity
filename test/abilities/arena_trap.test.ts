@@ -1,6 +1,6 @@
 import { allAbilities } from "#app/data/ability";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -23,11 +23,11 @@ describe("Abilities - Arena Trap", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset(Moves.SPLASH)
+      .moveset(MoveId.SPLASH)
       .ability(Abilities.ARENA_TRAP)
       .enemySpecies(Species.RALTS)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.TELEPORT);
+      .enemyMoveset(MoveId.TELEPORT);
   });
 
   // TODO: Enable test when Issue #935 is addressed
@@ -38,7 +38,7 @@ describe("Abilities - Arena Trap", () => {
 
     const enemy = game.scene.getEnemyPokemon();
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
 
     await game.toNextTurn();
 
@@ -55,15 +55,15 @@ describe("Abilities - Arena Trap", () => {
 
   /**
    * This checks if the Player Pokemon is able to switch out/run away after the Enemy Pokemon with {@linkcode Abilities.ARENA_TRAP}
-   * is forcefully moved out of the field from moves such as Roar {@linkcode Moves.ROAR}
+   * is forcefully moved out of the field from moves such as Roar {@linkcode MoveId.ROAR}
    *
    * Note: It should be able to switch out/run away
    */
   it("should lift if pokemon with this ability leaves the field", async () => {
     game.override
       .battleType("double")
-      .enemyMoveset(Moves.SPLASH)
-      .moveset([Moves.ROAR, Moves.SPLASH])
+      .enemyMoveset(MoveId.SPLASH)
+      .moveset([MoveId.ROAR, MoveId.SPLASH])
       .ability(Abilities.BALL_FETCH);
     await game.classicMode.startBattle([Species.MAGIKARP, Species.SUDOWOODO, Species.LUNATONE]);
 
@@ -72,8 +72,8 @@ describe("Abilities - Arena Trap", () => {
 
     vi.spyOn(enemy1, "getAbility").mockReturnValue(allAbilities[Abilities.ARENA_TRAP]);
 
-    game.move.select(Moves.ROAR);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.ROAR);
+    game.move.select(MoveId.SPLASH, 1);
     await game.toNextTurn();
 
     expect(player1.isTrapped()).toBe(false);

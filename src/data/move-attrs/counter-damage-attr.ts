@@ -27,7 +27,7 @@ export class CounterDamageAttr extends FixedDamageAttr {
 
   override apply(user: Pokemon, _target: Pokemon, _move: Move, damage: NumberHolder): boolean {
     const damageTaken = user.turnData.attacksReceived
-      .filter((ar) => this.moveFilter(allMoves[ar.move]))
+      .filter((ar) => this.moveFilter(allMoves[ar.moveId]))
       .reduce((total: number, ar: AttackMoveResult) => total + ar.damage, 0);
     damage.value = toDmgValue(damageTaken * this.multiplier);
 
@@ -36,6 +36,6 @@ export class CounterDamageAttr extends FixedDamageAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, _target, _move) =>
-      !!user.turnData.attacksReceived.filter((ar) => this.moveFilter(allMoves[ar.move])).length;
+      !!user.turnData.attacksReceived.filter((ar) => this.moveFilter(allMoves[ar.moveId])).length;
   }
 }

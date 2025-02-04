@@ -11,7 +11,7 @@ import {
 import type BattleScene from "#app/battle-scene";
 import { UiMode } from "#enums/ui-mode";
 import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
-import { BerryModifier } from "#app/modifier/modifier";
+import type { BerryModifier } from "#app/modifier/modifier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
@@ -136,7 +136,7 @@ describe("Berries Abound - Mystery Encounter", () => {
       await game.phaseInterceptor.to(SelectModifierPhase, false);
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
 
-      const berriesAfter = scene.findModifiers((m) => m instanceof BerryModifier) as BerryModifier[];
+      const berriesAfter = scene.findModifiers((m) => m.isBerryModifier()) as BerryModifier[];
       const berriesAfterCount = berriesAfter.reduce((a, b) => a + b.stackCount, 0);
 
       expect(numBerries).toBe(berriesAfterCount);

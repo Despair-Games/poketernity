@@ -1,7 +1,7 @@
 import { EffectSporeAbAttr } from "#app/data/ab-attrs/effect-spore-ab-attr";
 import { allMoves } from "#app/data/all-moves";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -25,13 +25,13 @@ describe("Abilities - Effect Spore", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SPLASH])
+      .moveset([MoveId.SPLASH])
       .ability(Abilities.EFFECT_SPORE)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset([Moves.TACKLE, Moves.WATER_GUN]);
+      .enemyMoveset([MoveId.TACKLE, MoveId.WATER_GUN]);
 
     // Force minimum RNG roll so that Effect Spore's RNG roll succeeds
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: 0) => min);
@@ -44,8 +44,8 @@ describe("Abilities - Effect Spore", () => {
     vi.spyOn(abilityAttr, "apply");
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.TACKLE);
+    game.move.select(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.TACKLE);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -60,8 +60,8 @@ describe("Abilities - Effect Spore", () => {
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
     vi.spyOn(abilityAttr, "apply");
 
-    game.move.select(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.TACKLE);
+    game.move.select(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.TACKLE);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -75,8 +75,8 @@ describe("Abilities - Effect Spore", () => {
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
     vi.spyOn(abilityAttr, "apply");
 
-    game.move.select(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.TACKLE);
+    game.move.select(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.TACKLE);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -89,8 +89,8 @@ describe("Abilities - Effect Spore", () => {
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
     vi.spyOn(abilityAttr, "apply");
 
-    game.move.select(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.WATER_GUN);
+    game.move.select(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.WATER_GUN);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -131,7 +131,7 @@ describe("Abilities - Effect Spore", () => {
     // Apply the Effect Spore attr while simulating the full range of possible RNG rolls.
     // Unfortunately, actually using Tackle 100 times takes too long, so we only apply the attr.
     for (rngSweepProgress = 0; rngSweepProgress < 100; rngSweepProgress++) {
-      abilityAttr.apply(playerPokemon, false, enemyPokemon, allMoves[Moves.TACKLE]);
+      abilityAttr.apply(playerPokemon, false, enemyPokemon, allMoves[MoveId.TACKLE]);
     }
 
     expect(sleepCount).toBe(11);

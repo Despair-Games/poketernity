@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -22,13 +22,13 @@ describe("Moves - Floral Healing", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.FLORAL_HEALING])
+      .moveset([MoveId.FLORAL_HEALING])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
   });
@@ -40,7 +40,7 @@ describe("Moves - Floral Healing", () => {
     vi.spyOn(enemy, "getMaxHp").mockReturnValue(100);
     enemy.hp = 1;
 
-    game.move.select(Moves.FLORAL_HEALING);
+    game.move.select(MoveId.FLORAL_HEALING);
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(enemy.hp).toBe(51);
@@ -55,7 +55,7 @@ describe("Moves - Floral Healing", () => {
     vi.spyOn(enemy, "getMaxHp").mockReturnValue(100);
     enemy.hp = 1;
 
-    game.move.select(Moves.FLORAL_HEALING);
+    game.move.select(MoveId.FLORAL_HEALING);
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(enemy.hp).toBe(67);

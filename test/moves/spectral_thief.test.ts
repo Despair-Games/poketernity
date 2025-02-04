@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/all-moves";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat, type BattleStat } from "#enums/stat";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -25,13 +25,13 @@ describe("Moves - Spectral Thief", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SPECTRAL_THIEF])
+      .moveset([MoveId.SPECTRAL_THIEF])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.SKARMORY)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.IRON_DEFENSE)
+      .enemyMoveset(MoveId.IRON_DEFENSE)
       .startingLevel(100)
       .enemyLevel(100);
   });
@@ -43,11 +43,11 @@ describe("Moves - Spectral Thief", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     const spy = vi.spyOn(enemy, "getAttackDamage");
 
-    game.move.select(Moves.SPECTRAL_THIEF);
+    game.move.select(MoveId.SPECTRAL_THIEF);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
-    const preEffectDamage = enemy.getAttackDamage(player, allMoves[Moves.SPECTRAL_THIEF]).damage;
+    const preEffectDamage = enemy.getAttackDamage(player, allMoves[MoveId.SPECTRAL_THIEF]).damage;
 
     await game.phaseInterceptor.to("MoveEffectPhase");
 
@@ -58,14 +58,14 @@ describe("Moves - Spectral Thief", () => {
   });
 
   it("should not steal negative stat stages from the target", async () => {
-    game.override.enemyMoveset(Moves.SHELL_SMASH);
+    game.override.enemyMoveset(MoveId.SHELL_SMASH);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SPECTRAL_THIEF);
+    game.move.select(MoveId.SPECTRAL_THIEF);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -90,7 +90,7 @@ describe("Moves - Spectral Thief", () => {
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SPECTRAL_THIEF);
+    game.move.select(MoveId.SPECTRAL_THIEF);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -114,7 +114,7 @@ describe("Moves - Spectral Thief", () => {
       const player = game.scene.getPlayerPokemon()!;
       const enemy = game.scene.getEnemyPokemon()!;
 
-      game.move.select(Moves.SPECTRAL_THIEF);
+      game.move.select(MoveId.SPECTRAL_THIEF);
       await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
       await game.phaseInterceptor.to("MoveEndPhase");
@@ -133,7 +133,7 @@ describe("Moves - Spectral Thief", () => {
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.SPECTRAL_THIEF);
+    game.move.select(MoveId.SPECTRAL_THIEF);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("MoveEndPhase");

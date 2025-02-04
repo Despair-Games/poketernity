@@ -8,7 +8,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "../move-conditions";
 
 /**
- * Attribute used for moves that suppress abilities like {@linkcode Moves.GASTRO_ACID}.
+ * Attribute used for moves that suppress abilities like {@linkcode MoveId.GASTRO_ACID}.
  * A suppressed ability cannot be activated.
  *
  * @extends MoveEffectAttr

@@ -7,6 +7,7 @@ import { genericTrainerConfigs } from "./generic-trainer-configs";
 import { gymLeaderTrainerConfigs } from "./gym-leader-configs";
 import { meTrainerConfigs } from "./me-trainer-configs";
 import { rivalTrainerConfigs } from "./rival-trainer-configs";
+import { championDoubleTrainerConfigs } from "./champion-double-trainer-configs";
 
 export const allTrainerConfigs: TrainerConfigs = {
   ...genericTrainerConfigs,
@@ -14,6 +15,7 @@ export const allTrainerConfigs: TrainerConfigs = {
   ...gymLeaderTrainerConfigs,
   ...eliteFourTrainerConfigs,
   ...championTrainerConfigs,
+  ...championDoubleTrainerConfigs,
   ...rivalTrainerConfigs,
   ...evilBossTrainerConfigs,
   ...meTrainerConfigs,

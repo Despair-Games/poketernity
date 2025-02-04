@@ -6,7 +6,8 @@ import { HitsTagAttr } from "#app/data/move-attrs/hits-tag-attr";
 import { OneHitKOAttr } from "#app/data/move-attrs/one-hit-ko-attr";
 import { ToxicAccuracyAttr } from "#app/data/move-attrs/toxic-accuracy-attr";
 import type { TypeDamageMultiplier } from "#app/data/type";
-import type { PokemonMove, Pokemon } from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
+import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { BooleanHolder } from "#app/utils";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
@@ -15,7 +16,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveTarget } from "#enums/move-target";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { PokemonPhase } from "./abstract-pokemon-phase";
 
 type HitCheckEntry = [HitCheckResult, TypeDamageMultiplier];
@@ -87,7 +88,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
         .getMove()
         .getAttrs(HitsTagAttr)
         .some((hta) => hta.tagType === semiInvulnerableTag.tagType)
-      && !(this.move.getMove().hasAttr(ToxicAccuracyAttr) && user.isOfType(ElementType.POISON));
+      && !(this.move.getMove().hasAttr(ToxicAccuracyAttr) && user.isOfType(ElementalType.POISON));
 
     if (targetIsSemiInvulnerable && !alwaysHit) {
       return [HitCheckResult.MISS, 0];

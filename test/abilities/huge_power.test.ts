@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -32,16 +32,16 @@ describe.each([
       .enemySpecies(Species.MAGIKARP)
       .enemyLevel(20)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should double the attack stat of the ability-holder", async () => {
-    game.override.moveset(Moves.TACKLE);
+    game.override.moveset(MoveId.TACKLE);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getEffectiveStat");
 
-    game.move.select(Moves.TACKLE);
+    game.move.select(MoveId.TACKLE);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -49,12 +49,12 @@ describe.each([
   });
 
   it("should double the attack stat when using Body Press", async () => {
-    game.override.ability(ability).moveset(Moves.BODY_PRESS);
+    game.override.ability(ability).moveset(MoveId.BODY_PRESS);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getEffectiveStat");
 
-    game.move.select(Moves.BODY_PRESS);
+    game.move.select(MoveId.BODY_PRESS);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 
@@ -63,12 +63,12 @@ describe.each([
   // Note: Huge Power/Pure Power's interaction with Foul Play is tested in moves/foul_play.test.ts
 
   it("should not double the attack stat when calculating confusion damage", async () => {
-    game.override.ability(ability).moveset(Moves.SPLASH).enemyMoveset(Moves.SUPERSONIC).statusActivation(true);
+    game.override.ability(ability).moveset(MoveId.SPLASH).enemyMoveset(MoveId.SUPERSONIC).statusActivation(true);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(playerPokemon, "getEffectiveStat");
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.move.forceHit();
     await game.phaseInterceptor.to("BerryPhase");
 

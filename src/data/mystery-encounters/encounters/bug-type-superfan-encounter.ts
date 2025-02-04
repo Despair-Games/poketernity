@@ -22,10 +22,10 @@ import { TrainerType } from "#enums/trainer-type";
 import { Species } from "#enums/species";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import { getEncounterText, showEncounterDialogue } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
@@ -35,12 +35,11 @@ import {
   HeldItemRequirement,
   TypeRequirement,
 } from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import type { AttackTypeBoosterModifierType, ModifierTypeOption } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import {
-  AttackTypeBoosterModifier,
   BypassSpeedChanceModifier,
   ContactHeldItemTransferChanceModifier,
   GigantamaxAccessModifier,
@@ -53,6 +52,7 @@ import { ModifierTier } from "#enums/modifier-tier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { GAME_WIDTH } from "#app/ui-constants";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/bugTypeSuperfan";
@@ -144,25 +144,31 @@ const POOL_3_POKEMON: { species: Species; formIndex?: number }[] = [
 const POOL_4_POKEMON = [Species.GENESECT, Species.SLITHER_WING, Species.BUZZWOLE, Species.PHEROMOSA];
 
 const PHYSICAL_TUTOR_MOVES = [
-  Moves.MEGAHORN,
-  Moves.X_SCISSOR,
-  Moves.ATTACK_ORDER,
-  Moves.PIN_MISSILE,
-  Moves.FIRST_IMPRESSION,
+  MoveId.MEGAHORN,
+  MoveId.X_SCISSOR,
+  MoveId.ATTACK_ORDER,
+  MoveId.PIN_MISSILE,
+  MoveId.FIRST_IMPRESSION,
 ];
 
-const SPECIAL_TUTOR_MOVES = [Moves.SILVER_WIND, Moves.BUG_BUZZ, Moves.SIGNAL_BEAM, Moves.POLLEN_PUFF];
+const SPECIAL_TUTOR_MOVES = [MoveId.SILVER_WIND, MoveId.BUG_BUZZ, MoveId.SIGNAL_BEAM, MoveId.POLLEN_PUFF];
 
-const STATUS_TUTOR_MOVES = [Moves.STRING_SHOT, Moves.STICKY_WEB, Moves.SILK_TRAP, Moves.RAGE_POWDER, Moves.HEAL_ORDER];
+const STATUS_TUTOR_MOVES = [
+  MoveId.STRING_SHOT,
+  MoveId.STICKY_WEB,
+  MoveId.SILK_TRAP,
+  MoveId.RAGE_POWDER,
+  MoveId.HEAL_ORDER,
+];
 
 const MISC_TUTOR_MOVES = [
-  Moves.BUG_BITE,
-  Moves.LEECH_LIFE,
-  Moves.DEFEND_ORDER,
-  Moves.QUIVER_DANCE,
-  Moves.TAIL_GLOW,
-  Moves.INFESTATION,
-  Moves.U_TURN,
+  MoveId.BUG_BITE,
+  MoveId.LEECH_LIFE,
+  MoveId.DEFEND_ORDER,
+  MoveId.QUIVER_DANCE,
+  MoveId.TAIL_GLOW,
+  MoveId.INFESTATION,
+  MoveId.U_TURN,
 ];
 
 /**
@@ -182,8 +188,8 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
     CombinationPokemonRequirement.Some(
       // Must have at least 1 Bug type on team, OR have a bug item somewhere on the team
       new HeldItemRequirement(["BypassSpeedChanceModifier", "ContactHeldItemTransferChanceModifier"], 1),
-      new AttackTypeBoosterHeldItemTypeRequirement(ElementType.BUG, 1),
-      new TypeRequirement(ElementType.BUG, false, 1),
+      new AttackTypeBoosterHeldItemTypeRequirement(ElementalType.BUG, 1),
+      new TypeRequirement(ElementalType.BUG, false, 1),
     ),
   )
   .withMaxAllowedEncounters(1)
@@ -257,7 +263,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
     const requiredItems = [
       generateModifierType(modifierTypes.QUICK_CLAW),
       generateModifierType(modifierTypes.GRIP_CLAW),
-      generateModifierType(modifierTypes.ATTACK_TYPE_BOOSTER, [ElementType.BUG]),
+      generateModifierType(modifierTypes.ATTACK_TYPE_BOOSTER, [ElementalType.BUG]),
     ];
 
     const requiredItemString = requiredItems.map((m) => m?.name ?? "unknown").join("/");
@@ -305,7 +311,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
   )
   .withOption(
     MysteryEncounterOptionBuilder.newOptionWithMode(MysteryEncounterOptionMode.DISABLED_OR_DEFAULT)
-      .withPrimaryPokemonRequirement(new TypeRequirement(ElementType.BUG, false, 1)) // Must have 1 Bug type on team
+      .withPrimaryPokemonRequirement(new TypeRequirement(ElementalType.BUG, false, 1)) // Must have 1 Bug type on team
       .withDialogue({
         buttonLabel: `${namespace}:option.2.label`,
         buttonTooltip: `${namespace}:option.2.tooltip`,
@@ -316,7 +322,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
         const encounter = globalScene.currentBattle.mysteryEncounter!;
 
         // Player gets different rewards depending on the number of bug types they have
-        const numBugTypes = globalScene.getPlayerParty().filter((p) => p.isOfType(ElementType.BUG, true)).length;
+        const numBugTypes = globalScene.getPlayerParty().filter((p) => p.isOfType(ElementalType.BUG, true)).length;
         const numBugTypesText = i18next.t(`${namespace}:numBugTypes`, { count: numBugTypes });
         encounter.setDialogueToken("numBugTypes", numBugTypesText);
 
@@ -406,7 +412,7 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
         CombinationPokemonRequirement.Some(
           // Meets one or both of the below reqs
           new HeldItemRequirement(["BypassSpeedChanceModifier", "ContactHeldItemTransferChanceModifier"], 1),
-          new AttackTypeBoosterHeldItemTypeRequirement(ElementType.BUG, 1),
+          new AttackTypeBoosterHeldItemTypeRequirement(ElementalType.BUG, 1),
         ),
       )
       .withDialogue({
@@ -433,8 +439,8 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
             return (
               (item instanceof BypassSpeedChanceModifier
                 || item instanceof ContactHeldItemTransferChanceModifier
-                || (item instanceof AttackTypeBoosterModifier
-                  && (item.type as AttackTypeBoosterModifierType).moveType === ElementType.BUG))
+                || (item.isAttackTypeBoosterModifier()
+                  && (item.type as AttackTypeBoosterModifierType).moveType === ElementalType.BUG))
               && item.isTransferable
             );
           });
@@ -462,8 +468,8 @@ export const BugTypeSuperfanEncounter: MysteryEncounter = MysteryEncounterBuilde
             return (
               item instanceof BypassSpeedChanceModifier
               || item instanceof ContactHeldItemTransferChanceModifier
-              || (item instanceof AttackTypeBoosterModifier
-                && (item.type as AttackTypeBoosterModifierType).moveType === ElementType.BUG)
+              || (item.isAttackTypeBoosterModifier()
+                && (item.type as AttackTypeBoosterModifierType).moveType === ElementalType.BUG)
             );
           });
           if (!hasValidItem) {
@@ -713,7 +719,7 @@ function doBugTypeMoveTutor(): Promise<void> {
       right: true,
       x: 1,
       y: -MoveInfoOverlay.getHeight(overlayScale, true) - 1,
-      width: globalScene.game.canvas.width / 6 - 2,
+      width: GAME_WIDTH - 2,
     });
     globalScene.ui.add(moveInfoOverlay);
 

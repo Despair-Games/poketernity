@@ -1,4 +1,4 @@
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -31,7 +31,7 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
     const moveTargets = getMoveTargets(user, move.id);
     if (
       target.hasAbilityWithAttr(IgnoreMoveEffectsAbAttr)
-      && move.id === Moves.SPARKLING_ARIA
+      && move.id === MoveId.SPARKLING_ARIA
       && moveTargets.targets.length === 1
     ) {
       return false;

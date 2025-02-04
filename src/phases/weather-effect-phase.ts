@@ -2,7 +2,7 @@ import { BlockNonDirectDamageAbAttr } from "#app/data/ab-attrs/block-non-direct-
 import { PostWeatherLapseAbAttr } from "#app/data/ab-attrs/post-weather-lapse-ab-attr";
 import { PreWeatherDamageAbAttr } from "#app/data/ab-attrs/pre-weather-damage-ab-attr";
 import { SuppressWeatherEffectAbAttr } from "#app/data/ab-attrs/suppress-weather-effect-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { CommonAnim } from "#enums/common-anim";
 import { type Weather, getWeatherDamageMessage, getWeatherLapseMessage } from "#app/data/weather";
 import { type Pokemon } from "#app/field/pokemon";

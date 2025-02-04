@@ -1,4 +1,4 @@
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { MovePhase } from "#app/phases/move-phase";
@@ -19,7 +19,7 @@ export class CueNextRoundAttr extends MoveEffectAttr {
 
   override applyEffect(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const nextRoundPhase = globalScene.findPhase<MovePhase>(
-      (phase) => phase instanceof MovePhase && phase.move.moveId === Moves.ROUND,
+      (phase) => phase.isMovePhase() && phase.move.moveId === MoveId.ROUND,
     );
 
     if (!nextRoundPhase) {
@@ -28,7 +28,7 @@ export class CueNextRoundAttr extends MoveEffectAttr {
 
     // Update the phase queue so that the next Pokemon using Round moves next
     const nextRoundIndex = globalScene.phaseQueue.indexOf(nextRoundPhase);
-    const nextMoveIndex = globalScene.phaseQueue.findIndex((phase) => phase instanceof MovePhase);
+    const nextMoveIndex = globalScene.phaseQueue.findIndex((phase) => phase.isMovePhase());
     if (nextRoundIndex !== nextMoveIndex) {
       globalScene.prependToPhase(globalScene.phaseQueue.splice(nextRoundIndex, 1)[0], MovePhase);
     }

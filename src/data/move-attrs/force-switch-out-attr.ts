@@ -1,7 +1,7 @@
 import { BattleType } from "#enums/battle-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { SwitchType } from "#enums/switch-type";
 import type { Pokemon, EnemyPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -14,7 +14,7 @@ import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { ForceSwitchOutImmunityAbAttr } from "#app/data/ab-attrs/force-switch-out-immunity-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { PostDamageForceSwitchAbAttr } from "#app/data/ab-attrs/post-damage-force-switch-out-ab-attr";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
@@ -58,7 +58,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
        */
       if (
         target.getAbility().hasAttr(PostDamageForceSwitchAbAttr)
-        && [Moves.U_TURN, Moves.VOLT_SWITCH, Moves.FLIP_TURN].includes(move.id)
+        && [MoveId.U_TURN, MoveId.VOLT_SWITCH, MoveId.FLIP_TURN].includes(move.id)
       ) {
         if (this.hpDroppedBelowHalf(target)) {
           return false;
@@ -141,7 +141,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
        */
       if (
         target.getAbility().hasAttr(PostDamageForceSwitchAbAttr)
-        && [Moves.U_TURN, Moves.VOLT_SWITCH, Moves.FLIP_TURN].includes(move.id)
+        && [MoveId.U_TURN, MoveId.VOLT_SWITCH, MoveId.FLIP_TURN].includes(move.id)
       ) {
         if (this.hpDroppedBelowHalf(target)) {
           return false;
