@@ -75,11 +75,11 @@ export class MoveChargePhase extends HitCheckPhase {
         // queue a new MovePhase for this move's attack phase
         globalScene.unshiftPhase(new MovePhase(user, this.targets, this.move, false));
       } else {
-        user.getMoveQueue().push({ move: move.id, targets: this.targets });
+        user.getMoveQueue().push({ moveId: move.id, targets: this.targets });
       }
 
       // Add this move's charging phase to the user's move history
-      user.pushMoveHistory({ move: this.move.moveId, targets: this.targets, result: MoveResult.OTHER });
+      user.pushMoveHistory({ moveId: this.move.moveId, targets: this.targets, result: MoveResult.OTHER });
     }
     this.end();
   }

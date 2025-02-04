@@ -1,11 +1,13 @@
 /**
- * Since `Type` is to generic we are using `ElementType`
+ * Enum holding the basic pokemon types, plus the pseudo-type Stellar.
+ *
+ * Due to `Type` being too generic, we are using `ElementalType` instead.
  *
  * > _In Generation I, **types** were occasionally referred to as **elements**._
  *
- * {@link https://bulbapedia.bulbagarden.net/wiki/Type | source}
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Type}
  */
-export enum ElementType {
+export enum ElementalType {
   UNKNOWN = -1,
   NORMAL,
   FIGHTING,

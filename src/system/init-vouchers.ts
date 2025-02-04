@@ -28,7 +28,14 @@ export function initVouchers() {
   for (const trainerType of bossTrainerTypes) {
     const voucherType = allTrainerConfigs[trainerType].moneyMultiplier < 10 ? VoucherType.PLUS : VoucherType.PREMIUM;
     const key = TrainerType[trainerType];
-    const trainerName = allTrainerConfigs[trainerType].name;
+    let trainerName = allTrainerConfigs[trainerType].name;
+    if (
+      allTrainerConfigs[trainerType].hasDouble
+      && allTrainerConfigs[trainerType].spriteNameLeft
+      && allTrainerConfigs[trainerType].spriteNameRight
+    ) {
+      trainerName = `${allTrainerConfigs[trainerType].name} & ${allTrainerConfigs[trainerType].nameFemale}`;
+    }
     const trainer = allTrainerConfigs[trainerType];
     const title = trainer.title ? ` (${trainer.title})` : "";
     vouchers[key] = new Voucher(voucherType, `${i18next.t("voucher:defeatTrainer", { trainerName })} ${title}`);

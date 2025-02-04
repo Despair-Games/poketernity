@@ -3,7 +3,7 @@ import { resolve } from "path";
 import { readFileSync } from "fs";
 import { describe, expect, it } from "vitest";
 import type { MoveCategory } from "#enums/move-category";
-import type { Moves } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 import type { Move } from "#app/data/move";
 import { MoveFlags } from "#enums/move-flags";
 
@@ -54,7 +54,7 @@ describe("All Moves", async () => {
   const moveData: MoveData[] = JSON.parse(file);
 
   it.each(moveData)("$identifier, if implemented, should have correct move data", async (move: MoveData) => {
-    const pktyMove = allMoves[move.id as Moves] as Move;
+    const pktyMove = allMoves[move.id as MoveId] as Move;
     if (pktyMove && !isUnimplemented(pktyMove.name)) {
       expect(pktyMove.type).toBe(move.type_id - 1); // PokeAPI begins its list of types with the number 1
       expect(pktyMove.accuracy).toBe(move.accuracy);

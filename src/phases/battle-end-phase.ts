@@ -1,7 +1,7 @@
 import { PostBattleAbAttr } from "#app/data/ab-attrs/post-battle-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
-import { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#app/modifier/modifier";
+import type { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#app/modifier/modifier";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { GameOverPhase } from "#app/phases/game-over-phase";
 
@@ -60,11 +60,11 @@ export class BattleEndPhase extends BattlePhase {
     globalScene.clearEnemyHeldItemModifiers();
 
     const lapsingModifiers = globalScene.findModifiers(
-      (m) => m instanceof LapsingPersistentModifier || m instanceof LapsingPokemonHeldItemModifier,
+      (m) => m.isLapsingPersistentModifier() || m.isLapsingPokemonHeldItemModifier(),
     ) as (LapsingPersistentModifier | LapsingPokemonHeldItemModifier)[];
     for (const m of lapsingModifiers) {
       const args: any[] = [];
-      if (m instanceof LapsingPokemonHeldItemModifier) {
+      if (m.isLapsingPokemonHeldItemModifier()) {
         args.push(globalScene.getPokemonById(m.pokemonId));
       }
       if (!m.lapse(...args)) {

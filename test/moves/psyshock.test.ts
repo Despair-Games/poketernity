@@ -1,6 +1,6 @@
 import { allMoves } from "#app/data/all-moves";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -28,7 +28,7 @@ describe("Moves - Psyshock", () => {
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.FUR_COAT)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
   });
@@ -38,7 +38,7 @@ describe("Moves - Psyshock", () => {
 
     const enemy = game.field.getEnemyPokemon();
 
-    game.move.use(Moves.PSYSHOCK);
+    game.move.use(MoveId.PSYSHOCK);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(enemy.battleData.abilitiesApplied).toContain(Abilities.FUR_COAT);
@@ -46,14 +46,14 @@ describe("Moves - Psyshock", () => {
 
   it("should use the user's Sp. Atk stat stages during damage calculation", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
-    const psyshock = allMoves[Moves.PSYSHOCK];
+    const psyshock = allMoves[MoveId.PSYSHOCK];
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
 
     const { damage: preDamage } = enemy.getAttackDamage(player, psyshock);
 
-    game.move.use(Moves.NASTY_PLOT);
+    game.move.use(MoveId.NASTY_PLOT);
     await game.toNextTurn();
 
     const { damage: postDamage } = enemy.getAttackDamage(player, psyshock);

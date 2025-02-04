@@ -12,7 +12,7 @@ import { StatusEffectAttr } from "#app/data/move-attrs/status-effect-attr";
 import { NumberHolder } from "#app/utils";
 import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
 import { MoveEffectChanceMultiplierAbAttr } from "#app/data/ab-attrs/move-effect-chance-multiplier-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { ChanceBasedMoveEffectAttr } from "./chance-based-move-effect-attr";
 
 /**

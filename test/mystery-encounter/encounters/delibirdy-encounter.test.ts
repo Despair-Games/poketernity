@@ -15,14 +15,13 @@ import { DelibirdyEncounter } from "#app/data/mystery-encounters/encounters/deli
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import type { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import {
-  BerryModifier,
+  type BerryModifier,
   HealingBoosterModifier,
-  HitHealModifier,
   LevelIncrementBoosterModifier,
   MoneyMultiplierModifier,
   PokemonInstantReviveModifier,
   PokemonNatureWeightModifier,
-  PreserveBerryModifier,
+  type PreserveBerryModifier,
 } from "#app/modifier/modifier";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
@@ -140,7 +139,7 @@ describe("Delibird-y - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1);
 
       const amuletCoinAfter = scene.findModifier((m) => m instanceof MoneyMultiplierModifier);
-      const shellBellAfter = scene.findModifier((m) => m instanceof HitHealModifier);
+      const shellBellAfter = scene.findModifier((m) => m.isHitHealModifier());
 
       expect(amuletCoinAfter).toBeDefined();
       expect(amuletCoinAfter?.stackCount).toBe(5);
@@ -209,7 +208,7 @@ describe("Delibird-y - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1, optionNo: 1 });
 
-      const sitrusAfter = scene.findModifier((m) => m instanceof BerryModifier);
+      const sitrusAfter = scene.findModifier((m) => m.isBerryModifier());
       const candyJarAfter = scene.findModifier((m) => m instanceof LevelIncrementBoosterModifier);
 
       expect(sitrusAfter?.stackCount).toBe(1);
@@ -231,7 +230,7 @@ describe("Delibird-y - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1, optionNo: 1 });
 
       const reviverSeedAfter = scene.findModifier((m) => m instanceof PokemonInstantReviveModifier);
-      const berryPouchAfter = scene.findModifier((m) => m instanceof PreserveBerryModifier);
+      const berryPouchAfter = scene.findModifier((m) => m.isPreserveBerryModifier());
 
       expect(reviverSeedAfter).toBeUndefined();
       expect(berryPouchAfter).toBeDefined();
@@ -256,9 +255,9 @@ describe("Delibird-y - Mystery Encounter", () => {
 
       await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1, optionNo: 1 });
 
-      const sitrusAfter = scene.findModifier((m) => m instanceof BerryModifier);
+      const sitrusAfter = scene.findModifier((m) => m.isBerryModifier());
       const candyJarAfter = scene.findModifier((m) => m instanceof LevelIncrementBoosterModifier);
-      const shellBellAfter = scene.findModifier((m) => m instanceof HitHealModifier);
+      const shellBellAfter = scene.findModifier((m) => m.isHitHealModifier());
 
       expect(sitrusAfter?.stackCount).toBe(1);
       expect(candyJarAfter).toBeDefined();
@@ -286,8 +285,8 @@ describe("Delibird-y - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1, optionNo: 1 });
 
       const reviverSeedAfter = scene.findModifier((m) => m instanceof PokemonInstantReviveModifier);
-      const healingCharmAfter = scene.findModifier((m) => m instanceof PreserveBerryModifier);
-      const shellBellAfter = scene.findModifier((m) => m instanceof HitHealModifier);
+      const healingCharmAfter = scene.findModifier((m) => m.isPreserveBerryModifier());
+      const shellBellAfter = scene.findModifier((m) => m.isHitHealModifier());
 
       expect(reviverSeedAfter).toBeUndefined();
       expect(healingCharmAfter).toBeDefined();
@@ -420,7 +419,7 @@ describe("Delibird-y - Mystery Encounter", () => {
 
       const soulDewAfter = scene.findModifier((m) => m instanceof PokemonNatureWeightModifier);
       const healingCharmAfter = scene.findModifier((m) => m instanceof HealingBoosterModifier);
-      const shellBellAfter = scene.findModifier((m) => m instanceof HitHealModifier);
+      const shellBellAfter = scene.findModifier((m) => m.isHitHealModifier());
 
       expect(soulDewAfter).toBeUndefined();
       expect(healingCharmAfter).toBeDefined();

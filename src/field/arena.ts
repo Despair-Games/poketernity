@@ -4,10 +4,10 @@ import { biomePokemonPools, biomeTrainerPools } from "#app/data/balance/biomes";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { type AbstractConstructor, randSeedInt } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#app/data/weather";
 import { CommonAnim } from "#enums/common-anim";
-import type { ElementType } from "#enums/element-type";
+import type { ElementalType } from "#enums/elemental-type";
 import type { Move } from "#app/data/move";
 import type { ArenaTag } from "#app/data/arena-tag";
 import { ArenaTrapTag, getArenaTag } from "#app/data/arena-tag";
@@ -15,7 +15,7 @@ import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { BattlerIndex } from "#enums/battler-index";
 import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
 import { TerrainType } from "#enums/terrain-type";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { PostTerrainChangeAbAttr } from "#app/data/ab-attrs/post-terrain-change-ab-attr";
 import { PostWeatherChangeAbAttr } from "#app/data/ab-attrs/post-weather-change-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
@@ -23,7 +23,7 @@ import Overrides from "#app/overrides";
 import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import { Biome } from "#enums/biome";
-import type { Moves } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { TimeOfDay } from "#enums/time-of-day";
 import { TrainerType } from "#enums/trainer-type";
@@ -409,7 +409,7 @@ export class Arena {
     return this.terrain?.terrainType ?? TerrainType.NONE;
   }
 
-  getAttackTypeMultiplier(attackType: ElementType, grounded: boolean): number {
+  getAttackTypeMultiplier(attackType: ElementalType, grounded: boolean): number {
     let weatherMultiplier = 1;
     if (this.weather && !this.weather.isEffectSuppressed()) {
       weatherMultiplier = this.weather.getAttackTypeMultiplier(attackType);
@@ -618,7 +618,7 @@ export class Arena {
    * Adds a new tag to the arena
    * @param tagType {@linkcode ArenaTagType} the tag being added
    * @param turnCount How many turns the tag lasts
-   * @param sourceMove {@linkcode Moves} the move the tag came from, or `undefined` if not from a move
+   * @param sourceMove {@linkcode MoveId} the move the tag came from, or `undefined` if not from a move
    * @param sourceId The ID of the pokemon in play the tag came from (see {@linkcode BattleScene.getPokemonById})
    * @param side {@linkcode ArenaTagSide} which side(s) the tag applies to
    * @param quiet If a message should be queued on screen to announce the tag being added
@@ -629,7 +629,7 @@ export class Arena {
     tagType: ArenaTagType,
     sourceId: number,
     turnCount: number = 0,
-    sourceMove?: Moves,
+    sourceMove?: MoveId,
     side: ArenaTagSide = ArenaTagSide.BOTH,
     quiet: boolean = false,
   ): boolean {

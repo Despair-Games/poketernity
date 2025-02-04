@@ -3,14 +3,14 @@ import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import type { ElementType } from "#enums/element-type";
+import type { ElementalType } from "#enums/elemental-type";
 import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
 
 export class TypeImmunityAddBattlerTagAbAttr extends TypeImmunityAbAttr {
   private readonly tagType: BattlerTagType;
   private readonly turnCount: number;
 
-  constructor(immuneType: ElementType, tagType: BattlerTagType, turnCount: number, condition?: AbAttrCondition) {
+  constructor(immuneType: ElementalType, tagType: BattlerTagType, turnCount: number, condition?: AbAttrCondition) {
     super(immuneType, condition);
 
     this.tagType = tagType;

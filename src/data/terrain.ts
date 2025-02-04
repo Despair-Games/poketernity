@@ -1,6 +1,6 @@
 import type { Pokemon } from "../field/pokemon";
 import type { Move } from "./move";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { ProtectAttr } from "./move-attrs/protect-attr";
 import type { BattlerIndex } from "#enums/battler-index";
 import i18next from "i18next";
@@ -36,23 +36,23 @@ export class Terrain {
   /**
    * Function to return a multiplier for specific types
    * Electric, Grassy, and Psychic give their corresponding types 30% boost
-   * @param attackType - the Attacking  {@linkcode ElementType}
+   * @param attackType - the Attacking  {@linkcode ElementalType}
    * @returns a multiplier (1.3 or 1)
    */
-  getAttackTypeMultiplier(attackType: ElementType): number {
+  getAttackTypeMultiplier(attackType: ElementalType): number {
     switch (this.terrainType) {
       case TerrainType.ELECTRIC:
-        if (attackType === ElementType.ELECTRIC) {
+        if (attackType === ElementalType.ELECTRIC) {
           return 1.3;
         }
         break;
       case TerrainType.GRASSY:
-        if (attackType === ElementType.GRASS) {
+        if (attackType === ElementalType.GRASS) {
           return 1.3;
         }
         break;
       case TerrainType.PSYCHIC:
-        if (attackType === ElementType.PSYCHIC) {
+        if (attackType === ElementalType.PSYCHIC) {
           return 1.3;
         }
         break;

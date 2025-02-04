@@ -12,6 +12,7 @@ import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
 import JSZip from "jszip";
 import { APP_ABBREVIATION, SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#app/constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 interface BuildInteractableImageOpts {
   scale?: number;
@@ -60,13 +61,12 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     this.infoContainer.add(this.saveDownloadImage);
     this.getUi().add(this.infoContainer);
     this.infoContainer.setVisible(false);
-    this.infoContainer.disableInteractive();
   }
 
   private buildExternalPartyContainer() {
     this.externalPartyContainer = globalScene.add.container(0, 0);
     this.externalPartyContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 12, globalScene.game.canvas.height / 12),
+      new Phaser.Geom.Rectangle(0, 0, GAME_WIDTH / 2, GAME_HEIGHT / 2),
       Phaser.Geom.Rectangle.Contains,
     );
     this.externalPartyTitle = addTextObject(0, 4, "", TextStyle.SETTINGS_LABEL);
@@ -219,29 +219,23 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
       const localStorageKeys = Object.keys(localStorage); // this gets the keys for localStorage
       const keyToFind = "data_";
       const dataKeys = localStorageKeys.filter((ls) => ls.indexOf(keyToFind) >= 0);
-      if (dataKeys.length > 0 && dataKeys.length <= 12) {
+      if (dataKeys.length > 0 && dataKeys.length <= 2) {
         const options: OptionSelectItem[] = [];
         for (let i = 0; i < dataKeys.length; i++) {
           options.push({
             label: dataKeys[i].replace(keyToFind, ""),
             handler: () => {
               globalScene.ui.revertMode();
-              this.infoContainer.disableInteractive();
               return true;
             },
           });
         }
-        const { ui, scaledCanvas } = globalScene;
-        ui.setOverlayMode(UiMode.OPTION_SELECT, {
+        globalScene.ui.setOverlayMode(UiMode.OPTION_SELECT, {
           options: options,
           delay: 1000,
-          xOffset: scaledCanvas.width,
-          yOffset: scaledCanvas.height - this.usernameInfoImage.displayHeight - 16 * dataKeys.length - 22,
+          xOffset: GAME_WIDTH,
+          yOffset: GAME_HEIGHT - this.usernameInfoImage.displayHeight - 16 * dataKeys.length - 22,
         });
-        this.infoContainer.setInteractive(
-          new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width, globalScene.game.canvas.height),
-          Phaser.Geom.Rectangle.Contains,
-        );
       } else {
         if (dataKeys.length > 2) {
           return onFail(this.ERR_TOO_MANY_SAVES);

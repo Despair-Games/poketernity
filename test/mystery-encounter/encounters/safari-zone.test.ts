@@ -19,7 +19,7 @@ import {
   SafariZoneEncounter,
 } from "#app/data/mystery-encounters/encounters/safari-zone-encounter";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { getSpecialSpeciesList } from "#app/data/pokemon-species";
+import { getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 
 const namespace = "mysteryEncounters/safariZone";

@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -29,18 +29,18 @@ describe("Abilities - Mega Launcher", () => {
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should boost the healing of Heal Pulse to 75% of the target's maximum HP", async () => {
-    game.override.moveset(Moves.HEAL_PULSE);
+    game.override.moveset(MoveId.HEAL_PULSE);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const enemyHpRecovered = Math.floor(enemyPokemon.hp * 0.75);
     enemyPokemon.hp = 1;
-    const pulseMove = allMoves[Moves.HEAL_PULSE];
-    game.move.select(Moves.HEAL_PULSE);
+    const pulseMove = allMoves[MoveId.HEAL_PULSE];
+    game.move.select(MoveId.HEAL_PULSE);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(pulseMove.checkFlag(MoveFlags.PULSE_MOVE, playerPokemon, null)).toBe(true);
