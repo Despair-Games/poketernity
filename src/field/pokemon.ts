@@ -3204,6 +3204,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const fixedDamage = new NumberHolder(0);
     applyMoveAttrs(FixedDamageAttr, source, this, move, fixedDamage);
     if (fixedDamage.value) {
+      // TODO: re-add multi-lens calculation
       fixedDamage.value = toDmgValue(fixedDamage.value);
 
       return {
@@ -3237,6 +3238,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     /** Multiplier for moves enhanced by Multi-Lens and/or Parental Bond */
     const multiStrikeEnhancementMultiplier = new NumberHolder(1);
+    // TODO: re-add multi-lens calculation
     applyAbFunc(AddSecondStrikeAbAttr, source, simulated, move, this, undefined, multiStrikeEnhancementMultiplier);
 
     /** Doubles damage if this Pokemon's last move was Glaive Rush */

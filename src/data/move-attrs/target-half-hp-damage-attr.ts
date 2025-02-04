@@ -12,12 +12,11 @@ import { FixedDamageAttr } from "#app/data/move-attrs/fixed-damage-attr";
  * @see {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Super_Fang | Variations of Super Fang}
  */
 export class TargetHalfHpDamageAttr extends FixedDamageAttr {
-  // the initial amount of hp the target had before the first hit
-  // used for multi lens
   constructor() {
     super(0);
   }
 
+  // TODO: re-add multi lens check when it is re-implemented
   override apply(_user: Pokemon, target: Pokemon, _move: Move, damage: NumberHolder): boolean {
     // no multi lenses; we can just halve the target's hp and call it a day
     damage.value = toDmgValue(target.hp / 2);

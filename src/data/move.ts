@@ -725,6 +725,7 @@ export abstract class Move implements Localizable {
 
     const isOhko = this.hasAttr(OneHitKOAccuracyAttr);
 
+    // TODO: wide lens was calculated here
     if (globalScene.arena.weather?.weatherType === WeatherType.FOG) {
       /**
        *  The 0.9 multiplier is Game-specific implementation, Bulbapedia uses 3/5
@@ -764,6 +765,7 @@ export abstract class Move implements Localizable {
       && power.value < 60
       && this.priority <= 0
       && !this.hasAttr(MultiHitAttr)
+      // TODO: multi lens check
     ) {
       power.value = 60;
     }

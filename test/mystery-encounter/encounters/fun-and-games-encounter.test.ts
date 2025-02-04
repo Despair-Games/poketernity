@@ -193,6 +193,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       expect(modifierSelectHandler.options.length).toEqual(0);
     });
 
+    // TODO: formerly wide lens
     it("should have [Placeholder] item in rewards if Wubboffet is at 15-33% HP remaining", async () => {
       scene.money = 20000;
       game.override.moveset([MoveId.SPLASH]);
@@ -223,6 +224,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("POKEBALL");
     });
 
+    // TODO: formerly scope lens
     it("should have [Placeholder] item in rewards if Wubboffet is at 3-15% HP remaining", async () => {
       scene.money = 20000;
       game.override.moveset([MoveId.SPLASH]);
@@ -253,6 +255,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
       expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("GREAT_BALL");
     });
 
+    // TODO: formerly multi lens
     it("should have [Placeholder] item in rewards if Wubboffet is at <3% HP remaining", async () => {
       scene.money = 20000;
       game.override.moveset([MoveId.SPLASH]);
