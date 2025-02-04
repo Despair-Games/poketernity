@@ -1,4 +1,4 @@
-name: Dependency Check
+name: Dependencies
 
 on:
   # Trigger the workflow on push or pull request,
@@ -15,8 +15,8 @@ on:
     types: [checks_requested]
 
 jobs:
-  dependency-check:
-    name: Run Dependency Check
+  check:
+    name: Run Check
     runs-on: ubuntu-latest
 
     steps:
