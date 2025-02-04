@@ -1,6 +1,6 @@
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import { globalScene } from "#app/global-scene";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { achvs } from "#app/system/achv";
 import { vouchers } from "#app/system/voucher";
 import { randSeedItem } from "#app/utils";

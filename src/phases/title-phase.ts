@@ -7,11 +7,8 @@ import { GameMode, getGameMode } from "#app/game-mode";
 import { GameModes } from "#enums/game-modes";
 import { globalScene } from "#app/global-scene";
 import type { Modifier } from "#app/modifier/modifier";
-import {
-  getDailyRunStarterModifiers,
-  modifierTypes,
-  regenerateModifierPoolThresholds,
-} from "#app/modifier/modifier-type";
+import { getDailyRunStarterModifiers, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { Phase } from "#app/phase";
 import { Unlockables } from "#enums/unlockables";

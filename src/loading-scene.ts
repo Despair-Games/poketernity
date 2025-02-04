@@ -23,6 +23,8 @@ import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTEMENT } from ".
 import { initAbilities } from "#app/data/init-abilities";
 import { api } from "#app/plugins/api/api";
 import { initMoves } from "#app/data/init-moves";
+import { initModifierTypes } from "#app/modifier/init-modifier-types";
+import { initModifierPools } from "#app/modifier/init-modifier-pools";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";
@@ -356,6 +358,8 @@ export class LoadingScene extends SceneBase {
 
     this.loadLoadingScreen();
 
+    initModifierTypes();
+    initModifierPools();
     initAchievements();
     initVouchers();
     initStatsKeys();

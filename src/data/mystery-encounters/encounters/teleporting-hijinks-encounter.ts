@@ -23,7 +23,8 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { Biome } from "#enums/biome";
 import { getBiomeKey } from "#app/field/arena";
 import { ElementalType } from "#enums/elemental-type";
-import { getPartyLuckValue, modifierTypes } from "#app/modifier/modifier-type";
+import { getPartyLuckValue } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { getPokemonNameWithAffix } from "#app/messages";

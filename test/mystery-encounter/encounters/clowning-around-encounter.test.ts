@@ -30,7 +30,7 @@ import { Button } from "#enums/buttons";
 import type PartyUiHandler from "#app/ui/party-ui-handler";
 import type ConfirmUiHandler from "#app/ui/confirm-ui-handler";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { BerryType } from "#enums/berry-type";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { ElementalType } from "#enums/elemental-type";

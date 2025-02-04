@@ -20,6 +20,8 @@ import { manageListeners } from "./listenersManager";
 import { initVouchers } from "#app/system/init-vouchers";
 import { initAbilities } from "#app/data/init-abilities";
 import { initMoves } from "#app/data/init-moves";
+import { initModifierTypes } from "#app/modifier/init-modifier-types";
+import { initModifierPools } from "#app/modifier/init-modifier-pools";
 
 /**
  * An initialization function that is run at the beginning of every test file (via `beforeAll()`).
@@ -78,6 +80,8 @@ export function initTestFile() {
 
   // Initialize all of these things if and only if they have not been initialized yet
   if (Object.values(allMoves).length === 0) {
+    initModifierTypes();
+    initModifierPools();
     initMoves();
     initVouchers();
     initAchievements();

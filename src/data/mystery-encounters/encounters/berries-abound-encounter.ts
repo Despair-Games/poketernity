@@ -12,7 +12,8 @@ import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { EnemyPokemon } from "#app/field/pokemon";
 import type { BerryModifierType, ModifierTypeOption } from "#app/modifier/modifier-type";
-import { getPartyLuckValue, modifierTypes, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
+import { getPartyLuckValue, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { randSeedInt } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -304,8 +305,7 @@ function tryGiveBerry(prioritizedPokemon?: PlayerPokemon) {
   // Will try to apply to prioritized pokemon first, then do normal application method if it fails
   if (prioritizedPokemon) {
     const heldBerriesOfType = globalScene.findModifier(
-      (m) =>
-        m.isBerryModifier() && m.pokemonId === prioritizedPokemon.id && m.berryType === berryType,
+      (m) => m.isBerryModifier() && m.pokemonId === prioritizedPokemon.id && m.berryType === berryType,
       true,
     ) as BerryModifier;
 

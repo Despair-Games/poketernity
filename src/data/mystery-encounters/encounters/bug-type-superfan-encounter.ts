@@ -37,7 +37,7 @@ import {
 } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import { ElementalType } from "#enums/elemental-type";
 import type { AttackTypeBoosterModifierType, ModifierTypeOption } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import {
   BypassSpeedChanceModifier,
