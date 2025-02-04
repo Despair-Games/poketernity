@@ -1379,9 +1379,10 @@ class PartySlot extends Phaser.GameObjects.Container {
       slotInfoContainer.add(splicedIcon);
     }
 
-    if (this.pokemon.status) {
+    if (this.pokemon.status || this.pokemon.isFainted()) {
+      const effectIcon = this.pokemon.isFainted() ? "faint" : StatusEffect[this.pokemon.status!.effect].toLowerCase();
       const statusIndicator = globalScene.add.sprite(0, 0, getLocalizedSpriteKey("statuses"));
-      statusIndicator.setFrame(StatusEffect[this.pokemon.status?.effect].toLowerCase());
+      statusIndicator.setFrame(effectIcon);
       statusIndicator.setOrigin(0, 0);
       statusIndicator.setPositionRelative(slotLevelLabel, this.slotIndex >= battlerCount ? 43 : 55, 0);
 
