@@ -209,7 +209,7 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
   }, 20000);
 
   it("FUSION_FLARE and FUSION_BOLT alternating throughout turn should double power of subsequent moves if moves are aimed at allies", async () => {
-    game.override.startingLevel(100).enemyLevel(100).enemyMoveset(Moves.FUSION_FLARE);
+    game.override.startingLevel(100).enemyLevel(100).enemyMoveset(MoveId.FUSION_FLARE);
     await game.classicMode.startBattle([Species.ZEKROM, Species.ZEKROM]);
 
     const party = game.scene.getPlayerParty();

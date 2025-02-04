@@ -103,7 +103,7 @@ describe("Enemy Commands - Move Selection", () => {
   it("should avoid attacks that have no effect on the target", async () => {
     game.override
       .enemySpecies(Species.SNORLAX)
-      .enemyMoveset([Moves.COVET, Moves.THIEF, Moves.FLAME_WHEEL, Moves.SPLASH])
+      .enemyMoveset([MoveId.COVET, MoveId.THIEF, MoveId.FLAME_WHEEL, MoveId.SPLASH])
       .startingLevel(100)
       .enemyLevel(100);
 
@@ -117,14 +117,14 @@ describe("Enemy Commands - Move Selection", () => {
     enemyMoveset.forEach((mv) => (moveChoices[mv.moveId] = 0));
     getEnemyMoveChoices(enemyPokemon, moveChoices);
 
-    expect(moveChoices[Moves.SPLASH]).toBe(0);
-    expect(moveChoices[Moves.COVET]).toBe(0);
+    expect(moveChoices[MoveId.SPLASH]).toBe(0);
+    expect(moveChoices[MoveId.COVET]).toBe(0);
   });
 
   it("should not crash from an off-field enemy Pokemon simulating every move", async () => {
     game.override.startingWave(5);
     await game.classicMode.startBattle([Species.FEEBAS]);
-    
+
     const player = game.field.getPlayerPokemon();
     const offFieldEnemy = game.scene.getEnemyParty()[1];
 

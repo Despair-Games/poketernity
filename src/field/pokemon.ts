@@ -7,7 +7,7 @@ import { variantData } from "#app/data/variant";
 import type BattleInfo from "#app/ui/battle-info";
 import { PlayerBattleInfo, EnemyBattleInfo } from "#app/ui/battle-info";
 import type { Move } from "#app/data/move";
-import { applyMoveAttrs, getMoveTargets } from "#app/data/move";
+import { applyMoveAttrs, AttackMove, getMoveTargets } from "#app/data/move";
 import { allMoves } from "#app/data/all-moves";
 import { RechargeAttr } from "#app/data/move-attrs/recharge-attr";
 import { HitsTagAttr } from "#app/data/move-attrs/hits-tag-attr";
@@ -1479,7 +1479,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const ret: Move[] = [];
 
     for (let i = 0; i < Math.min(types.length, 4 - this.battleData.revealedMoves.size); i++) {
-      ret.push(new AttackMove(Moves.NONE, types[i], category, this.getSimulatedMovePower(), 100, 10, -1, 0, 0));
+      ret.push(new AttackMove(MoveId.NONE, types[i], category, this.getSimulatedMovePower(), 100, 10, -1, 0, 0));
     }
 
     return ret;
@@ -3942,7 +3942,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
     turnMove.turn = globalScene.currentBattle?.turn;
     this.getMoveHistory().push(turnMove);
-    this.battleData.revealedMoves.add(turnMove.move);
+    this.battleData.revealedMoves.add(turnMove.moveId);
   }
 
   /**
@@ -5634,7 +5634,7 @@ export class EnemyPokemon extends Pokemon {
   public getMoveScore(opponent: Pokemon, move: Move): number {
     const meetsConditions =
       move.applyConditions(this, opponent, move)
-      || [Moves.SUCKER_PUNCH, Moves.UPPER_HAND, Moves.THUNDERCLAP].includes(move.id);
+      || [MoveId.SUCKER_PUNCH, MoveId.UPPER_HAND, MoveId.THUNDERCLAP].includes(move.id);
 
     const attackScore = this.getAttackScore(opponent, move);
 
@@ -5744,10 +5744,10 @@ export class EnemyPokemon extends Pokemon {
     // If this Pokemon has already queued a move before this turn, it will try to use it.
     const queuedMove = this.getMoveQueue()[0];
     if (queuedMove) {
-      const queuedMovesetMove = this.getMoveset().find((m) => m.moveId === queuedMove.move);
+      const queuedMovesetMove = this.getMoveset().find((m) => m.moveId === queuedMove.moveId);
       if (queuedMovesetMove?.isUsable(this, queuedMove.ignorePP)) {
         return {
-          move: queuedMovesetMove.moveId,
+          moveId: queuedMovesetMove.moveId,
           targets: queuedMove.targets,
           ignorePP: queuedMove.ignorePP,
         };
@@ -5762,8 +5762,8 @@ export class EnemyPokemon extends Pokemon {
     // If this Pokemon has no usable moves, it will use Struggle.
     if (movePool.length === 0) {
       return {
-        move: Moves.STRUGGLE,
-        targets: getMoveTargets(this, Moves.STRUGGLE).targets,
+        moveId: MoveId.STRUGGLE,
+        targets: getMoveTargets(this, MoveId.STRUGGLE).targets,
       };
     }
 
@@ -5782,7 +5782,7 @@ export class EnemyPokemon extends Pokemon {
     const optMoveAction = randSeedShuffle(moveActions).sort((actionA, actionB) => actionB.score - actionA.score)[0];
 
     return {
-      move: optMoveAction.move,
+      moveId: optMoveAction.moveId,
       targets: optMoveAction.targets,
     };
   }
@@ -5806,7 +5806,7 @@ export class EnemyPokemon extends Pokemon {
       const score = move.getEffectScore(this);
 
       return {
-        move: move.id,
+        moveId: move.id,
         targets: [BattlerIndex.ATTACKER],
         score,
       };
@@ -5822,7 +5822,7 @@ export class EnemyPokemon extends Pokemon {
     if (activeTargets.length === 0) {
       /** Moves with no valid targets are given a "fail penalty" of (-5). */
       return {
-        move: move.id,
+        moveId: move.id,
         targets: [],
         score: -5,
       };
@@ -5842,7 +5842,7 @@ export class EnemyPokemon extends Pokemon {
        * for each target.
        */
       return {
-        move: move.id,
+        moveId: move.id,
         targets: targets,
         score: targetScores.map((ts) => ts[1]).reduce((total, score) => total + score),
       };
@@ -5857,7 +5857,7 @@ export class EnemyPokemon extends Pokemon {
           .reduce((total, score) => total + score, 0) / this.getOpponents().length;
 
       return {
-        move: move.id,
+        moveId: move.id,
         targets: targets,
         score: averageScore,
       };
@@ -5871,7 +5871,7 @@ export class EnemyPokemon extends Pokemon {
       const optTarget = randSeedShuffle(targetScores).sort((aScore, bScore) => bScore[1] - aScore[1])[0];
 
       return {
-        move: move.id,
+        moveId: move.id,
         targets: [optTarget[0]],
         score: optTarget[1],
       };
@@ -6175,7 +6175,7 @@ interface AbilityData {
 }
 
 interface TargetScoreData {
-  move: Moves;
+  moveId: MoveId;
   targets: BattlerIndex[];
   score: number;
 }
@@ -6241,7 +6241,7 @@ export class PokemonBattleData {
   /**
    * The moves revealed from this Pokemon
    */
-  public revealedMoves: Set<Moves> = new Set();
+  public revealedMoves: Set<MoveId> = new Set();
 }
 
 export class PokemonBattleSummonData {
