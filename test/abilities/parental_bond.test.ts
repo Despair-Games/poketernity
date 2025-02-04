@@ -1,4 +1,4 @@
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
@@ -231,11 +231,11 @@ describe("Abilities - Parental Bond", () => {
 
     expect(leadPokemon.turnData.hitCount).toBe(2);
     expect(enemyPokemon.hp).toBeGreaterThan(0);
-    expect(leadPokemon.isOfType(ElementType.FIRE)).toBe(true);
+    expect(leadPokemon.isOfType(ElementalType.FIRE)).toBe(true);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    expect(leadPokemon.isOfType(ElementType.FIRE)).toBe(false);
+    expect(leadPokemon.isOfType(ElementalType.FIRE)).toBe(false);
   });
 
   it("Moves boosted by this ability and Multi-Lens should strike 3 times", async () => {

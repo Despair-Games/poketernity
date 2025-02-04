@@ -6,7 +6,7 @@ import { Nature } from "#enums/nature";
 import { pokemonFormChanges, SpeciesFormChangeItemTrigger } from "#app/data/pokemon-forms";
 import { FormChangeItem } from "#enums/form-change-item";
 import { StatusEffect } from "#enums/status-effect";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { WeatherType } from "#enums/weather-type";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { isNullOrUndefined } from "#app/utils";
@@ -506,11 +506,11 @@ export class NatureRequirement extends EncounterPokemonRequirement {
 }
 
 export class TypeRequirement extends EncounterPokemonRequirement {
-  requiredType: ElementType[];
+  requiredType: ElementalType[];
   excludeFainted: boolean;
 
   constructor(
-    type: ElementType | ElementType[],
+    type: ElementalType | ElementalType[],
     excludeFainted: boolean = true,
     minNumberOfPokemon: number = 1,
     invertQuery: boolean = false,
@@ -552,7 +552,7 @@ export class TypeRequirement extends EncounterPokemonRequirement {
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
     const includedTypes = this.requiredType.filter((ty) => pokemon?.getTypes().includes(ty));
     if (includedTypes.length > 0) {
-      return ["type", ElementType[includedTypes[0]]];
+      return ["type", ElementalType[includedTypes[0]]];
     }
     return ["type", ""];
   }
@@ -993,11 +993,11 @@ export class HeldItemRequirement extends EncounterPokemonRequirement {
 }
 
 export class AttackTypeBoosterHeldItemTypeRequirement extends EncounterPokemonRequirement {
-  requiredHeldItemTypes: ElementType[];
+  requiredHeldItemTypes: ElementalType[];
   requireTransferable: boolean;
 
   constructor(
-    heldItemTypes: ElementType | ElementType[],
+    heldItemTypes: ElementalType | ElementalType[],
     minNumberOfPokemon: number = 1,
     invertQuery: boolean = false,
     requireTransferable: boolean = true,

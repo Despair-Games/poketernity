@@ -15,7 +15,7 @@ import {
   koPlayerPokemon,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { MessagePhase } from "#app/phases/message-phase";
 import { GameManager } from "#test/testUtils/gameManager";
 import { Species } from "#enums/species";
@@ -249,7 +249,7 @@ describe("Mystery Encounter Utils", () => {
 
     it("gets species of specified types", () => {
       // Only 9 tiers are: Koraidon, Miraidon, Arceus, Rayquaza, Kyogre, Groudon, Zacian
-      const result = getRandomSpeciesByStarterCost(9, undefined, [ElementType.GROUND]);
+      const result = getRandomSpeciesByStarterCost(9, undefined, [ElementalType.GROUND]);
       const pokeSpecies = getPokemonSpecies(result);
       expect(pokeSpecies.speciesId).toBe(Species.GROUDON);
     });

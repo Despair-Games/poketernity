@@ -5,14 +5,14 @@ import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
 import type { BattleStat } from "#enums/stat";
-import type { ElementType } from "#enums/element-type";
+import type { ElementalType } from "#enums/elemental-type";
 import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
 
 export class TypeImmunityStatStageChangeAbAttr extends TypeImmunityAbAttr {
   private readonly stat: BattleStat;
   private readonly stages: number;
 
-  constructor(immuneType: ElementType, stat: BattleStat, stages: number, condition?: AbAttrCondition) {
+  constructor(immuneType: ElementalType, stat: BattleStat, stages: number, condition?: AbAttrCondition) {
     super(immuneType, condition);
 
     this.stat = stat;

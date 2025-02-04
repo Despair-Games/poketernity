@@ -13,7 +13,7 @@ import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveTarget } from "#enums/move-target";
 import { MoveId } from "#enums/move-id";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { AllyMoveCategoryPowerBoostAbAttr } from "./ab-attrs/ally-move-category-power-boost-ab-attr";
@@ -51,7 +51,7 @@ import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr
 export abstract class Move implements Localizable {
   public id: MoveId;
   public name: string;
-  private _type: ElementType;
+  private _type: ElementalType;
   private _category: MoveCategory;
   public moveTarget: MoveTarget;
   public power: number;
@@ -70,7 +70,7 @@ export abstract class Move implements Localizable {
 
   constructor(
     id: MoveId,
-    type: ElementType,
+    type: ElementalType,
     category: MoveCategory,
     defaultMoveTarget: MoveTarget,
     power: number,
@@ -278,18 +278,18 @@ export abstract class Move implements Localizable {
    * @param type the type of the move's target
    * @returns boolean
    */
-  isTypeImmune(user: Pokemon, target: Pokemon, type: ElementType): boolean {
+  isTypeImmune(user: Pokemon, target: Pokemon, type: ElementalType): boolean {
     if (this.moveTarget === MoveTarget.USER) {
       return false;
     }
 
     switch (type) {
-      case ElementType.GRASS:
+      case ElementalType.GRASS:
         if (this.hasFlag(MoveFlags.POWDER_MOVE)) {
           return true;
         }
         break;
-      case ElementType.DARK:
+      case ElementalType.DARK:
         if (
           user.hasAbility(Abilities.PRANKSTER)
           && this.category === MoveCategory.STATUS
@@ -763,7 +763,7 @@ export abstract class Move implements Localizable {
 
     const sourceTeraType = source.getTeraType();
     if (
-      sourceTeraType !== ElementType.UNKNOWN
+      sourceTeraType !== ElementalType.UNKNOWN
       && sourceTeraType === this.type
       && power.value < 60
       && this.priority <= 0
@@ -871,7 +871,7 @@ export abstract class Move implements Localizable {
 export class AttackMove extends Move {
   constructor(
     id: MoveId,
-    type: ElementType,
+    type: ElementalType,
     category: MoveCategory,
     power: number,
     accuracy: number,
@@ -886,7 +886,7 @@ export class AttackMove extends Move {
      * {@link https://bulbapedia.bulbagarden.net/wiki/Freeze_(status_condition)}
      * > All damaging Fire-type moves can now thaw a frozen target, regardless of whether or not they have a chance to burn;
      */
-    if (this.type === ElementType.FIRE) {
+    if (this.type === ElementalType.FIRE) {
       this.addAttr(new HealStatusEffectAttr(false, StatusEffect.FREEZE));
     }
   }
@@ -936,7 +936,7 @@ export class AttackMove extends Move {
 export class StatusMove extends Move {
   constructor(
     id: MoveId,
-    type: ElementType,
+    type: ElementalType,
     accuracy: number,
     pp: number,
     chance: number,
@@ -950,7 +950,7 @@ export class StatusMove extends Move {
 export class SelfStatusMove extends StatusMove {
   constructor(
     id: MoveId,
-    type: ElementType,
+    type: ElementalType,
     accuracy: number,
     pp: number,
     chance: number,
@@ -1162,7 +1162,7 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId): MoveTargetSet {
       multiple = true;
       break;
     case MoveTarget.CURSE:
-      set = user.getTypes(true).includes(ElementType.GHOST) ? opponents.concat([user.getAlly()]) : [user];
+      set = user.getTypes(true).includes(ElementalType.GHOST) ? opponents.concat([user.getAlly()]) : [user];
       break;
   }
 

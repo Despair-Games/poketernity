@@ -1,4 +1,4 @@
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { GameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
@@ -34,7 +34,7 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
     }
 
     const moveData = allMoves[targetMove.moveId];
-    if (moveData.type === ElementType.STELLAR || moveData.type === ElementType.UNKNOWN) {
+    if (moveData.type === ElementalType.STELLAR || moveData.type === ElementalType.UNKNOWN) {
       return false;
     }
     const userTypes = user.getTypes();
@@ -49,7 +49,7 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
     globalScene.queueMessage(
       i18next.t("battle:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
-        type: toReadableString(ElementType[type]),
+        type: toReadableString(ElementalType[type]),
       }),
     );
     user.updateInfo();
@@ -61,10 +61,10 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
    * Retrieve the types resisting a given type. Used by Conversion 2
    * @returns An array populated with Types, or an empty array if no resistances exist (Unknown or Stellar type)
    */
-  getTypeResistances(gameMode: GameMode, type: number): ElementType[] {
-    const typeResistances: ElementType[] = [];
+  getTypeResistances(gameMode: GameMode, type: number): ElementalType[] {
+    const typeResistances: ElementalType[] = [];
 
-    for (let i = 0; i < Object.keys(ElementType).length; i++) {
+    for (let i = 0; i < Object.keys(ElementalType).length; i++) {
       const multiplier = new NumberHolder(1);
       multiplier.value = getTypeDamageMultiplier(type, i);
       applyChallenges(gameMode, ChallengeType.TYPE_EFFECTIVENESS, multiplier);

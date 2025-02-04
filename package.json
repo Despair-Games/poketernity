@@ -6,36 +6,22 @@
   "scripts": {
     "start": "vite",
     "start:dev": "vite --mode development",
-
     "build": "vite build",
     "build:beta": "vite build --mode beta",
-
     "preview": "vite preview",
-
     "test": "vitest run --no-isolate",
-
     "test:cov": "vitest run --coverage",
-
     "test:watch": "vitest watch --coverage",
-
     "test:silent": "vitest run --silent --no-isolate",
-
     "test:full": "tsc --noEmit && vitest run --silent --no-isolate",
-
     "typecheck": "tsc --noEmit",
-
     "eslint": "eslint --fix .",
     "eslint-ci": "eslint .",
-
     "prettier": "prettier . --write",
-
     "docs": "typedoc",
-
     "depcruise": "depcruise src",
     "depcruise:graph": "depcruise src --output-type dot | node dependency-graph.js > dependency-graph.svg",
-
     "create-test": "node ./create-test-boilerplate.js",
-
     "postinstall": "npx lefthook install && npx lefthook run post-merge"
   },
   "devDependencies": {
@@ -47,7 +33,7 @@
     "@types/node": "^20.12.13",
     "@typescript-eslint/eslint-plugin": "^8.0.0-alpha.54",
     "@typescript-eslint/parser": "^8.0.0-alpha.54",
-    "@vitest/coverage-istanbul": "^3.0.2",
+    "@vitest/coverage-istanbul": "^3.0.5",
     "chalk": "^5.4.1",
     "dependency-cruiser": "^16.3.10",
     "eslint": "^9.7.0",
@@ -62,7 +48,7 @@
     "typescript-eslint": "^8.0.0-alpha.54",
     "vite": "^6.0.11",
     "vite-tsconfig-paths": "^4.3.2",
-    "vitest": "^3.0.2",
+    "vitest": "^3.0.5",
     "vitest-canvas-mock": "^0.3.3"
   },
   "dependencies": {

@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Abilities } from "#enums/abilities";
@@ -84,8 +84,8 @@ describe("Moves - Dragon Cheer", () => {
     await game.toNextTurn();
 
     // Change Magikarp's type to Dragon
-    vi.spyOn(magikarp, "getTypes").mockReturnValue([ElementType.DRAGON]);
-    expect(magikarp.getTypes()).toEqual([ElementType.DRAGON]);
+    vi.spyOn(magikarp, "getTypes").mockReturnValue([ElementalType.DRAGON]);
+    expect(magikarp.getTypes()).toEqual([ElementalType.DRAGON]);
 
     game.move.select(MoveId.SPLASH, 0);
     game.move.select(MoveId.TACKLE, 1, BattlerIndex.ENEMY);

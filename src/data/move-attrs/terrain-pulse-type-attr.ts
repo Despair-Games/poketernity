@@ -1,5 +1,5 @@
 import { TerrainType } from "#enums/terrain-type";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { NumberHolder } from "#app/utils";
@@ -21,16 +21,16 @@ export class TerrainPulseTypeAttr extends VariableMoveTypeAttr {
     const currentTerrain = globalScene.arena.getTerrainType();
     switch (currentTerrain) {
       case TerrainType.MISTY:
-        moveType.value = ElementType.FAIRY;
+        moveType.value = ElementalType.FAIRY;
         break;
       case TerrainType.ELECTRIC:
-        moveType.value = ElementType.ELECTRIC;
+        moveType.value = ElementalType.ELECTRIC;
         break;
       case TerrainType.GRASSY:
-        moveType.value = ElementType.GRASS;
+        moveType.value = ElementalType.GRASS;
         break;
       case TerrainType.PSYCHIC:
-        moveType.value = ElementType.PSYCHIC;
+        moveType.value = ElementalType.PSYCHIC;
         break;
       default:
         return false;

@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { Challenges } from "#enums/challenges";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -117,7 +117,7 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 2x damage to steel type terastallized into water", async () => {
-    game.override.enemySpecies(Species.SKARMORY).enemyHeldItems([{ name: "TERA_SHARD", type: ElementType.WATER }]);
+    game.override.enemySpecies(Species.SKARMORY).enemyHeldItems([{ name: "TERA_SHARD", type: ElementalType.WATER }]);
     await game.classicMode.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
@@ -131,7 +131,7 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 0.5x damage to water type terastallized into fire", async () => {
-    game.override.enemySpecies(Species.PELIPPER).enemyHeldItems([{ name: "TERA_SHARD", type: ElementType.FIRE }]);
+    game.override.enemySpecies(Species.PELIPPER).enemyHeldItems([{ name: "TERA_SHARD", type: ElementalType.FIRE }]);
     await game.classicMode.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;

@@ -1,4 +1,4 @@
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
@@ -11,7 +11,7 @@ import { VariableMoveTypeMultiplierAttr } from "#app/data/move-attrs/variable-mo
  */
 export class IceNoEffectTypeAttr extends VariableMoveTypeMultiplierAttr {
   override apply(_user: Pokemon, target: Pokemon, _move: Move, multiplier: NumberHolder): boolean {
-    if (target.isOfType(ElementType.ICE)) {
+    if (target.isOfType(ElementalType.ICE)) {
       multiplier.value = 0;
       return true;
     }

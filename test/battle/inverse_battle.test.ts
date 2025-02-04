@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { Challenges } from "#enums/challenges";
@@ -201,7 +201,7 @@ describe("Inverse Battle", () => {
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
-    expect(player.getTypes()[0]).toBe(ElementType.DRAGON);
+    expect(player.getTypes()[0]).toBe(ElementalType.DRAGON);
   });
 
   it("Flying Press should be 0.25x effective against Grass + Dark Type - Flying Press against Meowscarada", async () => {

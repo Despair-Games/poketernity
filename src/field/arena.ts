@@ -7,7 +7,7 @@ import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#app/data/weather";
 import { CommonAnim } from "#enums/common-anim";
-import type { ElementType } from "#enums/element-type";
+import type { ElementalType } from "#enums/elemental-type";
 import type { Move } from "#app/data/move";
 import type { ArenaTag } from "#app/data/arena-tag";
 import { ArenaTrapTag, getArenaTag } from "#app/data/arena-tag";
@@ -409,7 +409,7 @@ export class Arena {
     return this.terrain?.terrainType ?? TerrainType.NONE;
   }
 
-  getAttackTypeMultiplier(attackType: ElementType, grounded: boolean): number {
+  getAttackTypeMultiplier(attackType: ElementalType, grounded: boolean): number {
     let weatherMultiplier = 1;
     if (this.weather && !this.weather.isEffectSuppressed()) {
       weatherMultiplier = this.weather.getAttackTypeMultiplier(attackType);
