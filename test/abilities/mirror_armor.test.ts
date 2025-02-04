@@ -183,6 +183,68 @@ describe("Abilities - Mirror Armor", () => {
     expect(enemyPokemon[0].getStatStage(Stat.ATK)).toBe(0);
   });
 
+  it("should not reflect stat stage changes for which the source already has -6 stages", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+    enemy.summonData.statStages[0] = -6; // Set Attack to -6 stages
+
+    game.move.use(MoveId.NOBLE_ROAR);
+    await game.phaseInterceptor.to("BerryPhase", false);
+
+    expect(player.getStatStage(Stat.ATK)).toBe(0);
+    expect(player.getStatStage(Stat.SPATK)).toBe(-1);
+    expect(enemy.getStatStage(Stat.ATK)).toBe(-6);
+    expect(enemy.getStatStage(Stat.SPATK)).toBe(0);
+  });
+
+  it("should not reflect stat stage changes if the source has a Substitute", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    game.move.use(MoveId.FEATHER_DANCE);
+    await game.move.forceEnemyMove(MoveId.SUBSTITUTE);
+    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+
+    await game.phaseInterceptor.to("BerryPhase", false);
+    expect(player.getStatStage(Stat.ATK)).toBe(0);
+    expect(enemy.getStatStage(Stat.ATK)).toBe(0);
+  });
+
+  it("should be ignored by the attacker's Mold Breaker", async () => {
+    game.override.ability(Abilities.MOLD_BREAKER);
+
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    game.move.use(MoveId.GROWL);
+    await game.phaseInterceptor.to("BerryPhase", false);
+
+    expect(enemy.getStatStage(Stat.ATK)).toBe(-1);
+    expect(player.getStatStage(Stat.ATK)).toBe(0);
+  });
+
+  it("reflected stat changes should be blocked by the attacker's Clear Body", async () => {
+    game.override.ability(Abilities.CLEAR_BODY);
+
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    game.move.use(MoveId.GROWL);
+    await game.phaseInterceptor.to("BerryPhase", false);
+
+    expect(player.battleData.abilitiesApplied).toContain(Abilities.CLEAR_BODY);
+    expect(player.getStatStage(Stat.ATK)).toBe(0);
+    expect(enemy.getStatStage(Stat.ATK)).toBe(0);
+  });
+
   /** @todo add this test after implementing Magic Bounce */
   it.todo("should reflect stat-lowering effects previously reflected by Magic Bounce");
 });

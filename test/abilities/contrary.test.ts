@@ -54,7 +54,10 @@ describe("Abilities - Contrary", () => {
     });
 
     it("should block negative effects", async () => {
-      game.override.enemyPassiveAbility(Abilities.CLEAR_BODY).moveset(MoveId.SWAGGER);
+      game.override
+        .enemyPassiveAbility(Abilities.CLEAR_BODY)
+        .moveset(MoveId.SWAGGER)
+        .passiveAbility(Abilities.NO_GUARD);
       await game.classicMode.startBattle([Species.SLOWBRO]);
 
       const enemyPokemon = game.scene.getEnemyPokemon()!;

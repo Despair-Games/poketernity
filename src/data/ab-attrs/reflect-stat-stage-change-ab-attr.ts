@@ -37,8 +37,15 @@ export class ReflectStatStageChangeAbAttr extends AbAttr {
       return false;
     }
 
+    const reflectedStats = stats.filter((stat) => pokemon.getStatStage(stat) > -6);
+    if (reflectedStats.length === 0) {
+      return false;
+    }
+
     if (!simulated && source) {
-      globalScene.unshiftPhase(new StatStageChangePhase(source.id, source, stats, stages));
+      globalScene.unshiftPhase(
+        new StatStageChangePhase(source.id, pokemon, reflectedStats, stages, { bypassReflect: true }),
+      );
     }
     reflected.value = true;
     return true;
