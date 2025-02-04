@@ -2,7 +2,7 @@ import type { Pokemon } from "../field/pokemon";
 import { StatusEffect } from "#enums/status-effect";
 import { allMoves } from "#app/data/all-moves";
 import { MoveCategory } from "#enums/move-category";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import type { AbstractConstructor, nil } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
@@ -282,9 +282,9 @@ export class SpeciesDefaultFormMatchTrigger extends SpeciesFormChangeTrigger {
  */
 export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeTrigger {
   /** The Tera type that triggers the form change */
-  private teraType: ElementType;
+  private teraType: ElementalType;
 
-  constructor(teraType: ElementType) {
+  constructor(teraType: ElementalType) {
     super();
     this.teraType = teraType;
   }
@@ -1826,7 +1826,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       Species.OGERPON,
       "teal-mask",
       "teal-mask-tera",
-      new SpeciesFormChangeTeraTrigger(ElementType.GRASS),
+      new SpeciesFormChangeTeraTrigger(ElementalType.GRASS),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
@@ -1834,13 +1834,13 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "teal-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementType.GRASS),
+      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.GRASS),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
       "wellspring-mask",
       "wellspring-mask-tera",
-      new SpeciesFormChangeTeraTrigger(ElementType.WATER),
+      new SpeciesFormChangeTeraTrigger(ElementalType.WATER),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
@@ -1848,13 +1848,13 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "wellspring-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementType.WATER),
+      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.WATER),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
       "hearthflame-mask",
       "hearthflame-mask-tera",
-      new SpeciesFormChangeTeraTrigger(ElementType.FIRE),
+      new SpeciesFormChangeTeraTrigger(ElementalType.FIRE),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
@@ -1862,13 +1862,13 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "hearthflame-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementType.FIRE),
+      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.FIRE),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
       "cornerstone-mask",
       "cornerstone-mask-tera",
-      new SpeciesFormChangeTeraTrigger(ElementType.ROCK),
+      new SpeciesFormChangeTeraTrigger(ElementalType.ROCK),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
@@ -1876,7 +1876,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "cornerstone-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementType.ROCK),
+      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.ROCK),
     ),
   ],
   [Species.TERAPAGOS]: [
@@ -1885,7 +1885,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       Species.TERAPAGOS,
       "terastal",
       "stellar",
-      new SpeciesFormChangeTeraTrigger(ElementType.STELLAR),
+      new SpeciesFormChangeTeraTrigger(ElementalType.STELLAR),
     ),
     new SpeciesFormChange(
       Species.TERAPAGOS,
@@ -1893,7 +1893,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "terastal",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementType.STELLAR),
+      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.STELLAR),
     ),
   ],
   [Species.GALAR_DARMANITAN]: [

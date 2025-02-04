@@ -2,7 +2,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 import type { NumberHolder } from "#app/utils";
-import type { ElementType } from "#enums/element-type";
+import type { ElementalType } from "#enums/elemental-type";
 
 /**
  * Attribute for moves which have a custom type chart interaction.
@@ -23,7 +23,7 @@ export abstract class VariableMoveTypeChartAttr extends MoveAttr {
     _target: Pokemon | null,
     _move: Move,
     _multiplier: NumberHolder,
-    _defType: ElementType,
+    _defType: ElementalType,
   ): boolean {
     return false;
   }

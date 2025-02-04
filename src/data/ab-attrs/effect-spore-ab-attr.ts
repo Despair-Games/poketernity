@@ -2,7 +2,7 @@ import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { Abilities } from "#enums/abilities";
 import { StatusEffect } from "#enums/status-effect";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 import { MoveFlags } from "#enums/move-flags";
 
@@ -21,7 +21,7 @@ export class EffectSporeAbAttr extends PostDefendAbAttr {
    * Effect Spore cannot affect the attacker if the attacker is Grass-type or has the ability Overcoat
    */
   override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
-    if (attacker.hasAbility(Abilities.OVERCOAT) || attacker.isOfType(ElementType.GRASS)) {
+    if (attacker.hasAbility(Abilities.OVERCOAT) || attacker.isOfType(ElementalType.GRASS)) {
       return false;
     }
     const roll = pokemon.randSeedInt(100);

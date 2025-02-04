@@ -1,7 +1,7 @@
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -38,10 +38,10 @@ describe("Moves - Trick Or Treat", () => {
     const enemyPokemon = game.scene.getEnemyPokemon();
     game.move.select(MoveId.FORESTS_CURSE);
     await game.phaseInterceptor.to("TurnEndPhase");
-    expect(enemyPokemon!.summonData.addedType).toBe(ElementType.GRASS);
+    expect(enemyPokemon!.summonData.addedType).toBe(ElementalType.GRASS);
 
     game.move.select(MoveId.TRICK_OR_TREAT);
     await game.phaseInterceptor.to("TurnEndPhase");
-    expect(enemyPokemon?.summonData.addedType).toBe(ElementType.GHOST);
+    expect(enemyPokemon?.summonData.addedType).toBe(ElementalType.GHOST);
   });
 });

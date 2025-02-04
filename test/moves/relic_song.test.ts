@@ -1,4 +1,4 @@
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { Challenges } from "#enums/challenges";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
@@ -48,7 +48,7 @@ describe("Moves - Relic Song", () => {
   });
 
   it("doesn't swap Meloetta's form during a mono-type challenge", async () => {
-    game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, ElementType.PSYCHIC + 1, 0);
+    game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, ElementalType.PSYCHIC + 1, 0);
     await game.challengeMode.startBattle([Species.MELOETTA]);
 
     const meloetta = game.scene.getPlayerPokemon()!;
