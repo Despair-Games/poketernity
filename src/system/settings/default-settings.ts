@@ -46,7 +46,7 @@ export const defaultDisplaySettings: DisplaySettings = {
   showTimeOfDayWidget: true,
   timeOfDayAnimation: EaseType.BOUNCE,
   enableFusionPaletteSwaps: true,
-  playerGender: PlayerGender.MALE,
+  playerGender: PlayerGender.UNSET,
   enableTypeHints: false,
   showBgmBar: true,
   shopCursorTarget: ShopCursorTarget.REWARDS,

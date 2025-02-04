@@ -450,7 +450,12 @@ export function initAbilities() {
       return false;
     }),
     new Ability(Abilities.SOUNDPROOF, 3).attr(MoveFlagImmunityAbAttr, MoveFlags.SOUND_MOVE).ignorable(),
-    new Ability(Abilities.RAIN_DISH, 3).attr(PostWeatherLapseHealAbAttr, 1, WeatherType.RAIN, WeatherType.HEAVY_RAIN),
+    new Ability(Abilities.RAIN_DISH, 3).attr(
+      PostWeatherLapseHealAbAttr,
+      1 / 16,
+      WeatherType.RAIN,
+      WeatherType.HEAVY_RAIN,
+    ),
     new Ability(Abilities.SAND_STREAM, 3)
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.SANDSTORM)
       .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.SANDSTORM),
@@ -587,7 +592,7 @@ export function initAbilities() {
     new Ability(Abilities.SIMPLE, 4).attr(StatStageChangeMultiplierAbAttr, 2).ignorable(),
     new Ability(Abilities.DRY_SKIN, 4)
       .attr(PostWeatherLapseDamageAbAttr, 2, WeatherType.SUNNY, WeatherType.HARSH_SUN)
-      .attr(PostWeatherLapseHealAbAttr, 2, WeatherType.RAIN, WeatherType.HEAVY_RAIN)
+      .attr(PostWeatherLapseHealAbAttr, 1 / 8, WeatherType.RAIN, WeatherType.HEAVY_RAIN)
       .attr(ReceivedTypeDamageMultiplierAbAttr, ElementalType.FIRE, 1.25)
       .attr(TypeImmunityHealAbAttr, ElementalType.WATER)
       .ignorable(),
@@ -696,7 +701,7 @@ export function initAbilities() {
       .ignorable(),
     new Ability(Abilities.ICE_BODY, 4)
       .attr(BlockWeatherDamageAttr, WeatherType.HAIL)
-      .attr(PostWeatherLapseHealAbAttr, 1, WeatherType.HAIL, WeatherType.SNOW),
+      .attr(PostWeatherLapseHealAbAttr, 1 / 16, WeatherType.HAIL, WeatherType.SNOW),
     new Ability(Abilities.SOLID_ROCK, 4)
       .attr(
         ReceivedMoveDamageMultiplierAbAttr,
