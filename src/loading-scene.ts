@@ -18,11 +18,11 @@ import i18next from "i18next";
 import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { Biome } from "#enums/biome";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
-import { initMoves } from "#app/data/all-moves";
 import { initVouchers } from "#app/system/init-vouchers";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTEMENT } from "./ui-constants";
 import { initAbilities } from "#app/data/init-abilities";
 import { api } from "#app/plugins/api/api";
+import { initMoves } from "#app/data/init-moves";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";

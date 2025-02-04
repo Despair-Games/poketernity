@@ -31,8 +31,6 @@ import { VariableTargetAttr } from "#app/data/move-attrs/variable-target-attr";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { MoveCondition } from "#app/data/move-conditions/move-condition";
 import { Stat } from "#enums/stat";
-import { StatusEffect } from "#enums/status-effect";
-import { HealStatusEffectAttr } from "#app/data/move-attrs/heal-status-effect-attr";
 import { allMoves } from "#app/data/all-moves";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -888,9 +886,6 @@ export class AttackMove extends Move {
      * {@link https://bulbapedia.bulbagarden.net/wiki/Freeze_(status_condition)}
      * > All damaging Fire-type moves can now thaw a frozen target, regardless of whether or not they have a chance to burn;
      */
-    if (this.type === ElementalType.FIRE) {
-      this.addAttr(new HealStatusEffectAttr(false, StatusEffect.FREEZE));
-    }
   }
 
   override getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {

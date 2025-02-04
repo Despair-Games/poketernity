@@ -1,6 +1,6 @@
 import { initLoggedInUser } from "#app/account";
 import { SESSION_ID_COOKIE } from "#app/constants";
-import { allMoves, initMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/all-moves";
 import { initBiomes } from "#app/data/balance/biomes";
 import { initEggMoves } from "#app/data/balance/egg-moves";
 import { initPokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
@@ -19,6 +19,7 @@ import Phaser from "phaser";
 import { manageListeners } from "./listenersManager";
 import { initVouchers } from "#app/system/init-vouchers";
 import { initAbilities } from "#app/data/init-abilities";
+import { initMoves } from "#app/data/init-moves";
 
 /**
  * An initialization function that is run at the beginning of every test file (via `beforeAll()`).
