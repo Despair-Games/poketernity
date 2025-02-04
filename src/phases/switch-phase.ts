@@ -92,8 +92,4 @@ export class SwitchPhase extends BattlePhase {
       PartyFilterNonFainted,
     );
   }
-
-  override isSwitchPhase(): this is this {
-    return true;
-  }
 }

@@ -1,6 +1,6 @@
 import { allMoves } from "#app/data/all-moves";
-import { type StockpilingTag, type ShellTrapTag } from "#app/data/battler-tags";
-import { SelfStatusMove, AttackMove, StatusMove } from "#app/data/move";
+import { type ShellTrapTag, type StockpilingTag } from "#app/data/battler-tags";
+import { AttackMove, SelfStatusMove, StatusMove, type Move } from "#app/data/move";
 import { AbilityChangeAttr } from "#app/data/move-attrs/ability-change-attr";
 import { AbilityCopyAttr } from "#app/data/move-attrs/ability-copy-attr";
 import { AbilityGiveAttr } from "#app/data/move-attrs/ability-give-attr";
@@ -53,7 +53,7 @@ import { DefAtkAttr } from "#app/data/move-attrs/def-atk-attr";
 import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 import { DestinyBondAttr } from "#app/data/move-attrs/destiny-bond-attr";
 import { DiscourageFrequentUseAttr } from "#app/data/move-attrs/discourage-frequent-use-attr";
-import { doublePowerChanceMessageFunc, DoublePowerChanceAttr } from "#app/data/move-attrs/double-power-chance-attr";
+import { DoublePowerChanceAttr, doublePowerChanceMessageFunc } from "#app/data/move-attrs/double-power-chance-attr";
 import { EatBerryAttr } from "#app/data/move-attrs/eat-berry-attr";
 import { ElectroBallPowerAttr } from "#app/data/move-attrs/electro-ball-power-attr";
 import { EncoreAttr } from "#app/data/move-attrs/encore-attr";
@@ -138,7 +138,7 @@ import { ReducePpMoveAttr } from "#app/data/move-attrs/reduce-pp-move-attr";
 import { RemoveAllSubstitutesAttr } from "#app/data/move-attrs/remove-all-substitutes-attr";
 import { RemoveArenaTagsAttr } from "#app/data/move-attrs/remove-arena-tags-attr";
 import { RemoveArenaTrapAttr } from "#app/data/move-attrs/remove-arena-trap-attr";
-import { RemoveBattlerTagAttr, rapidSpinRemoveTags } from "#app/data/move-attrs/remove-battler-tag-attr";
+import { rapidSpinRemoveTags, RemoveBattlerTagAttr } from "#app/data/move-attrs/remove-battler-tag-attr";
 import { RemoveHeldItemAttr } from "#app/data/move-attrs/remove-held-item-attr";
 import { RemoveScreensAttr } from "#app/data/move-attrs/remove-screens-attr";
 import { RemoveTypeAttr } from "#app/data/move-attrs/remove-type-attr";
@@ -214,7 +214,7 @@ import { UpperHandCondition } from "#app/data/move-conditions/upper-hand-conditi
 import { userSleptOrComatoseCondition } from "#app/data/move-conditions/user-slept-or-comatose-condition";
 import { ChargingAttackMove } from "#app/data/moves/charging-attack-move";
 import { ChargingSelfStatusMove } from "#app/data/moves/charging-self-status-move";
-import { isNonVolatileStatusEffect, getNonVolatileStatusEffects } from "#app/data/status-effect";
+import { getNonVolatileStatusEffects, isNonVolatileStatusEffect } from "#app/data/status-effect";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { isNullOrUndefined } from "#app/utils";
@@ -234,7 +234,7 @@ import { MoveResult } from "#enums/move-result";
 import { MoveTarget } from "#enums/move-target";
 import { MultiHitType } from "#enums/multi-hit-type";
 import { Species } from "#enums/species";
-import { Stat, getStatKey, BATTLE_STATS } from "#enums/stat";
+import { BATTLE_STATS, getStatKey, Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { SwitchType } from "#enums/switch-type";
 import { TerrainType } from "#enums/terrain-type";
@@ -4066,9 +4066,20 @@ export function initMoves() {
   for (const move of rawAllMoves) {
     // Make sure `allMoves` assigns correct ID to every move
     allMoves[move.id] = move;
-
-    if (move.type === ElementalType.FIRE) {
-      move.addAttr(new HealStatusEffectAttr(false, StatusEffect.FREEZE));
-    }
+    addFireMovesThawFrozenTargetAttribute(move);
   }
 }
+
+//#region Helpers
+
+/**
+ * All damaging Fire-type moves can now thaw a frozen target, regardless of whether or not they have a chance to burn.
+ * @source {@link https://bulbapedia.bulbagarden.net/wiki/Freeze_(status_condition) | Bulbapedia - Freeze (Status Condition)}
+ */
+function addFireMovesThawFrozenTargetAttribute(move: Move) {
+  if (move.type === ElementalType.FIRE) {
+    move.addAttr(new HealStatusEffectAttr(false, StatusEffect.FREEZE));
+  }
+}
+
+//#endregion

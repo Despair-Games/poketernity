@@ -42,7 +42,7 @@ import {
 } from "./modifier/modifier";
 import { PokeballType } from "#enums/pokeball";
 import { populateAnims } from "./data/populate-anims";
-import { loadCommonAnimAssets } from "./utils/common-anim-utils";
+import { loadCommonAnimAssets } from "./utils/anim-utils";
 import { initCommonAnims } from "./data/init-common-anims";
 import { loadMoveAnimAssets } from "./utils/move-anim-utils";
 import { initMoveAnim } from "./data/init-move-anim";
@@ -3786,7 +3786,7 @@ export default class BattleScene extends SceneBase {
     const movePhase = new MovePhase(pokemon, targets, move, followUp, ignorePp);
 
     if ((when === "before" || when === "after") && !phaseId) {
-      throw new Error("phaseId is required for useMove.when === 'before'");
+      throw new Error("phaseId is required for useMove.when === 'before' or 'after'");
     }
 
     switch (when) {

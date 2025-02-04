@@ -5,9 +5,9 @@ import { toDmgValue } from "#app/utils";
 import type { MoveId } from "#enums/move-id";
 
 /**
- * Wrapper class for the {@linkcode MoveId} class for Pokemon to interact with.
+ * Wrapper class for the {@linkcode Move} class for Pokemon to interact with.
  * These are the moves assigned to a {@linkcode Pokemon} object.
- * It links to {@linkcode MoveId} class via the move ID.
+ * It links to {@linkcode Move} class via the move ID.
  * Compared to {@linkcode Move}, this class also tracks if a move has received
  * PP Ups, amount of PP used, and things like that.
  * @see {@linkcode isUsable} - checks if move is restricted, out of PP, or not implemented.

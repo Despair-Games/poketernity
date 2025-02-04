@@ -9,7 +9,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { BattleType } from "#enums/battle-type";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { loadEncounterAnimAssets } from "#app/utils/encounter-anim-utils";
+import { loadEncounterAnimAssets } from "#app/utils/anim-utils";
 import { initEncounterAnims } from "#app/data/init-encounter-anims";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import { ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants";

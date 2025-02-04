@@ -99,7 +99,6 @@ export default class Battle {
   public battleScore: number = 0;
   public postBattleLoot: PokemonHeldItemModifier[] = [];
   public escapeAttempts: number = 0;
-  /** Now holding the {@linkcode Move} instead of just a {@linkcode MoveId}. */
   public lastMove: Move;
   public battleSeed: string = generateBattleSeed();
   private battleSeedState: string | null = null;
