@@ -15,8 +15,8 @@ export class AnticipationAbAttr extends PostSummonMessageAbAttr {
 
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
     for (const opponent of pokemon.getOpponents()) {
-      for (const pkmMove of opponent.moveset) {
-        const move = pkmMove ? pkmMove.getMove() : undefined;
+      for (const pkmMove of opponent.getMoveset()) {
+        const move = pkmMove.getMove();
         if (!move || move.id === MoveId.NONE) {
           continue;
         }
