@@ -57,6 +57,7 @@ import {
   deltaRgb,
   isBetween,
   type AbstractConstructor,
+  randSeedItem,
 } from "#app/utils";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import { getTypeDamageMultiplier, getTypeRgb } from "#app/data/type";
@@ -93,7 +94,7 @@ import {
 import { PokeballType } from "#enums/pokeball";
 import { Gender } from "#enums/gender";
 import { initMoveAnim, loadMoveAnimAssets } from "#app/data/battle-anims";
-import { Status, getRandomStatus } from "#app/data/status-effect";
+import { Status } from "#app/data/status-effect";
 import type { SpeciesFormEvolution, SpeciesEvolutionCondition } from "#app/data/balance/pokemon-evolutions";
 import {
   pokemonEvolutions,
@@ -531,11 +532,18 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   /**
    * Checks if a pokemon is fainted (ie: its `hp <= 0`).
    * It's usually better to call {@linkcode isAllowedInBattle()}
-   * @param checkStatus `true` to also check that the pokemon's status is {@linkcode StatusEffect.FAINT}
    * @returns `true` if the pokemon is fainted
    */
-  public isFainted(checkStatus: boolean = false): boolean {
-    return this.hp <= 0 && (!checkStatus || this.status?.effect === StatusEffect.FAINT);
+  public isFainted(): boolean {
+    return this.hp <= 0;
+  }
+
+  /**
+   * Faints the pokemon.
+   * @todo Handle all fainting-related side-effects here
+   */
+  public faint(): void {
+    this.hp = 0;
   }
 
   /**
@@ -4039,13 +4047,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     sourcePokemon: Pokemon | null = null,
     ignoreField: boolean = false,
   ): boolean {
-    if (effect !== StatusEffect.FAINT) {
-      if (overrideStatus ? this.status?.effect === effect : this.status) {
-        return false;
-      }
-      if (this.isGrounded() && !ignoreField && globalScene.arena.terrain?.terrainType === TerrainType.MISTY) {
-        return false;
-      }
+    if (overrideStatus ? this.status?.effect === effect : this.status) {
+      return false;
+    }
+    if (this.isGrounded() && !ignoreField && globalScene.arena.terrain?.terrainType === TerrainType.MISTY) {
+      return false;
     }
 
     if (sourcePokemon && sourcePokemon !== this && this.isSafeguarded(sourcePokemon)) {
@@ -4134,7 +4140,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (!this.canSetStatus(effect, asPhase, false, sourcePokemon)) {
       return false;
     }
-    if (this.isFainted() && effect !== StatusEffect.FAINT) {
+    if (this.isFainted()) {
       return false;
     }
 
@@ -4181,14 +4187,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     sleepTurnsRemaining = sleepTurnsRemaining!; // tell TS compiler it's defined
-    effect = effect!; // If `effect` is undefined then `trySetStatus()` will have already returned early via the `canSetStatus()` call
     this.status = new Status(effect, 0, sleepTurnsRemaining?.value);
 
-    if (effect !== StatusEffect.FAINT) {
-      globalScene.triggerPokemonFormChange(this, SpeciesFormChangeStatusEffectTrigger, true);
-      if (sourcePokemon) {
-        applyAbAttrs(SynchronizeStatusAbAttr, this, false, sourcePokemon, effect);
-      }
+    globalScene.triggerPokemonFormChange(this, SpeciesFormChangeStatusEffectTrigger, true);
+    if (sourcePokemon) {
+      applyAbAttrs(SynchronizeStatusAbAttr, this, false, sourcePokemon, effect);
     }
 
     return true;
@@ -4196,13 +4199,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Resets the status of a pokemon.
-   * @param revive Whether revive should be cured; defaults to true.
-   * @param confusion Whether resetStatus should include confusion or not; defaults to false.
-   * @param reloadAssets Whether to reload the assets or not; defaults to false.
+   * @param revive Whether the pokemon should be revived if fainted; defaults to `true`.
+   * @param confusion Whether resetStatus should include confusion or not; defaults to `false`.
+   * @param reloadAssets Whether to reload the assets or not; defaults to `false`.
    */
   resetStatus(revive: boolean = true, confusion: boolean = false, reloadAssets: boolean = false): void {
     const lastStatus = this.status?.effect;
-    if (!revive && lastStatus === StatusEffect.FAINT) {
+    if (!revive && this.isFainted()) {
       return;
     }
     this.status = null;
@@ -5253,6 +5256,16 @@ export class PlayerPokemon extends Pokemon {
     if (!this.isFainted()) {
       // If this Pokemon hasn't fainted, make sure the HP wasn't set over the new maximum
       this.hp = Math.min(this.hp, maxHp);
+      const getRandomStatus = (statusA: Status | null, statusB: Status | null): Status | null => {
+        if (!statusA || statusA.effect === StatusEffect.NONE) {
+          return statusB;
+        }
+        if (!statusB || statusB.effect === StatusEffect.NONE) {
+          return statusA;
+        }
+
+        return randSeedItem([statusA, statusB]);
+      };
       this.status = getRandomStatus(this.status, pokemon.status); // Get a random valid status between the two
     } else if (!pokemon.isFainted()) {
       // If this Pokemon fainted but the other hasn't, make sure the HP wasn't set to zero
@@ -5909,11 +5922,12 @@ export class EnemyPokemon extends Pokemon {
    * The new pokemon's visibility will be set to `false`.
    * @param pokeballType the type of pokeball the pokemon was caught with
    * @param slotIndex an optional index to place the pokemon in the party
-   * @returns the pokemon that was added or null if the pokemon could not be added
+   * @returns the pokemon that was added or `undefined` if the pokemon could not be added
+   * @todo This feels like it can be improved...
    */
-  addToParty(pokeballType: PokeballType, slotIndex: number = -1) {
+  addToParty(pokeballType: PokeballType, slotIndex: number = -1): PlayerPokemon | undefined {
     const party = globalScene.getPlayerParty();
-    let ret: PlayerPokemon | null = null;
+    let ret: PlayerPokemon | undefined;
 
     if (party.length < PLAYER_PARTY_MAX_SIZE) {
       this.pokeball = pokeballType;

@@ -238,7 +238,7 @@ function handleLoseMinigame() {
   return new Promise<void>(async (resolve) => {
     // Check Wobbuffet is still alive
     const wobbuffet = globalScene.getEnemyPokemon();
-    if (!wobbuffet || wobbuffet.isFainted(true) || wobbuffet.hp === 0) {
+    if (!wobbuffet || wobbuffet.isFainted()) {
       // Player loses
       // End the battle
       if (wobbuffet) {

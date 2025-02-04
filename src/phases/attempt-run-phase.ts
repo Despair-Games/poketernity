@@ -7,7 +7,6 @@ import { BattleEndPhase } from "#app/phases/battle-end-phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { NumberHolder } from "#app/utils";
 import { Stat } from "#enums/stat";
-import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { ArenaTagType } from "#enums/arena-tag-type";
 
@@ -55,8 +54,7 @@ export class AttemptRunPhase extends PokemonPhase {
 
       enemyField.forEach((enemyPokemon) => {
         enemyPokemon.hideInfo().then(() => enemyPokemon.destroy());
-        enemyPokemon.hp = 0;
-        enemyPokemon.trySetStatus(StatusEffect.FAINT);
+        enemyPokemon.faint(); // TODO: why are we fainting the pokemon at all, let alone after using `.destroy()` on them?
       });
 
       globalScene.pushPhase(new BattleEndPhase(false));
