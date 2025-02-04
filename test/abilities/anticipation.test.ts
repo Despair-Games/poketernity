@@ -1,6 +1,7 @@
 import { AnticipationAbAttr } from "#app/data/ab-attrs/anticipation-ab-attr";
 import { allAbilities } from "#app/data/ability";
 import { Abilities } from "#enums/abilities";
+import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -64,16 +65,20 @@ describe("Abilities - Anticipation", () => {
     const anticipationAbility = allAbilities[Abilities.ANTICIPATION].getAttrs(AnticipationAbAttr)[0];
     vi.spyOn(anticipationAbility, "apply");
     await game.classicMode.startBattle([Species.FEEBAS]);
-
+    const enemyPokemon = game.scene.getEnemyPokemon();
+    expect(enemyPokemon?.getMoveType(enemyPokemon.getMoveset()[0].getMove())).toBe(ElementalType.ELECTRIC);
     expect(anticipationAbility.apply).toHaveLastReturnedWith(true);
   });
 
   it("should not consider most variable-type moves' calculated type", async () => {
-    game.override.enemyMoveset(MoveId.REVELATION_DANCE);
+    game.override.enemySpecies(Species.PIKACHU).enemyMoveset(MoveId.REVELATION_DANCE);
+
     const anticipationAbility = allAbilities[Abilities.ANTICIPATION].getAttrs(AnticipationAbAttr)[0];
     vi.spyOn(anticipationAbility, "apply");
     await game.classicMode.startBattle([Species.FEEBAS]);
+    const enemyPokemon = game.scene.getEnemyPokemon();
 
+    expect(enemyPokemon?.getMoveType(enemyPokemon.getMoveset()[0].getMove())).toBe(ElementalType.ELECTRIC);
     expect(anticipationAbility.apply).toHaveLastReturnedWith(false);
   });
 });

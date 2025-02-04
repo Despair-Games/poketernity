@@ -17,9 +17,6 @@ export class AnticipationAbAttr extends PostSummonMessageAbAttr {
     for (const opponent of pokemon.getOpponents()) {
       for (const pkmMove of opponent.getMoveset()) {
         const move = pkmMove.getMove();
-        if (!move || move.id === MoveId.NONE) {
-          continue;
-        }
         if (move.isAttackMove()) {
           // Hidden Power is the only exception to Anticipation's interactions with variable type moves. Anticipation considers the type of most other variable-type moves to be their default type.
           const moveType = move.id !== MoveId.HIDDEN_POWER ? move.type : opponent.getMoveType(move, simulated);
