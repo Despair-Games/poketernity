@@ -393,7 +393,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.shinyOverlay.setVisible(false);
     this.starterSelectContainer.add(this.shinyOverlay);
 
-    const starterContainerWindow = addWindow(speciesContainerX, filterBarHeight + 1, 175, 161);
     const starterContainerBg = globalScene.add.image(
       speciesContainerX + 1,
       filterBarHeight + 2,
@@ -406,7 +405,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.starterSelectContainer.add(
       addWindow(teamWindowX, teamWindowY + teamWindowHeight - 5, teamWindowWidth, teamWindowWidth, true),
     );
-    this.starterSelectContainer.add(starterContainerWindow);
 
     // Create and initialise filter bar
     this.filterBarContainer = globalScene.add.container(0, 0);
@@ -713,7 +711,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
     const starterBoxContainer = globalScene.add.container(speciesContainerX + 6, 9);
 
-    this.starterSelectScrollBar = new ScrollBar(161, 12, 5, starterContainerWindow.height - 6, 9);
+    this.starterSelectScrollBar = new ScrollBar(161, 12, 5, 161 - 6, 9);
 
     starterBoxContainer.add(this.starterSelectScrollBar);
 

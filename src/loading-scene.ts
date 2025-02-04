@@ -53,6 +53,8 @@ export class LoadingScene extends SceneBase {
     }
     this.loadSpritesheet("trainer_namebox", "ui", 20, 20, { windowTypeDependant: true });
     this.loadSpritesheet("battle_message_box", "ui", 320, 48, { windowTypeDependant: true });
+    this.loadSpritesheet("scroll_bar", "ui", 8, 8, { windowTypeDependant: true });
+    this.loadSpritesheet("scroll_bar_handle", "ui", 8, 8, { windowTypeDependant: true });
 
     // Load menu images
     this.loadAtlas("prompt", "ui");
@@ -161,8 +163,6 @@ export class LoadingScene extends SceneBase {
     this.loadImage("egg_list_bg", "ui");
     this.loadImage("egg_summary_bg", "ui");
 
-    this.loadImage("scroll_bar", "ui");
-    this.loadImage("scroll_bar_handle", "ui");
     this.loadImage("starter_container_bg", "ui");
     this.loadImage("starter_select_bg", "ui");
     this.loadImage("select_cursor", "ui");
