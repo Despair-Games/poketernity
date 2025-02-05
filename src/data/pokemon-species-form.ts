@@ -2,11 +2,8 @@ import type { StarterMoveset } from "#app/@types/StarterData";
 import type { AnySound } from "#app/battle-scene";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
-import {
-  type LevelMoves,
-  pokemonFormLevelMoves,
-  pokemonSpeciesLevelMoves,
-} from "#app/data/balance/pokemon-level-moves";
+import { type LevelMoves, pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";
+import { pokemonFormLevelMoves } from "./balance/pokemon-form-level-moves";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import { uncatchableSpecies } from "#app/data/balance/uncatchable-species";
 import type { PokemonForm } from "./pokemon-form";
