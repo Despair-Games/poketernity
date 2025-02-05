@@ -36,12 +36,16 @@ import { BattlePhase } from "./abstract-battle-phase";
 import { FilterItemMaxStacks } from "#app/utils/item-utils";
 import { PhaseId } from "#enums/phase-id";
 
+//#region Types
+
 interface SelectModifierPhaseOptions {
   rerollCount?: number;
   modifierTiers?: ModifierTier[];
   customModifierSettings?: CustomModifierSettings;
   isCopy?: boolean;
 }
+
+//#endregion
 
 export class SelectModifierPhase extends BattlePhase {
   override readonly id = PhaseId.SELECT_MODIFIER;
