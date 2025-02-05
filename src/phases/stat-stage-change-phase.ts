@@ -11,7 +11,6 @@ import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } f
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
 import { PokemonPhase } from "./abstract-pokemon-phase";
-import { ReflectStatStageChangeAbAttr } from "#app/data/ab-attrs/reflect-stat-stage-change-ab-attr";
 import { CANVAS_SCALE } from "#app/ui-constants";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -76,7 +75,15 @@ export class StatStageChangePhase extends PokemonPhase {
 
     if (!this.ignoreAbilities && !this.bypassReflect) {
       const reflected = new BooleanHolder(false);
-      applyAbAttrs(ReflectStatStageChangeAbAttr, pokemon, false, this.source, this.stats, this.stages, reflected);
+      applyAbAttrs(
+        AbAttrFlag.REFLECT_STAT_STAGE_CHANGE,
+        pokemon,
+        false,
+        this.source,
+        this.stats,
+        this.stages,
+        reflected,
+      );
       if (reflected.value) {
         return super.end();
       }
