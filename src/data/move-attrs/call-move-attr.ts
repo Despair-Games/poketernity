@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { CopycatAttr } from "#app/data/move-attrs/copycat-attr";
 import type { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
+import type { NaturePowerAttr } from "#app/data/move-attrs/nature-power-attr";
 import type { RandomMovesetMoveAttr } from "#app/data/move-attrs/random-moveset-move-attr";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
@@ -9,18 +10,20 @@ import type { RandomMovesetMoveAttr } from "#app/data/move-attrs/random-moveset-
 import { type Move, getMoveTargets } from "#app/data/move";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
 import { type Pokemon } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { LoadMoveAnimPhase } from "#app/phases/load-move-anim-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import type { BooleanHolder } from "#app/utils";
 import type { BattlerIndex } from "#enums/battler-index";
-import { MoveTarget } from "#enums/move-target";
 import type { MoveId } from "#enums/move-id";
-import { PokemonMove } from "#app/field/pokemon-move";
+import { MoveTarget } from "#enums/move-target";
 
 /**
- * Attribute used to call a move.
+ * Attribute used to call a different move.
+ *
  * Used by other move attributes: {@linkcode MetronomeAttr}, {@linkcode RandomMovesetMoveAttr}, {@linkcode CopycatAttr}
+ * and {@linkcode NaturePowerAttr}
  * @see {@linkcode apply} for move call
  * @extends OverrideMoveEffectAttr
  */
