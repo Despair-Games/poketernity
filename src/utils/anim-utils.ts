@@ -48,7 +48,7 @@ export function loadAnimAssets(anims: AnimConfig[], startLoad?: boolean): Promis
 }
 
 /**
- * Lodas common animation assets to scene.
+ * Loads common animation assets to scene.
  *
  * **Must** be called after {@linkcode initCommonAnims} to load all required animations properly.
  * @param startLoad
