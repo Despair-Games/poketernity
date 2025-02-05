@@ -335,7 +335,7 @@ export class OverridesHelper extends GameManagerHelper {
   /**
    * Overrides the enemy (pokemon)'s IVs
    * @param ivs a number or array of 6 numbers ranging from 0-31
-   * @returns
+   * @returns `this`
    */
   public enemyIVs(ivs: number | number[]): this {
     vi.spyOn(Overrides, "ENEMY_IVS_OVERRIDE", "get").mockReturnValue(ivs);
