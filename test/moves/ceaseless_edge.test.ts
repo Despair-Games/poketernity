@@ -98,12 +98,12 @@ describe("Moves - Ceaseless Edge", () => {
       expect(tagAfter instanceof ArenaTrapTag).toBeTruthy();
       expect(tagAfter.layers).toBe(2);
 
-      const hpBeforeSpikes = game.scene.currentBattle.enemyParty[1].hp;
-      // Check HP of pokemon that WILL BE switched in (index 1)
       game.forceEnemyToSwitch();
       game.move.select(MoveId.SPLASH);
       await game.phaseInterceptor.to(TurnEndPhase, false);
-      expect(game.scene.currentBattle.enemyParty[0].hp).toBeLessThan(hpBeforeSpikes);
+
+      const switchedInPokemon = game.field.getEnemyPokemon();
+      expect(switchedInPokemon.getInverseHp()).toBe(toDmgValue(switchedInPokemon.getMaxHp() / 6));
     },
   );
 });

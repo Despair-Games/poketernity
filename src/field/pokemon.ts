@@ -1097,6 +1097,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   getCritStage(source: Pokemon, move: Move, simulated: boolean = true): number {
     const critStage = new NumberHolder(0);
     applyMoveAttrs(HighCritAttr, source, this, move, critStage);
+    // TODO: Scope Lens and Leek were applied here
     globalScene.applyModifiers(TempCritBoosterModifier, source.isPlayer(), critStage);
 
     const bonusCrit = new BooleanHolder(false);

@@ -113,6 +113,7 @@ describe("Items - Multi Lens", () => {
   });
 
   it.todo("should enhance fixed-damage moves while also applying damage reduction", async () => {
+    game.override.moveset(MoveId.SEISMIC_TOSS);
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
