@@ -1980,7 +1980,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     const typeMultiplier = new NumberHolder(
       move.category !== MoveCategory.STATUS || move.hasAttr(RespectAttackTypeImmunityAttr)
-        ? this.getAttackTypeEffectiveness(moveType, source, false, simulated, move)
+        ? this.getAttackTypeEffectiveness(moveType, source, false, false, simulated, move)
         : 1,
     );
 
@@ -2033,6 +2033,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param moveType {@linkcode ElementalType} the type of the move being used
    * @param source {@linkcode Pokemon} the Pokemon using the move
    * @param ignoreStrongWinds whether or not this ignores strong winds (anticipation, forewarn, stealth rocks)
+   * @param ignoreGravity whether or not the function should consider gravity
    * @param simulated tag to only apply the strong winds effect message when the move is used
    * @param move (optional) the move whose type effectiveness is to be checked. Used for applying {@linkcode VariableMoveTypeChartAttr}
    * @returns a multiplier for the type effectiveness
@@ -2041,6 +2042,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     moveType: ElementalType,
     source?: Pokemon,
     ignoreStrongWinds: boolean = false,
+    ignoreGravity: boolean = false,
     simulated: boolean = true,
     move?: Move,
   ): TypeDamageMultiplier {
@@ -2051,7 +2053,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const arena = globalScene.arena;
 
     // Handle flying v ground type immunity without removing flying type so effective types are still effective
-    if (moveType === ElementalType.GROUND && (this.isGrounded() || arena.hasTag(ArenaTagType.GRAVITY))) {
+    if (
+      moveType === ElementalType.GROUND
+      && (this.isGrounded() || arena.hasTag(ArenaTagType.GRAVITY))
+      && !ignoreGravity
+    ) {
       const flyingIndex = types.indexOf(ElementalType.FLYING);
       if (flyingIndex > -1) {
         types.splice(flyingIndex, 1);

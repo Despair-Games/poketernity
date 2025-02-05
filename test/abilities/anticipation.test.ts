@@ -3,8 +3,9 @@ import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
+import { Challenges } from "#enums/challenges";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Abilities - Anticipation", () => {
   let phaserGame: Phaser.Game;
@@ -77,7 +78,7 @@ describe("Abilities - Anticipation", () => {
 
     const playerPokemon = game.scene.getPlayerParty()[1];
     vi.spyOn(playerPokemon, "getMoveEffectiveness");
-    
+
     game.move.use(MoveId.GRAVITY);
     await game.toNextTurn();
     game.doSwitchPokemon(1);
