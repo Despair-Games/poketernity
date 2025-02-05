@@ -61,8 +61,8 @@ describe("Moves - Glaive Rush", () => {
     expect(enemy.hp).toBeLessThan(1000);
   });
 
-  it.todo("interacts properly with multi-lens", async () => {
-    game.override.enemyMoveset([MoveId.AVALANCHE]);
+  it("interacts properly with multi-lens", async () => {
+    game.override.enemyAbility(Abilities.PARENTAL_BOND).enemyMoveset([MoveId.AVALANCHE]);
     await game.classicMode.startBattle();
 
     const player = game.scene.getPlayerPokemon()!;

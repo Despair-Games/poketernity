@@ -60,27 +60,6 @@ describe("Moves - Ceaseless Edge", () => {
     expect(enemyPokemon.hp).toBeLessThan(enemyStartingHp);
   });
 
-  test.todo("move should hit twice with multi lens and apply two layers of spikes", async () => {
-    await game.classicMode.startBattle([Species.ILLUMISE]);
-
-    const enemyPokemon = game.scene.getEnemyPokemon()!;
-
-    const enemyStartingHp = enemyPokemon.hp;
-
-    game.move.select(MoveId.CEASELESS_EDGE);
-
-    await game.phaseInterceptor.to(MoveEffectPhase, false);
-    // Spikes should not have any layers before move effect is applied
-    const tagBefore = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
-    expect(tagBefore instanceof ArenaTrapTag).toBeFalsy();
-
-    await game.phaseInterceptor.to(TurnEndPhase);
-    const tagAfter = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
-    expect(tagAfter instanceof ArenaTrapTag).toBeTruthy();
-    expect(tagAfter.layers).toBe(2);
-    expect(enemyPokemon.hp).toBeLessThan(enemyStartingHp);
-  });
-
   test.todo(
     "trainer - move should hit twice, apply two layers of spikes, force switch opponent - opponent takes damage",
     async () => {
