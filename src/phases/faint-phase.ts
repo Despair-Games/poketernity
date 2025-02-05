@@ -241,7 +241,7 @@ export class FaintPhase extends PokemonPhase {
             .forEach((p) => p.removeTagsBySourceId(pokemon.id));
 
           pokemon.y -= 150;
-          // pokemon.faint();
+          pokemon.status = null;
           if (pokemon.isPlayer()) {
             currentBattle.removeFaintedParticipant(pokemon);
           } else {
