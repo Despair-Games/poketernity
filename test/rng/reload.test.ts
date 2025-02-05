@@ -5,6 +5,8 @@ import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { UiMode } from "#enums/ui-mode";
+import { Button } from "#enums/buttons";
 
 describe("Reload", () => {
   let phaserGame: Phaser.Game;
@@ -50,6 +52,10 @@ describe("Reload", () => {
 
     // Transition from Wave 10 to Wave 11 in order to trigger biome switch
     game.move.select(MoveId.SPLASH);
+    game.onNextPrompt("SelectBiomePhase", UiMode.OPTION_SELECT, () => {
+      // Input first option for Map
+      game.scene.ui.getHandler().processInput(Button.ACTION);
+    });
     await game.doKillOpponents();
     await game.toNextWave();
     expect(game.phaseInterceptor.log).toContain("NewBiomeEncounterPhase");
