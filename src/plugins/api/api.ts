@@ -16,9 +16,9 @@ export class Api extends ApiBase {
   public readonly admin: AdminApi;
   public readonly savedata: SavedataApi;
 
-  /** Wheter the hostname is 'localhost' or an IP address, and ensure a port is specified */
+  /** Wheter the hostname is 'localhost' or an IP address, and ensure a port is specified. */
   private _isLocal: boolean;
-  /** Whether the server/api is connected */
+  /** Whether the server/api is connected. By default we assume `true`. */
   private _isConnected: boolean;
 
   //#region Public
@@ -33,6 +33,7 @@ export class Api extends ApiBase {
       ((window.location.hostname === "localhost" || /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(window.location.hostname))
         && window.location.port !== "")
       || window.location.hostname === "";
+    this._isConnected = true;
   }
 
   public get isConnected() {
