@@ -59,7 +59,7 @@ describe("Moves - Disable", () => {
     expect(playerMon.getMoveHistory()[0]).toMatchObject<TurnMove>({
       moveId: MoveId.DISABLE,
       result: MoveResult.FAIL,
-      targets: [],
+      targets: [2],
     });
     expect(enemyMon.isMoveRestricted(MoveId.SPLASH)).toBe(false);
   }, 20000);
@@ -113,7 +113,11 @@ describe("Moves - Disable", () => {
 
     const enemyHistory = enemyMon.getMoveHistory();
     expect(enemyHistory).toHaveLength(2);
-    expect(enemyHistory[0]).toMatchObject<TurnMove>({ moveId: MoveId.SPLASH, result: MoveResult.SUCCESS, targets: [] });
+    expect(enemyHistory[0]).toMatchObject<TurnMove>({
+      moveId: MoveId.SPLASH,
+      result: MoveResult.SUCCESS,
+      targets: [2],
+    });
     expect(enemyHistory[1].result).toBe(MoveResult.FAIL);
   }, 20000);
 
