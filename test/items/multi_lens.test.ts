@@ -7,7 +7,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-describe("Items - Multi Lens", () => {
+describe.todo("Items - Multi Lens", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
@@ -35,7 +35,7 @@ describe("Items - Multi Lens", () => {
       .enemyLevel(99);
   });
 
-  it.todo.each([
+  it.each([
     { stackCount: 1, firstHitDamage: 0.75 },
     { stackCount: 2, firstHitDamage: 0.5 },
   ])(
@@ -59,7 +59,7 @@ describe("Items - Multi Lens", () => {
     },
   );
 
-  it.todo("should stack additively with Parental Bond", async () => {
+  it("should stack additively with Parental Bond", async () => {
     game.override.ability(Abilities.PARENTAL_BOND);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
@@ -73,7 +73,7 @@ describe("Items - Multi Lens", () => {
     expect(playerPokemon.turnData.hitCount).toBe(3);
   });
 
-  it.todo("should apply secondary effects on each hit", async () => {
+  it("should apply secondary effects on each hit", async () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
@@ -84,7 +84,7 @@ describe("Items - Multi Lens", () => {
     expect(playerPokemon.getStatStage(Stat.SPD)).toBe(2);
   });
 
-  it.todo("should not enhance multi-hit moves", async () => {
+  it("should not enhance multi-hit moves", async () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
@@ -95,7 +95,7 @@ describe("Items - Multi Lens", () => {
     expect(playerPokemon.turnData.hitCount).toBe(2);
   });
 
-  it.todo("should not enhance multi-target moves", async () => {
+  it("should not enhance multi-target moves", async () => {
     game.override.battleType("double").moveset([MoveId.SWIFT, MoveId.SPLASH]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
@@ -112,7 +112,7 @@ describe("Items - Multi Lens", () => {
     expect(magikarp.turnData.hitCount).toBe(1);
   });
 
-  it.todo("should enhance fixed-damage moves while also applying damage reduction", async () => {
+  it("should enhance fixed-damage moves while also applying damage reduction", async () => {
     game.override.moveset(MoveId.SEISMIC_TOSS);
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -131,7 +131,7 @@ describe("Items - Multi Lens", () => {
     expect(damageResults[1]).toBe(Math.floor(playerPokemon.level * 0.25));
   });
 
-  it.todo("should result in correct damage for hp% attacks with 1 lens", async () => {
+  it("should result in correct damage for hp% attacks with 1 lens", async () => {
     game.override
       .moveset(MoveId.SUPER_FANG)
       .ability(Abilities.COMPOUND_EYES)
@@ -148,7 +148,7 @@ describe("Items - Multi Lens", () => {
     expect(enemyPokemon.getHpRatio()).toBeCloseTo(0.5, 5);
   });
 
-  it.todo("should result in correct damage for hp% attacks with 2 lenses", async () => {
+  it("should result in correct damage for hp% attacks with 2 lenses", async () => {
     game.override
       .moveset(MoveId.SUPER_FANG)
       .ability(Abilities.COMPOUND_EYES)
@@ -166,7 +166,7 @@ describe("Items - Multi Lens", () => {
     expect(enemyPokemon.getHpRatio()).toBeCloseTo(0.5, 5);
   });
 
-  it.todo("should result in correct damage for hp% attacks with 2 lenses + Parental Bond", async () => {
+  it("should result in correct damage for hp% attacks with 2 lenses + Parental Bond", async () => {
     game.override
       .moveset(MoveId.SUPER_FANG)
       .ability(Abilities.PARENTAL_BOND)
@@ -185,7 +185,7 @@ describe("Items - Multi Lens", () => {
     expect(enemyPokemon.getHpRatio()).toBeCloseTo(0.25, 5);
   });
 
-  it.todo("should not allow Future Sight to hit infinitely many times if the user switches out", async () => {
+  it("should not allow Future Sight to hit infinitely many times if the user switches out", async () => {
     game.override.enemyLevel(1000);
     await game.classicMode.startBattle([Species.BULBASAUR, Species.CHARMANDER, Species.SQUIRTLE]);
 
