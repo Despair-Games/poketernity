@@ -54,6 +54,40 @@ describe("Abilities - Anticipation", () => {
     expect(playerPokemon.battleData.abilitiesApplied.length).toBe(0);
   });
 
+  it("should not activate against status moves", async () => {
+    game.override.enemyMoveset(MoveId.THUNDER_WAVE);
+    await game.classicMode.startBattle([Species.FEEBAS]);
+    const playerPokemon = game.scene.getPlayerPokemon()!;
+
+    expect(playerPokemon.battleData.abilitiesApplied.length).toBe(0);
+  });
+
+  it("should work correctly in Inverse Battles", async () => {
+    game.override.enemyMoveset(MoveId.EMBER);
+    game.challengeMode.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
+    await game.challengeMode.startBattle([Species.FEEBAS]);
+    const playerPokemon = game.scene.getPlayerPokemon()!;
+
+    expect(playerPokemon.battleData.abilitiesApplied[0]).toBe(Abilities.ANTICIPATION);
+  });
+
+  it("should ignore Gravity when evaluating move effectiveness", async () => {
+    game.override.enemyMoveset(MoveId.EARTHQUAKE);
+    await game.classicMode.startBattle([Species.FEEBAS, Species.SKARMORY]);
+
+    const playerPokemon = game.scene.getPlayerParty()[1];
+    vi.spyOn(playerPokemon, "getMoveEffectiveness");
+    
+    game.move.use(MoveId.GRAVITY);
+    await game.toNextTurn();
+    game.doSwitchPokemon(1);
+    await game.toNextTurn();
+
+    // Should not have activated Anticipation despite taking super-effective damage
+    expect(playerPokemon.getMoveEffectiveness).toHaveLastReturnedWith(2);
+    expect(playerPokemon.battleData.abilitiesApplied.length).toBe(0);
+  });
+
   it("should consider Hidden Power's calculated type, not its default Normal type", async () => {
     game.override.enemyMoveset(MoveId.HIDDEN_POWER).enemyIVs([31, 31, 31, 30, 31, 31]);
     // Hidden Power type set to Electric here

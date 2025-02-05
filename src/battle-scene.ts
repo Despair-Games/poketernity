@@ -989,14 +989,12 @@ export default class BattleScene extends SceneBase {
 
     let ENEMY_IVS_OVERRIDE_VALIDATED: number[] = [];
     if (Array.isArray(Overrides.ENEMY_IVS_OVERRIDE)) {
-      ENEMY_IVS_OVERRIDE_VALIDATED = (Overrides.ENEMY_IVS_OVERRIDE as number[]).map(
-        (iv) => Phaser.Math.Clamp(iv, 0, 31)
-      );
+      ENEMY_IVS_OVERRIDE_VALIDATED = Overrides.ENEMY_IVS_OVERRIDE;
     } else if (typeof Overrides.ENEMY_IVS_OVERRIDE === "number") {
-      ENEMY_IVS_OVERRIDE_VALIDATED = new Array(6).fill(Phaser.Math.Clamp(Overrides.ENEMY_IVS_OVERRIDE, 0, 31));
+      ENEMY_IVS_OVERRIDE_VALIDATED = new Array(6).fill(Overrides.ENEMY_IVS_OVERRIDE);
     }
     if (ENEMY_IVS_OVERRIDE_VALIDATED.length === 6) {
-      pokemon.ivs = ENEMY_IVS_OVERRIDE_VALIDATED;
+      pokemon.ivs = ENEMY_IVS_OVERRIDE_VALIDATED.map(iv => Phaser.Math.Clamp(iv, 0, 31));
     }
 
     pokemon.init();
