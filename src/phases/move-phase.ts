@@ -343,13 +343,7 @@ export class MovePhase extends BattlePhase {
 
     const success = passesConditions && !failedDueToWeather && !failedDueToTerrain;
 
-    // Update the battle's "last move" pointer, unless we're currently mimicking a move.
-    if (!allMoves[this.move.moveId].hasAttr(CopyMoveAttr)) {
-      // The last move used is unaffected by moves that fail
-      if (success) {
-        globalScene.currentBattle.lastMoveId = this.move.moveId;
-      }
-    }
+    this.updateLastMoveId(success);
 
     /**
      * If the move has not failed, trigger ability-based user type changes and then execute it.
@@ -402,6 +396,8 @@ export class MovePhase extends BattlePhase {
     const targets = this.getActiveTargetPokemon();
 
     if (move.applyConditions(this.pokemon, targets[0], move)) {
+      this.updateLastMoveId(true);
+
       // Protean and Libero apply on the charging turn of charge moves
       applyAbAttrs(PokemonTypeChangeAbAttr, this.pokemon, false, this.move.getMove());
 
@@ -421,6 +417,16 @@ export class MovePhase extends BattlePhase {
 
       // Remove the user from its semi-invulnerable state (if applicable)
       this.pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
+    }
+  }
+
+  protected updateLastMoveId(success: boolean): void {
+    // Update the battle's "last move" pointer, unless we're currently mimicking a move.
+    if (!allMoves[this.move.moveId].hasAttr(CopyMoveAttr)) {
+      // The last move used is unaffected by moves that fail
+      if (success) {
+        globalScene.currentBattle.lastMoveId = this.move.moveId;
+      }
     }
   }
 
