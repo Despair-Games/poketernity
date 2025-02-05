@@ -16,7 +16,7 @@ import { MoveId } from "#enums/move-id";
  * @extends CallMoveAttr
  */
 export class CopyMoveAttr extends CallMoveAttr {
-  private mirrorMove: boolean;
+  private readonly mirrorMove: boolean;
 
   constructor(mirrorMove: boolean, invalidMoves: MoveId[] = []) {
     super();

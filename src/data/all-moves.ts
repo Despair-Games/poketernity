@@ -997,8 +997,7 @@ export function initMoves() {
     new SelfStatusMove(MoveId.SLEEP_TALK, ElementalType.NORMAL, -1, 10, -1, 0, 2)
       .attr(BypassSleepAttr)
       .attr(RandomMovesetMoveAttr, invalidSleepTalkMoves)
-      .condition(userSleptOrComatoseCondition)
-      .target(MoveTarget.ALL_ENEMIES),
+      .condition(userSleptOrComatoseCondition),
     new StatusMove(MoveId.HEAL_BELL, ElementalType.NORMAL, -1, 5, -1, 0, 2)
       .attr(PartyStatusCureAttr, i18next.t("moveTriggers:bellChimed"), Abilities.SOUNDPROOF)
       .soundMove()
