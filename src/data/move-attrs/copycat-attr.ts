@@ -8,41 +8,33 @@ import type { BooleanHolder } from "#app/utils";
 import { MoveId } from "#enums/move-id";
 
 /**
- * Attribute used to copy a previously-used move.
- * Copycat copies the last used move, and Mirror Move copies the last move used by the target.
+ * Attribute used to copy the last move used by any pokemon.
  *
- * Used for {@linkcode MoveId.COPYCAT} and {@linkcode MoveId.MIRROR_MOVE}
+ * Used for {@linkcode MoveId.COPYCAT}
  * @see {@linkcode apply} for move selection and move call
  * @extends CallMoveAttr
  */
-export class CopyMoveAttr extends CallMoveAttr {
-  private readonly mirrorMove: boolean;
-
-  constructor(mirrorMove: boolean, invalidMoves: MoveId[] = []) {
+export class CopycatAttr extends CallMoveAttr {
+  constructor() {
     super();
-    this.mirrorMove = mirrorMove;
-    this.invalidMoves = invalidMoves;
+    this.invalidMoves = invalidCopycatMoves;
+    this.hasTarget = false;
   }
 
   override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder): boolean {
-    this.hasTarget = this.mirrorMove;
-    const lastMove = this.mirrorMove ? target.getLastXMoves()[0].moveId : globalScene.currentBattle.lastMoveId;
+    const lastMove = globalScene.currentBattle.lastMoveId;
     return super.apply(user, target, allMoves[lastMove], overridden);
   }
 
   override getCondition(): MoveConditionFunc {
-    return (_user, target, _move) => {
-      if (this.mirrorMove) {
-        return target.getMoveHistory().length !== 0;
-      } else {
-        const lastMove = globalScene.currentBattle.lastMoveId;
-        return lastMove !== undefined && !this.invalidMoves.includes(lastMove);
-      }
+    return (_user, _target, _move) => {
+      const lastMove = globalScene.currentBattle.lastMoveId;
+      return lastMove !== undefined && !this.invalidMoves.includes(lastMove);
     };
   }
 }
 
-export const invalidCopycatMoves = [
+const invalidCopycatMoves = [
   MoveId.ASSIST,
   MoveId.BANEFUL_BUNKER,
   MoveId.BEAK_BLAST,

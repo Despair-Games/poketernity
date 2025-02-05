@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/all-moves";
-import { RandomMoveAttr } from "#app/data/move-attrs/random-move-attr";
+import { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
 import { Abilities } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveResult } from "#enums/move-result";
@@ -14,7 +14,7 @@ describe("Moves - Copycat", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
-  const randomMoveAttr = allMoves[MoveId.METRONOME].getAttrs(RandomMoveAttr)[0];
+  const randomMoveAttr = allMoves[MoveId.METRONOME].getAttrs(MetronomeAttr)[0];
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({

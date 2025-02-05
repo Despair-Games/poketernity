@@ -1,7 +1,7 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
-import type { RandomMoveAttr } from "#app/data/move-attrs/random-move-attr";
+import type { CopycatAttr } from "#app/data/move-attrs/copycat-attr";
+import type { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
 import type { RandomMovesetMoveAttr } from "#app/data/move-attrs/random-moveset-move-attr";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
@@ -20,7 +20,7 @@ import { PokemonMove } from "#app/field/pokemon-move";
 
 /**
  * Attribute used to call a move.
- * Used by other move attributes: {@linkcode RandomMoveAttr}, {@linkcode RandomMovesetMoveAttr}, {@linkcode CopyMoveAttr}
+ * Used by other move attributes: {@linkcode MetronomeAttr}, {@linkcode RandomMovesetMoveAttr}, {@linkcode CopycatAttr}
  * @see {@linkcode apply} for move call
  * @extends OverrideMoveEffectAttr
  */

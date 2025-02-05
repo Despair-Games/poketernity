@@ -1,6 +1,6 @@
 import { allMoves } from "#app/data/all-moves";
 import { RechargingTag, SemiInvulnerableTag } from "#app/data/battler-tags";
-import { RandomMoveAttr } from "#app/data/move-attrs/random-move-attr";
+import { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -13,7 +13,7 @@ describe("Moves - Metronome", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
-  const randomMoveAttr = allMoves[MoveId.METRONOME].getAttrs(RandomMoveAttr)[0];
+  const randomMoveAttr = allMoves[MoveId.METRONOME].getAttrs(MetronomeAttr)[0];
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({

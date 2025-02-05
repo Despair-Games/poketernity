@@ -11,10 +11,10 @@ import { MoveId } from "#enums/move-id";
  * @see {@linkcode apply} for move selection and move call
  * @extends CallMoveAttr to call a selected move
  */
-export class RandomMoveAttr extends CallMoveAttr {
-  constructor(invalidMoves: MoveId[]) {
+export class MetronomeAttr extends CallMoveAttr {
+  constructor() {
     super();
-    this.invalidMoves = invalidMoves;
+    this.invalidMoves = invalidMetronomeMoves;
   }
 
   /**
@@ -44,7 +44,7 @@ export class RandomMoveAttr extends CallMoveAttr {
   }
 }
 
-export const invalidMetronomeMoves: MoveId[] = [
+const invalidMetronomeMoves: MoveId[] = [
   MoveId.AFTER_YOU,
   MoveId.APPLE_ACID,
   MoveId.ARMOR_CANNON,

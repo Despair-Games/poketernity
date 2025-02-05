@@ -13,7 +13,7 @@ import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { applyMoveAttrs } from "#app/data/move";
 import { BypassRedirectAttr } from "#app/data/move-attrs/bypass-redirect-attr";
 import { BypassSleepAttr } from "#app/data/move-attrs/bypass-sleep-attr";
-import { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
+import { CopycatAttr } from "#app/data/move-attrs/copycat-attr";
 import { HealStatusEffectAttr } from "#app/data/move-attrs/heal-status-effect-attr";
 import { PreMoveMessageAttr } from "#app/data/move-attrs/pre-move-message-attr";
 import { frenzyMissFunc } from "#app/data/move-utils";
@@ -422,7 +422,7 @@ export class MovePhase extends BattlePhase {
 
   protected updateLastMoveId(success: boolean): void {
     // Update the battle's "last move" pointer, unless we're currently mimicking a move.
-    if (!allMoves[this.move.moveId].hasAttr(CopyMoveAttr)) {
+    if (!allMoves[this.move.moveId].hasAttr(CopycatAttr)) {
       // The last move used is unaffected by moves that fail
       if (success) {
         globalScene.currentBattle.lastMoveId = this.move.moveId;

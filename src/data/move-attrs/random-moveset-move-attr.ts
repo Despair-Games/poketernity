@@ -12,7 +12,7 @@ import { MoveId } from "#enums/move-id";
  * Used for {@linkcode MoveId.ASSIST} and {@linkcode MoveId.SLEEP_TALK}
  *
  * Fails if the user has no callable moves.
- * @extends RandomMoveAttr
+ * @extends CallMoveAttr
  * @see {@linkcode getCondition} for move selection
  */
 export class RandomMovesetMoveAttr extends CallMoveAttr {

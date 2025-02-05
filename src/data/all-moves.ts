@@ -62,7 +62,7 @@ import { ConfuseAttr } from "./move-attrs/confuse-attr";
 import { ConsecutiveUseDoublePowerAttr } from "./move-attrs/consecutive-use-double-power-attr";
 import { ConsecutiveUseMultiBasePowerAttr } from "./move-attrs/consecutive-use-multi-base-power-attr";
 import { CopyBiomeTypeAttr } from "./move-attrs/copy-biome-type-attr";
-import { CopyMoveAttr, invalidCopycatMoves } from "./move-attrs/copy-move-attr";
+import { CopycatAttr } from "./move-attrs/copycat-attr";
 import { CopyStatsAttr } from "./move-attrs/copy-stats-attr";
 import { CopyTypeAttr } from "./move-attrs/copy-type-attr";
 import { CounterDamageAttr } from "./move-attrs/counter-damage-attr";
@@ -150,7 +150,7 @@ import { ProtectAttr } from "./move-attrs/protect-attr";
 import { PsychoShiftEffectAttr } from "./move-attrs/psycho-shift-effect-attr";
 import { RagingBullTypeAttr } from "./move-attrs/raging-bull-type-attr";
 import { RandomLevelDamageAttr } from "./move-attrs/random-level-damage-attr";
-import { invalidMetronomeMoves, RandomMoveAttr } from "./move-attrs/random-move-attr";
+import { MetronomeAttr } from "./move-attrs/metronome-attr";
 import {
   invalidAssistMoves,
   invalidSleepTalkMoves,
@@ -244,6 +244,7 @@ import { crashDamageFunc, frenzyMissFunc } from "./move-utils";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { NoDamageAgainstFlyingAttr } from "./move-attrs/no-damage-against-flying-attr";
 import { SkyDropAttr } from "./move-attrs/sky-drop-attr";
+import { MirrorMoveAttr } from "#app/data/move-attrs/mirror-move-attr";
 
 // Initialized as being empty; it will be filled during `initMoves()`
 export const allMoves: { [moveId in MoveId]: Move } = {} as any;
@@ -640,11 +641,8 @@ export function initMoves() {
     new AttackMove(MoveId.BIDE, ElementalType.NORMAL, MoveCategory.PHYSICAL, -1, -1, 10, -1, 1, 1)
       .target(MoveTarget.USER)
       .unimplemented(),
-    new SelfStatusMove(MoveId.METRONOME, ElementalType.NORMAL, -1, 10, -1, 0, 1).attr(
-      RandomMoveAttr,
-      invalidMetronomeMoves,
-    ),
-    new StatusMove(MoveId.MIRROR_MOVE, ElementalType.FLYING, -1, 20, -1, 0, 1).attr(CopyMoveAttr, true).edgeCase(), // Need to find out which moves are not copyable by Mirror Move
+    new SelfStatusMove(MoveId.METRONOME, ElementalType.NORMAL, -1, 10, -1, 0, 1).attr(MetronomeAttr),
+    new StatusMove(MoveId.MIRROR_MOVE, ElementalType.FLYING, -1, 20, -1, 0, 1).attr(MirrorMoveAttr).edgeCase(), // Need to find out which moves are not copyable by Mirror Move
     new AttackMove(MoveId.SELF_DESTRUCT, ElementalType.NORMAL, MoveCategory.PHYSICAL, 200, 100, 5, -1, 0, 1)
       .attr(SacrificialAttr)
       .makesContact(false)
@@ -1654,11 +1652,7 @@ export function initMoves() {
       .ignoresSubstitute()
       .target(MoveTarget.NEAR_ENEMY)
       .unimplemented(),
-    new SelfStatusMove(MoveId.COPYCAT, ElementalType.NORMAL, -1, 20, -1, 0, 4).attr(
-      CopyMoveAttr,
-      false,
-      invalidCopycatMoves,
-    ),
+    new SelfStatusMove(MoveId.COPYCAT, ElementalType.NORMAL, -1, 20, -1, 0, 4).attr(CopycatAttr),
     new StatusMove(MoveId.POWER_SWAP, ElementalType.PSYCHIC, -1, 10, 100, 0, 4)
       .attr(SwapStatStagesAttr, [Stat.ATK, Stat.SPATK])
       .ignoresSubstitute(),

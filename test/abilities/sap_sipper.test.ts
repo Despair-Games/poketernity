@@ -10,7 +10,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { allMoves } from "#app/data/all-moves";
-import { RandomMoveAttr } from "#app/data/move-attrs/random-move-attr";
+import { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
 
 // See also: TypeImmunityAbAttr
 describe("Abilities - Sap Sipper", () => {
@@ -132,8 +132,8 @@ describe("Abilities - Sap Sipper", () => {
     const moveToUse = MoveId.METRONOME;
 
     const randomMoveAttr = allMoves[MoveId.METRONOME].findAttr(
-      (attr) => attr instanceof RandomMoveAttr,
-    ) as RandomMoveAttr;
+      (attr) => attr instanceof MetronomeAttr,
+    ) as MetronomeAttr;
     vi.spyOn(randomMoveAttr, "getMoveOverride").mockReturnValue(MoveId.BULLET_SEED);
 
     game.override.moveset(moveToUse);
