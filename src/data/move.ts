@@ -1095,18 +1095,18 @@ export type MoveTargetSet = {
   multiple: boolean;
 };
 
-export function getMoveTargets(user: Pokemon, move: Moves, replaceTarget?: MoveTarget): MoveTargetSet {
+export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: MoveTarget): MoveTargetSet {
   const variableTarget = new NumberHolder(0);
   user.getOpponents().forEach((p) => applyMoveAttrs(VariableTargetAttr, user, p, allMoves[moveId], variableTarget));
 
   let moveTarget: MoveTarget | undefined;
-  if (allMoves[move].hasAttr(VariableTargetAttr)) {
+  if (allMoves[moveId].hasAttr(VariableTargetAttr)) {
     moveTarget = variableTarget.value;
   } else if (replaceTarget !== undefined) {
     moveTarget = replaceTarget;
-  } else if (move) {
-    moveTarget = allMoves[move].moveTarget;
-  } else if (move === undefined) {
+  } else if (moveId) {
+    moveTarget = allMoves[moveId].moveTarget;
+  } else if (moveId === undefined) {
     moveTarget = MoveTarget.NEAR_ENEMY;
   }
   const opponents = user.getOpponents();

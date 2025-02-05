@@ -56,7 +56,11 @@ describe("Moves - Disable", () => {
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
-    expect(playerMon.getMoveHistory()[0]).toMatchObject<TurnMove>({ moveId: MoveId.DISABLE, result: MoveResult.FAIL });
+    expect(playerMon.getMoveHistory()[0]).toMatchObject<TurnMove>({
+      moveId: MoveId.DISABLE,
+      result: MoveResult.FAIL,
+      targets: [],
+    });
     expect(enemyMon.isMoveRestricted(MoveId.SPLASH)).toBe(false);
   }, 20000);
 
@@ -109,7 +113,7 @@ describe("Moves - Disable", () => {
 
     const enemyHistory = enemyMon.getMoveHistory();
     expect(enemyHistory).toHaveLength(2);
-    expect(enemyHistory[0]).toMatchObject<TurnMove>({ moveId: MoveId.SPLASH, result: MoveResult.SUCCESS });
+    expect(enemyHistory[0]).toMatchObject<TurnMove>({ moveId: MoveId.SPLASH, result: MoveResult.SUCCESS, targets: [] });
     expect(enemyHistory[1].result).toBe(MoveResult.FAIL);
   }, 20000);
 

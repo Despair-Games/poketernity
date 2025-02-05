@@ -184,15 +184,15 @@ export class CommandPhase extends FieldPhase {
         const useStruggle = cursor > -1 && !playerPokemon.getMoveset().filter((m) => m.isUsable(playerPokemon)).length;
 
         if (cursor === -1 || playerPokemon.trySelectMove(cursor, ignorePp) || useStruggle) {
-          let moveId: Moves;
+          let moveId: MoveId;
           if (useStruggle) {
-            moveId = Moves.STRUGGLE;
+            moveId = MoveId.STRUGGLE;
           } else if (turnMove !== undefined) {
-            moveId = turnMove.move;
+            moveId = turnMove.moveId;
           } else if (cursor > -1) {
             moveId = playerPokemon.getMoveset()[cursor]!.moveId;
           } else {
-            moveId = Moves.NONE;
+            moveId = MoveId.NONE;
           }
 
           const turnCommand: TurnCommand = {

@@ -5,20 +5,20 @@ import { type MoveConditionFunc } from "#app/data/move-conditions";
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { BooleanHolder } from "#app/utils";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 
 /**
  * Attribute used to copy a previously-used move.
  * Copycat copies the last used move, and Mirror Move copies the last move used by the target.
  *
- * Used for {@linkcode Moves.COPYCAT} and {@linkcode Moves.MIRROR_MOVE}
+ * Used for {@linkcode MoveId.COPYCAT} and {@linkcode MoveId.MIRROR_MOVE}
  * @see {@linkcode apply} for move selection and move call
  * @extends CallMoveAttr
  */
 export class CopyMoveAttr extends CallMoveAttr {
   private mirrorMove: boolean;
 
-  constructor(mirrorMove: boolean, invalidMoves: Moves[] = []) {
+  constructor(mirrorMove: boolean, invalidMoves: MoveId[] = []) {
     super();
     this.mirrorMove = mirrorMove;
     this.invalidMoves = invalidMoves;
@@ -26,7 +26,7 @@ export class CopyMoveAttr extends CallMoveAttr {
 
   override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder): boolean {
     this.hasTarget = this.mirrorMove;
-    const lastMove = this.mirrorMove ? target.getLastXMoves()[0].move : globalScene.currentBattle.lastMove;
+    const lastMove = this.mirrorMove ? target.getLastXMoves()[0].moveId : globalScene.currentBattle.lastMoveId;
     return super.apply(user, target, allMoves[lastMove], overridden);
   }
 
@@ -35,7 +35,7 @@ export class CopyMoveAttr extends CallMoveAttr {
       if (this.mirrorMove) {
         return target.getMoveHistory().length !== 0;
       } else {
-        const lastMove = globalScene.currentBattle.lastMove;
+        const lastMove = globalScene.currentBattle.lastMoveId;
         return lastMove !== undefined && !this.invalidMoves.includes(lastMove);
       }
     };
@@ -43,49 +43,49 @@ export class CopyMoveAttr extends CallMoveAttr {
 }
 
 export const invalidCopycatMoves = [
-  Moves.ASSIST,
-  Moves.BANEFUL_BUNKER,
-  Moves.BEAK_BLAST,
-  Moves.BEHEMOTH_BASH,
-  Moves.BEHEMOTH_BLADE,
-  Moves.BESTOW,
-  Moves.CELEBRATE,
-  Moves.CHATTER,
-  Moves.CIRCLE_THROW,
-  Moves.COPYCAT,
-  Moves.COUNTER,
-  Moves.COVET,
-  Moves.DESTINY_BOND,
-  Moves.DETECT,
-  Moves.DRAGON_TAIL,
-  Moves.DYNAMAX_CANNON,
-  Moves.ENDURE,
-  Moves.FEINT,
-  Moves.FOCUS_PUNCH,
-  Moves.FOLLOW_ME,
-  Moves.HELPING_HAND,
-  Moves.HOLD_HANDS,
-  Moves.KINGS_SHIELD,
-  Moves.MAT_BLOCK,
-  Moves.ME_FIRST,
-  Moves.METRONOME,
-  Moves.MIMIC,
-  Moves.MIRROR_COAT,
-  Moves.MIRROR_MOVE,
-  Moves.NONE,
-  Moves.PROTECT,
-  Moves.RAGE_POWDER,
-  Moves.ROAR,
-  Moves.SHELL_TRAP,
-  Moves.SKETCH,
-  Moves.SLEEP_TALK,
-  Moves.SNATCH,
-  Moves.SPIKY_SHIELD,
-  Moves.SPOTLIGHT,
-  Moves.STRUGGLE,
-  Moves.SWITCHEROO,
-  Moves.THIEF,
-  Moves.TRANSFORM,
-  Moves.TRICK,
-  Moves.WHIRLWIND,
+  MoveId.ASSIST,
+  MoveId.BANEFUL_BUNKER,
+  MoveId.BEAK_BLAST,
+  MoveId.BEHEMOTH_BASH,
+  MoveId.BEHEMOTH_BLADE,
+  MoveId.BESTOW,
+  MoveId.CELEBRATE,
+  MoveId.CHATTER,
+  MoveId.CIRCLE_THROW,
+  MoveId.COPYCAT,
+  MoveId.COUNTER,
+  MoveId.COVET,
+  MoveId.DESTINY_BOND,
+  MoveId.DETECT,
+  MoveId.DRAGON_TAIL,
+  MoveId.DYNAMAX_CANNON,
+  MoveId.ENDURE,
+  MoveId.FEINT,
+  MoveId.FOCUS_PUNCH,
+  MoveId.FOLLOW_ME,
+  MoveId.HELPING_HAND,
+  MoveId.HOLD_HANDS,
+  MoveId.KINGS_SHIELD,
+  MoveId.MAT_BLOCK,
+  MoveId.ME_FIRST,
+  MoveId.METRONOME,
+  MoveId.MIMIC,
+  MoveId.MIRROR_COAT,
+  MoveId.MIRROR_MOVE,
+  MoveId.NONE,
+  MoveId.PROTECT,
+  MoveId.RAGE_POWDER,
+  MoveId.ROAR,
+  MoveId.SHELL_TRAP,
+  MoveId.SKETCH,
+  MoveId.SLEEP_TALK,
+  MoveId.SNATCH,
+  MoveId.SPIKY_SHIELD,
+  MoveId.SPOTLIGHT,
+  MoveId.STRUGGLE,
+  MoveId.SWITCHEROO,
+  MoveId.THIEF,
+  MoveId.TRANSFORM,
+  MoveId.TRICK,
+  MoveId.WHIRLWIND,
 ];

@@ -5473,7 +5473,7 @@ export class EnemyPokemon extends Pokemon {
     if (moveQueue.length !== 0) {
       const queuedMove = moveQueue[0];
       if (queuedMove) {
-        const moveIndex = this.getMoveset().findIndex((m) => m?.moveId === queuedMove.move);
+        const moveIndex = this.getMoveset().findIndex((m) => m?.moveId === queuedMove.moveId);
         if (
           (moveIndex > -1 && this.getMoveset()[moveIndex]!.isUsable(this, queuedMove.ignorePP))
           || queuedMove.virtual
