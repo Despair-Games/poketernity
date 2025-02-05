@@ -7,11 +7,11 @@ import i18next from "i18next";
 import { PhaseId } from "#enums/phase-id";
 
 export class UnlockPhase extends Phase {
+  override readonly id = PhaseId.UNLOCK;
   private readonly unlockable: Unlockables;
 
   constructor(unlockable: Unlockables) {
     super();
-    this._id = PhaseId.UNLOCK;
 
     this.unlockable = unlockable;
   }

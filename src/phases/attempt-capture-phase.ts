@@ -31,13 +31,14 @@ import { PhaseId } from "#enums/phase-id";
  * @extends PokemonPhase
  */
 export class AttemptCapturePhase extends PokemonPhase {
+  override readonly id = PhaseId.ATTEMPT_CAPTURE;
+
   private readonly pokeballType: PokeballType;
   private pokeball: Phaser.GameObjects.Sprite;
   private originalY: number;
 
   constructor(targetIndex: number, pokeballType: PokeballType) {
     super(BattlerIndex.ENEMY + targetIndex);
-    this._id = PhaseId.ATTEMPT_CAPTURE;
 
     this.pokeballType = pokeballType;
   }

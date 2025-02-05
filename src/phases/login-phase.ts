@@ -15,11 +15,12 @@ import { PlayerGender } from "#enums/player-gender";
 import { PhaseId } from "#enums/phase-id";
 
 export class LoginPhase extends Phase {
+  override readonly id = PhaseId.LOGIN;
+
   private readonly showText: boolean;
 
   constructor(showText: boolean = true) {
     super();
-    this._id = PhaseId.LOGIN;
 
     this.showText = showText;
   }

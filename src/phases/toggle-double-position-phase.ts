@@ -4,11 +4,12 @@ import { BattlePhase } from "./abstract-battle-phase";
 import { PhaseId } from "#enums/phase-id";
 
 export class ToggleDoublePositionPhase extends BattlePhase {
+  override readonly id = PhaseId.TOGGLE_DOUBLE_POSITION;
+
   private readonly double: boolean;
 
   constructor(double: boolean) {
     super();
-    this._id = PhaseId.TOGGLE_DOUBLE_POSITION;
 
     this.double = double;
   }

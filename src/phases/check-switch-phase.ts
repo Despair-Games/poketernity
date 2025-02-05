@@ -17,13 +17,14 @@ import { PhaseId } from "#enums/phase-id";
  * @extends BattlePhase
  */
 export class CheckSwitchPhase extends BattlePhase {
+  override readonly id = PhaseId.CHECK_SWITCH;
+
   protected readonly fieldIndex: number;
   /** Whether to use the pokemon's name or "Pokemon" when displaying the dialog box */
   protected readonly useName: boolean;
 
   constructor(fieldIndex: number, useName: boolean) {
     super();
-    this._id = PhaseId.CHECK_SWITCH;
 
     this.fieldIndex = fieldIndex;
     this.useName = useName;

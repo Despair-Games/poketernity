@@ -16,6 +16,9 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
 
 export class SwitchSummonPhase extends SummonPhase {
+  /** @override Can't be just {@linkcode PhaseId.SWITCH} as {@linkcode SwitchSummonPhase} is extended by other phases. */
+  override readonly id: PhaseId = PhaseId.SWITCH_SUMMON;
+
   private readonly switchType: SwitchType;
   private slotIndex: number;
   private readonly doReturn: boolean;
@@ -32,7 +35,6 @@ export class SwitchSummonPhase extends SummonPhase {
    */
   constructor(switchType: SwitchType, fieldIndex: number, slotIndex: number, doReturn: boolean, player?: boolean) {
     super(fieldIndex, player !== undefined ? player : true);
-    this._id = PhaseId.SWITCH_SUMMON;
 
     this.switchType = switchType;
     this.slotIndex = slotIndex;

@@ -7,10 +7,7 @@ import { BattlePhase } from "./abstract-battle-phase";
  * @extends BattlePhase
  */
 export class NewBattlePhase extends BattlePhase {
-  constructor() {
-    super();
-    this._id = PhaseId.NEW_BATTLE;
-  }
+  override readonly id = PhaseId.NEW_BATTLE;
 
   public override start(): void {
     super.start();

@@ -44,6 +44,8 @@ interface SelectModifierPhaseOptions {
 }
 
 export class SelectModifierPhase extends BattlePhase {
+  override readonly id = PhaseId.SELECT_MODIFIER;
+
   private readonly rerollCount: number;
   private readonly modifierTiers?: ModifierTier[];
   private readonly customModifierSettings?: CustomModifierSettings;
@@ -53,7 +55,6 @@ export class SelectModifierPhase extends BattlePhase {
 
   constructor(options?: SelectModifierPhaseOptions) {
     super();
-    this._id = PhaseId.SELECT_MODIFIER;
 
     this.rerollCount = options?.rerollCount ?? 0;
     this.modifierTiers = options?.modifierTiers;
@@ -440,9 +441,5 @@ export class SelectModifierPhase extends BattlePhase {
       },
       isCopy: true,
     });
-  }
-
-  override isSelectModifierPhase(): this is this {
-    return true;
   }
 }

@@ -21,6 +21,8 @@ import { UiMode } from "#enums/ui-mode";
 import { TextStyle } from "#enums/text-style";
 import { AdminMode } from "#enums/admin-mode";
 import { GAME_WIDTH, GAME_HEIGHT } from "#app/ui-constants";
+import { PhaseId } from "#enums/phase-id";
+import { type SelectModifierPhase } from "#app/phases/select-modifier-phase";
 
 enum MenuOptions {
   GAME_SETTINGS,
@@ -57,7 +59,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
     this.excludedMenus = () => [
       {
-        excluded: globalScene.getCurrentPhase()?.isSelectModifierPhase() ?? false,
+        excluded: globalScene.getCurrentPhase()?.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER) ?? false,
         options: [MenuOptions.EGG_GACHA, MenuOptions.EGG_LIST],
       },
       { excluded: bypassLogin, options: [MenuOptions.LOG_OUT] },

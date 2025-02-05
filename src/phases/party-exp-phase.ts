@@ -10,13 +10,14 @@ import { PhaseId } from "#enums/phase-id";
  * @extends Phase
  */
 export class PartyExpPhase extends Phase {
+  override readonly id = PhaseId.PARTY_EXP;
+
   protected readonly expValue: number;
   protected readonly useWaveIndexMultiplier?: boolean;
   protected readonly pokemonParticipantIds?: Set<number>;
 
   constructor(expValue: number, useWaveIndexMultiplier?: boolean, pokemonParticipantIds?: Set<number>) {
     super();
-    this._id = PhaseId.PARTY_EXP;
 
     this.expValue = expValue;
     this.useWaveIndexMultiplier = useWaveIndexMultiplier;

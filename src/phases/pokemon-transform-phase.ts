@@ -13,12 +13,13 @@ import { PhaseId } from "#enums/phase-id";
  * @extends PokemonPhase
  */
 export class PokemonTransformPhase extends PokemonPhase {
+  override readonly id = PhaseId.POKEMON_TRANSFORM;
+
   protected readonly targetIndex: BattlerIndex;
   private readonly playSound: boolean;
 
   constructor(userIndex: BattlerIndex, targetIndex: BattlerIndex, playSound: boolean = false) {
     super(userIndex);
-    this._id = PhaseId.POKEMON_TRANSFORM;
 
     this.targetIndex = targetIndex;
     this.playSound = playSound;

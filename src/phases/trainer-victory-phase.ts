@@ -14,10 +14,7 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import { PhaseId } from "#enums/phase-id";
 
 export class TrainerVictoryPhase extends BattlePhase {
-  constructor() {
-    super();
-    this._id = PhaseId.TRAINER_VICTORY;
-  }
+  override readonly id = PhaseId.TRAINER_VICTORY;
 
   public override start(): void {
     const { arena, charSprite, currentBattle, eventManager, ui } = globalScene;

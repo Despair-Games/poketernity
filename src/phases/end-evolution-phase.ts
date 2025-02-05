@@ -9,10 +9,7 @@ import { UiMode } from "#enums/ui-mode";
  * @extends Phase
  */
 export class EndEvolutionPhase extends Phase {
-  constructor() {
-    super();
-    this._id = PhaseId.END_EVOLUTION;
-  }
+  override readonly id = PhaseId.END_EVOLUTION;
 
   public override start(): void {
     super.start();

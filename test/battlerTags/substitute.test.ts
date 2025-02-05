@@ -8,7 +8,7 @@ import { MoveId } from "#enums/move-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import * as messages from "#app/messages";
 import { allMoves } from "#app/data/all-moves";
-import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
+import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { GameManager } from "#test/testUtils/gameManager";
 import { MoveResult } from "#enums/move-result";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";

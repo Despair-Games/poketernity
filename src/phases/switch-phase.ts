@@ -16,7 +16,10 @@ import { PhaseId } from "#enums/phase-id";
  * @extends BattlePhase
  */
 export class SwitchPhase extends BattlePhase {
+  override readonly id = PhaseId.SWITCH;
+
   protected readonly fieldIndex: number;
+
   private readonly switchType: SwitchType;
   private readonly isModal: boolean;
   private readonly doReturn: boolean;
@@ -32,7 +35,6 @@ export class SwitchPhase extends BattlePhase {
    */
   constructor(switchType: SwitchType, fieldIndex: number, isModal: boolean, doReturn: boolean) {
     super();
-    this._id = PhaseId.SWITCH;
 
     this.switchType = switchType;
     this.fieldIndex = fieldIndex;

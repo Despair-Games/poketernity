@@ -16,10 +16,7 @@ import { PhaseId } from "#enums/phase-id";
  * @extends FieldPhase
  */
 export class BerryPhase extends FieldPhase {
-  constructor() {
-    super();
-    this._id = PhaseId.BERRY;
-  }
+  override readonly id = PhaseId.BERRY;
 
   public override start(): void {
     super.start();

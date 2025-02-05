@@ -12,6 +12,8 @@ import { PhaseId } from "#enums/phase-id";
  * @extends PokemonPhase
  */
 export class DamageAnimPhase extends PokemonPhase {
+  override readonly id = PhaseId.DAMAGE_ANIM;
+
   private amount: number;
   private readonly damageResult: DamageResult;
   private readonly critical: boolean;
@@ -23,7 +25,6 @@ export class DamageAnimPhase extends PokemonPhase {
     critical: boolean = false,
   ) {
     super(battlerIndex);
-    this._id = PhaseId.DAMAGE_ANIM;
 
     this.amount = amount;
     this.damageResult = damageResult;

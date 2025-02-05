@@ -4,10 +4,7 @@ import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 
 export class UnavailablePhase extends Phase {
-  constructor() {
-    super();
-    this._id = PhaseId.UNAVAILABLE;
-  }
+  override readonly id = PhaseId.UNAVAILABLE;
 
   public override start(): void {
     globalScene.ui.setMode(UiMode.UNAVAILABLE, () => {

@@ -9,12 +9,13 @@ import { BattlePhase } from "./abstract-battle-phase";
 import type { MovePhase } from "./move-phase";
 
 export class QuietFormChangePhase extends BattlePhase {
+  override readonly id = PhaseId.QUIET_FORM_CHANGE;
+
   protected readonly pokemon: Pokemon;
   protected readonly formChange: SpeciesFormChange;
 
   constructor(pokemon: Pokemon, formChange: SpeciesFormChange) {
     super();
-    this._id = PhaseId.QUIET_FORM_CHANGE;
     this.pokemon = pokemon;
     this.formChange = formChange;
   }
@@ -170,7 +171,9 @@ export class QuietFormChangePhase extends BattlePhase {
       this.pokemon.initBattleInfo();
       this.pokemon.cry();
 
-      const movePhase = globalScene.findPhase<MovePhase>((p) => p.isMovePhase() && p.pokemon === this.pokemon);
+      const movePhase = globalScene.findPhase<MovePhase>(
+        (p) => p.is<MovePhase>(PhaseId.MOVE) && p.pokemon === this.pokemon,
+      );
       if (movePhase) {
         movePhase.cancel();
       }

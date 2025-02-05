@@ -9,9 +9,10 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
 
 export class PostSummonPhase extends PokemonPhase {
+  override readonly id = PhaseId.POST_SUMMON;
+
   constructor(battlerIndex: BattlerIndex) {
     super(battlerIndex);
-    this._id = PhaseId.POST_SUMMON;
   }
 
   public override start(): void {

@@ -24,12 +24,13 @@ import { PhaseId } from "#enums/phase-id";
  * @extends FieldPhase
  */
 export class EnemyCommandPhase extends FieldPhase {
+  override readonly id = PhaseId.ENEMY_COMMAND;
+
   protected readonly fieldIndex: number;
   protected skipTurn: boolean = false;
 
   constructor(fieldIndex: number) {
     super();
-    this._id = PhaseId.ENEMY_COMMAND;
 
     this.fieldIndex = fieldIndex;
     if (globalScene.currentBattle.mysteryEncounter?.skipEnemyBattleTurns) {

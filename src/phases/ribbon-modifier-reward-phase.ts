@@ -7,11 +7,12 @@ import { ModifierRewardPhase } from "./modifier-reward-phase";
 import { PhaseId } from "#enums/phase-id";
 
 export class RibbonModifierRewardPhase extends ModifierRewardPhase {
+  override readonly id = PhaseId.RIBBON_MODIFIER_REWARD;
+
   private readonly species: PokemonSpecies;
 
   constructor(modifierTypeFunc: ModifierTypeFunc, species: PokemonSpecies) {
     super(modifierTypeFunc);
-    this._id = PhaseId.RIBBON_MODIFIER_REWARD;
 
     this.species = species;
   }

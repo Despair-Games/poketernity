@@ -14,10 +14,7 @@ import { TurnStartPhase } from "./turn-start-phase";
 import { PhaseId } from "#enums/phase-id";
 
 export class TurnInitPhase extends FieldPhase {
-  constructor() {
-    super();
-    this._id = PhaseId.TURN_INIT;
-  }
+  override readonly id = PhaseId.TURN_INIT;
 
   public override start(): void {
     super.start();

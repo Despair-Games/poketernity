@@ -5,9 +5,10 @@ import { SwitchType } from "#enums/switch-type";
 import { SwitchSummonPhase } from "./switch-summon-phase";
 
 export class ReturnPhase extends SwitchSummonPhase {
+  override readonly id = PhaseId.RETURN;
+
   constructor(fieldIndex: number) {
     super(SwitchType.SWITCH, fieldIndex, -1, true);
-    this._id = PhaseId.RETURN;
   }
 
   protected override switchAndSummon(): void {

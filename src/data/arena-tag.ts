@@ -28,6 +28,7 @@ import { MoveFlags } from "#enums/move-flags";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { type SkyDropTag } from "./battler-tags";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 export abstract class ArenaTag {
   constructor(
@@ -374,7 +375,7 @@ const QuickGuardConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
   const move = allMoves[moveId];
   const effectPhase = globalScene.getCurrentPhase();
 
-  if (effectPhase?.isMoveEffectPhase()) {
+  if (effectPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
     const attacker = effectPhase.getUserPokemon();
     if (attacker) {
       return move.getPriority(attacker) > 0;

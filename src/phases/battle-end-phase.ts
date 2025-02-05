@@ -10,12 +10,12 @@ import { PhaseId } from "#enums/phase-id";
  * @extends BattlePhase
  */
 export class BattleEndPhase extends BattlePhase {
+  override readonly id = PhaseId.BATTLE_END;
   /** If true, will increment battles won */
   public readonly isVictory: boolean;
 
   constructor(isVictory: boolean) {
     super();
-    this._id = PhaseId.BATTLE_END;
 
     this.isVictory = isVictory;
   }

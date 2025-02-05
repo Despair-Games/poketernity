@@ -12,9 +12,14 @@ import { PhaseId } from "#enums/phase-id";
  * @extends Phase
  */
 export class LoadMoveAnimPhase extends Phase {
-  constructor(protected readonly moveId: MoveId) {
+  override readonly id = PhaseId.LOAD_MOVE_ANIM;
+
+  protected readonly moveId: MoveId;
+
+  constructor(moveId: MoveId) {
     super();
-    this._id = PhaseId.LOAD_MOVE_ANIM;
+
+    this.moveId = moveId;
   }
 
   public override start(): void {

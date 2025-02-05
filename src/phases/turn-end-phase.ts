@@ -12,10 +12,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
 
 export class TurnEndPhase extends FieldPhase {
-  constructor() {
-    super();
-    this._id = PhaseId.TURN_END;
-  }
+  override readonly id = PhaseId.TURN_END;
 
   public override start(): void {
     super.start();

@@ -5,9 +5,10 @@ import { PlayerGender } from "#enums/player-gender";
 import { BattlePhase } from "./abstract-battle-phase";
 
 export class ShowTrainerPhase extends BattlePhase {
+  override readonly id = PhaseId.SHOW_TRAINER;
+
   public override start(): void {
     super.start();
-    this._id = PhaseId.SHOW_TRAINER;
 
     globalScene.trainer.setVisible(true);
 

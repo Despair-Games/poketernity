@@ -18,9 +18,14 @@ import { PhaseId } from "#enums/phase-id";
  * @extends BattlePhase
  */
 export class RevivalBlessingPhase extends BattlePhase {
-  constructor(protected readonly user: PlayerPokemon) {
+  override readonly id = PhaseId.REVIVAL_BLESSING;
+
+  protected readonly user: PlayerPokemon;
+
+  constructor(user: PlayerPokemon) {
     super();
-    this._id = PhaseId.REVIVAL_BLESSING;
+
+    this.user = user;
   }
 
   public override start(): void {

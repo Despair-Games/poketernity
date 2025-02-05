@@ -27,6 +27,8 @@ import { PhaseId } from "#enums/phase-id";
  * @extends FormChangeBasePhase
  */
 export class EvolutionPhase extends FormChangeBasePhase {
+  override readonly id = PhaseId.EVOLUTION;
+
   protected readonly lastLevel: number;
 
   private preEvolvedPokemonName: string;
@@ -43,7 +45,6 @@ export class EvolutionPhase extends FormChangeBasePhase {
 
   constructor(pokemon: PlayerPokemon, evolution: SpeciesFormEvolution | null, lastLevel: number) {
     super(pokemon);
-    this._id = PhaseId.EVOLUTION;
 
     this.pokemon = pokemon;
     this.evolution = evolution;
@@ -295,9 +296,5 @@ export class EvolutionPhase extends FormChangeBasePhase {
         });
       });
     });
-  }
-
-  override isEvolutionPhase(): this is this {
-    return true;
   }
 }

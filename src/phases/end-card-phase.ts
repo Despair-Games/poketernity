@@ -14,13 +14,9 @@ import { PhaseId } from "#enums/phase-id";
  * @extends Phase
  */
 export class EndCardPhase extends Phase {
+  override readonly id = PhaseId.END_CARD;
   public endCard: Phaser.GameObjects.Image;
   public text: Phaser.GameObjects.Text;
-
-  constructor() {
-    super();
-    this._id = PhaseId.END_CARD;
-  }
 
   public override start(): void {
     super.start();

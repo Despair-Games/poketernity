@@ -4,11 +4,12 @@ import { PhaseId } from "#enums/phase-id";
 import type { EndCardPhase } from "./end-card-phase";
 
 export class PostGameOverPhase extends Phase {
+  override readonly id = PhaseId.POST_GAME_OVER;
+
   private readonly endCardPhase?: EndCardPhase;
 
   constructor(endCardPhase?: EndCardPhase) {
     super();
-    this._id = PhaseId.POST_GAME_OVER;
 
     this.endCardPhase = endCardPhase;
   }

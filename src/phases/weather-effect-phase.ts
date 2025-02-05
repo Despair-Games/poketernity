@@ -12,10 +12,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
 
 export class WeatherEffectPhase extends CommonAnimPhase {
-  constructor() {
-    super();
-    this._id = PhaseId.WEATHER_EFFECT;
-  }
+  override readonly id = PhaseId.WEATHER_EFFECT;
 
   public override start(): void {
     // Get current weather state at end of turn

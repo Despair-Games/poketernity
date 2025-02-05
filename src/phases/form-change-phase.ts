@@ -24,12 +24,13 @@ import { PhaseId } from "#enums/phase-id";
  * @extends FormChangeBasePhase
  */
 export class FormChangePhase extends FormChangeBasePhase {
+  override readonly id = PhaseId.FORM_CHANGE;
+
   private readonly formChange: SpeciesFormChange;
   private readonly modal: boolean;
 
   constructor(pokemon: PlayerPokemon, formChange: SpeciesFormChange, modal: boolean) {
     super(pokemon);
-    this._id = PhaseId.FORM_CHANGE;
 
     this.formChange = formChange;
     this.modal = modal;

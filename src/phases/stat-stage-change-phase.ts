@@ -16,6 +16,8 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
 
+//#region Types
+
 export type StatStageChangeCallback = (changed: BattleStat[], relativeChanges: number[], target?: Pokemon) => void;
 
 interface SSCPhaseOptions {
@@ -25,7 +27,11 @@ interface SSCPhaseOptions {
   onChange?: StatStageChangeCallback;
 }
 
+//#endregion
+
 export class StatStageChangePhase extends PokemonPhase {
+  override readonly id = PhaseId.STAT_STAGE_CHANGE;
+
   protected readonly stats: BattleStat[];
   protected readonly selfTarget: boolean;
   protected stages: number;
@@ -43,7 +49,6 @@ export class StatStageChangePhase extends PokemonPhase {
     options?: SSCPhaseOptions,
   ) {
     super(battlerIndex);
-    this._id = PhaseId.STAT_STAGE_CHANGE;
 
     this.selfTarget = selfTarget;
     this.stats = stats;

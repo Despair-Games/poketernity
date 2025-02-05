@@ -10,12 +10,14 @@ import { PhaseId } from "#enums/phase-id";
  * @extends PokemonPhase
  */
 export class CommonAnimPhase extends PokemonPhase {
+  /** @override Can't be just {@linkcode PhaseId.COMMON_ANIM} as {@linkcode CommonAnimPhase} is extended by other phases */
+  override readonly id: PhaseId = PhaseId.COMMON_ANIM;
+
   private anim: CommonAnim | null;
   private readonly targetIndex?: BattlerIndex;
 
   constructor(battlerIndex?: BattlerIndex, targetIndex?: BattlerIndex, anim: CommonAnim | null = null) {
     super(battlerIndex);
-    this._id = PhaseId.COMMON_ANIM;
 
     this.anim = anim;
     this.targetIndex = targetIndex;

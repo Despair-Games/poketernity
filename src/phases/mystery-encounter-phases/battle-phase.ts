@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { PostSummonPhase } from "#app/phases/post-summon-phase";
+import { type PostSummonPhase } from "#app/phases/post-summon-phase";
 // -- end tsdoc imports --
 
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
@@ -29,11 +29,13 @@ import { PhaseId } from "#enums/phase-id";
  * @extends Phase
  */
 export class MysteryEncounterBattlePhase extends Phase {
+  override readonly id = PhaseId.ME_BATTLE;
+
   protected disableSwitch: boolean;
 
   constructor(disableSwitch: boolean = false) {
     super();
-    this._id = PhaseId.ME_BATTLE;
+
     this.disableSwitch = disableSwitch;
   }
 

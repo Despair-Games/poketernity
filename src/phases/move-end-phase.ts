@@ -14,9 +14,10 @@ import { PhaseId } from "#enums/phase-id";
  * @extends PokemonPhase
  */
 export class MoveEndPhase extends PokemonPhase {
+  override readonly id = PhaseId.MOVE_END;
+
   constructor(battlerIndex: BattlerIndex) {
     super(battlerIndex);
-    this._id = PhaseId.MOVE_END;
   }
 
   public override start(): void {

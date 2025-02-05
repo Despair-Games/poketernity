@@ -27,7 +27,7 @@ export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
     }
 
     const allyMovePhase = globalScene.findPhase<MovePhase>(
-      (phase) => phase.isMovePhase() && phase.pokemon.isPlayer() === user.isPlayer(),
+      (phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon.isPlayer() === user.isPlayer(),
     );
     if (allyMovePhase) {
       const allyMove = allyMovePhase.move.getMove();
@@ -44,7 +44,7 @@ export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
 
         // Move the ally's MovePhase (if needed) so that the ally moves next
         const allyMovePhaseIndex = globalScene.phaseQueue.indexOf(allyMovePhase);
-        const firstMovePhaseIndex = globalScene.phaseQueue.findIndex((phase) => phase.isMovePhase());
+        const firstMovePhaseIndex = globalScene.phaseQueue.findIndex((phase) => phase.is<MovePhase>(PhaseId.MOVE));
         if (allyMovePhaseIndex !== firstMovePhaseIndex) {
           globalScene.prependToPhase(globalScene.phaseQueue.splice(allyMovePhaseIndex, 1)[0], PhaseId.MOVE);
         }

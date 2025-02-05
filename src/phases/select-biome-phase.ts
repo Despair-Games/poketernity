@@ -11,10 +11,7 @@ import { SwitchBiomePhase } from "./switch-biome-phase";
 import { PhaseId } from "#enums/phase-id";
 
 export class SelectBiomePhase extends BattlePhase {
-  constructor() {
-    super();
-    this._id = PhaseId.SELECT_BIOME;
-  }
+  override readonly id = PhaseId.SELECT_BIOME;
 
   public override start(): void {
     super.start();

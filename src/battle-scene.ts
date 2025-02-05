@@ -46,7 +46,7 @@ import { loadCommonAnimAssets } from "./utils/anim-utils";
 import { initCommonAnims } from "./data/init-common-anims";
 import { loadMoveAnimAssets } from "./utils/move-anim-utils";
 import { initMoveAnim } from "./data/init-move-anim";
-import type { Phase } from "#app/phase";
+import { type Phase } from "#app/phase";
 import { initGameSpeed } from "#app/system/game-speed";
 import { Arena, ArenaBase } from "#app/field/arena";
 import { GameData } from "#app/system/game-data";
@@ -186,7 +186,8 @@ import { SelectTargetPhase } from "#app/phases/select-target-phase";
 import { MoveAnimPhase } from "#app/phases/move-anim-phase";
 import type { ChargeAnim } from "#enums/charge-anim";
 import { MoveChargeAnim } from "#app/data/battle-anims/move-charge-anim";
-import { type PhaseId } from "#enums/phase-id";
+import { PhaseId } from "#enums/phase-id";
+import { type SwitchPhase } from "#app/phases/switch-phase";
 
 //#region Types
 
@@ -937,7 +938,7 @@ export default class BattleScene extends SceneBase {
       do {
         targetingMovePhase = this.findPhase(
           (mp) =>
-            mp.isMovePhase()
+            mp.is<MovePhase>(PhaseId.MOVE)
             && mp.targets.length === 1
             && mp.targets[0] === removedPokemon.getBattlerIndex()
             && mp.pokemon.isPlayer() !== allyPokemon.isPlayer(),
@@ -1461,7 +1462,7 @@ export default class BattleScene extends SceneBase {
     }
 
     if (lastBattle?.double && !newDouble) {
-      this.tryRemovePhase((p) => p.isSwitchPhase());
+      this.tryRemovePhase((p) => p.is<SwitchPhase>(PhaseId.SWITCH));
       this.getPlayerField().forEach((p) => p.lapseTag(BattlerTagType.COMMANDED));
     }
 

@@ -15,12 +15,12 @@ import { PhaseId } from "#enums/phase-id";
  * @extends PokemonPhase
  */
 export class AttemptRunPhase extends PokemonPhase {
+  override readonly id = PhaseId.ATTEMPT_RUN;
   /** For testing purposes: this is to force the pokemon to fail to escape */
   public forceFailEscape = false; // TODO: replace with a new override
 
   constructor(fieldIndex: number) {
     super(fieldIndex);
-    this._id = PhaseId.ATTEMPT_RUN;
   }
 
   public override start(): void {

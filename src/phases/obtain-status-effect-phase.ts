@@ -14,6 +14,8 @@ import { PhaseId } from "#enums/phase-id";
  * @extends PokemonPhase
  */
 export class ObtainStatusEffectPhase extends PokemonPhase {
+  override readonly id = PhaseId.OBTAIN_STATUS_EFFECT;
+
   private readonly statusEffect: StatusEffect;
   private readonly turnsRemaining?: number;
   private readonly sourceText?: string | null;
@@ -27,7 +29,6 @@ export class ObtainStatusEffectPhase extends PokemonPhase {
     sourcePokemon?: Pokemon | null,
   ) {
     super(battlerIndex);
-    this._id = PhaseId.OBTAIN_STATUS_EFFECT;
 
     this.statusEffect = statusEffect;
     this.turnsRemaining = turnsRemaining;

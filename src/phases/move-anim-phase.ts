@@ -7,12 +7,13 @@ import { PhaseId } from "#enums/phase-id";
  * @extends Phase
  */
 export class MoveAnimPhase<Anim extends MoveAnim> extends Phase {
+  override readonly id = PhaseId.MOVE_ANIM;
+
   protected readonly anim: Anim;
   protected readonly onSubstitute: boolean;
 
   constructor(anim: Anim, onSubstitute: boolean = false) {
     super();
-    this._id = PhaseId.MOVE_ANIM;
 
     this.anim = anim;
     this.onSubstitute = onSubstitute;

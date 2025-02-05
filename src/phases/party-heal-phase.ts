@@ -8,11 +8,12 @@ import { BattlePhase } from "./abstract-battle-phase";
  * @extends BattlePhase
  */
 export class PartyHealPhase extends BattlePhase {
+  override readonly id = PhaseId.PARTY_HEAL;
+
   private readonly resumeBgm: boolean;
 
   constructor(resumeBgm: boolean) {
     super();
-    this._id = PhaseId.PARTY_HEAL;
 
     this.resumeBgm = resumeBgm;
   }

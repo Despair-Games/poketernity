@@ -5,11 +5,12 @@ import { fixedNumber } from "#app/utils";
 import { PhaseId } from "#enums/phase-id";
 
 export class ReloadSessionPhase extends Phase {
+  override readonly id = PhaseId.RELOAD_SESSION;
+
   private readonly systemDataStr?: string;
 
   constructor(systemDataStr?: string) {
     super();
-    this._id = PhaseId.RELOAD_SESSION;
 
     this.systemDataStr = systemDataStr;
   }

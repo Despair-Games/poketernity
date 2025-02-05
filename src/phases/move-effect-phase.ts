@@ -43,6 +43,8 @@ import type { PokemonMove } from "#app/field/pokemon-move";
 import { PhaseId } from "#enums/phase-id";
 
 export class MoveEffectPhase extends HitCheckPhase {
+  override readonly id = PhaseId.MOVE_EFFECT;
+
   private moveHistoryEntry: TurnMove;
   /** The targets of the move after dynamic adjustments, e.g. from Dragon Darts */
   private adjustedTargets: BattlerIndex[] | null = null;
@@ -56,7 +58,6 @@ export class MoveEffectPhase extends HitCheckPhase {
 
   constructor(battlerIndex: BattlerIndex, targets: BattlerIndex[], move: PokemonMove) {
     super(battlerIndex, targets, move);
-    this._id = PhaseId.MOVE_EFFECT;
   }
 
   public override start(): void {
@@ -654,9 +655,5 @@ export class MoveEffectPhase extends HitCheckPhase {
   /** @returns A new `MoveEffectPhase` with the same properties as this phase */
   protected getNewHitPhase(): MoveEffectPhase {
     return new MoveEffectPhase(this.battlerIndex, this.targets, this.move);
-  }
-
-  override isMoveEffectPhase(): this is this {
-    return true;
   }
 }

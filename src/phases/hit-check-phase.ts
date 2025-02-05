@@ -20,7 +20,11 @@ import { PokemonPhase } from "./abstract-pokemon-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
 
+//#region Types
+
 type HitCheckEntry = [HitCheckResult, TypeDamageMultiplier];
+
+//#endregion
 
 /**
  * Abstract class for phases that may calculate hit checks.
@@ -29,13 +33,15 @@ type HitCheckEntry = [HitCheckResult, TypeDamageMultiplier];
  * @see {@linkcode hitCheck}
  */
 export abstract class HitCheckPhase extends PokemonPhase {
+  /** @override Can't be just {@linkcode PhaseId.HIT_CHECK} as {@linkcode HitCheckPhase} is extended by other phases */
+  override readonly id: PhaseId = PhaseId.HIT_CHECK;
   public move: PokemonMove;
+
   protected targets: BattlerIndex[];
   protected hitChecks: HitCheckEntry[];
 
   constructor(battlerIndex: BattlerIndex, targets: BattlerIndex[], move: PokemonMove) {
     super(battlerIndex);
-    this._id = PhaseId.HIT_CHECK;
 
     this.move = move;
     this.targets = targets;

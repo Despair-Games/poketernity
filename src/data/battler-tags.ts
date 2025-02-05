@@ -25,7 +25,7 @@ import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
-import type { StatStageChangeCallback } from "#app/phases/stat-stage-change-phase";
+import { type StatStageChangeCallback } from "#app/phases/stat-stage-change-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import i18next from "#app/plugins/i18n";
 import { BooleanHolder, getFrameMs, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
@@ -536,9 +536,9 @@ export class ShellTrapTag extends BattlerTag {
       // Trap should only be triggered by opponent's Physical moves
       if (phaseData?.move.category === MoveCategory.PHYSICAL && pokemon.isOpponent(phaseData.attacker)) {
         const shellTrapPhaseIndex = globalScene.phaseQueue.findIndex(
-          (phase) => phase.isMovePhase() && phase.pokemon === pokemon,
+          (phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon === pokemon,
         );
-        const firstMovePhaseIndex = globalScene.phaseQueue.findIndex((phase) => phase.isMovePhase());
+        const firstMovePhaseIndex = globalScene.phaseQueue.findIndex((phase) => phase.is<MovePhase>(PhaseId.MOVE));
 
         // Only shift MovePhase timing if it's not already next up
         if (shellTrapPhaseIndex !== -1 && shellTrapPhaseIndex !== firstMovePhaseIndex) {
@@ -1001,7 +1001,7 @@ export class PowderTag extends BattlerTag {
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     if (lapseType === BattlerTagLapseType.PRE_MOVE) {
       const currPhase = globalScene.getCurrentPhase();
-      if (currPhase?.isMovePhase()) {
+      if (currPhase?.is<MovePhase>(PhaseId.MOVE)) {
         const move = currPhase.move.getMove();
         const weather = globalScene.arena.weather;
         if (
@@ -1127,13 +1127,13 @@ export class EncoreTag extends MoveRestrictionBattlerTag {
       i18next.t("battlerTags:encoreOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
 
-    const movePhase = globalScene.findPhase((m) => m.isMovePhase() && m.pokemon === pokemon);
+    const movePhase = globalScene.findPhase((m) => m.is<MovePhase>(PhaseId.MOVE) && m.pokemon === pokemon);
     if (movePhase) {
       const movesetMove = pokemon.getMoveset().find((m) => m.moveId === this.moveId);
       if (movesetMove) {
         const lastMove = pokemon.getLastXMoves(1)[0];
         globalScene.tryReplacePhase(
-          (m) => m.isMovePhase() && m.pokemon === pokemon,
+          (m) => m.is<MovePhase>(PhaseId.MOVE) && m.pokemon === pokemon,
           new MovePhase(pokemon, lastMove.targets ?? [], movesetMove),
         );
       }
@@ -2063,7 +2063,7 @@ export class SkyDropTag extends BattlerTag {
       if (pokemon?.getTag(BattlerTagType.SKY_DROP)?.sourceId === this.sourceId) {
         // Cancel the Sky Drop user's next use of Sky Drop
         if (this.sourceId === pokemon.id) {
-          globalScene.tryRemovePhase((phase) => phase.isMovePhase() && phase.pokemon.id === pokemon.id);
+          globalScene.tryRemovePhase((phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon.id === pokemon.id);
           pokemon.getMoveQueue().shift();
           pokemon.removeTag(BattlerTagType.CHARGING);
         }
@@ -2645,7 +2645,7 @@ export class GulpMissileTag extends BattlerTag {
     }
 
     const moveEffectPhase = globalScene.getCurrentPhase();
-    if (moveEffectPhase?.isMoveEffectPhase()) {
+    if (moveEffectPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
       const attacker = moveEffectPhase.getUserPokemon();
 
       if (!attacker) {
@@ -2994,7 +2994,7 @@ export class SubstituteTag extends BattlerTag {
   /** If the Substitute redirects damage, queue a message to indicate it. */
   onHit(pokemon: Pokemon): void {
     const moveEffectPhase = globalScene.getCurrentPhase();
-    if (moveEffectPhase?.isMoveEffectPhase()) {
+    if (moveEffectPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
       const attacker = moveEffectPhase.getUserPokemon();
       if (!attacker) {
         return;
@@ -3636,7 +3636,7 @@ export function loadBattlerTag(source: BattlerTag | any): BattlerTag {
  */
 function getMoveEffectPhaseData(_pokemon: Pokemon): { phase: MoveEffectPhase; attacker: Pokemon; move: Move } | null {
   const phase = globalScene.getCurrentPhase();
-  if (phase?.isMoveEffectPhase()) {
+  if (phase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
     return {
       phase: phase,
       attacker: phase.getPokemon(),

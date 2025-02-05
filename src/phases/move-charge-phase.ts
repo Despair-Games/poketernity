@@ -11,8 +11,6 @@ import { HitCheckResult } from "#enums/hit-check-result";
 import i18next from "i18next";
 import { HitCheckPhase } from "./hit-check-phase";
 import { MoveEndPhase } from "./move-end-phase";
-import type { PokemonMove } from "#app/field/pokemon-move";
-import type { BattlerIndex } from "#enums/battler-index";
 import { PhaseId } from "#enums/phase-id";
 
 /**
@@ -20,10 +18,7 @@ import { PhaseId } from "#enums/phase-id";
  * @extends {@linkcode PokemonPhase}
  */
 export class MoveChargePhase extends HitCheckPhase {
-  constructor(battlerIndex: BattlerIndex, targets: BattlerIndex[], move: PokemonMove) {
-    super(battlerIndex, targets, move);
-    this._id = PhaseId.MOVE_CHARGE;
-  }
+  override readonly id = PhaseId.MOVE_CHARGE;
 
   public override start() {
     super.start();

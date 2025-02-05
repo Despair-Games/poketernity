@@ -9,9 +9,10 @@ import { CommandPhase } from "./command-phase";
 import { PhaseId } from "#enums/phase-id";
 
 export class SelectTargetPhase extends PokemonPhase {
+  override readonly id = PhaseId.SELECT_TARGET;
+
   constructor(fieldIndex: number) {
     super(fieldIndex);
-    this._id = PhaseId.SELECT_TARGET;
   }
 
   public override start(): void {

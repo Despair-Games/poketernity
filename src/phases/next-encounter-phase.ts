@@ -7,10 +7,8 @@ import { EncounterPhase } from "./encounter-phase";
  * @extends EncounterPhase
  */
 export class NextEncounterPhase extends EncounterPhase {
-  constructor(loaded: boolean = false) {
-    super(loaded);
-    this._id = PhaseId.NEXT_ENCOUNTER;
-  }
+  /** @override Can't be just {@linkcode PhaseId.NEXT_ENCOUNTER} as {@linkcode NextEncounterPhase} is extended by other phases */
+  override readonly id: PhaseId = PhaseId.NEXT_ENCOUNTER;
 
   protected override doEncounter(): void {
     const { arena, arenaEnemy, arenaNextEnemy, currentBattle, field, lastEnemyTrainer, lastMysteryEncounter, tweens } =

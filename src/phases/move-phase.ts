@@ -56,6 +56,8 @@ import { PhaseId } from "#enums/phase-id";
  * @extends BattlePhase
  */
 export class MovePhase extends BattlePhase {
+  override readonly id = PhaseId.MOVE;
+
   protected _pokemon: Pokemon;
   protected _move: PokemonMove;
   protected _targets: BattlerIndex[];
@@ -63,6 +65,26 @@ export class MovePhase extends BattlePhase {
   protected ignorePp: boolean;
   protected failed: boolean = false;
   protected cancelled: boolean = false;
+
+  /**
+   * @param followUp Indicates that the move being uses is a "follow-up" - for example, a move being used by Metronome or Dancer.
+   *                 Follow-ups bypass a few failure conditions, including flinches, sleep/paralysis/freeze and volatile status checks, etc.
+   */
+  constructor(
+    pokemon: Pokemon,
+    targets: BattlerIndex[],
+    move: PokemonMove | MoveId,
+    followUp: boolean = false,
+    ignorePp: boolean = false,
+  ) {
+    super();
+
+    this.pokemon = pokemon;
+    this.targets = targets;
+    this.move = typeof move === "number" ? new PokemonMove(move, 0, 0, true) : move;
+    this.followUp = followUp;
+    this.ignorePp = ignorePp;
+  }
 
   public get pokemon(): Pokemon {
     return this._pokemon;
@@ -86,27 +108,6 @@ export class MovePhase extends BattlePhase {
 
   protected set targets(targets: BattlerIndex[]) {
     this._targets = targets;
-  }
-
-  /**
-   * @param followUp Indicates that the move being uses is a "follow-up" - for example, a move being used by Metronome or Dancer.
-   *                 Follow-ups bypass a few failure conditions, including flinches, sleep/paralysis/freeze and volatile status checks, etc.
-   */
-  constructor(
-    pokemon: Pokemon,
-    targets: BattlerIndex[],
-    move: PokemonMove | MoveId,
-    followUp: boolean = false,
-    ignorePp: boolean = false,
-  ) {
-    super();
-    this._id = PhaseId.MOVE;
-
-    this.pokemon = pokemon;
-    this.targets = targets;
-    this.move = typeof move === "number" ? new PokemonMove(move, 0, 0, true) : move;
-    this.followUp = followUp;
-    this.ignorePp = ignorePp;
   }
 
   /**
@@ -603,9 +604,5 @@ export class MovePhase extends BattlePhase {
 
   public showFailedText(failedText?: string): void {
     globalScene.queueMessage(failedText ?? i18next.t("battle:attackFailed"));
-  }
-
-  override isMovePhase(): this is this {
-    return true;
   }
 }

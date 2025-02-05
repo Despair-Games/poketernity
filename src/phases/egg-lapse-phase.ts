@@ -22,13 +22,10 @@ import { PhaseId } from "#enums/phase-id";
  * @extends Phase
  */
 export class EggLapsePhase extends Phase {
+  override readonly id = PhaseId.EGG_LAPSE;
+
   private eggHatchData: EggHatchData[] = [];
   private readonly minEggsToSkip: number = 2;
-
-  constructor() {
-    super();
-    this._id = PhaseId.EGG_LAPSE;
-  }
 
   public override start(): void {
     super.start();

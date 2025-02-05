@@ -10,6 +10,8 @@ import { Species } from "#enums/species";
 
 // TODO: This should probably be made into an abstract base class
 export class PokemonAnimPhase extends BattlePhase {
+  override readonly id = PhaseId.POKEMON_ANIM;
+
   /** The type of animation to play in this phase */
   protected readonly key: PokemonAnimType;
   /** The Pokemon to which this animation applies */
@@ -19,7 +21,6 @@ export class PokemonAnimPhase extends BattlePhase {
 
   constructor(key: PokemonAnimType, pokemon: Pokemon, fieldAssets: Phaser.GameObjects.Sprite[] = []) {
     super();
-    this._id = PhaseId.POKEMON_ANIM;
 
     this.key = key;
     this.pokemon = pokemon;

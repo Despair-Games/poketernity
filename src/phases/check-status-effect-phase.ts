@@ -10,12 +10,13 @@ import { PhaseId } from "#enums/phase-id";
  * @extends Phase
  */
 export class CheckStatusEffectPhase extends Phase {
+  override readonly id = PhaseId.CHECK_STATUS_EFFECT;
+
   /** The pokemon being checked, ordered by turn order */
   private readonly activePokemon: BattlerIndex[];
 
   constructor(activePokemon: BattlerIndex[]) {
     super();
-    this._id = PhaseId.CHECK_STATUS_EFFECT;
 
     this.activePokemon = activePokemon;
   }

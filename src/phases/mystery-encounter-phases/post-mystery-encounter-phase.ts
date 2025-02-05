@@ -22,6 +22,8 @@ import { PhaseId } from "#enums/phase-id";
  * @extends Phase
  */
 export class PostMysteryEncounterPhase extends Phase {
+  override readonly id = PhaseId.ME_POST;
+
   private readonly FIRST_DIALOGUE_PROMPT_DELAY = 750;
   protected onPostOptionSelect?: OptionPhaseCallback =
     globalScene.currentBattle.mysteryEncounter?.selectedOption?.onPostOptionPhase;
@@ -31,7 +33,6 @@ export class PostMysteryEncounterPhase extends Phase {
    */
   public override start(): void {
     super.start();
-    this._id = PhaseId.ME_POST;
 
     const { mysteryEncounter } = globalScene.currentBattle;
 

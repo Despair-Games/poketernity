@@ -10,12 +10,12 @@ import { BattlePhase } from "./abstract-battle-phase";
  * @extends BattlePhase
  */
 export class MoveHeaderPhase extends BattlePhase {
+  override readonly id = PhaseId.MOVE_HEADER;
   public readonly pokemon: Pokemon;
   public readonly move: PokemonMove;
 
   constructor(pokemon: Pokemon, move: PokemonMove) {
     super();
-    this._id = PhaseId.MOVE_HEADER;
 
     this.pokemon = pokemon;
     this.move = move;

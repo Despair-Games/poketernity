@@ -4,9 +4,10 @@ import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 
 export class SelectChallengePhase extends Phase {
+  override readonly id = PhaseId.SELECT_CHALLENGE;
+
   constructor() {
     super();
-    this._id = PhaseId.SELECT_CHALLENGE;
   }
 
   public override start(): void {

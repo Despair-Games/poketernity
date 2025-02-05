@@ -3,6 +3,8 @@ import { Phase } from "#app/phase";
 import { PhaseId } from "#enums/phase-id";
 
 export class MessagePhase extends Phase {
+  override readonly id = PhaseId.MESSAGE;
+
   private text: string;
   private readonly callbackDelay: number | null;
   private readonly prompt: boolean | null;
@@ -17,7 +19,6 @@ export class MessagePhase extends Phase {
     speaker?: string,
   ) {
     super();
-    this._id = PhaseId.MESSAGE;
 
     this.text = text;
     this.callbackDelay = callbackDelay;

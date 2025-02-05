@@ -16,12 +16,12 @@ import { EVIL_BOSS_2_WAVE } from "#app/data/special-waves";
 import { PhaseId } from "#enums/phase-id";
 
 export class VictoryPhase extends PokemonPhase {
+  override readonly id = PhaseId.VICTORY;
   /** If true, indicates that the phase is intended for EXP purposes only, and not to continue a battle to next phase */
   public readonly isExpOnly: boolean;
 
   constructor(battlerIndex: BattlerIndex | number, isExpOnly: boolean = false) {
     super(battlerIndex);
-    this._id = PhaseId.VICTORY;
 
     this.isExpOnly = isExpOnly;
   }

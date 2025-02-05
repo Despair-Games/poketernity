@@ -196,6 +196,7 @@ import { PartyFilterNonFainted } from "#app/utils/party-utils";
 import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
+import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -916,7 +917,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
       // During the Pokemon's MoveEffect phase, the offset is removed to put the Pokemon "in focus"
       const currentPhase = globalScene.getCurrentPhase();
-      if (currentPhase?.isMoveEffectPhase() && currentPhase.getPokemon() === this) {
+      if (currentPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT) && currentPhase.getPokemon() === this) {
         return false;
       }
       return true;
@@ -4119,7 +4120,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
      */
     if (effect === StatusEffect.SLEEP || effect === StatusEffect.FREEZE) {
       const currentPhase = globalScene.getCurrentPhase();
-      if (currentPhase?.isMoveEffectPhase() && currentPhase.getUserPokemon() === this) {
+      if (currentPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT) && currentPhase.getUserPokemon() === this) {
         this.turnData.hitCount = 1;
         this.turnData.hitsLeft = 1;
       }

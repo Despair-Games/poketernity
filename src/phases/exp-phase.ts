@@ -12,11 +12,12 @@ import { PhaseId } from "#enums/phase-id";
  * @extends PlayerPartyMemberPokemonPhase
  */
 export class ExpPhase extends PlayerPartyMemberPokemonPhase {
+  override readonly id = PhaseId.EXP;
+
   private readonly expValue: number;
 
   constructor(partyMemberIndex: number, expValue: number) {
     super(partyMemberIndex);
-    this._id = PhaseId.EXP;
 
     this.expValue = expValue;
   }

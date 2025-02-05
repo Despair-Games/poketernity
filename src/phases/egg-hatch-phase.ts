@@ -23,6 +23,8 @@ import { PhaseId } from "#enums/phase-id";
  * @extends Phase
  */
 export class EggHatchPhase extends Phase {
+  override readonly id = PhaseId.EGG_HATCH;
+
   /** The egg that is hatching */
   private readonly egg: Egg;
   /** The new EggHatchData for the egg/pokemon that hatches */
@@ -73,7 +75,7 @@ export class EggHatchPhase extends Phase {
 
   constructor(hatchScene: EggLapsePhase, egg: Egg, eggsToHatchCount: number) {
     super();
-    this._id = PhaseId.EGG_HATCH;
+
     this.eggLapsePhase = hatchScene;
     this.egg = egg;
     this.eggsToHatchCount = eggsToHatchCount;

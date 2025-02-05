@@ -26,6 +26,8 @@ export interface PokemonHealPhaseOptions {
 }
 
 export class PokemonHealPhase extends CommonAnimPhase {
+  override readonly id = PhaseId.POKEMON_HEAL;
+
   private readonly hpHealed: number;
   private message?: string;
   private readonly showFullHpMessage: boolean;
@@ -37,7 +39,6 @@ export class PokemonHealPhase extends CommonAnimPhase {
 
   constructor(battlerIndex: BattlerIndex, hpHealed: number, options?: PokemonHealPhaseOptions) {
     super(battlerIndex, undefined, CommonAnim.HEALTH_UP);
-    this._id = PhaseId.POKEMON_HEAL;
 
     this.hpHealed = hpHealed;
     this.message = options?.message;

@@ -28,10 +28,7 @@ import { PhaseId } from "#enums/phase-id";
  * @extends Phase
  */
 export class MysteryEncounterBattleStartCleanupPhase extends Phase {
-  constructor() {
-    super();
-    this._id = PhaseId.ME_BATTLE_START_CLEANUP;
-  }
+  override readonly id = PhaseId.ME_BATTLE_START_CLEANUP;
 
   /**
    * Cleans up `TURN_END` tags, any {@linkcode PostTurnStatusEffectPhase}s, checks for Pokemon switches, then continues

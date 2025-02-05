@@ -59,6 +59,7 @@ import type { Variant } from "#app/data/variant";
 import { StatusEffect } from "#enums/status-effect";
 import { globalScene } from "#app/global-scene";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Animates exclamation sprite over trainer's head at start of encounter
@@ -735,7 +736,7 @@ export function setEncounterRewards(
     if (customShopRewards) {
       globalScene.unshiftPhase(new SelectModifierPhase({ customModifierSettings: customShopRewards }));
     } else {
-      globalScene.tryRemovePhase((p) => p.isSelectModifierPhase());
+      globalScene.tryRemovePhase((p) => p.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER));
     }
 
     if (eggRewards) {

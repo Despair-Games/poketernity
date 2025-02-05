@@ -12,11 +12,12 @@ import { UiMode } from "#enums/ui-mode";
  * @extends Phase
  */
 export class EggSummaryPhase extends Phase {
+  override readonly id = PhaseId.EGG_SUMMARY;
+
   private readonly eggHatchData: EggHatchData[];
 
   constructor(eggHatchData: EggHatchData[]) {
     super();
-    this._id = PhaseId.EGG_SUMMARY;
     this.eggHatchData = eggHatchData;
   }
 

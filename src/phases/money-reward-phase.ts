@@ -11,11 +11,12 @@ import { PhaseId } from "#enums/phase-id";
  * @extends BattlePhase
  */
 export class MoneyRewardPhase extends BattlePhase {
+  override readonly id = PhaseId.MONEY_REWARD;
+
   private readonly moneyMultiplier: number;
 
   constructor(moneyMultiplier: number) {
     super();
-    this._id = PhaseId.MONEY_REWARD;
 
     this.moneyMultiplier = moneyMultiplier;
   }

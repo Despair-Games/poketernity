@@ -10,9 +10,10 @@ import { PhaseId } from "#enums/phase-id";
  * @extends ModifierRewardPhase
  */
 export class GameOverModifierRewardPhase extends ModifierRewardPhase {
+  override readonly id: PhaseId = PhaseId.GAME_OVER_MODIFIER_REWARD;
+
   constructor(modifierTypeFunc: ModifierTypeFunc) {
     super(modifierTypeFunc);
-    this._id = PhaseId.GAME_OVER_MODIFIER_REWARD;
   }
 
   public override doReward(): Promise<void> {

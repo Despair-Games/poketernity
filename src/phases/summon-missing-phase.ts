@@ -5,9 +5,10 @@ import { SummonPhase } from "./summon-phase";
 import { PhaseId } from "#enums/phase-id";
 
 export class SummonMissingPhase extends SummonPhase {
+  override readonly id: PhaseId = PhaseId.SUMMON_MISSING;
+
   constructor(fieldIndex: number) {
     super(fieldIndex);
-    this._id = PhaseId.SUMMON_MISSING;
   }
 
   protected override preSummon(): void {

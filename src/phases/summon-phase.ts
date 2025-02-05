@@ -16,11 +16,13 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PhaseId } from "#enums/phase-id";
 
 export class SummonPhase extends PartyMemberPokemonPhase {
+  /** @override This one can't be just {@linkcode PhaseId.SUMMON} as other phases extend {@linkcode SummonPhase} */
+  override readonly id: PhaseId = PhaseId.SUMMON;
+
   private readonly loaded: boolean;
 
   constructor(fieldIndex: number, player: boolean = true, loaded: boolean = false) {
     super(fieldIndex, player);
-    this._id = PhaseId.SUMMON;
 
     this.loaded = loaded;
   }

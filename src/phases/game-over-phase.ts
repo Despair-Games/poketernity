@@ -39,12 +39,13 @@ import { PhaseId } from "#enums/phase-id";
  * - Award ribbons + vouchers per player pokemon if a victory
  */
 export class GameOverPhase extends BattlePhase {
+  override readonly id = PhaseId.GAME_OVER;
+
   private isVictory: boolean;
   private readonly firstRibbons: PokemonSpecies[] = [];
 
   constructor(isVictory: boolean = false) {
     super();
-    this._id = PhaseId.GAME_OVER;
 
     this.isVictory = isVictory;
   }

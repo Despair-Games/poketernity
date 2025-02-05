@@ -27,15 +27,11 @@ import { api } from "#app/plugins/api/api";
 import { PhaseId } from "#enums/phase-id";
 
 export class TitlePhase extends Phase {
-  private loaded: boolean = false;
-  private lastSessionData: SessionSaveData;
+  override readonly id = PhaseId.TITLE;
   public gameMode: GameModes;
 
-  constructor() {
-    super();
-
-    this._id = PhaseId.TITLE;
-  }
+  private loaded: boolean = false;
+  private lastSessionData: SessionSaveData;
 
   public override start(): void {
     super.start();

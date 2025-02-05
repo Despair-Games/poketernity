@@ -9,10 +9,7 @@ import { PhaseId } from "#enums/phase-id";
  * @extends FieldPhase
  */
 export class LevelCapPhase extends FieldPhase {
-  constructor() {
-    super();
-    this._id = PhaseId.LEVEL_CAP;
-  }
+  override readonly id = PhaseId.LEVEL_CAP;
 
   public override start(): void {
     super.start();

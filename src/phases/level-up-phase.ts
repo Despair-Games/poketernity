@@ -23,13 +23,14 @@ import { PhaseId } from "#enums/phase-id";
  * @extends PlayerPartyMemberPokemonPhase
  */
 export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
+  override readonly id = PhaseId.LEVEL_UP;
+
   protected readonly lastLevel: number;
   protected readonly level: number;
   protected readonly pokemon: PlayerPokemon = this.getPlayerPokemon();
 
   constructor(partyMemberIndex: number, lastLevel: number, level: number) {
     super(partyMemberIndex);
-    this._id = PhaseId.LEVEL_UP;
 
     this.lastLevel = lastLevel;
     this.level = level;

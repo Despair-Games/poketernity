@@ -62,6 +62,8 @@ import { PhaseId } from "#enums/phase-id";
  * @extends PokemonPhase
  */
 export class FaintPhase extends PokemonPhase {
+  override readonly id = PhaseId.FAINT;
+
   /** Whether or not enduring (for this phase's purposes, Reviver Seed) should be prevented */
   private readonly preventEndure: boolean;
 
@@ -82,7 +84,6 @@ export class FaintPhase extends PokemonPhase {
     source?: Pokemon,
   ) {
     super(battlerIndex);
-    this._id = PhaseId.FAINT;
 
     this.preventEndure = preventEndure;
     this.destinyTag = destinyTag;

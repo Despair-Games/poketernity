@@ -1,7 +1,7 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { NewBiomeEncounterPhase } from "#app/phases/new-biome-encounter-phase";
-import type { NextEncounterPhase } from "#app/phases/next-encounter-phase";
+import { type NewBiomeEncounterPhase } from "#app/phases/new-biome-encounter-phase";
+import { type NextEncounterPhase } from "#app/phases/next-encounter-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -64,11 +64,13 @@ import { PhaseId } from "#enums/phase-id";
  * @extends BattlePhase
  */
 export class EncounterPhase extends BattlePhase {
+  /** @override Can't be just {@linkcode PhaseId.ENCOUNTER} as {@linkcode EncounterPhase} is extended by other phases */
+  override readonly id: PhaseId = PhaseId.ENCOUNTER;
+
   private readonly loaded: boolean;
 
   constructor(loaded: boolean = false) {
     super();
-    this._id = PhaseId.ENCOUNTER;
 
     this.loaded = loaded;
   }

@@ -31,12 +31,13 @@ import { PhaseId } from "#enums/phase-id";
  * @see {@linkcode handleCommand}
  */
 export class CommandPhase extends FieldPhase {
+  override readonly id = PhaseId.COMMAND;
+
   /** TODO: Is this supposed to be a {@linkcode FieldPosition} or a {@linkcode BattlerIndex}? */
   protected fieldIndex: number;
 
   constructor(fieldIndex: number) {
     super();
-    this._id = PhaseId.COMMAND;
 
     this.fieldIndex = fieldIndex;
   }

@@ -20,10 +20,7 @@ import { PhaseId } from "#enums/phase-id";
  * @extends Phase
  */
 export class MysteryEncounterOptionSelectedPhase extends Phase {
-  constructor() {
-    super();
-    this._id = PhaseId.ME_OPTION_SELECTED;
-  }
+  override readonly id = PhaseId.ME_OPTION_SELECTED;
 
   protected onOptionSelect: OptionPhaseCallback =
     globalScene.currentBattle.mysteryEncounter!.selectedOption!.onOptionPhase;

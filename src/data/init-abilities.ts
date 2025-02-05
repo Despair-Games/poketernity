@@ -199,6 +199,8 @@ import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
+import { type MovePhase } from "#app/phases/move-phase";
+import { PhaseId } from "#enums/phase-id";
 
 export function initAbilities() {
   allAbilities.push(
@@ -707,7 +709,9 @@ export function initAbilities() {
     new Ability(Abilities.ANALYTIC, 5).attr(
       MovePowerBoostAbAttr,
       (user, _target, _move) => {
-        const movePhase = globalScene.findPhase((phase) => phase.isMovePhase() && phase.pokemon.id !== user?.id);
+        const movePhase = globalScene.findPhase(
+          (phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon.id !== user?.id,
+        );
         return isNullOrUndefined(movePhase);
       },
       1.3,
