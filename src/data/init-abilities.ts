@@ -201,6 +201,7 @@ import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { type MovePhase } from "#app/phases/move-phase";
 import { PhaseId } from "#enums/phase-id";
+import { ReflectStatStageChangeAbAttr } from "#app/data/ab-attrs/reflect-stat-stage-change-ab-attr";
 
 export function initAbilities() {
   allAbilities.push(
@@ -1170,7 +1171,7 @@ export function initAbilities() {
       )
       .bypassFaint(),
     new Ability(Abilities.PROPELLER_TAIL, 8).attr(BlockRedirectAbAttr),
-    new Ability(Abilities.MIRROR_ARMOR, 8).ignorable().unimplemented(),
+    new Ability(Abilities.MIRROR_ARMOR, 8).attr(ReflectStatStageChangeAbAttr).ignorable(),
     /**
      * Right now, the logic is attached to Surf and Dive MoveId. Ideally, the post-defend/hit should be an
      * ability attribute but the current implementation of move effects for BattlerTag does not support this- in the case

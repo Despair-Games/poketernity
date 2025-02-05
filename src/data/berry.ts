@@ -102,7 +102,9 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
         const stat: BattleStat = berryType - BerryType.ENIGMA;
         const statStages = new NumberHolder(1);
         applyAbAttrs(AbAttrFlag.DOUBLE_BERRY_EFFECT, pokemon, false, statStages);
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [stat], statStages.value));
+        globalScene.unshiftPhase(
+          new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [stat], statStages.value),
+        );
         applyAbAttrs(AbAttrFlag.POST_ITEM_LOST, berryOwner ?? pokemon, false);
       };
     case BerryType.LANSAT:
@@ -121,7 +123,9 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
         const randStat = randSeedInt(Stat.SPD, Stat.ATK);
         const stages = new NumberHolder(2);
         applyAbAttrs(AbAttrFlag.DOUBLE_BERRY_EFFECT, pokemon, false, stages);
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [randStat], stages.value));
+        globalScene.unshiftPhase(
+          new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [randStat], stages.value),
+        );
         applyAbAttrs(AbAttrFlag.POST_ITEM_LOST, berryOwner ?? pokemon, false);
       };
     case BerryType.LEPPA:
