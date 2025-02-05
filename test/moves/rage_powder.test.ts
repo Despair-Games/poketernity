@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -26,8 +26,8 @@ describe("Moves - Rage Powder", () => {
     game.override.enemySpecies(Species.SNORLAX);
     game.override.startingLevel(100);
     game.override.enemyLevel(100);
-    game.override.moveset([Moves.FOLLOW_ME, Moves.RAGE_POWDER, Moves.SPOTLIGHT, Moves.QUICK_ATTACK]);
-    game.override.enemyMoveset([Moves.RAGE_POWDER, Moves.TACKLE, Moves.SPLASH]);
+    game.override.moveset([MoveId.FOLLOW_ME, MoveId.RAGE_POWDER, MoveId.SPOTLIGHT, MoveId.QUICK_ATTACK]);
+    game.override.enemyMoveset([MoveId.RAGE_POWDER, MoveId.TACKLE, MoveId.SPLASH]);
   });
 
   test("move effect should be bypassed by Grass type", async () => {
@@ -35,11 +35,11 @@ describe("Moves - Rage Powder", () => {
 
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.move.select(Moves.QUICK_ATTACK, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.QUICK_ATTACK, 1, BattlerIndex.ENEMY_2);
+    game.move.select(MoveId.QUICK_ATTACK, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.QUICK_ATTACK, 1, BattlerIndex.ENEMY_2);
 
-    await game.forceEnemyMove(Moves.RAGE_POWDER);
-    await game.forceEnemyMove(Moves.SPLASH);
+    await game.forceEnemyMove(MoveId.RAGE_POWDER);
+    await game.forceEnemyMove(MoveId.SPLASH);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -58,11 +58,11 @@ describe("Moves - Rage Powder", () => {
 
     const enemyStartingHp = enemyPokemon.map((p) => p.hp);
 
-    game.move.select(Moves.QUICK_ATTACK, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.QUICK_ATTACK, 1, BattlerIndex.ENEMY_2);
+    game.move.select(MoveId.QUICK_ATTACK, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.QUICK_ATTACK, 1, BattlerIndex.ENEMY_2);
 
-    await game.forceEnemyMove(Moves.RAGE_POWDER);
-    await game.forceEnemyMove(Moves.SPLASH);
+    await game.forceEnemyMove(MoveId.RAGE_POWDER);
+    await game.forceEnemyMove(MoveId.SPLASH);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 

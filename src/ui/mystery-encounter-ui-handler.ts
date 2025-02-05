@@ -17,6 +17,7 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import { globalScene } from "#app/global-scene";
+import { CANVAS_SCALE, GAME_WIDTH } from "#app/ui-constants";
 
 export default class MysteryEncounterUiHandler extends UiHandler {
   private cursorContainer: Phaser.GameObjects.Container;
@@ -435,7 +436,7 @@ export default class MysteryEncounterUiHandler extends UiHandler {
       // Sets up the mask that hides the option text to give an illusion of scrolling
       const nonScrollWidth = 90;
       const optionTextMaskRect = globalScene.make.graphics({});
-      optionTextMaskRect.setScale(6);
+      optionTextMaskRect.setScale(CANVAS_SCALE);
       optionTextMaskRect.fillStyle(0xffffff);
       optionTextMaskRect.beginPath();
       optionTextMaskRect.fillRect(optionText.x + 11, optionText.y + 140, nonScrollWidth, 18);
@@ -468,7 +469,7 @@ export default class MysteryEncounterUiHandler extends UiHandler {
 
     // View Party Button
     const viewPartyText = addBBCodeTextObject(
-      globalScene.game.canvas.width / 6,
+      GAME_WIDTH,
       -24,
       getBBCodeFrag(i18next.t("mysteryEncounterMessages:view_party_button"), TextStyle.PARTY),
       TextStyle.PARTY,
@@ -506,7 +507,7 @@ export default class MysteryEncounterUiHandler extends UiHandler {
 
     // Sets up the mask that hides the description text to give an illusion of scrolling
     const descriptionTextMaskRect = globalScene.make.graphics({});
-    descriptionTextMaskRect.setScale(6);
+    descriptionTextMaskRect.setScale(CANVAS_SCALE);
     descriptionTextMaskRect.fillStyle(0xffffff);
     descriptionTextMaskRect.beginPath();
     descriptionTextMaskRect.fillRect(6, 53, 206, 57);
@@ -617,7 +618,7 @@ export default class MysteryEncounterUiHandler extends UiHandler {
 
       // Sets up the mask that hides the description text to give an illusion of scrolling
       const tooltipTextMaskRect = globalScene.make.graphics({});
-      tooltipTextMaskRect.setScale(6);
+      tooltipTextMaskRect.setScale(CANVAS_SCALE);
       tooltipTextMaskRect.fillStyle(0xffffff);
       tooltipTextMaskRect.beginPath();
       tooltipTextMaskRect.fillRect(this.tooltipContainer.x, this.tooltipContainer.y + 188.5, 150, 32);

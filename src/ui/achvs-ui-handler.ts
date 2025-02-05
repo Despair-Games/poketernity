@@ -13,6 +13,7 @@ import { ScrollBar } from "#app/ui/scroll-bar";
 import { PlayerGender } from "#enums/player-gender";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 enum Page {
   ACHIEVEMENTS,
@@ -72,14 +73,9 @@ export default class AchvsUiHandler extends MessageUiHandler {
   setup() {
     const ui = this.getUi();
 
-    this.mainContainer = globalScene.add.container(1, -(globalScene.game.canvas.height / 6) + 1);
+    this.mainContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
 
-    this.mainContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 6, globalScene.game.canvas.height / 6),
-      Phaser.Geom.Rectangle.Contains,
-    );
-
-    this.headerBg = addWindow(0, 0, globalScene.game.canvas.width / 6 - 2, 24);
+    this.headerBg = addWindow(0, 0, GAME_WIDTH - 2, 24);
     this.headerBg.setOrigin(0, 0);
 
     this.headerText = addTextObject(0, 0, "", TextStyle.SETTINGS_LABEL);
@@ -99,12 +95,7 @@ export default class AchvsUiHandler extends MessageUiHandler {
     this.achvsName = i18next.t("achv:Achievements.name", { context: genderStr });
     this.vouchersName = i18next.t("voucher:vouchers");
 
-    this.iconsBg = addWindow(
-      0,
-      this.headerBg.height,
-      globalScene.game.canvas.width / 6 - 2,
-      globalScene.game.canvas.height / 6 - this.headerBg.height - 68,
-    );
+    this.iconsBg = addWindow(0, this.headerBg.height, GAME_WIDTH - 2, GAME_HEIGHT - this.headerBg.height - 68);
     this.iconsBg.setOrigin(0, 0);
 
     const yOffset = 6;
@@ -160,7 +151,7 @@ export default class AchvsUiHandler extends MessageUiHandler {
     this.unlockText.setOrigin(0.5, 0.5);
     this.unlockText.setPositionRelative(unlockBg, unlockBg.width / 2, unlockBg.height / 2);
 
-    const descriptionBg = addWindow(0, titleBg.y + titleBg.height, globalScene.game.canvas.width / 6 - 2, 42);
+    const descriptionBg = addWindow(0, titleBg.y + titleBg.height, GAME_WIDTH - 2, 42);
     descriptionBg.setOrigin(0, 0);
 
     const descriptionText = addTextObject(0, 0, "", TextStyle.WINDOW, { maxLines: 2 });

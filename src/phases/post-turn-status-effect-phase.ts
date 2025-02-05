@@ -3,7 +3,7 @@ import { BlockNonDirectDamageAbAttr } from "#app/data/ab-attrs/block-non-direct-
 import { BlockStatusDamageAbAttr } from "#app/data/ab-attrs/block-status-damage-ab-attr";
 import { PostDamageAbAttr } from "#app/data/ab-attrs/post-damage-ab-attr";
 import { ReduceBurnDamageAbAttr } from "#app/data/ab-attrs/reduce-burn-damage-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { CommonBattleAnim } from "#app/data/battle-anims";
 import { CommonAnim } from "#enums/common-anim";
 import { getStatusEffectActivationText } from "#app/data/status-effect";

@@ -1,6 +1,6 @@
 import { allMoves } from "#app/data/all-moves";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -28,14 +28,14 @@ describe("Moves - Body Press", () => {
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
   });
 
   it("should use the user's Defense stat to calculate damage", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
-    const bodyPress = allMoves[Moves.BODY_PRESS];
+    const bodyPress = allMoves[MoveId.BODY_PRESS];
 
     const player = game.field.getPlayerPokemon();
     vi.spyOn(player, "stats", "get").mockReturnValue(Array(6).fill(100));
@@ -55,14 +55,14 @@ describe("Moves - Body Press", () => {
 
   it("should use Defense stat stages during damage calculation", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
-    const bodyPress = allMoves[Moves.BODY_PRESS];
+    const bodyPress = allMoves[MoveId.BODY_PRESS];
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
 
     const { damage: preDamage } = enemy.getAttackDamage(player, bodyPress);
 
-    game.move.use(Moves.IRON_DEFENSE);
+    game.move.use(MoveId.IRON_DEFENSE);
 
     await game.toNextTurn();
 
@@ -74,7 +74,7 @@ describe("Moves - Body Press", () => {
 
   it("should only apply Attack stat multipliers from abilities for damage", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
-    const bodyPress = allMoves[Moves.BODY_PRESS];
+    const bodyPress = allMoves[MoveId.BODY_PRESS];
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();

@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -25,19 +25,19 @@ describe("Abilities - Anger Point", () => {
     game = new GameManager(phaserGame);
     game.override
       .startingLevel(10)
-      .moveset([Moves.SPLASH, Moves.SUBSTITUTE])
+      .moveset([MoveId.SPLASH, MoveId.SUBSTITUTE])
       .ability(Abilities.ANGER_POINT)
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.STORM_THROW);
+      .enemyMoveset(MoveId.STORM_THROW);
   });
 
   it("should maximize the ability holder's attack if it receives a critical hit", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon();
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(pokemon?.getStatStage(Stat.ATK)).toBe(6);
@@ -47,7 +47,7 @@ describe("Abilities - Anger Point", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon();
 
-    game.move.select(Moves.SUBSTITUTE);
+    game.move.select(MoveId.SUBSTITUTE);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("BerryPhase");
 

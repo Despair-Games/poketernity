@@ -111,6 +111,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.PROTECTED:
       case BattlerTagType.FLYING:
       case BattlerTagType.CRIT_BOOST:
+      case BattlerTagType.CRIT_BOOST_STACKABLE:
       case BattlerTagType.ALWAYS_CRIT:
         return 5;
       default:

@@ -3,7 +3,7 @@ import { ArenaTagSide } from "#enums/arena-tag-side";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -27,13 +27,13 @@ describe("Moves - Rapid Spin", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.RAPID_SPIN])
+      .moveset([MoveId.RAPID_SPIN])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should increase the user's Speed", async () => {
@@ -41,20 +41,20 @@ describe("Moves - Rapid Spin", () => {
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.RAPID_SPIN);
+    game.move.select(MoveId.RAPID_SPIN);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(player.getStatStage(Stat.SPD)).toBe(1);
   });
 
   it("should remove binding effects from the user", async () => {
-    game.override.enemyMoveset(Moves.INFESTATION);
+    game.override.enemyMoveset(MoveId.INFESTATION);
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.RAPID_SPIN);
+    game.move.select(MoveId.RAPID_SPIN);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
@@ -71,10 +71,10 @@ describe("Moves - Rapid Spin", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     [ArenaTagSide.PLAYER, ArenaTagSide.ENEMY].forEach((side) =>
-      game.scene.arena.addTag(tagType, 0, 1, Moves.NONE, side),
+      game.scene.arena.addTag(tagType, 0, 1, MoveId.NONE, side),
     );
 
-    game.move.select(Moves.RAPID_SPIN);
+    game.move.select(MoveId.RAPID_SPIN);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 

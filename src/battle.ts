@@ -13,13 +13,13 @@ import {
 import { TrainerVariant } from "#enums/trainer-variant";
 import Trainer from "./field/trainer";
 import type { GameMode } from "./game-mode";
-import { MoneyMultiplierModifier, PokemonHeldItemModifier } from "./modifier/modifier";
+import { MoneyMultiplierModifier, type PokemonHeldItemModifier } from "./modifier/modifier";
 import type { PokeballType } from "#enums/pokeball";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import type { EnemyPokemon, PlayerPokemon, TurnMove } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import type { Moves } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 import { PlayerGender } from "#enums/player-gender";
 import { MusicPreference } from "#enums/music-preference";
 import { Species } from "#enums/species";
@@ -74,6 +74,13 @@ interface TurnCommands {
   [key: number]: TurnCommand | null;
 }
 
+/**
+ * Uses the global RNG seed to generate a second seed to be used for in-battle RNG rolls.
+ */
+function generateBattleSeed() {
+  return randomString(16, true);
+}
+
 export default class Battle {
   protected gameMode: GameMode;
   public waveIndex: number;
@@ -92,8 +99,8 @@ export default class Battle {
   public battleScore: number = 0;
   public postBattleLoot: PokemonHeldItemModifier[] = [];
   public escapeAttempts: number = 0;
-  public lastMove: Moves;
-  public battleSeed: string = randomString(16, true);
+  public lastMoveId: MoveId;
+  public battleSeed: string = generateBattleSeed();
   private battleSeedState: string | null = null;
   public moneyScattered: number = 0;
   public lastUsedPokeball: PokeballType | null = null;
@@ -178,7 +185,7 @@ export default class Battle {
     this.postBattleLoot.push(
       ...globalScene
         .findModifiers(
-          (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === enemyPokemon.id && m.isTransferable,
+          (m) => m.isPokemonHeldItemModifier() && m.pokemonId === enemyPokemon.id && m.isTransferable,
           false,
         )
         .map((i) => {

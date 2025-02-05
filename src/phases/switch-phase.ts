@@ -90,4 +90,8 @@ export class SwitchPhase extends BattlePhase {
       PartyUiHandler.FilterNonFainted,
     );
   }
+
+  override isSwitchPhase(): this is this {
+    return true;
+  }
 }

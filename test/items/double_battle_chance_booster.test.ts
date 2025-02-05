@@ -1,4 +1,4 @@
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { DoubleBattleChanceBoosterModifier } from "#app/modifier/modifier";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -50,12 +50,12 @@ describe("Items - Double Battle Chance Boosters", () => {
     game.override
       .startingModifier([{ name: "LURE" }])
       .itemRewards([{ name: "LURE" }])
-      .moveset(Moves.SPLASH)
+      .moveset(MoveId.SPLASH)
       .startingLevel(200);
 
     await game.classicMode.startBattle([Species.PIKACHU]);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
 
     await game.doKillOpponents();
 

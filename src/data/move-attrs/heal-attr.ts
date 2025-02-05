@@ -6,7 +6,7 @@ import { toDmgValue } from "#app/utils";
 import i18next from "i18next";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import { applyAbAttrs } from "../ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { NumberHolder } from "#app/utils";
 import { RecoveryBoostAbAttr } from "../ab-attrs/recovery-boost-ab-attr";
 

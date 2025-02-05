@@ -6,7 +6,7 @@ import type { TurnMove } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
 import { GameManager } from "#test/testUtils/gameManager";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -17,7 +17,7 @@ describe("Moves - Spit Up", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
-  const spitUp = allMoves[Moves.SPIT_UP];
+  const spitUp = allMoves[MoveId.SPIT_UP];
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({ type: Phaser.HEADLESS });
@@ -33,7 +33,7 @@ describe("Moves - Spit Up", () => {
     game.override.battleType("single");
 
     game.override.enemySpecies(Species.RATTATA);
-    game.override.enemyMoveset(Moves.SPLASH);
+    game.override.enemyMoveset(MoveId.SPLASH);
     game.override.enemyAbility(Abilities.NONE);
     game.override.enemyLevel(2000);
 
@@ -57,7 +57,7 @@ describe("Moves - Spit Up", () => {
       expect(stockpilingTag).toBeDefined();
       expect(stockpilingTag.stockpiledCount).toBe(stacksToSetup);
 
-      game.move.select(Moves.SPIT_UP);
+      game.move.select(MoveId.SPIT_UP);
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(spitUp.calculateBattlePower).toHaveBeenCalledOnce();
@@ -80,7 +80,7 @@ describe("Moves - Spit Up", () => {
       expect(stockpilingTag).toBeDefined();
       expect(stockpilingTag.stockpiledCount).toBe(stacksToSetup);
 
-      game.move.select(Moves.SPIT_UP);
+      game.move.select(MoveId.SPIT_UP);
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(spitUp.calculateBattlePower).toHaveBeenCalledOnce();
@@ -104,7 +104,7 @@ describe("Moves - Spit Up", () => {
       expect(stockpilingTag).toBeDefined();
       expect(stockpilingTag.stockpiledCount).toBe(stacksToSetup);
 
-      game.move.select(Moves.SPIT_UP);
+      game.move.select(MoveId.SPIT_UP);
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(spitUp.calculateBattlePower).toHaveBeenCalledOnce();
@@ -122,11 +122,11 @@ describe("Moves - Spit Up", () => {
     const stockpilingTag = pokemon.getTag(StockpilingTag)!;
     expect(stockpilingTag).toBeUndefined();
 
-    game.move.select(Moves.SPIT_UP);
+    game.move.select(MoveId.SPIT_UP);
     await game.phaseInterceptor.to(TurnInitPhase);
 
     expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-      move: Moves.SPIT_UP,
+      moveId: MoveId.SPIT_UP,
       result: MoveResult.FAIL,
       targets: [game.field.getEnemyPokemon().getBattlerIndex()],
     });
@@ -144,7 +144,7 @@ describe("Moves - Spit Up", () => {
       const stockpilingTag = pokemon.getTag(StockpilingTag)!;
       expect(stockpilingTag).toBeDefined();
 
-      game.move.select(Moves.SPIT_UP);
+      game.move.select(MoveId.SPIT_UP);
       await game.phaseInterceptor.to(MovePhase);
 
       expect(pokemon.getStatStage(Stat.DEF)).toBe(1);
@@ -153,7 +153,7 @@ describe("Moves - Spit Up", () => {
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-        move: Moves.SPIT_UP,
+        moveId: MoveId.SPIT_UP,
         result: MoveResult.SUCCESS,
         targets: [game.field.getEnemyPokemon().getBattlerIndex()],
       });
@@ -181,11 +181,11 @@ describe("Moves - Spit Up", () => {
         [Stat.SPDEF]: 2,
       };
 
-      game.move.select(Moves.SPIT_UP);
+      game.move.select(MoveId.SPIT_UP);
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-        move: Moves.SPIT_UP,
+        moveId: MoveId.SPIT_UP,
         result: MoveResult.SUCCESS,
         targets: [game.field.getEnemyPokemon().getBattlerIndex()],
       });

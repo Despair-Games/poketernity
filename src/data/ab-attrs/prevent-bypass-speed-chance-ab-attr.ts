@@ -32,7 +32,7 @@ export class PreventBypassSpeedChanceAbAttr extends AbAttr {
   ): boolean {
     const turnCommand = globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()];
     const isCommandFight = turnCommand?.command === BattleCommand.FIGHT;
-    const move = turnCommand?.move?.move ? allMoves[turnCommand.move.move] : null;
+    const move = turnCommand?.move?.moveId ? allMoves[turnCommand.move.moveId] : null;
     if (move && this.condition(pokemon, move) && isCommandFight) {
       bypassSpeed.value = false;
       canCheckHeldItems.value = false;

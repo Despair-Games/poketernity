@@ -3,11 +3,7 @@ import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";
 import { getPokemonNameWithAffix } from "#app/messages";
-import {
-  PokemonMoveAccuracyBoosterModifier,
-  PokemonMultiHitModifier,
-  AttackTypeBoosterModifier,
-} from "#app/modifier/modifier";
+import { PokemonMoveAccuracyBoosterModifier, AttackTypeBoosterModifier } from "#app/modifier/modifier";
 import type { AbstractConstructor, Constructor, nil } from "#app/utils";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
@@ -16,8 +12,8 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveTarget } from "#enums/move-target";
-import { Moves } from "#enums/moves";
-import { Type } from "#enums/type";
+import { MoveId } from "#enums/move-id";
+import { ElementalType } from "#enums/elemental-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { AllyMoveCategoryPowerBoostAbAttr } from "./ab-attrs/ally-move-category-power-boost-ab-attr";
@@ -31,7 +27,7 @@ import { MoveTypeChangeAbAttr } from "./ab-attrs/move-type-change-ab-attr";
 import { UserFieldMoveTypePowerBoostAbAttr } from "./ab-attrs/user-field-move-type-power-boost-ab-attr";
 import { VariableMovePowerAbAttr } from "./ab-attrs/variable-move-power-ab-attr";
 import { WonderSkinAbAttr } from "./ab-attrs/wonder-skin-ab-attr";
-import { applyAbAttrs } from "./ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { WeakenMoveTypeTag } from "./arena-tag";
 import { HelpingHandTag, TypeBoostTag } from "./battler-tags";
 import { IncrementMovePriorityAttr } from "./move-attrs/increment-move-priority-attr";
@@ -50,11 +46,12 @@ import { StatusEffect } from "#enums/status-effect";
 import { HealStatusEffectAttr } from "./move-attrs/heal-status-effect-attr";
 import { ChargeAnim } from "#enums/charge-anim";
 import { allMoves } from "#app/data/all-moves";
+import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
 
 export abstract class Move implements Localizable {
-  public id: Moves;
+  public id: MoveId;
   public name: string;
-  private _type: Type;
+  private _type: ElementalType;
   private _category: MoveCategory;
   public moveTarget: MoveTarget;
   public power: number;
@@ -72,8 +69,8 @@ export abstract class Move implements Localizable {
   private nameAppend: string = "";
 
   constructor(
-    id: Moves,
-    type: Type,
+    id: MoveId,
+    type: ElementalType,
     category: MoveCategory,
     defaultMoveTarget: MoveTarget,
     power: number,
@@ -112,7 +109,7 @@ export abstract class Move implements Localizable {
   }
 
   localize(): void {
-    const i18nKey = Moves[this.id]
+    const i18nKey = MoveId[this.id]
       .split("_")
       .filter((f) => f)
       .map((f, i) => (i ? `${f[0]}${f.slice(1).toLowerCase()}` : f.toLowerCase()))
@@ -261,6 +258,18 @@ export abstract class Move implements Localizable {
     return false;
   }
 
+  isAttackMove(): this is AttackMove {
+    return this.category === MoveCategory.PHYSICAL || this.category === MoveCategory.SPECIAL;
+  }
+
+  isStatusMove(): this is StatusMove {
+    return this.category === MoveCategory.STATUS;
+  }
+
+  isSelfStatusMove(): this is SelfStatusMove {
+    return this.category === MoveCategory.STATUS && this.moveTarget === MoveTarget.USER;
+  }
+
   /**
    * Checks if the move is immune to certain types.
    * Currently looks at cases of Grass types with powder moves and Dark types with moves affected by Prankster.
@@ -269,18 +278,18 @@ export abstract class Move implements Localizable {
    * @param type the type of the move's target
    * @returns boolean
    */
-  isTypeImmune(user: Pokemon, target: Pokemon, type: Type): boolean {
+  isTypeImmune(user: Pokemon, target: Pokemon, type: ElementalType): boolean {
     if (this.moveTarget === MoveTarget.USER) {
       return false;
     }
 
     switch (type) {
-      case Type.GRASS:
+      case ElementalType.GRASS:
         if (this.hasFlag(MoveFlags.POWDER_MOVE)) {
           return true;
         }
         break;
-      case Type.DARK:
+      case ElementalType.DARK:
         if (
           user.hasAbility(Abilities.PRANKSTER)
           && this.category === MoveCategory.STATUS
@@ -381,7 +390,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.IGNORE_PROTECT} flag for the calling Move
-   * @see {@linkcode Moves.CURSE}
+   * @see {@linkcode MoveId.CURSE}
    * @returns The {@linkcode Move} that called this function
    */
   ignoresProtect(): this {
@@ -391,7 +400,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.SOUND_MOVE} flag for the calling Move
-   * @see {@linkcode Moves.UPROAR}
+   * @see {@linkcode MoveId.UPROAR}
    * @returns The {@linkcode Move} that called this function
    */
   soundMove(): this {
@@ -401,7 +410,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.HIDE_USER} flag for the calling Move
-   * @see {@linkcode Moves.TELEPORT}
+   * @see {@linkcode MoveId.TELEPORT}
    * @returns The {@linkcode Move} that called this function
    */
   hidesUser(): this {
@@ -411,7 +420,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.HIDE_TARGET} flag for the calling Move
-   * @see {@linkcode Moves.WHIRLWIND}
+   * @see {@linkcode MoveId.WHIRLWIND}
    * @returns The {@linkcode Move} that called this function
    */
   hidesTarget(): this {
@@ -421,7 +430,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.BITING_MOVE} flag for the calling Move
-   * @see {@linkcode Moves.BITE}
+   * @see {@linkcode MoveId.BITE}
    * @returns The {@linkcode Move} that called this function
    */
   bitingMove(): this {
@@ -431,7 +440,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.PULSE_MOVE} flag for the calling Move
-   * @see {@linkcode Moves.WATER_PULSE}
+   * @see {@linkcode MoveId.WATER_PULSE}
    * @returns The {@linkcode Move} that called this function
    */
   pulseMove(): this {
@@ -441,7 +450,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.PUNCHING_MOVE} flag for the calling Move
-   * @see {@linkcode Moves.DRAIN_PUNCH}
+   * @see {@linkcode MoveId.DRAIN_PUNCH}
    * @returns The {@linkcode Move} that called this function
    */
   punchingMove(): this {
@@ -451,7 +460,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.SLICING_MOVE} flag for the calling Move
-   * @see {@linkcode Moves.X_SCISSOR}
+   * @see {@linkcode MoveId.X_SCISSOR}
    * @returns The {@linkcode Move} that called this function
    */
   slicingMove(): this {
@@ -471,7 +480,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.BULLET_MOVE} flag for the calling Move
-   * @see {@linkcode Moves.ELECTRO_BALL}
+   * @see {@linkcode MoveId.ELECTRO_BALL}
    * @returns The {@linkcode Move} that called this function
    */
   bulletMove(): this {
@@ -481,7 +490,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.POWDER_MOVE} flag for the calling Move
-   * @see {@linkcode Moves.STUN_SPORE}
+   * @see {@linkcode MoveId.STUN_SPORE}
    * @returns The {@linkcode Move} that called this function
    */
   powderMove(): this {
@@ -491,7 +500,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.DANCE_MOVE} flag for the calling Move
-   * @see {@linkcode Moves.PETAL_DANCE}
+   * @see {@linkcode MoveId.PETAL_DANCE}
    * @returns The {@linkcode Move} that called this function
    */
   danceMove(): this {
@@ -501,7 +510,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.WIND_MOVE} flag for the calling Move
-   * @see {@linkcode Moves.HURRICANE}
+   * @see {@linkcode MoveId.HURRICANE}
    * @returns The {@linkcode Move} that called this function
    */
   windMove(): this {
@@ -511,7 +520,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.TRIAGE_MOVE} flag for the calling Move
-   * @see {@linkcode Moves.ABSORB}
+   * @see {@linkcode MoveId.ABSORB}
    * @returns The {@linkcode Move} that called this function
    */
   triageMove(): this {
@@ -521,7 +530,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.IGNORE_ABILITIES} flag for the calling Move
-   * @see {@linkcode Moves.SUNSTEEL_STRIKE}
+   * @see {@linkcode MoveId.SUNSTEEL_STRIKE}
    * @returns The {@linkcode Move} that called this function
    */
   ignoresAbilities(): this {
@@ -531,7 +540,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.CHECK_ALL_HITS} flag for the calling Move
-   * @see {@linkcode Moves.TRIPLE_AXEL}
+   * @see {@linkcode MoveId.TRIPLE_AXEL}
    * @returns The {@linkcode Move} that called this function
    */
   checkAllHits(): this {
@@ -541,7 +550,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.IGNORE_SUBSTITUTE} flag for the calling Move
-   * @see {@linkcode Moves.WHIRLWIND}
+   * @see {@linkcode MoveId.WHIRLWIND}
    * @returns The {@linkcode Move} that called this function
    */
   ignoresSubstitute(): this {
@@ -551,7 +560,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.REDIRECT_COUNTER} flag for the calling Move
-   * @see {@linkcode Moves.METAL_BURST}
+   * @see {@linkcode MoveId.METAL_BURST}
    * @returns The {@linkcode Move} that called this function
    */
   redirectCounter(): this {
@@ -744,12 +753,12 @@ export abstract class Move implements Localizable {
 
     const sourceTeraType = source.getTeraType();
     if (
-      sourceTeraType !== Type.UNKNOWN
+      sourceTeraType !== ElementalType.UNKNOWN
       && sourceTeraType === this.type
       && power.value < 60
       && this.priority <= 0
       && !this.hasAttr(MultiHitAttr)
-      && !globalScene.findModifier((m) => m instanceof PokemonMultiHitModifier && m.pokemonId === source.id)
+      && !globalScene.findModifier((m) => m.isPokemonMultiHitModifier() && m.pokemonId === source.id)
     ) {
       power.value = 60;
     }
@@ -829,7 +838,7 @@ export abstract class Move implements Localizable {
     const exceptAttrs: AbstractConstructor<MoveAttr>[] = [MultiHitAttr, SacrificialAttr];
 
     // ...and cannot enhance these specific moves.
-    const exceptMoves: Moves[] = [Moves.FLING, Moves.UPROAR, Moves.ROLLOUT, Moves.ICE_BALL, Moves.ENDEAVOR];
+    const exceptMoves: MoveId[] = [MoveId.FLING, MoveId.UPROAR, MoveId.ROLLOUT, MoveId.ICE_BALL, MoveId.ENDEAVOR];
 
     return (
       !isMultiTarget
@@ -839,12 +848,20 @@ export abstract class Move implements Localizable {
       && this.category !== MoveCategory.STATUS
     );
   }
+
+  /**
+   * Checks if the move lowers the stat of the user
+   * @returns `true` if the move is a self stat lowering move
+   */
+  isSelfStatLowering(): boolean {
+    return this.getAttrs(StatStageChangeAttr).some((a) => a.selfTarget && a.stages < 0);
+  }
 }
 
 export class AttackMove extends Move {
   constructor(
-    id: Moves,
-    type: Type,
+    id: MoveId,
+    type: ElementalType,
     category: MoveCategory,
     power: number,
     accuracy: number,
@@ -859,7 +876,7 @@ export class AttackMove extends Move {
      * {@link https://bulbapedia.bulbagarden.net/wiki/Freeze_(status_condition)}
      * > All damaging Fire-type moves can now thaw a frozen target, regardless of whether or not they have a chance to burn;
      */
-    if (this.type === Type.FIRE) {
+    if (this.type === ElementalType.FIRE) {
       this.addAttr(new HealStatusEffectAttr(false, StatusEffect.FREEZE));
     }
   }
@@ -908,8 +925,8 @@ export class AttackMove extends Move {
 
 export class StatusMove extends Move {
   constructor(
-    id: Moves,
-    type: Type,
+    id: MoveId,
+    type: ElementalType,
     accuracy: number,
     pp: number,
     chance: number,
@@ -920,17 +937,18 @@ export class StatusMove extends Move {
   }
 }
 
-export class SelfStatusMove extends Move {
+export class SelfStatusMove extends StatusMove {
   constructor(
-    id: Moves,
-    type: Type,
+    id: MoveId,
+    type: ElementalType,
     accuracy: number,
     pp: number,
     chance: number,
     priority: number,
     generation: number,
   ) {
-    super(id, type, MoveCategory.STATUS, MoveTarget.USER, -1, accuracy, pp, chance, priority, generation);
+    super(id, type, accuracy, pp, chance, priority, generation);
+    this.target(MoveTarget.USER);
   }
 }
 
@@ -939,7 +957,7 @@ type SubMove = new (...args: any[]) => Move;
 function ChargeMove<TBase extends SubMove>(Base: TBase) {
   return class extends Base {
     /** The animation to play during the move's charging phase */
-    public readonly chargeAnim: ChargeAnim = ChargeAnim[`${Moves[this.id]}_CHARGING`];
+    public readonly chargeAnim: ChargeAnim = ChargeAnim[`${MoveId[this.id]}_CHARGING`];
     /** The message to show during the move's charging phase */
     private _chargeText: string;
 
@@ -1079,7 +1097,7 @@ export type MoveTargetSet = {
 
 export function getMoveTargets(user: Pokemon, move: Moves, replaceTarget?: MoveTarget): MoveTargetSet {
   const variableTarget = new NumberHolder(0);
-  user.getOpponents().forEach((p) => applyMoveAttrs(VariableTargetAttr, user, p, allMoves[move], variableTarget));
+  user.getOpponents().forEach((p) => applyMoveAttrs(VariableTargetAttr, user, p, allMoves[moveId], variableTarget));
 
   let moveTarget: MoveTarget | undefined;
   if (allMoves[move].hasAttr(VariableTargetAttr)) {
@@ -1137,7 +1155,7 @@ export function getMoveTargets(user: Pokemon, move: Moves, replaceTarget?: MoveT
       multiple = true;
       break;
     case MoveTarget.CURSE:
-      set = user.getTypes(true).includes(Type.GHOST) ? opponents.concat([user.getAlly()]) : [user];
+      set = user.getTypes(true).includes(ElementalType.GHOST) ? opponents.concat([user.getAlly()]) : [user];
       break;
   }
 
@@ -1149,5 +1167,3 @@ export function getMoveTargets(user: Pokemon, move: Moves, replaceTarget?: MoveT
     multiple,
   };
 }
-
-export const selfStatLowerMoves: Moves[] = [];

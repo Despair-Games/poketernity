@@ -1,6 +1,6 @@
 import { initMoveAnim, loadMoveAnimAssets } from "#app/data/battle-anims";
 import { Phase } from "#app/phase";
-import type { Moves } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 
 /**
  * Phase for synchronous move animation loading.
@@ -10,7 +10,7 @@ import type { Moves } from "#enums/moves";
  * @extends Phase
  */
 export class LoadMoveAnimPhase extends Phase {
-  constructor(protected readonly moveId: Moves) {
+  constructor(protected readonly moveId: MoveId) {
     super();
   }
 

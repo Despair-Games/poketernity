@@ -3,8 +3,8 @@ import { type CallMoveAttr } from "#app/data/move-attrs/call-move-attr";
 import { type NaturePowerAttr } from "#app/data/move-attrs/nature-power-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { Moves } from "#enums/moves";
-import { Type } from "#enums/type";
+import { MoveId } from "#enums/move-id";
+import { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";
 import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 
@@ -13,12 +13,12 @@ import { PreAttackAbAttr } from "./pre-attack-ab-attr";
  * @extends PreAttackAbAttr
  */
 export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
-  private moveType: Type;
+  private moveType: ElementalType;
 
   override apply(pokemon: Pokemon, simulated: boolean, move: Move): boolean {
     if (
       !pokemon.isTerastallized()
-      && move.id !== Moves.STRUGGLE
+      && move.id !== MoveId.STRUGGLE
       /**
        * Skip moves that call other moves because these moves generate a following move that will trigger this ability attribute
        * @see {@link https://bulbapedia.bulbagarden.net/wiki/Category:Moves_that_call_other_moves}
@@ -44,7 +44,7 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
   override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]): string {
     return i18next.t("abilityTriggers:pokemonTypeChange", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      moveType: i18next.t(`pokemonInfo:Type.${Type[this.moveType]}`),
+      moveType: i18next.t(`pokemonInfo:Type.${ElementalType[this.moveType]}`),
     });
   }
 }
