@@ -33,7 +33,6 @@ export class Api extends ApiBase {
       ((window.location.hostname === "localhost" || /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(window.location.hostname))
         && window.location.port !== "")
       || window.location.hostname === "";
-    this._isConnected = true;
   }
 
   public get isConnected() {
@@ -98,9 +97,9 @@ export class Api extends ApiBase {
   /**
    * Pings the server (via {@linkcode getGameTitleStats}) and updates {@linkcode _isConnected} accordingly.
    */
-  ping() {
+  async ping() {
     if (this.isLocal) {
-      const titleStats = this.getGameTitleStats();
+      const titleStats = await this.getGameTitleStats();
       this._isConnected = !!titleStats;
       console.log("isLocalServerConnected:", this.isConnected);
     }
