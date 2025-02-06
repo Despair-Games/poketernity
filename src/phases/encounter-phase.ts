@@ -64,7 +64,7 @@ import { PhaseId } from "#enums/phase-id";
  * @extends BattlePhase
  */
 export class EncounterPhase extends BattlePhase {
-  /** @override Can't be just {@linkcode PhaseId.ENCOUNTER} as {@linkcode EncounterPhase} is extended by other phases */
+  /** @override **Must** use generic {@linkcode PhaseId} because as {@linkcode EncounterPhase} is extended by other phases */
   override readonly id: PhaseId = PhaseId.ENCOUNTER;
 
   private readonly loaded: boolean;

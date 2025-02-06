@@ -33,7 +33,7 @@ type HitCheckEntry = [HitCheckResult, TypeDamageMultiplier];
  * @see {@linkcode hitCheck}
  */
 export abstract class HitCheckPhase extends PokemonPhase {
-  /** @override Can't be just {@linkcode PhaseId.HIT_CHECK} as {@linkcode HitCheckPhase} is extended by other phases */
+  /** @override **Must** use generic {@linkcode PhaseId} because as {@linkcode HitCheckPhase} is extended by other phases */
   override readonly id: PhaseId = PhaseId.HIT_CHECK;
   public move: PokemonMove;
 

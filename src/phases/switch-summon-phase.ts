@@ -16,7 +16,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
 
 export class SwitchSummonPhase extends SummonPhase {
-  /** @override Can't be just {@linkcode PhaseId.SWITCH} as {@linkcode SwitchSummonPhase} is extended by other phases. */
+  /** @override **Must** use generic {@linkcode PhaseId} because as {@linkcode SummonPhase} is extended by other phases */
   override readonly id: PhaseId = PhaseId.SWITCH_SUMMON;
 
   private readonly switchType: SwitchType;

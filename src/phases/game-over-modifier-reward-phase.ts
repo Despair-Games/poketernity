@@ -10,7 +10,7 @@ import { PhaseId } from "#enums/phase-id";
  * @extends ModifierRewardPhase
  */
 export class GameOverModifierRewardPhase extends ModifierRewardPhase {
-  override readonly id: PhaseId = PhaseId.GAME_OVER_MODIFIER_REWARD;
+  override readonly id = PhaseId.GAME_OVER_MODIFIER_REWARD;
 
   constructor(modifierTypeFunc: ModifierTypeFunc) {
     super(modifierTypeFunc);

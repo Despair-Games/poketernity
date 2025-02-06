@@ -16,7 +16,7 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PhaseId } from "#enums/phase-id";
 
 export class SummonPhase extends PartyMemberPokemonPhase {
-  /** @override This one can't be just {@linkcode PhaseId.SUMMON} as other phases extend {@linkcode SummonPhase} */
+  /** @override **Must** use generic {@linkcode PhaseId} because as {@linkcode SummonPhase} is extended by other phases */
   override readonly id: PhaseId = PhaseId.SUMMON;
 
   private readonly loaded: boolean;
