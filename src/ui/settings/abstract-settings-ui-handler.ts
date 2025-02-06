@@ -412,7 +412,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
     if (!this.cursorObj) {
       const cursorWidth = GAME_WIDTH - (this.scrollBar.visible ? 16 : 10);
-      this.cursorObj = globalScene.add.nineslice(0, 0, "summary_moves_cursor", undefined, cursorWidth, 16, 1, 1, 1, 1);
+      this.cursorObj = globalScene.add.nineslice(0, 0, "summary_moves_cursor", "select", cursorWidth, 16, 1, 1, 1, 1);
       this.cursorObj.setOrigin(0, 0);
       this.optionsContainer.add(this.cursorObj);
     }
