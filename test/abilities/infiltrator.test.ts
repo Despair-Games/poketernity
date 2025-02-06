@@ -81,8 +81,7 @@ describe("Abilities - Infiltrator", () => {
     expect(player.battleData.abilitiesApplied[0]).toBe(Abilities.INFILTRATOR);
   });
 
-  // TODO: fix this interaction to pass this test
-  it.todo("should bypass the target's Mist", async () => {
+  it("should bypass the target's Mist", async () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
