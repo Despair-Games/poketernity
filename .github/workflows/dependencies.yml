@@ -1,8 +1,7 @@
 name: Dependencies
 
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch
+  # Trigger the workflow on push or pull request
   push:
     branches:
       - main # Trigger on push events to the main branch
