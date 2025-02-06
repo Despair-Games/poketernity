@@ -47,6 +47,11 @@ import { HealStatusEffectAttr } from "./move-attrs/heal-status-effect-attr";
 import { ChargeAnim } from "#enums/charge-anim";
 import { allMoves } from "#app/data/all-moves";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
+import { AlwaysHitAbAttr } from "./ab-attrs/always-hit-ab-attr";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import { MultiHitPowerIncrementAttr } from "./move-attrs/multi-hit-power-increment-attr";
+import { MultiHitType } from "#enums/multi-hit-type";
+import { MaxMultiHitAbAttr } from "./ab-attrs/max-multi-hit-ab-attr";
 
 export abstract class Move implements Localizable {
   public id: MoveId;
@@ -724,7 +729,7 @@ export abstract class Move implements Localizable {
    * @returns a score value accumulated from effect score modifiers.
    * @todo Add Low Accuracy Penalty and Ally Target Penalty
    */
-  public getEffectScore(user: EnemyPokemon, target?: Pokemon): number {
+  public getEffectScore(user: EnemyPokemon, target: Pokemon): number {
     // penalize targeting Pokemon that are hidden by Commander
     if (
       (target && target.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === target)
@@ -739,9 +744,10 @@ export abstract class Move implements Localizable {
     /** The combined score from all conditions of the move */
     const conditionScores = this.conditions.map((cond) => cond.getConditionScore(user, target, this));
 
-    const totalScore = attrScores.concat(conditionScores).reduce((total, score) => total + score, 0);
+    /** The penalty given if the move is inaccurate */
+    const accuracyPenalty = this.getBattleAccuracyPenalty(user, target);
 
-    // @todo apply low accuracy penalty + ally target penalty to totalScore
+    const totalScore = attrScores.concat(conditionScores).reduce((total, score) => total + score, 0) + accuracyPenalty;
 
     return totalScore;
   }
@@ -782,6 +788,62 @@ export abstract class Move implements Localizable {
     }
 
     return moveAccuracy.value;
+  }
+
+  /**
+   * Calculates the score penalty granted to this move based on its accuracy, according
+   * to the table below:
+   *   ```
+   *   +--------+-------+
+   *   | Acc    | Score |
+   *   +--------+-------+
+   *   | 80-100 |     0 |
+   *   | 70-79  |    -1 |
+   *   | 50-69  |    -2 |
+   *   | 0-49   |    -3 |
+   *   +--------+-------+
+   *   ```
+   * This penalty is negated if any ongoing effect would cause the move to bypass accuracy checks,
+   * and it becomes (-5) if the target is semi-invulnerable.
+   * @param user the {@linkcode EnemyPokemon} using this move
+   * @param target the {@linkcode Pokemon} targeted by this move
+   * @returns the score penalty from accuracy
+   * @see {@linkcode getEffectScore}
+   */
+  protected getBattleAccuracyPenalty(user: EnemyPokemon, target: Pokemon): number {
+    /**
+     * If any ongoing effect would cause the move to bypass accuracy checks, assign no penalty.
+     * @todo the target's No Guard can be discovered prematurely here
+     */
+    if (
+      [user, target].some((p) => p.hasAbilityWithAttr(AlwaysHitAbAttr))
+      || user.getTag(BattlerTagType.IGNORE_ACCURACY)
+      || target.getTag(BattlerTagType.ALWAYS_GET_HIT)
+      || target.getTag(BattlerTagType.TELEKINESIS)
+    ) {
+      return 0;
+    }
+
+    /**
+     * If the user is faster than the target, and the target is semi-invulnerable,
+     * assign a (-5) penalty.
+     */
+    const userSpd = user.getEffectiveStat(Stat.SPD);
+    const targetSpd = target.getEffectiveStat(Stat.SPD, undefined, undefined, AbilityApplyMode.REVEALED);
+    if (target.isSemiInvulnerable() && userSpd > targetSpd) {
+      return -5;
+    }
+
+    const accuracy = this.calculateBattleAccuracy(user, target, true);
+    if (accuracy < 0 || accuracy >= 80) {
+      return 0;
+    } else if (accuracy >= 70) {
+      return -1;
+    } else if (accuracy >= 50) {
+      return -2;
+    } else {
+      return -3;
+    }
   }
 
   /**
@@ -857,6 +919,45 @@ export abstract class Move implements Localizable {
     }
 
     return power.value;
+  }
+
+  /**
+   * Obtains an approximate damage multiplier accounting for multi-hit
+   * move and ability modifiers relative to the move's first strike.
+   * @param user the {@linkcode Pokemon} using this move
+   * @returns a damage modifier to be used for move scoring
+   * @see {@linkcode Pokemon.getAttackScore}
+   */
+  public getMultiHitAttackScoreMultiplier(user: Pokemon): number {
+    let multiHitMultiplier = 1;
+    const skillLink = user.hasAbilityWithAttr(MaxMultiHitAbAttr);
+    if (this.hasAttr(MultiHitPowerIncrementAttr)) {
+      multiHitMultiplier *= 6; // assumes 3 hits: 1x + 2x + 3x
+    } else {
+      const multiHitType = this.getAttrs(MultiHitAttr)?.[0]?.getMultiHitType();
+      switch (multiHitType) {
+        case MultiHitType._2:
+          multiHitMultiplier *= 2;
+          break;
+        case MultiHitType._2_TO_5:
+          multiHitMultiplier *= skillLink ? 5 : 3; // Expected hit count is ~3.1
+          break;
+        case MultiHitType._3:
+          multiHitMultiplier *= 3;
+          break;
+        case MultiHitType._10:
+          multiHitMultiplier *= skillLink ? 10 : 6; // Population Bomb hits ~5.8 times on average
+          break;
+        case MultiHitType.BEAT_UP:
+          multiHitMultiplier *= user.getParty().length;
+      }
+    }
+
+    if (user.hasAbility(Abilities.PARENTAL_BOND)) {
+      multiHitMultiplier += 0.25;
+    }
+
+    return multiHitMultiplier;
   }
 
   getPriority(user: Pokemon, simulated: boolean = true) {
