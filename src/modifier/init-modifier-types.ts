@@ -178,13 +178,13 @@ export function initModifierTypes() {
     new PokemonAllMovePpRestoreModifierType("modifierType:ModifierType.MAX_ELIXIR", "max_elixir", -1);
 
   modifierTypes.PP_UP = () => new PokemonPpUpModifierType("modifierType:ModifierType.PP_UP", "pp_up", 1);
-  (modifierTypes.PP_MAX = () => new PokemonPpUpModifierType("modifierType:ModifierType.PP_MAX", "pp_max", 3)),
-    /*modifierTypes.REPEL = () => new DoubleBattleChanceBoosterModifierType('Repel', 5);
-    modifierTypes.SUPER_REPEL = () => new DoubleBattleChanceBoosterModifierType('Super Repel', 10);
-    modifierTypes.MAX_REPEL = () => new DoubleBattleChanceBoosterModifierType('Max Repel', 25),*/
+  modifierTypes.PP_MAX = () => new PokemonPpUpModifierType("modifierType:ModifierType.PP_MAX", "pp_max", 3);
 
-    (modifierTypes.LURE = () =>
-      new DoubleBattleChanceBoosterModifierType("modifierType:ModifierType.LURE", "lure", 10));
+  /*modifierTypes.REPEL = () => new DoubleBattleChanceBoosterModifierType('Repel', 5);
+  modifierTypes.SUPER_REPEL = () => new DoubleBattleChanceBoosterModifierType('Super Repel', 10);
+  modifierTypes.MAX_REPEL = () => new DoubleBattleChanceBoosterModifierType('Max Repel', 25);*/
+
+  modifierTypes.LURE = () => new DoubleBattleChanceBoosterModifierType("modifierType:ModifierType.LURE", "lure", 10);
   modifierTypes.SUPER_LURE = () =>
     new DoubleBattleChanceBoosterModifierType("modifierType:ModifierType.SUPER_LURE", "super_lure", 15);
   modifierTypes.MAX_LURE = () =>

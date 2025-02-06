@@ -67,7 +67,7 @@ export class MovePhase extends BattlePhase {
   protected cancelled: boolean = false;
 
   /**
-   * @param followUp Indicates that the move being uses is a "follow-up" - for example, a move being used by Metronome or Dancer.
+   * @param followUp Indicates that the move being used is a "follow-up" - for example, a move being used by Metronome or Dancer.
    *                 Follow-ups bypass a few failure conditions, including flinches, sleep/paralysis/freeze and volatile status checks, etc.
    */
   constructor(

@@ -99,6 +99,7 @@ export function initModifierPools() {
     m.setTier(ModifierTier.COMMON);
     return m;
   });
+
   modifierPool[ModifierTier.GREAT] = [
     new WeightedModifierType(modifierTypes.GREAT_BALL, () => (hasMaximumBalls(PokeballType.GREAT_BALL) ? 0 : 6), 6),
     new WeightedModifierType(modifierTypes.PP_UP, 2),
@@ -276,6 +277,7 @@ export function initModifierPools() {
     m.setTier(ModifierTier.GREAT);
     return m;
   });
+
   modifierPool[ModifierTier.ULTRA] = [
     new WeightedModifierType(modifierTypes.ULTRA_BALL, () => (hasMaximumBalls(PokeballType.ULTRA_BALL) ? 0 : 15), 15),
     new WeightedModifierType(modifierTypes.MAX_LURE, lureWeightFunc(30, 4)),
@@ -459,6 +461,7 @@ export function initModifierPools() {
     m.setTier(ModifierTier.ULTRA);
     return m;
   });
+
   modifierPool[ModifierTier.EPIC] = [
     new WeightedModifierType(modifierTypes.RELIC_GOLD, skipInLastClassicWaveOrDefault(2)),
     new WeightedModifierType(modifierTypes.LEFTOVERS, 3),
@@ -508,6 +511,7 @@ export function initModifierPools() {
     m.setTier(ModifierTier.EPIC);
     return m;
   });
+
   modifierPool[ModifierTier.MASTER] = [
     new WeightedModifierType(modifierTypes.MASTER_BALL, () => (hasMaximumBalls(PokeballType.MASTER_BALL) ? 0 : 24), 24),
     new WeightedModifierType(modifierTypes.SHINY_CHARM, 14),
