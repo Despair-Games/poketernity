@@ -49,6 +49,7 @@ export class LoadingScene extends SceneBase {
     for (const windowVariant of getEnumValues(WindowVariant)) {
       this.loadSpritesheet(`window${getWindowVariantSuffix(windowVariant)}`, "ui/windows", 24, 24, {
         windowTypeDependant: true,
+        uiThemeDependant: true,
       });
     }
     this.loadSpritesheet("trainer_namebox", "ui", 20, 20, { windowTypeDependant: true });
@@ -62,8 +63,8 @@ export class LoadingScene extends SceneBase {
     this.loadImage("candy_overlay", "ui");
     this.loadImage("friendship", "ui");
     this.loadImage("friendship_overlay", "ui");
-    this.loadImage("cursor", "ui");
-    this.loadImage("cursor_reverse", "ui");
+    this.loadImage("cursor", "ui", { uiThemeDependant: true });
+    this.loadImage("cursor_reverse", "ui", { uiThemeDependant: true });
 
     this.loadImage("pbinfo_player", "ui");
     this.loadImage("pbinfo_player_stats", "ui");
