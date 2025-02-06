@@ -216,8 +216,8 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
     key: "uiTheme",
     label: t("settings:uiTheme"),
     options: [
-      { value: UiTheme.DEFAULT, label: t("settings:default") },
-      { value: UiTheme.LEGACY, label: t("settings:legacy") },
+      { value: UiTheme.DARK, label: t("settings:darkTheme") },
+      { value: UiTheme.LIGHT, label: t("settings:lightTheme") },
     ],
     requiresReload: true,
   },
