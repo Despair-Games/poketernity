@@ -12,7 +12,7 @@ export type SupportedLanguage = {
   key: SupportedLanguageKey;
   /**
    * Whether all localized images are available for the language, ie: status and types icons.
-   * To find all localized images, check {@linkcode LoadingScene} for calls to `loadLocalizedAtlas` and similar.
+   * To find all localized images, check {@linkcode LoadingScene} for loadXXXX calls that have a `languageKey` parameter.
    */
   hasAllLocalizedImages: boolean;
 };
