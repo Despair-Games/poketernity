@@ -1124,7 +1124,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       critStage.value += critBoostStackableTag.stackCount;
     }
 
-    console.log(`crit stage: +${critStage.value}`);
     return critStage.value;
   }
 
