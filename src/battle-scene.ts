@@ -95,7 +95,7 @@ import type { Voucher } from "#app/system/voucher";
 import { vouchers } from "#app/system/voucher";
 import { Gender } from "#enums/gender";
 import type UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
-import { addUiThemeOverrides, updateWindowType } from "#app/ui/ui-theme";
+import { updateWindowType } from "#app/ui/ui-theme";
 import type PokemonData from "#app/system/pokemon-data";
 import { Nature } from "#enums/nature";
 import type { SpeciesFormChange, SpeciesFormChangeTrigger } from "#app/data/pokemon-forms";
@@ -441,8 +441,6 @@ export default class BattleScene extends SceneBase {
     this.uiInputs = new UiInputs(this.inputController);
 
     this.gameData = new GameData();
-
-    addUiThemeOverrides();
 
     this.load.setBaseURL();
 

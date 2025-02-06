@@ -35,7 +35,7 @@ export const defaultGeneralSettings: GeneralSettings = {
 };
 
 export const defaultDisplaySettings: DisplaySettings = {
-  uiTheme: UiTheme.DEFAULT,
+  uiTheme: UiTheme.DARK,
   uiWindowType: UiWindowType.RED_ORANGE,
   moneyFormat: MoneyFormat.NORMAL,
   damageNumbersMode: DamageNumbersMode.OFF,

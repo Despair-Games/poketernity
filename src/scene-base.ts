@@ -6,9 +6,8 @@ import { UiWindowType } from "#enums/ui-window-type";
 // -- end tsdoc imports --
 
 import { getLocalizedFilename } from "#app/utils";
+import { settings } from "./system/settings/settings-manager";
 
-// TODO: remove
-export const legacyCompatibleImages: string[] = [];
 // TODO: move elsewhere
 export const windowTypeDependantAtlases: string[] = [];
 
@@ -60,11 +59,6 @@ export class SceneBase extends Phaser.Scene {
   loadImage(key: string, folder: string, params?: TextureLoadingParams) {
     const filenameRoot = params ? this.getFilenameRoot(key, params) : key;
     this.load.image(key, this.getCachedUrl(`images/${folder}/${filenameRoot}.png`));
-    if (folder.startsWith("ui")) {
-      legacyCompatibleImages.push(key);
-      folder = folder.replace("ui", "ui/legacy");
-      this.load.image(`${key}_legacy`, this.getCachedUrl(`images/${folder}/${filenameRoot}.png`));
-    }
   }
 
   loadSpritesheet(key: string, folder: string, width: number, height?: number, params?: TextureLoadingParams) {
@@ -88,24 +82,12 @@ export class SceneBase extends Phaser.Scene {
       this.getCachedUrl(`images/${folder}/${filenameRoot}.png`),
       this.getCachedUrl(`images/${folder}/${filenameRoot}.json`),
     );
-    if (folder.startsWith("ui")) {
-      legacyCompatibleImages.push(key);
-      folder = folder.replace("ui", "ui/legacy");
-      this.load.atlas(
-        `${key}_legacy`,
-        this.getCachedUrl(`images/${folder}/${filenameRoot}.png`),
-        this.getCachedUrl(`images/${folder}/${filenameRoot}.json`),
-      );
-    }
   }
 
-  private getFilenameRoot(
-    key: string,
-    params: { filenameRoot?: string; languageKey?: string; windowTypeDependant?: boolean; uiThemeDependant?: boolean },
-  ) {
+  private getFilenameRoot(key: string, params: TextureLoadingParams) {
     let filenameRoot = params.filenameRoot ?? key;
     if (params.uiThemeDependant) {
-      // TODO
+      filenameRoot += "-" + UiTheme[settings.display.uiTheme].toLowerCase();
     }
     if (params.languageKey) {
       filenameRoot = getLocalizedFilename(filenameRoot, params.languageKey);

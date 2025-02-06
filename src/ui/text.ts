@@ -253,7 +253,7 @@ export function getTextWithColors(content: string, primaryStyle: TextStyle, forW
   const primaryStyleString = [...text.match(new RegExp(/\[color=[^\[]*\]\[shadow=[^\[]*\]/i))!][0];
 
   /* For money text displayed in game windows, we can't use the default {@linkcode TextStyle.MONEY}
-   * or it will look wrong in legacy mode because of the different window background color
+   * or it will look wrong in light mode because of the different window background color
    * So, for text to be displayed in windows replace all "@[MONEY]" with "@[MONEY_WINDOW]" */
   if (forWindow) {
     text = text.replace(/@\[MONEY\]/g, (_substring: string) => "@[MONEY_WINDOW]");
@@ -269,7 +269,7 @@ export function getTextWithColors(content: string, primaryStyle: TextStyle, forW
 }
 
 export function getTextColor(textStyle: TextStyle, shadow?: boolean): string {
-  const isLegacyTheme = settings.display.uiTheme === UiTheme.LEGACY;
+  const isLightTheme = settings.display.uiTheme === UiTheme.LIGHT;
   switch (textStyle) {
     case TextStyle.MESSAGE:
       return !shadow ? "#f8f8f8" : "#6b5a73";
@@ -278,29 +278,29 @@ export function getTextColor(textStyle: TextStyle, shadow?: boolean): string {
     case TextStyle.MOVE_PP_FULL:
     case TextStyle.TOOLTIP_CONTENT:
     case TextStyle.SETTINGS_VALUE:
-      if (isLegacyTheme) {
+      if (isLightTheme) {
         return !shadow ? "#484848" : "#d0d0c8";
       }
       return !shadow ? "#f8f8f8" : "#6b5a73";
     case TextStyle.MOVE_PP_HALF_FULL:
-      if (isLegacyTheme) {
+      if (isLightTheme) {
         return !shadow ? "#a68e17" : "#ebd773";
       }
       return !shadow ? "#ccbe00" : "#6e672c";
     case TextStyle.MOVE_PP_NEAR_EMPTY:
-      if (isLegacyTheme) {
+      if (isLightTheme) {
         return !shadow ? "#d64b00" : "#f7b18b";
       }
       return !shadow ? "#d64b00" : "#69402a";
     case TextStyle.MOVE_PP_EMPTY:
-      if (isLegacyTheme) {
+      if (isLightTheme) {
         return !shadow ? "#e13d3d" : "#fca2a2";
       }
       return !shadow ? "#e13d3d" : "#632929";
     case TextStyle.WINDOW_ALT:
       return !shadow ? "#484848" : "#d0d0c8";
     case TextStyle.BATTLE_INFO:
-      if (isLegacyTheme) {
+      if (isLightTheme) {
         return !shadow ? "#404040" : "#ded6b5";
       }
       return !shadow ? "#f8f8f8" : "#6b5a73";
@@ -311,7 +311,7 @@ export function getTextColor(textStyle: TextStyle, shadow?: boolean): string {
     case TextStyle.SUMMARY:
       return !shadow ? "#f8f8f8" : "#636363";
     case TextStyle.SUMMARY_ALT:
-      if (isLegacyTheme) {
+      if (isLightTheme) {
         return !shadow ? "#f8f8f8" : "#636363";
       }
       return !shadow ? "#484848" : "#d0d0c8";
@@ -326,7 +326,7 @@ export function getTextColor(textStyle: TextStyle, shadow?: boolean): string {
     case TextStyle.MONEY:
       return !shadow ? "#e8e8a8" : "#a0a060"; // Pale Yellow/Gold
     case TextStyle.MONEY_WINDOW:
-      if (isLegacyTheme) {
+      if (isLightTheme) {
         return !shadow ? "#f8b050" : "#c07800"; // Gold
       }
       return !shadow ? "#e8e8a8" : "#a0a060"; // Pale Yellow/Gold
@@ -336,7 +336,7 @@ export function getTextColor(textStyle: TextStyle, shadow?: boolean): string {
     case TextStyle.STATS_LABEL:
       return !shadow ? "#f8b050" : "#c07800";
     case TextStyle.STATS_VALUE:
-      if (isLegacyTheme) {
+      if (isLightTheme) {
         return !shadow ? "#484848" : "#d0d0c8";
       }
       return !shadow ? "#f8f8f8" : "#6b5a73";
@@ -355,7 +355,7 @@ export function getTextColor(textStyle: TextStyle, shadow?: boolean): string {
     case TextStyle.ME_OPTION_DEFAULT:
       return !shadow ? "#f8f8f8" : "#6b5a73"; // White
     case TextStyle.ME_OPTION_SPECIAL:
-      if (isLegacyTheme) {
+      if (isLightTheme) {
         return !shadow ? "#f8b050" : "#c07800"; // Gold
       }
       return !shadow ? "#78c850" : "#306850"; // Green
