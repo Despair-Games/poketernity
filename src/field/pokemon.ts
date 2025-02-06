@@ -2183,6 +2183,20 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
+   * Obtains the estimated damage of a move against this Pokemon, accounting
+   * for revealed abilities and multi-hit modifiers (if applicable).
+   * @param source the {@linkcode Pokemon} using the move
+   * @param move the {@linkcode Move} being evaluated
+   * @returns the given move's estimated damage output.
+   */
+  protected getEstimatedAttackDamage(source: Pokemon, move: Move): number {
+    return (
+      this.getAttackDamage(source, move, AbilityApplyMode.REVEALED).damage
+      * move.getMultiHitAttackScoreMultiplier(source)
+    );
+  }
+
+  /**
    * Obtains this Pokemon's Attack Score (AS) against the given opponent
    * for the given move. This score ranges from (-1) to (+4) depending on the
    * move's forecasted damage against the opponent:
@@ -2210,16 +2224,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return 0;
     }
 
-    const damage =
-      opponent.getAttackDamage(this, move, AbilityApplyMode.REVEALED).damage
-      * move.getMultiHitAttackScoreMultiplier(this);
+    const damage = opponent.getEstimatedAttackDamage(this, move);
 
     if (damage >= opponent.hp) {
-      if (move.getPriority(this, true) > 0) {
-        return 6;
-      } else {
-        return 4;
-      }
+      return this.getAttackScoreOnKnockOut(move);
     } else if (damage <= 0) {
       return -1;
     }
@@ -2253,21 +2261,29 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @see {@linkcode getAttackScore}
    */
   public getExpectedAttackScore(opponent: Pokemon, move: Move): number {
-    const damage =
-      opponent.getAttackDamage(this, move, AbilityApplyMode.REVEALED).damage
-      * move.getMultiHitAttackScoreMultiplier(this);
+    const damage = opponent.getEstimatedAttackDamage(this, move);
 
     if (damage >= opponent.hp) {
-      if (move.getPriority(this, true) > 0) {
-        return 6;
-      } else {
-        return 4;
-      }
+      return this.getAttackScoreOnKnockOut(move);
     } else if (damage <= 0) {
       return -1;
     } else {
       const damagePct = Math.floor((damage / opponent.getMaxHp()) * 100);
       return damagePct / 40;
+    }
+  }
+
+  /**
+   * Obtains the Attack Score of a move assuming the move can KO its opponent.
+   * @param move the {@linkcode Move} being evaluated
+   * @returns the move's calculated Attack Score
+   * @see {@linkcode getAttackScore}
+   */
+  protected getAttackScoreOnKnockOut(move: Move): number {
+    if (move.getPriority(this) > 0) {
+      return 6;
+    } else {
+      return 4;
     }
   }
 

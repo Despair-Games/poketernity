@@ -929,35 +929,28 @@ export abstract class Move implements Localizable {
    * @see {@linkcode Pokemon.getAttackScore}
    */
   public getMultiHitAttackScoreMultiplier(user: Pokemon): number {
-    let multiHitMultiplier = 1;
-    const skillLink = user.hasAbilityWithAttr(MaxMultiHitAbAttr);
+    const userHasSkillLink = user.hasAbilityWithAttr(MaxMultiHitAbAttr);
     if (this.hasAttr(MultiHitPowerIncrementAttr)) {
-      multiHitMultiplier *= 6; // assumes 3 hits: 1x + 2x + 3x
-    } else {
-      const multiHitType = this.getAttrs(MultiHitAttr)?.[0]?.getMultiHitType();
+      return 6; // assumes 3 hits: 1x + 2x + 3x
+    } else if (this.hasAttr(MultiHitAttr)) {
+      const multiHitType = this.getAttrs(MultiHitAttr)[0].getMultiHitType();
       switch (multiHitType) {
         case MultiHitType._2:
-          multiHitMultiplier *= 2;
-          break;
+          return 2;
         case MultiHitType._2_TO_5:
-          multiHitMultiplier *= skillLink ? 5 : 3; // Expected hit count is ~3.1
-          break;
+          return userHasSkillLink ? 5 : 3; // Expected hit count is ~3.1
         case MultiHitType._3:
-          multiHitMultiplier *= 3;
-          break;
+          return 3;
         case MultiHitType._10:
-          multiHitMultiplier *= skillLink ? 10 : 6; // Population Bomb hits ~5.8 times on average
-          break;
+          return userHasSkillLink ? 10 : 6; // Population Bomb hits ~5.8 times on average
         case MultiHitType.BEAT_UP:
-          multiHitMultiplier *= user.getParty().length;
+          return user.getParty().length;
       }
+    } else if (this.canBeMultiStrikeEnhanced(user) && user.hasAbility(Abilities.PARENTAL_BOND)) {
+      return 1.25;
+    } else {
+      return 1;
     }
-
-    if (user.hasAbility(Abilities.PARENTAL_BOND)) {
-      multiHitMultiplier += 0.25;
-    }
-
-    return multiHitMultiplier;
   }
 
   getPriority(user: Pokemon, simulated: boolean = true) {
