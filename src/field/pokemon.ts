@@ -4200,15 +4200,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Resets the status of a pokemon.
-   * @param revive Whether the pokemon should be revived if fainted; defaults to `true`.
    * @param confusion Whether resetStatus should include confusion or not; defaults to `false`.
    * @param reloadAssets Whether to reload the assets or not; defaults to `false`.
    */
-  resetStatus(revive: boolean = true, confusion: boolean = false, reloadAssets: boolean = false): void {
+  resetStatus(confusion: boolean = false, reloadAssets: boolean = false): void {
     const lastStatus = this.status?.effect;
-    if (!revive && this.isFainted()) {
-      return;
-    }
     this.status = null;
     if (lastStatus === StatusEffect.SLEEP) {
       this.setFrameRate(10);
