@@ -7,7 +7,7 @@ import { variantData } from "#app/data/variant";
 import type BattleInfo from "#app/ui/battle-info";
 import { PlayerBattleInfo, EnemyBattleInfo } from "#app/ui/battle-info";
 import type { Move } from "#app/data/move";
-import { applyMoveAttrs, getMoveTargets } from "#app/data/move";
+import { applyMoveAttrs, AttackMove, getMoveTargets } from "#app/data/move";
 import { allMoves } from "#app/data/all-moves";
 import { RechargeAttr } from "#app/data/move-attrs/recharge-attr";
 import { HitsTagAttr } from "#app/data/move-attrs/hits-tag-attr";
@@ -32,7 +32,6 @@ import { CritOnlyAttr } from "#app/data/move-attrs/crit-only-attr";
 import { HighCritAttr } from "#app/data/move-attrs/high-crit-attr";
 import { IgnoreOpponentStatStagesAttr } from "#app/data/move-attrs/ignore-opponent-stat-stages-attr";
 import { RespectAttackTypeImmunityAttr } from "#app/data/move-attrs/respect-attack-type-immunity-attr";
-import { MoveTarget } from "#enums/move-target";
 import { MoveCategory } from "#enums/move-category";
 import type { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
 import { default as PokemonSpecies } from "#app/data/pokemon-species";
@@ -57,6 +56,7 @@ import {
   deltaRgb,
   isBetween,
   type AbstractConstructor,
+  randSeedShuffle,
 } from "#app/utils";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import { getTypeDamageMultiplier, getTypeRgb } from "#app/data/type";
@@ -103,7 +103,6 @@ import {
 import { reverseCompatibleTms, tmSpecies, tmPoolTiers } from "#app/data/balance/tms";
 import {
   BattlerTag,
-  EncoreTag,
   GroundedTag,
   HighestStatBoostTag,
   SubstituteTag,
@@ -230,6 +229,9 @@ import { FieldPosition } from "#enums/field-position";
 import { ArenaTrapAbAttr } from "#app/data/ab-attrs/arena-trap-ab-attr";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import type { AbilityFilterOptions } from "#app/data/ability-filter-options";
+import type { TurnCommand } from "#app/battle";
+import { BattleCommand } from "#enums/battle-command";
+import { MoveTarget } from "#enums/move-target";
 import { PokemonMove } from "#app/field/pokemon-move";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
@@ -1477,7 +1479,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const ret: Move[] = [];
 
     for (let i = 0; i < Math.min(types.length, 4 - this.battleData.revealedMoves.size); i++) {
-      ret.push(new AttackMove(Moves.NONE, types[i], category, this.getSimulatedMovePower(), 100, 10, -1, 0, 0));
+      ret.push(new AttackMove(MoveId.NONE, types[i], category, this.getSimulatedMovePower(), 100, 10, -1, 0, 0));
     }
 
     return ret;
@@ -2204,6 +2206,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns The calculated AS for the forecasted action
    */
   public getAttackScore(opponent: Pokemon, move: Move): number {
+    if (move.category === MoveCategory.STATUS) {
+      return 0;
+    }
+
     const { damage } = opponent.getAttackDamage(this, move, AbilityApplyMode.REVEALED);
 
     if (damage >= opponent.hp) {
@@ -2286,11 +2292,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         return eas * (3 - oppEas + (userCanOutspeed ? 1 : 0));
       }
     } else {
-      if (oppEas >= 4) {
-        return 0;
-      } else {
-        return eas * (2 - oppEas + (userCanOutspeed ? 1 : 0));
-      }
+      return Math.max(eas * (2 - oppEas + (userCanOutspeed ? 1 : 0)), 0);
     }
   }
 
@@ -3931,7 +3933,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   public getMoveHistory(): TurnMove[] {
-    return this.battleSummonData.moveHistory;
+    return this.battleSummonData?.moveHistory ?? [];
   }
 
   public pushMoveHistory(turnMove: TurnMove): void {
@@ -3940,7 +3942,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
     turnMove.turn = globalScene.currentBattle?.turn;
     this.getMoveHistory().push(turnMove);
-    this.battleData.revealedMoves.add(turnMove.move);
+    this.battleData.revealedMoves.add(turnMove.moveId);
   }
 
   /**
@@ -5630,25 +5632,124 @@ export class EnemyPokemon extends Pokemon {
    * @returns the sum of the move's AS and ES against the given opponent
    */
   public getMoveScore(opponent: Pokemon, move: Move): number {
-    return this.getAttackScore(opponent, move) + move.getEffectScore(this, opponent);
+    const meetsConditions =
+      move.applyConditions(this, opponent, move)
+      || [MoveId.SUCKER_PUNCH, MoveId.UPPER_HAND, MoveId.THUNDERCLAP].includes(move.id);
+
+    const attackScore = this.getAttackScore(opponent, move);
+
+    if (!meetsConditions || attackScore <= -1) {
+      return -5;
+    }
+
+    return attackScore + move.getEffectScore(this, opponent);
   }
 
   /**
-   * Determines the move this Pokemon will use on the next turn, as well as
-   * the Pokemon the move will target.
-   * @returns this Pokemon's next move in the format {move, moveTargets}
+   * Obtains this Pokemon's next action for the turn based on
+   * {@linkcode getMatchupScore | Matchup Score} and {@linkcode getMoveScore | Move Score}.
+   * @returns this Pokemon's {@linkcode TurnCommand} for next turn, or `undefined` if this
+   * Pokemon's turn is skipped.
    */
-  getNextMove(): QueuedMove {
-    // If this Pokemon has a move already queued, return it.
-    const queuedMove = this.getMoveQueue().length
-      ? this.getMoveset().find((m) => m.moveId === this.getMoveQueue()[0].moveId)
-      : null;
+  public getNextCommand(): TurnCommand | undefined {
+    const battle = globalScene.currentBattle;
+    const trainer = battle.trainer;
+
+    // If the current Mystery Encounter is configured to disable enemy moves,
+    // skip this command fetch.
+    if (battle.mysteryEncounter?.skipEnemyBattleTurns) {
+      return undefined;
+    }
+
+    // If this Pokemon is hidden by its Commander ability, skip this command fetch.
+    if (
+      battle.double
+      && this.hasAbility(Abilities.COMMANDER)
+      && this.getAlly().getTag(BattlerTagType.COMMANDED)?.sourceId === this.id
+    ) {
+      return undefined;
+    }
+
+    if (
+      trainer
+      && !this.isTrapped()
+      && this.getParty().some((p) => p.isActive() && !p.isOnField())
+      && this.getMoveQueue().length === 0
+    ) {
+      const switchCommand = this.getSwitchCommand();
+      if (switchCommand) {
+        return switchCommand;
+      }
+    }
+
+    const nextMove = this.getNextMove();
+    console.log(
+      `${BattlerIndex[this.getBattlerIndex()]}: selecting ${MoveId[nextMove.moveId]} against ${nextMove.targets.map((i) => BattlerIndex[i])}`,
+    );
+
+    return {
+      command: BattleCommand.FIGHT,
+      move: nextMove,
+    };
+  }
+
+  /**
+   * Determines if this Pokemon should switch out with another Pokemon
+   * in its party and, if so, returns the command to do so
+   * @returns the {@linkcode TurnCommand} to switch, or `undefined` if
+   * this Pokemon should not switch out.
+   * @todo Finalize the MUS threshold for switching
+   */
+  public getSwitchCommand(): TurnCommand | undefined {
+    if (Overrides.ENEMY_DISABLE_SWITCHING_OVERRIDE) {
+      return undefined;
+    }
+
+    const nonActiveParty = this.getParty().filter((p) => p.isActive() && !p.isOnField());
+    const matchupScore = this.getAverageMatchupScore();
+
+    // If this Pokemon can safely KO at least 1 opponent, it gains an average MUS
+    // of Infinity and should never switch out.
+    if (matchupScore === Infinity) {
+      return undefined;
+    }
+
+    // The switch candidate is the inactive Pokemon with the highest average MUS.
+    const [candIndex, candScore] = nonActiveParty
+      .map((p) => [this.getParty().indexOf(p), p.getAverageMatchupScore()])
+      .reduce((cand, entry) => (cand[1] < entry[1] ? entry : cand));
+
+    // To qualify for switching in, the candidate must have an MUS that exceeds
+    // whichever's higher between this Pokemon's MUS + 2 or twice this Pokemon's MUS.
+    if (candScore > Math.max(matchupScore + 2, matchupScore * 2)) {
+      return {
+        command: BattleCommand.POKEMON,
+        cursor: candIndex,
+        args: [false],
+      };
+    } else {
+      return undefined;
+    }
+  }
+
+  /**
+   * Generates the move action to be performed by this Pokemon on the upcoming turn.
+   * In most cases, this is done by finding the best target for each usable move
+   * according to {@linkcode getMoveScore | Move Score}, then selecting the move
+   * action with the highest overall score. If there is a tie for the highest
+   * score, then the final move selection is random between the tied move actions.
+   * @returns The {@linkcode QueuedMove} representing the optimal move action.
+   */
+  public getNextMove(): QueuedMove {
+    // If this Pokemon has already queued a move before this turn, it will try to use it.
+    const queuedMove = this.getMoveQueue()[0];
     if (queuedMove) {
-      if (queuedMove.isUsable(this, this.getMoveQueue()[0].ignorePP)) {
+      const queuedMovesetMove = this.getMoveset().find((m) => m.moveId === queuedMove.moveId);
+      if (queuedMovesetMove?.isUsable(this, queuedMove.ignorePP)) {
         return {
-          moveId: queuedMove.moveId,
-          targets: this.getMoveQueue()[0].targets,
-          ignorePP: this.getMoveQueue()[0].ignorePP,
+          moveId: queuedMovesetMove.moveId,
+          targets: queuedMove.targets,
+          ignorePP: queuedMove.ignorePP,
         };
       } else {
         this.getMoveQueue().shift();
@@ -5656,187 +5757,133 @@ export class EnemyPokemon extends Pokemon {
       }
     }
 
-    // Filter out any moves this Pokemon cannot use
-    let movePool = this.getMoveset().filter((m) => m.isUsable(this));
-    // If no moves are left, use Struggle. Otherwise, continue with move selection
-    if (movePool.length) {
-      // If there's only 1 move in the move pool, use it.
-      if (movePool.length === 1) {
-        return { moveId: movePool[0].moveId, targets: this.getNextTargets(movePool[0].moveId) };
-      }
-      // If a move is forced because of Encore, use it.
-      const encoreTag = this.getTag(EncoreTag) as EncoreTag;
-      if (encoreTag) {
-        const encoreMove = movePool.find((m) => m.moveId === encoreTag.moveId);
-        if (encoreMove) {
-          return { moveId: encoreMove.moveId, targets: this.getNextTargets(encoreMove.moveId) };
-        }
-      }
-      switch (this.aiType) {
-        case AiType.RANDOM: // No enemy should spawn with this AI type in-game
-          const moveId = movePool[globalScene.randBattleSeedInt(movePool.length)].moveId;
-          return { moveId: moveId, targets: this.getNextTargets(moveId) };
-        case AiType.SMART_RANDOM:
-        case AiType.SMART:
-          /**
-           * Search this Pokemon's move pool for moves that will KO an opposing target.
-           * If there are any moves that can KO an opponent (i.e. a player Pokemon),
-           * those moves are the only ones considered for selection on this turn.
-           */
-          const koMoves = movePool.filter((pkmnMove) => {
-            if (!pkmnMove) {
-              return false;
-            }
+    const movePool = this.getMoveset().filter((m) => m.isUsable(this));
 
-            const move = pkmnMove.getMove()!;
-            if (move.moveTarget === MoveTarget.ATTACKER) {
-              return false;
-            }
-
-            const moveTargets = getMoveTargets(this, move.id)
-              .targets.map((ind) => globalScene.getFieldPokemonByBattlerIndex(ind))
-              .filter((p) => !isNullOrUndefined(p) && this.isPlayer() !== p.isPlayer()) as Pokemon[];
-            // Only considers critical hits for crit-only moves or when this Pokemon is under the effect of Laser Focus
-            const isCritical = move.hasAttr(CritOnlyAttr) || !!this.getTag(BattlerTagType.ALWAYS_CRIT);
-
-            return (
-              move.category !== MoveCategory.STATUS
-              && moveTargets.some((p) => {
-                const doesNotFail =
-                  move.applyConditions(this, p, move)
-                  || [MoveId.SUCKER_PUNCH, MoveId.UPPER_HAND, MoveId.THUNDERCLAP].includes(move.id);
-                return (
-                  doesNotFail && p.getAttackDamage(this, move, AbilityApplyMode.REVEALED, isCritical).damage >= p.hp
-                );
-              })
-            );
-          }, this);
-
-          if (koMoves.length > 0) {
-            movePool = koMoves;
-          }
-
-          /**
-           * Move selection is based on the move's calculated "benefit score" against the
-           * best possible target(s) (as determined by {@linkcode getNextTargets}).
-           * For more information on how benefit scores are calculated, see `docs/enemy-ai.md`.
-           */
-          const moveScores = movePool.map(() => 0);
-          const moveTargets = Object.fromEntries(movePool.map((m) => [m.moveId, this.getNextTargets(m.moveId)]));
-          for (const m in movePool) {
-            const pokemonMove = movePool[m];
-            const move = pokemonMove.getMove();
-
-            let moveScore = moveScores[m];
-            const targetScores: number[] = [];
-
-            for (const mt of moveTargets[move.id]) {
-              // Prevent a target score from being calculated when the target is whoever attacks the user
-              if (mt === BattlerIndex.ATTACKER) {
-                break;
-              }
-
-              const target = globalScene.getFieldPokemonByBattlerIndex(mt)!;
-              /**
-               * The "target score" of a move is given by the move's user benefit score + the move's target benefit score.
-               * If the target is an ally, the target benefit score is multiplied by -1.
-               */
-              let targetScore =
-                move.getUserBenefitScore(this, target, move)
-                + move.getTargetBenefitScore(this, target, move)
-                  * (mt < BattlerIndex.ENEMY === this.isPlayer() ? 1 : -1);
-              if (Number.isNaN(targetScore)) {
-                console.error(`Move ${move.name} returned score of NaN`);
-                targetScore = 0;
-              }
-              /**
-               * If this move is unimplemented, or the move is known to fail when used, set its
-               * target score to -20
-               */
-              if (
-                (move.name.endsWith(" (N)") || !move.applyConditions(this, target, move))
-                && ![MoveId.SUCKER_PUNCH, MoveId.UPPER_HAND, MoveId.THUNDERCLAP].includes(move.id)
-              ) {
-                targetScore = -20;
-              } else if (move.isAttackMove()) {
-                /**
-                 * Attack moves are given extra multipliers to their base benefit score based on
-                 * the move's type effectiveness against the target and whether the move is a STAB move.
-                 */
-                const effectiveness = target.getMoveEffectiveness(this, move, AbilityApplyMode.REVEALED);
-                if (target.isPlayer() !== this.isPlayer()) {
-                  targetScore *= effectiveness;
-                  if (this.isOfType(move.type)) {
-                    targetScore *= 1.5;
-                  }
-                } else if (effectiveness) {
-                  targetScore /= effectiveness;
-                  if (this.isOfType(move.type)) {
-                    targetScore /= 1.5;
-                  }
-                }
-                /** If a move has a base benefit score of 0, its benefit score is assumed to be unimplemented at this point */
-                if (!targetScore) {
-                  targetScore = -20;
-                }
-              }
-              targetScores.push(targetScore);
-            }
-            // When a move has multiple targets, its score is equal to the maximum target score across all targets
-            moveScore += Math.max(...targetScores);
-
-            // could make smarter by checking opponent def/spdef
-            moveScores[m] = moveScore;
-          }
-
-          console.log(moveScores);
-
-          // Sort the move pool in decreasing order of move score
-          const sortedMovePool = movePool.slice(0);
-          sortedMovePool.sort((a, b) => {
-            const scoreA = moveScores[movePool.indexOf(a)];
-            const scoreB = moveScores[movePool.indexOf(b)];
-            return scoreA < scoreB ? 1 : scoreA > scoreB ? -1 : 0;
-          });
-          let r = 0;
-          if (this.aiType === AiType.SMART_RANDOM) {
-            // Has a 5/8 chance to select the best move, and a 3/8 chance to advance to the next best move (and repeat this roll)
-            while (r < sortedMovePool.length - 1 && globalScene.randBattleSeedInt(8) >= 5) {
-              r++;
-            }
-          } else if (this.aiType === AiType.SMART) {
-            // The chance to advance to the next best move increases when the compared moves' scores are closer to each other.
-            while (
-              r < sortedMovePool.length - 1
-              && moveScores[movePool.indexOf(sortedMovePool[r + 1])] / moveScores[movePool.indexOf(sortedMovePool[r])]
-                >= 0
-              && globalScene.randBattleSeedInt(100)
-                < Math.round(
-                  (moveScores[movePool.indexOf(sortedMovePool[r + 1])]
-                    / moveScores[movePool.indexOf(sortedMovePool[r])])
-                    * 50,
-                )
-            ) {
-              r++;
-            }
-          }
-          console.log(
-            movePool.map((m) => m.getName()),
-            moveScores,
-            r,
-            sortedMovePool.map((m) => m.getName()),
-          );
-          return { moveId: sortedMovePool[r]!.moveId, targets: moveTargets[sortedMovePool[r]!.moveId] };
-      }
+    // If this Pokemon has no usable moves, it will use Struggle.
+    if (movePool.length === 0) {
+      return {
+        moveId: MoveId.STRUGGLE,
+        targets: getMoveTargets(this, MoveId.STRUGGLE).targets,
+      };
     }
 
-    return { moveId: MoveId.STRUGGLE, targets: this.getNextTargets(MoveId.STRUGGLE) };
+    /**
+     * Contains the "optimal" action for each move in this Pokemon's move pool.
+     * This accumulates scores and resolves move targeting based on those scores.
+     * @todo Resolve issues with {@linkcode BattlerIndex.ATTACKER} targeting
+     */
+    const moveActions = movePool.map((mv) => this.getOptimalMoveAction(mv.getMove()));
+
+    /**
+     * Following similar logic to finding {@linkcode optTarget}, this shuffles
+     * and sorts {@linkcode moveActions} to obtain the best overall
+     * move action among all entries in the move pool.
+     */
+    const optMoveAction = randSeedShuffle(moveActions).sort((actionA, actionB) => actionB.score - actionA.score)[0];
+
+    return {
+      moveId: optMoveAction.moveId,
+      targets: optMoveAction.targets,
+    };
+  }
+
+  /**
+   * Calculates the optimal use case for the given move among
+   * all valid targets on the current field.
+   * @param move the {@linkcode Move} being evaluated
+   * @returns A {@linkcode TargetScoreData} object with the following data:
+   * - `move`: The {@linkcode Moves | identifier} for the evaluated move
+   * - `targets`: The {@linkcode BattlerIndex} of the target(s) for which
+   * the evaluated move scores highest.
+   * - `score`: The {@linkcode getMoveScore | score} corresponding to the optimal target(s)
+   */
+  private getOptimalMoveAction(move: Move): TargetScoreData {
+    if (move.moveTarget === MoveTarget.ATTACKER) {
+      /**
+       * Counter-attacks (e.g. Metal Burst) are scored entirely
+       * based on their effect score.
+       */
+      const score = move.getEffectScore(this);
+
+      return {
+        moveId: move.id,
+        targets: [BattlerIndex.ATTACKER],
+        score,
+      };
+    }
+
+    const { targets, multiple } = getMoveTargets(this, move.id);
+
+    /**
+     * The {@linkcode BattlerIndex | BattlerIndexes} of active Pokemon that
+     * can legally be targeted with this move.
+     */
+    const activeTargets = targets.filter((bi) => !isNullOrUndefined(globalScene.getFieldPokemonByBattlerIndex(bi)));
+    if (activeTargets.length === 0) {
+      /** Moves with no valid targets are given a "fail penalty" of (-5). */
+      return {
+        moveId: move.id,
+        targets: [],
+        score: -5,
+      };
+    }
+
+    /**
+     * A mapping between {@linkcode BattlerIndex} and the move score for this
+     * move against the Pokemon at that index.
+     */
+    const targetScores = activeTargets.map(
+      (bi) => [bi, this.getMoveScore(globalScene.getFieldPokemonByBattlerIndex(bi)!, move)], // TODO: find a way to get rid of this bang
+    );
+
+    if (multiple) {
+      /**
+       * Multi-targeted moves use the full target set and the sum of move scores
+       * for each target.
+       */
+      return {
+        moveId: move.id,
+        targets: targets,
+        score: targetScores.map((ts) => ts[1]).reduce((total, score) => total + score),
+      };
+    } else if (move.moveTarget === MoveTarget.RANDOM_NEAR_ENEMY) {
+      /**
+       * Moves with random targeting resolve their final target within {@linkcode getMoveTargets},
+       * but calculate score based on the average move score between all legal targets
+       */
+      const averageScore =
+        this.getOpponents()
+          .map((p) => this.getMoveScore(p, move))
+          .reduce((total, score) => total + score, 0) / this.getOpponents().length;
+
+      return {
+        moveId: move.id,
+        targets: targets,
+        score: averageScore,
+      };
+    } else {
+      /**
+       * Single-target moves form an optimal move action with the highest-scoring
+       * {@linkcode BattlerIndex}. {@linkcode targetScores} is shuffled here so
+       * that a target is randomly selected from the highest-scoring indexes in
+       * the event of a tie.
+       */
+      const optTarget = randSeedShuffle(targetScores).sort((aScore, bScore) => bScore[1] - aScore[1])[0];
+
+      return {
+        moveId: move.id,
+        targets: [optTarget[0]],
+        score: optTarget[1],
+      };
+    }
   }
 
   /**
    * Determines the Pokemon the given move would target if used by this Pokemon
    * @param moveId {@linkcode MoveId} The move to be used
    * @returns The indexes of the Pokemon the given move would target
+   * @deprecated Target selection is now handled within {@linkcode getNextMove}
+   * immediately after move scoring.
    */
   getNextTargets(moveId: MoveId): BattlerIndex[] {
     const moveTargets = getMoveTargets(this, moveId);
@@ -6127,6 +6174,12 @@ interface AbilityData {
   passive: boolean;
 }
 
+interface TargetScoreData {
+  moveId: MoveId;
+  targets: BattlerIndex[];
+  score: number;
+}
+
 export interface TurnMove {
   moveId: MoveId;
   targets?: BattlerIndex[];
@@ -6188,7 +6241,7 @@ export class PokemonBattleData {
   /**
    * The moves revealed from this Pokemon
    */
-  public revealedMoves: Set<Moves> = new Set();
+  public revealedMoves: Set<MoveId> = new Set();
 }
 
 export class PokemonBattleSummonData {

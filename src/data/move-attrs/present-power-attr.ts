@@ -18,6 +18,10 @@ import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
  */
 export class PresentPowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, target: Pokemon, _move: Move, power: NumberHolder): boolean {
+    if (!user.turnData) {
+      return false;
+    }
+
     /**
      * If this move is multi-hit, and this attribute is applied to any hit
      * other than the first, this move cannot result in a heal.

@@ -71,7 +71,7 @@ describe("Moves - Spikes", () => {
     await game.toNextTurn();
 
     game.move.select(MoveId.SPLASH);
-    game.forceEnemyToSwitch();
+    await game.forceEnemyToSwitch();
     await game.toNextTurn();
 
     const enemy = game.scene.getEnemyParty()[0];

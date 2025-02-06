@@ -27,7 +27,7 @@ function getEnemyMoveChoices(pokemon: EnemyPokemon, moveChoices: MoveChoiceSet):
   }
 
   for (const [moveId, count] of Object.entries(moveChoices)) {
-    console.log(`Move: ${allMoves[moveId].name}   Count: ${count} (${(count / NUM_TRIALS) * 100}%)`);
+    console.log(`Move: ${allMoves[moveId].name}   Count: ${count} (${Math.round((count / NUM_TRIALS) * 100)}%)`);
   }
 }
 
@@ -98,5 +98,43 @@ describe("Enemy Commands - Move Selection", () => {
         expect(moveChoices[mv.moveId]).toBe(0);
       }
     });
+  });
+
+  it("should avoid attacks that have no effect on the target", async () => {
+    game.override
+      .enemySpecies(Species.SNORLAX)
+      .enemyMoveset([MoveId.COVET, MoveId.THIEF, MoveId.FLAME_WHEEL, MoveId.SPLASH])
+      .startingLevel(100)
+      .enemyLevel(100);
+
+    await game.classicMode.startBattle([Species.DUSKULL]);
+
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
+    enemyPokemon.aiType = AiType.SMART_RANDOM;
+
+    const moveChoices: MoveChoiceSet = {};
+    const enemyMoveset = enemyPokemon.getMoveset();
+    enemyMoveset.forEach((mv) => (moveChoices[mv.moveId] = 0));
+    getEnemyMoveChoices(enemyPokemon, moveChoices);
+
+    expect(moveChoices[MoveId.SPLASH]).toBe(0);
+    expect(moveChoices[MoveId.COVET]).toBe(0);
+  });
+
+  it("should not crash from an off-field enemy Pokemon simulating every move", async () => {
+    game.override.startingWave(5);
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const player = game.field.getPlayerPokemon();
+    const offFieldEnemy = game.scene.getEnemyParty()[1];
+
+    for (const move of Object.values(allMoves)) {
+      const eas = offFieldEnemy.getExpectedAttackScore(player, move);
+      expect(eas).toBeGreaterThanOrEqual(-1);
+      expect(eas).toBeLessThanOrEqual(4);
+      const eas2 = player.getExpectedAttackScore(offFieldEnemy, move);
+      expect(eas2).toBeGreaterThanOrEqual(-1);
+      expect(eas2).toBeLessThanOrEqual(4);
+    }
   });
 });

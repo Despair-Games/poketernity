@@ -1,4 +1,4 @@
-import { type Pokemon } from "#app/field/pokemon";
+import { type EnemyPokemon, type Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -33,7 +33,7 @@ export class MoveCondition {
     return 0;
   }
 
-  public getConditionScore(_user: Pokemon, _target: Pokemon, _move: Move): number {
+  public getConditionScore(_user: EnemyPokemon, _target?: Pokemon, _move?: Move): number {
     return 0;
   }
 }

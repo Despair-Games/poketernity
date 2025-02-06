@@ -164,6 +164,12 @@ class DefaultOverrides {
    * 2+: the Pokemon will be a boss with the given number of health segments
    */
   readonly ENEMY_HEALTH_SEGMENTS_OVERRIDE: number = 0;
+  /**
+   * Prevents enemy Trainers from switching their Pokemon.
+   * Setting this to `true` is highly recommended if you are overriding the
+   * enemy's moveset with only status moves.
+   */
+  readonly ENEMY_DISABLE_SWITCHING_OVERRIDE: boolean = false;
 
   // -------------
   // EGG OVERRIDES

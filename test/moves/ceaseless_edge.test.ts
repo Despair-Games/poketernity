@@ -99,9 +99,8 @@ describe("Moves - Ceaseless Edge", () => {
     expect(tagAfter.layers).toBe(2);
 
     const hpBeforeSpikes = game.scene.currentBattle.enemyParty[1].hp;
-    // Check HP of pokemon that WILL BE switched in (index 1)
-    game.forceEnemyToSwitch();
     game.move.select(MoveId.SPLASH);
+    await game.forceEnemyToSwitch();
     await game.phaseInterceptor.to(TurnEndPhase, false);
     expect(game.scene.currentBattle.enemyParty[0].hp).toBeLessThan(hpBeforeSpikes);
   });

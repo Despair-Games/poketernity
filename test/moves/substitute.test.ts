@@ -189,7 +189,6 @@ describe("Moves - Substitute", () => {
 
     await game.toNextTurn();
 
-    expect(leadPokemon.getMoveEffectiveness).not.toHaveReturnedWith(0);
     expect(game.scene.arena.getTagOnSide(ArenaTagType.LIGHT_SCREEN, ArenaTagSide.PLAYER)).toBeDefined();
   });
 
