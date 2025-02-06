@@ -6,7 +6,7 @@ import { PhaseId } from "#enums/phase-id";
 import i18next from "i18next";
 
 export class ModifierRewardPhase extends Phase {
-  /** @override **Must** use generic {@linkcode PhaseId} because as {@linkcode ModifierRewardPhase} is extended by other phases */
+  /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode ModifierRewardPhase} is extended by other phases */
   override readonly id: PhaseId = PhaseId.MODIFIER_REWARD;
 
   protected readonly modifierType: ModifierType;

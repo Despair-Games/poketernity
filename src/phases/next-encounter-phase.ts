@@ -7,7 +7,7 @@ import { EncounterPhase } from "./encounter-phase";
  * @extends EncounterPhase
  */
 export class NextEncounterPhase extends EncounterPhase {
-  /** @override **Must** use generic {@linkcode PhaseId} because as {@linkcode NextEncounterPhase} is extended by other phases */
+  /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode NextEncounterPhase} is extended by other phases */
   override readonly id: PhaseId = PhaseId.NEXT_ENCOUNTER;
 
   protected override doEncounter(): void {

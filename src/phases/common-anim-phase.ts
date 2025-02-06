@@ -10,7 +10,7 @@ import { PhaseId } from "#enums/phase-id";
  * @extends PokemonPhase
  */
 export class CommonAnimPhase extends PokemonPhase {
-  /** @override **Must** use generic {@linkcode PhaseId} because as {@linkcode CommonAnimPhase} is extended by other phases */
+  /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode CommonAnimPhase} is extended by other phases */
   override readonly id: PhaseId = PhaseId.COMMON_ANIM;
 
   private anim: CommonAnim | null;
