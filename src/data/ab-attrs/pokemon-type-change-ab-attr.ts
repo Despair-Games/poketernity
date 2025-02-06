@@ -1,6 +1,5 @@
 import type { Move } from "#app/data/move";
 import { type CallMoveAttr } from "#app/data/move-attrs/call-move-attr";
-import { type NaturePowerAttr } from "#app/data/move-attrs/nature-power-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { MoveId } from "#enums/move-id";
@@ -23,7 +22,7 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
        * Skip moves that call other moves because these moves generate a following move that will trigger this ability attribute
        * @see {@link https://bulbapedia.bulbagarden.net/wiki/Category:Moves_that_call_other_moves}
        */
-      && !move.findAttr((attr: CallMoveAttr | NaturePowerAttr) => attr.callsOtherMoves)
+      && !move.findAttr((attr: CallMoveAttr) => attr.callsOtherMoves)
     ) {
       const moveType = pokemon.getMoveType(move);
 
