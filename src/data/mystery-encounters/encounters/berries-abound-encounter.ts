@@ -236,7 +236,7 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
           config.pokemonConfigs![0].mysteryEncounterBattleEffects = (pokemon: Pokemon) => {
             queueEncounterMessage(`${namespace}:option.2.boss_enraged`);
             globalScene.unshiftPhase(
-              new StatStageChangePhase(pokemon.getBattlerIndex(), true, statChangesForBattle, 1),
+              new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, statChangesForBattle, 1),
             );
           };
           setEncounterRewards(
