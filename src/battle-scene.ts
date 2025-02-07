@@ -244,7 +244,7 @@ interface UseMoveInit {
 
 const DEBUG_RNG = false;
 
-export const startingWave = Overrides.STARTING_WAVE_OVERRIDE || 1;
+const startingWave = Overrides.STARTING_WAVE_OVERRIDE || 1;
 
 //#endregion
 
