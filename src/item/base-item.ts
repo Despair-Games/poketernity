@@ -1,10 +1,17 @@
 import type { ModifierTier } from "#enums/modifier-tier";
 
-export abstract class BaseItem {
-  public nameKey: string;
-  public descKey: string;
-  public price: number;
-  public rarity: ModifierTier; // TODO: Rename this
+interface SelectOption {
+  nameKey: string;
+  descKey: string;
+  price: number;
+  rarity: ModifierTier; // TODO: Rename this
+}
+
+export abstract class BaseItem implements SelectOption {
+  nameKey: string;
+  descKey: string;
+  price: number;
+  rarity: ModifierTier;
   public stackCount: number;
   public maxStackCount: number;
 }

@@ -1,10 +1,28 @@
+import type { ElementalType } from "#enums/elemental-type";
 import { BaseItem } from "./base-item";
 
+/**
+ * Held items are items that are held onto by Pokemon
+ */
 export abstract class HeldItem extends BaseItem {
-  public flingDamage: number;
-  public flingEffect: null; // TODO: fill this out later
-  public drive: boolean; // TODO: replace with enum representing drive
-  public memory: boolean; // TODO: replace with enum representing memory
-  public megaStone: boolean; // TODO: replace with enum representing the mega stone
-  public ignoreKlutz: boolean;
+  public isTransferable: boolean;
+  public ignorable: boolean;
+
+  getFlingDamage(): number {
+    return 0;
+  }
+
+  getFlingEffect(): void {}
+}
+
+export abstract class FormChangeHeldItem extends HeldItem {}
+
+/**
+ * For beries which are held by Pokemon and consumed
+ */
+export abstract class BerryItem extends HeldItem {
+  public naturalGiftPower: number;
+  public naturalGiftType: ElementalType;
+
+  getBerryEatenEffect(): void {}
 }
