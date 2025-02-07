@@ -41,6 +41,7 @@ export default class AdminUiHandler extends FormModalUiHandler {
   }
 
   override getWidth(): number {
+    // TODO: adapt these numbers
     return this.adminMode === AdminMode.ADMIN ? 180 : 160;
   }
 

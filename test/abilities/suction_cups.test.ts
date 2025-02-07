@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -33,8 +33,8 @@ describe("Abilities - Suction Cups", () => {
   it("should prevent the user from being forced to switch out", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.use(Moves.WHIRLWIND);
-    await game.move.forceEnemyMove(Moves.SPLASH);
+    game.move.use(MoveId.WHIRLWIND);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.phaseInterceptor.to("BerryPhase");
 
     const enemyPokemon = game.field.getEnemyPokemon();
@@ -47,8 +47,8 @@ describe("Abilities - Suction Cups", () => {
 
     const [feebas, milotic] = game.scene.getPlayerParty();
 
-    game.move.use(Moves.SPLASH);
-    await game.move.forceEnemyMove(Moves.FALSE_SWIPE);
+    game.move.use(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.FALSE_SWIPE);
     game.doSelectPartyPokemon(1);
     await game.phaseInterceptor.to("BerryPhase");
 

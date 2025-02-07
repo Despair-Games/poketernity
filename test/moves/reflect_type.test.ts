@@ -1,7 +1,7 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { Type } from "#enums/type";
+import { ElementalType } from "#enums/elemental-type";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -27,29 +27,29 @@ describe("Moves - Reflect Type", () => {
 
   it("will make the user Normal/Grass if targetting a typeless Pokemon affected by Forest's Curse", async () => {
     game.override
-      .moveset([Moves.FORESTS_CURSE, Moves.REFLECT_TYPE])
+      .moveset([MoveId.FORESTS_CURSE, MoveId.REFLECT_TYPE])
       .startingLevel(60)
       .enemySpecies(Species.CHARMANDER)
-      .enemyMoveset([Moves.BURN_UP, Moves.SPLASH]);
+      .enemyMoveset([MoveId.BURN_UP, MoveId.SPLASH]);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
     const enemyPokemon = game.scene.getEnemyPokemon();
 
-    game.move.select(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.BURN_UP);
+    game.move.select(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.BURN_UP);
     await game.toNextTurn();
 
-    game.move.select(Moves.FORESTS_CURSE);
-    await game.forceEnemyMove(Moves.SPLASH);
+    game.move.select(MoveId.FORESTS_CURSE);
+    await game.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
-    expect(enemyPokemon?.getTypes().includes(Type.UNKNOWN)).toBe(true);
-    expect(enemyPokemon?.getTypes().includes(Type.GRASS)).toBe(true);
+    expect(enemyPokemon?.getTypes().includes(ElementalType.UNKNOWN)).toBe(true);
+    expect(enemyPokemon?.getTypes().includes(ElementalType.GRASS)).toBe(true);
 
-    game.move.select(Moves.REFLECT_TYPE);
-    await game.forceEnemyMove(Moves.SPLASH);
+    game.move.select(MoveId.REFLECT_TYPE);
+    await game.forceEnemyMove(MoveId.SPLASH);
     await game.phaseInterceptor.to("TurnEndPhase");
-    expect(playerPokemon?.getTypes()[0]).toBe(Type.NORMAL);
-    expect(playerPokemon?.getTypes().includes(Type.GRASS)).toBe(true);
+    expect(playerPokemon?.getTypes()[0]).toBe(ElementalType.NORMAL);
+    expect(playerPokemon?.getTypes().includes(ElementalType.GRASS)).toBe(true);
   });
 });

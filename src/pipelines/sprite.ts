@@ -1,8 +1,6 @@
-import { Pokemon } from "#app/field/pokemon";
-import Trainer from "#app/field/trainer";
 import FieldSpritePipeline from "#app/pipelines/field-sprite";
-import MysteryEncounterIntroVisuals from "#app/field/mystery-encounter-intro";
 import { settings } from "#app/system/settings/settings-manager";
+import { CANVAS_SCALE } from "#app/ui-constants";
 
 const spriteFragShader = `
 #ifdef GL_FRAGMENT_PRECISION_HIGH
@@ -345,9 +343,9 @@ export default class SpritePipeline extends FieldSpritePipeline {
     const ignoreOverride = data["ignoreOverride"] as boolean;
 
     const isEntityObj =
-      sprite.parentContainer instanceof Pokemon
-      || sprite.parentContainer instanceof Trainer
-      || sprite.parentContainer instanceof MysteryEncounterIntroVisuals;
+      sprite.parentContainer.type === "Pokemon"
+      || sprite.parentContainer.type === "Trainer"
+      || sprite.parentContainer.type === "MysteryEncounterIntroVisuals";
     const field = isEntityObj ? sprite.parentContainer.parentContainer : sprite.parentContainer;
     const position = isEntityObj ? [sprite.parentContainer.x, sprite.parentContainer.y] : [sprite.x, sprite.y];
     if (field) {
@@ -438,13 +436,16 @@ export default class SpritePipeline extends FieldSpritePipeline {
     const yShadowOffset = (sprite.pipelineData["yShadowOffset"] as number) ?? 0;
     if (hasShadow) {
       const isEntityObj =
-        sprite.parentContainer instanceof Pokemon
-        || sprite.parentContainer instanceof Trainer
-        || sprite.parentContainer instanceof MysteryEncounterIntroVisuals;
+        sprite.parentContainer.type === "Pokemon"
+        || sprite.parentContainer.type === "Trainer"
+        || sprite.parentContainer.type === "MysteryEncounterIntroVisuals";
       const field = isEntityObj ? sprite.parentContainer.parentContainer : sprite.parentContainer;
-      const fieldScaleRatio = field.scale / 6;
-      const baseY = ((isEntityObj ? sprite.parentContainer.y : sprite.y + sprite.height) * 6) / fieldScaleRatio;
-      const bottomPadding = (Math.ceil(sprite.height * 0.05 + Math.max(yShadowOffset, 0)) * 6) / fieldScaleRatio;
+      // TODO scaling: is using the canvas scale needed here? Seems like overall it's doing value * canvas_scale / canvas_scale
+      const fieldScaleRatio = field.scale / CANVAS_SCALE;
+      const baseY =
+        ((isEntityObj ? sprite.parentContainer.y : sprite.y + sprite.height) * CANVAS_SCALE) / fieldScaleRatio;
+      const bottomPadding =
+        (Math.ceil(sprite.height * 0.05 + Math.max(yShadowOffset, 0)) * CANVAS_SCALE) / fieldScaleRatio;
       const yDelta = (baseY - y1) / field.scale;
       y2 = y1 = baseY + bottomPadding;
       const pixelHeight =

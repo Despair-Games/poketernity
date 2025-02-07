@@ -2,14 +2,14 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 import Phaser from "phaser";
 import { GameManager } from "#test/testUtils/gameManager";
 import { Species } from "#enums/species";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { allMoves } from "#app/data/all-moves";
 
 describe("Moves - Retaliate", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
-  const retaliate = allMoves[Moves.RETALIATE];
+  const retaliate = allMoves[MoveId.RETALIATE];
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({
@@ -26,9 +26,9 @@ describe("Moves - Retaliate", () => {
     game.override
       .battleType("single")
       .enemySpecies(Species.SNORLAX)
-      .enemyMoveset([Moves.RETALIATE, Moves.RETALIATE, Moves.RETALIATE, Moves.RETALIATE])
+      .enemyMoveset([MoveId.RETALIATE, MoveId.RETALIATE, MoveId.RETALIATE, MoveId.RETALIATE])
       .enemyLevel(100)
-      .moveset([Moves.RETALIATE, Moves.SPLASH])
+      .moveset([MoveId.RETALIATE, MoveId.SPLASH])
       .startingLevel(80)
       .disableCrits();
   });
@@ -36,13 +36,13 @@ describe("Moves - Retaliate", () => {
   it("increases power if ally died previous turn", async () => {
     vi.spyOn(retaliate, "calculateBattlePower");
     await game.startBattle([Species.ABRA, Species.COBALION]);
-    game.move.select(Moves.RETALIATE);
+    game.move.select(MoveId.RETALIATE);
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(retaliate.calculateBattlePower).toHaveLastReturnedWith(70);
     game.doSelectPartyPokemon(1);
 
     await game.toNextTurn();
-    game.move.select(Moves.RETALIATE);
+    game.move.select(MoveId.RETALIATE);
     await game.phaseInterceptor.to("MoveEffectPhase");
     expect(retaliate.calculateBattlePower).toHaveReturnedWith(140);
   });

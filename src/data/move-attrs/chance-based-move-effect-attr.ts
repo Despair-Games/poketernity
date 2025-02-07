@@ -4,7 +4,7 @@ import { NumberHolder } from "#app/utils";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { IgnoreMoveEffectsAbAttr } from "../ab-attrs/ignore-move-effect-ab-attr";
 import { MoveEffectChanceMultiplierAbAttr } from "../ab-attrs/move-effect-chance-multiplier-ab-attr";
-import { applyAbAttrs } from "../ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type { Move } from "../move";
 import { MoveEffectAttr, type MoveEffectAttrOptions } from "./move-effect-attr";
 

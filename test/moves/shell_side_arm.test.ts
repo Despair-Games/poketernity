@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/all-moves";
 import { ShellSideArmCategoryAttr } from "#app/data/move-attrs/shell-side-arm-category-attr";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -11,7 +11,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 describe("Moves - Shell Side Arm", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
-  const shellSideArm = allMoves[Moves.SHELL_SIDE_ARM];
+  const shellSideArm = allMoves[MoveId.SHELL_SIDE_ARM];
   const shellSideArmAttr = shellSideArm.getAttrs(ShellSideArmCategoryAttr)[0];
 
   beforeAll(() => {
@@ -27,12 +27,12 @@ describe("Moves - Shell Side Arm", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SHELL_SIDE_ARM, Moves.SPLASH])
+      .moveset([MoveId.SHELL_SIDE_ARM, MoveId.SPLASH])
       .battleType("single")
       .startingLevel(100)
       .enemyLevel(100)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it("becomes a physical attack if forecasted to deal more damage as physical", async () => {
@@ -42,7 +42,7 @@ describe("Moves - Shell Side Arm", () => {
 
     vi.spyOn(shellSideArmAttr, "apply");
 
-    game.move.select(Moves.SHELL_SIDE_ARM);
+    game.move.select(MoveId.SHELL_SIDE_ARM);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(shellSideArmAttr.apply).toHaveLastReturnedWith(true);
@@ -55,7 +55,7 @@ describe("Moves - Shell Side Arm", () => {
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SHELL_SIDE_ARM);
+    game.move.select(MoveId.SHELL_SIDE_ARM);
     await game.toNextTurn();
 
     expect(player.getMaxHp()).toBeGreaterThan(player.hp);
@@ -68,7 +68,7 @@ describe("Moves - Shell Side Arm", () => {
 
     vi.spyOn(shellSideArmAttr, "apply");
 
-    game.move.select(Moves.SHELL_SIDE_ARM);
+    game.move.select(MoveId.SHELL_SIDE_ARM);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(shellSideArmAttr.apply).toHaveLastReturnedWith(false);
@@ -81,23 +81,23 @@ describe("Moves - Shell Side Arm", () => {
 
     const player = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SHELL_SIDE_ARM);
+    game.move.select(MoveId.SHELL_SIDE_ARM);
     await game.toNextTurn();
 
     expect(player.getMaxHp()).toBe(player.hp);
   });
 
   it("respects stat stage changes when forecasting base damage", async () => {
-    game.override.enemySpecies(Species.SNORLAX).enemyMoveset(Moves.COTTON_GUARD);
+    game.override.enemySpecies(Species.SNORLAX).enemyMoveset(MoveId.COTTON_GUARD);
 
     await game.classicMode.startBattle([Species.MANAPHY]);
 
     vi.spyOn(shellSideArmAttr, "apply");
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
-    game.move.select(Moves.SHELL_SIDE_ARM);
+    game.move.select(MoveId.SHELL_SIDE_ARM);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -114,7 +114,7 @@ describe("Moves - Shell Side Arm", () => {
     const enemy = game.field.getEnemyPokemon();
     vi.spyOn(enemy, "stats", "get").mockReturnValue([100, 100, 75, 100, 100, 100]);
 
-    game.move.select(Moves.SHELL_SIDE_ARM);
+    game.move.select(MoveId.SHELL_SIDE_ARM);
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(shellSideArmAttr.apply).toHaveLastReturnedWith(true);

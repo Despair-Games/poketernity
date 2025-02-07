@@ -1,6 +1,6 @@
 import { Biome } from "#enums/biome";
 import { TerrainType } from "#enums/terrain-type";
-import { Type } from "#enums/type";
+import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -21,7 +21,7 @@ export class CopyBiomeTypeAttr extends MoveEffectAttr {
 
   override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const terrainType = globalScene.arena.getTerrainType();
-    let typeChange: Type;
+    let typeChange: ElementalType;
     if (terrainType !== TerrainType.NONE) {
       typeChange = this.getTypeForTerrain(globalScene.arena.getTerrainType());
     } else {
@@ -34,7 +34,7 @@ export class CopyBiomeTypeAttr extends MoveEffectAttr {
     globalScene.queueMessage(
       i18next.t("moveTriggers:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
-        typeName: i18next.t(`pokemonInfo:Type.${Type[typeChange]}`),
+        typeName: i18next.t(`pokemonInfo:Type.${ElementalType[typeChange]}`),
       }),
     );
 
@@ -44,86 +44,86 @@ export class CopyBiomeTypeAttr extends MoveEffectAttr {
   /**
    * Retrieves a type from the current terrain
    * @param terrainType {@linkcode TerrainType}
-   * @returns the {@linkcode Type} corresponding to the terrain
+   * @returns the {@linkcode ElementalType} corresponding to the terrain
    */
-  private getTypeForTerrain(terrainType: TerrainType): Type {
+  private getTypeForTerrain(terrainType: TerrainType): ElementalType {
     switch (terrainType) {
       case TerrainType.ELECTRIC:
-        return Type.ELECTRIC;
+        return ElementalType.ELECTRIC;
       case TerrainType.MISTY:
-        return Type.FAIRY;
+        return ElementalType.FAIRY;
       case TerrainType.GRASSY:
-        return Type.GRASS;
+        return ElementalType.GRASS;
       case TerrainType.PSYCHIC:
-        return Type.PSYCHIC;
+        return ElementalType.PSYCHIC;
       case TerrainType.NONE:
       default:
-        return Type.UNKNOWN;
+        return ElementalType.UNKNOWN;
     }
   }
 
   /**
    * Retrieves a type from the current biome
    * @param biomeType {@linkcode Biome}
-   * @returns the {@linkcode Type} corresponding to the biome
+   * @returns the {@linkcode ElementalType} corresponding to the biome
    */
-  private getTypeForBiome(biomeType: Biome): Type {
+  private getTypeForBiome(biomeType: Biome): ElementalType {
     switch (biomeType) {
       case Biome.TOWN:
       case Biome.PLAINS:
       case Biome.METROPOLIS:
-        return Type.NORMAL;
+        return ElementalType.NORMAL;
       case Biome.GRASS:
       case Biome.TALL_GRASS:
-        return Type.GRASS;
+        return ElementalType.GRASS;
       case Biome.FOREST:
       case Biome.JUNGLE:
-        return Type.BUG;
+        return ElementalType.BUG;
       case Biome.SLUM:
       case Biome.SWAMP:
-        return Type.POISON;
+        return ElementalType.POISON;
       case Biome.SEA:
       case Biome.BEACH:
       case Biome.LAKE:
       case Biome.SEABED:
-        return Type.WATER;
+        return ElementalType.WATER;
       case Biome.MOUNTAIN:
-        return Type.FLYING;
+        return ElementalType.FLYING;
       case Biome.BADLANDS:
-        return Type.GROUND;
+        return ElementalType.GROUND;
       case Biome.CAVE:
       case Biome.DESERT:
-        return Type.ROCK;
+        return ElementalType.ROCK;
       case Biome.ICE_CAVE:
       case Biome.SNOWY_FOREST:
-        return Type.ICE;
+        return ElementalType.ICE;
       case Biome.MEADOW:
       case Biome.FAIRY_CAVE:
       case Biome.ISLAND:
-        return Type.FAIRY;
+        return ElementalType.FAIRY;
       case Biome.POWER_PLANT:
-        return Type.ELECTRIC;
+        return ElementalType.ELECTRIC;
       case Biome.VOLCANO:
-        return Type.FIRE;
+        return ElementalType.FIRE;
       case Biome.GRAVEYARD:
       case Biome.TEMPLE:
-        return Type.GHOST;
+        return ElementalType.GHOST;
       case Biome.DOJO:
       case Biome.CONSTRUCTION_SITE:
-        return Type.FIGHTING;
+        return ElementalType.FIGHTING;
       case Biome.FACTORY:
       case Biome.LABORATORY:
-        return Type.STEEL;
+        return ElementalType.STEEL;
       case Biome.RUINS:
       case Biome.SPACE:
-        return Type.PSYCHIC;
+        return ElementalType.PSYCHIC;
       case Biome.WASTELAND:
       case Biome.END:
-        return Type.DRAGON;
+        return ElementalType.DRAGON;
       case Biome.ABYSS:
-        return Type.DARK;
+        return ElementalType.DARK;
       default:
-        return Type.UNKNOWN;
+        return ElementalType.UNKNOWN;
     }
   }
 }

@@ -13,6 +13,7 @@ import { ScrollBar } from "#app/ui/scroll-bar";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
 import { EggSkipPreference } from "#enums/egg-skip-preference";
+import { GAME_HEIGHT } from "#app/ui-constants";
 
 const iconContainerX = 112;
 const iconContainerY = 9;
@@ -63,11 +64,11 @@ export default class EggSummaryUiHandler extends MessageUiHandler {
   setup() {
     const ui = this.getUi();
 
-    this.summaryContainer = globalScene.add.container(0, -globalScene.game.canvas.height / 6);
+    this.summaryContainer = globalScene.add.container(0, -GAME_HEIGHT);
     this.summaryContainer.setVisible(false);
     ui.add(this.summaryContainer);
 
-    this.eggHatchContainer = globalScene.add.container(0, -globalScene.game.canvas.height / 6);
+    this.eggHatchContainer = globalScene.add.container(0, -GAME_HEIGHT);
     this.eggHatchContainer.setVisible(false);
     ui.add(this.eggHatchContainer);
 
@@ -96,7 +97,7 @@ export default class EggSummaryUiHandler extends MessageUiHandler {
       iconContainerX + numCols * iconSize,
       iconContainerY + 3,
       4,
-      globalScene.game.canvas.height / 6 - 20,
+      GAME_HEIGHT - 20,
       numRows,
     );
     this.summaryContainer.add(scrollBar);

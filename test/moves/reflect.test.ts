@@ -6,7 +6,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { NumberHolder } from "#app/utils";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -35,15 +35,15 @@ describe("Moves - Reflect", () => {
     globalScene = game.scene;
     game.override.battleType("single");
     game.override.ability(Abilities.NONE);
-    game.override.moveset([Moves.ABSORB, Moves.ROCK_SLIDE, Moves.TACKLE]);
+    game.override.moveset([MoveId.ABSORB, MoveId.ROCK_SLIDE, MoveId.TACKLE]);
     game.override.enemyLevel(100);
     game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyMoveset([Moves.REFLECT, Moves.REFLECT, Moves.REFLECT, Moves.REFLECT]);
+    game.override.enemyMoveset([MoveId.REFLECT, MoveId.REFLECT, MoveId.REFLECT, MoveId.REFLECT]);
     game.override.disableCrits();
   });
 
   it("reduces damage of physical attacks by half in a single battle", async () => {
-    const moveToUse = Moves.TACKLE;
+    const moveToUse = MoveId.TACKLE;
     await game.startBattle([Species.SHUCKLE]);
 
     game.move.select(moveToUse);
@@ -61,7 +61,7 @@ describe("Moves - Reflect", () => {
   it("reduces damage of physical attacks by a third in a double battle", async () => {
     game.override.battleType("double");
 
-    const moveToUse = Moves.ROCK_SLIDE;
+    const moveToUse = MoveId.ROCK_SLIDE;
     await game.startBattle([Species.SHUCKLE, Species.SHUCKLE]);
 
     game.move.select(moveToUse);
@@ -78,7 +78,7 @@ describe("Moves - Reflect", () => {
   });
 
   it("does not affect special attacks", async () => {
-    const moveToUse = Moves.ABSORB;
+    const moveToUse = MoveId.ABSORB;
     await game.startBattle([Species.SHUCKLE]);
 
     game.move.select(moveToUse);
@@ -96,7 +96,7 @@ describe("Moves - Reflect", () => {
 });
 
 /**
- * Calculates the damage of a move multiplied by screen's multiplier, Reflect in this case {@linkcode Moves.REFLECT}.
+ * Calculates the damage of a move multiplied by screen's multiplier, Reflect in this case {@linkcode MoveId.REFLECT}.
  * Please note this does not consider other damage calculations except the screen multiplier.
  *
  * @param defender - The defending Pokémon.
