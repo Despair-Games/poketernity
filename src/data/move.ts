@@ -46,7 +46,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { HealStatusEffectAttr } from "./move-attrs/heal-status-effect-attr";
 import { ChargeAnim } from "#enums/charge-anim";
 import { allMoves } from "#app/data/all-moves";
-import { UseHigherAttackingStatAttr } from "./move-attrs/photon-geyser-category-attr";
+import { UseHigherAttackingStatAttr } from "./move-attrs/use-higher-attacking-stat-attr";
 import { GMaxPowerAttr } from "./move-attrs/gmax-power-attr";
 import type { Species } from "#enums/species";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";

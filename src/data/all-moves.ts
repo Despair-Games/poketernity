@@ -140,7 +140,7 @@ import { OneHitKOAttr } from "./move-attrs/one-hit-ko-attr";
 import { OpponentHighHpPowerAttr } from "./move-attrs/opponent-high-hp-power-attr";
 import { OrderUpStatBoostAttr } from "./move-attrs/order-up-stat-boost-attr";
 import { PartyStatusCureAttr } from "./move-attrs/party-status-cure-attr";
-import { PhotonGeyserCategoryAttr } from "./move-attrs/photon-geyser-category-attr";
+import { PhotonGeyserCategoryAttr } from "./move-attrs/use-higher-attacking-stat-attr";
 import { PlantHealAttr } from "./move-attrs/plant-heal-attr";
 import { PunishmentPowerAttr, PositiveStatStagePowerAttr } from "./move-attrs/positive-stat-stage-power-attr";
 import { PostVictoryStatStageChangeAttr } from "./move-attrs/post-victory-stat-stage-change-attr";
