@@ -8,7 +8,7 @@ import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { MoveAnim } from "#app/data/battle-anims";
 import { SkyDropTag, SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import { applyFilteredMoveAttrs, applyMoveAttrs } from "#app/data/move";
+import { applyFilteredMoveAttrs, applyMoveAttrs, isFieldTargeted } from "#app/data/move";
 import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
 import { MissEffectAttr } from "#app/data/move-attrs/miss-effect-attr";
@@ -72,7 +72,7 @@ export class MoveEffectPhase extends HitCheckPhase {
      * bypass hit checks and other conditions at this point to
      * apply their effects without a specific target
      */
-    if ([BattlerIndex.PLAYER_SIDE, BattlerIndex.ENEMY_SIDE, BattlerIndex.BOTH_SIDES].includes(this.targets[0])) {
+    if (isFieldTargeted(this.targets)) {
       return this.applyFieldMoveEffects(user);
     }
 

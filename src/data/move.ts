@@ -1185,3 +1185,7 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId): MoveTargetSet {
     multiple,
   };
 }
+
+export function isFieldTargeted(targets: BattlerIndex[]) {
+  return targets.some((t) => [BattlerIndex.BOTH_SIDES, BattlerIndex.PLAYER_SIDE, BattlerIndex.ENEMY_SIDE].includes(t));
+}
