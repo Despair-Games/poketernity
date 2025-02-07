@@ -198,6 +198,7 @@ import { TerrainEventTypeChangeAbAttr } from "./ab-attrs/terrain-event-type-chan
 import { WeatherBasedSpeedDoublerAbAttr } from "./ab-attrs/weather-based-speed-doubler-ab-attr";
 import { MoveFlagPowerBoostAbAttr } from "./ab-attrs/move-flag-power-boost-ab-attr";
 import { MoveFlagImmunityAbAttr } from "./ab-attrs/move-flag-immunity-ab-attr";
+import { ReflectStatStageChangeAbAttr } from "./ab-attrs/reflect-stat-stage-change-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
@@ -836,7 +837,7 @@ export function initAbilities() {
     ),
     new Ability(Abilities.ILLUSION, 5).attr(UncopiableAbilityAbAttr).attr(UnswappableAbilityAbAttr).unimplemented(),
     new Ability(Abilities.IMPOSTER, 5).attr(PostSummonTransformAbAttr).attr(UncopiableAbilityAbAttr),
-    new Ability(Abilities.INFILTRATOR, 5).attr(InfiltratorAbAttr).partial(), // does not bypass Mist
+    new Ability(Abilities.INFILTRATOR, 5).attr(InfiltratorAbAttr),
     new Ability(Abilities.MUMMY, 5).attr(PostDefendAbilityGiveAbAttr, Abilities.MUMMY).bypassFaint(),
     new Ability(Abilities.MOXIE, 5).attr(PostVictoryStatStageChangeAbAttr, Stat.ATK, 1),
     new Ability(Abilities.JUSTIFIED, 5).attr(
@@ -1288,7 +1289,7 @@ export function initAbilities() {
       )
       .bypassFaint(),
     new Ability(Abilities.PROPELLER_TAIL, 8).attr(BlockRedirectAbAttr),
-    new Ability(Abilities.MIRROR_ARMOR, 8).ignorable().unimplemented(),
+    new Ability(Abilities.MIRROR_ARMOR, 8).attr(ReflectStatStageChangeAbAttr).ignorable(),
     /**
      * Right now, the logic is attached to Surf and Dive moves. Ideally, the post-defend/hit should be an
      * ability attribute but the current implementation of move effects for BattlerTag does not support this- in the case
