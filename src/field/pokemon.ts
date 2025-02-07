@@ -3562,7 +3562,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     );
 
     if (!cancelled.value && newTag.canAdd(this)) {
-      this.summonData.tags.push(newTag);
+      this.summonData?.tags.push(newTag);
       newTag.onAdd(this);
 
       return true;
@@ -3579,6 +3579,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   findTag<T extends BattlerTag = BattlerTag>(tagFilter: (tag: BattlerTag) => boolean): T | nil {
+    if (!this.summonData) {
+      return null;
+    }
     return this.summonData.tags.find((t) => tagFilter(t)) as T | nil;
   }
 
