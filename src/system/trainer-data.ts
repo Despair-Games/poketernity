@@ -10,7 +10,7 @@ export default class TrainerData {
   public partnerName: string;
 
   constructor(source: Trainer | any) {
-    const sourceTrainer = source instanceof Trainer ? (source as Trainer) : null;
+    const sourceTrainer = source.type === "Trainer" ? (source as Trainer) : null;
     this.trainerType = sourceTrainer ? sourceTrainer.config.trainerType : source.trainerType;
     this.variant = source.hasOwnProperty("variant")
       ? source.variant

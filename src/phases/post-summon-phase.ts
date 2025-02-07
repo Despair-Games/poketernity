@@ -1,7 +1,7 @@
 import type { BattlerIndex } from "#enums/battler-index";
 import { CommanderAbAttr } from "#app/data/ab-attrs/commander-ab-attr";
 import { PostSummonAbAttr } from "#app/data/ab-attrs/post-summon-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { ArenaTrapTag } from "#app/data/arena-tag";
 import { MysteryEncounterPostSummonTag } from "#app/data/battler-tags";
 import { globalScene } from "#app/global-scene";

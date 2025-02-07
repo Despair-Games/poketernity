@@ -4,7 +4,7 @@ import type { initGameSpeed } from "#app/system/game-speed";
 // -- end tsdoc imports --
 import { api } from "#app/plugins/api/api";
 import { MoneyFormat } from "#enums/money-format";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 import { supportedLanguages } from "./system/settings/supported-languages";
 
@@ -161,7 +161,10 @@ export function getPlayTimeString(totalSeconds: number): string {
  * @param id 32-bit number
  * @returns An array of six numbers corresponding to 5-bit chunks from {@linkcode id}
  */
-export function getIvsFromId(id: number): number[] {
+export function getIvsFromId(id?: number): number[] {
+  if (isNullOrUndefined(id)) {
+    id = randSeedInt(4294967296);
+  }
   return [
     (id & 0x3e000000) >>> 25,
     (id & 0x01f00000) >>> 20,
@@ -628,10 +631,10 @@ export function isBetween(num: number, min: number, max: number): boolean {
 /**
  * Helper method to return the animation filename for a given move
  *
- * @param move the move for which the animation filename is needed
+ * @param moveId the move for which the animation filename is needed
  */
-export function animationFileName(move: Moves): string {
-  return Moves[move].toLowerCase().replace(/\_/g, "-");
+export function animationFileName(moveId: MoveId): string {
+  return MoveId[moveId].toLowerCase().replace(/\_/g, "-");
 }
 
 /**

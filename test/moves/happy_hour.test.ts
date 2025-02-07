@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -22,13 +22,13 @@ describe("Moves - Happy Hour", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.HAPPY_HOUR, Moves.PAY_DAY])
+      .moveset([MoveId.HAPPY_HOUR, MoveId.PAY_DAY])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100);
   });
 
@@ -38,14 +38,14 @@ describe("Moves - Happy Hour", () => {
     const moneyAmounts = [game.scene.money];
 
     // Wave 1: Earn money from Pay Day without using Happy Hour
-    game.move.select(Moves.PAY_DAY);
+    game.move.select(MoveId.PAY_DAY);
     await game.toNextWave();
     moneyAmounts.push(game.scene.money);
 
     // Wave 2: Earn money from Pay Day, boosted by Happy Hour
-    game.move.select(Moves.HAPPY_HOUR);
+    game.move.select(MoveId.HAPPY_HOUR);
     await game.toNextTurn();
-    game.move.select(Moves.PAY_DAY);
+    game.move.select(MoveId.PAY_DAY);
     await game.toNextWave();
     moneyAmounts.push(game.scene.money);
 

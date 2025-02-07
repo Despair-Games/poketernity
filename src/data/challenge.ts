@@ -4,21 +4,22 @@ import i18next from "i18next";
 import type { DexAttrProps, GameData } from "#app/system/game-data";
 import { defaultStarterSpecies } from "#app/data/balance/default-starters";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/data/pokemon-species";
+import { getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "../utils/pokemon-species-utils";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import type { FixedBattleConfig } from "#app/battle";
 import { BattleType } from "#enums/battle-type";
 import Trainer from "#app/field/trainer";
 import { TrainerVariant } from "#enums/trainer-variant";
 import type { GameMode } from "#app/game-mode";
-import { Type } from "#enums/type";
+import { ElementalType } from "#enums/elemental-type";
 import { Challenges } from "#enums/challenges";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 import { Nature } from "#enums/nature";
-import type { Moves } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 import { TypeColor, TypeShadow } from "#enums/color";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
@@ -323,11 +324,11 @@ export abstract class Challenge {
    * An apply function for {@linkcode ChallengeType.MOVE_ACCESS} challenges. Derived classes should alter this.
    * @param _pokemon {@linkcode Pokemon} What pokemon would learn the move.
    * @param _moveSource {@linkcode MoveSourceType} What source the pokemon would get the move from.
-   * @param _move {@linkcode Moves} The move in question.
+   * @param _moveId {@linkcode MoveId} The move in question.
    * @param _level {@linkcode NumberHolder} The level threshold for access.
    * @returns `true` if this function did anything.
    */
-  applyMoveAccessLevel(_pokemon: Pokemon, _moveSource: MoveSourceType, _move: Moves, _level: NumberHolder): boolean {
+  applyMoveAccessLevel(_pokemon: Pokemon, _moveSource: MoveSourceType, _moveId: MoveId, _level: NumberHolder): boolean {
     return false;
   }
 
@@ -335,11 +336,27 @@ export abstract class Challenge {
    * An apply function for {@linkcode ChallengeType.MOVE_WEIGHT} challenges. Derived classes should alter this.
    * @param _pokemon {@linkcode Pokemon} What pokemon would learn the move.
    * @param _moveSource {@linkcode MoveSourceType} What source the pokemon would get the move from.
-   * @param _move {@linkcode Moves} The move in question.
+   * @param _moveId {@linkcode MoveId} The move in question.
    * @param weight {@linkcode NumberHolder} The base weight of the move
    * @returns `true` if this function did anything.
    */
-  applyMoveWeight(_pokemon: Pokemon, _moveSource: MoveSourceType, _move: Moves, _level: NumberHolder): boolean {
+  applyMoveWeight(_pokemon: Pokemon, _moveSource: MoveSourceType, _moveId: MoveId, _level: NumberHolder): boolean {
+    return false;
+  }
+
+  isSingleGenerationChallenge(): this is SingleGenerationChallenge {
+    return false;
+  }
+
+  isSingleTypeChallenge(): this is SingleTypeChallenge {
+    return false;
+  }
+
+  isFreshStartChallenge(): this is FreshStartChallenge {
+    return false;
+  }
+
+  isInverseBattleChallenge(): this is InverseBattleChallenge {
     return false;
   }
 }
@@ -518,13 +535,17 @@ export class SingleGenerationChallenge extends Challenge {
     newChallenge.severity = source.severity;
     return newChallenge;
   }
+
+  override isSingleGenerationChallenge(): this is this {
+    return true;
+  }
 }
 
 interface monotypeOverride {
   /** The species to override */
   species: Species;
   /** The type to count as */
-  type: Type;
+  type: ElementalType;
   /** If part of a fusion, should we check the fused species instead of the base species? */
   fusion: boolean;
 }
@@ -533,7 +554,9 @@ interface monotypeOverride {
  * Implements a mono type challenge.
  */
 export class SingleTypeChallenge extends Challenge {
-  private static TYPE_OVERRIDES: monotypeOverride[] = [{ species: Species.CASTFORM, type: Type.NORMAL, fusion: false }];
+  private static TYPE_OVERRIDES: monotypeOverride[] = [
+    { species: Species.CASTFORM, type: ElementalType.NORMAL, fusion: false },
+  ];
   private static SPECIES_OVERRIDES: Species[] = [Species.MELOETTA];
 
   constructor() {
@@ -604,7 +627,7 @@ export class SingleTypeChallenge extends Challenge {
    */
   override getValue(overrideValue?: number): string {
     const value = overrideValue ?? this.value;
-    return Type[value - 1].toLowerCase();
+    return ElementalType[value - 1].toLowerCase();
   }
 
   /**
@@ -614,8 +637,8 @@ export class SingleTypeChallenge extends Challenge {
    */
   override getDescription(overrideValue?: number): string {
     const value = overrideValue ?? this.value;
-    const type = i18next.t(`pokemonInfo:Type.${Type[value - 1]}`);
-    const typeColor = `[color=${TypeColor[Type[value - 1]]}][shadow=${TypeShadow[Type[value - 1]]}]${type}[/shadow][/color]`;
+    const type = i18next.t(`pokemonInfo:Type.${ElementalType[value - 1]}`);
+    const typeColor = `[color=${TypeColor[ElementalType[value - 1]]}][shadow=${TypeShadow[ElementalType[value - 1]]}]${type}[/shadow][/color]`;
     const defaultDesc = i18next.t(`challenges:${this.geti18nKey()}.desc_default`);
     const typeDesc = i18next.t(`challenges:${this.geti18nKey()}.desc`, { type: typeColor });
     return value === 0 ? defaultDesc : typeDesc;
@@ -626,6 +649,10 @@ export class SingleTypeChallenge extends Challenge {
     newChallenge.value = source.value;
     newChallenge.severity = source.severity;
     return newChallenge;
+  }
+
+  override isSingleTypeChallenge(): this is this {
+    return true;
   }
 }
 
@@ -681,6 +708,10 @@ export class FreshStartChallenge extends Challenge {
     newChallenge.severity = source.severity;
     return newChallenge;
   }
+
+  override isFreshStartChallenge(): this is this {
+    return true;
+  }
 }
 
 /**
@@ -712,6 +743,10 @@ export class InverseBattleChallenge extends Challenge {
     }
 
     return false;
+  }
+
+  override isInverseBattleChallenge(): this is this {
+    return true;
   }
 }
 
@@ -925,7 +960,7 @@ export function applyChallenges(gameMode: GameMode, challengeType: ChallengeType
  * @param challengeType {@linkcode ChallengeType.MOVE_ACCESS}
  * @param pokemon What {@linkcode Pokemon} would learn the move.
  * @param moveSource {@linkcode MoveSourceType} What source the pokemon would get the move from.
- * @param move {@linkcode Moves} The move in question.
+ * @param moveId {@linkcode MoveId} The move in question.
  * @param level {@linkcode NumberHolder} The level threshold for access.
  * @returns `true` if any challenge was successfully applied.
  */
@@ -934,7 +969,7 @@ export function applyChallenges(
   challengeType: ChallengeType.MOVE_ACCESS,
   pokemon: Pokemon,
   moveSource: MoveSourceType,
-  move: Moves,
+  moveId: MoveId,
   level: NumberHolder,
 ): boolean;
 /**
@@ -943,7 +978,7 @@ export function applyChallenges(
  * @param challengeType {@linkcode ChallengeType.MOVE_WEIGHT}
  * @param pokemon What {@linkcode Pokemon} would learn the move.
  * @param moveSource {@linkcode MoveSourceType} What source the pokemon would get the move from.
- * @param move {@linkcode Moves} The move in question.
+ * @param moveId {@linkcode MoveId} The move in question.
  * @param weight {@linkcode NumberHolder} The weight of the move.
  * @returns `true` if any challenge was successfully applied.
  */
@@ -952,7 +987,7 @@ export function applyChallenges(
   challengeType: ChallengeType.MOVE_WEIGHT,
   pokemon: Pokemon,
   moveSource: MoveSourceType,
-  move: Moves,
+  moveId: MoveId,
   weight: NumberHolder,
 ): boolean;
 export function applyChallenges(gameMode: GameMode, challengeType: ChallengeType, ...args: any[]): boolean {

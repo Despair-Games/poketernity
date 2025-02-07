@@ -11,7 +11,7 @@ import { AbilityApplyMode } from "#enums/ability-apply-mode";
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Photon_Geyser_(move) | Photon Geyser}.
  * @extends VariableMoveCategoryAttr
  */
-export class PhotonGeyserCategoryAttr extends VariableMoveCategoryAttr {
+export class UseHigherAttackingStatAttr extends VariableMoveCategoryAttr {
   override apply(user: Pokemon, target: Pokemon, move: Move, category: NumberHolder): boolean {
     if (
       user.getEffectiveStat(Stat.ATK, target, move, AbilityApplyMode.IGNORE)

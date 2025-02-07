@@ -1,11 +1,11 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BerryModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
+import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { BlockItemTheftAbAttr } from "#app/data/ab-attrs/block-item-theft-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
@@ -43,7 +43,7 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
     let heldItems = this.getTargetHeldItems(target).filter((i) => i.isTransferable);
 
     if (this.berriesOnly) {
-      heldItems = heldItems.filter((m) => m instanceof BerryModifier && m.pokemonId === target.id, target.isPlayer());
+      heldItems = heldItems.filter((m) => m.isBerryModifier() && m.pokemonId === target.id, target.isPlayer());
     }
 
     if (heldItems.length) {
@@ -77,7 +77,7 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
 
   getTargetHeldItems(target: Pokemon): PokemonHeldItemModifier[] {
     return globalScene.findModifiers(
-      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === target.id,
+      (m) => m.isPokemonHeldItemModifier() && m.pokemonId === target.id,
       target.isPlayer(),
     ) as PokemonHeldItemModifier[];
   }

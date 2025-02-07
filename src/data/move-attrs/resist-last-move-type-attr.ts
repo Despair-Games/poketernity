@@ -1,4 +1,4 @@
-import { Type } from "#enums/type";
+import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { GameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
@@ -20,7 +20,7 @@ import type { MoveConditionFunc } from "../move-conditions";
  * Fails if the type is unknown or stellar
  *
  * TODO:
- * If a move has its type changed (e.g. {@linkcode Moves.HIDDEN_POWER}), it will check the new type.
+ * If a move has its type changed (e.g. {@linkcode MoveId.HIDDEN_POWER}), it will check the new type.
  */
 export class ResistLastMoveTypeAttr extends MoveEffectAttr {
   constructor() {
@@ -33,8 +33,8 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
       return false;
     }
 
-    const moveData = allMoves[targetMove.move];
-    if (moveData.type === Type.STELLAR || moveData.type === Type.UNKNOWN) {
+    const moveData = allMoves[targetMove.moveId];
+    if (moveData.type === ElementalType.STELLAR || moveData.type === ElementalType.UNKNOWN) {
       return false;
     }
     const userTypes = user.getTypes();
@@ -49,7 +49,7 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
     globalScene.queueMessage(
       i18next.t("battle:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
-        type: toReadableString(Type[type]),
+        type: toReadableString(ElementalType[type]),
       }),
     );
     user.updateInfo();
@@ -61,10 +61,10 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
    * Retrieve the types resisting a given type. Used by Conversion 2
    * @returns An array populated with Types, or an empty array if no resistances exist (Unknown or Stellar type)
    */
-  getTypeResistances(gameMode: GameMode, type: number): Type[] {
-    const typeResistances: Type[] = [];
+  getTypeResistances(gameMode: GameMode, type: number): ElementalType[] {
+    const typeResistances: ElementalType[] = [];
 
-    for (let i = 0; i < Object.keys(Type).length; i++) {
+    for (let i = 0; i < Object.keys(ElementalType).length; i++) {
       const multiplier = new NumberHolder(1);
       multiplier.value = getTypeDamageMultiplier(type, i);
       applyChallenges(gameMode, ChallengeType.TYPE_EFFECTIVENESS, multiplier);

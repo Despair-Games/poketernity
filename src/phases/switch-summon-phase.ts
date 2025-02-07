@@ -1,5 +1,5 @@
 import { PreSwitchOutAbAttr } from "#app/data/ab-attrs/pre-switch-out-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { SubstituteTag } from "#app/data/battler-tags";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
@@ -7,7 +7,7 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { SwitchEffectTransferModifier } from "#app/modifier/modifier";
+import type { SwitchEffectTransferModifier } from "#app/modifier/modifier";
 import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
 import { PostSummonPhase } from "./post-summon-phase";
@@ -117,12 +117,12 @@ export class SwitchSummonPhase extends SummonPhase {
       );
 
       const switchedInPokemonHeldBaton = globalScene.findModifier(
-        (m) => m instanceof SwitchEffectTransferModifier && m.pokemonId === switchedInPokemon.id,
+        (m) => m.isSwitchEffectTransferModifier() && m.pokemonId === switchedInPokemon.id,
       );
 
       if (!switchedInPokemonHeldBaton) {
         const lastPokemonHeldBaton = globalScene.findModifier(
-          (m) => m instanceof SwitchEffectTransferModifier && m.pokemonId === this.lastPokemon.id,
+          (m) => m.isSwitchEffectTransferModifier() && m.pokemonId === this.lastPokemon.id,
         ) as SwitchEffectTransferModifier;
 
         if (lastPokemonHeldBaton) {

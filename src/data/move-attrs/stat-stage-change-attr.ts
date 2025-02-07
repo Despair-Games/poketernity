@@ -3,7 +3,6 @@ import { type BattleStat, Stat } from "#enums/stat";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { AttackMove } from "#app/data/move";
 import type { Move } from "#app/data/move";
 import type { MoveConditionFunc } from "#app/data/move-conditions";
 import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "./chance-based-move-effect-attr";
@@ -69,13 +68,9 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
 
     const stages = this.getLevels(user);
     globalScene.unshiftPhase(
-      new StatStageChangePhase(
-        (this.selfTarget ? user : target).getBattlerIndex(),
-        this.selfTarget,
-        this.stats,
-        stages,
-        { showMessage: this.showMessage },
-      ),
+      new StatStageChangePhase((this.selfTarget ? user : target).getBattlerIndex(), user, this.stats, stages, {
+        showMessage: this.showMessage,
+      }),
     );
     return true;
   }
@@ -99,22 +94,22 @@ export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
       switch (stat) {
         case Stat.ATK:
           if (this.selfTarget) {
-            noEffect = !user.getMoveset().find((m) => m instanceof AttackMove && m.category === MoveCategory.PHYSICAL);
+            noEffect = !user.getMoveset().find((m) => m.getMove().category === MoveCategory.PHYSICAL);
           }
           break;
         case Stat.DEF:
           if (!this.selfTarget) {
-            noEffect = !user.getMoveset().find((m) => m instanceof AttackMove && m.category === MoveCategory.PHYSICAL);
+            noEffect = !user.getMoveset().find((m) => m.getMove().category === MoveCategory.PHYSICAL);
           }
           break;
         case Stat.SPATK:
           if (this.selfTarget) {
-            noEffect = !user.getMoveset().find((m) => m instanceof AttackMove && m.category === MoveCategory.SPECIAL);
+            noEffect = !user.getMoveset().find((m) => m.getMove().category === MoveCategory.SPECIAL);
           }
           break;
         case Stat.SPDEF:
           if (!this.selfTarget) {
-            noEffect = !user.getMoveset().find((m) => m instanceof AttackMove && m.category === MoveCategory.SPECIAL);
+            noEffect = !user.getMoveset().find((m) => m.getMove().category === MoveCategory.SPECIAL);
           }
           break;
       }

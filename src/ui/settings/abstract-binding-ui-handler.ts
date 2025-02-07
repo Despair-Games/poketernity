@@ -7,6 +7,7 @@ import { Button } from "#enums/buttons";
 import { NavigationManager } from "#app/ui/settings/navigationMenu";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 type CancelFn = (succes?: boolean) => boolean;
 
@@ -72,18 +73,13 @@ export default abstract class AbstractBindingUiHandler extends UiHandler {
     ui.add(this.actionsContainer);
 
     // Setup backgrounds and text objects for UI.
-    this.titleBg = addWindow(
-      globalScene.game.canvas.width / 6 - this.getWindowWidth(),
-      -(globalScene.game.canvas.height / 6) + 28 + 21,
-      this.getWindowWidth(),
-      24,
-    );
+    this.titleBg = addWindow(GAME_WIDTH - this.getWindowWidth(), -GAME_HEIGHT + 28 + 21, this.getWindowWidth(), 24);
     this.titleBg.setOrigin(0.5);
     this.optionSelectContainer.add(this.titleBg);
 
     this.actionBg = addWindow(
-      globalScene.game.canvas.width / 6 - this.getWindowWidth(),
-      -(globalScene.game.canvas.height / 6) + this.getWindowHeight() + 28 + 21 + 21,
+      GAME_WIDTH - this.getWindowWidth(),
+      -GAME_HEIGHT + this.getWindowHeight() + 28 + 21 + 21,
       this.getWindowWidth(),
       24,
     );
@@ -98,12 +94,12 @@ export default abstract class AbstractBindingUiHandler extends UiHandler {
 
     this.timerText = addTextObject(0, 0, "(5)", TextStyle.WINDOW);
     this.timerText.setOrigin(0, 0);
-    this.timerText.setPositionRelative(this.unlockText, this.unlockText.width / 6 + 5, 0);
+    this.timerText.setPositionRelative(this.unlockText, this.unlockText.displayWidth + 5, 0);
     this.optionSelectContainer.add(this.timerText);
 
     this.optionSelectBg = addWindow(
-      globalScene.game.canvas.width / 6 - this.getWindowWidth(),
-      -(globalScene.game.canvas.height / 6) + this.getWindowHeight() + 28,
+      GAME_WIDTH - this.getWindowWidth(),
+      -GAME_HEIGHT + this.getWindowHeight() + 28,
       this.getWindowWidth(),
       this.getWindowHeight(),
     );

@@ -90,10 +90,12 @@ export interface SettingsUiItem<K = string> {
   key: K;
   label: string;
   options: SettingUiItemOption[];
-  /** Indicates if a settings change requires a reload */
+  /** Indicates if a settings change requires a reload. Should not be combined with {@linkcode doWrap} */
   requiresReload?: boolean;
   /** Whether the setting is only available on devices supporting touchscreen. */
   touchscreenOnly?: boolean;
+  /** Wheter the setting options cursor should wrap. Should not be combined with {@linkcode requiresReload} */
+  doWrap?: boolean;
 }
 
 export type SettingsCategory = keyof UserFacingSettings;

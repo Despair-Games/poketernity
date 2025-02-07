@@ -10,6 +10,7 @@ import i18next from "i18next";
 import type { Stat } from "#enums/stat";
 import { PERMANENT_STATS, getStatKey } from "#enums/stat";
 import { settings } from "#app/system/settings/settings-manager";
+import { GAME_WIDTH } from "#app/ui-constants";
 
 export default class BattleMessageUiHandler extends MessageUiHandler {
   private readonly wordWrapWidth: number = 1780;
@@ -94,7 +95,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
 
     this.levelUpStatsContainer = levelUpStatsContainer;
 
-    const levelUpStatsLabelsContent = addTextObject(globalScene.game.canvas.width / 6 - 73, -94, "", TextStyle.WINDOW, {
+    const levelUpStatsLabelsContent = addTextObject(GAME_WIDTH - 73, -94, "", TextStyle.WINDOW, {
       maxLines: 6,
     });
     levelUpStatsLabelsContent.setLineSpacing(i18next.resolvedLanguage === "ja" ? 25 : 5);
@@ -106,36 +107,24 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     levelUpStatsLabelsContent.text = levelUpStatsLabelText;
     levelUpStatsLabelsContent.x -= levelUpStatsLabelsContent.displayWidth;
 
-    const levelUpStatsBg = addWindow(
-      globalScene.game.canvas.width / 6,
-      -100,
-      80 + levelUpStatsLabelsContent.displayWidth,
-      100,
-    );
+    const levelUpStatsBg = addWindow(GAME_WIDTH, -100, 80 + levelUpStatsLabelsContent.displayWidth, 100);
     levelUpStatsBg.setOrigin(1, 0);
     levelUpStatsContainer.add(levelUpStatsBg);
 
     levelUpStatsContainer.add(levelUpStatsLabelsContent);
 
-    const levelUpStatsIncrContent = addTextObject(
-      globalScene.game.canvas.width / 6 - 50,
-      -94,
-      "+\n+\n+\n+\n+\n+",
-      TextStyle.WINDOW,
-      { maxLines: 6 },
-    );
+    const levelUpStatsIncrContent = addTextObject(GAME_WIDTH - 50, -94, "+\n+\n+\n+\n+\n+", TextStyle.WINDOW, {
+      maxLines: 6,
+    });
     levelUpStatsIncrContent.setLineSpacing(i18next.resolvedLanguage === "ja" ? 25 : 5);
     levelUpStatsContainer.add(levelUpStatsIncrContent);
 
     this.levelUpStatsIncrContent = levelUpStatsIncrContent;
 
-    const levelUpStatsValuesContent = addBBCodeTextObject(
-      globalScene.game.canvas.width / 6 - 7,
-      -94,
-      "",
-      TextStyle.WINDOW,
-      { maxLines: 6, lineSpacing: 5 },
-    );
+    const levelUpStatsValuesContent = addBBCodeTextObject(GAME_WIDTH - 7, -94, "", TextStyle.WINDOW, {
+      maxLines: 6,
+      lineSpacing: 5,
+    });
     levelUpStatsValuesContent.setLineSpacing(i18next.resolvedLanguage === "ja" ? 25 : 5);
     levelUpStatsValuesContent.setOrigin(1, 0);
     levelUpStatsValuesContent.setAlign("right");

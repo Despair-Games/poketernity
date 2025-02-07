@@ -1,11 +1,12 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { BypassSpeedChanceAbAttr } from "#app/data/ab-attrs/bypass-speed-chance-ab-attr";
 import { PreventBypassSpeedChanceAbAttr } from "#app/data/ab-attrs/prevent-bypass-speed-chance-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { allMoves } from "#app/data/all-moves";
 import { TrickRoomTag } from "#app/data/arena-tag";
 import { MoveHeaderAttr } from "#app/data/move-attrs/move-header-attr";
-import { PokemonMove, type Pokemon } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { BypassSpeedChanceModifier } from "#app/modifier/modifier";
 import { CheckStatusEffectPhase } from "#app/phases/check-status-effect-phase";
@@ -101,8 +102,8 @@ export class TurnStartPhase extends FieldPhase {
           return -1;
         }
       } else if (aCommand?.command === BattleCommand.FIGHT) {
-        const aMove = allMoves[aCommand.move!.move];
-        const bMove = allMoves[bCommand!.move!.move];
+        const aMove = allMoves[aCommand.move!.moveId];
+        const bMove = allMoves[bCommand!.move!.moveId];
 
         const aUser = globalScene.getField(true).find((p) => p.getBattlerIndex() === a)!;
         const bUser = globalScene.getField(true).find((p) => p.getBattlerIndex() === b)!;
@@ -160,8 +161,8 @@ export class TurnStartPhase extends FieldPhase {
             continue;
           }
           const move =
-            pokemon.getMoveset().find((m) => m.moveId === queuedMove.move && m.ppUsed < m.getMovePp())
-            ?? new PokemonMove(queuedMove.move);
+            pokemon.getMoveset().find((m) => m.moveId === queuedMove.moveId && m.ppUsed < m.getMovePp())
+            ?? new PokemonMove(queuedMove.moveId);
           if (move.getMove().hasAttr(MoveHeaderAttr)) {
             globalScene.unshiftPhase(new MoveHeaderPhase(pokemon, move));
           }

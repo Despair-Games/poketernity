@@ -26,7 +26,8 @@ import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data
 import { getNatureName } from "#app/data/nature";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { allSpecies, getPokemonSpeciesForm, getPokerusStarters } from "#app/data/pokemon-species";
+import { getPokemonSpeciesForm, getPokerusStarters } from "#app/utils/pokemon-species-utils";
+import { allSpecies } from "#app/data/all-species";
 import type { Variant } from "#app/data/variant";
 import { getVariantTierForVariant, getVariantTint } from "#app/data/variant";
 import { GameModes } from "#enums/game-modes";
@@ -70,11 +71,11 @@ import { ChallengeType } from "#enums/challenge-type";
 import { Device } from "#enums/devices";
 import { EggSourceType } from "#enums/egg-source-types";
 import { Gender } from "#enums/gender";
-import type { Moves } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 import type { Nature } from "#enums/nature";
 import { Passive as PassiveAttr } from "#enums/passive";
 import { Species } from "#enums/species";
-import { Type } from "#enums/type";
+import { ElementalType } from "#enums/elemental-type";
 import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
@@ -85,6 +86,7 @@ import { DropDownColumn } from "#enums/drop-down-column";
 import { DropDownType } from "#enums/drop-down-type";
 import { SortCriteria } from "#enums/sort-criteria";
 import { SettingKeyboard } from "#enums/setting-keyboard";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 export type StarterSelectCallback = (starters: Starter[]) => void;
 
@@ -334,7 +336,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
   private starterNatures: Nature[] = [];
   private starterMovesets: StarterMoveset[] = [];
   private speciesStarterDexEntry: DexEntry | null;
-  private speciesStarterMoves: Moves[];
+  private speciesStarterMoves: MoveId[];
   private canToggleShiny: boolean;
   private canCycleForm: boolean;
   private canCycleGender: boolean;
@@ -376,17 +378,11 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     const langSettingKey = Object.keys(languageSettings).find((lang) => currentLanguage.includes(lang)) ?? "en";
     const textSettings = languageSettings[langSettingKey];
 
-    this.starterSelectContainer = globalScene.add.container(0, -globalScene.game.canvas.height / 6);
+    this.starterSelectContainer = globalScene.add.container(0, -GAME_HEIGHT);
     this.starterSelectContainer.setVisible(false);
     ui.add(this.starterSelectContainer);
 
-    const bgColor = globalScene.add.rectangle(
-      0,
-      0,
-      globalScene.game.canvas.width / 6,
-      globalScene.game.canvas.height / 6,
-      0x006860,
-    );
+    const bgColor = globalScene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x006860);
     bgColor.setOrigin(0, 0);
     this.starterSelectContainer.add(bgColor);
 
@@ -434,7 +430,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.filterBar.addFilter(DropDownColumn.GEN, i18next.t("filterBar:genFilter"), genDropDown);
 
     // type filter
-    const typeKeys = Object.keys(Type).filter((v) => isNaN(Number(v)));
+    const typeKeys = Object.keys(ElementalType).filter((v) => isNaN(Number(v)));
     const typeOptions: DropDownOption[] = [];
     typeKeys.forEach((type, index) => {
       if (index === 0 || index === 19) {
@@ -1057,7 +1053,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.filterInstructionsContainer.setVisible(true);
     this.starterSelectContainer.add(this.filterInstructionsContainer);
 
-    this.starterSelectMessageBoxContainer = globalScene.add.container(0, globalScene.game.canvas.height / 6);
+    this.starterSelectMessageBoxContainer = globalScene.add.container(0, GAME_HEIGHT);
     this.starterSelectMessageBoxContainer.setVisible(false);
     this.starterSelectContainer.add(this.starterSelectMessageBoxContainer);
 
@@ -1086,7 +1082,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       scale: overlayScale,
       top: true,
       x: 1,
-      y: globalScene.game.canvas.height / 6 - MoveInfoOverlay.getHeight(overlayScale) - 29,
+      y: GAME_HEIGHT - MoveInfoOverlay.getHeight(overlayScale) - 29,
     });
     this.starterSelectContainer.add(this.moveInfoOverlay);
 
@@ -1273,7 +1269,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       this.starterSelectMessageBoxContainer.setY(0);
       this.message.setY(4);
     } else {
-      this.starterSelectMessageBoxContainer.setY(globalScene.game.canvas.height / 6);
+      this.starterSelectMessageBoxContainer.setY(GAME_HEIGHT);
       this.starterSelectMessageBox.setOrigin(0, 1);
       this.message.setY(singleLine ? -22 : -37);
     }
@@ -1626,7 +1622,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
                   ui.setModeWithoutClear(UiMode.OPTION_SELECT, {
                     options: moveset
-                      .map((m: Moves, i: number) => {
+                      .map((m: MoveId, i: number) => {
                         const option: OptionSelectItem = {
                           label: allMoves[m].name,
                           handler: () => {
@@ -1636,7 +1632,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                                 `${i18next.t("starterSelectUiHandler:selectMoveSwapWith")} ${allMoves[m].name}.`,
                                 null,
                                 () => {
-                                  const possibleMoves = this.speciesStarterMoves.filter((sm: Moves) => sm !== m);
+                                  const possibleMoves = this.speciesStarterMoves.filter((sm: MoveId) => sm !== m);
                                   this.moveInfoOverlay.show(allMoves[possibleMoves[0]]);
 
                                   ui.setModeWithoutClear(UiMode.OPTION_SELECT, {
@@ -2394,12 +2390,12 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.checkIconId(this.starterIcons[index], species, props.female, props.formIndex, props.shiny, props.variant);
   }
 
-  switchMoveHandler(i: number, newMove: Moves, move: Moves) {
+  switchMoveHandler(i: number, newMoveId: MoveId, moveId: MoveId) {
     const speciesId = this.lastSpecies.speciesId;
-    const existingMoveIndex = this.starterMoveset?.indexOf(newMove)!; // TODO: is this bang correct?
-    this.starterMoveset![i] = newMove; // TODO: is this bang correct?
+    const existingMoveIndex = this.starterMoveset?.indexOf(newMoveId)!; // TODO: is this bang correct?
+    this.starterMoveset![i] = newMoveId; // TODO: is this bang correct?
     if (existingMoveIndex > -1) {
-      this.starterMoveset![existingMoveIndex] = move; // TODO: is this bang correct?
+      this.starterMoveset![existingMoveIndex] = moveId; // TODO: is this bang correct?
     }
     const props: DexAttrProps = globalScene.gameData.getSpeciesDexAttrProps(this.lastSpecies, this.dexAttrCursor);
     // species has different forms
@@ -2425,7 +2421,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       // does the species' starter move data have its form's starter moves and has it been updated
       if (starterMoveData.hasOwnProperty(props.formIndex)) {
         // active form move hasn't been updated
-        if (starterMoveData[props.formIndex][existingMoveIndex] !== newMove) {
+        if (starterMoveData[props.formIndex][existingMoveIndex] !== newMoveId) {
           globalScene.gameData.starterData[speciesId].moveset[props.formIndex] = this.starterMoveset?.slice(
             0,
           ) as StarterMoveset;
@@ -3622,7 +3618,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
     for (let m = 0; m < 4; m++) {
       const move = m < this.starterMoveset.length ? allMoves[this.starterMoveset[m]] : null;
-      this.pokemonMoveBgs[m].setFrame(Type[move ? move.type : Type.UNKNOWN].toString().toLowerCase());
+      this.pokemonMoveBgs[m].setFrame(ElementalType[move ? move.type : ElementalType.UNKNOWN].toString().toLowerCase());
       this.pokemonMoveLabels[m].setText(move ? move.name : "-");
       this.pokemonMoveContainers[m].setVisible(!!move);
     }
@@ -3632,7 +3628,9 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     for (let em = 0; em < 4; em++) {
       const eggMove = hasEggMoves ? allMoves[speciesEggMoves[species.speciesId][em]] : null;
       const eggMoveUnlocked = eggMove && globalScene.gameData.starterData[species.speciesId].eggMoves & (1 << em);
-      this.pokemonEggMoveBgs[em].setFrame(Type[eggMove ? eggMove.type : Type.UNKNOWN].toString().toLowerCase());
+      this.pokemonEggMoveBgs[em].setFrame(
+        ElementalType[eggMove ? eggMove.type : ElementalType.UNKNOWN].toString().toLowerCase(),
+      );
       this.pokemonEggMoveLabels[em].setText(eggMove && eggMoveUnlocked ? eggMove.name : "???");
     }
 
@@ -3646,16 +3644,16 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.updateInstructions();
   }
 
-  setTypeIcons(type1: Type | null, type2: Type | null): void {
+  setTypeIcons(type1: ElementalType | null, type2: ElementalType | null): void {
     if (type1 !== null) {
       this.type1Icon.setVisible(true);
-      this.type1Icon.setFrame(Type[type1].toLowerCase());
+      this.type1Icon.setFrame(ElementalType[type1].toLowerCase());
     } else {
       this.type1Icon.setVisible(false);
     }
     if (type2 !== null) {
       this.type2Icon.setVisible(true);
-      this.type2Icon.setFrame(Type[type2].toLowerCase());
+      this.type2Icon.setFrame(ElementalType[type2].toLowerCase());
     } else {
       this.type2Icon.setVisible(false);
     }
