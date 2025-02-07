@@ -1,17 +1,23 @@
 import type { ModifierTier } from "#enums/modifier-tier";
 
 interface SelectOption {
-  nameKey: string;
-  descKey: string;
-  price: number;
-  rarity: ModifierTier; // TODO: Rename this
+  readonly price: number;
+  readonly rarity: ModifierTier; // TODO: Rename this
+
+  get name(): string;
+  get description(): string;
 }
 
 export abstract class BaseItem implements SelectOption {
-  nameKey: string;
-  descKey: string;
-  price: number;
-  rarity: ModifierTier;
-  public stackCount: number;
-  public maxStackCount: number;
+  readonly price: number;
+  readonly rarity: ModifierTier;
+  public readonly stackCount: number;
+  public readonly maxStackCount: number;
+
+  get name(): string {
+    throw new Error("Method not implemented.");
+  }
+  get description(): string {
+    throw new Error("Method not implemented.");
+  }
 }

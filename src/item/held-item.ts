@@ -5,8 +5,8 @@ import { BaseItem } from "./base-item";
  * Held items are items that are held onto by Pokemon
  */
 export abstract class HeldItem extends BaseItem {
-  public isTransferable: boolean;
-  public ignorable: boolean;
+  public readonly isTransferable: boolean;
+  public readonly isIgnorable: boolean;
 
   getFlingDamage(): number {
     return 0;
