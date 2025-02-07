@@ -198,6 +198,7 @@ import { TerrainEventTypeChangeAbAttr } from "./ab-attrs/terrain-event-type-chan
 import { WeatherBasedSpeedDoublerAbAttr } from "./ab-attrs/weather-based-speed-doubler-ab-attr";
 import { MoveFlagPowerBoostAbAttr } from "./ab-attrs/move-flag-power-boost-ab-attr";
 import { MoveFlagImmunityAbAttr } from "./ab-attrs/move-flag-immunity-ab-attr";
+import { ReflectStatStageChangeAbAttr } from "./ab-attrs/reflect-stat-stage-change-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
@@ -450,7 +451,12 @@ export function initAbilities() {
       return false;
     }),
     new Ability(Abilities.SOUNDPROOF, 3).attr(MoveFlagImmunityAbAttr, MoveFlags.SOUND_MOVE).ignorable(),
-    new Ability(Abilities.RAIN_DISH, 3).attr(PostWeatherLapseHealAbAttr, 1, WeatherType.RAIN, WeatherType.HEAVY_RAIN),
+    new Ability(Abilities.RAIN_DISH, 3).attr(
+      PostWeatherLapseHealAbAttr,
+      1 / 16,
+      WeatherType.RAIN,
+      WeatherType.HEAVY_RAIN,
+    ),
     new Ability(Abilities.SAND_STREAM, 3)
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.SANDSTORM)
       .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.SANDSTORM),
@@ -588,7 +594,7 @@ export function initAbilities() {
     new Ability(Abilities.SIMPLE, 4).attr(StatStageChangeMultiplierAbAttr, 2).ignorable(),
     new Ability(Abilities.DRY_SKIN, 4)
       .attr(PostWeatherLapseDamageAbAttr, 2, WeatherType.SUNNY, WeatherType.HARSH_SUN)
-      .attr(PostWeatherLapseHealAbAttr, 2, WeatherType.RAIN, WeatherType.HEAVY_RAIN)
+      .attr(PostWeatherLapseHealAbAttr, 1 / 8, WeatherType.RAIN, WeatherType.HEAVY_RAIN)
       .attr(ReceivedTypeDamageMultiplierAbAttr, ElementalType.FIRE, 1.25)
       .attr(TypeImmunityHealAbAttr, ElementalType.WATER)
       .ignorable(),
@@ -697,7 +703,7 @@ export function initAbilities() {
       .ignorable(),
     new Ability(Abilities.ICE_BODY, 4)
       .attr(BlockWeatherDamageAttr, WeatherType.HAIL)
-      .attr(PostWeatherLapseHealAbAttr, 1, WeatherType.HAIL, WeatherType.SNOW),
+      .attr(PostWeatherLapseHealAbAttr, 1 / 16, WeatherType.HAIL, WeatherType.SNOW),
     new Ability(Abilities.SOLID_ROCK, 4)
       .attr(
         ReceivedMoveDamageMultiplierAbAttr,
@@ -832,7 +838,7 @@ export function initAbilities() {
     ),
     new Ability(Abilities.ILLUSION, 5).attr(UncopiableAbilityAbAttr).attr(UnswappableAbilityAbAttr).unimplemented(),
     new Ability(Abilities.IMPOSTER, 5).attr(PostSummonTransformAbAttr).attr(UncopiableAbilityAbAttr),
-    new Ability(Abilities.INFILTRATOR, 5).attr(InfiltratorAbAttr).partial(), // does not bypass Mist
+    new Ability(Abilities.INFILTRATOR, 5).attr(InfiltratorAbAttr),
     new Ability(Abilities.MUMMY, 5).attr(PostDefendAbilityGiveAbAttr, Abilities.MUMMY).bypassFaint(),
     new Ability(Abilities.MOXIE, 5).attr(PostVictoryStatStageChangeAbAttr, Stat.ATK, 1),
     new Ability(Abilities.JUSTIFIED, 5).attr(
@@ -1284,7 +1290,7 @@ export function initAbilities() {
       )
       .bypassFaint(),
     new Ability(Abilities.PROPELLER_TAIL, 8).attr(BlockRedirectAbAttr),
-    new Ability(Abilities.MIRROR_ARMOR, 8).ignorable().unimplemented(),
+    new Ability(Abilities.MIRROR_ARMOR, 8).attr(ReflectStatStageChangeAbAttr).ignorable(),
     /**
      * Right now, the logic is attached to Surf and Dive moves. Ideally, the post-defend/hit should be an
      * ability attribute but the current implementation of move effects for BattlerTag does not support this- in the case
