@@ -239,6 +239,7 @@ import { crashDamageFunc, frenzyMissFunc } from "./move-utils";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { NoDamageAgainstFlyingAttr } from "./move-attrs/no-damage-against-flying-attr";
 import { SkyDropAttr } from "./move-attrs/sky-drop-attr";
+import { UseHigherAttackingStatAttr } from "./move-attrs/use-higher-attacking-stat-attr";
 
 // Initialized as being empty; it will be filled during `initMoves()`
 export const allMoves: { [moveId in MoveId]: Move } = {} as any;
@@ -3096,11 +3097,11 @@ export function initMoves() {
       .attr(AddArenaTagAttr, ArenaTagType.ION_DELUGE, { turnCount: 1 })
       .punchingMove(),
     new AttackMove(MoveId.PHOTON_GEYSER, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 100, 100, 5, -1, 0, 7)
-      .attr(PhotonGeyserCategoryAttr)
+      .attr(UseHigherAttackingStatAttr)
       .ignoresAbilities(),
     /* Unused */
     new AttackMove(MoveId.LIGHT_THAT_BURNS_THE_SKY, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 200, -1, 1, -1, 0, 7)
-      .attr(PhotonGeyserCategoryAttr)
+      .attr(UseHigherAttackingStatAttr)
       .unimplemented()
       .ignoresAbilities()
       .ignoresVirtual(),
