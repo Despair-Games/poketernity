@@ -1,0 +1,13 @@
+export const DEFAULT_CHAMPION_THEME = "battle_champion_alder";
+export const KANTO_CHAMPION_THEME = "battle_kanto_champion";
+export const JOHTO_CHAMPION_THEME = "battle_johto_champion";
+export const HOENN5_CHAMPION_THEME = "battle_hoenn_champion_g5";
+export const HOENN6_CHAMPION_THEME = "battle_hoenn_champion_g6";
+export const SINNOH_CHAMPION_THEME = "battle_sinnoh_champion";
+export const IRIS_CHAMPION_THEME = "battle_champion_iris";
+export const KALOS_CHAMPION_THEME = "battle_kalos_champion";
+export const ALOLA_CHAMPION_THEME = "battle_alola_champion";
+export const GALAR_CHAMPION_THEME = "battle_galar_champion";
+export const GEETA_CHAMPION_THEME = "battle_champion_geeta";
+export const NEMONA_CHAMPION_THEME = "battle_champion_nemona";
+export const KIERAN_CHAMPION_THEME = "battle_champion_kieran";

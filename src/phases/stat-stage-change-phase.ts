@@ -16,6 +16,7 @@ import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } f
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
 import { PokemonPhase } from "./abstract-pokemon-phase";
+import { ReflectStatStageChangeAbAttr } from "#app/data/ab-attrs/reflect-stat-stage-change-ab-attr";
 import { CANVAS_SCALE } from "#app/ui-constants";
 
 export type StatStageChangeCallback = (changed: BattleStat[], relativeChanges: number[], target?: Pokemon) => void;
@@ -24,40 +25,44 @@ interface SSCPhaseOptions {
   showMessage?: boolean;
   ignoreAbilities?: boolean;
   canBeCopied?: boolean;
+  bypassReflect?: boolean;
   onChange?: StatStageChangeCallback;
 }
 
 export class StatStageChangePhase extends PokemonPhase {
   protected readonly stats: BattleStat[];
-  protected readonly selfTarget: boolean;
+  protected readonly source: Pokemon | null;
   protected stages: number;
   protected readonly showMessage: boolean;
   protected readonly ignoreAbilities: boolean;
   protected readonly canBeCopied: boolean;
+  protected readonly bypassReflect: boolean;
   protected readonly onChange?: StatStageChangeCallback;
   private readonly options?: SSCPhaseOptions;
 
   constructor(
     battlerIndex: BattlerIndex,
-    selfTarget: boolean,
+    source: Pokemon | null,
     stats: BattleStat[],
     stages: number,
     options?: SSCPhaseOptions,
   ) {
     super(battlerIndex);
 
-    this.selfTarget = selfTarget;
+    this.source = source;
     this.stats = stats;
     this.stages = stages;
     this.showMessage = options?.showMessage ?? true;
     this.ignoreAbilities = options?.ignoreAbilities ?? false;
     this.canBeCopied = options?.canBeCopied ?? true;
+    this.bypassReflect = options?.bypassReflect ?? false;
     this.onChange = options?.onChange;
     this.options = options;
   }
 
   public override start(): void {
     const pokemon = this.getPokemon();
+    const selfTarget = pokemon === this.source;
 
     const { add, arena, field, fieldSpritePipeline, tweens, time } = globalScene;
 
@@ -65,12 +70,20 @@ export class StatStageChangePhase extends PokemonPhase {
       return super.end();
     }
 
+    if (!this.ignoreAbilities && !this.bypassReflect) {
+      const reflected = new BooleanHolder(false);
+      applyAbAttrs(ReflectStatStageChangeAbAttr, pokemon, false, this.source, this.stats, this.stages, reflected);
+      if (reflected.value) {
+        return super.end();
+      }
+    }
+
     // Check if multiple stats are being changed at the same time, then run SSCPhase for each of them
     if (this.stats.length > 1) {
       for (let i = 0; i < this.stats.length; i++) {
         const stat = [this.stats[i]];
         globalScene.unshiftPhase(
-          new StatStageChangePhase(this.battlerIndex, this.selfTarget, stat, this.stages, this.options),
+          new StatStageChangePhase(this.battlerIndex, this.source, stat, this.stages, this.options),
         );
       }
       return super.end();
@@ -87,12 +100,11 @@ export class StatStageChangePhase extends PokemonPhase {
     const filteredStats: BattleStat[] = this.stats.filter((stat) => {
       const cancelled = new BooleanHolder(false);
 
-      if (!this.selfTarget && stages.value < 0) {
-        // TODO: add a reference to the source of the stat change to fix Infiltrator interaction
-        arena.applyTagsForSide(MistTag, pokemon.getArenaTagSide(), false, null, cancelled);
+      if (!selfTarget && stages.value < 0) {
+        arena.applyTagsForSide(MistTag, pokemon.getArenaTagSide(), false, this.source, cancelled);
       }
 
-      if (!cancelled.value && !this.selfTarget && stages.value < 0) {
+      if (!cancelled.value && !selfTarget && stages.value < 0) {
         applyAbAttrs(ProtectStatAbAttr, pokemon, simulate, stat, cancelled);
       }
 
@@ -155,7 +167,7 @@ export class StatStageChangePhase extends PokemonPhase {
         }
       }
 
-      applyAbAttrs(PostStatStageChangeAbAttr, pokemon, false, filteredStats, this.stages, this.selfTarget);
+      applyAbAttrs(PostStatStageChangeAbAttr, pokemon, false, filteredStats, this.stages, selfTarget);
 
       // Look for any other stat change phases; if this is the last one, do White Herb check
       const existingPhase = globalScene.findPhase(
