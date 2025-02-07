@@ -147,7 +147,7 @@ export default class TargetSelectUiHandler extends UiHandler {
     } else if (this.targets.includes(BattlerIndex.ENEMY_SIDE)) {
       return globalScene.getEnemyField().filter((p) => p.isActive(true));
     } else if (this.targets.includes(BattlerIndex.PLAYER_SIDE)) {
-      return globalScene.getEnemyField().filter((p) => p.isActive(true));
+      return globalScene.getPlayerField().filter((p) => p.isActive(true));
     } else if (this.isMultipleTargets) {
       return this.getTargetsByIndex();
     } else {
