@@ -63,7 +63,7 @@ describe("Moves - Ceaseless Edge", () => {
   test(
     "trainer - move should hit twice, apply two layers of spikes, force switch opponent - opponent takes damage",
     async () => {
-      game.override.startingWave(25);
+      game.override.startingWave(25).ability(Abilities.PARENTAL_BOND);
 
       await game.classicMode.startBattle([Species.ILLUMISE]);
 
