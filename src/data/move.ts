@@ -931,7 +931,12 @@ export abstract class Move implements Localizable {
   public getMultiHitAttackScoreMultiplier(user: Pokemon): number {
     const userHasSkillLink = user.hasAbilityWithAttr(MaxMultiHitAbAttr);
     if (this.hasAttr(MultiHitPowerIncrementAttr)) {
-      return 6; // assumes 3 hits: 1x + 2x + 3x
+      /**
+       * Triple Axel / Triple Kick have a combined power of 6x the first strike,
+       * assuming all strikes hit (~72.9% at 90 accuracy). Accounting for accuracy,
+       * their average damage output is ~4.7x the first strike.
+       */
+      return 5;
     } else if (this.hasAttr(MultiHitAttr)) {
       const multiHitType = this.getAttrs(MultiHitAttr)[0].getMultiHitType();
       switch (multiHitType) {

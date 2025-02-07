@@ -5680,8 +5680,8 @@ export class EnemyPokemon extends Pokemon {
    * when used by this Pokemon against the given opponent.
    * @param opponent the {@linkcode Pokemon} targeted by the move
    * @param move the {@linkcode Move} being evaluated
-   * @param attackScore the pre
-   * @returns
+   * @param attackScore the previously calculated attack score (optional)
+   * @returns the score bonus from critical hit chance
    */
   protected getCriticalHitBonus(opponent: Pokemon, move: Move, attackScore?: number) {
     const { damage: critDamage } = opponent.getAttackDamage(this, move, AbilityApplyMode.REVEALED, true);
@@ -5710,12 +5710,7 @@ export class EnemyPokemon extends Pokemon {
     const defendingSide = this.getArenaTagSide();
     const noCritTag = globalScene.arena.getTagOnSide(NoCritTag, defendingSide);
 
-    if (
-      noCritTag
-      || move.hasAttr(FixedDamageAttr)
-      || target.hasAbilityWithAttr(BlockCritAbAttr)
-      || Overrides.NEVER_CRIT_OVERRIDE
-    ) {
+    if (noCritTag || move.hasAttr(FixedDamageAttr) || target.hasAbilityWithAttr(BlockCritAbAttr)) {
       return -1;
     }
 
