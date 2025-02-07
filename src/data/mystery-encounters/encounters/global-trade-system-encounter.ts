@@ -5,7 +5,6 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { ModifierTier } from "#enums/modifier-tier";
-import { MusicPreference } from "#enums/music-preference";
 import type { ModifierTypeOption } from "#app/modifier/modifier-type";
 import { getPlayerModifierTypeOptions, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
@@ -21,7 +20,7 @@ import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { getTypeRgb } from "#app/data/type";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { NumberHolder, isNullOrUndefined, randInt, randSeedInt, randSeedShuffle } from "#app/utils";
+import { NumberHolder, isNullOrUndefined, randInt, randItem, randSeedInt, randSeedShuffle } from "#app/utils";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { EnemyPokemon } from "#app/field/pokemon";
@@ -44,7 +43,6 @@ import { trainerNamePools } from "#app/data/trainer-names";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { addPokemonDataToDexAndValidateAchievements } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { PokeballType } from "#enums/pokeball";
-import { settings } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 /** the i18n namespace for the encounter */
@@ -125,15 +123,8 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
     const encounter = globalScene.currentBattle.mysteryEncounter!;
 
     // Load bgm
-    let bgmKey: string;
-    if (settings.audio.musicPreference === MusicPreference.GENFIVE) {
-      bgmKey = "mystery_encounter_gen_5_gts";
-      globalScene.loadBgm(bgmKey, `${bgmKey}.mp3`);
-    } else {
-      // Mixed option
-      bgmKey = "mystery_encounter_gen_6_gts";
-      globalScene.loadBgm(bgmKey, `${bgmKey}.mp3`);
-    }
+    const bgmKey = randItem(["mystery_encounter_gen_5_gts", "mystery_encounter_gen_6_gts"]);
+    globalScene.loadBgm(bgmKey, `${bgmKey}.mp3`);
 
     // Load possible trade options
     // Maps current party member's id to 3 EnemyPokemon objects

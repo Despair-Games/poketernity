@@ -3144,9 +3144,8 @@ export function initMoves() {
       FriendshipPowerAttr,
     ),
     new AttackMove(MoveId.BOUNCY_BUBBLE, ElementalType.WATER, MoveCategory.SPECIAL, 60, 100, 20, -1, 0, 7)
-      .attr(HitHealAttr) // Custom
-      .triageMove()
-      .target(MoveTarget.ALL_NEAR_ENEMIES),
+      .attr(HitHealAttr, 1)
+      .triageMove(),
     new AttackMove(MoveId.BUZZY_BUZZ, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 60, 100, 20, 100, 0, 7).attr(
       StatusEffectAttr,
       StatusEffect.PARALYSIS,
