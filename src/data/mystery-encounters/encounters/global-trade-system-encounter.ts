@@ -20,7 +20,7 @@ import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { getTypeRgb } from "#app/data/type";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { NumberHolder, isNullOrUndefined, randInt, randSeedInt, randSeedShuffle } from "#app/utils";
+import { NumberHolder, isNullOrUndefined, randInt, randItem, randSeedInt, randSeedShuffle } from "#app/utils";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { EnemyPokemon } from "#app/field/pokemon";
@@ -123,7 +123,7 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
     const encounter = globalScene.currentBattle.mysteryEncounter!;
 
     // Load bgm
-    const bgmKey = "mystery_encounter_gen_6_gts";
+    const bgmKey = randItem(["mystery_encounter_gen_5_gts", "mystery_encounter_gen_6_gts"]);
     globalScene.loadBgm(bgmKey, `${bgmKey}.mp3`);
 
     // Load possible trade options
