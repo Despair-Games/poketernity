@@ -994,7 +994,7 @@ export default class BattleScene extends SceneBase {
       ENEMY_IVS_OVERRIDE_VALIDATED = new Array(6).fill(Overrides.ENEMY_IVS_OVERRIDE);
     }
     if (ENEMY_IVS_OVERRIDE_VALIDATED.length === 6) {
-      pokemon.ivs = ENEMY_IVS_OVERRIDE_VALIDATED.map(iv => Phaser.Math.Clamp(iv, 0, 31));
+      pokemon.ivs = ENEMY_IVS_OVERRIDE_VALIDATED.map((iv) => Phaser.Math.Clamp(iv, 0, 31));
     }
 
     pokemon.init();
