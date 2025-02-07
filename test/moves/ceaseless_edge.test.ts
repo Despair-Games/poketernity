@@ -60,7 +60,7 @@ describe("Moves - Ceaseless Edge", () => {
     expect(enemyPokemon.hp).toBeLessThan(enemyStartingHp);
   });
 
-  test.todo(
+  test(
     "trainer - move should hit twice, apply two layers of spikes, force switch opponent - opponent takes damage",
     async () => {
       game.override.startingWave(25);
