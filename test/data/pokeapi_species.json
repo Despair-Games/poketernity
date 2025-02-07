@@ -29,7 +29,7 @@
     "evolution_chain_id": 1,
     "color_id": 5,
     "shape_id": 8,
-    "habitat_id": 3,
+    "habitat_id": 3, 
     "gender_rate": 1,
     "capture_rate": 45,
     "base_happiness": 50,
