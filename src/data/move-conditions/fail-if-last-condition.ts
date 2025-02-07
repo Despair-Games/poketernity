@@ -6,4 +6,4 @@ import { type MovePhase } from "#app/phases/move-phase";
 import { PhaseId } from "#enums/phase-id";
 
 export const failIfLastCondition: MoveConditionFunc = (_user: Pokemon, _target: Pokemon, _move: Move) =>
-  globalScene.phaseQueue.find((phase) => phase.is<MovePhase>(PhaseId.MOVE)) !== undefined;
+  globalScene.hasPhase((phase) => phase.is<MovePhase>(PhaseId.MOVE));

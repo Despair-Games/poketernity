@@ -2468,6 +2468,16 @@ export default class BattleScene extends SceneBase {
     return this.phaseQueue.find(phaseFilter) as P;
   }
 
+  /**
+   * Checks if the phase queue contains a phase that matches the filter function
+   *
+   * @param phaseFilter filter function to use to check the expected phase
+   * @returns `true` if the phase exists, `false` otherwise
+   */
+  hasPhase<P extends Phase = Phase>(phaseFilter: (phase: P) => boolean): boolean {
+    return this.phaseQueue.some(phaseFilter);
+  }
+
   tryReplacePhase(phaseFilter: (phase: Phase) => boolean, phase: Phase): boolean {
     const phaseIndex = this.phaseQueue.findIndex(phaseFilter);
     if (phaseIndex > -1) {
