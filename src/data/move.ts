@@ -594,7 +594,7 @@ export abstract class Move implements Localizable {
     this.moveTarget = MoveTarget.NEAR_ENEMY;
     this.makesContact(false);
     this.attr(UseHigherAttackingStatAttr);
-    this.attr(GMaxPowerAttr);
+    this.attr(GMaxPowerAttr, _signatureSpecies);
     return this;
   }
 
