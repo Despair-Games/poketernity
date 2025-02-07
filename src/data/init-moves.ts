@@ -218,6 +218,7 @@ import { getNonVolatileStatusEffects, isNonVolatileStatusEffect } from "#app/dat
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { isNullOrUndefined } from "#app/utils";
+import { ConditionalProtectArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { SemiInvulnerableBattlerTagTypes, TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { crashDamageFunc, frenzyMissFunc } from "#app/utils/move-utils";
 import { Abilities } from "#enums/abilities";
@@ -1577,7 +1578,7 @@ export function initMoves() {
       .attr(RemoveBattlerTagAttr, [BattlerTagType.PROTECTED])
       .attr(
         RemoveArenaTagsAttr,
-        [ArenaTagType.QUICK_GUARD, ArenaTagType.WIDE_GUARD, ArenaTagType.MAT_BLOCK, ArenaTagType.CRAFTY_SHIELD],
+        ConditionalProtectArenaTagTypes,
         ArenaTagRelativeSide.TARGET,
         MoveEffectTrigger.PRE_APPLY,
       )
@@ -4073,11 +4074,11 @@ export function initMoves() {
 //#region Helpers
 
 /**
- * All damaging Fire-type moves can now thaw a frozen target, regardless of whether or not they have a chance to burn.
+ * All damaging (aka {@linkcode AttackMove}) Fire-type moves can now thaw a frozen target, regardless of whether or not they have a chance to burn.
  * @source {@link https://bulbapedia.bulbagarden.net/wiki/Freeze_(status_condition) | Bulbapedia - Freeze (Status Condition)}
  */
 function addFireMovesThawFrozenTargetAttribute(move: Move) {
-  if (move.type === ElementalType.FIRE) {
+  if (move.type === ElementalType.FIRE && move.isAttackMove()) {
     move.addAttr(new HealStatusEffectAttr(false, StatusEffect.FREEZE));
   }
 }

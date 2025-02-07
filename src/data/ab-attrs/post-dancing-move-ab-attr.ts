@@ -1,8 +1,8 @@
-import type { BattlerIndex } from "#enums/battler-index";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import type { BattlerIndex } from "#enums/battler-index";
 import { PostMoveUsedAbAttr } from "./post-move-used-ab-attr";
 
 /**
@@ -17,17 +17,10 @@ export class PostDancingMoveAbAttr extends PostMoveUsedAbAttr {
     source: Pokemon,
     targets: BattlerIndex[],
   ): boolean {
-    // List of tags that prevent the Dancer from replicating the move
-    const forbiddenTags = [
-      BattlerTagType.FLYING,
-      BattlerTagType.UNDERWATER,
-      BattlerTagType.UNDERGROUND,
-      BattlerTagType.HIDDEN,
-    ];
     // The move to replicate cannot come from the Dancer
     if (
       source.getBattlerIndex() !== pokemon.getBattlerIndex()
-      && !pokemon.summonData.tags.some((tag) => forbiddenTags.includes(tag.tagType))
+      && !pokemon.summonData.tags.some((tag) => SemiInvulnerableBattlerTagTypes.includes(tag.tagType))
     ) {
       if (!simulated) {
         if (move.getMove().isSelfStatusMove()) {

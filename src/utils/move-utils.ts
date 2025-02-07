@@ -76,7 +76,7 @@ function applyMoveChargeAttrsInternal<TAttr extends MoveAttr>(
   ...params: Parameters<TAttr["apply"]>
 ): void {
   const [user, target, move, ...args] = params;
-  if (move.isChargingAttackMove() || move.isChargingSelfStatusMove()) {
+  if (move.isChargingMove()) {
     move.chargeAttrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, ...args));
   }
 }

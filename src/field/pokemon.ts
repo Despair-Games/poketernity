@@ -3571,18 +3571,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (!this.summonData) {
       return null;
     }
-    const result = this.summonData.tags.find((t) => tagTypes.includes(t.tagType));
-
-    return result ? (result as T) : (result as nil);
+    return this.summonData.tags.find((t) => tagTypes.includes(t.tagType)) as T | nil;
   }
 
   findTag<T extends BattlerTag = BattlerTag>(tagFilter: (tag: BattlerTag) => boolean): T | nil {
-    if (!this.summonData) {
-      return null;
-    }
-    const result = this.summonData.tags.find((t) => tagFilter(t));
-
-    return result ? (result as T) : (result as nil);
+    return this.summonData.tags.find((t) => tagFilter(t)) as T | nil;
   }
 
   findTags(tagFilter: (tag: BattlerTag) => boolean): BattlerTag[] {
@@ -4140,15 +4133,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
       this.setFrameRate(4);
 
-      // If the user is invulnerable, lets remove their invulnerability when they fall asleep
-      const invulnerableTags = [
-        BattlerTagType.UNDERGROUND,
-        BattlerTagType.UNDERWATER,
-        BattlerTagType.HIDDEN,
-        BattlerTagType.FLYING,
-      ];
-
-      const tag = invulnerableTags.find((t) => this.getTag(t));
+      const tag = SemiInvulnerableBattlerTagTypes.find((t) => this.getTag(t));
 
       if (tag) {
         this.removeTag(tag);

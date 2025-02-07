@@ -10,7 +10,7 @@ import { BlockCritAbAttr } from "#app/data/ab-attrs/block-crit-ab-attr";
 import { BlockItemTheftAbAttr } from "#app/data/ab-attrs/block-item-theft-ab-attr";
 import { BlockNonDirectDamageAbAttr } from "#app/data/ab-attrs/block-non-direct-damage-ab-attr";
 import { BlockOneHitKOAbAttr } from "#app/data/ab-attrs/block-one-hit-ko-ab-attr";
-import { BlockRecoilDamageAttr } from "#app/data/ab-attrs/block-recoil-damage-ab-attr";
+import { BlockRecoilDamageAbAttr } from "#app/data/ab-attrs/block-recoil-damage-ab-attr";
 import { BlockRedirectAbAttr } from "#app/data/ab-attrs/block-redirect-ab-attr";
 import { BlockStatusDamageAbAttr } from "#app/data/ab-attrs/block-status-damage-ab-attr";
 import { BlockWeatherDamageAttr } from "#app/data/ab-attrs/block-weather-damage-attr";
@@ -409,7 +409,7 @@ export function initAbilities() {
     new Ability(Abilities.BLAZE, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, ElementalType.FIRE),
     new Ability(Abilities.TORRENT, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, ElementalType.WATER),
     new Ability(Abilities.SWARM, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, ElementalType.BUG),
-    new Ability(Abilities.ROCK_HEAD, 3).attr(BlockRecoilDamageAttr),
+    new Ability(Abilities.ROCK_HEAD, 3).attr(BlockRecoilDamageAbAttr),
     new Ability(Abilities.DROUGHT, 3)
       .attr(PostSummonWeatherChangeAbAttr, WeatherType.SUNNY)
       .attr(PostBiomeChangeWeatherChangeAbAttr, WeatherType.SUNNY),

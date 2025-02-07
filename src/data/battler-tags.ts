@@ -41,6 +41,7 @@ import Overrides from "#app/overrides";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import {
+  GulpMissileBattlerTagTypes,
   RemoveTypeBattlerTagTypes,
   SemiInvulnerableBattlerTagTypes,
   TrappedBattlerTagTypes,
@@ -2683,10 +2684,7 @@ export class GulpMissileTag extends BattlerTag {
    */
   override canAdd(pokemon: Pokemon): boolean {
     const isSurfOrDive = [MoveId.SURF, MoveId.DIVE].includes(this.sourceMoveId);
-    const isNormalForm =
-      pokemon.formIndex === 0
-      && !pokemon.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)
-      && !pokemon.getTag(BattlerTagType.GULP_MISSILE_PIKACHU);
+    const isNormalForm = pokemon.formIndex === 0 && !pokemon.getTag(...GulpMissileBattlerTagTypes);
     const isCramorant = pokemon.species.speciesId === Species.CRAMORANT;
 
     return isSurfOrDive && isNormalForm && isCramorant;

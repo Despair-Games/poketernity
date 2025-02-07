@@ -20,6 +20,7 @@ export const DamagingTrappedBattlerTagTypes = [
   BattlerTagType.WRAP,
   BattlerTagType.CLAMP,
   BattlerTagType.SAND_TOMB,
+  BattlerTagType.G_MAX_SAND_TOMB,
   BattlerTagType.MAGMA_STORM,
   BattlerTagType.SNAP_TRAP,
   BattlerTagType.THUNDER_CAGE,
@@ -35,4 +36,4 @@ export const TrappedBattlerTagTypes = [
   ...DamagingTrappedBattlerTagTypes,
 ];
 
-export const GulpMissleBattlerTagTypes = [BattlerTagType.GULP_MISSILE_ARROKUDA, BattlerTagType.GULP_MISSILE_PIKACHU];
+export const GulpMissileBattlerTagTypes = [BattlerTagType.GULP_MISSILE_ARROKUDA, BattlerTagType.GULP_MISSILE_PIKACHU];

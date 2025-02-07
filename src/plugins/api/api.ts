@@ -98,11 +98,9 @@ export class Api extends ApiBase {
    * Pings the server (via {@linkcode getGameTitleStats}) and updates {@linkcode _isConnected} accordingly.
    */
   async ping() {
-    if (this.isLocal) {
-      const titleStats = await this.getGameTitleStats();
-      this._isConnected = !!titleStats;
-      console.log("isLocalServerConnected:", this.isConnected);
-    }
+    const titleStats = await this.getGameTitleStats();
+    this._isConnected = !!titleStats;
+    console.log("isLocalServerConnected:", this.isConnected);
   }
   //#endregion
 }
