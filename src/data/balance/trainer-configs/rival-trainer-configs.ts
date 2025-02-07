@@ -24,7 +24,6 @@ export const rivalTrainerConfigs: TrainerConfigs = {
     .setStaticParty()
     .setEncounterBgm(TrainerType.RIVAL)
     .setBattleBgm("battle_rival")
-    .setMixedBattleBgm("battle_rival")
     .setPartyTemplates(trainerPartyTemplates.RIVAL)
     .setModifierRewardFuncs(
       () => modifierTypes.SUPER_EXP_CHARM,
@@ -98,7 +97,6 @@ export const rivalTrainerConfigs: TrainerConfigs = {
     .setMoneyMultiplier(1.25)
     .setEncounterBgm(TrainerType.RIVAL)
     .setBattleBgm("battle_rival")
-    .setMixedBattleBgm("battle_rival")
     .setPartyTemplates(trainerPartyTemplates.RIVAL_2)
     .setModifierRewardFuncs(() => modifierTypes.EXP_SHARE)
     .setEventModifierRewardFuncs(() => modifierTypes.SHINY_CHARM)
@@ -175,7 +173,6 @@ export const rivalTrainerConfigs: TrainerConfigs = {
     .setMoneyMultiplier(1.5)
     .setEncounterBgm(TrainerType.RIVAL)
     .setBattleBgm("battle_rival")
-    .setMixedBattleBgm("battle_rival")
     .setPartyTemplates(trainerPartyTemplates.RIVAL_3)
     .setPartyMemberFunc(
       0,
@@ -252,7 +249,6 @@ export const rivalTrainerConfigs: TrainerConfigs = {
     .setMoneyMultiplier(1.75)
     .setEncounterBgm(TrainerType.RIVAL)
     .setBattleBgm("battle_rival_2")
-    .setMixedBattleBgm("battle_rival_2")
     .setPartyTemplates(trainerPartyTemplates.RIVAL_4)
     .setPartyMemberFunc(
       0,
@@ -339,7 +335,6 @@ export const rivalTrainerConfigs: TrainerConfigs = {
     .setMoneyMultiplier(2.25)
     .setEncounterBgm(TrainerType.RIVAL)
     .setBattleBgm("battle_rival_3")
-    .setMixedBattleBgm("battle_rival_3")
     .setPartyTemplates(trainerPartyTemplates.RIVAL_5)
     .setPartyMemberFunc(
       0,
@@ -438,7 +433,6 @@ export const rivalTrainerConfigs: TrainerConfigs = {
     .setMoneyMultiplier(3)
     .setEncounterBgm("final")
     .setBattleBgm("battle_rival_3")
-    .setMixedBattleBgm("battle_rival_3")
     .setPartyTemplates(trainerPartyTemplates.RIVAL_6)
     .setPartyMemberFunc(
       0,
