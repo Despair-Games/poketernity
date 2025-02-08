@@ -1,7 +1,7 @@
 import type { ModalConfig } from "#app/ui/modal-ui-handler";
 import { ModalUiHandler } from "#app/ui/modal-ui-handler";
 import type { UiMode } from "#enums/ui-mode";
-import { addTextInputObject, addTextObject, getTextColor } from "#app/ui/text";
+import { addTextInputObject, addTextObject, setTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { addWindow } from "#app/ui/ui-theme";
 import { WindowVariant } from "#enums/window-variant";
@@ -74,8 +74,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
       "",
       TextStyle.TOOLTIP_CONTENT,
     );
-    this.errorMessage.setColor(getTextColor(TextStyle.SUMMARY_PINK));
-    this.errorMessage.setShadowColor(getTextColor(TextStyle.SUMMARY_PINK, true));
+    setTextColor(this.errorMessage, TextStyle.SUMMARY_PINK);
     this.errorMessage.setVisible(false);
     this.modalContainer.add(this.errorMessage);
   }

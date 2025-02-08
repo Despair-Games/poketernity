@@ -594,18 +594,12 @@ export default class MysteryEncounterUiHandler extends UiHandler {
       text = text.replace(
         /(\(\+\)[^\(\[]*)/gi,
         (substring) =>
-          "[/color][/shadow]"
-          + getBBCodeFrag(substring, TextStyle.SUMMARY_GREEN)
-          + "[/color][/shadow]"
-          + primaryStyleString,
+          "[/color][/shadow]" + getBBCodeFrag(substring, TextStyle.SUMMARY_GREEN, true) + primaryStyleString,
       );
       text = text.replace(
         /(\(\-\)[^\(\[]*)/gi,
         (substring) =>
-          "[/color][/shadow]"
-          + getBBCodeFrag(substring, TextStyle.SUMMARY_BLUE)
-          + "[/color][/shadow]"
-          + primaryStyleString,
+          "[/color][/shadow]" + getBBCodeFrag(substring, TextStyle.SUMMARY_BLUE, true) + primaryStyleString,
       );
     }
 

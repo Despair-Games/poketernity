@@ -6,7 +6,7 @@ import MessageUiHandler from "#app/ui/message-ui-handler";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-handler";
 import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigationMenu";
-import { addTextObject, getTextColor } from "#app/ui/text";
+import { addTextObject, setTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "#app/ui/ui-theme";
@@ -440,8 +440,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
     const lastValueLabel = this.optionValueLabels[settingIndex][lastCursor];
     if (lastValueLabel) {
-      lastValueLabel.setColor(getTextColor(TextStyle.SETTINGS_VALUE));
-      lastValueLabel.setShadowColor(getTextColor(TextStyle.SETTINGS_VALUE, true));
+      setTextColor(lastValueLabel, TextStyle.SETTINGS_VALUE);
     } else {
       console.warn(
         "Could no determine lastValue label for ",
@@ -456,8 +455,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
     const newValueLabel = this.optionValueLabels[settingIndex][cursor];
     if (newValueLabel) {
-      newValueLabel.setColor(getTextColor(TextStyle.SETTINGS_SELECTED));
-      newValueLabel.setShadowColor(getTextColor(TextStyle.SETTINGS_SELECTED, true));
+      setTextColor(newValueLabel, TextStyle.SETTINGS_SELECTED);
     } else {
       console.warn(
         "Could no determine newValueLabel label for ",

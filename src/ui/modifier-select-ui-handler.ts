@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import type { ModifierTypeOption } from "../modifier/modifier-type";
 import { getPlayerShopModifierTypeOptionsForWave, TmModifierType } from "../modifier/modifier-type";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
-import { addTextObject, getTextStyleOptions, getModifierTierTextTint, getTextColor } from "./text";
+import { addTextObject, getTextStyleOptions, getModifierTierTextTint, setTextColor } from "./text";
 import { TextStyle } from "#enums/text-style";
 import AwaitableUiHandler from "./awaitable-ui-handler";
 import { UiMode } from "#enums/ui-mode";
@@ -623,14 +623,12 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     const formattedMoney = formatMoney(settings.display.moneyFormat, this.rerollCost);
 
     this.rerollCostText.setText(i18next.t("modifierSelectUiHandler:rerollCost", { formattedMoney }));
-    this.rerollCostText.setColor(getTextColor(canReroll ? TextStyle.MONEY : TextStyle.PARTY_RED));
-    this.rerollCostText.setShadowColor(getTextColor(canReroll ? TextStyle.MONEY : TextStyle.PARTY_RED, true));
+    setTextColor(this.rerollCostText, canReroll ? TextStyle.MONEY : TextStyle.PARTY_RED);
   }
 
   updateLockRaritiesText(): void {
     const textStyle = globalScene.lockModifierTiers ? TextStyle.SUMMARY_BLUE : TextStyle.PARTY;
-    this.lockRarityButtonText.setColor(getTextColor(textStyle));
-    this.lockRarityButtonText.setShadowColor(getTextColor(textStyle, true));
+    setTextColor(this.lockRarityButtonText, textStyle);
   }
 
   override clear() {
@@ -934,7 +932,6 @@ class ModifierOption extends Phaser.GameObjects.Container {
     const formattedMoney = formatMoney(settings.display.moneyFormat, cost);
 
     this.itemCostText.setText(i18next.t("modifierSelectUiHandler:itemCost", { formattedMoney }));
-    this.itemCostText.setColor(getTextColor(textStyle, false));
-    this.itemCostText.setShadowColor(getTextColor(textStyle, true));
+    setTextColor(this.itemCostText, textStyle);
   }
 }

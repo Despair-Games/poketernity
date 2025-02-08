@@ -1,6 +1,6 @@
 import type { InfoToggle } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
-import { addTextObject, getTextColor } from "#app/ui/text";
+import { addTextObject, setTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { getTypeDamageMultiplierColor } from "#app/data/type";
 import { ElementalType } from "#enums/elemental-type";
@@ -269,8 +269,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
       }
 
       //** Changes the text color and shadow according to the determined TextStyle */
-      this.ppText.setColor(getTextColor(ppColorStyle, false));
-      this.ppText.setShadowColor(getTextColor(ppColorStyle, true));
+      setTextColor(this.ppText, ppColorStyle);
       this.moveInfoOverlay.show(pokemonMove.getMove());
 
       pokemon.getOpponents().forEach((opponent) => {

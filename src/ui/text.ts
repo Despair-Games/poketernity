@@ -39,17 +39,6 @@ export function addTextObject(
   return ret;
 }
 
-export function setTextColor(obj: Phaser.GameObjects.Text, style: TextStyle) {
-  const colorCombination = getTextColorCombination(style);
-  obj.setColor(colorCombination.mainColor);
-  obj.setShadowColor(colorCombination.shadowColor);
-}
-
-export function getTextColor(textStyle: TextStyle, shadow?: boolean): string {
-  const colorCombination = getTextColorCombination(textStyle);
-  return shadow ? colorCombination.shadowColor : colorCombination.mainColor;
-}
-
 export function addBBCodeTextObject(
   x: number,
   y: number,
@@ -87,6 +76,17 @@ export function addTextInputObject(
   ret.setScale(scale);
 
   return ret;
+}
+
+/**
+ * Set the color and shadow color of a Text object to the given TextStyle.
+ * @param textObject the {@linkcode Phaser.GameObjects.Text} to set color for.
+ * @param style the {@linkcode TextStyle} to use.
+ */
+export function setTextColor(textObject: Phaser.GameObjects.Text, style: TextStyle) {
+  const colorCombination = getTextColorCombination(style);
+  textObject.setColor(colorCombination.mainColor);
+  textObject.setShadowColor(colorCombination.shadowColor);
 }
 
 export function getTextStyleOptions(
@@ -217,10 +217,21 @@ export function getTextStyleOptions(
   return { scale, styleOptions, shadowColor, shadowXpos, shadowYpos };
 }
 
-export function getBBCodeFrag(content: string, textStyle: TextStyle, closeFragment: boolean = false): string {
+export function getBBCodeFrag(
+  content: string,
+  textStyle: TextStyle,
+  closeFragment: boolean = false,
+  noShadow = false,
+): string {
   const colorCombination = getTextColorCombination(textStyle);
-  const openingFragment = `[color=${colorCombination.mainColor}][shadow=${colorCombination.shadowColor}]`;
-  const closingFragment = closeFragment ? "[/color][/shadow]" : "";
+  let openingFragment = `[color=${colorCombination.mainColor}]`;
+  let closingFragment = closeFragment ? "[/color]" : "";
+  if (!noShadow) {
+    openingFragment += `[shadow=${colorCombination.shadowColor}]`;
+    if (closeFragment) {
+      closingFragment = "[/shadow]" + closingFragment;
+    }
+  }
   return `${openingFragment}${content}${closingFragment}`;
 }
 

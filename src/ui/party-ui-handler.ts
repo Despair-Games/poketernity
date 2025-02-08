@@ -2,7 +2,7 @@ import type { PlayerPokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import type { Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
-import { addBBCodeTextObject, addTextObject, getTextColor } from "#app/ui/text";
+import { addBBCodeTextObject, addTextObject, getBBCodeFrag } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { BattleCommand } from "#enums/battle-command";
 import MessageUiHandler from "#app/ui/message-ui-handler";
@@ -1098,7 +1098,7 @@ export default class PartyUiHandler extends MessageUiHandler {
 
         /** If the amount held is the maximum, display the count in red */
         if (this.transferQuantitiesMax[option] === itemModifier.getMaxHeldItemCount(undefined)) {
-          amountText = `[color=${getTextColor(TextStyle.SUMMARY_RED)}]${amountText}[/color]`;
+          amountText = getBBCodeFrag(amountText, TextStyle.SUMMARY_RED, true, true);
         }
 
         optionText.setText(optionName + amountText);

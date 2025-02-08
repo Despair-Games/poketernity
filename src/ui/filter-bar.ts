@@ -1,7 +1,7 @@
 import type { DropDown } from "./dropdown";
 import { DropDownType } from "#enums/drop-down-type";
 import type { StarterContainer } from "./starter-container";
-import { addTextObject, getTextColor } from "./text";
+import { addTextObject, setTextColor } from "./text";
 import { TextStyle } from "#enums/text-style";
 import { addWindow } from "./ui-theme";
 import { WindowVariant } from "#enums/window-variant";
@@ -76,9 +76,9 @@ export class FilterBar extends Phaser.GameObjects.Container {
   updateFilterLabels(): void {
     for (let i = 0; i < this.numFilters; i++) {
       if (this.dropDowns[i].hasDefaultValues()) {
-        this.labels[i].setColor(getTextColor(TextStyle.TOOLTIP_CONTENT, false));
+        setTextColor(this.labels[i], TextStyle.TOOLTIP_CONTENT);
       } else {
-        this.labels[i].setColor(getTextColor(TextStyle.STATS_LABEL, false));
+        setTextColor(this.labels[i], TextStyle.STATS_LABEL);
       }
     }
   }

@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { addBBCodeTextObject, addTextObject, getTextColor } from "./text";
+import { addBBCodeTextObject, addTextObject, getBBCodeFrag } from "./text";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import MessageUiHandler from "./message-ui-handler";
@@ -278,8 +278,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
       } else {
         textStyle = TextStyle.WINDOW;
       }
-      const color = getTextColor(textStyle, false);
-      return `[color=${color}][shadow=${getTextColor(textStyle, true)}]${text}[/shadow][/color]`;
+      return getBBCodeFrag(text, textStyle, true);
     };
 
     if (value > 30) {
