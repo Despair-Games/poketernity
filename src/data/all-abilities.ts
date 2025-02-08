@@ -130,7 +130,6 @@ import { allMoves } from "#app/data/all-moves";
 import { FlinchAttr } from "./move-attrs/flinch-attr";
 import { VariableMoveTypeAttr } from "./move-attrs/variable-move-type-attr";
 import { VariablePowerAttr } from "./move-attrs/variable-power-attr";
-import { OneHitKOAttr } from "./move-attrs/one-hit-ko-attr";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveCategory } from "#enums/move-category";
 import { getNonVolatileStatusEffects } from "./status-effect";
@@ -199,6 +198,7 @@ import { WeatherBasedSpeedDoublerAbAttr } from "./ab-attrs/weather-based-speed-d
 import { MoveFlagPowerBoostAbAttr } from "./ab-attrs/move-flag-power-boost-ab-attr";
 import { MoveFlagImmunityAbAttr } from "./ab-attrs/move-flag-immunity-ab-attr";
 import { ReflectStatStageChangeAbAttr } from "./ab-attrs/reflect-stat-stage-change-ab-attr";
+import { AnticipationAbAttr } from "./ab-attrs/anticipation-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
@@ -247,67 +247,6 @@ function getSheerForceHitDisableAbCondition(): AbAttrCondition {
       allMoves[lastReceivedAttack.moveId].chance >= 0 && lastAttacker.hasAbility(Abilities.SHEER_FORCE);
 
     return !SheerForceAffected;
-  };
-}
-
-function getAnticipationCondition(): AbAttrCondition {
-  return (pokemon: Pokemon) => {
-    for (const opponent of pokemon.getOpponents()) {
-      for (const move of opponent.moveset) {
-        // ignore null/undefined moves
-        if (!move) {
-          continue;
-        }
-        // the move's base type (not accounting for variable type changes) is super effective
-        if (
-          move.getMove().isAttackMove()
-          && pokemon.getAttackTypeEffectiveness(move.getMove().type, opponent, true, undefined, move.getMove()) >= 2
-        ) {
-          return true;
-        }
-        // move is a OHKO
-        if (move.getMove().hasAttr(OneHitKOAttr)) {
-          return true;
-        }
-        // edge case for hidden power, type is computed
-        if (move.getMove().id === MoveId.HIDDEN_POWER) {
-          const iv_val = Math.floor(
-            (((opponent.ivs[Stat.HP] & 1)
-              + (opponent.ivs[Stat.ATK] & 1) * 2
-              + (opponent.ivs[Stat.DEF] & 1) * 4
-              + (opponent.ivs[Stat.SPD] & 1) * 8
-              + (opponent.ivs[Stat.SPATK] & 1) * 16
-              + (opponent.ivs[Stat.SPDEF] & 1) * 32)
-              * 15)
-              / 63,
-          );
-
-          const type = [
-            ElementalType.FIGHTING,
-            ElementalType.FLYING,
-            ElementalType.POISON,
-            ElementalType.GROUND,
-            ElementalType.ROCK,
-            ElementalType.BUG,
-            ElementalType.GHOST,
-            ElementalType.STEEL,
-            ElementalType.FIRE,
-            ElementalType.WATER,
-            ElementalType.GRASS,
-            ElementalType.ELECTRIC,
-            ElementalType.PSYCHIC,
-            ElementalType.ICE,
-            ElementalType.DRAGON,
-            ElementalType.DARK,
-          ][iv_val];
-
-          if (pokemon.getAttackTypeEffectiveness(type, opponent) >= 2) {
-            return true;
-          }
-        }
-      }
-    }
-    return false;
   };
 }
 
@@ -669,12 +608,10 @@ export function initAbilities() {
       .attr(MoveAbilityBypassAbAttr),
     new Ability(Abilities.SUPER_LUCK, 4).attr(BonusCritAbAttr),
     new Ability(Abilities.AFTERMATH, 4).attr(PostFaintContactDamageAbAttr, 4).bypassFaint(),
-    new Ability(Abilities.ANTICIPATION, 4).conditionalAttr(
-      getAnticipationCondition(),
-      PostSummonMessageAbAttr,
-      (pokemon: Pokemon) =>
-        i18next.t("abilityTriggers:postSummonAnticipation", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-    ),
+    new Ability(Abilities.ANTICIPATION, 4).attr(AnticipationAbAttr, (pokemon: Pokemon) =>
+      i18next.t("abilityTriggers:postSummonAnticipation", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+    )
+    .edgeCase(), // Does not activate upon acquiring the Ability (e.g., via Skill Swap)
     new Ability(Abilities.FOREWARN, 4).attr(ForewarnAbAttr),
     new Ability(Abilities.UNAWARE, 4)
       .attr(IgnoreOpponentStatStagesAbAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.ACC, Stat.EVA])

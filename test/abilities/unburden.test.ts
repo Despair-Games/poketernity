@@ -365,7 +365,7 @@ describe("Abilities - Unburden", () => {
       .battleType("double")
       .enemyMoveset([MoveId.SPLASH, MoveId.THIEF])
       .moveset([MoveId.SPLASH, MoveId.REVIVAL_BLESSING])
-      .startingHeldItems([{ name: "WIDE_LENS" }]);
+      .startingHeldItems([{ name: "LUCKY_EGG" }]);
     await game.classicMode.startBattle([Species.TREECKO, Species.FEEBAS, Species.MILOTIC]);
 
     const treecko = game.scene.getPlayerField()[0];

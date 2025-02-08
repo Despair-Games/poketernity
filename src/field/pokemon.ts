@@ -83,12 +83,10 @@ import {
   TempStatStageBoosterModifier,
   TempCritBoosterModifier,
   StatBoosterModifier,
-  CritBoosterModifier,
   PokemonBaseStatFlatModifier,
   PokemonBaseStatTotalModifier,
   PokemonIncrementingStatModifier,
   EvoTrackerModifier,
-  PokemonMultiHitModifier,
 } from "#app/modifier/modifier";
 import { PokeballType } from "#enums/pokeball";
 import { Gender } from "#enums/gender";
@@ -1099,7 +1097,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   getCritStage(source: Pokemon, move: Move, simulated: boolean = true): number {
     const critStage = new NumberHolder(0);
     applyMoveAttrs(HighCritAttr, source, this, move, critStage);
-    globalScene.applyModifiers(CritBoosterModifier, source.isPlayer(), source, critStage);
+    // TODO: Scope Lens and Leek were applied here
     globalScene.applyModifiers(TempCritBoosterModifier, source.isPlayer(), critStage);
 
     const bonusCrit = new BooleanHolder(false);
@@ -2032,7 +2030,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * Calculates the move's type effectiveness multiplier based on the target's type/s.
    * @param moveType {@linkcode ElementalType} the type of the move being used
    * @param source {@linkcode Pokemon} the Pokemon using the move
-   * @param ignoreStrongWinds whether or not this ignores strong winds (anticipation, forewarn, stealth rocks)
+   * @param ignoreFieldConditions whether or not this ignores strong winds/gravity (anticipation, forewarn, stealth rocks)
    * @param simulated tag to only apply the strong winds effect message when the move is used
    * @param move (optional) the move whose type effectiveness is to be checked. Used for applying {@linkcode VariableMoveTypeChartAttr}
    * @returns a multiplier for the type effectiveness
@@ -2040,7 +2038,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   getAttackTypeEffectiveness(
     moveType: ElementalType,
     source?: Pokemon,
-    ignoreStrongWinds: boolean = false,
+    ignoreFieldConditions: boolean = false,
     simulated: boolean = true,
     move?: Move,
   ): TypeDamageMultiplier {
@@ -2051,7 +2049,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const arena = globalScene.arena;
 
     // Handle flying v ground type immunity without removing flying type so effective types are still effective
-    if (moveType === ElementalType.GROUND && (this.isGrounded() || arena.hasTag(ArenaTagType.GRAVITY))) {
+    if (
+      moveType === ElementalType.GROUND
+      && (this.isGrounded() || arena.hasTag(ArenaTagType.GRAVITY))
+      && !ignoreFieldConditions
+    ) {
       const flyingIndex = types.indexOf(ElementalType.FLYING);
       if (flyingIndex > -1) {
         types.splice(flyingIndex, 1);
@@ -2091,7 +2093,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     applyChallenges(globalScene.gameMode, ChallengeType.TYPE_EFFECTIVENESS, typeMultiplierAgainstFlying);
     // Handle strong winds lowering effectiveness of types super effective against pure flying
     if (
-      !ignoreStrongWinds
+      !ignoreFieldConditions
       && arena.weather?.weatherType === WeatherType.STRONG_WINDS
       && !arena.weather.isEffectSuppressed()
       && this.isOfType(ElementalType.FLYING)
@@ -3207,16 +3209,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const fixedDamage = new NumberHolder(0);
     applyMoveAttrs(FixedDamageAttr, source, this, move, fixedDamage);
     if (fixedDamage.value) {
-      const multiLensMultiplier = new NumberHolder(1);
-      globalScene.applyModifiers(
-        PokemonMultiHitModifier,
-        source.isPlayer(),
-        source,
-        move.id,
-        null,
-        multiLensMultiplier,
-      );
-      fixedDamage.value = toDmgValue(fixedDamage.value * multiLensMultiplier.value);
+      // TODO: re-add multi-lens calculation
+      fixedDamage.value = toDmgValue(fixedDamage.value);
 
       return {
         cancelled: false,
@@ -3249,14 +3243,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     /** Multiplier for moves enhanced by Multi-Lens and/or Parental Bond */
     const multiStrikeEnhancementMultiplier = new NumberHolder(1);
-    globalScene.applyModifiers(
-      PokemonMultiHitModifier,
-      source.isPlayer(),
-      source,
-      move.id,
-      null,
-      multiStrikeEnhancementMultiplier,
-    );
+    // TODO: re-add multi-lens calculation
     applyAbFunc(AddSecondStrikeAbAttr, source, simulated, move, this, undefined, multiStrikeEnhancementMultiplier);
 
     /** Doubles damage if this Pokemon's last move was Glaive Rush */

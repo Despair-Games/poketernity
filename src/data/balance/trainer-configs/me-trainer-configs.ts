@@ -256,7 +256,6 @@ export const meTrainerConfigs: TrainerConfigs = {
     .setMoneyMultiplier(0)
     .setEncounterBgm("mystery_encounter_weird_dream")
     .setBattleBgm("mystery_encounter_weird_dream")
-    .setMixedBattleBgm("mystery_encounter_weird_dream")
     .setVictoryBgm("mystery_encounter_weird_dream")
     .setLocalizedName("Future Self M")
     .setPartyTemplates(new TrainerPartyTemplate(6, PartyMemberStrength.STRONG)),
@@ -264,7 +263,6 @@ export const meTrainerConfigs: TrainerConfigs = {
     .setMoneyMultiplier(0)
     .setEncounterBgm("mystery_encounter_weird_dream")
     .setBattleBgm("mystery_encounter_weird_dream")
-    .setMixedBattleBgm("mystery_encounter_weird_dream")
     .setVictoryBgm("mystery_encounter_weird_dream")
     .setLocalizedName("Future Self F")
     .setPartyTemplates(new TrainerPartyTemplate(6, PartyMemberStrength.STRONG)),
