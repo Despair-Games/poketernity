@@ -83,12 +83,10 @@ import {
   TempStatStageBoosterModifier,
   TempCritBoosterModifier,
   StatBoosterModifier,
-  CritBoosterModifier,
   PokemonBaseStatFlatModifier,
   PokemonBaseStatTotalModifier,
   PokemonIncrementingStatModifier,
   EvoTrackerModifier,
-  PokemonMultiHitModifier,
 } from "#app/modifier/modifier";
 import { PokeballType } from "#enums/pokeball";
 import { Gender } from "#enums/gender";
@@ -1099,7 +1097,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   getCritStage(source: Pokemon, move: Move, simulated: boolean = true): number {
     const critStage = new NumberHolder(0);
     applyMoveAttrs(HighCritAttr, source, this, move, critStage);
-    globalScene.applyModifiers(CritBoosterModifier, source.isPlayer(), source, critStage);
+    // TODO: Scope Lens and Leek were applied here
     globalScene.applyModifiers(TempCritBoosterModifier, source.isPlayer(), critStage);
 
     const bonusCrit = new BooleanHolder(false);
@@ -3211,16 +3209,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const fixedDamage = new NumberHolder(0);
     applyMoveAttrs(FixedDamageAttr, source, this, move, fixedDamage);
     if (fixedDamage.value) {
-      const multiLensMultiplier = new NumberHolder(1);
-      globalScene.applyModifiers(
-        PokemonMultiHitModifier,
-        source.isPlayer(),
-        source,
-        move.id,
-        null,
-        multiLensMultiplier,
-      );
-      fixedDamage.value = toDmgValue(fixedDamage.value * multiLensMultiplier.value);
+      // TODO: re-add multi-lens calculation
+      fixedDamage.value = toDmgValue(fixedDamage.value);
 
       return {
         cancelled: false,
@@ -3253,14 +3243,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     /** Multiplier for moves enhanced by Multi-Lens and/or Parental Bond */
     const multiStrikeEnhancementMultiplier = new NumberHolder(1);
-    globalScene.applyModifiers(
-      PokemonMultiHitModifier,
-      source.isPlayer(),
-      source,
-      move.id,
-      null,
-      multiStrikeEnhancementMultiplier,
-    );
+    // TODO: re-add multi-lens calculation
     applyAbFunc(AddSecondStrikeAbAttr, source, simulated, move, this, undefined, multiStrikeEnhancementMultiplier);
 
     /** Doubles damage if this Pokemon's last move was Glaive Rush */

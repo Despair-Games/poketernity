@@ -431,8 +431,8 @@ describe("Abilities - Wimp Out", () => {
     confirmSwitch();
   });
 
-  it("triggers after last hit of multi hit move (multi lens)", async () => {
-    game.override.enemyMoveset(MoveId.TACKLE).enemyHeldItems([{ name: "MULTI_LENS", count: 1 }]);
+  it.todo("triggers after last hit of multi hit move (multi lens)", async () => {
+    game.override.enemyMoveset(MoveId.TACKLE);
     await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
 
     game.scene.getPlayerPokemon()!.hp *= 0.51;
