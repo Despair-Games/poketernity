@@ -14060,7 +14060,7 @@
     "accuracy": -1,
     "priority": 0,
     "target_id": 10,
-    "damage_class_id": 3,
+    "damage_class_id": 2,
     "effect_id": "",
     "effect_chance": -1
   },

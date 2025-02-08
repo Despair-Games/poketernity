@@ -94,6 +94,10 @@ export const ME_ANTI_VARIANCE_WEIGHT_MODIFIER = 15;
 
 export const PARTY_UI_NO_EFFECT_MSG_i18N_KEY = "partyUiHandler:anyEffect";
 
+/**
+ * IVs are between 0 and 31 since in the mainline games it is stored as 5 bits.
+ * Each point of IV is worth level/100 extra stat points before the nature multiplier
+ */
 export const IV_MIN = 0;
 
 export const IV_MAX = 31;

@@ -19,9 +19,9 @@ export class UseHigherAttackingStatAttr extends VariableMoveCategoryAttr {
       > user.getEffectiveStat(Stat.SPATK, target, move, AbilityApplyMode.IGNORE)
     ) {
       category.value = MoveCategory.PHYSICAL;
-      return true;
+    } else {
+      category.value = MoveCategory.SPECIAL;
     }
-
-    return false;
+    return true;
   }
 }

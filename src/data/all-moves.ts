@@ -3711,7 +3711,7 @@ export function initMoves() {
       .gMaxMove(Species.GRIMMSNARL)
       .attr(AddBattlerTagAttr, BattlerTagType.DROWSY, false, { effectChanceOverride: 50 })
       .edgeCase(), // The 50% chance incorrectly gets overridden by Shield Dust, Sheer Force, etc.
-    new AttackMove(MoveId.G_MAX_TARTNESS, ElementalType.GRASS, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
+    new AttackMove(MoveId.G_MAX_TARTNESS, ElementalType.GRASS, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.FLAPPLE)
       .attr(StatStageChangeAttr, [Stat.EVA], -1),
     new AttackMove(MoveId.G_MAX_SWEETNESS, ElementalType.GRASS, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
