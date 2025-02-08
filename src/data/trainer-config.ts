@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-type";
 import type { EnemyPokemon } from "#app/field/pokemon";
-import { toReadableString, randSeedItem, randInt } from "#app/utils";
+import { toReadableString, randSeedItem, randItem } from "#app/utils";
 import type { PokemonSpeciesFilter } from "#app/@types/PokemonSpeciesFilter";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
@@ -271,7 +271,6 @@ export class TrainerConfig {
   public isBoss: boolean = false;
   public hasStaticParty: boolean = false;
   public useSameSeedForAllMembers: boolean = false;
-  public mixedBattleBgm: string;
   public battleBgm: string;
   public encounterBgm: string;
   public femaleEncounterBgm: string;
@@ -304,7 +303,6 @@ export class TrainerConfig {
     this.trainerType = trainerType;
     this.name = toReadableString(TrainerType[this.getDerivedType()]);
     this.battleBgm = "battle_trainer";
-    this.mixedBattleBgm = "battle_trainer";
     this.victoryBgm = "victory_trainer";
     this.partyTemplates = [trainerPartyTemplates.TWO_AVG];
     this.speciesFilter = (species) => (allowLegendaries || !species.isLegendLike()) && !species.isTrainerForbidden();
@@ -583,11 +581,6 @@ export class TrainerConfig {
 
   setUseSameSeedForAllMembers(): TrainerConfig {
     this.useSameSeedForAllMembers = true;
-    return this;
-  }
-
-  setMixedBattleBgm(mixedBattleBgm: string): TrainerConfig {
-    this.mixedBattleBgm = mixedBattleBgm;
     return this;
   }
 
@@ -1088,7 +1081,6 @@ export class TrainerConfig {
     this.setMoneyMultiplier(1.5);
     this.setBoss();
     this.setStaticParty();
-    this.setBattleBgm("battle_plasma_boss");
     this.setVictoryBgm("victory_team_plasma");
 
     return this;
@@ -1128,8 +1120,7 @@ export class TrainerConfig {
     this.setBoss();
     this.setStaticParty();
 
-    // TODO: replace with more suitable music?
-    this.setBattleBgm("battle_trainer");
+    // TODO: replace battle music with more suitable music? (currently using basic trainer battle music)
     this.setVictoryBgm("victory_trainer");
 
     return this;
@@ -1140,10 +1131,10 @@ export class TrainerConfig {
    * @param title the string representation of the evil team leader's title
    * @param name the string representation of the evil team leader's name
    * @param rematch Whether or not this is the rematch fight
-   * @param mixedBattleBgm the string representation of the mixed battle bgm
+   * @param battleBgm the string representation of the battle bgm
    * @returns The updated TrainerConfig instance.
    * **/
-  initForEvilTeamLeader(title: string, name: string, rematch: boolean = false, mixedBattleBgm: string): TrainerConfig {
+  initForEvilTeamLeader(title: string, name: string, rematch: boolean = false, battleBgm: string): TrainerConfig {
     if (!getIsInitialized()) {
       initI18n();
     }
@@ -1159,8 +1150,7 @@ export class TrainerConfig {
     this.setBoss();
     this.setStaticParty();
     this.setHasVoucher(true);
-    this.setBattleBgm("battle_plasma_boss");
-    this.setMixedBattleBgm(mixedBattleBgm);
+    this.setBattleBgm(battleBgm);
     this.setVictoryBgm("victory_team_plasma");
 
     return this;
@@ -1225,7 +1215,6 @@ export class TrainerConfig {
     this.setBoss();
     this.setStaticParty();
     this.setHasVoucher(true);
-    this.setBattleBgm("battle_unova_gym");
     this.setVictoryBgm("victory_gym");
     this.setGenModifiersFunc((party) => {
       const waveIndex = globalScene.currentBattle.waveIndex;
@@ -1292,7 +1281,6 @@ export class TrainerConfig {
     this.setBoss();
     this.setStaticParty();
     this.setHasVoucher(true);
-    this.setBattleBgm("battle_unova_elite");
     this.setVictoryBgm("victory_gym");
     this.setGenModifiersFunc((party) =>
       getRandomTeraModifiers(party, 2, specialtyTypes.length ? specialtyTypes : undefined),
@@ -1304,28 +1292,17 @@ export class TrainerConfig {
   /**
    * Initializes the trainer configuration for a Champion.
    * @param variant The {@linkcode TrainerVariant} of the Champion (used for localization of the title).
-   * @param battleBgm String representing the battle music
-   * @param mixedBattleBgm []String array representing the mixed battle music. If more then one are in the array a random one will be choosen on game init
+   * @param battleBgm Array of strings representing the battle music. One is chosen at random.
    * @returns The updated TrainerConfig instance.
    **/
-  initForChampion(variant: TrainerVariant, battleBgm: string[], mixedBattleBgm: string[]): TrainerConfig {
+  initForChampion(variant: TrainerVariant, battleBgm: string[]): TrainerConfig {
     // Check if the internationalization (i18n) system is initialized.
     if (!getIsInitialized()) {
       initI18n();
     }
 
-    let battleBgmToSet = battleBgm[0];
-    if (battleBgm.length > 1) {
-      battleBgmToSet = battleBgm[randInt(battleBgm.length, 0)];
-    }
-
-    let mixedBattleBgmToSet = mixedBattleBgm[0];
-    if (mixedBattleBgm.length > 1) {
-      mixedBattleBgmToSet = mixedBattleBgm[randInt(mixedBattleBgm.length, 0)];
-    }
-
-    this.setBattleBgm(battleBgmToSet);
-    this.setMixedBattleBgm(mixedBattleBgmToSet);
+    // TODO: make this seeded
+    this.setBattleBgm(randItem(battleBgm));
 
     // Set the party templates for the Champion.
     let partyTemplate = trainerPartyTemplates.CHAMPION;

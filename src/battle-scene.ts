@@ -182,12 +182,6 @@ import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 const DEBUG_RNG = false;
 
-const ENEMY_IVS_OVERRIDE_VALIDATED: number[] = (
-  Array.isArray(Overrides.ENEMY_IVS_OVERRIDE)
-    ? Overrides.ENEMY_IVS_OVERRIDE
-    : new Array(6).fill(Overrides.ENEMY_IVS_OVERRIDE)
-).map((iv) => (isNaN(iv) || iv === null || iv > 31 ? -1 : iv));
-
 export const startingWave = Overrides.STARTING_WAVE_OVERRIDE || 1;
 
 export interface PokeballCounts {
@@ -993,10 +987,14 @@ export default class BattleScene extends SceneBase {
       postProcess(pokemon);
     }
 
-    for (let i = 0; i < pokemon.ivs.length; i++) {
-      if (ENEMY_IVS_OVERRIDE_VALIDATED[i] > -1) {
-        pokemon.ivs[i] = ENEMY_IVS_OVERRIDE_VALIDATED[i];
-      }
+    let ENEMY_IVS_OVERRIDE_VALIDATED: number[] = [];
+    if (Array.isArray(Overrides.ENEMY_IVS_OVERRIDE)) {
+      ENEMY_IVS_OVERRIDE_VALIDATED = Overrides.ENEMY_IVS_OVERRIDE;
+    } else if (typeof Overrides.ENEMY_IVS_OVERRIDE === "number") {
+      ENEMY_IVS_OVERRIDE_VALIDATED = new Array(6).fill(Overrides.ENEMY_IVS_OVERRIDE);
+    }
+    if (ENEMY_IVS_OVERRIDE_VALIDATED.length === 6) {
+      pokemon.ivs = ENEMY_IVS_OVERRIDE_VALIDATED.map(iv => Phaser.Math.Clamp(iv, 0, 31));
     }
 
     pokemon.init();

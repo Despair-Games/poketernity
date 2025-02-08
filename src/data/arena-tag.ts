@@ -140,11 +140,8 @@ export class MistTag extends ArenaTag {
    * @returns `true` if a stat reduction was cancelled; `false` otherwise
    */
   override apply(_arena: Arena, simulated: boolean, attacker: Pokemon, cancelled: BooleanHolder): boolean {
-    // `StatStageChangePhase` currently doesn't have a reference to the source of stat drops,
-    // so this code currently has no effect on gameplay.
-    if (attacker) {
+    if (attacker?.isActive(true)) {
       const bypassed = new BooleanHolder(false);
-      // TODO: Allow this to be simulated
       applyAbAttrs(InfiltratorAbAttr, attacker, simulated, bypassed);
       if (bypassed.value) {
         return false;
@@ -1072,7 +1069,9 @@ class StickyWebTag extends ArenaTrapTag {
           i18next.t("arenaTag:stickyWebActivateTrap", { pokemonName: pokemon.getNameToRender() }),
         );
         const stages = new NumberHolder(-1);
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), false, [Stat.SPD], stages.value));
+        globalScene.unshiftPhase(
+          new StatStageChangePhase(pokemon.getBattlerIndex(), this.getSourcePokemon(), [Stat.SPD], stages.value),
+        );
         return true;
       }
     }
@@ -1183,7 +1182,7 @@ class TailwindTag extends ArenaTag {
       // Raise attack by one stage if party member has WIND_RIDER ability
       if (pokemon.hasAbility(Abilities.WIND_RIDER)) {
         globalScene.unshiftPhase(new ShowAbilityPhase(pokemon.getBattlerIndex()));
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.ATK], 1));
+        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.ATK], 1));
       }
     }
   }

@@ -48,7 +48,7 @@ export class OrderUpStatBoostAttr extends MoveEffectAttr {
         break;
     }
 
-    globalScene.unshiftPhase(new StatStageChangePhase(user.getBattlerIndex(), this.selfTarget, [increasedStat], 1));
+    globalScene.unshiftPhase(new StatStageChangePhase(user.getBattlerIndex(), user, [increasedStat], 1));
     return true;
   }
 }
