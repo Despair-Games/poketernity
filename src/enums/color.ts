@@ -5,9 +5,10 @@ export enum Color {
   GREY = "#484848",
   DARK_GREY = "#404040",
   PINK = "#f89890",
+  DARK_PINK = "#f88880",
   RED = "#e13d3d",
-  RED2 = "#e70808",
-  REDORANGE = "#d64b00",
+  BRIGHT_RED = "#e70808",
+  RED_ORANGE = "#d64b00",
   ORANGE = "#f8b050",
   LIGHT_YELLOW = "#e8e8a8",
   YELLOW = "#ccbe00",
@@ -77,6 +78,31 @@ export enum ShadowColor {
   LIGHT_YELLOW = "#ded6b5",
   YELLOW = "#ebd773",
   DARK_YELLOW = "#a0a060",
+  MUSTARD = "#6e672c",
   ORANGE = "#c07800",
   LIGHT_ORANGE = "#ffbd73",
+  LIGHT_SALMON = "#f7b18b",
+}
+
+/**
+ * Combination of a {@linkcode Color} and {@linkcode ShadowColor} used for text display.
+ */
+export enum TextColor {
+  OFF_WHITE_PURPLE,
+  OFF_WHITE_GREY,
+  ORANGE,
+  GREEN,
+  BLUE,
+  PINK_RED,
+  GREY_LIGHT_GREY,
+  LIGHT_GREY_GREY,
+  LIGHT_YELLOW_DARK_YELLOW,
+  DARK_YELLOW_YELLOW,
+  BRIGHT_RED_LIGHT_ORANGE,
+  RED_MAROON,
+  RED_PINK,
+  RED_ORANGE_BROWN,
+  YELLOW_MUSTARD,
+  RED_ORANGE_LIGHT_SALMON,
+  DARK_PINK_BRIGHT_RED,
 }

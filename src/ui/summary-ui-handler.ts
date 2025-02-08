@@ -1057,7 +1057,7 @@ export default class SummaryUiHandler extends UiHandler {
           this.extraMoveRowContainer.add(ppOverlay);
 
           const pp = leftPad(this.newMove?.pp!, 2, "  "); // TODO: is this bang correct?
-          const ppText = addTextObject(173, 1, `${pp}/${pp}`, TextStyle.WINDOW);
+          const ppText = addTextObject(173, 1, `${pp}/${pp}`, TextStyle.SUMMARY);
           ppText.setOrigin(0, 1);
           this.extraMoveRowContainer.add(ppText);
         }
@@ -1086,7 +1086,7 @@ export default class SummaryUiHandler extends UiHandler {
           ppOverlay.setOrigin(0, 1);
           moveRowContainer.add(ppOverlay);
 
-          const ppText = addTextObject(173, 1, "--/--", TextStyle.WINDOW);
+          const ppText = addTextObject(173, 1, "--/--", TextStyle.SUMMARY);
           ppText.setOrigin(0, 1);
 
           if (move) {
