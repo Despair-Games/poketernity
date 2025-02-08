@@ -3,7 +3,6 @@ import { globalScene } from "#app/global-scene";
 import {
   BoostBugSpawnModifier,
   BypassSpeedChanceModifier,
-  CritBoosterModifier,
   CriticalCatchChanceBoosterModifier,
   DamageMoneyRewardModifier,
   EvolutionStatBoosterModifier,
@@ -31,7 +30,6 @@ import {
   PreserveBerryModifier,
   ResetNegativeStatStageModifier,
   ShinyRateBoosterModifier,
-  SpeciesCritBoosterModifier,
   SurviveDamageModifier,
   SwitchEffectTransferModifier,
   TempCritBoosterModifier,
@@ -65,8 +63,6 @@ import {
   PokemonHeldItemModifierType,
   PokemonHpRestoreModifierType,
   PokemonLevelIncrementModifierType,
-  PokemonMoveAccuracyBoosterModifierType,
-  PokemonMultiHitModifierType,
   PokemonNatureChangeModifierType,
   PokemonPpRestoreModifierType,
   PokemonPpUpModifierType,
@@ -291,24 +287,6 @@ export function initModifierTypes() {
   modifierTypes.SOOTHE_BELL = () =>
     new PokemonFriendshipBoosterModifierType("modifierType:ModifierType.SOOTHE_BELL", "soothe_bell");
 
-  modifierTypes.SCOPE_LENS = () =>
-    new PokemonHeldItemModifierType(
-      "modifierType:ModifierType.SCOPE_LENS",
-      "scope_lens",
-      (type, args) => new CritBoosterModifier(type, (args[0] as Pokemon).id, 1),
-    );
-  modifierTypes.LEEK = () =>
-    new PokemonHeldItemModifierType(
-      "modifierType:ModifierType.LEEK",
-      "leek",
-      (type, args) =>
-        new SpeciesCritBoosterModifier(type, (args[0] as Pokemon).id, 2, [
-          Species.FARFETCHD,
-          Species.GALAR_FARFETCHD,
-          Species.SIRFETCHD,
-        ]),
-    );
-
   modifierTypes.EVIOLITE = () =>
     new PokemonHeldItemModifierType(
       "modifierType:ModifierType.EVIOLITE",
@@ -373,10 +351,6 @@ export function initModifierTypes() {
 
   modifierTypes.GRIP_CLAW = () =>
     new ContactHeldItemTransferChanceModifierType("modifierType:ModifierType.GRIP_CLAW", "grip_claw", 10);
-  modifierTypes.WIDE_LENS = () =>
-    new PokemonMoveAccuracyBoosterModifierType("modifierType:ModifierType.WIDE_LENS", "wide_lens", 5);
-
-  modifierTypes.MULTI_LENS = () => new PokemonMultiHitModifierType("modifierType:ModifierType.MULTI_LENS", "zoom_lens");
 
   modifierTypes.HEALING_CHARM = () =>
     new ModifierType(

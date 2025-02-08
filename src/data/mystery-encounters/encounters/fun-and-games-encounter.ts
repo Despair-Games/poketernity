@@ -272,17 +272,19 @@ function handleNextTurn() {
     const healthRatio = wobbuffet.hp / wobbuffet.getMaxHp();
     let resultMessageKey: string;
     let isHealPhase = false;
+    // The Pokeballs are temporary placeholders and will be replaced once items are reimplemented again.
+    // Grand Prize: Multi Lens, 2nd Prize: Scope Lens, 3rd Prize: Wide Lens
     if (healthRatio < 0.03) {
       // Grand prize
-      setEncounterRewards({ guaranteedModifierTypeFuncs: [modifierTypes.MULTI_LENS], fillRemaining: false });
+      setEncounterRewards({ guaranteedModifierTypeFuncs: [modifierTypes.ULTRA_BALL], fillRemaining: false });
       resultMessageKey = `${namespace}:best_result`;
     } else if (healthRatio < 0.15) {
       // 2nd prize
-      setEncounterRewards({ guaranteedModifierTypeFuncs: [modifierTypes.SCOPE_LENS], fillRemaining: false });
+      setEncounterRewards({ guaranteedModifierTypeFuncs: [modifierTypes.GREAT_BALL], fillRemaining: false });
       resultMessageKey = `${namespace}:great_result`;
     } else if (healthRatio < 0.33) {
       // 3rd prize
-      setEncounterRewards({ guaranteedModifierTypeFuncs: [modifierTypes.WIDE_LENS], fillRemaining: false });
+      setEncounterRewards({ guaranteedModifierTypeFuncs: [modifierTypes.POKEBALL], fillRemaining: false });
       resultMessageKey = `${namespace}:good_result`;
     } else {
       // No prize

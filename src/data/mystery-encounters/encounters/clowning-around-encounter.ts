@@ -475,14 +475,14 @@ function generateItemsOfTier(pokemon: PlayerPokemon, numItems: number, tier: Mod
     [modifierTypes.GOLDEN_PUNCH, 5],
     [modifierTypes.ATTACK_TYPE_BOOSTER, 99],
     [modifierTypes.QUICK_CLAW, 3],
-    [modifierTypes.WIDE_LENS, 3],
+    // wide lens, weight 3
   ];
 
   const epicPool = [
     [modifierTypes.LEFTOVERS, 4],
     [modifierTypes.SHELL_BELL, 4],
     [modifierTypes.SOUL_DEW, 10],
-    [modifierTypes.SCOPE_LENS, 1],
+    // scope lens, weight 1
     [modifierTypes.BATON, 1],
     [modifierTypes.FOCUS_BAND, 5],
     [modifierTypes.KINGS_ROCK, 3],

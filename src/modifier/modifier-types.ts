@@ -62,8 +62,6 @@ interface ModifierTypes {
   LUCKY_EGG: () => ModifierType;
   GOLDEN_EGG: () => ModifierType;
   SOOTHE_BELL: () => ModifierType;
-  SCOPE_LENS: () => ModifierType;
-  LEEK: () => ModifierType;
   EVIOLITE: () => ModifierType;
   SOUL_DEW: () => ModifierType;
   NUGGET: () => ModifierType;
@@ -74,8 +72,6 @@ interface ModifierTypes {
   COIN_CASE: () => ModifierType;
   LOCK_CAPSULE: () => ModifierType;
   GRIP_CLAW: () => ModifierType;
-  WIDE_LENS: () => ModifierType;
-  MULTI_LENS: () => ModifierType;
   HEALING_CHARM: () => ModifierType;
   CANDY_JAR: () => ModifierType;
   BERRY_POUCH: () => ModifierType;

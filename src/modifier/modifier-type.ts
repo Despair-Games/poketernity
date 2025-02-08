@@ -36,8 +36,6 @@ import {
   PokemonFriendshipBoosterModifier,
   PokemonHpRestoreModifier,
   PokemonLevelIncrementModifier,
-  PokemonMoveAccuracyBoosterModifier,
-  PokemonMultiHitModifier,
   PokemonNatureChangeModifier,
   PokemonPpRestoreModifier,
   PokemonPpUpModifier,
@@ -1040,42 +1038,6 @@ export class PokemonFriendshipBoosterModifierType extends PokemonHeldItemModifie
 
   override getDescription(): string {
     return i18next.t("modifierType:ModifierType.PokemonFriendshipBoosterModifierType.description");
-  }
-}
-
-export class PokemonMoveAccuracyBoosterModifierType extends PokemonHeldItemModifierType {
-  private amount: number;
-
-  constructor(localeKey: string, iconImage: string, amount: number, group?: string, soundName?: string) {
-    super(
-      localeKey,
-      iconImage,
-      (_type, args) => new PokemonMoveAccuracyBoosterModifier(this, (args[0] as Pokemon).id, amount),
-      group,
-      soundName,
-    );
-
-    this.amount = amount;
-  }
-
-  override getDescription(): string {
-    return i18next.t("modifierType:ModifierType.PokemonMoveAccuracyBoosterModifierType.description", {
-      accuracyAmount: this.amount,
-    });
-  }
-}
-
-export class PokemonMultiHitModifierType extends PokemonHeldItemModifierType {
-  constructor(localeKey: string, iconImage: string) {
-    super(
-      localeKey,
-      iconImage,
-      (type, args) => new PokemonMultiHitModifier(type as PokemonMultiHitModifierType, (args[0] as Pokemon).id),
-    );
-  }
-
-  override getDescription(): string {
-    return i18next.t("modifierType:ModifierType.PokemonMultiHitModifierType.description");
   }
 }
 

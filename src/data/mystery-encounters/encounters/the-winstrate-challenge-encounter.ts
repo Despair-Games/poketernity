@@ -505,13 +505,7 @@ function getVitoTrainerConfig(): EnemyPartyConfig {
         formIndex: 1,
         nature: Nature.BOLD,
         moveSet: [MoveId.PSYCHIC, MoveId.SHADOW_BALL, MoveId.FOCUS_BLAST, MoveId.THUNDERBOLT],
-        modifierConfigs: [
-          {
-            modifier: generateModifierType(modifierTypes.WIDE_LENS) as PokemonHeldItemModifierType,
-            stackCount: 2,
-            isTransferable: false,
-          },
-        ],
+        modifierConfigs: [], // TODO: re-add 2x wide lens
       },
       {
         species: getPokemonSpecies(Species.DARMANITAN),

@@ -6,7 +6,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phase from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-describe("Items - Leek", () => {
+describe.todo("Items - Leek", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
@@ -26,7 +26,6 @@ describe("Items - Leek", () => {
     game.override
       .enemySpecies(Species.MAGIKARP)
       .enemyMoveset([MoveId.SPLASH, MoveId.SPLASH, MoveId.SPLASH, MoveId.SPLASH])
-      .startingHeldItems([{ name: "LEEK" }])
       .moveset([MoveId.TACKLE])
       .battleType("single");
   });

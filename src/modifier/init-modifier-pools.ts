@@ -5,7 +5,6 @@ import { globalScene } from "#app/global-scene";
 import {
   DoubleBattleChanceBoosterModifier,
   ResetNegativeStatStageModifier,
-  SpeciesCritBoosterModifier,
   TurnStatusEffectModifier,
 } from "#app/modifier/modifier";
 import { WeightedModifierType, type WeightedModifierTypeWeightFunc } from "#app/modifier/modifier-type";
@@ -23,7 +22,6 @@ import { BerryType } from "#enums/berry-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";
 import { PokeballType } from "#enums/pokeball";
-import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { Unlockables } from "#enums/unlockables";
 
@@ -317,22 +315,6 @@ export function initModifierPools() {
     }),
     new WeightedModifierType(modifierTypes.SPECIES_STAT_BOOSTER, 12),
     new WeightedModifierType(
-      modifierTypes.LEEK,
-      (party: Pokemon[]) => {
-        const checkedSpecies = [Species.FARFETCHD, Species.GALAR_FARFETCHD, Species.SIRFETCHD];
-        // If a party member doesn't already have a Leek and is one of the relevant species, Leek can appear
-        return party.some(
-          (p) =>
-            !p.getHeldItems().some((i) => i instanceof SpeciesCritBoosterModifier)
-            && (checkedSpecies.includes(p.getSpeciesForm(true).speciesId)
-              || (p.isFusion() && checkedSpecies.includes(p.getFusionSpeciesForm(true).speciesId))),
-        )
-          ? 12
-          : 0;
-      },
-      12,
-    ),
-    new WeightedModifierType(
       modifierTypes.TOXIC_ORB,
       (party: Pokemon[]) => {
         return party.some((p) => {
@@ -456,7 +438,6 @@ export function initModifierPools() {
       4,
     ),
     new WeightedModifierType(modifierTypes.QUICK_CLAW, 3),
-    new WeightedModifierType(modifierTypes.WIDE_LENS, 4),
   ].map((m) => {
     m.setTier(ModifierTier.ULTRA);
     return m;
@@ -468,7 +449,6 @@ export function initModifierPools() {
     new WeightedModifierType(modifierTypes.SHELL_BELL, 3),
     new WeightedModifierType(modifierTypes.BERRY_POUCH, 4),
     new WeightedModifierType(modifierTypes.GRIP_CLAW, 5),
-    new WeightedModifierType(modifierTypes.SCOPE_LENS, 4),
     new WeightedModifierType(modifierTypes.BATON, 2),
     new WeightedModifierType(modifierTypes.SOUL_DEW, 7),
     //new WeightedModifierType(modifierTypes.OVAL_CHARM, 6),
@@ -516,7 +496,6 @@ export function initModifierPools() {
     new WeightedModifierType(modifierTypes.MASTER_BALL, () => (hasMaximumBalls(PokeballType.MASTER_BALL) ? 0 : 24), 24),
     new WeightedModifierType(modifierTypes.SHINY_CHARM, 14),
     new WeightedModifierType(modifierTypes.HEALING_CHARM, 18),
-    new WeightedModifierType(modifierTypes.MULTI_LENS, 18),
     new WeightedModifierType(
       modifierTypes.VOUCHER_PREMIUM,
       (_party: Pokemon[], rerollCount: number) =>
@@ -593,7 +572,6 @@ export function initModifierPools() {
     new WeightedModifierType(modifierTypes.LUCKY_EGG, 4),
     new WeightedModifierType(modifierTypes.QUICK_CLAW, 1),
     new WeightedModifierType(modifierTypes.GRIP_CLAW, 1),
-    new WeightedModifierType(modifierTypes.WIDE_LENS, 1),
   ].map((m) => {
     m.setTier(ModifierTier.EPIC);
     return m;
@@ -602,7 +580,6 @@ export function initModifierPools() {
     new WeightedModifierType(modifierTypes.KINGS_ROCK, 1),
     new WeightedModifierType(modifierTypes.LEFTOVERS, 1),
     new WeightedModifierType(modifierTypes.SHELL_BELL, 1),
-    new WeightedModifierType(modifierTypes.SCOPE_LENS, 1),
   ].map((m) => {
     m.setTier(ModifierTier.MASTER);
     return m;

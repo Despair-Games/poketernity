@@ -2,7 +2,7 @@ import type { BattlerIndex } from "#enums/battler-index";
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";
-import { PokemonMoveAccuracyBoosterModifier, AttackTypeBoosterModifier } from "#app/modifier/modifier";
+import { AttackTypeBoosterModifier } from "#app/modifier/modifier";
 import type { AbstractConstructor, Constructor, nil } from "#app/utils";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
@@ -715,10 +715,7 @@ export abstract class Move implements Localizable {
 
     const isOhko = this.hasAttr(OneHitKOAccuracyAttr);
 
-    if (!isOhko) {
-      globalScene.applyModifiers(PokemonMoveAccuracyBoosterModifier, user.isPlayer(), user, moveAccuracy);
-    }
-
+    // TODO: wide lens was calculated here
     if (globalScene.arena.weather?.weatherType === WeatherType.FOG) {
       /**
        *  The 0.9 multiplier is Game-specific implementation, Bulbapedia uses 3/5
@@ -758,7 +755,7 @@ export abstract class Move implements Localizable {
       && power.value < 60
       && this.priority <= 0
       && !this.hasAttr(MultiHitAttr)
-      && !globalScene.findModifier((m) => m.isPokemonMultiHitModifier() && m.pokemonId === source.id)
+      // TODO: multi lens check
     ) {
       power.value = 60;
     }
