@@ -11,7 +11,7 @@ import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
  */
 export class LowHpPowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
-    const hpRatio = user.getHpRatio();
+    const hpRatio = user.getHpRatio(4);
 
     switch (true) {
       case hpRatio < 0.0417:

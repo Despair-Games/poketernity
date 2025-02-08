@@ -1193,7 +1193,7 @@ export class HealthRatioRequirement extends EncounterPokemonRequirement {
   }
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
-    const hpRatio = pokemon?.getHpRatio();
+    const hpRatio = pokemon?.getHpRatio(1);
     if (!isNullOrUndefined(hpRatio)) {
       return ["healthRatio", Math.floor(hpRatio * 100).toString() + "%"];
     }

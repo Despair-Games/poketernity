@@ -608,10 +608,11 @@ export function initAbilities() {
       .attr(MoveAbilityBypassAbAttr),
     new Ability(Abilities.SUPER_LUCK, 4).attr(BonusCritAbAttr),
     new Ability(Abilities.AFTERMATH, 4).attr(PostFaintContactDamageAbAttr, 4).bypassFaint(),
-    new Ability(Abilities.ANTICIPATION, 4).attr(AnticipationAbAttr, (pokemon: Pokemon) =>
-      i18next.t("abilityTriggers:postSummonAnticipation", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-    )
-    .edgeCase(), // Does not activate upon acquiring the Ability (e.g., via Skill Swap)
+    new Ability(Abilities.ANTICIPATION, 4)
+      .attr(AnticipationAbAttr, (pokemon: Pokemon) =>
+        i18next.t("abilityTriggers:postSummonAnticipation", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+      )
+      .edgeCase(), // Does not activate upon acquiring the Ability (e.g., via Skill Swap)
     new Ability(Abilities.FOREWARN, 4).attr(ForewarnAbAttr),
     new Ability(Abilities.UNAWARE, 4)
       .attr(IgnoreOpponentStatStagesAbAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.ACC, Stat.EVA])
@@ -701,7 +702,7 @@ export function initAbilities() {
     new Ability(Abilities.DEFEATIST, 5)
       .attr(StatMultiplierAbAttr, Stat.ATK, 0.5)
       .attr(StatMultiplierAbAttr, Stat.SPATK, 0.5)
-      .condition((pokemon) => pokemon.getHpRatio() <= 0.5),
+      .condition((pokemon) => pokemon.getHpRatio(1) <= 0.5),
     new Ability(Abilities.CURSED_BODY, 5).attr(PostDefendMoveDisableAbAttr, 30).bypassFaint(),
     new Ability(Abilities.HEALER, 5).conditionalAttr(
       (pokemon) => pokemon.getAlly() && pokemon.getAlly().status?.effect !== StatusEffect.FAINT && randSeedInt(10) < 3,
@@ -815,8 +816,8 @@ export function initAbilities() {
     new Ability(Abilities.IRON_BARBS, 5).attr(PostDefendContactDamageAbAttr, 8).bypassFaint(),
     new Ability(Abilities.ZEN_MODE, 5)
       .attr(PostBattleInitFormChangeAbAttr, () => 0)
-      .attr(PostSummonFormChangeAbAttr, (p) => (p.getHpRatio() <= 0.5 ? 1 : 0))
-      .attr(PostTurnFormChangeAbAttr, (p) => (p.getHpRatio() <= 0.5 ? 1 : 0))
+      .attr(PostSummonFormChangeAbAttr, (p) => (p.getHpRatio(1) <= 0.5 ? 1 : 0))
+      .attr(PostTurnFormChangeAbAttr, (p) => (p.getHpRatio(1) <= 0.5 ? 1 : 0))
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
       .attr(UnsuppressableAbilityAbAttr)
@@ -978,8 +979,8 @@ export function initAbilities() {
     ),
     new Ability(Abilities.SHIELDS_DOWN, 7)
       .attr(PostBattleInitFormChangeAbAttr, () => 0)
-      .attr(PostSummonFormChangeAbAttr, (p) => (p.formIndex % 7) + (p.getHpRatio() <= 0.5 ? 7 : 0))
-      .attr(PostTurnFormChangeAbAttr, (p) => (p.formIndex % 7) + (p.getHpRatio() <= 0.5 ? 7 : 0))
+      .attr(PostSummonFormChangeAbAttr, (p) => (p.formIndex % 7) + (p.getHpRatio(1) <= 0.5 ? 7 : 0))
+      .attr(PostTurnFormChangeAbAttr, (p) => (p.formIndex % 7) + (p.getHpRatio(1) <= 0.5 ? 7 : 0))
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
       .attr(UnsuppressableAbilityAbAttr)

@@ -24,6 +24,6 @@ export class SacrificialAttr extends MoveEffectAttr {
     if (user.isBoss()) {
       return -20;
     }
-    return Math.ceil(((1 - user.getHpRatio()) * 10 - 10) * (target.getAttackTypeEffectiveness(move.type, user) - 0.5));
+    return Math.ceil(((1 - user.getHpRatio(1)) * 10 - 10) * (target.getAttackTypeEffectiveness(move.type, user) - 0.5));
   }
 }

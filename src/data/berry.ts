@@ -21,7 +21,7 @@ export type BerryPredicate = (pokemon: Pokemon) => boolean;
 export function getBerryPredicate(berryType: BerryType): BerryPredicate {
   switch (berryType) {
     case BerryType.SITRUS:
-      return (pokemon: Pokemon) => pokemon.getHpRatio() < 0.5;
+      return (pokemon: Pokemon) => pokemon.getHpRatio(1) < 0.5;
     case BerryType.LUM:
       return (pokemon: Pokemon) => !!pokemon.status || !!pokemon.getTag(BattlerTagType.CONFUSED);
     case BerryType.ENIGMA:

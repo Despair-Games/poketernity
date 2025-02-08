@@ -1595,7 +1595,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "gorging",
       new SpeciesFormChangeManualTrigger(),
       true,
-      new SpeciesFormChangeCondition((p) => p.getHpRatio() < 0.5),
+      new SpeciesFormChangeCondition((p) => p.getHpRatio(1) < 0.5),
     ),
     new SpeciesFormChange(Species.CRAMORANT, "gulping", "", new SpeciesFormChangeManualTrigger(), true),
     new SpeciesFormChange(Species.CRAMORANT, "gorging", "", new SpeciesFormChangeManualTrigger(), true),
