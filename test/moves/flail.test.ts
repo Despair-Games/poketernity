@@ -39,19 +39,27 @@ describe("Moves - Flail", () => {
   });
 
   it.each([
-    { hpRatio: 1, expectedBp: 200 },
-    { hpRatio: 4, expectedBp: 150 },
-    { hpRatio: 9, expectedBp: 100 },
-    { hpRatio: 16, expectedBp: 80 },
-    { hpRatio: 32, expectedBp: 40 },
+    { hpRatio: 0.1, expectedBp: 200 },
+    { hpRatio: 1.9, expectedBp: 200 },
+    { hpRatio: 2, expectedBp: 150 },
+    { hpRatio: 4.9, expectedBp: 150 },
+    { hpRatio: 5, expectedBp: 100 },
+    { hpRatio: 9.9, expectedBp: 100 },
+    { hpRatio: 10, expectedBp: 80 },
+    { hpRatio: 16.9, expectedBp: 80 },
+    { hpRatio: 17, expectedBp: 40 },
+    { hpRatio: 32.9, expectedBp: 40 },
+    { hpRatio: 33, expectedBp: 20 },
     { hpRatio: 48, expectedBp: 20 },
   ])("should have $expectedBp base power at ($hpRatio / 48) health", async ({ hpRatio, expectedBp }) => {
     await game.classicMode.startBattle([Species.BLISSEY]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    playerPokemon.hp = (playerPokemon.hp * hpRatio) / 48;
+    vi.spyOn(playerPokemon, "getMaxHp").mockReturnValue(480);
+    playerPokemon.hp = 10 * hpRatio;
 
     game.move.select(MoveId.FLAIL, 0);
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     expect((game.scene.getCurrentPhase() as MoveEffectPhase).move.moveId).toBe(flail.id);
