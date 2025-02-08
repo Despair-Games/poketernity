@@ -11,6 +11,7 @@ import { readFileSync, writeFileSync } from "fs";
 import { PokemonShapes } from "#enums/pokemon-shapes";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { starterPassiveAbilities } from "#app/data/balance/passives";
+import { FormCategory } from "#enums/forms";
 
 
 describe("Data - Pokemon Species", () => {
@@ -140,12 +141,13 @@ const enum GrowthRate_PokeAPI {
       speciesEntry['growthRate'] = GrowthRate_PokeAPI[pokeapiEntry['growth_rate_id']];
       speciesEntry['speciesGroup'] = SpeciesGroups[sp.group];
       speciesEntry['hasGenderDiff'] = sp.genderDiffs;
-      if (sp.forms.length > 0) {
+      if (sp.canChangeForm) {
         speciesEntries['forms'] = [];
       }}
       speciesEntries.push(speciesEntry);
     });
     writeFileSync('./test/data/pokemon_species_01.json', JSON.stringify(speciesEntries));
+    retrieveMegaPokemon(showdownEntries.filter(x => x[1]['forme'] && x[1]['forme'] === "Mega"));
   });
 
   function processAbilities(abilityObj: SpeciesAbilities, smogonData, speciesId) {
@@ -160,4 +162,21 @@ const enum GrowthRate_PokeAPI {
       abilityObj.P = Abilities[starterPassiveAbilities[speciesId]];
     }
   };
+
+  function retrieveMegaPokemon(megaList) {
+    const printList: any[] = [];
+    megaList.forEach(x => {
+      const megaEntry = x[1];
+      const printOut = {};
+      printOut['formCategory'] = FormCategory[FormCategory['MEGA']];
+      printOut['types'] = megaEntry['types'];
+      printOut['baseStats'] = megaEntry['baseStats'];
+      const ability = { A1: (megaEntry['abilities']['0'].toUpperCase()).replace(" ", "_")};
+      printOut['abilities'] = ability;
+      printOut['height'] = megaEntry['heightm'];
+      printOut['weight'] = megaEntry['weightkg'];
+      printList.push(printOut);
+    });
+    writeFileSync('./test/data/megaPokemon.json', JSON.stringify(printList));
+  }
 });
