@@ -36,7 +36,7 @@ describe("Abilities - Quick Feet", () => {
   it("should increase the Pokemon's speed by 50% if it has a status effect", async () => {
     game.override.statusEffect(StatusEffect.POISON);
     await game.classicMode.startBattle([Species.FEEBAS]);
-    const playerPokemon = game.scene.getPlayerPokemon()!;
+    const playerPokemon = game.field.getPlayerPokemon();
     const speedStat = playerPokemon.getStat(Stat.SPD);
     const effectiveSpeedStat = playerPokemon.getEffectiveStat(Stat.SPD);
 
