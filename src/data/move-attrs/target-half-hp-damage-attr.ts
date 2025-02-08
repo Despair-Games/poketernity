@@ -49,6 +49,6 @@ export class TargetHalfHpDamageAttr extends FixedDamageAttr {
   }
 
   override getTargetBenefitScore(_user: Pokemon, target: Pokemon, _move: Move): number {
-    return target.getHpRatio(1) > 0.5 ? Math.floor((target.getHpRatio() - 0.5) * -24 + 4) : -20;
+    return target.getHpRatio() > 0.5 ? Math.floor((target.getHpRatio() - 0.5) * -24 + 4) : -20;
   }
 }

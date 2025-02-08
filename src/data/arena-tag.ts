@@ -722,7 +722,7 @@ export abstract class ArenaTrapTag extends ArenaTag {
   getMatchupScoreMultiplier(pokemon: Pokemon): number {
     return pokemon.isGrounded()
       ? 1
-      : Phaser.Math.Linear(0, 1 / Math.pow(2, this.layers), Math.min(pokemon.getHpRatio(1), 0.5) * 2);
+      : Phaser.Math.Linear(0, 1 / Math.pow(2, this.layers), Math.min(pokemon.getHpRatio(), 0.5) * 2);
   }
 
   override loadTag(source: any): void {

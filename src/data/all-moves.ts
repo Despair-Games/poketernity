@@ -1574,7 +1574,7 @@ export function initMoves() {
       .partial(), // Does not have the effect of being stored if the incoming Pokemon is already healthy
     new AttackMove(MoveId.BRINE, ElementalType.WATER, MoveCategory.SPECIAL, 65, 100, 10, -1, 0, 4).attr(
       MovePowerMultiplierAttr,
-      (_user, target, _move) => (target.getHpRatio(1) < 0.5 ? 2 : 1),
+      (_user, target, _move) => (target.getHpRatio() < 0.5 ? 2 : 1),
     ),
     new AttackMove(MoveId.NATURAL_GIFT, ElementalType.NORMAL, MoveCategory.PHYSICAL, -1, 100, 15, -1, 0, 4)
       .makesContact(false)

@@ -1417,7 +1417,7 @@ class PartySlot extends Phaser.GameObjects.Container {
     this.slotHpBar.setOrigin(0, 0);
     this.slotHpBar.setVisible(false);
 
-    const hpRatio = this.pokemon.getHpRatio(1);
+    const hpRatio = this.pokemon.getHpRatio();
 
     this.slotHpOverlay = globalScene.add.sprite(
       0,
