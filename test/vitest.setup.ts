@@ -1,7 +1,19 @@
 import "vitest-canvas-mock";
 
-import { afterAll, beforeAll, vi } from "vitest";
+import { initLoggedInUser } from "#app/account";
+import { initAbilities } from "#app/data/all-abilities";
+import { allMoves, initMoves } from "#app/data/all-moves";
+import { initBiomes } from "#app/data/balance/biomes";
+import { initEggMoves } from "#app/data/balance/egg-moves";
+import { initPokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
+import { initSpecies } from "#app/data/init-species";
+import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
+import { initPokemonForms } from "#app/data/pokemon-forms";
+import { initAchievements } from "#app/system/achv";
+import { initVouchers } from "#app/system/init-vouchers";
+import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { initTestFile } from "#test/testUtils/testFileInitialization";
+import { afterAll, beforeAll, vi } from "vitest";
 
 //#region Mocking
 
@@ -62,7 +74,26 @@ vi.mock("#app/plugins/i18n", async (importOriginal) => {
 
 //#region
 
+function initData() {
+  // Initialize all of these things if and only if they have not been initialized yet
+  if (Object.values(allMoves).length === 0) {
+    initMoves();
+    initVouchers();
+    initAchievements();
+    initStatsKeys();
+    initPokemonPrevolutions();
+    initBiomes();
+    initEggMoves();
+    initPokemonForms();
+    initSpecies();
+    initAbilities();
+    initLoggedInUser();
+    initMysteryEncounters();
+  }
+}
+
 global.testFailed = false;
+initData();
 
 beforeAll(() => {
   initTestFile();
