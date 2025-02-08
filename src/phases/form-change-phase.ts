@@ -200,14 +200,12 @@ export class FormChangePhase extends FormChangeBasePhase {
     const { ui } = globalScene;
 
     /**
-     * Edgecase
-     *
-     * If a fused Pokemon has either of its halves change form then it will attempt to learn the
+     * @todo If a fused Pokemon has either of its halves change form then it will attempt to learn the
      * EVOLVE_MOVE of both halves of the fusion
      */
     const formChangeLearnMove = this.pokemon.getLevelMoves(EVOLVE_MOVE, true);
-    for (const lm of formChangeLearnMove) {
-      globalScene.unshiftPhase(new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), lm[1]));
+    for (const [, learnMoveId] of formChangeLearnMove) {
+      globalScene.unshiftPhase(new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), learnMoveId));
     }
 
     this.pokemon.findAndRemoveTags((t) => t.tagType === BattlerTagType.AUTOTOMIZED);
