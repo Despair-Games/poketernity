@@ -8,7 +8,8 @@ import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { starterPassiveAbilities } from "#app/data/balance/passives";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
-import { pokemonFormLevelMoves, pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";
+import { pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";
+import { pokemonFormLevelMoves } from "#app/data/balance/pokemon-form-level-moves";
 import {
   POKERUS_STARTER_COUNT,
   getPassiveCandyCount,
