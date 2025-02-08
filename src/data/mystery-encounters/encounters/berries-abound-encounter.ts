@@ -304,8 +304,7 @@ function tryGiveBerry(prioritizedPokemon?: PlayerPokemon) {
   // Will try to apply to prioritized pokemon first, then do normal application method if it fails
   if (prioritizedPokemon) {
     const heldBerriesOfType = globalScene.findModifier(
-      (m) =>
-        m.isBerryModifier() && m.pokemonId === prioritizedPokemon.id && m.berryType === berryType,
+      (m) => m.isBerryModifier() && m.pokemonId === prioritizedPokemon.id && m.berryType === berryType,
       true,
     ) as BerryModifier;
 

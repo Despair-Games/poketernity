@@ -16,6 +16,8 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
 import { EndEvolutionPhase } from "./end-evolution-phase";
+import { EVOLVE_MOVE } from "#app/data/balance/pokemon-level-moves";
+import { LearnMovePhase } from "./learn-move-phase";
 
 /**
  * A phase for handling Pokemon form changes, this does not cover evolutions
@@ -196,6 +198,15 @@ export class FormChangePhase extends FormChangeBasePhase {
 
   public override end(): void {
     const { ui } = globalScene;
+
+    /**
+     * @todo If a fused Pokemon has either of its halves change form then it will attempt to learn the
+     * EVOLVE_MOVE of both halves of the fusion
+     */
+    const formChangeLearnMove = this.pokemon.getLevelMoves(EVOLVE_MOVE, true);
+    for (const [, learnMoveId] of formChangeLearnMove) {
+      globalScene.unshiftPhase(new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), learnMoveId));
+    }
 
     this.pokemon.findAndRemoveTags((t) => t.tagType === BattlerTagType.AUTOTOMIZED);
     if (this.modal) {

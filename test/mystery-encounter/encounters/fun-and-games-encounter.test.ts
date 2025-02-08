@@ -193,7 +193,8 @@ describe("Fun And Games! - Mystery Encounter", () => {
       expect(modifierSelectHandler.options.length).toEqual(0);
     });
 
-    it("should have Wide Lens item in rewards if Wubboffet is at 15-33% HP remaining", async () => {
+    // TODO: formerly wide lens
+    it("should have [Placeholder] item in rewards if Wubboffet is at 15-33% HP remaining", async () => {
       scene.money = 20000;
       game.override.moveset([MoveId.SPLASH]);
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
@@ -220,10 +221,11 @@ describe("Fun And Games! - Mystery Encounter", () => {
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
       expect(modifierSelectHandler.options.length).toEqual(1);
-      expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("WIDE_LENS");
+      expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("POKEBALL");
     });
 
-    it("should have Scope Lens item in rewards if Wubboffet is at 3-15% HP remaining", async () => {
+    // TODO: formerly scope lens
+    it("should have [Placeholder] item in rewards if Wubboffet is at 3-15% HP remaining", async () => {
       scene.money = 20000;
       game.override.moveset([MoveId.SPLASH]);
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
@@ -250,10 +252,11 @@ describe("Fun And Games! - Mystery Encounter", () => {
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
       expect(modifierSelectHandler.options.length).toEqual(1);
-      expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("SCOPE_LENS");
+      expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("GREAT_BALL");
     });
 
-    it("should have Multi Lens item in rewards if Wubboffet is at <3% HP remaining", async () => {
+    // TODO: formerly multi lens
+    it("should have [Placeholder] item in rewards if Wubboffet is at <3% HP remaining", async () => {
       scene.money = 20000;
       game.override.moveset([MoveId.SPLASH]);
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
@@ -280,7 +283,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
       expect(modifierSelectHandler.options.length).toEqual(1);
-      expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("MULTI_LENS");
+      expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("ULTRA_BALL");
     });
   });
 

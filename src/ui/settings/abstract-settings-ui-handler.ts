@@ -60,7 +60,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     this.category = category;
 
     this.reloadRequired = false;
-    this.rowsToDisplay = 8;
+    this.rowsToDisplay = Math.min(8, uiItems.length);
     this.title = capitalizeFirstLetter(category);
   }
 
