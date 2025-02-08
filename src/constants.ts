@@ -93,3 +93,7 @@ export const ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET = 12;
 export const ME_ANTI_VARIANCE_WEIGHT_MODIFIER = 15;
 
 export const PARTY_UI_NO_EFFECT_MSG_i18N_KEY = "partyUiHandler:anyEffect";
+
+export const IV_MIN = 0;
+
+export const IV_MAX = 31;

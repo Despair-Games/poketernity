@@ -3738,13 +3738,13 @@ export function initMoves() {
     new AttackMove(MoveId.G_MAX_CANNONADE, ElementalType.WATER, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.BLASTOISE)
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_CANNONADE),
-    new AttackMove(MoveId.G_MAX_DRUM_SOLO, ElementalType.GRASS, MoveCategory.PHYSICAL, 100, -1, 3, -1, 0, 8)
+    new AttackMove(MoveId.G_MAX_DRUM_SOLO, ElementalType.GRASS, MoveCategory.PHYSICAL, 110, -1, 3, -1, 0, 8)
       .gMaxMove(Species.RILLABOOM)
       .ignoresAbilities(),
-    new AttackMove(MoveId.G_MAX_FIREBALL, ElementalType.FIRE, MoveCategory.PHYSICAL, 100, -1, 3, -1, 0, 8)
+    new AttackMove(MoveId.G_MAX_FIREBALL, ElementalType.FIRE, MoveCategory.PHYSICAL, 110, -1, 3, -1, 0, 8)
       .gMaxMove(Species.CINDERACE)
       .ignoresAbilities(),
-    new AttackMove(MoveId.G_MAX_HYDROSNIPE, ElementalType.WATER, MoveCategory.SPECIAL, 100, -1, 3, -1, 0, 8)
+    new AttackMove(MoveId.G_MAX_HYDROSNIPE, ElementalType.WATER, MoveCategory.SPECIAL, 110, -1, 3, -1, 0, 8)
       .gMaxMove(Species.INTELEON)
       .ignoresAbilities(),
     new AttackMove(MoveId.G_MAX_ONE_BLOW, ElementalType.DARK, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)

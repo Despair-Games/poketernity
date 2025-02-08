@@ -582,19 +582,21 @@ export abstract class Move implements Localizable {
   }
 
   /**
-   * Sets the {@linkcode MoveFlags.G_MAX_MOVE} for the move
-   * and {@linkcode moveTarget} to NEAR_ENEMY (g-max moves cannot target allies)
-   * and make the move not make contact
-   * and have the {@linkcode UseHigherAttackingStatAttr} to use the higher of the attacking stat
-   * and have the move use the {@linkcode GMaxPowerAttr}
-   * @returns The {@linkcode Move} that called this function
+   * Modifies the move with the following properties:
+   * - Sets the {@linkcode MoveFlags.G_MAX_MOVE}.
+   * - Sets {@linkcode moveTarget} to NEAR_ENEMY (G-Max moves cannot target allies).
+   * - Prevents the move from making contact.
+   * - Applies {@linkcode UseHigherAttackingStatAttr} to use the higher attacking stat.
+   * - Assigns the move the {@linkcode GMaxPowerAttr}.
+   *
+   * @returns The {@linkcode Move} that called this function.
    */
-  gMaxMove(_signatureSpecies: Species): this {
+  gMaxMove(signatureSpecies: Species): this {
     this.setFlag(MoveFlags.G_MAX_MOVE, true);
     this.moveTarget = MoveTarget.NEAR_ENEMY;
     this.makesContact(false);
     this.attr(UseHigherAttackingStatAttr);
-    this.attr(GMaxPowerAttr, _signatureSpecies);
+    this.attr(GMaxPowerAttr, signatureSpecies);
     return this;
   }
 

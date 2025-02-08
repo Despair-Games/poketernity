@@ -13,7 +13,7 @@ export class GMaxPowerAttr extends VariablePowerAttr {
   /**
    * Unused, but keeping it in case we want to use it in the future
    */
-  signatureSpecies: Species;
+  public readonly signatureSpecies: Species;
 
   constructor(signatureSpecies: Species) {
     super();
