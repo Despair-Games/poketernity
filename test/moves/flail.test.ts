@@ -8,6 +8,7 @@ import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import { allMoves } from "#app/data/all-moves";
 import type { Move } from "#app/data/move";
+import { BattlerIndex } from "#enums/battler-index";
 
 describe("Moves - Flail", () => {
   let phaserGame: Phaser.Game;
