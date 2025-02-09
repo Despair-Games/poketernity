@@ -797,7 +797,7 @@ export class Arena {
       case Biome.BEACH:
         return 3.462;
       case Biome.LAKE:
-        return 7.215;
+        return 5.35;
       case Biome.SEABED:
         return 2.6;
       case Biome.MOUNTAIN:
@@ -823,7 +823,7 @@ export class Arena {
       case Biome.FACTORY:
         return 4.985;
       case Biome.RUINS:
-        return 0.0;
+        return 2.27;
       case Biome.WASTELAND:
         return 6.336;
       case Biome.ABYSS:
@@ -862,6 +862,7 @@ export function getBiomeHasProps(biomeType: Biome): boolean {
     case Biome.METROPOLIS:
     case Biome.BEACH:
     case Biome.LAKE:
+
     case Biome.SEABED:
     case Biome.MOUNTAIN:
     case Biome.BADLANDS:
@@ -874,6 +875,7 @@ export function getBiomeHasProps(biomeType: Biome): boolean {
     case Biome.GRAVEYARD:
     case Biome.FACTORY:
     case Biome.RUINS:
+
     case Biome.WASTELAND:
     case Biome.ABYSS:
     case Biome.CONSTRUCTION_SITE:
