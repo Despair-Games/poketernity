@@ -161,7 +161,6 @@ export class LoadingScene extends SceneBase {
     this.loadImage("summary_moves_effect", currentFolder);
     this.loadImage("summary_moves_overlay_row", currentFolder);
     this.loadImage("summary_moves_overlay_pp", currentFolder);
-    this.loadAtlas("summary_moves_cursor", currentFolder);
     for (let t = 1; t <= 3; t++) {
       this.loadImage(`summary_tabs_${t}`, currentFolder);
     }
@@ -171,12 +170,14 @@ export class LoadingScene extends SceneBase {
 
     this.loadImage("starter_container_bg", "ui");
     this.loadImage("starter_select_bg", "ui");
-    this.loadImage("select_cursor", "ui");
-    this.loadImage("select_cursor_highlight", "ui");
-    this.loadImage("select_cursor_highlight_thick", "ui");
-    this.loadImage("select_cursor_pokerus", "ui");
-    this.loadImage("select_gen_cursor", "ui");
-    this.loadImage("select_gen_cursor_highlight", "ui");
+
+    currentFolder = "ui/cursors";
+    this.loadImage("select_cursor", currentFolder);
+    this.loadImage("select_cursor_highlight", currentFolder);
+    this.loadImage("select_cursor_highlight_thick", currentFolder);
+    this.loadImage("select_cursor_pokerus", currentFolder);
+    this.loadImage("select_gen_cursor", currentFolder);
+    this.loadAtlas("summary_moves_cursor", currentFolder);
 
     this.loadImage("saving_icon", "ui");
     this.loadImage("discord", "ui");
