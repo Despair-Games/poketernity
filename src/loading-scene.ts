@@ -72,19 +72,29 @@ export class LoadingScene extends SceneBase {
     this.loadAtlas("overlay_hp", "ui");
     this.loadAtlas("overlay_hp_boss", "ui");
     this.loadImage("overlay_exp", "ui");
-    this.loadImage("ability_bar_left", "ui");
-    this.loadImage("bgm_bar", "ui");
-    this.loadImage("party_exp_bar", "ui");
-    this.loadImage("achv_bar", "ui");
-    this.loadImage("achv_bar_2", "ui");
-    this.loadImage("achv_bar_3", "ui");
-    this.loadImage("achv_bar_4", "ui");
-    this.loadImage("achv_bar_5", "ui");
 
     this.loadAtlas("type_bgs", "ui");
     this.loadImage("type_tera", "ui");
 
-    let currentFolder = "ui/menu-icons";
+    let currentFolder = "ui/notification-bars";
+    this.loadImage("ability_bar_left", currentFolder);
+    this.loadImage("bgm_bar", currentFolder);
+    this.loadImage("party_exp_bar", currentFolder);
+    this.loadImage("achv_bar", currentFolder);
+    this.loadImage("achv_bar_2", currentFolder);
+    this.loadImage("achv_bar_3", currentFolder);
+    this.loadImage("achv_bar_4", currentFolder);
+    this.loadImage("achv_bar_5", currentFolder);
+
+    currentFolder = "ui/cursors";
+    this.loadImage("select_cursor", currentFolder);
+    this.loadImage("select_cursor_highlight", currentFolder);
+    this.loadImage("select_cursor_highlight_thick", currentFolder);
+    this.loadImage("select_cursor_pokerus", currentFolder);
+    this.loadImage("select_gen_cursor", currentFolder);
+    this.loadAtlas("summary_moves_cursor", currentFolder);
+
+    currentFolder = "ui/menu-icons";
     this.loadImage("saving_icon", currentFolder);
     this.loadImage("discord", currentFolder);
     this.loadImage("google", currentFolder);
@@ -181,14 +191,6 @@ export class LoadingScene extends SceneBase {
     this.loadImage("starter_container_bg", "ui");
     this.loadImage("starter_select_bg", "ui");
     this.loadImage("passive_bg", "ui");
-
-    currentFolder = "ui/cursors";
-    this.loadImage("select_cursor", currentFolder);
-    this.loadImage("select_cursor_highlight", currentFolder);
-    this.loadImage("select_cursor_highlight_thick", currentFolder);
-    this.loadImage("select_cursor_pokerus", currentFolder);
-    this.loadImage("select_gen_cursor", currentFolder);
-    this.loadAtlas("summary_moves_cursor", currentFolder);
 
     this.loadImage("default_bg", "arenas");
     // Load arena images
