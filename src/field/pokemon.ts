@@ -3607,7 +3607,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       applyAbAttrs(MockStatusEffectAbAttr, this, false, result, statusList);
     }
     if (
-      (!!this.status && statusList.includes(this.status.effect))
+      (this.status && statusList.includes(this.status.effect))
       || (includeConfusion && this.getTag(BattlerTagType.CONFUSED))
     ) {
       result.value = true;
