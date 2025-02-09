@@ -608,10 +608,11 @@ export function initAbilities() {
       .attr(MoveAbilityBypassAbAttr),
     new Ability(Abilities.SUPER_LUCK, 4).attr(BonusCritAbAttr),
     new Ability(Abilities.AFTERMATH, 4).attr(PostFaintContactDamageAbAttr, 4).bypassFaint(),
-    new Ability(Abilities.ANTICIPATION, 4).attr(AnticipationAbAttr, (pokemon: Pokemon) =>
-      i18next.t("abilityTriggers:postSummonAnticipation", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-    )
-    .edgeCase(), // Does not activate upon acquiring the Ability (e.g., via Skill Swap)
+    new Ability(Abilities.ANTICIPATION, 4)
+      .attr(AnticipationAbAttr, (pokemon: Pokemon) =>
+        i18next.t("abilityTriggers:postSummonAnticipation", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+      )
+      .edgeCase(), // Does not activate upon acquiring the Ability (e.g., via Skill Swap)
     new Ability(Abilities.FOREWARN, 4).attr(ForewarnAbAttr),
     new Ability(Abilities.UNAWARE, 4)
       .attr(IgnoreOpponentStatStagesAbAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.ACC, Stat.EVA])
