@@ -52,8 +52,8 @@ export class LoadingScene extends SceneBase {
         uiThemeDependant: true,
       });
     }
-    this.loadSpritesheet("trainer_namebox", "ui", 20, 20, { windowTypeDependant: true });
-    this.loadSpritesheet("battle_message_box", "ui", 320, 48, { windowTypeDependant: true });
+    this.loadSpritesheet("trainer_namebox", "ui/windows", 20, 20, { windowTypeDependant: true });
+    this.loadSpritesheet("battle_message_box", "ui/windows", 320, 48, { windowTypeDependant: true });
     this.loadSpritesheet("scroll_bar", "ui", 8, 8, { windowTypeDependant: true });
     this.loadSpritesheet("scroll_bar_handle", "ui", 8, 8, { windowTypeDependant: true });
 
