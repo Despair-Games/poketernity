@@ -5,9 +5,10 @@ import { EVOLVE_MOVE } from "./pokemon-level-moves";
 
 export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.VENUSAUR]: {
-    1: [
+    2: [
       // G-Max
       [EVOLVE_MOVE, MoveId.G_MAX_VINE_LASH],
+      [1, MoveId.PETAL_BLIZZARD],
       [1, MoveId.GROWTH],
       [1, MoveId.PETAL_DANCE],
       [1, MoveId.VINE_WHIP],
@@ -48,9 +49,10 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     ],
   },
   [Species.BLASTOISE]: {
-    1: [
+    2: [
       // G-Max
       [EVOLVE_MOVE, MoveId.G_MAX_CANNONADE],
+      [1, MoveId.FLASH_CANNON],
       [1, MoveId.TACKLE],
       [1, MoveId.TAIL_WHIP],
       [1, MoveId.WATER_GUN],
@@ -71,6 +73,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     1: [
       // G-Max
       [EVOLVE_MOVE, MoveId.G_MAX_BEFUDDLE],
+      [1, MoveId.GUST],
       [1, MoveId.TACKLE],
       [1, MoveId.STRING_SHOT],
       [1, MoveId.HARDEN],
@@ -962,6 +965,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     1: [
       // G-Max
       [EVOLVE_MOVE, MoveId.G_MAX_MELTDOWN],
+      [1, MoveId.THUNDER_PUNCH],
       [1, MoveId.HEADBUTT],
       [1, MoveId.TAIL_WHIP],
       [1, MoveId.THUNDER_SHOCK],
@@ -982,6 +986,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     1: [
       // G-Max
       [EVOLVE_MOVE, MoveId.G_MAX_WIND_RAGE],
+      [1, MoveId.STEEL_WING],
       [1, MoveId.LEER],
       [1, MoveId.PECK],
       [1, MoveId.SCREECH],
@@ -1024,6 +1029,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     1: [
       // G-Max
       [EVOLVE_MOVE, MoveId.G_MAX_STONESURGE],
+      [1, MoveId.ROCK_TOMB],
       [1, MoveId.TACKLE],
       [1, MoveId.BITE],
       [1, MoveId.WATER_GUN],
@@ -1043,6 +1049,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     1: [
       // G-Max
       [EVOLVE_MOVE, MoveId.G_MAX_VOLCALITH],
+      [1, MoveId.TAR_SHOT],
       [1, MoveId.TACKLE],
       [1, MoveId.SMOKESCREEN],
       [1, MoveId.RAPID_SPIN],
@@ -1061,6 +1068,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     1: [
       // G-Max
       [EVOLVE_MOVE, MoveId.G_MAX_TARTNESS],
+      [1, MoveId.WING_ATTACK],
       [1, MoveId.LEAFAGE], // Previous Stage Move, Custom
       [1, MoveId.GROWTH],
       [1, MoveId.WITHDRAW],
@@ -1084,6 +1092,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     1: [
       // G-Max
       [EVOLVE_MOVE, MoveId.G_MAX_SWEETNESS],
+      [1, MoveId.HEADBUTT],
       [1, MoveId.LEAFAGE], // Previous Stage Move, Custom
       [1, MoveId.GROWTH],
       [1, MoveId.WITHDRAW],
@@ -1152,6 +1161,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     2: [
       // G-Max
       [EVOLVE_MOVE, MoveId.G_MAX_STUN_SHOCK],
+      [1, MoveId.SPARK],
       [1, MoveId.LEER],
       [1, MoveId.GROWL],
       [1, MoveId.ACID],
@@ -1201,6 +1211,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     1: [
       // G-Max
       [EVOLVE_MOVE, MoveId.G_MAX_SMITE],
+      [1, MoveId.PSYCHO_CUT],
       [1, MoveId.CONFUSION],
       [1, MoveId.DISARMING_VOICE],
       [1, MoveId.PLAY_NICE],
@@ -1220,6 +1231,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     1: [
       // G-Max
       [EVOLVE_MOVE, MoveId.G_MAX_SNOOZE],
+      [1, MoveId.SPIRIT_BREAK],
       [1, MoveId.BITE],
       [1, MoveId.FAKE_OUT],
       [1, MoveId.FLATTER],
@@ -1242,6 +1254,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     9: [
       // G-Max
       [EVOLVE_MOVE, MoveId.G_MAX_FINALE],
+      [1, MoveId.DECORATE],
       [1, MoveId.TACKLE],
       [1, MoveId.SWEET_KISS],
       [1, MoveId.SWEET_SCENT],
@@ -1276,7 +1289,8 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.COPPERAJAH]: {
     1: [
       // G-Max
-      [EVOLVE_MOVE, MoveId.G_MAX_STONESURGE],
+      [EVOLVE_MOVE, MoveId.G_MAX_STEELSURGE],
+      [1, MoveId.HEAVY_SLAM],
       [1, MoveId.TACKLE],
       [1, MoveId.GROWL],
       [1, MoveId.ROLLOUT],
@@ -1354,6 +1368,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     1: [
       // G-Max
       [EVOLVE_MOVE, MoveId.G_MAX_DRUM_SOLO],
+      [1, MoveId.DRUM_BEATING],
       [1, MoveId.SCRATCH],
       [1, MoveId.GROWL],
       [1, MoveId.TAUNT],
@@ -1375,6 +1390,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     1: [
       // G-Max
       [EVOLVE_MOVE, MoveId.G_MAX_FIREBALL],
+      [1, MoveId.PYRO_BALL],
       [1, MoveId.TACKLE],
       [1, MoveId.GROWL],
       [1, MoveId.EMBER],
@@ -1394,6 +1410,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     1: [
       // G-Max
       [EVOLVE_MOVE, MoveId.G_MAX_HYDROSNIPE],
+      [1, MoveId.SNIPE_SHOT],
       [1, MoveId.POUND],
       [1, MoveId.BIND],
       [1, MoveId.GROWL],
@@ -1453,6 +1470,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     2: [
       // G-Max Single Strike Style
       [EVOLVE_MOVE, MoveId.G_MAX_ONE_BLOW],
+      [1, MoveId.WICKED_BLOW],
       [1, MoveId.LEER],
       [1, MoveId.FOCUS_ENERGY],
       [1, MoveId.ENDURE],
@@ -1473,6 +1491,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     3: [
       // G-Max Rapid Style
       [EVOLVE_MOVE, MoveId.G_MAX_RAPID_FLOW],
+      [1, MoveId.SURGING_STRIKES],
       [1, MoveId.LEER],
       [1, MoveId.FOCUS_ENERGY],
       [1, MoveId.ENDURE],
