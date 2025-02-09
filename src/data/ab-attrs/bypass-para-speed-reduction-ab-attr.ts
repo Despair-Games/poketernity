@@ -5,6 +5,7 @@ import { AbAttr } from "./ab-attr";
 /**
  * Ability attribute that allows the ability holder to ignore the speed reduction from Paralysis.
  * Used by the ability Quick Feet
+ * @extends AbAttr
  */
 export class BypassParaSpeedReductionAbAttr extends AbAttr {
   constructor() {
