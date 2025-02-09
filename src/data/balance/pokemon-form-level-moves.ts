@@ -5,7 +5,7 @@ import { EVOLVE_MOVE } from "./pokemon-level-moves";
 
 export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.VENUSAUR]: {
-    1: [
+    2: [
       // G-Max
       [EVOLVE_MOVE, MoveId.G_MAX_VINE_LASH],
       [1, MoveId.GROWTH],
@@ -48,7 +48,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     ],
   },
   [Species.BLASTOISE]: {
-    1: [
+    2: [
       // G-Max
       [EVOLVE_MOVE, MoveId.G_MAX_CANNONADE],
       [1, MoveId.TACKLE],
