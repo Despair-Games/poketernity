@@ -199,6 +199,7 @@ import { MoveFlagPowerBoostAbAttr } from "./ab-attrs/move-flag-power-boost-ab-at
 import { MoveFlagImmunityAbAttr } from "./ab-attrs/move-flag-immunity-ab-attr";
 import { ReflectStatStageChangeAbAttr } from "./ab-attrs/reflect-stat-stage-change-ab-attr";
 import { AnticipationAbAttr } from "./ab-attrs/anticipation-ab-attr";
+import { BypassParaSpeedReductionAbAttr } from "./ab-attrs/bypass-para-speed-reduction-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
@@ -551,12 +552,7 @@ export function initAbilities() {
       .attr(StatMultiplierAbAttr, Stat.SPATK, 1.5)
       .condition(getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN)),
     new Ability(Abilities.QUICK_FEET, 4)
-      .conditionalAttr(
-        (pokemon) => (pokemon.status ? pokemon.status.effect === StatusEffect.PARALYSIS : false),
-        StatMultiplierAbAttr,
-        Stat.SPD,
-        2,
-      )
+      .attr(BypassParaSpeedReductionAbAttr)
       .conditionalAttr(
         (pokemon) => !!pokemon.status || pokemon.hasAbility(Abilities.COMATOSE),
         StatMultiplierAbAttr,
@@ -608,10 +604,11 @@ export function initAbilities() {
       .attr(MoveAbilityBypassAbAttr),
     new Ability(Abilities.SUPER_LUCK, 4).attr(BonusCritAbAttr),
     new Ability(Abilities.AFTERMATH, 4).attr(PostFaintContactDamageAbAttr, 4).bypassFaint(),
-    new Ability(Abilities.ANTICIPATION, 4).attr(AnticipationAbAttr, (pokemon: Pokemon) =>
-      i18next.t("abilityTriggers:postSummonAnticipation", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-    )
-    .edgeCase(), // Does not activate upon acquiring the Ability (e.g., via Skill Swap)
+    new Ability(Abilities.ANTICIPATION, 4)
+      .attr(AnticipationAbAttr, (pokemon: Pokemon) =>
+        i18next.t("abilityTriggers:postSummonAnticipation", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+      )
+      .edgeCase(), // Does not activate upon acquiring the Ability (e.g., via Skill Swap)
     new Ability(Abilities.FOREWARN, 4).attr(ForewarnAbAttr),
     new Ability(Abilities.UNAWARE, 4)
       .attr(IgnoreOpponentStatStagesAbAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.ACC, Stat.EVA])
