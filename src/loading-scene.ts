@@ -146,23 +146,24 @@ export class LoadingScene extends SceneBase {
     this.loadAtlas("party_slot_main", currentFolder);
     this.loadAtlas("party_slot", currentFolder);
 
-    this.loadImage("summary_bg", "ui");
-    this.loadImage("summary_overlay_shiny", "ui");
-    this.loadImage("summary_profile", "ui");
-    this.loadImage("summary_profile_prompt_z", "ui"); // The pixel Z button prompt
-    this.loadImage("summary_profile_prompt_a", "ui"); // The pixel A button prompt
-    this.loadImage("summary_profile_ability", "ui"); // Pixel text 'ABILITY'
-    this.loadImage("summary_profile_passive", "ui"); // Pixel text 'PASSIVE'
-    this.loadImage("summary_status", "ui");
-    this.loadImage("summary_stats", "ui");
-    this.loadImage("summary_stats_overlay_exp", "ui");
-    this.loadImage("summary_moves", "ui");
-    this.loadImage("summary_moves_effect", "ui");
-    this.loadImage("summary_moves_overlay_row", "ui");
-    this.loadImage("summary_moves_overlay_pp", "ui");
-    this.loadAtlas("summary_moves_cursor", "ui");
+    currentFolder = "ui/summary";
+    this.loadImage("summary_bg", currentFolder);
+    this.loadImage("summary_overlay_shiny", currentFolder);
+    this.loadImage("summary_profile", currentFolder);
+    this.loadImage("summary_profile_prompt_z", currentFolder); // The pixel Z button prompt
+    this.loadImage("summary_profile_prompt_a", currentFolder); // The pixel A button prompt
+    this.loadImage("summary_profile_ability", currentFolder); // Pixel text 'ABILITY'
+    this.loadImage("summary_profile_passive", currentFolder); // Pixel text 'PASSIVE'
+    this.loadImage("summary_status", currentFolder);
+    this.loadImage("summary_stats", currentFolder);
+    this.loadImage("summary_stats_overlay_exp", currentFolder);
+    this.loadImage("summary_moves", currentFolder);
+    this.loadImage("summary_moves_effect", currentFolder);
+    this.loadImage("summary_moves_overlay_row", currentFolder);
+    this.loadImage("summary_moves_overlay_pp", currentFolder);
+    this.loadAtlas("summary_moves_cursor", currentFolder);
     for (let t = 1; t <= 3; t++) {
-      this.loadImage(`summary_tabs_${t}`, "ui");
+      this.loadImage(`summary_tabs_${t}`, currentFolder);
     }
 
     this.loadImage("egg_list_bg", "ui");
