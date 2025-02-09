@@ -54,10 +54,16 @@ export class LoadingScene extends SceneBase {
     }
     this.loadSpritesheet("trainer_namebox", "ui/windows", 20, 20, { windowTypeDependant: true });
     this.loadSpritesheet("battle_message_box", "ui/windows", 320, 48, { windowTypeDependant: true });
+
     this.loadSpritesheet("scroll_bar", "ui", 8, 8, { windowTypeDependant: true });
     this.loadSpritesheet("scroll_bar_handle", "ui", 8, 8, { windowTypeDependant: true });
 
-    // Load menu images
+    this.loadAtlas("numbers", "ui");
+    this.loadAtlas("numbers_red", "ui");
+
+    this.loadAtlas("type_bgs", "ui");
+    this.loadImage("type_tera", "ui");
+
     let currentFolder = "ui/cursors";
     this.loadAtlas("prompt", currentFolder);
     this.loadImage("cursor", currentFolder, { uiThemeDependant: true });
@@ -68,16 +74,6 @@ export class LoadingScene extends SceneBase {
     this.loadImage("select_cursor_pokerus", currentFolder);
     this.loadImage("select_gen_cursor", currentFolder);
     this.loadAtlas("summary_moves_cursor", currentFolder);
-
-    this.loadImage("overlay_lv", "ui");
-    this.loadAtlas("numbers", "ui");
-    this.loadAtlas("numbers_red", "ui");
-    this.loadAtlas("overlay_hp", "ui");
-    this.loadAtlas("overlay_hp_boss", "ui");
-    this.loadImage("overlay_exp", "ui");
-
-    this.loadAtlas("type_bgs", "ui");
-    this.loadImage("type_tera", "ui");
 
     currentFolder = "ui/notification-bars";
     this.loadImage("ability_bar_left", currentFolder);
@@ -119,7 +115,7 @@ export class LoadingScene extends SceneBase {
     this.loadImage("friendship", currentFolder);
     this.loadImage("friendship_overlay", currentFolder);
 
-    currentFolder = "ui/pokemon-battle-info";
+    currentFolder = "ui/pokemon-info";
     this.loadImage("pbinfo_player", currentFolder);
     this.loadImage("pbinfo_player_stats", currentFolder);
     this.loadImage("pbinfo_player_mini", currentFolder);
@@ -140,6 +136,11 @@ export class LoadingScene extends SceneBase {
     this.loadImage("pb_tray_overlay_player", currentFolder);
     this.loadImage("pb_tray_overlay_enemy", currentFolder);
     this.loadAtlas("pb_tray_ball", currentFolder);
+
+    this.loadImage("overlay_lv", currentFolder);
+    this.loadAtlas("overlay_hp", currentFolder);
+    this.loadAtlas("overlay_hp_boss", currentFolder);
+    this.loadImage("overlay_exp", currentFolder);
 
     currentFolder = "ui/time-of-day";
     this.loadImage("dawn_icon_fg", currentFolder);
