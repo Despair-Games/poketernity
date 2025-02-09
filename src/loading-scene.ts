@@ -58,9 +58,16 @@ export class LoadingScene extends SceneBase {
     this.loadSpritesheet("scroll_bar_handle", "ui", 8, 8, { windowTypeDependant: true });
 
     // Load menu images
-    this.loadAtlas("prompt", "ui");
-    this.loadImage("cursor", "ui", { uiThemeDependant: true });
-    this.loadImage("cursor_reverse", "ui", { uiThemeDependant: true });
+    let currentFolder = "ui/cursors";
+    this.loadAtlas("prompt", currentFolder);
+    this.loadImage("cursor", currentFolder, { uiThemeDependant: true });
+    this.loadImage("cursor_reverse", currentFolder, { uiThemeDependant: true });
+    this.loadImage("select_cursor", currentFolder);
+    this.loadImage("select_cursor_highlight", currentFolder);
+    this.loadImage("select_cursor_highlight_thick", currentFolder);
+    this.loadImage("select_cursor_pokerus", currentFolder);
+    this.loadImage("select_gen_cursor", currentFolder);
+    this.loadAtlas("summary_moves_cursor", currentFolder);
 
     this.loadImage("overlay_lv", "ui");
     this.loadAtlas("numbers", "ui");
@@ -72,7 +79,7 @@ export class LoadingScene extends SceneBase {
     this.loadAtlas("type_bgs", "ui");
     this.loadImage("type_tera", "ui");
 
-    let currentFolder = "ui/notification-bars";
+    currentFolder = "ui/notification-bars";
     this.loadImage("ability_bar_left", currentFolder);
     this.loadImage("bgm_bar", currentFolder);
     this.loadImage("party_exp_bar", currentFolder);
@@ -81,14 +88,6 @@ export class LoadingScene extends SceneBase {
     this.loadImage("achv_bar_3", currentFolder);
     this.loadImage("achv_bar_4", currentFolder);
     this.loadImage("achv_bar_5", currentFolder);
-
-    currentFolder = "ui/cursors";
-    this.loadImage("select_cursor", currentFolder);
-    this.loadImage("select_cursor_highlight", currentFolder);
-    this.loadImage("select_cursor_highlight_thick", currentFolder);
-    this.loadImage("select_cursor_pokerus", currentFolder);
-    this.loadImage("select_gen_cursor", currentFolder);
-    this.loadAtlas("summary_moves_cursor", currentFolder);
 
     currentFolder = "ui/menu-icons";
     this.loadImage("saving_icon", currentFolder);
