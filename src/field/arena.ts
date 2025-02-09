@@ -862,9 +862,7 @@ export function getBiomeHasProps(biomeType: Biome): boolean {
     case Biome.METROPOLIS:
     case Biome.BEACH:
     case Biome.LAKE:
-
     case Biome.SEABED:
-
     case Biome.MOUNTAIN:
     case Biome.BADLANDS:
     case Biome.CAVE:
@@ -876,10 +874,8 @@ export function getBiomeHasProps(biomeType: Biome): boolean {
     case Biome.GRAVEYARD:
     case Biome.FACTORY:
     case Biome.RUINS:
-
     case Biome.WASTELAND:
     case Biome.ABYSS:
-
     case Biome.CONSTRUCTION_SITE:
     case Biome.JUNGLE:
     case Biome.FAIRY_CAVE:
