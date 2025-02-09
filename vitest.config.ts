@@ -60,7 +60,7 @@ class MySequencer extends BaseSequencer {
 function getTestOrder(testName: string): number {
   if (testName.includes("battle_scene.test.ts")) {
     return 1;
-  } else if (testName.includes("inputs.test.ts")) {
+  } else if (testName.includes("inputs.test.ts") || testName.includes("all_moves.test.ts")) {
     return 2;
   } else {
     return 3;
