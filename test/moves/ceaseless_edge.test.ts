@@ -60,30 +60,27 @@ describe("Moves - Ceaseless Edge", () => {
     expect(enemyPokemon.hp).toBeLessThan(enemyStartingHp);
   });
 
-  test(
-    "trainer - move should hit twice, apply two layers of spikes, force switch opponent - opponent takes damage",
-    async () => {
-      game.override.startingWave(25).ability(Abilities.PARENTAL_BOND);
+  test("trainer - move should hit twice, apply two layers of spikes, force switch opponent - opponent takes damage", async () => {
+    game.override.startingWave(25).ability(Abilities.PARENTAL_BOND);
 
-      await game.classicMode.startBattle([Species.ILLUMISE]);
+    await game.classicMode.startBattle([Species.ILLUMISE]);
 
-      game.move.select(MoveId.CEASELESS_EDGE);
-      await game.phaseInterceptor.to(MoveEffectPhase, false);
-      // Spikes should not have any layers before move effect is applied
-      const tagBefore = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
-      expect(tagBefore instanceof ArenaTrapTag).toBeFalsy();
+    game.move.select(MoveId.CEASELESS_EDGE);
+    await game.phaseInterceptor.to(MoveEffectPhase, false);
+    // Spikes should not have any layers before move effect is applied
+    const tagBefore = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
+    expect(tagBefore instanceof ArenaTrapTag).toBeFalsy();
 
-      await game.toNextTurn();
-      const tagAfter = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
-      expect(tagAfter instanceof ArenaTrapTag).toBeTruthy();
-      expect(tagAfter.layers).toBe(2);
+    await game.toNextTurn();
+    const tagAfter = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
+    expect(tagAfter instanceof ArenaTrapTag).toBeTruthy();
+    expect(tagAfter.layers).toBe(2);
 
-      game.forceEnemyToSwitch();
-      game.move.select(MoveId.SPLASH);
-      await game.phaseInterceptor.to(TurnEndPhase, false);
+    game.forceEnemyToSwitch();
+    game.move.select(MoveId.SPLASH);
+    await game.phaseInterceptor.to(TurnEndPhase, false);
 
-      const switchedInPokemon = game.field.getEnemyPokemon();
-      expect(switchedInPokemon.getInverseHp()).toBe(toDmgValue(switchedInPokemon.getMaxHp() / 6));
-    },
-  );
+    const switchedInPokemon = game.field.getEnemyPokemon();
+    expect(switchedInPokemon.getInverseHp()).toBe(toDmgValue(switchedInPokemon.getMaxHp() / 6));
+  });
 });
