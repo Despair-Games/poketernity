@@ -46,6 +46,9 @@ import { StatusEffect } from "#enums/status-effect";
 import { HealStatusEffectAttr } from "./move-attrs/heal-status-effect-attr";
 import { ChargeAnim } from "#enums/charge-anim";
 import { allMoves } from "#app/data/all-moves";
+import { UseHigherAttackingStatAttr } from "./move-attrs/use-higher-attacking-stat-attr";
+import { GMaxPowerAttr } from "./move-attrs/gmax-power-attr";
+import type { Species } from "#enums/species";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
 
 export abstract class Move implements Localizable {
@@ -579,13 +582,21 @@ export abstract class Move implements Localizable {
   }
 
   /**
-   * Sets the {@linkcode MoveFlags.G_MAX_MOVE} for the move
-   * and {@linkcode moveTarget} to NEAR_ENEMY (g-max moves cannot target allies)
-   * @returns The {@linkcode Move} that called this function
+   * Modifies the move with the following properties:
+   * - Sets the {@linkcode MoveFlags.G_MAX_MOVE}.
+   * - Sets {@linkcode moveTarget} to NEAR_ENEMY (G-Max moves cannot target allies).
+   * - Prevents the move from making contact.
+   * - Applies {@linkcode UseHigherAttackingStatAttr} to use the higher attacking stat.
+   * - Assigns the move the {@linkcode GMaxPowerAttr}.
+   *
+   * @returns The {@linkcode Move} that called this function.
    */
-  gMaxMove(): this {
+  gMaxMove(signatureSpecies: Species): this {
     this.setFlag(MoveFlags.G_MAX_MOVE, true);
     this.moveTarget = MoveTarget.NEAR_ENEMY;
+    this.makesContact(false);
+    this.attr(UseHigherAttackingStatAttr);
+    this.attr(GMaxPowerAttr, signatureSpecies);
     return this;
   }
 
