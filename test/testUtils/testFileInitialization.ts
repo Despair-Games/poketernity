@@ -21,6 +21,27 @@ import { manageListeners } from "./listenersManager";
 import { initVouchers } from "#app/system/init-vouchers";
 
 /**
+ * A function to initialize game data before running any other test-related code.
+ */
+export function initDataForTests() {
+  // Initialize all of these things if and only if they have not been initialized yet
+  if (Object.values(allMoves).length === 0) {
+    initMoves();
+    initVouchers();
+    initAchievements();
+    initStatsKeys();
+    initPokemonPrevolutions();
+    initBiomes();
+    initEggMoves();
+    initPokemonForms();
+    initSpecies();
+    initAbilities();
+    initLoggedInUser();
+    initMysteryEncounters();
+  }
+}
+
+/**
  * An initialization function that is run at the beginning of every test file (via `beforeAll()`).
  */
 export function initTestFile() {
@@ -74,22 +95,6 @@ export function initTestFile() {
   Phaser.GameObjects.Text.prototype.setPositionRelative = setPositionRelative;
   Phaser.GameObjects.Rectangle.prototype.setPositionRelative = setPositionRelative;
   HTMLCanvasElement.prototype.getContext = () => mockContext;
-
-  // Initialize all of these things if and only if they have not been initialized yet
-  if (Object.values(allMoves).length === 0) {
-    initMoves();
-    initVouchers();
-    initAchievements();
-    initStatsKeys();
-    initPokemonPrevolutions();
-    initBiomes();
-    initEggMoves();
-    initPokemonForms();
-    initSpecies();
-    initAbilities();
-    initLoggedInUser();
-    initMysteryEncounters();
-  }
 
   manageListeners();
 }

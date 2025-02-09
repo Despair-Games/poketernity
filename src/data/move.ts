@@ -3,7 +3,7 @@ import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PokemonMoveAccuracyBoosterModifier, AttackTypeBoosterModifier } from "#app/modifier/modifier";
+import { AttackTypeBoosterModifier } from "#app/modifier/modifier";
 import type { AbstractConstructor, Constructor, nil } from "#app/utils";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
@@ -46,6 +46,9 @@ import { StatusEffect } from "#enums/status-effect";
 import { HealStatusEffectAttr } from "./move-attrs/heal-status-effect-attr";
 import { ChargeAnim } from "#enums/charge-anim";
 import { allMoves } from "#app/data/all-moves";
+import { UseHigherAttackingStatAttr } from "./move-attrs/use-higher-attacking-stat-attr";
+import { GMaxPowerAttr } from "./move-attrs/gmax-power-attr";
+import type { Species } from "#enums/species";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 
@@ -580,13 +583,21 @@ export abstract class Move implements Localizable {
   }
 
   /**
-   * Sets the {@linkcode MoveFlags.G_MAX_MOVE} for the move
-   * and {@linkcode moveTarget} to NEAR_ENEMY (g-max moves cannot target allies)
-   * @returns The {@linkcode Move} that called this function
+   * Modifies the move with the following properties:
+   * - Sets the {@linkcode MoveFlags.G_MAX_MOVE}.
+   * - Sets {@linkcode moveTarget} to NEAR_ENEMY (G-Max moves cannot target allies).
+   * - Prevents the move from making contact.
+   * - Applies {@linkcode UseHigherAttackingStatAttr} to use the higher attacking stat.
+   * - Assigns the move the {@linkcode GMaxPowerAttr}.
+   *
+   * @returns The {@linkcode Move} that called this function.
    */
-  gMaxMove(): this {
+  gMaxMove(signatureSpecies: Species): this {
     this.setFlag(MoveFlags.G_MAX_MOVE, true);
     this.moveTarget = MoveTarget.NEAR_ENEMY;
+    this.makesContact(false);
+    this.attr(UseHigherAttackingStatAttr);
+    this.attr(GMaxPowerAttr, signatureSpecies);
     return this;
   }
 
@@ -726,10 +737,7 @@ export abstract class Move implements Localizable {
 
     const isOhko = this.hasAttr(OneHitKOAccuracyAttr);
 
-    if (!isOhko) {
-      globalScene.applyModifiers(PokemonMoveAccuracyBoosterModifier, user.isPlayer(), user, moveAccuracy);
-    }
-
+    // TODO: wide lens was calculated here
     if (globalScene.arena.weather?.weatherType === WeatherType.FOG) {
       /**
        *  The 0.9 multiplier is Game-specific implementation, Bulbapedia uses 3/5
@@ -769,7 +777,7 @@ export abstract class Move implements Localizable {
       && power.value < 60
       && this.priority <= 0
       && !this.hasAttr(MultiHitAttr)
-      && !globalScene.findModifier((m) => m.isPokemonMultiHitModifier() && m.pokemonId === source.id)
+      // TODO: multi lens check
     ) {
       power.value = 60;
     }

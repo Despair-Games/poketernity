@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/all-moves";
-import { PhotonGeyserCategoryAttr } from "#app/data/move-attrs/photon-geyser-category-attr";
+import { UseHigherAttackingStatAttr } from "#app/data/move-attrs/use-higher-attacking-stat-attr";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -10,7 +10,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 describe("Moves - Photon Geyser", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
-  const photonGeyserAttr = allMoves[MoveId.PHOTON_GEYSER].getAttrs(PhotonGeyserCategoryAttr)[0];
+  const photonGeyserAttr = allMoves[MoveId.PHOTON_GEYSER].getAttrs(UseHigherAttackingStatAttr)[0];
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({

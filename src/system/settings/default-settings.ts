@@ -13,7 +13,6 @@ import { ExpGainsSpeed } from "#app/enums/exp-gains-speed";
 import { ExpNotification } from "#app/enums/exp-notification";
 import { HpBarSpeed } from "#app/enums/hp-bar-speed";
 import { MoneyFormat } from "#app/enums/money-format";
-import { MusicPreference } from "#app/enums/music-preference";
 import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
 import { UiTheme } from "#app/enums/ui-theme";
 import { PlayerGender } from "#enums/player-gender";
@@ -60,7 +59,6 @@ export const defaultAudioSettings: AudioSettings = {
   fieldVolume: 1,
   soundEffectsVolume: 1,
   uiVolume: 1,
-  musicPreference: MusicPreference.ALLGENS,
 };
 
 export const defaultGamepadSettings: GamepadSettings = {
