@@ -238,9 +238,8 @@ describe("Abilities - Parental Bond", () => {
     expect(leadPokemon.isOfType(ElementalType.FIRE)).toBe(false);
   });
 
-  it("Moves boosted by this ability and Multi-Lens should strike 3 times", async () => {
+  it.todo("Moves boosted by this ability and Multi-Lens should strike 3 times", async () => {
     game.override.moveset([MoveId.TACKLE]);
-    game.override.startingHeldItems([{ name: "MULTI_LENS", count: 1 }]);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -253,9 +252,8 @@ describe("Abilities - Parental Bond", () => {
     expect(leadPokemon.turnData.hitCount).toBe(3);
   });
 
-  it("Seismic Toss boosted by this ability and Multi-Lens should strike 3 times", async () => {
+  it.todo("Seismic Toss boosted by this ability and Multi-Lens should strike 3 times", async () => {
     game.override.moveset([MoveId.SEISMIC_TOSS]);
-    game.override.startingHeldItems([{ name: "MULTI_LENS", count: 1 }]);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 

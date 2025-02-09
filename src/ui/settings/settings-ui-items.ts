@@ -14,7 +14,6 @@ import { ExpGainsSpeed } from "#app/enums/exp-gains-speed";
 import { ExpNotification } from "#app/enums/exp-notification";
 import { HpBarSpeed } from "#app/enums/hp-bar-speed";
 import { MoneyFormat } from "#app/enums/money-format";
-import { MusicPreference } from "#app/enums/music-preference";
 import { PlayerGender } from "#app/enums/player-gender";
 import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
 import { UiTheme } from "#app/enums/ui-theme";
@@ -368,14 +367,5 @@ export const audioSettingsUiItems: SettingsUiItem<AudioSettingsKey>[] = [
     key: "uiVolume",
     label: t("settings:uiVolume"),
     options: useVolumeOptions(),
-  },
-  {
-    key: "musicPreference",
-    label: t("settings:musicPreference"),
-    options: [
-      { value: MusicPreference.GENFIVE, label: t("settings:musicGenFive") },
-      { value: MusicPreference.ALLGENS, label: t("settings:musicAllGens") },
-    ],
-    requiresReload: true,
   },
 ];

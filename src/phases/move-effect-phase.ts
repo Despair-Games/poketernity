@@ -29,7 +29,6 @@ import {
   DamageMoneyRewardModifier,
   FlinchChanceModifier,
   HitHealModifier,
-  PokemonMultiHitModifier,
 } from "#app/modifier/modifier";
 import { DamageAchv } from "#app/system/achv";
 import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils";
@@ -116,7 +115,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     /**
      * If this phase is for the first hit of the invoked move,
      * resolve the move's total hit count. This block combines the
-     * effects of the move itself, Parental Bond, and Multi-Lens to do so.
+     * effects of the move itself and Parental Bond to do so.
      */
     if (user.turnData.hitsLeft === -1) {
       const hitCount = new NumberHolder(1);
@@ -124,8 +123,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       applyMoveAttrs(MultiHitAttr, user, targets[0], move, hitCount);
       // If Parental Bond is applicable, add another hit
       applyAbAttrs(AddSecondStrikeAbAttr, user, false, move, targets[0], hitCount);
-      // If Multi-Lens is applicable, add hits equal to the number of held Multi-Lenses
-      globalScene.applyModifiers(PokemonMultiHitModifier, user.isPlayer(), user, move.id, hitCount);
+      // TODO: re-add multi-lens calculation
       // Set the user's relevant turnData fields to reflect the final hit count
       user.turnData.hitCount = hitCount.value;
       user.turnData.hitsLeft = hitCount.value;

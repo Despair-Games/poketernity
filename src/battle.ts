@@ -21,7 +21,6 @@ import type { Pokemon } from "#app/field/pokemon";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { MoveId } from "#enums/move-id";
 import { PlayerGender } from "#enums/player-gender";
-import { MusicPreference } from "#enums/music-preference";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "#app/plugins/i18n";
@@ -249,11 +248,7 @@ export default class Battle {
       if (!this.started && this.trainer?.config.encounterBgm && this.trainer?.getEncounterMessages()?.length) {
         return `encounter_${this.trainer?.getEncounterBgm()}`;
       }
-      if (settings.audio.musicPreference === MusicPreference.GENFIVE) {
-        return this.trainer?.getBattleBgm() ?? null;
-      } else {
-        return this.trainer?.getMixedBattleBgm() ?? null;
-      }
+      return this.trainer?.getBattleBgm() ?? null;
     } else if (this.gameMode.isClassic && isBetween(this.waveIndex, 195, 199)) {
       return "end_summit";
     }
@@ -266,159 +261,140 @@ export default class Battle {
         return "battle_final_encounter";
       }
       if (pokemon.species.isLegendLike()) {
-        if (settings.audio.musicPreference === MusicPreference.GENFIVE) {
-          switch (pokemon.species.speciesId) {
-            case Species.REGIROCK:
-            case Species.REGICE:
-            case Species.REGISTEEL:
-            case Species.REGIGIGAS:
-            case Species.REGIDRAGO:
-            case Species.REGIELEKI:
-              return "battle_legendary_regis_g5";
-            case Species.KYUREM:
-              return "battle_legendary_kyurem";
-            default:
-              if (pokemon.species.isLegendary()) {
-                return "battle_legendary_res_zek";
-              }
-              return "battle_legendary_unova";
-          }
-        } else if (settings.audio.musicPreference === MusicPreference.ALLGENS) {
-          switch (pokemon.species.speciesId) {
-            case Species.ARTICUNO:
-            case Species.ZAPDOS:
-            case Species.MOLTRES:
-            case Species.MEWTWO:
-            case Species.MEW:
-              return "battle_legendary_kanto";
-            case Species.RAIKOU:
-              return "battle_legendary_raikou";
-            case Species.ENTEI:
-              return "battle_legendary_entei";
-            case Species.SUICUNE:
-              return "battle_legendary_suicune";
-            case Species.LUGIA:
-              return "battle_legendary_lugia";
-            case Species.HO_OH:
-              return "battle_legendary_ho_oh";
-            case Species.REGIROCK:
-            case Species.REGICE:
-            case Species.REGISTEEL:
-            case Species.REGIGIGAS:
-            case Species.REGIDRAGO:
-            case Species.REGIELEKI:
-              return "battle_legendary_regis_g6";
-            case Species.GROUDON:
-            case Species.KYOGRE:
-              return "battle_legendary_gro_kyo";
-            case Species.RAYQUAZA:
-              return "battle_legendary_rayquaza";
-            case Species.DEOXYS:
-              return "battle_legendary_deoxys";
-            case Species.UXIE:
-            case Species.MESPRIT:
-            case Species.AZELF:
-              return "battle_legendary_lake_trio";
-            case Species.HEATRAN:
-            case Species.CRESSELIA:
-            case Species.DARKRAI:
-            case Species.SHAYMIN:
-              return "battle_legendary_sinnoh";
-            case Species.DIALGA:
-            case Species.PALKIA:
-              if (pokemon.species.getFormSpriteKey(pokemon.formIndex) === SpeciesFormKey.ORIGIN) {
-                return "battle_legendary_origin_forme";
-              }
-              return "battle_legendary_dia_pal";
-            case Species.GIRATINA:
-              return "battle_legendary_giratina";
-            case Species.ARCEUS:
-              return "battle_legendary_arceus";
-            case Species.COBALION:
-            case Species.TERRAKION:
-            case Species.VIRIZION:
-            case Species.KELDEO:
-            case Species.TORNADUS:
-            case Species.LANDORUS:
-            case Species.THUNDURUS:
-            case Species.MELOETTA:
-            case Species.GENESECT:
-              return "battle_legendary_unova";
-            case Species.KYUREM:
-              return "battle_legendary_kyurem";
-            case Species.XERNEAS:
-            case Species.YVELTAL:
-            case Species.ZYGARDE:
-              return "battle_legendary_xern_yvel";
-            case Species.TAPU_KOKO:
-            case Species.TAPU_LELE:
-            case Species.TAPU_BULU:
-            case Species.TAPU_FINI:
-              return "battle_legendary_tapu";
-            case Species.SOLGALEO:
-            case Species.LUNALA:
-              return "battle_legendary_sol_lun";
-            case Species.NECROZMA:
-              switch (pokemon.getFormKey()) {
-                case "dusk-mane":
-                case "dawn-wings":
-                  return "battle_legendary_dusk_dawn";
-                case "ultra":
-                  return "battle_legendary_ultra_nec";
-                default:
-                  return "battle_legendary_sol_lun";
-              }
-            case Species.NIHILEGO:
-            case Species.PHEROMOSA:
-            case Species.BUZZWOLE:
-            case Species.XURKITREE:
-            case Species.CELESTEELA:
-            case Species.KARTANA:
-            case Species.GUZZLORD:
-            case Species.POIPOLE:
-            case Species.NAGANADEL:
-            case Species.STAKATAKA:
-            case Species.BLACEPHALON:
-              return "battle_legendary_ub";
-            case Species.ZACIAN:
-            case Species.ZAMAZENTA:
-              return "battle_legendary_zac_zam";
-            case Species.GLASTRIER:
-            case Species.SPECTRIER:
-              return "battle_legendary_glas_spec";
-            case Species.CALYREX:
-              if (pokemon.getFormKey() === "ice" || pokemon.getFormKey() === "shadow") {
-                return "battle_legendary_riders";
-              }
-              return "battle_legendary_calyrex";
-            case Species.GALAR_ARTICUNO:
-            case Species.GALAR_ZAPDOS:
-            case Species.GALAR_MOLTRES:
-              return "battle_legendary_birds_galar";
-            case Species.WO_CHIEN:
-            case Species.CHIEN_PAO:
-            case Species.TING_LU:
-            case Species.CHI_YU:
-              return "battle_legendary_ruinous";
-            case Species.KORAIDON:
-            case Species.MIRAIDON:
-              return "battle_legendary_kor_mir";
-            case Species.OKIDOGI:
-            case Species.MUNKIDORI:
-            case Species.FEZANDIPITI:
-              return "battle_legendary_loyal_three";
-            case Species.OGERPON:
-              return "battle_legendary_ogerpon";
-            case Species.TERAPAGOS:
-              return "battle_legendary_terapagos";
-            case Species.PECHARUNT:
-              return "battle_legendary_pecharunt";
-            default:
-              if (pokemon.species.isLegendary()) {
-                return "battle_legendary_res_zek";
-              }
-              return "battle_legendary_unova";
-          }
+        switch (pokemon.species.speciesId) {
+          case Species.ARTICUNO:
+          case Species.ZAPDOS:
+          case Species.MOLTRES:
+          case Species.MEWTWO:
+          case Species.MEW:
+            return "battle_legendary_kanto";
+          case Species.RAIKOU:
+            return "battle_legendary_raikou";
+          case Species.ENTEI:
+            return "battle_legendary_entei";
+          case Species.SUICUNE:
+            return "battle_legendary_suicune";
+          case Species.LUGIA:
+            return "battle_legendary_lugia";
+          case Species.HO_OH:
+            return "battle_legendary_ho_oh";
+          case Species.REGIROCK:
+          case Species.REGICE:
+          case Species.REGISTEEL:
+          case Species.REGIGIGAS:
+          case Species.REGIDRAGO:
+          case Species.REGIELEKI:
+            return "battle_legendary_regis_g6";
+          case Species.GROUDON:
+          case Species.KYOGRE:
+            return "battle_legendary_gro_kyo";
+          case Species.RAYQUAZA:
+            return "battle_legendary_rayquaza";
+          case Species.DEOXYS:
+            return "battle_legendary_deoxys";
+          case Species.UXIE:
+          case Species.MESPRIT:
+          case Species.AZELF:
+            return "battle_legendary_lake_trio";
+          case Species.HEATRAN:
+          case Species.CRESSELIA:
+          case Species.DARKRAI:
+          case Species.SHAYMIN:
+            return "battle_legendary_sinnoh";
+          case Species.DIALGA:
+          case Species.PALKIA:
+            if (pokemon.species.getFormSpriteKey(pokemon.formIndex) === SpeciesFormKey.ORIGIN) {
+              return "battle_legendary_origin_forme";
+            }
+            return "battle_legendary_dia_pal";
+          case Species.GIRATINA:
+            return "battle_legendary_giratina";
+          case Species.ARCEUS:
+            return "battle_legendary_arceus";
+          case Species.COBALION:
+          case Species.TERRAKION:
+          case Species.VIRIZION:
+          case Species.KELDEO:
+          case Species.TORNADUS:
+          case Species.LANDORUS:
+          case Species.THUNDURUS:
+          case Species.MELOETTA:
+          case Species.GENESECT:
+            return "battle_legendary_unova";
+          case Species.KYUREM:
+            return "battle_legendary_kyurem";
+          case Species.XERNEAS:
+          case Species.YVELTAL:
+          case Species.ZYGARDE:
+            return "battle_legendary_xern_yvel";
+          case Species.TAPU_KOKO:
+          case Species.TAPU_LELE:
+          case Species.TAPU_BULU:
+          case Species.TAPU_FINI:
+            return "battle_legendary_tapu";
+          case Species.SOLGALEO:
+          case Species.LUNALA:
+            return "battle_legendary_sol_lun";
+          case Species.NECROZMA:
+            switch (pokemon.getFormKey()) {
+              case "dusk-mane":
+              case "dawn-wings":
+                return "battle_legendary_dusk_dawn";
+              case "ultra":
+                return "battle_legendary_ultra_nec";
+              default:
+                return "battle_legendary_sol_lun";
+            }
+          case Species.NIHILEGO:
+          case Species.PHEROMOSA:
+          case Species.BUZZWOLE:
+          case Species.XURKITREE:
+          case Species.CELESTEELA:
+          case Species.KARTANA:
+          case Species.GUZZLORD:
+          case Species.POIPOLE:
+          case Species.NAGANADEL:
+          case Species.STAKATAKA:
+          case Species.BLACEPHALON:
+            return "battle_legendary_ub";
+          case Species.ZACIAN:
+          case Species.ZAMAZENTA:
+            return "battle_legendary_zac_zam";
+          case Species.GLASTRIER:
+          case Species.SPECTRIER:
+            return "battle_legendary_glas_spec";
+          case Species.CALYREX:
+            if (pokemon.getFormKey() === "ice" || pokemon.getFormKey() === "shadow") {
+              return "battle_legendary_riders";
+            }
+            return "battle_legendary_calyrex";
+          case Species.GALAR_ARTICUNO:
+          case Species.GALAR_ZAPDOS:
+          case Species.GALAR_MOLTRES:
+            return "battle_legendary_birds_galar";
+          case Species.WO_CHIEN:
+          case Species.CHIEN_PAO:
+          case Species.TING_LU:
+          case Species.CHI_YU:
+            return "battle_legendary_ruinous";
+          case Species.KORAIDON:
+          case Species.MIRAIDON:
+            return "battle_legendary_kor_mir";
+          case Species.OKIDOGI:
+          case Species.MUNKIDORI:
+          case Species.FEZANDIPITI:
+            return "battle_legendary_loyal_three";
+          case Species.OGERPON:
+            return "battle_legendary_ogerpon";
+          case Species.TERAPAGOS:
+            return "battle_legendary_terapagos";
+          case Species.PECHARUNT:
+            return "battle_legendary_pecharunt";
+          default:
+            if (pokemon.species.isLegendary()) {
+              return "battle_legendary_res_zek";
+            }
+            return "battle_legendary_unova";
         }
       }
     }

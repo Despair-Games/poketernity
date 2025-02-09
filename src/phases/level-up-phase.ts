@@ -73,8 +73,8 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
     // this feels like an unnecessary optimization
     if (this.lastLevel < 100) {
       const levelMoves = this.getPokemon().getLevelMoves(this.lastLevel + 1);
-      for (const lm of levelMoves) {
-        globalScene.unshiftPhase(new LearnMovePhase(this.partyMemberIndex, lm[1]));
+      for (const [, learnMoveId] of levelMoves) {
+        globalScene.unshiftPhase(new LearnMovePhase(this.partyMemberIndex, learnMoveId));
       }
     }
 

@@ -22,11 +22,13 @@ export class PostBattleInitStatStageChangeAbAttr extends PostBattleInitAbAttr {
 
     if (!simulated) {
       if (this.selfTarget) {
-        statStageChangePhases.push(new StatStageChangePhase(pokemon.getBattlerIndex(), true, this.stats, this.stages));
+        statStageChangePhases.push(
+          new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, this.stats, this.stages),
+        );
       } else {
         for (const opponent of pokemon.getOpponents()) {
           statStageChangePhases.push(
-            new StatStageChangePhase(opponent.getBattlerIndex(), false, this.stats, this.stages),
+            new StatStageChangePhase(opponent.getBattlerIndex(), pokemon, this.stats, this.stages),
           );
         }
       }
