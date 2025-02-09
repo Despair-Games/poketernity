@@ -787,7 +787,7 @@ export class Arena {
       case Biome.TALL_GRASS:
         return 9.608;
       case Biome.METROPOLIS:
-        return 141.47;
+        return 4.867;
       case Biome.FOREST:
         return 4.294;
       case Biome.SEA:
@@ -833,7 +833,7 @@ export class Arena {
       case Biome.CONSTRUCTION_SITE:
         return 1.222;
       case Biome.JUNGLE:
-        return 0.0;
+        return 2.477;
       case Biome.FAIRY_CAVE:
         return 4.542;
       case Biome.TEMPLE:
@@ -841,7 +841,7 @@ export class Arena {
       case Biome.ISLAND:
         return 2.751;
       case Biome.LABORATORY:
-        return 114.862;
+        return 0.797;
       case Biome.SLUM:
         return 0.0;
       case Biome.SNOWY_FOREST:
