@@ -329,6 +329,9 @@ export class MoveEffectPhase extends HitCheckPhase {
    * @param user the {@linkcode Pokemon} using the move
    */
   private applyFieldMoveEffects(user: Pokemon): void {
+    // Lapse `MOVE_EFFECT` effects (i.e. semi-invulnerability) when applicable
+    user.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
+
     /** The indexes of active Pokemon that fall within the move's field effect */
     const affectedPokemon: BattlerIndex[] = [];
 
@@ -353,6 +356,7 @@ export class MoveEffectPhase extends HitCheckPhase {
         moveId: this.move.moveId,
         targets: this.targets,
         result: MoveResult.SUCCESS,
+        virtual: this.move.virtual,
       });
 
       this.end();

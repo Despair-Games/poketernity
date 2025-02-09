@@ -10,7 +10,7 @@ import { allMoves } from "#app/data/all-moves";
 import { CommonAnim } from "#enums/common-anim";
 import { CenterOfAttentionTag, SkyDropTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import { applyMoveAttrs } from "#app/data/move";
+import { applyMoveAttrs, isFieldTargeted } from "#app/data/move";
 import { BypassRedirectAttr } from "#app/data/move-attrs/bypass-redirect-attr";
 import { BypassSleepAttr } from "#app/data/move-attrs/bypass-sleep-attr";
 import { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
@@ -202,8 +202,12 @@ export class MovePhase extends BattlePhase {
    */
   protected resolveFinalPreMoveCancellationChecks(): void {
     const moveQueue = this.pokemon.getMoveQueue();
+    const targets = this.getActiveTargetPokemon();
 
-    if (moveQueue.length && moveQueue[0].moveId === MoveId.NONE) {
+    if (
+      (targets.length === 0 && !isFieldTargeted(this.targets))
+      || (moveQueue.length && moveQueue[0].moveId === MoveId.NONE)
+    ) {
       this.showMoveText();
       this.showFailedText();
       this.cancel();
