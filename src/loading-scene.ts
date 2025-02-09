@@ -59,10 +59,6 @@ export class LoadingScene extends SceneBase {
 
     // Load menu images
     this.loadAtlas("prompt", "ui");
-    this.loadImage("candy", "ui");
-    this.loadImage("candy_overlay", "ui");
-    this.loadImage("friendship", "ui");
-    this.loadImage("friendship_overlay", "ui");
     this.loadImage("cursor", "ui", { uiThemeDependant: true });
     this.loadImage("cursor_reverse", "ui", { uiThemeDependant: true });
 
@@ -119,6 +115,10 @@ export class LoadingScene extends SceneBase {
     this.loadImage("icon_tera", currentFolder);
     this.loadImage("icon_owned", currentFolder);
     this.loadImage("icon_egg_move", currentFolder);
+    this.loadImage("candy", currentFolder);
+    this.loadImage("candy_overlay", currentFolder);
+    this.loadImage("friendship", currentFolder);
+    this.loadImage("friendship_overlay", currentFolder);
 
     currentFolder = "ui/pokemon-battle-info";
     this.loadImage("pbinfo_player", currentFolder);
