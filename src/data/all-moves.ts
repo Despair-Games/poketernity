@@ -234,7 +234,7 @@ import {
   failOnMaxCondition,
 } from "./move-conditions";
 import { SelfStatusMove } from "./move";
-import { isNonVolatileStatusEffect, getNonVolatileStatusEffects } from "./status-effect";
+import { getNonVolatileStatusEffects } from "./status-effect";
 import { StatusMove } from "./move";
 import { crashDamageFunc, frenzyMissFunc } from "./move-utils";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
@@ -1175,11 +1175,8 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], -2),
     new AttackMove(MoveId.FACADE, ElementalType.NORMAL, MoveCategory.PHYSICAL, 70, 100, 20, -1, 0, 3)
       .attr(MovePowerMultiplierAttr, (user, _target, _move) =>
-        user.status
-        && (user.status.effect === StatusEffect.BURN
-          || user.status.effect === StatusEffect.POISON
-          || user.status.effect === StatusEffect.TOXIC
-          || user.status.effect === StatusEffect.PARALYSIS)
+        !!user
+        && user.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC, StatusEffect.PARALYSIS])
           ? 2
           : 1,
       )
@@ -1193,7 +1190,7 @@ export function initMoves() {
       .condition((user, _target, _move) => !user.turnData.attacksReceived.find((r) => r.damage)),
     new AttackMove(MoveId.SMELLING_SALTS, ElementalType.NORMAL, MoveCategory.PHYSICAL, 70, 100, 10, -1, 0, 3)
       .attr(MovePowerMultiplierAttr, (_user, target, _move) =>
-        target.status?.effect === StatusEffect.PARALYSIS ? 2 : 1,
+        !!target && target.hasStatusEffect(StatusEffect.PARALYSIS) ? 2 : 1,
       )
       .attr(HealStatusEffectAttr, true, StatusEffect.PARALYSIS),
     new SelfStatusMove(MoveId.FOLLOW_ME, ElementalType.NORMAL, -1, 20, -1, 2, 3).attr(
@@ -1270,11 +1267,8 @@ export function initMoves() {
       ])
       .condition(
         (user, _target, _move) =>
-          !!user.status
-          && (user.status.effect === StatusEffect.PARALYSIS
-            || user.status.effect === StatusEffect.POISON
-            || user.status.effect === StatusEffect.TOXIC
-            || user.status.effect === StatusEffect.BURN),
+          !!user
+          && user.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC, StatusEffect.PARALYSIS]),
       ),
     new SelfStatusMove(MoveId.GRUDGE, ElementalType.GHOST, -1, 5, -1, 0, 3).attr(
       AddBattlerTagAttr,
@@ -1637,11 +1631,8 @@ export function initMoves() {
     new StatusMove(MoveId.PSYCHO_SHIFT, ElementalType.PSYCHIC, 100, 10, -1, 0, 4)
       .attr(PsychoShiftEffectAttr)
       .condition((user, target, _move) => {
-        let statusToApply = user.hasAbility(Abilities.COMATOSE) ? StatusEffect.SLEEP : undefined;
-        if (user.status?.effect && isNonVolatileStatusEffect(user.status.effect)) {
-          statusToApply = user.status.effect;
-        }
-        return !!statusToApply && target.canSetStatus(statusToApply, false, false, user);
+        const statusToApply = user.getStatusEffect();
+        return target.canSetStatus(statusToApply, false, false, user);
       }),
     new AttackMove(MoveId.TRUMP_CARD, ElementalType.NORMAL, MoveCategory.SPECIAL, -1, -1, 5, -1, 0, 4)
       .makesContact()
@@ -2008,10 +1999,7 @@ export function initMoves() {
     ),
     new AttackMove(MoveId.VENOSHOCK, ElementalType.POISON, MoveCategory.SPECIAL, 65, 100, 10, -1, 0, 5).attr(
       MovePowerMultiplierAttr,
-      (_user, target, _move) =>
-        target.status && (target.status.effect === StatusEffect.POISON || target.status.effect === StatusEffect.TOXIC)
-          ? 2
-          : 1,
+      (_user, target, _move) => (target.hasStatusEffect([StatusEffect.POISON, StatusEffect.TOXIC]) ? 2 : 1),
     ),
     new SelfStatusMove(MoveId.AUTOTOMIZE, ElementalType.STEEL, -1, 15, -1, 0, 5)
       .attr(StatStageChangeAttr, [Stat.SPD], 2, true)
@@ -2542,8 +2530,7 @@ export function initMoves() {
     ),
     new StatusMove(MoveId.VENOM_DRENCH, ElementalType.POISON, 100, 20, -1, 0, 6)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK, Stat.SPD], -1, false, {
-        condition: (_user, target, _move) =>
-          target.status?.effect === StatusEffect.POISON || target.status?.effect === StatusEffect.TOXIC,
+        condition: (_user, target, _move) => target.hasStatusEffect([StatusEffect.POISON, StatusEffect.TOXIC]),
       })
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new StatusMove(MoveId.POWDER, ElementalType.BUG, 100, 20, -1, 1, 6)
@@ -2918,10 +2905,7 @@ export function initMoves() {
     new AttackMove(MoveId.SMART_STRIKE, ElementalType.STEEL, MoveCategory.PHYSICAL, 70, -1, 10, -1, 0, 7),
     new StatusMove(MoveId.PURIFY, ElementalType.POISON, -1, 20, -1, 0, 7)
       .condition((_user, target, _move) => {
-        if (!target.status) {
-          return false;
-        }
-        return isNonVolatileStatusEffect(target.status.effect);
+        return target.hasStatusEffect(getNonVolatileStatusEffects());
       })
       .attr(HealAttr, 0.5)
       .attr(HealStatusEffectAttr, false, getNonVolatileStatusEffects())
@@ -3589,9 +3573,7 @@ export function initMoves() {
     new AttackMove(MoveId.BARB_BARRAGE, ElementalType.POISON, MoveCategory.PHYSICAL, 60, 100, 10, 50, 0, 8)
       .makesContact(false)
       .attr(MovePowerMultiplierAttr, (_user, target, _move) =>
-        target.status && (target.status.effect === StatusEffect.POISON || target.status.effect === StatusEffect.TOXIC)
-          ? 2
-          : 1,
+        target.hasStatusEffect[(StatusEffect.POISON, StatusEffect.TOXIC)] ? 2 : 1,
       )
       .attr(StatusEffectAttr, StatusEffect.POISON),
     new AttackMove(MoveId.ESPER_WING, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 80, 100, 10, 100, 0, 8)

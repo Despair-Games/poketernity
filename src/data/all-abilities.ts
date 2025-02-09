@@ -199,6 +199,7 @@ import { MoveFlagPowerBoostAbAttr } from "./ab-attrs/move-flag-power-boost-ab-at
 import { MoveFlagImmunityAbAttr } from "./ab-attrs/move-flag-immunity-ab-attr";
 import { ReflectStatStageChangeAbAttr } from "./ab-attrs/reflect-stat-stage-change-ab-attr";
 import { AnticipationAbAttr } from "./ab-attrs/anticipation-ab-attr";
+import { MockStatusEffectAbAttr } from "./ab-attrs/mock-status-effect-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
@@ -608,10 +609,11 @@ export function initAbilities() {
       .attr(MoveAbilityBypassAbAttr),
     new Ability(Abilities.SUPER_LUCK, 4).attr(BonusCritAbAttr),
     new Ability(Abilities.AFTERMATH, 4).attr(PostFaintContactDamageAbAttr, 4).bypassFaint(),
-    new Ability(Abilities.ANTICIPATION, 4).attr(AnticipationAbAttr, (pokemon: Pokemon) =>
-      i18next.t("abilityTriggers:postSummonAnticipation", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-    )
-    .edgeCase(), // Does not activate upon acquiring the Ability (e.g., via Skill Swap)
+    new Ability(Abilities.ANTICIPATION, 4)
+      .attr(AnticipationAbAttr, (pokemon: Pokemon) =>
+        i18next.t("abilityTriggers:postSummonAnticipation", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+      )
+      .edgeCase(), // Does not activate upon acquiring the Ability (e.g., via Skill Swap)
     new Ability(Abilities.FOREWARN, 4).attr(ForewarnAbAttr),
     new Ability(Abilities.UNAWARE, 4)
       .attr(IgnoreOpponentStatStagesAbAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.ACC, Stat.EVA])
@@ -731,12 +733,14 @@ export function initAbilities() {
       MovePowerBoostAbAttr,
       (user, _target, move) =>
         move?.category === MoveCategory.PHYSICAL
-        && (user?.status?.effect === StatusEffect.POISON || user?.status?.effect === StatusEffect.TOXIC),
+        && !!user
+        && user.hasStatusEffect([StatusEffect.POISON, StatusEffect.TOXIC]),
       1.5,
     ),
     new Ability(Abilities.FLARE_BOOST, 5).attr(
       MovePowerBoostAbAttr,
-      (user, _target, move) => move?.category === MoveCategory.SPECIAL && user?.status?.effect === StatusEffect.BURN,
+      (user, _target, move) =>
+        move?.category === MoveCategory.SPECIAL && !!user && user.hasStatusEffect(StatusEffect.BURN),
       1.5,
     ),
     new Ability(Abilities.HARVEST, 5)
@@ -1124,6 +1128,7 @@ export function initAbilities() {
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
       .attr(UnsuppressableAbilityAbAttr)
+      .attr(MockStatusEffectAbAttr, StatusEffect.SLEEP)
       .attr(StatusEffectImmunityAbAttr, ...getNonVolatileStatusEffects())
       .attr(BattlerTagImmunityAbAttr, BattlerTagType.DROWSY),
     new Ability(Abilities.QUEENLY_MAJESTY, 7).attr(FieldPriorityMoveImmunityAbAttr).ignorable(),

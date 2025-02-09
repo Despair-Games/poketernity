@@ -38,7 +38,7 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
     }
 
     const pokemon = this.selfTarget ? user : target;
-    if (pokemon.status && this.effects.includes(pokemon.status.effect)) {
+    if (pokemon.hasStatusEffect(this.effects) && pokemon.status) {
       globalScene.queueMessage(getStatusEffectHealText(pokemon.status.effect, getPokemonNameWithAffix(pokemon)));
       pokemon.resetStatus();
       pokemon.updateInfo();

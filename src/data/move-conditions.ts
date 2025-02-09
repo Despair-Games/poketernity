@@ -3,7 +3,6 @@ import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder } from "#app/utils";
-import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { StatusEffect } from "#enums/status-effect";
 import { ElementalType } from "#enums/elemental-type";
@@ -117,10 +116,10 @@ export const failIfDampCondition: MoveConditionFunc = (user, _target, move) => {
 };
 
 export const userSleptOrComatoseCondition: MoveConditionFunc = (user: Pokemon, _target: Pokemon, _move: Move) =>
-  user.status?.effect === StatusEffect.SLEEP || user.hasAbility(Abilities.COMATOSE);
+  !!user && user.hasStatusEffect(StatusEffect.SLEEP);
 
 export const targetSleptOrComatoseCondition: MoveConditionFunc = (_user: Pokemon, target: Pokemon, _move: Move) =>
-  target.status?.effect === StatusEffect.SLEEP || target.hasAbility(Abilities.COMATOSE);
+  !!target && target.hasStatusEffect(StatusEffect.SLEEP);
 
 export const failIfLastCondition: MoveConditionFunc = (_user: Pokemon, _target: Pokemon, _move: Move) =>
   globalScene.phaseQueue.find((phase) => phase.isMovePhase()) !== undefined;

@@ -91,7 +91,7 @@ import {
 import { PokeballType } from "#enums/pokeball";
 import { Gender } from "#enums/gender";
 import { initMoveAnim, loadMoveAnimAssets } from "#app/data/battle-anims";
-import { Status, getRandomStatus } from "#app/data/status-effect";
+import { Status, getNonVolatileStatusEffects, getRandomStatus } from "#app/data/status-effect";
 import type { SpeciesFormEvolution, SpeciesEvolutionCondition } from "#app/data/balance/pokemon-evolutions";
 import {
   pokemonEvolutions,
@@ -229,6 +229,7 @@ import { ArenaTrapAbAttr } from "#app/data/ab-attrs/arena-trap-ab-attr";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import type { AbilityFilterOptions } from "#app/data/ability-filter-options";
 import { PokemonMove } from "#app/field/pokemon-move";
+import { MockStatusEffectAbAttr } from "#app/data/ab-attrs/mock-status-effect-ab-attr";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -3579,6 +3580,51 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     return false;
+  }
+
+  /**
+   * Helper function that determines if a Pokemon has a non-volatile status effect and/or is Confused
+   * @param statusList the status(es) to be checked
+   * @param includeConfusion whether Confusion should also be considered
+   * @param ignoreAbility whether a status effect-mocking ability should be considered
+   * @returns `true` if the Pokemon has a status effect | `false` if it does not
+   */
+  hasStatusEffect(
+    statusList: StatusEffect | StatusEffect[],
+    includeConfusion: boolean = false,
+    ignoreAbility: boolean = false,
+  ): boolean {
+    const result = new BooleanHolder(false);
+    if (!Array.isArray(statusList)) {
+      statusList = [statusList];
+    }
+    if (!ignoreAbility) {
+      applyAbAttrs(MockStatusEffectAbAttr, this, false, result, statusList);
+    }
+    if (
+      (!!this.status && statusList.includes(this.status.effect))
+      || (includeConfusion && this.getTag(BattlerTagType.CONFUSED))
+    ) {
+      result.value = true;
+    }
+    return result.value;
+  }
+
+  /**
+   * Helper function that retrieves the Pokemon's non-volatile status effect
+   * @returns {@linkcode StatusEffect} the status effect held by the Pokemon
+   */
+  getStatusEffect(): StatusEffect {
+    if (this.hasStatusEffect(getNonVolatileStatusEffects())) {
+      if (this.hasAbilityWithAttr(MockStatusEffectAbAttr)) {
+        return this.getAbilityAttrs(MockStatusEffectAbAttr)[0].mockedStatus;
+      } else {
+        if (this.status) {
+          return this.status?.effect;
+        }
+      }
+    }
+    return StatusEffect.NONE;
   }
 
   /** @overload */

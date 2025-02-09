@@ -1,7 +1,7 @@
 import { getPokemonNameWithAffix } from "../messages";
 import type { Pokemon } from "../field/pokemon";
 import { HitResult } from "#enums/hit-result";
-import { getStatusEffectHealText } from "./status-effect";
+import { getNonVolatileStatusEffects, getStatusEffectHealText } from "./status-effect";
 import { NumberHolder, toDmgValue, randSeedInt } from "#app/utils";
 import { applyAbAttrs } from "./apply-ab-attrs";
 import { ReduceBerryUseThresholdAbAttr } from "./ab-attrs/reduce-berry-use-threshold-ab-attr";
@@ -23,7 +23,7 @@ export function getBerryPredicate(berryType: BerryType): BerryPredicate {
     case BerryType.SITRUS:
       return (pokemon: Pokemon) => pokemon.getHpRatio() < 0.5;
     case BerryType.LUM:
-      return (pokemon: Pokemon) => !!pokemon.status || !!pokemon.getTag(BattlerTagType.CONFUSED);
+      return (pokemon: Pokemon) => pokemon.hasStatusEffect(getNonVolatileStatusEffects(), true);
     case BerryType.ENIGMA:
       return (pokemon: Pokemon) =>
         !!pokemon.turnData.attacksReceived.filter((a) => a.result === HitResult.SUPER_EFFECTIVE).length;
