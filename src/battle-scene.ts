@@ -150,6 +150,8 @@ import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { allMysteryEncounters, mysteryEncountersByBiome } from "#app/data/mystery-encounters/mystery-encounters";
 import {
+  IV_MAX,
+  IV_MIN,
   ME_ANTI_VARIANCE_WEIGHT_MODIFIER,
   ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
   ME_BASE_SPAWN_WEIGHT,
@@ -994,7 +996,7 @@ export default class BattleScene extends SceneBase {
       ENEMY_IVS_OVERRIDE_VALIDATED = new Array(6).fill(Overrides.ENEMY_IVS_OVERRIDE);
     }
     if (ENEMY_IVS_OVERRIDE_VALIDATED.length === 6) {
-      pokemon.ivs = ENEMY_IVS_OVERRIDE_VALIDATED.map(iv => Phaser.Math.Clamp(iv, 0, 31));
+      pokemon.ivs = ENEMY_IVS_OVERRIDE_VALIDATED.map((iv) => Phaser.Math.Clamp(iv, IV_MIN, IV_MAX));
     }
 
     pokemon.init();

@@ -199,6 +199,7 @@ import { MoveFlagPowerBoostAbAttr } from "./ab-attrs/move-flag-power-boost-ab-at
 import { MoveFlagImmunityAbAttr } from "./ab-attrs/move-flag-immunity-ab-attr";
 import { ReflectStatStageChangeAbAttr } from "./ab-attrs/reflect-stat-stage-change-ab-attr";
 import { AnticipationAbAttr } from "./ab-attrs/anticipation-ab-attr";
+import { BypassParaSpeedReductionAbAttr } from "./ab-attrs/bypass-para-speed-reduction-ab-attr";
 import { MockStatusEffectAbAttr } from "./ab-attrs/mock-status-effect-ab-attr";
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
@@ -552,12 +553,7 @@ export function initAbilities() {
       .attr(StatMultiplierAbAttr, Stat.SPATK, 1.5)
       .condition(getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN)),
     new Ability(Abilities.QUICK_FEET, 4)
-      .conditionalAttr(
-        (pokemon) => (pokemon.status ? pokemon.status.effect === StatusEffect.PARALYSIS : false),
-        StatMultiplierAbAttr,
-        Stat.SPD,
-        2,
-      )
+      .attr(BypassParaSpeedReductionAbAttr)
       .conditionalAttr(
         (pokemon) => !!pokemon.status || pokemon.hasAbility(Abilities.COMATOSE),
         StatMultiplierAbAttr,
