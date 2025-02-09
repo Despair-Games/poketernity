@@ -126,7 +126,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
       this.ownedIcon.setPositionRelative(this.nameText, 0, 11.75);
       this.add(this.ownedIcon);
 
-      this.championRibbon = globalScene.add.sprite(0, 0, "champion_ribbon");
+      this.championRibbon = globalScene.add.sprite(0, 0, "icon_champion_ribbon");
       this.championRibbon.setName("icon_champion_ribbon");
       this.championRibbon.setVisible(false);
       this.championRibbon.setOrigin(0, 0);

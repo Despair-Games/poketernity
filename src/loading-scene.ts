@@ -72,8 +72,6 @@ export class LoadingScene extends SceneBase {
     this.loadAtlas("overlay_hp", "ui");
     this.loadAtlas("overlay_hp_boss", "ui");
     this.loadImage("overlay_exp", "ui");
-    this.loadImage("icon_owned", "ui");
-    this.loadImage("icon_egg_move", "ui");
     this.loadImage("ability_bar_left", "ui");
     this.loadImage("bgm_bar", "ui");
     this.loadImage("party_exp_bar", "ui");
@@ -82,25 +80,37 @@ export class LoadingScene extends SceneBase {
     this.loadImage("achv_bar_3", "ui");
     this.loadImage("achv_bar_4", "ui");
     this.loadImage("achv_bar_5", "ui");
-    this.loadImage("shiny_star", "ui", { filenameRoot: "shiny" });
-    this.loadImage("shiny_star_1", "ui", { filenameRoot: "shiny_1" });
-    this.loadImage("shiny_star_2", "ui", { filenameRoot: "shiny_2" });
-    this.loadImage("shiny_star_small", "ui", { filenameRoot: "shiny_small" });
-    this.loadImage("shiny_star_small_1", "ui", { filenameRoot: "shiny_small_1" });
-    this.loadImage("shiny_star_small_2", "ui", { filenameRoot: "shiny_small_2" });
-    this.loadImage("favorite", "ui");
-    this.loadImage("passive_bg", "ui");
-    this.loadAtlas("shiny_icons", "ui");
-    this.loadImage("ha_capsule", "ui");
-    this.loadImage("champion_ribbon", "ui");
-    this.loadImage("icon_spliced", "ui");
-    this.loadImage("icon_lock", "ui");
-    this.loadImage("icon_stop", "ui");
-    this.loadImage("icon_tera", "ui");
-    this.loadImage("type_tera", "ui");
-    this.loadAtlas("type_bgs", "ui");
 
-    let currentFolder = "ui/pokemon-battle-info";
+    this.loadAtlas("type_bgs", "ui");
+    this.loadImage("type_tera", "ui");
+
+    let currentFolder = "ui/menu-icons";
+    this.loadImage("saving_icon", currentFolder);
+    this.loadImage("discord", currentFolder);
+    this.loadImage("google", currentFolder);
+    this.loadImage("settings_icon", currentFolder);
+    this.loadImage("link_icon", currentFolder);
+    this.loadImage("unlink_icon", currentFolder);
+    this.loadImage("icon_lock", currentFolder);
+    this.loadImage("icon_stop", currentFolder);
+
+    currentFolder = "ui/game-icons";
+    this.loadImage("shiny_star", currentFolder, { filenameRoot: "shiny" });
+    this.loadImage("shiny_star_1", currentFolder, { filenameRoot: "shiny_1" });
+    this.loadImage("shiny_star_2", currentFolder, { filenameRoot: "shiny_2" });
+    this.loadImage("shiny_star_small", currentFolder, { filenameRoot: "shiny_small" });
+    this.loadImage("shiny_star_small_1", currentFolder, { filenameRoot: "shiny_small_1" });
+    this.loadImage("shiny_star_small_2", currentFolder, { filenameRoot: "shiny_small_2" });
+    this.loadImage("icon_favorite", currentFolder);
+    this.loadAtlas("shiny_icons", currentFolder);
+    this.loadImage("icon_ha_capsule", currentFolder);
+    this.loadImage("icon_champion_ribbon", currentFolder);
+    this.loadImage("icon_spliced", currentFolder);
+    this.loadImage("icon_tera", currentFolder);
+    this.loadImage("icon_owned", currentFolder);
+    this.loadImage("icon_egg_move", currentFolder);
+
+    currentFolder = "ui/pokemon-battle-info";
     this.loadImage("pbinfo_player", currentFolder);
     this.loadImage("pbinfo_player_stats", currentFolder);
     this.loadImage("pbinfo_player_mini", currentFolder);
@@ -170,6 +180,7 @@ export class LoadingScene extends SceneBase {
 
     this.loadImage("starter_container_bg", "ui");
     this.loadImage("starter_select_bg", "ui");
+    this.loadImage("passive_bg", "ui");
 
     currentFolder = "ui/cursors";
     this.loadImage("select_cursor", currentFolder);
@@ -178,13 +189,6 @@ export class LoadingScene extends SceneBase {
     this.loadImage("select_cursor_pokerus", currentFolder);
     this.loadImage("select_gen_cursor", currentFolder);
     this.loadAtlas("summary_moves_cursor", currentFolder);
-
-    this.loadImage("saving_icon", "ui");
-    this.loadImage("discord", "ui");
-    this.loadImage("google", "ui");
-    this.loadImage("settings_icon", "ui");
-    this.loadImage("link_icon", "ui");
-    this.loadImage("unlink_icon", "ui");
 
     this.loadImage("default_bg", "arenas");
     // Load arena images
