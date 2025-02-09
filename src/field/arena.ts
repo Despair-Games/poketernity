@@ -890,6 +890,8 @@ export function getBiomeHasProps(biomeType: Biome): boolean {
     case Biome.END:
       return true;
   }
+
+  return false;
 }
 
 export class ArenaBase extends Phaser.GameObjects.Container {
