@@ -136,14 +136,15 @@ export class LoadingScene extends SceneBase {
     this.loadImage("night_icon_mg", currentFolder);
     this.loadImage("night_icon_bg", currentFolder);
 
-    this.loadImage("party_bg", "ui");
-    this.loadImage("party_bg_double", "ui");
-    this.loadAtlas("party_slot_main", "ui");
-    this.loadAtlas("party_slot", "ui");
-    this.loadImage("party_slot_overlay_lv", "ui");
-    this.loadImage("party_slot_hp_bar", "ui");
-    this.loadAtlas("party_slot_hp_overlay", "ui");
-    this.loadAtlas("party_cancel", "ui");
+    currentFolder = "ui/party";
+    this.loadImage("party_bg_double", currentFolder);
+    this.loadImage("party_bg", currentFolder);
+    this.loadAtlas("party_cancel", currentFolder);
+    this.loadImage("party_slot_hp_bar", currentFolder);
+    this.loadAtlas("party_slot_hp_overlay", currentFolder);
+    this.loadImage("party_slot_overlay_lv", currentFolder);
+    this.loadAtlas("party_slot_main", currentFolder);
+    this.loadAtlas("party_slot", currentFolder);
 
     this.loadImage("summary_bg", "ui");
     this.loadImage("summary_overlay_shiny", "ui");
