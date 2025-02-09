@@ -781,7 +781,7 @@ export class Arena {
       case Biome.TOWN:
         return 7.288;
       case Biome.PLAINS:
-        return 17.485;
+        return 7.693;
       case Biome.GRASS:
         return 1.995;
       case Biome.TALL_GRASS:
@@ -809,13 +809,13 @@ export class Arena {
       case Biome.DESERT:
         return 1.143;
       case Biome.ICE_CAVE:
-        return 0.0;
+        return 15.01;
       case Biome.MEADOW:
         return 3.891;
       case Biome.POWER_PLANT:
-        return 9.447;
+        return 2.81;
       case Biome.VOLCANO:
-        return 17.637;
+        return 5.116;
       case Biome.GRAVEYARD:
         return 3.232;
       case Biome.DOJO:
@@ -886,8 +886,6 @@ export function getBiomeHasProps(biomeType: Biome): boolean {
     case Biome.END:
       return true;
   }
-
-  return false;
 }
 
 export class ArenaBase extends Phaser.GameObjects.Container {
