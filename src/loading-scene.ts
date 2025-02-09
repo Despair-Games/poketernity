@@ -116,18 +116,19 @@ export class LoadingScene extends SceneBase {
     this.loadImage("type_tera", "ui");
     this.loadAtlas("type_bgs", "ui");
 
-    this.loadImage("dawn_icon_fg", "ui");
-    this.loadImage("dawn_icon_mg", "ui");
-    this.loadImage("dawn_icon_bg", "ui");
-    this.loadImage("day_icon_fg", "ui");
-    this.loadImage("day_icon_mg", "ui");
-    this.loadImage("day_icon_bg", "ui");
-    this.loadImage("dusk_icon_fg", "ui");
-    this.loadImage("dusk_icon_mg", "ui");
-    this.loadImage("dusk_icon_bg", "ui");
-    this.loadImage("night_icon_fg", "ui");
-    this.loadImage("night_icon_mg", "ui");
-    this.loadImage("night_icon_bg", "ui");
+    const timeOfDayFolder = "ui/time-of-day";
+    this.loadImage("dawn_icon_fg", timeOfDayFolder);
+    this.loadImage("dawn_icon_mg", timeOfDayFolder);
+    this.loadImage("dawn_icon_bg", timeOfDayFolder);
+    this.loadImage("day_icon_fg", timeOfDayFolder);
+    this.loadImage("day_icon_mg", timeOfDayFolder);
+    this.loadImage("day_icon_bg", timeOfDayFolder);
+    this.loadImage("dusk_icon_fg", timeOfDayFolder);
+    this.loadImage("dusk_icon_mg", timeOfDayFolder);
+    this.loadImage("dusk_icon_bg", timeOfDayFolder);
+    this.loadImage("night_icon_fg", timeOfDayFolder);
+    this.loadImage("night_icon_mg", timeOfDayFolder);
+    this.loadImage("night_icon_bg", timeOfDayFolder);
 
     this.loadImage("pb_tray_overlay_player", "ui");
     this.loadImage("pb_tray_overlay_enemy", "ui");
