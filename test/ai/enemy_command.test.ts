@@ -1,35 +1,16 @@
-import type BattleScene from "#app/battle-scene";
 import { allMoves } from "#app/data/all-moves";
 import { MoveCategory } from "#enums/move-category";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import type { EnemyPokemon } from "#app/field/pokemon";
 import { AiType } from "#enums/ai-type";
-import { randSeedInt } from "#app/utils";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { getEnemyMoveChoices, type MoveChoiceSet } from "./utils/enemy_command_utils";
+import type BattleScene from "#app/battle-scene";
 
 let globalScene: BattleScene;
-const NUM_TRIALS = 300;
-
-type MoveChoiceSet = { [key: number]: number };
-
-function getEnemyMoveChoices(pokemon: EnemyPokemon, moveChoices: MoveChoiceSet): void {
-  // Use an unseeded random number generator in place of the mocked-out randBattleSeedInt
-  vi.spyOn(globalScene, "randBattleSeedInt").mockImplementation((range, min?) => {
-    return randSeedInt(range, min);
-  });
-  for (let i = 0; i < NUM_TRIALS; i++) {
-    const queuedMove = pokemon.getNextMove();
-    moveChoices[queuedMove.moveId]++;
-  }
-
-  for (const [moveId, count] of Object.entries(moveChoices)) {
-    console.log(`Move: ${allMoves[moveId].name}   Count: ${count} (${Math.round((count / NUM_TRIALS) * 100)}%)`);
-  }
-}
 
 describe("Enemy Commands - Move Selection", () => {
   let phaserGame: Phaser.Game;
@@ -67,7 +48,7 @@ describe("Enemy Commands - Move Selection", () => {
     const moveChoices: MoveChoiceSet = {};
     const enemyMoveset = enemyPokemon.getMoveset();
     enemyMoveset.forEach((mv) => (moveChoices[mv!.moveId] = 0));
-    getEnemyMoveChoices(enemyPokemon, moveChoices);
+    getEnemyMoveChoices(globalScene, enemyPokemon, moveChoices);
 
     enemyMoveset.forEach((mv) => {
       if (mv?.getMove().category === MoveCategory.STATUS) {
@@ -91,7 +72,7 @@ describe("Enemy Commands - Move Selection", () => {
     const moveChoices: MoveChoiceSet = {};
     const enemyMoveset = enemyPokemon.getMoveset();
     enemyMoveset.forEach((mv) => (moveChoices[mv!.moveId] = 0));
-    getEnemyMoveChoices(enemyPokemon, moveChoices);
+    getEnemyMoveChoices(globalScene, enemyPokemon, moveChoices);
 
     enemyMoveset.forEach((mv) => {
       if (mv?.getMove().category === MoveCategory.STATUS || mv?.moveId === MoveId.LAST_RESORT) {
@@ -115,7 +96,7 @@ describe("Enemy Commands - Move Selection", () => {
     const moveChoices: MoveChoiceSet = {};
     const enemyMoveset = enemyPokemon.getMoveset();
     enemyMoveset.forEach((mv) => (moveChoices[mv.moveId] = 0));
-    getEnemyMoveChoices(enemyPokemon, moveChoices);
+    getEnemyMoveChoices(globalScene, enemyPokemon, moveChoices);
 
     expect(moveChoices[MoveId.SPLASH]).toBe(0);
     expect(moveChoices[MoveId.COVET]).toBe(0);
@@ -131,10 +112,10 @@ describe("Enemy Commands - Move Selection", () => {
     for (const move of Object.values(allMoves)) {
       const eas = offFieldEnemy.getExpectedAttackScore(player, move);
       expect(eas).toBeGreaterThanOrEqual(-1);
-      expect(eas).toBeLessThanOrEqual(4);
+      expect(eas).toBeLessThanOrEqual(6);
       const eas2 = player.getExpectedAttackScore(offFieldEnemy, move);
       expect(eas2).toBeGreaterThanOrEqual(-1);
-      expect(eas2).toBeLessThanOrEqual(4);
+      expect(eas2).toBeLessThanOrEqual(6);
     }
   });
 });

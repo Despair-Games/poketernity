@@ -1124,7 +1124,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       critStage.value += critBoostStackableTag.stackCount;
     }
 
-    console.log(`crit stage: +${critStage.value}`);
     return critStage.value;
   }
 
@@ -2184,10 +2183,25 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
+   * Obtains the estimated damage of a move against this Pokemon, accounting
+   * for revealed abilities and multi-hit modifiers (if applicable).
+   * @param source the {@linkcode Pokemon} using the move
+   * @param move the {@linkcode Move} being evaluated
+   * @returns the given move's estimated damage output.
+   */
+  protected getEstimatedAttackDamage(source: Pokemon, move: Move): number {
+    return (
+      this.getAttackDamage(source, move, AbilityApplyMode.REVEALED).damage
+      * move.getMultiHitAttackScoreMultiplier(source)
+    );
+  }
+
+  /**
    * Obtains this Pokemon's Attack Score (AS) against the given opponent
    * for the given move. This score ranges from (-1) to (+4) depending on the
    * move's forecasted damage against the opponent:
    * - If the move is forecasted to KO the opponent, AS = (+4)
+   *   - (+6) if the move has increased priority in the current game state
    * - If the move deals at least 80% of the opponent's maximum HP but does not KO, AS = (+2)
    * - If the move deals damage in the interval of (0, 80)% max HP, and does not KO, AS
    * is determined randomly based on the damage forecasted:
@@ -2210,10 +2224,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return 0;
     }
 
-    const { damage } = opponent.getAttackDamage(this, move, AbilityApplyMode.REVEALED);
+    const damage = opponent.getEstimatedAttackDamage(this, move);
 
     if (damage >= opponent.hp) {
-      return 4;
+      return this.getAttackScoreOnKnockOut(move);
     } else if (damage <= 0) {
       return -1;
     }
@@ -2247,15 +2261,29 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @see {@linkcode getAttackScore}
    */
   public getExpectedAttackScore(opponent: Pokemon, move: Move): number {
-    const { damage } = opponent.getAttackDamage(this, move, AbilityApplyMode.REVEALED);
+    const damage = opponent.getEstimatedAttackDamage(this, move);
 
     if (damage >= opponent.hp) {
-      return 4;
+      return this.getAttackScoreOnKnockOut(move);
     } else if (damage <= 0) {
       return -1;
     } else {
       const damagePct = Math.floor((damage / opponent.getMaxHp()) * 100);
       return damagePct / 40;
+    }
+  }
+
+  /**
+   * Obtains the Attack Score of a move assuming the move can KO its opponent.
+   * @param move the {@linkcode Move} being evaluated
+   * @returns the move's calculated Attack Score
+   * @see {@linkcode getAttackScore}
+   */
+  protected getAttackScoreOnKnockOut(move: Move): number {
+    if (move.getPriority(this) > 0) {
+      return 6;
+    } else {
+      return 4;
     }
   }
 
@@ -3594,7 +3622,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     applyMoveAttrs(CritOnlyAttr, source, this, move, isCritical);
     applyAbAttrs(ConditionalCritAbAttr, source, simulated, isCritical, this, move);
     if (!isCritical.value) {
-      const critChance = [24, 8, 2, 1][Math.max(0, Math.min(this.getCritStage(source, move, false), 3))];
+      const critChance = [24, 8, 2, 1][Math.max(0, Math.min(this.getCritStage(source, move, simulated), 3))];
       isCritical.value = critChance === 1 || !globalScene.randBattleSeedInt(critChance);
     }
 
@@ -5642,7 +5670,60 @@ export class EnemyPokemon extends Pokemon {
       return -5;
     }
 
-    return attackScore + move.getEffectScore(this, opponent);
+    const critBonus = this.getCriticalHitBonus(opponent, move, attackScore);
+
+    return attackScore + critBonus + move.getEffectScore(this, opponent);
+  }
+
+  /**
+   * Calculates the bonus granted to the given move based on its critical hit chance
+   * when used by this Pokemon against the given opponent.
+   * @param opponent the {@linkcode Pokemon} targeted by the move
+   * @param move the {@linkcode Move} being evaluated
+   * @param attackScore the previously calculated attack score (optional)
+   * @returns the score bonus from critical hit chance
+   */
+  protected getCriticalHitBonus(opponent: Pokemon, move: Move, attackScore?: number) {
+    const { damage: critDamage } = opponent.getAttackDamage(this, move, AbilityApplyMode.REVEALED, true);
+    if ((isNullOrUndefined(attackScore) || attackScore < 4) && critDamage >= opponent.hp) {
+      const critChance = this.getSimulatedCriticalHitChance(opponent, move);
+      /**
+       * Only grant a bonus if the calculated critical hit chance is over 10%
+       * (i.e. the user has 1 or more crit stages)
+       */
+      if (critChance > 10) {
+        return 1 + (this.randSeedInt(100) < critChance ? 1 : 0);
+      }
+    }
+
+    return 0;
+  }
+
+  /**
+   * Calculates the chance (%, rounded down) of the given move critically hitting
+   * the given target when used by this Pokemon.
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param move the {@linkcode Move} being evaluated
+   * @returns the chance of the move hitting
+   */
+  protected getSimulatedCriticalHitChance(target: Pokemon, move: Move): number {
+    const defendingSide = this.getArenaTagSide();
+    const noCritTag = globalScene.arena.getTagOnSide(NoCritTag, defendingSide);
+
+    if (noCritTag || move.hasAttr(FixedDamageAttr) || target.hasAbilityWithAttr(BlockCritAbAttr)) {
+      return -1;
+    }
+
+    const isCritical = new BooleanHolder(!!this.getTag(BattlerTagType.ALWAYS_CRIT));
+    applyMoveAttrs(CritOnlyAttr, this, target, move, isCritical);
+    applyAbAttrs(ConditionalCritAbAttr, this, true, isCritical, target, move);
+
+    if (isCritical.value) {
+      return 100;
+    }
+
+    const critChance = [24, 8, 2, 1][Phaser.Math.Clamp(target.getCritStage(this, move, true), 0, 3)];
+    return Math.floor(100 / critChance);
   }
 
   /**
@@ -5803,7 +5884,7 @@ export class EnemyPokemon extends Pokemon {
        * Counter-attacks (e.g. Metal Burst) are scored entirely
        * based on their effect score.
        */
-      const score = move.getEffectScore(this);
+      const score = move.getEffectScore(this, this.getOpponents()[0]);
 
       return {
         moveId: move.id,
