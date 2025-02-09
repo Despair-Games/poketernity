@@ -72,13 +72,13 @@ export class LoadingScene extends SceneBase {
     this.loadImage("select_cursor_highlight", currentFolder);
     this.loadImage("select_cursor_highlight_thick", currentFolder);
     this.loadImage("select_cursor_pokerus", currentFolder);
-    this.loadImage("select_gen_cursor", currentFolder);
+    this.loadImage("select_gen_cursor", currentFolder); // same as select_cursor, could be removed by using it as a nineslice
     this.loadAtlas("summary_moves_cursor", currentFolder);
 
     currentFolder = "ui/notification-bars";
     this.loadImage("ability_bar_left", currentFolder);
-    this.loadImage("bgm_bar", currentFolder);
-    this.loadImage("party_exp_bar", currentFolder);
+    this.loadImage("bgm_bar", currentFolder); // same as abilitity_bar_left, could be removed by using it as a nineslice
+    this.loadImage("party_exp_bar", currentFolder); // same as abilitity_bar_left, could be removed by using it as a nineslice
     this.loadImage("achv_bar", currentFolder);
     this.loadImage("achv_bar_2", currentFolder);
     this.loadImage("achv_bar_3", currentFolder);
@@ -192,8 +192,20 @@ export class LoadingScene extends SceneBase {
     this.loadImage("starter_select_bg", "ui");
     this.loadImage("passive_bg", "ui");
 
-    this.loadImage("default_bg", "arenas");
+    // Get current language and load the different localized images and atlases for it
+    const lang = i18next.resolvedLanguage ?? "en";
+    this.loadAtlas("statuses", "ui/status-icons", { languageKey: lang });
+    this.loadAtlas("types", "ui/type-icons", { languageKey: lang });
+
+    const availableLangs = ["en", "de", "it", "fr", "ja", "ko", "es-ES", "pt-BR", "zh-CN"];
+    if (lang && availableLangs.includes(lang)) {
+      this.loadImage("halloween2024-event-" + lang, "events");
+    } else {
+      this.loadImage("halloween2024-event-en", "events");
+    }
+
     // Load arena images
+    this.loadImage("default_bg", "arenas");
     getEnumValues(Biome).map((bt) => {
       const btKey = Biome[bt].toLowerCase();
       const isBaseAnimated = btKey === "end";
@@ -252,18 +264,6 @@ export class LoadingScene extends SceneBase {
     this.loadAtlas("pb", "");
     this.loadAtlas("items", "");
     this.loadAtlas("categories", "");
-
-    // Get current language and load the different localized images and atlases for it
-    const lang = i18next.resolvedLanguage ?? "en";
-    this.loadAtlas("statuses", "", { languageKey: lang });
-    this.loadAtlas("types", "", { languageKey: lang });
-
-    const availableLangs = ["en", "de", "it", "fr", "ja", "ko", "es-ES", "pt-BR", "zh-CN"];
-    if (lang && availableLangs.includes(lang)) {
-      this.loadImage("halloween2024-event-" + lang, "events");
-    } else {
-      this.loadImage("halloween2024-event-en", "events");
-    }
 
     this.loadAtlas("egg", "egg");
     this.loadAtlas("egg_crack", "egg");
