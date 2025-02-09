@@ -789,7 +789,7 @@ export class Arena {
       case Biome.METROPOLIS:
         return 141.47;
       case Biome.FOREST:
-        return 0.341;
+        return 4.294;
       case Biome.SEA:
         return 0.024;
       case Biome.SWAMP:
