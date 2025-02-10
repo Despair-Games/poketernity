@@ -3454,6 +3454,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
     const surviveDamage = new BooleanHolder(false);
 
+    // Eternatus does not need the damage reduction as its emax form has increased hp/defenses
+    if (this.isMax() && this.species.speciesId !== Species.ETERNATUS) {
+      damage = toDmgValue(damage * DYNAMAX_DAMAGE_TAKEN_FACTOR);
+    }
+
     if (!preventEndure && this.hp - damage <= 0) {
       if (this.hp >= 1 && this.getTag(BattlerTagType.ENDURING)) {
         surviveDamage.value = this.lapseTag(BattlerTagType.ENDURING);
@@ -3468,11 +3473,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       if (surviveDamage.value) {
         damage = this.hp - 1;
       }
-    }
-
-    // Eternatus does not need the damage reduction as its emax form has increased hp/defenses
-    if (this.isMax() && this.species.speciesId !== Species.ETERNATUS) {
-      damage = Math.floor(damage * DYNAMAX_DAMAGE_TAKEN_FACTOR);
     }
 
     damage = Math.min(damage, this.hp);
