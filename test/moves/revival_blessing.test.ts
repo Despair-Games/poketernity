@@ -62,12 +62,12 @@ describe("Moves - Revival Blessing", () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     game.move.select(MoveId.SPLASH);
-    await game.move.forceEnemyMove(Moves.MEMENTO);
+    await game.move.forceEnemyMove(MoveId.MEMENTO);
     await game.toNextTurn();
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     game.move.select(MoveId.SPLASH);
-    await game.move.forceEnemyMove(Moves.REVIVAL_BLESSING);
+    await game.move.forceEnemyMove(MoveId.REVIVAL_BLESSING);
 
     await game.phaseInterceptor.to("MoveEndPhase", false);
 

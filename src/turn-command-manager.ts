@@ -1,21 +1,23 @@
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { Abilities } from "#enums/abilities";
+import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleCommand } from "#enums/battle-command";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";
+import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { SwitchType } from "#enums/switch-type";
-import { BypassSpeedChanceAbAttr } from "./data/ab-attrs/bypass-speed-chance-ab-attr";
-import { applyAbAttrs } from "./data/ability";
+import type { QueuedMove } from "./@types/QueuedMove";
 import { allMoves } from "./data/all-moves";
-import { TrickRoomTag } from "./data/arena-tag";
+import { applyAbAttrs } from "./data/apply-ab-attrs";
 import { MoveHeaderAttr } from "./data/move-attrs/move-header-attr";
-import { PokemonMove, type Pokemon, type QueuedMove } from "./field/pokemon";
+import type { Pokemon } from "./field/pokemon";
+import { PokemonMove } from "./field/pokemon-move";
 import { globalScene } from "./global-scene";
 import { BypassSpeedChanceModifier } from "./modifier/modifier";
 import { AttemptCapturePhase } from "./phases/attempt-capture-phase";
 import { AttemptRunPhase } from "./phases/attempt-run-phase";
-import { MoveEndPhase } from "./phases/move-end-phase";
 import { MoveHeaderPhase } from "./phases/move-header-phase";
 import { MovePhase } from "./phases/move-phase";
 import { SwitchSummonPhase } from "./phases/switch-summon-phase";
@@ -223,12 +225,12 @@ export class TurnCommandManager {
       pokemon.turnData.order = this.orderIndex++;
 
       const move =
-        pokemon.getMoveset().find((m) => m.moveId === queuedMove.move && m.ppUsed < m.getMovePp())
-        ?? new PokemonMove(queuedMove.move);
+        pokemon.getMoveset().find((m) => m.moveId === queuedMove.moveId && m.ppUsed < m.getMovePp())
+        ?? new PokemonMove(queuedMove.moveId);
 
       globalScene.appendToPhase(
         new MovePhase(pokemon, targets ?? queuedMove.targets, move, false, cursor !== -1 && queuedMove.ignorePP),
-        MoveEndPhase,
+        PhaseId.MOVE_END,
       );
 
       return true;
@@ -272,7 +274,7 @@ export class TurnCommandManager {
     }
 
     const newMove: QueuedMove = {
-      move: move.moveId,
+      moveId: move.moveId,
       targets,
     };
 
@@ -307,7 +309,7 @@ export class TurnCommandManager {
   private sortBySpeed(): void {
     /** 'true' if Trick Room is on the field. */
     const speedReversed = new BooleanHolder(false);
-    globalScene.arena.applyTags(TrickRoomTag, false, speedReversed);
+    globalScene.arena.applyTags(ArenaTagType.TRICK_ROOM, false, speedReversed);
 
     this.turnCommands.sort((a, b) => {
       const [aSpeed, bSpeed] = [a, b].map((command) => command.pokemon.getEffectiveStat(Stat.SPD) ?? 0);
@@ -332,7 +334,7 @@ export class TurnCommandManager {
         }
       } else if (a.command === BattleCommand.FIGHT) {
         const priority = [a, b].map((tc) => {
-          const move = allMoves[tc.move!.move];
+          const move = allMoves[tc.move!.moveId];
           return move.getPriority(tc.pokemon, quiet);
         });
 
@@ -363,8 +365,8 @@ export class TurnCommandManager {
     pokemon.turnData.order = this.orderIndex++;
 
     const move =
-      pokemon.getMoveset().find((m) => m.moveId === queuedMove.move && m.ppUsed < m.getMovePp())
-      ?? new PokemonMove(queuedMove.move);
+      pokemon.getMoveset().find((m) => m.moveId === queuedMove.moveId && m.ppUsed < m.getMovePp())
+      ?? new PokemonMove(queuedMove.moveId);
 
     globalScene.unshiftPhase(
       new MovePhase(pokemon, targets ?? queuedMove.targets, move, false, cursor !== -1 && queuedMove.ignorePP),
@@ -440,11 +442,11 @@ export class TurnCommandManager {
     this.turnCommands.forEach((tc) => {
       const { pokemon, move } = tc;
       // Only apply to commands to use damaging moves
-      if (!move || allMoves[move.move].category === MoveCategory.STATUS) {
+      if (!move || allMoves[move.moveId].category === MoveCategory.STATUS) {
         return;
       }
 
-      applyAbAttrs(BypassSpeedChanceAbAttr, pokemon, false);
+      applyAbAttrs(AbAttrFlag.BYPASS_SPEED_CHANCE, pokemon, false);
       globalScene.applyModifiers(BypassSpeedChanceModifier, pokemon.isPlayer(), pokemon);
     });
   }
@@ -465,7 +467,7 @@ export class TurnCommandManager {
         return;
       }
       const pokemonMove =
-        pokemon.getMoveset().find((mv) => mv.moveId === queuedMove.move) ?? new PokemonMove(queuedMove.move);
+        pokemon.getMoveset().find((mv) => mv.moveId === queuedMove.moveId) ?? new PokemonMove(queuedMove.moveId);
 
       if (pokemonMove.getMove().hasAttr(MoveHeaderAttr)) {
         globalScene.unshiftPhase(new MoveHeaderPhase(pokemon, pokemonMove));

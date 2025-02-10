@@ -8,7 +8,7 @@ import { Species } from "#enums/species";
 import { AbAttr } from "./ab-attr";
 import { type SkyDropTag } from "../battler-tags";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { MovePhase } from "#app/phases/move-phase";
+import type { MovePhase } from "#app/phases/move-phase";
 import { PhaseId } from "#enums/phase-id";
 
 /**

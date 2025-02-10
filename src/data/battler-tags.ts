@@ -23,7 +23,7 @@ import { HitResult } from "#enums/hit-result";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { MovePhase } from "#app/phases/move-phase";
+import type { MovePhase } from "#app/phases/move-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { type StatStageChangeCallback } from "#app/phases/stat-stage-change-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
@@ -48,8 +48,6 @@ import {
 } from "#app/utils/battler-tag-type-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
-import { PreventBypassSpeedChanceAbAttr } from "./ab-attrs/prevent-bypass-speed-chance-ab-attr";
-
 export class BattlerTag {
   public tagType: BattlerTagType;
   public lapseTypes: BattlerTagLapseType[];
@@ -3410,7 +3408,7 @@ export class BypassSpeedTag extends BattlerTag {
 
   override canAdd(pokemon: Pokemon): boolean {
     const cancelled = new BooleanHolder(false);
-    applyAbAttrs(PreventBypassSpeedChanceAbAttr, pokemon, false, cancelled);
+    applyAbAttrs(AbAttrFlag.PREVENT_BYPASS_SPEED_CHANCE, pokemon, false, cancelled);
     return !cancelled.value;
   }
 }

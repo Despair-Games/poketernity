@@ -32,7 +32,7 @@ export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
       if (!queuedMove || pokemon.isPlayer() !== user.isPlayer()) {
         return false;
       }
-      const allyMove = allMoves[queuedMove.move];
+      const allyMove = allMoves[queuedMove.moveId];
       return allyMove !== move && allyMove.hasAttr(AwaitCombinedPledgeAttr);
     });
 
