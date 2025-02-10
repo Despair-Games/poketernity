@@ -24,6 +24,29 @@ import { initModifierTypes } from "#app/modifier/init-modifier-types";
 import { initModifierPools } from "#app/modifier/init-modifier-pools";
 
 /**
+ * A function to initialize game data before running any other test-related code.
+ */
+export function initDataForTests() {
+  // Initialize all of these things if and only if they have not been initialized yet
+  if (Object.values(allMoves).length === 0) {
+    initModifierTypes();
+    initModifierPools();
+    initMoves();
+    initVouchers();
+    initAchievements();
+    initStatsKeys();
+    initPokemonPrevolutions();
+    initBiomes();
+    initEggMoves();
+    initPokemonForms();
+    initSpecies();
+    initAbilities();
+    initLoggedInUser();
+    initMysteryEncounters();
+  }
+}
+
+/**
  * An initialization function that is run at the beginning of every test file (via `beforeAll()`).
  */
 export function initTestFile() {
@@ -77,24 +100,6 @@ export function initTestFile() {
   Phaser.GameObjects.Text.prototype.setPositionRelative = setPositionRelative;
   Phaser.GameObjects.Rectangle.prototype.setPositionRelative = setPositionRelative;
   HTMLCanvasElement.prototype.getContext = () => mockContext;
-
-  // Initialize all of these things if and only if they have not been initialized yet
-  if (Object.values(allMoves).length === 0) {
-    initModifierTypes();
-    initModifierPools();
-    initMoves();
-    initVouchers();
-    initAchievements();
-    initStatsKeys();
-    initPokemonPrevolutions();
-    initBiomes();
-    initEggMoves();
-    initPokemonForms();
-    initSpecies();
-    initAbilities();
-    initLoggedInUser();
-    initMysteryEncounters();
-  }
 
   manageListeners();
 }

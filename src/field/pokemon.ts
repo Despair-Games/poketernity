@@ -184,6 +184,7 @@ import { FieldPosition } from "#enums/field-position";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import type { AbilityFilterOptions } from "#app/data/ability-filter-options";
 import { PokemonMove } from "#app/field/pokemon-move";
+import { BypassParaSpeedReductionAbAttr } from "#app/data/ab-attrs/bypass-para-speed-reduction-ab-attr";
 import { WeakenMoveScreenArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import {
   CritBoostBattlerTagTypes,
@@ -1189,7 +1190,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           ret >>= 1;
         }
         if (this.status && this.status.effect === StatusEffect.PARALYSIS) {
-          ret >>= 1;
+          const paraSpeedReductionCancelled = new BooleanHolder(false);
+          applyAbFunc(BypassParaSpeedReductionAbAttr, this, simulated, paraSpeedReductionCancelled);
+          if (!paraSpeedReductionCancelled.value) {
+            ret >>= 1;
+          }
         }
         if (this.getTag(BattlerTagType.UNBURDEN) && this.hasAbility(Abilities.UNBURDEN)) {
           ret *= 2;
