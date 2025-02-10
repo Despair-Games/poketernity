@@ -5652,14 +5652,12 @@ export class EnemyPokemon extends Pokemon {
       || [MoveId.SUCKER_PUNCH, MoveId.UPPER_HAND, MoveId.THUNDERCLAP].includes(move.id);
 
     const attackScore = this.getAttackScore(opponent, move);
+    const isKnockOut = attackScore >= 4;
+    const isFail = attackScore === -1 || !meetsConditions;
 
-    if (!meetsConditions || attackScore <= -1) {
-      return -5;
-    }
+    const critBonus = isFail ? 0 : this.getCriticalHitBonus(opponent, move, attackScore);
 
-    const critBonus = this.getCriticalHitBonus(opponent, move, attackScore);
-
-    return attackScore + critBonus + move.getEffectScore(this, opponent);
+    return (isFail ? -5 : attackScore) + critBonus + move.getEffectScore(this, opponent, isKnockOut, isFail);
   }
 
   /**
