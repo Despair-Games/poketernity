@@ -85,7 +85,8 @@ describe("All Moves", async () => {
         for (const f of Object.keys(flagsToCheck)) {
           const actualHasFlag = pktyMove.hasFlag(flagsToCheck[f]);
           const expectedHasFlag = move.flags.includes(Number(f));
-          expect(actualHasFlag, `${MoveId[pktyMove.id]} is missing flag ${Number(f)}!`).toBe(expectedHasFlag);
+          const errOutput = `${MoveId[pktyMove.id]}'s usage of flag ${MoveFlags[flagsToCheck[f]]} should be ${expectedHasFlag} but is ${actualHasFlag}!`
+          expect(actualHasFlag, errOutput).toBe(expectedHasFlag);
         }
       }
     }
