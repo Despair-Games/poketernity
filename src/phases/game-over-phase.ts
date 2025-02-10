@@ -8,7 +8,7 @@ import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { CheckSwitchPhase } from "#app/phases/check-switch-phase";
 import { EncounterPhase } from "#app/phases/encounter-phase";
@@ -19,16 +19,17 @@ import { RibbonModifierRewardPhase } from "#app/phases/ribbon-modifier-reward-ph
 import { SummonPhase } from "#app/phases/summon-phase";
 import { UnlockPhase } from "#app/phases/unlock-phase";
 import { api } from "#app/plugins/api/api";
-import { achvs, ChallengeAchv } from "#app/system/achv";
+import { achvs } from "#app/system/achv";
 import { settings } from "#app/system/settings/settings-manager";
 import TrainerData from "#app/system/trainer-data";
 import { Unlockables } from "#enums/unlockables";
 import { UiMode } from "#enums/ui-mode";
-import { isLocal, isLocalServerConnected } from "#app/utils";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
+import { AchvCategory } from "#enums/achv-category";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Handles the effects of the player ending a run:
@@ -38,6 +39,8 @@ import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
  * - Award ribbons + vouchers per player pokemon if a victory
  */
 export class GameOverPhase extends BattlePhase {
+  override readonly id = PhaseId.GAME_OVER;
+
   private isVictory: boolean;
   private readonly firstRibbons: PokemonSpecies[] = [];
 
@@ -152,7 +155,7 @@ export class GameOverPhase extends BattlePhase {
           ui.clearText();
 
           if (this.isVictory && gameMode.isChallenge) {
-            gameMode.challenges.forEach((c) => globalScene.validateAchvs(ChallengeAchv, c));
+            gameMode.challenges.forEach((c) => globalScene.validateAchvs(AchvCategory.CHALLENGE, c));
           }
 
           const clear = (endCardPhase?: EndCardPhase): void => {
@@ -225,7 +228,7 @@ export class GameOverPhase extends BattlePhase {
      * If Online, execute apiFetch as intended
      * If Offline, execute offlineNewClear() only for victory, a localStorage implementation of newClear daily run checks
      */
-    if (!isLocal || isLocalServerConnected) {
+    if (!api.isLocal || api.isConnected) {
       api.savedata.session
         .newclear({ slot: globalScene.sessionSlotId, isVictory: this.isVictory, clientSessionId: clientSessionId })
         .then((success) => doGameOver(success));

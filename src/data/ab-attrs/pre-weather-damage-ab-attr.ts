@@ -1,11 +1,13 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Weather } from "../weather";
 import { PreWeatherEffectAbAttr } from "./pre-weather-effect-ab-attr";
 
 export abstract class PreWeatherDamageAbAttr extends PreWeatherEffectAbAttr {
   constructor(showAbility: boolean = false) {
     super(showAbility, true);
+    this._flags.add(AbAttrFlag.PRE_WEATHER_DAMAGE);
   }
 
   /**

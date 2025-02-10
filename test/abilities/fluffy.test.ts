@@ -1,4 +1,3 @@
-import { ReceivedMoveDamageMultiplierAbAttr } from "#app/data/ab-attrs/received-move-damage-multiplier-ab-attr";
 import { allMoves } from "#app/data/all-moves";
 import { Abilities } from "#enums/abilities";
 import { MoveFlags } from "#enums/move-flags";
@@ -8,6 +7,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import type { NumberHolder } from "#app/utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Abilities - Fluffy", () => {
   let phaserGame: Phaser.Game;
@@ -38,7 +38,7 @@ describe("Abilities - Fluffy", () => {
   it("should reduce the damage of contact moves by half", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const enemy = game.scene.getEnemyPokemon()!;
-    const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(ReceivedMoveDamageMultiplierAbAttr)[0], "apply");
+    const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
 
     game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to("BerryPhase");
@@ -51,7 +51,7 @@ describe("Abilities - Fluffy", () => {
   it("should double the damage of a non-contact fire move", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const enemy = game.scene.getEnemyPokemon()!;
-    const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(ReceivedMoveDamageMultiplierAbAttr)[0], "apply");
+    const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
 
     game.move.select(MoveId.EMBER);
     await game.phaseInterceptor.to("BerryPhase");
@@ -63,7 +63,7 @@ describe("Abilities - Fluffy", () => {
   it("should not alter the damage of a contact-making fire move", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const enemy = game.scene.getEnemyPokemon()!;
-    const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(ReceivedMoveDamageMultiplierAbAttr)[0], "apply");
+    const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
 
     game.move.select(MoveId.FIRE_FANG);
     await game.move.forceHit();
@@ -78,7 +78,7 @@ describe("Abilities - Fluffy", () => {
     game.override.ability(Abilities.LONG_REACH);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const enemy = game.scene.getEnemyPokemon()!;
-    const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(ReceivedMoveDamageMultiplierAbAttr)[0], "apply");
+    const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
 
     game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to("BerryPhase");

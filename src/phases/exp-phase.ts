@@ -5,12 +5,15 @@ import { NumberHolder } from "#app/utils";
 import i18next from "i18next";
 import { PlayerPartyMemberPokemonPhase } from "./abstract-player-party-member-pokemon-phase";
 import { LevelUpPhase } from "./level-up-phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Grants a player pokemon EXP and pushes a {@linkcode LevelUpPhase} if it leveled up
  * @extends PlayerPartyMemberPokemonPhase
  */
 export class ExpPhase extends PlayerPartyMemberPokemonPhase {
+  override readonly id = PhaseId.EXP;
+
   private readonly expValue: number;
 
   constructor(partyMemberIndex: number, expValue: number) {

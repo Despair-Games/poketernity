@@ -4,7 +4,7 @@ import { allSpecies } from "#app/data/all-species";
 import { GameModes } from "#enums/game-modes";
 import { EncounterPhase } from "#app/phases/encounter-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
-import type { TitlePhase } from "#app/phases/title-phase";
+import { type TitlePhase } from "#app/phases/title-phase";
 import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import type SaveSlotSelectUiHandler from "#app/ui/save-slot-select-ui-handler";
 import type OptionSelectUiHandler from "#app/ui/option-select-ui-handler";

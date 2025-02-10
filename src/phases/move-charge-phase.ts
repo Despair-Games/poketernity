@@ -1,5 +1,5 @@
-import { MoveChargeAnim } from "#app/data/battle-anims";
-import { applyMoveChargeAttrs } from "#app/data/move";
+import { MoveChargeAnim } from "#app/data/battle-anims/move-charge-anim";
+import { applyMoveChargeAttrs } from "#app/utils/move-utils";
 import { InstantChargeAttr } from "#app/data/move-attrs/instant-charge-attr";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import { MoveResult } from "#enums/move-result";
@@ -11,13 +11,15 @@ import { HitCheckResult } from "#enums/hit-check-result";
 import i18next from "i18next";
 import { HitCheckPhase } from "./hit-check-phase";
 import { MoveEndPhase } from "./move-end-phase";
-import { MovePhase } from "./move-phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Phase for the "charging turn" of two-turn moves (e.g. Dig).
  * @extends {@linkcode PokemonPhase}
  */
 export class MoveChargePhase extends HitCheckPhase {
+  override readonly id = PhaseId.MOVE_CHARGE;
+
   public override start() {
     super.start();
 
@@ -73,13 +75,17 @@ export class MoveChargePhase extends HitCheckPhase {
         // this MoveEndPhase will be duplicated by the queued MovePhase if not removed
         globalScene.tryRemovePhase((phase) => phase instanceof MoveEndPhase && phase.getPokemon() === user);
         // queue a new MovePhase for this move's attack phase
-        globalScene.unshiftPhase(new MovePhase(user, this.targets, this.move, false));
+        globalScene.useMove({ pokemon: user, targets: this.targets, move: this.move, followUp: false, when: "eager" });
       } else {
         user.getMoveQueue().push({ moveId: move.id, targets: this.targets });
       }
 
       // Add this move's charging phase to the user's move history
-      user.pushMoveHistory({ moveId: this.move.moveId, targets: this.targets, result: MoveResult.OTHER });
+      user.pushMoveHistory({
+        move: this.move.getMove(),
+        targets: this.targets,
+        result: MoveResult.OTHER,
+      });
     }
     this.end();
   }

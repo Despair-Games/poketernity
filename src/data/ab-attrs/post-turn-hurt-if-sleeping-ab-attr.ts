@@ -6,8 +6,8 @@ import { toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
-import { BlockNonDirectDamageAbAttr } from "./block-non-direct-damage-ab-attr";
 import { PostTurnAbAttr } from "./post-turn-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Attribute to damage all sleeping opponents by 1/8 of their max hp at the end of turn.
@@ -20,7 +20,7 @@ export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
     for (const opp of pokemon.getOpponents()) {
       if (
         (opp.status?.effect === StatusEffect.SLEEP || opp.hasAbility(Abilities.COMATOSE))
-        && !opp.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)
+        && !opp.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)
         && !opp.switchOutStatus
       ) {
         if (!simulated) {

@@ -6,7 +6,7 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { ElementalType } from "#enums/elemental-type";
 import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { Button } from "#enums/buttons";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
 import { FormChangePhase } from "#app/phases/form-change-phase";

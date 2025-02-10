@@ -79,8 +79,8 @@ export abstract class MoveEffectAttr extends MoveAttr {
    * @param move the {@linkcode Move} being used
    * @returns `true` if effects can apply
    */
-  canApply(user: Pokemon, target: Pokemon, _move: Move): boolean {
-    return this.selfTarget ? !user.isFainted() && !user.getTag(BattlerTagType.FRENZY) : !target.isFainted();
+  canApply(user: Pokemon, target: Pokemon | null, _move: Move): boolean {
+    return this.selfTarget ? !user.isFainted() && !user.getTag(BattlerTagType.FRENZY) : !!target && !target.isFainted();
   }
 
   /**
@@ -92,7 +92,7 @@ export abstract class MoveEffectAttr extends MoveAttr {
    * @param move the {@linkcode Move} being used
    * @sealed
    */
-  override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
+  override apply(user: Pokemon, target: Pokemon | null, move: Move): boolean {
     if (this.canApply(user, target, move)) {
       return this.applyEffect(user, target, move);
     } else {
@@ -109,5 +109,5 @@ export abstract class MoveEffectAttr extends MoveAttr {
    * @param move the {@linkcode Move} being used
    * @returns `true` if effects successfully applied.
    */
-  abstract applyEffect(_user: Pokemon, _target: Pokemon, _move: Move): boolean;
+  abstract applyEffect(_user: Pokemon, _target: Pokemon | null, _move: Move): boolean;
 }

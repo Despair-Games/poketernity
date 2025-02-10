@@ -67,6 +67,7 @@ export class PokemonForm extends PokemonSpeciesForm {
       genderDiffs,
       isStarterSelectable || !formKey,
     );
+    this.type = "PokemonForm";
     this.formName = formName;
     this.formKey = formKey;
     this.formSpriteKey = formSpriteKey;

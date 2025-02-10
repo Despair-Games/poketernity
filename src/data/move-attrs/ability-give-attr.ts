@@ -2,12 +2,11 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
-import { UncopiableAbilityAbAttr } from "#app/data/ab-attrs/uncopiable-ability-ab-attr";
-import { UnsuppressableAbilityAbAttr } from "#app/data/ab-attrs/unsuppressable-ability-ab-attr";
-import { allAbilities } from "#app/data/ability";
+import { allAbilities } from "../all-abilities";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Attribute to give the user's ability to the target.
@@ -30,8 +29,8 @@ export class AbilityGiveAttr extends MoveEffectAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) =>
-      !user.getAbility().hasAttr(UncopiableAbilityAbAttr)
-      && !target.getAbility().hasAttr(UnsuppressableAbilityAbAttr)
+      !user.getAbility().hasAttrFlag(AbAttrFlag.UNCOPIABLE_ABILITY)
+      && !target.getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY)
       && user.getAbility().id !== target.getAbility().id;
   }
 }

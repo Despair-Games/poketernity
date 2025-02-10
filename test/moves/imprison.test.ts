@@ -54,7 +54,7 @@ describe("Moves - Imprison", () => {
     await game.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
     const move1 = playerPokemon.getLastXMoves(1)[0]!;
-    expect(move1.moveId).toBe(MoveId.STRUGGLE);
+    expect(move1.move.id).toBe(MoveId.STRUGGLE);
   });
 
   it("Imprison applies to Pokemon switched into Battle", async () => {

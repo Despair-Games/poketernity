@@ -2,6 +2,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { BooleanHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { BattleStat } from "#enums/stat";
 import { AbAttr } from "./ab-attr";
 
@@ -12,6 +13,11 @@ import { AbAttr } from "./ab-attr";
  * @extends AbAttr
  */
 export class ReflectStatStageChangeAbAttr extends AbAttr {
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.REFLECT_STAT_STAGE_CHANGE);
+  }
+
   /**
    * If the current {@linkcode StatStageChangePhase} will lower the ability
    * source's stat(s), queue a new phase targeting the effect source

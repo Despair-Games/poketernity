@@ -18,6 +18,7 @@ import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
 import { EndEvolutionPhase } from "./end-evolution-phase";
 import { EVOLVE_MOVE } from "#app/data/balance/pokemon-level-moves";
 import { LearnMovePhase } from "./learn-move-phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * A phase for handling Pokemon form changes, this does not cover evolutions
@@ -25,6 +26,8 @@ import { LearnMovePhase } from "./learn-move-phase";
  * @extends FormChangeBasePhase
  */
 export class FormChangePhase extends FormChangeBasePhase {
+  override readonly id = PhaseId.FORM_CHANGE;
+
   private readonly formChange: SpeciesFormChange;
   private readonly modal: boolean;
 
