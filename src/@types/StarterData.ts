@@ -1,4 +1,4 @@
-import type { Moves } from "#enums/moves";
+import type { MoveId } from "#enums/move-id";
 
 /**
  * Data for a single starter species
@@ -18,7 +18,7 @@ export interface StarterData {
   [key: number]: StarterDataEntry;
 }
 
-export type StarterMoveset = [Moves] | [Moves, Moves] | [Moves, Moves, Moves] | [Moves, Moves, Moves, Moves];
+export type StarterMoveset = [MoveId] | [MoveId, MoveId] | [MoveId, MoveId, MoveId] | [MoveId, MoveId, MoveId, MoveId];
 
 export interface StarterFormMoveData {
   [key: number]: StarterMoveset;

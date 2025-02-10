@@ -5,22 +5,26 @@ import { SceneBase } from "#app/scene-base";
 import { getWindowVariantSuffix } from "#app/ui/ui-theme";
 import { WindowVariant } from "#enums/window-variant";
 import { isMobile } from "#app/touch-controls";
-import { localPing, getEnumValues, hasAllLocalizedSprites, getEnumKeys } from "#app/utils";
+import { getEnumValues, hasAllLocalizedSprites, getEnumKeys } from "#app/utils";
 import { initPokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import { initBiomes } from "#app/data/balance/biomes";
 import { initEggMoves } from "#app/data/balance/egg-moves";
 import { initPokemonForms } from "#app/data/pokemon-forms";
-import { initSpecies } from "#app/data/pokemon-species";
+import { initSpecies } from "./data/init-species";
 import { initAchievements } from "#app/system/achv";
-import { initTrainerTypeDialogue } from "#app/data/dialogue";
+import { initTrainerTypeDialogue } from "./data/init-trainer-type-dialogue";
 import { initChallenges } from "#app/data/challenge";
 import i18next from "i18next";
 import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { Biome } from "#enums/biome";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
-import { initAbilities } from "#app/data/all-abilities";
-import { initMoves } from "#app/data/all-moves";
 import { initVouchers } from "#app/system/init-vouchers";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTEMENT } from "./ui-constants";
+import { initAbilities } from "#app/data/init-abilities";
+import { api } from "#app/plugins/api/api";
+import { initMoves } from "#app/data/init-moves";
+import { initModifierTypes } from "#app/modifier/init-modifier-types";
+import { initModifierPools } from "#app/modifier/init-modifier-pools";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";
@@ -34,7 +38,7 @@ export class LoadingScene extends SceneBase {
   }
 
   preload() {
-    localPing();
+    api.ping();
     this.load["manifest"] = this.game["manifest"];
 
     this.loadImage("loading_bg", "arenas");
@@ -354,6 +358,8 @@ export class LoadingScene extends SceneBase {
 
     this.loadLoadingScreen();
 
+    initModifierTypes();
+    initModifierPools();
     initAchievements();
     initVouchers();
     initStatsKeys();
@@ -376,7 +382,7 @@ export class LoadingScene extends SceneBase {
 
     const bg = this.add.image(0, 0, "");
     bg.setOrigin(0, 0);
-    bg.setScale(6);
+    bg.setScale(CANVAS_SCALE);
     bg.setVisible(false);
 
     const graphics = this.add.graphics();
@@ -384,24 +390,27 @@ export class LoadingScene extends SceneBase {
     graphics.lineStyle(4, 0xff00ff, 1).setDepth(10);
 
     const progressBar = this.add.graphics();
+    // TODO: I think progressBox was meant to put a border around the progress bar, but isn't used at all?
     const progressBox = this.add.graphics();
     progressBox.lineStyle(5, 0xff00ff, 1.0);
     progressBox.fillStyle(0x222222, 0.8);
 
-    const width = this.cameras.main.width;
-    const height = this.cameras.main.height;
+    const width = CANVAS_SCALE * GAME_WIDTH;
+    const height = CANVAS_SCALE * GAME_HEIGHT;
 
     const midWidth = width / 2;
     const midHeight = height / 2;
 
-    const logo = this.add.image(midWidth, 240, "");
+    // TODO: add logo with proper scale and placement
+    const logo = this.add.image(midWidth, height / 5, "");
     logo.setVisible(false);
     logo.setOrigin(0.5, 0.5);
-    logo.setScale(4);
+    logo.setScale(4 * TEMP_SCALE_ADJUSTEMENT);
 
     const percentText = this.make.text({
       x: midWidth,
-      y: midHeight - 24,
+      y: midHeight - 4 * CANVAS_SCALE,
+      scale: TEMP_SCALE_ADJUSTEMENT,
       text: "0%",
       style: {
         font: "72px emerald",
@@ -412,7 +421,8 @@ export class LoadingScene extends SceneBase {
 
     const assetText = this.make.text({
       x: midWidth,
-      y: midHeight + 48,
+      y: midHeight + 8 * CANVAS_SCALE,
+      scale: TEMP_SCALE_ADJUSTEMENT,
       text: "",
       style: {
         font: "48px emerald",
@@ -423,7 +433,8 @@ export class LoadingScene extends SceneBase {
 
     const disclaimerText = this.make.text({
       x: midWidth,
-      y: assetText.y + 152,
+      y: assetText.y + 25 * CANVAS_SCALE,
+      scale: TEMP_SCALE_ADJUSTEMENT,
       text: i18next.t("menu:disclaimer"),
       style: {
         font: "72px emerald",
@@ -434,7 +445,8 @@ export class LoadingScene extends SceneBase {
 
     const disclaimerDescriptionText = this.make.text({
       x: midWidth,
-      y: disclaimerText.y + 120,
+      y: disclaimerText.y + 20 * CANVAS_SCALE,
+      scale: TEMP_SCALE_ADJUSTEMENT,
       text: i18next.t("menu:disclaimerDescription"),
       style: {
         font: "48px emerald",
@@ -466,11 +478,13 @@ export class LoadingScene extends SceneBase {
       }, 500);
     });
 
+    const progressBarWidth = width / 3;
+    const progressBarHeight = 10 * CANVAS_SCALE;
     this.load.on(this.LOAD_EVENTS.PROGRESS, (progress: number) => {
       percentText.setText(`${Math.floor(progress * 100)}%`);
       progressBar.clear();
       progressBar.fillStyle(0xffffff, 0.8);
-      progressBar.fillRect(midWidth - 320, 360, 640 * progress, 64);
+      progressBar.fillRect(midWidth - progressBarWidth / 2, height / 3, progressBarWidth * progress, progressBarHeight);
     });
 
     this.load.on(this.LOAD_EVENTS.FILE_COMPLETE, (key: string) => {

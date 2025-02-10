@@ -14,6 +14,7 @@ import { Phase } from "#app/phase";
 import { UiMode } from "#enums/ui-mode";
 import { isNullOrUndefined } from "#app/utils";
 import { MysteryEncounterOptionSelectedPhase } from "./option-selected-phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Will handle (in order):
@@ -27,8 +28,11 @@ import { MysteryEncounterOptionSelectedPhase } from "./option-selected-phase";
  * @extends Phase
  */
 export class MysteryEncounterPhase extends Phase {
-  private readonly FIRST_DIALOGUE_PROMPT_DELAY = 300;
+  override readonly id = PhaseId.ME_ENCOUNTER;
+
   protected optionSelectSettings?: OptionSelectSettings;
+
+  private readonly FIRST_DIALOGUE_PROMPT_DELAY = 300;
 
   /**
    * Mostly useful for having repeated queries during a single encounter, where the queries and options may differ each time
@@ -36,6 +40,7 @@ export class MysteryEncounterPhase extends Phase {
    */
   constructor(optionSelectSettings?: OptionSelectSettings) {
     super();
+
     this.optionSelectSettings = optionSelectSettings;
   }
 

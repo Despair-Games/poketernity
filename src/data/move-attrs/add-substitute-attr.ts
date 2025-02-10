@@ -4,10 +4,9 @@ import { HitResult } from "#enums/hit-result";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
-import { SubstituteTag } from "#app/data/battler-tags";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
 /**
  * Attribute to put in a {@link https://bulbapedia.bulbagarden.net/wiki/Substitute_(doll) | Substitute Doll}
@@ -40,11 +39,13 @@ export class AddSubstituteAttr extends MoveEffectAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, _target, _move) =>
-      !user.getTag(SubstituteTag) && user.hp > Math.floor(user.getMaxHp() * this.hpCost) && user.getMaxHp() > 1;
+      !user.getTag(BattlerTagType.SUBSTITUTE)
+      && user.hp > Math.floor(user.getMaxHp() * this.hpCost)
+      && user.getMaxHp() > 1;
   }
 
   override getFailedText(user: Pokemon, _target: Pokemon, _move: Move, _cancelled: BooleanHolder): string | null {
-    if (user.getTag(SubstituteTag)) {
+    if (user.getTag(BattlerTagType.SUBSTITUTE)) {
       return i18next.t("moveTriggers:substituteOnOverlap", { pokemonName: getPokemonNameWithAffix(user) });
     } else if (user.hp <= Math.floor(user.getMaxHp() / 4) || user.getMaxHp() === 1) {
       return i18next.t("moveTriggers:substituteNotEnoughHp");

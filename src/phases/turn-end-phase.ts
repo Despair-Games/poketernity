@@ -1,5 +1,4 @@
-import { PostTurnAbAttr } from "#app/data/ab-attrs/post-turn-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { TurnEndEvent } from "#app/events/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
@@ -7,17 +6,19 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { TurnHealModifier, TurnHeldItemTransferModifier, TurnStatusEffectModifier } from "#app/modifier/modifier";
 import { TerrainType } from "#enums/terrain-type";
-import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { FieldPhase } from "./abstract-field-phase";
-import { PokemonHealPhase } from "./pokemon-heal-phase";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 export class TurnEndPhase extends FieldPhase {
+  override readonly id = PhaseId.TURN_END;
+
   public override start(): void {
     super.start();
 
     const { arena, currentBattle, eventTarget } = globalScene;
-    const { terrain, weather } = arena;
+    const { terrain } = arena;
 
     currentBattle.incrementTurn();
     eventTarget.dispatchEvent(new TurnEndEvent(currentBattle.turn));
@@ -29,13 +30,11 @@ export class TurnEndPhase extends FieldPhase {
         globalScene.applyModifiers(TurnHealModifier, pokemon.isPlayer(), pokemon);
 
         if (terrain?.terrainType === TerrainType.GRASSY && pokemon.isGrounded()) {
-          globalScene.unshiftPhase(
-            new PokemonHealPhase(pokemon.getBattlerIndex(), Math.max(pokemon.getMaxHp() >> 4, 1), {
-              message: i18next.t("battle:turnEndHpRestore", { pokemonName: getPokemonNameWithAffix(pokemon) }),
-            }),
-          );
+          globalScene.queuePokemonHeal(true, pokemon.getBattlerIndex(), Math.max(pokemon.getMaxHp() >> 4, 1), {
+            message: i18next.t("battle:turnEndHpRestore", { pokemonName: getPokemonNameWithAffix(pokemon) }),
+          });
         }
-        applyAbAttrs(PostTurnAbAttr, pokemon, false);
+        applyAbAttrs(AbAttrFlag.POST_TURN, pokemon, false);
       }
 
       globalScene.applyModifiers(TurnStatusEffectModifier, pokemon.isPlayer(), pokemon);
@@ -46,11 +45,6 @@ export class TurnEndPhase extends FieldPhase {
     this.executeForAll(handlePokemon);
 
     arena.lapseTags();
-
-    if (weather && !weather.lapse()) {
-      arena.trySetWeather(WeatherType.NONE, false);
-      arena.triggerWeatherBasedFormChangesToNormal();
-    }
 
     if (terrain && !terrain.lapse()) {
       arena.trySetTerrain(TerrainType.NONE, false);

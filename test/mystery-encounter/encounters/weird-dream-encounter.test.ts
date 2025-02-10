@@ -16,10 +16,10 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
 import { WeirdDreamEncounter } from "#app/data/mystery-encounters/encounters/weird-dream-encounter";
-import * as EncounterTransformationSequence from "#app/data/mystery-encounters/utils/encounter-transformation-sequence";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { CommandPhase } from "#app/phases/command-phase";
 import { ModifierTier } from "#enums/modifier-tier";
+import { Button } from "#enums/buttons";
 
 const namespace = "mysteryEncounters/weirdDream";
 const defaultParty = [Species.MAGBY, Species.HAUNTER, Species.ABRA];
@@ -42,9 +42,6 @@ describe("Weird Dream - Mystery Encounter", () => {
     game.override.startingWave(defaultWave);
     game.override.startingBiome(defaultBiome);
     game.override.disableTrainerWaves();
-    vi.spyOn(EncounterTransformationSequence, "doPokemonTransformationSequence").mockImplementation(
-      () => new Promise<void>((resolve) => resolve()),
-    );
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
       new Map<Biome, MysteryEncounterType[]>([[Biome.CAVE, [MysteryEncounterType.WEIRD_DREAM]]]),
@@ -110,13 +107,24 @@ describe("Weird Dream - Mystery Encounter", () => {
       });
     });
 
-    it("should transform the new party into new species, 2 at +90/+110, the rest at +40/50 BST", async () => {
+    it("should transform 2 species at +90/+110 BST, the rest at +40/50 BST, and should not be cancellable", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.WEIRD_DREAM, defaultParty);
 
       const pokemonPrior = scene.getPlayerParty().map((pokemon) => pokemon);
       const bstsPrior = pokemonPrior.map((species) => species.getSpeciesForm().getBaseStatTotal());
 
+      // Prevent transformation from finishing instantly, so that the player can attempt to cancel it
+      const originalDoCycle = game.scene.animations.doCycle;
+      vi.spyOn(game.scene.animations, "doCycle").mockImplementation(async (...args) => {
+        await new Promise<void>((resolve) => setTimeout(resolve));
+        return originalDoCycle.apply(game.scene.animations, args);
+      });
+
+      // Repeatedly press "Cancel" to attempt to cancel transformation
+      const pressCancelInterval = setInterval(() => game.scene.ui.processInput(Button.CANCEL));
+
       await runMysteryEncounterToEnd(game, 1);
+      clearInterval(pressCancelInterval);
       await game.phaseInterceptor.to(SelectModifierPhase, false);
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
 

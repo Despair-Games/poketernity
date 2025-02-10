@@ -1,13 +1,17 @@
-import { SubstituteTag } from "#app/data/battler-tags";
-import type { Pokemon } from "#app/field/pokemon";
+import { type SubstituteTag } from "#app/data/battler-tags";
+import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { isNullOrUndefined } from "#app/utils";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { PhaseId } from "#enums/phase-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { Species } from "#enums/species";
 
 // TODO: This should probably be made into an abstract base class
 export class PokemonAnimPhase extends BattlePhase {
+  override readonly id = PhaseId.POKEMON_ANIM;
+
   /** The type of animation to play in this phase */
   protected readonly key: PokemonAnimType;
   /** The Pokemon to which this animation applies */
@@ -53,7 +57,7 @@ export class PokemonAnimPhase extends BattlePhase {
   private doSubstituteAddAnim(): void {
     const { field, tweens } = globalScene;
 
-    const substitute = this.pokemon.getTag(SubstituteTag);
+    const substitute = this.pokemon.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
     if (isNullOrUndefined(substitute)) {
       return this.end();
     }

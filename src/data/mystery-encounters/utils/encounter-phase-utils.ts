@@ -4,23 +4,20 @@ import { BattleType } from "#enums/battle-type";
 import { biomeLinks } from "#app/data/balance/biomes";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
-import {
-  AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
-  WEIGHT_INCREMENT_ON_SPAWN_MISS,
-} from "#app/data/mystery-encounters/mystery-encounters";
+import { ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET, ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import { type PlayerPokemon, type Pokemon } from "#app/field/pokemon";
+import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import type { AiType } from "#enums/ai-type";
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove, PokemonSummonData } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import { FieldPosition } from "#enums/field-position";
 import type { CustomModifierSettings, ModifierType } from "#app/modifier/modifier-type";
 import {
   ModifierTypeGenerator,
   ModifierTypeOption,
-  modifierTypes,
   regenerateModifierPoolThresholds,
 } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { MysteryEncounterBattlePhase } from "#app/phases/mystery-encounter-phases/battle-phase";
 import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
@@ -28,7 +25,7 @@ import { MysteryEncounterBattleStartCleanupPhase } from "#app/phases/mystery-enc
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import type PokemonData from "#app/system/pokemon-data";
 import type { OptionSelectModeConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
-import type { PokemonSelectFilter } from "#app/ui/party-ui-handler";
+import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
 import type { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { UiMode } from "#enums/ui-mode";
@@ -41,8 +38,9 @@ import Trainer from "#app/field/trainer";
 import { TrainerVariant } from "#enums/trainer-variant";
 import type { Gender } from "#enums/gender";
 import type { Nature } from "#enums/nature";
-import type { Moves } from "#enums/moves";
-import { initMoveAnim, loadMoveAnimAssets } from "#app/data/battle-anims";
+import type { MoveId } from "#enums/move-id";
+import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
+import { initMoveAnim } from "#app/data/init-move-anim";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { Status } from "#app/data/status-effect";
 import type { TrainerConfig } from "#app/data/trainer-config";
@@ -52,17 +50,16 @@ import type { IEggOptions } from "#app/data/egg";
 import { Egg } from "#app/data/egg";
 import type { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import type HeldModifierConfig from "#app/interfaces/held-modifier-config";
-import { MovePhase } from "#app/phases/move-phase";
 import { EggLapsePhase } from "#app/phases/egg-lapse-phase";
 import { TrainerVictoryPhase } from "#app/phases/trainer-victory-phase";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
-import { GameOverPhase } from "#app/phases/game-over-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { PartyExpPhase } from "#app/phases/party-exp-phase";
 import type { Variant } from "#app/data/variant";
 import { StatusEffect } from "#enums/status-effect";
 import { globalScene } from "#app/global-scene";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Animates exclamation sprite over trainer's head at start of encounter
@@ -102,7 +99,7 @@ export interface EnemyPokemonConfig {
   level?: number;
   gender?: Gender;
   passive?: boolean;
-  moveSet?: Moves[];
+  moveSet?: MoveId[];
   nature?: Nature;
   ivs?: [number, number, number, number, number, number];
   shiny?: boolean;
@@ -282,7 +279,7 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
 
       // Generate new id, reset status and HP in case using data source
       if (config.dataSource) {
-        enemyPokemon.id = randSeedInt(4294967296);
+        enemyPokemon.generateId();
       }
 
       // Set form
@@ -435,11 +432,11 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
  * See: [startOfBattleEffects](IMysteryEncounter.startOfBattleEffects) for more details
  *
  * This promise does not need to be awaited on if called in an encounter onInit (will just load lazily)
- * @param moves The move or moves the Pokemon uses at the start of the encounter
+ * @param moveIds The move or moves the Pokemon uses at the start of the encounter
  */
-export function loadCustomMovesForEncounter(moves: Moves | Moves[]) {
-  moves = Array.isArray(moves) ? moves : [moves];
-  return Promise.all(moves.map((move) => initMoveAnim(move))).then(() => loadMoveAnimAssets(moves));
+export function loadCustomMovesForEncounter(moveIds: MoveId | MoveId[]) {
+  moveIds = Array.isArray(moveIds) ? moveIds : [moveIds];
+  return Promise.all(moveIds.map((moveId) => initMoveAnim(moveId))).then(() => loadMoveAnimAssets(moveIds));
 }
 
 /**
@@ -739,7 +736,7 @@ export function setEncounterRewards(
     if (customShopRewards) {
       globalScene.unshiftPhase(new SelectModifierPhase({ customModifierSettings: customShopRewards }));
     } else {
-      globalScene.tryRemovePhase((p) => p instanceof SelectModifierPhase);
+      globalScene.tryRemovePhase((p) => p.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER));
     }
 
     if (eggRewards) {
@@ -827,8 +824,7 @@ export function handleMysteryEncounterVictory(addHealPhase: boolean = false, doN
   const allowedPkm = globalScene.getPlayerParty().filter((pkm) => pkm.isAllowedInBattle());
 
   if (allowedPkm.length === 0) {
-    globalScene.clearPhaseQueue();
-    globalScene.unshiftPhase(new GameOverPhase());
+    globalScene.gameOver({ clearPhaseQueue: true });
     return;
   }
 
@@ -870,8 +866,7 @@ export function handleMysteryEncounterBattleFailed(addHealPhase: boolean = false
   const allowedPkm = globalScene.getPlayerParty().filter((pkm) => pkm.isAllowedInBattle());
 
   if (allowedPkm.length === 0) {
-    globalScene.clearPhaseQueue();
-    globalScene.unshiftPhase(new GameOverPhase());
+    globalScene.gameOver({ clearPhaseQueue: true });
     return;
   }
 
@@ -890,59 +885,6 @@ export function handleMysteryEncounterBattleFailed(addHealPhase: boolean = false
     // Only lapse eggs once for multi-battle encounters
     globalScene.pushPhase(new EggLapsePhase());
   }
-}
-
-/**
- * Function used to bring in a ME's intro visuals
- * @param hide - If true, performs ease out and hide visuals. If false, eases in visuals. Defaults to true
- * @param destroy - If true, will destroy visuals ONLY ON HIDE TRANSITION. Does nothing on show. Defaults to true
- * @param duration - Delay in milliseconds (default 750)
- */
-export function transitionMysteryEncounterIntroVisuals(
-  hide: boolean = true,
-  destroy: boolean = true,
-  duration: number = 750,
-): Promise<boolean> {
-  return new Promise((resolve) => {
-    const introVisuals = globalScene.currentBattle.mysteryEncounter!.introVisuals;
-    const enemyPokemon = globalScene.getEnemyField();
-    if (enemyPokemon) {
-      globalScene.currentBattle.enemyParty = [];
-    }
-    if (introVisuals) {
-      if (!hide) {
-        // Make sure visuals are in proper state for showing
-        introVisuals.setVisible(true);
-        introVisuals.x = 244;
-        introVisuals.y = 60;
-        introVisuals.alpha = 0;
-      }
-
-      // Transition
-      globalScene.tweens.add({
-        targets: [introVisuals, enemyPokemon],
-        x: `${hide ? "+" : "-"}=16`,
-        y: `${hide ? "-" : "+"}=16`,
-        alpha: hide ? 0 : 1,
-        ease: "Sine.easeInOut",
-        duration,
-        onComplete: () => {
-          if (hide && destroy) {
-            globalScene.field.remove(introVisuals, true);
-
-            enemyPokemon.forEach((pokemon) => {
-              globalScene.field.remove(pokemon, true);
-            });
-
-            globalScene.currentBattle.mysteryEncounter!.introVisuals = undefined;
-          }
-          resolve(true);
-        },
-      });
-    } else {
-      resolve(true);
-    }
-  });
 }
 
 /**
@@ -977,7 +919,14 @@ export function handleMysteryEncounterBattleStartEffects() {
       } else {
         source = globalScene.getEnemyField()[0];
       }
-      globalScene.pushPhase(new MovePhase(source, effect.targets, effect.move, effect.followUp, effect.ignorePp));
+      globalScene.useMove({
+        pokemon: source,
+        targets: effect.targets,
+        move: effect.move,
+        followUp: effect.followUp,
+        ignorePp: effect.ignorePp,
+        when: "defer",
+      });
     });
 
     // Pseudo turn end phase to reset flinch states, Endure, etc.
@@ -1086,7 +1035,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
 
       // If total number of encounters is lower than expected for the run, slightly favor a new encounter
       // Do the reverse as well
-      const expectedEncountersByFloor = (AVERAGE_ENCOUNTERS_PER_RUN_TARGET / (180 - 10)) * (i - 10);
+      const expectedEncountersByFloor = (ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET / (180 - 10)) * (i - 10);
       const currentRunDiffFromAvg = expectedEncountersByFloor - numEncounters.reduce((a, b) => a + b);
       const favoredEncounterRate = encounterRate + currentRunDiffFromAvg * 15;
 
@@ -1120,7 +1069,7 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
               : ++numEncounters[3];
         encountersByBiome.set(Biome[currentBiome], (encountersByBiome.get(Biome[currentBiome]) ?? 0) + 1);
       } else {
-        encounterRate += WEIGHT_INCREMENT_ON_SPAWN_MISS;
+        encounterRate += ME_WEIGHT_INCREMENT_ON_SPAWN_MISS;
       }
     }
 

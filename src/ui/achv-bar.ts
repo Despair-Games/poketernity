@@ -3,6 +3,7 @@ import { Achv } from "#app/system/achv";
 import type { Voucher } from "#app/system/voucher";
 import { addTextObject } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
+import { GAME_WIDTH } from "#app/ui-constants";
 
 export default class AchvBar extends Phaser.GameObjects.Container {
   private defaultWidth: number;
@@ -19,7 +20,7 @@ export default class AchvBar extends Phaser.GameObjects.Container {
   public shown: boolean;
 
   constructor() {
-    super(globalScene, globalScene.game.canvas.width / 6, 0);
+    super(globalScene, GAME_WIDTH, 0);
   }
 
   setup(): void {
@@ -105,7 +106,7 @@ export default class AchvBar extends Phaser.GameObjects.Container {
 
     globalScene.tweens.add({
       targets: this,
-      x: globalScene.game.canvas.width / 6 - this.bg.width / 2,
+      x: GAME_WIDTH - this.bg.width / 2,
       duration: 500,
       ease: "Sine.easeOut",
     });
@@ -123,7 +124,7 @@ export default class AchvBar extends Phaser.GameObjects.Container {
 
     globalScene.tweens.add({
       targets: this,
-      x: globalScene.game.canvas.width / 6,
+      x: GAME_WIDTH,
       duration: 500,
       ease: "Sine.easeIn",
       onComplete: () => {

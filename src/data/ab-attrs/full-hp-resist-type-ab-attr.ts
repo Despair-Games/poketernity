@@ -5,6 +5,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { NumberHolder } from "#app/utils";
 import i18next from "i18next";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Attribute implementing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Tera_Shell_(Ability) | Tera Shell}
@@ -12,6 +13,11 @@ import { PreDefendAbAttr } from "./pre-defend-ab-attr";
  * @extends PreDefendAbAttr
  */
 export class FullHpResistTypeAbAttr extends PreDefendAbAttr {
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.FULL_HP_RESIST_TYPE);
+  }
+
   /**
    * Reduces a type multiplier to 0.5 if the source is at full HP.
    * @param pokemon {@linkcode Pokemon} the Pokemon with this ability

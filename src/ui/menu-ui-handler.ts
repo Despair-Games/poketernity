@@ -2,7 +2,6 @@ import { loggedInUser, updateUserInfo } from "#app/account";
 import { bypassLogin } from "#app/constants";
 import { SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { api } from "#app/plugins/api/api";
 import { handleTutorial } from "#app/tutorial";
 import { Tutorial } from "#enums/tutorial";
@@ -13,7 +12,7 @@ import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interface
 import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 import { addTextObject } from "#app/ui/text";
 import { addWindow } from "#app/ui/ui-theme";
-import { fixedNumber, getCookie, getEnumKeys, isBeta, isLocal } from "#app/utils";
+import { fixedNumber, getCookie, getEnumKeys, isBeta } from "#app/utils";
 import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";
 import i18next from "i18next";
@@ -21,6 +20,9 @@ import type AwaitableUiHandler from "./awaitable-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { TextStyle } from "#enums/text-style";
 import { AdminMode } from "#enums/admin-mode";
+import { GAME_WIDTH, GAME_HEIGHT } from "#app/ui-constants";
+import { PhaseId } from "#enums/phase-id";
+import { type SelectModifierPhase } from "#app/phases/select-modifier-phase";
 
 enum MenuOptions {
   GAME_SETTINGS,
@@ -57,7 +59,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
     this.excludedMenus = () => [
       {
-        excluded: globalScene.getCurrentPhase() instanceof SelectModifierPhase,
+        excluded: globalScene.getCurrentPhase()?.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER) ?? false,
         options: [MenuOptions.EGG_GACHA, MenuOptions.EGG_LIST],
       },
       { excluded: bypassLogin, options: [MenuOptions.LOG_OUT] },
@@ -75,15 +77,13 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
     ui.bgmBar = this.bgmBar;
 
-    const { width, height } = globalScene.scaledCanvas;
-
     // Background overlay that sits below everything in the menu
     this.menuOverlay = new Phaser.GameObjects.Rectangle(
       globalScene,
-      -width - 1,
-      -height - 1,
-      width + 2,
-      height + 2,
+      -GAME_WIDTH - 1,
+      -GAME_HEIGHT - 1,
+      GAME_WIDTH + 2,
+      GAME_HEIGHT + 2,
       0xffffff,
       0.3,
     );
@@ -91,7 +91,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     this.menuOverlay.setOrigin(0, 0);
     this.optionSelectContainer.addAt(this.menuOverlay, 0);
 
-    this.menuContainer = globalScene.add.container(2 - width, 2 - height);
+    this.menuContainer = globalScene.add.container(2 - GAME_WIDTH, 2 - GAME_HEIGHT);
     this.menuContainer.setName("menu");
     this.menuContainer.add(this.bgmBar);
 
@@ -99,14 +99,13 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     this.menuMessageBoxContainer.setName("menu-message-box");
     this.menuMessageBoxContainer.setVisible(false);
 
-    this.menuMessageBox = addWindow(0, 0, width, 48);
+    this.menuMessageBox = addWindow(0, 0, GAME_WIDTH, 48);
     this.menuMessageBox.setOrigin(0, 0);
     this.menuMessageBoxContainer.add(this.menuMessageBox);
 
     this.message = addTextObject(this.textPadding, this.textPadding, "", TextStyle.WINDOW, { maxLines: 2 });
     this.message.setName("menu-message");
     this.message.setOrigin(0, 0);
-    this.message.setWordWrapWidth(1224);
     this.menuMessageBoxContainer.add(this.message);
 
     this.initTutorialOverlay(this.menuContainer);
@@ -166,13 +165,14 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
         this.initCommunityMenuOptions();
         this.initManageDataOptions();
         // Resize the message box so that it does not go over the menu
-        this.menuMessageBox.setSize(globalScene.scaledCanvas.width - w - 2, 48);
+        this.menuMessageBox.setSize(GAME_WIDTH - w - 2, 48);
+        this.message.setWordWrapWidth((GAME_WIDTH - w - 10) / this.message.scale);
       },
     };
   }
 
   override computeWindowHeight(): number {
-    return globalScene.scaledCanvas.height - 2; // always fill the screen
+    return GAME_HEIGHT - 2; // always fill the screen
   }
 
   private initManageDataOptions(): void {
@@ -216,7 +216,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
       });
     };
     // Import Session
-    if (isLocal || isBeta) {
+    if (api.isLocal || isBeta) {
       manageDataOptions.push({
         label: i18next.t("menuUiHandler:importSession"),
         handler: () => {
@@ -274,7 +274,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
       keepOpen: true,
     });
     // Import Data
-    if (isLocal || isBeta) {
+    if (api.isLocal || isBeta) {
       manageDataOptions.push({
         label: i18next.t("menuUiHandler:importData"),
         handler: () => {
@@ -313,7 +313,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     );
 
     // TODO: fully remove test dialogue option and related handlers
-    if (isLocal || isBeta) {
+    if (api.isLocal || isBeta) {
       // this should make sure we don't have this option in live
       manageDataOptions.push({
         label: "Test Dialogue",

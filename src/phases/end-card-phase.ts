@@ -5,6 +5,8 @@ import { TextStyle } from "#enums/text-style";
 import { PlayerGender } from "#enums/player-gender";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
+import { GAME_WIDTH, GAME_HEIGHT } from "#app/ui-constants";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Displays the End Card after a classic run ends in victory.
@@ -12,13 +14,14 @@ import { settings } from "#app/system/settings/settings-manager";
  * @extends Phase
  */
 export class EndCardPhase extends Phase {
+  override readonly id = PhaseId.END_CARD;
   public endCard: Phaser.GameObjects.Image;
   public text: Phaser.GameObjects.Text;
 
   public override start(): void {
     super.start();
 
-    const { field, game, ui } = globalScene;
+    const { field, ui } = globalScene;
 
     ui.getMessageHandler().bg.setVisible(false);
     ui.getMessageHandler().nameBoxContainer.setVisible(false);
@@ -29,12 +32,11 @@ export class EndCardPhase extends Phase {
       `end_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}`,
     );
     this.endCard.setOrigin(0);
-    this.endCard.setScale(0.5);
     field.add(this.endCard);
 
     this.text = addTextObject(
-      game.canvas.width / 12,
-      game.canvas.height / 6 - 16,
+      GAME_WIDTH / 2,
+      GAME_HEIGHT - 16,
       i18next.t("battle:congratulations"),
       TextStyle.SUMMARY,
       { fontSize: "128px" },

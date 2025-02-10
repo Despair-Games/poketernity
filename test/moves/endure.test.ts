@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -22,20 +22,20 @@ describe("Moves - Endure", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.THUNDER, Moves.BULLET_SEED, Moves.TOXIC])
+      .moveset([MoveId.THUNDER, MoveId.BULLET_SEED, MoveId.TOXIC])
       .ability(Abilities.SKILL_LINK)
       .startingLevel(100)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.NO_GUARD)
-      .enemyMoveset(Moves.ENDURE);
+      .enemyMoveset(MoveId.ENDURE);
   });
 
   it("should let the pokemon survive with 1 HP", async () => {
     await game.classicMode.startBattle([Species.ARCEUS]);
 
-    game.move.select(Moves.THUNDER);
+    game.move.select(MoveId.THUNDER);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(game.scene.getEnemyPokemon()!.hp).toBe(1);
@@ -44,7 +44,7 @@ describe("Moves - Endure", () => {
   it("should let the pokemon survive with 1 HP when hit with a multihit move", async () => {
     await game.classicMode.startBattle([Species.ARCEUS]);
 
-    game.move.select(Moves.BULLET_SEED);
+    game.move.select(MoveId.BULLET_SEED);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(game.scene.getEnemyPokemon()!.hp).toBe(1);
@@ -57,7 +57,7 @@ describe("Moves - Endure", () => {
     const enemy = game.scene.getEnemyPokemon()!;
     enemy.hp = 2;
 
-    game.move.select(Moves.TOXIC);
+    game.move.select(MoveId.TOXIC);
     await game.phaseInterceptor.to("VictoryPhase");
 
     expect(enemy.isFainted()).toBe(true);

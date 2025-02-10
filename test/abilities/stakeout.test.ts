@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { isBetween } from "#app/utils";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -24,7 +24,7 @@ describe("Abilities - Stakeout", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SPLASH, Moves.SURF])
+      .moveset([MoveId.SPLASH, MoveId.SURF])
       .ability(Abilities.STAKEOUT)
       .battleType("single")
       .disableCrits()
@@ -32,7 +32,7 @@ describe("Abilities - Stakeout", () => {
       .enemyLevel(100)
       .enemySpecies(Species.SNORLAX)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset([Moves.SPLASH, Moves.FLIP_TURN])
+      .enemyMoveset([MoveId.SPLASH, MoveId.FLIP_TURN])
       .startingWave(5);
   });
 
@@ -41,17 +41,17 @@ describe("Abilities - Stakeout", () => {
 
     const [enemy1] = game.scene.getEnemyParty();
 
-    game.move.select(Moves.SURF);
-    await game.forceEnemyMove(Moves.SPLASH);
+    game.move.select(MoveId.SURF);
+    await game.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
     const damage1 = enemy1.getInverseHp();
     enemy1.hp = enemy1.getMaxHp();
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     game.forceEnemyToSwitch();
     await game.toNextTurn();
 
-    game.move.select(Moves.SURF);
+    game.move.select(MoveId.SURF);
     game.forceEnemyToSwitch();
     await game.toNextTurn();
 
@@ -64,18 +64,18 @@ describe("Abilities - Stakeout", () => {
 
     const [enemy1] = game.scene.getEnemyParty();
 
-    game.move.select(Moves.SURF);
-    await game.forceEnemyMove(Moves.SPLASH);
+    game.move.select(MoveId.SURF);
+    await game.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
     const damage1 = enemy1.getInverseHp();
     enemy1.hp = enemy1.getMaxHp();
 
-    game.move.select(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.FLIP_TURN);
+    game.move.select(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.FLIP_TURN);
     await game.toNextTurn();
 
-    game.move.select(Moves.SURF);
-    await game.forceEnemyMove(Moves.FLIP_TURN);
+    game.move.select(MoveId.SURF);
+    await game.forceEnemyMove(MoveId.FLIP_TURN);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 

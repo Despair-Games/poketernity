@@ -1,7 +1,7 @@
 import type BattleScene from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import { VariantTier } from "#enums/variant-tier";
 import { randInt, randomString, randSeedInt, getIvsFromId } from "#app/utils";
@@ -266,7 +266,7 @@ export class Egg {
       ret.shiny = this._isShiny;
       ret.variant = this._variantTier;
 
-      const secondaryIvs = getIvsFromId(randSeedInt(4294967295));
+      const secondaryIvs = getIvsFromId();
 
       for (let s = 0; s < ret.ivs.length; s++) {
         ret.ivs[s] = Math.max(ret.ivs[s], secondaryIvs[s]);

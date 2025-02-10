@@ -3,7 +3,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { ContactHeldItemTransferChanceModifier } from "#app/modifier/modifier";
 import { Abilities } from "#enums/abilities";
 import { BerryType } from "#enums/berry-type";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phase from "phaser";
@@ -28,12 +28,12 @@ describe("Items - Grip Claw", () => {
 
     game.override
       .battleType("double")
-      .moveset([Moves.TACKLE, Moves.SPLASH, Moves.ATTRACT])
+      .moveset([MoveId.TACKLE, MoveId.SPLASH, MoveId.ATTRACT])
       .startingHeldItems([{ name: "GRIP_CLAW", count: 1 }])
       .enemySpecies(Species.SNORLAX)
       .enemyAbility(Abilities.UNNERVE)
       .ability(Abilities.UNNERVE)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .enemyHeldItems([
         { name: "BERRY", type: BerryType.SITRUS, count: 2 },
         { name: "BERRY", type: BerryType.LUM, count: 2 },
@@ -56,8 +56,8 @@ describe("Items - Grip Claw", () => {
     const enemy2HeldItemCount = getHeldItemCount(enemyPokemon[1]);
     expect(enemy2HeldItemCount).toBeGreaterThan(0);
 
-    game.move.select(Moves.TACKLE, 0, BattlerIndex.ENEMY_2);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.TACKLE, 0, BattlerIndex.ENEMY_2);
+    game.move.select(MoveId.SPLASH, 1);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -85,8 +85,8 @@ describe("Items - Grip Claw", () => {
     const enemy2HeldItemCount = getHeldItemCount(enemyPokemon[1]);
     expect(enemy2HeldItemCount).toBeGreaterThan(0);
 
-    game.move.select(Moves.ATTRACT, 0, BattlerIndex.ENEMY_2);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.ATTRACT, 0, BattlerIndex.ENEMY_2);
+    game.move.select(MoveId.SPLASH, 1);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 

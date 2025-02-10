@@ -3,8 +3,9 @@ import { type Move } from "#app/data/move";
 import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
-import type { Type } from "#enums/type";
+import type { ElementalType } from "#enums/elemental-type";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Determines whether a Pokemon is immune to a move because of an ability.
@@ -13,11 +14,12 @@ import { PreDefendAbAttr } from "./pre-defend-ab-attr";
  * @see {@linkcode getCondition}
  */
 export class TypeImmunityAbAttr extends PreDefendAbAttr {
-  private readonly immuneType: Type | null;
+  private readonly immuneType: ElementalType | null;
   private readonly condition: AbAttrCondition | null;
 
-  constructor(immuneType: Type | null, condition?: AbAttrCondition) {
+  constructor(immuneType: ElementalType | null, condition?: AbAttrCondition) {
     super();
+    this._flags.add(AbAttrFlag.TYPE_IMMUNITY);
 
     this.immuneType = immuneType;
     this.condition = condition ?? null;
@@ -51,7 +53,7 @@ export class TypeImmunityAbAttr extends PreDefendAbAttr {
     return false;
   }
 
-  getImmuneType(): Type | null {
+  getImmuneType(): ElementalType | null {
     return this.immuneType;
   }
 

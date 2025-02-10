@@ -1,6 +1,7 @@
 import type { LanguageEvent } from "./@types/Language";
 import type { SettingsEvent } from "./@types/Settings";
 import type { TouchControlsEvent } from "./@types/TouchControls";
+import Phaser from "phaser";
 
 type EventName = SettingsEvent | TouchControlsEvent | LanguageEvent;
 type CallbackFn<D> = (data: D) => void;

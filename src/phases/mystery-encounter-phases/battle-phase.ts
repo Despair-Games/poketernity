@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { PostSummonPhase } from "#app/phases/post-summon-phase";
+import { type PostSummonPhase } from "#app/phases/post-summon-phase";
 // -- end tsdoc imports --
 
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
@@ -17,6 +17,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import i18next from "i18next";
 import { TrainerSlot } from "#enums/trainer-slot";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Will handle (in order):
@@ -28,10 +29,13 @@ import { TrainerSlot } from "#enums/trainer-slot";
  * @extends Phase
  */
 export class MysteryEncounterBattlePhase extends Phase {
+  override readonly id = PhaseId.ME_BATTLE;
+
   protected disableSwitch: boolean;
 
   constructor(disableSwitch: boolean = false) {
     super();
+
     this.disableSwitch = disableSwitch;
   }
 

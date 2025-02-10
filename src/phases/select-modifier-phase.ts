@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import {
   ExtraModifierModifier,
   HealShopCostModifier,
-  PokemonHeldItemModifier,
+  type PokemonHeldItemModifier,
   TempExtraModifierModifier,
   type Modifier,
 } from "#app/modifier/modifier";
@@ -27,13 +27,16 @@ import Overrides from "#app/overrides";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
 import { SHOP_OPTIONS_ROW_LIMIT } from "#app/ui/modifier-select-ui-handler";
-import PartyUiHandler from "#app/ui/party-ui-handler";
 import { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { UiMode } from "#enums/ui-mode";
 import { NumberHolder } from "#app/utils";
 import i18next from "i18next";
 import { BattlePhase } from "./abstract-battle-phase";
+import { FilterItemMaxStacks } from "#app/utils/item-utils";
+import { PhaseId } from "#enums/phase-id";
+
+//#region Types
 
 interface SelectModifierPhaseOptions {
   rerollCount?: number;
@@ -42,7 +45,11 @@ interface SelectModifierPhaseOptions {
   isCopy?: boolean;
 }
 
+//#endregion
+
 export class SelectModifierPhase extends BattlePhase {
+  override readonly id = PhaseId.SELECT_MODIFIER;
+
   private readonly rerollCount: number;
   private readonly modifierTiers?: ModifierTier[];
   private readonly customModifierSettings?: CustomModifierSettings;
@@ -167,9 +174,7 @@ export class SelectModifierPhase extends BattlePhase {
                   ) {
                     const itemModifiers = globalScene.findModifiers(
                       (m) =>
-                        m instanceof PokemonHeldItemModifier
-                        && m.isTransferable
-                        && m.pokemonId === party[fromSlotIndex].id,
+                        m.isPokemonHeldItemModifier() && m.isTransferable && m.pokemonId === party[fromSlotIndex].id,
                     ) as PokemonHeldItemModifier[];
                     const itemModifier = itemModifiers[itemIndex];
                     globalScene.tryTransferHeldItemModifier(
@@ -191,7 +196,7 @@ export class SelectModifierPhase extends BattlePhase {
                     );
                   }
                 },
-                PartyUiHandler.FilterItemMaxStacks,
+                FilterItemMaxStacks,
               );
               break;
             case 2:

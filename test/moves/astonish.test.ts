@@ -5,7 +5,7 @@ import { CommandPhase } from "#app/phases/command-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -28,14 +28,14 @@ describe("Moves - Astonish", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
-    game.override.moveset([Moves.ASTONISH, Moves.SPLASH]);
+    game.override.moveset([MoveId.ASTONISH, MoveId.SPLASH]);
     game.override.enemySpecies(Species.BLASTOISE);
     game.override.enemyAbility(Abilities.INSOMNIA);
-    game.override.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
+    game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
     game.override.startingLevel(100);
     game.override.enemyLevel(100);
 
-    vi.spyOn(allMoves[Moves.ASTONISH], "chance", "get").mockReturnValue(100);
+    vi.spyOn(allMoves[MoveId.ASTONISH], "chance", "get").mockReturnValue(100);
   });
 
   test("move effect should cancel the target's move on the turn it applies", async () => {
@@ -45,7 +45,7 @@ describe("Moves - Astonish", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.ASTONISH);
+    game.move.select(MoveId.ASTONISH);
 
     await game.phaseInterceptor.to(MoveEndPhase, false);
 
@@ -58,7 +58,7 @@ describe("Moves - Astonish", () => {
 
     await game.phaseInterceptor.to(CommandPhase, false);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
 
     await game.phaseInterceptor.to(BerryPhase, false);
 

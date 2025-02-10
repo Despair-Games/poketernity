@@ -1,9 +1,9 @@
 import {
   initSubsequentOptionSelect,
   leaveEncounterWithoutBattle,
-  transitionMysteryEncounterIntroVisuals,
   updatePlayerMoney,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
@@ -17,7 +17,7 @@ import { PokeballType } from "#enums/pokeball";
 import { PlayerGender } from "#enums/player-gender";
 import { NumberHolder, randSeedInt } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies, getSpecialSpeciesList } from "#app/data/pokemon-species";
+import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
 import { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import {
   doPlayerFlee,

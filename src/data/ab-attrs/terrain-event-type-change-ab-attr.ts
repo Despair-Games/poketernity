@@ -2,9 +2,10 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { TerrainType } from "#enums/terrain-type";
-import { Type } from "#enums/type";
+import { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * This applies a terrain-based type change to the Pokemon.
@@ -12,6 +13,11 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
  * @extends PostSummonAbAttr
  */
 export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.TERRAIN_EVENT_TYPE_CHANGE);
+  }
+
   override apply(pokemon: Pokemon, _simulated: boolean, onSummon: boolean = true): boolean {
     if (pokemon.isTerastallized()) {
       return false;
@@ -24,7 +30,7 @@ export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
       return false;
     }
 
-    const typeChange: Type[] = this.determineTypeChange(pokemon, currentTerrain);
+    const typeChange: ElementalType[] = this.determineTypeChange(pokemon, currentTerrain);
     if (typeChange.length !== 0) {
       if (pokemon.summonData.addedType && typeChange.includes(pokemon.summonData.addedType)) {
         pokemon.summonData.addedType = null;
@@ -41,20 +47,20 @@ export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
    * @param currentTerrain {@linkcode TerrainType}
    * @returns a list of type(s)
    */
-  private determineTypeChange(pokemon: Pokemon, currentTerrain: TerrainType): Type[] {
-    const typeChange: Type[] = [];
+  private determineTypeChange(pokemon: Pokemon, currentTerrain: TerrainType): ElementalType[] {
+    const typeChange: ElementalType[] = [];
     switch (currentTerrain) {
       case TerrainType.ELECTRIC:
-        typeChange.push(Type.ELECTRIC);
+        typeChange.push(ElementalType.ELECTRIC);
         break;
       case TerrainType.MISTY:
-        typeChange.push(Type.FAIRY);
+        typeChange.push(ElementalType.FAIRY);
         break;
       case TerrainType.GRASSY:
-        typeChange.push(Type.GRASS);
+        typeChange.push(ElementalType.GRASS);
         break;
       case TerrainType.PSYCHIC:
-        typeChange.push(Type.PSYCHIC);
+        typeChange.push(ElementalType.PSYCHIC);
         break;
       default:
         pokemon.getTypes(false, false, true).forEach((t) => {
@@ -71,7 +77,9 @@ export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
     if (currentTerrain === TerrainType.NONE) {
       return i18next.t("abilityTriggers:pokemonTypeChangeRevert", { pokemonNameWithAffix });
     } else {
-      const moveType = i18next.t(`pokemonInfo:Type.${Type[this.determineTypeChange(pokemon, currentTerrain)[0]]}`);
+      const moveType = i18next.t(
+        `pokemonInfo:Type.${ElementalType[this.determineTypeChange(pokemon, currentTerrain)[0]]}`,
+      );
       return i18next.t("abilityTriggers:pokemonTypeChange", { pokemonNameWithAffix, moveType });
     }
   }

@@ -6,7 +6,6 @@ import type { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import type { ExpNotification } from "#enums/exp-notification";
 import type { HpBarSpeed } from "#enums/hp-bar-speed";
 import type { MoneyFormat } from "#enums/money-format";
-import type { MusicPreference } from "#enums/music-preference";
 import type { PlayerGender } from "#enums/player-gender";
 import type { ShopCursorTarget } from "#enums/shop-cursor-target";
 import type { UiTheme } from "#enums/ui-theme";
@@ -69,7 +68,6 @@ export interface AudioSettings {
   fieldVolume: number;
   soundEffectsVolume: number;
   uiVolume: number;
-  musicPreference: MusicPreference;
 }
 
 export interface GamepadSettings {
@@ -90,10 +88,12 @@ export interface SettingsUiItem<K = string> {
   key: K;
   label: string;
   options: SettingUiItemOption[];
-  /** Indicates if a settings change requires a reload */
+  /** Indicates if a settings change requires a reload. Should not be combined with {@linkcode doWrap} */
   requiresReload?: boolean;
   /** Whether the setting is only available on devices supporting touchscreen. */
   touchscreenOnly?: boolean;
+  /** Wheter the setting options cursor should wrap. Should not be combined with {@linkcode requiresReload} */
+  doWrap?: boolean;
 }
 
 export type SettingsCategory = keyof UserFacingSettings;

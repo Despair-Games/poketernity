@@ -4,8 +4,10 @@ import { globalScene } from "#app/global-scene";
 import { PlayerPokemon } from "#app/field/pokemon";
 import type { Starter } from "#app/ui/starter-select-ui-handler";
 import { randSeedGauss, randSeedInt, randSeedItem } from "#app/utils";
-import type { PokemonSpeciesForm } from "#app/data/pokemon-species";
-import PokemonSpecies, { getPokemonSpecies, getPokemonSpeciesForm } from "#app/data/pokemon-species";
+import type { PokemonSpeciesForm } from "./pokemon-species-form";
+import type PokemonSpecies from "#app/data/pokemon-species";
+import { getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import { api } from "#app/plugins/api/api";
 
@@ -67,8 +69,10 @@ export function getDailyRunStarters(seed: string): Starter[] {
 
 function getDailyRunStarter(starterSpeciesForm: PokemonSpeciesForm, startingLevel: number): Starter {
   const starterSpecies =
-    starterSpeciesForm instanceof PokemonSpecies ? starterSpeciesForm : getPokemonSpecies(starterSpeciesForm.speciesId);
-  const formIndex = starterSpeciesForm instanceof PokemonSpecies ? undefined : starterSpeciesForm.formIndex;
+    starterSpeciesForm.type === "PokemonSpecies"
+      ? (starterSpeciesForm as PokemonSpecies)
+      : getPokemonSpecies(starterSpeciesForm.speciesId);
+  const formIndex = starterSpeciesForm.type === "PokemonSpecies" ? undefined : starterSpeciesForm.formIndex;
   const pokemon = new PlayerPokemon(
     starterSpecies,
     startingLevel,

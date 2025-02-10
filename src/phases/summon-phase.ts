@@ -1,6 +1,6 @@
 import { BattleType } from "#enums/battle-type";
 import { getPokeballAtlasKey, getPokeballTintColor } from "#app/data/pokeball";
-import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { PlayerGender } from "#enums/player-gender";
 import { type Pokemon } from "#app/field/pokemon";
@@ -10,12 +10,15 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { settings } from "#app/system/settings/settings-manager";
 import i18next from "i18next";
 import { PartyMemberPokemonPhase } from "./abstract-party-member-pokemon-phase";
-import { GameOverPhase } from "./game-over-phase";
 import { PostSummonPhase } from "./post-summon-phase";
 import { ShinySparklePhase } from "./shiny-sparkle-phase";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
+import { PhaseId } from "#enums/phase-id";
 
 export class SummonPhase extends PartyMemberPokemonPhase {
+  /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode SummonPhase} is extended by other phases */
+  override readonly id: PhaseId = PhaseId.SUMMON;
+
   private readonly loaded: boolean;
 
   constructor(fieldIndex: number, player: boolean = true, loaded: boolean = false) {
@@ -58,8 +61,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
       if (legalIndex === -1) {
         console.error("Party Details:\n", party);
         console.error("All available Pokemon were fainted or illegal!");
-        globalScene.clearPhaseQueue();
-        globalScene.unshiftPhase(new GameOverPhase());
+        globalScene.gameOver({ clearPhaseQueue: true });
         return this.end();
       }
 

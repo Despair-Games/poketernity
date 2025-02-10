@@ -1,25 +1,20 @@
-import type { Modifier } from "typescript";
-import { TurnHeldItemTransferModifier } from "../modifier/modifier";
+import { type Modifier } from "#app/modifier/modifier";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import i18next from "i18next";
 import { NumberHolder } from "#app/utils";
 import { PlayerGender } from "#enums/player-gender";
 import type { Challenge } from "#app/data/challenge";
-import {
-  FreshStartChallenge,
-  SingleGenerationChallenge,
-  SingleTypeChallenge,
-  InverseBattleChallenge,
-} from "#app/data/challenge";
 import type { ConditionFn } from "#app/@types/common";
 import { Stat, getShortenedStatKey } from "#enums/stat";
 import { Challenges } from "#enums/challenges";
 import { globalScene } from "#app/global-scene";
-import { settings } from "./settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 import { AchvTier } from "#enums/achv-tier";
-import { Type } from "#enums/type";
+import { ElementalType } from "#enums/elemental-type";
+import { AchvCategory } from "#enums/achv-category";
 
 export class Achv {
+  protected _category: AchvCategory;
   protected readonly localizationKey: string;
   protected descriptionKey: string;
   protected descriptionLocArgs: Record<string, unknown>;
@@ -34,11 +29,16 @@ export class Achv {
   private conditionFunc?: ConditionFn;
 
   constructor(localizationKey: string, iconImage: string, score: number, conditionFunc?: ConditionFn) {
+    this._category = AchvCategory.UNSPECIFIED;
     this.localizationKey = localizationKey;
     this.descriptionKey = localizationKey;
     this._iconImage = iconImage;
     this.score = score;
     this.conditionFunc = conditionFunc;
+  }
+
+  get flag(): AchvCategory {
+    return this._category;
   }
 
   /**
@@ -99,6 +99,7 @@ export class MoneyAchv extends Achv {
 
   constructor(localizationKey: string, moneyAmount: number, iconImage: string, score: number) {
     super(localizationKey, iconImage, score, () => globalScene.money >= this.moneyAmount);
+    this._category = AchvCategory.MONEY;
     this.moneyAmount = moneyAmount;
     this.descriptionKey = "MoneyAchv";
     this.descriptionLocArgs = { moneyAmount: moneyAmount.toLocaleString(i18next.resolvedLanguage ?? "en-US") };
@@ -126,6 +127,7 @@ export class DamageAchv extends Achv {
       score,
       (damage: number | NumberHolder) => (damage instanceof NumberHolder ? damage.value : damage) >= this.damageAmount,
     );
+    this._category = AchvCategory.DAMAGE;
     this.damageAmount = damageAmount;
     this.descriptionKey = "DamageAchv";
     this.descriptionLocArgs = { damageAmount: damageAmount.toLocaleString(i18next.resolvedLanguage ?? "en-US") };
@@ -142,6 +144,7 @@ export class HealAchv extends Achv {
       score,
       (heal: number | NumberHolder) => (heal instanceof NumberHolder ? heal.value : heal) >= this.healAmount,
     );
+    this._category = AchvCategory.HEAL;
     this.healAmount = healAmount;
     this.descriptionKey = "HealAchv";
     this.descriptionLocArgs = {
@@ -161,6 +164,7 @@ export class LevelAchv extends Achv {
       score,
       (level: number | NumberHolder) => (level instanceof NumberHolder ? level.value : level) >= this.level,
     );
+    this._category = AchvCategory.LEVEL;
     this.level = level;
     this.descriptionKey = "LevelAchv";
     this.descriptionLocArgs = { level: level };
@@ -175,6 +179,7 @@ export class ModifierAchv extends Achv {
     modifierFunc: (modifier: Modifier) => boolean,
   ) {
     super(localizationKey, iconImage, score, (modifier: Modifier) => modifierFunc(modifier));
+    this._category = AchvCategory.MODIFIER;
   }
 }
 
@@ -186,6 +191,7 @@ export class ChallengeAchv extends Achv {
     challengeFunc: (challenge: Challenge) => boolean,
   ) {
     super(localizationKey, iconImage, score, (challenge: Challenge) => challengeFunc(challenge));
+    this._category = AchvCategory.CHALLENGE;
   }
 }
 
@@ -196,7 +202,7 @@ export class MonoGenAchv extends ChallengeAchv {
       iconImage,
       score,
       (c) =>
-        c instanceof SingleGenerationChallenge
+        c.isSingleGenerationChallenge()
         && c.value === gen
         && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
     );
@@ -204,18 +210,18 @@ export class MonoGenAchv extends ChallengeAchv {
 }
 
 export class MonoTypeAchv extends ChallengeAchv {
-  constructor(type: Type, iconImage: string, score: number) {
+  constructor(type: ElementalType, iconImage: string, score: number) {
     super(
-      "MONO_" + Type[type],
+      "MONO_" + ElementalType[type],
       iconImage,
       score,
       (c) =>
-        c instanceof SingleTypeChallenge
+        c.isSingleTypeChallenge()
         && c.value === type + 1
         && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
     );
     this.descriptionKey = "MonoType";
-    this.descriptionLocArgs = { type: i18next.t(`pokemonInfo:Type.${Type[type]}`) };
+    this.descriptionLocArgs = { type: i18next.t(`pokemonInfo:Type.${ElementalType[type]}`) };
   }
 }
 
@@ -247,11 +253,8 @@ export const achvs = {
   TERASTALLIZE: new Achv("TERASTALLIZE", "tera_orb", 25),
   STELLAR_TERASTALLIZE: new Achv("STELLAR_TERASTALLIZE", "stellar_tera_shard", 25).setSecret(true),
   SPLICE: new Achv("SPLICE", "dna_splicers", 10),
-  MINI_BLACK_HOLE: new ModifierAchv(
-    "MINI_BLACK_HOLE",
-    "mini_black_hole",
-    25,
-    (modifier) => modifier instanceof TurnHeldItemTransferModifier,
+  MINI_BLACK_HOLE: new ModifierAchv("MINI_BLACK_HOLE", "mini_black_hole", 25, (modifier) =>
+    modifier.isTurnHeldItemTransferModifier(),
   ).setSecret(),
   CATCH_MYTHICAL: new Achv("CATCH_MYTHICAL", "strange_ball", 50).setSecret(),
   CATCH_SUB_LEGENDARY: new Achv("CATCH_SUB_LEGENDARY", "rb", 75).setSecret(),
@@ -277,30 +280,30 @@ export const achvs = {
   MONO_GEN_SEVEN_VICTORY: new MonoGenAchv("MONO_GEN_SEVEN", 7, "ribbon_gen7", 100),
   MONO_GEN_EIGHT_VICTORY: new MonoGenAchv("MONO_GEN_EIGHT", 8, "ribbon_gen8", 100),
   MONO_GEN_NINE_VICTORY: new MonoGenAchv("MONO_GEN_NINE", 9, "ribbon_gen9", 100),
-  MONO_NORMAL: new MonoTypeAchv(Type.NORMAL, "silk_scarf", 100),
-  MONO_FIGHTING: new MonoTypeAchv(Type.FIGHTING, "black_belt", 100),
-  MONO_FLYING: new MonoTypeAchv(Type.FLYING, "sharp_beak", 100),
-  MONO_POISON: new MonoTypeAchv(Type.POISON, "poison_barb", 100),
-  MONO_GROUND: new MonoTypeAchv(Type.GROUND, "soft_sand", 100),
-  MONO_ROCK: new MonoTypeAchv(Type.ROCK, "hard_stone", 100),
-  MONO_BUG: new MonoTypeAchv(Type.BUG, "silver_powder", 100),
-  MONO_GHOST: new MonoTypeAchv(Type.GHOST, "spell_tag", 100),
-  MONO_STEEL: new MonoTypeAchv(Type.STEEL, "metal_coat", 100),
-  MONO_FIRE: new MonoTypeAchv(Type.FIRE, "charcoal", 100),
-  MONO_WATER: new MonoTypeAchv(Type.WATER, "mystic_water", 100),
-  MONO_GRASS: new MonoTypeAchv(Type.GRASS, "miracle_seed", 100),
-  MONO_ELECTRIC: new MonoTypeAchv(Type.ELECTRIC, "magnet", 100),
-  MONO_PSYCHIC: new MonoTypeAchv(Type.PSYCHIC, "twisted_spoon", 100),
-  MONO_ICE: new MonoTypeAchv(Type.ICE, "never_melt_ice", 100),
-  MONO_DRAGON: new MonoTypeAchv(Type.DRAGON, "dragon_fang", 100),
-  MONO_DARK: new MonoTypeAchv(Type.DARK, "black_glasses", 100),
-  MONO_FAIRY: new MonoTypeAchv(Type.FAIRY, "fairy_feather", 100),
+  MONO_NORMAL: new MonoTypeAchv(ElementalType.NORMAL, "silk_scarf", 100),
+  MONO_FIGHTING: new MonoTypeAchv(ElementalType.FIGHTING, "black_belt", 100),
+  MONO_FLYING: new MonoTypeAchv(ElementalType.FLYING, "sharp_beak", 100),
+  MONO_POISON: new MonoTypeAchv(ElementalType.POISON, "poison_barb", 100),
+  MONO_GROUND: new MonoTypeAchv(ElementalType.GROUND, "soft_sand", 100),
+  MONO_ROCK: new MonoTypeAchv(ElementalType.ROCK, "hard_stone", 100),
+  MONO_BUG: new MonoTypeAchv(ElementalType.BUG, "silver_powder", 100),
+  MONO_GHOST: new MonoTypeAchv(ElementalType.GHOST, "spell_tag", 100),
+  MONO_STEEL: new MonoTypeAchv(ElementalType.STEEL, "metal_coat", 100),
+  MONO_FIRE: new MonoTypeAchv(ElementalType.FIRE, "charcoal", 100),
+  MONO_WATER: new MonoTypeAchv(ElementalType.WATER, "mystic_water", 100),
+  MONO_GRASS: new MonoTypeAchv(ElementalType.GRASS, "miracle_seed", 100),
+  MONO_ELECTRIC: new MonoTypeAchv(ElementalType.ELECTRIC, "magnet", 100),
+  MONO_PSYCHIC: new MonoTypeAchv(ElementalType.PSYCHIC, "twisted_spoon", 100),
+  MONO_ICE: new MonoTypeAchv(ElementalType.ICE, "never_melt_ice", 100),
+  MONO_DRAGON: new MonoTypeAchv(ElementalType.DRAGON, "dragon_fang", 100),
+  MONO_DARK: new MonoTypeAchv(ElementalType.DARK, "black_glasses", 100),
+  MONO_FAIRY: new MonoTypeAchv(ElementalType.FAIRY, "fairy_feather", 100),
   FRESH_START: new ChallengeAchv(
     "FRESH_START",
     "reviver_seed",
     100,
     (c) =>
-      c instanceof FreshStartChallenge
+      c.isFreshStartChallenge()
       && c.value > 0
       && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0),
   ),
@@ -308,7 +311,7 @@ export const achvs = {
     "INVERSE_BATTLE",
     "inverse",
     100,
-    (c) => c instanceof InverseBattleChallenge && c.value > 0,
+    (c) => c.isInverseBattleChallenge() && c.value > 0,
   ),
   BREEDERS_IN_SPACE: new Achv("BREEDERS_IN_SPACE", "moon_stone", 50).setSecret(),
 };
