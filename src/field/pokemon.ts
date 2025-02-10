@@ -177,7 +177,6 @@ import { StatusEffect } from "#enums/status-effect";
 import type { AbAttr } from "#app/data/ab-attrs/ab-attr";
 import { settings } from "#app/system/settings/settings-manager";
 import { HitResult } from "#enums/hit-result";
-import type { MoveResult } from "#enums/move-result";
 import { AiType } from "#enums/ai-type";
 import { LearnMoveSituation } from "#enums/learn-move-situation";
 import { FieldPosition } from "#enums/field-position";
@@ -195,6 +194,9 @@ import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
 import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
+import type { TurnMove } from "#app/@types/TurnMove";
+import type { QueuedMove } from "#app/@types/QueuedMove";
+import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -5916,30 +5918,6 @@ export class EnemyPokemon extends Pokemon {
 interface AbilityData {
   ability: Ability;
   passive: boolean;
-}
-
-export interface TurnMove {
-  moveId: MoveId;
-  move: Move | undefined;
-  targets?: BattlerIndex[];
-  result: MoveResult;
-  virtual?: boolean;
-  turn?: number;
-}
-
-export interface QueuedMove {
-  moveId: MoveId;
-  targets: BattlerIndex[];
-  ignorePP?: boolean;
-}
-
-export interface AttackMoveResult {
-  moveId: MoveId;
-  result: DamageResult;
-  damage: number;
-  isCritical: boolean;
-  sourceId: number;
-  sourceBattlerIndex: BattlerIndex;
 }
 
 /** Container for Pokemon-specific data that resets at the end of each wave. */

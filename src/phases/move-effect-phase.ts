@@ -14,7 +14,9 @@ import { NoEffectAttr } from "#app/data/move-attrs/no-effect-attr";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-post-move-trigger";
 import type { TypeDamageMultiplier } from "#app/data/type";
-import type { AttackMoveResult, DamageResult, Pokemon, TurnMove } from "#app/field/pokemon";
+import type { DamageResult, Pokemon } from "#app/field/pokemon";
+import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
+import type { TurnMove } from "#app/@types/TurnMove";
 import { MoveResult } from "#enums/move-result";
 import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
@@ -175,7 +177,6 @@ export class MoveEffectPhase extends HitCheckPhase {
      * used in the sense of "Did it affect any of the targets?".
      */
     this.moveHistoryEntry = {
-      moveId: this.move.moveId,
       move: this.move.getMove(),
       targets: this.adjustedTargets ?? this.targets,
       result: MoveResult.PENDING,
@@ -352,7 +353,6 @@ export class MoveEffectPhase extends HitCheckPhase {
       // Log this move action as a success
       user.pushMoveHistory({
         move: this.move.getMove(),
-        moveId: this.move.moveId,
         targets: this.targets,
         result: MoveResult.SUCCESS,
         virtual: this.move.virtual,

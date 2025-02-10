@@ -1,6 +1,6 @@
 import { Stat } from "#enums/stat";
 import { type StockpilingTag } from "#app/data/battler-tags";
-import type { TurnMove } from "#app/field/pokemon";
+import type { TurnMove } from "#app/@types/TurnMove";
 import { MoveResult } from "#enums/move-result";
 import { CommandPhase } from "#app/phases/command-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
@@ -11,7 +11,6 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { Move } from "#app/data/move";
 
 describe("Moves - Stockpile", () => {
   describe("integration tests", () => {
@@ -77,8 +76,7 @@ describe("Moves - Stockpile", () => {
           expect(stockpilingTag.stockpiledCount).toBe(3);
           expect(user.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
             result: MoveResult.FAIL,
-            move: expect.any(Move),
-            moveId: MoveId.STOCKPILE,
+            move: expect.objectContaining({ id: MoveId.STOCKPILE }),
           });
         }
       }

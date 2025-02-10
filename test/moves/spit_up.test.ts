@@ -2,7 +2,7 @@ import { Stat } from "#enums/stat";
 import { type StockpilingTag } from "#app/data/battler-tags";
 import { allMoves } from "#app/data/all-moves";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import type { TurnMove } from "#app/field/pokemon";
+import type { TurnMove } from "#app/@types/TurnMove";
 import { MoveResult } from "#enums/move-result";
 import { GameManager } from "#test/testUtils/gameManager";
 import { Abilities } from "#enums/abilities";
@@ -12,7 +12,6 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { MovePhase } from "#app/phases/move-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
-import { Move } from "#app/data/move";
 
 describe("Moves - Spit Up", () => {
   let phaserGame: Phaser.Game;
@@ -127,8 +126,7 @@ describe("Moves - Spit Up", () => {
     await game.phaseInterceptor.to(TurnInitPhase);
 
     expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-      moveId: MoveId.SPIT_UP,
-      move: expect.any(Move),
+      move: expect.objectContaining({ id: MoveId.SPIT_UP }),
       result: MoveResult.FAIL,
     });
 
@@ -154,8 +152,7 @@ describe("Moves - Spit Up", () => {
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-        moveId: MoveId.SPIT_UP,
-        move: expect.any(Move),
+        move: expect.objectContaining({ id: MoveId.SPIT_UP }),
         result: MoveResult.SUCCESS,
       });
 
@@ -186,8 +183,7 @@ describe("Moves - Spit Up", () => {
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-        moveId: MoveId.SPIT_UP,
-        move: expect.any(Move),
+        move: expect.objectContaining({ id: MoveId.SPIT_UP }),
         result: MoveResult.SUCCESS,
       });
 

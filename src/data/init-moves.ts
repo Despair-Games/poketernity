@@ -244,7 +244,7 @@ import i18next from "i18next";
 
 export function initMoves() {
   const rawAllMoves = [
-    new SelfStatusMove(MoveId.NONE, ElementalType.NORMAL, MoveCategory.STATUS, -1, -1, 0, 1),
+    SelfStatusMove.none(),
     new AttackMove(MoveId.POUND, ElementalType.NORMAL, MoveCategory.PHYSICAL, 40, 100, 35, -1, 0, 1),
     new AttackMove(MoveId.KARATE_CHOP, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 50, 100, 25, -1, 0, 1).attr(
       HighCritAttr,
@@ -399,7 +399,7 @@ export function initMoves() {
           target
             .getMoveHistory()
             .reverse()
-            .find((m) => m.moveId !== MoveId.NONE && m.moveId !== MoveId.STRUGGLE && !m.virtual) !== undefined,
+            .find((m) => m.move.id !== MoveId.NONE && m.move.id !== MoveId.STRUGGLE && !m.virtual) !== undefined,
       )
       .ignoresSubstitute(),
     new AttackMove(MoveId.ACID, ElementalType.POISON, MoveCategory.SPECIAL, 40, 100, 30, 10, 0, 1)
@@ -935,7 +935,7 @@ export function initMoves() {
         // - the previous move was unsuccessful
         return (
           lastTurnMove.length === 0
-          || lastTurnMove[0].moveId !== move.id
+          || lastTurnMove[0].move.id !== move.id
           || lastTurnMove[0].result !== MoveResult.SUCCESS
         );
       }),
@@ -3953,7 +3953,7 @@ export function initMoves() {
       .makesContact(false)
       .condition((user, _target, move) => {
         const turnMove = user.getLastXMoves(1);
-        return !turnMove.length || turnMove[0].moveId !== move.id || turnMove[0].result !== MoveResult.SUCCESS;
+        return !turnMove.length || turnMove[0].move.id !== move.id || turnMove[0].result !== MoveResult.SUCCESS;
       }), // TODO Add Instruct/Encore interaction
     new AttackMove(MoveId.COMEUPPANCE, ElementalType.DARK, MoveCategory.PHYSICAL, -1, 100, 10, -1, 0, 9)
       .attr(CounterDamageAttr, (moveId) => allMoves[moveId].isAttackMove(), 1.5)
@@ -3981,7 +3981,7 @@ export function initMoves() {
     new AttackMove(MoveId.BLOOD_MOON, ElementalType.NORMAL, MoveCategory.SPECIAL, 140, 100, 5, -1, 0, 9).condition(
       (user, _target, move) => {
         const turnMove = user.getLastXMoves(1);
-        return !turnMove.length || turnMove[0].moveId !== move.id || turnMove[0].result !== MoveResult.SUCCESS;
+        return !turnMove.length || turnMove[0].move.id !== move.id || turnMove[0].result !== MoveResult.SUCCESS;
       },
     ), // TODO Add Instruct/Encore interaction
     new AttackMove(MoveId.MATCHA_GOTCHA, ElementalType.GRASS, MoveCategory.SPECIAL, 80, 90, 15, 20, 0, 9)

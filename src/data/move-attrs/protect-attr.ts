@@ -1,4 +1,4 @@
-import { type TurnMove } from "#app/field/pokemon";
+import { type TurnMove } from "#app/@types/TurnMove";
 import { MoveResult } from "#enums/move-result";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";

@@ -5,7 +5,7 @@ import { CommonBattleAnim } from "./battle-anims/common-battle-anim";
 import { MoveChargeAnim } from "./battle-anims/move-charge-anim";
 import { CommonAnim } from "#enums/common-anim";
 import { ChargeAnim } from "#enums/charge-anim";
-import type { Move } from "#app/data/move";
+import { SelfStatusMove, type Move } from "#app/data/move";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { allMoves } from "#app/data/all-moves";
 import { StatusCategoryOnAllyAttr } from "./move-attrs/status-category-on-ally-attr";
@@ -300,14 +300,14 @@ export class DisabledTag extends MoveRestrictionBattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    const move = pokemon
+    const turnMove = pokemon
       .getLastXMoves()
-      .find((m) => m.moveId !== MoveId.NONE && m.moveId !== MoveId.STRUGGLE && !m.virtual);
-    if (move === undefined) {
+      .find((m) => m.move.id !== MoveId.NONE && m.move.id !== MoveId.STRUGGLE && !m.virtual);
+    if (turnMove === undefined) {
       return;
     }
 
-    this.moveId = move.moveId;
+    this.moveId = turnMove.move.id;
 
     globalScene.queueMessage(
       i18next.t("battlerTags:disabledOnAdd", {
@@ -426,11 +426,11 @@ export class GorillaTacticsTag extends MoveRestrictionBattlerTag {
    * @returns the last valid move from the pokemon's move history
    */
   getLastValidMove(pokemon: Pokemon): MoveId | undefined {
-    const move = pokemon
+    const turnMove = pokemon
       .getLastXMoves()
-      .find((m) => m.moveId !== MoveId.NONE && m.moveId !== MoveId.STRUGGLE && !m.virtual);
+      .find((m) => m.move.id !== MoveId.NONE && m.move.id !== MoveId.STRUGGLE && !m.virtual);
 
-    return move?.moveId;
+    return turnMove?.move.id;
   }
 }
 
@@ -679,7 +679,7 @@ export class InterruptedTag extends BattlerTag {
     super.onAdd(pokemon);
 
     pokemon.getMoveQueue().shift();
-    pokemon.pushMoveHistory({ moveId: MoveId.NONE, move: undefined, result: MoveResult.OTHER });
+    pokemon.pushMoveHistory({ move: SelfStatusMove.none(), result: MoveResult.OTHER });
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
@@ -1122,7 +1122,7 @@ export class EncoreTag extends MoveRestrictionBattlerTag {
 
   override onAdd(pokemon: Pokemon): void {
     super.onRemove(pokemon);
-    this.moveId = pokemon.getLastXMoves(1)[0].moveId;
+    this.moveId = pokemon.getLastXMoves(1)[0].move.id;
 
     globalScene.queueMessage(
       i18next.t("battlerTags:encoreOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
@@ -1866,8 +1866,8 @@ export class TruantTag extends AbilityBattlerTag {
 
     const lastMove = pokemon.getLastXMoves().find(() => true);
 
-    if (lastMove && lastMove.moveId !== MoveId.NONE) {
-      (globalScene.getCurrentPhase() as MovePhase).cancel();
+    if (lastMove && lastMove.move.id !== MoveId.NONE) {
+      globalScene.getCurrentPhase<MovePhase>()?.cancel();
       globalScene.unshiftPhase(new ShowAbilityPhase(pokemon.id, passive));
       globalScene.queueMessage(
         i18next.t("battlerTags:truantLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
@@ -3104,16 +3104,21 @@ export class TormentTag extends MoveRestrictionBattlerTag {
     if (!user) {
       return false;
     }
-    const lastMove = user.getLastXMoves(1)[0];
-    if (!lastMove) {
+    const lastMoveTurn = user.getLastXMoves(1)[0];
+    if (!lastMoveTurn) {
       return false;
     }
     // This checks for locking / momentum moves like Rollout and Hydro Cannon + if the user is under the influence of BattlerTagType.FRENZY
     // Because Uproar's unique behavior is not implemented, it does not check for Uproar. Torment has been marked as partial in moves.ts
-    const moveObj = allMoves[lastMove.moveId];
+    const moveObj = allMoves[lastMoveTurn.move.id];
     const isUnaffected = moveObj.hasAttr(ConsecutiveUseDoublePowerAttr) || user.getTag(BattlerTagType.FRENZY);
-    const validLastMoveResult = lastMove.result === MoveResult.SUCCESS || lastMove.result === MoveResult.MISS;
-    if (lastMove.moveId === moveId && validLastMoveResult && lastMove.moveId !== MoveId.STRUGGLE && !isUnaffected) {
+    const validLastMoveResult = lastMoveTurn.result === MoveResult.SUCCESS || lastMoveTurn.result === MoveResult.MISS;
+    if (
+      lastMoveTurn.move.id === moveId
+      && validLastMoveResult
+      && lastMoveTurn.move.id !== MoveId.STRUGGLE
+      && !isUnaffected
+    ) {
       return true;
     }
     return false;

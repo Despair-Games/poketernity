@@ -17,8 +17,8 @@ export class LastResortAttr extends MoveAttr {
       const uniqueUsedMoveIds = new Set<MoveId>();
       const movesetMoveIds = user.getMoveset().map((m) => m.moveId);
       user.getMoveHistory().map((m) => {
-        if (m.moveId !== move.id && movesetMoveIds.find((mm) => mm === m.moveId)) {
-          uniqueUsedMoveIds.add(m.moveId);
+        if (m.move.id !== move.id && movesetMoveIds.find((mm) => mm === m.move.id)) {
+          uniqueUsedMoveIds.add(m.move.id);
         }
       });
       return uniqueUsedMoveIds.size >= movesetMoveIds.length - 1;

@@ -1,7 +1,7 @@
 import { Stat } from "#enums/stat";
 import { type StockpilingTag } from "#app/data/battler-tags";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import type { TurnMove } from "#app/field/pokemon";
+import type { TurnMove } from "#app/@types/TurnMove";
 import { MoveResult } from "#enums/move-result";
 import { MovePhase } from "#app/phases/move-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
@@ -11,7 +11,6 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { Move } from "#app/data/move";
 
 describe("Moves - Swallow", () => {
   let phaserGame: Phaser.Game;
@@ -137,8 +136,7 @@ describe("Moves - Swallow", () => {
     await game.phaseInterceptor.to(TurnInitPhase);
 
     expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-      moveId: MoveId.SWALLOW,
-      move: expect.any(Move),
+      move: expect.objectContaining({ id: MoveId.SWALLOW }),
       result: MoveResult.FAIL,
     });
   });
@@ -162,8 +160,7 @@ describe("Moves - Swallow", () => {
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-        moveId: MoveId.SWALLOW,
-        move: expect.any(Move),
+        move: expect.objectContaining({ id: MoveId.SWALLOW }),
         result: MoveResult.SUCCESS,
       });
 
@@ -193,8 +190,7 @@ describe("Moves - Swallow", () => {
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-        moveId: MoveId.SWALLOW,
-        move: expect.any(Move),
+        move: expect.objectContaining({ id: MoveId.SWALLOW }),
         result: MoveResult.SUCCESS,
       });
 

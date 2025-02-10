@@ -1,6 +1,6 @@
 import type { BattlerTag } from "#app/data/battler-tags";
 import type { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
-import type { QueuedMove } from "#app/field/pokemon";
+import type { QueuedMove } from "#app/@types/QueuedMove";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { Abilities } from "#enums/abilities";
 import type { ElementalType } from "#enums/elemental-type";

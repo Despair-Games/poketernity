@@ -21,11 +21,11 @@ export class EncoreAttr extends AddBattlerTagAttr {
 
       const repeatableMove = lastMoves[0];
 
-      if (!repeatableMove.moveId || repeatableMove.virtual) {
+      if (!repeatableMove.move.id || repeatableMove.virtual) {
         return false;
       }
 
-      switch (repeatableMove.moveId) {
+      switch (repeatableMove.move.id) {
         case MoveId.MIMIC:
         case MoveId.MIRROR_MOVE:
         case MoveId.TRANSFORM:

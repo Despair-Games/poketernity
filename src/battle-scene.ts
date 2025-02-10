@@ -2316,8 +2316,8 @@ export default class BattleScene extends SceneBase {
   }
 
   /* Phase Functions */
-  getCurrentPhase(): Phase | null {
-    return this.currentPhase;
+  getCurrentPhase<P extends Phase = Phase>(): P | null {
+    return this.currentPhase as P;
   }
 
   getStandbyPhase(): Phase | null {

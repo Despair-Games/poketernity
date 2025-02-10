@@ -12,7 +12,7 @@ export const targetMoveCopiableCondition: MoveConditionFunc = (_user, target, _m
 
   const copiableMove = targetMoves[0];
 
-  if (!copiableMove.moveId) {
+  if (!copiableMove.move.id) {
     return false;
   }
 

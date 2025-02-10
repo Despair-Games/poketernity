@@ -36,6 +36,7 @@ import { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
+import { SelfStatusMove } from "#app/data/move";
 
 /**
  * Resolves the following:
@@ -373,7 +374,6 @@ export class MovePhase extends BattlePhase {
       }
 
       this.pokemon.pushMoveHistory({
-        moveId: this.move.moveId,
         move: this.move.getMove(),
         targets: this.targets,
         result: MoveResult.FAIL,
@@ -417,7 +417,6 @@ export class MovePhase extends BattlePhase {
       globalScene.chargeMove(this.pokemon.getBattlerIndex(), this.targets, this.move);
     } else {
       this.pokemon.pushMoveHistory({
-        moveId: this.move.moveId,
         move: this.move.getMove(),
         targets: this.targets,
         result: MoveResult.FAIL,
@@ -577,7 +576,7 @@ export class MovePhase extends BattlePhase {
         frenzyMissFunc(this.pokemon, this.move.getMove());
       }
 
-      this.pokemon.pushMoveHistory({ moveId: MoveId.NONE, move: undefined, result: MoveResult.FAIL });
+      this.pokemon.pushMoveHistory({ move: SelfStatusMove.none(), result: MoveResult.FAIL });
 
       this.pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
       this.pokemon.lapseTags(BattlerTagLapseType.AFTER_MOVE);

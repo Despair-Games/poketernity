@@ -966,6 +966,10 @@ export class SelfStatusMove extends StatusMove {
     super(id, type, accuracy, pp, chance, priority, generation);
     this.target(MoveTarget.USER);
   }
+
+  static none(): SelfStatusMove {
+    return new SelfStatusMove(MoveId.NONE, ElementalType.NORMAL, MoveCategory.STATUS, -1, -1, 0, 1);
+  }
 }
 
 export type ChargingMove = ChargingAttackMove | ChargingSelfStatusMove;

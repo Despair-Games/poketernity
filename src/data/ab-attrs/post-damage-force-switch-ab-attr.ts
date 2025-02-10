@@ -54,7 +54,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
     const forbiddenAttackingMoves = [MoveId.BELLY_DRUM, MoveId.SUBSTITUTE, MoveId.CURSE, MoveId.PAIN_SPLIT];
     if (moveHistory.length > 0) {
       const lastMoveUsed = moveHistory[moveHistory.length - 1];
-      if (forbiddenAttackingMoves.includes(lastMoveUsed.moveId)) {
+      if (forbiddenAttackingMoves.includes(lastMoveUsed.move.id)) {
         return false;
       }
     }
@@ -66,10 +66,10 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
       if (enemyMoveHistory.length > 0) {
         const enemyLastMoveUsed = enemyMoveHistory[enemyMoveHistory.length - 1];
         // Will not activate if the Pokémon's HP falls below half while it is in the air during Sky Drop.
-        if (forbiddenDefendingMoves.includes(enemyLastMoveUsed.moveId) || pokemon.getTag(BattlerTagType.SKY_DROP)) {
+        if (forbiddenDefendingMoves.includes(enemyLastMoveUsed.move.id) || pokemon.getTag(BattlerTagType.SKY_DROP)) {
           return false;
           // Will not activate if the Pokémon's HP falls below half by a move affected by Sheer Force.
-        } else if (allMoves[enemyLastMoveUsed.moveId].chance >= 0 && source.hasAbility(Abilities.SHEER_FORCE)) {
+        } else if (allMoves[enemyLastMoveUsed.move.id].chance >= 0 && source.hasAbility(Abilities.SHEER_FORCE)) {
           return false;
           // Activate only after the last hit of multistrike moves
         } else if (source.turnData.hitsLeft > 1) {

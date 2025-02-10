@@ -883,7 +883,7 @@ export default class PartyUiHandler extends MessageUiHandler {
             const isBatonPassMove =
               this.partyUiMode === PartyUiMode.FAINT_SWITCH
               && moveHistory.length
-              && allMoves[moveHistory[moveHistory.length - 1].moveId].getAttrs(ForceSwitchOutAttr)[0]?.isBatonPass()
+              && allMoves[moveHistory[moveHistory.length - 1].move.id].getAttrs(ForceSwitchOutAttr)[0]?.isBatonPass()
               && moveHistory[moveHistory.length - 1].result === MoveResult.SUCCESS;
 
             // isBatonPassMove and allowBatonModifierSwitch shouldn't ever be true
