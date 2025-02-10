@@ -219,6 +219,19 @@ export abstract class MoveRestrictionBattlerTag extends BattlerTag {
   interruptedText(_pokemon: Pokemon, _moveId: MoveId): string {
     return "";
   }
+
+  /**
+   * Gets the last valid move from the pokemon's move history.
+   * @param pokemon {@linkcode Pokemon} to get the last valid move from
+   * @returns the last valid move from the pokemon's move history
+   */
+  public getLastValidMove(pokemon: Pokemon): Move | undefined {
+    const turnMove = pokemon
+      .getLastXMoves()
+      .find((m) => m.move.id !== MoveId.NONE && m.move.id !== MoveId.STRUGGLE && !m.virtual);
+
+    return turnMove?.move;
+  }
 }
 
 /**
@@ -300,14 +313,12 @@ export class DisabledTag extends MoveRestrictionBattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    const turnMove = pokemon
-      .getLastXMoves()
-      .find((m) => m.move.id !== MoveId.NONE && m.move.id !== MoveId.STRUGGLE && !m.virtual);
-    if (turnMove === undefined) {
+    const lastValidMove = this.getLastValidMove(pokemon);
+    if (lastValidMove === undefined) {
       return;
     }
 
-    this.moveId = turnMove.move.id;
+    this.moveId = lastValidMove.id;
 
     globalScene.queueMessage(
       i18next.t("battlerTags:disabledOnAdd", {
@@ -392,7 +403,7 @@ export class GorillaTacticsTag extends MoveRestrictionBattlerTag {
       return;
     }
 
-    this.moveId = lastValidMove;
+    this.moveId = lastValidMove.id;
     pokemon.setStat(Stat.ATK, pokemon.getStat(Stat.ATK, false) * 1.5, false);
   }
 
@@ -418,19 +429,6 @@ export class GorillaTacticsTag extends MoveRestrictionBattlerTag {
       moveName: allMoves[this.moveId].name,
       pokemonName: getPokemonNameWithAffix(pokemon),
     });
-  }
-
-  /**
-   * Gets the last valid move from the pokemon's move history.
-   * @param pokemon {@linkcode Pokemon} to get the last valid move from
-   * @returns the last valid move from the pokemon's move history
-   */
-  getLastValidMove(pokemon: Pokemon): MoveId | undefined {
-    const turnMove = pokemon
-      .getLastXMoves()
-      .find((m) => m.move.id !== MoveId.NONE && m.move.id !== MoveId.STRUGGLE && !m.virtual);
-
-    return turnMove?.move.id;
   }
 }
 
