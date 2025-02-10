@@ -9,23 +9,16 @@ import {
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 
 export function getModifierPoolForType(poolType: ModifierPoolType): ModifierPool {
-  let pool: ModifierPool;
   switch (poolType) {
     case ModifierPoolType.PLAYER:
-      pool = modifierPool;
-      break;
+      return modifierPool;
     case ModifierPoolType.WILD:
-      pool = wildModifierPool;
-      break;
+      return wildModifierPool;
     case ModifierPoolType.TRAINER:
-      pool = trainerModifierPool;
-      break;
+      return trainerModifierPool;
     case ModifierPoolType.ENEMY_BUFF:
-      pool = enemyBuffModifierPool;
-      break;
+      return enemyBuffModifierPool;
     case ModifierPoolType.DAILY_STARTER:
-      pool = dailyStarterModifierPool;
-      break;
+      return dailyStarterModifierPool;
   }
-  return pool;
 }

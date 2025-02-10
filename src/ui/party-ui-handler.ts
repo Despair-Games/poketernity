@@ -39,7 +39,7 @@ import type { PartyModifierTransferSelectCallback } from "#app/@types/PartyModif
 import type { PartyModifierSpliceSelectCallback } from "#app/@types/PartyModifierSpliceSelectCallback";
 import type { PokemonModifierTransferSelectFilter } from "#app/@types/PokemonModifierTransferSelectFilter";
 import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilter";
-import { PartyFilterAll } from "#app/utils/party-utils";
+import { PartyFilterAll } from "#app/utils/party-ui-utils";
 import { FilterAllMoves } from "#app/utils/move-utils";
 import { GAME_WIDTH } from "#app/ui-constants";
 import { type SelectModifierPhase } from "#app/phases/select-modifier-phase";

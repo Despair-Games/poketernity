@@ -38,7 +38,6 @@ import { MoveFlags } from "#enums/move-flags";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AchvCategory } from "#enums/achv-category";
-import type { PokemonMove } from "#app/field/pokemon-move";
 import { PhaseId } from "#enums/phase-id";
 
 export class MoveEffectPhase extends HitCheckPhase {
@@ -54,10 +53,6 @@ export class MoveEffectPhase extends HitCheckPhase {
   private firstHit: boolean;
   /** Is this the last strike of a move? */
   private lastHit: boolean;
-
-  constructor(battlerIndex: BattlerIndex, targets: BattlerIndex[], move: PokemonMove) {
-    super(battlerIndex, targets, move);
-  }
 
   public override start(): void {
     super.start();

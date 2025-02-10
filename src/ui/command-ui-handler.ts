@@ -9,7 +9,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { CommandPhase } from "#app/phases/command-phase";
 import { globalScene } from "#app/global-scene";
 import { BattleCommand } from "#enums/battle-command";
-import { PartyFilterNonFainted } from "#app/utils/party-utils";
+import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
 
 export default class CommandUiHandler extends UiHandler {
   private commandsContainer: Phaser.GameObjects.Container;

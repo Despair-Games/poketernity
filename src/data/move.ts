@@ -808,7 +808,7 @@ export abstract class Move implements Localizable {
     applyMoveAttrs(VariablePowerAttr, source, target, this, power);
 
     if (!this.hasAttr(TypelessAttr)) {
-      globalScene.arena.applyTags(WeakenMoveTypeArenaTagTypes, simulated, this.type, power);
+      globalScene.arena.applyTags([...WeakenMoveTypeArenaTagTypes], simulated, this.type, power);
       globalScene.applyModifiers(AttackTypeBoosterModifier, source.isPlayer(), source, this.type, power);
     }
 

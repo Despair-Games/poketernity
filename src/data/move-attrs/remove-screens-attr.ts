@@ -12,7 +12,7 @@ import { RemoveArenaTagsAttr } from "./remove-arena-tags-attr";
 export class RemoveScreensAttr extends RemoveArenaTagsAttr {
   constructor(targetBothSides: boolean = false) {
     super(
-      WeakenMoveScreenArenaTagTypes,
+      [...WeakenMoveScreenArenaTagTypes],
       targetBothSides ? ArenaTagRelativeSide.ALL : ArenaTagRelativeSide.TARGET,
       MoveEffectTrigger.PRE_APPLY,
     );

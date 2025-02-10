@@ -6,10 +6,6 @@ import { UiMode } from "#enums/ui-mode";
 export class SelectChallengePhase extends Phase {
   override readonly id = PhaseId.SELECT_CHALLENGE;
 
-  constructor() {
-    super();
-  }
-
   public override start(): void {
     super.start();
 

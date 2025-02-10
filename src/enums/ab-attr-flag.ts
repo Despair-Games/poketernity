@@ -104,6 +104,7 @@ import { type PostWeatherLapseAbAttr } from "#app/data/ab-attrs/post-weather-lap
 import { type FieldMoveTypePowerBoostAbAttr } from "#app/data/ab-attrs/field-move-type-power-boost-ab-attr";
 import { type EffectSporeAbAttr } from "#app/data/ab-attrs/effect-spore-ab-attr";
 import { type ReflectStatStageChangeAbAttr } from "#app/data/ab-attrs/reflect-stat-stage-change-ab-attr";
+import { type BypassParaSpeedReductionAbAttr } from "#app/data/ab-attrs/bypass-para-speed-reduction-ab-attr";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -324,4 +325,6 @@ export enum AbAttrFlag {
   EFFECT_SPORE,
   /** @see {@linkcode ReflectStatStageChangeAbAttr} */
   REFLECT_STAT_STAGE_CHANGE,
+  /** @see {@linkcode BypassParaSpeedReductionAbAttr} */
+  BYPASS_PARA_SPEED_REDUCTION,
 }

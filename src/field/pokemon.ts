@@ -184,14 +184,13 @@ import { FieldPosition } from "#enums/field-position";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import type { AbilityFilterOptions } from "#app/data/ability-filter-options";
 import { PokemonMove } from "#app/field/pokemon-move";
-import { BypassParaSpeedReductionAbAttr } from "#app/data/ab-attrs/bypass-para-speed-reduction-ab-attr";
 import { WeakenMoveScreenArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import {
   CritBoostBattlerTagTypes,
   SemiInvulnerableBattlerTagTypes,
   TrappedBattlerTagTypes,
 } from "#app/utils/battler-tag-type-utils";
-import { PartyFilterNonFainted } from "#app/utils/party-utils";
+import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
 import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
@@ -1191,7 +1190,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         }
         if (this.status && this.status.effect === StatusEffect.PARALYSIS) {
           const paraSpeedReductionCancelled = new BooleanHolder(false);
-          applyAbFunc(BypassParaSpeedReductionAbAttr, this, simulated, paraSpeedReductionCancelled);
+          applyAbFunc(AbAttrFlag.BYPASS_PARA_SPEED_REDUCTION, this, simulated, paraSpeedReductionCancelled);
           if (!paraSpeedReductionCancelled.value) {
             ret >>= 1;
           }
@@ -1646,7 +1645,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * Gets a list of all instances of a given ability attribute among abilities this pokemon has.
    * Accounts for all the various effects which can affect whether an ability will be present or
    * in effect, and both passive and non-passive.
-   * @param abAttrFlag - The {@linkcode AbAttrFlag} to check for in the abilities
+   * @param abAttrFlag – The {@linkcode AbAttrFlag} to verify within the abilities.
    * @param canApply - If `false`, it doesn't check whether the ability is currently active; Default `true`
    * @param baseOnly - If `true`, it ignores ability changing effects; Default `false`
    * @returns An array of all the ability attributes on this ability.
@@ -3276,7 +3275,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     /** Reduces damage if this Pokemon has a relevant screen (e.g. Light Screen for special attacks) */
     const screenMultiplier = new NumberHolder(1);
     globalScene.arena.applyTagsForSide(
-      WeakenMoveScreenArenaTagTypes,
+      [...WeakenMoveScreenArenaTagTypes],
       defendingSide,
       simulated,
       source,
@@ -3550,7 +3549,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     );
 
     if (!cancelled.value && newTag.canAdd(this)) {
-      this.summonData?.tags.push(newTag);
+      this.summonData.tags.push(newTag);
       newTag.onAdd(this);
 
       return true;
@@ -3559,7 +3558,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return false;
   }
 
-  getTag<T extends BattlerTag>(...tagTypes: BattlerTagType[]): T | nil {
+  getTag<T extends BattlerTag = BattlerTag>(...tagTypes: BattlerTagType[]): T | nil {
     if (!this.summonData) {
       return null;
     }

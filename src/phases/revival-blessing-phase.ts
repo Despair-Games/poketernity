@@ -8,7 +8,7 @@ import { UiMode } from "#enums/ui-mode";
 import { toDmgValue } from "#app/utils";
 import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
-import { PartyFilterFainted } from "#app/utils/party-utils";
+import { PartyFilterFainted } from "#app/utils/party-ui-utils";
 import { PhaseId } from "#enums/phase-id";
 
 /**

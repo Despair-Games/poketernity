@@ -6,7 +6,7 @@ import { SwitchType } from "#enums/switch-type";
 import { BattlePhase } from "./abstract-battle-phase";
 import { PostSummonPhase } from "./post-summon-phase";
 import { SwitchSummonPhase } from "./switch-summon-phase";
-import { PartyFilterNonFainted } from "#app/utils/party-utils";
+import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
 import { PhaseId } from "#enums/phase-id";
 
 /**

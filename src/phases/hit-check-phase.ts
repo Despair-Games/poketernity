@@ -18,7 +18,6 @@ import { MoveTarget } from "#enums/move-target";
 import { ElementalType } from "#enums/elemental-type";
 import { PokemonPhase } from "./abstract-pokemon-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { PhaseId } from "#enums/phase-id";
 
 //#region Types
 
@@ -33,8 +32,6 @@ type HitCheckEntry = [HitCheckResult, TypeDamageMultiplier];
  * @see {@linkcode hitCheck}
  */
 export abstract class HitCheckPhase extends PokemonPhase {
-  /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode HitCheckPhase} is extended by other phases */
-  override readonly id: PhaseId = PhaseId.HIT_CHECK;
   public move: PokemonMove;
 
   protected targets: BattlerIndex[];
@@ -111,7 +108,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
     /** If the move is not targeting a Pokemon on the user's side, try to apply conditional protection effects */
     if (!this.move.getMove().isAllyTarget()) {
       globalScene.arena.applyTagsForSide(
-        ConditionalProtectArenaTagTypes,
+        [...ConditionalProtectArenaTagTypes],
         targetSide,
         simulated,
         hasConditionalProtectApplied,

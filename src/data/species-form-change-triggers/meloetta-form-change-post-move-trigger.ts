@@ -6,6 +6,7 @@ import { Challenges } from "#enums/challenges";
 
 export class MeloettaFormChangePostMoveTrigger extends SpeciesFormChangePostMoveTrigger {
   override canChange(pokemon: Pokemon): boolean {
+    // TODO: improve this (should only block the form change in Psychic or Fighting mono-type, not Normal)
     if (globalScene.gameMode.hasChallenge(Challenges.SINGLE_TYPE)) {
       return false;
     } else {

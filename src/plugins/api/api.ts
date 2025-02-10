@@ -35,10 +35,12 @@ export class Api extends ApiBase {
       || window.location.hostname === "";
   }
 
+  /** Whether the server/api is connected. By default we assume `true`. */
   public get isConnected() {
     return this._isConnected;
   }
 
+  /** Wheter the hostname is 'localhost' or an IP address, and ensure a port is specified. */
   public get isLocal() {
     return this._isLocal;
   }
