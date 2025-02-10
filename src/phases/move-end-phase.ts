@@ -7,13 +7,16 @@ import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "./abstract-pokemon-phase";
-import { MovePhase } from "./move-phase";
+import type { MovePhase } from "./move-phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Lapses {@linkcode BattlerTagLapseType.AFTER_MOVE} and calls {@linkcode Arena.setIgnoreAbilities}`(false)`
  * @extends PokemonPhase
  */
 export class MoveEndPhase extends PokemonPhase {
+  override readonly id = PhaseId.MOVE_END;
+
   constructor(battlerIndex: BattlerIndex) {
     super(battlerIndex);
   }
@@ -28,7 +31,7 @@ export class MoveEndPhase extends PokemonPhase {
 
     globalScene.arena.setIgnoreAbilities(false);
 
-    if (!globalScene.findPhase((phase) => phase instanceof MovePhase)) {
+    if (!globalScene.findPhase((phase) => phase.is<MovePhase>(PhaseId.MOVE))) {
       const { turnManager } = globalScene.currentBattle;
 
       // Reset turn order in case the last move affected Speed

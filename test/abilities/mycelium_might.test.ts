@@ -1,7 +1,7 @@
 import { GameManager } from "#test/testUtils/gameManager";
 import { Abilities } from "#enums/abilities";
 import { Stat } from "#enums/stat";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -27,9 +27,9 @@ describe("Abilities - Mycelium Might", () => {
     game.override.disableCrits();
     game.override.enemySpecies(Species.SHUCKLE);
     game.override.enemyAbility(Abilities.CLEAR_BODY);
-    game.override.enemyMoveset(Moves.QUICK_ATTACK);
+    game.override.enemyMoveset(MoveId.QUICK_ATTACK);
     game.override.ability(Abilities.MYCELIUM_MIGHT);
-    game.override.moveset([Moves.QUICK_ATTACK, Moves.BABY_DOLL_EYES]);
+    game.override.moveset([MoveId.QUICK_ATTACK, MoveId.BABY_DOLL_EYES]);
   });
 
   const getTurnOrder = () => {
@@ -51,7 +51,7 @@ describe("Abilities - Mycelium Might", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon();
 
-    game.move.select(Moves.BABY_DOLL_EYES);
+    game.move.select(MoveId.BABY_DOLL_EYES);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -60,12 +60,12 @@ describe("Abilities - Mycelium Might", () => {
   }, 20000);
 
   it("should still go first if a status move that is in a higher priority bracket than the opponent's move is used", async () => {
-    game.override.enemyMoveset(Moves.TACKLE);
+    game.override.enemyMoveset(MoveId.TACKLE);
     await game.classicMode.startBattle([Species.REGIELEKI]);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
 
-    game.move.select(Moves.BABY_DOLL_EYES);
+    game.move.select(MoveId.BABY_DOLL_EYES);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -76,7 +76,7 @@ describe("Abilities - Mycelium Might", () => {
   it("should not affect non-status moves", async () => {
     await game.classicMode.startBattle([Species.REGIELEKI]);
 
-    game.move.select(Moves.QUICK_ATTACK);
+    game.move.select(MoveId.QUICK_ATTACK);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 

@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -22,13 +22,13 @@ describe("Abilities - Wonder Guard", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.TACKLE, Moves.THUNDERBOLT])
+      .moveset([MoveId.TACKLE, MoveId.THUNDERBOLT])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.WONDER_GUARD)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should prevent damage from attacks that aren't >=2x effectiveness", async () => {
@@ -36,7 +36,7 @@ describe("Abilities - Wonder Guard", () => {
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.TACKLE);
+    game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(enemy.hp).toBe(1);
@@ -47,7 +47,7 @@ describe("Abilities - Wonder Guard", () => {
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.THUNDERBOLT);
+    game.move.select(MoveId.THUNDERBOLT);
     await game.phaseInterceptor.to("BattleEndPhase");
 
     expect(enemy.isFainted()).toBe(true);

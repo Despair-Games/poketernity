@@ -2,9 +2,9 @@ import {
   leaveEncounterWithoutBattle,
   selectPokemonForOption,
   setEncounterRewards,
-  transitionMysteryEncounterIntroVisuals,
   updatePlayerMoney,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
@@ -14,7 +14,7 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { FieldPosition } from "#enums/field-position";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import { queueEncounterMessage, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -25,9 +25,9 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { PlayerGender } from "#enums/player-gender";
 import { getPokeballAtlasKey, getPokeballTintColor } from "#app/data/pokeball";
 import { ShinySparklePhase } from "#app/phases/shiny-sparkle-phase";
-import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
 import { PostSummonPhase } from "#app/phases/post-summon-phase";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { Nature } from "#enums/nature";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { isPokemonValidForEncounterOptionSelection } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
@@ -272,17 +272,19 @@ function handleNextTurn() {
     const healthRatio = wobbuffet.hp / wobbuffet.getMaxHp();
     let resultMessageKey: string;
     let isHealPhase = false;
+    // The Pokeballs are temporary placeholders and will be replaced once items are reimplemented again.
+    // Grand Prize: Multi Lens, 2nd Prize: Scope Lens, 3rd Prize: Wide Lens
     if (healthRatio < 0.03) {
       // Grand prize
-      setEncounterRewards({ guaranteedModifierTypeFuncs: [modifierTypes.MULTI_LENS], fillRemaining: false });
+      setEncounterRewards({ guaranteedModifierTypeFuncs: [modifierTypes.ULTRA_BALL], fillRemaining: false });
       resultMessageKey = `${namespace}:best_result`;
     } else if (healthRatio < 0.15) {
       // 2nd prize
-      setEncounterRewards({ guaranteedModifierTypeFuncs: [modifierTypes.SCOPE_LENS], fillRemaining: false });
+      setEncounterRewards({ guaranteedModifierTypeFuncs: [modifierTypes.GREAT_BALL], fillRemaining: false });
       resultMessageKey = `${namespace}:great_result`;
     } else if (healthRatio < 0.33) {
       // 3rd prize
-      setEncounterRewards({ guaranteedModifierTypeFuncs: [modifierTypes.WIDE_LENS], fillRemaining: false });
+      setEncounterRewards({ guaranteedModifierTypeFuncs: [modifierTypes.POKEBALL], fillRemaining: false });
       resultMessageKey = `${namespace}:good_result`;
     } else {
       // No prize

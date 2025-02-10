@@ -58,7 +58,7 @@ export class SwapArenaTagsAttr extends MoveEffectAttr {
           swapTagsType.tagType,
           swapTagsType.sourceId!,
           swapTagsType.turnCount,
-          swapTagsType.sourceMove,
+          swapTagsType.sourceMoveId,
           ArenaTagSide.ENEMY,
           true,
         ); // TODO: is the bang correct?
@@ -71,7 +71,7 @@ export class SwapArenaTagsAttr extends MoveEffectAttr {
           swapTagsType.tagType,
           swapTagsType.sourceId!,
           swapTagsType.turnCount,
-          swapTagsType.sourceMove,
+          swapTagsType.sourceMoveId,
           ArenaTagSide.PLAYER,
           true,
         ); // TODO: is the bang correct?

@@ -1,6 +1,6 @@
 import { Abilities } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -26,7 +26,7 @@ describe("Battle order", () => {
     game.override.enemySpecies(Species.MEWTWO);
     game.override.enemyAbility(Abilities.INSOMNIA);
     game.override.ability(Abilities.INSOMNIA);
-    game.override.moveset([Moves.TACKLE]);
+    game.override.moveset([MoveId.TACKLE]);
   });
 
   const getTurnOrder = () => {
@@ -47,7 +47,7 @@ describe("Battle order", () => {
     vi.spyOn(playerPokemon, "stats", "get").mockReturnValue([20, 20, 20, 20, 20, 50]); // set playerPokemon's speed to 50
     vi.spyOn(enemyPokemon, "stats", "get").mockReturnValue([20, 20, 20, 20, 20, 150]); // set enemyPokemon's speed to 150
 
-    game.move.select(Moves.TACKLE);
+    game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to("BerryPhase", false);
 
     const { turnManager } = game.scene.currentBattle;
@@ -65,7 +65,7 @@ describe("Battle order", () => {
     vi.spyOn(playerPokemon, "stats", "get").mockReturnValue([20, 20, 20, 20, 20, 150]); // set playerPokemon's speed to 150
     vi.spyOn(enemyPokemon, "stats", "get").mockReturnValue([20, 20, 20, 20, 20, 50]); // set enemyPokemon's speed to 50
 
-    game.move.select(Moves.TACKLE);
+    game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to("BerryPhase", false);
 
     const turnOrder = getTurnOrder();
@@ -82,8 +82,8 @@ describe("Battle order", () => {
     playerPokemon.forEach((p) => vi.spyOn(p, "stats", "get").mockReturnValue([20, 20, 20, 20, 20, 50])); // set both playerPokemons' speed to 50
     enemyPokemon.forEach((p) => vi.spyOn(p, "stats", "get").mockReturnValue([20, 20, 20, 20, 20, 150])); // set both enemyPokemons' speed to 150
 
-    game.move.select(Moves.TACKLE);
-    game.move.select(Moves.TACKLE, 1);
+    game.move.select(MoveId.TACKLE);
+    game.move.select(MoveId.TACKLE, 1);
     await game.phaseInterceptor.to("BerryPhase", false);
 
     const turnOrder = getTurnOrder();
@@ -101,8 +101,8 @@ describe("Battle order", () => {
     vi.spyOn(enemyPokemon[0], "stats", "get").mockReturnValue([20, 20, 20, 20, 20, 100]); // set enemyPokemon's speed to 100
     vi.spyOn(enemyPokemon[1], "stats", "get").mockReturnValue([20, 20, 20, 20, 20, 150]); // set enemyPokemon's speed to 150
 
-    game.move.select(Moves.TACKLE);
-    game.move.select(Moves.TACKLE, 1);
+    game.move.select(MoveId.TACKLE);
+    game.move.select(MoveId.TACKLE, 1);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -122,8 +122,8 @@ describe("Battle order", () => {
     vi.spyOn(enemyPokemon[0], "stats", "get").mockReturnValue([20, 20, 20, 20, 20, 100]); // set one enemyPokemon's speed to 100
     vi.spyOn(enemyPokemon[1], "stats", "get").mockReturnValue([20, 20, 20, 20, 20, 150]); // set other enemyPokemon's speed to 150
 
-    game.move.select(Moves.TACKLE);
-    game.move.select(Moves.TACKLE, 1);
+    game.move.select(MoveId.TACKLE);
+    game.move.select(MoveId.TACKLE, 1);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 

@@ -15,20 +15,19 @@ import {
   updatePlayerMoney,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { applyModifierTypeToPlayerPokemon } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import type { PokemonHeldItemModifier, PokemonInstantReviveModifier } from "#app/modifier/modifier";
 import {
-  BerryModifier,
+  type BerryModifier,
   HealingBoosterModifier,
   LevelIncrementBoosterModifier,
   MoneyMultiplierModifier,
-  PreserveBerryModifier,
 } from "#app/modifier/modifier";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { ModifierRewardPhase } from "#app/phases/modifier-reward-phase";
 import i18next from "#app/plugins/i18n";
 import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
@@ -225,7 +224,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
         const chosenPokemon: PlayerPokemon = encounter.misc.chosenPokemon;
 
         // Give the player a Candy Jar if they gave a Berry, and a Berry Pouch for Reviver Seed
-        if (modifier instanceof BerryModifier) {
+        if (modifier.isBerryModifier()) {
           // Check if the player has max stacks of that Candy Jar already
           const existing = globalScene.findModifier(
             (m) => m instanceof LevelIncrementBoosterModifier,
@@ -247,7 +246,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
           }
         } else {
           // Check if the player has max stacks of that Berry Pouch already
-          const existing = globalScene.findModifier((m) => m instanceof PreserveBerryModifier) as PreserveBerryModifier;
+          const existing = globalScene.findModifier((m) => m.isPreserveBerryModifier());
 
           if (existing && existing.getStackCount() >= existing.getMaxStackCount()) {
             // At max stacks, give the first party pokemon a Shell Bell instead

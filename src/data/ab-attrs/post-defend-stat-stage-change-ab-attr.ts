@@ -54,14 +54,16 @@ export class PostDefendStatStageChangeAbAttr extends PostDefendAbAttr {
           ? pokemon.getOpponents().concat([pokemon.getAlly()])
           : pokemon.getOpponents();
         for (const other of otherPokemon) {
-          globalScene.unshiftPhase(new StatStageChangePhase(other.getBattlerIndex(), false, [this.stat], this.stages));
+          globalScene.unshiftPhase(
+            new StatStageChangePhase(other.getBattlerIndex(), pokemon, [this.stat], this.stages),
+          );
         }
         return true;
       }
       globalScene.unshiftPhase(
         new StatStageChangePhase(
           (this.selfTarget ? pokemon : attacker).getBattlerIndex(),
-          this.selfTarget,
+          pokemon,
           [this.stat],
           this.stages,
         ),

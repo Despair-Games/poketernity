@@ -1,21 +1,25 @@
-import { PokemonFormChangeItemModifier, TerastallizeModifier } from "../modifier/modifier";
 import type { Pokemon } from "../field/pokemon";
-import { StatusEffect } from "#enums/status-effect";
 import { allMoves } from "#app/data/all-moves";
 import { MoveCategory } from "#enums/move-category";
-import { Type } from "#enums/type";
+import { ElementalType } from "#enums/elemental-type";
 import type { AbstractConstructor, nil } from "#app/utils";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import type { TimeOfDay } from "#enums/time-of-day";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import { WeatherType } from "#enums/weather-type";
-import { Challenges } from "#enums/challenges";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { globalScene } from "#app/global-scene";
 import { FormChangeItem } from "#enums/form-change-item";
+import { SpeciesFormChangeTrigger } from "#app/data/species-form-change-triggers/species-form-change-trigger";
+import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
+import { SpeciesFormChangeCompoundTrigger } from "#app/data/species-form-change-triggers/species-form-change-compound-trigger";
+import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
+import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
+import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/species-form-change-triggers/species-form-change-move-learned-trigger";
+import { SpeciesFormChangePreMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-pre-move-trigger";
+import { MeloettaFormChangePostMoveTrigger } from "#app/data/species-form-change-triggers/meloetta-form-change-post-move-trigger";
 
 export type SpeciesFormChangeConditionPredicate = (p: Pokemon) => boolean;
 export type SpeciesFormChangeConditionEnforceFunc = (p: Pokemon) => void;
@@ -100,164 +104,6 @@ export class SpeciesFormChangeCondition {
   }
 }
 
-export abstract class SpeciesFormChangeTrigger {
-  canChange(_pokemon: Pokemon): boolean {
-    return true;
-  }
-
-  hasTriggerType(triggerType: AbstractConstructor<SpeciesFormChangeTrigger>): boolean {
-    return this instanceof triggerType;
-  }
-}
-
-export class SpeciesFormChangeManualTrigger extends SpeciesFormChangeTrigger {
-  override canChange(_pokemon: Pokemon): boolean {
-    return true;
-  }
-}
-
-export class SpeciesFormChangeCompoundTrigger {
-  public triggers: SpeciesFormChangeTrigger[];
-
-  constructor(...triggers: SpeciesFormChangeTrigger[]) {
-    this.triggers = triggers;
-  }
-
-  canChange(pokemon: Pokemon): boolean {
-    for (const trigger of this.triggers) {
-      if (!trigger.canChange(pokemon)) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  hasTriggerType(triggerType: AbstractConstructor<SpeciesFormChangeTrigger>): boolean {
-    return !!this.triggers.find((t) => t.hasTriggerType(triggerType));
-  }
-}
-
-export class SpeciesFormChangeItemTrigger extends SpeciesFormChangeTrigger {
-  public item: FormChangeItem;
-  public active: boolean;
-
-  constructor(item: FormChangeItem, active: boolean = true) {
-    super();
-    this.item = item;
-    this.active = active;
-  }
-
-  override canChange(pokemon: Pokemon): boolean {
-    return !!globalScene.findModifier(
-      (m) =>
-        m instanceof PokemonFormChangeItemModifier
-        && m.pokemonId === pokemon.id
-        && m.formChangeItem === this.item
-        && m.active === this.active,
-    );
-  }
-}
-
-export class SpeciesFormChangeTimeOfDayTrigger extends SpeciesFormChangeTrigger {
-  public timesOfDay: TimeOfDay[];
-
-  constructor(...timesOfDay: TimeOfDay[]) {
-    super();
-    this.timesOfDay = timesOfDay;
-  }
-
-  override canChange(_pokemon: Pokemon): boolean {
-    return this.timesOfDay.indexOf(globalScene.arena.getTimeOfDay()) > -1;
-  }
-}
-
-export class SpeciesFormChangeActiveTrigger extends SpeciesFormChangeTrigger {
-  public active: boolean;
-
-  constructor(active: boolean = false) {
-    super();
-    this.active = active;
-  }
-
-  override canChange(pokemon: Pokemon): boolean {
-    return pokemon.isActive(true) === this.active;
-  }
-}
-
-export class SpeciesFormChangeStatusEffectTrigger extends SpeciesFormChangeTrigger {
-  public statusEffects: StatusEffect[];
-  public invert: boolean;
-
-  constructor(statusEffects: StatusEffect | StatusEffect[], invert: boolean = false) {
-    super();
-    if (!Array.isArray(statusEffects)) {
-      statusEffects = [statusEffects];
-    }
-    this.statusEffects = statusEffects;
-    this.invert = invert;
-  }
-
-  override canChange(pokemon: Pokemon): boolean {
-    return this.statusEffects.indexOf(pokemon.status?.effect || StatusEffect.NONE) > -1 !== this.invert;
-  }
-}
-
-export class SpeciesFormChangeMoveLearnedTrigger extends SpeciesFormChangeTrigger {
-  public move: Moves;
-  public known: boolean;
-
-  constructor(move: Moves, known: boolean = true) {
-    super();
-    this.move = move;
-    this.known = known;
-  }
-
-  override canChange(pokemon: Pokemon): boolean {
-    return !!pokemon.moveset.filter((m) => m.moveId === this.move).length === this.known;
-  }
-}
-
-export abstract class SpeciesFormChangeMoveTrigger extends SpeciesFormChangeTrigger {
-  public movePredicate: (m: Moves) => boolean;
-  public used: boolean;
-
-  constructor(move: Moves | ((m: Moves) => boolean), used: boolean = true) {
-    super();
-    this.movePredicate = typeof move === "function" ? move : (m: Moves) => m === move;
-    this.used = used;
-  }
-}
-
-export class SpeciesFormChangePreMoveTrigger extends SpeciesFormChangeMoveTrigger {
-  override canChange(pokemon: Pokemon): boolean {
-    const command = pokemon.turnData?.turnCommand;
-    return !!command?.move && this.movePredicate(command.move.move) === this.used;
-  }
-}
-
-export class SpeciesFormChangePostMoveTrigger extends SpeciesFormChangeMoveTrigger {
-  override canChange(pokemon: Pokemon): boolean {
-    return (
-      pokemon.summonData && !!pokemon.getLastXMoves(1).filter((m) => this.movePredicate(m.move)).length === this.used
-    );
-  }
-}
-
-export class MeloettaFormChangePostMoveTrigger extends SpeciesFormChangePostMoveTrigger {
-  override canChange(pokemon: Pokemon): boolean {
-    if (globalScene.gameMode.hasChallenge(Challenges.SINGLE_TYPE)) {
-      return false;
-    } else {
-      // Meloetta will not transform if it has the ability Sheer Force when using Relic Song
-      if (pokemon.hasAbility(Abilities.SHEER_FORCE)) {
-        return false;
-      }
-      return super.canChange(pokemon);
-    }
-  }
-}
-
 export class SpeciesDefaultFormMatchTrigger extends SpeciesFormChangeTrigger {
   private formKey: string;
 
@@ -283,9 +129,9 @@ export class SpeciesDefaultFormMatchTrigger extends SpeciesFormChangeTrigger {
  */
 export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeTrigger {
   /** The Tera type that triggers the form change */
-  private teraType: Type;
+  private teraType: ElementalType;
 
-  constructor(teraType: Type) {
+  constructor(teraType: ElementalType) {
     super();
     this.teraType = teraType;
   }
@@ -297,7 +143,7 @@ export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeTrigger {
    */
   override canChange(pokemon: Pokemon): boolean {
     return !!globalScene.findModifier(
-      (m) => m instanceof TerastallizeModifier && m.pokemonId === pokemon.id && m.teraType === this.teraType,
+      (m) => m.isTerastallizeModifier() && m.pokemonId === pokemon.id && m.teraType === this.teraType,
     );
   }
 }
@@ -309,7 +155,7 @@ export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeTrigger {
  */
 export class SpeciesFormChangeLapseTeraTrigger extends SpeciesFormChangeTrigger {
   override canChange(pokemon: Pokemon): boolean {
-    return !!globalScene.findModifier((m) => m instanceof TerastallizeModifier && m.pokemonId === pokemon.id);
+    return !!globalScene.findModifier((m) => m.isTerastallizeModifier() && m.pokemonId === pokemon.id);
   }
 }
 
@@ -1256,13 +1102,13 @@ export const pokemonFormChanges: PokemonFormChanges = {
       Species.KELDEO,
       "ordinary",
       "resolute",
-      new SpeciesFormChangeMoveLearnedTrigger(Moves.SECRET_SWORD),
+      new SpeciesFormChangeMoveLearnedTrigger(MoveId.SECRET_SWORD),
     ),
     new SpeciesFormChange(
       Species.KELDEO,
       "resolute",
       "ordinary",
-      new SpeciesFormChangeMoveLearnedTrigger(Moves.SECRET_SWORD, false),
+      new SpeciesFormChangeMoveLearnedTrigger(MoveId.SECRET_SWORD, false),
     ),
   ],
   [Species.MELOETTA]: [
@@ -1270,14 +1116,14 @@ export const pokemonFormChanges: PokemonFormChanges = {
       Species.MELOETTA,
       "aria",
       "pirouette",
-      new MeloettaFormChangePostMoveTrigger(Moves.RELIC_SONG),
+      new MeloettaFormChangePostMoveTrigger(MoveId.RELIC_SONG),
       true,
     ),
     new SpeciesFormChange(
       Species.MELOETTA,
       "pirouette",
       "aria",
-      new MeloettaFormChangePostMoveTrigger(Moves.RELIC_SONG),
+      new MeloettaFormChangePostMoveTrigger(MoveId.RELIC_SONG),
       true,
     ),
   ],
@@ -1300,7 +1146,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       Species.AEGISLASH,
       "blade",
       "shield",
-      new SpeciesFormChangePreMoveTrigger(Moves.KINGS_SHIELD),
+      new SpeciesFormChangePreMoveTrigger(MoveId.KINGS_SHIELD),
       true,
       new SpeciesFormChangeCondition((p) => p.hasAbility(Abilities.STANCE_CHANGE)),
     ),
@@ -1823,20 +1669,25 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "cornerstone-mask",
       new SpeciesFormChangeItemTrigger(FormChangeItem.CORNERSTONE_MASK),
     ),
-    new SpeciesFormChange(Species.OGERPON, "teal-mask", "teal-mask-tera", new SpeciesFormChangeTeraTrigger(Type.GRASS)),
+    new SpeciesFormChange(
+      Species.OGERPON,
+      "teal-mask",
+      "teal-mask-tera",
+      new SpeciesFormChangeTeraTrigger(ElementalType.GRASS),
+    ),
     new SpeciesFormChange(
       Species.OGERPON,
       "teal-mask-tera",
       "teal-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== Type.GRASS),
+      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.GRASS),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
       "wellspring-mask",
       "wellspring-mask-tera",
-      new SpeciesFormChangeTeraTrigger(Type.WATER),
+      new SpeciesFormChangeTeraTrigger(ElementalType.WATER),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
@@ -1844,13 +1695,13 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "wellspring-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== Type.WATER),
+      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.WATER),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
       "hearthflame-mask",
       "hearthflame-mask-tera",
-      new SpeciesFormChangeTeraTrigger(Type.FIRE),
+      new SpeciesFormChangeTeraTrigger(ElementalType.FIRE),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
@@ -1858,13 +1709,13 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "hearthflame-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== Type.FIRE),
+      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.FIRE),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
       "cornerstone-mask",
       "cornerstone-mask-tera",
-      new SpeciesFormChangeTeraTrigger(Type.ROCK),
+      new SpeciesFormChangeTeraTrigger(ElementalType.ROCK),
     ),
     new SpeciesFormChange(
       Species.OGERPON,
@@ -1872,19 +1723,24 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "cornerstone-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== Type.ROCK),
+      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.ROCK),
     ),
   ],
   [Species.TERAPAGOS]: [
     new SpeciesFormChange(Species.TERAPAGOS, "", "terastal", new SpeciesFormChangeManualTrigger(), true),
-    new SpeciesFormChange(Species.TERAPAGOS, "terastal", "stellar", new SpeciesFormChangeTeraTrigger(Type.STELLAR)),
+    new SpeciesFormChange(
+      Species.TERAPAGOS,
+      "terastal",
+      "stellar",
+      new SpeciesFormChangeTeraTrigger(ElementalType.STELLAR),
+    ),
     new SpeciesFormChange(
       Species.TERAPAGOS,
       "stellar",
       "terastal",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== Type.STELLAR),
+      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.STELLAR),
     ),
   ],
   [Species.GALAR_DARMANITAN]: [

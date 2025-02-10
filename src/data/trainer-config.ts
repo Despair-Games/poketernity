@@ -1,12 +1,12 @@
 import { globalScene } from "#app/global-scene";
 import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import type { EnemyPokemon } from "#app/field/pokemon";
-import { toReadableString, randSeedItem } from "#app/utils";
-import type { PokemonSpeciesFilter } from "#app/data/pokemon-species";
+import { toReadableString, randSeedItem, randItem } from "#app/utils";
+import type { PokemonSpeciesFilter } from "#app/@types/PokemonSpeciesFilter";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
-import type { Type } from "#enums/type";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import type { ElementalType } from "#enums/elemental-type";
 import type { PersistentModifier } from "#app/modifier/modifier";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
@@ -205,6 +205,11 @@ export const trainerPartyTemplates = {
     new TrainerPartyTemplate(2, PartyMemberStrength.STRONGER),
   ),
 
+  CHAMPION_DOUBLE: new TrainerPartyCompoundTemplate(
+    new TrainerPartyTemplate(2, PartyMemberStrength.STRONG),
+    new TrainerPartyTemplate(4, PartyMemberStrength.STRONGER),
+  ),
+
   RIVAL: new TrainerPartyCompoundTemplate(
     new TrainerPartyTemplate(1, PartyMemberStrength.STRONG),
     new TrainerPartyTemplate(1, PartyMemberStrength.AVERAGE),
@@ -259,12 +264,13 @@ export class TrainerConfig {
   public hasGenders: boolean = false;
   public hasDouble: boolean = false;
   public hasCharSprite: boolean = false;
+  public spriteNameLeft?: string;
+  public spriteNameRight?: string;
   public doubleOnly: boolean = false;
   public moneyMultiplier: number = 1;
   public isBoss: boolean = false;
   public hasStaticParty: boolean = false;
   public useSameSeedForAllMembers: boolean = false;
-  public mixedBattleBgm: string;
   public battleBgm: string;
   public encounterBgm: string;
   public femaleEncounterBgm: string;
@@ -278,7 +284,7 @@ export class TrainerConfig {
   public partyMemberFuncs: PartyMemberFuncs = {};
   public speciesPools: TrainerTierPools;
   public speciesFilter: PokemonSpeciesFilter;
-  public specialtyTypes: Type[] = [];
+  public specialtyTypes: ElementalType[] = [];
   public hasVoucher: boolean = false;
 
   public encounterMessages: string[] = [];
@@ -297,7 +303,6 @@ export class TrainerConfig {
     this.trainerType = trainerType;
     this.name = toReadableString(TrainerType[this.getDerivedType()]);
     this.battleBgm = "battle_trainer";
-    this.mixedBattleBgm = "battle_trainer";
     this.victoryBgm = "victory_trainer";
     this.partyTemplates = [trainerPartyTemplates.TWO_AVG];
     this.speciesFilter = (species) => (allowLegendaries || !species.isLegendLike()) && !species.isTrainerForbidden();
@@ -316,6 +321,11 @@ export class TrainerConfig {
     if (this.trainerTypeDouble && female && isDouble) {
       // Get the derived type for the double trainer since the sprite key is based on the derived type
       ret = TrainerType[this.getDerivedType(this.trainerTypeDouble)].toString().toLowerCase();
+    }
+    if (!female && this.spriteNameLeft) {
+      return this.spriteNameLeft;
+    } else if (female && this.spriteNameRight) {
+      return this.spriteNameRight;
     }
     return ret;
   }
@@ -346,6 +356,12 @@ export class TrainerConfig {
     this.hasVoucher = hasVoucher;
   }
 
+  setSpriteNames(spriteNameLeft: string, spriteNameRight: string): TrainerConfig {
+    this.spriteNameLeft = spriteNameLeft;
+    this.spriteNameRight = spriteNameRight;
+    return this;
+  }
+
   setTitle(title: string): TrainerConfig {
     // First check if i18n is initialized
     if (!getIsInitialized()) {
@@ -354,10 +370,8 @@ export class TrainerConfig {
 
     // Make the title lowercase and replace spaces with underscores
     title = title.toLowerCase().replace(/\s/g, "_");
-
     // Get the title from the i18n file
     this.title = i18next.t(`titles:${title}`);
-
     return this;
   }
 
@@ -570,11 +584,6 @@ export class TrainerConfig {
     return this;
   }
 
-  setMixedBattleBgm(mixedBattleBgm: string): TrainerConfig {
-    this.mixedBattleBgm = mixedBattleBgm;
-    return this;
-  }
-
   setBattleBgm(battleBgm: string): TrainerConfig {
     this.battleBgm = battleBgm;
     return this;
@@ -619,7 +628,7 @@ export class TrainerConfig {
     return this;
   }
 
-  setSpecialtyTypes(...specialtyTypes: Type[]): TrainerConfig {
+  setSpecialtyTypes(...specialtyTypes: ElementalType[]): TrainerConfig {
     this.specialtyTypes = specialtyTypes;
     return this;
   }
@@ -1072,7 +1081,6 @@ export class TrainerConfig {
     this.setMoneyMultiplier(1.5);
     this.setBoss();
     this.setStaticParty();
-    this.setBattleBgm("battle_plasma_boss");
     this.setVictoryBgm("victory_team_plasma");
 
     return this;
@@ -1088,7 +1096,7 @@ export class TrainerConfig {
   initForStatTrainer(
     signatureSpecies: (Species | Species[])[],
     _isMale: boolean,
-    ...specialtyTypes: Type[]
+    ...specialtyTypes: ElementalType[]
   ): TrainerConfig {
     if (!getIsInitialized()) {
       initI18n();
@@ -1112,8 +1120,7 @@ export class TrainerConfig {
     this.setBoss();
     this.setStaticParty();
 
-    // TODO: replace with more suitable music?
-    this.setBattleBgm("battle_trainer");
+    // TODO: replace battle music with more suitable music? (currently using basic trainer battle music)
     this.setVictoryBgm("victory_trainer");
 
     return this;
@@ -1124,10 +1131,10 @@ export class TrainerConfig {
    * @param title the string representation of the evil team leader's title
    * @param name the string representation of the evil team leader's name
    * @param rematch Whether or not this is the rematch fight
-   * @param mixedBattleBgm the string representation of the mixed battle bgm
+   * @param battleBgm the string representation of the battle bgm
    * @returns The updated TrainerConfig instance.
    * **/
-  initForEvilTeamLeader(title: string, name: string, rematch: boolean = false, mixedBattleBgm: string): TrainerConfig {
+  initForEvilTeamLeader(title: string, name: string, rematch: boolean = false, battleBgm: string): TrainerConfig {
     if (!getIsInitialized()) {
       initI18n();
     }
@@ -1143,8 +1150,7 @@ export class TrainerConfig {
     this.setBoss();
     this.setStaticParty();
     this.setHasVoucher(true);
-    this.setBattleBgm("battle_plasma_boss");
-    this.setMixedBattleBgm(mixedBattleBgm);
+    this.setBattleBgm(battleBgm);
     this.setVictoryBgm("victory_team_plasma");
 
     return this;
@@ -1160,7 +1166,7 @@ export class TrainerConfig {
   initForGymLeader(
     signatureSpecies: (Species | Species[])[],
     isMale: boolean,
-    ...specialtyTypes: Type[]
+    ...specialtyTypes: ElementalType[]
   ): TrainerConfig {
     // Check if the internationalization (i18n) system is initialized.
     if (!getIsInitialized()) {
@@ -1209,7 +1215,6 @@ export class TrainerConfig {
     this.setBoss();
     this.setStaticParty();
     this.setHasVoucher(true);
-    this.setBattleBgm("battle_unova_gym");
     this.setVictoryBgm("victory_gym");
     this.setGenModifiersFunc((party) => {
       const waveIndex = globalScene.currentBattle.waveIndex;
@@ -1233,7 +1238,7 @@ export class TrainerConfig {
   initForEliteFour(
     signatureSpecies: (Species | Species[])[],
     isMale: boolean,
-    ...specialtyTypes: Type[]
+    ...specialtyTypes: ElementalType[]
   ): TrainerConfig {
     // Check if the internationalization (i18n) system is initialized.
     if (!getIsInitialized()) {
@@ -1276,7 +1281,6 @@ export class TrainerConfig {
     this.setBoss();
     this.setStaticParty();
     this.setHasVoucher(true);
-    this.setBattleBgm("battle_unova_elite");
     this.setVictoryBgm("victory_gym");
     this.setGenModifiersFunc((party) =>
       getRandomTeraModifiers(party, 2, specialtyTypes.length ? specialtyTypes : undefined),
@@ -1287,30 +1291,49 @@ export class TrainerConfig {
 
   /**
    * Initializes the trainer configuration for a Champion.
-   * @param isMale Whether the Champion is Male or Female (for localization of the title).
-   * @param battleBgm String representing the battle music
-   * @param mixedBattleBgm String representing mixed battle music
+   * @param variant The {@linkcode TrainerVariant} of the Champion (used for localization of the title).
+   * @param battleBgm Array of strings representing the battle music. One is chosen at random.
    * @returns The updated TrainerConfig instance.
    **/
-  initForChampion(isMale: boolean, battleBgm: string, mixedBattleBgm: string): TrainerConfig {
+  initForChampion(variant: TrainerVariant, battleBgm: string[]): TrainerConfig {
     // Check if the internationalization (i18n) system is initialized.
     if (!getIsInitialized()) {
       initI18n();
     }
-    this.setBattleBgm(battleBgm);
-    this.setMixedBattleBgm(mixedBattleBgm);
+
+    // TODO: make this seeded
+    this.setBattleBgm(randItem(battleBgm));
 
     // Set the party templates for the Champion.
-    this.setPartyTemplates(trainerPartyTemplates.CHAMPION);
+    let partyTemplate = trainerPartyTemplates.CHAMPION;
+    if (variant === TrainerVariant.DOUBLE) {
+      partyTemplate = trainerPartyTemplates.CHAMPION_DOUBLE;
+    }
+    this.setPartyTemplates(partyTemplate);
 
     // Localize the trainer's name by converting it to lowercase and replacing spaces with underscores.
     const nameForCall = this.name.toLowerCase().replace(/\s/g, "_");
     this.name = i18next.t(`trainerNames:${nameForCall}`);
+    if (this.nameDouble && this.spriteNameLeft && this.spriteNameRight) {
+      const nameDoubleForCall = this.nameDouble.toLowerCase().replace(/\s/g, "_");
+      this.nameDouble = i18next.t(`trainerNames:${nameDoubleForCall}`);
+      this.name = i18next.t(`trainerNames:${this.spriteNameLeft.toLowerCase().replace(/\s/g, "_")}`);
+      this.nameFemale = i18next.t(`trainerNames:${this.spriteNameRight.toLowerCase().replace(/\s/g, "_")}`);
+    }
 
-    // Set the title to "champion". (this is the key in the i18n file)
-    this.setTitle("champion");
-    if (!isMale) {
-      this.setTitle("champion_female");
+    // Only do this if the title is not already set
+    if (!this.title) {
+      switch (variant) {
+        case TrainerVariant.FEMALE:
+          this.setTitle("champion_female");
+          break;
+        case TrainerVariant.DOUBLE:
+          this.setTitle("champion_double");
+          break;
+        // Default includes Gender.MALE
+        default:
+          this.setTitle("champion");
+      }
     }
 
     // Configure various properties for the Champion.
@@ -1319,7 +1342,6 @@ export class TrainerConfig {
     this.setStaticParty();
     this.setHasVoucher(true);
     this.setVictoryBgm("victory_champion");
-    this.setGenModifiersFunc((party) => getRandomTeraModifiers(party, 3));
 
     return this;
   }
@@ -1604,7 +1626,7 @@ export function getSpeciesFilterRandomPartyMemberFunc(
   };
 }
 
-function getRandomTeraModifiers(party: EnemyPokemon[], count: number, types?: Type[]): PersistentModifier[] {
+function getRandomTeraModifiers(party: EnemyPokemon[], count: number, types?: ElementalType[]): PersistentModifier[] {
   const ret: PersistentModifier[] = [];
   const partyMemberIndexes = new Array(party.length).fill(null).map((_, i) => i);
   for (let t = 0; t < Math.min(count, party.length); t++) {

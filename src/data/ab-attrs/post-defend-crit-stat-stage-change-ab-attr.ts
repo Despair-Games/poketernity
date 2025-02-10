@@ -31,7 +31,9 @@ export class PostDefendCritStatStageChangeAbAttr extends PostDefendAbAttr {
       && pokemon.getStatStage(Stat.ATK) < 6
     ) {
       if (!simulated) {
-        globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [this.stat], this.stages));
+        globalScene.unshiftPhase(
+          new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [this.stat], this.stages),
+        );
       }
       return true;
     } else {

@@ -1,7 +1,7 @@
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -26,10 +26,10 @@ describe("Items - Leftovers", () => {
     game.override.battleType("single");
     game.override.startingLevel(2000);
     game.override.ability(Abilities.UNNERVE);
-    game.override.moveset([Moves.SPLASH]);
+    game.override.moveset([MoveId.SPLASH]);
     game.override.enemySpecies(Species.SHUCKLE);
     game.override.enemyAbility(Abilities.UNNERVE);
-    game.override.enemyMoveset([Moves.TACKLE, Moves.TACKLE, Moves.TACKLE, Moves.TACKLE]);
+    game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
     game.override.startingHeldItems([{ name: "LEFTOVERS", count: 1 }]);
   });
 
@@ -44,7 +44,7 @@ describe("Items - Leftovers", () => {
     // We should have full hp
     expect(leadPokemon.isFullHp()).toBe(true);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
 
     // We should have less hp after the attack
     await game.phaseInterceptor.to(DamageAnimPhase, false);

@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -24,15 +24,16 @@ describe("Arena - Type Hazards", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .moveset([Moves.STEALTH_ROCK, Moves.G_MAX_STEELSURGE, Moves.ROAR, Moves.SPLASH])
-      .enemyMoveset(Moves.SPLASH)
+      .moveset([MoveId.STEALTH_ROCK, MoveId.G_MAX_STEELSURGE, MoveId.ROAR, MoveId.SPLASH])
+      .enemyLevel(100)
+      .enemyMoveset(MoveId.SPLASH)
       .enemySpecies(Species.RAMPARDOS);
   });
 
   it("should not damage the team that set them", async () => {
     await game.classicMode.startBattle([Species.ABRA, Species.ABRA]);
 
-    game.move.select(Moves.STEALTH_ROCK);
+    game.move.select(MoveId.STEALTH_ROCK);
     await game.toNextTurn();
 
     game.doSwitchPokemon(1);
@@ -49,10 +50,10 @@ describe("Arena - Type Hazards", () => {
     game.override.startingWave(5);
     await game.classicMode.startBattle([Species.ABRA, Species.ABRA]);
 
-    game.move.select(Moves.STEALTH_ROCK);
+    game.move.select(MoveId.STEALTH_ROCK);
     await game.toNextTurn();
 
-    game.move.select(Moves.ROAR);
+    game.move.select(MoveId.ROAR);
     await game.toNextTurn();
 
     const enemy = game.scene.getEnemyParty()[0];
@@ -64,48 +65,48 @@ describe("Arena - Type Hazards", () => {
     game.override.startingWave(5);
     await game.classicMode.startBattle([Species.ABRA, Species.ABRA]);
 
-    game.move.select(Moves.STEALTH_ROCK);
+    game.move.select(MoveId.STEALTH_ROCK);
     await game.toNextTurn();
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     game.forceEnemyToSwitch();
     await game.toNextTurn();
 
     const enemy = game.scene.getEnemyParty()[0];
     const damage = enemy.getMaxHp() - enemy.hp;
     expect(damage).toBe(toDmgValue(enemy.getMaxHp() / 8));
-  }, 20000);
+  });
 
   it("should not damage opposing pokemon with magic guard", async () => {
     game.override.startingWave(5);
     game.override.enemyAbility(Abilities.MAGIC_GUARD);
     await game.classicMode.startBattle([Species.ABRA, Species.ABRA]);
 
-    game.move.select(Moves.STEALTH_ROCK);
+    game.move.select(MoveId.STEALTH_ROCK);
     await game.toNextTurn();
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     game.forceEnemyToSwitch();
     await game.toNextTurn();
 
     const enemy = game.scene.getEnemyParty()[0];
     const damage = enemy.getMaxHp() - enemy.hp;
     expect(damage).toBe(0);
-  }, 20000);
+  });
 
   it("should respect type matchups", async () => {
     game.override.startingWave(5);
     await game.classicMode.startBattle([Species.ABRA, Species.ABRA]);
 
-    game.move.select(Moves.G_MAX_STEELSURGE);
+    game.move.select(MoveId.G_MAX_STEELSURGE);
     await game.toNextTurn();
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     game.forceEnemyToSwitch();
     await game.toNextTurn();
 
     const enemy = game.scene.getEnemyParty()[0];
     const damage = enemy.getMaxHp() - enemy.hp;
     expect(damage).toBe(toDmgValue(enemy.getMaxHp() / 4));
-  }, 20000);
+  });
 });

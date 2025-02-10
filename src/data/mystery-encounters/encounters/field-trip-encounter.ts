@@ -7,8 +7,9 @@ import {
   setEncounterExp,
   setEncounterRewards,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import type { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PokemonMove } from "#app/field/pokemon-move";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";

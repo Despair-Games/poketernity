@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -26,8 +26,8 @@ describe("Abilities - Stall", () => {
     game.override.disableCrits();
     game.override.enemySpecies(Species.REGIELEKI);
     game.override.enemyAbility(Abilities.STALL);
-    game.override.enemyMoveset(Moves.QUICK_ATTACK);
-    game.override.moveset([Moves.QUICK_ATTACK, Moves.TACKLE]);
+    game.override.enemyMoveset(MoveId.QUICK_ATTACK);
+    game.override.moveset([MoveId.QUICK_ATTACK, MoveId.TACKLE]);
   });
 
   const getTurnOrder = () => {
@@ -46,7 +46,7 @@ describe("Abilities - Stall", () => {
   it("should cause the source to move last in its priority bracket", async () => {
     await game.classicMode.startBattle([Species.SHUCKLE]);
 
-    game.move.select(Moves.QUICK_ATTACK);
+    game.move.select(MoveId.QUICK_ATTACK);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -56,7 +56,7 @@ describe("Abilities - Stall", () => {
   it("should not cause the source to move after moves in a lower priority bracket", async () => {
     await game.classicMode.startBattle([Species.SHUCKLE]);
 
-    game.move.select(Moves.TACKLE);
+    game.move.select(MoveId.TACKLE);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -67,7 +67,7 @@ describe("Abilities - Stall", () => {
     game.override.ability(Abilities.STALL);
     await game.classicMode.startBattle([Species.SHUCKLE]);
 
-    game.move.select(Moves.QUICK_ATTACK);
+    game.move.select(MoveId.QUICK_ATTACK);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 

@@ -1,4 +1,4 @@
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Move } from "#app/data/move";
@@ -19,7 +19,7 @@ export class CueNextRoundAttr extends MoveEffectAttr {
   override applyEffect(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const { turnManager } = globalScene.currentBattle;
     return turnManager.preemptFightCommand((tc) => {
-      if (tc.move?.move === Moves.ROUND) {
+      if (tc.move?.move === MoveId.ROUND) {
         tc.pokemon.turnData.joinedRound = true;
         return true;
       }

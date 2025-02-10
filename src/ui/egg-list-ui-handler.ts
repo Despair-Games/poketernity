@@ -10,6 +10,7 @@ import i18next from "i18next";
 import ScrollableGridUiHandler from "#app/ui/scrollable-grid-handler";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import { globalScene } from "#app/global-scene";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 export default class EggListUiHandler extends MessageUiHandler {
   private readonly ROWS = 9;
@@ -37,17 +38,11 @@ export default class EggListUiHandler extends MessageUiHandler {
   setup() {
     const ui = this.getUi();
 
-    this.eggListContainer = globalScene.add.container(0, -globalScene.game.canvas.height / 6);
+    this.eggListContainer = globalScene.add.container(0, -GAME_HEIGHT);
     this.eggListContainer.setVisible(false);
     ui.add(this.eggListContainer);
 
-    const bgColor = globalScene.add.rectangle(
-      0,
-      0,
-      globalScene.game.canvas.width / 6,
-      globalScene.game.canvas.height / 6,
-      0x006860,
-    );
+    const bgColor = globalScene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x006860);
     bgColor.setOrigin(0, 0);
     this.eggListContainer.add(bgColor);
 
@@ -96,7 +91,7 @@ export default class EggListUiHandler extends MessageUiHandler {
       .withUpdateGridCallBack(() => this.updateEggIcons())
       .withUpdateSingleElementCallback((i: number) => this.setEggDetails(i));
 
-    this.eggListMessageBoxContainer = globalScene.add.container(0, globalScene.game.canvas.height / 6);
+    this.eggListMessageBoxContainer = globalScene.add.container(0, GAME_HEIGHT);
     this.eggListMessageBoxContainer.setVisible(false);
     this.eggListContainer.add(this.eggListMessageBoxContainer);
 

@@ -1,3 +1,8 @@
+/**
+ * Remember to add the appropriate score to
+ * {@linkcode getTagTargetBenefitScore}
+ */
+
 export enum BattlerTagType {
   NONE,
   RECHARGING,
@@ -19,9 +24,11 @@ export enum BattlerTagType {
   BIND,
   WRAP,
   FIRE_SPIN,
+  G_MAX_FIRE_SPIN,
   WHIRLPOOL,
   CLAMP,
   SAND_TOMB,
+  G_MAX_SAND_TOMB,
   MAGMA_STORM,
   SNAP_TRAP,
   THUNDER_CAGE,
@@ -49,6 +56,7 @@ export enum BattlerTagType {
   ALWAYS_CRIT,
   IGNORE_ACCURACY,
   BYPASS_SLEEP,
+  /** Aka `Grounded` */
   IGNORE_FLYING,
   SALT_CURED,
   CURSED,
@@ -96,4 +104,5 @@ export enum BattlerTagType {
   POWDER,
   SKY_DROP,
   BYPASS_SPEED,
+  CRIT_BOOST_STACKABLE,
 }

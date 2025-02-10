@@ -4,9 +4,10 @@ import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-en
 // -- end tsdoc imports --
 
 import type { OptionPhaseCallback } from "#app/data/mystery-encounters/mystery-encounter-option";
-import { transitionMysteryEncounterIntroVisuals } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { transitionMysteryEncounterIntroVisuals } from "#app/data/mystery-encounters/utils/encounter-visuals-utils";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Will handle (in order):
@@ -19,6 +20,8 @@ import { Phase } from "#app/phase";
  * @extends Phase
  */
 export class MysteryEncounterOptionSelectedPhase extends Phase {
+  override readonly id = PhaseId.ME_OPTION_SELECTED;
+
   protected onOptionSelect: OptionPhaseCallback =
     globalScene.currentBattle.mysteryEncounter!.selectedOption!.onOptionPhase;
 

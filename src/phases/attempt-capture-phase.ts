@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
-import { SubstituteTag } from "#app/data/battler-tags";
+import { type SubstituteTag } from "#app/data/battler-tags";
 import {
   doPokeballBounceAnim,
   getCriticalCaptureChance,
@@ -11,7 +11,6 @@ import {
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
 import { type EnemyPokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { VictoryPhase } from "#app/phases/victory-phase";
 import { achvs } from "#app/system/achv";
@@ -24,12 +23,16 @@ import { type PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Handles catching a pokemon after the player throws a ball
  * @extends PokemonPhase
  */
 export class AttemptCapturePhase extends PokemonPhase {
+  override readonly id = PhaseId.ATTEMPT_CAPTURE;
+
   private readonly pokeballType: PokeballType;
   private pokeball: Phaser.GameObjects.Sprite;
   private originalY: number;
@@ -51,7 +54,7 @@ export class AttemptCapturePhase extends PokemonPhase {
       return this.end();
     }
 
-    const substitute = pokemon.getTag(SubstituteTag);
+    const substitute = pokemon.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
     if (substitute) {
       substitute.sprite.setVisible(false);
     }
@@ -203,7 +206,7 @@ export class AttemptCapturePhase extends PokemonPhase {
     pokemon.setVisible(true);
     pokemon.untint(250, "Sine.easeOut");
 
-    const substitute = pokemon.getTag(SubstituteTag);
+    const substitute = pokemon.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
     if (substitute) {
       substitute.sprite.setVisible(true);
     }
@@ -278,7 +281,7 @@ export class AttemptCapturePhase extends PokemonPhase {
         };
         const addToParty = (slotIndex?: number): void => {
           const newPokemon = pokemon.addToParty(this.pokeballType, slotIndex);
-          const modifiers = globalScene.findModifiers((m) => m instanceof PokemonHeldItemModifier, false);
+          const modifiers = globalScene.findModifiers((m) => m.isPokemonHeldItemModifier(), false);
           if (globalScene.getPlayerParty().filter((p) => p.isShiny()).length === PLAYER_PARTY_MAX_SIZE) {
             globalScene.validateAchv(achvs.SHINY_PARTY);
           }

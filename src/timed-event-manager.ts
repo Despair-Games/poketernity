@@ -4,6 +4,7 @@ import { TextStyle } from "#enums/text-style";
 import type { nil } from "#app/utils";
 import { EventType } from "#enums/event-type";
 import i18next from "i18next";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 interface EventBanner {
   bannerKey?: string;
@@ -90,7 +91,7 @@ export class TimedEventDisplay extends Phaser.GameObjects.Container {
 
   constructor(x: number, y: number, event?: TimedEvent) {
     super(globalScene, x, y);
-    this.availableWidth = globalScene.scaledCanvas.width;
+    this.availableWidth = GAME_WIDTH;
     this.event = event;
     this.setVisible(false);
   }
@@ -126,7 +127,7 @@ export class TimedEventDisplay extends Phaser.GameObjects.Container {
       console.log(this.event.bannerKey);
       const padding = 5;
       const showTimer = this.event.eventType !== EventType.NO_TIMER_DISPLAY;
-      const yPosition = globalScene.game.canvas.height / 6 - padding - (showTimer ? 10 : 0) - (this.event.yOffset ?? 0);
+      const yPosition = GAME_HEIGHT - padding - (showTimer ? 10 : 0) - (this.event.yOffset ?? 0);
       this.banner = new Phaser.GameObjects.Image(globalScene, this.availableWidth / 2, yPosition - padding, key);
       this.banner.setName("img-event-banner");
       this.banner.setOrigin(0.5, 1);

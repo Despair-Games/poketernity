@@ -1,12 +1,13 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { PostDefendContactApplyStatusEffectAbAttr } from "#app/data/ab-attrs/post-defend-contact-apply-status-effect-ab-attr";
+import { type PostDefendContactApplyStatusEffectAbAttr } from "#app/data/ab-attrs/post-defend-contact-apply-status-effect-ab-attr";
 import { StatusEffect } from "#enums/status-effect";
-import { Type } from "#enums/type";
+import { ElementalType } from "#enums/elemental-type";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Abilities - Flame Body/Poison Point/Static", () => {
   let phaserGame: Phaser.Game;
@@ -25,12 +26,12 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SPLASH])
+      .moveset([MoveId.SPLASH])
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset([Moves.TACKLE, Moves.WATER_GUN]);
+      .enemyMoveset([MoveId.TACKLE, MoveId.WATER_GUN]);
   });
 
   it.each([
@@ -42,15 +43,15 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon();
     vi.spyOn(
-      pokemon
-        ?.getAbility()
-        .getAttrs(PostDefendContactApplyStatusEffectAbAttr)[0] as PostDefendContactApplyStatusEffectAbAttr,
+      pokemon!
+        .getAbility()
+        .getAttrs<PostDefendContactApplyStatusEffectAbAttr>(AbAttrFlag.POST_DEFEND_CONTACT_APPLY_STATUS_EFFECT)[0],
       "chance",
       "get",
     ).mockReturnValue(100);
 
-    game.move.select(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.TACKLE);
+    game.move.select(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.TACKLE);
     await game.phaseInterceptor.to("BerryPhase");
 
     const attacker = game.scene.getEnemyPokemon();
@@ -66,15 +67,15 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon();
     vi.spyOn(
-      pokemon
-        ?.getAbility()
-        .getAttrs(PostDefendContactApplyStatusEffectAbAttr)[0] as PostDefendContactApplyStatusEffectAbAttr,
+      pokemon!
+        .getAbility()
+        .getAttrs<PostDefendContactApplyStatusEffectAbAttr>(AbAttrFlag.POST_DEFEND_CONTACT_APPLY_STATUS_EFFECT)[0],
       "chance",
       "get",
     ).mockReturnValue(100);
 
-    game.move.select(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.WATER_GUN);
+    game.move.select(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.WATER_GUN);
     await game.phaseInterceptor.to("BerryPhase");
 
     const attacker = game.scene.getEnemyPokemon();
@@ -86,19 +87,19 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(
-      pokemon
-        ?.getAbility()
-        .getAttrs(PostDefendContactApplyStatusEffectAbAttr)[0] as PostDefendContactApplyStatusEffectAbAttr,
+      pokemon!
+        .getAbility()
+        .getAttrs<PostDefendContactApplyStatusEffectAbAttr>(AbAttrFlag.POST_DEFEND_CONTACT_APPLY_STATUS_EFFECT)[0],
       "chance",
       "get",
     ).mockReturnValue(100);
 
-    game.move.select(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.TACKLE);
+    game.move.select(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.TACKLE);
     await game.phaseInterceptor.to("BerryPhase");
 
     const attacker = game.scene.getEnemyPokemon();
-    expect(attacker?.getTypes()).toContain(Type.GROUND);
+    expect(attacker?.getTypes()).toContain(ElementalType.GROUND);
     expect(attacker?.status?.effect).toBe(StatusEffect.PARALYSIS);
   });
 });

@@ -12,7 +12,8 @@ import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { EnemyPokemon } from "#app/field/pokemon";
 import type { BerryModifierType, ModifierTypeOption } from "#app/modifier/modifier-type";
-import { getPartyLuckValue, modifierTypes, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
+import { getPartyLuckValue, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { randSeedInt } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -33,7 +34,7 @@ import {
   STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import PokemonData from "#app/system/pokemon-data";
-import { BerryModifier } from "#app/modifier/modifier";
+import type { BerryModifier } from "#app/modifier/modifier";
 import i18next from "#app/plugins/i18n";
 import { BerryType } from "#enums/berry-type";
 import { PERMANENT_STATS, Stat } from "#enums/stat";
@@ -236,7 +237,7 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
           config.pokemonConfigs![0].mysteryEncounterBattleEffects = (pokemon: Pokemon) => {
             queueEncounterMessage(`${namespace}:option.2.boss_enraged`);
             globalScene.unshiftPhase(
-              new StatStageChangePhase(pokemon.getBattlerIndex(), true, statChangesForBattle, 1),
+              new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, statChangesForBattle, 1),
             );
           };
           setEncounterRewards(
@@ -304,10 +305,7 @@ function tryGiveBerry(prioritizedPokemon?: PlayerPokemon) {
   // Will try to apply to prioritized pokemon first, then do normal application method if it fails
   if (prioritizedPokemon) {
     const heldBerriesOfType = globalScene.findModifier(
-      (m) =>
-        m instanceof BerryModifier
-        && m.pokemonId === prioritizedPokemon.id
-        && (m as BerryModifier).berryType === berryType,
+      (m) => m.isBerryModifier() && m.pokemonId === prioritizedPokemon.id && m.berryType === berryType,
       true,
     ) as BerryModifier;
 
@@ -320,7 +318,7 @@ function tryGiveBerry(prioritizedPokemon?: PlayerPokemon) {
   // Iterate over the party until berry was successfully given
   for (const pokemon of party) {
     const heldBerriesOfType = globalScene.findModifier(
-      (m) => m instanceof BerryModifier && m.pokemonId === pokemon.id && (m as BerryModifier).berryType === berryType,
+      (m) => m.isBerryModifier() && m.pokemonId === pokemon.id && m.berryType === berryType,
       true,
     ) as BerryModifier;
 
