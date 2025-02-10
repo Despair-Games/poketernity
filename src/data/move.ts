@@ -726,30 +726,86 @@ export abstract class Move implements Localizable {
    * should typically be limited to (+3) or lower.
    * @param user the {@linkcode Pokemon} using the move
    * @param target the {@linkcode Pokemon} targeted by the move
+   * @param isKnockOut `true` if the move is already known to KO the target (default `false`)
+   * @param isFail `true` if the move is already known to fail or have no effect (default `false`)
    * @returns a score value accumulated from effect score modifiers.
    * @todo Add Low Accuracy Penalty and Ally Target Penalty
    */
-  public getEffectScore(user: EnemyPokemon, target: Pokemon): number {
+  public getEffectScore(
+    user: EnemyPokemon,
+    target: Pokemon,
+    isKnockOut: boolean = false,
+    isFail: boolean = false,
+  ): number {
     // penalize targeting Pokemon that are hidden by Commander
-    if (
-      (target && target.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === target)
-      || target === user.getAlly()
-    ) {
+    if (target && target.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === target) {
       return -20;
     }
 
     /** The combined score from all attributes of the move */
-    const attrScores = this.attrs.map((attr) => attr.getEffectScore(user, target, this));
+    const attrScore = this.getCombinedAttributeScore(user, target, isKnockOut, isFail);
 
     /** The combined score from all conditions of the move */
-    const conditionScores = this.conditions.map((cond) => cond.getConditionScore(user, target, this));
+    const conditionScore = this.conditions
+      .map((cond) => cond.getConditionScore(user, target, this))
+      .reduce((total, score) => total + score, 0);
 
     /** The penalty given if the move is inaccurate */
     const accuracyPenalty = this.getBattleAccuracyPenalty(user, target);
 
-    const totalScore = attrScores.concat(conditionScores).reduce((total, score) => total + score, 0) + accuracyPenalty;
+    const totalScore = attrScore + conditionScore + accuracyPenalty;
 
     return totalScore;
+  }
+
+  /**
+   * Calculates the combined score from this move's attributes' effect scores.
+   * @param user the {@linkcode Pokemon} evaluating this move
+   * @param target the {@linkcode Pokemon} this move is evaluated against
+   * @returns the cumulative integer score from this move's attributes
+   * @see {@linkcode getEffectScore}
+   * @see {@linkcode MoveAttr.getEffectScore}
+   */
+  protected getCombinedAttributeScore(
+    user: EnemyPokemon,
+    target: Pokemon,
+    isKnockOut: boolean,
+    isFail: boolean,
+  ): number {
+    if (target === user.getAlly()) {
+      /**
+       * ALLY TARGET PENALTY:
+       *
+       * If the user is the target's ally, a (-20) score penalty is applied
+       * unless the move has at least one attribute that overrides the penalty,
+       * in which case the total score is the sum of effect scores from those
+       * overriding attributes.
+       *
+       * NOTE: if at least one attribute overrides the Ally Target Penalty, ONLY
+       * the overriding attributes are accounted for in scoring. Score contributions
+       * from other non-overriding attributes are ignored.
+       */
+      const allyTargetAttrs = this.attrs.filter((attr) => attr.overridesAllyTargetPenalty);
+
+      if (allyTargetAttrs.length === 0) {
+        return -20;
+      } else {
+        return allyTargetAttrs
+          .map((attr) => attr.getEffectScore(user, target, this))
+          .reduce((total, score) => total + score);
+      }
+    } else {
+      let attrs: MoveAttr[] = this.attrs;
+      if (isKnockOut) {
+        attrs = attrs.filter((attr) => attr.appliesScoreOnKO);
+      }
+
+      if (isFail) {
+        attrs = attrs.filter((attr) => attr.appliesScoreOnFail);
+      }
+
+      return attrs.map((attr) => attr.getEffectScore(user, target, this)).reduce((total, score) => total + score, 0);
+    }
   }
 
   /**
