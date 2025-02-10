@@ -9,6 +9,7 @@ export enum CommonColor {
   SOFT_PINK = "#f89890",
   CORAL_PINK = "#F88880",
   BRIGHT_PINK = "#f85888",
+  PURE_RED = "#FF0000",
   WARM_RED = "#e13d3d",
   DEEP_RED = "#e70808",
 
@@ -24,7 +25,8 @@ export enum CommonColor {
   DARK_YELLOW = "#a68e17",
 
   // Greens
-  LIGHT_GREEN = "#78c850",
+  LIGHT_GREEN = "#008000",
+  PURE_GREEN = "#58d858",
 
   // Blues
   LIGHT_BLUE = "#40c8f8",

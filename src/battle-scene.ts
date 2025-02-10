@@ -1956,7 +1956,7 @@ export default class BattleScene extends SceneBase {
       return;
     }
     const deltaScale = this.moneyText.scale * 0.14 * (positiveChange ? 1 : -1);
-    this.moneyText.setShadowColor(positiveChange ? "#008000" : "#FF0000");
+    this.moneyText.setShadowColor(positiveChange ? CommonColor.PURE_GREEN : CommonColor.PURE_RED);
     this.tweens.add({
       targets: this.moneyText,
       duration: 250,

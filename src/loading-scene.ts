@@ -439,7 +439,7 @@ export class LoadingScene extends SceneBase {
       text: i18next.t("menu:disclaimer"),
       style: {
         font: "72px emerald",
-        color: "#DA3838",
+        color: CommonColor.WARM_RED,
       },
     });
     disclaimerText.setOrigin(0.5, 0.5);
