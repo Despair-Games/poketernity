@@ -195,7 +195,7 @@ describe("Moves - Powder", () => {
     await game.phaseInterceptor.to(BerryPhase, false);
     expect(enemyPokemon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
     expect(enemyPokemon.hp).toBe(Math.ceil((3 * enemyPokemon.getMaxHp()) / 4));
-    expect(playerPokemon.getLastXMoves()[0].moveId).toBe(MoveId.POWDER);
+    expect(playerPokemon.getLastXMoves()[0].move.id).toBe(MoveId.POWDER);
   });
 
   it("should cancel Revelation Dance if it becomes a Fire-type move", async () => {

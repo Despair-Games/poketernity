@@ -1,5 +1,5 @@
 import type { BattlerIndex } from "#enums/battler-index";
-import { CommonBattleAnim } from "#app/data/battle-anims";
+import { CommonBattleAnim } from "#app/data/battle-anims/common-battle-anim";
 import { CommonAnim } from "#enums/common-anim";
 import { getStatusEffectObtainText, getStatusEffectOverlapText } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
@@ -7,12 +7,15 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { StatusEffect } from "#enums/status-effect";
 import { PokemonPhase } from "./abstract-pokemon-phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Applies a status effect to a pokemon
  * @extends PokemonPhase
  */
 export class ObtainStatusEffectPhase extends PokemonPhase {
+  override readonly id = PhaseId.OBTAIN_STATUS_EFFECT;
+
   private readonly statusEffect: StatusEffect;
   private readonly turnsRemaining?: number;
   private readonly sourceText?: string | null;

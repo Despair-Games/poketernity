@@ -5,7 +5,8 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import * as BattleAnims from "#app/data/battle-anims";
+import * as MoveAnimUtils from "#app/utils/move-anim-utils";
+import * as InitMoveAnim from "#app/data/init-move-anim";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
   runMysteryEncounterToEnd,
@@ -26,9 +27,10 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { CommandPhase } from "#app/phases/command-phase";
-import type { MovePhase } from "#app/phases/move-phase";
+import { type MovePhase } from "#app/phases/move-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { Abilities } from "#enums/abilities";
+import { PhaseId } from "#enums/phase-id";
 
 const namespace = "mysteryEncounters/theStrongStuff";
 const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
@@ -93,8 +95,8 @@ describe("The Strong Stuff - Mystery Encounter", () => {
   it("should initialize fully ", async () => {
     initSceneWithoutEncounterPhase(scene, defaultParty);
     scene.currentBattle.mysteryEncounter = TheStrongStuffEncounter;
-    const moveInitSpy = vi.spyOn(BattleAnims, "initMoveAnim");
-    const moveLoadSpy = vi.spyOn(BattleAnims, "loadMoveAnimAssets");
+    const moveInitSpy = vi.spyOn(InitMoveAnim, "initMoveAnim");
+    const moveLoadSpy = vi.spyOn(MoveAnimUtils, "loadMoveAnimAssets");
 
     const { onInit } = TheStrongStuffEncounter;
 
@@ -214,7 +216,7 @@ describe("The Strong Stuff - Mystery Encounter", () => {
       ]);
 
       // Should have used moves pre-battle
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].isMovePhase()).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is<MovePhase>(PhaseId.MOVE)).map((p) => p[0]);
       expect(movePhases.length).toBe(2);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.GASTRO_ACID).length).toBe(1);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.STEALTH_ROCK).length).toBe(1);

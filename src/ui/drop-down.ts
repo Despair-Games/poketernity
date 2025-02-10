@@ -4,34 +4,9 @@ import { TextStyle } from "#enums/text-style";
 import { addWindow } from "./ui-theme";
 import { WindowVariant } from "#enums/window-variant";
 import i18next from "i18next";
-
-export enum DropDownState {
-  ON,
-  OFF,
-  EXCLUDE,
-  UNLOCKABLE,
-  PARTIAL,
-}
-
-export enum DropDownType {
-  SINGLE = 0,
-  MULTI = 1,
-  HYBRID = 2,
-  RADIAL = 3,
-}
-
-export enum SortDirection {
-  ASC = -1,
-  DESC = 1,
-}
-
-export enum SortCriteria {
-  NUMBER = 0,
-  COST = 1,
-  CANDY = 2,
-  IV = 3,
-  NAME = 4,
-}
+import { SortDirection } from "#enums/sort-direction";
+import { DropDownState } from "#enums/drop-down-state";
+import { DropDownType } from "#enums/drop-down-type";
 
 export class DropDownLabel {
   public state: DropDownState;

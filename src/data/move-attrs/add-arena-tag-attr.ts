@@ -5,7 +5,7 @@ import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveTarget } from "#enums/move-target";
 import type { Move } from "../move";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "./chance-based-move-effect-attr";
 
 interface AddArenaTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {

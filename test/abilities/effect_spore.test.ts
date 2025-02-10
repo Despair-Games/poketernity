@@ -1,5 +1,5 @@
-import { EffectSporeAbAttr } from "#app/data/ab-attrs/effect-spore-ab-attr";
 import { allMoves } from "#app/data/all-moves";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -40,7 +40,7 @@ describe("Abilities - Effect Spore", () => {
   it("should have a chance of inflicting a status effect if user is hit with a contact move", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
+    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
     vi.spyOn(abilityAttr, "apply");
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -57,7 +57,7 @@ describe("Abilities - Effect Spore", () => {
     game.override.enemyAbility(Abilities.OVERCOAT);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
+    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
     vi.spyOn(abilityAttr, "apply");
 
     game.move.select(MoveId.SPLASH);
@@ -72,7 +72,7 @@ describe("Abilities - Effect Spore", () => {
     game.override.enemySpecies(Species.TREECKO);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
+    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
     vi.spyOn(abilityAttr, "apply");
 
     game.move.select(MoveId.SPLASH);
@@ -86,7 +86,7 @@ describe("Abilities - Effect Spore", () => {
   it("should require contact to activate", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(EffectSporeAbAttr)[0]!;
+    const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
     vi.spyOn(abilityAttr, "apply");
 
     game.move.select(MoveId.SPLASH);
@@ -102,7 +102,7 @@ describe("Abilities - Effect Spore", () => {
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    const abilityAttr = playerPokemon.getAbilityAttrs(EffectSporeAbAttr)[0]!;
+    const abilityAttr = playerPokemon.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
 
     let rngSweepProgress = 0; // Will simulate full range of RNG rolls by steadily increasing from 0 to 100
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((range, min: 0) => {

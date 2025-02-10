@@ -1,23 +1,10 @@
-import { BattleType } from "#enums/battle-type";
-import { SwitchType } from "#enums/switch-type";
-import type { Pokemon, EnemyPokemon } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";
-import { BattleEndPhase } from "#app/phases/battle-end-phase";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
-import { NewBattlePhase } from "#app/phases/new-battle-phase";
-import { SwitchPhase } from "#app/phases/switch-phase";
-import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
-import type { AbstractConstructor, Constructor } from "#app/utils";
-import { BooleanHolder } from "#app/utils";
+import type { Constructor } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import i18next from "i18next";
-import { getPokemonNameWithAffix } from "../messages";
 import type { AbAttr } from "./ab-attrs/ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
-import { ForceSwitchOutImmunityAbAttr } from "./ab-attrs/force-switch-out-immunity-ab-attr";
-import { AbilityApplyMode } from "#enums/ability-apply-mode";
-import { applyAbAttrs, applyRevealedAbAttrs } from "#app/data/apply-ab-attrs";
+import type { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class Ability implements Localizable {
   public id: Abilities;
@@ -54,21 +41,21 @@ export class Ability implements Localizable {
   }
 
   /**
-   * Get all ability attributes that match `attrType`
-   * @param attrType any attribute that extends {@linkcode AbAttr}
-   * @returns Array of attributes that match `attrType`, Empty Array if none match.
+   * Get all ability attributes that match the given {@linkcode flag}
+   * @param flag The {@linkcode AbAttrFlag} to check for
+   * @returns Array of attributes that match the given {@linkcode flag}, Empty Array if none match.
    */
-  getAttrs<T extends AbAttr>(attrType: AbstractConstructor<T>): T[] {
-    return this.attrs.filter((a): a is T => a instanceof attrType);
+  getAttrs<T extends AbAttr>(flag: AbAttrFlag): T[] {
+    return this.attrs.filter((abAttr): abAttr is T => abAttr.hasFlag(flag));
   }
 
   /**
-   * Check if an ability has an attribute that matches `attrType`
-   * @param attrType any attribute that extends {@linkcode AbAttr}
-   * @returns true if the ability has attribute `attrType`
+   * Check if an ability has an attribute that matches {@linkcode flag}
+   * @param flag The {@linkcode AbAttrFlag} to check
+   * @returns true if the ability has an attribute with the given {@linkcode flag}
    */
-  hasAttr<T extends AbAttr>(attrType: AbstractConstructor<T>): boolean {
-    return this.attrs.some((attr) => attr instanceof attrType);
+  hasAttrFlag(flag: AbAttrFlag): boolean {
+    return this.attrs.some((abAttr) => abAttr.hasFlag(flag));
   }
 
   attr<T extends Constructor<AbAttr>>(AttrType: T, ...args: ConstructorParameters<T>): Ability {
@@ -126,168 +113,3 @@ export class Ability implements Localizable {
     return this;
   }
 }
-
-export class ForceSwitchOutHelper {
-  constructor(private switchType: SwitchType) {}
-
-  /**
-   * Handles the logic for switching out a Pokémon based on battle conditions, HP, and the switch type.
-   *
-   * @param pokemon The {@linkcode Pokemon} attempting to switch out.
-   * @returns `true` if the switch is successful
-   */
-  public switchOutLogic(pokemon: Pokemon): boolean {
-    const switchOutTarget = pokemon;
-    /**
-     * If the switch-out target is a player-controlled Pokémon, the function checks:
-     * - Whether there are available party members to switch in.
-     * - If the Pokémon is still alive (hp > 0), and if so, it leaves the field and a new SwitchPhase is initiated.
-     */
-    if (switchOutTarget.isPlayer()) {
-      if (globalScene.getPlayerParty().filter((p) => p.isAllowedInBattle() && !p.isOnField()).length < 1) {
-        return false;
-      }
-
-      if (switchOutTarget.hp > 0) {
-        switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-        globalScene.prependToPhase(
-          new SwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
-          MoveEndPhase,
-        );
-        return true;
-      }
-      /**
-       * For non-wild battles, it checks if the opposing party has any available Pokémon to switch in.
-       * If yes, the Pokémon leaves the field and a new SwitchSummonPhase is initiated.
-       */
-    } else if (globalScene.currentBattle.battleType !== BattleType.WILD) {
-      if (globalScene.getEnemyParty().filter((p) => p.isAllowedInBattle() && !p.isOnField()).length < 1) {
-        return false;
-      }
-      if (switchOutTarget.hp > 0) {
-        switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-        const summonIndex = globalScene.currentBattle.trainer
-          ? globalScene.currentBattle.trainer.getNextSummonIndex((switchOutTarget as EnemyPokemon).trainerSlot)
-          : 0;
-        globalScene.prependToPhase(
-          new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), summonIndex, false, false),
-          MoveEndPhase,
-        );
-        return true;
-      }
-      /**
-       * For wild Pokémon battles, the Pokémon will flee if the conditions are met (waveIndex and double battles).
-       * It will not flee if it is a Mystery Encounter with fleeing disabled (checked in `getSwitchOutCondition()`) or if it is a wave 10x wild boss
-       */
-    } else {
-      if (!globalScene.currentBattle.waveIndex || globalScene.currentBattle.waveIndex % 10 === 0) {
-        return false;
-      }
-
-      if (switchOutTarget.hp > 0) {
-        switchOutTarget.leaveField(false);
-        globalScene.queueMessage(
-          i18next.t("moveTriggers:fled", { pokemonName: getPokemonNameWithAffix(switchOutTarget) }),
-          null,
-          true,
-          500,
-        );
-
-        if (globalScene.currentBattle.double) {
-          const allyPokemon = switchOutTarget.getAlly();
-          globalScene.redirectPokemonMoves(switchOutTarget, allyPokemon);
-        }
-      }
-
-      if (!switchOutTarget.getAlly()?.isActive(true)) {
-        globalScene.clearEnemyHeldItemModifiers();
-
-        if (switchOutTarget.hp) {
-          globalScene.pushPhase(new BattleEndPhase(false));
-          globalScene.pushPhase(new NewBattlePhase());
-        }
-      }
-    }
-    return false;
-  }
-
-  /**
-   * Determines if a Pokémon can switch out based on its status, the opponent's status, and battle conditions.
-   *
-   * @param pokemon The Pokémon attempting to switch out.
-   * @param opponent The opponent Pokémon.
-   * @returns `true` if the switch-out condition is met
-   */
-  public getSwitchOutCondition(pokemon: Pokemon, _opponent: Pokemon): boolean {
-    const switchOutTarget = pokemon;
-    const player = switchOutTarget.isPlayer();
-
-    if (player) {
-      const blockedByAbility = new BooleanHolder(false);
-      applyAbAttrs(ForceSwitchOutImmunityAbAttr, pokemon, false, blockedByAbility);
-      return !blockedByAbility.value;
-    }
-
-    if (!player && globalScene.currentBattle.battleType === BattleType.WILD) {
-      if (!globalScene.currentBattle.waveIndex && globalScene.currentBattle.waveIndex % 10 === 0) {
-        return false;
-      }
-    }
-
-    if (
-      !player
-      && globalScene.currentBattle.isBattleMysteryEncounter()
-      && !globalScene.currentBattle.mysteryEncounter?.fleeAllowed
-    ) {
-      return false;
-    }
-
-    const party = player ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
-    return (
-      (!player && globalScene.currentBattle.battleType === BattleType.WILD)
-      || party.filter(
-        (p) =>
-          p.isAllowedInBattle()
-          && (player || (p as EnemyPokemon).trainerSlot === (switchOutTarget as EnemyPokemon).trainerSlot),
-      ).length > globalScene.currentBattle.getBattlerCount()
-    );
-  }
-
-  /**
-   * Returns a message if the switch-out attempt fails due to ability effects.
-   *
-   * @param target The target Pokémon.
-   * @returns The failure message, or `null` if no failure.
-   */
-  public getFailedText(target: Pokemon): string | null {
-    const blockedByAbility = new BooleanHolder(false);
-    applyAbAttrs(ForceSwitchOutImmunityAbAttr, target, false, blockedByAbility);
-    return blockedByAbility.value
-      ? i18next.t("moveTriggers:cannotBeSwitchedOut", { pokemonName: getPokemonNameWithAffix(target) })
-      : null;
-  }
-}
-
-/**
- * Obtains the function to apply abilities corresponding to the given mode
- * @param mode the {@linkcode AbilityApplyMode} determining how abilities are applied:
- * @returns the function to apply abilities based on the mode:
- * - {@linkcode AbilityApplyMode.DEFAULT} applies abilities without restriction
- * (as long as they meet conditions to apply).
- * - {@linkcode AbilityApplyMode.REVEALED} only applies abilities that have
- * previously applied in the current battle.
- * - {@linkcode AbilityApplyMode.IGNORE} does nothing and returns an empty
- * message array.
- */
-export function getAbApplyFunc(mode: AbilityApplyMode) {
-  switch (mode) {
-    case AbilityApplyMode.DEFAULT:
-      return applyAbAttrs;
-    case AbilityApplyMode.REVEALED:
-      return applyRevealedAbAttrs;
-    case AbilityApplyMode.IGNORE:
-      return () => [];
-  }
-}
-
-export const allAbilities = [new Ability(Abilities.NONE, 3)];

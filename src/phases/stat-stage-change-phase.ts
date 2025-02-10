@@ -1,10 +1,5 @@
 import type { BattlerIndex } from "#enums/battler-index";
-import { PostStatStageChangeAbAttr } from "#app/data/ab-attrs/post-stat-stage-change-ab-attr";
-import { ProtectStatAbAttr } from "#app/data/ab-attrs/protect-stat-ab-attr";
-import { StatStageChangeCopyAbAttr } from "#app/data/ab-attrs/stat-stage-change-copy-ab-attr";
-import { StatStageChangeMultiplierAbAttr } from "#app/data/ab-attrs/stat-stage-change-multiplier-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { MistTag } from "#app/data/arena-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -16,8 +11,12 @@ import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } f
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
 import { PokemonPhase } from "./abstract-pokemon-phase";
-import { ReflectStatStageChangeAbAttr } from "#app/data/ab-attrs/reflect-stat-stage-change-ab-attr";
 import { CANVAS_SCALE } from "#app/ui-constants";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
+
+//#region Types
 
 export type StatStageChangeCallback = (changed: BattleStat[], relativeChanges: number[], target?: Pokemon) => void;
 
@@ -29,7 +28,11 @@ interface SSCPhaseOptions {
   onChange?: StatStageChangeCallback;
 }
 
+//#endregion
+
 export class StatStageChangePhase extends PokemonPhase {
+  override readonly id = PhaseId.STAT_STAGE_CHANGE;
+
   protected readonly stats: BattleStat[];
   protected readonly source: Pokemon | null;
   protected stages: number;
@@ -72,7 +75,15 @@ export class StatStageChangePhase extends PokemonPhase {
 
     if (!this.ignoreAbilities && !this.bypassReflect) {
       const reflected = new BooleanHolder(false);
-      applyAbAttrs(ReflectStatStageChangeAbAttr, pokemon, false, this.source, this.stats, this.stages, reflected);
+      applyAbAttrs(
+        AbAttrFlag.REFLECT_STAT_STAGE_CHANGE,
+        pokemon,
+        false,
+        this.source,
+        this.stats,
+        this.stages,
+        reflected,
+      );
       if (reflected.value) {
         return super.end();
       }
@@ -92,7 +103,7 @@ export class StatStageChangePhase extends PokemonPhase {
     const stages = new NumberHolder(this.stages);
 
     if (!this.ignoreAbilities) {
-      applyAbAttrs(StatStageChangeMultiplierAbAttr, pokemon, false, stages);
+      applyAbAttrs(AbAttrFlag.STAT_STAGE_CHANGE_MULTIPLIER, pokemon, false, stages);
     }
 
     let simulate = false;
@@ -101,11 +112,11 @@ export class StatStageChangePhase extends PokemonPhase {
       const cancelled = new BooleanHolder(false);
 
       if (!selfTarget && stages.value < 0) {
-        arena.applyTagsForSide(MistTag, pokemon.getArenaTagSide(), false, this.source, cancelled);
+        arena.applyTagsForSide(ArenaTagType.MIST, pokemon.getArenaTagSide(), false, this.source, cancelled);
       }
 
       if (!cancelled.value && !selfTarget && stages.value < 0) {
-        applyAbAttrs(ProtectStatAbAttr, pokemon, simulate, stat, cancelled);
+        applyAbAttrs(AbAttrFlag.PROTECT_STAT, pokemon, simulate, stat, cancelled);
       }
 
       // If one stat stage decrease is cancelled, simulate the rest of the applications
@@ -163,11 +174,11 @@ export class StatStageChangePhase extends PokemonPhase {
 
       if (stages.value > 0 && this.canBeCopied) {
         for (const opponent of pokemon.getOpponents()) {
-          applyAbAttrs(StatStageChangeCopyAbAttr, opponent, false, this.stats, stages.value);
+          applyAbAttrs(AbAttrFlag.STAT_STAGE_CHANGE_COPY, opponent, false, this.stats, stages.value);
         }
       }
 
-      applyAbAttrs(PostStatStageChangeAbAttr, pokemon, false, filteredStats, this.stages, selfTarget);
+      applyAbAttrs(AbAttrFlag.POST_STAT_STAGE_CHANGE, pokemon, false, filteredStats, this.stages, selfTarget);
 
       // Look for any other stat change phases; if this is the last one, do White Herb check
       const existingPhase = globalScene.findPhase(

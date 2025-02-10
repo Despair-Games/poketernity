@@ -1,9 +1,10 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { SemiInvulnerableTag, SkyDropTag } from "#app/data/battler-tags";
 import type { Move } from "#app/data/move";
-import { type MoveConditionFunc, failOnGravityCondition } from "#app/data/move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { failOnGravityCondition } from "../move-conditions/fail-on-gravity-condition";
 import { MoveEffectAttr } from "./move-effect-attr";
+import { SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 
 /**
  * Attribute implementing the charging phase effects of {@link https://bulbapedia.bulbagarden.net/wiki/Sky_Drop_(move) | Sky Drop}.
@@ -40,8 +41,8 @@ export class SkyDropAttr extends MoveEffectAttr {
       && target.isPlayer() !== user.isPlayer()
       && target.species.weight < 200
       && !target.getTag(BattlerTagType.SUBSTITUTE)
-      && !target.getTag(SemiInvulnerableTag)
+      && !target.getTag(...SemiInvulnerableBattlerTagTypes)
       && target.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon()?.id !== target.id
-      && (!target.getTag(SkyDropTag) || target.getTag(SkyDropTag)?.sourceId === user.id);
+      && (!target.getTag(BattlerTagType.SKY_DROP) || target.getTag(BattlerTagType.SKY_DROP)?.sourceId === user.id);
   }
 }

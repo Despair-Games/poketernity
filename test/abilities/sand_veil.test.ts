@@ -1,5 +1,5 @@
-import { allAbilities } from "#app/data/ability";
-import { StatMultiplierAbAttr } from "#app/data/ab-attrs/stat-multiplier-ab-attr";
+import { allAbilities } from "#app/data/all-abilities";
+import { type StatMultiplierAbAttr } from "#app/data/ab-attrs/stat-multiplier-ab-attr";
 import { CommandPhase } from "#app/phases/command-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
@@ -11,6 +11,7 @@ import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Abilities - Sand Veil", () => {
   let phaserGame: Phaser.Game;
@@ -44,7 +45,9 @@ describe("Abilities - Sand Veil", () => {
 
     vi.spyOn(leadPokemon[0], "getAbility").mockReturnValue(allAbilities[Abilities.SAND_VEIL]);
 
-    const sandVeilAttr = allAbilities[Abilities.SAND_VEIL].getAttrs(StatMultiplierAbAttr)[0];
+    const sandVeilAttr = allAbilities[Abilities.SAND_VEIL].getAttrs<StatMultiplierAbAttr>(
+      AbAttrFlag.STAT_MULTIPLIER,
+    )[0];
     vi.spyOn(sandVeilAttr, "apply").mockImplementation((_pokemon, _simulated, stat, statValue) => {
       if (stat === Stat.EVA && game.scene.arena.weather?.weatherType === WeatherType.SANDSTORM) {
         statValue.value *= -1; // will make all attacks miss
