@@ -1,7 +1,6 @@
 import { initLoggedInUser } from "#app/account";
 import { SESSION_ID_COOKIE } from "#app/constants";
-import { initAbilities } from "#app/data/all-abilities";
-import { allMoves, initMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/all-moves";
 import { initBiomes } from "#app/data/balance/biomes";
 import { initEggMoves } from "#app/data/balance/egg-moves";
 import { initPokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
@@ -19,6 +18,10 @@ import { MockImage } from "#test/testUtils/mocks/mocksContainer/mockImage";
 import Phaser from "phaser";
 import { manageListeners } from "./listenersManager";
 import { initVouchers } from "#app/system/init-vouchers";
+import { initAbilities } from "#app/data/init-abilities";
+import { initMoves } from "#app/data/init-moves";
+import { initModifierTypes } from "#app/modifier/init-modifier-types";
+import { initModifierPools } from "#app/modifier/init-modifier-pools";
 
 /**
  * A function to initialize game data before running any other test-related code.
@@ -26,6 +29,8 @@ import { initVouchers } from "#app/system/init-vouchers";
 export function initDataForTests() {
   // Initialize all of these things if and only if they have not been initialized yet
   if (Object.values(allMoves).length === 0) {
+    initModifierTypes();
+    initModifierPools();
     initMoves();
     initVouchers();
     initAchievements();

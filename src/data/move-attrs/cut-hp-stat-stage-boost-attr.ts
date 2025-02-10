@@ -4,7 +4,7 @@ import { HitResult } from "#enums/hit-result";
 import { toDmgValue } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
 /**
  * Attribute to grant a stat stage boost to the user

@@ -1,5 +1,6 @@
 import { MoveId } from "#enums/move-id";
-import { type Pokemon, type TurnMove } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { type TurnMove } from "#app/@types/TurnMove";
 import { MoveResult } from "#enums/move-result";
 import type { Move } from "#app/data/move";
 import { MovePowerMultiplierAttr } from "#app/data/move-attrs/move-power-multiplier-attr";
@@ -18,8 +19,8 @@ export abstract class ConsecutiveUsePowerMultiplierAttr extends MovePowerMultipl
       let turnMove: TurnMove | undefined;
 
       while (
-        ((turnMove = moveHistory.shift())?.moveId === move.id
-          || (comboMoves.length && comboMoves.includes(turnMove?.moveId ?? MoveId.NONE)))
+        ((turnMove = moveHistory.shift())?.move.id === move.id
+          || (comboMoves.length && comboMoves.includes(turnMove?.move.id ?? MoveId.NONE)))
         && (!resetOnFail || turnMove?.result === MoveResult.SUCCESS)
       ) {
         if (count < limit - 1) {

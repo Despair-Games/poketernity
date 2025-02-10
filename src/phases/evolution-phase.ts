@@ -19,6 +19,7 @@ import { BooleanHolder, fixedNumber } from "#app/utils";
 import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * A phase for handling Pokemon evolution
@@ -26,6 +27,8 @@ import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
  * @extends FormChangeBasePhase
  */
 export class EvolutionPhase extends FormChangeBasePhase {
+  override readonly id = PhaseId.EVOLUTION;
+
   protected readonly lastLevel: number;
 
   private preEvolvedPokemonName: string;
@@ -293,9 +296,5 @@ export class EvolutionPhase extends FormChangeBasePhase {
         });
       });
     });
-  }
-
-  override isEvolutionPhase(): this is this {
-    return true;
   }
 }

@@ -1,5 +1,6 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { PokemonTurnData, TurnMove } from "#app/field/pokemon";
+import type { PokemonTurnData } from "#app/field/pokemon";
+import type { TurnMove } from "#app/@types/TurnMove";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import type { Pokemon } from "#app/field/pokemon";
 import type BattleScene from "#app/battle-scene";
@@ -8,10 +9,13 @@ import { MoveId } from "#enums/move-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import * as messages from "#app/messages";
 import { allMoves } from "#app/data/all-moves";
-import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
+import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { GameManager } from "#test/testUtils/gameManager";
 import { MoveResult } from "#enums/move-result";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
+import { AttackMove } from "#app/data/move";
+import { ElementalType } from "#enums/elemental-type";
+import { MoveCategory } from "#enums/move-category";
 
 describe("BattlerTag - SubstituteTag", () => {
   let phaserGame: Phaser.Game;
@@ -127,6 +131,17 @@ describe("BattlerTag - SubstituteTag", () => {
   });
 
   describe("lapse behavior", () => {
+    const tackleMove = new AttackMove(
+      MoveId.TACKLE,
+      ElementalType.NORMAL,
+      MoveCategory.PHYSICAL,
+      40,
+      100,
+      35,
+      -1,
+      0,
+      1,
+    );
     beforeEach(() => {
       mockPokemon = {
         scene: game.scene,
@@ -135,9 +150,7 @@ describe("BattlerTag - SubstituteTag", () => {
         turnData: { acted: true } as PokemonTurnData,
         getLastXMoves: vi
           .fn()
-          .mockReturnValue([
-            { moveId: MoveId.TACKLE, result: MoveResult.SUCCESS } as TurnMove,
-          ]) as Pokemon["getLastXMoves"],
+          .mockReturnValue([{ move: tackleMove, result: MoveResult.SUCCESS } as TurnMove]) as Pokemon["getLastXMoves"],
       } as unknown as Pokemon;
 
       vi.spyOn(messages, "getPokemonNameWithAffix").mockReturnValue("");

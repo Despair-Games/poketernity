@@ -1,14 +1,13 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { toDmgValue } from "#app/utils";
 import i18next from "i18next";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { NumberHolder } from "#app/utils";
-import { RecoveryBoostAbAttr } from "../ab-attrs/recovery-boost-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Heals the user or target by {@linkcode healRatio} depending on the value of {@linkcode selfTarget}
@@ -38,7 +37,7 @@ export class HealAttr extends MoveEffectAttr {
    */
   protected getHealRatio(user: Pokemon, target: Pokemon, move: Move): number {
     const healRatio = new NumberHolder(this.healRatio);
-    applyAbAttrs(RecoveryBoostAbAttr, user, false, move, target, healRatio);
+    applyAbAttrs(AbAttrFlag.RECOVERY_BOOST, user, false, move, target, healRatio);
     return healRatio.value;
   }
 
@@ -47,12 +46,10 @@ export class HealAttr extends MoveEffectAttr {
    * This heals the target and shows the appropriate message.
    */
   addHealPhase(target: Pokemon, healRatio: number) {
-    globalScene.unshiftPhase(
-      new PokemonHealPhase(target.getBattlerIndex(), toDmgValue(target.getMaxHp() * healRatio), {
-        message: i18next.t("moveTriggers:healHp", { pokemonName: getPokemonNameWithAffix(target) }),
-        skipAnim: !this.showAnim,
-      }),
-    );
+    globalScene.queuePokemonHeal(true, target.getBattlerIndex(), toDmgValue(target.getMaxHp() * healRatio), {
+      message: i18next.t("moveTriggers:healHp", { pokemonName: getPokemonNameWithAffix(target) }),
+      skipAnim: !this.showAnim,
+    });
   }
 
   override getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {

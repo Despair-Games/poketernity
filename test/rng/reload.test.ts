@@ -20,10 +20,11 @@ describe("Reload", () => {
     game.phaseInterceptor.restoreOg();
   });
 
-  beforeEach(() => {
+  beforeEach(async () => {
     game = new GameManager(phaserGame);
     vi.spyOn(api, "getGameTitleStats").mockResolvedValue({ battleCount: -1, playerCount: -1 });
     vi.spyOn(api.daily, "getSeed").mockResolvedValue("test-seed");
+    await api.ping();
   });
 
   it("should not have RNG inconsistencies in a Classic run", async () => {

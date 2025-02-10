@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { PostAttackApplyStatusEffectAbAttr } from "#app/data/ab-attrs/post-attack-apply-status-effect-ab-attr";
+import { type PostAttackApplyStatusEffectAbAttr } from "#app/data/ab-attrs/post-attack-apply-status-effect-ab-attr";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { Abilities } from "#enums/abilities";
@@ -9,6 +9,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Abilities - Toxic Chain", () => {
   let phaserGame: Phaser.Game;
@@ -65,7 +66,7 @@ describe("Abilities - Toxic Chain", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const abilityAttr = playerPokemon
       .getAbility()
-      .getAttrs(PostAttackApplyStatusEffectAbAttr)[0] as PostAttackApplyStatusEffectAbAttr;
+      .getAttrs<PostAttackApplyStatusEffectAbAttr>(AbAttrFlag.POST_ATTACK_APPLY_STATUS_EFFECT)[0];
 
     await checkSucceedPoison(MoveId.WATER_GUN, enemyPokemon);
     expect(abilityAttr.chance).toBe(30);

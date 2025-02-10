@@ -5,7 +5,8 @@ import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 import { type Move } from "../move";
 import { allMoves } from "#app/data/all-moves";
-import { targetMoveCopiableCondition, type MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { targetMoveCopiableCondition } from "../move-conditions/target-move-copiable-condition";
 import { MoveEffectAttr } from "./move-effect-attr";
 
 /**
@@ -27,12 +28,12 @@ export class SketchAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     const targetMove = target
       .getLastXMoves(-1)
-      .find((m) => m.moveId !== MoveId.NONE && m.moveId !== MoveId.STRUGGLE && !m.virtual);
+      .find((m) => m.move.id !== MoveId.NONE && m.move.id !== MoveId.STRUGGLE && !m.virtual);
     if (!targetMove) {
       return false;
     }
 
-    const sketchedMove = allMoves[targetMove.moveId];
+    const sketchedMove = allMoves[targetMove.move.id];
     const sketchIndex = user.getMoveset().findIndex((m) => m.moveId === move.id);
     if (sketchIndex === -1) {
       return false;
@@ -76,11 +77,11 @@ export class SketchAttr extends MoveEffectAttr {
         MoveId.BREAKNECK_BLITZ__SPECIAL,
       ];
 
-      if (unsketchableMoves.includes(targetMove.moveId)) {
+      if (unsketchableMoves.includes(targetMove.move.id)) {
         return false;
       }
 
-      if (user.getMoveset().find((m) => m.moveId === targetMove.moveId)) {
+      if (user.getMoveset().find((m) => m.moveId === targetMove.move.id)) {
         return false;
       }
 

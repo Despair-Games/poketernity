@@ -4,8 +4,14 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import type { MoveId } from "#enums/move-id";
 import { AbAttr } from "./ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class RedirectMoveAbAttr extends AbAttr {
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.REDIRECT_MOVE);
+  }
+
   override apply(pokemon: Pokemon, _simulated: boolean, moveId: MoveId, target: NumberHolder): boolean {
     if (this.canRedirect(moveId)) {
       const newTarget = pokemon.getBattlerIndex();

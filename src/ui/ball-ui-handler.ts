@@ -6,7 +6,7 @@ import { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
 import { addWindow } from "./ui-theme";
 import { Button } from "#enums/buttons";
-import type { CommandPhase } from "#app/phases/command-phase";
+import { type CommandPhase } from "#app/phases/command-phase";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
 import { GAME_WIDTH } from "#app/ui-constants";

@@ -12,8 +12,11 @@ import { SelectGenderPhase } from "./select-gender-phase";
 import { UnavailablePhase } from "./unavailable-phase";
 import { settings } from "#app/system/settings/settings-manager";
 import { PlayerGender } from "#enums/player-gender";
+import { PhaseId } from "#enums/phase-id";
 
 export class LoginPhase extends Phase {
+  override readonly id = PhaseId.LOGIN;
+
   private readonly showText: boolean;
 
   constructor(showText: boolean = true) {
@@ -74,7 +77,7 @@ export class LoginPhase extends Phase {
                       });
                     },
                     (): void => {
-                      globalScene.unshiftPhase(new LoginPhase(false));
+                      globalScene.toLoginScreen({ showText: false, eager: true });
                       this.end();
                     },
                   ],

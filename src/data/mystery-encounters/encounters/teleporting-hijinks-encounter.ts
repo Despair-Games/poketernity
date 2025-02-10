@@ -4,9 +4,9 @@ import {
   initBattleWithEnemyConfig,
   setEncounterExp,
   setEncounterRewards,
-  transitionMysteryEncounterIntroVisuals,
   updatePlayerMoney,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 import { randSeedInt } from "#app/utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
@@ -23,7 +23,8 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { Biome } from "#enums/biome";
 import { getBiomeKey } from "#app/field/arena";
 import { ElementalType } from "#enums/elemental-type";
-import { getPartyLuckValue, modifierTypes } from "#app/modifier/modifier-type";
+import { getPartyLuckValue } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { getPokemonNameWithAffix } from "#app/messages";

@@ -7,7 +7,7 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { randSeedInt } from "#app/utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";

@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Move } from "../move";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "./chance-based-move-effect-attr";
 
 interface AddBattlerTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {

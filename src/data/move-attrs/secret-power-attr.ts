@@ -10,10 +10,9 @@ import { AddBattlerTagAttr } from "./add-battler-tag-attr";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
 import { StatusEffectAttr } from "#app/data/move-attrs/status-effect-attr";
 import { NumberHolder } from "#app/utils";
-import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
-import { MoveEffectChanceMultiplierAbAttr } from "#app/data/ab-attrs/move-effect-chance-multiplier-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { ChanceBasedMoveEffectAttr } from "./chance-based-move-effect-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Attribute used to determine the Biome/Terrain-based secondary
@@ -137,10 +136,10 @@ export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
   ): number {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
-    applyAbAttrs(MoveEffectChanceMultiplierAbAttr, user, false, moveChance, move, showAbility);
+    applyAbAttrs(AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER, user, false, moveChance, move, showAbility);
 
     if (!selfEffect) {
-      applyAbAttrs(IgnoreMoveEffectsAbAttr, target, false, user, move, moveChance);
+      applyAbAttrs(AbAttrFlag.IGNORE_MOVE_EFFECTS, target, false, user, move, moveChance);
     }
     return moveChance.value;
   }
