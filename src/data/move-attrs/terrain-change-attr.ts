@@ -14,7 +14,7 @@ export class TerrainChangeAttr extends MoveEffectAttr {
   private terrainType: TerrainType;
 
   constructor(terrainType: TerrainType) {
-    super();
+    super(true);
 
     this.terrainType = terrainType;
   }

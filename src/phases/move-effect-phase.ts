@@ -1,4 +1,4 @@
-import type { BattlerIndex } from "#enums/battler-index";
+import { BattlerIndex } from "#enums/battler-index";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { MoveAnim } from "#app/data/battle-anims/move-anim";
 import { type SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
@@ -39,6 +39,7 @@ import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AchvCategory } from "#enums/achv-category";
 import { PhaseId } from "#enums/phase-id";
+import { isFieldTargeted } from "#app/utils/move-utils";
 
 export class MoveEffectPhase extends HitCheckPhase {
   override readonly id = PhaseId.MOVE_EFFECT;
@@ -59,12 +60,22 @@ export class MoveEffectPhase extends HitCheckPhase {
 
     /** The Pokemon using this phase's invoked move */
     const user = this.getUserPokemon();
-    /** All Pokemon targeted by this phase's invoked move */
-    const targets = this.getTargets();
 
     if (!user) {
       return super.end();
     }
+
+    /**
+     * Moves that target one or both sides of the field
+     * bypass hit checks and other conditions at this point to
+     * apply their effects without a specific target
+     */
+    if (isFieldTargeted(this.targets)) {
+      return this.applyFieldMoveEffects(user);
+    }
+
+    /** All Pokemon targeted by this phase's invoked move */
+    const targets = this.getTargets();
 
     const isDelayedAttack = this.move.getMove().hasAttr(DelayedAttackAttr);
     /** If the user was somehow removed from the field and it's not a delayed attack, end this phase */
@@ -283,11 +294,6 @@ export class MoveEffectPhase extends HitCheckPhase {
       return;
     }
 
-    // prevent field-targeted moves from activating multiple times
-    if (move.isFieldTarget() && target !== this.getTargets()[this.targets.length - 1]) {
-      return;
-    }
-
     this.triggerMoveEffects(MoveEffectTrigger.PRE_APPLY, user, target);
 
     const hitResult = this.applyMove(target, effectiveness);
@@ -311,6 +317,49 @@ export class MoveEffectPhase extends HitCheckPhase {
         applyAbAttrs(AbAttrFlag.POST_DAMAGE, target, false, 0, user);
       }
     }
+  }
+
+  /**
+   * Applies all effects for moves that target one or both sides of the field.
+   * This assumes such effects are implemented with {@linkcode MoveEffectTrigger | POST_APPLY}
+   * effect triggers, and will try to play an animation even if no active Pokemon
+   * are affected.
+   * @param user the {@linkcode Pokemon} using the move
+   */
+  private applyFieldMoveEffects(user: Pokemon): void {
+    // Lapse `MOVE_EFFECT` effects (i.e. semi-invulnerability) when applicable
+    user.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
+
+    /** The indexes of active Pokemon that fall within the move's field effect */
+    const affectedPokemon: BattlerIndex[] = [];
+
+    if (this.targets.some((t) => [BattlerIndex.PLAYER_SIDE, BattlerIndex.BOTH_SIDES].includes(t))) {
+      affectedPokemon.push(...globalScene.getPlayerField().map((p) => p.getBattlerIndex()));
+    }
+
+    if (this.targets.some((t) => [BattlerIndex.ENEMY_SIDE, BattlerIndex.BOTH_SIDES].includes(t))) {
+      affectedPokemon.push(...globalScene.getEnemyField().map((p) => p.getBattlerIndex()));
+    }
+
+    new MoveAnim(this.move.moveId, user, affectedPokemon[0], true).play(false, () => {
+      /**
+       * Apply all move effect attributes from this move to the field.
+       * NOTE: this assumes all field effects are implemented with the
+       * `POST_APPLY` move effect trigger and are internally self-targeted.
+       */
+      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, null);
+
+      // Log this move action as a success
+      user.pushMoveHistory({
+        move: this.move.getMove(),
+        moveId: this.move.moveId,
+        targets: this.targets,
+        result: MoveResult.SUCCESS,
+        virtual: this.move.virtual,
+      });
+
+      this.end();
+    });
   }
 
   /**

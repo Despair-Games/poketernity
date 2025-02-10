@@ -3,6 +3,7 @@ import { AddSecondStrikeAbAttr } from "#app/data/ab-attrs/add-second-strike-ab-a
 import { AlliedFieldDamageReductionAbAttr } from "#app/data/ab-attrs/allied-field-damage-reduction-ab-attr";
 import { AllyMoveCategoryPowerBoostAbAttr } from "#app/data/ab-attrs/ally-move-category-power-boost-ab-attr";
 import { AlwaysHitAbAttr } from "#app/data/ab-attrs/always-hit-ab-attr";
+import { AnticipationAbAttr } from "#app/data/ab-attrs/anticipation-ab-attr";
 import { ArenaTrapAbAttr } from "#app/data/ab-attrs/arena-trap-ab-attr";
 import { AttackTypeImmunityAbAttr } from "#app/data/ab-attrs/attack-type-immunity-ab-attr";
 import { BattlerTagImmunityAbAttr } from "#app/data/ab-attrs/battler-tag-immunity-ab-attr";
@@ -145,6 +146,7 @@ import { RedirectTypeMoveAbAttr } from "#app/data/ab-attrs/redirect-type-move-ab
 import { ReduceBerryUseThresholdAbAttr } from "#app/data/ab-attrs/reduce-berry-use-threshold-ab-attr";
 import { ReduceBurnDamageAbAttr } from "#app/data/ab-attrs/reduce-burn-damage-ab-attr";
 import { ReduceSleepDurationAbAttr } from "#app/data/ab-attrs/reduce-sleep-duration-ab-attr";
+import { ReflectStatStageChangeAbAttr } from "#app/data/ab-attrs/reflect-stat-stage-change-ab-attr";
 import { ReverseDrainAbAttr } from "#app/data/ab-attrs/reverse-drain-ab-attr";
 import { RunSuccessAbAttr } from "#app/data/ab-attrs/run-success-ab-attr";
 import { SpeedBoostAbAttr } from "#app/data/ab-attrs/speed-boost-ab-attr";
@@ -172,10 +174,8 @@ import { WeatherBasedSpeedDoublerAbAttr } from "#app/data/ab-attrs/weather-based
 import { WeightMultiplierAbAttr } from "#app/data/ab-attrs/weight-multiplier-ab-attr";
 import { WonderSkinAbAttr } from "#app/data/ab-attrs/wonder-skin-ab-attr";
 import { Ability } from "#app/data/ability";
-import { allAbilities } from "./all-abilities";
 import { allMoves } from "#app/data/all-moves";
 import { type Move } from "#app/data/move";
-import { applyMoveAttrs } from "#app/utils/move-utils";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
 import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-attr";
 import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
@@ -183,8 +183,10 @@ import { getNonVolatileStatusEffects } from "#app/data/status-effect";
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { type MovePhase } from "#app/phases/move-phase";
 import { isNullOrUndefined, NumberHolder, randSeedInt, toDmgValue } from "#app/utils";
 import { getWeatherCondition } from "#app/utils/ability-utils";
+import { applyMoveAttrs } from "#app/utils/move-utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -193,15 +195,13 @@ import { Gender } from "#enums/gender";
 import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
+import { PhaseId } from "#enums/phase-id";
 import { type EffectiveStat, EFFECTIVE_STATS, getStatKey, Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-import { type MovePhase } from "#app/phases/move-phase";
-import { PhaseId } from "#enums/phase-id";
-import { ReflectStatStageChangeAbAttr } from "#app/data/ab-attrs/reflect-stat-stage-change-ab-attr";
-import { AnticipationAbAttr } from "#app/data/ab-attrs/anticipation-ab-attr";
+import { allAbilities } from "./all-abilities";
 
 export function initAbilities() {
   allAbilities.push(
@@ -344,7 +344,8 @@ export function initAbilities() {
       .attr(IncreasePpAbAttr)
       .attr(PostSummonMessageAbAttr, (pokemon: Pokemon) =>
         i18next.t("abilityTriggers:postSummonPressure", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-      ),
+      )
+      .partial(), // Does not affect PP cost for field-targeting moves,
     new Ability(Abilities.THICK_FAT, 3)
       .attr(ReceivedTypeDamageMultiplierAbAttr, ElementalType.FIRE, 0.5)
       .attr(ReceivedTypeDamageMultiplierAbAttr, ElementalType.ICE, 0.5)
@@ -1426,8 +1427,7 @@ export function initAbilities() {
         MoveImmunityAbAttr,
         (pokemon, attacker, move) => pokemon !== attacker && move.category === MoveCategory.STATUS,
       )
-      .ignorable()
-      .partial(), // Lots of weird interactions with moves and abilities such as negating status moves that target the field
+      .ignorable(),
     new Ability(Abilities.VESSEL_OF_RUIN, 9)
       .attr(FieldMultiplyStatAbAttr, Stat.SPATK, 0.75)
       .attr(PostSummonMessageAbAttr, (user) =>

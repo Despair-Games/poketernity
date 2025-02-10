@@ -8,6 +8,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder, toDmgValue, type AbstractConstructor } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
 import { t } from "i18next";
@@ -79,6 +80,9 @@ function applyMoveChargeAttrsInternal<TAttr extends MoveAttr>(
   if (move.isChargingMove()) {
     move.chargeAttrs.filter((attr) => attrFilter(attr)).forEach((attr) => attr.apply(user, target, move, ...args));
   }
+}
+export function isFieldTargeted(targets: BattlerIndex[]) {
+  return targets.some((t) => [BattlerIndex.BOTH_SIDES, BattlerIndex.PLAYER_SIDE, BattlerIndex.ENEMY_SIDE].includes(t));
 }
 
 //#endregion

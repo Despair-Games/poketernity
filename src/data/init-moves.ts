@@ -414,7 +414,7 @@ export function initMoves() {
       StatusEffect.BURN,
     ),
     new StatusMove(MoveId.MIST, ElementalType.ICE, -1, 30, -1, 0, 1)
-      .attr(AddArenaTagAttr, ArenaTagType.MIST, { turnCount: 5, failOnOverlap: true })
+      .attr(AddArenaTagAttr, ArenaTagType.MIST, ArenaTagRelativeSide.USER, { turnCount: 5, failOnOverlap: true })
       .target(MoveTarget.USER_SIDE),
     new AttackMove(MoveId.WATER_GUN, ElementalType.WATER, MoveCategory.SPECIAL, 40, 100, 25, -1, 0, 1),
     new AttackMove(MoveId.HYDRO_PUMP, ElementalType.WATER, MoveCategory.SPECIAL, 110, 80, 5, -1, 0, 1),
@@ -626,11 +626,14 @@ export function initMoves() {
       true,
     ),
     new StatusMove(MoveId.LIGHT_SCREEN, ElementalType.PSYCHIC, -1, 30, -1, 0, 1)
-      .attr(AddArenaTagAttr, ArenaTagType.LIGHT_SCREEN, { turnCount: 5, failOnOverlap: true })
+      .attr(AddArenaTagAttr, ArenaTagType.LIGHT_SCREEN, ArenaTagRelativeSide.USER, {
+        turnCount: 5,
+        failOnOverlap: true,
+      })
       .target(MoveTarget.USER_SIDE),
     new SelfStatusMove(MoveId.HAZE, ElementalType.ICE, -1, 30, -1, 0, 1).ignoresSubstitute().attr(ResetStatsAttr, true),
     new StatusMove(MoveId.REFLECT, ElementalType.PSYCHIC, -1, 20, -1, 0, 1)
-      .attr(AddArenaTagAttr, ArenaTagType.REFLECT, { turnCount: 5, failOnOverlap: true })
+      .attr(AddArenaTagAttr, ArenaTagType.REFLECT, ArenaTagRelativeSide.USER, { turnCount: 5, failOnOverlap: true })
       .target(MoveTarget.USER_SIDE),
     new SelfStatusMove(MoveId.FOCUS_ENERGY, ElementalType.NORMAL, -1, 30, -1, 0, 1).attr(
       AddBattlerTagAttr,
@@ -1021,7 +1024,7 @@ export function initMoves() {
     ),
     new StatusMove(MoveId.SAFEGUARD, ElementalType.NORMAL, -1, 25, -1, 0, 2)
       .target(MoveTarget.USER_SIDE)
-      .attr(AddArenaTagAttr, ArenaTagType.SAFEGUARD, { turnCount: 5, failOnOverlap: true, selfSideTarget: true }),
+      .attr(AddArenaTagAttr, ArenaTagType.SAFEGUARD, ArenaTagRelativeSide.USER, { turnCount: 5, failOnOverlap: true }),
     new StatusMove(MoveId.PAIN_SPLIT, ElementalType.NORMAL, -1, 20, -1, 0, 2)
       .attr(HpSplitAttr)
       .condition(failOnBossCondition),
@@ -1212,7 +1215,7 @@ export function initMoves() {
     new StatusMove(MoveId.ROLE_PLAY, ElementalType.PSYCHIC, -1, 10, -1, 0, 3).ignoresSubstitute().attr(AbilityCopyAttr),
     new SelfStatusMove(MoveId.WISH, ElementalType.NORMAL, -1, 10, -1, 0, 3)
       .triageMove()
-      .attr(AddArenaTagAttr, ArenaTagType.WISH, { turnCount: 2, failOnOverlap: true }),
+      .attr(AddArenaTagAttr, ArenaTagType.WISH, ArenaTagRelativeSide.USER, { turnCount: 2, failOnOverlap: true }),
     new SelfStatusMove(MoveId.ASSIST, ElementalType.NORMAL, -1, 20, -1, 0, 3)
       .attr(RandomMovesetMoveAttr, true)
       .ignoresVirtual(),
@@ -1254,7 +1257,7 @@ export function initMoves() {
       .attr(SwitchAbilitiesAttr),
     new StatusMove(MoveId.IMPRISON, ElementalType.PSYCHIC, 100, 10, -1, 0, 3)
       .ignoresSubstitute()
-      .attr(AddArenaTagAttr, ArenaTagType.IMPRISON, { failOnOverlap: true })
+      .attr(AddArenaTagAttr, ArenaTagType.IMPRISON, ArenaTagRelativeSide.TARGET, { failOnOverlap: true })
       .target(MoveTarget.ENEMY_SIDE),
     new SelfStatusMove(MoveId.REFRESH, ElementalType.NORMAL, -1, 20, -1, 0, 3)
       .attr(HealStatusEffectAttr, true, [
@@ -1318,7 +1321,7 @@ export function initMoves() {
       .attr(StatusEffectAttr, StatusEffect.BURN),
     new StatusMove(MoveId.MUD_SPORT, ElementalType.GROUND, -1, 15, -1, 0, 3)
       .ignoresProtect()
-      .attr(AddArenaTagAttr, ArenaTagType.MUD_SPORT, { turnCount: 5 })
+      .attr(AddArenaTagAttr, ArenaTagType.MUD_SPORT, ArenaTagRelativeSide.ALL, { turnCount: 5 })
       .target(MoveTarget.BOTH_SIDES),
     new AttackMove(MoveId.ICE_BALL, ElementalType.ICE, MoveCategory.PHYSICAL, 30, 90, 20, -1, 0, 3)
       .partial() // Does not lock the user properly, does not increase damage correctly
@@ -1505,7 +1508,7 @@ export function initMoves() {
     new AttackMove(MoveId.MAGICAL_LEAF, ElementalType.GRASS, MoveCategory.SPECIAL, 60, -1, 20, -1, 0, 3),
     new StatusMove(MoveId.WATER_SPORT, ElementalType.WATER, -1, 15, -1, 0, 3)
       .ignoresProtect()
-      .attr(AddArenaTagAttr, ArenaTagType.WATER_SPORT, { turnCount: 5 })
+      .attr(AddArenaTagAttr, ArenaTagType.WATER_SPORT, ArenaTagRelativeSide.ALL, { turnCount: 5 })
       .target(MoveTarget.BOTH_SIDES),
     new SelfStatusMove(MoveId.CALM_MIND, ElementalType.PSYCHIC, -1, 20, -1, 0, 3).attr(
       StatStageChangeAttr,
@@ -1547,7 +1550,7 @@ export function initMoves() {
       .triageMove(),
     new StatusMove(MoveId.GRAVITY, ElementalType.PSYCHIC, -1, 5, -1, 0, 4)
       .ignoresProtect()
-      .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, { turnCount: 5 })
+      .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, ArenaTagRelativeSide.ALL, { turnCount: 5 })
       .target(MoveTarget.BOTH_SIDES),
     new StatusMove(MoveId.MIRACLE_EYE, ElementalType.PSYCHIC, -1, 40, -1, 0, 4)
       .attr(ExposedMoveAttr, BattlerTagType.IGNORE_DARK)
@@ -1589,7 +1592,7 @@ export function initMoves() {
     ),
     new StatusMove(MoveId.TAILWIND, ElementalType.FLYING, -1, 15, -1, 0, 4)
       .windMove()
-      .attr(AddArenaTagAttr, ArenaTagType.TAILWIND, { turnCount: 4, failOnOverlap: true })
+      .attr(AddArenaTagAttr, ArenaTagType.TAILWIND, ArenaTagRelativeSide.USER, { turnCount: 4, failOnOverlap: true })
       .target(MoveTarget.USER_SIDE),
     new StatusMove(MoveId.ACUPRESSURE, ElementalType.NORMAL, -1, 30, -1, 0, 4)
       .attr(AcupressureStatStageChangeAttr)
@@ -1650,7 +1653,7 @@ export function initMoves() {
     ),
     new StatusMove(MoveId.GASTRO_ACID, ElementalType.POISON, 100, 10, -1, 0, 4).attr(SuppressAbilitiesAttr),
     new StatusMove(MoveId.LUCKY_CHANT, ElementalType.NORMAL, -1, 30, -1, 0, 4)
-      .attr(AddArenaTagAttr, ArenaTagType.NO_CRIT, { turnCount: 5, failOnOverlap: true, selfSideTarget: true })
+      .attr(AddArenaTagAttr, ArenaTagType.NO_CRIT, ArenaTagRelativeSide.USER, { turnCount: 5, failOnOverlap: true })
       .target(MoveTarget.USER_SIDE),
     new StatusMove(MoveId.ME_FIRST, ElementalType.NORMAL, -1, 20, -1, 0, 4)
       .ignoresSubstitute()
@@ -1846,7 +1849,7 @@ export function initMoves() {
       .attr(RemoveArenaTrapAttr, true)
       .attr(RemoveArenaTagsAttr, [ArenaTagType.SAFEGUARD, ArenaTagType.MIST], ArenaTagRelativeSide.TARGET),
     new StatusMove(MoveId.TRICK_ROOM, ElementalType.PSYCHIC, -1, 5, -1, -7, 4)
-      .attr(AddArenaTagAttr, ArenaTagType.TRICK_ROOM, { turnCount: 5 })
+      .attr(AddArenaTagAttr, ArenaTagType.TRICK_ROOM, ArenaTagRelativeSide.ALL, { turnCount: 5 })
       .ignoresProtect()
       .target(MoveTarget.BOTH_SIDES),
     new AttackMove(MoveId.DRACO_METEOR, ElementalType.DRAGON, MoveCategory.SPECIAL, 130, 90, 5, -1, 0, 4).attr(
@@ -1978,7 +1981,7 @@ export function initMoves() {
     ),
     new StatusMove(MoveId.WIDE_GUARD, ElementalType.ROCK, -1, 10, -1, 3, 5)
       .target(MoveTarget.USER_SIDE)
-      .attr(AddArenaTagAttr, ArenaTagType.WIDE_GUARD, { turnCount: 1, failOnOverlap: true, selfSideTarget: true })
+      .attr(AddArenaTagAttr, ArenaTagType.WIDE_GUARD, ArenaTagRelativeSide.USER, { turnCount: 1, failOnOverlap: true })
       .condition(failIfLastCondition),
     new StatusMove(MoveId.GUARD_SPLIT, ElementalType.PSYCHIC, -1, 10, -1, 0, 5).attr(
       AverageStatsAttr,
@@ -2128,7 +2131,7 @@ export function initMoves() {
     ),
     new StatusMove(MoveId.QUICK_GUARD, ElementalType.FIGHTING, -1, 15, -1, 3, 5)
       .target(MoveTarget.USER_SIDE)
-      .attr(AddArenaTagAttr, ArenaTagType.QUICK_GUARD, { turnCount: 1, failOnOverlap: true, selfSideTarget: true })
+      .attr(AddArenaTagAttr, ArenaTagType.QUICK_GUARD, ArenaTagRelativeSide.USER, { turnCount: 1, failOnOverlap: true })
       .condition(failIfLastCondition),
     new SelfStatusMove(MoveId.ALLY_SWITCH, ElementalType.PSYCHIC, -1, 15, -1, 2, 5).ignoresProtect().unimplemented(),
     new AttackMove(MoveId.SCALD, ElementalType.WATER, MoveCategory.SPECIAL, 80, 100, 15, 30, 0, 5)
@@ -2207,24 +2210,24 @@ export function initMoves() {
       .attr(CombinedPledgeTypeAttr)
       .attr(CombinedPledgePowerAttr)
       .attr(CombinedPledgeStabBoostAttr)
-      .attr(AddPledgeEffectAttr, ArenaTagType.WATER_FIRE_PLEDGE, MoveId.FIRE_PLEDGE, true)
-      .attr(AddPledgeEffectAttr, ArenaTagType.GRASS_WATER_PLEDGE, MoveId.GRASS_PLEDGE)
+      .attr(AddPledgeEffectAttr, ArenaTagType.WATER_FIRE_PLEDGE, MoveId.FIRE_PLEDGE, ArenaTagRelativeSide.USER)
+      .attr(AddPledgeEffectAttr, ArenaTagType.GRASS_WATER_PLEDGE, MoveId.GRASS_PLEDGE, ArenaTagRelativeSide.TARGET)
       .attr(BypassRedirectAttr, true),
     new AttackMove(MoveId.FIRE_PLEDGE, ElementalType.FIRE, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 5)
       .attr(AwaitCombinedPledgeAttr)
       .attr(CombinedPledgeTypeAttr)
       .attr(CombinedPledgePowerAttr)
       .attr(CombinedPledgeStabBoostAttr)
-      .attr(AddPledgeEffectAttr, ArenaTagType.FIRE_GRASS_PLEDGE, MoveId.GRASS_PLEDGE)
-      .attr(AddPledgeEffectAttr, ArenaTagType.WATER_FIRE_PLEDGE, MoveId.WATER_PLEDGE, true)
+      .attr(AddPledgeEffectAttr, ArenaTagType.FIRE_GRASS_PLEDGE, MoveId.GRASS_PLEDGE, ArenaTagRelativeSide.TARGET)
+      .attr(AddPledgeEffectAttr, ArenaTagType.WATER_FIRE_PLEDGE, MoveId.WATER_PLEDGE, ArenaTagRelativeSide.USER)
       .attr(BypassRedirectAttr, true),
     new AttackMove(MoveId.GRASS_PLEDGE, ElementalType.GRASS, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 5)
       .attr(AwaitCombinedPledgeAttr)
       .attr(CombinedPledgeTypeAttr)
       .attr(CombinedPledgePowerAttr)
       .attr(CombinedPledgeStabBoostAttr)
-      .attr(AddPledgeEffectAttr, ArenaTagType.GRASS_WATER_PLEDGE, MoveId.WATER_PLEDGE)
-      .attr(AddPledgeEffectAttr, ArenaTagType.FIRE_GRASS_PLEDGE, MoveId.FIRE_PLEDGE)
+      .attr(AddPledgeEffectAttr, ArenaTagType.GRASS_WATER_PLEDGE, MoveId.WATER_PLEDGE, ArenaTagRelativeSide.TARGET)
+      .attr(AddPledgeEffectAttr, ArenaTagType.FIRE_GRASS_PLEDGE, MoveId.FIRE_PLEDGE, ArenaTagRelativeSide.TARGET)
       .attr(BypassRedirectAttr, true),
     new AttackMove(MoveId.VOLT_SWITCH, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 70, 100, 20, -1, 0, 5).attr(
       ForceSwitchOutAttr,
@@ -2383,7 +2386,7 @@ export function initMoves() {
       .condition(failOnGravityCondition),
     new StatusMove(MoveId.MAT_BLOCK, ElementalType.FIGHTING, -1, 10, -1, 0, 6)
       .target(MoveTarget.USER_SIDE)
-      .attr(AddArenaTagAttr, ArenaTagType.MAT_BLOCK, { turnCount: 1, failOnOverlap: true, selfSideTarget: true })
+      .attr(AddArenaTagAttr, ArenaTagType.MAT_BLOCK, ArenaTagRelativeSide.USER, { turnCount: 1, failOnOverlap: true })
       .condition(new FirstMoveCondition())
       .condition(failIfLastCondition),
     new AttackMove(MoveId.BELCH, ElementalType.POISON, MoveCategory.SPECIAL, 120, 90, 10, -1, 0, 6).condition(
@@ -2422,7 +2425,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], -1)
       .soundMove(),
     new StatusMove(MoveId.ION_DELUGE, ElementalType.ELECTRIC, -1, 25, -1, 1, 6)
-      .attr(AddArenaTagAttr, ArenaTagType.ION_DELUGE, { turnCount: 1 })
+      .attr(AddArenaTagAttr, ArenaTagType.ION_DELUGE, ArenaTagRelativeSide.ALL, { turnCount: 1 })
       .target(MoveTarget.BOTH_SIDES),
     new AttackMove(MoveId.PARABOLIC_CHARGE, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 65, 100, 20, -1, 0, 6)
       .attr(HitHealAttr)
@@ -2450,7 +2453,10 @@ export function initMoves() {
       .triageMove(),
     new StatusMove(MoveId.CRAFTY_SHIELD, ElementalType.FAIRY, -1, 10, -1, 3, 6)
       .target(MoveTarget.USER_SIDE)
-      .attr(AddArenaTagAttr, ArenaTagType.CRAFTY_SHIELD, { turnCount: 1, failOnOverlap: true, selfSideTarget: true })
+      .attr(AddArenaTagAttr, ArenaTagType.CRAFTY_SHIELD, ArenaTagRelativeSide.USER, {
+        turnCount: 1,
+        failOnOverlap: true,
+      })
       .condition(failIfLastCondition),
     new StatusMove(MoveId.FLOWER_SHIELD, ElementalType.FAIRY, -1, 10, -1, 0, 6)
       .target(MoveTarget.ALL)
@@ -2488,7 +2494,7 @@ export function initMoves() {
       .ignoresSubstitute()
       .ignoresProtect()
       .target(MoveTarget.BOTH_SIDES)
-      .attr(AddArenaTagAttr, ArenaTagType.FAIRY_LOCK, { turnCount: 2, failOnOverlap: true }),
+      .attr(AddArenaTagAttr, ArenaTagType.FAIRY_LOCK, ArenaTagRelativeSide.ALL, { turnCount: 2, failOnOverlap: true }),
     new SelfStatusMove(MoveId.KINGS_SHIELD, ElementalType.STEEL, -1, 10, -1, 4, 6)
       .attr(ProtectAttr, BattlerTagType.KINGS_SHIELD)
       .condition(failIfLastCondition),
@@ -2559,7 +2565,7 @@ export function initMoves() {
             .find((p) => !![Abilities.PLUS, Abilities.MINUS].find((a) => p.hasAbility(a, false))),
       ),
     new StatusMove(MoveId.HAPPY_HOUR, ElementalType.NORMAL, -1, 30, -1, 0, 6) // No animation
-      .attr(AddArenaTagAttr, ArenaTagType.HAPPY_HOUR, { failOnOverlap: true })
+      .attr(AddArenaTagAttr, ArenaTagType.HAPPY_HOUR, ArenaTagRelativeSide.USER, { failOnOverlap: true })
       .target(MoveTarget.USER_SIDE),
     new StatusMove(MoveId.ELECTRIC_TERRAIN, ElementalType.ELECTRIC, -1, 10, -1, 0, 6)
       .attr(TerrainChangeAttr, TerrainType.ELECTRIC)
@@ -2951,7 +2957,7 @@ export function initMoves() {
             || globalScene.arena.weather?.weatherType === WeatherType.SNOW)
           && !globalScene.arena.weather?.isEffectSuppressed(),
       )
-      .attr(AddArenaTagAttr, ArenaTagType.AURORA_VEIL, { turnCount: 5, failOnOverlap: true })
+      .attr(AddArenaTagAttr, ArenaTagType.AURORA_VEIL, ArenaTagRelativeSide.USER, { turnCount: 5, failOnOverlap: true })
       .target(MoveTarget.USER_SIDE),
     /* Unused */
     new AttackMove(MoveId.SINISTER_ARROW_RAID, ElementalType.GHOST, MoveCategory.PHYSICAL, 180, -1, 1, -1, 0, 7)
@@ -3085,7 +3091,7 @@ export function initMoves() {
       .attr(HalfSacrificialAttr)
       .target(MoveTarget.ALL_NEAR_OTHERS),
     new AttackMove(MoveId.PLASMA_FISTS, ElementalType.ELECTRIC, MoveCategory.PHYSICAL, 100, 100, 15, -1, 0, 7)
-      .attr(AddArenaTagAttr, ArenaTagType.ION_DELUGE, { turnCount: 1 })
+      .attr(AddArenaTagAttr, ArenaTagType.ION_DELUGE, ArenaTagRelativeSide.ALL, { turnCount: 1 })
       .punchingMove(),
     new AttackMove(MoveId.PHOTON_GEYSER, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 100, 100, 5, -1, 0, 7)
       .attr(UseHigherAttackingStatAttr)
@@ -3148,12 +3154,14 @@ export function initMoves() {
     new AttackMove(MoveId.GLITZY_GLOW, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 80, 95, 15, -1, 0, 7).attr(
       AddArenaTagAttr,
       ArenaTagType.LIGHT_SCREEN,
-      { turnCount: 5, selfSideTarget: true },
+      ArenaTagRelativeSide.USER,
+      { turnCount: 5 },
     ),
     new AttackMove(MoveId.BADDY_BAD, ElementalType.DARK, MoveCategory.SPECIAL, 80, 95, 15, -1, 0, 7).attr(
       AddArenaTagAttr,
       ArenaTagType.REFLECT,
-      { turnCount: 5, selfSideTarget: true },
+      ArenaTagRelativeSide.USER,
+      { turnCount: 5 },
     ),
     new AttackMove(MoveId.SAPPY_SEED, ElementalType.GRASS, MoveCategory.PHYSICAL, 100, 90, 10, -1, 0, 7)
       .attr(LeechSeedAttr)
@@ -3660,7 +3668,7 @@ export function initMoves() {
       .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED),
     new AttackMove(MoveId.G_MAX_RESONANCE, ElementalType.ICE, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.LAPRAS)
-      .attr(AddArenaTagAttr, ArenaTagType.AURORA_VEIL, { turnCount: 5, selfSideTarget: true }),
+      .attr(AddArenaTagAttr, ArenaTagType.AURORA_VEIL, ArenaTagRelativeSide.USER, { turnCount: 5 }),
     new AttackMove(MoveId.G_MAX_CUDDLE, ElementalType.NORMAL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.EEVEE)
       .attr(AddBattlerTagAttr, BattlerTagType.INFATUATED),
@@ -3691,7 +3699,7 @@ export function initMoves() {
       .attr(AttackReducePpMoveAttr, 2),
     new AttackMove(MoveId.G_MAX_GRAVITAS, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.ORBEETLE)
-      .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, { turnCount: 5 }),
+      .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, ArenaTagRelativeSide.ALL, { turnCount: 5 }),
     new AttackMove(MoveId.G_MAX_VOLCALITH, ElementalType.ROCK, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.COALOSSAL)
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_VOLCALITH),

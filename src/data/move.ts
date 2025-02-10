@@ -1,4 +1,4 @@
-import type { BattlerIndex } from "#enums/battler-index";
+import { BattlerIndex } from "#enums/battler-index";
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";
@@ -36,6 +36,7 @@ import { UseHigherAttackingStatAttr } from "./move-attrs/use-higher-attacking-st
 import { GMaxPowerAttr } from "./move-attrs/gmax-power-attr";
 import type { Species } from "#enums/species";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import type { ChargingAttackMove } from "#app/data/moves/charging-attack-move";
@@ -693,7 +694,7 @@ export abstract class Move implements Localizable {
   getTargetBenefitScore(user: Pokemon, target: Pokemon, move: Move): number {
     let score = 0;
 
-    if (target.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === target) {
+    if (target && target.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === target) {
       return 20 * (target.isPlayer() === user.isPlayer() ? -1 : 1); // always -20 with how the AI handles this score
     }
 
@@ -990,6 +991,7 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId): MoveTargetSet {
   const opponents = user.getOpponents();
 
   let set: Pokemon[] = [];
+  let targets: BattlerIndex[] | undefined;
   let multiple = false;
 
   switch (moveTarget) {
@@ -1008,7 +1010,6 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId): MoveTargetSet {
     case MoveTarget.NEAR_ENEMY:
     case MoveTarget.ALL_NEAR_ENEMIES:
     case MoveTarget.ALL_ENEMIES:
-    case MoveTarget.ENEMY_SIDE:
       set = opponents;
       multiple = moveTarget !== MoveTarget.NEAR_ENEMY;
       break;
@@ -1023,14 +1024,22 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId): MoveTargetSet {
       break;
     case MoveTarget.USER_OR_NEAR_ALLY:
     case MoveTarget.USER_AND_ALLIES:
-    case MoveTarget.USER_SIDE:
       set = [user, user.getAlly()];
       multiple = moveTarget !== MoveTarget.USER_OR_NEAR_ALLY;
       break;
     case MoveTarget.ALL:
-    case MoveTarget.BOTH_SIDES:
       set = [user, user.getAlly()].concat(opponents);
       multiple = true;
+      break;
+    case MoveTarget.USER_SIDE:
+      targets = user.getArenaTagSide() === ArenaTagSide.PLAYER ? [BattlerIndex.PLAYER_SIDE] : [BattlerIndex.ENEMY_SIDE];
+      break;
+    case MoveTarget.ENEMY_SIDE:
+      targets =
+        user.getOpposingArenaTagSide() === ArenaTagSide.PLAYER ? [BattlerIndex.PLAYER_SIDE] : [BattlerIndex.ENEMY_SIDE];
+      break;
+    case MoveTarget.BOTH_SIDES:
+      targets = [BattlerIndex.BOTH_SIDES];
       break;
     case MoveTarget.CURSE:
       set = user.getTypes(true).includes(ElementalType.GHOST) ? opponents.concat([user.getAlly()]) : [user];
@@ -1038,10 +1047,12 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId): MoveTargetSet {
   }
 
   return {
-    targets: set
-      .filter((p) => p?.isActive(true))
-      .map((p) => p.getBattlerIndex())
-      .filter((t) => t !== undefined),
+    targets:
+      targets
+      ?? set
+        .filter((p) => p?.isActive(true))
+        .map((p) => p.getBattlerIndex())
+        .filter((t) => t !== undefined),
     multiple,
   };
 }

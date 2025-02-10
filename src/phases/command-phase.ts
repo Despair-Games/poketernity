@@ -6,6 +6,7 @@ import { speciesStarterCosts } from "#app/data/balance/starters";
 import type { EncoreTag } from "#app/data/battler-tags";
 import { type SkyDropTag, type TrappedTag } from "#app/data/battler-tags";
 import { getMoveTargets, type MoveTargetSet } from "#app/data/move";
+import { isFieldTargeted } from "#app/utils/move-utils";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { FieldPosition } from "#enums/field-position";
 import { globalScene } from "#app/global-scene";
@@ -171,7 +172,7 @@ export class CommandPhase extends FieldPhase {
     let success: boolean = false;
 
     const { arena, currentBattle, gameData, gameMode, ui } = globalScene;
-    const { battleType, mysteryEncounter } = currentBattle;
+    const { battleType, mysteryEncounter, double } = currentBattle;
 
     const failCatchRunCallback = (): void => {
       ui.showText("", 0);
@@ -208,7 +209,10 @@ export class CommandPhase extends FieldPhase {
           }
 
           console.log(moveTargets, getPokemonNameWithAffix(playerPokemon));
-          if (moveTargets.targets.length > 1 && moveTargets.multiple) {
+          if (
+            (isFieldTargeted(moveTargets.targets) && double)
+            || (moveTargets.targets.length > 1 && moveTargets.multiple)
+          ) {
             globalScene.selectTarget(this.fieldIndex);
           }
           if (turnCommand.move && (moveTargets.targets.length <= 1 || moveTargets.multiple)) {
