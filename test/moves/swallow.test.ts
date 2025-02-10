@@ -1,7 +1,7 @@
 import { Stat } from "#enums/stat";
-import { StockpilingTag } from "#app/data/battler-tags";
+import { type StockpilingTag } from "#app/data/battler-tags";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import type { TurnMove } from "#app/field/pokemon";
+import type { TurnMove } from "#app/@types/TurnMove";
 import { MoveResult } from "#enums/move-result";
 import { MovePhase } from "#app/phases/move-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
@@ -51,7 +51,7 @@ describe("Moves - Swallow", () => {
 
       pokemon.addTag(BattlerTagType.STOCKPILING);
 
-      const stockpilingTag = pokemon.getTag(StockpilingTag)!;
+      const stockpilingTag = pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)!;
       expect(stockpilingTag).toBeDefined();
       expect(stockpilingTag.stockpiledCount).toBe(stacksToSetup);
 
@@ -63,7 +63,7 @@ describe("Moves - Swallow", () => {
       expect(pokemon.heal).toHaveBeenCalledOnce();
       expect(pokemon.heal).toHaveReturnedWith(expectedHeal);
 
-      expect(pokemon.getTag(StockpilingTag)).toBeUndefined();
+      expect(pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)).toBeUndefined();
     });
 
     it("2 stacks -> 50% heal", async () => {
@@ -79,7 +79,7 @@ describe("Moves - Swallow", () => {
       pokemon.addTag(BattlerTagType.STOCKPILING);
       pokemon.addTag(BattlerTagType.STOCKPILING);
 
-      const stockpilingTag = pokemon.getTag(StockpilingTag)!;
+      const stockpilingTag = pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)!;
       expect(stockpilingTag).toBeDefined();
       expect(stockpilingTag.stockpiledCount).toBe(stacksToSetup);
 
@@ -91,7 +91,7 @@ describe("Moves - Swallow", () => {
       expect(pokemon.heal).toHaveBeenCalledOnce();
       expect(pokemon.heal).toHaveReturnedWith(expectedHeal);
 
-      expect(pokemon.getTag(StockpilingTag)).toBeUndefined();
+      expect(pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)).toBeUndefined();
     });
 
     it("3 stacks -> 100% heal", async () => {
@@ -108,7 +108,7 @@ describe("Moves - Swallow", () => {
       pokemon.addTag(BattlerTagType.STOCKPILING);
       pokemon.addTag(BattlerTagType.STOCKPILING);
 
-      const stockpilingTag = pokemon.getTag(StockpilingTag)!;
+      const stockpilingTag = pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)!;
       expect(stockpilingTag).toBeDefined();
       expect(stockpilingTag.stockpiledCount).toBe(stacksToSetup);
 
@@ -120,7 +120,7 @@ describe("Moves - Swallow", () => {
       expect(pokemon.heal).toHaveBeenCalledOnce();
       expect(pokemon.heal).toHaveReturnedWith(expect.closeTo(expectedHeal));
 
-      expect(pokemon.getTag(StockpilingTag)).toBeUndefined();
+      expect(pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)).toBeUndefined();
     });
   });
 
@@ -129,14 +129,14 @@ describe("Moves - Swallow", () => {
 
     const pokemon = game.scene.getPlayerPokemon()!;
 
-    const stockpilingTag = pokemon.getTag(StockpilingTag)!;
+    const stockpilingTag = pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)!;
     expect(stockpilingTag).toBeUndefined();
 
     game.move.select(MoveId.SWALLOW);
     await game.phaseInterceptor.to(TurnInitPhase);
 
     expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-      moveId: MoveId.SWALLOW,
+      move: expect.objectContaining({ id: MoveId.SWALLOW }),
       result: MoveResult.FAIL,
     });
   });
@@ -148,7 +148,7 @@ describe("Moves - Swallow", () => {
       const pokemon = game.scene.getPlayerPokemon()!;
       pokemon.addTag(BattlerTagType.STOCKPILING);
 
-      const stockpilingTag = pokemon.getTag(StockpilingTag)!;
+      const stockpilingTag = pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)!;
       expect(stockpilingTag).toBeDefined();
 
       game.move.select(MoveId.SWALLOW);
@@ -160,14 +160,14 @@ describe("Moves - Swallow", () => {
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-        moveId: MoveId.SWALLOW,
+        move: expect.objectContaining({ id: MoveId.SWALLOW }),
         result: MoveResult.SUCCESS,
       });
 
       expect(pokemon.getStatStage(Stat.DEF)).toBe(0);
       expect(pokemon.getStatStage(Stat.SPDEF)).toBe(0);
 
-      expect(pokemon.getTag(StockpilingTag)).toBeUndefined();
+      expect(pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)).toBeUndefined();
     });
 
     it("lower stat stages based on stored values (different boosts)", async () => {
@@ -176,7 +176,7 @@ describe("Moves - Swallow", () => {
       const pokemon = game.scene.getPlayerPokemon()!;
       pokemon.addTag(BattlerTagType.STOCKPILING);
 
-      const stockpilingTag = pokemon.getTag(StockpilingTag)!;
+      const stockpilingTag = pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)!;
       expect(stockpilingTag).toBeDefined();
 
       // for the sake of simplicity (and because other tests cover the setup), set boost amounts directly
@@ -190,14 +190,14 @@ describe("Moves - Swallow", () => {
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-        moveId: MoveId.SWALLOW,
+        move: expect.objectContaining({ id: MoveId.SWALLOW }),
         result: MoveResult.SUCCESS,
       });
 
       expect(pokemon.getStatStage(Stat.DEF)).toBe(1);
       expect(pokemon.getStatStage(Stat.SPDEF)).toBe(-2);
 
-      expect(pokemon.getTag(StockpilingTag)).toBeUndefined();
+      expect(pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)).toBeUndefined();
     });
   });
 });

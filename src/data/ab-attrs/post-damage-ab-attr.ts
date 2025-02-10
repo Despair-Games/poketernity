@@ -1,4 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 
 /**
@@ -6,6 +7,11 @@ import { AbAttr } from "./ab-attr";
  * @extends AbAttr
  */
 export abstract class PostDamageAbAttr extends AbAttr {
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.POST_DAMAGE);
+  }
+
   /**
    * Applies an effect after the Pokemon takes damage
    * @param pokemon The {@linkcode Pokemon} with this ability

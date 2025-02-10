@@ -2,7 +2,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { initGameSpeed } from "#app/system/game-speed";
 // -- end tsdoc imports --
-import { api } from "#app/plugins/api/api";
 import { MoneyFormat } from "#enums/money-format";
 import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
@@ -266,26 +265,11 @@ export function executeIf<T>(condition: boolean, promiseFunc: () => Promise<T>):
   return condition ? promiseFunc() : new Promise<T | null>((resolve) => resolve(null));
 }
 
-// Check if the current hostname is 'localhost' or an IP address, and ensure a port is specified
-export const isLocal =
-  ((window.location.hostname === "localhost" || /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(window.location.hostname))
-    && window.location.port !== "")
-  || window.location.hostname === "";
-
 /**
  * @deprecated Refer to [api.ts](./plugins/api/api.ts) instead
  */
 export const localServerUrl =
   import.meta.env.VITE_SERVER_URL ?? `http://${window.location.hostname}:${window.location.port + 1}`;
-
-/**
- * Set the server URL based on whether it's local or not
- *
- * @deprecated Refer to [api.ts](./plugins/api/api.ts) instead
- */
-export const apiUrl = localServerUrl ?? "https://api.poketernity.com";
-// used to disable api calls when isLocal is true and a server is not found
-export let isLocalServerConnected = true;
 
 export const isBeta = import.meta.env.MODE === "beta"; // this checks to see if the env mode is development. Technically this gives the same value for beta AND for dev envs
 
@@ -324,19 +308,6 @@ export function getCookie(cName: string): string {
     }
   }
   return "";
-}
-
-/**
- * When locally running the game, "pings" the local server
- * with a GET request to verify if a server is running,
- * sets isLocalServerConnected based on results
- */
-export async function localPing(): Promise<void> {
-  if (isLocal) {
-    const titleStats = await api.getGameTitleStats();
-    isLocalServerConnected = !!titleStats;
-    console.log("isLocalServerConnected:", isLocalServerConnected);
-  }
 }
 
 /**

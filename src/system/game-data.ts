@@ -12,7 +12,6 @@ import { speciesStarterCosts } from "#app/data/balance/starters";
 import {
   randInt,
   getEnumKeys,
-  isLocal,
   executeIf,
   fixedNumber,
   randSeedItem,
@@ -50,7 +49,7 @@ import type { Device } from "#enums/devices";
 import { GameDataType } from "#enums/game-data-type";
 import { PlayerGender } from "#enums/player-gender";
 import type { Species } from "#enums/species";
-import { applyChallenges } from "#app/data/challenge";
+import { applyChallenges } from "#app/utils/challenge-utils";
 import { ChallengeType } from "#enums/challenge-type";
 import { WeatherType } from "#enums/weather-type";
 import { TerrainType } from "#enums/terrain-type";
@@ -474,7 +473,7 @@ export class GameData {
    * At the moment, only retrievable from locale cache
    */
   async getRunHistoryData(): Promise<RunHistoryData> {
-    if (!isLocal) {
+    if (!api.isLocal) {
       /**
        * Networking Code DO NOT DELETE!
        * Note: Might have to be migrated to `api.ts`

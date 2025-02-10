@@ -1,4 +1,4 @@
-import type { DropDown } from "./dropdown";
+import type { DropDown } from "./drop-down";
 import { DropDownType } from "#enums/drop-down-type";
 import type { StarterContainer } from "./starter-container";
 import { addTextObject, getTextColor } from "./text";

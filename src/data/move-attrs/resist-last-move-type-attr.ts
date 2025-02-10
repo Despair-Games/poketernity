@@ -5,13 +5,12 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { toReadableString, NumberHolder } from "#app/utils";
 import i18next from "i18next";
-import { applyChallenges } from "#app/data/challenge";
+import { applyChallenges } from "#app/utils/challenge-utils";
 import { ChallengeType } from "#enums/challenge-type";
 import { type Move } from "#app/data/move";
-import { allMoves } from "#app/data/all-moves";
 import { getTypeDamageMultiplier } from "#app/data/type";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
 /**
  * Attribute used for Conversion 2, to convert the user's type to a random type that resists the target's last used move.
@@ -33,8 +32,8 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
       return false;
     }
 
-    const moveData = allMoves[targetMove.moveId];
-    if (moveData.type === ElementalType.STELLAR || moveData.type === ElementalType.UNKNOWN) {
+    const moveData = targetMove.move;
+    if (!moveData || [ElementalType.STELLAR, ElementalType.UNKNOWN].includes(moveData.type)) {
       return false;
     }
     const userTypes = user.getTypes();

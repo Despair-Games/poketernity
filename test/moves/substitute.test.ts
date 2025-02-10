@@ -1,6 +1,6 @@
-import { SubstituteTag, TrappedTag } from "#app/data/battler-tags";
+import { type SubstituteTag } from "#app/data/battler-tags";
 import { allMoves } from "#app/data/all-moves";
-import type { CommandPhase } from "#app/phases/command-phase";
+import { type CommandPhase } from "#app/phases/command-phase";
 import { GameManager } from "#test/testUtils/gameManager";
 import { BattleCommand } from "#enums/battle-command";
 import { UiMode } from "#enums/ui-mode";
@@ -18,6 +18,7 @@ import { StealHeldItemChanceAttr } from "#app/data/move-attrs/steal-held-item-ch
 import { MoveResult } from "#enums/move-result";
 import { BattlerIndex } from "#enums/battler-index";
 import { ArenaTagSide } from "#enums/arena-tag-side";
+import { TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 
 describe("Moves - Substitute", () => {
   let phaserGame: Phaser.Game;
@@ -261,7 +262,7 @@ describe("Moves - Substitute", () => {
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    expect(leadPokemon.getTag(TrappedTag)).toBeUndefined();
+    expect(leadPokemon.getTag(...TrappedBattlerTagTypes)).toBeUndefined();
   });
 
   it("should prevent the user's stats from being lowered", async () => {
@@ -406,7 +407,7 @@ describe("Moves - Substitute", () => {
     await game.phaseInterceptor.to("MovePhase", false);
 
     const switchedPokemon = game.scene.getPlayerPokemon()!;
-    const subTag = switchedPokemon.getTag(SubstituteTag)!;
+    const subTag = switchedPokemon.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE)!;
     expect(subTag).toBeDefined();
     expect(subTag.hp).toBe(Math.floor((leadPokemon.getMaxHp() * 1) / 4));
   });

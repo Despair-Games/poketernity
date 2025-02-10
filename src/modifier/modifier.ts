@@ -2,11 +2,8 @@ import { FusionSpeciesFormEvolution, pokemonEvolutions } from "#app/data/balance
 import { getBerryEffectFunc, getBerryPredicate } from "#app/data/berry";
 import { getLevelTotalExp } from "#app/data/exp";
 import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
-import {
-  SpeciesFormChangeItemTrigger,
-  SpeciesFormChangeLapseTeraTrigger,
-  SpeciesFormChangeTeraTrigger,
-} from "#app/data/pokemon-forms";
+import { SpeciesFormChangeLapseTeraTrigger, SpeciesFormChangeTeraTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
 import { type FormChangeItem } from "#enums/form-change-item";
 import { type Pokemon, type PlayerPokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -15,7 +12,6 @@ import { EvolutionPhase } from "#app/phases/evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { LearnMoveType } from "#enums/learn-move-type";
 import { LevelUpPhase } from "#app/phases/level-up-phase";
-import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { achvs } from "#app/system/achv";
 import type { VoucherType } from "#enums/voucher-type";
 import { BattleCommand } from "#enums/battle-command";
@@ -42,17 +38,15 @@ import {
   type PokemonFriendshipBoosterModifierType,
   type TerastallizeModifierType,
   type TmModifierType,
-  getModifierType,
-  ModifierTypeGenerator,
-  modifierTypes,
-  PokemonHeldItemModifierType,
 } from "./modifier-type";
+import { getModifierType } from "#app/utils/modifier-type-utils";
+import { modifierTypes } from "./modifier-types";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { Color, ShadowColor } from "#enums/color";
 import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { CommanderAbAttr } from "#app/data/ab-attrs/commander-ab-attr";
 import { globalScene } from "#app/global-scene";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 const iconOverflowIndex = 24;
 
@@ -242,6 +236,26 @@ export abstract class Modifier {
   }
 
   isHealShopCostModifier(): this is HealShopCostModifier {
+    return false;
+  }
+
+  isDamageMoneyRewardModifier(): this is DamageMoneyRewardModifier {
+    return false;
+  }
+
+  isMoneyMultiplierModifier(): this is MoneyMultiplierModifier {
+    return false;
+  }
+
+  isExtraModifierModifier(): this is ExtraModifierModifier {
+    return false;
+  }
+
+  isTempExtraModifierModifier(): this is TempExtraModifierModifier {
+    return false;
+  }
+
+  isTurnHeldItemTransferModifier(): this is TurnHeldItemTransferModifier {
     return false;
   }
 }
@@ -1692,7 +1706,7 @@ export class BypassSpeedChanceModifier extends PokemonHeldItemModifier {
       doBypassSpeed.value = true;
       const isCommandFight =
         globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()]?.command === BattleCommand.FIGHT;
-      const hasQuickClaw = this.type instanceof PokemonHeldItemModifierType && this.type.id === "QUICK_CLAW";
+      const hasQuickClaw = this.type.isPokemonHeldItemModifierType() && this.type.id === "QUICK_CLAW";
 
       if (isCommandFight && hasQuickClaw) {
         globalScene.queueMessage(
@@ -1784,13 +1798,16 @@ export class TurnHealModifier extends PokemonHeldItemModifier {
    */
   override apply(pokemon: Pokemon): boolean {
     if (!pokemon.isFullHp()) {
-      globalScene.unshiftPhase(
-        new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 16) * this.stackCount, {
+      globalScene.queuePokemonHeal(
+        true,
+        pokemon.getBattlerIndex(),
+        toDmgValue(pokemon.getMaxHp() / 16) * this.stackCount,
+        {
           message: i18next.t("modifier:turnHealApply", {
             pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
             typeName: this.type.name,
           }),
-        }),
+        },
       );
       return true;
     }
@@ -1886,17 +1903,16 @@ export class HitHealModifier extends PokemonHeldItemModifier {
    */
   override apply(pokemon: Pokemon): boolean {
     if (pokemon.turnData.totalDamageDealt && !pokemon.isFullHp()) {
-      globalScene.unshiftPhase(
-        new PokemonHealPhase(
-          pokemon.getBattlerIndex(),
-          toDmgValue(pokemon.turnData.totalDamageDealt / 8) * this.stackCount,
-          {
-            message: i18next.t("modifier:hitHealApply", {
-              pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-              typeName: this.type.name,
-            }),
-          },
-        ),
+      globalScene.queuePokemonHeal(
+        true,
+        pokemon.getBattlerIndex(),
+        toDmgValue(pokemon.turnData.totalDamageDealt / 8) * this.stackCount,
+        {
+          message: i18next.t("modifier:hitHealApply", {
+            pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+            typeName: this.type.name,
+          }),
+        },
       );
     }
 
@@ -2077,23 +2093,21 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
    */
   override apply(pokemon: Pokemon): boolean {
     // Restore the Pokemon to half HP
-    globalScene.unshiftPhase(
-      new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 2), {
-        message: i18next.t("modifier:pokemonInstantReviveApply", {
-          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-          typeName: this.type.name,
-        }),
-        showFullHpMessage: false,
-        revive: true,
+    globalScene.queuePokemonHeal(true, pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 2), {
+      message: i18next.t("modifier:pokemonInstantReviveApply", {
+        pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+        typeName: this.type.name,
       }),
-    );
+      showFullHpMessage: false,
+      revive: true,
+    });
 
     // Remove the Pokemon's FAINT status
     pokemon.resetStatus(true, false, true);
 
     // Reapply Commander on the Pokemon's side of the field, if applicable
     const field = pokemon.getField();
-    field.forEach((p) => applyAbAttrs(CommanderAbAttr, p, false));
+    field.forEach((p) => applyAbAttrs(AbAttrFlag.COMMANDER, p, false));
     return true;
   }
 
@@ -2934,6 +2948,10 @@ export class MoneyMultiplierModifier extends PersistentModifier {
   getMaxStackCount(): number {
     return 5;
   }
+
+  override isMoneyMultiplierModifier(): this is this {
+    return true;
+  }
 }
 
 export class DamageMoneyRewardModifier extends PokemonHeldItemModifier {
@@ -2965,6 +2983,10 @@ export class DamageMoneyRewardModifier extends PokemonHeldItemModifier {
 
   getMaxHeldItemCount(_pokemon: Pokemon): number {
     return 5;
+  }
+
+  override isDamageMoneyRewardModifier(): this is this {
+    return true;
   }
 }
 
@@ -3355,6 +3377,10 @@ export class TurnHeldItemTransferModifier extends HeldItemTransferModifier {
   setTransferrableFalse(): void {
     this.isTransferable = false;
   }
+
+  override isTurnHeldItemTransferModifier(): this is this {
+    return true;
+  }
 }
 
 /**
@@ -3465,6 +3491,10 @@ export class ExtraModifierModifier extends PersistentModifier {
   getMaxStackCount(): number {
     return 3;
   }
+
+  override isExtraModifierModifier(): this is this {
+    return true;
+  }
 }
 
 /**
@@ -3518,6 +3548,10 @@ export class TempExtraModifierModifier extends LapsingPersistentModifier {
     count.value += this.getStackCount();
     return true;
   }
+
+  override isTempExtraModifierModifier(): this is this {
+    return true;
+  }
 }
 
 /**
@@ -3543,7 +3577,7 @@ export function overrideModifiers(isPlayer: boolean = true): void {
     const modifierFunc = modifierTypes[item.name];
     let modifierType: ModifierType | null = modifierFunc();
 
-    if (modifierType instanceof ModifierTypeGenerator) {
+    if (modifierType?.isModifierTypeGenerator()) {
       const pregenArgs = "type" in item && item.type !== null ? [item.type] : undefined;
       modifierType = modifierType.generateType([], pregenArgs);
     }
@@ -3585,7 +3619,7 @@ export function overrideHeldItems(pokemon: Pokemon, isPlayer: boolean = true): v
     let modifierType: ModifierType | null = modifierFunc();
     const qty = item.count || 1;
 
-    if (modifierType instanceof ModifierTypeGenerator) {
+    if (modifierType?.isModifierTypeGenerator()) {
       const pregenArgs = "type" in item && item.type !== null ? [item.type] : undefined;
       modifierType = modifierType.generateType([], pregenArgs);
     }

@@ -28,7 +28,7 @@ import { EggTier } from "#enums/egg-type";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { ElementalType } from "#enums/elemental-type";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";

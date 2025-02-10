@@ -1,5 +1,4 @@
 import type { PlayerPokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
 import type { Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
 import { addBBCodeTextObject, addTextObject, getTextColor } from "#app/ui/text";
@@ -16,11 +15,11 @@ import PokemonIconAnimHandler from "#app/ui/pokemon-icon-anim-handler";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { addWindow } from "#app/ui/ui-theme";
-import { SpeciesFormChangeItemTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
 import { FormChangeItem } from "#enums/form-change-item";
 import { getVariantTint } from "#app/data/variant";
 import { Button } from "#enums/buttons";
-import { applyChallenges } from "#app/data/challenge";
+import { applyChallenges } from "#app/utils/challenge-utils";
 import { ChallengeType } from "#enums/challenge-type";
 import MoveInfoOverlay from "#app/ui/move-info-overlay";
 import i18next from "i18next";
@@ -28,7 +27,7 @@ import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { CommandPhase } from "#app/phases/command-phase";
+import { type CommandPhase } from "#app/phases/command-phase";
 import { globalScene } from "#app/global-scene";
 import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
@@ -40,7 +39,11 @@ import type { PartyModifierTransferSelectCallback } from "#app/@types/PartyModif
 import type { PartyModifierSpliceSelectCallback } from "#app/@types/PartyModifierSpliceSelectCallback";
 import type { PokemonModifierTransferSelectFilter } from "#app/@types/PokemonModifierTransferSelectFilter";
 import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilter";
+import { PartyFilterAll } from "#app/utils/party-ui-utils";
+import { FilterAllMoves } from "#app/utils/move-utils";
 import { GAME_WIDTH } from "#app/ui-constants";
+import { type SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import { PhaseId } from "#enums/phase-id";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
 
@@ -88,22 +91,6 @@ export default class PartyUiHandler extends MessageUiHandler {
 
   private blockInput: boolean;
 
-  private static FilterAll = (_pokemon: PlayerPokemon) => null;
-
-  public static FilterNonFainted = (pokemon: PlayerPokemon) => {
-    if (pokemon.isFainted()) {
-      return i18next.t("partyUiHandler:noEnergy", { pokemonName: getPokemonNameWithAffix(pokemon) });
-    }
-    return null;
-  };
-
-  public static FilterFainted = (pokemon: PlayerPokemon) => {
-    if (!pokemon.isFainted()) {
-      return i18next.t("partyUiHandler:hasEnergy", { pokemonName: getPokemonNameWithAffix(pokemon) });
-    }
-    return null;
-  };
-
   /**
    * For consistency reasons, this looks like the above filters. However this is used only internally and is always enforced for switching.
    * @param pokemon The pokemon to check.
@@ -117,8 +104,6 @@ export default class PartyUiHandler extends MessageUiHandler {
     }
     return null;
   };
-
-  private static FilterAllMoves = (_pokemonMove: PokemonMove) => null;
 
   public static FilterItemMaxStacks = (pokemon: PlayerPokemon, modifier: PokemonHeldItemModifier) => {
     const matchingModifier = globalScene.findModifier(
@@ -235,11 +220,9 @@ export default class PartyUiHandler extends MessageUiHandler {
 
     this.selectCallback = args.length > 2 && args[2] instanceof Function ? args[2] : undefined;
     this.selectFilter =
-      args.length > 3 && args[3] instanceof Function ? (args[3] as PokemonSelectFilter) : PartyUiHandler.FilterAll;
+      args.length > 3 && args[3] instanceof Function ? (args[3] as PokemonSelectFilter) : PartyFilterAll;
     this.moveSelectFilter =
-      args.length > 4 && args[4] instanceof Function
-        ? (args[4] as PokemonMoveSelectFilter)
-        : PartyUiHandler.FilterAllMoves;
+      args.length > 4 && args[4] instanceof Function ? (args[4] as PokemonMoveSelectFilter) : FilterAllMoves;
     this.tmMoveId = args.length > 5 && args[5] ? args[5] : MoveId.NONE;
     this.showMovePp = args.length > 6 && args[6];
 
@@ -411,7 +394,10 @@ export default class PartyUiHandler extends MessageUiHandler {
                 selectCallback(this.cursor, option);
               }
             } else {
-              if (option >= PartyOption.FORM_CHANGE_ITEM && globalScene.getCurrentPhase()?.isSelectModifierPhase()) {
+              if (
+                option >= PartyOption.FORM_CHANGE_ITEM
+                && globalScene.getCurrentPhase()?.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER)
+              ) {
                 if (this.partyUiMode === PartyUiMode.CHECK) {
                   const formChangeItemModifiers = this.getFormChangeItemsModifiers(pokemon);
                   const modifier = formChangeItemModifiers[option - PartyOption.FORM_CHANGE_ITEM];
@@ -897,7 +883,7 @@ export default class PartyUiHandler extends MessageUiHandler {
             const isBatonPassMove =
               this.partyUiMode === PartyUiMode.FAINT_SWITCH
               && moveHistory.length
-              && allMoves[moveHistory[moveHistory.length - 1].moveId].getAttrs(ForceSwitchOutAttr)[0]?.isBatonPass()
+              && allMoves[moveHistory[moveHistory.length - 1].move.id].getAttrs(ForceSwitchOutAttr)[0]?.isBatonPass()
               && moveHistory[moveHistory.length - 1].result === MoveResult.SUCCESS;
 
             // isBatonPassMove and allowBatonModifierSwitch shouldn't ever be true
@@ -938,7 +924,7 @@ export default class PartyUiHandler extends MessageUiHandler {
           this.options.push(PartyOption.RELEASE);
           break;
         case PartyUiMode.CHECK:
-          if (globalScene.getCurrentPhase()?.isSelectModifierPhase()) {
+          if (globalScene.getCurrentPhase()?.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER)) {
             formChangeItemModifiers = this.getFormChangeItemsModifiers(pokemon);
             for (let i = 0; i < formChangeItemModifiers.length; i++) {
               this.options.push(PartyOption.FORM_CHANGE_ITEM + i);

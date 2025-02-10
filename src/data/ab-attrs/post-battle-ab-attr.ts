@@ -1,7 +1,13 @@
 import type { Pokemon } from "#app/field/pokemon";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 
 export abstract class PostBattleAbAttr extends AbAttr {
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.POST_BATTLE);
+  }
+
   /**
    * Applies an effect at the end of a battle.
    * @param pokemon The {@linkcode Pokemon} with this ability

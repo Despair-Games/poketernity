@@ -5,7 +5,7 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { TrainerPartyCompoundTemplate, TrainerPartyTemplate, trainerPartyTemplates } from "#app/data/trainer-config";
 import { ModifierTier } from "#enums/modifier-tier";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { globalScene } from "#app/global-scene";

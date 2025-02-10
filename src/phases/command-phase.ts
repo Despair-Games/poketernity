@@ -4,14 +4,14 @@ import { type FairyLockTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import type { EncoreTag } from "#app/data/battler-tags";
-import { SkyDropTag, TrappedTag } from "#app/data/battler-tags";
-import { getMoveTargets, isFieldTargeted, type MoveTargetSet } from "#app/data/move";
+import { type SkyDropTag, type TrappedTag } from "#app/data/battler-tags";
+import { getMoveTargets, type MoveTargetSet } from "#app/data/move";
+import { isFieldTargeted } from "#app/utils/move-utils";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { FieldPosition } from "#enums/field-position";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { FieldPhase } from "#app/phases/abstract-field-phase";
-import { SelectTargetPhase } from "#app/phases/select-target-phase";
 import { BattleCommand } from "#enums/battle-command";
 import { UiMode } from "#enums/ui-mode";
 import { isNullOrUndefined } from "#app/utils";
@@ -23,6 +23,8 @@ import { MoveId } from "#enums/move-id";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PokeballType } from "#enums/pokeball";
 import i18next from "i18next";
+import { TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Handles the player's start-of-turn actions (`Fight/Ball/Pokemon/Run`) during a battle
@@ -30,6 +32,8 @@ import i18next from "i18next";
  * @see {@linkcode handleCommand}
  */
 export class CommandPhase extends FieldPhase {
+  override readonly id = PhaseId.COMMAND;
+
   /** TODO: Is this supposed to be a {@linkcode FieldPosition} or a {@linkcode BattlerIndex}? */
   protected fieldIndex: number;
 
@@ -209,7 +213,7 @@ export class CommandPhase extends FieldPhase {
             (isFieldTargeted(moveTargets.targets) && double)
             || (moveTargets.targets.length > 1 && moveTargets.multiple)
           ) {
-            globalScene.unshiftPhase(new SelectTargetPhase(this.fieldIndex));
+            globalScene.selectTarget(this.fieldIndex);
           }
           if (turnCommand.move && (moveTargets.targets.length <= 1 || moveTargets.multiple)) {
             turnCommand.move.targets = moveTargets.targets;
@@ -220,7 +224,7 @@ export class CommandPhase extends FieldPhase {
           ) {
             turnCommand.move.targets = playerPokemon.getMoveQueue()[0].targets;
           } else {
-            globalScene.unshiftPhase(new SelectTargetPhase(this.fieldIndex));
+            globalScene.selectTarget(this.fieldIndex);
           }
 
           currentBattle.turnCommands[this.fieldIndex] = turnCommand;
@@ -348,7 +352,9 @@ export class CommandPhase extends FieldPhase {
           }
           showNoEscapeText(trappedAbMessages[0]);
         } else {
-          const trapTag = playerPokemon.getTag(TrappedTag) ?? playerPokemon.getTag(SkyDropTag);
+          const trapTag =
+            playerPokemon.getTag<TrappedTag>(...TrappedBattlerTagTypes)
+            ?? playerPokemon.getTag<SkyDropTag>(BattlerTagType.SKY_DROP);
           const fairyLockTag = arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER);
 
           if (!isSwitch) {

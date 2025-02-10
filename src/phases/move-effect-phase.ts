@@ -1,14 +1,9 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { AddSecondStrikeAbAttr } from "#app/data/ab-attrs/add-second-strike-ab-attr";
-import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
-import { PostAttackAbAttr } from "#app/data/ab-attrs/post-attack-ab-attr";
-import { PostDamageAbAttr } from "#app/data/ab-attrs/post-damage-ab-attr";
-import { PostDefendAbAttr } from "#app/data/ab-attrs/post-defend-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { MoveAnim } from "#app/data/battle-anims";
-import { SkyDropTag, SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
+import { MoveAnim } from "#app/data/battle-anims/move-anim";
+import { type SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import { applyFilteredMoveAttrs, applyMoveAttrs, isFieldTargeted } from "#app/data/move";
+import { applyFilteredMoveAttrs, applyMoveAttrs } from "#app/utils/move-utils";
 import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
 import { MissEffectAttr } from "#app/data/move-attrs/miss-effect-attr";
@@ -17,9 +12,11 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import { MultiHitAttr } from "#app/data/move-attrs/multi-hit-attr";
 import { NoEffectAttr } from "#app/data/move-attrs/no-effect-attr";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
-import { SpeciesFormChangePostMoveTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangePostMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-post-move-trigger";
 import type { TypeDamageMultiplier } from "#app/data/type";
-import type { AttackMoveResult, DamageResult, Pokemon, TurnMove } from "#app/field/pokemon";
+import type { DamageResult, Pokemon } from "#app/field/pokemon";
+import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
+import type { TurnMove } from "#app/@types/TurnMove";
 import { MoveResult } from "#enums/move-result";
 import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
@@ -30,7 +27,6 @@ import {
   FlinchChanceModifier,
   HitHealModifier,
 } from "#app/modifier/modifier";
-import { DamageAchv } from "#app/system/achv";
 import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
@@ -39,12 +35,17 @@ import { MoveEffectTrigger } from "#enums/move-effect-trigger";
 import { MoveTarget } from "#enums/move-target";
 import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
-import { FaintPhase } from "./faint-phase";
 import { HitCheckPhase } from "./hit-check-phase";
 import { MoveFlags } from "#enums/move-flags";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { AchvCategory } from "#enums/achv-category";
+import { PhaseId } from "#enums/phase-id";
+import { isFieldTargeted } from "#app/utils/move-utils";
 
 export class MoveEffectPhase extends HitCheckPhase {
+  override readonly id = PhaseId.MOVE_EFFECT;
+
   private moveHistoryEntry: TurnMove;
   /** The targets of the move after dynamic adjustments, e.g. from Dragon Darts */
   private adjustedTargets: BattlerIndex[] | null = null;
@@ -108,7 +109,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     // Lapse `MOVE_EFFECT` effects (i.e. semi-invulnerability) when applicable
     user.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
     globalScene.getField(true).forEach((p) => {
-      const skyDropTag = p.getTag(SkyDropTag);
+      const skyDropTag = p.getTag(BattlerTagType.SKY_DROP);
       if (skyDropTag?.sourceId === user.id) {
         p.removeTag(BattlerTagType.SKY_DROP);
       }
@@ -132,7 +133,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       // Assume single target for multi hit
       applyMoveAttrs(MultiHitAttr, user, targets[0], move, hitCount);
       // If Parental Bond is applicable, add another hit
-      applyAbAttrs(AddSecondStrikeAbAttr, user, false, move, targets[0], hitCount);
+      applyAbAttrs(AbAttrFlag.ADD_SECOND_STRIKE, user, false, move, targets[0], hitCount);
       // TODO: re-add multi-lens calculation
       // Set the user's relevant turnData fields to reflect the final hit count
       user.turnData.hitCount = hitCount.value;
@@ -176,7 +177,7 @@ export class MoveEffectPhase extends HitCheckPhase {
      * used in the sense of "Did it affect any of the targets?".
      */
     this.moveHistoryEntry = {
-      moveId: this.move.moveId,
+      move: this.move.getMove(),
       targets: this.adjustedTargets ?? this.targets,
       result: MoveResult.PENDING,
       virtual: this.move.virtual,
@@ -314,7 +315,7 @@ export class MoveEffectPhase extends HitCheckPhase {
 
       // Multi-hit check for Wimp Out/Emergency Exit
       if (user.turnData.hitCount > 1) {
-        applyAbAttrs(PostDamageAbAttr, target, false, 0, user);
+        applyAbAttrs(AbAttrFlag.POST_DAMAGE, target, false, 0, user);
       }
     }
   }
@@ -351,7 +352,7 @@ export class MoveEffectPhase extends HitCheckPhase {
 
       // Log this move action as a success
       user.pushMoveHistory({
-        moveId: this.move.moveId,
+        move: this.move.getMove(),
         targets: this.targets,
         result: MoveResult.SUCCESS,
         virtual: this.move.virtual,
@@ -469,7 +470,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     if (dmg) {
       target.lapseTags(BattlerTagLapseType.HIT);
 
-      const substitute = target.getTag(SubstituteTag);
+      const substitute = target.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
       const isBlockedBySubstitute = !!substitute && move.hitsSubstitute(user, target);
       if (isBlockedBySubstitute) {
         substitute.hp -= dmg;
@@ -490,7 +491,7 @@ export class MoveEffectPhase extends HitCheckPhase {
 
       if (damage > 0) {
         if (user.isPlayer()) {
-          globalScene.validateAchvs(DamageAchv, new NumberHolder(damage));
+          globalScene.validateAchvs(AchvCategory.DAMAGE, new NumberHolder(damage));
           if (damage > globalScene.gameData.gameStats.highestDamage) {
             globalScene.gameData.gameStats.highestDamage = damage;
           }
@@ -536,9 +537,12 @@ export class MoveEffectPhase extends HitCheckPhase {
     }
 
     if (target.isFainted()) {
-      // set splice index here, so future scene queues happen before FaintedPhase
-      globalScene.setPhaseQueueSplice();
-      globalScene.unshiftPhase(new FaintPhase(target.getBattlerIndex(), isOneHitKo, destinyTag, grudgeTag, user));
+      globalScene.faintBattler(target.getBattlerIndex(), {
+        preventEndure: isOneHitKo,
+        destinyTag,
+        grudgeTag,
+        source: user,
+      });
     }
 
     return result;
@@ -566,7 +570,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, false);
     this.applyHeldItemFlinchCheck(user, target, dealsDamage);
     this.applyOnGetHitAbEffects(user, target);
-    applyAbAttrs(PostAttackAbAttr, user, false, target, move);
+    applyAbAttrs(AbAttrFlag.POST_ATTACK, user, false, target, move);
 
     // Apply Grip Claw's chance to steal an item from the target
     if (move.isAttackMove()) {
@@ -628,7 +632,7 @@ export class MoveEffectPhase extends HitCheckPhase {
    * @param target - {@linkcode Pokemon} the current target of this phase's invoked move
    */
   protected applyOnGetHitAbEffects(user: Pokemon, target: Pokemon): void {
-    applyAbAttrs(PostDefendAbAttr, target, false, user, this.move.getMove());
+    applyAbAttrs(AbAttrFlag.POST_DEFEND, target, false, user, this.move.getMove());
     target.lapseTags(BattlerTagLapseType.AFTER_HIT);
   }
 
@@ -645,7 +649,7 @@ export class MoveEffectPhase extends HitCheckPhase {
 
     if (
       dealsDamage
-      && !target.hasAbilityWithAttr(IgnoreMoveEffectsAbAttr)
+      && !target.hasAbilityWithAttr(AbAttrFlag.IGNORE_MOVE_EFFECTS)
       && !this.move.getMove().hitsSubstitute(user, target)
     ) {
       const flinched = new BooleanHolder(false);
@@ -673,7 +677,7 @@ export class MoveEffectPhase extends HitCheckPhase {
   protected updateSubstitutes(): void {
     const targets = this.getTargets();
     targets.forEach((target) => {
-      const substitute = target.getTag(SubstituteTag);
+      const substitute = target.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
       if (substitute && substitute.hp <= 0) {
         target.lapseTag(BattlerTagType.SUBSTITUTE);
       }

@@ -76,6 +76,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
       genderDiffs,
       false,
     );
+    this.type = "PokemonSpecies";
     this.speciesId = id;
     this.formIndex = 0;
     this.generation = generation;

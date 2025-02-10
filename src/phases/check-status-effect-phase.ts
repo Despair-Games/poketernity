@@ -3,12 +3,15 @@ import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { PostTurnStatusEffectPhase } from "#app/phases/post-turn-status-effect-phase";
 import { isNullOrUndefined } from "#app/utils";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Queues a {@linkcode PostTurnStatusEffectPhase} for every active pokemon that needs one
  * @extends Phase
  */
 export class CheckStatusEffectPhase extends Phase {
+  override readonly id = PhaseId.CHECK_STATUS_EFFECT;
+
   /** The pokemon being checked, ordered by turn order */
   private readonly activePokemon: BattlerIndex[];
 

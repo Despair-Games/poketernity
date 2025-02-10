@@ -5,10 +5,10 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { NumberHolder } from "#app/utils";
 import i18next from "i18next";
-import { StatStageChangeMultiplierAbAttr } from "#app/data/ab-attrs/stat-stage-change-multiplier-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Attribute to steal the target's positive stat stages.
@@ -25,7 +25,7 @@ export class StealPositiveStatsAttr extends MoveEffectAttr {
     for (const s of BATTLE_STATS) {
       if (target.getStatStage(s) > 0) {
         const userStatChange = new NumberHolder(target.getStatStage(s));
-        applyAbAttrs(StatStageChangeMultiplierAbAttr, user, false, userStatChange);
+        applyAbAttrs(AbAttrFlag.STAT_STAGE_CHANGE_MULTIPLIER, user, false, userStatChange);
         user.setStatStage(s, user.getStatStage(s) + userStatChange.value);
         target.setStatStage(s, 0);
       }

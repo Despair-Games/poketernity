@@ -20,9 +20,10 @@ import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { CommandPhase } from "#app/phases/command-phase";
-import type { MovePhase } from "#app/phases/move-phase";
+import { type MovePhase } from "#app/phases/move-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
+import { PhaseId } from "#enums/phase-id";
 
 const namespace = "mysteryEncounters/dancingLessons";
 const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
@@ -115,7 +116,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
       const moveset = enemyField[0].moveset.map((m) => m.moveId);
       expect(moveset.some((m) => m === MoveId.REVELATION_DANCE)).toBeTruthy();
 
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].isMovePhase()).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is<MovePhase>(PhaseId.MOVE)).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.REVELATION_DANCE).length).toBe(1); // Revelation Dance used before battle
     });

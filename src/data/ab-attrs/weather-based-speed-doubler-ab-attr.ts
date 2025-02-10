@@ -4,7 +4,7 @@ import type { BattleStat } from "#enums/stat";
 import { Stat } from "#enums/stat";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
-import { getWeatherCondition } from "#app/data/all-abilities";
+import { getWeatherCondition } from "#app/utils/ability-utils";
 import type { Move } from "../move";
 
 /**

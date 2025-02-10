@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/all-moves";
-import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
+import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";

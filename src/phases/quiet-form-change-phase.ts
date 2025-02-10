@@ -4,11 +4,13 @@ import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { PhaseId } from "#enums/phase-id";
 import { BattlePhase } from "./abstract-battle-phase";
 import type { MovePhase } from "./move-phase";
-import { PokemonHealPhase } from "./pokemon-heal-phase";
 
 export class QuietFormChangePhase extends BattlePhase {
+  override readonly id = PhaseId.QUIET_FORM_CHANGE;
+
   protected readonly pokemon: Pokemon;
   protected readonly formChange: SpeciesFormChange;
 
@@ -158,12 +160,10 @@ export class QuietFormChangePhase extends BattlePhase {
 
     if (globalScene?.currentBattle.isClassicFinalBoss && this.pokemon.isEnemy()) {
       globalScene.playBgm();
-      globalScene.unshiftPhase(
-        new PokemonHealPhase(this.pokemon.getBattlerIndex(), this.pokemon.getMaxHp(), {
-          showFullHpMessage: false,
-          healStatus: true,
-        }),
-      );
+      globalScene.queuePokemonHeal(true, this.pokemon.getBattlerIndex(), this.pokemon.getMaxHp(), {
+        showFullHpMessage: false,
+        healStatus: true,
+      });
 
       this.pokemon.findAndRemoveTags(() => true);
       this.pokemon.bossSegments = 5;
@@ -171,7 +171,9 @@ export class QuietFormChangePhase extends BattlePhase {
       this.pokemon.initBattleInfo();
       this.pokemon.cry();
 
-      const movePhase = globalScene.findPhase<MovePhase>((p) => p.isMovePhase() && p.pokemon === this.pokemon);
+      const movePhase = globalScene.findPhase<MovePhase>(
+        (p) => p.is<MovePhase>(PhaseId.MOVE) && p.pokemon === this.pokemon,
+      );
       if (movePhase) {
         movePhase.cancel();
       }

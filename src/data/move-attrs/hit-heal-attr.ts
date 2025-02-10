@@ -2,13 +2,11 @@ import type { EffectiveStat } from "#enums/stat";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { toDmgValue } from "#app/utils";
 import i18next from "i18next";
-import { BlockNonDirectDamageAbAttr } from "#app/data/ab-attrs/block-non-direct-damage-ab-attr";
-import { ReverseDrainAbAttr } from "#app/data/ab-attrs/reverse-drain-ab-attr";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Heals user as a side effect of a move that hits a target.
@@ -35,7 +33,7 @@ export class HitHealAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     let healAmount = 0;
     let message = "";
-    const reverseDrain = target.hasAbilityWithAttr(ReverseDrainAbAttr, false);
+    const reverseDrain = target.hasAbilityWithAttr(AbAttrFlag.REVERSE_DRAIN, false);
     if (this.healStat !== null) {
       // Strength Sap formula
       healAmount = target.getEffectiveStat(this.healStat);
@@ -46,7 +44,7 @@ export class HitHealAttr extends MoveEffectAttr {
       message = i18next.t("battle:regainHealth", { pokemonName: getPokemonNameWithAffix(user) });
     }
     if (reverseDrain) {
-      if (user.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)) {
+      if (user.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)) {
         healAmount = 0;
         message = "";
       } else {
@@ -55,13 +53,11 @@ export class HitHealAttr extends MoveEffectAttr {
         message = "";
       }
     }
-    globalScene.unshiftPhase(
-      new PokemonHealPhase(user.getBattlerIndex(), healAmount, {
-        message,
-        showFullHpMessage: false,
-        skipAnim: true,
-      }),
-    );
+    globalScene.queuePokemonHeal(true, user.getBattlerIndex(), healAmount, {
+      message,
+      showFullHpMessage: false,
+      skipAnim: true,
+    });
     return true;
   }
 
