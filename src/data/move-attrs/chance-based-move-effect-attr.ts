@@ -84,7 +84,7 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
     const minScore = Math.floor(chanceWeightedScore);
     const tierUpChance = Math.floor((chanceWeightedScore % 1) * 100);
 
-    return this.getRandomScore(user, tierUpChance, minScore, minScore + 1);
+    return this.getRandomScore(user, tierUpChance, minScore + 1, minScore);
   }
 
   /**
