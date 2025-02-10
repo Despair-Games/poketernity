@@ -3689,7 +3689,7 @@ export function initMoves() {
     new AttackMove(MoveId.G_MAX_DEPLETION, ElementalType.DRAGON, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.DURALUDON)
       .attr(AttackReducePpMoveAttr, 2),
-    new AttackMove(MoveId.G_MAX_GRAVITAS, ElementalType.PSYCHIC, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
+    new AttackMove(MoveId.G_MAX_GRAVITAS, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.ORBEETLE)
       .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, { turnCount: 5 }),
     new AttackMove(MoveId.G_MAX_VOLCALITH, ElementalType.ROCK, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
@@ -3705,7 +3705,7 @@ export function initMoves() {
     new AttackMove(MoveId.G_MAX_TARTNESS, ElementalType.GRASS, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.FLAPPLE)
       .attr(StatStageChangeAttr, [Stat.EVA], -1),
-    new AttackMove(MoveId.G_MAX_SWEETNESS, ElementalType.GRASS, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
+    new AttackMove(MoveId.G_MAX_SWEETNESS, ElementalType.GRASS, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.APPLETUN)
       .attr(HealStatusEffectAttr, true, getNonVolatileStatusEffects()),
     new AttackMove(MoveId.G_MAX_SMITE, ElementalType.FAIRY, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
@@ -3726,7 +3726,7 @@ export function initMoves() {
     new AttackMove(MoveId.G_MAX_VINE_LASH, ElementalType.GRASS, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.VENUSAUR)
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_VINE_LASH),
-    new AttackMove(MoveId.G_MAX_CANNONADE, ElementalType.WATER, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
+    new AttackMove(MoveId.G_MAX_CANNONADE, ElementalType.WATER, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.BLASTOISE)
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_CANNONADE),
     new AttackMove(MoveId.G_MAX_DRUM_SOLO, ElementalType.GRASS, MoveCategory.PHYSICAL, 110, -1, 3, -1, 0, 8)
@@ -3735,7 +3735,7 @@ export function initMoves() {
     new AttackMove(MoveId.G_MAX_FIREBALL, ElementalType.FIRE, MoveCategory.PHYSICAL, 110, -1, 3, -1, 0, 8)
       .gMaxMove(Species.CINDERACE)
       .ignoresAbilities(),
-    new AttackMove(MoveId.G_MAX_HYDROSNIPE, ElementalType.WATER, MoveCategory.PHYSICAL, 110, -1, 3, -1, 0, 8)
+    new AttackMove(MoveId.G_MAX_HYDROSNIPE, ElementalType.WATER, MoveCategory.SPECIAL, 110, -1, 3, -1, 0, 8)
       .gMaxMove(Species.INTELEON)
       .ignoresAbilities(),
     new AttackMove(MoveId.G_MAX_ONE_BLOW, ElementalType.DARK, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
