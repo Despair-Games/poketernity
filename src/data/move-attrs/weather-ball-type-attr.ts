@@ -1,4 +1,4 @@
-import { Type } from "#enums/type";
+import { ElementalType } from "#enums/elemental-type";
 import { WeatherType } from "#enums/weather-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -17,18 +17,18 @@ export class WeatherBallTypeAttr extends VariableMoveTypeAttr {
       switch (globalScene.arena.weather?.weatherType) {
         case WeatherType.SUNNY:
         case WeatherType.HARSH_SUN:
-          moveType.value = Type.FIRE;
+          moveType.value = ElementalType.FIRE;
           break;
         case WeatherType.RAIN:
         case WeatherType.HEAVY_RAIN:
-          moveType.value = Type.WATER;
+          moveType.value = ElementalType.WATER;
           break;
         case WeatherType.SANDSTORM:
-          moveType.value = Type.ROCK;
+          moveType.value = ElementalType.ROCK;
           break;
         case WeatherType.HAIL:
         case WeatherType.SNOW:
-          moveType.value = Type.ICE;
+          moveType.value = ElementalType.ICE;
           break;
         default:
           return false;

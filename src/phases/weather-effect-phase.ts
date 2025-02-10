@@ -1,10 +1,6 @@
-import { BlockNonDirectDamageAbAttr } from "#app/data/ab-attrs/block-non-direct-damage-ab-attr";
-import { PostWeatherLapseAbAttr } from "#app/data/ab-attrs/post-weather-lapse-ab-attr";
-import { PreWeatherDamageAbAttr } from "#app/data/ab-attrs/pre-weather-damage-ab-attr";
-import { SuppressWeatherEffectAbAttr } from "#app/data/ab-attrs/suppress-weather-effect-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { CommonAnim } from "#enums/common-anim";
-import { type Weather, getWeatherDamageMessage, getWeatherLapseMessage } from "#app/data/weather";
+import { getWeatherDamageMessage, getWeatherLapseMessage } from "#app/data/weather";
 import { type Pokemon } from "#app/field/pokemon";
 import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
@@ -12,24 +8,22 @@ import { BooleanHolder, toDmgValue } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { WeatherType } from "#enums/weather-type";
 import { CommonAnimPhase } from "./common-anim-phase";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 export class WeatherEffectPhase extends CommonAnimPhase {
-  public weather: Weather | null;
-
-  constructor() {
-    super(
-      undefined,
-      undefined,
-      CommonAnim.SUNNY + ((globalScene?.arena?.weather?.weatherType ?? WeatherType.NONE) - 1),
-    );
-    this.weather = globalScene?.arena?.weather;
-  }
+  override readonly id = PhaseId.WEATHER_EFFECT;
 
   public override start(): void {
-    // Update weather state with any changes that occurred during the turn
-    this.weather = globalScene?.arena?.weather;
+    // Get current weather state at end of turn
+    const { arena } = globalScene;
+    const weather = arena?.weather;
 
-    const { weather } = this;
+    if (weather && !weather.lapse()) {
+      arena.trySetWeather(WeatherType.NONE, false);
+      arena.triggerWeatherBasedFormChangesToNormal();
+      return this.end();
+    }
 
     if (!weather) {
       return this.end();
@@ -41,15 +35,15 @@ export class WeatherEffectPhase extends CommonAnimPhase {
       const cancelled = new BooleanHolder(false);
 
       this.executeForAll((pokemon: Pokemon) =>
-        applyAbAttrs(SuppressWeatherEffectAbAttr, pokemon, false, weather, cancelled),
+        applyAbAttrs(AbAttrFlag.SUPPRESS_WEATHER_EFFECT, pokemon, false, weather, cancelled),
       );
 
       if (!cancelled.value) {
         const inflictDamage = (pokemon: Pokemon): void => {
           const cancelled = new BooleanHolder(false);
 
-          applyAbAttrs(PreWeatherDamageAbAttr, pokemon, false, weather, cancelled);
-          applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
+          applyAbAttrs(AbAttrFlag.PRE_WEATHER_DAMAGE, pokemon, false, weather, cancelled);
+          applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
 
           if (
             cancelled.value
@@ -80,7 +74,7 @@ export class WeatherEffectPhase extends CommonAnimPhase {
     globalScene.ui.showText(getWeatherLapseMessage(weather.weatherType) ?? "", null, () => {
       this.executeForAll((pokemon: Pokemon) => {
         if (!pokemon.switchOutStatus) {
-          applyAbAttrs(PostWeatherLapseAbAttr, pokemon, false, weather);
+          applyAbAttrs(AbAttrFlag.POST_WEATHER_LAPSE, pokemon, false, weather);
         }
       });
 

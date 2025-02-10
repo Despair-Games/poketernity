@@ -6,18 +6,17 @@ import type {
   SettingUiItemOption,
 } from "#app/@types/Settings";
 import { GAME_SPEEDS } from "#app/constants";
-import { BattleStyle } from "#app/enums/battle-style";
-import { DamageNumbersMode } from "#app/enums/damage-numbers-mode";
-import { EaseType } from "#app/enums/ease-type";
-import { EggSkipPreference } from "#app/enums/egg-skip-preference";
-import { ExpGainsSpeed } from "#app/enums/exp-gains-speed";
-import { ExpNotification } from "#app/enums/exp-notification";
-import { HpBarSpeed } from "#app/enums/hp-bar-speed";
-import { MoneyFormat } from "#app/enums/money-format";
-import { MusicPreference } from "#app/enums/music-preference";
-import { PlayerGender } from "#app/enums/player-gender";
-import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
-import { UiTheme } from "#app/enums/ui-theme";
+import { BattleStyle } from "#enums/battle-style";
+import { DamageNumbersMode } from "#enums/damage-numbers-mode";
+import { EaseType } from "#enums/ease-type";
+import { EggSkipPreference } from "#enums/egg-skip-preference";
+import { ExpGainsSpeed } from "#enums/exp-gains-speed";
+import { ExpNotification } from "#enums/exp-notification";
+import { HpBarSpeed } from "#enums/hp-bar-speed";
+import { MoneyFormat } from "#enums/money-format";
+import { PlayerGender } from "#enums/player-gender";
+import { ShopCursorTarget } from "#enums/shop-cursor-target";
+import { UiTheme } from "#enums/ui-theme";
 import { supportedLanguages } from "#app/system/settings/supported-languages";
 import { isLandscapeMode } from "#app/utils";
 import i18next, { t } from "i18next";
@@ -84,6 +83,7 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
     key: "gameSpeed",
     label: t("settings:gameSpeed"),
     options: useGameSpeedOptions(),
+    doWrap: true,
   },
   {
     key: "hpBarSpeed",
@@ -94,6 +94,7 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
       { value: HpBarSpeed.FASTER, label: t("settings:faster") },
       { value: HpBarSpeed.SKIP, label: t("settings:skip") },
     ],
+    doWrap: true,
   },
   {
     key: "expGainsSpeed",
@@ -104,6 +105,7 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
       { value: ExpGainsSpeed.FASTER, label: t("settings:faster") },
       { value: ExpGainsSpeed.SKIP, label: t("settings:skip") },
     ],
+    doWrap: true,
   },
   {
     key: "partyExpNotificationMode",
@@ -113,11 +115,13 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
       { value: ExpNotification.ONLY_LEVEL_UP, label: t("settings:levelUpNotifications") },
       { value: ExpNotification.SKIP, label: t("settings:skip") },
     ],
+    doWrap: true,
   },
   {
     key: "skipSeenDialogues",
     label: t("settings:skipSeenDialogues"),
     options: useOnOffOptions(),
+    doWrap: true,
   },
   {
     key: "eggSkipPreference",
@@ -127,6 +131,7 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
       { value: EggSkipPreference.ASK, label: t("settings:ask") },
       { value: EggSkipPreference.ALWAYS, label: t("settings:always") },
     ],
+    doWrap: true,
   },
   {
     key: "battleStyle",
@@ -135,26 +140,31 @@ export const generalSettingsUiItems: SettingsUiItem<GeneralSettingsKey>[] = [
       { value: BattleStyle.SWITCH, label: t("settings:switch") },
       { value: BattleStyle.SET, label: t("settings:set") },
     ],
+    doWrap: true,
   },
   {
     key: "enableRetries",
     label: t("settings:enableRetries"),
     options: useOnOffOptions(),
+    doWrap: true,
   },
   {
     key: "hideIvScanner",
     label: t("settings:hideIvs"),
     options: useOnOffOptions(),
+    doWrap: true,
   },
   {
     key: "enableTutorials",
     label: t("settings:tutorials"),
     options: useOnOffOptions(),
+    doWrap: true,
   },
   {
     key: "enableVibration",
     label: t("settings:vibrations"),
     options: useAutoDisabledOptions(),
+    doWrap: true,
   },
   {
     key: "enableTouchControls",
@@ -214,6 +224,7 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
     key: "uiWindowType",
     label: t("settings:windowType"),
     options: Array.from({ length: 5 }).map((_, i) => ({ value: i + 1, label: `${i + 1}` })),
+    doWrap: true,
   },
   {
     key: "moneyFormat",
@@ -222,6 +233,7 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
       { value: MoneyFormat.NORMAL, label: t("settings:normal") },
       { value: MoneyFormat.ABBREVIATED, label: t("settings:abbreviated") },
     ],
+    doWrap: true,
   },
   {
     key: "damageNumbersMode",
@@ -231,36 +243,43 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
       { value: DamageNumbersMode.SIMPLE, label: t("settings:simple") },
       { value: DamageNumbersMode.FANCY, label: t("settings:fancy") },
     ],
+    doWrap: true,
   },
   {
     key: "enableMoveAnimations",
     label: t("settings:moveAnimations"),
     options: useOnOffOptions(),
+    doWrap: true,
   },
   {
     key: "showStatsOnLevelUp",
     label: t("settings:showStatsOnLevelUp"),
     options: useOnOffOptions(),
+    doWrap: true,
   },
   {
     key: "enableMoveInfo",
     label: t("settings:moveInfo"),
     options: useOnOffOptions(),
+    doWrap: true,
   },
   {
     key: "showMovesetFlyout",
     label: t("settings:showMovesetFlyout"),
     options: useOnOffOptions(),
+    doWrap: true,
   },
   {
     key: "showArenaFlyout",
     label: t("settings:showArenaFlyout"),
     options: useOnOffOptions(),
+    doWrap: true,
   },
   {
     key: "showTimeOfDayWidget",
     label: t("settings:showTimeOfDayWidget"),
     options: useOnOffOptions(),
+    doWrap: true,
   },
   {
     key: "timeOfDayAnimation",
@@ -269,11 +288,13 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
       { value: EaseType.BOUNCE, label: t("settings:bounce") },
       { value: EaseType.BACK, label: t("settings:timeOfDay_back") },
     ],
+    doWrap: true,
   },
   {
     key: "enableFusionPaletteSwaps",
     label: t("settings:fusionPaletteSwaps"),
     options: useOnOffOptions(),
+    doWrap: true,
   },
   {
     key: "playerGender",
@@ -282,16 +303,19 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
       { value: PlayerGender.MALE, label: t("settings:boy") },
       { value: PlayerGender.FEMALE, label: t("settings:girl") },
     ],
+    doWrap: true,
   },
   {
     key: "enableTypeHints",
     label: t("settings:typeHints"),
     options: useOnOffOptions(),
+    doWrap: true,
   },
   {
     key: "showBgmBar",
     label: t("settings:showBgmBar"),
     options: useOnOffOptions(),
+    doWrap: true,
   },
   {
     key: "shopCursorTarget",
@@ -302,6 +326,7 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
       { value: ShopCursorTarget.REROLL, label: t("settings:reroll") },
       { value: ShopCursorTarget.CHECK_TEAM, label: t("settings:checkTeam") },
     ],
+    doWrap: true,
   },
   {
     key: "shopOverlayOpacity",
@@ -310,6 +335,7 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
       value: Number(((i + 1) * 0.1).toFixed(1)),
       label: `${(i + 1) * 10}`,
     })),
+    doWrap: true,
   },
 ];
 
@@ -341,14 +367,5 @@ export const audioSettingsUiItems: SettingsUiItem<AudioSettingsKey>[] = [
     key: "uiVolume",
     label: t("settings:uiVolume"),
     options: useVolumeOptions(),
-  },
-  {
-    key: "musicPreference",
-    label: t("settings:musicPreference"),
-    options: [
-      { value: MusicPreference.GENFIVE, label: t("settings:musicGenFive") },
-      { value: MusicPreference.ALLGENS, label: t("settings:musicAllGens") },
-    ],
-    requiresReload: true,
   },
 ];

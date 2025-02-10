@@ -1,3 +1,8 @@
+/**
+ * Remember to add the appropriate score to
+ * {@linkcode getTagTargetBenefitScore}
+ */
+
 export enum BattlerTagType {
   NONE,
   RECHARGING,
@@ -51,6 +56,7 @@ export enum BattlerTagType {
   ALWAYS_CRIT,
   IGNORE_ACCURACY,
   BYPASS_SLEEP,
+  /** Aka `Grounded` */
   IGNORE_FLYING,
   SALT_CURED,
   CURSED,
@@ -97,4 +103,5 @@ export enum BattlerTagType {
   ENDURE_TOKEN,
   POWDER,
   SKY_DROP,
+  CRIT_BOOST_STACKABLE,
 }

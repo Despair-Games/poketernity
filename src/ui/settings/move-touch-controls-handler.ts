@@ -2,6 +2,7 @@ import { LS_PREFIX } from "#app/constants";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import type TouchControl from "#app/touch-controls";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import type UI from "#app/ui/ui";
 import { t } from "i18next";
 
@@ -384,16 +385,8 @@ export default class MoveTouchControlsHandler {
    */
   private createOverlay(ui: UI) {
     const container = new Phaser.GameObjects.Container(globalScene, 0, 0);
-    const overlay = new Phaser.GameObjects.Rectangle(
-      globalScene,
-      0,
-      0,
-      globalScene.game.canvas.width,
-      globalScene.game.canvas.height,
-      0x000000,
-      0.5,
-    );
-    overlay.setInteractive();
+    const overlay = new Phaser.GameObjects.Rectangle(globalScene, 0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.5);
+    overlay.setOrigin(0, 1);
     container.add(overlay);
     ui.add(container);
     this.overlay = container;

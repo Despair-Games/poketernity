@@ -1,6 +1,4 @@
-import { HealFromBerryUseAbAttr } from "#app/data/ab-attrs/heal-from-berry-use-ab-attr";
-import { PreventBerryUseAbAttr } from "#app/data/ab-attrs/prevent-berry-use-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { CommonAnim } from "#enums/common-anim";
 import { BerryUsedEvent } from "#app/events/battle-scene";
 import { globalScene } from "#app/global-scene";
@@ -10,23 +8,27 @@ import { FieldPhase } from "#app/phases/abstract-field-phase";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * The phase after attacks where the pokemon eat berries
  * @extends FieldPhase
  */
 export class BerryPhase extends FieldPhase {
+  override readonly id = PhaseId.BERRY;
+
   public override start(): void {
     super.start();
 
     this.executeForAll((pokemon) => {
       const hasUsableBerry = !!globalScene.findModifier((m) => {
-        return m instanceof BerryModifier && m.shouldApply(pokemon);
+        return m.isBerryModifier() && m.shouldApply(pokemon);
       }, pokemon.isPlayer());
 
       if (hasUsableBerry) {
         const cancelled = new BooleanHolder(false);
-        pokemon.getOpponents().map((opp) => applyAbAttrs(PreventBerryUseAbAttr, opp, false, cancelled));
+        pokemon.getOpponents().map((opp) => applyAbAttrs(AbAttrFlag.PREVENT_BERRY_USE, opp, false, cancelled));
 
         if (cancelled.value) {
           globalScene.queueMessage(
@@ -47,7 +49,7 @@ export class BerryPhase extends FieldPhase {
 
           globalScene.updateModifiers(pokemon.isPlayer());
 
-          applyAbAttrs(HealFromBerryUseAbAttr, pokemon, false);
+          applyAbAttrs(AbAttrFlag.HEAL_FROM_BERRY_USE, pokemon, false);
         }
       }
     });

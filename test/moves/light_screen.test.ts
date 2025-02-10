@@ -6,7 +6,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { NumberHolder } from "#app/utils";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -35,15 +35,15 @@ describe("Moves - Light Screen", () => {
     globalScene = game.scene;
     game.override.battleType("single");
     game.override.ability(Abilities.NONE);
-    game.override.moveset([Moves.ABSORB, Moves.DAZZLING_GLEAM, Moves.TACKLE]);
+    game.override.moveset([MoveId.ABSORB, MoveId.DAZZLING_GLEAM, MoveId.TACKLE]);
     game.override.enemyLevel(100);
     game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyMoveset([Moves.LIGHT_SCREEN, Moves.LIGHT_SCREEN, Moves.LIGHT_SCREEN, Moves.LIGHT_SCREEN]);
+    game.override.enemyMoveset([MoveId.LIGHT_SCREEN, MoveId.LIGHT_SCREEN, MoveId.LIGHT_SCREEN, MoveId.LIGHT_SCREEN]);
     game.override.disableCrits();
   });
 
   it("reduces damage of special attacks by half in a single battle", async () => {
-    const moveToUse = Moves.ABSORB;
+    const moveToUse = MoveId.ABSORB;
     await game.startBattle([Species.SHUCKLE]);
 
     game.move.select(moveToUse);
@@ -62,7 +62,7 @@ describe("Moves - Light Screen", () => {
   it("reduces damage of special attacks by a third in a double battle", async () => {
     game.override.battleType("double");
 
-    const moveToUse = Moves.DAZZLING_GLEAM;
+    const moveToUse = MoveId.DAZZLING_GLEAM;
     await game.startBattle([Species.SHUCKLE, Species.SHUCKLE]);
 
     game.move.select(moveToUse);
@@ -79,7 +79,7 @@ describe("Moves - Light Screen", () => {
   });
 
   it("does not affect physical attacks", async () => {
-    const moveToUse = Moves.TACKLE;
+    const moveToUse = MoveId.TACKLE;
     await game.startBattle([Species.SHUCKLE]);
 
     game.move.select(moveToUse);
@@ -96,7 +96,7 @@ describe("Moves - Light Screen", () => {
 });
 
 /**
- * Calculates the damage of a move multiplied by screen's multiplier, Light Screen in this case {@linkcode Moves.LIGHT_SCREEN}.
+ * Calculates the damage of a move multiplied by screen's multiplier, Light Screen in this case {@linkcode MoveId.LIGHT_SCREEN}.
  * Please note this does not consider other damage calculations except the screen multiplier.
  *
  * @param defender - The defending Pokémon.

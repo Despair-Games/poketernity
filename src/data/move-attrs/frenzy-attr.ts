@@ -1,6 +1,7 @@
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Pokemon } from "#app/field/pokemon";
-import { type Move, applyMoveAttrs } from "#app/data/move";
+import { type Move } from "#app/data/move";
+import { applyMoveAttrs } from "#app/utils/move-utils";
 import { AddBattlerTagAttr } from "./add-battler-tag-attr";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
@@ -24,7 +25,7 @@ export class FrenzyAttr extends MoveEffectAttr {
       const turnCount = user.randSeedIntRange(1, 2);
       new Array(turnCount)
         .fill(null)
-        .map(() => user.getMoveQueue().push({ move: move.id, targets: [target.getBattlerIndex()], ignorePP: true }));
+        .map(() => user.getMoveQueue().push({ moveId: move.id, targets: [target.getBattlerIndex()], ignorePP: true }));
       user.addTag(BattlerTagType.FRENZY, turnCount, move.id, user.id);
     } else {
       applyMoveAttrs(AddBattlerTagAttr, user, target, move);

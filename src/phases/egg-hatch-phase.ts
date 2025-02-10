@@ -15,12 +15,16 @@ import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import type { EggLapsePhase } from "./egg-lapse-phase";
 import type { EggHatchData } from "#app/data/egg-hatch-data";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Class that represents egg hatching
  * @extends Phase
  */
 export class EggHatchPhase extends Phase {
+  override readonly id = PhaseId.EGG_HATCH;
+
   /** The egg that is hatching */
   private readonly egg: Egg;
   /** The new EggHatchData for the egg/pokemon that hatches */
@@ -71,6 +75,7 @@ export class EggHatchPhase extends Phase {
 
   constructor(hatchScene: EggLapsePhase, egg: Egg, eggsToHatchCount: number) {
     super();
+
     this.eggLapsePhase = hatchScene;
     this.egg = egg;
     this.eggsToHatchCount = eggsToHatchCount;
@@ -146,13 +151,7 @@ export class EggHatchPhase extends Phase {
 
       this.eggHatchContainer.add(this.pokemonShinySparkle);
 
-      this.eggHatchOverlay = globalScene.add.rectangle(
-        0,
-        -globalScene.game.canvas.height / 6,
-        globalScene.game.canvas.width / 6,
-        globalScene.game.canvas.height / 6,
-        0xffffff,
-      );
+      this.eggHatchOverlay = globalScene.add.rectangle(0, -GAME_HEIGHT, GAME_WIDTH, GAME_HEIGHT, 0xffffff);
       this.eggHatchOverlay.setOrigin(0, 0);
       this.eggHatchOverlay.setAlpha(0);
       globalScene.fieldUI.add(this.eggHatchOverlay);

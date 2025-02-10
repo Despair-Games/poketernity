@@ -11,11 +11,12 @@ import {
   toReadableString,
   formatStat,
 } from "#app/utils";
-import type { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PokemonMove } from "#app/field/pokemon-move";
 import { getStarterValueFriendshipCap, speciesStarterCosts } from "#app/data/balance/starters";
 import { argbFromRgba } from "@material/material-color-utilities";
 import { getTypeRgb } from "#app/data/type";
-import { Type } from "#enums/type";
+import { ElementalType } from "#enums/elemental-type";
 import { addBBCodeTextObject, addTextObject, getBBCodeFrag } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import type { Move } from "#app/data/move";
@@ -23,7 +24,7 @@ import { MoveCategory } from "#enums/move-category";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
 import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
 import { getLevelRelExp, getLevelTotalExp } from "#app/data/exp";
-import { PokemonHeldItemModifier } from "#app/modifier/modifier";
+import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { StatusEffect } from "#enums/status-effect";
 import { getBiomeName } from "#app/data/balance/biomes";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
@@ -39,6 +40,7 @@ import { Stat, PERMANENT_STATS, getStatKey } from "#enums/stat";
 import { Nature } from "#enums/nature";
 import { settings } from "#app/system/settings/settings-manager";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
+import { CANVAS_SCALE } from "#app/ui-constants";
 
 enum Page {
   PROFILE,
@@ -795,10 +797,10 @@ export default class SummaryUiHandler extends UiHandler {
         typeLabel.setOrigin(0, 0);
         profileContainer.add(typeLabel);
 
-        const getTypeIcon = (index: number, type: Type, tera: boolean = false) => {
+        const getTypeIcon = (index: number, type: ElementalType, tera: boolean = false) => {
           const xCoord = typeLabel.width * typeLabel.scale + 9 + 34 * index;
           const typeIcon = !tera
-            ? globalScene.add.sprite(xCoord, 42, getLocalizedSpriteKey("types"), Type[type].toLowerCase())
+            ? globalScene.add.sprite(xCoord, 42, getLocalizedSpriteKey("types"), ElementalType[type].toLowerCase())
             : globalScene.add.sprite(xCoord, 42, "type_tera");
           if (tera) {
             typeIcon.setScale(0.5);
@@ -882,7 +884,7 @@ export default class SummaryUiHandler extends UiHandler {
 
           // Sets up the mask that hides the description text to give an illusion of scrolling
           const descriptionTextMaskRect = globalScene.make.graphics({});
-          descriptionTextMaskRect.setScale(6);
+          descriptionTextMaskRect.setScale(CANVAS_SCALE);
           descriptionTextMaskRect.fillStyle(0xffffff);
           descriptionTextMaskRect.beginPath();
           descriptionTextMaskRect.fillRect(110, 90.5, 206, 31);
@@ -967,7 +969,7 @@ export default class SummaryUiHandler extends UiHandler {
 
         const itemModifiers = (
           globalScene.findModifiers(
-            (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === this.pokemon?.id,
+            (m) => m.isPokemonHeldItemModifier() && m.pokemonId === this.pokemon?.id,
             this.playerParty,
           ) as PokemonHeldItemModifier[]
         ).sort(modifierSortFunc);
@@ -1013,7 +1015,7 @@ export default class SummaryUiHandler extends UiHandler {
         statsContainer.add(expOverlay);
 
         const expMaskRect = globalScene.make.graphics({});
-        expMaskRect.setScale(6);
+        expMaskRect.setScale(CANVAS_SCALE);
         expMaskRect.fillStyle(0xffffff);
         expMaskRect.beginPath();
         expMaskRect.fillRect(140 + pageContainer.x, 145 + pageContainer.y + 21, Math.floor(expRatio * 64), 3);
@@ -1051,7 +1053,7 @@ export default class SummaryUiHandler extends UiHandler {
           if (this.newMove && this.pokemon) {
             const spriteKey = getLocalizedSpriteKey("types");
             const moveType = this.pokemon.getMoveType(this.newMove);
-            const newMoveTypeIcon = globalScene.add.sprite(0, 0, spriteKey, Type[moveType].toLowerCase());
+            const newMoveTypeIcon = globalScene.add.sprite(0, 0, spriteKey, ElementalType[moveType].toLowerCase());
             newMoveTypeIcon.setOrigin(0, 1);
             this.extraMoveRowContainer.add(newMoveTypeIcon);
           }
@@ -1077,7 +1079,7 @@ export default class SummaryUiHandler extends UiHandler {
           if (move && this.pokemon) {
             const spriteKey = getLocalizedSpriteKey("types");
             const moveType = this.pokemon.getMoveType(move.getMove());
-            const typeIcon = globalScene.add.sprite(0, 0, spriteKey, Type[moveType].toLowerCase());
+            const typeIcon = globalScene.add.sprite(0, 0, spriteKey, ElementalType[moveType].toLowerCase());
             typeIcon.setOrigin(0, 1);
             moveRowContainer.add(typeIcon);
           }
@@ -1106,7 +1108,7 @@ export default class SummaryUiHandler extends UiHandler {
         this.movesContainer.add(this.moveDescriptionText);
 
         const moveDescriptionTextMaskRect = globalScene.make.graphics({});
-        moveDescriptionTextMaskRect.setScale(6);
+        moveDescriptionTextMaskRect.setScale(CANVAS_SCALE);
         moveDescriptionTextMaskRect.fillStyle(0xffffff);
         moveDescriptionTextMaskRect.beginPath();
         moveDescriptionTextMaskRect.fillRect(112, 130, 202, 46);

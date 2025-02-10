@@ -1,11 +1,9 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { BypassSpeedChanceAbAttr } from "#app/data/ab-attrs/bypass-speed-chance-ab-attr";
-import { PreventBypassSpeedChanceAbAttr } from "#app/data/ab-attrs/prevent-bypass-speed-chance-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { allMoves } from "#app/data/all-moves";
-import { TrickRoomTag } from "#app/data/arena-tag";
 import { MoveHeaderAttr } from "#app/data/move-attrs/move-header-attr";
-import { PokemonMove, type Pokemon } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { BypassSpeedChanceModifier } from "#app/modifier/modifier";
 import { CheckStatusEffectPhase } from "#app/phases/check-status-effect-phase";
@@ -19,12 +17,16 @@ import { AttemptCapturePhase } from "./attempt-capture-phase";
 import { AttemptRunPhase } from "./attempt-run-phase";
 import { BerryPhase } from "./berry-phase";
 import { MoveHeaderPhase } from "./move-header-phase";
-import { MovePhase } from "./move-phase";
 import { SwitchSummonPhase } from "./switch-summon-phase";
 import { TurnEndPhase } from "./turn-end-phase";
 import { WeatherEffectPhase } from "./weather-effect-phase";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 export class TurnStartPhase extends FieldPhase {
+  override readonly id = PhaseId.TURN_START;
+
   /**
    * This orders the active Pokemon on the field by speed into an BattlerIndex array and returns that array.
    * It also checks for Trick Room and reverses the array if it is present.
@@ -48,7 +50,7 @@ export class TurnStartPhase extends FieldPhase {
 
     // Next, a check for Trick Room is applied to determine sort order.
     const speedReversed = new BooleanHolder(false);
-    globalScene.arena.applyTags(TrickRoomTag, false, speedReversed);
+    globalScene.arena.applyTags(ArenaTagType.TRICK_ROOM, false, speedReversed);
 
     // Adjust the sort function based on whether Trick Room is active.
     orderedTargets.sort((a: Pokemon, b: Pokemon) => {
@@ -79,8 +81,8 @@ export class TurnStartPhase extends FieldPhase {
       .map((p) => {
         const bypassSpeed = new BooleanHolder(false);
         const canCheckHeldItems = new BooleanHolder(true);
-        applyAbAttrs(BypassSpeedChanceAbAttr, p, false, bypassSpeed);
-        applyAbAttrs(PreventBypassSpeedChanceAbAttr, p, false, bypassSpeed, canCheckHeldItems);
+        applyAbAttrs(AbAttrFlag.BYPASS_SPEED_CHANCE, p, false, bypassSpeed);
+        applyAbAttrs(AbAttrFlag.PREVENT_BYPASS_SPEED_CHANCE, p, false, bypassSpeed, canCheckHeldItems);
         if (canCheckHeldItems.value) {
           globalScene.applyModifiers(BypassSpeedChanceModifier, p.isPlayer(), p, bypassSpeed);
         }
@@ -101,8 +103,8 @@ export class TurnStartPhase extends FieldPhase {
           return -1;
         }
       } else if (aCommand?.command === BattleCommand.FIGHT) {
-        const aMove = allMoves[aCommand.move!.move];
-        const bMove = allMoves[bCommand!.move!.move];
+        const aMove = allMoves[aCommand.move!.moveId];
+        const bMove = allMoves[bCommand!.move!.moveId];
 
         const aUser = globalScene.getField(true).find((p) => p.getBattlerIndex() === a)!;
         const bUser = globalScene.getField(true).find((p) => p.getBattlerIndex() === b)!;
@@ -160,28 +162,33 @@ export class TurnStartPhase extends FieldPhase {
             continue;
           }
           const move =
-            pokemon.getMoveset().find((m) => m.moveId === queuedMove.move && m.ppUsed < m.getMovePp())
-            ?? new PokemonMove(queuedMove.move);
+            pokemon.getMoveset().find((m) => m.moveId === queuedMove.moveId && m.ppUsed < m.getMovePp())
+            ?? new PokemonMove(queuedMove.moveId);
           if (move.getMove().hasAttr(MoveHeaderAttr)) {
             globalScene.unshiftPhase(new MoveHeaderPhase(pokemon, move));
           }
           if (pokemon.isPlayer()) {
             if (turnCommand.cursor === -1) {
-              globalScene.pushPhase(new MovePhase(pokemon, turnCommand.targets ?? queuedMove.targets, move));
+              globalScene.useMove({ pokemon, targets: turnCommand.targets ?? queuedMove.targets, move, when: "defer" });
             } else {
-              const playerPhase = new MovePhase(
+              globalScene.useMove({
                 pokemon,
-                turnCommand.targets ?? queuedMove.targets,
+                targets: turnCommand.targets ?? queuedMove.targets,
                 move,
-                false,
-                queuedMove.ignorePP,
-              );
-              globalScene.pushPhase(playerPhase);
+                followUp: false,
+                ignorePp: queuedMove.ignorePP,
+                when: "defer",
+              });
             }
           } else {
-            globalScene.pushPhase(
-              new MovePhase(pokemon, turnCommand.targets ?? queuedMove.targets, move, false, queuedMove.ignorePP),
-            );
+            globalScene.useMove({
+              pokemon,
+              targets: turnCommand.targets ?? queuedMove.targets,
+              move,
+              followUp: false,
+              ignorePp: queuedMove.ignorePP,
+              when: "defer",
+            });
           }
           break;
         case BattleCommand.BALL:

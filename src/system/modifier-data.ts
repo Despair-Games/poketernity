@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { PersistentModifier } from "#app/modifier/modifier";
+import type { PersistentModifier } from "#app/modifier/modifier";
 import type { GeneratedPersistentModifierType, ModifierType } from "#app/modifier/modifier-type";
 import { ModifierTypeGenerator, getModifierTypeFuncById } from "#app/modifier/modifier-type";
 
@@ -13,7 +13,7 @@ export default class ModifierData {
   public className: string;
 
   constructor(source: PersistentModifier | any, player: boolean) {
-    const sourceModifier = source instanceof PersistentModifier ? (source as PersistentModifier) : null;
+    const sourceModifier = source.isPersistentModifier?.() ? source : null;
     this.player = player;
     this.typeId = sourceModifier ? sourceModifier.type.id : source.typeId;
     if (sourceModifier) {

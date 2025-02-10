@@ -37,4 +37,6 @@ export enum TextStyle {
   ME_OPTION_DEFAULT,
   /** Style for choices with special requirements in ME */
   ME_OPTION_SPECIAL,
+  /** Style for challenge description */
+  CHALLENGE_DESCRIPTION,
 }

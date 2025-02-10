@@ -1,149 +1,138 @@
 import { signatureSpecies } from "#app/data/balance/signatureSpecies";
 import { TrainerConfig, type TrainerConfigs } from "#app/data/trainer-config";
 import { TrainerType } from "#enums/trainer-type";
-import { Type } from "#enums/type";
+import { ElementalType } from "#enums/elemental-type";
 
 let t = TrainerType.LORELEI;
 export const eliteFourTrainerConfigs: TrainerConfigs = {
   [TrainerType.LORELEI]: new TrainerConfig(t)
-    .initForEliteFour(signatureSpecies["LORELEI"], false, Type.ICE)
-    .setBattleBgm("battle_kanto_gym")
-    .setMixedBattleBgm("battle_kanto_gym"),
+    .initForEliteFour(signatureSpecies["LORELEI"], false, ElementalType.ICE)
+    .setBattleBgm("battle_kanto_gym"),
   [TrainerType.BRUNO]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["BRUNO"], true, Type.FIGHTING)
-    .setBattleBgm("battle_kanto_gym")
-    .setMixedBattleBgm("battle_kanto_gym"),
+    .initForEliteFour(signatureSpecies["BRUNO"], true, ElementalType.FIGHTING)
+    .setBattleBgm("battle_kanto_gym"),
   [TrainerType.AGATHA]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["AGATHA"], false, Type.GHOST)
-    .setBattleBgm("battle_kanto_gym")
-    .setMixedBattleBgm("battle_kanto_gym"),
+    .initForEliteFour(signatureSpecies["AGATHA"], false, ElementalType.GHOST)
+    .setBattleBgm("battle_kanto_gym"),
   [TrainerType.LANCE]: new TrainerConfig(++t)
     .setName("Lance")
-    .initForEliteFour(signatureSpecies["LANCE"], true, Type.DRAGON)
-    .setBattleBgm("battle_kanto_gym")
-    .setMixedBattleBgm("battle_kanto_gym"),
+    .initForEliteFour(signatureSpecies["LANCE"], true, ElementalType.DRAGON)
+    .setBattleBgm("battle_kanto_gym"),
   [TrainerType.WILL]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["WILL"], true, Type.PSYCHIC)
-    .setBattleBgm("battle_johto_gym")
-    .setMixedBattleBgm("battle_johto_gym"),
+    .initForEliteFour(signatureSpecies["WILL"], true, ElementalType.PSYCHIC)
+    .setBattleBgm("battle_johto_gym"),
   [TrainerType.KOGA]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["KOGA"], true, Type.POISON)
-    .setBattleBgm("battle_johto_gym")
-    .setMixedBattleBgm("battle_johto_gym"),
+    .initForEliteFour(signatureSpecies["KOGA"], true, ElementalType.POISON)
+    .setBattleBgm("battle_johto_gym"),
   [TrainerType.KAREN]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["KAREN"], false, Type.DARK)
-    .setBattleBgm("battle_johto_gym")
-    .setMixedBattleBgm("battle_johto_gym"),
+    .initForEliteFour(signatureSpecies["KAREN"], false, ElementalType.DARK)
+    .setBattleBgm("battle_johto_gym"),
   [TrainerType.SIDNEY]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["SIDNEY"], true, Type.DARK)
-    .setMixedBattleBgm("battle_hoenn_elite"),
+    .initForEliteFour(signatureSpecies["SIDNEY"], true, ElementalType.DARK)
+    .setBattleBgm("battle_hoenn_elite"),
   [TrainerType.PHOEBE]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["PHOEBE"], false, Type.GHOST)
-    .setMixedBattleBgm("battle_hoenn_elite"),
+    .initForEliteFour(signatureSpecies["PHOEBE"], false, ElementalType.GHOST)
+    .setBattleBgm("battle_hoenn_elite"),
   [TrainerType.GLACIA]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["GLACIA"], false, Type.ICE)
-    .setMixedBattleBgm("battle_hoenn_elite"),
+    .initForEliteFour(signatureSpecies["GLACIA"], false, ElementalType.ICE)
+    .setBattleBgm("battle_hoenn_elite"),
   [TrainerType.DRAKE]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["DRAKE"], true, Type.DRAGON)
-    .setMixedBattleBgm("battle_hoenn_elite"),
+    .initForEliteFour(signatureSpecies["DRAKE"], true, ElementalType.DRAGON)
+    .setBattleBgm("battle_hoenn_elite"),
   [TrainerType.AARON]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["AARON"], true, Type.BUG)
-    .setBattleBgm("battle_sinnoh_gym")
-    .setMixedBattleBgm("battle_sinnoh_gym"),
+    .initForEliteFour(signatureSpecies["AARON"], true, ElementalType.BUG)
+    .setBattleBgm("battle_sinnoh_gym"),
   [TrainerType.BERTHA]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["BERTHA"], false, Type.GROUND)
-    .setBattleBgm("battle_sinnoh_gym")
-    .setMixedBattleBgm("battle_sinnoh_gym"),
+    .initForEliteFour(signatureSpecies["BERTHA"], false, ElementalType.GROUND)
+    .setBattleBgm("battle_sinnoh_gym"),
   [TrainerType.FLINT]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["FLINT"], true, Type.FIRE)
-    .setBattleBgm("battle_sinnoh_gym")
-    .setMixedBattleBgm("battle_sinnoh_gym"),
+    .initForEliteFour(signatureSpecies["FLINT"], true, ElementalType.FIRE)
+    .setBattleBgm("battle_sinnoh_gym"),
   [TrainerType.LUCIAN]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["LUCIAN"], true, Type.PSYCHIC)
-    .setBattleBgm("battle_sinnoh_gym")
-    .setMixedBattleBgm("battle_sinnoh_gym"),
+    .initForEliteFour(signatureSpecies["LUCIAN"], true, ElementalType.PSYCHIC)
+    .setBattleBgm("battle_sinnoh_gym"),
   [TrainerType.SHAUNTAL]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["SHAUNTAL"], false, Type.GHOST)
-    .setMixedBattleBgm("battle_unova_elite"),
+    .initForEliteFour(signatureSpecies["SHAUNTAL"], false, ElementalType.GHOST)
+    .setBattleBgm("battle_unova_elite"),
   [TrainerType.MARSHAL]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["MARSHAL"], true, Type.FIGHTING)
-    .setMixedBattleBgm("battle_unova_elite"),
+    .initForEliteFour(signatureSpecies["MARSHAL"], true, ElementalType.FIGHTING)
+    .setBattleBgm("battle_unova_elite"),
   [TrainerType.GRIMSLEY]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["GRIMSLEY"], true, Type.DARK)
-    .setMixedBattleBgm("battle_unova_elite"),
+    .initForEliteFour(signatureSpecies["GRIMSLEY"], true, ElementalType.DARK)
+    .setBattleBgm("battle_unova_elite"),
   [TrainerType.CAITLIN]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["CAITLIN"], false, Type.PSYCHIC)
-    .setMixedBattleBgm("battle_unova_elite"),
+    .initForEliteFour(signatureSpecies["CAITLIN"], false, ElementalType.PSYCHIC)
+    .setBattleBgm("battle_unova_elite"),
   [TrainerType.MALVA]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["MALVA"], false, Type.FIRE)
-    .setMixedBattleBgm("battle_kalos_elite"),
+    .initForEliteFour(signatureSpecies["MALVA"], false, ElementalType.FIRE)
+    .setBattleBgm("battle_kalos_elite"),
   [TrainerType.SIEBOLD]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["SIEBOLD"], true, Type.WATER)
-    .setMixedBattleBgm("battle_kalos_elite"),
+    .initForEliteFour(signatureSpecies["SIEBOLD"], true, ElementalType.WATER)
+    .setBattleBgm("battle_kalos_elite"),
   [TrainerType.WIKSTROM]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["WIKSTROM"], true, Type.STEEL)
-    .setMixedBattleBgm("battle_kalos_elite"),
+    .initForEliteFour(signatureSpecies["WIKSTROM"], true, ElementalType.STEEL)
+    .setBattleBgm("battle_kalos_elite"),
   [TrainerType.DRASNA]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["DRASNA"], false, Type.DRAGON)
-    .setMixedBattleBgm("battle_kalos_elite"),
+    .initForEliteFour(signatureSpecies["DRASNA"], false, ElementalType.DRAGON)
+    .setBattleBgm("battle_kalos_elite"),
   [TrainerType.HALA]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["HALA"], true, Type.FIGHTING)
-    .setMixedBattleBgm("battle_alola_elite"),
+    .initForEliteFour(signatureSpecies["HALA"], true, ElementalType.FIGHTING)
+    .setBattleBgm("battle_alola_elite"),
   [TrainerType.MOLAYNE]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["MOLAYNE"], true, Type.STEEL)
-    .setMixedBattleBgm("battle_alola_elite"),
+    .initForEliteFour(signatureSpecies["MOLAYNE"], true, ElementalType.STEEL)
+    .setBattleBgm("battle_alola_elite"),
   [TrainerType.OLIVIA]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["OLIVIA"], false, Type.ROCK)
-    .setMixedBattleBgm("battle_alola_elite"),
+    .initForEliteFour(signatureSpecies["OLIVIA"], false, ElementalType.ROCK)
+    .setBattleBgm("battle_alola_elite"),
   [TrainerType.ACEROLA]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["ACEROLA"], false, Type.GHOST)
-    .setMixedBattleBgm("battle_alola_elite"),
+    .initForEliteFour(signatureSpecies["ACEROLA"], false, ElementalType.GHOST)
+    .setBattleBgm("battle_alola_elite"),
   [TrainerType.KAHILI]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["KAHILI"], false, Type.FLYING)
-    .setMixedBattleBgm("battle_alola_elite"),
+    .initForEliteFour(signatureSpecies["KAHILI"], false, ElementalType.FLYING)
+    .setBattleBgm("battle_alola_elite"),
   [TrainerType.MARNIE_ELITE]: new TrainerConfig(++t)
     .setName("Marnie")
-    .initForEliteFour(signatureSpecies["MARNIE_ELITE"], false, Type.DARK)
-    .setMixedBattleBgm("battle_galar_elite"),
+    .initForEliteFour(signatureSpecies["MARNIE_ELITE"], false, ElementalType.DARK)
+    .setBattleBgm("battle_galar_elite"),
   [TrainerType.NESSA_ELITE]: new TrainerConfig(++t)
     .setName("Nessa")
-    .initForEliteFour(signatureSpecies["NESSA_ELITE"], false, Type.WATER)
-    .setMixedBattleBgm("battle_galar_elite"),
+    .initForEliteFour(signatureSpecies["NESSA_ELITE"], false, ElementalType.WATER)
+    .setBattleBgm("battle_galar_elite"),
   [TrainerType.BEA_ELITE]: new TrainerConfig(++t)
     .setName("Bea")
-    .initForEliteFour(signatureSpecies["BEA_ELITE"], false, Type.FIGHTING)
-    .setMixedBattleBgm("battle_galar_elite"),
+    .initForEliteFour(signatureSpecies["BEA_ELITE"], false, ElementalType.FIGHTING)
+    .setBattleBgm("battle_galar_elite"),
   [TrainerType.ALLISTER_ELITE]: new TrainerConfig(++t)
     .setName("Allister")
-    .initForEliteFour(signatureSpecies["ALLISTER_ELITE"], true, Type.GHOST)
-    .setMixedBattleBgm("battle_galar_elite"),
+    .initForEliteFour(signatureSpecies["ALLISTER_ELITE"], true, ElementalType.GHOST)
+    .setBattleBgm("battle_galar_elite"),
   [TrainerType.RAIHAN_ELITE]: new TrainerConfig(++t)
     .setName("Raihan")
-    .initForEliteFour(signatureSpecies["RAIHAN_ELITE"], true, Type.DRAGON)
-    .setMixedBattleBgm("battle_galar_elite"),
+    .initForEliteFour(signatureSpecies["RAIHAN_ELITE"], true, ElementalType.DRAGON)
+    .setBattleBgm("battle_galar_elite"),
   [TrainerType.RIKA]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["RIKA"], false, Type.GROUND)
-    .setMixedBattleBgm("battle_paldea_elite"),
+    .initForEliteFour(signatureSpecies["RIKA"], false, ElementalType.GROUND)
+    .setBattleBgm("battle_paldea_elite"),
   [TrainerType.POPPY]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["POPPY"], false, Type.STEEL)
-    .setMixedBattleBgm("battle_paldea_elite"),
+    .initForEliteFour(signatureSpecies["POPPY"], false, ElementalType.STEEL)
+    .setBattleBgm("battle_paldea_elite"),
   [TrainerType.LARRY_ELITE]: new TrainerConfig(++t)
     .setName("Larry")
-    .initForEliteFour(signatureSpecies["LARRY_ELITE"], true, Type.NORMAL, Type.FLYING)
-    .setMixedBattleBgm("battle_paldea_elite"),
+    .initForEliteFour(signatureSpecies["LARRY_ELITE"], true, ElementalType.NORMAL, ElementalType.FLYING)
+    .setBattleBgm("battle_paldea_elite"),
   [TrainerType.HASSEL]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["HASSEL"], true, Type.DRAGON)
-    .setMixedBattleBgm("battle_paldea_elite"),
+    .initForEliteFour(signatureSpecies["HASSEL"], true, ElementalType.DRAGON)
+    .setBattleBgm("battle_paldea_elite"),
   [TrainerType.CRISPIN]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["CRISPIN"], true, Type.FIRE)
-    .setMixedBattleBgm("battle_bb_elite"),
+    .initForEliteFour(signatureSpecies["CRISPIN"], true, ElementalType.FIRE)
+    .setBattleBgm("battle_bb_elite"),
   [TrainerType.AMARYS]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["AMARYS"], false, Type.STEEL)
-    .setMixedBattleBgm("battle_bb_elite"),
+    .initForEliteFour(signatureSpecies["AMARYS"], false, ElementalType.STEEL)
+    .setBattleBgm("battle_bb_elite"),
   [TrainerType.LACEY]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["LACEY"], false, Type.FAIRY)
-    .setMixedBattleBgm("battle_bb_elite"),
+    .initForEliteFour(signatureSpecies["LACEY"], false, ElementalType.FAIRY)
+    .setBattleBgm("battle_bb_elite"),
   [TrainerType.DRAYTON]: new TrainerConfig(++t)
-    .initForEliteFour(signatureSpecies["DRAYTON"], true, Type.DRAGON)
-    .setMixedBattleBgm("battle_bb_elite"),
+    .initForEliteFour(signatureSpecies["DRAYTON"], true, ElementalType.DRAGON)
+    .setBattleBgm("battle_bb_elite"),
 };

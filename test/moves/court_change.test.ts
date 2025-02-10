@@ -1,6 +1,6 @@
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -25,7 +25,7 @@ describe("Moves - Court Change", () => {
 
     game.override.battleType("single");
 
-    game.override.moveset([Moves.COURT_CHANGE, Moves.SAFEGUARD]);
+    game.override.moveset([MoveId.COURT_CHANGE, MoveId.SAFEGUARD]);
     game.override.enemySpecies(Species.NINJASK);
 
     game.override.startingLevel(100);
@@ -34,9 +34,9 @@ describe("Moves - Court Change", () => {
 
   test("should swap arena tags to opponent", async () => {
     await game.classicMode.startBattle([Species.SHUCKLE]);
-    game.override.enemyMoveset([Moves.SPLASH]);
+    game.override.enemyMoveset([MoveId.SPLASH]);
 
-    game.move.select(Moves.SAFEGUARD);
+    game.move.select(MoveId.SAFEGUARD);
     await game.toNextTurn();
 
     const tag1 = game.scene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, ArenaTagSide.PLAYER);
@@ -44,7 +44,7 @@ describe("Moves - Court Change", () => {
     expect(tag1?.turnCount).toBe(4);
     expect(game.scene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, ArenaTagSide.ENEMY)).toBeUndefined();
 
-    game.move.select(Moves.COURT_CHANGE);
+    game.move.select(MoveId.COURT_CHANGE);
     await game.toNextTurn();
 
     const tag2 = game.scene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, ArenaTagSide.ENEMY);
@@ -56,11 +56,11 @@ describe("Moves - Court Change", () => {
   test("should not miss", async () => {
     await game.classicMode.startBattle([Species.SHUCKLE]);
 
-    game.override.enemyMoveset([Moves.FLY]);
+    game.override.enemyMoveset([MoveId.FLY]);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
-    game.move.select(Moves.SAFEGUARD);
+    game.move.select(MoveId.SAFEGUARD);
     await game.toNextTurn();
 
     expect(game.scene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, ArenaTagSide.PLAYER)?.tagType).toBe(
@@ -68,7 +68,7 @@ describe("Moves - Court Change", () => {
     );
     expect(game.scene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, ArenaTagSide.ENEMY)).toBeUndefined();
 
-    game.move.select(Moves.COURT_CHANGE);
+    game.move.select(MoveId.COURT_CHANGE);
     await game.toNextTurn();
 
     expect(game.scene.arena.getTagOnSide(ArenaTagType.SAFEGUARD, ArenaTagSide.ENEMY)?.tagType).toBe(
