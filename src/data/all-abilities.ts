@@ -452,14 +452,14 @@ export function initAbilities() {
     new Ability(Abilities.GUTS, 3)
       .attr(BypassBurnDamageReductionAbAttr)
       .conditionalAttr(
-        (pokemon) => !!pokemon.status || pokemon.hasAbility(Abilities.COMATOSE),
+        (pokemon) => !!pokemon && pokemon.hasStatusEffect(getNonVolatileStatusEffects()),
         StatMultiplierAbAttr,
         Stat.ATK,
         1.5,
       ),
     new Ability(Abilities.MARVEL_SCALE, 3)
       .conditionalAttr(
-        (pokemon) => !!pokemon.status || pokemon.hasAbility(Abilities.COMATOSE),
+        (pokemon) => !!pokemon && pokemon.hasStatusEffect(getNonVolatileStatusEffects()),
         StatMultiplierAbAttr,
         Stat.DEF,
         1.5,
@@ -555,7 +555,7 @@ export function initAbilities() {
     new Ability(Abilities.QUICK_FEET, 4)
       .attr(BypassParaSpeedReductionAbAttr)
       .conditionalAttr(
-        (pokemon) => !!pokemon.status || pokemon.hasAbility(Abilities.COMATOSE),
+        (pokemon) => !!pokemon && pokemon.hasStatusEffect(getNonVolatileStatusEffects()),
         StatMultiplierAbAttr,
         Stat.SPD,
         1.5,
