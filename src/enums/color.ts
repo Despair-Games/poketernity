@@ -1,20 +1,35 @@
-export enum Color {
+export enum CommonColor {
   WHITE = "#ffffff",
   OFF_WHITE = "#f8f8f8",
   LIGHT_GREY = "#a0a0a0",
   GREY = "#484848",
   DARK_GREY = "#404040",
-  PINK = "#f89890",
-  RED = "#e13d3d",
-  RED2 = "#e70808",
-  REDORANGE = "#d64b00",
-  ORANGE = "#f8b050",
-  LIGHT_YELLOW = "#e8e8a8",
-  YELLOW = "#ccbe00",
+
+  // Reds & Pinks
+  SOFT_PINK = "#f89890",
+  CORAL_PINK = "#F88880",
+  BRIGHT_PINK = "#f85888",
+  WARM_RED = "#e13d3d",
+  DEEP_RED = "#e70808",
+
+  VIBRANT_PURPLE = "#a040a0",
+
+  // Oranges & Yellows
+  SOFT_ORANGE = "#f8b050",
+  BRIGHT_ORANGE = "#f08030",
+  DEEP_ORANGE = "#d64b00",
+  GOLD_YELLOW = "#f8d030",
+  MUTED_YELLOW = "#e8e8a8",
+  DEEP_YELLOW = "#ccbe00",
   DARK_YELLOW = "#a68e17",
-  GREEN = "#78c850",
-  BLUE = "#40c8f8",
-  COMMON = "#ffffff",
+
+  // Greens
+  LIGHT_GREEN = "#78c850",
+
+  // Blues
+  LIGHT_BLUE = "#40c8f8",
+  SOFT_BLUE = "#6890f0",
+
   GREAT = "#3890f8",
   ULTRA = "#f8d038",
   MASTER = "#e020c0",
@@ -42,7 +57,7 @@ export enum TypeColor {
   FAIRY = "#EF70EF",
 }
 
-export enum TypeShadow {
+export enum TypeShadowColor {
   NORMAL = "#574F4A",
   FIGHTING = "#4E637C",
   FLYING = "#4E637C",
@@ -64,19 +79,57 @@ export enum TypeShadow {
 }
 
 export enum ShadowColor {
-  GREY = "#636363",
-  PURPLE = "#6b5a73",
   LIGHT_GREY = "#d0d0c8",
-  BROWN = "#69402a",
-  PINK = "#fca2a2",
+  GREY = "#636363",
+  MEDIUM_GRAY = "#707070",
+  DARK_GREY = "#807870",
+
+  // Browns
+  LIGHT_BROWN = "#69402a",
+  DARK_BROWN = "#632929",
+  OLIVE_BRONZE = "#6e672c",
+
+  // Purples
+  DARK_PURPLE = "#483850",
+  PURPLE = "#6b5a73",
+
+  // Reds
+  LIGHT_RED = "#fca2a2",
   BRIGHT_RED = "#f83018",
-  RED = "#984038",
-  MAROON = "#632929",
-  GREEN = "#306850",
-  BLUE = "#006090",
+  DEEP_RED = "#984038",
+  DARK_RED = "#c03028",
+  DUSTY_ROSE = "#906060",
+
+  // Greens
+  SOFT_GREEN = "#306850",
+  MUTED_GREEN = "#588040",
+
+  // Blues
+  LIGHT_BLUE = "#006090",
+
+  // Yellows and Oranges
   LIGHT_YELLOW = "#ded6b5",
   YELLOW = "#ebd773",
   DARK_YELLOW = "#a0a060",
+  MUTED_GOLD = "b8a038",
   ORANGE = "#c07800",
   LIGHT_ORANGE = "#ffbd73",
+  PEACH_SAND = "#f7b18b",
+}
+
+export enum TypeEffectivenessColor {
+  NO_EFFECT = "#929292", // Grey (0x)
+
+  VERY_RESISTED = "#FF5500", // Deep Orange (0.125x)
+  RESISTED = "#FF7400", // Bright Orange (0.25x)
+  NOT_VERY_EFFECTIVE = "#FE8E00", // Warm Orange (0.5x)
+
+  SUPER_EFFECTIVE = "#4AA500", // Deep Green (2x)
+  VERY_SUPER_EFFECTIVE = "#4BB400", // Brighter Green (4x)
+  MAX_SUPER_EFFECTIVE = "#52C200", // Most vibrant Green (8x)
+
+  DEFENSE_NO_EFFECT = "#B1B100", // Mustard Yellow (0x)
+  DEFENSE_VERY_RESISTED = "#2DB4FF", // Light Blue (0.125x)
+  DEFENSE_RESISTED = "#00A4FF", // Brighter Blue (0.25x)
+  DEFENSE_NOT_VERY_EFFECTIVE = "#0093FF", // Deep Blue (0.5x)
 }

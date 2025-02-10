@@ -16,6 +16,7 @@ import { TrainerVariant } from "#enums/trainer-variant";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { settings } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { CommonColor } from "#enums/color";
 
 export type RunSelectCallback = (cursor: number) => void;
 
@@ -314,10 +315,10 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
             20,
             `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(enemy.level, 1000)}`,
             TextStyle.PARTY,
-            { fontSize: "54px", color: "#f8f8f8" },
+            { fontSize: "54px", color: CommonColor.OFF_WHITE },
           );
           enemyLevel.setShadow(0, 0, undefined);
-          enemyLevel.setStroke("#424242", 14);
+          enemyLevel.setStroke(CommonColor.DARK_GREY, 14);
           enemyLevel.setOrigin(1, 0);
           enemyIconContainer.add(enemyIcon);
           enemyIconContainer.add(enemyLevel);
@@ -408,10 +409,10 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
         20,
         `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(pokemon.level, 1000)}`,
         TextStyle.PARTY,
-        { fontSize: "54px", color: "#f8f8f8" },
+        { fontSize: "54px", color: CommonColor.OFF_WHITE },
       );
       text.setShadow(0, 0, undefined);
-      text.setStroke("#424242", 14);
+      text.setStroke(CommonColor.DARK_GREY, 14);
       text.setOrigin(1, 0);
 
       iconContainer.add(icon);

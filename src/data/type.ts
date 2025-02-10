@@ -1,3 +1,4 @@
+import { TypeEffectivenessColor } from "#enums/color";
 import { ElementalType } from "#enums/elemental-type";
 
 export type TypeDamageMultiplier = 0 | 0.125 | 0.25 | 0.5 | 1 | 2 | 4 | 8;
@@ -278,40 +279,40 @@ export function getTypeDamageMultiplierColor(
   if (side === "offense") {
     switch (multiplier) {
       case 0:
-        return "#929292";
+        return TypeEffectivenessColor.NO_EFFECT;
       case 0.125:
-        return "#FF5500";
+        return TypeEffectivenessColor.VERY_RESISTED;
       case 0.25:
-        return "#FF7400";
+        return TypeEffectivenessColor.RESISTED;
       case 0.5:
-        return "#FE8E00";
+        return TypeEffectivenessColor.NOT_VERY_EFFECTIVE;
       case 1:
         return undefined;
       case 2:
-        return "#4AA500";
+        return TypeEffectivenessColor.SUPER_EFFECTIVE;
       case 4:
-        return "#4BB400";
+        return TypeEffectivenessColor.VERY_SUPER_EFFECTIVE;
       case 8:
-        return "#52C200";
+        return TypeEffectivenessColor.MAX_SUPER_EFFECTIVE;
     }
   } else if (side === "defense") {
     switch (multiplier) {
       case 0:
-        return "#B1B100";
+        return TypeEffectivenessColor.DEFENSE_NO_EFFECT;
       case 0.125:
-        return "#2DB4FF";
+        return TypeEffectivenessColor.DEFENSE_VERY_RESISTED;
       case 0.25:
-        return "#00A4FF";
+        return TypeEffectivenessColor.DEFENSE_RESISTED;
       case 0.5:
-        return "#0093FF";
+        return TypeEffectivenessColor.DEFENSE_NOT_VERY_EFFECTIVE;
       case 1:
         return undefined;
       case 2:
-        return "#FE8E00";
+        return TypeEffectivenessColor.SUPER_EFFECTIVE;
       case 4:
-        return "#FF7400";
+        return TypeEffectivenessColor.VERY_SUPER_EFFECTIVE;
       case 8:
-        return "#FF5500";
+        return TypeEffectivenessColor.MAX_SUPER_EFFECTIVE;
     }
   }
 }
