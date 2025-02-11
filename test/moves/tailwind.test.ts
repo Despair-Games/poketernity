@@ -7,6 +7,8 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { Abilities } from "#enums/abilities";
+import { BattlerIndex } from "#enums/battler-index";
 
 describe("Moves - Tailwind", () => {
   let phaserGame: Phaser.Game;
@@ -29,8 +31,8 @@ describe("Moves - Tailwind", () => {
     game.override.enemyMoveset(MoveId.SPLASH);
   });
 
-  it("doubles the Speed stat of the Pokemons on its side", async () => {
-    await game.startBattle([Species.MAGIKARP, Species.MEOWTH]);
+  it("doubles the Speed stat of the Pokemon on its side", async () => {
+    await game.classicMode.startBattle([Species.MAGIKARP, Species.MEOWTH]);
     const magikarp = game.scene.getPlayerField()[0];
     const meowth = game.scene.getPlayerField()[1];
 
@@ -53,7 +55,7 @@ describe("Moves - Tailwind", () => {
   it("lasts for 4 turns", async () => {
     game.override.battleType("single");
 
-    await game.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([Species.MAGIKARP]);
 
     game.move.select(MoveId.TAILWIND);
     await game.toNextTurn();
@@ -76,7 +78,7 @@ describe("Moves - Tailwind", () => {
   it("does not affect the opposing side", async () => {
     game.override.battleType("single");
 
-    await game.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const ally = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -97,5 +99,24 @@ describe("Moves - Tailwind", () => {
     expect(enemy.getEffectiveStat(Stat.SPD)).equal(enemySpd);
     expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.PLAYER)).toBeDefined();
     expect(game.scene.arena.getTagOnSide(ArenaTagType.TAILWIND, ArenaTagSide.ENEMY)).toBeUndefined();
+  });
+
+  it("modifies turn order on the turn it is set", async () => {
+    game.override.battleType("double").enemySpecies(Species.EXCADRILL).ability(Abilities.PRANKSTER).enemyIVs(0);
+
+    await game.classicMode.startBattle([Species.WHIMSICOTT, Species.URSALUNA]);
+
+    game.move.use(MoveId.TAILWIND, 0);
+    game.move.use(MoveId.TACKLE, 1, BattlerIndex.ENEMY);
+
+    await game.phaseInterceptor.to("BerryPhase", false);
+
+    const turnOrder = game.scene
+      .getField(true)
+      .sort((a, b) => a.turnData.order - b.turnData.order)
+      .map((p) => p.getBattlerIndex());
+
+    expect(turnOrder[0]).toBe(BattlerIndex.PLAYER);
+    expect(turnOrder[1]).toBe(BattlerIndex.PLAYER_2);
   });
 });
