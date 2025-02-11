@@ -92,7 +92,7 @@ import { PokeballType } from "#enums/pokeball";
 import { Gender } from "#enums/gender";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
 import { initMoveAnim } from "#app/data/init-move-anim";
-import { Status, getRandomStatus } from "#app/data/status-effect";
+import { Status, getNonVolatileStatusEffects, getRandomStatus } from "#app/data/status-effect";
 import type { SpeciesFormEvolution, SpeciesEvolutionCondition } from "#app/data/balance/pokemon-evolutions";
 import {
   pokemonEvolutions,
@@ -4038,7 +4038,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     ignoreField: boolean = false,
   ): boolean {
     if (effect !== StatusEffect.FAINT) {
-      if (overrideStatus ? this.status?.effect === effect : this.status) {
+      if (overrideStatus ? this.status?.effect === effect : this.hasStatusEffect(getNonVolatileStatusEffects())) {
         return false;
       }
       if (this.isGrounded() && !ignoreField && globalScene.arena.terrain?.terrainType === TerrainType.MISTY) {
