@@ -1313,12 +1313,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Helper function that returns a Pokemon's HP ratio rounded to a specific decimal value
-   * @param fractionDigits the number of decimal places desired, defaults to the hundredths place
-   * @returns the HP ratio rounded to the provided decimal place
+   * Helper function that returns a Pokemon's unrounded HP ratio
+   * @returns the Pokemon's current HP divided by its max HP
    */
-  getHpRatio(fractionDigits: number = 2): number {
-    return parseFloat((this.hp / this.getMaxHp()).toFixed(fractionDigits));
+  getHpRatio(): number {
+    return this.hp / this.getMaxHp();
   }
 
   generateGender(): void {

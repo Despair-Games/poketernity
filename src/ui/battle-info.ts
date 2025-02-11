@@ -457,7 +457,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
       }
     }
 
-    this.hpBar.setScale(this.getHpBarScaleX(pokemon), 1);
+    this.hpBar.setScale(pokemon.getHpRatio(), 1);
     this.lastHpFrame = this.hpBar.scaleX > 0.5 ? "high" : this.hpBar.scaleX > 0.25 ? "medium" : "low";
     this.hpBar.setFrame(this.lastHpFrame);
     if (this.player) {
@@ -714,7 +714,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
         globalScene.tweens.add({
           targets: this.hpBar,
           ease: "Sine.easeOut",
-          scaleX: this.getHpBarScaleX(pokemon),
+          scaleX: pokemon.getHpRatio(),
           duration: duration,
           onUpdate: () => {
             if (this.player && this.lastHp !== pokemon.hp) {
@@ -901,15 +901,6 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     for (let i = hpStr.length - 1; i >= 0; i--) {
       this.hpNumbersContainer.add(globalScene.add.image(offset++ * -8, 0, "numbers", hpStr[i]));
     }
-  }
-
-  /**
-   * Helper function that provides the unrounded current HP to max HP ratio of a Pokemon
-   * @param pokemon the Pokemon associated with the battle info UI
-   * @returns the unrounded result of the Pokemon's current HP divided by max HP
-   */
-  getHpBarScaleX(pokemon: Pokemon): number {
-    return pokemon.hp / pokemon.getMaxHp();
   }
 
   updateStats(stats: number[]): void {
