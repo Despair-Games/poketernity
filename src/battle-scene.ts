@@ -28,7 +28,6 @@ import {
   DoubleBattleChanceBoosterModifier,
   ExpBalanceModifier,
   ExpShareModifier,
-  FusePokemonModifier,
   HealingBoosterModifier,
   ModifierBar,
   MultipleParticipantExpBonusModifier,
@@ -2611,8 +2610,6 @@ export default class BattleScene extends SceneBase {
             } else {
               args.push(1);
             }
-          } else if (modifier instanceof FusePokemonModifier) {
-            args.push(this.getPokemonById(modifier.fusePokemonId) as PlayerPokemon);
           } else if (modifier instanceof RememberMoveModifier && !isNullOrUndefined(cost)) {
             args.push(cost);
           }
