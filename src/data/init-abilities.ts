@@ -644,7 +644,8 @@ export function initAbilities() {
       .condition((pokemon) => pokemon.getHpRatio() <= 0.5),
     new Ability(Abilities.CURSED_BODY, 5).attr(PostDefendMoveDisableAbAttr, 30).bypassFaint(),
     new Ability(Abilities.HEALER, 5).conditionalAttr(
-      (pokemon) => pokemon.getAlly() && pokemon.getAlly().status?.effect !== StatusEffect.FAINT && randSeedInt(10) < 3,
+      (pokemon) =>
+        pokemon.getAlly() && pokemon.getAlly().hasStatusEffect(getNonVolatileStatusEffects()) && randSeedInt(10) < 3,
       PostTurnResetStatusAbAttr,
       true,
     ),
@@ -671,7 +672,8 @@ export function initAbilities() {
       MovePowerBoostAbAttr,
       (user, _target, move) =>
         move?.category === MoveCategory.PHYSICAL
-        && (user?.status?.effect === StatusEffect.POISON || user?.status?.effect === StatusEffect.TOXIC),
+        && !!user
+        && user.hasStatusEffect([StatusEffect.TOXIC, StatusEffect.POISON]),
       1.5,
     ),
     new Ability(Abilities.FLARE_BOOST, 5).attr(
@@ -915,8 +917,7 @@ export function initAbilities() {
     ),
     new Ability(Abilities.MERCILESS, 7).attr(
       ConditionalCritAbAttr,
-      (_user, target, _move) =>
-        target?.status?.effect === StatusEffect.TOXIC || target?.status?.effect === StatusEffect.POISON,
+      (_user, target, _move) => !!target && target.hasStatusEffect([StatusEffect.POISON, StatusEffect.TOXIC]),
     ),
     new Ability(Abilities.SHIELDS_DOWN, 7)
       .attr(PostBattleInitFormChangeAbAttr, () => 0)
