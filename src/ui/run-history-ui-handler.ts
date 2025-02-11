@@ -356,8 +356,6 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
     }
 
     // Game Mode + Waves
-    // Because Endless (Spliced) tends to have the longest name across languages, the line tends to spill into the party icons.
-    // To fix this, the Spliced icon is used to indicate an Endless Spliced run
     const gameModeLabel = addTextObject(8, 19, "", TextStyle.WINDOW);
     let mode = "";
     switch (data.gameMode) {

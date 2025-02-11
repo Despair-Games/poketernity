@@ -861,7 +861,7 @@ export default class RunInfoUiHandler extends UiHandler {
       }
 
       // Pokemon Held Items - not displayed by default
-      // Endless/Endless Spliced have a different scale because Pokemon tend to accumulate more items in these runs.
+      // Endless has a different scale because Pokemon tend to accumulate more items in these runs.
       const heldItemsScale = this.runInfo.gameMode === GameModes.ENDLESS ? 0.25 : 0.5;
       const heldItemsContainer = globalScene.add.container(-82, 2);
       const heldItemsList: Modifier.PokemonHeldItemModifier[] = [];
