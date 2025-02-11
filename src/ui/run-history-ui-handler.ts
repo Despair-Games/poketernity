@@ -364,7 +364,6 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
       case GameModes.DAILY:
         mode = i18next.t("gameMode:dailyRun");
         break;
-      case GameModes.SPLICED_ENDLESS:
       case GameModes.ENDLESS:
         mode = i18next.t("gameMode:endless");
         break;
@@ -376,17 +375,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
         break;
     }
     gameModeLabel.appendText(mode, false);
-    if (data.gameMode === GameModes.SPLICED_ENDLESS) {
-      const splicedIcon = globalScene.add.image(0, 0, "icon_spliced");
-      splicedIcon.setScale(0.75);
-      const coords = gameModeLabel.getTopRight();
-      splicedIcon.setPosition(coords.x + 5, 27);
-      this.add(splicedIcon);
-      // 4 spaces of room for the Spliced icon
-      gameModeLabel.appendText("    - ", false);
-    } else {
-      gameModeLabel.appendText(" - ", false);
-    }
+    gameModeLabel.appendText(" - ", false);
     gameModeLabel.appendText(i18next.t("saveSlotSelectUiHandler:wave") + " " + data.waveIndex, false);
     this.add(gameModeLabel);
 

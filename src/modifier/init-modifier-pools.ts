@@ -492,9 +492,7 @@ export function initModifierPools() {
     new WeightedModifierType(
       modifierTypes.VOUCHER_PREMIUM,
       (_party: Pokemon[], rerollCount: number) =>
-        !globalScene.gameMode.isDaily && !globalScene.gameMode.isEndless && !globalScene.gameMode.isSplicedOnly
-          ? Math.max(5 - rerollCount * 2, 0)
-          : 0,
+        !globalScene.gameMode.isDaily && !globalScene.gameMode.isEndless ? Math.max(5 - rerollCount * 2, 0) : 0,
       5,
     ),
     new WeightedModifierType(

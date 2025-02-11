@@ -2579,7 +2579,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     const valueLimit = new NumberHolder(0);
     switch (globalScene.gameMode.modeId) {
       case GameModes.ENDLESS:
-      case GameModes.SPLICED_ENDLESS:
         valueLimit.value = 15;
         break;
       default:

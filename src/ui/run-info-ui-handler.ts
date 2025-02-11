@@ -576,9 +576,6 @@ export default class RunInfoUiHandler extends UiHandler {
       case GameModes.DAILY:
         modeText.appendText(`${i18next.t("gameMode:dailyRun")}`, false);
         break;
-      case GameModes.SPLICED_ENDLESS:
-        modeText.appendText(`${i18next.t("gameMode:endlessSpliced")}`, false);
-        break;
       case GameModes.CHALLENGE:
         modeText.appendText(`${i18next.t("gameMode:challenge")}`, false);
         modeText.appendText(`${i18next.t("runHistory:challengeRules")}: `);
@@ -604,7 +601,7 @@ export default class RunInfoUiHandler extends UiHandler {
 
     // If the player achieves a personal best in Endless, the mode text will be tinted similarly to SSS luck to celebrate their achievement.
     if (
-      (this.runInfo.gameMode === GameModes.ENDLESS || this.runInfo.gameMode === GameModes.SPLICED_ENDLESS)
+      this.runInfo.gameMode === GameModes.ENDLESS
       && this.runInfo.waveIndex === globalScene.gameData.gameStats.highestEndlessWave
     ) {
       modeText.appendText(` [${i18next.t("runHistory:personalBest")}]`);
@@ -865,8 +862,7 @@ export default class RunInfoUiHandler extends UiHandler {
 
       // Pokemon Held Items - not displayed by default
       // Endless/Endless Spliced have a different scale because Pokemon tend to accumulate more items in these runs.
-      const heldItemsScale =
-        this.runInfo.gameMode === GameModes.SPLICED_ENDLESS || this.runInfo.gameMode === GameModes.ENDLESS ? 0.25 : 0.5;
+      const heldItemsScale = this.runInfo.gameMode === GameModes.ENDLESS ? 0.25 : 0.5;
       const heldItemsContainer = globalScene.add.container(-82, 2);
       const heldItemsList: Modifier.PokemonHeldItemModifier[] = [];
       if (this.runInfo.modifiers.length) {

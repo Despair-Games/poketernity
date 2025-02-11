@@ -349,9 +349,6 @@ export default class PartyUiHandler extends MessageUiHandler {
             );
           }
           if (filterResult === null) {
-            if (this.partyUiMode !== PartyUiMode.SPLICE) {
-              this.clearOptions();
-            }
             if (this.selectCallback && this.partyUiMode !== PartyUiMode.CHECK) {
               if (option === PartyOption.TRANSFER) {
                 if (this.transferCursor !== this.cursor) {
@@ -581,10 +578,7 @@ export default class PartyUiHandler extends MessageUiHandler {
         }
         return true;
       } else if (button === Button.CANCEL) {
-        if (
-          (this.partyUiMode === PartyUiMode.MODIFIER_TRANSFER || this.partyUiMode === PartyUiMode.SPLICE)
-          && this.transferMode
-        ) {
+        if (this.partyUiMode === PartyUiMode.MODIFIER_TRANSFER && this.transferMode) {
           this.clearTransfer();
           ui.playSelect();
         } else if (this.partyUiMode !== PartyUiMode.FAINT_SWITCH && this.partyUiMode !== PartyUiMode.REVIVAL_BLESSING) {
@@ -764,11 +758,6 @@ export default class PartyUiHandler extends MessageUiHandler {
       case PartyUiMode.MODIFIER_TRANSFER:
         if (!this.transferMode) {
           optionsMessage = i18next.t("partyUiHandler:changeQuantity");
-        }
-        break;
-      case PartyUiMode.SPLICE:
-        if (!this.transferMode) {
-          optionsMessage = i18next.t("partyUiHandler:selectAnotherPokemonToSplice");
         }
         break;
     }
