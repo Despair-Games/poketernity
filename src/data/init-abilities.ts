@@ -183,8 +183,7 @@ import { getNonVolatileStatusEffects } from "#app/data/status-effect";
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { type MovePhase } from "#app/phases/move-phase";
-import { isNullOrUndefined, NumberHolder, randSeedInt, toDmgValue } from "#app/utils";
+import { NumberHolder, randSeedInt, toDmgValue } from "#app/utils";
 import { getWeatherCondition } from "#app/utils/ability-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { Abilities } from "#enums/abilities";
@@ -195,7 +194,6 @@ import { Gender } from "#enums/gender";
 import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 import { type EffectiveStat, EFFECTIVE_STATS, getStatKey, Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
@@ -709,12 +707,7 @@ export function initAbilities() {
     new Ability(Abilities.WONDER_SKIN, 5).attr(WonderSkinAbAttr).ignorable(),
     new Ability(Abilities.ANALYTIC, 5).attr(
       MovePowerBoostAbAttr,
-      (user, _target, _move) => {
-        const movePhase = globalScene.findPhase(
-          (phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon.id !== user?.id,
-        );
-        return isNullOrUndefined(movePhase);
-      },
+      () => globalScene.currentBattle.turnManager.empty(),
       1.3,
     ),
     new Ability(Abilities.ILLUSION, 5).attr(UncopiableAbilityAbAttr).attr(UnswappableAbilityAbAttr).unimplemented(),

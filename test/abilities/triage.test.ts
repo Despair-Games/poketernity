@@ -85,6 +85,6 @@ describe("Abilities - Triage", () => {
 
     // The Pokemon using Pollen Puff on its ally should be after the enemy Pokemon using Quick Attack
     expect(allMoves[MoveId.POLLEN_PUFF].checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(false);
-    expect(playerPokemon[0].turnData.order).toBeGreaterThanOrEqual(2);
+    expect(playerPokemon.turnData.order).toBeGreaterThanOrEqual(2);
   });
 });
