@@ -3985,19 +3985,19 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * Helper function that determines if a Pokemon has a non-volatile status effect and/or is Confused
    * @param statusList the status(es) to be checked
    * @param includeConfusion whether Confusion should also be considered
-   * @param ignoreAbility whether a status effect-mocking ability should be considered
+   * @param ignoreMockAbility whether a status effect-mocking ability should be considered
    * @returns `true` if the Pokemon has a status effect | `false` if it does not
    */
   hasStatusEffect(
     statusList: StatusEffect | StatusEffect[],
     includeConfusion: boolean = false,
-    ignoreAbility: boolean = false,
+    ignoreMockAbility: boolean = false,
   ): boolean {
     if (!Array.isArray(statusList)) {
       statusList = [statusList];
     }
     if (
-      statusList.includes(this.getStatusEffect(ignoreAbility))
+      statusList.includes(this.getStatusEffect(ignoreMockAbility))
       || (includeConfusion && this.getTag(BattlerTagType.CONFUSED))
     ) {
       return true;
@@ -4007,15 +4007,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Helper function that retrieves the Pokemon's non-volatile status effect
-   * @param ignoreAbility whether a status effect-mocking ability should be applied
+   * @param ignoreMockAbility whether a status effect-mocking ability should be applied
    * @returns {@linkcode StatusEffect} the status effect held by the Pokemon
    */
-  getStatusEffect(ignoreAbility: boolean = false): StatusEffect {
+  getStatusEffect(ignoreMockAbility: boolean = false): StatusEffect {
     const statusEffect = new NumberHolder(StatusEffect.NONE);
     if (this.status) {
       statusEffect.value = this.status.effect;
     }
-    if (!ignoreAbility) {
+    if (!ignoreMockAbility) {
       applyAbAttrs(AbAttrFlag.MOCK_STATUS_EFFECT, this, false, statusEffect);
     }
     return statusEffect.value as StatusEffect;
