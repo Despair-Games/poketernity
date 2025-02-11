@@ -3,11 +3,17 @@ import { ShadowColor, TextColor, Color } from "#enums/color";
 import { TextStyle } from "#enums/text-style";
 import { UiTheme } from "#enums/ui-theme";
 
+/**
+ * Combination of a {@linkcode Color} and {@linkcode ShadowColor} used for text elements.
+ */
 interface TextColorCombination {
   mainColor: Color;
   shadowColor: ShadowColor;
 }
 
+/**
+ * Object linking each {@linkcode TextColor} to a {@linkcode Color} and {@linkcode ShadowColor}.
+ */
 const colorCombinations: { [key: string]: TextColorCombination } = {
   [TextColor.OFF_WHITE_PURPLE]: { mainColor: Color.OFF_WHITE, shadowColor: ShadowColor.PURPLE },
   [TextColor.OFF_WHITE_GREY]: { mainColor: Color.OFF_WHITE, shadowColor: ShadowColor.GREY },
@@ -28,6 +34,11 @@ const colorCombinations: { [key: string]: TextColorCombination } = {
   [TextColor.DARK_PINK_BRIGHT_RED]: { mainColor: Color.DARK_PINK, shadowColor: ShadowColor.BRIGHT_RED },
 };
 
+/**
+ * Retrieve the colors associated with the given TextStyle, based on the current {@linkcode UiTheme}.
+ * @param textStyle the {@linkcode TextStyle} to retrieve colors for
+ * @returns a {@linkcode TextColorCombination} consisting of a {@linkcode Color} and {@linkcode ShadowColor};
+ */
 export function getTextColorCombination(textStyle: TextStyle): TextColorCombination {
   let colorCombination: TextColor | undefined;
   if (settings.display.uiTheme === UiTheme.LIGHT) {
@@ -39,6 +50,10 @@ export function getTextColorCombination(textStyle: TextStyle): TextColorCombinat
   return colorCombinations[colorCombination];
 }
 
+/**
+ * Get the {@linkcode TextColor} associated with the given {@linkcode TextStyle}.
+ * This does not take into account any variations introduced by various UIThemes.
+ */
 function getDefaultTextColor(textStyle: TextStyle): TextColor {
   switch (textStyle) {
     // White text, purple shadow
@@ -107,6 +122,10 @@ function getDefaultTextColor(textStyle: TextStyle): TextColor {
   }
 }
 
+/**
+ * Get the {@linkcode TextColor} associated with the given {@linkcode TextStyle} with the UI light theme.
+ * @returns a {@linkcode TextColor} if a specific color is defined compared to the default, `undefined` otherwise.
+ */
 function getLightThemeTextColor(textStyle: TextStyle): TextColor | undefined {
   switch (textStyle) {
     // Grey text, light grey shadow

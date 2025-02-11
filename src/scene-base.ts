@@ -17,7 +17,7 @@ export const windowTypeDependantAtlases: string[] = [];
  * atlases/spritesheets that need to be updated live when the {@linkcode UiWindowType} is changed
  * and UI elements that depend on the current {@linkcode UiTheme}.
  */
-interface TextureLoadingParams {
+interface TextureLoadingOptions {
   /**
    * Optional filename, without the extension. Allows to use a texture key different from the name of the file to load.
    */
@@ -56,31 +56,31 @@ export class SceneBase extends Phaser.Scene {
     return url;
   }
 
-  loadImage(key: string, folder: string, params?: TextureLoadingParams) {
+  loadImage(key: string, folder: string, options?: TextureLoadingOptions) {
     folder = folder ? folder + "/" : "";
-    const filenameRoot = params ? this.getFilenameRoot(key, params) : key;
+    const filenameRoot = options ? this.getFilenameRoot(key, options) : key;
     this.load.image(key, this.getCachedUrl(`images/${folder}${filenameRoot}.png`));
   }
 
-  loadSpritesheet(key: string, folder: string, width: number, height?: number, params?: TextureLoadingParams) {
-    if (params?.windowTypeDependant) {
+  loadSpritesheet(key: string, folder: string, width: number, height?: number, options?: TextureLoadingOptions) {
+    if (options?.windowTypeDependant) {
       windowTypeDependantAtlases.push(key);
     }
     folder = folder ? folder + "/" : "";
-    const filenameRoot = params ? this.getFilenameRoot(key, params) : key;
+    const filenameRoot = options ? this.getFilenameRoot(key, options) : key;
     this.load.spritesheet(key, this.getCachedUrl(`images/${folder}${filenameRoot}.png`), {
       frameWidth: width,
       frameHeight: height ?? width,
     });
   }
 
-  loadAtlas(key: string, folder: string, params?: TextureLoadingParams) {
-    if (params?.windowTypeDependant) {
+  loadAtlas(key: string, folder: string, options?: TextureLoadingOptions) {
+    if (options?.windowTypeDependant) {
       windowTypeDependantAtlases.push(key);
     }
     folder = folder ? folder + "/" : "";
-    const atlasFilenameRoot = params?.filenameRoot ?? key;
-    const imageFilenameRoot = params ? this.getFilenameRoot(key, params) : key;
+    const atlasFilenameRoot = options?.filenameRoot ?? key;
+    const imageFilenameRoot = options ? this.getFilenameRoot(key, options) : key;
     this.load.atlas(
       key,
       this.getCachedUrl(`images/${folder}${imageFilenameRoot}.png`),
@@ -88,7 +88,7 @@ export class SceneBase extends Phaser.Scene {
     );
   }
 
-  private getFilenameRoot(key: string, params: TextureLoadingParams) {
+  private getFilenameRoot(key: string, params: TextureLoadingOptions) {
     let filenameRoot = params.filenameRoot ?? key;
     if (params.uiThemeDependant) {
       filenameRoot += "-" + UiTheme[settings.display.uiTheme].toLowerCase();

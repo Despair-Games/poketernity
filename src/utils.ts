@@ -445,7 +445,7 @@ export function hslToHex(h: number, s: number, l: number): string {
 }
 
 /**
- * This function returns checks if all localized images used by the game have been added for the given language.
+ * This function checks if all localized images used by the game have been added for the given language.
  * @param key the language key (e.g. "ko").
  * @returns `true` if the given language is supported and has localized sprites.
  */
