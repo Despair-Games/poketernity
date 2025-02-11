@@ -149,7 +149,7 @@ export function initModifierPools() {
       modifierTypes.HYPER_POTION,
       (party: Pokemon[]) => {
         const thresholdPartyMemberCount = Math.min(
-          party.filter((p) => p.getInverseHp() >= 100 && p.getHpRatio() <= 0.625 && !p.isFainted()).length,
+          party.filter((p) => p.getInverseHp() >= 100 && p.getHpRatio(3) <= 0.625 && !p.isFainted()).length,
           3,
         );
         return thresholdPartyMemberCount * 3;
