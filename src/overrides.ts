@@ -130,10 +130,10 @@ class DefaultOverrides {
   /** This will override the species of the fusion */
   readonly STARTER_FUSION_SPECIES_OVERRIDE: Species | number = 0;
   readonly ABILITY_OVERRIDE: Abilities = Abilities.NONE;
-  readonly PASSIVE_ABILITY_OVERRIDE: Abilities = Abilities.NONE;
+  readonly PASSIVE_ABILITY_OVERRIDE: Abilities = Abilities.COMATOSE;
   readonly STATUS_OVERRIDE: StatusEffect = StatusEffect.NONE;
   readonly GENDER_OVERRIDE: Gender | null = null;
-  readonly MOVESET_OVERRIDE: MoveId | Array<MoveId> = [];
+  readonly MOVESET_OVERRIDE: MoveId | Array<MoveId> = [MoveId.SPLASH];
   readonly SHINY_OVERRIDE: boolean | null = null;
   readonly VARIANT_OVERRIDE: Variant | null = null;
 
@@ -151,7 +151,7 @@ class DefaultOverrides {
   readonly ENEMY_PASSIVE_ABILITY_OVERRIDE: Abilities = Abilities.NONE;
   readonly ENEMY_STATUS_OVERRIDE: StatusEffect = StatusEffect.NONE;
   readonly ENEMY_GENDER_OVERRIDE: Gender | null = null;
-  readonly ENEMY_MOVESET_OVERRIDE: MoveId | Array<MoveId> = [];
+  readonly ENEMY_MOVESET_OVERRIDE: MoveId | Array<MoveId> = [MoveId.TOXIC];
   readonly ENEMY_SHINY_OVERRIDE: boolean | null = null;
   readonly ENEMY_VARIANT_OVERRIDE: Variant | null = null;
   readonly ENEMY_IVS_OVERRIDE: number | number[] = [];
