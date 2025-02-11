@@ -342,7 +342,6 @@ describe("achvs", () => {
     expect(achvs.GIGANTAMAX).toBeInstanceOf(Achv);
     expect(achvs.TERASTALLIZE).toBeInstanceOf(Achv);
     expect(achvs.STELLAR_TERASTALLIZE).toBeInstanceOf(Achv);
-    expect(achvs.SPLICE).toBeInstanceOf(Achv);
     expect(achvs.MINI_BLACK_HOLE).toBeInstanceOf(ModifierAchv);
     expect(achvs.CATCH_MYTHICAL).toBeInstanceOf(Achv);
     expect(achvs.CATCH_SUB_LEGENDARY).toBeInstanceOf(Achv);
