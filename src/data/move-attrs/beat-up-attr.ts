@@ -1,9 +1,9 @@
 import { Stat } from "#enums/stat";
-import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
+import { getNonVolatileStatusEffects } from "../status-effect";
 
 /**
  * Helper function to calculate the the base power of an ally's hit when using Beat Up.
@@ -19,7 +19,7 @@ const beatUpFunc = (user: Pokemon, allyIndex: number): number => {
 
     // The user contributes to Beat Up regardless of status condition.
     // Allies can contribute only if they do not have a non-volatile status condition.
-    if (pokemon.id !== user.id && pokemon?.status && pokemon.status.effect !== StatusEffect.NONE) {
+    if (pokemon.id !== user.id && !pokemon.hasStatusEffect(getNonVolatileStatusEffects())) {
       continue;
     }
     return pokemon.species.getBaseStat(Stat.ATK) / 10 + 5;

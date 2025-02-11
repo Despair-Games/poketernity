@@ -1191,7 +1191,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         if (this.getTag(BattlerTagType.SLOW_START)) {
           ret >>= 1;
         }
-        if (this.status && this.status.effect === StatusEffect.PARALYSIS) {
+        if (this.hasStatusEffect(StatusEffect.PARALYSIS)) {
           const paraSpeedReductionCancelled = new BooleanHolder(false);
           applyAbFunc(AbAttrFlag.BYPASS_PARA_SPEED_REDUCTION, this, simulated, paraSpeedReductionCancelled);
           if (!paraSpeedReductionCancelled.value) {
@@ -3265,7 +3265,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     /** Halves damage if the attacker is using a physical attack while burned */
     const burnMultiplier = new NumberHolder(1);
-    if (isPhysical && source.status && source.status.effect === StatusEffect.BURN) {
+    if (isPhysical && source.hasStatusEffect(StatusEffect.BURN)) {
       if (!move.hasAttr(BypassBurnDamageReductionAttr)) {
         const burnDamageReductionCancelled = new BooleanHolder(false);
         applyAbFunc(AbAttrFlag.BYPASS_BURN_DAMAGE_REDUCTION, source, simulated, burnDamageReductionCancelled);

@@ -3402,7 +3402,7 @@ export class PsychoShiftTag extends BattlerTag {
    */
   override lapse(pokemon: Pokemon, _lapseType: BattlerTagLapseType): boolean {
     if (pokemon.status && pokemon.isActive(true)) {
-      globalScene.queueMessage(getStatusEffectHealText(pokemon.status.effect, getPokemonNameWithAffix(pokemon)));
+      globalScene.queueMessage(getStatusEffectHealText(pokemon.getStatusEffect(), getPokemonNameWithAffix(pokemon)));
       pokemon.resetStatus();
       pokemon.updateInfo();
     }

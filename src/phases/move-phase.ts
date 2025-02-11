@@ -230,7 +230,7 @@ export class MovePhase extends BattlePhase {
       let activated = false;
       let healed = false;
 
-      switch (this.pokemon.status.effect) {
+      switch (this.pokemon.getStatusEffect()) {
         case StatusEffect.PARALYSIS:
           activated =
             (!this.pokemon.randSeedInt(4) || Overrides.STATUS_ACTIVATION_OVERRIDE === true)
@@ -243,7 +243,7 @@ export class MovePhase extends BattlePhase {
             AbAttrFlag.REDUCE_SLEEP_DURATION,
             this.pokemon,
             false,
-            this.pokemon.status.effect,
+            this.pokemon.getStatusEffect(),
             turnsRemaining,
           );
           if (Overrides.STATUS_ACTIVATION_OVERRIDE === true) {
