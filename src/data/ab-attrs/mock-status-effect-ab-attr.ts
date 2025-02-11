@@ -1,5 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import type { StatusEffect } from "#enums/status-effect";
 import { AbAttr } from "./ab-attr";
 
@@ -16,11 +16,8 @@ export class MockStatusEffectAbAttr extends AbAttr {
     this.mockedStatus = mockedStatus;
   }
 
-  override apply(_pokemon: Pokemon, _simulated: boolean, result: BooleanHolder, statusList: StatusEffect[]): boolean {
-    if (statusList.includes(this.mockedStatus)) {
-      result.value = true;
-      return true;
-    }
-    return false;
+  override apply(_pokemon: Pokemon, _simulated: boolean, statusEffect: NumberHolder): boolean {
+    statusEffect.value = this.mockedStatus;
+    return true;
   }
 }

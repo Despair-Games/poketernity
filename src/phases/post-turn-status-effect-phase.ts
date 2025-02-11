@@ -30,11 +30,11 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
 
       if (!cancelled.value) {
         globalScene.queueMessage(
-          getStatusEffectActivationText(pokemon.status.effect, getPokemonNameWithAffix(pokemon)),
+          getStatusEffectActivationText(pokemon.getStatusEffect(), getPokemonNameWithAffix(pokemon)),
         );
 
         const damage = new NumberHolder(0);
-        switch (pokemon.status.effect) {
+        switch (pokemon.getStatusEffect()) {
           case StatusEffect.POISON:
             damage.value = Math.max(pokemon.getMaxHp() >> 3, 1);
             break;

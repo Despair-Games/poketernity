@@ -92,7 +92,7 @@ import { PokeballType } from "#enums/pokeball";
 import { Gender } from "#enums/gender";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
 import { initMoveAnim } from "#app/data/init-move-anim";
-import { Status, getNonVolatileStatusEffects, getRandomStatus } from "#app/data/status-effect";
+import { Status, getRandomStatus } from "#app/data/status-effect";
 import type { SpeciesFormEvolution, SpeciesEvolutionCondition } from "#app/data/balance/pokemon-evolutions";
 import {
   pokemonEvolutions,
@@ -197,7 +197,6 @@ import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type { QueuedMove } from "#app/@types/QueuedMove";
 import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
-import type { MockStatusEffectAbAttr } from "#app/data/ab-attrs/mock-status-effect-ab-attr";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -3994,20 +3993,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     includeConfusion: boolean = false,
     ignoreAbility: boolean = false,
   ): boolean {
-    const result = new BooleanHolder(false);
     if (!Array.isArray(statusList)) {
       statusList = [statusList];
     }
-    if (!ignoreAbility) {
-      applyAbAttrs(AbAttrFlag.MOCK_STATUS_EFFECT, this, false, result, statusList);
-    }
     if (
-      (this.status && statusList.includes(this.status.effect))
+      statusList.includes(this.getStatusEffect(ignoreAbility))
       || (includeConfusion && this.getTag(BattlerTagType.CONFUSED))
     ) {
-      result.value = true;
+      return true;
     }
-    return result.value;
+    return false;
   }
 
   /**
@@ -4016,16 +4011,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns {@linkcode StatusEffect} the status effect held by the Pokemon
    */
   getStatusEffect(ignoreAbility: boolean = false): StatusEffect {
-    if (this.hasStatusEffect(getNonVolatileStatusEffects())) {
-      if (!ignoreAbility && this.hasAbilityWithAttr(AbAttrFlag.MOCK_STATUS_EFFECT)) {
-        return (this.getAbilityAttrs(AbAttrFlag.MOCK_STATUS_EFFECT)[0] as MockStatusEffectAbAttr).mockedStatus;
-      } else {
-        if (this.status) {
-          return this.status?.effect;
-        }
-      }
+    const statusEffect = new NumberHolder(StatusEffect.NONE);
+    if (this.status) {
+      statusEffect.value = this.status.effect;
     }
-    return StatusEffect.NONE;
+    if (!ignoreAbility) {
+      applyAbAttrs(AbAttrFlag.MOCK_STATUS_EFFECT, this, false, statusEffect);
+    }
+    return statusEffect.value as StatusEffect;
   }
 
   /**
