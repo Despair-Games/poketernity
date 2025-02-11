@@ -1,8 +1,14 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 
 export abstract class PostFaintAbAttr extends AbAttr {
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.POST_FAINT);
+  }
+
   /**
    * Applies an effect after the source Pokemon faints
    * @param pokemon The {@linkcode Pokemon} with this ability

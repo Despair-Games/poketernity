@@ -16,12 +16,15 @@ import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import type { EggLapsePhase } from "./egg-lapse-phase";
 import type { EggHatchData } from "#app/data/egg-hatch-data";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Class that represents egg hatching
  * @extends Phase
  */
 export class EggHatchPhase extends Phase {
+  override readonly id = PhaseId.EGG_HATCH;
+
   /** The egg that is hatching */
   private readonly egg: Egg;
   /** The new EggHatchData for the egg/pokemon that hatches */
@@ -72,6 +75,7 @@ export class EggHatchPhase extends Phase {
 
   constructor(hatchScene: EggLapsePhase, egg: Egg, eggsToHatchCount: number) {
     super();
+
     this.eggLapsePhase = hatchScene;
     this.egg = egg;
     this.eggsToHatchCount = eggsToHatchCount;

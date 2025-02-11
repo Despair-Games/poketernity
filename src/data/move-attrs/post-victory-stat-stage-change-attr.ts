@@ -3,7 +3,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
 /**
  * Attribute to increase the user's stats upon knocking out the target with the move.

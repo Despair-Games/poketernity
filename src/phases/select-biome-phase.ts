@@ -8,8 +8,11 @@ import { Biome } from "#enums/biome";
 import { BattlePhase } from "./abstract-battle-phase";
 import { PartyHealPhase } from "./party-heal-phase";
 import { SwitchBiomePhase } from "./switch-biome-phase";
+import { PhaseId } from "#enums/phase-id";
 
 export class SelectBiomePhase extends BattlePhase {
+  override readonly id = PhaseId.SELECT_BIOME;
+
   public override start(): void {
     super.start();
 

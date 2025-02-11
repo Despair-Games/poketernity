@@ -2,9 +2,10 @@ import { type EffectiveStat, Stat } from "#enums/stat";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { CommandedTag } from "#app/data/battler-tags";
+import { type CommandedTag } from "#app/data/battler-tags";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import { BattlerTagType } from "#enums/battler-tag-type";
 
 /**
  * Attribute implementing the stat boosting effect of {@link https://bulbapedia.bulbagarden.net/wiki/Order_Up_(move) | Order Up}.
@@ -30,7 +31,7 @@ export class OrderUpStatBoostAttr extends MoveEffectAttr {
    * matching form, this boosts the user's Attack by default.
    */
   override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
-    const commandedTag = user.getTag(CommandedTag);
+    const commandedTag = user.getTag<CommandedTag>(BattlerTagType.COMMANDED);
     if (!commandedTag) {
       return false;
     }

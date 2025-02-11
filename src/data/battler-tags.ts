@@ -1,20 +1,19 @@
 import { globalScene } from "#app/global-scene";
-import { allAbilities } from "#app/data/ability";
+import { allAbilities } from "./all-abilities";
 import { applyAbAttrs } from "./apply-ab-attrs";
-import { FlinchEffectAbAttr } from "./ab-attrs/flinch-effect-ab-attr";
-import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-ab-attr";
-import { CommonBattleAnim, MoveChargeAnim } from "#app/data/battle-anims";
+import { CommonBattleAnim } from "./battle-anims/common-battle-anim";
+import { MoveChargeAnim } from "./battle-anims/move-charge-anim";
 import { CommonAnim } from "#enums/common-anim";
 import { ChargeAnim } from "#enums/charge-anim";
-import type { Move } from "#app/data/move";
-import { applyMoveAttrs } from "#app/data/move";
+import { SelfStatusMove, type Move } from "#app/data/move";
+import { applyMoveAttrs } from "#app/utils/move-utils";
 import { allMoves } from "#app/data/all-moves";
 import { StatusCategoryOnAllyAttr } from "./move-attrs/status-category-on-ally-attr";
 import { ConsecutiveUseDoublePowerAttr } from "./move-attrs/consecutive-use-double-power-attr";
 import { HealOnAllyAttr } from "./move-attrs/heal-on-ally-attr";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveCategory } from "#enums/move-category";
-import { SpeciesFormChangeManualTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeManualTrigger } from "./species-form-change-triggers/species-form-change-manual-trigger";
 import { getStatusEffectHealText } from "#app/data/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import { ElementalType } from "#enums/elemental-type";
@@ -23,11 +22,10 @@ import { MoveResult } from "#enums/move-result";
 import { HitResult } from "#enums/hit-result";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
-import { MoveEffectPhase } from "#app/phases/move-effect-phase";
+import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MovePhase } from "#app/phases/move-phase";
-import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
-import type { StatStageChangeCallback } from "#app/phases/stat-stage-change-phase";
+import { type StatStageChangeCallback } from "#app/phases/stat-stage-change-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import i18next from "#app/plugins/i18n";
 import { BooleanHolder, getFrameMs, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
@@ -39,10 +37,17 @@ import { Species } from "#enums/species";
 import { EFFECTIVE_STATS, getStatKey, Stat, type BattleStat, type EffectiveStat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
-import { ReverseDrainAbAttr } from "./ab-attrs/reverse-drain-ab-attr";
 import Overrides from "#app/overrides";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import {
+  GulpMissileBattlerTagTypes,
+  RemoveTypeBattlerTagTypes,
+  SemiInvulnerableBattlerTagTypes,
+  TrappedBattlerTagTypes,
+} from "#app/utils/battler-tag-type-utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 export class BattlerTag {
   public tagType: BattlerTagType;
@@ -115,6 +120,14 @@ export class BattlerTag {
    */
   public getSourcePokemon(): Pokemon | null {
     return this.sourceId ? globalScene.getPokemonById(this.sourceId) : null;
+  }
+
+  isMysteryEncounterPostSummonTag(): this is MysteryEncounterPostSummonTag {
+    return false;
+  }
+
+  isTypeBoostTag(): this is TypeBoostTag {
+    return false;
   }
 }
 
@@ -206,6 +219,19 @@ export abstract class MoveRestrictionBattlerTag extends BattlerTag {
   interruptedText(_pokemon: Pokemon, _moveId: MoveId): string {
     return "";
   }
+
+  /**
+   * Gets the last valid move from the pokemon's move history.
+   * @param pokemon {@linkcode Pokemon} to get the last valid move from
+   * @returns the last valid move from the pokemon's move history
+   */
+  public getLastValidMove(pokemon: Pokemon): Move | undefined {
+    const turnMove = pokemon
+      .getLastXMoves()
+      .find((m) => m.move.id !== MoveId.NONE && m.move.id !== MoveId.STRUGGLE && !m.virtual);
+
+    return turnMove?.move;
+  }
 }
 
 /**
@@ -287,14 +313,12 @@ export class DisabledTag extends MoveRestrictionBattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    const move = pokemon
-      .getLastXMoves()
-      .find((m) => m.moveId !== MoveId.NONE && m.moveId !== MoveId.STRUGGLE && !m.virtual);
-    if (move === undefined) {
+    const lastValidMove = this.getLastValidMove(pokemon);
+    if (lastValidMove === undefined) {
       return;
     }
 
-    this.moveId = move.moveId;
+    this.moveId = lastValidMove.id;
 
     globalScene.queueMessage(
       i18next.t("battlerTags:disabledOnAdd", {
@@ -363,7 +387,7 @@ export class GorillaTacticsTag extends MoveRestrictionBattlerTag {
    * @returns `true` if the pokemon has a valid move and no existing {@linkcode GorillaTacticsTag}; `false` otherwise
    */
   override canAdd(pokemon: Pokemon): boolean {
-    return this.getLastValidMove(pokemon) !== undefined && !pokemon.getTag(GorillaTacticsTag);
+    return this.getLastValidMove(pokemon) !== undefined && !pokemon.getTag(BattlerTagType.GORILLA_TACTICS);
   }
 
   /**
@@ -379,7 +403,7 @@ export class GorillaTacticsTag extends MoveRestrictionBattlerTag {
       return;
     }
 
-    this.moveId = lastValidMove;
+    this.moveId = lastValidMove.id;
     pokemon.setStat(Stat.ATK, pokemon.getStat(Stat.ATK, false) * 1.5, false);
   }
 
@@ -405,19 +429,6 @@ export class GorillaTacticsTag extends MoveRestrictionBattlerTag {
       moveName: allMoves[this.moveId].name,
       pokemonName: getPokemonNameWithAffix(pokemon),
     });
-  }
-
-  /**
-   * Gets the last valid move from the pokemon's move history.
-   * @param pokemon {@linkcode Pokemon} to get the last valid move from
-   * @returns the last valid move from the pokemon's move history
-   */
-  getLastValidMove(pokemon: Pokemon): MoveId | undefined {
-    const move = pokemon
-      .getLastXMoves()
-      .find((m) => m.moveId !== MoveId.NONE && m.moveId !== MoveId.STRUGGLE && !m.virtual);
-
-    return move?.moveId;
   }
 }
 
@@ -524,14 +535,14 @@ export class ShellTrapTag extends BattlerTag {
       // Trap should only be triggered by opponent's Physical moves
       if (phaseData?.move.category === MoveCategory.PHYSICAL && pokemon.isOpponent(phaseData.attacker)) {
         const shellTrapPhaseIndex = globalScene.phaseQueue.findIndex(
-          (phase) => phase.isMovePhase() && phase.pokemon === pokemon,
+          (phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon === pokemon,
         );
-        const firstMovePhaseIndex = globalScene.phaseQueue.findIndex((phase) => phase.isMovePhase());
+        const firstMovePhaseIndex = globalScene.phaseQueue.findIndex((phase) => phase.is<MovePhase>(PhaseId.MOVE));
 
         // Only shift MovePhase timing if it's not already next up
         if (shellTrapPhaseIndex !== -1 && shellTrapPhaseIndex !== firstMovePhaseIndex) {
           const shellTrapMovePhase = globalScene.phaseQueue.splice(shellTrapPhaseIndex, 1)[0];
-          globalScene.prependToPhase(shellTrapMovePhase, MovePhase);
+          globalScene.prependToPhase(shellTrapMovePhase, PhaseId.MOVE);
         }
 
         this.activated = true;
@@ -560,7 +571,7 @@ export class TrappedTag extends BattlerTag {
     const move = allMoves[this.sourceMoveId];
 
     const isGhost = pokemon.isOfType(ElementalType.GHOST);
-    const isTrapped = pokemon.getTag(TrappedTag);
+    const isTrapped = pokemon.getTag(...TrappedBattlerTagTypes);
     const hasSubstitute = move.hitsSubstitute(source, pokemon);
 
     return !isTrapped && !isGhost && (this.sourceMoveId === MoveId.G_MAX_TERROR || !hasSubstitute);
@@ -609,7 +620,7 @@ class NoRetreatTag extends TrappedTag {
 
   /** overrides {@linkcode TrappedTag.apply}, removing the Ghost-type condition */
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.getTag(TrappedTag);
+    return !pokemon.getTag(...TrappedBattlerTagTypes);
   }
 }
 
@@ -628,7 +639,7 @@ export class FlinchedTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    applyAbAttrs(FlinchEffectAbAttr, pokemon, false);
+    applyAbAttrs(AbAttrFlag.FLINCH_EFFECT, pokemon, false);
   }
 
   /**
@@ -666,7 +677,7 @@ export class InterruptedTag extends BattlerTag {
     super.onAdd(pokemon);
 
     pokemon.getMoveQueue().shift();
-    pokemon.pushMoveHistory({ moveId: MoveId.NONE, result: MoveResult.OTHER });
+    pokemon.pushMoveHistory({ move: SelfStatusMove.none(), result: MoveResult.OTHER });
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
@@ -931,7 +942,7 @@ export class SeedTag extends BattlerTag {
       const source = pokemon.getOpponents().find((o) => o.getBattlerIndex() === this.sourceIndex);
       if (source) {
         const cancelled = new BooleanHolder(false);
-        applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
+        applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
 
         if (!cancelled.value) {
           globalScene.unshiftPhase(
@@ -939,16 +950,15 @@ export class SeedTag extends BattlerTag {
           );
 
           const damage = pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
-          const reverseDrain = pokemon.hasAbilityWithAttr(ReverseDrainAbAttr, false);
-          globalScene.unshiftPhase(
-            new PokemonHealPhase(source.getBattlerIndex(), !reverseDrain ? damage : damage * -1, {
-              message: !reverseDrain
-                ? i18next.t("battlerTags:seededLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) })
-                : i18next.t("battlerTags:seededLapseShed", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-              showFullHpMessage: false,
-              skipAnim: true,
-            }),
-          );
+          const reverseDrain = pokemon.hasAbilityWithAttr(AbAttrFlag.REVERSE_DRAIN, false);
+
+          globalScene.queuePokemonHeal(true, source.getBattlerIndex(), !reverseDrain ? damage : damage * -1, {
+            message: !reverseDrain
+              ? i18next.t("battlerTags:seededLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) })
+              : i18next.t("battlerTags:seededLapseShed", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+            showFullHpMessage: false,
+            skipAnim: true,
+          });
         }
       }
     }
@@ -990,7 +1000,7 @@ export class PowderTag extends BattlerTag {
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     if (lapseType === BattlerTagLapseType.PRE_MOVE) {
       const currPhase = globalScene.getCurrentPhase();
-      if (currPhase?.isMovePhase()) {
+      if (currPhase?.is<MovePhase>(PhaseId.MOVE)) {
         const move = currPhase.move.getMove();
         const weather = globalScene.arena.weather;
         if (
@@ -1005,7 +1015,7 @@ export class PowderTag extends BattlerTag {
           );
 
           const cancelDamage = new BooleanHolder(false);
-          applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelDamage);
+          applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelDamage);
           if (!cancelDamage.value) {
             pokemon.damageAndUpdate(Math.floor(pokemon.getMaxHp() / 4), HitResult.OTHER);
           }
@@ -1052,7 +1062,7 @@ export class NightmareTag extends BattlerTag {
       globalScene.unshiftPhase(new CommonAnimPhase(pokemon.getBattlerIndex(), undefined, CommonAnim.CURSE)); // TODO: Update animation type
 
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
+      applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
 
       if (!cancelled.value) {
         pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 4));
@@ -1108,52 +1118,21 @@ export class EncoreTag extends MoveRestrictionBattlerTag {
     this.moveId = source.moveId as MoveId;
   }
 
-  override canAdd(pokemon: Pokemon): boolean {
-    if (pokemon.isMax()) {
-      return false;
-    }
-
-    const lastMoves = pokemon.getLastXMoves(1);
-    if (!lastMoves.length) {
-      return false;
-    }
-
-    const repeatableMove = lastMoves[0];
-
-    if (!repeatableMove.moveId || repeatableMove.virtual) {
-      return false;
-    }
-
-    switch (repeatableMove.moveId) {
-      case MoveId.MIMIC:
-      case MoveId.MIRROR_MOVE:
-      case MoveId.TRANSFORM:
-      case MoveId.STRUGGLE:
-      case MoveId.SKETCH:
-      case MoveId.SLEEP_TALK:
-      case MoveId.ENCORE:
-        return false;
-    }
-
-    this.moveId = repeatableMove.moveId;
-
-    return true;
-  }
-
   override onAdd(pokemon: Pokemon): void {
     super.onRemove(pokemon);
+    this.moveId = pokemon.getLastXMoves(1)[0].move.id;
 
     globalScene.queueMessage(
       i18next.t("battlerTags:encoreOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
 
-    const movePhase = globalScene.findPhase((m) => m.isMovePhase() && m.pokemon === pokemon);
+    const movePhase = globalScene.findPhase((m) => m.is<MovePhase>(PhaseId.MOVE) && m.pokemon === pokemon);
     if (movePhase) {
       const movesetMove = pokemon.getMoveset().find((m) => m.moveId === this.moveId);
       if (movesetMove) {
         const lastMove = pokemon.getLastXMoves(1)[0];
         globalScene.tryReplacePhase(
-          (m) => m.isMovePhase() && m.pokemon === pokemon,
+          (m) => m.is<MovePhase>(PhaseId.MOVE) && m.pokemon === pokemon,
           new MovePhase(pokemon, lastMove.targets ?? [], movesetMove),
         );
       }
@@ -1241,11 +1220,9 @@ export class IngrainTag extends TrappedTag {
     const ret = lapseType !== BattlerTagLapseType.CUSTOM || super.lapse(pokemon, lapseType);
 
     if (ret) {
-      globalScene.unshiftPhase(
-        new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 16), {
-          message: i18next.t("battlerTags:ingrainLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
-        }),
-      );
+      globalScene.queuePokemonHeal(true, pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 16), {
+        message: i18next.t("battlerTags:ingrainLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+      });
     }
 
     return ret;
@@ -1300,14 +1277,12 @@ export class AquaRingTag extends BattlerTag {
     const ret = lapseType !== BattlerTagLapseType.CUSTOM || super.lapse(pokemon, lapseType);
 
     if (ret) {
-      globalScene.unshiftPhase(
-        new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 16), {
-          message: i18next.t("battlerTags:aquaRingLapse", {
-            moveName: this.getMoveName(),
-            pokemonName: getPokemonNameWithAffix(pokemon),
-          }),
+      globalScene.queuePokemonHeal(true, pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 16), {
+        message: i18next.t("battlerTags:aquaRingLapse", {
+          moveName: this.getMoveName(),
+          pokemonName: getPokemonNameWithAffix(pokemon),
         }),
-      );
+      });
     }
 
     return ret;
@@ -1397,7 +1372,7 @@ export abstract class DamagingTrapTag extends TrappedTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.getTag(TrappedTag) && !pokemon.getTag(BattlerTagType.SUBSTITUTE);
+    return !pokemon.getTag(...TrappedBattlerTagTypes) && !pokemon.getTag(BattlerTagType.SUBSTITUTE);
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
@@ -1413,7 +1388,7 @@ export abstract class DamagingTrapTag extends TrappedTag {
       globalScene.unshiftPhase(new CommonAnimPhase(pokemon.getBattlerIndex(), undefined, this.commonAnim));
 
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
+      applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
 
       if (!cancelled.value) {
         pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
@@ -1489,7 +1464,7 @@ export class GMaxFireSpinTag extends FireSpinTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.getTag(TrappedTag);
+    return !pokemon.getTag(...TrappedBattlerTagTypes);
   }
 }
 
@@ -1541,7 +1516,7 @@ export class GMaxSandTombTag extends SandTombTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return !pokemon.getTag(TrappedTag);
+    return !pokemon.getTag(...TrappedBattlerTagTypes);
   }
 }
 
@@ -1657,7 +1632,7 @@ export class ContactDamageProtectedTag extends ProtectedTag {
     }
 
     if (!simulated && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, null)) {
-      if (!attacker.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)) {
+      if (!attacker.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)) {
         attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), HitResult.OTHER);
       }
     }
@@ -1889,8 +1864,8 @@ export class TruantTag extends AbilityBattlerTag {
 
     const lastMove = pokemon.getLastXMoves().find(() => true);
 
-    if (lastMove && lastMove.moveId !== MoveId.NONE) {
-      (globalScene.getCurrentPhase() as MovePhase).cancel();
+    if (lastMove && lastMove.move.id !== MoveId.NONE) {
+      globalScene.getCurrentPhase<MovePhase>()?.cancel();
       globalScene.unshiftPhase(new ShowAbilityPhase(pokemon.id, passive));
       globalScene.queueMessage(
         i18next.t("battlerTags:truantLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
@@ -2089,7 +2064,7 @@ export class SkyDropTag extends BattlerTag {
       if (pokemon?.getTag(BattlerTagType.SKY_DROP)?.sourceId === this.sourceId) {
         // Cancel the Sky Drop user's next use of Sky Drop
         if (this.sourceId === pokemon.id) {
-          globalScene.tryRemovePhase((phase) => phase.isMovePhase() && phase.pokemon.id === pokemon.id);
+          globalScene.tryRemovePhase((phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon.id === pokemon.id);
           pokemon.getMoveQueue().shift();
           pokemon.removeTag(BattlerTagType.CHARGING);
         }
@@ -2180,6 +2155,10 @@ export class TypeBoostTag extends BattlerTag {
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     return lapseType !== BattlerTagLapseType.CUSTOM || super.lapse(pokemon, lapseType);
+  }
+
+  override isTypeBoostTag(): this is this {
+    return true;
   }
 }
 
@@ -2297,7 +2276,7 @@ export class SaltCuredTag extends BattlerTag {
       );
 
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
+      applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
 
       if (!cancelled.value) {
         const pokemonSteelOrWater = pokemon.isOfType(ElementalType.STEEL) || pokemon.isOfType(ElementalType.WATER);
@@ -2346,7 +2325,7 @@ export class CursedTag extends BattlerTag {
       );
 
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
+      applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
 
       if (!cancelled.value) {
         pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 4));
@@ -2387,7 +2366,7 @@ export class GroundedTag extends BattlerTag {
       pokemon.isOfType(ElementalType.FLYING, true, true)
       || pokemon.hasAbility(Abilities.LEVITATE)
       || pokemon.getTag(BattlerTagType.FLOATING)
-      || pokemon.getTag(SemiInvulnerableTag);
+      || pokemon.getTag(...SemiInvulnerableBattlerTagTypes);
 
     if (isSmackDownOrThousandArrows && wasNotGrounded) {
       globalScene.queueMessage(
@@ -2451,7 +2430,7 @@ export class RoostedTag extends BattlerTag {
       if (this.isBasePureFlying && !isCurrentlyDualType) {
         modifiedTypes = [ElementalType.NORMAL];
       } else {
-        if (!!pokemon.getTag(RemovedTypeTag) && isOriginallyDualType && !isCurrentlyDualType) {
+        if (!!pokemon.getTag(...RemoveTypeBattlerTagTypes) && isOriginallyDualType && !isCurrentlyDualType) {
           modifiedTypes = [ElementalType.UNKNOWN];
         } else {
           modifiedTypes = currentTypes.filter((type) => type !== ElementalType.FLYING);
@@ -2669,7 +2648,7 @@ export class GulpMissileTag extends BattlerTag {
     }
 
     const moveEffectPhase = globalScene.getCurrentPhase();
-    if (moveEffectPhase instanceof MoveEffectPhase) {
+    if (moveEffectPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
       const attacker = moveEffectPhase.getUserPokemon();
 
       if (!attacker) {
@@ -2681,7 +2660,7 @@ export class GulpMissileTag extends BattlerTag {
       }
 
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(BlockNonDirectDamageAbAttr, attacker, false, cancelled);
+      applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, attacker, false, cancelled);
 
       if (!cancelled.value) {
         attacker.damageAndUpdate(Math.max(1, Math.floor(attacker.getMaxHp() / 4)), HitResult.OTHER);
@@ -2703,10 +2682,7 @@ export class GulpMissileTag extends BattlerTag {
    */
   override canAdd(pokemon: Pokemon): boolean {
     const isSurfOrDive = [MoveId.SURF, MoveId.DIVE].includes(this.sourceMoveId);
-    const isNormalForm =
-      pokemon.formIndex === 0
-      && !pokemon.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)
-      && !pokemon.getTag(BattlerTagType.GULP_MISSILE_PIKACHU);
+    const isNormalForm = pokemon.formIndex === 0 && !pokemon.getTag(...GulpMissileBattlerTagTypes);
     const isCramorant = pokemon.species.speciesId === Species.CRAMORANT;
 
     return isSurfOrDive && isNormalForm && isCramorant;
@@ -3018,7 +2994,7 @@ export class SubstituteTag extends BattlerTag {
   /** If the Substitute redirects damage, queue a message to indicate it. */
   onHit(pokemon: Pokemon): void {
     const moveEffectPhase = globalScene.getCurrentPhase();
-    if (moveEffectPhase instanceof MoveEffectPhase) {
+    if (moveEffectPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
       const attacker = moveEffectPhase.getUserPokemon();
       if (!attacker) {
         return;
@@ -3077,6 +3053,10 @@ export class MysteryEncounterPostSummonTag extends BattlerTag {
   override onRemove(pokemon: Pokemon): void {
     super.onRemove(pokemon);
   }
+
+  override isMysteryEncounterPostSummonTag(): this is this {
+    return true;
+  }
 }
 
 /**
@@ -3122,16 +3102,21 @@ export class TormentTag extends MoveRestrictionBattlerTag {
     if (!user) {
       return false;
     }
-    const lastMove = user.getLastXMoves(1)[0];
-    if (!lastMove) {
+    const lastMoveTurn = user.getLastXMoves(1)[0];
+    if (!lastMoveTurn) {
       return false;
     }
     // This checks for locking / momentum moves like Rollout and Hydro Cannon + if the user is under the influence of BattlerTagType.FRENZY
     // Because Uproar's unique behavior is not implemented, it does not check for Uproar. Torment has been marked as partial in moves.ts
-    const moveObj = allMoves[lastMove.moveId];
+    const moveObj = allMoves[lastMoveTurn.move.id];
     const isUnaffected = moveObj.hasAttr(ConsecutiveUseDoublePowerAttr) || user.getTag(BattlerTagType.FRENZY);
-    const validLastMoveResult = lastMove.result === MoveResult.SUCCESS || lastMove.result === MoveResult.MISS;
-    if (lastMove.moveId === moveId && validLastMoveResult && lastMove.moveId !== MoveId.STRUGGLE && !isUnaffected) {
+    const validLastMoveResult = lastMoveTurn.result === MoveResult.SUCCESS || lastMoveTurn.result === MoveResult.MISS;
+    if (
+      lastMoveTurn.move.id === moveId
+      && validLastMoveResult
+      && lastMoveTurn.move.id !== MoveId.STRUGGLE
+      && !isUnaffected
+    ) {
       return true;
     }
     return false;
@@ -3658,7 +3643,7 @@ export function loadBattlerTag(source: BattlerTag | any): BattlerTag {
  */
 function getMoveEffectPhaseData(_pokemon: Pokemon): { phase: MoveEffectPhase; attacker: Pokemon; move: Move } | null {
   const phase = globalScene.getCurrentPhase();
-  if (phase instanceof MoveEffectPhase) {
+  if (phase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
     return {
       phase: phase,
       attacker: phase.getPokemon(),

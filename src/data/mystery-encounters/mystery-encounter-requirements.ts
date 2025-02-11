@@ -1,9 +1,10 @@
 import { globalScene } from "#app/global-scene";
-import { allAbilities } from "#app/data/ability";
+import { allAbilities } from "../all-abilities";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { EvolutionItem } from "#enums/evolution-item";
 import { Nature } from "#enums/nature";
-import { pokemonFormChanges, SpeciesFormChangeItemTrigger } from "#app/data/pokemon-forms";
+import { pokemonFormChanges } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeItemTrigger } from "../species-form-change-triggers/species-form-change-item-trigger";
 import { FormChangeItem } from "#enums/form-change-item";
 import { StatusEffect } from "#enums/status-effect";
 import { ElementalType } from "#enums/elemental-type";

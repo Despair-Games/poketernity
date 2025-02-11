@@ -1,7 +1,4 @@
-import { AlwaysHitAbAttr } from "#app/data/ab-attrs/always-hit-ab-attr";
-import { MaxMultiHitAbAttr } from "#app/data/ab-attrs/max-multi-hit-ab-attr";
-import { ConditionalProtectTag } from "#app/data/arena-tag";
-import { SemiInvulnerableTag, SkyDropTag, ProtectedTag } from "#app/data/battler-tags";
+import { ProtectedTag } from "#app/data/battler-tags";
 import { HitsTagAttr } from "#app/data/move-attrs/hits-tag-attr";
 import { OneHitKOAttr } from "#app/data/move-attrs/one-hit-ko-attr";
 import { ToxicAccuracyAttr } from "#app/data/move-attrs/toxic-accuracy-attr";
@@ -10,6 +7,8 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { BooleanHolder } from "#app/utils";
+import { ConditionalProtectArenaTagTypes } from "#app/utils/arena-tag-type-utils";
+import { SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -18,8 +17,13 @@ import { MoveFlags } from "#enums/move-flags";
 import { MoveTarget } from "#enums/move-target";
 import { ElementalType } from "#enums/elemental-type";
 import { PokemonPhase } from "./abstract-pokemon-phase";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+
+//#region Types
 
 type HitCheckEntry = [HitCheckResult, TypeDamageMultiplier];
+
+//#endregion
 
 /**
  * Abstract class for phases that may calculate hit checks.
@@ -29,6 +33,7 @@ type HitCheckEntry = [HitCheckResult, TypeDamageMultiplier];
  */
 export abstract class HitCheckPhase extends PokemonPhase {
   public move: PokemonMove;
+
   protected targets: BattlerIndex[];
   protected hitChecks: HitCheckEntry[];
 
@@ -75,12 +80,13 @@ export abstract class HitCheckPhase extends PokemonPhase {
 
     /** Is there an effect that causes the move to bypass accuracy checks, including semi-invulnerability? */
     const alwaysHit =
-      [user, target].some((p) => p.hasAbilityWithAttr(AlwaysHitAbAttr))
+      [user, target].some((p) => p.hasAbilityWithAttr(AbAttrFlag.ALWAYS_HIT))
       || (user.getTag(BattlerTagType.IGNORE_ACCURACY)
         && (user.getLastXMoves()[0]?.targets ?? []).indexOf(target.getBattlerIndex()) !== -1)
       || !!target.getTag(BattlerTagType.ALWAYS_GET_HIT);
 
-    const semiInvulnerableTag = target.getTag(SemiInvulnerableTag) ?? target.getTag(SkyDropTag);
+    const semiInvulnerableTag =
+      target.getTag(...SemiInvulnerableBattlerTagTypes) ?? target.getTag(BattlerTagType.SKY_DROP);
     /** Should the move miss due to the target's semi-invulnerability? */
     const targetIsSemiInvulnerable =
       !!semiInvulnerableTag
@@ -102,7 +108,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
     /** If the move is not targeting a Pokemon on the user's side, try to apply conditional protection effects */
     if (!this.move.getMove().isAllyTarget()) {
       globalScene.arena.applyTagsForSide(
-        ConditionalProtectTag,
+        [...ConditionalProtectArenaTagTypes],
         targetSide,
         simulated,
         hasConditionalProtectApplied,
@@ -143,7 +149,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
     // Strikes after the first in a multi-strike move are guaranteed to hit,
     // unless the move is flagged to check all hits and the user does not have Skill Link.
     if (user.turnData.hitsLeft < user.turnData.hitCount) {
-      if (!move.hasFlag(MoveFlags.CHECK_ALL_HITS) || user.hasAbilityWithAttr(MaxMultiHitAbAttr)) {
+      if (!move.hasFlag(MoveFlags.CHECK_ALL_HITS) || user.hasAbilityWithAttr(AbAttrFlag.MAX_MULTI_HIT)) {
         return [HitCheckResult.HIT, effectiveness];
       }
     }

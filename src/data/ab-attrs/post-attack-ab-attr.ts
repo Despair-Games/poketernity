@@ -2,6 +2,7 @@ import type { Move } from "#app/data/move";
 import { MoveCategory } from "#enums/move-category";
 import type { Pokemon } from "#app/field/pokemon";
 import { AbAttr } from "./ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export abstract class PostAttackAbAttr extends AbAttr {
   /** Whether it only applies to attack moves. */
@@ -9,6 +10,7 @@ export abstract class PostAttackAbAttr extends AbAttr {
 
   constructor(attackMovesOnly: boolean = true, showAbility: boolean = true) {
     super(showAbility);
+    this._flags.add(AbAttrFlag.POST_ATTACK);
 
     this.attackMovesOnly = attackMovesOnly;
   }

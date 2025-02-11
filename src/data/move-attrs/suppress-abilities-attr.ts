@@ -2,10 +2,10 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
-import { UnsuppressableAbilityAbAttr } from "#app/data/ab-attrs/unsuppressable-ability-ab-attr";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Attribute used for moves that suppress abilities like {@linkcode MoveId.GASTRO_ACID}.
@@ -28,6 +28,6 @@ export class SuppressAbilitiesAttr extends MoveEffectAttr {
   /** Causes the effect to fail when the target's ability is unsupressable or already suppressed. */
   override getCondition(): MoveConditionFunc {
     return (_user, target, _move) =>
-      !target.getAbility().hasAttr(UnsuppressableAbilityAbAttr) && !target.summonData.abilitySuppressed;
+      !target.getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY) && !target.summonData.abilitySuppressed;
   }
 }
