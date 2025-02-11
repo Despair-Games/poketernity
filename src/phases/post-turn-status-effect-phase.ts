@@ -54,7 +54,9 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
           applyAbAttrs(AbAttrFlag.POST_DAMAGE, pokemon, false, damage.value);
         }
 
-        new CommonBattleAnim(CommonAnim.POISON + (pokemon.status.effect - 1), pokemon).play(false, () => this.end());
+        new CommonBattleAnim(CommonAnim.POISON + (pokemon.getStatusEffect() - 1), pokemon).play(false, () =>
+          this.end(),
+        );
       } else {
         this.end();
       }

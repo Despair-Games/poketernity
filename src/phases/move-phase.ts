@@ -273,18 +273,18 @@ export class MovePhase extends BattlePhase {
       if (activated) {
         this.cancel();
         globalScene.queueMessage(
-          getStatusEffectActivationText(this.pokemon.status.effect, getPokemonNameWithAffix(this.pokemon)),
+          getStatusEffectActivationText(this.pokemon.getStatusEffect(), getPokemonNameWithAffix(this.pokemon)),
         );
         globalScene.unshiftPhase(
           new CommonAnimPhase(
             this.pokemon.getBattlerIndex(),
             undefined,
-            CommonAnim.POISON + (this.pokemon.status.effect - 1),
+            CommonAnim.POISON + (this.pokemon.getStatusEffect() - 1),
           ),
         );
       } else if (healed) {
         globalScene.queueMessage(
-          getStatusEffectHealText(this.pokemon.status.effect, getPokemonNameWithAffix(this.pokemon)),
+          getStatusEffectHealText(this.pokemon.getStatusEffect(), getPokemonNameWithAffix(this.pokemon)),
         );
         this.pokemon.resetStatus();
         this.pokemon.updateInfo();

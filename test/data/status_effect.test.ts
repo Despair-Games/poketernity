@@ -374,23 +374,23 @@ describe("Status Effects", () => {
       game.move.select(MoveId.SPLASH);
       await game.toNextTurn();
 
-      expect(player.status.effect).toBe(StatusEffect.SLEEP);
+      expect(player.getStatusEffect()).toBe(StatusEffect.SLEEP);
 
       game.move.select(MoveId.SPLASH);
       await game.toNextTurn();
 
-      expect(player.status.effect).toBe(StatusEffect.SLEEP);
+      expect(player.getStatusEffect()).toBe(StatusEffect.SLEEP);
 
       game.move.select(MoveId.SPLASH);
       await game.toNextTurn();
 
-      expect(player.status.effect).toBe(StatusEffect.SLEEP);
+      expect(player.getStatusEffect()).toBe(StatusEffect.SLEEP);
       expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
 
       game.move.select(MoveId.SPLASH);
       await game.toNextTurn();
 
-      expect(player.status?.effect).toBeUndefined();
+      expect(player.getStatusEffect()).toBeUndefined();
       expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
     });
   });
@@ -429,7 +429,7 @@ describe("Status Effects", () => {
       player.hp = 0;
 
       expect(player.trySetStatus(StatusEffect.BURN)).toBe(false);
-      expect(player.status?.effect).not.toBe(StatusEffect.BURN);
+      expect(player.getStatusEffect()).not.toBe(StatusEffect.BURN);
     });
   });
 });

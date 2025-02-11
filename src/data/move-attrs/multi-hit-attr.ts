@@ -91,7 +91,11 @@ export class MultiHitAttr extends MoveAttr {
         return party.reduce((total, pokemon) => {
           return (
             total
-            + (pokemon.id === user.id ? 1 : pokemon?.status && pokemon.status.effect !== StatusEffect.NONE ? 0 : 1)
+            + (pokemon.id === user.id
+              ? 1
+              : pokemon?.status && pokemon.getStatusEffect(true) !== StatusEffect.NONE
+                ? 0
+                : 1)
           );
         }, 0);
     }

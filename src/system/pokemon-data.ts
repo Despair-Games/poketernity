@@ -148,7 +148,7 @@ export default class PokemonData {
         .map((m: any) => new PokemonMove(m.moveId, m.ppUsed, m.ppUp, m.virtual, m.maxPpOverride));
       if (!forHistory) {
         this.status = source.status
-          ? new Status(source.status.effect, source.status.toxicTurnCount, source.status.sleepTurnsRemaining)
+          ? new Status(source.getStatusEffect(), source.status.toxicTurnCount, source.status.sleepTurnsRemaining)
           : null;
       }
 

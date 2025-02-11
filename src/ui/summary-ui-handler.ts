@@ -475,7 +475,9 @@ export default class SummaryUiHandler extends UiHandler {
 
     if (this.pokemon.status || this.pokemon.pokerus) {
       this.showStatus(!fromSummary);
-      this.status.setFrame(this.pokemon.status ? StatusEffect[this.pokemon.status.effect].toLowerCase() : "pokerus");
+      this.status.setFrame(
+        this.pokemon.status ? StatusEffect[this.pokemon.getStatusEffect()].toLowerCase() : "pokerus",
+      );
     } else {
       this.hideStatus(!fromSummary);
     }
