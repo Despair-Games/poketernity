@@ -968,9 +968,6 @@ export default class RunInfoUiHandler extends UiHandler {
     const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
     const isFemale = genderIndex === PlayerGender.FEMALE;
     const genderStr = PlayerGender[genderIndex].toLowerCase();
-    // Issue Note (08-05-2024): It seems as if fused pokemon do not appear with the averaged color b/c pokemonData's loadAsset requires there to be some active battle?
-    // As an alternative, the icons of the second/bottom fused Pokemon have been placed next to their fellow fused Pokemon in Hall of Fame
-    // TODO: confirm the fusion related code was removed
     this.hallofFameContainer = globalScene.add.container(0, 0);
     const overlayColor = isFemale ? "red" : "blue";
     const hallofFameBg = globalScene.add.image(-1, -1, "hall_of_fame_" + overlayColor);
