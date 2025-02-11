@@ -1,7 +1,6 @@
 import FieldSpritePipeline from "#app/pipelines/field-sprite";
 import { CANVAS_SCALE } from "#app/ui-constants";
 
-// TODO: remove fusion-related code from this...
 const spriteFragShader = `
 #ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
