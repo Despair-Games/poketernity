@@ -1,4 +1,4 @@
-import { FusionSpeciesFormEvolution, pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { getBerryEffectFunc, getBerryPredicate } from "#app/data/berry";
 import { getLevelTotalExp } from "#app/data/exp";
 import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
@@ -1440,11 +1440,7 @@ export class EvolutionStatBoosterModifier extends StatBoosterModifier {
   override apply(pokemon: Pokemon, stat: Stat, statValue: NumberHolder): boolean {
     const isUnevolved = pokemon.getSpeciesForm(true).speciesId in pokemonEvolutions;
 
-    if (pokemon.isFusion() && pokemon.getFusionSpeciesForm(true).speciesId in pokemonEvolutions !== isUnevolved) {
-      // Half boost applied if pokemon is fused and either part of fusion is fully evolved
-      statValue.value *= 1 + (this.multiplier - 1) / 2;
-      return true;
-    } else if (isUnevolved) {
+    if (isUnevolved) {
       // Full boost applied if holder is unfused and unevolved or, if fused, both parts of fusion are unevolved
       return super.apply(pokemon, stat, statValue);
     }
@@ -1511,11 +1507,7 @@ export class SpeciesStatBoosterModifier extends StatBoosterModifier {
    * @returns `true` if the stat could be boosted, false otherwise
    */
   override shouldApply(pokemon: Pokemon, stat: Stat, statValue: NumberHolder): boolean {
-    return (
-      super.shouldApply(pokemon, stat, statValue)
-      && (this.species.includes(pokemon.getSpeciesForm(true).speciesId)
-        || (pokemon.isFusion() && this.species.includes(pokemon.getFusionSpeciesForm(true).speciesId)))
-    );
+    return super.shouldApply(pokemon, stat, statValue) && this.species.includes(pokemon.getSpeciesForm(true).speciesId);
   }
 
   /**
@@ -2481,7 +2473,7 @@ export class EvolutionItemModifier extends ConsumablePokemonModifier {
    * @returns `true` if the evolution was successful
    */
   override apply(playerPokemon: PlayerPokemon): boolean {
-    let matchingEvolution = pokemonEvolutions.hasOwnProperty(playerPokemon.species.speciesId)
+    const matchingEvolution = pokemonEvolutions.hasOwnProperty(playerPokemon.species.speciesId)
       ? pokemonEvolutions[playerPokemon.species.speciesId].find(
           (e) =>
             e.item === this.type.evolutionItem
@@ -2490,57 +2482,12 @@ export class EvolutionItemModifier extends ConsumablePokemonModifier {
         )
       : null;
 
-    if (!matchingEvolution && playerPokemon.isFusion()) {
-      matchingEvolution = pokemonEvolutions[playerPokemon.fusionSpecies!.speciesId].find(
-        (e) =>
-          e.item === this.type.evolutionItem // TODO: is the bang correct?
-          && (e.evoFormKey === null || (e.preFormKey || "") === playerPokemon.getFusionFormKey())
-          && (!e.condition || e.condition.predicate(playerPokemon)),
-      );
-      if (matchingEvolution) {
-        matchingEvolution = new FusionSpeciesFormEvolution(playerPokemon.species.speciesId, matchingEvolution);
-      }
-    }
-
     if (matchingEvolution) {
       globalScene.unshiftPhase(new EvolutionPhase(playerPokemon, matchingEvolution, playerPokemon.level - 1));
       return true;
     }
 
     return false;
-  }
-}
-
-export class FusePokemonModifier extends ConsumablePokemonModifier {
-  public fusePokemonId: number;
-
-  constructor(type: ModifierType, pokemonId: number, fusePokemonId: number) {
-    super(type, pokemonId);
-
-    this.fusePokemonId = fusePokemonId;
-  }
-
-  /**
-   * Checks if {@linkcode FusePokemonModifier} should be applied
-   * @param playerPokemon {@linkcode PlayerPokemon} that should be fused
-   * @param playerPokemon2 {@linkcode PlayerPokemon} that should be fused with {@linkcode playerPokemon}
-   * @returns `true` if {@linkcode FusePokemonModifier} should be applied
-   */
-  override shouldApply(playerPokemon?: PlayerPokemon, playerPokemon2?: PlayerPokemon): boolean {
-    return (
-      super.shouldApply(playerPokemon, playerPokemon2) && !!playerPokemon2 && this.fusePokemonId === playerPokemon2.id
-    );
-  }
-
-  /**
-   * Applies {@linkcode FusePokemonModifier}
-   * @param playerPokemon {@linkcode PlayerPokemon} that should be fused
-   * @param playerPokemon2 {@linkcode PlayerPokemon} that should be fused with {@linkcode playerPokemon}
-   * @returns always Promise<true>
-   */
-  override apply(playerPokemon: PlayerPokemon, playerPokemon2: PlayerPokemon): boolean {
-    playerPokemon.fuse(playerPokemon2);
-    return true;
   }
 }
 
@@ -2906,7 +2853,7 @@ export class MoneyRewardModifier extends ConsumableModifier {
     globalScene.addMoney(moneyAmount.value);
 
     globalScene.getPlayerParty().map((p) => {
-      if (p.species?.speciesId === Species.GIMMIGHOUL || p.fusionSpecies?.speciesId === Species.GIMMIGHOUL) {
+      if (p.species?.speciesId === Species.GIMMIGHOUL) {
         p.evoCounter
           ? (p.evoCounter += Math.min(Math.floor(this.moneyMultiplier), 3))
           : (p.evoCounter = Math.min(Math.floor(this.moneyMultiplier), 3));

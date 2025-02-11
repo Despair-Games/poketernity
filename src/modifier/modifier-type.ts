@@ -22,7 +22,6 @@ import {
   DoubleBattleChanceBoosterModifier,
   EvolutionItemModifier,
   ExpBoosterModifier,
-  FusePokemonModifier,
   GigantamaxAccessModifier,
   LevelIncrementBoosterModifier,
   MegaEvolutionAccessModifier,
@@ -1101,19 +1100,6 @@ export class EvolutionItemModifierType extends PokemonModifierType implements Ge
           && pokemon.getFormKey() !== SpeciesFormKey.GIGANTAMAX
         ) {
           return null;
-        } else if (
-          pokemon.isFusion()
-          && pokemon.fusionSpecies
-          && pokemonEvolutions.hasOwnProperty(pokemon.fusionSpecies.speciesId)
-          && pokemonEvolutions[pokemon.fusionSpecies.speciesId].filter(
-            (e) =>
-              e.item === this.evolutionItem
-              && (!e.condition || e.condition.predicate(pokemon))
-              && (e.preFormKey === null || e.preFormKey === pokemon.getFusionFormKey()),
-          ).length
-          && pokemon.getFusionFormKey() !== SpeciesFormKey.GIGANTAMAX
-        ) {
-          return null;
         }
 
         return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
@@ -1182,26 +1168,6 @@ export class FormChangeItemModifierType extends PokemonModifierType implements G
 
   getPregenArgs(): any[] {
     return [this.formChangeItem];
-  }
-}
-
-export class FusePokemonModifierType extends PokemonModifierType {
-  constructor(localeKey: string, iconImage: string) {
-    super(
-      localeKey,
-      iconImage,
-      (_type, args) => new FusePokemonModifier(this, (args[0] as PlayerPokemon).id, (args[1] as PlayerPokemon).id),
-      (pokemon: PlayerPokemon) => {
-        if (pokemon.isFusion()) {
-          return i18next.t(PARTY_UI_NO_EFFECT_MSG_i18N_KEY);
-        }
-        return null;
-      },
-    );
-  }
-
-  override getDescription(): string {
-    return i18next.t("modifierType:ModifierType.FusePokemonModifierType.description");
   }
 }
 
@@ -1334,7 +1300,6 @@ export class SpeciesStatBoosterModifierTypeGenerator extends ModifierTypeGenerat
 
       for (const p of party) {
         const speciesId = p.getSpeciesForm(true).speciesId;
-        const fusionSpeciesId = p.isFusion() ? p.getFusionSpeciesForm(true).speciesId : null;
         const hasFling = p.getMoveset(true).some((m) => m.moveId === MoveId.FLING);
 
         for (const i in values) {
@@ -1351,7 +1316,7 @@ export class SpeciesStatBoosterModifierTypeGenerator extends ModifierTypeGenerat
             );
 
           if (!hasItem) {
-            if (checkedSpecies.includes(speciesId) || (!!fusionSpeciesId && checkedSpecies.includes(fusionSpeciesId))) {
+            if (checkedSpecies.includes(speciesId)) {
               // Add weight if party member has a matching species or, if applicable, a matching fusion species
               weights[i]++;
             } else if (checkedSpecies.includes(Species.PIKACHU) && hasFling) {
@@ -1432,26 +1397,6 @@ export class EvolutionItemModifierTypeGenerator extends ModifierTypeGenerator {
               (e) =>
                 e.item !== EvolutionItem.NONE
                 && (e.evoFormKey === null || (e.preFormKey || "") === p.getFormKey())
-                && (!e.condition || e.condition.predicate(p)),
-            );
-          })
-          .flat(),
-        party
-          .filter(
-            (p) =>
-              p.isFusion()
-              && p.fusionSpecies
-              && pokemonEvolutions.hasOwnProperty(p.fusionSpecies.speciesId)
-              && (!p.pauseEvolutions
-                || p.fusionSpecies.speciesId === Species.SLOWPOKE
-                || p.fusionSpecies.speciesId === Species.EEVEE),
-          )
-          .map((p) => {
-            const evolutions = pokemonEvolutions[p.fusionSpecies!.speciesId];
-            return evolutions.filter(
-              (e) =>
-                e.item !== EvolutionItem.NONE
-                && (e.evoFormKey === null || (e.preFormKey || "") === p.getFusionFormKey())
                 && (!e.condition || e.condition.predicate(p)),
             );
           })
