@@ -349,7 +349,7 @@ function getTeamTransformations(): PokemonTransformation[] {
       .getHeldItems()
       .filter((m) => !m.isPokemonFormChangeItemModifier());
 
-    const bst = removed.calculateBaseStats().reduce((a, b) => a + b, 0);
+    const bst = removed.getSpeciesForm().getBaseStatTotal();
     let newBstRange: [number, number];
     if (i < 2) {
       newBstRange = HIGH_BST_TRANSFORM_BASE_VALUES;
