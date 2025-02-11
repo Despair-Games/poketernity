@@ -33,7 +33,7 @@ export function initModifierPools() {
       modifierTypes.POTION,
       (party: Pokemon[]) => {
         const thresholdPartyMemberCount = Math.min(
-          party.filter((p) => p.getInverseHp() >= 10 && p.getHpRatio() <= 0.875 && !p.isFainted()).length,
+          party.filter((p) => p.getInverseHp() >= 10 && p.getHpRatio(3) <= 0.875 && !p.isFainted()).length,
           3,
         );
         return thresholdPartyMemberCount * 3;
