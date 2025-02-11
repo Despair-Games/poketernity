@@ -15,6 +15,7 @@ import { DelayedAttackAttr } from "./move-attrs/delayed-attack-attr";
 import { AnimFrameTarget } from "#enums/anim-frame-target";
 import { ChargeAnim } from "#enums/charge-anim";
 import { CommonAnim } from "#enums/common-anim";
+import { ImagesFolder } from "#enums/images-folders";
 
 enum AnimFocus {
   TARGET = 1,
@@ -663,11 +664,11 @@ function loadAnimAssets(anims: AnimConfig[], startLoad?: boolean): Promise<void>
         backgrounds.add(abg);
       }
       if (a.graphic) {
-        globalScene.loadSpritesheet(a.graphic, "battle_anims", 96);
+        globalScene.loadSpritesheet(a.graphic, ImagesFolder.BATTLE_ANIMS, 96);
       }
     }
     for (const bg of backgrounds) {
-      globalScene.loadImage(bg, "battle_anims");
+      globalScene.loadImage(bg, ImagesFolder.BATTLE_ANIMS);
     }
     for (const s of sounds) {
       globalScene.loadSe(s, "battle_anims", s);

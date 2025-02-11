@@ -25,7 +25,8 @@ import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-enco
 import { initAbilities } from "#app/data/all-abilities";
 import { initMoves } from "#app/data/all-moves";
 import { initVouchers } from "#app/system/init-vouchers";
-import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTEMENT } from "./ui-constants";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTEMENT } from "#app/ui-constants";
+import { ImagesFolder } from "#enums/images-folders";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";
@@ -42,261 +43,257 @@ export class LoadingScene extends SceneBase {
     localPing();
     this.load["manifest"] = this.game["manifest"];
 
-    this.loadImage("loading_bg", "arenas");
-    this.loadImage("logo", "");
+    this.loadImage("loading_bg", ImagesFolder.ARENAS);
+    this.loadImage("logo");
 
     /** UI Elements that change based on the {@linkcode UiWindowType} */
     for (const windowVariant of getEnumValues(WindowVariant)) {
-      this.loadSpritesheet(`window${getWindowVariantSuffix(windowVariant)}`, "ui/windows", 24, 24, {
+      this.loadSpritesheet(`window${getWindowVariantSuffix(windowVariant)}`, ImagesFolder.UI_WINDOWS, 24, 24, {
         windowTypeDependant: true,
         uiThemeDependant: true,
       });
     }
-    this.loadSpritesheet("trainer_namebox", "ui/windows", 20, 20, { windowTypeDependant: true });
-    this.loadSpritesheet("battle_message_box", "ui/windows", 320, 48, { windowTypeDependant: true });
+    this.loadSpritesheet("trainer_namebox", ImagesFolder.UI_WINDOWS, 20, 20, { windowTypeDependant: true });
+    this.loadSpritesheet("battle_message_box", ImagesFolder.UI_WINDOWS, 320, 48, { windowTypeDependant: true });
 
-    this.loadSpritesheet("scroll_bar", "ui", 8, 8, { windowTypeDependant: true });
-    this.loadSpritesheet("scroll_bar_handle", "ui", 8, 8, { windowTypeDependant: true });
+    this.loadSpritesheet("scroll_bar", ImagesFolder.UI, 8, 8, { windowTypeDependant: true });
+    this.loadSpritesheet("scroll_bar_handle", ImagesFolder.UI, 8, 8, { windowTypeDependant: true });
 
-    this.loadAtlas("numbers", "ui");
-    this.loadAtlas("numbers_red", "ui");
+    this.loadAtlas("numbers", ImagesFolder.UI);
+    this.loadAtlas("numbers_red", ImagesFolder.UI);
 
-    this.loadAtlas("type_bgs", "ui");
-    this.loadImage("type_tera", "ui");
+    this.loadAtlas("type_bgs", ImagesFolder.UI);
+    this.loadImage("type_tera", ImagesFolder.UI);
 
-    let currentFolder = "ui/cursors";
-    this.loadAtlas("prompt", currentFolder);
-    this.loadImage("cursor", currentFolder, { uiThemeDependant: true });
-    this.loadImage("cursor_reverse", currentFolder, { uiThemeDependant: true });
-    this.loadImage("select_cursor", currentFolder);
-    this.loadImage("select_cursor_highlight", currentFolder);
-    this.loadImage("select_cursor_highlight_thick", currentFolder);
-    this.loadImage("select_cursor_pokerus", currentFolder);
-    this.loadImage("select_gen_cursor", currentFolder); // same as select_cursor, could be removed by using it as a nineslice
-    this.loadAtlas("summary_moves_cursor", currentFolder);
+    this.loadAtlas("prompt", ImagesFolder.UI_CURSORS);
+    this.loadImage("cursor", ImagesFolder.UI_CURSORS, { uiThemeDependant: true });
+    this.loadImage("cursor_reverse", ImagesFolder.UI_CURSORS, { uiThemeDependant: true });
+    this.loadImage("select_cursor", ImagesFolder.UI_CURSORS);
+    this.loadImage("select_cursor_highlight", ImagesFolder.UI_CURSORS);
+    this.loadImage("select_cursor_highlight_thick", ImagesFolder.UI_CURSORS);
+    this.loadImage("select_cursor_pokerus", ImagesFolder.UI_CURSORS);
+    this.loadImage("select_gen_cursor", ImagesFolder.UI_CURSORS); // same as select_cursor, could be removed by using it as a nineslice
+    this.loadAtlas("summary_moves_cursor", ImagesFolder.UI_CURSORS);
 
-    currentFolder = "ui/notification-bars";
-    this.loadImage("ability_bar_left", currentFolder);
-    this.loadImage("bgm_bar", currentFolder); // same as abilitity_bar_left, could be removed by using it as a nineslice
-    this.loadImage("party_exp_bar", currentFolder); // same as abilitity_bar_left, could be removed by using it as a nineslice
-    this.loadImage("achv_bar", currentFolder);
-    this.loadImage("achv_bar_2", currentFolder);
-    this.loadImage("achv_bar_3", currentFolder);
-    this.loadImage("achv_bar_4", currentFolder);
-    this.loadImage("achv_bar_5", currentFolder);
+    this.loadImage("ability_bar_left", ImagesFolder.UI_NOTIFICATION_BARS);
+    this.loadImage("bgm_bar", ImagesFolder.UI_NOTIFICATION_BARS); // same as abilitity_bar_left, could be removed by using it as a nineslice
+    this.loadImage("party_exp_bar", ImagesFolder.UI_NOTIFICATION_BARS); // same as abilitity_bar_left, could be removed by using it as a nineslice
+    this.loadImage("achv_bar", ImagesFolder.UI_NOTIFICATION_BARS);
+    this.loadImage("achv_bar_2", ImagesFolder.UI_NOTIFICATION_BARS);
+    this.loadImage("achv_bar_3", ImagesFolder.UI_NOTIFICATION_BARS);
+    this.loadImage("achv_bar_4", ImagesFolder.UI_NOTIFICATION_BARS);
+    this.loadImage("achv_bar_5", ImagesFolder.UI_NOTIFICATION_BARS);
 
-    currentFolder = "ui/menu-icons";
-    this.loadImage("saving_icon", currentFolder);
-    this.loadImage("discord", currentFolder);
-    this.loadImage("google", currentFolder);
-    this.loadImage("settings_icon", currentFolder);
-    this.loadImage("link_icon", currentFolder);
-    this.loadImage("unlink_icon", currentFolder);
-    this.loadImage("icon_lock", currentFolder);
-    this.loadImage("icon_stop", currentFolder);
+    this.loadImage("saving_icon", ImagesFolder.UI_MENU_ICONS);
+    this.loadImage("discord", ImagesFolder.UI_MENU_ICONS);
+    this.loadImage("google", ImagesFolder.UI_MENU_ICONS);
+    this.loadImage("settings_icon", ImagesFolder.UI_MENU_ICONS);
+    this.loadImage("link_icon", ImagesFolder.UI_MENU_ICONS);
+    this.loadImage("unlink_icon", ImagesFolder.UI_MENU_ICONS);
+    this.loadImage("icon_lock", ImagesFolder.UI_MENU_ICONS);
+    this.loadImage("icon_stop", ImagesFolder.UI_MENU_ICONS);
 
-    currentFolder = "ui/game-icons";
-    this.loadImage("shiny_star", currentFolder, { filenameRoot: "shiny" });
-    this.loadImage("shiny_star_1", currentFolder, { filenameRoot: "shiny_1" });
-    this.loadImage("shiny_star_2", currentFolder, { filenameRoot: "shiny_2" });
-    this.loadImage("shiny_star_small", currentFolder, { filenameRoot: "shiny_small" });
-    this.loadImage("shiny_star_small_1", currentFolder, { filenameRoot: "shiny_small_1" });
-    this.loadImage("shiny_star_small_2", currentFolder, { filenameRoot: "shiny_small_2" });
-    this.loadImage("icon_favorite", currentFolder);
-    this.loadAtlas("shiny_icons", currentFolder);
-    this.loadImage("icon_ha_capsule", currentFolder);
-    this.loadImage("icon_champion_ribbon", currentFolder);
-    this.loadImage("icon_spliced", currentFolder);
-    this.loadImage("icon_tera", currentFolder);
-    this.loadImage("icon_owned", currentFolder);
-    this.loadImage("icon_egg_move", currentFolder);
-    this.loadImage("candy", currentFolder);
-    this.loadImage("candy_overlay", currentFolder);
-    this.loadImage("friendship", currentFolder);
-    this.loadImage("friendship_overlay", currentFolder);
+    this.loadImage("shiny_star", ImagesFolder.UI_GAME_ICONS, { filenameRoot: "shiny" });
+    this.loadImage("shiny_star_1", ImagesFolder.UI_GAME_ICONS, { filenameRoot: "shiny_1" });
+    this.loadImage("shiny_star_2", ImagesFolder.UI_GAME_ICONS, { filenameRoot: "shiny_2" });
+    this.loadImage("shiny_star_small", ImagesFolder.UI_GAME_ICONS, { filenameRoot: "shiny_small" });
+    this.loadImage("shiny_star_small_1", ImagesFolder.UI_GAME_ICONS, { filenameRoot: "shiny_small_1" });
+    this.loadImage("shiny_star_small_2", ImagesFolder.UI_GAME_ICONS, { filenameRoot: "shiny_small_2" });
+    this.loadImage("icon_favorite", ImagesFolder.UI_GAME_ICONS);
+    this.loadAtlas("shiny_icons", ImagesFolder.UI_GAME_ICONS);
+    this.loadImage("icon_ha_capsule", ImagesFolder.UI_GAME_ICONS);
+    this.loadImage("icon_champion_ribbon", ImagesFolder.UI_GAME_ICONS);
+    this.loadImage("icon_spliced", ImagesFolder.UI_GAME_ICONS);
+    this.loadImage("icon_tera", ImagesFolder.UI_GAME_ICONS);
+    this.loadImage("icon_owned", ImagesFolder.UI_GAME_ICONS);
+    this.loadImage("icon_egg_move", ImagesFolder.UI_GAME_ICONS);
+    this.loadImage("candy", ImagesFolder.UI_GAME_ICONS);
+    this.loadImage("candy_overlay", ImagesFolder.UI_GAME_ICONS);
+    this.loadImage("friendship", ImagesFolder.UI_GAME_ICONS);
+    this.loadImage("friendship_overlay", ImagesFolder.UI_GAME_ICONS);
 
-    currentFolder = "ui/pokemon-info";
-    this.loadImage("pbinfo_player", currentFolder);
-    this.loadImage("pbinfo_player_stats", currentFolder);
-    this.loadImage("pbinfo_player_mini", currentFolder);
-    this.loadImage("pbinfo_player_mini_stats", currentFolder);
-    this.loadAtlas("pbinfo_player_type", currentFolder);
-    this.loadAtlas("pbinfo_player_type1", currentFolder);
-    this.loadAtlas("pbinfo_player_type2", currentFolder);
-    this.loadImage("pbinfo_enemy_mini", currentFolder);
-    this.loadImage("pbinfo_enemy_mini_stats", currentFolder);
-    this.loadImage("pbinfo_enemy_boss", currentFolder);
-    this.loadImage("pbinfo_enemy_boss_stats", currentFolder);
-    this.loadAtlas("pbinfo_enemy_type", currentFolder);
-    this.loadAtlas("pbinfo_enemy_type1", currentFolder);
-    this.loadAtlas("pbinfo_enemy_type2", currentFolder);
-    this.loadAtlas("pbinfo_stat", currentFolder);
-    this.loadAtlas("pbinfo_stat_numbers", currentFolder);
+    this.loadImage("pbinfo_player", ImagesFolder.UI_PB_INFO);
+    this.loadImage("pbinfo_player_stats", ImagesFolder.UI_PB_INFO);
+    this.loadImage("pbinfo_player_mini", ImagesFolder.UI_PB_INFO);
+    this.loadImage("pbinfo_player_mini_stats", ImagesFolder.UI_PB_INFO);
+    this.loadAtlas("pbinfo_player_type", ImagesFolder.UI_PB_INFO);
+    this.loadAtlas("pbinfo_player_type1", ImagesFolder.UI_PB_INFO);
+    this.loadAtlas("pbinfo_player_type2", ImagesFolder.UI_PB_INFO);
+    this.loadImage("pbinfo_enemy_mini", ImagesFolder.UI_PB_INFO);
+    this.loadImage("pbinfo_enemy_mini_stats", ImagesFolder.UI_PB_INFO);
+    this.loadImage("pbinfo_enemy_boss", ImagesFolder.UI_PB_INFO);
+    this.loadImage("pbinfo_enemy_boss_stats", ImagesFolder.UI_PB_INFO);
+    this.loadAtlas("pbinfo_enemy_type", ImagesFolder.UI_PB_INFO);
+    this.loadAtlas("pbinfo_enemy_type1", ImagesFolder.UI_PB_INFO);
+    this.loadAtlas("pbinfo_enemy_type2", ImagesFolder.UI_PB_INFO);
+    this.loadAtlas("pbinfo_stat", ImagesFolder.UI_PB_INFO);
+    this.loadAtlas("pbinfo_stat_numbers", ImagesFolder.UI_PB_INFO);
 
-    this.loadImage("pb_tray_overlay_player", currentFolder);
-    this.loadImage("pb_tray_overlay_enemy", currentFolder);
-    this.loadAtlas("pb_tray_ball", currentFolder);
+    this.loadImage("pb_tray_overlay_player", ImagesFolder.UI_PB_INFO);
+    this.loadImage("pb_tray_overlay_enemy", ImagesFolder.UI_PB_INFO);
+    this.loadAtlas("pb_tray_ball", ImagesFolder.UI_PB_INFO);
 
-    this.loadImage("overlay_lv", currentFolder);
-    this.loadAtlas("overlay_hp", currentFolder);
-    this.loadAtlas("overlay_hp_boss", currentFolder);
-    this.loadImage("overlay_exp", currentFolder);
+    this.loadImage("overlay_lv", ImagesFolder.UI_PB_INFO);
+    this.loadAtlas("overlay_hp", ImagesFolder.UI_PB_INFO);
+    this.loadAtlas("overlay_hp_boss", ImagesFolder.UI_PB_INFO);
+    this.loadImage("overlay_exp", ImagesFolder.UI_PB_INFO);
 
-    currentFolder = "ui/time-of-day";
-    this.loadImage("dawn_icon_fg", currentFolder);
-    this.loadImage("dawn_icon_mg", currentFolder);
-    this.loadImage("dawn_icon_bg", currentFolder);
-    this.loadImage("day_icon_fg", currentFolder);
-    this.loadImage("day_icon_mg", currentFolder);
-    this.loadImage("day_icon_bg", currentFolder);
-    this.loadImage("dusk_icon_fg", currentFolder);
-    this.loadImage("dusk_icon_mg", currentFolder);
-    this.loadImage("dusk_icon_bg", currentFolder);
-    this.loadImage("night_icon_fg", currentFolder);
-    this.loadImage("night_icon_mg", currentFolder);
-    this.loadImage("night_icon_bg", currentFolder);
+    this.loadImage("dawn_icon_fg", ImagesFolder.UI_TIME_OF_DAY);
+    this.loadImage("dawn_icon_mg", ImagesFolder.UI_TIME_OF_DAY);
+    this.loadImage("dawn_icon_bg", ImagesFolder.UI_TIME_OF_DAY);
+    this.loadImage("day_icon_fg", ImagesFolder.UI_TIME_OF_DAY);
+    this.loadImage("day_icon_mg", ImagesFolder.UI_TIME_OF_DAY);
+    this.loadImage("day_icon_bg", ImagesFolder.UI_TIME_OF_DAY);
+    this.loadImage("dusk_icon_fg", ImagesFolder.UI_TIME_OF_DAY);
+    this.loadImage("dusk_icon_mg", ImagesFolder.UI_TIME_OF_DAY);
+    this.loadImage("dusk_icon_bg", ImagesFolder.UI_TIME_OF_DAY);
+    this.loadImage("night_icon_fg", ImagesFolder.UI_TIME_OF_DAY);
+    this.loadImage("night_icon_mg", ImagesFolder.UI_TIME_OF_DAY);
+    this.loadImage("night_icon_bg", ImagesFolder.UI_TIME_OF_DAY);
 
-    currentFolder = "ui/party";
-    this.loadImage("party_bg_double", currentFolder);
-    this.loadImage("party_bg", currentFolder);
-    this.loadAtlas("party_cancel", currentFolder);
-    this.loadImage("party_slot_hp_bar", currentFolder);
-    this.loadAtlas("party_slot_hp_overlay", currentFolder);
-    this.loadImage("party_slot_overlay_lv", currentFolder);
-    this.loadAtlas("party_slot_main", currentFolder);
-    this.loadAtlas("party_slot", currentFolder);
+    this.loadImage("party_bg_double", ImagesFolder.UI_PARTY);
+    this.loadImage("party_bg", ImagesFolder.UI_PARTY);
+    this.loadAtlas("party_cancel", ImagesFolder.UI_PARTY);
+    this.loadImage("party_slot_hp_bar", ImagesFolder.UI_PARTY);
+    this.loadAtlas("party_slot_hp_overlay", ImagesFolder.UI_PARTY);
+    this.loadImage("party_slot_overlay_lv", ImagesFolder.UI_PARTY);
+    this.loadAtlas("party_slot_main", ImagesFolder.UI_PARTY);
+    this.loadAtlas("party_slot", ImagesFolder.UI_PARTY);
 
-    currentFolder = "ui/summary";
-    this.loadImage("summary_bg", currentFolder);
-    this.loadImage("summary_overlay_shiny", currentFolder);
-    this.loadImage("summary_profile", currentFolder);
-    this.loadImage("summary_profile_prompt_z", currentFolder); // The pixel Z button prompt
-    this.loadImage("summary_profile_prompt_a", currentFolder); // The pixel A button prompt
-    this.loadImage("summary_profile_ability", currentFolder); // Pixel text 'ABILITY'
-    this.loadImage("summary_profile_passive", currentFolder); // Pixel text 'PASSIVE'
-    this.loadImage("summary_status", currentFolder);
-    this.loadImage("summary_stats", currentFolder);
-    this.loadImage("summary_stats_overlay_exp", currentFolder);
-    this.loadImage("summary_moves", currentFolder);
-    this.loadImage("summary_moves_effect", currentFolder);
-    this.loadImage("summary_moves_overlay_row", currentFolder);
-    this.loadImage("summary_moves_overlay_pp", currentFolder);
+    this.loadImage("summary_bg", ImagesFolder.UI_SUMMARY);
+    this.loadImage("summary_overlay_shiny", ImagesFolder.UI_SUMMARY);
+    this.loadImage("summary_profile", ImagesFolder.UI_SUMMARY);
+    this.loadImage("summary_profile_prompt_z", ImagesFolder.UI_SUMMARY); // The pixel Z button prompt
+    this.loadImage("summary_profile_prompt_a", ImagesFolder.UI_SUMMARY); // The pixel A button prompt
+    this.loadImage("summary_profile_ability", ImagesFolder.UI_SUMMARY); // Pixel text 'ABILITY'
+    this.loadImage("summary_profile_passive", ImagesFolder.UI_SUMMARY); // Pixel text 'PASSIVE'
+    this.loadImage("summary_status", ImagesFolder.UI_SUMMARY);
+    this.loadImage("summary_stats", ImagesFolder.UI_SUMMARY);
+    this.loadImage("summary_stats_overlay_exp", ImagesFolder.UI_SUMMARY);
+    this.loadImage("summary_moves", ImagesFolder.UI_SUMMARY);
+    this.loadImage("summary_moves_effect", ImagesFolder.UI_SUMMARY);
+    this.loadImage("summary_moves_overlay_row", ImagesFolder.UI_SUMMARY);
+    this.loadImage("summary_moves_overlay_pp", ImagesFolder.UI_SUMMARY);
+    // Background of the 3 tabs of a pokemon's summary
     for (let t = 1; t <= 3; t++) {
-      this.loadImage(`summary_tabs_${t}`, currentFolder);
+      this.loadImage(`summary_tabs_${t}`, ImagesFolder.UI_SUMMARY);
     }
 
-    this.loadImage("egg_list_bg", "ui");
-    this.loadImage("egg_summary_bg", "ui");
+    this.loadImage("egg_list_bg", ImagesFolder.UI);
+    this.loadImage("egg_summary_bg", ImagesFolder.UI);
 
-    this.loadImage("starter_container_bg", "ui");
-    this.loadImage("starter_select_bg", "ui");
-    this.loadImage("passive_bg", "ui");
+    this.loadImage("starter_container_bg", ImagesFolder.UI);
+    this.loadImage("starter_select_bg", ImagesFolder.UI);
+    this.loadImage("passive_bg", ImagesFolder.UI);
 
     // Get current language and load the different localized images and atlases for it
     const lang = i18next.resolvedLanguage ?? "en";
-    this.loadAtlas("statuses", "ui/status-icons", { languageKey: lang });
-    this.loadAtlas("types", "ui/type-icons", { languageKey: lang });
+    this.loadAtlas("statuses", ImagesFolder.UI_STATUS_ICONS, { languageKey: lang });
+    this.loadAtlas("types", ImagesFolder.UI_TYPE_ICONS, { languageKey: lang });
 
+    // TODO: cleanup event images loading
     const availableLangs = ["en", "de", "it", "fr", "ja", "ko", "es-ES", "pt-BR", "zh-CN"];
     if (lang && availableLangs.includes(lang)) {
-      this.loadImage("halloween2024-event-" + lang, "events");
+      this.loadImage("halloween2024-event-" + lang, ImagesFolder.EVENTS);
     } else {
-      this.loadImage("halloween2024-event-en", "events");
+      this.loadImage("halloween2024-event-en", ImagesFolder.EVENTS);
     }
 
     // Load arena images
-    this.loadImage("default_bg", "arenas");
+    this.loadImage("default_bg", ImagesFolder.ARENAS);
     getEnumValues(Biome).map((bt) => {
       const btKey = Biome[bt].toLowerCase();
       const isBaseAnimated = btKey === "end";
       const baseAKey = `${btKey}_a`;
       const baseBKey = `${btKey}_b`;
-      this.loadImage(`${btKey}_bg`, "arenas");
+      this.loadImage(`${btKey}_bg`, ImagesFolder.ARENAS);
       if (!isBaseAnimated) {
-        this.loadImage(baseAKey, "arenas");
+        this.loadImage(baseAKey, ImagesFolder.ARENAS);
       } else {
-        this.loadAtlas(baseAKey, "arenas");
+        this.loadAtlas(baseAKey, ImagesFolder.ARENAS);
       }
       if (!isBaseAnimated) {
-        this.loadImage(baseBKey, "arenas");
+        this.loadImage(baseBKey, ImagesFolder.ARENAS);
       } else {
-        this.loadAtlas(baseBKey, "arenas");
+        this.loadAtlas(baseBKey, ImagesFolder.ARENAS);
       }
       if (getBiomeHasProps(bt)) {
         for (let p = 1; p <= 3; p++) {
           const isPropAnimated = p === 3 && ["power_plant", "end"].find((b) => b === btKey);
           const propKey = `${btKey}_b_${p}`;
           if (!isPropAnimated) {
-            this.loadImage(propKey, "arenas");
+            this.loadImage(propKey, ImagesFolder.ARENAS);
           } else {
-            this.loadAtlas(propKey, "arenas");
+            this.loadAtlas(propKey, ImagesFolder.ARENAS);
           }
         }
       }
     });
 
-    // Load bitmap fonts
-    this.load.bitmapFont("item-count", "fonts/item-count.png", "fonts/item-count.xml");
-
     // Load trainer images
-    this.loadAtlas("trainer_m_back", "trainer");
-    this.loadAtlas("trainer_m_back_pb", "trainer");
-    this.loadAtlas("trainer_f_back", "trainer");
-    this.loadAtlas("trainer_f_back_pb", "trainer");
+    this.loadAtlas("trainer_m_back", ImagesFolder.TRAINER);
+    this.loadAtlas("trainer_m_back_pb", ImagesFolder.TRAINER);
+    this.loadAtlas("trainer_f_back", ImagesFolder.TRAINER);
+    this.loadAtlas("trainer_f_back_pb", ImagesFolder.TRAINER);
 
     // Load character sprites
-    this.loadAtlas("c_rival_m", "character", { filenameRoot: "rival_m" });
-    this.loadAtlas("c_rival_f", "character", { filenameRoot: "rival_f" });
+    this.loadAtlas("c_rival_m", ImagesFolder.CHARACTER, { filenameRoot: "rival_m" });
+    this.loadAtlas("c_rival_f", ImagesFolder.CHARACTER, { filenameRoot: "rival_f" });
 
     // Load pokemon-related images
-    this.loadImage("pkmn__back__sub", "pokemon/back", { filenameRoot: "sub" });
-    this.loadImage("pkmn__sub", "pokemon", { filenameRoot: "sub" });
-    this.loadAtlas("battle_stats", "effects");
-    this.loadAtlas("shiny", "effects");
-    this.loadAtlas("shiny_2", "effects");
-    this.loadAtlas("shiny_3", "effects");
-    this.loadImage("tera", "effects");
-    this.loadAtlas("pb_particles", "effects");
-    this.loadImage("evo_sparkle", "effects");
-    this.loadAtlas("tera_sparkle", "effects");
+    this.loadImage("pkmn__back__sub", ImagesFolder.POKEMON_BACK, { filenameRoot: "sub" });
+    this.loadImage("pkmn__sub", ImagesFolder.POKEMON, { filenameRoot: "sub" });
+    this.loadAtlas("battle_stats", ImagesFolder.EFFECTS);
+    this.loadAtlas("shiny", ImagesFolder.EFFECTS);
+    this.loadAtlas("shiny_2", ImagesFolder.EFFECTS);
+    this.loadAtlas("shiny_3", ImagesFolder.EFFECTS);
+    this.loadImage("tera", ImagesFolder.EFFECTS);
+    this.loadAtlas("pb_particles", ImagesFolder.EFFECTS);
+    this.loadImage("evo_sparkle", ImagesFolder.EFFECTS);
+    this.loadAtlas("tera_sparkle", ImagesFolder.EFFECTS);
     this.load.video("evo_bg", "images/effects/evo_bg.mp4", true);
 
-    this.loadAtlas("pb", "");
-    this.loadAtlas("items", "");
-    this.loadAtlas("categories", "");
+    this.loadAtlas("pb");
+    this.loadAtlas("items");
+    this.loadAtlas("categories");
 
-    this.loadAtlas("egg", "egg");
-    this.loadAtlas("egg_crack", "egg");
-    this.loadAtlas("egg_icons", "egg");
-    this.loadAtlas("egg_shard", "egg");
-    this.loadAtlas("egg_lightrays", "egg");
+    this.loadAtlas("egg", ImagesFolder.EGG);
+    this.loadAtlas("egg_crack", ImagesFolder.EGG);
+    this.loadAtlas("egg_icons", ImagesFolder.EGG);
+    this.loadAtlas("egg_shard", ImagesFolder.EGG);
+    this.loadAtlas("egg_lightrays", ImagesFolder.EGG);
     getEnumKeys(GachaType).forEach((gt) => {
       const key = gt.toLowerCase();
-      this.loadImage(`gacha_${key}`, "egg");
-      this.loadAtlas(`gacha_underlay_${key}`, "egg");
+      this.loadImage(`gacha_${key}`, ImagesFolder.EGG);
+      this.loadAtlas(`gacha_underlay_${key}`, ImagesFolder.EGG);
     });
-    this.loadImage("gacha_glass", "egg");
-    this.loadImage("gacha_eggs", "egg");
-    this.loadAtlas("gacha_hatch", "egg");
-    this.loadImage("gacha_knob", "egg");
+    this.loadImage("gacha_glass", ImagesFolder.EGG);
+    this.loadImage("gacha_eggs", ImagesFolder.EGG);
+    this.loadAtlas("gacha_hatch", ImagesFolder.EGG);
+    this.loadImage("gacha_knob", ImagesFolder.EGG);
 
-    this.loadImage("end_m", "cg");
-    this.loadImage("end_f", "cg");
+    this.loadImage("end_m", ImagesFolder.CG);
+    this.loadImage("end_f", ImagesFolder.CG);
 
     for (let i = 0; i < 10; i++) {
-      this.loadAtlas(`pokemon_icons_${i}`, "");
+      this.loadAtlas(`pokemon_icons_${i}`);
       if (i) {
-        this.loadAtlas(`pokemon_icons_${i}v`, "");
+        this.loadAtlas(`pokemon_icons_${i}v`);
       }
     }
 
     // Load Mystery Encounter dex progress icon
-    this.loadImage("encounter_radar", "mystery-encounters");
+    this.loadImage("encounter_radar", ImagesFolder.ME);
 
-    this.loadAtlas("dualshock", "inputs");
-    this.loadAtlas("xbox", "inputs");
-    this.loadAtlas("keyboard", "inputs");
+    // Load controller button icons
+    this.loadAtlas("dualshock", ImagesFolder.INPUTS);
+    this.loadAtlas("xbox", ImagesFolder.INPUTS);
+    this.loadAtlas("keyboard", ImagesFolder.INPUTS);
 
+    // Load bitmap fonts
+    this.load.bitmapFont("item-count", "fonts/item-count.png", "fonts/item-count.xml");
+
+    // Load sound effects and music
     this.loadSe("select", "ui");
     this.loadSe("menu_open", "ui");
     this.loadSe("error", "ui");

@@ -34,6 +34,7 @@ import { SummonPhase } from "#app/phases/summon-phase";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { settings } from "#app/system/settings/settings-manager";
+import { ImagesFolder } from "#enums/images-folders";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/safariZone";
@@ -101,8 +102,8 @@ export const SafariZoneEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
         globalScene.loadSe("PRSFX- Bug Bite", "battle_anims", "PRSFX- Bug Bite.wav");
         globalScene.loadSe("PRSFX- Sludge Bomb2", "battle_anims", "PRSFX- Sludge Bomb2.wav");
         globalScene.loadSe("PRSFX- Taunt2", "battle_anims", "PRSFX- Taunt2.wav");
-        globalScene.loadAtlas("safari_zone_bait", "mystery-encounters");
-        globalScene.loadAtlas("safari_zone_mud", "mystery-encounters");
+        globalScene.loadAtlas("safari_zone_bait", ImagesFolder.ME);
+        globalScene.loadAtlas("safari_zone_mud", ImagesFolder.ME);
         // Clear enemy party
         globalScene.currentBattle.enemyParty = [];
         await transitionMysteryEncounterIntroVisuals();
