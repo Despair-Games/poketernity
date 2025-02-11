@@ -90,7 +90,7 @@ describe("Abilities - Synchronize", () => {
     game.move.select(MoveId.THUNDER_WAVE);
     await game.phaseInterceptor.to("BerryPhase");
 
-    expect(game.scene.getPlayerPokemon()!.getStatusEffect()).toBeUndefined();
+    expect(game.scene.getPlayerPokemon()!.getStatusEffect()).toBe(StatusEffect.NONE);
     expect(game.scene.getEnemyPokemon()!.getStatusEffect()).toBe(StatusEffect.PARALYSIS);
     expect(game.phaseInterceptor.log).toContain("ShowAbilityPhase");
   });

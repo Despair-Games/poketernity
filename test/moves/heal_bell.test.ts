@@ -94,8 +94,8 @@ describe("Moves - Heal Bell", () => {
     expect(rightPlayer.resetStatus).toHaveBeenCalledTimes(0);
     expect(partyPokemon.resetStatus).toHaveBeenCalledOnce();
 
-    expect(leftPlayer.getStatusEffect()).toBeUndefined();
+    expect(leftPlayer.getStatusEffect()).toBe(StatusEffect.NONE);
     expect(rightPlayer.getStatusEffect()).toBe(StatusEffect.BURN);
-    expect(partyPokemon.getStatusEffect()).toBeUndefined();
+    expect(partyPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
   });
 });
