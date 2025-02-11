@@ -1,6 +1,5 @@
-import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { StatusEffect } from "#enums/status-effect";
+import type { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { type Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
@@ -43,6 +42,6 @@ export class PsychoShiftEffectAttr extends MoveEffectAttr {
   }
 
   private getStatusToApply(user: Pokemon): StatusEffect | undefined {
-    return user.status?.effect ?? (user.hasAbility(Abilities.COMATOSE) ? StatusEffect.SLEEP : undefined);
+    return user.getStatusEffect();
   }
 }

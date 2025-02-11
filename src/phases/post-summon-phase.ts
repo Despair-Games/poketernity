@@ -20,8 +20,8 @@ export class PostSummonPhase extends PokemonPhase {
 
     const pokemon = this.getPokemon();
 
-    if (pokemon.status?.effect === StatusEffect.TOXIC) {
-      pokemon.status.toxicTurnCount = 0;
+    if (pokemon.hasStatusEffect(StatusEffect.TOXIC)) {
+      pokemon.status!.toxicTurnCount = 0;
     }
     globalScene.arena.applyTags([...ArenaTrapArenaTagTypes], false, pokemon);
 

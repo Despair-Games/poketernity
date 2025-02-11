@@ -504,7 +504,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @returns `true` if the pokemon is fainted
    */
   public isFainted(checkStatus: boolean = false): boolean {
-    return this.hp <= 0 && (!checkStatus || this.status?.effect === StatusEffect.FAINT);
+    return this.hp <= 0 && (!checkStatus || this.getStatusEffect(true) === StatusEffect.FAINT);
   }
 
   /**
@@ -4038,7 +4038,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     ignoreField: boolean = false,
   ): boolean {
     if (effect !== StatusEffect.FAINT) {
-      if (overrideStatus ? this.status?.effect === effect : this.hasStatusEffect(getNonVolatileStatusEffects())) {
+      if (overrideStatus ? this.getStatusEffect() === effect : this.hasStatusEffect(getNonVolatileStatusEffects())) {
         return false;
       }
       if (this.isGrounded() && !ignoreField && globalScene.arena.terrain?.terrainType === TerrainType.MISTY) {
@@ -4198,7 +4198,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param reloadAssets Whether to reload the assets or not; defaults to false.
    */
   resetStatus(revive: boolean = true, confusion: boolean = false, reloadAssets: boolean = false): void {
-    const lastStatus = this.status?.effect;
+    const lastStatus = this.getStatusEffect();
     if (!revive && lastStatus === StatusEffect.FAINT) {
       return;
     }

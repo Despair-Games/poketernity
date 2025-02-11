@@ -12,7 +12,7 @@ import { MoveAttr } from "#app/data/move-attrs/move-attr";
  */
 export class BypassSleepAttr extends MoveAttr {
   override apply(user: Pokemon, _target: Pokemon | null, move: Move): boolean {
-    if (user.status?.effect === StatusEffect.SLEEP) {
+    if (user.hasStatusEffect(StatusEffect.SLEEP)) {
       user.addTag(BattlerTagType.BYPASS_SLEEP, 1, move.id, user.id);
       return true;
     }

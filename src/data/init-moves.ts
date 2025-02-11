@@ -2521,8 +2521,7 @@ export function initMoves() {
     ),
     new StatusMove(MoveId.VENOM_DRENCH, ElementalType.POISON, 100, 20, -1, 0, 6)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK, Stat.SPD], -1, false, {
-        condition: (_user, target, _move) =>
-          target.status?.effect === StatusEffect.POISON || target.status?.effect === StatusEffect.TOXIC,
+        condition: (_user, target, _move) => target.hasStatusEffect([StatusEffect.POISON, StatusEffect.TOXIC]),
       })
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new StatusMove(MoveId.POWDER, ElementalType.BUG, 100, 20, -1, 1, 6)

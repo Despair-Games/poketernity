@@ -678,7 +678,8 @@ export function initAbilities() {
     ),
     new Ability(Abilities.FLARE_BOOST, 5).attr(
       MovePowerBoostAbAttr,
-      (user, _target, move) => move?.category === MoveCategory.SPECIAL && user?.status?.effect === StatusEffect.BURN,
+      (user, _target, move) =>
+        move?.category === MoveCategory.SPECIAL && !!user && user.hasStatusEffect(StatusEffect.BURN),
       1.5,
     ),
     new Ability(Abilities.HARVEST, 5)
