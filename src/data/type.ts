@@ -276,45 +276,21 @@ export function getTypeDamageMultiplierColor(
   multiplier: TypeDamageMultiplier,
   side: "defense" | "offense",
 ): string | undefined {
-  if (side === "offense") {
-    switch (multiplier) {
-      case 0:
-        return TypeEffectivenessColor.NO_EFFECT;
-      case 0.125:
-        return TypeEffectivenessColor.VERY_RESISTED;
-      case 0.25:
-        return TypeEffectivenessColor.RESISTED;
-      case 0.5:
-        return TypeEffectivenessColor.NOT_VERY_EFFECTIVE;
-      case 1:
-        return undefined;
-      case 2:
-        return TypeEffectivenessColor.SUPER_EFFECTIVE;
-      case 4:
-        return TypeEffectivenessColor.VERY_SUPER_EFFECTIVE;
-      case 8:
-        return TypeEffectivenessColor.MAX_SUPER_EFFECTIVE;
-    }
-  } else if (side === "defense") {
-    switch (multiplier) {
-      case 0:
-        return TypeEffectivenessColor.DEFENSE_NO_EFFECT;
-      case 0.125:
-        return TypeEffectivenessColor.DEFENSE_VERY_RESISTED;
-      case 0.25:
-        return TypeEffectivenessColor.DEFENSE_RESISTED;
-      case 0.5:
-        return TypeEffectivenessColor.DEFENSE_NOT_VERY_EFFECTIVE;
-      case 1:
-        return undefined;
-      case 2:
-        return TypeEffectivenessColor.SUPER_EFFECTIVE;
-      case 4:
-        return TypeEffectivenessColor.VERY_SUPER_EFFECTIVE;
-      case 8:
-        return TypeEffectivenessColor.MAX_SUPER_EFFECTIVE;
-    }
-  }
+  const effectivenessMap: Record<TypeDamageMultiplier, string | undefined> = {
+    0: side === "offense" ? TypeEffectivenessColor.NO_EFFECT : TypeEffectivenessColor.DEFENSE_NO_EFFECT,
+    0.125: side === "offense" ? TypeEffectivenessColor.VERY_RESISTED : TypeEffectivenessColor.DEFENSE_VERY_RESISTED,
+    0.25: side === "offense" ? TypeEffectivenessColor.RESISTED : TypeEffectivenessColor.DEFENSE_RESISTED,
+    0.5:
+      side === "offense"
+        ? TypeEffectivenessColor.NOT_VERY_EFFECTIVE
+        : TypeEffectivenessColor.DEFENSE_NOT_VERY_EFFECTIVE,
+    1: undefined,
+    2: TypeEffectivenessColor.SUPER_EFFECTIVE,
+    4: TypeEffectivenessColor.VERY_SUPER_EFFECTIVE,
+    8: TypeEffectivenessColor.MAX_SUPER_EFFECTIVE,
+  };
+
+  return effectivenessMap[multiplier];
 }
 
 export function getTypeRgb(type: ElementalType): [number, number, number] {
