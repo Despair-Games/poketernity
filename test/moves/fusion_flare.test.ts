@@ -51,6 +51,6 @@ describe("Moves - Fusion Flare", () => {
     await game.toNextTurn();
 
     // Check if FUSION_FLARE thawed freeze
-    expect(partyMember.status?.effect).toBeUndefined();
+    expect(partyMember.getStatusEffect()).toBe(StatusEffect.NONE);
   });
 });

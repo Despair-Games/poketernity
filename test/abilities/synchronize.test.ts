@@ -48,8 +48,8 @@ describe("Abilities - Synchronize", () => {
     game.move.select(MoveId.THUNDER_WAVE);
     await game.phaseInterceptor.to("BerryPhase");
 
-    expect(game.scene.getPlayerPokemon()!.status?.effect).toBe(StatusEffect.PARALYSIS);
-    expect(game.scene.getEnemyPokemon()!.status?.effect).toBe(StatusEffect.PARALYSIS);
+    expect(game.scene.getPlayerPokemon()!.getStatusEffect()).toBe(StatusEffect.PARALYSIS);
+    expect(game.scene.getEnemyPokemon()!.getStatusEffect()).toBe(StatusEffect.PARALYSIS);
     expect(game.phaseInterceptor.log).toContain("ShowAbilityPhase");
   });
 
@@ -60,8 +60,8 @@ describe("Abilities - Synchronize", () => {
 
     await game.phaseInterceptor.to("BerryPhase");
 
-    expect(game.scene.getPlayerPokemon()!.status?.effect).toBeUndefined();
-    expect(game.scene.getEnemyPokemon()!.status?.effect).toBe(StatusEffect.SLEEP);
+    expect(game.scene.getPlayerPokemon()!.getStatusEffect()).toBe(StatusEffect.NONE);
+    expect(game.scene.getEnemyPokemon()!.getStatusEffect()).toBe(StatusEffect.SLEEP);
     expect(game.phaseInterceptor.log).not.toContain("ShowAbilityPhase");
   });
 
@@ -79,8 +79,8 @@ describe("Abilities - Synchronize", () => {
     game.doSwitchPokemon(1);
     await game.phaseInterceptor.to("BerryPhase");
 
-    expect(game.scene.getPlayerPokemon()!.status?.effect).toBe(StatusEffect.POISON);
-    expect(game.scene.getEnemyPokemon()!.status?.effect).toBeUndefined();
+    expect(game.scene.getPlayerPokemon()!.getStatusEffect()).toBe(StatusEffect.POISON);
+    expect(game.scene.getEnemyPokemon()!.getStatusEffect()).toBe(StatusEffect.NONE);
     expect(game.phaseInterceptor.log).not.toContain("ShowAbilityPhase");
   });
 
@@ -90,8 +90,8 @@ describe("Abilities - Synchronize", () => {
     game.move.select(MoveId.THUNDER_WAVE);
     await game.phaseInterceptor.to("BerryPhase");
 
-    expect(game.scene.getPlayerPokemon()!.status?.effect).toBeUndefined();
-    expect(game.scene.getEnemyPokemon()!.status?.effect).toBe(StatusEffect.PARALYSIS);
+    expect(game.scene.getPlayerPokemon()!.getStatusEffect()).toBeUndefined();
+    expect(game.scene.getEnemyPokemon()!.getStatusEffect()).toBe(StatusEffect.PARALYSIS);
     expect(game.phaseInterceptor.log).toContain("ShowAbilityPhase");
   });
 });
