@@ -16,10 +16,10 @@ import type { GameMode } from "./game-mode";
 import { MoneyMultiplierModifier, type PokemonHeldItemModifier } from "./modifier/modifier";
 import type { PokeballType } from "#enums/pokeball";
 import { SpeciesFormKey } from "#enums/species-form-key";
-import type { EnemyPokemon, PlayerPokemon, QueuedMove } from "#app/field/pokemon";
+import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
+import type { QueuedMove } from "./@types/QueuedMove";
 import type { Pokemon } from "#app/field/pokemon";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import type { MoveId } from "#enums/move-id";
 import { PlayerGender } from "#enums/player-gender";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
@@ -54,6 +54,7 @@ import {
   RIVAL_WAVE,
   TUTORIAL_BATTLE_WAVE,
 } from "./data/special-waves";
+import type { Move } from "#app/data/move";
 
 export interface TurnCommand {
   command: BattleCommand;
@@ -98,7 +99,7 @@ export default class Battle {
   public battleScore: number = 0;
   public postBattleLoot: PokemonHeldItemModifier[] = [];
   public escapeAttempts: number = 0;
-  public lastMoveId: MoveId;
+  public lastMove: Move;
   public battleSeed: string = generateBattleSeed();
   private battleSeedState: string | null = null;
   public moneyScattered: number = 0;

@@ -5,10 +5,10 @@ import {
   leaveEncounterWithoutBattle,
   loadCustomMovesForEncounter,
   setEncounterRewards,
-  transitionMysteryEncounterIntroVisuals,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
@@ -23,10 +23,10 @@ import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-
 import i18next from "#app/plugins/i18n";
 import { ModifierTier } from "#enums/modifier-tier";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { MoveId } from "#enums/move-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { MoveId } from "#enums/move-id";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/trashToTreasure";

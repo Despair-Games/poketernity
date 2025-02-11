@@ -3,13 +3,12 @@ import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
-import { MovePhase } from "#app/phases/move-phase";
 import i18next from "i18next";
 import { type Move } from "#app/data/move";
 import { allMoves } from "#app/data/all-moves";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Attribute used for moves that causes the target to repeat their last used move.
@@ -23,8 +22,8 @@ export class RepeatMoveAttr extends MoveEffectAttr {
 
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     // get the last move used (excluding status based failures) as well as the corresponding moveset slot
-    const lastMove = target.getLastXMoves(-1).find((m) => m.moveId !== MoveId.NONE)!;
-    const movesetMove = target.getMoveset().find((m) => m?.moveId === lastMove.moveId)!;
+    const lastMove = target.getLastXMoves(-1).find((m) => m.move.id !== MoveId.NONE)!;
+    const movesetMove = target.getMoveset().find((m) => m?.moveId === lastMove.move.id)!;
     const moveTargets = lastMove.targets ?? [];
 
     globalScene.queueMessage(
@@ -33,17 +32,23 @@ export class RepeatMoveAttr extends MoveEffectAttr {
         targetPokemonName: getPokemonNameWithAffix(target),
       }),
     );
-    target.getMoveQueue().unshift({ moveId: lastMove.moveId, targets: moveTargets, ignorePP: false });
+    target.getMoveQueue().unshift({ moveId: lastMove.move.id, targets: moveTargets, ignorePP: false });
     target.turnData.extraTurns++;
-    globalScene.appendToPhase(new MovePhase(target, moveTargets, movesetMove), MoveEndPhase);
+    globalScene.useMove({
+      pokemon: target,
+      targets: moveTargets,
+      move: movesetMove,
+      when: "after",
+      phaseId: PhaseId.MOVE_END,
+    });
     return true;
   }
 
   override getCondition(): MoveConditionFunc {
     return (_user, target, _move) => {
       // TODO: Confirm behavior of instructing move known by target but called by another move
-      const lastMove = target.getLastXMoves(-1).find((m) => m.moveId !== MoveId.NONE);
-      const movesetMove = target.getMoveset().find((m) => m?.moveId === lastMove?.moveId);
+      const lastMove = target.getLastXMoves(-1).find((m) => m.move.id !== MoveId.NONE);
+      const movesetMove = target.getMoveset().find((m) => m?.moveId === lastMove?.move.id);
       const moveTargets = lastMove?.targets ?? [];
       // TODO: Add a way of adding moves to list procedurally rather than a pre-defined blacklist
       const unrepeatablemoves = [
@@ -104,9 +109,9 @@ export class RepeatMoveAttr extends MoveEffectAttr {
       if (
         !movesetMove // called move not in target's moveset (dancer, forgetting the move, etc.)
         || movesetMove.ppUsed === movesetMove.getMovePp() // move out of pp
-        || allMoves[lastMove?.moveId ?? MoveId.NONE].isChargingMove() // called move is a charging/recharging move
+        || allMoves[lastMove?.move.id ?? MoveId.NONE].isChargingMove() // called move is a charging/recharging move
         || !moveTargets.length // called move has no targets
-        || unrepeatablemoves.includes(lastMove?.moveId ?? MoveId.NONE)
+        || unrepeatablemoves.includes(lastMove?.move.id ?? MoveId.NONE)
       ) {
         // called move is explicitly in the banlist
         return false;

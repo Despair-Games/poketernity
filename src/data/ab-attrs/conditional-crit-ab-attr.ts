@@ -2,6 +2,7 @@ import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition"
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 
 /**
@@ -14,6 +15,7 @@ export class ConditionalCritAbAttr extends AbAttr {
 
   constructor(condition: PokemonAttackCondition) {
     super();
+    this._flags.add(AbAttrFlag.CONDITIONAL_CRIT);
 
     this.condition = condition;
   }

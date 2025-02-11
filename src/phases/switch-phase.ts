@@ -1,5 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import PartyUiHandler from "#app/ui/party-ui-handler";
 import { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { UiMode } from "#enums/ui-mode";
@@ -7,6 +6,8 @@ import { SwitchType } from "#enums/switch-type";
 import { BattlePhase } from "./abstract-battle-phase";
 import { PostSummonPhase } from "./post-summon-phase";
 import { SwitchSummonPhase } from "./switch-summon-phase";
+import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Opens the party selector UI and transitions into a {@linkcode SwitchSummonPhase}
@@ -15,7 +16,10 @@ import { SwitchSummonPhase } from "./switch-summon-phase";
  * @extends BattlePhase
  */
 export class SwitchPhase extends BattlePhase {
+  override readonly id = PhaseId.SWITCH;
+
   protected readonly fieldIndex: number;
+
   private readonly switchType: SwitchType;
   private readonly isModal: boolean;
   private readonly doReturn: boolean;
@@ -87,11 +91,7 @@ export class SwitchPhase extends BattlePhase {
         }
         ui.setMode(UiMode.MESSAGE).then(() => super.end());
       },
-      PartyUiHandler.FilterNonFainted,
+      PartyFilterNonFainted,
     );
-  }
-
-  override isSwitchPhase(): this is this {
-    return true;
   }
 }

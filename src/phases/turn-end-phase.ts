@@ -1,4 +1,3 @@
-import { PostTurnAbAttr } from "#app/data/ab-attrs/post-turn-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { TurnEndEvent } from "#app/events/battle-scene";
@@ -9,9 +8,12 @@ import { TurnHealModifier, TurnHeldItemTransferModifier, TurnStatusEffectModifie
 import { TerrainType } from "#enums/terrain-type";
 import i18next from "i18next";
 import { FieldPhase } from "./abstract-field-phase";
-import { PokemonHealPhase } from "./pokemon-heal-phase";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 export class TurnEndPhase extends FieldPhase {
+  override readonly id = PhaseId.TURN_END;
+
   public override start(): void {
     super.start();
 
@@ -28,13 +30,11 @@ export class TurnEndPhase extends FieldPhase {
         globalScene.applyModifiers(TurnHealModifier, pokemon.isPlayer(), pokemon);
 
         if (terrain?.terrainType === TerrainType.GRASSY && pokemon.isGrounded()) {
-          globalScene.unshiftPhase(
-            new PokemonHealPhase(pokemon.getBattlerIndex(), Math.max(pokemon.getMaxHp() >> 4, 1), {
-              message: i18next.t("battle:turnEndHpRestore", { pokemonName: getPokemonNameWithAffix(pokemon) }),
-            }),
-          );
+          globalScene.queuePokemonHeal(true, pokemon.getBattlerIndex(), Math.max(pokemon.getMaxHp() >> 4, 1), {
+            message: i18next.t("battle:turnEndHpRestore", { pokemonName: getPokemonNameWithAffix(pokemon) }),
+          });
         }
-        applyAbAttrs(PostTurnAbAttr, pokemon, false);
+        applyAbAttrs(AbAttrFlag.POST_TURN, pokemon, false);
       }
 
       globalScene.applyModifiers(TurnStatusEffectModifier, pokemon.isPlayer(), pokemon);

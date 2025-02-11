@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { allAbilities } from "#app/data/ability";
-import { PostDefendContactApplyStatusEffectAbAttr } from "#app/data/ab-attrs/post-defend-contact-apply-status-effect-ab-attr";
+import { allAbilities } from "#app/data/all-abilities";
+import { type PostDefendContactApplyStatusEffectAbAttr } from "#app/data/ab-attrs/post-defend-contact-apply-status-effect-ab-attr";
 import { Abilities } from "#enums/abilities";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -8,6 +8,7 @@ import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Moves - Safeguard", () => {
   let phaserGame: Phaser.Game;
@@ -139,7 +140,9 @@ describe("Moves - Safeguard", () => {
   it("protects from ability-inflicted status", async () => {
     game.override.ability(Abilities.STATIC);
     vi.spyOn(
-      allAbilities[Abilities.STATIC].getAttrs(PostDefendContactApplyStatusEffectAbAttr)[0],
+      allAbilities[Abilities.STATIC].getAttrs<PostDefendContactApplyStatusEffectAbAttr>(
+        AbAttrFlag.POST_DEFEND_CONTACT_APPLY_STATUS_EFFECT,
+      )[0],
       "chance",
       "get",
     ).mockReturnValue(100);

@@ -3,10 +3,10 @@ import type { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
 import { type Move, getMoveTargets } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import { getStatusEffectHealText } from "#app/data/status-effect";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Move attribute to cure a set of {@linkcode StatusEffect | status effects}
@@ -30,7 +30,7 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
     // Special edge case for shield dust blocking Sparkling Aria curing burn
     const moveTargets = getMoveTargets(user, move.id);
     if (
-      target.hasAbilityWithAttr(IgnoreMoveEffectsAbAttr)
+      target.hasAbilityWithAttr(AbAttrFlag.IGNORE_MOVE_EFFECTS)
       && move.id === MoveId.SPARKLING_ARIA
       && moveTargets.targets.length === 1
     ) {
