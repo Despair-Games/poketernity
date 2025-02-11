@@ -267,7 +267,7 @@ export abstract class BattleAnim {
                   spriteSource!.frame.name,
                   true,
                 ); // TODO: are those bangs correct?
-                ["spriteColors", "fusionSpriteColors"].map(
+                ["spriteColors"].map(
                   (k) => (sprite.pipelineData[k] = (isUser ? user! : target).getSprite().pipelineData[k]),
                 ); // TODO: are those bangs correct?
                 sprite.setPipelineData("spriteKey", (isUser ? user! : target).getBattleSpriteKey());

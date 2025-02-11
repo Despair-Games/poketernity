@@ -998,7 +998,6 @@ export function isPokemonValidForEncounterOptionSelection(
 
 /**
  * Permanently overrides the ability (not passive) of a pokemon.
- * If the pokemon is a fusion, instead overrides the fused pokemon's ability.
  * @param pokemon - The Pokemon with its ability being overriden
  * @param ability - The ability that is overriding
  */

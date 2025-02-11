@@ -68,7 +68,7 @@ export class QuietFormChangePhase extends BattlePhase {
         teraColor: getTypeRgb(this.pokemon.getTeraType()),
       });
 
-      ["spriteColors", "fusionSpriteColors"].map((k) => {
+      ["spriteColors"].map((k) => {
         if (this.pokemon.summonData?.speciesForm) {
           k += "Base";
         }

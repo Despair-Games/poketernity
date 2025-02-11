@@ -535,17 +535,13 @@ interface monotypeOverride {
   species: Species;
   /** The type to count as */
   type: ElementalType;
-  /** If part of a fusion, should we check the fused species instead of the base species? */
-  fusion: boolean;
 }
 
 /**
  * Implements a mono type challenge.
  */
 export class SingleTypeChallenge extends Challenge {
-  private static TYPE_OVERRIDES: monotypeOverride[] = [
-    { species: Species.CASTFORM, type: ElementalType.NORMAL, fusion: false },
-  ];
+  private static TYPE_OVERRIDES: monotypeOverride[] = [{ species: Species.CASTFORM, type: ElementalType.NORMAL }];
   private static SPECIES_OVERRIDES: Species[] = [Species.MELOETTA];
 
   constructor() {

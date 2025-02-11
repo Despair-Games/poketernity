@@ -1,7 +1,7 @@
 import FieldSpritePipeline from "#app/pipelines/field-sprite";
-import { settings } from "#app/system/settings/settings-manager";
 import { CANVAS_SCALE } from "#app/ui-constants";
 
+// TODO: remove fusion-related code from this...
 const spriteFragShader = `
 #ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
@@ -340,7 +340,6 @@ export default class SpritePipeline extends FieldSpritePipeline {
     const hasShadow = data["hasShadow"] as boolean;
     const yShadowOffset = data["yShadowOffset"] as number;
     const ignoreFieldPos = data["ignoreFieldPos"] as boolean;
-    const ignoreOverride = data["ignoreOverride"] as boolean;
 
     const isEntityObj =
       sprite.parentContainer.type === "Pokemon"
@@ -378,32 +377,6 @@ export default class SpritePipeline extends FieldSpritePipeline {
     this.set1f("yShadowOffset", yShadowOffset ?? 0);
     this.set4fv("tone", tone);
     this.bindTexture(this.game.textures.get("tera").source[0].glTexture!, 1); // TODO: is this bang correct?
-
-    if (settings.display.enableFusionPaletteSwaps) {
-      const spriteColors = ((ignoreOverride && data["spriteColorsBase"]) || data["spriteColors"] || []) as number[][];
-      const fusionSpriteColors = ((ignoreOverride && data["fusionSpriteColorsBase"])
-        || data["fusionSpriteColors"]
-        || []) as number[][];
-
-      const emptyColors = [0, 0, 0, 0];
-      const flatSpriteColors: number[] = [];
-      const flatFusionSpriteColors: number[] = [];
-      for (let c = 0; c < 32; c++) {
-        flatSpriteColors.splice(
-          flatSpriteColors.length,
-          0,
-          ...(c < spriteColors.length ? spriteColors[c] : emptyColors),
-        );
-        flatFusionSpriteColors.splice(
-          flatFusionSpriteColors.length,
-          0,
-          ...(c < fusionSpriteColors.length ? fusionSpriteColors[c] : emptyColors),
-        );
-      }
-
-      this.set4iv("spriteColors", flatSpriteColors.flat());
-      this.set4iv("fusionSpriteColors", flatFusionSpriteColors.flat());
-    }
   }
 
   override batchQuad(

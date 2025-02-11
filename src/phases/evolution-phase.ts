@@ -5,7 +5,6 @@ import { type FormChangePhase } from "#app/phases/form-change-phase";
 
 import type { AnySound } from "#app/battle-scene";
 import type { SpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions";
-import { FusionSpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions";
 import { EVOLVE_MOVE } from "#app/data/balance/pokemon-level-moves";
 import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -34,8 +33,6 @@ export class EvolutionPhase extends FormChangeBasePhase {
 
   private readonly evolution: SpeciesFormEvolution | null;
   private evolutionBgm: AnySound;
-  /** `true` if the secondary species of a fused pokemon is evolving */
-  private readonly fusionSpeciesEvolved: boolean;
 
   /**
    * A {@linecode BooleanHolder} whose value indicates whether or not the player has cancelled the evolution.
@@ -48,7 +45,6 @@ export class EvolutionPhase extends FormChangeBasePhase {
     this.pokemon = pokemon;
     this.evolution = evolution;
     this.lastLevel = lastLevel;
-    this.fusionSpeciesEvolved = evolution instanceof FusionSpeciesFormEvolution;
   }
 
   public override validate(): boolean {
@@ -80,7 +76,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
 
             sprite.setPipelineData("ignoreTimeTint", true);
             sprite.setPipelineData("spriteKey", evolvedPokemon.getSpriteKey());
-            ["spriteColors", "fusionSpriteColors"].map((k) => {
+            ["spriteColors"].map((k) => {
               if (evolvedPokemon.summonData?.speciesForm) {
                 k += "Base";
               }

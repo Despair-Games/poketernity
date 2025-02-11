@@ -48,14 +48,6 @@ export default class PokemonData {
   public usedTMs: MoveId[];
   public evoCounter: number;
 
-  public fusionSpecies: Species;
-  public fusionFormIndex: number;
-  public fusionAbilityIndex: number;
-  public fusionShiny: boolean;
-  public fusionVariant: Variant;
-  public fusionGender: Gender;
-  public fusionLuck: number;
-
   public boss: boolean;
   public bossSegments?: number;
 
@@ -63,12 +55,10 @@ export default class PokemonData {
 
   /** Data that can customize a Pokemon in non-standard ways from its Species */
   public customPokemonData: CustomPokemonData;
-  public fusionCustomPokemonData: CustomPokemonData;
 
   // Deprecated attributes, needed for now to allow SessionData migration
   public natureOverride: Nature | -1;
   public mysteryEncounterPokemonData: CustomPokemonData | null;
-  public fusionMysteryEncounterPokemonData: CustomPokemonData | null;
 
   constructor(source: Pokemon | any, forHistory: boolean = false) {
     const sourcePokemon = source.type === "Pokemon" ? source : null;
@@ -106,16 +96,6 @@ export default class PokemonData {
       this.evoCounter = source.evoCounter ?? 0;
     }
     this.pokerus = !!source.pokerus;
-
-    this.fusionSpecies = sourcePokemon ? sourcePokemon.fusionSpecies?.speciesId : source.fusionSpecies;
-    this.fusionFormIndex = source.fusionFormIndex;
-    this.fusionAbilityIndex = source.fusionAbilityIndex;
-    this.fusionShiny = source.fusionShiny;
-    this.fusionVariant = source.fusionVariant;
-    this.fusionGender = source.fusionGender;
-    this.fusionLuck =
-      source.fusionLuck !== undefined ? source.fusionLuck : source.fusionShiny ? source.fusionVariant + 1 : 0;
-    this.fusionCustomPokemonData = new CustomPokemonData(source.fusionCustomPokemonData);
     this.usedTMs = source.usedTMs ?? [];
 
     this.customPokemonData = new CustomPokemonData(source.customPokemonData);
@@ -124,9 +104,6 @@ export default class PokemonData {
     this.natureOverride = source.natureOverride;
     this.mysteryEncounterPokemonData = source.mysteryEncounterPokemonData
       ? new CustomPokemonData(source.mysteryEncounterPokemonData)
-      : null;
-    this.fusionMysteryEncounterPokemonData = source.fusionMysteryEncounterPokemonData
-      ? new CustomPokemonData(source.fusionMysteryEncounterPokemonData)
       : null;
 
     if (!forHistory) {

@@ -533,16 +533,11 @@ export default class RunInfoUiHandler extends UiHandler {
       const enemy = enemyData.toPokemon();
       const enemyIcon = globalScene.addPokemonIcon(enemy, 0, 0, 0, 0);
       // Applying Terastallizing Type tint to Pokemon icon
-      // If the Pokemon is a fusion, it has two sprites and so, the tint has to be applied to each icon separately
       const enemySprite1 = enemyIcon.list[0] as Phaser.GameObjects.Sprite;
-      const enemySprite2 = enemyIcon.list.length > 1 ? (enemyIcon.list[1] as Phaser.GameObjects.Sprite) : undefined;
       if (teraPokemon[enemyData.id]) {
         const teraTint = getTypeRgb(teraPokemon[enemyData.id]);
         const teraColor = new Phaser.Display.Color(teraTint[0], teraTint[1], teraTint[2]);
         enemySprite1.setTint(teraColor.color);
-        if (enemySprite2) {
-          enemySprite2.setTint(teraColor.color);
-        }
       }
       enemyIcon.setPosition(39 * (e % 3) + 5, 35 * pokemonRowHeight);
       const enemyLevel = addTextObject(
@@ -725,7 +720,7 @@ export default class RunInfoUiHandler extends UiHandler {
 
   /**
    * Parses and displays the run's player party.
-   * Default Information: Icon, Level, Nature, Ability, Passive, Shiny Status, Fusion Status, Stats, and MoveId.
+   * Default Information: Icon, Level, Nature, Ability, Passive, Shiny Status, Stats, and MoveId.
    * B-Side Information: Icon + Held Items (Can be displayed to the user through pressing the abilityButton)
    */
   private parsePartyInfo(): void {
@@ -826,7 +821,7 @@ export default class RunInfoUiHandler extends UiHandler {
       pokeStatText2.appendText(speed);
       pokeStatTextContainer.add(pokeStatText2);
 
-      // Shiny + Fusion Status
+      // Shiny
       const marksContainer = globalScene.add.container(0, 0);
       if (pokemon.isShiny()) {
         const shinyStar = globalScene.add.image(0, 0, `shiny_star_small`);
@@ -979,6 +974,7 @@ export default class RunInfoUiHandler extends UiHandler {
     const genderStr = PlayerGender[genderIndex].toLowerCase();
     // Issue Note (08-05-2024): It seems as if fused pokemon do not appear with the averaged color b/c pokemonData's loadAsset requires there to be some active battle?
     // As an alternative, the icons of the second/bottom fused Pokemon have been placed next to their fellow fused Pokemon in Hall of Fame
+    // TODO: confirm the fusion related code was removed
     this.hallofFameContainer = globalScene.add.container(0, 0);
     const overlayColor = isFemale ? "red" : "blue";
     const hallofFameBg = globalScene.add.image(-1, -1, "hall_of_fame_" + overlayColor);

@@ -274,9 +274,7 @@ export class PokemonAnimPhase extends BattlePhase {
         this.pokemon.getSprite()!.frame.name,
         true,
       );
-      ["spriteColors", "fusionSpriteColors"].map(
-        (k) => (sprite.pipelineData[k] = this.pokemon.getSprite().pipelineData[k]),
-      );
+      ["spriteColors"].map((k) => (sprite.pipelineData[k] = this.pokemon.getSprite().pipelineData[k]));
       sprite.setPipelineData("spriteKey", this.pokemon.getBattleSpriteKey());
       sprite.setPipelineData("ignoreFieldPos", true);
       sprite.setOrigin(0.5, 1);
@@ -345,9 +343,7 @@ export class PokemonAnimPhase extends BattlePhase {
       true,
     );
 
-    ["spriteColors", "fusionSpriteColors"].map(
-      (k) => (tatsuSprite.pipelineData[k] = tatsugiri.getSprite().pipelineData[k]),
-    );
+    ["spriteColors"].map((k) => (tatsuSprite.pipelineData[k] = tatsugiri.getSprite().pipelineData[k]));
 
     tatsuSprite.setPipelineData("spriteKey", tatsugiri.getBattleSpriteKey());
     tatsuSprite.setPipelineData("ignoreFieldPos", true);

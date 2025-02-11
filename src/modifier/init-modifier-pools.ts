@@ -294,7 +294,7 @@ export function initModifierPools() {
       const { gameMode, gameData } = globalScene;
       if (gameMode.isDaily || (!gameMode.isFreshStartChallenge() && gameData.isUnlocked(Unlockables.EVIOLITE))) {
         return party.some((p) => {
-          // Check if Pokemon's species (or fusion species, if applicable) can evolve or if they're G-Max'd
+          // Check if Pokemon's species can evolve or if they're G-Max'd
           if (!p.isMax() && p.getSpeciesForm(true).speciesId in pokemonEvolutions) {
             // Check if Pokemon is already holding an Eviolite
             return !p.getHeldItems().some((i) => i.type.id === "EVIOLITE");

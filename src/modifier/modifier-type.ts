@@ -1317,7 +1317,7 @@ export class SpeciesStatBoosterModifierTypeGenerator extends ModifierTypeGenerat
 
           if (!hasItem) {
             if (checkedSpecies.includes(speciesId)) {
-              // Add weight if party member has a matching species or, if applicable, a matching fusion species
+              // Add weight if party member has a matching species
               weights[i]++;
             } else if (checkedSpecies.includes(Species.PIKACHU) && hasFling) {
               // Add weight to Light Ball if party member has Fling

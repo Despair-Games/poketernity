@@ -655,7 +655,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
       });
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", tradedPokemon.getSpriteKey());
-      ["spriteColors", "fusionSpriteColors"].map((k) => {
+      ["spriteColors"].map((k) => {
         if (tradedPokemon.summonData?.speciesForm) {
           k += "Base";
         }
@@ -678,7 +678,7 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
       });
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", receivedPokemon.getSpriteKey());
-      ["spriteColors", "fusionSpriteColors"].map((k) => {
+      ["spriteColors"].map((k) => {
         if (receivedPokemon.summonData?.speciesForm) {
           k += "Base";
         }

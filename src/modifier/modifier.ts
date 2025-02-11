@@ -1426,14 +1426,10 @@ export class EvolutionStatBoosterModifier extends StatBoosterModifier {
   }
 
   /**
-   * Boosts the incoming stat value by a {@linkcode EvolutionStatBoosterModifier.multiplier} if the holder
-   * can evolve. Note that, if the holder is a fusion, they will receive
-   * only half of the boost if either of the fused members are fully
-   * evolved. However, if they are both unevolved, the full boost
-   * will apply.
+   * Boosts the incoming stat value by a {@linkcode EvolutionStatBoosterModifier.multiplier} if the holder can evolve.
    * @param pokemon {@linkcode Pokemon} that holds the item
-   * @param _stat {@linkcode Stat} The {@linkcode Stat} to be boosted
-   * @param statValue{@linkcode NumberHolder} that holds the resulting value of the stat
+   * @param stat {@linkcode Stat} The {@linkcode Stat} to be boosted
+   * @param statValue {@linkcode NumberHolder} that holds the resulting value of the stat
    * @returns `true` if the stat boost applies successfully, false otherwise
    * @see shouldApply
    */
@@ -1441,7 +1437,6 @@ export class EvolutionStatBoosterModifier extends StatBoosterModifier {
     const isUnevolved = pokemon.getSpeciesForm(true).speciesId in pokemonEvolutions;
 
     if (isUnevolved) {
-      // Full boost applied if holder is unfused and unevolved or, if fused, both parts of fusion are unevolved
       return super.apply(pokemon, stat, statValue);
     }
 
@@ -1499,8 +1494,7 @@ export class SpeciesStatBoosterModifier extends StatBoosterModifier {
   }
 
   /**
-   * Checks if the incoming stat is listed in {@linkcode stats} and if the holder's {@linkcode Species}
-   * (or its fused species) is listed in {@linkcode species}.
+   * Checks if the incoming stat is listed in {@linkcode stats} and if the holder's {@linkcode Species}.
    * @param pokemon {@linkcode Pokemon} that holds the item
    * @param stat {@linkcode Stat} being checked at the time
    * @param statValue {@linkcode NumberHolder} that holds the resulting value of the stat

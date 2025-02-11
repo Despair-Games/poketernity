@@ -98,11 +98,7 @@ import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
 import { initMoveAnim } from "#app/data/init-move-anim";
 import { Status } from "#app/data/status-effect";
 import type { SpeciesFormEvolution, SpeciesEvolutionCondition } from "#app/data/balance/pokemon-evolutions";
-import {
-  pokemonEvolutions,
-  pokemonPrevolutions,
-  FusionSpeciesFormEvolution,
-} from "#app/data/balance/pokemon-evolutions";
+import { pokemonEvolutions, pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import { reverseCompatibleTms, tmSpecies, tmPoolTiers } from "#app/data/balance/tms";
 import {
   BattlerTag,
@@ -357,14 +353,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       this.metSpecies = species.speciesId;
       this.metWave = globalScene.currentBattle ? globalScene.currentBattle.waveIndex : -1;
       this.pokerus = false;
-
-      if (level > 1) {
-        const fused = new BooleanHolder(globalScene.gameMode.isSplicedOnly);
-
-        if (fused.value) {
-          this.calculateStats();
-        }
-      }
       this.luck = this.shiny ? this.variant + 1 : 0;
     }
 
@@ -1372,7 +1360,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Gets the non-passive ability of the pokemon. This accounts for fusions and ability changing effects.
+   * Gets the non-passive ability of the pokemon. This accounts for ability changing effects.
    * This should rarely be called, most of the time {@linkcode hasAbility} or {@linkcode hasAbilityWithAttr} are better used as
    * those check both the passive and non-passive abilities and account for ability suppression.
    * @see {@linkcode hasAbility} {@linkcode hasAbilityWithAttr} Intended ways to check abilities in most cases
@@ -3479,77 +3467,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     });
   }
 
-  private fusionFaintCry(callback: Function): void {
-    const key = this.species.getCryKey(this.formIndex);
-    let rate = 0.85;
-    const cry = globalScene.playSound(key, { rate: rate }) as AnySound;
-    const sprite = this.getSprite();
-    const tintSprite = this.getTintSprite();
-    const duration = cry.totalDuration * 1000;
-
-    if (!cry || settings.effectiveFieldVolume === 0) {
-      return callback();
-    }
-    const delay = Math.max(duration * 0.05, 25);
-
-    let durationProgress = 0;
-
-    const transitionThreshold = Math.ceil(duration * 0.4);
-    while (durationProgress < transitionThreshold) {
-      durationProgress += delay * rate;
-      rate *= 0.99;
-    }
-
-    rate = 0.85;
-
-    let frameProgress = 0;
-    let frameThreshold: number;
-
-    sprite.anims.pause();
-    tintSprite?.anims.pause();
-
-    let faintCryTimer: Phaser.Time.TimerEvent | null = globalScene.time.addEvent({
-      delay: fixedNumber(delay),
-      repeat: -1,
-      callback: () => {
-        frameThreshold = sprite.anims.msPerFrame / rate;
-        frameProgress += delay;
-        while (frameProgress > frameThreshold) {
-          if (sprite.anims.duration) {
-            sprite.anims.nextFrame();
-            tintSprite?.anims.nextFrame();
-          }
-          frameProgress -= frameThreshold;
-        }
-        rate *= 0.99;
-        if (cry && !cry.pendingRemove) {
-          cry.setRate(rate);
-        }
-        if (!cry || cry.pendingRemove) {
-          faintCryTimer?.destroy();
-          faintCryTimer = null;
-          if (callback) {
-            callback();
-          }
-        }
-      },
-    });
-
-    // Failsafe
-    globalScene.time.delayedCall(fixedNumber(3000), () => {
-      if (!faintCryTimer || !globalScene) {
-        return;
-      }
-      if (cry?.isPlaying) {
-        cry.stop();
-      }
-      faintCryTimer.destroy();
-      if (callback) {
-        callback();
-      }
-    });
-  }
-
   isOppositeGender(pokemon: Pokemon): boolean {
     return (
       this.gender !== Gender.GENDERLESS
@@ -4188,7 +4105,7 @@ export class PlayerPokemon extends Pokemon {
       if (this.friendship === 255) {
         globalScene.validateAchv(achvs.MAX_FRIENDSHIP);
       }
-      // Add to candy progress for this mon's starter species and its fused species (if it has one)
+      // Add to candy progress for this mon's starter species
       starterData.forEach((sd: StarterDataEntry) => {
         const speciesId = starterSpeciesId;
         sd.friendship = (sd.friendship || 0) + starterAmount.value;
@@ -4209,16 +4126,15 @@ export class PlayerPokemon extends Pokemon {
     }
     return new Promise((resolve) => {
       const evolutionSpecies = getPokemonSpecies(evolution.speciesId);
-      const isFusion = evolution instanceof FusionSpeciesFormEvolution;
       const formIndex =
-        evolution.evoFormKey !== null && !isFusion
+        evolution.evoFormKey !== null
           ? Math.max(
               evolutionSpecies.forms.findIndex((f) => f.formKey === evolution.evoFormKey),
               0,
             )
           : this.formIndex;
       const ret = globalScene.addPlayerPokemon(
-        !isFusion ? evolutionSpecies : this.species,
+        evolutionSpecies,
         this.level,
         this.abilityIndex,
         formIndex,
