@@ -1,10 +1,10 @@
 import { type Pokemon } from "#app/field/pokemon";
 import { HitResult } from "#enums/hit-result";
 import { BooleanHolder } from "#app/utils";
-import { BlockNonDirectDamageAbAttr } from "#app/data/ab-attrs/block-non-direct-damage-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Applies damage to the target's ally equal to 1/16 of that ally's max HP.
@@ -26,7 +26,7 @@ export class FlameBurstAttr extends MoveEffectAttr {
     const cancelled = new BooleanHolder(false);
 
     if (targetAlly) {
-      applyAbAttrs(BlockNonDirectDamageAbAttr, targetAlly, false, cancelled);
+      applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, targetAlly, false, cancelled);
     }
 
     if (cancelled.value || !targetAlly || targetAlly.switchOutStatus) {

@@ -1,6 +1,7 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
 //#region Types
@@ -15,6 +16,7 @@ export class ReceivedMoveDamageMultiplierAbAttr extends PreDefendAbAttr {
 
   constructor(condition: PokemonDefendCondition, damageMultiplier: number) {
     super();
+    this._flags.add(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER);
 
     this.condition = condition;
     this.damageMultiplier = damageMultiplier;

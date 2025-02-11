@@ -2,6 +2,7 @@ import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition"
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { ElementalType } from "#enums/elemental-type";
 import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 
@@ -12,6 +13,7 @@ export class MoveTypeChangeAbAttr extends PreAttackAbAttr {
     private readonly condition?: PokemonAttackCondition,
   ) {
     super(true);
+    this._flags.add(AbAttrFlag.MOVE_TYPE_CHANGE);
   }
 
   // TODO: Decouple this into two attributes (type change / power boost)

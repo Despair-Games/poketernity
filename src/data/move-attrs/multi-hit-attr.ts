@@ -2,11 +2,12 @@ import { MultiHitType } from "#enums/multi-hit-type";
 import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { NumberHolder } from "#app/utils";
-import { MaxMultiHitAbAttr } from "#app/data/ab-attrs/max-multi-hit-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { type Move, applyMoveAttrs } from "#app/data/move";
+import { type Move } from "#app/data/move";
+import { applyMoveAttrs } from "#app/utils/move-utils";
 import { ChangeMultiHitTypeAttr } from "#app/data/move-attrs/change-multi-hit-type-attr";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Attribute used for attack moves that hit multiple times per use, e.g. Bullet Seed.
@@ -67,7 +68,7 @@ export class MultiHitAttr extends MoveAttr {
       case MultiHitType._2_TO_5: {
         const rand = user.randSeedInt(16);
         const hitValue = new NumberHolder(rand);
-        applyAbAttrs(MaxMultiHitAbAttr, user, false, hitValue);
+        applyAbAttrs(AbAttrFlag.MAX_MULTI_HIT, user, false, hitValue);
         if (hitValue.value >= 10) {
           return 2;
         } else if (hitValue.value >= 4) {

@@ -7,7 +7,8 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 import { FieryFalloutEncounter } from "#app/data/mystery-encounters/encounters/fiery-fallout-encounter";
 import { Gender } from "#enums/gender";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import * as BattleAnims from "#app/data/battle-anims";
+import * as MoveAnimUtils from "#app/utils/move-anim-utils";
+import * as InitMoveAnim from "#app/data/init-move-anim";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
   runMysteryEncounterToEnd,
@@ -24,12 +25,13 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
 import { CommandPhase } from "#app/phases/command-phase";
-import type { MovePhase } from "#app/phases/move-phase";
+import { type MovePhase } from "#app/phases/move-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Abilities } from "#enums/abilities";
 import i18next from "i18next";
 import { StatusEffect } from "#enums/status-effect";
+import { PhaseId } from "#enums/phase-id";
 
 const namespace = "mysteryEncounters/fieryFallout";
 /** Arcanine and Ninetails for 2 Fire types. Lapras, Gengar, Abra for burnable mon. */
@@ -102,8 +104,8 @@ describe("Fiery Fallout - Mystery Encounter", () => {
     initSceneWithoutEncounterPhase(scene, defaultParty);
     scene.currentBattle.mysteryEncounter = FieryFalloutEncounter;
     const weatherSpy = vi.spyOn(scene.arena, "trySetWeather").mockReturnValue(true);
-    const moveInitSpy = vi.spyOn(BattleAnims, "initMoveAnim");
-    const moveLoadSpy = vi.spyOn(BattleAnims, "loadMoveAnimAssets");
+    const moveInitSpy = vi.spyOn(InitMoveAnim, "initMoveAnim");
+    const moveLoadSpy = vi.spyOn(MoveAnimUtils, "loadMoveAnimAssets");
 
     const { onInit } = FieryFalloutEncounter;
 
@@ -169,7 +171,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
       expect(enemyField[1].species.speciesId).toBe(Species.VOLCARONA);
       expect(enemyField[0].gender).not.toEqual(enemyField[1].gender); // Should be opposite gender
 
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].isMovePhase()).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is<MovePhase>(PhaseId.MOVE)).map((p) => p[0]);
       expect(movePhases.length).toBe(2);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.FIRE_SPIN).length).toBe(2); // Fire spin used twice before battle
     });

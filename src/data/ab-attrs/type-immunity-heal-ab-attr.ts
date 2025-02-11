@@ -2,7 +2,6 @@ import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { type BooleanHolder, type NumberHolder, toDmgValue } from "#app/utils";
 import type { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";
@@ -26,14 +25,12 @@ export class TypeImmunityHealAbAttr extends TypeImmunityAbAttr {
     if (ret) {
       if (!pokemon.isFullHp() && !simulated) {
         const abilityName = this.source.name;
-        globalScene.unshiftPhase(
-          new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 4), {
-            message: i18next.t("abilityTriggers:typeImmunityHeal", {
-              pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-              abilityName,
-            }),
+        globalScene.queuePokemonHeal(true, pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 4), {
+          message: i18next.t("abilityTriggers:typeImmunityHeal", {
+            pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+            abilityName,
           }),
-        );
+        });
         cancelled.value = true; // Suppresses "No Effect" message
       }
       return true;

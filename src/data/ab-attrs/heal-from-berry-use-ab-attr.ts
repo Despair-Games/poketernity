@@ -1,10 +1,10 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { toDmgValue } from "#app/utils";
 import i18next from "i18next";
 import { AbAttr } from "./ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * A Pokemon with this ability heals by a percentage of their maximum hp after eating a berry
@@ -17,6 +17,7 @@ export class HealFromBerryUseAbAttr extends AbAttr {
 
   constructor(healPercent: number) {
     super();
+    this._flags.add(AbAttrFlag.HEAL_FROM_BERRY_USE);
 
     // Clamp healPercent so its between [0,1].
     this.healPercent = Phaser.Math.Clamp(healPercent, 0, 1);
@@ -25,14 +26,12 @@ export class HealFromBerryUseAbAttr extends AbAttr {
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const abilityName = this.source.name;
     if (!simulated) {
-      globalScene.unshiftPhase(
-        new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() * this.healPercent), {
-          message: i18next.t("abilityTriggers:healFromBerryUse", {
-            pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-            abilityName,
-          }),
+      globalScene.queuePokemonHeal(true, pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() * this.healPercent), {
+        message: i18next.t("abilityTriggers:healFromBerryUse", {
+          pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+          abilityName,
         }),
-      );
+      });
     }
     return true;
   }

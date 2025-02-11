@@ -1,10 +1,10 @@
 import { globalScene } from "#app/global-scene";
-import type { EvolutionPhase } from "#app/phases/evolution-phase";
-import type { MovePhase } from "#app/phases/move-phase";
-import type { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import type { SwitchPhase } from "#app/phases/switch-phase";
+import { PhaseId } from "#enums/phase-id";
 
-export class Phase {
+export abstract class Phase {
+  /** The identifier of the phase. Unique per phase, but **not** per instance! */
+  public readonly id: PhaseId = PhaseId.UNSPECIFIED;
+
   public start(): void {
     if (globalScene.abilityBar.shown) {
       globalScene.abilityBar.resetAutoHideTimer();
@@ -15,19 +15,7 @@ export class Phase {
     globalScene.shiftPhase();
   }
 
-  isEvolutionPhase(): this is EvolutionPhase {
-    return false;
-  }
-
-  isSwitchPhase(): this is SwitchPhase {
-    return false;
-  }
-
-  isMovePhase(): this is MovePhase {
-    return false;
-  }
-
-  isSelectModifierPhase(): this is SelectModifierPhase {
-    return false;
+  public is<T extends Phase = Phase>(phaseId: T["id"]): this is T {
+    return this.id === phaseId;
   }
 }

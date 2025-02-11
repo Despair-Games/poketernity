@@ -1,5 +1,4 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { PostItemLostAbAttr } from "#app/data/ab-attrs/post-item-lost-ab-attr";
 import { allMoves } from "#app/data/all-moves";
 import { StealHeldItemChanceAttr } from "#app/data/move-attrs/steal-held-item-chance-attr";
 import type { Pokemon } from "#app/field/pokemon";
@@ -13,6 +12,7 @@ import { Stat } from "#enums/stat";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Abilities - Unburden", () => {
   let phaserGame: Phaser.Game;
@@ -279,7 +279,7 @@ describe("Abilities - Unburden", () => {
     const [treecko, purrloin] = game.scene.getPlayerParty();
     const initialTreeckoSpeed = treecko.getStat(Stat.SPD);
     const initialPurrloinSpeed = purrloin.getStat(Stat.SPD);
-    const unburdenAttr = treecko.getAbilityAttrs(PostItemLostAbAttr)[0];
+    const unburdenAttr = treecko.getAbilityAttrs(AbAttrFlag.POST_ITEM_LOST)[0];
     vi.spyOn(unburdenAttr, "apply");
 
     // Player uses Baton Pass, which also passes the Baton item

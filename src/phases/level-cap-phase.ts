@@ -2,12 +2,15 @@ import { globalScene } from "#app/global-scene";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { FieldPhase } from "./abstract-field-phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Displays the message for when the level cap increases
  * @extends FieldPhase
  */
 export class LevelCapPhase extends FieldPhase {
+  override readonly id = PhaseId.LEVEL_CAP;
+
   public override start(): void {
     super.start();
 

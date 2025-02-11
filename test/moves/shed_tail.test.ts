@@ -1,4 +1,4 @@
-import { SubstituteTag } from "#app/data/battler-tags";
+import { type SubstituteTag } from "#app/data/battler-tags";
 import { MoveResult } from "#enums/move-result";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
@@ -6,6 +6,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect } from "vitest";
+import { BattlerTagType } from "#enums/battler-tag-type";
 
 describe("Moves - Shed Tail", () => {
   let phaserGame: Phaser.Game;
@@ -42,7 +43,7 @@ describe("Moves - Shed Tail", () => {
     await game.phaseInterceptor.to("TurnEndPhase", false);
 
     const feebas = game.scene.getPlayerPokemon()!;
-    const substituteTag = feebas.getTag(SubstituteTag);
+    const substituteTag = feebas.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
 
     expect(feebas).not.toBe(magikarp);
     expect(feebas.hp).toBe(feebas.getMaxHp());

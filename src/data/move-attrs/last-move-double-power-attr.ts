@@ -47,7 +47,7 @@ export class LastMoveDoublePowerAttr extends VariablePowerAttr {
     for (const p of pokemonActed) {
       const [lastMove] = p.getLastXMoves(1);
       if (lastMove?.result !== MoveResult.FAIL) {
-        if (lastMove?.result === MoveResult.SUCCESS && lastMove?.moveId === this.moveId) {
+        if (lastMove?.result === MoveResult.SUCCESS && lastMove?.move.id === this.moveId) {
           power.value *= 2;
           return true;
         } else {

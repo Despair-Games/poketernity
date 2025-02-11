@@ -1,14 +1,15 @@
 import { Biome } from "#enums/biome";
-import { getPokemonNameWithAffix } from "../messages";
-import type { Pokemon } from "../field/pokemon";
+import { getPokemonNameWithAffix } from "#app/messages";
+import type { Pokemon } from "#app/field/pokemon";
 import { ElementalType } from "#enums/elemental-type";
-import type { Move } from "./move";
+import type { Move } from "#app/data/move";
 import { randSeedInt } from "#app/utils";
-import { SuppressWeatherEffectAbAttr } from "./ab-attrs/suppress-weather-effect-ab-attr";
+import { type SuppressWeatherEffectAbAttr } from "#app/data/ab-attrs/suppress-weather-effect-ab-attr";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 import type { Arena } from "#app/field/arena";
 import { WeatherType } from "#enums/weather-type";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Class representing Weather effects
@@ -150,10 +151,10 @@ export class Weather {
     for (const pokemon of field) {
       let suppressWeatherEffectAbAttr: SuppressWeatherEffectAbAttr | null = pokemon
         .getAbility()
-        .getAttrs(SuppressWeatherEffectAbAttr)[0];
+        .getAttrs<SuppressWeatherEffectAbAttr>(AbAttrFlag.SUPPRESS_WEATHER_EFFECT)[0];
       if (!suppressWeatherEffectAbAttr) {
         suppressWeatherEffectAbAttr = pokemon.hasPassive()
-          ? pokemon.getPassiveAbility().getAttrs(SuppressWeatherEffectAbAttr)[0]
+          ? pokemon.getPassiveAbility().getAttrs<SuppressWeatherEffectAbAttr>(AbAttrFlag.SUPPRESS_WEATHER_EFFECT)[0]
           : null;
       }
       if (suppressWeatherEffectAbAttr && (!this.isImmutable() || suppressWeatherEffectAbAttr.affectsImmutable)) {
