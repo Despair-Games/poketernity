@@ -1022,9 +1022,6 @@ export default class BattleScene extends SceneBase {
     }
 
     const pokemon = new EnemyPokemon(species, level, trainerSlot, boss, shinyLock, dataSource);
-    if (Overrides.ENEMY_FUSION_OVERRIDE) {
-      pokemon.generateFusionSpecies();
-    }
 
     if (boss && !dataSource) {
       const secondaryIvs = getIvsFromId();
@@ -1104,76 +1101,11 @@ export default class BattleScene extends SceneBase {
 
     container.add(icon);
 
-    if (pokemon.isFusion()) {
-      const fusionIcon = this.add.sprite(0, 0, pokemon.getFusionIconAtlasKey(ignoreOverride));
-      fusionIcon.setName("sprite-fusion-icon");
-      fusionIcon.setOrigin(0.5, 0);
-      fusionIcon.setFrame(pokemon.getFusionIconId(true));
-
-      const originalWidth = icon.width;
-      const originalHeight = icon.height;
-      const originalFrame = icon.frame;
-
-      const iconHeight = (icon.frame.cutHeight <= fusionIcon.frame.cutHeight ? Math.ceil : Math.floor)(
-        (icon.frame.cutHeight + fusionIcon.frame.cutHeight) / 4,
-      );
-
-      // Inefficient, but for some reason didn't work with only the unique properties as part of the name
-      const iconFrameId = `${icon.frame.name}f${fusionIcon.frame.name}`;
-
-      if (!icon.frame.texture.has(iconFrameId)) {
-        icon.frame.texture.add(
-          iconFrameId,
-          icon.frame.sourceIndex,
-          icon.frame.cutX,
-          icon.frame.cutY,
-          icon.frame.cutWidth,
-          iconHeight,
-        );
-      }
-
-      icon.setFrame(iconFrameId);
-
-      fusionIcon.y = icon.frame.cutHeight;
-
-      const originalFusionFrame = fusionIcon.frame;
-
-      const fusionIconY = fusionIcon.frame.cutY + icon.frame.cutHeight;
-      const fusionIconHeight = fusionIcon.frame.cutHeight - icon.frame.cutHeight;
-
-      // Inefficient, but for some reason didn't work with only the unique properties as part of the name
-      const fusionIconFrameId = `${fusionIcon.frame.name}f${icon.frame.name}`;
-
-      if (!fusionIcon.frame.texture.has(fusionIconFrameId)) {
-        fusionIcon.frame.texture.add(
-          fusionIconFrameId,
-          fusionIcon.frame.sourceIndex,
-          fusionIcon.frame.cutX,
-          fusionIconY,
-          fusionIcon.frame.cutWidth,
-          fusionIconHeight,
-        );
-      }
-      fusionIcon.setFrame(fusionIconFrameId);
-
-      const frameY = (originalFrame.y + originalFusionFrame.y) / 2;
-      icon.frame.y = fusionIcon.frame.y = frameY;
-
-      container.add(fusionIcon);
-
-      if (originX !== 0.5) {
-        container.x -= originalWidth * (originX - 0.5);
-      }
-      if (originY !== 0) {
-        container.y -= originalHeight * originY;
-      }
-    } else {
-      if (originX !== 0.5) {
-        container.x -= icon.width * (originX - 0.5);
-      }
-      if (originY !== 0) {
-        container.y -= icon.height * originY;
-      }
+    if (originX !== 0.5) {
+      container.x -= icon.width * (originX - 0.5);
+    }
+    if (originY !== 0) {
+      container.y -= icon.height * originY;
     }
 
     return container;
@@ -3263,9 +3195,6 @@ export default class BattleScene extends SceneBase {
         keys.push(p.getBattleSpriteKey(true, true));
       }
       keys.push(p.species.getCryKey(p.formIndex));
-      if (p.fusionSpecies) {
-        keys.push(p.fusionSpecies.getCryKey(p.fusionFormIndex));
-      }
     });
     return keys;
   }

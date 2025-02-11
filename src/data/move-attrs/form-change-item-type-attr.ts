@@ -14,16 +14,8 @@ import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-at
  */
 export class FormChangeItemTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
-    if (
-      [user.species.speciesId, user.fusionSpecies?.speciesId].includes(Species.ARCEUS)
-      || [user.species.speciesId, user.fusionSpecies?.speciesId].includes(Species.SILVALLY)
-    ) {
-      const form =
-        user.species.speciesId === Species.ARCEUS || user.species.speciesId === Species.SILVALLY
-          ? user.formIndex
-          : user.fusionSpecies?.formIndex!;
-
-      moveType.value = ElementalType[ElementalType[form]];
+    if ([Species.ARCEUS, Species.SILVALLY].includes(user.species.speciesId)) {
+      moveType.value = ElementalType[ElementalType[user.formIndex]];
       return true;
     }
 

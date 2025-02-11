@@ -8,14 +8,12 @@ import {
   setEncounterRewards,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { getNatureName } from "#app/data/nature";
-import { speciesStarterCosts } from "#app/data/balance/starters";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import { AbilityAttr } from "#app/data/dex-attributes";
 import PokemonData from "#app/system/pokemon-data";
 import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
-import { isNullOrUndefined, randSeedShuffle } from "#app/utils";
+import { randSeedShuffle } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
@@ -260,9 +258,7 @@ export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilde
         const encounter = globalScene.currentBattle.mysteryEncounter!;
         const onPokemonSelected = (pokemon: PlayerPokemon) => {
           // Return the options for ability selection
-          const speciesForm = !!pokemon.getFusionSpeciesForm()
-            ? pokemon.getFusionSpeciesForm()
-            : pokemon.getSpeciesForm();
+          const speciesForm = pokemon.getSpeciesForm();
           const abilityCount = speciesForm.getAbilityCount();
           const abilities: Ability[] = new Array(abilityCount)
             .fill(null)
@@ -318,24 +314,7 @@ export const TrainingSessionEncounter: MysteryEncounter = MysteryEncounterBuilde
           // Add the pokemon back to party with ability change
           const abilityIndex = encounter.misc.abilityIndex;
 
-          if (!!playerPokemon.getFusionSpeciesForm()) {
-            playerPokemon.fusionAbilityIndex = abilityIndex;
-
-            // Only update the fusion's dex data if the Pokemon is already caught in dex (ignore rentals)
-            const rootFusionSpecies = playerPokemon.fusionSpecies?.getRootSpeciesId();
-            if (
-              !isNullOrUndefined(rootFusionSpecies)
-              && speciesStarterCosts.hasOwnProperty(rootFusionSpecies)
-              && !!globalScene.gameData.dexData[rootFusionSpecies].caughtAttr
-            ) {
-              globalScene.gameData.starterData[rootFusionSpecies].abilityAttr |=
-                playerPokemon.fusionAbilityIndex !== 1 || playerPokemon.fusionSpecies?.ability2
-                  ? 1 << playerPokemon.fusionAbilityIndex
-                  : AbilityAttr.ABILITY_HIDDEN;
-            }
-          } else {
-            playerPokemon.abilityIndex = abilityIndex;
-          }
+          playerPokemon.abilityIndex = abilityIndex;
 
           playerPokemon.calculateStats();
           globalScene.gameData.setPokemonCaught(playerPokemon, false);

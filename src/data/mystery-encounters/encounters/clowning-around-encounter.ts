@@ -391,12 +391,6 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
             pokemon.customPokemonData = new CustomPokemonData();
           }
           pokemon.customPokemonData.types = newTypes;
-          if (pokemon.isFusion()) {
-            if (!pokemon.fusionCustomPokemonData) {
-              pokemon.fusionCustomPokemonData = new CustomPokemonData();
-            }
-            pokemon.fusionCustomPokemonData.types = newTypes;
-          }
         }
       })
       .withOptionPhase(async () => {

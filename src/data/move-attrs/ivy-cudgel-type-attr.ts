@@ -13,8 +13,8 @@ import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-at
  */
 export class IvyCudgelTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
-    if ([user.species.speciesId, user.fusionSpecies?.speciesId].includes(Species.OGERPON)) {
-      const form = user.species.speciesId === Species.OGERPON ? user.formIndex : user.fusionSpecies?.formIndex;
+    if (user.species.speciesId === Species.OGERPON) {
+      const form = user.formIndex;
 
       switch (form) {
         case 1: // Wellspring Mask

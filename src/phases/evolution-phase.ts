@@ -8,7 +8,6 @@ import type { SpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions"
 import { FusionSpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions";
 import { EVOLVE_MOVE } from "#app/data/balance/pokemon-level-moves";
 import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
-import { LearnMoveSituation } from "#enums/learn-move-situation";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
@@ -254,13 +253,8 @@ export class EvolutionPhase extends FormChangeBasePhase {
       this.handler.canCancel = false;
 
       this.pokemon.evolve(this.evolution, this.pokemon.species).then(() => {
-        const learnSituation: LearnMoveSituation = this.fusionSpeciesEvolved
-          ? LearnMoveSituation.EVOLUTION_FUSED
-          : this.pokemon.fusionSpecies
-            ? LearnMoveSituation.EVOLUTION_FUSED_BASE
-            : LearnMoveSituation.EVOLUTION;
         const levelMoves = this.pokemon
-          .getLevelMoves(this.lastLevel + 1, true, false, false, learnSituation)
+          .getLevelMoves(this.lastLevel + 1, true, false, false)
           .filter((lm) => lm[0] === EVOLVE_MOVE);
         for (const lm of levelMoves) {
           globalScene.unshiftPhase(new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), lm[1]));

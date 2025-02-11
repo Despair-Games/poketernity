@@ -637,12 +637,9 @@ export async function catchPokemon(
   showCatchObtainMessage: boolean = true,
   isObtain: boolean = false,
 ): Promise<void> {
-  const speciesForm = !pokemon.fusionSpecies ? pokemon.getSpeciesForm() : pokemon.getFusionSpeciesForm();
+  const speciesForm = pokemon.getSpeciesForm();
 
-  if (
-    speciesForm.abilityHidden
-    && (pokemon.fusionSpecies ? pokemon.fusionAbilityIndex : pokemon.abilityIndex) === speciesForm.getAbilityCount() - 1
-  ) {
+  if (speciesForm.abilityHidden && pokemon.abilityIndex === speciesForm.getAbilityCount() - 1) {
     globalScene.validateAchv(achvs.HIDDEN_ABILITY);
   }
 
@@ -955,12 +952,9 @@ export function getEncounterPokemonLevelForWave(levelAdditiveModifier: number = 
  * @param pokemon - The newly obtained Pokemon
  */
 export async function addPokemonDataToDexAndValidateAchievements(pokemon: PlayerPokemon) {
-  const speciesForm = !pokemon.fusionSpecies ? pokemon.getSpeciesForm() : pokemon.getFusionSpeciesForm();
+  const speciesForm = pokemon.getSpeciesForm();
 
-  if (
-    speciesForm.abilityHidden
-    && (pokemon.fusionSpecies ? pokemon.fusionAbilityIndex : pokemon.abilityIndex) === speciesForm.getAbilityCount() - 1
-  ) {
+  if (speciesForm.abilityHidden && pokemon.abilityIndex === speciesForm.getAbilityCount() - 1) {
     globalScene.validateAchv(achvs.HIDDEN_ABILITY);
   }
 
@@ -1009,15 +1003,8 @@ export function isPokemonValidForEncounterOptionSelection(
  * @param ability - The ability that is overriding
  */
 export function applyAbilityOverrideToPokemon(pokemon: Pokemon, ability: Abilities) {
-  if (pokemon.isFusion()) {
-    if (!pokemon.fusionCustomPokemonData) {
-      pokemon.fusionCustomPokemonData = new CustomPokemonData();
-    }
-    pokemon.fusionCustomPokemonData.ability = ability;
-  } else {
-    if (!pokemon.customPokemonData) {
-      pokemon.customPokemonData = new CustomPokemonData();
-    }
-    pokemon.customPokemonData.ability = ability;
+  if (!pokemon.customPokemonData) {
+    pokemon.customPokemonData = new CustomPokemonData();
   }
+  pokemon.customPokemonData.ability = ability;
 }
