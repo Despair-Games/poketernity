@@ -1,6 +1,7 @@
-import { BypassSpeedChanceAbAttr } from "#app/data/ab-attrs/bypass-speed-chance-ab-attr";
-import { allAbilities } from "#app/data/ability";
+import { type BypassSpeedChanceAbAttr } from "#app/data/ab-attrs/bypass-speed-chance-ab-attr";
+import { allAbilities } from "#app/data/all-abilities";
 import { FaintPhase } from "#app/phases/faint-phase";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -35,9 +36,11 @@ describe("Abilities - Quick Draw", () => {
     game.override.enemyAbility(Abilities.BALL_FETCH);
     game.override.enemyMoveset([MoveId.TACKLE]);
 
-    vi.spyOn(allAbilities[Abilities.QUICK_DRAW].getAttrs(BypassSpeedChanceAbAttr)[0], "chance", "get").mockReturnValue(
-      100,
-    );
+    vi.spyOn(
+      allAbilities[Abilities.QUICK_DRAW].getAttrs<BypassSpeedChanceAbAttr>(AbAttrFlag.BYPASS_SPEED_CHANCE)[0],
+      "chance",
+      "get",
+    ).mockReturnValue(100);
   });
 
   test("makes pokemon going first in its priority bracket", async () => {

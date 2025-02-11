@@ -2,8 +2,8 @@ import type { Move } from "#app/data/move";
 import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import { IgnoreMoveEffectsAbAttr } from "./ignore-move-effect-ab-attr";
 import { PostAttackAbAttr } from "./post-attack-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Ability attribute that applies a battler tag to the target after an attack
@@ -21,6 +21,7 @@ export class PostAttackApplyBattlerTagAbAttr extends PostAttackAbAttr {
     ...effects: BattlerTagType[]
   ) {
     super();
+    this._flags.add(AbAttrFlag.POST_ATTACK_APPLY_BATTLER_TAG);
 
     this.contactRequired = contactRequired;
     this.chance = chance;
@@ -39,7 +40,7 @@ export class PostAttackApplyBattlerTagAbAttr extends PostAttackAbAttr {
      * Note: Battler tags inflicted by abilities post attacking are also considered additional effects of moves.
      */
     if (
-      !target.hasAbilityWithAttr(IgnoreMoveEffectsAbAttr)
+      !target.hasAbilityWithAttr(AbAttrFlag.IGNORE_MOVE_EFFECTS)
       && target.id !== attacker.id
       && (!this.contactRequired || move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, target))
       && target.randSeedInt(100) < this.getChance(attacker, target, move)

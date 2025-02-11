@@ -1,5 +1,5 @@
 import type { BattlerIndex } from "#enums/battler-index";
-import { CommonBattleAnim } from "#app/data/battle-anims";
+import { CommonBattleAnim } from "#app/data/battle-anims/common-battle-anim";
 import { CommonAnim } from "#enums/common-anim";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -10,8 +10,11 @@ import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
 import { PokemonPhase } from "./abstract-pokemon-phase";
 import { Color } from "#enums/color";
+import { PhaseId } from "#enums/phase-id";
 
 export class ScanIvsPhase extends PokemonPhase {
+  override readonly id = PhaseId.SCAN_IVS;
+
   private readonly shownIvs: number;
 
   constructor(battlerIndex: BattlerIndex, shownIvs: number) {

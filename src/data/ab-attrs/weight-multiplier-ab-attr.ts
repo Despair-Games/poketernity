@@ -1,5 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 
 /**
@@ -12,6 +13,7 @@ export class WeightMultiplierAbAttr extends AbAttr {
 
   constructor(multiplier: number) {
     super();
+    this._flags.add(AbAttrFlag.WEIGHT_MULTIPLIER);
 
     this.multiplier = multiplier;
   }

@@ -7,12 +7,15 @@ import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "./abstract-pokemon-phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Lapses {@linkcode BattlerTagLapseType.AFTER_MOVE} and calls {@linkcode Arena.setIgnoreAbilities}`(false)`
  * @extends PokemonPhase
  */
 export class MoveEndPhase extends PokemonPhase {
+  override readonly id = PhaseId.MOVE_END;
+
   constructor(battlerIndex: BattlerIndex) {
     super(battlerIndex);
   }

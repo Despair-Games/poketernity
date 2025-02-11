@@ -1,5 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 
 export class MultCritAbAttr extends AbAttr {
@@ -7,6 +8,7 @@ export class MultCritAbAttr extends AbAttr {
 
   constructor(multAmount: number) {
     super(true);
+    this._flags.add(AbAttrFlag.MULT_CRIT);
 
     this.multAmount = multAmount;
   }

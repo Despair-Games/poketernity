@@ -6,6 +6,7 @@ import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounte
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import { PhaseId } from "#enums/phase-id";
 import { PostMysteryEncounterPhase } from "./post-mystery-encounter-phase";
 
 /**
@@ -22,6 +23,8 @@ import { PostMysteryEncounterPhase } from "./post-mystery-encounter-phase";
  * @extends Phase
  */
 export class MysteryEncounterRewardsPhase extends Phase {
+  override readonly id: PhaseId.ME_REWARDS = PhaseId.ME_REWARDS;
+
   protected addHealPhase: boolean;
 
   constructor(addHealPhase: boolean = false) {
@@ -68,7 +71,7 @@ export class MysteryEncounterRewardsPhase extends Phase {
     if (encounter.doEncounterRewards) {
       encounter.doEncounterRewards();
     } else if (this.addHealPhase) {
-      globalScene.tryRemovePhase((p) => p.isSelectModifierPhase());
+      globalScene.tryRemovePhase((p) => p.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER));
       globalScene.unshiftPhase(
         new SelectModifierPhase({ customModifierSettings: { fillRemaining: false, rerollMultiplier: -1 } }),
       );

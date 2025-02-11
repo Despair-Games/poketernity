@@ -12,10 +12,8 @@ import { HitResult } from "#enums/hit-result";
 import { StatusEffect } from "#enums/status-effect";
 import type { BattlerIndex } from "#enums/battler-index";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { InfiltratorAbAttr } from "./ab-attrs/infiltrator-ab-attr";
-import { BlockNonDirectDamageAbAttr } from "./ab-attrs/block-non-direct-damage-ab-attr";
 import { Stat } from "#enums/stat";
-import { CommonBattleAnim } from "#app/data/battle-anims";
+import { CommonBattleAnim } from "./battle-anims/common-battle-anim";
 import { CommonAnim } from "#enums/common-anim";
 import i18next from "i18next";
 import { Abilities } from "#enums/abilities";
@@ -23,14 +21,14 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
-import { ProtectStatAbAttr } from "./ab-attrs/protect-stat-ab-attr";
 import { MoveFlags } from "#enums/move-flags";
 import { ArenaTagSide } from "#enums/arena-tag-side";
-import { SkyDropTag } from "./battler-tags";
+import { type SkyDropTag } from "./battler-tags";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 export abstract class ArenaTag {
   constructor(
@@ -142,7 +140,7 @@ export class MistTag extends ArenaTag {
   override apply(_arena: Arena, simulated: boolean, attacker: Pokemon, cancelled: BooleanHolder): boolean {
     if (attacker?.isActive(true)) {
       const bypassed = new BooleanHolder(false);
-      applyAbAttrs(InfiltratorAbAttr, attacker, simulated, bypassed);
+      applyAbAttrs(AbAttrFlag.INFILTRATOR, attacker, simulated, bypassed);
       if (bypassed.value) {
         return false;
       }
@@ -207,7 +205,7 @@ export abstract class WeakenMoveScreenTag extends ArenaTag {
   ): boolean {
     if (this.weakenedCategories.includes(moveCategory)) {
       const bypassed = new BooleanHolder(false);
-      applyAbAttrs(InfiltratorAbAttr, attacker, simulated, bypassed);
+      applyAbAttrs(AbAttrFlag.INFILTRATOR, attacker, simulated, bypassed);
       if (bypassed.value) {
         return false;
       }
@@ -374,7 +372,7 @@ const QuickGuardConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
   const move = allMoves[moveId];
   const effectPhase = globalScene.getCurrentPhase();
 
-  if (effectPhase instanceof MoveEffectPhase) {
+  if (effectPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
     const attacker = effectPhase.getUserPokemon();
     if (attacker) {
       return move.getPriority(attacker) > 0;
@@ -557,7 +555,7 @@ class WishTag extends ArenaTag {
     const target = globalScene.getFieldPokemonByBattlerIndex(this.battlerIndex);
     if (target?.isActive(true)) {
       globalScene.queueMessage(this.triggerMessage);
-      globalScene.unshiftPhase(new PokemonHealPhase(target.getBattlerIndex(), this.healHp));
+      globalScene.queuePokemonHeal(true, target.getBattlerIndex(), this.healHp);
     }
   }
 }
@@ -759,7 +757,7 @@ class SpikesTag extends ArenaTrapTag {
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.isGrounded()) {
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, simulated, cancelled);
+      applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, simulated, cancelled);
 
       if (simulated) {
         return !cancelled.value;
@@ -963,7 +961,7 @@ class TypeHazardTag extends ArenaTrapTag {
 
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     const cancelled = new BooleanHolder(false);
-    applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, simulated, cancelled);
+    applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, simulated, cancelled);
 
     if (cancelled.value) {
       return false;
@@ -1058,7 +1056,7 @@ class StickyWebTag extends ArenaTrapTag {
   override activateTrap(pokemon: Pokemon, simulated: boolean): boolean {
     if (pokemon.isGrounded()) {
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(ProtectStatAbAttr, pokemon, simulated, Stat.SPD, cancelled);
+      applyAbAttrs(AbAttrFlag.PROTECT_STAT, pokemon, simulated, Stat.SPD, cancelled);
 
       if (simulated) {
         return !cancelled.value;
@@ -1136,7 +1134,7 @@ export class GravityTag extends ArenaTag {
         if (pokemon.getTag(BattlerTagType.FLYING)) {
           pokemon.addTag(BattlerTagType.INTERRUPTED);
         }
-        pokemon.getTag(SkyDropTag)?.clearSkyDropEffects();
+        pokemon.getTag<SkyDropTag>(BattlerTagType.SKY_DROP)?.clearSkyDropEffects();
       }
     });
   }
@@ -1336,7 +1334,7 @@ class FireGrassPledgeTag extends ArenaTag {
       .filter((pokemon) => !pokemon.isOfType(ElementalType.FIRE) && !pokemon.switchOutStatus)
       .forEach((pokemon) => {
         const cancelled = new BooleanHolder(false);
-        applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
+        applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
         if (cancelled.value) {
           return;
         }
@@ -1465,7 +1463,7 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
       .filter((pokemon) => !pokemon.isOfType(this.immuneType) && !pokemon.switchOutStatus)
       .forEach((pokemon) => {
         const cancelled = new BooleanHolder(false);
-        applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
+        applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
         if (cancelled.value) {
           return;
         }

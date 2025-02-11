@@ -6,8 +6,11 @@ import { ExpNotification } from "#enums/exp-notification";
 import { PlayerPartyMemberPokemonPhase } from "./abstract-player-party-member-pokemon-phase";
 import { LevelUpPhase } from "./level-up-phase";
 import { settings } from "#app/system/settings/settings-manager";
+import { PhaseId } from "#enums/phase-id";
 
 export class ShowPartyExpBarPhase extends PlayerPartyMemberPokemonPhase {
+  override readonly id = PhaseId.SHOW_PARTY_EXP_BAR;
+
   private readonly expValue: number;
 
   constructor(partyMemberIndex: number, expValue: number) {

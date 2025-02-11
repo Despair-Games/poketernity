@@ -5,7 +5,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { Button } from "#enums/buttons";
-import type { EvolutionPhase } from "#app/phases/evolution-phase";
+import { type EvolutionPhase } from "#app/phases/evolution-phase";
 import { UiMode } from "#enums/ui-mode";
 
 describe("Evolution Phase", () => {

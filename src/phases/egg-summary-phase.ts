@@ -1,6 +1,7 @@
 import type { EggHatchData } from "#app/data/egg-hatch-data";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
+import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 
 /**
@@ -11,6 +12,8 @@ import { UiMode } from "#enums/ui-mode";
  * @extends Phase
  */
 export class EggSummaryPhase extends Phase {
+  override readonly id = PhaseId.EGG_SUMMARY;
+
   private readonly eggHatchData: EggHatchData[];
 
   constructor(eggHatchData: EggHatchData[]) {

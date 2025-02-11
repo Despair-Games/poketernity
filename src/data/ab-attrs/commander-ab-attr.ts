@@ -6,7 +6,10 @@ import { MoveId } from "#enums/move-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { Species } from "#enums/species";
 import { AbAttr } from "./ab-attr";
-import { SkyDropTag } from "../battler-tags";
+import { type SkyDropTag } from "../battler-tags";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
+import { type MovePhase } from "#app/phases/move-phase";
 
 /**
  * Attribute implementing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Commander_(Ability) | Commander}.
@@ -15,6 +18,11 @@ import { SkyDropTag } from "../battler-tags";
  * causing attacks that target the source to always miss.
  */
 export class CommanderAbAttr extends AbAttr {
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.COMMANDER);
+  }
+
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
     // TODO: Should this work with X + Dondozo fusions?
     if (globalScene.currentBattle?.double && pokemon.getAlly()?.species.speciesId === Species.DONDOZO) {
@@ -28,13 +36,13 @@ export class CommanderAbAttr extends AbAttr {
         // Lapse the source's semi-invulnerable tags (to avoid visual inconsistencies)
         pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
         // Remove Sky Drop's effect from the source and whoever else is affected.
-        pokemon.getTag(SkyDropTag)?.clearSkyDropEffects();
+        pokemon.getTag<SkyDropTag>(BattlerTagType.SKY_DROP)?.clearSkyDropEffects();
         // Play an animation of the source jumping into the ally Dondozo's mouth
         globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.COMMANDER_APPLY);
         // Apply boosts from this effect to the ally Dondozo
         pokemon.getAlly().addTag(BattlerTagType.COMMANDED, 0, MoveId.NONE, pokemon.id);
         // Cancel the source Pokemon's next move (if a move is queued)
-        globalScene.tryRemovePhase((phase) => phase.isMovePhase() && phase.pokemon === pokemon);
+        globalScene.tryRemovePhase((phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon === pokemon);
       }
       return true;
     }

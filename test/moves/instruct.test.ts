@@ -13,8 +13,8 @@ describe("Moves - Instruct", () => {
   let game: GameManager;
 
   function instructSuccess(pokemon: Pokemon, moveId: MoveId): void {
-    expect(pokemon.getLastXMoves(-1)[0].moveId).toBe(moveId);
-    expect(pokemon.getLastXMoves(-1)[1].moveId).toBe(pokemon.getLastXMoves()[0].moveId);
+    expect(pokemon.getLastXMoves(-1)[0].move.id).toBe(moveId);
+    expect(pokemon.getLastXMoves(-1)[1].move.id).toBe(pokemon.getLastXMoves()[0].move.id);
     expect(pokemon.getMoveset().find((m) => m?.moveId === moveId)?.ppUsed).toBe(2);
   }
 
@@ -129,9 +129,9 @@ describe("Moves - Instruct", () => {
 
     const moveHistory = game.scene.getEnemyPokemon()!.getMoveHistory();
     expect(moveHistory.length).toBe(3);
-    expect(moveHistory[0].moveId).toBe(MoveId.SONIC_BOOM);
-    expect(moveHistory[1].moveId).toBe(MoveId.NONE);
-    expect(moveHistory[2].moveId).toBe(MoveId.SONIC_BOOM);
+    expect(moveHistory[0].move.id).toBe(MoveId.SONIC_BOOM);
+    expect(moveHistory[1].move.id).toBe(MoveId.NONE);
+    expect(moveHistory[2].move.id).toBe(MoveId.SONIC_BOOM);
   });
 
   it("should not repeat enemy's out of pp move", async () => {
@@ -202,7 +202,7 @@ describe("Moves - Instruct", () => {
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("TurnEndPhase", false);
 
-    expect(enemyPokemon.getLastXMoves(-1)[0].moveId).toBe(MoveId.PROTECT);
+    expect(enemyPokemon.getLastXMoves(-1)[0].move.id).toBe(MoveId.PROTECT);
     expect(enemyPokemon.getLastXMoves(-1)[1]).toBeUndefined(); // undefined because protect failed
     expect(enemyPokemon.getMoveset().find((m) => m?.moveId === MoveId.PROTECT)?.ppUsed).toBe(1);
   });
@@ -214,7 +214,12 @@ describe("Moves - Instruct", () => {
     const player = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     enemyPokemon.battleSummonData.moveHistory = [
-      { moveId: MoveId.SONIC_BOOM, targets: [BattlerIndex.PLAYER], result: MoveResult.SUCCESS, virtual: false },
+      {
+        move: expect.objectContaining({ id: MoveId.SONIC_BOOM }),
+        targets: [BattlerIndex.PLAYER],
+        result: MoveResult.SUCCESS,
+        virtual: false,
+      },
     ];
 
     game.move.select(MoveId.INSTRUCT);

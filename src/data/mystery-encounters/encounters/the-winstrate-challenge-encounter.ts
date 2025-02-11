@@ -5,10 +5,10 @@ import {
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
   setEncounterRewards,
-  transitionMysteryEncounterIntroVisuals,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
@@ -18,12 +18,11 @@ import { TrainerType } from "#enums/trainer-type";
 import { Species } from "#enums/species";
 import { Abilities } from "#enums/abilities";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { MoveId } from "#enums/move-id";
 import { Nature } from "#enums/nature";
 import { ElementalType } from "#enums/elemental-type";
 import { BerryType } from "#enums/berry-type";
 import { Stat } from "#enums/stat";
-import { SpeciesFormChangeManualTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { showEncounterDialogue, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
@@ -34,7 +33,8 @@ import i18next from "i18next";
 import { ModifierTier } from "#enums/modifier-tier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { PostBattleInitAbAttr } from "#app/data/ab-attrs/post-battle-init-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { MoveId } from "#enums/move-id";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/theWinstrateChallenge";
@@ -214,7 +214,7 @@ function endTrainerBattleAndShowDialogue(): Promise<void> {
         }
 
         pokemon.resetBattleData();
-        applyAbAttrs(PostBattleInitAbAttr, pokemon, false);
+        applyAbAttrs(AbAttrFlag.POST_BATTLE_INIT, pokemon, false);
       }
 
       globalScene.unshiftPhase(new ShowTrainerPhase());

@@ -5,7 +5,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
 /**
  * Attribute used for moves that reduce PP of the target's last used move.
@@ -21,7 +21,7 @@ export class ReducePpMoveAttr extends MoveEffectAttr {
 
   override applyEffect(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     const lastMove = target.getLastXMoves()[0];
-    const movesetMove = target.getMoveset().find((m) => m.moveId === lastMove.moveId)!;
+    const movesetMove = target.getMoveset().find((m) => m.moveId === lastMove.move.id)!;
     const lastPpUsed = movesetMove.ppUsed;
     movesetMove.ppUsed = Math.min(lastPpUsed + this.reduction, movesetMove.getMovePp());
 
@@ -40,7 +40,7 @@ export class ReducePpMoveAttr extends MoveEffectAttr {
     return (_user, target, _move) => {
       const lastMove = target.getLastXMoves()[0];
       if (lastMove) {
-        const movesetMove = target.getMoveset().find((m) => m.moveId === lastMove.moveId);
+        const movesetMove = target.getMoveset().find((m) => m.moveId === lastMove.move.id);
         return !!movesetMove?.getPpRatio();
       }
       return false;
@@ -50,7 +50,7 @@ export class ReducePpMoveAttr extends MoveEffectAttr {
   override getTargetBenefitScore(_user: Pokemon, target: Pokemon, _move: Move): number {
     const lastMove = target.getLastXMoves()[0];
     if (lastMove) {
-      const movesetMove = target.getMoveset().find((m) => m.moveId === lastMove.moveId);
+      const movesetMove = target.getMoveset().find((m) => m.moveId === lastMove.move.id);
       if (movesetMove) {
         const maxPp = movesetMove.getMovePp();
         const ppLeft = maxPp - movesetMove.ppUsed;
