@@ -19,7 +19,7 @@ const beatUpFunc = (user: Pokemon, allyIndex: number): number => {
 
     // The user contributes to Beat Up regardless of status condition.
     // Allies can contribute only if they do not have a non-volatile status condition.
-    if (pokemon.id !== user.id && !pokemon.hasStatusEffect(getNonVolatileStatusEffects())) {
+    if (pokemon.id !== user.id && !pokemon.hasStatusEffect(getNonVolatileStatusEffects(), false, true)) {
       continue;
     }
     return pokemon.species.getBaseStat(Stat.ATK) / 10 + 5;

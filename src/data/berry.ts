@@ -20,7 +20,7 @@ export function getBerryPredicate(berryType: BerryType): BerryPredicate {
     case BerryType.SITRUS:
       return (pokemon: Pokemon) => pokemon.getHpRatio() < 0.5;
     case BerryType.LUM:
-      return (pokemon: Pokemon) => pokemon.hasStatusEffect(getNonVolatileStatusEffects(), true);
+      return (pokemon: Pokemon) => pokemon.hasStatusEffect(getNonVolatileStatusEffects(), true, false);
     case BerryType.ENIGMA:
       return (pokemon: Pokemon) =>
         !!pokemon.turnData.attacksReceived.filter((a) => a.result === HitResult.SUPER_EFFECTIVE).length;

@@ -4012,11 +4012,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Helper function that retrieves the Pokemon's non-volatile status effect
+   * @param ignoreAbility whether a status effect-mocking ability should be applied
    * @returns {@linkcode StatusEffect} the status effect held by the Pokemon
    */
-  getStatusEffect(): StatusEffect {
+  getStatusEffect(ignoreAbility: boolean = false): StatusEffect {
     if (this.hasStatusEffect(getNonVolatileStatusEffects())) {
-      if (this.hasAbilityWithAttr(AbAttrFlag.MOCK_STATUS_EFFECT)) {
+      if (!ignoreAbility && this.hasAbilityWithAttr(AbAttrFlag.MOCK_STATUS_EFFECT)) {
         return (this.getAbilityAttrs(AbAttrFlag.MOCK_STATUS_EFFECT)[0] as MockStatusEffectAbAttr).mockedStatus;
       } else {
         if (this.status) {
