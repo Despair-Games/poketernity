@@ -37,7 +37,6 @@ uniform float yOffset;
 uniform float yShadowOffset;
 uniform vec4 tone;
 uniform ivec4 spriteColors[32];
-uniform ivec4 fusionSpriteColors[32];
 
 const vec3 lumaF = vec3(.299, .587, .114);
 
@@ -161,12 +160,10 @@ void main() {
         if (spriteColors[i][3] == 0)
             break;
         if (texture.a > 0.0 && colorInt.r == spriteColors[i].r && colorInt.g == spriteColors[i].g && colorInt.b == spriteColors[i].b) {
-            vec3 fusionColor = vec3(float(fusionSpriteColors[i].r) / 255.0, float(fusionSpriteColors[i].g) / 255.0, float(fusionSpriteColors[i].b) / 255.0);
             vec3 bg = vec3(float(spriteColors[i].r) / 255.0, float(spriteColors[i].g) / 255.0, float(spriteColors[i].b) / 255.0);
             float gray = (bg.r + bg.g + bg.b) / 3.0;
             bg = vec3(gray, gray, gray);
-            vec3 fg = fusionColor;
-            texture.rgb = mix(1.0 - 2.0 * (1.0 - bg) * (1.0 - fg), 2.0 * bg * fg, step(bg, vec3(0.5)));
+            texture.rgb = mix(1.0 - 2.0 * (1.0 - bg) * (1.0), 2.0 * bg, step(bg, vec3(0.5)));
             break;
         }
     }
