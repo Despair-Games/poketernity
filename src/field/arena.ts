@@ -839,7 +839,7 @@ export class Arena {
       case Biome.LABORATORY:
         return 0.797;
       case Biome.SLUM:
-        return 0.0;
+        return 1.221;
       case Biome.SNOWY_FOREST:
         return 3.047;
       default:
