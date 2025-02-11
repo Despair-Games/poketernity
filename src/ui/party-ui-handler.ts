@@ -349,6 +349,7 @@ export default class PartyUiHandler extends MessageUiHandler {
             );
           }
           if (filterResult === null) {
+            this.clearOptions();
             if (this.selectCallback && this.partyUiMode !== PartyUiMode.CHECK) {
               if (option === PartyOption.TRANSFER) {
                 if (this.transferCursor !== this.cursor) {
