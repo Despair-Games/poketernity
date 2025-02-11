@@ -203,6 +203,7 @@ import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { allAbilities } from "./all-abilities";
 import { BypassParaSpeedReductionAbAttr } from "./ab-attrs/bypass-para-speed-reduction-ab-attr";
+import { MockStatusEffectAbAttr } from "./ab-attrs/mock-status-effect-ab-attr";
 
 export function initAbilities() {
   allAbilities.push(
@@ -393,14 +394,14 @@ export function initAbilities() {
     new Ability(Abilities.GUTS, 3)
       .attr(BypassBurnDamageReductionAbAttr)
       .conditionalAttr(
-        (pokemon) => !!pokemon.status || pokemon.hasAbility(Abilities.COMATOSE),
+        (pokemon) => pokemon.hasStatusEffect(getNonVolatileStatusEffects()),
         StatMultiplierAbAttr,
         Stat.ATK,
         1.5,
       ),
     new Ability(Abilities.MARVEL_SCALE, 3)
       .conditionalAttr(
-        (pokemon) => !!pokemon.status || pokemon.hasAbility(Abilities.COMATOSE),
+        (pokemon) => pokemon.hasStatusEffect(getNonVolatileStatusEffects()),
         StatMultiplierAbAttr,
         Stat.DEF,
         1.5,
@@ -496,7 +497,7 @@ export function initAbilities() {
     new Ability(Abilities.QUICK_FEET, 4)
       .attr(BypassParaSpeedReductionAbAttr)
       .conditionalAttr(
-        (pokemon) => !!pokemon.status || pokemon.hasAbility(Abilities.COMATOSE),
+        (pokemon) => pokemon.hasStatusEffect(getNonVolatileStatusEffects()),
         StatMultiplierAbAttr,
         Stat.SPD,
         1.5,
@@ -1065,6 +1066,7 @@ export function initAbilities() {
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
       .attr(UnsuppressableAbilityAbAttr)
+      .attr(MockStatusEffectAbAttr, StatusEffect.SLEEP)
       .attr(StatusEffectImmunityAbAttr, ...getNonVolatileStatusEffects())
       .attr(BattlerTagImmunityAbAttr, BattlerTagType.DROWSY),
     new Ability(Abilities.QUEENLY_MAJESTY, 7).attr(FieldPriorityMoveImmunityAbAttr).ignorable(),
