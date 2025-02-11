@@ -390,7 +390,7 @@ describe("Status Effects", () => {
       game.move.select(MoveId.SPLASH);
       await game.toNextTurn();
 
-      expect(player.getStatusEffect()).toBeUndefined();
+      expect(player.getStatusEffect()).toBe(StatusEffect.NONE);
       expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
     });
   });
