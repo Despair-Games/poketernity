@@ -69,12 +69,10 @@ export default class SummaryUiHandler extends UiHandler {
   private numberText: Phaser.GameObjects.Text;
   private pokemonSprite: Phaser.GameObjects.Sprite;
   private nameText: Phaser.GameObjects.Text;
-  private splicedIcon: Phaser.GameObjects.Sprite;
   private pokeball: Phaser.GameObjects.Sprite;
   private levelText: Phaser.GameObjects.Text;
   private genderText: Phaser.GameObjects.Text;
   private shinyIcon: Phaser.GameObjects.Image;
-  private fusionShinyIcon: Phaser.GameObjects.Image;
   private candyShadow: Phaser.GameObjects.Sprite;
   private candyIcon: Phaser.GameObjects.Sprite;
   private candyOverlay: Phaser.GameObjects.Sprite;
@@ -166,25 +164,12 @@ export default class SummaryUiHandler extends UiHandler {
     this.nameText.setOrigin(0, 0);
     this.summaryContainer.add(this.nameText);
 
-    this.splicedIcon = globalScene.add.sprite(0, -54, "icon_spliced");
-    this.splicedIcon.setVisible(false);
-    this.splicedIcon.setOrigin(0, 0);
-    this.splicedIcon.setScale(0.75);
-    this.splicedIcon.setInteractive(new Phaser.Geom.Rectangle(0, 0, 12, 15), Phaser.Geom.Rectangle.Contains);
-    this.summaryContainer.add(this.splicedIcon);
-
     this.shinyIcon = globalScene.add.image(0, -54, "shiny_star");
     this.shinyIcon.setVisible(false);
     this.shinyIcon.setOrigin(0, 0);
     this.shinyIcon.setScale(0.75);
     this.shinyIcon.setInteractive(new Phaser.Geom.Rectangle(0, 0, 12, 15), Phaser.Geom.Rectangle.Contains);
     this.summaryContainer.add(this.shinyIcon);
-
-    this.fusionShinyIcon = globalScene.add.image(0, 0, "shiny_star_2");
-    this.fusionShinyIcon.setVisible(false);
-    this.fusionShinyIcon.setOrigin(0, 0);
-    this.fusionShinyIcon.setScale(0.75);
-    this.summaryContainer.add(this.fusionShinyIcon);
 
     this.pokeball = globalScene.add.sprite(6, -19, "pb");
     this.pokeball.setOrigin(0, 1);
@@ -358,21 +343,6 @@ export default class SummaryUiHandler extends UiHandler {
 
     this.nameText.setText(this.pokemon.getNameToRender());
 
-    const isFusion = this.pokemon.isFusion();
-
-    this.splicedIcon.setPositionRelative(this.nameText, this.nameText.displayWidth + 2, 3);
-    this.splicedIcon.setVisible(isFusion);
-    if (this.splicedIcon.visible) {
-      this.splicedIcon.on("pointerover", () =>
-        globalScene.ui.showTooltip(
-          "",
-          `${this.pokemon?.species.getName(this.pokemon.formIndex)}/${this.pokemon?.fusionSpecies?.getName(this.pokemon?.fusionFormIndex)}`,
-          true,
-        ),
-      );
-      this.splicedIcon.on("pointerout", () => globalScene.ui.hideTooltip());
-    }
-
     if (
       globalScene.gameData.starterData[this.pokemon.species.getRootSpeciesId()].classicWinCount > 0
       && globalScene.gameData.starterData[this.pokemon.species.getRootSpeciesId(true)].classicWinCount > 0
@@ -414,22 +384,16 @@ export default class SummaryUiHandler extends UiHandler {
 
     this.friendshipShadow.setCrop(0, 0, 16, 16 - 16 * ((this.pokemon?.friendship || 0) / 255));
 
-    const doubleShiny = isFusion && this.pokemon.shiny && this.pokemon.fusionShiny;
-    const baseVariant = !doubleShiny ? this.pokemon.getVariant() : this.pokemon.variant;
+    const baseVariant = this.pokemon.getVariant();
 
-    this.shinyIcon.setPositionRelative(
-      this.nameText,
-      this.nameText.displayWidth + (this.splicedIcon.visible ? this.splicedIcon.displayWidth + 1 : 0) + 1,
-      3,
-    );
-    this.shinyIcon.setTexture(`shiny_star${doubleShiny ? "_1" : ""}`);
+    this.shinyIcon.setPositionRelative(this.nameText, this.nameText.displayWidth + 1, 3);
+    this.shinyIcon.setTexture(`shiny_star`);
     this.shinyIcon.setVisible(this.pokemon.isShiny());
     this.shinyIcon.setTint(getVariantTint(baseVariant));
     if (this.shinyIcon.visible) {
-      const shinyDescriptor =
-        doubleShiny || baseVariant
-          ? `${baseVariant === 2 ? i18next.t("common:epicShiny") : baseVariant === 1 ? i18next.t("common:rareShiny") : i18next.t("common:commonShiny")}${doubleShiny ? `/${this.pokemon.fusionVariant === 2 ? i18next.t("common:epicShiny") : this.pokemon.fusionVariant === 1 ? i18next.t("common:rareShiny") : i18next.t("common:commonShiny")}` : ""}`
-          : "";
+      const shinyDescriptor = baseVariant
+        ? `${baseVariant === 2 ? i18next.t("common:epicShiny") : baseVariant === 1 ? i18next.t("common:rareShiny") : i18next.t("common:commonShiny")}`
+        : "";
       this.shinyIcon.on("pointerover", () =>
         globalScene.ui.showTooltip(
           "",
@@ -438,12 +402,6 @@ export default class SummaryUiHandler extends UiHandler {
         ),
       );
       this.shinyIcon.on("pointerout", () => globalScene.ui.hideTooltip());
-    }
-
-    this.fusionShinyIcon.setPosition(this.shinyIcon.x, this.shinyIcon.y);
-    this.fusionShinyIcon.setVisible(doubleShiny);
-    if (isFusion) {
-      this.fusionShinyIcon.setTint(getVariantTint(this.pokemon.fusionVariant));
     }
 
     this.pokeball.setFrame(getPokeballAtlasKey(this.pokemon.pokeball));

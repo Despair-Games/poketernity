@@ -45,7 +45,6 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
   private pokemonNatureText: BBCodeText;
   private pokemonShinyIcon: Phaser.GameObjects.Image;
   private pokemonShinyNewIcon: Phaser.GameObjects.Text;
-  private pokemonFusionShinyIcon: Phaser.GameObjects.Image;
   private pokemonMovesContainer: Phaser.GameObjects.Container;
   private pokemonMovesContainers: Phaser.GameObjects.Container[];
   private pokemonMoveBgs: Phaser.GameObjects.NineSlice[];
@@ -224,16 +223,6 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
     this.add(this.pokemonShinyNewIcon);
     this.pokemonShinyNewIcon.setVisible(false);
 
-    this.pokemonFusionShinyIcon = globalScene.add.image(
-      this.pokemonShinyIcon.x,
-      this.pokemonShinyIcon.y,
-      "shiny_star_2",
-    );
-    this.pokemonFusionShinyIcon.setOrigin(0, 0);
-    this.pokemonFusionShinyIcon.setScale(0.75);
-    this.pokemonFusionShinyIcon.setName("img-pkmn-fusion-shiny-icon");
-    this.add(this.pokemonFusionShinyIcon);
-
     this.setVisible(false);
   }
 
@@ -357,18 +346,15 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
         this.pokemonNatureLabelText.setShadowColor(getTextColor(TextStyle.WINDOW, true, settings.display.uiTheme));
       }
 
-      const isFusion = pokemon.isFusion();
-      const doubleShiny = isFusion && pokemon.shiny && pokemon.fusionShiny;
-      const baseVariant = !doubleShiny ? pokemon.getVariant() : pokemon.variant;
+      const baseVariant = pokemon.getVariant();
 
-      this.pokemonShinyIcon.setTexture(`shiny_star${doubleShiny ? "_1" : ""}`);
+      this.pokemonShinyIcon.setTexture(`shiny_star`);
       this.pokemonShinyIcon.setVisible(pokemon.isShiny());
       this.pokemonShinyIcon.setTint(getVariantTint(baseVariant));
       if (this.pokemonShinyIcon.visible) {
-        const shinyDescriptor =
-          doubleShiny || baseVariant
-            ? `${baseVariant === 2 ? i18next.t("common:epicShiny") : baseVariant === 1 ? i18next.t("common:rareShiny") : i18next.t("common:commonShiny")}${doubleShiny ? `/${pokemon.fusionVariant === 2 ? i18next.t("common:epicShiny") : pokemon.fusionVariant === 1 ? i18next.t("common:rareShiny") : i18next.t("common:commonShiny")}` : ""}`
-            : "";
+        const shinyDescriptor = baseVariant
+          ? `${baseVariant === 2 ? i18next.t("common:epicShiny") : baseVariant === 1 ? i18next.t("common:rareShiny") : i18next.t("common:commonShiny")}`
+          : "";
         this.pokemonShinyIcon.on("pointerover", () =>
           globalScene.ui.showTooltip(
             "",
@@ -394,12 +380,6 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
         this.pokemonShinyNewIcon.setShadowColor(getTextColor(TextStyle.SUMMARY_BLUE, true, settings.display.uiTheme));
       } else {
         this.pokemonShinyNewIcon.setVisible(false);
-      }
-
-      this.pokemonFusionShinyIcon.setPosition(this.pokemonShinyIcon.x, this.pokemonShinyIcon.y);
-      this.pokemonFusionShinyIcon.setVisible(doubleShiny);
-      if (isFusion) {
-        this.pokemonFusionShinyIcon.setTint(getVariantTint(pokemon.fusionVariant));
       }
 
       const starterSpeciesId = pokemon.species.getRootSpeciesId();

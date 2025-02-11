@@ -828,34 +828,14 @@ export default class RunInfoUiHandler extends UiHandler {
 
       // Shiny + Fusion Status
       const marksContainer = globalScene.add.container(0, 0);
-      if (pokemon.fusionSpecies) {
-        const splicedIcon = globalScene.add.image(0, 0, "icon_spliced");
-        splicedIcon.setScale(0.35);
-        splicedIcon.setOrigin(0, 0);
-        pokemon.isShiny()
-          ? splicedIcon.setPositionRelative(pokeInfoTextContainer, 35, 0)
-          : splicedIcon.setPositionRelative(pokeInfoTextContainer, 28, 0);
-        marksContainer.add(splicedIcon);
-        this.getUi().bringToTop(splicedIcon);
-      }
       if (pokemon.isShiny()) {
-        const doubleShiny = pokemon.isFusion() && pokemon.shiny && pokemon.fusionShiny;
-        const shinyStar = globalScene.add.image(0, 0, `shiny_star_small${doubleShiny ? "_1" : ""}`);
+        const shinyStar = globalScene.add.image(0, 0, `shiny_star_small`);
         shinyStar.setOrigin(0, 0);
         shinyStar.setScale(0.65);
         shinyStar.setPositionRelative(pokeInfoTextContainer, 28, 0);
-        shinyStar.setTint(getVariantTint(!doubleShiny ? pokemon.getVariant() : pokemon.variant));
+        shinyStar.setTint(getVariantTint(pokemon.getVariant()));
         marksContainer.add(shinyStar);
         this.getUi().bringToTop(shinyStar);
-        if (doubleShiny) {
-          const fusionShinyStar = globalScene.add.image(0, 0, "shiny_star_small_2");
-          fusionShinyStar.setOrigin(0, 0);
-          fusionShinyStar.setScale(0.5);
-          fusionShinyStar.setPosition(shinyStar.x + 1, shinyStar.y + 1);
-          fusionShinyStar.setTint(getVariantTint(pokemon.fusionVariant));
-          marksContainer.add(fusionShinyStar);
-          this.getUi().bringToTop(fusionShinyStar);
-        }
       }
 
       // Pokemon Moveset
@@ -1034,13 +1014,6 @@ export default class RunInfoUiHandler extends UiHandler {
         pokemonSprite.setPipelineData("spriteKey", species.getSpriteKey(female, formIndex, shiny, variant));
         pokemonSprite.setVisible(true);
       });
-      if (pkmn.isFusion()) {
-        const fusionIcon = globalScene.add.sprite(80 + 40 * i, 50 + row * 80, pkmn.getFusionIconAtlasKey());
-        fusionIcon.setName("sprite-fusion-icon");
-        fusionIcon.setOrigin(0.5, 0);
-        fusionIcon.setFrame(pkmn.getFusionIconId(true));
-        this.hallofFameContainer.add(fusionIcon);
-      }
       pkmn.destroy();
     });
     this.hallofFameContainer.setVisible(false);
