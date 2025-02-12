@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/main-data";
 import { AnimConfig } from "#app/data/anim-config";
 import { BattleAnim } from "#app/data/battle-anims";
 import { moveAnims } from "#app/data/move-anims";

@@ -1,5 +1,5 @@
 import type { BattlerIndex } from "#enums/battler-index";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/main-data";
 import { globalScene } from "#app/global-scene";
 import { UiMode } from "#enums/ui-mode";
 import { MoveId } from "#enums/move-id";

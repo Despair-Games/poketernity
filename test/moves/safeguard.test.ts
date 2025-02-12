@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { allAbilities } from "#app/data/all-abilities";
+import { allAbilities } from "#app/data/main-data";
 import { type PostDefendContactApplyStatusEffectAbAttr } from "#app/data/ab-attrs/post-defend-contact-apply-status-effect-ab-attr";
 import { Abilities } from "#enums/abilities";
 import { StatusEffect } from "#enums/status-effect";

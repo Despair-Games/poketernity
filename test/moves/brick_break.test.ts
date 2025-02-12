@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/main-data";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";

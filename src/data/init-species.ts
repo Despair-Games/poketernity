@@ -1,4 +1,4 @@
-import { allSpecies } from "#app/data/all-species";
+import { allSpecies } from "#app/data/main-data";
 import PokemonSpecies from "#app/data/pokemon-species";
 import { PokemonForm } from "./pokemon-form";
 import { Abilities } from "#enums/abilities";

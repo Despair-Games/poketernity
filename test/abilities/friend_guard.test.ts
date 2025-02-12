@@ -5,8 +5,8 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { BattlerIndex } from "#enums/battler-index";
-import { allAbilities } from "#app/data/all-abilities";
-import { allMoves } from "#app/data/all-moves";
+import { allAbilities } from "#app/data/main-data";
+import { allMoves } from "#app/data/main-data";
 import { MoveCategory } from "#enums/move-category";
 
 describe("Moves - Friend Guard", () => {

@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { allAbilities } from "#app/data/all-abilities";
+import { allAbilities } from "#app/data/main-data";
 import { Abilities } from "#enums/abilities";
 import { WeatherType } from "#enums/weather-type";
 import { MoveId } from "#enums/move-id";
