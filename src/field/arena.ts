@@ -777,15 +777,15 @@ export class Arena {
       case Biome.TOWN:
         return 7.288;
       case Biome.PLAINS:
-        return 17.485;
+        return 7.693;
       case Biome.GRASS:
         return 1.995;
       case Biome.TALL_GRASS:
         return 9.608;
       case Biome.METROPOLIS:
-        return 141.47;
+        return 4.867;
       case Biome.FOREST:
-        return 0.341;
+        return 4.294;
       case Biome.SEA:
         return 0.024;
       case Biome.SWAMP:
@@ -793,9 +793,9 @@ export class Arena {
       case Biome.BEACH:
         return 3.462;
       case Biome.LAKE:
-        return 7.215;
+        return 5.35;
       case Biome.SEABED:
-        return 2.6;
+        return 2.629;
       case Biome.MOUNTAIN:
         return 4.018;
       case Biome.BADLANDS:
@@ -805,31 +805,31 @@ export class Arena {
       case Biome.DESERT:
         return 1.143;
       case Biome.ICE_CAVE:
-        return 0.0;
+        return 15.01;
       case Biome.MEADOW:
         return 3.891;
       case Biome.POWER_PLANT:
-        return 9.447;
+        return 2.81;
       case Biome.VOLCANO:
-        return 17.637;
+        return 5.116;
       case Biome.GRAVEYARD:
-        return 13.711;
+        return 3.232;
       case Biome.DOJO:
         return 6.205;
       case Biome.FACTORY:
         return 4.985;
       case Biome.RUINS:
-        return 0.0;
+        return 2.27;
       case Biome.WASTELAND:
         return 6.336;
       case Biome.ABYSS:
         return 5.13;
       case Biome.SPACE:
-        return 20.036;
+        return 21.347;
       case Biome.CONSTRUCTION_SITE:
         return 1.222;
       case Biome.JUNGLE:
-        return 0.0;
+        return 2.477;
       case Biome.FAIRY_CAVE:
         return 4.542;
       case Biome.TEMPLE:
@@ -837,9 +837,9 @@ export class Arena {
       case Biome.ISLAND:
         return 2.751;
       case Biome.LABORATORY:
-        return 114.862;
+        return 0.797;
       case Biome.SLUM:
-        return 0.0;
+        return 1.221;
       case Biome.SNOWY_FOREST:
         return 3.047;
       default:

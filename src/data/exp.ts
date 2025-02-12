@@ -1,3 +1,4 @@
+import { CommonColor, ShadowColor } from "#enums/color";
 import { GrowthRate } from "#enums/growth-rates";
 
 const expLevels = [
@@ -103,16 +104,16 @@ export function getLevelRelExp(level: number, growthRate: GrowthRate): number {
 export function getGrowthRateColor(growthRate: GrowthRate, shadow?: boolean) {
   switch (growthRate) {
     case GrowthRate.ERRATIC:
-      return !shadow ? "#f85888" : "#906060";
+      return shadow ? ShadowColor.DUSTY_ROSE : CommonColor.SOFT_PINK;
     case GrowthRate.FAST:
-      return !shadow ? "#f8d030" : "#b8a038";
+      return shadow ? ShadowColor.MUTED_GOLD : CommonColor.GOLD_YELLOW;
     case GrowthRate.MEDIUM_FAST:
-      return !shadow ? "#78c850" : "#588040";
+      return shadow ? ShadowColor.MUTED_GREEN : CommonColor.LIGHT_GREEN;
     case GrowthRate.MEDIUM_SLOW:
-      return !shadow ? "#6890f0" : "#807870";
+      return shadow ? ShadowColor.DARK_GREY : CommonColor.SOFT_BLUE;
     case GrowthRate.SLOW:
-      return !shadow ? "#f08030" : "#c03028";
+      return shadow ? ShadowColor.DARK_RED : CommonColor.BRIGHT_ORANGE;
     case GrowthRate.FLUCTUATING:
-      return !shadow ? "#a040a0" : "#483850";
+      return shadow ? ShadowColor.DARK_PURPLE : CommonColor.VIBRANT_PURPLE;
   }
 }

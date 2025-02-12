@@ -1,3 +1,4 @@
+import { TypeEffectivenessColor } from "#enums/color";
 import { ElementalType } from "#enums/elemental-type";
 
 export type TypeDamageMultiplier = 0 | 0.125 | 0.25 | 0.5 | 1 | 2 | 4 | 8;
@@ -275,45 +276,21 @@ export function getTypeDamageMultiplierColor(
   multiplier: TypeDamageMultiplier,
   side: "defense" | "offense",
 ): string | undefined {
-  if (side === "offense") {
-    switch (multiplier) {
-      case 0:
-        return "#929292";
-      case 0.125:
-        return "#FF5500";
-      case 0.25:
-        return "#FF7400";
-      case 0.5:
-        return "#FE8E00";
-      case 1:
-        return undefined;
-      case 2:
-        return "#4AA500";
-      case 4:
-        return "#4BB400";
-      case 8:
-        return "#52C200";
-    }
-  } else if (side === "defense") {
-    switch (multiplier) {
-      case 0:
-        return "#B1B100";
-      case 0.125:
-        return "#2DB4FF";
-      case 0.25:
-        return "#00A4FF";
-      case 0.5:
-        return "#0093FF";
-      case 1:
-        return undefined;
-      case 2:
-        return "#FE8E00";
-      case 4:
-        return "#FF7400";
-      case 8:
-        return "#FF5500";
-    }
-  }
+  const effectivenessMap: Record<TypeDamageMultiplier, string | undefined> = {
+    0: side === "offense" ? TypeEffectivenessColor.NO_EFFECT : TypeEffectivenessColor.DEFENSE_NO_EFFECT,
+    0.125: side === "offense" ? TypeEffectivenessColor.VERY_RESISTED : TypeEffectivenessColor.DEFENSE_VERY_RESISTED,
+    0.25: side === "offense" ? TypeEffectivenessColor.RESISTED : TypeEffectivenessColor.DEFENSE_RESISTED,
+    0.5:
+      side === "offense"
+        ? TypeEffectivenessColor.NOT_VERY_EFFECTIVE
+        : TypeEffectivenessColor.DEFENSE_NOT_VERY_EFFECTIVE,
+    1: undefined,
+    2: TypeEffectivenessColor.SUPER_EFFECTIVE,
+    4: TypeEffectivenessColor.VERY_SUPER_EFFECTIVE,
+    8: TypeEffectivenessColor.MAX_SUPER_EFFECTIVE,
+  };
+
+  return effectivenessMap[multiplier];
 }
 
 export function getTypeRgb(type: ElementalType): [number, number, number] {
