@@ -45,9 +45,9 @@ export enum CommonColor {
 
   // Greens
   /** #008000 */
-  LIGHT_GREEN = "#008000",
+  PURE_GREEN = "#008000",
   /** #58d858 */
-  PURE_GREEN = "#58d858",
+  LIGHT_GREEN = "#58d858",
 
   // Blues
   /** #40c8f8 */
