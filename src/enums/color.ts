@@ -233,10 +233,10 @@ export enum TypeEffectivenessColor {
   /** #0093ff */
   DEFENSE_NOT_VERY_EFFECTIVE = "#0093ff", // Deep Blue (0.5x)
 
-  /** #FE8E00 - Currently equivalent to `NOT_VERY_EFFECTIVE` */
-  DEFENSE_SUPER_EFFECTIVE = "#FE8E00", // Warm Orange (2x)
-  /** #FF7400 - Currently equivalent to `RESISTED` */
-  DEFENSE_VERY_SUPER_EFFECTIVE = "#FF7400", // Orange (4x)
-  /** #FF5500 - Currently equivalent to `VERY_RESISTED` */
-  DEFENSE_MAX_SUPER_EFFECTIVE = "#FF5500", // Deep Orange (8x)
+  /** #fe8e00 - Currently equivalent to `NOT_VERY_EFFECTIVE` */
+  DEFENSE_SUPER_EFFECTIVE = "#fe8e00", // Warm Orange (2x)
+  /** #ff7400 - Currently equivalent to `RESISTED` */
+  DEFENSE_VERY_SUPER_EFFECTIVE = "#ff7400", // Bright Orange (4x)
+  /** #ff5500 - Currently equivalent to `VERY_RESISTED` */
+  DEFENSE_MAX_SUPER_EFFECTIVE = "#ff5500", // Deep Orange (8x)
 }
