@@ -6,9 +6,11 @@ import { AbAttr } from "./ab-attr";
 /**
  * Ability attribute that provides bonus critical hit rate stages to the ability holder
  * It is used by the ability Super Luck, which provides a one stage boost to critical hit rate.
+ * @extends AbAttr
  */
 export class BonusCritAbAttr extends AbAttr {
-  private stages: number; // Additional critical hit stages provided by the ability
+  /** Additional critical hit stages provided by the ability. */
+  private stages: number; 
 
   constructor(stages: number, showAbility: boolean = true, showAbilityInstant: boolean = false) {
     super(showAbility, showAbilityInstant);
