@@ -10,7 +10,7 @@ import { AbAttr } from "./ab-attr";
  */
 export class BonusCritAbAttr extends AbAttr {
   /** Additional critical hit stages provided by the ability. */
-  private stages: number; 
+  private readonly stages: number;
 
   constructor(stages: number, showAbility: boolean = true, showAbilityInstant: boolean = false) {
     super(showAbility, showAbilityInstant);
