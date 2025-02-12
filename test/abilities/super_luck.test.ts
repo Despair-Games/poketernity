@@ -23,7 +23,7 @@ describe("Abilities - Super Luck", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([MoveId.TACKLE])
+      .moveset([MoveId.TACKLE, MoveId.RAZOR_LEAF])
       .ability(Abilities.SUPER_LUCK)
       .battleType("single")
       .disableCrits()
@@ -38,5 +38,6 @@ describe("Abilities - Super Luck", () => {
     const playerPokemon = game.field.getPlayerPokemon();
 
     expect(playerPokemon.getCritStage(playerPokemon, allMoves[MoveId.TACKLE])).toBe(1);
+    expect(playerPokemon.getCritStage(playerPokemon, allMoves[MoveId.RAZOR_LEAF])).toBe(2);
   });
 });
