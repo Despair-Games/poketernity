@@ -15,7 +15,7 @@ export class AcupressureStatStageChangeAttr extends MoveEffectAttr {
     const randStats = BATTLE_STATS.filter((s) => target.getStatStage(s) < 6);
     if (randStats.length > 0) {
       const boostStat = [randStats[user.randSeedInt(randStats.length)]];
-      globalScene.unshiftPhase(new StatStageChangePhase(target.getBattlerIndex(), this.selfTarget, boostStat, 2));
+      globalScene.unshiftPhase(new StatStageChangePhase(target.getBattlerIndex(), user, boostStat, 2));
       return true;
     }
     return false;

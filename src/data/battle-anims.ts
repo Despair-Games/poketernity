@@ -1,687 +1,16 @@
 import { globalScene } from "#app/global-scene";
-import { allMoves } from "#app/data/all-moves";
-import { BeakBlastHeaderAttr } from "./move-attrs/beak-blast-header-attr";
-import { type Move } from "#app/data/move";
-import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
-import { getFrameMs, getEnumKeys, getEnumValues, animationFileName, isNullOrUndefined } from "#app/utils";
-import { BattlerIndex } from "#enums/battler-index";
-import { MoveId } from "#enums/move-id";
-import { SubstituteTag } from "./battler-tags";
+import { getFrameMs, getEnumValues, isNullOrUndefined } from "#app/utils";
+import { type SubstituteTag } from "#app/data/battler-tags";
 import Phaser from "phaser";
-import { EncounterAnim } from "#enums/encounter-anims";
 import { settings } from "#app/system/settings/settings-manager";
-import { DelayedAttackAttr } from "./move-attrs/delayed-attack-attr";
 import { AnimFrameTarget } from "#enums/anim-frame-target";
-import { ChargeAnim } from "#enums/charge-anim";
-import { CommonAnim } from "#enums/common-anim";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { type AnimConfig, type AnimFrame } from "#app/data/anim-config";
+import { AnimBlendType } from "#enums/anim-blend-type";
+import { AnimFocus } from "#enums/anim-focus";
 
-enum AnimFocus {
-  TARGET = 1,
-  USER,
-  USER_TARGET,
-  SCREEN,
-}
-
-enum AnimBlendType {
-  NORMAL,
-  ADD,
-  SUBTRACT,
-}
-
-export class AnimConfig {
-  public id: number;
-  public graphic: string;
-  public frames: AnimFrame[][];
-  public frameTimedEvents: Map<number, AnimTimedEvent[]>;
-  public position: number;
-  public hue: number;
-
-  constructor(source?: any) {
-    this.frameTimedEvents = new Map<number, AnimTimedEvent[]>();
-
-    if (source) {
-      this.id = source.id;
-      this.graphic = source.graphic;
-      const frames: any[][] = source.frames;
-      frames.map((animFrames) => {
-        for (let f = 0; f < animFrames.length; f++) {
-          animFrames[f] = new ImportedAnimFrame(animFrames[f]);
-        }
-      });
-      this.frames = frames;
-
-      const frameTimedEvents = source.frameTimedEvents;
-      for (const fte of Object.keys(frameTimedEvents)) {
-        const timedEvents: AnimTimedEvent[] = [];
-        for (const te of frameTimedEvents[fte]) {
-          let timedEvent: AnimTimedEvent | undefined;
-          switch (te.eventType) {
-            case "AnimTimedSoundEvent":
-              timedEvent = new AnimTimedSoundEvent(te.frameIndex, te.resourceName, te);
-              break;
-            case "AnimTimedAddBgEvent":
-              timedEvent = new AnimTimedAddBgEvent(te.frameIndex, te.resourceName, te);
-              break;
-            case "AnimTimedUpdateBgEvent":
-              timedEvent = new AnimTimedUpdateBgEvent(te.frameIndex, te.resourceName, te);
-              break;
-          }
-
-          timedEvent && timedEvents.push(timedEvent);
-        }
-        this.frameTimedEvents.set(parseInt(fte), timedEvents);
-      }
-
-      this.position = source.position;
-      this.hue = source.hue;
-    } else {
-      this.frames = [];
-    }
-  }
-
-  getSoundResourceNames(): string[] {
-    const sounds = new Set<string>();
-
-    for (const ftes of this.frameTimedEvents.values()) {
-      for (const fte of ftes) {
-        if (fte instanceof AnimTimedSoundEvent && fte.resourceName) {
-          sounds.add(fte.resourceName);
-        }
-      }
-    }
-
-    return Array.from(sounds.values());
-  }
-
-  getBackgroundResourceNames(): string[] {
-    const backgrounds = new Set<string>();
-
-    for (const ftes of this.frameTimedEvents.values()) {
-      for (const fte of ftes) {
-        if (fte instanceof AnimTimedAddBgEvent && fte.resourceName) {
-          backgrounds.add(fte.resourceName);
-        }
-      }
-    }
-
-    return Array.from(backgrounds.values());
-  }
-}
-
-class AnimFrame {
-  public x: number;
-  public y: number;
-  public zoomX: number;
-  public zoomY: number;
-  public angle: number;
-  public mirror: boolean;
-  public visible: boolean;
-  public blendType: AnimBlendType;
-  public target: AnimFrameTarget;
-  public graphicFrame: number;
-  public opacity: number;
-  public color: number[];
-  public tone: number[];
-  public flash: number[];
-  public locked: boolean;
-  public priority: number;
-  public focus: AnimFocus;
-
-  constructor(
-    x: number,
-    y: number,
-    zoomX: number,
-    zoomY: number,
-    angle: number,
-    mirror: boolean,
-    visible: boolean,
-    blendType: AnimBlendType,
-    pattern: number,
-    opacity: number,
-    colorR: number,
-    colorG: number,
-    colorB: number,
-    colorA: number,
-    toneR: number,
-    toneG: number,
-    toneB: number,
-    toneA: number,
-    flashR: number,
-    flashG: number,
-    flashB: number,
-    flashA: number,
-    locked: boolean,
-    priority: number,
-    focus: AnimFocus,
-    init?: boolean,
-  ) {
-    this.x = !init ? ((x || 0) - 128) * 0.5 : x;
-    this.y = !init ? ((y || 0) - 224) * 0.5 : y;
-    if (zoomX) {
-      this.zoomX = zoomX;
-    } else if (init) {
-      this.zoomX = 0;
-    }
-    if (zoomY) {
-      this.zoomY = zoomY;
-    } else if (init) {
-      this.zoomY = 0;
-    }
-    if (angle) {
-      this.angle = angle;
-    } else if (init) {
-      this.angle = 0;
-    }
-    if (mirror) {
-      this.mirror = mirror;
-    } else if (init) {
-      this.mirror = false;
-    }
-    if (visible) {
-      this.visible = visible;
-    } else if (init) {
-      this.visible = false;
-    }
-    if (blendType) {
-      this.blendType = blendType;
-    } else if (init) {
-      this.blendType = AnimBlendType.NORMAL;
-    }
-    if (!init) {
-      let target = AnimFrameTarget.GRAPHIC;
-      switch (pattern) {
-        case -2:
-          target = AnimFrameTarget.TARGET;
-          break;
-        case -1:
-          target = AnimFrameTarget.USER;
-          break;
-      }
-      this.target = target;
-      this.graphicFrame = pattern >= 0 ? pattern : 0;
-    }
-    if (opacity) {
-      this.opacity = opacity;
-    } else if (init) {
-      this.opacity = 0;
-    }
-    if (colorR || colorG || colorB || colorA) {
-      this.color = [colorR || 0, colorG || 0, colorB || 0, colorA || 0];
-    } else if (init) {
-      this.color = [0, 0, 0, 0];
-    }
-    if (toneR || toneG || toneB || toneA) {
-      this.tone = [toneR || 0, toneG || 0, toneB || 0, toneA || 0];
-    } else if (init) {
-      this.tone = [0, 0, 0, 0];
-    }
-    if (flashR || flashG || flashB || flashA) {
-      this.flash = [flashR || 0, flashG || 0, flashB || 0, flashA || 0];
-    } else if (init) {
-      this.flash = [0, 0, 0, 0];
-    }
-    if (locked) {
-      this.locked = locked;
-    } else if (init) {
-      this.locked = false;
-    }
-    if (priority) {
-      this.priority = priority;
-    } else if (init) {
-      this.priority = 0;
-    }
-    this.focus = focus || AnimFocus.TARGET;
-  }
-}
-
-class ImportedAnimFrame extends AnimFrame {
-  constructor(source: any) {
-    const color: number[] = source.color || [0, 0, 0, 0];
-    const tone: number[] = source.tone || [0, 0, 0, 0];
-    const flash: number[] = source.flash || [0, 0, 0, 0];
-    super(
-      source.x,
-      source.y,
-      source.zoomX,
-      source.zoomY,
-      source.angle,
-      source.mirror,
-      source.visible,
-      source.blendType,
-      source.graphicFrame,
-      source.opacity,
-      color[0],
-      color[1],
-      color[2],
-      color[3],
-      tone[0],
-      tone[1],
-      tone[2],
-      tone[3],
-      flash[0],
-      flash[1],
-      flash[2],
-      flash[3],
-      source.locked,
-      source.priority,
-      source.focus,
-      true,
-    );
-    this.target = source.target;
-    this.graphicFrame = source.graphicFrame;
-  }
-}
-
-abstract class AnimTimedEvent {
-  public frameIndex: number;
-  public resourceName: string;
-
-  constructor(frameIndex: number, resourceName: string) {
-    this.frameIndex = frameIndex;
-    this.resourceName = resourceName;
-  }
-
-  abstract execute(battleAnim: BattleAnim, priority?: number): number;
-
-  abstract getEventType(): string;
-}
-
-class AnimTimedSoundEvent extends AnimTimedEvent {
-  public volume: number = 100;
-  public pitch: number = 100;
-
-  constructor(frameIndex: number, resourceName: string, source?: any) {
-    super(frameIndex, resourceName);
-
-    if (source) {
-      this.volume = source.volume;
-      this.pitch = source.pitch;
-    }
-  }
-
-  execute(battleAnim: BattleAnim, _priority?: number): number {
-    const soundConfig = { rate: this.pitch * 0.01, volume: this.volume * 0.01 };
-    if (this.resourceName) {
-      try {
-        globalScene.playSound(`battle_anims/${this.resourceName}`, soundConfig);
-      } catch (err) {
-        console.error(err);
-      }
-      return Math.ceil((globalScene.sound.get(`battle_anims/${this.resourceName}`).totalDuration * 1000) / 33.33);
-    } else {
-      return Math.ceil((battleAnim.user!.cry(soundConfig).totalDuration * 1000) / 33.33); // TODO: is the bang behind user correct?
-    }
-  }
-
-  getEventType(): string {
-    return "AnimTimedSoundEvent";
-  }
-}
-
-abstract class AnimTimedBgEvent extends AnimTimedEvent {
-  public bgX: number = 0;
-  public bgY: number = 0;
-  public opacity: number = 0;
-  /*public colorRed: number = 0;
-    public colorGreen: number = 0;
-    public colorBlue: number = 0;
-    public colorAlpha: number = 0;*/
-  public duration: number = 0;
-  /*public flashScope: number = 0;
-    public flashRed: number = 0;
-    public flashGreen: number = 0;
-    public flashBlue: number = 0;
-    public flashAlpha: number = 0;
-    public flashDuration: number = 0;*/
-
-  constructor(frameIndex: number, resourceName: string, source: any) {
-    super(frameIndex, resourceName);
-
-    if (source) {
-      this.bgX = source.bgX;
-      this.bgY = source.bgY;
-      this.opacity = source.opacity;
-      /*this.colorRed = source.colorRed;
-            this.colorGreen = source.colorGreen;
-            this.colorBlue = source.colorBlue;
-            this.colorAlpha = source.colorAlpha;*/
-      this.duration = source.duration;
-      /*this.flashScope = source.flashScope;
-            this.flashRed = source.flashRed;
-            this.flashGreen = source.flashGreen;
-            this.flashBlue = source.flashBlue;
-            this.flashAlpha = source.flashAlpha;
-            this.flashDuration = source.flashDuration;*/
-    }
-  }
-}
-
-class AnimTimedUpdateBgEvent extends AnimTimedBgEvent {
-  constructor(frameIndex: number, resourceName: string, source?: any) {
-    super(frameIndex, resourceName, source);
-  }
-
-  // TODO scaling: look at these 320 and 284 numbers
-  execute(moveAnim: MoveAnim, _priority?: number): number {
-    const tweenProps = {};
-    if (this.bgX !== undefined) {
-      tweenProps["x"] = this.bgX * 0.5 - 320;
-    }
-    if (this.bgY !== undefined) {
-      tweenProps["y"] = this.bgY * 0.5 - 284;
-    }
-    if (this.opacity !== undefined) {
-      tweenProps["alpha"] = (this.opacity || 0) / 255;
-    }
-    if (Object.keys(tweenProps).length) {
-      globalScene.tweens.add(
-        Object.assign(
-          {
-            targets: moveAnim.bgSprite,
-            duration: getFrameMs(this.duration * 3),
-          },
-          tweenProps,
-        ),
-      );
-    }
-    return this.duration * 2;
-  }
-
-  getEventType(): string {
-    return "AnimTimedUpdateBgEvent";
-  }
-}
-
-class AnimTimedAddBgEvent extends AnimTimedBgEvent {
-  constructor(frameIndex: number, resourceName: string, source?: any) {
-    super(frameIndex, resourceName, source);
-  }
-
-  execute(moveAnim: MoveAnim, priority?: number): number {
-    if (moveAnim.bgSprite) {
-      moveAnim.bgSprite.destroy();
-    }
-    moveAnim.bgSprite = this.resourceName
-      ? globalScene.add.tileSprite(this.bgX - 320, this.bgY - 284, 896, 576, this.resourceName)
-      : globalScene.add.rectangle(this.bgX - 320, this.bgY - 284, 896, 576, 0);
-    moveAnim.bgSprite.setOrigin(0, 0);
-    moveAnim.bgSprite.setScale(1.25);
-    moveAnim.bgSprite.setAlpha(this.opacity / 255);
-    globalScene.field.add(moveAnim.bgSprite);
-    const fieldPokemon = globalScene.getEnemyPokemon(false) ?? globalScene.getPlayerPokemon(false);
-    if (!isNullOrUndefined(priority)) {
-      globalScene.field.moveTo(moveAnim.bgSprite as Phaser.GameObjects.GameObject, priority);
-    } else if (fieldPokemon?.isOnField()) {
-      globalScene.field.moveBelow(moveAnim.bgSprite as Phaser.GameObjects.GameObject, fieldPokemon);
-    }
-
-    globalScene.tweens.add({
-      targets: moveAnim.bgSprite,
-      duration: getFrameMs(this.duration * 3),
-    });
-
-    return this.duration * 2;
-  }
-
-  getEventType(): string {
-    return "AnimTimedAddBgEvent";
-  }
-}
-
-export const moveAnims = new Map<MoveId, AnimConfig | [AnimConfig, AnimConfig] | null>();
-export const chargeAnims = new Map<ChargeAnim, AnimConfig | [AnimConfig, AnimConfig] | null>();
-export const commonAnims = new Map<CommonAnim, AnimConfig>();
-export const encounterAnims = new Map<EncounterAnim, AnimConfig>();
-
-export function initCommonAnims(): Promise<void> {
-  return new Promise((resolve) => {
-    const commonAnimNames = getEnumKeys(CommonAnim);
-    const commonAnimIds = getEnumValues(CommonAnim);
-    const commonAnimFetches: Promise<Map<CommonAnim, AnimConfig>>[] = [];
-    for (let ca = 0; ca < commonAnimIds.length; ca++) {
-      const commonAnimId = commonAnimIds[ca];
-      commonAnimFetches.push(
-        globalScene
-          .cachedFetch(`./battle-anims/common-${commonAnimNames[ca].toLowerCase().replace(/\_/g, "-")}.json`)
-          .then((response) => response.json())
-          .then((cas) => commonAnims.set(commonAnimId, new AnimConfig(cas))),
-      );
-    }
-    Promise.allSettled(commonAnimFetches).then(() => resolve());
-  });
-}
-
-export function initMoveAnim(moveId: MoveId): Promise<void> {
-  return new Promise((resolve) => {
-    if (moveAnims.has(moveId)) {
-      if (moveAnims.get(moveId) !== null) {
-        resolve();
-      } else {
-        const loadedCheckTimer = setInterval(() => {
-          if (moveAnims.get(moveId) !== null) {
-            const chargeAnimSource = allMoves[moveId].isChargingMove()
-              ? allMoves[moveId]
-              : (allMoves[moveId].getAttrs(DelayedAttackAttr)[0] ?? allMoves[moveId].getAttrs(BeakBlastHeaderAttr)[0]);
-            if (chargeAnimSource && chargeAnims.get(chargeAnimSource.chargeAnim) === null) {
-              return;
-            }
-            clearInterval(loadedCheckTimer);
-            resolve();
-          }
-        }, 50);
-      }
-    } else {
-      moveAnims.set(moveId, null);
-      const defaultMoveAnim = allMoves[moveId].isAttackMove()
-        ? MoveId.TACKLE
-        : (allMoves[moveId] as Move).isSelfStatusMove() // as Move is necessary for the ts-compiler
-          ? MoveId.FOCUS_ENERGY
-          : MoveId.TAIL_WHIP;
-
-      const fetchAnimAndResolve = (moveId: MoveId) => {
-        globalScene
-          .cachedFetch(`./battle-anims/${animationFileName(moveId)}.json`)
-          .then((response) => {
-            const contentType = response.headers.get("content-type");
-            if (!response.ok || contentType?.indexOf("application/json") === -1) {
-              useDefaultAnim(moveId, defaultMoveAnim);
-              logMissingMoveAnim(moveId, response.status, response.statusText);
-              return resolve();
-            }
-            return response.json();
-          })
-          .then((ba) => {
-            if (Array.isArray(ba)) {
-              populateMoveAnim(moveId, ba[0]);
-              populateMoveAnim(moveId, ba[1]);
-            } else {
-              populateMoveAnim(moveId, ba);
-            }
-            const chargeAnimSource = allMoves[moveId].isChargingMove()
-              ? allMoves[moveId]
-              : (allMoves[moveId].getAttrs(DelayedAttackAttr)[0] ?? allMoves[moveId].getAttrs(BeakBlastHeaderAttr)[0]);
-            if (chargeAnimSource) {
-              initMoveChargeAnim(chargeAnimSource.chargeAnim).then(() => resolve());
-            } else {
-              resolve();
-            }
-          })
-          .catch((error) => {
-            useDefaultAnim(moveId, defaultMoveAnim);
-            logMissingMoveAnim(moveId, error);
-            return resolve();
-          });
-      };
-      fetchAnimAndResolve(moveId);
-    }
-  });
-}
-
-/**
- * Populates the default animation for the given move.
- *
- * @param moveId the move to populate an animation for
- * @param defaultMoveAnim the move to use as the default animation
- */
-function useDefaultAnim(moveId: MoveId, defaultMoveAnim: MoveId) {
-  populateMoveAnim(moveId, moveAnims.get(defaultMoveAnim));
-}
-
-/**
- * Helper method for printing a warning to the console when a move animation is missing.
- *
- * @param moveId the move to populate an animation for
- * @param optionalParams parameters to add to the error logging
- *
- * @remarks use {@linkcode useDefaultAnim} to use a default animation
- */
-function logMissingMoveAnim(moveId: MoveId, ...optionalParams: any[]) {
-  const moveName = animationFileName(moveId);
-  console.warn(`Could not load animation file for move '${moveName}'`, ...optionalParams);
-}
-
-/**
- * Fetches animation configs to be used in a Mystery Encounter
- * @param encounterAnim one or more animations to fetch
- */
-export async function initEncounterAnims(encounterAnim: EncounterAnim | EncounterAnim[]): Promise<void> {
-  const anims = Array.isArray(encounterAnim) ? encounterAnim : [encounterAnim];
-  const encounterAnimNames = getEnumKeys(EncounterAnim);
-  const encounterAnimFetches: Promise<Map<EncounterAnim, AnimConfig>>[] = [];
-  for (const anim of anims) {
-    if (encounterAnims.has(anim) && !isNullOrUndefined(encounterAnims.get(anim))) {
-      continue;
-    }
-    encounterAnimFetches.push(
-      globalScene
-        .cachedFetch(`./battle-anims/encounter-${encounterAnimNames[anim].toLowerCase().replace(/\_/g, "-")}.json`)
-        .then((response) => response.json())
-        .then((cas) => encounterAnims.set(anim, new AnimConfig(cas))),
-    );
-  }
-  await Promise.allSettled(encounterAnimFetches);
-}
-
-export function initMoveChargeAnim(chargeAnim: ChargeAnim): Promise<void> {
-  return new Promise((resolve) => {
-    if (chargeAnims.has(chargeAnim)) {
-      if (chargeAnims.get(chargeAnim) !== null) {
-        resolve();
-      } else {
-        const loadedCheckTimer = setInterval(() => {
-          if (chargeAnims.get(chargeAnim) !== null) {
-            clearInterval(loadedCheckTimer);
-            resolve();
-          }
-        }, 50);
-      }
-    } else {
-      chargeAnims.set(chargeAnim, null);
-      globalScene
-        .cachedFetch(`./battle-anims/${ChargeAnim[chargeAnim].toLowerCase().replace(/\_/g, "-")}.json`)
-        .then((response) => response.json())
-        .then((ca) => {
-          if (Array.isArray(ca)) {
-            populateMoveChargeAnim(chargeAnim, ca[0]);
-            populateMoveChargeAnim(chargeAnim, ca[1]);
-          } else {
-            populateMoveChargeAnim(chargeAnim, ca);
-          }
-          resolve();
-        });
-    }
-  });
-}
-
-function populateMoveAnim(moveId: MoveId, animSource: any): void {
-  const moveAnim = new AnimConfig(animSource);
-  if (moveAnims.get(moveId) === null) {
-    moveAnims.set(moveId, moveAnim);
-    return;
-  }
-  moveAnims.set(moveId, [moveAnims.get(moveId) as AnimConfig, moveAnim]);
-}
-
-function populateMoveChargeAnim(chargeAnim: ChargeAnim, animSource: any) {
-  const moveChargeAnim = new AnimConfig(animSource);
-  if (chargeAnims.get(chargeAnim) === null) {
-    chargeAnims.set(chargeAnim, moveChargeAnim);
-    return;
-  }
-  chargeAnims.set(chargeAnim, [chargeAnims.get(chargeAnim) as AnimConfig, moveChargeAnim]);
-}
-
-export function loadCommonAnimAssets(startLoad?: boolean): Promise<void> {
-  return new Promise((resolve) => {
-    loadAnimAssets(Array.from(commonAnims.values()), startLoad).then(() => resolve());
-  });
-}
-
-/**
- * Loads encounter animation assets to scene
- * MUST be called after {@linkcode initEncounterAnims()} to load all required animations properly
- * @param startLoad
- */
-export async function loadEncounterAnimAssets(startLoad?: boolean): Promise<void> {
-  await loadAnimAssets(Array.from(encounterAnims.values()), startLoad);
-}
-
-export function loadMoveAnimAssets(moveIds: MoveId[], startLoad?: boolean): Promise<void> {
-  return new Promise((resolve) => {
-    const moveAnimations = moveIds.map((m) => moveAnims.get(m) as AnimConfig).flat();
-    for (const moveId of moveIds) {
-      const chargeAnimSource = allMoves[moveId].isChargingMove()
-        ? allMoves[moveId]
-        : (allMoves[moveId].getAttrs(DelayedAttackAttr)[0] ?? allMoves[moveId].getAttrs(BeakBlastHeaderAttr)[0]);
-      if (chargeAnimSource) {
-        const moveChargeAnims = chargeAnims.get(chargeAnimSource.chargeAnim);
-        moveAnimations.push(moveChargeAnims instanceof AnimConfig ? moveChargeAnims : moveChargeAnims![0]); // TODO: is the bang correct?
-        if (Array.isArray(moveChargeAnims)) {
-          moveAnimations.push(moveChargeAnims[1]);
-        }
-      }
-    }
-    loadAnimAssets(moveAnimations, startLoad).then(() => resolve());
-  });
-}
-
-function loadAnimAssets(anims: AnimConfig[], startLoad?: boolean): Promise<void> {
-  return new Promise((resolve) => {
-    const backgrounds = new Set<string>();
-    const sounds = new Set<string>();
-    for (const a of anims) {
-      if (!a.frames?.length) {
-        continue;
-      }
-      const animSounds = a.getSoundResourceNames();
-      for (const ms of animSounds) {
-        sounds.add(ms);
-      }
-      const animBackgrounds = a.getBackgroundResourceNames();
-      for (const abg of animBackgrounds) {
-        backgrounds.add(abg);
-      }
-      if (a.graphic) {
-        globalScene.loadSpritesheet(a.graphic, "battle_anims", 96);
-      }
-    }
-    for (const bg of backgrounds) {
-      globalScene.loadImage(bg, "battle_anims");
-    }
-    for (const s of sounds) {
-      globalScene.loadSe(s, "battle_anims", s);
-    }
-    if (startLoad) {
-      globalScene.load.once(Phaser.Loader.Events.COMPLETE, () => resolve());
-      if (!globalScene.load.isLoading()) {
-        globalScene.load.start();
-      }
-    } else {
-      resolve();
-    }
-  });
-}
+//#region Types
 
 interface GraphicFrameData {
   x: number;
@@ -691,63 +20,20 @@ interface GraphicFrameData {
   angle: number;
 }
 
+interface SpriteCache {
+  [key: number]: Phaser.GameObjects.Sprite[];
+}
+
+//#endregion
+//#region Constants
+
 const userFocusX = 106;
 const userFocusY = 148 - 32;
 const targetFocusX = 234;
 const targetFocusY = 84 - 32;
 
-function transformPoint(
-  x1: number,
-  y1: number,
-  x2: number,
-  y2: number,
-  x3: number,
-  y3: number,
-  x4: number,
-  y4: number,
-  px: number,
-  py: number,
-): [x: number, y: number] {
-  const yIntersect = yAxisIntersect(x1, y1, x2, y2, px, py);
-  return repositionY(x3, y3, x4, y4, yIntersect[0], yIntersect[1]);
-}
-
-function yAxisIntersect(
-  x1: number,
-  y1: number,
-  x2: number,
-  y2: number,
-  px: number,
-  py: number,
-): [x: number, y: number] {
-  const dx = x2 - x1;
-  const dy = y2 - y1;
-  const x = dx === 0 ? 0 : (px - x1) / dx;
-  const y = dy === 0 ? 0 : (py - y1) / dy;
-  return [x, y];
-}
-
-function repositionY(x1: number, y1: number, x2: number, y2: number, tx: number, ty: number): [x: number, y: number] {
-  const dx = x2 - x1;
-  const dy = y2 - y1;
-  const x = x1 + tx * dx;
-  const y = y1 + ty * dy;
-  return [x, y];
-}
-
-function isReversed(src1: number, src2: number, dst1: number, dst2: number) {
-  if (src1 === src2) {
-    return false;
-  }
-  if (src1 < src2) {
-    return dst1 > dst2;
-  }
-  return dst1 < dst2;
-}
-
-interface SpriteCache {
-  [key: number]: Phaser.GameObjects.Sprite[];
-}
+//#endregion
+//#region Export
 
 export abstract class BattleAnim {
   public user: Pokemon | null;
@@ -797,7 +83,8 @@ export abstract class BattleAnim {
     const user = !isOppAnim ? this.user : this.target;
     const target = !isOppAnim ? this.target : this.user;
 
-    const targetSubstitute = onSubstitute && user !== target ? target!.getTag(SubstituteTag) : null;
+    const targetSubstitute =
+      onSubstitute && user !== target ? target!.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE) : null;
 
     const userInitialX = user!.x; // TODO: is this bang correct?
     const userInitialY = user!.y; // TODO: is this bang correct?
@@ -868,7 +155,8 @@ export abstract class BattleAnim {
       return;
     }
 
-    const targetSubstitute = !!onSubstitute && user !== target ? target.getTag(SubstituteTag) : null;
+    const targetSubstitute =
+      !!onSubstitute && user !== target ? target.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE) : null;
 
     const userSprite = user.getSprite();
     const targetSprite = targetSubstitute?.sprite ?? target.getSprite();
@@ -1332,286 +620,56 @@ export abstract class BattleAnim {
   }
 }
 
-export class CommonBattleAnim extends BattleAnim {
-  public commonAnim: CommonAnim | null;
+//#endregion
+//#region Helpers
 
-  constructor(commonAnim: CommonAnim | null, user: Pokemon, target?: Pokemon, playOnEmptyField: boolean = false) {
-    super(user, target || user, playOnEmptyField);
+function transformPoint(
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  x3: number,
+  y3: number,
+  x4: number,
+  y4: number,
+  px: number,
+  py: number,
+): [x: number, y: number] {
+  const yIntersect = yAxisIntersect(x1, y1, x2, y2, px, py);
+  return repositionY(x3, y3, x4, y4, yIntersect[0], yIntersect[1]);
+}
 
-    this.commonAnim = commonAnim;
-  }
+function yAxisIntersect(
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  px: number,
+  py: number,
+): [x: number, y: number] {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const x = dx === 0 ? 0 : (px - x1) / dx;
+  const y = dy === 0 ? 0 : (py - y1) / dy;
+  return [x, y];
+}
 
-  getAnim(): AnimConfig | null {
-    return this.commonAnim ? (commonAnims.get(this.commonAnim) ?? null) : null;
-  }
+function repositionY(x1: number, y1: number, x2: number, y2: number, tx: number, ty: number): [x: number, y: number] {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const x = x1 + tx * dx;
+  const y = y1 + ty * dy;
+  return [x, y];
+}
 
-  isOppAnim(): boolean {
+function isReversed(src1: number, src2: number, dst1: number, dst2: number) {
+  if (src1 === src2) {
     return false;
   }
+  if (src1 < src2) {
+    return dst1 > dst2;
+  }
+  return dst1 < dst2;
 }
 
-export class MoveAnim extends BattleAnim {
-  public moveId: MoveId;
-
-  constructor(moveId: MoveId, user: Pokemon, targetIndex: BattlerIndex, playOnEmptyField: boolean = false) {
-    super(user, globalScene.getFieldPokemonByBattlerIndex(targetIndex), playOnEmptyField);
-
-    this.moveId = moveId;
-  }
-
-  getAnim(): AnimConfig {
-    return moveAnims.get(this.moveId) instanceof AnimConfig
-      ? (moveAnims.get(this.moveId) as AnimConfig)
-      : (moveAnims.get(this.moveId)?.[this.user?.isPlayer() ? 0 : 1] as AnimConfig);
-  }
-
-  isOppAnim(): boolean {
-    return !this.user?.isPlayer() && Array.isArray(moveAnims.get(this.moveId));
-  }
-
-  protected override isHideUser(): boolean {
-    return allMoves[this.moveId].hasFlag(MoveFlags.HIDE_USER);
-  }
-
-  protected override isHideTarget(): boolean {
-    return allMoves[this.moveId].hasFlag(MoveFlags.HIDE_TARGET);
-  }
-}
-
-export class MoveChargeAnim extends MoveAnim {
-  private chargeAnim: ChargeAnim;
-
-  /**
-   * **Note:** The default for {@linkcode targetIndex} being {@linkcode BattlerIndex.PLAYER} is due to `MoveChargeAnim` originally not supporting a target argument.
-   */
-  constructor(chargeAnim: ChargeAnim, moveId: MoveId, user: Pokemon, targetIndex: BattlerIndex = BattlerIndex.PLAYER) {
-    super(moveId, user, targetIndex);
-
-    this.chargeAnim = chargeAnim;
-  }
-
-  override isOppAnim(): boolean {
-    return !this.user?.isPlayer() && Array.isArray(chargeAnims.get(this.chargeAnim));
-  }
-
-  override getAnim(): AnimConfig {
-    return chargeAnims.get(this.chargeAnim) instanceof AnimConfig
-      ? (chargeAnims.get(this.chargeAnim) as AnimConfig)
-      : (chargeAnims.get(this.chargeAnim)?.[this.user?.isPlayer() ? 0 : 1] as AnimConfig);
-  }
-}
-
-export class EncounterBattleAnim extends BattleAnim {
-  public encounterAnim: EncounterAnim;
-  public oppAnim: boolean;
-
-  constructor(encounterAnim: EncounterAnim, user: Pokemon, target?: Pokemon, oppAnim?: boolean) {
-    super(user, target ?? user, true);
-
-    this.encounterAnim = encounterAnim;
-    this.oppAnim = oppAnim ?? false;
-  }
-
-  getAnim(): AnimConfig | null {
-    return encounterAnims.get(this.encounterAnim) ?? null;
-  }
-
-  isOppAnim(): boolean {
-    return this.oppAnim;
-  }
-}
-
-export async function populateAnims() {
-  const commonAnimNames = getEnumKeys(CommonAnim).map((k) => k.toLowerCase());
-  const commonAnimMatchNames = commonAnimNames.map((k) => k.replace(/\_/g, ""));
-  const commonAnimIds = getEnumValues(CommonAnim) as CommonAnim[];
-  const chargeAnimNames = getEnumKeys(ChargeAnim).map((k) => k.toLowerCase());
-  const chargeAnimMatchNames = chargeAnimNames.map((k) => k.replace(/\_/g, " "));
-  const chargeAnimIds = getEnumValues(ChargeAnim) as ChargeAnim[];
-  const commonNamePattern = /name: (?:Common:)?(Opp )?(.*)/;
-  const moveNameToId = {};
-  for (const move of getEnumValues(MoveId).slice(1)) {
-    const moveName = MoveId[move].toUpperCase().replace(/\_/g, "");
-    moveNameToId[moveName] = move;
-  }
-
-  const seNames: string[] = []; //(await fs.readdir('./public/audio/se/battle_anims/')).map(se => se.toString());
-
-  const animsData: any[] = []; //battleAnimRawData.split('!ruby/array:PBAnimation').slice(1); // TODO: add a proper type
-  for (let a = 0; a < animsData.length; a++) {
-    const fields = animsData[a].split("@").slice(1);
-
-    const nameField = fields.find((f) => f.startsWith("name: "));
-
-    let isOppMove: boolean | undefined;
-    let commonAnimId: CommonAnim | undefined;
-    let chargeAnimId: ChargeAnim | undefined;
-    if (!nameField.startsWith("name: Move:") && !(isOppMove = nameField.startsWith("name: OppMove:"))) {
-      const nameMatch = commonNamePattern.exec(nameField)!; // TODO: is this bang correct?
-      const name = nameMatch[2].toLowerCase();
-      if (commonAnimMatchNames.indexOf(name) > -1) {
-        commonAnimId = commonAnimIds[commonAnimMatchNames.indexOf(name)];
-      } else if (chargeAnimMatchNames.indexOf(name) > -1) {
-        isOppMove = nameField.startsWith("name: Opp ");
-        chargeAnimId = chargeAnimIds[chargeAnimMatchNames.indexOf(name)];
-      }
-    }
-    const nameIndex = nameField.indexOf(":", 5) + 1;
-    const animName = nameField.slice(nameIndex, nameField.indexOf("\n", nameIndex));
-    if (!moveNameToId.hasOwnProperty(animName) && !commonAnimId && !chargeAnimId) {
-      continue;
-    }
-    const anim = commonAnimId || chargeAnimId ? new AnimConfig() : new AnimConfig();
-    if (anim instanceof AnimConfig) {
-      (anim as AnimConfig).id = moveNameToId[animName];
-    }
-    if (commonAnimId) {
-      commonAnims.set(commonAnimId, anim);
-    } else if (chargeAnimId) {
-      chargeAnims.set(chargeAnimId, !isOppMove ? anim : [chargeAnims.get(chargeAnimId) as AnimConfig, anim]);
-    } else {
-      moveAnims.set(
-        moveNameToId[animName],
-        !isOppMove ? (anim as AnimConfig) : [moveAnims.get(moveNameToId[animName]) as AnimConfig, anim as AnimConfig],
-      );
-    }
-    for (let f = 0; f < fields.length; f++) {
-      const field = fields[f];
-      const fieldName = field.slice(0, field.indexOf(":"));
-      const fieldData = field.slice(fieldName.length + 1, field.lastIndexOf("\n")).trim();
-      switch (fieldName) {
-        case "array":
-          const framesData = fieldData.split("  - - - ").slice(1);
-          for (let fd = 0; fd < framesData.length; fd++) {
-            anim.frames.push([]);
-            const frameData = framesData[fd];
-            const focusFramesData = frameData.split("    - - ");
-            for (let tf = 0; tf < focusFramesData.length; tf++) {
-              const values = focusFramesData[tf].replace(/      \- /g, "").split("\n");
-              const targetFrame = new AnimFrame(
-                parseFloat(values[0]),
-                parseFloat(values[1]),
-                parseFloat(values[2]),
-                parseFloat(values[11]),
-                parseFloat(values[3]),
-                parseInt(values[4]) === 1,
-                parseInt(values[6]) === 1,
-                parseInt(values[5]),
-                parseInt(values[7]),
-                parseInt(values[8]),
-                parseInt(values[12]),
-                parseInt(values[13]),
-                parseInt(values[14]),
-                parseInt(values[15]),
-                parseInt(values[16]),
-                parseInt(values[17]),
-                parseInt(values[18]),
-                parseInt(values[19]),
-                parseInt(values[21]),
-                parseInt(values[22]),
-                parseInt(values[23]),
-                parseInt(values[24]),
-                parseInt(values[20]) === 1,
-                parseInt(values[25]),
-                parseInt(values[26]) as AnimFocus,
-              );
-              anim.frames[fd].push(targetFrame);
-            }
-          }
-          break;
-        case "graphic":
-          const graphic = fieldData !== "''" ? fieldData : "";
-          anim.graphic = graphic.indexOf(".") > -1 ? graphic.slice(0, fieldData.indexOf(".")) : graphic;
-          break;
-        case "timing":
-          const timingEntries = fieldData.split("- !ruby/object:PBAnimTiming ").slice(1);
-          for (let t = 0; t < timingEntries.length; t++) {
-            const timingData = timingEntries[t]
-              .replace(/\n/g, " ")
-              .replace(/[ ]{2,}/g, " ")
-              .replace(/[a-z]+: ! '', /gi, "")
-              .replace(/name: (.*?),/, 'name: "$1",')
-              .replace(
-                /flashColor: !ruby\/object:Color { alpha: ([\d\.]+), blue: ([\d\.]+), green: ([\d\.]+), red: ([\d\.]+)}/,
-                "flashRed: $4, flashGreen: $3, flashBlue: $2, flashAlpha: $1",
-              );
-            const frameIndex = parseInt(/frame: (\d+)/.exec(timingData)![1]); // TODO: is the bang correct?
-            let resourceName = /name: "(.*?)"/.exec(timingData)![1].replace("''", ""); // TODO: is the bang correct?
-            const timingType = parseInt(/timingType: (\d)/.exec(timingData)![1]); // TODO: is the bang correct?
-            let timedEvent: AnimTimedEvent | undefined;
-            switch (timingType) {
-              case 0:
-                if (resourceName && resourceName.indexOf(".") === -1) {
-                  let ext: string | undefined;
-                  ["wav", "mp3", "m4a"].every((e) => {
-                    if (seNames.indexOf(`${resourceName}.${e}`) > -1) {
-                      ext = e;
-                      return false;
-                    }
-                    return true;
-                  });
-                  if (!ext) {
-                    ext = ".wav";
-                  }
-                  resourceName += `.${ext}`;
-                }
-                timedEvent = new AnimTimedSoundEvent(frameIndex, resourceName);
-                break;
-              case 1:
-                timedEvent = new AnimTimedAddBgEvent(frameIndex, resourceName.slice(0, resourceName.indexOf(".")));
-                break;
-              case 2:
-                timedEvent = new AnimTimedUpdateBgEvent(frameIndex, resourceName.slice(0, resourceName.indexOf(".")));
-                break;
-            }
-            if (!timedEvent) {
-              continue;
-            }
-            const propPattern = /([a-z]+): (.*?)(?:,|\})/gi;
-            let propMatch: RegExpExecArray;
-            while ((propMatch = propPattern.exec(timingData)!)) {
-              // TODO: is this bang correct?
-              const prop = propMatch[1];
-              let value: any = propMatch[2];
-              switch (prop) {
-                case "bgX":
-                case "bgY":
-                  value = parseFloat(value);
-                  break;
-                case "volume":
-                case "pitch":
-                case "opacity":
-                case "colorRed":
-                case "colorGreen":
-                case "colorBlue":
-                case "colorAlpha":
-                case "duration":
-                case "flashScope":
-                case "flashRed":
-                case "flashGreen":
-                case "flashBlue":
-                case "flashAlpha":
-                case "flashDuration":
-                  value = parseInt(value);
-                  break;
-              }
-              if (timedEvent.hasOwnProperty(prop)) {
-                timedEvent[prop] = value;
-              }
-            }
-            if (!anim.frameTimedEvents.has(frameIndex)) {
-              anim.frameTimedEvents.set(frameIndex, []);
-            }
-            anim.frameTimedEvents.get(frameIndex)!.push(timedEvent); // TODO: is this bang correct?
-          }
-          break;
-        case "position":
-          anim.position = parseInt(fieldData);
-          break;
-        case "hue":
-          anim.hue = parseInt(fieldData);
-          break;
-      }
-    }
-  }
-}
+//#endregion

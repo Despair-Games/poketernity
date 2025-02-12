@@ -5,7 +5,7 @@ import UiHandler from "./ui-handler";
 import { Button } from "#enums/buttons";
 import { addWindow } from "./ui-theme";
 import { WindowVariant } from "#enums/window-variant";
-import type { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
+import { type MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
 import { fixedNumber, isNullOrUndefined } from "#app/utils";

@@ -9,6 +9,7 @@ import { BattleCommand } from "#enums/battle-command";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { FieldPhase } from "./abstract-field-phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Phase for determining an enemy AI's action for the next turn.
@@ -23,6 +24,8 @@ import { FieldPhase } from "./abstract-field-phase";
  * @extends FieldPhase
  */
 export class EnemyCommandPhase extends FieldPhase {
+  override readonly id = PhaseId.ENEMY_COMMAND;
+
   protected readonly fieldIndex: number;
   protected skipTurn: boolean = false;
 

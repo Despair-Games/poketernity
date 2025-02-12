@@ -62,7 +62,7 @@ describe("Moves - Glaive Rush", () => {
   });
 
   it("interacts properly with multi-lens", async () => {
-    game.override.startingHeldItems([{ name: "MULTI_LENS", count: 2 }]).enemyMoveset([MoveId.AVALANCHE]);
+    game.override.ability(Abilities.PARENTAL_BOND).enemyMoveset([MoveId.AVALANCHE]);
     await game.classicMode.startBattle();
 
     const player = game.scene.getPlayerPokemon()!;

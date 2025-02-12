@@ -56,6 +56,7 @@ export enum BattlerTagType {
   ALWAYS_CRIT,
   IGNORE_ACCURACY,
   BYPASS_SLEEP,
+  /** Aka `Grounded` */
   IGNORE_FLYING,
   SALT_CURED,
   CURSED,

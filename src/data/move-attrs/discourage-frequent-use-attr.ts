@@ -13,7 +13,7 @@ export class DiscourageFrequentUseAttr extends MoveAttr {
     const lastMoves = user.getLastXMoves(4);
     console.log(lastMoves);
     for (let m = 0; m < lastMoves.length; m++) {
-      if (lastMoves[m].moveId === move.id) {
+      if (lastMoves[m].move.id === move.id) {
         return (4 - (m + 1)) * -10;
       }
     }

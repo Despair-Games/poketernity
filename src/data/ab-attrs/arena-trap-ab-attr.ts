@@ -5,6 +5,7 @@ import { Abilities } from "#enums/abilities";
 import { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";
 import { AbAttr } from "./ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 type ArenaTrapCondition = (user: Pokemon, target: Pokemon) => boolean;
 
@@ -18,6 +19,7 @@ export class ArenaTrapAbAttr extends AbAttr {
 
   constructor(condition: ArenaTrapCondition) {
     super(false);
+    this._flags.add(AbAttrFlag.ARENA_TRAP);
     this.arenaTrapCondition = condition;
   }
   /**

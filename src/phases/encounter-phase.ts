@@ -1,16 +1,16 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { NewBiomeEncounterPhase } from "#app/phases/new-biome-encounter-phase";
-import type { NextEncounterPhase } from "#app/phases/next-encounter-phase";
+import { type NewBiomeEncounterPhase } from "#app/phases/new-biome-encounter-phase";
+import { type NextEncounterPhase } from "#app/phases/next-encounter-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
 import { BattlerIndex } from "#enums/battler-index";
 import { BattleType } from "#enums/battle-type";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
-import { SyncEncounterNatureAbAttr } from "#app/data/ab-attrs/sync-encounter-nature-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { initEncounterAnims, loadEncounterAnimAssets } from "#app/data/battle-anims";
+import { loadEncounterAnimAssets } from "#app/utils/anim-utils";
+import { initEncounterAnims } from "#app/data/init-encounter-anims";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import { ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants";
 import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
@@ -35,7 +35,6 @@ import { ModifierPoolType } from "#enums/modifier-pool-type";
 import Overrides from "#app/overrides";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { CheckSwitchPhase } from "#app/phases/check-switch-phase";
-import { GameOverPhase } from "#app/phases/game-over-phase";
 import { PostSummonPhase } from "#app/phases/post-summon-phase";
 import { ReturnPhase } from "#app/phases/return-phase";
 import { ScanIvsPhase } from "#app/phases/scan-ivs-phase";
@@ -54,6 +53,8 @@ import { PlayerGender } from "#enums/player-gender";
 import { Species } from "#enums/species";
 import i18next from "i18next";
 import { MysteryEncounterPhase } from "./mystery-encounter-phases/mystery-encounter-phase";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Starts the first encounter (wave 1) of a new run. Subsequent encounters are handled by
@@ -63,6 +64,9 @@ import { MysteryEncounterPhase } from "./mystery-encounter-phases/mystery-encoun
  * @extends BattlePhase
  */
 export class EncounterPhase extends BattlePhase {
+  /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode EncounterPhase} is extended by other phases */
+  override readonly id: PhaseId = PhaseId.ENCOUNTER;
+
   private readonly loaded: boolean;
 
   constructor(loaded: boolean = false) {
@@ -86,7 +90,7 @@ export class EncounterPhase extends BattlePhase {
 
     // Failsafe if players somehow skip floor 200 in classic mode
     if (gameMode.isClassic && waveIndex > 200) {
-      globalScene.unshiftPhase(new GameOverPhase());
+      globalScene.gameOver({ clearPhaseQueue: false });
     }
 
     const loadEnemyAssets: Promise<void>[] = [];
@@ -158,7 +162,7 @@ export class EncounterPhase extends BattlePhase {
             .slice(0, !double ? 1 : 2)
             .reverse()
             .forEach((playerPokemon) => {
-              applyAbAttrs(SyncEncounterNatureAbAttr, playerPokemon, false, currentBattle.enemyParty[e]);
+              applyAbAttrs(AbAttrFlag.SYNC_ENCOUNTER_NATURE, playerPokemon, false, currentBattle.enemyParty[e]);
             });
         }
       }

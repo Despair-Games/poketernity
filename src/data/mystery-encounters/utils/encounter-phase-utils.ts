@@ -6,19 +6,18 @@ import { BiomePoolTier } from "#enums/biome-pool-tier";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
 import { ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET, ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import { type PlayerPokemon, type Pokemon } from "#app/field/pokemon";
+import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import type { AiType } from "#enums/ai-type";
-import type { Pokemon } from "#app/field/pokemon";
-import { PokemonSummonData } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { FieldPosition } from "#enums/field-position";
 import type { CustomModifierSettings, ModifierType } from "#app/modifier/modifier-type";
 import {
   ModifierTypeGenerator,
   ModifierTypeOption,
-  modifierTypes,
   regenerateModifierPoolThresholds,
 } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { MysteryEncounterBattlePhase } from "#app/phases/mystery-encounter-phases/battle-phase";
 import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
@@ -40,7 +39,8 @@ import { TrainerVariant } from "#enums/trainer-variant";
 import type { Gender } from "#enums/gender";
 import type { Nature } from "#enums/nature";
 import type { MoveId } from "#enums/move-id";
-import { initMoveAnim, loadMoveAnimAssets } from "#app/data/battle-anims";
+import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
+import { initMoveAnim } from "#app/data/init-move-anim";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { Status } from "#app/data/status-effect";
 import type { TrainerConfig } from "#app/data/trainer-config";
@@ -50,17 +50,16 @@ import type { IEggOptions } from "#app/data/egg";
 import { Egg } from "#app/data/egg";
 import type { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import type HeldModifierConfig from "#app/interfaces/held-modifier-config";
-import { MovePhase } from "#app/phases/move-phase";
 import { EggLapsePhase } from "#app/phases/egg-lapse-phase";
 import { TrainerVictoryPhase } from "#app/phases/trainer-victory-phase";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
-import { GameOverPhase } from "#app/phases/game-over-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { PartyExpPhase } from "#app/phases/party-exp-phase";
 import type { Variant } from "#app/data/variant";
 import { StatusEffect } from "#enums/status-effect";
 import { globalScene } from "#app/global-scene";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Animates exclamation sprite over trainer's head at start of encounter
@@ -737,7 +736,7 @@ export function setEncounterRewards(
     if (customShopRewards) {
       globalScene.unshiftPhase(new SelectModifierPhase({ customModifierSettings: customShopRewards }));
     } else {
-      globalScene.tryRemovePhase((p) => p.isSelectModifierPhase());
+      globalScene.tryRemovePhase((p) => p.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER));
     }
 
     if (eggRewards) {
@@ -825,8 +824,7 @@ export function handleMysteryEncounterVictory(addHealPhase: boolean = false, doN
   const allowedPkm = globalScene.getPlayerParty().filter((pkm) => pkm.isAllowedInBattle());
 
   if (allowedPkm.length === 0) {
-    globalScene.clearPhaseQueue();
-    globalScene.unshiftPhase(new GameOverPhase());
+    globalScene.gameOver({ clearPhaseQueue: true });
     return;
   }
 
@@ -868,8 +866,7 @@ export function handleMysteryEncounterBattleFailed(addHealPhase: boolean = false
   const allowedPkm = globalScene.getPlayerParty().filter((pkm) => pkm.isAllowedInBattle());
 
   if (allowedPkm.length === 0) {
-    globalScene.clearPhaseQueue();
-    globalScene.unshiftPhase(new GameOverPhase());
+    globalScene.gameOver({ clearPhaseQueue: true });
     return;
   }
 
@@ -888,59 +885,6 @@ export function handleMysteryEncounterBattleFailed(addHealPhase: boolean = false
     // Only lapse eggs once for multi-battle encounters
     globalScene.pushPhase(new EggLapsePhase());
   }
-}
-
-/**
- * Function used to bring in a ME's intro visuals
- * @param hide - If true, performs ease out and hide visuals. If false, eases in visuals. Defaults to true
- * @param destroy - If true, will destroy visuals ONLY ON HIDE TRANSITION. Does nothing on show. Defaults to true
- * @param duration - Delay in milliseconds (default 750)
- */
-export function transitionMysteryEncounterIntroVisuals(
-  hide: boolean = true,
-  destroy: boolean = true,
-  duration: number = 750,
-): Promise<boolean> {
-  return new Promise((resolve) => {
-    const introVisuals = globalScene.currentBattle.mysteryEncounter!.introVisuals;
-    const enemyPokemon = globalScene.getEnemyField();
-    if (enemyPokemon) {
-      globalScene.currentBattle.enemyParty = [];
-    }
-    if (introVisuals) {
-      if (!hide) {
-        // Make sure visuals are in proper state for showing
-        introVisuals.setVisible(true);
-        introVisuals.x = 244;
-        introVisuals.y = 60;
-        introVisuals.alpha = 0;
-      }
-
-      // Transition
-      globalScene.tweens.add({
-        targets: [introVisuals, enemyPokemon],
-        x: `${hide ? "+" : "-"}=16`,
-        y: `${hide ? "-" : "+"}=16`,
-        alpha: hide ? 0 : 1,
-        ease: "Sine.easeInOut",
-        duration,
-        onComplete: () => {
-          if (hide && destroy) {
-            globalScene.field.remove(introVisuals, true);
-
-            enemyPokemon.forEach((pokemon) => {
-              globalScene.field.remove(pokemon, true);
-            });
-
-            globalScene.currentBattle.mysteryEncounter!.introVisuals = undefined;
-          }
-          resolve(true);
-        },
-      });
-    } else {
-      resolve(true);
-    }
-  });
 }
 
 /**
@@ -975,7 +919,14 @@ export function handleMysteryEncounterBattleStartEffects() {
       } else {
         source = globalScene.getEnemyField()[0];
       }
-      globalScene.pushPhase(new MovePhase(source, effect.targets, effect.move, effect.followUp, effect.ignorePp));
+      globalScene.useMove({
+        pokemon: source,
+        targets: effect.targets,
+        move: effect.move,
+        followUp: effect.followUp,
+        ignorePp: effect.ignorePp,
+        when: "defer",
+      });
     });
 
     // Pseudo turn end phase to reset flinch states, Endure, etc.

@@ -7,7 +7,8 @@ import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import Trainer from "#app/field/trainer";
 import { getGameMode } from "#app/game-mode";
 import { GameModes } from "#enums/game-modes";
-import { ModifierTypeOption, modifierTypes } from "#app/modifier/modifier-type";
+import { ModifierTypeOption } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import overrides from "#app/overrides";
 import { CheckSwitchPhase } from "#app/phases/check-switch-phase";
 import { CommandPhase } from "#app/phases/command-phase";
@@ -19,7 +20,7 @@ import { MovePhase } from "#app/phases/move-phase";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
-import type { SelectTargetPhase } from "#app/phases/select-target-phase";
+import { type SelectTargetPhase } from "#app/phases/select-target-phase";
 import { TitlePhase } from "#app/phases/title-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
@@ -110,7 +111,7 @@ export class GameManager {
 
       // This part, in particular, must not be run before the PhaseInterceptor has been initialized.
       this.scene.pushPhase(new LoginPhase());
-      this.scene.pushPhase(new TitlePhase());
+      this.scene.toTitleScreen();
       this.scene.shiftPhase();
 
       this.gameWrapper.scene = this.scene;

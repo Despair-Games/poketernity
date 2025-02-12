@@ -1,6 +1,7 @@
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { Pokemon } from "#app/field/pokemon";
-import { type Move, applyMoveAttrs } from "#app/data/move";
+import { type Move } from "#app/data/move";
+import { applyMoveAttrs } from "#app/utils/move-utils";
 import { AddBattlerTagAttr } from "./add-battler-tag-attr";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
