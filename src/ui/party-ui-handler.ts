@@ -1153,7 +1153,7 @@ export default class PartyUiHandler extends MessageUiHandler {
         true,
       );
     } else {
-      this.showText(i18next.t("partyUihandler:cannotReleasePokemon"), null, () => this.showText("", 0), null, true);
+      this.showText(i18next.t("partyUiHandler:cannotReleasePokemon"), null, () => this.showText("", 0), null, true);
     }
   }
 
