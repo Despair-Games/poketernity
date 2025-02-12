@@ -68,20 +68,31 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
   }
 
   /**
-   * Calculates score based on raw score value from {@linkcode getRawEffectScore} and effect
-   * chance from {@linkcode getMoveChance}. If the product of the raw score and effect chance
-   * is equal to `B + D`, where `B` is the nearest integer less than the product and
-   * `D` is a decimal value in the interval `[0, 1)`, then:
-   * - The chance of the final score being `B` is `(1-D) * 100 %`
-   * - The chance of the final score being `B + 1` is `D * 100 %`
+   * Calculates effect score, factoring in this attribute's {@linkcode getRawEffectScore | raw effect score}
+   * and {@linkcode getMoveChance | chance to apply}.
    */
   public override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
-    /** @todo this chance calculation may prematurely reveal abilities */
+    /**
+     * The attribute's chance to apply its effect
+     * @todo this chance calculation may prematurely reveal abilities
+     */
     const chance = this.getMoveChance(user, target, move);
+    /** The attribute's effect score, assuming its effect always applies */
     const rawScore = this.getRawEffectScore(user, target, move);
 
+    /**
+     * The attribute's effect score after factoring in effect chance.
+     * This may be a decimal number; the final output is either
+     * `floor(chanceWeightedScore)` or `floor(chanceWeightedScore) + 1`
+     */
     const chanceWeightedScore = chance * rawScore;
+    /** The minimum integer score this function can return */
     const minScore = Math.floor(chanceWeightedScore);
+    /**
+     * The chance to return `minScore + 1` instead of `minScore`.
+     * This is the decimal component of `chanceWeightedScore` scaled
+     * up to a percent value, then rounded down.
+     */
     const tierUpChance = Math.floor((chanceWeightedScore % 1) * 100);
 
     return this.getRandomScore(user, tierUpChance, minScore + 1, minScore);

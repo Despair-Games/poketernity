@@ -5655,9 +5655,9 @@ export class EnemyPokemon extends Pokemon {
     const isKnockOut = attackScore >= 4;
     const isFail = attackScore === -1 || !meetsConditions;
 
-    const critBonus = isFail ? 0 : this.getCriticalHitBonus(opponent, move, attackScore);
+    const critBonus = this.getCriticalHitBonus(opponent, move, attackScore);
 
-    return (isFail ? -5 : attackScore) + critBonus + move.getEffectScore(this, opponent, isKnockOut, isFail);
+    return (isFail ? -5 : attackScore + critBonus) + move.getEffectScore(this, opponent, isKnockOut, isFail);
   }
 
   /**
