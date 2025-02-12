@@ -42,6 +42,7 @@ import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilte
 import { PartyFilterAll } from "#app/utils/party-ui-utils";
 import { FilterAllMoves } from "#app/utils/move-utils";
 import { GAME_WIDTH } from "#app/ui-constants";
+import { CommonColor, ShadowColor } from "#enums/color";
 import { type SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { PhaseId } from "#enums/phase-id";
 
@@ -1066,8 +1067,8 @@ export default class PartyUiHandler extends MessageUiHandler {
       const yCoord = -6 - 16 * o;
       const optionText = addBBCodeTextObject(0, yCoord - 16, optionName, TextStyle.WINDOW, { maxLines: 1 });
       if (altText) {
-        optionText.setColor("#40c8f8");
-        optionText.setShadowColor("#006090");
+        optionText.setColor(CommonColor.LIGHT_BLUE);
+        optionText.setShadowColor(ShadowColor.LIGHT_BLUE);
       }
       optionText.setOrigin(0, 0);
 

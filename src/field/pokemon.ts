@@ -1312,8 +1312,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.getMaxHp() - this.hp;
   }
 
-  getHpRatio(precise: boolean = false): number {
-    return precise ? this.hp / this.getMaxHp() : Math.round((this.hp / this.getMaxHp()) * 100) / 100;
+  /**
+   * Helper function that returns a Pokemon's unrounded HP ratio
+   * @returns the Pokemon's current HP divided by its max HP
+   */
+  getHpRatio(): number {
+    return this.hp / this.getMaxHp();
   }
 
   generateGender(): void {

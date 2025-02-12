@@ -20,7 +20,7 @@ import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 import { Nature } from "#enums/nature";
 import type { MoveId } from "#enums/move-id";
-import { TypeColor, TypeShadow } from "#enums/color";
+import { TypeColor, TypeShadowColor } from "#enums/color";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
 import type { MoveSourceType } from "#enums/move-source-type";
@@ -637,7 +637,7 @@ export class SingleTypeChallenge extends Challenge {
   override getDescription(overrideValue?: number): string {
     const value = overrideValue ?? this.value;
     const type = i18next.t(`pokemonInfo:Type.${ElementalType[value - 1]}`);
-    const typeColor = `[color=${TypeColor[ElementalType[value - 1]]}][shadow=${TypeShadow[ElementalType[value - 1]]}]${type}[/shadow][/color]`;
+    const typeColor = `[color=${TypeColor[ElementalType[value - 1]]}][shadow=${TypeShadowColor[ElementalType[value - 1]]}]${type}[/shadow][/color]`;
     const defaultDesc = i18next.t(`challenges:${this.geti18nKey()}.desc_default`);
     const typeDesc = i18next.t(`challenges:${this.geti18nKey()}.desc`, { type: typeColor });
     return value === 0 ? defaultDesc : typeDesc;
