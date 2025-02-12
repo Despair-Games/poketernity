@@ -3507,13 +3507,19 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.isBoss();
   }
 
-  isMax(): boolean {
-    const maxForms = [
-      SpeciesFormKey.GIGANTAMAX,
-      SpeciesFormKey.GIGANTAMAX_RAPID,
-      SpeciesFormKey.GIGANTAMAX_SINGLE,
-      SpeciesFormKey.ETERNAMAX,
-    ] as string[];
+  /**
+   * @param includeEternamax Whether or not to include Eternamax
+   * @returns if the Pokemon is in a max form
+   */
+  isMax(includeEternamax: boolean = true): boolean {
+    const maxForms = includeEternamax
+      ? [
+          SpeciesFormKey.GIGANTAMAX,
+          SpeciesFormKey.GIGANTAMAX_RAPID,
+          SpeciesFormKey.GIGANTAMAX_SINGLE,
+          SpeciesFormKey.ETERNAMAX,
+        ]
+      : ([SpeciesFormKey.GIGANTAMAX, SpeciesFormKey.GIGANTAMAX_RAPID, SpeciesFormKey.GIGANTAMAX_SINGLE] as string[]);
     return (
       maxForms.includes(this.getFormKey()) || (!!this.getFusionFormKey() && maxForms.includes(this.getFusionFormKey()!))
     );
