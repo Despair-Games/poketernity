@@ -285,14 +285,21 @@ export function getTypeDamageMultiplierColor(
         ? TypeEffectivenessColor.NOT_VERY_EFFECTIVE
         : TypeEffectivenessColor.DEFENSE_NOT_VERY_EFFECTIVE,
     1: undefined,
-    2: TypeEffectivenessColor.SUPER_EFFECTIVE,
-    4: TypeEffectivenessColor.VERY_SUPER_EFFECTIVE,
-    8: TypeEffectivenessColor.MAX_SUPER_EFFECTIVE,
+    2: side === "offense" ? TypeEffectivenessColor.SUPER_EFFECTIVE : TypeEffectivenessColor.DEFENSE_SUPER_EFFECTIVE,
+    4:
+      side === "offense"
+        ? TypeEffectivenessColor.VERY_SUPER_EFFECTIVE
+        : TypeEffectivenessColor.DEFENSE_VERY_SUPER_EFFECTIVE,
+    8:
+      side === "offense"
+        ? TypeEffectivenessColor.MAX_SUPER_EFFECTIVE
+        : TypeEffectivenessColor.DEFENSE_MAX_SUPER_EFFECTIVE,
   };
 
   return effectivenessMap[multiplier];
 }
 
+/** @todo Normalize all RGB/Hexcode colors to the same system */
 export function getTypeRgb(type: ElementalType): [number, number, number] {
   switch (type) {
     case ElementalType.NORMAL:
