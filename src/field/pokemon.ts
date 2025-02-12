@@ -1070,11 +1070,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     // TODO: Scope Lens and Leek were applied here
     globalScene.applyModifiers(TempCritBoosterModifier, source.isPlayer(), critStage);
 
-    const bonusCrit = new BooleanHolder(false);
-    applyAbAttrs(AbAttrFlag.BONUS_CRIT, source, simulated, bonusCrit);
-    if (bonusCrit.value) {
-      critStage.value += 1;
-    }
+    // Applies the effects of the ability 'Super Luck' here
+    applyAbAttrs(AbAttrFlag.BONUS_CRIT, source, simulated, critStage);
 
     const critBoostTag = source.getTag(...CritBoostBattlerTagTypes);
     if (critBoostTag) {
