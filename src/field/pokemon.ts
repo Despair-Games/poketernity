@@ -119,7 +119,7 @@ import { NoCritTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { Ability } from "#app/data/ability";
 import { getAbApplyFunc } from "#app/data/apply-ab-attrs";
-import { allAbilities, allMoves } from "#app/data/main-data";
+import { allAbilities, allMoves } from "#app/data/data-lists";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type PokemonData from "#app/system/pokemon-data";
 import { BattlerIndex } from "#enums/battler-index";

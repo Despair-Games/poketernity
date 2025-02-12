@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/main-data";
+import { allMoves } from "#app/data/data-lists";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { WeatherType } from "#enums/weather-type";
 import { MoveResult } from "#enums/move-result";

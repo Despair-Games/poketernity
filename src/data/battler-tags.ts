@@ -6,7 +6,7 @@ import { CommonAnim } from "#enums/common-anim";
 import { ChargeAnim } from "#enums/charge-anim";
 import { SelfStatusMove, type Move } from "#app/data/move";
 import { applyMoveAttrs } from "#app/utils/move-utils";
-import { allMoves, allAbilities } from "#app/data/main-data";
+import { allMoves, allAbilities } from "#app/data/data-lists";
 import { StatusCategoryOnAllyAttr } from "./move-attrs/status-category-on-ally-attr";
 import { ConsecutiveUseDoublePowerAttr } from "./move-attrs/consecutive-use-double-power-attr";
 import { HealOnAllyAttr } from "./move-attrs/heal-on-ally-attr";

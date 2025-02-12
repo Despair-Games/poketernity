@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/main-data";
+import { allMoves } from "#app/data/data-lists";
 import { PresentPowerAttr } from "#app/data/move-attrs/present-power-attr";
 import { NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";

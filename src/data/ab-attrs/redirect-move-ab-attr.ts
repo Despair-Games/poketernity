@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/main-data";
+import { allMoves } from "#app/data/data-lists";
 import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";

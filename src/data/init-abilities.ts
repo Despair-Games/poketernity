@@ -174,7 +174,7 @@ import { WeatherBasedSpeedDoublerAbAttr } from "#app/data/ab-attrs/weather-based
 import { WeightMultiplierAbAttr } from "#app/data/ab-attrs/weight-multiplier-ab-attr";
 import { WonderSkinAbAttr } from "#app/data/ab-attrs/wonder-skin-ab-attr";
 import { Ability } from "#app/data/ability";
-import { allMoves, allAbilities } from "#app/data/main-data";
+import { allMoves, allAbilities } from "#app/data/data-lists";
 import { type Move } from "#app/data/move";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
 import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-attr";

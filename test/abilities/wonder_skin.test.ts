@@ -1,5 +1,5 @@
-import { allAbilities } from "#app/data/main-data";
-import { allMoves } from "#app/data/main-data";
+import { allAbilities } from "#app/data/data-lists";
+import { allMoves } from "#app/data/data-lists";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
