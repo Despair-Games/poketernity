@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import UI from "#app/ui/ui";
-import { allSpecies, allAbilities } from "#app/data/data-lists";
+import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
 import { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { PokemonSpeciesFilter } from "./@types/PokemonSpeciesFilter";
@@ -52,7 +52,6 @@ import { Arena, ArenaBase } from "#app/field/arena";
 import { GameData } from "#app/system/game-data";
 import { addTextObject, getTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
-import { allMoves } from "#app/data/data-lists";
 import {
   getDefaultModifierTypeForTier,
   getEnemyModifierTypesForWave,
