@@ -462,6 +462,7 @@ export class RechargingTag extends BattlerTag {
 
 /**
  * BattlerTag representing the rage effect where a Pokemon will gain +1 attack for each time it is hit
+ * @extends BattlerTag
  */
 export class RageTag extends BattlerTag {
   constructor() {
