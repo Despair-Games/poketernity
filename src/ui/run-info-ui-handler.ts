@@ -37,6 +37,7 @@ import { settings } from "#app/system/settings/settings-manager";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { ImagesFolder } from "#enums/images-folders";
 
 /**
  * RunInfoUiMode indicates possible overlays of RunInfoUiHandler.
@@ -82,7 +83,7 @@ export default class RunInfoUiHandler extends UiHandler {
     // The import of the modifiersModule is loaded here to sidestep async/await issues.
     this.modifiersModule = Modifier;
     this.runContainer.setVisible(false);
-    globalScene.loadImage("encounter_exclaim", "mystery-encounters");
+    globalScene.loadImage("encounter_exclaim", ImagesFolder.ME);
   }
 
   /**

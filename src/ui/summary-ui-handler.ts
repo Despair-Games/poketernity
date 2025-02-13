@@ -220,7 +220,7 @@ export default class SummaryUiHandler extends UiHandler {
     this.friendshipText.setOrigin(0, 0);
     this.summaryContainer.add(this.friendshipText);
 
-    this.championRibbon = globalScene.add.image(88, -146, "champion_ribbon");
+    this.championRibbon = globalScene.add.image(88, -146, "icon_champion_ribbon");
     this.championRibbon.setOrigin(0, 0);
     //this.championRibbon.setScale(0.8);
     this.championRibbon.setScale(1.25);
@@ -247,7 +247,7 @@ export default class SummaryUiHandler extends UiHandler {
 
     this.statusContainer.add(statusLabel);
 
-    this.status = globalScene.add.sprite(91, 4, "statuses");
+    this.status = globalScene.add.sprite(91, 4, "status_icons");
     this.status.setOrigin(0.5, 0);
 
     this.statusContainer.add(this.status);
@@ -794,7 +794,7 @@ export default class SummaryUiHandler extends UiHandler {
         const getTypeIcon = (index: number, type: ElementalType, tera: boolean = false) => {
           const xCoord = typeLabel.width * typeLabel.scale + 9 + 34 * index;
           const typeIcon = !tera
-            ? globalScene.add.sprite(xCoord, 42, "types", ElementalType[type].toLowerCase())
+            ? globalScene.add.sprite(xCoord, 42, "type_icons", ElementalType[type].toLowerCase())
             : globalScene.add.sprite(xCoord, 42, "type_tera");
           if (tera) {
             typeIcon.setScale(0.5);
@@ -1046,7 +1046,7 @@ export default class SummaryUiHandler extends UiHandler {
 
           if (this.newMove && this.pokemon) {
             const moveType = this.pokemon.getMoveType(this.newMove);
-            const newMoveTypeIcon = globalScene.add.sprite(0, 0, "types", ElementalType[moveType].toLowerCase());
+            const newMoveTypeIcon = globalScene.add.sprite(0, 0, "type_icons", ElementalType[moveType].toLowerCase());
             newMoveTypeIcon.setOrigin(0, 1);
             this.extraMoveRowContainer.add(newMoveTypeIcon);
           }
@@ -1071,7 +1071,7 @@ export default class SummaryUiHandler extends UiHandler {
 
           if (move && this.pokemon) {
             const moveType = this.pokemon.getMoveType(move.getMove());
-            const typeIcon = globalScene.add.sprite(0, 0, "types", ElementalType[moveType].toLowerCase());
+            const typeIcon = globalScene.add.sprite(0, 0, "type_icons", ElementalType[moveType].toLowerCase());
             typeIcon.setOrigin(0, 1);
             moveRowContainer.add(typeIcon);
           }

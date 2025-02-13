@@ -32,7 +32,7 @@ export default class GameChallengesUiHandler extends UiHandler {
     leftArrow: Phaser.GameObjects.Image;
     rightArrow: Phaser.GameObjects.Image;
   }>;
-  private monoTypeValue: Phaser.GameObjects.Sprite;
+  private monoTypeIcon: Phaser.GameObjects.Sprite;
 
   private cursorObj: Phaser.GameObjects.NineSlice | null;
 
@@ -172,11 +172,11 @@ export default class GameChallengesUiHandler extends UiHandler {
       };
     }
 
-    this.monoTypeValue = globalScene.add.sprite(8, 98, "types");
-    this.monoTypeValue.setName("challenge-value-monotype-sprite");
-    this.monoTypeValue.setScale(0.86);
-    this.monoTypeValue.setVisible(false);
-    this.valuesContainer.add(this.monoTypeValue);
+    this.monoTypeIcon = globalScene.add.sprite(8, 98, "type_icons");
+    this.monoTypeIcon.setName("challenge-value-monotype-sprite");
+    this.monoTypeIcon.setScale(0.86);
+    this.monoTypeIcon.setVisible(false);
+    this.valuesContainer.add(this.monoTypeIcon);
 
     this.challengesContainer.add(headerBg);
     this.challengesContainer.add(headerText);
@@ -252,7 +252,7 @@ export default class GameChallengesUiHandler extends UiHandler {
       challengeLabel.leftArrow.setVisible(challenge.value !== 0);
       challengeLabel.rightArrow.setPositionRelative(
         challengeLabel.leftArrow,
-        Math.max(this.monoTypeValue.width, this.widestTextBox)
+        Math.max(this.monoTypeIcon.width, this.widestTextBox)
           + challengeLabel.leftArrow.displayWidth
           + 2 * this.arrowSpacing,
         0,
@@ -273,10 +273,10 @@ export default class GameChallengesUiHandler extends UiHandler {
         (challengeLabel.leftArrow.x + challengeLabel.rightArrow.x + challengeLabel.leftArrow.displayWidth) / 2,
       );
       if (challenge.id === Challenges.SINGLE_TYPE) {
-        this.monoTypeValue.setX(xLocation);
-        this.monoTypeValue.setY(challengeLabel.label.y + 8);
-        this.monoTypeValue.setFrame(challenge.getValue());
-        this.monoTypeValue.setVisible(true);
+        this.monoTypeIcon.setX(xLocation);
+        this.monoTypeIcon.setY(challengeLabel.label.y + 8);
+        this.monoTypeIcon.setFrame(challenge.getValue());
+        this.monoTypeIcon.setVisible(true);
         challengeLabel.value.setVisible(false);
         monoTypeVisible = true;
       } else {
@@ -287,7 +287,7 @@ export default class GameChallengesUiHandler extends UiHandler {
       }
     }
     if (!monoTypeVisible) {
-      this.monoTypeValue.setVisible(false);
+      this.monoTypeIcon.setVisible(false);
     }
 
     // This checks if a challenge has been selected by the user and updates the text/its opacity accordingly.

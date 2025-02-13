@@ -7,6 +7,7 @@ import { UiWindowStyle } from "#enums/ui-window-style";
 
 import { getLocalizedFilename } from "#app/utils";
 import { settings } from "#app/system/settings/settings-manager";
+import { ImagesFolder } from "#enums/images-folders";
 import { windowStyleDependantAtlases } from "#app/ui/ui-theme";
 
 /**
@@ -54,17 +55,23 @@ export class SceneBase extends Phaser.Scene {
     return url;
   }
 
-  loadImage(key: string, folder: string, options?: TextureLoadingOptions) {
-    folder = folder ? folder + "/" : "";
+  loadImage(key: string, imageFolder: ImagesFolder = ImagesFolder.ROOT, options?: TextureLoadingOptions) {
+    const folder = imageFolder !== ImagesFolder.ROOT ? imageFolder + "/" : "";
     const filenameRoot = options ? this.getFilenameRoot(key, options) : key;
     this.load.image(key, this.getCachedUrl(`images/${folder}${filenameRoot}.png`));
   }
 
-  loadSpritesheet(key: string, folder: string, width: number, height?: number, options?: TextureLoadingOptions) {
+  loadSpritesheet(
+    key: string,
+    imageFolder: ImagesFolder,
+    width: number,
+    height?: number,
+    options?: TextureLoadingOptions,
+  ) {
     if (options?.windowStyleDependant && !windowStyleDependantAtlases.includes(key)) {
       windowStyleDependantAtlases.push(key);
     }
-    folder = folder ? folder + "/" : "";
+    const folder = imageFolder !== ImagesFolder.ROOT ? imageFolder + "/" : "";
     const filenameRoot = options ? this.getFilenameRoot(key, options) : key;
     this.load.spritesheet(key, this.getCachedUrl(`images/${folder}${filenameRoot}.png`), {
       frameWidth: width,
@@ -72,11 +79,11 @@ export class SceneBase extends Phaser.Scene {
     });
   }
 
-  loadAtlas(key: string, folder: string, options?: TextureLoadingOptions) {
+  loadAtlas(key: string, imageFolder: ImagesFolder = ImagesFolder.ROOT, options?: TextureLoadingOptions) {
     if (options?.windowStyleDependant && !windowStyleDependantAtlases.includes(key)) {
       windowStyleDependantAtlases.push(key);
     }
-    folder = folder ? folder + "/" : "";
+    const folder = imageFolder !== ImagesFolder.ROOT ? imageFolder + "/" : "";
     const atlasFilenameRoot = options?.filenameRoot ?? key;
     const imageFilenameRoot = options ? this.getFilenameRoot(key, options) : key;
     this.load.atlas(

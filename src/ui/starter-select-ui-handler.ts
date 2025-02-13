@@ -432,7 +432,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       if (index === 0 || index === 19) {
         return;
       }
-      const typeSprite = globalScene.add.sprite(0, 0, "types");
+      const typeSprite = globalScene.add.sprite(0, 0, "type_icons");
       typeSprite.setScale(0.5);
       typeSprite.setFrame(type.toLowerCase());
       typeOptions.push(new DropDownOption(index, new DropDownLabel("", typeSprite)));
@@ -772,12 +772,12 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.pokemonSprite.setPipeline(globalScene.spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], ignoreTimeTint: true });
     this.starterSelectContainer.add(this.pokemonSprite);
 
-    this.type1Icon = globalScene.add.sprite(8, 98, "types");
+    this.type1Icon = globalScene.add.sprite(8, 98, "type_icons");
     this.type1Icon.setScale(0.5);
     this.type1Icon.setOrigin(0, 0);
     this.starterSelectContainer.add(this.type1Icon);
 
-    this.type2Icon = globalScene.add.sprite(26, 98, "types");
+    this.type2Icon = globalScene.add.sprite(26, 98, "type_icons");
     this.type2Icon.setScale(0.5);
     this.type2Icon.setOrigin(0, 0);
     this.starterSelectContainer.add(this.type2Icon);
