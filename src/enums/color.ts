@@ -210,6 +210,8 @@ export enum TypeEffectivenessColor {
   /** #929292 */
   NO_EFFECT = "#929292", // Grey (0x)
 
+  /** #ff3500 */
+  MAX_RESISTED = "#ff3500", // Mostly Red (0.0625x) - not possible?
   /** #ff5500 */
   VERY_RESISTED = "#ff5500", // Deep Orange (0.125x)
   /** #ff7400 */
@@ -220,23 +222,9 @@ export enum TypeEffectivenessColor {
   /** #4aa500 */
   SUPER_EFFECTIVE = "#4aa500", // Deep Green (2x)
   /** #4bb400 */
-  VERY_SUPER_EFFECTIVE = "#4bb400", // Brighter Green (4x)
+  DOUBLE_SUPER_EFFECTIVE = "#4bb400", // Green (4x)
   /** #52c200 */
-  MAX_SUPER_EFFECTIVE = "#52c200", // Most vibrant Green (8x)
-
-  /** #b1b100 */
-  DEFENSE_NO_EFFECT = "#b1b100", // Mustard Yellow (0x)
-  /** #2db4ff */
-  DEFENSE_VERY_RESISTED = "#2db4ff", // Light Blue (0.125x)
-  /** #00a4ff */
-  DEFENSE_RESISTED = "#00a4ff", // Brighter Blue (0.25x)
-  /** #0093ff */
-  DEFENSE_NOT_VERY_EFFECTIVE = "#0093ff", // Deep Blue (0.5x)
-
-  /** #fe8e00 - Currently equivalent to `NOT_VERY_EFFECTIVE` */
-  DEFENSE_SUPER_EFFECTIVE = "#fe8e00", // Warm Orange (2x)
-  /** #ff7400 - Currently equivalent to `RESISTED` */
-  DEFENSE_VERY_SUPER_EFFECTIVE = "#ff7400", // Bright Orange (4x)
-  /** #ff5500 - Currently equivalent to `VERY_RESISTED` */
-  DEFENSE_MAX_SUPER_EFFECTIVE = "#ff5500", // Deep Orange (8x)
+  QUAD_SUPER_EFFECTIVE = "#52c200", // Bright Green (8x)
+  /** #61e000 */
+  MAX_SUPER_EFFECTIVE = "#61e000", // Vibrant Green (16x)
 }
