@@ -54,7 +54,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     this.moveInfoContainer.setName("move-info");
     ui.add(this.moveInfoContainer);
 
-    this.typeIcon = globalScene.add.sprite(GAME_WIDTH - 57, -36, "types", "unknown");
+    this.typeIcon = globalScene.add.sprite(GAME_WIDTH - 57, -36, "type_icons", "unknown");
     this.typeIcon.setVisible(false);
     this.moveInfoContainer.add(this.typeIcon);
 
@@ -241,7 +241,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     if (hasMove) {
       const pokemonMove = moveset[cursor];
       const moveType = pokemon.getMoveType(pokemonMove.getMove());
-      this.typeIcon.setTexture("types", ElementalType[moveType].toLowerCase()).setScale(0.8);
+      this.typeIcon.setTexture("type_icons", ElementalType[moveType].toLowerCase()).setScale(0.8);
 
       const moveCategory = pokemonMove.getMove().category;
       this.moveCategoryIcon.setTexture("categories", MoveCategory[moveCategory].toLowerCase()).setScale(1.0);

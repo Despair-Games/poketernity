@@ -15,7 +15,7 @@ export enum ImagesFolder {
   ITEMS = "items", // Icons for items (should only be used to create the items atlas)
   ME = "mystery-encounters", // ME specific images
   POKEBALL = "pokeball", // Pokeball icons and animations (should only be used to create the p(oke)b(all) atlas)
-  STATUSES = "statuses", // English status icons (should only be used to create the statuses atlas, or unused?)
+  STATUS_ICONS = "status_icons", // English status icons (should only be used to create the statuses atlas, or unused?)
   TRAINER = "trainer", // Trainer sprites
   // Pokemon sprites
   POKEMON = "pokemon",

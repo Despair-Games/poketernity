@@ -192,8 +192,8 @@ export class LoadingScene extends SceneBase {
 
     // Get current language and load the different localized images and atlases for it
     const lang = i18next.resolvedLanguage ?? "en";
-    this.loadAtlas("statuses", ImagesFolder.UI_STATUS_ICONS, { languageKey: lang });
-    this.loadAtlas("types", ImagesFolder.UI_TYPE_ICONS, { languageKey: lang });
+    this.loadAtlas("status_icons", ImagesFolder.UI_STATUS_ICONS, { languageKey: lang });
+    this.loadAtlas("type_icons", ImagesFolder.UI_TYPE_ICONS, { languageKey: lang });
 
     // TODO: cleanup event images loading
     const availableLangs = ["en", "de", "it", "fr", "ja", "ko", "es-ES", "pt-BR", "zh-CN"];

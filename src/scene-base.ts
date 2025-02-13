@@ -6,7 +6,7 @@ import { UiWindowStyle } from "#enums/ui-window-style";
 // -- end tsdoc imports --
 
 import { getLocalizedFilename } from "#app/utils";
-import { settings } from "./system/settings/settings-manager";
+import { settings } from "#app/system/settings/settings-manager";
 import { ImagesFolder } from "#enums/images-folders";
 
 // TODO: move elsewhere
@@ -63,7 +63,13 @@ export class SceneBase extends Phaser.Scene {
     this.load.image(key, this.getCachedUrl(`images/${folder}${filenameRoot}.png`));
   }
 
-  loadSpritesheet(key: string, imageFolder: ImagesFolder, width: number, height?: number, options?: TextureLoadingOptions) {
+  loadSpritesheet(
+    key: string,
+    imageFolder: ImagesFolder,
+    width: number,
+    height?: number,
+    options?: TextureLoadingOptions,
+  ) {
     if (options?.windowStyleDependant) {
       windowStyleDependantAtlases.push(key);
     }
