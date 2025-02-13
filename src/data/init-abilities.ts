@@ -205,6 +205,7 @@ import { BypassParaSpeedReductionAbAttr } from "./ab-attrs/bypass-para-speed-red
 
 export function initAbilities() {
   allAbilities.push(
+    new Ability(Abilities.NONE, 3),
     new Ability(Abilities.STENCH, 3).attr(
       PostAttackApplyBattlerTagAbAttr,
       false,
