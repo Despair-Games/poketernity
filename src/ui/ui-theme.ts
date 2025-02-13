@@ -1,9 +1,13 @@
-import { windowStyleDependantAtlases as windowStyleDependantAtlases } from "#app/scene-base";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
 import { WindowVariant } from "#enums/window-variant";
 import { CANVAS_SCALE } from "#app/ui-constants";
 import type { UiWindowStyle } from "#enums/ui-window-style";
+
+/**
+ * Texture keys of atlases that need to be updated when the {@linkcode UiWindowStyle} changes.
+ */
+export const windowStyleDependantAtlases: string[] = [];
 
 export function getWindowVariantSuffix(windowVariant: WindowVariant): string {
   switch (windowVariant) {

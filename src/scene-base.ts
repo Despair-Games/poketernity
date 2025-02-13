@@ -8,9 +8,7 @@ import { UiWindowStyle } from "#enums/ui-window-style";
 import { getLocalizedFilename } from "#app/utils";
 import { settings } from "#app/system/settings/settings-manager";
 import { ImagesFolder } from "#enums/images-folders";
-
-// TODO: move elsewhere
-export const windowStyleDependantAtlases: string[] = [];
+import { windowStyleDependantAtlases } from "#app/ui/ui-theme";
 
 /**
  * Additional parameters that can be used when loading Images, Spritesheets or Atlases.
@@ -29,7 +27,7 @@ interface TextureLoadingOptions {
    */
   languageKey?: string;
   /**
-   * If set to `true`, will automatically update any object using this texture when the window type is changed.
+   * If set to `true`, will automatically update any object using this texture when the window style is changed.
    * Only works for atlases with keys corresponding to each {@linkcode UiWindowStyle} (starting at "0"), or spritesheets.
    */
   windowStyleDependant?: boolean;
@@ -70,7 +68,7 @@ export class SceneBase extends Phaser.Scene {
     height?: number,
     options?: TextureLoadingOptions,
   ) {
-    if (options?.windowStyleDependant) {
+    if (options?.windowStyleDependant && !windowStyleDependantAtlases.includes(key)) {
       windowStyleDependantAtlases.push(key);
     }
     const folder = imageFolder !== ImagesFolder.ROOT ? imageFolder + "/" : "";
@@ -82,7 +80,7 @@ export class SceneBase extends Phaser.Scene {
   }
 
   loadAtlas(key: string, imageFolder: ImagesFolder = ImagesFolder.ROOT, options?: TextureLoadingOptions) {
-    if (options?.windowStyleDependant) {
+    if (options?.windowStyleDependant && !windowStyleDependantAtlases.includes(key)) {
       windowStyleDependantAtlases.push(key);
     }
     const folder = imageFolder !== ImagesFolder.ROOT ? imageFolder + "/" : "";

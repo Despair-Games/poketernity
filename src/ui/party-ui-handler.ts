@@ -1068,7 +1068,7 @@ export default class PartyUiHandler extends MessageUiHandler {
       const optionText = addBBCodeTextObject(0, yCoord - 16, optionName, TextStyle.WINDOW, { maxLines: 1 });
       if (altText) {
         optionText.setColor(CommonColor.LIGHT_BLUE);
-        optionText.setShadowColor(ShadowColor.LIGHT_BLUE);
+        optionText.setShadowColor(ShadowColor.BLUE);
       }
       optionText.setOrigin(0, 0);
 

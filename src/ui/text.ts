@@ -79,11 +79,11 @@ export function addTextInputObject(
 }
 
 /**
- * Set the color and shadow color of a Text object to the given TextStyle.
- * @param textObject the {@linkcode Phaser.GameObjects.Text} to set color for.
+ * Set the color and shadow color of a Text object based on the given TextStyle.
+ * @param textObject the {@linkcode Phaser.GameObjects.Text} to update.
  * @param style the {@linkcode TextStyle} to use.
  */
-export function setTextColor(textObject: Phaser.GameObjects.Text, style: TextStyle) {
+export function setTextColor(textObject: Phaser.GameObjects.Text, style: TextStyle): void {
   const colorCombination = getTextColorCombination(style);
   textObject.setColor(colorCombination.mainColor);
   textObject.setShadowColor(colorCombination.shadowColor);
