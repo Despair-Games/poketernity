@@ -3513,7 +3513,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       SpeciesFormKey.GIGANTAMAX,
       SpeciesFormKey.GIGANTAMAX_RAPID,
       SpeciesFormKey.GIGANTAMAX_SINGLE,
-      ...(includeEternamax ? SpeciesFormKey.ETERNAMAX : []),
+      ...(includeEternamax ? [SpeciesFormKey.ETERNAMAX] : []),
     ] as string[];
     return (
       maxForms.includes(this.getFormKey()) || (!!this.getFusionFormKey() && maxForms.includes(this.getFusionFormKey()!))
