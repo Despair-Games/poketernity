@@ -27,7 +27,6 @@ import { getNatureName } from "#app/data/nature";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpeciesForm, getPokerusStarters } from "#app/utils/pokemon-species-utils";
-import { allSpecies } from "#app/data/data-lists";
 import type { Variant } from "#app/data/variant";
 import { getVariantTierForVariant, getVariantTint } from "#app/data/variant";
 import { GameModes } from "#enums/game-modes";
