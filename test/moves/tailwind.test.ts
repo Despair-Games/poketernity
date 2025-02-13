@@ -111,10 +111,7 @@ describe("Moves - Tailwind", () => {
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    const turnOrder = game.scene
-      .getField(true)
-      .sort((a, b) => a.turnData.order - b.turnData.order)
-      .map((p) => p.getBattlerIndex());
+    const turnOrder = game.field.getTurnOrder();
 
     expect(turnOrder[0]).toBe(BattlerIndex.PLAYER);
     expect(turnOrder[1]).toBe(BattlerIndex.PLAYER_2);

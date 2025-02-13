@@ -30,13 +30,6 @@ describe("Abilities - Stall", () => {
     game.override.moveset([MoveId.QUICK_ATTACK, MoveId.TACKLE]);
   });
 
-  const getTurnOrder = () => {
-    return game.scene
-      .getField(true)
-      .sort((a, b) => a.turnData.order - b.turnData.order)
-      .map((p) => p.getBattlerIndex());
-  };
-
   /**
    * References:
    * https://bulbapedia.bulbagarden.net/wiki/Stall_(Ability)
@@ -50,8 +43,8 @@ describe("Abilities - Stall", () => {
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    expect(getTurnOrder()).toEqual([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-  }, 20000);
+    expect(game.field.getTurnOrder()).toEqual([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+  });
 
   it("should not cause the source to move after moves in a lower priority bracket", async () => {
     await game.classicMode.startBattle([Species.SHUCKLE]);
@@ -60,8 +53,8 @@ describe("Abilities - Stall", () => {
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    expect(getTurnOrder()).toEqual([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-  }, 20000);
+    expect(game.field.getTurnOrder()).toEqual([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+  });
 
   it("multiple Pokemon with Stall should execute moves in speed order", async () => {
     game.override.ability(Abilities.STALL);
@@ -71,6 +64,6 @@ describe("Abilities - Stall", () => {
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    expect(getTurnOrder()).toEqual([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-  }, 20000);
+    expect(game.field.getTurnOrder()).toEqual([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+  });
 });

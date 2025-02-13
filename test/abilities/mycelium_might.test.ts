@@ -32,13 +32,6 @@ describe("Abilities - Mycelium Might", () => {
     game.override.moveset([MoveId.QUICK_ATTACK, MoveId.BABY_DOLL_EYES]);
   });
 
-  const getTurnOrder = () => {
-    return game.scene
-      .getField(true)
-      .sort((a, b) => a.turnData.order - b.turnData.order)
-      .map((p) => p.getBattlerIndex());
-  };
-
   /**
    * References:
    * https://bulbapedia.bulbagarden.net/wiki/Mycelium_Might_(Ability)
@@ -55,9 +48,9 @@ describe("Abilities - Mycelium Might", () => {
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    expect(getTurnOrder()).toEqual([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    expect(game.field.getTurnOrder()).toEqual([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     expect(enemyPokemon?.getStatStage(Stat.ATK)).toBe(-1);
-  }, 20000);
+  });
 
   it("should still go first if a status move that is in a higher priority bracket than the opponent's move is used", async () => {
     game.override.enemyMoveset(MoveId.TACKLE);
@@ -69,9 +62,9 @@ describe("Abilities - Mycelium Might", () => {
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    expect(getTurnOrder()).toEqual([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    expect(game.field.getTurnOrder()).toEqual([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     expect(enemyPokemon?.getStatStage(Stat.ATK)).toBe(-1);
-  }, 20000);
+  });
 
   it("should not affect non-status moves", async () => {
     await game.classicMode.startBattle([Species.REGIELEKI]);
@@ -80,6 +73,6 @@ describe("Abilities - Mycelium Might", () => {
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    expect(getTurnOrder()).toEqual([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-  }, 20000);
+    expect(game.field.getTurnOrder()).toEqual([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+  });
 });

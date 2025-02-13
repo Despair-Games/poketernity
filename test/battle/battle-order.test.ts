@@ -29,16 +29,6 @@ describe("Battle order", () => {
     game.override.moveset([MoveId.TACKLE]);
   });
 
-  const getTurnOrder = () => {
-    const { turnManager } = game.scene.currentBattle;
-    expect(turnManager.empty()).toBeTruthy();
-
-    return game.scene
-      .getField()
-      .sort((pA, pB) => pA.turnData.order - pB.turnData.order)
-      .map((p) => p.getBattlerIndex());
-  };
-
   it("opponent faster than player 50 vs 150", async () => {
     await game.classicMode.startBattle([Species.BULBASAUR]);
 
@@ -53,9 +43,9 @@ describe("Battle order", () => {
     const { turnManager } = game.scene.currentBattle;
     expect(turnManager.empty()).toBeTruthy();
 
-    const turnOrder = getTurnOrder();
+    const turnOrder = game.field.getTurnOrder();
     expect(turnOrder).toEqual([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-  }, 20000);
+  });
 
   it("Player faster than opponent 150 vs 50", async () => {
     await game.classicMode.startBattle([Species.BULBASAUR]);
@@ -68,9 +58,9 @@ describe("Battle order", () => {
     game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    const turnOrder = getTurnOrder();
+    const turnOrder = game.field.getTurnOrder();
     expect(turnOrder).toEqual([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-  }, 20000);
+  });
 
   it("double - both opponents faster than player 50/50 vs 150/150", async () => {
     game.override.battleType("double");
@@ -86,10 +76,10 @@ describe("Battle order", () => {
     game.move.select(MoveId.TACKLE, 1);
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    const turnOrder = getTurnOrder();
+    const turnOrder = game.field.getTurnOrder();
     enemyPokemon.forEach((p) => expect(turnOrder.slice(0, 2)).toContain(p.getBattlerIndex()));
     playerPokemon.forEach((p) => expect(turnOrder.slice(2)).toContain(p.getBattlerIndex()));
-  }, 20000);
+  });
 
   it("double - speed tie except 1 - 100/100 vs 100/150", async () => {
     game.override.battleType("double");
@@ -106,10 +96,10 @@ describe("Battle order", () => {
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    const turnOrder = getTurnOrder();
+    const turnOrder = game.field.getTurnOrder();
     expect(turnOrder).toHaveLength(4);
     expect(turnOrder[0]).toBe(enemyPokemon[1].getBattlerIndex());
-  }, 20000);
+  });
 
   it("double - speed tie 100/150 vs 100/150", async () => {
     game.override.battleType("double");
@@ -127,9 +117,9 @@ describe("Battle order", () => {
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    const turnOrder = getTurnOrder();
+    const turnOrder = game.field.getTurnOrder();
     expect(turnOrder).toHaveLength(4);
     [playerPokemon[1], enemyPokemon[1]].forEach((p) => expect(turnOrder.slice(0, 2)).toContain(p.getBattlerIndex()));
     [playerPokemon[0], enemyPokemon[0]].forEach((p) => expect(turnOrder.slice(2)).toContain(p.getBattlerIndex()));
-  }, 20000);
+  });
 });

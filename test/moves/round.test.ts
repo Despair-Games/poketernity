@@ -51,12 +51,7 @@ describe("Moves - Round", () => {
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    const actualTurnOrder = game.scene
-      .getField(true)
-      .sort((pA, pB) => pA.turnData.order - pB.turnData.order)
-      .map((p) => p.getBattlerIndex());
-
-    expect(actualTurnOrder).toEqual([
+    expect(game.field.getTurnOrder()).toEqual([
       BattlerIndex.PLAYER,
       BattlerIndex.PLAYER_2,
       BattlerIndex.ENEMY,

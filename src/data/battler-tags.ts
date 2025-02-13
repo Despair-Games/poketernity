@@ -48,6 +48,7 @@ import {
 } from "#app/utils/battler-tag-type-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
+
 export class BattlerTag {
   public tagType: BattlerTagType;
   public lapseTypes: BattlerTagLapseType[];

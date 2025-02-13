@@ -15,7 +15,7 @@ export class CheckStatusEffectPhase extends Phase {
   public override start(): void {
     super.start();
 
-    // TODO: shuffle this before sorting to randomize Speed ties
+    /** @todo Shuffle this before sorting to resolve speed ties */
     const pokemon = globalScene
       .getField(true)
       .sort((a, b) => b.getEffectiveStat(Stat.SPD) - a.getEffectiveStat(Stat.SPD));

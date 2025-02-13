@@ -9,6 +9,7 @@ import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { SwitchType } from "#enums/switch-type";
 import type { QueuedMove } from "./@types/QueuedMove";
+import type { TurnCommandFilter } from "./@types/TurnCommandFilter";
 import { allMoves } from "./data/all-moves";
 import { applyAbAttrs } from "./data/apply-ab-attrs";
 import { MoveHeaderAttr } from "./data/move-attrs/move-header-attr";
@@ -68,7 +69,7 @@ export class TurnCommandManager {
     this.orderIndex = 0;
   }
 
-  // --------------  BEGIN PUBLIC METHODS  -------------- //
+  // #region Public Methods
 
   /**
    * @returns the {@linkcode TurnCommand} in the turn sequence
@@ -97,7 +98,7 @@ export class TurnCommandManager {
    * @param quiet if `true`, applies abilities and other field effects silently
    */
   public setTurnOrder(quiet: boolean = true): void {
-    this.shuffle();
+    this.shuffle(); // shuffle the list before sorting so speed ties produce random results
     this.sortBySpeed();
     this.sortPostSpeed(quiet);
   }
@@ -109,7 +110,7 @@ export class TurnCommandManager {
    * @returns The first {@linkcode TurnCommand} for which `commandFilter` returns
    * `true`, or `undefined` if no such turn command exists.
    */
-  public findCommand(commandFilter: (command: TurnCommand) => boolean): TurnCommand | undefined {
+  public findCommand(commandFilter: TurnCommandFilter): TurnCommand | undefined {
     return this.turnCommands.find((tc) => commandFilter(tc));
   }
 
@@ -130,8 +131,7 @@ export class TurnCommandManager {
    * if evaluated to be `true`.
    * @returns the {@linkcode TurnCommand} that was removed, or `undefined` if no command is removed
    */
-  public tryRemoveCommand(commandFilter: (command: TurnCommand) => boolean): TurnCommand | undefined {
-    console.log(this.turnCommands.map((tc) => tc.pokemon.name));
+  public tryRemoveCommand(commandFilter: TurnCommandFilter): TurnCommand | undefined {
     const cmdIndex = this.turnCommands.findIndex((tc) => commandFilter(tc));
     if (cmdIndex > -1) {
       return this.turnCommands.splice(cmdIndex, 1)[0];
@@ -142,6 +142,7 @@ export class TurnCommandManager {
   /**
    * Changes the target of a given Pokemon's move command in-place.
    * @param pokemon the Pokemon whose turn command should be modified.
+   * @returns `true` if a command was modified
    */
   public tryAdjustMoveCommandTarget(pokemon: Pokemon, newTargets: BattlerIndex[]): boolean {
     const turnCommand = this.findCommand((tc) => tc.pokemon === pokemon);
@@ -156,8 +157,7 @@ export class TurnCommandManager {
    * Redirects single target move commands from opposing Pokemon from
    * a removed Pokemon to the removed Pokemon's ally.
    * Should only be used during a double battle
-   * @param removedPokemon
-   * @returns
+   * @param removedPokemon the {@linkcode Pokemon} removed from battle
    */
   public redirectMoveCommandTargetsToAlly(removedPokemon: Pokemon): void {
     const allyPokemon = removedPokemon.getAlly();
@@ -205,16 +205,16 @@ export class TurnCommandManager {
    * immediately, possibly out of turn order.
    * This should not be used when command types other than `FIGHT`
    * are present in the turn command queue.
-   * @param pokemon The {@linkcode Pokemon} whose command is preempted
+   * @param commandFilter
    * @returns `true` if a command is found and scheduled for execution
    */
-  public preemptFightCommand(condition: (command: TurnCommand) => boolean): boolean {
+  public preemptFightCommand(commandFilter: TurnCommandFilter): boolean {
     if (this.turnCommands.some((tc) => tc.command !== BattleCommand.FIGHT)) {
       console.warn("Found non-FIGHT commands in the turn command queue when trying to preempt a FIGHT command");
       return false;
     }
 
-    const turnCommand = this.tryRemoveCommand((tc) => tc.command === BattleCommand.FIGHT && condition(tc));
+    const turnCommand = this.tryRemoveCommand((tc) => tc.command === BattleCommand.FIGHT && commandFilter(tc));
 
     if (turnCommand) {
       const { pokemon, cursor, move: queuedMove, targets } = turnCommand;
@@ -241,7 +241,7 @@ export class TurnCommandManager {
   /** Schedules all turn commands to be run at the start of the turn. */
   public startTurn(): void {
     // Apply speed-bypassing effects for all remaining Pokemon
-    // TODO: Find a way to apply this after non-FIGHT commands are processed
+    /** @todo Find a way to apply this after non-FIGHT commands are processed */
     this.applyBypassSpeedEffects();
     // Shuffle and sort turn commands by speed, command type, priority, etc.
     this.setTurnOrder(false);
@@ -284,7 +284,7 @@ export class TurnCommandManager {
     return true;
   }
 
-  // ---------------  END PUBLIC METHODS  --------------- //
+  // #region Private Methods
 
   /** Randomly shuffles the turn command queue. */
   private shuffle(): void {

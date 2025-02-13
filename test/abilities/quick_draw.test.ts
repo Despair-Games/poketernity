@@ -51,7 +51,7 @@ describe("Abilities - Quick Draw", () => {
 
     expect(player.turnData.order).toBeLessThan(enemy.turnData.order);
     expect(player.battleData.abilitiesApplied).toContain(Abilities.QUICK_DRAW);
-  }, 20000);
+  });
 
   test("should not apply when the source uses a status move", async () => {
     await game.classicMode.startBattle();
@@ -78,5 +78,5 @@ describe("Abilities - Quick Draw", () => {
 
     expect(player.turnData.order).toBeGreaterThan(enemy.turnData.order);
     expect(player.battleData.abilitiesApplied).contain(Abilities.QUICK_DRAW);
-  }, 20000);
+  });
 });

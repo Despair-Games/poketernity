@@ -36,8 +36,6 @@ export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
       return allyMove !== move && allyMove.hasAttr(AwaitCombinedPledgeAttr);
     });
 
-    console.log(ret);
-
     if (ret) {
       const ally = user.getAlly();
       // "{userPokemonName} is waiting for {allyPokemonName}'s move..."
