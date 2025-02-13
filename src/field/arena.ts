@@ -84,6 +84,19 @@ export class Arena {
     }
   }
 
+  /**
+   * Generates a random Pokemon species for the biome
+   * @param waveIndex the current floor
+   * @param level the level of the generated Pokemon
+   * @param attempt the number of attempts this function has been called since it calls itself recursively
+   * Is 0 if called from a ME
+   * Is undefined if called from battle-scene
+   * @param luckValue the player's luck value
+   * If the spawned Pokemon is a boss then the rng ceiling is decreased by half the luck value
+   * If the spawned Pokemon is not a boss then the rng ceiling is decreased by twice the luck value
+   * @param isBoss
+   * @returns a Pokemon species
+   */
   randomSpecies(
     waveIndex: number,
     level: number,
@@ -95,6 +108,8 @@ export class Arena {
     if (overrideSpecies) {
       return overrideSpecies;
     }
+
+    // Boss pool is 0-63, non Boss pool is 0-512
     const isBossSpecies =
       !!globalScene.getEncounterBossSegments(waveIndex, level)
       && !!this.pokemonPool[BiomePoolTier.BOSS].length
@@ -102,30 +117,17 @@ export class Arena {
         || globalScene.gameMode.isClassic
         || globalScene.gameMode.isWaveFinal(waveIndex));
     const randVal = isBossSpecies ? 64 : 512;
-    // luck influences encounter rarity
+
+    // Luck reduces the rng ceiling
     let luckModifier = 0;
     if (typeof luckValue !== "undefined") {
       luckModifier = luckValue * (isBossSpecies ? 0.5 : 2);
     }
     const tierValue = randSeedInt(randVal - luckModifier);
-    let tier = !isBossSpecies
-      ? tierValue >= 156
-        ? BiomePoolTier.COMMON
-        : tierValue >= 32
-          ? BiomePoolTier.UNCOMMON
-          : tierValue >= 6
-            ? BiomePoolTier.RARE
-            : tierValue >= 1
-              ? BiomePoolTier.SUPER_RARE
-              : BiomePoolTier.ULTRA_RARE
-      : tierValue >= 20
-        ? BiomePoolTier.BOSS
-        : tierValue >= 6
-          ? BiomePoolTier.BOSS_RARE
-          : tierValue >= 1
-            ? BiomePoolTier.BOSS_SUPER_RARE
-            : BiomePoolTier.BOSS_ULTRA_RARE;
+    let tier = isBossSpecies ? this.generateBossBiomeTier(tierValue) : this.generateNonBossBiomeTier(tierValue);
     console.log(BiomePoolTier[tier]);
+
+    // If the BiomePoolTier is empty, downgrade the rarity
     while (!this.pokemonPool[tier].length) {
       console.log(`Downgraded rarity tier from ${BiomePoolTier[tier]} to ${BiomePoolTier[tier - 1]}`);
       tier--;
@@ -133,7 +135,7 @@ export class Arena {
     const tierPool = this.pokemonPool[tier];
     let ret: PokemonSpecies;
     let regen = false;
-    if (!tierPool.length) {
+    if (tierPool.length === 0) {
       ret = globalScene.randomSpecies(waveIndex, level);
     } else {
       const entry = tierPool[randSeedInt(tierPool.length)];
@@ -141,6 +143,7 @@ export class Arena {
       if (typeof entry === "number") {
         species = entry as Species;
       } else {
+        // Try and evolve the Pokemon if possible
         const levelThresholds = Object.keys(entry);
         for (let l = levelThresholds.length - 1; l >= 0; l--) {
           const levelThreshold = parseInt(levelThresholds[l]);
@@ -157,25 +160,10 @@ export class Arena {
       }
 
       ret = getPokemonSpecies(species!);
-
-      if (ret.isLegendLike()) {
-        switch (true) {
-          case ret.baseTotal >= 720:
-            regen = level < 90;
-            break;
-          case ret.baseTotal >= 670:
-            regen = level < 70;
-            break;
-          case ret.baseTotal >= 580:
-            regen = level < 50;
-            break;
-          default:
-            regen = level < 30;
-            break;
-        }
-      }
+      regen = this.determineRerollIfLegendLike(ret, level);
     }
 
+    // Attempt to retry 10 times if generated a LegendLike with an incompatible level
     if (regen && (attempt || 0) < 10) {
       console.log("Incompatible level: regenerating...");
       return this.randomSpecies(waveIndex, level, (attempt || 0) + 1);
@@ -189,30 +177,102 @@ export class Arena {
     return ret;
   }
 
+  /**
+   * Determines whether or not to reroll for the given
+   * @param pokemonSpecies
+   * @param level
+   *
+   * Mega/Primal/Ultra legendaries and Arceus (720) cannot spawn below level 90
+   * Most legendaries (including Regigigas but not Kyurem, Zacian and Zamazenta) cannot spawn below level 70
+   * All other sublegends cannot spawn below level 50
+   * The final base case only has Cosmoem/Cosmog
+   * @returns true if rerolling is required, false otherwise
+   */
+  determineRerollIfLegendLike(pokemonSpecies: PokemonSpecies, level: number): boolean {
+    if (pokemonSpecies.isLegendLike()) {
+      if (pokemonSpecies.baseTotal >= 720) {
+        return level < 90;
+      } else if (pokemonSpecies.baseTotal >= 670) {
+        return level < 70;
+      } else if (pokemonSpecies.baseTotal >= 580) {
+        return level < 50;
+      } else {
+        return level < 30;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Generates a boss BiomePoolTier for a given
+   * @param tierValue number from 0-63
+   *
+   * |         | tier values | Chance |
+   * |---------|-------------|--------|
+   * | Boss    | 20-63       | 44/64  |
+   * | Boss R  | 6-19        | 14/64  |
+   * | Boss SR | 1-5         | 5/64   |
+   * | Boss UR | 0           | 1/64   |
+   *
+   * @returns the generated BiomePoolTier
+   */
+  generateBossBiomeTier(tierValue: number): BiomePoolTier {
+    if (tierValue >= 20) {
+      return BiomePoolTier.BOSS;
+    } else if (tierValue >= 6) {
+      return BiomePoolTier.BOSS_RARE;
+    } else if (tierValue >= 1) {
+      return BiomePoolTier.SUPER_RARE;
+    } else {
+      return BiomePoolTier.ULTRA_RARE;
+    }
+  }
+
+  /**
+   * Generates a non-boss BiomePoolTier for a given
+   * @param tierValue number from 0-511
+   *
+   * |            | tier values | Chance  |
+   * |------------|-------------|---------|
+   * | Common     | 156-511     | 356/512 |
+   * | Uncommon   | 32-155      | 124/512 |
+   * | Rare       | 6-31        | 26/512  |
+   * | Super Rare | 1-5         | 5/512   |
+   * | Ultra Rare | 0           | 1/512   |
+   *
+   * @returns the generated BiomePoolTier
+   */
+  generateNonBossBiomeTier(tierValue: number): BiomePoolTier {
+    if (tierValue >= 156) {
+      return BiomePoolTier.COMMON;
+    } else if (tierValue >= 32) {
+      return BiomePoolTier.UNCOMMON;
+    } else if (tierValue >= 6) {
+      return BiomePoolTier.RARE;
+    } else if (tierValue >= 1) {
+      return BiomePoolTier.SUPER_RARE;
+    } else {
+      return BiomePoolTier.ULTRA_RARE;
+    }
+  }
+
+  /**
+   * Attempts to generate a trainer for a given wave
+   * @param waveIndex the wave index
+   * @param isBoss only true for the brutal mysterious challengers ME
+   *
+   * If no trainers can be found then a breeder will be retruned instead
+   * @returns a trainer
+   */
   randomTrainerType(waveIndex: number, isBoss: boolean = false): TrainerType {
     const isTrainerBoss =
       !!this.trainerPool[BiomePoolTier.BOSS].length
       && (globalScene.gameMode.isTrainerBoss(waveIndex, this.biomeType, globalScene.offsetGym) || isBoss);
     console.log(isBoss, this.trainerPool);
     const tierValue = randSeedInt(!isTrainerBoss ? 512 : 64);
-    let tier = !isTrainerBoss
-      ? tierValue >= 156
-        ? BiomePoolTier.COMMON
-        : tierValue >= 32
-          ? BiomePoolTier.UNCOMMON
-          : tierValue >= 6
-            ? BiomePoolTier.RARE
-            : tierValue >= 1
-              ? BiomePoolTier.SUPER_RARE
-              : BiomePoolTier.ULTRA_RARE
-      : tierValue >= 20
-        ? BiomePoolTier.BOSS
-        : tierValue >= 6
-          ? BiomePoolTier.BOSS_RARE
-          : tierValue >= 1
-            ? BiomePoolTier.BOSS_SUPER_RARE
-            : BiomePoolTier.BOSS_ULTRA_RARE;
+    let tier = isTrainerBoss ? this.generateBossBiomeTier(tierValue) : this.generateNonBossBiomeTier(tierValue);
     console.log(BiomePoolTier[tier]);
+
     while (tier && !this.trainerPool[tier].length) {
       console.log(`Downgraded trainer rarity tier from ${BiomePoolTier[tier]} to ${BiomePoolTier[tier - 1]}`);
       tier--;
@@ -221,6 +281,12 @@ export class Arena {
     return !tierPool.length ? TrainerType.BREEDER : tierPool[randSeedInt(tierPool.length)];
   }
 
+  /**
+   * Generates a formIndex for a given Species based on the biome and time of day
+   * Used for Burmy/Wormadam, Rotom, and Lycanroc
+   * @param species the species being checked
+   * @returns the appropriate formIndex
+   */
   getSpeciesFormIndex(species: PokemonSpecies): number {
     switch (species.speciesId) {
       case Species.BURMY:
@@ -263,6 +329,10 @@ export class Arena {
     return 0;
   }
 
+  /**
+   * Returns a background terrain color ratio for a given biome
+   * @returns 0, 131/180 or 1
+   */
   getBgTerrainColorRatioForBiome(): number {
     switch (this.biomeType) {
       case Biome.SPACE:
@@ -360,6 +430,13 @@ export class Arena {
     });
   }
 
+  /**
+   * Attempts to set terrain
+   * @param terrain the type of terrain
+   * @param hasPokemonSource whether the terrain was generated from a Pokemon
+   * @param ignoreAnim whether or not to ignore animations
+   * @returns whether or not the terrain was successfully set
+   */
   trySetTerrain(terrain: TerrainType, hasPokemonSource: boolean, ignoreAnim: boolean = false): boolean {
     if (this.terrain?.terrainType === (terrain || undefined)) {
       return false;
@@ -395,10 +472,23 @@ export class Arena {
     return true;
   }
 
+  /**
+   * Checks to see if the current weather will cancel a move
+   * @param user the Pokemon using the move
+   * @param move the move being used
+   * @returns whether the move was cancelled by weather
+   */
   public isMoveWeatherCancelled(user: Pokemon, move: Move): boolean {
     return !!this.weather && !this.weather.isEffectSuppressed() && this.weather.isMoveWeatherCancelled(user, move);
   }
 
+  /**
+   * Checks to see if the current terrain will cancel a move
+   * @param user the Pokemon using the move
+   * @param targets the Pokemon being targetted
+   * @param move the move being used
+   * @returns whether the move was cancelled by terrain
+   */
   public isMoveTerrainCancelled(user: Pokemon, targets: BattlerIndex[], move: Move): boolean {
     return !!this.terrain && this.terrain.isMoveTerrainCancelled(user, targets, move);
   }
@@ -407,6 +497,12 @@ export class Arena {
     return this.terrain?.terrainType ?? TerrainType.NONE;
   }
 
+  /**
+   * Gets the attack type multiplier for weather and terrain
+   * @param attackType the type of the attack being used
+   * @param grounded whether or not the user is grounded
+   * @returns the attack multiplier
+   */
   getAttackTypeMultiplier(attackType: ElementalType, grounded: boolean): number {
     let weatherMultiplier = 1;
     if (this.weather && !this.weather.isEffectSuppressed()) {
@@ -469,10 +565,22 @@ export class Arena {
     }
   }
 
+  /**
+   * Gets the time of day
+   * | time of day | waveCycle | waves |
+   * |-------------|-----------|-------|
+   * | day         | 0-14      | 15    |
+   * | dusk        | 15-19     | 5     |
+   * | night       | 20-34     | 15    |
+   * | dawn        | 35-39     | 5     |
+   *
+   * It is always night in the abyss
+   *
+   * @returns the TimeOfDay
+   */
   getTimeOfDay(): TimeOfDay {
-    switch (this.biomeType) {
-      case Biome.ABYSS:
-        return TimeOfDay.NIGHT;
+    if (this.biomeType === Biome.ABYSS) {
+      return TimeOfDay.NIGHT;
     }
 
     const waveCycle = ((globalScene.currentBattle?.waveIndex || 0) + globalScene.waveCycleOffset) % 40;
@@ -492,37 +600,33 @@ export class Arena {
     return TimeOfDay.DAWN;
   }
 
+  indoorBiomes = [
+    Biome.SEABED,
+    Biome.CAVE,
+    Biome.ICE_CAVE,
+    Biome.POWER_PLANT,
+    Biome.DOJO,
+    Biome.FACTORY,
+    Biome.ABYSS,
+    Biome.FAIRY_CAVE,
+    Biome.TEMPLE,
+    Biome.LABORATORY,
+  ];
   isOutside(): boolean {
-    switch (this.biomeType) {
-      case Biome.SEABED:
-      case Biome.CAVE:
-      case Biome.ICE_CAVE:
-      case Biome.POWER_PLANT:
-      case Biome.DOJO:
-      case Biome.FACTORY:
-      case Biome.ABYSS:
-      case Biome.FAIRY_CAVE:
-      case Biome.TEMPLE:
-      case Biome.LABORATORY:
-        return false;
-      default:
-        return true;
-    }
+    return !(this.biomeType in this.indoorBiomes);
   }
 
+  // @todo these tints feel like they belong in their own class somewhere
   overrideTint(): [number, number, number] {
     switch (Overrides.ARENA_TINT_OVERRIDE) {
       case TimeOfDay.DUSK:
         return [98, 48, 73].map((c) => Math.round((c + 128) / 2)) as [number, number, number];
-        break;
       case TimeOfDay.NIGHT:
         return [64, 64, 64];
-        break;
       case TimeOfDay.DAWN:
       case TimeOfDay.DAY:
       default:
         return [128, 128, 128];
-        break;
     }
   }
 
@@ -853,37 +957,36 @@ export function getBiomeKey(biome: Biome): string {
   return Biome[biome].toLowerCase();
 }
 
-export function getBiomeHasProps(biomeType: Biome): boolean {
-  switch (biomeType) {
-    case Biome.METROPOLIS:
-    case Biome.BEACH:
-    case Biome.LAKE:
-    case Biome.SEABED:
-    case Biome.MOUNTAIN:
-    case Biome.BADLANDS:
-    case Biome.CAVE:
-    case Biome.DESERT:
-    case Biome.ICE_CAVE:
-    case Biome.MEADOW:
-    case Biome.POWER_PLANT:
-    case Biome.VOLCANO:
-    case Biome.GRAVEYARD:
-    case Biome.FACTORY:
-    case Biome.RUINS:
-    case Biome.WASTELAND:
-    case Biome.ABYSS:
-    case Biome.CONSTRUCTION_SITE:
-    case Biome.JUNGLE:
-    case Biome.FAIRY_CAVE:
-    case Biome.TEMPLE:
-    case Biome.SNOWY_FOREST:
-    case Biome.ISLAND:
-    case Biome.LABORATORY:
-    case Biome.END:
-      return true;
-  }
+export const biomeWithProps = [
+  Biome.METROPOLIS,
+  Biome.BEACH,
+  Biome.LAKE,
+  Biome.SEABED,
+  Biome.MOUNTAIN,
+  Biome.BADLANDS,
+  Biome.CAVE,
+  Biome.DESERT,
+  Biome.ICE_CAVE,
+  Biome.MEADOW,
+  Biome.POWER_PLANT,
+  Biome.VOLCANO,
+  Biome.GRAVEYARD,
+  Biome.FACTORY,
+  Biome.RUINS,
+  Biome.WASTELAND,
+  Biome.ABYSS,
+  Biome.CONSTRUCTION_SITE,
+  Biome.JUNGLE,
+  Biome.FAIRY_CAVE,
+  Biome.TEMPLE,
+  Biome.SNOWY_FOREST,
+  Biome.ISLAND,
+  Biome.LABORATORY,
+  Biome.END,
+];
 
-  return false;
+export function getBiomeHasProps(biomeType: Biome): boolean {
+  return biomeType in biomeWithProps;
 }
 
 export class ArenaBase extends Phaser.GameObjects.Container {
