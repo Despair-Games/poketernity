@@ -42,7 +42,7 @@ import {
 import { getModifierType } from "#app/utils/modifier-type-utils";
 import { modifierTypes } from "./modifier-types";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
-import { Color, ShadowColor } from "#enums/color";
+import { CommonColor, ShadowColor } from "#enums/color";
 import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
@@ -896,10 +896,10 @@ export abstract class LapsingPokemonHeldItemModifier extends PokemonHeldItemModi
     if (this.getPokemon()?.isPlayer()) {
       const battleCountText = addTextObject(27, 0, this.battlesLeft.toString(), TextStyle.PARTY, {
         fontSize: "66px",
-        color: Color.PINK,
+        color: CommonColor.SOFT_PINK,
       });
       battleCountText.setShadow(0, 0);
-      battleCountText.setStroke(ShadowColor.RED, 16);
+      battleCountText.setStroke(ShadowColor.DEEP_RED, 16);
       battleCountText.setOrigin(1, 0);
       container.add(battleCountText);
     }

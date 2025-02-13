@@ -6,7 +6,7 @@ import { globalScene } from "#app/global-scene";
 import { ModifierTier } from "#enums/modifier-tier";
 import i18next from "#app/plugins/i18n";
 import { TextStyle } from "#enums/text-style";
-import { getTextColorCombination } from "./text-color";
+import { getTextColorCombination } from "#app/ui/text-color";
 
 export interface TextStyleOptions {
   scale: number;

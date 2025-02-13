@@ -24,6 +24,7 @@ import { Biome } from "#enums/biome";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
 import { initVouchers } from "#app/system/init-vouchers";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTEMENT } from "./ui-constants";
+import { CommonColor } from "#enums/color";
 import { initAbilities } from "#app/data/init-abilities";
 import { api } from "#app/plugins/api/api";
 import { initMoves } from "#app/data/init-moves";
@@ -408,7 +409,7 @@ export class LoadingScene extends SceneBase {
       text: "0%",
       style: {
         font: "72px emerald",
-        color: "#ffffff",
+        color: CommonColor.WHITE,
       },
     });
     percentText.setOrigin(0.5, 0.5);
@@ -420,7 +421,7 @@ export class LoadingScene extends SceneBase {
       text: "",
       style: {
         font: "48px emerald",
-        color: "#ffffff",
+        color: CommonColor.WHITE,
       },
     });
     assetText.setOrigin(0.5, 0.5);
@@ -432,7 +433,7 @@ export class LoadingScene extends SceneBase {
       text: i18next.t("menu:disclaimer"),
       style: {
         font: "72px emerald",
-        color: "#DA3838",
+        color: CommonColor.WARM_RED,
       },
     });
     disclaimerText.setOrigin(0.5, 0.5);
@@ -444,7 +445,7 @@ export class LoadingScene extends SceneBase {
       text: i18next.t("menu:disclaimerDescription"),
       style: {
         font: "48px emerald",
-        color: "#ffffff",
+        color: CommonColor.WHITE,
         align: "center",
       },
     });

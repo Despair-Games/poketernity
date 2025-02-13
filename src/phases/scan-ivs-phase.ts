@@ -9,7 +9,7 @@ import { Stat } from "#enums/stat";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
 import { PokemonPhase } from "./abstract-pokemon-phase";
-import { Color } from "#enums/color";
+import { CommonColor } from "#enums/color";
 import { PhaseId } from "#enums/phase-id";
 
 export class ScanIvsPhase extends PokemonPhase {
@@ -51,7 +51,7 @@ export class ScanIvsPhase extends PokemonPhase {
       for (let s = 0; s < statsContainerLabels.length; s++) {
         const ivStat = Stat[statsContainerLabels[s].frame.name];
         if (enemyIvs[ivStat] > currentIvs[ivStat] && ivsToShow.indexOf(Number(ivStat)) >= 0) {
-          const hexColour = enemyIvs[ivStat] === 31 ? Color.ORANGE : Color.GREEN;
+          const hexColour = enemyIvs[ivStat] === 31 ? CommonColor.SOFT_ORANGE : CommonColor.LIGHT_GREEN;
           const hexTextColour = Phaser.Display.Color.HexStringToColor(hexColour).color;
           statsContainerLabels[s].setTint(hexTextColour);
         }
