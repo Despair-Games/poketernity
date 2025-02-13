@@ -53,6 +53,12 @@ export class CommandPhase extends FieldPhase {
 
     globalScene.updateGameInfo();
 
+    /**
+     * Reset this pokemon's turn command in case the player already
+     * selected an action for it, then cancelled during its ally's command selection.
+     */
+    turnManager.tryRemoveCommand((tc) => tc.pokemon === pokemon);
+
     const commandUiHandler = globalScene.ui.handlers[UiMode.COMMAND];
 
     if (commandUiHandler) {
