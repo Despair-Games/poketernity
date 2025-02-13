@@ -1,3 +1,4 @@
+import { CommonColor, ShadowColor } from "#enums/color";
 import { Gender } from "#enums/gender";
 
 /**
@@ -23,11 +24,11 @@ export function getGenderSymbol(gender: Gender) {
 export function getGenderColor(gender: Gender) {
   switch (gender) {
     case Gender.MALE:
-      return "#40c8f8"; // light blue
+      return CommonColor.LIGHT_BLUE;
     case Gender.FEMALE:
-      return "#f89890"; // pink
+      return CommonColor.SOFT_PINK;
   }
-  return "#ffffff"; // White
+  return CommonColor.WHITE;
 }
 
 /**
@@ -38,9 +39,9 @@ export function getGenderColor(gender: Gender) {
 export function getGenderShadowColor(gender: Gender) {
   switch (gender) {
     case Gender.MALE:
-      return "#006090"; // Dark blue
+      return ShadowColor.LIGHT_BLUE;
     case Gender.FEMALE:
-      return "#984038"; // Red
+      return ShadowColor.DEEP_RED;
   }
-  return "#ffffff"; // White
+  return CommonColor.WHITE;
 }

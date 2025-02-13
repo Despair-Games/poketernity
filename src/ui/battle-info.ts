@@ -459,7 +459,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
       }
     }
 
-    this.hpBar.setScale(pokemon.getHpRatio(true), 1);
+    this.hpBar.setScale(pokemon.getHpRatio(), 1);
     this.lastHpFrame = this.hpBar.scaleX > 0.5 ? "high" : this.hpBar.scaleX > 0.25 ? "medium" : "low";
     this.hpBar.setFrame(this.lastHpFrame);
     if (this.player) {
@@ -715,7 +715,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
         globalScene.tweens.add({
           targets: this.hpBar,
           ease: "Sine.easeOut",
-          scaleX: pokemon.getHpRatio(true),
+          scaleX: pokemon.getHpRatio(),
           duration: duration,
           onUpdate: () => {
             if (this.player && this.lastHp !== pokemon.hp) {
