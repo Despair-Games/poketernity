@@ -343,7 +343,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     const moveColors = opponents
       .map((opponent) => opponent.getMoveEffectiveness(pokemon, pokemonMove.getMove(), AbilityApplyMode.REVEALED))
       .sort((a, b) => b - a)
-      .map((effectiveness) => getTypeDamageMultiplierColor(effectiveness ?? 0, "offense"));
+      .map((effectiveness) => getTypeDamageMultiplierColor(effectiveness ?? 0));
 
     return moveColors[0];
   }
