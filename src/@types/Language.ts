@@ -1,6 +1,7 @@
 // -- start tsdoc imports --
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { LoadingScene } from "#app/loading-scene";
+/* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
 export type LanguageEvent = "language/change";

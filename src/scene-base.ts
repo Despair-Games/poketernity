@@ -1,7 +1,7 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { UiTheme } from "#enums/ui-theme";
-import { UiWindowType } from "#enums/ui-window-type";
+import { UiWindowStyle } from "#enums/ui-window-style";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
@@ -9,12 +9,12 @@ import { getLocalizedFilename } from "#app/utils";
 import { settings } from "./system/settings/settings-manager";
 
 // TODO: move elsewhere
-export const windowTypeDependantAtlases: string[] = [];
+export const windowStyleDependantAtlases: string[] = [];
 
 /**
  * Additional parameters that can be used when loading Images, Spritesheets or Atlases.
  * They allow to automatically handle textures with a file for each language,
- * atlases/spritesheets that need to be updated live when the {@linkcode UiWindowType} is changed
+ * atlases/spritesheets that need to be updated live when the {@linkcode UiWindowStyle} is changed
  * and UI elements that depend on the current {@linkcode UiTheme}.
  */
 interface TextureLoadingOptions {
@@ -29,9 +29,9 @@ interface TextureLoadingOptions {
   languageKey?: string;
   /**
    * If set to `true`, will automatically update any object using this texture when the window type is changed.
-   * Only works for atlases with keys corresponding to each {@linkcode UiWindowType} (starting at "0"), or spritesheets.
+   * Only works for atlases with keys corresponding to each {@linkcode UiWindowStyle} (starting at "0"), or spritesheets.
    */
-  windowTypeDependant?: boolean;
+  windowStyleDependant?: boolean;
   /**
    * If set to `true`, will load the filename corresponding to the current {@linkcode UiTheme} (and not the other themes).
    * Elements that use these need to have `-{uitheme}` at the end of their filename, e.g. "window-dark.png", for each theme.
@@ -63,8 +63,8 @@ export class SceneBase extends Phaser.Scene {
   }
 
   loadSpritesheet(key: string, folder: string, width: number, height?: number, options?: TextureLoadingOptions) {
-    if (options?.windowTypeDependant) {
-      windowTypeDependantAtlases.push(key);
+    if (options?.windowStyleDependant) {
+      windowStyleDependantAtlases.push(key);
     }
     folder = folder ? folder + "/" : "";
     const filenameRoot = options ? this.getFilenameRoot(key, options) : key;
@@ -75,8 +75,8 @@ export class SceneBase extends Phaser.Scene {
   }
 
   loadAtlas(key: string, folder: string, options?: TextureLoadingOptions) {
-    if (options?.windowTypeDependant) {
-      windowTypeDependantAtlases.push(key);
+    if (options?.windowStyleDependant) {
+      windowStyleDependantAtlases.push(key);
     }
     folder = folder ? folder + "/" : "";
     const atlasFilenameRoot = options?.filenameRoot ?? key;

@@ -1,9 +1,9 @@
-import { windowTypeDependantAtlases as windowTypeDependantAtlases } from "#app/scene-base";
+import { windowStyleDependantAtlases as windowStyleDependantAtlases } from "#app/scene-base";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
 import { WindowVariant } from "#enums/window-variant";
 import { CANVAS_SCALE } from "#app/ui-constants";
-import type { UiWindowType } from "#enums/ui-window-type";
+import type { UiWindowStyle } from "#enums/ui-window-style";
 
 export function getWindowVariantSuffix(windowVariant: WindowVariant): string {
   switch (windowVariant) {
@@ -33,7 +33,7 @@ export function addWindow(
     x,
     y,
     `window${getWindowVariantSuffix(windowVariant)}`,
-    settings.display.uiWindowType,
+    settings.display.uiWindowStyle,
     width,
     height,
     borderSize,
@@ -67,7 +67,7 @@ export function addWindow(
   return window;
 }
 
-export function updateWindowType(windowType: UiWindowType): void {
+export function updateWindowStyle(windowStyle: UiWindowStyle): void {
   const traverse = (object: any) => {
     if (object.hasOwnProperty("children") && object.children instanceof Phaser.GameObjects.DisplayList) {
       const children = object.children as Phaser.GameObjects.DisplayList;
@@ -82,9 +82,9 @@ export function updateWindowType(windowType: UiWindowType): void {
       (object instanceof Phaser.GameObjects.NineSlice
         || object instanceof Phaser.GameObjects.Image
         || object instanceof Phaser.GameObjects.Sprite)
-      && windowTypeDependantAtlases.includes(object.texture?.key)
+      && windowStyleDependantAtlases.includes(object.texture?.key)
     ) {
-      object.setFrame(windowType);
+      object.setFrame(windowStyle);
     }
   };
 

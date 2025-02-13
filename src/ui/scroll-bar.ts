@@ -28,11 +28,9 @@ export class ScrollBar extends Phaser.GameObjects.Container {
   constructor(x: number, y: number, width: number, height: number, maxRows: number) {
     super(globalScene, x, y);
 
-    console.log(x + " " + y + " " + width + " " + height);
-
     width = Math.max(width, 4);
 
-    this.bg = globalScene.add.nineslice(0, 0, "scroll_bar", settings.display.uiWindowType, width, height, 2, 2, 2, 2);
+    this.bg = globalScene.add.nineslice(0, 0, "scroll_bar", settings.display.uiWindowStyle, width, height, 2, 2, 2, 2);
     this.bg.setOrigin(0, 0);
     this.add(this.bg);
 
@@ -40,7 +38,7 @@ export class ScrollBar extends Phaser.GameObjects.Container {
       0,
       0,
       "scroll_bar_handle",
-      settings.display.uiWindowType,
+      settings.display.uiWindowStyle,
       width,
       2,
       2,

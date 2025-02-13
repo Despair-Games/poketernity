@@ -20,6 +20,7 @@ import { UiTheme } from "#enums/ui-theme";
 import { supportedLanguages } from "#app/system/settings/supported-languages";
 import { isLandscapeMode } from "#app/utils";
 import i18next, { t } from "i18next";
+import { UiWindowStyle } from "#enums/ui-window-style";
 
 //#region Types
 
@@ -221,9 +222,9 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
     requiresReload: true,
   },
   {
-    key: "uiWindowType",
+    key: "uiWindowStyle",
     label: t("settings:windowType"),
-    options: Array.from({ length: 5 }).map((_, i) => ({ value: i, label: `${i + 1}` })),
+    options: Array.from({ length: Object.keys(UiWindowStyle).length }).map((_, i) => ({ value: i, label: `${i + 1}` })),
     doWrap: true,
   },
   {

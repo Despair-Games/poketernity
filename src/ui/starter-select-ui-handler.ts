@@ -3453,8 +3453,8 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         const ability = allAbilities[this.lastSpecies.getAbility(abilityIndex!)]; // TODO: is this bang correct?
         this.pokemonAbilityText.setText(ability.name);
 
-        const isHidden = abilityIndex === (this.lastSpecies.ability2 ? 2 : 1);
-        setTextColor(this.pokemonAbilityText, !isHidden ? TextStyle.SUMMARY_ALT : TextStyle.SUMMARY_GOLD);
+        const isHiddenAbility = abilityIndex === (this.lastSpecies.ability2 ? 2 : 1);
+        setTextColor(this.pokemonAbilityText, !isHiddenAbility ? TextStyle.SUMMARY_ALT : TextStyle.SUMMARY_GOLD);
 
         const passiveAttr = globalScene.gameData.starterData[species.speciesId].passiveAttr;
         const passiveAbility = allAbilities[starterPassiveAbilities[this.lastSpecies.speciesId]];
