@@ -104,4 +104,5 @@ export enum BattlerTagType {
   POWDER,
   SKY_DROP,
   CRIT_BOOST_STACKABLE,
+  RAGE,
 }
