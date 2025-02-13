@@ -86,15 +86,15 @@ export class Arena {
 
   /**
    * Generates a random Pokemon species for the biome
-   * @param waveIndex the current floor
-   * @param level the level of the generated Pokemon
-   * @param attempt the number of attempts this function has been called since it calls itself recursively
-   * Is 0 if called from a ME
-   * Is undefined if called from battle-scene
-   * @param luckValue the player's luck value
-   * If the spawned Pokemon is a boss then the rng ceiling is decreased by half the luck value
-   * If the spawned Pokemon is not a boss then the rng ceiling is decreased by twice the luck value
-   * @param isBoss whether or not to force a boss
+   * @param waveIndex - The current floor
+   * @param level - The level of the generated Pokemon
+   * @param attempt - The number of attempts this function has been called since it calls itself recursively
+   * - Is 0 if called from a ME
+   * - Is `undefined` if called from battle-scene
+   * @param luckValue - The player's luck value
+   * - If the spawned Pokemon is a boss then the RNG ceiling is decreased by half the luck value
+   * - If the spawned Pokemon is not a boss then the RNG ceiling is decreased by twice the luck value
+   * @param isBoss - Whether or not to force a boss
    * @returns a Pokemon species
    */
   randomSpecies(
@@ -179,8 +179,6 @@ export class Arena {
 
   /**
    * Determines whether or not to reroll for the given {@linkcode PokemonSpecies} and level
-   * @param pokemonSpecies
-   * @param level
    *
    * Mega/Primal/Ultra legendaries and Arceus (720) cannot spawn below level 90
    * Most legendaries (including Regigigas but not Kyurem, Zacian and Zamazenta) cannot spawn below level 70
@@ -204,16 +202,16 @@ export class Arena {
   }
 
   /**
-   * Generates a boss {@linkcode BiomePoolTier} for a given
-   * @param tierValue number from 0-63
-   *
+   * Generates a boss {@linkcode BiomePoolTier} for a given tier value.
+   * ```
    * |         | tier values | Chance |
    * |---------|-------------|--------|
    * | Boss    | 20-63       | 44/64  |
    * | Boss R  | 6-19        | 14/64  |
    * | Boss SR | 1-5         | 5/64   |
    * | Boss UR | 0           | 1/64   |
-   *
+   * ```
+   * @param tierValue - Number from 0-63
    * @returns the generated BiomePoolTier
    */
   generateBossBiomeTier(tierValue: number): BiomePoolTier {
@@ -229,9 +227,8 @@ export class Arena {
   }
 
   /**
-   * Generates a non-boss {@linkcode BiomePoolTier} for a given
-   * @param tierValue number from 0-511
-   *
+   * Generates a non-boss {@linkcode BiomePoolTier} for a given tier value.
+   * ```
    * |            | tier values | Chance  |
    * |------------|-------------|---------|
    * | Common     | 156-511     | 356/512 |
@@ -239,7 +236,8 @@ export class Arena {
    * | Rare       | 6-31        | 26/512  |
    * | Super Rare | 1-5         | 5/512   |
    * | Ultra Rare | 0           | 1/512   |
-   *
+   * ```
+   * @param tierValue - Number from 0-511
    * @returns the generated BiomePoolTier
    */
   generateNonBossBiomeTier(tierValue: number): BiomePoolTier {
@@ -257,12 +255,11 @@ export class Arena {
   }
 
   /**
-   * Attempts to generate a trainer for a given wave
-   * @param waveIndex the wave index
-   * @param isBoss only true for the brutal mysterious challengers ME
-   *
-   * If no trainers can be found then a breeder will be retruned instead
-   * @returns a trainer
+   * Attempts to generate a trainer for a given wave.
+   * If no trainers can be found then a breeder will be returned instead.
+   * @param waveIndex - The wave index
+   * @param isBoss - Only true for the brutal mysterious challengers ME
+   * @returns a {@linkcode TrainerType | trainer}
    */
   randomTrainerType(waveIndex: number, isBoss: boolean = false): TrainerType {
     const isTrainerBoss =
@@ -284,9 +281,9 @@ export class Arena {
   }
 
   /**
-   * Generates a formIndex for a given Species based on the biome and time of day
+   * Generates a `formIndex` for a given species based on the biome and time of day.
    * Used for Burmy/Wormadam, Rotom, and Lycanroc
-   * @param species the {@linkcode PokemonSpecies} being checked
+   * @param species - The {@linkcode PokemonSpecies} being checked
    * @returns the appropriate formIndex
    */
   getSpeciesFormIndex(species: PokemonSpecies): number {
@@ -434,9 +431,9 @@ export class Arena {
 
   /**
    * Attempts to set terrain
-   * @param terrain {@linkcode TerrainType | the type of terrain}
-   * @param hasPokemonSource whether the terrain was generated from a Pokemon
-   * @param ignoreAnim whether or not to ignore animations
+   * @param terrain - {@linkcode TerrainType | The type of terrain}
+   * @param hasPokemonSource - Whether the terrain was generated from a Pokemon
+   * @param ignoreAnim - Whether or not to ignore animations
    * @returns whether or not the terrain was successfully set
    */
   trySetTerrain(terrain: TerrainType, hasPokemonSource: boolean, ignoreAnim: boolean = false): boolean {
@@ -476,8 +473,8 @@ export class Arena {
 
   /**
    * Checks to see if the current weather will cancel a move
-   * @param user the Pokemon using the move
-   * @param move the move being used
+   * @param user - The Pokemon using the move
+   * @param move - The move being used
    * @returns whether the move was cancelled by weather
    */
   public isMoveWeatherCancelled(user: Pokemon, move: Move): boolean {
@@ -486,9 +483,9 @@ export class Arena {
 
   /**
    * Checks to see if the current terrain will cancel a move
-   * @param user the Pokemon using the move
-   * @param targets the Pokemon being targetted
-   * @param move the move being used
+   * @param user - The Pokemon using the move
+   * @param targets - The Pokemon being targetted
+   * @param move - The move being used
    * @returns whether the move was cancelled by terrain
    */
   public isMoveTerrainCancelled(user: Pokemon, targets: BattlerIndex[], move: Move): boolean {
@@ -501,8 +498,8 @@ export class Arena {
 
   /**
    * Gets the attack type multiplier for weather and terrain
-   * @param attackType the type of the attack being used
-   * @param grounded whether or not the user is grounded
+   * @param attackType - The type of the attack being used
+   * @param grounded - Whether or not the user is grounded
    * @returns the attack multiplier
    */
   getAttackTypeMultiplier(attackType: ElementalType, grounded: boolean): number {
@@ -569,13 +566,14 @@ export class Arena {
 
   /**
    * Gets the time of day
+   * ```
    * | time of day | waveCycle | waves |
    * |-------------|-----------|-------|
    * | day         | 0-14      | 15    |
    * | dusk        | 15-19     | 5     |
    * | night       | 20-34     | 15    |
    * | dawn        | 35-39     | 5     |
-   *
+   * ```
    * It is always night in the abyss
    *
    * @returns the TimeOfDay
