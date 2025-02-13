@@ -174,6 +174,7 @@ import { Animation } from "./animations";
 import { resetStarterColors, starterColors } from "./data/starter-colors";
 import { CallSourceLogger } from "#app/loggers";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { CommonColor, ShadowColor } from "#enums/color";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { GameOverPhase } from "#app/phases/game-over-phase";
@@ -1943,8 +1944,8 @@ export default class BattleScene extends SceneBase {
     const biomeString: string = getBiomeName(this.arena.biomeType);
     this.fieldUI.moveAbove(this.biomeWaveText, this.luckText);
     this.biomeWaveText.setText(biomeString + " - " + this.currentBattle.waveIndex.toString());
-    this.biomeWaveText.setColor(!isBoss ? "#ffffff" : "#f89890");
-    this.biomeWaveText.setShadowColor(!isBoss ? "#636363" : "#984038");
+    this.biomeWaveText.setColor(isBoss ? CommonColor.SOFT_PINK : CommonColor.WHITE);
+    this.biomeWaveText.setShadowColor(isBoss ? ShadowColor.DEEP_RED : ShadowColor.GREY);
     this.biomeWaveText.setVisible(true);
   }
 
@@ -1965,7 +1966,7 @@ export default class BattleScene extends SceneBase {
       return;
     }
     const deltaScale = this.moneyText.scale * 0.14 * (positiveChange ? 1 : -1);
-    this.moneyText.setShadowColor(positiveChange ? "#008000" : "#FF0000");
+    this.moneyText.setShadowColor(positiveChange ? CommonColor.PURE_GREEN : CommonColor.PURE_RED);
     this.tweens.add({
       targets: this.moneyText,
       duration: 250,
@@ -3470,6 +3471,7 @@ export default class BattleScene extends SceneBase {
       "partyUiHandler:illNeverForgetYou",
       "partyUiHandler:untilWeMeetAgain",
       "partyUiHandler:sayonara",
+      "partyUiHandler:smellYaLater",
     ];
     return i18next.t(randItem(goodbyeKeys), { pokemonName });
   }
