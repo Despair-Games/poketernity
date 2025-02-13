@@ -1,6 +1,7 @@
+import { TypeEffectivenessColor } from "#enums/color";
 import { ElementalType } from "#enums/elemental-type";
 
-export type TypeDamageMultiplier = 0 | 0.125 | 0.25 | 0.5 | 1 | 2 | 4 | 8;
+export type TypeDamageMultiplier = 0 | 0.125 | 0.25 | 0.5 | 1 | 2 | 4 | 8 | 16;
 
 export function getTypeDamageMultiplier(attackType: ElementalType, defType: ElementalType): TypeDamageMultiplier {
   if (attackType === ElementalType.UNKNOWN || defType === ElementalType.UNKNOWN) {
@@ -271,51 +272,23 @@ export function getTypeDamageMultiplier(attackType: ElementalType, defType: Elem
  * Retrieve the color corresponding to a specific damage multiplier
  * @returns A color or undefined if the default color should be used
  */
-export function getTypeDamageMultiplierColor(
-  multiplier: TypeDamageMultiplier,
-  side: "defense" | "offense",
-): string | undefined {
-  if (side === "offense") {
-    switch (multiplier) {
-      case 0:
-        return "#929292";
-      case 0.125:
-        return "#FF5500";
-      case 0.25:
-        return "#FF7400";
-      case 0.5:
-        return "#FE8E00";
-      case 1:
-        return undefined;
-      case 2:
-        return "#4AA500";
-      case 4:
-        return "#4BB400";
-      case 8:
-        return "#52C200";
-    }
-  } else if (side === "defense") {
-    switch (multiplier) {
-      case 0:
-        return "#B1B100";
-      case 0.125:
-        return "#2DB4FF";
-      case 0.25:
-        return "#00A4FF";
-      case 0.5:
-        return "#0093FF";
-      case 1:
-        return undefined;
-      case 2:
-        return "#FE8E00";
-      case 4:
-        return "#FF7400";
-      case 8:
-        return "#FF5500";
-    }
-  }
+export function getTypeDamageMultiplierColor(multiplier: TypeDamageMultiplier): string | undefined {
+  const effectivenessMap: Record<TypeDamageMultiplier, string | undefined> = {
+    0: TypeEffectivenessColor.NO_EFFECT,
+    0.125: TypeEffectivenessColor.VERY_RESISTED,
+    0.25: TypeEffectivenessColor.RESISTED,
+    0.5: TypeEffectivenessColor.NOT_VERY_EFFECTIVE,
+    1: undefined,
+    2: TypeEffectivenessColor.SUPER_EFFECTIVE,
+    4: TypeEffectivenessColor.DOUBLE_SUPER_EFFECTIVE,
+    8: TypeEffectivenessColor.QUAD_SUPER_EFFECTIVE,
+    16: TypeEffectivenessColor.MAX_SUPER_EFFECTIVE,
+  };
+
+  return effectivenessMap[multiplier];
 }
 
+/** @todo Normalize all RGB/Hexcode colors to the same system */
 export function getTypeRgb(type: ElementalType): [number, number, number] {
   switch (type) {
     case ElementalType.NORMAL:

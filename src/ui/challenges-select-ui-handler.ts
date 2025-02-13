@@ -9,7 +9,7 @@ import type { Challenge } from "#app/data/challenge";
 import { getLocalizedSpriteKey } from "#app/utils";
 import { Challenges } from "#enums/challenges";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import { Color, ShadowColor } from "#enums/color";
+import { CommonColor, ShadowColor } from "#enums/color";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
@@ -205,7 +205,7 @@ export default class GameChallengesUiHandler extends UiHandler {
    * @param text text to set to the BBCode description
    */
   setDescription(text: string): void {
-    this.descriptionText.setText(`[color=${Color.ORANGE}][shadow=${ShadowColor.ORANGE}]${text}`);
+    this.descriptionText.setText(`[color=${CommonColor.SOFT_ORANGE}][shadow=${ShadowColor.ORANGE}]${text}`);
   }
 
   /**
