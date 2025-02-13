@@ -3957,7 +3957,8 @@ export function initMoves() {
       .condition((user, _target, move) => {
         const turnMove = user.getLastXMoves(1);
         return !turnMove.length || turnMove[0].move.id !== move.id || turnMove[0].result !== MoveResult.SUCCESS;
-      }), // TODO Add Instruct/Encore interaction
+      }) // TODO Add Instruct/Encore interaction
+      .edgeCase(), // should be unselectable the turn after its used
     new AttackMove(MoveId.COMEUPPANCE, ElementalType.DARK, MoveCategory.PHYSICAL, -1, 100, 10, -1, 0, 9)
       .attr(CounterDamageAttr, (moveId) => allMoves[moveId].isAttackMove(), 1.5)
       .redirectCounter()
@@ -3981,12 +3982,12 @@ export function initMoves() {
     new AttackMove(MoveId.MAGICAL_TORQUE, ElementalType.FAIRY, MoveCategory.PHYSICAL, 100, 100, 10, 30, 0, 9)
       .attr(ConfuseAttr)
       .makesContact(false),
-    new AttackMove(MoveId.BLOOD_MOON, ElementalType.NORMAL, MoveCategory.SPECIAL, 140, 100, 5, -1, 0, 9).condition(
-      (user, _target, move) => {
+    new AttackMove(MoveId.BLOOD_MOON, ElementalType.NORMAL, MoveCategory.SPECIAL, 140, 100, 5, -1, 0, 9)
+      .condition((user, _target, move) => {
         const turnMove = user.getLastXMoves(1);
         return !turnMove.length || turnMove[0].move.id !== move.id || turnMove[0].result !== MoveResult.SUCCESS;
-      },
-    ), // TODO Add Instruct/Encore interaction
+      }) // TODO Add Instruct/Encore interaction
+      .edgeCase(), // should be unselectable the turn after it's used
     new AttackMove(MoveId.MATCHA_GOTCHA, ElementalType.GRASS, MoveCategory.SPECIAL, 80, 90, 15, 20, 0, 9)
       .attr(HitHealAttr)
       .attr(HealStatusEffectAttr, true, StatusEffect.FREEZE)
