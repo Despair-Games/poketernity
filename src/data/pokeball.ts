@@ -78,18 +78,14 @@ export function getCriticalCaptureChance(modifiedCatchRate: number): number {
   const dexCount = globalScene.gameData.getSpeciesCount((d) => !!d.caughtAttr);
   const catchingCharmMultiplier = new NumberHolder(1);
   globalScene.findModifier((m) => m.isCriticalCatchChanceBoosterModifier())?.apply(catchingCharmMultiplier);
-  const dexMultiplier =
-    globalScene.gameMode.isDaily || dexCount > 800
-      ? 2.5
-      : dexCount > 600
-        ? 2
-        : dexCount > 400
-          ? 1.5
-          : dexCount > 200
-            ? 1
-            : dexCount > 100
-              ? 0.5
-              : 0;
+  let dexMultiplier = 1;
+  if (globalScene.gameMode.isDaily || dexCount > 800) {
+    dexMultiplier = 2.5;
+  } else if (dexCount > 600) {
+    dexMultiplier = 2;
+  } else if (dexCount > 400) {
+    dexMultiplier = 1.5;
+  }
   return Math.floor((catchingCharmMultiplier.value * dexMultiplier * Math.min(255, modifiedCatchRate)) / 6);
 }
 
