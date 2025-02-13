@@ -94,7 +94,7 @@ export class Arena {
    * @param luckValue the player's luck value
    * If the spawned Pokemon is a boss then the rng ceiling is decreased by half the luck value
    * If the spawned Pokemon is not a boss then the rng ceiling is decreased by twice the luck value
-   * @param isBoss
+   * @param isBoss whether or not to force a boss
    * @returns a Pokemon species
    */
   randomSpecies(
@@ -178,7 +178,7 @@ export class Arena {
   }
 
   /**
-   * Determines whether or not to reroll for the given
+   * Determines whether or not to reroll for the given {@linkcode PokemonSpecies} and level
    * @param pokemonSpecies
    * @param level
    *
@@ -186,7 +186,7 @@ export class Arena {
    * Most legendaries (including Regigigas but not Kyurem, Zacian and Zamazenta) cannot spawn below level 70
    * All other sublegends cannot spawn below level 50
    * The final base case only has Cosmoem/Cosmog
-   * @returns true if rerolling is required, false otherwise
+   * @returns `true` if rerolling is required, `false` otherwise
    */
   determineRerollIfLegendLike(pokemonSpecies: PokemonSpecies, level: number): boolean {
     if (pokemonSpecies.isLegendLike()) {
@@ -204,7 +204,7 @@ export class Arena {
   }
 
   /**
-   * Generates a boss BiomePoolTier for a given
+   * Generates a boss {@linkcode BiomePoolTier} for a given
    * @param tierValue number from 0-63
    *
    * |         | tier values | Chance |
@@ -229,7 +229,7 @@ export class Arena {
   }
 
   /**
-   * Generates a non-boss BiomePoolTier for a given
+   * Generates a non-boss {@linkcode BiomePoolTier} for a given
    * @param tierValue number from 0-511
    *
    * |            | tier values | Chance  |
@@ -269,6 +269,8 @@ export class Arena {
       !!this.trainerPool[BiomePoolTier.BOSS].length
       && (globalScene.gameMode.isTrainerBoss(waveIndex, this.biomeType, globalScene.offsetGym) || isBoss);
     console.log(isBoss, this.trainerPool);
+
+    // @todo Right now there are no super/ultra or rare boss trainers
     const tierValue = randSeedInt(!isTrainerBoss ? 512 : 64);
     let tier = isTrainerBoss ? this.generateBossBiomeTier(tierValue) : this.generateNonBossBiomeTier(tierValue);
     console.log(BiomePoolTier[tier]);
@@ -284,7 +286,7 @@ export class Arena {
   /**
    * Generates a formIndex for a given Species based on the biome and time of day
    * Used for Burmy/Wormadam, Rotom, and Lycanroc
-   * @param species the species being checked
+   * @param species the {@linkcode PokemonSpecies} being checked
    * @returns the appropriate formIndex
    */
   getSpeciesFormIndex(species: PokemonSpecies): number {
@@ -432,7 +434,7 @@ export class Arena {
 
   /**
    * Attempts to set terrain
-   * @param terrain the type of terrain
+   * @param terrain {@linkcode TerrainType | the type of terrain}
    * @param hasPokemonSource whether the terrain was generated from a Pokemon
    * @param ignoreAnim whether or not to ignore animations
    * @returns whether or not the terrain was successfully set
@@ -600,7 +602,10 @@ export class Arena {
     return TimeOfDay.DAWN;
   }
 
-  indoorBiomes = [
+  /**
+   * Whether or not a biome is indoors affects tinting
+   */
+  private readonly indoorBiomes = [
     Biome.SEABED,
     Biome.CAVE,
     Biome.ICE_CAVE,
@@ -957,7 +962,10 @@ export function getBiomeKey(biome: Biome): string {
   return Biome[biome].toLowerCase();
 }
 
-export const biomeWithProps = [
+/**
+ * Props are additional sprite images present in a biome
+ */
+const biomeWithProps = [
   Biome.METROPOLIS,
   Biome.BEACH,
   Biome.LAKE,
