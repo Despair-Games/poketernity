@@ -242,6 +242,7 @@ import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { RageAttr } from "./move-attrs/rage-attr";
+import { CaptivateAttr } from "./move-attrs/captivate-attr";
 
 export function initMoves() {
   const rawAllMoves = [
@@ -1893,8 +1894,7 @@ export function initMoves() {
       .attr(HighCritAttr)
       .makesContact(false),
     new StatusMove(MoveId.CAPTIVATE, ElementalType.NORMAL, 100, 20, -1, 0, 4)
-      .attr(StatStageChangeAttr, [Stat.SPATK], -2)
-      .condition((user, target, _move) => target.isOppositeGender(user))
+      .attr(CaptivateAttr)
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new StatusMove(MoveId.STEALTH_ROCK, ElementalType.ROCK, -1, 20, -1, 0, 4)
       .attr(AddArenaTrapTagAttr, ArenaTagType.STEALTH_ROCK)
