@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { allAbilities } from "#app/data/data-lists";
+import { allAbilities, allMoves } from "#app/data/data-lists";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
 import { ElementalType } from "#enums/elemental-type";
