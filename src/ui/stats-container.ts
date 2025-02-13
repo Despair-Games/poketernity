@@ -1,5 +1,5 @@
 import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
-import { addBBCodeTextObject, addTextObject, getBBCodeFrag } from "#app/ui/text";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { PERMANENT_STATS, getStatKey } from "#enums/stat";
 import i18next from "i18next";
@@ -122,13 +122,13 @@ export class StatsContainer extends Phaser.GameObjects.Container {
 
         // Check to see if IVs are 31, if so change the text style to gold, otherwise leave them be.
         if (ivs[i] === 31) {
-          label += getBBCodeFrag(ivs[i].toString(), TextStyle.PERFECT_IV, true, true);
+          label += getBBCodeFragment(ivs[i].toString(), TextStyle.PERFECT_IV, true, true);
         } else {
           label = ivs[i].toString();
         }
         if (this.showDiff && originalIvs) {
           if (originalIvs[i] < ivs[i]) {
-            label += ` (${getBBCodeFrag(`+${ivs[i] - originalIvs[i]}`, TextStyle.SUMMARY_BLUE, true)})`;
+            label += ` (${getBBCodeFragment(`+${ivs[i] - originalIvs[i]}`, TextStyle.SUMMARY_BLUE, true)})`;
           } else {
             label += " (-)";
           }

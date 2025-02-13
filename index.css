@@ -19,31 +19,31 @@ html {
   touch-action: none;
 }
 
-html[data-window-type="RED_ORANGE"] {
+html[data-window-style="RED_ORANGE"] {
   --color-base: #6b5a73;
   --color-light: #DD5748;
   --color-dark: #7E4955;
 }
 
-html[data-window-type="TEAL"] {
+html[data-window-style="TEAL"] {
   --color-base: #6b5a73;
   --color-light: #48DDAA;
   --color-dark: #4D7574;
 }
 
-html[data-window-type="LIGHT_GRAY"] {
+html[data-window-style="LIGHT_GRAY"] {
   --color-base: #6b5a73;
   --color-light: #C5C5C5;
   --color-dark: #766D7E;
 }
 
-html[data-window-type="GOLDENROD"] {
+html[data-window-style="GOLDENROD"] {
   --color-base: #6b5a73;
   --color-light: #EBC07C;
   --color-dark: #836C66;
 }
 
-html[data-window-type="MEDIUM_GRAY"] {
+html[data-window-style="MEDIUM_GRAY"] {
   --color-base: #686868;
   --color-light: #E8E8E8;
   --color-dark: #919191;

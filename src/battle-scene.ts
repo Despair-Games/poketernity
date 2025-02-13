@@ -92,7 +92,7 @@ import type { Voucher } from "#app/system/voucher";
 import { vouchers } from "#app/system/voucher";
 import { Gender } from "#enums/gender";
 import type UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
-import { updateWindowType } from "#app/ui/ui-theme";
+import { updateWindowStyle } from "#app/ui/ui-theme";
 import type PokemonData from "#app/system/pokemon-data";
 import { Nature } from "#enums/nature";
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";
@@ -394,8 +394,8 @@ export default class BattleScene extends SceneBase {
       }
 
       // If window type gets changed, update window colors
-      if (key === "uiWindowType" && typeof value === "number") {
-        updateWindowType(value);
+      if (key === "uiWindowStyle" && typeof value === "number") {
+        updateWindowStyle(value);
       }
 
       // If gender gets changed, update trainer sprite

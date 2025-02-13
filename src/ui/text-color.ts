@@ -14,7 +14,7 @@ interface TextColorCombination {
 /**
  * Object linking each {@linkcode TextColor} to a {@linkcode CommonColor} and {@linkcode ShadowColor}.
  */
-const colorCombinations: { [key: string]: TextColorCombination } = {
+const colorCombinations: { [key: string]: TextColorCombination } = Object.freeze({
   [TextColor.OFF_WHITE_PURPLE]: { mainColor: CommonColor.OFF_WHITE, shadowColor: ShadowColor.PURPLE },
   [TextColor.OFF_WHITE_GREY]: { mainColor: CommonColor.OFF_WHITE, shadowColor: ShadowColor.GREY },
   [TextColor.GREY_LIGHT_GREY]: { mainColor: CommonColor.GREY, shadowColor: ShadowColor.LIGHT_GREY },
@@ -32,7 +32,7 @@ const colorCombinations: { [key: string]: TextColorCombination } = {
   [TextColor.DEEP_YELLOW_OLIVE_BRONZE]: { mainColor: CommonColor.DEEP_YELLOW, shadowColor: ShadowColor.OLIVE_BRONZE },
   [TextColor.DEEP_ORANGE_PEACH_SAND]: { mainColor: CommonColor.DEEP_ORANGE, shadowColor: ShadowColor.PEACH_SAND },
   [TextColor.CORAL_PINK_BRIGHT_RED]: { mainColor: CommonColor.CORAL_PINK, shadowColor: ShadowColor.BRIGHT_RED },
-};
+});
 
 /**
  * Retrieve the colors associated with the given TextStyle, based on the current {@linkcode UiTheme}.

@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { addBBCodeTextObject, addTextObject, getBBCodeFrag } from "./text";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "./text";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import MessageUiHandler from "./message-ui-handler";
@@ -36,7 +36,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     this.textTimer = null;
     this.textCallbackTimer = null;
 
-    this.bg = globalScene.add.sprite(0, 0, "battle_message_box", settings.display.uiWindowType);
+    this.bg = globalScene.add.sprite(0, 0, "battle_message_box", settings.display.uiWindowStyle);
     this.bg.setName("sprite-battle-msg-bg");
     this.bg.setOrigin(0, 1);
     ui.add(this.bg);
@@ -82,7 +82,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
       0,
       0,
       "trainer_namebox",
-      settings.display.uiWindowType,
+      settings.display.uiWindowStyle,
       72,
       16,
       8,
@@ -278,7 +278,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
       } else {
         textStyle = TextStyle.WINDOW;
       }
-      return getBBCodeFrag(text, textStyle, true);
+      return getBBCodeFragment(text, textStyle, true);
     };
 
     if (value > 30) {

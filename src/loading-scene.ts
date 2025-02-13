@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { type UiWindowType } from "#enums/ui-window-type";
+import { type UiWindowStyle } from "#enums/ui-window-style";
 // -- end tsdoc imports --
 import { GachaType } from "#enums/gacha-types";
 import { getBiomeHasProps } from "#app/field/arena";
@@ -50,18 +50,18 @@ export class LoadingScene extends SceneBase {
     this.loadImage("loading_bg", ImagesFolder.ARENAS);
     this.loadImage("logo");
 
-    /** UI Elements that change based on the {@linkcode UiWindowType} */
+    /** UI Elements that change based on the {@linkcode UiWindowStyle} */
     for (const windowVariant of getEnumValues(WindowVariant)) {
       this.loadSpritesheet(`window${getWindowVariantSuffix(windowVariant)}`, ImagesFolder.UI_WINDOWS, 24, 24, {
-        windowTypeDependant: true,
+        windowStyleDependant: true,
         uiThemeDependant: true,
       });
     }
-    this.loadSpritesheet("trainer_namebox", ImagesFolder.UI_WINDOWS, 20, 20, { windowTypeDependant: true });
-    this.loadSpritesheet("battle_message_box", ImagesFolder.UI_WINDOWS, 320, 48, { windowTypeDependant: true });
+    this.loadSpritesheet("trainer_namebox", ImagesFolder.UI_WINDOWS, 20, 20, { windowStyleDependant: true });
+    this.loadSpritesheet("battle_message_box", ImagesFolder.UI_WINDOWS, 320, 48, { windowStyleDependant: true });
 
-    this.loadSpritesheet("scroll_bar", ImagesFolder.UI, 8, 8, { windowTypeDependant: true });
-    this.loadSpritesheet("scroll_bar_handle", ImagesFolder.UI, 8, 8, { windowTypeDependant: true });
+    this.loadSpritesheet("scroll_bar", ImagesFolder.UI, 8, 8, { windowStyleDependant: true });
+    this.loadSpritesheet("scroll_bar_handle", ImagesFolder.UI, 8, 8, { windowStyleDependant: true });
 
     this.loadAtlas("numbers", ImagesFolder.UI);
     this.loadAtlas("numbers_red", ImagesFolder.UI);

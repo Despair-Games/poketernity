@@ -1,7 +1,7 @@
 import { GameModes } from "#enums/game-modes";
 import UiHandler from "./ui-handler";
 import type { SessionSaveData } from "#app/@types/SessionData";
-import { addTextObject, addBBCodeTextObject, getBBCodeFrag } from "./text";
+import { addTextObject, addBBCodeTextObject, getBBCodeFragment } from "./text";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "./ui-theme";
@@ -626,7 +626,7 @@ export default class RunInfoUiHandler extends UiHandler {
     runInfoText.appendText(`${i18next.t("runHistory:runLength")}: ${runTime}`, false);
     const runMoney = formatMoney(settings.display.moneyFormat, this.runInfo.money);
     const moneyText = i18next.t("battleScene:moneyOwned", { formattedMoney: runMoney });
-    runInfoText.appendText(getBBCodeFrag(moneyText, TextStyle.MONEY_WINDOW, true, false));
+    runInfoText.appendText(getBBCodeFragment(moneyText, TextStyle.MONEY_WINDOW, true, false));
     runInfoText.setPosition(7, 70);
     runInfoTextContainer.add(runInfoText);
     // Luck

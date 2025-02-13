@@ -217,7 +217,7 @@ export function getTextStyleOptions(
   return { scale, styleOptions, shadowColor, shadowXpos, shadowYpos };
 }
 
-export function getBBCodeFrag(
+export function getBBCodeFragment(
   content: string,
   textStyle: TextStyle,
   closeFragment: boolean = false,
@@ -252,7 +252,7 @@ export function getBBCodeFrag(
  */
 export function getTextWithColors(content: string, primaryStyle: TextStyle, forWindow?: boolean): string {
   // Apply primary styling before anything else
-  let text = getBBCodeFrag(content, primaryStyle, true);
+  let text = getBBCodeFragment(content, primaryStyle, true);
   const primaryStyleString = [...text.match(new RegExp(/\[color=[^\[]*\]\[shadow=[^\[]*\]/i))!][0];
 
   /* For money text displayed in game windows, we can't use the default {@linkcode TextStyle.MONEY}
@@ -264,7 +264,7 @@ export function getTextWithColors(content: string, primaryStyle: TextStyle, forW
 
   // Set custom colors
   text = text.replace(/@\[([^{]*)\]{([^}]*)}/gi, (_substring, textStyle: string, textToColor: string) => {
-    return "[/color][/shadow]" + getBBCodeFrag(textToColor, TextStyle[textStyle], true) + primaryStyleString;
+    return "[/color][/shadow]" + getBBCodeFragment(textToColor, TextStyle[textStyle], true) + primaryStyleString;
   });
 
   // Remove extra style block at the end

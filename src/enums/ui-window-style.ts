@@ -1,4 +1,4 @@
-export enum UiWindowType {
+export enum UiWindowStyle {
   /** @hex #c73625 */
   RED_ORANGE,
   /** @hex #20B098 */
