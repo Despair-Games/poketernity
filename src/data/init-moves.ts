@@ -1553,7 +1553,7 @@ export function initMoves() {
       .ignoresProtect()
       .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, ArenaTagRelativeSide.ALL, { turnCount: 5 })
       .target(MoveTarget.BOTH_SIDES)
-      .partial(), // does not prevent Bounce, Fly, etc. from being selected; only causes the moves to fail.
+      .edgeCase(), // does not prevent Bounce, Fly, etc. from being selected; only causes the moves to fail.
     new StatusMove(MoveId.MIRACLE_EYE, ElementalType.PSYCHIC, -1, 40, -1, 0, 4)
       .attr(ExposedMoveAttr, BattlerTagType.IGNORE_DARK)
       .ignoresSubstitute(),
@@ -3702,7 +3702,7 @@ export function initMoves() {
     new AttackMove(MoveId.G_MAX_GRAVITAS, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.ORBEETLE)
       .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, ArenaTagRelativeSide.ALL, { turnCount: 5 })
-      .partial(), // does not prevent Bounce, Fly, etc. from being selected; only causes the moves to fail.
+      .edgeCase(), // does not prevent Bounce, Fly, etc. from being selected; only causes the moves to fail.
     new AttackMove(MoveId.G_MAX_VOLCALITH, ElementalType.ROCK, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.COALOSSAL)
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_VOLCALITH),
