@@ -16460,7 +16460,7 @@ export function initSpecies() {
         650,
         Abilities.LEVITATE,
         Abilities.NONE,
-        Abilities.NONE,
+        Abilities.LEVITATE,
         680,
         150,
         120,
