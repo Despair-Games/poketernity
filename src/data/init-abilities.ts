@@ -202,6 +202,7 @@ import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { allAbilities } from "./all-abilities";
+import { BypassParaSpeedReductionAbAttr } from "./ab-attrs/bypass-para-speed-reduction-ab-attr";
 
 export function initAbilities() {
   allAbilities.push(
@@ -493,12 +494,7 @@ export function initAbilities() {
       .attr(StatMultiplierAbAttr, Stat.SPATK, 1.5)
       .condition(getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN)),
     new Ability(Abilities.QUICK_FEET, 4)
-      .conditionalAttr(
-        (pokemon) => (pokemon.status ? pokemon.status.effect === StatusEffect.PARALYSIS : false),
-        StatMultiplierAbAttr,
-        Stat.SPD,
-        2,
-      )
+      .attr(BypassParaSpeedReductionAbAttr)
       .conditionalAttr(
         (pokemon) => !!pokemon.status || pokemon.hasAbility(Abilities.COMATOSE),
         StatMultiplierAbAttr,
@@ -548,7 +544,7 @@ export function initAbilities() {
         i18next.t("abilityTriggers:postSummonMoldBreaker", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       )
       .attr(MoveAbilityBypassAbAttr),
-    new Ability(Abilities.SUPER_LUCK, 4).attr(BonusCritAbAttr),
+    new Ability(Abilities.SUPER_LUCK, 4).attr(BonusCritAbAttr, 1),
     new Ability(Abilities.AFTERMATH, 4).attr(PostFaintContactDamageAbAttr, 4).bypassFaint(),
     new Ability(Abilities.ANTICIPATION, 4)
       .attr(AnticipationAbAttr, (pokemon: Pokemon) =>

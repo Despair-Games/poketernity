@@ -8,6 +8,7 @@ import { ModifierTier } from "#enums/modifier-tier";
 import i18next from "#app/plugins/i18n";
 import { settings } from "#app/system/settings/settings-manager";
 import { TextStyle } from "#enums/text-style";
+import { CommonColor, ShadowColor } from "#enums/color";
 
 export interface TextStyleOptions {
   scale: number;
@@ -286,93 +287,93 @@ export function getTextColor(textStyle: TextStyle, shadow?: boolean, uiTheme: Ui
   const isLegacyTheme = uiTheme === UiTheme.LEGACY;
   switch (textStyle) {
     case TextStyle.MESSAGE:
-      return !shadow ? "#f8f8f8" : "#6b5a73";
+      return shadow ? ShadowColor.PURPLE : CommonColor.OFF_WHITE;
     case TextStyle.WINDOW:
     case TextStyle.MOVE_INFO_CONTENT:
     case TextStyle.MOVE_PP_FULL:
     case TextStyle.TOOLTIP_CONTENT:
     case TextStyle.SETTINGS_VALUE:
       if (isLegacyTheme) {
-        return !shadow ? "#484848" : "#d0d0c8";
+        return shadow ? ShadowColor.LIGHT_GREY : CommonColor.GREY;
       }
-      return !shadow ? "#f8f8f8" : "#6b5a73";
+      return shadow ? ShadowColor.PURPLE : CommonColor.OFF_WHITE;
     case TextStyle.MOVE_PP_HALF_FULL:
       if (isLegacyTheme) {
-        return !shadow ? "#a68e17" : "#ebd773";
+        return shadow ? ShadowColor.YELLOW : CommonColor.DARK_YELLOW;
       }
-      return !shadow ? "#ccbe00" : "#6e672c";
+      return shadow ? ShadowColor.OLIVE_BRONZE : CommonColor.DEEP_YELLOW;
     case TextStyle.MOVE_PP_NEAR_EMPTY:
       if (isLegacyTheme) {
-        return !shadow ? "#d64b00" : "#f7b18b";
+        return shadow ? ShadowColor.PEACH_SAND : CommonColor.DEEP_ORANGE;
       }
-      return !shadow ? "#d64b00" : "#69402a";
+      return shadow ? ShadowColor.LIGHT_BROWN : CommonColor.DEEP_ORANGE;
     case TextStyle.MOVE_PP_EMPTY:
       if (isLegacyTheme) {
-        return !shadow ? "#e13d3d" : "#fca2a2";
+        return shadow ? ShadowColor.LIGHT_RED : CommonColor.WARM_RED;
       }
-      return !shadow ? "#e13d3d" : "#632929";
+      return shadow ? ShadowColor.DARK_BROWN : CommonColor.WARM_RED;
     case TextStyle.WINDOW_ALT:
-      return !shadow ? "#484848" : "#d0d0c8";
+      return shadow ? ShadowColor.LIGHT_GREY : CommonColor.GREY;
     case TextStyle.BATTLE_INFO:
       if (isLegacyTheme) {
-        return !shadow ? "#404040" : "#ded6b5";
+        return shadow ? ShadowColor.LIGHT_YELLOW : CommonColor.DARK_GREY;
       }
-      return !shadow ? "#f8f8f8" : "#6b5a73";
+      return shadow ? ShadowColor.PURPLE : CommonColor.OFF_WHITE;
     case TextStyle.PARTY:
-      return !shadow ? "#f8f8f8" : "#707070";
+      return shadow ? ShadowColor.MEDIUM_GRAY : CommonColor.OFF_WHITE;
     case TextStyle.PARTY_RED:
-      return !shadow ? "#f89890" : "#984038";
+      return shadow ? ShadowColor.DEEP_RED : CommonColor.SOFT_PINK;
     case TextStyle.SUMMARY:
-      return !shadow ? "#f8f8f8" : "#636363";
+      return shadow ? ShadowColor.GREY : CommonColor.OFF_WHITE;
     case TextStyle.SUMMARY_ALT:
       if (isLegacyTheme) {
-        return !shadow ? "#f8f8f8" : "#636363";
+        return shadow ? ShadowColor.GREY : CommonColor.OFF_WHITE;
       }
-      return !shadow ? "#484848" : "#d0d0c8";
+      return shadow ? ShadowColor.LIGHT_GREY : CommonColor.GREY;
     case TextStyle.SUMMARY_RED:
     case TextStyle.TOOLTIP_TITLE:
-      return !shadow ? "#e70808" : "#ffbd73";
+      return shadow ? ShadowColor.LIGHT_ORANGE : CommonColor.DEEP_RED;
     case TextStyle.SUMMARY_BLUE:
-      return !shadow ? "#40c8f8" : "#006090";
+      return shadow ? ShadowColor.LIGHT_BLUE : CommonColor.LIGHT_BLUE;
     case TextStyle.SUMMARY_PINK:
-      return !shadow ? "#f89890" : "#984038";
+      return shadow ? ShadowColor.DEEP_RED : CommonColor.SOFT_PINK;
     case TextStyle.SUMMARY_GOLD:
     case TextStyle.MONEY:
-      return !shadow ? "#e8e8a8" : "#a0a060"; // Pale Yellow/Gold
+      return shadow ? ShadowColor.DARK_YELLOW : CommonColor.MUTED_YELLOW;
     case TextStyle.MONEY_WINDOW:
       if (isLegacyTheme) {
-        return !shadow ? "#f8b050" : "#c07800"; // Gold
+        return shadow ? ShadowColor.ORANGE : CommonColor.SOFT_ORANGE;
       }
-      return !shadow ? "#e8e8a8" : "#a0a060"; // Pale Yellow/Gold
+      return shadow ? ShadowColor.DARK_YELLOW : CommonColor.MUTED_YELLOW;
     case TextStyle.SETTINGS_LOCKED:
     case TextStyle.SUMMARY_GRAY:
-      return !shadow ? "#a0a0a0" : "#636363";
+      return shadow ? ShadowColor.GREY : CommonColor.LIGHT_GREY;
     case TextStyle.STATS_LABEL:
-      return !shadow ? "#f8b050" : "#c07800";
+      return shadow ? ShadowColor.ORANGE : CommonColor.SOFT_ORANGE;
     case TextStyle.STATS_VALUE:
       if (isLegacyTheme) {
-        return !shadow ? "#484848" : "#d0d0c8";
+        return shadow ? ShadowColor.LIGHT_GREY : CommonColor.GREY;
       }
-      return !shadow ? "#f8f8f8" : "#6b5a73";
+      return shadow ? ShadowColor.PURPLE : CommonColor.OFF_WHITE;
     case TextStyle.SUMMARY_GREEN:
-      return !shadow ? "#78c850" : "#306850";
+      return shadow ? ShadowColor.SOFT_GREEN : CommonColor.LIGHT_GREEN;
     case TextStyle.SETTINGS_LABEL:
     case TextStyle.PERFECT_IV:
     case TextStyle.CHALLENGE_DESCRIPTION:
-      return !shadow ? "#f8b050" : "#c07800";
+      return shadow ? ShadowColor.ORANGE : CommonColor.SOFT_ORANGE;
     case TextStyle.SETTINGS_SELECTED:
-      return !shadow ? "#f88880" : "#f83018";
+      return shadow ? ShadowColor.BRIGHT_RED : CommonColor.CORAL_PINK;
     case TextStyle.SMALLER_WINDOW_ALT:
-      return !shadow ? "#484848" : "#d0d0c8";
+      return shadow ? ShadowColor.LIGHT_GREY : CommonColor.GREY;
     case TextStyle.BGM_BAR:
-      return !shadow ? "#f8f8f8" : "#6b5a73";
+      return shadow ? ShadowColor.PURPLE : CommonColor.OFF_WHITE;
     case TextStyle.ME_OPTION_DEFAULT:
-      return !shadow ? "#f8f8f8" : "#6b5a73"; // White
+      return shadow ? ShadowColor.PURPLE : CommonColor.OFF_WHITE;
     case TextStyle.ME_OPTION_SPECIAL:
       if (isLegacyTheme) {
-        return !shadow ? "#f8b050" : "#c07800"; // Gold
+        return shadow ? ShadowColor.ORANGE : CommonColor.SOFT_ORANGE;
       }
-      return !shadow ? "#78c850" : "#306850"; // Green
+      return shadow ? ShadowColor.SOFT_GREEN : CommonColor.LIGHT_GREEN;
   }
 }
 
