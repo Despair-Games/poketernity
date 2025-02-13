@@ -104,7 +104,7 @@ export function getLevelRelExp(level: number, growthRate: GrowthRate): number {
 export function getGrowthRateColor(growthRate: GrowthRate, shadow?: boolean) {
   switch (growthRate) {
     case GrowthRate.ERRATIC:
-      return shadow ? ShadowColor.DUSTY_ROSE : CommonColor.SOFT_PINK;
+      return shadow ? ShadowColor.DUSTY_ROSE : CommonColor.BRIGHT_PINK;
     case GrowthRate.FAST:
       return shadow ? ShadowColor.MUTED_GOLD : CommonColor.GOLD_YELLOW;
     case GrowthRate.MEDIUM_FAST:

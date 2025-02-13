@@ -796,7 +796,7 @@ export default class RunInfoUiHandler extends UiHandler {
       pokemon.stats.forEach((element) => pStats.push(formatFancyLargeNumber(element, 1)));
       for (let i = 0; i < pStats.length; i++) {
         const isMult = getNatureStatMultiplier(pNature, i);
-        pStats[i] = isMult < 1 ? pStats[i] + `[color=${CommonColor.LIGHT_BLUE}↓[/color]` : pStats[i];
+        pStats[i] = isMult < 1 ? pStats[i] + `[color=${CommonColor.LIGHT_BLUE}]↓[/color]` : pStats[i];
         pStats[i] = isMult > 1 ? pStats[i] + `[color=${CommonColor.SOFT_PINK}]↑[/color]` : pStats[i];
       }
       const hp = i18next.t("pokemonInfo:Stat.HPshortened") + ": " + pStats[0];
