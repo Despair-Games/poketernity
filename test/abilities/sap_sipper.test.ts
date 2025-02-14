@@ -84,7 +84,7 @@ describe("Abilities - Sap Sipper", () => {
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    expect(game.scene.arena.isOfTerrain(TerrainType.GRASSY)).toBe(true);
+    expect(game.scene.arena.isTerrain(TerrainType.GRASSY)).toBe(true);
     expect(game.scene.getEnemyPokemon()!.getStatStage(Stat.ATK)).toBe(0);
   });
 

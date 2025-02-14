@@ -76,7 +76,7 @@ export class Arena {
    * @param biome - {@linkcode Biome} or array of {@linkcode Biome} to check against
    * @returns `true` if the arena is of the specified biome, `false` otherwise
    */
-  public isOfBiome(biome: Biome | Biome[]): boolean {
+  public isBiome(biome: Biome | Biome[]): boolean {
     return Array.isArray(biome) ? biome.includes(this.biomeType) : this.biomeType === biome;
   }
 
@@ -85,7 +85,7 @@ export class Arena {
    * @param terrain - {@linkcode TerrainType} or array of {@linkcode TerrainType} to check against
    * @returns `true` if the arena is of the specified terrain, `false` otherwise
    */
-  public isOfTerrain(terrain: TerrainType | TerrainType[]): boolean {
+  public isTerrain(terrain: TerrainType | TerrainType[]): boolean {
     const terrainType = this.getTerrainType();
     return Array.isArray(terrain) ? terrain.includes(terrainType) : terrainType === terrain;
   }
@@ -95,7 +95,7 @@ export class Arena {
    * @param weather - {@linkcode WeatherType} or array of {@linkcode WeatherType} to check against
    * @returns `true` if the arena is of the specified weather, `false` otherwise
    */
-  public isOfWeather(weather: WeatherType | WeatherType[]): boolean {
+  public isWeather(weather: WeatherType | WeatherType[]): boolean {
     const weatherType = this.weather?.weatherType ?? WeatherType.NONE;
     return Array.isArray(weather) ? weather.includes(weatherType) : weatherType === weather;
   }
@@ -105,7 +105,7 @@ export class Arena {
    * @param timeOfDay - {@linkcode TimeOfDay} or array of {@linkcode TimeOfDay} to check against
    * @returns `true` if the arena is of the specified time of day, `false` otherwise
    */
-  public isOfTimeOfDay(timeOfDay: TimeOfDay | TimeOfDay[]): boolean {
+  public isTimeOfDay(timeOfDay: TimeOfDay | TimeOfDay[]): boolean {
     return Array.isArray(timeOfDay) ? timeOfDay.includes(this.getTimeOfDay()) : this.getTimeOfDay() === timeOfDay;
   }
 
@@ -654,7 +654,7 @@ export class Arena {
     Biome.LABORATORY,
   ];
   isOutside(): boolean {
-    return !(this.biomeType in this.indoorBiomes);
+    return !this.indoorBiomes.includes(this.biomeType);
   }
 
   // @todo these tints feel like they belong in their own class somewhere
@@ -1030,7 +1030,7 @@ const biomeWithProps = [
 ];
 
 export function getBiomeHasProps(biomeType: Biome): boolean {
-  return biomeType in biomeWithProps;
+  return biomeWithProps.includes(biomeType);
 }
 
 export class ArenaBase extends Phaser.GameObjects.Container {

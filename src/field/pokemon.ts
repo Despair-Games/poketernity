@@ -1164,14 +1164,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         }
         break;
       case Stat.DEF:
-        if (this.isOfType(ElementalType.ICE) && globalScene.arena.isOfWeather(WeatherType.SNOW)) {
+        if (this.isOfType(ElementalType.ICE) && globalScene.arena.isWeather(WeatherType.SNOW)) {
           ret *= 1.5;
         }
         break;
       case Stat.SPATK:
         break;
       case Stat.SPDEF:
-        if (this.isOfType(ElementalType.ROCK) && globalScene.arena.isOfWeather(WeatherType.SANDSTORM)) {
+        if (this.isOfType(ElementalType.ROCK) && globalScene.arena.isWeather(WeatherType.SANDSTORM)) {
           ret *= 1.5;
         }
         break;
@@ -3304,7 +3304,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     /** Halves damage if this Pokemon is grounded in Misty Terrain against a Dragon-type attack */
     const mistyTerrainMultiplier =
-      globalScene.arena.isOfTerrain(TerrainType.MISTY) && this.isGrounded() && moveType === ElementalType.DRAGON
+      globalScene.arena.isTerrain(TerrainType.MISTY) && this.isGrounded() && moveType === ElementalType.DRAGON
         ? 0.5
         : 1;
 
@@ -4000,7 +4000,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       if (overrideStatus ? this.status?.effect === effect : this.status) {
         return false;
       }
-      if (this.isGrounded() && !ignoreField && globalScene.arena.isOfTerrain(TerrainType.MISTY)) {
+      if (this.isGrounded() && !ignoreField && globalScene.arena.isTerrain(TerrainType.MISTY)) {
         return false;
       }
     }
@@ -4052,7 +4052,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         }
         break;
       case StatusEffect.SLEEP:
-        if (this.isGrounded() && globalScene.arena.isOfTerrain(TerrainType.ELECTRIC)) {
+        if (this.isGrounded() && globalScene.arena.isTerrain(TerrainType.ELECTRIC)) {
           return false;
         }
         break;

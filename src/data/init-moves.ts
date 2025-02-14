@@ -534,7 +534,7 @@ export function initMoves() {
     new AttackMove(MoveId.EARTHQUAKE, ElementalType.GROUND, MoveCategory.PHYSICAL, 100, 100, 10, -1, 0, 1)
       .attr(HitsTagForDoubleDamageAttr, BattlerTagType.UNDERGROUND)
       .attr(MovePowerMultiplierAttr, (_user, target, _move) =>
-        globalScene.arena.isOfTerrain(TerrainType.GRASSY) && target.isGrounded() ? 0.5 : 1,
+        globalScene.arena.isTerrain(TerrainType.GRASSY) && target.isGrounded() ? 0.5 : 1,
       )
       .makesContact(false)
       .target(MoveTarget.ALL_NEAR_OTHERS),
@@ -1037,7 +1037,7 @@ export function initMoves() {
       .attr(PreMoveMessageAttr, magnitudeMessageFunc)
       .attr(MagnitudePowerAttr)
       .attr(MovePowerMultiplierAttr, (_user, target, _move) =>
-        globalScene.arena.isOfTerrain(TerrainType.GRASSY) && target.isGrounded() ? 0.5 : 1,
+        globalScene.arena.isTerrain(TerrainType.GRASSY) && target.isGrounded() ? 0.5 : 1,
       )
       .attr(HitsTagForDoubleDamageAttr, BattlerTagType.UNDERGROUND)
       .makesContact(false)
@@ -2240,7 +2240,7 @@ export function initMoves() {
     new AttackMove(MoveId.BULLDOZE, ElementalType.GROUND, MoveCategory.PHYSICAL, 60, 100, 20, 100, 0, 5)
       .attr(StatStageChangeAttr, [Stat.SPD], -1)
       .attr(MovePowerMultiplierAttr, (_user, target, _move) =>
-        globalScene.arena.isOfTerrain(TerrainType.GRASSY) && target.isGrounded() ? 0.5 : 1,
+        globalScene.arena.isTerrain(TerrainType.GRASSY) && target.isGrounded() ? 0.5 : 1,
       )
       .makesContact(false)
       .target(MoveTarget.ALL_NEAR_OTHERS),
@@ -2822,7 +2822,7 @@ export function initMoves() {
       .punchingMove(),
     new StatusMove(MoveId.FLORAL_HEALING, ElementalType.FAIRY, -1, 10, -1, 0, 7)
       .attr(BoostHealAttr, 0.5, 2 / 3, true, false, (_user, _target, _move) =>
-        globalScene.arena.isOfTerrain(TerrainType.GRASSY),
+        globalScene.arena.isTerrain(TerrainType.GRASSY),
       )
       .triageMove(),
     new AttackMove(MoveId.HIGH_HORSEPOWER, ElementalType.GROUND, MoveCategory.PHYSICAL, 95, 95, 10, -1, 0, 7),
@@ -2949,7 +2949,7 @@ export function initMoves() {
     new StatusMove(MoveId.AURORA_VEIL, ElementalType.ICE, -1, 20, -1, 0, 7)
       .condition(
         (_user, _target, _move) =>
-          globalScene.arena.isOfWeather([WeatherType.HAIL, WeatherType.SNOW])
+          globalScene.arena.isWeather([WeatherType.HAIL, WeatherType.SNOW])
           && !globalScene.arena.weather?.isEffectSuppressed(),
       )
       .attr(AddArenaTagAttr, ArenaTagType.AURORA_VEIL, ArenaTagRelativeSide.USER, { turnCount: 5, failOnOverlap: true })
@@ -3407,10 +3407,10 @@ export function initMoves() {
     ),
     new AttackMove(MoveId.EXPANDING_FORCE, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 8)
       .attr(MovePowerMultiplierAttr, (user, _target, _move) =>
-        globalScene.arena.isOfTerrain(TerrainType.PSYCHIC) && user.isGrounded() ? 1.5 : 1,
+        globalScene.arena.isTerrain(TerrainType.PSYCHIC) && user.isGrounded() ? 1.5 : 1,
       )
       .attr(VariableTargetAttr, (user, _target, _move) =>
-        globalScene.arena.isOfTerrain(TerrainType.PSYCHIC) && user.isGrounded()
+        globalScene.arena.isTerrain(TerrainType.PSYCHIC) && user.isGrounded()
           ? MoveTarget.ALL_NEAR_ENEMIES
           : MoveTarget.NEAR_OTHER,
       ),
@@ -3433,17 +3433,17 @@ export function initMoves() {
       .attr(SacrificialAttr)
       .target(MoveTarget.ALL_NEAR_OTHERS)
       .attr(MovePowerMultiplierAttr, (user, _target, _move) =>
-        globalScene.arena.isOfTerrain(TerrainType.MISTY) && user.isGrounded() ? 1.5 : 1,
+        globalScene.arena.isTerrain(TerrainType.MISTY) && user.isGrounded() ? 1.5 : 1,
       )
       .condition(failIfDampCondition)
       .makesContact(false),
     new AttackMove(MoveId.GRASSY_GLIDE, ElementalType.GRASS, MoveCategory.PHYSICAL, 55, 100, 20, -1, 0, 8).attr(
       IncrementMovePriorityAttr,
-      (user, _target, _move) => globalScene.arena.isOfTerrain(TerrainType.GRASSY) && user.isGrounded(),
+      (user, _target, _move) => globalScene.arena.isTerrain(TerrainType.GRASSY) && user.isGrounded(),
     ),
     new AttackMove(MoveId.RISING_VOLTAGE, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 70, 100, 20, -1, 0, 8).attr(
       MovePowerMultiplierAttr,
-      (_user, target, _move) => (globalScene.arena.isOfTerrain(TerrainType.ELECTRIC) && target.isGrounded() ? 2 : 1),
+      (_user, target, _move) => (globalScene.arena.isTerrain(TerrainType.ELECTRIC) && target.isGrounded() ? 2 : 1),
     ),
     new AttackMove(MoveId.TERRAIN_PULSE, ElementalType.NORMAL, MoveCategory.SPECIAL, 50, 100, 10, -1, 0, 8)
       .attr(TerrainPulseTypeAttr)

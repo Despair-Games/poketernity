@@ -1561,7 +1561,7 @@ export function initAbilities() {
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
-    return globalScene.arena.isOfTerrain([...terrainTypes]);
+    return globalScene.arena.isTerrain([...terrainTypes]);
   };
 }
 

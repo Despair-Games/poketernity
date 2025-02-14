@@ -102,7 +102,7 @@ describe("Arena - Grassy Terrain", () => {
     game.move.use(MoveId.GRASSY_TERRAIN);
     await game.toNextTurn();
 
-    expect(game.scene.arena.isOfTerrain(TerrainType.GRASSY)).toBe(true);
+    expect(game.scene.arena.isTerrain(TerrainType.GRASSY)).toBe(true);
     expect(pokemon.hp).toBe(1);
   });
 });

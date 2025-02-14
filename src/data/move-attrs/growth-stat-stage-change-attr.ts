@@ -18,7 +18,7 @@ export class GrowthStatStageChangeAttr extends StatStageChangeAttr {
   override getLevels(_user: Pokemon): number {
     if (
       !globalScene.arena.weather?.isEffectSuppressed()
-      && globalScene.arena.isOfWeather([WeatherType.SUNNY, WeatherType.HARSH_SUN])
+      && globalScene.arena.isWeather([WeatherType.SUNNY, WeatherType.HARSH_SUN])
     ) {
       return this.stages + 1;
     }

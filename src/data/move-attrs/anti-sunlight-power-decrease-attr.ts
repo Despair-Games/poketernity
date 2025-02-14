@@ -15,7 +15,7 @@ export class AntiSunlightPowerDecreaseAttr extends VariablePowerAttr {
   override apply(_user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
     if (
       !globalScene.arena.weather?.isEffectSuppressed()
-      && globalScene.arena.isOfWeather([
+      && globalScene.arena.isWeather([
         WeatherType.RAIN,
         WeatherType.SANDSTORM,
         WeatherType.HAIL,
