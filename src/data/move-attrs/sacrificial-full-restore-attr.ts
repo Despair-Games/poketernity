@@ -27,8 +27,10 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
 
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     // We don't know which party member will be chosen, so pick the highest max HP in the party
-    const maxPartyMemberHp = globalScene
-      .getPlayerParty()
+
+    const party = user instanceof PlayerPokemon ? globalScene.getPlayerParty() : globalScene.getEnemyParty();
+
+    const maxPartyMemberHp = party
       .map((p) => p.getMaxHp())
       .reduce((maxHp: number, hp: number) => Math.max(hp, maxHp), 0);
 
