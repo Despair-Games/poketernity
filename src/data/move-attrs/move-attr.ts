@@ -131,11 +131,11 @@ export abstract class MoveAttr {
    * Uses a seeded chance roll to return one of two score values.
    * @param user the {@linkcode EnemyPokemon} evaluating effect scores under which the chance roll is seeded
    * @param chance the chance (%) to yield the maximum score. Assumed to be an integer in the range [0, 100].
-   * @param hitScore the score given if the chance roll is successful
+   * @param hitScore the score given if the chance roll is successful. Defaults to `1`
    * @param missScore the score given if the chance roll is unsuccessful. Defaults to `0`
    * @returns either `maxScore` or `minScore`, depending on the chance roll's outcome.
    */
-  protected getRandomScore(user: EnemyPokemon, chance: number, hitScore: number, missScore: number = 0): number {
+  protected getRandomScore(user: EnemyPokemon, chance: number, hitScore: number = 1, missScore: number = 0): number {
     return user.randSeedInt(100) < chance ? hitScore : missScore;
   }
 }
