@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { type ShellTrapTag, type StockpilingTag } from "#app/data/battler-tags";
 import { AttackMove, SelfStatusMove, StatusMove, type Move } from "#app/data/move";
 import { AbilityChangeAttr } from "#app/data/move-attrs/ability-change-attr";

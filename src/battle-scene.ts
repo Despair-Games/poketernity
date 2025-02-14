@@ -1,10 +1,10 @@
 import Phaser from "phaser";
 import UI from "#app/ui/ui";
+import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
 import { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { PokemonSpeciesFilter } from "./@types/PokemonSpeciesFilter";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { allSpecies } from "./data/all-species";
 import { getPokemonSpecies } from "./utils/pokemon-species-utils";
 import {
   fixedNumber,
@@ -52,7 +52,6 @@ import { Arena, ArenaBase } from "#app/field/arena";
 import { GameData } from "#app/system/game-data";
 import { addTextObject, getTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
-import { allMoves } from "#app/data/all-moves";
 import {
   getDefaultModifierTypeForTier,
   getEnemyModifierTypesForWave,
@@ -66,7 +65,6 @@ import { getModifierType } from "./utils/modifier-type-utils";
 import { modifierTypes } from "./modifier/modifier-types";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import AbilityBar from "#app/ui/ability-bar";
-import { allAbilities } from "./data/all-abilities";
 import { applyAbAttrs } from "./data/apply-ab-attrs";
 import type { FixedBattleConfig } from "#app/battle";
 import type { BattlerIndex } from "#enums/battler-index";

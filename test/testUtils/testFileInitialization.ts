@@ -1,6 +1,6 @@
 import { initLoggedInUser } from "#app/account";
 import { SESSION_ID_COOKIE } from "#app/constants";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { initBiomes } from "#app/data/balance/biomes";
 import { initEggMoves } from "#app/data/balance/egg-moves";
 import { initPokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
