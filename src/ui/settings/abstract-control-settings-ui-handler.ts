@@ -2,7 +2,7 @@ import UiHandler from "#app/ui/ui-handler";
 import type { UiMode } from "#enums/ui-mode";
 import type { InterfaceConfig } from "#app/inputs-controller";
 import { addWindow } from "#app/ui/ui-theme";
-import { addTextObject } from "#app/ui/text";
+import { addTextObject, setTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import { getIconWithSettingName } from "#app/configs/inputs/configHandler";
@@ -578,7 +578,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
     // Check if the cursor object exists, if not, create it.
     if (!this.cursorObj) {
       const cursorWidth = GAME_WIDTH - (this.scrollBar.visible ? 16 : 10);
-      this.cursorObj = globalScene.add.nineslice(0, 0, "summary_moves_cursor", undefined, cursorWidth, 16, 1, 1, 1, 1);
+      this.cursorObj = globalScene.add.nineslice(0, 0, "summary_moves_cursor", "select", cursorWidth, 16, 1, 1, 1, 1);
       this.cursorObj.setOrigin(0, 0); // Set the origin to the top-left corner.
       this.optionsContainer.add(this.cursorObj); // Add the cursor to the options container.
     }
@@ -634,17 +634,14 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
       // Get the label of the last selected option and revert its color to the default.
       const lastValueLabel =
         this.optionValueLabels[settingIndex][lastCursor] ?? this.optionValueLabels[settingIndex][0];
-      lastValueLabel.setColor(this.getTextColor(TextStyle.WINDOW));
-      lastValueLabel.setShadowColor(this.getTextColor(TextStyle.WINDOW, true));
+      setTextColor(lastValueLabel, TextStyle.WINDOW);
 
       // Update the cursor for the setting to the new position.
       this.optionCursors[settingIndex] = cursor;
 
       // Change the color of the new selected option to indicate it's selected.
       const newValueLabel = this.optionValueLabels[settingIndex][cursor] ?? this.optionValueLabels[settingIndex][0];
-
-      newValueLabel.setColor(this.getTextColor(TextStyle.SETTINGS_SELECTED));
-      newValueLabel.setShadowColor(this.getTextColor(TextStyle.SETTINGS_SELECTED, true));
+      setTextColor(newValueLabel, TextStyle.SETTINGS_SELECTED);
     }
 
     // If the save flag is set, save the setting to local storage

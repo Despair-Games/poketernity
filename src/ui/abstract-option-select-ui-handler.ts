@@ -1,9 +1,8 @@
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/system/settings/settings-manager";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { ScrollBar } from "#app/ui/scroll-bar";
-import { addBBCodeTextObject, getBBCodeFrag, getTextStyleOptions } from "#app/ui/text";
+import { addBBCodeTextObject, getBBCodeFragment, getTextStyleOptions } from "#app/ui/text";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, isNullOrUndefined } from "#app/utils";
 import { Button } from "#enums/buttons";
@@ -66,7 +65,7 @@ export default abstract class AbstractOptionSelectUiHandler<T extends OptionSele
   override setup() {
     const ui = this.getUi();
 
-    this.scale = getTextStyleOptions(DEFAULT_TEXT_STYLE, settings.display.uiTheme).scale;
+    this.scale = getTextStyleOptions(DEFAULT_TEXT_STYLE).scale;
 
     this.optionSelectContainer = globalScene.add.container(GAME_WIDTH - 1, -1);
     this.optionSelectContainer.setName(`option-select-${this.mode ? UiMode[this.mode] : "UNKNOWN"}`);
@@ -247,7 +246,7 @@ export default abstract class AbstractOptionSelectUiHandler<T extends OptionSele
         label = label.padStart(label.length + neededSpaces);
         // Change the label color to fit the required text style
         if (!isNullOrUndefined(option.color) && option.color !== DEFAULT_TEXT_STYLE) {
-          label = getBBCodeFrag(label, option.color, true);
+          label = getBBCodeFragment(label, option.color, true);
         }
       }
       option.iconsWidth = maxIconWidth;

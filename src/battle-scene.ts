@@ -50,7 +50,7 @@ import { type Phase } from "#app/phase";
 import { initGameSpeed } from "#app/system/game-speed";
 import { Arena, ArenaBase } from "#app/field/arena";
 import { GameData } from "#app/system/game-data";
-import { addTextObject, getTextColor } from "#app/ui/text";
+import { addTextObject } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import {
   getDefaultModifierTypeForTier,
@@ -90,7 +90,7 @@ import type { Voucher } from "#app/system/voucher";
 import { vouchers } from "#app/system/voucher";
 import { Gender } from "#enums/gender";
 import type UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
-import { addUiThemeOverrides, updateWindowType } from "#app/ui/ui-theme";
+import { updateWindowStyle } from "#app/ui/ui-theme";
 import type PokemonData from "#app/system/pokemon-data";
 import { Nature } from "#enums/nature";
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";
@@ -392,8 +392,8 @@ export default class BattleScene extends SceneBase {
       }
 
       // If window type gets changed, update window colors
-      if (key === "uiWindowType" && typeof value === "number") {
-        updateWindowType(value);
+      if (key === "uiWindowStyle" && typeof value === "number") {
+        updateWindowStyle(value);
       }
 
       // If gender gets changed, update trainer sprite
@@ -489,8 +489,6 @@ export default class BattleScene extends SceneBase {
     this.uiInputs = new UiInputs(this.inputController);
 
     this.gameData = new GameData();
-
-    addUiThemeOverrides();
 
     this.load.setBaseURL();
 
@@ -1954,6 +1952,7 @@ export default class BattleScene extends SceneBase {
       return;
     }
     const deltaScale = this.moneyText.scale * 0.14 * (positiveChange ? 1 : -1);
+    const originalColor = this.moneyText.style.shadowColor;
     this.moneyText.setShadowColor(positiveChange ? CommonColor.PURE_GREEN : CommonColor.PURE_RED);
     this.tweens.add({
       targets: this.moneyText,
@@ -1961,7 +1960,7 @@ export default class BattleScene extends SceneBase {
       scale: this.moneyText.scale + deltaScale,
       loop: 0,
       yoyo: true,
-      onComplete: (_) => this.moneyText.setShadowColor(getTextColor(TextStyle.MONEY, true)),
+      onComplete: (_) => this.moneyText.setShadowColor(originalColor),
     });
   }
 

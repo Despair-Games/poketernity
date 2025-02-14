@@ -17,6 +17,7 @@ import { TrainerType } from "#enums/trainer-type";
 import Overrides from "#app/overrides";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
+import { ImagesFolder } from "#enums/images-folders";
 
 /** Minimum BST for Pokemon generated onto the Elite Four's teams */
 const ELITE_FOUR_MINIMUM_BST = 460;
@@ -1409,9 +1410,9 @@ export class TrainerConfig {
       const isDouble = variant === TrainerVariant.DOUBLE;
       const trainerKey = this.getSpriteKey(variant === TrainerVariant.FEMALE, false);
       const partnerTrainerKey = this.getSpriteKey(true, true);
-      globalScene.loadAtlas(trainerKey, "trainer");
+      globalScene.loadAtlas(trainerKey, ImagesFolder.TRAINER);
       if (isDouble) {
-        globalScene.loadAtlas(partnerTrainerKey, "trainer");
+        globalScene.loadAtlas(partnerTrainerKey, ImagesFolder.TRAINER);
       }
       globalScene.load.once(Phaser.Loader.Events.COMPLETE, () => {
         const originalWarn = console.warn;
