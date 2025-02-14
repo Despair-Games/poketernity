@@ -853,8 +853,7 @@ export function initMoves() {
     ),
     new StatusMove(MoveId.CONVERSION_2, ElementalType.NORMAL, -1, 30, -1, 0, 2)
       .attr(ResistLastMoveTypeAttr)
-      .ignoresSubstitute()
-      .partial(), // Checks the move's original typing and not if its type is changed through some other means
+      .ignoresSubstitute(),
     new AttackMove(MoveId.AEROBLAST, ElementalType.FLYING, MoveCategory.SPECIAL, 100, 95, 5, -1, 0, 2)
       .windMove()
       .attr(HighCritAttr),
