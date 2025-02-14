@@ -37,6 +37,7 @@ import i18next from "i18next";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
 import { SelfStatusMove } from "#app/data/move";
+import { WeatherType } from "#enums/weather-type";
 
 /**
  * Resolves the following:
@@ -381,7 +382,15 @@ export class MovePhase extends BattlePhase {
       });
 
       let failedText: string | undefined;
-      const failureMessage = move.getFailedText(this.pokemon, targets[0], move, new BooleanHolder(false));
+      let failureMessage = move.getFailedText(this.pokemon, targets[0], move, new BooleanHolder(false));
+
+      if (failedDueToWeather) {
+        if (globalScene.arena.weather?.weatherType === WeatherType.HARSH_SUN) {
+          failureMessage = i18next.t("weather:harshSunStopAttackMessage");
+        } else {
+          failureMessage = i18next.t("weather:heavyRainStopAttackMessage");
+        }
+      }
 
       if (failureMessage) {
         failedText = failureMessage;
