@@ -28,6 +28,7 @@ describe("Moves - Rage", () => {
       .battleType("double")
       .startingLevel(100)
       .moveset([MoveId.RAGE, MoveId.SPLASH])
+      .disableCrits()
       .enemySpecies(Species.BLISSEY)
       .enemyLevel(100)
       .enemyAbility(Abilities.NO_GUARD)
