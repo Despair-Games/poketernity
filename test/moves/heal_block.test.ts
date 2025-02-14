@@ -49,7 +49,7 @@ describe("Moves - Heal Block", () => {
     await game.phaseInterceptor.to("TurnEndPhase");
 
     const lastPlayerMove = player.getLastXMoves(1)[0];
-    expect(lastPlayerMove.moveId).toBe(MoveId.NONE);
+    expect(lastPlayerMove.move.id).toBe(MoveId.NONE);
   });
 
   it("should stop delayed heals, such as from Wish", async () => {

@@ -10,6 +10,7 @@ import { Phase } from "#app/phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { UiMode } from "#enums/ui-mode";
 import { isNullOrUndefined } from "#app/utils";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Will handle (in order):
@@ -21,6 +22,8 @@ import { isNullOrUndefined } from "#app/utils";
  * @extends Phase
  */
 export class PostMysteryEncounterPhase extends Phase {
+  override readonly id = PhaseId.ME_POST;
+
   private readonly FIRST_DIALOGUE_PROMPT_DELAY = 750;
   protected onPostOptionSelect?: OptionPhaseCallback =
     globalScene.currentBattle.mysteryEncounter?.selectedOption?.onPostOptionPhase;

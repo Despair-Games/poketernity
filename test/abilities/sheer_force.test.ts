@@ -7,7 +7,7 @@ import { Stat } from "#enums/stat";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
 
 describe("Abilities - Sheer Force", () => {

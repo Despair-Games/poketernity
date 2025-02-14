@@ -5,23 +5,27 @@ import { SceneBase } from "#app/scene-base";
 import { getWindowVariantSuffix } from "#app/ui/ui-theme";
 import { WindowVariant } from "#enums/window-variant";
 import { isMobile } from "#app/touch-controls";
-import { localPing, getEnumValues, hasAllLocalizedSprites, getEnumKeys } from "#app/utils";
+import { getEnumValues, hasAllLocalizedSprites, getEnumKeys } from "#app/utils";
 import { initPokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import { initBiomes } from "#app/data/balance/biomes";
 import { initEggMoves } from "#app/data/balance/egg-moves";
 import { initPokemonForms } from "#app/data/pokemon-forms";
 import { initSpecies } from "./data/init-species";
 import { initAchievements } from "#app/system/achv";
-import { initTrainerTypeDialogue } from "#app/data/dialogue";
+import { initTrainerTypeDialogue } from "./data/init-trainer-type-dialogue";
 import { initChallenges } from "#app/data/challenge";
 import i18next from "i18next";
 import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { Biome } from "#enums/biome";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
-import { initAbilities } from "#app/data/all-abilities";
-import { initMoves } from "#app/data/all-moves";
 import { initVouchers } from "#app/system/init-vouchers";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTEMENT } from "./ui-constants";
+import { CommonColor } from "#enums/color";
+import { initAbilities } from "#app/data/init-abilities";
+import { api } from "#app/plugins/api/api";
+import { initMoves } from "#app/data/init-moves";
+import { initModifierTypes } from "#app/modifier/init-modifier-types";
+import { initModifierPools } from "#app/modifier/init-modifier-pools";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";
@@ -35,7 +39,7 @@ export class LoadingScene extends SceneBase {
   }
 
   preload() {
-    localPing();
+    api.ping();
     this.load["manifest"] = this.game["manifest"];
 
     this.loadImage("loading_bg", "arenas");
@@ -355,6 +359,8 @@ export class LoadingScene extends SceneBase {
 
     this.loadLoadingScreen();
 
+    initModifierTypes();
+    initModifierPools();
     initAchievements();
     initVouchers();
     initStatsKeys();
@@ -409,7 +415,7 @@ export class LoadingScene extends SceneBase {
       text: "0%",
       style: {
         font: "72px emerald",
-        color: "#ffffff",
+        color: CommonColor.WHITE,
       },
     });
     percentText.setOrigin(0.5, 0.5);
@@ -421,7 +427,7 @@ export class LoadingScene extends SceneBase {
       text: "",
       style: {
         font: "48px emerald",
-        color: "#ffffff",
+        color: CommonColor.WHITE,
       },
     });
     assetText.setOrigin(0.5, 0.5);
@@ -433,7 +439,7 @@ export class LoadingScene extends SceneBase {
       text: i18next.t("menu:disclaimer"),
       style: {
         font: "72px emerald",
-        color: "#DA3838",
+        color: CommonColor.WARM_RED,
       },
     });
     disclaimerText.setOrigin(0.5, 0.5);
@@ -445,7 +451,7 @@ export class LoadingScene extends SceneBase {
       text: i18next.t("menu:disclaimerDescription"),
       style: {
         font: "48px emerald",
-        color: "#ffffff",
+        color: CommonColor.WHITE,
         align: "center",
       },
     });

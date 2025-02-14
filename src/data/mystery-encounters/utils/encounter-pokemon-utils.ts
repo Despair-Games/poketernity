@@ -28,7 +28,7 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { Gender } from "#enums/gender";
 import type { PermanentStat } from "#enums/stat";
 import { VictoryPhase } from "#app/phases/victory-phase";

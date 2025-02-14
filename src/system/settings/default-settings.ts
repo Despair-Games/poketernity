@@ -5,17 +5,16 @@ import type {
   GeneralSettings,
   UserFacingSettings,
 } from "#app/@types/Settings";
-import { BattleStyle } from "#app/enums/battle-style";
-import { DamageNumbersMode } from "#app/enums/damage-numbers-mode";
-import { EaseType } from "#app/enums/ease-type";
-import { EggSkipPreference } from "#app/enums/egg-skip-preference";
-import { ExpGainsSpeed } from "#app/enums/exp-gains-speed";
-import { ExpNotification } from "#app/enums/exp-notification";
-import { HpBarSpeed } from "#app/enums/hp-bar-speed";
-import { MoneyFormat } from "#app/enums/money-format";
-import { MusicPreference } from "#app/enums/music-preference";
-import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
-import { UiTheme } from "#app/enums/ui-theme";
+import { BattleStyle } from "#enums/battle-style";
+import { DamageNumbersMode } from "#enums/damage-numbers-mode";
+import { EaseType } from "#enums/ease-type";
+import { EggSkipPreference } from "#enums/egg-skip-preference";
+import { ExpGainsSpeed } from "#enums/exp-gains-speed";
+import { ExpNotification } from "#enums/exp-notification";
+import { HpBarSpeed } from "#enums/hp-bar-speed";
+import { MoneyFormat } from "#enums/money-format";
+import { ShopCursorTarget } from "#enums/shop-cursor-target";
+import { UiTheme } from "#enums/ui-theme";
 import { PlayerGender } from "#enums/player-gender";
 import { UiWindowType } from "#enums/ui-window-type";
 
@@ -60,7 +59,6 @@ export const defaultAudioSettings: AudioSettings = {
   fieldVolume: 1,
   soundEffectsVolume: 1,
   uiVolume: 1,
-  musicPreference: MusicPreference.ALLGENS,
 };
 
 export const defaultGamepadSettings: GamepadSettings = {

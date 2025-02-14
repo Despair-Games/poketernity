@@ -25,7 +25,7 @@ import {
 } from "#app/modifier/modifier";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { BerryType } from "#enums/berry-type";
 
 const namespace = "mysteryEncounters/delibirdy";

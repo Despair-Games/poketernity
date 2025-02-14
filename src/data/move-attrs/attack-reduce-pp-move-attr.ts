@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#app/data/move";
 import { ReducePpMoveAttr } from "#app/data/move-attrs/reduce-pp-move-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
 /**
  * Attribute to reduce the PP of the target's last move after attacking.
@@ -16,7 +16,7 @@ export class AttackReducePpMoveAttr extends ReducePpMoveAttr {
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     const lastMove = target.getLastXMoves().find(() => true);
     if (lastMove) {
-      const movesetMove = target.getMoveset().find((m) => m.moveId === lastMove.moveId);
+      const movesetMove = target.getMoveset().find((m) => m.moveId === lastMove.move.id);
       if (Boolean(movesetMove?.getPpRatio())) {
         super.apply(user, target, move);
       }

@@ -13,7 +13,7 @@ import i18next from "i18next";
 import { Button } from "#enums/buttons";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { CommandPhase } from "#app/phases/command-phase";
+import { type CommandPhase } from "#app/phases/command-phase";
 import MoveInfoOverlay from "./move-info-overlay";
 import { BattleType } from "#enums/battle-type";
 import { settings } from "#app/system/settings/settings-manager";
@@ -343,7 +343,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     const moveColors = opponents
       .map((opponent) => opponent.getMoveEffectiveness(pokemon, pokemonMove.getMove(), AbilityApplyMode.REVEALED))
       .sort((a, b) => b - a)
-      .map((effectiveness) => getTypeDamageMultiplierColor(effectiveness ?? 0, "offense"));
+      .map((effectiveness) => getTypeDamageMultiplierColor(effectiveness ?? 0));
 
     return moveColors[0];
   }

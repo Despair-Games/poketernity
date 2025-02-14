@@ -6,13 +6,12 @@ import type { Pokemon } from "#app/field/pokemon";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { noStarterFormKeys } from "#app/data/no-starter-form-keys";
-import { allSpecies } from "#app/data/all-species";
+import { allSpecies } from "#app/data/data-lists";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import {
   randInt,
   getEnumKeys,
-  isLocal,
   executeIf,
   fixedNumber,
   randSeedItem,
@@ -40,7 +39,7 @@ import { Nature } from "#enums/nature";
 import { GameStats } from "#app/system/game-stats";
 import type { Tutorial } from "#enums/tutorial";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { TrainerVariant } from "#enums/trainer-variant";
 import type { Variant } from "#app/data/variant";
 import { TagAddedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
@@ -50,7 +49,7 @@ import type { Device } from "#enums/devices";
 import { GameDataType } from "#enums/game-data-type";
 import { PlayerGender } from "#enums/player-gender";
 import type { Species } from "#enums/species";
-import { applyChallenges } from "#app/data/challenge";
+import { applyChallenges } from "#app/utils/challenge-utils";
 import { ChallengeType } from "#enums/challenge-type";
 import { WeatherType } from "#enums/weather-type";
 import { TerrainType } from "#enums/terrain-type";
@@ -474,7 +473,7 @@ export class GameData {
    * At the moment, only retrievable from locale cache
    */
   async getRunHistoryData(): Promise<RunHistoryData> {
-    if (!isLocal) {
+    if (!api.isLocal) {
       /**
        * Networking Code DO NOT DELETE!
        * Note: Might have to be migrated to `api.ts`

@@ -5,7 +5,7 @@ import { Stat } from "#enums/stat";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { MoveFlags } from "#enums/move-flags";
 
 describe("Abilities - Gooey/Tangling Hair", () => {

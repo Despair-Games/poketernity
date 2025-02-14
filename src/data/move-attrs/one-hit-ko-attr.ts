@@ -1,10 +1,10 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { BooleanHolder } from "#app/utils";
-import { BlockOneHitKOAbAttr } from "#app/data/ab-attrs/block-one-hit-ko-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Attribute to mark a move as a {@link https://bulbapedia.bulbagarden.net/wiki/One-hit_knockout_move | one-hit knockout}
@@ -33,7 +33,7 @@ export class OneHitKOAttr extends MoveAttr {
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) => {
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(BlockOneHitKOAbAttr, target, false, cancelled);
+      applyAbAttrs(AbAttrFlag.BLOCK_ONE_HIT_KO, target, false, cancelled);
       return !cancelled.value && user.level >= target.level;
     };
   }

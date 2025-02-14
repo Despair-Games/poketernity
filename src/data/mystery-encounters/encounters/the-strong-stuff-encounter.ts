@@ -4,11 +4,11 @@ import {
   loadCustomMovesForEncounter,
   leaveEncounterWithoutBattle,
   setEncounterRewards,
-  transitionMysteryEncounterIntroVisuals,
   generateModifierType,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
@@ -116,7 +116,7 @@ export const TheStrongStuffEncounter: MysteryEncounter = MysteryEncounterBuilder
           mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
             queueEncounterMessage(`${namespace}:option.2.stat_boost`);
             globalScene.unshiftPhase(
-              new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.DEF, Stat.SPDEF], 2),
+              new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.DEF, Stat.SPDEF], 2),
             );
           },
         },
@@ -158,8 +158,8 @@ export const TheStrongStuffEncounter: MysteryEncounter = MysteryEncounterBuilder
         .getPlayerParty()
         .slice(0)
         .sort((pokemon1, pokemon2) => {
-          const pokemon1Bst = pokemon1.calculateBaseStats().reduce((a, b) => a + b, 0);
-          const pokemon2Bst = pokemon2.calculateBaseStats().reduce((a, b) => a + b, 0);
+          const pokemon1Bst = pokemon1.getSpeciesForm().getBaseStatTotal();
+          const pokemon2Bst = pokemon2.getSpeciesForm().getBaseStatTotal();
           return pokemon2Bst - pokemon1Bst;
         });
 

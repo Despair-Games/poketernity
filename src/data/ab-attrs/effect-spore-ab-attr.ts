@@ -5,6 +5,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { ElementalType } from "#enums/elemental-type";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 import { MoveFlags } from "#enums/move-flags";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Effect Spore's ability attribute
@@ -15,6 +16,11 @@ import { MoveFlags } from "#enums/move-flags";
  */
 export class EffectSporeAbAttr extends PostDefendAbAttr {
   public readonly chance = 30;
+
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.EFFECT_SPORE);
+  }
 
   /**
    * Identical code to {@linkcode PostDefendContactApplyStatusEffectAbAttr}'s `applyPostDefend()` but it contains two conditional checks.

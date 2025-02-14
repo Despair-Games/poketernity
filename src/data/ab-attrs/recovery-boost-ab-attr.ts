@@ -2,6 +2,7 @@ import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition"
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 
 /**
@@ -15,6 +16,7 @@ export class RecoveryBoostAbAttr extends AbAttr {
 
   constructor(condition: PokemonAttackCondition, recoveryMultiplier: number, showAbility: boolean = true) {
     super(showAbility);
+    this._flags.add(AbAttrFlag.RECOVERY_BOOST);
     this.condition = condition;
     this.recoveryMultiplier = recoveryMultiplier;
   }

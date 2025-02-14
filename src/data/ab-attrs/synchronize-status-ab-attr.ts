@@ -1,4 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { StatusEffect } from "#enums/status-effect";
 import { AbAttr } from "./ab-attr";
 
@@ -10,6 +11,11 @@ import { AbAttr } from "./ab-attr";
  * @extends AbAttr
  */
 export class SynchronizeStatusAbAttr extends AbAttr {
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.SYNCHRONIZE_STATUS);
+  }
+
   /**
    * When afflicted with burn, paralysis, or poison, copies the status
    * effect onto the source of the status condition

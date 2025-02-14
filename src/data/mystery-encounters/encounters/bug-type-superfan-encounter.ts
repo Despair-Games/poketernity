@@ -7,8 +7,8 @@ import {
   selectOptionThenPokemon,
   selectPokemonForOption,
   setEncounterRewards,
-  transitionMysteryEncounterIntroVisuals,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 import { getRandomPartyMemberFunc, TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#app/data/trainer-config";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
@@ -37,7 +37,7 @@ import {
 } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import { ElementalType } from "#enums/elemental-type";
 import type { AttackTypeBoosterModifierType, ModifierTypeOption } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import {
   BypassSpeedChanceModifier,
@@ -47,7 +47,7 @@ import {
 } from "#app/modifier/modifier";
 import i18next from "i18next";
 import MoveInfoOverlay from "#app/ui/move-info-overlay";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { ModifierTier } from "#enums/modifier-tier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
