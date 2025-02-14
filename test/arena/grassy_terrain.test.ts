@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { Challenges } from "#enums/challenges";

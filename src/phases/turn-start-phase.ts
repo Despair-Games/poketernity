@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { MoveHeaderAttr } from "#app/data/move-attrs/move-header-attr";
 import { type Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";

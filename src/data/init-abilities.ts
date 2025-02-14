@@ -174,7 +174,7 @@ import { WeatherBasedSpeedDoublerAbAttr } from "#app/data/ab-attrs/weather-based
 import { WeightMultiplierAbAttr } from "#app/data/ab-attrs/weight-multiplier-ab-attr";
 import { WonderSkinAbAttr } from "#app/data/ab-attrs/wonder-skin-ab-attr";
 import { Ability } from "#app/data/ability";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves, allAbilities } from "#app/data/data-lists";
 import { type Move } from "#app/data/move";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
 import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-attr";
@@ -201,11 +201,11 @@ import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-import { allAbilities } from "./all-abilities";
 import { BypassParaSpeedReductionAbAttr } from "./ab-attrs/bypass-para-speed-reduction-ab-attr";
 
 export function initAbilities() {
   allAbilities.push(
+    new Ability(Abilities.NONE, 3),
     new Ability(Abilities.STENCH, 3).attr(
       PostAttackApplyBattlerTagAbAttr,
       false,

@@ -1,7 +1,7 @@
 import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilter";
 import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
 import { PARTY_UI_NO_EFFECT_MSG_i18N_KEY } from "#app/constants";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { tmPoolTiers, tmSpecies } from "#app/data/balance/tms";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";

@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { Abilities } from "#enums/abilities";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";

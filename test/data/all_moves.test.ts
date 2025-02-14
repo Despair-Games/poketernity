@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { resolve } from "path";
 import { readFileSync } from "fs";
 import { describe, expect, it } from "vitest";

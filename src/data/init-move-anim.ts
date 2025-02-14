@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { chargeAnims } from "./charge-anims";
 import { moveAnims } from "./move-anims";
 import { AnimConfig } from "./anim-config";

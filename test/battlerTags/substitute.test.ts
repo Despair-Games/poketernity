@@ -8,7 +8,7 @@ import { BindTag, SubstituteTag } from "#app/data/battler-tags";
 import { MoveId } from "#enums/move-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import * as messages from "#app/messages";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { GameManager } from "#test/testUtils/gameManager";
 import { MoveResult } from "#enums/move-result";
