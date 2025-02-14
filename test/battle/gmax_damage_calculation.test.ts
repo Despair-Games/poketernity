@@ -41,7 +41,6 @@ describe("Battle Mechanics - Damage Calculation", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getEffectiveStat").mockReturnValue(90);
-    vi.spyOn(enemyPokemon, "isMax").mockReturnValue(true);
 
     game.move.select(MoveId.TACKLE);
     await game.toNextTurn();
@@ -57,7 +56,6 @@ describe("Battle Mechanics - Damage Calculation", () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    vi.spyOn(enemyPokemon, "isMax").mockReturnValue(true);
 
     game.move.select(MoveId.TACKLE);
     await game.toNextTurn();
@@ -81,7 +79,6 @@ describe("Battle Mechanics - Damage Calculation", () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
-    vi.spyOn(enemyPokemon, "isMax").mockReturnValue(true);
     game.move.select(MoveId.HAIL);
     await game.toNextTurn();
 
