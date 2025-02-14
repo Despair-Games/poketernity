@@ -190,7 +190,7 @@ export class SpeciesFormChangeWeatherTrigger extends SpeciesFormChangeTrigger {
       !isAbilitySuppressed
       && !isWeatherSuppressed
       && pokemon.hasAbility(this.ability)
-      && globalScene.arena.isWeather(this.weathers)
+      && globalScene.arena.hasWeather(this.weathers)
     );
   }
 }
@@ -227,7 +227,7 @@ export class SpeciesFormChangeRevertWeatherFormTrigger extends SpeciesFormChange
       const isAbilityChanged = summonDataAbility !== this.ability && summonDataAbility !== Abilities.NONE;
 
       if (
-        globalScene.arena.isWeather(this.weathers)
+        globalScene.arena.hasWeather(this.weathers)
         || isWeatherSuppressed
         || isAbilitySuppressed
         || isAbilityChanged

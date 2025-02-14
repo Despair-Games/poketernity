@@ -15,7 +15,7 @@ export class StormAccuracyAttr extends VariableAccuracyAttr {
   override apply(_user: Pokemon, _target: Pokemon, _move: Move, accuracy: NumberHolder): boolean {
     if (
       !globalScene.arena.weather?.isEffectSuppressed()
-      && globalScene.arena.isWeather([WeatherType.RAIN, WeatherType.HEAVY_RAIN])
+      && globalScene.arena.hasWeather([WeatherType.RAIN, WeatherType.HEAVY_RAIN])
     ) {
       accuracy.value = -1;
       return true;

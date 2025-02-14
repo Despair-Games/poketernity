@@ -637,7 +637,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       50,
       null,
       new SpeciesEvolutionCondition((_p) =>
-        globalScene.arena.isWeather([WeatherType.RAIN, WeatherType.FOG, WeatherType.HEAVY_RAIN]),
+        globalScene.arena.hasWeather([WeatherType.RAIN, WeatherType.FOG, WeatherType.HEAVY_RAIN]),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -827,7 +827,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       50,
       null,
       new SpeciesEvolutionCondition((_p) =>
-        globalScene.arena.isWeather([WeatherType.RAIN, WeatherType.FOG, WeatherType.HEAVY_RAIN]),
+        globalScene.arena.hasWeather([WeatherType.RAIN, WeatherType.FOG, WeatherType.HEAVY_RAIN]),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1472,7 +1472,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       1,
       EvolutionItem.STRAWBERRY_SWEET,
       new SpeciesEvolutionCondition((_p) =>
-        globalScene.arena.isBiome([Biome.TOWN, Biome.PLAINS, Biome.GRASS, Biome.TALL_GRASS, Biome.METROPOLIS]),
+        globalScene.arena.isInBiome([Biome.TOWN, Biome.PLAINS, Biome.GRASS, Biome.TALL_GRASS, Biome.METROPOLIS]),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1483,7 +1483,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       1,
       EvolutionItem.STRAWBERRY_SWEET,
       new SpeciesEvolutionCondition((_p) =>
-        globalScene.arena.isBiome([Biome.BADLANDS, Biome.VOLCANO, Biome.GRAVEYARD, Biome.FACTORY, Biome.SLUM]),
+        globalScene.arena.isInBiome([Biome.BADLANDS, Biome.VOLCANO, Biome.GRAVEYARD, Biome.FACTORY, Biome.SLUM]),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1494,7 +1494,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       1,
       EvolutionItem.STRAWBERRY_SWEET,
       new SpeciesEvolutionCondition((_p) =>
-        globalScene.arena.isBiome([Biome.FOREST, Biome.SWAMP, Biome.MEADOW, Biome.JUNGLE]),
+        globalScene.arena.isInBiome([Biome.FOREST, Biome.SWAMP, Biome.MEADOW, Biome.JUNGLE]),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1505,7 +1505,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       1,
       EvolutionItem.STRAWBERRY_SWEET,
       new SpeciesEvolutionCondition((_p) =>
-        globalScene.arena.isBiome([Biome.MOUNTAIN, Biome.CAVE, Biome.ICE_CAVE, Biome.FAIRY_CAVE, Biome.SNOWY_FOREST]),
+        globalScene.arena.isInBiome([Biome.MOUNTAIN, Biome.CAVE, Biome.ICE_CAVE, Biome.FAIRY_CAVE, Biome.SNOWY_FOREST]),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1516,7 +1516,13 @@ export const pokemonEvolutions: PokemonEvolutions = {
       1,
       EvolutionItem.STRAWBERRY_SWEET,
       new SpeciesEvolutionCondition((_p) =>
-        globalScene.arena.isBiome([Biome.DESERT, Biome.POWER_PLANT, Biome.DOJO, Biome.RUINS, Biome.CONSTRUCTION_SITE]),
+        globalScene.arena.isInBiome([
+          Biome.DESERT,
+          Biome.POWER_PLANT,
+          Biome.DOJO,
+          Biome.RUINS,
+          Biome.CONSTRUCTION_SITE,
+        ]),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1527,7 +1533,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       1,
       EvolutionItem.STRAWBERRY_SWEET,
       new SpeciesEvolutionCondition((_p) =>
-        globalScene.arena.isBiome([Biome.MOUNTAIN, Biome.CAVE, Biome.ICE_CAVE, Biome.FAIRY_CAVE, Biome.SNOWY_FOREST]),
+        globalScene.arena.isInBiome([Biome.MOUNTAIN, Biome.CAVE, Biome.ICE_CAVE, Biome.FAIRY_CAVE, Biome.SNOWY_FOREST]),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1537,7 +1543,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       "ruby-swirl",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isBiome([Biome.WASTELAND, Biome.LABORATORY])),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isInBiome([Biome.WASTELAND, Biome.LABORATORY])),
       SpeciesWildEvolutionDelay.LONG,
     ),
     new SpeciesFormEvolution(
@@ -1546,7 +1552,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       "caramel-swirl",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isBiome([Biome.TEMPLE, Biome.ISLAND])),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isInBiome([Biome.TEMPLE, Biome.ISLAND])),
       SpeciesWildEvolutionDelay.LONG,
     ),
     new SpeciesFormEvolution(
@@ -1555,7 +1561,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       "rainbow-swirl",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isBiome([Biome.SPACE, Biome.ABYSS, Biome.END])),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isInBiome([Biome.SPACE, Biome.ABYSS, Biome.END])),
       SpeciesWildEvolutionDelay.LONG,
     ),
   ],

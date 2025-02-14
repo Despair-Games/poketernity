@@ -76,7 +76,7 @@ export class Arena {
    * @param biome - {@linkcode Biome} or array of {@linkcode Biome} to check against
    * @returns `true` if the arena is of the specified biome, `false` otherwise
    */
-  public isBiome(biome: Biome | Biome[]): boolean {
+  public isInBiome(biome: Biome | Biome[]): boolean {
     return Array.isArray(biome) ? biome.includes(this.biomeType) : this.biomeType === biome;
   }
 
@@ -85,7 +85,7 @@ export class Arena {
    * @param terrain - {@linkcode TerrainType} or array of {@linkcode TerrainType} to check against
    * @returns `true` if the arena is of the specified terrain, `false` otherwise
    */
-  public isTerrain(terrain: TerrainType | TerrainType[]): boolean {
+  public hasTerrain(terrain: TerrainType | TerrainType[]): boolean {
     const terrainType = this.getTerrainType();
     return Array.isArray(terrain) ? terrain.includes(terrainType) : terrainType === terrain;
   }
@@ -95,7 +95,7 @@ export class Arena {
    * @param weather - {@linkcode WeatherType} or array of {@linkcode WeatherType} to check against
    * @returns `true` if the arena is of the specified weather, `false` otherwise
    */
-  public isWeather(weather: WeatherType | WeatherType[]): boolean {
+  public hasWeather(weather: WeatherType | WeatherType[]): boolean {
     const weatherType = this.weather?.weatherType ?? WeatherType.NONE;
     return Array.isArray(weather) ? weather.includes(weatherType) : weatherType === weather;
   }

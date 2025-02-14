@@ -14,7 +14,7 @@ export class BlizzardAccuracyAttr extends VariableAccuracyAttr {
   override apply(_user: Pokemon, _target: Pokemon, _move: Move, accuracy: NumberHolder): boolean {
     if (
       !globalScene.arena.weather?.isEffectSuppressed()
-      && globalScene.arena.isWeather([WeatherType.HAIL, WeatherType.SNOW])
+      && globalScene.arena.hasWeather([WeatherType.HAIL, WeatherType.SNOW])
     ) {
       accuracy.value = -1;
       return true;

@@ -725,7 +725,7 @@ export class ConfusedTag extends BattlerTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return !globalScene.arena.isTerrain(TerrainType.MISTY) || pokemon.isGrounded();
+    return !globalScene.arena.hasTerrain(TerrainType.MISTY) || pokemon.isGrounded();
   }
 
   override onAdd(pokemon: Pokemon): void {
@@ -1351,7 +1351,7 @@ export class DrowsyTag extends BattlerTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return !globalScene.arena.isTerrain(TerrainType.ELECTRIC) || pokemon.isGrounded();
+    return !globalScene.arena.hasTerrain(TerrainType.ELECTRIC) || pokemon.isGrounded();
   }
 
   override onAdd(pokemon: Pokemon): void {
@@ -2522,7 +2522,7 @@ export class IceFaceBlockDamageTag extends FormBlockDamageTag {
    * @returns True if the tag can be added, false otherwise.
    */
   override canAdd(pokemon: Pokemon): boolean {
-    return super.canAdd(pokemon) || globalScene.arena.isWeather([WeatherType.HAIL, WeatherType.SNOW]);
+    return super.canAdd(pokemon) || globalScene.arena.hasWeather([WeatherType.HAIL, WeatherType.SNOW]);
   }
 }
 

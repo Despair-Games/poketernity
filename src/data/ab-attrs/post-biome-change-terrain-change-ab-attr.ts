@@ -14,7 +14,7 @@ export class PostBiomeChangeTerrainChangeAbAttr extends PostBiomeChangeAbAttr {
 
   override apply(_pokemon: Pokemon, simulated: boolean): boolean {
     return simulated
-      ? !globalScene.arena.isTerrain(this.terrainType)
+      ? !globalScene.arena.hasTerrain(this.terrainType)
       : globalScene.arena.trySetTerrain(this.terrainType, true);
   }
 }
