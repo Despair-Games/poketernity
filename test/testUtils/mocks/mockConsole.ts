@@ -76,21 +76,12 @@ export class MockConsole {
   public clearLogs() {
     this.logs = [];
   }
+
+  /**
+   * Return a semicolon-separated string listing all string arguments in `args`.
+   */
   public getStr(args: any[]) {
-    return args
-      .map((arg) => {
-        if (typeof arg === "object" && arg !== null) {
-          // Handle objects including arrays
-          return JSON.stringify(arg, (_key, value) => (typeof value === "bigint" ? value.toString() : value));
-        } else if (typeof arg === "bigint") {
-          // Handle BigInt values
-          return arg.toString();
-        } else {
-          // Handle all other types
-          return arg.toString();
-        }
-      })
-      .join(";");
+    return args.filter((arg) => typeof arg === "string").join(";");
   }
 
   /**
