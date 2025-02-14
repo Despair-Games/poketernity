@@ -71,6 +71,44 @@ export class Arena {
     this.updatePoolsForTimeOfDay();
   }
 
+  /**
+   * Determines if the arena is of the specified biome
+   * @param biome - {@linkcode Biome} or array of {@linkcode Biome} to check against
+   * @returns `true` if the arena is of the specified biome, `false` otherwise
+   */
+  public isOfBiome(biome: Biome | Biome[]): boolean {
+    return Array.isArray(biome) ? biome.includes(this.biomeType) : this.biomeType === biome;
+  }
+
+  /**
+   * Determines if the arena is of the specified terrain
+   * @param terrain - {@linkcode TerrainType} or array of {@linkcode TerrainType} to check against
+   * @returns `true` if the arena is of the specified terrain, `false` otherwise
+   */
+  public isOfTerrain(terrain: TerrainType | TerrainType[]): boolean {
+    const terrainType = this.getTerrainType();
+    return Array.isArray(terrain) ? terrain.includes(terrainType) : terrainType === terrain;
+  }
+
+  /**
+   * Determines if the arena is of the specified weather
+   * @param weather - {@linkcode WeatherType} or array of {@linkcode WeatherType} to check against
+   * @returns `true` if the arena is of the specified weather, `false` otherwise
+   */
+  public isOfWeather(weather: WeatherType | WeatherType[]): boolean {
+    const weatherType = this.weather?.weatherType ?? WeatherType.NONE;
+    return Array.isArray(weather) ? weather.includes(weatherType) : weatherType === weather;
+  }
+
+  /**
+   * Determines if the arena is of the specified time of day
+   * @param timeOfDay - {@linkcode TimeOfDay} or array of {@linkcode TimeOfDay} to check against
+   * @returns `true` if the arena is of the specified time of day, `false` otherwise
+   */
+  public isOfTimeOfDay(timeOfDay: TimeOfDay | TimeOfDay[]): boolean {
+    return Array.isArray(timeOfDay) ? timeOfDay.includes(this.getTimeOfDay()) : this.getTimeOfDay() === timeOfDay;
+  }
+
   updatePoolsForTimeOfDay(): void {
     const timeOfDay = this.getTimeOfDay();
     if (timeOfDay !== this.lastTimeOfDay) {
