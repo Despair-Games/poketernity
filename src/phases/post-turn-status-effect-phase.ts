@@ -30,11 +30,11 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
 
       if (!cancelled.value) {
         globalScene.queueMessage(
-          getStatusEffectActivationText(pokemon.getStatusEffect(), getPokemonNameWithAffix(pokemon)),
+          getStatusEffectActivationText(pokemon.getStatusEffect(true), getPokemonNameWithAffix(pokemon)),
         );
 
         const damage = new NumberHolder(0);
-        switch (pokemon.getStatusEffect()) {
+        switch (pokemon.getStatusEffect(true)) {
           case StatusEffect.POISON:
             damage.value = Math.max(pokemon.getMaxHp() >> 3, 1);
             break;
@@ -54,7 +54,7 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
           applyAbAttrs(AbAttrFlag.POST_DAMAGE, pokemon, false, damage.value);
         }
 
-        new CommonBattleAnim(CommonAnim.POISON + (pokemon.getStatusEffect() - 1), pokemon).play(false, () =>
+        new CommonBattleAnim(CommonAnim.POISON + (pokemon.getStatusEffect(true) - 1), pokemon).play(false, () =>
           this.end(),
         );
       } else {

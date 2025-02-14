@@ -230,7 +230,7 @@ export class MovePhase extends BattlePhase {
       let activated = false;
       let healed = false;
 
-      switch (this.pokemon.getStatusEffect()) {
+      switch (this.pokemon.getStatusEffect(true)) {
         case StatusEffect.PARALYSIS:
           activated =
             (!this.pokemon.randSeedInt(4) || Overrides.STATUS_ACTIVATION_OVERRIDE === true)
@@ -243,7 +243,7 @@ export class MovePhase extends BattlePhase {
             AbAttrFlag.REDUCE_SLEEP_DURATION,
             this.pokemon,
             false,
-            this.pokemon.getStatusEffect(),
+            this.pokemon.getStatusEffect(true),
             turnsRemaining,
           );
           if (Overrides.STATUS_ACTIVATION_OVERRIDE === true) {
@@ -273,18 +273,18 @@ export class MovePhase extends BattlePhase {
       if (activated) {
         this.cancel();
         globalScene.queueMessage(
-          getStatusEffectActivationText(this.pokemon.getStatusEffect(), getPokemonNameWithAffix(this.pokemon)),
+          getStatusEffectActivationText(this.pokemon.getStatusEffect(true), getPokemonNameWithAffix(this.pokemon)),
         );
         globalScene.unshiftPhase(
           new CommonAnimPhase(
             this.pokemon.getBattlerIndex(),
             undefined,
-            CommonAnim.POISON + (this.pokemon.getStatusEffect() - 1),
+            CommonAnim.POISON + (this.pokemon.getStatusEffect(true) - 1),
           ),
         );
       } else if (healed) {
         globalScene.queueMessage(
-          getStatusEffectHealText(this.pokemon.getStatusEffect(), getPokemonNameWithAffix(this.pokemon)),
+          getStatusEffectHealText(this.pokemon.getStatusEffect(true), getPokemonNameWithAffix(this.pokemon)),
         );
         this.pokemon.resetStatus();
         this.pokemon.updateInfo();

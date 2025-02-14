@@ -85,7 +85,7 @@ describe("Moves - Dig", () => {
 
     await game.phaseInterceptor.to("TurnEndPhase");
     expect(playerPokemon.getTag(BattlerTagType.UNDERGROUND)).toBeUndefined();
-    expect(playerPokemon.getStatusEffect()).toBe(StatusEffect.SLEEP);
+    expect(playerPokemon.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
 
     const playerDig = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === MoveId.DIG);
     expect(playerDig?.ppUsed).toBe(0);

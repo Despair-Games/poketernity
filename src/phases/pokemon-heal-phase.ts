@@ -108,7 +108,7 @@ export class PokemonHealPhase extends CommonAnimPhase {
       }
 
       if (this.healStatus && !this.revive && pokemon.status) {
-        lastStatusEffect = pokemon.getStatusEffect();
+        lastStatusEffect = pokemon.getStatusEffect(true);
         pokemon.resetStatus();
       }
 
@@ -121,7 +121,7 @@ export class PokemonHealPhase extends CommonAnimPhase {
       }
 
       pokemon.updateInfo().then(() => super.end());
-      lastStatusEffect = pokemon.getStatusEffect();
+      lastStatusEffect = pokemon.getStatusEffect(true);
     } else if (this.healStatus && !this.revive && lastStatusEffect !== StatusEffect.NONE) {
       pokemon.resetStatus();
       pokemon.updateInfo().then(() => super.end());

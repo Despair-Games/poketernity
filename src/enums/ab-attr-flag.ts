@@ -327,6 +327,6 @@ export enum AbAttrFlag {
   REFLECT_STAT_STAGE_CHANGE,
   /** @see {@linkcode BypassParaSpeedReductionAbAttr} */
   BYPASS_PARA_SPEED_REDUCTION,
-  /** @see MockStatusEffectAbAttr */
+  /** @see {@linkcode MockStatusEffectAbAttr} */
   MOCK_STATUS_EFFECT,
 }

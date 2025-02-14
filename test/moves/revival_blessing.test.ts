@@ -53,7 +53,7 @@ describe("Moves - Revival Blessing", () => {
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
     const revivedPokemon = game.scene.getPlayerParty()[1];
-    expect(revivedPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
+    expect(revivedPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
     expect(revivedPokemon.hp).toBe(Math.floor(revivedPokemon.getMaxHp() / 2));
   });
 
@@ -72,7 +72,7 @@ describe("Moves - Revival Blessing", () => {
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
     const revivedPokemon = game.scene.getEnemyParty()[1];
-    expect(revivedPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
+    expect(revivedPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
     expect(revivedPokemon.hp).toBe(Math.floor(revivedPokemon.getMaxHp() / 2));
   });
 

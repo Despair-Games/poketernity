@@ -5,7 +5,7 @@ import type { StatusEffect } from "#enums/status-effect";
 import { AbAttr } from "./ab-attr";
 
 /**
- * Ability attribute that allows the ability holder to be treated as if it has a status effect
+ * Ability attribute that allows the ability holder to be treated as if it has a status effect.
  * Used by the ability Comatose
  * @extends AbAttr
  */

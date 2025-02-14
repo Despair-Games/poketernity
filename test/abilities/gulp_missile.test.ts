@@ -179,7 +179,7 @@ describe("Abilities - Gulp Missile", () => {
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(enemy.damageAndUpdate).toHaveReturnedWith(getEffectDamage(enemy));
-    expect(enemy.getStatusEffect()).toBe(StatusEffect.PARALYSIS);
+    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.PARALYSIS);
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_PIKACHU)).toBeUndefined();
     expect(cramorant.formIndex).toBe(NORMAL_FORM);
   });

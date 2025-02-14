@@ -111,7 +111,7 @@ describe("Moves - Safeguard", () => {
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
-    expect(enemyPokemon.getStatusEffect()).toEqual(StatusEffect.SLEEP);
+    expect(enemyPokemon.getStatusEffect(true)).toEqual(StatusEffect.SLEEP);
   });
 
   it("doesn't protect from self-inflicted via Rest or Flame Orb", async () => {
@@ -124,7 +124,7 @@ describe("Moves - Safeguard", () => {
     await game.toNextTurn();
     enemyPokemon.damageAndUpdate(1);
 
-    expect(enemyPokemon.getStatusEffect()).toEqual(StatusEffect.BURN);
+    expect(enemyPokemon.getStatusEffect(true)).toEqual(StatusEffect.BURN);
 
     game.override.enemyMoveset([MoveId.REST]);
     // Force the moveset to update mid-battle
@@ -134,7 +134,7 @@ describe("Moves - Safeguard", () => {
     enemyPokemon.damageAndUpdate(1);
     await game.toNextTurn();
 
-    expect(enemyPokemon.getStatusEffect()).toEqual(StatusEffect.SLEEP);
+    expect(enemyPokemon.getStatusEffect(true)).toEqual(StatusEffect.SLEEP);
   });
 
   it("protects from ability-inflicted status", async () => {
@@ -156,7 +156,7 @@ describe("Moves - Safeguard", () => {
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
-    expect(enemyPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
 
   it("should apply even if the user has a fainted ally", async () => {
@@ -177,6 +177,6 @@ describe("Moves - Safeguard", () => {
     expect(enemyPokemon[1].isFainted()).toBe(true);
 
     await game.toNextTurn();
-    expect(enemyPokemon[0].getStatusEffect()).toBe(StatusEffect.NONE);
+    expect(enemyPokemon[0].getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
 });

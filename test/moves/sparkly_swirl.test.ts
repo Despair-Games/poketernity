@@ -52,9 +52,9 @@ describe("Moves - Sparkly Swirl", () => {
     expect(rightPlayer.resetStatus).toHaveBeenCalledOnce();
     expect(partyPokemon.resetStatus).toHaveBeenCalledOnce();
 
-    expect(leftPlayer.getStatusEffect()).toBe(StatusEffect.NONE);
-    expect(rightPlayer.getStatusEffect()).toBe(StatusEffect.NONE);
-    expect(partyPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
+    expect(leftPlayer.getStatusEffect(true)).toBe(StatusEffect.NONE);
+    expect(rightPlayer.getStatusEffect(true)).toBe(StatusEffect.NONE);
+    expect(partyPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
 
   it("should not cure status effect of the target/target's allies", async () => {
@@ -73,10 +73,10 @@ describe("Moves - Sparkly Swirl", () => {
     expect(leftOpp.resetStatus).toHaveBeenCalledTimes(0);
     expect(rightOpp.resetStatus).toHaveBeenCalledTimes(0);
 
-    expect(leftOpp.getStatusEffect()).toBeTruthy();
-    expect(rightOpp.getStatusEffect()).toBeTruthy();
+    expect(leftOpp.getStatusEffect(true)).toBeTruthy();
+    expect(rightOpp.getStatusEffect(true)).toBeTruthy();
 
-    expect(leftOpp.getStatusEffect()).toBe(StatusEffect.BURN);
-    expect(rightOpp.getStatusEffect()).toBe(StatusEffect.BURN);
+    expect(leftOpp.getStatusEffect(true)).toBe(StatusEffect.BURN);
+    expect(rightOpp.getStatusEffect(true)).toBe(StatusEffect.BURN);
   });
 });

@@ -16,6 +16,6 @@ export class SpeciesFormChangeStatusEffectTrigger extends SpeciesFormChangeTrigg
   }
 
   override canChange(pokemon: Pokemon): boolean {
-    return this.statusEffects.indexOf(pokemon.getStatusEffect() || StatusEffect.NONE) > -1 !== this.invert;
+    return this.statusEffects.indexOf(pokemon.getStatusEffect(true) || StatusEffect.NONE) > -1 !== this.invert;
   }
 }

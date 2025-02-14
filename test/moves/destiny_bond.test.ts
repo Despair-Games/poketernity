@@ -145,7 +145,7 @@ describe("Moves - Destiny Bond", () => {
 
     expect(enemyPokemon?.isFainted()).toBe(false);
     expect(playerPokemon?.isFainted()).toBe(false);
-    expect(enemyPokemon?.getStatusEffect()).toBe(StatusEffect.SLEEP);
+    expect(enemyPokemon?.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
 
     // Turn 2: Enemy should skip a turn due to sleep, then get KO'd
     game.move.select(moveToUse);

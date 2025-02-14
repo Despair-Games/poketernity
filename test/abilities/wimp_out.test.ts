@@ -411,7 +411,7 @@ describe("Abilities - Wimp Out", () => {
     game.doSelectPartyPokemon(1);
     await game.phaseInterceptor.to("TurnEndPhase");
 
-    expect(game.scene.getPlayerParty()[1].getStatusEffect()).toEqual(StatusEffect.POISON);
+    expect(game.scene.getPlayerParty()[1].getStatusEffect(true)).toEqual(StatusEffect.POISON);
     confirmSwitch();
   });
 

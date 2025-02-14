@@ -49,7 +49,7 @@ describe("Moves - Toxic Spikes", () => {
     await game.toNextTurn();
 
     expect(enemy.hp).toBe(enemy.getMaxHp());
-    expect(enemy.getStatusEffect()).toBe(StatusEffect.NONE);
+    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
 
   it("should poison the opponent if they switch into 1 layer", async () => {
@@ -63,7 +63,7 @@ describe("Moves - Toxic Spikes", () => {
     const enemy = game.scene.getEnemyField()[0];
 
     expect(enemy.hp).toBeLessThan(enemy.getMaxHp());
-    expect(enemy.getStatusEffect()).toBe(StatusEffect.POISON);
+    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.POISON);
   });
 
   it("should badly poison the opponent if they switch into 2 layers", async () => {
@@ -78,7 +78,7 @@ describe("Moves - Toxic Spikes", () => {
 
     const enemy = game.scene.getEnemyField()[0];
     expect(enemy.hp).toBeLessThan(enemy.getMaxHp());
-    expect(enemy.getStatusEffect()).toBe(StatusEffect.TOXIC);
+    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.TOXIC);
   });
 
   it("should be removed if a grounded poison pokemon switches in", async () => {
@@ -100,7 +100,7 @@ describe("Moves - Toxic Spikes", () => {
     await game.toNextTurn();
 
     expect(muk.isFullHp()).toBe(true);
-    expect(muk.getStatusEffect()).toBe(StatusEffect.NONE);
+    expect(muk.getStatusEffect(true)).toBe(StatusEffect.NONE);
     expect(game.scene.arena.tags.length).toBe(0);
   });
 

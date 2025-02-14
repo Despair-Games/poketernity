@@ -590,7 +590,7 @@ function failCatch(
   return new Promise<void>((resolve) => {
     globalScene.playSound("se/pb_rel");
     pokemon.setY(originalY);
-    if (pokemon.hasStatusEffect(StatusEffect.SLEEP)) {
+    if (pokemon.hasStatusEffect(StatusEffect.SLEEP, false, true)) {
       pokemon.cry(pokemon.getHpRatio() > 0.25 ? undefined : { rate: 0.85 });
     }
     pokemon.tint(getPokeballTintColor(pokeballType));

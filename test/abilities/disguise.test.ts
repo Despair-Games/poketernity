@@ -100,7 +100,7 @@ describe("Abilities - Disguise", () => {
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(mimikyu.formIndex).toBe(disguisedForm);
-    expect(mimikyu.getStatusEffect()).toBe(StatusEffect.POISON);
+    expect(mimikyu.getStatusEffect(true)).toBe(StatusEffect.POISON);
     expect(mimikyu.getStatStage(Stat.SPD)).toBe(-1);
     expect(mimikyu.hp).toBeLessThan(mimikyu.getMaxHp());
   });
