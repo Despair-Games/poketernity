@@ -14,6 +14,13 @@ export class MockConsoleLog {
   private logs: any[] = [];
   private notified: any[] = [];
 
+  /**
+   * A list of warnings that are queued to be displayed after all tests are finished.
+   *
+   * This is static so that it does not get overridden by the test framework constructing new `MockConsoleLog`s.
+   */
+  private static queuedWarnings: any[] = [];
+
   public log(...args) {
     const argsStr = this.getStr(args);
     this.logs.push(argsStr);
@@ -41,7 +48,7 @@ export class MockConsoleLog {
     }
     originalDebug(args);
   }
-  warn(...args) {
+  public warn(...args) {
     const argsStr = this.getStr(args);
     this.logs.push(args);
     if (this.logDisabled && !this.phaseText) {
@@ -52,17 +59,34 @@ export class MockConsoleLog {
     }
     originalWarn(args);
   }
-  notify(msg) {
+
+  /**
+   * Queues a warning to be printed after all tests are finished.
+   */
+  public queuePostTestWarning(...args) {
+    MockConsoleLog.queuedWarnings.push(args);
+  }
+
+  /**
+   * Prints all post-test warnings that have been queued. Does not clear the queue.
+   */
+  public printPostTestWarnings() {
+    for (const args of MockConsoleLog.queuedWarnings) {
+      this.log(...args);
+    }
+  }
+
+  public notify(msg) {
     originalLog(msg);
     this.notified.push(msg);
   }
-  getLogs() {
+  public getLogs() {
     return this.logs;
   }
-  clearLogs() {
+  public clearLogs() {
     this.logs = [];
   }
-  getStr(...args) {
+  public getStr(...args) {
     return args
       .map((arg) => {
         if (typeof arg === "object" && arg !== null) {

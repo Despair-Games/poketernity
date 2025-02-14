@@ -17,10 +17,16 @@ import KeyboardPlugin = Phaser.Input.Keyboard.KeyboardPlugin;
 import GamepadPlugin = Phaser.Input.Gamepad.GamepadPlugin;
 import EventEmitter = Phaser.Events.EventEmitter;
 import UpdateList = Phaser.GameObjects.UpdateList;
+import type { MockConsoleLog } from "#test/testUtils/mocks/mockConsoleLog";
+import { globalScene } from "#app/global-scene";
+import { MoveEffectPhase } from "#app/phases/move-effect-phase";
+import { BattlerTagType } from "#enums/battler-tag-type";
 
 export class GameWrapper {
   public game: Phaser.Game;
   public scene: BattleScene;
+
+  private static originalDamage = Pokemon.prototype.damage;
 
   constructor(phaserGame: Phaser.Game, bypassLoginMockTrue: boolean) {
     Phaser.Math.RND.sow(["test"]);
@@ -38,6 +44,43 @@ export class GameWrapper {
     Pokemon.prototype.cry = () => null as any;
     Pokemon.prototype.faintCry = (cb) => {
       if (cb) cb();
+    };
+
+    Pokemon.prototype.damage = function (...args) {
+      const pokemon: Pokemon = this;
+      const ret = GameWrapper.originalDamage.apply(pokemon, args);
+
+      const side = pokemon.isPlayer() ? "Player" : "Enemy";
+      const lowHpMoves = ["False Swipe", "Hard Press"];
+      const currentPhase = globalScene.getCurrentPhase();
+      let moveName = "N/A";
+      if (currentPhase instanceof MoveEffectPhase) {
+        moveName = currentPhase.move.getName();
+      }
+      const isLowHpMove = lowHpMoves.includes(moveName);
+      /**
+       * Warn about Pokemon reaching low HP, as a measure to prevent flaky tests from Pokemon randomly fainting.
+       *
+       * The list of conditions required for the warning to show up are:
+       * - The Pokemon actually took damage (`ret > 0`)
+       * - The Pokemon is under 20% HP
+       * - The Pokemon is not fainted
+       * - The Pokemon is not using Endure
+       * - The Pokemon was not damaged by a move that intentionally involves low HP (False Swipe, Hard Press, etc.)
+       */
+      if (
+        ret > 0
+        && pokemon.getHpRatio() < 0.2
+        && !pokemon.isFainted()
+        && !pokemon.getTag(BattlerTagType.ENDURING)
+        && !isLowHpMove
+      ) {
+        const warning1 = `Caution: ${side} ${pokemon.name} was damaged to low HP (${pokemon.hp}/${pokemon.getMaxHp()}) by the move ${moveName}!`;
+        const warning2 = `Make sure that the test cannot break from the Pokemon accidentally fainting!`;
+        (console as any as MockConsoleLog).queuePostTestWarning(warning1, warning2);
+        console.log(warning1, warning2);
+      }
+      return ret;
     };
 
     BattleScene.prototype.addPokemonIcon = () => new Phaser.GameObjects.Container(this.scene);

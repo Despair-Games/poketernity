@@ -70,7 +70,7 @@ describe("Moves - Grudge", () => {
     game.override
       .moveset([MoveId.FALSE_SWIPE])
       .startingLevel(100)
-      .ability(Abilities.SAND_STREAM)
+      .enemyAbility(Abilities.SAND_STREAM)
       .enemySpecies(Species.RATTATA);
     await game.classicMode.startBattle([Species.GEODUDE]);
 
