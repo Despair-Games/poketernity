@@ -11,7 +11,7 @@ import { initAchievements } from "#app/system/achv";
 import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { setCookie } from "#app/utils";
 import { blobToString } from "#test/testUtils/gameManagerUtils";
-import { MockConsoleLog } from "#test/testUtils/mocks/mockConsoleLog";
+import { MockConsole } from "#test/testUtils/mocks/mockConsole";
 import { mockContext } from "#test/testUtils/mocks/mockContext";
 import { mockLocalStorage } from "#test/testUtils/mocks/mockLocalStorage";
 import { MockImage } from "#test/testUtils/mocks/mocksContainer/mockImage";
@@ -57,7 +57,7 @@ export function initTestFile() {
     value: mockLocalStorage(),
   });
   Object.defineProperty(window, "console", {
-    value: new MockConsoleLog(false),
+    value: new MockConsole(),
   });
   Object.defineProperty(document, "fonts", {
     writable: true,

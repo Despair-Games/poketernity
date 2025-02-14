@@ -6,11 +6,10 @@ const originalWarn = console.warn;
 const blacklist = ["Phaser", "variant icon does not exist", 'Texture "%s" not found'];
 const whitelist = ["Phase"];
 
-export class MockConsoleLog {
-  constructor(
-    private logDisabled = false,
-    private phaseText = false,
-  ) {}
+const RED_ANSI_CODE = "\u001b[31m";
+const YELLOW_ANSI_CODE = "\u001b[33m";
+
+export class MockConsole {
   private logs: any[] = [];
   private notified: any[] = [];
 
@@ -21,59 +20,50 @@ export class MockConsoleLog {
    */
   private static queuedWarnings: any[] = [];
 
-  public log(...args) {
-    const argsStr = this.getStr(args);
-    this.logs.push(argsStr);
-    if (this.logDisabled && !this.phaseText) {
-      return;
-    }
-    if ((this.phaseText && !whitelist.some((b) => argsStr.includes(b))) || blacklist.some((b) => argsStr.includes(b))) {
-      return;
-    }
-    originalLog(args);
-  }
-  public error(...args) {
-    const argsStr = this.getStr(args);
-    this.logs.push(argsStr);
-    originalError(args); // Appelle le console.error originel
-  }
-  public debug(...args) {
-    const argsStr = this.getStr(args);
-    this.logs.push(argsStr);
-    if (this.logDisabled && !this.phaseText) {
-      return;
-    }
-    if (!whitelist.some((b) => argsStr.includes(b)) || blacklist.some((b) => argsStr.includes(b))) {
-      return;
-    }
-    originalDebug(args);
-  }
-  public warn(...args) {
-    const argsStr = this.getStr(args);
-    this.logs.push(args);
-    if (this.logDisabled && !this.phaseText) {
-      return;
-    }
-    if (!whitelist.some((b) => argsStr.includes(b)) || blacklist.some((b) => argsStr.includes(b))) {
-      return;
-    }
-    originalWarn(args);
-  }
-
   /**
    * Queues a warning to be printed after all tests are finished.
    */
-  public queuePostTestWarning(...args) {
-    MockConsoleLog.queuedWarnings.push(args);
+  public static queuePostTestWarning(...args) {
+    MockConsole.queuedWarnings.push(args);
   }
 
   /**
    * Prints all post-test warnings that have been queued. Does not clear the queue.
    */
-  public printPostTestWarnings() {
-    for (const args of MockConsoleLog.queuedWarnings) {
-      this.log(...args);
+  public static printPostTestWarnings() {
+    for (const args of MockConsole.queuedWarnings) {
+      console.warn(...args);
     }
+  }
+
+  public log(...args) {
+    const argsStr = this.getStr(args);
+    this.logs.push(argsStr);
+    if (!whitelist.some((b) => argsStr.includes(b)) && blacklist.some((b) => argsStr.includes(b))) {
+      return;
+    }
+    originalLog(...args);
+  }
+  public error(...args) {
+    const argsStr = this.getStr(args);
+    this.logs.push(argsStr);
+    originalError(...this.addColor(RED_ANSI_CODE, ...args));
+  }
+  public debug(...args) {
+    const argsStr = this.getStr(args);
+    this.logs.push(argsStr);
+    if (!whitelist.some((b) => argsStr.includes(b)) && blacklist.some((b) => argsStr.includes(b))) {
+      return;
+    }
+    originalDebug(...args);
+  }
+  public warn(...args) {
+    const argsStr = this.getStr(args);
+    this.logs.push(args);
+    if (!whitelist.some((b) => argsStr.includes(b)) && blacklist.some((b) => argsStr.includes(b))) {
+      return;
+    }
+    originalWarn(...this.addColor(YELLOW_ANSI_CODE, ...args)); // Yellow
   }
 
   public notify(msg) {
@@ -86,7 +76,7 @@ export class MockConsoleLog {
   public clearLogs() {
     this.logs = [];
   }
-  public getStr(...args) {
+  public getStr(args: any[]) {
     return args
       .map((arg) => {
         if (typeof arg === "object" && arg !== null) {
@@ -101,5 +91,15 @@ export class MockConsoleLog {
         }
       })
       .join(";");
+  }
+
+  /**
+   * Prepends the given color to every string in the given args.
+   * @param color An ANSI escape sequence representing a color.
+   * @param args The args that the color should be applied to.
+   * @return A copy of `args` with the color prepended to every string argument.
+   */
+  private addColor(color: string, ...args: any[]): any[] {
+    return args.map((a) => (typeof a === "string" ? color + a : a));
   }
 }

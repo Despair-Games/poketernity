@@ -17,7 +17,7 @@ import KeyboardPlugin = Phaser.Input.Keyboard.KeyboardPlugin;
 import GamepadPlugin = Phaser.Input.Gamepad.GamepadPlugin;
 import EventEmitter = Phaser.Events.EventEmitter;
 import UpdateList = Phaser.GameObjects.UpdateList;
-import type { MockConsoleLog } from "#test/testUtils/mocks/mockConsoleLog";
+import { MockConsole } from "#test/testUtils/mocks/mockConsole";
 import { globalScene } from "#app/global-scene";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -75,10 +75,10 @@ export class GameWrapper {
         && !pokemon.getTag(BattlerTagType.ENDURING)
         && !isLowHpMove
       ) {
-        const warning1 = `Caution: ${side} ${pokemon.name} was damaged to low HP (${pokemon.hp}/${pokemon.getMaxHp()}) by the move ${moveName}!`;
-        const warning2 = `Make sure that the test cannot break from the Pokemon accidentally fainting!`;
-        (console as any as MockConsoleLog).queuePostTestWarning(warning1, warning2);
-        console.log(warning1, warning2);
+        const line1 = `Caution: ${side} ${pokemon.name} was damaged to low HP (${pokemon.hp}/${pokemon.getMaxHp()}) by the move ${moveName}!\n`;
+        const line2 = `Make sure that the test cannot break from the Pokemon accidentally fainting!`;
+        MockConsole.queuePostTestWarning(line1 + line2);
+        console.warn(line1 + line2);
       }
       return ret;
     };

@@ -2443,7 +2443,7 @@ export default class BattleScene extends SceneBase {
     }
 
     if (this.currentPhase) {
-      console.log(`%cStart Phase ${this.currentPhase.constructor.name}`, "color:green;");
+      console.log(`\u001b[32mStart Phase ${this.currentPhase.constructor.name}`); // Green
       this.currentPhase.start();
     }
   }
@@ -2455,7 +2455,7 @@ export default class BattleScene extends SceneBase {
 
     this.standbyPhase = this.currentPhase;
     this.currentPhase = phase;
-    console.log(`%cStart Phase ${phase.constructor.name}`, "color:green;");
+    console.log(`\u001b[32mStart Phase ${phase.constructor.name}`); // Green
     phase.start();
 
     return true;
