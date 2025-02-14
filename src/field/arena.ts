@@ -220,9 +220,9 @@ export class Arena {
     } else if (tierValue >= 6) {
       return BiomePoolTier.BOSS_RARE;
     } else if (tierValue >= 1) {
-      return BiomePoolTier.SUPER_RARE;
+      return BiomePoolTier.BOSS_SUPER_RARE;
     } else {
-      return BiomePoolTier.ULTRA_RARE;
+      return BiomePoolTier.BOSS_ULTRA_RARE;
     }
   }
 
