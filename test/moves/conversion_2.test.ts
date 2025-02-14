@@ -1,5 +1,6 @@
 import { Abilities } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
+import { Challenges } from "#enums/challenges";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
@@ -71,24 +72,51 @@ describe("Moves - Conversion 2", () => {
     expect(playerTypes[0]).toBeOneOf([ElementalType.STEEL, ElementalType.POISON, ElementalType.FIRE]);
   });
 
-  it("should change the user's type to resist Fairy if the target's last move was affected by Pixilate", async () => {
-    game.override.enemyAbility(Abilities.PIXILATE);
+  it.each([
+    {
+      moveType: "Fairy",
+      ability: Abilities.PIXILATE,
+      abilityName: "Pixilate",
+      resistingTypes: [ElementalType.STEEL, ElementalType.POISON, ElementalType.FIRE],
+    },
+    {
+      moveType: "Electric",
+      ability: Abilities.GALVANIZE,
+      abilityName: "Galvanize",
+      resistingTypes: [ElementalType.GRASS, ElementalType.ELECTRIC, ElementalType.DRAGON, ElementalType.GROUND],
+    },
+    {
+      moveType: "Flying",
+      ability: Abilities.AERILATE,
+      abilityName: "Aerilate",
+      resistingTypes: [ElementalType.ROCK, ElementalType.STEEL, ElementalType.ELECTRIC],
+    },
+    {
+      moveType: "Ice",
+      ability: Abilities.REFRIGERATE,
+      abilityName: "Refrigerate",
+      resistingTypes: [ElementalType.STEEL, ElementalType.FIRE, ElementalType.ICE],
+    },
+  ])(
+    "should change the user's type to resist $moveType if the target's last move was affected by $abilityName",
+    async ({ ability, resistingTypes }) => {
+      game.override.enemyAbility(ability);
 
-    await game.classicMode.startBattle([Species.FEEBAS]);
+      await game.classicMode.startBattle([Species.FEEBAS]);
 
-    const player = game.field.getPlayerPokemon();
+      const player = game.field.getPlayerPokemon();
 
-    game.move.use(MoveId.CONVERSION_2);
-    await game.move.forceEnemyMove(MoveId.TACKLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+      game.move.use(MoveId.CONVERSION_2);
+      await game.move.forceEnemyMove(MoveId.TACKLE);
+      await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+      await game.phaseInterceptor.to("BerryPhase", false);
 
-    const playerTypes = player.getTypes();
-    expect(playerTypes).toHaveLength(1);
-    // player's type should resist Fairy
-    expect(playerTypes[0]).toBeOneOf([ElementalType.STEEL, ElementalType.POISON, ElementalType.FIRE]);
-  });
+      const playerTypes = player.getTypes();
+      expect(playerTypes).toHaveLength(1);
+      expect(playerTypes[0]).toBeOneOf(resistingTypes);
+    },
+  );
 
   it("should change the user's type according to the target move's changed type, if applicable", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
@@ -154,5 +182,22 @@ describe("Moves - Conversion 2", () => {
     // Ghost is resisted only by Dark and Normal. Obstagoon is of both types.
     expect(player.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
     expect(player.getTypes()).toEqual([ElementalType.DARK, ElementalType.NORMAL]);
+  });
+
+  it("should account for Inverse Challenge when determining a resisting type", async () => {
+    game.challengeMode.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
+
+    await game.challengeMode.startBattle([Species.FEEBAS]);
+
+    const player = game.field.getPlayerPokemon();
+
+    game.move.use(MoveId.CONVERSION_2);
+    await game.move.forceEnemyMove(MoveId.DRAGON_CLAW);
+    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+
+    await game.phaseInterceptor.to("BerryPhase", false);
+
+    expect(player.getTypes()).toHaveLength(1);
+    expect(player.isOfType(ElementalType.DRAGON)).toBeTruthy();
   });
 });
