@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { UseHigherAttackingStatAttr } from "#app/data/move-attrs/use-higher-attacking-stat-attr";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";

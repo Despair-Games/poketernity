@@ -6,7 +6,7 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect, vi } from "vitest";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import type { Move } from "#app/data/move";
 import { BattlerIndex } from "#enums/battler-index";
 

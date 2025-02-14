@@ -10,7 +10,7 @@ import { type SkyDropTag } from "#app/data/battler-tags";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattleType } from "#enums/battle-type";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { FRIENDSHIP_LOSS_FROM_FAINT } from "#app/data/balance/starters";
 import { type DestinyBondTag, type GrudgeTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
