@@ -3,7 +3,7 @@ import { BooleanHolder, toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { SwitchType } from "#enums/switch-type";
 import { PostDamageAbAttr } from "./post-damage-ab-attr";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import type { Move } from "#app/data/move";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { globalScene } from "#app/global-scene";

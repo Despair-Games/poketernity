@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveId } from "#enums/move-id";
@@ -27,54 +27,94 @@ describe("Moves - Dynamax Cannon", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-
-    game.override.moveset([dynamaxCannon.id]);
-    game.override.startingLevel(200);
-
-    game.override.battleType("single");
-    game.override.disableCrits();
-
-    game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyMoveset([MoveId.SPLASH]);
-
-    vi.spyOn(dynamaxCannon, "calculateBattlePower");
+    game.override
+      .battleType("single")
+      .enemySpecies(Species.SNORLAX)
+      .enemyForms({ [Species.SNORLAX]: 1 })
+      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyMoveset(MoveId.SPLASH)
+      .startingLevel(100)
+      .enemyLevel(100)
+      .disableCrits()
+      .moveset([MoveId.DYNAMAX_CANNON, MoveId.EARTHQUAKE]);
   });
 
-  it("should return 100 power against a non dynamax'd Pokemon", async () => {
-    await game.classicMode.startBattle([Species.ETERNATUS]);
 
-    game.move.select(dynamaxCannon.id);
+  it("should deal double damage against a dynamax'd Pokemon", async () => {
+    await game.classicMode.startBattle([Species.CHARIZARD]);
 
-    await game.phaseInterceptor.to(MoveEffectPhase, false);
-    expect((game.scene.getCurrentPhase() as MoveEffectPhase).move.moveId).toBe(dynamaxCannon.id);
-    await game.phaseInterceptor.to(DamageAnimPhase, false);
-    expect(dynamaxCannon.calculateBattlePower).toHaveLastReturnedWith(100);
+    const playerPokemon = game.scene.getPlayerPokemon()!;
+    vi.spyOn(playerPokemon, "getEffectiveStat").mockReturnValue(80);
+
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
+    vi.spyOn(enemyPokemon, "getEffectiveStat").mockReturnValue(90);
+
+    game.move.select(MoveId.EARTHQUAKE);
+    await game.toNextTurn();
+
+    // expected base damage = [(2*level/5 + 2) * power * playerATK / enemyDEF / 50] + 2
+    //                      = 76.666...
+    // Dynamax damage reduction of 1/3 -> 51.11
+    expect(enemyPokemon.getMaxHp() - enemyPokemon.hp).toBeCloseTo(50);
+
+    // Heal the opponent back to full
+    enemyPokemon.hp = enemyPokemon.getMaxHp()
+    game.move.select(MoveId.DYNAMAX_CANNON);
+    await game.toNextTurn();
+
+    expect(enemyPokemon.getMaxHp() - enemyPokemon.hp).toBeCloseTo(102);
   });
 
-  it("should return 200 power against a G-Max Pokemon", async () => {
-    game.override.enemySpecies(Species.SNORLAX).enemyForms({ [Species.SNORLAX]: 1 });
-    await game.classicMode.startBattle([Species.ETERNATUS]);
+  it("should not deal double damage against non max Pokemon", async () => {
+    game.override.enemySpecies(Species.SNORLAX).enemyForms({[Species.SNORLAX]: 0});
+    await game.classicMode.startBattle([Species.CHARIZARD]);
 
-    game.move.select(dynamaxCannon.id);
+    const playerPokemon = game.scene.getPlayerPokemon()!;
+    vi.spyOn(playerPokemon, "getEffectiveStat").mockReturnValue(80);
 
-    await game.phaseInterceptor.to(MoveEffectPhase, false);
-    expect((game.scene.getCurrentPhase() as MoveEffectPhase).move.moveId).toBe(dynamaxCannon.id);
-    await game.phaseInterceptor.to(DamageAnimPhase, false);
-    expect(dynamaxCannon.calculateBattlePower).toHaveLastReturnedWith(200);
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
+    vi.spyOn(enemyPokemon, "getEffectiveStat").mockReturnValue(90);
+
+    game.move.select(MoveId.EARTHQUAKE);
+    await game.toNextTurn();
+
+    // expected base damage = [(2*level/5 + 2) * power * playerATK / enemyDEF / 50] + 2
+    //                      = 76.666...
+    expect(enemyPokemon.getMaxHp() - enemyPokemon.hp).toBeCloseTo(76);
+
+    // Heal the opponent back to full
+    enemyPokemon.hp = enemyPokemon.getMaxHp()
+    game.move.select(MoveId.DYNAMAX_CANNON);
+    await game.toNextTurn();
+
+    expect(enemyPokemon.getMaxHp() - enemyPokemon.hp).toBeCloseTo(76);
   });
+  
 
-  it("should return 100 power against E-Max Eternatus", async () => {
-    game.override.enemySpecies(Species.ETERNATUS).enemyForms({ [Species.ETERNATUS]: 1 });
-    await game.classicMode.startBattle([Species.ETERNATUS]);
+  it("should not deal double damage against Eternamax", async () => {
+    game.override.enemySpecies(Species.ETERNATUS).enemyForms({[Species.ETERNATUS]: 1});
+    await game.classicMode.startBattle([Species.CHARIZARD]);
 
-    game.move.select(dynamaxCannon.id);
+    const playerPokemon = game.scene.getPlayerPokemon()!;
+    vi.spyOn(playerPokemon, "getEffectiveStat").mockReturnValue(80);
 
-    await game.phaseInterceptor.to(MoveEffectPhase, false);
-    const phase = game.scene.getCurrentPhase() as MoveEffectPhase;
-    expect(phase.move.moveId).toBe(dynamaxCannon.id);
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
+    vi.spyOn(enemyPokemon, "getEffectiveStat").mockReturnValue(90);
 
-    await game.phaseInterceptor.to(DamageAnimPhase, false);
-    expect(dynamaxCannon.calculateBattlePower).toHaveLastReturnedWith(100);
+    game.move.select(MoveId.EARTHQUAKE);
+    await game.toNextTurn();
+
+    // expected base damage = [(2*level/5 + 2) * power * playerATK / enemyDEF / 50] + 2
+    //                      = 76.666...
+    // Super effective *2
+    expect(enemyPokemon.getMaxHp() - enemyPokemon.hp).toBeCloseTo(153);
+
+    // Heal the opponent back to full
+    enemyPokemon.hp = enemyPokemon.getMaxHp()
+    game.move.select(MoveId.DYNAMAX_CANNON);
+    await game.toNextTurn();
+
+    expect(enemyPokemon.getMaxHp() - enemyPokemon.hp).toBeCloseTo(153);
   });
 
   it("Dynamax cannon cannot be encored", async () => {

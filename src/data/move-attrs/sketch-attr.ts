@@ -4,7 +4,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 import { type Move } from "../move";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { targetMoveCopiableCondition } from "../move-conditions/target-move-copiable-condition";
 import { MoveEffectAttr } from "./move-effect-attr";

@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { ElementalType } from "#enums/elemental-type";
 import { Weather } from "#app/data/weather";
 import type { PlayerPokemon } from "#app/field/pokemon";

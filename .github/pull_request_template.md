@@ -73,7 +73,7 @@ Do the reviewers need to do something special in order to test your changes?
 - [ ] Have I tested the changes manually?
 <!-- We have heavily optimized our test suite, so please actually run the tests :) -->
 - [ ] Are all unit tests still passing? (`npm run test:silent`)
-  - [ ] Have I created new automated tests (`npm run create-test`) or updated existing tests related to the PR's changes?
+  - [ ] Have I created new automated tests (`npm run test:create`) or updated existing tests related to the PR's changes?
 - [ ] Have I provided screenshots/videos of the changes (if applicable)?
   - [ ] Have I made sure that any UI change works for both UI themes (default and legacy)?
 

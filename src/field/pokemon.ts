@@ -9,7 +9,6 @@ import { PlayerBattleInfo, EnemyBattleInfo } from "#app/ui/battle-info";
 import type { Move } from "#app/data/move";
 import { getMoveTargets } from "#app/data/move";
 import { applyMoveAttrs } from "#app/utils/move-utils";
-import { allMoves } from "#app/data/all-moves";
 import { RechargeAttr } from "#app/data/move-attrs/recharge-attr";
 import { HitsTagAttr } from "#app/data/move-attrs/hits-tag-attr";
 import { TypelessAttr } from "#app/data/move-attrs/typeless-attr";
@@ -120,7 +119,7 @@ import { NoCritTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { Ability } from "#app/data/ability";
 import { getAbApplyFunc } from "#app/data/apply-ab-attrs";
-import { allAbilities } from "#app/data/all-abilities";
+import { allAbilities, allMoves } from "#app/data/data-lists";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type PokemonData from "#app/system/pokemon-data";
 import { BattlerIndex } from "#enums/battler-index";
@@ -162,7 +161,7 @@ import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { Challenges } from "#enums/challenges";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { SwitchType } from "#enums/switch-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
@@ -197,6 +196,7 @@ import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type { QueuedMove } from "#app/@types/QueuedMove";
 import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
+import { DoubleDamageToMaxAttr } from "#app/data/move-attrs/double-damage-to-max-attr";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -3206,6 +3206,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       };
     }
 
+    /** Behemoth Bash, Behemoth Blade, and Dynamax Cannon do double damage to G-Max Pokemon (except Eternamax) */
+    let gmaxBonusDamageMultiplier = 1;
+    const doDoubleDamageToMax = new BooleanHolder(false);
+    applyMoveAttrs(DoubleDamageToMaxAttr, source, this, move, doDoubleDamageToMax);
+    if (doDoubleDamageToMax.value) {
+      gmaxBonusDamageMultiplier = 2;
+    }
+
     /**
      * The attack's base damage, as determined by the source's level, move power
      * and Attack stat as well as this Pokemon's Defense stat
@@ -3335,6 +3343,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     damage.value =
       baseDamage
       * targetMultiplier
+      * gmaxBonusDamageMultiplier
       * multiStrikeEnhancementMultiplier.value
       * arenaAttackTypeMultiplier.value
       * glaiveRushMultiplier.value
@@ -3432,6 +3441,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return 0;
     }
     const surviveDamage = new BooleanHolder(false);
+
+    // Eternatus does not need the damage reduction as its emax form has increased hp/defenses
+    if (this.isMax(false)) {
+      damage = toDmgValue(damage * DYNAMAX_DAMAGE_TAKEN_FACTOR);
+    }
 
     if (!preventEndure && this.hp - damage <= 0) {
       if (this.hp >= 1 && this.getTag(BattlerTagType.ENDURING)) {

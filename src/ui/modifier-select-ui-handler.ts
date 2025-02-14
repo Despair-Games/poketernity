@@ -11,7 +11,7 @@ import { handleTutorial } from "../tutorial";
 import { Tutorial } from "#enums/tutorial";
 import { Button } from "#enums/buttons";
 import MoveInfoOverlay from "./move-info-overlay";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { formatMoney } from "#app/utils";
 import Overrides from "#app/overrides";
 import i18next from "i18next";

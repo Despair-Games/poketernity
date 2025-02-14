@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { type ShellTrapTag, type StockpilingTag } from "#app/data/battler-tags";
 import { AttackMove, SelfStatusMove, StatusMove, type Move } from "#app/data/move";
 import { AbilityChangeAttr } from "#app/data/move-attrs/ability-change-attr";
@@ -241,6 +241,8 @@ import { SwitchType } from "#enums/switch-type";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
+import { RageAttr } from "./move-attrs/rage-attr";
+import { DoubleDamageToMaxAttr } from "./move-attrs/double-damage-to-max-attr";
 
 export function initMoves() {
   const rawAllMoves = [
@@ -571,7 +573,7 @@ export function initMoves() {
       true,
     ),
     new AttackMove(MoveId.QUICK_ATTACK, ElementalType.NORMAL, MoveCategory.PHYSICAL, 40, 100, 30, -1, 1, 1),
-    new AttackMove(MoveId.RAGE, ElementalType.NORMAL, MoveCategory.PHYSICAL, 20, 100, 20, -1, 0, 1).partial(), // No effect implemented
+    new AttackMove(MoveId.RAGE, ElementalType.NORMAL, MoveCategory.PHYSICAL, 20, 100, 20, -1, 0, 1).attr(RageAttr),
     new SelfStatusMove(MoveId.TELEPORT, ElementalType.PSYCHIC, -1, 20, -1, -6, 1)
       .attr(ForceSwitchOutAttr, true)
       .hidesUser(),
@@ -3189,7 +3191,7 @@ export function initMoves() {
       .ignoresVirtual(),
     /* End Unused */
     new AttackMove(MoveId.DYNAMAX_CANNON, ElementalType.DRAGON, MoveCategory.SPECIAL, 100, 100, 5, -1, 0, 8)
-      .attr(MovePowerMultiplierAttr, (_user, target, _move) => (target.isMax(false) ? 2 : 1))
+      .attr(DoubleDamageToMaxAttr)
       .attr(DiscourageFrequentUseAttr)
       .ignoresVirtual(),
 
@@ -3335,12 +3337,10 @@ export function initMoves() {
       .bulletMove()
       .makesContact(false),
     new AttackMove(MoveId.BEHEMOTH_BLADE, ElementalType.STEEL, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 8)
-      .attr(MovePowerMultiplierAttr, (_user, target, _move) => (target.isMax(false) ? 2 : 1))
+      .attr(DoubleDamageToMaxAttr)
       .slicingMove(),
-    new AttackMove(MoveId.BEHEMOTH_BASH, ElementalType.STEEL, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 8).attr(
-      MovePowerMultiplierAttr,
-      (_user, target, _move) => (target.isMax(false) ? 2 : 1),
-    ),
+    new AttackMove(MoveId.BEHEMOTH_BASH, ElementalType.STEEL, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 8)
+      .attr(DoubleDamageToMaxAttr),
     new AttackMove(MoveId.AURA_WHEEL, ElementalType.ELECTRIC, MoveCategory.PHYSICAL, 110, 100, 10, 100, 0, 8)
       .attr(StatStageChangeAttr, [Stat.SPD], 1, true)
       .makesContact(false)

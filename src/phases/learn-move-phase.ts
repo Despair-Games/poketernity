@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
 import { initMoveAnim } from "#app/data/init-move-anim";
 import type { Move } from "#app/data/move";
