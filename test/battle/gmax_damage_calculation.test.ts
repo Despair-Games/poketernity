@@ -52,7 +52,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
   });
 
   it("E-Max Eternatus does not get gmax damage reduction", async () => {
-    game.override.enemySpecies(Species.ETERNATUS).enemyForms({[Species.ETERNATUS]: 1})
+    game.override.enemySpecies(Species.ETERNATUS).enemyForms({ [Species.ETERNATUS]: 1 });
     await game.classicMode.startBattle([Species.CHARIZARD]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;

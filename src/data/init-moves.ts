@@ -3339,8 +3339,9 @@ export function initMoves() {
     new AttackMove(MoveId.BEHEMOTH_BLADE, ElementalType.STEEL, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 8)
       .attr(DoubleDamageToMaxAttr)
       .slicingMove(),
-    new AttackMove(MoveId.BEHEMOTH_BASH, ElementalType.STEEL, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 8)
-      .attr(DoubleDamageToMaxAttr),
+    new AttackMove(MoveId.BEHEMOTH_BASH, ElementalType.STEEL, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 8).attr(
+      DoubleDamageToMaxAttr,
+    ),
     new AttackMove(MoveId.AURA_WHEEL, ElementalType.ELECTRIC, MoveCategory.PHYSICAL, 110, 100, 10, 100, 0, 8)
       .attr(StatStageChangeAttr, [Stat.SPD], 1, true)
       .makesContact(false)

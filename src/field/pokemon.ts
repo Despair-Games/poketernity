@@ -3519,7 +3519,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * @param includeEternamax Whether or not to include Eternamax
+   * @param includeEternamax - Whether or not to include Eternamax
    * @returns if the Pokemon is in a max form
    */
   isMax(includeEternamax: boolean = true): boolean {

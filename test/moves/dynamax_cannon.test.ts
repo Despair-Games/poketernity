@@ -1,6 +1,4 @@
 import { allMoves } from "#app/data/data-lists";
-import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
-import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -39,7 +37,6 @@ describe("Moves - Dynamax Cannon", () => {
       .moveset([MoveId.DYNAMAX_CANNON, MoveId.EARTHQUAKE]);
   });
 
-
   it("should deal double damage against a dynamax'd Pokemon", async () => {
     await game.classicMode.startBattle([Species.CHARIZARD]);
 
@@ -58,7 +55,7 @@ describe("Moves - Dynamax Cannon", () => {
     expect(enemyPokemon.getMaxHp() - enemyPokemon.hp).toBeCloseTo(50);
 
     // Heal the opponent back to full
-    enemyPokemon.hp = enemyPokemon.getMaxHp()
+    enemyPokemon.hp = enemyPokemon.getMaxHp();
     game.move.select(MoveId.DYNAMAX_CANNON);
     await game.toNextTurn();
 
@@ -66,7 +63,7 @@ describe("Moves - Dynamax Cannon", () => {
   });
 
   it("should not deal double damage against non max Pokemon", async () => {
-    game.override.enemySpecies(Species.SNORLAX).enemyForms({[Species.SNORLAX]: 0});
+    game.override.enemySpecies(Species.SNORLAX).enemyForms({ [Species.SNORLAX]: 0 });
     await game.classicMode.startBattle([Species.CHARIZARD]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
@@ -83,16 +80,15 @@ describe("Moves - Dynamax Cannon", () => {
     expect(enemyPokemon.getMaxHp() - enemyPokemon.hp).toBeCloseTo(76);
 
     // Heal the opponent back to full
-    enemyPokemon.hp = enemyPokemon.getMaxHp()
+    enemyPokemon.hp = enemyPokemon.getMaxHp();
     game.move.select(MoveId.DYNAMAX_CANNON);
     await game.toNextTurn();
 
     expect(enemyPokemon.getMaxHp() - enemyPokemon.hp).toBeCloseTo(76);
   });
-  
 
   it("should not deal double damage against Eternamax", async () => {
-    game.override.enemySpecies(Species.ETERNATUS).enemyForms({[Species.ETERNATUS]: 1});
+    game.override.enemySpecies(Species.ETERNATUS).enemyForms({ [Species.ETERNATUS]: 1 });
     await game.classicMode.startBattle([Species.CHARIZARD]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
@@ -110,7 +106,7 @@ describe("Moves - Dynamax Cannon", () => {
     expect(enemyPokemon.getMaxHp() - enemyPokemon.hp).toBeCloseTo(153);
 
     // Heal the opponent back to full
-    enemyPokemon.hp = enemyPokemon.getMaxHp()
+    enemyPokemon.hp = enemyPokemon.getMaxHp();
     game.move.select(MoveId.DYNAMAX_CANNON);
     await game.toNextTurn();
 
