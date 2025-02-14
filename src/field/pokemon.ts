@@ -512,7 +512,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   public faint(): void {
     this.hp = 0;
-    this.status = null;
+    this.resetStatus(true);
   }
 
   /**
