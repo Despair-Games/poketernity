@@ -71,6 +71,46 @@ export class Arena {
     this.updatePoolsForTimeOfDay();
   }
 
+  /**
+   * Determines if the arena is in one the specified biomes.
+   * @param biome - {@linkcode Biome} or array of {@linkcode Biome} to check against
+   * @returns `true` if the arena is of the specified biome, `false` otherwise
+   */
+  public isInBiome(biome: Biome | Biome[]): boolean {
+    return Array.isArray(biome) ? biome.includes(this.biomeType) : this.biomeType === biome;
+  }
+
+  /**
+   * Determines if one of the specified terrains is set in the arena.
+   * @param terrain - {@linkcode TerrainType} or array of {@linkcode TerrainType} to check against
+   * @returns `true` if the arena is of the specified terrain, `false` otherwise
+   */
+  public hasTerrain(terrain: TerrainType | TerrainType[]): boolean {
+    const terrainType = this.getTerrainType();
+    return Array.isArray(terrain) ? terrain.includes(terrainType) : terrainType === terrain;
+  }
+
+  /**
+   * Determines if one the specified weather effects is set in the arena.
+   * Does **not** take into account weather suppression effects.
+   * @see {@linkcode Weather.isEffectSuppressed} to check if the weather effect is suppressed.
+   * @param weather - {@linkcode WeatherType} or array of {@linkcode WeatherType} to check against
+   * @returns `true` if the arena is of the specified weather, `false` otherwise
+   */
+  public hasWeather(weather: WeatherType | WeatherType[]): boolean {
+    const weatherType = this.weather?.weatherType ?? WeatherType.NONE;
+    return Array.isArray(weather) ? weather.includes(weatherType) : weatherType === weather;
+  }
+
+  /**
+   * Determines if the arena is of the specified time of day
+   * @param timeOfDay - {@linkcode TimeOfDay} or array of {@linkcode TimeOfDay} to check against
+   * @returns `true` if the arena is of the specified time of day, `false` otherwise
+   */
+  public isTimeOfDay(timeOfDay: TimeOfDay | TimeOfDay[]): boolean {
+    return Array.isArray(timeOfDay) ? timeOfDay.includes(this.getTimeOfDay()) : this.getTimeOfDay() === timeOfDay;
+  }
+
   updatePoolsForTimeOfDay(): void {
     const timeOfDay = this.getTimeOfDay();
     if (timeOfDay !== this.lastTimeOfDay) {
@@ -615,8 +655,9 @@ export class Arena {
     Biome.TEMPLE,
     Biome.LABORATORY,
   ];
+
   isOutside(): boolean {
-    return !(this.biomeType in this.indoorBiomes);
+    return !this.indoorBiomes.includes(this.biomeType);
   }
 
   // @todo these tints feel like they belong in their own class somewhere
@@ -992,7 +1033,7 @@ const biomeWithProps = [
 ];
 
 export function getBiomeHasProps(biomeType: Biome): boolean {
-  return biomeType in biomeWithProps;
+  return biomeWithProps.includes(biomeType);
 }
 
 export class ArenaBase extends Phaser.GameObjects.Container {
