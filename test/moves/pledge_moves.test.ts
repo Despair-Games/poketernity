@@ -148,7 +148,7 @@ describe("Moves - Pledge Moves", () => {
     game.move.select(MoveId.FIRE_PLEDGE, 0, BattlerIndex.ENEMY_2);
     game.move.select(MoveId.GRASS_PLEDGE, 1, BattlerIndex.ENEMY);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     // advance to the end of PLAYER_2's move this turn
     for (let i = 0; i < 2; i++) {
       await game.phaseInterceptor.to("MoveEndPhase");

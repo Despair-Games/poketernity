@@ -69,7 +69,7 @@ describe("Abilities - Mirror Armor", () => {
 
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.OVERHEAT);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.move.forceHit();
 
     await game.phaseInterceptor.to("BerryPhase", false);
@@ -130,7 +130,7 @@ describe("Abilities - Mirror Armor", () => {
 
     game.move.use(MoveId.STICKY_WEB);
     await game.move.forceEnemyMove(MoveId.U_TURN);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -151,7 +151,7 @@ describe("Abilities - Mirror Armor", () => {
 
     game.move.use(MoveId.U_TURN);
     await game.move.forceEnemyMove(MoveId.U_TURN);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     game.doSelectPartyPokemon(1, "SwitchPhase");
 
     await game.phaseInterceptor.to("BerryPhase", false);
@@ -207,7 +207,7 @@ describe("Abilities - Mirror Armor", () => {
 
     game.move.use(MoveId.FEATHER_DANCE);
     await game.move.forceEnemyMove(MoveId.SUBSTITUTE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(player.getStatStage(Stat.ATK)).toBe(0);

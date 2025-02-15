@@ -287,7 +287,7 @@ describe("Moves - Sky Drop", () => {
 
     game.move.use(MoveId.TOXIC);
     await game.move.forceEnemyMove(MoveId.SKY_DROP);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(enemyPokemon.isFainted()).toBeTruthy();
@@ -426,7 +426,7 @@ describe("Moves - Sky Drop", () => {
 
     game.move.use(MoveId.GRASSY_TERRAIN);
     await game.move.forceEnemyMove(MoveId.SKY_DROP);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
     for (const pokemon of game.scene.getField()) {
