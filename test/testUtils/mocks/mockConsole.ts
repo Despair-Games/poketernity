@@ -3,11 +3,13 @@ const originalError = console.error;
 const originalDebug = console.debug;
 const originalWarn = console.warn;
 
-const blacklist = ["Phaser", "variant icon does not exist", 'Texture "%s" not found'];
+const blacklist = ["variant icon does not exist", 'Texture "%s" not found'];
 const whitelist = ["Phase"];
 
 const RED_ANSI_CODE = "\u001b[31m";
+const GREEN_ANSI_CODE = "\u001b[32m";
 const YELLOW_ANSI_CODE = "\u001b[33m";
+const WHITE_ANSI_CODE = "\u001b[37m";
 
 export class MockConsole {
   private logs: any[] = [];
@@ -42,7 +44,12 @@ export class MockConsole {
     if (!whitelist.some((b) => argsStr.includes(b)) && blacklist.some((b) => argsStr.includes(b))) {
       return;
     }
-    originalLog(...args);
+    if (args[1] === "color:green;") {
+      // Edge case for displaying green "Start phase" messages
+      originalLog(...this.addColor(GREEN_ANSI_CODE, args[0].replace("%c", "")));
+    } else {
+      originalLog(...this.addColor(WHITE_ANSI_CODE, ...args));
+    }
   }
   public error(...args) {
     const argsStr = this.getStr(args);
