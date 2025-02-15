@@ -10,8 +10,6 @@ import { type AnimConfig, type AnimFrame } from "#app/data/anim-config";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimFocus } from "#enums/anim-focus";
 
-//#region Types
-
 interface GraphicFrameData {
   x: number;
   y: number;

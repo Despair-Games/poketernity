@@ -9,6 +9,7 @@ import { commonAnims } from "#app/data/common-anims";
 import { encounterAnims } from "#app/data/encounter-anims";
 import { globalScene } from "#app/global-scene";
 import Phaser from "phaser";
+import { ImagesFolder } from "#enums/images-folders";
 
 export function loadAnimAssets(anims: AnimConfig[], startLoad?: boolean): Promise<void> {
   return new Promise((resolve) => {
@@ -27,11 +28,11 @@ export function loadAnimAssets(anims: AnimConfig[], startLoad?: boolean): Promis
         backgrounds.add(abg);
       }
       if (a.graphic) {
-        globalScene.loadSpritesheet(a.graphic, "battle_anims", 96);
+        globalScene.loadSpritesheet(a.graphic, ImagesFolder.BATTLE_ANIMS, 96);
       }
     }
     for (const bg of backgrounds) {
-      globalScene.loadImage(bg, "battle_anims");
+      globalScene.loadImage(bg, ImagesFolder.BATTLE_ANIMS);
     }
     for (const s of sounds) {
       globalScene.loadSe(s, "battle_anims", s);

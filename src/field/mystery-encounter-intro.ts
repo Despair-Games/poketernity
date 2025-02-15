@@ -6,35 +6,18 @@ import { isNullOrUndefined } from "#app/utils";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { Variant } from "#app/data/variant";
 import PlayAnimationConfig = Phaser.Types.Animations.PlayAnimationConfig;
-
-type KnownFileRoot =
-  | "arenas"
-  | "battle_anims"
-  | "cg"
-  | "character"
-  | "effect"
-  | "egg"
-  | "events"
-  | "inputs"
-  | "items"
-  | "mystery-encounters"
-  | "pokeball"
-  | "pokemon"
-  | "pokemon/back"
-  | "pokemon/female"
-  | "pokemon/icons"
-  | "pokemon/input"
-  | "pokemon/shiny"
-  | "pokemon/variant"
-  | "statuses"
-  | "trainer"
-  | "ui";
+import { ImagesFolder } from "#enums/images-folders";
 
 export class MysteryEncounterSpriteConfig {
   /** The sprite key (which is the image file name). e.g. "ace_trainer_f" */
   spriteKey: string;
-  /** Refer to [/public/images](../../public/images) directorty for all folder names */
-  fileRoot: (KnownFileRoot & string) | string;
+  /**
+   * Refer to images in the [/public/images](../../public/images) directory for all folder names
+   * TODO: currently the 'string' type is needed for Pokemon sprites because `globalScene.loadPokemonAtlas` expects
+   * the fileroot to contain the folder + filename.
+   * However this should be changed to have a separate folder and fileNameRoot attributes, like for other loading functions.
+   */
+  fileRoot: ImagesFolder | string;
   /** Optional replacement for `spriteKey`/`fileRoot`. Just know this defaults to male/genderless, form 0, no shiny */
   species?: Species;
   /** Enable shadow. Defaults to `false` */
@@ -222,9 +205,11 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
         if (config.isPokemon) {
           globalScene.loadPokemonAtlas(config.spriteKey, config.fileRoot);
         } else if (config.isItem) {
-          globalScene.loadAtlas("items", "");
+          globalScene.loadAtlas("items");
+        } else if (Object.values(ImagesFolder).includes(config.fileRoot as ImagesFolder)) {
+          globalScene.loadAtlas(config.spriteKey, config.fileRoot as ImagesFolder);
         } else {
-          globalScene.loadAtlas(config.spriteKey, config.fileRoot);
+          console.warn("Invalid fileroot for spriteConfig: " + config);
         }
       });
 
