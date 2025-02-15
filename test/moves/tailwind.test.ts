@@ -29,6 +29,8 @@ describe("Moves - Tailwind", () => {
     game.override.battleType("double");
     game.override.moveset([MoveId.TAILWIND, MoveId.SPLASH, MoveId.PETAL_BLIZZARD, MoveId.SANDSTORM]);
     game.override.enemyMoveset(MoveId.SPLASH);
+    game.override.startingLevel(100);
+    game.override.enemyLevel(100);
   });
 
   it("doubles the Speed stat of the Pokemon on its side", async () => {
@@ -106,14 +108,26 @@ describe("Moves - Tailwind", () => {
 
     await game.classicMode.startBattle([Species.WHIMSICOTT, Species.URSALUNA]);
 
+    game.move.use(MoveId.TACKLE, 0, BattlerIndex.ENEMY);
+    game.move.use(MoveId.TACKLE, 1, BattlerIndex.ENEMY_2);
+
+    await game.phaseInterceptor.to("BerryPhase", false);
+
+    const firstTurnOrder = game.field.getTurnOrder();
+    // Ursaluna should be last in the turn order without Tailwind
+    expect(firstTurnOrder.at(-1)).toBe(BattlerIndex.PLAYER_2);
+
+    await game.toNextTurn();
+
     game.move.use(MoveId.TAILWIND, 0);
     game.move.use(MoveId.TACKLE, 1, BattlerIndex.ENEMY);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    const turnOrder = game.field.getTurnOrder();
+    const secondTurnOrder = game.field.getTurnOrder();
 
-    expect(turnOrder[0]).toBe(BattlerIndex.PLAYER);
-    expect(turnOrder[1]).toBe(BattlerIndex.PLAYER_2);
+    expect(secondTurnOrder).not.toEqual(firstTurnOrder);
+    expect(secondTurnOrder[0]).toBe(BattlerIndex.PLAYER);
+    expect(secondTurnOrder[1]).toBe(BattlerIndex.PLAYER_2);
   });
 });

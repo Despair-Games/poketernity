@@ -4,6 +4,8 @@ import i18next from "i18next";
 import { AbAttr } from "./ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import type { Move } from "../move";
+import { MoveCategory } from "#enums/move-category";
 
 /**
  * If a Pokémon with this Ability selects a damaging move, it has a 30% chance of going first in its priority bracket.
@@ -22,7 +24,11 @@ export class BypassSpeedChanceAbAttr extends AbAttr {
     this.chance = chance;
   }
 
-  override apply(pokemon: Pokemon, simulated: boolean): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, move: Move): boolean {
+    if (move.category === MoveCategory.STATUS) {
+      return false;
+    }
+
     if (pokemon.randSeedInt(100) < this.chance) {
       if (!simulated) {
         return pokemon.addTag(BattlerTagType.BYPASS_SPEED);

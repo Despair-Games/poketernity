@@ -4,12 +4,12 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleCommand } from "#enums/battle-command";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { MoveCategory } from "#enums/move-category";
 import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { SwitchType } from "#enums/switch-type";
 import type { QueuedMove } from "./@types/QueuedMove";
 import type { TurnCommandFilter } from "./@types/TurnCommandFilter";
+import type { BypassSpeedChanceAbAttr } from "./data/ab-attrs/bypass-speed-chance-ab-attr";
 import { applyAbAttrs } from "./data/apply-ab-attrs";
 import { allMoves } from "./data/data-lists";
 import { MoveHeaderAttr } from "./data/move-attrs/move-header-attr";
@@ -442,11 +442,11 @@ export class TurnCommandManager {
     this.turnCommands.forEach((tc) => {
       const { pokemon, move } = tc;
       // Only apply to commands to use damaging moves
-      if (!move || allMoves[move.moveId].category === MoveCategory.STATUS) {
+      if (!move) {
         return;
       }
 
-      applyAbAttrs(AbAttrFlag.BYPASS_SPEED_CHANCE, pokemon, false);
+      applyAbAttrs<BypassSpeedChanceAbAttr>(AbAttrFlag.BYPASS_SPEED_CHANCE, pokemon, false, allMoves[move.moveId]);
       globalScene.applyModifiers(BypassSpeedChanceModifier, pokemon.isPlayer(), pokemon);
     });
   }
