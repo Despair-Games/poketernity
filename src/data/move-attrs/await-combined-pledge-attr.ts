@@ -5,7 +5,7 @@ import type { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import type { Move } from "#app/data/move";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
-import { allMoves } from "../all-moves";
+import { allMoves } from "#app/data/data-lists";
 
 /**
  * Attribute that cancels the associated move's effects when set to be combined
