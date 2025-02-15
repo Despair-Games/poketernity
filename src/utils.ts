@@ -445,32 +445,26 @@ export function hslToHex(h: number, s: number, l: number): string {
 }
 
 /**
- * This function returns `true` if all localized images used by the game have been added for the given language.
- *
- * If the lang is not in the function, it usually means that lang is going to use the default english version
- *
- * English itself counts as not available
+ * This function checks if all localized images used by the game have been added for the given language.
+ * @param key the language key (e.g. "ko").
+ * @returns `true` if the given language is supported and has localized sprites.
  */
-export function hasAllLocalizedSprites(lang?: string): boolean {
-  // IMPORTANT - ONLY ADD YOUR LANG HERE IF YOU'VE ALREADY ADDED ALL THE NECESSARY IMAGES
-  if (!lang) {
-    lang = i18next.resolvedLanguage;
-  }
+function hasAllLocalizedSprites(key: string): boolean {
+  return supportedLanguages.some((lang) => lang.key === key && lang.hasAllLocalizedImages);
+}
 
-  switch (lang) {
-    case "es-ES":
-    case "fr":
-    case "de":
-    case "it":
-    case "zh-CN":
-    case "zh-TW":
-    case "pt-BR":
-    case "ko":
-    case "ja":
-      return true;
-    default:
-      return false;
+/**
+ * Helper method to localize a filename (e.g. for types icons) based on the given language.
+ * Defaults to English if the language is not a {@linkcode supportedLanguages} or does not have all pictures defined.
+ * @param baseName the original name of the file (e.g. `types`)
+ * @param langKey optional - language key. If not provided, by default uses the resolved language
+ * @returns the localized sprite key, of form "baseKey_{languageKey}"
+ */
+export function getLocalizedFilename(baseName: string, langKey?: string): string {
+  if (!langKey) {
+    langKey = i18next.resolvedLanguage ?? "en";
   }
+  return `${baseName}_${hasAllLocalizedSprites(langKey) ? `${langKey}` : "en"}`;
 }
 
 /**
@@ -577,15 +571,6 @@ export function capitalizeFirstLetter(str: string): string {
  */
 export function toDmgValue(value: number, minValue: number = 1): number {
   return Math.max(Math.floor(value), minValue);
-}
-
-/**
- * Helper method to localize a sprite key (e.g. for types)
- * @param baseKey the base key of the sprite (e.g. `type`)
- * @returns the localized sprite key
- */
-export function getLocalizedSpriteKey(baseKey: string): string {
-  return `${baseKey}${hasAllLocalizedSprites(i18next.resolvedLanguage) ? `_${i18next.resolvedLanguage}` : ""}`;
 }
 
 /**

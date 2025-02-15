@@ -16,6 +16,7 @@ import { TrainerVariant } from "#enums/trainer-variant";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { settings } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { ImagesFolder } from "#enums/images-folders";
 import { CommonColor } from "#enums/color";
 
 export type RunSelectCallback = (cursor: number) => void;
@@ -65,12 +66,12 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
 
     this.runs = [];
 
-    globalScene.loadImage("hall_of_fame_red", "ui");
-    globalScene.loadImage("hall_of_fame_blue", "ui");
+    globalScene.loadImage("hall_of_fame_red", ImagesFolder.UI);
+    globalScene.loadImage("hall_of_fame_blue", ImagesFolder.UI);
     // For some reason, the game deletes/unloads the rival sprites. As a result, Run Info cannot access the rival sprites.
     // The rivals are loaded here to have some way of accessing those sprites.
-    globalScene.loadAtlas("rival_f", "trainer");
-    globalScene.loadAtlas("rival_m", "trainer");
+    globalScene.loadAtlas("rival_f", ImagesFolder.TRAINER);
+    globalScene.loadAtlas("rival_m", ImagesFolder.TRAINER);
   }
 
   override show(args: any[]): boolean {

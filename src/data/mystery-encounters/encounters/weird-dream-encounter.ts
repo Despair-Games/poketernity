@@ -20,7 +20,7 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import { NumberHolder, isNullOrUndefined, randSeedInt, randSeedShuffle } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
-import { allSpecies } from "#app/data/all-species";
+import { allSpecies } from "#app/data/data-lists";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { HiddenAbilityRateBoosterModifier } from "#app/modifier/modifier";
 import { achvs } from "#app/system/achv";

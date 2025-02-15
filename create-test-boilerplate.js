@@ -1,7 +1,7 @@
 /**
  * This script creates a test boilerplate file in the appropriate
  * directory based on the type selected.
- * @example npm run create-test
+ * @example npm run test:create
  */
 
 import fs from "fs";
@@ -71,7 +71,7 @@ async function promptFileName(selectedType) {
 }
 
 /**
- * Runs the interactive create-test "CLI"
+ * Runs the interactive test:create "CLI"
  * @returns {Promise<void>}
  */
 async function runInteractive() {

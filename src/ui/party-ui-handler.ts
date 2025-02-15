@@ -1,14 +1,14 @@
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
-import { addBBCodeTextObject, addTextObject, getTextColor } from "#app/ui/text";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { BattleCommand } from "#enums/battle-command";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { UiMode } from "#enums/ui-mode";
-import { BooleanHolder, toReadableString, getLocalizedSpriteKey } from "#app/utils";
+import { BooleanHolder, toReadableString } from "#app/utils";
 import { type PokemonHeldItemModifier, type PokemonFormChangeItemModifier } from "#app/modifier/modifier";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
 import { StatusEffect } from "#enums/status-effect";
 import PokemonIconAnimHandler from "#app/ui/pokemon-icon-anim-handler";
@@ -990,7 +990,7 @@ export default class PartyUiHandler extends MessageUiHandler {
       const optionText = addBBCodeTextObject(0, yCoord - 16, optionName, TextStyle.WINDOW, { maxLines: 1 });
       if (altText) {
         optionText.setColor(CommonColor.LIGHT_BLUE);
-        optionText.setShadowColor(ShadowColor.LIGHT_BLUE);
+        optionText.setShadowColor(ShadowColor.BLUE);
       }
       optionText.setOrigin(0, 0);
 
@@ -1007,7 +1007,7 @@ export default class PartyUiHandler extends MessageUiHandler {
 
         /** If the amount held is the maximum, display the count in red */
         if (this.transferQuantitiesMax[option] === itemModifier.getMaxHeldItemCount(undefined)) {
-          amountText = `[color=${getTextColor(TextStyle.SUMMARY_RED)}]${amountText}[/color]`;
+          amountText = getBBCodeFragment(amountText, TextStyle.SUMMARY_RED, true, true);
         }
 
         optionText.setText(optionName + amountText);
@@ -1156,7 +1156,6 @@ class PartySlot extends Phaser.GameObjects.Container {
   private pokemon: PlayerPokemon;
 
   private slotBg: Phaser.GameObjects.Image;
-  private slotPb: Phaser.GameObjects.Sprite;
   public slotName: Phaser.GameObjects.Text;
   public slotHpBar: Phaser.GameObjects.Image;
   public slotHpOverlay: Phaser.GameObjects.Sprite;
@@ -1204,16 +1203,10 @@ class PartySlot extends Phaser.GameObjects.Container {
 
     this.add(slotBg);
 
-    const slotPb = globalScene.add.sprite(
-      this.slotIndex >= battlerCount ? -85.5 : -51,
-      this.slotIndex >= battlerCount ? 0 : -20.5,
-      "party_pb",
-    );
-    this.slotPb = slotPb;
-
-    this.add(slotPb);
-
-    this.pokemonIcon = globalScene.addPokemonIcon(this.pokemon, slotPb.x, slotPb.y, 0.5, 0.5, true);
+    // TODO: positions/sizes should not use decimal values
+    const iconX = this.slotIndex >= battlerCount ? -85.5 : -51;
+    const iconY = this.slotIndex >= battlerCount ? 0 : -20.5;
+    this.pokemonIcon = globalScene.addPokemonIcon(this.pokemon, iconX, iconY, 0.5, 0.5, true);
 
     this.add(this.pokemonIcon);
 
@@ -1276,7 +1269,7 @@ class PartySlot extends Phaser.GameObjects.Container {
     }
 
     if (this.pokemon.status) {
-      const statusIndicator = globalScene.add.sprite(0, 0, getLocalizedSpriteKey("statuses"));
+      const statusIndicator = globalScene.add.sprite(0, 0, "status_icons");
       statusIndicator.setFrame(StatusEffect[this.pokemon.status?.effect].toLowerCase());
       statusIndicator.setOrigin(0, 0);
       statusIndicator.setPositionRelative(slotLevelLabel, this.slotIndex >= battlerCount ? 43 : 55, 0);
@@ -1364,7 +1357,6 @@ class PartySlot extends Phaser.GameObjects.Container {
     this.iconAnimHandler.addOrUpdate(this.pokemonIcon, PokemonIconAnimMode.ACTIVE);
 
     this.updateSlotTexture();
-    this.slotPb.setFrame("party_pb_sel");
   }
 
   deselect(): void {
@@ -1376,7 +1368,6 @@ class PartySlot extends Phaser.GameObjects.Container {
     this.iconAnimHandler.addOrUpdate(this.pokemonIcon, PokemonIconAnimMode.PASSIVE);
 
     this.updateSlotTexture();
-    this.slotPb.setFrame("party_pb");
   }
 
   setTransfer(transfer: boolean): void {
@@ -1401,7 +1392,6 @@ class PartyCancelButton extends Phaser.GameObjects.Container {
   private selected: boolean;
 
   private partyCancelBg: Phaser.GameObjects.Sprite;
-  private partyCancelPb: Phaser.GameObjects.Sprite;
 
   constructor(x: number, y: number) {
     super(globalScene, x, y);
@@ -1415,11 +1405,6 @@ class PartyCancelButton extends Phaser.GameObjects.Container {
 
     this.partyCancelBg = partyCancelBg;
 
-    const partyCancelPb = globalScene.add.sprite(-17, 0, "party_pb");
-    this.add(partyCancelPb);
-
-    this.partyCancelPb = partyCancelPb;
-
     const partyCancelText = addTextObject(-8, -7, i18next.t("partyUiHandler:cancel"), TextStyle.PARTY);
     this.add(partyCancelText);
   }
@@ -1432,7 +1417,6 @@ class PartyCancelButton extends Phaser.GameObjects.Container {
     this.selected = true;
 
     this.partyCancelBg.setFrame("party_cancel_sel");
-    this.partyCancelPb.setFrame("party_pb_sel");
   }
 
   deselect() {
@@ -1443,6 +1427,5 @@ class PartyCancelButton extends Phaser.GameObjects.Container {
     this.selected = false;
 
     this.partyCancelBg.setFrame("party_cancel");
-    this.partyCancelPb.setFrame("party_pb");
   }
 }

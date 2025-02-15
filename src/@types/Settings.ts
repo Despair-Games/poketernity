@@ -9,7 +9,7 @@ import type { MoneyFormat } from "#enums/money-format";
 import type { PlayerGender } from "#enums/player-gender";
 import type { ShopCursorTarget } from "#enums/shop-cursor-target";
 import type { UiTheme } from "#enums/ui-theme";
-import type { UiWindowType } from "#enums/ui-window-type";
+import type { UiWindowStyle } from "#enums/ui-window-style";
 
 export interface Settings extends UserFacingSettings {
   meta: MetaSettings;
@@ -43,7 +43,7 @@ export interface GeneralSettings {
 
 export interface DisplaySettings {
   uiTheme: UiTheme;
-  uiWindowType: UiWindowType;
+  uiWindowStyle: UiWindowStyle;
   moneyFormat: MoneyFormat;
   damageNumbersMode: DamageNumbersMode;
   enableMoveAnimations: boolean;

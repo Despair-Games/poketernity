@@ -1,6 +1,6 @@
 import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
 import { getLevelRelExp } from "#app/data/exp";
-import { getLocalizedSpriteKey, fixedNumber } from "#app/utils";
+import { fixedNumber } from "#app/utils";
 import { addTextObject } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { getGenderSymbol, getGenderColor } from "#app/data/gender";
@@ -124,7 +124,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
       this.ownedIcon.setPositionRelative(this.nameText, 0, 11.75);
       this.add(this.ownedIcon);
 
-      this.championRibbon = globalScene.add.sprite(0, 0, "champion_ribbon");
+      this.championRibbon = globalScene.add.sprite(0, 0, "icon_champion_ribbon");
       this.championRibbon.setName("icon_champion_ribbon");
       this.championRibbon.setVisible(false);
       this.championRibbon.setOrigin(0, 0);
@@ -150,7 +150,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     this.shinyIcon.setInteractive(new Phaser.Geom.Rectangle(0, 0, 12, 15), Phaser.Geom.Rectangle.Contains);
     this.add(this.shinyIcon);
 
-    this.statusIndicator = globalScene.add.sprite(0, 0, getLocalizedSpriteKey("statuses"));
+    this.statusIndicator = globalScene.add.sprite(0, 0, "status_icons");
     this.statusIndicator.setName("icon_status");
     this.statusIndicator.setVisible(false);
     this.statusIndicator.setOrigin(0, 0);
@@ -164,6 +164,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     const levelOverlay = globalScene.add.image(0, 0, "overlay_lv");
     this.levelContainer.add(levelOverlay);
 
+    //TODO: we shouldn't use decimal values for position
     this.hpBar = globalScene.add.image(player ? -61 : -71, player ? -1 : 4.5, "overlay_hp");
     this.hpBar.setName("hp_bar");
     this.hpBar.setOrigin(0);
@@ -171,7 +172,8 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
 
     this.hpBarSegmentDividers = [];
 
-    this.levelNumbersContainer = globalScene.add.container(9.5, settings.display.uiTheme ? 0 : -0.5);
+    //TODO: we shouldn't use decimal values for position
+    this.levelNumbersContainer = globalScene.add.container(9.5, -0.5);
     this.levelNumbersContainer.setName("container_level");
     this.levelContainer.add(this.levelNumbersContainer);
 
@@ -533,7 +535,6 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     }
 
     if (this.boss && this.bossSegments > 1) {
-      const uiTheme = settings.display.uiTheme;
       const maxHp = pokemon.getMaxHp();
       for (let s = 1; s < this.bossSegments; s++) {
         const dividerX = (Math.round((maxHp / this.bossSegments) * s) / maxHp) * this.hpBar.width;
@@ -541,7 +542,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
           0,
           0,
           1,
-          this.hpBar.height - (uiTheme ? 0 : 1),
+          this.hpBar.height - 1,
           pokemon.bossSegmentIndex >= s ? 0xffffff : 0x404040,
         );
         divider.setOrigin(0.5, 0);
@@ -549,7 +550,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
         this.add(divider);
         this.moveBelow(divider as Phaser.GameObjects.GameObject, this.statsContainer);
 
-        divider.setPositionRelative(this.hpBar, dividerX, uiTheme ? 0 : 1);
+        divider.setPositionRelative(this.hpBar, dividerX, 1);
         this.hpBarSegmentDividers.push(divider);
       }
     }

@@ -6,7 +6,7 @@ import { allChallenges, copyChallenge } from "./data/challenge";
 import { applyChallenges } from "./utils/challenge-utils";
 import { ChallengeType } from "#enums/challenge-type";
 import type PokemonSpecies from "./data/pokemon-species";
-import { allSpecies } from "./data/all-species";
+import { allSpecies } from "#app/data/data-lists";
 import type { Arena } from "./field/arena";
 import Overrides from "#app/overrides";
 import { randSeedInt, randSeedItem } from "#app/utils";

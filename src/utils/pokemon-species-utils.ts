@@ -1,4 +1,4 @@
-import { allSpecies } from "#app/data/all-species";
+import { allSpecies } from "#app/data/data-lists";
 import { Species } from "#enums/species";
 import { type PokemonSpeciesForm } from "#app/data/pokemon-species-form";
 import { isNullOrUndefined, randSeedItem } from "#app/utils";

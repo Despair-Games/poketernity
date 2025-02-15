@@ -4,7 +4,7 @@ import EventEmitter = Phaser.Events.EventEmitter;
 import { hasTouchscreen } from "./utils";
 import { settings } from "./system/settings/settings-manager";
 import { UiTheme } from "#enums/ui-theme";
-import { UiWindowType } from "#enums/ui-window-type";
+import { UiWindowStyle } from "#enums/ui-window-style";
 
 const repeatInputDelayMillis = 250;
 
@@ -195,7 +195,7 @@ export default class TouchControl {
   render() {
     if (hasTouchscreen() && settings.general.enableTouchControls) {
       document.documentElement.dataset.uiTheme = UiTheme[settings.display.uiTheme];
-      document.documentElement.dataset.windowType = UiWindowType[settings.display.uiWindowType];
+      document.documentElement.dataset.windowStyle = UiWindowStyle[settings.display.uiWindowStyle];
       const touchControls = document.getElementById("touchControls");
       if (touchControls) {
         touchControls.classList.add("visible");
