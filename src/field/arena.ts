@@ -72,7 +72,7 @@ export class Arena {
   }
 
   /**
-   * Determines if the arena is of the specified biome
+   * Determines if the arena is in one the specified biomes.
    * @param biome - {@linkcode Biome} or array of {@linkcode Biome} to check against
    * @returns `true` if the arena is of the specified biome, `false` otherwise
    */
@@ -81,7 +81,7 @@ export class Arena {
   }
 
   /**
-   * Determines if the arena is of the specified terrain
+   * Determines if one of the specified terrains is set in the arena.
    * @param terrain - {@linkcode TerrainType} or array of {@linkcode TerrainType} to check against
    * @returns `true` if the arena is of the specified terrain, `false` otherwise
    */
@@ -91,7 +91,8 @@ export class Arena {
   }
 
   /**
-   * Determines if the arena is of the specified weather
+   * Determines if one the specified weather effects is set in the arena.
+   * Does **not** take into account weather suppression effects.
    * @param weather - {@linkcode WeatherType} or array of {@linkcode WeatherType} to check against
    * @returns `true` if the arena is of the specified weather, `false` otherwise
    */
@@ -653,6 +654,7 @@ export class Arena {
     Biome.TEMPLE,
     Biome.LABORATORY,
   ];
+
   isOutside(): boolean {
     return !this.indoorBiomes.includes(this.biomeType);
   }
