@@ -105,4 +105,5 @@ export enum BattlerTagType {
   SKY_DROP,
   BYPASS_SPEED,
   CRIT_BOOST_STACKABLE,
+  RAGE,
 }

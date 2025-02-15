@@ -10,9 +10,7 @@ import { DexAttr } from "#app/data/dex-attributes";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
-import { UiTheme } from "#enums/ui-theme";
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 interface DisplayStat {
@@ -289,10 +287,9 @@ export default class GameStatsUiHandler extends UiHandler {
     this.gameStatsContainer.add(this.statsContainer);
 
     // arrows to show that we can scroll through the stats
-    const isLegacyTheme = settings.display.uiTheme === UiTheme.LEGACY;
-    this.arrowDown = globalScene.add.sprite(statsBgWidth, GAME_HEIGHT - (isLegacyTheme ? 9 : 5), "prompt");
+    this.arrowDown = globalScene.add.sprite(statsBgWidth, GAME_HEIGHT - 5, "prompt");
     this.gameStatsContainer.add(this.arrowDown);
-    this.arrowUp = globalScene.add.sprite(statsBgWidth, headerBg.height + (isLegacyTheme ? 7 : 3), "prompt");
+    this.arrowUp = globalScene.add.sprite(statsBgWidth, headerBg.height + 3, "prompt");
     this.arrowUp.flipY = true;
     this.gameStatsContainer.add(this.arrowUp);
 
@@ -312,10 +309,6 @@ export default class GameStatsUiHandler extends UiHandler {
 
     this.arrowUp.play("prompt");
     this.arrowDown.play("prompt");
-    if (settings.display.uiTheme === UiTheme.LEGACY) {
-      this.arrowUp.setTint(0x484848);
-      this.arrowDown.setTint(0x484848);
-    }
 
     this.updateArrows();
 

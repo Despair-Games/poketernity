@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";

@@ -39,7 +39,7 @@ export function getGenderColor(gender: Gender) {
 export function getGenderShadowColor(gender: Gender) {
   switch (gender) {
     case Gender.MALE:
-      return ShadowColor.LIGHT_BLUE;
+      return ShadowColor.BLUE;
     case Gender.FEMALE:
       return ShadowColor.DEEP_RED;
   }

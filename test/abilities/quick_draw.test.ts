@@ -1,5 +1,5 @@
 import { type BypassSpeedChanceAbAttr } from "#app/data/ab-attrs/bypass-speed-chance-ab-attr";
-import { allAbilities } from "#app/data/all-abilities";
+import { allAbilities } from "#app/data/data-lists";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";

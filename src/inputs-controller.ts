@@ -179,7 +179,7 @@ export class InputsController {
     this.setGamepadSupport(settings.gamepad.enabled);
 
     eventBus.on("settings/updated", ({ category, key, value }: SettingsUpdateEventArgs) => {
-      if (category === "display" && ["uiWindowType", "uiTheme"].includes(key)) {
+      if (category === "display" && ["uiWindowStyle", "uiTheme"].includes(key)) {
         this.touchControls.render();
       } else if (category === "gamepad" && key === "enabled" && typeof value === "boolean") {
         this.setGamepadSupport(value);

@@ -1,5 +1,5 @@
 import type { Move } from "#app/data/move";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BattleCommand } from "#enums/battle-command";

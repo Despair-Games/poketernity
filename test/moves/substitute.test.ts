@@ -1,5 +1,5 @@
 import { type SubstituteTag } from "#app/data/battler-tags";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { type CommandPhase } from "#app/phases/command-phase";
 import { GameManager } from "#test/testUtils/gameManager";
 import { BattleCommand } from "#enums/battle-command";

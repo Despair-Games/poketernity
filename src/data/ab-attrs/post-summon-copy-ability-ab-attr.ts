@@ -1,4 +1,4 @@
-import { allAbilities } from "../all-abilities";
+import { allAbilities } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";

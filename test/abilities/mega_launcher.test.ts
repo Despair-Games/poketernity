@@ -3,7 +3,7 @@ import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { MoveFlags } from "#enums/move-flags";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 

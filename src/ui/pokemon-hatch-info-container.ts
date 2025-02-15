@@ -5,7 +5,7 @@ import { rgbHexToRgba, leftPad } from "#app/utils";
 import { addTextObject } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { Species } from "#enums/species";
 import { getEggTierForSpecies } from "#app/data/egg";
 import { starterColors } from "#app/data/starter-colors";

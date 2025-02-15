@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import type { MoveId } from "#enums/move-id";
 import type { ElementalType } from "#enums/elemental-type";
 import { RedirectMoveAbAttr } from "./redirect-move-ab-attr";
