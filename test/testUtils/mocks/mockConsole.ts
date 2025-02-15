@@ -62,7 +62,7 @@ export class MockConsole {
     if (!whitelist.some((b) => argsStr.includes(b)) && blacklist.some((b) => argsStr.includes(b))) {
       return;
     }
-    originalDebug(...args);
+    originalDebug(...this.addColor(WHITE_ANSI_CODE, ...args));
   }
   public warn(...args) {
     const argsStr = this.getStr(args);
@@ -70,7 +70,7 @@ export class MockConsole {
     if (!whitelist.some((b) => argsStr.includes(b)) && blacklist.some((b) => argsStr.includes(b))) {
       return;
     }
-    originalWarn(...this.addColor(YELLOW_ANSI_CODE, ...args)); // Yellow
+    originalWarn(...this.addColor(YELLOW_ANSI_CODE, ...args));
   }
 
   public notify(msg) {

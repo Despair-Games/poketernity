@@ -39,7 +39,7 @@ export class TextInterceptor {
 
   /**
    * Formats text to be displayed to the unit test console.
-   * 1. Replaces new lines and new text boxes ($) with indented new lines.
+   * 1. Replaces new lines and new text boxes (marked by $) with indented new lines.
    * 2. Removes all @c{}, @d{}, @s{}, and @f{} flags from the text.
    */
   private formatText(text: string): string {
