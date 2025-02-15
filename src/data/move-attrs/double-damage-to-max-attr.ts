@@ -1,5 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import type { Move } from "../move";
 import { MoveAttr } from "./move-attr";
 
@@ -13,9 +13,9 @@ export class DoubleDamageToMaxAttr extends MoveAttr {
    * the current attack to do double damage
    * @returns `true` if the move should deal double damage, `false` otherwise
    */
-  override apply(_user: Pokemon, target: Pokemon, _move: Move, doDoubleDamage: BooleanHolder): boolean {
+  override apply(_user: Pokemon, target: Pokemon, _move: Move, damage: NumberHolder): boolean {
     if (target.isMax(false)) {
-      doDoubleDamage.value = true;
+      damage.value *= 2;
       return true;
     }
     return false;

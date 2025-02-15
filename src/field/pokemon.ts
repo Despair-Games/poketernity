@@ -3207,12 +3207,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     /** Behemoth Bash, Behemoth Blade, and Dynamax Cannon do double damage to G-Max Pokemon (except Eternamax) */
-    let gmaxBonusDamageMultiplier = 1;
-    const doDoubleDamageToMax = new BooleanHolder(false);
-    applyMoveAttrs(DoubleDamageToMaxAttr, source, this, move, doDoubleDamageToMax);
-    if (doDoubleDamageToMax.value) {
-      gmaxBonusDamageMultiplier = 2;
-    }
+    const gmaxBonusDamageMultiplier = new NumberHolder(1);
+    applyMoveAttrs(DoubleDamageToMaxAttr, source, this, move, gmaxBonusDamageMultiplier);
 
     /**
      * The attack's base damage, as determined by the source's level, move power
@@ -3343,7 +3339,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     damage.value =
       baseDamage
       * targetMultiplier
-      * gmaxBonusDamageMultiplier
+      * gmaxBonusDamageMultiplier.value
       * multiStrikeEnhancementMultiplier.value
       * arenaAttackTypeMultiplier.value
       * glaiveRushMultiplier.value
