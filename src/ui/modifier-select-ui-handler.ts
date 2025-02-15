@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import type { ModifierTypeOption } from "../modifier/modifier-type";
 import { getPlayerShopModifierTypeOptionsForWave, TmModifierType } from "../modifier/modifier-type";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
-import { addTextObject, getTextStyleOptions, getModifierTierTextTint, getTextColor } from "./text";
+import { addTextObject, getTextStyleOptions, getModifierTierTextTint, setTextColor } from "./text";
 import { TextStyle } from "#enums/text-style";
 import AwaitableUiHandler from "./awaitable-ui-handler";
 import { UiMode } from "#enums/ui-mode";
@@ -73,7 +73,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
 
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
-    const { styleOptions, scale } = getTextStyleOptions(TextStyle.PARTY, settings.display.uiTheme);
+    const { styleOptions, scale } = getTextStyleOptions(TextStyle.PARTY);
 
     if (context) {
       context.font = styleOptions.fontSize + "px " + styleOptions.fontFamily;
@@ -623,14 +623,12 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     const formattedMoney = formatMoney(settings.display.moneyFormat, this.rerollCost);
 
     this.rerollCostText.setText(i18next.t("modifierSelectUiHandler:rerollCost", { formattedMoney }));
-    this.rerollCostText.setColor(this.getTextColor(canReroll ? TextStyle.MONEY : TextStyle.PARTY_RED));
-    this.rerollCostText.setShadowColor(this.getTextColor(canReroll ? TextStyle.MONEY : TextStyle.PARTY_RED, true));
+    setTextColor(this.rerollCostText, canReroll ? TextStyle.MONEY : TextStyle.PARTY_RED);
   }
 
   updateLockRaritiesText(): void {
     const textStyle = globalScene.lockModifierTiers ? TextStyle.SUMMARY_BLUE : TextStyle.PARTY;
-    this.lockRarityButtonText.setColor(this.getTextColor(textStyle));
-    this.lockRarityButtonText.setShadowColor(this.getTextColor(textStyle, true));
+    setTextColor(this.lockRarityButtonText, textStyle);
   }
 
   override clear() {
@@ -934,7 +932,6 @@ class ModifierOption extends Phaser.GameObjects.Container {
     const formattedMoney = formatMoney(settings.display.moneyFormat, cost);
 
     this.itemCostText.setText(i18next.t("modifierSelectUiHandler:itemCost", { formattedMoney }));
-    this.itemCostText.setColor(getTextColor(textStyle, false, settings.display.uiTheme));
-    this.itemCostText.setShadowColor(getTextColor(textStyle, true, settings.display.uiTheme));
+    setTextColor(this.itemCostText, textStyle);
   }
 }

@@ -161,7 +161,7 @@ import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { Challenges } from "#enums/challenges";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { SwitchType } from "#enums/switch-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
@@ -3431,6 +3431,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return 0;
     }
     const surviveDamage = new BooleanHolder(false);
+
+    // Eternatus does not need the damage reduction as its emax form has increased hp/defenses
+    if (this.isMax() && this.species.speciesId !== Species.ETERNATUS) {
+      damage = toDmgValue(damage * DYNAMAX_DAMAGE_TAKEN_FACTOR);
+    }
 
     if (!preventEndure && this.hp - damage <= 0) {
       if (this.hp >= 1 && this.getTag(BattlerTagType.ENDURING)) {

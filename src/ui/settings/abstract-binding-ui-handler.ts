@@ -1,7 +1,7 @@
-import UiHandler from "../ui-handler";
+import UiHandler from "#app/ui/ui-handler";
 import type { UiMode } from "#enums/ui-mode";
-import { addWindow } from "../ui-theme";
-import { addTextObject } from "../text";
+import { addWindow } from "#app/ui/ui-theme";
+import { addTextObject, setTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { Button } from "#enums/buttons";
 import { NavigationManager } from "#app/ui/settings/navigationMenu";
@@ -218,16 +218,12 @@ export default abstract class AbstractBindingUiHandler extends UiHandler {
   override setCursor(cursor: number): boolean {
     this.cursor = cursor;
     if (cursor === 1) {
-      this.actionLabel.setColor(this.getTextColor(TextStyle.SETTINGS_SELECTED));
-      this.actionLabel.setShadowColor(this.getTextColor(TextStyle.SETTINGS_SELECTED, true));
-      this.cancelLabel.setColor(this.getTextColor(TextStyle.WINDOW));
-      this.cancelLabel.setShadowColor(this.getTextColor(TextStyle.WINDOW, true));
-      return true;
+      setTextColor(this.actionLabel, TextStyle.SETTINGS_SELECTED);
+      setTextColor(this.cancelLabel, TextStyle.WINDOW);
+    } else {
+      setTextColor(this.actionLabel, TextStyle.WINDOW);
+      setTextColor(this.cancelLabel, TextStyle.SETTINGS_SELECTED);
     }
-    this.actionLabel.setColor(this.getTextColor(TextStyle.WINDOW));
-    this.actionLabel.setShadowColor(this.getTextColor(TextStyle.WINDOW, true));
-    this.cancelLabel.setColor(this.getTextColor(TextStyle.SETTINGS_SELECTED));
-    this.cancelLabel.setShadowColor(this.getTextColor(TextStyle.SETTINGS_SELECTED, true));
     return true;
   }
 

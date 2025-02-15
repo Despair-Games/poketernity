@@ -55,7 +55,7 @@ export class HatchedPokemonContainer extends Phaser.GameObjects.Container {
     this.add(this.shinyIcon);
 
     // Hidden ability icon
-    const haIcon = globalScene.add.image(rightSideX, offset * 4, "ha_capsule");
+    const haIcon = globalScene.add.image(rightSideX, offset * 4, "icon_ha_capsule");
     haIcon.setOrigin(0, 0);
     haIcon.setScale(0.5);
     this.hiddenAbilityIcon = haIcon;

@@ -1,7 +1,7 @@
 import { GameModes } from "#enums/game-modes";
 import UiHandler from "./ui-handler";
 import type { SessionSaveData } from "#app/@types/SessionData";
-import { addTextObject, addBBCodeTextObject, getTextColor } from "./text";
+import { addTextObject, addBBCodeTextObject, getBBCodeFragment } from "./text";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "./ui-theme";
@@ -37,6 +37,7 @@ import { settings } from "#app/system/settings/settings-manager";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { ImagesFolder } from "#enums/images-folders";
 
 /**
  * RunInfoUiMode indicates possible overlays of RunInfoUiHandler.
@@ -82,7 +83,7 @@ export default class RunInfoUiHandler extends UiHandler {
     // The import of the modifiersModule is loaded here to sidestep async/await issues.
     this.modifiersModule = Modifier;
     this.runContainer.setVisible(false);
-    globalScene.loadImage("encounter_exclaim", "mystery-encounters");
+    globalScene.loadImage("encounter_exclaim", ImagesFolder.ME);
   }
 
   /**
@@ -624,10 +625,8 @@ export default class RunInfoUiHandler extends UiHandler {
     const runTime = getPlayTimeString(this.runInfo.playTime);
     runInfoText.appendText(`${i18next.t("runHistory:runLength")}: ${runTime}`, false);
     const runMoney = formatMoney(settings.display.moneyFormat, this.runInfo.money);
-    const moneyTextColor = getTextColor(TextStyle.MONEY_WINDOW, false, settings.display.uiTheme);
-    runInfoText.appendText(
-      `[color=${moneyTextColor}]${i18next.t("battleScene:moneyOwned", { formattedMoney: runMoney })}[/color]`,
-    );
+    const moneyText = i18next.t("battleScene:moneyOwned", { formattedMoney: runMoney });
+    runInfoText.appendText(getBBCodeFragment(moneyText, TextStyle.MONEY_WINDOW, true, false));
     runInfoText.setPosition(7, 70);
     runInfoTextContainer.add(runInfoText);
     // Luck

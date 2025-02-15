@@ -1,13 +1,11 @@
 import type { DropDown } from "./drop-down";
 import { DropDownType } from "#enums/drop-down-type";
 import type { StarterContainer } from "./starter-container";
-import { addTextObject, getTextColor } from "./text";
+import { addTextObject, setTextColor } from "./text";
 import { TextStyle } from "#enums/text-style";
-import type { UiTheme } from "#enums/ui-theme";
 import { addWindow } from "./ui-theme";
 import { WindowVariant } from "#enums/window-variant";
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/system/settings/settings-manager";
 import type { DropDownColumn } from "#enums/drop-down-column";
 
 export class FilterBar extends Phaser.GameObjects.Container {
@@ -19,7 +17,6 @@ export class FilterBar extends Phaser.GameObjects.Container {
   public numFilters: number = 0;
   public openDropDown: boolean = false;
   private lastCursor: number = -1;
-  private uiTheme: UiTheme;
 
   constructor(x: number, y: number, width: number, height: number) {
     super(globalScene, x, y);
@@ -35,8 +32,6 @@ export class FilterBar extends Phaser.GameObjects.Container {
     this.cursorObj.setVisible(false);
     this.cursorObj.setOrigin(0, 0);
     this.add(this.cursorObj);
-
-    this.uiTheme = settings.display.uiTheme;
   }
 
   /**
@@ -81,9 +76,9 @@ export class FilterBar extends Phaser.GameObjects.Container {
   updateFilterLabels(): void {
     for (let i = 0; i < this.numFilters; i++) {
       if (this.dropDowns[i].hasDefaultValues()) {
-        this.labels[i].setColor(getTextColor(TextStyle.TOOLTIP_CONTENT, false, this.uiTheme));
+        setTextColor(this.labels[i], TextStyle.TOOLTIP_CONTENT);
       } else {
-        this.labels[i].setColor(getTextColor(TextStyle.STATS_LABEL, false, this.uiTheme));
+        setTextColor(this.labels[i], TextStyle.STATS_LABEL);
       }
     }
   }

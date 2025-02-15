@@ -16,7 +16,7 @@ import { MoneyFormat } from "#enums/money-format";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { UiTheme } from "#enums/ui-theme";
 import { PlayerGender } from "#enums/player-gender";
-import { UiWindowType } from "#enums/ui-window-type";
+import { UiWindowStyle } from "#enums/ui-window-style";
 
 export const defaultGeneralSettings: GeneralSettings = {
   gameSpeed: 2,
@@ -34,8 +34,8 @@ export const defaultGeneralSettings: GeneralSettings = {
 };
 
 export const defaultDisplaySettings: DisplaySettings = {
-  uiTheme: UiTheme.DEFAULT,
-  uiWindowType: UiWindowType.RED_ORANGE,
+  uiTheme: UiTheme.DARK,
+  uiWindowStyle: UiWindowStyle.RED_ORANGE,
   moneyFormat: MoneyFormat.NORMAL,
   damageNumbersMode: DamageNumbersMode.OFF,
   enableMoveAnimations: true,
