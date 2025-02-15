@@ -1505,7 +1505,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       1,
       EvolutionItem.STRAWBERRY_SWEET,
       new SpeciesEvolutionCondition((_p) =>
-        globalScene.arena.isInBiome([Biome.MOUNTAIN, Biome.CAVE, Biome.ICE_CAVE, Biome.FAIRY_CAVE, Biome.SNOWY_FOREST]),
+        globalScene.arena.isInBiome([Biome.SEA, Biome.BEACH, Biome.LAKE, Biome.SEABED]),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),

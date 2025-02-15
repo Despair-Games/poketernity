@@ -724,7 +724,7 @@ export class ConfusedTag extends BattlerTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return !globalScene.arena.hasTerrain(TerrainType.MISTY) || pokemon.isGrounded();
+    return !globalScene.arena.hasTerrain(TerrainType.MISTY) || !pokemon.isGrounded();
   }
 
   override onAdd(pokemon: Pokemon): void {
@@ -1350,7 +1350,7 @@ export class DrowsyTag extends BattlerTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return !globalScene.arena.hasTerrain(TerrainType.ELECTRIC) || pokemon.isGrounded();
+    return !globalScene.arena.hasTerrain(TerrainType.ELECTRIC) || !pokemon.isGrounded();
   }
 
   override onAdd(pokemon: Pokemon): void {

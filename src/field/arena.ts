@@ -93,6 +93,7 @@ export class Arena {
   /**
    * Determines if one the specified weather effects is set in the arena.
    * Does **not** take into account weather suppression effects.
+   * @see {@linkcode Weather.isEffectSuppressed} to check if the weather effect is suppressed.
    * @param weather - {@linkcode WeatherType} or array of {@linkcode WeatherType} to check against
    * @returns `true` if the arena is of the specified weather, `false` otherwise
    */
