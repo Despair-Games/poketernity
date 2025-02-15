@@ -1552,7 +1552,8 @@ export function initMoves() {
     new StatusMove(MoveId.GRAVITY, ElementalType.PSYCHIC, -1, 5, -1, 0, 4)
       .ignoresProtect()
       .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, ArenaTagRelativeSide.ALL, { turnCount: 5 })
-      .target(MoveTarget.BOTH_SIDES),
+      .target(MoveTarget.BOTH_SIDES)
+      .edgeCase(), // does not prevent Bounce, Fly, etc. from being selected; only causes the moves to fail.
     new StatusMove(MoveId.MIRACLE_EYE, ElementalType.PSYCHIC, -1, 40, -1, 0, 4)
       .attr(ExposedMoveAttr, BattlerTagType.IGNORE_DARK)
       .ignoresSubstitute(),
@@ -3693,7 +3694,8 @@ export function initMoves() {
       .attr(AttackReducePpMoveAttr, 2),
     new AttackMove(MoveId.G_MAX_GRAVITAS, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.ORBEETLE)
-      .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, ArenaTagRelativeSide.ALL, { turnCount: 5 }),
+      .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, ArenaTagRelativeSide.ALL, { turnCount: 5 })
+      .edgeCase(), // does not prevent Bounce, Fly, etc. from being selected; only causes the moves to fail.
     new AttackMove(MoveId.G_MAX_VOLCALITH, ElementalType.ROCK, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.COALOSSAL)
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_VOLCALITH),
@@ -3948,7 +3950,8 @@ export function initMoves() {
       .condition((user, _target, move) => {
         const turnMove = user.getLastXMoves(1);
         return !turnMove.length || turnMove[0].move.id !== move.id || turnMove[0].result !== MoveResult.SUCCESS;
-      }), // TODO Add Instruct/Encore interaction
+      }) // TODO Add Instruct/Encore interaction
+      .edgeCase(), // should be unselectable the turn after its used
     new AttackMove(MoveId.COMEUPPANCE, ElementalType.DARK, MoveCategory.PHYSICAL, -1, 100, 10, -1, 0, 9)
       .attr(CounterDamageAttr, (moveId) => allMoves[moveId].isAttackMove(), 1.5)
       .redirectCounter()
@@ -3972,12 +3975,12 @@ export function initMoves() {
     new AttackMove(MoveId.MAGICAL_TORQUE, ElementalType.FAIRY, MoveCategory.PHYSICAL, 100, 100, 10, 30, 0, 9)
       .attr(ConfuseAttr)
       .makesContact(false),
-    new AttackMove(MoveId.BLOOD_MOON, ElementalType.NORMAL, MoveCategory.SPECIAL, 140, 100, 5, -1, 0, 9).condition(
-      (user, _target, move) => {
+    new AttackMove(MoveId.BLOOD_MOON, ElementalType.NORMAL, MoveCategory.SPECIAL, 140, 100, 5, -1, 0, 9)
+      .condition((user, _target, move) => {
         const turnMove = user.getLastXMoves(1);
         return !turnMove.length || turnMove[0].move.id !== move.id || turnMove[0].result !== MoveResult.SUCCESS;
-      },
-    ), // TODO Add Instruct/Encore interaction
+      }) // TODO Add Instruct/Encore interaction
+      .edgeCase(), // should be unselectable the turn after it's used
     new AttackMove(MoveId.MATCHA_GOTCHA, ElementalType.GRASS, MoveCategory.SPECIAL, 80, 90, 15, 20, 0, 9)
       .attr(HitHealAttr)
       .attr(HealStatusEffectAttr, true, StatusEffect.FREEZE)
