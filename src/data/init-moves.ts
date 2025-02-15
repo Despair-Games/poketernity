@@ -1568,10 +1568,6 @@ export function initMoves() {
       .attr(GyroBallPowerAttr)
       .bulletMove(),
     new SelfStatusMove(MoveId.HEALING_WISH, ElementalType.PSYCHIC, -1, 10, -1, 0, 4)
-      .condition(
-        (user, _target, _move) =>
-          user.getParty().filter((p) => !p.isFainted()).length > (globalScene.currentBattle.double ? 1 : 0),
-      )
       .attr(SacrificialFullRestoreAttr, false, "moveTriggers:sacrificialFullRestore")
       .triageMove()
       .partial(), // Does not have the effect of being stored if the incoming Pokemon is already healthy
@@ -1950,10 +1946,6 @@ export function initMoves() {
       HighCritAttr,
     ),
     new SelfStatusMove(MoveId.LUNAR_DANCE, ElementalType.PSYCHIC, -1, 10, -1, 0, 4)
-      .condition(
-        (user, _target, _move) =>
-          user.getParty().filter((p) => !p.isFainted()).length > (globalScene.currentBattle.double ? 1 : 0),
-      )
       .attr(SacrificialFullRestoreAttr, true, "moveTriggers:lunarDanceRestore")
       .danceMove()
       .triageMove()
