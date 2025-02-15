@@ -1,5 +1,5 @@
 import type { Pokemon } from "../field/pokemon";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { MoveCategory } from "#enums/move-category";
 import { ElementalType } from "#enums/elemental-type";
 import type { AbstractConstructor, nil } from "#app/utils";

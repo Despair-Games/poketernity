@@ -65,6 +65,115 @@ export enum CommonColor {
   LUXURY = "#e64a18",
 }
 
+/** Colors used for the shadow of text elements. */
+export enum ShadowColor {
+  /** #d0d0c8 */
+  LIGHT_GREY = "#d0d0c8",
+  /** #636363 */
+  GREY = "#636363",
+  /** #707070 */
+  MEDIUM_GRAY = "#707070",
+  /** #807870 */
+  DARK_GREY = "#807870",
+
+  // Browns
+  /** #69402a */
+  LIGHT_BROWN = "#69402a",
+  /** #632929 */
+  DARK_BROWN = "#632929",
+  /** #6e672c */
+  OLIVE_BRONZE = "#6e672c",
+
+  // Purples
+  /** #483850 */
+  DARK_PURPLE = "#483850",
+  /** #6b5a73 */
+  PURPLE = "#6b5a73",
+
+  // Reds
+  /** #fca2a2 */
+  LIGHT_RED = "#fca2a2",
+  /** #f83018 */
+  BRIGHT_RED = "#f83018",
+  /** #984038 */
+  DEEP_RED = "#984038",
+  /** #c03028 */
+  DARK_RED = "#c03028",
+  /** #906060 */
+  DUSTY_ROSE = "#906060",
+
+  // Greens
+  /** #306850 */
+  GREEN = "#306850",
+  /** #588040 */
+  MUTED_GREEN = "#588040",
+
+  // Blues
+  /** #006090 */
+  BLUE = "#006090",
+
+  // Yellows and Oranges
+  /** #ded6b5 */
+  LIGHT_YELLOW = "#ded6b5",
+  /** #ebd773 */
+  YELLOW = "#ebd773",
+  /** #a0a060 */
+  DARK_YELLOW = "#a0a060",
+  /** #b8a038 */
+  MUTED_GOLD = "#b8a038",
+  /** #c07800 */
+  ORANGE = "#c07800",
+  /** #ffbd73 */
+  LIGHT_ORANGE = "#ffbd73",
+  /** #f7b18b */
+  PEACH_SAND = "#f7b18b",
+}
+
+/**
+ * Combination of a {@linkcode CommonColor} and {@linkcode ShadowColor} used for text display.
+ */
+export enum TextColor {
+  /** #f8f8f8 and #6b5a73 */
+  WHITE_DARK_PURPLE_SHADOW,
+  /** #f8f8f8 and #636363 */
+  WHITE_DARK_GREY_SHADOW,
+  /** #a0a0a0 and #636363 */
+  GREY_DARK_SHADOW,
+  /** #484848 and #d0d0c8 */
+  DARK_GREY_LIGHT_SHADOW,
+
+  /** #f89890 and #984038 */
+  PINK_DARK_BROWN_SHADOW,
+  /** #f88880 and #f83018 */
+  PINK_DARK_RED_SHADOW,
+
+  /** #e70808 and #ffbd73 */
+  RED_LIGHT_ORANGE_SHADOW,
+  /** #e13d3d and #fca2a2 */
+  RED_LIGHT_PINK_SHADOW,
+  /** #e13d3d and #632929 */
+  RED_DARK_BROWN_SHADOW,
+
+  /** #d64b00 and #69402a */
+  DARK_ORANGE_DARK_BROWN_SHADOW,
+  /** #d64b00 and #f7b18b */
+  DARK_ORANGE_LIGHT_SHADOW,
+  /** #f8b050 and #c07800 */
+  ORANGE_DARK_SHADOW,
+
+  /** #e8e8a8 and #a0a060 */
+  LIGHT_YELLOW_DARK_SHADOW,
+  /** #ccbe00 and #6e672c */
+  YELLOW_DARK_SHADOW,
+  /** #a68e17 and #ebd773 */
+  DARK_YELLOW_LIGHT_SHADOW,
+
+  /** #78c850 and #306850 */
+  GREEN_DARK_SHADOW,
+  /** #40c8f8 and #006090 */
+  BLUE_DARK_SHADOW,
+}
+
 export enum TypeColor {
   /** #ada594 */
   NORMAL = "#ada594",
@@ -141,69 +250,6 @@ export enum TypeShadowColor {
   DARK = "#392725",
   /** #663878 */
   FAIRY = "#663878",
-}
-
-export enum ShadowColor {
-  /** #d0d0c8 */
-  LIGHT_GREY = "#d0d0c8",
-  /** #636363 */
-  GREY = "#636363",
-  /** #707070 */
-  MEDIUM_GRAY = "#707070",
-  /** #807870 */
-  DARK_GREY = "#807870",
-
-  // Browns
-  /** #69402a */
-  LIGHT_BROWN = "#69402a",
-  /** #632929 */
-  DARK_BROWN = "#632929",
-  /** #6e672c */
-  OLIVE_BRONZE = "#6e672c",
-
-  // Purples
-  /** #483850 */
-  DARK_PURPLE = "#483850",
-  /** #6b5a73 */
-  PURPLE = "#6b5a73",
-
-  // Reds
-  /** #fca2a2 */
-  LIGHT_RED = "#fca2a2",
-  /** #f83018 */
-  BRIGHT_RED = "#f83018",
-  /** #984038 */
-  DEEP_RED = "#984038",
-  /** #c03028 */
-  DARK_RED = "#c03028",
-  /** #906060 */
-  DUSTY_ROSE = "#906060",
-
-  // Greens
-  /** #306850 */
-  SOFT_GREEN = "#306850",
-  /** #588040 */
-  MUTED_GREEN = "#588040",
-
-  // Blues
-  /** #006090 */
-  LIGHT_BLUE = "#006090",
-
-  // Yellows and Oranges
-  /** #ded6b5 */
-  LIGHT_YELLOW = "#ded6b5",
-  /** #ebd773 */
-  YELLOW = "#ebd773",
-  /** #a0a060 */
-  DARK_YELLOW = "#a0a060",
-  /** #b8a038 */
-  MUTED_GOLD = "#b8a038",
-  /** #c07800 */
-  ORANGE = "#c07800",
-  /** #ffbd73 */
-  LIGHT_ORANGE = "#ffbd73",
-  /** #f7b18b */
-  PEACH_SAND = "#f7b18b",
 }
 
 export enum TypeEffectivenessColor {

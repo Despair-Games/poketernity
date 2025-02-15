@@ -55,6 +55,7 @@ import i18next from "i18next";
 import { MysteryEncounterPhase } from "./mystery-encounter-phases/mystery-encounter-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
+import { ImagesFolder } from "#enums/images-folders";
 
 /**
  * Starts the first encounter (wave 1) of a new run. Subsequent encounters are handled by
@@ -223,7 +224,7 @@ export class EncounterPhase extends BattlePhase {
       loadEnemyAssets.push(
         new Promise<void>((resolve) => {
           globalScene.loadSe("GEN8- Exclaim", "battle_anims", "GEN8- Exclaim.wav");
-          globalScene.loadImage("encounter_exclaim", "mystery-encounters");
+          globalScene.loadImage("encounter_exclaim", ImagesFolder.BATTLE_ANIMS);
           load.once(Phaser.Loader.Events.COMPLETE, () => resolve());
           if (!load.isLoading()) {
             load.start();

@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { allAbilities } from "../all-abilities";
+import { allAbilities } from "#app/data/data-lists";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { EvolutionItem } from "#enums/evolution-item";
 import { Nature } from "#enums/nature";

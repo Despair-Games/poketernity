@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { UiMode } from "#enums/ui-mode";
 import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-handler";
-import { addTextObject, setTextStyle } from "#app/ui/text";
+import { addTextObject, setTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { addWindow } from "#app/ui/ui-theme";
 import { Button } from "#enums/buttons";
@@ -162,7 +162,7 @@ export default class NavigationMenu extends Phaser.GameObjects.Container {
     const posSelected = navigationManager.modes.indexOf(navigationManager.selectedMode);
 
     for (const [index, title] of this.headerTitles.entries()) {
-      setTextStyle(title, index === posSelected ? TextStyle.SETTINGS_SELECTED : TextStyle.SETTINGS_LABEL);
+      setTextColor(title, index === posSelected ? TextStyle.SETTINGS_SELECTED : TextStyle.SETTINGS_LABEL);
     }
   }
 

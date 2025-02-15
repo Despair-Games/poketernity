@@ -9,7 +9,6 @@ import { PlayerBattleInfo, EnemyBattleInfo } from "#app/ui/battle-info";
 import type { Move } from "#app/data/move";
 import { getMoveTargets } from "#app/data/move";
 import { applyMoveAttrs } from "#app/utils/move-utils";
-import { allMoves } from "#app/data/all-moves";
 import { RechargeAttr } from "#app/data/move-attrs/recharge-attr";
 import { HitsTagAttr } from "#app/data/move-attrs/hits-tag-attr";
 import { TypelessAttr } from "#app/data/move-attrs/typeless-attr";
@@ -120,7 +119,7 @@ import { NoCritTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { Ability } from "#app/data/ability";
 import { getAbApplyFunc } from "#app/data/apply-ab-attrs";
-import { allAbilities } from "#app/data/all-abilities";
+import { allAbilities, allMoves } from "#app/data/data-lists";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type PokemonData from "#app/system/pokemon-data";
 import { BattlerIndex } from "#enums/battler-index";
@@ -162,7 +161,7 @@ import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { Challenges } from "#enums/challenges";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { SwitchType } from "#enums/switch-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
@@ -3432,6 +3431,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return 0;
     }
     const surviveDamage = new BooleanHolder(false);
+
+    // Eternatus does not need the damage reduction as its emax form has increased hp/defenses
+    if (this.isMax() && this.species.speciesId !== Species.ETERNATUS) {
+      damage = toDmgValue(damage * DYNAMAX_DAMAGE_TAKEN_FACTOR);
+    }
 
     if (!preventEndure && this.hp - damage <= 0) {
       if (this.hp >= 1 && this.getTag(BattlerTagType.ENDURING)) {

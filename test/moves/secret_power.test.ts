@@ -2,7 +2,7 @@ import { Abilities } from "#enums/abilities";
 import { Biome } from "#enums/biome";
 import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
-import { allMoves } from "#app/data/all-moves";
+import { allAbilities, allMoves } from "#app/data/data-lists";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -11,7 +11,6 @@ import { StatusEffect } from "#enums/status-effect";
 import { BattlerIndex } from "#enums/battler-index";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { ArenaTagSide } from "#enums/arena-tag-side";
-import { allAbilities } from "#app/data/all-abilities";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Moves - Secret Power", () => {

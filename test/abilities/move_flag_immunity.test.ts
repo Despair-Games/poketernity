@@ -6,7 +6,7 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveResult } from "#enums/move-result";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 
 describe("Ability Attribute - Move Flag Immunity", () => {
   let phaserGame: Phaser.Game;
