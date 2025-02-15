@@ -79,7 +79,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     await game.phaseInterceptor.to("BerryPhase");
 
     const attacker = game.scene.getEnemyPokemon();
-    expect(attacker?.getStatusEffect(true).toBe(StatusEffect.NONE);
+    expect(attacker?.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
 
   it("Static can paralyze a Ground-type Pokemon", async () => {
