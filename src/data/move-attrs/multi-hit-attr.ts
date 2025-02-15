@@ -1,5 +1,4 @@
 import { MultiHitType } from "#enums/multi-hit-type";
-import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { NumberHolder } from "#app/utils";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
