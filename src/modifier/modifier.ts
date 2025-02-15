@@ -2102,7 +2102,7 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
       revive: true,
     });
 
-    // Remove the Pokemon's FAINT status
+    // Remove any status the Pokemon had before fainting
     pokemon.resetStatus(false, true);
 
     // Reapply Commander on the Pokemon's side of the field, if applicable
