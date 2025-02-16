@@ -441,7 +441,7 @@ export class TurnCommandManager {
   private applyBypassSpeedEffects(): void {
     this.turnCommands.forEach((tc) => {
       const { pokemon, move } = tc;
-      // Only apply to commands to use damaging moves
+      // Only apply to fight commands
       if (!move) {
         return;
       }

@@ -1686,16 +1686,6 @@ export class BypassSpeedChanceModifier extends PokemonHeldItemModifier {
   }
 
   /**
-   * Checks if {@linkcode BypassSpeedChanceModifier} should be applied
-   * @param pokemon the {@linkcode Pokemon} that holds the item
-   * @param doBypassSpeed {@linkcode BooleanHolder} that is `true` if speed should be bypassed
-   * @returns `true` if {@linkcode BypassSpeedChanceModifier} should be applied
-   */
-  override shouldApply(pokemon?: Pokemon, doBypassSpeed?: BooleanHolder): boolean {
-    return super.shouldApply(pokemon, doBypassSpeed) && !!doBypassSpeed;
-  }
-
-  /**
    * Applies {@linkcode BypassSpeedChanceModifier}
    * @param pokemon the {@linkcode Pokemon} that holds the item
    * @returns `true` if {@linkcode BypassSpeedChanceModifier} has been applied
