@@ -1172,14 +1172,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         }
         break;
       case Stat.DEF:
-        if (this.isOfType(ElementalType.ICE) && globalScene.arena.weather?.weatherType === WeatherType.SNOW) {
+        if (this.isOfType(ElementalType.ICE) && globalScene.arena.hasWeather(WeatherType.SNOW)) {
           ret *= 1.5;
         }
         break;
       case Stat.SPATK:
         break;
       case Stat.SPDEF:
-        if (this.isOfType(ElementalType.ROCK) && globalScene.arena.weather?.weatherType === WeatherType.SANDSTORM) {
+        if (this.isOfType(ElementalType.ROCK) && globalScene.arena.hasWeather(WeatherType.SANDSTORM)) {
           ret *= 1.5;
         }
         break;
@@ -3312,9 +3312,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     /** Halves damage if this Pokemon is grounded in Misty Terrain against a Dragon-type attack */
     const mistyTerrainMultiplier =
-      globalScene.arena.terrain?.terrainType === TerrainType.MISTY
-      && this.isGrounded()
-      && moveType === ElementalType.DRAGON
+      globalScene.arena.hasTerrain(TerrainType.MISTY) && this.isGrounded() && moveType === ElementalType.DRAGON
         ? 0.5
         : 1;
 
@@ -4014,7 +4012,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (overrideStatus ? this.status?.effect === effect : this.status) {
       return false;
     }
-    if (this.isGrounded() && !ignoreField && globalScene.arena.terrain?.terrainType === TerrainType.MISTY) {
+    if (this.isGrounded() && !ignoreField && globalScene.arena.hasTerrain(TerrainType.MISTY)) {
       return false;
     }
 
@@ -4065,7 +4063,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         }
         break;
       case StatusEffect.SLEEP:
-        if (this.isGrounded() && globalScene.arena.terrain?.terrainType === TerrainType.ELECTRIC) {
+        if (this.isGrounded() && globalScene.arena.hasTerrain(TerrainType.ELECTRIC)) {
           return false;
         }
         break;

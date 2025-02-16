@@ -728,7 +728,7 @@ export abstract class Move implements Localizable {
     const isOhko = this.hasAttr(OneHitKOAccuracyAttr);
 
     // TODO: wide lens was calculated here
-    if (globalScene.arena.weather?.weatherType === WeatherType.FOG) {
+    if (globalScene.arena.hasWeather(WeatherType.FOG)) {
       /**
        *  The 0.9 multiplier is Game-specific implementation, Bulbapedia uses 3/5
        *  See Fog {@link https://bulbapedia.bulbagarden.net/wiki/Fog}
