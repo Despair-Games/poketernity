@@ -42,7 +42,7 @@ export class RandomMovesetMoveAttr extends CallMoveAttr {
       let allies: Pokemon[];
       if (this.includeParty) {
         allies = user.isPlayer()
-          ? globalScene.getPlayerParty().filter((p) => p !== user)
+          ? globalScene.getPlayerParty().filter((p) => p !== user && p.isAllowedInChallenge())
           : globalScene.getEnemyParty().filter((p) => p !== user);
       } else {
         allies = [user];
