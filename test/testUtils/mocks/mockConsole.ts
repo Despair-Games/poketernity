@@ -5,7 +5,12 @@ const originalError = console.error;
 const originalDebug = console.debug;
 const originalWarn = console.warn;
 
-const blacklist = ["variant icon does not exist", 'Texture "%s" not found'];
+const blacklist = [
+  "variant icon does not exist", // Repetitive warnings about icons not found
+  'Texture "%s" not found', // Repetitive warnings about textures not found
+  "gameVersion: ", // Large session-data and system-data objects
+  "newModifierFunc: ", // Large ModifierType objects, displayed by ModifierSelectPhase
+];
 const whitelist = ["Phase"];
 
 const RED_ANSI_CODE = "\u001b[31m";
