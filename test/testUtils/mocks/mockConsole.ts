@@ -26,8 +26,6 @@ export class MockConsole {
 
   /**
    * A list of warnings that are queued to be displayed after all tests in the same file are finished.
-   *
-   * This is static so that it does not get overridden by the test framework constructing new `MockConsoleLog`s.
    */
   private static queuedWarnings: any[] = [];
 
