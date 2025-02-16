@@ -2,7 +2,6 @@ import type { Weather } from "#app/data/weather";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { toDmgValue } from "#app/utils";
 import type { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
@@ -37,14 +36,12 @@ export class PostWeatherLapseHealAbAttr extends PostWeatherLapseAbAttr {
     if (!pokemon.isFullHp()) {
       const abilityName = this.source.name;
       if (!simulated) {
-        globalScene.unshiftPhase(
-          new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() * this.healRatio), {
-            message: i18next.t("abilityTriggers:postWeatherLapseHeal", {
-              pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-              abilityName,
-            }),
+        globalScene.queuePokemonHeal(true, pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() * this.healRatio), {
+          message: i18next.t("abilityTriggers:postWeatherLapseHeal", {
+            pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+            abilityName,
           }),
-        );
+        });
       }
       return true;
     }

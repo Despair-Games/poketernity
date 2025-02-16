@@ -2,7 +2,6 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { initGameSpeed } from "#app/system/game-speed";
 // -- end tsdoc imports --
-import { api } from "#app/plugins/api/api";
 import { MoneyFormat } from "#enums/money-format";
 import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
@@ -266,26 +265,11 @@ export function executeIf<T>(condition: boolean, promiseFunc: () => Promise<T>):
   return condition ? promiseFunc() : new Promise<T | null>((resolve) => resolve(null));
 }
 
-// Check if the current hostname is 'localhost' or an IP address, and ensure a port is specified
-export const isLocal =
-  ((window.location.hostname === "localhost" || /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(window.location.hostname))
-    && window.location.port !== "")
-  || window.location.hostname === "";
-
 /**
  * @deprecated Refer to [api.ts](./plugins/api/api.ts) instead
  */
 export const localServerUrl =
   import.meta.env.VITE_SERVER_URL ?? `http://${window.location.hostname}:${window.location.port + 1}`;
-
-/**
- * Set the server URL based on whether it's local or not
- *
- * @deprecated Refer to [api.ts](./plugins/api/api.ts) instead
- */
-export const apiUrl = localServerUrl ?? "https://api.poketernity.com";
-// used to disable api calls when isLocal is true and a server is not found
-export let isLocalServerConnected = true;
 
 export const isBeta = import.meta.env.MODE === "beta"; // this checks to see if the env mode is development. Technically this gives the same value for beta AND for dev envs
 
@@ -324,19 +308,6 @@ export function getCookie(cName: string): string {
     }
   }
   return "";
-}
-
-/**
- * When locally running the game, "pings" the local server
- * with a GET request to verify if a server is running,
- * sets isLocalServerConnected based on results
- */
-export async function localPing(): Promise<void> {
-  if (isLocal) {
-    const titleStats = await api.getGameTitleStats();
-    isLocalServerConnected = !!titleStats;
-    console.log("isLocalServerConnected:", isLocalServerConnected);
-  }
 }
 
 /**
@@ -474,32 +445,26 @@ export function hslToHex(h: number, s: number, l: number): string {
 }
 
 /**
- * This function returns `true` if all localized images used by the game have been added for the given language.
- *
- * If the lang is not in the function, it usually means that lang is going to use the default english version
- *
- * English itself counts as not available
+ * This function checks if all localized images used by the game have been added for the given language.
+ * @param key the language key (e.g. "ko").
+ * @returns `true` if the given language is supported and has localized sprites.
  */
-export function hasAllLocalizedSprites(lang?: string): boolean {
-  // IMPORTANT - ONLY ADD YOUR LANG HERE IF YOU'VE ALREADY ADDED ALL THE NECESSARY IMAGES
-  if (!lang) {
-    lang = i18next.resolvedLanguage;
-  }
+function hasAllLocalizedSprites(key: string): boolean {
+  return supportedLanguages.some((lang) => lang.key === key && lang.hasAllLocalizedImages);
+}
 
-  switch (lang) {
-    case "es-ES":
-    case "fr":
-    case "de":
-    case "it":
-    case "zh-CN":
-    case "zh-TW":
-    case "pt-BR":
-    case "ko":
-    case "ja":
-      return true;
-    default:
-      return false;
+/**
+ * Helper method to localize a filename (e.g. for types icons) based on the given language.
+ * Defaults to English if the language is not a {@linkcode supportedLanguages} or does not have all pictures defined.
+ * @param baseName the original name of the file (e.g. `types`)
+ * @param langKey optional - language key. If not provided, by default uses the resolved language
+ * @returns the localized sprite key, of form "baseKey_{languageKey}"
+ */
+export function getLocalizedFilename(baseName: string, langKey?: string): string {
+  if (!langKey) {
+    langKey = i18next.resolvedLanguage ?? "en";
   }
+  return `${baseName}_${hasAllLocalizedSprites(langKey) ? `${langKey}` : "en"}`;
 }
 
 /**
@@ -606,15 +571,6 @@ export function capitalizeFirstLetter(str: string): string {
  */
 export function toDmgValue(value: number, minValue: number = 1): number {
   return Math.max(Math.floor(value), minValue);
-}
-
-/**
- * Helper method to localize a sprite key (e.g. for types)
- * @param baseKey the base key of the sprite (e.g. `type`)
- * @returns the localized sprite key
- */
-export function getLocalizedSpriteKey(baseKey: string): string {
-  return `${baseKey}${hasAllLocalizedSprites(i18next.resolvedLanguage) ? `_${i18next.resolvedLanguage}` : ""}`;
 }
 
 /**

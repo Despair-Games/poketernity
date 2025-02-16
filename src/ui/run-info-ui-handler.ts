@@ -1,7 +1,7 @@
 import { GameModes } from "#enums/game-modes";
 import UiHandler from "./ui-handler";
 import type { SessionSaveData } from "#app/@types/SessionData";
-import { addTextObject, addBBCodeTextObject, getTextColor } from "./text";
+import { addTextObject, addBBCodeTextObject, getBBCodeFragment } from "./text";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "./ui-theme";
@@ -23,7 +23,7 @@ import { getLuckString, getLuckTextTint } from "../modifier/modifier-type";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
 import { getTypeRgb } from "#app/data/type";
 import { ElementalType } from "#enums/elemental-type";
-import { TypeColor, TypeShadow } from "#enums/color";
+import { CommonColor, TypeColor, TypeShadowColor } from "#enums/color";
 import { getNatureStatMultiplier, getNatureName } from "../data/nature";
 import { getVariantTint } from "#app/data/variant";
 import * as Modifier from "../modifier/modifier";
@@ -37,6 +37,7 @@ import { settings } from "#app/system/settings/settings-manager";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { ImagesFolder } from "#enums/images-folders";
 
 /**
  * RunInfoUiMode indicates possible overlays of RunInfoUiHandler.
@@ -82,7 +83,7 @@ export default class RunInfoUiHandler extends UiHandler {
     // The import of the modifiersModule is loaded here to sidestep async/await issues.
     this.modifiersModule = Modifier;
     this.runContainer.setVisible(false);
-    globalScene.loadImage("encounter_exclaim", "mystery-encounters");
+    globalScene.loadImage("encounter_exclaim", ImagesFolder.ME);
   }
 
   /**
@@ -406,10 +407,10 @@ export default class RunInfoUiHandler extends UiHandler {
       26,
       `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(enemy.level, 1000)}`,
       enemyLevelStyle,
-      { fontSize: "44px", color: "#f8f8f8" },
+      { fontSize: "44px", color: CommonColor.OFF_WHITE },
     );
     enemyLevel.setShadow(0, 0, undefined);
-    enemyLevel.setStroke("#424242", 14);
+    enemyLevel.setStroke(CommonColor.DARK_GREY, 14);
     enemyLevel.setOrigin(1, 0);
     enemyIconContainer.add(enemyIcon);
     enemyIconContainer.add(enemyLevel);
@@ -436,10 +437,10 @@ export default class RunInfoUiHandler extends UiHandler {
         26,
         `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(enemy.level, 1000)}`,
         bossStatus ? TextStyle.PARTY_RED : TextStyle.PARTY,
-        { fontSize: "44px", color: "#f8f8f8" },
+        { fontSize: "44px", color: CommonColor.OFF_WHITE },
       );
       enemyLevel.setShadow(0, 0, undefined);
-      enemyLevel.setStroke("#424242", 14);
+      enemyLevel.setStroke(CommonColor.DARK_GREY, 14);
       enemyLevel.setOrigin(1, 0);
       enemyIconContainer.add(enemyIcon);
       enemyIconContainer.add(enemyLevel);
@@ -553,7 +554,7 @@ export default class RunInfoUiHandler extends UiHandler {
         { fontSize: "54px" },
       );
       enemyLevel.setShadow(0, 0, undefined);
-      enemyLevel.setStroke("#424242", 14);
+      enemyLevel.setStroke(CommonColor.DARK_GREY, 14);
       enemyLevel.setOrigin(0, 0);
 
       enemyIconContainer.add(enemyIcon);
@@ -624,10 +625,8 @@ export default class RunInfoUiHandler extends UiHandler {
     const runTime = getPlayTimeString(this.runInfo.playTime);
     runInfoText.appendText(`${i18next.t("runHistory:runLength")}: ${runTime}`, false);
     const runMoney = formatMoney(settings.display.moneyFormat, this.runInfo.money);
-    const moneyTextColor = getTextColor(TextStyle.MONEY_WINDOW, false, settings.display.uiTheme);
-    runInfoText.appendText(
-      `[color=${moneyTextColor}]${i18next.t("battleScene:moneyOwned", { formattedMoney: runMoney })}[/color]`,
-    );
+    const moneyText = i18next.t("battleScene:moneyOwned", { formattedMoney: runMoney });
+    runInfoText.appendText(getBBCodeFragment(moneyText, TextStyle.MONEY_WINDOW, true, false));
     runInfoText.setPosition(7, 70);
     runInfoTextContainer.add(runInfoText);
     // Luck
@@ -702,7 +701,7 @@ export default class RunInfoUiHandler extends UiHandler {
           case Challenges.SINGLE_TYPE:
             const typeRule = ElementalType[this.runInfo.challenges[i].value - 1];
             const typeTextColor = `[color=${TypeColor[typeRule]}]`;
-            const typeShadowColor = `[shadow=${TypeShadow[typeRule]}]`;
+            const typeShadowColor = `[shadow=${TypeShadowColor[typeRule]}]`;
             const typeText =
               typeTextColor + typeShadowColor + i18next.t(`pokemonInfo:Type.${typeRule}`)! + "[/color]" + "[/shadow]";
             rules.push(typeText);
@@ -796,8 +795,8 @@ export default class RunInfoUiHandler extends UiHandler {
       pokemon.stats.forEach((element) => pStats.push(formatFancyLargeNumber(element, 1)));
       for (let i = 0; i < pStats.length; i++) {
         const isMult = getNatureStatMultiplier(pNature, i);
-        pStats[i] = isMult < 1 ? pStats[i] + "[color=#40c8f8]↓[/color]" : pStats[i];
-        pStats[i] = isMult > 1 ? pStats[i] + "[color=#f89890]↑[/color]" : pStats[i];
+        pStats[i] = isMult < 1 ? pStats[i] + `[color=${CommonColor.LIGHT_BLUE}]↓[/color]` : pStats[i];
+        pStats[i] = isMult > 1 ? pStats[i] + `[color=${CommonColor.SOFT_PINK}]↑[/color]` : pStats[i];
       }
       const hp = i18next.t("pokemonInfo:Stat.HPshortened") + ": " + pStats[0];
       const atk = i18next.t("pokemonInfo:Stat.ATKshortened") + ": " + pStats[1];

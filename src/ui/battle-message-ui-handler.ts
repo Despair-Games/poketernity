@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { addBBCodeTextObject, addTextObject, getTextColor } from "./text";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "./text";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import MessageUiHandler from "./message-ui-handler";
@@ -36,7 +36,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     this.textTimer = null;
     this.textCallbackTimer = null;
 
-    this.bg = globalScene.add.sprite(0, 0, "bg", settings.display.uiWindowType);
+    this.bg = globalScene.add.sprite(0, 0, "battle_message_box", settings.display.uiWindowStyle);
     this.bg.setName("sprite-battle-msg-bg");
     this.bg.setOrigin(0, 1);
     ui.add(this.bg);
@@ -78,7 +78,18 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     this.nameBoxContainer = globalScene.add.container(0, -16);
     this.nameBoxContainer.setVisible(false);
 
-    this.nameBox = globalScene.add.nineslice(0, 0, "namebox", settings.display.uiWindowType, 72, 16, 8, 8, 5, 5);
+    this.nameBox = globalScene.add.nineslice(
+      0,
+      0,
+      "trainer_namebox",
+      settings.display.uiWindowStyle,
+      72,
+      16,
+      8,
+      8,
+      5,
+      5,
+    );
     this.nameBox.setOrigin(0, 0);
 
     this.nameText = addTextObject(8, 0, "Rival", TextStyle.MESSAGE, { maxLines: 1 });
@@ -254,7 +265,6 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
   getIvDescriptor(value: number, typeIv: number, pokemonId: number): string {
     const starterSpecies = globalScene.getPokemonById(pokemonId)!.species.getRootSpeciesId(); // we are using getRootSpeciesId() here because we want to check against the baby form, not the mid form if it exists
     const starterIvs: number[] = globalScene.gameData.dexData[starterSpecies].ivs;
-    const uiTheme = settings.display.uiTheme; // Assuming uiTheme is accessible
 
     // Function to wrap text in color based on comparison
     const coloredText = (text: string, isBetter: boolean, ivValue) => {
@@ -268,8 +278,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
       } else {
         textStyle = TextStyle.WINDOW;
       }
-      const color = getTextColor(textStyle, false, uiTheme);
-      return `[color=${color}][shadow=${getTextColor(textStyle, true, uiTheme)}]${text}[/shadow][/color]`;
+      return getBBCodeFragment(text, textStyle, true);
     };
 
     if (value > 30) {

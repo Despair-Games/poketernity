@@ -56,6 +56,7 @@ export enum BattlerTagType {
   ALWAYS_CRIT,
   IGNORE_ACCURACY,
   BYPASS_SLEEP,
+  /** Aka `Grounded` */
   IGNORE_FLYING,
   SALT_CURED,
   CURSED,
@@ -103,4 +104,5 @@ export enum BattlerTagType {
   POWDER,
   SKY_DROP,
   CRIT_BOOST_STACKABLE,
+  RAGE,
 }

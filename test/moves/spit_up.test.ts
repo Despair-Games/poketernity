@@ -1,8 +1,8 @@
 import { Stat } from "#enums/stat";
-import { StockpilingTag } from "#app/data/battler-tags";
-import { allMoves } from "#app/data/all-moves";
+import { type StockpilingTag } from "#app/data/battler-tags";
+import { allMoves } from "#app/data/data-lists";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import type { TurnMove } from "#app/field/pokemon";
+import type { TurnMove } from "#app/@types/TurnMove";
 import { MoveResult } from "#enums/move-result";
 import { GameManager } from "#test/testUtils/gameManager";
 import { Abilities } from "#enums/abilities";
@@ -53,7 +53,7 @@ describe("Moves - Spit Up", () => {
       const pokemon = game.scene.getPlayerPokemon()!;
       pokemon.addTag(BattlerTagType.STOCKPILING);
 
-      const stockpilingTag = pokemon.getTag(StockpilingTag)!;
+      const stockpilingTag = pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)!;
       expect(stockpilingTag).toBeDefined();
       expect(stockpilingTag.stockpiledCount).toBe(stacksToSetup);
 
@@ -63,7 +63,7 @@ describe("Moves - Spit Up", () => {
       expect(spitUp.calculateBattlePower).toHaveBeenCalledOnce();
       expect(spitUp.calculateBattlePower).toHaveReturnedWith(expectedPower);
 
-      expect(pokemon.getTag(StockpilingTag)).toBeUndefined();
+      expect(pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)).toBeUndefined();
     });
 
     it("2 stacks -> 200 power", async () => {
@@ -76,7 +76,7 @@ describe("Moves - Spit Up", () => {
       pokemon.addTag(BattlerTagType.STOCKPILING);
       pokemon.addTag(BattlerTagType.STOCKPILING);
 
-      const stockpilingTag = pokemon.getTag(StockpilingTag)!;
+      const stockpilingTag = pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)!;
       expect(stockpilingTag).toBeDefined();
       expect(stockpilingTag.stockpiledCount).toBe(stacksToSetup);
 
@@ -86,7 +86,7 @@ describe("Moves - Spit Up", () => {
       expect(spitUp.calculateBattlePower).toHaveBeenCalledOnce();
       expect(spitUp.calculateBattlePower).toHaveReturnedWith(expectedPower);
 
-      expect(pokemon.getTag(StockpilingTag)).toBeUndefined();
+      expect(pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)).toBeUndefined();
     });
 
     it("3 stacks -> 300 power", async () => {
@@ -100,7 +100,7 @@ describe("Moves - Spit Up", () => {
       pokemon.addTag(BattlerTagType.STOCKPILING);
       pokemon.addTag(BattlerTagType.STOCKPILING);
 
-      const stockpilingTag = pokemon.getTag(StockpilingTag)!;
+      const stockpilingTag = pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)!;
       expect(stockpilingTag).toBeDefined();
       expect(stockpilingTag.stockpiledCount).toBe(stacksToSetup);
 
@@ -110,7 +110,7 @@ describe("Moves - Spit Up", () => {
       expect(spitUp.calculateBattlePower).toHaveBeenCalledOnce();
       expect(spitUp.calculateBattlePower).toHaveReturnedWith(expectedPower);
 
-      expect(pokemon.getTag(StockpilingTag)).toBeUndefined();
+      expect(pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)).toBeUndefined();
     });
   });
 
@@ -119,14 +119,14 @@ describe("Moves - Spit Up", () => {
 
     const pokemon = game.scene.getPlayerPokemon()!;
 
-    const stockpilingTag = pokemon.getTag(StockpilingTag)!;
+    const stockpilingTag = pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)!;
     expect(stockpilingTag).toBeUndefined();
 
     game.move.select(MoveId.SPIT_UP);
     await game.phaseInterceptor.to(TurnInitPhase);
 
     expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-      moveId: MoveId.SPIT_UP,
+      move: expect.objectContaining({ id: MoveId.SPIT_UP }),
       result: MoveResult.FAIL,
       targets: [game.field.getEnemyPokemon().getBattlerIndex()],
     });
@@ -141,7 +141,7 @@ describe("Moves - Spit Up", () => {
       const pokemon = game.scene.getPlayerPokemon()!;
       pokemon.addTag(BattlerTagType.STOCKPILING);
 
-      const stockpilingTag = pokemon.getTag(StockpilingTag)!;
+      const stockpilingTag = pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)!;
       expect(stockpilingTag).toBeDefined();
 
       game.move.select(MoveId.SPIT_UP);
@@ -153,7 +153,7 @@ describe("Moves - Spit Up", () => {
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-        moveId: MoveId.SPIT_UP,
+        move: expect.objectContaining({ id: MoveId.SPIT_UP }),
         result: MoveResult.SUCCESS,
         targets: [game.field.getEnemyPokemon().getBattlerIndex()],
       });
@@ -163,7 +163,7 @@ describe("Moves - Spit Up", () => {
       expect(pokemon.getStatStage(Stat.DEF)).toBe(0);
       expect(pokemon.getStatStage(Stat.SPDEF)).toBe(0);
 
-      expect(pokemon.getTag(StockpilingTag)).toBeUndefined();
+      expect(pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)).toBeUndefined();
     });
 
     it("decreases stats based on stored values (different boosts)", async () => {
@@ -172,7 +172,7 @@ describe("Moves - Spit Up", () => {
       const pokemon = game.scene.getPlayerPokemon()!;
       pokemon.addTag(BattlerTagType.STOCKPILING);
 
-      const stockpilingTag = pokemon.getTag(StockpilingTag)!;
+      const stockpilingTag = pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)!;
       expect(stockpilingTag).toBeDefined();
 
       // for the sake of simplicity (and because other tests cover the setup), set boost amounts directly
@@ -185,7 +185,7 @@ describe("Moves - Spit Up", () => {
       await game.phaseInterceptor.to(TurnInitPhase);
 
       expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-        moveId: MoveId.SPIT_UP,
+        move: expect.objectContaining({ id: MoveId.SPIT_UP }),
         result: MoveResult.SUCCESS,
         targets: [game.field.getEnemyPokemon().getBattlerIndex()],
       });
@@ -195,7 +195,7 @@ describe("Moves - Spit Up", () => {
       expect(pokemon.getStatStage(Stat.DEF)).toBe(1);
       expect(pokemon.getStatStage(Stat.SPDEF)).toBe(-2);
 
-      expect(pokemon.getTag(StockpilingTag)).toBeUndefined();
+      expect(pokemon.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)).toBeUndefined();
     });
   });
 });

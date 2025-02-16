@@ -2,13 +2,13 @@ import type { DexEntry } from "#app/@types/DexData";
 import type { StarterMoveset } from "#app/@types/StarterData";
 import { starterColors } from "#app/data/starter-colors";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
-import { allAbilities } from "#app/data/ability";
-import { allMoves } from "#app/data/all-moves";
+import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { starterPassiveAbilities } from "#app/data/balance/passives";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
-import { pokemonFormLevelMoves, pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";
+import { pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";
+import { pokemonFormLevelMoves } from "#app/data/balance/pokemon-form-level-moves";
 import {
   POKERUS_STARTER_COUNT,
   getPassiveCandyCount,
@@ -17,7 +17,7 @@ import {
   getValueReductionCandyCounts,
   speciesStarterCosts,
 } from "#app/data/balance/starters";
-import * as Challenge from "#app/data/challenge";
+import { applyChallenges } from "#app/utils/challenge-utils";
 import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
 import { Egg, getEggTierForSpecies } from "#app/data/egg";
 import { GrowthRate } from "#enums/growth-rates";
@@ -27,7 +27,6 @@ import { getNatureName } from "#app/data/nature";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpeciesForm, getPokerusStarters } from "#app/utils/pokemon-species-utils";
-import { allSpecies } from "#app/data/all-species";
 import type { Variant } from "#app/data/variant";
 import { getVariantTierForVariant, getVariantTint } from "#app/data/variant";
 import { GameModes } from "#enums/game-modes";
@@ -35,12 +34,11 @@ import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { EncounterPhase } from "#app/phases/encounter-phase";
 import { SelectChallengePhase } from "#app/phases/select-challenge-phase";
-import { TitlePhase } from "#app/phases/title-phase";
 import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#app/system/game-data";
 import { StarterPrefs } from "#app/system/game-data";
 import { Tutorial } from "#enums/tutorial";
 import { handleTutorial } from "#app/tutorial";
-import { DropDown, DropDownLabel, DropDownOption } from "#app/ui/dropdown";
+import { DropDown, DropDownLabel, DropDownOption } from "#app/ui/drop-down";
 import { FilterBar } from "#app/ui/filter-bar";
 import type { OptionSelectIconConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import MessageUiHandler from "#app/ui/message-ui-handler";
@@ -50,7 +48,7 @@ import { ScrollBar } from "#app/ui/scroll-bar";
 import { StarterContainer } from "#app/ui/starter-container";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 import { StatsContainer } from "#app/ui/stats-container";
-import { addBBCodeTextObject, addTextObject } from "#app/ui/text";
+import { addBBCodeTextObject, addTextObject, setTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "#app/ui/ui-theme";
@@ -59,7 +57,6 @@ import {
   NumberHolder,
   capitalizeString,
   fixedNumber,
-  getLocalizedSpriteKey,
   isNullOrUndefined,
   leftPad,
   rgbHexToRgba,
@@ -80,7 +77,6 @@ import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { settings } from "#app/system/settings/settings-manager";
 import { DropDownState } from "#enums/drop-down-state";
 import { DropDownColumn } from "#enums/drop-down-column";
 import { DropDownType } from "#enums/drop-down-type";
@@ -395,7 +391,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.shinyOverlay.setVisible(false);
     this.starterSelectContainer.add(this.shinyOverlay);
 
-    const starterContainerWindow = addWindow(speciesContainerX, filterBarHeight + 1, 175, 161);
     const starterContainerBg = globalScene.add.image(
       speciesContainerX + 1,
       filterBarHeight + 2,
@@ -408,7 +403,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.starterSelectContainer.add(
       addWindow(teamWindowX, teamWindowY + teamWindowHeight - 5, teamWindowWidth, teamWindowWidth, true),
     );
-    this.starterSelectContainer.add(starterContainerWindow);
 
     // Create and initialise filter bar
     this.filterBarContainer = globalScene.add.container(0, 0);
@@ -436,7 +430,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       if (index === 0 || index === 19) {
         return;
       }
-      const typeSprite = globalScene.add.sprite(0, 0, getLocalizedSpriteKey("types"));
+      const typeSprite = globalScene.add.sprite(0, 0, "type_icons");
       typeSprite.setScale(0.5);
       typeSprite.setFrame(type.toLowerCase());
       typeOptions.push(new DropDownOption(index, new DropDownLabel("", typeSprite)));
@@ -564,10 +558,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
     // Offset the generation filter dropdown to avoid covering the filtered pokemon
     this.filterBar.offsetHybridFilters();
-
-    if (!settings.display.uiTheme) {
-      starterContainerWindow.setVisible(false);
-    }
 
     this.iconAnimHandler = new PokemonIconAnimHandler();
     this.iconAnimHandler.setup();
@@ -719,7 +709,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
     const starterBoxContainer = globalScene.add.container(speciesContainerX + 6, 9);
 
-    this.starterSelectScrollBar = new ScrollBar(161, 12, 5, starterContainerWindow.height - 6, 9);
+    this.starterSelectScrollBar = new ScrollBar(161, 12, 5, 161 - 6, 9);
 
     starterBoxContainer.add(this.starterSelectScrollBar);
 
@@ -780,12 +770,12 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.pokemonSprite.setPipeline(globalScene.spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], ignoreTimeTint: true });
     this.starterSelectContainer.add(this.pokemonSprite);
 
-    this.type1Icon = globalScene.add.sprite(8, 98, getLocalizedSpriteKey("types"));
+    this.type1Icon = globalScene.add.sprite(8, 98, "type_icons");
     this.type1Icon.setScale(0.5);
     this.type1Icon.setOrigin(0, 0);
     this.starterSelectContainer.add(this.type1Icon);
 
-    this.type2Icon = globalScene.add.sprite(26, 98, getLocalizedSpriteKey("types"));
+    this.type2Icon = globalScene.add.sprite(26, 98, "type_icons");
     this.type2Icon.setScale(0.5);
     this.type2Icon.setOrigin(0, 0);
     this.starterSelectContainer.add(this.type2Icon);
@@ -1530,7 +1520,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           const isPartyValid = this.isPartyValid();
           const isValidForChallenge = new BooleanHolder(true);
 
-          Challenge.applyChallenges(
+          applyChallenges(
             globalScene.gameMode,
             ChallengeType.STARTER_CHOICE,
             this.lastSpecies,
@@ -2586,7 +2576,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         valueLimit.value = 10;
     }
 
-    Challenge.applyChallenges(globalScene.gameMode, ChallengeType.STARTER_POINTS, valueLimit);
+    applyChallenges(globalScene.gameMode, ChallengeType.STARTER_POINTS, valueLimit);
 
     return valueLimit.value;
   }
@@ -2613,7 +2603,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
              */
             const tempFormProps = BigInt(Math.pow(2, i)) * DexAttr.DEFAULT_FORM;
             const isValidForChallenge = new BooleanHolder(true);
-            Challenge.applyChallenges(
+            applyChallenges(
               globalScene.gameMode,
               ChallengeType.STARTER_CHOICE,
               container.species,
@@ -2625,7 +2615,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           }
         } else {
           const isValidForChallenge = new BooleanHolder(true);
-          Challenge.applyChallenges(
+          applyChallenges(
             globalScene.gameMode,
             ChallengeType.STARTER_CHOICE,
             container.species,
@@ -3361,10 +3351,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       }
 
       this.shinyOverlay.setVisible(shiny ?? false); // TODO: is false the correct default?
-      this.pokemonNumberText.setColor(this.getTextColor(shiny ? TextStyle.SUMMARY_GOLD : TextStyle.SUMMARY, false));
-      this.pokemonNumberText.setShadowColor(
-        this.getTextColor(shiny ? TextStyle.SUMMARY_GOLD : TextStyle.SUMMARY, true),
-      );
+      setTextColor(this.pokemonNumberText, shiny ? TextStyle.SUMMARY_GOLD : TextStyle.SUMMARY);
 
       if (forSeen ? this.speciesStarterDexEntry?.seenAttr : this.speciesStarterDexEntry?.caughtAttr) {
         const starterIndex = this.starterSpecies.indexOf(species);
@@ -3395,7 +3382,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         }
 
         const isValidForChallenge = new BooleanHolder(true);
-        Challenge.applyChallenges(
+        applyChallenges(
           globalScene.gameMode,
           ChallengeType.STARTER_CHOICE,
           species,
@@ -3464,11 +3451,8 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         const ability = allAbilities[this.lastSpecies.getAbility(abilityIndex!)]; // TODO: is this bang correct?
         this.pokemonAbilityText.setText(ability.name);
 
-        const isHidden = abilityIndex === (this.lastSpecies.ability2 ? 2 : 1);
-        this.pokemonAbilityText.setColor(this.getTextColor(!isHidden ? TextStyle.SUMMARY_ALT : TextStyle.SUMMARY_GOLD));
-        this.pokemonAbilityText.setShadowColor(
-          this.getTextColor(!isHidden ? TextStyle.SUMMARY_ALT : TextStyle.SUMMARY_GOLD, true),
-        );
+        const isHiddenAbility = abilityIndex === (this.lastSpecies.ability2 ? 2 : 1);
+        setTextColor(this.pokemonAbilityText, !isHiddenAbility ? TextStyle.SUMMARY_ALT : TextStyle.SUMMARY_GOLD);
 
         const passiveAttr = globalScene.gameData.starterData[species.speciesId].passiveAttr;
         const passiveAbility = allAbilities[starterPassiveAbilities[this.lastSpecies.speciesId]];
@@ -3492,17 +3476,16 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           const isUnlocked = !!(passiveAttr & PassiveAttr.UNLOCKED);
           const isEnabled = !!(passiveAttr & PassiveAttr.ENABLED);
 
+          this.pokemonPassiveLabelText.setVisible(true);
+          setTextColor(this.pokemonPassiveLabelText, TextStyle.SUMMARY_ALT);
+
           const textStyle = isUnlocked && isEnabled ? TextStyle.SUMMARY_ALT : TextStyle.SUMMARY_GRAY;
           const textAlpha = isUnlocked && isEnabled ? 1 : 0.5;
 
-          this.pokemonPassiveLabelText.setVisible(true);
-          this.pokemonPassiveLabelText.setColor(this.getTextColor(TextStyle.SUMMARY_ALT));
-          this.pokemonPassiveLabelText.setShadowColor(this.getTextColor(TextStyle.SUMMARY_ALT, true));
           this.pokemonPassiveText.setVisible(true);
           this.pokemonPassiveText.setText(passiveAbility.name);
-          this.pokemonPassiveText.setColor(this.getTextColor(textStyle));
           this.pokemonPassiveText.setAlpha(textAlpha);
-          this.pokemonPassiveText.setShadowColor(this.getTextColor(textStyle, true));
+          setTextColor(this.pokemonPassiveText, textStyle);
 
           if (this.activeTooltip === "PASSIVE") {
             globalScene.ui.editTooltip(`${passiveAbility.name}`, `${passiveAbility.description}`);
@@ -3603,8 +3586,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       }
     } else {
       this.shinyOverlay.setVisible(false);
-      this.pokemonNumberText.setColor(this.getTextColor(TextStyle.SUMMARY));
-      this.pokemonNumberText.setShadowColor(this.getTextColor(TextStyle.SUMMARY, true));
+      setTextColor(this.pokemonNumberText, TextStyle.SUMMARY);
       this.pokemonGenderText.setText("");
       this.pokemonAbilityText.setText("");
       this.pokemonPassiveText.setText("");
@@ -3736,8 +3718,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         break;
     }
     if (baseStarterValue - starterValue > 0) {
-      starter.label.setColor(this.getTextColor(textStyle));
-      starter.label.setShadowColor(this.getTextColor(textStyle, true));
+      setTextColor(starter.label, textStyle);
     }
   }
 
@@ -3757,10 +3738,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       newValueStr = newValueStr.slice(1);
     }
     this.valueLimitLabel.setText(`${newValueStr}/${valueLimit}`);
-    this.valueLimitLabel.setColor(this.getTextColor(!overLimit ? TextStyle.TOOLTIP_CONTENT : TextStyle.SUMMARY_PINK));
-    this.valueLimitLabel.setShadowColor(
-      this.getTextColor(!overLimit ? TextStyle.TOOLTIP_CONTENT : TextStyle.SUMMARY_PINK, true),
-    );
+    setTextColor(this.valueLimitLabel, !overLimit ? TextStyle.TOOLTIP_CONTENT : TextStyle.SUMMARY_PINK);
     if (overLimit) {
       globalScene.time.delayedCall(fixedNumber(500), () => this.tryUpdateValue());
       return false;
@@ -3770,7 +3748,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       // this does a check to see if the pokemon being added is valid; if so, it will update the isPartyValid boolean
       const isNewPokemonValid = new BooleanHolder(true);
       const species = this.filteredStarterContainers[this.cursor].species;
-      Challenge.applyChallenges(
+      applyChallenges(
         globalScene.gameMode,
         ChallengeType.STARTER_CHOICE,
         species,
@@ -3803,7 +3781,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
        * we change to can AddParty value to true since the user has enough cost to choose this pokemon and this pokemon registered too.
        */
       const isValidForChallenge = new BooleanHolder(true);
-      Challenge.applyChallenges(
+      applyChallenges(
         globalScene.gameMode,
         ChallengeType.STARTER_CHOICE,
         this.allSpecies[s],
@@ -3851,7 +3829,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         globalScene.pushPhase(new SelectChallengePhase());
         globalScene.pushPhase(new EncounterPhase());
       } else {
-        globalScene.pushPhase(new TitlePhase());
+        globalScene.toTitleScreen();
       }
       this.clearText();
       globalScene.getCurrentPhase()?.end();
@@ -3945,7 +3923,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     for (let s = 0; s < this.starterSpecies.length; s++) {
       const isValidForChallenge = new BooleanHolder(true);
       const species = this.starterSpecies[s];
-      Challenge.applyChallenges(
+      applyChallenges(
         globalScene.gameMode,
         ChallengeType.STARTER_CHOICE,
         species,

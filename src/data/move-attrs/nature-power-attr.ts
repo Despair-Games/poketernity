@@ -115,4 +115,8 @@ export class NaturePowerAttr extends CallMoveAttr {
 
     return super.apply(user, target, allMoves[moveId], overridden);
   }
+
+  override isNaturePowerAttr(): this is this {
+    return true;
+  }
 }

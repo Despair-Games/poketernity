@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { toReadableString, randSeedItem, randItem } from "#app/utils";
 import type { PokemonSpeciesFilter } from "#app/@types/PokemonSpeciesFilter";
@@ -17,6 +17,7 @@ import { TrainerType } from "#enums/trainer-type";
 import Overrides from "#app/overrides";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { TrainerSlot } from "#enums/trainer-slot";
+import { ImagesFolder } from "#enums/images-folders";
 
 /** Minimum BST for Pokemon generated onto the Elite Four's teams */
 const ELITE_FOUR_MINIMUM_BST = 460;
@@ -1409,9 +1410,9 @@ export class TrainerConfig {
       const isDouble = variant === TrainerVariant.DOUBLE;
       const trainerKey = this.getSpriteKey(variant === TrainerVariant.FEMALE, false);
       const partnerTrainerKey = this.getSpriteKey(true, true);
-      globalScene.loadAtlas(trainerKey, "trainer");
+      globalScene.loadAtlas(trainerKey, ImagesFolder.TRAINER);
       if (isDouble) {
-        globalScene.loadAtlas(partnerTrainerKey, "trainer");
+        globalScene.loadAtlas(partnerTrainerKey, ImagesFolder.TRAINER);
       }
       globalScene.load.once(Phaser.Loader.Events.COMPLETE, () => {
         const originalWarn = console.warn;

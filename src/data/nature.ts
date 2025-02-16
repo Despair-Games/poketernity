@@ -1,5 +1,5 @@
 import { toReadableString } from "#app/utils";
-import { getBBCodeFrag } from "../ui/text";
+import { getBBCodeFragment } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { Nature } from "#enums/nature";
 import i18next from "i18next";
@@ -29,7 +29,7 @@ export function getNatureName(
     }
     const textStyle = forStarterSelect ? TextStyle.SUMMARY_ALT : TextStyle.WINDOW;
     const getTextFrag = !ignoreBBCode
-      ? (text: string, style: TextStyle) => getBBCodeFrag(text, style)
+      ? (text: string, style: TextStyle) => getBBCodeFragment(text, style)
       : (text: string, _style: TextStyle) => text;
     if (increasedStat && decreasedStat) {
       ret = `${getTextFrag(`${ret}${!forStarterSelect ? "\n" : " "}(`, textStyle)}${getTextFrag(`+${i18next.t(getShortenedStatKey(increasedStat))}`, TextStyle.SUMMARY_PINK)}${getTextFrag("/", textStyle)}${getTextFrag(`-${i18next.t(getShortenedStatKey(decreasedStat))}`, TextStyle.SUMMARY_BLUE)}${getTextFrag(")", textStyle)}`;

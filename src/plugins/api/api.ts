@@ -1,7 +1,7 @@
 import type { TitleStatsResponse } from "#app/@types/Api";
-import { ApiBase } from "#app/plugins/api/api-base";
 import { AccountApi } from "#app/plugins/api/account-api";
 import { AdminApi } from "#app/plugins/api/admin-api";
+import { ApiBase } from "#app/plugins/api/api-base";
 import { DailyApi } from "#app/plugins/api/daily-api";
 import { SavedataApi } from "#app/plugins/api/savedata-api";
 
@@ -16,6 +16,11 @@ export class Api extends ApiBase {
   public readonly admin: AdminApi;
   public readonly savedata: SavedataApi;
 
+  /** Wheter the hostname is 'localhost' or an IP address, and ensure a port is specified. */
+  private _isLocal: boolean;
+  /** Whether the server/api is connected. By default we assume `true`. */
+  private _isConnected: boolean;
+
   //#region Public
 
   constructor(base: string) {
@@ -24,6 +29,20 @@ export class Api extends ApiBase {
     this.daily = new DailyApi(base);
     this.admin = new AdminApi(base);
     this.savedata = new SavedataApi(base);
+    this._isLocal =
+      ((window.location.hostname === "localhost" || /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(window.location.hostname))
+        && window.location.port !== "")
+      || window.location.hostname === "";
+  }
+
+  /** Whether the server/api is connected. By default we assume `true`. */
+  public get isConnected() {
+    return this._isConnected;
+  }
+
+  /** Wheter the hostname is 'localhost' or an IP address, and ensure a port is specified. */
+  public get isLocal() {
+    return this._isLocal;
   }
 
   /**
@@ -77,6 +96,14 @@ export class Api extends ApiBase {
     return false;
   }
 
+  /**
+   * Pings the server (via {@linkcode getGameTitleStats}) and updates {@linkcode _isConnected} accordingly.
+   */
+  async ping() {
+    const titleStats = await this.getGameTitleStats();
+    this._isConnected = !!titleStats;
+    console.log("isLocalServerConnected:", this.isConnected);
+  }
   //#endregion
 }
 

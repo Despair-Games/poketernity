@@ -9,6 +9,7 @@ import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
 import { DamageNumbersMode } from "#enums/damage-numbers-mode";
 import { GAME_HEIGHT } from "#app/ui-constants";
+import { CommonColor, ShadowColor } from "#enums/color";
 
 type TextAndShadowArr = [string | null, string | null];
 
@@ -46,19 +47,19 @@ export default class DamageNumberHandler {
 
     switch (result) {
       case HitResult.SUPER_EFFECTIVE:
-        [textColor, shadowColor] = ["#f8d030", "#b8a038"];
+        [textColor, shadowColor] = [CommonColor.GOLD_YELLOW, ShadowColor.MUTED_GOLD];
         break;
       case HitResult.NOT_VERY_EFFECTIVE:
-        [textColor, shadowColor] = ["#f08030", "#c03028"];
+        [textColor, shadowColor] = [CommonColor.BRIGHT_ORANGE, ShadowColor.DARK_RED];
         break;
       case HitResult.ONE_HIT_KO:
-        [textColor, shadowColor] = ["#a040a0", "#483850"];
+        [textColor, shadowColor] = [CommonColor.VIBRANT_PURPLE, ShadowColor.DARK_PURPLE];
         break;
       case HitResult.HEAL:
-        [textColor, shadowColor] = ["#78c850", "#588040"];
+        [textColor, shadowColor] = [CommonColor.LIGHT_GREEN, ShadowColor.MUTED_GREEN];
         break;
       default:
-        [textColor, shadowColor] = ["#ffffff", "#636363"];
+        [textColor, shadowColor] = [CommonColor.WHITE, ShadowColor.GREY];
         break;
     }
 

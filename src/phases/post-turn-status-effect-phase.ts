@@ -1,10 +1,6 @@
 import type { BattlerIndex } from "#enums/battler-index";
-import { BlockNonDirectDamageAbAttr } from "#app/data/ab-attrs/block-non-direct-damage-ab-attr";
-import { BlockStatusDamageAbAttr } from "#app/data/ab-attrs/block-status-damage-ab-attr";
-import { PostDamageAbAttr } from "#app/data/ab-attrs/post-damage-ab-attr";
-import { ReduceBurnDamageAbAttr } from "#app/data/ab-attrs/reduce-burn-damage-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { CommonBattleAnim } from "#app/data/battle-anims";
+import { CommonBattleAnim } from "#app/data/battle-anims/common-battle-anim";
 import { CommonAnim } from "#enums/common-anim";
 import { getStatusEffectActivationText } from "#app/data/status-effect";
 import { globalScene } from "#app/global-scene";
@@ -12,8 +8,12 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { StatusEffect } from "#enums/status-effect";
 import { PokemonPhase } from "./abstract-pokemon-phase";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 export class PostTurnStatusEffectPhase extends PokemonPhase {
+  override readonly id = PhaseId.POST_TURN_STATUS_EFFECT;
+
   constructor(battlerIndex: BattlerIndex) {
     super(battlerIndex);
   }
@@ -25,8 +25,8 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
       pokemon.status.incrementTurn();
 
       const cancelled = new BooleanHolder(false);
-      applyAbAttrs(BlockNonDirectDamageAbAttr, pokemon, false, cancelled);
-      applyAbAttrs(BlockStatusDamageAbAttr, pokemon, false, cancelled);
+      applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
+      applyAbAttrs(AbAttrFlag.BLOCK_STATUS_DAMAGE, pokemon, false, cancelled);
 
       if (!cancelled.value) {
         globalScene.queueMessage(
@@ -43,7 +43,7 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
             break;
           case StatusEffect.BURN:
             damage.value = Math.max(pokemon.getMaxHp() >> 4, 1);
-            applyAbAttrs(ReduceBurnDamageAbAttr, pokemon, false, damage);
+            applyAbAttrs(AbAttrFlag.REDUCE_BURN_DAMAGE, pokemon, false, damage);
             break;
         }
 
@@ -51,7 +51,7 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
           // Set preventEndure flag to avoid pokemon surviving thanks to focus band, sturdy, endure ...
           globalScene.damageNumberHandler.add(this.getPokemon(), pokemon.damage(damage.value, false, true));
           pokemon.updateInfo();
-          applyAbAttrs(PostDamageAbAttr, pokemon, false, damage.value);
+          applyAbAttrs(AbAttrFlag.POST_DAMAGE, pokemon, false, damage.value);
         }
 
         new CommonBattleAnim(CommonAnim.POISON + (pokemon.status.effect - 1), pokemon).play(false, () => this.end());

@@ -86,10 +86,9 @@ describe("Moves - Beak Blast", () => {
     expect(enemyPokemon.status?.effect).not.toBe(StatusEffect.BURN);
   });
 
-  it("should only hit twice with Multi-Lens", async () => {
-    game.override.startingHeldItems([{ name: "MULTI_LENS", count: 1 }]);
-
-    await game.startBattle([Species.BLASTOISE]);
+  it("should only hit twice with Parental Bond", async () => {
+    game.override.ability(Abilities.PARENTAL_BOND);
+    await game.classicMode.startBattle([Species.BLASTOISE]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 

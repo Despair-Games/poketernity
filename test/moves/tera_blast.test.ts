@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { Stat } from "#enums/stat";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { ElementalType } from "#enums/elemental-type";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";

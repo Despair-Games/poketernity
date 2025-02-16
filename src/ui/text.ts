@@ -1,13 +1,12 @@
 import { EggTier } from "#enums/egg-type";
-import { UiTheme } from "#enums/ui-theme";
 import type Phaser from "phaser";
 import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
 import type InputText from "phaser3-rex-plugins/plugins/inputtext";
 import { globalScene } from "#app/global-scene";
 import { ModifierTier } from "#enums/modifier-tier";
 import i18next from "#app/plugins/i18n";
-import { settings } from "#app/system/settings/settings-manager";
 import { TextStyle } from "#enums/text-style";
+import { getTextColorCombination } from "#app/ui/text-color";
 
 export interface TextStyleOptions {
   scale: number;
@@ -24,11 +23,7 @@ export function addTextObject(
   style: TextStyle,
   extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle,
 ): Phaser.GameObjects.Text {
-  const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(
-    style,
-    settings.display.uiTheme,
-    extraStyleOptions,
-  );
+  const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(style, extraStyleOptions);
 
   const ret = globalScene.add.text(x, y, content, styleOptions);
   ret.setScale(scale);
@@ -44,27 +39,6 @@ export function addTextObject(
   return ret;
 }
 
-export function setTextStyle(
-  obj: Phaser.GameObjects.Text,
-  style: TextStyle,
-  extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle,
-) {
-  const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(
-    style,
-    settings.display.uiTheme,
-    extraStyleOptions,
-  );
-  obj.setScale(scale);
-  obj.setShadow(shadowXpos, shadowYpos, shadowColor);
-  if (!(styleOptions as Phaser.Types.GameObjects.Text.TextStyle).lineSpacing) {
-    obj.setLineSpacing(scale * 30);
-  }
-
-  if (obj.lineSpacing < 12 && i18next.resolvedLanguage === "ja") {
-    obj.setLineSpacing(obj.lineSpacing + 35);
-  }
-}
-
 export function addBBCodeTextObject(
   x: number,
   y: number,
@@ -72,11 +46,7 @@ export function addBBCodeTextObject(
   style: TextStyle,
   extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle,
 ): BBCodeText {
-  const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(
-    style,
-    settings.display.uiTheme,
-    extraStyleOptions,
-  );
+  const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(style, extraStyleOptions);
 
   const ret = globalScene.add.rexBBCodeText(x, y, content, styleOptions as BBCodeText.TextStyle);
   ret.setScale(scale);
@@ -100,7 +70,7 @@ export function addTextInputObject(
   style: TextStyle,
   extraStyleOptions?: InputText.IConfig,
 ): InputText {
-  const { scale, styleOptions } = getTextStyleOptions(style, settings.display.uiTheme, extraStyleOptions);
+  const { scale, styleOptions } = getTextStyleOptions(style, extraStyleOptions);
 
   const ret = globalScene.add.rexInputText(x, y, width, height, styleOptions as InputText.IConfig);
   ret.setScale(scale);
@@ -108,9 +78,19 @@ export function addTextInputObject(
   return ret;
 }
 
+/**
+ * Set the color and shadow color of a Text object based on the given TextStyle.
+ * @param textObject the {@linkcode Phaser.GameObjects.Text} to update.
+ * @param style the {@linkcode TextStyle} to use.
+ */
+export function setTextColor(textObject: Phaser.GameObjects.Text, style: TextStyle): void {
+  const colorCombination = getTextColorCombination(style);
+  textObject.setColor(colorCombination.mainColor);
+  textObject.setShadowColor(colorCombination.shadowColor);
+}
+
 export function getTextStyleOptions(
   style: TextStyle,
-  uiTheme: UiTheme,
   extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle,
 ): TextStyleOptions {
   const lang = i18next.resolvedLanguage;
@@ -119,11 +99,12 @@ export function getTextStyleOptions(
   // TODO scaling: figure this out
   let scale = 0.1666666667;
   const defaultFontSize = 96;
+  const { mainColor, shadowColor } = getTextColorCombination(style);
 
   let styleOptions: Phaser.Types.GameObjects.Text.TextStyle = {
     fontFamily: "emerald",
     fontSize: 96,
-    color: getTextColor(style, false, uiTheme),
+    color: mainColor,
     padding: {
       bottom: 6,
     },
@@ -223,8 +204,6 @@ export function getTextStyleOptions(
       break;
   }
 
-  const shadowColor = getTextColor(style, true, uiTheme);
-
   if (extraStyleOptions) {
     if (extraStyleOptions.fontSize) {
       const sizeRatio =
@@ -238,10 +217,21 @@ export function getTextStyleOptions(
   return { scale, styleOptions, shadowColor, shadowXpos, shadowYpos };
 }
 
-export function getBBCodeFrag(content: string, textStyle: TextStyle, closeFragment: boolean = false): string {
-  const uiTheme = settings.display.uiTheme ?? UiTheme.DEFAULT;
-  const openingFragment = `[color=${getTextColor(textStyle, false, uiTheme)}][shadow=${getTextColor(textStyle, true, uiTheme)}]`;
-  const closingFragment = closeFragment ? "[/color][/shadow]" : "";
+export function getBBCodeFragment(
+  content: string,
+  textStyle: TextStyle,
+  closeFragment: boolean = false,
+  noShadow = false,
+): string {
+  const colorCombination = getTextColorCombination(textStyle);
+  let openingFragment = `[color=${colorCombination.mainColor}]`;
+  let closingFragment = closeFragment ? "[/color]" : "";
+  if (!noShadow) {
+    openingFragment += `[shadow=${colorCombination.shadowColor}]`;
+    if (closeFragment) {
+      closingFragment = "[/shadow]" + closingFragment;
+    }
+  }
   return `${openingFragment}${content}${closingFragment}`;
 }
 
@@ -257,17 +247,16 @@ export function getBBCodeFrag(content: string, textStyle: TextStyle, closeFragme
  * - "red text" with TextStyle.SUMMARY_RED applied
  * @param content string with styling that need to be applied for BBCodeTextObject
  * @param primaryStyle Primary style is required in order to escape BBCode styling properly.
- * @param uiTheme the {@linkcode UiTheme} to get TextStyle for
  * @param forWindow set to `true` if the text is to be displayed in a window ({@linkcode BattleScene.addWindow})
  *  it will replace all instances of the default MONEY TextStyle by {@linkcode TextStyle.MONEY_WINDOW}
  */
 export function getTextWithColors(content: string, primaryStyle: TextStyle, forWindow?: boolean): string {
   // Apply primary styling before anything else
-  let text = getBBCodeFrag(content, primaryStyle, true);
+  let text = getBBCodeFragment(content, primaryStyle, true);
   const primaryStyleString = [...text.match(new RegExp(/\[color=[^\[]*\]\[shadow=[^\[]*\]/i))!][0];
 
   /* For money text displayed in game windows, we can't use the default {@linkcode TextStyle.MONEY}
-   * or it will look wrong in legacy mode because of the different window background color
+   * or it will look wrong in light mode because of the different window background color
    * So, for text to be displayed in windows replace all "@[MONEY]" with "@[MONEY_WINDOW]" */
   if (forWindow) {
     text = text.replace(/@\[MONEY\]/g, (_substring: string) => "@[MONEY_WINDOW]");
@@ -275,105 +264,11 @@ export function getTextWithColors(content: string, primaryStyle: TextStyle, forW
 
   // Set custom colors
   text = text.replace(/@\[([^{]*)\]{([^}]*)}/gi, (_substring, textStyle: string, textToColor: string) => {
-    return "[/color][/shadow]" + getBBCodeFrag(textToColor, TextStyle[textStyle], true) + primaryStyleString;
+    return "[/color][/shadow]" + getBBCodeFragment(textToColor, TextStyle[textStyle], true) + primaryStyleString;
   });
 
   // Remove extra style block at the end
   return text.replace(/\[color=[^\[]*\]\[shadow=[^\[]*\]\[\/color\]\[\/shadow\]/gi, "");
-}
-
-export function getTextColor(textStyle: TextStyle, shadow?: boolean, uiTheme: UiTheme = UiTheme.DEFAULT): string {
-  const isLegacyTheme = uiTheme === UiTheme.LEGACY;
-  switch (textStyle) {
-    case TextStyle.MESSAGE:
-      return !shadow ? "#f8f8f8" : "#6b5a73";
-    case TextStyle.WINDOW:
-    case TextStyle.MOVE_INFO_CONTENT:
-    case TextStyle.MOVE_PP_FULL:
-    case TextStyle.TOOLTIP_CONTENT:
-    case TextStyle.SETTINGS_VALUE:
-      if (isLegacyTheme) {
-        return !shadow ? "#484848" : "#d0d0c8";
-      }
-      return !shadow ? "#f8f8f8" : "#6b5a73";
-    case TextStyle.MOVE_PP_HALF_FULL:
-      if (isLegacyTheme) {
-        return !shadow ? "#a68e17" : "#ebd773";
-      }
-      return !shadow ? "#ccbe00" : "#6e672c";
-    case TextStyle.MOVE_PP_NEAR_EMPTY:
-      if (isLegacyTheme) {
-        return !shadow ? "#d64b00" : "#f7b18b";
-      }
-      return !shadow ? "#d64b00" : "#69402a";
-    case TextStyle.MOVE_PP_EMPTY:
-      if (isLegacyTheme) {
-        return !shadow ? "#e13d3d" : "#fca2a2";
-      }
-      return !shadow ? "#e13d3d" : "#632929";
-    case TextStyle.WINDOW_ALT:
-      return !shadow ? "#484848" : "#d0d0c8";
-    case TextStyle.BATTLE_INFO:
-      if (isLegacyTheme) {
-        return !shadow ? "#404040" : "#ded6b5";
-      }
-      return !shadow ? "#f8f8f8" : "#6b5a73";
-    case TextStyle.PARTY:
-      return !shadow ? "#f8f8f8" : "#707070";
-    case TextStyle.PARTY_RED:
-      return !shadow ? "#f89890" : "#984038";
-    case TextStyle.SUMMARY:
-      return !shadow ? "#f8f8f8" : "#636363";
-    case TextStyle.SUMMARY_ALT:
-      if (isLegacyTheme) {
-        return !shadow ? "#f8f8f8" : "#636363";
-      }
-      return !shadow ? "#484848" : "#d0d0c8";
-    case TextStyle.SUMMARY_RED:
-    case TextStyle.TOOLTIP_TITLE:
-      return !shadow ? "#e70808" : "#ffbd73";
-    case TextStyle.SUMMARY_BLUE:
-      return !shadow ? "#40c8f8" : "#006090";
-    case TextStyle.SUMMARY_PINK:
-      return !shadow ? "#f89890" : "#984038";
-    case TextStyle.SUMMARY_GOLD:
-    case TextStyle.MONEY:
-      return !shadow ? "#e8e8a8" : "#a0a060"; // Pale Yellow/Gold
-    case TextStyle.MONEY_WINDOW:
-      if (isLegacyTheme) {
-        return !shadow ? "#f8b050" : "#c07800"; // Gold
-      }
-      return !shadow ? "#e8e8a8" : "#a0a060"; // Pale Yellow/Gold
-    case TextStyle.SETTINGS_LOCKED:
-    case TextStyle.SUMMARY_GRAY:
-      return !shadow ? "#a0a0a0" : "#636363";
-    case TextStyle.STATS_LABEL:
-      return !shadow ? "#f8b050" : "#c07800";
-    case TextStyle.STATS_VALUE:
-      if (isLegacyTheme) {
-        return !shadow ? "#484848" : "#d0d0c8";
-      }
-      return !shadow ? "#f8f8f8" : "#6b5a73";
-    case TextStyle.SUMMARY_GREEN:
-      return !shadow ? "#78c850" : "#306850";
-    case TextStyle.SETTINGS_LABEL:
-    case TextStyle.PERFECT_IV:
-    case TextStyle.CHALLENGE_DESCRIPTION:
-      return !shadow ? "#f8b050" : "#c07800";
-    case TextStyle.SETTINGS_SELECTED:
-      return !shadow ? "#f88880" : "#f83018";
-    case TextStyle.SMALLER_WINDOW_ALT:
-      return !shadow ? "#484848" : "#d0d0c8";
-    case TextStyle.BGM_BAR:
-      return !shadow ? "#f8f8f8" : "#6b5a73";
-    case TextStyle.ME_OPTION_DEFAULT:
-      return !shadow ? "#f8f8f8" : "#6b5a73"; // White
-    case TextStyle.ME_OPTION_SPECIAL:
-      if (isLegacyTheme) {
-        return !shadow ? "#f8b050" : "#c07800"; // Gold
-      }
-      return !shadow ? "#78c850" : "#306850"; // Green
-  }
 }
 
 export function getModifierTierTextTint(tier: ModifierTier): number {

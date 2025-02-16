@@ -5,7 +5,7 @@ import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import type { TurnMove } from "#app/field/pokemon";
+import type { TurnMove } from "#app/@types/TurnMove";
 
 describe("Moves - Disable", () => {
   let phaserGame: Phaser.Game;
@@ -57,7 +57,7 @@ describe("Moves - Disable", () => {
     await game.toNextTurn();
 
     expect(playerMon.getMoveHistory()[0]).toMatchObject<TurnMove>({
-      moveId: MoveId.DISABLE,
+      move: expect.objectContaining({ id: MoveId.DISABLE }),
       result: MoveResult.FAIL,
       targets: [2],
     });
@@ -78,8 +78,8 @@ describe("Moves - Disable", () => {
 
     const enemyHistory = enemyMon.getMoveHistory();
     expect(enemyHistory).toHaveLength(2);
-    expect(enemyHistory[0].moveId).toBe(MoveId.SPLASH);
-    expect(enemyHistory[1].moveId).toBe(MoveId.STRUGGLE);
+    expect(enemyHistory[0].move.id).toBe(MoveId.SPLASH);
+    expect(enemyHistory[1].move.id).toBe(MoveId.STRUGGLE);
   }, 20000);
 
   it("cannot disable STRUGGLE", async () => {
@@ -94,7 +94,7 @@ describe("Moves - Disable", () => {
     await game.toNextTurn();
 
     expect(playerMon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
-    expect(enemyMon.getLastXMoves()[0].moveId).toBe(MoveId.STRUGGLE);
+    expect(enemyMon.getLastXMoves()[0].move.id).toBe(MoveId.STRUGGLE);
     expect(enemyMon.isMoveRestricted(MoveId.STRUGGLE)).toBe(false);
   }, 20000);
 
@@ -114,7 +114,7 @@ describe("Moves - Disable", () => {
     const enemyHistory = enemyMon.getMoveHistory();
     expect(enemyHistory).toHaveLength(2);
     expect(enemyHistory[0]).toMatchObject<TurnMove>({
-      moveId: MoveId.SPLASH,
+      move: expect.objectContaining({ id: MoveId.SPLASH }),
       result: MoveResult.SUCCESS,
       targets: [2],
     });
@@ -132,6 +132,6 @@ describe("Moves - Disable", () => {
     await game.toNextTurn();
 
     expect(enemyMon.isMoveRestricted(MoveId.NATURE_POWER)).toBe(true);
-    expect(enemyMon.isMoveRestricted(enemyMon.getLastXMoves(2)[1].moveId)).toBe(false);
+    expect(enemyMon.isMoveRestricted(enemyMon.getLastXMoves(2)[1].move.id)).toBe(false);
   }, 20000);
 });

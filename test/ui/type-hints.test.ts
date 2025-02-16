@@ -9,6 +9,7 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import type { MockText } from "#test/testUtils/mocks/mocksContainer/mockText";
 import i18next from "i18next";
+import { TypeEffectivenessColor } from "#enums/color";
 
 describe("UI - Type Hints", () => {
   let phaserGame: Phaser.Game;
@@ -56,7 +57,7 @@ describe("UI - Type Hints", () => {
         .getAll<Phaser.GameObjects.Text>()
         .find((text) => text.text === i18next.t("move:dragonClaw.name"))! as unknown as MockText;
 
-      expect.soft(dragonClawText.color).toBe("#929292");
+      expect.soft(dragonClawText.color).toBe(TypeEffectivenessColor.NO_EFFECT);
       ui.getHandler().processInput(Button.ACTION);
     });
     await game.phaseInterceptor.to(CommandPhase);

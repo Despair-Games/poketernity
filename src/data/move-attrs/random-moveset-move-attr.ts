@@ -62,6 +62,10 @@ export class RandomMovesetMoveAttr extends CallMoveAttr {
       return true;
     };
   }
+
+  override isRandomMovesetMoveAttr(): this is this {
+    return true;
+  }
 }
 
 export const invalidAssistMoves: MoveId[] = [

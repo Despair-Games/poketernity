@@ -1,4 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
+import type { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { MoveId } from "#enums/move-id";
 import type { Move } from "../move";
@@ -12,11 +13,10 @@ import { AddArenaTagAttr } from "./add-arena-tag-attr";
 export class AddPledgeEffectAttr extends AddArenaTagAttr {
   private readonly requiredPledge: MoveId;
 
-  constructor(tagType: ArenaTagType, requiredPledge: MoveId, selfSideTarget: boolean = false) {
-    super(tagType, {
+  constructor(tagType: ArenaTagType, requiredPledge: MoveId, relativeSide: ArenaTagRelativeSide) {
+    super(tagType, relativeSide, {
       turnCount: 4,
       failOnOverlap: false,
-      selfSideTarget: selfSideTarget,
     });
 
     this.requiredPledge = requiredPledge;

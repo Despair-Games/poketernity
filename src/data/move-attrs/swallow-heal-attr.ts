@@ -1,7 +1,8 @@
 import type { Pokemon } from "#app/field/pokemon";
-import { StockpilingTag } from "#app/data/battler-tags";
+import { type StockpilingTag } from "#app/data/battler-tags";
 import type { Move } from "#app/data/move";
 import { HealAttr } from "#app/data/move-attrs/heal-attr";
+import { BattlerTagType } from "#enums/battler-tag-type";
 
 /**
  * Attribute used to apply Swallow's healing, which scales with Stockpile stacks.
@@ -10,7 +11,7 @@ import { HealAttr } from "#app/data/move-attrs/heal-attr";
  */
 export class SwallowHealAttr extends HealAttr {
   protected override getHealRatio(user: Pokemon, _target: Pokemon, _move: Move): number {
-    const stockpilingTag = user.getTag(StockpilingTag);
+    const stockpilingTag = user.getTag<StockpilingTag>(BattlerTagType.STOCKPILING);
 
     switch (stockpilingTag?.stockpiledCount) {
       case 1:

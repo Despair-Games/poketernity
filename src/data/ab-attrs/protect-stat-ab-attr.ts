@@ -4,6 +4,7 @@ import { isNullOrUndefined, type BooleanHolder } from "#app/utils";
 import { getStatKey, type BattleStat } from "#enums/stat";
 import i18next from "i18next";
 import { PreStatStageChangeAbAttr } from "./pre-stat-stage-change-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Protect one or all {@linkcode BattleStat} from reductions caused by other Pokémon's moves and Abilities
@@ -15,6 +16,7 @@ export class ProtectStatAbAttr extends PreStatStageChangeAbAttr {
 
   constructor(protectedStat?: BattleStat) {
     super();
+    this._flags.add(AbAttrFlag.PROTECT_STAT);
 
     this.protectedStat = protectedStat;
   }

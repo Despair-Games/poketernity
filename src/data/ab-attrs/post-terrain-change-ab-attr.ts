@@ -1,8 +1,14 @@
 import type { Pokemon } from "#app/field/pokemon";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { TerrainType } from "#enums/terrain-type";
 import { AbAttr } from "./ab-attr";
 
 export abstract class PostTerrainChangeAbAttr extends AbAttr {
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.POST_TERRAIN_CHANGE);
+  }
+
   /**
    * Applies an effect after the terrain on the field changes
    * @param pokemon The {@linkcode Pokemon} with this ability

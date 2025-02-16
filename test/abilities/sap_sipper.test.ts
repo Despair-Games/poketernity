@@ -9,7 +9,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
 
 // See also: TypeImmunityAbAttr
@@ -84,8 +84,7 @@ describe("Abilities - Sap Sipper", () => {
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    expect(game.scene.arena.terrain).toBeDefined();
-    expect(game.scene.arena.terrain!.terrainType).toBe(TerrainType.GRASSY);
+    expect(game.scene.arena.hasTerrain(TerrainType.GRASSY)).toBe(true);
     expect(game.scene.getEnemyPokemon()!.getStatStage(Stat.ATK)).toBe(0);
   });
 
