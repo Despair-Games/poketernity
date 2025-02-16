@@ -169,26 +169,8 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
       }
     });
 
-    this.optionCursors = this.uiItems.map((uiItem) => {
-      const value = settingsManager[this.category][uiItem.key];
-      let index = 0;
-
-      if (value !== undefined) {
-        index = uiItem.options.findIndex((o) => {
-          return o.value === value;
-        });
-      }
-
-      if (index < 0) {
-        console.warn(
-          `Could not find index for ${uiItem.key}.`,
-          `\nExpected value: ${settingsManager[this.category][uiItem.key]}`,
-          `\nAvailable values:`,
-          uiItem.options,
-        );
-      }
-      return Math.max(index, 0);
-    });
+    // Treat all settings as having the first options selected. These get properly updated in show()
+    this.optionCursors = new Array(this.uiItems.length).fill(0);
 
     this.scrollBar = new ScrollBar(
       this.optionsBg.width - 9,
