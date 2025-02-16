@@ -17,7 +17,6 @@ import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { TimeOfDay } from "#enums/time-of-day";
-import { getNonVolatileStatusEffects } from "../status-effect";
 
 export interface EncounterRequirement {
   meetsRequirement(): boolean; // Boolean to see if a requirement is met
@@ -746,7 +745,7 @@ export class StatusEffectRequirement extends EncounterPokemonRequirement {
         return this.requiredStatusEffect.some((statusEffect) => {
           if (statusEffect === StatusEffect.NONE) {
             // StatusEffect.NONE also checks for null or undefined status
-            return !pokemon.hasStatusEffect(getNonVolatileStatusEffects());
+            return !pokemon.hasNonVolatileStatusEffect();
           } else {
             return pokemon.getStatusEffect() === statusEffect;
           }
@@ -758,7 +757,7 @@ export class StatusEffectRequirement extends EncounterPokemonRequirement {
         return !this.requiredStatusEffect.some((statusEffect) => {
           if (statusEffect === StatusEffect.NONE) {
             // StatusEffect.NONE also checks for null or undefined status
-            return !pokemon.hasStatusEffect(getNonVolatileStatusEffects());
+            return !pokemon.hasNonVolatileStatusEffect();
           } else {
             return pokemon.getStatusEffect() === statusEffect;
           }
@@ -770,7 +769,7 @@ export class StatusEffectRequirement extends EncounterPokemonRequirement {
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
     const reqStatus = this.requiredStatusEffect.filter((a) => {
       if (a === StatusEffect.NONE) {
-        return pokemon && !pokemon.hasStatusEffect(getNonVolatileStatusEffects());
+        return pokemon && !pokemon.hasNonVolatileStatusEffect();
       }
       return pokemon && pokemon.getStatusEffect() === a;
     });

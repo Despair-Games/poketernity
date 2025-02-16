@@ -3987,7 +3987,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Helper function that determines if a Pokemon has a non-volatile status effect and/or is Confused
+   * Helper function that determines if a Pokemon has a specified non-volatile status effect and/or is Confused
    * @param statusList the status(es) to be checked
    * @param includeConfusion whether Confusion should also be considered
    * @param ignoreMockAbility whether a status effect-mocking ability should be considered
@@ -4008,6 +4008,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Helper function that checks if a Pokemon has one of any non-volatile status effects and/or is confused
+   * @param includeConfusion whether Confusion should also be considered
+   * @param ignoreMockAbility whether a status effect-mocking ability should be considered
+   * @returns `true` if the Pokemon has any of the non-volatile status effects | `false` if not
+   */
+  hasNonVolatileStatusEffect(includeConfusion: boolean = false, ignoreMockAbility: boolean = false): boolean {
+    return this.hasStatusEffect(getNonVolatileStatusEffects(), includeConfusion, ignoreMockAbility);
   }
 
   /**
@@ -4043,7 +4053,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     ignoreField: boolean = false,
   ): boolean {
     if (effect !== StatusEffect.FAINT) {
-      if (overrideStatus ? this.getStatusEffect() === effect : this.hasStatusEffect(getNonVolatileStatusEffects())) {
+      if (overrideStatus ? this.getStatusEffect() === effect : this.hasNonVolatileStatusEffect()) {
         return false;
       }
       if (this.isGrounded() && !ignoreField && globalScene.arena.terrain?.terrainType === TerrainType.MISTY) {

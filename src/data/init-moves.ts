@@ -2897,7 +2897,7 @@ export function initMoves() {
     new AttackMove(MoveId.SMART_STRIKE, ElementalType.STEEL, MoveCategory.PHYSICAL, 70, -1, 10, -1, 0, 7),
     new StatusMove(MoveId.PURIFY, ElementalType.POISON, -1, 20, -1, 0, 7)
       .condition((_user, target, _move) => {
-        return target.hasStatusEffect(getNonVolatileStatusEffects(), false, true);
+        return target.hasNonVolatileStatusEffect(false, true);
       })
       .attr(HealAttr, 0.5)
       .attr(HealStatusEffectAttr, false, getNonVolatileStatusEffects())

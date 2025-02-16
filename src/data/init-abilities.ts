@@ -393,19 +393,9 @@ export function initAbilities() {
     new Ability(Abilities.SHED_SKIN, 3).conditionalAttr((_pokemon) => !randSeedInt(3), PostTurnResetStatusAbAttr),
     new Ability(Abilities.GUTS, 3)
       .attr(BypassBurnDamageReductionAbAttr)
-      .conditionalAttr(
-        (pokemon) => pokemon.hasStatusEffect(getNonVolatileStatusEffects()),
-        StatMultiplierAbAttr,
-        Stat.ATK,
-        1.5,
-      ),
+      .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), StatMultiplierAbAttr, Stat.ATK, 1.5),
     new Ability(Abilities.MARVEL_SCALE, 3)
-      .conditionalAttr(
-        (pokemon) => pokemon.hasStatusEffect(getNonVolatileStatusEffects()),
-        StatMultiplierAbAttr,
-        Stat.DEF,
-        1.5,
-      )
+      .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), StatMultiplierAbAttr, Stat.DEF, 1.5)
       .ignorable(),
     new Ability(Abilities.LIQUID_OOZE, 3).attr(ReverseDrainAbAttr),
     new Ability(Abilities.OVERGROW, 3).attr(LowHpMoveTypeAttackMultiplierAbAttr, ElementalType.GRASS),
@@ -496,12 +486,7 @@ export function initAbilities() {
       .condition(getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN)),
     new Ability(Abilities.QUICK_FEET, 4)
       .attr(BypassParaSpeedReductionAbAttr)
-      .conditionalAttr(
-        (pokemon) => pokemon.hasStatusEffect(getNonVolatileStatusEffects()),
-        StatMultiplierAbAttr,
-        Stat.SPD,
-        1.5,
-      ),
+      .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), StatMultiplierAbAttr, Stat.SPD, 1.5),
     new Ability(Abilities.NORMALIZE, 4).attr(
       MoveTypeChangeAbAttr,
       ElementalType.NORMAL,
@@ -645,7 +630,7 @@ export function initAbilities() {
     new Ability(Abilities.CURSED_BODY, 5).attr(PostDefendMoveDisableAbAttr, 30).bypassFaint(),
     new Ability(Abilities.HEALER, 5).conditionalAttr(
       (pokemon) =>
-        pokemon.getAlly() && pokemon.getAlly().hasStatusEffect(getNonVolatileStatusEffects()) && randSeedInt(10) < 3,
+        pokemon.getAlly() && pokemon.getAlly().hasNonVolatileStatusEffect(false, true) && randSeedInt(10) < 3,
       PostTurnResetStatusAbAttr,
       true,
     ),
