@@ -1621,7 +1621,7 @@ export function initMoves() {
     new StatusMove(MoveId.PSYCHO_SHIFT, ElementalType.PSYCHIC, 100, 10, -1, 0, 4)
       .attr(PsychoShiftEffectAttr)
       .condition((user, target, _move) => {
-        return target.canSetStatus(user.getStatusEffect(), false, false, user);
+        return user.hasStatusEffect(getNonVolatileStatusEffects()) && target.canSetStatus(user.getStatusEffect(), false, false, user);
       }),
     new AttackMove(MoveId.TRUMP_CARD, ElementalType.NORMAL, MoveCategory.SPECIAL, -1, -1, 5, -1, 0, 4)
       .makesContact()
