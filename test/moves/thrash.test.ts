@@ -35,7 +35,7 @@ describe("Moves - Thrash", () => {
       .startingLevel(100)
       .enemyLevel(100);
 
-    vi.spyOn(allMoves[MoveId.IRON_HEAD], "chance", "get").mockReturnValue(100);
+    vi.spyOn(allMoves[MoveId.ASTONISH], "chance", "get").mockReturnValue(100);
   });
 
   it("should lock the user into using Thrash for 1-2 turns, then confuse the user", async () => {
@@ -100,7 +100,7 @@ describe("Moves - Thrash", () => {
     game.move.use(MoveId.THRASH);
     await game.toNextTurn();
 
-    await game.move.forceEnemyMove(MoveId.IRON_HEAD);
+    await game.move.forceEnemyMove(MoveId.ASTONISH);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
@@ -124,7 +124,7 @@ describe("Moves - Thrash", () => {
       }
     }
 
-    await game.move.forceEnemyMove(MoveId.IRON_HEAD);
+    await game.move.forceEnemyMove(MoveId.ASTONISH);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
