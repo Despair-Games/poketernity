@@ -1,11 +1,13 @@
+import { allMoves } from "#app/data/data-lists";
 import { Abilities } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Moves - Thrash", () => {
   let phaserGame: Phaser.Game;
@@ -32,6 +34,8 @@ describe("Moves - Thrash", () => {
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
+
+    vi.spyOn(allMoves[MoveId.IRON_HEAD], "chance", "get").mockReturnValue(100);
   });
 
   it("should lock the user into using Thrash for 1-2 turns, then confuse the user", async () => {
@@ -96,7 +100,8 @@ describe("Moves - Thrash", () => {
     game.move.use(MoveId.THRASH);
     await game.toNextTurn();
 
-    await game.move.forceEnemyMove(MoveId.FAKE_OUT);
+    await game.move.forceEnemyMove(MoveId.IRON_HEAD);
+    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(player.getTag(BattlerTagType.FRENZY)).toBeUndefined();
@@ -119,9 +124,11 @@ describe("Moves - Thrash", () => {
       }
     }
 
-    await game.move.forceEnemyMove(MoveId.FAKE_OUT);
+    await game.move.forceEnemyMove(MoveId.IRON_HEAD);
+    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
+    expect(player.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
     expect(player.getTag(BattlerTagType.FRENZY)).toBeUndefined();
     expect(player.getTag(BattlerTagType.CONFUSED)).toBeDefined();
   });
