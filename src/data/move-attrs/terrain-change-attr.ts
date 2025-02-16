@@ -24,8 +24,7 @@ export class TerrainChangeAttr extends MoveEffectAttr {
   }
 
   override getCondition(): MoveConditionFunc {
-    return (_user, _target, _move) =>
-      !globalScene.arena.terrain || globalScene.arena.terrain.terrainType !== this.terrainType;
+    return (_user, _target, _move) => !globalScene.arena.hasTerrain(this.terrainType);
   }
 
   override getUserBenefitScore(_user: Pokemon, _target: Pokemon, _move: Move): number {
