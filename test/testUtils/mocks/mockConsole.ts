@@ -11,6 +11,7 @@ const whitelist = ["Phase"];
 const RED_ANSI_CODE = "\u001b[31m";
 const GREEN_ANSI_CODE = "\u001b[32m";
 const YELLOW_ANSI_CODE = "\u001b[33m";
+const BLUE_ANSI_CODE = "\u001b[36m";
 const WHITE_ANSI_CODE = "\u001b[37m";
 
 export class MockConsole {
@@ -49,6 +50,9 @@ export class MockConsole {
     if (args[1] === "color:green;") {
       // Edge case for displaying green "Start phase" messages
       originalLog(...this.addColor(GREEN_ANSI_CODE, args[0].replace("%c", "")));
+    } else if (args[0] === ">>") {
+      // Displaying dialogue and in-battle messages caught by the TextInterceptor mock
+      originalLog(...this.addColor(BLUE_ANSI_CODE, ...args));
     } else {
       originalLog(...args);
     }

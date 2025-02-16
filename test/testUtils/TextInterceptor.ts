@@ -17,7 +17,7 @@ export class TextInterceptor {
     _prompt?: boolean,
     _promptDelay?: number,
   ): void {
-    console.log(this.formatText(`>> ${text}`));
+    console.log(">>", this.formatText(text));
     this.logs.push(text);
   }
 
@@ -29,7 +29,7 @@ export class TextInterceptor {
     _callbackDelay?: number,
     _promptDelay?: number,
   ): void {
-    console.log(this.formatText(`>> ${name}:\n"${text}"`));
+    console.log(">>", this.formatText(`${name}:\n"${text}"`));
     this.logs.push(name, text);
   }
 
