@@ -1,3 +1,5 @@
+const util = require("util");
+
 const originalLog = console.log;
 const originalError = console.error;
 const originalDebug = console.debug;
@@ -48,7 +50,7 @@ export class MockConsole {
       // Edge case for displaying green "Start phase" messages
       originalLog(...this.addColor(GREEN_ANSI_CODE, args[0].replace("%c", "")));
     } else {
-      originalLog(...this.addColor(WHITE_ANSI_CODE, ...args));
+      originalLog(...args);
     }
   }
   public error(...args) {
@@ -85,19 +87,20 @@ export class MockConsole {
   }
 
   /**
-   * Return a semicolon-separated string listing all string arguments in `args`.
+   * Returns a human-readable string representation of `args`.
    */
   public getStr(args: any[]) {
-    return args.filter((arg) => typeof arg === "string").join(";");
+    return util.inspect(args);
   }
 
   /**
-   * Prepends the given color to every string in the given args.
+   * Prepends the given color to every argument in the given args.
+   * Also appends the white ANSI code as an extra argument, so that the added color does not leak to future messages.
    * @param color An ANSI escape sequence representing a color.
    * @param args The args that the color should be applied to.
-   * @return A copy of `args` with the color prepended to every string argument.
+   * @return A copy of `args` with the color prepended to every argument.
    */
   private addColor(color: string, ...args: any[]): any[] {
-    return args.map((a) => (typeof a === "string" ? color + a : a));
+    return [...args.map((a) => `${color}${typeof a === "string" ? a : this.getStr(a)}`), WHITE_ANSI_CODE];
   }
 }
