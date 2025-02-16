@@ -151,8 +151,8 @@ export class CommandPhase extends FieldPhase {
   /**
    * @param command - {@linkcode BattleCommand.FIGHT}
    * @param cursor - Cursor index for the selected Move
-   * @param ignorePp - `true` if the move shouldn't use PP
-   * @param targets - (optional) {@linkcode MoveTargetSet} containing the queued moves targets (ie: from rollout, etc)
+   * @param ignorePp - (optional) `true` if the move shouldn't use PP
+   * @param turnMove - (optional) A {@linkcode TurnMove} object for an existing queued move
    * @returns `true` if the command was successful
    * @overload
    */
@@ -185,7 +185,6 @@ export class CommandPhase extends FieldPhase {
     switch (command) {
       case BattleCommand.FIGHT:
         const ignorePp = args[0] as boolean | undefined;
-        //const targets = args[1] as MoveTargetSet | undefined;
         const turnMove: TurnMove | undefined = args.length === 2 ? (args[1] as TurnMove) : undefined;
         const useStruggle = cursor > -1 && !playerPokemon.getMoveset().filter((m) => m.isUsable(playerPokemon)).length;
 

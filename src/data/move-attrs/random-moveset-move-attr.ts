@@ -26,11 +26,11 @@ export class RandomMovesetMoveAttr extends CallMoveAttr {
   }
 
   /**
-   * User calls a random moveId selected in {@linkcode getCondition}
-   * @param user Pokemon that used the move and will call a random move
-   * @param target Pokemon that will be targeted by the random move (if single target)
-   * @param move Move being used
-   * @param args Unused
+   * User calls a random move (`moveId` selected in {@linkcode getCondition})
+   * @param user - Pokemon that used the move and will call a random move
+   * @param target - Pokemon that will be targeted by the random move (if single target)
+   * @param move - Move being used
+   * @param overridden - {@linkcode BooleanHolder} for if the move is overridden
    */
   override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder): boolean {
     return super.apply(user, target, allMoves[this.moveId], overridden);

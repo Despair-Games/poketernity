@@ -3190,7 +3190,6 @@ export function initMoves() {
     new AttackMove(MoveId.MALICIOUS_MOONSAULT, ElementalType.DARK, MoveCategory.PHYSICAL, 180, -1, 1, -1, 0, 7)
       .unimplemented()
       .attr(AlwaysHitMinimizeAttr)
-      .unimplemented()
       .attr(HitsTagAttr, BattlerTagType.MINIMIZED, true)
       .edgeCase(), // I assume it's because it needs darkest lariat and incineroar
     new AttackMove(MoveId.OCEANIC_OPERETTA, ElementalType.WATER, MoveCategory.SPECIAL, 195, -1, 1, -1, 0, 7)
@@ -3226,10 +3225,8 @@ export function initMoves() {
       .edgeCase(), // I assume it's because it needs giga impact and snorlax
     new SelfStatusMove(MoveId.EXTREME_EVOBOOST, ElementalType.NORMAL, -1, 1, -1, 0, 7)
       .unimplemented()
-      .attr(StatStageChangeAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD], 2, true)
-      .unimplemented(),
+      .attr(StatStageChangeAttr, [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD], 2, true),
     new AttackMove(MoveId.GENESIS_SUPERNOVA, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 185, -1, 1, 100, 0, 7)
-      .unimplemented()
       .attr(TerrainChangeAttr, TerrainType.PSYCHIC)
       .unimplemented(),
     // #endregion
@@ -3409,12 +3406,9 @@ export function initMoves() {
       .attr(MultiHitAttr, MultiHitType._2)
       .attr(FlinchAttr)
       .punchingMove(),
-    /* Unused */
     new SelfStatusMove(MoveId.MAX_GUARD, ElementalType.NORMAL, -1, 10, -1, 4, 8)
       .attr(ProtectAttr)
-      .unimplemented()
       .condition(failIfLastCondition),
-    /* End Unused */
     new AttackMove(MoveId.DYNAMAX_CANNON, ElementalType.DRAGON, MoveCategory.SPECIAL, 100, 100, 5, -1, 0, 8)
       .attr(MovePowerMultiplierAttr, (_user, target, _move) => {
         // Move is only stronger against overleveled foes.
