@@ -2863,28 +2863,10 @@ export function initMoves() {
     new AttackMove(MoveId.OCEANIC_OPERETTA, ElementalType.WATER, MoveCategory.SPECIAL, 195, -1, 1, -1, 0, 7)
       .unimplemented()
       .edgeCase(), // I assume it's because it needs sparkling aria and primarina
-    new AttackMove(
-      MoveId.GUARDIAN_OF_ALOLA,
-      ElementalType.FAIRY,
-      MoveCategory.SPECIAL,
-      -1,
-      -1,
-      1,
-      -1,
-      0,
-      7,
-    ).unimplemented(),
-    new AttackMove(
-      MoveId.SOUL_STEALING_7_STAR_STRIKE,
-      ElementalType.GHOST,
-      MoveCategory.PHYSICAL,
-      195,
-      -1,
-      1,
-      -1,
-      0,
-      7,
-    ).unimplemented(),
+    new AttackMove(MoveId.GUARDIAN_OF_ALOLA, ElementalType.FAIRY, MoveCategory.SPECIAL, -1, -1, 1, -1, 0, 7)
+      .unimplemented(),
+    new AttackMove(MoveId.SOUL_STEALING_7_STAR_STRIKE, ElementalType.GHOST, MoveCategory.PHYSICAL, 195, -1, 1, -1, 0, 7)
+      .unimplemented(),
     new AttackMove(MoveId.STOKED_SPARKSURFER, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 175, -1, 1, 100, 0, 7)
       .unimplemented()
       .edgeCase(), // I assume it's because it needs thunderbolt and Alola Raichu
