@@ -1,5 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import { allAbilities } from "./all-abilities";
 import { applyAbAttrs } from "./apply-ab-attrs";
 import { CommonBattleAnim } from "./battle-anims/common-battle-anim";
 import { MoveChargeAnim } from "./battle-anims/move-charge-anim";
@@ -7,7 +6,7 @@ import { CommonAnim } from "#enums/common-anim";
 import { ChargeAnim } from "#enums/charge-anim";
 import { SelfStatusMove, type Move } from "#app/data/move";
 import { applyMoveAttrs } from "#app/utils/move-utils";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves, allAbilities } from "#app/data/data-lists";
 import { StatusCategoryOnAllyAttr } from "./move-attrs/status-category-on-ally-attr";
 import { ConsecutiveUseDoublePowerAttr } from "./move-attrs/consecutive-use-double-power-attr";
 import { HealOnAllyAttr } from "./move-attrs/heal-on-ally-attr";
@@ -725,7 +724,7 @@ export class ConfusedTag extends BattlerTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return globalScene.arena.terrain?.terrainType !== TerrainType.MISTY || !pokemon.isGrounded();
+    return !globalScene.arena.hasTerrain(TerrainType.MISTY) || !pokemon.isGrounded();
   }
 
   override onAdd(pokemon: Pokemon): void {
@@ -1351,7 +1350,7 @@ export class DrowsyTag extends BattlerTag {
   }
 
   override canAdd(pokemon: Pokemon): boolean {
-    return globalScene.arena.terrain?.terrainType !== TerrainType.ELECTRIC || !pokemon.isGrounded();
+    return !globalScene.arena.hasTerrain(TerrainType.ELECTRIC) || !pokemon.isGrounded();
   }
 
   override onAdd(pokemon: Pokemon): void {
@@ -2522,10 +2521,7 @@ export class IceFaceBlockDamageTag extends FormBlockDamageTag {
    * @returns True if the tag can be added, false otherwise.
    */
   override canAdd(pokemon: Pokemon): boolean {
-    const weatherType = globalScene.arena.weather?.weatherType;
-    const isWeatherSnowOrHail = weatherType === WeatherType.HAIL || weatherType === WeatherType.SNOW;
-
-    return super.canAdd(pokemon) || isWeatherSnowOrHail;
+    return super.canAdd(pokemon) || globalScene.arena.hasWeather([WeatherType.HAIL, WeatherType.SNOW]);
   }
 }
 

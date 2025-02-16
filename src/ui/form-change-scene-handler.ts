@@ -31,7 +31,7 @@ export default class FormChangeSceneHandler extends MessageUiHandler {
     this.container = globalScene.add.container(0, -GAME_HEIGHT);
     ui.add(this.container);
 
-    const messageBg = globalScene.add.sprite(0, 0, "bg", settings.display.uiWindowType);
+    const messageBg = globalScene.add.sprite(0, 0, "battle_message_box", settings.display.uiWindowStyle);
     messageBg.setOrigin(0, 1);
     messageBg.setVisible(false);
     ui.add(messageBg);

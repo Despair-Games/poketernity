@@ -157,19 +157,13 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.ALOLA_MAROWAK,
       28,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
     new SpeciesEvolution(
       Species.MAROWAK,
       28,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
     ),
   ],
   [Species.TYROGUE]: [
@@ -221,19 +215,13 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.GALAR_WEEZING,
       35,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
     new SpeciesEvolution(
       Species.WEEZING,
       35,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
     ),
   ],
   [Species.RHYHORN]: [new SpeciesEvolution(Species.RHYDON, 42, null, null)],
@@ -255,19 +243,13 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.HISUI_TYPHLOSION,
       36,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
     new SpeciesEvolution(
       Species.TYPHLOSION,
       36,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
     ),
   ],
   [Species.TOTODILE]: [new SpeciesEvolution(Species.CROCONAW, 18, null, null)],
@@ -308,19 +290,13 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.SILCOON,
       7,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
     ),
     new SpeciesEvolution(
       Species.CASCOON,
       7,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
   ],
   [Species.SILCOON]: [new SpeciesEvolution(Species.BEAUTIFLY, 10, null, null)],
@@ -492,19 +468,13 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.HISUI_SAMUROTT,
       36,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
     new SpeciesEvolution(
       Species.SAMUROTT,
       36,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
     ),
   ],
   [Species.PATRAT]: [new SpeciesEvolution(Species.WATCHOG, 20, null, null)],
@@ -563,19 +533,13 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.HISUI_BRAVIARY,
       54,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
     new SpeciesEvolution(
       Species.BRAVIARY,
       54,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
     ),
   ],
   [Species.VULLABY]: [new SpeciesEvolution(Species.MANDIBUZZ, 54, null, null)],
@@ -642,10 +606,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.TYRANTRUM,
       39,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
     ),
   ],
   [Species.AMAURA]: [
@@ -653,10 +614,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.AURORUS,
       39,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
   ],
   [Species.GOOMY]: [
@@ -664,19 +622,13 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.HISUI_SLIGGOO,
       40,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
     new SpeciesEvolution(
       Species.SLIGGOO,
       40,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
     ),
   ],
   [Species.SLIGGOO]: [
@@ -684,11 +636,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.GOODRA,
       50,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          [WeatherType.RAIN, WeatherType.FOG, WeatherType.HEAVY_RAIN].indexOf(
-            globalScene.arena.weather?.weatherType || WeatherType.NONE,
-          ) > -1,
+      new SpeciesEvolutionCondition((_p) =>
+        globalScene.arena.hasWeather([WeatherType.RAIN, WeatherType.FOG, WeatherType.HEAVY_RAIN]),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -698,19 +647,13 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.HISUI_AVALUGG,
       37,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
     new SpeciesEvolution(
       Species.AVALUGG,
       37,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
     ),
   ],
   [Species.NOIBAT]: [new SpeciesEvolution(Species.NOIVERN, 48, null, null)],
@@ -720,19 +663,13 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.HISUI_DECIDUEYE,
       36,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
     new SpeciesEvolution(
       Species.DECIDUEYE,
       34,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
     ),
   ],
   [Species.LITTEN]: [new SpeciesEvolution(Species.TORRACAT, 17, null, null)],
@@ -746,10 +683,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.GUMSHOOS,
       20,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
     ),
   ],
   [Species.GRUBBIN]: [new SpeciesEvolution(Species.CHARJABUG, 20, null, null)],
@@ -762,10 +696,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.LURANTIS,
       34,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
     ),
   ],
   [Species.MORELULL]: [new SpeciesEvolution(Species.SHIINOTIC, 24, null, null)],
@@ -797,10 +728,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.ALOLA_RATICATE,
       20,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
   ],
   [Species.ALOLA_DIGLETT]: [new SpeciesEvolution(Species.ALOLA_DUGTRIO, 26, null, null)],
@@ -888,10 +816,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.OBSTAGOON,
       35,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
   ],
   [Species.GALAR_YAMASK]: [new SpeciesEvolution(Species.RUNERIGUS, 34, null, null)],
@@ -901,11 +826,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.HISUI_GOODRA,
       50,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          [WeatherType.RAIN, WeatherType.FOG, WeatherType.HEAVY_RAIN].indexOf(
-            globalScene.arena.weather?.weatherType || WeatherType.NONE,
-          ) > -1,
+      new SpeciesEvolutionCondition((_p) =>
+        globalScene.arena.hasWeather([WeatherType.RAIN, WeatherType.FOG, WeatherType.HEAVY_RAIN]),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -982,10 +904,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.HOUNDSTONE,
       30,
       null,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
   ],
   [Species.FRIGIBAX]: [new SpeciesEvolution(Species.ARCTIBAX, 35, null, null)],
@@ -1120,7 +1039,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(120, (_p) => globalScene.arena.getTimeOfDay() === TimeOfDay.DAY),
+      new SpeciesFriendshipEvolutionCondition(120, (_p) => globalScene.arena.isTimeOfDay(TimeOfDay.DAY)),
       SpeciesWildEvolutionDelay.LONG,
     ),
     new SpeciesFormEvolution(
@@ -1129,7 +1048,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(120, (_p) => globalScene.arena.getTimeOfDay() === TimeOfDay.DAY),
+      new SpeciesFriendshipEvolutionCondition(120, (_p) => globalScene.arena.isTimeOfDay(TimeOfDay.DAY)),
       SpeciesWildEvolutionDelay.LONG,
     ),
     new SpeciesFormEvolution(
@@ -1138,7 +1057,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(120, (_p) => globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT),
+      new SpeciesFriendshipEvolutionCondition(120, (_p) => globalScene.arena.isTimeOfDay(TimeOfDay.NIGHT)),
       SpeciesWildEvolutionDelay.LONG,
     ),
     new SpeciesFormEvolution(
@@ -1147,7 +1066,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(120, (_p) => globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT),
+      new SpeciesFriendshipEvolutionCondition(120, (_p) => globalScene.arena.isTimeOfDay(TimeOfDay.NIGHT)),
       SpeciesWildEvolutionDelay.LONG,
     ),
     new SpeciesFormEvolution(
@@ -1302,9 +1221,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       1,
       EvolutionItem.RAZOR_FANG,
       new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK
-          || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT /* Razor fang at night*/,
+        (_p) => globalScene.arena.isTimeOfDay([TimeOfDay.NIGHT, TimeOfDay.DUSK]) /* Razor fang at night*/,
       ),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),
@@ -1315,9 +1232,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       1,
       EvolutionItem.RAZOR_CLAW,
       new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK
-          || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT /* Razor claw at night*/,
+        (_p) => globalScene.arena.isTimeOfDay([TimeOfDay.NIGHT, TimeOfDay.DUSK]) /* Razor claw at night*/,
       ),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),
@@ -1375,8 +1290,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       new SpeciesEvolutionCondition(
         (p) =>
           p.moveset.filter((m) => m.moveId === MoveId.MIMIC).length > 0
-          && (globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK
-            || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT),
+          && globalScene.arena.isTimeOfDay([TimeOfDay.NIGHT, TimeOfDay.DUSK]),
       ),
       SpeciesWildEvolutionDelay.MEDIUM,
     ),
@@ -1387,8 +1301,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       new SpeciesEvolutionCondition(
         (p) =>
           p.moveset.filter((m) => m.moveId === MoveId.MIMIC).length > 0
-          && (globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN
-            || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY),
+          && globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]),
       ),
       SpeciesWildEvolutionDelay.MEDIUM,
     ),
@@ -1470,9 +1383,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       25,
       null,
       new SpeciesEvolutionCondition(
-        (p) =>
-          (globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY)
-          && p.formIndex === 0,
+        (p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]) && p.formIndex === 0,
       ),
     ),
     new SpeciesFormEvolution(
@@ -1490,9 +1401,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       25,
       null,
       new SpeciesEvolutionCondition(
-        (p) =>
-          (globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT)
-          && p.formIndex === 0,
+        (p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT]) && p.formIndex === 0,
       ),
     ),
   ],
@@ -1562,13 +1471,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
       "vanilla-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.biomeType === Biome.TOWN
-          || globalScene.arena.biomeType === Biome.PLAINS
-          || globalScene.arena.biomeType === Biome.GRASS
-          || globalScene.arena.biomeType === Biome.TALL_GRASS
-          || globalScene.arena.biomeType === Biome.METROPOLIS,
+      new SpeciesEvolutionCondition((_p) =>
+        globalScene.arena.isInBiome([Biome.TOWN, Biome.PLAINS, Biome.GRASS, Biome.TALL_GRASS, Biome.METROPOLIS]),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1578,13 +1482,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
       "ruby-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.biomeType === Biome.BADLANDS
-          || globalScene.arena.biomeType === Biome.VOLCANO
-          || globalScene.arena.biomeType === Biome.GRAVEYARD
-          || globalScene.arena.biomeType === Biome.FACTORY
-          || globalScene.arena.biomeType === Biome.SLUM,
+      new SpeciesEvolutionCondition((_p) =>
+        globalScene.arena.isInBiome([Biome.BADLANDS, Biome.VOLCANO, Biome.GRAVEYARD, Biome.FACTORY, Biome.SLUM]),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1594,12 +1493,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
       "matcha-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.biomeType === Biome.FOREST
-          || globalScene.arena.biomeType === Biome.SWAMP
-          || globalScene.arena.biomeType === Biome.MEADOW
-          || globalScene.arena.biomeType === Biome.JUNGLE,
+      new SpeciesEvolutionCondition((_p) =>
+        globalScene.arena.isInBiome([Biome.FOREST, Biome.SWAMP, Biome.MEADOW, Biome.JUNGLE]),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1609,12 +1504,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
       "mint-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.biomeType === Biome.SEA
-          || globalScene.arena.biomeType === Biome.BEACH
-          || globalScene.arena.biomeType === Biome.LAKE
-          || globalScene.arena.biomeType === Biome.SEABED,
+      new SpeciesEvolutionCondition((_p) =>
+        globalScene.arena.isInBiome([Biome.SEA, Biome.BEACH, Biome.LAKE, Biome.SEABED]),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1624,13 +1515,14 @@ export const pokemonEvolutions: PokemonEvolutions = {
       "lemon-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.biomeType === Biome.DESERT
-          || globalScene.arena.biomeType === Biome.POWER_PLANT
-          || globalScene.arena.biomeType === Biome.DOJO
-          || globalScene.arena.biomeType === Biome.RUINS
-          || globalScene.arena.biomeType === Biome.CONSTRUCTION_SITE,
+      new SpeciesEvolutionCondition((_p) =>
+        globalScene.arena.isInBiome([
+          Biome.DESERT,
+          Biome.POWER_PLANT,
+          Biome.DOJO,
+          Biome.RUINS,
+          Biome.CONSTRUCTION_SITE,
+        ]),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1640,13 +1532,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
       "salted-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.biomeType === Biome.MOUNTAIN
-          || globalScene.arena.biomeType === Biome.CAVE
-          || globalScene.arena.biomeType === Biome.ICE_CAVE
-          || globalScene.arena.biomeType === Biome.FAIRY_CAVE
-          || globalScene.arena.biomeType === Biome.SNOWY_FOREST,
+      new SpeciesEvolutionCondition((_p) =>
+        globalScene.arena.isInBiome([Biome.MOUNTAIN, Biome.CAVE, Biome.ICE_CAVE, Biome.FAIRY_CAVE, Biome.SNOWY_FOREST]),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -1656,9 +1543,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       "ruby-swirl",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition(
-        (_p) => globalScene.arena.biomeType === Biome.WASTELAND || globalScene.arena.biomeType === Biome.LABORATORY,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isInBiome([Biome.WASTELAND, Biome.LABORATORY])),
       SpeciesWildEvolutionDelay.LONG,
     ),
     new SpeciesFormEvolution(
@@ -1667,9 +1552,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       "caramel-swirl",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition(
-        (_p) => globalScene.arena.biomeType === Biome.TEMPLE || globalScene.arena.biomeType === Biome.ISLAND,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isInBiome([Biome.TEMPLE, Biome.ISLAND])),
       SpeciesWildEvolutionDelay.LONG,
     ),
     new SpeciesFormEvolution(
@@ -1678,12 +1561,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       "rainbow-swirl",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.biomeType === Biome.ABYSS
-          || globalScene.arena.biomeType === Biome.SPACE
-          || globalScene.arena.biomeType === Biome.END,
-      ),
+      new SpeciesEvolutionCondition((_p) => globalScene.arena.isInBiome([Biome.SPACE, Biome.ABYSS, Biome.END])),
       SpeciesWildEvolutionDelay.LONG,
     ),
   ],
@@ -1742,9 +1620,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
       1,
       EvolutionItem.RAZOR_CLAW,
       new SpeciesEvolutionCondition(
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN
-          || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY /* Razor claw at day*/,
+        (_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]) /* Razor claw at day */,
       ),
       SpeciesWildEvolutionDelay.VERY_LONG,
     ),
@@ -1999,10 +1875,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.ROSELIA,
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(
-        70,
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY,
+      new SpeciesFriendshipEvolutionCondition(70, (_p) =>
+        globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]),
       ),
       SpeciesWildEvolutionDelay.SHORT,
     ),
@@ -2021,10 +1895,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.CHIMECHO,
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(
-        90,
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT,
+      new SpeciesFriendshipEvolutionCondition(90, (_p) =>
+        globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT]),
       ),
       SpeciesWildEvolutionDelay.MEDIUM,
     ),
@@ -2052,10 +1924,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.LUCARIO,
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(
-        120,
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DAWN || globalScene.arena.getTimeOfDay() === TimeOfDay.DAY,
+      new SpeciesFriendshipEvolutionCondition(120, (_p) =>
+        globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]),
       ),
       SpeciesWildEvolutionDelay.LONG,
     ),
@@ -2101,10 +1971,8 @@ export const pokemonEvolutions: PokemonEvolutions = {
       Species.FROSMOTH,
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(
-        90,
-        (_p) =>
-          globalScene.arena.getTimeOfDay() === TimeOfDay.DUSK || globalScene.arena.getTimeOfDay() === TimeOfDay.NIGHT,
+      new SpeciesFriendshipEvolutionCondition(90, (_p) =>
+        globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT]),
       ),
       SpeciesWildEvolutionDelay.MEDIUM,
     ),

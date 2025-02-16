@@ -12,12 +12,12 @@ import { VariableAccuracyAttr } from "#app/data/move-attrs/variable-accuracy-att
  */
 export class BlizzardAccuracyAttr extends VariableAccuracyAttr {
   override apply(_user: Pokemon, _target: Pokemon, _move: Move, accuracy: NumberHolder): boolean {
-    if (!globalScene.arena.weather?.isEffectSuppressed()) {
-      const weatherType = globalScene.arena.weather?.weatherType || WeatherType.NONE;
-      if (weatherType === WeatherType.HAIL || weatherType === WeatherType.SNOW) {
-        accuracy.value = -1;
-        return true;
-      }
+    if (
+      !globalScene.arena.weather?.isEffectSuppressed()
+      && globalScene.arena.hasWeather([WeatherType.HAIL, WeatherType.SNOW])
+    ) {
+      accuracy.value = -1;
+      return true;
     }
     return false;
   }

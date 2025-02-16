@@ -2,22 +2,14 @@ import { starterColors } from "#app/data/starter-colors";
 import { globalScene } from "#app/global-scene";
 import { UiMode } from "#enums/ui-mode";
 import UiHandler from "#app/ui/ui-handler";
-import {
-  getLocalizedSpriteKey,
-  rgbHexToRgba,
-  leftPad,
-  getEnumValues,
-  fixedNumber,
-  toReadableString,
-  formatStat,
-} from "#app/utils";
+import { rgbHexToRgba, leftPad, getEnumValues, fixedNumber, toReadableString, formatStat } from "#app/utils";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { getStarterValueFriendshipCap, speciesStarterCosts } from "#app/data/balance/starters";
 import { argbFromRgba } from "@material/material-color-utilities";
 import { getTypeRgb } from "#app/data/type";
 import { ElementalType } from "#enums/elemental-type";
-import { addBBCodeTextObject, addTextObject, getBBCodeFrag } from "#app/ui/text";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import type { Move } from "#app/data/move";
 import { MoveCategory } from "#enums/move-category";
@@ -228,7 +220,7 @@ export default class SummaryUiHandler extends UiHandler {
     this.friendshipText.setOrigin(0, 0);
     this.summaryContainer.add(this.friendshipText);
 
-    this.championRibbon = globalScene.add.image(88, -146, "champion_ribbon");
+    this.championRibbon = globalScene.add.image(88, -146, "icon_champion_ribbon");
     this.championRibbon.setOrigin(0, 0);
     //this.championRibbon.setScale(0.8);
     this.championRibbon.setScale(1.25);
@@ -255,7 +247,7 @@ export default class SummaryUiHandler extends UiHandler {
 
     this.statusContainer.add(statusLabel);
 
-    this.status = globalScene.add.sprite(91, 4, getLocalizedSpriteKey("statuses"));
+    this.status = globalScene.add.sprite(91, 4, "status_icons");
     this.status.setOrigin(0.5, 0);
 
     this.statusContainer.add(this.status);
@@ -334,10 +326,8 @@ export default class SummaryUiHandler extends UiHandler {
     this.candyOverlay.setTint(argbFromRgba(rgbHexToRgba(colorScheme[1])));
 
     this.numberText.setText(leftPad(this.pokemon.species.speciesId, 4));
-    this.numberText.setColor(this.getTextColor(!this.pokemon.isShiny() ? TextStyle.SUMMARY : TextStyle.SUMMARY_GOLD));
-    this.numberText.setShadowColor(
-      this.getTextColor(!this.pokemon.isShiny() ? TextStyle.SUMMARY : TextStyle.SUMMARY_GOLD, true),
-    );
+    setTextColor(this.numberText, this.pokemon.isShiny() ? TextStyle.SUMMARY_GOLD : TextStyle.SUMMARY);
+
     const spriteKey = this.pokemon.getSpriteKey(true);
     try {
       this.pokemonSprite.play(spriteKey);
@@ -787,7 +777,7 @@ export default class SummaryUiHandler extends UiHandler {
         const trainerText = addBBCodeTextObject(
           7,
           12,
-          `${i18next.t("pokemonSummary:ot")}/${getBBCodeFrag(loggedInUser?.username || i18next.t("pokemonSummary:unknown"), settings.display.playerGender === PlayerGender.FEMALE ? TextStyle.SUMMARY_PINK : TextStyle.SUMMARY_BLUE)}`,
+          `${i18next.t("pokemonSummary:ot")}/${getBBCodeFragment(loggedInUser?.username || i18next.t("pokemonSummary:unknown"), settings.display.playerGender === PlayerGender.FEMALE ? TextStyle.SUMMARY_PINK : TextStyle.SUMMARY_BLUE)}`,
           TextStyle.SUMMARY_ALT,
         );
         trainerText.setOrigin(0, 0);
@@ -804,7 +794,7 @@ export default class SummaryUiHandler extends UiHandler {
         const getTypeIcon = (index: number, type: ElementalType, tera: boolean = false) => {
           const xCoord = typeLabel.width * typeLabel.scale + 9 + 34 * index;
           const typeIcon = !tera
-            ? globalScene.add.sprite(xCoord, 42, getLocalizedSpriteKey("types"), ElementalType[type].toLowerCase())
+            ? globalScene.add.sprite(xCoord, 42, "type_icons", ElementalType[type].toLowerCase())
             : globalScene.add.sprite(xCoord, 42, "type_tera");
           if (tera) {
             typeIcon.setScale(0.5);
@@ -917,17 +907,17 @@ export default class SummaryUiHandler extends UiHandler {
         this.passiveContainer?.nameText?.setVisible(false);
         this.passiveContainer?.descriptionText?.setVisible(false);
 
-        const closeFragment = getBBCodeFrag("", TextStyle.WINDOW_ALT);
+        const closeFragment = getBBCodeFragment("", TextStyle.WINDOW_ALT);
         const rawNature = toReadableString(Nature[this.pokemon?.getNature()!]); // TODO: is this bang correct?
-        const nature = `${getBBCodeFrag(toReadableString(getNatureName(this.pokemon?.getNature()!)), TextStyle.SUMMARY_RED)}${closeFragment}`; // TODO: is this bang correct?
+        const nature = `${getBBCodeFragment(toReadableString(getNatureName(this.pokemon?.getNature()!)), TextStyle.SUMMARY_RED)}${closeFragment}`; // TODO: is this bang correct?
 
         const memoString = i18next.t("pokemonSummary:memoString", {
           metFragment: i18next.t(
             `pokemonSummary:metFragment.${this.pokemon?.metBiome === -1 ? "apparently" : "normal"}`,
             {
-              biome: `${getBBCodeFrag(getBiomeName(this.pokemon?.metBiome!), TextStyle.SUMMARY_RED)}${closeFragment}`, // TODO: is this bang correct?
-              level: `${getBBCodeFrag(this.pokemon?.metLevel.toString()!, TextStyle.SUMMARY_RED)}${closeFragment}`, // TODO: is this bang correct?
-              wave: `${getBBCodeFrag(this.pokemon?.metWave ? this.pokemon.metWave.toString()! : i18next.t("pokemonSummary:unknownTrainer"), TextStyle.SUMMARY_RED)}${closeFragment}`,
+              biome: `${getBBCodeFragment(getBiomeName(this.pokemon?.metBiome!), TextStyle.SUMMARY_RED)}${closeFragment}`, // TODO: is this bang correct?
+              level: `${getBBCodeFragment(this.pokemon?.metLevel.toString()!, TextStyle.SUMMARY_RED)}${closeFragment}`, // TODO: is this bang correct?
+              wave: `${getBBCodeFragment(this.pokemon?.metWave ? this.pokemon.metWave.toString()! : i18next.t("pokemonSummary:unknownTrainer"), TextStyle.SUMMARY_RED)}${closeFragment}`,
             },
           ),
           natureFragment: i18next.t(`pokemonSummary:natureFragment.${rawNature}`, { nature: nature }),
@@ -1055,9 +1045,8 @@ export default class SummaryUiHandler extends UiHandler {
           this.extraMoveRowContainer.setVisible(true);
 
           if (this.newMove && this.pokemon) {
-            const spriteKey = getLocalizedSpriteKey("types");
             const moveType = this.pokemon.getMoveType(this.newMove);
-            const newMoveTypeIcon = globalScene.add.sprite(0, 0, spriteKey, ElementalType[moveType].toLowerCase());
+            const newMoveTypeIcon = globalScene.add.sprite(0, 0, "type_icons", ElementalType[moveType].toLowerCase());
             newMoveTypeIcon.setOrigin(0, 1);
             this.extraMoveRowContainer.add(newMoveTypeIcon);
           }
@@ -1066,7 +1055,7 @@ export default class SummaryUiHandler extends UiHandler {
           this.extraMoveRowContainer.add(ppOverlay);
 
           const pp = leftPad(this.newMove?.pp!, 2, "  "); // TODO: is this bang correct?
-          const ppText = addTextObject(173, 1, `${pp}/${pp}`, TextStyle.WINDOW);
+          const ppText = addTextObject(173, 1, `${pp}/${pp}`, TextStyle.SUMMARY);
           ppText.setOrigin(0, 1);
           this.extraMoveRowContainer.add(ppText);
         }
@@ -1081,9 +1070,8 @@ export default class SummaryUiHandler extends UiHandler {
           this.moveRowsContainer.add(moveRowContainer);
 
           if (move && this.pokemon) {
-            const spriteKey = getLocalizedSpriteKey("types");
             const moveType = this.pokemon.getMoveType(move.getMove());
-            const typeIcon = globalScene.add.sprite(0, 0, spriteKey, ElementalType[moveType].toLowerCase());
+            const typeIcon = globalScene.add.sprite(0, 0, "type_icons", ElementalType[moveType].toLowerCase());
             typeIcon.setOrigin(0, 1);
             moveRowContainer.add(typeIcon);
           }
@@ -1096,7 +1084,7 @@ export default class SummaryUiHandler extends UiHandler {
           ppOverlay.setOrigin(0, 1);
           moveRowContainer.add(ppOverlay);
 
-          const ppText = addTextObject(173, 1, "--/--", TextStyle.WINDOW);
+          const ppText = addTextObject(173, 1, "--/--", TextStyle.SUMMARY);
           ppText.setOrigin(0, 1);
 
           if (move) {

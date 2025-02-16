@@ -1,4 +1,4 @@
-import { allSpecies } from "#app/data/all-species";
+import { allSpecies } from "#app/data/data-lists";
 import PokemonSpecies from "#app/data/pokemon-species";
 import { PokemonForm } from "./pokemon-form";
 import { Abilities } from "#enums/abilities";
@@ -16460,7 +16460,7 @@ export function initSpecies() {
         650,
         Abilities.LEVITATE,
         Abilities.NONE,
-        Abilities.NONE,
+        Abilities.LEVITATE,
         680,
         150,
         120,

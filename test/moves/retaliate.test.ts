@@ -3,7 +3,7 @@ import Phaser from "phaser";
 import { GameManager } from "#test/testUtils/gameManager";
 import { Species } from "#enums/species";
 import { MoveId } from "#enums/move-id";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 
 describe("Moves - Retaliate", () => {
   let phaserGame: Phaser.Game;

@@ -18,8 +18,9 @@ import { PlayerGender } from "#enums/player-gender";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { UiTheme } from "#enums/ui-theme";
 import { supportedLanguages } from "#app/system/settings/supported-languages";
-import { isLandscapeMode } from "#app/utils";
+import { getEnumLength, isLandscapeMode } from "#app/utils";
 import i18next, { t } from "i18next";
+import { UiWindowStyle } from "#enums/ui-window-style";
 
 //#region Types
 
@@ -215,15 +216,15 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
     key: "uiTheme",
     label: t("settings:uiTheme"),
     options: [
-      { value: UiTheme.DEFAULT, label: t("settings:default") },
-      { value: UiTheme.LEGACY, label: t("settings:legacy") },
+      { value: UiTheme.DARK, label: t("settings:darkTheme") },
+      { value: UiTheme.LIGHT, label: t("settings:lightTheme") },
     ],
     requiresReload: true,
   },
   {
-    key: "uiWindowType",
+    key: "uiWindowStyle",
     label: t("settings:windowType"),
-    options: Array.from({ length: 5 }).map((_, i) => ({ value: i + 1, label: `${i + 1}` })),
+    options: Array.from({ length: getEnumLength(UiWindowStyle) }).map((_, i) => ({ value: i, label: `${i + 1}` })),
     doWrap: true,
   },
   {
