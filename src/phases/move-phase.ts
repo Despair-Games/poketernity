@@ -205,7 +205,7 @@ export class MovePhase extends BattlePhase {
 
     if (
       (targets.length === 0 && !isFieldTargeted(this.targets))
-      || (moveQueue.length && moveQueue[0].moveId === MoveId.NONE)
+      || (moveQueue.length && moveQueue[0].move.id === MoveId.NONE)
     ) {
       this.showMoveText();
       this.showFailedText();
@@ -445,7 +445,7 @@ export class MovePhase extends BattlePhase {
     if (!allMoves[this.move.moveId].hasAttr(CopycatAttr)) {
       // The last move used is unaffected by moves that fail
       if (success) {
-        globalScene.currentBattle.lastMoveId = this.move.moveId;
+        globalScene.currentBattle.lastMove = this.move.getMove();
       }
     }
   }

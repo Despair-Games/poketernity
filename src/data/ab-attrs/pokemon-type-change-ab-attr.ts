@@ -1,6 +1,5 @@
 import { PreAttackAbAttr } from "#app/data/ab-attrs/pre-attack-ab-attr";
 import type { Move } from "#app/data/move";
-import { type CallMoveAttr } from "#app/data/move-attrs/call-move-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -28,7 +27,7 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
        * Skip moves that call other moves because these moves generate a following move that will trigger this ability attribute
        * @see {@link https://bulbapedia.bulbagarden.net/wiki/Category:Moves_that_call_other_moves}
        */
-      && !move.findAttr((attr: CallMoveAttr) => attr.callsOtherMoves)
+      && !move.findAttr((attr) => attr.callsOtherMoves)
     ) {
       const moveType = pokemon.getMoveType(move);
 

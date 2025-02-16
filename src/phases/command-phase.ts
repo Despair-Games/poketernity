@@ -1,30 +1,32 @@
+import type { TurnMove } from "#app/@types/TurnMove";
 import type { TurnCommand } from "#app/battle";
-import { BattleType } from "#enums/battle-type";
 import { type FairyLockTag } from "#app/data/arena-tag";
-import { ArenaTagSide } from "#enums/arena-tag-side";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import type { EncoreTag } from "#app/data/battler-tags";
 import { type SkyDropTag, type TrappedTag } from "#app/data/battler-tags";
-import { getMoveTargets, type MoveTargetSet } from "#app/data/move";
-import type { PlayerPokemon, TurnMove } from "#app/field/pokemon";
-import { isFieldTargeted } from "#app/utils/move-utils";
-import { FieldPosition } from "#enums/field-position";
+import { allMoves } from "#app/data/data-lists";
+import { getMoveTargets, SelfStatusMove, type MoveTargetSet } from "#app/data/move";
+import type { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { FieldPhase } from "#app/phases/abstract-field-phase";
-import { BattleCommand } from "#enums/battle-command";
-import { UiMode } from "#enums/ui-mode";
 import { isNullOrUndefined } from "#app/utils";
+import { TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { isFieldTargeted } from "#app/utils/move-utils";
 import { Abilities } from "#enums/abilities";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
+import { BattleCommand } from "#enums/battle-command";
+import { BattleType } from "#enums/battle-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Biome } from "#enums/biome";
+import { FieldPosition } from "#enums/field-position";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import { PokeballType } from "#enums/pokeball";
-import i18next from "i18next";
-import { TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { PhaseId } from "#enums/phase-id";
+import { PokeballType } from "#enums/pokeball";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
 
 /**
  * Handles the player's start-of-turn actions (`Fight/Ball/Pokemon/Run`) during a battle
@@ -80,7 +82,7 @@ export class CommandPhase extends FieldPhase {
     ) {
       currentBattle.turnCommands[this.fieldIndex] = {
         command: BattleCommand.FIGHT,
-        move: { moveId: MoveId.NONE, targets: [] },
+        move: { move: SelfStatusMove.none(), targets: [] },
         skip: true,
       };
     }
@@ -102,13 +104,13 @@ export class CommandPhase extends FieldPhase {
     while (
       moveQueue.length
       && moveQueue[0]
-      && moveQueue[0].moveId
+      && moveQueue[0].move.id !== MoveId.NONE
       && !moveQueue[0].virtual
-      && (!playerPokemon.getMoveset().find((m) => m.moveId === moveQueue[0].moveId)
+      && (!playerPokemon.getMoveset().find((m) => m.moveId === moveQueue[0].move.id)
         || !playerPokemon
           .getMoveset()
           [
-            playerPokemon.getMoveset().findIndex((m) => m.moveId === moveQueue[0].moveId)
+            playerPokemon.getMoveset().findIndex((m) => m.moveId === moveQueue[0].move.id)
           ].isUsable(playerPokemon, moveQueue[0].ignorePP))
     ) {
       moveQueue.shift();
@@ -116,10 +118,10 @@ export class CommandPhase extends FieldPhase {
 
     if (moveQueue.length > 0) {
       const queuedMove = moveQueue[0];
-      if (!queuedMove.moveId) {
+      if (queuedMove.move.id === MoveId.NONE) {
         this.handleCommand(BattleCommand.FIGHT, -1);
       } else {
-        const moveIndex = playerPokemon.getMoveset().findIndex((m) => m.moveId === queuedMove.moveId);
+        const moveIndex = playerPokemon.getMoveset().findIndex((m) => m.moveId === queuedMove.move.id);
         if (
           (moveIndex > -1 && playerPokemon.getMoveset()[moveIndex].isUsable(playerPokemon, queuedMove.ignorePP))
           || queuedMove.virtual
@@ -192,7 +194,7 @@ export class CommandPhase extends FieldPhase {
           if (useStruggle) {
             moveId = MoveId.STRUGGLE;
           } else if (turnMove !== undefined) {
-            moveId = turnMove.moveId;
+            moveId = turnMove.move.id;
           } else if (cursor > -1) {
             moveId = playerPokemon.getMoveset()[cursor]!.moveId;
           } else {
@@ -202,7 +204,7 @@ export class CommandPhase extends FieldPhase {
           const turnCommand: TurnCommand = {
             command: BattleCommand.FIGHT,
             cursor: cursor,
-            move: { moveId: moveId, targets: [], ignorePP: ignorePp },
+            move: { move: allMoves[moveId], targets: [], ignorePP: ignorePp },
             args: args,
           };
           const moveTargets: MoveTargetSet =

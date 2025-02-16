@@ -40,7 +40,6 @@ import { ConfuseAttr } from "#app/data/move-attrs/confuse-attr";
 import { ConsecutiveUseDoublePowerAttr } from "#app/data/move-attrs/consecutive-use-double-power-attr";
 import { ConsecutiveUseMultiBasePowerAttr } from "#app/data/move-attrs/consecutive-use-multi-base-power-attr";
 import { CopyBiomeTypeAttr } from "#app/data/move-attrs/copy-biome-type-attr";
-import { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
 import { CopyStatsAttr } from "#app/data/move-attrs/copy-stats-attr";
 import { CopyTypeAttr } from "#app/data/move-attrs/copy-type-attr";
 import { CounterDamageAttr } from "#app/data/move-attrs/counter-damage-attr";
@@ -129,8 +128,11 @@ import { ProtectAttr } from "#app/data/move-attrs/protect-attr";
 import { PsychoShiftEffectAttr } from "#app/data/move-attrs/psycho-shift-effect-attr";
 import { RagingBullTypeAttr } from "#app/data/move-attrs/raging-bull-type-attr";
 import { RandomLevelDamageAttr } from "#app/data/move-attrs/random-level-damage-attr";
-import { RandomMoveAttr } from "#app/data/move-attrs/random-move-attr";
-import { RandomMovesetMoveAttr } from "#app/data/move-attrs/random-moveset-move-attr";
+import {
+  invalidAssistMoves,
+  invalidSleepTalkMoves,
+  RandomMovesetMoveAttr,
+} from "#app/data/move-attrs/random-moveset-move-attr";
 import { RechargeAttr } from "#app/data/move-attrs/recharge-attr";
 import { RecoilAttr } from "#app/data/move-attrs/recoil-attr";
 import { ReducePpMoveAttr } from "#app/data/move-attrs/reduce-pp-move-attr";
@@ -243,6 +245,8 @@ import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { RageAttr } from "./move-attrs/rage-attr";
 import { MirrorMoveAttr } from "#app/data/move-attrs/mirror-move-attr";
+import { CopycatAttr } from "#app/data/move-attrs/copycat-attr";
+import { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
 
 export function initMoves() {
   const rawAllMoves = [
@@ -1670,7 +1674,7 @@ export function initMoves() {
         return (
           turnCommand.command === BattleCommand.FIGHT
           && !target.turnData.acted
-          && allMoves[turnCommand.move.moveId].category !== MoveCategory.STATUS
+          && turnCommand.move.move.category !== MoveCategory.STATUS
         );
       },
     ),
@@ -4230,7 +4234,7 @@ export function initMoves() {
         return (
           turnCommand.command === BattleCommand.FIGHT
           && !target.turnData.acted
-          && allMoves[turnCommand.move.moveId].category !== MoveCategory.STATUS
+          && turnCommand.move.move.category !== MoveCategory.STATUS
         );
       },
     ),

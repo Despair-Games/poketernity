@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import type { Move } from "#app/data/move";
 import { CallMoveAttr } from "#app/data/move-attrs/call-move-attr";
 import { type Pokemon } from "#app/field/pokemon";
@@ -114,9 +114,5 @@ export class NaturePowerAttr extends CallMoveAttr {
     }
 
     return super.apply(user, target, allMoves[moveId], overridden);
-  }
-
-  override isNaturePowerAttr(): this is this {
-    return true;
   }
 }

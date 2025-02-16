@@ -30,7 +30,7 @@ import { MoveTarget } from "#enums/move-target";
 export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
   protected invalidMoves: MoveId[];
   protected hasTarget: boolean;
-  public readonly callsOtherMoves: boolean = true;
+  public override readonly callsOtherMoves: boolean = true;
 
   override apply(user: Pokemon, target: Pokemon, move: Move, overridden: BooleanHolder): boolean {
     const replaceMoveTarget = [MoveTarget.NEAR_OTHER, MoveTarget.DRAGON_DARTS].includes(move.moveTarget)
@@ -51,7 +51,7 @@ export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
       targets = [moveTargets.targets[user.randSeedInt(moveTargets.targets.length)]];
     }
 
-    user.getMoveQueue().push({ moveId: move.id, targets, virtual: true, ignorePP: true });
+    user.getMoveQueue().push({ move: move, targets, virtual: true, ignorePP: true });
     globalScene.unshiftPhase(new LoadMoveAnimPhase(move.id));
     globalScene.unshiftPhase(new MovePhase(user, targets, new PokemonMove(move.id, 0, 0, true), true, true));
 

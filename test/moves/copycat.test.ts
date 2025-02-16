@@ -1,9 +1,9 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
 import { Abilities } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
-import { MoveResult } from "#enums/move-result";
 import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/testUtils/gameManager";

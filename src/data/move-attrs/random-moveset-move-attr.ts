@@ -1,7 +1,7 @@
-import { allMoves } from "#app/data/all-moves";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { allMoves } from "#app/data/data-lists";
 import { type Move } from "#app/data/move";
 import { CallMoveAttr } from "#app/data/move-attrs/call-move-attr";
-import type { MoveConditionFunc } from "#app/data/move-conditions";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { BooleanHolder } from "#app/utils";
@@ -61,10 +61,6 @@ export class RandomMovesetMoveAttr extends CallMoveAttr {
       this.moveId = moves[user.randSeedInt(moves.length)].moveId;
       return true;
     };
-  }
-
-  override isRandomMovesetMoveAttr(): this is this {
-    return true;
   }
 }
 

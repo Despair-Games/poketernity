@@ -1,6 +1,6 @@
+import type { TurnMove } from "#app/@types/TurnMove";
 import type { BattlerTag } from "#app/data/battler-tags";
 import type { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
-import type { QueuedMove } from "#app/@types/QueuedMove";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { Abilities } from "#enums/abilities";
 import type { ElementalType } from "#enums/elemental-type";
@@ -9,7 +9,7 @@ import type { Gender } from "#enums/gender";
 export class PokemonSummonData {
   /** [Atk, Def, SpAtk, SpDef, Spd, Acc, Eva] */
   public statStages: number[] = [0, 0, 0, 0, 0, 0, 0];
-  public moveQueue: QueuedMove[] = [];
+  public moveQueue: TurnMove[] = [];
   public tags: BattlerTag[] = [];
   public abilitySuppressed: boolean = false;
   public abilitiesApplied: Abilities[] = [];

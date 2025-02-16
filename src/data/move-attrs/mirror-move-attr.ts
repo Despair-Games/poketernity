@@ -1,7 +1,6 @@
-import { allMoves } from "#app/data/all-moves";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { type Move } from "#app/data/move";
 import { CallMoveAttr } from "#app/data/move-attrs/call-move-attr";
-import { type MoveConditionFunc } from "#app/data/move-conditions";
 import { type Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
 import type { MoveId } from "#enums/move-id";
@@ -21,8 +20,8 @@ export class MirrorMoveAttr extends CallMoveAttr {
   }
 
   override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder): boolean {
-    const lastMove = target.getLastXMoves()[0].moveId;
-    return super.apply(user, target, allMoves[lastMove], overridden);
+    const lastMove = target.getLastXMoves()[0].move;
+    return super.apply(user, target, lastMove, overridden);
   }
 
   override getCondition(): MoveConditionFunc {

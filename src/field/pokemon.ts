@@ -194,7 +194,6 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
 import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
 import type { TurnMove } from "#app/@types/TurnMove";
-import type { QueuedMove } from "#app/@types/QueuedMove";
 import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
@@ -5433,7 +5432,7 @@ export class EnemyPokemon extends Pokemon {
     if (moveQueue.length !== 0) {
       const queuedMove = moveQueue[0];
       if (queuedMove) {
-        const moveIndex = this.getMoveset().findIndex((m) => m?.moveId === queuedMove.moveId);
+        const moveIndex = this.getMoveset().findIndex((m) => m?.moveId === queuedMove.move.id);
         if (
           (moveIndex > -1 && this.getMoveset()[moveIndex]!.isUsable(this, queuedMove.ignorePP))
           || queuedMove.virtual
@@ -5452,20 +5451,20 @@ export class EnemyPokemon extends Pokemon {
     if (movePool.length) {
       // If there's only 1 move in the move pool, use it.
       if (movePool.length === 1) {
-        return { moveId: movePool[0].moveId, targets: this.getNextTargets(movePool[0].moveId) };
+        return { move: movePool[0].getMove(), targets: this.getNextTargets(movePool[0].moveId) };
       }
       // If a move is forced because of Encore, use it.
       const encoreTag = this.getTag<EncoreTag>(BattlerTagType.ENCORE);
       if (encoreTag) {
         const encoreMove = movePool.find((m) => m.moveId === encoreTag.moveId);
         if (encoreMove) {
-          return { moveId: encoreMove.moveId, targets: this.getNextTargets(encoreMove.moveId) };
+          return { move: encoreMove.getMove(), targets: this.getNextTargets(encoreMove.moveId) };
         }
       }
       switch (this.aiType) {
         case AiType.RANDOM: // No enemy should spawn with this AI type in-game
-          const moveId = movePool[globalScene.randBattleSeedInt(movePool.length)].moveId;
-          return { moveId: moveId, targets: this.getNextTargets(moveId) };
+          const move = movePool[globalScene.randBattleSeedInt(movePool.length)];
+          return { move: move.getMove(), targets: this.getNextTargets(move.moveId) };
         case AiType.SMART_RANDOM:
         case AiType.SMART:
           /**
@@ -5616,11 +5615,11 @@ export class EnemyPokemon extends Pokemon {
             r,
             sortedMovePool.map((m) => m.getName()),
           );
-          return { moveId: sortedMovePool[r]!.moveId, targets: moveTargets[sortedMovePool[r]!.moveId] };
+          return { move: sortedMovePool[r].getMove(), targets: moveTargets[sortedMovePool[r].moveId] };
       }
     }
 
-    return { moveId: MoveId.STRUGGLE, targets: this.getNextTargets(MoveId.STRUGGLE) };
+    return { move: allMoves[MoveId.STRUGGLE], targets: this.getNextTargets(MoveId.STRUGGLE) };
   }
 
   /**

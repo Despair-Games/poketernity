@@ -37,7 +37,7 @@ describe("Moves - Nature Power", () => {
     game.move.select(MoveId.NATURE_POWER);
     await game.phaseInterceptor.to("MoveEndPhase");
 
-    expect(game.field.getPlayerPokemon().getLastXMoves()[0].moveId).toBe(MoveId.ROUND);
+    expect(game.field.getPlayerPokemon().getLastXMoves()[0].move.id).toBe(MoveId.ROUND);
   });
 
   it("should call Thunderbolt in electric terrain, overriding the Biome-defined move", async () => {
@@ -47,6 +47,6 @@ describe("Moves - Nature Power", () => {
     game.move.select(MoveId.NATURE_POWER);
     await game.phaseInterceptor.to("MoveEndPhase");
 
-    expect(game.field.getPlayerPokemon().getLastXMoves()[0].moveId).toBe(MoveId.THUNDERBOLT);
+    expect(game.field.getPlayerPokemon().getLastXMoves()[0].move.id).toBe(MoveId.THUNDERBOLT);
   });
 });

@@ -1,7 +1,6 @@
-import { allMoves } from "#app/data/all-moves";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { type Move } from "#app/data/move";
 import { CallMoveAttr } from "#app/data/move-attrs/call-move-attr";
-import { type MoveConditionFunc } from "#app/data/move-conditions";
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { BooleanHolder } from "#app/utils";
@@ -22,14 +21,14 @@ export class CopycatAttr extends CallMoveAttr {
   }
 
   override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder): boolean {
-    const lastMove = globalScene.currentBattle.lastMoveId;
-    return super.apply(user, target, allMoves[lastMove], overridden);
+    const lastMove = globalScene.currentBattle.lastMove;
+    return super.apply(user, target, lastMove, overridden);
   }
 
   override getCondition(): MoveConditionFunc {
     return (_user, _target, _move) => {
-      const lastMove = globalScene.currentBattle.lastMoveId;
-      return lastMove !== undefined && !this.invalidMoves.includes(lastMove);
+      const lastMove = globalScene.currentBattle.lastMove;
+      return !!lastMove && !this.invalidMoves.includes(lastMove.id);
     };
   }
 }

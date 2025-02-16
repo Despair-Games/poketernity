@@ -1,7 +1,9 @@
-import { allMoves } from "#app/data/all-moves";
-import { RechargingTag, SemiInvulnerableTag } from "#app/data/battler-tags";
+import type { RechargingTag, SemiInvulnerableTag } from "#app/data/battler-tags";
+import { allMoves } from "#app/data/data-lists";
 import { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
+import { SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { Abilities } from "#enums/abilities";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
@@ -47,10 +49,10 @@ describe("Moves - Metronome", () => {
     game.move.select(MoveId.METRONOME);
     await game.toNextTurn();
 
-    expect(player.getTag(SemiInvulnerableTag)).toBeTruthy();
+    expect(player.getTag<SemiInvulnerableTag>(...SemiInvulnerableBattlerTagTypes)).toBeTruthy();
 
     await game.toNextTurn();
-    expect(player.getTag(SemiInvulnerableTag)).toBeFalsy();
+    expect(player.getTag<SemiInvulnerableTag>(...SemiInvulnerableBattlerTagTypes)).toBeFalsy();
     expect(enemy.isFullHp()).toBeFalsy();
   });
 
@@ -74,7 +76,7 @@ describe("Moves - Metronome", () => {
     game.move.select(MoveId.METRONOME);
     await game.toNextTurn();
 
-    expect(player.getTag(RechargingTag)).toBeTruthy();
+    expect(player.getTag<RechargingTag>(BattlerTagType.RECHARGING)).toBeTruthy();
   });
 
   it("should only target ally for Aromatic Mist", async () => {
