@@ -377,6 +377,7 @@ export class MovePhase extends BattlePhase {
         move: this.move.getMove(),
         targets: this.targets,
         result: MoveResult.FAIL,
+        type: this.pokemon.getMoveType(this.move.getMove()),
         virtual: this.move.virtual,
       });
 
@@ -428,6 +429,7 @@ export class MovePhase extends BattlePhase {
         move: this.move.getMove(),
         targets: this.targets,
         result: MoveResult.FAIL,
+        type: this.pokemon.getMoveType(this.move.getMove()),
         virtual: this.move.virtual,
       });
 
@@ -578,7 +580,11 @@ export class MovePhase extends BattlePhase {
         globalScene.eventTarget.dispatchEvent(new MoveUsedEvent(this.pokemon?.id, this.move.getMove(), ppUsed));
       }
 
-      this.pokemon.pushMoveHistory({ move: SelfStatusMove.none(), result: MoveResult.FAIL });
+      this.pokemon.pushMoveHistory({
+        move: SelfStatusMove.none(),
+        result: MoveResult.FAIL,
+        type: ElementalType.UNKNOWN,
+      });
 
       this.pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
 
