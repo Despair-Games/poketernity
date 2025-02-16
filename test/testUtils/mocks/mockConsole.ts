@@ -8,10 +8,11 @@ const originalWarn = console.warn;
 const blacklist = [
   "variant icon does not exist", // Repetitive warnings about icons not found
   'Texture "%s" not found', // Repetitive warnings about textures not found
+  "type: 'Pokemon',", // Large Pokemon objects
   "gameVersion: ", // Large session-data and system-data objects
   "newModifierFunc: ", // Large ModifierType objects, displayed by ModifierSelectPhase
 ];
-const whitelist = ["Phase"];
+const whitelist = ["Start Phase"];
 
 const RED_ANSI_CODE = "\u001b[31m";
 const GREEN_ANSI_CODE = "\u001b[32m";
@@ -24,26 +25,27 @@ export class MockConsole {
   private notified: any[] = [];
 
   /**
-   * A list of warnings that are queued to be displayed after all tests are finished.
+   * A list of warnings that are queued to be displayed after all tests in the same file are finished.
    *
    * This is static so that it does not get overridden by the test framework constructing new `MockConsoleLog`s.
    */
   private static queuedWarnings: any[] = [];
 
   /**
-   * Queues a warning to be printed after all tests are finished.
+   * Queues a warning to be printed after all tests in the same file are finished.
    */
   public static queuePostTestWarning(...args) {
     MockConsole.queuedWarnings.push(args);
   }
 
   /**
-   * Prints all post-test warnings that have been queued. Does not clear the queue.
+   * Prints all post-test warnings that have been queued, and then also clears the queue.
    */
   public static printPostTestWarnings() {
     for (const args of MockConsole.queuedWarnings) {
       console.warn(...args);
     }
+    MockConsole.queuedWarnings = [];
   }
 
   public log(...args) {

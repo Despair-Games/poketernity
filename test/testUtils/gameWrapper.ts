@@ -21,6 +21,7 @@ import { MockConsole } from "#test/testUtils/mocks/mockConsole";
 import { globalScene } from "#app/global-scene";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { MoveId } from "#enums/move-id";
 
 export class GameWrapper {
   public game: Phaser.Game;
@@ -51,13 +52,16 @@ export class GameWrapper {
       const ret = GameWrapper.originalDamage.apply(pokemon, args);
 
       const side = pokemon.isPlayer() ? "Player" : "Enemy";
-      const lowHpMoves = ["False Swipe", "Hard Press"];
+      const lowHpMoves = [MoveId.FALSE_SWIPE, MoveId.HARD_PRESS];
       const currentPhase = globalScene.getCurrentPhase();
       let moveName = "N/A";
+      let moveId = MoveId.NONE;
       if (currentPhase instanceof MoveEffectPhase) {
-        moveName = currentPhase.move.getName();
+        const move = currentPhase.move;
+        moveName = move.getName();
+        moveId = move.moveId;
       }
-      const isLowHpMove = lowHpMoves.includes(moveName);
+      const isLowHpMove = lowHpMoves.includes(moveId);
       /**
        * Warn about Pokemon reaching low HP, as a measure to prevent flaky tests from Pokemon randomly fainting.
        *
