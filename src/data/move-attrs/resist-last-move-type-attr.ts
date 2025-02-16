@@ -3,7 +3,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { GameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { toReadableString, NumberHolder } from "#app/utils";
+import { NumberHolder } from "#app/utils";
 import i18next from "i18next";
 import { applyChallenges } from "#app/utils/challenge-utils";
 import { ChallengeType } from "#enums/challenge-type";
@@ -38,7 +38,7 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
     globalScene.queueMessage(
       i18next.t("battle:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
-        type: toReadableString(ElementalType[type]),
+        type: i18next.t(`pokemonInfo:Type.${ElementalType[type]}`),
       }),
     );
     user.updateInfo();
