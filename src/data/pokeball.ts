@@ -88,12 +88,12 @@ export function getCriticalCaptureChance(modifiedCatchRate: number): number {
     dexMultiplier = 1.5;
   } else if (dexCount > 200) {
     dexMultiplier = 1;
-  } else if (dexCount > 40) {
+  } else if (dexCount > 100) {
     dexMultiplier = 0.5;
   } else {
     dexMultiplier = 0;
   }
-  return Math.floor((catchingCharmMultiplier.value * dexMultiplier! * Math.min(255, modifiedCatchRate)) / 6);
+  return Math.floor((catchingCharmMultiplier.value * dexMultiplier * Math.min(255, modifiedCatchRate)) / 6);
 }
 
 export function doPokeballBounceAnim(
