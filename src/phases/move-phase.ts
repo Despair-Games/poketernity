@@ -10,7 +10,6 @@ import { BypassSleepAttr } from "#app/data/move-attrs/bypass-sleep-attr";
 import { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
 import { HealStatusEffectAttr } from "#app/data/move-attrs/heal-status-effect-attr";
 import { PreMoveMessageAttr } from "#app/data/move-attrs/pre-move-message-attr";
-import { frenzyMissFunc } from "#app/utils/move-utils";
 import { SpeciesFormChangePreMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-pre-move-trigger";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/data/status-effect";
 import { getTerrainBlockMessage } from "#app/data/terrain";
@@ -565,8 +564,6 @@ export class MovePhase extends BattlePhase {
    *     to lapse on move failure/cancellation.
    *
    *     TODO: ...this seems weird.
-   * - Lapses `AFTER_MOVE` tags:
-   *   - This handles the effects of {@link MoveId.SUBSTITUTE Substitute}
    * - Removes the second turn of charge moves
    */
   protected handlePreMoveFailures(): void {
@@ -581,14 +578,9 @@ export class MovePhase extends BattlePhase {
         globalScene.eventTarget.dispatchEvent(new MoveUsedEvent(this.pokemon?.id, this.move.getMove(), ppUsed));
       }
 
-      if (this.cancelled && this.pokemon.summonData?.tags?.find((t) => t.tagType === BattlerTagType.FRENZY)) {
-        frenzyMissFunc(this.pokemon, this.move.getMove());
-      }
-
       this.pokemon.pushMoveHistory({ move: SelfStatusMove.none(), result: MoveResult.FAIL });
 
       this.pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
-      this.pokemon.lapseTags(BattlerTagLapseType.AFTER_MOVE);
 
       this.pokemon.getMoveQueue().shift();
     }
