@@ -7,9 +7,8 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder, toDmgValue } from "#app/utils";
 import i18next from "i18next";
-import { BlockNonDirectDamageAbAttr } from "./block-non-direct-damage-ab-attr";
-import { FieldPreventExplosionLikeAbAttr } from "./field-prevent-explosion-like-ab-attr";
 import { PostFaintAbAttr } from "./post-faint-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Attribute that damages an attacker for a fraction of its HP if the attacker KO's the user with a contact move.
@@ -36,7 +35,7 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
         .getField(true)
         .map((p) =>
           applyAbAttrs(
-            FieldPreventExplosionLikeAbAttr,
+            AbAttrFlag.FIELD_PREVENT_EXPLOSION_LIKE,
             p,
             simulated,
             cancelled,
@@ -45,7 +44,7 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
           ),
         );
 
-      applyAbAttrs(BlockNonDirectDamageAbAttr, attacker, simulated, cancelled);
+      applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, attacker, simulated, cancelled);
       if (cancelled.value) {
         return false;
       }

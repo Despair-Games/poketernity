@@ -199,6 +199,4 @@ export const bgmLoopPoint = {
   mystery_encounter_fun_and_games: 4.78,
   /** EoS Temporal Spire */
   mystery_encounter_weird_dream: 41.42,
-  /** Firel Delibirdy */
-  mystery_encounter_delibirdy: 82.28,
 };

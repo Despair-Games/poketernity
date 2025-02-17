@@ -10,6 +10,5 @@ export default class SettingsAudioUiHandler extends AbstractSettingsUiHandler {
    */
   constructor() {
     super("audio", audioSettingsUiItems);
-    this.rowsToDisplay = 6;
   }
 }

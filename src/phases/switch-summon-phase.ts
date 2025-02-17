@@ -1,8 +1,7 @@
-import { PreSwitchOutAbAttr } from "#app/data/ab-attrs/pre-switch-out-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { SubstituteTag } from "#app/data/battler-tags";
+import { type SubstituteTag } from "#app/data/battler-tags";
 import { getPokeballTintColor } from "#app/data/pokeball";
-import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -10,10 +9,16 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { SwitchEffectTransferModifier } from "#app/modifier/modifier";
 import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
-import { PostSummonPhase } from "./post-summon-phase";
-import { SummonPhase } from "./summon-phase";
+import { PostSummonPhase } from "#app/phases/post-summon-phase";
+import { SummonPhase } from "#app/phases/summon-phase";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
 export class SwitchSummonPhase extends SummonPhase {
+  /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode SummonPhase} is extended by other phases */
+  override readonly id: PhaseId = PhaseId.SWITCH_SUMMON;
+
   private readonly switchType: SwitchType;
   private slotIndex: number;
   private readonly doReturn: boolean;
@@ -70,7 +75,7 @@ export class SwitchSummonPhase extends SummonPhase {
     this.getOpposingField().forEach((opposingPokemon: Pokemon) => opposingPokemon.removeTagsBySourceId(pokemon.id));
 
     if (this.switchType === SwitchType.SWITCH || this.switchType === SwitchType.INITIAL_SWITCH) {
-      const substitute = pokemon.getTag(SubstituteTag);
+      const substitute = pokemon.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
       if (substitute) {
         tweens.add({
           targets: substitute.sprite,
@@ -110,7 +115,7 @@ export class SwitchSummonPhase extends SummonPhase {
     const party = this.getAlliedParty();
     const switchedInPokemon = party[this.slotIndex];
     this.lastPokemon = this.getPokemon();
-    applyAbAttrs(PreSwitchOutAbAttr, this.lastPokemon, false);
+    applyAbAttrs(AbAttrFlag.PRE_SWITCH_OUT, this.lastPokemon, false);
     if (this.switchType === SwitchType.BATON_PASS && switchedInPokemon) {
       this.getOpposingField().forEach((opposingPokemon: Pokemon) =>
         opposingPokemon.transferTagsBySourceId(this.lastPokemon.id, switchedInPokemon.id),
@@ -157,7 +162,7 @@ export class SwitchSummonPhase extends SummonPhase {
          * Otherwise, clear any persisting tags on the returned Pokemon.
          */
         if ([SwitchType.BATON_PASS, SwitchType.SHED_TAIL].includes(this.switchType)) {
-          const substitute = this.lastPokemon.getTag(SubstituteTag);
+          const substitute = this.lastPokemon.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
           if (substitute) {
             switchedInPokemon.x += this.lastPokemon.getSubstituteOffset()[0];
             switchedInPokemon.y += this.lastPokemon.getSubstituteOffset()[1];
@@ -203,7 +208,7 @@ export class SwitchSummonPhase extends SummonPhase {
     if (this.switchType === SwitchType.BATON_PASS) {
       pokemon.transferSummon(this.lastPokemon);
     } else if (this.switchType === SwitchType.SHED_TAIL) {
-      const subTag = this.lastPokemon.getTag(SubstituteTag);
+      const subTag = this.lastPokemon.getTag(BattlerTagType.SUBSTITUTE);
       if (subTag) {
         pokemon.summonData.tags.push(subTag);
       }

@@ -1,14 +1,16 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
-import type { ElementType } from "#enums/element-type";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { ElementalType } from "#enums/elemental-type";
 import { AbAttr } from "./ab-attr";
 
 export class IgnoreTypeImmunityAbAttr extends AbAttr {
-  private readonly defenderType: ElementType;
-  private readonly allowedMoveTypes: ElementType[];
+  private readonly defenderType: ElementalType;
+  private readonly allowedMoveTypes: ElementalType[];
 
-  constructor(defenderType: ElementType, allowedMoveTypes: ElementType[]) {
+  constructor(defenderType: ElementalType, allowedMoveTypes: ElementalType[]) {
     super(true);
+    this._flags.add(AbAttrFlag.IGNORE_TYPE_IMMUNITY);
     this.defenderType = defenderType;
     this.allowedMoveTypes = allowedMoveTypes;
   }
@@ -17,8 +19,8 @@ export class IgnoreTypeImmunityAbAttr extends AbAttr {
     _pokemon: Pokemon,
     _simulated: boolean,
     cancelled: BooleanHolder,
-    moveType: ElementType,
-    defType: ElementType,
+    moveType: ElementalType,
+    defType: ElementalType,
   ): boolean {
     if (this.defenderType === defType && this.allowedMoveTypes.includes(moveType)) {
       cancelled.value = true;

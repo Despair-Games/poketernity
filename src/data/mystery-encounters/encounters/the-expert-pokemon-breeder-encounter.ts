@@ -28,8 +28,8 @@ import { EggTier } from "#enums/egg-type";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
-import { ElementType } from "#enums/element-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
+import { ElementalType } from "#enums/elemental-type";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
@@ -457,7 +457,7 @@ function getPartyConfig(): EnemyPartyConfig {
         modifierConfigs: [
           {
             modifier: generateModifierType(modifierTypes.TERA_SHARD, [
-              ElementType.STEEL,
+              ElementalType.STEEL,
             ]) as PokemonHeldItemModifierType,
           },
         ],
@@ -465,7 +465,7 @@ function getPartyConfig(): EnemyPartyConfig {
     ],
   };
 
-  if (globalScene.arena.biomeType === Biome.SPACE) {
+  if (globalScene.arena.isInBiome(Biome.SPACE)) {
     // All 3 members always Cleffa line, but different configs
     baseConfig.pokemonConfigs!.push(
       {
@@ -529,7 +529,7 @@ function getSpeciesFromPool(speciesPool: (Species | BreederSpeciesEvolution)[][]
 }
 
 function calculateEggRewardsForPokemon(pokemon: PlayerPokemon): [number, number] {
-  const bst = pokemon.calculateBaseStats().reduce((a, b) => a + b, 0);
+  const bst = pokemon.getSpeciesForm().getBaseStatTotal();
   // 1 point for every 20 points below 680 BST the pokemon is, (max 18, min 1)
   const pointsFromBst = Math.min(Math.max(Math.floor((680 - bst) / 20), 1), 18);
 

@@ -1,5 +1,5 @@
 import { Species } from "#enums/species";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import { type Move } from "#app/data/move";
@@ -15,7 +15,7 @@ export class TeraStarstormTypeAttr extends VariableMoveTypeAttr {
       user.isTerastallized()
       && (user.hasFusionSpecies(Species.TERAPAGOS) || user.species.speciesId === Species.TERAPAGOS)
     ) {
-      moveType.value = ElementType.STELLAR;
+      moveType.value = ElementalType.STELLAR;
       return true;
     }
     return false;

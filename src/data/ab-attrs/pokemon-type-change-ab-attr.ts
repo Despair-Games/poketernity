@@ -1,21 +1,23 @@
+import { PreAttackAbAttr } from "#app/data/ab-attrs/pre-attack-ab-attr";
 import type { Move } from "#app/data/move";
-import { CopyMoveAttr } from "../move-attrs/copy-move-attr";
-import { NaturePowerAttr } from "../move-attrs/nature-power-attr";
-import { RandomMoveAttr } from "../move-attrs/random-move-attr";
-import { RandomMovesetMoveAttr } from "../move-attrs/random-moveset-move-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
-import { ElementType } from "#enums/element-type";
 import i18next from "i18next";
-import { PreAttackAbAttr } from "./pre-attack-ab-attr";
 
 /**
  * Ability attribute for changing a pokemon's type before using a move
  * @extends PreAttackAbAttr
  */
 export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
-  private moveType: ElementType;
+  private moveType: ElementalType;
+
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.POKEMON_TYPE_CHANGE);
+  }
 
   override apply(pokemon: Pokemon, simulated: boolean, move: Move): boolean {
     if (
@@ -27,10 +29,10 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
        */
       && !move.findAttr(
         (attr) =>
-          attr instanceof RandomMovesetMoveAttr
-          || attr instanceof RandomMoveAttr
-          || attr instanceof NaturePowerAttr
-          || attr instanceof CopyMoveAttr,
+          attr.isRandomMovesetMoveAttr()
+          || attr.isRandomMoveAttr()
+          || attr.isNaturePowerAttr()
+          || attr.isCopyMoveAttr(),
       )
     ) {
       const moveType = pokemon.getMoveType(move);
@@ -52,7 +54,7 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
   override getTriggerMessage(pokemon: Pokemon, _abilityName: string, ..._args: any[]): string {
     return i18next.t("abilityTriggers:pokemonTypeChange", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      moveType: i18next.t(`pokemonInfo:Type.${ElementType[this.moveType]}`),
+      moveType: i18next.t(`pokemonInfo:Type.${ElementalType[this.moveType]}`),
     });
   }
 }

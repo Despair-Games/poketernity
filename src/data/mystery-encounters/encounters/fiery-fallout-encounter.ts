@@ -6,11 +6,11 @@ import {
   leaveEncounterWithoutBattle,
   setEncounterExp,
   setEncounterRewards,
-  transitionMysteryEncounterIntroVisuals,
   generateModifierType,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 import type { AttackTypeBoosterModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
@@ -23,12 +23,12 @@ import {
 import { Species } from "#enums/species";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { Gender } from "#enums/gender";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { BattlerIndex } from "#enums/battler-index";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { MoveId } from "#enums/move-id";
-import { EncounterBattleAnim } from "#app/data/battle-anims";
+import { EncounterBattleAnim } from "#app/data/battle-anims/encounter-battle-anim";
 import { WeatherType } from "#enums/weather-type";
 import { isNullOrUndefined, randSeedInt } from "#app/utils";
 import { StatusEffect } from "#enums/status-effect";
@@ -92,7 +92,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
           tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
           mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
             globalScene.unshiftPhase(
-              new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPDEF, Stat.SPD], 1),
+              new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.SPDEF, Stat.SPD], 1),
             );
           },
         },
@@ -103,7 +103,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
           tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
           mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
             globalScene.unshiftPhase(
-              new StatStageChangePhase(pokemon.getBattlerIndex(), true, [Stat.SPDEF, Stat.SPD], 1),
+              new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [Stat.SPDEF, Stat.SPD], 1),
             );
           },
         },
@@ -219,7 +219,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
       const encounter = globalScene.currentBattle.mysteryEncounter!;
       const nonFireTypes = globalScene
         .getPlayerParty()
-        .filter((p) => p.isAllowedInBattle() && !p.getTypes().includes(ElementType.FIRE));
+        .filter((p) => p.isAllowedInBattle() && !p.getTypes().includes(ElementalType.FIRE));
 
       for (const pkm of nonFireTypes) {
         const percentage = DAMAGE_PERCENTAGE / 100;
@@ -254,7 +254,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
     MysteryEncounterOptionBuilder.newOptionWithMode(MysteryEncounterOptionMode.DISABLED_OR_SPECIAL)
       .withPrimaryPokemonRequirement(
         CombinationPokemonRequirement.Some(
-          new TypeRequirement(ElementType.FIRE, true, 1),
+          new TypeRequirement(ElementalType.FIRE, true, 1),
           new AbilityRequirement(FIRE_RESISTANT_ABILITIES, true),
         ),
       ) // Will set option3PrimaryName dialogue token automatically
@@ -297,7 +297,7 @@ function giveLeadPokemonAttackTypeBoostItem() {
     let boosterModifierType = generateModifierType(modifierTypes.ATTACK_TYPE_BOOSTER) as AttackTypeBoosterModifierType;
     if (!boosterModifierType) {
       boosterModifierType = generateModifierType(modifierTypes.ATTACK_TYPE_BOOSTER, [
-        ElementType.FIRE,
+        ElementalType.FIRE,
       ]) as AttackTypeBoosterModifierType;
     }
     applyModifierTypeToPlayerPokemon(leadPokemon, boosterModifierType);

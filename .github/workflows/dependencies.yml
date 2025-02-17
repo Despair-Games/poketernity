@@ -1,0 +1,36 @@
+name: Dependencies
+
+on:
+  # Trigger the workflow on push or pull request
+  push:
+    branches:
+      - main # Trigger on push events to the main branch
+      - beta # Trigger on push events to the beta branch
+  pull_request:
+    branches:
+      - main # Trigger on pull request events targeting the main branch
+      - beta # Trigger on pull request events targeting the beta branch
+  merge_group:
+    types: [checks_requested]
+
+jobs:
+  check:
+    name: Run Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: depcruise
+        run: npm run depcruise

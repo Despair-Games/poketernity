@@ -1,11 +1,11 @@
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
 /**
  * Attribute to add a set type to the target.
@@ -16,9 +16,9 @@ import type { MoveConditionFunc } from "../move-conditions";
  * @extends MoveEffectAttr
  */
 export class AddTypeAttr extends MoveEffectAttr {
-  private type: ElementType;
+  private type: ElementalType;
 
-  constructor(type: ElementType) {
+  constructor(type: ElementalType) {
     super(false);
 
     this.type = type;
@@ -30,7 +30,7 @@ export class AddTypeAttr extends MoveEffectAttr {
 
     globalScene.queueMessage(
       i18next.t("moveTriggers:addType", {
-        typeName: i18next.t(`pokemonInfo:Type.${ElementType[this.type]}`),
+        typeName: i18next.t(`pokemonInfo:Type.${ElementalType[this.type]}`),
         pokemonName: getPokemonNameWithAffix(target),
       }),
     );

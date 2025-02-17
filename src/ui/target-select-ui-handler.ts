@@ -3,12 +3,13 @@ import { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
 import { isNullOrUndefined, fixedNumber } from "#app/utils";
 import { getMoveTargets } from "../data/move";
+import { isFieldTargeted } from "#app/utils/move-utils";
 import { Button } from "#enums/buttons";
 import type { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#app/field/pokemon";
 import type { ModifierBar } from "#app/modifier/modifier";
-import { SubstituteTag } from "#app/data/battler-tags";
 import { globalScene } from "#app/global-scene";
+import { BattlerTagType } from "#enums/battler-tag-type";
 
 export type TargetSelectCallback = (targets: BattlerIndex[]) => void;
 
@@ -20,6 +21,7 @@ export default class TargetSelectUiHandler extends UiHandler {
   private cursor1: number; // associated with BattlerIndex.PLAYER_2
 
   private isMultipleTargets: boolean = false;
+  private isFieldTarget: boolean = false;
   private targets: BattlerIndex[];
   private targetsHighlighted: Pokemon[];
   private targetFlashTween: Phaser.Tweens.Tween | null;
@@ -49,6 +51,7 @@ export default class TargetSelectUiHandler extends UiHandler {
     const moveTargets = getMoveTargets(user, this.moveId);
     this.targets = moveTargets.targets;
     this.isMultipleTargets = moveTargets.multiple ?? false;
+    this.isFieldTarget = isFieldTargeted(this.targets);
 
     if (!this.targets.length) {
       return false;
@@ -85,7 +88,7 @@ export default class TargetSelectUiHandler extends UiHandler {
     let success = false;
 
     if (button === Button.ACTION || button === Button.CANCEL) {
-      const targetIndexes: BattlerIndex[] = this.isMultipleTargets ? this.targets : [this.cursor];
+      const targetIndexes: BattlerIndex[] = this.isMultipleTargets || this.isFieldTarget ? this.targets : [this.cursor];
       this.targetSelectCallback(button === Button.ACTION ? targetIndexes : []);
       success = true;
       if (this.fieldIndex === BattlerIndex.PLAYER) {
@@ -97,7 +100,7 @@ export default class TargetSelectUiHandler extends UiHandler {
           this.cursor1 = this.cursor;
         }
       }
-    } else if (this.isMultipleTargets) {
+    } else if (this.isMultipleTargets || this.isFieldTarget) {
       success = false;
     } else {
       switch (button) {
@@ -131,18 +134,38 @@ export default class TargetSelectUiHandler extends UiHandler {
     return success;
   }
 
-  override setCursor(cursor: number): boolean {
-    const singleTarget = globalScene.getFieldPokemonByBattlerIndex(cursor)!;
-    const multipleTargets = this.targets.map((index) => globalScene.getFieldPokemonByBattlerIndex(index)!);
+  /** @returns all valid target {@linkcode Pokemon} for the current target selection */
+  protected getTargetsByIndex(): Pokemon[] {
+    return this.targets
+      .map((index) => globalScene.getFieldPokemonByBattlerIndex(index))
+      .filter((p) => !isNullOrUndefined(p));
+  }
 
-    this.targetsHighlighted = this.isMultipleTargets ? multipleTargets : [singleTarget];
+  /** @returns the {@linkcode Pokemon} to highlight based on the move's targeting */
+  protected getHighlightedPokemon(cursor: number): Pokemon[] {
+    if (this.targets.includes(BattlerIndex.BOTH_SIDES)) {
+      return globalScene.getField(true);
+    } else if (this.targets.includes(BattlerIndex.ENEMY_SIDE)) {
+      return globalScene.getEnemyField().filter((p) => p.isActive(true));
+    } else if (this.targets.includes(BattlerIndex.PLAYER_SIDE)) {
+      return globalScene.getPlayerField().filter((p) => p.isActive(true));
+    } else if (this.isMultipleTargets) {
+      return this.getTargetsByIndex();
+    } else {
+      return [globalScene.getFieldPokemonByBattlerIndex(cursor)!];
+    }
+  }
+
+  override setCursor(cursor: number): boolean {
+    const allTargets = this.getTargetsByIndex();
+    this.targetsHighlighted = this.getHighlightedPokemon(cursor);
 
     const ret = super.setCursor(cursor);
 
     if (this.targetFlashTween) {
       this.targetFlashTween.stop();
-      for (const pokemon of multipleTargets) {
-        pokemon.setAlpha(!!pokemon.getTag(SubstituteTag) ? 0.5 : 1);
+      for (const pokemon of allTargets) {
+        pokemon.setAlpha(!!pokemon.getTag(BattlerTagType.SUBSTITUTE) ? 0.5 : 1);
         this.highlightItems(pokemon.id, 1);
       }
     }
@@ -165,7 +188,7 @@ export default class TargetSelectUiHandler extends UiHandler {
 
     if (this.targetBattleInfoMoveTween.length >= 1) {
       this.targetBattleInfoMoveTween.filter((t) => t !== undefined).forEach((tween) => tween.stop());
-      for (const pokemon of multipleTargets) {
+      for (const pokemon of allTargets) {
         pokemon.getBattleInfo().resetY();
       }
     }
@@ -194,7 +217,7 @@ export default class TargetSelectUiHandler extends UiHandler {
     }
 
     for (const pokemon of this.targetsHighlighted) {
-      pokemon.setAlpha(!!pokemon.getTag(SubstituteTag) ? 0.5 : 1);
+      pokemon.setAlpha(!!pokemon.getTag(BattlerTagType.SUBSTITUTE) ? 0.5 : 1);
       this.highlightItems(pokemon.id, 1);
     }
 

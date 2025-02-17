@@ -39,19 +39,12 @@ export class TimedEventDisplay extends Phaser.GameObjects.Container {
   }
 
   setup() {
-    const lang = i18next.resolvedLanguage;
     if (this.event && this.event.bannerKey) {
-      let key = this.event.bannerKey;
-
-      if (globalScene.textures.exists(key + lang)) {
-        key += lang;
-      } else {
-        key += "en";
-      }
+      const bannerKey = this.event.bannerKey;
       const padding = 5;
       const showTimer = this.event.eventType !== EventType.NO_TIMER_DISPLAY;
       const yPosition = GAME_HEIGHT - padding - (showTimer ? 10 : 0) - (this.event.yOffset ?? 0);
-      this.banner = new Phaser.GameObjects.Image(globalScene, this.availableWidth / 2, yPosition - padding, key);
+      this.banner = new Phaser.GameObjects.Image(globalScene, this.availableWidth / 2, yPosition - padding, bannerKey);
       this.banner.setName("img-event-banner");
       this.banner.setOrigin(0.5, 1);
       if (this.event.bannerScale) {

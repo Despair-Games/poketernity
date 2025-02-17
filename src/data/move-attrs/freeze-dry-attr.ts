@@ -1,4 +1,4 @@
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
@@ -15,9 +15,9 @@ export class FreezeDryAttr extends VariableMoveTypeChartAttr {
     _target: Pokemon,
     _move: Move,
     multiplier: NumberHolder,
-    defType: ElementType,
+    defType: ElementalType,
   ): boolean {
-    if (defType === ElementType.WATER) {
+    if (defType === ElementalType.WATER) {
       multiplier.value = 2;
       return true;
     } else {

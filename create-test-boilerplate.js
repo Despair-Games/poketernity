@@ -1,7 +1,7 @@
 /**
  * This script creates a test boilerplate file in the appropriate
  * directory based on the type selected.
- * @example npm run create-test
+ * @example npm run test:create
  */
 
 import fs from "fs";
@@ -71,7 +71,7 @@ async function promptFileName(selectedType) {
 }
 
 /**
- * Runs the interactive create-test "CLI"
+ * Runs the interactive test:create "CLI"
  * @returns {Promise<void>}
  */
 async function runInteractive() {
@@ -115,7 +115,7 @@ async function runInteractive() {
 
   // Define the content template
   const content = `import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -138,19 +138,19 @@ describe("${description}", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([ Moves.SPLASH ])
+      .moveset([ MoveId.SPLASH ])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should do X", async () => {
     await game.classicMode.startBattle([ Species.FEEBAS ]);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(true).toBe(true);

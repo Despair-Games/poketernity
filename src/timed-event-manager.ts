@@ -7,7 +7,7 @@ const timedEvents: TimedEvent[] = [
     eventType: EventType.NO_TIMER_DISPLAY,
     startDate: new Date(Date.UTC(2025, 0, 1, 0)),
     endDate: new Date(Date.UTC(2025, 5, 30, 0)),
-    bannerKey: "welcome-",
+    bannerKey: "welcome",
   },
 ];
 

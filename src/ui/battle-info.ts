@@ -1,6 +1,6 @@
 import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
 import { getLevelRelExp } from "#app/data/exp";
-import { getLocalizedSpriteKey, fixedNumber } from "#app/utils";
+import { fixedNumber } from "#app/utils";
 import { addTextObject } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { getGenderSymbol, getGenderColor } from "#app/data/gender";
@@ -8,7 +8,7 @@ import { Gender } from "#enums/gender";
 import { StatusEffect } from "#enums/status-effect";
 import { globalScene } from "#app/global-scene";
 import { getTypeRgb } from "#app/data/type";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { getVariantTint } from "#app/data/variant";
 import { Stat } from "#enums/stat";
 import BattleFlyout from "#app/ui/battle-flyout";
@@ -30,7 +30,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
   private bossSegments: number;
   private offset: boolean;
   private lastName: string | null;
-  private lastTeraType: ElementType;
+  private lastTeraType: ElementalType;
   private lastStatus: StatusEffect;
   private lastHp: number;
   private lastMaxHp: number;
@@ -90,7 +90,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     this.boss = false;
     this.offset = false;
     this.lastName = null;
-    this.lastTeraType = ElementType.UNKNOWN;
+    this.lastTeraType = ElementalType.UNKNOWN;
     this.lastStatus = StatusEffect.NONE;
     this.lastHp = -1;
     this.lastMaxHp = -1;
@@ -126,7 +126,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
       this.ownedIcon.setPositionRelative(this.nameText, 0, 11.75);
       this.add(this.ownedIcon);
 
-      this.championRibbon = globalScene.add.sprite(0, 0, "champion_ribbon");
+      this.championRibbon = globalScene.add.sprite(0, 0, "icon_champion_ribbon");
       this.championRibbon.setName("icon_champion_ribbon");
       this.championRibbon.setVisible(false);
       this.championRibbon.setOrigin(0, 0);
@@ -169,7 +169,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     this.splicedIcon.setInteractive(new Phaser.Geom.Rectangle(0, 0, 12, 15), Phaser.Geom.Rectangle.Contains);
     this.add(this.splicedIcon);
 
-    this.statusIndicator = globalScene.add.sprite(0, 0, getLocalizedSpriteKey("statuses"));
+    this.statusIndicator = globalScene.add.sprite(0, 0, "status_icons");
     this.statusIndicator.setName("icon_status");
     this.statusIndicator.setVisible(false);
     this.statusIndicator.setOrigin(0, 0);
@@ -183,6 +183,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     const levelOverlay = globalScene.add.image(0, 0, "overlay_lv");
     this.levelContainer.add(levelOverlay);
 
+    //TODO: we shouldn't use decimal values for position
     this.hpBar = globalScene.add.image(player ? -61 : -71, player ? -1 : 4.5, "overlay_hp");
     this.hpBar.setName("hp_bar");
     this.hpBar.setOrigin(0);
@@ -190,7 +191,8 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
 
     this.hpBarSegmentDividers = [];
 
-    this.levelNumbersContainer = globalScene.add.container(9.5, settings.display.uiTheme ? 0 : -0.5);
+    //TODO: we shouldn't use decimal values for position
+    this.levelNumbersContainer = globalScene.add.container(9.5, -0.5);
     this.levelNumbersContainer.setName("container_level");
     this.levelContainer.add(this.levelNumbersContainer);
 
@@ -349,13 +351,13 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     this.lastTeraType = pokemon.getTeraType();
 
     this.teraIcon.setPositionRelative(this.nameText, nameTextWidth + this.genderText.displayWidth + 1, 2);
-    this.teraIcon.setVisible(this.lastTeraType !== ElementType.UNKNOWN);
+    this.teraIcon.setVisible(this.lastTeraType !== ElementalType.UNKNOWN);
     this.teraIcon.on("pointerover", () => {
-      if (this.lastTeraType !== ElementType.UNKNOWN) {
+      if (this.lastTeraType !== ElementalType.UNKNOWN) {
         globalScene.ui.showTooltip(
           "",
           i18next.t("fightUiHandler:teraHover", {
-            type: i18next.t(`pokemonInfo:Type.${ElementType[this.lastTeraType]}`),
+            type: i18next.t(`pokemonInfo:Type.${ElementalType[this.lastTeraType]}`),
           }),
         );
       }
@@ -457,7 +459,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
       }
     }
 
-    this.hpBar.setScale(pokemon.getHpRatio(true), 1);
+    this.hpBar.setScale(pokemon.getHpRatio(), 1);
     this.lastHpFrame = this.hpBar.scaleX > 0.5 ? "high" : this.hpBar.scaleX > 0.25 ? "medium" : "low";
     this.hpBar.setFrame(this.lastHpFrame);
     if (this.player) {
@@ -473,14 +475,14 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
 
     const types = pokemon.getTypes(true);
     this.type1Icon.setTexture(`pbinfo_${this.player ? "player" : "enemy"}_type${types.length > 1 ? "1" : ""}`);
-    this.type1Icon.setFrame(ElementType[types[0]].toLowerCase());
+    this.type1Icon.setFrame(ElementalType[types[0]].toLowerCase());
     this.type2Icon.setVisible(types.length > 1);
     this.type3Icon.setVisible(types.length > 2);
     if (types.length > 1) {
-      this.type2Icon.setFrame(ElementType[types[1]].toLowerCase());
+      this.type2Icon.setFrame(ElementalType[types[1]].toLowerCase());
     }
     if (types.length > 2) {
-      this.type3Icon.setFrame(ElementType[types[2]].toLowerCase());
+      this.type3Icon.setFrame(ElementalType[types[2]].toLowerCase());
     }
 
     if (this.player) {
@@ -584,7 +586,6 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     }
 
     if (this.boss && this.bossSegments > 1) {
-      const uiTheme = settings.display.uiTheme;
       const maxHp = pokemon.getMaxHp();
       for (let s = 1; s < this.bossSegments; s++) {
         const dividerX = (Math.round((maxHp / this.bossSegments) * s) / maxHp) * this.hpBar.width;
@@ -592,7 +593,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
           0,
           0,
           1,
-          this.hpBar.height - (uiTheme ? 0 : 1),
+          this.hpBar.height - 1,
           pokemon.bossSegmentIndex >= s ? 0xffffff : 0x404040,
         );
         divider.setOrigin(0.5, 0);
@@ -600,7 +601,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
         this.add(divider);
         this.moveBelow(divider as Phaser.GameObjects.GameObject, this.statsContainer);
 
-        divider.setPositionRelative(this.hpBar, dividerX, uiTheme ? 0 : 1);
+        divider.setPositionRelative(this.hpBar, dividerX, 1);
         this.hpBarSegmentDividers.push(divider);
       }
     }
@@ -635,7 +636,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
       const teraTypeUpdated = this.lastTeraType !== teraType;
 
       if (teraTypeUpdated) {
-        this.teraIcon.setVisible(teraType !== ElementType.UNKNOWN);
+        this.teraIcon.setVisible(teraType !== ElementalType.UNKNOWN);
         this.teraIcon.setPositionRelative(
           this.nameText,
           this.nameText.displayWidth + this.genderText.displayWidth + 1,
@@ -687,14 +688,14 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
 
       const types = pokemon.getTypes(true);
       this.type1Icon.setTexture(`pbinfo_${this.player ? "player" : "enemy"}_type${types.length > 1 ? "1" : ""}`);
-      this.type1Icon.setFrame(ElementType[types[0]].toLowerCase());
+      this.type1Icon.setFrame(ElementalType[types[0]].toLowerCase());
       this.type2Icon.setVisible(types.length > 1);
       this.type3Icon.setVisible(types.length > 2);
       if (types.length > 1) {
-        this.type2Icon.setFrame(ElementType[types[1]].toLowerCase());
+        this.type2Icon.setFrame(ElementalType[types[1]].toLowerCase());
       }
       if (types.length > 2) {
-        this.type3Icon.setFrame(ElementType[types[2]].toLowerCase());
+        this.type3Icon.setFrame(ElementalType[types[2]].toLowerCase());
       }
 
       const updateHpFrame = () => {
@@ -714,7 +715,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
         globalScene.tweens.add({
           targets: this.hpBar,
           ease: "Sine.easeOut",
-          scaleX: pokemon.getHpRatio(true),
+          scaleX: pokemon.getHpRatio(),
           duration: duration,
           onUpdate: () => {
             if (this.player && this.lastHp !== pokemon.hp) {
@@ -955,7 +956,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
 
 export class PlayerBattleInfo extends BattleInfo {
   constructor() {
-    super(Math.floor(GAME_WIDTH) - 10, -72, true);
+    super(GAME_WIDTH - 10, -72, true);
     this.type = "PlayerBattleInfo";
   }
 }

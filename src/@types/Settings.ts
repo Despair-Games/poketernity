@@ -6,11 +6,10 @@ import type { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import type { ExpNotification } from "#enums/exp-notification";
 import type { HpBarSpeed } from "#enums/hp-bar-speed";
 import type { MoneyFormat } from "#enums/money-format";
-import type { MusicPreference } from "#enums/music-preference";
 import type { PlayerGender } from "#enums/player-gender";
 import type { ShopCursorTarget } from "#enums/shop-cursor-target";
 import type { UiTheme } from "#enums/ui-theme";
-import type { UiWindowType } from "#enums/ui-window-type";
+import type { UiWindowStyle } from "#enums/ui-window-style";
 
 export interface Settings extends UserFacingSettings {
   meta: MetaSettings;
@@ -44,7 +43,7 @@ export interface GeneralSettings {
 
 export interface DisplaySettings {
   uiTheme: UiTheme;
-  uiWindowType: UiWindowType;
+  uiWindowStyle: UiWindowStyle;
   moneyFormat: MoneyFormat;
   damageNumbersMode: DamageNumbersMode;
   enableMoveAnimations: boolean;
@@ -69,7 +68,6 @@ export interface AudioSettings {
   fieldVolume: number;
   soundEffectsVolume: number;
   uiVolume: number;
-  musicPreference: MusicPreference;
 }
 
 export interface GamepadSettings {

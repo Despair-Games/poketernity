@@ -40,7 +40,7 @@ describe("Moves - Taunt", () => {
     await game.forceEnemyMove(MoveId.TAUNT);
     await game.toNextTurn();
     const move1 = playerPokemon.getLastXMoves(1)[0]!;
-    expect(move1.moveId).toBe(MoveId.GROWL);
+    expect(move1.move.id).toBe(MoveId.GROWL);
     expect(move1.result).toBe(MoveResult.SUCCESS);
     expect(playerPokemon?.getTag(BattlerTagType.TAUNT)).toBeDefined();
 
@@ -49,6 +49,6 @@ describe("Moves - Taunt", () => {
     await game.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
     const move2 = playerPokemon.getLastXMoves(1)[0]!;
-    expect(move2.moveId).toBe(MoveId.STRUGGLE);
+    expect(move2.move.id).toBe(MoveId.STRUGGLE);
   });
 });

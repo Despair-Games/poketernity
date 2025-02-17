@@ -1,9 +1,9 @@
-import type { ElementType } from "#enums/element-type";
+import type { ElementalType } from "#enums/elemental-type";
 import { isNullOrUndefined, randSeedInt } from "#app/utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { globalScene } from "#app/global-scene";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
@@ -103,12 +103,12 @@ export const DarkDealEncounter: MysteryEncounter = MysteryEncounterBuilder.withE
 
         // Start encounter with random legendary (7-10 starter strength) that has level additive
         // If this is a mono-type challenge, always ensure the required type is filtered for
-        let bossTypes: ElementType[] = encounter.misc.removedTypes;
+        let bossTypes: ElementalType[] = encounter.misc.removedTypes;
         const singleTypeChallenges = globalScene.gameMode.challenges.filter(
           (c) => c.value && c.id === Challenges.SINGLE_TYPE,
         );
         if (globalScene.gameMode.isChallenge && singleTypeChallenges.length > 0) {
-          bossTypes = singleTypeChallenges.map((c) => (c.value - 1) as ElementType);
+          bossTypes = singleTypeChallenges.map((c) => (c.value - 1) as ElementalType);
         }
 
         const bossModifiers: PokemonHeldItemModifier[] = encounter.misc.modifiers;

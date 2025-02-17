@@ -17,7 +17,7 @@ import { UiMode } from "#enums/ui-mode";
 import type { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { Species } from "#enums/species";
-import type { ElementType } from "#enums/element-type";
+import type { ElementalType } from "#enums/elemental-type";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { speciesStarterCosts } from "#app/data/balance/starters";
@@ -28,7 +28,7 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { Gender } from "#enums/gender";
 import type { PermanentStat } from "#enums/stat";
 import { VictoryPhase } from "#app/phases/victory-phase";
@@ -257,7 +257,7 @@ export function getHighestStatTotalPlayerPokemon(
 export function getRandomSpeciesByStarterCost(
   starterTiers: number | [number, number],
   excludedSpecies?: Species[],
-  types?: ElementType[],
+  types?: ElementalType[],
   allowSubLegendary: boolean = true,
   allowLegendary: boolean = true,
   allowMythical: boolean = true,

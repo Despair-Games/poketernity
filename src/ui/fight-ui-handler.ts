@@ -1,20 +1,20 @@
 import type { InfoToggle } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
-import { addTextObject } from "./text";
+import { addTextObject, setTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { getTypeDamageMultiplierColor } from "#app/data/type";
-import { ElementType } from "#enums/element-type";
+import { ElementalType } from "#enums/elemental-type";
 import { BattleCommand } from "#enums/battle-command";
 import { UiMode } from "#enums/ui-mode";
-import UiHandler from "./ui-handler";
-import { getLocalizedSpriteKey, fixedNumber, leftPad } from "#app/utils";
+import UiHandler from "#app/ui/ui-handler";
+import { fixedNumber, leftPad } from "#app/utils";
 import { MoveCategory } from "#enums/move-category";
 import i18next from "i18next";
 import { Button } from "#enums/buttons";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { CommandPhase } from "#app/phases/command-phase";
-import MoveInfoOverlay from "./move-info-overlay";
+import MoveInfoOverlay from "#app/ui/move-info-overlay";
 import { BattleType } from "#enums/battle-type";
 import { settings } from "#app/system/settings/settings-manager";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
@@ -54,7 +54,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     this.moveInfoContainer.setName("move-info");
     ui.add(this.moveInfoContainer);
 
-    this.typeIcon = globalScene.add.sprite(GAME_WIDTH - 57, -36, getLocalizedSpriteKey("types"), "unknown");
+    this.typeIcon = globalScene.add.sprite(GAME_WIDTH - 57, -36, "type_icons", "unknown");
     this.typeIcon.setVisible(false);
     this.moveInfoContainer.add(this.typeIcon);
 
@@ -190,6 +190,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
   }
 
   toggleInfo(visible: boolean): void {
+    visible = visible && settings.display.enableMoveInfo;
     if (visible) {
       this.movesContainer.setVisible(false);
       this.cursorObj?.setVisible(false);
@@ -240,8 +241,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     if (hasMove) {
       const pokemonMove = moveset[cursor];
       const moveType = pokemon.getMoveType(pokemonMove.getMove());
-      const textureKey = getLocalizedSpriteKey("types");
-      this.typeIcon.setTexture(textureKey, ElementType[moveType].toLowerCase()).setScale(0.8);
+      this.typeIcon.setTexture("type_icons", ElementalType[moveType].toLowerCase()).setScale(0.8);
 
       const moveCategory = pokemonMove.getMove().category;
       this.moveCategoryIcon.setTexture("categories", MoveCategory[moveCategory].toLowerCase()).setScale(1.0);
@@ -269,8 +269,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
       }
 
       //** Changes the text color and shadow according to the determined TextStyle */
-      this.ppText.setColor(this.getTextColor(ppColorStyle, false));
-      this.ppText.setShadowColor(this.getTextColor(ppColorStyle, true));
+      setTextColor(this.ppText, ppColorStyle);
       this.moveInfoOverlay.show(pokemonMove.getMove());
 
       pokemon.getOpponents().forEach((opponent) => {
@@ -342,7 +341,7 @@ export default class FightUiHandler extends UiHandler implements InfoToggle {
     const moveColors = opponents
       .map((opponent) => opponent.getMoveEffectiveness(pokemon, pokemonMove.getMove(), AbilityApplyMode.REVEALED))
       .sort((a, b) => b - a)
-      .map((effectiveness) => getTypeDamageMultiplierColor(effectiveness ?? 0, "offense"));
+      .map((effectiveness) => getTypeDamageMultiplierColor(effectiveness ?? 0));
 
     return moveColors[0];
   }

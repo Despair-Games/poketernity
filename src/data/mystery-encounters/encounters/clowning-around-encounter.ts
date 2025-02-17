@@ -6,12 +6,12 @@ import {
   loadCustomMovesForEncounter,
   selectPokemonForOption,
   setEncounterRewards,
-  transitionMysteryEncounterIntroVisuals,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 import { TrainerPartyCompoundTemplate, TrainerPartyTemplate } from "#app/data/trainer-config";
 import { ModifierTier } from "#enums/modifier-tier";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PartyMemberStrength } from "#enums/party-member-strength";
@@ -27,7 +27,7 @@ import {
   applyAbilityOverrideToPokemon,
   applyModifierTypeToPlayerPokemon,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import type { ElementType } from "#enums/element-type";
+import type { ElementalType } from "#enums/elemental-type";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { randSeedInt, randSeedShuffle } from "#app/utils";
@@ -39,7 +39,7 @@ import { Ability } from "#app/data/ability";
 import { BerryType } from "#enums/berry-type";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
-import { EncounterBattleAnim } from "#app/data/battle-anims";
+import { EncounterBattleAnim } from "#app/data/battle-anims/encounter-battle-anim";
 import { MoveCategory } from "#enums/move-category";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
@@ -376,12 +376,12 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
           }
 
           const newTypes = [originalTypes[0]];
-          let secondType: ElementType | null = null;
+          let secondType: ElementalType | null = null;
           while (secondType === null || secondType === newTypes[0] || originalTypes.includes(secondType)) {
             if (priorityTypes.length > 0) {
               secondType = priorityTypes.pop() ?? null;
             } else {
-              secondType = randSeedInt(18) as ElementType;
+              secondType = randSeedInt(18) as ElementalType;
             }
           }
           newTypes.push(secondType);
@@ -475,14 +475,14 @@ function generateItemsOfTier(pokemon: PlayerPokemon, numItems: number, tier: Mod
     [modifierTypes.GOLDEN_PUNCH, 5],
     [modifierTypes.ATTACK_TYPE_BOOSTER, 99],
     [modifierTypes.QUICK_CLAW, 3],
-    [modifierTypes.WIDE_LENS, 3],
+    // wide lens, weight 3
   ];
 
   const epicPool = [
     [modifierTypes.LEFTOVERS, 4],
     [modifierTypes.SHELL_BELL, 4],
     [modifierTypes.SOUL_DEW, 10],
-    [modifierTypes.SCOPE_LENS, 1],
+    // scope lens, weight 1
     [modifierTypes.BATON, 1],
     [modifierTypes.FOCUS_BAND, 5],
     [modifierTypes.KINGS_ROCK, 3],

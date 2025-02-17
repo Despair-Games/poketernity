@@ -22,7 +22,7 @@ export class IgnoreWeatherTypeDebuffAttr extends MoveAttr {
 
   override apply(_user: Pokemon, _target: Pokemon, _move: Move, weatherModifier: NumberHolder): boolean {
     //If the type-based attack power modifier due to weather (e.g. Water moves in Sun) is below 1, set it to 1
-    if (globalScene.arena.weather?.weatherType === this.weather) {
+    if (globalScene.arena.hasWeather(this.weather)) {
       weatherModifier.value = Math.max(weatherModifier.value, 1);
     }
     return true;
