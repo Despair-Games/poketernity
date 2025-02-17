@@ -171,7 +171,6 @@ import { Animation } from "./animations";
 import { resetStarterColors, starterColors } from "./data/starter-colors";
 import { CallSourceLogger } from "#app/loggers";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
-import { eventManager } from "#app/timed-event-manager";
 import { CommonColor, ShadowColor } from "#enums/color";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
@@ -1012,9 +1011,6 @@ export default class BattleScene extends SceneBase {
       species = getPokemonSpecies(Overrides.ENEMY_SPECIES_OVERRIDE);
       // The fact that a Pokemon is a boss or not can change based on its Species and level
       boss = this.getEncounterBossSegments(this.currentBattle.waveIndex, level, species) > 1;
-    }
-    if (eventManager.activeEvent()) {
-      // TODO remove species = getPokemonSpecies(Species.MAGIKARP);
     }
 
     const pokemon = new EnemyPokemon(species, level, trainerSlot, boss, shinyLock, dataSource);

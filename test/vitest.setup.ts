@@ -22,7 +22,7 @@ vi.mock("#app/overrides", async (importOriginal) => {
 vi.mock("#app/timed-event-manager", async () => {
   const { MockTimedEventManager } = await import("#test/testUtils/mocks/mockTimedEventManager");
   return {
-    eventManager: new MockTimedEventManager(),
+    eventManager: new MockTimedEventManager() as any,
   } satisfies typeof import("#app/timed-event-manager"); // eslint-disable-line
 });
 

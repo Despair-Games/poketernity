@@ -1,26 +1,27 @@
-import type { TimedEvent } from "#app/@types/TimedEvent";
+import type { EventBanner, TimedEvent } from "#app/@types/TimedEvent";
+import type { EventModifierType } from "#enums/event-modifier-type";
 
 /** Mock TimedEventManager so that ongoing events don't impact tests */
 export class MockTimedEventManager {
-  isActive(_event: TimedEvent) {
-    return false;
+  private events: TimedEvent[];
+
+  private getActiveEvents(): TimedEvent[] {
+    return [];
   }
-  activeEvent() {
+
+  public getActiveOrUpcomingEventBanner(): EventBanner | undefined {
     return undefined;
   }
-  isEventActive(): boolean {
+  public getActiveEvent(_bannerOnly?: boolean): TimedEvent | undefined {
+    return undefined;
+  }
+  public isEventActive(_modifier: EventModifierType): boolean {
     return false;
   }
-  activeEventHasBanner(): boolean {
-    return false;
-  }
-  getEventBannerFilename(): string {
-    return "";
-  }
-  getFriendshipMultiplier(): number {
+  public getClassicCandyFriendshipMultiplier(): number {
     return 1;
   }
-  getShinyMultiplier(): number {
+  public getWildShinyChanceMultiplier(): number {
     return 1;
   }
 }

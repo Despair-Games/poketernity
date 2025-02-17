@@ -13,6 +13,7 @@ import { MoneyRewardPhase } from "./money-reward-phase";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { PhaseId } from "#enums/phase-id";
 import { eventManager } from "#app/timed-event-manager";
+import { EventModifierType } from "#enums/event-modifier-type";
 
 export class TrainerVictoryPhase extends BattlePhase {
   override readonly id = PhaseId.TRAINER_VICTORY;
@@ -35,7 +36,7 @@ export class TrainerVictoryPhase extends BattlePhase {
       globalScene.unshiftPhase(new ModifierRewardPhase(modifierRewardFunc));
     }
 
-    if (eventManager.isEventActive()) {
+    if (eventManager.isEventActive(EventModifierType.EXTRA_TRAINER_REWARDS)) {
       for (const rewardFunc of trainer.config.eventRewardFuncs) {
         globalScene.unshiftPhase(new ModifierRewardPhase(rewardFunc));
       }

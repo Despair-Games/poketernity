@@ -1,10 +1,10 @@
-import { EventType } from "#enums/event-type";
+import { EventModifierType } from "#enums/event-modifier-type";
 import type { EventBanner, TimedEvent } from "#app/@types/TimedEvent";
+import { isNullOrUndefined } from "#app/utils";
 
 const timedEvents: TimedEvent[] = [
   {
     name: "Welcome to Pokéternity",
-    eventType: EventType.NO_TIMER_DISPLAY,
     startDate: new Date(Date.UTC(2025, 0, 1, 0)),
     endDate: new Date(Date.UTC(2025, 5, 30, 0)),
     banner: {
@@ -17,9 +17,7 @@ const timedEvents: TimedEvent[] = [
 function isActive(event: TimedEvent) {
   return event.startDate < new Date() && new Date() < event.endDate;
 }
-/*function isUpcoming(event: TimedEvent) {
-  return event.startDate >= new Date();
-}*/
+
 function isActiveOrUpcoming(event: TimedEvent) {
   return event.startDate >= new Date() || new Date() < event.endDate;
 }
@@ -47,31 +45,47 @@ class TimedEventManager {
    * @param bannerOnly set to `true` to only retrieve events with a banner.
    * @returns the current {@linkcode TimedEvent}, or `undefined`
    */
-  public activeEvent(bannerOnly?: boolean): TimedEvent | undefined {
+  public getActiveEvent(bannerOnly?: boolean): TimedEvent | undefined {
     return this.events.find((te: TimedEvent) => isActive(te) && (!bannerOnly || te.banner));
   }
 
-  isEventActive(): boolean {
-    return this.events.some((te: TimedEvent) => isActive(te));
+  /**
+   * Check if an event with the given effect is active.
+   * @param modifier the {@linkcode EventModifierType} to check for
+   * @returns `true` if at least one active event has the required elements for the given modifier, `false` otherwise
+   */
+  public isEventActive(modifier: EventModifierType): boolean {
+    switch (modifier) {
+      case EventModifierType.WILD_SHINY_CHANCE:
+        return this.events.some(
+          (te: TimedEvent) => isActive(te) && !isNullOrUndefined(te.modifiers?.wildShinyMultiplier),
+        );
+      case EventModifierType.CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER:
+        return this.events.some(
+          (te: TimedEvent) => isActive(te) && !isNullOrUndefined(te.modifiers?.classicCandyFriendshipMultiplier),
+        );
+      case EventModifierType.EXTRA_TRAINER_REWARDS:
+        return this.events.some((te: TimedEvent) => isActive(te) && te.modifiers?.specialBattleRewards);
+    }
   }
 
-  getFriendshipMultiplier(): number {
-    let multiplier = 1;
-    const friendshipEvents = this.events.filter((te) => isActive(te));
-    friendshipEvents.forEach((fe) => {
-      multiplier *= fe.friendshipMultiplier ?? 1;
-    });
+  private getActiveEvents(): TimedEvent[] {
+    return this.events.filter((te) => isActive(te));
+  }
 
+  public getClassicCandyFriendshipMultiplier(): number {
+    let multiplier = 1;
+    this.getActiveEvents().forEach((event) => {
+      multiplier *= event.modifiers?.classicCandyFriendshipMultiplier ?? 1;
+    });
     return multiplier;
   }
 
-  getShinyMultiplier(): number {
+  public getWildShinyChanceMultiplier(): number {
     let multiplier = 1;
-    const shinyEvents = this.events.filter((te) => te.eventType === EventType.SHINY && isActive(te));
-    shinyEvents.forEach((se) => {
-      multiplier *= se.shinyMultiplier ?? 1;
+    this.getActiveEvents().forEach((event) => {
+      multiplier *= event.modifiers?.wildShinyMultiplier ?? 1;
     });
-
     return multiplier;
   }
 }

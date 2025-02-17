@@ -105,7 +105,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
 
       const ui = this.getUi();
 
-      const activeBannerEvent = eventManager.activeEvent(true);
+      const activeBannerEvent = eventManager.getActiveEvent(true);
       if (activeBannerEvent) {
         if (!this.eventDisplay) {
           const availableBannerWidth = GAME_WIDTH - this.optionSelectBg.width - this.optionSelectBg.x;
