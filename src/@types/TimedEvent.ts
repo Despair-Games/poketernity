@@ -1,18 +1,21 @@
 import type { EventType } from "#enums/event-type";
 
-interface EventBanner {
-  bannerKey?: string;
+export interface EventBanner {
+  key: string;
   xOffset?: number;
   yOffset?: number;
-  bannerScale?: number;
+  scale?: number;
   availableLangs?: string[];
 }
 
-export interface TimedEvent extends EventBanner {
+export interface TimedEvent {
   name: string;
-  eventType: EventType;
-  shinyMultiplier?: number;
-  friendshipMultiplier?: number;
   startDate: Date;
   endDate: Date;
+  banner?: EventBanner;
+
+  eventType: EventType; // TODO change
+  shinyMultiplier?: number;
+  friendshipMultiplier?: number;
+  // TODO enable trainer rewards
 }

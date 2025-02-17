@@ -15,6 +15,7 @@ export class TimedEventDisplay extends Phaser.GameObjects.Container {
   private eventTimer: NodeJS.Timeout | null;
 
   constructor(x: number, y: number, event?: TimedEvent) {
+    console.log(event);
     super(globalScene, x, y);
     this.availableWidth = GAME_WIDTH;
     this.event = event;
@@ -28,7 +29,7 @@ export class TimedEventDisplay extends Phaser.GameObjects.Container {
   setWidth(width: number) {
     if (width !== this.availableWidth) {
       this.availableWidth = width;
-      const xPosition = this.availableWidth / 2 + (this.event?.xOffset ?? 0);
+      const xPosition = this.availableWidth / 2 + (this.event?.banner?.xOffset ?? 0);
       if (this.banner) {
         this.banner.x = xPosition;
       }
@@ -39,16 +40,16 @@ export class TimedEventDisplay extends Phaser.GameObjects.Container {
   }
 
   setup() {
-    if (this.event && this.event.bannerKey) {
-      const bannerKey = this.event.bannerKey;
+    if (this.event && this.event.banner) {
+      const { key, scale, yOffset } = this.event.banner;
       const padding = 5;
       const showTimer = this.event.eventType !== EventType.NO_TIMER_DISPLAY;
-      const yPosition = GAME_HEIGHT - padding - (showTimer ? 10 : 0) - (this.event.yOffset ?? 0);
-      this.banner = new Phaser.GameObjects.Image(globalScene, this.availableWidth / 2, yPosition - padding, bannerKey);
+      const yPosition = GAME_HEIGHT - padding - (showTimer ? 10 : 0) - (yOffset ?? 0);
+      this.banner = new Phaser.GameObjects.Image(globalScene, this.availableWidth / 2, yPosition - padding, key);
       this.banner.setName("img-event-banner");
       this.banner.setOrigin(0.5, 1);
-      if (this.event.bannerScale) {
-        this.banner.setScale(this.event.bannerScale);
+      if (scale) {
+        this.banner.setScale(scale);
       }
       if (showTimer) {
         this.eventTimerText = addTextObject(

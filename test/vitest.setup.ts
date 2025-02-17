@@ -20,7 +20,6 @@ vi.mock("#app/overrides", async (importOriginal) => {
 
 /** Mock the timed event manager to never have an ongoing event. */
 vi.mock("#app/timed-event-manager", async () => {
-   
   const { MockTimedEventManager } = await import("#test/testUtils/mocks/mockTimedEventManager");
   return {
     eventManager: new MockTimedEventManager(),

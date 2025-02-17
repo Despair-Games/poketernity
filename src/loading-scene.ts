@@ -31,6 +31,7 @@ import { api } from "#app/plugins/api/api";
 import { initMoves } from "#app/data/init-moves";
 import { initModifierTypes } from "#app/modifier/init-modifier-types";
 import { initModifierPools } from "#app/modifier/init-modifier-pools";
+import { eventManager } from "#app/timed-event-manager";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";
@@ -195,12 +196,15 @@ export class LoadingScene extends SceneBase {
     this.loadAtlas("status_icons", ImagesFolder.UI_STATUS_ICONS, { languageKey: lang });
     this.loadAtlas("type_icons", ImagesFolder.UI_TYPE_ICONS, { languageKey: lang });
 
-    // TODO: cleanup event images loading
-    const availableLangs = ["en", "de", "it", "fr", "ja", "ko", "es-ES", "pt-BR", "zh-CN"];
-    if (availableLangs.includes(lang)) {
-      this.loadImage("welcome", ImagesFolder.BANNERS, { languageKey: lang });
-    } else {
-      this.loadImage("welcome", ImagesFolder.BANNERS, { languageKey: "en" });
+    // Load the banner for the current or next event with a banner, if any
+    const eventBanner = eventManager.getActiveOrUpcomingEventBanner();
+    if (eventBanner) {
+      if (eventBanner.availableLangs) {
+        const bannerLang = eventBanner.availableLangs.includes(lang) ? lang : "en";
+        this.loadImage(eventBanner.key, ImagesFolder.BANNERS, { languageKey: bannerLang });
+      } else {
+        this.loadImage(eventBanner.key, ImagesFolder.BANNERS);
+      }
     }
 
     // Load arena images
