@@ -9,14 +9,10 @@ import { MoveEffectAttr } from "./move-effect-attr";
 import { getPokemonNameWithAffix } from "#app/messages";
 
 /**
- * Attribute used for captivate where all opponents that do not have the {@linkcode OBLIVIOUS} ability
+ * Attribute used for captivate where all opponents that do not have the {@linkcode Abilities.OBLIVIOUS} ability
  * and are of opposite gender from the user has their SPATK stat dropped by 2 stages
  */
 export class CaptivateAttr extends MoveEffectAttr {
-  constructor() {
-    super();
-  }
-
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     if (!target.hasAbility(Abilities.OBLIVIOUS) && target.isOppositeGender(user)) {
       globalScene.unshiftPhase(new StatStageChangePhase(target.getBattlerIndex(), user, [Stat.SPATK], -2));
