@@ -3,8 +3,10 @@ import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { Abilities } from "#enums/abilities";
 import { Stat } from "#enums/stat";
+import i18next from "i18next";
 import type { Move } from "../move";
 import { MoveEffectAttr } from "./move-effect-attr";
+import { getPokemonNameWithAffix } from "#app/messages";
 
 /**
  * Attribute used for captivate where all opponents that do not have the {@linkcode OBLIVIOUS} ability
@@ -20,7 +22,12 @@ export class CaptivateAttr extends MoveEffectAttr {
       globalScene.unshiftPhase(new StatStageChangePhase(target.getBattlerIndex(), user, [Stat.SPATK], -2));
       return true;
     }
-
+    // It doesn't affect pokemonNameWithAffix!
+    globalScene.queueMessage(
+      i18next.t("abilityTriggers:moveImmunity", {
+        pokemonNameWithAffix: getPokemonNameWithAffix(target),
+      }),
+    );
     return false;
   }
 }
