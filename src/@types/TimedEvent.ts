@@ -2,10 +2,10 @@ import type { EventType } from "#enums/event-type";
 
 export interface EventBanner {
   key: string;
+  availableLangs?: string[];
+  showTimer?: boolean;
   xOffset?: number;
   yOffset?: number;
-  scale?: number;
-  availableLangs?: string[];
 }
 
 export interface TimedEvent {

@@ -20,8 +20,8 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
   private playerCountLabel: Phaser.GameObjects.Text;
   private splashMessage: string;
   private splashMessageText: Phaser.GameObjects.Text;
-  private eventDisplay: TimedEventDisplay;
   private appVersionText: Phaser.GameObjects.Text;
+  private eventDisplay?: TimedEventDisplay;
 
   private titleStatsTimer: NodeJS.Timeout | null;
 
@@ -42,12 +42,6 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
     const logo = globalScene.add.image(GAME_WIDTH / 2, 8, "logo");
     logo.setOrigin(0.5, 0);
     this.titleContainer.add(logo);
-
-    if (eventManager.isEventActive()) {
-      this.eventDisplay = new TimedEventDisplay(0, 0, eventManager.activeEvent());
-      this.eventDisplay.setup();
-      this.titleContainer.add(this.eventDisplay);
-    }
 
     this.playerCountLabel = addTextObject(
       GAME_WIDTH - 2,
@@ -111,9 +105,17 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
 
       const ui = this.getUi();
 
-      if (eventManager.isEventActive()) {
-        this.eventDisplay.setWidth(GAME_WIDTH - this.optionSelectBg.width - this.optionSelectBg.x);
+      const activeBannerEvent = eventManager.activeEvent(true);
+      if (activeBannerEvent) {
+        if (!this.eventDisplay) {
+          const availableBannerWidth = GAME_WIDTH - this.optionSelectBg.width - this.optionSelectBg.x;
+          this.eventDisplay = new TimedEventDisplay(0, 0, availableBannerWidth);
+          this.titleContainer.add(this.eventDisplay);
+        }
+        this.eventDisplay.setEvent(activeBannerEvent);
         this.eventDisplay.show();
+      } else {
+        this.eventDisplay?.hide();
       }
 
       this.updateTitleStats();

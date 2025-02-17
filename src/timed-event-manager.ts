@@ -38,21 +38,21 @@ class TimedEventManager {
    * Get the banner information for the current or next upcoming event with a banner.
    * @returns the current or next {@linkcode EventBanner}, if any.
    */
-  getActiveOrUpcomingEventBanner(): EventBanner | undefined {
+  public getActiveOrUpcomingEventBanner(): EventBanner | undefined {
     return this.events.find((te: TimedEvent) => isActiveOrUpcoming(te) && te.banner)?.banner;
   }
 
-  activeEvent(): TimedEvent | undefined {
-    return this.events.find((te: TimedEvent) => isActive(te));
+  /**
+   * Get the current active event, if any.
+   * @param bannerOnly set to `true` to only retrieve events with a banner.
+   * @returns the current {@linkcode TimedEvent}, or `undefined`
+   */
+  public activeEvent(bannerOnly?: boolean): TimedEvent | undefined {
+    return this.events.find((te: TimedEvent) => isActive(te) && (!bannerOnly || te.banner));
   }
 
   isEventActive(): boolean {
     return this.events.some((te: TimedEvent) => isActive(te));
-  }
-
-  activeEventHasBanner(): boolean {
-    const activeEvents = this.events.filter((te) => isActive(te) && te.hasOwnProperty("bannerFilename"));
-    return activeEvents.length > 0;
   }
 
   getFriendshipMultiplier(): number {
