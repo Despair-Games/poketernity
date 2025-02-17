@@ -136,18 +136,9 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
       this.optionsContainer.add(this.settingLabels[i]);
       this.optionValueLabels.push(
         uiItem.options.map((option) => {
-          const valueLabel = addTextObject(
-            0,
-            0,
-            option.label,
-            option.value === settingsManager[this.category][uiItem.key]
-              ? TextStyle.SETTINGS_SELECTED
-              : TextStyle.SETTINGS_VALUE,
-          );
+          const valueLabel = addTextObject(0, 0, option.label, TextStyle.SETTINGS_VALUE);
           valueLabel.setOrigin(0, 0);
-
           this.optionsContainer.add(valueLabel);
-
           return valueLabel;
         }),
       );
