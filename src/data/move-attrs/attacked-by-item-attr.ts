@@ -14,6 +14,7 @@ export class AttackedByItemAttr extends PreMoveMessageAttr {
   constructor() {
     super((_user, target, _move) => {
       const heldItems = target.getHeldItems().filter((i) => i.isTransferable);
+      // "item" should be localizable here but under normal circumstances this fallback should never show
       const itemName = heldItems[0]?.type?.name ?? "item";
 
       return i18next.t("moveTriggers:attackedByItem", {
@@ -25,7 +26,6 @@ export class AttackedByItemAttr extends PreMoveMessageAttr {
 
   /** Causes failure if the target isn't holding a transferable item */
   override getCondition(): MoveConditionFunc {
-    return (_user: Pokemon, target: Pokemon, _move: Move) =>
-      target.getHeldItems().some((i) => i.isTransferable);
+    return (_user: Pokemon, target: Pokemon, _move: Move) => target.getHeldItems().some((i) => i.isTransferable);
   }
 }
