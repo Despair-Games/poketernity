@@ -10,7 +10,7 @@ import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
 import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
-import { eventManager } from "#app/timed-event-manager";
+import { timedEventManager } from "#app/timed-event-manager";
 
 export default class TitleUiHandler extends OptionSelectUiHandler {
   /** If the stats can not be retrieved, use this fallback value */
@@ -105,7 +105,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
 
       const ui = this.getUi();
 
-      const activeBannerEvent = eventManager.getActiveEvent(true);
+      const activeBannerEvent = timedEventManager.getActiveEvent(true);
       if (activeBannerEvent) {
         if (!this.eventDisplay) {
           const availableBannerWidth = GAME_WIDTH - this.optionSelectBg.width - this.optionSelectBg.x;

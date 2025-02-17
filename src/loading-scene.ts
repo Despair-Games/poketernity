@@ -31,7 +31,7 @@ import { api } from "#app/plugins/api/api";
 import { initMoves } from "#app/data/init-moves";
 import { initModifierTypes } from "#app/modifier/init-modifier-types";
 import { initModifierPools } from "#app/modifier/init-modifier-pools";
-import { eventManager } from "#app/timed-event-manager";
+import { timedEventManager } from "#app/timed-event-manager";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";
@@ -197,7 +197,7 @@ export class LoadingScene extends SceneBase {
     this.loadAtlas("type_icons", ImagesFolder.UI_TYPE_ICONS, { languageKey: lang });
 
     // Load the banner for the current or next event with a banner, if any
-    const eventBanner = eventManager.getActiveOrUpcomingEventBanner();
+    const eventBanner = timedEventManager.getActiveOrNextEventBanner();
     if (eventBanner) {
       if (eventBanner.availableLangs) {
         const bannerLang = eventBanner.availableLangs.includes(lang) ? lang : "en";

@@ -44,7 +44,7 @@ import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { addPokemonDataToDexAndValidateAchievements } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { PokeballType } from "#enums/pokeball";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
-import { eventManager } from "#app/timed-event-manager";
+import { timedEventManager } from "#app/timed-event-manager";
 import { EventModifierType } from "#enums/event-modifier-type";
 
 /** the i18n namespace for the encounter */
@@ -270,8 +270,8 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
           // Extra shiny roll at 1/128 odds (boosted by events and charms)
           if (!tradePokemon.shiny) {
             const shinyThreshold = new NumberHolder(WONDER_TRADE_SHINY_CHANCE);
-            if (eventManager.isEventActive(EventModifierType.WILD_SHINY_CHANCE)) {
-              shinyThreshold.value *= eventManager.getWildShinyChanceMultiplier();
+            if (timedEventManager.isEventActive(EventModifierType.WILD_SHINY_CHANCE)) {
+              shinyThreshold.value *= timedEventManager.getWildShinyChanceMultiplier();
             }
             globalScene.applyModifiers(ShinyRateBoosterModifier, true, shinyThreshold);
 

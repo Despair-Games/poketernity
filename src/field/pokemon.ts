@@ -182,7 +182,7 @@ import { FieldPosition } from "#enums/field-position";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import type { AbilityFilterOptions } from "#app/data/ability-filter-options";
 import { PokemonMove } from "#app/field/pokemon-move";
-import { eventManager } from "#app/timed-event-manager";
+import { timedEventManager } from "#app/timed-event-manager";
 import { WeakenMoveScreenArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import {
   CritBoostBattlerTagTypes,
@@ -2360,8 +2360,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     const shinyThreshold = new NumberHolder(BASE_SHINY_CHANCE);
     if (thresholdOverride === undefined) {
-      if (eventManager.isEventActive(EventModifierType.WILD_SHINY_CHANCE)) {
-        shinyThreshold.value *= eventManager.getWildShinyChanceMultiplier();
+      if (timedEventManager.isEventActive(EventModifierType.WILD_SHINY_CHANCE)) {
+        shinyThreshold.value *= timedEventManager.getWildShinyChanceMultiplier();
       }
       if (!this.hasTrainer()) {
         globalScene.applyModifiers(ShinyRateBoosterModifier, true, shinyThreshold);
@@ -2395,8 +2395,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       if (thresholdOverride !== undefined && applyModifiersToOverride) {
         shinyThreshold.value = thresholdOverride;
       }
-      if (eventManager.isEventActive(EventModifierType.WILD_SHINY_CHANCE)) {
-        shinyThreshold.value *= eventManager.getWildShinyChanceMultiplier();
+      if (timedEventManager.isEventActive(EventModifierType.WILD_SHINY_CHANCE)) {
+        shinyThreshold.value *= timedEventManager.getWildShinyChanceMultiplier();
       }
       if (!this.hasTrainer()) {
         globalScene.applyModifiers(ShinyRateBoosterModifier, true, shinyThreshold);
@@ -4884,8 +4884,8 @@ export class PlayerPokemon extends Pokemon {
       const amount = new NumberHolder(friendship);
       globalScene.applyModifier(PokemonFriendshipBoosterModifier, true, this, amount);
       let candyFriendshipMultiplier = CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER;
-      if (eventManager.isEventActive(EventModifierType.CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER)) {
-        candyFriendshipMultiplier *= eventManager.getClassicCandyFriendshipMultiplier();
+      if (timedEventManager.isEventActive(EventModifierType.CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER)) {
+        candyFriendshipMultiplier *= timedEventManager.getClassicCandyFriendshipMultiplier();
       }
       const starterAmount = new NumberHolder(
         Math.floor(
