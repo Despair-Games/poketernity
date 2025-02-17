@@ -26,6 +26,6 @@ export class AttackedByItemAttr extends PreMoveMessageAttr {
   /** Causes failure if the target isn't holding a transferable item */
   override getCondition(): MoveConditionFunc {
     return (_user: Pokemon, target: Pokemon, _move: Move) =>
-      target.getHeldItems().filter((i) => i.isTransferable).length > 0;
+      target.getHeldItems().some((i) => i.isTransferable);
   }
 }
