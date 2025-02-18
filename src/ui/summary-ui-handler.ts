@@ -322,13 +322,12 @@ export default class SummaryUiHandler extends UiHandler {
     this.pokemonSprite.setPipelineData("teraColor", getTypeRgb(this.pokemon.getTeraType()));
     this.pokemonSprite.setPipelineData("ignoreTimeTint", true);
     this.pokemonSprite.setPipelineData("spriteKey", this.pokemon.getSpriteKey());
-    ["spriteColors"].map((k) => {
-      delete this.pokemonSprite.pipelineData[`${k}Base`];
-      if (this.pokemon?.summonData?.speciesForm) {
-        k += "Base";
-      }
-      this.pokemonSprite.pipelineData[k] = this.pokemon?.getSprite().pipelineData[k];
-    });
+    let key = "spriteColors";
+    delete this.pokemonSprite.pipelineData[`${key}Base`];
+    if (this.pokemon?.summonData?.speciesForm) {
+      key += "Base";
+    }
+    this.pokemonSprite.pipelineData[key] = this.pokemon?.getSprite().pipelineData[key];
     this.pokemon.cry();
 
     this.nameText.setText(this.pokemon.getNameToRender());

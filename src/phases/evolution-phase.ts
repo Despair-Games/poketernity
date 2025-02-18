@@ -76,12 +76,11 @@ export class EvolutionPhase extends FormChangeBasePhase {
 
             sprite.setPipelineData("ignoreTimeTint", true);
             sprite.setPipelineData("spriteKey", evolvedPokemon.getSpriteKey());
-            ["spriteColors"].map((k) => {
-              if (evolvedPokemon.summonData?.speciesForm) {
-                k += "Base";
-              }
-              sprite.pipelineData[k] = evolvedPokemon.getSprite().pipelineData[k];
-            });
+            let key = "spriteColors";
+            if (evolvedPokemon.summonData?.speciesForm) {
+              key += "Base";
+            }
+            sprite.pipelineData[key] = evolvedPokemon.getSprite().pipelineData[key];
           });
 
           time.delayedCall(1000, () => {
