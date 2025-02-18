@@ -8,8 +8,6 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { Status } from "#app/data/status-effect";
-import { StatusEffect } from "#enums/status-effect";
 import { BattlerIndex } from "#enums/battler-index";
 
 describe("Moves - Whirlwind", () => {
@@ -124,8 +122,7 @@ describe("Moves - Whirlwind", () => {
     const [lapras, eevee, toxapex, primarina] = game.scene.getPlayerParty();
 
     // Turn 1: Eevee faints
-    eevee.hp = 0;
-    eevee.status = new Status(StatusEffect.FAINT);
+    eevee.faint();
     expect(eevee.isFainted()).toBe(true);
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.SPLASH);
@@ -151,8 +148,7 @@ describe("Moves - Whirlwind", () => {
     const [lapras, eevee] = game.scene.getPlayerParty();
 
     // Turn 1: Eevee faints
-    eevee.hp = 0;
-    eevee.status = new Status(StatusEffect.FAINT);
+    eevee.faint();
     expect(eevee.isFainted()).toBe(true);
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.SPLASH);

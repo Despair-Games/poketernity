@@ -157,6 +157,6 @@ describe("Moves - Flame Burst", () => {
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
-    expect(leftEnemy.isFainted(true)).toBeTruthy();
+    expect(leftEnemy.isFainted()).toBeTruthy();
   });
 });

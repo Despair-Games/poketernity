@@ -213,9 +213,7 @@ export function initAbilities() {
         !move.hasAttr(FlinchAttr)
         && !target.turnData.acted
         && move.category !== MoveCategory.STATUS
-        && (target.status
-          ? ![StatusEffect.FREEZE, StatusEffect.SLEEP, StatusEffect.FAINT].includes(target.status.effect)
-          : true)
+        && (target.status ? ![StatusEffect.FREEZE, StatusEffect.SLEEP].includes(target.status.effect) : true)
           ? 10
           : 0,
       BattlerTagType.FLINCHED,
@@ -643,7 +641,7 @@ export function initAbilities() {
       .condition((pokemon) => pokemon.getHpRatio() <= 0.5),
     new Ability(Abilities.CURSED_BODY, 5).attr(PostDefendMoveDisableAbAttr, 30).bypassFaint(),
     new Ability(Abilities.HEALER, 5).conditionalAttr(
-      (pokemon) => pokemon.getAlly() && pokemon.getAlly().status?.effect !== StatusEffect.FAINT && randSeedInt(10) < 3,
+      (pokemon) => pokemon.getAlly() && randSeedInt(10) < 3,
       PostTurnResetStatusAbAttr,
       true,
     ),
