@@ -1382,35 +1382,32 @@ export class EvolutionItemModifierTypeGenerator extends ModifierTypeGenerator {
         return new EvolutionItemModifierType(pregenArgs[0] as EvolutionItem);
       }
 
-      const evolutionItemPool = [
-        party
-          .filter(
-            (p) =>
-              pokemonEvolutions.hasOwnProperty(p.species.speciesId)
-              && (!p.pauseEvolutions
-                || p.species.speciesId === Species.SLOWPOKE
-                || p.species.speciesId === Species.EEVEE),
-          )
-          .map((p) => {
-            const evolutions = pokemonEvolutions[p.species.speciesId];
-            return evolutions.filter(
-              (e) =>
-                e.item !== EvolutionItem.NONE
-                && (e.evoFormKey === null || (e.preFormKey || "") === p.getFormKey())
-                && (!e.condition || e.condition.predicate(p)),
-            );
-          })
-          .flat(),
-      ]
-        .flat()
+      const evolutionItemPool = party
+        .filter(
+          (p) =>
+            pokemonEvolutions.hasOwnProperty(p.species.speciesId)
+            && (!p.pauseEvolutions
+              || p.species.speciesId === Species.SLOWPOKE
+              || p.species.speciesId === Species.EEVEE),
+        )
+        .flatMap((p) => {
+          const evolutions = pokemonEvolutions[p.species.speciesId];
+          return evolutions.filter(
+            (e) =>
+              e.item !== EvolutionItem.NONE
+              && (e.evoFormKey === null || (e.preFormKey || "") === p.getFormKey())
+              && (!e.condition || e.condition.predicate(p)),
+          );
+        })
         .flatMap((e) => e.item)
-        .filter((i) => (!!i && i > 50) === rare);
+        .filter((i) => i !== null)
+        .filter((i) => i > 50 === rare);
 
       if (!evolutionItemPool.length) {
         return null;
       }
 
-      return new EvolutionItemModifierType(evolutionItemPool[randSeedInt(evolutionItemPool.length)]!); // TODO: is the bang correct?
+      return new EvolutionItemModifierType(evolutionItemPool[randSeedInt(evolutionItemPool.length)]);
     });
   }
 }
