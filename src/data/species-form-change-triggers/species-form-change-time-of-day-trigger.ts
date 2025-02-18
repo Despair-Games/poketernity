@@ -12,6 +12,6 @@ export class SpeciesFormChangeTimeOfDayTrigger extends SpeciesFormChangeTrigger 
   }
 
   override canChange(_pokemon: Pokemon): boolean {
-    return this.timesOfDay.indexOf(globalScene.arena.getTimeOfDay()) > -1;
+    return globalScene.arena.isTimeOfDay(this.timesOfDay);
   }
 }

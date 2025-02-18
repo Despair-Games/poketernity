@@ -68,7 +68,6 @@ import { FlyingTypeMultiplierAttr } from "#app/data/move-attrs/flying-type-multi
 import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
 import { FormChangeItemTypeAttr } from "#app/data/move-attrs/form-change-item-type-attr";
 import { FreezeDryAttr } from "#app/data/move-attrs/freeze-dry-attr";
-import { FrenzyAttr } from "#app/data/move-attrs/frenzy-attr";
 import { FriendshipPowerAttr } from "#app/data/move-attrs/friendship-power-attr";
 import { GrowthStatStageChangeAttr } from "#app/data/move-attrs/growth-stat-stage-change-attr";
 import { GulpMissileTagAttr } from "#app/data/move-attrs/gulp-missile-tag-attr";
@@ -220,7 +219,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { isNullOrUndefined } from "#app/utils";
 import { ConditionalProtectArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { SemiInvulnerableBattlerTagTypes, TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
-import { crashDamageFunc, frenzyMissFunc } from "#app/utils/move-utils";
+import { crashDamageFunc } from "#app/utils/move-utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -350,9 +349,7 @@ export function initMoves() {
       .attr(RecoilAttr)
       .recklessMove(),
     new AttackMove(MoveId.THRASH, ElementalType.NORMAL, MoveCategory.PHYSICAL, 120, 100, 10, -1, 0, 1)
-      .attr(FrenzyAttr)
-      .attr(MissEffectAttr, frenzyMissFunc)
-      .attr(NoEffectAttr, frenzyMissFunc)
+      .attr(AddBattlerTagAttr, BattlerTagType.FRENZY, true, { turnCountMin: 2, turnCountMax: 3 })
       .target(MoveTarget.RANDOM_NEAR_ENEMY),
     new AttackMove(MoveId.DOUBLE_EDGE, ElementalType.NORMAL, MoveCategory.PHYSICAL, 120, 100, 15, -1, 0, 1)
       .attr(RecoilAttr, false, 0.33)
@@ -495,9 +492,7 @@ export function initMoves() {
       .attr(StatusEffectAttr, StatusEffect.SLEEP)
       .powderMove(),
     new AttackMove(MoveId.PETAL_DANCE, ElementalType.GRASS, MoveCategory.SPECIAL, 120, 100, 10, -1, 0, 1)
-      .attr(FrenzyAttr)
-      .attr(MissEffectAttr, frenzyMissFunc)
-      .attr(NoEffectAttr, frenzyMissFunc)
+      .attr(AddBattlerTagAttr, BattlerTagType.FRENZY, true, { turnCountMin: 2, turnCountMax: 3 })
       .makesContact()
       .danceMove()
       .target(MoveTarget.RANDOM_NEAR_ENEMY),
@@ -534,7 +529,7 @@ export function initMoves() {
     new AttackMove(MoveId.EARTHQUAKE, ElementalType.GROUND, MoveCategory.PHYSICAL, 100, 100, 10, -1, 0, 1)
       .attr(HitsTagForDoubleDamageAttr, BattlerTagType.UNDERGROUND)
       .attr(MovePowerMultiplierAttr, (_user, target, _move) =>
-        globalScene.arena.getTerrainType() === TerrainType.GRASSY && target.isGrounded() ? 0.5 : 1,
+        globalScene.arena.hasTerrain(TerrainType.GRASSY) && target.isGrounded() ? 0.5 : 1,
       )
       .makesContact(false)
       .target(MoveTarget.ALL_NEAR_OTHERS),
@@ -853,8 +848,7 @@ export function initMoves() {
     ),
     new StatusMove(MoveId.CONVERSION_2, ElementalType.NORMAL, -1, 30, -1, 0, 2)
       .attr(ResistLastMoveTypeAttr)
-      .ignoresSubstitute()
-      .partial(), // Checks the move's original typing and not if its type is changed through some other means
+      .ignoresSubstitute(),
     new AttackMove(MoveId.AEROBLAST, ElementalType.FLYING, MoveCategory.SPECIAL, 100, 95, 5, -1, 0, 2)
       .windMove()
       .attr(HighCritAttr),
@@ -958,9 +952,7 @@ export function initMoves() {
       .makesContact(false),
     new StatusMove(MoveId.LOCK_ON, ElementalType.NORMAL, -1, 5, -1, 0, 2).attr(IgnoreAccuracyAttr),
     new AttackMove(MoveId.OUTRAGE, ElementalType.DRAGON, MoveCategory.PHYSICAL, 120, 100, 10, -1, 0, 2)
-      .attr(FrenzyAttr)
-      .attr(MissEffectAttr, frenzyMissFunc)
-      .attr(NoEffectAttr, frenzyMissFunc)
+      .attr(AddBattlerTagAttr, BattlerTagType.FRENZY, true, { turnCountMin: 2, turnCountMax: 3 })
       .target(MoveTarget.RANDOM_NEAR_ENEMY),
     new StatusMove(MoveId.SANDSTORM, ElementalType.ROCK, -1, 10, -1, 0, 2)
       .attr(WeatherChangeAttr, WeatherType.SANDSTORM)
@@ -1037,7 +1029,7 @@ export function initMoves() {
       .attr(PreMoveMessageAttr, magnitudeMessageFunc)
       .attr(MagnitudePowerAttr)
       .attr(MovePowerMultiplierAttr, (_user, target, _move) =>
-        globalScene.arena.getTerrainType() === TerrainType.GRASSY && target.isGrounded() ? 0.5 : 1,
+        globalScene.arena.hasTerrain(TerrainType.GRASSY) && target.isGrounded() ? 0.5 : 1,
       )
       .attr(HitsTagForDoubleDamageAttr, BattlerTagType.UNDERGROUND)
       .makesContact(false)
@@ -1541,7 +1533,8 @@ export function initMoves() {
     new StatusMove(MoveId.GRAVITY, ElementalType.PSYCHIC, -1, 5, -1, 0, 4)
       .ignoresProtect()
       .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, ArenaTagRelativeSide.ALL, { turnCount: 5 })
-      .target(MoveTarget.BOTH_SIDES),
+      .target(MoveTarget.BOTH_SIDES)
+      .edgeCase(), // does not prevent Bounce, Fly, etc. from being selected; only causes the moves to fail.
     new StatusMove(MoveId.MIRACLE_EYE, ElementalType.PSYCHIC, -1, 40, -1, 0, 4)
       .attr(ExposedMoveAttr, BattlerTagType.IGNORE_DARK)
       .ignoresSubstitute(),
@@ -2222,7 +2215,7 @@ export function initMoves() {
     new AttackMove(MoveId.BULLDOZE, ElementalType.GROUND, MoveCategory.PHYSICAL, 60, 100, 20, 100, 0, 5)
       .attr(StatStageChangeAttr, [Stat.SPD], -1)
       .attr(MovePowerMultiplierAttr, (_user, target, _move) =>
-        globalScene.arena.getTerrainType() === TerrainType.GRASSY && target.isGrounded() ? 0.5 : 1,
+        globalScene.arena.hasTerrain(TerrainType.GRASSY) && target.isGrounded() ? 0.5 : 1,
       )
       .makesContact(false)
       .target(MoveTarget.ALL_NEAR_OTHERS),
@@ -2802,13 +2795,8 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.SPD], -1, true)
       .punchingMove(),
     new StatusMove(MoveId.FLORAL_HEALING, ElementalType.FAIRY, -1, 10, -1, 0, 7)
-      .attr(
-        BoostHealAttr,
-        0.5,
-        2 / 3,
-        true,
-        false,
-        (_user, _target, _move) => globalScene.arena.terrain?.terrainType === TerrainType.GRASSY,
+      .attr(BoostHealAttr, 0.5, 2 / 3, true, false, (_user, _target, _move) =>
+        globalScene.arena.hasTerrain(TerrainType.GRASSY),
       )
       .triageMove(),
     new AttackMove(MoveId.HIGH_HORSEPOWER, ElementalType.GROUND, MoveCategory.PHYSICAL, 95, 95, 10, -1, 0, 7),
@@ -2932,8 +2920,7 @@ export function initMoves() {
     new StatusMove(MoveId.AURORA_VEIL, ElementalType.ICE, -1, 20, -1, 0, 7)
       .condition(
         (_user, _target, _move) =>
-          (globalScene.arena.weather?.weatherType === WeatherType.HAIL
-            || globalScene.arena.weather?.weatherType === WeatherType.SNOW)
+          globalScene.arena.hasWeather([WeatherType.HAIL, WeatherType.SNOW])
           && !globalScene.arena.weather?.isEffectSuppressed(),
       )
       .attr(AddArenaTagAttr, ArenaTagType.AURORA_VEIL, ArenaTagRelativeSide.USER, { turnCount: 5, failOnOverlap: true })
@@ -3391,10 +3378,10 @@ export function initMoves() {
     ),
     new AttackMove(MoveId.EXPANDING_FORCE, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 8)
       .attr(MovePowerMultiplierAttr, (user, _target, _move) =>
-        globalScene.arena.getTerrainType() === TerrainType.PSYCHIC && user.isGrounded() ? 1.5 : 1,
+        globalScene.arena.hasTerrain(TerrainType.PSYCHIC) && user.isGrounded() ? 1.5 : 1,
       )
       .attr(VariableTargetAttr, (user, _target, _move) =>
-        globalScene.arena.getTerrainType() === TerrainType.PSYCHIC && user.isGrounded()
+        globalScene.arena.hasTerrain(TerrainType.PSYCHIC) && user.isGrounded()
           ? MoveTarget.ALL_NEAR_ENEMIES
           : MoveTarget.NEAR_OTHER,
       ),
@@ -3417,18 +3404,17 @@ export function initMoves() {
       .attr(SacrificialAttr)
       .target(MoveTarget.ALL_NEAR_OTHERS)
       .attr(MovePowerMultiplierAttr, (user, _target, _move) =>
-        globalScene.arena.getTerrainType() === TerrainType.MISTY && user.isGrounded() ? 1.5 : 1,
+        globalScene.arena.hasTerrain(TerrainType.MISTY) && user.isGrounded() ? 1.5 : 1,
       )
       .condition(failIfDampCondition)
       .makesContact(false),
     new AttackMove(MoveId.GRASSY_GLIDE, ElementalType.GRASS, MoveCategory.PHYSICAL, 55, 100, 20, -1, 0, 8).attr(
       IncrementMovePriorityAttr,
-      (user, _target, _move) => globalScene.arena.getTerrainType() === TerrainType.GRASSY && user.isGrounded(),
+      (user, _target, _move) => globalScene.arena.hasTerrain(TerrainType.GRASSY) && user.isGrounded(),
     ),
     new AttackMove(MoveId.RISING_VOLTAGE, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 70, 100, 20, -1, 0, 8).attr(
       MovePowerMultiplierAttr,
-      (_user, target, _move) =>
-        globalScene.arena.getTerrainType() === TerrainType.ELECTRIC && target.isGrounded() ? 2 : 1,
+      (_user, target, _move) => (globalScene.arena.hasTerrain(TerrainType.ELECTRIC) && target.isGrounded() ? 2 : 1),
     ),
     new AttackMove(MoveId.TERRAIN_PULSE, ElementalType.NORMAL, MoveCategory.SPECIAL, 50, 100, 10, -1, 0, 8)
       .attr(TerrainPulseTypeAttr)
@@ -3542,9 +3528,7 @@ export function initMoves() {
     ),
     new AttackMove(MoveId.RAGING_FURY, ElementalType.FIRE, MoveCategory.PHYSICAL, 120, 100, 10, -1, 0, 8)
       .makesContact(false)
-      .attr(FrenzyAttr)
-      .attr(MissEffectAttr, frenzyMissFunc)
-      .attr(NoEffectAttr, frenzyMissFunc)
+      .attr(AddBattlerTagAttr, BattlerTagType.FRENZY, true, { turnCountMin: 2, turnCountMax: 3 })
       .target(MoveTarget.RANDOM_NEAR_ENEMY),
     new AttackMove(MoveId.WAVE_CRASH, ElementalType.WATER, MoveCategory.PHYSICAL, 120, 100, 10, -1, 0, 8)
       .attr(RecoilAttr, false, 0.33)
@@ -3676,7 +3660,8 @@ export function initMoves() {
       .attr(AttackReducePpMoveAttr, 2),
     new AttackMove(MoveId.G_MAX_GRAVITAS, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.ORBEETLE)
-      .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, ArenaTagRelativeSide.ALL, { turnCount: 5 }),
+      .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, ArenaTagRelativeSide.ALL, { turnCount: 5 })
+      .edgeCase(), // does not prevent Bounce, Fly, etc. from being selected; only causes the moves to fail.
     new AttackMove(MoveId.G_MAX_VOLCALITH, ElementalType.ROCK, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.COALOSSAL)
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_VOLCALITH),
@@ -3931,7 +3916,8 @@ export function initMoves() {
       .condition((user, _target, move) => {
         const turnMove = user.getLastXMoves(1);
         return !turnMove.length || turnMove[0].move.id !== move.id || turnMove[0].result !== MoveResult.SUCCESS;
-      }), // TODO Add Instruct/Encore interaction
+      }) // TODO Add Instruct/Encore interaction
+      .edgeCase(), // should be unselectable the turn after its used
     new AttackMove(MoveId.COMEUPPANCE, ElementalType.DARK, MoveCategory.PHYSICAL, -1, 100, 10, -1, 0, 9)
       .attr(CounterDamageAttr, (moveId) => allMoves[moveId].isAttackMove(), 1.5)
       .redirectCounter()
@@ -3955,12 +3941,12 @@ export function initMoves() {
     new AttackMove(MoveId.MAGICAL_TORQUE, ElementalType.FAIRY, MoveCategory.PHYSICAL, 100, 100, 10, 30, 0, 9)
       .attr(ConfuseAttr)
       .makesContact(false),
-    new AttackMove(MoveId.BLOOD_MOON, ElementalType.NORMAL, MoveCategory.SPECIAL, 140, 100, 5, -1, 0, 9).condition(
-      (user, _target, move) => {
+    new AttackMove(MoveId.BLOOD_MOON, ElementalType.NORMAL, MoveCategory.SPECIAL, 140, 100, 5, -1, 0, 9)
+      .condition((user, _target, move) => {
         const turnMove = user.getLastXMoves(1);
         return !turnMove.length || turnMove[0].move.id !== move.id || turnMove[0].result !== MoveResult.SUCCESS;
-      },
-    ), // TODO Add Instruct/Encore interaction
+      }) // TODO Add Instruct/Encore interaction
+      .edgeCase(), // should be unselectable the turn after it's used
     new AttackMove(MoveId.MATCHA_GOTCHA, ElementalType.GRASS, MoveCategory.SPECIAL, 80, 90, 15, 20, 0, 9)
       .attr(HitHealAttr)
       .attr(HealStatusEffectAttr, true, StatusEffect.FREEZE)

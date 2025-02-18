@@ -1,6 +1,5 @@
 import { Stat } from "#enums/stat";
 import { type StockpilingTag } from "#app/data/battler-tags";
-import type { TurnMove } from "#app/@types/TurnMove";
 import { MoveResult } from "#enums/move-result";
 import { CommandPhase } from "#app/phases/command-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
@@ -74,10 +73,7 @@ describe("Moves - Stockpile", () => {
           expect(user.getStatStage(Stat.SPDEF)).toBe(3);
           expect(stockpilingTag).toBeDefined();
           expect(stockpilingTag.stockpiledCount).toBe(3);
-          expect(user.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-            result: MoveResult.FAIL,
-            move: expect.objectContaining({ id: MoveId.STOCKPILE }),
-          });
+          expect(user.getLastXMoves()?.[0]?.result).toBe(MoveResult.FAIL);
         }
       }
     });

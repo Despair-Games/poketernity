@@ -1,5 +1,4 @@
 import type { Variant } from "#app/data/variant";
-import { Weather } from "#app/data/weather";
 import { Abilities } from "#enums/abilities";
 import type { ModifierOverride } from "#app/modifier/modifier-type";
 import type { BattleStyle } from "#app/overrides";
@@ -11,7 +10,7 @@ import type { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
-import type { WeatherType } from "#enums/weather-type";
+import { WeatherType } from "#enums/weather-type";
 import { expect, vi } from "vitest";
 import { GameManagerHelper } from "#test/testUtils/helpers/gameManagerHelper";
 import { shiftCharCodes } from "#app/utils";
@@ -226,7 +225,7 @@ export class OverridesHelper extends GameManagerHelper {
    */
   public weather(type: WeatherType): this {
     vi.spyOn(Overrides, "WEATHER_OVERRIDE", "get").mockReturnValue(type);
-    this.log(`Weather set to ${Weather[type]} (=${type})!`);
+    this.log(`Weather set to ${WeatherType[type]} (=${type})!`);
     return this;
   }
 

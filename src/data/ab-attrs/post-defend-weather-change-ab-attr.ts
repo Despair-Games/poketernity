@@ -22,7 +22,7 @@ export class PostDefendWeatherChangeAbAttr extends PostDefendAbAttr {
     }
     if (!globalScene.arena.weather?.isImmutable()) {
       if (simulated) {
-        return globalScene.arena.weather?.weatherType !== this.weatherType;
+        return !globalScene.arena.hasWeather(this.weatherType);
       }
       return globalScene.arena.trySetWeather(this.weatherType, true);
     }

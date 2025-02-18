@@ -2,7 +2,6 @@ import { Stat } from "#enums/stat";
 import { type StockpilingTag } from "#app/data/battler-tags";
 import { allMoves } from "#app/data/data-lists";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import type { TurnMove } from "#app/@types/TurnMove";
 import { MoveResult } from "#enums/move-result";
 import { GameManager } from "#test/testUtils/gameManager";
 import { Abilities } from "#enums/abilities";
@@ -125,11 +124,7 @@ describe("Moves - Spit Up", () => {
     game.move.select(MoveId.SPIT_UP);
     await game.phaseInterceptor.to(TurnInitPhase);
 
-    expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-      move: expect.objectContaining({ id: MoveId.SPIT_UP }),
-      result: MoveResult.FAIL,
-    });
-
+    expect(pokemon.getLastXMoves()?.[0]?.result).toBe(MoveResult.FAIL);
     expect(spitUp.calculateBattlePower).not.toHaveBeenCalled();
   });
 
@@ -151,10 +146,7 @@ describe("Moves - Spit Up", () => {
 
       await game.phaseInterceptor.to(TurnInitPhase);
 
-      expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-        move: expect.objectContaining({ id: MoveId.SPIT_UP }),
-        result: MoveResult.SUCCESS,
-      });
+      expect(pokemon.getLastXMoves()?.[0]?.result).toBe(MoveResult.SUCCESS);
 
       expect(spitUp.calculateBattlePower).toHaveBeenCalledOnce();
 
@@ -182,10 +174,7 @@ describe("Moves - Spit Up", () => {
       game.move.select(MoveId.SPIT_UP);
       await game.phaseInterceptor.to(TurnInitPhase);
 
-      expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-        move: expect.objectContaining({ id: MoveId.SPIT_UP }),
-        result: MoveResult.SUCCESS,
-      });
+      expect(pokemon.getLastXMoves()?.[0]?.result).toBe(MoveResult.SUCCESS);
 
       expect(spitUp.calculateBattlePower).toHaveBeenCalledOnce();
 

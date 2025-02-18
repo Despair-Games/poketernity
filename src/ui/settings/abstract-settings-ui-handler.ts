@@ -136,18 +136,9 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
       this.optionsContainer.add(this.settingLabels[i]);
       this.optionValueLabels.push(
         uiItem.options.map((option) => {
-          const valueLabel = addTextObject(
-            0,
-            0,
-            option.label,
-            option.value === settingsManager[this.category][uiItem.key]
-              ? TextStyle.SETTINGS_SELECTED
-              : TextStyle.SETTINGS_VALUE,
-          );
+          const valueLabel = addTextObject(0, 0, option.label, TextStyle.SETTINGS_VALUE);
           valueLabel.setOrigin(0, 0);
-
           this.optionsContainer.add(valueLabel);
-
           return valueLabel;
         }),
       );
@@ -169,26 +160,8 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
       }
     });
 
-    this.optionCursors = this.uiItems.map((uiItem) => {
-      const value = settingsManager[this.category][uiItem.key];
-      let index = 0;
-
-      if (value !== undefined) {
-        index = uiItem.options.findIndex((o) => {
-          return o.value === value;
-        });
-      }
-
-      if (index < 0) {
-        console.warn(
-          `Could not find index for ${uiItem.key}.`,
-          `\nExpected value: ${settingsManager[this.category][uiItem.key]}`,
-          `\nAvailable values:`,
-          uiItem.options,
-        );
-      }
-      return Math.max(index, 0);
-    });
+    // Treat all settings as having the first options selected. These get properly updated in show()
+    this.optionCursors = new Array(this.uiItems.length).fill(0);
 
     this.scrollBar = new ScrollBar(
       this.optionsBg.width - 9,
