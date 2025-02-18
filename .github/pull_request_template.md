@@ -81,7 +81,7 @@ Do the reviewers need to do something special in order to test your changes?
 
 - [ ] Has a locales PR been created on the [locales](https://github.com/despair-games/poketernity-locales) repo?
   - [ ] If so, please leave a link to it here:
-  - [ ] Have I added the `Localization` tag to this PR?
+- [ ] Have I added the `Localization` tag to this PR?
 <!-- not relevant for now - [ ] Has the translation team been contacted for proofreading/translation? -->
 <details><summary>Locale merging process summary</summary>
 
