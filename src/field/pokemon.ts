@@ -112,6 +112,7 @@ import {
   getBattlerTag,
   type AutotomizedTag,
   type CritBoostStackableTag,
+  type UproarTag,
 } from "../data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { WeatherType } from "#enums/weather-type";
@@ -4056,7 +4057,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         }
         break;
       case StatusEffect.SLEEP:
-        if (this.isGrounded() && globalScene.arena.hasTerrain(TerrainType.ELECTRIC)) {
+        const preventSleep = new BooleanHolder(false);
+        globalScene
+          .getField(true)
+          .forEach((p) => p.getTag<UproarTag>(BattlerTagType.UPROAR)?.apply(p, quiet, this, preventSleep));
+
+        if (preventSleep.value || (this.isGrounded() && globalScene.arena.hasTerrain(TerrainType.ELECTRIC))) {
           return false;
         }
         break;
@@ -4099,7 +4105,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     turnsRemaining: number = 0,
     sourceText: string | null = null,
   ): boolean {
-    if (!this.canSetStatus(effect, asPhase, false, sourcePokemon)) {
+    if (!this.canSetStatus(effect, !asPhase, false, sourcePokemon)) {
       return false;
     }
     if (this.isFainted() && effect !== StatusEffect.FAINT) {
