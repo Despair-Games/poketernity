@@ -90,7 +90,7 @@ describe("Moves - Dragon Rage", () => {
     partyPokemon.addTag(BattlerTagType.ALWAYS_CRIT, 99, MoveId.NONE, 0);
 
     game.move.select(MoveId.DRAGON_RAGE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     const lastAttackReceived = enemyPokemon.turnData.attacksReceived[0];
     expect(lastAttackReceived.isCritical).toBe(false);

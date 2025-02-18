@@ -49,7 +49,7 @@ describe("Moves - Fissure", () => {
     game.override.enemyAbility(Abilities.FUR_COAT);
 
     game.move.select(MoveId.FISSURE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     expect(enemyPokemon.isFainted()).toBe(true);
   });

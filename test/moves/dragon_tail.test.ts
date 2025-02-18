@@ -45,7 +45,7 @@ describe("Moves - Dragon Tail", () => {
 
     game.move.select(MoveId.DRAGON_TAIL);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     const isVisible = enemyPokemon.visible;
     const hasFled = enemyPokemon.switchOutStatus;
@@ -64,7 +64,7 @@ describe("Moves - Dragon Tail", () => {
 
     game.move.select(MoveId.DRAGON_TAIL);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     const isVisible = enemyPokemon.visible;
     const hasFled = enemyPokemon.switchOutStatus;
@@ -97,7 +97,7 @@ describe("Moves - Dragon Tail", () => {
     game.move.select(MoveId.FLAMETHROWER, 0, BattlerIndex.ENEMY_2);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.phaseInterceptor.to("TurnEndPhase");
     expect(enemySecPokemon.hp).toBeLessThan(enemySecPokemon.getMaxHp());
   });
 
@@ -115,7 +115,7 @@ describe("Moves - Dragon Tail", () => {
     // target the same pokemon, second move should be redirected after first flees
     game.move.select(MoveId.DRAGON_TAIL, 1, BattlerIndex.ENEMY);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     const isVisibleLead = enemyLeadPokemon.visible;
     const hasFledLead = enemyLeadPokemon.switchOutStatus;

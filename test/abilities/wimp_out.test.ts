@@ -88,7 +88,7 @@ describe("Abilities - Wimp Out", () => {
     enemyPokemon.hp *= 0.52;
 
     game.move.select(MoveId.FALSE_SWIPE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     const isVisible = enemyPokemon.visible;
     const hasFled = enemyPokemon.switchOutStatus;
@@ -352,7 +352,7 @@ describe("Abilities - Wimp Out", () => {
     game.move.select(MoveId.FALSE_SWIPE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.phaseInterceptor.to("TurnEndPhase");
 
     const isVisibleLead = enemyLeadPokemon.visible;
     const hasFledLead = enemyLeadPokemon.switchOutStatus;
