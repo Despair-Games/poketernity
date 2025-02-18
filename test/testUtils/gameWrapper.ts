@@ -19,9 +19,10 @@ import EventEmitter = Phaser.Events.EventEmitter;
 import UpdateList = Phaser.GameObjects.UpdateList;
 import { MockConsole } from "#test/testUtils/mocks/mockConsole";
 import { globalScene } from "#app/global-scene";
-import { MoveEffectPhase } from "#app/phases/move-effect-phase";
+import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
+import { PhaseId } from "#enums/phase-id";
 
 export class GameWrapper {
   public game: Phaser.Game;
@@ -56,7 +57,7 @@ export class GameWrapper {
       const currentPhase = globalScene.getCurrentPhase();
       let moveName = "N/A";
       let moveId = MoveId.NONE;
-      if (currentPhase instanceof MoveEffectPhase) {
+      if (currentPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
         const move = currentPhase.move;
         moveName = move.getName();
         moveId = move.moveId;
