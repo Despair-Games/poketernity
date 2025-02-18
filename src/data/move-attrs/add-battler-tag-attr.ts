@@ -91,6 +91,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.FRENZY:
       case BattlerTagType.TRAPPED:
       case BattlerTagType.OCTOLOCK:
+      case BattlerTagType.NO_RETREAT:
       case BattlerTagType.BIND:
       case BattlerTagType.WRAP:
       case BattlerTagType.FIRE_SPIN:
@@ -115,6 +116,12 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.TELEKINESIS:
       case BattlerTagType.POWDER:
         return -2;
+      case BattlerTagType.NONE:
+      /**
+       * @todo: Burned Up and Double Shocked terastallization considerations
+       */
+      case BattlerTagType.BURNED_UP:
+      case BattlerTagType.DOUBLE_SHOCKED:
       case BattlerTagType.MINIMIZED:
       case BattlerTagType.ALWAYS_GET_HIT:
       case BattlerTagType.ENDURING:
@@ -122,13 +129,10 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.BYPASS_SLEEP:
       case BattlerTagType.IGNORE_FLYING:
       case BattlerTagType.ROOSTED:
-      case BattlerTagType.DESTINY_BOND:
       case BattlerTagType.CENTER_OF_ATTENTION:
       case BattlerTagType.STOCKPILING:
       case BattlerTagType.IGNORE_GHOST:
       case BattlerTagType.IGNORE_DARK:
-      case BattlerTagType.BURNED_UP:
-      case BattlerTagType.DOUBLE_SHOCKED:
       case BattlerTagType.AUTOTOMIZED:
       case BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON:
       case BattlerTagType.POWER_TRICK:
@@ -152,6 +156,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.SHELL_TRAP:
       case BattlerTagType.UNBURDEN:
       case BattlerTagType.GRUDGE:
+      case BattlerTagType.DESTINY_BOND:
       case BattlerTagType.RAGE:
         return 3;
       case BattlerTagType.PROTECTED:
