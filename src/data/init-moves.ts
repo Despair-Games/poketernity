@@ -68,7 +68,6 @@ import { FlyingTypeMultiplierAttr } from "#app/data/move-attrs/flying-type-multi
 import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
 import { FormChangeItemTypeAttr } from "#app/data/move-attrs/form-change-item-type-attr";
 import { FreezeDryAttr } from "#app/data/move-attrs/freeze-dry-attr";
-import { FrenzyAttr } from "#app/data/move-attrs/frenzy-attr";
 import { FriendshipPowerAttr } from "#app/data/move-attrs/friendship-power-attr";
 import { GrowthStatStageChangeAttr } from "#app/data/move-attrs/growth-stat-stage-change-attr";
 import { GulpMissileTagAttr } from "#app/data/move-attrs/gulp-missile-tag-attr";
@@ -220,7 +219,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { isNullOrUndefined } from "#app/utils";
 import { ConditionalProtectArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { SemiInvulnerableBattlerTagTypes, TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
-import { crashDamageFunc, frenzyMissFunc } from "#app/utils/move-utils";
+import { crashDamageFunc } from "#app/utils/move-utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -350,9 +349,7 @@ export function initMoves() {
       .attr(RecoilAttr)
       .recklessMove(),
     new AttackMove(MoveId.THRASH, ElementalType.NORMAL, MoveCategory.PHYSICAL, 120, 100, 10, -1, 0, 1)
-      .attr(FrenzyAttr)
-      .attr(MissEffectAttr, frenzyMissFunc)
-      .attr(NoEffectAttr, frenzyMissFunc)
+      .attr(AddBattlerTagAttr, BattlerTagType.FRENZY, true, { turnCountMin: 2, turnCountMax: 3 })
       .target(MoveTarget.RANDOM_NEAR_ENEMY),
     new AttackMove(MoveId.DOUBLE_EDGE, ElementalType.NORMAL, MoveCategory.PHYSICAL, 120, 100, 15, -1, 0, 1)
       .attr(RecoilAttr, false, 0.33)
@@ -495,9 +492,7 @@ export function initMoves() {
       .attr(StatusEffectAttr, StatusEffect.SLEEP)
       .powderMove(),
     new AttackMove(MoveId.PETAL_DANCE, ElementalType.GRASS, MoveCategory.SPECIAL, 120, 100, 10, -1, 0, 1)
-      .attr(FrenzyAttr)
-      .attr(MissEffectAttr, frenzyMissFunc)
-      .attr(NoEffectAttr, frenzyMissFunc)
+      .attr(AddBattlerTagAttr, BattlerTagType.FRENZY, true, { turnCountMin: 2, turnCountMax: 3 })
       .makesContact()
       .danceMove()
       .target(MoveTarget.RANDOM_NEAR_ENEMY),
@@ -957,9 +952,7 @@ export function initMoves() {
       .makesContact(false),
     new StatusMove(MoveId.LOCK_ON, ElementalType.NORMAL, -1, 5, -1, 0, 2).attr(IgnoreAccuracyAttr),
     new AttackMove(MoveId.OUTRAGE, ElementalType.DRAGON, MoveCategory.PHYSICAL, 120, 100, 10, -1, 0, 2)
-      .attr(FrenzyAttr)
-      .attr(MissEffectAttr, frenzyMissFunc)
-      .attr(NoEffectAttr, frenzyMissFunc)
+      .attr(AddBattlerTagAttr, BattlerTagType.FRENZY, true, { turnCountMin: 2, turnCountMax: 3 })
       .target(MoveTarget.RANDOM_NEAR_ENEMY),
     new StatusMove(MoveId.SANDSTORM, ElementalType.ROCK, -1, 10, -1, 0, 2)
       .attr(WeatherChangeAttr, WeatherType.SANDSTORM)
@@ -3557,9 +3550,7 @@ export function initMoves() {
     ),
     new AttackMove(MoveId.RAGING_FURY, ElementalType.FIRE, MoveCategory.PHYSICAL, 120, 100, 10, -1, 0, 8)
       .makesContact(false)
-      .attr(FrenzyAttr)
-      .attr(MissEffectAttr, frenzyMissFunc)
-      .attr(NoEffectAttr, frenzyMissFunc)
+      .attr(AddBattlerTagAttr, BattlerTagType.FRENZY, true, { turnCountMin: 2, turnCountMax: 3 })
       .target(MoveTarget.RANDOM_NEAR_ENEMY),
     new AttackMove(MoveId.WAVE_CRASH, ElementalType.WATER, MoveCategory.PHYSICAL, 120, 100, 10, -1, 0, 8)
       .attr(RecoilAttr, false, 0.33)

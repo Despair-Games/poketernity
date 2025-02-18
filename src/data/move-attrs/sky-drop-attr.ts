@@ -4,7 +4,7 @@ import type { Move } from "#app/data/move";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { failOnGravityCondition } from "../move-conditions/fail-on-gravity-condition";
 import { MoveEffectAttr } from "./move-effect-attr";
-import { SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { MoveLockTagTypes, SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 
 /**
  * Attribute implementing the charging phase effects of {@link https://bulbapedia.bulbagarden.net/wiki/Sky_Drop_(move) | Sky Drop}.
@@ -20,8 +20,8 @@ export class SkyDropAttr extends MoveEffectAttr {
     [user, target].forEach((p) => p.addTag(BattlerTagType.SKY_DROP, 1, move.id, user.id));
     // Clear the target's move queue
     target.getMoveQueue().splice(0, target.getMoveQueue().length);
-    // Remove Frenzy from the target, if applicable
-    target.removeTag(BattlerTagType.FRENZY);
+    // Cancel any effects that force consecutive move use
+    target.findAndRemoveTags((tag) => MoveLockTagTypes.includes(tag.tagType));
     return true;
   }
 

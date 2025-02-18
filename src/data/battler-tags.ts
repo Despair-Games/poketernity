@@ -4,7 +4,7 @@ import { CommonBattleAnim } from "./battle-anims/common-battle-anim";
 import { MoveChargeAnim } from "./battle-anims/move-charge-anim";
 import { CommonAnim } from "#enums/common-anim";
 import { ChargeAnim } from "#enums/charge-anim";
-import { SelfStatusMove, type Move } from "#app/data/move";
+import { getMoveTargets, SelfStatusMove, type Move } from "#app/data/move";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { allMoves, allAbilities } from "#app/data/data-lists";
 import { StatusCategoryOnAllyAttr } from "./move-attrs/status-category-on-ally-attr";
@@ -47,6 +47,8 @@ import {
 } from "#app/utils/battler-tag-type-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
+import type { BattlerIndex } from "#enums/battler-index";
+import { MoveTarget } from "#enums/move-target";
 
 export class BattlerTag {
   public tagType: BattlerTagType;
@@ -1109,15 +1111,69 @@ export class NightmareTag extends BattlerTag {
   }
 }
 
-export class FrenzyTag extends BattlerTag {
-  constructor(turnCount: number, sourceMoveId: MoveId, sourceId: number) {
-    super(BattlerTagType.FRENZY, BattlerTagLapseType.CUSTOM, turnCount, sourceMoveId, sourceId);
+/**
+ * Locks the source into using a move consecutively for `turnCount - 1` turns. If the move fails or is interrupted
+ * during any of these uses, this effect is removed.
+ * @extends BattlerTag
+ */
+export abstract class MoveLockTag extends BattlerTag {
+  constructor(tagType: BattlerTagType, turnCount: number, sourceMoveId: MoveId) {
+    super(tagType, BattlerTagLapseType.AFTER_MOVE, turnCount, sourceMoveId);
+  }
+
+  override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
+    const { move: lastMove, targets: lastTargets, result: lastMoveResult } = pokemon.getLastXMoves()?.[0];
+
+    // If this pokemon somehow used another move (e.g. via Dancer), don't advance this tag
+    if (![this.sourceMoveId, MoveId.NONE].includes(lastMove.id)) {
+      return true;
+    }
+
+    const ret =
+      super.lapse(pokemon, lapseType)
+      && !!lastTargets
+      && lastTargets.length > 0
+      && lastMoveResult === MoveResult.SUCCESS;
+
+    if (ret) {
+      const nextTargets = this.getNextTargets(pokemon, lastMove, lastTargets);
+      pokemon.getMoveQueue().push({ moveId: this.sourceMoveId, targets: nextTargets, ignorePP: true });
+    }
+
+    return ret;
+  }
+
+  /**
+   * Obtains the target(s) for move actions queued by this tag
+   * @param pokemon the {@linkcode Pokemon} with this tag
+   * @param move the {@linkcode Move} queued by this tag
+   * @param lastTargets the target(s), by {@linkcode BattlerIndex}, attacked by
+   * the source Pokemon's last use of the move.
+   * @returns the target(s), by {@linkcode BattlerIndex}, for the next usage of this tag's move
+   */
+  protected getNextTargets(pokemon: Pokemon, move: Move, lastTargets: BattlerIndex[]): BattlerIndex[] {
+    if ((move.moveTarget = MoveTarget.RANDOM_NEAR_ENEMY)) {
+      return getMoveTargets(pokemon, move.id).targets;
+    } else {
+      return lastTargets;
+    }
+  }
+}
+
+/**
+ * Puts the source {@linkcode Pokemon} into a "frenzy", locking them into using the tag's
+ * move for `turnCount - 1` turns. If this effect isn't interrupted,
+ * the source {@linkcode Pokemon} becomes confused at the end of those turns.
+ * @extends MoveLockTag
+ * @see {@linkcode FrenzyAttr}
+ */
+export class FrenzyTag extends MoveLockTag {
+  constructor(turnCount: number, sourceMoveId: MoveId) {
+    super(BattlerTagType.FRENZY, turnCount, sourceMoveId);
   }
 
   override onRemove(pokemon: Pokemon): void {
-    super.onRemove(pokemon);
-
-    if (this.turnCount < 2) {
+    if (this.turnCount <= 0) {
       // Only add CONFUSED tag if a disruption occurs on the final confusion-inducing turn of FRENZY
       pokemon.addTag(BattlerTagType.CONFUSED, pokemon.randSeedIntRange(2, 4));
     }
@@ -3474,7 +3530,7 @@ export function getBattlerTag(
     case BattlerTagType.NIGHTMARE:
       return new NightmareTag();
     case BattlerTagType.FRENZY:
-      return new FrenzyTag(turnCount, sourceMoveId, sourceId);
+      return new FrenzyTag(turnCount, sourceMoveId);
     case BattlerTagType.CHARGING:
       return new BattlerTag(tagType, BattlerTagLapseType.CUSTOM, 1, sourceMoveId, sourceId);
     case BattlerTagType.ENCORE:
