@@ -85,6 +85,7 @@ Do the reviewers need to do something special in order to test your changes?
 <!-- not relevant for now - [ ] Has the translation team been contacted for proofreading/translation? -->
 <details><summary>Locale merging process summary</summary>
 
+  - For the full details, check out the [localization.md](https://github.com/Despair-Games/poketernity/blob/beta/docs/localization.md) file.
   - The locale PR should always be merged before this PR.
   - If the locale PR updates or removes keys it should not be merged until this PR has all its approvals and is ready to go.
   - Once the locale PR has been merged, this PR should update the submodule to reference the new commit: `git submodule update --remote --recursive --force`
@@ -99,7 +100,7 @@ Do the reviewers need to do something special in order to test your changes?
 
 <details><summary>How to fix it if no:</summary>
 
-### With the Command Line:
+#### Using the Command Line:
 - Go to https://github.com/Despair-Games/poketernity/tree/beta/public and copy the hash of the current locale commit beta is pointing to
 
 - If the hash corresponds to the latest commit in the locale repo:
