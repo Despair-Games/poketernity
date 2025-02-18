@@ -87,7 +87,7 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
             getStatusEffectHealText(pokemon.getStatusEffect(), getPokemonNameWithAffix(pokemon)),
           );
         }
-        pokemon.resetStatus(true, true);
+        pokemon.resetStatus(true);
         pokemon.updateInfo();
         applyAbAttrs(AbAttrFlag.POST_ITEM_LOST, berryOwner ?? pokemon, false);
       };

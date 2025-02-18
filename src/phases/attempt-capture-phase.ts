@@ -274,8 +274,8 @@ export class AttemptCapturePhase extends PokemonPhase {
             .getPlayerField()
             .filter((p) => p.isActive(true))
             .forEach((playerPokemon) => playerPokemon.removeTagsBySourceId(pokemon.id));
-          pokemon.hp = 0;
-          pokemon.trySetStatus(StatusEffect.FAINT);
+          // TODO: this isn't right, is it?
+          pokemon.faint();
           globalScene.clearEnemyHeldItemModifiers();
           globalScene.field.remove(pokemon, true);
         };
