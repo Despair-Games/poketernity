@@ -129,7 +129,7 @@ import { PartyUiMode } from "#enums/party-ui-mode";
 import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
 import { EVOLVE_MOVE, RELEARN_MOVE } from "#app/data/balance/pokemon-level-moves";
 import { achvs } from "#app/system/achv";
-import type { StarterDataEntry, StarterMoveset } from "#app/@types/StarterData";
+import type { StarterMoveset } from "#app/@types/StarterData";
 import { DexAttr } from "#app/data/dex-attributes";
 import { getNatureStatMultiplier } from "#app/data/nature";
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";
@@ -4107,11 +4107,10 @@ export class PlayerPokemon extends Pokemon {
       if (starterData) {
         starterData.friendship = (starterData.friendship || 0) + starterAmount.value;
         if (starterData.friendship >= getStarterValueFriendshipCap(speciesStarterCosts[starterSpeciesId])) {
-          globalScene.gameData.addStarterCandy(getPokemonSpecies(speciesId), 1);
+          globalScene.gameData.addStarterCandy(getPokemonSpecies(starterSpeciesId), 1);
           starterData.friendship = 0;
-          sd.friendship = 0;
         }
-      });
+      }
     } else {
       // Lose friendship upon fainting
       this.friendship = Math.max(this.friendship + friendship, 0);
