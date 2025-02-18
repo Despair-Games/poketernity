@@ -13,9 +13,7 @@ import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-at
 export class TechnoBlastTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
     if (user.species.speciesId === Species.GENESECT) {
-      const form = user.formIndex;
-
-      switch (form) {
+      switch (user.formIndex) {
         case 1: // Shock Drive
           moveType.value = ElementalType.ELECTRIC;
           break;

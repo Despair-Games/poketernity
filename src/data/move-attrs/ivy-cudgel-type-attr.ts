@@ -13,9 +13,7 @@ import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-at
 export class IvyCudgelTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
     if (user.species.speciesId === Species.OGERPON) {
-      const form = user.formIndex;
-
-      switch (form) {
+      switch (user.formIndex) {
         case 1: // Wellspring Mask
         case 5: // Wellspring Mask Tera
           moveType.value = ElementalType.WATER;

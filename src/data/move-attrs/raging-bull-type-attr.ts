@@ -14,9 +14,7 @@ import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-at
 export class RagingBullTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
     if (user.species.speciesId === Species.PALDEA_TAUROS) {
-      const form = user.formIndex;
-
-      switch (form) {
+      switch (user.formIndex) {
         case 1: // Blaze breed
           moveType.value = ElementalType.FIRE;
           break;
