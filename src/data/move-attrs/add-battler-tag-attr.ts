@@ -100,6 +100,8 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.INFESTATION:
         return -3;
       case BattlerTagType.ENCORE:
+      case BattlerTagType.ROLLOUT:
+      case BattlerTagType.ICE_BALL:
         return -2;
       case BattlerTagType.MINIMIZED:
       case BattlerTagType.ALWAYS_GET_HIT:

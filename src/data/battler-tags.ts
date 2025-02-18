@@ -1181,6 +1181,23 @@ export class FrenzyTag extends MoveLockTag {
 }
 
 /**
+ * Applies the move-locking effect of {@link https://bulbapedia.bulbagarden.net/wiki/Rollout_(move) Rollout}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Ice_Ball_(move) Ice Ball}.
+ * Also defines a power multiplier for the respective move based on
+ * the tag's turn count.
+ * @extends MoveLockTag
+ */
+export class RollingTag extends MoveLockTag {
+  constructor(tagType: BattlerTagType, sourceMoveId: MoveId) {
+    super(tagType, 5, sourceMoveId);
+  }
+
+  public get powerMultiplier() {
+    return Math.pow(2, 5 - this.turnCount);
+  }
+}
+
+/**
  * Applies the effects of the move Encore onto the target Pokemon
  * Encore forces the target Pokemon to use its most-recent move for 3 turns
  */
@@ -3531,6 +3548,9 @@ export function getBattlerTag(
       return new NightmareTag();
     case BattlerTagType.FRENZY:
       return new FrenzyTag(turnCount, sourceMoveId);
+    case BattlerTagType.ROLLOUT:
+    case BattlerTagType.ICE_BALL:
+      return new RollingTag(tagType, sourceMoveId);
     case BattlerTagType.CHARGING:
       return new BattlerTag(tagType, BattlerTagLapseType.CUSTOM, 1, sourceMoveId, sourceId);
     case BattlerTagType.ENCORE:
