@@ -36,11 +36,13 @@ describe("Candy Friendship Modifier Event", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .starterSpecies(Species.IVYSAUR)
-      .enemyMoveset(MoveId.SPLASH)
+      .starterSpecies(Species.VENUSAUR)
+      .ability(Abilities.NO_GUARD)
+      .startingLevel(1000)
       .enemySpecies(Species.MAGIKARP)
+      .enemyMoveset(MoveId.SPLASH)
       .enemyAbility(Abilities.BALL_FETCH)
-      .startingLevel(100)
+      .enemyHeldItems([])
       .timedEvents(testEvents, duringEventDate);
   });
 
