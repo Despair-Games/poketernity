@@ -1434,9 +1434,7 @@ export class EvolutionStatBoosterModifier extends StatBoosterModifier {
    * @see shouldApply
    */
   override apply(pokemon: Pokemon, stat: Stat, statValue: NumberHolder): boolean {
-    const isUnevolved = pokemon.getSpeciesForm(true).speciesId in pokemonEvolutions;
-
-    if (isUnevolved) {
+    if (pokemon.getSpeciesForm(true).speciesId in pokemonEvolutions) {
       return super.apply(pokemon, stat, statValue);
     }
 
