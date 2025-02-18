@@ -77,8 +77,46 @@ Do the reviewers need to do something special in order to test your changes?
 - [ ] Have I provided screenshots/videos of the changes (if applicable)?
   - [ ] Have I made sure that any UI change works for both UI themes (dark and light)?
 
-Are there any localization additions or changes? If so:
+#### Are there any localization additions or changes? If so:
 
 - [ ] Has a locales PR been created on the [locales](https://github.com/despair-games/poketernity-locales) repo?
   - [ ] If so, please leave a link to it here:
-- [ ] Has the translation team been contacted for proofreading/translation?
+  - [ ] Have I added the `Localization` tag to this PR?
+<!-- not relevant for now - [ ] Has the translation team been contacted for proofreading/translation? -->
+<details><summary>Locale merging process summary</summary>
+
+  - The locale PR should always be merged before this PR.
+  - If the locale PR updates or removes keys it should not be merged until this PR has all its approvals and is ready to go.
+  - Once the locale PR has been merged, this PR should update the submodule to reference the new commit: `git submodule update --remote --recursive --force`
+  - This PR should not be merged before this has been done.
+
+</details>
+
+#### If there are no locale changes:
+- [ ] Have I made sure **not** to commit any changes to the locale repo on this branch?
+<!-- check the `Files Changed` tab on the PR to be sure. 
+`public/locales` should not appear here, or it will create needless conflicts for future PRs and could potentially roll back changes already merged to beta. -->
+
+<details><summary>How to fix it if no:</summary>
+
+### With the Command Line:
+- Go to https://github.com/Despair-Games/poketernity/tree/beta/public and copy the hash of the current locale commit beta is pointing to
+
+- If the hash corresponds to the latest commit in the locale repo:
+  - `git submodule update --remote --recursive --force`
+  - `git add public/locales`
+  - make your commit, push etc
+
+- If it's not the latest commit:
+  - `git checkout beta`
+  - if not up to date: `git pull`. Otherwise: `git submodule update --init --recursive`
+  - `git checkout {this pr's branch}`
+  - `git add public/locales`
+  - make your commit, push etc
+
+<!-- anyone using another tool, feel free to add instructions there -->
+
+You may have to do this again later and fix conflicts if beta keeps updating the locale repo.
+**When fixing conflicts, make sure you prioritize the latest commit between the one on beta and this branch, to avoid any rollbacks.**
+
+</details>

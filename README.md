@@ -16,12 +16,19 @@ If you have the motivation and experience with Typescript/Javascript (or are wil
 
 - node: 20.13.1
 - npm: [how to install](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- git: [how to install](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) (needed to retrieve the translations)
 
 #### Running Locally
 
-1. Clone the repo and in the root directory run `npm install`
+1. Clone the repo through git and in the root directory run `npm install`
+If the install process seems to hang at the post-install step, you likely just need to press `Enter` for it continue.
 <!--   - _if you run into any errors, reach out in the **#dev-corner** channel in discord_-->
 2. Run `npm run start:dev` to locally run the project in `localhost:8000`
+If you want to access the game from any device on your local network, you can run `npm run start:dev -- --host`
+
+#### Tests
+
+We are using [vitest](https://vitest.dev/) as a testing framework for the game. The full test suite can be run with the command `npm run test:silent`. Most PRs are expected to add tests for their new features or bug fixes to avoid future regression. A basic test file for a variety of cases can be created by running the `npm run test:create` command.
 
 #### Code-Style
 
@@ -30,6 +37,13 @@ We are using [prettier](https://prettier.io/) to format our code. It will run au
 #### Linting
 
 We're using ESLint as our common linter and formatter. It will run automatically during the pre-commit hook but if you would like to manually run it, use the `npm run eslint` script. To view the complete rules, check out the [eslint.config.js](./eslint.config.js) file.
+
+#### Localization
+
+Pokéternity's translations are managed under a dedicated repository at https://github.com/Despair-Games/poketernity-locales/. There is a specific process involved in making PRs that impacts the in game text, which can be found in the [localization.md](./docs/localization.md) file.
+
+
+<!-- Todo: write up on typecheck and depcruise -->
 
 <!-- ### 📚 Documentation
 
@@ -45,8 +59,8 @@ For detailed guidelines on documenting your code, refer to the [comments.md](./d
 
 **How do I retrieve the translations?**
 
-- The translations were moved to the [dedicated translation repository](https://github.com/despair-games/poketernity-locales) and are now applied as a submodule in this project.
-- The command to retrieve the translations is `git submodule update --init --recursive`. <!--If you still struggle to get it working, please reach out to #dev-corner channel in Discord.-->
+- The translations are found in a [dedicated repository](https://github.com/despair-games/poketernity-locales) and are applied as a submodule in this project.
+- The command to retrieve the translations is `git submodule update --init --recursive`. <!--If you still struggle to get it working, please reach out in [TBD].-->
 
 > [!NOTE]
 > We have recently made major changes to our testing framework (see #158 and #247). If you experience any weird issues with unit tests, especially issues that only occur when running multiple test files in a single run, please feel free to reach out for help.
