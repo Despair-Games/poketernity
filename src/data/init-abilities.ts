@@ -184,7 +184,7 @@ import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { type MovePhase } from "#app/phases/move-phase";
-import { isNullOrUndefined, NumberHolder, randSeedInt, toDmgValue } from "#app/utils";
+import { isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
 import { getWeatherCondition } from "#app/utils/ability-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { Abilities } from "#enums/abilities";
@@ -388,7 +388,10 @@ export function initAbilities() {
         WeatherType.FOG,
       ]),
     new Ability(Abilities.STICKY_HOLD, 3).attr(BlockItemTheftAbAttr).bypassFaint().ignorable(),
-    new Ability(Abilities.SHED_SKIN, 3).conditionalAttr((_pokemon) => !randSeedInt(3), PostTurnResetStatusAbAttr),
+    new Ability(Abilities.SHED_SKIN, 3).conditionalAttr(
+      (pokemon) => !pokemon.randSeedInt(3),
+      PostTurnResetStatusAbAttr,
+    ),
     new Ability(Abilities.GUTS, 3)
       .attr(BypassBurnDamageReductionAbAttr)
       .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), StatMultiplierAbAttr, Stat.ATK, 1.5),
