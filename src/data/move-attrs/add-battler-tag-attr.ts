@@ -135,7 +135,6 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.ELECTRIFIED:
       case BattlerTagType.COMMANDED:
       case BattlerTagType.PSYCHO_SHIFT:
-      case BattlerTagType.ENDURE_TOKEN:
       case BattlerTagType.SKY_DROP:
         return 0;
       case BattlerTagType.INGRAIN:
