@@ -37,12 +37,10 @@ describe("Candy Friendship Modifier Event", () => {
     game.override
       .battleType("single")
       .starterSpecies(Species.VENUSAUR)
-      .ability(Abilities.NO_GUARD)
-      .startingLevel(1000)
+      .startingLevel(100)
       .enemySpecies(Species.MAGIKARP)
       .enemyMoveset(MoveId.SPLASH)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyHeldItems([])
       .timedEvents(testEvents, duringEventDate);
   });
 
@@ -61,7 +59,8 @@ describe("Candy Friendship Modifier Event", () => {
     const starterData = game.scene.gameData.starterData[playerPokemon.species.getRootSpeciesId()];
     expect(starterData.friendship).toBe(0); // candy friendship
 
-    game.move.use(MoveId.VINE_WHIP);
+    game.move.use(MoveId.SPLASH);
+    await game.doKillOpponents();
     await game.phaseInterceptor.to("VictoryPhase", true);
 
     expect(playerPokemon.friendship).toBe(baseFriendship + FRIENDSHIP_GAIN_FROM_BATTLE);
@@ -80,7 +79,8 @@ describe("Candy Friendship Modifier Event", () => {
     const starterData = game.scene.gameData.starterData[playerPokemon.species.getRootSpeciesId()];
     expect(starterData.friendship).toBe(0); // candy friendship
 
-    game.move.use(MoveId.VINE_WHIP);
+    game.move.use(MoveId.SPLASH);
+    await game.doKillOpponents();
     await game.phaseInterceptor.to("VictoryPhase", true);
 
     expect(playerPokemon.friendship).toBe(baseFriendship + FRIENDSHIP_GAIN_FROM_BATTLE);
@@ -98,7 +98,8 @@ describe("Candy Friendship Modifier Event", () => {
     const starterData = game.scene.gameData.starterData[playerPokemon.species.getRootSpeciesId()];
     expect(starterData.friendship).toBe(0); // candy friendship
 
-    game.move.use(MoveId.VINE_WHIP);
+    game.move.use(MoveId.SPLASH);
+    await game.doKillOpponents();
     await game.phaseInterceptor.to("VictoryPhase", true);
 
     expect(playerPokemon.friendship).toBe(baseFriendship + FRIENDSHIP_GAIN_FROM_BATTLE);
