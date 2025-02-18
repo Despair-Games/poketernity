@@ -7,6 +7,8 @@ export const SemiInvulnerableBattlerTagTypes = Object.freeze([
   BattlerTagType.HIDDEN,
 ]);
 
+export const MoveLockTagTypes = Object.freeze([BattlerTagType.FRENZY]);
+
 export const CritBoostBattlerTagTypes = Object.freeze([BattlerTagType.CRIT_BOOST, BattlerTagType.DRAGON_CHEER]);
 
 export const RemoveTypeBattlerTagTypes = Object.freeze([BattlerTagType.BURNED_UP, BattlerTagType.DOUBLE_SHOCKED]);
