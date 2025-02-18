@@ -513,11 +513,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    */
   generateName(): void {
     this.name = this.species.getName(this.formIndex);
-    return;
-    // TODO: this didn't run if the pokemon wasn't fused, is that correct?
-    // if (this.battleInfo) {
-    //   this.updateInfo(true);
-    // }
   }
 
   abstract isPlayer(): this is PlayerPokemon;
@@ -4092,7 +4087,7 @@ export class PlayerPokemon extends Pokemon {
   addFriendship(friendship: number): void {
     if (friendship > 0) {
       const starterSpeciesId = this.species.getRootSpeciesId();
-      const starterData = [globalScene.gameData.starterData[starterSpeciesId]].filter((d) => !!d);
+      const starterData = globalScene.gameData.starterData[starterSpeciesId];
       const amount = new NumberHolder(friendship);
       globalScene.applyModifier(PokemonFriendshipBoosterModifier, true, this, amount);
       let candyFriendshipMultiplier = CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER;
@@ -4109,11 +4104,11 @@ export class PlayerPokemon extends Pokemon {
         globalScene.validateAchv(achvs.MAX_FRIENDSHIP);
       }
       // Add to candy progress for this mon's starter species
-      starterData.forEach((sd: StarterDataEntry) => {
-        const speciesId = starterSpeciesId;
-        sd.friendship = (sd.friendship || 0) + starterAmount.value;
-        if (sd.friendship >= getStarterValueFriendshipCap(speciesStarterCosts[speciesId])) {
+      if (starterData) {
+        starterData.friendship = (starterData.friendship || 0) + starterAmount.value;
+        if (starterData.friendship >= getStarterValueFriendshipCap(speciesStarterCosts[starterSpeciesId])) {
           globalScene.gameData.addStarterCandy(getPokemonSpecies(speciesId), 1);
+          starterData.friendship = 0;
           sd.friendship = 0;
         }
       });
