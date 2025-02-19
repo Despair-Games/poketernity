@@ -628,7 +628,7 @@ export function initAbilities() {
       .attr(PostDefendStealHeldItemAbAttr, (_target, _user, move) => move.hasFlag(MoveFlags.MAKES_CONTACT))
       .condition(getSheerForceHitDisableAbCondition()),
     new Ability(Abilities.SHEER_FORCE, 5)
-      .attr(MovePowerBoostAbAttr, (_user, _target, move) => !!move && move.chance >= 1, 5461 / 4096)
+      .attr(MovePowerBoostAbAttr, (_user, _target, move) => !!move && move.chance >= 1, 1.3)
       .attr(MoveEffectChanceMultiplierAbAttr, 0), // Should disable life orb, eject button, red card, kee/maranga berry if they get implemented
     new Ability(Abilities.CONTRARY, 5).attr(StatStageChangeMultiplierAbAttr, -1).ignorable(),
     new Ability(Abilities.UNNERVE, 5).attr(PreventBerryUseAbAttr),

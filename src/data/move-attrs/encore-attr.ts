@@ -33,6 +33,7 @@ export class EncoreAttr extends AddBattlerTagAttr {
         case MoveId.SKETCH:
         case MoveId.SLEEP_TALK:
         case MoveId.ENCORE:
+        case MoveId.DYNAMAX_CANNON:
           return false;
       }
 
