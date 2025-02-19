@@ -1544,7 +1544,7 @@ export class GameData {
 
   /**
    * Set the given PokemonSpecies as caught based on the characteristics of a caught Pokemon.
-   * By default, updates games stats and starter candy count, and show a message if the catch unlocked a new starter.
+   * By default, updates games stats and starter candy count, and shows a message if the catch unlocked a new starter.
    * Calls itself recursively for all pre-evolved species of the provided one.
    *
    * @param pokemon the {@linkcode Pokemon} that was caught
@@ -1596,39 +1596,28 @@ export class GameData {
       const hasNewAttr = (caughtAttr & dexAttr) !== dexAttr;
 
       if (incrementCount) {
-        if (!fromEgg) {
-          dexEntry.caughtCount++;
-          this.gameStats.pokemonCaught++;
-          if (pokemon.species.isSubLegendary()) {
-            this.gameStats.subLegendaryPokemonCaught++;
-          } else if (pokemon.species.isLegendary()) {
-            this.gameStats.legendaryPokemonCaught++;
-          } else if (pokemon.species.isMythical()) {
-            this.gameStats.mythicalPokemonCaught++;
-          }
-          if (pokemon.isShiny()) {
-            this.gameStats.shinyPokemonCaught++;
-          }
-        } else {
-          dexEntry.hatchedCount++;
-          this.gameStats.pokemonHatched++;
-          if (pokemon.species.isSubLegendary()) {
-            this.gameStats.subLegendaryPokemonHatched++;
-          } else if (pokemon.species.isLegendary()) {
-            this.gameStats.legendaryPokemonHatched++;
-          } else if (pokemon.species.isMythical()) {
-            this.gameStats.mythicalPokemonHatched++;
-          }
-          if (pokemon.isShiny()) {
-            this.gameStats.shinyPokemonHatched++;
+        // Only update the stats for the caught species itself, not its pre evolution(s)
+        if (pokemon.species.speciesId === species.speciesId) {
+          if (fromEgg) {
+            dexEntry.hatchedCount++;
+            this.incrementHatchedPokemonStats(pokemon);
+          } else {
+            dexEntry.caughtCount++;
+            this.incrementCaughtPokemonStats(pokemon);
           }
         }
 
+        // Once at the root species, give starter candy
         if (!hasPrevolution && (!globalScene.gameMode.isDaily || hasNewAttr || fromEgg)) {
-          this.addStarterCandy(
-            species,
-            1 * (pokemon.isShiny() ? 5 * (1 << (pokemon.variant ?? 0)) : 1) * (fromEgg || pokemon.isBoss() ? 2 : 1),
-          );
+          let candyMultiplier = 1;
+          if (pokemon.isShiny()) {
+            // Common shiny gives x5 candies, rare shiny: x10, epic shiny: x20.
+            candyMultiplier *= 5 * (1 << (pokemon.variant ?? 0));
+          }
+          if (fromEgg || pokemon.isBoss()) {
+            candyMultiplier *= 2;
+          }
+          this.addStarterCandy(species, 1 * candyMultiplier);
         }
       }
 
@@ -1664,6 +1653,34 @@ export class GameData {
         checkPrevolution(false);
       }
     });
+  }
+
+  private incrementCaughtPokemonStats(pokemon: Pokemon) {
+    this.gameStats.pokemonCaught++;
+    if (pokemon.species.isSubLegendary()) {
+      this.gameStats.subLegendaryPokemonCaught++;
+    } else if (pokemon.species.isLegendary()) {
+      this.gameStats.legendaryPokemonCaught++;
+    } else if (pokemon.species.isMythical()) {
+      this.gameStats.mythicalPokemonCaught++;
+    }
+    if (pokemon.isShiny()) {
+      this.gameStats.shinyPokemonCaught++;
+    }
+  }
+
+  private incrementHatchedPokemonStats(pokemon: Pokemon) {
+    this.gameStats.pokemonHatched++;
+    if (pokemon.species.isSubLegendary()) {
+      this.gameStats.subLegendaryPokemonHatched++;
+    } else if (pokemon.species.isLegendary()) {
+      this.gameStats.legendaryPokemonHatched++;
+    } else if (pokemon.species.isMythical()) {
+      this.gameStats.mythicalPokemonHatched++;
+    }
+    if (pokemon.isShiny()) {
+      this.gameStats.shinyPokemonHatched++;
+    }
   }
 
   incrementRibbonCount(species: PokemonSpecies, forStarter: boolean = false): number {
