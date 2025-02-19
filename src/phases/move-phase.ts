@@ -442,10 +442,13 @@ export class MovePhase extends BattlePhase {
     }
   }
 
+  /**
+   * Update the battle's "last move" pointer, unless we're currently mimicking a move.
+   * The last move used is unaffected by moves that fail.
+   * @param success - Whether the move was successful or not.
+   */
   protected updateLastMoveId(success: boolean): void {
-    // Update the battle's "last move" pointer, unless we're currently mimicking a move.
     if (!allMoves[this.move.moveId].hasAttr(CopycatAttr)) {
-      // The last move used is unaffected by moves that fail
       if (success) {
         globalScene.currentBattle.lastMove = this.move.getMove();
       }
