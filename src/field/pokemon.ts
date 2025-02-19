@@ -192,6 +192,7 @@ import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type { QueuedMove } from "#app/@types/QueuedMove";
 import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
+import { DoubleDamageToMaxAttr } from "#app/data/move-attrs/double-damage-to-max-attr";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -460,11 +461,19 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   /**
    * Checks if a pokemon is fainted (ie: its `hp <= 0`).
    * It's usually better to call {@linkcode isAllowedInBattle()}
-   * @param checkStatus `true` to also check that the pokemon's status is {@linkcode StatusEffect.FAINT}
    * @returns `true` if the pokemon is fainted
    */
-  public isFainted(checkStatus: boolean = false): boolean {
-    return this.hp <= 0 && (!checkStatus || this.status?.effect === StatusEffect.FAINT);
+  public isFainted(): boolean {
+    return this.hp <= 0;
+  }
+
+  /**
+   * Faints the pokemon.
+   * @todo Handle all fainting-related side-effects here
+   */
+  public faint(): void {
+    this.hp = 0;
+    this.resetStatus(true);
   }
 
   /**
@@ -2822,6 +2831,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       };
     }
 
+    /** Behemoth Bash, Behemoth Blade, and Dynamax Cannon do double damage to G-Max Pokemon (except Eternamax) */
+    const gmaxBonusDamageMultiplier = new NumberHolder(1);
+    applyMoveAttrs(DoubleDamageToMaxAttr, source, this, move, gmaxBonusDamageMultiplier);
+
     /**
      * The attack's base damage, as determined by the source's level, move power
      * and Attack stat as well as this Pokemon's Defense stat
@@ -2949,6 +2962,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     damage.value =
       baseDamage
       * targetMultiplier
+      * gmaxBonusDamageMultiplier.value
       * multiStrikeEnhancementMultiplier.value
       * arenaAttackTypeMultiplier.value
       * glaiveRushMultiplier.value
@@ -3048,7 +3062,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const surviveDamage = new BooleanHolder(false);
 
     // Eternatus does not need the damage reduction as its emax form has increased hp/defenses
-    if (this.isMax() && this.species.speciesId !== Species.ETERNATUS) {
+    if (this.isMax(false)) {
       damage = toDmgValue(damage * DYNAMAX_DAMAGE_TAKEN_FACTOR);
     }
 
@@ -3123,12 +3137,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.isBoss();
   }
 
-  isMax(): boolean {
+  /**
+   * @param includeEternamax - Whether or not to include Eternamax
+   * @returns if the Pokemon is in a max form
+   */
+  isMax(includeEternamax: boolean = true): boolean {
     const maxForms = [
       SpeciesFormKey.GIGANTAMAX,
       SpeciesFormKey.GIGANTAMAX_RAPID,
       SpeciesFormKey.GIGANTAMAX_SINGLE,
-      SpeciesFormKey.ETERNAMAX,
+      ...(includeEternamax ? [SpeciesFormKey.ETERNAMAX] : []),
     ] as string[];
     return maxForms.includes(this.getFormKey());
   }
@@ -3488,13 +3506,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     sourcePokemon: Pokemon | null = null,
     ignoreField: boolean = false,
   ): boolean {
-    if (effect !== StatusEffect.FAINT) {
-      if (overrideStatus ? this.status?.effect === effect : this.status) {
-        return false;
-      }
-      if (this.isGrounded() && !ignoreField && globalScene.arena.hasTerrain(TerrainType.MISTY)) {
-        return false;
-      }
+    if (overrideStatus ? this.status?.effect === effect : this.status) {
+      return false;
+    }
+    if (this.isGrounded() && !ignoreField && globalScene.arena.hasTerrain(TerrainType.MISTY)) {
+      return false;
     }
 
     if (sourcePokemon && sourcePokemon !== this && this.isSafeguarded(sourcePokemon)) {
@@ -3590,7 +3606,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (!this.canSetStatus(effect, asPhase, false, sourcePokemon)) {
       return false;
     }
-    if (this.isFainted() && effect !== StatusEffect.FAINT) {
+    if (this.isFainted()) {
       return false;
     }
 
@@ -3629,14 +3645,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     sleepTurnsRemaining = sleepTurnsRemaining!; // tell TS compiler it's defined
-    effect = effect!; // If `effect` is undefined then `trySetStatus()` will have already returned early via the `canSetStatus()` call
     this.status = new Status(effect, 0, sleepTurnsRemaining?.value);
 
-    if (effect !== StatusEffect.FAINT) {
-      globalScene.triggerPokemonFormChange(this, SpeciesFormChangeStatusEffectTrigger, true);
-      if (sourcePokemon) {
-        applyAbAttrs(AbAttrFlag.SYNCHRONIZE_STATUS, this, false, sourcePokemon, effect);
-      }
+    globalScene.triggerPokemonFormChange(this, SpeciesFormChangeStatusEffectTrigger, true);
+    if (sourcePokemon) {
+      applyAbAttrs(AbAttrFlag.SYNCHRONIZE_STATUS, this, false, sourcePokemon, effect);
     }
 
     return true;
@@ -3644,15 +3657,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Resets the status of a pokemon.
-   * @param revive Whether revive should be cured; defaults to true.
-   * @param confusion Whether resetStatus should include confusion or not; defaults to false.
-   * @param reloadAssets Whether to reload the assets or not; defaults to false.
+   * @param confusion Whether resetStatus should include confusion or not; defaults to `false`.
+   * @param reloadAssets Whether to reload the assets or not; defaults to `false`.
    */
-  resetStatus(revive: boolean = true, confusion: boolean = false, reloadAssets: boolean = false): void {
+  resetStatus(confusion: boolean = false, reloadAssets: boolean = false): void {
     const lastStatus = this.status?.effect;
-    if (!revive && lastStatus === StatusEffect.FAINT) {
-      return;
-    }
     this.status = null;
     if (lastStatus === StatusEffect.SLEEP) {
       this.setFrameRate(10);
@@ -4939,11 +4948,12 @@ export class EnemyPokemon extends Pokemon {
    * The new pokemon's visibility will be set to `false`.
    * @param pokeballType the type of pokeball the pokemon was caught with
    * @param slotIndex an optional index to place the pokemon in the party
-   * @returns the pokemon that was added or null if the pokemon could not be added
+   * @returns the pokemon that was added or `undefined` if the pokemon could not be added
+   * @todo This feels like it can be improved...
    */
-  addToParty(pokeballType: PokeballType, slotIndex: number = -1) {
+  addToParty(pokeballType: PokeballType, slotIndex: number = -1): PlayerPokemon | undefined {
     const party = globalScene.getPlayerParty();
-    let ret: PlayerPokemon | null = null;
+    let ret: PlayerPokemon | undefined;
 
     if (party.length < PLAYER_PARTY_MAX_SIZE) {
       this.pokeball = pokeballType;

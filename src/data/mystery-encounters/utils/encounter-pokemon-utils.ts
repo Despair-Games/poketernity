@@ -311,8 +311,7 @@ export function getRandomSpeciesByStarterCost(
  * @param pokemon the player pokemon to KO
  */
 export function koPlayerPokemon(pokemon: PlayerPokemon) {
-  pokemon.hp = 0;
-  pokemon.trySetStatus(StatusEffect.FAINT);
+  pokemon.faint();
   pokemon.updateInfo();
   queueEncounterMessage(i18next.t("battle:fainted", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }));
 }
