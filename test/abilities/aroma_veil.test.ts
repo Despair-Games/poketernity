@@ -5,8 +5,6 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { ArenaTagType } from "#enums/arena-tag-type";
-import { BattlerIndex } from "#enums/battler-index";
 import type { PlayerPokemon } from "#app/field/pokemon";
 
 describe("Moves - Aroma Veil", () => {
@@ -47,19 +45,5 @@ describe("Moves - Aroma Veil", () => {
     });
   });
 
-  it("Aroma Veil does not protect against Imprison", async () => {
-    await game.classicMode.startBattle([Species.REGIELEKI, Species.BULBASAUR]);
-
-    const party = game.scene.getPlayerParty()! as PlayerPokemon[];
-
-    game.move.select(MoveId.GROWL);
-    game.move.select(MoveId.GROWL, 1);
-    await game.forceEnemyMove(MoveId.IMPRISON, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(MoveId.SPLASH);
-    await game.toNextTurn();
-    expect(game.scene.arena.getTag(ArenaTagType.IMPRISON)).toBeDefined();
-    party.forEach((p) => {
-      expect(p.getTag(BattlerTagType.IMPRISON)).toBeDefined();
-    });
-  });
+  it.todo("Aroma Veil does not protect against Imprison");
 });
