@@ -195,8 +195,8 @@ describe("Abilities - Magic Guard", () => {
      * - The player Pokemon (with Magic Guard) has not taken damage from poison
      * - The enemy Pokemon (without Magic Guard) has taken damage from poison
      */
-    expect(leadPokemon.status!.effect).toBe(StatusEffect.POISON);
-    expect(enemyPokemon.status!.effect).toBe(StatusEffect.POISON);
+    expect(leadPokemon.getStatusEffect()).toBe(StatusEffect.POISON);
+    expect(enemyPokemon.getStatusEffect()).toBe(StatusEffect.POISON);
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp());
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
   });
@@ -343,7 +343,7 @@ describe("Abilities - Magic Guard", () => {
      * - The player Pokemon is asleep
      */
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp());
-    expect(leadPokemon.status!.effect).toBe(StatusEffect.SLEEP);
+    expect(leadPokemon.getStatusEffect()).toBe(StatusEffect.SLEEP);
   });
 
   it("Magic Guard prevents damage from abilities with PostFaintContactDamageAbAttr", async () => {

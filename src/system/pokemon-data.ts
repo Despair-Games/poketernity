@@ -137,7 +137,7 @@ export default class PokemonData {
     if (sourcePokemon) {
       this.moveset = sourcePokemon.moveset;
       if (!forHistory) {
-        this.status = sourcePokemon.status;
+        this.status = sourcePokemon.getStatusEffect(false, true);
         if (this.player) {
           this.summonData = sourcePokemon.summonData;
         }
@@ -147,7 +147,7 @@ export default class PokemonData {
         .filter((m) => m)
         .map((m: any) => new PokemonMove(m.moveId, m.ppUsed, m.ppUp, m.virtual, m.maxPpOverride));
       if (!forHistory) {
-        this.status = source.status
+        this.status = source.hasNonVolatileStatusEffect(false, true)
           ? new Status(source.getStatusEffect(true), source.status.toxicTurnCount, source.status.sleepTurnsRemaining)
           : null;
       }

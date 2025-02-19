@@ -832,7 +832,7 @@ class ToxicSpikesTag extends ArenaTrapTag {
           );
           return true;
         }
-      } else if (!pokemon.status) {
+      } else if (!pokemon.hasNonVolatileStatusEffect()) {
         const toxic = this.layers > 1;
         if (
           pokemon.trySetStatus(!toxic ? StatusEffect.POISON : StatusEffect.TOXIC, true, null, 0, this.getMoveName())

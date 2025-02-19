@@ -4018,7 +4018,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Helper function that checks if a Pokemon has one of any non-volatile status effects and/or is confused
+   * Helper function that checks if a Pokemon has one of any non-volatile status effects and/or is confused (which is a volatile status effect but is lumped into this category for some status-recovery effects)
    * @param includeConfusion whether Confusion should also be considered
    * @param ignoreMockAbility whether a status effect-mocking ability should be considered
    * @returns `true` if the Pokemon has any of the non-volatile status effects | `false` if not

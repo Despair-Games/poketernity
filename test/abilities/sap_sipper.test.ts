@@ -11,6 +11,7 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { allMoves } from "#app/data/data-lists";
 import { RandomMoveAttr } from "#app/data/move-attrs/random-move-attr";
+import { StatusEffect } from "#enums/status-effect";
 
 // See also: TypeImmunityAbAttr
 describe("Abilities - Sap Sipper", () => {
@@ -69,7 +70,7 @@ describe("Abilities - Sap Sipper", () => {
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    expect(enemyPokemon.status).toBeUndefined();
+    expect(enemyPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(1);
   });
 

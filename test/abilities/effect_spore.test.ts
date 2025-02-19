@@ -50,7 +50,7 @@ describe("Abilities - Effect Spore", () => {
     await game.phaseInterceptor.to("BerryPhase");
 
     expect(abilityAttr.apply).toHaveLastReturnedWith(true);
-    expect(enemyPokemon.status).toBeDefined();
+    expect(enemyPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
   });
 
   it("should not affect Pokemon with the ability Overcoat", async () => {

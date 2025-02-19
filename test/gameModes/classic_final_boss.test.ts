@@ -132,7 +132,7 @@ describe("Classic Final Boss", () => {
     // Eternatus phase 2: changed form, healed and restored its shields
     expect(eternatus.hp).toBeGreaterThan(phase1Hp);
     expect(eternatus.hp).toBe(eternatus.getMaxHp());
-    expect(eternatus.status).toBeFalsy();
+    expect(eternatus.getStatusEffect()).toBe(StatusEffect.NONE);
     expect(eternatus.formIndex).toBe(1);
     expect(eternatus.bossSegments).toBe(5);
     expect(eternatus.bossSegmentIndex).toBe(4);
