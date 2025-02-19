@@ -6,7 +6,7 @@ import { AbilityCopyAttr } from "#app/data/move-attrs/ability-copy-attr";
 import { AbilityGiveAttr } from "#app/data/move-attrs/ability-give-attr";
 import { AcupressureStatStageChangeAttr } from "#app/data/move-attrs/acupressure-stat-stage-change-attr";
 import { AddArenaTagAttr } from "#app/data/move-attrs/add-arena-tag-attr";
-import { AddArenaTrapTagAttr } from "#app/data/move-attrs/add-arena-trap-tag-attr";
+import { AddArenaHazardTagAttr } from "#app/data/move-attrs/add-arena-hazard-tag-attr";
 import { AddBattlerTagAttr } from "#app/data/move-attrs/add-battler-tag-attr";
 import { AddBattlerTagHeaderAttr } from "#app/data/move-attrs/add-battler-tag-header-attr";
 import { AddBattlerTagIfBoostedAttr } from "#app/data/move-attrs/add-battler-tag-if-boosted-attr";
@@ -244,6 +244,7 @@ import { RageAttr } from "./move-attrs/rage-attr";
 import { DoubleDamageToMaxAttr } from "./move-attrs/double-damage-to-max-attr";
 import { DisplayMessageAttr } from "./move-attrs/display-message-attr";
 
+// prettier-ignore
 export function initMoves() {
   const rawAllMoves = [
     SelfStatusMove.none(),
@@ -914,7 +915,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.ACC], -1)
       .bulletMove(),
     new StatusMove(MoveId.SPIKES, ElementalType.GROUND, -1, 20, -1, 0, 2)
-      .attr(AddArenaTrapTagAttr, ArenaTagType.SPIKES)
+      .attr(AddArenaHazardTagAttr, ArenaTagType.SPIKES)
       .target(MoveTarget.ENEMY_SIDE),
     new AttackMove(MoveId.ZAP_CANNON, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 120, 50, 5, 100, 0, 2)
       .attr(StatusEffectAttr, StatusEffect.PARALYSIS)
@@ -1674,7 +1675,7 @@ export function initMoves() {
       },
     ),
     new StatusMove(MoveId.TOXIC_SPIKES, ElementalType.POISON, -1, 20, -1, 0, 4)
-      .attr(AddArenaTrapTagAttr, ArenaTagType.TOXIC_SPIKES)
+      .attr(AddArenaHazardTagAttr, ArenaTagType.TOXIC_SPIKES)
       .target(MoveTarget.ENEMY_SIDE),
     new StatusMove(MoveId.HEART_SWAP, ElementalType.PSYCHIC, -1, 10, -1, 0, 4)
       .attr(SwapStatStagesAttr, BATTLE_STATS)
@@ -1879,7 +1880,7 @@ export function initMoves() {
       .condition((user, target, _move) => target.isOppositeGender(user))
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new StatusMove(MoveId.STEALTH_ROCK, ElementalType.ROCK, -1, 20, -1, 0, 4)
-      .attr(AddArenaTrapTagAttr, ArenaTagType.STEALTH_ROCK)
+      .attr(AddArenaHazardTagAttr, ArenaTagType.STEALTH_ROCK)
       .target(MoveTarget.ENEMY_SIDE),
     new AttackMove(MoveId.GRASS_KNOT, ElementalType.GRASS, MoveCategory.SPECIAL, -1, 100, 20, -1, 0, 4)
       .condition(failOnMaxCondition)
@@ -2384,7 +2385,7 @@ export function initMoves() {
         condition: (_user, target, _move) => target.isOfType(ElementalType.GRASS) && target.isGrounded(),
       }),
     new StatusMove(MoveId.STICKY_WEB, ElementalType.BUG, -1, 20, -1, 0, 6)
-      .attr(AddArenaTrapTagAttr, ArenaTagType.STICKY_WEB)
+      .attr(AddArenaHazardTagAttr, ArenaTagType.STICKY_WEB)
       .target(MoveTarget.ENEMY_SIDE),
     new AttackMove(MoveId.FELL_STINGER, ElementalType.BUG, MoveCategory.PHYSICAL, 50, 100, 25, -1, 0, 6).attr(
       PostVictoryStatStageChangeAttr,
@@ -3503,7 +3504,7 @@ export function initMoves() {
       .target(MoveTarget.USER)
       .attr(ShiftStatAttr, Stat.ATK, Stat.DEF),
     new AttackMove(MoveId.STONE_AXE, ElementalType.ROCK, MoveCategory.PHYSICAL, 65, 90, 15, 100, 0, 8)
-      .attr(AddArenaTrapTagAttr, ArenaTagType.STEALTH_ROCK)
+      .attr(AddArenaHazardTagAttr, ArenaTagType.STEALTH_ROCK)
       .slicingMove(),
     new AttackMove(MoveId.SPRINGTIDE_STORM, ElementalType.FAIRY, MoveCategory.SPECIAL, 100, 80, 5, 30, 0, 8)
       .attr(StatStageChangeAttr, [Stat.ATK], -1)
@@ -3566,7 +3567,7 @@ export function initMoves() {
       .attr(StatusEffectAttr, StatusEffect.BURN)
       .attr(MovePowerMultiplierAttr, (_user, target, _move) => (target.hasNonVolatileStatusEffect() ? 2 : 1)),
     new AttackMove(MoveId.CEASELESS_EDGE, ElementalType.DARK, MoveCategory.PHYSICAL, 65, 90, 15, 100, 0, 8)
-      .attr(AddArenaTrapTagAttr, ArenaTagType.SPIKES)
+      .attr(AddArenaHazardTagAttr, ArenaTagType.SPIKES)
       .slicingMove(),
     new AttackMove(MoveId.BLEAKWIND_STORM, ElementalType.FLYING, MoveCategory.SPECIAL, 100, 80, 10, 30, 0, 8)
       .attr(StormAccuracyAttr)
@@ -3630,7 +3631,7 @@ export function initMoves() {
       .attr(StatusEffectAttr, StatusEffect.POISON),
     new AttackMove(MoveId.G_MAX_STONESURGE, ElementalType.WATER, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.DREDNAW)
-      .attr(AddArenaTrapTagAttr, ArenaTagType.STEALTH_ROCK),
+      .attr(AddArenaHazardTagAttr, ArenaTagType.STEALTH_ROCK),
     new AttackMove(MoveId.G_MAX_WIND_RAGE, ElementalType.FLYING, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.CORVIKNIGHT)
       .attr(ClearWeatherAttr, WeatherType.FOG)
@@ -3672,7 +3673,7 @@ export function initMoves() {
       .attr(ConfuseAttr),
     new AttackMove(MoveId.G_MAX_STEELSURGE, ElementalType.STEEL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.COPPERAJAH)
-      .attr(AddArenaTrapTagAttr, ArenaTagType.SHARP_STEEL),
+      .attr(AddArenaHazardTagAttr, ArenaTagType.SHARP_STEEL),
     new AttackMove(MoveId.G_MAX_MELTDOWN, ElementalType.STEEL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.MELMETAL)
       .attr(AddBattlerTagAttr, BattlerTagType.TORMENT),

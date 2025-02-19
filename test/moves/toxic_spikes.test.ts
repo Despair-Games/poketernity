@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import type { ArenaTrapTag } from "#app/data/arena-tag";
+import type { ArenaHazardTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -112,7 +112,7 @@ describe("Moves - Toxic Spikes", () => {
     game.move.select(MoveId.SPLASH, 1);
     await game.toNextTurn();
 
-    const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
+    const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as ArenaHazardTag;
     expect(arenaTags.tagType).toBe(ArenaTagType.TOXIC_SPIKES);
     expect(arenaTags.layers).toBe(1);
   });
@@ -130,7 +130,7 @@ describe("Moves - Toxic Spikes", () => {
 
     await game.reload.reloadSession();
 
-    const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
+    const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as ArenaHazardTag;
     expect(arenaTags.tagType).toBe(ArenaTagType.TOXIC_SPIKES);
     expect(arenaTags.layers).toBe(1);
   });
@@ -147,7 +147,7 @@ describe("Moves - Toxic Spikes", () => {
     expect(enemyPokemon.isFainted()).toBe(true);
     await game.toNextTurn();
 
-    const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
+    const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as ArenaHazardTag;
     expect(arenaTags.tagType).toBe(ArenaTagType.TOXIC_SPIKES);
     expect(arenaTags.layers).toBe(1);
   });

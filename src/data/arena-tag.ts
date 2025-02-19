@@ -678,15 +678,14 @@ export class IonDelugeTag extends ArenaTag {
 }
 
 /**
- * Abstract class to implement arena traps.
+ * Abstract class to implement arena hazards.
+ * @extends ArenaTag
  */
-export abstract class ArenaTrapTag extends ArenaTag {
+export abstract class ArenaHazardTag extends ArenaTag {
   public layers: number;
   public maxLayers: number;
 
   /**
-   * Creates a new instance of the ArenaTrapTag class.
-   *
    * @param tagType - The type of the arena tag.
    * @param sourceMoveId - The move that created the tag.
    * @param sourceId - The ID of the source of the tag.
@@ -745,7 +744,7 @@ export abstract class ArenaTrapTag extends ArenaTag {
  * Applies up to 3 layers of Spikes, dealing 1/8th, 1/6th, or 1/4th of the the Pokémon's HP
  * in damage for 1, 2, or 3 layers of Spikes respectively if they are summoned into this trap.
  */
-class SpikesTag extends ArenaTrapTag {
+class SpikesTag extends ArenaHazardTag {
   constructor(sourceId: number, side: ArenaTagSide) {
     super(ArenaTagType.SPIKES, MoveId.SPIKES, sourceId, side, 3);
   }
@@ -798,7 +797,7 @@ class SpikesTag extends ArenaTrapTag {
  * summoned into this trap if 1 or 2 layers of Toxic Spikes respectively are up. Poison-type
  * Pokémon summoned into this trap remove it entirely.
  */
-class ToxicSpikesTag extends ArenaTrapTag {
+class ToxicSpikesTag extends ArenaHazardTag {
   private neutralized: boolean;
 
   constructor(sourceId: number, side: ArenaTagSide) {
@@ -937,7 +936,7 @@ export class DelayedAttackTag extends ArenaTag {
  * Stealth rock (produced by stealth rock and stone axe) and
  * Sharp steel (produced by G-Max steelsurge)
  */
-class TypeHazardTag extends ArenaTrapTag {
+class TypeHazardTag extends ArenaHazardTag {
   public readonly damagingType: ElementalType;
   public readonly onAddKey: string;
   public readonly activateTrapKey: string;
@@ -1038,7 +1037,7 @@ class SharpSteelTag extends TypeHazardTag {
  * Applies up to 1 layer of Sticky Web, which lowers the Speed by one stage
  * to any Pokémon who is summoned into this trap.
  */
-class StickyWebTag extends ArenaTrapTag {
+class StickyWebTag extends ArenaHazardTag {
   constructor(sourceId: number, side: ArenaTagSide) {
     super(ArenaTagType.STICKY_WEB, MoveId.STICKY_WEB, sourceId, side, 1);
   }
@@ -1262,11 +1261,11 @@ class NoneTag extends ArenaTag {
   }
 }
 /**
- * This arena tag facilitates the application of the move Imprison
+ * This arena tag facilitates the application of the move Imprison.
  * Imprison remains in effect as long as the source Pokemon is active and present on the field.
  * Imprison will apply to any opposing Pokemon that switch onto the field as well.
  */
-class ImprisonTag extends ArenaTrapTag {
+class ImprisonTag extends ArenaHazardTag {
   constructor(sourceId: number, side: ArenaTagSide) {
     super(ArenaTagType.IMPRISON, MoveId.IMPRISON, sourceId, side, 1);
   }
