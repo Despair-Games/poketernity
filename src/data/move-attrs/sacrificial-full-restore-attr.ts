@@ -29,13 +29,11 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
     const party = user.getParty();
 
     // We don't know which party member will be chosen, so pick the highest max HP in the party
-    const maxPartyMemberHp = party
-      .map((p) => p.getMaxHp())
-      .reduce((maxHp: number, hp: number) => Math.max(hp, maxHp), 0);
+    const maxPartyMemberHp = Math.max(...party.map((p) => p.getMaxHp()));
 
     /**
      * @todo If the incoming Pokemon does not get any HP healed, status healed, or PP restored,
-     * There should be a battler tag applied to the Pokemon which should expire whenever the heal
+     * There should be an arena tag applied to the field which should expire whenever the heal
      * would be needed
      */
     globalScene.queuePokemonHeal(false, user.getBattlerIndex(), maxPartyMemberHp, {
@@ -53,7 +51,7 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
 
   /**
    * Only works if there is at least 1 unfainted allowed Pokemon in the party and not already in battle
-   * @returns `true` if the condition is met, `false` otherwise
+   * @returns the condition function to add to Move objects with this attribute
    */
   override getCondition(): MoveConditionFunc {
     return (user, _target, _move) =>
