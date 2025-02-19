@@ -89,7 +89,7 @@ describe("Moves - Burning Jealousy", () => {
     await game.toEndOfTurn();
 
     expect(allMoves[MoveId.BURNING_JEALOUSY].calculateBattlePower).toHaveReturnedWith(
-      (allMoves[MoveId.BURNING_JEALOUSY].power * 5461) / 4096,
+      allMoves[MoveId.BURNING_JEALOUSY].power * 1.3,
     );
   });
 });

@@ -1,8 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
-import { Status } from "#app/data/status-effect";
 import { Challenges } from "#enums/challenges";
-import { StatusEffect } from "#enums/status-effect";
 import { ElementalType } from "#enums/elemental-type";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
@@ -256,8 +254,7 @@ describe("Moves - Dragon Tail", () => {
     const [lapras, eevee, toxapex, primarina] = game.scene.getPlayerParty();
 
     // Turn 1: Eevee faints
-    eevee.hp = 0;
-    eevee.status = new Status(StatusEffect.FAINT);
+    eevee.faint();
     expect(eevee.isFainted()).toBe(true);
     game.move.select(MoveId.SPLASH);
     await game.forceEnemyMove(MoveId.SPLASH);
@@ -285,8 +282,7 @@ describe("Moves - Dragon Tail", () => {
     const [lapras, eevee] = game.scene.getPlayerParty();
 
     // Turn 1: Eevee faints
-    eevee.hp = 0;
-    eevee.status = new Status(StatusEffect.FAINT);
+    eevee.faint();
     expect(eevee.isFainted()).toBe(true);
     game.move.select(MoveId.SPLASH);
     await game.forceEnemyMove(MoveId.SPLASH);

@@ -1,5 +1,4 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Status } from "#app/data/status-effect";
 import { getGameMode } from "#app/game-mode";
 import { GameModes } from "#enums/game-modes";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
@@ -7,7 +6,6 @@ import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -48,8 +46,7 @@ describe("Double Battles", () => {
     game.move.select(MoveId.SPLASH, 1);
 
     for (const pokemon of game.scene.getPlayerField()) {
-      pokemon.hp = 0;
-      pokemon.status = new Status(StatusEffect.FAINT);
+      pokemon.faint();
       expect(pokemon.isFainted()).toBe(true);
     }
 

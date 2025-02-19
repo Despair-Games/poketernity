@@ -17,13 +17,12 @@ import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
 import { PostVictoryStatStageChangeAttr } from "#app/data/move-attrs/post-victory-stat-stage-change-attr";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
-import type { Pokemon, EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
+import type { Pokemon, EnemyPokemon } from "#app/field/pokemon";
 import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonInstantReviveModifier } from "#app/modifier/modifier";
 import { isNullOrUndefined } from "#app/utils";
-import { StatusEffect } from "#enums/status-effect";
 import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
 import { PokemonPhase } from "./abstract-pokemon-phase";
@@ -244,9 +243,9 @@ export class FaintPhase extends PokemonPhase {
             .forEach((p) => p.removeTagsBySourceId(pokemon.id));
 
           pokemon.y -= 150;
-          pokemon.trySetStatus(StatusEffect.FAINT);
+          pokemon.faint();
           if (pokemon.isPlayer()) {
-            currentBattle.removeFaintedParticipant(pokemon as PlayerPokemon);
+            currentBattle.removeFaintedParticipant(pokemon);
           } else {
             globalScene.addFaintedEnemyScore(pokemon as EnemyPokemon);
             currentBattle.addPostBattleLoot(pokemon as EnemyPokemon);

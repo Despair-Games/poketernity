@@ -1,11 +1,9 @@
 import { allMoves } from "#app/data/data-lists";
 import { MultiHitAttr } from "#app/data/move-attrs/multi-hit-attr";
 import { MultiHitType } from "#enums/multi-hit-type";
-import { Status } from "#app/data/status-effect";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -46,8 +44,7 @@ describe("Abilities - BATTLE BOND", () => {
     const greninja = game.scene.getPlayerParty()[1];
     expect(greninja.formIndex).toBe(ashForm);
 
-    greninja.hp = 0;
-    greninja.status = new Status(StatusEffect.FAINT);
+    greninja.faint();
     expect(greninja.isFainted()).toBe(true);
 
     game.move.select(MoveId.SPLASH);

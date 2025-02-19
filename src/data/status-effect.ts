@@ -1,4 +1,3 @@
-import { randIntRange } from "#app/utils";
 import { StatusEffect } from "#enums/status-effect";
 import type { ParseKeys } from "i18next";
 import i18next from "i18next";
@@ -110,45 +109,6 @@ export function getStatusEffectCatchRateMultiplier(statusEffect: StatusEffect): 
   }
 
   return 1;
-}
-
-/**
- * Returns a random non-volatile StatusEffect
- */
-export function generateRandomStatusEffect(): StatusEffect {
-  return randIntRange(1, 6);
-}
-
-/**
- * Returns a random non-volatile StatusEffect between the two provided
- * @param statusEffectA The first StatusEffect
- * @param statusEffectA The second StatusEffect
- */
-export function getRandomStatusEffect(statusEffectA: StatusEffect, statusEffectB: StatusEffect): StatusEffect {
-  if (statusEffectA === StatusEffect.NONE || statusEffectA === StatusEffect.FAINT) {
-    return statusEffectB;
-  }
-  if (statusEffectB === StatusEffect.NONE || statusEffectB === StatusEffect.FAINT) {
-    return statusEffectA;
-  }
-
-  return randIntRange(0, 2) ? statusEffectA : statusEffectB;
-}
-
-/**
- * Returns a random non-volatile StatusEffect between the two provided
- * @param statusA The first Status
- * @param statusB The second Status
- */
-export function getRandomStatus(statusA: Status | null, statusB: Status | null): Status | null {
-  if (!statusA || statusA.effect === StatusEffect.NONE || statusA.effect === StatusEffect.FAINT) {
-    return statusB;
-  }
-  if (!statusB || statusB.effect === StatusEffect.NONE || statusB.effect === StatusEffect.FAINT) {
-    return statusA;
-  }
-
-  return randIntRange(0, 2) ? statusA : statusB;
 }
 
 /**

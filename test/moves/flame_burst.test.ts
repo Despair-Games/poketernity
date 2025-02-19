@@ -157,6 +157,6 @@ describe("Moves - Flame Burst", () => {
 
     await game.toEndOfTurn();
 
-    expect(leftEnemy.isFainted(true)).toBeTruthy();
+    expect(leftEnemy.isFainted()).toBeTruthy();
   });
 });
