@@ -5,7 +5,6 @@ import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { noStarterFormKeys } from "#app/data/no-starter-form-keys";
 import { allSpecies } from "#app/data/data-lists";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { speciesStarterCosts } from "#app/data/balance/starters";
@@ -1516,12 +1515,16 @@ export class GameData {
   }
 
   /**
+   * Set the given Pokemon (and its pre-evolutions, if any) as caught.
+   * By default, updates games stats and starter candy count, and show a message if the catch unlocked a new starter.
+   * The function exits early if the Pokemon is a "rental" Pokemon (ie was given through an event for the current run only)
+   * unless that Pokemon had already been captured before, in which case any new form, gender, etc. gets unlocked.
    *
-   * @param pokemon
-   * @param incrementCount
-   * @param fromEgg
-   * @param showMessage
-   * @returns `true` if Pokemon catch unlocked a new starter, `false` if Pokemon catch did not unlock a starter
+   * @param pokemon the {@linkcode Pokemon} that was caught
+   * @param incrementCount whether to increment game stats and starter candy or not. Default: `true`. Use `false` for "rental" Pokemon.
+   * @param fromEgg whether the Pokemon was obtained through an egg. Default: `false`
+   * @param showMessage whether to display a message if (a) new Starter(s) was unlocked. Default: `true`
+   * @returns `true` if the catch unlocked a new starter, `false` if it didn't.
    */
   setPokemonCaught(
     pokemon: Pokemon,
@@ -1540,15 +1543,18 @@ export class GameData {
   }
 
   /**
+   * Set the given PokemonSpecies as caught based on the characteristics of a caught Pokemon.
+   * By default, updates games stats and starter candy count, and show a message if the catch unlocked a new starter.
+   * Calls itself recursively for all pre-evolved species of the provided one.
    *
-   * @param pokemon
-   * @param species
-   * @param incrementCount
-   * @param fromEgg
-   * @param showMessage
-   * @returns `true` if Pokemon catch unlocked a new starter, `false` if Pokemon catch did not unlock a starter
+   * @param pokemon the {@linkcode Pokemon} that was caught
+   * @param species the {@linkcode PokemonSpecies} to mark as caught based on the pokemon's characteristics
+   * @param incrementCount whether to increment game stats and starter candy or not. Default: `true`
+   * @param fromEgg whether the Pokemon was obtained through an egg. Default: `false`
+   * @param showMessage whether to display a message if (a) new Starter(s) was unlocked. Default: `true`
+   * @returns `true` if the catch unlocked a new starter, `false` if it didn't.
    */
-  setPokemonSpeciesCaught(
+  private setPokemonSpeciesCaught(
     pokemon: Pokemon,
     species: PokemonSpecies,
     incrementCount: boolean = true,
@@ -1558,12 +1564,18 @@ export class GameData {
     return new Promise<boolean>((resolve) => {
       const dexEntry = this.dexData[species.speciesId];
       const caughtAttr = dexEntry.caughtAttr;
-      const formIndex = pokemon.formIndex;
-      if (noStarterFormKeys.includes(pokemon.getFormKey())) {
+      const caughtFormIndex = pokemon.formIndex;
+
+      /*
+       * Ensure that the form index is valid for this species. An invalid index can happen when an evolved Species
+       * and its pre evolution Species doen't have the same number of forms. For example when catching any Pikachu
+       * other than normal and partner it should not unlock the caught form for Pichu since it doesn't have them.
+       */
+      if (pokemon.formIndex >= species.forms.length) {
         pokemon.formIndex = 0;
       }
-      const dexAttr = pokemon.getDexAttr();
-      pokemon.formIndex = formIndex;
+      const dexAttr = pokemon.getDexAttr(); // Get the dex attr with the valid form index
+      pokemon.formIndex = caughtFormIndex; // Give the caught pokemon its correct form back
 
       // Mark as caught
       dexEntry.caughtAttr |= dexAttr;
