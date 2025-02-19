@@ -20,6 +20,6 @@ export class ChillyReceptionAttr extends ForceSwitchOutAttr {
   override getCondition(): MoveConditionFunc {
     // chilly reception move will go through if the weather is change-able to snow, or the user can switch out, else move will fail
     return (user, target, move) =>
-      globalScene.arena.weather?.weatherType !== WeatherType.SNOW || super.getSwitchOutCondition()(user, target, move);
+      !globalScene.arena.hasWeather(WeatherType.SNOW) || super.getSwitchOutCondition()(user, target, move);
   }
 }

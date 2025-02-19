@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { toDmgValue } from "#app/utils";

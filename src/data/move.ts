@@ -31,7 +31,7 @@ import { VariableTargetAttr } from "#app/data/move-attrs/variable-target-attr";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { MoveCondition } from "#app/data/move-conditions/move-condition";
 import { Stat } from "#enums/stat";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { UseHigherAttackingStatAttr } from "./move-attrs/use-higher-attacking-stat-attr";
 import { GMaxPowerAttr } from "./move-attrs/gmax-power-attr";
 import type { Species } from "#enums/species";
@@ -728,7 +728,7 @@ export abstract class Move implements Localizable {
     const isOhko = this.hasAttr(OneHitKOAccuracyAttr);
 
     // TODO: wide lens was calculated here
-    if (globalScene.arena.weather?.weatherType === WeatherType.FOG) {
+    if (globalScene.arena.hasWeather(WeatherType.FOG)) {
       /**
        *  The 0.9 multiplier is Game-specific implementation, Bulbapedia uses 3/5
        *  See Fog {@link https://bulbapedia.bulbagarden.net/wiki/Fog}

@@ -1,4 +1,4 @@
-import { allAbilities } from "#app/data/all-abilities";
+import { allAbilities } from "#app/data/data-lists";
 import { type StatMultiplierAbAttr } from "#app/data/ab-attrs/stat-multiplier-ab-attr";
 import { CommandPhase } from "#app/phases/command-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
@@ -49,7 +49,7 @@ describe("Abilities - Sand Veil", () => {
       AbAttrFlag.STAT_MULTIPLIER,
     )[0];
     vi.spyOn(sandVeilAttr, "apply").mockImplementation((_pokemon, _simulated, stat, statValue) => {
-      if (stat === Stat.EVA && game.scene.arena.weather?.weatherType === WeatherType.SANDSTORM) {
+      if (stat === Stat.EVA && game.scene.arena.hasWeather(WeatherType.SANDSTORM)) {
         statValue.value *= -1; // will make all attacks miss
         return true;
       }

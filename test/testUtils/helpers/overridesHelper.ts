@@ -1,5 +1,4 @@
 import type { Variant } from "#app/data/variant";
-import { Weather } from "#app/data/weather";
 import { Abilities } from "#enums/abilities";
 import type { ModifierOverride } from "#app/modifier/modifier-type";
 import type { BattleStyle } from "#app/overrides";
@@ -11,7 +10,7 @@ import type { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
-import type { WeatherType } from "#enums/weather-type";
+import { WeatherType } from "#enums/weather-type";
 import { expect, vi } from "vitest";
 import { GameManagerHelper } from "#test/testUtils/helpers/gameManagerHelper";
 import { shiftCharCodes } from "#app/utils";
@@ -127,6 +126,20 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
+   * Override the enemy (pokemons) forms
+   * @param forms the (pokemon) forms to set
+   * @returns `this`
+   */
+  public enemyForms(forms: Partial<Record<Species, number>>): this {
+    vi.spyOn(Overrides, "ENEMY_FORM_OVERRIDES", "get").mockReturnValue(forms);
+    const formsStr = Object.entries(forms)
+      .map(([speciesId, formIndex]) => `${Species[speciesId]}=${formIndex}`)
+      .join(", ");
+    this.log(`Enemy Pokemon form set to: ${formsStr}!`);
+    return this;
+  }
+
+  /**
    * Override the player's starting modifiers
    * @param modifiers the modifiers to set
    * @returns `this`
@@ -212,7 +225,7 @@ export class OverridesHelper extends GameManagerHelper {
    */
   public weather(type: WeatherType): this {
     vi.spyOn(Overrides, "WEATHER_OVERRIDE", "get").mockReturnValue(type);
-    this.log(`Weather set to ${Weather[type]} (=${type})!`);
+    this.log(`Weather set to ${WeatherType[type]} (=${type})!`);
     return this;
   }
 

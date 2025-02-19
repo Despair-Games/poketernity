@@ -434,4 +434,22 @@ describe("Moves - Sky Drop", () => {
       expect(pokemon.isGrounded()).toBe(false);
     }
   });
+
+  it("should stop the target's consecutive uses of frenzy moves", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    game.move.use(MoveId.SKY_DROP);
+    await game.move.forceEnemyMove(MoveId.THRASH);
+
+    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    await game.toNextTurn();
+
+    [player, enemy].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());
+    expect(enemy.getTag(BattlerTagType.FRENZY)).toBeUndefined();
+    /** @todo is this mainline-accurate? */
+    expect(enemy.getTag(BattlerTagType.CONFUSED)).toBeDefined();
+  });
 });

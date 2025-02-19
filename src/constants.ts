@@ -101,3 +101,21 @@ export const PARTY_UI_NO_EFFECT_MSG_i18N_KEY = "partyUiHandler:anyEffect";
 export const IV_MIN = 0;
 
 export const IV_MAX = 31;
+
+/**
+ * In the mainline games, dynamaxing increases HP from +50% to +100% in 5% intervals.
+ * Below is a chart showing what an equivalent damage taken factor would be compared to
+ * the increased HP.
+ *
+ * | hp increase | damage taken factor |
+ * |-------------|---------------------|
+ * | +50%        | 2/3                 |
+ * | +60%        | 5/8                 |
+ * | +70%        | ~0.588              |
+ * | +80%        | ~0.556              |
+ * | +90%        | ~0.526              |
+ * | +100%       | 1/2                 |
+ *
+ * Tweak this value if necessary for balancing purposes
+ */
+export const DYNAMAX_DAMAGE_TAKEN_FACTOR = 2 / 3;

@@ -174,7 +174,7 @@ import { WeatherBasedSpeedDoublerAbAttr } from "#app/data/ab-attrs/weather-based
 import { WeightMultiplierAbAttr } from "#app/data/ab-attrs/weight-multiplier-ab-attr";
 import { WonderSkinAbAttr } from "#app/data/ab-attrs/wonder-skin-ab-attr";
 import { Ability } from "#app/data/ability";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves, allAbilities } from "#app/data/data-lists";
 import { type Move } from "#app/data/move";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
 import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-attr";
@@ -201,11 +201,11 @@ import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-import { allAbilities } from "./all-abilities";
 import { BypassParaSpeedReductionAbAttr } from "./ab-attrs/bypass-para-speed-reduction-ab-attr";
 
 export function initAbilities() {
   allAbilities.push(
+    new Ability(Abilities.NONE, 3),
     new Ability(Abilities.STENCH, 3).attr(
       PostAttackApplyBattlerTagAbAttr,
       false,
@@ -213,9 +213,7 @@ export function initAbilities() {
         !move.hasAttr(FlinchAttr)
         && !target.turnData.acted
         && move.category !== MoveCategory.STATUS
-        && (target.status
-          ? ![StatusEffect.FREEZE, StatusEffect.SLEEP, StatusEffect.FAINT].includes(target.status.effect)
-          : true)
+        && (target.status ? ![StatusEffect.FREEZE, StatusEffect.SLEEP].includes(target.status.effect) : true)
           ? 10
           : 0,
       BattlerTagType.FLINCHED,
@@ -643,7 +641,7 @@ export function initAbilities() {
       .condition((pokemon) => pokemon.getHpRatio() <= 0.5),
     new Ability(Abilities.CURSED_BODY, 5).attr(PostDefendMoveDisableAbAttr, 30).bypassFaint(),
     new Ability(Abilities.HEALER, 5).conditionalAttr(
-      (pokemon) => pokemon.getAlly() && pokemon.getAlly().status?.effect !== StatusEffect.FAINT && randSeedInt(10) < 3,
+      (pokemon) => pokemon.getAlly() && randSeedInt(10) < 3,
       PostTurnResetStatusAbAttr,
       true,
     ),
@@ -1561,8 +1559,7 @@ export function initAbilities() {
 
 function getTerrainCondition(...terrainTypes: TerrainType[]): AbAttrCondition {
   return (_pokemon: Pokemon) => {
-    const terrainType = globalScene.arena.terrain?.terrainType;
-    return !!terrainType && terrainTypes.indexOf(terrainType) > -1;
+    return globalScene.arena.hasTerrain([...terrainTypes]);
   };
 }
 

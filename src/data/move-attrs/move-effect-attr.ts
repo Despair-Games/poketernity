@@ -1,4 +1,3 @@
-import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
 import type { Pokemon } from "#app/field/pokemon";
 import { type Move } from "#app/data/move";
@@ -80,7 +79,8 @@ export abstract class MoveEffectAttr extends MoveAttr {
    * @returns `true` if effects can apply
    */
   canApply(user: Pokemon, target: Pokemon | null, _move: Move): boolean {
-    return this.selfTarget ? !user.isFainted() && !user.getTag(BattlerTagType.FRENZY) : !!target && !target.isFainted();
+    const affectedPokemon = this.selfTarget ? user : target;
+    return !!affectedPokemon && !affectedPokemon.isFainted();
   }
 
   /**

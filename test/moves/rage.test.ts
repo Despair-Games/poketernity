@@ -28,6 +28,7 @@ describe("Moves - Rage", () => {
       .battleType("double")
       .startingLevel(100)
       .moveset([MoveId.RAGE, MoveId.SPLASH])
+      .disableCrits()
       .enemySpecies(Species.BLISSEY)
       .enemyLevel(100)
       .enemyAbility(Abilities.NO_GUARD)
@@ -37,6 +38,7 @@ describe("Moves - Rage", () => {
   it("Rage should increase the user's attack by 1 for each time they are hit", async () => {
     await game.classicMode.startBattle([Species.BLISSEY]);
     const playerPokemon = game.field.getPlayerPokemon();
+    playerPokemon.setStatStage(Stat.DEF, 6); // Prevents Blissey from fainting due to its low Defense stat
 
     game.move.select(MoveId.RAGE, 0, BattlerIndex.ENEMY);
     await game.move.forceEnemyMove(MoveId.TRIPLE_AXEL); // Should give +3

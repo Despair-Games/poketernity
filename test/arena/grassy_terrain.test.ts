@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { Challenges } from "#enums/challenges";
@@ -102,7 +102,7 @@ describe("Arena - Grassy Terrain", () => {
     game.move.use(MoveId.GRASSY_TERRAIN);
     await game.toNextTurn();
 
-    expect(game.scene.arena.terrain?.terrainType).toBe(TerrainType.GRASSY);
+    expect(game.scene.arena.hasTerrain(TerrainType.GRASSY)).toBe(true);
     expect(pokemon.hp).toBe(1);
   });
 });

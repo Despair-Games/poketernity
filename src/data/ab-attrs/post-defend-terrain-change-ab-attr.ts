@@ -16,11 +16,9 @@ export class PostDefendTerrainChangeAbAttr extends PostDefendAbAttr {
 
   override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (attacker.getMoveCategory(pokemon, move) !== MoveCategory.STATUS) {
-      if (simulated) {
-        return globalScene.arena.terrain?.terrainType !== (this.terrainType || undefined);
-      } else {
-        return globalScene.arena.trySetTerrain(this.terrainType, true);
-      }
+      return simulated
+        ? !globalScene.arena.hasTerrain(this.terrainType)
+        : globalScene.arena.trySetTerrain(this.terrainType, true);
     }
 
     return false;

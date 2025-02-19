@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { allAbilities } from "#app/data/all-abilities";
+import { allAbilities } from "#app/data/data-lists";
 import { Abilities } from "#enums/abilities";
 import type { Pokemon } from "#app/field/pokemon";
 import { MoveId } from "#enums/move-id";
@@ -157,6 +157,6 @@ describe("Moves - Flame Burst", () => {
 
     await game.phaseInterceptor.to("TurnEndPhase");
 
-    expect(leftEnemy.isFainted(true)).toBeTruthy();
+    expect(leftEnemy.isFainted()).toBeTruthy();
   });
 });
