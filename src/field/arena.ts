@@ -413,6 +413,7 @@ export class Arena {
           newWeather === WeatherType.HARSH_SUN
           || newWeather === WeatherType.HEAVY_RAIN
           || newWeather === WeatherType.STRONG_WINDS
+          || newWeather === WeatherType.NONE
         ) {
           return true;
         } else {
