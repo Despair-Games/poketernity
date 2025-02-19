@@ -364,6 +364,7 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
         await doPokemonTradeSequence(tradedPokemon, newPlayerPokemon);
         await showEncounterText(`${namespace}:trade_received`, null, 0, true, 4000);
         globalScene.playBgm(encounter.misc.bgmKey);
+        // TODO: no message shown when unlocking new starter(s)
         await addPokemonDataToDexAndValidateAchievements(newPlayerPokemon);
         await hideTradeBackground();
         tradedPokemon.destroy();

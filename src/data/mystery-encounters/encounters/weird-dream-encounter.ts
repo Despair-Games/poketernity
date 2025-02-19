@@ -505,6 +505,7 @@ async function postProcessTransformedPokemon(
     const newStarterUnlocked = await globalScene.gameData.setPokemonCaught(newPokemon, true, false, false);
     if (newStarterUnlocked) {
       isNewStarter = true;
+      // TODO: if you get a Pikachu and it unlocks both Pichu and Pikachu as starter only the message for Pichu will be shown
       await showEncounterText(
         i18next.t("battle:addedAsAStarter", { pokemonName: getPokemonSpecies(speciesRootForm).getName() }),
       );

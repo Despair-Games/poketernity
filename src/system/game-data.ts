@@ -1517,6 +1517,7 @@ export class GameData {
   /**
    * Set the given Pokemon (and its pre-evolutions, if any) as caught.
    * By default, updates games stats and starter candy count, and show a message if the catch unlocked a new starter.
+   * Note: it does not update the Pokemon IVs (TODO: why??). See {@linkcode updateSpeciesDexIvs} for that.
    * The function exits early if the Pokemon is a "rental" Pokemon (ie was given through an event for the current run only)
    * unless that Pokemon had already been captured before, in which case any new form, gender, etc. gets unlocked.
    *
@@ -1638,17 +1639,17 @@ export class GameData {
 
       if (newCatch && speciesStarterCosts.hasOwnProperty(species.speciesId)) {
         if (!showMessage) {
-          resolve(true);
-          return;
+          checkPrevolution(true);
+        } else {
+          globalScene.playSound("level_up_fanfare");
+          globalScene.ui.showText(
+            i18next.t("battle:addedAsAStarter", { pokemonName: species.name }),
+            null,
+            () => checkPrevolution(true),
+            null,
+            true,
+          );
         }
-        globalScene.playSound("level_up_fanfare");
-        globalScene.ui.showText(
-          i18next.t("battle:addedAsAStarter", { pokemonName: species.name }),
-          null,
-          () => checkPrevolution(true),
-          null,
-          true,
-        );
       } else {
         checkPrevolution(false);
       }
