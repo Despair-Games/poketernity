@@ -20,11 +20,11 @@ If you have the motivation and experience with Typescript/Javascript (or are wil
 
 #### Running Locally
 
-1. Clone the repo through git and in the root directory run `npm install`
+1. Clone the repo through git and in the root directory run `npm install`.
 If the install process seems to hang at the post-install step, you likely just need to press `Enter` for it continue.
 <!--   - _if you run into any errors, reach out in the **#dev-corner** channel in discord_-->
-2. Run `npm run start:dev` to locally run the project in `localhost:8000`
-If you want to access the game from any device on your local network, you can run `npm run start:dev -- --host`
+2. Run `npm run start:dev` to locally run the project in `localhost:8000`.
+If you want to access the game from any device on your local network, you can run `npm run start:dev -- --host`.
 
 #### Tests
 
