@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import type { BiomeTierTrainerPools, PokemonPools } from "#app/data/balance/biomes";
 import { biomePokemonPools, biomeTrainerPools } from "#app/data/balance/biomes";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
-import { type AbstractConstructor, randSeedInt } from "#app/utils";
+import { type AbstractConstructor, isNullOrUndefined, randSeedInt } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#app/data/weather";
@@ -420,6 +420,9 @@ export class Arena {
           return false;
         }
       }
+      // Checks if there is no current weather and the game is attempting to set the weather to none
+    } else if (isNullOrUndefined(this.weather) && newWeather === WeatherType.NONE) {
+      return false;
     }
     return true;
   }
