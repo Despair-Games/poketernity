@@ -1564,18 +1564,18 @@ export class GameData {
     return new Promise<boolean>((resolve) => {
       const dexEntry = this.dexData[species.speciesId];
       const caughtAttr = dexEntry.caughtAttr;
-      const caughtFormIndex = pokemon.formIndex;
 
       /*
        * Ensure that the form index is valid for this species. An invalid index can happen when an evolved Species
        * and its pre evolution Species doen't have the same number of forms. For example when catching any Pikachu
        * other than normal and partner it should not unlock the caught form for Pichu since it doesn't have them.
        */
+      const formIndex = pokemon.formIndex;
       if (pokemon.formIndex >= species.forms.length) {
-        pokemon.formIndex = 0;
+        pokemon.formIndex = this.getFormIndex(caughtAttr); // Get the first unlocked form index, or 0 if none
       }
       const dexAttr = pokemon.getDexAttr(); // Get the dex attr with the valid form index
-      pokemon.formIndex = caughtFormIndex; // Give the caught pokemon its correct form back
+      pokemon.formIndex = formIndex; // Give the caught pokemon its correct form back
 
       // Mark as caught
       dexEntry.caughtAttr |= dexAttr;
