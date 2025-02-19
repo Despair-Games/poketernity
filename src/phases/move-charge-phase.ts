@@ -85,6 +85,7 @@ export class MoveChargePhase extends HitCheckPhase {
         move: this.move.getMove(),
         targets: this.targets,
         result: MoveResult.OTHER,
+        type: user.getMoveType(move),
       });
     }
     this.end();

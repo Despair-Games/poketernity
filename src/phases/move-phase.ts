@@ -10,7 +10,6 @@ import { BypassSleepAttr } from "#app/data/move-attrs/bypass-sleep-attr";
 import { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
 import { HealStatusEffectAttr } from "#app/data/move-attrs/heal-status-effect-attr";
 import { PreMoveMessageAttr } from "#app/data/move-attrs/pre-move-message-attr";
-import { frenzyMissFunc } from "#app/utils/move-utils";
 import { SpeciesFormChangePreMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-pre-move-trigger";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/data/status-effect";
 import { getTerrainBlockMessage } from "#app/data/terrain";
@@ -368,6 +367,7 @@ export class MovePhase extends BattlePhase {
      */
     if (success) {
       applyAbAttrs(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
+      this.showPreMoveMessages();
       globalScene.unshiftPhase(new MoveEffectPhase(this.pokemon.getBattlerIndex(), this.targets, this.move));
     } else {
       if ([MoveId.ROAR, MoveId.WHIRLWIND, MoveId.TRICK_OR_TREAT, MoveId.FORESTS_CURSE].includes(this.move.moveId)) {
@@ -378,6 +378,7 @@ export class MovePhase extends BattlePhase {
         move: this.move.getMove(),
         targets: this.targets,
         result: MoveResult.FAIL,
+        type: this.pokemon.getMoveType(this.move.getMove()),
         virtual: this.move.virtual,
       });
 
@@ -429,6 +430,7 @@ export class MovePhase extends BattlePhase {
         move: this.move.getMove(),
         targets: this.targets,
         result: MoveResult.FAIL,
+        type: this.pokemon.getMoveType(this.move.getMove()),
         virtual: this.move.virtual,
       });
 
@@ -565,8 +567,6 @@ export class MovePhase extends BattlePhase {
    *     to lapse on move failure/cancellation.
    *
    *     TODO: ...this seems weird.
-   * - Lapses `AFTER_MOVE` tags:
-   *   - This handles the effects of {@link MoveId.SUBSTITUTE Substitute}
    * - Removes the second turn of charge moves
    */
   protected handlePreMoveFailures(): void {
@@ -581,14 +581,13 @@ export class MovePhase extends BattlePhase {
         globalScene.eventTarget.dispatchEvent(new MoveUsedEvent(this.pokemon?.id, this.move.getMove(), ppUsed));
       }
 
-      if (this.cancelled && this.pokemon.summonData?.tags?.find((t) => t.tagType === BattlerTagType.FRENZY)) {
-        frenzyMissFunc(this.pokemon, this.move.getMove());
-      }
-
-      this.pokemon.pushMoveHistory({ move: SelfStatusMove.none(), result: MoveResult.FAIL });
+      this.pokemon.pushMoveHistory({
+        move: SelfStatusMove.none(),
+        result: MoveResult.FAIL,
+        type: ElementalType.UNKNOWN,
+      });
 
       this.pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
-      this.pokemon.lapseTags(BattlerTagLapseType.AFTER_MOVE);
 
       this.pokemon.getMoveQueue().shift();
     }
@@ -614,10 +613,17 @@ export class MovePhase extends BattlePhase {
       }),
       500,
     );
-    applyMoveAttrs(PreMoveMessageAttr, this.pokemon, this.pokemon.getOpponents()[0], this.move.getMove());
   }
 
   public showFailedText(failedText?: string): void {
     globalScene.queueMessage(failedText ?? i18next.t("battle:attackFailed"));
+  }
+
+  /**
+   * Displays the move's pre-execution messages, if applicable.
+   * Ex. Chilly Reception's "<Pokemon> is preparing to tell a chillingly bad joke!"
+   */
+  public showPreMoveMessages(): void {
+    applyMoveAttrs(PreMoveMessageAttr, this.pokemon, this.pokemon.getOpponents()[0], this.move.getMove());
   }
 }

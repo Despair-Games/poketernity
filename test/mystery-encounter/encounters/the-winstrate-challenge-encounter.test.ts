@@ -19,13 +19,11 @@ import { Nature } from "#enums/nature";
 import { MoveId } from "#enums/move-id";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { TheWinstrateChallengeEncounter } from "#app/data/mystery-encounters/encounters/the-winstrate-challenge-encounter";
-import { Status } from "#app/data/status-effect";
 import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
 import { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";
 import { VictoryPhase } from "#app/phases/victory-phase";
-import { StatusEffect } from "#enums/status-effect";
 
 const namespace = "mysteryEncounters/theWinstrateChallenge";
 const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
@@ -362,8 +360,7 @@ async function skipBattleToNextBattle(game: GameManager, isFinalBattle: boolean 
   const commandUiHandler = game.scene.ui.handlers[UiMode.COMMAND];
   commandUiHandler.clear();
   game.scene.getEnemyParty().forEach((p) => {
-    p.hp = 0;
-    p.status = new Status(StatusEffect.FAINT);
+    p.faint();
     game.scene.field.remove(p);
   });
   game.phaseInterceptor["onHold"] = [];

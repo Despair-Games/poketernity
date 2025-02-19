@@ -1,30 +1,31 @@
 import type { Pokemon } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import type { Move } from "#app/data/move";
-import { MoveAttr } from "#app/data/move-attrs/move-attr";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { PreMoveMessageAttr } from "./pre-move-message-attr";
 
 /**
  * Attribute to cause the move to fail if the target is not holding an item.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Poltergeist_(move) | Poltergeist}.
- * @extends MoveAttr
+ * @extends PreMoveMessageAttr
  */
-export class AttackedByItemAttr extends MoveAttr {
-  override getCondition(): MoveConditionFunc {
-    return (_user: Pokemon, target: Pokemon, _move: Move) => {
+export class AttackedByItemAttr extends PreMoveMessageAttr {
+  constructor() {
+    super((_user, target, _move) => {
       const heldItems = target.getHeldItems().filter((i) => i.isTransferable);
-      if (heldItems.length === 0) {
-        return false;
-      }
-
+      // "item" should be localizable here but under normal circumstances this fallback should never show
       const itemName = heldItems[0]?.type?.name ?? "item";
-      globalScene.queueMessage(
-        i18next.t("moveTriggers:attackedByItem", { pokemonName: getPokemonNameWithAffix(target), itemName: itemName }),
-      );
 
-      return true;
-    };
+      return i18next.t("moveTriggers:attackedByItem", {
+        pokemonName: getPokemonNameWithAffix(target),
+        itemName,
+      });
+    });
+  }
+
+  /** Causes failure if the target isn't holding a transferable item */
+  override getCondition(): MoveConditionFunc {
+    return (_user: Pokemon, target: Pokemon, _move: Move) => target.getHeldItems().some((i) => i.isTransferable);
   }
 }
