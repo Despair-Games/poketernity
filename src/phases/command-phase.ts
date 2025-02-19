@@ -20,6 +20,7 @@ import { BattleCommand } from "#enums/battle-command";
 import { BattleType } from "#enums/battle-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Biome } from "#enums/biome";
+import { ElementalType } from "#enums/elemental-type";
 import { FieldPosition } from "#enums/field-position";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
@@ -82,7 +83,7 @@ export class CommandPhase extends FieldPhase {
     ) {
       currentBattle.turnCommands[this.fieldIndex] = {
         command: BattleCommand.FIGHT,
-        move: { move: SelfStatusMove.none(), targets: [] },
+        move: { move: SelfStatusMove.none(), targets: [], type: ElementalType.UNKNOWN },
         skip: true,
       };
     }
@@ -203,7 +204,12 @@ export class CommandPhase extends FieldPhase {
           const turnCommand: TurnCommand = {
             command: BattleCommand.FIGHT,
             cursor: cursor,
-            move: { move: allMoves[moveId], targets: [], ignorePP: ignorePp },
+            move: {
+              move: allMoves[moveId],
+              targets: [],
+              ignorePP: ignorePp,
+              type: playerPokemon.getMoveType(allMoves[moveId]),
+            },
             args: args,
           };
           const moveTargets: MoveTargetSet =

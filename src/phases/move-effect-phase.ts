@@ -104,10 +104,11 @@ export class MoveEffectPhase extends HitCheckPhase {
     // If other effects were overridden, stop this phase before they can be applied
     if (overridden.value) {
       this.moveHistoryEntry = {
-        move: this.move.getMove(),
+        move,
         targets: this.adjustedTargets ?? this.targets,
         result: MoveResult.SUCCESS,
         virtual: this.move.virtual,
+        type: user.getMoveType(move),
       };
       user.pushMoveHistory(this.moveHistoryEntry);
       return this.end();

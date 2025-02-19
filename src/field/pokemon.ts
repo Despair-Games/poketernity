@@ -5461,20 +5461,22 @@ export class EnemyPokemon extends Pokemon {
     if (movePool.length) {
       // If there's only 1 move in the move pool, use it.
       if (movePool.length === 1) {
-        return { move: movePool[0].getMove(), targets: this.getNextTargets(movePool[0].moveId) };
+        const move = movePool[0].getMove();
+        return { move, targets: this.getNextTargets(movePool[0].moveId), type: this.getMoveType(move) };
       }
       // If a move is forced because of Encore, use it.
       const encoreTag = this.getTag<EncoreTag>(BattlerTagType.ENCORE);
       if (encoreTag) {
         const encoreMove = movePool.find((m) => m.moveId === encoreTag.moveId);
         if (encoreMove) {
-          return { move: encoreMove.getMove(), targets: this.getNextTargets(encoreMove.moveId) };
+          const move = encoreMove.getMove();
+          return { move, targets: this.getNextTargets(encoreMove.moveId), type: this.getMoveType(move) };
         }
       }
       switch (this.aiType) {
         case AiType.RANDOM: // No enemy should spawn with this AI type in-game
-          const move = movePool[globalScene.randBattleSeedInt(movePool.length)];
-          return { move: move.getMove(), targets: this.getNextTargets(move.moveId) };
+          const move = movePool[globalScene.randBattleSeedInt(movePool.length)].getMove();
+          return { move, targets: this.getNextTargets(move.id), type: this.getMoveType(move) };
         case AiType.SMART_RANDOM:
         case AiType.SMART:
           /**
@@ -5625,11 +5627,15 @@ export class EnemyPokemon extends Pokemon {
             r,
             sortedMovePool.map((m) => m.getName()),
           );
-          return { move: sortedMovePool[r].getMove(), targets: moveTargets[sortedMovePool[r].moveId] };
+          const retMove = sortedMovePool[r].getMove();
+          return { move: retMove, targets: moveTargets[retMove.id], type: this.getMoveType(retMove) };
       }
     }
-
-    return { move: allMoves[MoveId.STRUGGLE], targets: this.getNextTargets(MoveId.STRUGGLE) };
+    return {
+      move: allMoves[MoveId.STRUGGLE],
+      targets: this.getNextTargets(MoveId.STRUGGLE),
+      type: ElementalType.UNKNOWN,
+    };
   }
 
   /**

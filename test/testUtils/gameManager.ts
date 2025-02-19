@@ -401,6 +401,7 @@ export class GameManager {
         target !== undefined && !legalTargets.multiple && legalTargets.targets.includes(target)
           ? [target]
           : enemy.getNextTargets(moveId),
+      type: enemy.getMoveType(allMoves[moveId]),
     });
 
     /**

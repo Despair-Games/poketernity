@@ -49,7 +49,7 @@ export abstract class CallMoveAttr extends OverrideMoveEffectAttr {
       targets = [moveTargets.targets[user.randSeedInt(moveTargets.targets.length)]];
     }
 
-    user.getMoveQueue().push({ move: move, targets, virtual: true, ignorePP: true });
+    user.getMoveQueue().push({ move: move, targets, virtual: true, ignorePP: true, type: user.getMoveType(move) });
     globalScene.unshiftPhase(new LoadMoveAnimPhase(move.id));
     globalScene.useMove({
       pokemon: user,
