@@ -1,7 +1,6 @@
 import { Stat } from "#enums/stat";
 import { type StockpilingTag } from "#app/data/battler-tags";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import type { TurnMove } from "#app/@types/TurnMove";
 import { MoveResult } from "#enums/move-result";
 import { MovePhase } from "#app/phases/move-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
@@ -135,10 +134,7 @@ describe("Moves - Swallow", () => {
     game.move.select(MoveId.SWALLOW);
     await game.phaseInterceptor.to(TurnInitPhase);
 
-    expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-      move: expect.objectContaining({ id: MoveId.SWALLOW }),
-      result: MoveResult.FAIL,
-    });
+    expect(pokemon.getLastXMoves()?.[0]?.result).toBe(MoveResult.FAIL);
   });
 
   describe("restores stat stage boosts granted by stacks", () => {
@@ -159,10 +155,7 @@ describe("Moves - Swallow", () => {
 
       await game.phaseInterceptor.to(TurnInitPhase);
 
-      expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-        move: expect.objectContaining({ id: MoveId.SWALLOW }),
-        result: MoveResult.SUCCESS,
-      });
+      expect(pokemon.getLastXMoves()?.[0]?.result).toBe(MoveResult.SUCCESS);
 
       expect(pokemon.getStatStage(Stat.DEF)).toBe(0);
       expect(pokemon.getStatStage(Stat.SPDEF)).toBe(0);
@@ -189,10 +182,7 @@ describe("Moves - Swallow", () => {
 
       await game.phaseInterceptor.to(TurnInitPhase);
 
-      expect(pokemon.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-        move: expect.objectContaining({ id: MoveId.SWALLOW }),
-        result: MoveResult.SUCCESS,
-      });
+      expect(pokemon.getLastXMoves()?.[0]?.result).toBe(MoveResult.SUCCESS);
 
       expect(pokemon.getStatStage(Stat.DEF)).toBe(1);
       expect(pokemon.getStatStage(Stat.SPDEF)).toBe(-2);

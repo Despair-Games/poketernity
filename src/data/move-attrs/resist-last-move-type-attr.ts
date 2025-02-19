@@ -3,7 +3,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { GameMode } from "#app/game-mode";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { toReadableString, NumberHolder } from "#app/utils";
+import { NumberHolder } from "#app/utils";
 import i18next from "i18next";
 import { applyChallenges } from "#app/utils/challenge-utils";
 import { ChallengeType } from "#enums/challenge-type";
@@ -17,9 +17,6 @@ import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
  * Fails if the user already has ALL types that resist the target's last used move.
  * Fails if the opponent has not used a move yet
  * Fails if the type is unknown or stellar
- *
- * TODO:
- * If a move has its type changed (e.g. {@linkcode MoveId.HIDDEN_POWER}), it will check the new type.
  */
 export class ResistLastMoveTypeAttr extends MoveEffectAttr {
   constructor() {
@@ -32,23 +29,16 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
       return false;
     }
 
-    const moveData = targetMove.move;
-    if (!moveData || [ElementalType.STELLAR, ElementalType.UNKNOWN].includes(moveData.type)) {
-      return false;
-    }
+    const moveType = targetMove.type;
     const userTypes = user.getTypes();
-    const validTypes = this.getTypeResistances(globalScene.gameMode, moveData.type).filter(
-      (t) => !userTypes.includes(t),
-    ); // valid types are ones that are not already the user's types
-    if (!validTypes.length) {
-      return false;
-    }
+    const validTypes = this.getTypeResistances(globalScene.gameMode, moveType).filter((t) => !userTypes.includes(t));
+
     const type = validTypes[user.randSeedInt(validTypes.length)];
     user.summonData.types = [type];
     globalScene.queueMessage(
       i18next.t("battle:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(user),
-        type: toReadableString(ElementalType[type]),
+        type: i18next.t(`pokemonInfo:Type.${ElementalType[type]}`),
       }),
     );
     user.updateInfo();
@@ -75,10 +65,26 @@ export class ResistLastMoveTypeAttr extends MoveEffectAttr {
     return typeResistances;
   }
 
+  /**
+   * This move fails if:
+   * - The target hasn't moved yet
+   * - The target's last move was either typeless or Stellar-type
+   * - The user is already of all types that resist the target's last move
+   */
   override getCondition(): MoveConditionFunc {
-    return (_user, target, _move) => {
-      const moveHistory = target.getLastXMoves();
-      return moveHistory.length !== 0;
+    return (user, target, _move) => {
+      const [targetMove] = target.getLastXMoves();
+      if (!targetMove) {
+        return false;
+      }
+
+      const { move: moveData, type: moveType } = targetMove;
+      if (!moveData || [ElementalType.STELLAR, ElementalType.UNKNOWN].includes(moveType)) {
+        return false;
+      }
+      const userTypes = user.getTypes();
+      const validTypes = this.getTypeResistances(globalScene.gameMode, moveType).filter((t) => !userTypes.includes(t)); // valid types are ones that are not already the user's types
+      return validTypes.length > 0;
     };
   }
 }

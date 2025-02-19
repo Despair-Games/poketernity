@@ -49,7 +49,7 @@ describe("Abilities - Sand Veil", () => {
       AbAttrFlag.STAT_MULTIPLIER,
     )[0];
     vi.spyOn(sandVeilAttr, "apply").mockImplementation((_pokemon, _simulated, stat, statValue) => {
-      if (stat === Stat.EVA && game.scene.arena.weather?.weatherType === WeatherType.SANDSTORM) {
+      if (stat === Stat.EVA && game.scene.arena.hasWeather(WeatherType.SANDSTORM)) {
         statValue.value *= -1; // will make all attacks miss
         return true;
       }
