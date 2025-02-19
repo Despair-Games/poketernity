@@ -52,7 +52,7 @@ describe("Abilities - BATTLE BOND", () => {
 
     game.move.select(MoveId.SPLASH);
     await game.doKillOpponents();
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     game.doSelectModifier();
     await game.phaseInterceptor.to("QuietFormChangePhase");
 

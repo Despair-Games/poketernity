@@ -42,7 +42,7 @@ describe("Moves - Fairy Lock", () => {
     await game.forceEnemyMove(MoveId.SPLASH, 1);
     await game.forceEnemyMove(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER)).toBeDefined();
     expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.ENEMY)).toBeDefined();
 
@@ -70,7 +70,7 @@ describe("Moves - Fairy Lock", () => {
     game.move.select(MoveId.SPLASH, 1);
     await game.forceEnemyMove(MoveId.SPLASH, 1);
     await game.forceEnemyMove(MoveId.SPLASH, 1);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER)).toBeDefined();
     expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.ENEMY)).toBeDefined();
@@ -85,7 +85,7 @@ describe("Moves - Fairy Lock", () => {
     game.doSwitchPokemon(2);
     await game.forceEnemyMove(MoveId.SPLASH, 1);
     await game.forceEnemyMove(MoveId.SPLASH, 1);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     await game.toNextTurn();
 
     expect(game.scene.getPlayerField()[1].species.speciesId).not.toBe(Species.GENGAR);
@@ -99,7 +99,7 @@ describe("Moves - Fairy Lock", () => {
     game.move.select(MoveId.SPLASH, 1);
     await game.forceEnemyMove(MoveId.SPLASH, 1);
     await game.forceEnemyMove(MoveId.SPLASH, 1);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER)).toBeDefined();
     expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.ENEMY)).toBeDefined();
@@ -111,7 +111,7 @@ describe("Moves - Fairy Lock", () => {
     game.doSelectPartyPokemon(2);
     await game.forceEnemyMove(MoveId.WHIRLWIND, 1);
     game.doSelectPartyPokemon(2);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     await game.toNextTurn();
 
     expect(game.scene.getPlayerField()[0].species.speciesId).not.toBe(Species.KLEFKI);
@@ -127,7 +127,7 @@ describe("Moves - Fairy Lock", () => {
     game.doSelectPartyPokemon(2);
     await game.forceEnemyMove(MoveId.SPLASH, 1);
     await game.forceEnemyMove(MoveId.SPLASH, 1);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER)).toBeDefined();
     expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.ENEMY)).toBeDefined();
 
@@ -141,7 +141,7 @@ describe("Moves - Fairy Lock", () => {
     game.move.select(MoveId.SPLASH);
     await game.forceEnemyMove(MoveId.SPLASH, 1);
     await game.forceEnemyMove(MoveId.SPLASH, 1);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
   });
 
   it("should apply even if the field is empty", async () => {
@@ -165,7 +165,7 @@ describe("Moves - Fairy Lock", () => {
     expect(enemyPokemon[0].isFainted()).toBe(true);
     expect(enemyPokemon[1].isFainted()).toBe(true);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER)).toBeDefined();
     expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.ENEMY)).toBeDefined();
     expect(playerPokemon[0].isTrapped()).toBe(true);

@@ -43,7 +43,7 @@ describe("Moves - Alluring Voice", () => {
 
     game.move.select(MoveId.ALLURING_VOICE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(enemy.getTag(BattlerTagType.CONFUSED)).toBeDefined();
   });

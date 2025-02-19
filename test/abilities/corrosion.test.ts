@@ -39,7 +39,7 @@ describe("Abilities - Corrosion", () => {
     expect(playerPokemon!.status).toBeUndefined();
 
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(playerPokemon!.status).toBeDefined();
     expect(enemyPokemon!.status).toBeUndefined();
   });

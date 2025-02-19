@@ -153,7 +153,7 @@ describe("${description}", () => {
 
     game.move.use(MoveId.SPLASH);
     
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(true).toBe(true);
   });

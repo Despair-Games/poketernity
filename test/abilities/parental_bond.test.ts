@@ -289,7 +289,7 @@ describe("Abilities - Parental Bond", () => {
     expect(leadPokemon.turnData.hitCount).toBe(2);
     expect(leadPokemon.getTag(BattlerTagType.RECHARGING)).toBeUndefined();
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(leadPokemon.getTag(BattlerTagType.RECHARGING)).toBeDefined();
   });
@@ -313,7 +313,7 @@ describe("Abilities - Parental Bond", () => {
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemyPokemon.getTag(BattlerTagType.TRAPPED)).toBeDefined();
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getTag(BattlerTagType.TRAPPED)).toBeDefined();
   });
@@ -334,7 +334,7 @@ describe("Abilities - Parental Bond", () => {
     expect(leadPokemon.turnData.hitCount).toBe(2);
     expect(enemyPokemon.getTag(BattlerTagType.IGNORE_FLYING)).toBeUndefined();
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getTag(BattlerTagType.IGNORE_FLYING)).toBeDefined();
   });
