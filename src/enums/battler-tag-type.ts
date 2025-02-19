@@ -93,7 +93,7 @@ export enum BattlerTagType {
   HEAL_BLOCK,
   TORMENT,
   TAUNT,
-  IMPRISON,
+  IMPRISONING,
   SYRUP_BOMB,
   ELECTRIFIED,
   TELEKINESIS,

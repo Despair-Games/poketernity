@@ -140,6 +140,11 @@ export interface TerrainBattlerTag {
   terrainTypes: TerrainType[];
 }
 
+export interface RestrictingBattlerTag {
+  interruptedText: (pokemon: Pokemon, moveId: MoveId) => string;
+  selectionDeniedText: (pokemon: Pokemon, moveId: MoveId) => string;
+}
+
 /**
  * Base class for tags that restrict the usage of moves. This effect is generally referred to as "disabling" a move
  * in-game. This is not to be confused with {@linkcode MoveId.DISABLE}.
@@ -148,7 +153,7 @@ export interface TerrainBattlerTag {
  * match a condition. A restricted move gets cancelled before it is used. Players and enemies should not be allowed
  * to select restricted moves.
  */
-export abstract class MoveRestrictionBattlerTag extends BattlerTag {
+export abstract class MoveRestrictionBattlerTag extends BattlerTag implements RestrictingBattlerTag {
   constructor(
     tagType: BattlerTagType,
     lapseType: BattlerTagLapseType | BattlerTagLapseType[],
@@ -195,7 +200,7 @@ export abstract class MoveRestrictionBattlerTag extends BattlerTag {
    * @param _target - The {@linkcode Pokemon| target} of the move
    * @returns `false` unless overridden by the child tag
    */
-  isMoveTargetRestricted(_moveId: MoveId, _user: Pokemon, _target: Pokemon): boolean {
+  public isMoveTargetRestricted(_moveId: MoveId, _user: Pokemon, _target: Pokemon): boolean {
     return false;
   }
 
@@ -217,7 +222,7 @@ export abstract class MoveRestrictionBattlerTag extends BattlerTag {
    * @param _moveId - The {@linkcode MoveId | move} being interrupted
    * @returns text to display when the move is interrupted
    */
-  interruptedText(_pokemon: Pokemon, _moveId: MoveId): string {
+  public interruptedText(_pokemon: Pokemon, _moveId: MoveId): string {
     return "";
   }
 
@@ -3255,66 +3260,50 @@ export class TauntTag extends MoveRestrictionBattlerTag {
 }
 
 /**
- * BattlerTag that applies the effects of Imprison to the target Pokemon
- * Imprison restricts the opposing side's usage of moves shared by the source-user of Imprison.
- * The tag is only removed when the source-user is removed from the field.
+ * BattlerTag representing the move-disabling effect of
+ * {@link https://bulbapedia.bulbagarden.net/wiki/Imprison_(move) | Imprison}.
+ * Disables all other Pokemon's moves that are also found in the tag owner's moveset.
+ * @extends BattlerTag
+ * @implements RestrictingBattlerTag
  */
-export class ImprisonTag extends MoveRestrictionBattlerTag {
-  constructor(sourceId: number) {
-    super(
-      BattlerTagType.IMPRISON,
-      [BattlerTagLapseType.PRE_MOVE, BattlerTagLapseType.AFTER_MOVE],
-      1,
-      MoveId.IMPRISON,
-      sourceId,
+export class ImprisoningTag extends BattlerTag implements RestrictingBattlerTag {
+  constructor() {
+    super(BattlerTagType.IMPRISONING, BattlerTagLapseType.CUSTOM, 1);
+  }
+
+  override onAdd(pokemon: Pokemon): void {
+    globalScene.queueMessage(
+      i18next.t("battlerTags:imprisonOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
   }
 
-  /**
-   * Checks if the source of Imprison is still active
-   * @override
-   * @param pokemon The pokemon this tag is attached to
-   * @returns `true` if the source is still active
-   */
-  public override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
-    const source = this.getSourcePokemon();
-    if (source) {
-      if (lapseType === BattlerTagLapseType.PRE_MOVE) {
-        return super.lapse(pokemon, lapseType) && source.isActive(true);
-      } else {
-        return source.isActive(true);
+  override apply(
+    pokemon: Pokemon,
+    simulated: boolean,
+    actingPokemon: Pokemon,
+    moveId: MoveId,
+    messages?: string[],
+  ): boolean {
+    if (pokemon.getMoveset().some((mv) => mv.moveId === moveId)) {
+      if (messages) {
+        messages.push(this.interruptedText(actingPokemon, moveId));
+      } else if (!simulated) {
+        globalScene.queueMessage(this.interruptedText(actingPokemon, moveId));
       }
+      return true;
     }
     return false;
   }
 
-  /**
-   * Checks if the source of the tag has the parameter move in its moveset and that the source is still active
-   * @override
-   * @param moveId the move under investigation
-   * @returns `false` if either condition is not met
-   */
-  public override isMoveRestricted(moveId: MoveId, _user: Pokemon): boolean {
-    const source = this.getSourcePokemon();
-    if (source) {
-      const sourceMoveset = source.getMoveset().map((m) => m.moveId);
-      return sourceMoveset?.includes(moveId) && source.isActive(true);
-    }
-    return false;
-  }
-
-  override selectionDeniedText(pokemon: Pokemon, moveId: MoveId): string {
+  public interruptedText(pokemon: Pokemon, moveId: MoveId): string {
     return i18next.t("battle:moveDisabledImprison", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       moveName: allMoves[moveId].name,
     });
   }
 
-  override interruptedText(pokemon: Pokemon, moveId: MoveId): string {
-    return i18next.t("battle:moveDisabledImprison", {
-      pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      moveName: allMoves[moveId].name,
-    });
+  public selectionDeniedText(pokemon: Pokemon, moveId: MoveId): string {
+    return this.interruptedText(pokemon, moveId);
   }
 }
 
@@ -3692,8 +3681,8 @@ export function getBattlerTag(
       return new TormentTag(sourceId);
     case BattlerTagType.TAUNT:
       return new TauntTag();
-    case BattlerTagType.IMPRISON:
-      return new ImprisonTag(sourceId);
+    case BattlerTagType.IMPRISONING:
+      return new ImprisoningTag();
     case BattlerTagType.SYRUP_BOMB:
       return new SyrupBombTag(sourceId);
     case BattlerTagType.TELEKINESIS:

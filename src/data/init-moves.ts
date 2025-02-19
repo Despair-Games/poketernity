@@ -1249,10 +1249,9 @@ export function initMoves() {
       .condition(failOnMaxCondition)
       .ignoresSubstitute()
       .attr(SwitchAbilitiesAttr),
-    new StatusMove(MoveId.IMPRISON, ElementalType.PSYCHIC, 100, 10, -1, 0, 3)
+    new SelfStatusMove(MoveId.IMPRISON, ElementalType.PSYCHIC, 100, 10, -1, 0, 3)
       .ignoresSubstitute()
-      .attr(AddArenaTagAttr, ArenaTagType.IMPRISON, ArenaTagRelativeSide.TARGET, { failOnOverlap: true })
-      .target(MoveTarget.ENEMY_SIDE),
+      .attr(AddBattlerTagAttr, BattlerTagType.IMPRISONING, true, { failOnOverlap: true }),
     new SelfStatusMove(MoveId.REFRESH, ElementalType.NORMAL, -1, 20, -1, 0, 3)
       .attr(HealStatusEffectAttr, true, [
         StatusEffect.PARALYSIS,

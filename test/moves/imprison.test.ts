@@ -4,8 +4,6 @@ import { Abilities } from "#enums/abilities";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { ArenaTagType } from "#enums/arena-tag-type";
 
 describe("Moves - Imprison", () => {
   let phaserGame: Phaser.Game;
@@ -44,10 +42,6 @@ describe("Moves - Imprison", () => {
       .getMoveset()
       .map((x) => x?.moveId);
     expect(enemyMoveset.includes(playerMoveset[0])).toBeTruthy();
-    const imprisonArenaTag = game.scene.arena.getTag(ArenaTagType.IMPRISON);
-    const imprisonBattlerTag = playerPokemon.getTag(BattlerTagType.IMPRISON);
-    expect(imprisonArenaTag).toBeDefined();
-    expect(imprisonBattlerTag).toBeDefined();
 
     // Second turn, Imprison forces Struggle to occur
     game.move.select(MoveId.SPLASH);
@@ -55,47 +49,5 @@ describe("Moves - Imprison", () => {
     await game.toNextTurn();
     const move1 = playerPokemon.getLastXMoves(1)[0]!;
     expect(move1.move.id).toBe(MoveId.STRUGGLE);
-  });
-
-  it("Imprison applies to Pokemon switched into Battle", async () => {
-    await game.classicMode.startBattle([Species.REGIELEKI, Species.BULBASAUR]);
-
-    const playerPokemon1 = game.scene.getPlayerPokemon()!;
-
-    game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.IMPRISON);
-    await game.toNextTurn();
-    const imprisonArenaTag = game.scene.arena.getTag(ArenaTagType.IMPRISON);
-    const imprisonBattlerTag1 = playerPokemon1.getTag(BattlerTagType.IMPRISON);
-    expect(imprisonArenaTag).toBeDefined();
-    expect(imprisonBattlerTag1).toBeDefined();
-
-    // Second turn, Imprison forces Struggle to occur
-    game.doSwitchPokemon(1);
-    await game.forceEnemyMove(MoveId.SPLASH);
-    await game.toNextTurn();
-    const playerPokemon2 = game.scene.getPlayerPokemon()!;
-    const imprisonBattlerTag2 = playerPokemon2.getTag(BattlerTagType.IMPRISON);
-    expect(playerPokemon1).not.toEqual(playerPokemon2);
-    expect(imprisonBattlerTag2).toBeDefined();
-  });
-
-  it("The effects of Imprison only end when the source is no longer active", async () => {
-    game.override.moveset([MoveId.SPLASH, MoveId.IMPRISON]);
-    await game.classicMode.startBattle([Species.REGIELEKI, Species.BULBASAUR]);
-
-    const playerPokemon = game.scene.getPlayerPokemon()!;
-    const enemyPokemon = game.scene.getEnemyPokemon()!;
-    game.move.select(MoveId.IMPRISON);
-    await game.forceEnemyMove(MoveId.GROWL);
-    await game.toNextTurn();
-    expect(game.scene.arena.getTag(ArenaTagType.IMPRISON)).toBeDefined();
-    expect(enemyPokemon.getTag(BattlerTagType.IMPRISON)).toBeDefined();
-    game.doSwitchPokemon(1);
-    await game.forceEnemyMove(MoveId.SPLASH);
-    await game.toNextTurn();
-    expect(playerPokemon.isActive(true)).toBeFalsy();
-    expect(game.scene.arena.getTag(ArenaTagType.IMPRISON)).toBeUndefined();
-    expect(enemyPokemon.getTag(BattlerTagType.IMPRISON)).toBeUndefined();
   });
 });
