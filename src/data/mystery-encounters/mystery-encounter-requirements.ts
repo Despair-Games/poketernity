@@ -747,7 +747,7 @@ export class StatusEffectRequirement extends EncounterPokemonRequirement {
             // StatusEffect.NONE also checks for null or undefined status
             return !pokemon.hasNonVolatileStatusEffect();
           } else {
-            return pokemon.getStatusEffect() === statusEffect;
+            return pokemon.hasStatusEffect(statusEffect);
           }
         });
       });
@@ -759,7 +759,7 @@ export class StatusEffectRequirement extends EncounterPokemonRequirement {
             // StatusEffect.NONE also checks for null or undefined status
             return !pokemon.hasNonVolatileStatusEffect();
           } else {
-            return pokemon.getStatusEffect() === statusEffect;
+            return pokemon.hasStatusEffect(statusEffect);
           }
         });
       });
@@ -771,7 +771,7 @@ export class StatusEffectRequirement extends EncounterPokemonRequirement {
       if (a === StatusEffect.NONE) {
         return pokemon && !pokemon.hasNonVolatileStatusEffect();
       }
-      return pokemon && pokemon.getStatusEffect() === a;
+      return pokemon && pokemon.hasStatusEffect(a);
     });
     if (reqStatus.length > 0) {
       return ["status", StatusEffect[reqStatus[0]]];

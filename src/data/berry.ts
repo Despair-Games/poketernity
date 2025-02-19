@@ -84,7 +84,7 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
         }
         if (pokemon.hasNonVolatileStatusEffect(true, true)) {
           globalScene.queueMessage(
-            getStatusEffectHealText(pokemon.getStatusEffect(), getPokemonNameWithAffix(pokemon)),
+            getStatusEffectHealText(pokemon.getStatusEffect(true), getPokemonNameWithAffix(pokemon)),
           );
         }
         pokemon.resetStatus(true);
