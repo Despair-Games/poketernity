@@ -6,5 +6,4 @@ export enum StatusEffect {
   SLEEP,
   FREEZE,
   BURN,
-  FAINT,
 }

@@ -1,8 +1,6 @@
-import { Status } from "#app/data/status-effect";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -96,8 +94,7 @@ describe("Abilities - ZEN MODE", () => {
     darmanitan.hp = 1;
     expect(darmanitan.formIndex).toBe(zenForm);
 
-    darmanitan.hp = 0;
-    darmanitan.status = new Status(StatusEffect.FAINT);
+    darmanitan.faint();
     expect(darmanitan.isFainted()).toBe(true);
 
     game.move.select(MoveId.SPLASH);

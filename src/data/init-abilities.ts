@@ -213,9 +213,7 @@ export function initAbilities() {
         !move.hasAttr(FlinchAttr)
         && !target.turnData.acted
         && move.category !== MoveCategory.STATUS
-        && (target.status
-          ? ![StatusEffect.FREEZE, StatusEffect.SLEEP, StatusEffect.FAINT].includes(target.status.effect)
-          : true)
+        && (target.status ? ![StatusEffect.FREEZE, StatusEffect.SLEEP].includes(target.status.effect) : true)
           ? 10
           : 0,
       BattlerTagType.FLINCHED,
@@ -630,7 +628,7 @@ export function initAbilities() {
       .attr(PostDefendStealHeldItemAbAttr, (_target, _user, move) => move.hasFlag(MoveFlags.MAKES_CONTACT))
       .condition(getSheerForceHitDisableAbCondition()),
     new Ability(Abilities.SHEER_FORCE, 5)
-      .attr(MovePowerBoostAbAttr, (_user, _target, move) => !!move && move.chance >= 1, 5461 / 4096)
+      .attr(MovePowerBoostAbAttr, (_user, _target, move) => !!move && move.chance >= 1, 1.3)
       .attr(MoveEffectChanceMultiplierAbAttr, 0), // Should disable life orb, eject button, red card, kee/maranga berry if they get implemented
     new Ability(Abilities.CONTRARY, 5).attr(StatStageChangeMultiplierAbAttr, -1).ignorable(),
     new Ability(Abilities.UNNERVE, 5).attr(PreventBerryUseAbAttr),
@@ -643,7 +641,7 @@ export function initAbilities() {
       .condition((pokemon) => pokemon.getHpRatio() <= 0.5),
     new Ability(Abilities.CURSED_BODY, 5).attr(PostDefendMoveDisableAbAttr, 30).bypassFaint(),
     new Ability(Abilities.HEALER, 5).conditionalAttr(
-      (pokemon) => pokemon.getAlly() && pokemon.getAlly().status?.effect !== StatusEffect.FAINT && randSeedInt(10) < 3,
+      (pokemon) => pokemon.getAlly() && randSeedInt(10) < 3,
       PostTurnResetStatusAbAttr,
       true,
     ),

@@ -32,6 +32,7 @@ export abstract class PokemonPhase extends FieldPhase {
   }
 
   public getPokemon(): Pokemon {
+    // TODO: change to `: PlayerPokemon | EnemyPokemon | nil`
     let pokemon: Pokemon | nil;
     if (this.battlerIndex > BattlerIndex.ENEMY_2) {
       pokemon = globalScene.getPokemonById(this.battlerIndex);

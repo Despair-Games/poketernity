@@ -29,7 +29,7 @@ export class PostTurnResetStatusAbAttr extends PostTurnAbAttr {
         globalScene.queueMessage(
           getStatusEffectHealText(this.target.status?.effect, getPokemonNameWithAffix(this.target)),
         );
-        this.target.resetStatus(false);
+        this.target.resetStatus();
         this.target.updateInfo();
       }
 

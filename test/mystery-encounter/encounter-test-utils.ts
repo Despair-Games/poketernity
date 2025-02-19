@@ -1,5 +1,4 @@
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { Status } from "#app/data/status-effect";
 import { CommandPhase } from "#app/phases/command-phase";
 import { MessagePhase } from "#app/phases/message-phase";
 import { MysteryEncounterBattlePhase } from "#app/phases/mystery-encounter-phases/battle-phase";
@@ -14,7 +13,6 @@ import type OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { isNullOrUndefined } from "#app/utils";
 import { Button } from "#enums/buttons";
-import { StatusEffect } from "#enums/status-effect";
 import type { GameManager } from "#test/testUtils/gameManager";
 import { expect, vi } from "vitest";
 
@@ -198,8 +196,7 @@ export async function skipBattleRunMysteryEncounterRewardsPhase(game: GameManage
   game.scene.clearPhaseQueue();
   game.scene.clearPhaseQueueSplice();
   game.scene.getEnemyParty().forEach((p) => {
-    p.hp = 0;
-    p.status = new Status(StatusEffect.FAINT);
+    p.faint();
     game.scene.field.remove(p);
   });
   game.scene.pushPhase(new VictoryPhase(0));

@@ -463,9 +463,17 @@ export default class SummaryUiHandler extends UiHandler {
 
     const fromSummary = args.length >= 2;
 
-    if (this.pokemon.status || this.pokemon.pokerus) {
+    let statusTextKey: string | undefined;
+    if (this.pokemon.isFainted()) {
+      statusTextKey = "faint";
+    } else if (this.pokemon.status) {
+      statusTextKey = StatusEffect[this.pokemon.status.effect].toLowerCase();
+    } else if (this.pokemon.pokerus) {
+      statusTextKey = "pokerus";
+    }
+    if (statusTextKey) {
       this.showStatus(!fromSummary);
-      this.status.setFrame(this.pokemon.status ? StatusEffect[this.pokemon.status.effect].toLowerCase() : "pokerus");
+      this.status.setFrame(statusTextKey);
     } else {
       this.hideStatus(!fromSummary);
     }
