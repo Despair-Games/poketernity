@@ -16,7 +16,7 @@ import { MoveId } from "#enums/move-id";
  * @see {@linkcode getCondition} for move selection
  */
 export class RandomMovesetMoveAttr extends CallMoveAttr {
-  private includeParty: boolean;
+  private readonly includeParty: boolean;
   private moveId: number;
 
   constructor(invalidMoves: MoveId[], includeParty: boolean = false) {
