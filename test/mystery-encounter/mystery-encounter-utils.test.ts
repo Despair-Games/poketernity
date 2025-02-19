@@ -19,7 +19,6 @@ import { ElementalType } from "#enums/elemental-type";
 import { MessagePhase } from "#app/phases/message-phase";
 import { GameManager } from "#test/testUtils/gameManager";
 import { Species } from "#enums/species";
-import { StatusEffect } from "#enums/status-effect";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -62,8 +61,7 @@ describe("Mystery Encounter Utils", () => {
     it("gets a fainted pokemon from player party if isAllowedInBattle is false", () => {
       // Both pokemon fainted
       scene.getPlayerParty().forEach((p) => {
-        p.hp = 0;
-        p.trySetStatus(StatusEffect.FAINT);
+        p.faint();
         void p.updateInfo();
       });
 
@@ -82,8 +80,7 @@ describe("Mystery Encounter Utils", () => {
     it("gets an unfainted legal pokemon from player party if isAllowed is true and isFainted is false", async () => {
       // Only faint 1st pokemon
       const party = scene.getPlayerParty();
-      party[0].hp = 0;
-      party[0].trySetStatus(StatusEffect.FAINT);
+      party[0].faint();
       await party[0].updateInfo();
 
       // Seeds are calculated to return index 0 first, 1 second (if both pokemon are legal)
@@ -101,8 +98,7 @@ describe("Mystery Encounter Utils", () => {
     it("returns last unfainted pokemon if doNotReturnLastAbleMon is false", async () => {
       // Only faint 1st pokemon
       const party = scene.getPlayerParty();
-      party[0].hp = 0;
-      party[0].trySetStatus(StatusEffect.FAINT);
+      party[0].faint();
       await party[0].updateInfo();
 
       // Seeds are calculated to return index 0 first, 1 second (if both pokemon are legal)
@@ -120,8 +116,7 @@ describe("Mystery Encounter Utils", () => {
     it("never returns last unfainted pokemon if doNotReturnLastAbleMon is true", async () => {
       // Only faint 1st pokemon
       const party = scene.getPlayerParty();
-      party[0].hp = 0;
-      party[0].trySetStatus(StatusEffect.FAINT);
+      party[0].faint();
       await party[0].updateInfo();
 
       // Seeds are calculated to return index 0 first, 1 second (if both pokemon are legal)
@@ -166,8 +161,7 @@ describe("Mystery Encounter Utils", () => {
     it("returns highest level unfainted if unfainted is true", async () => {
       const party = scene.getPlayerParty();
       party[0].level = 100;
-      party[0].hp = 0;
-      party[0].trySetStatus(StatusEffect.FAINT);
+      party[0].faint();
       await party[0].updateInfo();
       party[1].level = 10;
 
@@ -205,8 +199,7 @@ describe("Mystery Encounter Utils", () => {
     it("returns lowest level unfainted if unfainted is true", async () => {
       const party = scene.getPlayerParty();
       party[0].level = 10;
-      party[0].hp = 0;
-      party[0].trySetStatus(StatusEffect.FAINT);
+      party[0].faint();
       await party[0].updateInfo();
       party[1].level = 100;
 

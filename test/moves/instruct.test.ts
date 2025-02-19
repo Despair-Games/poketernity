@@ -7,6 +7,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { ElementalType } from "#enums/elemental-type";
 
 describe("Moves - Instruct", () => {
   let phaserGame: Phaser.Game;
@@ -218,6 +219,7 @@ describe("Moves - Instruct", () => {
         move: expect.objectContaining({ id: MoveId.SONIC_BOOM }),
         targets: [BattlerIndex.PLAYER],
         result: MoveResult.SUCCESS,
+        type: ElementalType.NORMAL,
         virtual: false,
       },
     ];

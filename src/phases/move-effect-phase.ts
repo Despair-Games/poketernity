@@ -187,6 +187,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       move: this.move.getMove(),
       targets: this.adjustedTargets ?? this.targets,
       result: MoveResult.PENDING,
+      type: user.getMoveType(move),
       virtual: this.move.virtual,
     };
 
@@ -362,6 +363,7 @@ export class MoveEffectPhase extends HitCheckPhase {
         move: this.move.getMove(),
         targets: this.targets,
         result: MoveResult.SUCCESS,
+        type: user.getMoveType(this.move.getMove()),
         virtual: this.move.virtual,
       });
 

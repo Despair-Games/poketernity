@@ -6,6 +6,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import type { TurnMove } from "#app/@types/TurnMove";
+import { ElementalType } from "#enums/elemental-type";
 
 describe("Moves - Disable", () => {
   let phaserGame: Phaser.Game;
@@ -59,6 +60,7 @@ describe("Moves - Disable", () => {
     expect(playerMon.getMoveHistory()[0]).toMatchObject<TurnMove>({
       move: expect.objectContaining({ id: MoveId.DISABLE }),
       result: MoveResult.FAIL,
+      type: ElementalType.NORMAL,
       targets: [2],
     });
     expect(enemyMon.isMoveRestricted(MoveId.SPLASH)).toBe(false);
@@ -116,6 +118,7 @@ describe("Moves - Disable", () => {
     expect(enemyHistory[0]).toMatchObject<TurnMove>({
       move: expect.objectContaining({ id: MoveId.SPLASH }),
       result: MoveResult.SUCCESS,
+      type: ElementalType.NORMAL,
       targets: [2],
     });
     expect(enemyHistory[1].result).toBe(MoveResult.FAIL);
