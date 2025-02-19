@@ -35,7 +35,6 @@ uniform vec2 texSize;
 uniform float yOffset;
 uniform float yShadowOffset;
 uniform vec4 tone;
-uniform ivec4 spriteColors[32];
 
 const vec3 lumaF = vec3(.299, .587, .114);
 
@@ -154,18 +153,6 @@ void main() {
     vec4 texture = texture2D(uMainSampler[0], outTexCoord);
 
     ivec4 colorInt = ivec4(int(texture.r * 255.0), int(texture.g * 255.0), int(texture.b * 255.0), int(texture.a * 255.0));
-
-    for (int i = 0; i < 32; i++) {
-        if (spriteColors[i][3] == 0)
-            break;
-        if (texture.a > 0.0 && colorInt.r == spriteColors[i].r && colorInt.g == spriteColors[i].g && colorInt.b == spriteColors[i].b) {
-            vec3 bg = vec3(float(spriteColors[i].r) / 255.0, float(spriteColors[i].g) / 255.0, float(spriteColors[i].b) / 255.0);
-            float gray = (bg.r + bg.g + bg.b) / 3.0;
-            bg = vec3(gray, gray, gray);
-            texture.rgb = mix(1.0 - 2.0 * (1.0 - bg) * (1.0), 2.0 * bg, step(bg, vec3(0.5)));
-            break;
-        }
-    }
 
     vec4 texel = vec4(outTint.bgr * outTint.a, outTint.a);
 
