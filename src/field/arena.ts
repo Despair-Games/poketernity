@@ -441,7 +441,7 @@ export class Arena {
 
     const oldWeatherType = this.weather?.weatherType || WeatherType.NONE;
 
-    this.weather = weather ? new Weather(weather, hasPokemonSource ? 5 : 0) : null;
+    this.weather = weather !== WeatherType.NONE ? new Weather(weather, hasPokemonSource ? 5 : 0) : null;
 
     if (this.weather) {
       this.eventTarget.dispatchEvent(
