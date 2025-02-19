@@ -178,9 +178,6 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.ICE_FACE:
       case BattlerTagType.DISGUISE:
         return 5;
-      default:
-        console.warn(`BattlerTag ${BattlerTagType[this.tagType]} is missing a score!`);
-        return 0;
     }
   }
 
