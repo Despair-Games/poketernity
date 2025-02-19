@@ -3587,8 +3587,6 @@ export function getBattlerTag(
       return new ContactBurnProtectedTag(sourceMoveId);
     case BattlerTagType.ENDURING:
       return new EnduringTag(tagType, BattlerTagLapseType.TURN_END, sourceMoveId);
-    case BattlerTagType.ENDURE_TOKEN:
-      return new EnduringTag(tagType, BattlerTagLapseType.AFTER_HIT, sourceMoveId);
     case BattlerTagType.STURDY:
       return new SturdyTag(sourceMoveId);
     case BattlerTagType.PERISH_SONG:

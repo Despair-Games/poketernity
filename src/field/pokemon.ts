@@ -197,6 +197,7 @@ import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type { QueuedMove } from "#app/@types/QueuedMove";
 import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
+import { DoubleDamageToMaxAttr } from "#app/data/move-attrs/double-damage-to-max-attr";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -3214,6 +3215,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       };
     }
 
+    /** Behemoth Bash, Behemoth Blade, and Dynamax Cannon do double damage to G-Max Pokemon (except Eternamax) */
+    const gmaxBonusDamageMultiplier = new NumberHolder(1);
+    applyMoveAttrs(DoubleDamageToMaxAttr, source, this, move, gmaxBonusDamageMultiplier);
+
     /**
      * The attack's base damage, as determined by the source's level, move power
      * and Attack stat as well as this Pokemon's Defense stat
@@ -3341,6 +3346,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     damage.value =
       baseDamage
       * targetMultiplier
+      * gmaxBonusDamageMultiplier.value
       * multiStrikeEnhancementMultiplier.value
       * arenaAttackTypeMultiplier.value
       * glaiveRushMultiplier.value
@@ -3440,7 +3446,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const surviveDamage = new BooleanHolder(false);
 
     // Eternatus does not need the damage reduction as its emax form has increased hp/defenses
-    if (this.isMax() && this.species.speciesId !== Species.ETERNATUS) {
+    if (this.isMax(false)) {
       damage = toDmgValue(damage * DYNAMAX_DAMAGE_TAKEN_FACTOR);
     }
 
@@ -3449,8 +3455,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         surviveDamage.value = this.lapseTag(BattlerTagType.ENDURING);
       } else if (this.hp > 1 && this.getTag(BattlerTagType.STURDY)) {
         surviveDamage.value = this.lapseTag(BattlerTagType.STURDY);
-      } else if (this.hp >= 1 && this.getTag(BattlerTagType.ENDURE_TOKEN)) {
-        surviveDamage.value = this.lapseTag(BattlerTagType.ENDURE_TOKEN);
       }
       if (!surviveDamage.value) {
         globalScene.applyModifiers(SurviveDamageModifier, this.isPlayer(), this, surviveDamage);
@@ -3515,12 +3519,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.isBoss();
   }
 
-  isMax(): boolean {
+  /**
+   * @param includeEternamax - Whether or not to include Eternamax
+   * @returns if the Pokemon is in a max form
+   */
+  isMax(includeEternamax: boolean = true): boolean {
     const maxForms = [
       SpeciesFormKey.GIGANTAMAX,
       SpeciesFormKey.GIGANTAMAX_RAPID,
       SpeciesFormKey.GIGANTAMAX_SINGLE,
-      SpeciesFormKey.ETERNAMAX,
+      ...(includeEternamax ? [SpeciesFormKey.ETERNAMAX] : []),
     ] as string[];
     return (
       maxForms.includes(this.getFormKey()) || (!!this.getFusionFormKey() && maxForms.includes(this.getFusionFormKey()!))

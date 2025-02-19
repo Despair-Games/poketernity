@@ -71,6 +71,9 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
     switch (this.tagType) {
       case BattlerTagType.RECHARGING:
       case BattlerTagType.PERISH_SONG:
+      case BattlerTagType.CHARGING:
+      case BattlerTagType.TRUANT:
+      case BattlerTagType.SLOW_START:
         return -16;
       case BattlerTagType.FLINCHED:
       case BattlerTagType.CONFUSED:
@@ -80,12 +83,15 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.DISABLED:
       case BattlerTagType.HEAL_BLOCK:
       case BattlerTagType.RECEIVE_DOUBLE_DAMAGE:
+      case BattlerTagType.INTERRUPTED:
         return -5;
       case BattlerTagType.SEEDED:
       case BattlerTagType.SALT_CURED:
       case BattlerTagType.CURSED:
       case BattlerTagType.FRENZY:
       case BattlerTagType.TRAPPED:
+      case BattlerTagType.OCTOLOCK:
+      case BattlerTagType.NO_RETREAT:
       case BattlerTagType.BIND:
       case BattlerTagType.WRAP:
       case BattlerTagType.FIRE_SPIN:
@@ -100,23 +106,78 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.INFESTATION:
         return -3;
       case BattlerTagType.ENCORE:
+      case BattlerTagType.GORILLA_TACTICS:
+      case BattlerTagType.THROAT_CHOPPED:
+      case BattlerTagType.TAR_SHOT:
+      case BattlerTagType.TORMENT:
+      case BattlerTagType.TAUNT:
+      case BattlerTagType.IMPRISON:
+      case BattlerTagType.SYRUP_BOMB:
+      case BattlerTagType.TELEKINESIS:
+      case BattlerTagType.POWDER:
         return -2;
+      case BattlerTagType.NONE:
+      /**
+       * @todo: Burned Up and Double Shocked terastallization considerations
+       */
+      case BattlerTagType.BURNED_UP:
+      case BattlerTagType.DOUBLE_SHOCKED:
       case BattlerTagType.MINIMIZED:
       case BattlerTagType.ALWAYS_GET_HIT:
+      case BattlerTagType.ENDURING:
+      case BattlerTagType.STURDY:
+      case BattlerTagType.BYPASS_SLEEP:
+      case BattlerTagType.IGNORE_FLYING:
+      case BattlerTagType.ROOSTED:
+      case BattlerTagType.CENTER_OF_ATTENTION:
+      case BattlerTagType.STOCKPILING:
+      case BattlerTagType.IGNORE_GHOST:
+      case BattlerTagType.IGNORE_DARK:
+      case BattlerTagType.AUTOTOMIZED:
+      case BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON:
+      case BattlerTagType.POWER_TRICK:
+      case BattlerTagType.ELECTRIFIED:
+      case BattlerTagType.COMMANDED:
+      case BattlerTagType.PSYCHO_SHIFT:
+      case BattlerTagType.SKY_DROP:
         return 0;
       case BattlerTagType.INGRAIN:
       case BattlerTagType.IGNORE_ACCURACY:
       case BattlerTagType.AQUA_RING:
+      case BattlerTagType.HELPING_HAND:
+      case BattlerTagType.PROTOSYNTHESIS:
+      case BattlerTagType.QUARK_DRIVE:
+      case BattlerTagType.CHARGED:
+      case BattlerTagType.FLOATING:
+      case BattlerTagType.SUBSTITUTE:
+      case BattlerTagType.GULP_MISSILE_ARROKUDA:
+      case BattlerTagType.GULP_MISSILE_PIKACHU:
+      case BattlerTagType.BEAK_BLAST_CHARGING:
+      case BattlerTagType.SHELL_TRAP:
+      case BattlerTagType.UNBURDEN:
+      case BattlerTagType.GRUDGE:
+      case BattlerTagType.DESTINY_BOND:
+      case BattlerTagType.RAGE:
         return 3;
       case BattlerTagType.PROTECTED:
+      case BattlerTagType.SPIKY_SHIELD:
+      case BattlerTagType.KINGS_SHIELD:
+      case BattlerTagType.OBSTRUCT:
+      case BattlerTagType.SILK_TRAP:
+      case BattlerTagType.BANEFUL_BUNKER:
+      case BattlerTagType.BURNING_BULWARK:
       case BattlerTagType.FLYING:
+      case BattlerTagType.UNDERGROUND:
+      case BattlerTagType.UNDERWATER:
+      case BattlerTagType.HIDDEN:
+      case BattlerTagType.FIRE_BOOST:
       case BattlerTagType.CRIT_BOOST:
       case BattlerTagType.CRIT_BOOST_STACKABLE:
       case BattlerTagType.ALWAYS_CRIT:
+      case BattlerTagType.DRAGON_CHEER:
+      case BattlerTagType.ICE_FACE:
+      case BattlerTagType.DISGUISE:
         return 5;
-      default:
-        console.warn(`BattlerTag ${BattlerTagType[this.tagType]} is missing a score!`);
-        return 0;
     }
   }
 
