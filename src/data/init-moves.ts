@@ -2971,6 +2971,7 @@ export function initMoves() {
       .ignoresAbilities(),
     // #region USUM Z-Moves (unused)
     new AttackMove(MoveId.LIGHT_THAT_BURNS_THE_SKY, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 200, -1, 1, -1, 0, 7)
+      .unimplemented()
       .attr(UseHigherAttackingStatAttr)
       .ignoresAbilities(),
     new AttackMove(MoveId.SEARING_SUNRAZE_SMASH, ElementalType.STEEL, MoveCategory.PHYSICAL, 200, -1, 1, -1, 0, 7)
