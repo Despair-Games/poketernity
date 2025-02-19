@@ -54,6 +54,6 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
   }
 
   override getUserBenefitScore(user: Pokemon, _target: Pokemon, _move: Move): number {
-    return user.status ? 10 : 0;
+    return user.hasNonVolatileStatusEffect(false, true) ? 10 : 0;
   }
 }

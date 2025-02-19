@@ -21,7 +21,7 @@ export class PsychoShiftEffectAttr extends MoveEffectAttr {
       return false;
     }
 
-    if (target.status) {
+    if (target.hasNonVolatileStatusEffect()) {
       return false;
     } else {
       const canSetStatus = target.canSetStatus(statusToApply, true, false, user);
@@ -38,7 +38,11 @@ export class PsychoShiftEffectAttr extends MoveEffectAttr {
 
   override getTargetBenefitScore(user: Pokemon, target: Pokemon, _move: Move): number {
     const statusToApply = this.getStatusToApply(user);
-    return !target.status && !!statusToApply && target.canSetStatus(statusToApply, true, false, user) ? -10 : 0;
+    return !target.hasNonVolatileStatusEffect()
+      && !!statusToApply
+      && target.canSetStatus(statusToApply, true, false, user)
+      ? -10
+      : 0;
   }
 
   private getStatusToApply(user: Pokemon): StatusEffect | undefined {

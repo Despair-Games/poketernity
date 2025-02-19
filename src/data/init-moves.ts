@@ -1226,7 +1226,7 @@ export function initMoves() {
     ),
     new StatusMove(MoveId.YAWN, ElementalType.NORMAL, -1, 10, -1, 0, 3)
       .attr(AddBattlerTagAttr, BattlerTagType.DROWSY, false, { failOnOverlap: true })
-      .condition((user, target, _move) => !target.status && !target.isSafeguarded(user)),
+      .condition((user, target, _move) => !target.hasNonVolatileStatusEffect() && !target.isSafeguarded(user)),
     new AttackMove(MoveId.KNOCK_OFF, ElementalType.DARK, MoveCategory.PHYSICAL, 65, 100, 20, -1, 0, 3)
       .attr(MovePowerMultiplierAttr, (_user, target, _move) =>
         target.getHeldItems().filter((i) => i.isTransferable).length > 0 ? 1.5 : 1,
@@ -1614,7 +1614,10 @@ export function initMoves() {
     new StatusMove(MoveId.PSYCHO_SHIFT, ElementalType.PSYCHIC, 100, 10, -1, 0, 4)
       .attr(PsychoShiftEffectAttr)
       .condition((user, target, _move) => {
-        return user.hasStatusEffect(getNonVolatileStatusEffects()) && target.canSetStatus(user.getStatusEffect(), false, false, user);
+        return (
+          user.hasStatusEffect(getNonVolatileStatusEffects())
+          && target.canSetStatus(user.getStatusEffect(), false, false, user)
+        );
       }),
     new AttackMove(MoveId.TRUMP_CARD, ElementalType.NORMAL, MoveCategory.SPECIAL, -1, -1, 5, -1, 0, 4)
       .makesContact()
@@ -2123,7 +2126,7 @@ export function initMoves() {
       .triageMove(),
     new AttackMove(MoveId.HEX, ElementalType.GHOST, MoveCategory.SPECIAL, 65, 100, 10, -1, 0, 5).attr(
       MovePowerMultiplierAttr,
-      (_user, target, _move) => (target.status || target.hasAbility(Abilities.COMATOSE) ? 2 : 1),
+      (_user, target, _move) => (target.hasNonVolatileStatusEffect() ? 2 : 1),
     ),
     new ChargingAttackMove(MoveId.SKY_DROP, ElementalType.FLYING, MoveCategory.PHYSICAL, 60, 100, 10, -1, 0, 5)
       .chargeText(i18next.t("moveTriggers:tookTargetIntoSky", { pokemonName: "{USER}", targetName: "{TARGET}" }))
