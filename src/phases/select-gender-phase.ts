@@ -34,6 +34,7 @@ export class SelectGenderPhase extends Phase {
           },
         },
       ],
+      inputDelay: 1000,
       blockCancelButton: true,
       yOffset: 48,
     };
