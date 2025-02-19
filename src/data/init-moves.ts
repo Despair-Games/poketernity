@@ -241,6 +241,7 @@ import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { RageAttr } from "./move-attrs/rage-attr";
+import { DoubleDamageToMaxAttr } from "./move-attrs/double-damage-to-max-attr";
 
 export function initMoves() {
   const rawAllMoves = [
@@ -3177,23 +3178,7 @@ export function initMoves() {
       .ignoresVirtual(),
     /* End Unused */
     new AttackMove(MoveId.DYNAMAX_CANNON, ElementalType.DRAGON, MoveCategory.SPECIAL, 100, 100, 5, -1, 0, 8)
-      .attr(MovePowerMultiplierAttr, (_user, target, _move) => {
-        // Move is only stronger against overleveled foes.
-        if (target.level > globalScene.getMaxExpLevel()) {
-          const dynamaxCannonPercentMarginBeforeFullDamage = 0.05; // How much % above MaxExpLevel of wave will the target need to be to take full damage.
-          // The move's power scales as the margin is approached, reaching double power when it does or goes over it.
-          return (
-            1
-            + Math.min(
-              1,
-              (target.level - globalScene.getMaxExpLevel())
-                / (globalScene.getMaxExpLevel() * dynamaxCannonPercentMarginBeforeFullDamage),
-            )
-          );
-        } else {
-          return 1;
-        }
-      })
+      .attr(DoubleDamageToMaxAttr)
       .attr(DiscourageFrequentUseAttr)
       .ignoresVirtual(),
 
@@ -3338,18 +3323,12 @@ export function initMoves() {
       .attr(StatusEffectAttr, StatusEffect.BURN)
       .bulletMove()
       .makesContact(false),
-    new AttackMove(
-      MoveId.BEHEMOTH_BLADE,
-      ElementalType.STEEL,
-      MoveCategory.PHYSICAL,
-      100,
-      100,
-      5,
-      -1,
-      0,
-      8,
-    ).slicingMove(),
-    new AttackMove(MoveId.BEHEMOTH_BASH, ElementalType.STEEL, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 8),
+    new AttackMove(MoveId.BEHEMOTH_BLADE, ElementalType.STEEL, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 8)
+      .attr(DoubleDamageToMaxAttr)
+      .slicingMove(),
+    new AttackMove(MoveId.BEHEMOTH_BASH, ElementalType.STEEL, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 8).attr(
+      DoubleDamageToMaxAttr,
+    ),
     new AttackMove(MoveId.AURA_WHEEL, ElementalType.ELECTRIC, MoveCategory.PHYSICAL, 110, 100, 10, 100, 0, 8)
       .attr(StatStageChangeAttr, [Stat.SPD], 1, true)
       .makesContact(false)

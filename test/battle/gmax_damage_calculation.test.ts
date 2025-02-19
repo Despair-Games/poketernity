@@ -51,6 +51,24 @@ describe("Battle Mechanics - Damage Calculation", () => {
     expect(enemyPokemon.getMaxHp() - enemyPokemon.hp).toBeCloseTo(20);
   });
 
+  it("E-Max Eternatus does not get gmax damage reduction", async () => {
+    game.override.enemySpecies(Species.ETERNATUS).enemyForms({ [Species.ETERNATUS]: 1 });
+    await game.classicMode.startBattle([Species.CHARIZARD]);
+
+    const playerPokemon = game.scene.getPlayerPokemon()!;
+    vi.spyOn(playerPokemon, "getEffectiveStat").mockReturnValue(80);
+
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
+    vi.spyOn(enemyPokemon, "getEffectiveStat").mockReturnValue(90);
+
+    game.move.select(MoveId.TACKLE);
+    await game.toNextTurn();
+
+    // expected base damage = [(2*level/5 + 2) * power * playerATK / enemyDEF / 50] + 2
+    //                      = 31.8666...
+    expect(enemyPokemon.getMaxHp() - enemyPokemon.hp).toBeCloseTo(31);
+  });
+
   it("Attacks deal 1 damage at minimum", async () => {
     game.override.startingLevel(1).enemyLevel(100000);
     await game.classicMode.startBattle([Species.MAGIKARP]);
