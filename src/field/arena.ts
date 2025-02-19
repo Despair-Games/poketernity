@@ -396,6 +396,34 @@ export class Arena {
   }
 
   /**
+   * Helper function that checks if it is possible to set a new weather given current weather conditions
+   * @param newWeather the weather that the game is attempting to set
+   * @returns `true` if the weather can be set given current conditions | `false` if not
+   */
+  canSetWeather(newWeather: WeatherType): boolean {
+    if (this.weather) {
+      // Checks if the new weather is identical to the current weather
+      if (newWeather === this.weather.weatherType) {
+        return false;
+      }
+      // Checks if the current weather is immutable
+      if (this.weather.isImmutable()) {
+        // Only other immutable weather types can overwrite immutable weather
+        if (
+          newWeather === WeatherType.HARSH_SUN
+          || newWeather === WeatherType.HEAVY_RAIN
+          || newWeather === WeatherType.STRONG_WINDS
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  /**
    * Attempts to set a new weather to the battle
    * @param weather {@linkcode WeatherType} new {@linkcode WeatherType} to set
    * @param hasPokemonSource boolean if the new weather is from a pokemon
@@ -406,7 +434,7 @@ export class Arena {
       return this.trySetWeatherOverride(Overrides.WEATHER_OVERRIDE);
     }
 
-    if (this.weather?.weatherType === (weather || undefined)) {
+    if (!this.canSetWeather(weather)) {
       return false;
     }
 
