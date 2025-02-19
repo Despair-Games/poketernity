@@ -43,7 +43,7 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
             damage.value = Math.max(pokemon.getMaxHp() >> 3, 1);
             break;
           case StatusEffect.TOXIC:
-            damage.value = Math.max(Math.floor((pokemon.getMaxHp() / 16) * pokemon.status.toxicTurnCount), 1);
+            damage.value = Math.max(Math.floor((pokemon.getMaxHp() / 16) * pokemon.status!.toxicTurnCount), 1);
             break;
           case StatusEffect.BURN:
             damage.value = Math.max(pokemon.getMaxHp() >> 4, 1);
