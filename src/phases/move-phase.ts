@@ -233,7 +233,8 @@ export class MovePhase extends BattlePhase {
       let activated = false;
       let healed = false;
 
-      switch (this.pokemon.getStatusEffect(true)) {
+      const statusEffect = this.pokemon.getStatusEffect(true);
+      switch (statusEffect) {
         case StatusEffect.PARALYSIS:
           activated =
             (!this.pokemon.randSeedInt(4) || Overrides.STATUS_ACTIVATION_OVERRIDE === true)
