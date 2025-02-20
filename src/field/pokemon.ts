@@ -56,7 +56,6 @@ import {
   rgbToHsv,
   deltaRgb,
   isBetween,
-  randSeedItem,
 } from "#app/utils";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import { getTypeDamageMultiplier, getTypeRgb } from "#app/data/type";
@@ -4043,7 +4042,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   getStatusEffect(ignoreMockAbility: boolean = false): StatusEffect {
     const statusEffect = new NumberHolder(StatusEffect.NONE);
     if (this.status) {
-      statusEffect.value = this.status.effect;
+      statusEffect.value = this.status.statusEffect;
     }
     if (!ignoreMockAbility) {
       applyAbAttrs(AbAttrFlag.MOCK_STATUS_EFFECT, this, false, statusEffect);
@@ -4067,7 +4066,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     sourcePokemon: Pokemon | null = null,
     ignoreField: boolean = false,
   ): boolean {
-    if (overrideStatus ? this.status?.effect === effect : this.status) {
+    if (overrideStatus ? this.status?.statusEffect === effect : this.status) {
       return false;
     }
     if (this.isGrounded() && !ignoreField && globalScene.arena.hasTerrain(TerrainType.MISTY)) {
@@ -5271,17 +5270,6 @@ export class PlayerPokemon extends Pokemon {
     if (!this.isFainted()) {
       // If this Pokemon hasn't fainted, make sure the HP wasn't set over the new maximum
       this.hp = Math.min(this.hp, maxHp);
-      const getRandomStatus = (statusA: Status | null, statusB: Status | null): Status | null => {
-        if (!statusA || statusA.effect === StatusEffect.NONE) {
-          return statusB;
-        }
-        if (!statusB || statusB.effect === StatusEffect.NONE) {
-          return statusA;
-        }
-
-        return randSeedItem([statusA, statusB]);
-      };
-      this.status = getRandomStatus(this.status, pokemon.status); // Get a random valid status between the two
     } else if (!pokemon.isFainted()) {
       // If this Pokemon fainted but the other hasn't, make sure the HP wasn't set to zero
       this.hp = Math.max(this.hp, 1);
