@@ -1403,7 +1403,7 @@ export class EvolutionItemModifierTypeGenerator extends ModifierTypeGenerator {
         .filter((i) => i !== null)
         .filter((i) => i > 50 === rare);
 
-      if (!evolutionItemPool.length) {
+      if (evolutionItemPool.length === 0) {
         return null;
       }
 
