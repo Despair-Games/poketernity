@@ -1533,19 +1533,19 @@ export class GameData {
    *   Use `false` for "rental" Pokemon, so that the function exits early.
    * @param fromEgg whether the Pokemon was obtained through an egg. Default: `false`
    * @param showMessage whether to display a message if (a) new Starter(s) was unlocked. Default: `true`
-   * @returns `true` if the catch unlocked a new starter, `false` if it didn't.
+   * @returns array of {@linkcode Species} of unlocked starters, if any (root species will be last in the array)
    */
   setPokemonCaught(
     pokemon: Pokemon,
     includeNewCatch: boolean = true,
     fromEgg: boolean = false,
     showMessage: boolean = true,
-  ): Promise<boolean> {
-    // If incrementCount === false (not a catch scenario), only update the pokemon's dex data if the Pokemon has already been marked as caught in dex
+  ): Promise<Species[]> {
+    // If includeNewCatch === false, only update the pokemon's dex data if the Pokemon has already been marked as caught in dex
     // Prevents form changes, nature changes, etc. from unintentionally updating the dex data of a "rental" pokemon
     const speciesRootForm = pokemon.species.getRootSpeciesId();
     if (!includeNewCatch && !globalScene.gameData.dexData[speciesRootForm].caughtAttr) {
-      return Promise.resolve(false);
+      return Promise.resolve([]);
     } else {
       return this.setPokemonSpeciesCaught(
         pokemon,
@@ -1569,7 +1569,7 @@ export class GameData {
    * @param giveCandy whether to give starter candy for the root species. Default: `true`
    * @param fromEgg whether the Pokemon was obtained through an egg. Default: `false`
    * @param showMessage whether to display a message if (a) new Starter(s) was unlocked. Default: `true`
-   * @returns `true` if the catch unlocked a new starter, `false` if it didn't.
+   * @returns array of {@linkcode Species} of unlocked starters, if any (root species will be last in the array)
    */
   private setPokemonSpeciesCaught(
     pokemon: Pokemon,
@@ -1578,8 +1578,9 @@ export class GameData {
     giveCandy: boolean = true,
     fromEgg: boolean = false,
     showMessage: boolean = true,
-  ): Promise<boolean> {
-    return new Promise<boolean>((resolve) => {
+    unlockedStarters: Species[] = [],
+  ): Promise<Species[]> {
+    return new Promise<Species[]>((resolve) => {
       const dexEntry = this.dexData[species.speciesId];
       const caughtAttr = dexEntry.caughtAttr;
 
@@ -1637,7 +1638,7 @@ export class GameData {
         this.addStarterCandy(species, STARTER_CANDY_GAIN_FROM_CATCH * candyMultiplier);
       }
 
-      const checkPrevolution = (newStarter: boolean) => {
+      const checkPrevolution = (unlockedStarters: Species[]) => {
         if (hasPrevolution) {
           const prevolutionSpecies = pokemonPrevolutions[species.speciesId];
           this.setPokemonSpeciesCaught(
@@ -1647,27 +1648,29 @@ export class GameData {
             giveCandy,
             fromEgg,
             showMessage,
+            unlockedStarters,
           ).then((result) => resolve(result));
         } else {
-          resolve(newStarter);
+          resolve(unlockedStarters);
         }
       };
 
       if (newCatch && speciesStarterCosts.hasOwnProperty(species.speciesId)) {
+        unlockedStarters.push(species.speciesId);
         if (!showMessage) {
-          checkPrevolution(true);
+          checkPrevolution(unlockedStarters);
         } else {
           globalScene.playSound("level_up_fanfare");
           globalScene.ui.showText(
             i18next.t("battle:addedAsAStarter", { pokemonName: species.name }),
             null,
-            () => checkPrevolution(true),
+            () => checkPrevolution(unlockedStarters),
             null,
             true,
           );
         }
       } else {
-        checkPrevolution(false);
+        checkPrevolution(unlockedStarters);
       }
     });
   }
@@ -1785,6 +1788,7 @@ export class GameData {
       }
       globalScene.playSound("level_up_fanfare");
       const moveName = allMoves[speciesEggMoves[speciesId][eggMoveIndex]].name;
+      // TODO: use a proper localized message in this case
       let message = prependSpeciesToMessage ? species.getName() + " " : "";
       message +=
         eggMoveIndex === 3

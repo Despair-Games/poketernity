@@ -962,7 +962,7 @@ export function getEncounterPokemonLevelForWave(levelAdditiveModifier: number = 
 export async function addPokemonDataToDexAndValidateAchievements(
   pokemon: PlayerPokemon,
   includeNewCatch: boolean = true,
-): Promise<boolean> {
+): Promise<Species[]> {
   const isNewCatch = !globalScene.gameData.dexData[pokemon.species.getRootSpeciesId()].caughtAttr;
   if (!isNewCatch || includeNewCatch) {
     const speciesForm = !pokemon.fusionSpecies ? pokemon.getSpeciesForm() : pokemon.getFusionSpeciesForm();
