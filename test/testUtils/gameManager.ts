@@ -562,7 +562,7 @@ export class GameManager {
   }
 
   /**
-   * Mocks the game's {@linkcode TurnCommandManager} to
+   * Mocks the game's {@linkcode TurnCommandManager} to set a certain turn order for future turns.
    * @param order The turn order to set
    * @example
    * ```ts

@@ -303,8 +303,6 @@ export class TurnCommandManager {
    * Sorts turn commands in decreasing order of their Pokemon's Speed
    * stat. If Trick Room is active, this sorts commands in increasing
    * order of Speed instead.
-   * @param turnStart - if `true`, applies start-of-turn effects that may
-   * change speed order.
    */
   private sortBySpeed(): void {
     /** 'true' if Trick Room is on the field. */
@@ -312,7 +310,7 @@ export class TurnCommandManager {
     globalScene.arena.applyTags(ArenaTagType.TRICK_ROOM, false, speedReversed);
 
     this.turnCommands.sort((a, b) => {
-      const [aSpeed, bSpeed] = [a, b].map((command) => command.pokemon.getEffectiveStat(Stat.SPD) ?? 0);
+      const [aSpeed, bSpeed] = [a, b].map((command) => command.pokemon.getEffectiveStat(Stat.SPD));
 
       return speedReversed.value ? aSpeed - bSpeed : bSpeed - aSpeed;
     });
