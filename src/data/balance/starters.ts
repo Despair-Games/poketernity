@@ -12,7 +12,6 @@ export const CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER = 3;
 export const STARTER_CANDY_GAIN_FROM_CATCH = 1;
 export const STARTER_CANDY_MULIPLIER_FOR_BOSS = 2;
 export const STARTER_CANDY_MULIPLIER_FOR_EGG = 2;
-export const STARTER_CANDY_BASE_MULIPLIER_FOR_SHINY = 5;
 
 /**
  * Get the starter candy multiplier for catching (or hatching) a shiny Pokemon based on its variant.
@@ -20,12 +19,20 @@ export const STARTER_CANDY_BASE_MULIPLIER_FOR_SHINY = 5;
  * @param variant the {@linkcode VariantTier} to consider.
  * @returns the amount to multiply candy gain by.
  */
-export function getCandyGainMultiplierForShinies(variant: VariantTier) {
-  // Make sure the given variant is valid, otherwise default to base variant
-  if (!VariantTier[variant]) {
-    variant = 0;
+export function getCandyGainMultiplierForShinies(variant: VariantTier): number {
+  let rarityMultiplier = 1;
+  switch (variant) {
+    case VariantTier.STANDARD:
+      rarityMultiplier = 1;
+      break;
+    case VariantTier.RARE:
+      rarityMultiplier = 2;
+      break;
+    case VariantTier.EPIC:
+      rarityMultiplier = 4;
+      break;
   }
-  return STARTER_CANDY_BASE_MULIPLIER_FOR_SHINY * (1 << variant);
+  return 5 * rarityMultiplier;
 }
 
 /**
