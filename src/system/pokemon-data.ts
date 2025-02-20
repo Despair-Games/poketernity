@@ -65,11 +65,6 @@ export default class PokemonData {
   public customPokemonData: CustomPokemonData;
   public fusionCustomPokemonData: CustomPokemonData;
 
-  // Deprecated attributes, needed for now to allow SessionData migration
-  public natureOverride: Nature | -1;
-  public mysteryEncounterPokemonData: CustomPokemonData | null;
-  public fusionMysteryEncounterPokemonData: CustomPokemonData | null;
-
   constructor(source: Pokemon | any, forHistory: boolean = false) {
     const sourcePokemon = source.type === "Pokemon" ? source : null;
     this.id = source.id;
@@ -119,15 +114,6 @@ export default class PokemonData {
     this.usedTMs = source.usedTMs ?? [];
 
     this.customPokemonData = new CustomPokemonData(source.customPokemonData);
-
-    // Deprecated, but needed for session data migration
-    this.natureOverride = source.natureOverride;
-    this.mysteryEncounterPokemonData = source.mysteryEncounterPokemonData
-      ? new CustomPokemonData(source.mysteryEncounterPokemonData)
-      : null;
-    this.fusionMysteryEncounterPokemonData = source.fusionMysteryEncounterPokemonData
-      ? new CustomPokemonData(source.fusionMysteryEncounterPokemonData)
-      : null;
 
     if (!forHistory) {
       this.boss = (source instanceof EnemyPokemon && !!source.bossSegments) || (!this.player && !!source.boss);
