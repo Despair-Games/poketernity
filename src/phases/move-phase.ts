@@ -287,7 +287,7 @@ export class MovePhase extends BattlePhase {
         );
       } else if (healed) {
         globalScene.queueMessage(
-          getStatusEffectHealText(this.pokemon.getStatusEffect(true), getPokemonNameWithAffix(this.pokemon)),
+          getStatusEffectHealText(statusEffect, getPokemonNameWithAffix(this.pokemon)),
         );
         this.pokemon.resetStatus();
         this.pokemon.updateInfo();
