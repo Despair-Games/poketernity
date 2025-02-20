@@ -41,7 +41,7 @@ describe("Abilities - Fluffy", () => {
     const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
 
     game.move.select(MoveId.TACKLE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const damageMultiplier = (abilitySpy.mock.lastCall?.[4] as NumberHolder).value;
     expect(allMoves[MoveId.TACKLE].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
@@ -54,7 +54,7 @@ describe("Abilities - Fluffy", () => {
     const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
 
     game.move.select(MoveId.EMBER);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const damageMultiplier = (abilitySpy.mock.lastCall?.[4] as NumberHolder).value;
     expect(damageMultiplier).toBe(2);
@@ -67,7 +67,7 @@ describe("Abilities - Fluffy", () => {
 
     game.move.select(MoveId.FIRE_FANG);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const damageMultiplier = (abilitySpy.mock.lastCall?.[4] as NumberHolder).value;
     expect(allMoves[MoveId.FIRE_FANG].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
@@ -81,7 +81,7 @@ describe("Abilities - Fluffy", () => {
     const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
 
     game.move.select(MoveId.TACKLE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const damageMultiplier = (abilitySpy.mock.lastCall?.[4] as NumberHolder).value;
     expect(allMoves[MoveId.TACKLE].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);

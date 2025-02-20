@@ -41,7 +41,7 @@ describe("Abilities - Gorilla Tactics", () => {
     game.move.select(MoveId.SPLASH);
     await game.forceEnemyMove(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(darmanitan.getStat(Stat.ATK, false)).toBeCloseTo(initialAtkStat * 1.5);
     // Other moves should be restricted
@@ -66,7 +66,7 @@ describe("Abilities - Gorilla Tactics", () => {
     await game.forceEnemyMove(MoveId.DISABLE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getStatStage(Stat.ATK)).toBe(-1); // Only the effect of the first Growl should be applied
 
     // Third turn, Struggle is used

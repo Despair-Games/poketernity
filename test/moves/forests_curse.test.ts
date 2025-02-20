@@ -37,11 +37,11 @@ describe("Moves - Forest's Curse", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     game.move.select(MoveId.TRICK_OR_TREAT);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemyPokemon!.summonData.addedType).toBe(ElementalType.GHOST);
 
     game.move.select(MoveId.FORESTS_CURSE);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemyPokemon?.summonData.addedType).toBe(ElementalType.GRASS);
   });
 });

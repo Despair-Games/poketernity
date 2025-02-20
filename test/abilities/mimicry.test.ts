@@ -82,7 +82,7 @@ describe("Abilities - Mimicry", () => {
 
     game.move.select(MoveId.SPLASH);
     await game.forceEnemyMove(MoveId.GRASSY_TERRAIN);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(playerPokemon?.summonData.addedType).toBeNull();
     expect(playerPokemon?.getTypes().includes(ElementalType.GRASS)).toBe(true);

@@ -35,7 +35,7 @@ describe("Weather - Sandstorm", () => {
 
     game.move.select(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     game.scene.getField(true).forEach((pokemon) => {
       expect(pokemon.hp).toBe(pokemon.getMaxHp() - toDmgValue(pokemon.getMaxHp() / 16));
@@ -70,7 +70,7 @@ describe("Weather - Sandstorm", () => {
 
     game.move.select(MoveId.DIVE);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -91,7 +91,7 @@ describe("Weather - Sandstorm", () => {
     game.move.select(MoveId.SPLASH, 0);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     game.scene.getField(true).forEach((pokemon) => {
       expect(pokemon.hp).toBe(pokemon.getMaxHp());

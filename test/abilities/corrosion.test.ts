@@ -40,7 +40,7 @@ describe("Abilities - Corrosion", () => {
     expect(playerPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
 
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
     expect(playerPokemon.getStatusEffect()).toBe(StatusEffect.TOXIC);
     expect(enemyPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
   });

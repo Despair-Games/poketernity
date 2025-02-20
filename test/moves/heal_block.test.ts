@@ -46,7 +46,7 @@ describe("Moves - Heal Block", () => {
 
     game.move.select(MoveId.ABSORB);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     const lastPlayerMove = player.getLastXMoves(1)[0];
     expect(lastPlayerMove.move.id).toBe(MoveId.NONE);
@@ -60,12 +60,12 @@ describe("Moves - Heal Block", () => {
     player.damageAndUpdate(player.getMaxHp() - 1);
 
     game.move.select(MoveId.WISH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.arena.getTagOnSide(ArenaTagType.WISH, ArenaTagSide.PLAYER)).toBeDefined();
     while (game.scene.arena.getTagOnSide(ArenaTagType.WISH, ArenaTagSide.PLAYER)) {
       game.move.select(MoveId.SPLASH);
-      await game.phaseInterceptor.to("TurnEndPhase");
+      await game.toEndOfTurn();
     }
 
     expect(player.hp).toBe(1);
@@ -81,7 +81,7 @@ describe("Moves - Heal Block", () => {
     player.damageAndUpdate(player.getMaxHp() - 1);
 
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(player.hp).toBe(1);
   });
@@ -94,7 +94,7 @@ describe("Moves - Heal Block", () => {
     player.damageAndUpdate(player.getMaxHp() - 1);
 
     game.move.select(MoveId.AQUA_RING);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(player.getTag(BattlerTagType.AQUA_RING)).toBeDefined();
     expect(player.hp).toBe(1);
@@ -110,7 +110,7 @@ describe("Moves - Heal Block", () => {
     player.damageAndUpdate(player.getMaxHp() - 1);
 
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(player.hp).toBe(1);
   });
@@ -124,7 +124,7 @@ describe("Moves - Heal Block", () => {
     player.damageAndUpdate(player.getMaxHp() - 1);
 
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(player.hp).toBe(1);
   });
