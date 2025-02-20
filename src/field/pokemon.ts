@@ -4980,9 +4980,14 @@ export class PlayerPokemon extends Pokemon {
     });
   }
 
-  evolve(evolution: SpeciesFormEvolution | null, preEvolution: PokemonSpeciesForm): Promise<void> {
+  /**
+   * @param evolution the {@linkcode SpeciesFormEvolution} to use
+   * @param preEvolution {@linkcode PokemonSpeciesForm} TODO: i think is only needed because of fusions?
+   * @returns array of {@linkcode Species} of unlocked starters, if any (root species will be last in the array)
+   */
+  evolve(evolution: SpeciesFormEvolution | null, preEvolution: PokemonSpeciesForm): Promise<Species[]> {
     if (!evolution) {
-      return new Promise((resolve) => resolve());
+      return new Promise((resolve) => resolve([]));
     }
     return new Promise((resolve) => {
       this.pauseEvolutions = false;
@@ -5038,10 +5043,10 @@ export class PlayerPokemon extends Pokemon {
       }
       this.compatibleTms.splice(0, this.compatibleTms.length);
       this.generateCompatibleTms();
-      const updateAndResolve = () => {
+      const updateAndResolve = (unlockedStarters: Species[]) => {
         this.loadAssets().then(() => {
           this.calculateStats();
-          this.updateInfo(true).then(() => resolve());
+          this.updateInfo(true).then(() => resolve(unlockedStarters));
         });
       };
       if (preEvolution.speciesId === Species.GIMMIGHOUL) {
@@ -5053,9 +5058,11 @@ export class PlayerPokemon extends Pokemon {
       if (!globalScene.gameMode.isDaily || this.metBiome > -1) {
         globalScene.gameData.updateSpeciesDexIvs(this.species.speciesId, this.ivs);
         globalScene.gameData.setPokemonSeen(this, false);
-        globalScene.gameData.setPokemonCaught(this, false).then(() => updateAndResolve());
+        globalScene.gameData.setPokemonCaught(this, false, false, false).then((unlockedStarters) => {
+          updateAndResolve(unlockedStarters);
+        });
       } else {
-        updateAndResolve();
+        updateAndResolve([]);
       }
     });
   }

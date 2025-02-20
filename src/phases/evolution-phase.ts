@@ -20,6 +20,8 @@ import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
 import { PhaseId } from "#enums/phase-id";
+import type { Species } from "#enums/species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 
 /**
  * A phase for handling Pokemon evolution
@@ -226,7 +228,22 @@ export class EvolutionPhase extends FormChangeBasePhase {
     this.pokemonNewFormSprite.setVisible(true);
     animations.doCircleInward(this.baseBgImg, this.container);
 
-    const onEvolutionComplete = (): void => {
+    const showStarterUnlockText = (unlockedStarters: Species[]): Promise<void> => {
+      return new Promise<void>((resolve) => {
+        if (unlockedStarters.length === 0) {
+          return resolve();
+        }
+        ui.showText(
+          i18next.t("battle:addedAsAStarter", { pokemonName: getPokemonSpecies(unlockedStarters.pop()).getName() }),
+          null,
+          () => showStarterUnlockText(unlockedStarters).then(() => resolve()),
+          null,
+          true,
+        );
+      });
+    };
+
+    const onEvolutionComplete = (unlockedStarters: Species[]): void => {
       SoundFade.fadeOut(globalScene, this.evolutionBgm, 100);
       time.delayedCall(250, () => {
         this.pokemon.cry();
@@ -240,7 +257,9 @@ export class EvolutionPhase extends FormChangeBasePhase {
               evolvedPokemonName: this.pokemon.name,
             }),
             null,
-            () => this.end(),
+            () => {
+              showStarterUnlockText(unlockedStarters).then(() => this.end());
+            },
             null,
             true,
             fixedNumber(4000),
@@ -253,7 +272,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
     time.delayedCall(900, () => {
       this.handler.canCancel = false;
 
-      this.pokemon.evolve(this.evolution, this.pokemon.species).then(() => {
+      this.pokemon.evolve(this.evolution, this.pokemon.species).then((unlockedStarters: Species[]) => {
         const learnSituation: LearnMoveSituation = this.fusionSpeciesEvolved
           ? LearnMoveSituation.EVOLUTION_FUSED
           : this.pokemon.fusionSpecies
@@ -288,7 +307,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
                   targets: this.bgOverlay,
                   alpha: 0,
                   duration: 250,
-                  onComplete: onEvolutionComplete,
+                  onComplete: () => onEvolutionComplete(unlockedStarters),
                 });
               },
             });
