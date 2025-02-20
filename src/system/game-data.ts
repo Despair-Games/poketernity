@@ -1521,31 +1521,40 @@ export class GameData {
   }
 
   /**
-   * Set the given Pokemon (and its pre-evolutions, if any) as caught.
-   * By default, updates games stats and starter candy count, and show a message if the catch unlocked a new starter.
+   * Set the given Pokemon (and its pre-evolutions, if any) as caught and update the dex data based on its characteristics
+   * (nature, ability, shinyness, variant, ...) updates games stats and gives starter candy.
    * Note: it does not update the Pokemon IVs (TODO: why??). See {@linkcode updateSpeciesDexIvs} for that.
+   * By default, shows a message for each starter unlocked in the process.
    * The function exits early if the Pokemon is a "rental" Pokemon (ie was given through an event for the current run only)
-   * unless that Pokemon had already been captured before, in which case any new form, gender, etc. gets unlocked.
+   * unless that species had already been captured before, in which case any new form, gender, etc. gets unlocked.
    *
-   * @param pokemon the {@linkcode Pokemon} that was caught
-   * @param incrementCount whether to increment game stats and starter candy or not. Default: `true`. Use `false` for "rental" Pokemon.
+   * @param pokemon the {@linkcode Pokemon} that was caught.
+   * @param includeNewCatch whether to update the data if the catch would unlock a new starter. Default: `true`.
+   *   Use `false` for "rental" Pokemon, so that the function exits early.
    * @param fromEgg whether the Pokemon was obtained through an egg. Default: `false`
    * @param showMessage whether to display a message if (a) new Starter(s) was unlocked. Default: `true`
    * @returns `true` if the catch unlocked a new starter, `false` if it didn't.
    */
   setPokemonCaught(
     pokemon: Pokemon,
-    incrementCount: boolean = true,
+    includeNewCatch: boolean = true,
     fromEgg: boolean = false,
     showMessage: boolean = true,
   ): Promise<boolean> {
     // If incrementCount === false (not a catch scenario), only update the pokemon's dex data if the Pokemon has already been marked as caught in dex
     // Prevents form changes, nature changes, etc. from unintentionally updating the dex data of a "rental" pokemon
     const speciesRootForm = pokemon.species.getRootSpeciesId();
-    if (!incrementCount && !globalScene.gameData.dexData[speciesRootForm].caughtAttr) {
+    if (!includeNewCatch && !globalScene.gameData.dexData[speciesRootForm].caughtAttr) {
       return Promise.resolve(false);
     } else {
-      return this.setPokemonSpeciesCaught(pokemon, pokemon.species, incrementCount, fromEgg, showMessage);
+      return this.setPokemonSpeciesCaught(
+        pokemon,
+        pokemon.species,
+        includeNewCatch,
+        includeNewCatch,
+        fromEgg,
+        showMessage,
+      );
     }
   }
 
@@ -1556,7 +1565,8 @@ export class GameData {
    *
    * @param pokemon the {@linkcode Pokemon} that was caught
    * @param species the {@linkcode PokemonSpecies} to mark as caught based on the pokemon's characteristics
-   * @param incrementCount whether to increment game stats and starter candy or not. Default: `true`
+   * @param updateStats whether to increment game stats and the species's caught/hatched count. Default: `true`
+   * @param giveCandy whether to give starter candy for the root species. Default: `true`
    * @param fromEgg whether the Pokemon was obtained through an egg. Default: `false`
    * @param showMessage whether to display a message if (a) new Starter(s) was unlocked. Default: `true`
    * @returns `true` if the catch unlocked a new starter, `false` if it didn't.
@@ -1564,7 +1574,8 @@ export class GameData {
   private setPokemonSpeciesCaught(
     pokemon: Pokemon,
     species: PokemonSpecies,
-    incrementCount: boolean = true,
+    updateStats: boolean = true,
+    giveCandy: boolean = true,
     fromEgg: boolean = false,
     showMessage: boolean = true,
   ): Promise<boolean> {
@@ -1602,31 +1613,28 @@ export class GameData {
       const newCatch = !caughtAttr;
       const hasNewAttr = (caughtAttr & dexAttr) !== dexAttr;
 
-      if (incrementCount) {
-        // Only update the stats for the caught species itself, not its pre evolution(s)
-        if (pokemon.species.speciesId === species.speciesId) {
-          if (fromEgg) {
-            dexEntry.hatchedCount++;
-            this.incrementHatchedPokemonStats(pokemon);
-          } else {
-            dexEntry.caughtCount++;
-            this.incrementCaughtPokemonStats(pokemon);
-          }
+      if (updateStats) {
+        if (fromEgg) {
+          dexEntry.hatchedCount++;
+          this.incrementHatchedPokemonStats(pokemon);
+        } else {
+          dexEntry.caughtCount++;
+          this.incrementCaughtPokemonStats(pokemon);
         }
+      }
 
-        // Once at the root species, give starter candy
-        if (!hasPrevolution && (!globalScene.gameMode.isDaily || hasNewAttr || fromEgg)) {
-          let candyMultiplier = 1;
-          if (pokemon.isShiny()) {
-            candyMultiplier *= getCandyGainMultiplierForShinies(pokemon.variant);
-          }
-          if (fromEgg) {
-            candyMultiplier *= STARTER_CANDY_MULIPLIER_FOR_EGG;
-          } else if (pokemon.isBoss()) {
-            candyMultiplier *= STARTER_CANDY_MULIPLIER_FOR_BOSS;
-          }
-          this.addStarterCandy(species, STARTER_CANDY_GAIN_FROM_CATCH * candyMultiplier);
+      // Once at the root species, give starter candy
+      if (giveCandy && !hasPrevolution && (!globalScene.gameMode.isDaily || hasNewAttr || fromEgg)) {
+        let candyMultiplier = 1;
+        if (pokemon.isShiny()) {
+          candyMultiplier *= getCandyGainMultiplierForShinies(pokemon.variant);
         }
+        if (fromEgg) {
+          candyMultiplier *= STARTER_CANDY_MULIPLIER_FOR_EGG;
+        } else if (pokemon.isBoss()) {
+          candyMultiplier *= STARTER_CANDY_MULIPLIER_FOR_BOSS;
+        }
+        this.addStarterCandy(species, STARTER_CANDY_GAIN_FROM_CATCH * candyMultiplier);
       }
 
       const checkPrevolution = (newStarter: boolean) => {
@@ -1635,7 +1643,8 @@ export class GameData {
           this.setPokemonSpeciesCaught(
             pokemon,
             getPokemonSpecies(prevolutionSpecies),
-            incrementCount,
+            false, // pre-volutions don't update game stats
+            giveCandy,
             fromEgg,
             showMessage,
           ).then((result) => resolve(result));
