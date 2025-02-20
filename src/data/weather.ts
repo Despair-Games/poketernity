@@ -25,9 +25,9 @@ export class Weather {
   public weatherType: WeatherType;
   public turnsLeft: number;
 
-  constructor(weatherType: WeatherType, turnsLeft?: number) {
+  constructor(weatherType: WeatherType, turnsLeft: number = 0) {
     this.weatherType = weatherType;
-    this.turnsLeft = !this.isPrimal() ? turnsLeft || 0 : 0;
+    this.turnsLeft = !this.isPrimal() ? turnsLeft : 0;
   }
 
   /**
