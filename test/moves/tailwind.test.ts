@@ -26,11 +26,13 @@ describe("Moves - Tailwind", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("double");
-    game.override.moveset([MoveId.TAILWIND, MoveId.SPLASH, MoveId.PETAL_BLIZZARD, MoveId.SANDSTORM]);
-    game.override.enemyMoveset(MoveId.SPLASH);
-    game.override.startingLevel(100);
-    game.override.enemyLevel(100);
+    game.override
+      .battleType("double")
+      .moveset([MoveId.TAILWIND, MoveId.SPLASH, MoveId.PETAL_BLIZZARD, MoveId.SANDSTORM])
+      .enemyMoveset(MoveId.SPLASH)
+      .enemyAbility(Abilities.BALL_FETCH)
+      .startingLevel(100)
+      .enemyLevel(100);
   });
 
   it("doubles the Speed stat of the Pokemon on its side", async () => {
