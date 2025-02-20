@@ -58,8 +58,7 @@ export class Weather {
    * @returns true for sandstorm or hail, false otherwise
    */
   isDamaging(): boolean {
-    const DAMAGING_WEATHER = Object.freeze([WeatherType.SANDSTORM, WeatherType.HAIL]);
-    return DAMAGING_WEATHER.includes(this.weatherType);
+    return [WeatherType.SANDSTORM, WeatherType.HAIL].includes(this.weatherType);
   }
 
   /**
