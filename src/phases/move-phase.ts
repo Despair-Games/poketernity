@@ -247,7 +247,7 @@ export class MovePhase extends BattlePhase {
             AbAttrFlag.REDUCE_SLEEP_DURATION,
             this.pokemon,
             false,
-            this.pokemon.getStatusEffect(true),
+            statusEffect,
             turnsRemaining,
           );
           if (Overrides.STATUS_ACTIVATION_OVERRIDE === true) {
