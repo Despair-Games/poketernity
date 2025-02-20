@@ -25,10 +25,12 @@ export class Status {
     }
   }
 
+  /**
+   * Helper function that checks if the status effect affects the afflicted at the end of the turn
+   * @returns `true` if it does | `false` if it does
+   */
   isPostTurn(): boolean {
-    return (
-      this.effect === StatusEffect.POISON || this.effect === StatusEffect.TOXIC || this.effect === StatusEffect.BURN
-    );
+    return [StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC].includes(this.effect);
   }
 }
 

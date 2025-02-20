@@ -24,7 +24,6 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
     if (
       pokemon?.isActive(true)
       && pokemon.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC], false, true)
-      && pokemon.status!.isPostTurn()
     ) {
       pokemon.status!.incrementTurn();
 
