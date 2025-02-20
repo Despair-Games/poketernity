@@ -43,7 +43,7 @@ describe.each([
 
     game.move.select(MoveId.TACKLE);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(playerPokemon.getEffectiveStat).toHaveReturnedWith(playerPokemon.getStat(Stat.ATK) * 2);
   });
@@ -56,7 +56,7 @@ describe.each([
 
     game.move.select(MoveId.BODY_PRESS);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(playerPokemon.getEffectiveStat).toHaveReturnedWith(playerPokemon.getStat(Stat.DEF) * 2);
   });
@@ -70,7 +70,7 @@ describe.each([
 
     game.move.select(MoveId.SPLASH);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(playerPokemon.getEffectiveStat).toHaveReturnedWith(playerPokemon.getStat(Stat.ATK));
   });

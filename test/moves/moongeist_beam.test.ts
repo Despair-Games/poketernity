@@ -41,7 +41,7 @@ describe("Moves - Moongeist Beam", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.MOONGEIST_BEAM);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(enemy.isFainted()).toBe(true);
   });
@@ -54,7 +54,7 @@ describe("Moves - Moongeist Beam", () => {
     );
 
     game.move.select(MoveId.METRONOME);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.getEnemyPokemon()!.isFainted()).toBe(false);
     expect(game.scene.getPlayerPokemon()!.getLastXMoves()[0].move.id).toBe(MoveId.MOONGEIST_BEAM);

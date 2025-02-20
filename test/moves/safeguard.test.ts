@@ -81,7 +81,7 @@ describe("Moves - Safeguard", () => {
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const enemyPokemon = game.scene.getEnemyField();
 

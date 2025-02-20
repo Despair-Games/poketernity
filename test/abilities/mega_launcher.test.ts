@@ -41,7 +41,7 @@ describe("Abilities - Mega Launcher", () => {
     enemyPokemon.hp = 1;
     const pulseMove = allMoves[MoveId.HEAL_PULSE];
     game.move.select(MoveId.HEAL_PULSE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(pulseMove.checkFlag(MoveFlags.PULSE_MOVE, playerPokemon, null)).toBe(true);
     expect(enemyPokemon.hp - 1).toBe(enemyHpRecovered);

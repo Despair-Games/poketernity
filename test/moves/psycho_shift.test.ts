@@ -42,7 +42,7 @@ describe("Moves - Psycho Shift", () => {
     expect(enemyPokemon?.status).toBeUndefined();
 
     game.move.select(MoveId.PSYCHO_SHIFT);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(playerPokemon?.status).toBeNull();
     expect(enemyPokemon?.status).toBeDefined();
   });

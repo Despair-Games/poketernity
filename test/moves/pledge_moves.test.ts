@@ -256,7 +256,7 @@ describe("Moves - Pledge Moves", () => {
     game.move.select(MoveId.WATER_PLEDGE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.FIRE_PLEDGE, 1, BattlerIndex.ENEMY_2);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.arena.getTagOnSide(ArenaTagType.WATER_FIRE_PLEDGE, ArenaTagSide.PLAYER)).toBeDefined();
 

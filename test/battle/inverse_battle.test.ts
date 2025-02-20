@@ -199,7 +199,7 @@ describe("Inverse Battle", () => {
     game.move.select(MoveId.CONVERSION_2);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(player.getTypes()[0]).toBe(ElementalType.DRAGON);
   });
@@ -244,7 +244,7 @@ describe("Inverse Battle", () => {
 
     game.move.select(MoveId.FORESIGHT);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     game.move.select(MoveId.TACKLE);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);

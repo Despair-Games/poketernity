@@ -43,7 +43,7 @@ describe("Moves - Triple Arrows", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.TRIPLE_ARROWS);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(flinchAttr.getMoveChance).toHaveReturnedWith(30);
     expect(defDropAttr.getMoveChance).toHaveReturnedWith(50);
@@ -54,7 +54,7 @@ describe("Moves - Triple Arrows", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.TRIPLE_ARROWS);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(flinchAttr.getMoveChance).toHaveReturnedWith(60);
     expect(defDropAttr.getMoveChance).toHaveReturnedWith(100);

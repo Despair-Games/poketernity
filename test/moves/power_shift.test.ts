@@ -39,7 +39,7 @@ describe("Moves - Power Shift", () => {
 
     game.move.select(MoveId.BULK_UP);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     // Stat stages are increased by 1
     expect(playerPokemon.getStatStageMultiplier(Stat.ATK)).toBe(1.5);
@@ -49,7 +49,7 @@ describe("Moves - Power Shift", () => {
 
     game.move.select(MoveId.POWER_SHIFT);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     // Effective stats are calculated correctly
     expect(playerPokemon.getEffectiveStat(Stat.ATK)).toBe(30);

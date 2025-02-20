@@ -149,7 +149,7 @@ describe("Abilities - Sheer Force", () => {
     const formKeyStart = playerPokemon?.getFormKey();
 
     game.move.select(MoveId.RELIC_SONG);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(formKeyStart).toBe(playerPokemon?.getFormKey());
   });
 });
