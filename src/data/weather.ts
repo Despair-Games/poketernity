@@ -27,7 +27,7 @@ export class Weather {
 
   constructor(weatherType: WeatherType, turnsLeft?: number) {
     this.weatherType = weatherType;
-    this.turnsLeft = !this.isImmutable() ? turnsLeft || 0 : 0;
+    this.turnsLeft = !this.isPrimal() ? turnsLeft || 0 : 0;
   }
 
   /**
@@ -35,7 +35,7 @@ export class Weather {
    * @returns false if turnsLeft is set to 0. True otherwise
    */
   lapse(): boolean {
-    if (this.isImmutable()) {
+    if (this.isPrimal()) {
       return true;
     }
     if (this.turnsLeft) {
@@ -49,7 +49,7 @@ export class Weather {
    * Checks if the weather is immutable (heavy rain, harsh sun, or strong winds)
    * @returns true if {@linkcode WeatherType} is immutable, false otherwise
    */
-  isImmutable(): boolean {
+  isPrimal(): boolean {
     return PRIMAL_WEATHER.includes(this.weatherType);
   }
 
@@ -149,7 +149,7 @@ export class Weather {
           ? pokemon.getPassiveAbility().getAttrs<SuppressWeatherEffectAbAttr>(AbAttrFlag.SUPPRESS_WEATHER_EFFECT)[0]
           : null;
       }
-      if (suppressWeatherEffectAbAttr && (!this.isImmutable() || suppressWeatherEffectAbAttr.affectsImmutable)) {
+      if (suppressWeatherEffectAbAttr && (!this.isPrimal() || suppressWeatherEffectAbAttr.affectsPrimal)) {
         return true;
       }
     }

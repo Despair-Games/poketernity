@@ -405,7 +405,7 @@ export class Arena {
       if (weather === this.weather.weatherType) {
         return false;
       }
-      if (this.weather.isImmutable() && [WeatherType.NONE, ...PRIMAL_WEATHER].includes(weather)) {
+      if (this.weather.isPrimal() && [WeatherType.NONE, ...PRIMAL_WEATHER].includes(weather)) {
         return true;
       }
     } else if (weather === WeatherType.NONE) {
