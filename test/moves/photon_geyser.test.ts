@@ -40,7 +40,7 @@ describe("Moves - Photon Geyser", () => {
     await game.classicMode.startBattle([Species.CHANDELURE]);
 
     game.move.select(MoveId.PHOTON_GEYSER);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(photonGeyserAttr.apply).toHaveReturnedWith(false);
   });
@@ -49,7 +49,7 @@ describe("Moves - Photon Geyser", () => {
     await game.classicMode.startBattle([Species.KARTANA]);
 
     game.move.select(MoveId.PHOTON_GEYSER);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(photonGeyserAttr.apply).toHaveReturnedWith(true);
   });
@@ -63,7 +63,7 @@ describe("Moves - Photon Geyser", () => {
     vi.spyOn(player, "stats", "get").mockReturnValue([100, 75, 100, 100, 100, 100]);
 
     game.move.select(MoveId.PHOTON_GEYSER);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(photonGeyserAttr.apply).toHaveReturnedWith(false);
   });

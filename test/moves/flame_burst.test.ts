@@ -51,7 +51,7 @@ describe("Moves - Flame Burst", () => {
 
     game.move.select(MoveId.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
     game.move.select(MoveId.SPLASH, 1);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(leftEnemy.hp).toBeLessThan(leftEnemy.getMaxHp());
     expect(rightEnemy.hp).toBe(rightEnemy.getMaxHp() - getEffectDamage(rightEnemy));
@@ -65,7 +65,7 @@ describe("Moves - Flame Burst", () => {
 
     game.move.select(MoveId.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
     game.move.select(MoveId.SPLASH, 1);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(leftEnemy.hp).toBe(leftEnemy.getMaxHp());
     expect(rightEnemy.hp).toBe(rightEnemy.getMaxHp());
@@ -79,7 +79,7 @@ describe("Moves - Flame Burst", () => {
 
     game.move.select(MoveId.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
     game.move.select(MoveId.SPLASH, 1);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(leftEnemy.hp).toBeLessThan(leftEnemy.getMaxHp());
     expect(rightEnemy.hp).toBe(rightEnemy.getMaxHp() - getEffectDamage(rightEnemy));
@@ -93,7 +93,7 @@ describe("Moves - Flame Burst", () => {
 
     game.move.select(MoveId.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
     game.move.select(MoveId.SPLASH, 1);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(leftEnemy.hp).toBeLessThan(leftEnemy.getMaxHp());
     expect(rightEnemy.hp).toBe(rightEnemy.getMaxHp());
@@ -113,7 +113,7 @@ describe("Moves - Flame Burst", () => {
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(rightEnemy.hp).toBe(rightEnemy.getMaxHp() - getEffectDamage(rightEnemy));
   });
@@ -133,7 +133,7 @@ describe("Moves - Flame Burst", () => {
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(leftEnemy.hp).toBe(leftEnemy.getMaxHp() - getEffectDamage(leftEnemy));
   });
@@ -155,7 +155,7 @@ describe("Moves - Flame Burst", () => {
 
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(leftEnemy.isFainted()).toBeTruthy();
   });

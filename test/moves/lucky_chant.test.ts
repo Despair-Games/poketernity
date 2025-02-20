@@ -39,7 +39,7 @@ describe("Moves - Lucky Chant", () => {
 
     game.move.select(MoveId.LUCKY_CHANT);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const lastAttackReceived = playerPokemon.turnData.attacksReceived[0];
     expect(lastAttackReceived.isCritical).toBe(false);
@@ -56,7 +56,7 @@ describe("Moves - Lucky Chant", () => {
     game.move.select(MoveId.LUCKY_CHANT, 1);
     await game.move.forceHit();
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const attacksReceivedA = playerPokemon[0].turnData.attacksReceived[0];
     const attacksReceivedB = playerPokemon[0].turnData.attacksReceived[1];
@@ -76,7 +76,7 @@ describe("Moves - Lucky Chant", () => {
 
     game.move.select(MoveId.LUCKY_CHANT);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const lastAttackReceived = playerPokemon.turnData.attacksReceived[0];
     expect(lastAttackReceived.isCritical).toBe(false);

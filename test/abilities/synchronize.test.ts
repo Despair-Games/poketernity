@@ -36,7 +36,7 @@ describe("Abilities - Synchronize", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.getPlayerPokemon()!.status).toBeUndefined();
     expect(game.phaseInterceptor.log).not.toContain("ShowAbilityPhase");
@@ -46,7 +46,7 @@ describe("Abilities - Synchronize", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.THUNDER_WAVE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.getPlayerPokemon()!.status?.effect).toBe(StatusEffect.PARALYSIS);
     expect(game.scene.getEnemyPokemon()!.status?.effect).toBe(StatusEffect.PARALYSIS);
@@ -58,7 +58,7 @@ describe("Abilities - Synchronize", () => {
 
     game.move.select(MoveId.SPORE);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.getPlayerPokemon()!.status?.effect).toBeUndefined();
     expect(game.scene.getEnemyPokemon()!.status?.effect).toBe(StatusEffect.SLEEP);
@@ -77,7 +77,7 @@ describe("Abilities - Synchronize", () => {
     await game.toNextTurn();
 
     game.doSwitchPokemon(1);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.getPlayerPokemon()!.status?.effect).toBe(StatusEffect.POISON);
     expect(game.scene.getEnemyPokemon()!.status?.effect).toBeUndefined();
@@ -88,7 +88,7 @@ describe("Abilities - Synchronize", () => {
     await game.classicMode.startBattle([Species.PIKACHU]);
 
     game.move.select(MoveId.THUNDER_WAVE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.getPlayerPokemon()!.status?.effect).toBeUndefined();
     expect(game.scene.getEnemyPokemon()!.status?.effect).toBe(StatusEffect.PARALYSIS);

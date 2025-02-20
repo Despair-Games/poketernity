@@ -78,7 +78,7 @@ describe("Abilities - Sweet Veil", () => {
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.YAWN, 1, BattlerIndex.PLAYER);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.getPlayerField().some((p) => !!p.getTag(BattlerTagType.DROWSY))).toBe(true);
 

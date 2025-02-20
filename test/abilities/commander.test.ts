@@ -127,7 +127,7 @@ describe("Abilities - Commander", () => {
 
     expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(tatsugiri.isFullHp()).toBeFalsy();
   });
 
@@ -147,7 +147,7 @@ describe("Abilities - Commander", () => {
 
     expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(tatsugiri.isFullHp()).toBeFalsy();
   });
 
@@ -165,7 +165,7 @@ describe("Abilities - Commander", () => {
 
     expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(tatsugiri.isFullHp()).toBeFalsy();
   });
 
@@ -187,7 +187,7 @@ describe("Abilities - Commander", () => {
     await game.forceEnemyMove(MoveId.SPLASH);
 
     // Test may time out here if Whirlwind forced out a Pokemon
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(dondozo.isActive(true)).toBeTruthy();
   });
 

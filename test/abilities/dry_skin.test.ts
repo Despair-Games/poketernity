@@ -39,13 +39,13 @@ describe("Abilities - Dry Skin", () => {
 
     // first turn
     game.move.select(MoveId.SUNNY_DAY);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.hp).toBeLessThan(enemy.getMaxHp());
 
     // second turn
     enemy.hp = enemy.getMaxHp();
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.hp).toBeLessThan(enemy.getMaxHp());
   });
 
@@ -58,13 +58,13 @@ describe("Abilities - Dry Skin", () => {
 
     // first turn
     game.move.select(MoveId.RAIN_DANCE);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.hp).toBeGreaterThan(1);
 
     // second turn
     enemy.hp = 1;
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.hp).toBeGreaterThan(1);
   });
 
@@ -78,7 +78,7 @@ describe("Abilities - Dry Skin", () => {
 
     // first turn
     game.move.select(MoveId.FLAMETHROWER);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     const fireDamageTakenWithDrySkin = initialHP - enemy.hp;
 
     enemy.hp = initialHP;
@@ -86,7 +86,7 @@ describe("Abilities - Dry Skin", () => {
 
     // second turn
     game.move.select(MoveId.FLAMETHROWER);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     const fireDamageTakenWithoutDrySkin = initialHP - enemy.hp;
 
     expect(fireDamageTakenWithDrySkin).toBeGreaterThan(fireDamageTakenWithoutDrySkin);
@@ -100,7 +100,7 @@ describe("Abilities - Dry Skin", () => {
     enemy.hp = 1;
 
     game.move.select(MoveId.WATER_GUN);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.hp).toBeGreaterThan(1);
   });
 
@@ -114,7 +114,7 @@ describe("Abilities - Dry Skin", () => {
     enemy.hp = 1;
 
     game.move.select(MoveId.WATER_GUN);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.hp).toBe(1);
   });
 
@@ -129,14 +129,14 @@ describe("Abilities - Dry Skin", () => {
 
     // first turn
     game.move.select(MoveId.WATER_SHURIKEN);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     const healthGainedFromWaterShuriken = enemy.hp - 1;
 
     enemy.hp = 1;
 
     // second turn
     game.move.select(MoveId.WATER_GUN);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     const healthGainedFromWaterGun = enemy.hp - 1;
 
     expect(healthGainedFromWaterShuriken).toBe(healthGainedFromWaterGun);

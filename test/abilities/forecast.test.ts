@@ -188,7 +188,7 @@ describe("Abilities - Forecast", () => {
     await game.classicMode.startBattle([Species.CASTFORM]);
 
     game.move.select(MoveId.RAIN_DANCE);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.getPlayerPokemon()?.formIndex).toBe(RAINY_FORM);
     expect(game.scene.getEnemyPokemon()?.formIndex).not.toBe(RAINY_FORM);
@@ -237,7 +237,7 @@ describe("Abilities - Forecast", () => {
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.move.forceHit();
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(castform.summonData.abilitySuppressed).toBe(true);
     expect(castform.formIndex).toBe(NORMAL_FORM);
