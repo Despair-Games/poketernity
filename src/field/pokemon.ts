@@ -4221,7 +4221,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param reloadAssets Whether to reload the assets or not; defaults to `false`.
    */
   resetStatus(confusion: boolean = false, reloadAssets: boolean = false): void {
-    const lastStatus = this.getStatusEffect();
+    const lastStatus = this.getStatusEffect(true);
     this.status = null;
     if (lastStatus === StatusEffect.SLEEP) {
       this.setFrameRate(10);
