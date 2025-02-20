@@ -93,7 +93,7 @@ describe("Abilities - Move Flag Power Boost Ability Attr", () => {
 
       game.move.select(move);
       await game.move.forceHit();
-      await game.phaseInterceptor.to("BerryPhase");
+      await game.toEndOfTurn();
 
       expect(moveUsed.checkFlag(moveFlag, playerPokemon, null)).toBe(true);
       expect(moveUsed.calculateBattlePower).toHaveLastReturnedWith(moveUsed.power * factor);

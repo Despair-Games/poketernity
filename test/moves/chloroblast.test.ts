@@ -35,7 +35,7 @@ describe("Moves - Chloroblast", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.CHLOROBLAST);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.getPlayerPokemon()!.isFullHp()).toBe(true);
   });

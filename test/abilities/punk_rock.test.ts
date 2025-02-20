@@ -40,7 +40,7 @@ describe("Abilities - Punk Rock", () => {
     const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");
 
     game.move.select(MoveId.UPROAR);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const damageMultiplier = (abilitySpy.mock.lastCall?.[4] as NumberHolder).value;
     expect(damageMultiplier).toBe(0.5);

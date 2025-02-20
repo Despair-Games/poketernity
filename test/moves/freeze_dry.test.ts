@@ -198,7 +198,7 @@ describe("Moves - Freeze-Dry", () => {
 
     game.move.select(MoveId.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(0);
   });
@@ -212,7 +212,7 @@ describe("Moves - Freeze-Dry", () => {
 
     game.move.select(MoveId.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(2);
   });
@@ -226,7 +226,7 @@ describe("Moves - Freeze-Dry", () => {
 
     game.move.select(MoveId.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(4);
   });
@@ -240,7 +240,7 @@ describe("Moves - Freeze-Dry", () => {
 
     game.move.select(MoveId.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(0);
   });
@@ -254,7 +254,7 @@ describe("Moves - Freeze-Dry", () => {
 
     game.move.select(MoveId.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(0.25);
   });
@@ -319,7 +319,7 @@ describe("Moves - Freeze-Dry", () => {
 
     game.move.select(MoveId.FREEZE_DRY);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(1);
   });

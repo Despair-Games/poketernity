@@ -42,7 +42,7 @@ describe("Moves - Lash Out", () => {
 
     game.move.select(MoveId.LASH_OUT);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(allMoves[MoveId.LASH_OUT].calculateBattlePower).toHaveReturnedWith(150);
   });

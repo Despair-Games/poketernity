@@ -39,7 +39,7 @@ describe("Moves - Grudge", () => {
     game.move.select(MoveId.EMBER);
     await game.forceEnemyMove(MoveId.GRUDGE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const playerMove = playerPokemon?.getMoveset().find((m) => m.moveId === MoveId.EMBER);
 
@@ -58,7 +58,7 @@ describe("Moves - Grudge", () => {
     game.move.select(MoveId.EMBER);
     await game.forceEnemyMove(MoveId.SPLASH);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const playerMove = playerPokemon?.getMoveset().find((m) => m.moveId === MoveId.EMBER);
 
@@ -80,7 +80,7 @@ describe("Moves - Grudge", () => {
     game.move.select(MoveId.FALSE_SWIPE);
     await game.forceEnemyMove(MoveId.GRUDGE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(enemyPokemon?.isFainted()).toBe(true);
 

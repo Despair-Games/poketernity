@@ -35,7 +35,7 @@ describe("Abilities - Suction Cups", () => {
 
     game.move.use(MoveId.WHIRLWIND);
     await game.move.forceEnemyMove(MoveId.SPLASH);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const enemyPokemon = game.field.getEnemyPokemon();
     expect(enemyPokemon.switchOutStatus).toBe(false);
@@ -50,7 +50,7 @@ describe("Abilities - Suction Cups", () => {
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.FALSE_SWIPE);
     game.doSelectPartyPokemon(1);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(feebas.isOnField()).toBe(false);
     expect(feebas.isAllowedInBattle()).toBe(true);
