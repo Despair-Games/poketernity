@@ -28,7 +28,7 @@ describe("Moves - Round", () => {
       .ability(Abilities.BALL_FETCH)
       .battleType("double")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(Species.BLISSEY)
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyMoveset([MoveId.SPLASH, MoveId.ROUND])
       .startingLevel(100)
@@ -36,7 +36,7 @@ describe("Moves - Round", () => {
   });
 
   it("should cue other instances of Round together in Speed order", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
+    await game.classicMode.startBattle([Species.BLISSEY, Species.FEEBAS]);
 
     const round = allMoves[MoveId.ROUND];
     const spy = vi.spyOn(round, "calculateBattlePower");
