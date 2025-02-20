@@ -106,9 +106,16 @@ describe("Moves - Tailwind", () => {
   });
 
   it("modifies turn order on the turn it is set", async () => {
-    game.override.battleType("double").enemySpecies(Species.EXCADRILL).ability(Abilities.PRANKSTER).enemyIVs(0);
+    game.override.battleType("double").enemySpecies(Species.EXCADRILL).ability(Abilities.PRANKSTER);
 
     await game.classicMode.startBattle([Species.WHIMSICOTT, Species.URSALUNA]);
+
+    const playerPokemon = game.scene.getPlayerField();
+    const enemyPokemon = game.scene.getEnemyField();
+
+    playerPokemon[0].setStat(Stat.SPD, 100);
+    playerPokemon[1].setStat(Stat.SPD, 50);
+    enemyPokemon.forEach((p) => p.setStat(Stat.SPD, 80));
 
     game.move.use(MoveId.TACKLE, 0, BattlerIndex.ENEMY);
     game.move.use(MoveId.TACKLE, 1, BattlerIndex.ENEMY_2);
