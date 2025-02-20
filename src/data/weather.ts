@@ -12,6 +12,11 @@ import { WeatherType } from "#enums/weather-type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
+ * Weather types that are associated with the primal forms of the Generation III cover legendaries and cannot be overwritten by weaker weather types
+ */
+export const PRIMAL_WEATHER = Object.freeze([WeatherType.HARSH_SUN, WeatherType.HEAVY_RAIN, WeatherType.STRONG_WINDS]);
+
+/**
  * Class representing Weather effects
  * @var weatherType - The {@linkcode WeatherType} that is being represented
  * @var turnsLeft - How many turns the weather still has left (0 if immutable)
@@ -45,14 +50,7 @@ export class Weather {
    * @returns true if {@linkcode WeatherType} is immutable, false otherwise
    */
   isImmutable(): boolean {
-    switch (this.weatherType) {
-      case WeatherType.HEAVY_RAIN:
-      case WeatherType.HARSH_SUN:
-      case WeatherType.STRONG_WINDS:
-        return true;
-    }
-
-    return false;
+    return PRIMAL_WEATHER.includes(this.weatherType);
   }
 
   /**
@@ -60,13 +58,8 @@ export class Weather {
    * @returns true for sandstorm or hail, false otherwise
    */
   isDamaging(): boolean {
-    switch (this.weatherType) {
-      case WeatherType.SANDSTORM:
-      case WeatherType.HAIL:
-        return true;
-    }
-
-    return false;
+    const DAMAGING_WEATHER = Object.freeze([WeatherType.SANDSTORM, WeatherType.HAIL]);
+    return DAMAGING_WEATHER.includes(this.weatherType);
   }
 
   /**

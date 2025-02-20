@@ -2,10 +2,10 @@ import { globalScene } from "#app/global-scene";
 import type { BiomeTierTrainerPools, PokemonPools } from "#app/data/balance/biomes";
 import { biomePokemonPools, biomeTrainerPools } from "#app/data/balance/biomes";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
-import { type AbstractConstructor, isNullOrUndefined, randSeedInt } from "#app/utils";
+import { type AbstractConstructor, randSeedInt } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#app/data/weather";
+import { getWeatherClearMessage, getWeatherStartMessage, PRIMAL_WEATHER, Weather } from "#app/data/weather";
 import { CommonAnim } from "#enums/common-anim";
 import type { ElementalType } from "#enums/elemental-type";
 import type { Move } from "#app/data/move";
@@ -405,11 +405,8 @@ export class Arena {
       if (weather === this.weather.weatherType) {
         return false;
       }
-      if (this.weather.isImmutable()) {
-        if ([WeatherType.NONE, ...primalWeathers].includes(weather)) {
-          return true;
-        }
-        return false;
+      if (this.weather.isImmutable() && [WeatherType.NONE, ...PRIMAL_WEATHER].includes(weather)) {
+        return true;
       }
     } else if (weather === WeatherType.NONE) {
       return false;
