@@ -397,31 +397,21 @@ export class Arena {
 
   /**
    * Helper function that checks if it is possible to set a new weather given current weather conditions
-   * @param newWeather the weather that the game is attempting to set
+   * @param weather - The weather that the game is attempting to set
    * @returns `true` if the weather can be set given current conditions | `false` if not
    */
-  canSetWeather(newWeather: WeatherType): boolean {
+  public canSetWeather(weather: WeatherType): boolean {
     if (this.weather) {
-      // Checks if the new weather is identical to the current weather
-      if (newWeather === this.weather.weatherType) {
+      if (weather === this.weather.weatherType) {
         return false;
       }
-      // Checks if the current weather is immutable
       if (this.weather.isImmutable()) {
-        // Only other immutable weather types can overwrite immutable weather
-        if (
-          newWeather === WeatherType.HARSH_SUN
-          || newWeather === WeatherType.HEAVY_RAIN
-          || newWeather === WeatherType.STRONG_WINDS
-          || newWeather === WeatherType.NONE
-        ) {
+        if ([WeatherType.NONE, ...primalWeathers].includes(weather)) {
           return true;
-        } else {
-          return false;
         }
+        return false;
       }
-      // Checks if there is no current weather and the game is attempting to set the weather to none
-    } else if (isNullOrUndefined(this.weather) && newWeather === WeatherType.NONE) {
+    } else if (weather === WeatherType.NONE) {
       return false;
     }
     return true;
