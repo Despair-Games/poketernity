@@ -40,7 +40,11 @@ import { Tutorial } from "#enums/tutorial";
 import { handleTutorial } from "#app/tutorial";
 import { DropDown, DropDownLabel, DropDownOption } from "#app/ui/drop-down";
 import { FilterBar } from "#app/ui/filter-bar";
-import type { OptionSelectIconConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
+import type {
+  OptionSelectIconConfig,
+  OptionSelectItem,
+  OptionSelectModeConfig,
+} from "#app/ui/interfaces/option-select-config";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import MoveInfoOverlay from "#app/ui/move-info-overlay";
 import PokemonIconAnimHandler from "#app/ui/pokemon-icon-anim-handler";
@@ -1601,87 +1605,94 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
               },
             },
           );
+
+          // Manage Moves options
           if (this.speciesStarterMoves.length > 1) {
-            // this lets you change the pokemon moves
+            const getMoveOptions = (
+              moves: MoveId[],
+              selectHandler: (moveId: MoveId, index: number, currentMoveId?: MoveId, currentIndex?: number) => boolean,
+              cancelHandler: () => boolean,
+              currentMoveId?: MoveId,
+              currentIndex?: number,
+            ): OptionSelectModeConfig => {
+              const options: OptionSelectItem[] = moves.map((moveId: MoveId, index: number): OptionSelectItem => {
+                return {
+                  label: allMoves[moveId].name,
+                  handler: () => selectHandler(moveId, index, currentMoveId, currentIndex),
+                  onHover: () => {
+                    this.moveInfoOverlay.show(allMoves[moveId]);
+                  },
+                };
+              });
+              options.push({
+                label: i18next.t("menu:cancel"),
+                handler: cancelHandler,
+                onHover: () => {
+                  this.moveInfoOverlay.clear();
+                },
+              });
+
+              return {
+                options: options,
+                maxOptions: 8,
+                yOffset: 29,
+              };
+            };
+
+            const onSelectedMoveToSwapWith = (moveId: MoveId, index: number): boolean => {
+              this.blockInput = true;
+              ui.setMode(UiMode.STARTER_SELECT).then(() => {
+                ui.showText(
+                  `${i18next.t("starterSelectUiHandler:selectMoveSwapWith")} ${allMoves[moveId].name}.`,
+                  null,
+                  () => {
+                    const possibleMoves = this.speciesStarterMoves.filter((sm: MoveId) => sm !== moveId);
+                    this.moveInfoOverlay.show(allMoves[possibleMoves[0]]);
+                    const movesOptions = getMoveOptions(
+                      possibleMoves,
+                      onSelectedMoveToSwapTo,
+                      onCancelMoveToSwapTo,
+                      moveId,
+                      index,
+                    );
+                    ui.setModeWithoutClear(UiMode.OPTION_SELECT, movesOptions);
+                    this.blockInput = false;
+                  },
+                );
+              });
+              return true;
+            };
+
+            const onCancelMoveToSwapWith = () => {
+              this.moveInfoOverlay.clear();
+              this.clearText();
+              ui.setMode(UiMode.STARTER_SELECT);
+              return true;
+            };
+
+            const onSelectedMoveToSwapTo = (
+              moveId: MoveId,
+              _i: number,
+              baseMoveId: MoveId,
+              baseMoveIndex: number,
+            ): boolean => {
+              this.switchMoveHandler(baseMoveIndex, moveId, baseMoveId);
+              showSwapOptions(this.starterMoveset!); // TODO: is this bang correct?
+              return true;
+            };
+
+            const onCancelMoveToSwapTo = () => {
+              showSwapOptions(this.starterMoveset!); // TODO: is this bang correct?
+              return true;
+            };
+
             const showSwapOptions = (moveset: StarterMoveset) => {
               this.blockInput = true;
-
               ui.setMode(UiMode.STARTER_SELECT).then(() => {
                 ui.showText(i18next.t("starterSelectUiHandler:selectMoveSwapOut"), null, () => {
                   this.moveInfoOverlay.show(allMoves[moveset[0]]);
-
-                  ui.setModeWithoutClear(UiMode.OPTION_SELECT, {
-                    options: moveset
-                      .map((m: MoveId, i: number) => {
-                        const option: OptionSelectItem = {
-                          label: allMoves[m].name,
-                          handler: () => {
-                            this.blockInput = true;
-                            ui.setMode(UiMode.STARTER_SELECT).then(() => {
-                              ui.showText(
-                                `${i18next.t("starterSelectUiHandler:selectMoveSwapWith")} ${allMoves[m].name}.`,
-                                null,
-                                () => {
-                                  const possibleMoves = this.speciesStarterMoves.filter((sm: MoveId) => sm !== m);
-                                  this.moveInfoOverlay.show(allMoves[possibleMoves[0]]);
-
-                                  ui.setModeWithoutClear(UiMode.OPTION_SELECT, {
-                                    options: possibleMoves
-                                      .map((sm) => {
-                                        // make an option for each available starter move
-                                        const option = {
-                                          label: allMoves[sm].name,
-                                          handler: () => {
-                                            this.switchMoveHandler(i, sm, m);
-                                            showSwapOptions(this.starterMoveset!); // TODO: is this bang correct?
-                                            return true;
-                                          },
-                                          onHover: () => {
-                                            this.moveInfoOverlay.show(allMoves[sm]);
-                                          },
-                                        };
-                                        return option;
-                                      })
-                                      .concat({
-                                        label: i18next.t("menu:cancel"),
-                                        handler: () => {
-                                          showSwapOptions(this.starterMoveset!); // TODO: is this bang correct?
-                                          return true;
-                                        },
-                                        onHover: () => {
-                                          this.moveInfoOverlay.clear();
-                                        },
-                                      }),
-                                    maxOptions: 8,
-                                    yOffset: 29,
-                                  });
-                                  this.blockInput = false;
-                                },
-                              );
-                            });
-                            return true;
-                          },
-                          onHover: () => {
-                            this.moveInfoOverlay.show(allMoves[m]);
-                          },
-                        };
-                        return option;
-                      })
-                      .concat({
-                        label: i18next.t("menu:cancel"),
-                        handler: () => {
-                          this.moveInfoOverlay.clear();
-                          this.clearText();
-                          ui.setMode(UiMode.STARTER_SELECT);
-                          return true;
-                        },
-                        onHover: () => {
-                          this.moveInfoOverlay.clear();
-                        },
-                      }),
-                    maxOptions: 8,
-                    yOffset: 29,
-                  });
+                  const movesOptions = getMoveOptions(moveset, onSelectedMoveToSwapWith, onCancelMoveToSwapWith);
+                  ui.setModeWithoutClear(UiMode.OPTION_SELECT, movesOptions);
                   this.blockInput = false;
                 });
               });
