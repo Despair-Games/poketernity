@@ -121,8 +121,8 @@ export class PokemonHealPhase extends CommonAnimPhase {
       }
 
       pokemon.updateInfo().then(() => super.end());
+        } else if (this.healStatus && !this.revive && pokemon.hasStatusEffect(false, true)) {
       lastStatusEffect = pokemon.getStatusEffect(true);
-    } else if (this.healStatus && !this.revive && lastStatusEffect !== StatusEffect.NONE) {
       pokemon.resetStatus();
       pokemon.updateInfo().then(() => super.end());
     } else if (this.showFullHpMessage) {
