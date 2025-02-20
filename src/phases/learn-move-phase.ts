@@ -44,6 +44,11 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
 
     const { ui } = globalScene;
     const pokemon = this.getPokemon();
+
+    if (!pokemon) {
+      return this.end();
+    }
+
     const move = allMoves[this.moveId];
     const currentMoveset = pokemon.getMoveset();
 
