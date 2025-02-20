@@ -276,7 +276,7 @@ export class MovePhase extends BattlePhase {
       if (activated) {
         this.cancel();
         globalScene.queueMessage(
-          getStatusEffectActivationText(this.pokemon.getStatusEffect(true), getPokemonNameWithAffix(this.pokemon)),
+          getStatusEffectActivationText(statusEffect, getPokemonNameWithAffix(this.pokemon)),
         );
         globalScene.unshiftPhase(
           new CommonAnimPhase(
