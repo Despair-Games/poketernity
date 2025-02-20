@@ -49,7 +49,9 @@ export abstract class ArenaTag {
     if (!quiet) {
       globalScene.queueMessage(
         i18next.t(
-          `arenaTag:arenaOnRemove${this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""}`,
+          `arenaTag:arenaOnRemove${
+            this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""
+          }`,
           { moveName: this.getMoveName() },
         ),
       );
@@ -229,7 +231,9 @@ class ReflectTag extends WeakenMoveScreenTag {
     if (!quiet) {
       globalScene.queueMessage(
         i18next.t(
-          `arenaTag:reflectOnAdd${this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""}`,
+          `arenaTag:reflectOnAdd${
+            this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""
+          }`,
         ),
       );
     }
@@ -249,7 +253,9 @@ class LightScreenTag extends WeakenMoveScreenTag {
     if (!quiet) {
       globalScene.queueMessage(
         i18next.t(
-          `arenaTag:lightScreenOnAdd${this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""}`,
+          `arenaTag:lightScreenOnAdd${
+            this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""
+          }`,
         ),
       );
     }
@@ -272,7 +278,9 @@ class AuroraVeilTag extends WeakenMoveScreenTag {
     if (!quiet) {
       globalScene.queueMessage(
         i18next.t(
-          `arenaTag:auroraVeilOnAdd${this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""}`,
+          `arenaTag:auroraVeilOnAdd${
+            this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""
+          }`,
         ),
       );
     }
@@ -308,7 +316,9 @@ export abstract class ConditionalProtectTag extends ArenaTag {
   override onAdd(_arena: Arena): void {
     globalScene.queueMessage(
       i18next.t(
-        `arenaTag:conditionalProtectOnAdd${this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""}`,
+        `arenaTag:conditionalProtectOnAdd${
+          this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""
+        }`,
         { moveName: super.getMoveName() },
       ),
     );
@@ -832,13 +842,14 @@ class ToxicSpikesTag extends ArenaTrapTag {
           );
           return true;
         }
-      } else if (!pokemon.hasNonVolatileStatusEffect()) {
-        const toxic = this.layers > 1;
-        if (
-          pokemon.trySetStatus(!toxic ? StatusEffect.POISON : StatusEffect.TOXIC, true, null, 0, this.getMoveName())
-        ) {
-          return true;
-        }
+      } else {
+        return pokemon.trySetStatus(
+          !(this.layers > 1) ? StatusEffect.POISON : StatusEffect.TOXIC,
+          true,
+          null,
+          0,
+          this.getMoveName(),
+        );
       }
     }
 
@@ -1158,7 +1169,9 @@ class TailwindTag extends ArenaTag {
     if (!quiet) {
       globalScene.queueMessage(
         i18next.t(
-          `arenaTag:tailwindOnAdd${this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""}`,
+          `arenaTag:tailwindOnAdd${
+            this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""
+          }`,
         ),
       );
     }
@@ -1189,7 +1202,9 @@ class TailwindTag extends ArenaTag {
     if (!quiet) {
       globalScene.queueMessage(
         i18next.t(
-          `arenaTag:tailwindOnRemove${this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""}`,
+          `arenaTag:tailwindOnRemove${
+            this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""
+          }`,
         ),
       );
     }
@@ -1222,7 +1237,9 @@ class SafeguardTag extends ArenaTag {
   override onAdd(_arena: Arena): void {
     globalScene.queueMessage(
       i18next.t(
-        `arenaTag:safeguardOnAdd${this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""}`,
+        `arenaTag:safeguardOnAdd${
+          this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""
+        }`,
       ),
     );
   }
@@ -1230,7 +1247,9 @@ class SafeguardTag extends ArenaTag {
   override onRemove(_arena: Arena): void {
     globalScene.queueMessage(
       i18next.t(
-        `arenaTag:safeguardOnRemove${this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""}`,
+        `arenaTag:safeguardOnRemove${
+          this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""
+        }`,
       ),
     );
   }
@@ -1321,7 +1340,9 @@ class FireGrassPledgeTag extends ArenaTag {
     // "A sea of fire enveloped your/the opposing team!"
     globalScene.queueMessage(
       i18next.t(
-        `arenaTag:fireGrassPledgeOnAdd${this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""}`,
+        `arenaTag:fireGrassPledgeOnAdd${
+          this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""
+        }`,
       ),
     );
   }
@@ -1370,7 +1391,9 @@ class WaterFirePledgeTag extends ArenaTag {
     // "A rainbow appeared in the sky on your/the opposing team's side!"
     globalScene.queueMessage(
       i18next.t(
-        `arenaTag:waterFirePledgeOnAdd${this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""}`,
+        `arenaTag:waterFirePledgeOnAdd${
+          this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""
+        }`,
       ),
     );
   }
@@ -1404,7 +1427,9 @@ class GrassWaterPledgeTag extends ArenaTag {
     // "A swamp enveloped your/the opposing team!"
     globalScene.queueMessage(
       i18next.t(
-        `arenaTag:grassWaterPledgeOnAdd${this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""}`,
+        `arenaTag:grassWaterPledgeOnAdd${
+          this.side === ArenaTagSide.PLAYER ? "Player" : this.side === ArenaTagSide.ENEMY ? "Enemy" : ""
+        }`,
       ),
     );
   }

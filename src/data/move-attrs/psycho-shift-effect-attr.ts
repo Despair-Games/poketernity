@@ -1,5 +1,5 @@
 import { BattlerTagType } from "#enums/battler-tag-type";
-import type { StatusEffect } from "#enums/status-effect";
+import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { type Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
@@ -39,13 +39,13 @@ export class PsychoShiftEffectAttr extends MoveEffectAttr {
   override getTargetBenefitScore(user: Pokemon, target: Pokemon, _move: Move): number {
     const statusToApply = this.getStatusToApply(user);
     return !target.hasNonVolatileStatusEffect()
-      && !!statusToApply
+      && statusToApply !== StatusEffect.NONE
       && target.canSetStatus(statusToApply, true, false, user)
       ? -10
       : 0;
   }
 
-  private getStatusToApply(user: Pokemon): StatusEffect | undefined {
+  private getStatusToApply(user: Pokemon): StatusEffect {
     return user.getStatusEffect();
   }
 }
