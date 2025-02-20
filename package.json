@@ -24,7 +24,8 @@
     "depcruise:graph": "depcruise src --output-type dot | node dependency-graph.js > dependency-graph.svg",
     "postinstall": "npx lefthook install && npx lefthook run post-merge",
     "update-version:patch": "npm version patch --force --no-git-tag-version",
-    "update-version:minor": "npm version minor --force --no-git-tag-version"
+    "update-version:minor": "npm version minor --force --no-git-tag-version",
+    "update-locales:remote": "git submodule update --progress --init --recursive --force --remote"
   },
   "devDependencies": {
     "@btmills/prettier": "^3.3.3",
