@@ -1616,7 +1616,7 @@ export function initMoves() {
       .attr(PsychoShiftEffectAttr)
       .condition((user, target, _move) => {
         return (
-          user.hasStatusEffect(getNonVolatileStatusEffects())
+          user.hasNonVolatileStatusEffect()
           && target.canSetStatus(user.getStatusEffect(), false, false, user)
         );
       }),
