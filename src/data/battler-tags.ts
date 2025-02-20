@@ -1188,8 +1188,8 @@ export class FrenzyTag extends MoveLockTag {
  * @extends MoveLockTag
  */
 export class RollingTag extends MoveLockTag {
-  constructor(tagType: BattlerTagType, sourceMoveId: MoveId) {
-    super(tagType, 5, sourceMoveId);
+  constructor(sourceMoveId: MoveId) {
+    super(BattlerTagType.ROLLING, 5, sourceMoveId);
   }
 
   public get powerMultiplier() {
@@ -3548,9 +3548,8 @@ export function getBattlerTag(
       return new NightmareTag();
     case BattlerTagType.FRENZY:
       return new FrenzyTag(turnCount, sourceMoveId);
-    case BattlerTagType.ROLLOUT:
-    case BattlerTagType.ICE_BALL:
-      return new RollingTag(tagType, sourceMoveId);
+    case BattlerTagType.ROLLING:
+      return new RollingTag(sourceMoveId);
     case BattlerTagType.CHARGING:
       return new BattlerTag(tagType, BattlerTagLapseType.CUSTOM, 1, sourceMoveId, sourceId);
     case BattlerTagType.ENCORE:
