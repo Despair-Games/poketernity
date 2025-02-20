@@ -56,7 +56,7 @@ This project uses the [i18next library](https://www.i18next.com/) to integrate t
 If you have a feature or enhancement that requires additions or changes to in-game text, you will need to make a fork of the `poketernity-locales` repo and submit your text changes as a pull request to that repo in addition to your pull request to the main project. Since these two PRs aren't technically linked, it's important to coordinate with the Translation Team to ensure that both PRs are integrated safely into the project. As the developer, you are responsible for creating or adjusting English keys in support of your feature or enhancement; the Translation Team will take care of the rest.
 
 When your new feature or enhancement requires a new key **without changing text in existing keys**, we require the following workflow with regards to localization:
-1. You (the developer) make a pull request to the main repository for your new feature. If this feature requires new text, the text should be integrated into the code with a new `i18next` key pointing to where you plan to add it into the `poketernity-locales` repository. **DO NOT HARDCODE ENGLISH TEXT FOR ANY TEXT ADDITIONS.**
+1. You (the developer) make a pull request to the main repository for your new feature. If this feature requires new text, the text should be integrated into the code with a new `i18next` key pointing to where you plan to add it into the `poketernity-locales` repository. **DO NOT HARDCODE PLAYER-FACING ENGLISH TEXT INTO THE CODE!**
 2. You then make another pull request -- this time to the `poketernity-locales` repository -- adding a new entry to the English locale with text for each key you added to your main PR. For any feature pulled from the mainline Pokémon games (e.g. a Move or Ability implementation), it's best practice to include a source link for any added text within the locale PR. [Poké Corpus](https://abcboy101.github.io/poke-corpus/) is a great resource for finding text from the mainline games; otherwise, a YouTube video link showing the text in mainline is sufficient. 
 <!-- You should also {who to contact/where to post} whenever you make a new PR to locales to ensure a fast response. -->
 3. The Translation Team will approve the locale PR (after corrections, if necessary), then merge it into `poketernity-locales`.
@@ -67,7 +67,7 @@ When your new feature or enhancement requires a new key **without changing text 
 
 PRs that modify existing text have different risks with respect to coordination between development and translation, so their requirements are slightly different:
 - As above, you set up 2 PRs: one for the feature itself in the main repo, and another for the changes you need to make to the locale repo as a result of your feature.
-- Now, however, you need to have your main PR be approved by the Dev Team (and Game Design/Balance if applicable) **before** your corresponding locale changes are merged in.
+- Now, however, you need to have your main PR be approved by the Dev Team **before** your corresponding locale changes are merged in.
 - After your main PR is approved, the Translation Team will merge your locale PR, and you may update the submodule and post video evidence of locale integration as above.
 <!-- - A Lead or Senior Translator from the Translation Team will then approve your main PR (if all is well), clearing your feature for merging into beta. -->
 

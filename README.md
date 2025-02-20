@@ -22,9 +22,9 @@ If you have the motivation and experience with Typescript/Javascript (or are wil
 
 1. Clone the repo through git and in the root directory run `npm install`.
 If the install process seems to hang at the post-install step, you likely just need to press `Enter` for it continue.
-<!--   - _if you run into any errors, reach out in the **#dev-corner** channel in discord_-->
-2. Run `npm run start:dev` to locally run the project in `localhost:8000`.
-If you want to access the game from any device on your local network, you can run `npm run start:dev -- --host`.
+<!--   - _if you run into any errors, reach out in [TBD]_-->
+2. Run `npm run start:dev` to locally run the project. You can then access it from the same machine by putting `http://localhost:8000/` in your browser's address bar.
+If you want to access the game from other devices on your local network, you can run `npm run start:dev -- --host` instead. You can then connect via `http://[IP of your device]:8000/` (ie: `http://192.168.1.101:8000/`).
 
 #### Tests
 
@@ -36,7 +36,7 @@ We are using [prettier](https://prettier.io/) to format our code. It will run au
 
 #### Linting
 
-We're using ESLint as our common linter and formatter. It will run automatically during the pre-commit hook but if you would like to manually run it, use the `npm run eslint` script. To view the complete rules, check out the [eslint.config.js](./eslint.config.js) file.
+We're using [ESLint](https://eslint.org/docs/latest/rules/) plus the [ESLint Stylistic](https://eslint.style/rules) and [Typescript ESLint](https://typescript-eslint.io/rules/) plugins for linting. It will run automatically via the pre-commit hook, but if you would like to run it manually you can use the `npm run eslint` script. To view the currently applied ESLint rules, check out the [eslint.config.js](./eslint.config.js) file.
 
 #### Localization
 
