@@ -1,14 +1,10 @@
 import type { SessionSaveData } from "#app/@types/SessionData";
 import type { SystemSaveData } from "#app/@types/SystemData";
+import { compareVersions } from "compare-versions";
 import { version } from "../../../package.json";
 
-// --- v1.0.4 (and below) PATCHES --- //
-import * as v1_0_4 from "./versions/v1_0_4";
-
-// --- v1.1.0 PATCHES --- //
-import * as v1_1_0 from "./versions/v1_1_0";
-
-const LATEST_VERSION = version.split(".").map((value) => parseInt(value));
+// --- vA.B.C PATCHES --- //
+// import * as vA_B_C from "./versions/vA_B_C";
 
 /**
  * Converts incoming {@linkcode SystemSaveData} that has a version below the
@@ -21,12 +17,12 @@ const LATEST_VERSION = version.split(".").map((value) => parseInt(value));
  * @see {@link SystemVersionConverter}
  */
 export function applySystemVersionMigration(data: SystemSaveData) {
-  const curVersion = data.gameVersion.split(".").map((value) => parseInt(value));
+  const prevVersion = data.gameVersion;
 
-  if (!curVersion.every((value, index) => value === LATEST_VERSION[index])) {
+  if (compareVersions(prevVersion, version) === -1) {
     const converter = new SystemVersionConverter();
     converter.applyStaticPreprocessors(data);
-    converter.applyMigration(data, curVersion);
+    converter.applyMigration(data, prevVersion);
   }
 }
 
@@ -41,12 +37,12 @@ export function applySystemVersionMigration(data: SystemSaveData) {
  * @see {@link SessionVersionConverter}
  */
 export function applySessionVersionMigration(data: SessionSaveData) {
-  const curVersion = data.gameVersion.split(".").map((value) => parseInt(value));
+  const prevVersion = data.gameVersion;
 
-  if (!curVersion.every((value, index) => value === LATEST_VERSION[index])) {
+  if (compareVersions(prevVersion, version) === -1) {
     const converter = new SessionVersionConverter();
     converter.applyStaticPreprocessors(data);
-    converter.applyMigration(data, curVersion);
+    converter.applyMigration(data, prevVersion);
   }
 }
 
@@ -61,13 +57,12 @@ export function applySessionVersionMigration(data: SessionSaveData) {
  * @see {@link SettingsVersionConverter}
  */
 export function applySettingsVersionMigration(data: Object) {
-  const gameVersion: string = data.hasOwnProperty("meta") ? (data["meta"]["gameVersion"] ?? "1.0.0") : "1.0.0";
-  const curVersion = gameVersion.split(".").map((value) => parseInt(value));
+  const prevVersion: string = data.hasOwnProperty("meta") ? (data["meta"]["gameVersion"] ?? "1.0.0") : "1.0.0";
 
-  if (!curVersion.every((value, index) => value === LATEST_VERSION[index])) {
+  if (compareVersions(prevVersion, version) === -1) {
     const converter = new SettingsVersionConverter();
     converter.applyStaticPreprocessors(data);
-    converter.applyMigration(data, curVersion);
+    converter.applyMigration(data, prevVersion);
   }
 }
 
@@ -110,7 +105,7 @@ abstract class VersionConverter {
    *                   [1] Current minor version
    *                   [2] Current patch version
    */
-  abstract applyMigration(data: any, curVersion: number[]): void;
+  abstract applyMigration(data: any, curVersion: string): void;
 }
 
 /**
@@ -124,22 +119,7 @@ class SessionVersionConverter extends VersionConverter {
     data.money = Math.floor(data.money);
   }
 
-  override applyMigration(data: SessionSaveData, curVersion: number[]): void {
-    const [curMajor, curMinor, curPatch] = curVersion;
-
-    if (curMajor === 1) {
-      if (curMinor === 0) {
-        if (curPatch <= 5) {
-          console.log("Applying v1.0.4 session data migration!");
-          this.callMigrators(data, v1_0_4.sessionMigrators);
-        }
-      }
-      if (curMinor <= 1) {
-        console.log("Applying v1.1.0 session data migration!");
-        this.callMigrators(data, v1_1_0.sessionMigrators);
-      }
-    }
-
+  override applyMigration(_data: SessionSaveData, _curVersion: string): void {
     console.log(`Session data successfully migrated to v${version}!`);
   }
 }
@@ -150,22 +130,7 @@ class SessionVersionConverter extends VersionConverter {
  * @extends VersionConverter
  */
 class SystemVersionConverter extends VersionConverter {
-  override applyMigration(data: SystemSaveData, curVersion: number[]): void {
-    const [curMajor, curMinor, curPatch] = curVersion;
-
-    if (curMajor === 1) {
-      if (curMinor === 0) {
-        if (curPatch <= 4) {
-          console.log("Applying v1.0.4 system data migration!");
-          this.callMigrators(data, v1_0_4.systemMigrators);
-        }
-      }
-      if (curMinor <= 1) {
-        console.log("Applying v1.1.0 system data migration!");
-        this.callMigrators(data, v1_1_0.systemMigrators);
-      }
-    }
-
+  override applyMigration(_data: SystemSaveData, _curVersion: string): void {
     console.log(`System data successfully migrated to v${version}!`);
   }
 }
@@ -176,22 +141,7 @@ class SystemVersionConverter extends VersionConverter {
  * @extends VersionConverter
  */
 class SettingsVersionConverter extends VersionConverter {
-  override applyMigration(data: Object, curVersion: number[]): void {
-    const [curMajor, curMinor, curPatch] = curVersion;
-
-    if (curMajor === 1) {
-      if (curMinor === 0) {
-        if (curPatch <= 4) {
-          console.log("Applying v1.0.4 settings data migration!");
-          this.callMigrators(data, v1_0_4.settingsMigrators);
-        }
-      }
-      if (curMinor <= 1) {
-        console.log("Applying v1.1.0 settings data migration!");
-        this.callMigrators(data, v1_1_0.settingsMigrators);
-      }
-    }
-
+  override applyMigration(_data: Object, _curVersion: string): void {
     console.log(`Settings successfully migrated to v${version}!`);
   }
 }
