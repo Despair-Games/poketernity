@@ -211,12 +211,7 @@ export function initAbilities() {
       PostAttackApplyBattlerTagAbAttr,
       false,
       (_user, target, move) =>
-        !move.hasAttr(FlinchAttr)
-        && !target.turnData.acted
-        && move.category !== MoveCategory.STATUS
-        && (target.status ? ![StatusEffect.FREEZE, StatusEffect.SLEEP].includes(target.status.effect) : true)
-          ? 10
-          : 0,
+        !move.hasAttr(FlinchAttr) && !target.turnData.acted && move.category !== MoveCategory.STATUS ? 10 : 0,
       BattlerTagType.FLINCHED,
     ),
     new Ability(Abilities.DRIZZLE, 3)
