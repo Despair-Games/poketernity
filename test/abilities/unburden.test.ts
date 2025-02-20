@@ -248,7 +248,7 @@ describe("Abilities - Unburden", () => {
     game.move.select(MoveId.SPLASH, 1);
     await game.forceEnemyMove(MoveId.FALSE_SWIPE, 0);
     await game.forceEnemyMove(MoveId.FALSE_SWIPE, 0);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(getHeldItemCount(treecko)).toBeLessThan(playerHeldItems);
     expect(treecko.getEffectiveStat(Stat.SPD)).toBe(initialPlayerSpeed * 2);
@@ -257,7 +257,7 @@ describe("Abilities - Unburden", () => {
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
     game.doSwitchPokemon(2);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(getHeldItemCount(treecko)).toBeLessThan(playerHeldItems);
     expect(treecko.getEffectiveStat(Stat.SPD)).toBe(initialPlayerSpeed);
@@ -266,7 +266,7 @@ describe("Abilities - Unburden", () => {
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
     game.doSwitchPokemon(2);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(getHeldItemCount(treecko)).toBeLessThan(playerHeldItems);
     expect(treecko.getEffectiveStat(Stat.SPD)).toBe(initialPlayerSpeed * 2);

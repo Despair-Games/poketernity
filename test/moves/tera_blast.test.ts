@@ -97,7 +97,7 @@ describe("Moves - Tera Blast", () => {
       playerPokemon.stats[Stat.SPATK] = 1;
 
       game.move.select(MoveId.TERA_BLAST);
-      await game.phaseInterceptor.to("TurnEndPhase");
+      await game.toEndOfTurn();
       expect(game.scene.getEnemyPokemon()!.battleData.abilitiesApplied).toContain(Abilities.TOXIC_DEBRIS);
     },
     20000,

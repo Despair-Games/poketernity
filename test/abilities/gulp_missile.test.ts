@@ -112,7 +112,7 @@ describe("Abilities - Gulp Missile", () => {
     vi.spyOn(enemy, "damageAndUpdate");
 
     game.move.select(MoveId.SURF);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(enemy.damageAndUpdate).toHaveReturnedWith(getEffectDamage(enemy));
   });
@@ -130,7 +130,7 @@ describe("Abilities - Gulp Missile", () => {
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)).toBeDefined();
     expect(cramorant.formIndex).toBe(GULPING_FORM);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)).toBeDefined();
     expect(cramorant.formIndex).toBe(GULPING_FORM);
@@ -152,7 +152,7 @@ describe("Abilities - Gulp Missile", () => {
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)).toBeDefined();
     expect(cramorant.formIndex).toBe(GULPING_FORM);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(enemy.damageAndUpdate).toHaveReturnedWith(getEffectDamage(enemy));
     expect(enemy.getStatStage(Stat.DEF)).toBe(-1);
@@ -176,7 +176,7 @@ describe("Abilities - Gulp Missile", () => {
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_PIKACHU)).toBeDefined();
     expect(cramorant.formIndex).toBe(GORGING_FORM);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(enemy.damageAndUpdate).toHaveReturnedWith(getEffectDamage(enemy));
     expect(enemy.status?.effect).toBe(StatusEffect.PARALYSIS);
@@ -213,7 +213,7 @@ describe("Abilities - Gulp Missile", () => {
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)).toBeDefined();
     expect(cramorant.formIndex).toBe(GULPING_FORM);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(enemy.hp).toBe(enemyHpPreEffect);
     expect(enemy.getStatStage(Stat.DEF)).toBe(-1);
@@ -267,7 +267,7 @@ describe("Abilities - Gulp Missile", () => {
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)).toBeDefined();
     expect(cramorant.formIndex).toBe(GULPING_FORM);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(cramorant.hasAbility(Abilities.GULP_MISSILE)).toBe(true);
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)).toBeDefined();
@@ -287,7 +287,7 @@ describe("Abilities - Gulp Missile", () => {
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)).toBeDefined();
     expect(cramorant.formIndex).toBe(GULPING_FORM);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(cramorant.hasAbility(Abilities.GULP_MISSILE)).toBe(true);
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)).toBeDefined();

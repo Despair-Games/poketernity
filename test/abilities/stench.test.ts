@@ -46,7 +46,7 @@ describe("Abilities - Stench", () => {
     vi.spyOn(abilityAttr, "getChance");
     game.move.select(MoveId.TACKLE);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(abilityAttr.getChance).toHaveLastReturnedWith(10);
   });
@@ -65,7 +65,7 @@ describe("Abilities - Stench", () => {
     vi.spyOn(abilityAttr, "getChance");
     game.move.select(MoveId.HEADBUTT);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(headbuttMove?.hasAttr(FlinchAttr)).toBe(true);
     expect(abilityAttr.getChance).toHaveLastReturnedWith(0);
@@ -88,7 +88,7 @@ describe("Abilities - Stench", () => {
     await game.forceEnemyMove(MoveId.SPLASH);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
     expect(abilityAttr.getChance).not.toHaveBeenCalled();
   });
 
@@ -105,13 +105,13 @@ describe("Abilities - Stench", () => {
 
     game.move.select(MoveId.TACKLE);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
     expect(abilityAttr.getChance).not.toHaveBeenCalled();
 
     await game.toNextTurn();
     game.move.select(MoveId.MOONGEIST_BEAM);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
     expect(abilityAttr.getChance).toHaveLastReturnedWith(10);
   });
 });

@@ -56,7 +56,7 @@ describe("Abilities - Dancer", () => {
     expect(currentPhase.pokemon).toBe(oricorio);
     expect(currentPhase.targets).toEqual([BattlerIndex.PLAYER]);
     expect(currentPhase.move.moveId).toBe(MoveId.VICTORY_DANCE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     // doesn't use PP if copied move is also in moveset
     expect(oricorio.moveset[0]?.ppUsed).toBe(0);

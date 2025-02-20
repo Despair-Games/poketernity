@@ -42,7 +42,7 @@ describe("Moves - Tera Starstorm", () => {
     vi.spyOn(terapagos, "getMoveType");
 
     game.move.select(MoveId.TERA_STARSTORM);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(terapagos.isTerastallized()).toBe(true);
     expect(terapagos.getMoveType).toHaveReturnedWith(ElementalType.STELLAR);
@@ -86,7 +86,7 @@ describe("Moves - Tera Starstorm", () => {
 
     game.move.select(MoveId.TERA_STARSTORM, 0);
     game.move.select(MoveId.SPLASH, 1);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     // Fusion and terastallized
     expect(fusionedMon.isFusion()).toBe(true);

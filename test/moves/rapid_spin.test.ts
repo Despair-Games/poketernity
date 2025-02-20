@@ -42,7 +42,7 @@ describe("Moves - Rapid Spin", () => {
     const player = game.scene.getPlayerPokemon()!;
 
     game.move.select(MoveId.RAPID_SPIN);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(player.getStatStage(Stat.SPD)).toBe(1);
   });

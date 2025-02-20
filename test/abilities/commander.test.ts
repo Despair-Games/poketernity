@@ -136,7 +136,7 @@ describe("Abilities - Commander", () => {
     const { turnManager } = game.scene.currentBattle;
     expect(turnManager.findCommand((tc) => tc.pokemon === tatsugiri)).toBeUndefined();
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(tatsugiri.isFullHp()).toBeFalsy();
   });
 
@@ -159,7 +159,7 @@ describe("Abilities - Commander", () => {
     const { turnManager } = game.scene.currentBattle;
     expect(turnManager.findCommand((tc) => tc.pokemon === tatsugiri)).toBeUndefined();
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(tatsugiri.isFullHp()).toBeFalsy();
   });
 
@@ -180,7 +180,7 @@ describe("Abilities - Commander", () => {
     const { turnManager } = game.scene.currentBattle;
     expect(turnManager.findCommand((tc) => tc.pokemon === tatsugiri)).toBeUndefined();
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(tatsugiri.isFullHp()).toBeFalsy();
   });
 
@@ -205,7 +205,7 @@ describe("Abilities - Commander", () => {
     expect(turnManager.findCommand((tc) => tc.pokemon === tatsugiri)).toBeUndefined();
 
     // Test may time out here if Whirlwind forced out a Pokemon
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(dondozo.isActive(true)).toBeTruthy();
   });
 
