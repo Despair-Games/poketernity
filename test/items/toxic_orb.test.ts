@@ -47,7 +47,7 @@ describe("Items - Toxic orb", () => {
 
     game.move.select(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     await game.phaseInterceptor.to("MessagePhase");
     expect(i18next.t).toHaveBeenCalledWith("statusEffect:toxic.obtainSource", expect.anything());
 

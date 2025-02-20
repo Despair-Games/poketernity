@@ -40,7 +40,7 @@ describe("Moves - Defog", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.DEFOG);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(enemy.getStatStage(Stat.EVA)).toBe(-1);
   });

@@ -48,7 +48,7 @@ describe("Abilities - Contrary", () => {
       expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(1);
 
       game.move.select(MoveId.TAIL_WHIP);
-      await game.phaseInterceptor.to("TurnEndPhase");
+      await game.toEndOfTurn();
 
       expect(enemyPokemon.getStatStage(Stat.DEF)).toBe(1);
     });
@@ -65,7 +65,7 @@ describe("Abilities - Contrary", () => {
       expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(1);
 
       game.move.select(MoveId.SWAGGER);
-      await game.phaseInterceptor.to("TurnEndPhase");
+      await game.toEndOfTurn();
 
       expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(1);
     });

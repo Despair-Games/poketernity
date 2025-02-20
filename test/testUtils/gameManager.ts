@@ -427,6 +427,11 @@ export class GameManager {
     await this.phaseInterceptor.to(CommandPhase);
   }
 
+  /** Transition to the {@linkcode TurnEndPhase | end of the current turn}. */
+  async toEndOfTurn() {
+    await this.phaseInterceptor.to(TurnEndPhase);
+  }
+
   /** Emulate selecting a modifier (item) and transition to the next upcoming {@linkcode CommandPhase} */
   async toNextWave() {
     this.doSelectModifier();

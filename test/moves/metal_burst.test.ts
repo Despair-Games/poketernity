@@ -71,7 +71,7 @@ describe("Moves - Metal Burst", () => {
     await game.phaseInterceptor.to("MoveEndPhase");
     await game.move.forceHit();
     await game.phaseInterceptor.to("MoveEndPhase");
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(enemy1.isFainted()).toBe(true);
     expect(enemy2.isFainted()).toBe(true);

@@ -138,20 +138,22 @@ describe("${description}", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([ MoveId.SPLASH ])
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(MoveId.SPLASH);
+      .enemyMoveset(MoveId.SPLASH)
+      .startingLevel(100)
+      .enemyLevel(100);
   });
 
   it("should do X", async () => {
     await game.classicMode.startBattle([ Species.FEEBAS ]);
 
-    game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.move.use(MoveId.SPLASH);
+    
+    await game.toEndOfTurn();
 
     expect(true).toBe(true);
   });

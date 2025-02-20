@@ -48,7 +48,7 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
 
       game.move.select(moveId);
       await game.move.forceHit();
-      await game.phaseInterceptor.to("BerryPhase");
+      await game.toEndOfTurn();
 
       expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(Math.floor(playerPokemon.stats[Stat.ATK] * 1.5));
     },
@@ -70,7 +70,7 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
 
       game.move.select(moveId);
       await game.move.forceHit();
-      await game.phaseInterceptor.to("BerryPhase");
+      await game.toEndOfTurn();
 
       expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(Math.floor(playerPokemon.stats[Stat.SPATK] * 1.5));
     },
@@ -91,7 +91,7 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
 
       game.move.select(moveId);
       await game.move.forceHit();
-      await game.phaseInterceptor.to("BerryPhase");
+      await game.toEndOfTurn();
 
       const statUsed =
         playerPokemon.getMoveCategory(game.scene.getEnemyPokemon()!, allMoves[moveId]) === MoveCategory.PHYSICAL
@@ -115,7 +115,7 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
 
     game.move.select(MoveId.TACKLE);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(Math.floor(playerPokemon.stats[Stat.ATK]));
   });

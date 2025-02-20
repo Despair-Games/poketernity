@@ -49,13 +49,13 @@ describe("Moves - Secret Power", () => {
     // No Terrain + Biome.VOLCANO --> Burn
     game.move.select(MoveId.SECRET_POWER);
     await game.forceEnemyMove(MoveId.SPLASH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemyPokemon.status?.effect).toBe(StatusEffect.BURN);
 
     // Misty Terrain --> SpAtk -1
     game.move.select(MoveId.SECRET_POWER);
     await game.forceEnemyMove(MoveId.MISTY_TERRAIN);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(-1);
   });
 
@@ -70,7 +70,7 @@ describe("Moves - Secret Power", () => {
     game.move.select(MoveId.WATER_PLEDGE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.FIRE_PLEDGE, 1, BattlerIndex.ENEMY_2);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     const sereneGraceAttr = allAbilities[Abilities.SERENE_GRACE].getAttrs(AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER)[0];
     vi.spyOn(sereneGraceAttr, "apply");
