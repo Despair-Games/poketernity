@@ -28,11 +28,11 @@ If you want to access the game from other devices on your local network, you can
 
 #### Tests
 
-We are using [vitest](https://vitest.dev/) as a testing framework for the game. The full test suite can be run with the command `npm run test:silent`. Most PRs are expected to add tests for their new features or bug fixes to avoid future regression. A basic test file for a variety of cases can be created by running the `npm run test:create` command.
+We are using [Vitest](https://vitest.dev/) as a testing framework for the game. The full test suite can be run with the command `npm run test:silent`. Most PRs are expected to add tests for their new features or bug fixes to avoid future regression. A basic test file for a variety of cases can be created by running the `npm run test:create` command.
 
 #### Code-Style
 
-We are using [prettier](https://prettier.io/) to format our code. It will run automatically during the pre-commit hook so don't worry about having to format the code manually properly.
+We are using [Prettier](https://prettier.io/) to format our code. It will run automatically during the pre-commit hook so don't worry about having to format the code manually properly.
 
 #### Linting
 
@@ -61,9 +61,6 @@ For detailed guidelines on documenting your code, refer to the [comments.md](./d
 
 - The translations are found in a [dedicated repository](https://github.com/despair-games/poketernity-locales) and are applied as a submodule in this project.
 - The command to retrieve the translations is `git submodule update --init --recursive`. <!--If you still struggle to get it working, please reach out in [TBD].-->
-
-> [!NOTE]
-> We have recently made major changes to our testing framework (see #158 and #247). If you experience any weird issues with unit tests, especially issues that only occur when running multiple test files in a single run, please feel free to reach out for help.
 
 ## 🪧 To Do
 
