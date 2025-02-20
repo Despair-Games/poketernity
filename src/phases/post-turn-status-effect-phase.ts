@@ -25,7 +25,7 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
       pokemon?.isActive(true)
       && pokemon.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC], false, true)
     ) {
-      pokemon.status.incrementTurn();
+      pokemon.status!.incrementTurn();
 
       const cancelled = new BooleanHolder(false);
       applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
