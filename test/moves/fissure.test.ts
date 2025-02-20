@@ -49,7 +49,7 @@ describe("Moves - Fissure", () => {
     game.override.enemyAbility(Abilities.FUR_COAT);
 
     game.move.select(MoveId.FISSURE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.isFainted()).toBe(true);
   });
@@ -62,7 +62,7 @@ describe("Moves - Fissure", () => {
     game.move.select(MoveId.FISSURE);
 
     // wait for TurnEndPhase instead of DamagePhase as fissure might not actually inflict damage
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(partyPokemon.getAccuracyMultiplier).toHaveReturnedWith(1);
   });
@@ -75,7 +75,7 @@ describe("Moves - Fissure", () => {
     game.move.select(MoveId.FISSURE);
 
     // wait for TurnEndPhase instead of DamagePhase as fissure might not actually inflict damage
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(partyPokemon.getAccuracyMultiplier).toHaveReturnedWith(1);
   });

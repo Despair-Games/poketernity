@@ -48,7 +48,7 @@ describe("Abilities - Analytic", () => {
 
     game.move.select(MoveId.TACKLE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
     expect(isBetween(enemy.getInverseHp(), toDmgValue(damage1 * 1.3) - 3, toDmgValue(damage1 * 1.3) + 3)).toBe(true);
   });
 
@@ -75,7 +75,7 @@ describe("Abilities - Analytic", () => {
     game.move.select(MoveId.TACKLE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
     await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
     expect(enemy.getInverseHp()).toBe(damage1);
   });
 });

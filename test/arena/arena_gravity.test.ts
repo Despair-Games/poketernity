@@ -45,7 +45,7 @@ describe("Arena - Gravity", () => {
     // Setup Gravity on first turn
     await game.classicMode.startBattle([Species.PIKACHU]);
     game.move.select(MoveId.GRAVITY);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.arena.getTag(ArenaTagType.GRAVITY)).toBeDefined();
 
@@ -66,7 +66,7 @@ describe("Arena - Gravity", () => {
     // Setup Gravity on first turn
     await game.classicMode.startBattle([Species.PIKACHU]);
     game.move.select(MoveId.GRAVITY);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.arena.getTag(ArenaTagType.GRAVITY)).toBeDefined();
 
@@ -89,21 +89,21 @@ describe("Arena - Gravity", () => {
 
       // Try earthquake on 1st turn (fails!);
       game.move.select(MoveId.EARTHQUAKE);
-      await game.phaseInterceptor.to("TurnEndPhase");
+      await game.toEndOfTurn();
 
       expect(pidgeot.getAttackTypeEffectiveness).toHaveLastReturnedWith(0);
 
       // Setup Gravity on 2nd turn
       await game.toNextTurn();
       game.move.select(MoveId.GRAVITY);
-      await game.phaseInterceptor.to("TurnEndPhase");
+      await game.toEndOfTurn();
 
       expect(game.scene.arena.getTag(ArenaTagType.GRAVITY)).toBeDefined();
 
       // Use ground move on 3rd turn
       await game.toNextTurn();
       game.move.select(MoveId.EARTHQUAKE);
-      await game.phaseInterceptor.to("TurnEndPhase");
+      await game.toEndOfTurn();
 
       expect(pidgeot.getAttackTypeEffectiveness).toHaveLastReturnedWith(1);
     });
@@ -118,14 +118,14 @@ describe("Arena - Gravity", () => {
 
       // Setup Gravity on 1st turn
       game.move.select(MoveId.GRAVITY);
-      await game.phaseInterceptor.to("TurnEndPhase");
+      await game.toEndOfTurn();
 
       expect(game.scene.arena.getTag(ArenaTagType.GRAVITY)).toBeDefined();
 
       // Use electric move on 2nd turn
       await game.toNextTurn();
       game.move.select(MoveId.THUNDERBOLT);
-      await game.phaseInterceptor.to("TurnEndPhase");
+      await game.toEndOfTurn();
 
       expect(pidgeot.getAttackTypeEffectiveness).toHaveLastReturnedWith(2);
     });
@@ -150,7 +150,7 @@ describe("Arena - Gravity", () => {
     await game.phaseInterceptor.to("MoveEffectPhase");
     expect(snorlax.getTag(BattlerTagType.INTERRUPTED)).toBeDefined();
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(charizard.hp).toBe(charizard.getMaxHp());
   });
 });

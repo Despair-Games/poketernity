@@ -39,7 +39,7 @@ describe("Abilities - Bulletproof", () => {
 
     game.move.select(MoveId.POLLEN_PUFF, 0, BattlerIndex.PLAYER_2);
     game.move.select(MoveId.SPLASH, 1);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const player1LastMove = playerPokemon1.getLastXMoves()[0];
     expect(player1LastMove.result).toBe(MoveResult.FAIL);

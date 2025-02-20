@@ -41,7 +41,7 @@ describe("Moves - Glaive Rush", () => {
     game.move.select(MoveId.SHADOW_SNEAK);
     await game.phaseInterceptor.to("DamageAnimPhase");
     const damageDealt = 1000 - enemy.hp;
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     game.move.select(MoveId.SHADOW_SNEAK);
     await game.phaseInterceptor.to("DamageAnimPhase");
     expect(enemy.hp).toBeLessThanOrEqual(1001 - damageDealt * 3);
@@ -57,7 +57,7 @@ describe("Moves - Glaive Rush", () => {
     vi.spyOn(player, "getAccuracyMultiplier").mockReturnValue(0);
 
     game.move.select(MoveId.AVALANCHE);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.hp).toBeLessThan(1000);
   });
 
@@ -74,11 +74,11 @@ describe("Moves - Glaive Rush", () => {
     vi.spyOn(enemy, "getAccuracyMultiplier").mockReturnValue(0);
 
     game.move.select(MoveId.GLAIVE_RUSH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(player.hp).toBeLessThan(1000);
     player.hp = 1000;
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(player.hp).toBe(1000);
   });
 
@@ -95,16 +95,16 @@ describe("Moves - Glaive Rush", () => {
     vi.spyOn(enemy, "getAccuracyMultiplier").mockReturnValue(0);
 
     game.move.select(MoveId.GLAIVE_RUSH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(player.hp).toBe(1000);
 
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     const damagedHp = player.hp;
     expect(player.hp).toBeLessThan(1000);
 
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(player.hp).toBe(damagedHp);
   });
 
@@ -120,13 +120,13 @@ describe("Moves - Glaive Rush", () => {
     vi.spyOn(enemy, "getAccuracyMultiplier").mockReturnValue(0);
 
     game.move.select(MoveId.GLAIVE_RUSH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(player.hp).toBe(player.getMaxHp());
 
     game.doSwitchPokemon(1);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     game.doSwitchPokemon(1);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(player.hp).toBe(player.getMaxHp());
   });
 
@@ -141,16 +141,16 @@ describe("Moves - Glaive Rush", () => {
     player.hp = 1000;
 
     game.move.select(MoveId.PROTECT);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     game.move.select(MoveId.SHADOW_SNEAK);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     game.override.enemyMoveset([MoveId.SPLASH]);
     const damagedHP1 = 1000 - enemy.hp;
     enemy.hp = 1000;
 
     game.move.select(MoveId.SHADOW_SNEAK);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     const damagedHP2 = 1000 - enemy.hp;
 
     expect(damagedHP2).toBeGreaterThanOrEqual(damagedHP1 * 2 - 1);

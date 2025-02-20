@@ -39,7 +39,7 @@ describe("Moves - Future Sight", () => {
       game.move.select(MoveId.SPLASH, 0);
       if (double) {
         game.move.select(MoveId.SPLASH, 1);
-        await game.phaseInterceptor.to("TurnEndPhase");
+        await game.toEndOfTurn();
       }
       await game.toNextTurn();
     }
@@ -133,7 +133,7 @@ describe("Moves - Future Sight", () => {
 
     game.move.select(MoveId.FUTURE_SIGHT, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.FUTURE_SIGHT, 1, BattlerIndex.ENEMY_2);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.arena.getTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
     enemyPokemon.forEach((p) => expect(p.isFullHp()).toBeTruthy());
@@ -153,7 +153,7 @@ describe("Moves - Future Sight", () => {
     game.move.select(MoveId.FUTURE_SIGHT, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.FUTURE_SIGHT, 1, BattlerIndex.ENEMY);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.arena.getTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
     expect(playerPokemon[1].getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
@@ -168,7 +168,7 @@ describe("Moves - Future Sight", () => {
 
     game.move.select(MoveId.DOOM_DESIRE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.FUTURE_SIGHT, 1, BattlerIndex.ENEMY_2);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     enemyPokemon.forEach((p) => expect(p.isFullHp()).toBeTruthy());
     expect(game.scene.arena.getTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
@@ -187,7 +187,7 @@ describe("Moves - Future Sight", () => {
 
     game.move.select(MoveId.FUTURE_SIGHT, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.arena.getTag(ArenaTagType.DELAYED_ATTACK)).toBeDefined();
 
@@ -195,7 +195,7 @@ describe("Moves - Future Sight", () => {
 
     game.move.select(MoveId.HEADBUTT, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(enemyPokemon[0].isFainted()).toBeTruthy();
     expect(enemyPokemon[1].isFullHp()).toBeTruthy();

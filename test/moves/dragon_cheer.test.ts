@@ -43,7 +43,7 @@ describe("Moves - Dragon Cheer", () => {
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     // After Tackle
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getCritStage).toHaveReturnedWith(1); // getCritStage is called on defender
   });
 
@@ -60,7 +60,7 @@ describe("Moves - Dragon Cheer", () => {
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     // After Tackle
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getCritStage).toHaveReturnedWith(2); // getCritStage is called on defender
   });
 
@@ -78,7 +78,7 @@ describe("Moves - Dragon Cheer", () => {
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     // After Tackle
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getCritStage).toHaveReturnedWith(1); // getCritStage is called on defender
 
     await game.toNextTurn();

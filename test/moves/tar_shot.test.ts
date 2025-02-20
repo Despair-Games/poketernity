@@ -42,7 +42,7 @@ describe("Moves - Tar Shot", () => {
 
     game.move.select(MoveId.TAR_SHOT);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getStatStage(Stat.SPD)).toBe(-1);
 
     await game.toNextTurn();
@@ -63,14 +63,14 @@ describe("Moves - Tar Shot", () => {
 
     game.move.select(MoveId.TAR_SHOT);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getStatStage(Stat.SPD)).toBe(-1);
 
     await game.toNextTurn();
 
     game.move.select(MoveId.TAR_SHOT);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getStatStage(Stat.SPD)).toBe(-2);
 
     await game.toNextTurn();
@@ -92,7 +92,7 @@ describe("Moves - Tar Shot", () => {
 
     game.move.select(MoveId.TAR_SHOT);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getStatStage(Stat.SPD)).toBe(-1);
 
     await game.toNextTurn();
@@ -114,7 +114,7 @@ describe("Moves - Tar Shot", () => {
 
     game.move.select(MoveId.TAR_SHOT);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getStatStage(Stat.SPD)).toBe(-1);
 
     await game.toNextTurn();
