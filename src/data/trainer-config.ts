@@ -1217,13 +1217,36 @@ export class TrainerConfig {
     this.setStaticParty();
     this.setHasVoucher(true);
     this.setVictoryBgm("victory_gym");
+    // this.setGenModifiersFunc((party) => {
+    //   const waveIndex = globalScene.currentBattle.waveIndex;
+    //   return getRandomTeraModifiers(
+    //     party,
+    //     waveIndex >= 100 ? 1 : 0,
+    //     specialtyTypes.length ? specialtyTypes : undefined,
+    //   );
+    // });
+
+    return this;
+  }
+
+  /**
+   * Function for generating Paldea gym leaders
+   * The only difference is they will always tera their ace Pokemon
+   * to their specialty type
+   * @param signatureSpecies
+   * @param isMale
+   * @param specialtyTypes
+   * @returns
+   */
+  initForPaldeaGymLeader(
+    signatureSpecies: (Species | Species[])[],
+    isMale: boolean,
+    ...specialtyTypes: ElementalType[]
+  ): TrainerConfig {
+    this.initForGymLeader(signatureSpecies, isMale, ...specialtyTypes);
+    this.setBattleBgm("battle_paldea_gym");
     this.setGenModifiersFunc((party) => {
-      const waveIndex = globalScene.currentBattle.waveIndex;
-      return getRandomTeraModifiers(
-        party,
-        waveIndex >= 100 ? 1 : 0,
-        specialtyTypes.length ? specialtyTypes : undefined,
-      );
+      return getSpecificTeraModifier(party, party.length - 1, specialtyTypes[0]);
     });
 
     return this;
@@ -1625,6 +1648,22 @@ export function getSpeciesFilterRandomPartyMemberFunc(
 
     return globalScene.addEnemyPokemon(species, level, trainerSlot, undefined, false, undefined, postProcess);
   };
+}
+
+function getSpecificTeraModifier(
+  party: EnemyPokemon[],
+  partySlot: number,
+  teraType: ElementalType,
+): PersistentModifier[] {
+  const ret: PersistentModifier[] = [];
+  ret.push(
+    modifierTypes
+      .TERA_SHARD()
+      .generateType([], [teraType])!
+      .withIdFromFunc(modifierTypes.TERA_SHARD)
+      .newModifier(party[partySlot]) as PersistentModifier,
+  );
+  return ret;
 }
 
 function getRandomTeraModifiers(party: EnemyPokemon[], count: number, types?: ElementalType[]): PersistentModifier[] {
