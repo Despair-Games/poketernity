@@ -90,9 +90,9 @@ describe("Dex Data", () => {
 
     // bulbasaur
     const newCatch = new PlayerPokemon(species, 5, 1, 0, Gender.MALE, false, 0, [], Nature.MODEST);
-    const isNewStarter = await gameData.setPokemonCaught(newCatch, true, false, false);
+    const newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
 
-    expect(isNewStarter).toBeFalsy();
+    expect(newStarters.length).toBe(0);
     expect(gameData.gameStats.pokemonCaught).toBe(1);
     expect(starterData.candyCount).toBe(1);
     expect(starterData.abilityAttr & AbilityAttr.ABILITY_2).toBeTruthy();
@@ -127,8 +127,8 @@ describe("Dex Data", () => {
     // Catch shiny tier 2 a Venusaur
     const species = getPokemonSpecies(Species.VENUSAUR);
     const newCatch = new PlayerPokemon(species, 5, 2, 0, Gender.FEMALE, true, 1, [], Nature.ADAMANT);
-    const isNewStarter = await gameData.setPokemonCaught(newCatch, true, false, false);
-    expect(isNewStarter).toBeFalsy();
+    const newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
+    expect(newStarters.length).toBe(0);
 
     expect(gameData.gameStats.pokemonCaught).toBe(1);
     expect(gameData.gameStats.shinyPokemonCaught).toBe(1);
@@ -182,14 +182,14 @@ describe("Dex Data", () => {
     // Catch a donphan, should unlock phanpy as a starter
     let species = getPokemonSpecies(Species.DONPHAN);
     let newCatch = new PlayerPokemon(species, 5, 2, 0, Gender.FEMALE, false, 0, [], Nature.MILD);
-    let isNewStarter = await gameData.setPokemonCaught(newCatch, true, false, false);
-    expect(isNewStarter).toBeTruthy();
+    let newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
+    expect(newStarters.length).toBe(1);
 
     // Hatch a shiny Phanpy
     species = getPokemonSpecies(Species.PHANPY);
     newCatch = new PlayerPokemon(species, 5, 0, 0, Gender.MALE, true, 0, [], Nature.QUIET);
-    isNewStarter = await gameData.setPokemonCaught(newCatch, true, true, false);
-    expect(isNewStarter).toBeFalsy();
+    newStarters = await gameData.setPokemonCaught(newCatch, true, true, false);
+    expect(newStarters.length).toBe(0);
 
     expect(gameData.gameStats.pokemonCaught).toBe(1);
     expect(gameData.gameStats.shinyPokemonCaught).toBe(0);
@@ -233,8 +233,8 @@ describe("Dex Data", () => {
 
     // Catch cosplay pikachu > no equivalent form in pichu > unlock default form
     const newCatch = new PlayerPokemon(species, 5, 0, 2, Gender.FEMALE, false, 0, [], Nature.MILD);
-    const isNewStarter = await gameData.setPokemonCaught(newCatch, true, false, false);
-    expect(isNewStarter).toBeTruthy();
+    const newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
+    expect(newStarters.length).toBe(2);
 
     expect(pikachuDexData.caughtAttr & gameData.getFormAttr(0)).toBeFalsy();
     expect(pikachuDexData.caughtAttr & gameData.getFormAttr(2)).toBeTruthy(); // cosplay pikachu
@@ -252,8 +252,8 @@ describe("Dex Data", () => {
 
     // Catch partner Pikachu
     let newCatch = new PlayerPokemon(species, 5, 0, 1, Gender.FEMALE, false, 0, [], Nature.MILD);
-    let isNewStarter = await gameData.setPokemonCaught(newCatch, true, false, false);
-    expect(isNewStarter).toBeTruthy();
+    let newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
+    expect(newStarters.length).toBe(2);
 
     expect(pikachuDexData.caughtAttr & gameData.getFormAttr(1)).toBeTruthy(); //partner pikachu
     expect(pichuDexData.caughtAttr & gameData.getFormAttr(0)).toBeFalsy();
@@ -261,8 +261,8 @@ describe("Dex Data", () => {
 
     // Catch cosplay pikachu > no equivalent form in pichu > already has a form unlocked > no other form unlock
     newCatch = new PlayerPokemon(species, 5, 0, 5, Gender.FEMALE, false, 0, [], Nature.MILD);
-    isNewStarter = await gameData.setPokemonCaught(newCatch, true, false, false);
-    expect(isNewStarter).toBeFalsy();
+    newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
+    expect(newStarters.length).toBe(0);
 
     expect(pikachuDexData.caughtAttr & gameData.getFormAttr(0)).toBeFalsy();
     expect(pikachuDexData.caughtAttr & gameData.getFormAttr(1)).toBeTruthy(); // partner pikachu
