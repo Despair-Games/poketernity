@@ -23,7 +23,6 @@ import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-spe
 import { allSpecies } from "#app/data/data-lists";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { HiddenAbilityRateBoosterModifier } from "#app/modifier/modifier";
-import { achvs } from "#app/system/achv";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
@@ -46,6 +45,7 @@ import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import { settings } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { addPokemonDataToDexAndValidateAchievements } from "../utils/encounter-pokemon-utils";
 
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/weirdDream";
@@ -477,32 +477,12 @@ async function postProcessTransformedPokemon(
   // Roll a neutral nature
   newPokemon.nature = [Nature.HARDY, Nature.DOCILE, Nature.BASHFUL, Nature.QUIRKY, Nature.SERIOUS][randSeedInt(5)];
 
-  // For pokemon at/below 570 BST or any shiny pokemon, unlock it permanently as if you had caught it
-  if (
-    !forBattle
-    && (newPokemon.getSpeciesForm().getBaseStatTotal() <= NON_LEGENDARY_BST_THRESHOLD || newPokemon.isShiny())
-  ) {
-    if (
-      newPokemon.getSpeciesForm().abilityHidden
-      && newPokemon.abilityIndex === newPokemon.getSpeciesForm().getAbilityCount() - 1
-    ) {
-      globalScene.validateAchv(achvs.HIDDEN_ABILITY);
-    }
-
-    if (newPokemon.species.isSubLegendary()) {
-      globalScene.validateAchv(achvs.CATCH_SUB_LEGENDARY);
-    }
-
-    if (newPokemon.species.isLegendary()) {
-      globalScene.validateAchv(achvs.CATCH_LEGENDARY);
-    }
-
-    if (newPokemon.species.isMythical()) {
-      globalScene.validateAchv(achvs.CATCH_MYTHICAL);
-    }
-
-    globalScene.gameData.updateSpeciesDexIvs(newPokemon.species.getRootSpeciesId(true), newPokemon.ivs);
-    const newStarterUnlocked = await globalScene.gameData.setPokemonCaught(newPokemon, true, false, false);
+  if (!forBattle) {
+    // For pokemon at/below 570 BST or any shiny pokemon, unlock it permanently as if you had caught it
+    // For other mons, update their dex data as long as they had been unlocked previously
+    const unlockData =
+      newPokemon.getSpeciesForm().getBaseStatTotal() <= NON_LEGENDARY_BST_THRESHOLD || newPokemon.isShiny();
+    const newStarterUnlocked = await addPokemonDataToDexAndValidateAchievements(newPokemon, unlockData);
     if (newStarterUnlocked) {
       isNewStarter = true;
       // TODO: if you get a Pikachu and it unlocks both Pichu and Pikachu as starter only the message for Pichu will be shown
