@@ -282,7 +282,7 @@ export class MovePhase extends BattlePhase {
           new CommonAnimPhase(
             this.pokemon.getBattlerIndex(),
             undefined,
-            CommonAnim.POISON + (this.pokemon.getStatusEffect(true) - 1),
+            CommonAnim.POISON + (statusEffect - 1),
           ),
         );
       } else if (healed) {
