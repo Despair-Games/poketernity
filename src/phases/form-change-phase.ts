@@ -172,10 +172,6 @@ export class FormChangePhase extends FormChangeBasePhase {
     animations.doCircleInward(this.baseBgImg, this.container);
     time.delayedCall(900, () => {
       this.pokemon.changeForm(this.formChange).then(() => {
-        if (!this.modal) {
-          globalScene.unshiftPhase(new EndEvolutionPhase());
-        }
-
         globalScene.audioManager.playSound("se/shine");
         animations.doSpray(this.baseBgImg, this.container);
         tweens.add({
@@ -203,9 +199,12 @@ export class FormChangePhase extends FormChangeBasePhase {
   public override end(): void {
     const { ui } = globalScene;
 
-    const formChangeLearnMove = this.pokemon.getLevelMoves(EVOLVE_MOVE, true);
-    for (const [, learnMoveId] of formChangeLearnMove) {
-      globalScene.unshiftPhase(new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), learnMoveId));
+    if (!this.modal) {
+      const formChangeLearnMove = this.pokemon.getLevelMoves(EVOLVE_MOVE, true);
+      for (const [, learnMoveId] of formChangeLearnMove) {
+        globalScene.unshiftPhase(new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), learnMoveId));
+      }
+      globalScene.unshiftPhase(new EndEvolutionPhase());
     }
 
     this.pokemon.findAndRemoveTags((t) => t.tagType === BattlerTagType.AUTOTOMIZED);
