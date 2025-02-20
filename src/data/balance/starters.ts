@@ -1,12 +1,32 @@
 import { Species } from "#enums/species";
+import { VariantTier } from "#enums/variant-tier";
 
 export const POKERUS_STARTER_COUNT = 5;
 
-// #region Friendship constants
-export const CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER = 3;
+// #region Friendship and candy constants and helper functions
 export const FRIENDSHIP_GAIN_FROM_BATTLE = 3;
 export const FRIENDSHIP_GAIN_FROM_RARE_CANDY = 6;
 export const FRIENDSHIP_LOSS_FROM_FAINT = 5;
+export const CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER = 3;
+
+export const STARTER_CANDY_GAIN_FROM_CATCH = 1;
+export const STARTER_CANDY_MULIPLIER_FOR_BOSS = 2;
+export const STARTER_CANDY_MULIPLIER_FOR_EGG = 2;
+export const STARTER_CANDY_BASE_MULIPLIER_FOR_SHINY = 5;
+
+/**
+ * Get the starter candy multiplier for catching (or hatching) a shiny Pokemon based on its variant.
+ * Common shinies gives a x5 multiplier and every tier above that doubles that (common: x5, rare: x10, epic: x20).
+ * @param variant the {@linkcode VariantTier} to consider.
+ * @returns the amount to multiply candy gain by.
+ */
+export function getCandyGainMultiplierForShinies(variant: VariantTier) {
+  // Make sure the given variant is valid, otherwise default to base variant
+  if (!VariantTier[variant]) {
+    variant = 0;
+  }
+  return STARTER_CANDY_BASE_MULIPLIER_FOR_SHINY * (1 << variant);
+}
 
 /**
  * Function to get the cumulative friendship threshold at which a candy is earned
@@ -36,6 +56,8 @@ export function getStarterValueFriendshipCap(starterCost: number): number {
       return 600;
   }
 }
+
+//#endregion
 
 export const speciesStarterCosts = {
   [Species.BULBASAUR]: 3,

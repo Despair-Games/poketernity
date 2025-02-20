@@ -7,7 +7,13 @@ import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { allSpecies } from "#app/data/data-lists";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { speciesStarterCosts } from "#app/data/balance/starters";
+import {
+  STARTER_CANDY_GAIN_FROM_CATCH,
+  STARTER_CANDY_MULIPLIER_FOR_BOSS,
+  STARTER_CANDY_MULIPLIER_FOR_EGG,
+  getCandyGainMultiplierForShinies,
+  speciesStarterCosts,
+} from "#app/data/balance/starters";
 import {
   randInt,
   getEnumKeys,
@@ -1612,13 +1618,14 @@ export class GameData {
         if (!hasPrevolution && (!globalScene.gameMode.isDaily || hasNewAttr || fromEgg)) {
           let candyMultiplier = 1;
           if (pokemon.isShiny()) {
-            // Common shiny gives x5 candies, rare shiny: x10, epic shiny: x20.
-            candyMultiplier *= 5 * (1 << (pokemon.variant ?? 0));
+            candyMultiplier *= getCandyGainMultiplierForShinies(pokemon.variant);
           }
-          if (fromEgg || pokemon.isBoss()) {
-            candyMultiplier *= 2;
+          if (fromEgg) {
+            candyMultiplier *= STARTER_CANDY_MULIPLIER_FOR_EGG;
+          } else if (pokemon.isBoss()) {
+            candyMultiplier *= STARTER_CANDY_MULIPLIER_FOR_BOSS;
           }
-          this.addStarterCandy(species, 1 * candyMultiplier);
+          this.addStarterCandy(species, STARTER_CANDY_GAIN_FROM_CATCH * candyMultiplier);
         }
       }
 
