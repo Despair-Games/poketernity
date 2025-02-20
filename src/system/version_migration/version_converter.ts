@@ -3,6 +3,22 @@ import type { SystemSaveData } from "#app/@types/SystemData";
 import { compareVersions } from "compare-versions";
 import { version } from "../../../package.json";
 
+/*
+// template for save migrator creation
+// versions/vA_B_C.ts
+const systemMigratorA = (data: SystemSaveData): void => {};
+
+export const systemMigrators = [systemMigratorA] as const;
+
+const settingsMigratorA = (data: Settings): void => {};
+
+export const settingsMigrators = [settingsMigratorA] as const;
+
+const sessionMigratorA = (data: SessionSaveData): void => {};
+
+export const sessionMigrators = [sessionMigratorA] as const;
+*/
+
 // --- vA.B.C PATCHES --- //
 // import * as vA_B_C from "./versions/vA_B_C";
 
