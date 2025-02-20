@@ -72,14 +72,6 @@ export class TurnCommandManager {
   // #region Public Methods
 
   /**
-   * @returns the {@linkcode TurnCommand} in the turn sequence
-   * for the given {@linkcode Pokemon}.
-   */
-  public getCommand(pokemon: Pokemon): TurnCommand | undefined {
-    return this.turnCommands.find((tc) => tc.pokemon === pokemon);
-  }
-
-  /**
    * Adds a command to the command queue.
    * After this is called, turn order should be reset
    * using {@linkcode setTurnOrder}.
@@ -132,7 +124,7 @@ export class TurnCommandManager {
    * @returns the {@linkcode TurnCommand} that was removed, or `undefined` if no command is removed
    */
   public tryRemoveCommand(commandFilter: TurnCommandFilter): TurnCommand | undefined {
-    const cmdIndex = this.turnCommands.findIndex((tc) => commandFilter(tc));
+    const cmdIndex = this.turnCommands.findIndex(commandFilter);
     if (cmdIndex > -1) {
       return this.turnCommands.splice(cmdIndex, 1)[0];
     }
@@ -145,7 +137,7 @@ export class TurnCommandManager {
    * @returns `true` if a command was modified
    */
   public tryAdjustMoveCommandTarget(pokemon: Pokemon, newTargets: BattlerIndex[]): boolean {
-    const turnCommand = this.findCommand((tc) => tc.pokemon === pokemon);
+    const turnCommand = this.findPokemonCommand(pokemon);
     if (turnCommand) {
       turnCommand.targets = newTargets;
       return true;

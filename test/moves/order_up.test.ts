@@ -85,7 +85,7 @@ describe("Moves - Order Up", () => {
     await game.phaseInterceptor.to("TurnStartPhase", false);
 
     const { turnManager } = game.scene.currentBattle;
-    expect(turnManager.findCommand((tc) => tc.pokemon === tatsugiri)).toBeUndefined();
+    expect(turnManager.findPokemonCommand(tatsugiri)).toBeUndefined();
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
