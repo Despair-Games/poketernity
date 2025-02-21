@@ -7,6 +7,7 @@ import { Abilities } from "#enums/abilities";
 import { Species } from "#enums/species";
 import { MoveId } from "#enums/move-id";
 import { CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER, FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
+import { api } from "#app/plugins/api/api";
 
 describe("Candy Friendship Modifier Event", () => {
   let phaserGame: Phaser.Game;
@@ -87,7 +88,10 @@ describe("Candy Friendship Modifier Event", () => {
     expect(starterData.friendship).toBe(FRIENDSHIP_GAIN_FROM_BATTLE * CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER);
   });
 
-  it("should not apply the event's multiplier outside of classic mode", async () => {
+  it("should not apply the event's multiplier in daily mode", async () => {
+    vi.spyOn(api.daily, "getSeed").mockResolvedValue("test-seed");
+    await api.ping();
+
     expect(timedEventManager.getActiveEvent()).toBeDefined();
     expect(timedEventManager.isEventActive(EventModifierType.CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER)).toBeTruthy();
     expect(timedEventManager.getClassicCandyFriendshipMultiplier()).toBe(3);
