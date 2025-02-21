@@ -314,7 +314,7 @@ export class MovePhase extends BattlePhase {
    * cancelled, and the corresponding tag's interrupting message is played.
    */
   protected resolveImprisoningEffects(): void {
-    if (this.cancelled || this.failed) {
+    if (this.followUp || this.cancelled || this.failed) {
       return;
     }
 

@@ -4,6 +4,10 @@ import { Abilities } from "#enums/abilities";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { BattlerIndex } from "#enums/battler-index";
+import { MoveResult } from "#enums/move-result";
+import { StatusEffect } from "#enums/status-effect";
+import { BattlerTagType } from "#enums/battler-tag-type";
 
 describe("Moves - Imprison", () => {
   let phaserGame: Phaser.Game;
@@ -28,26 +32,93 @@ describe("Moves - Imprison", () => {
       .moveset([MoveId.TRANSFORM, MoveId.SPLASH]);
   });
 
-  it("Pokemon under Imprison cannot use shared moves", async () => {
+  it("should prevent opponents from using moves shared by the user", async () => {
     await game.classicMode.startBattle([Species.REGIELEKI]);
 
-    const playerPokemon = game.scene.getPlayerPokemon()!;
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
 
     game.move.select(MoveId.TRANSFORM);
-    await game.forceEnemyMove(MoveId.IMPRISON);
+    await game.move.selectEnemyMove(MoveId.IMPRISON);
     await game.toNextTurn();
-    const playerMoveset = playerPokemon.getMoveset().map((x) => x?.moveId);
-    const enemyMoveset = game.scene
-      .getEnemyPokemon()!
-      .getMoveset()
-      .map((x) => x?.moveId);
+    const playerMoveset = player.getMoveset().map((x) => x?.moveId);
+    const enemyMoveset = enemy.getMoveset().map((x) => x?.moveId);
     expect(enemyMoveset.includes(playerMoveset[0])).toBeTruthy();
 
     // Second turn, Imprison forces Struggle to occur
     game.move.select(MoveId.SPLASH);
     await game.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
-    const move1 = playerPokemon.getLastXMoves(1)[0]!;
-    expect(move1.move.id).toBe(MoveId.STRUGGLE);
+    expect(player.getLastXMoves()[0]?.move.id).toBe(MoveId.STRUGGLE);
+  });
+
+  it("should not prevent allies from using moves shared by the user", async () => {
+    game.override.battleType("double").moveset([MoveId.IMPRISON, MoveId.SPLASH]).enemyMoveset(MoveId.SPLASH);
+
+    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+
+    const playerPokemon = game.scene.getPlayerField();
+    const enemyPokemon = game.scene.getEnemyField();
+
+    game.move.select(MoveId.IMPRISON, 0);
+    game.move.select(MoveId.SPLASH);
+
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+
+    await game.toNextTurn();
+    playerPokemon.forEach((p) => expect(p.getLastXMoves()[0]?.result).toBe(MoveResult.SUCCESS));
+    enemyPokemon.forEach((p) => expect(p.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL));
+  });
+
+  it("should not interrupt moves invoked by Sleep Talk", async () => {
+    game.override
+      .moveset([MoveId.IMPRISON, MoveId.SPLASH])
+      .enemyMoveset([MoveId.SPLASH, MoveId.SLEEP_TALK])
+      .enemyStatusEffect(StatusEffect.SLEEP);
+
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const enemyPokemon = game.field.getEnemyPokemon();
+
+    game.move.select(MoveId.IMPRISON);
+    await game.move.selectEnemyMove(MoveId.SLEEP_TALK);
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+
+    await game.toNextTurn();
+    expect(enemyPokemon.getMoveHistory().map((turnMove) => turnMove.result)).toEqual(Array(2).fill(MoveResult.SUCCESS));
+  });
+
+  it("should not interfere with the effects of an ally's Imprison", async () => {
+    game.override
+      .battleType("double")
+      .moveset([]) // Moves are set manually for this test
+      .enemyMoveset([MoveId.SPLASH, MoveId.CELEBRATE]);
+
+    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+
+    const [feebas, magikarp] = game.scene.getPlayerField();
+    const enemyPokemon = game.scene.getEnemyField();
+
+    game.move.changeMoveset(feebas, [MoveId.IMPRISON, MoveId.SPLASH]);
+    game.move.changeMoveset(magikarp, [MoveId.IMPRISON, MoveId.CELEBRATE]);
+
+    game.move.select(MoveId.IMPRISON, 0);
+    game.move.select(MoveId.IMPRISON, 1);
+
+    await game.move.selectEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+
+    await game.toNextTurn();
+
+    [feebas, magikarp].forEach((p) => expect(p.getTag(BattlerTagType.IMPRISONING)).toBeDefined());
+    enemyPokemon.forEach((p) => expect(p.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL));
+
+    game.move.select(MoveId.SPLASH, 0);
+    game.move.select(MoveId.CELEBRATE, 1);
+
+    await game.toNextTurn();
+
+    enemyPokemon.forEach((p) => expect(p.getLastXMoves()[0]?.move.id).toBe(MoveId.STRUGGLE));
   });
 });

@@ -5,7 +5,8 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import { BattlerIndex } from "#enums/battler-index";
+import { MoveResult } from "#enums/move-result";
 
 describe("Moves - Aroma Veil", () => {
   let phaserGame: Phaser.Game;
@@ -28,22 +29,37 @@ describe("Moves - Aroma Veil", () => {
       .enemyMoveset([MoveId.HEAL_BLOCK, MoveId.IMPRISON, MoveId.SPLASH])
       .enemySpecies(Species.SHUCKLE)
       .ability(Abilities.AROMA_VEIL)
-      .moveset([MoveId.GROWL]);
+      .moveset(MoveId.SPLASH);
   });
 
   it("Aroma Veil protects the Pokemon's side against most Move Restriction Battler Tags", async () => {
     await game.classicMode.startBattle([Species.REGIELEKI, Species.BULBASAUR]);
 
-    const party = game.scene.getPlayerParty()! as PlayerPokemon[];
+    const playerPokemon = game.scene.getPlayerField();
 
-    game.move.select(MoveId.GROWL);
-    game.move.select(MoveId.GROWL);
-    await game.forceEnemyMove(MoveId.HEAL_BLOCK);
+    game.move.select(MoveId.SPLASH);
+    game.move.select(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.HEAL_BLOCK);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
-    party.forEach((p) => {
+
+    playerPokemon.forEach((p) => {
       expect(p.getTag(BattlerTagType.HEAL_BLOCK)).toBeUndefined();
     });
   });
 
-  it.todo("Aroma Veil does not protect against Imprison");
+  it("Aroma Veil does not protect against Imprison", async () => {
+    await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
+
+    const playerPokemon = game.scene.getPlayerField();
+
+    game.move.select(MoveId.SPLASH);
+    game.move.select(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.IMPRISON);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
+    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
+    await game.toNextTurn();
+
+    playerPokemon.forEach((p) => expect(p.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL));
+  });
 });
