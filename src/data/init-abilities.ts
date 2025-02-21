@@ -80,7 +80,7 @@ import { PostDamageForceSwitchAbAttr } from "#app/data/ab-attrs/post-damage-forc
 import { PostDancingMoveAbAttr } from "#app/data/ab-attrs/post-dancing-move-ab-attr";
 import { PostDefendAbilityGiveAbAttr } from "#app/data/ab-attrs/post-defend-ability-give-ab-attr";
 import { PostDefendAbilitySwapAbAttr } from "#app/data/ab-attrs/post-defend-ability-swap-ab-attr";
-import { PostDefendApplyArenaHazardTagAbAttr } from "#app/data/ab-attrs/post-defend-apply-arena-hazard-tag-ab-attr";
+import { PostDefendApplyEntryHazardTagAbAttr } from "#app/data/ab-attrs/post-defend-apply-entry-hazard-tag-ab-attr";
 import { PostDefendApplyBattlerTagAbAttr } from "#app/data/ab-attrs/post-defend-apply-battler-tag-ab-attr";
 import { PostDefendContactApplyStatusEffectAbAttr } from "#app/data/ab-attrs/post-defend-contact-apply-status-effect-ab-attr";
 import { PostDefendContactApplyTagChanceAbAttr } from "#app/data/ab-attrs/post-defend-contact-apply-tag-chance-ab-attr";
@@ -1473,7 +1473,7 @@ export function initAbilities() {
     new Ability(Abilities.COSTAR, 9).attr(PostSummonCopyAllyStatsAbAttr),
     new Ability(Abilities.TOXIC_DEBRIS, 9)
       .attr(
-        PostDefendApplyArenaHazardTagAbAttr,
+        PostDefendApplyEntryHazardTagAbAttr,
         (_target, _user, move) => move.category === MoveCategory.PHYSICAL,
         ArenaTagType.TOXIC_SPIKES,
       )
