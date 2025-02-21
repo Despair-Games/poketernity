@@ -1,11 +1,11 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import Phaser from "phaser";
 import { GameManager } from "#test/testUtils/gameManager";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { Stat } from "#enums/stat";
 import { getMovePosition } from "#test/testUtils/gameManagerUtils";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 
 describe("Abilities - Intimidate", () => {
@@ -31,16 +31,16 @@ describe("Abilities - Intimidate", () => {
       .enemyPassiveAbility(Abilities.HYDRATION)
       .ability(Abilities.INTIMIDATE)
       .startingWave(3)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should lower ATK stat stage by 1 of enemy Pokemon on entry and player switch", async () => {
     await game.classicMode.runToSummon([Species.MIGHTYENA, Species.POOCHYENA]);
     game.onNextPrompt(
       "CheckSwitchPhase",
-      Mode.CONFIRM,
+      UiMode.CONFIRM,
       () => {
-        game.setMode(Mode.MESSAGE);
+        game.setMode(UiMode.MESSAGE);
         game.endPhase();
       },
       () => game.isCurrentPhase("CommandPhase") || game.isCurrentPhase("TurnInitPhase"),
@@ -69,9 +69,9 @@ describe("Abilities - Intimidate", () => {
     await game.classicMode.runToSummon([Species.MIGHTYENA, Species.POOCHYENA]);
     game.onNextPrompt(
       "CheckSwitchPhase",
-      Mode.CONFIRM,
+      UiMode.CONFIRM,
       () => {
-        game.setMode(Mode.MESSAGE);
+        game.setMode(UiMode.MESSAGE);
         game.endPhase();
       },
       () => game.isCurrentPhase("CommandPhase") || game.isCurrentPhase("TurnInitPhase"),
@@ -89,7 +89,7 @@ describe("Abilities - Intimidate", () => {
 
   it("should not activate again if there is no switch or new entry", async () => {
     game.override.startingWave(2);
-    game.override.moveset([Moves.SPLASH]);
+    game.override.moveset([MoveId.SPLASH]);
     await game.classicMode.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
@@ -98,7 +98,7 @@ describe("Abilities - Intimidate", () => {
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-1);
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(-1);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-1);
@@ -106,7 +106,7 @@ describe("Abilities - Intimidate", () => {
   }, 20000);
 
   it("should lower ATK stat stage by 1 for every switch", async () => {
-    game.override.moveset([Moves.SPLASH]).enemyMoveset([Moves.VOLT_SWITCH]).startingWave(5);
+    game.override.moveset([MoveId.SPLASH]).enemyMoveset([MoveId.VOLT_SWITCH]).startingWave(5);
     await game.classicMode.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
@@ -115,7 +115,7 @@ describe("Abilities - Intimidate", () => {
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-1);
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(-1);
 
-    game.move.select(getMovePosition(game.scene, 0, Moves.SPLASH));
+    game.move.select(getMovePosition(game.scene, 0, MoveId.SPLASH));
     await game.toNextTurn();
 
     enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -123,7 +123,7 @@ describe("Abilities - Intimidate", () => {
     expect(playerPokemon.getStatStage(Stat.ATK)).toBe(-2);
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(0);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
     enemyPokemon = game.scene.getEnemyPokemon()!;

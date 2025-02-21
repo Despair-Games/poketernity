@@ -4,31 +4,33 @@ import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
-import * as BattleAnims from "#app/data/battle-anims";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import * as MoveAnimUtils from "#app/utils/move-anim-utils";
+import * as InitMoveAnim from "#app/data/init-move-anim";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
   runMysteryEncounterToEnd,
   skipBattleRunMysteryEncounterRewardsPhase,
 } from "#test/mystery-encounter/encounter-test-utils";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type BattleScene from "#app/battle-scene";
 import { TheStrongStuffEncounter } from "#app/data/mystery-encounters/encounters/the-strong-stuff-encounter";
 import { Nature } from "#enums/nature";
 import { BerryType } from "#enums/berry-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { PokemonMove } from "#app/field/pokemon";
-import { Mode } from "#app/ui/ui";
+import { PokemonMove } from "#app/field/pokemon-move";
+import { UiMode } from "#enums/ui-mode";
 import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
-import { BerryModifier, PokemonBaseStatTotalModifier } from "#app/modifier/modifier";
+import { PokemonBaseStatTotalModifier } from "#app/modifier/modifier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { CommandPhase } from "#app/phases/command-phase";
-import { MovePhase } from "#app/phases/move-phase";
+import { type MovePhase } from "#app/phases/move-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { Abilities } from "#enums/abilities";
+import { PhaseId } from "#enums/phase-id";
 
 const namespace = "mysteryEncounters/theStrongStuff";
 const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
@@ -93,8 +95,8 @@ describe("The Strong Stuff - Mystery Encounter", () => {
   it("should initialize fully ", async () => {
     initSceneWithoutEncounterPhase(scene, defaultParty);
     scene.currentBattle.mysteryEncounter = TheStrongStuffEncounter;
-    const moveInitSpy = vi.spyOn(BattleAnims, "initMoveAnim");
-    const moveLoadSpy = vi.spyOn(BattleAnims, "loadMoveAnimAssets");
+    const moveInitSpy = vi.spyOn(InitMoveAnim, "initMoveAnim");
+    const moveLoadSpy = vi.spyOn(MoveAnimUtils, "loadMoveAnimAssets");
 
     const { onInit } = TheStrongStuffEncounter;
 
@@ -115,7 +117,7 @@ describe("The Strong Stuff - Mystery Encounter", () => {
             shiny: false,
             customPokemonData: new CustomPokemonData({ spriteScale: 1.25 }),
             nature: Nature.BOLD,
-            moveSet: [Moves.INFESTATION, Moves.SALT_CURE, Moves.GASTRO_ACID, Moves.HEAL_ORDER],
+            moveSet: [MoveId.INFESTATION, MoveId.SALT_CURE, MoveId.GASTRO_ACID, MoveId.HEAL_ORDER],
             modifierConfigs: expect.any(Array),
             tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
             mysteryEncounterBattleEffects: expect.any(Function),
@@ -201,31 +203,23 @@ describe("The Strong Stuff - Mystery Encounter", () => {
       expect(enemyField[0].summonData.statStages).toEqual([0, 2, 0, 2, 0, 0, 0]);
       const shuckleItems = enemyField[0].getHeldItems();
       expect(shuckleItems.length).toBe(5);
-      expect(shuckleItems.find((m) => m instanceof BerryModifier && m.berryType === BerryType.SITRUS)?.stackCount).toBe(
-        1,
-      );
-      expect(shuckleItems.find((m) => m instanceof BerryModifier && m.berryType === BerryType.ENIGMA)?.stackCount).toBe(
-        1,
-      );
-      expect(shuckleItems.find((m) => m instanceof BerryModifier && m.berryType === BerryType.GANLON)?.stackCount).toBe(
-        1,
-      );
-      expect(shuckleItems.find((m) => m instanceof BerryModifier && m.berryType === BerryType.APICOT)?.stackCount).toBe(
-        1,
-      );
-      expect(shuckleItems.find((m) => m instanceof BerryModifier && m.berryType === BerryType.LUM)?.stackCount).toBe(2);
+      expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.SITRUS)?.stackCount).toBe(1);
+      expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.ENIGMA)?.stackCount).toBe(1);
+      expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.GANLON)?.stackCount).toBe(1);
+      expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.APICOT)?.stackCount).toBe(1);
+      expect(shuckleItems.find((m) => m.isBerryModifier() && m.berryType === BerryType.LUM)?.stackCount).toBe(2);
       expect(enemyField[0].moveset).toEqual([
-        new PokemonMove(Moves.INFESTATION),
-        new PokemonMove(Moves.SALT_CURE),
-        new PokemonMove(Moves.GASTRO_ACID),
-        new PokemonMove(Moves.HEAL_ORDER),
+        new PokemonMove(MoveId.INFESTATION),
+        new PokemonMove(MoveId.SALT_CURE),
+        new PokemonMove(MoveId.GASTRO_ACID),
+        new PokemonMove(MoveId.HEAL_ORDER),
       ]);
 
       // Should have used moves pre-battle
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is<MovePhase>(PhaseId.MOVE)).map((p) => p[0]);
       expect(movePhases.length).toBe(2);
-      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === Moves.GASTRO_ACID).length).toBe(1);
-      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === Moves.STEALTH_ROCK).length).toBe(1);
+      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.GASTRO_ACID).length).toBe(1);
+      expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.STEALTH_ROCK).length).toBe(1);
     });
 
     it("should have Soul Dew in rewards", async () => {
@@ -236,7 +230,7 @@ describe("The Strong Stuff - Mystery Encounter", () => {
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
       await game.phaseInterceptor.run(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;

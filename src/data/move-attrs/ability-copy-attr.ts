@@ -2,13 +2,18 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
-import { UncopiableAbilityAbAttr } from "#app/data/ab-attrs/uncopiable-ability-ab-attr";
-import { UnsuppressableAbilityAbAttr } from "#app/data/ab-attrs/unsuppressable-ability-ab-attr";
-import { allAbilities } from "#app/data/ability";
+import { allAbilities } from "#app/data/data-lists";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
+/**
+ * Attribute to copy the target's ability onto the user (and, optionally, the user's ally).
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Role_Play_(move) | Role Play}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Doodle_(move) | Doodle}.
+ * @extends MoveEffectAttr
+ */
 export class AbilityCopyAttr extends MoveEffectAttr {
   public copyToPartner: boolean;
 
@@ -18,11 +23,7 @@ export class AbilityCopyAttr extends MoveEffectAttr {
     this.copyToPartner = copyToPartner;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
-      return false;
-    }
-
+  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     user.summonData.ability = target.getAbility().id;
 
     globalScene.queueMessage(
@@ -50,10 +51,11 @@ export class AbilityCopyAttr extends MoveEffectAttr {
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) => {
       let ret =
-        !target.getAbility().hasAttr(UncopiableAbilityAbAttr)
-        && !user.getAbility().hasAttr(UnsuppressableAbilityAbAttr);
+        !target.getAbility().hasAttrFlag(AbAttrFlag.UNCOPIABLE_ABILITY)
+        && !user.getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY);
       if (this.copyToPartner && globalScene.currentBattle?.double) {
-        ret = ret && (!user.getAlly().hp || !user.getAlly().getAbility().hasAttr(UnsuppressableAbilityAbAttr));
+        ret =
+          ret && (!user.getAlly().hp || !user.getAlly().getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY));
       } else {
         ret = ret && user.getAbility().id !== target.getAbility().id;
       }

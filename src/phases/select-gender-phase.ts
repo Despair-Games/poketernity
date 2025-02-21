@@ -1,46 +1,51 @@
 import { globalScene } from "#app/global-scene";
-import { PlayerGender } from "#app/enums/player-gender";
 import { Phase } from "#app/phase";
-import { SettingKeys } from "#app/system/settings/settings";
-import { Mode } from "#app/ui/ui";
+import { settings } from "#app/system/settings/settings-manager";
+import { UiMode } from "#enums/ui-mode";
+import { PlayerGender } from "#enums/player-gender";
 import i18next from "i18next";
+import { PhaseId } from "#enums/phase-id";
+import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 
 export class SelectGenderPhase extends Phase {
-  constructor() {
-    super();
-  }
+  override readonly id = PhaseId.SELECT_GENDER;
 
-  override start(): void {
+  public override start(): void {
     super.start();
 
-    globalScene.ui.showText(i18next.t("menu:boyOrGirl"), null, () => {
-      globalScene.ui.setMode(Mode.OPTION_SELECT, {
-        options: [
-          {
-            label: i18next.t("settings:boy"),
-            handler: () => {
-              globalScene.gameData.gender = PlayerGender.MALE;
-              globalScene.gameData.saveSetting(SettingKeys.Player_Gender, 0);
-              globalScene.gameData.saveSystem().then(() => this.end());
-              return true;
-            },
+    const { gameData, ui } = globalScene;
+
+    const menuOptionsConfig: OptionSelectModeConfig = {
+      options: [
+        {
+          label: i18next.t("settings:boy"),
+          handler: () => {
+            settings.update("display", "playerGender", PlayerGender.MALE);
+            gameData.saveSystem().then(() => this.end());
+            return true;
           },
-          {
-            label: i18next.t("settings:girl"),
-            handler: () => {
-              globalScene.gameData.gender = PlayerGender.FEMALE;
-              globalScene.gameData.saveSetting(SettingKeys.Player_Gender, 1);
-              globalScene.gameData.saveSystem().then(() => this.end());
-              return true;
-            },
+        },
+        {
+          label: i18next.t("settings:girl"),
+          handler: () => {
+            settings.update("display", "playerGender", PlayerGender.FEMALE);
+            gameData.saveSystem().then(() => this.end());
+            return true;
           },
-        ],
-      });
+        },
+      ],
+      inputDelay: 1000,
+      blockCancelButton: true,
+      yOffset: 48,
+    };
+
+    ui.showText(i18next.t("menu:boyOrGirl"), null, () => {
+      ui.setMode(UiMode.OPTION_SELECT, menuOptionsConfig);
     });
   }
 
-  override end(): void {
-    globalScene.ui.setMode(Mode.MESSAGE);
+  public override end(): void {
+    globalScene.ui.setMode(UiMode.MESSAGE);
     super.end();
   }
 }

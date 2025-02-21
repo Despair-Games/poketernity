@@ -1,16 +1,19 @@
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import type { Achv } from "#app/system/achv";
-import { achvs, getAchievementDescription } from "#app/system/achv";
+import { achvs } from "#app/system/achv";
 import type { Voucher } from "#app/system/voucher";
 import { getVoucherTypeIcon, getVoucherTypeName, vouchers } from "#app/system/voucher";
 import MessageUiHandler from "#app/ui/message-ui-handler";
-import { addTextObject, TextStyle } from "#app/ui/text";
-import type { Mode } from "#app/ui/ui";
+import { addTextObject } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
+import type { UiMode } from "#enums/ui-mode";
 import { addWindow } from "#app/ui/ui-theme";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import { PlayerGender } from "#enums/player-gender";
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 enum Page {
   ACHIEVEMENTS,
@@ -59,7 +62,7 @@ export default class AchvsUiHandler extends MessageUiHandler {
   private cursorObj: Phaser.GameObjects.NineSlice | null;
   private currentPage: Page;
 
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
 
     this.achvsTotal = Object.keys(achvs).length;
@@ -70,14 +73,9 @@ export default class AchvsUiHandler extends MessageUiHandler {
   setup() {
     const ui = this.getUi();
 
-    this.mainContainer = globalScene.add.container(1, -(globalScene.game.canvas.height / 6) + 1);
+    this.mainContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
 
-    this.mainContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 6, globalScene.game.canvas.height / 6),
-      Phaser.Geom.Rectangle.Contains,
-    );
-
-    this.headerBg = addWindow(0, 0, globalScene.game.canvas.width / 6 - 2, 24);
+    this.headerBg = addWindow(0, 0, GAME_WIDTH - 2, 24);
     this.headerBg.setOrigin(0, 0);
 
     this.headerText = addTextObject(0, 0, "", TextStyle.SETTINGS_LABEL);
@@ -91,18 +89,13 @@ export default class AchvsUiHandler extends MessageUiHandler {
     this.headerActionText.setPositionRelative(this.headerBg, 264, 8);
 
     // We need to get the player gender from the game data to add the correct prefix to the achievement name
-    const genderIndex = globalScene.gameData.gender ?? PlayerGender.MALE;
+    const genderIndex = settings.display.playerGender ?? PlayerGender.MALE;
     const genderStr = PlayerGender[genderIndex].toLowerCase();
 
     this.achvsName = i18next.t("achv:Achievements.name", { context: genderStr });
     this.vouchersName = i18next.t("voucher:vouchers");
 
-    this.iconsBg = addWindow(
-      0,
-      this.headerBg.height,
-      globalScene.game.canvas.width / 6 - 2,
-      globalScene.game.canvas.height / 6 - this.headerBg.height - 68,
-    );
+    this.iconsBg = addWindow(0, this.headerBg.height, GAME_WIDTH - 2, GAME_HEIGHT - this.headerBg.height - 68);
     this.iconsBg.setOrigin(0, 0);
 
     const yOffset = 6;
@@ -158,7 +151,7 @@ export default class AchvsUiHandler extends MessageUiHandler {
     this.unlockText.setOrigin(0.5, 0.5);
     this.unlockText.setPositionRelative(unlockBg, unlockBg.width / 2, unlockBg.height / 2);
 
-    const descriptionBg = addWindow(0, titleBg.y + titleBg.height, globalScene.game.canvas.width / 6 - 2, 42);
+    const descriptionBg = addWindow(0, titleBg.y + titleBg.height, GAME_WIDTH - 2, 42);
     descriptionBg.setOrigin(0, 0);
 
     const descriptionText = addTextObject(0, 0, "", TextStyle.WINDOW, { maxLines: 2 });
@@ -210,12 +203,6 @@ export default class AchvsUiHandler extends MessageUiHandler {
   }
 
   protected showAchv(achv: Achv) {
-    // We need to get the player gender from the game data to add the correct prefix to the achievement name
-    const genderIndex = globalScene.gameData.gender ?? PlayerGender.MALE;
-    const genderStr = PlayerGender[genderIndex].toLowerCase();
-
-    achv.name = i18next.t(`achv:${achv.localizationKey}.name`, { context: genderStr });
-    achv.description = getAchievementDescription(achv.localizationKey);
     const achvUnlocks = globalScene.gameData.achvUnlocks;
     const unlocked = achvUnlocks.hasOwnProperty(achv.id);
     const hidden = !unlocked && achv.secret && (!achv.parentId || !achvUnlocks.hasOwnProperty(achv.parentId));

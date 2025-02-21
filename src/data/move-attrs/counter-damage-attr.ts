@@ -1,12 +1,20 @@
-import type { Pokemon, AttackMoveResult } from "#app/field/pokemon";
+import type { Pokemon } from "#app/field/pokemon";
+import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
 import { type NumberHolder, toDmgValue } from "#app/utils";
 import { type Move } from "#app/data/move";
-import { allMoves } from "#app/data/all-moves";
 import { FixedDamageAttr } from "#app/data/move-attrs/fixed-damage-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { MoveId } from "#enums/move-id";
 
-type MoveFilter = (move: Move) => boolean;
+type MoveFilter = (moveId: MoveId) => boolean;
 
+/**
+ * Attribute to modify damage based on the damage received by the user from attacks
+ * that satisfy a given {@linkcode moveFilter | move filter}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Move_variations#Variations_of_Counter | variants of Counter},
+ * including Metal Burst and Comeuppance.
+ * @extends FixedDamageAttr
+ */
 export class CounterDamageAttr extends FixedDamageAttr {
   private moveFilter: MoveFilter;
   private multiplier: number;
@@ -18,17 +26,16 @@ export class CounterDamageAttr extends FixedDamageAttr {
     this.multiplier = multiplier;
   }
 
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, args: any[]): boolean {
-    const damage = user.turnData.attacksReceived
-      .filter((ar) => this.moveFilter(allMoves[ar.move]))
+  override apply(user: Pokemon, _target: Pokemon, _move: Move, damage: NumberHolder): boolean {
+    const damageTaken = user.turnData.attacksReceived
+      .filter((ar) => this.moveFilter(ar.moveId))
       .reduce((total: number, ar: AttackMoveResult) => total + ar.damage, 0);
-    (args[0] as NumberHolder).value = toDmgValue(damage * this.multiplier);
+    damage.value = toDmgValue(damageTaken * this.multiplier);
 
     return true;
   }
 
   override getCondition(): MoveConditionFunc {
-    return (user, _target, _move) =>
-      !!user.turnData.attacksReceived.filter((ar) => this.moveFilter(allMoves[ar.move])).length;
+    return (user, _target, _move) => !!user.turnData.attacksReceived.filter((ar) => this.moveFilter(ar.moveId)).length;
   }
 }

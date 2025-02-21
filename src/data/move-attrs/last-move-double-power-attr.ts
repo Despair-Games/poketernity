@@ -1,5 +1,6 @@
-import type { Moves } from "#enums/moves";
-import { type Pokemon, MoveResult } from "#app/field/pokemon";
+import type { MoveId } from "#enums/move-id";
+import { type Pokemon } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
@@ -13,26 +14,15 @@ import { VariablePowerAttr } from "#app/data/move-attrs/variable-power-attr";
  */
 export class LastMoveDoublePowerAttr extends VariablePowerAttr {
   /** The move that must precede the current move */
-  private move: Moves;
+  private moveId: MoveId;
 
-  constructor(move: Moves) {
+  constructor(moveId: MoveId) {
     super();
 
-    this.move = move;
+    this.moveId = moveId;
   }
 
-  /**
-   * Doubles power of move if the given move is found to precede the current
-   * move with no other moves being executed in between, only ignoring failed
-   * moves if any.
-   * @param user {@linkcode Pokemon} that used the move
-   * @param target N/A
-   * @param move N/A
-   * @param args [0] {@linkcode NumberHolder} that holds the resulting power of the move
-   * @returns true if attribute application succeeds, false otherwise
-   */
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, args: any[]): boolean {
-    const power = args[0] as NumberHolder;
+  override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
     const enemy = user.getOpponent(0);
     const pokemonActed: Pokemon[] = [];
 
@@ -57,7 +47,7 @@ export class LastMoveDoublePowerAttr extends VariablePowerAttr {
     for (const p of pokemonActed) {
       const [lastMove] = p.getLastXMoves(1);
       if (lastMove?.result !== MoveResult.FAIL) {
-        if (lastMove?.result === MoveResult.SUCCESS && lastMove?.move === this.move) {
+        if (lastMove?.result === MoveResult.SUCCESS && lastMove?.move.id === this.moveId) {
           power.value *= 2;
           return true;
         } else {

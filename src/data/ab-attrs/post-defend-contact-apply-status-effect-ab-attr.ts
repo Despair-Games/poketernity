@@ -1,9 +1,9 @@
 import type { Move } from "#app/data/move";
-import { MoveFlags } from "../../enums/move-flags";
+import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
-import type { HitResult } from "#app/field/pokemon";
 import type { StatusEffect } from "#enums/status-effect";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Ability attribute that inflicts a status on the attacking Pokemon if the attacker used a contact move on the ability holder
@@ -30,20 +30,13 @@ export class PostDefendContactApplyStatusEffectAbAttr extends PostDefendAbAttr {
    */
   constructor(chance: number, effects: StatusEffect | StatusEffect[]) {
     super();
+    this._flags.add(AbAttrFlag.POST_DEFEND_CONTACT_APPLY_STATUS_EFFECT);
 
     this.chance = chance;
     this.statusEffects = this.statusEffects.concat(effects);
   }
 
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-    _args: any[],
-  ): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && !attacker.status

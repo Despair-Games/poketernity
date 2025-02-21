@@ -3,17 +3,16 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { AbAttr } from "./ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class BlockItemTheftAbAttr extends AbAttr {
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
-    cancelled.value = true;
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.BLOCK_ITEM_THEFT);
+  }
 
+  override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {
+    cancelled.value = true;
     return true;
   }
 

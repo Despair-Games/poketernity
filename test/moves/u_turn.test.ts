@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -27,8 +27,8 @@ describe("Moves - U-turn", () => {
       .enemySpecies(Species.GENGAR)
       .startingLevel(90)
       .startingWave(97)
-      .moveset([Moves.U_TURN])
-      .enemyMoveset(Moves.SPLASH)
+      .moveset([MoveId.U_TURN])
+      .enemyMoveset(MoveId.SPLASH)
       .disableCrits();
   });
 
@@ -40,9 +40,9 @@ describe("Moves - U-turn", () => {
     game.scene.getPlayerPokemon()!.hp = playerHp;
 
     // act
-    game.move.select(Moves.U_TURN);
+    game.move.select(MoveId.U_TURN);
     game.doSelectPartyPokemon(1);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     // assert
     expect(game.scene.getPlayerParty()[1].hp).toEqual(
@@ -58,14 +58,14 @@ describe("Moves - U-turn", () => {
     await game.classicMode.startBattle([Species.RAICHU, Species.SHUCKLE]);
 
     // act
-    game.move.select(Moves.U_TURN);
+    game.move.select(MoveId.U_TURN);
     game.doSelectPartyPokemon(1);
     await game.phaseInterceptor.to("SwitchPhase", false);
 
     // assert
     const playerPkm = game.scene.getPlayerPokemon()!;
     expect(playerPkm.hp).not.toEqual(playerPkm.getMaxHp());
-    expect(game.scene.getEnemyPokemon()!.battleData.abilityRevealed).toBe(true); // proxy for asserting ability activated
+    expect(game.scene.getEnemyPokemon()!.battleData.abilitiesApplied).toContain(Abilities.ROUGH_SKIN); // proxy for asserting ability activated
     expect(playerPkm.species.speciesId).toEqual(Species.RAICHU);
     expect(game.phaseInterceptor.log).not.toContain("SwitchSummonPhase");
   }, 20000);
@@ -77,14 +77,14 @@ describe("Moves - U-turn", () => {
     vi.spyOn(game.scene.getEnemyPokemon()!, "randSeedInt").mockReturnValue(0);
 
     // act
-    game.move.select(Moves.U_TURN);
+    game.move.select(MoveId.U_TURN);
     await game.phaseInterceptor.to("SwitchPhase", false);
 
     // assert
     const playerPkm = game.scene.getPlayerPokemon()!;
     expect(playerPkm.status?.effect).toEqual(StatusEffect.POISON);
     expect(playerPkm.species.speciesId).toEqual(Species.RAICHU);
-    expect(game.scene.getEnemyPokemon()!.battleData.abilityRevealed).toBe(true); // proxy for asserting ability activated
+    expect(game.scene.getEnemyPokemon()!.battleData.abilitiesApplied).toContain(Abilities.POISON_POINT); // proxy for asserting ability activated
     expect(game.phaseInterceptor.log).not.toContain("SwitchSummonPhase");
   }, 20000);
 
@@ -94,9 +94,9 @@ describe("Moves - U-turn", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     // KO the opponent with U-Turn
-    game.move.select(Moves.U_TURN);
+    game.move.select(MoveId.U_TURN);
     game.doSelectPartyPokemon(1);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.isFainted()).toBe(true);
 
     // Check that U-Turn forced a switch

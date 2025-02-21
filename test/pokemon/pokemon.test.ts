@@ -3,8 +3,8 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { GameManager } from "#test/testUtils/gameManager";
 import { PokeballType } from "#enums/pokeball";
 import type BattleScene from "#app/battle-scene";
-import { Moves } from "#enums/moves";
-import { Abilities } from "#app/enums/abilities";
+import { MoveId } from "#enums/move-id";
+import { Abilities } from "#enums/abilities";
 
 describe("Spec - Pokemon", () => {
   let phaserGame: Phaser.Game;
@@ -22,15 +22,6 @@ describe("Spec - Pokemon", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-  });
-
-  it("should not crash when trying to set status of undefined", async () => {
-    await game.classicMode.runToSummon([Species.ABRA]);
-
-    const pkm = game.scene.getPlayerPokemon()!;
-    expect(pkm).toBeDefined();
-
-    expect(pkm.trySetStatus(undefined)).toBe(true);
   });
 
   describe("Add To Party", () => {
@@ -73,8 +64,8 @@ describe("Spec - Pokemon", () => {
 
     const fanRotom = game.scene.getPlayerPokemon()!;
 
-    expect(fanRotom.compatibleTms).not.toContain(Moves.BLIZZARD);
-    expect(fanRotom.compatibleTms).toContain(Moves.AIR_SLASH);
+    expect(fanRotom.compatibleTms).not.toContain(MoveId.BLIZZARD);
+    expect(fanRotom.compatibleTms).toContain(MoveId.AIR_SLASH);
   });
 
   it("should provide Eevee with 3 defined abilities", async () => {

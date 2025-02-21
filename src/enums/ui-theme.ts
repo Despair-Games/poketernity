@@ -1,4 +1,4 @@
 export enum UiTheme {
-  DEFAULT,
-  LEGACY,
+  DARK,
+  LIGHT,
 }

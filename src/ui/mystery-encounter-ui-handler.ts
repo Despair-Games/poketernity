@@ -1,12 +1,14 @@
-import { addBBCodeTextObject, getBBCodeFrag, TextStyle } from "./text";
-import { Mode } from "./ui";
+import { addBBCodeTextObject, getBBCodeFragment } from "./text";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
 import { Button } from "#enums/buttons";
-import { addWindow, WindowVariant } from "./ui-theme";
-import type { MysteryEncounterPhase } from "../phases/mystery-encounter-phases";
-import { PartyUiMode } from "./party-ui-handler";
+import { addWindow } from "./ui-theme";
+import { WindowVariant } from "#enums/window-variant";
+import { type MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
+import { PartyUiMode } from "#enums/party-ui-mode";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
-import { fixedInt, isNullOrUndefined } from "#app/utils";
+import { fixedNumber, isNullOrUndefined } from "#app/utils";
 import { getPokeballAtlasKey } from "../data/pokeball";
 import type { OptionSelectSettings } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
@@ -15,6 +17,7 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import { globalScene } from "#app/global-scene";
+import { CANVAS_SCALE, GAME_WIDTH } from "#app/ui-constants";
 
 export default class MysteryEncounterUiHandler extends UiHandler {
   private cursorContainer: Phaser.GameObjects.Container;
@@ -47,7 +50,7 @@ export default class MysteryEncounterUiHandler extends UiHandler {
   protected blockInput: boolean = true;
 
   constructor() {
-    super(Mode.MYSTERY_ENCOUNTER);
+    super(UiMode.MYSTERY_ENCOUNTER);
   }
 
   override setup() {
@@ -141,8 +144,8 @@ export default class MysteryEncounterUiHandler extends UiHandler {
             ...this.overrideSettings,
             slideInDescription: false,
           };
-          globalScene.ui.setMode(Mode.PARTY, PartyUiMode.CHECK, -1, () => {
-            globalScene.ui.setMode(Mode.MYSTERY_ENCOUNTER, overrideSettings);
+          globalScene.ui.setMode(UiMode.PARTY, PartyUiMode.CHECK, -1, () => {
+            globalScene.ui.setMode(UiMode.MYSTERY_ENCOUNTER, overrideSettings);
             setTimeout(() => {
               this.setCursor(this.viewPartyIndex);
               this.unblockInput();
@@ -433,7 +436,7 @@ export default class MysteryEncounterUiHandler extends UiHandler {
       // Sets up the mask that hides the option text to give an illusion of scrolling
       const nonScrollWidth = 90;
       const optionTextMaskRect = globalScene.make.graphics({});
-      optionTextMaskRect.setScale(6);
+      optionTextMaskRect.setScale(CANVAS_SCALE);
       optionTextMaskRect.fillStyle(0xffffff);
       optionTextMaskRect.beginPath();
       optionTextMaskRect.fillRect(optionText.x + 11, optionText.y + 140, nonScrollWidth, 18);
@@ -453,10 +456,10 @@ export default class MysteryEncounterUiHandler extends UiHandler {
       if (optionTextWidth > nonScrollWidth) {
         this.optionScrollTweens[i] = globalScene.tweens.add({
           targets: optionText,
-          delay: fixedInt(2000),
+          delay: fixedNumber(2000),
           loop: -1,
-          hold: fixedInt(2000),
-          duration: fixedInt(((optionTextWidth - nonScrollWidth) / 15) * 2000),
+          hold: fixedNumber(2000),
+          duration: fixedNumber(((optionTextWidth - nonScrollWidth) / 15) * 2000),
           x: `-=${optionTextWidth - nonScrollWidth}`,
         });
       }
@@ -466,9 +469,9 @@ export default class MysteryEncounterUiHandler extends UiHandler {
 
     // View Party Button
     const viewPartyText = addBBCodeTextObject(
-      globalScene.game.canvas.width / 6,
+      GAME_WIDTH,
       -24,
-      getBBCodeFrag(i18next.t("mysteryEncounterMessages:view_party_button"), TextStyle.PARTY),
+      getBBCodeFragment(i18next.t("mysteryEncounterMessages:view_party_button"), TextStyle.PARTY),
       TextStyle.PARTY,
     );
     this.optionsContainer.add(viewPartyText);
@@ -504,7 +507,7 @@ export default class MysteryEncounterUiHandler extends UiHandler {
 
     // Sets up the mask that hides the description text to give an illusion of scrolling
     const descriptionTextMaskRect = globalScene.make.graphics({});
-    descriptionTextMaskRect.setScale(6);
+    descriptionTextMaskRect.setScale(CANVAS_SCALE);
     descriptionTextMaskRect.fillStyle(0xffffff);
     descriptionTextMaskRect.beginPath();
     descriptionTextMaskRect.fillRect(6, 53, 206, 57);
@@ -524,10 +527,10 @@ export default class MysteryEncounterUiHandler extends UiHandler {
     if (descriptionLineCount > 6) {
       this.descriptionScrollTween = globalScene.tweens.add({
         targets: descriptionTextObject,
-        delay: fixedInt(2000),
+        delay: fixedNumber(2000),
         loop: -1,
-        hold: fixedInt(2000),
-        duration: fixedInt((descriptionLineCount - 6) * 2000),
+        hold: fixedNumber(2000),
+        duration: fixedNumber((descriptionLineCount - 6) * 2000),
         y: `-=${10 * (descriptionLineCount - 6)}`,
       });
     }
@@ -591,18 +594,12 @@ export default class MysteryEncounterUiHandler extends UiHandler {
       text = text.replace(
         /(\(\+\)[^\(\[]*)/gi,
         (substring) =>
-          "[/color][/shadow]"
-          + getBBCodeFrag(substring, TextStyle.SUMMARY_GREEN)
-          + "[/color][/shadow]"
-          + primaryStyleString,
+          "[/color][/shadow]" + getBBCodeFragment(substring, TextStyle.SUMMARY_GREEN, true) + primaryStyleString,
       );
       text = text.replace(
         /(\(\-\)[^\(\[]*)/gi,
         (substring) =>
-          "[/color][/shadow]"
-          + getBBCodeFrag(substring, TextStyle.SUMMARY_BLUE)
-          + "[/color][/shadow]"
-          + primaryStyleString,
+          "[/color][/shadow]" + getBBCodeFragment(substring, TextStyle.SUMMARY_BLUE, true) + primaryStyleString,
       );
     }
 
@@ -615,7 +612,7 @@ export default class MysteryEncounterUiHandler extends UiHandler {
 
       // Sets up the mask that hides the description text to give an illusion of scrolling
       const tooltipTextMaskRect = globalScene.make.graphics({});
-      tooltipTextMaskRect.setScale(6);
+      tooltipTextMaskRect.setScale(CANVAS_SCALE);
       tooltipTextMaskRect.fillStyle(0xffffff);
       tooltipTextMaskRect.beginPath();
       tooltipTextMaskRect.fillRect(this.tooltipContainer.x, this.tooltipContainer.y + 188.5, 150, 32);
@@ -634,10 +631,10 @@ export default class MysteryEncounterUiHandler extends UiHandler {
       if (tooltipLineCount > 3) {
         this.tooltipScrollTween = globalScene.tweens.add({
           targets: tooltipTextObject,
-          delay: fixedInt(1200),
+          delay: fixedNumber(1200),
           loop: -1,
-          hold: fixedInt(1200),
-          duration: fixedInt((tooltipLineCount - 3) * 1200),
+          hold: fixedNumber(1200),
+          duration: fixedNumber((tooltipLineCount - 3) * 1200),
           y: `-=${11.2 * (tooltipLineCount - 3)}`,
         });
       }

@@ -1,5 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder, NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 
 export class MultCritAbAttr extends AbAttr {
@@ -7,20 +8,14 @@ export class MultCritAbAttr extends AbAttr {
 
   constructor(multAmount: number) {
     super(true);
+    this._flags.add(AbAttrFlag.MULT_CRIT);
 
     this.multAmount = multAmount;
   }
 
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    const critMult = args[0] as NumberHolder;
-    if (critMult.value > 1) {
-      critMult.value *= this.multAmount;
+  override apply(_pokemon: Pokemon, _simulated: boolean, critMultiplier: NumberHolder): boolean {
+    if (critMultiplier.value > 1) {
+      critMultiplier.value *= this.multAmount;
       return true;
     }
 

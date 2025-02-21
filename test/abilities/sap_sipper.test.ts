@@ -4,12 +4,12 @@ import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { RandomMoveAttr } from "#app/data/move-attrs/random-move-attr";
 
 // See also: TypeImmunityAbAttr
@@ -35,11 +35,11 @@ describe("Abilities - Sap Sipper", () => {
       .ability(Abilities.SAP_SIPPER)
       .enemySpecies(Species.RATTATA)
       .enemyAbility(Abilities.SAP_SIPPER)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   it("raises ATK stat stage by 1 and block effects when activated against a grass attack", async () => {
-    const moveToUse = Moves.LEAFAGE;
+    const moveToUse = MoveId.LEAFAGE;
 
     game.override.moveset(moveToUse);
 
@@ -57,7 +57,7 @@ describe("Abilities - Sap Sipper", () => {
   });
 
   it("raises ATK stat stage by 1 and block effects when activated against a grass status move", async () => {
-    const moveToUse = Moves.SPORE;
+    const moveToUse = MoveId.SPORE;
 
     game.override.moveset(moveToUse);
 
@@ -74,7 +74,7 @@ describe("Abilities - Sap Sipper", () => {
   });
 
   it("do not activate against status moves that target the field", async () => {
-    const moveToUse = Moves.GRASSY_TERRAIN;
+    const moveToUse = MoveId.GRASSY_TERRAIN;
 
     game.override.moveset(moveToUse);
 
@@ -84,13 +84,12 @@ describe("Abilities - Sap Sipper", () => {
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    expect(game.scene.arena.terrain).toBeDefined();
-    expect(game.scene.arena.terrain!.terrainType).toBe(TerrainType.GRASSY);
+    expect(game.scene.arena.hasTerrain(TerrainType.GRASSY)).toBe(true);
     expect(game.scene.getEnemyPokemon()!.getStatStage(Stat.ATK)).toBe(0);
   });
 
   it("activate once against multi-hit grass attacks", async () => {
-    const moveToUse = Moves.BULLET_SEED;
+    const moveToUse = MoveId.BULLET_SEED;
 
     game.override.moveset(moveToUse);
 
@@ -108,7 +107,7 @@ describe("Abilities - Sap Sipper", () => {
   });
 
   it("do not activate against status moves that target the user", async () => {
-    const moveToUse = Moves.SPIKY_SHIELD;
+    const moveToUse = MoveId.SPIKY_SHIELD;
 
     game.override.moveset(moveToUse);
 
@@ -129,12 +128,12 @@ describe("Abilities - Sap Sipper", () => {
   });
 
   it("activate once against multi-hit grass attacks (metronome)", async () => {
-    const moveToUse = Moves.METRONOME;
+    const moveToUse = MoveId.METRONOME;
 
-    const randomMoveAttr = allMoves[Moves.METRONOME].findAttr(
+    const randomMoveAttr = allMoves[MoveId.METRONOME].findAttr(
       (attr) => attr instanceof RandomMoveAttr,
     ) as RandomMoveAttr;
-    vi.spyOn(randomMoveAttr, "getMoveOverride").mockReturnValue(Moves.BULLET_SEED);
+    vi.spyOn(randomMoveAttr, "getMoveOverride").mockReturnValue(MoveId.BULLET_SEED);
 
     game.override.moveset(moveToUse);
 
@@ -152,13 +151,13 @@ describe("Abilities - Sap Sipper", () => {
   });
 
   it("still activates regardless of accuracy check", async () => {
-    game.override.moveset(Moves.LEAF_BLADE);
+    game.override.moveset(MoveId.LEAF_BLADE);
 
     await game.classicMode.startBattle([Species.BULBASAUR]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.LEAF_BLADE);
+    game.move.select(MoveId.LEAF_BLADE);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     await game.move.forceMiss();

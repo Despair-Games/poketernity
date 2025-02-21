@@ -1,6 +1,6 @@
 import { StockpilingTag } from "#app/data/battler-tags";
 import type { Pokemon } from "#app/field/pokemon";
-import { PokemonSummonData } from "#app/field/pokemon";
+import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import * as messages from "#app/messages";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { Stat } from "#enums/stat";
@@ -41,7 +41,7 @@ describe("BattlerTag - StockpilingTag", () => {
         expect((phase as StatStageChangePhase)["stages"]).toEqual(1);
         expect((phase as StatStageChangePhase)["stats"]).toEqual(expect.arrayContaining([Stat.DEF, Stat.SPDEF]));
 
-        (phase as StatStageChangePhase)["onChange"]!(mockPokemon, [Stat.DEF, Stat.SPDEF], [1, 1]);
+        (phase as StatStageChangePhase)["onChange"]!([Stat.DEF, Stat.SPDEF], [1, 1], mockPokemon);
       });
 
       subject.onAdd(mockPokemon);
@@ -67,7 +67,7 @@ describe("BattlerTag - StockpilingTag", () => {
         expect((phase as StatStageChangePhase)["stages"]).toEqual(1);
         expect((phase as StatStageChangePhase)["stats"]).toEqual(expect.arrayContaining([Stat.DEF, Stat.SPDEF]));
 
-        (phase as StatStageChangePhase)["onChange"]!(mockPokemon, [Stat.DEF, Stat.SPDEF], [1, 1]);
+        (phase as StatStageChangePhase)["onChange"]!([Stat.DEF, Stat.SPDEF], [1, 1], mockPokemon);
       });
 
       subject.onAdd(mockPokemon);
@@ -91,7 +91,7 @@ describe("BattlerTag - StockpilingTag", () => {
         expect((phase as StatStageChangePhase)["stages"]).toEqual(1);
         expect((phase as StatStageChangePhase)["stats"]).toEqual(expect.arrayContaining([Stat.DEF, Stat.SPDEF]));
 
-        (phase as StatStageChangePhase)["onChange"]!(mockPokemon, [Stat.DEF, Stat.SPDEF], [1, 1]);
+        (phase as StatStageChangePhase)["onChange"]!([Stat.DEF, Stat.SPDEF], [1, 1], mockPokemon);
       });
 
       subject.onOverlap(mockPokemon);
@@ -120,7 +120,7 @@ describe("BattlerTag - StockpilingTag", () => {
         expect((phase as StatStageChangePhase)["stats"]).toEqual(expect.arrayContaining([Stat.DEF, Stat.SPDEF]));
 
         // def doesn't change
-        (phase as StatStageChangePhase)["onChange"]!(mockPokemon, [Stat.SPDEF], [1]);
+        (phase as StatStageChangePhase)["onChange"]!([Stat.SPDEF], [1], mockPokemon);
       });
 
       subject.onAdd(mockPokemon);
@@ -132,7 +132,7 @@ describe("BattlerTag - StockpilingTag", () => {
         expect((phase as StatStageChangePhase)["stats"]).toEqual(expect.arrayContaining([Stat.DEF, Stat.SPDEF]));
 
         // def doesn't change
-        (phase as StatStageChangePhase)["onChange"]!(mockPokemon, [Stat.SPDEF], [1]);
+        (phase as StatStageChangePhase)["onChange"]!([Stat.SPDEF], [1], mockPokemon);
       });
 
       subject.onOverlap(mockPokemon);
@@ -149,10 +149,6 @@ describe("BattlerTag - StockpilingTag", () => {
       subject.onOverlap(mockPokemon);
       expect(subject.stockpiledCount).toBe(3);
 
-      vi.spyOn(game.scene, "unshiftPhase").mockImplementationOnce((_phase) => {
-        throw new Error("Should not be called a fourth time");
-      });
-
       // fourth stack should not be applied
       subject.onOverlap(mockPokemon);
       expect(subject.stockpiledCount).toBe(3);
@@ -166,7 +162,7 @@ describe("BattlerTag - StockpilingTag", () => {
       });
 
       subject.onRemove(mockPokemon);
-      expect(game.scene.unshiftPhase).toHaveBeenCalledOnce(); // note that re-spying each add/overlap has been refreshing call count
+      expect(game.scene.unshiftPhase).toHaveBeenCalledTimes(4);
     });
   });
 });

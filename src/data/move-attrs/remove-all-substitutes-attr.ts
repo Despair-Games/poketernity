@@ -15,19 +15,7 @@ export class RemoveAllSubstitutesAttr extends MoveEffectAttr {
     super(true);
   }
 
-  /**
-   * Remove's the Substitute Doll effect from all active Pokemon on the field
-   * @param user {@linkcode Pokemon} the Pokemon using this move
-   * @param target n/a
-   * @param move {@linkcode Move} the move applying this effect
-   * @param args n/a
-   * @returns `true` if the effect successfully applies
-   */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
-      return false;
-    }
-
+  override applyEffect(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
     globalScene
       .getField(true)
       .forEach((pokemon) => pokemon.findAndRemoveTags((tag) => tag.tagType === BattlerTagType.SUBSTITUTE));

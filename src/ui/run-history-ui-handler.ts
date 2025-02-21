@@ -1,18 +1,23 @@
 import { globalScene } from "#app/global-scene";
-import { GameModes } from "../game-mode";
-import { TextStyle, addTextObject } from "./text";
-import { Mode } from "./ui";
+import { GameModes } from "#enums/game-modes";
+import { addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "./ui-theme";
-import { fixedInt, formatLargeNumber, isNullOrUndefined } from "#app/utils";
+import { fixedNumber, formatLargeNumber, isNullOrUndefined } from "#app/utils";
 import type PokemonData from "../system/pokemon-data";
 import MessageUiHandler from "./message-ui-handler";
 import i18next from "i18next";
-import { Button } from "../enums/buttons";
-import { BattleType } from "../battle";
+import { Button } from "#enums/buttons";
+import { BattleType } from "#enums/battle-type";
 import type { RunEntry } from "../system/game-data";
 import { PlayerGender } from "#enums/player-gender";
-import { TrainerVariant } from "../field/trainer";
-import { RunDisplayMode } from "#app/ui/run-info-ui-handler";
+import { TrainerVariant } from "#enums/trainer-variant";
+import { RunDisplayMode } from "#enums/run-display-mode";
+import { settings } from "#app/system/settings/settings-manager";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { ImagesFolder } from "#enums/images-folders";
+import { CommonColor } from "#enums/color";
 
 export type RunSelectCallback = (cursor: number) => void;
 
@@ -40,7 +45,7 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
   private runContainerInitialY: number;
 
   constructor() {
-    super(Mode.RUN_HISTORY);
+    super(UiMode.RUN_HISTORY);
   }
 
   override setup() {
@@ -50,29 +55,23 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
     this.runSelectContainer.setVisible(false);
     ui.add(this.runSelectContainer);
 
-    const loadSessionBg = globalScene.add.rectangle(
-      0,
-      0,
-      globalScene.game.canvas.width / 6,
-      -globalScene.game.canvas.height / 6,
-      0x006860,
-    );
+    const loadSessionBg = globalScene.add.rectangle(0, 0, GAME_WIDTH, -GAME_HEIGHT, 0x006860);
     loadSessionBg.setOrigin(0, 0);
     this.runSelectContainer.add(loadSessionBg);
 
-    this.runContainerInitialY = -globalScene.game.canvas.height / 6 + 8;
+    this.runContainerInitialY = -GAME_HEIGHT + 8;
 
     this.runsContainer = globalScene.add.container(8, this.runContainerInitialY);
     this.runSelectContainer.add(this.runsContainer);
 
     this.runs = [];
 
-    globalScene.loadImage("hall_of_fame_red", "ui");
-    globalScene.loadImage("hall_of_fame_blue", "ui");
+    globalScene.loadImage("hall_of_fame_red", ImagesFolder.UI);
+    globalScene.loadImage("hall_of_fame_blue", ImagesFolder.UI);
     // For some reason, the game deletes/unloads the rival sprites. As a result, Run Info cannot access the rival sprites.
     // The rivals are loaded here to have some way of accessing those sprites.
-    globalScene.loadAtlas("rival_f", "trainer");
-    globalScene.loadAtlas("rival_m", "trainer");
+    globalScene.loadAtlas("rival_f", ImagesFolder.TRAINER);
+    globalScene.loadAtlas("rival_m", ImagesFolder.TRAINER);
   }
 
   override show(args: any[]): boolean {
@@ -110,7 +109,7 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
       if (button === Button.ACTION) {
         const cursor = this.cursor + this.scrollCursor;
         if (this.runs[cursor]) {
-          globalScene.ui.setOverlayMode(Mode.RUN_INFO, this.runs[cursor].entryData, RunDisplayMode.RUN_HISTORY, true);
+          globalScene.ui.setOverlayMode(UiMode.RUN_INFO, this.runs[cursor].entryData, RunDisplayMode.RUN_HISTORY, true);
         } else {
           return false;
         }
@@ -219,7 +218,7 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
       globalScene.tweens.add({
         targets: this.runsContainer,
         y: this.runContainerInitialY - 56 * scrollCursor,
-        duration: fixedInt(325),
+        duration: fixedNumber(325),
         ease: "Sine.easeInOut",
       });
     }
@@ -293,7 +292,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
       this.add(gameOutcomeLabel);
     } else {
       // Run Result: Defeats
-      const genderIndex = globalScene.gameData.gender ?? PlayerGender.UNSET;
+      const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
       const genderStr = PlayerGender[genderIndex].toLowerCase();
       // Defeats from wild Pokemon battles will show the Pokemon responsible by the text of the run result.
       if (data.battleType === BattleType.WILD || (data.battleType === BattleType.MYSTERY_ENCOUNTER && !data.trainer)) {
@@ -317,10 +316,10 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
             20,
             `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(enemy.level, 1000)}`,
             TextStyle.PARTY,
-            { fontSize: "54px", color: "#f8f8f8" },
+            { fontSize: "54px", color: CommonColor.OFF_WHITE },
           );
           enemyLevel.setShadow(0, 0, undefined);
-          enemyLevel.setStroke("#424242", 14);
+          enemyLevel.setStroke(CommonColor.DARK_GREY, 14);
           enemyLevel.setOrigin(1, 0);
           enemyIconContainer.add(enemyIcon);
           enemyIconContainer.add(enemyLevel);
@@ -411,10 +410,10 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
         20,
         `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(pokemon.level, 1000)}`,
         TextStyle.PARTY,
-        { fontSize: "54px", color: "#f8f8f8" },
+        { fontSize: "54px", color: CommonColor.OFF_WHITE },
       );
       text.setShadow(0, 0, undefined);
-      text.setStroke("#424242", 14);
+      text.setStroke(CommonColor.DARK_GREY, 14);
       text.setOrigin(1, 0);
 
       iconContainer.add(icon);

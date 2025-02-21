@@ -1,14 +1,28 @@
+// -- start tsdoc imports --
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { Stat } from "#enums/stat";
+// -- end tsdoc imports --
+
 import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
+import type { NumberHolder } from "#app/utils";
 
-export class VariableDefAttr extends MoveAttr {
-  constructor() {
-    super();
-  }
-
-  override apply(_user: Pokemon, _target: Pokemon, _move: Move, _args: any[]): boolean {
-    //const def = args[0] as Utils.NumberHolder;
+/**
+ * Attribute to change the defensive stat to be used in a move's damage calculations.
+ * @extends MoveAttr
+ */
+export abstract class VariableDefAttr extends MoveAttr {
+  /**
+   * Changes the defensive stat used in the current attack's damage calculation
+   * @param _user the {@linkcode Pokemon} using the move
+   * @param _target the {@linkcode Pokemon} targeted by the move
+   * @param _move the {@linkcode Move} being used
+   * @param _defendingStat a {@linkcode NumberHolder} containing the defensive {@linkcode Stat}
+   * (originally `DEF` or `SPDEF`) used in the current attack's damage calculation.
+   * @returns `true` if the defensive stat is modified by this attribute
+   */
+  override apply(_user: Pokemon, _target: Pokemon, _move: Move, _defendingStat: NumberHolder): boolean {
     return false;
   }
 }

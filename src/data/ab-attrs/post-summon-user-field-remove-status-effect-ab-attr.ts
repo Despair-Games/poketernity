@@ -21,15 +21,7 @@ export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAtt
     this.statusEffect = statusEffect;
   }
 
-  /**
-   * Removes supplied status effect from the user's field when user of the ability is summoned.
-   *
-   * @param pokemon - The Pokémon that triggered the ability.
-   * @param _passive - n/a
-   * @param _args - n/a
-   * @returns A boolean or a promise that resolves to a boolean indicating the result of the ability application.
-   */
-  override applyPostSummon(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const allowedPokemon = pokemon.getField().filter((p) => p.isAllowedInBattle());
 
     if (allowedPokemon.length < 1) {
@@ -40,7 +32,7 @@ export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAtt
       for (const pokemon of allowedPokemon) {
         if (pokemon.status && this.statusEffect.includes(pokemon.status.effect)) {
           globalScene.queueMessage(getStatusEffectHealText(pokemon.status.effect, getPokemonNameWithAffix(pokemon)));
-          pokemon.resetStatus(false);
+          pokemon.resetStatus();
           pokemon.updateInfo();
         }
       }

@@ -1,17 +1,17 @@
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
 import { type Move, getMoveTargets } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import { getStatusEffectHealText } from "#app/data/status-effect";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
- * Move attribute that signals that the move should cure a status effect
+ * Move attribute to cure a set of {@linkcode StatusEffect | status effects}
+ * from the user or target, depending on if the effect is {@linkcode selfTarget | self-targeted}.
  * @extends MoveEffectAttr
- * @see {@linkcode apply()}
  */
 export class HealStatusEffectAttr extends MoveEffectAttr {
   /** List of Status Effects to cure */
@@ -26,22 +26,12 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
     this.effects = [effects].flat(1);
   }
 
-  /**
-   * @param user {@linkcode Pokemon} source of the move
-   * @param target {@linkcode Pokemon} target of the move
-   * @param move the {@linkcode Move} being used
-   * @returns true if the status is cured
-   */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
-      return false;
-    }
-
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     // Special edge case for shield dust blocking Sparkling Aria curing burn
     const moveTargets = getMoveTargets(user, move.id);
     if (
-      target.hasAbilityWithAttr(IgnoreMoveEffectsAbAttr)
-      && move.id === Moves.SPARKLING_ARIA
+      target.hasAbilityWithAttr(AbAttrFlag.IGNORE_MOVE_EFFECTS)
+      && move.id === MoveId.SPARKLING_ARIA
       && moveTargets.targets.length === 1
     ) {
       return false;

@@ -1,8 +1,9 @@
 import { globalScene } from "#app/global-scene";
-import { Achv, getAchievementDescription } from "../system/achv";
-import { Voucher } from "../system/voucher";
-import { TextStyle, addTextObject } from "./text";
-import type { PlayerGender } from "#enums/player-gender";
+import { Achv } from "#app/system/achv";
+import type { Voucher } from "#app/system/voucher";
+import { addTextObject } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
+import { GAME_WIDTH } from "#app/ui-constants";
 
 export default class AchvBar extends Phaser.GameObjects.Container {
   private defaultWidth: number;
@@ -15,13 +16,11 @@ export default class AchvBar extends Phaser.GameObjects.Container {
   private descriptionText: Phaser.GameObjects.Text;
 
   private queue: (Achv | Voucher)[] = [];
-  private playerGender: PlayerGender;
 
   public shown: boolean;
 
   constructor() {
-    super(globalScene, globalScene.game.canvas.width / 6, 0);
-    this.playerGender = globalScene.gameData.gender;
+    super(globalScene, GAME_WIDTH, 0);
   }
 
   setup(): void {
@@ -77,17 +76,13 @@ export default class AchvBar extends Phaser.GameObjects.Container {
     const tier = achv.getTier();
 
     this.bg.setTexture(`achv_bar${tier ? `_${tier + 1}` : ""}`);
-    this.icon.setFrame(achv.getIconImage());
-    this.titleText.setText(achv.getName(this.playerGender));
+    this.icon.setFrame(achv.iconImage);
+    this.titleText.setText(achv.name);
     this.scoreText.setVisible(achv instanceof Achv);
-    if (achv instanceof Achv) {
-      this.descriptionText.setText(getAchievementDescription((achv as Achv).localizationKey));
-    } else if (achv instanceof Voucher) {
-      this.descriptionText.setText((achv as Voucher).description);
-    }
+    this.descriptionText.setText(achv.description);
 
     if (achv instanceof Achv) {
-      this.scoreText.setText(`+${(achv as Achv).score}pt`);
+      this.scoreText.setText(`+${achv.score}pt`);
     }
 
     // Take the width of the default interface or the title if longest
@@ -111,25 +106,25 @@ export default class AchvBar extends Phaser.GameObjects.Container {
 
     globalScene.tweens.add({
       targets: this,
-      x: globalScene.game.canvas.width / 6 - this.bg.width / 2,
+      x: GAME_WIDTH - this.bg.width / 2,
       duration: 500,
       ease: "Sine.easeOut",
     });
 
-    globalScene.time.delayedCall(10000, () => this.hide(this.playerGender));
+    globalScene.time.delayedCall(10000, () => this.hide());
 
     this.setVisible(true);
     this.shown = true;
   }
 
-  protected hide(_playerGender: PlayerGender): void {
+  protected hide(): void {
     if (!this.shown) {
       return;
     }
 
     globalScene.tweens.add({
       targets: this,
-      x: globalScene.game.canvas.width / 6,
+      x: GAME_WIDTH,
       duration: 500,
       ease: "Sine.easeIn",
       onComplete: () => {

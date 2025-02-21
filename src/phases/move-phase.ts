@@ -1,50 +1,64 @@
-import { BattlerIndex } from "#app/battle";
-import { globalScene } from "#app/global-scene";
-import { applyAbAttrs, applyPostMoveUsedAbAttrs, applyPreAttackAbAttrs } from "#app/data/ability";
-import { IncreasePpAbAttr } from "#app/data/ab-attrs/increase-pp-ab-attr";
-import { ReduceStatusEffectDurationAbAttr } from "#app/data/ab-attrs/reduce-status-effect-duration-ab-attr";
-import { BlockRedirectAbAttr } from "#app/data/ab-attrs/block-redirect-ab-attr";
-import { RedirectMoveAbAttr } from "#app/data/ab-attrs/redirect-move-ab-attr";
-import { PostMoveUsedAbAttr } from "#app/data/ab-attrs/post-move-used-ab-attr";
-import type { DelayedAttackTag } from "#app/data/arena-tag";
-import { CommonAnim } from "#app/data/battle-anims";
-import { BattlerTagLapseType, CenterOfAttentionTag } from "#app/data/battler-tags";
-import { applyMoveAttrs } from "#app/data/move";
-import { allMoves } from "#app/data/all-moves";
-import { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
+import { BattlerIndex } from "#enums/battler-index";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { allMoves } from "#app/data/data-lists";
+import { CommonAnim } from "#enums/common-anim";
+import { type CenterOfAttentionTag } from "#app/data/battler-tags";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
+import { applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
 import { BypassRedirectAttr } from "#app/data/move-attrs/bypass-redirect-attr";
 import { BypassSleepAttr } from "#app/data/move-attrs/bypass-sleep-attr";
+import { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
 import { HealStatusEffectAttr } from "#app/data/move-attrs/heal-status-effect-attr";
 import { PreMoveMessageAttr } from "#app/data/move-attrs/pre-move-message-attr";
-import { MoveFlags } from "#app/enums/move-flags";
-import { SpeciesFormChangePreMoveTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangePreMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-pre-move-trigger";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/data/status-effect";
-import { Type } from "#enums/type";
+import { getTerrainBlockMessage } from "#app/data/terrain";
 import { MoveUsedEvent } from "#app/events/battle-scene";
-import type { PokemonMove } from "#app/field/pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import { MoveResult } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
+import { MoveResult } from "#enums/move-result";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
-import { BattlePhase } from "#app/phases/battle-phase";
+import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
-import { MoveChargePhase } from "#app/phases/move-charge-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { BooleanHolder, NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
-import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { Moves } from "#enums/moves";
+import { MoveFlags } from "#enums/move-flags";
+import { MoveId } from "#enums/move-id";
 import { StatusEffect } from "#enums/status-effect";
+import { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";
-import { getTerrainBlockMessage } from "#app/data/terrain";
-import { PokemonTypeChangeAbAttr } from "#app/data/ab-attrs/pokemon-type-change-ab-attr";
-import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
-import { frenzyMissFunc } from "#app/data/move-utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
+import { SelfStatusMove } from "#app/data/move";
+import { WeatherType } from "#enums/weather-type";
 
+/**
+ * Resolves the following:
+ * - Checks if the move can be executed
+ * - Applies target redirection based on move effects and abilities
+ * - Chooses the move target for counterattack moves
+ * - Applies the effects of statuses that might stop a move from executing
+ * - Lapses `PRE_MOVE` and `MOVE` `BattlerTag`s
+ * - Checks if it's the first turn of a charging move and passes off to a {@linkcode MoveChargePhase} if so
+ * - Handles the delayed attack of Future Sight and Doom Desire
+ * - Handles PP usage
+ * - Handles move failure due to weather or terrain
+ * - Handles the Dancer ability
+ *
+ * If the move is successful then a {@linkcode MoveEffectPhase} is queued.
+ * Regardless of success, a {@linkcode MoveEndPhase} is queued.
+ *
+ * @extends BattlePhase
+ */
 export class MovePhase extends BattlePhase {
+  override readonly id = PhaseId.MOVE;
+
   protected _pokemon: Pokemon;
   protected _move: PokemonMove;
   protected _targets: BattlerIndex[];
@@ -52,6 +66,26 @@ export class MovePhase extends BattlePhase {
   protected ignorePp: boolean;
   protected failed: boolean = false;
   protected cancelled: boolean = false;
+
+  /**
+   * @param followUp Indicates that the move being used is a "follow-up" - for example, a move being used by Metronome or Dancer.
+   *                 Follow-ups bypass a few failure conditions, including flinches, sleep/paralysis/freeze and volatile status checks, etc.
+   */
+  constructor(
+    pokemon: Pokemon,
+    targets: BattlerIndex[],
+    move: PokemonMove | MoveId,
+    followUp: boolean = false,
+    ignorePp: boolean = false,
+  ) {
+    super();
+
+    this.pokemon = pokemon;
+    this.targets = targets;
+    this.move = typeof move === "number" ? new PokemonMove(move, 0, 0, true) : move;
+    this.followUp = followUp;
+    this.ignorePp = ignorePp;
+  }
 
   public get pokemon(): Pokemon {
     return this._pokemon;
@@ -78,26 +112,6 @@ export class MovePhase extends BattlePhase {
   }
 
   /**
-   * @param followUp Indicates that the move being uses is a "follow-up" - for example, a move being used by Metronome or Dancer.
-   *                 Follow-ups bypass a few failure conditions, including flinches, sleep/paralysis/freeze and volatile status checks, etc.
-   */
-  constructor(
-    pokemon: Pokemon,
-    targets: BattlerIndex[],
-    move: PokemonMove,
-    followUp: boolean = false,
-    ignorePp: boolean = false,
-  ) {
-    super();
-
-    this.pokemon = pokemon;
-    this.targets = targets;
-    this.move = move;
-    this.followUp = followUp;
-    this.ignorePp = ignorePp;
-  }
-
-  /**
    * Checks if the pokemon is active, if the move is usable, and that the move is targetting something.
    * @param ignoreDisableTags `true` to not check if the move is disabled
    * @returns `true` if all the checks pass
@@ -106,16 +120,16 @@ export class MovePhase extends BattlePhase {
     return (
       this.pokemon.isActive(true)
       && this.move.isUsable(this.pokemon, this.ignorePp, ignoreDisableTags)
-      && !!this.targets.length
+      && (this.targets.length > 0 || this.move.getMove().isFieldTarget())
     );
   }
 
-  /**Signifies the current move should fail but still use PP */
+  /** Signifies the current move should fail but still use PP */
   public fail(): void {
     this.failed = true;
   }
 
-  /**Signifies the current move should cancel and retain PP */
+  /** Signifies the current move should cancel and retain PP */
   public cancel(): void {
     this.cancelled = true;
   }
@@ -123,7 +137,13 @@ export class MovePhase extends BattlePhase {
   public override start(): void {
     super.start();
 
-    console.log(Moves[this.move.moveId]);
+    // If the user is affected by another Pokemon's Sky Drop, skip the user's turn
+    const skyDropTag = this.pokemon.getTag(BattlerTagType.SKY_DROP);
+    if (skyDropTag && skyDropTag.sourceId !== this.pokemon.id) {
+      return this.end();
+    }
+
+    console.log(MoveId[this.move.moveId]);
 
     // Check if move is unusable (e.g. because it's out of PP due to a mid-turn Spite).
     if (!this.canMove(true)) {
@@ -173,20 +193,32 @@ export class MovePhase extends BattlePhase {
     this.end();
   }
 
-  /** Check for cancellation edge cases - no targets remaining, or {@linkcode Moves.NONE} is in the queue */
+  /**
+   * Check for cancellation edge cases.
+   * Currently only checks if {@linkcode MoveId.NONE}
+   * is in the user's move queue
+   */
   protected resolveFinalPreMoveCancellationChecks(): void {
-    const targets = this.getActiveTargetPokemon();
     const moveQueue = this.pokemon.getMoveQueue();
+    const targets = this.getActiveTargetPokemon();
 
-    if (targets.length === 0 || (moveQueue.length && moveQueue[0].move === Moves.NONE)) {
+    if (
+      (targets.length === 0 && !isFieldTargeted(this.targets))
+      || (moveQueue.length && moveQueue[0].moveId === MoveId.NONE)
+    ) {
       this.showMoveText();
       this.showFailedText();
       this.cancel();
     }
   }
 
+  /**
+   * @returns An array of all {@linkcode Pokemon} targeted by this phase's invoked move.
+   * Unless the move is field-targeting, this array only includes active (e.g., non-fainted) targets.
+   */
   public getActiveTargetPokemon(): Pokemon[] {
-    return globalScene.getField(true).filter((p) => this.targets.includes(p.getBattlerIndex()));
+    const activeOnly = !this.move.getMove().isFieldTarget();
+    return globalScene.getField(activeOnly).filter((p) => this.targets.includes(p.getBattlerIndex()));
   }
 
   /**
@@ -208,9 +240,8 @@ export class MovePhase extends BattlePhase {
           applyMoveAttrs(BypassSleepAttr, this.pokemon, null, this.move.getMove());
           const turnsRemaining = new NumberHolder(this.pokemon.status.sleepTurnsRemaining ?? 0);
           applyAbAttrs(
-            ReduceStatusEffectDurationAbAttr,
+            AbAttrFlag.REDUCE_SLEEP_DURATION,
             this.pokemon,
-            null,
             false,
             this.pokemon.status.effect,
             turnsRemaining,
@@ -268,7 +299,7 @@ export class MovePhase extends BattlePhase {
   protected lapsePreMoveAndMoveTags(): void {
     this.pokemon.lapseTags(BattlerTagLapseType.PRE_MOVE);
 
-    // TODO: does this intentionally happen before the no targets/Moves.NONE on queue cancellation case is checked?
+    // TODO: does this intentionally happen before the no targets/MoveId.NONE on queue cancellation case is checked?
     if (!this.followUp && this.canMove() && !this.cancelled) {
       this.pokemon.lapseTags(BattlerTagLapseType.MOVE);
     }
@@ -281,32 +312,6 @@ export class MovePhase extends BattlePhase {
     // form changes happen even before we know that the move wll execute.
     globalScene.triggerPokemonFormChange(this.pokemon, SpeciesFormChangePreMoveTrigger);
 
-    const isDelayedAttack = this.move.getMove().hasAttr(DelayedAttackAttr);
-    if (isDelayedAttack) {
-      // Check the player side arena if future sight is active
-      const futureSightTags = globalScene.arena.findTags((t) => t.tagType === ArenaTagType.FUTURE_SIGHT);
-      const doomDesireTags = globalScene.arena.findTags((t) => t.tagType === ArenaTagType.DOOM_DESIRE);
-      let fail = false;
-      const currentTargetIndex = targets[0].getBattlerIndex();
-      for (const tag of futureSightTags) {
-        if ((tag as DelayedAttackTag).targetIndex === currentTargetIndex) {
-          fail = true;
-          break;
-        }
-      }
-      for (const tag of doomDesireTags) {
-        if ((tag as DelayedAttackTag).targetIndex === currentTargetIndex) {
-          fail = true;
-          break;
-        }
-      }
-      if (fail) {
-        this.showMoveText();
-        this.showFailedText();
-        return this.end();
-      }
-    }
-
     this.showMoveText();
 
     if (moveQueue.length > 0) {
@@ -314,7 +319,7 @@ export class MovePhase extends BattlePhase {
       this.ignorePp = moveQueue.shift()?.ignorePP ?? false;
     }
 
-    if (this.pokemon.getTag(BattlerTagType.CHARGING)?.sourceMove === this.move.moveId) {
+    if (this.pokemon.getTag(BattlerTagType.CHARGING)?.sourceMoveId === this.move.moveId) {
       this.pokemon.lapseTag(BattlerTagType.CHARGING);
     }
 
@@ -328,7 +333,7 @@ export class MovePhase extends BattlePhase {
 
     // Update the battle's "last move" pointer, unless we're currently mimicking a move.
     if (!allMoves[this.move.moveId].hasAttr(CopyMoveAttr)) {
-      globalScene.currentBattle.lastMove = this.move.moveId;
+      globalScene.currentBattle.lastMove = this.move.getMove();
     }
 
     /**
@@ -348,7 +353,7 @@ export class MovePhase extends BattlePhase {
      * Move conditions assume the move has a single target
      * TODO: is this sustainable?
      */
-    const passesConditions = move.applyConditions(this.pokemon, targets[0], move);
+    const passesConditions = move.applyConditions(this.pokemon, targets[0] ?? null, move);
     const failedDueToWeather: boolean = globalScene.arena.isMoveWeatherCancelled(this.pokemon, move);
     const failedDueToTerrain: boolean = globalScene.arena.isMoveTerrainCancelled(this.pokemon, this.targets, move);
 
@@ -361,27 +366,37 @@ export class MovePhase extends BattlePhase {
      * if the move fails.
      */
     if (success) {
-      applyPreAttackAbAttrs(PokemonTypeChangeAbAttr, this.pokemon, null, this.move.getMove());
+      applyAbAttrs(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
+      this.showPreMoveMessages();
       globalScene.unshiftPhase(new MoveEffectPhase(this.pokemon.getBattlerIndex(), this.targets, this.move));
     } else {
-      if ([Moves.ROAR, Moves.WHIRLWIND, Moves.TRICK_OR_TREAT, Moves.FORESTS_CURSE].includes(this.move.moveId)) {
-        applyPreAttackAbAttrs(PokemonTypeChangeAbAttr, this.pokemon, null, this.move.getMove());
+      if ([MoveId.ROAR, MoveId.WHIRLWIND, MoveId.TRICK_OR_TREAT, MoveId.FORESTS_CURSE].includes(this.move.moveId)) {
+        applyAbAttrs(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
       }
 
       this.pokemon.pushMoveHistory({
-        move: this.move.moveId,
+        move: this.move.getMove(),
         targets: this.targets,
         result: MoveResult.FAIL,
+        type: this.pokemon.getMoveType(this.move.getMove()),
         virtual: this.move.virtual,
       });
 
       let failedText: string | undefined;
-      const failureMessage = move.getFailedText(this.pokemon, targets[0], move, new BooleanHolder(false));
+      let failureMessage = move.getFailedText(this.pokemon, targets[0], move, new BooleanHolder(false));
+
+      if (failedDueToWeather) {
+        if (globalScene.arena.weather?.weatherType === WeatherType.HARSH_SUN) {
+          failureMessage = i18next.t("weather:harshSunStopAttackMessage");
+        } else {
+          failureMessage = i18next.t("weather:heavyRainStopAttackMessage");
+        }
+      }
 
       if (failureMessage) {
         failedText = failureMessage;
       } else if (failedDueToTerrain) {
-        failedText = getTerrainBlockMessage(this.pokemon, globalScene.arena.getTerrainType());
+        failedText = getTerrainBlockMessage(targets[0], globalScene.arena.getTerrainType());
       }
 
       this.showFailedText(failedText);
@@ -394,27 +409,28 @@ export class MovePhase extends BattlePhase {
     // Note that the `!this.followUp` check here prevents an infinite Dancer loop.
     if (this.move.getMove().hasFlag(MoveFlags.DANCE_MOVE) && !this.followUp) {
       globalScene.getField(true).forEach((pokemon) => {
-        applyPostMoveUsedAbAttrs(PostMoveUsedAbAttr, pokemon, this.move, this.pokemon, this.targets);
+        applyAbAttrs(AbAttrFlag.POST_MOVE_USED, pokemon, false, this.move, this.pokemon, this.targets);
       });
     }
   }
 
   /** Queues a {@linkcode MoveChargePhase} for this phase's invoked move. */
-  protected chargeMove() {
+  protected chargeMove(): void {
     const move = this.move.getMove();
     const targets = this.getActiveTargetPokemon();
 
     if (move.applyConditions(this.pokemon, targets[0], move)) {
       // Protean and Libero apply on the charging turn of charge moves
-      applyPreAttackAbAttrs(PokemonTypeChangeAbAttr, this.pokemon, null, this.move.getMove());
+      applyAbAttrs(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
 
       this.showMoveText();
-      globalScene.unshiftPhase(new MoveChargePhase(this.pokemon.getBattlerIndex(), this.targets[0], this.move));
+      globalScene.chargeMove(this.pokemon.getBattlerIndex(), this.targets, this.move);
     } else {
       this.pokemon.pushMoveHistory({
-        move: this.move.moveId,
+        move: this.move.getMove(),
         targets: this.targets,
         result: MoveResult.FAIL,
+        type: this.pokemon.getMoveType(this.move.getMove()),
         virtual: this.move.virtual,
       });
 
@@ -448,7 +464,7 @@ export class MovePhase extends BattlePhase {
   public getPpIncreaseFromPressure(targets: Pokemon[]): number {
     const foesWithPressure = this.pokemon
       .getOpponents()
-      .filter((o) => targets.includes(o) && o.isActive(true) && o.hasAbilityWithAttr(IncreasePpAbAttr));
+      .filter((o) => targets.includes(o) && o.isActive(true) && o.hasAbilityWithAttr(AbAttrFlag.INCREASE_PP));
     return foesWithPressure.length;
   }
 
@@ -466,21 +482,21 @@ export class MovePhase extends BattlePhase {
       globalScene
         .getField(true)
         .filter((p) => p !== this.pokemon)
-        .forEach((p) => applyAbAttrs(RedirectMoveAbAttr, p, null, false, this.move.moveId, redirectTarget));
+        .forEach((p) => applyAbAttrs(AbAttrFlag.REDIRECT_MOVE, p, false, this.move.moveId, redirectTarget));
 
       /** `true` if an Ability is responsible for redirecting the move to another target; `false` otherwise */
       let redirectedByAbility = currentTarget !== redirectTarget.value;
 
       // check for center-of-attention tags (note that this will override redirect abilities)
       this.pokemon.getOpponents().forEach((p) => {
-        const redirectTag = p.getTag(CenterOfAttentionTag);
+        const redirectTag = p.getTag<CenterOfAttentionTag>(BattlerTagType.CENTER_OF_ATTENTION);
 
         // TODO: don't hardcode this interaction.
         // Handle interaction between the rage powder center-of-attention tag and moves used by grass types/overcoat-havers (which are immune to RP's redirect)
         if (
           redirectTag
           && (!redirectTag.powder
-            || (!this.pokemon.isOfType(Type.GRASS) && !this.pokemon.hasAbility(Abilities.OVERCOAT)))
+            || (!this.pokemon.isOfType(ElementalType.GRASS) && !this.pokemon.hasAbility(Abilities.OVERCOAT)))
         ) {
           redirectTarget.value = p.getBattlerIndex();
           redirectedByAbility = false;
@@ -495,12 +511,12 @@ export class MovePhase extends BattlePhase {
           }
         });
 
-        if (this.pokemon.hasAbilityWithAttr(BlockRedirectAbAttr)) {
+        if (this.pokemon.hasAbilityWithAttr(AbAttrFlag.BLOCK_REDIRECT)) {
           redirectTarget.value = currentTarget;
           globalScene.unshiftPhase(
             new ShowAbilityPhase(
               this.pokemon.getBattlerIndex(),
-              this.pokemon.getPassiveAbility().hasAttr(BlockRedirectAbAttr),
+              this.pokemon.getPassiveAbility().hasAttrFlag(AbAttrFlag.BLOCK_REDIRECT),
             ),
           );
         }
@@ -551,8 +567,6 @@ export class MovePhase extends BattlePhase {
    *     to lapse on move failure/cancellation.
    *
    *     TODO: ...this seems weird.
-   * - Lapses `AFTER_MOVE` tags:
-   *   - This handles the effects of {@link Moves.SUBSTITUTE Substitute}
    * - Removes the second turn of charge moves
    */
   protected handlePreMoveFailures(): void {
@@ -567,25 +581,24 @@ export class MovePhase extends BattlePhase {
         globalScene.eventTarget.dispatchEvent(new MoveUsedEvent(this.pokemon?.id, this.move.getMove(), ppUsed));
       }
 
-      if (this.cancelled && this.pokemon.summonData?.tags?.find((t) => t.tagType === BattlerTagType.FRENZY)) {
-        frenzyMissFunc(this.pokemon, this.move.getMove());
-      }
-
-      this.pokemon.pushMoveHistory({ move: Moves.NONE, result: MoveResult.FAIL });
+      this.pokemon.pushMoveHistory({
+        move: SelfStatusMove.none(),
+        result: MoveResult.FAIL,
+        type: ElementalType.UNKNOWN,
+      });
 
       this.pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
-      this.pokemon.lapseTags(BattlerTagLapseType.AFTER_MOVE);
 
       this.pokemon.getMoveQueue().shift();
     }
   }
 
   /**
-   * Displays the move's usage text to the player, unless it's a charge turn (ie: {@link Moves.SOLAR_BEAM Solar Beam}),
-   * the pokemon is on a recharge turn (ie: {@link Moves.HYPER_BEAM Hyper Beam}), or a 2-turn move was interrupted (ie: {@link Moves.FLY Fly}).
+   * Displays the move's usage text to the player, unless it's a charge turn (ie: {@link MoveId.SOLAR_BEAM Solar Beam}),
+   * the pokemon is on a recharge turn (ie: {@link MoveId.HYPER_BEAM Hyper Beam}), or a 2-turn move was interrupted (ie: {@link MoveId.FLY Fly}).
    */
   public showMoveText(): void {
-    if (this.move.moveId === Moves.NONE) {
+    if (this.move.moveId === MoveId.NONE) {
       return;
     }
 
@@ -600,10 +613,17 @@ export class MovePhase extends BattlePhase {
       }),
       500,
     );
-    applyMoveAttrs(PreMoveMessageAttr, this.pokemon, this.pokemon.getOpponents()[0], this.move.getMove());
   }
 
   public showFailedText(failedText?: string): void {
     globalScene.queueMessage(failedText ?? i18next.t("battle:attackFailed"));
+  }
+
+  /**
+   * Displays the move's pre-execution messages, if applicable.
+   * Ex. Chilly Reception's "<Pokemon> is preparing to tell a chillingly bad joke!"
+   */
+  public showPreMoveMessages(): void {
+    applyMoveAttrs(PreMoveMessageAttr, this.pokemon, this.pokemon.getOpponents()[0], this.move.getMove());
   }
 }

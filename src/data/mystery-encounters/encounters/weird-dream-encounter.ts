@@ -1,4 +1,4 @@
-import type { Type } from "#enums/type";
+import type { ElementalType } from "#enums/elemental-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { globalScene } from "#app/global-scene";
@@ -16,34 +16,36 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import { NumberHolder, isNullOrUndefined, randSeedInt, randSeedShuffle } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { allSpecies, getPokemonSpecies, getSpecialSpeciesList } from "#app/data/pokemon-species";
+import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
+import { allSpecies } from "#app/data/data-lists";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import { HiddenAbilityRateBoosterModifier, PokemonFormChangeItemModifier } from "#app/modifier/modifier";
+import { HiddenAbilityRateBoosterModifier } from "#app/modifier/modifier";
 import { achvs } from "#app/system/achv";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import i18next from "#app/plugins/i18n";
-import {
-  doPokemonTransformationSequence,
-  TransformationScreenPosition,
-} from "#app/data/mystery-encounters/utils/encounter-transformation-sequence";
+import { doPokemonTransformationSequence } from "#app/data/mystery-encounters/utils/encounter-transformation-sequence";
+import { TransformationScreenPosition } from "#enums/transformation-screen-position";
 import { getLevelTotalExp } from "#app/data/exp";
 import { Stat } from "#enums/stat";
 import { Challenges } from "#enums/challenges";
-import { ModifierTier } from "#app/modifier/modifier-tier";
+import { ModifierTier } from "#enums/modifier-tier";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import PokemonData from "#app/system/pokemon-data";
 import { Nature } from "#enums/nature";
 import type HeldModifierConfig from "#app/interfaces/held-modifier-config";
-import { trainerConfigs, TrainerPartyTemplate } from "#app/data/trainer-config";
+import { TrainerPartyTemplate } from "#app/data/trainer-config";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
+import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { settings } from "#app/system/settings/settings-manager";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/weirdDream";
@@ -243,9 +245,9 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
         enemyPokemonConfigs.push(enemyConfig);
       }
 
-      const genderIndex = globalScene.gameData.gender ?? PlayerGender.UNSET;
+      const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
       const trainerConfig =
-        trainerConfigs[
+        allTrainerConfigs[
           genderIndex === PlayerGender.FEMALE ? TrainerType.FUTURE_SELF_F : TrainerType.FUTURE_SELF_M
         ].clone();
       trainerConfig.setPartyTemplates(new TrainerPartyTemplate(transformations.length, PartyMemberStrength.STRONG));
@@ -345,9 +347,9 @@ function getTeamTransformations(): PokemonTransformation[] {
     const index = pokemonTransformations.findIndex((p) => p.previousPokemon.id === removed.id);
     pokemonTransformations[index].heldItems = removed
       .getHeldItems()
-      .filter((m) => !(m instanceof PokemonFormChangeItemModifier));
+      .filter((m) => !m.isPokemonFormChangeItemModifier());
 
-    const bst = removed.calculateBaseStats().reduce((a, b) => a + b, 0);
+    const bst = removed.getSpeciesForm().getBaseStatTotal();
     let newBstRange: [number, number];
     if (i < 2) {
       newBstRange = HIGH_BST_TRANSFORM_BASE_VALUES;
@@ -540,9 +542,9 @@ async function postProcessTransformedPokemon(
   // Randomize the second type of the pokemon
   // If the pokemon does not normally have a second type, it will gain 1
   const newTypes = [newPokemon.getTypes()[0]];
-  let newType = randSeedInt(18) as Type;
+  let newType = randSeedInt(18) as ElementalType;
   while (newType === newTypes[0]) {
-    newType = randSeedInt(18) as Type;
+    newType = randSeedInt(18) as ElementalType;
   }
   newTypes.push(newType);
   if (!newPokemon.customPokemonData) {
@@ -643,17 +645,11 @@ function getTransformedSpecies(
 }
 
 function doShowDreamBackground() {
-  const transformationContainer = globalScene.add.container(0, -globalScene.game.canvas.height / 6);
+  const transformationContainer = globalScene.add.container(0, -GAME_HEIGHT);
   transformationContainer.name = "Dream Background";
 
   // In case it takes a bit for video to load
-  const transformationStaticBg = globalScene.add.rectangle(
-    0,
-    0,
-    globalScene.game.canvas.width / 6,
-    globalScene.game.canvas.height / 6,
-    0,
-  );
+  const transformationStaticBg = globalScene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0);
   transformationStaticBg.setName("Black Background");
   transformationStaticBg.setOrigin(0, 0);
   transformationContainer.add(transformationStaticBg);

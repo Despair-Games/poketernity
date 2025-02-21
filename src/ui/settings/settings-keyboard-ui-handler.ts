@@ -1,21 +1,22 @@
-import { Mode } from "../ui";
 import cfg_keyboard_qwerty from "#app/configs/inputs/cfg_keyboard_qwerty";
+import { deleteBind } from "#app/configs/inputs/configHandler";
+import { globalScene } from "#app/global-scene";
+import type { InterfaceConfig } from "#app/inputs-controller";
 import {
   setSettingKeyboard,
-  SettingKeyboard,
   settingKeyboardBlackList,
   settingKeyboardDefaults,
   settingKeyboardOptions,
 } from "#app/system/settings/settings-keyboard";
-import { reverseValueToKeySetting, truncateString } from "#app/utils";
+import { SettingKeyboard } from "#enums/setting-keyboard";
 import AbstractControlSettingsUiHandler from "#app/ui/settings/abstract-control-settings-ui-handler";
-import type { InterfaceConfig } from "#app/inputs-controller";
-import { addTextObject, TextStyle } from "#app/ui/text";
-import { deleteBind } from "#app/configs/inputs/configHandler";
-import { Device } from "#enums/devices";
 import { NavigationManager } from "#app/ui/settings/navigationMenu";
+import { addTextObject } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
+import { reverseValueToKeySetting, truncateString } from "#app/utils";
+import { Device } from "#enums/devices";
 import i18next from "i18next";
-import { globalScene } from "#app/global-scene";
+import { UiMode } from "#enums/ui-mode";
 
 /**
  * Class representing the settings UI handler for keyboards.
@@ -28,7 +29,7 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
    *
    * @param mode - The UI mode, optional.
    */
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
     this.titleSelected = "Keyboard";
     this.setting = SettingKeyboard;
@@ -37,7 +38,6 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
     this.configs = [cfg_keyboard_qwerty];
     this.commonSettingsCount = 0;
     this.textureOverride = "keyboard";
-    this.localStoragePropertyName = "settingsKeyboard";
     this.settingBlacklisted = settingKeyboardBlackList;
     this.device = Device.KEYBOARD;
 
@@ -70,7 +70,7 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
 
     const deleteText = addTextObject(0, 0, i18next.t("settings:delete"), TextStyle.SETTINGS_LABEL);
     deleteText.setOrigin(0, 0.15);
-    deleteText.setPositionRelative(iconDelete, -deleteText.width / 6 - 2, 0);
+    deleteText.setPositionRelative(iconDelete, -deleteText.displayWidth - 2, 0);
 
     this.settingsContainer.add(iconDelete);
     this.settingsContainer.add(deleteText);
@@ -81,21 +81,22 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
   }
 
   /**
-   * Handle the home key press event.
+   * Handle the home key press event: reset mappings for the current device
    */
   onHomeDown(): void {
-    if (![Mode.SETTINGS_KEYBOARD, Mode.SETTINGS_GAMEPAD].includes(globalScene.ui.getMode())) {
+    if (![UiMode.SETTINGS_KEYBOARD, UiMode.SETTINGS_GAMEPAD].includes(globalScene.ui.getMode())) {
       return;
     }
-    globalScene.gameData.resetMappingToFactory();
+    const isKeyboard = globalScene.ui.getMode() === UiMode.SETTINGS_KEYBOARD;
+    globalScene.gameData.resetMappingToFactory(isKeyboard ? Device.KEYBOARD : Device.GAMEPAD);
     NavigationManager.getInstance().updateIcons();
   }
 
   /**
-   * Handle the delete key press event.
+   * Handle the delete key press event: remove mapping for the current button
    */
   onDeleteDown(): void {
-    if (globalScene.ui.getMode() !== Mode.SETTINGS_KEYBOARD) {
+    if (globalScene.ui.getMode() !== UiMode.SETTINGS_KEYBOARD) {
       return;
     }
     const cursor = this.cursor + this.scrollCursor; // Calculate the absolute cursor position.
@@ -105,7 +106,10 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
     const activeConfig = this.getActiveConfig();
     const success = deleteBind(this.getActiveConfig(), settingName);
     if (success) {
-      this.saveCustomKeyboardMappingToLocalStorage(activeConfig);
+      globalScene.gameData.saveMappingConfigs(
+        globalScene.inputController?.selectedDevice[Device.KEYBOARD],
+        activeConfig,
+      );
       this.updateBindings();
       NavigationManager.getInstance().updateIcons();
     }
@@ -156,33 +160,6 @@ export default class SettingsKeyboardUiHandler extends AbstractControlSettingsUi
           );
         }
       }
-    }
-  }
-
-  /**
-   * Save the custom keyboard mapping to local storage.
-   *
-   * @param config - The configuration to save.
-   */
-  saveCustomKeyboardMappingToLocalStorage(config): void {
-    globalScene.gameData.saveMappingConfigs(globalScene.inputController?.selectedDevice[Device.KEYBOARD], config);
-  }
-
-  /**
-   * Save the setting to local storage.
-   *
-   * @param settingName - The name of the setting to save.
-   * @param cursor - The cursor position to save.
-   */
-  saveSettingToLocalStorage(settingName, cursor): void {
-    if (this.setting[settingName] !== this.setting.Default_Layout) {
-      globalScene.gameData.saveControlSetting(
-        this.device,
-        this.localStoragePropertyName,
-        settingName,
-        this.settingDeviceDefaults,
-        cursor,
-      );
     }
   }
 }

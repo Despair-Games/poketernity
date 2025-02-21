@@ -3,22 +3,22 @@ import { type BattleStat, Stat } from "#enums/stat";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { AttackMove } from "../move";
 import type { Move } from "#app/data/move";
-import { type MoveEffectAttrOptions, MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "./chance-based-move-effect-attr";
 
 /**
  * Set of optional parameters that may be applied to stat stage changing effects
  * @extends MoveEffectAttrOptions
  * @see {@linkcode StatStageChangeAttr}
  */
-interface StatStageChangeAttrOptions extends MoveEffectAttrOptions {
+interface StatStageChangeAttrOptions extends ChanceBasedMoveEffectAttrOptions {
   /** If defined, needs to be met in order for the stat change to apply */
   condition?: MoveConditionFunc;
   /** `true` to display a message */
   showMessage?: boolean;
 }
+
 /**
  * Attribute used for moves that change stat stages
  *
@@ -27,11 +27,9 @@ interface StatStageChangeAttrOptions extends MoveEffectAttrOptions {
  * @param selfTarget `true` if the move is self-targetting
  * @param options {@linkcode StatStageChangeAttrOptions} Container for any optional parameters for this attribute.
  *
- * @extends MoveEffectAttr
- * @see {@linkcode apply}
+ * @extends ChanceBasedMoveEffectAttr
  */
-
-export class StatStageChangeAttr extends MoveEffectAttr {
+export class StatStageChangeAttr extends ChanceBasedMoveEffectAttr {
   public stats: BattleStat[];
   public stages: number;
   /**
@@ -63,35 +61,18 @@ export class StatStageChangeAttr extends MoveEffectAttr {
     return this.options?.showMessage ?? true;
   }
 
-  /**
-   * Attempts to change stats of the user or target (depending on value of selfTarget) if conditions are met
-   * @param user {@linkcode Pokemon} the user of the move
-   * @param target {@linkcode Pokemon} the target of the move
-   * @param move {@linkcode Move} the move
-   * @param args unused
-   * @returns whether stat stages were changed
-   */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args?: any[]): boolean {
-    if (!super.apply(user, target, move, args) || (this.condition && !this.condition(user, target, move))) {
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
+    if (this.condition && !this.condition(user, target, move)) {
       return false;
     }
 
-    const moveChance = this.getMoveChance(user, target, move, this.selfTarget, true);
-    if (moveChance < 0 || moveChance === 100 || user.randSeedInt(100) < moveChance) {
-      const stages = this.getLevels(user);
-      globalScene.unshiftPhase(
-        new StatStageChangePhase(
-          (this.selfTarget ? user : target).getBattlerIndex(),
-          this.selfTarget,
-          this.stats,
-          stages,
-          this.showMessage,
-        ),
-      );
-      return true;
-    }
-
-    return false;
+    const stages = this.getLevels(user);
+    globalScene.unshiftPhase(
+      new StatStageChangePhase((this.selfTarget ? user : target).getBattlerIndex(), user, this.stats, stages, {
+        showMessage: this.showMessage,
+      }),
+    );
+    return true;
   }
 
   getLevels(_user: Pokemon): number {
@@ -113,22 +94,22 @@ export class StatStageChangeAttr extends MoveEffectAttr {
       switch (stat) {
         case Stat.ATK:
           if (this.selfTarget) {
-            noEffect = !user.getMoveset().find((m) => m instanceof AttackMove && m.category === MoveCategory.PHYSICAL);
+            noEffect = !user.getMoveset().find((m) => m.getMove().category === MoveCategory.PHYSICAL);
           }
           break;
         case Stat.DEF:
           if (!this.selfTarget) {
-            noEffect = !user.getMoveset().find((m) => m instanceof AttackMove && m.category === MoveCategory.PHYSICAL);
+            noEffect = !user.getMoveset().find((m) => m.getMove().category === MoveCategory.PHYSICAL);
           }
           break;
         case Stat.SPATK:
           if (this.selfTarget) {
-            noEffect = !user.getMoveset().find((m) => m instanceof AttackMove && m.category === MoveCategory.SPECIAL);
+            noEffect = !user.getMoveset().find((m) => m.getMove().category === MoveCategory.SPECIAL);
           }
           break;
         case Stat.SPDEF:
           if (!this.selfTarget) {
-            noEffect = !user.getMoveset().find((m) => m instanceof AttackMove && m.category === MoveCategory.SPECIAL);
+            noEffect = !user.getMoveset().find((m) => m.getMove().category === MoveCategory.SPECIAL);
           }
           break;
       }

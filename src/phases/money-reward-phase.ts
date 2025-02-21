@@ -1,12 +1,19 @@
 import { globalScene } from "#app/global-scene";
-import { ArenaTagType } from "#app/enums/arena-tag-type";
 import { MoneyMultiplierModifier } from "#app/modifier/modifier";
-import i18next from "i18next";
 import { NumberHolder } from "#app/utils";
-import { BattlePhase } from "./battle-phase";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import i18next from "i18next";
+import { BattlePhase } from "./abstract-battle-phase";
+import { PhaseId } from "#enums/phase-id";
 
+/**
+ * Grants the player money at the end of a wave
+ * @extends BattlePhase
+ */
 export class MoneyRewardPhase extends BattlePhase {
-  private moneyMultiplier: number;
+  override readonly id = PhaseId.MONEY_REWARD;
+
+  private readonly moneyMultiplier: number;
 
   constructor(moneyMultiplier: number) {
     super();
@@ -14,7 +21,7 @@ export class MoneyRewardPhase extends BattlePhase {
     this.moneyMultiplier = moneyMultiplier;
   }
 
-  override start() {
+  public override start(): void {
     const moneyAmount = new NumberHolder(globalScene.getWaveMoneyAmount(this.moneyMultiplier));
 
     globalScene.applyModifiers(MoneyMultiplierModifier, true, moneyAmount);

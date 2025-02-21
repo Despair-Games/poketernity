@@ -1,6 +1,7 @@
-import Phaser from "phaser";
-import { TextStyle, addTextObject } from "#app/ui/text";
-import type { Mode } from "#app/ui/ui";
+import type Phaser from "phaser";
+import { addTextObject } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
+import type { UiMode } from "#enums/ui-mode";
 import UiHandler from "#app/ui/ui-handler";
 import { addWindow } from "#app/ui/ui-theme";
 import { getPlayTimeString, formatFancyLargeNumber, toReadableString } from "#app/utils";
@@ -9,8 +10,8 @@ import { DexAttr } from "#app/data/dex-attributes";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
-import { UiTheme } from "#enums/ui-theme";
 import { globalScene } from "#app/global-scene";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 interface DisplayStat {
   label_key?: string;
@@ -223,7 +224,7 @@ export default class GameStatsUiHandler extends UiHandler {
   private arrowUp: Phaser.GameObjects.Sprite;
   private arrowDown: Phaser.GameObjects.Sprite;
 
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
 
     this.statLabels = [];
@@ -233,24 +234,19 @@ export default class GameStatsUiHandler extends UiHandler {
   setup() {
     const ui = this.getUi();
 
-    this.gameStatsContainer = globalScene.add.container(1, -(globalScene.game.canvas.height / 6) + 1);
+    this.gameStatsContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
 
-    this.gameStatsContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 6, globalScene.game.canvas.height / 6),
-      Phaser.Geom.Rectangle.Contains,
-    );
-
-    const headerBg = addWindow(0, 0, globalScene.game.canvas.width / 6 - 2, 24);
+    const headerBg = addWindow(0, 0, GAME_WIDTH - 2, 24);
     headerBg.setOrigin(0, 0);
 
     const headerText = addTextObject(0, 0, i18next.t("gameStatsUiHandler:stats"), TextStyle.SETTINGS_LABEL);
     headerText.setOrigin(0, 0);
     headerText.setPositionRelative(headerBg, 8, 4);
 
-    const statsBgWidth = (globalScene.game.canvas.width / 6 - 2) / 2;
+    const statsBgWidth = (GAME_WIDTH - 2) / 2;
     const [statsBgLeft, statsBgRight] = new Array(2).fill(null).map((_, i) => {
       const width = statsBgWidth + 2;
-      const height = Math.floor(globalScene.game.canvas.height / 6 - headerBg.height - 2);
+      const height = Math.floor(GAME_HEIGHT - headerBg.height - 2);
       const statsBg = addWindow(
         (statsBgWidth - 2) * i,
         headerBg.height,
@@ -291,14 +287,9 @@ export default class GameStatsUiHandler extends UiHandler {
     this.gameStatsContainer.add(this.statsContainer);
 
     // arrows to show that we can scroll through the stats
-    const isLegacyTheme = globalScene.uiTheme === UiTheme.LEGACY;
-    this.arrowDown = globalScene.add.sprite(
-      statsBgWidth,
-      globalScene.game.canvas.height / 6 - (isLegacyTheme ? 9 : 5),
-      "prompt",
-    );
+    this.arrowDown = globalScene.add.sprite(statsBgWidth, GAME_HEIGHT - 5, "prompt");
     this.gameStatsContainer.add(this.arrowDown);
-    this.arrowUp = globalScene.add.sprite(statsBgWidth, headerBg.height + (isLegacyTheme ? 7 : 3), "prompt");
+    this.arrowUp = globalScene.add.sprite(statsBgWidth, headerBg.height + 3, "prompt");
     this.arrowUp.flipY = true;
     this.gameStatsContainer.add(this.arrowUp);
 
@@ -318,10 +309,6 @@ export default class GameStatsUiHandler extends UiHandler {
 
     this.arrowUp.play("prompt");
     this.arrowDown.play("prompt");
-    if (globalScene.uiTheme === UiTheme.LEGACY) {
-      this.arrowUp.setTint(0x484848);
-      this.arrowDown.setTint(0x484848);
-    }
 
     this.updateArrows();
 

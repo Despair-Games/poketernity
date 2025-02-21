@@ -1,11 +1,17 @@
-import type { BattlerIndex } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
 import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { MovePhase } from "#app/phases/move-phase";
 import { type Move, getMoveTargets } from "#app/data/move";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
 
+/**
+ * Attribute to invoke a random move from the user or enemy's moveset
+ * and use it against a random legal target.
+ * Used by {@link https://bulbapedia.bulbagarden.net/wiki/Sleep_Talk_(move) | Sleep Talk}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Assist_(move) | Assist}.
+ * @extends OverrideMoveEffectAttr
+ */
 export class RandomMovesetMoveAttr extends OverrideMoveEffectAttr {
   private enemyMoveset: boolean | null;
 
@@ -15,7 +21,15 @@ export class RandomMovesetMoveAttr extends OverrideMoveEffectAttr {
     this.enemyMoveset = enemyMoveset!; // TODO: is this bang correct?
   }
 
-  override apply(user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
+  /**
+   * Invokes a random move from the user or enemy's moveset, using it
+   * against a random legal target
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param _move the {@linkcode Move} being used
+   * @returns `true` if a move is successfully invoked
+   */
+  override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const moveset = (!this.enemyMoveset ? user : target).getMoveset();
     const moves = moveset.filter((m) => !m.getMove().hasFlag(MoveFlags.IGNORE_VIRTUAL));
     if (moves.length) {
@@ -42,11 +56,15 @@ export class RandomMovesetMoveAttr extends OverrideMoveEffectAttr {
         }
       }
       const targets = selectTargets;
-      user.getMoveQueue().push({ move: move.moveId, targets: targets, ignorePP: true });
-      globalScene.unshiftPhase(new MovePhase(user, targets, moveset[moveIndex], true));
+      user.getMoveQueue().push({ moveId: move.moveId, targets: targets, ignorePP: true });
+      globalScene.useMove({ pokemon: user, targets, move: moveset[moveIndex], followUp: true, when: "eager" });
       return true;
     }
 
     return false;
+  }
+
+  override isRandomMovesetMoveAttr(): this is this {
+    return true;
   }
 }

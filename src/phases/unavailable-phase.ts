@@ -1,16 +1,14 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { Mode } from "#app/ui/ui";
-import { LoginPhase } from "./login-phase";
+import { PhaseId } from "#enums/phase-id";
+import { UiMode } from "#enums/ui-mode";
 
 export class UnavailablePhase extends Phase {
-  constructor() {
-    super();
-  }
+  override readonly id = PhaseId.UNAVAILABLE;
 
-  override start(): void {
-    globalScene.ui.setMode(Mode.UNAVAILABLE, () => {
-      globalScene.unshiftPhase(new LoginPhase(true));
+  public override start(): void {
+    globalScene.ui.setMode(UiMode.UNAVAILABLE, () => {
+      globalScene.toLoginScreen({ showText: true, eager: true });
       this.end();
     });
   }

@@ -17,11 +17,11 @@ export class SessionSavedataApi extends ApiBase {
 
   /**
    * Mark a session as cleared aka "newclear".\
-   * *This is **NOT** the same as {@linkcode clear | clear()}.*
+   * *This is **NOT** the same as {@linkcode clear()}.*
    * @param params The {@linkcode NewClearSessionSavedataRequest} to send
    * @returns The raw savedata as `string`.
    */
-  public async newclear(params: NewClearSessionSavedataRequest) {
+  public async newclear(params: NewClearSessionSavedataRequest): Promise<boolean> {
     try {
       const urlSearchParams = this.toUrlSearchParams(params);
       const response = await this.doGet(`/savedata/session/newclear?${urlSearchParams}`);

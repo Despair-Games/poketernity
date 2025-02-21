@@ -1,101 +1,122 @@
-import { globalScene } from "#app/global-scene";
-import type { BattlerIndex } from "#app/battle";
-import { applyAbAttrs, applyPostStatStageChangeAbAttrs, applyPreStatStageChangeAbAttrs } from "#app/data/ability";
-import { StatStageChangeCopyAbAttr } from "#app/data/ab-attrs/stat-stage-change-copy-ab-attr";
-import { StatStageChangeMultiplierAbAttr } from "#app/data/ab-attrs/stat-stage-change-multiplier-ab-attr";
-import { MistTag } from "#app/data/arena-tag";
+import type { BattlerIndex } from "#enums/battler-index";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { ResetNegativeStatStageModifier } from "#app/modifier/modifier";
-import { handleTutorial, Tutorial } from "#app/tutorial";
-import { NumberHolder, BooleanHolder } from "#app/utils";
+import { handleTutorial } from "#app/tutorial";
+import { Tutorial } from "#enums/tutorial";
+import { BooleanHolder, NumberHolder } from "#app/utils";
+import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } from "#enums/stat";
 import i18next from "i18next";
-import { PokemonPhase } from "./pokemon-phase";
-import { Stat, type BattleStat, getStatKey, getStatStageChangeDescriptionKey } from "#enums/stat";
-import { PostStatStageChangeAbAttr } from "#app/data/ab-attrs/post-stat-stage-change-ab-attr";
-import { ProtectStatAbAttr } from "#app/data/ab-attrs/protect-stat-ab-attr";
+import { settings } from "#app/system/settings/settings-manager";
+import { PokemonPhase } from "./abstract-pokemon-phase";
+import { CANVAS_SCALE } from "#app/ui-constants";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
-export type StatStageChangeCallback = (
-  target: Pokemon | null,
-  changed: BattleStat[],
-  relativeChanges: number[],
-) => void;
+//#region Types
+
+export type StatStageChangeCallback = (changed: BattleStat[], relativeChanges: number[], target?: Pokemon) => void;
+
+interface SSCPhaseOptions {
+  showMessage?: boolean;
+  ignoreAbilities?: boolean;
+  canBeCopied?: boolean;
+  bypassReflect?: boolean;
+  onChange?: StatStageChangeCallback;
+}
+
+//#endregion
 
 export class StatStageChangePhase extends PokemonPhase {
-  private stats: BattleStat[];
-  private selfTarget: boolean;
-  private stages: number;
-  private showMessage: boolean;
-  private ignoreAbilities: boolean;
-  private canBeCopied: boolean;
-  private onChange: StatStageChangeCallback | null;
+  override readonly id = PhaseId.STAT_STAGE_CHANGE;
+
+  protected readonly stats: BattleStat[];
+  protected readonly source: Pokemon | null;
+  protected stages: number;
+  protected readonly showMessage: boolean;
+  protected readonly ignoreAbilities: boolean;
+  protected readonly canBeCopied: boolean;
+  protected readonly bypassReflect: boolean;
+  protected readonly onChange?: StatStageChangeCallback;
+  private readonly options?: SSCPhaseOptions;
 
   constructor(
     battlerIndex: BattlerIndex,
-    selfTarget: boolean,
+    source: Pokemon | null,
     stats: BattleStat[],
     stages: number,
-    showMessage: boolean = true,
-    ignoreAbilities: boolean = false,
-    canBeCopied: boolean = true,
-    onChange: StatStageChangeCallback | null = null,
+    options?: SSCPhaseOptions,
   ) {
     super(battlerIndex);
 
-    this.selfTarget = selfTarget;
+    this.source = source;
     this.stats = stats;
     this.stages = stages;
-    this.showMessage = showMessage;
-    this.ignoreAbilities = ignoreAbilities;
-    this.canBeCopied = canBeCopied;
-    this.onChange = onChange;
+    this.showMessage = options?.showMessage ?? true;
+    this.ignoreAbilities = options?.ignoreAbilities ?? false;
+    this.canBeCopied = options?.canBeCopied ?? true;
+    this.bypassReflect = options?.bypassReflect ?? false;
+    this.onChange = options?.onChange;
+    this.options = options;
   }
 
-  override start() {
+  public override start(): void {
+    const pokemon = this.getPokemon();
+    const selfTarget = pokemon === this.source;
+
+    const { add, arena, field, fieldSpritePipeline, tweens, time } = globalScene;
+
+    if (!pokemon.isActive(true)) {
+      return super.end();
+    }
+
+    if (!this.ignoreAbilities && !this.bypassReflect) {
+      const reflected = new BooleanHolder(false);
+      applyAbAttrs(
+        AbAttrFlag.REFLECT_STAT_STAGE_CHANGE,
+        pokemon,
+        false,
+        this.source,
+        this.stats,
+        this.stages,
+        reflected,
+      );
+      if (reflected.value) {
+        return super.end();
+      }
+    }
+
     // Check if multiple stats are being changed at the same time, then run SSCPhase for each of them
     if (this.stats.length > 1) {
       for (let i = 0; i < this.stats.length; i++) {
         const stat = [this.stats[i]];
         globalScene.unshiftPhase(
-          new StatStageChangePhase(
-            this.battlerIndex,
-            this.selfTarget,
-            stat,
-            this.stages,
-            this.showMessage,
-            this.ignoreAbilities,
-            this.canBeCopied,
-            this.onChange,
-          ),
+          new StatStageChangePhase(this.battlerIndex, this.source, stat, this.stages, this.options),
         );
       }
-      return this.end();
-    }
-
-    const pokemon = this.getPokemon();
-
-    if (!pokemon.isActive(true)) {
-      return this.end();
+      return super.end();
     }
 
     const stages = new NumberHolder(this.stages);
 
     if (!this.ignoreAbilities) {
-      applyAbAttrs(StatStageChangeMultiplierAbAttr, pokemon, null, false, stages);
+      applyAbAttrs(AbAttrFlag.STAT_STAGE_CHANGE_MULTIPLIER, pokemon, false, stages);
     }
 
     let simulate = false;
 
-    const filteredStats = this.stats.filter((stat) => {
+    const filteredStats: BattleStat[] = this.stats.filter((stat) => {
       const cancelled = new BooleanHolder(false);
 
-      if (!this.selfTarget && stages.value < 0) {
-        // TODO: add a reference to the source of the stat change to fix Infiltrator interaction
-        globalScene.arena.applyTagsForSide(MistTag, pokemon.getArenaTagSide(), false, null, cancelled);
+      if (!selfTarget && stages.value < 0) {
+        arena.applyTagsForSide(ArenaTagType.MIST, pokemon.getArenaTagSide(), false, this.source, cancelled);
       }
 
-      if (!cancelled.value && !this.selfTarget && stages.value < 0) {
-        applyPreStatStageChangeAbAttrs(ProtectStatAbAttr, pokemon, stat, cancelled, simulate);
+      if (!cancelled.value && !selfTarget && stages.value < 0) {
+        applyAbAttrs(AbAttrFlag.PROTECT_STAT, pokemon, simulate, stat, cancelled);
       }
 
       // If one stat stage decrease is cancelled, simulate the rest of the applications
@@ -113,11 +134,21 @@ export class StatStageChangePhase extends PokemonPhase {
           : Math.max(pokemon.getStatStage(s) + stages.value, -6)) - pokemon.getStatStage(s),
     );
 
-    this.onChange && this.onChange(this.getPokemon(), filteredStats, relLevels);
+    this.onChange && this.onChange(filteredStats, relLevels, this.getPokemon());
 
-    const end = () => {
+    const end = (): void => {
       if (this.showMessage) {
-        const messages = this.getStatStageChangeMessages(filteredStats, stages.value, relLevels);
+        const messages: string[] = [];
+        if (this.stages === 12 && filteredStats.length === 1) {
+          messages.push(
+            i18next.t("battle:statMaximized", {
+              pokemonNameWithAffix: getPokemonNameWithAffix(this.getPokemon()),
+              stats: i18next.t(getStatKey(this.stats[0])),
+            }),
+          );
+        } else {
+          messages.push(...this.getStatStageChangeMessages(filteredStats, stages.value, relLevels));
+        }
         for (const message of messages) {
           globalScene.queueMessage(message);
         }
@@ -143,64 +174,64 @@ export class StatStageChangePhase extends PokemonPhase {
 
       if (stages.value > 0 && this.canBeCopied) {
         for (const opponent of pokemon.getOpponents()) {
-          applyAbAttrs(StatStageChangeCopyAbAttr, opponent, null, false, this.stats, stages.value);
+          applyAbAttrs(AbAttrFlag.STAT_STAGE_CHANGE_COPY, opponent, false, this.stats, stages.value);
         }
       }
 
-      applyPostStatStageChangeAbAttrs(PostStatStageChangeAbAttr, pokemon, filteredStats, this.stages, this.selfTarget);
+      applyAbAttrs(AbAttrFlag.POST_STAT_STAGE_CHANGE, pokemon, false, filteredStats, this.stages, selfTarget);
 
       // Look for any other stat change phases; if this is the last one, do White Herb check
       const existingPhase = globalScene.findPhase(
         (p) => p instanceof StatStageChangePhase && p.battlerIndex === this.battlerIndex,
       );
-      if (!(existingPhase instanceof StatStageChangePhase)) {
+      if (!existingPhase) {
         // Apply White Herb if needed
         const whiteHerb = globalScene.applyModifier(
           ResetNegativeStatStageModifier,
-          this.player,
+          this.isPlayer,
           pokemon,
         ) as ResetNegativeStatStageModifier;
         // If the White Herb was applied, consume it
         if (whiteHerb) {
           pokemon.loseHeldItem(whiteHerb);
-          globalScene.updateModifiers(this.player);
+          globalScene.updateModifiers(this.isPlayer);
         }
       }
 
       pokemon.updateInfo();
 
-      handleTutorial(Tutorial.Stat_Change).then(() => super.end());
+      handleTutorial(Tutorial.STAT_CHANGE).then(() => super.end());
     };
 
-    if (relLevels.filter((l) => l).length && globalScene.moveAnimations) {
+    if (relLevels.filter((l) => l).length && settings.display.enableMoveAnimations) {
       pokemon.enableMask();
       const pokemonMaskSprite = pokemon.maskSprite;
 
-      const tileX = (this.player ? 106 : 236) * pokemon.getSpriteScale() * globalScene.field.scale;
+      const tileX = (this.isPlayer ? 106 : 236) * pokemon.getSpriteScale() * field.scale;
       const tileY =
-        ((this.player ? 148 : 84) + (stages.value >= 1 ? 160 : 0)) * pokemon.getSpriteScale() * globalScene.field.scale;
-      const tileWidth = 156 * globalScene.field.scale * pokemon.getSpriteScale();
-      const tileHeight = 316 * globalScene.field.scale * pokemon.getSpriteScale();
+        ((this.isPlayer ? 148 : 84) + (stages.value >= 1 ? 160 : 0)) * pokemon.getSpriteScale() * field.scale;
+      const tileWidth = 156 * field.scale * pokemon.getSpriteScale();
+      const tileHeight = 316 * field.scale * pokemon.getSpriteScale();
 
       // On increase, show the red sprite located at ATK
       // On decrease, show the blue sprite located at SPD
       const spriteColor = stages.value >= 1 ? Stat[Stat.ATK].toLowerCase() : Stat[Stat.SPD].toLowerCase();
-      const statSprite = globalScene.add.tileSprite(tileX, tileY, tileWidth, tileHeight, "battle_stats", spriteColor);
-      statSprite.setPipeline(globalScene.fieldSpritePipeline);
+      const statSprite = add.tileSprite(tileX, tileY, tileWidth, tileHeight, "battle_stats", spriteColor);
+      statSprite.setPipeline(fieldSpritePipeline);
       statSprite.setAlpha(0);
-      statSprite.setScale(6);
+      statSprite.setScale(CANVAS_SCALE);
       statSprite.setOrigin(0.5, 1);
 
       globalScene.playSound(`se/stat_${stages.value >= 1 ? "up" : "down"}`);
 
       statSprite.setMask(new Phaser.Display.Masks.BitmapMask(globalScene, pokemonMaskSprite ?? undefined));
 
-      globalScene.tweens.add({
+      tweens.add({
         targets: statSprite,
         duration: 250,
         alpha: 0.8375,
         onComplete: () => {
-          globalScene.tweens.add({
+          tweens.add({
             targets: statSprite,
             delay: 1000,
             duration: 250,
@@ -209,13 +240,13 @@ export class StatStageChangePhase extends PokemonPhase {
         },
       });
 
-      globalScene.tweens.add({
+      tweens.add({
         targets: statSprite,
         duration: 1500,
         y: `${stages.value >= 1 ? "-" : "+"}=${160 * 6}`,
       });
 
-      globalScene.time.delayedCall(1750, () => {
+      time.delayedCall(1750, () => {
         pokemon.disableMask();
         end();
       });
@@ -224,50 +255,7 @@ export class StatStageChangePhase extends PokemonPhase {
     }
   }
 
-  aggregateStatStageChanges(): void {
-    const accEva: BattleStat[] = [Stat.ACC, Stat.EVA];
-    const isAccEva = accEva.some((s) => this.stats.includes(s));
-    let existingPhase: StatStageChangePhase;
-    if (this.stats.length === 1) {
-      while (
-        (existingPhase = globalScene.findPhase(
-          (p) =>
-            p instanceof StatStageChangePhase
-            && p.battlerIndex === this.battlerIndex
-            && p.stats.length === 1
-            && p.stats[0] === this.stats[0]
-            && p.selfTarget === this.selfTarget
-            && p.showMessage === this.showMessage
-            && p.ignoreAbilities === this.ignoreAbilities,
-        ) as StatStageChangePhase)
-      ) {
-        this.stages += existingPhase.stages;
-
-        if (!globalScene.tryRemovePhase((p) => p === existingPhase)) {
-          break;
-        }
-      }
-    }
-    while (
-      (existingPhase = globalScene.findPhase(
-        (p) =>
-          p instanceof StatStageChangePhase
-          && p.battlerIndex === this.battlerIndex
-          && p.selfTarget === this.selfTarget
-          && accEva.some((s) => p.stats.includes(s)) === isAccEva
-          && p.stages === this.stages
-          && p.showMessage === this.showMessage
-          && p.ignoreAbilities === this.ignoreAbilities,
-      ) as StatStageChangePhase)
-    ) {
-      this.stats.push(...existingPhase.stats);
-      if (!globalScene.tryRemovePhase((p) => p === existingPhase)) {
-        break;
-      }
-    }
-  }
-
-  getStatStageChangeMessages(stats: BattleStat[], stages: number, relStages: number[]): string[] {
+  protected getStatStageChangeMessages(stats: BattleStat[], stages: number, relStages: number[]): string[] {
     const messages: string[] = [];
 
     const relStageStatIndexes = {};
@@ -293,23 +281,17 @@ export class StatStageChangePhase extends PokemonPhase {
                 .join(
                   ", ",
                 )}${relStageStats.length > 2 ? "," : ""} ${i18next.t("battle:statsAnd")} ${i18next.t(getStatKey(relStageStats[relStageStats.length - 1]))}`;
-        messages.push(
-          i18next.t(getStatStageChangeDescriptionKey(Math.abs(parseInt(rl)), stages >= 1), {
-            pokemonNameWithAffix: getPokemonNameWithAffix(this.getPokemon()),
-            stats: statsFragment,
-            count: relStageStats.length,
-          }),
-        );
       } else {
         statsFragment = i18next.t(getStatKey(relStageStats[0]));
-        messages.push(
-          i18next.t(getStatStageChangeDescriptionKey(Math.abs(parseInt(rl)), stages >= 1), {
-            pokemonNameWithAffix: getPokemonNameWithAffix(this.getPokemon()),
-            stats: statsFragment,
-            count: relStageStats.length,
-          }),
-        );
       }
+
+      messages.push(
+        i18next.t(getStatStageChangeDescriptionKey(Math.abs(parseInt(rl)), stages >= 1), {
+          pokemonNameWithAffix: getPokemonNameWithAffix(this.getPokemon()),
+          stats: statsFragment,
+          count: relStageStats.length,
+        }),
+      );
     });
 
     return messages;

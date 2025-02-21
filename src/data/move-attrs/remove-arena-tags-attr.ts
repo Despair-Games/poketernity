@@ -1,35 +1,49 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
+import { MoveEffectTrigger } from "#enums/move-effect-trigger";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { Move } from "../move";
 import { MoveEffectAttr } from "./move-effect-attr";
 
 /**
  * Generic class for removing arena tags
- * @param tagTypes: The types of tags that can be removed
- * @param selfSideTarget: Is the user removing tags from its own side?
+ * @param tagTypes The types of tags that can be removed
+ * @param relativeSide The {@linkcode ArenaTagRelativeSide side}
+ * (relative to the user) to remove tags from.
  */
 export class RemoveArenaTagsAttr extends MoveEffectAttr {
   public tagTypes: ArenaTagType[];
-  public selfSideTarget: boolean;
+  public relativeSide: ArenaTagRelativeSide;
 
-  constructor(tagTypes: ArenaTagType[], selfSideTarget: boolean) {
-    super(true);
+  constructor(
+    tagTypes: ArenaTagType[],
+    relativeSide: ArenaTagRelativeSide,
+    trigger: MoveEffectTrigger = MoveEffectTrigger.POST_APPLY,
+  ) {
+    super(true, { trigger });
 
     this.tagTypes = tagTypes;
-    this.selfSideTarget = selfSideTarget;
+    this.relativeSide = relativeSide;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
-      return false;
+  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
+    const sides: ArenaTagSide[] = [];
+
+    switch (this.relativeSide) {
+      case ArenaTagRelativeSide.USER:
+        sides.push(user.getArenaTagSide());
+        break;
+      case ArenaTagRelativeSide.TARGET:
+        sides.push(target.getArenaTagSide());
+        break;
+      case ArenaTagRelativeSide.ALL:
+        sides.push(ArenaTagSide.PLAYER, ArenaTagSide.ENEMY);
+        break;
     }
 
-    const side = (this.selfSideTarget ? user : target).getArenaTagSide();
-
-    for (const tagType of this.tagTypes) {
-      globalScene.arena.removeTagOnSide(tagType, side);
-    }
+    sides.forEach((side) => this.tagTypes.forEach((tagType) => globalScene.arena.removeTagOnSide(tagType, side)));
 
     return true;
   }

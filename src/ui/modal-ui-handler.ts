@@ -1,9 +1,12 @@
-import { TextStyle, addTextObject } from "./text";
-import type { Mode } from "./ui";
+import { addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
+import type { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
-import { WindowVariant, addWindow } from "./ui-theme";
+import { addWindow } from "./ui-theme";
+import { WindowVariant } from "#enums/window-variant";
 import type { Button } from "#enums/buttons";
 import { globalScene } from "#app/global-scene";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 export interface ModalConfig {
   buttonActions: Function[];
@@ -17,7 +20,7 @@ export abstract class ModalUiHandler extends UiHandler {
   protected buttonBgs: Phaser.GameObjects.NineSlice[];
   protected buttonLabels: Phaser.GameObjects.Text[];
 
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
 
     this.buttonContainers = [];
@@ -45,7 +48,7 @@ export abstract class ModalUiHandler extends UiHandler {
     this.modalContainer = globalScene.add.container(0, 0);
 
     this.modalContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 6, globalScene.game.canvas.height / 6),
+      new Phaser.Geom.Rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT),
       Phaser.Geom.Rectangle.Contains,
     );
 
@@ -104,8 +107,8 @@ export abstract class ModalUiHandler extends UiHandler {
         const overlay = globalScene.add.rectangle(
           (this.getWidth() + marginLeft + marginRight) / 2,
           (this.getHeight() + marginTop + marginBottom) / 2,
-          globalScene.game.canvas.width / 6,
-          globalScene.game.canvas.height / 6,
+          GAME_WIDTH,
+          GAME_HEIGHT,
           0,
         );
         overlay.setOrigin(0.5, 0.5);
@@ -149,8 +152,8 @@ export abstract class ModalUiHandler extends UiHandler {
 
     const [width, height] = [this.getWidth(config), this.getHeight(config)];
     this.modalContainer.setPosition(
-      (globalScene.game.canvas.width / 6 - (width + (marginRight - marginLeft))) / 2,
-      (-globalScene.game.canvas.height / 6 - (height + (marginBottom - marginTop))) / 2,
+      (GAME_WIDTH - (width + (marginRight - marginLeft))) / 2,
+      (-GAME_HEIGHT - (height + (marginBottom - marginTop))) / 2,
     );
 
     this.modalBg.setSize(width, height);

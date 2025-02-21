@@ -1,15 +1,21 @@
+import type { BattlerIndex } from "#enums/battler-index";
+import { CommonBattleAnim } from "#app/data/battle-anims/common-battle-anim";
+import { CommonAnim } from "#enums/common-anim";
 import { globalScene } from "#app/global-scene";
-import type { BattlerIndex } from "#app/battle";
-import { CommonBattleAnim, CommonAnim } from "#app/data/battle-anims";
-import { Stat } from "#app/enums/stat";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { getTextColor, TextStyle } from "#app/ui/text";
-import { Mode } from "#app/ui/ui";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
+import { UiMode } from "#enums/ui-mode";
+import { Stat } from "#enums/stat";
 import i18next from "i18next";
-import { PokemonPhase } from "./pokemon-phase";
+import { settings } from "#app/system/settings/settings-manager";
+import { PokemonPhase } from "./abstract-pokemon-phase";
+import { CommonColor } from "#enums/color";
+import { PhaseId } from "#enums/phase-id";
 
 export class ScanIvsPhase extends PokemonPhase {
-  private shownIvs: number;
+  override readonly id = PhaseId.SCAN_IVS;
+
+  private readonly shownIvs: number;
 
   constructor(battlerIndex: BattlerIndex, shownIvs: number) {
     super(battlerIndex);
@@ -17,8 +23,10 @@ export class ScanIvsPhase extends PokemonPhase {
     this.shownIvs = shownIvs;
   }
 
-  override start() {
+  public override start(): void {
     super.start();
+
+    const { gameData, ui } = globalScene;
 
     if (!this.shownIvs) {
       return this.end();
@@ -29,21 +37,21 @@ export class ScanIvsPhase extends PokemonPhase {
     let enemyIvs: number[] = [];
     let statsContainer: Phaser.GameObjects.Sprite[] = [];
     let statsContainerLabels: Phaser.GameObjects.Sprite[] = [];
+
     const enemyField = globalScene.getEnemyField();
-    const uiTheme = globalScene.uiTheme; // Assuming uiTheme is accessible
     for (let e = 0; e < enemyField.length; e++) {
       enemyIvs = enemyField[e].ivs;
-      const currentIvs = globalScene.gameData.dexData[enemyField[e].species.getRootSpeciesId()].ivs; // we are using getRootSpeciesId() here because we want to check against the baby form, not the mid form if it exists
-      const ivsToShow = globalScene.ui.getMessageHandler().getTopIvs(enemyIvs, this.shownIvs);
+      // we are using getRootSpeciesId() here because we want to check against the baby form, not the mid form if it exists
+      const currentIvs = gameData.dexData[enemyField[e].species.getRootSpeciesId()].ivs;
+      const ivsToShow = ui.getMessageHandler().getTopIvs(enemyIvs, this.shownIvs);
+
       statsContainer = enemyField[e].getBattleInfo().getStatsValueContainer().list as Phaser.GameObjects.Sprite[];
       statsContainerLabels = statsContainer.filter((m) => m.name.indexOf("icon_stat_label") >= 0);
+
       for (let s = 0; s < statsContainerLabels.length; s++) {
         const ivStat = Stat[statsContainerLabels[s].frame.name];
         if (enemyIvs[ivStat] > currentIvs[ivStat] && ivsToShow.indexOf(Number(ivStat)) >= 0) {
-          const hexColour =
-            enemyIvs[ivStat] === 31
-              ? getTextColor(TextStyle.PERFECT_IV, false, uiTheme)
-              : getTextColor(TextStyle.SUMMARY_GREEN, false, uiTheme);
+          const hexColour = enemyIvs[ivStat] === 31 ? CommonColor.SOFT_ORANGE : CommonColor.LIGHT_GREEN;
           const hexTextColour = Phaser.Display.Color.HexStringToColor(hexColour).color;
           statsContainerLabels[s].setTint(hexTextColour);
         }
@@ -51,29 +59,28 @@ export class ScanIvsPhase extends PokemonPhase {
       }
     }
 
-    if (!globalScene.hideIvs) {
-      globalScene.ui.showText(
+    if (!settings.general.hideIvScanner) {
+      ui.showText(
         i18next.t("battle:ivScannerUseQuestion", { pokemonName: getPokemonNameWithAffix(pokemon) }),
         null,
         () => {
-          globalScene.ui.setMode(
-            Mode.CONFIRM,
-            () => {
-              globalScene.ui.setMode(Mode.MESSAGE);
-              globalScene.ui.clearText();
+          const options: ConfirmModeConfig = {
+            yesHandler: () => {
+              ui.setMode(UiMode.MESSAGE);
+              ui.clearText();
               new CommonBattleAnim(CommonAnim.LOCK_ON, pokemon, pokemon).play(false, () => {
-                globalScene.ui
-                  .getMessageHandler()
+                ui.getMessageHandler()
                   .promptIvs(pokemon.id, pokemon.ivs, this.shownIvs)
                   .then(() => this.end());
               });
             },
-            () => {
-              globalScene.ui.setMode(Mode.MESSAGE);
-              globalScene.ui.clearText();
+            noHandler: () => {
+              ui.setMode(UiMode.MESSAGE);
+              ui.clearText();
               this.end();
             },
-          );
+          };
+          ui.setMode(UiMode.CONFIRM, options);
         },
       );
     } else {

@@ -1,8 +1,9 @@
-import { GameModes } from "../game-mode";
+import { GameModes } from "#enums/game-modes";
 import UiHandler from "./ui-handler";
 import type { SessionSaveData } from "#app/@types/SessionData";
-import { TextStyle, addTextObject, addBBCodeTextObject, getTextColor } from "./text";
-import { Mode } from "./ui";
+import { addTextObject, addBBCodeTextObject, getBBCodeFragment } from "./text";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "./ui-theme";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
 import {
@@ -14,24 +15,29 @@ import {
 } from "#app/utils";
 import type PokemonData from "../system/pokemon-data";
 import i18next from "i18next";
-import { Button } from "../enums/buttons";
-import { BattleType } from "../battle";
-import { TrainerVariant } from "../field/trainer";
+import { Button } from "#enums/buttons";
+import { BattleType } from "#enums/battle-type";
+import { TrainerVariant } from "#enums/trainer-variant";
 import { Challenges } from "#enums/challenges";
 import { getLuckString, getLuckTextTint } from "../modifier/modifier-type";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
 import { getTypeRgb } from "#app/data/type";
-import { Type } from "#enums/type";
-import { TypeColor, TypeShadow } from "#app/enums/color";
+import { ElementalType } from "#enums/elemental-type";
+import { CommonColor, TypeColor, TypeShadowColor } from "#enums/color";
 import { getNatureStatMultiplier, getNatureName } from "../data/nature";
 import { getVariantTint } from "#app/data/variant";
 import * as Modifier from "../modifier/modifier";
 import type { Species } from "#enums/species";
 import { PlayerGender } from "#enums/player-gender";
-import { SettingKeyboard } from "#app/system/settings/settings-keyboard";
+import { SettingKeyboard } from "#enums/setting-keyboard";
 import { getBiomeName } from "#app/data/balance/biomes";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
+import { RunDisplayMode } from "#enums/run-display-mode";
+import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { ImagesFolder } from "#enums/images-folders";
 
 /**
  * RunInfoUiMode indicates possible overlays of RunInfoUiHandler.
@@ -42,11 +48,6 @@ enum RunInfoUiMode {
   MAIN,
   HALL_OF_FAME,
   ENDING_ART,
-}
-
-export enum RunDisplayMode {
-  RUN_HISTORY,
-  SESSION_PREVIEW,
 }
 
 /**
@@ -74,15 +75,15 @@ export default class RunInfoUiHandler extends UiHandler {
   private modifiersModule: any;
 
   constructor() {
-    super(Mode.RUN_INFO);
+    super(UiMode.RUN_INFO);
   }
 
   override async setup() {
-    this.runContainer = globalScene.add.container(1, -(globalScene.game.canvas.height / 6) + 1);
+    this.runContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
     // The import of the modifiersModule is loaded here to sidestep async/await issues.
     this.modifiersModule = Modifier;
     this.runContainer.setVisible(false);
-    globalScene.loadImage("encounter_exclaim", "mystery-encounters");
+    globalScene.loadImage("encounter_exclaim", ImagesFolder.ME);
   }
 
   /**
@@ -99,15 +100,9 @@ export default class RunInfoUiHandler extends UiHandler {
   override show(args: any[]): boolean {
     super.show(args);
 
-    const gameStatsBg = globalScene.add.rectangle(
-      0,
-      0,
-      globalScene.game.canvas.width,
-      globalScene.game.canvas.height,
-      0x006860,
-    );
-    gameStatsBg.setOrigin(0, 0);
-    this.runContainer.add(gameStatsBg);
+    const runInfoBg = globalScene.add.rectangle(-1, -1, GAME_WIDTH, GAME_HEIGHT, 0x006860);
+    runInfoBg.setOrigin(0, 0);
+    this.runContainer.add(runInfoBg);
 
     const run = args[0];
     this.runDisplayMode = args[1];
@@ -124,7 +119,7 @@ export default class RunInfoUiHandler extends UiHandler {
     // Creates Header and adds to this.runContainer
     this.addHeader();
 
-    this.statsBgWidth = (globalScene.game.canvas.width / 6 - 2) / 3;
+    this.statsBgWidth = (GAME_WIDTH - 2) / 3;
 
     // Creates Run Result Container
     this.runResultContainer = globalScene.add.container(0, 24);
@@ -150,10 +145,6 @@ export default class RunInfoUiHandler extends UiHandler {
     this.parsePartyInfo();
     this.showParty(true);
 
-    this.runContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 6, globalScene.game.canvas.height / 6),
-      Phaser.Geom.Rectangle.Contains,
-    );
     this.getUi().bringToTop(this.runContainer);
     this.runContainer.setVisible(true);
 
@@ -178,7 +169,7 @@ export default class RunInfoUiHandler extends UiHandler {
    * It does not check if the run has any PokemonHeldItemModifiers though.
    */
   private addHeader() {
-    const headerBg = addWindow(0, 0, globalScene.game.canvas.width / 6 - 2, 24);
+    const headerBg = addWindow(0, 0, GAME_WIDTH - 2, 24);
     headerBg.setOrigin(0, 0);
     this.runContainer.add(headerBg);
     if (this.runInfo.modifiers.length !== 0) {
@@ -222,7 +213,7 @@ export default class RunInfoUiHandler extends UiHandler {
    *
    */
   private async parseRunResult() {
-    const genderIndex = globalScene.gameData.gender ?? PlayerGender.UNSET;
+    const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
     const genderStr = PlayerGender[genderIndex];
     const runResultTextStyle = this.isVictory ? TextStyle.PERFECT_IV : TextStyle.SUMMARY_RED;
     const runResultTitle = this.isVictory
@@ -416,10 +407,10 @@ export default class RunInfoUiHandler extends UiHandler {
       26,
       `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(enemy.level, 1000)}`,
       enemyLevelStyle,
-      { fontSize: "44px", color: "#f8f8f8" },
+      { fontSize: "44px", color: CommonColor.OFF_WHITE },
     );
     enemyLevel.setShadow(0, 0, undefined);
-    enemyLevel.setStroke("#424242", 14);
+    enemyLevel.setStroke(CommonColor.DARK_GREY, 14);
     enemyLevel.setOrigin(1, 0);
     enemyIconContainer.add(enemyIcon);
     enemyIconContainer.add(enemyLevel);
@@ -446,10 +437,10 @@ export default class RunInfoUiHandler extends UiHandler {
         26,
         `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(enemy.level, 1000)}`,
         bossStatus ? TextStyle.PARTY_RED : TextStyle.PARTY,
-        { fontSize: "44px", color: "#f8f8f8" },
+        { fontSize: "44px", color: CommonColor.OFF_WHITE },
       );
       enemyLevel.setShadow(0, 0, undefined);
-      enemyLevel.setStroke("#424242", 14);
+      enemyLevel.setStroke(CommonColor.DARK_GREY, 14);
       enemyLevel.setOrigin(1, 0);
       enemyIconContainer.add(enemyIcon);
       enemyIconContainer.add(enemyLevel);
@@ -563,7 +554,7 @@ export default class RunInfoUiHandler extends UiHandler {
         { fontSize: "54px" },
       );
       enemyLevel.setShadow(0, 0, undefined);
-      enemyLevel.setStroke("#424242", 14);
+      enemyLevel.setStroke(CommonColor.DARK_GREY, 14);
       enemyLevel.setOrigin(0, 0);
 
       enemyIconContainer.add(enemyIcon);
@@ -633,11 +624,9 @@ export default class RunInfoUiHandler extends UiHandler {
     const runInfoText = addBBCodeTextObject(7, 0, "", TextStyle.WINDOW, { fontSize: "50px", lineSpacing: lineSpacing });
     const runTime = getPlayTimeString(this.runInfo.playTime);
     runInfoText.appendText(`${i18next.t("runHistory:runLength")}: ${runTime}`, false);
-    const runMoney = formatMoney(globalScene.moneyFormat, this.runInfo.money);
-    const moneyTextColor = getTextColor(TextStyle.MONEY_WINDOW, false, globalScene.uiTheme);
-    runInfoText.appendText(
-      `[color=${moneyTextColor}]${i18next.t("battleScene:moneyOwned", { formattedMoney: runMoney })}[/color]`,
-    );
+    const runMoney = formatMoney(settings.display.moneyFormat, this.runInfo.money);
+    const moneyText = i18next.t("battleScene:moneyOwned", { formattedMoney: runMoney });
+    runInfoText.appendText(getBBCodeFragment(moneyText, TextStyle.MONEY_WINDOW, true, false));
     runInfoText.setPosition(7, 70);
     runInfoTextContainer.add(runInfoText);
     // Luck
@@ -710,9 +699,9 @@ export default class RunInfoUiHandler extends UiHandler {
             rules.push(i18next.t(`runHistory:challengeMonoGen${this.runInfo.challenges[i].value}`));
             break;
           case Challenges.SINGLE_TYPE:
-            const typeRule = Type[this.runInfo.challenges[i].value - 1];
+            const typeRule = ElementalType[this.runInfo.challenges[i].value - 1];
             const typeTextColor = `[color=${TypeColor[typeRule]}]`;
-            const typeShadowColor = `[shadow=${TypeShadow[typeRule]}]`;
+            const typeShadowColor = `[shadow=${TypeShadowColor[typeRule]}]`;
             const typeText =
               typeTextColor + typeShadowColor + i18next.t(`pokemonInfo:Type.${typeRule}`)! + "[/color]" + "[/shadow]";
             rules.push(typeText);
@@ -735,13 +724,13 @@ export default class RunInfoUiHandler extends UiHandler {
 
   /**
    * Parses and displays the run's player party.
-   * Default Information: Icon, Level, Nature, Ability, Passive, Shiny Status, Fusion Status, Stats, and Moves.
+   * Default Information: Icon, Level, Nature, Ability, Passive, Shiny Status, Fusion Status, Stats, and MoveId.
    * B-Side Information: Icon + Held Items (Can be displayed to the user through pressing the abilityButton)
    */
   private parsePartyInfo(): void {
     const party = this.runInfo.party;
     const currentLanguage = i18next.resolvedLanguage ?? "en";
-    const windowHeight = (globalScene.game.canvas.height / 6 - 23) / 6;
+    const windowHeight = (GAME_HEIGHT - 23) / PLAYER_PARTY_MAX_SIZE;
 
     party.forEach((p: PokemonData, i: number) => {
       const pokemonInfoWindow = new RoundRectangle(globalScene, 0, 14, this.statsBgWidth * 2 + 10, windowHeight - 2, 3);
@@ -806,8 +795,8 @@ export default class RunInfoUiHandler extends UiHandler {
       pokemon.stats.forEach((element) => pStats.push(formatFancyLargeNumber(element, 1)));
       for (let i = 0; i < pStats.length; i++) {
         const isMult = getNatureStatMultiplier(pNature, i);
-        pStats[i] = isMult < 1 ? pStats[i] + "[color=#40c8f8]↓[/color]" : pStats[i];
-        pStats[i] = isMult > 1 ? pStats[i] + "[color=#f89890]↑[/color]" : pStats[i];
+        pStats[i] = isMult < 1 ? pStats[i] + `[color=${CommonColor.LIGHT_BLUE}]↓[/color]` : pStats[i];
+        pStats[i] = isMult > 1 ? pStats[i] + `[color=${CommonColor.SOFT_PINK}]↑[/color]` : pStats[i];
       }
       const hp = i18next.t("pokemonInfo:Stat.HPshortened") + ": " + pStats[0];
       const atk = i18next.t("pokemonInfo:Stat.ATKshortened") + ": " + pStats[1];
@@ -894,7 +883,7 @@ export default class RunInfoUiHandler extends UiHandler {
         moveContainer.add(moveLabel);
         movesetContainer.add(moveContainer);
         const move = pokemonMoveset[m]?.getMove();
-        pokemonMoveBgs[m].setFrame(Type[move ? move.type : Type.UNKNOWN].toString().toLowerCase());
+        pokemonMoveBgs[m].setFrame(ElementalType[move ? move.type : ElementalType.UNKNOWN].toString().toLowerCase());
         pokemonMoveLabels[m].setText(move ? move.name : "-");
       }
 
@@ -983,14 +972,13 @@ export default class RunInfoUiHandler extends UiHandler {
    */
   private createVictorySplash(): void {
     this.endCardContainer = globalScene.add.container(0, 0);
-    const genderIndex = globalScene.gameData.gender ?? PlayerGender.UNSET;
+    const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
     const isFemale = genderIndex === PlayerGender.FEMALE;
-    const endCard = globalScene.add.image(0, 0, `end_${isFemale ? "f" : "m"}`);
+    const endCard = globalScene.add.image(-1, -1, `end_${isFemale ? "f" : "m"}`);
     endCard.setOrigin(0);
-    endCard.setScale(0.5);
     const text = addTextObject(
-      globalScene.game.canvas.width / 12,
-      globalScene.game.canvas.height / 6 - 16,
+      GAME_WIDTH / 2,
+      GAME_HEIGHT - 16,
       i18next.t("battle:congratulations"),
       TextStyle.SUMMARY,
       { fontSize: "128px" },
@@ -1005,33 +993,24 @@ export default class RunInfoUiHandler extends UiHandler {
    * This could be adapted into a public-facing method for victory screens. Perhaps.
    */
   private createHallofFame(): void {
-    const genderIndex = globalScene.gameData.gender ?? PlayerGender.UNSET;
+    const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
     const isFemale = genderIndex === PlayerGender.FEMALE;
     const genderStr = PlayerGender[genderIndex].toLowerCase();
     // Issue Note (08-05-2024): It seems as if fused pokemon do not appear with the averaged color b/c pokemonData's loadAsset requires there to be some active battle?
     // As an alternative, the icons of the second/bottom fused Pokemon have been placed next to their fellow fused Pokemon in Hall of Fame
     this.hallofFameContainer = globalScene.add.container(0, 0);
-    // Thank you Hayuna for the code
-    const endCard = globalScene.add.image(0, 0, `end_${isFemale ? "f" : "m"}`);
-    endCard.setOrigin(0);
-    endCard.setPosition(-1, -1);
-    endCard.setScale(0.5);
-    const endCardCoords = endCard.getBottomCenter();
     const overlayColor = isFemale ? "red" : "blue";
-    const hallofFameBg = globalScene.add.image(0, 0, "hall_of_fame_" + overlayColor);
-    hallofFameBg.setPosition(159, 89);
-    hallofFameBg.setSize(globalScene.game.canvas.width, globalScene.game.canvas.height + 10);
-    hallofFameBg.setAlpha(0.8);
-    this.hallofFameContainer.add(endCard);
+    const hallofFameBg = globalScene.add.image(-1, -1, "hall_of_fame_" + overlayColor);
+    hallofFameBg.setOrigin(0, 0);
     this.hallofFameContainer.add(hallofFameBg);
-
     const hallofFameText = addTextObject(
       0,
       0,
       i18next.t("runHistory:hallofFameText", { context: genderStr }),
       TextStyle.WINDOW,
     );
-    hallofFameText.setPosition(endCardCoords.x - hallofFameText.displayWidth / 2, 164);
+    hallofFameText.setOrigin(0.5);
+    hallofFameText.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - 16);
     this.hallofFameContainer.add(hallofFameText);
     this.runInfo.party.forEach((p, i) => {
       const pkmn = p.toPokemon();
@@ -1051,8 +1030,6 @@ export default class RunInfoUiHandler extends UiHandler {
       species.loadAssets(female, formIndex, shiny, variant, true).then(() => {
         speciesLoaded.set(id, true);
         pokemonSprite.play(species.getSpriteKey(female, formIndex, shiny, variant));
-        pokemonSprite.setPipelineData("shiny", shiny);
-        pokemonSprite.setPipelineData("variant", variant);
         pokemonSprite.setPipelineData("spriteKey", species.getSpriteKey(female, formIndex, shiny, variant));
         pokemonSprite.setVisible(true);
       });

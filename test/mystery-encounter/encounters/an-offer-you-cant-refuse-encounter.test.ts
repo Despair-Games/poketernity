@@ -8,14 +8,14 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { runMysteryEncounterToEnd } from "#test/mystery-encounter/encounter-test-utils";
 import type BattleScene from "#app/battle-scene";
-import { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
+import { PlayerPokemon } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import { AnOfferYouCantRefuseEncounter } from "#app/data/mystery-encounters/encounters/an-offer-you-cant-refuse-encounter";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
-import { Moves } from "#enums/moves";
-import { ShinyRateBoosterModifier } from "#app/modifier/modifier";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { MoveId } from "#enums/move-id";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import i18next from "i18next";
 import { Abilities } from "#enums/abilities";
@@ -147,7 +147,7 @@ describe("An Offer You Can't Refuse - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.AN_OFFER_YOU_CANT_REFUSE, defaultParty);
       await runMysteryEncounterToEnd(game, 1);
 
-      const itemModifier = scene.findModifier((m) => m instanceof ShinyRateBoosterModifier) as ShinyRateBoosterModifier;
+      const itemModifier = scene.findModifier((m) => m.isShinyRateBoosterModifier());
 
       expect(itemModifier).toBeDefined();
       expect(itemModifier?.stackCount).toBe(1);
@@ -212,7 +212,7 @@ describe("An Offer You Can't Refuse - Mystery Encounter", () => {
       await game.runToMysteryEncounter(MysteryEncounterType.AN_OFFER_YOU_CANT_REFUSE, [Species.ABRA]);
       const party = scene.getPlayerParty();
       const abra = party.find((pkm) => pkm.species.speciesId === Species.ABRA)!;
-      abra.moveset = [new PokemonMove(Moves.BEAT_UP)];
+      abra.moveset = [new PokemonMove(MoveId.BEAT_UP)];
       const expBefore = abra.exp;
 
       await runMysteryEncounterToEnd(game, 2);

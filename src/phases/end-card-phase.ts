@@ -1,50 +1,57 @@
 import { globalScene } from "#app/global-scene";
-import { PlayerGender } from "#app/enums/player-gender";
 import { Phase } from "#app/phase";
-import { addTextObject, TextStyle } from "#app/ui/text";
+import { addTextObject } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
+import { PlayerGender } from "#enums/player-gender";
 import i18next from "i18next";
+import { settings } from "#app/system/settings/settings-manager";
+import { GAME_WIDTH, GAME_HEIGHT } from "#app/ui-constants";
+import { PhaseId } from "#enums/phase-id";
 
+/**
+ * Displays the End Card after a classic run ends in victory.
+ *
+ * @extends Phase
+ */
 export class EndCardPhase extends Phase {
+  override readonly id = PhaseId.END_CARD;
   public endCard: Phaser.GameObjects.Image;
   public text: Phaser.GameObjects.Text;
 
-  constructor() {
-    super();
-  }
-
-  override start(): void {
+  public override start(): void {
     super.start();
 
-    globalScene.ui.getMessageHandler().bg.setVisible(false);
-    globalScene.ui.getMessageHandler().nameBoxContainer.setVisible(false);
+    const { field, ui } = globalScene;
+
+    ui.getMessageHandler().bg.setVisible(false);
+    ui.getMessageHandler().nameBoxContainer.setVisible(false);
 
     this.endCard = globalScene.add.image(
       0,
       0,
-      `end_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}`,
+      `end_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}`,
     );
     this.endCard.setOrigin(0);
-    this.endCard.setScale(0.5);
-    globalScene.field.add(this.endCard);
+    field.add(this.endCard);
 
     this.text = addTextObject(
-      globalScene.game.canvas.width / 12,
-      globalScene.game.canvas.height / 6 - 16,
+      GAME_WIDTH / 2,
+      GAME_HEIGHT - 16,
       i18next.t("battle:congratulations"),
       TextStyle.SUMMARY,
       { fontSize: "128px" },
     );
     this.text.setOrigin(0.5);
-    globalScene.field.add(this.text);
+    field.add(this.text);
 
-    globalScene.ui.clearText();
+    ui.clearText();
 
-    globalScene.ui.fadeIn(1000).then(() => {
-      globalScene.ui.showText(
+    ui.fadeIn(1000).then(() => {
+      ui.showText(
         "",
         null,
         () => {
-          globalScene.ui.getMessageHandler().bg.setVisible(true);
+          ui.getMessageHandler().bg.setVisible(true);
           this.end();
         },
         null,

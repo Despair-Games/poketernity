@@ -4,6 +4,7 @@ import { isNullOrUndefined, type BooleanHolder } from "#app/utils";
 import { getStatKey, type BattleStat } from "#enums/stat";
 import i18next from "i18next";
 import { PreStatStageChangeAbAttr } from "./pre-stat-stage-change-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Protect one or all {@linkcode BattleStat} from reductions caused by other Pokémon's moves and Abilities
@@ -15,28 +16,12 @@ export class ProtectStatAbAttr extends PreStatStageChangeAbAttr {
 
   constructor(protectedStat?: BattleStat) {
     super();
+    this._flags.add(AbAttrFlag.PROTECT_STAT);
 
     this.protectedStat = protectedStat;
   }
 
-  /**
-   * Apply the {@linkcode ProtectedStatAbAttr} to an interaction
-   * @param _pokemon
-   * @param _passive
-   * @param simulated
-   * @param stat the {@linkcode BattleStat} being affected
-   * @param cancelled The {@linkcode BooleanHolder} that will be set to true if the stat is protected
-   * @param _args
-   * @returns true if the stat is protected, false otherwise
-   */
-  override applyPreStatStageChange(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    stat: BattleStat,
-    cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
+  override apply(_pokemon: Pokemon, _simulated: boolean, stat: BattleStat, cancelled: BooleanHolder): boolean {
     if (isNullOrUndefined(this.protectedStat) || stat === this.protectedStat) {
       cancelled.value = true;
       return true;

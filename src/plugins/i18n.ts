@@ -1,9 +1,7 @@
 import { LOCALE_LS_KEY } from "#app/constants";
+import { supportedLanguages } from "#app/system/settings/supported-languages";
 import { camelCaseToKebabCase } from "#app/utils";
 import i18next from "i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
-import HttpBackend from "i18next-http-backend";
-import processor, { KoreanPostpositionProcessor } from "i18next-korean-postposition-processor";
 import pkg from "../../package.json";
 
 //#region Interfaces/Types
@@ -91,7 +89,6 @@ const namespaceMap = {
   battlePokemonForm: "pokemon-form-battle",
   miscDialogue: "dialogue-misc",
   battleSpecDialogue: "dialogue-final-boss",
-  doubleBattleDialogue: "dialogue-double-battle",
   splashMessages: "splash-texts",
   mysteryEncounterMessages: "mystery-encounter-texts",
 };
@@ -158,13 +155,23 @@ export async function initI18n(): Promise<void> {
    * A: In src/system/settings.ts, add a new case to the Setting.Language switch statement.
    */
 
+  const [
+    { default: LanguageDetector },
+    { default: HttpBackend },
+    { default: koreanProcessor, KoreanPostpositionProcessor },
+  ] = await Promise.all([
+    import("i18next-browser-languagedetector"),
+    import("i18next-http-backend"),
+    import("i18next-korean-postposition-processor"),
+  ]);
+
   i18next.use(HttpBackend);
   i18next.use(LanguageDetector);
-  i18next.use(processor);
+  i18next.use(koreanProcessor);
   i18next.use(new KoreanPostpositionProcessor());
   await i18next.init({
     fallbackLng: "en",
-    supportedLngs: ["en", "es-ES", "fr", "it", "de", "zh-CN", "zh-TW", "pt-BR", "ko", "ja", "ca-ES"],
+    supportedLngs: supportedLanguages.map((l) => l.key),
     backend: {
       loadPath(lng: string, [ns]: string[]) {
         let fileName: string;
@@ -200,7 +207,6 @@ export async function initI18n(): Promise<void> {
       "dialogue",
       "battleSpecDialogue",
       "miscDialogue",
-      "doubleBattleDialogue",
       "egg",
       "fightUiHandler",
       "filterBar",

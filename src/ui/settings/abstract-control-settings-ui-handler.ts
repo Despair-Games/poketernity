@@ -1,8 +1,9 @@
 import UiHandler from "#app/ui/ui-handler";
-import type { Mode } from "#app/ui/ui";
+import type { UiMode } from "#enums/ui-mode";
 import type { InterfaceConfig } from "#app/inputs-controller";
 import { addWindow } from "#app/ui/ui-theme";
-import { addTextObject, TextStyle } from "#app/ui/text";
+import { addTextObject, setTextColor } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import { getIconWithSettingName } from "#app/configs/inputs/configHandler";
 import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigationMenu";
@@ -10,6 +11,8 @@ import type { Device } from "#enums/devices";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 export interface InputsIcons {
   [key: string]: Phaser.GameObjects.Sprite;
@@ -49,10 +52,10 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
   protected inputsIcons: InputsIcons;
   protected navigationIcons: InputsIcons;
   // list all the setting keys used in the selected layout (because dualshock has more buttons than xbox)
-  protected keys: Array<String>;
+  protected keys: Array<string>;
 
   // Store the specific settings related to key bindings for the current gamepad configuration.
-  protected bindingSettings: Array<String>;
+  protected bindingSettings: Array<string>;
 
   protected setting;
   protected settingBlacklisted;
@@ -66,7 +69,6 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
   protected rowsToDisplay: number;
   protected device: Device;
 
-  abstract saveSettingToLocalStorage(setting, cursor): void;
   abstract setSetting(setting, value: number): boolean;
 
   /**
@@ -74,17 +76,9 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
    *
    * @param mode - The UI mode.
    */
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
     this.rowsToDisplay = 8;
-  }
-
-  getLocalStorageSetting(): object {
-    // Retrieve the settings from local storage or use an empty object if none exist.
-    const settings: object = localStorage.hasOwnProperty(this.localStoragePropertyName)
-      ? JSON.parse(localStorage.getItem(this.localStoragePropertyName)!)
-      : {}; // TODO: is this bang correct?
-    return settings;
   }
 
   private camelize(string: string): string {
@@ -102,30 +96,20 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
     const ui = this.getUi();
     this.navigationIcons = {};
 
-    this.settingsContainer = globalScene.add.container(1, -(globalScene.game.canvas.height / 6) + 1);
+    this.settingsContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
     this.settingsContainer.setName(`settings-${this.titleSelected}`);
-
-    this.settingsContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 6, globalScene.game.canvas.height / 6),
-      Phaser.Geom.Rectangle.Contains,
-    );
 
     this.navigationContainer = new NavigationMenu(0, 0);
 
     this.optionsBg = addWindow(
       0,
       this.navigationContainer.height,
-      globalScene.game.canvas.width / 6 - 2,
-      globalScene.game.canvas.height / 6 - 16 - this.navigationContainer.height - 2,
+      GAME_WIDTH - 2,
+      GAME_HEIGHT - 16 - this.navigationContainer.height - 2,
     );
     this.optionsBg.setOrigin(0, 0);
 
-    this.actionsBg = addWindow(
-      0,
-      globalScene.game.canvas.height / 6 - this.navigationContainer.height,
-      globalScene.game.canvas.width / 6 - 2,
-      22,
-    );
+    this.actionsBg = addWindow(0, GAME_HEIGHT - this.navigationContainer.height, GAME_WIDTH - 2, 22);
     this.actionsBg.setOrigin(0, 0);
 
     const iconAction = globalScene.add.sprite(0, 0, "keyboard");
@@ -135,7 +119,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
 
     const actionText = addTextObject(0, 0, i18next.t("settings:action"), TextStyle.SETTINGS_LABEL);
     actionText.setOrigin(0, 0.15);
-    actionText.setPositionRelative(iconAction, -actionText.width / 6 - 2, 0);
+    actionText.setPositionRelative(iconAction, -actionText.displayWidth - 2, 0);
 
     const iconCancel = globalScene.add.sprite(0, 0, "keyboard");
     iconCancel.setOrigin(0, -0.1);
@@ -144,7 +128,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
 
     const cancelText = addTextObject(0, 0, i18next.t("settings:back"), TextStyle.SETTINGS_LABEL);
     cancelText.setOrigin(0, 0.15);
-    cancelText.setPositionRelative(iconCancel, -cancelText.width / 6 - 2, 0);
+    cancelText.setPositionRelative(iconCancel, -cancelText.displayWidth - 2, 0);
 
     const iconReset = globalScene.add.sprite(0, 0, "keyboard");
     iconReset.setOrigin(0, -0.1);
@@ -153,7 +137,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
 
     const resetText = addTextObject(0, 0, i18next.t("settings:reset"), TextStyle.SETTINGS_LABEL);
     resetText.setOrigin(0, 0.15);
-    resetText.setPositionRelative(iconReset, -resetText.width / 6 - 2, 0);
+    resetText.setPositionRelative(iconReset, -resetText.displayWidth - 2, 0);
 
     this.settingsContainer.add(this.optionsBg);
     this.settingsContainer.add(this.actionsBg);
@@ -265,7 +249,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
         // Calculate the total width of all option labels within a specific setting
         // This is achieved by summing the width of each option label
         const totalWidth = optionValueLabels[s]
-          .map((o) => (o as Phaser.GameObjects.Text).width)
+          .map((o) => (o as Phaser.GameObjects.Text).displayWidth)
           .reduce((total, width) => (total += width), 0);
 
         // Define the minimum width for a label, ensuring it's at least 78 pixels wide or the width of the setting label plus some padding
@@ -273,7 +257,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
 
         // Calculate the total available space for placing option labels next to their setting label
         // We reserve space for the setting label and then distribute the remaining space evenly
-        const totalSpace = 297 - labelWidth - totalWidth / 6;
+        const totalSpace = 297 - labelWidth - totalWidth;
         // Calculate the spacing between options based on the available space divided by the number of gaps between labels
         const optionSpacing = Math.floor(totalSpace / (optionValueLabels[s].length - 1));
 
@@ -285,7 +269,7 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
           // Set the option label's position right next to the setting label, adjusted by xOffset
           (value as Phaser.GameObjects.Text).setPositionRelative(settingLabels[s], labelWidth + xOffset, 0);
           // Move the xOffset to the right for the next label, ensuring each label is spaced evenly
-          xOffset += (value as Phaser.GameObjects.Text).width / 6 + optionSpacing;
+          xOffset += (value as Phaser.GameObjects.Text).displayWidth + optionSpacing;
         }
       });
 
@@ -342,15 +326,11 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
       return;
     }
 
-    // Retrieve the gamepad settings from local storage or use an empty object if none exist.
-    const settings: object = this.getLocalStorageSetting();
-
     // Update the cursor for each key based on the stored settings or default cursors.
     this.keys.forEach((key, index) => {
-      this.setOptionCursor(
-        index,
-        settings.hasOwnProperty(key as string) ? settings[key as string] : this.optionCursors[index],
-      );
+      if (["enabled"].includes(key)) {
+        this.setOptionCursor(index, settings.gamepad[key] ? Number(!settings.gamepad[key]) : this.optionCursors[index]);
+      }
     });
 
     // If the active configuration has no custom bindings set, exit the function early.
@@ -597,8 +577,8 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
 
     // Check if the cursor object exists, if not, create it.
     if (!this.cursorObj) {
-      const cursorWidth = globalScene.game.canvas.width / 6 - (this.scrollBar.visible ? 16 : 10);
-      this.cursorObj = globalScene.add.nineslice(0, 0, "summary_moves_cursor", undefined, cursorWidth, 16, 1, 1, 1, 1);
+      const cursorWidth = GAME_WIDTH - (this.scrollBar.visible ? 16 : 10);
+      this.cursorObj = globalScene.add.nineslice(0, 0, "summary_moves_cursor", "select", cursorWidth, 16, 1, 1, 1, 1);
       this.cursorObj.setOrigin(0, 0); // Set the origin to the top-left corner.
       this.optionsContainer.add(this.cursorObj); // Add the cursor to the options container.
     }
@@ -652,22 +632,21 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
     // Check if the setting is not part of the bindings (i.e., it's a regular setting).
     if (!this.bindingSettings.includes(setting) && !setting.includes("BUTTON_")) {
       // Get the label of the last selected option and revert its color to the default.
-      const lastValueLabel = this.optionValueLabels[settingIndex][lastCursor];
-      lastValueLabel.setColor(this.getTextColor(TextStyle.WINDOW));
-      lastValueLabel.setShadowColor(this.getTextColor(TextStyle.WINDOW, true));
+      const lastValueLabel =
+        this.optionValueLabels[settingIndex][lastCursor] ?? this.optionValueLabels[settingIndex][0];
+      setTextColor(lastValueLabel, TextStyle.WINDOW);
 
       // Update the cursor for the setting to the new position.
       this.optionCursors[settingIndex] = cursor;
 
       // Change the color of the new selected option to indicate it's selected.
-      const newValueLabel = this.optionValueLabels[settingIndex][cursor];
-      newValueLabel.setColor(this.getTextColor(TextStyle.SETTINGS_SELECTED));
-      newValueLabel.setShadowColor(this.getTextColor(TextStyle.SETTINGS_SELECTED, true));
+      const newValueLabel = this.optionValueLabels[settingIndex][cursor] ?? this.optionValueLabels[settingIndex][0];
+      setTextColor(newValueLabel, TextStyle.SETTINGS_SELECTED);
     }
 
     // If the save flag is set, save the setting to local storage
     if (save) {
-      this.saveSettingToLocalStorage(setting, cursor);
+      this.setSetting(setting, cursor);
     }
 
     return true; // Return true to indicate the cursor was successfully updated.

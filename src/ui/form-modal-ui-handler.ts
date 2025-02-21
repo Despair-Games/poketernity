@@ -1,10 +1,12 @@
-import type { ModalConfig } from "./modal-ui-handler";
-import { ModalUiHandler } from "./modal-ui-handler";
-import type { Mode } from "./ui";
-import { TextStyle, addTextInputObject, addTextObject } from "./text";
-import { WindowVariant, addWindow } from "./ui-theme";
+import type { ModalConfig } from "#app/ui/modal-ui-handler";
+import { ModalUiHandler } from "#app/ui/modal-ui-handler";
+import type { UiMode } from "#enums/ui-mode";
+import { addTextInputObject, addTextObject, setTextColor } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
+import { addWindow } from "#app/ui/ui-theme";
+import { WindowVariant } from "#enums/window-variant";
 import type InputText from "phaser3-rex-plugins/plugins/inputtext";
-import { fixedInt } from "#app/utils";
+import { fixedNumber } from "#app/utils";
 import { Button } from "#enums/buttons";
 import { globalScene } from "#app/global-scene";
 
@@ -21,7 +23,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
   protected tween: Phaser.Tweens.Tween;
   protected formLabels: Phaser.GameObjects.Text[];
 
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
 
     this.editing = false;
@@ -72,8 +74,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
       "",
       TextStyle.TOOLTIP_CONTENT,
     );
-    this.errorMessage.setColor(this.getTextColor(TextStyle.SUMMARY_PINK));
-    this.errorMessage.setShadowColor(this.getTextColor(TextStyle.SUMMARY_PINK, true));
+    setTextColor(this.errorMessage, TextStyle.SUMMARY_PINK);
     this.errorMessage.setVisible(false);
     this.modalContainer.add(this.errorMessage);
   }
@@ -135,7 +136,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
 
       this.tween = globalScene.tweens.add({
         targets: this.modalContainer,
-        duration: fixedInt(1000),
+        duration: fixedNumber(1000),
         ease: "Sine.easeInOut",
         y: "-=24",
         alpha: 1,

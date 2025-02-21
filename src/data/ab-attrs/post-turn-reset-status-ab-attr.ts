@@ -18,7 +18,7 @@ export class PostTurnResetStatusAbAttr extends PostTurnAbAttr {
     this.allyTarget = allyTarget;
   }
 
-  override applyPostTurn(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     if (this.allyTarget) {
       this.target = pokemon.getAlly();
     } else {
@@ -29,7 +29,7 @@ export class PostTurnResetStatusAbAttr extends PostTurnAbAttr {
         globalScene.queueMessage(
           getStatusEffectHealText(this.target.status?.effect, getPokemonNameWithAffix(this.target)),
         );
-        this.target.resetStatus(false);
+        this.target.resetStatus();
         this.target.updateInfo();
       }
 

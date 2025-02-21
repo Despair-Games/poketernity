@@ -1,14 +1,15 @@
 import { Button } from "#enums/buttons";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { CommandPhase } from "#app/phases/command-phase";
 import FightUiHandler from "#app/ui/fight-ui-handler";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import type { MockText } from "#test/testUtils/mocks/mocksContainer/mockText";
 import i18next from "i18next";
+import { TypeEffectivenessColor } from "#enums/color";
 
 describe("UI - Type Hints", () => {
   let phaserGame: Phaser.Game;
@@ -27,7 +28,7 @@ describe("UI - Type Hints", () => {
   beforeEach(async () => {
     game = new GameManager(phaserGame);
     game.settings.typeHints(true); //activate type hints
-    game.override.battleType("single").startingLevel(100).startingWave(1).enemyMoveset(Moves.SPLASH);
+    game.override.battleType("single").startingLevel(100).startingWave(1).enemyMoveset(MoveId.SPLASH);
   });
 
   it("check immunity color", async () => {
@@ -36,45 +37,45 @@ describe("UI - Type Hints", () => {
       .startingLevel(100)
       .startingWave(1)
       .enemySpecies(Species.FLORGES)
-      .enemyMoveset(Moves.SPLASH)
-      .moveset([Moves.DRAGON_CLAW]);
+      .enemyMoveset(MoveId.SPLASH)
+      .moveset([MoveId.DRAGON_CLAW]);
     game.settings.typeHints(true); //activate type hints
 
     await game.startBattle([Species.RAYQUAZA]);
 
-    game.onNextPrompt("CommandPhase", Mode.COMMAND, () => {
+    game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
       const { ui } = game.scene;
       const handler = ui.getHandler<FightUiHandler>();
       handler.processInput(Button.ACTION); // select "Fight"
       game.phaseInterceptor.unlock();
     });
 
-    game.onNextPrompt("CommandPhase", Mode.FIGHT, () => {
+    game.onNextPrompt("CommandPhase", UiMode.FIGHT, () => {
       const { ui } = game.scene;
       const movesContainer = ui.getByName<Phaser.GameObjects.Container>(FightUiHandler.MOVES_CONTAINER_NAME);
       const dragonClawText = movesContainer
         .getAll<Phaser.GameObjects.Text>()
         .find((text) => text.text === i18next.t("move:dragonClaw.name"))! as unknown as MockText;
 
-      expect.soft(dragonClawText.color).toBe("#929292");
+      expect.soft(dragonClawText.color).toBe(TypeEffectivenessColor.NO_EFFECT);
       ui.getHandler().processInput(Button.ACTION);
     });
     await game.phaseInterceptor.to(CommandPhase);
   });
 
   it("check status move color", async () => {
-    game.override.enemySpecies(Species.FLORGES).moveset([Moves.GROWL]);
+    game.override.enemySpecies(Species.FLORGES).moveset([MoveId.GROWL]);
 
     await game.startBattle([Species.RAYQUAZA]);
 
-    game.onNextPrompt("CommandPhase", Mode.COMMAND, () => {
+    game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
       const { ui } = game.scene;
       const handler = ui.getHandler<FightUiHandler>();
       handler.processInput(Button.ACTION); // select "Fight"
       game.phaseInterceptor.unlock();
     });
 
-    game.onNextPrompt("CommandPhase", Mode.FIGHT, () => {
+    game.onNextPrompt("CommandPhase", UiMode.FIGHT, () => {
       const { ui } = game.scene;
       const movesContainer = ui.getByName<Phaser.GameObjects.Container>(FightUiHandler.MOVES_CONTAINER_NAME);
       const growlText = movesContainer

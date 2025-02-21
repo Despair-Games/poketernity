@@ -1,6 +1,6 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { HitResult } from "#app/field/pokemon";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { StatusEffect } from "#enums/status-effect";
 import { PostAttackAbAttr } from "./post-attack-ab-attr";
@@ -18,29 +18,27 @@ export class ConfusionOnStatusEffectAbAttr extends PostAttackAbAttr {
 
   constructor(...effects: StatusEffect[]) {
     /** This effect does not require a damaging move */
-    super((_user, _target, _move) => true);
+    super(false);
+    this._flags.add(AbAttrFlag.CONFUSION_ON_STATUS_EFFECT);
     this.effects = effects;
   }
+
   /**
    * Applies confusion to the target pokemon.
    * @param pokemon {@link Pokemon} attacking
-   * @param _passive N/A
+   * @param simulated if `true`, suppresses changes to game state
    * @param defender {@link Pokemon} defending
    * @param move {@link Move} used to apply status effect and confusion
-   * @param _hitResult N/A
-   * @param args [0] {@linkcode StatusEffect} applied by move
+   * @param effect {@linkcode StatusEffect} applied by move
    * @returns true if defender is confused
    */
-  override applyPostAttackAfterMoveTypeCheck(
+  override applyPostAttack(
     pokemon: Pokemon,
-    _passive: boolean,
     simulated: boolean,
     defender: Pokemon,
     move: Move,
-    _hitResult: HitResult,
-    args: any[],
+    effect: StatusEffect,
   ): boolean {
-    const effect: StatusEffect = args[0];
     if (this.effects.includes(effect) && !defender.isFainted()) {
       if (simulated) {
         return defender.canAddTag(BattlerTagType.CONFUSED);

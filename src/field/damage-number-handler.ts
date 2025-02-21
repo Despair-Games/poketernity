@@ -1,10 +1,15 @@
-import { TextStyle, addTextObject } from "../ui/text";
+import { addTextObject } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
 import type { DamageResult } from "./pokemon";
 import type { Pokemon } from "./pokemon";
-import { HitResult } from "./pokemon";
-import { formatStat, fixedInt } from "#app/utils";
-import type { BattlerIndex } from "../battle";
+import { HitResult } from "#enums/hit-result";
+import { formatStat, fixedNumber } from "#app/utils";
+import type { BattlerIndex } from "#enums/battler-index";
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
+import { DamageNumbersMode } from "#enums/damage-numbers-mode";
+import { GAME_HEIGHT } from "#app/ui-constants";
+import { CommonColor, ShadowColor } from "#enums/color";
 
 type TextAndShadowArr = [string | null, string | null];
 
@@ -21,18 +26,19 @@ export default class DamageNumberHandler {
     result: DamageResult | HitResult.HEAL = HitResult.EFFECTIVE,
     critical: boolean = false,
   ): void {
-    if (!globalScene?.damageNumbersMode) {
+    if (settings.display.damageNumbersMode === DamageNumbersMode.OFF) {
       return;
     }
 
     const battlerIndex = target.getBattlerIndex();
-    const baseScale = target.getSpriteScale() / 6;
     const damageNumber = addTextObject(
       target.x,
-      -(globalScene.game.canvas.height / 6) + target.y - target.getSprite().height / 2,
+      -GAME_HEIGHT + target.y - target.getSprite().height / 2,
       formatStat(amount, true),
       TextStyle.SUMMARY,
     );
+    const baseScale = target.getSpriteScale() * damageNumber.scale;
+
     damageNumber.setName("text-damage-number");
     damageNumber.setOrigin(0.5, 1);
     damageNumber.setScale(baseScale);
@@ -41,19 +47,19 @@ export default class DamageNumberHandler {
 
     switch (result) {
       case HitResult.SUPER_EFFECTIVE:
-        [textColor, shadowColor] = ["#f8d030", "#b8a038"];
+        [textColor, shadowColor] = [CommonColor.GOLD_YELLOW, ShadowColor.MUTED_GOLD];
         break;
       case HitResult.NOT_VERY_EFFECTIVE:
-        [textColor, shadowColor] = ["#f08030", "#c03028"];
+        [textColor, shadowColor] = [CommonColor.BRIGHT_ORANGE, ShadowColor.DARK_RED];
         break;
       case HitResult.ONE_HIT_KO:
-        [textColor, shadowColor] = ["#a040a0", "#483850"];
+        [textColor, shadowColor] = [CommonColor.VIBRANT_PURPLE, ShadowColor.DARK_PURPLE];
         break;
       case HitResult.HEAL:
-        [textColor, shadowColor] = ["#78c850", "#588040"];
+        [textColor, shadowColor] = [CommonColor.LIGHT_GREEN, ShadowColor.MUTED_GREEN];
         break;
       default:
-        [textColor, shadowColor] = ["#ffffff", "#636363"];
+        [textColor, shadowColor] = [CommonColor.WHITE, ShadowColor.GREY];
         break;
     }
 
@@ -82,17 +88,17 @@ export default class DamageNumberHandler {
 
     this.damageNumbers.get(battlerIndex)!.push(damageNumber);
 
-    if (globalScene.damageNumbersMode === 1) {
+    if (settings.display.damageNumbersMode === DamageNumbersMode.SIMPLE) {
       globalScene.tweens.add({
         targets: damageNumber,
-        duration: fixedInt(750),
+        duration: fixedNumber(750),
         alpha: 1,
         y: "-=32",
       });
       globalScene.tweens.add({
         delay: 375,
         targets: damageNumber,
-        duration: fixedInt(625),
+        duration: fixedNumber(625),
         alpha: 0,
         ease: "Sine.easeIn",
         onComplete: () => {
@@ -109,7 +115,7 @@ export default class DamageNumberHandler {
       targets: damageNumber,
       tweens: [
         {
-          duration: fixedInt(250),
+          duration: fixedNumber(250),
           alpha: 1,
           scaleX: 0.75 * baseScale,
           scaleY: 1.25 * baseScale,
@@ -117,7 +123,7 @@ export default class DamageNumberHandler {
           ease: "Cubic.easeOut",
         },
         {
-          duration: fixedInt(175),
+          duration: fixedNumber(175),
           alpha: 1,
           scaleX: 0.875 * baseScale,
           scaleY: 1.125 * baseScale,
@@ -125,59 +131,59 @@ export default class DamageNumberHandler {
           ease: "Cubic.easeIn",
         },
         {
-          duration: fixedInt(100),
+          duration: fixedNumber(100),
           scaleX: 1.25 * baseScale,
           scaleY: 0.75 * baseScale,
           ease: "Cubic.easeOut",
         },
         {
-          duration: fixedInt(175),
+          duration: fixedNumber(175),
           scaleX: 0.875 * baseScale,
           scaleY: 1.125 * baseScale,
           y: "-=8",
           ease: "Cubic.easeOut",
         },
         {
-          duration: fixedInt(50),
+          duration: fixedNumber(50),
           scaleX: 0.925 * baseScale,
           scaleY: 1.075 * baseScale,
           y: "+=8",
           ease: "Cubic.easeIn",
         },
         {
-          duration: fixedInt(100),
+          duration: fixedNumber(100),
           scaleX: 1.125 * baseScale,
           scaleY: 0.875 * baseScale,
           ease: "Cubic.easeOut",
         },
         {
-          duration: fixedInt(175),
+          duration: fixedNumber(175),
           scaleX: 0.925 * baseScale,
           scaleY: 1.075 * baseScale,
           y: "-=4",
           ease: "Cubic.easeOut",
         },
         {
-          duration: fixedInt(50),
+          duration: fixedNumber(50),
           scaleX: 0.975 * baseScale,
           scaleY: 1.025 * baseScale,
           y: "+=4",
           ease: "Cubic.easeIn",
         },
         {
-          duration: fixedInt(100),
+          duration: fixedNumber(100),
           scaleX: 1.075 * baseScale,
           scaleY: 0.925 * baseScale,
           ease: "Cubic.easeOut",
         },
         {
-          duration: fixedInt(25),
+          duration: fixedNumber(25),
           scaleX: baseScale,
           scaleY: baseScale,
           ease: "Cubic.easeOut",
         },
         {
-          delay: fixedInt(500),
+          delay: fixedNumber(500),
           alpha: 0,
           onComplete: () => {
             this.damageNumbers

@@ -1,6 +1,5 @@
 import { SwitchType } from "#enums/switch-type";
 import type { Pokemon } from "#app/field/pokemon";
-import { PlayerPokemon, EnemyPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { RevivalBlessingPhase } from "#app/phases/revival-blessing-phase";
@@ -9,32 +8,24 @@ import { toDmgValue } from "#app/utils";
 import i18next from "i18next";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
 /**
- * Attribute used for Revival Blessing.
+ * Attribute to revive a Pokemon in the user's party to 50% HP.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Revival_Blessing_(move) | Revival Blessing}
  * @extends MoveEffectAttr
- * @see {@linkcode apply}
  */
 export class RevivalBlessingAttr extends MoveEffectAttr {
   constructor() {
     super(true);
   }
 
-  /**
-   *
-   * @param user {@linkcode Pokemon} using this move
-   * @param _target {@linkcode Pokemon} target of this move
-   * @param _move {@linkcode Move} being used
-   * @param _args N/A
-   * @returns 'true' if the function succeeds
-   */
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, _args: any[]): boolean {
+  override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     // If user is player, checks if the user has fainted pokemon
-    if (user instanceof PlayerPokemon) {
+    if (user.isPlayer()) {
       globalScene.unshiftPhase(new RevivalBlessingPhase(user));
       return true;
-    } else if (user instanceof EnemyPokemon) {
+    } else if (user.isEnemy()) {
       // If used by an enemy trainer with at least one fainted non-boss Pokemon, this
       // revives one of said Pokemon selected at random.
       const faintedPokemon = globalScene.getEnemyParty().filter((p) => p.isFainted() && !p.isBoss());
@@ -67,10 +58,8 @@ export class RevivalBlessingAttr extends MoveEffectAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, _target, _move) =>
-      (user instanceof PlayerPokemon && globalScene.getPlayerParty().some((p) => p.isFainted()))
-      || (user instanceof EnemyPokemon
-        && user.hasTrainer()
-        && globalScene.getEnemyParty().some((p) => p.isFainted() && !p.isBoss()));
+      (user.isPlayer() && globalScene.getPlayerParty().some((p) => p.isFainted()))
+      || (user.isEnemy() && user.hasTrainer() && globalScene.getEnemyParty().some((p) => p.isFainted() && !p.isBoss()));
   }
 
   override getUserBenefitScore(user: Pokemon, _target: Pokemon, _move: Move): number {

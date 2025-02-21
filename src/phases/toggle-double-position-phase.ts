@@ -1,9 +1,12 @@
+import { FieldPosition } from "#enums/field-position";
 import { globalScene } from "#app/global-scene";
-import { FieldPosition } from "#app/field/pokemon";
-import { BattlePhase } from "./battle-phase";
+import { BattlePhase } from "./abstract-battle-phase";
+import { PhaseId } from "#enums/phase-id";
 
 export class ToggleDoublePositionPhase extends BattlePhase {
-  private double: boolean;
+  override readonly id = PhaseId.TOGGLE_DOUBLE_POSITION;
+
+  private readonly double: boolean;
 
   constructor(double: boolean) {
     super();
@@ -11,7 +14,7 @@ export class ToggleDoublePositionPhase extends BattlePhase {
     this.double = double;
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     const playerPokemon = globalScene.getPlayerField().find((p) => p.isActive(true));

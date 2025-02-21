@@ -1,6 +1,6 @@
 import { STEALING_MOVES } from "#app/data/mystery-encounters/requirements/requirement-groups";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { globalScene } from "#app/global-scene";
@@ -19,14 +19,15 @@ import {
   setEncounterRewards,
 } from "../utils/encounter-phase-utils";
 import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import { Moves } from "#enums/moves";
-import { BattlerIndex } from "#app/battle";
-import { AiType, PokemonMove } from "#app/field/pokemon";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { MoveId } from "#enums/move-id";
+import { BattlerIndex } from "#enums/battler-index";
+import { PokemonMove } from "#app/field/pokemon-move";
+import { AiType } from "#enums/ai-type";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { BerryType } from "#enums/berry-type";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 
@@ -72,7 +73,7 @@ export const SlumberingSnorlaxEncounter: MysteryEncounter = MysteryEncounterBuil
       isBoss: true,
       shiny: false, // Shiny lock because shiny is rolled only if the battle option is picked
       status: [StatusEffect.SLEEP, 5], // Extra turns on timer for Snorlax's start of fight moves
-      moveSet: [Moves.REST, Moves.SLEEP_TALK, Moves.CRUNCH, Moves.GIGA_IMPACT],
+      moveSet: [MoveId.REST, MoveId.SLEEP_TALK, MoveId.CRUNCH, MoveId.GIGA_IMPACT],
       modifierConfigs: [
         {
           modifier: generateModifierType(modifierTypes.BERRY, [BerryType.SITRUS]) as PokemonHeldItemModifierType,
@@ -93,7 +94,7 @@ export const SlumberingSnorlaxEncounter: MysteryEncounter = MysteryEncounterBuil
     encounter.enemyPartyConfigs = [config];
 
     // Load animations/sfx for Snorlax fight start moves
-    loadCustomMovesForEncounter([Moves.SNORE]);
+    loadCustomMovesForEncounter([MoveId.SNORE]);
 
     encounter.setDialogueToken("snorlaxName", getPokemonSpecies(Species.SNORLAX).getName());
 
@@ -121,13 +122,13 @@ export const SlumberingSnorlaxEncounter: MysteryEncounter = MysteryEncounterBuil
         {
           sourceBattlerIndex: BattlerIndex.ENEMY,
           targets: [BattlerIndex.PLAYER],
-          move: new PokemonMove(Moves.SNORE),
+          move: new PokemonMove(MoveId.SNORE),
           ignorePp: true,
         },
         {
           sourceBattlerIndex: BattlerIndex.ENEMY,
           targets: [BattlerIndex.PLAYER],
-          move: new PokemonMove(Moves.SNORE),
+          move: new PokemonMove(MoveId.SNORE),
           ignorePp: true,
         },
       );

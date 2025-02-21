@@ -1,26 +1,26 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { ModifierPoolType } from "#app/modifier/modifier-type";
-import { PokemonHeldItemModifier } from "#app/modifier/modifier";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
+import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import i18next from "i18next";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
 /**
- * The following needs to be implemented for Thief
- * "If the user faints due to the target's Ability (Rough Skin or Iron Barbs) or held Rocky Helmet, it cannot remove the target's held item."
- * "If Knock Off causes a Pokémon with the Sticky Hold Ability to faint, it can now remove that Pokémon's held item."
+ * TODO: The following needs to be implemented for Thief:
+ * - "If the user faints due to the target's Ability (Rough Skin or Iron Barbs) or held Rocky Helmet, it cannot remove the target's held item."
+ * - "If Knock Off causes a Pokémon with the Sticky Hold Ability to faint, it can now remove that Pokémon's held item."
  */
 export class StealHeldItemChanceAttr extends MoveEffectAttr {
-  private chance: number;
+  public readonly chance: number;
 
   constructor(chance: number) {
-    super(false);
+    super(true);
     this.chance = chance;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, _args: any[]): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (move.hitsSubstitute(user, target)) {
       return false;
     }
@@ -56,7 +56,7 @@ export class StealHeldItemChanceAttr extends MoveEffectAttr {
 
   getTargetHeldItems(target: Pokemon): PokemonHeldItemModifier[] {
     return globalScene.findModifiers(
-      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === target.id,
+      (m) => m.isPokemonHeldItemModifier() && m.pokemonId === target.id,
       target.isPlayer(),
     ) as PokemonHeldItemModifier[];
   }

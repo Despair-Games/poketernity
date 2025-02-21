@@ -1,23 +1,23 @@
 import {
   initSubsequentOptionSelect,
   leaveEncounterWithoutBattle,
-  transitionMysteryEncounterIntroVisuals,
   updatePlayerMoney,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
-import { TrainerSlot } from "#app/data/trainer-config";
+import { TrainerSlot } from "#enums/trainer-slot";
 import { HiddenAbilityRateBoosterModifier, IvScannerModifier } from "#app/modifier/modifier";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { PokeballType } from "#enums/pokeball";
 import { PlayerGender } from "#enums/player-gender";
 import { NumberHolder, randSeedInt } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies, getSpecialSpeciesList } from "#app/data/pokemon-species";
+import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
 import { MoneyRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import {
   doPlayerFlee,
@@ -31,8 +31,10 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { ScanIvsPhase } from "#app/phases/scan-ivs-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
+import { settings } from "#app/system/settings/settings-manager";
+import { ImagesFolder } from "#enums/images-folders";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/safariZone";
@@ -100,8 +102,8 @@ export const SafariZoneEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
         globalScene.loadSe("PRSFX- Bug Bite", "battle_anims", "PRSFX- Bug Bite.wav");
         globalScene.loadSe("PRSFX- Sludge Bomb2", "battle_anims", "PRSFX- Sludge Bomb2.wav");
         globalScene.loadSe("PRSFX- Taunt2", "battle_anims", "PRSFX- Taunt2.wav");
-        globalScene.loadAtlas("safari_zone_bait", "mystery-encounters");
-        globalScene.loadAtlas("safari_zone_mud", "mystery-encounters");
+        globalScene.loadAtlas("safari_zone_bait", ImagesFolder.ME);
+        globalScene.loadAtlas("safari_zone_mud", ImagesFolder.ME);
         // Clear enemy party
         globalScene.currentBattle.enemyParty = [];
         await transitionMysteryEncounterIntroVisuals();
@@ -362,7 +364,7 @@ async function throwBait(pokemon: EnemyPokemon): Promise<boolean> {
 
   return new Promise((resolve) => {
     globalScene.trainer.setTexture(
-      `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
+      `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
     );
     globalScene.time.delayedCall(TRAINER_THROW_ANIMATION_TIMES[0], () => {
       globalScene.playSound("se/pb_throw");
@@ -373,7 +375,7 @@ async function throwBait(pokemon: EnemyPokemon): Promise<boolean> {
         globalScene.trainer.setFrame("3");
         globalScene.time.delayedCall(TRAINER_THROW_ANIMATION_TIMES[2], () => {
           globalScene.trainer.setTexture(
-            `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back`,
+            `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back`,
           );
         });
       });
@@ -431,7 +433,7 @@ async function throwMud(pokemon: EnemyPokemon): Promise<boolean> {
 
   return new Promise((resolve) => {
     globalScene.trainer.setTexture(
-      `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
+      `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
     );
     globalScene.time.delayedCall(TRAINER_THROW_ANIMATION_TIMES[0], () => {
       globalScene.playSound("se/pb_throw");
@@ -442,7 +444,7 @@ async function throwMud(pokemon: EnemyPokemon): Promise<boolean> {
         globalScene.trainer.setFrame("3");
         globalScene.time.delayedCall(TRAINER_THROW_ANIMATION_TIMES[2], () => {
           globalScene.trainer.setTexture(
-            `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back`,
+            `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back`,
           );
         });
       });
@@ -557,7 +559,7 @@ async function doEndTurn(cursorIndex: number) {
       leaveEncounterWithoutBattle(true);
     }
   } else {
-    globalScene.queueMessage(getEncounterText(`${namespace}:safari.watching`) ?? "", 0, null, 1000);
+    globalScene.queueMessage(getEncounterText(`${namespace}:safari.watching`) ?? "", null, null, 1000);
     initSubsequentOptionSelect({
       overrideOptions: safariZoneGameOptions,
       startingCursorIndex: cursorIndex,

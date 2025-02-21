@@ -8,26 +8,27 @@ import {
   runMysteryEncounterToEnd,
   runSelectMysteryEncounterOption,
 } from "#test/mystery-encounter/encounter-test-utils";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type BattleScene from "#app/battle-scene";
-import { PokemonMove } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases";
+import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { CommandPhase } from "#app/phases/command-phase";
 import { UncommonBreedEncounter } from "#app/data/mystery-encounters/encounters/uncommon-breed-encounter";
-import { MovePhase } from "#app/phases/move-phase";
+import { type MovePhase } from "#app/phases/move-phase";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { BerryType } from "#enums/berry-type";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { Stat } from "#enums/stat";
 import type { BerryModifier } from "#app/modifier/modifier";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { Abilities } from "#enums/abilities";
+import { PhaseId } from "#enums/phase-id";
 
 const namespace = "mysteryEncounters/uncommonBreed";
 const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
@@ -133,9 +134,9 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       expect(statStagePhases.stats).toEqual([Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD]);
 
       // Should have used its egg move pre-battle
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is<MovePhase>(PhaseId.MOVE)).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
-      const eggMoves: Moves[] = speciesEggMoves[getPokemonSpecies(speciesToSpawn).getRootSpeciesId()];
+      const eggMoves: MoveId[] = speciesEggMoves[getPokemonSpecies(speciesToSpawn).getRootSpeciesId()];
       const usedMove = (movePhases[0] as MovePhase).move.moveId;
       expect(eggMoves.includes(usedMove)).toBe(true);
     });
@@ -162,9 +163,9 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       expect(statStagePhases.stats).toEqual([Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD]);
 
       // Should have used its egg move pre-battle
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0] instanceof MovePhase).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is<MovePhase>(PhaseId.MOVE)).map((p) => p[0]);
       expect(movePhases.length).toBe(1);
-      const eggMoves: Moves[] = speciesEggMoves[getPokemonSpecies(speciesToSpawn).getRootSpeciesId()];
+      const eggMoves: MoveId[] = speciesEggMoves[getPokemonSpecies(speciesToSpawn).getRootSpeciesId()];
       const usedMove = (movePhases[0] as MovePhase).move.moveId;
       expect(eggMoves.includes(usedMove)).toBe(true);
     });
@@ -276,7 +277,7 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       const leaveEncounterWithoutBattleSpy = vi.spyOn(EncounterPhaseUtils, "leaveEncounterWithoutBattle");
       await game.runToMysteryEncounter(MysteryEncounterType.UNCOMMON_BREED, defaultParty);
       // Mock moveset
-      scene.getPlayerParty()[0].moveset = [new PokemonMove(Moves.CHARM)];
+      scene.getPlayerParty()[0].moveset = [new PokemonMove(MoveId.CHARM)];
       await runMysteryEncounterToEnd(game, 3);
 
       expect(leaveEncounterWithoutBattleSpy).toBeCalled();

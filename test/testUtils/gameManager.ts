@@ -1,11 +1,14 @@
 import { updateUserInfo } from "#app/account";
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import BattleScene from "#app/battle-scene";
 import { getMoveTargets } from "#app/data/move";
+import { settings } from "#app/system/settings/settings-manager";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import Trainer from "#app/field/trainer";
-import { GameModes, getGameMode } from "#app/game-mode";
-import { ModifierTypeOption, modifierTypes } from "#app/modifier/modifier-type";
+import { getGameMode } from "#app/game-mode";
+import { GameModes } from "#enums/game-modes";
+import { ModifierTypeOption } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import overrides from "#app/overrides";
 import { CheckSwitchPhase } from "#app/phases/check-switch-phase";
 import { CommandPhase } from "#app/phases/command-phase";
@@ -14,31 +17,31 @@ import { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
 import { FaintPhase } from "#app/phases/faint-phase";
 import { LoginPhase } from "#app/phases/login-phase";
 import { MovePhase } from "#app/phases/move-phase";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases";
+import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
-import type { SelectTargetPhase } from "#app/phases/select-target-phase";
+import { type SelectTargetPhase } from "#app/phases/select-target-phase";
 import { TitlePhase } from "#app/phases/title-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import { TurnStartPhase } from "#app/phases/turn-start-phase";
-import { ErrorInterceptor } from "#test/testUtils/errorInterceptor";
-import type { InputsHandler } from "#test/testUtils/inputsHandler";
 import type BattleMessageUiHandler from "#app/ui/battle-message-ui-handler";
 import type CommandUiHandler from "#app/ui/command-ui-handler";
 import type ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
 import type PartyUiHandler from "#app/ui/party-ui-handler";
 import type TargetSelectUiHandler from "#app/ui/target-select-ui-handler";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { isNullOrUndefined } from "#app/utils";
 import { BattleStyle } from "#enums/battle-style";
 import { Button } from "#enums/buttons";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { ExpNotification } from "#enums/exp-notification";
-import type { Moves } from "#enums/moves";
+import { HpBarSpeed } from "#enums/hp-bar-speed";
+import type { MoveId } from "#enums/move-id";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PlayerGender } from "#enums/player-gender";
 import type { Species } from "#enums/species";
+import { ErrorInterceptor } from "#test/testUtils/errorInterceptor";
 import { generateStarter, waitUntil } from "#test/testUtils/gameManagerUtils";
 import { GameWrapper } from "#test/testUtils/gameWrapper";
 import { ChallengeModeHelper } from "#test/testUtils/helpers/challengeModeHelper";
@@ -47,13 +50,18 @@ import { DailyModeHelper } from "#test/testUtils/helpers/dailyModeHelper";
 import { ModifierHelper } from "#test/testUtils/helpers/modifiersHelper";
 import { MoveHelper } from "#test/testUtils/helpers/moveHelper";
 import { OverridesHelper } from "#test/testUtils/helpers/overridesHelper";
+import { FieldHelper } from "#test/testUtils/helpers/fieldHelper";
 import { ReloadHelper } from "#test/testUtils/helpers/reloadHelper";
 import { SettingsHelper } from "#test/testUtils/helpers/settingsHelper";
+import type { InputsHandler } from "#test/testUtils/inputsHandler";
 import { PhaseInterceptor } from "#test/testUtils/phaseInterceptor";
 import { TextInterceptor } from "#test/testUtils/TextInterceptor";
 import { AES, enc } from "crypto-js";
 import fs from "fs";
 import { expect, vi } from "vitest";
+import { globalScene } from "#app/global-scene";
+import type StarterSelectUiHandler from "#app/ui/starter-select-ui-handler";
+import { MockFetch } from "#test/testUtils/mocks/mockFetch";
 
 /**
  * Class to manage the game state and transitions between phases.
@@ -72,6 +80,7 @@ export class GameManager {
   public readonly settings: SettingsHelper;
   public readonly reload: ReloadHelper;
   public readonly modifiers: ModifierHelper;
+  public readonly field: FieldHelper;
 
   /**
    * Creates an instance of GameManager.
@@ -83,10 +92,31 @@ export class GameManager {
     ErrorInterceptor.getInstance().clear();
     BattleScene.prototype.randBattleSeedInt = (range, min: number = 0) => min + range - 1; // This simulates a max roll
     this.gameWrapper = new GameWrapper(phaserGame, bypassLogin);
-    this.scene = new BattleScene();
+
+    let firstTimeScene = false;
+    if (globalScene) {
+      this.scene = globalScene;
+    } else {
+      this.scene = new BattleScene();
+      this.gameWrapper.setScene(this.scene);
+      firstTimeScene = true;
+    }
+
     this.phaseInterceptor = new PhaseInterceptor(this.scene);
+
+    if (!firstTimeScene) {
+      this.scene.reset(false, true);
+      (this.scene.ui.handlers[UiMode.STARTER_SELECT] as StarterSelectUiHandler).clearStarterPreferences();
+      this.scene.clearAllPhases();
+
+      // This part, in particular, must not be run before the PhaseInterceptor has been initialized.
+      this.scene.pushPhase(new LoginPhase());
+      this.scene.toTitleScreen();
+      this.scene.shiftPhase();
+
+      this.gameWrapper.scene = this.scene;
+    }
     this.textInterceptor = new TextInterceptor(this.scene);
-    this.gameWrapper.setScene(this.scene);
     this.override = new OverridesHelper(this);
     this.move = new MoveHelper(this);
     this.classicMode = new ClassicModeHelper(this);
@@ -95,16 +125,20 @@ export class GameManager {
     this.settings = new SettingsHelper(this);
     this.reload = new ReloadHelper(this);
     this.modifiers = new ModifierHelper(this);
+    this.field = new FieldHelper(this);
+    this.override.sanitizeOverrides();
 
     // Disables Mystery Encounters on all tests (can be overridden at test level)
     this.override.mysteryEncounterChance(0);
+
+    global.fetch = vi.fn(MockFetch) as any;
   }
 
   /**
    * Sets the game mode.
    * @param mode - The mode to set.
    */
-  setMode(mode: Mode) {
+  setMode(mode: UiMode) {
     this.scene.ui?.setMode(mode);
   }
 
@@ -113,7 +147,7 @@ export class GameManager {
    * @param mode - The mode to wait for.
    * @returns A promise that resolves when the mode is set.
    */
-  waitMode(mode: Mode): Promise<void> {
+  waitMode(mode: UiMode): Promise<void> {
     return new Promise(async (resolve) => {
       await waitUntil(() => this.scene.ui?.getMode() === mode);
       return resolve();
@@ -136,7 +170,7 @@ export class GameManager {
    */
   onNextPrompt(
     phaseTarget: string,
-    mode: Mode,
+    mode: UiMode,
     callback: () => void,
     expireFn?: () => void,
     awaitingActionInput: boolean = false,
@@ -153,16 +187,16 @@ export class GameManager {
     this.phaseInterceptor.pop();
     await this.phaseInterceptor.run(TitlePhase);
 
-    this.scene.gameSpeed = 5;
-    this.scene.moveAnimations = false;
-    this.scene.showLevelUpStats = false;
-    this.scene.expGainsSpeed = ExpGainsSpeed.SKIP;
-    this.scene.expParty = ExpNotification.SKIP;
-    this.scene.hpBarSpeed = 3;
-    this.scene.enableTutorials = false;
-    this.scene.gameData.gender = PlayerGender.MALE; // set initial player gender
-    this.scene.battleStyle = this.settings.battleStyle;
-    this.scene.fieldVolume = 0;
+    settings.update("general", "gameSpeed", 5);
+    settings.update("display", "enableMoveAnimations", false);
+    settings.update("display", "showStatsOnLevelUp", false);
+    settings.update("general", "expGainsSpeed", ExpGainsSpeed.SKIP);
+    settings.update("general", "partyExpNotificationMode", ExpNotification.SKIP);
+    settings.update("general", "hpBarSpeed", HpBarSpeed.SKIP);
+    settings.update("general", "enableTutorials", false);
+    settings.update("display", "playerGender", PlayerGender.MALE);
+    settings.update("general", "battleStyle", this.settings.battleStyle);
+    settings.update("audio", "fieldVolume", 0);
   }
 
   /**
@@ -176,7 +210,7 @@ export class GameManager {
     console.log("===to final boss encounter===");
     await this.runToTitle();
 
-    this.onNextPrompt("TitlePhase", Mode.TITLE, () => {
+    this.onNextPrompt("TitlePhase", UiMode.TITLE, () => {
       this.scene.gameMode = getGameMode(mode);
       const starters = generateStarter(this.scene, species);
       const selectStarterPhase = new SelectStarterPhase();
@@ -187,7 +221,7 @@ export class GameManager {
     // This will consider all battle entry dialog as seens and skip them
     vi.spyOn(this.scene.ui, "shouldSkipDialogue").mockReturnValue(true);
 
-    if (overrides.OPP_HELD_ITEMS_OVERRIDE.length === 0) {
+    if (overrides.ENEMY_HELD_ITEMS_OVERRIDE.length === 0) {
       this.removeEnemyHeldItems();
     }
 
@@ -211,7 +245,7 @@ export class GameManager {
 
     this.onNextPrompt(
       "TitlePhase",
-      Mode.TITLE,
+      UiMode.TITLE,
       () => {
         this.scene.gameMode = getGameMode(GameModes.CLASSIC);
         const starters = generateStarter(this.scene, species);
@@ -224,7 +258,7 @@ export class GameManager {
 
     this.onNextPrompt(
       "EncounterPhase",
-      Mode.MESSAGE,
+      UiMode.MESSAGE,
       () => {
         const handler = this.scene.ui.getHandler() as BattleMessageUiHandler;
         handler.processInput(Button.ACTION);
@@ -249,12 +283,12 @@ export class GameManager {
   async startBattle(species?: Species[]) {
     await this.classicMode.runToSummon(species);
 
-    if (this.scene.battleStyle === BattleStyle.SWITCH) {
+    if (settings.general.battleStyle === BattleStyle.SWITCH) {
       this.onNextPrompt(
         "CheckSwitchPhase",
-        Mode.CONFIRM,
+        UiMode.CONFIRM,
         () => {
-          this.setMode(Mode.MESSAGE);
+          this.setMode(UiMode.MESSAGE);
           this.endPhase();
         },
         () => this.isCurrentPhase(CommandPhase) || this.isCurrentPhase(TurnInitPhase),
@@ -262,9 +296,9 @@ export class GameManager {
 
       this.onNextPrompt(
         "CheckSwitchPhase",
-        Mode.CONFIRM,
+        UiMode.CONFIRM,
         () => {
-          this.setMode(Mode.MESSAGE);
+          this.setMode(UiMode.MESSAGE);
           this.endPhase();
         },
         () => this.isCurrentPhase(CommandPhase) || this.isCurrentPhase(TurnInitPhase),
@@ -284,7 +318,7 @@ export class GameManager {
   selectTarget(movePosition: number, targetIndex?: BattlerIndex) {
     this.onNextPrompt(
       "SelectTargetPhase",
-      Mode.TARGET_SELECT,
+      UiMode.TARGET_SELECT,
       () => {
         const handler = this.scene.ui.getHandler() as TargetSelectUiHandler;
         const move = (this.scene.getCurrentPhase() as SelectTargetPhase)
@@ -319,7 +353,7 @@ export class GameManager {
   doSelectModifier() {
     this.onNextPrompt(
       "SelectModifierPhase",
-      Mode.MODIFIER_SELECT,
+      UiMode.MODIFIER_SELECT,
       () => {
         const handler = this.scene.ui.getHandler() as ModifierSelectUiHandler;
         handler.processInput(Button.CANCEL);
@@ -333,7 +367,7 @@ export class GameManager {
 
     this.onNextPrompt(
       "SelectModifierPhase",
-      Mode.CONFIRM,
+      UiMode.CONFIRM,
       () => {
         const handler = this.scene.ui.getHandler() as ModifierSelectUiHandler;
         handler.processInput(Button.ACTION);
@@ -348,17 +382,20 @@ export class GameManager {
   /**
    * Forces the next enemy selecting a move to use the given move in its moveset against the
    * given target (if applicable).
-   * @param moveId {@linkcode Moves} the move the enemy will use
+   * @param moveId {@linkcode MoveId} the move the enemy will use
    * @param target {@linkcode BattlerIndex} the target on which the enemy will use the given move
+   * @deprecated Use {@linkcode MoveHelper.selectEnemyMove | this.move.selectEnemyMove} instead for
+   * identical functionality, or {@linkcode MoveHelper.forceEnemyMove | this.move.forceEnemyMove} which will
+   * overwrite the enemy pokemon's moveset (and disable the global moveset override if it's active)
    */
-  async forceEnemyMove(moveId: Moves, target?: BattlerIndex) {
+  async forceEnemyMove(moveId: MoveId, target?: BattlerIndex) {
     // Wait for the next EnemyCommandPhase to start
     await this.phaseInterceptor.to(EnemyCommandPhase, false);
     const enemy = this.scene.getEnemyField()[(this.scene.getCurrentPhase() as EnemyCommandPhase).getFieldIndex()];
     const legalTargets = getMoveTargets(enemy, moveId);
 
     vi.spyOn(enemy, "getNextMove").mockReturnValueOnce({
-      move: moveId,
+      moveId: moveId,
       targets:
         target !== undefined && !legalTargets.multiple && legalTargets.targets.includes(target)
           ? [target]
@@ -384,9 +421,15 @@ export class GameManager {
     };
   }
 
-  /** Transition to the next upcoming {@linkcode CommandPhase} */
+  /** Transition to the first {@linkcode CommandPhase} of the next turn. */
   async toNextTurn() {
+    await this.phaseInterceptor.to(TurnInitPhase);
     await this.phaseInterceptor.to(CommandPhase);
+  }
+
+  /** Transition to the {@linkcode TurnEndPhase | end of the current turn}. */
+  async toEndOfTurn() {
+    await this.phaseInterceptor.to(TurnEndPhase);
   }
 
   /** Emulate selecting a modifier (item) and transition to the next upcoming {@linkcode CommandPhase} */
@@ -395,12 +438,12 @@ export class GameManager {
 
     this.onNextPrompt(
       "CheckSwitchPhase",
-      Mode.CONFIRM,
+      UiMode.CONFIRM,
       () => {
-        this.setMode(Mode.MESSAGE);
+        this.setMode(UiMode.MESSAGE);
         this.endPhase();
       },
-      () => this.isCurrentPhase(TurnInitPhase),
+      () => this.isCurrentPhase(TurnInitPhase) || this.isCurrentPhase(CommandPhase),
     );
 
     await this.toNextTurn();
@@ -429,7 +472,7 @@ export class GameManager {
    * @param mode - The target mode.
    * @returns True if the current mode matches the target mode, otherwise false.
    */
-  isCurrentMode(mode: Mode) {
+  isCurrentMode(mode: UiMode) {
     return this.scene.ui?.getMode() === mode;
   }
 
@@ -479,7 +522,7 @@ export class GameManager {
    * @param pokemonIndex the index of the pokemon in your party to switch to
    */
   doSwitchPokemon(pokemonIndex: number) {
-    this.onNextPrompt("CommandPhase", Mode.COMMAND, () => {
+    this.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
       (this.scene.ui.getHandler() as CommandUiHandler).setCursor(2);
       (this.scene.ui.getHandler() as CommandUiHandler).processInput(Button.ACTION);
     });
@@ -508,7 +551,7 @@ export class GameManager {
    * non-command switch actions happen in SwitchPhase.
    */
   doSelectPartyPokemon(slot: number, inPhase = "SwitchPhase") {
-    this.onNextPrompt(inPhase, Mode.PARTY, () => {
+    this.onNextPrompt(inPhase, UiMode.PARTY, () => {
       const partyHandler = this.scene.ui.getHandler() as PartyUiHandler;
 
       partyHandler.setCursor(slot);

@@ -1,8 +1,9 @@
 import { type Move } from "#app/data/move";
-import { MoveCategory } from "../../enums/move-category";
+import { MoveCategory } from "#enums/move-category";
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder, NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Reduces the accuracy of status moves used against the Pokémon with this ability to 50%.
@@ -11,16 +12,18 @@ import { PreDefendAbAttr } from "./pre-defend-ab-attr";
  * @extends PreDefendAbAttr
  */
 export class WonderSkinAbAttr extends PreDefendAbAttr {
-  override applyPreDefend(
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.WONDER_SKIN);
+  }
+
+  override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     _attacker: Pokemon,
     move: Move,
-    _cancelled: BooleanHolder,
-    args: any[],
+    moveAccuracy: NumberHolder,
   ): boolean {
-    const moveAccuracy = args[0] as NumberHolder;
     if (move.category === MoveCategory.STATUS && moveAccuracy.value >= 50) {
       moveAccuracy.value = 50;
       return true;

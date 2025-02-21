@@ -1,14 +1,26 @@
-import { globalScene } from "#app/global-scene";
-import type { BattlerIndex } from "#app/battle";
-import { BattlerTagLapseType } from "#app/data/battler-tags";
-import { PokemonPhase } from "./pokemon-phase";
+// -- start tsdoc imports --
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { type Arena } from "#app/field/arena";
+// -- end tsdoc imports --
 
+import type { BattlerIndex } from "#enums/battler-index";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
+import { globalScene } from "#app/global-scene";
+import { PokemonPhase } from "./abstract-pokemon-phase";
+import { PhaseId } from "#enums/phase-id";
+
+/**
+ * Lapses {@linkcode BattlerTagLapseType.AFTER_MOVE} and calls {@linkcode Arena.setIgnoreAbilities}`(false)`
+ * @extends PokemonPhase
+ */
 export class MoveEndPhase extends PokemonPhase {
+  override readonly id = PhaseId.MOVE_END;
+
   constructor(battlerIndex: BattlerIndex) {
     super(battlerIndex);
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     const pokemon = this.getPokemon();

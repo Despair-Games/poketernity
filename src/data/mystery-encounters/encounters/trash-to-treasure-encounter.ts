@@ -5,10 +5,10 @@ import {
   leaveEncounterWithoutBattle,
   loadCustomMovesForEncounter,
   setEncounterRewards,
-  transitionMysteryEncounterIntroVisuals,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
@@ -17,16 +17,16 @@ import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/myst
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { Species } from "#enums/species";
-import { HitHealModifier, PokemonHeldItemModifier, TurnHealModifier } from "#app/modifier/modifier";
+import { type PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { applyModifierTypeToPlayerPokemon } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import i18next from "#app/plugins/i18n";
-import { ModifierTier } from "#app/modifier/modifier-tier";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
-import { Moves } from "#enums/moves";
-import { BattlerIndex } from "#app/battle";
-import { PokemonMove } from "#app/field/pokemon";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
+import { ModifierTier } from "#enums/modifier-tier";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { BattlerIndex } from "#enums/battler-index";
+import { PokemonMove } from "#app/field/pokemon-move";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { MoveId } from "#enums/move-id";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/trashToTreasure";
@@ -79,7 +79,7 @@ export const TrashToTreasureEncounter: MysteryEncounter = MysteryEncounterBuilde
       shiny: false, // Shiny lock because of custom intro sprite
       formIndex: 1, // Gmax
       bossSegmentModifier: 1, // +1 Segment from normal
-      moveSet: [Moves.PAYBACK, Moves.GUNK_SHOT, Moves.STOMPING_TANTRUM, Moves.DRAIN_PUNCH],
+      moveSet: [MoveId.PAYBACK, MoveId.GUNK_SHOT, MoveId.STOMPING_TANTRUM, MoveId.DRAIN_PUNCH],
     };
     const config: EnemyPartyConfig = {
       levelAdditiveModifier: 0.5,
@@ -89,7 +89,7 @@ export const TrashToTreasureEncounter: MysteryEncounter = MysteryEncounterBuilde
     encounter.enemyPartyConfigs = [config];
 
     // Load animations/sfx for Garbodor fight start moves
-    loadCustomMovesForEncounter([Moves.TOXIC, Moves.AMNESIA]);
+    loadCustomMovesForEncounter([MoveId.TOXIC, MoveId.AMNESIA]);
 
     globalScene.loadSe("PRSFX- Dig2", "battle_anims", "PRSFX- Dig2.wav");
     globalScene.loadSe("PRSFX- Venom Drench", "battle_anims", "PRSFX- Venom Drench.wav");
@@ -164,13 +164,13 @@ export const TrashToTreasureEncounter: MysteryEncounter = MysteryEncounterBuilde
           {
             sourceBattlerIndex: BattlerIndex.ENEMY,
             targets: [BattlerIndex.PLAYER],
-            move: new PokemonMove(Moves.TOXIC),
+            move: new PokemonMove(MoveId.TOXIC),
             ignorePp: true,
           },
           {
             sourceBattlerIndex: BattlerIndex.ENEMY,
             targets: [BattlerIndex.ENEMY],
-            move: new PokemonMove(Moves.AMNESIA),
+            move: new PokemonMove(MoveId.AMNESIA),
             ignorePp: true,
           },
         );
@@ -190,10 +190,10 @@ async function tryApplyDigRewardItems() {
   // First leftovers
   for (const pokemon of party) {
     const heldItems = globalScene.findModifiers(
-      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === pokemon.id,
+      (m) => m.isPokemonHeldItemModifier() && m.pokemonId === pokemon.id,
       true,
-    ) as PokemonHeldItemModifier[];
-    const existingLeftovers = heldItems.find((m) => m instanceof TurnHealModifier) as TurnHealModifier;
+    );
+    const existingLeftovers = heldItems.find((m) => m.isTurnHealModifier());
 
     if (!existingLeftovers || existingLeftovers.getStackCount() < existingLeftovers.getMaxStackCount()) {
       await applyModifierTypeToPlayerPokemon(pokemon, leftovers);
@@ -204,10 +204,10 @@ async function tryApplyDigRewardItems() {
   // Second leftovers
   for (const pokemon of party) {
     const heldItems = globalScene.findModifiers(
-      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === pokemon.id,
+      (m) => m.isPokemonHeldItemModifier() && m.pokemonId === pokemon.id,
       true,
-    ) as PokemonHeldItemModifier[];
-    const existingLeftovers = heldItems.find((m) => m instanceof TurnHealModifier) as TurnHealModifier;
+    );
+    const existingLeftovers = heldItems.find((m) => m.isTurnHealModifier());
 
     if (!existingLeftovers || existingLeftovers.getStackCount() < existingLeftovers.getMaxStackCount()) {
       await applyModifierTypeToPlayerPokemon(pokemon, leftovers);
@@ -226,10 +226,10 @@ async function tryApplyDigRewardItems() {
   // First Shell bell
   for (const pokemon of party) {
     const heldItems = globalScene.findModifiers(
-      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === pokemon.id,
+      (m) => m.isPokemonHeldItemModifier() && m.pokemonId === pokemon.id,
       true,
-    ) as PokemonHeldItemModifier[];
-    const existingShellBell = heldItems.find((m) => m instanceof HitHealModifier) as HitHealModifier;
+    );
+    const existingShellBell = heldItems.find((m) => m.isHitHealModifier());
 
     if (!existingShellBell || existingShellBell.getStackCount() < existingShellBell.getMaxStackCount()) {
       await applyModifierTypeToPlayerPokemon(pokemon, shellBell);
@@ -240,10 +240,10 @@ async function tryApplyDigRewardItems() {
   // Second Shell bell
   for (const pokemon of party) {
     const heldItems = globalScene.findModifiers(
-      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === pokemon.id,
+      (m) => m.isPokemonHeldItemModifier() && m.pokemonId === pokemon.id,
       true,
     ) as PokemonHeldItemModifier[];
-    const existingShellBell = heldItems.find((m) => m instanceof HitHealModifier) as HitHealModifier;
+    const existingShellBell = heldItems.find((m) => m.isHitHealModifier());
 
     if (!existingShellBell || existingShellBell.getStackCount() < existingShellBell.getMaxStackCount()) {
       await applyModifierTypeToPlayerPokemon(pokemon, shellBell);

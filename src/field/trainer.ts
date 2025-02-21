@@ -1,32 +1,25 @@
 import { globalScene } from "#app/global-scene";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import type { TrainerConfig, TrainerPartyTemplate } from "#app/data/trainer-config";
-import {
-  TrainerPartyCompoundTemplate,
-  TrainerPoolTier,
-  TrainerSlot,
-  trainerConfigs,
-  trainerPartyTemplates,
-} from "#app/data/trainer-config";
+import { TrainerPartyCompoundTemplate, trainerPartyTemplates } from "#app/data/trainer-config";
+import { TrainerSlot } from "#enums/trainer-slot";
+import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { signatureSpecies } from "#app/data/balance/signatureSpecies";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { randSeedWeightedItem, randSeedItem, randSeedInt } from "#app/utils";
 import type { PersistentModifier } from "#app/modifier/modifier";
 import { trainerNamePools } from "#app/data/trainer-names";
-import { ArenaTagSide, ArenaTrapTag } from "#app/data/arena-tag";
+import { ArenaTrapTag } from "#app/data/arena-tag";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
 import i18next from "i18next";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
-
-export enum TrainerVariant {
-  DEFAULT,
-  FEMALE,
-  DOUBLE,
-}
+import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { TrainerVariant } from "#enums/trainer-variant";
 
 export default class Trainer extends Phaser.GameObjects.Container {
   public config: TrainerConfig;
@@ -44,9 +37,10 @@ export default class Trainer extends Phaser.GameObjects.Container {
     trainerConfigOverride?: TrainerConfig,
   ) {
     super(globalScene, -72, 80);
-    this.config = trainerConfigs.hasOwnProperty(trainerType)
-      ? trainerConfigs[trainerType]
-      : trainerConfigs[TrainerType.ACE_TRAINER];
+    this.type = "Trainer";
+    this.config = allTrainerConfigs.hasOwnProperty(trainerType)
+      ? allTrainerConfigs[trainerType]
+      : allTrainerConfigs[TrainerType.ACE_TRAINER];
 
     if (trainerConfigOverride) {
       this.config = trainerConfigOverride;
@@ -140,6 +134,14 @@ export default class Trainer extends Phaser.GameObjects.Container {
    * @returns - The formatted name of the trainer.
    **/
   getName(trainerSlot: TrainerSlot = TrainerSlot.NONE, includeTitle: boolean = false): string {
+    if (this.config.hasDouble && this.config.spriteNameLeft && this.config.spriteNameRight) {
+      if (trainerSlot === TrainerSlot.TRAINER) {
+        return this.config.name;
+      } else if (trainerSlot === TrainerSlot.TRAINER_PARTNER) {
+        return this.config.nameFemale;
+      }
+    }
+
     // Get the base title based on the trainer slot and variant.
     let name = this.config.getTitle(trainerSlot, this.variant);
 
@@ -199,10 +201,6 @@ export default class Trainer extends Phaser.GameObjects.Container {
     return this.config.doubleOnly || this.variant === TrainerVariant.DOUBLE;
   }
 
-  getMixedBattleBgm(): string {
-    return this.config.mixedBattleBgm;
-  }
-
   getBattleBgm(): string {
     return this.config.battleBgm;
   }
@@ -243,12 +241,25 @@ export default class Trainer extends Phaser.GameObjects.Container {
     return this.config.partyTemplates[this.partyTemplateIndex];
   }
 
+  /**
+   * Function to get levels for a given wave and the {@linkcode TrainerPartyTemplate}
+   *
+   * First the waveIndex is scaled according to {@linkcode getWaveForDifficulty} which I will call `x` here
+   * The base level is 1 + x/2 + (x^2 / 625) a quadratic function that is outpaced by y=x until around wave 310
+   *
+   * If the party member strength is below STRONG, the multiplier is scaled and a negative level offset is applied
+   *
+   * The final result is the base level * scaled multiplier + level offset
+   *
+   * @param waveIndex the current wave the player is on
+   * @returns an array of numbers representing the levels of a trainer's party
+   */
   getPartyLevels(waveIndex: number): number[] {
     const ret: number[] = [];
     const partyTemplate = this.getPartyTemplate();
 
-    const difficultyWaveIndex = globalScene.gameMode.getWaveForDifficulty(waveIndex);
-    const baseLevel = 1 + difficultyWaveIndex / 2 + Math.pow(difficultyWaveIndex / 25, 2);
+    const scaledWaveIndex = globalScene.gameMode.getWaveForDifficulty(waveIndex);
+    const baseLevel = 1 + scaledWaveIndex / 2 + Math.pow(scaledWaveIndex / 25, 2);
 
     if (this.isDouble() && partyTemplate.size < 2) {
       partyTemplate.size = 2;
@@ -279,9 +290,17 @@ export default class Trainer extends Phaser.GameObjects.Container {
 
       let levelOffset = 0;
 
+      /**
+       * If the strength is WEAKER, WEAK, or AVERAGE,
+       * The multiplier is increased by .025 for every 25 scaled waves, with a max cap of 1.2
+       * This means that at a scaled wave index of 200 or higher multiplier will always be 1.2
+       *
+       * A negative level offset is then applied with a base of -1 for every 50 scaled waves,
+       * further scaled by 4 - the scaled multiplier
+       */
       if (strength < PartyMemberStrength.STRONG) {
-        multiplier = Math.min(multiplier + 0.025 * Math.floor(difficultyWaveIndex / 25), 1.2);
-        levelOffset = -Math.floor((difficultyWaveIndex / 50) * (PartyMemberStrength.STRONG - strength));
+        multiplier = Math.min(multiplier + 0.025 * Math.floor(scaledWaveIndex / 25), 1.2);
+        levelOffset = -Math.floor((scaledWaveIndex / 50) * (4 - strength));
       }
 
       const level = Math.ceil(baseLevel * multiplier) + levelOffset;

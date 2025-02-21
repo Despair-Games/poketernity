@@ -1,21 +1,14 @@
 import { defineProject } from "vitest/config";
 import { defaultConfig } from "./vite.config";
+import { BaseSequencer, type TestSpecification } from "vitest/node";
 
 export default defineProject(({ mode }) => ({
   ...defaultConfig,
   test: {
     testTimeout: 20000,
     setupFiles: ["./test/fontFace.setup.ts", "./test/vitest.setup.ts"],
-    server: {
-      deps: {
-        inline: ["vitest-canvas-mock"],
-        //@ts-ignore
-        optimizer: {
-          web: {
-            include: ["vitest-canvas-mock"],
-          },
-        },
-      },
+    sequence: {
+      sequencer: MySequencer,
     },
     environment: "jsdom" as const,
     environmentOptions: {
@@ -40,3 +33,38 @@ export default defineProject(({ mode }) => ({
     keepNames: true,
   },
 }));
+
+//#region Helpers
+
+/**
+ * Class for sorting test files in the desired order.
+ */
+class MySequencer extends BaseSequencer {
+  async sort(files: TestSpecification[]) {
+    files = await super.sort(files);
+
+    return files.sort((a, b) => {
+      const aTestOrder = getTestOrder(a.moduleId);
+      const bTestOrder = getTestOrder(b.moduleId);
+      return aTestOrder - bTestOrder;
+    });
+  }
+}
+
+/**
+ * A helper function for sorting test files in a desired order.
+ *
+ * A lower number means that a test file must be run earlier,
+ * or else it breaks due to running tests with `--no-isolate.`
+ */
+function getTestOrder(testName: string): number {
+  if (testName.includes("battle_scene.test.ts")) {
+    return 1;
+  } else if (testName.includes("inputs.test.ts") || testName.includes("all_moves.test.ts")) {
+    return 2;
+  } else {
+    return 3;
+  }
+}
+
+//#endregion

@@ -2,21 +2,26 @@ import { globalScene } from "#app/global-scene";
 import type { ModifierTypeOption } from "../modifier/modifier-type";
 import { getPlayerShopModifierTypeOptionsForWave, TmModifierType } from "../modifier/modifier-type";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
-import { addTextObject, getTextStyleOptions, getModifierTierTextTint, getTextColor, TextStyle } from "./text";
+import { addTextObject, getTextStyleOptions, getModifierTierTextTint, setTextColor } from "./text";
+import { TextStyle } from "#enums/text-style";
 import AwaitableUiHandler from "./awaitable-ui-handler";
-import { Mode } from "./ui";
-import { LockModifierTiersModifier, PokemonHeldItemModifier, HealShopCostModifier } from "../modifier/modifier";
-import { handleTutorial, Tutorial } from "../tutorial";
+import { UiMode } from "#enums/ui-mode";
+import { LockModifierTiersModifier, HealShopCostModifier } from "../modifier/modifier";
+import { handleTutorial } from "../tutorial";
+import { Tutorial } from "#enums/tutorial";
 import { Button } from "#enums/buttons";
 import MoveInfoOverlay from "./move-info-overlay";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { formatMoney } from "#app/utils";
 import Overrides from "#app/overrides";
 import i18next from "i18next";
-import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
+import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { NumberHolder } from "#app/utils";
 import Phaser from "phaser";
-import type { PokeballType } from "#enums/pokeball";
+import { PokeballType } from "#enums/pokeball";
+import { ModifierTier } from "#enums/modifier-tier";
+import { settings } from "#app/system/settings/settings-manager";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 export const SHOP_OPTIONS_ROW_LIMIT = 7;
 const SINGLE_SHOP_ROW_YOFFSET = 12;
@@ -50,8 +55,11 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
 
   private cursorObj: Phaser.GameObjects.Image | null;
 
+  /**
+   * @todo Why does it use {@linkcode UiMode.CONFIRM} and not {@linkcode UiMode.MODIFIER_SELECT} (for the `super` call)?
+   */
   constructor() {
-    super(Mode.CONFIRM);
+    super(UiMode.CONFIRM);
 
     this.options = [];
     this.shopOptionsRows = [];
@@ -65,16 +73,17 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
 
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
-    const styleOptions = getTextStyleOptions(TextStyle.PARTY, globalScene.uiTheme).styleOptions;
+    const { styleOptions, scale } = getTextStyleOptions(TextStyle.PARTY);
 
     if (context) {
       context.font = styleOptions.fontSize + "px " + styleOptions.fontFamily;
-      this.transferButtonWidth = context.measureText(i18next.t("modifierSelectUiHandler:transfer")).width;
-      this.checkButtonWidth = context.measureText(i18next.t("modifierSelectUiHandler:checkTeam")).width;
+      // TODO scaling: replace this with using displayWidth once text scaling is changed?
+      this.transferButtonWidth = context.measureText(i18next.t("modifierSelectUiHandler:transfer")).width * scale;
+      this.checkButtonWidth = context.measureText(i18next.t("modifierSelectUiHandler:checkTeam")).width * scale;
     }
 
     this.transferButtonContainer = globalScene.add.container(
-      (globalScene.game.canvas.width - this.checkButtonWidth) / 6 - 21,
+      GAME_WIDTH - this.checkButtonWidth - 21,
       OPTION_BUTTON_YPOSITION,
     );
     this.transferButtonContainer.setName("transfer-btn");
@@ -86,10 +95,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     transferButtonText.setOrigin(1, 0);
     this.transferButtonContainer.add(transferButtonText);
 
-    this.checkButtonContainer = globalScene.add.container(
-      globalScene.game.canvas.width / 6 - 1,
-      OPTION_BUTTON_YPOSITION,
-    );
+    this.checkButtonContainer = globalScene.add.container(GAME_WIDTH - 1, OPTION_BUTTON_YPOSITION);
     this.checkButtonContainer.setName("use-btn");
     this.checkButtonContainer.setVisible(false);
     ui.add(this.checkButtonContainer);
@@ -128,10 +134,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.lockRarityButtonText.setOrigin(0, 0);
     this.lockRarityButtonContainer.add(this.lockRarityButtonText);
 
-    this.continueButtonContainer = globalScene.add.container(
-      globalScene.game.canvas.width / 12,
-      -(globalScene.game.canvas.height / 12),
-    );
+    this.continueButtonContainer = globalScene.add.container(GAME_WIDTH / 2, -(GAME_HEIGHT / 2));
     this.continueButtonContainer.setVisible(false);
     ui.add(this.continueButtonContainer);
 
@@ -154,7 +157,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
       right: true,
       x: 1,
       y: -MoveInfoOverlay.getHeight(overlayScale, true) - 1,
-      width: globalScene.game.canvas.width / 6 - 2,
+      width: GAME_WIDTH - 2,
     });
     ui.add(this.moveInfoOverlay);
     // register the overlay to receive toggle events
@@ -184,8 +187,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.player = args[0];
 
     const partyHasHeldItem =
-      this.player
-      && !!globalScene.findModifiers((m) => m instanceof PokemonHeldItemModifier && m.isTransferable).length;
+      this.player && !!globalScene.findModifiers((m) => m.isPokemonHeldItemModifier() && m.isTransferable).length;
     const canLockRarities = !!globalScene.findModifier((m) => m instanceof LockModifierTiersModifier);
 
     this.transferButtonContainer.setVisible(false);
@@ -220,10 +222,10 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
       shopTypeOptions.length > SHOP_OPTIONS_ROW_LIMIT ? -SINGLE_SHOP_ROW_YOFFSET : -DOUBLE_SHOP_ROW_YOFFSET;
 
     for (let m = 0; m < typeOptions.length; m++) {
-      const sliceWidth = globalScene.game.canvas.width / 6 / (typeOptions.length + 2);
+      const sliceWidth = GAME_WIDTH / (typeOptions.length + 2);
       const option = new ModifierOption(
         sliceWidth * (m + 1) + sliceWidth * 0.5,
-        -globalScene.game.canvas.height / 12 + optionsYOffset,
+        -GAME_HEIGHT / 2 + optionsYOffset,
         typeOptions[m],
       );
       option.setScale(0.5);
@@ -244,10 +246,10 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
         row ? SHOP_OPTIONS_ROW_LIMIT : 0,
         row ? undefined : SHOP_OPTIONS_ROW_LIMIT,
       );
-      const sliceWidth = globalScene.game.canvas.width / 6 / (rowOptions.length + 2);
+      const sliceWidth = GAME_WIDTH / (rowOptions.length + 2);
       const option = new ModifierOption(
         sliceWidth * (col + 1) + sliceWidth * 0.5,
-        -globalScene.game.canvas.height / 12 - globalScene.game.canvas.height / 32 - (42 - (28 * row - 1)),
+        -GAME_HEIGHT / 2 - GAME_HEIGHT / 6 - (46 - (28 * row - 1)),
         shopTypeOptions[m],
       );
       option.setScale(0.375);
@@ -268,7 +270,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     globalScene.getModifierBar().updateModifiers(globalScene.modifiers, true);
 
     /* Multiplies the appearance duration by the speed parameter so that it is always constant, and avoids "flashbangs" at game speed x5 */
-    globalScene.showShopOverlay(750 * globalScene.gameSpeed);
+    globalScene.showShopOverlay(750 * settings.general.gameSpeed);
     globalScene.updateAndShowText(750);
     globalScene.updateBiomeWaveText();
     globalScene.updateMoneyText();
@@ -331,21 +333,21 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
       });
 
       const updateCursorTarget = () => {
-        if (globalScene.shopCursorTarget === ShopCursorTarget.CHECK_TEAM) {
+        if (settings.display.shopCursorTarget === ShopCursorTarget.CHECK_TEAM) {
           this.setRowCursor(0);
           this.setCursor(2);
-        } else if (globalScene.shopCursorTarget === ShopCursorTarget.SHOP && globalScene.gameMode.hasNoShop) {
+        } else if (settings.display.shopCursorTarget === ShopCursorTarget.SHOP && globalScene.gameMode.hasNoShop) {
           this.setRowCursor(ShopCursorTarget.REWARDS);
           this.setCursor(0);
         } else {
-          this.setRowCursor(globalScene.shopCursorTarget);
+          this.setRowCursor(settings.display.shopCursorTarget);
           this.setCursor(0);
         }
       };
 
       updateCursorTarget();
 
-      handleTutorial(Tutorial.Select_Item).then((res) => {
+      handleTutorial(Tutorial.SELECT_ITEM).then((res) => {
         if (res) {
           updateCursorTarget();
         }
@@ -500,29 +502,27 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
         // Continue button when no shop items
         this.cursorObj.setScale(1.25);
         this.cursorObj.setPosition(
-          globalScene.game.canvas.width / 18 + 23,
-          -globalScene.game.canvas.height / 12
+          GAME_WIDTH / 3 + 23,
+          -GAME_HEIGHT / 2
             - (this.shopOptionsRows.length > 1 ? SINGLE_SHOP_ROW_YOFFSET - 2 : DOUBLE_SHOP_ROW_YOFFSET - 2),
         );
         ui.showText(i18next.t("modifierSelectUiHandler:continueNextWaveDescription"));
         return ret;
       }
 
-      const sliceWidth = globalScene.game.canvas.width / 6 / (options.length + 2);
+      const sliceWidth = GAME_WIDTH / (options.length + 2);
       if (this.rowCursor < 2) {
         // Cursor on free items
         this.cursorObj.setPosition(
           sliceWidth * (cursor + 1) + sliceWidth * 0.5 - 20,
-          -globalScene.game.canvas.height / 12
+          -GAME_HEIGHT / 2
             - (this.shopOptionsRows.length > 1 ? SINGLE_SHOP_ROW_YOFFSET - 2 : DOUBLE_SHOP_ROW_YOFFSET - 2),
         );
       } else {
         // Cursor on paying items
         this.cursorObj.setPosition(
           sliceWidth * (cursor + 1) + sliceWidth * 0.5 - 16,
-          -globalScene.game.canvas.height / 12
-            - globalScene.game.canvas.height / 32
-            - (-14 + 28 * (this.rowCursor - (this.shopOptionsRows.length - 1))),
+          -GAME_HEIGHT / 2 - GAME_HEIGHT / 6 - (-10 + 28 * (this.rowCursor - (this.shopOptionsRows.length - 1))),
         );
       }
 
@@ -540,15 +540,12 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
       ui.showText(i18next.t("modifierSelectUiHandler:rerollDesc"));
     } else if (cursor === 1) {
       this.cursorObj.setPosition(
-        (globalScene.game.canvas.width - this.transferButtonWidth - this.checkButtonWidth) / 6 - 30,
+        GAME_WIDTH - this.transferButtonWidth - this.checkButtonWidth - 30,
         OPTION_BUTTON_YPOSITION + 4,
       );
       ui.showText(i18next.t("modifierSelectUiHandler:transferDesc"));
     } else if (cursor === 2) {
-      this.cursorObj.setPosition(
-        (globalScene.game.canvas.width - this.checkButtonWidth) / 6 - 10,
-        OPTION_BUTTON_YPOSITION + 4,
-      );
+      this.cursorObj.setPosition(GAME_WIDTH - this.checkButtonWidth - 10, OPTION_BUTTON_YPOSITION + 4);
       ui.showText(i18next.t("modifierSelectUiHandler:checkTeamDesc"));
     } else {
       this.cursorObj.setPosition(6, OPTION_BUTTON_YPOSITION + 4);
@@ -623,17 +620,15 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     }
     const canReroll = globalScene.money >= this.rerollCost;
 
-    const formattedMoney = formatMoney(globalScene.moneyFormat, this.rerollCost);
+    const formattedMoney = formatMoney(settings.display.moneyFormat, this.rerollCost);
 
     this.rerollCostText.setText(i18next.t("modifierSelectUiHandler:rerollCost", { formattedMoney }));
-    this.rerollCostText.setColor(this.getTextColor(canReroll ? TextStyle.MONEY : TextStyle.PARTY_RED));
-    this.rerollCostText.setShadowColor(this.getTextColor(canReroll ? TextStyle.MONEY : TextStyle.PARTY_RED, true));
+    setTextColor(this.rerollCostText, canReroll ? TextStyle.MONEY : TextStyle.PARTY_RED);
   }
 
   updateLockRaritiesText(): void {
     const textStyle = globalScene.lockModifierTiers ? TextStyle.SUMMARY_BLUE : TextStyle.PARTY;
-    this.lockRarityButtonText.setColor(this.getTextColor(textStyle));
-    this.lockRarityButtonText.setShadowColor(this.getTextColor(textStyle, true));
+    setTextColor(this.lockRarityButtonText, textStyle);
   }
 
   override clear() {
@@ -651,7 +646,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.rowCursor = 0;
 
     /* Multiplies the fade time duration by the speed parameter so that it is always constant, and avoids "flashbangs" at game speed x5 */
-    globalScene.hideShopOverlay(750 * globalScene.gameSpeed);
+    globalScene.hideShopOverlay(750 * settings.general.gameSpeed);
     globalScene.hideLuckText(250);
 
     /* Normally already called just after the shop, but not sure if it happens in 100% of cases */
@@ -759,7 +754,7 @@ class ModifierOption extends Phaser.GameObjects.Container {
     this.itemText.setOrigin(0.5, 0);
     this.itemText.setAlpha(0);
     this.itemText.setTint(
-      this.modifierTypeOption.type?.tier ? getModifierTierTextTint(this.modifierTypeOption.type?.tier) : undefined,
+      this.modifierTypeOption.type?.tier ? getModifierTierTextTint(this.modifierTypeOption.type.tier) : undefined,
     );
     this.add(this.itemText);
 
@@ -897,18 +892,46 @@ class ModifierOption extends Phaser.GameObjects.Container {
     });
   }
 
-  getPbAtlasKey(tierOffset: number = 0) {
-    return getPokeballAtlasKey((this.modifierTypeOption.type?.tier! + tierOffset) as number as PokeballType); // TODO: is this bang correct?
+  /**
+   * Get the frame from the pokeball sprite atlas used to animate this Modifier getting rolled
+   * @param tierOffset optional offset to the modifier's tier, if it was bumped up
+   * @returns the atlas key to use, falls back to pokeball if none is found
+   */
+  getPbAtlasKey(tierOffset: number = 0): string {
+    const modifierTier = (this.modifierTypeOption.type ? this.modifierTypeOption.type.tier : 0) + tierOffset;
+    return getPokeballAtlasKey(this.getPbForRarity(modifierTier));
+  }
+
+  /**
+   * Get the pokeball used to animate a modifier of the given tier being rolled
+   * Maps common, great, ultra and master tiers to their counterpart ball
+   * Temporarily Maps Epic tier to the Luxury ball
+   * @param modifierTier the {@linkcode ModifierTier} to get corresponding pokeball for
+   * @returns the corresponding {@linkcode PokeballType}, or Pokeball by default
+   */
+  getPbForRarity(modifierTier: ModifierTier): PokeballType {
+    switch (modifierTier) {
+      case ModifierTier.COMMON:
+        return PokeballType.POKEBALL;
+      case ModifierTier.GREAT:
+        return PokeballType.GREAT_BALL;
+      case ModifierTier.ULTRA:
+        return PokeballType.ULTRA_BALL;
+      case ModifierTier.EPIC:
+        return PokeballType.LUXURY_BALL;
+      case ModifierTier.MASTER:
+        return PokeballType.MASTER_BALL;
+    }
+    return PokeballType.POKEBALL;
   }
 
   updateCostText(): void {
-    const cost = Overrides.WAIVE_ROLL_FEE_OVERRIDE ? 0 : this.modifierTypeOption.cost;
+    const cost = Overrides.WAIVE_SHOP_FEES_OVERRIDE ? 0 : this.modifierTypeOption.cost;
     const textStyle = cost <= globalScene.money ? TextStyle.MONEY : TextStyle.PARTY_RED;
 
-    const formattedMoney = formatMoney(globalScene.moneyFormat, cost);
+    const formattedMoney = formatMoney(settings.display.moneyFormat, cost);
 
     this.itemCostText.setText(i18next.t("modifierSelectUiHandler:itemCost", { formattedMoney }));
-    this.itemCostText.setColor(getTextColor(textStyle, false, globalScene.uiTheme));
-    this.itemCostText.setShadowColor(getTextColor(textStyle, true, globalScene.uiTheme));
+    setTextColor(this.itemCostText, textStyle);
   }
 }

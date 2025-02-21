@@ -1,11 +1,6 @@
 import { globalScene } from "#app/global-scene";
-import { fixedInt } from "#app/utils";
-
-export enum PokemonIconAnimMode {
-  NONE,
-  PASSIVE,
-  ACTIVE,
-}
+import { fixedNumber } from "#app/utils";
+import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 
 type PokemonIcon = Phaser.GameObjects.Container | Phaser.GameObjects.Sprite;
 
@@ -27,7 +22,7 @@ export default class PokemonIconAnimHandler {
       }
     };
     globalScene.tweens.addCounter({
-      duration: fixedInt(200),
+      duration: fixedNumber(200),
       from: 0,
       to: 1,
       yoyo: true,

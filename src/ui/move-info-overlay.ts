@@ -1,12 +1,15 @@
 import type { InfoToggle } from "#app/battle-scene";
 import { globalScene } from "#app/global-scene";
-import { TextStyle, addTextObject } from "./text";
+import { addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
 import { addWindow } from "./ui-theme";
-import { getLocalizedSpriteKey, fixedInt } from "#app/utils";
+import { fixedNumber } from "#app/utils";
 import type { Move } from "../data/move";
-import { MoveCategory } from "#app/enums/move-category";
-import { Type } from "#enums/type";
+import { MoveCategory } from "#enums/move-category";
+import { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";
+import { settings } from "#app/system/settings/settings-manager";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 export interface MoveInfoOverlaySettings {
   delayVisibility?: boolean; // if true, showing the overlay will only set it to active and populate the fields and the handler using this field has to manually call setVisible later.
@@ -28,7 +31,6 @@ const EFF_HEIGHT = 48;
 const EFF_WIDTH = 82;
 const DESC_HEIGHT = 48;
 const BORDER = 8;
-const GLOBAL_SCALE = 6;
 
 export default class MoveInfoOverlay extends Phaser.GameObjects.Container implements InfoToggle {
   public override active: boolean = false;
@@ -74,8 +76,8 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
       (options?.top ? EFF_HEIGHT : 0) + BORDER - 2,
       "",
       TextStyle.BATTLE_INFO,
-      { wordWrap: { width: (width - (BORDER - 2) * 2 - (options?.onSide ? EFF_WIDTH : 0)) * GLOBAL_SCALE } },
     );
+    this.desc.setWordWrapWidth((width - (BORDER - 2) * 2 - (options?.onSide ? EFF_WIDTH : 0)) / this.desc.scale);
     this.desc.setLineSpacing(i18next.resolvedLanguage === "ja" ? 25 : 5);
 
     // limit the text rendering, required for scrolling later on
@@ -84,10 +86,10 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
       y: options?.y || 0,
     };
     if (maskPointOrigin.x < 0) {
-      maskPointOrigin.x += globalScene.game.canvas.width / GLOBAL_SCALE;
+      maskPointOrigin.x += GAME_WIDTH;
     }
     if (maskPointOrigin.y < 0) {
-      maskPointOrigin.y += globalScene.game.canvas.height / GLOBAL_SCALE;
+      maskPointOrigin.y += GAME_HEIGHT;
     }
 
     const moveDescriptionTextMaskRect = globalScene.make.graphics();
@@ -98,7 +100,7 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
       width - ((options?.onSide ? EFF_WIDTH : 0) - BORDER * 2) * scale,
       (DESC_HEIGHT - (BORDER - 2) * 2) * scale,
     );
-    moveDescriptionTextMaskRect.setScale(6);
+    moveDescriptionTextMaskRect.setScale(CANVAS_SCALE);
     const moveDescriptionTextMask = this.createGeometryMask(moveDescriptionTextMaskRect);
 
     this.add(this.desc);
@@ -116,7 +118,7 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
     valuesBg.setOrigin(0, 0);
     this.val.add(valuesBg);
 
-    this.typ = globalScene.add.sprite(25, EFF_HEIGHT - 35, getLocalizedSpriteKey("types"), "unknown");
+    this.typ = globalScene.add.sprite(25, EFF_HEIGHT - 35, "type_icons", "unknown");
     this.typ.setScale(0.8);
     this.val.add(this.typ);
 
@@ -164,14 +166,14 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
 
   // show this component with infos for the specific move
   show(move: Move): boolean {
-    if (!globalScene.enableMoveInfo) {
+    if (!settings.display.enableMoveInfo) {
       return false; // move infos have been disabled // TODO:: is `false` correct? i used to be `undeefined`
     }
     this.move = move;
     this.pow.setText(move.power >= 0 ? move.power.toString() : "---");
     this.acc.setText(move.accuracy >= 0 ? move.accuracy.toString() : "---");
     this.pp.setText(move.pp >= 0 ? move.pp.toString() : "---");
-    this.typ.setTexture(getLocalizedSpriteKey("types"), Type[move.type].toLowerCase());
+    this.typ.setTexture("type_icons", ElementalType[move.type].toLowerCase());
     this.cat.setFrame(MoveCategory[move.category].toLowerCase());
 
     this.desc.setText(move?.effect || "");
@@ -189,10 +191,10 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
       // generate scrolling effects
       this.descScroll = globalScene.tweens.add({
         targets: this.desc,
-        delay: fixedInt(2000),
+        delay: fixedNumber(2000),
         loop: -1,
-        hold: fixedInt(2000),
-        duration: fixedInt((moveDescriptionLineCount - 3) * 2000),
+        hold: fixedNumber(2000),
+        duration: fixedNumber((moveDescriptionLineCount - 3) * 2000),
         y: `-=${14.83 * (72 / 96) * (moveDescriptionLineCount - 3)}`,
       });
     }
@@ -215,7 +217,7 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
     }
     globalScene.tweens.add({
       targets: this.desc,
-      duration: fixedInt(125),
+      duration: fixedNumber(125),
       ease: "Sine.easeInOut",
       alpha: visible ? 1 : 0,
     });
@@ -230,7 +232,7 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
 
   // width of this element
   static getWidth(_scale: number): number {
-    return globalScene.game.canvas.width / GLOBAL_SCALE / 2;
+    return GAME_WIDTH / 2;
   }
 
   // height of this element

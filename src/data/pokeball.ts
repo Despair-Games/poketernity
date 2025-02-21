@@ -1,5 +1,4 @@
 import { globalScene } from "#app/global-scene";
-import { CriticalCatchChanceBoosterModifier } from "#app/modifier/modifier";
 import { NumberHolder } from "#app/utils";
 import { PokeballType } from "#enums/pokeball";
 import i18next from "i18next";
@@ -14,28 +13,26 @@ export function getPokeballAtlasKey(type: PokeballType): string {
       return "gb";
     case PokeballType.ULTRA_BALL:
       return "ub";
+    case PokeballType.LUXURY_BALL:
+      return "lb";
     case PokeballType.MASTER_BALL:
       return "mb";
   }
 }
 
 export function getPokeballName(type: PokeballType): string {
-  let ret: string;
   switch (type) {
     case PokeballType.POKEBALL:
-      ret = i18next.t("pokeball:pokeBall");
-      break;
+      return i18next.t("pokeball:pokeBall");
     case PokeballType.GREAT_BALL:
-      ret = i18next.t("pokeball:greatBall");
-      break;
+      return i18next.t("pokeball:greatBall");
     case PokeballType.ULTRA_BALL:
-      ret = i18next.t("pokeball:ultraBall");
-      break;
+      return i18next.t("pokeball:ultraBall");
+    case PokeballType.LUXURY_BALL:
+      return i18next.t("pokeball:luxuryBall");
     case PokeballType.MASTER_BALL:
-      ret = i18next.t("pokeball:masterBall");
-      break;
+      return i18next.t("pokeball:masterBall");
   }
-  return ret;
 }
 
 export function getPokeballCatchMultiplier(type: PokeballType): number {
@@ -46,6 +43,8 @@ export function getPokeballCatchMultiplier(type: PokeballType): number {
       return 1.5;
     case PokeballType.ULTRA_BALL:
       return 2;
+    case PokeballType.LUXURY_BALL:
+      return 0;
     case PokeballType.MASTER_BALL:
       return -1;
   }
@@ -59,15 +58,18 @@ export function getPokeballTintColor(type: PokeballType): number {
       return 0x94b4de;
     case PokeballType.ULTRA_BALL:
       return 0xe6cd31;
+    case PokeballType.LUXURY_BALL:
+      return 0xffde6a;
     case PokeballType.MASTER_BALL:
       return 0xa441bd;
   }
 }
 
 /**
- * Gets the critical capture chance based on number of mons registered in Dex and modified {@link https://bulbapedia.bulbagarden.net/wiki/Catch_rate Catch rate}
- * Formula from {@link https://www.dragonflycave.com/mechanics/gen-vi-vii-capturing Dragonfly Cave Gen 6 Capture Mechanics page}
- * @param modifiedCatchRate the modified catch rate as calculated in {@linkcode AttemptCapturePhase}
+ * Gets the critical capture chance based on number of mons registered in Dex and modified {@link https://bulbapedia.bulbagarden.net/wiki/Catch_rate Catch rate}.
+ * Formula from {@link https://www.dragonflycave.com/mechanics/gen-vi-vii-capturing Dragonfly Cave Gen 6 Capture Mechanics page}.
+ * The values used to calculate the Pokedex multiplier have been adjusted so that they reflect the current size of the national dex, 1025.
+ * @param modifiedCatchRate - The modified catch rate as calculated in {@linkcode AttemptCapturePhase}
  * @returns the chance of getting a critical capture, out of 256
  */
 export function getCriticalCaptureChance(modifiedCatchRate: number): number {
@@ -76,19 +78,21 @@ export function getCriticalCaptureChance(modifiedCatchRate: number): number {
   }
   const dexCount = globalScene.gameData.getSpeciesCount((d) => !!d.caughtAttr);
   const catchingCharmMultiplier = new NumberHolder(1);
-  globalScene.findModifier((m) => m instanceof CriticalCatchChanceBoosterModifier)?.apply(catchingCharmMultiplier);
-  const dexMultiplier =
-    globalScene.gameMode.isDaily || dexCount > 800
-      ? 2.5
-      : dexCount > 600
-        ? 2
-        : dexCount > 400
-          ? 1.5
-          : dexCount > 200
-            ? 1
-            : dexCount > 100
-              ? 0.5
-              : 0;
+  globalScene.findModifier((m) => m.isCriticalCatchChanceBoosterModifier())?.apply(catchingCharmMultiplier);
+  let dexMultiplier: number;
+  if (globalScene.gameMode.isDaily || dexCount > 800) {
+    dexMultiplier = 2.5;
+  } else if (dexCount > 600) {
+    dexMultiplier = 2;
+  } else if (dexCount > 400) {
+    dexMultiplier = 1.5;
+  } else if (dexCount > 200) {
+    dexMultiplier = 1;
+  } else if (dexCount > 100) {
+    dexMultiplier = 0.5;
+  } else {
+    dexMultiplier = 0;
+  }
   return Math.floor((catchingCharmMultiplier.value * dexMultiplier * Math.min(255, modifiedCatchRate)) / 6);
 }
 

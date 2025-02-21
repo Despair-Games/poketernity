@@ -1,6 +1,6 @@
-import { BattlerIndex } from "#app/battle";
-import { Type } from "#enums/type";
-import { Moves } from "#enums/moves";
+import { BattlerIndex } from "#enums/battler-index";
+import { ElementalType } from "#enums/elemental-type";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Abilities } from "#enums/abilities";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -25,9 +25,9 @@ describe("Moves - Dragon Cheer", () => {
     game.override
       .battleType("double")
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .enemyLevel(20)
-      .moveset([Moves.DRAGON_CHEER, Moves.TACKLE, Moves.SPLASH]);
+      .moveset([MoveId.DRAGON_CHEER, MoveId.TACKLE, MoveId.SPLASH]);
   });
 
   it("increases the user's allies' critical hit ratio by one stage", async () => {
@@ -37,13 +37,13 @@ describe("Moves - Dragon Cheer", () => {
 
     vi.spyOn(enemy, "getCritStage");
 
-    game.move.select(Moves.DRAGON_CHEER, 0);
-    game.move.select(Moves.TACKLE, 1, BattlerIndex.ENEMY);
+    game.move.select(MoveId.DRAGON_CHEER, 0);
+    game.move.select(MoveId.TACKLE, 1, BattlerIndex.ENEMY);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     // After Tackle
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getCritStage).toHaveReturnedWith(1); // getCritStage is called on defender
   });
 
@@ -54,13 +54,13 @@ describe("Moves - Dragon Cheer", () => {
 
     vi.spyOn(enemy, "getCritStage");
 
-    game.move.select(Moves.DRAGON_CHEER, 0);
-    game.move.select(Moves.TACKLE, 1, BattlerIndex.ENEMY);
+    game.move.select(MoveId.DRAGON_CHEER, 0);
+    game.move.select(MoveId.TACKLE, 1, BattlerIndex.ENEMY);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     // After Tackle
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getCritStage).toHaveReturnedWith(2); // getCritStage is called on defender
   });
 
@@ -72,23 +72,23 @@ describe("Moves - Dragon Cheer", () => {
 
     vi.spyOn(enemy, "getCritStage");
 
-    game.move.select(Moves.DRAGON_CHEER, 0);
-    game.move.select(Moves.TACKLE, 1, BattlerIndex.ENEMY);
+    game.move.select(MoveId.DRAGON_CHEER, 0);
+    game.move.select(MoveId.TACKLE, 1, BattlerIndex.ENEMY);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     // After Tackle
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getCritStage).toHaveReturnedWith(1); // getCritStage is called on defender
 
     await game.toNextTurn();
 
     // Change Magikarp's type to Dragon
-    vi.spyOn(magikarp, "getTypes").mockReturnValue([Type.DRAGON]);
-    expect(magikarp.getTypes()).toEqual([Type.DRAGON]);
+    vi.spyOn(magikarp, "getTypes").mockReturnValue([ElementalType.DRAGON]);
+    expect(magikarp.getTypes()).toEqual([ElementalType.DRAGON]);
 
-    game.move.select(Moves.SPLASH, 0);
-    game.move.select(Moves.TACKLE, 1, BattlerIndex.ENEMY);
+    game.move.select(MoveId.SPLASH, 0);
+    game.move.select(MoveId.TACKLE, 1, BattlerIndex.ENEMY);
 
     await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 

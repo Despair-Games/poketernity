@@ -1,50 +1,86 @@
-import { type Pokemon, MoveResult } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
+import { MoveTarget } from "#enums/move-target";
 import type { Move } from "../move";
-import type { MoveConditionFunc } from "../move-conditions";
-import { MoveEffectAttr } from "./move-effect-attr";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { ChanceBasedMoveEffectAttr, type ChanceBasedMoveEffectAttrOptions } from "./chance-based-move-effect-attr";
 
-export class AddArenaTagAttr extends MoveEffectAttr {
-  public tagType: ArenaTagType;
-  public turnCount: number;
-  private failOnOverlap: boolean;
-  public selfSideTarget: boolean;
+interface AddArenaTagAttrOptions extends ChanceBasedMoveEffectAttrOptions {
+  /** The number of turns the tag is in effect */
+  turnCount?: number;
+  /** Should the move fail if an arena tag of the same type is already on the field? */
+  failOnOverlap?: boolean;
+}
+
+/**
+ * Attribute to add an arena tag to the field of a given {@linkcode ArenaTagType | type}.
+ * @extends ChanceBasedMoveEffectAttr
+ */
+export class AddArenaTagAttr extends ChanceBasedMoveEffectAttr {
+  protected readonly tagType: ArenaTagType;
+  protected readonly relativeSide: ArenaTagRelativeSide;
+  protected override options?: AddArenaTagAttrOptions;
 
   constructor(
     tagType: ArenaTagType,
-    turnCount?: number | null,
-    failOnOverlap: boolean = false,
-    selfSideTarget: boolean = false,
+    relativeSide: ArenaTagRelativeSide = ArenaTagRelativeSide.TARGET,
+    options?: AddArenaTagAttrOptions,
   ) {
     super(true);
 
     this.tagType = tagType;
-    this.turnCount = turnCount!; // TODO: is the bang correct?
-    this.failOnOverlap = failOnOverlap;
-    this.selfSideTarget = selfSideTarget;
+    this.relativeSide = relativeSide;
+    this.options = options;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
-      return false;
+  /**
+   * The number of turns the added tag remains in effect.
+   * @default 0, which denotes an arena tag that lasts indefinitely until the next arena reset.
+   */
+  public get turnCount() {
+    return this.options?.turnCount ?? 0;
+  }
+
+  /**
+   * If `true`, causes the move to fail when a tag already exists
+   * where it would otherwise be added on the field.
+   * @default false
+   */
+  public get failOnOverlap() {
+    return this.options?.failOnOverlap ?? false;
+  }
+
+  protected getTagSide(user: Pokemon, move: Move): ArenaTagSide {
+    switch (move.moveTarget) {
+      case MoveTarget.USER_SIDE:
+        return user.getArenaTagSide();
+      case MoveTarget.ENEMY_SIDE:
+        return user.getOpposingArenaTagSide();
+      case MoveTarget.BOTH_SIDES:
+        return ArenaTagSide.BOTH;
     }
 
-    if (
-      (move.chance < 0 || move.chance === 100 || user.randSeedInt(100) < move.chance)
-      && user.getLastXMoves(1)[0]?.result === MoveResult.SUCCESS
-    ) {
-      const side = (this.selfSideTarget ? user : target).getArenaTagSide();
-      globalScene.arena.addTag(this.tagType, this.turnCount, move.id, user.id, side);
-      return true;
+    switch (this.relativeSide) {
+      case ArenaTagRelativeSide.USER:
+        return user.getArenaTagSide();
+      case ArenaTagRelativeSide.TARGET:
+        return user.getOpposingArenaTagSide();
+      case ArenaTagRelativeSide.ALL:
+        return ArenaTagSide.BOTH;
     }
+  }
 
-    return false;
+  override applyEffect(user: Pokemon, _target: null, move: Move): boolean {
+    const side = this.getTagSide(user, move);
+    return globalScene.arena.addTag(this.tagType, user.id, this.turnCount, move.id, side);
   }
 
   override getCondition(): MoveConditionFunc | null {
     return this.failOnOverlap
-      ? (_user, target, _move) => !globalScene.arena.getTagOnSide(this.tagType, target.getArenaTagSide())
+      ? (user, _target, move) => !globalScene.arena.getTagOnSide(this.tagType, this.getTagSide(user, move))
       : null;
   }
 }

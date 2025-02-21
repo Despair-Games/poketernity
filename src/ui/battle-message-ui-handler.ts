@@ -1,15 +1,20 @@
 import { globalScene } from "#app/global-scene";
-import { addBBCodeTextObject, addTextObject, getTextColor, TextStyle } from "./text";
-import { Mode } from "./ui";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "./text";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
 import MessageUiHandler from "./message-ui-handler";
 import { addWindow } from "./ui-theme";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
-import type { Stat } from "#app/enums/stat";
-import { PERMANENT_STATS, getStatKey } from "#app/enums/stat";
+import type { Stat } from "#enums/stat";
+import { PERMANENT_STATS, getStatKey } from "#enums/stat";
+import { settings } from "#app/system/settings/settings-manager";
+import { GAME_WIDTH } from "#app/ui-constants";
 
 export default class BattleMessageUiHandler extends MessageUiHandler {
+  private readonly wordWrapWidth: number = 1780;
+
   private levelUpStatsContainer: Phaser.GameObjects.Container;
   private levelUpStatsIncrContent: Phaser.GameObjects.Text;
   private levelUpStatsValuesContent: BBCodeText;
@@ -21,10 +26,8 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
   public movesWindowContainer: Phaser.GameObjects.Container;
   public nameBoxContainer: Phaser.GameObjects.Container;
 
-  public readonly wordWrapWidth: number = 1780;
-
   constructor() {
-    super(Mode.MESSAGE);
+    super(UiMode.MESSAGE);
   }
 
   setup(): void {
@@ -33,7 +36,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     this.textTimer = null;
     this.textCallbackTimer = null;
 
-    this.bg = globalScene.add.sprite(0, 0, "bg", globalScene.windowType);
+    this.bg = globalScene.add.sprite(0, 0, "battle_message_box", settings.display.uiWindowStyle);
     this.bg.setName("sprite-battle-msg-bg");
     this.bg.setOrigin(0, 1);
     ui.add(this.bg);
@@ -75,7 +78,18 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     this.nameBoxContainer = globalScene.add.container(0, -16);
     this.nameBoxContainer.setVisible(false);
 
-    this.nameBox = globalScene.add.nineslice(0, 0, "namebox", globalScene.windowType, 72, 16, 8, 8, 5, 5);
+    this.nameBox = globalScene.add.nineslice(
+      0,
+      0,
+      "trainer_namebox",
+      settings.display.uiWindowStyle,
+      72,
+      16,
+      8,
+      8,
+      5,
+      5,
+    );
     this.nameBox.setOrigin(0, 0);
 
     this.nameText = addTextObject(8, 0, "Rival", TextStyle.MESSAGE, { maxLines: 1 });
@@ -92,7 +106,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
 
     this.levelUpStatsContainer = levelUpStatsContainer;
 
-    const levelUpStatsLabelsContent = addTextObject(globalScene.game.canvas.width / 6 - 73, -94, "", TextStyle.WINDOW, {
+    const levelUpStatsLabelsContent = addTextObject(GAME_WIDTH - 73, -94, "", TextStyle.WINDOW, {
       maxLines: 6,
     });
     levelUpStatsLabelsContent.setLineSpacing(i18next.resolvedLanguage === "ja" ? 25 : 5);
@@ -104,36 +118,24 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     levelUpStatsLabelsContent.text = levelUpStatsLabelText;
     levelUpStatsLabelsContent.x -= levelUpStatsLabelsContent.displayWidth;
 
-    const levelUpStatsBg = addWindow(
-      globalScene.game.canvas.width / 6,
-      -100,
-      80 + levelUpStatsLabelsContent.displayWidth,
-      100,
-    );
+    const levelUpStatsBg = addWindow(GAME_WIDTH, -100, 80 + levelUpStatsLabelsContent.displayWidth, 100);
     levelUpStatsBg.setOrigin(1, 0);
     levelUpStatsContainer.add(levelUpStatsBg);
 
     levelUpStatsContainer.add(levelUpStatsLabelsContent);
 
-    const levelUpStatsIncrContent = addTextObject(
-      globalScene.game.canvas.width / 6 - 50,
-      -94,
-      "+\n+\n+\n+\n+\n+",
-      TextStyle.WINDOW,
-      { maxLines: 6 },
-    );
+    const levelUpStatsIncrContent = addTextObject(GAME_WIDTH - 50, -94, "+\n+\n+\n+\n+\n+", TextStyle.WINDOW, {
+      maxLines: 6,
+    });
     levelUpStatsIncrContent.setLineSpacing(i18next.resolvedLanguage === "ja" ? 25 : 5);
     levelUpStatsContainer.add(levelUpStatsIncrContent);
 
     this.levelUpStatsIncrContent = levelUpStatsIncrContent;
 
-    const levelUpStatsValuesContent = addBBCodeTextObject(
-      globalScene.game.canvas.width / 6 - 7,
-      -94,
-      "",
-      TextStyle.WINDOW,
-      { maxLines: 6, lineSpacing: 5 },
-    );
+    const levelUpStatsValuesContent = addBBCodeTextObject(GAME_WIDTH - 7, -94, "", TextStyle.WINDOW, {
+      maxLines: 6,
+      lineSpacing: 5,
+    });
     levelUpStatsValuesContent.setLineSpacing(i18next.resolvedLanguage === "ja" ? 25 : 5);
     levelUpStatsValuesContent.setOrigin(1, 0);
     levelUpStatsValuesContent.setAlign("right");
@@ -202,7 +204,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
 
   promptLevelUpStats(partyMemberIndex: number, prevStats: number[], showTotals: boolean): Promise<void> {
     return new Promise((resolve) => {
-      if (!globalScene.showLevelUpStats) {
+      if (!settings.display.showStatsOnLevelUp) {
         return resolve();
       }
       const newStats = globalScene.getPlayerParty()[partyMemberIndex].stats;
@@ -263,7 +265,6 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
   getIvDescriptor(value: number, typeIv: number, pokemonId: number): string {
     const starterSpecies = globalScene.getPokemonById(pokemonId)!.species.getRootSpeciesId(); // we are using getRootSpeciesId() here because we want to check against the baby form, not the mid form if it exists
     const starterIvs: number[] = globalScene.gameData.dexData[starterSpecies].ivs;
-    const uiTheme = globalScene.uiTheme; // Assuming uiTheme is accessible
 
     // Function to wrap text in color based on comparison
     const coloredText = (text: string, isBetter: boolean, ivValue) => {
@@ -277,8 +278,7 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
       } else {
         textStyle = TextStyle.WINDOW;
       }
-      const color = getTextColor(textStyle, false, uiTheme);
-      return `[color=${color}][shadow=${getTextColor(textStyle, true, uiTheme)}]${text}[/shadow][/color]`;
+      return getBBCodeFragment(text, textStyle, true);
     };
 
     if (value > 30) {

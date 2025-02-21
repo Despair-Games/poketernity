@@ -13,13 +13,13 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
 import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases";
+import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import {
   getSafariSpeciesSpawn,
   SafariZoneEncounter,
 } from "#app/data/mystery-encounters/encounters/safari-zone-encounter";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { getSpecialSpeciesList } from "#app/data/pokemon-species";
+import { getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 
 const namespace = "mysteryEncounters/safariZone";

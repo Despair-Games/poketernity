@@ -1,13 +1,5 @@
-import { ArenaTagType } from "#enums/arena-tag-type";
-import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
-import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
-import { NumberHolder } from "#app/utils";
-import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
-import { MoveEffectChanceMultiplierAbAttr } from "#app/data/ab-attrs/move-effect-chance-multiplier-ab-attr";
-import { applyAbAttrs, applyPreDefendAbAttrs } from "#app/data/ability";
 import { type Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 
@@ -23,22 +15,21 @@ export interface MoveEffectAttrOptions {
   lastHitOnly?: boolean;
   /** Should this effect only apply on the first target hit? */
   firstTargetOnly?: boolean;
-  /** Overrides the secondary effect chance for this attr if set. */
-  effectChanceOverride?: number;
 }
-/** Base class defining all Move Effect Attributes
+
+/**
+ * Base class defining all Move Effect Attributes
  * @extends MoveAttr
  * @see {@linkcode apply}
  */
-
-export class MoveEffectAttr extends MoveAttr {
+export abstract class MoveEffectAttr extends MoveAttr {
   /**
    * A container for this attribute's optional parameters
    * @see {@linkcode MoveEffectAttrOptions} for supported params.
    */
   protected options?: MoveEffectAttrOptions;
 
-  constructor(selfTarget?: boolean, options?: MoveEffectAttrOptions) {
+  constructor(selfTarget: boolean = false, options?: MoveEffectAttrOptions) {
     super(selfTarget);
     this.options = options;
   }
@@ -80,66 +71,43 @@ export class MoveEffectAttr extends MoveAttr {
   }
 
   /**
-   * If defined, overrides the move's base chance for this
-   * secondary effect to trigger.
-   */
-  public get effectChanceOverride() {
-    return this.options?.effectChanceOverride;
-  }
-
-  /**
    * Determines whether the {@linkcode Move}'s effects are valid to {@linkcode apply}
    * @virtual
-   * @param user {@linkcode Pokemon} using the move
-   * @param target {@linkcode Pokemon} target of the move
-   * @param move {@linkcode Move} with this attribute
-   * @param _args Set of unique arguments needed by this attribute
-   * @returns true if basic application of the ability attribute should be possible
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param move the {@linkcode Move} being used
+   * @returns `true` if effects can apply
    */
-  canApply(user: Pokemon, target: Pokemon, move: Move, _args?: any[]) {
-    return (
-      !!(this.selfTarget ? user.hp && !user.getTag(BattlerTagType.FRENZY) : target.hp)
-      && (this.selfTarget
-        || !target.getTag(BattlerTagType.PROTECTED)
-        || move.checkFlag(MoveFlags.IGNORE_PROTECT, user, target))
-    );
-  }
-
-  /** Applies move effects so long as they are able based on {@linkcode canApply} */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args?: any[]): boolean {
-    return this.canApply(user, target, move, args);
+  canApply(user: Pokemon, target: Pokemon | null, _move: Move): boolean {
+    const affectedPokemon = this.selfTarget ? user : target;
+    return !!affectedPokemon && !affectedPokemon.isFainted();
   }
 
   /**
-   * Gets the used move's additional effect chance.
-   * Chance is modified by {@linkcode MoveEffectChanceMultiplierAbAttr} and {@linkcode IgnoreMoveEffectsAbAttr}.
-   * @param user {@linkcode Pokemon} using this move
-   * @param target {@linkcode Pokemon | Target} of this move
-   * @param move {@linkcode Move} being used
-   * @param selfEffect `true` if move targets user.
-   * @returns Move effect chance value.
+   * Checks if this attribute's effect can be applied, and if so, applies the move effect.
+   * Subclasses of this attribute should override {@linkcode applyEffect} instead of this
+   * method.
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param move the {@linkcode Move} being used
+   * @sealed
    */
-  getMoveChance(user: Pokemon, target: Pokemon, move: Move, selfEffect: boolean, showAbility?: boolean): number {
-    const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
-
-    applyAbAttrs(
-      MoveEffectChanceMultiplierAbAttr,
-      user,
-      null,
-      false,
-      moveChance,
-      move,
-      target,
-      selfEffect,
-      showAbility,
-    );
-
-    const userSide = user.getArenaTagSide();
-    globalScene.arena.applyTagsForSide(ArenaTagType.WATER_FIRE_PLEDGE, userSide, false, moveChance);
-
-    if (!selfEffect) {
-      applyPreDefendAbAttrs(IgnoreMoveEffectsAbAttr, target, user, null, null, false, moveChance);
+  override apply(user: Pokemon, target: Pokemon | null, move: Move): boolean {
+    if (this.canApply(user, target, move)) {
+      return this.applyEffect(user, target, move);
+    } else {
+      return false;
     }
-    return moveChance.value;
   }
+
+  /**
+   * Applies this attribute's effects.
+   * Subclasses should override this method instead of {@linkcode apply}
+   * to implement their own move effects.
+   * @param user the {@linkcode Pokemon} using the move
+   * @param target the {@linkcode Pokemon} targeted by the move
+   * @param move the {@linkcode Move} being used
+   * @returns `true` if effects successfully applied.
+   */
+  abstract applyEffect(_user: Pokemon, _target: Pokemon | null, _move: Move): boolean;
 }

@@ -1,5 +1,5 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -28,15 +28,15 @@ describe("Abilities - Synchronize", () => {
       .startingLevel(100)
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.SYNCHRONIZE)
-      .moveset([Moves.SPLASH, Moves.THUNDER_WAVE, Moves.SPORE, Moves.PSYCHO_SHIFT])
+      .moveset([MoveId.SPLASH, MoveId.THUNDER_WAVE, MoveId.SPORE, MoveId.PSYCHO_SHIFT])
       .ability(Abilities.NO_GUARD);
   });
 
   it("does not trigger when no status is applied by opponent Pokemon", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.select(Moves.SPLASH);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.move.select(MoveId.SPLASH);
+    await game.toEndOfTurn();
 
     expect(game.scene.getPlayerPokemon()!.status).toBeUndefined();
     expect(game.phaseInterceptor.log).not.toContain("ShowAbilityPhase");
@@ -45,8 +45,8 @@ describe("Abilities - Synchronize", () => {
   it("sets the status of the source pokemon to Paralysis when paralyzed by it", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.select(Moves.THUNDER_WAVE);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.move.select(MoveId.THUNDER_WAVE);
+    await game.toEndOfTurn();
 
     expect(game.scene.getPlayerPokemon()!.status?.effect).toBe(StatusEffect.PARALYSIS);
     expect(game.scene.getEnemyPokemon()!.status?.effect).toBe(StatusEffect.PARALYSIS);
@@ -56,9 +56,9 @@ describe("Abilities - Synchronize", () => {
   it("does not trigger on Sleep", async () => {
     await game.classicMode.startBattle();
 
-    game.move.select(Moves.SPORE);
+    game.move.select(MoveId.SPORE);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.getPlayerPokemon()!.status?.effect).toBeUndefined();
     expect(game.scene.getEnemyPokemon()!.status?.effect).toBe(StatusEffect.SLEEP);
@@ -69,15 +69,15 @@ describe("Abilities - Synchronize", () => {
     game.override
       .ability(Abilities.SYNCHRONIZE)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Array(4).fill(Moves.TOXIC_SPIKES));
+      .enemyMoveset(Array(4).fill(MoveId.TOXIC_SPIKES));
 
     await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
     game.doSwitchPokemon(1);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.getPlayerPokemon()!.status?.effect).toBe(StatusEffect.POISON);
     expect(game.scene.getEnemyPokemon()!.status?.effect).toBeUndefined();
@@ -87,8 +87,8 @@ describe("Abilities - Synchronize", () => {
   it("shows ability even if it fails to set the status of the opponent Pokemon", async () => {
     await game.classicMode.startBattle([Species.PIKACHU]);
 
-    game.move.select(Moves.THUNDER_WAVE);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.move.select(MoveId.THUNDER_WAVE);
+    await game.toEndOfTurn();
 
     expect(game.scene.getPlayerPokemon()!.status?.effect).toBeUndefined();
     expect(game.scene.getEnemyPokemon()!.status?.effect).toBe(StatusEffect.PARALYSIS);

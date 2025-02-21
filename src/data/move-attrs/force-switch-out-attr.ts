@@ -1,38 +1,41 @@
-import { BattleType } from "#app/battle";
+import { BattleType } from "#enums/battle-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveCategory } from "#enums/move-category";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { SwitchType } from "#enums/switch-type";
 import type { Pokemon, EnemyPokemon } from "#app/field/pokemon";
-import { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BattleEndPhase } from "#app/phases/battle-end-phase";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
-import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
-import { ForceSwitchOutImmunityAbAttr } from "#app/data/ab-attrs/force-switch-out-immunity-ab-attr";
-import { PostDamageForceSwitchAbAttr, applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
+/**
+ * Attribute to force either the user (e.g. {@link https://bulbapedia.bulbagarden.net/wiki/U-turn_(move) | U-turn})
+ * or the target (e.g. {@link https://bulbapedia.bulbagarden.net/wiki/Roar_(move) | Roar})
+ * off the field, prompting a switch.
+ * @extends MoveEffectAttr
+ */
 export class ForceSwitchOutAttr extends MoveEffectAttr {
   constructor(
     private selfSwitch: boolean = false,
     private switchType: SwitchType = SwitchType.SWITCH,
   ) {
-    super(false, { lastHitOnly: true });
+    super(selfSwitch, { lastHitOnly: true });
   }
 
   isBatonPass() {
     return this.switchType === SwitchType.BATON_PASS;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, _args: any[]): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     // Check if the move category is not STATUS or if the switch out condition is not met
     if (!this.getSwitchOutCondition()(user, target, move)) {
       return false;
@@ -45,14 +48,14 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
     // (e.g. when it uses Flip Turn), make it spit out the Tatsugiri before switching out.
     switchOutTarget.lapseTag(BattlerTagType.COMMANDED);
 
-    if (switchOutTarget instanceof PlayerPokemon) {
+    if (switchOutTarget.isPlayer()) {
       /**
        * Check if Wimp Out/Emergency Exit activates due to being hit by U-turn or Volt Switch
        * If it did, the user of U-turn or Volt Switch will not be switched out.
        */
       if (
-        target.getAbility().hasAttr(PostDamageForceSwitchAbAttr)
-        && [Moves.U_TURN, Moves.VOLT_SWITCH, Moves.FLIP_TURN].includes(move.id)
+        target.getAbility().hasAttrFlag(AbAttrFlag.POST_DAMAGE_FORCE_SWITCH)
+        && [MoveId.U_TURN, MoveId.VOLT_SWITCH, MoveId.FLIP_TURN].includes(move.id)
       ) {
         if (this.hpDroppedBelowHalf(target)) {
           return false;
@@ -77,13 +80,13 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
           const slotIndex = eligibleNewIndices[user.randSeedInt(eligibleNewIndices.length)];
           globalScene.prependToPhase(
             new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), slotIndex, false, true),
-            MoveEndPhase,
+            PhaseId.MOVE_END,
           );
         } else {
           switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
           globalScene.prependToPhase(
             new SwitchPhase(this.switchType, switchOutTarget.getFieldIndex(), true, true),
-            MoveEndPhase,
+            PhaseId.MOVE_END,
           );
           return true;
         }
@@ -109,7 +112,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
           const slotIndex = eligibleNewIndices[user.randSeedInt(eligibleNewIndices.length)];
           globalScene.prependToPhase(
             new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), slotIndex, false, false),
-            MoveEndPhase,
+            PhaseId.MOVE_END,
           );
         } else {
           switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
@@ -123,7 +126,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
               false,
               false,
             ),
-            MoveEndPhase,
+            PhaseId.MOVE_END,
           );
         }
       }
@@ -134,8 +137,8 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
        * If it did, the user of U-turn or Volt Switch will not be switched out.
        */
       if (
-        target.getAbility().hasAttr(PostDamageForceSwitchAbAttr)
-        && [Moves.U_TURN, Moves.VOLT_SWITCH, Moves.FLIP_TURN].includes(move.id)
+        target.getAbility().hasAttrFlag(AbAttrFlag.POST_DAMAGE_FORCE_SWITCH)
+        && [MoveId.U_TURN, MoveId.VOLT_SWITCH, MoveId.FLIP_TURN].includes(move.id)
       ) {
         if (this.hpDroppedBelowHalf(target)) {
           return false;
@@ -171,8 +174,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         globalScene.clearEnemyHeldItemModifiers();
 
         if (switchOutTarget.hp) {
-          globalScene.pushPhase(new BattleEndPhase(false));
-          globalScene.pushPhase(new NewBattlePhase());
+          globalScene.nextBattle(false);
         }
       }
     }
@@ -187,7 +189,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
 
   override getFailedText(_user: Pokemon, target: Pokemon, _move: Move, _cancelled: BooleanHolder): string | null {
     const blockedByAbility = new BooleanHolder(false);
-    applyAbAttrs(ForceSwitchOutImmunityAbAttr, target, blockedByAbility);
+    applyAbAttrs(AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY, target, false, blockedByAbility);
     return blockedByAbility.value
       ? i18next.t("moveTriggers:cannotBeSwitchedOut", { pokemonName: getPokemonNameWithAffix(target) })
       : null;
@@ -196,7 +198,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
   getSwitchOutCondition(): MoveConditionFunc {
     return (user, target, _move) => {
       const switchOutTarget = this.selfSwitch ? user : target;
-      const player = switchOutTarget instanceof PlayerPokemon;
+      const player = switchOutTarget.isPlayer();
 
       if (!this.selfSwitch) {
         // Dondozo with an allied Tatsugiri in its mouth cannot be forced out
@@ -215,8 +217,8 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         }
 
         const blockedByAbility = new BooleanHolder(false);
-        applyAbAttrs(ForceSwitchOutImmunityAbAttr, target, blockedByAbility);
-        return !blockedByAbility.value;
+        applyAbAttrs(AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY, target, false, blockedByAbility);
+        return !blockedByAbility.value && !target.isMax();
       }
 
       if (!player && globalScene.currentBattle.battleType === BattleType.WILD) {

@@ -1,17 +1,18 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import i18next from "i18next";
 import type { Move } from "#app/data/move";
 import { SacrificialAttr } from "#app/data/move-attrs/sacrificial-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
 /**
  * Attr used for moves that faint the user but revive a different Pokemon
  * @protected restorePP - whether or not PP is restored to the revived Pokemon. Lunar dance does this
  * @protected moveMessage - the associated key for the move trigger message
- * Used by healing wish and lunar dance
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Healing_Wish_(move) | Healing Wish}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Lunar_Dance_(move) | Lunar Dance}.
+ * @extends SacrificialAttr
  */
 export class SacrificialFullRestoreAttr extends SacrificialAttr {
   protected restorePP: boolean;
@@ -24,41 +25,36 @@ export class SacrificialFullRestoreAttr extends SacrificialAttr {
     this.moveTriggerMessage = moveTriggerMessage;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
-      return false;
-    }
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
+    const party = user.getParty();
 
     // We don't know which party member will be chosen, so pick the highest max HP in the party
-    const maxPartyMemberHp = globalScene
-      .getPlayerParty()
-      .map((p) => p.getMaxHp())
-      .reduce((maxHp: number, hp: number) => Math.max(hp, maxHp), 0);
+    const maxPartyMemberHp = Math.max(...party.map((p) => p.getMaxHp()));
 
-    globalScene.pushPhase(
-      new PokemonHealPhase(
-        user.getBattlerIndex(),
-        maxPartyMemberHp,
-        i18next.t(this.moveTriggerMessage, { pokemonName: getPokemonNameWithAffix(user) }),
-        true,
-        false,
-        false,
-        true,
-        false,
-        this.restorePP,
-      ),
-      true,
-    );
+    /**
+     * @todo If the incoming Pokemon does not get any HP healed, status healed, or PP restored,
+     * There should be an arena tag applied to the field which should expire whenever the heal
+     * would be needed
+     */
+    globalScene.queuePokemonHeal(false, user.getBattlerIndex(), maxPartyMemberHp, {
+      message: i18next.t(this.moveTriggerMessage, { pokemonName: getPokemonNameWithAffix(user) }),
+      healStatus: true,
+      fullRestorePP: this.restorePP,
+    });
 
-    return true;
+    return super.applyEffect(user, target, move);
   }
 
   override getUserBenefitScore(_user: Pokemon, _target: Pokemon, _move: Move): number {
     return -20;
   }
 
+  /**
+   * Only works if there is at least 1 unfainted allowed Pokemon in the party and not already in battle
+   * @returns the condition function to add to Move objects with this attribute
+   */
   override getCondition(): MoveConditionFunc {
-    return (_user, _target, _move) =>
-      globalScene.getPlayerParty().filter((p) => p.isActive()).length > globalScene.currentBattle.getBattlerCount();
+    return (user, _target, _move) =>
+      user.getParty().filter((p) => p.isActive()).length > globalScene.currentBattle.getBattlerCount();
   }
 }

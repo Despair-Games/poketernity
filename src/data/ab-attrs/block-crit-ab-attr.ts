@@ -1,5 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 
 /**
@@ -10,16 +11,12 @@ import { AbAttr } from "./ab-attr";
  * @extends AbAttr
  */
 export class BlockCritAbAttr extends AbAttr {
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    const isCritical = args[0] as BooleanHolder;
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.BLOCK_CRIT);
+  }
 
-    // Only if isCritical is `true`, then the game checks if any crit-blocking abilities would nullify the result.
+  override apply(_pokemon: Pokemon, _simulated: boolean, isCritical: BooleanHolder): boolean {
     if (isCritical.value) {
       isCritical.value = false;
       return true;

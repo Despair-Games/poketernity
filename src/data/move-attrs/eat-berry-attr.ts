@@ -1,35 +1,26 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { BerryModifier, PreserveBerryModifier } from "#app/modifier/modifier";
+import { type BerryModifier, PreserveBerryModifier } from "#app/modifier/modifier";
 import { BooleanHolder } from "#app/utils";
-import { HealFromBerryUseAbAttr } from "#app/data/ab-attrs/heal-from-berry-use-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { getBerryEffectFunc } from "#app/data/berry";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
- * Attribute that causes targets of the move to eat a berry. Used for Teatime, Stuff Cheeks
+ * Attribute that causes targets of the move to eat a berry.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Stuff_Cheeks_(move) | Stuff Cheeks}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Teatime_(move) | Teatime}.
+ * @extends MoveEffectAttr
  */
-
 export class EatBerryAttr extends MoveEffectAttr {
   protected chosenBerry: BerryModifier | undefined;
   constructor(selfTarget: boolean) {
     super(selfTarget);
   }
-  /**
-   * Causes the target to eat a berry.
-   * @param user {@linkcode Pokemon} Pokemon that used the move
-   * @param target {@linkcode Pokemon} Pokemon that will eat a berry
-   * @param move {@linkcode Move} The move being used
-   * @param args Unused
-   * @returns `true` if the function succeeds
-   */
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
-      return false;
-    }
 
+  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const pokemon = this.selfTarget ? user : target;
 
     const heldBerries = this.getTargetHeldBerries(pokemon);
@@ -46,11 +37,11 @@ export class EatBerryAttr extends MoveEffectAttr {
     return true;
   }
 
-  getTargetHeldBerries(target: Pokemon): BerryModifier[] {
-    return globalScene.findModifiers(
-      (m) => m instanceof BerryModifier && (m as BerryModifier).pokemonId === target.id,
+  getTargetHeldBerries(target: Pokemon) {
+    return globalScene.findModifiers<BerryModifier>(
+      (m) => m.isBerryModifier() && m.pokemonId === target.id,
       target.isPlayer(),
-    ) as BerryModifier[];
+    );
   }
 
   reduceBerryModifier(target: Pokemon) {
@@ -62,6 +53,6 @@ export class EatBerryAttr extends MoveEffectAttr {
 
   eatBerry(consumer: Pokemon, berryOwner?: Pokemon) {
     getBerryEffectFunc(this.chosenBerry!.berryType)(consumer, berryOwner); // consumer eats the berry
-    applyAbAttrs(HealFromBerryUseAbAttr, consumer, new BooleanHolder(false));
+    applyAbAttrs(AbAttrFlag.HEAL_FROM_BERRY_USE, consumer, false);
   }
 }

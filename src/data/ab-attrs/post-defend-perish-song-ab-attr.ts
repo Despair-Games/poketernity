@@ -1,7 +1,6 @@
 import type { Move } from "#app/data/move";
-import { MoveFlags } from "../../enums/move-flags";
+import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
-import type { HitResult } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import i18next from "i18next";
@@ -14,30 +13,14 @@ import { PostDefendAbAttr } from "./post-defend-ab-attr";
  * @extends PostDefendAbAttr
  */
 export class PostDefendPerishSongAbAttr extends PostDefendAbAttr {
-  private readonly turns: number;
-
-  constructor(turns: number) {
-    super();
-
-    this.turns = turns;
-  }
-
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-    _args: any[],
-  ): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)) {
-      if (pokemon.getTag(BattlerTagType.PERISH_SONG) && attacker.getTag(BattlerTagType.PERISH_SONG)) {
+      if (attacker.getTag(BattlerTagType.PERISH_SONG)) {
         return false;
       } else {
         if (!simulated) {
-          attacker.addTag(BattlerTagType.PERISH_SONG, this.turns);
-          pokemon.addTag(BattlerTagType.PERISH_SONG, this.turns);
+          attacker.addTag(BattlerTagType.PERISH_SONG, 4);
+          pokemon.addTag(BattlerTagType.PERISH_SONG, 4);
         }
         return true;
       }

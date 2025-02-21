@@ -9,9 +9,9 @@ import {
   skipBattleRunMysteryEncounterRewardsPhase,
 } from "#test/mystery-encounter/encounter-test-utils";
 import type BattleScene from "#app/battle-scene";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
-import { BerryModifier } from "#app/modifier/modifier";
+import type { BerryModifier } from "#app/modifier/modifier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
@@ -136,7 +136,7 @@ describe("Berries Abound - Mystery Encounter", () => {
       await game.phaseInterceptor.to(SelectModifierPhase, false);
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
 
-      const berriesAfter = scene.findModifiers((m) => m instanceof BerryModifier) as BerryModifier[];
+      const berriesAfter = scene.findModifiers((m) => m.isBerryModifier()) as BerryModifier[];
       const berriesAfterCount = berriesAfter.reduce((a, b) => a + b.stackCount, 0);
 
       expect(numBerries).toBe(berriesAfterCount);
@@ -150,7 +150,7 @@ describe("Berries Abound - Mystery Encounter", () => {
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
       await game.phaseInterceptor.run(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
@@ -235,7 +235,7 @@ describe("Berries Abound - Mystery Encounter", () => {
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
       await game.phaseInterceptor.run(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;

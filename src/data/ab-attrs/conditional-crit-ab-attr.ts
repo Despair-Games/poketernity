@@ -2,6 +2,7 @@ import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition"
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 
 /**
@@ -14,27 +15,24 @@ export class ConditionalCritAbAttr extends AbAttr {
 
   constructor(condition: PokemonAttackCondition) {
     super();
+    this._flags.add(AbAttrFlag.CONDITIONAL_CRIT);
 
     this.condition = condition;
   }
 
   /**
    * @param pokemon {@linkcode Pokemon} user.
-   * @param args -
-   * - [0] {@linkcode BooleanHolder} Set to `true` if it should be a critical hit.
-   * - [1] {@linkcode Pokemon} Target.
-   * - [2] {@linkcode Move} used by ability user.
+   * @param isCritical {@linkcode BooleanHolder} Set to `true` if it should be a critical hit.
+   * @param target {@linkcode Pokemon} Target.
+   * @param move {@linkcode Move} used by ability user.
    */
   override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
+    isCritical: BooleanHolder,
+    target: Pokemon,
+    move: Move,
   ): boolean {
-    const isCritical: BooleanHolder = args[0];
-    const target: Pokemon = args[1];
-    const move: Move = args[2];
     if (!this.condition(pokemon, target, move)) {
       return false;
     }

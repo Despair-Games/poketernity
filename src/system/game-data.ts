@@ -1,69 +1,75 @@
 import i18next from "i18next";
-import { bypassLogin } from "#app/battle-scene";
+import { APP_ABBREVIATION, bypassLogin, SETTINGS_LS_KEY, TUTORIALS_LS_KEY } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { allSpecies, getPokemonSpecies, noStarterFormKeys } from "#app/data/pokemon-species";
+import { noStarterFormKeys } from "#app/data/no-starter-form-keys";
+import { allSpecies } from "#app/data/data-lists";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { speciesStarterCosts } from "#app/data/balance/starters";
-import { randInt, getEnumKeys, isLocal, executeIf, fixedInt, randSeedItem, NumberHolder } from "#app/utils";
+import {
+  randInt,
+  getEnumKeys,
+  executeIf,
+  fixedNumber,
+  randSeedItem,
+  NumberHolder,
+  isNullOrUndefined,
+} from "#app/utils";
 import Overrides from "#app/overrides";
 import PokemonData from "#app/system/pokemon-data";
 import PersistentModifierData from "#app/system/modifier-data";
 import ArenaData from "#app/system/arena-data";
-import { Unlockables } from "#app/system/unlockables";
-import { GameModes, getGameMode } from "#app/game-mode";
-import { BattleType } from "#app/battle";
+import { Unlockables } from "#enums/unlockables";
+import { getGameMode } from "#app/game-mode";
+import { GameModes } from "#enums/game-modes";
+import { BattleType } from "#enums/battle-type";
 import TrainerData from "#app/system/trainer-data";
-import { trainerConfigs } from "#app/data/trainer-config";
-import { resetSettings, setSetting, SettingKeys } from "#app/system/settings/settings";
 import { achvs } from "#app/system/achv";
 import EggData from "#app/system/egg-data";
 import type { Egg } from "#app/data/egg";
-import { vouchers, VoucherType } from "#app/system/voucher";
+import { vouchers } from "#app/system/voucher";
+import { VoucherType } from "#enums/voucher-type";
 import { AES, enc } from "crypto-js";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { clientSessionId, loggedInUser, updateUserInfo } from "#app/account";
 import { Nature } from "#enums/nature";
 import { GameStats } from "#app/system/game-stats";
-import { Tutorial } from "#app/tutorial";
+import type { Tutorial } from "#enums/tutorial";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
-import { allMoves } from "#app/data/all-moves";
-import { TrainerVariant } from "#app/field/trainer";
+import { allMoves } from "#app/data/data-lists";
+import { TrainerVariant } from "#enums/trainer-variant";
 import type { Variant } from "#app/data/variant";
-import { setSettingGamepad, SettingGamepad, settingGamepadDefaults } from "#app/system/settings/settings-gamepad";
-import type { SettingKeyboard } from "#app/system/settings/settings-keyboard";
-import { setSettingKeyboard } from "#app/system/settings/settings-keyboard";
 import { TagAddedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
 import * as Modifier from "#app/modifier/modifier";
-import { StatusEffect } from "#enums/status-effect";
 import ChallengeData from "#app/system/challenge-data";
-import { Device } from "#enums/devices";
+import type { Device } from "#enums/devices";
 import { GameDataType } from "#enums/game-data-type";
 import { PlayerGender } from "#enums/player-gender";
 import type { Species } from "#enums/species";
-import { applyChallenges, ChallengeType } from "#app/data/challenge";
+import { applyChallenges } from "#app/utils/challenge-utils";
+import { ChallengeType } from "#enums/challenge-type";
 import { WeatherType } from "#enums/weather-type";
 import { TerrainType } from "#enums/terrain-type";
 import { ReloadSessionPhase } from "#app/phases/reload-session-phase";
 import { RUN_HISTORY_LIMIT } from "#app/ui/run-history-ui-handler";
-import {
-  applySessionVersionMigration,
-  applySystemVersionMigration,
-  applySettingsVersionMigration,
-} from "./version_migration/version_converter";
+import { applySessionVersionMigration, applySystemVersionMigration } from "./version_migration/version_converter";
 import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { api } from "#app/plugins/api/api";
 import { ArenaTrapTag } from "#app/data/arena-tag";
-import { SAVE_FILE_EXTENSION } from "#app/constants";
+import { MAPPING_CONFIG_LS_KEY, SAVE_FILE_EXTENSION } from "#app/constants";
+import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#app/@types/SystemData";
 import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
 import type { StarterData } from "#app/@types/StarterData";
 import type { DexData, DexEntry } from "#app/@types/DexData";
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { defaultStarterSpecies } from "#app/data/balance/default-starters";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
+import { settings } from "#app/system/settings/settings-manager";
 
 const saveKey = "x0i2O7WRiANTqPmZ"; // Temporary; secure encryption is not yet necessary
 
@@ -78,9 +84,9 @@ export function getDataTypeKey(dataType: GameDataType, slotId: number = 0): stri
       }
       return ret;
     case GameDataType.SETTINGS:
-      return "settings";
+      return SETTINGS_LS_KEY;
     case GameDataType.TUTORIALS:
-      return "tutorials";
+      return TUTORIALS_LS_KEY;
     case GameDataType.SEEN_DIALOGUES:
       return "seenDialogues";
     case GameDataType.RUN_HISTORY:
@@ -165,10 +171,6 @@ export class StarterPrefs {
   }
 }
 
-export interface TutorialFlags {
-  [key: string]: boolean;
-}
-
 export interface SeenDialogues {
   [key: string]: boolean;
 }
@@ -195,8 +197,6 @@ export class GameData {
   public trainerId: number;
   public secretId: number;
 
-  public gender: PlayerGender;
-
   public dexData: DexData;
   private defaultDexData: DexData | null;
 
@@ -216,8 +216,6 @@ export class GameData {
   public unlockPity: number[];
 
   constructor() {
-    this.loadSettings();
-    this.loadGamepadSettings();
     this.loadMappingConfigs();
     this.trainerId = randInt(65536);
     this.secretId = randInt(65536);
@@ -249,7 +247,7 @@ export class GameData {
     return {
       trainerId: this.trainerId,
       secretId: this.secretId,
-      gender: this.gender,
+      gender: settings.display.playerGender,
       dexData: this.dexData,
       starterData: this.starterData,
       gameStats: this.gameStats,
@@ -383,10 +381,6 @@ export class GameData {
         this.trainerId = systemData.trainerId;
         this.secretId = systemData.secretId;
 
-        this.gender = systemData.gender;
-
-        this.saveSetting(SettingKeys.Player_Gender, systemData.gender === PlayerGender.FEMALE ? 1 : 0);
-
         if (!systemData.starterData) {
           this.initStarterData();
 
@@ -462,6 +456,10 @@ export class GameData {
         this.consolidateDexData(this.dexData);
         this.defaultDexData = null;
 
+        // Ensure that the player gender in settings matches the player gender in system data
+        if (systemData.gender !== PlayerGender.UNSET && systemData.gender !== settings.display.playerGender) {
+          settings.update("display", "playerGender", systemData.gender);
+        }
         resolve(true);
       } catch (err) {
         console.error(err);
@@ -475,7 +473,7 @@ export class GameData {
    * At the moment, only retrievable from locale cache
    */
   async getRunHistoryData(): Promise<RunHistoryData> {
-    if (!isLocal) {
+    if (!api.isLocal) {
       /**
        * Networking Code DO NOT DELETE!
        * Note: Might have to be migrated to `api.ts`
@@ -629,28 +627,6 @@ export class GameData {
   }
 
   /**
-   * Saves a setting to localStorage
-   * @param setting string ideally of SettingKeys
-   * @param valueIndex index of the setting's option
-   * @returns true
-   */
-  public saveSetting(setting: string, valueIndex: number): boolean {
-    let settings: object = {};
-    if (localStorage.hasOwnProperty("settings")) {
-      settings = JSON.parse(localStorage.getItem("settings")!); // TODO: is this bang correct?
-    }
-
-    setSetting(setting, valueIndex);
-
-    settings[setting] = valueIndex;
-    settings["gameVersion"] = globalScene.game.config.gameVersion;
-
-    localStorage.setItem("settings", JSON.stringify(settings));
-
-    return true;
-  }
-
-  /**
    * Saves the mapping configurations for a specified device.
    *
    * @param deviceName - The name of the device for which the configurations are being saved.
@@ -660,15 +636,20 @@ export class GameData {
   public saveMappingConfigs(deviceName: string, config): boolean {
     const key = deviceName.toLowerCase(); // Convert the gamepad name to lowercase to use as a key
     let mappingConfigs: object = {}; // Initialize an empty object to hold the mapping configurations
-    if (localStorage.hasOwnProperty("mappingConfigs")) {
+    const lsMappingStr = localStorage.getItem(MAPPING_CONFIG_LS_KEY);
+    if (lsMappingStr) {
       // Check if 'mappingConfigs' exists in localStorage
-      mappingConfigs = JSON.parse(localStorage.getItem("mappingConfigs")!); // TODO: is this bang correct?
+      try {
+        mappingConfigs = JSON.parse(lsMappingStr);
+      } catch (err) {
+        console.error("Error parsing mapping configs from localStorage:", err);
+      }
     } // Parse the existing 'mappingConfigs' from localStorage
     if (!mappingConfigs[key]) {
       mappingConfigs[key] = {};
     } // If there is no configuration for the given key, create an empty object for it
     mappingConfigs[key].custom = config.custom; // Assign the custom configuration to the mapping configuration for the given key
-    localStorage.setItem("mappingConfigs", JSON.stringify(mappingConfigs)); // Save the updated mapping configurations back to localStorage
+    localStorage.setItem(MAPPING_CONFIG_LS_KEY, JSON.stringify(mappingConfigs)); // Save the updated mapping configurations back to localStorage
     return true; // Return true to indicate the operation was successful
   }
 
@@ -683,13 +664,12 @@ export class GameData {
    * for the corresponding gamepad or device key. The method then returns `true` to indicate success.
    */
   public loadMappingConfigs(): boolean {
-    if (!localStorage.hasOwnProperty("mappingConfigs")) {
+    const lsMappingStr = localStorage.getItem(MAPPING_CONFIG_LS_KEY);
+    if (!lsMappingStr) {
       // Check if 'mappingConfigs' exists in localStorage
       return false;
     } // If 'mappingConfigs' does not exist, return false
-
-    const mappingConfigs = JSON.parse(localStorage.getItem("mappingConfigs")!); // Parse the existing 'mappingConfigs' from localStorage // TODO: is this bang correct?
-
+    const mappingConfigs = JSON.parse(lsMappingStr); // Parse the existing 'mappingConfigs' from localStorage
     for (const key of Object.keys(mappingConfigs)) {
       // Iterate over the keys of the mapping configurations
       globalScene.inputController.injectConfig(key, mappingConfigs[key]);
@@ -698,142 +678,78 @@ export class GameData {
     return true; // Return true to indicate the operation was successful
   }
 
-  public resetMappingToFactory(): boolean {
-    if (!localStorage.hasOwnProperty("mappingConfigs")) {
-      // Check if 'mappingConfigs' exists in localStorage
+  /**
+   * Reset the mappings for the given device to its default values
+   * If it's a gamepad, only reset the one currently in use
+   * @returns `true` if the operation was successful, `false` otherwise
+   */
+  public resetMappingToFactory(device: Device): boolean {
+    const deviceName = globalScene.inputController?.selectedDevice[device];
+    const lsMappingStr = localStorage.getItem(MAPPING_CONFIG_LS_KEY);
+    if (!lsMappingStr) {
+      // no config found
       return false;
-    } // If 'mappingConfigs' does not exist, return false
-    localStorage.removeItem("mappingConfigs");
-    globalScene.inputController.resetConfigs();
+    }
+    let mappingConfigs = {};
+    try {
+      mappingConfigs = JSON.parse(lsMappingStr);
+    } catch (err) {
+      console.error("Error parsing mapping configs from localStorage:", err);
+    }
+    if (mappingConfigs.hasOwnProperty(deviceName)) {
+      // Delete the config for this device and update local storage
+      delete mappingConfigs[deviceName];
+      localStorage.setItem(MAPPING_CONFIG_LS_KEY, JSON.stringify(mappingConfigs));
+      // Tell the inputcontroller to update
+      globalScene.inputController.resetConfig(device);
+    }
     return true; // TODO: is `true` the correct return value?
   }
 
   /**
-   * Saves a gamepad setting to localStorage.
-   *
-   * @param setting - The gamepad setting to save.
-   * @param valueIndex - The index of the value to set for the gamepad setting.
-   * @returns `true` if the setting is successfully saved.
-   *
-   * @remarks
-   * This method initializes an empty object for gamepad settings if none exist in localStorage.
-   * It then updates the setting in the current scene and iterates over the default gamepad settings
-   * to update the specified setting with the new value. Finally, it saves the updated settings back
-   * to localStorage and returns `true` to indicate success.
+   * Retrieve the seen tutorials from local storage as {@linkcode Set}
+   * @returns the numbers saved in local storage if they exist, otherwise an empty {@linkcode Set}
    */
-  public saveControlSetting(
-    device: Device,
-    localStoragePropertyName: string,
-    setting: SettingGamepad | SettingKeyboard,
-    settingDefaults,
-    valueIndex: number,
-  ): boolean {
-    let settingsControls: object = {}; // Initialize an empty object to hold the gamepad settings
-
-    if (localStorage.hasOwnProperty(localStoragePropertyName)) {
-      // Check if 'settingsControls' exists in localStorage
-      settingsControls = JSON.parse(localStorage.getItem(localStoragePropertyName)!); // Parse the existing 'settingsControls' from localStorage // TODO: is this bang correct?
-    }
-
-    if (device === Device.GAMEPAD) {
-      setSettingGamepad(setting as SettingGamepad, valueIndex);
-    } else if (device === Device.KEYBOARD) {
-      setSettingKeyboard(setting as SettingKeyboard, valueIndex);
-    }
-
-    Object.keys(settingDefaults).forEach((s) => {
-      // Iterate over the default gamepad settings
-      if (s === setting) {
-        // If the current setting matches, update its value
-        settingsControls[s] = valueIndex;
+  private getSeenTutorialsSet() {
+    const key = getDataTypeKey(GameDataType.TUTORIALS);
+    const tutorials = new Set<Tutorial>();
+    const lsItem = localStorage.getItem(key);
+    if (lsItem) {
+      try {
+        const lsTutorials: Tutorial[] = JSON.parse(lsItem);
+        lsTutorials.forEach((lsTutorial) => (!isNullOrUndefined(lsTutorial) ? tutorials.add(lsTutorial) : null));
+      } catch (err) {
+        console.warn("Failed to parse tutorial data from local storage", err);
       }
-    });
-
-    localStorage.setItem(localStoragePropertyName, JSON.stringify(settingsControls)); // Save the updated gamepad settings back to localStorage
-
-    return true; // Return true to indicate the operation was successful
+    }
+    return tutorials;
   }
 
   /**
-   * Loads Settings from local storage if available
-   * @returns true if succesful, false if not
+   * Registers the given tutorial as seen in local storage
+   * @param tutorial the {@linkcode Tutorial} to update the flag for
+   * @returns `true` if saving was successful, `false` otherwise
    */
-  private loadSettings(): boolean {
-    resetSettings();
-
-    if (!localStorage.hasOwnProperty("settings")) {
+  public saveTutorialAsSeen(tutorial: Tutorial): boolean {
+    const key = getDataTypeKey(GameDataType.TUTORIALS);
+    const tutorials = this.getSeenTutorialsSet();
+    tutorials.add(tutorial);
+    try {
+      localStorage.setItem(key, JSON.stringify([...tutorials]));
+      return true;
+    } catch (err) {
+      console.error("Failed to saved tutorial data in local storage", err);
       return false;
     }
-
-    const settings = JSON.parse(localStorage.getItem("settings")!); // TODO: is this bang correct?
-
-    applySettingsVersionMigration(settings);
-
-    for (const setting of Object.keys(settings)) {
-      setSetting(setting, settings[setting]);
-    }
-
-    return true; // TODO: is `true` the correct return value?
   }
 
-  private loadGamepadSettings(): boolean {
-    Object.values(SettingGamepad)
-      .map((setting) => setting as SettingGamepad)
-      .forEach((setting) => setSettingGamepad(setting, settingGamepadDefaults[setting]));
-
-    if (!localStorage.hasOwnProperty("settingsGamepad")) {
-      return false;
-    }
-    const settingsGamepad = JSON.parse(localStorage.getItem("settingsGamepad")!); // TODO: is this bang correct?
-
-    for (const setting of Object.keys(settingsGamepad)) {
-      setSettingGamepad(setting as SettingGamepad, settingsGamepad[setting]);
-    }
-
-    return true; // TODO: is `true` the correct return value?
-  }
-
-  public saveTutorialFlag(tutorial: Tutorial, flag: boolean): boolean {
-    const key = getDataTypeKey(GameDataType.TUTORIALS);
-    let tutorials: object = {};
-    if (localStorage.hasOwnProperty(key)) {
-      tutorials = JSON.parse(localStorage.getItem(key)!); // TODO: is this bang correct?
-    }
-
-    Object.keys(Tutorial)
-      .map((t) => t as Tutorial)
-      .forEach((t) => {
-        const key = Tutorial[t];
-        if (key === tutorial) {
-          tutorials[key] = flag;
-        } else {
-          tutorials[key] ??= false;
-        }
-      });
-
-    localStorage.setItem(key, JSON.stringify(tutorials));
-
-    return true;
-  }
-
-  public getTutorialFlags(): TutorialFlags {
-    const key = getDataTypeKey(GameDataType.TUTORIALS);
-    const ret: TutorialFlags = {};
-    Object.values(Tutorial)
-      .map((tutorial) => tutorial as Tutorial)
-      .forEach((tutorial) => (ret[Tutorial[tutorial]] = false));
-
-    if (!localStorage.hasOwnProperty(key)) {
-      return ret;
-    }
-
-    const tutorials = JSON.parse(localStorage.getItem(key)!); // TODO: is this bang correct?
-
-    for (const tutorial of Object.keys(tutorials)) {
-      ret[tutorial] = tutorials[tutorial];
-    }
-
-    return ret;
+  /**
+   * Checks if the given tutorial is marked as seen in local storage
+   * @param tutorial the {@linkcode Tutorial} to get the flag for
+   * @returns `true` if the tutorial has already been seen, `false` otherwise
+   */
+  public isSeenTutorial(tutorial: Tutorial): boolean {
+    return this.getSeenTutorialsSet().has(tutorial) ?? false;
   }
 
   public saveSeenDialogue(dialogue: string): boolean {
@@ -864,6 +780,7 @@ export class GameData {
     return ret;
   }
 
+  // Note: changing this requires testing run history (and updating `GameOverPhase.getRunHistoryEntry()` if necessary)
   public getSessionSaveData(): SessionSaveData {
     return {
       seed: globalScene.seed,
@@ -984,7 +901,7 @@ export class GameData {
           globalScene.newArena(sessionData.arena.biome);
 
           const battleType = sessionData.battleType || 0;
-          const trainerConfig = sessionData.trainer ? trainerConfigs[sessionData.trainer.trainerType] : null;
+          const trainerConfig = sessionData.trainer ? allTrainerConfigs[sessionData.trainer.trainerType] : null;
           const mysteryEncounterType =
             sessionData.mysteryEncounterType !== -1 ? sessionData.mysteryEncounterType : undefined;
           const battle = globalScene.newBattle(
@@ -1084,10 +1001,11 @@ export class GameData {
   }
 
   /**
-   * Delete the session data at the given slot when overwriting a save file
+   * Delete the session data at the given slot when overwriting a save file.
+   *
    * For deleting the session of a finished run, use {@linkcode tryClearSession}
    * @param slotId the slot to clear
-   * @returns Promise with result `true` if the session was deleted successfully, `false` otherwise
+   * @returns `Promise` with result `true` if the session was deleted successfully, `false` otherwise
    */
   deleteSession(slotId: number): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
@@ -1121,9 +1039,13 @@ export class GameData {
     });
   }
 
-  /* Defines a localStorage item 'daily' to check on clears, offline implementation of savedata/newclear API
-  If a GameModes clear other than Daily is checked, newClear = true as usual
-  If a Daily mode is cleared, checks if it was already cleared before, based on seed, and returns true only to new daily clear runs */
+  /**
+   * Defines a localStorage item 'daily' to check on clears, offline implementation of savedata/newclear API.
+   *
+   * If a game mode other than Daily is checked, `newClear` = `true` as usual.
+   *
+   * If a Daily mode is cleared, checks if it was already cleared before based on seed, and returns `true` only to new daily clear runs.
+   */
   offlineNewClear(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       const sessionData = this.getSessionSaveData();
@@ -1152,8 +1074,10 @@ export class GameData {
   }
 
   /**
-   * Attempt to clear session data after the end of a run
-   * After session data is removed, attempt to update user info so the menu updates
+   * Attempt to clear session data after the end of a run.
+   *
+   * After session data is removed, attempt to update user info so the menu updates.
+   *
    * To delete an unfinished run instead, use {@linkcode deleteSession}
    */
   async tryClearSession(slotId: number): Promise<[success: boolean, newClear: boolean]> {
@@ -1216,12 +1140,6 @@ export class GameData {
           if (md?.className === "ExpBalanceModifier") {
             // Temporarily limit EXP Balance until it gets reworked
             md.stackCount = Math.min(md.stackCount, 4);
-          }
-          if (
-            (md instanceof Modifier.EnemyAttackStatusEffectChanceModifier && md.effect === StatusEffect.FREEZE)
-            || md.effect === StatusEffect.SLEEP
-          ) {
-            continue;
           }
           ret.push(new PersistentModifierData(md, player));
         }
@@ -1352,7 +1270,7 @@ export class GameData {
         const blob = new Blob([encryptedData.toString()], { type: "text/json" });
         const link = document.createElement("a");
         link.href = window.URL.createObjectURL(blob);
-        link.download = `${dataKey}.${SAVE_FILE_EXTENSION}`;
+        link.download = `${dataKey}.${APP_ABBREVIATION}.${SAVE_FILE_EXTENSION}`;
         link.click();
         link.remove();
       };
@@ -1385,7 +1303,7 @@ export class GameData {
     });
   }
 
-  public importData(dataType: GameDataType, slotId: number = 0): void {
+  public importData(dataType: GameDataType, slotId: number = 0, confirmWindowXOffset?: number): void {
     const dataKey = `${getDataTypeKey(dataType, slotId)}_${loggedInUser?.username}`;
 
     let saveFile: any = document.getElementById("saveFile");
@@ -1438,7 +1356,7 @@ export class GameData {
           }
 
           const displayError = (error: string) =>
-            globalScene.ui.showText(error, null, () => globalScene.ui.showText("", 0), fixedInt(1500));
+            globalScene.ui.showText(error, null, () => globalScene.ui.showText("", 0), fixedNumber(1500));
           dataName = dataName!; // tell TS compiler that dataName is defined!
 
           if (!valid) {
@@ -1446,57 +1364,55 @@ export class GameData {
               `Your ${dataName} data could not be loaded. It may be corrupted.`,
               null,
               () => globalScene.ui.showText("", 0),
-              fixedInt(1500),
+              fixedNumber(1500),
             );
           }
 
+          // TODO: move this outside of game data
+          const importDataConfirmOptions: ConfirmModeConfig = {
+            yesHandler: () => {
+              localStorage.setItem(dataKey, encrypt(dataStr, bypassLogin));
+
+              if (!bypassLogin && dataType < GameDataType.SETTINGS) {
+                updateUserInfo().then((success) => {
+                  if (!success[0]) {
+                    return displayError(`Could not contact the server. Your ${dataName} data could not be imported.`);
+                  }
+                  const { trainerId, secretId } = this;
+                  let updatePromise: Promise<string | null>;
+                  if (dataType === GameDataType.SESSION) {
+                    updatePromise = api.savedata.session.update(
+                      { slot: slotId, trainerId, secretId, clientSessionId },
+                      dataStr,
+                    );
+                  } else {
+                    updatePromise = api.savedata.system.update({ trainerId, secretId, clientSessionId }, dataStr);
+                  }
+                  updatePromise.then((error) => {
+                    if (error) {
+                      console.error(error);
+                      return displayError(
+                        `An error occurred while updating ${dataName} data. Please contact the administrator.`,
+                      );
+                    }
+                    window.location = window.location;
+                  });
+                });
+              } else {
+                window.location = window.location;
+              }
+            },
+            noHandler: () => {
+              globalScene.ui.revertMode();
+              globalScene.ui.showText("", 0);
+            },
+            xOffset: confirmWindowXOffset,
+          };
           globalScene.ui.showText(
             `Your ${dataName} data will be overridden and the page will reload. Proceed?`,
             null,
             () => {
-              globalScene.ui.setOverlayMode(
-                Mode.CONFIRM,
-                () => {
-                  localStorage.setItem(dataKey, encrypt(dataStr, bypassLogin));
-
-                  if (!bypassLogin && dataType < GameDataType.SETTINGS) {
-                    updateUserInfo().then((success) => {
-                      if (!success[0]) {
-                        return displayError(
-                          `Could not contact the server. Your ${dataName} data could not be imported.`,
-                        );
-                      }
-                      const { trainerId, secretId } = this;
-                      let updatePromise: Promise<string | null>;
-                      if (dataType === GameDataType.SESSION) {
-                        updatePromise = api.savedata.session.update(
-                          { slot: slotId, trainerId, secretId, clientSessionId },
-                          dataStr,
-                        );
-                      } else {
-                        updatePromise = api.savedata.system.update({ trainerId, secretId, clientSessionId }, dataStr);
-                      }
-                      updatePromise.then((error) => {
-                        if (error) {
-                          console.error(error);
-                          return displayError(
-                            `An error occurred while updating ${dataName} data. Please contact the administrator.`,
-                          );
-                        }
-                        window.location = window.location;
-                      });
-                    });
-                  } else {
-                    window.location = window.location;
-                  }
-                },
-                () => {
-                  globalScene.ui.revertMode();
-                  globalScene.ui.showText("", 0);
-                },
-                false,
-                -98,
-              );
+              globalScene.ui.setOverlayMode(UiMode.CONFIRM, importDataConfirmOptions);
             },
           );
         };

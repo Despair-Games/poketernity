@@ -6,24 +6,19 @@ import {
   getStatusEffectObtainText,
   getStatusEffectOverlapText,
 } from "#app/data/status-effect";
-import { MoveResult } from "#app/field/pokemon";
+import { MoveResult } from "#enums/move-result";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
 import { mockI18next } from "#test/testUtils/testUtils";
-import i18next from "i18next";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 const pokemonName = "PKM";
 const sourceText = "SOURCE";
 
 describe("Status Effect Messages", () => {
-  beforeAll(() => {
-    i18next.init();
-  });
-
   describe("NONE", () => {
     const statusEffect = StatusEffect.NONE;
 
@@ -31,7 +26,6 @@ describe("Status Effect Messages", () => {
       mockI18next();
 
       const text = getStatusEffectObtainText(statusEffect, pokemonName);
-      console.log("text:", text);
       expect(text).toBe("");
 
       const emptySourceText = getStatusEffectObtainText(statusEffect, pokemonName, "");
@@ -326,9 +320,9 @@ describe("Status Effects", () => {
 
       game.override
         .enemySpecies(Species.MAGIKARP)
-        .enemyMoveset(Moves.SPLASH)
+        .enemyMoveset(MoveId.SPLASH)
         .enemyAbility(Abilities.BALL_FETCH)
-        .moveset([Moves.QUICK_ATTACK])
+        .moveset([MoveId.QUICK_ATTACK])
         .ability(Abilities.BALL_FETCH)
         .statusEffect(StatusEffect.PARALYSIS);
     });
@@ -336,7 +330,7 @@ describe("Status Effects", () => {
     it("causes the pokemon's move to fail when activated", async () => {
       await game.classicMode.startBattle([Species.FEEBAS]);
 
-      game.move.select(Moves.QUICK_ATTACK);
+      game.move.select(MoveId.QUICK_ATTACK);
       await game.move.forceStatusActivation(true);
       await game.toNextTurn();
 
@@ -362,13 +356,13 @@ describe("Status Effects", () => {
     beforeEach(() => {
       game = new GameManager(phaserGame);
       game.override
-        .moveset([Moves.SPLASH])
+        .moveset([MoveId.SPLASH])
         .ability(Abilities.BALL_FETCH)
         .battleType("single")
         .disableCrits()
         .enemySpecies(Species.MAGIKARP)
         .enemyAbility(Abilities.BALL_FETCH)
-        .enemyMoveset(Moves.SPLASH);
+        .enemyMoveset(MoveId.SPLASH);
     });
 
     it("should last the appropriate number of turns", async () => {
@@ -377,27 +371,65 @@ describe("Status Effects", () => {
       const player = game.scene.getPlayerPokemon()!;
       player.status = new Status(StatusEffect.SLEEP, 0, 4);
 
-      game.move.select(Moves.SPLASH);
+      game.move.select(MoveId.SPLASH);
       await game.toNextTurn();
 
       expect(player.status.effect).toBe(StatusEffect.SLEEP);
 
-      game.move.select(Moves.SPLASH);
+      game.move.select(MoveId.SPLASH);
       await game.toNextTurn();
 
       expect(player.status.effect).toBe(StatusEffect.SLEEP);
 
-      game.move.select(Moves.SPLASH);
+      game.move.select(MoveId.SPLASH);
       await game.toNextTurn();
 
       expect(player.status.effect).toBe(StatusEffect.SLEEP);
       expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
 
-      game.move.select(Moves.SPLASH);
+      game.move.select(MoveId.SPLASH);
       await game.toNextTurn();
 
       expect(player.status?.effect).toBeUndefined();
       expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
+    });
+  });
+
+  describe("Behavior", () => {
+    let phaserGame: Phaser.Game;
+    let game: GameManager;
+
+    beforeAll(() => {
+      phaserGame = new Phaser.Game({
+        type: Phaser.HEADLESS,
+      });
+    });
+
+    afterEach(() => {
+      game.phaseInterceptor.restoreOg();
+    });
+
+    beforeEach(() => {
+      game = new GameManager(phaserGame);
+      game.override
+        .moveset([MoveId.SPLASH])
+        .ability(Abilities.BALL_FETCH)
+        .battleType("single")
+        .disableCrits()
+        .enemySpecies(Species.MAGIKARP)
+        .enemyAbility(Abilities.BALL_FETCH)
+        .enemyMoveset(MoveId.NUZZLE)
+        .enemyLevel(2000);
+    });
+
+    it("should not inflict a 0 HP mon with a status", async () => {
+      await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+
+      const player = game.field.getPlayerPokemon();
+      player.hp = 0;
+
+      expect(player.trySetStatus(StatusEffect.BURN)).toBe(false);
+      expect(player.status?.effect).not.toBe(StatusEffect.BURN);
     });
   });
 });

@@ -1,7 +1,6 @@
 import type { PokemonDefendCondition } from "#app/@types/PokemonDefendCondition";
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { BattleStat } from "#enums/stat";
@@ -30,15 +29,7 @@ export class PostDefendHpGatedStatStageChangeAbAttr extends PostDefendAbAttr {
     this.selfTarget = selfTarget;
   }
 
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-    _args: any[],
-  ): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     const hpGateFlat: number = Math.ceil(pokemon.getMaxHp() * this.hpGate);
     // TODO: Normalize `attacksReceived[]` checks
     const lastAttackReceived = pokemon.turnData.attacksReceived[pokemon.turnData.attacksReceived.length - 1];
@@ -53,7 +44,7 @@ export class PostDefendHpGatedStatStageChangeAbAttr extends PostDefendAbAttr {
         globalScene.unshiftPhase(
           new StatStageChangePhase(
             (this.selfTarget ? pokemon : attacker).getBattlerIndex(),
-            true,
+            pokemon,
             this.stats,
             this.stages,
           ),

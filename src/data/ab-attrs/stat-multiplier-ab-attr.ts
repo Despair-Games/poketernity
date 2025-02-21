@@ -2,13 +2,14 @@ import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition"
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { BattleStat } from "#enums/stat";
 import { AbAttr } from "./ab-attr";
 
 /**
  * Ability attribute that multiplies a Pokemon's stat by a factor
  * Abilities with this attribute:
- ```text
+ ```
 +-----------------------+-------+--------+----------------------------------+
 |        Ability        | Stat  | Factor |              Notes               |
 +-----------------------+-------+--------+----------------------------------+
@@ -29,6 +30,7 @@ import { AbAttr } from "./ab-attr";
 |                       | SPDEF |    1.5 |                                  |
 | Defeatist             | ATK   |    0.5 | Needs to be at less than half HP |
 |                       | SPATK |    0.5 |                                  |
+| Fur Coat              | DEF   |      2 |                                  |
 | Grass Pelt            | DEF   |    1.5 | In grassy terrain only           |
 | Surge Surfer          | SPD   |      2 | In electric terrain only         |
 | Orichalum Pulse       | ATK   |   1.33 | In sun only                      |
@@ -37,28 +39,38 @@ import { AbAttr } from "./ab-attr";
 ```
  */
 export class StatMultiplierAbAttr extends AbAttr {
-  public stat: BattleStat;
-  private readonly multiplier: number;
-  private readonly condition?: PokemonAttackCondition;
+  protected stat: BattleStat;
+  protected readonly multiplier: number;
+  protected readonly condition?: PokemonAttackCondition;
 
   constructor(stat: BattleStat, multiplier: number, condition?: PokemonAttackCondition) {
-    super(false);
+    super();
+    this._flags.add(AbAttrFlag.STAT_MULTIPLIER);
 
     this.stat = stat;
     this.multiplier = multiplier;
     this.condition = condition;
   }
 
-  applyStatStage(
+  /**
+   * Applies a multiplier to a given stat on the source if conditions are met.
+   * @param pokemon The {@linkcode Pokemon} with this ability
+   * @param simulated If `true`, suppresses changes to game state
+   * @param stat The {@linkcode BattleStat} being evaluated
+   * @param statValue A {@linkcode NumberHolder} containing the value of the evaluated stat
+   * @param move The {@linkcode Move} being used at the time of evaluation
+   * @param target The {@linkcode Pokemon} targeted by the move
+   * @returns `true` if this attribute's multiplier applies to the evaluated stat
+   */
+  override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     stat: BattleStat,
     statValue: NumberHolder,
-    args: any[],
+    move?: Move,
+    target?: Pokemon,
   ): boolean {
-    const move = args[0] as Move;
-    if (stat === this.stat && (!this.condition || this.condition(pokemon, null, move))) {
+    if (stat === this.stat && (!this.condition || this.condition(pokemon, target, move))) {
       statValue.value *= this.multiplier;
       return true;
     }

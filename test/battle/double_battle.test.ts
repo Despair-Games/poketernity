@@ -1,12 +1,11 @@
-import { BattlerIndex } from "#app/battle";
-import { Status } from "#app/data/status-effect";
-import { GameModes, getGameMode } from "#app/game-mode";
+import { BattlerIndex } from "#enums/battler-index";
+import { getGameMode } from "#app/game-mode";
+import { GameModes } from "#enums/game-modes";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -31,8 +30,8 @@ describe("Double Battles", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("double")
-      .moveset(Moves.SPLASH)
-      .enemyMoveset(Moves.SPLASH)
+      .moveset(MoveId.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .enemySpecies(Species.MAGIKARP)
       .ability(Abilities.BALL_FETCH)
       .enemyAbility(Abilities.BALL_FETCH);
@@ -43,12 +42,11 @@ describe("Double Battles", () => {
   it("3v2 edge case: player summons 2 pokemon on the next battle after being fainted and revived", async () => {
     await game.classicMode.startBattle([Species.BULBASAUR, Species.CHARIZARD, Species.SQUIRTLE]);
 
-    game.move.select(Moves.SPLASH);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.SPLASH);
+    game.move.select(MoveId.SPLASH, 1);
 
     for (const pokemon of game.scene.getPlayerField()) {
-      pokemon.hp = 0;
-      pokemon.status = new Status(StatusEffect.FAINT);
+      pokemon.faint();
       expect(pokemon.isFainted()).toBe(true);
     }
 
@@ -82,7 +80,7 @@ describe("Double Battles", () => {
     for (let i = 0; i < DOUBLE_CHANCE; i++) {
       rngSweepProgress = (i + 0.5) / DOUBLE_CHANCE;
 
-      game.move.select(Moves.SPLASH);
+      game.move.select(MoveId.SPLASH);
       await game.doKillOpponents();
       await game.toNextWave();
 
@@ -102,8 +100,8 @@ describe("Double Battles", () => {
 
     const [, milotic] = game.scene.getPlayerField();
 
-    game.move.select(Moves.MEMENTO, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SURF, 1);
+    game.move.select(MoveId.MEMENTO, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.SURF, 1);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
     await game.toNextTurn();
 

@@ -1,20 +1,23 @@
+import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
 import { globalScene } from "#app/global-scene";
-import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
+import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import { SwitchSummonPhase } from "./switch-summon-phase";
 
 export class ReturnPhase extends SwitchSummonPhase {
+  override readonly id = PhaseId.RETURN;
+
   constructor(fieldIndex: number) {
     super(SwitchType.SWITCH, fieldIndex, -1, true);
   }
 
-  override switchAndSummon(): void {
+  protected override switchAndSummon(): void {
     this.end();
   }
 
-  override summon(): void {}
+  protected override summon(): void {}
 
-  override onEnd(): void {
+  protected override onEnd(): void {
     const pokemon = this.getPokemon();
 
     pokemon.resetSprite();

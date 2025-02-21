@@ -1,4 +1,4 @@
-import { SpeciesFormChangeManualTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeManualTrigger } from "../species-form-change-triggers/species-form-change-manual-trigger";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { PostVictoryAbAttr } from "./post-victory-ab-attr";
@@ -12,7 +12,7 @@ export class PostVictoryFormChangeAbAttr extends PostVictoryAbAttr {
     this.formFunc = formFunc;
   }
 
-  override applyPostVictory(pokemon: Pokemon, _passive: boolean, simulated: boolean, _args: any[]): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean): boolean {
     const formIndex = this.formFunc(pokemon);
     if (formIndex !== pokemon.formIndex) {
       if (!simulated) {

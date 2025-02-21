@@ -4,9 +4,8 @@ import {
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
   setEncounterRewards,
-  transitionMysteryEncounterIntroVisuals,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { trainerConfigs } from "#app/data/trainer-config";
+import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
@@ -20,9 +19,10 @@ import type { IEggOptions } from "#app/data/egg";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";
-import { ModifierTier } from "#app/modifier/modifier-tier";
-import { modifierTypes } from "#app/modifier/modifier-type";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
+import { ModifierTier } from "#enums/modifier-tier";
+import { modifierTypes } from "#app/modifier/modifier-types";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/aTrainersTest";
@@ -104,7 +104,7 @@ export const ATrainersTestEncounter: MysteryEncounter = MysteryEncounterBuilder.
     encounter.misc = { trainerType, trainerNameKey, trainerEggDescription: eggDescription };
 
     // Trainer config
-    const trainerConfig = trainerConfigs[trainerType].clone();
+    const trainerConfig = allTrainerConfigs[trainerType].clone();
     const trainerSpriteKey = trainerConfig.getSpriteKey();
     encounter.enemyPartyConfigs.push({
       levelAdditiveModifier: 1,

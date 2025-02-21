@@ -1,37 +1,36 @@
-import type { BattlerIndex } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
+import type { CommonAnim } from "#enums/common-anim";
+import { CommonBattleAnim } from "#app/data/battle-anims/common-battle-anim";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { globalScene } from "#app/global-scene";
-import type { CommonAnim } from "#app/data/battle-anims";
-import { CommonBattleAnim } from "#app/data/battle-anims";
-import { PokemonPhase } from "./pokemon-phase";
+import { PhaseId } from "#enums/phase-id";
 
+/**
+ * Plays a {@linkcode CommonBattleAnim}
+ * @extends PokemonPhase
+ */
 export class CommonAnimPhase extends PokemonPhase {
-  private anim: CommonAnim | null;
-  private targetIndex?: BattlerIndex;
-  private playOnEmptyField: boolean;
+  /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode CommonAnimPhase} is extended by other phases */
+  override readonly id: PhaseId = PhaseId.COMMON_ANIM;
 
-  constructor(
-    battlerIndex?: BattlerIndex,
-    targetIndex?: BattlerIndex,
-    anim: CommonAnim | null = null,
-    playOnEmptyField: boolean = false,
-  ) {
+  private anim: CommonAnim | null;
+  private readonly targetIndex?: BattlerIndex;
+
+  constructor(battlerIndex?: BattlerIndex, targetIndex?: BattlerIndex, anim: CommonAnim | null = null) {
     super(battlerIndex);
 
     this.anim = anim;
     this.targetIndex = targetIndex;
-    this.playOnEmptyField = playOnEmptyField;
   }
 
-  setAnimation(anim: CommonAnim) {
+  public setAnimation(anim: CommonAnim): void {
     this.anim = anim;
   }
 
-  override start() {
-    const target =
-      this.targetIndex !== undefined
-        ? (this.player ? globalScene.getEnemyField() : globalScene.getPlayerField())[this.targetIndex]
-        : this.getPokemon();
-    new CommonBattleAnim(this.anim, this.getPokemon(), target).play(false, () => {
+  public override start(): void {
+    const user = this.getPokemon();
+    const target = globalScene.getFieldPokemonByBattlerIndex(this.targetIndex) ?? user;
+    new CommonBattleAnim(this.anim, user, target).play(false, () => {
       this.end();
     });
   }

@@ -5,19 +5,22 @@ import type { Pokemon } from "#app/field/pokemon";
 import { type Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 
+/**
+ * Attribute implementing {@link https://bulbapedia.bulbagarden.net/wiki/Psycho_Shift_(move) | Psycho Shift}'s effect.
+ * Passes the user's status effect onto the target, then heals the user.
+ * @extends MoveEffectAttr
+ */
 export class PsychoShiftEffectAttr extends MoveEffectAttr {
   constructor() {
     super(false);
   }
 
-  /**
-   * Applies the effect of Psycho Shift to its target
-   * Psycho Shift takes the user's status effect and passes it onto the target. The user is then healed after the move has been successfully executed.
-   * @returns `true` if Psycho Shift's effect is able to be applied to the target
-   */
-  override apply(user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
-    const statusToApply: StatusEffect | undefined =
-      user.status?.effect ?? (user.hasAbility(Abilities.COMATOSE) ? StatusEffect.SLEEP : undefined);
+  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
+    const statusToApply = this.getStatusToApply(user);
+
+    if (!statusToApply) {
+      return false;
+    }
 
     if (target.status) {
       return false;
@@ -35,6 +38,11 @@ export class PsychoShiftEffectAttr extends MoveEffectAttr {
   }
 
   override getTargetBenefitScore(user: Pokemon, target: Pokemon, _move: Move): number {
-    return !target.status && target.canSetStatus(user.status?.effect, true, false, user) ? -10 : 0;
+    const statusToApply = this.getStatusToApply(user);
+    return !target.status && !!statusToApply && target.canSetStatus(statusToApply, true, false, user) ? -10 : 0;
+  }
+
+  private getStatusToApply(user: Pokemon): StatusEffect | undefined {
+    return user.status?.effect ?? (user.hasAbility(Abilities.COMATOSE) ? StatusEffect.SLEEP : undefined);
   }
 }

@@ -1,20 +1,17 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder, NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
 
 export class PreDefendFullHpEndureAbAttr extends PreDefendAbAttr {
-  override applyPreDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    _attacker: Pokemon,
-    _move: Move,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    const damage: NumberHolder = args[0];
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.PRE_DEFEND_FULL_HP_ENDURE);
+  }
+
+  override apply(pokemon: Pokemon, simulated: boolean, _attacker: Pokemon, _move: Move, damage: NumberHolder): boolean {
     if (
       pokemon.isFullHp()
       && pokemon.getMaxHp() > 1 // Checks if pokemon has Wonder Guard (which forces 1hp)

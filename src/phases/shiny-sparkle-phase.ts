@@ -1,13 +1,16 @@
+import type { BattlerIndex } from "#enums/battler-index";
 import { globalScene } from "#app/global-scene";
-import type { BattlerIndex } from "#app/battle";
-import { PokemonPhase } from "./pokemon-phase";
+import { PokemonPhase } from "./abstract-pokemon-phase";
+import { PhaseId } from "#enums/phase-id";
 
 export class ShinySparklePhase extends PokemonPhase {
+  override readonly id = PhaseId.SHINY_SPARKLE;
+
   constructor(battlerIndex: BattlerIndex) {
     super(battlerIndex);
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     this.getPokemon().sparkle();

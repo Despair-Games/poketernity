@@ -1,8 +1,13 @@
 import MessageUiHandler from "./message-ui-handler";
-import { TextStyle, addTextObject } from "./text";
-import { Mode } from "./ui";
+import { addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
 import { Button } from "#enums/buttons";
 import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
+import { GAME_HEIGHT } from "#app/ui-constants";
+import { type EvolutionPhase } from "#app/phases/evolution-phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * A handler for Pokemon form change and evolution scenes
@@ -13,22 +18,20 @@ export default class FormChangeSceneHandler extends MessageUiHandler {
   public messageBg: Phaser.GameObjects.Image;
   public messageContainer: Phaser.GameObjects.Container;
   public canCancel: boolean;
-  public cancelled: boolean;
 
   constructor() {
-    super(Mode.FORM_CHANGE_SCENE);
+    super(UiMode.FORM_CHANGE_SCENE);
   }
 
   setup() {
     this.canCancel = false;
-    this.cancelled = false;
 
     const ui = this.getUi();
 
-    this.container = globalScene.add.container(0, -globalScene.game.canvas.height / 6);
+    this.container = globalScene.add.container(0, -GAME_HEIGHT);
     ui.add(this.container);
 
-    const messageBg = globalScene.add.sprite(0, 0, "bg", globalScene.windowType);
+    const messageBg = globalScene.add.sprite(0, 0, "battle_message_box", settings.display.uiWindowStyle);
     messageBg.setOrigin(0, 1);
     messageBg.setVisible(false);
     ui.add(messageBg);
@@ -65,8 +68,12 @@ export default class FormChangeSceneHandler extends MessageUiHandler {
   }
 
   processInput(button: Button): boolean {
-    if (this.canCancel && !this.cancelled && button === Button.CANCEL) {
-      this.cancelled = true;
+    if (this.canCancel && button === Button.CANCEL) {
+      this.canCancel = false;
+      const currentPhase = globalScene.getCurrentPhase();
+      if (currentPhase?.is<EvolutionPhase>(PhaseId.EVOLUTION)) {
+        currentPhase.cancelEvolution();
+      }
       return true;
     }
 
@@ -89,7 +96,6 @@ export default class FormChangeSceneHandler extends MessageUiHandler {
   override clear() {
     this.clearText();
     this.canCancel = false;
-    this.cancelled = false;
     this.container.removeAll(true);
     this.messageContainer.setVisible(false);
     this.messageBg.setVisible(false);

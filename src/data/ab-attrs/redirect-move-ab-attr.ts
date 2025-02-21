@@ -1,21 +1,19 @@
-import { allMoves } from "#app/data/all-moves";
-import { MoveTarget } from "../../enums/move-target";
+import { allMoves } from "#app/data/data-lists";
+import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder, NumberHolder } from "#app/utils";
-import type { Moves } from "#enums/moves";
+import type { NumberHolder } from "#app/utils";
+import type { MoveId } from "#enums/move-id";
 import { AbAttr } from "./ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class RedirectMoveAbAttr extends AbAttr {
-  override apply(
-    pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    const move: Moves = args[0];
-    if (this.canRedirect(move)) {
-      const target = args[1] as NumberHolder;
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.REDIRECT_MOVE);
+  }
+
+  override apply(pokemon: Pokemon, _simulated: boolean, moveId: MoveId, target: NumberHolder): boolean {
+    if (this.canRedirect(moveId)) {
       const newTarget = pokemon.getBattlerIndex();
       if (target.value !== newTarget) {
         target.value = newTarget;
@@ -26,7 +24,7 @@ export class RedirectMoveAbAttr extends AbAttr {
     return false;
   }
 
-  canRedirect(moveId: Moves): boolean {
+  canRedirect(moveId: MoveId): boolean {
     const move = allMoves[moveId];
     return !![MoveTarget.NEAR_OTHER, MoveTarget.OTHER].find((t) => move.moveTarget === t);
   }

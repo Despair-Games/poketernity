@@ -1,6 +1,4 @@
 import type { Abilities } from "#enums/abilities";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
@@ -10,9 +8,7 @@ import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 /**
  * Cures the user's party of non-volatile status conditions, ie. Heal Bell, Aromatherapy
  * @extends MoveEffectAttr
- * @see {@linkcode apply}
  */
-
 export class PartyStatusCureAttr extends MoveEffectAttr {
   /** Message to display after using move */
   private message: string | null;
@@ -20,24 +16,13 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
   private abilityCondition: Abilities;
 
   constructor(message: string | null, abilityCondition: Abilities) {
-    super();
+    super(true);
 
     this.message = message;
     this.abilityCondition = abilityCondition;
   }
 
-  //The same as MoveEffectAttr.canApply, except it doesn't check for the target's HP.
-  override canApply(user: Pokemon, target: Pokemon, move: Move, _args: any[]) {
-    const isTargetValid =
-      (this.selfTarget && user.hp && !user.getTag(BattlerTagType.FRENZY))
-      || (!this.selfTarget && (!target.getTag(BattlerTagType.PROTECTED) || move.hasFlag(MoveFlags.IGNORE_PROTECT)));
-    return !!isTargetValid;
-  }
-
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!this.canApply(user, target, move, args)) {
-      return false;
-    }
+  override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const partyPokemon = user.getParty();
     partyPokemon.forEach((p) => this.cureStatus(p, user.id));
 
@@ -56,7 +41,7 @@ export class PartyStatusCureAttr extends MoveEffectAttr {
   public cureStatus(pokemon: Pokemon, userId: number) {
     if (!pokemon.isOnField() || pokemon.id === userId) {
       // user always cures its own status, regardless of ability
-      pokemon.resetStatus(false);
+      pokemon.resetStatus();
       pokemon.updateInfo();
     } else if (!pokemon.hasAbility(this.abilityCondition)) {
       pokemon.resetStatus();

@@ -1,12 +1,12 @@
 import type { Move } from "#app/data/move";
-import { MoveFlags } from "../../enums/move-flags";
+import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#app/field/pokemon";
+import { HitResult } from "#enums/hit-result";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { toDmgValue } from "#app/utils";
 import i18next from "i18next";
-import { BlockNonDirectDamageAbAttr } from "./block-non-direct-damage-ab-attr";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
   private readonly damageRatio: number;
@@ -17,19 +17,11 @@ export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
     this.damageRatio = damageRatio;
   }
 
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-    _args: any[],
-  ): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (
       !simulated
       && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
-      && !attacker.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)
+      && !attacker.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)
     ) {
       attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), HitResult.OTHER);
       // TODO: This should be handled by `damage()`

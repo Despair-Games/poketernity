@@ -1,4 +1,4 @@
-import { VariantTier } from "#app/enums/variant-tier";
+import { VariantTier } from "#enums/variant-tier";
 
 // Normal Shiny, Rare Shiny, Epic Shiny
 export type Variant = 0 | 1 | 2;
@@ -13,9 +13,6 @@ export type VariantSet = [Variant, Variant, Variant];
 
 // The _masterlist.json but parsed/loaded
 export const variantData: any = {};
-
-/** What the variant color json gets parsed into, see {@linkcode populateVariantColorCache} */
-export const variantColorCache = {};
 
 /**
  * Function to get a color hex number representing a color for a Variant

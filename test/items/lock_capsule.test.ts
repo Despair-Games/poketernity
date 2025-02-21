@@ -1,8 +1,8 @@
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
-import { ModifierTier } from "#app/modifier/modifier-tier";
+import { MoveId } from "#enums/move-id";
+import { ModifierTier } from "#enums/modifier-tier";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phase from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -27,7 +27,7 @@ describe("Items - Lock Capsule", () => {
     game.override
       .battleType("single")
       .startingLevel(200)
-      .moveset([Moves.SURF])
+      .moveset([MoveId.SURF])
       .enemyAbility(Abilities.BALL_FETCH)
       .startingModifier([{ name: "LOCK_CAPSULE" }]);
   });
@@ -35,13 +35,15 @@ describe("Items - Lock Capsule", () => {
   it("doesn't set the cost of common tier items to 0", async () => {
     await game.classicMode.startBattle();
     game.scene.overridePhase(
-      new SelectModifierPhase(0, undefined, {
-        guaranteedModifierTiers: [ModifierTier.COMMON, ModifierTier.COMMON, ModifierTier.COMMON],
-        fillRemaining: false,
+      new SelectModifierPhase({
+        customModifierSettings: {
+          guaranteedModifierTiers: [ModifierTier.COMMON, ModifierTier.COMMON, ModifierTier.COMMON],
+          fillRemaining: false,
+        },
       }),
     );
 
-    game.onNextPrompt("SelectModifierPhase", Mode.MODIFIER_SELECT, () => {
+    game.onNextPrompt("SelectModifierPhase", UiMode.MODIFIER_SELECT, () => {
       const selectModifierPhase = game.scene.getCurrentPhase() as SelectModifierPhase;
       const rerollCost = selectModifierPhase.getRerollCost(true);
       expect(rerollCost).toBe(150);

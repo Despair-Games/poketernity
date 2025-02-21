@@ -1,20 +1,14 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 
 export class SyncEncounterNatureAbAttr extends AbAttr {
   constructor() {
     super(false);
+    this._flags.add(AbAttrFlag.SYNC_ENCOUNTER_NATURE);
   }
 
-  override apply(
-    pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    const opponent: Pokemon = args[0];
+  override apply(pokemon: Pokemon, _simulated: boolean, opponent: Pokemon): boolean {
     opponent.setNature(pokemon.getNature());
 
     return true;

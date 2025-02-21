@@ -1,24 +1,21 @@
 import { type Ability } from "#app/data/ability";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
-import { UnsuppressableAbilityAbAttr } from "./unsuppressable-ability-ab-attr";
 
 export class SuppressFieldAbilitiesAbAttr extends AbAttr {
   constructor() {
     super(false);
+    this._flags.add(AbAttrFlag.SUPPRESS_FIELD_ABILITIES);
   }
 
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    cancelled: BooleanHolder,
-    args: any[],
-  ): boolean {
-    const ability = args[0] as Ability;
-    if (!ability.hasAttr(UnsuppressableAbilityAbAttr) && !ability.hasAttr(SuppressFieldAbilitiesAbAttr)) {
-      cancelled.value = true;
+  override apply(_pokemon: Pokemon, _simulated: boolean, suppressed: BooleanHolder, ability: Ability): boolean {
+    if (
+      !ability.hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY)
+      && !ability.hasAttrFlag(AbAttrFlag.SUPPRESS_FIELD_ABILITIES)
+    ) {
+      suppressed.value = true;
       return true;
     }
     return false;

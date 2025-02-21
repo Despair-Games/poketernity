@@ -1,20 +1,27 @@
-import { Mode } from "./ui";
-import { TextStyle, addTextObject, getEggTierTextTint, getTextStyleOptions } from "./text";
+import { UiMode } from "#enums/ui-mode";
+import { addTextObject, getEggTierTextTint, getTextStyleOptions } from "./text";
+import { TextStyle } from "#enums/text-style";
 import MessageUiHandler from "./message-ui-handler";
-import { getEnumValues, getEnumKeys, fixedInt, randSeedShuffle } from "#app/utils";
+import { getEnumValues, getEnumKeys, fixedNumber, randSeedShuffle } from "#app/utils";
 import type { IEggOptions } from "../data/egg";
 import { Egg, getLegendaryGachaSpeciesForTimestamp } from "../data/egg";
-import { VoucherType, getVoucherTypeIcon } from "../system/voucher";
-import { getPokemonSpecies } from "../data/pokemon-species";
+import { getVoucherTypeIcon } from "../system/voucher";
+import { VoucherType } from "#enums/voucher-type";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { addWindow } from "./ui-theme";
-import { Tutorial, handleTutorial } from "../tutorial";
+import { handleTutorial } from "../tutorial";
+import { Tutorial } from "#enums/tutorial";
 import { Button } from "#enums/buttons";
 import Overrides from "#app/overrides";
-import { GachaType } from "#app/enums/gacha-types";
+import { GachaType } from "#enums/gacha-types";
 import i18next from "i18next";
 import { EggTier } from "#enums/egg-type";
 import { globalScene } from "#app/global-scene";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
+/**
+ * TODO: this should extend AbstractOptionSelectUiHandler
+ */
 export default class EggGachaUiHandler extends MessageUiHandler {
   private eggGachaContainer: Phaser.GameObjects.Container;
   private eggGachaMessageBox: Phaser.GameObjects.NineSlice;
@@ -38,10 +45,11 @@ export default class EggGachaUiHandler extends MessageUiHandler {
   private summaryFinished: boolean;
   private defaultText: string;
 
+  // TODO scaling: find a way to improve this. currently needed for japanese
   private scale: number = 0.1666666667;
 
   constructor() {
-    super(Mode.EGG_GACHA);
+    super(UiMode.EGG_GACHA);
 
     this.gachaContainers = [];
     this.gachaKnobs = [];
@@ -54,15 +62,15 @@ export default class EggGachaUiHandler extends MessageUiHandler {
 
   setup() {
     this.gachaCursor = 0;
-    this.scale = getTextStyleOptions(TextStyle.WINDOW, globalScene.uiTheme).scale;
+    this.scale = getTextStyleOptions(TextStyle.WINDOW).scale;
 
     const ui = this.getUi();
 
-    this.eggGachaContainer = globalScene.add.container(0, -globalScene.game.canvas.height / 6);
+    this.eggGachaContainer = globalScene.add.container(0, -GAME_HEIGHT);
     this.eggGachaContainer.setVisible(false);
     ui.add(this.eggGachaContainer);
 
-    const bg = globalScene.add.nineslice(0, 0, "default_bg", undefined, 320, 180, 0, 0, 16, 0);
+    const bg = globalScene.add.nineslice(0, 0, "default_bg", undefined, GAME_WIDTH, GAME_HEIGHT, 0, 0, 16, 0);
     bg.setOrigin(0, 0);
 
     this.eggGachaContainer.add(bg);
@@ -203,7 +211,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
 
     this.eggGachaOptionsContainer = globalScene.add.container();
 
-    this.eggGachaOptionsContainer = globalScene.add.container(globalScene.game.canvas.width / 6, 148);
+    this.eggGachaOptionsContainer = globalScene.add.container(GAME_WIDTH, 148);
     this.eggGachaContainer.add(this.eggGachaOptionsContainer);
 
     this.eggGachaOptionSelectBg = addWindow(0, 0, 96, 16 + 576 * this.scale);
@@ -273,7 +281,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     this.eggGachaContainer.add(this.eggGachaOptionsContainer);
 
     new Array(getEnumKeys(VoucherType).length).fill(null).map((_, i) => {
-      const container = globalScene.add.container(globalScene.game.canvas.width / 6 - 56 * i, 0);
+      const container = globalScene.add.container(GAME_WIDTH - 56 * i, 0);
 
       const bg = addWindow(0, 0, 56, 22);
       bg.setOrigin(1, 0);
@@ -307,7 +315,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
 
     const gachaMessageBoxContainer = globalScene.add.container(0, 148);
 
-    const gachaMessageBox = addWindow(0, 0, 320, 32);
+    const gachaMessageBox = addWindow(0, 0, GAME_WIDTH, 32);
     gachaMessageBox.setOrigin(0, 0);
     gachaMessageBoxContainer.add(gachaMessageBox);
 
@@ -344,7 +352,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
 
     this.eggGachaContainer.setVisible(true);
 
-    handleTutorial(Tutorial.Egg_Gacha);
+    handleTutorial(Tutorial.EGG_GACHA);
 
     return true;
   }
@@ -353,7 +361,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     if (this.transitioning && this.transitionCancelled) {
       delay = Math.ceil(delay / 5);
     }
-    return fixedInt(delay);
+    return fixedNumber(delay);
   }
 
   pull(pullCount: number = 0, count: number = 0, eggs?: Egg[]): void {
@@ -625,11 +633,11 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     }
 
     if (text?.indexOf("\n") === -1) {
-      this.eggGachaMessageBox.setSize(320, 32);
+      this.eggGachaMessageBox.setSize(GAME_WIDTH, 32);
       this.eggGachaMessageBox.setY(0);
       this.message.setY(8);
     } else {
-      this.eggGachaMessageBox.setSize(320, 46);
+      this.eggGachaMessageBox.setSize(GAME_WIDTH, 46);
       this.eggGachaMessageBox.setY(-14);
       this.message.setY(-6);
     }
@@ -638,7 +646,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
   }
 
   showError(text: string): void {
-    this.showText(text, undefined, () => this.showText(this.defaultText), fixedInt(1500));
+    this.showText(text, undefined, () => this.showText(this.defaultText), fixedNumber(1500));
   }
 
   setTransitioning(transitioning: boolean): void {

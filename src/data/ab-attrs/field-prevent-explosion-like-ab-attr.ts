@@ -1,5 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 import i18next from "i18next";
 
@@ -13,6 +14,12 @@ import i18next from "i18next";
 export class FieldPreventExplosionLikeAbAttr extends AbAttr {
   private moveUser: string;
   private moveName: string;
+
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.FIELD_PREVENT_EXPLOSION_LIKE);
+  }
+
   /**
    * Applies the effects of the AbAttr when it is called in {@linkcode failIfDampCondition}
    * @param cancelled a {@linkcode BooleanHolder} that determines if the move should fail
@@ -21,13 +28,13 @@ export class FieldPreventExplosionLikeAbAttr extends AbAttr {
    */
   override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     cancelled: BooleanHolder,
-    args: any[],
+    moveUser: string,
+    moveName: string,
   ): boolean {
-    this.moveUser = args[0];
-    this.moveName = args[1];
+    this.moveUser = moveUser;
+    this.moveName = moveName;
     cancelled.value = true;
     return true;
   }

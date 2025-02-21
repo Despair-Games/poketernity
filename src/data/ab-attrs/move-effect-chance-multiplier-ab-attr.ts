@@ -1,7 +1,8 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder, NumberHolder } from "#app/utils";
-import { Moves } from "#enums/moves";
+import type { NumberHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { MoveId } from "#enums/move-id";
 import { AbAttr } from "./ab-attr";
 
 /**
@@ -14,29 +15,24 @@ export class MoveEffectChanceMultiplierAbAttr extends AbAttr {
 
   constructor(chanceMultiplier: number) {
     super(true);
+    this._flags.add(AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER);
     this.chanceMultiplier = chanceMultiplier;
   }
   /**
-   * @param args [0]: {@linkcode NumberHolder} Move additional effect chance. Has to be higher than or equal to 0.
-   *             [1]: {@linkcode Moves} Move used by the ability user.
-   *             [4]: Whether to show the ability flyout or not
+   * @param moveChance - {@linkcode NumberHolder} containing the additional effect chance. Has to be higher than or equal to 0.
+   * @param move - {@linkcode Move} used by the ability holder.
+   * @param showAbility - Whether to show the ability flyout or not.
    */
   override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
-    _cancelled: BooleanHolder,
-    args: any[],
+    moveChance: NumberHolder,
+    move: Move,
+    showAbility: boolean,
   ): boolean {
-    const moveChance: NumberHolder = args[0];
-    const move: Move = args[1];
-    // const target: Pokemon = args[2];
-    // const selfEffect: boolean = args[3];
-    const showAbility: boolean = args[4];
-
     this.showAbility = showAbility;
 
-    const exceptMoves = [Moves.ORDER_UP, Moves.ELECTRO_SHOT];
+    const exceptMoves = [MoveId.ORDER_UP, MoveId.ELECTRO_SHOT];
     if (moveChance.value <= 0 || exceptMoves.includes(move.id)) {
       return false;
     }

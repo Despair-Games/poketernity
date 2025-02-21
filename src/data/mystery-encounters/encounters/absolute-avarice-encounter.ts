@@ -4,12 +4,13 @@ import {
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
   setEncounterRewards,
-  transitionMysteryEncounterIntroVisuals,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 import type { Pokemon } from "#app/field/pokemon";
-import { EnemyPokemon, PokemonMove } from "#app/field/pokemon";
+import { EnemyPokemon } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import type { BerryModifierType, PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { globalScene } from "#app/global-scene";
@@ -20,24 +21,24 @@ import { PersistentModifierRequirement } from "#app/data/mystery-encounters/myst
 import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { BerryModifier, PokemonInstantReviveModifier } from "#app/modifier/modifier";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
-import { Moves } from "#enums/moves";
+import { type BerryModifier, PokemonInstantReviveModifier } from "#app/modifier/modifier";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { MoveId } from "#enums/move-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { randInt } from "#app/utils";
-import { BattlerIndex } from "#app/battle";
+import { BattlerIndex } from "#enums/battler-index";
 import {
   applyModifierTypeToPlayerPokemon,
   catchPokemon,
   getHighestLevelPlayerPokemon,
 } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { TrainerSlot } from "#app/data/trainer-config";
+import { TrainerSlot } from "#enums/trainer-slot";
 import { PokeballType } from "#enums/pokeball";
 import type HeldModifierConfig from "#app/interfaces/held-modifier-config";
 import type { BerryType } from "#enums/berry-type";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { Stat } from "#enums/stat";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import i18next from "i18next";
 
 /** the i18n namespace for this encounter */
@@ -191,7 +192,7 @@ export const AbsoluteAvariceEncounter: MysteryEncounter = MysteryEncounterBuilde
     globalScene.loadSe("Follow Me", "battle_anims", "Follow Me.mp3");
 
     // Get all player berry items, remove from party, and store reference
-    const berryItems = globalScene.findModifiers((m) => m instanceof BerryModifier) as BerryModifier[];
+    const berryItems = globalScene.findModifiers((m) => m.isBerryModifier()) as BerryModifier[];
 
     // Sort berries by party member ID to more easily re-add later if necessary
     const berryItemsMap = new Map<number, BerryModifier[]>();
@@ -232,13 +233,13 @@ export const AbsoluteAvariceEncounter: MysteryEncounter = MysteryEncounterBuilde
           isBoss: true,
           bossSegments: 3,
           shiny: false, // Shiny lock because of consistency issues between the different options
-          moveSet: [Moves.THRASH, Moves.BODY_PRESS, Moves.STUFF_CHEEKS, Moves.CRUNCH],
+          moveSet: [MoveId.THRASH, MoveId.BODY_PRESS, MoveId.STUFF_CHEEKS, MoveId.CRUNCH],
           modifierConfigs: bossModifierConfigs,
           tags: [BattlerTagType.MYSTERY_ENCOUNTER_POST_SUMMON],
           mysteryEncounterBattleEffects: (pokemon: Pokemon) => {
             queueEncounterMessage(`${namespace}:option.1.boss_enraged`);
             globalScene.unshiftPhase(
-              new StatStageChangePhase(pokemon.getBattlerIndex(), true, statChangesForBattle, 1),
+              new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, statChangesForBattle, 1),
             );
           },
         },
@@ -256,7 +257,7 @@ export const AbsoluteAvariceEncounter: MysteryEncounter = MysteryEncounterBuilde
 
     // Remove the berries from the party
     // Session has been safely saved at this point, so data won't be lost
-    const berryItems = globalScene.findModifiers((m) => m instanceof BerryModifier) as BerryModifier[];
+    const berryItems = globalScene.findModifiers((m) => m.isBerryModifier()) as BerryModifier[];
     berryItems.forEach((berryMod) => {
       globalScene.removeModifier(berryMod);
     });
@@ -302,7 +303,7 @@ export const AbsoluteAvariceEncounter: MysteryEncounter = MysteryEncounterBuilde
         encounter.startOfBattleEffects.push({
           sourceBattlerIndex: BattlerIndex.ENEMY,
           targets: [BattlerIndex.ENEMY],
-          move: new PokemonMove(Moves.STUFF_CHEEKS),
+          move: new PokemonMove(MoveId.STUFF_CHEEKS),
           ignorePp: true,
         });
 
@@ -375,10 +376,10 @@ export const AbsoluteAvariceEncounter: MysteryEncounter = MysteryEncounterBuilde
         const level = getHighestLevelPlayerPokemon(false, true).level - 2;
         const greedent = new EnemyPokemon(getPokemonSpecies(Species.GREEDENT), level, TrainerSlot.NONE, false, true);
         greedent.moveset = [
-          new PokemonMove(Moves.THRASH),
-          new PokemonMove(Moves.BODY_PRESS),
-          new PokemonMove(Moves.STUFF_CHEEKS),
-          new PokemonMove(Moves.SLACK_OFF),
+          new PokemonMove(MoveId.THRASH),
+          new PokemonMove(MoveId.BODY_PRESS),
+          new PokemonMove(MoveId.STUFF_CHEEKS),
+          new PokemonMove(MoveId.SLACK_OFF),
         ];
         greedent.passive = true;
 

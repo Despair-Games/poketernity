@@ -1,4 +1,4 @@
-import { MoveCategory } from "#app/enums/move-category";
+import { MoveCategory } from "#enums/move-category";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import {
   generateModifierTypeOption,
@@ -7,9 +7,10 @@ import {
   setEncounterExp,
   setEncounterRewards,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import type { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
-import { modifierTypes } from "#app/modifier/modifier-type";
-import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
+import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PokemonMove } from "#app/field/pokemon-move";
+import { modifierTypes } from "#app/modifier/modifier-types";
+import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
@@ -18,7 +19,7 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { Stat } from "#enums/stat";
 import i18next from "i18next";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 
 /** i18n namespace for the encounter */
 const namespace = "mysteryEncounters/fieldTrip";

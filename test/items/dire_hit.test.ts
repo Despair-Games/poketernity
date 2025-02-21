@@ -1,12 +1,12 @@
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phase from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
 import { TempCritBoosterModifier } from "#app/modifier/modifier";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import type ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
 import { Button } from "#enums/buttons";
 import { CommandPhase } from "#app/phases/command-phase";
@@ -33,8 +33,8 @@ describe("Items - Dire Hit", () => {
 
     game.override
       .enemySpecies(Species.MAGIKARP)
-      .enemyMoveset(Moves.SPLASH)
-      .moveset([Moves.POUND])
+      .enemyMoveset(MoveId.SPLASH)
+      .moveset([MoveId.POUND])
       .startingHeldItems([{ name: "DIRE_HIT" }])
       .battleType("single");
   }, 20000);
@@ -46,7 +46,7 @@ describe("Items - Dire Hit", () => {
 
     vi.spyOn(enemyPokemon, "getCritStage");
 
-    game.move.select(Moves.POUND);
+    game.move.select(MoveId.POUND);
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -58,7 +58,7 @@ describe("Items - Dire Hit", () => {
 
     await game.startBattle([Species.PIKACHU]);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
 
     await game.doKillOpponents();
 
@@ -70,7 +70,7 @@ describe("Items - Dire Hit", () => {
     // Forced DIRE_HIT to spawn in the first slot with override
     game.onNextPrompt(
       "SelectModifierPhase",
-      Mode.MODIFIER_SELECT,
+      UiMode.MODIFIER_SELECT,
       () => {
         const handler = game.scene.ui.getHandler() as ModifierSelectUiHandler;
         // Traverse to first modifier slot

@@ -3,15 +3,11 @@ import {
   selectPokemonForOption,
   setEncounterRewards,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { TrainerSlot } from "#app/data/trainer-config";
-import { ModifierTier } from "#app/modifier/modifier-tier";
-import { MusicPreference } from "#app/system/settings/settings";
+import { TrainerSlot } from "#enums/trainer-slot";
+import { ModifierTier } from "#enums/modifier-tier";
 import type { ModifierTypeOption } from "#app/modifier/modifier-type";
-import {
-  getPlayerModifierTypeOptions,
-  ModifierPoolType,
-  regenerateModifierPoolThresholds,
-} from "#app/modifier/modifier-type";
+import { getPlayerModifierTypeOptions, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
@@ -19,22 +15,23 @@ import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-en
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { Species } from "#enums/species";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { allSpecies, getPokemonSpecies } from "#app/data/pokemon-species";
+import { allSpecies } from "#app/data/data-lists";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { getTypeRgb } from "#app/data/type";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { NumberHolder, isNullOrUndefined, randInt, randSeedInt, randSeedShuffle } from "#app/utils";
+import { NumberHolder, isNullOrUndefined, randInt, randItem, randSeedInt, randSeedShuffle } from "#app/utils";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { EnemyPokemon, PokemonMove } from "#app/field/pokemon";
+import { EnemyPokemon } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import {
   HiddenAbilityRateBoosterModifier,
-  PokemonFormChangeItemModifier,
   ShinyRateBoosterModifier,
   SpeciesStatBoosterModifier,
 } from "#app/modifier/modifier";
-import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
+import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
 import PokemonData from "#app/system/pokemon-data";
 import i18next from "i18next";
 import { getGenderSymbol } from "#app/data/gender";
@@ -43,10 +40,10 @@ import { getNatureName } from "#app/data/nature";
 import { getPokeballAtlasKey, getPokeballTintColor } from "#app/data/pokeball";
 import { getEncounterText, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { trainerNamePools } from "#app/data/trainer-names";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { addPokemonDataToDexAndValidateAchievements } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { PokeballType } from "#enums/pokeball";
-import { doShinySparkleAnim } from "#app/field/anims";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/globalTradeSystem";
@@ -126,15 +123,8 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
     const encounter = globalScene.currentBattle.mysteryEncounter!;
 
     // Load bgm
-    let bgmKey: string;
-    if (globalScene.musicPreference === MusicPreference.CONSISTENT) {
-      bgmKey = "mystery_encounter_gen_5_gts";
-      globalScene.loadBgm(bgmKey, `${bgmKey}.mp3`);
-    } else {
-      // Mixed option
-      bgmKey = "mystery_encounter_gen_6_gts";
-      globalScene.loadBgm(bgmKey, `${bgmKey}.mp3`);
-    }
+    const bgmKey = randItem(["mystery_encounter_gen_5_gts", "mystery_encounter_gen_6_gts"]);
+    globalScene.loadBgm(bgmKey, `${bgmKey}.mp3`);
 
     // Load possible trade options
     // Maps current party member's id to 3 EnemyPokemon objects
@@ -215,7 +205,7 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
         const receivedPokemonData: EnemyPokemon = encounter.misc.receivedPokemon;
         const modifiers = tradedPokemon
           .getHeldItems()
-          .filter((m) => !(m instanceof PokemonFormChangeItemModifier) && !(m instanceof SpeciesStatBoosterModifier));
+          .filter((m) => !m.isPokemonFormChangeItemModifier() && !(m instanceof SpeciesStatBoosterModifier));
 
         // Generate a trainer name
         const traderName = generateRandomTraderName();
@@ -336,7 +326,7 @@ export const GlobalTradeSystemEncounter: MysteryEncounter = MysteryEncounterBuil
         const receivedPokemonData: EnemyPokemon = encounter.misc.receivedPokemon;
         const modifiers = tradedPokemon
           .getHeldItems()
-          .filter((m) => !(m instanceof PokemonFormChangeItemModifier) && !(m instanceof SpeciesStatBoosterModifier));
+          .filter((m) => !m.isPokemonFormChangeItemModifier() && !(m instanceof SpeciesStatBoosterModifier));
 
         // Generate a trainer name
         const traderName = generateRandomTraderName();
@@ -506,7 +496,7 @@ function getPokemonTradeOptions(): Map<number, EnemyPokemon[]> {
       });
       tradeOptionsMap.set(pokemon.id, tradeOptions);
     } else {
-      const originalBst = pokemon.calculateBaseStats().reduce((a, b) => a + b, 0);
+      const originalBst = pokemon.getSpeciesForm().getBaseStatTotal();
 
       const tradeOptions: PokemonSpecies[] = [];
       for (let i = 0; i < 3; i++) {
@@ -564,16 +554,10 @@ function generateTradeOption(alreadyUsedSpecies: PokemonSpecies[], originalBst?:
 
 function showTradeBackground() {
   return new Promise<void>((resolve) => {
-    const tradeContainer = globalScene.add.container(0, -globalScene.game.canvas.height / 6);
+    const tradeContainer = globalScene.add.container(0, -GAME_HEIGHT);
     tradeContainer.setName("Trade Background");
 
-    const flyByStaticBg = globalScene.add.rectangle(
-      0,
-      0,
-      globalScene.game.canvas.width / 6,
-      globalScene.game.canvas.height / 6,
-      0,
-    );
+    const flyByStaticBg = globalScene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0);
     flyByStaticBg.setName("Black Background");
     flyByStaticBg.setOrigin(0, 0);
     flyByStaticBg.setVisible(false);
@@ -671,8 +655,6 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
       });
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", tradedPokemon.getSpriteKey());
-      sprite.setPipelineData("shiny", tradedPokemon.shiny);
-      sprite.setPipelineData("variant", tradedPokemon.variant);
       ["spriteColors", "fusionSpriteColors"].map((k) => {
         if (tradedPokemon.summonData?.speciesForm) {
           k += "Base";
@@ -696,8 +678,6 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
       });
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", receivedPokemon.getSpriteKey());
-      sprite.setPipelineData("shiny", receivedPokemon.shiny);
-      sprite.setPipelineData("variant", receivedPokemon.variant);
       ["spriteColors", "fusionSpriteColors"].map((k) => {
         if (receivedPokemon.summonData?.speciesForm) {
           k += "Base";
@@ -965,7 +945,7 @@ function doTradeReceivedSequence(
             onComplete: () => {
               if (receivedPokemon.shiny) {
                 globalScene.time.delayedCall(500, () => {
-                  doShinySparkleAnim(pokemonShinySparkle, receivedPokemon.variant);
+                  globalScene.animations.doShinySparkleAnim(pokemonShinySparkle, receivedPokemon.variant);
                 });
               }
               receivedPokeballSprite.destroy();

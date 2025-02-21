@@ -1,13 +1,13 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BerryModifier, PokemonHeldItemModifier } from "#app/modifier/modifier";
+import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
-import { BlockItemTheftAbAttr } from "#app/data/ab-attrs/block-item-theft-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Removes a random held item (or berry) from target.
@@ -25,22 +25,15 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
     this.berriesOnly = berriesOnly;
   }
 
-  /**
-   *
-   * @param user {@linkcode Pokemon} that used the move
-   * @param target Target {@linkcode Pokemon} that the moves applies to
-   * @param move {@linkcode Move} that is used
-   * @param _args N/A
-   * @returns `True` if an item was removed
-   */
-  override apply(user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     if (!this.berriesOnly && target.isPlayer()) {
       // "Wild Pokemon cannot knock off Player Pokemon's held items" (See Bulbapedia)
       return false;
     }
 
     const cancelled = new BooleanHolder(false);
-    applyAbAttrs(BlockItemTheftAbAttr, target, cancelled); // Check for abilities that block item theft
+
+    applyAbAttrs(AbAttrFlag.BLOCK_ITEM_THEFT, target, false, cancelled);
 
     if (cancelled.value === true) {
       return false;
@@ -50,7 +43,7 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
     let heldItems = this.getTargetHeldItems(target).filter((i) => i.isTransferable);
 
     if (this.berriesOnly) {
-      heldItems = heldItems.filter((m) => m instanceof BerryModifier && m.pokemonId === target.id, target.isPlayer());
+      heldItems = heldItems.filter((m) => m.isBerryModifier() && m.pokemonId === target.id, target.isPlayer());
     }
 
     if (heldItems.length) {
@@ -84,7 +77,7 @@ export class RemoveHeldItemAttr extends MoveEffectAttr {
 
   getTargetHeldItems(target: Pokemon): PokemonHeldItemModifier[] {
     return globalScene.findModifiers(
-      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === target.id,
+      (m) => m.isPokemonHeldItemModifier() && m.pokemonId === target.id,
       target.isPlayer(),
     ) as PokemonHeldItemModifier[];
   }

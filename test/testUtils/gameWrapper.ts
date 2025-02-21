@@ -1,84 +1,40 @@
 import BattleScene from "#app/battle-scene";
-import * as battleScene from "#app/battle-scene";
-import { SESSION_ID_COOKIE } from "#app/constants";
-import { MoveAnim } from "#app/data/battle-anims";
+import { MoveAnim } from "#app/data/battle-anims/move-anim";
 import { Pokemon } from "#app/field/pokemon";
-import { setCookie } from "#app/utils";
-import { blobToString } from "#test/testUtils/gameManagerUtils";
 import { MockClock } from "#test/testUtils/mocks/mockClock";
-import { mockConsoleLog } from "#test/testUtils/mocks/mockConsoleLog";
-import { MockFetch } from "#test/testUtils/mocks/mockFetch";
 import { MockGameObjectCreator } from "#test/testUtils/mocks/mockGameObjectCreator";
-import { MockImage } from "#test/testUtils/mocks/mocksContainer/mockImage";
 import { MockLoader } from "#test/testUtils/mocks/mockLoader";
-import { mockLocalStorage } from "#test/testUtils/mocks/mockLocalStorage";
 import { MockTextureManager } from "#test/testUtils/mocks/mockTextureManager";
 import { MockTimedEventManager } from "#test/testUtils/mocks/mockTimedEventManager";
 import fs from "fs";
 import Phaser from "phaser";
-import InputText from "phaser3-rex-plugins/plugins/inputtext";
 import { vi } from "vitest";
 import { version } from "../../package.json";
+import * as constants from "#app/constants";
 import InputManager = Phaser.Input.InputManager;
 import KeyboardManager = Phaser.Input.Keyboard.KeyboardManager;
 import KeyboardPlugin = Phaser.Input.Keyboard.KeyboardPlugin;
 import GamepadPlugin = Phaser.Input.Gamepad.GamepadPlugin;
 import EventEmitter = Phaser.Events.EventEmitter;
 import UpdateList = Phaser.GameObjects.UpdateList;
-
-Object.defineProperty(window, "localStorage", {
-  value: mockLocalStorage(),
-});
-Object.defineProperty(window, "console", {
-  value: mockConsoleLog(false),
-});
-
-InputText.prototype.setElement = () => null as any;
-InputText.prototype.resize = () => null as any;
-Phaser.GameObjects.Image = MockImage as any;
-window.URL.createObjectURL = (blob: Blob) => {
-  blobToString(blob).then((data: string) => {
-    localStorage.setItem("toExport", data);
-  });
-  return null as any;
-};
-navigator.getGamepads = () => [];
-global.fetch = vi.fn(MockFetch) as any;
-setCookie(SESSION_ID_COOKIE, "fake_token");
-
-window.matchMedia = () =>
-  ({
-    matches: false,
-  }) as any;
-
-/**
- * Sets this object's position relative to another object with a given offset
- * @param guideObject {@linkcode Phaser.GameObjects.GameObject} to base the position off of
- * @param x The relative x position
- * @param y The relative y position
- */
-const setPositionRelative = function (guideObject: any, x: number, y: number) {
-  const offsetX = guideObject.width * (-0.5 + (0.5 - guideObject.originX));
-  const offsetY = guideObject.height * (-0.5 + (0.5 - guideObject.originY));
-  this.setPosition(guideObject.x + offsetX + x, guideObject.y + offsetY + y);
-};
-
-Phaser.GameObjects.Container.prototype.setPositionRelative = setPositionRelative;
-Phaser.GameObjects.Sprite.prototype.setPositionRelative = setPositionRelative;
-Phaser.GameObjects.Image.prototype.setPositionRelative = setPositionRelative;
-Phaser.GameObjects.NineSlice.prototype.setPositionRelative = setPositionRelative;
-Phaser.GameObjects.Text.prototype.setPositionRelative = setPositionRelative;
-Phaser.GameObjects.Rectangle.prototype.setPositionRelative = setPositionRelative;
+import { MockConsole } from "#test/testUtils/mocks/mockConsole";
+import { globalScene } from "#app/global-scene";
+import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { MoveId } from "#enums/move-id";
+import { PhaseId } from "#enums/phase-id";
 
 export class GameWrapper {
   public game: Phaser.Game;
   public scene: BattleScene;
 
-  constructor(phaserGame: Phaser.Game, bypassLogin: boolean) {
+  private static originalDamage = Pokemon.prototype.damage;
+
+  constructor(phaserGame: Phaser.Game, bypassLoginMockTrue: boolean) {
     Phaser.Math.RND.sow(["test"]);
     // vi.spyOn(Utils, "apiFetch", "get").mockReturnValue(fetch);
-    if (bypassLogin) {
-      vi.spyOn(battleScene, "bypassLogin", "get").mockReturnValue(true);
+    if (bypassLoginMockTrue) {
+      vi.spyOn(constants, "bypassLogin", "get").mockReturnValue(true);
     }
     this.game = phaserGame;
     MoveAnim.prototype.getAnim = () =>
@@ -90,6 +46,46 @@ export class GameWrapper {
     Pokemon.prototype.cry = () => null as any;
     Pokemon.prototype.faintCry = (cb) => {
       if (cb) cb();
+    };
+
+    Pokemon.prototype.damage = function (...args) {
+      const pokemon: Pokemon = this;
+      const ret = GameWrapper.originalDamage.apply(pokemon, args);
+
+      const side = pokemon.isPlayer() ? "Player" : "Enemy";
+      const lowHpMoves = [MoveId.FALSE_SWIPE, MoveId.HARD_PRESS];
+      const currentPhase = globalScene.getCurrentPhase();
+      let moveName = "N/A";
+      let moveId = MoveId.NONE;
+      if (currentPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
+        const move = currentPhase.move;
+        moveName = move.getName();
+        moveId = move.moveId;
+      }
+      const isLowHpMove = lowHpMoves.includes(moveId);
+      /**
+       * Warn about Pokemon reaching low HP, as a measure to prevent flaky tests from Pokemon randomly fainting.
+       *
+       * The list of conditions required for the warning to show up are:
+       * - The Pokemon actually took damage (`ret > 0`)
+       * - The Pokemon is under 20% HP
+       * - The Pokemon is not fainted
+       * - The Pokemon is not using Endure
+       * - The Pokemon was not damaged by a move that intentionally involves low HP (False Swipe, Hard Press, etc.)
+       */
+      if (
+        ret > 0
+        && pokemon.getHpRatio() < 0.2
+        && !pokemon.isFainted()
+        && !pokemon.getTag(BattlerTagType.ENDURING)
+        && !isLowHpMove
+      ) {
+        const line1 = `Caution: ${side} ${pokemon.name} was damaged to low HP (${pokemon.hp}/${pokemon.getMaxHp()}) by the move ${moveName}!\n`;
+        const line2 = `Make sure that the test cannot break from the Pokemon accidentally fainting!`;
+        MockConsole.queuePostTestWarning(line1 + line2);
+        console.warn(line1 + line2);
+      }
+      return ret;
     };
 
     BattleScene.prototype.addPokemonIcon = () => new Phaser.GameObjects.Container(this.scene);
@@ -254,6 +250,8 @@ export class GameWrapper {
     // @ts-ignore
     this.scene.remove = vi.fn();
     this.scene.eventManager = new MockTimedEventManager(); // Disable Timed Events
+
+    Pokemon.prototype.updateInfo = async () => {};
   }
 }
 

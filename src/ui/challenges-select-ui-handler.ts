@@ -1,17 +1,17 @@
-import { TextStyle, addTextObject } from "./text";
-import type { Mode } from "./ui";
+import { addBBCodeTextObject, addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
+import type { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
 import { addWindow } from "./ui-theme";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import type { Challenge } from "#app/data/challenge";
-import { getLocalizedSpriteKey } from "#app/utils";
-import { Challenges } from "#app/enums/challenges";
-import BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import { Color, ShadowColor } from "#app/enums/color";
+import { Challenges } from "#enums/challenges";
+import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
+import { CommonColor, ShadowColor } from "#enums/color";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
-import { TitlePhase } from "#app/phases/title-phase";
 import { globalScene } from "#app/global-scene";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 /**
  * Handles all the UI for choosing optional challenges.
@@ -24,8 +24,6 @@ export default class GameChallengesUiHandler extends UiHandler {
 
   private optionsBg: Phaser.GameObjects.NineSlice;
 
-  // private difficultyText: Phaser.GameObjects.Text;
-
   private descriptionText: BBCodeText;
 
   private challengeLabels: Array<{
@@ -34,7 +32,7 @@ export default class GameChallengesUiHandler extends UiHandler {
     leftArrow: Phaser.GameObjects.Image;
     rightArrow: Phaser.GameObjects.Image;
   }>;
-  private monoTypeValue: Phaser.GameObjects.Sprite;
+  private monoTypeIcon: Phaser.GameObjects.Sprite;
 
   private cursorObj: Phaser.GameObjects.NineSlice | null;
 
@@ -50,7 +48,7 @@ export default class GameChallengesUiHandler extends UiHandler {
   private readonly leftArrowGap: number = 90; // distance from the label to the left arrow
   private readonly arrowSpacing: number = 3; // distance between the arrows and the value area
 
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
   }
 
@@ -59,28 +57,21 @@ export default class GameChallengesUiHandler extends UiHandler {
 
     this.widestTextBox = 0;
 
-    this.challengesContainer = globalScene.add.container(1, -(globalScene.game.canvas.height / 6) + 1);
+    this.challengesContainer = globalScene.add.container(1, -GAME_HEIGHT + 1);
     this.challengesContainer.setName("challenges");
 
     this.challengesContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 6, globalScene.game.canvas.height / 6),
+      new Phaser.Geom.Rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT),
       Phaser.Geom.Rectangle.Contains,
     );
 
-    const bgOverlay = globalScene.add.rectangle(
-      -1,
-      -1,
-      globalScene.scaledCanvas.width,
-      globalScene.scaledCanvas.height,
-      0x424242,
-      0.8,
-    );
+    const bgOverlay = globalScene.add.rectangle(-1, -1, GAME_WIDTH, GAME_HEIGHT, 0x424242, 0.8);
     bgOverlay.setName("rect-challenge-overlay");
     bgOverlay.setOrigin(0, 0);
     this.challengesContainer.add(bgOverlay);
 
     // TODO: Change this back to /9 when adding in difficulty
-    const headerBg = addWindow(0, 0, globalScene.game.canvas.width / 6, 24);
+    const headerBg = addWindow(0, 0, GAME_WIDTH - 2, 24);
     headerBg.setName("window-header-bg");
     headerBg.setOrigin(0, 0);
 
@@ -89,43 +80,31 @@ export default class GameChallengesUiHandler extends UiHandler {
     headerText.setOrigin(0, 0);
     headerText.setPositionRelative(headerBg, 8, 4);
 
-    this.optionsWidth = globalScene.scaledCanvas.width * 0.6;
-    this.optionsBg = addWindow(
-      0,
-      headerBg.height,
-      this.optionsWidth,
-      globalScene.scaledCanvas.height - headerBg.height - 2,
-    );
+    this.optionsWidth = Math.floor(GAME_WIDTH * 0.6);
+    this.optionsBg = addWindow(0, headerBg.height, this.optionsWidth, GAME_HEIGHT - headerBg.height - 2);
     this.optionsBg.setName("window-options-bg");
     this.optionsBg.setOrigin(0, 0);
 
     const descriptionBg = addWindow(
       0,
       headerBg.height,
-      globalScene.scaledCanvas.width - this.optionsWidth,
-      globalScene.scaledCanvas.height - headerBg.height - 26,
+      GAME_WIDTH - this.optionsWidth - 2,
+      GAME_HEIGHT - headerBg.height - 26,
     );
     descriptionBg.setName("window-desc-bg");
     descriptionBg.setOrigin(0, 0);
     descriptionBg.setPositionRelative(this.optionsBg, this.optionsBg.width, 0);
 
-    this.descriptionText = new BBCodeText(globalScene, descriptionBg.x + 6, descriptionBg.y + 4, "", {
-      fontFamily: "emerald",
-      fontSize: 84,
-      color: Color.ORANGE,
-      padding: {
-        bottom: 6,
-      },
-      wrap: {
-        mode: "word",
-        width: (descriptionBg.width - 12) * 6,
-      },
-    });
+    this.descriptionText = addBBCodeTextObject(
+      descriptionBg.x + 6,
+      descriptionBg.y + 4,
+      "",
+      TextStyle.CHALLENGE_DESCRIPTION,
+    );
     this.descriptionText.setName("text-desc");
-    globalScene.add.existing(this.descriptionText);
-    this.descriptionText.setScale(1 / 6);
-    this.descriptionText.setShadow(4, 5, ShadowColor.ORANGE);
     this.descriptionText.setOrigin(0, 0);
+    this.descriptionText.setWrapMode("word");
+    this.descriptionText.setWordWrapWidth((descriptionBg.width - 10) / this.descriptionText.scale);
 
     this.startBg = addWindow(0, 0, descriptionBg.width, 24);
     this.startBg.setName("window-start-bg");
@@ -193,11 +172,11 @@ export default class GameChallengesUiHandler extends UiHandler {
       };
     }
 
-    this.monoTypeValue = globalScene.add.sprite(8, 98, getLocalizedSpriteKey("types"));
-    this.monoTypeValue.setName("challenge-value-monotype-sprite");
-    this.monoTypeValue.setScale(0.86);
-    this.monoTypeValue.setVisible(false);
-    this.valuesContainer.add(this.monoTypeValue);
+    this.monoTypeIcon = globalScene.add.sprite(8, 98, "type_icons");
+    this.monoTypeIcon.setName("challenge-value-monotype-sprite");
+    this.monoTypeIcon.setScale(0.86);
+    this.monoTypeIcon.setVisible(false);
+    this.valuesContainer.add(this.monoTypeIcon);
 
     this.challengesContainer.add(headerBg);
     this.challengesContainer.add(headerText);
@@ -225,7 +204,7 @@ export default class GameChallengesUiHandler extends UiHandler {
    * @param text text to set to the BBCode description
    */
   setDescription(text: string): void {
-    this.descriptionText.setText(`[color=${Color.ORANGE}][shadow=${ShadowColor.ORANGE}]${text}`);
+    this.descriptionText.setText(`[color=${CommonColor.SOFT_ORANGE}][shadow=${ShadowColor.ORANGE}]${text}`);
   }
 
   /**
@@ -273,7 +252,7 @@ export default class GameChallengesUiHandler extends UiHandler {
       challengeLabel.leftArrow.setVisible(challenge.value !== 0);
       challengeLabel.rightArrow.setPositionRelative(
         challengeLabel.leftArrow,
-        Math.max(this.monoTypeValue.width, this.widestTextBox)
+        Math.max(this.monoTypeIcon.width, this.widestTextBox)
           + challengeLabel.leftArrow.displayWidth
           + 2 * this.arrowSpacing,
         0,
@@ -294,10 +273,10 @@ export default class GameChallengesUiHandler extends UiHandler {
         (challengeLabel.leftArrow.x + challengeLabel.rightArrow.x + challengeLabel.leftArrow.displayWidth) / 2,
       );
       if (challenge.id === Challenges.SINGLE_TYPE) {
-        this.monoTypeValue.setX(xLocation);
-        this.monoTypeValue.setY(challengeLabel.label.y + 8);
-        this.monoTypeValue.setFrame(challenge.getValue());
-        this.monoTypeValue.setVisible(true);
+        this.monoTypeIcon.setX(xLocation);
+        this.monoTypeIcon.setY(challengeLabel.label.y + 8);
+        this.monoTypeIcon.setFrame(challenge.getValue());
+        this.monoTypeIcon.setVisible(true);
         challengeLabel.value.setVisible(false);
         monoTypeVisible = true;
       } else {
@@ -308,7 +287,7 @@ export default class GameChallengesUiHandler extends UiHandler {
       }
     }
     if (!monoTypeVisible) {
-      this.monoTypeValue.setVisible(false);
+      this.monoTypeIcon.setVisible(false);
     }
 
     // This checks if a challenge has been selected by the user and updates the text/its opacity accordingly.
@@ -383,8 +362,7 @@ export default class GameChallengesUiHandler extends UiHandler {
         this.cursorObj?.setVisible(true);
         this.updateChallengeArrows(this.startCursor.visible);
       } else {
-        globalScene.clearPhaseQueue();
-        globalScene.pushPhase(new TitlePhase());
+        globalScene.toTitleScreen({ clearPhaseQueue: true });
         globalScene.getCurrentPhase()?.end();
       }
       success = true;

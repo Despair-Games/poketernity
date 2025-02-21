@@ -5,22 +5,21 @@ import {
   initBattleWithEnemyConfig,
   setEncounterRewards,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { trainerConfigs } from "#app/data/trainer-config";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import { randSeedShuffle } from "#app/utils";
 import type MysteryEncounter from "../mystery-encounter";
 import { MysteryEncounterBuilder } from "../mystery-encounter";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { Biome } from "#enums/biome";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
 import { Species } from "#enums/species";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import { Nature } from "#enums/nature";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import type { IEggOptions } from "#app/data/egg";
@@ -29,10 +28,11 @@ import { EggTier } from "#enums/egg-type";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
-import { Type } from "#enums/type";
+import { modifierTypes } from "#app/modifier/modifier-types";
+import { ElementalType } from "#enums/elemental-type";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
+import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/theExpertPokemonBreeder";
@@ -430,7 +430,7 @@ export const TheExpertPokemonBreederEncounter: MysteryEncounter = MysteryEncount
 function getPartyConfig(): EnemyPartyConfig {
   // Bug type superfan trainer config
   const waveIndex = globalScene.currentBattle.waveIndex;
-  const breederConfig = trainerConfigs[TrainerType.EXPERT_POKEMON_BREEDER].clone();
+  const breederConfig = allTrainerConfigs[TrainerType.EXPERT_POKEMON_BREEDER].clone();
   breederConfig.name = i18next.t(trainerNameKey);
 
   // First mon is *always* this special cleffa
@@ -452,18 +452,20 @@ function getPartyConfig(): EnemyPartyConfig {
         abilityIndex: 1, // Magic Guard
         shiny: false,
         nature: Nature.ADAMANT,
-        moveSet: [Moves.METEOR_MASH, Moves.FIRE_PUNCH, Moves.ICE_PUNCH, Moves.THUNDER_PUNCH],
+        moveSet: [MoveId.METEOR_MASH, MoveId.FIRE_PUNCH, MoveId.ICE_PUNCH, MoveId.THUNDER_PUNCH],
         ivs: [31, 31, 31, 31, 31, 31],
         modifierConfigs: [
           {
-            modifier: generateModifierType(modifierTypes.TERA_SHARD, [Type.STEEL]) as PokemonHeldItemModifierType,
+            modifier: generateModifierType(modifierTypes.TERA_SHARD, [
+              ElementalType.STEEL,
+            ]) as PokemonHeldItemModifierType,
           },
         ],
       },
     ],
   };
 
-  if (globalScene.arena.biomeType === Biome.SPACE) {
+  if (globalScene.arena.isInBiome(Biome.SPACE)) {
     // All 3 members always Cleffa line, but different configs
     baseConfig.pokemonConfigs!.push(
       {
@@ -476,7 +478,7 @@ function getPartyConfig(): EnemyPartyConfig {
         shiny: true,
         variant: 1,
         nature: Nature.MODEST,
-        moveSet: [Moves.MOONBLAST, Moves.MYSTICAL_FIRE, Moves.ICE_BEAM, Moves.THUNDERBOLT],
+        moveSet: [MoveId.MOONBLAST, MoveId.MYSTICAL_FIRE, MoveId.ICE_BEAM, MoveId.THUNDERBOLT],
         ivs: [31, 31, 31, 31, 31, 31],
       },
       {
@@ -489,7 +491,7 @@ function getPartyConfig(): EnemyPartyConfig {
         shiny: true,
         variant: 2,
         nature: Nature.BOLD,
-        moveSet: [Moves.TRI_ATTACK, Moves.STORED_POWER, Moves.TAKE_HEART, Moves.MOONLIGHT],
+        moveSet: [MoveId.TRI_ATTACK, MoveId.STORED_POWER, MoveId.TAKE_HEART, MoveId.MOONLIGHT],
         ivs: [31, 31, 31, 31, 31, 31],
       },
     );
@@ -527,7 +529,7 @@ function getSpeciesFromPool(speciesPool: (Species | BreederSpeciesEvolution)[][]
 }
 
 function calculateEggRewardsForPokemon(pokemon: PlayerPokemon): [number, number] {
-  const bst = pokemon.calculateBaseStats().reduce((a, b) => a + b, 0);
+  const bst = pokemon.getSpeciesForm().getBaseStatTotal();
   // 1 point for every 20 points below 680 BST the pokemon is, (max 18, min 1)
   const pointsFromBst = Math.min(Math.max(Math.floor((680 - bst) / 20), 1), 18);
 

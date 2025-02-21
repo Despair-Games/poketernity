@@ -1,11 +1,9 @@
-import { BattlerIndex } from "#app/battle";
-import { allMoves } from "#app/data/all-moves";
-import { Status } from "#app/data/status-effect";
+import { BattlerIndex } from "#enums/battler-index";
+import { allMoves } from "#app/data/data-lists";
 import { Challenges } from "#enums/challenges";
-import { StatusEffect } from "#enums/status-effect";
-import { Type } from "#enums/type";
+import { ElementalType } from "#enums/elemental-type";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -29,13 +27,13 @@ describe("Moves - Dragon Tail", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .moveset([Moves.DRAGON_TAIL, Moves.SPLASH, Moves.FLAMETHROWER])
+      .moveset([MoveId.DRAGON_TAIL, MoveId.SPLASH, MoveId.FLAMETHROWER])
       .enemySpecies(Species.WAILORD)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .startingLevel(5)
       .enemyLevel(5);
 
-    vi.spyOn(allMoves[Moves.DRAGON_TAIL], "accuracy", "get").mockReturnValue(100);
+    vi.spyOn(allMoves[MoveId.DRAGON_TAIL], "accuracy", "get").mockReturnValue(100);
   });
 
   it("should cause opponent to flee, and not crash", async () => {
@@ -43,9 +41,9 @@ describe("Moves - Dragon Tail", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DRAGON_TAIL);
+    game.move.select(MoveId.DRAGON_TAIL);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const isVisible = enemyPokemon.visible;
     const hasFled = enemyPokemon.switchOutStatus;
@@ -62,9 +60,9 @@ describe("Moves - Dragon Tail", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DRAGON_TAIL);
+    game.move.select(MoveId.DRAGON_TAIL);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const isVisible = enemyPokemon.visible;
     const hasFled = enemyPokemon.switchOutStatus;
@@ -73,7 +71,7 @@ describe("Moves - Dragon Tail", () => {
   });
 
   it("should proceed without crashing in a double battle", async () => {
-    game.override.battleType("double").enemyMoveset(Moves.SPLASH).enemyAbility(Abilities.ROUGH_SKIN);
+    game.override.battleType("double").enemyMoveset(MoveId.SPLASH).enemyAbility(Abilities.ROUGH_SKIN);
     await game.classicMode.startBattle([Species.DRATINI, Species.DRATINI, Species.WAILORD, Species.WAILORD]);
 
     const leadPokemon = game.scene.getPlayerParty()[0]!;
@@ -81,10 +79,10 @@ describe("Moves - Dragon Tail", () => {
     const enemyLeadPokemon = game.scene.getEnemyParty()[0]!;
     const enemySecPokemon = game.scene.getEnemyParty()[1]!;
 
-    game.move.select(Moves.DRAGON_TAIL, 0, BattlerIndex.ENEMY);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.DRAGON_TAIL, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     const isVisibleLead = enemyLeadPokemon.visible;
     const hasFledLead = enemyLeadPokemon.switchOutStatus;
@@ -94,15 +92,15 @@ describe("Moves - Dragon Tail", () => {
     expect(leadPokemon.hp).toBeLessThan(leadPokemon.getMaxHp());
 
     // second turn
-    game.move.select(Moves.FLAMETHROWER, 0, BattlerIndex.ENEMY_2);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.FLAMETHROWER, 0, BattlerIndex.ENEMY_2);
+    game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
     expect(enemySecPokemon.hp).toBeLessThan(enemySecPokemon.getMaxHp());
   });
 
   it("should redirect targets upon opponent flee", async () => {
-    game.override.battleType("double").enemyMoveset(Moves.SPLASH).enemyAbility(Abilities.ROUGH_SKIN);
+    game.override.battleType("double").enemyMoveset(MoveId.SPLASH).enemyAbility(Abilities.ROUGH_SKIN);
     await game.classicMode.startBattle([Species.DRATINI, Species.DRATINI, Species.WAILORD, Species.WAILORD]);
 
     const leadPokemon = game.scene.getPlayerParty()[0]!;
@@ -111,11 +109,11 @@ describe("Moves - Dragon Tail", () => {
     const enemyLeadPokemon = game.scene.getEnemyParty()[0]!;
     const enemySecPokemon = game.scene.getEnemyParty()[1]!;
 
-    game.move.select(Moves.DRAGON_TAIL, 0, BattlerIndex.ENEMY);
+    game.move.select(MoveId.DRAGON_TAIL, 0, BattlerIndex.ENEMY);
     // target the same pokemon, second move should be redirected after first flees
-    game.move.select(Moves.DRAGON_TAIL, 1, BattlerIndex.ENEMY);
+    game.move.select(MoveId.DRAGON_TAIL, 1, BattlerIndex.ENEMY);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const isVisibleLead = enemyLeadPokemon.visible;
     const hasFledLead = enemyLeadPokemon.switchOutStatus;
@@ -134,8 +132,8 @@ describe("Moves - Dragon Tail", () => {
 
     const enemy = game.scene.getEnemyPokemon()!;
 
-    game.move.select(Moves.DRAGON_TAIL);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    game.move.select(MoveId.DRAGON_TAIL);
+    await game.toEndOfTurn();
 
     expect(enemy.isFullHp()).toBe(false);
   });
@@ -144,7 +142,7 @@ describe("Moves - Dragon Tail", () => {
     game.override.startingWave(5).startingLevel(1000); // To make sure Dragon Tail KO's the opponent
     await game.classicMode.startBattle([Species.DRATINI]);
 
-    game.move.select(Moves.DRAGON_TAIL);
+    game.move.select(MoveId.DRAGON_TAIL);
 
     await game.toNextTurn();
 
@@ -166,7 +164,7 @@ describe("Moves - Dragon Tail", () => {
       .startingLevel(1000); // To make sure Dragon Tail KO's the opponent
     await game.classicMode.startBattle([Species.DRATINI]);
 
-    game.move.select(Moves.DRAGON_TAIL);
+    game.move.select(MoveId.DRAGON_TAIL);
 
     await game.toNextTurn();
 
@@ -180,11 +178,11 @@ describe("Moves - Dragon Tail", () => {
   it("should not cause a softlock when activating a player's reviver seed", async () => {
     game.override
       .startingHeldItems([{ name: "REVIVER_SEED" }])
-      .enemyMoveset(Moves.DRAGON_TAIL)
+      .enemyMoveset(MoveId.DRAGON_TAIL)
       .enemyLevel(1000); // To make sure Dragon Tail KO's the player
     await game.classicMode.startBattle([Species.DRATINI, Species.BULBASAUR]);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
 
     await game.toNextTurn();
 
@@ -196,7 +194,7 @@ describe("Moves - Dragon Tail", () => {
   });
 
   it("should force switches randomly", async () => {
-    game.override.enemyMoveset(Moves.DRAGON_TAIL).startingLevel(100).enemyLevel(1);
+    game.override.enemyMoveset(MoveId.DRAGON_TAIL).startingLevel(100).enemyLevel(1);
     await game.classicMode.startBattle([Species.BULBASAUR, Species.CHARMANDER, Species.SQUIRTLE]);
 
     const [bulbasaur, charmander, squirtle] = game.scene.getPlayerParty();
@@ -205,8 +203,8 @@ describe("Moves - Dragon Tail", () => {
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min;
     });
-    game.move.select(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.DRAGON_TAIL);
+    game.move.select(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.DRAGON_TAIL);
     await game.toNextTurn();
 
     expect(bulbasaur.isOnField()).toBe(false);
@@ -218,7 +216,7 @@ describe("Moves - Dragon Tail", () => {
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min + 1;
     });
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
     expect(bulbasaur.isOnField()).toBe(false);
@@ -228,9 +226,9 @@ describe("Moves - Dragon Tail", () => {
   });
 
   it("should not force a switch to a challenge-ineligible Pokemon", async () => {
-    game.override.enemyMoveset(Moves.DRAGON_TAIL).startingLevel(100).enemyLevel(1);
+    game.override.enemyMoveset(MoveId.DRAGON_TAIL).startingLevel(100).enemyLevel(1);
     // Mono-Water challenge, Eevee is ineligible
-    game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, Type.WATER + 1, 0);
+    game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, ElementalType.WATER + 1, 0);
     await game.challengeMode.startBattle([Species.LAPRAS, Species.EEVEE, Species.TOXAPEX, Species.PRIMARINA]);
 
     const [lapras, eevee, toxapex, primarina] = game.scene.getPlayerParty();
@@ -239,7 +237,7 @@ describe("Moves - Dragon Tail", () => {
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min;
     });
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
     expect(lapras.isOnField()).toBe(false);
@@ -250,25 +248,24 @@ describe("Moves - Dragon Tail", () => {
   });
 
   it("should not force a switch to a fainted Pokemon", async () => {
-    game.override.enemyMoveset([Moves.SPLASH, Moves.DRAGON_TAIL]).startingLevel(100).enemyLevel(1);
+    game.override.enemyMoveset([MoveId.SPLASH, MoveId.DRAGON_TAIL]).startingLevel(100).enemyLevel(1);
     await game.classicMode.startBattle([Species.LAPRAS, Species.EEVEE, Species.TOXAPEX, Species.PRIMARINA]);
 
     const [lapras, eevee, toxapex, primarina] = game.scene.getPlayerParty();
 
     // Turn 1: Eevee faints
-    eevee.hp = 0;
-    eevee.status = new Status(StatusEffect.FAINT);
+    eevee.faint();
     expect(eevee.isFainted()).toBe(true);
-    game.move.select(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
     // Turn 2: Mock an RNG call that would normally call for switching to Eevee, but it is fainted
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min;
     });
-    game.move.select(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.DRAGON_TAIL);
+    game.move.select(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.DRAGON_TAIL);
     await game.toNextTurn();
 
     expect(lapras.isOnField()).toBe(false);
@@ -279,25 +276,24 @@ describe("Moves - Dragon Tail", () => {
   });
 
   it("should not force a switch if there are no available Pokemon to switch into", async () => {
-    game.override.enemyMoveset([Moves.SPLASH, Moves.DRAGON_TAIL]).startingLevel(100).enemyLevel(1);
+    game.override.enemyMoveset([MoveId.SPLASH, MoveId.DRAGON_TAIL]).startingLevel(100).enemyLevel(1);
     await game.classicMode.startBattle([Species.LAPRAS, Species.EEVEE]);
 
     const [lapras, eevee] = game.scene.getPlayerParty();
 
     // Turn 1: Eevee faints
-    eevee.hp = 0;
-    eevee.status = new Status(StatusEffect.FAINT);
+    eevee.faint();
     expect(eevee.isFainted()).toBe(true);
-    game.move.select(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
     // Turn 2: Mock an RNG call that would normally call for switching to Eevee, but it is fainted
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: number = 0) => {
       return min;
     });
-    game.move.select(Moves.SPLASH);
-    await game.forceEnemyMove(Moves.DRAGON_TAIL);
+    game.move.select(MoveId.SPLASH);
+    await game.forceEnemyMove(MoveId.DRAGON_TAIL);
     await game.toNextTurn();
 
     expect(lapras.isOnField()).toBe(true);

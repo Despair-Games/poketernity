@@ -1,10 +1,9 @@
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PokemonHeldItemModifier } from "#app/modifier/modifier";
+import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import i18next from "i18next";
 import { PostAttackAbAttr } from "./post-attack-ab-attr";
 
@@ -17,20 +16,8 @@ export class PostAttackStealHeldItemAbAttr extends PostAttackAbAttr {
     this.stealCondition = stealCondition;
   }
 
-  override applyPostAttackAfterMoveTypeCheck(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    defender: Pokemon,
-    move: Move,
-    hitResult: HitResult,
-    _args: any[],
-  ): boolean {
-    if (
-      !simulated
-      && hitResult < HitResult.NO_EFFECT
-      && (!this.stealCondition || this.stealCondition(pokemon, defender, move))
-    ) {
+  override applyPostAttack(pokemon: Pokemon, simulated: boolean, defender: Pokemon, move: Move): boolean {
+    if (!simulated && (!this.stealCondition || this.stealCondition(pokemon, defender, move))) {
       const heldItems = this.getTargetHeldItems(defender).filter((i) => i.isTransferable);
       if (heldItems.length) {
         const stolenItem = heldItems[pokemon.randSeedInt(heldItems.length)];
@@ -51,7 +38,7 @@ export class PostAttackStealHeldItemAbAttr extends PostAttackAbAttr {
 
   getTargetHeldItems(target: Pokemon): PokemonHeldItemModifier[] {
     return globalScene.findModifiers(
-      (m) => m instanceof PokemonHeldItemModifier && m.pokemonId === target.id,
+      (m) => m.isPokemonHeldItemModifier() && m.pokemonId === target.id,
       target.isPlayer(),
     ) as PokemonHeldItemModifier[];
   }

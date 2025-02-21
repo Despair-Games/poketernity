@@ -1,37 +1,31 @@
 import type { Move } from "#app/data/move";
-import { MoveFlags } from "../../enums/move-flags";
+import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
-import type { HitResult } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { Abilities } from "#enums/abilities";
 import i18next from "i18next";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
-import { UnsuppressableAbilityAbAttr } from "./unsuppressable-ability-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class PostDefendAbilityGiveAbAttr extends PostDefendAbAttr {
   private readonly ability: Abilities;
 
   constructor(ability: Abilities) {
     super();
+    this._flags.add(AbAttrFlag.POST_DEFEND_ABILITY_GIVE);
     this.ability = ability;
   }
 
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-    _args: any[],
-  ): boolean {
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
-      && !attacker.getAbility().hasAttr(UnsuppressableAbilityAbAttr)
-      && !attacker.getAbility().hasAttr(PostDefendAbilityGiveAbAttr)
+      && !attacker.getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY)
+      && !attacker.getAbility().hasAttrFlag(AbAttrFlag.POST_DEFEND_ABILITY_GIVE)
+      && !attacker.isMax()
     ) {
       if (!simulated) {
         attacker.summonData.ability = this.ability;
+        attacker.battleData.abilitiesRevealed.push(this.ability);
       }
 
       return true;

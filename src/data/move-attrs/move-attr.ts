@@ -1,14 +1,18 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
-import type { MoveCondition, MoveConditionFunc } from "../move-conditions";
+import type { MoveCondition } from "../move-conditions/move-condition";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import type { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
+import type { NaturePowerAttr } from "#app/data/move-attrs/nature-power-attr";
+import type { RandomMoveAttr } from "#app/data/move-attrs/random-move-attr";
+import type { RandomMovesetMoveAttr } from "#app/data/move-attrs/random-moveset-move-attr";
 
 /**
  * Base class defining all {@linkcode Move} Attributes
  * @abstract
  * @see {@linkcode apply}
  */
-
 export abstract class MoveAttr {
   /** Should this {@linkcode Move} target the user? */
   public selfTarget: boolean;
@@ -27,7 +31,7 @@ export abstract class MoveAttr {
    * @param _args Set of unique arguments needed by this attribute
    * @returns true if application of the ability succeeds
    */
-  apply(_user: Pokemon | null, _target: Pokemon | null, _move: Move, _args: any[]): boolean {
+  apply(_user: Pokemon | null, _target: Pokemon | null, _move: Move, ..._args: unknown[]): boolean {
     return true;
   }
 
@@ -67,5 +71,21 @@ export abstract class MoveAttr {
    */
   getTargetBenefitScore(_user: Pokemon, _target: Pokemon, _move: Move): number {
     return 0;
+  }
+
+  isCopyMoveAttr(): this is CopyMoveAttr {
+    return false;
+  }
+
+  isNaturePowerAttr(): this is NaturePowerAttr {
+    return false;
+  }
+
+  isRandomMovesetMoveAttr(): this is RandomMovesetMoveAttr {
+    return false;
+  }
+
+  isRandomMoveAttr(): this is RandomMoveAttr {
+    return false;
   }
 }

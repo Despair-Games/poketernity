@@ -1,11 +1,11 @@
 import { Abilities } from "#enums/abilities";
 import { Stat } from "#enums/stat";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { toDmgValue } from "#app/utils";
 
 describe("Weather - Sandstorm", () => {
   let phaserGame: Phaser.Game;
@@ -24,32 +24,53 @@ describe("Weather - Sandstorm", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .weather(WeatherType.SANDSTORM)
       .battleType("single")
-      .moveset(Moves.SPLASH)
-      .enemyMoveset(Moves.SPLASH)
+      .moveset(MoveId.SPLASH)
+      .enemyMoveset(MoveId.SANDSTORM)
       .enemySpecies(Species.MAGIKARP);
   });
 
   it("inflicts damage equal to 1/16 of Pokemon's max HP at turn end", async () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     game.scene.getField(true).forEach((pokemon) => {
-      expect(pokemon.hp).toBe(pokemon.getMaxHp() - Math.max(Math.floor(pokemon.getMaxHp() / 16), 1));
+      expect(pokemon.hp).toBe(pokemon.getMaxHp() - toDmgValue(pokemon.getMaxHp() / 16));
     });
   });
 
-  it("does not inflict damage to a Pokemon that is underwater (Dive) or underground (Dig)", async () => {
-    game.override.moveset([Moves.DIVE]);
+  it("should not inflict damage on the turn that the weather expires", async () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
-    game.move.select(Moves.DIVE);
+    game.move.select(MoveId.SPLASH);
+    await game.toNextTurn();
+    game.move.select(MoveId.SPLASH);
+    await game.toNextTurn();
+    game.move.select(MoveId.SPLASH);
+    await game.toNextTurn();
+    game.move.select(MoveId.SPLASH);
+    await game.toNextTurn();
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    // Turn 5: Sandstorm should expire and deal no damage this turn
+    const player = game.field.getPlayerPokemon();
+    const initialHp = player.hp;
+    game.move.select(MoveId.SPLASH);
+    await game.toNextTurn();
+
+    expect(game.scene.arena.weather).toBeFalsy();
+    expect(player.hp).toBe(initialHp);
+  });
+
+  it("does not inflict damage to a Pokemon that is underwater (Dive) or underground (Dig)", async () => {
+    game.override.moveset([MoveId.DIVE]);
+    await game.classicMode.startBattle([Species.MAGIKARP]);
+
+    game.move.select(MoveId.DIVE);
+
+    await game.toEndOfTurn();
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -67,10 +88,10 @@ describe("Weather - Sandstorm", () => {
 
     await game.classicMode.startBattle([Species.ROCKRUFF, Species.KLINK]);
 
-    game.move.select(Moves.SPLASH, 0);
-    game.move.select(Moves.SPLASH, 1);
+    game.move.select(MoveId.SPLASH, 0);
+    game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     game.scene.getField(true).forEach((pokemon) => {
       expect(pokemon.hp).toBe(pokemon.getMaxHp());
@@ -79,6 +100,10 @@ describe("Weather - Sandstorm", () => {
 
   it("increases Rock type Pokemon Sp.Def by 50%", async () => {
     await game.classicMode.startBattle([Species.ROCKRUFF]);
+
+    // Stall 1 turn to let opponent use Sandstorm
+    game.move.select(MoveId.SPLASH);
+    await game.toNextTurn();
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const playerSpdef = playerPokemon.getStat(Stat.SPDEF);

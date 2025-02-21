@@ -10,19 +10,19 @@ import {
   runSelectMysteryEncounterOption,
 } from "#test/mystery-encounter/encounter-test-utils";
 import type BattleScene from "#app/battle-scene";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
 import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
 import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { Nature } from "#enums/nature";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases";
+import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { CommandPhase } from "#app/phases/command-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { FunAndGamesEncounter } from "#app/data/mystery-encounters/encounters/fun-and-games-encounter";
-import { Moves } from "#enums/moves";
-import { Command } from "#app/ui/command-ui-handler";
+import { MoveId } from "#enums/move-id";
+import { BattleCommand } from "#enums/battle-command";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 
 const namespace = "mysteryEncounters/funAndGames";
@@ -138,7 +138,7 @@ describe("Fun And Games! - Mystery Encounter", () => {
 
     it("should get 3 turns to attack the Wobbuffet for a reward", async () => {
       scene.money = 20000;
-      game.override.moveset([Moves.TACKLE]);
+      game.override.moveset([MoveId.TACKLE]);
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
       await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
 
@@ -147,20 +147,20 @@ describe("Fun And Games! - Mystery Encounter", () => {
       expect(scene.getEnemyPokemon()?.ivs).toEqual([0, 0, 0, 0, 0, 0]);
       expect(scene.getEnemyPokemon()?.nature).toBe(Nature.MILD);
 
-      game.onNextPrompt("MessagePhase", Mode.MESSAGE, () => {
+      game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
         game.endPhase();
       });
 
       // Turn 1
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, 0, false);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
       await game.phaseInterceptor.to(CommandPhase);
 
       // Turn 2
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, 0, false);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
       await game.phaseInterceptor.to(CommandPhase);
 
       // Turn 3
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, 0, false);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
       await game.phaseInterceptor.to(SelectModifierPhase, false);
 
       // Rewards
@@ -173,34 +173,35 @@ describe("Fun And Games! - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
 
       expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
-      game.onNextPrompt("MessagePhase", Mode.MESSAGE, () => {
+      game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
         game.endPhase();
       });
 
       // Skip minigame
       scene.currentBattle.mysteryEncounter!.misc.turnsRemaining = 0;
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, 0, false);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
       await game.phaseInterceptor.to(SelectModifierPhase, false);
 
       // Rewards
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
       await game.phaseInterceptor.run(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
       expect(modifierSelectHandler.options.length).toEqual(0);
     });
 
-    it("should have Wide Lens item in rewards if Wubboffet is at 15-33% HP remaining", async () => {
+    // TODO: formerly wide lens
+    it("should have [Placeholder] item in rewards if Wubboffet is at 15-33% HP remaining", async () => {
       scene.money = 20000;
-      game.override.moveset([Moves.SPLASH]);
+      game.override.moveset([MoveId.SPLASH]);
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
       await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
 
       expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
-      game.onNextPrompt("MessagePhase", Mode.MESSAGE, () => {
+      game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
         game.endPhase();
       });
 
@@ -208,29 +209,30 @@ describe("Fun And Games! - Mystery Encounter", () => {
       const wobbuffet = scene.getEnemyPokemon()!;
       wobbuffet.hp = Math.floor(0.2 * wobbuffet.getMaxHp());
       scene.currentBattle.mysteryEncounter!.misc.turnsRemaining = 0;
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, 0, false);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
       await game.phaseInterceptor.to(SelectModifierPhase, false);
 
       // Rewards
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
       await game.phaseInterceptor.run(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
       expect(modifierSelectHandler.options.length).toEqual(1);
-      expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("WIDE_LENS");
+      expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("POKEBALL");
     });
 
-    it("should have Scope Lens item in rewards if Wubboffet is at 3-15% HP remaining", async () => {
+    // TODO: formerly scope lens
+    it("should have [Placeholder] item in rewards if Wubboffet is at 3-15% HP remaining", async () => {
       scene.money = 20000;
-      game.override.moveset([Moves.SPLASH]);
+      game.override.moveset([MoveId.SPLASH]);
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
       await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
 
       expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
-      game.onNextPrompt("MessagePhase", Mode.MESSAGE, () => {
+      game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
         game.endPhase();
       });
 
@@ -238,29 +240,30 @@ describe("Fun And Games! - Mystery Encounter", () => {
       const wobbuffet = scene.getEnemyPokemon()!;
       wobbuffet.hp = Math.floor(0.1 * wobbuffet.getMaxHp());
       scene.currentBattle.mysteryEncounter!.misc.turnsRemaining = 0;
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, 0, false);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
       await game.phaseInterceptor.to(SelectModifierPhase, false);
 
       // Rewards
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
       await game.phaseInterceptor.run(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
       expect(modifierSelectHandler.options.length).toEqual(1);
-      expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("SCOPE_LENS");
+      expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("GREAT_BALL");
     });
 
-    it("should have Multi Lens item in rewards if Wubboffet is at <3% HP remaining", async () => {
+    // TODO: formerly multi lens
+    it("should have [Placeholder] item in rewards if Wubboffet is at <3% HP remaining", async () => {
       scene.money = 20000;
-      game.override.moveset([Moves.SPLASH]);
+      game.override.moveset([MoveId.SPLASH]);
       await game.runToMysteryEncounter(MysteryEncounterType.FUN_AND_GAMES, defaultParty);
       await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1 }, true);
 
       expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
-      game.onNextPrompt("MessagePhase", Mode.MESSAGE, () => {
+      game.onNextPrompt("MessagePhase", UiMode.MESSAGE, () => {
         game.endPhase();
       });
 
@@ -268,19 +271,19 @@ describe("Fun And Games! - Mystery Encounter", () => {
       const wobbuffet = scene.getEnemyPokemon()!;
       wobbuffet.hp = 1;
       scene.currentBattle.mysteryEncounter!.misc.turnsRemaining = 0;
-      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(Command.FIGHT, 0, false);
+      (game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, 0, false);
       await game.phaseInterceptor.to(SelectModifierPhase, false);
 
       // Rewards
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
       await game.phaseInterceptor.run(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
       expect(modifierSelectHandler.options.length).toEqual(1);
-      expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("MULTI_LENS");
+      expect(modifierSelectHandler.options[0].modifierTypeOption.type.id).toEqual("ULTRA_BALL");
     });
   });
 

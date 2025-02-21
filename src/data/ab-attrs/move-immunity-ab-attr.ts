@@ -5,24 +5,24 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class MoveImmunityAbAttr extends PreDefendAbAttr {
   private readonly immuneCondition: PreDefendAbAttrCondition;
 
   constructor(immuneCondition: PreDefendAbAttrCondition) {
     super(true);
+    this._flags.add(AbAttrFlag.MOVE_IMMUNITY);
 
     this.immuneCondition = immuneCondition;
   }
 
-  override applyPreDefend(
+  override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     attacker: Pokemon,
     move: Move,
     cancelled: BooleanHolder,
-    _args: any[],
   ): boolean {
     if (this.immuneCondition(pokemon, attacker, move)) {
       cancelled.value = true;

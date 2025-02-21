@@ -1,18 +1,22 @@
 import { type Move } from "#app/data/move";
-import { MoveTarget } from "../../enums/move-target";
+import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class FieldPriorityMoveImmunityAbAttr extends PreDefendAbAttr {
-  override applyPreDefend(
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.FIELD_PRIORITY_MOVE_IMMUNITY);
+  }
+
+  override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     attacker: Pokemon,
     move: Move,
     cancelled: BooleanHolder,
-    _args: any[],
   ): boolean {
     if (move.moveTarget === MoveTarget.USER || move.moveTarget === MoveTarget.NEAR_ALLY) {
       return false;

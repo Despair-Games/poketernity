@@ -1,30 +1,36 @@
 import { Abilities } from "#enums/abilities";
-import { Type } from "#enums/type";
+import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
+/**
+ * Attribute to change the target's type to a set type.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Soak_(move) | Soak}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Magic_Powder_(move) | Magic Powder}.
+ * @extends MoveEffectAttr
+ */
 export class ChangeTypeAttr extends MoveEffectAttr {
-  private type: Type;
+  private type: ElementalType;
 
-  constructor(type: Type) {
+  constructor(type: ElementalType) {
     super(false);
 
     this.type = type;
   }
 
-  override apply(_user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
+  override applyEffect(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     target.summonData.types = [this.type];
     target.updateInfo();
 
     globalScene.queueMessage(
       i18next.t("moveTriggers:transformedIntoType", {
         pokemonName: getPokemonNameWithAffix(target),
-        typeName: i18next.t(`pokemonInfo:Type.${Type[this.type]}`),
+        typeName: i18next.t(`pokemonInfo:Type.${ElementalType[this.type]}`),
       }),
     );
 

@@ -1,16 +1,18 @@
 import type { InputFieldConfig } from "./form-modal-ui-handler";
 import { FormModalUiHandler } from "./form-modal-ui-handler";
 import type { ModalConfig } from "./modal-ui-handler";
-import { fixedInt } from "#app/utils";
-import { Mode } from "./ui";
+import { fixedNumber } from "#app/utils";
+import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import { addTextObject, TextStyle } from "./text";
+import { addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
 import { addWindow } from "./ui-theme";
-import type { OptionSelectItem } from "#app/ui/abstact-option-select-ui-handler";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
 import JSZip from "jszip";
-import { SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#app/constants";
+import { APP_ABBREVIATION, SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#app/constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 interface BuildInteractableImageOpts {
   scale?: number;
@@ -35,7 +37,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
   private infoContainer: Phaser.GameObjects.Container;
   private externalPartyBg: Phaser.GameObjects.NineSlice;
   private externalPartyTitle: Phaser.GameObjects.Text;
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     super(mode);
   }
 
@@ -59,13 +61,12 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     this.infoContainer.add(this.saveDownloadImage);
     this.getUi().add(this.infoContainer);
     this.infoContainer.setVisible(false);
-    this.infoContainer.disableInteractive();
   }
 
   private buildExternalPartyContainer() {
     this.externalPartyContainer = globalScene.add.container(0, 0);
     this.externalPartyContainer.setInteractive(
-      new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width / 12, globalScene.game.canvas.height / 12),
+      new Phaser.Geom.Rectangle(0, 0, GAME_WIDTH / 2, GAME_HEIGHT / 2),
       Phaser.Geom.Rectangle.Contains,
     );
     this.externalPartyTitle = addTextObject(0, 4, "", TextStyle.SETTINGS_LABEL);
@@ -140,9 +141,9 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
         // Prevent overlapping overrides on action modification
         this.submitAction = originalLoginAction;
         this.sanitizeInputs();
-        globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] });
+        globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
         const onFail = (error) => {
-          globalScene.ui.setMode(Mode.LOGIN_FORM, Object.assign(config, { errorMessage: error?.trim() }));
+          globalScene.ui.setMode(UiMode.LOGIN_FORM, Object.assign(config, { errorMessage: error?.trim() }));
           globalScene.ui.playError();
         };
         if (!this.inputs[0].text) {
@@ -209,8 +210,8 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     });
 
     const onFail = (error) => {
-      globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] });
-      globalScene.ui.setModeForceTransition(Mode.LOGIN_FORM, Object.assign(config, { errorMessage: error?.trim() }));
+      globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
+      globalScene.ui.setModeForceTransition(UiMode.LOGIN_FORM, Object.assign(config, { errorMessage: error?.trim() }));
       globalScene.ui.playError();
     };
 
@@ -225,19 +226,16 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
             label: dataKeys[i].replace(keyToFind, ""),
             handler: () => {
               globalScene.ui.revertMode();
-              this.infoContainer.disableInteractive();
               return true;
             },
           });
         }
-        globalScene.ui.setOverlayMode(Mode.OPTION_SELECT, {
+        const optionSelectConfig: OptionSelectModeConfig = {
           options: options,
-          delay: 1000,
-        });
-        this.infoContainer.setInteractive(
-          new Phaser.Geom.Rectangle(0, 0, globalScene.game.canvas.width, globalScene.game.canvas.height),
-          Phaser.Geom.Rectangle.Contains,
-        );
+          xOffset: GAME_WIDTH,
+          yOffset: GAME_HEIGHT - this.usernameInfoImage.displayHeight - 16 * dataKeys.length - 22,
+        };
+        globalScene.ui.setOverlayMode(UiMode.OPTION_SELECT, optionSelectConfig);
       } else {
         if (dataKeys.length > 2) {
           return onFail(this.ERR_TOO_MANY_SAVES);
@@ -257,10 +255,13 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
       if (dataKeys.length > 0 || sessionKeys.length > 0) {
         const zip = new JSZip();
         for (let i = 0; i < dataKeys.length; i++) {
-          zip.file(dataKeys[i] + `.${SAVE_FILE_EXTENSION}`, localStorage.getItem(dataKeys[i])!);
+          zip.file(dataKeys[i] + `.${APP_ABBREVIATION}.${SAVE_FILE_EXTENSION}`, localStorage.getItem(dataKeys[i])!);
         }
         for (let i = 0; i < sessionKeys.length; i++) {
-          zip.file(sessionKeys[i] + `.${SAVE_FILE_EXTENSION}`, localStorage.getItem(sessionKeys[i])!);
+          zip.file(
+            sessionKeys[i] + `.${APP_ABBREVIATION}.${SAVE_FILE_EXTENSION}`,
+            localStorage.getItem(sessionKeys[i])!,
+          );
         }
         zip.generateAsync({ type: "blob" }).then((content) => {
           const url = URL.createObjectURL(content);
@@ -278,7 +279,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     this.externalPartyContainer.setAlpha(0);
     globalScene.tweens.add({
       targets: this.externalPartyContainer,
-      duration: fixedInt(1000),
+      duration: fixedNumber(1000),
       ease: "Sine.easeInOut",
       y: "-=24",
       alpha: 1,
@@ -287,7 +288,7 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     this.infoContainer.setAlpha(0);
     globalScene.tweens.add({
       targets: this.infoContainer,
-      duration: fixedInt(1000),
+      duration: fixedNumber(1000),
       ease: "Sine.easeInOut",
       y: "-=24",
       alpha: 1,

@@ -1,13 +1,18 @@
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
-import { applyPostBattleAbAttrs } from "#app/data/ability";
-import { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#app/modifier/modifier";
-import { BattlePhase } from "./battle-phase";
-import { GameOverPhase } from "./game-over-phase";
-import { PostBattleAbAttr } from "#app/data/ab-attrs/post-battle-ab-attr";
+import type { LapsingPersistentModifier, LapsingPokemonHeldItemModifier } from "#app/modifier/modifier";
+import { BattlePhase } from "#app/phases/abstract-battle-phase";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
+/**
+ * Handles the effects that need to trigger after a battle ends (game stats updates, reducing item turn count, etc)
+ * @extends BattlePhase
+ */
 export class BattleEndPhase extends BattlePhase {
+  override readonly id = PhaseId.BATTLE_END;
   /** If true, will increment battles won */
-  isVictory: boolean;
+  public readonly isVictory: boolean;
 
   constructor(isVictory: boolean) {
     super();
@@ -15,53 +20,51 @@ export class BattleEndPhase extends BattlePhase {
     this.isVictory = isVictory;
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
-    globalScene.gameData.gameStats.battles++;
-    if (
-      globalScene.gameMode.isEndless
-      && globalScene.currentBattle.waveIndex + 1 > globalScene.gameData.gameStats.highestEndlessWave
-    ) {
-      globalScene.gameData.gameStats.highestEndlessWave = globalScene.currentBattle.waveIndex + 1;
+    const { currentBattle, gameData, gameMode } = globalScene;
+
+    gameData.gameStats.battles++;
+    if (gameMode.isEndless && currentBattle.waveIndex + 1 > gameData.gameStats.highestEndlessWave) {
+      gameData.gameStats.highestEndlessWave = currentBattle.waveIndex + 1;
     }
 
     if (this.isVictory) {
-      globalScene.currentBattle.addBattleScore();
+      currentBattle.addBattleScore();
 
-      if (globalScene.currentBattle.trainer) {
-        globalScene.gameData.gameStats.trainersDefeated++;
+      if (currentBattle.trainer) {
+        gameData.gameStats.trainersDefeated++;
       }
     }
 
     // Endless graceful end
-    if (globalScene.gameMode.isEndless && globalScene.currentBattle.waveIndex >= 5850) {
-      globalScene.clearPhaseQueue();
-      globalScene.unshiftPhase(new GameOverPhase(true));
+    if (gameMode.isEndless && currentBattle.waveIndex >= 5850) {
+      globalScene.gameOver({ clearPhaseQueue: true, isVictory: true });
     }
 
     for (const pokemon of globalScene.getField()) {
       if (pokemon && pokemon.battleSummonData) {
-        pokemon.battleSummonData.waveTurnCount = 1;
+        pokemon.battleSummonData.waveTurnCount = 0;
       }
     }
 
     for (const pokemon of globalScene.getPokemonAllowedInBattle()) {
-      applyPostBattleAbAttrs(PostBattleAbAttr, pokemon, false, this.isVictory);
+      applyAbAttrs(AbAttrFlag.POST_BATTLE, pokemon, false, this.isVictory);
     }
 
-    if (globalScene.currentBattle.moneyScattered) {
-      globalScene.currentBattle.pickUpScatteredMoney();
+    if (currentBattle.moneyScattered) {
+      currentBattle.pickUpScatteredMoney();
     }
 
     globalScene.clearEnemyHeldItemModifiers();
 
     const lapsingModifiers = globalScene.findModifiers(
-      (m) => m instanceof LapsingPersistentModifier || m instanceof LapsingPokemonHeldItemModifier,
+      (m) => m.isLapsingPersistentModifier() || m.isLapsingPokemonHeldItemModifier(),
     ) as (LapsingPersistentModifier | LapsingPokemonHeldItemModifier)[];
     for (const m of lapsingModifiers) {
       const args: any[] = [];
-      if (m instanceof LapsingPokemonHeldItemModifier) {
+      if (m.isLapsingPokemonHeldItemModifier()) {
         args.push(globalScene.getPokemonById(m.pokemonId));
       }
       if (!m.lapse(...args)) {

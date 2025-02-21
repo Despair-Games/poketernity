@@ -1,15 +1,18 @@
 import { getPokeballName } from "../data/pokeball";
-import { addTextObject, getTextStyleOptions, TextStyle } from "./text";
-import { Command } from "./command-ui-handler";
-import { Mode } from "./ui";
+import { addTextObject, getTextStyleOptions } from "./text";
+import { TextStyle } from "#enums/text-style";
+import { BattleCommand } from "#enums/battle-command";
+import { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
 import { addWindow } from "./ui-theme";
 import { Button } from "#enums/buttons";
-import type { CommandPhase } from "#app/phases/command-phase";
+import { type CommandPhase } from "#app/phases/command-phase";
 import { globalScene } from "#app/global-scene";
-import { PokeballType } from "#app/enums/pokeball";
-import { getEnumLength } from "#app/utils";
+import { GAME_WIDTH } from "#app/ui-constants";
 
+/**
+ * TODO: This should extend AbstractOptionSelectUiHandler
+ */
 export default class BallUiHandler extends UiHandler {
   private pokeballSelectContainer: Phaser.GameObjects.Container;
   private pokeballSelectBg: Phaser.GameObjects.NineSlice;
@@ -17,29 +20,28 @@ export default class BallUiHandler extends UiHandler {
 
   private cursorObj: Phaser.GameObjects.Image | null;
 
+  // TODO scaling: find a way to improve this. currently needed for japanese
   private scale: number = 0.1666666667;
 
   constructor() {
-    super(Mode.BALL);
+    super(UiMode.BALL);
   }
 
   setup() {
     const ui = this.getUi();
 
-    this.scale = getTextStyleOptions(TextStyle.WINDOW, globalScene.uiTheme).scale;
+    this.scale = getTextStyleOptions(TextStyle.WINDOW).scale;
 
     let optionsTextContent = "";
+    const pokeballTypeCount = Object.keys(globalScene.pokeballCounts).length;
 
-    for (let pb = 0; pb < Object.keys(globalScene.pokeballCounts).length; pb++) {
+    for (let pb = 0; pb < pokeballTypeCount; pb++) {
       optionsTextContent += `${getPokeballName(pb)}\n`;
     }
     optionsTextContent += "Cancel";
     const optionsText = addTextObject(0, 0, optionsTextContent, TextStyle.WINDOW, { align: "right", maxLines: 6 });
     const optionsTextWidth = optionsText.displayWidth;
-    this.pokeballSelectContainer = globalScene.add.container(
-      globalScene.game.canvas.width / 6 - 51 - Math.max(64, optionsTextWidth),
-      -49,
-    );
+    this.pokeballSelectContainer = globalScene.add.container(GAME_WIDTH - 51 - Math.max(64, optionsTextWidth), -49);
     this.pokeballSelectContainer.setVisible(false);
     ui.add(this.pokeballSelectContainer);
 
@@ -47,7 +49,7 @@ export default class BallUiHandler extends UiHandler {
       0,
       0,
       50 + Math.max(64, optionsTextWidth),
-      32 + getEnumLength(PokeballType) * 96 * this.scale,
+      32 + pokeballTypeCount * 96 * this.scale,
     );
     this.pokeballSelectBg.setOrigin(0, 1);
     this.pokeballSelectContainer.add(this.pokeballSelectBg);
@@ -86,16 +88,16 @@ export default class BallUiHandler extends UiHandler {
       success = true;
       if (button === Button.ACTION && this.cursor < pokeballTypeCount) {
         if (globalScene.pokeballCounts[this.cursor]) {
-          if (commandPhase.handleCommand(Command.BALL, this.cursor)) {
-            globalScene.ui.setMode(Mode.COMMAND, commandPhase.getFieldIndex());
-            globalScene.ui.setMode(Mode.MESSAGE);
+          if (commandPhase.handleCommand(BattleCommand.BALL, this.cursor)) {
+            globalScene.ui.setMode(UiMode.COMMAND, commandPhase.getFieldIndex());
+            globalScene.ui.setMode(UiMode.MESSAGE);
             success = true;
           }
         } else {
           ui.playError();
         }
       } else {
-        ui.setMode(Mode.COMMAND, commandPhase.getFieldIndex());
+        ui.setMode(UiMode.COMMAND, commandPhase.getFieldIndex());
         success = true;
       }
     } else {

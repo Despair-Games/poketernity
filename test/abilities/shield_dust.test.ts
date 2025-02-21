@@ -1,16 +1,15 @@
-import { BattlerIndex } from "#app/battle";
-import { IgnoreMoveEffectsAbAttr } from "#app/data/ab-attrs/ignore-move-effect-ab-attr";
-import { MoveEffectChanceMultiplierAbAttr } from "#app/data/ab-attrs/move-effect-chance-multiplier-ab-attr";
-import { applyAbAttrs, applyPreDefendAbAttrs } from "#app/data/ability";
+import { BattlerIndex } from "#enums/battler-index";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Abilities - Shield Dust", () => {
   let phaserGame: Phaser.Game;
@@ -32,8 +31,8 @@ describe("Abilities - Shield Dust", () => {
     game.override.enemySpecies(Species.ONIX);
     game.override.enemyAbility(Abilities.SHIELD_DUST);
     game.override.startingLevel(100);
-    game.override.moveset(Moves.AIR_SLASH);
-    game.override.enemyMoveset(Moves.TACKLE);
+    game.override.moveset(MoveId.AIR_SLASH);
+    game.override.enemyMoveset(MoveId.TACKLE);
   });
 
   it("Shield Dust", async () => {
@@ -42,7 +41,7 @@ describe("Abilities - Shield Dust", () => {
     game.scene.getEnemyPokemon()!.stats[Stat.SPDEF] = 10000;
     expect(game.scene.getPlayerPokemon()!.formIndex).toBe(0);
 
-    game.move.select(Moves.AIR_SLASH);
+    game.move.select(MoveId.AIR_SLASH);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to(MoveEffectPhase, false);
@@ -50,28 +49,11 @@ describe("Abilities - Shield Dust", () => {
     // Shield Dust negates secondary effect
     const phase = game.scene.getCurrentPhase() as MoveEffectPhase;
     const move = phase.move.getMove();
-    expect(move.id).toBe(Moves.AIR_SLASH);
+    expect(move.id).toBe(MoveId.AIR_SLASH);
 
     const chance = new NumberHolder(move.chance);
-    applyAbAttrs(
-      MoveEffectChanceMultiplierAbAttr,
-      phase.getUserPokemon()!,
-      null,
-      false,
-      chance,
-      move,
-      phase.getFirstTarget(),
-      false,
-    );
-    applyPreDefendAbAttrs(
-      IgnoreMoveEffectsAbAttr,
-      phase.getFirstTarget()!,
-      phase.getUserPokemon()!,
-      null,
-      null,
-      false,
-      chance,
-    );
+    applyAbAttrs(AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER, phase.getUserPokemon()!, false, chance, move, false);
+    applyAbAttrs(AbAttrFlag.IGNORE_MOVE_EFFECTS, phase.getFirstTarget()!, false, phase.getUserPokemon()!, move, chance);
     expect(chance.value).toBe(0);
   }, 20000);
 

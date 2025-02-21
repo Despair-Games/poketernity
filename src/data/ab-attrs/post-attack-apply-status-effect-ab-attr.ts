@@ -1,11 +1,24 @@
 import type { Move } from "#app/data/move";
-import { MoveFlags } from "../../enums/move-flags";
+import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
-import type { HitResult } from "#app/field/pokemon";
 import type { StatusEffect } from "#enums/status-effect";
-import { IgnoreMoveEffectsAbAttr } from "./ignore-move-effect-ab-attr";
 import { PostAttackAbAttr } from "./post-attack-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
+/**
+ * Ability attribute that inflicts a status on a Pokemon that gets hit by the ability user's attacks.
+```
++--------------+-------------------------+----------+----------------+
+| Ability Name | Only for contact moves? | % Chance | Status         |
++--------------+-------------------------+----------+----------------+
+| Poison Touch |                     Yes |       30 | Poisoned       |
+| Toxic Chain  |                      No |       30 | Badly Poisoned |
++--------------+-------------------------+----------+----------------+ 
+```
+Currently, all abilities that use this attribute only inflict one status effect each. 
+The code is future-proofed so that it can accept a list of multiple status effects though. 
+@extends PostAttackAbAttr
+*/
 export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
   private readonly contactRequired: boolean;
   public readonly chance: number;
@@ -13,21 +26,14 @@ export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
 
   constructor(contactRequired: boolean, chance: number, ...effects: StatusEffect[]) {
     super();
+    this._flags.add(AbAttrFlag.POST_ATTACK_APPLY_STATUS_EFFECT);
 
     this.contactRequired = contactRequired;
     this.chance = chance;
     this.effects = effects;
   }
 
-  override applyPostAttackAfterMoveTypeCheck(
-    attacker: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    target: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-    _args: any[],
-  ): boolean {
+  override applyPostAttack(attacker: Pokemon, simulated: boolean, target: Pokemon, move: Move): boolean {
     /**
      * The status is only applied to the target if
      * - The target does not have a secondary ability that suppresses move effects
@@ -40,7 +46,7 @@ export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
      * Note: Status inflicted by abilities post attacking are also considered additional effects of moves.
      */
     if (
-      !target.hasAbilityWithAttr(IgnoreMoveEffectsAbAttr)
+      !target.hasAbilityWithAttr(AbAttrFlag.IGNORE_MOVE_EFFECTS)
       && target.id !== attacker.id
       && (!this.contactRequired || move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, target))
       && target.randSeedInt(100) < this.chance

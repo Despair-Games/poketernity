@@ -3,13 +3,19 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
-import { UnsuppressableAbilityAbAttr } from "#app/data/ab-attrs/unsuppressable-ability-ab-attr";
-import { allAbilities } from "#app/data/ability";
+import { allAbilities } from "#app/data/data-lists";
 import type { Move } from "#app/data/move";
 import { SpeciesFormChangeRevertWeatherFormTrigger } from "#app/data/pokemon-forms";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
+/**
+ * Attribute to change a target's ability to a set ability.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Worry_Seed_(move) | Worry Seed}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Simple_Beam_(move) | Simple Beam}.
+ * @extends MoveEffectAttr
+ */
 export class AbilityChangeAttr extends MoveEffectAttr {
   public ability: Abilities;
 
@@ -19,11 +25,7 @@ export class AbilityChangeAttr extends MoveEffectAttr {
     this.ability = ability;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
-    if (!super.apply(user, target, move, args)) {
-      return false;
-    }
-
+  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
     const moveTarget = this.selfTarget ? user : target;
 
     moveTarget.summonData.ability = this.ability;
@@ -41,7 +43,7 @@ export class AbilityChangeAttr extends MoveEffectAttr {
 
   override getCondition(): MoveConditionFunc {
     return (user, target, _move) =>
-      !(this.selfTarget ? user : target).getAbility().hasAttr(UnsuppressableAbilityAbAttr)
+      !(this.selfTarget ? user : target).getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY)
       && (this.selfTarget ? user : target).getAbility().id !== this.ability;
   }
 }

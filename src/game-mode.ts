@@ -2,24 +2,20 @@ import i18next from "i18next";
 import type { FixedBattleConfigs } from "./battle";
 import { classicFixedBattles, FixedBattleConfig } from "./battle";
 import type { Challenge } from "./data/challenge";
-import { allChallenges, applyChallenges, ChallengeType, copyChallenge } from "./data/challenge";
+import { allChallenges, copyChallenge } from "./data/challenge";
+import { applyChallenges } from "./utils/challenge-utils";
+import { ChallengeType } from "#enums/challenge-type";
 import type PokemonSpecies from "./data/pokemon-species";
-import { allSpecies } from "./data/pokemon-species";
+import { allSpecies } from "#app/data/data-lists";
 import type { Arena } from "./field/arena";
 import Overrides from "#app/overrides";
 import { randSeedInt, randSeedItem } from "#app/utils";
 import { Biome } from "#enums/biome";
 import { Species } from "#enums/species";
-import { Challenges } from "./enums/challenges";
+import { Challenges } from "#enums/challenges";
 import { globalScene } from "#app/global-scene";
-
-export enum GameModes {
-  CLASSIC,
-  ENDLESS,
-  SPLICED_ENDLESS,
-  DAILY,
-  CHALLENGE,
-}
+import { GameModes } from "#enums/game-modes";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES, CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES } from "./constants";
 
 interface GameModeConfig {
   isClassic?: boolean;
@@ -34,10 +30,6 @@ interface GameModeConfig {
   isChallenge?: boolean;
   hasMysteryEncounters?: boolean;
 }
-
-// Describes min and max waves for MEs in specific game modes
-export const CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES: [number, number] = [10, 180];
-export const CHALLENGE_MODE_MYSTERY_ENCOUNTER_WAVES: [number, number] = [10, 180];
 
 export class GameMode implements GameModeConfig {
   public modeId: GameModes;
@@ -126,6 +118,16 @@ export class GameMode implements GameModeConfig {
     }
   }
 
+  /**
+   * Function to tweak a wave based on different game modes.
+   * For daily mode, adds 30 plus a possible additional 1 per every 5 floors (rounded down)
+   *
+   * @param waveIndex the current floor the player is on
+   * @param ignoreCurveChanges whether or not to ignore the extra addition in daily mode
+   * Acetrainers, Breeders, Twins, and gym leaders all use the {@linkcode getWavePartyTemplate} function
+   * and thus do not have the extra addition applied in daily mode
+   * @returns a number representing what the wave should be
+   */
   getWaveForDifficulty(waveIndex: number, ignoreCurveChanges: boolean = false): number {
     switch (this.modeId) {
       case GameModes.DAILY:

@@ -1,32 +1,31 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { BooleanHolder } from "#app/utils";
+import type { BooleanHolder, NumberHolder } from "#app/utils";
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import type { Type } from "#enums/type";
+import type { ElementalType } from "#enums/elemental-type";
 import { TypeImmunityAbAttr } from "./type-immunity-ab-attr";
 
 export class TypeImmunityAddBattlerTagAbAttr extends TypeImmunityAbAttr {
   private readonly tagType: BattlerTagType;
   private readonly turnCount: number;
 
-  constructor(immuneType: Type, tagType: BattlerTagType, turnCount: number, condition?: AbAttrCondition) {
+  constructor(immuneType: ElementalType, tagType: BattlerTagType, turnCount: number, condition?: AbAttrCondition) {
     super(immuneType, condition);
 
     this.tagType = tagType;
     this.turnCount = turnCount;
   }
 
-  override applyPreDefend(
+  override apply(
     pokemon: Pokemon,
-    passive: boolean,
     simulated: boolean,
     attacker: Pokemon,
     move: Move,
     cancelled: BooleanHolder,
-    args: any[],
+    typeMultiplier: NumberHolder,
   ): boolean {
-    const ret = super.applyPreDefend(pokemon, passive, simulated, attacker, move, cancelled, args);
+    const ret = super.apply(pokemon, simulated, attacker, move, cancelled, typeMultiplier);
 
     if (ret) {
       cancelled.value = true; // Suppresses "No Effect" message

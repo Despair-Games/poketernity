@@ -1,12 +1,12 @@
-import * as BattleScene from "#app/battle-scene";
 import { api } from "#app/plugins/api/api";
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import * as account from "#app/account";
+import * as constants from "#app/constants";
 
 describe("System - Game Data", () => {
   let phaserGame: Phaser.Game;
@@ -21,10 +21,10 @@ describe("System - Game Data", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.SPLASH])
+      .moveset([MoveId.SPLASH])
       .battleType("single")
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH);
+      .enemyMoveset(MoveId.SPLASH);
   });
 
   afterEach(() => {
@@ -33,13 +33,13 @@ describe("System - Game Data", () => {
 
   describe("tryClearSession", () => {
     beforeEach(() => {
-      vi.spyOn(BattleScene, "bypassLogin", "get").mockReturnValue(false);
+      vi.spyOn(constants, "bypassLogin", "get").mockReturnValue(false);
       vi.spyOn(game.scene.gameData, "getSessionSaveData").mockReturnValue({} as SessionSaveData);
       vi.spyOn(account, "updateUserInfo").mockImplementation(async () => [true, 1]);
     });
 
     it("should return [true, true] if bypassLogin is true", async () => {
-      vi.spyOn(BattleScene, "bypassLogin", "get").mockReturnValue(true);
+      vi.spyOn(constants, "bypassLogin", "get").mockReturnValue(true);
 
       const result = await game.scene.gameData.tryClearSession(0);
 

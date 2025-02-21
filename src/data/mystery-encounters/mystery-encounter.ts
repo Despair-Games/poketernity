@@ -1,5 +1,6 @@
 import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import type { PlayerPokemon, PokemonMove } from "#app/field/pokemon";
+import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PokemonMove } from "#app/field/pokemon-move";
 import type { Pokemon } from "#app/field/pokemon";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import type { MysteryEncounterSpriteConfig } from "#app/field/mystery-encounter-intro";
@@ -19,11 +20,11 @@ import {
   StatusEffectRequirement,
   WaveRangeRequirement,
 } from "./mystery-encounter-requirements";
-import type { BattlerIndex } from "#app/battle";
+import type { BattlerIndex } from "#enums/battler-index";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import type { GameModes } from "#app/game-mode";
+import type { GameModes } from "#enums/game-modes";
 import type { EncounterAnim } from "#enums/encounter-anims";
 import type { Challenges } from "#enums/challenges";
 import { globalScene } from "#app/global-scene";
@@ -273,7 +274,7 @@ export default class MysteryEncounter implements IMysteryEncounter {
    * Used for keeping RNG consistent on session resets, but increments when cycling through multiple "Encounters" on the same wave
    * You should only need to interact via getter/update methods
    */
-  private seedOffset?: any;
+  private seedOffset?: number;
 
   constructor(encounter: IMysteryEncounter | null) {
     if (!isNullOrUndefined(encounter)) {

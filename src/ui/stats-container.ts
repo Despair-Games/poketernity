@@ -1,6 +1,7 @@
 import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
-import { TextStyle, addBBCodeTextObject, addTextObject, getTextColor } from "./text";
-import { PERMANENT_STATS, getStatKey } from "#app/enums/stat";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text";
+import { TextStyle } from "#enums/text-style";
+import { PERMANENT_STATS, getStatKey } from "#enums/stat";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 
@@ -114,7 +115,6 @@ export class StatsContainer extends Phaser.GameObjects.Container {
         ])
         .flat();
       const lastIvChartData = this.statsIvsCache || defaultIvChartData;
-      const perfectIVColor: string = getTextColor(TextStyle.SUMMARY_GOLD, false, globalScene.uiTheme);
       this.statsIvsCache = ivChartData.slice(0);
 
       this.ivStatValueTexts.map((t: BBCodeText, i: number) => {
@@ -122,13 +122,13 @@ export class StatsContainer extends Phaser.GameObjects.Container {
 
         // Check to see if IVs are 31, if so change the text style to gold, otherwise leave them be.
         if (ivs[i] === 31) {
-          label += `[color=${perfectIVColor}][shadow]${ivs[i].toString()}[/shadow][/color]`;
+          label += getBBCodeFragment(ivs[i].toString(), TextStyle.PERFECT_IV, true, true);
         } else {
           label = ivs[i].toString();
         }
         if (this.showDiff && originalIvs) {
           if (originalIvs[i] < ivs[i]) {
-            label += ` ([color=${getTextColor(TextStyle.SUMMARY_BLUE, false, globalScene.uiTheme)}][shadow=${getTextColor(TextStyle.SUMMARY_BLUE, true, globalScene.uiTheme)}]+${ivs[i] - originalIvs[i]}[/shadow][/color])`;
+            label += ` (${getBBCodeFragment(`+${ivs[i] - originalIvs[i]}`, TextStyle.SUMMARY_BLUE, true)})`;
           } else {
             label += " (-)";
           }
@@ -136,7 +136,7 @@ export class StatsContainer extends Phaser.GameObjects.Container {
         t.setText(`[shadow]${label}[/shadow]`);
       });
 
-      const newColor = ivs.every((iv) => iv === 31) ? parseInt(perfectIVColor.substr(1), 16) : 0x98d8a0;
+      const newColor = ivs.every((iv) => iv === 31) ? 0xe8e8a8 : 0x98d8a0;
       const oldColor = this.ivChart.fillColor;
       const interpolateColor =
         oldColor !== newColor

@@ -1,9 +1,12 @@
+import type { BattlerIndex } from "#enums/battler-index";
 import { globalScene } from "#app/global-scene";
-import type { BattlerIndex } from "#app/battle";
-import { PokemonPhase } from "./pokemon-phase";
+import { PokemonPhase } from "./abstract-pokemon-phase";
+import { PhaseId } from "#enums/phase-id";
 
 export class ShowAbilityPhase extends PokemonPhase {
-  private passive: boolean;
+  override readonly id = PhaseId.SHOW_ABILITY;
+
+  private readonly passive: boolean;
 
   constructor(battlerIndex: BattlerIndex, passive: boolean = false) {
     super(battlerIndex);
@@ -11,17 +14,13 @@ export class ShowAbilityPhase extends PokemonPhase {
     this.passive = passive;
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     const pokemon = this.getPokemon();
 
     if (pokemon) {
       globalScene.abilityBar.showAbility(pokemon, this.passive);
-
-      if (pokemon?.battleData) {
-        pokemon.battleData.abilityRevealed = true;
-      }
     }
 
     this.end();

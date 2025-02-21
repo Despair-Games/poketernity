@@ -1,10 +1,7 @@
-import {
-  pokemonEvolutions,
-  SpeciesFormEvolution,
-  SpeciesWildEvolutionDelay,
-} from "#app/data/balance/pokemon-evolutions";
+import { pokemonEvolutions, SpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions";
+import { SpeciesWildEvolutionDelay } from "#enums/species-wild-evolution-delay";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import * as Utils from "#app/utils";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -45,10 +42,10 @@ describe("Evolution", () => {
     eevee.abilityIndex = 2;
     trapinch.abilityIndex = 2;
 
-    eevee.evolve(pokemonEvolutions[Species.EEVEE][6], eevee.getSpeciesForm());
+    await eevee.evolve(pokemonEvolutions[Species.EEVEE][6], eevee.getSpeciesForm());
     expect(eevee.abilityIndex).toBe(2);
 
-    trapinch.evolve(pokemonEvolutions[Species.TRAPINCH][0], trapinch.getSpeciesForm());
+    await trapinch.evolve(pokemonEvolutions[Species.TRAPINCH][0], trapinch.getSpeciesForm());
     expect(trapinch.abilityIndex).toBe(1);
   });
 
@@ -60,10 +57,10 @@ describe("Evolution", () => {
     bulbasaur.abilityIndex = 0;
     charmander.abilityIndex = 1;
 
-    bulbasaur.evolve(pokemonEvolutions[Species.BULBASAUR][0], bulbasaur.getSpeciesForm());
+    await bulbasaur.evolve(pokemonEvolutions[Species.BULBASAUR][0], bulbasaur.getSpeciesForm());
     expect(bulbasaur.abilityIndex).toBe(0);
 
-    charmander.evolve(pokemonEvolutions[Species.CHARMANDER][0], charmander.getSpeciesForm());
+    await charmander.evolve(pokemonEvolutions[Species.CHARMANDER][0], charmander.getSpeciesForm());
     expect(charmander.abilityIndex).toBe(1);
   });
 
@@ -73,7 +70,7 @@ describe("Evolution", () => {
     const squirtle = game.scene.getPlayerPokemon()!;
     squirtle.abilityIndex = 5;
 
-    squirtle.evolve(pokemonEvolutions[Species.SQUIRTLE][0], squirtle.getSpeciesForm());
+    await squirtle.evolve(pokemonEvolutions[Species.SQUIRTLE][0], squirtle.getSpeciesForm());
     expect(squirtle.abilityIndex).toBe(0);
   });
 
@@ -85,7 +82,7 @@ describe("Evolution", () => {
     nincada.metBiome = -1;
     nincada.gender = Gender.FEMALE;
 
-    nincada.evolve(pokemonEvolutions[Species.NINCADA][0], nincada.getSpeciesForm());
+    await nincada.evolve(pokemonEvolutions[Species.NINCADA][0], nincada.getSpeciesForm());
     const ninjask = game.scene.getPlayerParty()[0];
     const shedinja = game.scene.getPlayerParty()[1];
     expect(ninjask.abilityIndex).toBe(2);
@@ -104,9 +101,9 @@ describe("Evolution", () => {
 
   it("should increase both HP and max HP when evolving", async () => {
     game.override
-      .moveset([Moves.SURF])
+      .moveset([MoveId.SURF])
       .enemySpecies(Species.GOLEM)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .startingWave(21)
       .startingLevel(16)
       .enemyLevel(50);
@@ -123,7 +120,7 @@ describe("Evolution", () => {
 
     expect(golem.hp).toBe(1);
 
-    game.move.select(Moves.SURF);
+    game.move.select(MoveId.SURF);
     await game.phaseInterceptor.to("EndEvolutionPhase");
 
     expect(totodile.hp).toBe(totodile.getMaxHp());
@@ -132,9 +129,9 @@ describe("Evolution", () => {
 
   it("should not fully heal HP when evolving", async () => {
     game.override
-      .moveset([Moves.SURF])
+      .moveset([MoveId.SURF])
       .enemySpecies(Species.GOLEM)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .startingWave(21)
       .startingLevel(13)
       .enemyLevel(30);
@@ -153,7 +150,7 @@ describe("Evolution", () => {
 
     expect(golem.hp).toBe(1);
 
-    game.move.select(Moves.SURF);
+    game.move.select(MoveId.SURF);
     await game.phaseInterceptor.to("EndEvolutionPhase");
 
     expect(cyndaquil.getMaxHp()).toBeGreaterThan(maxHpBefore);

@@ -4,105 +4,29 @@ import i18next from "i18next";
 import type { DexAttrProps, GameData } from "#app/system/game-data";
 import { defaultStarterSpecies } from "#app/data/balance/default-starters";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/data/pokemon-species";
+import { getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "../utils/pokemon-species-utils";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import type { Pokemon } from "#app/field/pokemon";
-import { PokemonMove } from "#app/field/pokemon";
+import { PokemonMove } from "#app/field/pokemon-move";
 import type { FixedBattleConfig } from "#app/battle";
-import { BattleType } from "#app/battle";
-import Trainer, { TrainerVariant } from "#app/field/trainer";
+import { BattleType } from "#enums/battle-type";
+import Trainer from "#app/field/trainer";
+import { TrainerVariant } from "#enums/trainer-variant";
 import type { GameMode } from "#app/game-mode";
-import { Type } from "#enums/type";
+import { ElementalType } from "#enums/elemental-type";
 import { Challenges } from "#enums/challenges";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 import { Nature } from "#enums/nature";
-import type { Moves } from "#enums/moves";
-import { TypeColor, TypeShadow } from "#enums/color";
+import type { MoveId } from "#enums/move-id";
+import { TypeColor, TypeShadowColor } from "#enums/color";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
+import type { MoveSourceType } from "#enums/move-source-type";
 
 /** A constant for the default max cost of the starting party before a run */
 const DEFAULT_PARTY_MAX_COST = 10;
-
-/**
- * An enum for all the challenge types. The parameter entries on these describe the
- * parameters to use when calling the applyChallenges function.
- */
-export enum ChallengeType {
-  /**
-   * Challenges which modify what starters you can choose
-   * @see {@linkcode Challenge.applyStarterChoice}
-   */
-  STARTER_CHOICE,
-  /**
-   * Challenges which modify how many starter points you have
-   * @see {@linkcode Challenge.applyStarterPoints}
-   */
-  STARTER_POINTS,
-  /**
-   * Challenges which modify how many starter points you have
-   * @see {@linkcode Challenge.applyStarterPointCost}
-   */
-  STARTER_COST,
-  /**
-   * Challenges which modify your starters in some way
-   * @see {@linkcode Challenge.applyStarterModify}
-   */
-  STARTER_MODIFY,
-  /**
-   * Challenges which limit which pokemon you can have in battle.
-   * @see {@linkcode Challenge.applyPokemonInBattle}
-   */
-  POKEMON_IN_BATTLE,
-  /**
-   * Adds or modifies the fixed battles in a run
-   * @see {@linkcode Challenge.applyFixedBattle}
-   */
-  FIXED_BATTLES,
-  /**
-   * Modifies the effectiveness of Type matchups in battle
-   * @see {@linkcode Challenge.applyTypeEffectiveness}
-   */
-  TYPE_EFFECTIVENESS,
-  /**
-   * Modifies what level the AI pokemon are. UNIMPLEMENTED.
-   */
-  AI_LEVEL,
-  /**
-   * Modifies how many move slots the AI has. UNIMPLEMENTED.
-   */
-  AI_MOVE_SLOTS,
-  /**
-   * Modifies if a pokemon has its passive. UNIMPLEMENTED.
-   */
-  PASSIVE_ACCESS,
-  /**
-   * Modifies the game mode settings in some way. UNIMPLEMENTED.
-   */
-  GAME_MODE_MODIFY,
-  /**
-   * Modifies what level AI pokemon can access a move. UNIMPLEMENTED.
-   */
-  MOVE_ACCESS,
-  /**
-   * Modifies what weight AI pokemon have when generating movesets. UNIMPLEMENTED.
-   */
-  MOVE_WEIGHT,
-}
-
-/**
- * Used for challenge types that modify movesets, these denote the various sources of moves for pokemon.
- */
-export enum MoveSourceType {
-  LEVEL_UP, // Currently unimplemented for move access
-  RELEARNER, // Relearner moves currently unimplemented
-  COMMON_TM,
-  GREAT_TM,
-  ULTRA_TM,
-  COMMON_EGG,
-  RARE_EGG,
-}
 
 /**
  * A challenge object. Exists only to serve as a base class.
@@ -399,11 +323,11 @@ export abstract class Challenge {
    * An apply function for {@linkcode ChallengeType.MOVE_ACCESS} challenges. Derived classes should alter this.
    * @param _pokemon {@linkcode Pokemon} What pokemon would learn the move.
    * @param _moveSource {@linkcode MoveSourceType} What source the pokemon would get the move from.
-   * @param _move {@linkcode Moves} The move in question.
+   * @param _moveId {@linkcode MoveId} The move in question.
    * @param _level {@linkcode NumberHolder} The level threshold for access.
    * @returns `true` if this function did anything.
    */
-  applyMoveAccessLevel(_pokemon: Pokemon, _moveSource: MoveSourceType, _move: Moves, _level: NumberHolder): boolean {
+  applyMoveAccessLevel(_pokemon: Pokemon, _moveSource: MoveSourceType, _moveId: MoveId, _level: NumberHolder): boolean {
     return false;
   }
 
@@ -411,11 +335,27 @@ export abstract class Challenge {
    * An apply function for {@linkcode ChallengeType.MOVE_WEIGHT} challenges. Derived classes should alter this.
    * @param _pokemon {@linkcode Pokemon} What pokemon would learn the move.
    * @param _moveSource {@linkcode MoveSourceType} What source the pokemon would get the move from.
-   * @param _move {@linkcode Moves} The move in question.
+   * @param _moveId {@linkcode MoveId} The move in question.
    * @param weight {@linkcode NumberHolder} The base weight of the move
    * @returns `true` if this function did anything.
    */
-  applyMoveWeight(_pokemon: Pokemon, _moveSource: MoveSourceType, _move: Moves, _level: NumberHolder): boolean {
+  applyMoveWeight(_pokemon: Pokemon, _moveSource: MoveSourceType, _moveId: MoveId, _level: NumberHolder): boolean {
+    return false;
+  }
+
+  isSingleGenerationChallenge(): this is SingleGenerationChallenge {
+    return false;
+  }
+
+  isSingleTypeChallenge(): this is SingleTypeChallenge {
+    return false;
+  }
+
+  isFreshStartChallenge(): this is FreshStartChallenge {
+    return false;
+  }
+
+  isInverseBattleChallenge(): this is InverseBattleChallenge {
     return false;
   }
 }
@@ -594,13 +534,17 @@ export class SingleGenerationChallenge extends Challenge {
     newChallenge.severity = source.severity;
     return newChallenge;
   }
+
+  override isSingleGenerationChallenge(): this is this {
+    return true;
+  }
 }
 
 interface monotypeOverride {
   /** The species to override */
   species: Species;
   /** The type to count as */
-  type: Type;
+  type: ElementalType;
   /** If part of a fusion, should we check the fused species instead of the base species? */
   fusion: boolean;
 }
@@ -609,7 +553,9 @@ interface monotypeOverride {
  * Implements a mono type challenge.
  */
 export class SingleTypeChallenge extends Challenge {
-  private static TYPE_OVERRIDES: monotypeOverride[] = [{ species: Species.CASTFORM, type: Type.NORMAL, fusion: false }];
+  private static TYPE_OVERRIDES: monotypeOverride[] = [
+    { species: Species.CASTFORM, type: ElementalType.NORMAL, fusion: false },
+  ];
   private static SPECIES_OVERRIDES: Species[] = [Species.MELOETTA];
 
   constructor() {
@@ -680,7 +626,7 @@ export class SingleTypeChallenge extends Challenge {
    */
   override getValue(overrideValue?: number): string {
     const value = overrideValue ?? this.value;
-    return Type[value - 1].toLowerCase();
+    return ElementalType[value - 1].toLowerCase();
   }
 
   /**
@@ -690,8 +636,8 @@ export class SingleTypeChallenge extends Challenge {
    */
   override getDescription(overrideValue?: number): string {
     const value = overrideValue ?? this.value;
-    const type = i18next.t(`pokemonInfo:Type.${Type[value - 1]}`);
-    const typeColor = `[color=${TypeColor[Type[value - 1]]}][shadow=${TypeShadow[Type[value - 1]]}]${type}[/shadow][/color]`;
+    const type = i18next.t(`pokemonInfo:Type.${ElementalType[value - 1]}`);
+    const typeColor = `[color=${TypeColor[ElementalType[value - 1]]}][shadow=${TypeShadowColor[ElementalType[value - 1]]}]${type}[/shadow][/color]`;
     const defaultDesc = i18next.t(`challenges:${this.geti18nKey()}.desc_default`);
     const typeDesc = i18next.t(`challenges:${this.geti18nKey()}.desc`, { type: typeColor });
     return value === 0 ? defaultDesc : typeDesc;
@@ -702,6 +648,10 @@ export class SingleTypeChallenge extends Challenge {
     newChallenge.value = source.value;
     newChallenge.severity = source.severity;
     return newChallenge;
+  }
+
+  override isSingleTypeChallenge(): this is this {
+    return true;
   }
 }
 
@@ -757,6 +707,10 @@ export class FreshStartChallenge extends Challenge {
     newChallenge.severity = source.severity;
     return newChallenge;
   }
+
+  override isFreshStartChallenge(): this is this {
+    return true;
+  }
 }
 
 /**
@@ -788,6 +742,10 @@ export class InverseBattleChallenge extends Challenge {
     }
 
     return false;
+  }
+
+  override isInverseBattleChallenge(): this is this {
+    return true;
   }
 }
 
@@ -844,241 +802,6 @@ export class LowerStarterPointsChallenge extends Challenge {
     newChallenge.severity = source.severity;
     return newChallenge;
   }
-}
-
-/**
- * Apply all challenges that modify starter choice.
- * @param gameMode The current {@linkcode GameMode}
- * @param challengeType {@linkcode ChallengeType.STARTER_CHOICE}
- * @param pokemon The {@linkcode PokemonSpecies} to check the validity of.
- * @param valid {@link BooleanHolder} `false` if the pokemon isn't allowed.
- * @param dexAttr {@linkcode DexAttrProps} The dex attributes of the pokemon.
- * @param soft If `true`, allow it if it could become a valid pokemon.
- * @returns `true` if any challenge was successfully applied.
- */
-export function applyChallenges(
-  gameMode: GameMode,
-  challengeType: ChallengeType.STARTER_CHOICE,
-  pokemon: PokemonSpecies,
-  valid: BooleanHolder,
-  dexAttr: DexAttrProps,
-  soft: boolean,
-): boolean;
-/**
- * Apply all challenges that modify available total starter points.
- * @param gameMode The current {@linkcode GameMode}
- * @param challengeType {@linkcode ChallengeType.STARTER_POINTS}
- * @param points {@link NumberHolder} The amount of points you have available.
- * @returns `true` if any challenge was successfully applied.
- */
-export function applyChallenges(
-  gameMode: GameMode,
-  challengeType: ChallengeType.STARTER_POINTS,
-  points: NumberHolder,
-): boolean;
-/**
- * Apply all challenges that modify the cost of a starter.
- * @param gameMode The current {@linkcode GameMode}
- * @param challengeType {@linkcode ChallengeType.STARTER_COST}
- * @param species The pokemon {@linkcode Species} to change the cost of.
- * @param points {@linkcode NumberHolder} The cost of the pokemon.
- * @returns `true` if any challenge was successfully applied.
- */
-export function applyChallenges(
-  gameMode: GameMode,
-  challengeType: ChallengeType.STARTER_COST,
-  species: Species,
-  cost: NumberHolder,
-): boolean;
-/**
- * Apply all challenges that modify a starter after selection.
- * @param gameMode The current {@linkcode GameMode}
- * @param challengeType {@linkcode ChallengeType.STARTER_MODIFY}
- * @param pokemon The starter {@linkcode Pokemon} to modify.
- * @returns `true` if any challenge was successfully applied.
- */
-export function applyChallenges(
-  gameMode: GameMode,
-  challengeType: ChallengeType.STARTER_MODIFY,
-  pokemon: Pokemon,
-): boolean;
-/**
- * Apply all challenges that what pokemon you can have in battle.
- * @param gameMode The current {@linkcode GameMode}
- * @param challengeType {@linkcode ChallengeType.POKEMON_IN_BATTLE}
- * @param pokemon The {@linkcode Pokemon} Tcheck the validity of.
- * @param valid {@link BooleanHolder} `false` if the pokemon isn't allowed.
- * @returns `true` if any challenge was successfully applied.
- */
-export function applyChallenges(
-  gameMode: GameMode,
-  challengeType: ChallengeType.POKEMON_IN_BATTLE,
-  pokemon: Pokemon,
-  valid: BooleanHolder,
-): boolean;
-/**
- * Apply all challenges that modify what fixed battles there are.
- * @param gameMode The current {@linkcode GameMode}
- * @param challengeType {@linkcode ChallengeType.FIXED_BATTLES}
- * @param waveIndex The current wave index.
- * @param battleConfig The {@link FixedBattleConfig} to modify.
- * @returns `true` if any challenge was successfully applied.
- */
-export function applyChallenges(
-  gameMode: GameMode,
-  challengeType: ChallengeType.FIXED_BATTLES,
-  waveIndex: number,
-  battleConfig: FixedBattleConfig,
-): boolean;
-/**
- * Apply all challenges that modify type effectiveness.
- * @param gameMode The current {@linkcode GameMode}
- * @param challengeType {@linkcode ChallengeType.TYPE_EFFECTIVENESS}
- * @param effectiveness {@linkcode NumberHolder} The current effectiveness of the move.
- * @returns `true` if any challenge was successfully applied.
- */
-export function applyChallenges(
-  gameMode: GameMode,
-  challengeType: ChallengeType.TYPE_EFFECTIVENESS,
-  effectiveness: NumberHolder,
-): boolean;
-/**
- * Apply all challenges that modify what level AI are.
- * @param gameMode The current {@linkcode GameMode}
- * @param challengeType {@linkcode ChallengeType.AI_LEVEL}
- * @param level {@link NumberHolder} The generated level of the pokemon.
- * @param levelCap The maximum level cap for the current wave.
- * @param isTrainer Whether this is a trainer pokemon.
- * @param isBoss Whether this is a non-trainer boss pokemon.
- * @returns `true` if any challenge was successfully applied.
- */
-export function applyChallenges(
-  gameMode: GameMode,
-  challengeType: ChallengeType.AI_LEVEL,
-  level: NumberHolder,
-  levelCap: number,
-  isTrainer: boolean,
-  isBoss: boolean,
-): boolean;
-/**
- * Apply all challenges that modify how many move slots the AI has.
- * @param gameMode The current {@linkcode GameMode}
- * @param challengeType {@linkcode ChallengeType.AI_MOVE_SLOTS}
- * @param pokemon The {@linkcode Pokemon} being considered.
- * @param moveSlots {@linkcode NumberHolder} The amount of move slots.
- * @returns `true` if any challenge was successfully applied.
- */
-export function applyChallenges(
-  gameMode: GameMode,
-  challengeType: ChallengeType.AI_MOVE_SLOTS,
-  pokemon: Pokemon,
-  moveSlots: NumberHolder,
-): boolean;
-/**
- * Apply all challenges that modify whether a pokemon has its passive.
- * @param gameMode The current {@linkcode GameMode}
- * @param challengeType {@linkcode ChallengeType.PASSIVE_ACCESS}
- * @param pokemon The {@linkcode Pokemon} to modify.
- * @param hasPassive {@linkcode BooleanHolder} Whether it has its passive.
- * @returns `true` if any challenge was successfully applied.
- */
-export function applyChallenges(
-  gameMode: GameMode,
-  challengeType: ChallengeType.PASSIVE_ACCESS,
-  pokemon: Pokemon,
-  hasPassive: BooleanHolder,
-): boolean;
-/**
- * Apply all challenges that modify the game modes settings.
- * @param gameMode The current {@linkcode GameMode}
- * @param challengeType {@linkcode ChallengeType.GAME_MODE_MODIFY}
- * @returns `true` if any challenge was successfully applied.
- */
-export function applyChallenges(gameMode: GameMode, challengeType: ChallengeType.GAME_MODE_MODIFY): boolean;
-/**
- * Apply all challenges that modify what level a pokemon can access a move.
- * @param gameMode The current {@linkcode GameMode}
- * @param challengeType {@linkcode ChallengeType.MOVE_ACCESS}
- * @param pokemon What {@linkcode Pokemon} would learn the move.
- * @param moveSource {@linkcode MoveSourceType} What source the pokemon would get the move from.
- * @param move {@linkcode Moves} The move in question.
- * @param level {@linkcode NumberHolder} The level threshold for access.
- * @returns `true` if any challenge was successfully applied.
- */
-export function applyChallenges(
-  gameMode: GameMode,
-  challengeType: ChallengeType.MOVE_ACCESS,
-  pokemon: Pokemon,
-  moveSource: MoveSourceType,
-  move: Moves,
-  level: NumberHolder,
-): boolean;
-/**
- * Apply all challenges that modify what weight a pokemon gives to move generation
- * @param gameMode The current {@linkcode GameMode}
- * @param challengeType {@linkcode ChallengeType.MOVE_WEIGHT}
- * @param pokemon What {@linkcode Pokemon} would learn the move.
- * @param moveSource {@linkcode MoveSourceType} What source the pokemon would get the move from.
- * @param move {@linkcode Moves} The move in question.
- * @param weight {@linkcode NumberHolder} The weight of the move.
- * @returns `true` if any challenge was successfully applied.
- */
-export function applyChallenges(
-  gameMode: GameMode,
-  challengeType: ChallengeType.MOVE_WEIGHT,
-  pokemon: Pokemon,
-  moveSource: MoveSourceType,
-  move: Moves,
-  weight: NumberHolder,
-): boolean;
-export function applyChallenges(gameMode: GameMode, challengeType: ChallengeType, ...args: any[]): boolean {
-  let ret = false;
-  gameMode.challenges.forEach((c) => {
-    if (c.value !== 0) {
-      switch (challengeType) {
-        case ChallengeType.STARTER_CHOICE:
-          ret ||= c.applyStarterChoice(args[0], args[1], args[2], args[3]);
-          break;
-        case ChallengeType.STARTER_POINTS:
-          ret ||= c.applyStarterPoints(args[0]);
-          break;
-        case ChallengeType.STARTER_COST:
-          ret ||= c.applyStarterCost(args[0], args[1]);
-          break;
-        case ChallengeType.STARTER_MODIFY:
-          ret ||= c.applyStarterModify(args[0]);
-          break;
-        case ChallengeType.POKEMON_IN_BATTLE:
-          ret ||= c.applyPokemonInBattle(args[0], args[1]);
-          break;
-        case ChallengeType.FIXED_BATTLES:
-          ret ||= c.applyFixedBattle(args[0], args[1]);
-          break;
-        case ChallengeType.TYPE_EFFECTIVENESS:
-          ret ||= c.applyTypeEffectiveness(args[0]);
-          break;
-        case ChallengeType.AI_LEVEL:
-          ret ||= c.applyLevelChange(args[0], args[1], args[2], args[3]);
-          break;
-        case ChallengeType.AI_MOVE_SLOTS:
-          ret ||= c.applyMoveSlot(args[0], args[1]);
-          break;
-        case ChallengeType.PASSIVE_ACCESS:
-          ret ||= c.applyPassiveAccess(args[0], args[1]);
-          break;
-        case ChallengeType.GAME_MODE_MODIFY:
-          ret ||= c.applyGameModeModify(gameMode);
-          break;
-        case ChallengeType.MOVE_ACCESS:
-          ret ||= c.applyMoveAccessLevel(args[0], args[1], args[2], args[3]);
-          break;
-        case ChallengeType.MOVE_WEIGHT:
-          ret ||= c.applyMoveWeight(args[0], args[1], args[2], args[3]);
-          break;
-      }
-    }
-  });
-  return ret;
 }
 
 /**

@@ -1,21 +1,17 @@
 import { Stat } from "#enums/stat";
-import { Type } from "#enums/type";
+import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#app/field/pokemon";
-import { NumberHolder } from "#app/utils";
+import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-attr";
 
 /**
- * Changes type based on the user's IVs
+ * Attribute to change the move's type based on the user's IVs.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Hidden_Power_(move) | Hidden Power}
  * @extends VariableMoveTypeAttr
  */
 export class HiddenPowerTypeAttr extends VariableMoveTypeAttr {
-  override apply(user: Pokemon, _target: Pokemon, _move: Move, args: any[]): boolean {
-    const moveType = args[0];
-    if (!(moveType instanceof NumberHolder)) {
-      return false;
-    }
-
+  override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
     const iv_val = Math.floor(
       (((user.ivs[Stat.HP] & 1)
         + (user.ivs[Stat.ATK] & 1) * 2
@@ -28,22 +24,22 @@ export class HiddenPowerTypeAttr extends VariableMoveTypeAttr {
     );
 
     moveType.value = [
-      Type.FIGHTING,
-      Type.FLYING,
-      Type.POISON,
-      Type.GROUND,
-      Type.ROCK,
-      Type.BUG,
-      Type.GHOST,
-      Type.STEEL,
-      Type.FIRE,
-      Type.WATER,
-      Type.GRASS,
-      Type.ELECTRIC,
-      Type.PSYCHIC,
-      Type.ICE,
-      Type.DRAGON,
-      Type.DARK,
+      ElementalType.FIGHTING,
+      ElementalType.FLYING,
+      ElementalType.POISON,
+      ElementalType.GROUND,
+      ElementalType.ROCK,
+      ElementalType.BUG,
+      ElementalType.GHOST,
+      ElementalType.STEEL,
+      ElementalType.FIRE,
+      ElementalType.WATER,
+      ElementalType.GRASS,
+      ElementalType.ELECTRIC,
+      ElementalType.PSYCHIC,
+      ElementalType.ICE,
+      ElementalType.DRAGON,
+      ElementalType.DARK,
     ][iv_val];
 
     return true;

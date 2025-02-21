@@ -3,19 +3,15 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { AbAttr } from "./ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class IntimidateImmunityAbAttr extends AbAttr {
   constructor() {
     super(false);
+    this._flags.add(AbAttrFlag.INITIMIDATE_IMMUNITY);
   }
 
-  override apply(
-    _pokemon: Pokemon,
-    _passive: boolean,
-    _simulated: boolean,
-    cancelled: BooleanHolder,
-    _args: any[],
-  ): boolean {
+  override apply(_pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {
     cancelled.value = true;
     return true;
   }

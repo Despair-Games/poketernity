@@ -14,9 +14,9 @@ import { CIVILIZATION_ENCOUNTER_BIOMES } from "#app/data/mystery-encounters/myst
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { PartTimerEncounter } from "#app/data/mystery-encounters/encounters/part-timer-encounter";
-import { PokemonMove } from "#app/field/pokemon";
-import { Moves } from "#enums/moves";
-import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases";
+import { PokemonMove } from "#app/field/pokemon-move";
+import { MoveId } from "#enums/move-id";
+import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 
 const namespace = "mysteryEncounters/partTimer";
 // Pyukumuku for lowest speed, Regieleki for highest speed, Feebas for lowest "bulk", Melmetal for highest "bulk"
@@ -259,7 +259,7 @@ describe("Part-Timer - Mystery Encounter", () => {
 
       await game.runToMysteryEncounter(MysteryEncounterType.PART_TIMER, defaultParty);
       // Mock moveset
-      scene.getPlayerParty()[0].moveset = [new PokemonMove(Moves.ATTRACT)];
+      scene.getPlayerParty()[0].moveset = [new PokemonMove(MoveId.ATTRACT)];
       await runMysteryEncounterToEnd(game, 3);
 
       expect(EncounterPhaseUtils.updatePlayerMoney).toHaveBeenCalledWith(scene.getWaveMoneyAmount(2.5), true, false);

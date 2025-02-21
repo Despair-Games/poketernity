@@ -1,25 +1,28 @@
-import { applyAbAttrs } from "#app/data/ability";
-import { RunSuccessAbAttr } from "#app/data/ab-attrs/run-success-ab-attr";
-import { Stat } from "#enums/stat";
-import { StatusEffect } from "#enums/status-effect";
-import type { PlayerPokemon, EnemyPokemon } from "#app/field/pokemon";
-import type { Pokemon } from "#app/field/pokemon";
-import i18next from "i18next";
-import { NumberHolder } from "#app/utils";
-import { BattleEndPhase } from "./battle-end-phase";
-import { NewBattlePhase } from "./new-battle-phase";
-import { PokemonPhase } from "./pokemon-phase";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import type { EnemyPokemon, PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
+import { NumberHolder } from "#app/utils";
+import { Stat } from "#enums/stat";
+import i18next from "i18next";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { PhaseId } from "#enums/phase-id";
 
+/**
+ * Handles the player attempting to run away from a wild battle
+ * @extends PokemonPhase
+ */
 export class AttemptRunPhase extends PokemonPhase {
-  /** For testing purposes: this is to force the pokemon to fail and escape */
-  public forceFailEscape = false;
+  override readonly id = PhaseId.ATTEMPT_RUN;
+  /** For testing purposes: this is to force the pokemon to fail to escape */
+  public forceFailEscape = false; // TODO: replace with a new override
 
   constructor(fieldIndex: number) {
     super(fieldIndex);
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
     const playerField = globalScene.getPlayerField();
@@ -31,7 +34,7 @@ export class AttemptRunPhase extends PokemonPhase {
 
     this.attemptRunAway(playerField, enemyField, escapeChance);
 
-    applyAbAttrs(RunSuccessAbAttr, playerPokemon, null, false, escapeChance);
+    applyAbAttrs(AbAttrFlag.RUN_SUCCESS, playerPokemon, false, escapeChance);
 
     if (playerPokemon.randSeedInt(100) < escapeChance.value && !this.forceFailEscape) {
       globalScene.playSound("se/flee");
@@ -46,15 +49,15 @@ export class AttemptRunPhase extends PokemonPhase {
       });
 
       globalScene.clearEnemyHeldItemModifiers();
+      // clear all queued delayed attacks (e.g. from Future Sight)
+      globalScene.arena.removeTag(ArenaTagType.DELAYED_ATTACK);
 
       enemyField.forEach((enemyPokemon) => {
         enemyPokemon.hideInfo().then(() => enemyPokemon.destroy());
-        enemyPokemon.hp = 0;
-        enemyPokemon.trySetStatus(StatusEffect.FAINT);
+        enemyPokemon.faint(); // TODO: why are we fainting the pokemon at all, let alone after using `.destroy()` on them?
       });
 
-      globalScene.pushPhase(new BattleEndPhase(false));
-      globalScene.pushPhase(new NewBattlePhase());
+      globalScene.nextBattle(false);
     } else {
       playerPokemon.turnData.failedRunAway = true;
       globalScene.queueMessage(i18next.t("battle:runAwayCannotEscape"), null, true, 500);
@@ -63,7 +66,13 @@ export class AttemptRunPhase extends PokemonPhase {
     this.end();
   }
 
-  attemptRunAway(playerField: PlayerPokemon[], enemyField: EnemyPokemon[], escapeChance: NumberHolder) {
+  /**
+   * Calculates the base escape chance based on the current field.
+   * @param playerField - Array of {@linkcode PlayerPokemon} whose speed stats will be used in the calculation.
+   * @param enemyField - Array of {@linkcode EnemyPokemon} whose speed stats will be used in the calculation.
+   * @param escapeChance - {@linkcode NumberHolder} holding the % chance to escape, will be overwritten by the function
+   */
+  public attemptRunAway(playerField: PlayerPokemon[], enemyField: EnemyPokemon[], escapeChance: NumberHolder): void {
     /** Sum of the speed of all enemy pokemon on the field */
     const enemySpeed = enemyField.reduce(
       (total: number, enemyPokemon: Pokemon) => total + enemyPokemon.getStat(Stat.SPD),

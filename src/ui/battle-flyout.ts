@@ -1,13 +1,13 @@
 import type { Pokemon } from "../field/pokemon";
-import { addTextObject, TextStyle } from "./text";
-import { fixedInt } from "#app/utils";
+import { addTextObject } from "./text";
+import { TextStyle } from "#enums/text-style";
+import { fixedNumber } from "#app/utils";
 import { globalScene } from "#app/global-scene";
 import type { Move } from "#app/data/move";
 import type { BerryUsedEvent, MoveUsedEvent } from "../events/battle-scene";
-import { BattleSceneEventType } from "../events/battle-scene";
+import { BattleSceneEventType } from "#enums/battle-scene-event-type";
 import { BerryType } from "#enums/berry-type";
-import { Moves } from "#enums/moves";
-import { UiTheme } from "#enums/ui-theme";
+import { MoveId } from "#enums/move-id";
 import { getPokemonNameWithAffix } from "#app/messages";
 
 /** Container for info about a {@linkcode Move} */
@@ -101,14 +101,10 @@ export default class BattleFlyout extends Phaser.GameObjects.Container {
     this.flyoutContainer.add(this.flyoutText);
 
     this.flyoutContainer.add(
-      new Phaser.GameObjects.Rectangle(
-        globalScene,
-        this.flyoutWidth / 2,
+      new Phaser.GameObjects.Rectangle(globalScene, this.flyoutWidth / 2, 0, 1, this.flyoutHeight, 0x212121).setOrigin(
+        0.5,
         0,
-        1,
-        this.flyoutHeight + (globalScene.uiTheme === UiTheme.LEGACY ? 1 : 0),
-        0x212121,
-      ).setOrigin(0.5, 0),
+      ),
     );
     this.flyoutContainer.add(
       new Phaser.GameObjects.Rectangle(
@@ -154,7 +150,7 @@ export default class BattleFlyout extends Phaser.GameObjects.Container {
   /** Updates all of the {@linkcode MoveInfo} objects in the moveInfo array */
   private onMoveUsed(event: Event) {
     const moveUsedEvent = event as MoveUsedEvent;
-    if (!moveUsedEvent || moveUsedEvent.pokemonId !== this.pokemon?.id || moveUsedEvent.move.id === Moves.STRUGGLE) {
+    if (!moveUsedEvent || moveUsedEvent.pokemonId !== this.pokemon?.id || moveUsedEvent.move.id === MoveId.STRUGGLE) {
       // Ignore Struggle
       return;
     }
@@ -197,7 +193,7 @@ export default class BattleFlyout extends Phaser.GameObjects.Container {
     globalScene.tweens.add({
       targets: this.flyoutParent,
       x: visible ? this.anchorX : this.anchorX - this.translationX,
-      duration: fixedInt(125),
+      duration: fixedNumber(125),
       ease: "Sine.easeInOut",
       alpha: visible ? 1 : 0,
     });

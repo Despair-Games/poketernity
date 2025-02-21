@@ -1,19 +1,25 @@
 import type { Pokemon } from "#app/field/pokemon";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 
 /**
  * Base class for defining all {@linkcode Ability} Attributes post summon
  * @see {@linkcode applyPostSummon()}
  */
-export class PostSummonAbAttr extends AbAttr {
+export abstract class PostSummonAbAttr extends AbAttr {
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.POST_SUMMON);
+  }
+
   /**
    * Applies ability post summon (after switching in)
-   * @param _pokemon {@linkcode Pokemon} with this ability
-   * @param _passive Whether this ability is a passive
-   * @param _args Set of unique arguments needed by this attribute
+   * @param pokemon {@linkcode Pokemon} with this ability
+   * @param simulated If `true`, suppresses changes to game state
+   * @param args Set of unique arguments needed by this attribute
    * @returns true if application of the ability succeeds
    */
-  applyPostSummon(_pokemon: Pokemon, _passive: boolean, _simulated: boolean, _args: any[]): boolean {
+  override apply(_pokemon: Pokemon, _simulated: boolean, ..._args: unknown[]): boolean {
     return false;
   }
 }

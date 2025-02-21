@@ -1,17 +1,23 @@
 import { updateUserInfo } from "#app/account";
-import { bypassLogin } from "#app/battle-scene";
+import { bypassLogin } from "#app/constants";
 import { SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { handleTutorial, Tutorial } from "#app/tutorial";
-import { Mode } from "#app/ui/ui";
+import { handleTutorial } from "#app/tutorial";
+import { Tutorial } from "#enums/tutorial";
+import { UiMode } from "#enums/ui-mode";
 import { executeIf, getCookie, removeCookie } from "#app/utils";
-import i18next, { t } from "i18next";
+import i18next from "i18next";
 import { SelectGenderPhase } from "./select-gender-phase";
 import { UnavailablePhase } from "./unavailable-phase";
+import { settings } from "#app/system/settings/settings-manager";
+import { PlayerGender } from "#enums/player-gender";
+import { PhaseId } from "#enums/phase-id";
 
 export class LoginPhase extends Phase {
-  private showText: boolean;
+  override readonly id = PhaseId.LOGIN;
+
+  private readonly showText: boolean;
 
   constructor(showText: boolean = true) {
     super();
@@ -19,46 +25,48 @@ export class LoginPhase extends Phase {
     this.showText = showText;
   }
 
-  override start(): void {
+  public override start(): void {
     super.start();
+
+    const { gameData, ui } = globalScene;
 
     const hasSession = !!getCookie(SESSION_ID_COOKIE);
 
-    globalScene.ui.setMode(Mode.LOADING, { buttonActions: [] });
+    ui.setMode(UiMode.LOADING, { buttonActions: [] });
     executeIf(bypassLogin || hasSession, updateUserInfo).then((response) => {
       const success = response ? response[0] : false;
       const statusCode = response ? response[1] : null;
       if (!success) {
         if (!statusCode || statusCode === 400) {
           if (this.showText) {
-            globalScene.ui.showText(i18next.t("menu:logInOrCreateAccount"));
+            ui.showText(i18next.t("menu:logInOrCreateAccount"));
           }
 
           globalScene.playSound("menu_open");
 
-          const loadData = () => {
+          const loadData = (): void => {
             updateUserInfo().then((success) => {
               if (!success[0]) {
                 removeCookie(SESSION_ID_COOKIE);
                 globalScene.reset(true, true);
                 return;
               }
-              globalScene.gameData.loadSystem().then(() => this.end());
+              gameData.loadSystem().then(() => this.end());
             });
           };
 
-          globalScene.ui.setMode(Mode.LOGIN_FORM, {
+          ui.setMode(UiMode.LOGIN_FORM, {
             buttonActions: [
-              () => {
-                globalScene.ui.playSelect();
+              (): void => {
+                ui.playSelect();
                 loadData();
               },
-              () => {
+              (): void => {
                 globalScene.playSound("menu_open");
-                globalScene.ui.setMode(Mode.REGISTRATION_FORM, {
+                ui.setMode(UiMode.REGISTRATION_FORM, {
                   buttonActions: [
-                    () => {
-                      globalScene.ui.playSelect();
+                    (): void => {
+                      ui.playSelect();
                       updateUserInfo().then((success) => {
                         if (!success[0]) {
                           removeCookie(SESSION_ID_COOKIE);
@@ -68,20 +76,20 @@ export class LoginPhase extends Phase {
                         this.end();
                       });
                     },
-                    () => {
-                      globalScene.unshiftPhase(new LoginPhase(false));
+                    (): void => {
+                      globalScene.toLoginScreen({ showText: false, eager: true });
                       this.end();
                     },
                   ],
                 });
               },
-              () => {
+              (): void => {
                 const redirectUri = encodeURIComponent(`${import.meta.env.VITE_SERVER_URL}/auth/discord/callback`);
                 const discordId = import.meta.env.VITE_DISCORD_CLIENT_ID;
                 const discordUrl = `https://discord.com/api/oauth2/authorize?client_id=${discordId}&redirect_uri=${redirectUri}&response_type=code&scope=identify&prompt=none`;
                 window.open(discordUrl, "_self");
               },
-              () => {
+              (): void => {
                 const redirectUri = encodeURIComponent(`${import.meta.env.VITE_SERVER_URL}/auth/google/callback`);
                 const googleId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
                 const googleUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${googleId}&redirect_uri=${redirectUri}&response_type=code&scope=openid`;
@@ -98,25 +106,25 @@ export class LoginPhase extends Phase {
         }
         return null;
       } else {
-        globalScene.gameData.loadSystem().then((success) => {
+        gameData.loadSystem().then((success) => {
           if (success || bypassLogin) {
             this.end();
           } else {
-            globalScene.ui.setMode(Mode.MESSAGE);
-            globalScene.ui.showText(t("menu:failedToLoadSaveData"));
+            ui.setMode(UiMode.MESSAGE);
+            ui.showText(i18next.t("menu:failedToLoadSaveData"));
           }
         });
       }
     });
   }
 
-  override end(): void {
-    globalScene.ui.setMode(Mode.MESSAGE);
+  public override end(): void {
+    globalScene.ui.setMode(UiMode.MESSAGE);
 
-    if (!globalScene.gameData.gender) {
+    if (settings.display.playerGender === PlayerGender.UNSET) {
       globalScene.unshiftPhase(new SelectGenderPhase());
     }
 
-    handleTutorial(Tutorial.Intro).then(() => super.end());
+    handleTutorial(Tutorial.INTRO).then(() => super.end());
   }
 }

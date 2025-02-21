@@ -1,10 +1,6 @@
-import { variantColorCache } from "#app/data/variant";
-import { Pokemon } from "../field/pokemon";
-import Trainer from "../field/trainer";
-import FieldSpritePipeline from "./field-sprite";
-import { rgbHexToRgba } from "#app/utils";
-import MysteryEncounterIntroVisuals from "../field/mystery-encounter-intro";
-import { globalScene } from "#app/global-scene";
+import FieldSpritePipeline from "#app/pipelines/field-sprite";
+import { settings } from "#app/system/settings/settings-manager";
+import { CANVAS_SCALE } from "#app/ui-constants";
 
 const spriteFragShader = `
 #ifdef GL_FRAGMENT_PRECISION_HIGH
@@ -40,8 +36,6 @@ uniform vec2 texSize;
 uniform float yOffset;
 uniform float yShadowOffset;
 uniform vec4 tone;
-uniform ivec4 baseVariantColors[32];
-uniform vec4 variantColors[32];
 uniform ivec4 spriteColors[32];
 uniform ivec4 fusionSpriteColors[32];
 
@@ -162,15 +156,6 @@ void main() {
     vec4 texture = texture2D(uMainSampler[0], outTexCoord);
 
     ivec4 colorInt = ivec4(int(texture.r * 255.0), int(texture.g * 255.0), int(texture.b * 255.0), int(texture.a * 255.0));
-
-    for (int i = 0; i < 32; i++) {
-        if (baseVariantColors[i][3] == 0)
-            break;
-        if (texture.a > 0.0 && colorInt.r == baseVariantColors[i].r && colorInt.g == baseVariantColors[i].g && colorInt.b == baseVariantColors[i].b) {
-            texture.rgb = variantColors[i].rgb;
-            break;
-        }
-    }
 
     for (int i = 0; i < 32; i++) {
         if (spriteColors[i][3] == 0)
@@ -358,9 +343,9 @@ export default class SpritePipeline extends FieldSpritePipeline {
     const ignoreOverride = data["ignoreOverride"] as boolean;
 
     const isEntityObj =
-      sprite.parentContainer instanceof Pokemon
-      || sprite.parentContainer instanceof Trainer
-      || sprite.parentContainer instanceof MysteryEncounterIntroVisuals;
+      sprite.parentContainer.type === "Pokemon"
+      || sprite.parentContainer.type === "Trainer"
+      || sprite.parentContainer.type === "MysteryEncounterIntroVisuals";
     const field = isEntityObj ? sprite.parentContainer.parentContainer : sprite.parentContainer;
     const position = isEntityObj ? [sprite.parentContainer.x, sprite.parentContainer.y] : [sprite.x, sprite.y];
     if (field) {
@@ -394,7 +379,7 @@ export default class SpritePipeline extends FieldSpritePipeline {
     this.set4fv("tone", tone);
     this.bindTexture(this.game.textures.get("tera").source[0].glTexture!, 1); // TODO: is this bang correct?
 
-    if (globalScene.fusionPaletteSwaps) {
+    if (settings.display.enableFusionPaletteSwaps) {
       const spriteColors = ((ignoreOverride && data["spriteColorsBase"]) || data["spriteColors"] || []) as number[][];
       const fusionSpriteColors = ((ignoreOverride && data["fusionSpriteColorsBase"])
         || data["fusionSpriteColors"]
@@ -419,58 +404,6 @@ export default class SpritePipeline extends FieldSpritePipeline {
       this.set4iv("spriteColors", flatSpriteColors.flat());
       this.set4iv("fusionSpriteColors", flatFusionSpriteColors.flat());
     }
-  }
-
-  override onBatch(gameObject: Phaser.GameObjects.GameObject): void {
-    if (gameObject) {
-      const sprite = gameObject as Phaser.GameObjects.Sprite;
-      const data = sprite.pipelineData;
-
-      const variant: number = data.hasOwnProperty("variant")
-        ? data["variant"]
-        : sprite.parentContainer instanceof Pokemon
-          ? sprite.parentContainer.variant
-          : 0;
-      let variantColors;
-
-      const emptyColors = [0, 0, 0, 0];
-      const flatBaseColors: number[] = [];
-      const flatVariantColors: number[] = [];
-
-      if (
-        (sprite.parentContainer instanceof Pokemon ? sprite.parentContainer.shiny : !!data["shiny"])
-        && (variantColors =
-          variantColorCache[
-            sprite.parentContainer instanceof Pokemon
-              ? sprite.parentContainer.getSprite().texture.key
-              : data["spriteKey"]
-          ])
-        && variantColors.hasOwnProperty(variant)
-      ) {
-        const baseColors = Object.keys(variantColors[variant]);
-        for (let c = 0; c < 32; c++) {
-          if (c < baseColors.length) {
-            const baseColor = Array.from(Object.values(rgbHexToRgba(baseColors[c])));
-            const variantColor = Array.from(Object.values(rgbHexToRgba(variantColors[variant][baseColors[c]])));
-            flatBaseColors.splice(flatBaseColors.length, 0, ...baseColor);
-            flatVariantColors.splice(flatVariantColors.length, 0, ...variantColor.map((c) => c / 255.0));
-          } else {
-            flatBaseColors.splice(flatBaseColors.length, 0, ...emptyColors);
-            flatVariantColors.splice(flatVariantColors.length, 0, ...emptyColors);
-          }
-        }
-      } else {
-        for (let c = 0; c < 32; c++) {
-          flatBaseColors.splice(flatBaseColors.length, 0, ...emptyColors);
-          flatVariantColors.splice(flatVariantColors.length, 0, ...emptyColors);
-        }
-      }
-
-      this.set4iv("baseVariantColors", flatBaseColors.flat());
-      this.set4fv("variantColors", flatVariantColors.flat());
-    }
-
-    super.onBatch(gameObject);
   }
 
   override batchQuad(
@@ -503,13 +436,16 @@ export default class SpritePipeline extends FieldSpritePipeline {
     const yShadowOffset = (sprite.pipelineData["yShadowOffset"] as number) ?? 0;
     if (hasShadow) {
       const isEntityObj =
-        sprite.parentContainer instanceof Pokemon
-        || sprite.parentContainer instanceof Trainer
-        || sprite.parentContainer instanceof MysteryEncounterIntroVisuals;
+        sprite.parentContainer.type === "Pokemon"
+        || sprite.parentContainer.type === "Trainer"
+        || sprite.parentContainer.type === "MysteryEncounterIntroVisuals";
       const field = isEntityObj ? sprite.parentContainer.parentContainer : sprite.parentContainer;
-      const fieldScaleRatio = field.scale / 6;
-      const baseY = ((isEntityObj ? sprite.parentContainer.y : sprite.y + sprite.height) * 6) / fieldScaleRatio;
-      const bottomPadding = (Math.ceil(sprite.height * 0.05 + Math.max(yShadowOffset, 0)) * 6) / fieldScaleRatio;
+      // TODO scaling: is using the canvas scale needed here? Seems like overall it's doing value * canvas_scale / canvas_scale
+      const fieldScaleRatio = field.scale / CANVAS_SCALE;
+      const baseY =
+        ((isEntityObj ? sprite.parentContainer.y : sprite.y + sprite.height) * CANVAS_SCALE) / fieldScaleRatio;
+      const bottomPadding =
+        (Math.ceil(sprite.height * 0.05 + Math.max(yShadowOffset, 0)) * CANVAS_SCALE) / fieldScaleRatio;
       const yDelta = (baseY - y1) / field.scale;
       y2 = y1 = baseY + bottomPadding;
       const pixelHeight =

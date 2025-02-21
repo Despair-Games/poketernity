@@ -9,14 +9,14 @@ import {
 import { STEALING_MOVES } from "#app/data/mystery-encounters/requirements/requirement-groups";
 import type { Pokemon } from "#app/field/pokemon";
 import { EnemyPokemon } from "#app/field/pokemon";
-import { ModifierTier } from "#app/modifier/modifier-tier";
+import { ModifierTier } from "#enums/modifier-tier";
 import type { ModifierTypeOption } from "#app/modifier/modifier-type";
 import {
   getPartyLuckValue,
   getPlayerModifierTypeOptions,
-  ModifierPoolType,
   regenerateModifierPoolThresholds,
 } from "#app/modifier/modifier-type";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
@@ -24,7 +24,7 @@ import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-en
 import { MoveRequirement } from "#app/data/mystery-encounters/mystery-encounter-requirements";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
-import { TrainerSlot } from "#app/data/trainer-config";
+import { TrainerSlot } from "#enums/trainer-slot";
 import {
   getEncounterPokemonLevelForWave,
   getSpriteKeysFromPokemon,
@@ -35,7 +35,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { randSeedInt } from "#app/utils";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/game-mode";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/fightOrFlight";
@@ -84,7 +84,9 @@ export const FightOrFlightEncounter: MysteryEncounter = MysteryEncounterBuilder.
             queueEncounterMessage(`${namespace}:option.1.stat_boost`);
             // Randomly boost 1 stat 2 stages
             // Cannot boost Spd, Acc, or Evasion
-            globalScene.unshiftPhase(new StatStageChangePhase(pokemon.getBattlerIndex(), true, [randSeedInt(4, 1)], 2));
+            globalScene.unshiftPhase(
+              new StatStageChangePhase(pokemon.getBattlerIndex(), pokemon, [randSeedInt(4, 1)], 2),
+            );
           },
         },
       ],

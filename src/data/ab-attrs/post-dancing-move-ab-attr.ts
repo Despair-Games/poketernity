@@ -1,12 +1,8 @@
-import type { BattlerIndex } from "#app/battle";
-import { SelfStatusMove } from "../move";
-import { StatusMove } from "../move";
-import { AttackMove } from "../move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon";
+import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
-import { MovePhase } from "#app/phases/move-phase";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import type { BattlerIndex } from "#enums/battler-index";
 import { PostMoveUsedAbAttr } from "./post-move-used-ab-attr";
 
 /**
@@ -14,45 +10,33 @@ import { PostMoveUsedAbAttr } from "./post-move-used-ab-attr";
  * @extends PostMoveUsedAbAttr
  */
 export class PostDancingMoveAbAttr extends PostMoveUsedAbAttr {
-  /**
-   * Resolves the Dancer ability by replicating the move used by the source of the dance
-   * either on the source itself or on the target of the dance
-   * @param dancer {@linkcode Pokemon} with Dancer ability
-   * @param move {@linkcode PokemonMove} Dancing move used by the source
-   * @param source {@linkcode Pokemon} that used the dancing move
-   * @param targets {@linkcode BattlerIndex} Targets of the dancing move
-   * @param _args N/A
-   *
-   * @return true if the Dancer ability was resolved
-   */
-  override applyPostMoveUsed(
-    dancer: Pokemon,
+  override apply(
+    pokemon: Pokemon,
+    simulated: boolean,
     move: PokemonMove,
     source: Pokemon,
     targets: BattlerIndex[],
-    simulated: boolean,
-    _args: any[],
   ): boolean {
-    // List of tags that prevent the Dancer from replicating the move
-    const forbiddenTags = [
-      BattlerTagType.FLYING,
-      BattlerTagType.UNDERWATER,
-      BattlerTagType.UNDERGROUND,
-      BattlerTagType.HIDDEN,
-    ];
     // The move to replicate cannot come from the Dancer
     if (
-      source.getBattlerIndex() !== dancer.getBattlerIndex()
-      && !dancer.summonData.tags.some((tag) => forbiddenTags.includes(tag.tagType))
+      source.getBattlerIndex() !== pokemon.getBattlerIndex()
+      && !pokemon.summonData.tags.some((tag) => SemiInvulnerableBattlerTagTypes.includes(tag.tagType))
     ) {
       if (!simulated) {
-        // If the move is an AttackMove or a StatusMove the Dancer must replicate the move on the source of the Dance
-        if (move.getMove() instanceof AttackMove || move.getMove() instanceof StatusMove) {
-          const target = this.getTarget(dancer, source, targets);
-          globalScene.unshiftPhase(new MovePhase(dancer, target, move, true, true));
-        } else if (move.getMove() instanceof SelfStatusMove) {
-          // If the move is a SelfStatusMove (ie. Swords Dance) the Dancer should replicate it on itself
-          globalScene.unshiftPhase(new MovePhase(dancer, [dancer.getBattlerIndex()], move, true, true));
+        if (move.getMove().isSelfStatusMove()) {
+          // If the move is a SelfStatusMove (ie. Swords Dance), the Dancer should replicate it on itself
+          globalScene.useMove({
+            pokemon,
+            targets: [pokemon.getBattlerIndex()],
+            move,
+            followUp: true,
+            ignorePp: true,
+            when: "eager",
+          });
+        } else {
+          // Otherwise, the Dancer must replicate the move on the source of the Dance
+          const target = this.getTarget(pokemon, source, targets);
+          globalScene.useMove({ pokemon, targets: target, move, followUp: true, ignorePp: true, when: "eager" });
         }
       }
       return true;

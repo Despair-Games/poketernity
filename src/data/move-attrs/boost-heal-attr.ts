@@ -1,13 +1,13 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { Move } from "#app/data/move";
 import { HealAttr } from "#app/data/move-attrs/heal-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
 /**
  * Heals the target or the user by either {@linkcode normalHealRatio} or {@linkcode boostedHealRatio}
- * depending on the evaluation of {@linkcode condition}
+ * depending on the evaluation of {@linkcode condition}.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Floral_Healing_(move) | Floral Healing}.
  * @extends HealAttr
- * @see {@linkcode apply}
  */
 export class BoostHealAttr extends HealAttr {
   /** Healing received when {@linkcode condition} is false */
@@ -30,18 +30,11 @@ export class BoostHealAttr extends HealAttr {
     this.condition = condition;
   }
 
-  /**
-   * @param user {@linkcode Pokemon} using the move
-   * @param target {@linkcode Pokemon} target of the move
-   * @param move {@linkcode Move} with this attribute
-   * @param _args N/A
-   * @returns true if the move was successful
-   */
-  override apply(user: Pokemon, target: Pokemon, move: Move, _args: any[]): boolean {
-    const healRatio: number = (this.condition ? this.condition(user, target, move) : false)
-      ? this.boostedHealRatio
-      : this.normalHealRatio;
-    this.addHealPhase(target, healRatio);
-    return true;
+  protected override getHealRatio(user: Pokemon, target: Pokemon, move: Move): number {
+    if (this.condition && this.condition(user, target, move)) {
+      return this.boostedHealRatio;
+    } else {
+      return this.normalHealRatio;
+    }
   }
 }

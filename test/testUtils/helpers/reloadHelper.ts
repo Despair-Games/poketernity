@@ -1,5 +1,5 @@
 import { TitlePhase } from "#app/phases/title-phase";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import { vi } from "vitest";
 import { BattleStyle } from "#enums/battle-style";
 import { CommandPhase } from "#app/phases/command-phase";
@@ -7,6 +7,7 @@ import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import type { SessionSaveData } from "#app/@types/SessionData";
 import type { GameManager } from "#test/testUtils/gameManager";
 import { GameManagerHelper } from "#test/testUtils/helpers/gameManagerHelper";
+import { settings } from "#app/system/settings/settings-manager";
 
 /**
  * Helper to allow reloading sessions in unit tests.
@@ -50,12 +51,12 @@ export class ReloadHelper extends GameManagerHelper {
     this.game.phaseInterceptor.shift(); // Loading the save slot also ended TitlePhase, clean it up
 
     // Run through prompts for switching Pokemon, copied from classicModeHelper.ts
-    if (this.game.scene.battleStyle === BattleStyle.SWITCH) {
+    if (settings.general.battleStyle === BattleStyle.SWITCH) {
       this.game.onNextPrompt(
         "CheckSwitchPhase",
-        Mode.CONFIRM,
+        UiMode.CONFIRM,
         () => {
-          this.game.setMode(Mode.MESSAGE);
+          this.game.setMode(UiMode.MESSAGE);
           this.game.endPhase();
         },
         () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),
@@ -63,9 +64,9 @@ export class ReloadHelper extends GameManagerHelper {
 
       this.game.onNextPrompt(
         "CheckSwitchPhase",
-        Mode.CONFIRM,
+        UiMode.CONFIRM,
         () => {
-          this.game.setMode(Mode.MESSAGE);
+          this.game.setMode(UiMode.MESSAGE);
           this.game.endPhase();
         },
         () => this.game.isCurrentPhase(CommandPhase) || this.game.isCurrentPhase(TurnInitPhase),

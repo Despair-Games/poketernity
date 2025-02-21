@@ -1,10 +1,18 @@
 import type { BattleStat } from "#enums/stat";
-import { type Pokemon, HitResult } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { HitResult } from "#enums/hit-result";
 import { toDmgValue } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
+/**
+ * Attribute to grant a stat stage boost to the user
+ * at the cost of a portion of the user's maximum HP.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Belly_Drum_(move) | Belly Drum}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Clangorous_Soul_(move) | Clangorous Soul}.
+ * @extends StatStageChangeAttr
+ */
 export class CutHpStatStageBoostAttr extends StatStageChangeAttr {
   private cutRatio: number;
   private messageCallback: ((user: Pokemon) => void) | undefined;
@@ -21,10 +29,10 @@ export class CutHpStatStageBoostAttr extends StatStageChangeAttr {
     this.messageCallback = messageCallback;
   }
 
-  override apply(user: Pokemon, target: Pokemon, move: Move, args: any[]): boolean {
+  override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     user.damageAndUpdate(toDmgValue(user.getMaxHp() / this.cutRatio), HitResult.OTHER, false, true);
     user.updateInfo();
-    const ret = super.apply(user, target, move, args);
+    const ret = super.applyEffect(user, target, move);
     if (this.messageCallback) {
       this.messageCallback(user);
     }

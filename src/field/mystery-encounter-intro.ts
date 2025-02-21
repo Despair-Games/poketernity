@@ -5,38 +5,19 @@ import type { Species } from "#enums/species";
 import { isNullOrUndefined } from "#app/utils";
 import { getSpriteKeysFromSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
 import type { Variant } from "#app/data/variant";
-import { doShinySparkleAnim } from "#app/field/anims";
 import PlayAnimationConfig = Phaser.Types.Animations.PlayAnimationConfig;
-
-type KnownFileRoot =
-  | "arenas"
-  | "battle_anims"
-  | "cg"
-  | "character"
-  | "effect"
-  | "egg"
-  | "events"
-  | "inputs"
-  | "items"
-  | "mystery-encounters"
-  | "pokeball"
-  | "pokemon"
-  | "pokemon/back"
-  | "pokemon/exp"
-  | "pokemon/female"
-  | "pokemon/icons"
-  | "pokemon/input"
-  | "pokemon/shiny"
-  | "pokemon/variant"
-  | "statuses"
-  | "trainer"
-  | "ui";
+import { ImagesFolder } from "#enums/images-folders";
 
 export class MysteryEncounterSpriteConfig {
   /** The sprite key (which is the image file name). e.g. "ace_trainer_f" */
   spriteKey: string;
-  /** Refer to [/public/images](../../public/images) directorty for all folder names */
-  fileRoot: (KnownFileRoot & string) | string;
+  /**
+   * Refer to images in the [/public/images](../../public/images) directory for all folder names
+   * TODO: currently the 'string' type is needed for Pokemon sprites because `globalScene.loadPokemonAtlas` expects
+   * the fileroot to contain the folder + filename.
+   * However this should be changed to have a separate folder and fileNameRoot attributes, like for other loading functions.
+   */
+  fileRoot: ImagesFolder | string;
   /** Optional replacement for `spriteKey`/`fileRoot`. Just know this defaults to male/genderless, form 0, no shiny */
   species?: Species;
   /** Enable shadow. Defaults to `false` */
@@ -84,6 +65,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
 
   constructor(encounter: MysteryEncounter) {
     super(globalScene, -72, 76);
+    this.type = "MysteryEncounterIntroVisuals";
     this.encounter = encounter;
     this.enterFromRight = encounter.enterIntroVisualsFromRight ?? false;
     // Shallow copy configs to allow visual config updates at runtime without dirtying master copy of Encounter
@@ -154,10 +136,6 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
           // Set Pipeline for shiny variant
           sprite.setPipelineData("spriteKey", spriteKey);
           tintSprite.setPipelineData("spriteKey", spriteKey);
-          sprite.setPipelineData("shiny", true);
-          sprite.setPipelineData("variant", variant);
-          tintSprite.setPipelineData("shiny", true);
-          tintSprite.setPipelineData("variant", variant);
           // Create Sprite for shiny Sparkle
           pokemonShinySparkle = globalScene.add.sprite(sprite.x, sprite.y, "shiny");
           pokemonShinySparkle.setOrigin(0.5, 1);
@@ -226,13 +204,12 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
       this.spriteConfigs.forEach((config) => {
         if (config.isPokemon) {
           globalScene.loadPokemonAtlas(config.spriteKey, config.fileRoot);
-          if (config.isShiny) {
-            globalScene.loadPokemonVariantAssets(config.spriteKey, config.fileRoot, config.variant);
-          }
         } else if (config.isItem) {
-          globalScene.loadAtlas("items", "");
+          globalScene.loadAtlas("items");
+        } else if (Object.values(ImagesFolder).includes(config.fileRoot as ImagesFolder)) {
+          globalScene.loadAtlas(config.spriteKey, config.fileRoot as ImagesFolder);
         } else {
-          globalScene.loadAtlas(config.spriteKey, config.fileRoot);
+          console.warn("Invalid fileroot for spriteConfig: " + config);
         }
       });
 
@@ -354,7 +331,7 @@ export default class MysteryEncounterIntroVisuals extends Phaser.GameObjects.Con
   playShinySparkles() {
     for (const sparkleConfig of this.shinySparkleSprites) {
       globalScene.time.delayedCall(500, () => {
-        doShinySparkleAnim(sparkleConfig.sprite, sparkleConfig.variant);
+        globalScene.animations.doShinySparkleAnim(sparkleConfig.sprite, sparkleConfig.variant);
       });
     }
   }

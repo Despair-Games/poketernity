@@ -1,12 +1,14 @@
-import { type Pokemon, HitResult } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
+import { HitResult } from "#enums/hit-result";
 import { BooleanHolder } from "#app/utils";
-import { BlockNonDirectDamageAbAttr } from "#app/data/ab-attrs/block-non-direct-damage-ab-attr";
-import { applyAbAttrs } from "#app/data/ability";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Applies damage to the target's ally equal to 1/16 of that ally's max HP.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Flame_Burst_(move) | Flame Burst}.
  * @extends MoveEffectAttr
  */
 export class FlameBurstAttr extends MoveEffectAttr {
@@ -19,19 +21,12 @@ export class FlameBurstAttr extends MoveEffectAttr {
     super(true);
   }
 
-  /**
-   * @param _user - n/a
-   * @param target - The target Pokémon.
-   * @param _move - n/a
-   * @param _args - n/a
-   * @returns A boolean indicating whether the effect was successfully applied.
-   */
-  override apply(_user: Pokemon, target: Pokemon, _move: Move, _args: any[]): boolean {
+  override applyEffect(_user: Pokemon, target: Pokemon, _move: Move): boolean {
     const targetAlly = target.getAlly();
     const cancelled = new BooleanHolder(false);
 
     if (targetAlly) {
-      applyAbAttrs(BlockNonDirectDamageAbAttr, targetAlly, cancelled);
+      applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, targetAlly, false, cancelled);
     }
 
     if (cancelled.value || !targetAlly || targetAlly.switchOutStatus) {

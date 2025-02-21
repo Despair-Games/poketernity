@@ -5,7 +5,7 @@ import { DexAttr } from "#app/data/dex-attributes";
 import { globalScene } from "#app/global-scene";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import type PokemonIconAnimHandler from "./pokemon-icon-anim-handler";
-import { PokemonIconAnimMode } from "./pokemon-icon-anim-handler";
+import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 
 /**
  * A container for a Pokemon's sprite and icons to get displayed in the egg summary screen
@@ -55,7 +55,7 @@ export class HatchedPokemonContainer extends Phaser.GameObjects.Container {
     this.add(this.shinyIcon);
 
     // Hidden ability icon
-    const haIcon = globalScene.add.image(rightSideX, offset * 4, "ha_capsule");
+    const haIcon = globalScene.add.image(rightSideX, offset * 4, "icon_ha_capsule");
     haIcon.setOrigin(0, 0);
     haIcon.setScale(0.5);
     this.hiddenAbilityIcon = haIcon;

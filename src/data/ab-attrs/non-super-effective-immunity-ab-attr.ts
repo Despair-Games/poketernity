@@ -1,6 +1,5 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { type Move } from "#app/data/move";
-import { AttackMove } from "../move";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
@@ -16,18 +15,15 @@ export class NonSuperEffectiveImmunityAbAttr extends TypeImmunityAbAttr {
     super(null, condition);
   }
 
-  override applyPreDefend(
+  override apply(
     _pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     _attacker: Pokemon,
     move: Move,
     cancelled: BooleanHolder,
-    args: any[],
+    typeMultiplier: NumberHolder,
   ): boolean {
-    const typeMultiplier: NumberHolder = args[0];
-
-    if (move instanceof AttackMove && typeMultiplier.value < 2) {
+    if (move.isAttackMove() && typeMultiplier.value < 2) {
       cancelled.value = true; // Suppresses "No Effect" message
       typeMultiplier.value = 0;
       return true;

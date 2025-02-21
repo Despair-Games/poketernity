@@ -1,11 +1,11 @@
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import type { HitResult } from "#app/field/pokemon";
 import { Abilities } from "#enums/abilities";
 import { StatusEffect } from "#enums/status-effect";
-import { Type } from "#enums/type";
+import { ElementalType } from "#enums/elemental-type";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
 import { MoveFlags } from "#enums/move-flags";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Effect Spore's ability attribute
@@ -17,20 +17,17 @@ import { MoveFlags } from "#enums/move-flags";
 export class EffectSporeAbAttr extends PostDefendAbAttr {
   public readonly chance = 30;
 
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.EFFECT_SPORE);
+  }
+
   /**
    * Identical code to {@linkcode PostDefendContactApplyStatusEffectAbAttr}'s `applyPostDefend()` but it contains two conditional checks.
    * Effect Spore cannot affect the attacker if the attacker is Grass-type or has the ability Overcoat
    */
-  override applyPostDefend(
-    pokemon: Pokemon,
-    _passive: boolean,
-    simulated: boolean,
-    attacker: Pokemon,
-    move: Move,
-    _hitResult: HitResult,
-    _args: any[],
-  ): boolean {
-    if (attacker.hasAbility(Abilities.OVERCOAT) || attacker.isOfType(Type.GRASS)) {
+  override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
+    if (attacker.hasAbility(Abilities.OVERCOAT) || attacker.isOfType(ElementalType.GRASS)) {
       return false;
     }
     const roll = pokemon.randSeedInt(100);

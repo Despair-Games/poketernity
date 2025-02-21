@@ -9,15 +9,16 @@ import {
   runSelectMysteryEncounterOption,
   skipBattleRunMysteryEncounterRewardsPhase,
 } from "#test/mystery-encounter/encounter-test-utils";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import type BattleScene from "#app/battle-scene";
-import { PokemonMove } from "#app/field/pokemon";
-import { Mode } from "#app/ui/ui";
+import { PokemonMove } from "#app/field/pokemon-move";
+import { UiMode } from "#enums/ui-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
 import { TrainerType } from "#enums/trainer-type";
-import { MysteryEncounterPhase, MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases";
+import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
+import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { ContactHeldItemTransferChanceModifier } from "#app/modifier/modifier";
 import { CommandPhase } from "#app/phases/command-phase";
 import { BugTypeSuperfanEncounter } from "#app/data/mystery-encounters/encounters/bug-type-superfan-encounter";
@@ -117,25 +118,31 @@ const POOL_3_POKEMON: { species: Species; formIndex?: number }[] = [
 const POOL_4_POKEMON = [Species.GENESECT, Species.SLITHER_WING, Species.BUZZWOLE, Species.PHEROMOSA];
 
 const PHYSICAL_TUTOR_MOVES = [
-  Moves.MEGAHORN,
-  Moves.X_SCISSOR,
-  Moves.ATTACK_ORDER,
-  Moves.PIN_MISSILE,
-  Moves.FIRST_IMPRESSION,
+  MoveId.MEGAHORN,
+  MoveId.X_SCISSOR,
+  MoveId.ATTACK_ORDER,
+  MoveId.PIN_MISSILE,
+  MoveId.FIRST_IMPRESSION,
 ];
 
-const SPECIAL_TUTOR_MOVES = [Moves.SILVER_WIND, Moves.BUG_BUZZ, Moves.SIGNAL_BEAM, Moves.POLLEN_PUFF];
+const SPECIAL_TUTOR_MOVES = [MoveId.SILVER_WIND, MoveId.BUG_BUZZ, MoveId.SIGNAL_BEAM, MoveId.POLLEN_PUFF];
 
-const STATUS_TUTOR_MOVES = [Moves.STRING_SHOT, Moves.STICKY_WEB, Moves.SILK_TRAP, Moves.RAGE_POWDER, Moves.HEAL_ORDER];
+const STATUS_TUTOR_MOVES = [
+  MoveId.STRING_SHOT,
+  MoveId.STICKY_WEB,
+  MoveId.SILK_TRAP,
+  MoveId.RAGE_POWDER,
+  MoveId.HEAL_ORDER,
+];
 
 const MISC_TUTOR_MOVES = [
-  Moves.BUG_BITE,
-  Moves.LEECH_LIFE,
-  Moves.DEFEND_ORDER,
-  Moves.QUIVER_DANCE,
-  Moves.TAIL_GLOW,
-  Moves.INFESTATION,
-  Moves.U_TURN,
+  MoveId.BUG_BITE,
+  MoveId.LEECH_LIFE,
+  MoveId.DEFEND_ORDER,
+  MoveId.QUIVER_DANCE,
+  MoveId.TAIL_GLOW,
+  MoveId.INFESTATION,
+  MoveId.U_TURN,
 ];
 
 describe("Bug-Type Superfan - Mystery Encounter", () => {
@@ -364,17 +371,21 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
 
       expect(scene.getCurrentPhase()?.constructor.name).toBe(MysteryEncounterRewardsPhase.name);
       game.phaseInterceptor["prompts"] = []; // Clear out prompt handlers
-      game.onNextPrompt("MysteryEncounterRewardsPhase", Mode.OPTION_SELECT, () => {
+      game.onNextPrompt("MysteryEncounterRewardsPhase", UiMode.OPTION_SELECT, () => {
         game.phaseInterceptor.superEndPhase();
       });
       await game.phaseInterceptor.run(MysteryEncounterRewardsPhase);
 
       expect(selectOptionSpy).toHaveBeenCalledTimes(1);
       const optionData = selectOptionSpy.mock.calls[0][0];
-      expect(PHYSICAL_TUTOR_MOVES.some((move) => new PokemonMove(move).getName() === optionData[0].label)).toBe(true);
-      expect(SPECIAL_TUTOR_MOVES.some((move) => new PokemonMove(move).getName() === optionData[1].label)).toBe(true);
-      expect(STATUS_TUTOR_MOVES.some((move) => new PokemonMove(move).getName() === optionData[2].label)).toBe(true);
-      expect(MISC_TUTOR_MOVES.some((move) => new PokemonMove(move).getName() === optionData[3].label)).toBe(true);
+      expect(PHYSICAL_TUTOR_MOVES.some((moveId) => new PokemonMove(moveId).getName() === optionData[0].label)).toBe(
+        true,
+      );
+      expect(SPECIAL_TUTOR_MOVES.some((moveId) => new PokemonMove(moveId).getName() === optionData[1].label)).toBe(
+        true,
+      );
+      expect(STATUS_TUTOR_MOVES.some((moveId) => new PokemonMove(moveId).getName() === optionData[2].label)).toBe(true);
+      expect(MISC_TUTOR_MOVES.some((moveId) => new PokemonMove(moveId).getName() === optionData[3].label)).toBe(true);
     });
   });
 
@@ -416,7 +427,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
       await game.phaseInterceptor.run(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
@@ -432,7 +443,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
       await game.phaseInterceptor.run(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
@@ -454,7 +465,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
       await game.phaseInterceptor.run(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
@@ -478,7 +489,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
       await game.phaseInterceptor.run(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
@@ -554,7 +565,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
       expect(scene.getCurrentPhase()?.constructor.name).toBe(SelectModifierPhase.name);
       await game.phaseInterceptor.run(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;

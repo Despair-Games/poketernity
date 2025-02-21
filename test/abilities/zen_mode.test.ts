@@ -1,8 +1,6 @@
-import { Status } from "#app/data/status-effect";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -32,8 +30,8 @@ describe("Abilities - ZEN MODE", () => {
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyLevel(5)
       .ability(Abilities.ZEN_MODE)
-      .moveset(Moves.SPLASH)
-      .enemyMoveset(Moves.SEISMIC_TOSS);
+      .moveset(MoveId.SPLASH)
+      .enemyMoveset(MoveId.SEISMIC_TOSS);
   });
 
   it("shouldn't change form when taking damage if not dropping below 50% HP", async () => {
@@ -41,7 +39,7 @@ describe("Abilities - ZEN MODE", () => {
     const darmanitan = game.scene.getPlayerPokemon()!;
     expect(darmanitan.formIndex).toBe(baseForm);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
     expect(darmanitan.getHpRatio()).toBeLessThan(1);
@@ -56,7 +54,7 @@ describe("Abilities - ZEN MODE", () => {
     darmanitan.hp = darmanitan.getMaxHp() / 2 + 1;
     expect(darmanitan.formIndex).toBe(baseForm);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
     expect(darmanitan.getHpRatio()).toBeLessThan(0.5);
@@ -69,13 +67,13 @@ describe("Abilities - ZEN MODE", () => {
     darmanitan.hp = darmanitan.getMaxHp() / 2 + 1;
     expect(darmanitan.formIndex).toBe(baseForm);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
     expect(darmanitan.getHpRatio()).toBeLessThan(0.5);
     expect(darmanitan.formIndex).toBe(zenForm);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.killPokemon(darmanitan);
     game.doSelectPartyPokemon(1);
     await game.toNextTurn();
@@ -96,11 +94,10 @@ describe("Abilities - ZEN MODE", () => {
     darmanitan.hp = 1;
     expect(darmanitan.formIndex).toBe(zenForm);
 
-    darmanitan.hp = 0;
-    darmanitan.status = new Status(StatusEffect.FAINT);
+    darmanitan.faint();
     expect(darmanitan.isFainted()).toBe(true);
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.doKillOpponents();
     await game.toNextWave();
 

@@ -1,10 +1,11 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { type Move } from "#app/data/move";
-import { MoveTarget } from "../../enums/move-target";
+import { MoveTarget } from "#enums/move-target";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
-import type { Type } from "#enums/type";
+import type { ElementalType } from "#enums/elemental-type";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Determines whether a Pokemon is immune to a move because of an ability.
@@ -13,11 +14,12 @@ import { PreDefendAbAttr } from "./pre-defend-ab-attr";
  * @see {@linkcode getCondition}
  */
 export class TypeImmunityAbAttr extends PreDefendAbAttr {
-  private readonly immuneType: Type | null;
+  private readonly immuneType: ElementalType | null;
   private readonly condition: AbAttrCondition | null;
 
-  constructor(immuneType: Type | null, condition?: AbAttrCondition) {
+  constructor(immuneType: ElementalType | null, condition?: AbAttrCondition) {
     super();
+    this._flags.add(AbAttrFlag.TYPE_IMMUNITY);
 
     this.immuneType = immuneType;
     this.condition = condition ?? null;
@@ -26,22 +28,20 @@ export class TypeImmunityAbAttr extends PreDefendAbAttr {
   /**
    * Applies immunity if this ability grants immunity to the type of the given move.
    * @param pokemon - The defending {@linkcode Pokemon}
-   * @param _passive - N/A
+   * @param simulated - N/A
    * @param attacker - The attacking {@linkcode Pokemon}
    * @param move The used {@linkcode Move}
-   * @param _cancelled N/A
-   * @param args `[0]`: {@linkcode NumberHolder} gets set to `0` if the pokemon is immune
+   * @param cancelled N/A
+   * @param typeMultiplier {@linkcode NumberHolder} gets set to `0` if the pokemon is immune
    */
-  override applyPreDefend(
+  override apply(
     pokemon: Pokemon,
-    _passive: boolean,
     _simulated: boolean,
     attacker: Pokemon,
     move: Move,
     _cancelled: BooleanHolder,
-    args: any[],
+    typeMultiplier: NumberHolder,
   ): boolean {
-    const typeMultiplier: NumberHolder = args[0];
     // Field moves should ignore immunity
     if ([MoveTarget.BOTH_SIDES, MoveTarget.ENEMY_SIDE, MoveTarget.USER_SIDE].includes(move.moveTarget)) {
       return false;
@@ -53,7 +53,7 @@ export class TypeImmunityAbAttr extends PreDefendAbAttr {
     return false;
   }
 
-  getImmuneType(): Type | null {
+  getImmuneType(): ElementalType | null {
     return this.immuneType;
   }
 

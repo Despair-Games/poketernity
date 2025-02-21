@@ -1,22 +1,24 @@
-import type { BattlerIndex } from "#app/battle";
-import { BattleType, ClassicFixedBossWaves } from "#app/battle";
-import type { CustomModifierSettings } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
-import { BattleEndPhase } from "./battle-end-phase";
-import { NewBattlePhase } from "./new-battle-phase";
-import { PokemonPhase } from "./pokemon-phase";
-import { AddEnemyBuffModifierPhase } from "./add-enemy-buff-modifier-phase";
-import { EggLapsePhase } from "./egg-lapse-phase";
-import { GameOverPhase } from "./game-over-phase";
-import { ModifierRewardPhase } from "./modifier-reward-phase";
-import { SelectModifierPhase } from "./select-modifier-phase";
-import { TrainerVictoryPhase } from "./trainer-victory-phase";
+import { type BattlerIndex } from "#enums/battler-index";
+import { BattleType } from "#enums/battle-type";
 import { handleMysteryEncounterVictory } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { globalScene } from "#app/global-scene";
+import { type CustomModifierSettings } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
+import { PokemonPhase } from "./abstract-pokemon-phase";
+import { BattleEndPhase } from "./battle-end-phase";
+import { EggLapsePhase } from "./egg-lapse-phase";
+import { ModifierRewardPhase } from "./modifier-reward-phase";
+import { NewBattlePhase } from "./new-battle-phase";
+import { SelectModifierPhase } from "./select-modifier-phase";
+import { TrainerVictoryPhase } from "./trainer-victory-phase";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import { EVIL_BOSS_2_WAVE } from "#app/data/special-waves";
+import { PhaseId } from "#enums/phase-id";
 
 export class VictoryPhase extends PokemonPhase {
+  override readonly id = PhaseId.VICTORY;
   /** If true, indicates that the phase is intended for EXP purposes only, and not to continue a battle to next phase */
-  isExpOnly: boolean;
+  public readonly isExpOnly: boolean;
 
   constructor(battlerIndex: BattlerIndex | number, isExpOnly: boolean = false) {
     super(battlerIndex);
@@ -24,14 +26,18 @@ export class VictoryPhase extends PokemonPhase {
     this.isExpOnly = isExpOnly;
   }
 
-  override start() {
+  public override start(): void {
     super.start();
 
-    const isMysteryEncounter = globalScene.currentBattle.isBattleMysteryEncounter();
+    const { currentBattle, gameData, gameMode, offsetGym } = globalScene;
+    const { battleType, mysteryEncounter, waveIndex } = currentBattle;
+    const { isClassic, isDaily, isEndless } = gameMode;
+
+    const isMysteryEncounter = currentBattle.isBattleMysteryEncounter();
 
     // update Pokemon defeated count except for MEs that disable it
-    if (!isMysteryEncounter || !globalScene.currentBattle.mysteryEncounter?.preventGameStatsUpdates) {
-      globalScene.gameData.gameStats.pokemonDefeated++;
+    if (!isMysteryEncounter || !mysteryEncounter?.preventGameStatsUpdates) {
+      gameData.gameStats.pokemonDefeated++;
     }
 
     const expValue = this.getPokemon().getExpValue();
@@ -42,71 +48,67 @@ export class VictoryPhase extends PokemonPhase {
       return this.end();
     }
 
-    if (
-      !globalScene
-        .getEnemyParty()
-        .find((p) => (globalScene.currentBattle.battleType === BattleType.WILD ? p.isOnField() : !p?.isFainted(true)))
-    ) {
+    if (!globalScene.getEnemyParty().find((p) => (battleType === BattleType.WILD ? p.isOnField() : !p?.isFainted()))) {
+      // clear all queued delayed attacks (e.g. from Future Sight)
+      globalScene.arena.removeTag(ArenaTagType.DELAYED_ATTACK);
+
       globalScene.pushPhase(new BattleEndPhase(true));
-      if (globalScene.currentBattle.battleType === BattleType.TRAINER) {
+
+      if (battleType === BattleType.TRAINER) {
         globalScene.pushPhase(new TrainerVictoryPhase());
       }
-      if (globalScene.gameMode.isEndless || !globalScene.gameMode.isWaveFinal(globalScene.currentBattle.waveIndex)) {
+
+      if (isEndless || !gameMode.isWaveFinal(waveIndex)) {
         globalScene.pushPhase(new EggLapsePhase());
-        if (
-          globalScene.gameMode.isClassic
-          && globalScene.currentBattle.waveIndex === ClassicFixedBossWaves.EVIL_BOSS_2
-        ) {
+
+        if (isClassic && waveIndex === EVIL_BOSS_2_WAVE) {
           // Should get Lock Capsule on 165 before shop phase so it can be used in the rewards shop
           globalScene.pushPhase(new ModifierRewardPhase(modifierTypes.LOCK_CAPSULE));
         }
-        if (globalScene.currentBattle.waveIndex % 10) {
-          globalScene.pushPhase(new SelectModifierPhase(undefined, undefined, this.getFixedBattleCustomModifiers()));
-        } else if (globalScene.gameMode.isDaily) {
+
+        if (waveIndex % 10) {
+          globalScene.pushPhase(
+            new SelectModifierPhase({ customModifierSettings: this.getFixedBattleCustomModifiers() }),
+          );
+        } else if (isDaily) {
           globalScene.pushPhase(new ModifierRewardPhase(modifierTypes.EXP_CHARM));
-          if (
-            globalScene.currentBattle.waveIndex > 10
-            && !globalScene.gameMode.isWaveFinal(globalScene.currentBattle.waveIndex)
-          ) {
+
+          if (waveIndex > 10 && !gameMode.isWaveFinal(waveIndex)) {
             globalScene.pushPhase(new ModifierRewardPhase(modifierTypes.GOLDEN_POKEBALL));
           }
         } else {
-          const superExpWave = !globalScene.gameMode.isEndless ? (globalScene.offsetGym ? 0 : 20) : 10;
-          if (globalScene.gameMode.isEndless && globalScene.currentBattle.waveIndex === 10) {
+          const superExpWave = !isEndless ? (offsetGym ? 0 : 20) : 10;
+          if (isEndless && waveIndex === 10) {
             globalScene.pushPhase(new ModifierRewardPhase(modifierTypes.EXP_SHARE));
           }
-          if (
-            globalScene.currentBattle.waveIndex <= 750
-            && (globalScene.currentBattle.waveIndex <= 500 || globalScene.currentBattle.waveIndex % 30 === superExpWave)
-          ) {
+
+          if (waveIndex <= 750 && (waveIndex <= 500 || waveIndex % 30 === superExpWave)) {
             globalScene.pushPhase(
               new ModifierRewardPhase(
-                globalScene.currentBattle.waveIndex % 30 !== superExpWave || globalScene.currentBattle.waveIndex > 250
+                waveIndex % 30 !== superExpWave || waveIndex > 250
                   ? modifierTypes.EXP_CHARM
                   : modifierTypes.SUPER_EXP_CHARM,
               ),
             );
           }
-          if (globalScene.currentBattle.waveIndex <= 150 && !(globalScene.currentBattle.waveIndex % 50)) {
+
+          if (waveIndex <= 150 && !(waveIndex % 50)) {
             globalScene.pushPhase(new ModifierRewardPhase(modifierTypes.GOLDEN_POKEBALL));
           }
-          if (globalScene.gameMode.isEndless && !(globalScene.currentBattle.waveIndex % 50)) {
+
+          if (isEndless && !(waveIndex % 50)) {
             globalScene.pushPhase(
-              new ModifierRewardPhase(
-                !(globalScene.currentBattle.waveIndex % 250)
-                  ? modifierTypes.VOUCHER_PREMIUM
-                  : modifierTypes.VOUCHER_PLUS,
-              ),
+              new ModifierRewardPhase(!(waveIndex % 250) ? modifierTypes.VOUCHER_PREMIUM : modifierTypes.VOUCHER_PLUS),
             );
-            globalScene.pushPhase(new AddEnemyBuffModifierPhase());
           }
         }
+
         globalScene.pushPhase(new NewBattlePhase());
       } else {
-        globalScene.currentBattle.battleType = BattleType.CLEAR;
-        globalScene.score += globalScene.gameMode.getClearScoreBonus();
+        currentBattle.battleType = BattleType.CLEAR;
+        globalScene.score += gameMode.getClearScoreBonus();
         globalScene.updateScoreText();
-        globalScene.pushPhase(new GameOverPhase(true));
+        globalScene.gameOver({ isVictory: true });
       }
     }
 
@@ -117,7 +119,7 @@ export class VictoryPhase extends PokemonPhase {
    * If this wave is a fixed battle with special custom modifier rewards,
    * will pass those settings to the upcoming {@linkcode SelectModifierPhase}`.
    */
-  getFixedBattleCustomModifiers(): CustomModifierSettings | undefined {
+  protected getFixedBattleCustomModifiers(): CustomModifierSettings | undefined {
     const gameMode = globalScene.gameMode;
     const waveIndex = globalScene.currentBattle.waveIndex;
     if (gameMode.isFixedBattle(waveIndex)) {

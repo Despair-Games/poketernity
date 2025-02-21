@@ -1,7 +1,7 @@
-import { Type } from "#enums/type";
+import { ElementalType } from "#enums/elemental-type";
 import { Challenges } from "#enums/challenges";
 import { Abilities } from "#enums/abilities";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
@@ -23,10 +23,10 @@ describe("Moves - Relic Song", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([Moves.RELIC_SONG, Moves.SPLASH])
+      .moveset([MoveId.RELIC_SONG, MoveId.SPLASH])
       .battleType("single")
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(Moves.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
       .enemySpecies(Species.MAGIKARP)
       .enemyLevel(100);
   });
@@ -36,27 +36,27 @@ describe("Moves - Relic Song", () => {
 
     const meloetta = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.RELIC_SONG);
+    game.move.select(MoveId.RELIC_SONG);
     await game.toNextTurn();
 
     expect(meloetta.formIndex).toBe(1);
 
-    game.move.select(Moves.RELIC_SONG);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.move.select(MoveId.RELIC_SONG);
+    await game.toEndOfTurn();
 
     expect(meloetta.formIndex).toBe(0);
   });
 
   it("doesn't swap Meloetta's form during a mono-type challenge", async () => {
-    game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, Type.PSYCHIC + 1, 0);
+    game.challengeMode.addChallenge(Challenges.SINGLE_TYPE, ElementalType.PSYCHIC + 1, 0);
     await game.challengeMode.startBattle([Species.MELOETTA]);
 
     const meloetta = game.scene.getPlayerPokemon()!;
 
     expect(meloetta.formIndex).toBe(0);
 
-    game.move.select(Moves.RELIC_SONG);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.move.select(MoveId.RELIC_SONG);
+    await game.toEndOfTurn();
     await game.toNextTurn();
 
     expect(meloetta.formIndex).toBe(0);
@@ -68,7 +68,7 @@ describe("Moves - Relic Song", () => {
 
     const meloetta = game.scene.getPlayerPokemon()!;
 
-    game.move.select(Moves.SPLASH);
+    game.move.select(MoveId.SPLASH);
     await game.doKillOpponents();
     await game.toNextWave();
 

@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import i18next from "i18next";
 import { isNullOrUndefined, randSeedInt } from "#app/utils";
-import { PokemonHeldItemModifier } from "#app/modifier/modifier";
+import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import {
@@ -11,16 +11,15 @@ import {
   getPokeballTintColor,
 } from "#app/data/pokeball";
 import { PlayerGender } from "#enums/player-gender";
-import { addPokeballCaptureStars, addPokeballOpenParticles } from "#app/field/anims";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
 import { achvs } from "#app/system/achv";
-import { Mode } from "#app/ui/ui";
-import type { PartyOption } from "#app/ui/party-ui-handler";
-import { PartyUiMode } from "#app/ui/party-ui-handler";
+import { UiMode } from "#enums/ui-mode";
+import type { PartyOption } from "#enums/party-option";
+import { PartyUiMode } from "#enums/party-ui-mode";
 import { Species } from "#enums/species";
-import type { Type } from "#enums/type";
+import type { ElementalType } from "#enums/elemental-type";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies } from "#app/data/pokemon-species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import {
   getEncounterText,
@@ -29,21 +28,23 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { Gender } from "#enums/gender";
 import type { PermanentStat } from "#enums/stat";
 import { VictoryPhase } from "#app/phases/victory-phase";
-import { SummaryUiMode } from "#app/ui/summary-ui-handler";
+import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import type { Abilities } from "#enums/abilities";
 import type { PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
+import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
+import { settings } from "#app/system/settings/settings-manager";
 
 /** Will give +1 level every 10 waves */
 export const STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER = 1;
 
 /**
- * Gets the sprite key and file root for a given PokemonSpecies (accounts for gender, shiny, variants, forms, and experimental)
+ * Gets the sprite key and file root for a given PokemonSpecies (accounts for gender, shiny, variants, and forms)
  * @param species - The species of the sprite
  * @param female - Whether the sprite represents the female version
  * @param formIndex - The formIndex of the sprite
@@ -73,7 +74,7 @@ export function getSpriteKeysFromSpecies(
 }
 
 /**
- * Gets the sprite key and file root for a given Pokemon (accounts for gender, shiny, variants, forms, and experimental)
+ * Gets the sprite key and file root for a given Pokemon (accounts for gender, shiny, variants, and forms)
  * @param pokemon - The input Pokemon
  * @returns an object with the sprite key and file root
  */
@@ -256,7 +257,7 @@ export function getHighestStatTotalPlayerPokemon(
 export function getRandomSpeciesByStarterCost(
   starterTiers: number | [number, number],
   excludedSpecies?: Species[],
-  types?: Type[],
+  types?: ElementalType[],
   allowSubLegendary: boolean = true,
   allowLegendary: boolean = true,
   allowMythical: boolean = true,
@@ -310,8 +311,7 @@ export function getRandomSpeciesByStarterCost(
  * @param pokemon the player pokemon to KO
  */
 export function koPlayerPokemon(pokemon: PlayerPokemon) {
-  pokemon.hp = 0;
-  pokemon.trySetStatus(StatusEffect.FAINT);
+  pokemon.faint();
   pokemon.updateInfo();
   queueEncounterMessage(i18next.t("battle:fainted", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }));
 }
@@ -403,10 +403,7 @@ export async function applyModifierTypeToPlayerPokemon(
   const modifier = modType.newModifier(pokemon);
   const existing = globalScene.findModifier(
     (m) =>
-      m instanceof PokemonHeldItemModifier
-      && m.type.id === modType.id
-      && m.pokemonId === pokemon.id
-      && m.matchType(modifier),
+      m.isPokemonHeldItemModifier() && m.type.id === modType.id && m.pokemonId === pokemon.id && m.matchType(modifier),
   ) as PokemonHeldItemModifier;
 
   // At max stacks
@@ -463,7 +460,7 @@ export function trainerThrowPokeball(
 
   return new Promise((resolve) => {
     globalScene.trainer.setTexture(
-      `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
+      `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
     );
     globalScene.time.delayedCall(512, () => {
       globalScene.playSound("se/pb_throw");
@@ -474,7 +471,7 @@ export function trainerThrowPokeball(
         globalScene.trainer.setFrame("3");
         globalScene.time.delayedCall(768, () => {
           globalScene.trainer.setTexture(
-            `trainer_${globalScene.gameData.gender === PlayerGender.FEMALE ? "f" : "m"}_back`,
+            `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back`,
           );
         });
       });
@@ -491,7 +488,7 @@ export function trainerThrowPokeball(
           globalScene.playSound("se/pb_rel");
           pokemon.tint(getPokeballTintColor(pokeballType));
 
-          addPokeballOpenParticles(pokeball.x, pokeball.y, pokeballType);
+          globalScene.animations.addPokeballOpenParticles(pokeball.x, pokeball.y, pokeballType);
 
           globalScene.tweens.add({
             targets: pokemon,
@@ -537,7 +534,7 @@ export function trainerThrowPokeball(
                       }
                     } else {
                       globalScene.playSound("se/pb_lock");
-                      addPokeballCaptureStars(pokeball);
+                      globalScene.animations.addPokeballCaptureStars(pokeball);
 
                       const pbTint = globalScene.add.sprite(pokeball.x, pokeball.y, "pb", "pb");
                       pbTint.setOrigin(pokeball.originX, pokeball.originY);
@@ -665,6 +662,7 @@ export async function catchPokemon(
   globalScene.gameData.updateSpeciesDexIvs(pokemon.species.getRootSpeciesId(true), pokemon.ivs);
 
   return new Promise((resolve) => {
+    // TODO: remove all this duplicated code from attempt-capture-phase
     const doPokemonCatchMenu = () => {
       const end = () => {
         // Ensure the pokemon is in the enemy party in all situations
@@ -685,7 +683,7 @@ export async function catchPokemon(
       };
       const addToParty = (slotIndex?: number) => {
         const newPokemon = pokemon.addToParty(pokeballType, slotIndex);
-        const modifiers = globalScene.findModifiers((m) => m instanceof PokemonHeldItemModifier, false);
+        const modifiers = globalScene.findModifiers((m) => m.isPokemonHeldItemModifier(), false);
         if (globalScene.getPlayerParty().filter((p) => p.isShiny()).length === 6) {
           globalScene.validateAchv(achvs.SHINY_PARTY);
         }
@@ -701,64 +699,80 @@ export async function catchPokemon(
       };
       Promise.all([pokemon.hideInfo(), globalScene.gameData.setPokemonCaught(pokemon)]).then(() => {
         if (globalScene.getPlayerParty().length === 6) {
+          const addToPartyMenuConfig: OptionSelectModeConfig = {
+            options: [
+              {
+                label: i18next.t("partyUiHandler:SUMMARY"),
+                handler: () => {
+                  globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
+                    removePokemon();
+                    end();
+                  });
+                  return true;
+                },
+              },
+              {
+                label: i18next.t("menu:yes"),
+                handler: () => {
+                  const newPokemon = globalScene.addPlayerPokemon(
+                    pokemon.species,
+                    pokemon.level,
+                    pokemon.abilityIndex,
+                    pokemon.formIndex,
+                    pokemon.gender,
+                    pokemon.shiny,
+                    pokemon.variant,
+                    pokemon.ivs,
+                    pokemon.nature,
+                    pokemon,
+                  );
+                  globalScene.ui.setMode(
+                    UiMode.SUMMARY,
+                    newPokemon,
+                    0,
+                    SummaryUiMode.DEFAULT,
+                    () => {
+                      globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
+                        promptRelease();
+                      });
+                    },
+                    false,
+                  );
+                  return true;
+                },
+              },
+              {
+                label: i18next.t("menu:no"),
+                handler: () => {
+                  globalScene.ui.setMode(
+                    UiMode.PARTY,
+                    PartyUiMode.RELEASE,
+                    0,
+                    (slotIndex: number, _option: PartyOption) => {
+                      globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
+                        if (slotIndex < 6) {
+                          addToParty(slotIndex);
+                        } else {
+                          promptRelease();
+                        }
+                      });
+                    },
+                  );
+                  return true;
+                },
+              },
+            ],
+            yOffset: 48,
+            onResize: (w: number, _h: number) => {
+              globalScene.pokemonInfoContainer.makeRoomForOptionSelectUi(w);
+            },
+          };
           const promptRelease = () => {
             globalScene.ui.showText(
               i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }),
               null,
               () => {
-                globalScene.pokemonInfoContainer.makeRoomForConfirmUi(1, true);
-                globalScene.ui.setMode(
-                  Mode.CONFIRM,
-                  () => {
-                    const newPokemon = globalScene.addPlayerPokemon(
-                      pokemon.species,
-                      pokemon.level,
-                      pokemon.abilityIndex,
-                      pokemon.formIndex,
-                      pokemon.gender,
-                      pokemon.shiny,
-                      pokemon.variant,
-                      pokemon.ivs,
-                      pokemon.nature,
-                      pokemon,
-                    );
-                    globalScene.ui.setMode(
-                      Mode.SUMMARY,
-                      newPokemon,
-                      0,
-                      SummaryUiMode.DEFAULT,
-                      () => {
-                        globalScene.ui.setMode(Mode.MESSAGE).then(() => {
-                          promptRelease();
-                        });
-                      },
-                      false,
-                    );
-                  },
-                  () => {
-                    globalScene.ui.setMode(
-                      Mode.PARTY,
-                      PartyUiMode.RELEASE,
-                      0,
-                      (slotIndex: number, _option: PartyOption) => {
-                        globalScene.ui.setMode(Mode.MESSAGE).then(() => {
-                          if (slotIndex < 6) {
-                            addToParty(slotIndex);
-                          } else {
-                            promptRelease();
-                          }
-                        });
-                      },
-                    );
-                  },
-                  () => {
-                    globalScene.ui.setMode(Mode.MESSAGE).then(() => {
-                      removePokemon();
-                      end();
-                    });
-                  },
-                  "fullParty",
-                );
+                globalScene.ui.setMode(UiMode.OPTION_SELECT, addToPartyMenuConfig);
               },
             );
           };

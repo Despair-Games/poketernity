@@ -10,9 +10,9 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import { FieldTripEncounter } from "#app/data/mystery-encounters/encounters/field-trip-encounter";
-import { Moves } from "#enums/moves";
+import { MoveId } from "#enums/move-id";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { Mode } from "#app/ui/ui";
+import { UiMode } from "#enums/ui-mode";
 import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
 import i18next from "i18next";
 
@@ -37,7 +37,7 @@ describe("Field Trip - Mystery Encounter", () => {
     game.override.startingWave(defaultWave);
     game.override.startingBiome(defaultBiome);
     game.override.disableTrainerWaves();
-    game.override.moveset([Moves.TACKLE, Moves.UPROAR, Moves.SWORDS_DANCE]);
+    game.override.moveset([MoveId.TACKLE, MoveId.UPROAR, MoveId.SWORDS_DANCE]);
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
       new Map<Biome, MysteryEncounterType[]>([[Biome.CAVE, [MysteryEncounterType.FIELD_TRIP]]]),
@@ -88,7 +88,7 @@ describe("Field Trip - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1, optionNo: 2 });
       await game.phaseInterceptor.to(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
@@ -100,7 +100,7 @@ describe("Field Trip - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 1, { pokemonNo: 1, optionNo: 1 });
       await game.phaseInterceptor.to(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
@@ -149,7 +149,7 @@ describe("Field Trip - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1, optionNo: 1 });
       await game.phaseInterceptor.to(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
@@ -161,7 +161,7 @@ describe("Field Trip - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 2, { pokemonNo: 1, optionNo: 2 });
       await game.phaseInterceptor.to(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
@@ -210,7 +210,7 @@ describe("Field Trip - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 3, { pokemonNo: 1, optionNo: 1 });
       await game.phaseInterceptor.to(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;
@@ -223,7 +223,7 @@ describe("Field Trip - Mystery Encounter", () => {
       await runMysteryEncounterToEnd(game, 3, { pokemonNo: 1, optionNo: 3 });
       await game.phaseInterceptor.to(SelectModifierPhase);
 
-      expect(scene.ui.getMode()).to.equal(Mode.MODIFIER_SELECT);
+      expect(scene.ui.getMode()).to.equal(UiMode.MODIFIER_SELECT);
       const modifierSelectHandler = scene.ui.handlers.find(
         (h) => h instanceof ModifierSelectUiHandler,
       ) as ModifierSelectUiHandler;

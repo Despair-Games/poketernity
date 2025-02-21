@@ -1,8 +1,7 @@
 import { globalScene } from "#app/global-scene";
-import type { TextStyle } from "./text";
-import { getTextColor } from "./text";
-import type { Mode } from "./ui";
+import type { UiMode } from "#enums/ui-mode";
 import type { Button } from "#enums/buttons";
+import type AwaitableUiHandler from "#app/ui/awaitable-ui-handler";
 
 /**
  * A basic abstract class to act as a holder and processor for UI elements.
@@ -15,7 +14,7 @@ export default abstract class UiHandler {
   /**
    * @param mode The mode of the UI element. These should be unique.
    */
-  constructor(mode: Mode | null = null) {
+  constructor(mode: UiMode | null = null) {
     this.mode = mode;
   }
 
@@ -31,10 +30,6 @@ export default abstract class UiHandler {
 
   getUi() {
     return globalScene.ui;
-  }
-
-  getTextColor(style: TextStyle, shadow: boolean = false): string {
-    return getTextColor(style, shadow, globalScene.uiTheme);
   }
 
   getCursor(): number {
@@ -61,5 +56,9 @@ export default abstract class UiHandler {
 
   clear() {
     this.active = false;
+  }
+
+  isAwaitableUiHandler(): this is AwaitableUiHandler {
+    return false;
   }
 }
