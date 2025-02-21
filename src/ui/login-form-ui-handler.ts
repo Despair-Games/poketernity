@@ -232,7 +232,6 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
         }
         const optionSelectConfig: OptionSelectModeConfig = {
           options: options,
-          inputDelay: 1000,
           xOffset: GAME_WIDTH,
           yOffset: GAME_HEIGHT - this.usernameInfoImage.displayHeight - 16 * dataKeys.length - 22,
         };
