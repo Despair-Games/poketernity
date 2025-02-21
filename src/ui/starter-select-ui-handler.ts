@@ -2391,6 +2391,13 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.checkIconId(this.starterIcons[index], species, props.female, props.formIndex, props.shiny, props.variant);
   }
 
+  /**
+   * Puts a move at the requested index in the current highlighted Pokemon's moveset.
+   * If the move was already present in the moveset, swap its position with the one in the new spot currently.
+   * @param targetIndex the index to put the move, between 0 and 3
+   * @param newMoveId the {@linkcode MoveId} of the move to add in
+   * @param previousMoveId the {@linkcode MoveId} of the move that was in that spot previously
+   */
   switchMoveHandler(targetIndex: number, newMoveId: MoveId, previousMoveId: MoveId): void {
     if (!this.starterMoveset) {
       console.warn("Trying to update a non existing moveset");
@@ -2431,11 +2438,12 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     if (!this.starterMoveset) {
       return;
     }
-    // Find the index of that Pokemon species in the team, if it is present.
-    const starterIndex = this.starterSpecies.findIndex((species: PokemonSpecies) => species.speciesId === speciesId);
-    if (starterIndex >= 0) {
-      this.starterMovesets[starterIndex] = this.starterMoveset;
-    }
+    // Find the Pokemon of that species in the team, and give them the correct moveset.
+    this.starterSpecies.forEach((species: PokemonSpecies, index: number) => {
+      if (species.speciesId === speciesId) {
+        this.starterMovesets[index] = this.starterMoveset!;
+      }
+    });
   }
 
   updateButtonIcon(iconSetting, gamepadType, iconElement, controlLabel): void {
