@@ -234,7 +234,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
           return resolve();
         }
         ui.showText(
-          i18next.t("battle:addedAsAStarter", { pokemonName: getPokemonSpecies(unlockedStarters.pop()).getName() }),
+          i18next.t("battle:addedAsAStarter", { pokemonName: getPokemonSpecies(unlockedStarters.shift()).getName() }),
           null,
           () => showStarterUnlockText(unlockedStarters).then(() => resolve()),
           null,

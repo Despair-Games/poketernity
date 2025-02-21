@@ -102,6 +102,72 @@ describe("Dex Data", () => {
     expect(gameData.getNaturesForAttr(dexData.natureAttr).includes(Nature.MODEST)).toBeTruthy();
   });
 
+  it("should update data but not stats of rental for already caught Pokemon", async () => {
+    await game.scene.initStarterColors();
+    expect(gameData.gameStats.pokemonCaught).toBe(0);
+
+    const species = getPokemonSpecies(Species.BULBASAUR);
+    const dexData = gameData.dexData[species.speciesId];
+    const starterData = gameData.starterData[species.getRootSpeciesId()];
+
+    expect(starterData.candyCount).toBe(0);
+    expect(starterData.abilityAttr & AbilityAttr.ABILITY_1).toBeTruthy();
+    expect(starterData.abilityAttr & AbilityAttr.ABILITY_2).toBeFalsy();
+    expect(starterData.abilityAttr & AbilityAttr.ABILITY_HIDDEN).toBeFalsy();
+
+    expect(dexData.caughtCount).toBe(0);
+    expect(dexData.caughtAttr & DexAttr.SHINY).toBeFalsy();
+    expect(gameData.getNaturesForAttr(dexData.natureAttr).length).toBe(1);
+    expect(gameData.getNaturesForAttr(dexData.natureAttr).includes(Nature.MODEST)).toBeFalsy();
+
+    // Shiny tier 3 bulbasaur
+    const newCatch = new PlayerPokemon(species, 5, 1, 0, Gender.MALE, true, 2, [], Nature.MODEST);
+    const newStarters = await gameData.setPokemonCaught(newCatch, false, false, false);
+    expect(newStarters.length).toBe(0);
+
+    // These should not update for rental Pokemon
+    expect(gameData.gameStats.pokemonCaught).toBe(0);
+    expect(starterData.candyCount).toBe(0);
+    expect(dexData.caughtCount).toBe(0);
+
+    // These should update for rental Pokemon
+    expect(starterData.abilityAttr & AbilityAttr.ABILITY_2).toBeTruthy();
+    expect(dexData.caughtAttr & DexAttr.SHINY).toBeTruthy();
+    expect(dexData.caughtAttr & DexAttr.VARIANT_3).toBeTruthy();
+    expect(gameData.getNaturesForAttr(dexData.natureAttr).length).toBe(2);
+    expect(gameData.getNaturesForAttr(dexData.natureAttr).includes(Nature.MODEST)).toBeTruthy();
+  });
+
+  it("should update nothing for rental, not already caught Pokemon", async () => {
+    await game.scene.initStarterColors();
+    expect(gameData.gameStats.pokemonCaught).toBe(0);
+
+    const species = getPokemonSpecies(Species.MEWTWO);
+    const dexData = gameData.dexData[species.speciesId];
+    const starterData = gameData.starterData[species.getRootSpeciesId()];
+
+    expect(dexData.caughtCount).toBe(0);
+    expect(dexData.hatchedCount).toBe(0);
+    expect(dexData.caughtAttr).toBeFalsy();
+    expect(starterData.candyCount).toBe(0);
+    expect(starterData.abilityAttr).toBeFalsy();
+    expect(gameData.getNaturesForAttr(dexData.natureAttr).length).toBe(0);
+
+    // Shiny tier 3 mewtwo
+    const newCatch = new PlayerPokemon(species, 5, 1, 0, Gender.GENDERLESS, true, 2, [], Nature.MODEST);
+    const newStarters = await gameData.setPokemonCaught(newCatch, false, false, false);
+    expect(newStarters.length).toBe(0);
+
+    // no data should have been updated
+    expect(gameData.gameStats.pokemonCaught).toBe(0);
+    expect(dexData.caughtCount).toBe(0);
+    expect(dexData.hatchedCount).toBe(0);
+    expect(dexData.caughtAttr).toBeFalsy();
+    expect(starterData.candyCount).toBe(0);
+    expect(starterData.abilityAttr).toBeFalsy();
+    expect(gameData.getNaturesForAttr(dexData.natureAttr).length).toBe(0);
+  });
+
   it("should update data for a caught Pokemon's pre-evolutions", async () => {
     await game.scene.initStarterColors();
     expect(gameData.gameStats.pokemonCaught).toBe(0);
