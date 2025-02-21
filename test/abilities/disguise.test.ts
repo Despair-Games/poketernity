@@ -97,7 +97,7 @@ describe("Abilities - Disguise", () => {
 
     game.move.select(MoveId.TOXIC_THREAD);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(mimikyu.formIndex).toBe(disguisedForm);
     expect(mimikyu.status?.effect).toBe(StatusEffect.POISON);
@@ -117,7 +117,7 @@ describe("Abilities - Disguise", () => {
 
     game.move.select(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(mimikyu.formIndex).toBe(bustedForm);
     expect(mimikyu.hp).equals(maxHp - disguiseDamage);
@@ -125,7 +125,7 @@ describe("Abilities - Disguise", () => {
     await game.toNextTurn();
     game.doSwitchPokemon(1);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(mimikyu.formIndex).toBe(bustedForm);
   });

@@ -86,7 +86,7 @@ describe("Weather - Strong Winds", () => {
     enemy.hp = 1;
 
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.arena.weather?.weatherType).toBeUndefined();
   });

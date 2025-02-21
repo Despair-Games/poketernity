@@ -1,12 +1,12 @@
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { ElementalType } from "#enums/elemental-type";
+import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
-describe("Moves - Trick Or Treat", () => {
+describe("Primal Weather", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
@@ -23,25 +23,24 @@ describe("Moves - Trick Or Treat", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .moveset([MoveId.FORESTS_CURSE, MoveId.TRICK_OR_TREAT])
-      .ability(Abilities.BALL_FETCH)
       .battleType("single")
-      .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
+      .ability(Abilities.BALL_FETCH)
       .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(Species.MAGIKARP)
       .enemyMoveset(MoveId.SPLASH);
   });
 
-  it("will replace added type from Forest's Curse", async () => {
+  it.each([
+    { weatherName: "Harsh Sun", ability: Abilities.DESOLATE_LAND, weatherType: WeatherType.HARSH_SUN },
+    { weatherName: "Heavy Rain", ability: Abilities.PRIMORDIAL_SEA, weatherType: WeatherType.HEAVY_RAIN },
+    { weatherName: "Strong Winds", ability: Abilities.DELTA_STREAM, weatherType: WeatherType.STRONG_WINDS },
+  ])("$weatherName can't be overwritten by non-primal weather", async ({ ability, weatherType }) => {
+    game.override.ability(ability);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    const enemyPokemon = game.scene.getEnemyPokemon();
-    game.move.select(MoveId.FORESTS_CURSE);
+    game.move.use(MoveId.SANDSTORM);
     await game.toEndOfTurn();
-    expect(enemyPokemon!.summonData.addedType).toBe(ElementalType.GRASS);
 
-    game.move.select(MoveId.TRICK_OR_TREAT);
-    await game.toEndOfTurn();
-    expect(enemyPokemon?.summonData.addedType).toBe(ElementalType.GHOST);
+    expect(game.scene.arena.hasWeather(weatherType)).toBe(true);
   });
 });
