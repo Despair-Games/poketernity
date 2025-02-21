@@ -242,6 +242,7 @@ import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { RageAttr } from "./move-attrs/rage-attr";
 import { DoubleDamageToMaxAttr } from "./move-attrs/double-damage-to-max-attr";
+import { DisplayMessageAttr } from "./move-attrs/display-message-attr";
 
 export function initMoves() {
   const rawAllMoves = [
@@ -755,7 +756,9 @@ export function initMoves() {
     new AttackMove(MoveId.PSYWAVE, ElementalType.PSYCHIC, MoveCategory.SPECIAL, -1, 100, 15, -1, 0, 1).attr(
       RandomLevelDamageAttr,
     ),
-    new SelfStatusMove(MoveId.SPLASH, ElementalType.NORMAL, -1, 40, -1, 0, 1).condition(failOnGravityCondition),
+    new SelfStatusMove(MoveId.SPLASH, ElementalType.NORMAL, -1, 40, -1, 0, 1)
+      .condition(failOnGravityCondition)
+      .attr(DisplayMessageAttr, i18next.t("moveTriggers:splash")),
     new SelfStatusMove(MoveId.ACID_ARMOR, ElementalType.POISON, -1, 20, -1, 0, 1).attr(
       StatStageChangeAttr,
       [Stat.DEF],
@@ -2568,8 +2571,15 @@ export function initMoves() {
     new AttackMove(MoveId.DAZZLING_GLEAM, ElementalType.FAIRY, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 6).target(
       MoveTarget.ALL_NEAR_ENEMIES,
     ),
-    new SelfStatusMove(MoveId.CELEBRATE, ElementalType.NORMAL, -1, 40, -1, 0, 6),
+    new SelfStatusMove(MoveId.CELEBRATE, ElementalType.NORMAL, -1, 40, -1, 0, 6).attr(
+      DisplayMessageAttr,
+      i18next.t("moveTriggers:celebrate", { pokemonName: "{USER}" }),
+    ),
     new StatusMove(MoveId.HOLD_HANDS, ElementalType.NORMAL, -1, 40, -1, 0, 6)
+      .attr(
+        DisplayMessageAttr,
+        i18next.t("moveTriggers:holdHands", { pokemonName: "{USER}", targetPokemonName: "{TARGET}" }),
+      )
       .ignoresSubstitute()
       .target(MoveTarget.NEAR_ALLY),
     new StatusMove(MoveId.BABY_DOLL_EYES, ElementalType.FAIRY, 100, 30, -1, 1, 6).attr(
