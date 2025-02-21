@@ -47,7 +47,7 @@ describe("Abilities - Effect Spore", () => {
     game.move.select(MoveId.SPLASH);
     await game.forceEnemyMove(MoveId.TACKLE);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(abilityAttr.apply).toHaveLastReturnedWith(true);
     expect(enemyPokemon.status).toBeDefined();
@@ -63,7 +63,7 @@ describe("Abilities - Effect Spore", () => {
     game.move.select(MoveId.SPLASH);
     await game.forceEnemyMove(MoveId.TACKLE);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(abilityAttr.apply).toHaveLastReturnedWith(false);
   });
@@ -78,7 +78,7 @@ describe("Abilities - Effect Spore", () => {
     game.move.select(MoveId.SPLASH);
     await game.forceEnemyMove(MoveId.TACKLE);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(abilityAttr.apply).toHaveLastReturnedWith(false);
   });
@@ -92,7 +92,7 @@ describe("Abilities - Effect Spore", () => {
     game.move.select(MoveId.SPLASH);
     await game.forceEnemyMove(MoveId.WATER_GUN);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(abilityAttr.apply).toHaveLastReturnedWith(false);
   });

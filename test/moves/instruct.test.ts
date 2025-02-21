@@ -267,14 +267,14 @@ describe("Moves - Instruct", () => {
 
     game.move.select(MoveId.INSTRUCT);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(player.turnData.attacksReceived.length).toBe(10);
 
     await game.toNextTurn();
     game.move.select(MoveId.INSTRUCT);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(player.turnData.attacksReceived.length).toBe(10);
   });
@@ -300,7 +300,7 @@ describe("Moves - Instruct", () => {
     await game.forceEnemyMove(MoveId.BULLET_SEED, BattlerIndex.PLAYER_2);
     await game.forceEnemyMove(MoveId.SPLASH);
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(ivysaur.turnData.attacksReceived.length).toBe(15);
 
@@ -310,7 +310,7 @@ describe("Moves - Instruct", () => {
     await game.forceEnemyMove(MoveId.BULLET_SEED, BattlerIndex.PLAYER_2);
     await game.forceEnemyMove(MoveId.SPLASH);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(ivysaur.turnData.attacksReceived.length).toBe(15);
   });

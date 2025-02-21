@@ -39,7 +39,7 @@ describe("Moves - Psyshock", () => {
     const enemy = game.field.getEnemyPokemon();
 
     game.move.use(MoveId.PSYSHOCK);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(enemy.battleData.abilitiesApplied).toContain(Abilities.FUR_COAT);
   });

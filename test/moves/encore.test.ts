@@ -95,19 +95,19 @@ describe("Moves - Encore", () => {
     const enemyPokemon = game.scene.getEnemyPokemon();
     game.move.select(MoveId.ENCORE);
     await game.setTurnOrder(turnOrder);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
     expect(enemyPokemon?.getTag(BattlerTagType.ENCORE)).toBeDefined();
 
     await game.toNextTurn();
     game.move.select(MoveId.TORMENT);
     await game.setTurnOrder(turnOrder);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
     expect(enemyPokemon?.getTag(BattlerTagType.TORMENT)).toBeDefined();
 
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
     await game.setTurnOrder(turnOrder);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
     const lastMove = enemyPokemon?.getLastXMoves()[0];
     expect(lastMove?.move.id).toBe(MoveId.STRUGGLE);
   });

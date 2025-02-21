@@ -45,7 +45,7 @@ describe("Ability Attribute - Block Weather Damage", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     expect(playerPokemon.isFullHp()).toBe(true);

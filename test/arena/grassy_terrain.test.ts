@@ -50,7 +50,7 @@ describe("Arena - Grassy Terrain", () => {
     await game.toNextTurn();
 
     game.move.select(MoveId.EARTHQUAKE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(eq.calculateBattlePower).toHaveLastReturnedWith(50);
   });
@@ -67,7 +67,7 @@ describe("Arena - Grassy Terrain", () => {
     await game.toNextTurn();
 
     game.move.select(MoveId.EARTHQUAKE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(eq.calculateBattlePower).toHaveLastReturnedWith(100);
   });

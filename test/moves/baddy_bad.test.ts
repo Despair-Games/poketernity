@@ -34,7 +34,7 @@ describe("Moves - Baddy Bad", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.BADDY_BAD);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.arena.tags.length).toBe(0);
   });

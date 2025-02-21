@@ -37,7 +37,7 @@ describe("Abilities - Pickpocket", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.getEnemyPokemon()!.getHeldItems().length).toBe(0);
     expect(game.scene.getPlayerPokemon()!.getHeldItems().length).toBe(1);
@@ -48,7 +48,7 @@ describe("Abilities - Pickpocket", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.getEnemyPokemon()!.getHeldItems().length).toBe(1);
     expect(game.scene.getPlayerPokemon()!.getHeldItems().length).toBe(0);
@@ -58,7 +58,7 @@ describe("Abilities - Pickpocket", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.SUBSTITUTE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.getEnemyPokemon()!.getHeldItems().length).toBe(1);
     expect(game.scene.getPlayerPokemon()!.getHeldItems().length).toBe(0);

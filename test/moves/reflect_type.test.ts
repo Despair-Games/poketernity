@@ -48,7 +48,7 @@ describe("Moves - Reflect Type", () => {
 
     game.move.select(MoveId.REFLECT_TYPE);
     await game.forceEnemyMove(MoveId.SPLASH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(playerPokemon?.getTypes()[0]).toBe(ElementalType.NORMAL);
     expect(playerPokemon?.getTypes().includes(ElementalType.GRASS)).toBe(true);
   });
