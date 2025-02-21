@@ -27,10 +27,7 @@ export class CheckStatusEffectPhase extends Phase {
 
     for (const p of this.activePokemon) {
       const pokemon = globalScene.getFieldPokemonByBattlerIndex(p);
-      if (
-        !isNullOrUndefined(pokemon)
-        && pokemon.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC], false, true)
-      ) {
+      if (pokemon?.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC], false, true)) {
         globalScene.unshiftPhase(new PostTurnStatusEffectPhase(p));
       }
     }

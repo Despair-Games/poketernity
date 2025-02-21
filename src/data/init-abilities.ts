@@ -652,14 +652,13 @@ export function initAbilities() {
       MovePowerBoostAbAttr,
       (user, _target, move) =>
         move?.category === MoveCategory.PHYSICAL
-        && !!user
-        && user.hasStatusEffect([StatusEffect.TOXIC, StatusEffect.POISON]),
+        && !!user?.hasStatusEffect([StatusEffect.TOXIC, StatusEffect.POISON]),
       1.5,
     ),
     new Ability(Abilities.FLARE_BOOST, 5).attr(
       MovePowerBoostAbAttr,
       (user, _target, move) =>
-        move?.category === MoveCategory.SPECIAL && !!user && user.hasStatusEffect(StatusEffect.BURN),
+        move?.category === MoveCategory.SPECIAL && !!user?.hasStatusEffect(StatusEffect.BURN),
       1.5,
     ),
     new Ability(Abilities.HARVEST, 5)
@@ -898,7 +897,7 @@ export function initAbilities() {
     ),
     new Ability(Abilities.MERCILESS, 7).attr(
       ConditionalCritAbAttr,
-      (_user, target, _move) => !!target && target.hasStatusEffect([StatusEffect.POISON, StatusEffect.TOXIC]),
+      (_user, target, _move) => !!target?.hasStatusEffect([StatusEffect.POISON, StatusEffect.TOXIC]),
     ),
     new Ability(Abilities.SHIELDS_DOWN, 7)
       .attr(PostBattleInitFormChangeAbAttr, () => 0)
