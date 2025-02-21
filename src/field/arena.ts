@@ -441,6 +441,7 @@ export class Arena {
       globalScene.queueMessage(getWeatherStartMessage(newWeather) ?? "");
     } else {
       globalScene.queueMessage(getWeatherClearMessage(oldWeatherType) ?? "");
+      this.eventTarget.dispatchEvent(new WeatherChangedEvent(oldWeatherType, WeatherType.NONE, 0));
     }
 
     globalScene
