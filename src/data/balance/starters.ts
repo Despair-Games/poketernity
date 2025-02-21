@@ -19,9 +19,9 @@ export const STARTER_CANDY_MULIPLIER_FOR_EGG = 2;
  * @param variant the {@linkcode VariantTier} to consider.
  * @returns the amount to multiply candy gain by.
  */
-export function getCandyGainMultiplierForShinies(variant: VariantTier): number {
+export function getCandyGainMultiplierForShinies(variantTier: VariantTier): number {
   let rarityMultiplier = 1;
-  switch (variant) {
+  switch (variantTier) {
     case VariantTier.STANDARD:
       rarityMultiplier = 1;
       break;
