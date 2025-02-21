@@ -38,12 +38,17 @@ We are using [Prettier](https://prettier.io/) to format our code. It will run au
 
 We're using [ESLint](https://eslint.org/docs/latest/rules/) plus the [ESLint Stylistic](https://eslint.style/rules) and [Typescript ESLint](https://typescript-eslint.io/rules/) plugins for linting. It will run automatically via the pre-commit hook, but if you would like to run it manually you can use the `npm run eslint` script. To view the currently applied ESLint rules, check out the [eslint.config.js](./eslint.config.js) file.
 
+#### Continuous Integration
+
+Github Workflows are used on every PR to enforce the test suite being successful, proper linting, no compilation errors and no circular dependencies in the codebase.
+- Use `npm run typecheck` to invoke the Typescript compiler to check for basic code errors.
+- Use `npm run depcruise` to check the codebase for any runtime circular dependency.
+- Use `npm run docs` to generate html documentation for the game, which can then be found in the `typedoc` folder.
+
 #### Localization
 
 Pokéternity's translations are managed under a dedicated repository at https://github.com/Despair-Games/poketernity-locales/. There is a specific process involved in making PRs that impacts the in game text, which can be found in the [localization.md](./docs/localization.md) file.
 
-
-<!-- Todo: write up on typecheck and depcruise -->
 
 <!-- ### 📚 Documentation
 
