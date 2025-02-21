@@ -83,7 +83,7 @@ export class CommandPhase extends FieldPhase {
     ) {
       currentBattle.turnCommands[this.fieldIndex] = {
         command: BattleCommand.FIGHT,
-        move: { move: SelfStatusMove.none(), targets: [], type: ElementalType.UNKNOWN },
+        turnMove: { move: SelfStatusMove.none(), targets: [], type: ElementalType.UNKNOWN },
         skip: true,
       };
     }
@@ -204,7 +204,7 @@ export class CommandPhase extends FieldPhase {
           const turnCommand: TurnCommand = {
             command: BattleCommand.FIGHT,
             cursor: cursor,
-            move: {
+            turnMove: {
               move: allMoves[moveId],
               targets: [],
               ignorePP: ignorePp,
@@ -228,14 +228,14 @@ export class CommandPhase extends FieldPhase {
           ) {
             globalScene.selectTarget(this.fieldIndex);
           }
-          if (turnCommand.move && (moveTargets.targets.length <= 1 || moveTargets.multiple)) {
-            turnCommand.move.targets = moveTargets.targets;
+          if (turnCommand.turnMove && (moveTargets.targets.length <= 1 || moveTargets.multiple)) {
+            turnCommand.turnMove.targets = moveTargets.targets;
           } else if (
-            turnCommand.move
+            turnCommand.turnMove
             && playerPokemon.getTag(BattlerTagType.CHARGING)
             && playerPokemon.getMoveQueue().length >= 1
           ) {
-            turnCommand.move.targets = playerPokemon.getMoveQueue()[0].targets;
+            turnCommand.turnMove.targets = playerPokemon.getMoveQueue()[0].targets;
           } else {
             globalScene.selectTarget(this.fieldIndex);
           }

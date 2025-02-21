@@ -18,9 +18,9 @@ export class UpperHandCondition extends MoveCondition {
         !!targetCommand
         && targetCommand.command === BattleCommand.FIGHT
         && !target.turnData.acted
-        && !!targetCommand.move
-        && targetCommand.move.move.category !== MoveCategory.STATUS
-        && targetCommand.move.move.getPriority(target) > 0
+        && !!targetCommand.turnMove
+        && targetCommand.turnMove.move.category !== MoveCategory.STATUS
+        && targetCommand.turnMove.move.getPriority(target) > 0
       );
     });
   }

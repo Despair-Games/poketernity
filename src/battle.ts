@@ -59,7 +59,7 @@ import type { TurnMove } from "#app/@types/TurnMove";
 export interface TurnCommand {
   command: BattleCommand;
   cursor?: number;
-  move?: TurnMove;
+  turnMove?: TurnMove;
   targets?: BattlerIndex[];
   skip?: boolean;
   args?: any[];

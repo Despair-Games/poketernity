@@ -1662,13 +1662,13 @@ export function initMoves() {
     new AttackMove(MoveId.SUCKER_PUNCH, ElementalType.DARK, MoveCategory.PHYSICAL, 70, 100, 5, -1, 1, 4).condition(
       (_user, target, _move) => {
         const turnCommand = globalScene.currentBattle.turnCommands[target.getBattlerIndex()];
-        if (!turnCommand || !turnCommand.move) {
+        if (!turnCommand || !turnCommand.turnMove) {
           return false;
         }
         return (
           turnCommand.command === BattleCommand.FIGHT
           && !target.turnData.acted
-          && turnCommand.move.move.category !== MoveCategory.STATUS
+          && turnCommand.turnMove.move.category !== MoveCategory.STATUS
         );
       },
     ),
@@ -3842,13 +3842,13 @@ export function initMoves() {
     new AttackMove(MoveId.THUNDERCLAP, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 70, 100, 5, -1, 1, 9).condition(
       (_user, target, _move) => {
         const turnCommand = globalScene.currentBattle.turnCommands[target.getBattlerIndex()];
-        if (!turnCommand || !turnCommand.move) {
+        if (!turnCommand || !turnCommand.turnMove) {
           return false;
         }
         return (
           turnCommand.command === BattleCommand.FIGHT
           && !target.turnData.acted
-          && turnCommand.move.move.category !== MoveCategory.STATUS
+          && turnCommand.turnMove.move.category !== MoveCategory.STATUS
         );
       },
     ),

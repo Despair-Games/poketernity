@@ -40,7 +40,7 @@ export class BypassSpeedChanceAbAttr extends AbAttr {
       const turnCommand = globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()];
       const isCommandFight = turnCommand?.command === BattleCommand.FIGHT;
 
-      if (isCommandFight && turnCommand?.move?.move?.isAttackMove()) {
+      if (isCommandFight && turnCommand?.turnMove?.move?.isAttackMove()) {
         bypassSpeed.value = true;
         return true;
       }

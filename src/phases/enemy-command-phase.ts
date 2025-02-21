@@ -101,7 +101,7 @@ export class EnemyCommandPhase extends FieldPhase {
 
     battle.turnCommands[this.fieldIndex + BattlerIndex.ENEMY] = {
       command: BattleCommand.FIGHT,
-      move: nextMove,
+      turnMove: nextMove,
       skip: this.skipTurn,
     };
 

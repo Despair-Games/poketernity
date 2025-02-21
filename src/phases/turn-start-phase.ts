@@ -104,8 +104,8 @@ export class TurnStartPhase extends FieldPhase {
           return -1;
         }
       } else if (aCommand?.command === BattleCommand.FIGHT) {
-        const aMove = allMoves[aCommand.move!.move.id];
-        const bMove = allMoves[bCommand!.move!.move.id];
+        const aMove = allMoves[aCommand.turnMove!.move.id];
+        const bMove = allMoves[bCommand!.turnMove!.move.id];
 
         const aUser = globalScene.getField(true).find((p) => p.getBattlerIndex() === a)!;
         const bUser = globalScene.getField(true).find((p) => p.getBattlerIndex() === b)!;
@@ -157,7 +157,7 @@ export class TurnStartPhase extends FieldPhase {
 
       switch (turnCommand?.command) {
         case BattleCommand.FIGHT:
-          const queuedMove = turnCommand.move;
+          const queuedMove = turnCommand.turnMove;
           pokemon.turnData.order = orderIndex++;
           if (!queuedMove) {
             continue;
