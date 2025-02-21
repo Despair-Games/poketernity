@@ -6,7 +6,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 
 /**
  * Attribute to display a message
- * @extends MoveAttr
+ * @extends MoveEffectAttr 
  */
 export class DisplayMessageAttr extends MoveEffectAttr {
   private displayMessage: string;
