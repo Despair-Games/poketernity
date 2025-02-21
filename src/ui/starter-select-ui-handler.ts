@@ -3571,6 +3571,11 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           return this.starterMoveset?.indexOf(move) === i;
         }) as StarterMoveset;
 
+        if (!isNullOrUndefined(formIndex)) {
+          // If we're switching form and the Pokemon is in the team, we need to update its moveset
+          this.updateSelectedStarterMoveset(species.speciesId);
+        }
+
         const speciesForm = getPokemonSpeciesForm(species.speciesId, formIndex!); // TODO: is the bang correct?
         const formText = capitalizeString(species?.forms[formIndex!]?.formKey, "-", false, false); // TODO: is the bang correct?
 
