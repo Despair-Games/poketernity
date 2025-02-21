@@ -1529,29 +1529,30 @@ export class GameData {
    * unless that species had already been captured before, in which case any new form, gender, etc. gets unlocked.
    *
    * @param pokemon the {@linkcode Pokemon} that was caught.
-   * @param includeNewCatch whether to update the data if the catch would unlock a new starter. Default: `true`.
-   *   Use `false` for "rental" Pokemon, so that the function exits early.
+   * @param isNonRentalCatch `true` if we are in a catching or hatching situation, and if the Pokemon is not being "rented"
+   *   as part of an event. If `false` and the Pokemon wasn't already caught (e.g. rental mon), no data will get updated,
+   *   otherwise (e.g. evolution situation) the nature, ability and other unlocks will get updated, but no the game stats.
    * @param fromEgg whether the Pokemon was obtained through an egg. Default: `false`
    * @param showMessage whether to display a message if (a) new Starter(s) was unlocked. Default: `true`
    * @returns array of {@linkcode Species} of unlocked starters, if any (root species will be last in the array)
    */
   setPokemonCaught(
     pokemon: Pokemon,
-    includeNewCatch: boolean = true,
+    isNonRentalCatch: boolean = true,
     fromEgg: boolean = false,
     showMessage: boolean = true,
   ): Promise<Species[]> {
-    // If includeNewCatch === false, only update the pokemon's dex data if the Pokemon has already been marked as caught in dex
+    // If isNonRentalCatch === false, only update the pokemon's dex data if the Pokemon has already been marked as caught in dex
     // Prevents form changes, nature changes, etc. from unintentionally updating the dex data of a "rental" pokemon
     const speciesRootForm = pokemon.species.getRootSpeciesId();
-    if (!includeNewCatch && !globalScene.gameData.dexData[speciesRootForm].caughtAttr) {
+    if (!isNonRentalCatch && !globalScene.gameData.dexData[speciesRootForm].caughtAttr) {
       return Promise.resolve([]);
     } else {
       return this.setPokemonSpeciesCaught(
         pokemon,
         pokemon.species,
-        includeNewCatch,
-        includeNewCatch,
+        isNonRentalCatch,
+        isNonRentalCatch,
         fromEgg,
         showMessage,
       );
