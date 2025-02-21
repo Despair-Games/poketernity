@@ -27,7 +27,7 @@ export class PsychoShiftEffectAttr extends MoveEffectAttr {
       const canSetStatus = target.canSetStatus(statusToApply, true, false, user);
       const trySetStatus = canSetStatus ? target.trySetStatus(statusToApply, true, user) : false;
 
-      if (trySetStatus && user.status) {
+      if (trySetStatus && user.hasNonVolatileStatusEffect()) {
         // PsychoShiftTag is added to the user if move succeeds so that the user is healed of its status effect after its move
         user.addTag(BattlerTagType.PSYCHO_SHIFT);
       }

@@ -1615,10 +1615,7 @@ export function initMoves() {
     new StatusMove(MoveId.PSYCHO_SHIFT, ElementalType.PSYCHIC, 100, 10, -1, 0, 4)
       .attr(PsychoShiftEffectAttr)
       .condition((user, target, _move) => {
-        return (
-          user.hasNonVolatileStatusEffect()
-          && target.canSetStatus(user.getStatusEffect(), false, false, user)
-        );
+        return user.hasNonVolatileStatusEffect() && target.canSetStatus(user.getStatusEffect(), false, false, user);
       }),
     new AttackMove(MoveId.TRUMP_CARD, ElementalType.NORMAL, MoveCategory.SPECIAL, -1, -1, 5, -1, 0, 4)
       .makesContact()
@@ -3557,7 +3554,7 @@ export function initMoves() {
       .attr(FlinchAttr),
     new AttackMove(MoveId.INFERNAL_PARADE, ElementalType.GHOST, MoveCategory.SPECIAL, 60, 100, 15, 30, 0, 8)
       .attr(StatusEffectAttr, StatusEffect.BURN)
-      .attr(MovePowerMultiplierAttr, (_user, target, _move) => (target.status ? 2 : 1)),
+      .attr(MovePowerMultiplierAttr, (_user, target, _move) => (target.hasNonVolatileStatusEffect() ? 2 : 1)),
     new AttackMove(MoveId.CEASELESS_EDGE, ElementalType.DARK, MoveCategory.PHYSICAL, 65, 90, 15, 100, 0, 8)
       .attr(AddArenaTrapTagAttr, ArenaTagType.SPIKES)
       .slicingMove(),
