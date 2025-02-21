@@ -24,7 +24,7 @@ If you have the motivation and experience with Typescript/Javascript (or are wil
 If the install process seems to hang at the post-install step, you likely just need to press `Enter` for it continue.
 <!--   - _if you run into any errors, reach out in [TBD]_-->
 2. Run `npm run start:dev` to locally run the project. You can then access it from the same machine by putting `http://localhost:8000/` in your browser's address bar.
-If you want to access the game from other devices on your local network, you can run `npm run start:dev -- --host` instead. You can then connect via `http://[IP of your device]:8000/` (ie: `http://192.168.1.101:8000/`).
+If you want to access the game from other devices on your local network, you can run `npm run start:dev -- --host` instead. You can then connect via `http://[IP of your device]:8000/` (e.g.: `http://192.168.1.101:8000/`).
 
 #### Tests
 
