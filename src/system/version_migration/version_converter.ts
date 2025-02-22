@@ -1,8 +1,8 @@
 import type { SessionSaveData } from "#app/@types/SessionData";
+import type { Settings } from "#app/@types/Settings";
 import type { SystemSaveData } from "#app/@types/SystemData";
 import { compareVersions } from "compare-versions";
 import { version } from "../../../package.json";
-import type { Settings } from "#app/@types/Settings";
 
 /*
 // template for save migrator creation
