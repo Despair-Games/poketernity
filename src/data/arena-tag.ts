@@ -1400,15 +1400,9 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
   }
 
   override onAdd(_arena: Arena) {
-    let localeKey = "arenaTag:TypeImmuneDamageOverTimeOnAdd";
-    if (this.side === ArenaTagSide.PLAYER) {
-      localeKey = localeKey.concat("Player");
-    } else {
-      localeKey = localeKey.concat("Enemy");
-    }
-    localeKey = localeKey.concat(ElementalType[this.immuneType]);
-
-    globalScene.queueMessage(i18next.t(localeKey));
+    globalScene.queueMessage(
+      i18next.t(`arenaTag:TypeImmuneDamageOverTimeOnAdd${this.i18nSideKey}${ElementalType[this.immuneType]}`),
+    );
   }
 
   override lapse(arena: Arena): boolean {
