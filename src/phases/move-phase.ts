@@ -243,13 +243,7 @@ export class MovePhase extends BattlePhase {
         case StatusEffect.SLEEP:
           applyMoveAttrs(BypassSleepAttr, this.pokemon, null, this.move.getMove());
           const turnsRemaining = new NumberHolder(this.pokemon.status!.sleepTurnsRemaining ?? 0);
-          applyAbAttrs(
-            AbAttrFlag.REDUCE_SLEEP_DURATION,
-            this.pokemon,
-            false,
-            statusEffect,
-            turnsRemaining,
-          );
+          applyAbAttrs(AbAttrFlag.REDUCE_SLEEP_DURATION, this.pokemon, false, statusEffect, turnsRemaining);
           if (Overrides.STATUS_ACTIVATION_OVERRIDE === true) {
             turnsRemaining.value = Math.max(turnsRemaining.value, 1);
           } else if (Overrides.STATUS_ACTIVATION_OVERRIDE === false) {
@@ -276,20 +270,12 @@ export class MovePhase extends BattlePhase {
 
       if (activated) {
         this.cancel();
-        globalScene.queueMessage(
-          getStatusEffectActivationText(statusEffect, getPokemonNameWithAffix(this.pokemon)),
-        );
+        globalScene.queueMessage(getStatusEffectActivationText(statusEffect, getPokemonNameWithAffix(this.pokemon)));
         globalScene.unshiftPhase(
-          new CommonAnimPhase(
-            this.pokemon.getBattlerIndex(),
-            undefined,
-            CommonAnim.POISON + (statusEffect - 1),
-          ),
+          new CommonAnimPhase(this.pokemon.getBattlerIndex(), undefined, CommonAnim.POISON + (statusEffect - 1)),
         );
       } else if (healed) {
-        globalScene.queueMessage(
-          getStatusEffectHealText(statusEffect, getPokemonNameWithAffix(this.pokemon)),
-        );
+        globalScene.queueMessage(getStatusEffectHealText(statusEffect, getPokemonNameWithAffix(this.pokemon)));
         this.pokemon.resetStatus();
         this.pokemon.updateInfo();
       }

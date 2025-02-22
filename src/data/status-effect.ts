@@ -24,7 +24,6 @@ export class Status {
       this.sleepTurnsRemaining--;
     }
   }
-
 }
 
 function getStatusEffectMessageKey(statusEffect: StatusEffect | undefined): string {

@@ -88,7 +88,7 @@ export class MultiHitAttr extends MoveAttr {
         const party = user.getParty();
         // No status means the ally pokemon can contribute to Beat Up
         return party.reduce((total, pokemon) => {
-          return total + (pokemon.id === user.id ? 1 : (pokemon.getStatusEffect(true) ? 0 : 1));
+          return total + (pokemon.id === user.id ? 1 : pokemon.getStatusEffect(true) ? 0 : 1);
         }, 0);
     }
   }

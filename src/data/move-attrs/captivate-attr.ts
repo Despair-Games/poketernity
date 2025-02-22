@@ -14,6 +14,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
  */
 export class CaptivateAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
+    // TODO: Should show oblivious ability flyout if target has oblivious
     if (!target.hasAbility(Abilities.OBLIVIOUS) && target.isOppositeGender(user)) {
       globalScene.unshiftPhase(new StatStageChangePhase(target.getBattlerIndex(), user, [Stat.SPATK], -2));
       return true;
