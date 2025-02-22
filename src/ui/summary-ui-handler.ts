@@ -466,8 +466,8 @@ export default class SummaryUiHandler extends UiHandler {
     let statusTextKey: string | undefined;
     if (this.pokemon.isFainted()) {
       statusTextKey = "faint";
-    } else if (this.pokemon.status) {
-      statusTextKey = StatusEffect[this.pokemon.status.effect].toLowerCase();
+    } else if (this.pokemon.hasNonVolatileStatusEffect(false, true)) {
+      statusTextKey = StatusEffect[this.pokemon.getStatusEffect(true)].toLowerCase();
     } else if (this.pokemon.pokerus) {
       statusTextKey = "pokerus";
     }

@@ -673,9 +673,8 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
         );
       }
 
-      if (this.lastStatus !== (pokemon.status?.effect ?? StatusEffect.NONE)) {
-        this.lastStatus = pokemon.status?.effect ?? StatusEffect.NONE;
-
+      if (this.lastStatus !== pokemon.getStatusEffect(true)) {
+        this.lastStatus = pokemon.getStatusEffect(true);
         if (this.lastStatus !== StatusEffect.NONE) {
           this.statusIndicator.setFrame(StatusEffect[this.lastStatus].toLowerCase());
         }

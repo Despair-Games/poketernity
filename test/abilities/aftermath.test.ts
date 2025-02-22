@@ -39,7 +39,7 @@ describe("Abilities - Aftermath", () => {
     const player = game.scene.getPlayerPokemon()!;
 
     game.move.use(MoveId.GRASS_KNOT);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(player.hp).toBe(Math.ceil((player.getMaxHp() * 3) / 4));
   });
@@ -50,7 +50,7 @@ describe("Abilities - Aftermath", () => {
     const player = game.scene.getPlayerPokemon()!;
 
     game.move.use(MoveId.EARTHQUAKE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(player.isFullHp()).toBe(true);
   });
@@ -62,7 +62,7 @@ describe("Abilities - Aftermath", () => {
     const player = game.scene.getPlayerPokemon()!;
 
     game.move.use(MoveId.WATERFALL);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(player.isFullHp()).toBe(true);
   });
@@ -76,7 +76,7 @@ describe("Abilities - Aftermath", () => {
 
     game.move.use(MoveId.SPLASH, 0);
     game.move.use(MoveId.TACKLE, 1, BattlerIndex.ENEMY_2);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(milotic.hp).toBe(Math.ceil((milotic.getMaxHp() * 3) / 4));
     expect(feebas.isFullHp()).toBe(true);
@@ -90,7 +90,7 @@ describe("Abilities - Aftermath", () => {
 
     game.move.use(MoveId.U_TURN);
     game.doSelectPartyPokemon(1);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(feebas.isOnField()).toBe(false);
     expect(feebas.hp).toBe(Math.ceil((feebas.getMaxHp() * 3) / 4));
@@ -107,7 +107,7 @@ describe("Abilities - Aftermath", () => {
 
     game.move.use(MoveId.GRASS_KNOT);
     game.doSelectPartyPokemon(1);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(feebas.getHeldItems()[0]?.type.id).toBe("REVIVER_SEED");
     expect(feebas.isFainted()).toBe(true);
@@ -122,7 +122,7 @@ describe("Abilities - Aftermath", () => {
 
     game.move.use(MoveId.FALSE_SWIPE);
     await game.move.forceEnemyMove(MoveId.SELF_DESTRUCT);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(player.isFullHp()).toBe(true);
     expect(enemy.isFainted()).toBe(true);
@@ -137,7 +137,7 @@ describe("Abilities - Aftermath", () => {
 
     game.move.use(MoveId.FALSE_SWIPE);
     await game.move.forceEnemyMove(MoveId.SPLASH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(player.isFullHp()).toBe(true);
     expect(enemy.isFainted()).toBe(true);

@@ -45,7 +45,7 @@ describe("Moves - Baneful Bunker", () => {
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
-    expect(leadPokemon.status?.effect === StatusEffect.POISON).toBeTruthy();
+    expect(leadPokemon.getStatusEffect(true)).toBe(StatusEffect.POISON);
   });
   test("should protect the user and poison attackers that make contact, regardless of accuracy checks", async () => {
     await game.classicMode.startBattle([Species.CHARIZARD]);
@@ -60,7 +60,7 @@ describe("Moves - Baneful Bunker", () => {
     await game.move.forceMiss();
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
-    expect(leadPokemon.status?.effect === StatusEffect.POISON).toBeTruthy();
+    expect(leadPokemon.getStatusEffect(true)).toBe(StatusEffect.POISON);
   });
 
   test("should not poison attackers that don't make contact", async () => {
@@ -77,6 +77,6 @@ describe("Moves - Baneful Bunker", () => {
     await game.move.forceMiss();
     await game.phaseInterceptor.to("BerryPhase", false);
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
-    expect(leadPokemon.status?.effect === StatusEffect.POISON).toBeFalsy();
+    expect(leadPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
 });

@@ -137,7 +137,7 @@ export default class PokemonData {
     if (sourcePokemon) {
       this.moveset = sourcePokemon.moveset;
       if (!forHistory) {
-        this.status = sourcePokemon.status;
+        this.status = sourcePokemon.getStatusEffect(false, true);
         if (this.player) {
           this.summonData = sourcePokemon.summonData;
         }

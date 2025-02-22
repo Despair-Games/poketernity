@@ -44,7 +44,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
       const pokemon = game.scene.getPlayerPokemon()!;
 
       game.move.select(MoveId.TACKLE);
-      await game.phaseInterceptor.to("BerryPhase");
+      await game.toEndOfTurn();
 
       expect(allMoves[MoveId.TACKLE].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
       expect(pokemon.getStatStage(Stat.SPD)).toBe(-1);
@@ -62,7 +62,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
       const pokemon = game.scene.getPlayerPokemon()!;
 
       game.move.select(MoveId.TACKLE);
-      await game.phaseInterceptor.to("BerryPhase");
+      await game.toEndOfTurn();
 
       expect(allMoves[MoveId.TACKLE].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
       expect(pokemon.getStatStage(Stat.SPD)).toBe(0);
@@ -80,7 +80,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
       const pokemon = game.scene.getPlayerPokemon()!;
 
       game.move.select(MoveId.EMBER);
-      await game.phaseInterceptor.to("BerryPhase");
+      await game.toEndOfTurn();
 
       expect(allMoves[MoveId.EMBER].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(false);
       expect(pokemon.getStatStage(Stat.SPD)).toBe(0);
@@ -96,7 +96,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
     const pokemon = game.scene.getPlayerPokemon()!;
 
     game.move.select(MoveId.DOUBLE_IRON_BASH);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(allMoves[MoveId.DOUBLE_IRON_BASH].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
     expect(pokemon.getStatStage(Stat.SPD)).toBe(-2);

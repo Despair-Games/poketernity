@@ -745,13 +745,9 @@ export class StatusEffectRequirement extends EncounterPokemonRequirement {
         return this.requiredStatusEffect.some((statusEffect) => {
           if (statusEffect === StatusEffect.NONE) {
             // StatusEffect.NONE also checks for null or undefined status
-            return (
-              isNullOrUndefined(pokemon.status)
-              || isNullOrUndefined(pokemon.status.effect)
-              || pokemon.status.effect === statusEffect
-            );
+            return !pokemon.hasNonVolatileStatusEffect();
           } else {
-            return pokemon.status?.effect === statusEffect;
+            return pokemon.hasStatusEffect(statusEffect);
           }
         });
       });
@@ -761,13 +757,9 @@ export class StatusEffectRequirement extends EncounterPokemonRequirement {
         return !this.requiredStatusEffect.some((statusEffect) => {
           if (statusEffect === StatusEffect.NONE) {
             // StatusEffect.NONE also checks for null or undefined status
-            return (
-              isNullOrUndefined(pokemon.status)
-              || isNullOrUndefined(pokemon.status.effect)
-              || pokemon.status.effect === statusEffect
-            );
+            return !pokemon.hasNonVolatileStatusEffect();
           } else {
-            return pokemon.status?.effect === statusEffect;
+            return pokemon.hasStatusEffect(statusEffect);
           }
         });
       });
@@ -777,11 +769,9 @@ export class StatusEffectRequirement extends EncounterPokemonRequirement {
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
     const reqStatus = this.requiredStatusEffect.filter((a) => {
       if (a === StatusEffect.NONE) {
-        return (
-          isNullOrUndefined(pokemon?.status) || isNullOrUndefined(pokemon.status.effect) || pokemon.status.effect === a
-        );
+        return pokemon && !pokemon.hasNonVolatileStatusEffect();
       }
-      return pokemon!.status?.effect === a;
+      return pokemon && pokemon.hasStatusEffect(a);
     });
     if (reqStatus.length > 0) {
       return ["status", StatusEffect[reqStatus[0]]];

@@ -41,7 +41,7 @@ describe("Abilities - Gale Wings", () => {
     vi.spyOn(flyingMove, "getPriority");
 
     game.move.select(MoveId.WING_ATTACK);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(playerPokemon?.isFullHp()).toBe(true);
     expect(flyingMove.getPriority).toHaveLastReturnedWith(flyingMove.priority + 1);
@@ -56,7 +56,7 @@ describe("Abilities - Gale Wings", () => {
     vi.spyOn(flyingMove, "getPriority");
 
     game.move.select(MoveId.WING_ATTACK);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(playerPokemon.isFullHp()).toBe(false);
     expect(flyingMove.getPriority).toHaveLastReturnedWith(flyingMove.priority);
@@ -73,7 +73,7 @@ describe("Abilities - Gale Wings", () => {
     vi.spyOn(flyingMove, "getPriority");
 
     game.move.select(MoveId.HIDDEN_POWER);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(playerPokemon.isFullHp()).toBe(true);
     expect(flyingMove.getPriority).toHaveLastReturnedWith(flyingMove.priority);
@@ -89,7 +89,7 @@ describe("Abilities - Gale Wings", () => {
     vi.spyOn(flyingMove, "getPriority");
 
     game.move.select(MoveId.TACKLE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(playerPokemon.isFullHp()).toBe(true);
     expect(flyingMove.getPriority).toHaveLastReturnedWith(flyingMove.priority);

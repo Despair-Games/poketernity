@@ -35,7 +35,7 @@ describe("Abilities - Sheer Force", () => {
       .disableCrits();
   });
 
-  const SHEER_FORCE_MULT = 5461 / 4096;
+  const SHEER_FORCE_MULT = 1.3;
 
   it("Sheer Force should boost the power of the move but disable secondary effects", async () => {
     game.override.moveset([MoveId.AIR_SLASH]);
@@ -149,7 +149,7 @@ describe("Abilities - Sheer Force", () => {
     const formKeyStart = playerPokemon?.getFormKey();
 
     game.move.select(MoveId.RELIC_SONG);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(formKeyStart).toBe(playerPokemon?.getFormKey());
   });
 });

@@ -39,7 +39,7 @@ describe("Moves - Diamond Storm", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.DIAMOND_STORM);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.getPlayerPokemon()!.getStatStage(Stat.DEF)).toBe(2);
   });

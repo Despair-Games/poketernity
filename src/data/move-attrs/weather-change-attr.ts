@@ -23,8 +23,6 @@ export class WeatherChangeAttr extends MoveEffectAttr {
   }
 
   override getCondition(): MoveConditionFunc {
-    return (_user, _target, _move) =>
-      !globalScene.arena.weather
-      || (globalScene.arena.weather.weatherType !== this.weatherType && !globalScene.arena.weather.isImmutable());
+    return (_user, _target, _move) => globalScene.arena.canSetWeather(this.weatherType);
   }
 }

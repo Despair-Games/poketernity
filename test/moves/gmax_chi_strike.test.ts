@@ -39,12 +39,12 @@ describe("Moves - G-Max Chi Strike grants a stackable crit boost", () => {
     vi.spyOn(enemy, "getCritStage");
 
     game.move.select(MoveId.G_MAX_CHI_STRIKE);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getCritStage).toHaveReturnedWith(0); // getCritStage is called on defender
     await game.toNextTurn();
 
     game.move.select(MoveId.G_MAX_CHI_STRIKE);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getCritStage).toHaveReturnedWith(1);
     await game.toNextTurn();
 
@@ -52,7 +52,7 @@ describe("Moves - G-Max Chi Strike grants a stackable crit boost", () => {
     await game.toNextTurn();
 
     game.move.select(MoveId.BITE);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getCritStage).toHaveReturnedWith(2);
   });
 
@@ -67,7 +67,7 @@ describe("Moves - G-Max Chi Strike grants a stackable crit boost", () => {
     await game.toNextTurn();
 
     game.move.select(MoveId.BITE);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getCritStage).toHaveReturnedWith(0);
   });
 
@@ -88,12 +88,12 @@ describe("Moves - G-Max Chi Strike grants a stackable crit boost", () => {
 
     game.move.select(MoveId.SPLASH, 0);
     game.move.select(MoveId.BITE, 1, BattlerIndex.ENEMY);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getCritStage).toHaveReturnedWith(1);
 
     game.move.select(MoveId.DRAGON_CHEER);
     game.move.select(MoveId.BITE, 1, BattlerIndex.ENEMY);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getCritStage).toHaveReturnedWith(2);
   });
 
@@ -109,15 +109,15 @@ describe("Moves - G-Max Chi Strike grants a stackable crit boost", () => {
 
     game.move.select(MoveId.BATON_PASS);
     game.doSelectPartyPokemon(1);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     game.move.select(MoveId.G_MAX_CHI_STRIKE);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getCritStage).toHaveReturnedWith(0);
     await game.toNextTurn();
 
     game.move.select(MoveId.BITE);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getCritStage).toHaveReturnedWith(1);
   });
 });

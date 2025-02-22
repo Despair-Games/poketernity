@@ -46,7 +46,7 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
 
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
     const pokemon = this.selfTarget ? user : target;
-    if (pokemon.status) {
+    if (pokemon.hasNonVolatileStatusEffect()) {
       if (this.overrideStatus) {
         pokemon.resetStatus();
       } else {
@@ -67,6 +67,6 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
     const score = moveChance < 0 ? -10 : Math.floor(moveChance * -0.1);
     const pokemon = this.selfTarget ? user : target;
 
-    return !pokemon.status && pokemon.canSetStatus(this.effect, true, false, user) ? score : 0;
+    return !pokemon.hasNonVolatileStatusEffect() && pokemon.canSetStatus(this.effect, true, false, user) ? score : 0;
   }
 }

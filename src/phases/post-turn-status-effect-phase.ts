@@ -21,8 +21,11 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
   public override start(): void {
     const pokemon = this.getPokemon();
 
-    if (pokemon?.isActive(true) && pokemon.status && pokemon.status.isPostTurn() && !pokemon.switchOutStatus) {
-      pokemon.status.incrementTurn();
+    if (
+      pokemon?.isActive(true)
+      && pokemon.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC], false, true)
+    ) {
+      pokemon.status!.incrementTurn();
 
       const cancelled = new BooleanHolder(false);
       applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
@@ -30,16 +33,16 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
 
       if (!cancelled.value) {
         globalScene.queueMessage(
-          getStatusEffectActivationText(pokemon.status.effect, getPokemonNameWithAffix(pokemon)),
+          getStatusEffectActivationText(pokemon.getStatusEffect(true), getPokemonNameWithAffix(pokemon)),
         );
 
         const damage = new NumberHolder(0);
-        switch (pokemon.status.effect) {
+        switch (pokemon.getStatusEffect(true)) {
           case StatusEffect.POISON:
             damage.value = Math.max(pokemon.getMaxHp() >> 3, 1);
             break;
           case StatusEffect.TOXIC:
-            damage.value = Math.max(Math.floor((pokemon.getMaxHp() / 16) * pokemon.status.toxicTurnCount), 1);
+            damage.value = Math.max(Math.floor((pokemon.getMaxHp() / 16) * pokemon.status!.toxicTurnCount), 1);
             break;
           case StatusEffect.BURN:
             damage.value = Math.max(pokemon.getMaxHp() >> 4, 1);
@@ -54,7 +57,9 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
           applyAbAttrs(AbAttrFlag.POST_DAMAGE, pokemon, false, damage.value);
         }
 
-        new CommonBattleAnim(CommonAnim.POISON + (pokemon.status.effect - 1), pokemon).play(false, () => this.end());
+        new CommonBattleAnim(CommonAnim.POISON + (pokemon.getStatusEffect(true) - 1), pokemon).play(false, () =>
+          this.end(),
+        );
       } else {
         this.end();
       }

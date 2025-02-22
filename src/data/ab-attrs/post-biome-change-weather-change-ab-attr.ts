@@ -13,7 +13,7 @@ export class PostBiomeChangeWeatherChangeAbAttr extends PostBiomeChangeAbAttr {
   }
 
   override apply(_pokemon: Pokemon, simulated: boolean): boolean {
-    if (!globalScene.arena.weather?.isImmutable()) {
+    if (!globalScene.arena.weather?.isPrimal()) {
       return simulated
         ? !globalScene.arena.hasWeather(this.weatherType)
         : globalScene.arena.trySetWeather(this.weatherType, true);

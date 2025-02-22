@@ -75,7 +75,7 @@ describe("Moves - Lunar Blessing", () => {
     expect(leftPlayer.resetStatus).toHaveBeenCalledOnce();
     expect(rightPlayer.resetStatus).toHaveBeenCalledOnce();
 
-    expect(leftPlayer.status?.effect).toBeUndefined();
-    expect(rightPlayer.status?.effect).toBeUndefined();
+    expect(leftPlayer.getStatusEffect(true)).toBe(StatusEffect.NONE);
+    expect(rightPlayer.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
 });

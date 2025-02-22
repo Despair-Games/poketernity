@@ -38,8 +38,8 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
     }
 
     const pokemon = this.selfTarget ? user : target;
-    if (pokemon.status && this.effects.includes(pokemon.status.effect)) {
-      globalScene.queueMessage(getStatusEffectHealText(pokemon.status.effect, getPokemonNameWithAffix(pokemon)));
+    if (pokemon.hasStatusEffect(this.effects, false, true)) {
+      globalScene.queueMessage(getStatusEffectHealText(pokemon.getStatusEffect(true), getPokemonNameWithAffix(pokemon)));
       pokemon.resetStatus();
       pokemon.updateInfo();
 
@@ -54,6 +54,6 @@ export class HealStatusEffectAttr extends MoveEffectAttr {
   }
 
   override getUserBenefitScore(user: Pokemon, _target: Pokemon, _move: Move): number {
-    return user.status ? 10 : 0;
+    return user.hasNonVolatileStatusEffect(false, true) ? 10 : 0;
   }
 }

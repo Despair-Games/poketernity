@@ -42,7 +42,7 @@ describe("Moves - Relic Song", () => {
     expect(meloetta.formIndex).toBe(1);
 
     game.move.select(MoveId.RELIC_SONG);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(meloetta.formIndex).toBe(0);
   });
@@ -56,7 +56,7 @@ describe("Moves - Relic Song", () => {
     expect(meloetta.formIndex).toBe(0);
 
     game.move.select(MoveId.RELIC_SONG);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
     await game.toNextTurn();
 
     expect(meloetta.formIndex).toBe(0);
