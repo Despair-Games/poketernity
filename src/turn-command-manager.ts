@@ -82,6 +82,8 @@ export class TurnCommandManager {
     if (pokemon.turnData) {
       pokemon.turnData.turnCommand = turnCommand;
     }
+    // Remove any existing commands by the Pokemon before adding
+    this.tryRemoveCommand((tc) => tc.pokemon === pokemon);
     this.turnCommands.push(turnCommand);
   }
 
@@ -103,7 +105,7 @@ export class TurnCommandManager {
    * `true`, or `undefined` if no such turn command exists.
    */
   public findCommand(commandFilter: TurnCommandFilter): TurnCommand | undefined {
-    return this.turnCommands.find((tc) => commandFilter(tc));
+    return this.turnCommands.find(commandFilter);
   }
 
   /**
@@ -193,6 +195,16 @@ export class TurnCommandManager {
   }
 
   /**
+   * Schedules the next valid turn command, unshifting a {@linkcode Phase}
+   * based on that commmand. This is usually preferred over
+   * {@linkcode shiftNextCommand} when phases need to be scheduled in-turn
+   * since it skips over invalid commands in the queue.
+   */
+  public scheduleNextValidCommand(): void {
+    while (!this.empty() && !this.shiftNextCommand());
+  }
+
+  /**
    * Schedules the execution of a {@linkcode Command.FIGHT | FIGHT} command
    * immediately, possibly out of turn order.
    * This should not be used when command types other than `FIGHT`
@@ -244,7 +256,7 @@ export class TurnCommandManager {
     // Add the first valid move command to the phase queue.
     // This loop ensures that skipped and invalid commands do not
     // freeze the turn sequence.
-    while (!this.empty() && !this.shiftNextCommand());
+    this.scheduleNextValidCommand();
   }
 
   public empty(): boolean {
@@ -286,7 +298,7 @@ export class TurnCommandManager {
       () => {
         this.turnCommands = randSeedShuffle(this.turnCommands);
       },
-      globalScene.currentBattle.turn,
+      globalScene.currentBattle.turn * 1000 + this.turnCommands.length,
       globalScene.waveSeed,
     );
   }

@@ -38,7 +38,7 @@ export class MoveEndPhase extends PokemonPhase {
       turnManager.setTurnOrder();
       // Pull commands from the turn manager until empty or a new
       // move phase is queued
-      while (!turnManager.empty() && !turnManager.shiftNextCommand());
+      turnManager.scheduleNextValidCommand();
     }
     this.end();
   }

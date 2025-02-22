@@ -1609,11 +1609,7 @@ export function initMoves() {
     ),
     new AttackMove(MoveId.PAYBACK, ElementalType.DARK, MoveCategory.PHYSICAL, 50, 100, 10, -1, 0, 4).attr(
       MovePowerMultiplierAttr,
-      (_user, target, _move) =>
-        target.getLastXMoves(1).find((m) => m.turn === globalScene.currentBattle.turn)
-        || globalScene.currentBattle.turnManager.findPokemonCommand(target)?.command === BattleCommand.BALL
-          ? 2
-          : 1,
+      (_user, target, _move) => (!globalScene.currentBattle.turnManager.findPokemonCommand(target) ? 2 : 1),
     ),
     new AttackMove(MoveId.ASSURANCE, ElementalType.DARK, MoveCategory.PHYSICAL, 60, 100, 10, -1, 0, 4).attr(
       MovePowerMultiplierAttr,

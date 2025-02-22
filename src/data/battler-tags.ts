@@ -2138,8 +2138,14 @@ export class SkyDropTag extends BattlerTag {
       if (pokemon?.getTag(BattlerTagType.SKY_DROP)?.sourceId === this.sourceId) {
         // Cancel the Sky Drop user's next use of Sky Drop
         if (this.sourceId === pokemon.id) {
-          globalScene.tryRemovePhase((phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon.id === pokemon.id);
           globalScene.currentBattle.turnManager.tryRemoveCommand((tc) => tc.pokemon === pokemon);
+          if (
+            globalScene.tryRemovePhase((phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon.id === pokemon.id)
+          ) {
+            // Just in case we removed a queued `MovePhase`, queue the next `MovePhase`.
+            const { turnManager } = globalScene.currentBattle;
+            turnManager.scheduleNextValidCommand();
+          }
           pokemon.getMoveQueue().shift();
           pokemon.removeTag(BattlerTagType.CHARGING);
         }

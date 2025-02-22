@@ -53,12 +53,6 @@ export class CommandPhase extends FieldPhase {
 
     globalScene.updateGameInfo();
 
-    /**
-     * Reset this pokemon's turn command in case the player already
-     * selected an action for it, then cancelled during its ally's command selection.
-     */
-    turnManager.tryRemoveCommand((tc) => tc.pokemon === pokemon);
-
     const commandUiHandler = globalScene.ui.handlers[UiMode.COMMAND];
 
     if (commandUiHandler) {
@@ -83,10 +77,7 @@ export class CommandPhase extends FieldPhase {
     }
 
     // If the Pokemon has applied Commander's effects to its ally, skip this command
-    if (
-      currentBattle?.double
-      && pokemon.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === this.getPokemon()
-    ) {
+    if (currentBattle?.double && pokemon.getAlly()?.getTag(BattlerTagType.COMMANDED)?.getSourcePokemon() === pokemon) {
       return this.end();
     }
 

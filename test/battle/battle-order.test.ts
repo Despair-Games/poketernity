@@ -98,7 +98,7 @@ describe("Battle order", () => {
 
     const turnOrder = game.field.getTurnOrder();
     expect(turnOrder).toHaveLength(4);
-    expect(turnOrder[0]).toBe(enemyPokemon[1].getBattlerIndex());
+    expect(turnOrder[0]).toBe(BattlerIndex.ENEMY_2);
   });
 
   it("double - speed tie 100/150 vs 100/150", async () => {
