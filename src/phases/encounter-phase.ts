@@ -12,6 +12,7 @@ import { initEncounterAnims } from "#app/data/init-encounter-anims";
 import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { doTrainerExclamation } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { getGoldenBugNetSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
+import { getNatureName } from "#app/data/nature";
 import { getRandomWeatherType } from "#app/data/weather";
 import { EncounterPhaseEvent } from "#app/events/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
@@ -47,7 +48,6 @@ import { FieldPosition } from "#enums/field-position";
 import { ImagesFolder } from "#enums/images-folders";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import { Nature } from "#enums/nature";
 import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { Species } from "#enums/species";
@@ -211,12 +211,12 @@ export class EncounterPhase extends BattlePhase {
       console.log(
         `Pokemon: ${getPokemonNameWithAffix(enemyPokemon)}`,
         `| Species ID: ${enemyPokemon.species.speciesId}`,
-        `| Nature: ${Nature[enemyPokemon.getNature()]}`,
+        `| Nature: ${getNatureName(enemyPokemon.nature, true, true, true)}`,
       );
       console.log(`Stats (IVs): ${stats}`);
       console.log(
         `Ability: ${enemyPokemon.getAbility().name}`,
-        `| Passive Ability${enemyPokemon.isBoss() ? "" : " (inactive)"}: ${enemyPokemon.getPassiveAbility().name}`,
+        `| Passive Ability${enemyPokemon.hasPassive() ? "" : " (inactive)"}: ${enemyPokemon.getPassiveAbility().name}`,
         `${enemyPokemon.isBoss() ? `| Boss Bars: ${enemyPokemon.bossSegments}` : ""}`,
       );
       console.log("Moveset:", moveset);
