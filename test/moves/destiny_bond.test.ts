@@ -223,8 +223,8 @@ describe("Moves - Destiny Bond", () => {
     const tagAfter = game.scene.arena.getTagOnSide(
       ArenaTagType.GRASS_WATER_PLEDGE,
       ArenaTagSide.ENEMY,
-    ) as EntryHazardTag;
-    expect(tagAfter.tagType).toBe(ArenaTagType.GRASS_WATER_PLEDGE);
+    );
+    expect(tagAfter?.tagType).toBe(ArenaTagType.GRASS_WATER_PLEDGE);
   });
 
   /**
