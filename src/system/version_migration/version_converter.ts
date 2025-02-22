@@ -2,6 +2,7 @@ import type { SessionSaveData } from "#app/@types/SessionData";
 import type { SystemSaveData } from "#app/@types/SystemData";
 import { compareVersions } from "compare-versions";
 import { version } from "../../../package.json";
+import { settings } from "#app/system/settings/settings-manager";
 
 /*
 // template for save migrator creation
@@ -75,8 +76,7 @@ export function applySessionVersionMigration(data: SessionSaveData) {
  * @see {@link SettingsVersionConverter}
  */
 export function applySettingsVersionMigration(data: Object) {
-  // TODO: replace this later
-  const prevVersion: string = data.hasOwnProperty("meta") ? (data["meta"]["gameVersion"] ?? "1.0.0") : "1.0.0";
+  const prevVersion: string = settings.meta.gameVersion;
   const isCurrentVersionHigher = compareVersions(prevVersion, version) === -1;
 
   if (isCurrentVersionHigher) {
