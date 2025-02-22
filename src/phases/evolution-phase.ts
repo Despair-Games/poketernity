@@ -247,7 +247,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
     time.delayedCall(900, () => {
       this.handler.canCancel = false;
 
-      this.pokemon.evolve(this.evolution, this.pokemon.species).then(() => {
+      this.pokemon.evolve(this.evolution).then(() => {
         const levelMoves = this.pokemon
           .getLevelMoves(this.lastLevel + 1, true, false, false)
           .filter((lm) => lm[0] === EVOLVE_MOVE);

@@ -4203,11 +4203,13 @@ export class PlayerPokemon extends Pokemon {
     });
   }
 
-  evolve(evolution: SpeciesFormEvolution | null, preEvolution: PokemonSpeciesForm): Promise<void> {
+  public evolve(evolution: SpeciesFormEvolution | null): Promise<void> {
     if (!evolution) {
       return new Promise((resolve) => resolve());
     }
     return new Promise((resolve) => {
+      const preEvolutionSpecies = this.species;
+
       this.pauseEvolutions = false;
       // Handles Nincada evolving into Ninjask + Shedinja
       this.handleSpecialEvolutions(evolution);
@@ -4220,16 +4222,17 @@ export class PlayerPokemon extends Pokemon {
         this.formIndex = formIndex;
       }
       this.generateName();
-      const abilityCount = this.getSpeciesForm().getAbilityCount();
-      const preEvoAbilityCount = preEvolution.getAbilityCount();
       if ([0, 1, 2].includes(this.abilityIndex)) {
-        // Handles cases where a Pokemon with 3 abilities evolves into a Pokemon with 2 abilities (ie: Eevee -> any Eeveelution)
-        if (this.abilityIndex === 2 && preEvoAbilityCount === 3 && abilityCount === 2) {
-          this.abilityIndex = 1;
+        // Handles cases where a Pokemon with HA evolves into a Pokemon with no HA
+        if (this.abilityIndex === 2 && this.getSpeciesForm().abilityHidden === Abilities.NONE) {
+          console.warn(
+            `${preEvolutionSpecies.getName()} with HA evolved into a Pokemon without HA, please report this.`,
+          );
+          this.abilityIndex = 0;
         }
       } else {
         // Prevent pokemon with an illegal ability value from breaking things
-        console.warn("this.abilityIndex is somehow an illegal value, please report this");
+        console.warn("this.abilityIndex is somehow an illegal value, please report this.");
         console.warn(this.abilityIndex);
         this.abilityIndex = 0;
       }
@@ -4241,7 +4244,8 @@ export class PlayerPokemon extends Pokemon {
           this.updateInfo(true).then(() => resolve());
         });
       };
-      if (preEvolution.speciesId === Species.GIMMIGHOUL) {
+      // TODO: should this be done in "handleSpecialEvolutions" to keep all species-specific things in the same spot?
+      if (preEvolutionSpecies.speciesId === Species.GIMMIGHOUL) {
         const evotracker = this.getHeldItems().filter((m) => m instanceof EvoTrackerModifier)[0] ?? null;
         if (evotracker) {
           globalScene.removeModifier(evotracker);
@@ -4258,9 +4262,9 @@ export class PlayerPokemon extends Pokemon {
   }
 
   private handleSpecialEvolutions(evolution: SpeciesFormEvolution) {
-    const evoSpecies = this.species;
-    if (evoSpecies?.speciesId === Species.NINCADA && evolution.speciesId === Species.NINJASK) {
-      const newEvolution = pokemonEvolutions[evoSpecies.speciesId][1];
+    const { speciesId } = this.species;
+    if (speciesId === Species.NINCADA && evolution.speciesId === Species.NINJASK) {
+      const newEvolution = pokemonEvolutions[speciesId][1];
 
       if (newEvolution.condition?.predicate(this)) {
         const newPokemon = globalScene.addPlayerPokemon(
@@ -4286,7 +4290,7 @@ export class PlayerPokemon extends Pokemon {
         newPokemon.usedTMs = this.usedTMs;
 
         globalScene.getPlayerParty().push(newPokemon);
-        newPokemon.evolve(newEvolution, evoSpecies);
+        newPokemon.evolve(newEvolution);
         const modifiers = globalScene.findModifiers(
           (m) => m.isPokemonHeldItemModifier() && m.pokemonId === this.id,
           true,
