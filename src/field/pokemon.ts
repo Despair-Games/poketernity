@@ -91,7 +91,7 @@ import { PokeballType } from "#enums/pokeball";
 import { Gender } from "#enums/gender";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
 import { initMoveAnim } from "#app/data/init-move-anim";
-import { Status, getRandomStatus } from "#app/data/status-effect";
+import { Status, getNonVolatileStatusEffects } from "#app/data/status-effect";
 import type { SpeciesFormEvolution, SpeciesEvolutionCondition } from "#app/data/balance/pokemon-evolutions";
 import {
   pokemonEvolutions,
@@ -197,6 +197,7 @@ import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type { QueuedMove } from "#app/@types/QueuedMove";
 import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
+import { DoubleDamageToMaxAttr } from "#app/data/move-attrs/double-damage-to-max-attr";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -500,11 +501,19 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   /**
    * Checks if a pokemon is fainted (ie: its `hp <= 0`).
    * It's usually better to call {@linkcode isAllowedInBattle()}
-   * @param checkStatus `true` to also check that the pokemon's status is {@linkcode StatusEffect.FAINT}
    * @returns `true` if the pokemon is fainted
    */
-  public isFainted(checkStatus: boolean = false): boolean {
-    return this.hp <= 0 && (!checkStatus || this.status?.effect === StatusEffect.FAINT);
+  public isFainted(): boolean {
+    return this.hp <= 0;
+  }
+
+  /**
+   * Faints the pokemon.
+   * @todo Handle all fainting-related side-effects here
+   */
+  public faint(): void {
+    this.hp = 0;
+    this.resetStatus(true);
   }
 
   /**
@@ -1187,7 +1196,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         if (this.getTag(BattlerTagType.SLOW_START)) {
           ret >>= 1;
         }
-        if (this.status && this.status.effect === StatusEffect.PARALYSIS) {
+        if (this.hasStatusEffect(StatusEffect.PARALYSIS)) {
           const paraSpeedReductionCancelled = new BooleanHolder(false);
           applyAbFunc(AbAttrFlag.BYPASS_PARA_SPEED_REDUCTION, this, simulated, paraSpeedReductionCancelled);
           if (!paraSpeedReductionCancelled.value) {
@@ -3206,6 +3215,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       };
     }
 
+    /** Behemoth Bash, Behemoth Blade, and Dynamax Cannon do double damage to G-Max Pokemon (except Eternamax) */
+    const gmaxBonusDamageMultiplier = new NumberHolder(1);
+    applyMoveAttrs(DoubleDamageToMaxAttr, source, this, move, gmaxBonusDamageMultiplier);
+
     /**
      * The attack's base damage, as determined by the source's level, move power
      * and Attack stat as well as this Pokemon's Defense stat
@@ -3265,7 +3278,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     /** Halves damage if the attacker is using a physical attack while burned */
     const burnMultiplier = new NumberHolder(1);
-    if (isPhysical && source.status && source.status.effect === StatusEffect.BURN) {
+    if (isPhysical && source.hasStatusEffect(StatusEffect.BURN)) {
       if (!move.hasAttr(BypassBurnDamageReductionAttr)) {
         const burnDamageReductionCancelled = new BooleanHolder(false);
         applyAbFunc(AbAttrFlag.BYPASS_BURN_DAMAGE_REDUCTION, source, simulated, burnDamageReductionCancelled);
@@ -3333,6 +3346,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     damage.value =
       baseDamage
       * targetMultiplier
+      * gmaxBonusDamageMultiplier.value
       * multiStrikeEnhancementMultiplier.value
       * arenaAttackTypeMultiplier.value
       * glaiveRushMultiplier.value
@@ -3432,7 +3446,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const surviveDamage = new BooleanHolder(false);
 
     // Eternatus does not need the damage reduction as its emax form has increased hp/defenses
-    if (this.isMax() && this.species.speciesId !== Species.ETERNATUS) {
+    if (this.isMax(false)) {
       damage = toDmgValue(damage * DYNAMAX_DAMAGE_TAKEN_FACTOR);
     }
 
@@ -3441,8 +3455,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         surviveDamage.value = this.lapseTag(BattlerTagType.ENDURING);
       } else if (this.hp > 1 && this.getTag(BattlerTagType.STURDY)) {
         surviveDamage.value = this.lapseTag(BattlerTagType.STURDY);
-      } else if (this.hp >= 1 && this.getTag(BattlerTagType.ENDURE_TOKEN)) {
-        surviveDamage.value = this.lapseTag(BattlerTagType.ENDURE_TOKEN);
       }
       if (!surviveDamage.value) {
         globalScene.applyModifiers(SurviveDamageModifier, this.isPlayer(), this, surviveDamage);
@@ -3507,12 +3519,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.isBoss();
   }
 
-  isMax(): boolean {
+  /**
+   * @param includeEternamax - Whether or not to include Eternamax
+   * @returns if the Pokemon is in a max form
+   */
+  isMax(includeEternamax: boolean = true): boolean {
     const maxForms = [
       SpeciesFormKey.GIGANTAMAX,
       SpeciesFormKey.GIGANTAMAX_RAPID,
       SpeciesFormKey.GIGANTAMAX_SINGLE,
-      SpeciesFormKey.ETERNAMAX,
+      ...(includeEternamax ? [SpeciesFormKey.ETERNAMAX] : []),
     ] as string[];
     return (
       maxForms.includes(this.getFormKey()) || (!!this.getFusionFormKey() && maxForms.includes(this.getFusionFormKey()!))
@@ -3986,6 +4002,56 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
+   * Helper function that determines if a Pokemon has a specified non-volatile status effect and/or is Confused
+   * @param statusList the status(es) to be checked
+   * @param includeConfusion whether Confusion should also be considered
+   * @param ignoreMockAbility whether a status effect-mocking ability should be considered
+   * @returns `true` if the Pokemon has a status effect | `false` if it does not
+   */
+  hasStatusEffect(
+    statusList: StatusEffect | StatusEffect[],
+    includeConfusion: boolean = false,
+    ignoreMockAbility: boolean = false,
+  ): boolean {
+    if (!Array.isArray(statusList)) {
+      statusList = [statusList];
+    }
+    if (
+      statusList.includes(this.getStatusEffect(ignoreMockAbility))
+      || (includeConfusion && this.getTag(BattlerTagType.CONFUSED))
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Helper function that checks if a Pokemon has one of any non-volatile status effects and/or is confused (which is a volatile status effect but is lumped into this category for some status-recovery effects)
+   * @param includeConfusion whether Confusion should also be considered
+   * @param ignoreMockAbility whether a status effect-mocking ability should be considered
+   * @returns `true` if the Pokemon has any of the non-volatile status effects | `false` if not
+   */
+  hasNonVolatileStatusEffect(includeConfusion: boolean = false, ignoreMockAbility: boolean = false): boolean {
+    return this.hasStatusEffect(getNonVolatileStatusEffects(), includeConfusion, ignoreMockAbility);
+  }
+
+  /**
+   * Helper function that retrieves the Pokemon's non-volatile status effect
+   * @param ignoreMockAbility whether a status effect-mocking ability should be applied
+   * @returns {@linkcode StatusEffect} the status effect held by the Pokemon
+   */
+  getStatusEffect(ignoreMockAbility: boolean = false): StatusEffect {
+    const statusEffect = new NumberHolder(StatusEffect.NONE);
+    if (this.status) {
+      statusEffect.value = this.status.statusEffect;
+    }
+    if (!ignoreMockAbility) {
+      applyAbAttrs(AbAttrFlag.MOCK_STATUS_EFFECT, this, false, statusEffect);
+    }
+    return statusEffect.value as StatusEffect;
+  }
+
+  /**
    * Checks if a status effect can be applied to the Pokemon.
    *
    * @param effect The {@linkcode StatusEffect} whose applicability is being checked
@@ -4001,13 +4067,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     sourcePokemon: Pokemon | null = null,
     ignoreField: boolean = false,
   ): boolean {
-    if (effect !== StatusEffect.FAINT) {
-      if (overrideStatus ? this.status?.effect === effect : this.status) {
-        return false;
-      }
-      if (this.isGrounded() && !ignoreField && globalScene.arena.hasTerrain(TerrainType.MISTY)) {
-        return false;
-      }
+    if (overrideStatus ? this.status?.statusEffect === effect : this.status) {
+      return false;
+    }
+    if (this.isGrounded() && !ignoreField && globalScene.arena.hasTerrain(TerrainType.MISTY)) {
+      return false;
     }
 
     if (sourcePokemon && sourcePokemon !== this && this.isSafeguarded(sourcePokemon)) {
@@ -4108,7 +4172,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (!this.canSetStatus(effect, !asPhase, false, sourcePokemon)) {
       return false;
     }
-    if (this.isFainted() && effect !== StatusEffect.FAINT) {
+    if (this.isFainted()) {
       return false;
     }
 
@@ -4147,14 +4211,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     sleepTurnsRemaining = sleepTurnsRemaining!; // tell TS compiler it's defined
-    effect = effect!; // If `effect` is undefined then `trySetStatus()` will have already returned early via the `canSetStatus()` call
     this.status = new Status(effect, 0, sleepTurnsRemaining?.value);
 
-    if (effect !== StatusEffect.FAINT) {
-      globalScene.triggerPokemonFormChange(this, SpeciesFormChangeStatusEffectTrigger, true);
-      if (sourcePokemon) {
-        applyAbAttrs(AbAttrFlag.SYNCHRONIZE_STATUS, this, false, sourcePokemon, effect);
-      }
+    globalScene.triggerPokemonFormChange(this, SpeciesFormChangeStatusEffectTrigger, true);
+    if (sourcePokemon) {
+      applyAbAttrs(AbAttrFlag.SYNCHRONIZE_STATUS, this, false, sourcePokemon, effect);
     }
 
     return true;
@@ -4162,15 +4223,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   /**
    * Resets the status of a pokemon.
-   * @param revive Whether revive should be cured; defaults to true.
-   * @param confusion Whether resetStatus should include confusion or not; defaults to false.
-   * @param reloadAssets Whether to reload the assets or not; defaults to false.
+   * @param confusion Whether resetStatus should include confusion or not; defaults to `false`.
+   * @param reloadAssets Whether to reload the assets or not; defaults to `false`.
    */
-  resetStatus(revive: boolean = true, confusion: boolean = false, reloadAssets: boolean = false): void {
-    const lastStatus = this.status?.effect;
-    if (!revive && lastStatus === StatusEffect.FAINT) {
-      return;
-    }
+  resetStatus(confusion: boolean = false, reloadAssets: boolean = false): void {
+    const lastStatus = this.getStatusEffect(true);
     this.status = null;
     if (lastStatus === StatusEffect.SLEEP) {
       this.setFrameRate(10);
@@ -5219,7 +5276,6 @@ export class PlayerPokemon extends Pokemon {
     if (!this.isFainted()) {
       // If this Pokemon hasn't fainted, make sure the HP wasn't set over the new maximum
       this.hp = Math.min(this.hp, maxHp);
-      this.status = getRandomStatus(this.status, pokemon.status); // Get a random valid status between the two
     } else if (!pokemon.isFainted()) {
       // If this Pokemon fainted but the other hasn't, make sure the HP wasn't set to zero
       this.hp = Math.max(this.hp, 1);
@@ -5882,11 +5938,12 @@ export class EnemyPokemon extends Pokemon {
    * The new pokemon's visibility will be set to `false`.
    * @param pokeballType the type of pokeball the pokemon was caught with
    * @param slotIndex an optional index to place the pokemon in the party
-   * @returns the pokemon that was added or null if the pokemon could not be added
+   * @returns the pokemon that was added or `undefined` if the pokemon could not be added
+   * @todo This feels like it can be improved...
    */
-  addToParty(pokeballType: PokeballType, slotIndex: number = -1) {
+  addToParty(pokeballType: PokeballType, slotIndex: number = -1): PlayerPokemon | undefined {
     const party = globalScene.getPlayerParty();
-    let ret: PlayerPokemon | null = null;
+    let ret: PlayerPokemon | undefined;
 
     if (party.length < PLAYER_PARTY_MAX_SIZE) {
       this.pokeball = pokeballType;

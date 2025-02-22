@@ -6,7 +6,7 @@ import { AbilityCopyAttr } from "#app/data/move-attrs/ability-copy-attr";
 import { AbilityGiveAttr } from "#app/data/move-attrs/ability-give-attr";
 import { AcupressureStatStageChangeAttr } from "#app/data/move-attrs/acupressure-stat-stage-change-attr";
 import { AddArenaTagAttr } from "#app/data/move-attrs/add-arena-tag-attr";
-import { AddArenaTrapTagAttr } from "#app/data/move-attrs/add-arena-trap-tag-attr";
+import { AddEntryHazardTagAttr } from "#app/data/move-attrs/add-entry-hazard-tag-attr";
 import { AddBattlerTagAttr } from "#app/data/move-attrs/add-battler-tag-attr";
 import { AddBattlerTagHeaderAttr } from "#app/data/move-attrs/add-battler-tag-header-attr";
 import { AddBattlerTagIfBoostedAttr } from "#app/data/move-attrs/add-battler-tag-if-boosted-attr";
@@ -135,7 +135,7 @@ import { RecoilAttr } from "#app/data/move-attrs/recoil-attr";
 import { ReducePpMoveAttr } from "#app/data/move-attrs/reduce-pp-move-attr";
 import { RemoveAllSubstitutesAttr } from "#app/data/move-attrs/remove-all-substitutes-attr";
 import { RemoveArenaTagsAttr } from "#app/data/move-attrs/remove-arena-tags-attr";
-import { RemoveArenaTrapAttr } from "#app/data/move-attrs/remove-arena-trap-attr";
+import { RemoveEntryHazardAttr } from "#app/data/move-attrs/remove-entry-hazard-attr";
 import { rapidSpinRemoveTags, RemoveBattlerTagAttr } from "#app/data/move-attrs/remove-battler-tag-attr";
 import { RemoveHeldItemAttr } from "#app/data/move-attrs/remove-held-item-attr";
 import { RemoveScreensAttr } from "#app/data/move-attrs/remove-screens-attr";
@@ -213,7 +213,7 @@ import { UpperHandCondition } from "#app/data/move-conditions/upper-hand-conditi
 import { userSleptOrComatoseCondition } from "#app/data/move-conditions/user-slept-or-comatose-condition";
 import { ChargingAttackMove } from "#app/data/moves/charging-attack-move";
 import { ChargingSelfStatusMove } from "#app/data/moves/charging-self-status-move";
-import { getNonVolatileStatusEffects, isNonVolatileStatusEffect } from "#app/data/status-effect";
+import { getNonVolatileStatusEffects } from "#app/data/status-effect";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { isNullOrUndefined } from "#app/utils";
@@ -241,7 +241,11 @@ import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { RageAttr } from "./move-attrs/rage-attr";
+import { CaptivateAttr } from "./move-attrs/captivate-attr";
+import { DoubleDamageToMaxAttr } from "./move-attrs/double-damage-to-max-attr";
+import { DisplayMessageAttr } from "./move-attrs/display-message-attr";
 
+// prettier-ignore
 export function initMoves() {
   const rawAllMoves = [
     SelfStatusMove.none(),
@@ -754,7 +758,9 @@ export function initMoves() {
     new AttackMove(MoveId.PSYWAVE, ElementalType.PSYCHIC, MoveCategory.SPECIAL, -1, 100, 15, -1, 0, 1).attr(
       RandomLevelDamageAttr,
     ),
-    new SelfStatusMove(MoveId.SPLASH, ElementalType.NORMAL, -1, 40, -1, 0, 1).condition(failOnGravityCondition),
+    new SelfStatusMove(MoveId.SPLASH, ElementalType.NORMAL, -1, 40, -1, 0, 1)
+      .condition(failOnGravityCondition)
+      .attr(DisplayMessageAttr, i18next.t("moveTriggers:splash")),
     new SelfStatusMove(MoveId.ACID_ARMOR, ElementalType.POISON, -1, 20, -1, 0, 1).attr(
       StatStageChangeAttr,
       [Stat.DEF],
@@ -910,7 +916,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.ACC], -1)
       .bulletMove(),
     new StatusMove(MoveId.SPIKES, ElementalType.GROUND, -1, 20, -1, 0, 2)
-      .attr(AddArenaTrapTagAttr, ArenaTagType.SPIKES)
+      .attr(AddEntryHazardTagAttr, ArenaTagType.SPIKES)
       .target(MoveTarget.ENEMY_SIDE),
     new AttackMove(MoveId.ZAP_CANNON, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 120, 50, 5, 100, 0, 2)
       .attr(StatusEffectAttr, StatusEffect.PARALYSIS)
@@ -1051,7 +1057,7 @@ export function initMoves() {
     new AttackMove(MoveId.RAPID_SPIN, ElementalType.NORMAL, MoveCategory.PHYSICAL, 50, 100, 40, 100, 0, 2)
       .attr(StatStageChangeAttr, [Stat.SPD], 1, true)
       .attr(RemoveBattlerTagAttr, rapidSpinRemoveTags, true)
-      .attr(RemoveArenaTrapAttr),
+      .attr(RemoveEntryHazardAttr),
     new StatusMove(MoveId.SWEET_SCENT, ElementalType.NORMAL, 100, 20, -1, 0, 2)
       .attr(StatStageChangeAttr, [Stat.EVA], -2)
       .target(MoveTarget.ALL_NEAR_ENEMIES),
@@ -1171,11 +1177,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], -2),
     new AttackMove(MoveId.FACADE, ElementalType.NORMAL, MoveCategory.PHYSICAL, 70, 100, 20, -1, 0, 3)
       .attr(MovePowerMultiplierAttr, (user, _target, _move) =>
-        user.status
-        && (user.status.effect === StatusEffect.BURN
-          || user.status.effect === StatusEffect.POISON
-          || user.status.effect === StatusEffect.TOXIC
-          || user.status.effect === StatusEffect.PARALYSIS)
+        user.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC, StatusEffect.PARALYSIS])
           ? 2
           : 1,
       )
@@ -1188,9 +1190,7 @@ export function initMoves() {
       .ignoresVirtual()
       .condition((user, _target, _move) => !user.turnData.attacksReceived.find((r) => r.damage)),
     new AttackMove(MoveId.SMELLING_SALTS, ElementalType.NORMAL, MoveCategory.PHYSICAL, 70, 100, 10, -1, 0, 3)
-      .attr(MovePowerMultiplierAttr, (_user, target, _move) =>
-        target.status?.effect === StatusEffect.PARALYSIS ? 2 : 1,
-      )
+      .attr(MovePowerMultiplierAttr, (_user, target, _move) => (target.hasStatusEffect(StatusEffect.PARALYSIS) ? 2 : 1))
       .attr(HealStatusEffectAttr, true, StatusEffect.PARALYSIS),
     new SelfStatusMove(MoveId.FOLLOW_ME, ElementalType.NORMAL, -1, 20, -1, 2, 3).attr(
       AddBattlerTagAttr,
@@ -1237,7 +1237,7 @@ export function initMoves() {
     ),
     new StatusMove(MoveId.YAWN, ElementalType.NORMAL, -1, 10, -1, 0, 3)
       .attr(AddBattlerTagAttr, BattlerTagType.DROWSY, false, { failOnOverlap: true })
-      .condition((user, target, _move) => !target.status && !target.isSafeguarded(user)),
+      .condition((user, target, _move) => !target.hasNonVolatileStatusEffect() && !target.isSafeguarded(user)),
     new AttackMove(MoveId.KNOCK_OFF, ElementalType.DARK, MoveCategory.PHYSICAL, 65, 100, 20, -1, 0, 3)
       .attr(MovePowerMultiplierAttr, (_user, target, _move) =>
         target.getHeldItems().filter((i) => i.isTransferable).length > 0 ? 1.5 : 1,
@@ -1264,13 +1264,8 @@ export function initMoves() {
         StatusEffect.TOXIC,
         StatusEffect.BURN,
       ])
-      .condition(
-        (user, _target, _move) =>
-          !!user.status
-          && (user.status.effect === StatusEffect.PARALYSIS
-            || user.status.effect === StatusEffect.POISON
-            || user.status.effect === StatusEffect.TOXIC
-            || user.status.effect === StatusEffect.BURN),
+      .condition((user, _target, _move) =>
+        user.hasStatusEffect([StatusEffect.BURN, StatusEffect.PARALYSIS, StatusEffect.POISON, StatusEffect.TOXIC]),
       ),
     new SelfStatusMove(MoveId.GRUDGE, ElementalType.GHOST, -1, 5, -1, 0, 3).attr(
       AddBattlerTagAttr,
@@ -1630,11 +1625,7 @@ export function initMoves() {
     new StatusMove(MoveId.PSYCHO_SHIFT, ElementalType.PSYCHIC, 100, 10, -1, 0, 4)
       .attr(PsychoShiftEffectAttr)
       .condition((user, target, _move) => {
-        let statusToApply = user.hasAbility(Abilities.COMATOSE) ? StatusEffect.SLEEP : undefined;
-        if (user.status?.effect && isNonVolatileStatusEffect(user.status.effect)) {
-          statusToApply = user.status.effect;
-        }
-        return !!statusToApply && target.canSetStatus(statusToApply, false, false, user);
+        return user.hasNonVolatileStatusEffect() && target.canSetStatus(user.getStatusEffect(), false, false, user);
       }),
     new AttackMove(MoveId.TRUMP_CARD, ElementalType.NORMAL, MoveCategory.SPECIAL, -1, -1, 5, -1, 0, 4)
       .makesContact()
@@ -1690,7 +1681,7 @@ export function initMoves() {
       },
     ),
     new StatusMove(MoveId.TOXIC_SPIKES, ElementalType.POISON, -1, 20, -1, 0, 4)
-      .attr(AddArenaTrapTagAttr, ArenaTagType.TOXIC_SPIKES)
+      .attr(AddEntryHazardTagAttr, ArenaTagType.TOXIC_SPIKES)
       .target(MoveTarget.ENEMY_SIDE),
     new StatusMove(MoveId.HEART_SWAP, ElementalType.PSYCHIC, -1, 10, -1, 0, 4)
       .attr(SwapStatStagesAttr, BATTLE_STATS)
@@ -1845,7 +1836,7 @@ export function initMoves() {
       .attr(ClearWeatherAttr, WeatherType.FOG)
       .attr(ClearTerrainAttr)
       .attr(RemoveScreensAttr, false)
-      .attr(RemoveArenaTrapAttr, true)
+      .attr(RemoveEntryHazardAttr, true)
       .attr(RemoveArenaTagsAttr, [ArenaTagType.SAFEGUARD, ArenaTagType.MIST], ArenaTagRelativeSide.TARGET),
     new StatusMove(MoveId.TRICK_ROOM, ElementalType.PSYCHIC, -1, 5, -1, -7, 4)
       .attr(AddArenaTagAttr, ArenaTagType.TRICK_ROOM, ArenaTagRelativeSide.ALL, { turnCount: 5 })
@@ -1891,11 +1882,10 @@ export function initMoves() {
       .attr(HighCritAttr)
       .makesContact(false),
     new StatusMove(MoveId.CAPTIVATE, ElementalType.NORMAL, 100, 20, -1, 0, 4)
-      .attr(StatStageChangeAttr, [Stat.SPATK], -2)
-      .condition((user, target, _move) => target.isOppositeGender(user))
+      .attr(CaptivateAttr)
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new StatusMove(MoveId.STEALTH_ROCK, ElementalType.ROCK, -1, 20, -1, 0, 4)
-      .attr(AddArenaTrapTagAttr, ArenaTagType.STEALTH_ROCK)
+      .attr(AddEntryHazardTagAttr, ArenaTagType.STEALTH_ROCK)
       .target(MoveTarget.ENEMY_SIDE),
     new AttackMove(MoveId.GRASS_KNOT, ElementalType.GRASS, MoveCategory.SPECIAL, -1, 100, 20, -1, 0, 4)
       .condition(failOnMaxCondition)
@@ -2001,10 +1991,7 @@ export function initMoves() {
     ),
     new AttackMove(MoveId.VENOSHOCK, ElementalType.POISON, MoveCategory.SPECIAL, 65, 100, 10, -1, 0, 5).attr(
       MovePowerMultiplierAttr,
-      (_user, target, _move) =>
-        target.status && (target.status.effect === StatusEffect.POISON || target.status.effect === StatusEffect.TOXIC)
-          ? 2
-          : 1,
+      (_user, target, _move) => (target.hasStatusEffect([StatusEffect.POISON, StatusEffect.TOXIC]) ? 2 : 1),
     ),
     new SelfStatusMove(MoveId.AUTOTOMIZE, ElementalType.STEEL, -1, 15, -1, 0, 5)
       .attr(StatStageChangeAttr, [Stat.SPD], 2, true)
@@ -2146,7 +2133,7 @@ export function initMoves() {
       .triageMove(),
     new AttackMove(MoveId.HEX, ElementalType.GHOST, MoveCategory.SPECIAL, 65, 100, 10, -1, 0, 5).attr(
       MovePowerMultiplierAttr,
-      (_user, target, _move) => (target.status || target.hasAbility(Abilities.COMATOSE) ? 2 : 1),
+      (_user, target, _move) => (target.hasNonVolatileStatusEffect() ? 2 : 1),
     ),
     new ChargingAttackMove(MoveId.SKY_DROP, ElementalType.FLYING, MoveCategory.PHYSICAL, 60, 100, 10, -1, 0, 5)
       .chargeText(i18next.t("moveTriggers:tookTargetIntoSky", { pokemonName: "{USER}", targetName: "{TARGET}" }))
@@ -2403,7 +2390,7 @@ export function initMoves() {
         condition: (_user, target, _move) => target.isOfType(ElementalType.GRASS) && target.isGrounded(),
       }),
     new StatusMove(MoveId.STICKY_WEB, ElementalType.BUG, -1, 20, -1, 0, 6)
-      .attr(AddArenaTrapTagAttr, ArenaTagType.STICKY_WEB)
+      .attr(AddEntryHazardTagAttr, ArenaTagType.STICKY_WEB)
       .target(MoveTarget.ENEMY_SIDE),
     new AttackMove(MoveId.FELL_STINGER, ElementalType.BUG, MoveCategory.PHYSICAL, 50, 100, 25, -1, 0, 6).attr(
       PostVictoryStatStageChangeAttr,
@@ -2538,8 +2525,7 @@ export function initMoves() {
     ),
     new StatusMove(MoveId.VENOM_DRENCH, ElementalType.POISON, 100, 20, -1, 0, 6)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK, Stat.SPD], -1, false, {
-        condition: (_user, target, _move) =>
-          target.status?.effect === StatusEffect.POISON || target.status?.effect === StatusEffect.TOXIC,
+        condition: (_user, target, _move) => target.hasStatusEffect([StatusEffect.POISON, StatusEffect.TOXIC]),
       })
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new StatusMove(MoveId.POWDER, ElementalType.BUG, 100, 20, -1, 1, 6)
@@ -2572,8 +2558,15 @@ export function initMoves() {
     new AttackMove(MoveId.DAZZLING_GLEAM, ElementalType.FAIRY, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 6).target(
       MoveTarget.ALL_NEAR_ENEMIES,
     ),
-    new SelfStatusMove(MoveId.CELEBRATE, ElementalType.NORMAL, -1, 40, -1, 0, 6),
+    new SelfStatusMove(MoveId.CELEBRATE, ElementalType.NORMAL, -1, 40, -1, 0, 6).attr(
+      DisplayMessageAttr,
+      i18next.t("moveTriggers:celebrate", { pokemonName: "{USER}" }),
+    ),
     new StatusMove(MoveId.HOLD_HANDS, ElementalType.NORMAL, -1, 40, -1, 0, 6)
+      .attr(
+        DisplayMessageAttr,
+        i18next.t("moveTriggers:holdHands", { pokemonName: "{USER}", targetPokemonName: "{TARGET}" }),
+      )
       .ignoresSubstitute()
       .target(MoveTarget.NEAR_ALLY),
     new StatusMove(MoveId.BABY_DOLL_EYES, ElementalType.FAIRY, 100, 30, -1, 1, 6).attr(
@@ -2909,10 +2902,7 @@ export function initMoves() {
     new AttackMove(MoveId.SMART_STRIKE, ElementalType.STEEL, MoveCategory.PHYSICAL, 70, -1, 10, -1, 0, 7),
     new StatusMove(MoveId.PURIFY, ElementalType.POISON, -1, 20, -1, 0, 7)
       .condition((_user, target, _move) => {
-        if (!target.status) {
-          return false;
-        }
-        return isNonVolatileStatusEffect(target.status.effect);
+        return target.hasNonVolatileStatusEffect(false, true);
       })
       .attr(HealAttr, 0.5)
       .attr(HealStatusEffectAttr, false, getNonVolatileStatusEffects())
@@ -3182,23 +3172,7 @@ export function initMoves() {
       .ignoresVirtual(),
     /* End Unused */
     new AttackMove(MoveId.DYNAMAX_CANNON, ElementalType.DRAGON, MoveCategory.SPECIAL, 100, 100, 5, -1, 0, 8)
-      .attr(MovePowerMultiplierAttr, (_user, target, _move) => {
-        // Move is only stronger against overleveled foes.
-        if (target.level > globalScene.getMaxExpLevel()) {
-          const dynamaxCannonPercentMarginBeforeFullDamage = 0.05; // How much % above MaxExpLevel of wave will the target need to be to take full damage.
-          // The move's power scales as the margin is approached, reaching double power when it does or goes over it.
-          return (
-            1
-            + Math.min(
-              1,
-              (target.level - globalScene.getMaxExpLevel())
-                / (globalScene.getMaxExpLevel() * dynamaxCannonPercentMarginBeforeFullDamage),
-            )
-          );
-        } else {
-          return 1;
-        }
-      })
+      .attr(DoubleDamageToMaxAttr)
       .attr(DiscourageFrequentUseAttr)
       .ignoresVirtual(),
 
@@ -3343,18 +3317,12 @@ export function initMoves() {
       .attr(StatusEffectAttr, StatusEffect.BURN)
       .bulletMove()
       .makesContact(false),
-    new AttackMove(
-      MoveId.BEHEMOTH_BLADE,
-      ElementalType.STEEL,
-      MoveCategory.PHYSICAL,
-      100,
-      100,
-      5,
-      -1,
-      0,
-      8,
-    ).slicingMove(),
-    new AttackMove(MoveId.BEHEMOTH_BASH, ElementalType.STEEL, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 8),
+    new AttackMove(MoveId.BEHEMOTH_BLADE, ElementalType.STEEL, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 8)
+      .attr(DoubleDamageToMaxAttr)
+      .slicingMove(),
+    new AttackMove(MoveId.BEHEMOTH_BASH, ElementalType.STEEL, MoveCategory.PHYSICAL, 100, 100, 5, -1, 0, 8).attr(
+      DoubleDamageToMaxAttr,
+    ),
     new AttackMove(MoveId.AURA_WHEEL, ElementalType.ELECTRIC, MoveCategory.PHYSICAL, 110, 100, 10, 100, 0, 8)
       .attr(StatStageChangeAttr, [Stat.SPD], 1, true)
       .makesContact(false)
@@ -3541,7 +3509,7 @@ export function initMoves() {
       .target(MoveTarget.USER)
       .attr(ShiftStatAttr, Stat.ATK, Stat.DEF),
     new AttackMove(MoveId.STONE_AXE, ElementalType.ROCK, MoveCategory.PHYSICAL, 65, 90, 15, 100, 0, 8)
-      .attr(AddArenaTrapTagAttr, ArenaTagType.STEALTH_ROCK)
+      .attr(AddEntryHazardTagAttr, ArenaTagType.STEALTH_ROCK)
       .slicingMove(),
     new AttackMove(MoveId.SPRINGTIDE_STORM, ElementalType.FAIRY, MoveCategory.SPECIAL, 100, 80, 5, 30, 0, 8)
       .attr(StatStageChangeAttr, [Stat.ATK], -1)
@@ -3578,9 +3546,7 @@ export function initMoves() {
     new AttackMove(MoveId.BARB_BARRAGE, ElementalType.POISON, MoveCategory.PHYSICAL, 60, 100, 10, 50, 0, 8)
       .makesContact(false)
       .attr(MovePowerMultiplierAttr, (_user, target, _move) =>
-        target.status && (target.status.effect === StatusEffect.POISON || target.status.effect === StatusEffect.TOXIC)
-          ? 2
-          : 1,
+        target.hasStatusEffect([StatusEffect.POISON, StatusEffect.TOXIC]) ? 2 : 1,
       )
       .attr(StatusEffectAttr, StatusEffect.POISON),
     new AttackMove(MoveId.ESPER_WING, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 80, 100, 10, 100, 0, 8)
@@ -3604,9 +3570,9 @@ export function initMoves() {
       .attr(FlinchAttr),
     new AttackMove(MoveId.INFERNAL_PARADE, ElementalType.GHOST, MoveCategory.SPECIAL, 60, 100, 15, 30, 0, 8)
       .attr(StatusEffectAttr, StatusEffect.BURN)
-      .attr(MovePowerMultiplierAttr, (_user, target, _move) => (target.status ? 2 : 1)),
+      .attr(MovePowerMultiplierAttr, (_user, target, _move) => (target.hasNonVolatileStatusEffect() ? 2 : 1)),
     new AttackMove(MoveId.CEASELESS_EDGE, ElementalType.DARK, MoveCategory.PHYSICAL, 65, 90, 15, 100, 0, 8)
-      .attr(AddArenaTrapTagAttr, ArenaTagType.SPIKES)
+      .attr(AddEntryHazardTagAttr, ArenaTagType.SPIKES)
       .slicingMove(),
     new AttackMove(MoveId.BLEAKWIND_STORM, ElementalType.FLYING, MoveCategory.SPECIAL, 100, 80, 10, 30, 0, 8)
       .attr(StormAccuracyAttr)
@@ -3670,13 +3636,13 @@ export function initMoves() {
       .attr(StatusEffectAttr, StatusEffect.POISON),
     new AttackMove(MoveId.G_MAX_STONESURGE, ElementalType.WATER, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.DREDNAW)
-      .attr(AddArenaTrapTagAttr, ArenaTagType.STEALTH_ROCK),
+      .attr(AddEntryHazardTagAttr, ArenaTagType.STEALTH_ROCK),
     new AttackMove(MoveId.G_MAX_WIND_RAGE, ElementalType.FLYING, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.CORVIKNIGHT)
       .attr(ClearWeatherAttr, WeatherType.FOG)
       .attr(ClearTerrainAttr)
       .attr(RemoveScreensAttr, false)
-      .attr(RemoveArenaTrapAttr, true)
+      .attr(RemoveEntryHazardAttr, true)
       .attr(RemoveArenaTagsAttr, [ArenaTagType.SAFEGUARD, ArenaTagType.MIST], ArenaTagRelativeSide.TARGET),
     new AttackMove(MoveId.G_MAX_STUN_SHOCK, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.TOXTRICITY)
@@ -3712,7 +3678,7 @@ export function initMoves() {
       .attr(ConfuseAttr),
     new AttackMove(MoveId.G_MAX_STEELSURGE, ElementalType.STEEL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.COPPERAJAH)
-      .attr(AddArenaTrapTagAttr, ArenaTagType.SHARP_STEEL),
+      .attr(AddEntryHazardTagAttr, ArenaTagType.SHARP_STEEL),
     new AttackMove(MoveId.G_MAX_MELTDOWN, ElementalType.STEEL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.MELMETAL)
       .attr(AddBattlerTagAttr, BattlerTagType.TORMENT),
@@ -3812,7 +3778,7 @@ export function initMoves() {
     new AttackMove(MoveId.MORTAL_SPIN, ElementalType.POISON, MoveCategory.PHYSICAL, 30, 100, 15, 100, 0, 9)
       .attr(RemoveBattlerTagAttr, rapidSpinRemoveTags, true)
       .attr(StatusEffectAttr, StatusEffect.POISON)
-      .attr(RemoveArenaTrapAttr)
+      .attr(RemoveEntryHazardAttr)
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new StatusMove(MoveId.DOODLE, ElementalType.NORMAL, 100, 10, -1, 0, 9).attr(AbilityCopyAttr, true),
     new SelfStatusMove(MoveId.FILLET_AWAY, ElementalType.NORMAL, -1, 10, -1, 0, 9).attr(
@@ -3878,7 +3844,7 @@ export function initMoves() {
       .attr(ChillyReceptionAttr, true),
     new SelfStatusMove(MoveId.TIDY_UP, ElementalType.NORMAL, -1, 10, -1, 0, 9)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPD], 1, true)
-      .attr(RemoveArenaTrapAttr, true)
+      .attr(RemoveEntryHazardAttr, true)
       .attr(RemoveAllSubstitutesAttr),
     new StatusMove(MoveId.SNOWSCAPE, ElementalType.ICE, -1, 10, -1, 0, 9)
       .attr(WeatherChangeAttr, WeatherType.SNOW)

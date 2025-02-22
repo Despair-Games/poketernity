@@ -43,7 +43,7 @@ describe("Abilities - Battle Armor/Shell Armor", () => {
     game.move.select(MoveId.SPLASH);
     await game.move.forceHit();
     await game.setTurnOrder[(BattlerIndex.ENEMY, BattlerIndex.PLAYER)];
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const lastAttackReceived = playerPokemon?.turnData.attacksReceived[0];
     expect(lastAttackReceived?.isCritical).toBe(false);

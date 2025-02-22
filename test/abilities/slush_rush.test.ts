@@ -39,7 +39,7 @@ describe("Abilities - Slush Rush", () => {
     const pokemon = game.scene.getPlayerPokemon();
 
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(pokemon?.isFullHp()).toBe(false);
   });

@@ -1,5 +1,4 @@
 import { Stat } from "#enums/stat";
-import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
@@ -19,7 +18,7 @@ const beatUpFunc = (user: Pokemon, allyIndex: number): number => {
 
     // The user contributes to Beat Up regardless of status condition.
     // Allies can contribute only if they do not have a non-volatile status condition.
-    if (pokemon.id !== user.id && pokemon?.status && pokemon.status.effect !== StatusEffect.NONE) {
+    if (pokemon.id !== user.id && !pokemon.hasNonVolatileStatusEffect(false, true)) {
       continue;
     }
     return pokemon.species.getBaseStat(Stat.ATK) / 10 + 5;
@@ -37,7 +36,7 @@ export class BeatUpAttr extends VariablePowerAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
     const party = user.getParty();
     const allyCount = party.filter((pokemon) => {
-      return pokemon.id === user.id || !pokemon.status?.effect;
+      return pokemon.id === user.id || !pokemon.hasNonVolatileStatusEffect(false, true);
     }).length;
     const allyIndex = (user.turnData.hitCount - user.turnData.hitsLeft) % allyCount;
     power.value = beatUpFunc(user, allyIndex);

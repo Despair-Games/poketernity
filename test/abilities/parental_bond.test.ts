@@ -289,7 +289,7 @@ describe("Abilities - Parental Bond", () => {
     expect(leadPokemon.turnData.hitCount).toBe(2);
     expect(leadPokemon.getTag(BattlerTagType.RECHARGING)).toBeUndefined();
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(leadPokemon.getTag(BattlerTagType.RECHARGING)).toBeDefined();
   });
@@ -313,7 +313,7 @@ describe("Abilities - Parental Bond", () => {
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemyPokemon.getTag(BattlerTagType.TRAPPED)).toBeDefined();
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getTag(BattlerTagType.TRAPPED)).toBeDefined();
   });
@@ -334,7 +334,7 @@ describe("Abilities - Parental Bond", () => {
     expect(leadPokemon.turnData.hitCount).toBe(2);
     expect(enemyPokemon.getTag(BattlerTagType.IGNORE_FLYING)).toBeUndefined();
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getTag(BattlerTagType.IGNORE_FLYING)).toBeDefined();
   });
@@ -370,11 +370,11 @@ describe("Abilities - Parental Bond", () => {
     await game.phaseInterceptor.to("DamageAnimPhase");
 
     expect(leadPokemon.turnData.hitCount).toBe(2);
-    expect(enemyPokemon.status?.effect).toBe(StatusEffect.SLEEP);
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
-    expect(enemyPokemon.status?.effect).toBeUndefined();
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
 
   it("should not cause user to hit into King's Shield more than once", async () => {

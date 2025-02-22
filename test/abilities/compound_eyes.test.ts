@@ -37,7 +37,7 @@ describe("Abilities - Compound Eyes", () => {
     vi.spyOn(pokemon, "getAccuracyMultiplier");
 
     game.move.select(MoveId.HYPNOSIS);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(pokemon.getAccuracyMultiplier).toHaveLastReturnedWith(1.3);
   });
@@ -49,7 +49,7 @@ describe("Abilities - Compound Eyes", () => {
     vi.spyOn(pokemon, "getAccuracyMultiplier");
 
     game.move.select(MoveId.SHEER_COLD);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(pokemon.getAccuracyMultiplier).toHaveLastReturnedWith(1);
   });

@@ -5,8 +5,10 @@
 
 export enum BattlerTagType {
   NONE,
+  /** For moves that require recharging after use like Hyper Beam */
   RECHARGING,
   FLINCHED,
+  /** For when things in mid air are suddenly knocked out of the air */
   INTERRUPTED,
   CONFUSED,
   INFATUATED,
@@ -47,14 +49,17 @@ export enum BattlerTagType {
   SLOW_START,
   PROTOSYNTHESIS,
   QUARK_DRIVE,
+  /** Following battler tags grant semi-invulnerability */
   FLYING,
   UNDERGROUND,
   UNDERWATER,
   HIDDEN,
+  /** For flash fire */
   FIRE_BOOST,
   CRIT_BOOST,
   ALWAYS_CRIT,
   IGNORE_ACCURACY,
+  /** For snore and sleep talk */
   BYPASS_SLEEP,
   /** Aka `Grounded` */
   IGNORE_FLYING,
@@ -100,7 +105,6 @@ export enum BattlerTagType {
   COMMANDED,
   GRUDGE,
   PSYCHO_SHIFT,
-  ENDURE_TOKEN,
   POWDER,
   SKY_DROP,
   CRIT_BOOST_STACKABLE,

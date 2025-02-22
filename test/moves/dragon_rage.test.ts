@@ -51,7 +51,7 @@ describe("Moves - Dragon Rage", () => {
     vi.spyOn(enemyPokemon, "getTypes").mockReturnValue([ElementalType.DRAGON]);
 
     game.move.select(MoveId.DRAGON_RAGE);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getInverseHp()).toBe(dragonRageDamage);
   });
@@ -61,7 +61,7 @@ describe("Moves - Dragon Rage", () => {
     vi.spyOn(enemyPokemon, "getTypes").mockReturnValue([ElementalType.STEEL]);
 
     game.move.select(MoveId.DRAGON_RAGE);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getInverseHp()).toBe(dragonRageDamage);
   });
@@ -71,7 +71,7 @@ describe("Moves - Dragon Rage", () => {
     partyPokemon.setStatStage(Stat.SPATK, 2);
 
     game.move.select(MoveId.DRAGON_RAGE);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getInverseHp()).toBe(dragonRageDamage);
   });
@@ -81,7 +81,7 @@ describe("Moves - Dragon Rage", () => {
     vi.spyOn(partyPokemon, "getTypes").mockReturnValue([ElementalType.DRAGON]);
 
     game.move.select(MoveId.DRAGON_RAGE);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getInverseHp()).toBe(dragonRageDamage);
   });
@@ -90,7 +90,7 @@ describe("Moves - Dragon Rage", () => {
     partyPokemon.addTag(BattlerTagType.ALWAYS_CRIT, 99, MoveId.NONE, 0);
 
     game.move.select(MoveId.DRAGON_RAGE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const lastAttackReceived = enemyPokemon.turnData.attacksReceived[0];
     expect(lastAttackReceived.isCritical).toBe(false);
@@ -101,7 +101,7 @@ describe("Moves - Dragon Rage", () => {
     game.override.enemyAbility(Abilities.ICE_SCALES);
 
     game.move.select(MoveId.DRAGON_RAGE);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getInverseHp()).toBe(dragonRageDamage);
   });

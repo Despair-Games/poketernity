@@ -48,9 +48,7 @@ export class VictoryPhase extends PokemonPhase {
       return this.end();
     }
 
-    if (
-      !globalScene.getEnemyParty().find((p) => (battleType === BattleType.WILD ? p.isOnField() : !p?.isFainted(true)))
-    ) {
+    if (!globalScene.getEnemyParty().find((p) => (battleType === BattleType.WILD ? p.isOnField() : !p?.isFainted()))) {
       // clear all queued delayed attacks (e.g. from Future Sight)
       globalScene.arena.removeTag(ArenaTagType.DELAYED_ATTACK);
 

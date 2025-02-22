@@ -5,17 +5,17 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PreWeatherEffectAbAttr } from "./pre-weather-effect-ab-attr";
 
 export class SuppressWeatherEffectAbAttr extends PreWeatherEffectAbAttr {
-  public readonly affectsImmutable: boolean;
+  public readonly affectsPrimal: boolean;
 
-  constructor(affectsImmutable: boolean = false) {
+  constructor(affectsPrimal: boolean = false) {
     super();
     this._flags.add(AbAttrFlag.SUPPRESS_WEATHER_EFFECT);
 
-    this.affectsImmutable = affectsImmutable;
+    this.affectsPrimal = affectsPrimal;
   }
 
   override apply(_pokemon: Pokemon, _simulated: boolean, weather: Weather, cancelled: BooleanHolder): boolean {
-    if (this.affectsImmutable || weather.isImmutable()) {
+    if (this.affectsPrimal || weather.isPrimal()) {
       cancelled.value = true;
       return true;
     }

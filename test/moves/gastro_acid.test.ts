@@ -54,7 +54,7 @@ describe("Moves - Gastro Acid", () => {
     game.move.select(MoveId.WATER_GUN, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.WATER_GUN, 1, BattlerIndex.ENEMY_2);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(enemyField[0].hp).toBeLessThan(enemyField[0].getMaxHp());
     expect(enemyField[1].isFullHp()).toBe(true);

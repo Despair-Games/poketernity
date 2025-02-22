@@ -1,10 +1,8 @@
-import { Status } from "#app/data/status-effect";
 import { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -45,8 +43,7 @@ describe("Abilities - ZERO TO HERO", () => {
     const palafin2 = game.scene.getPlayerParty()[2];
     expect(palafin1.formIndex).toBe(heroForm);
     expect(palafin2.formIndex).toBe(heroForm);
-    palafin2.hp = 0;
-    palafin2.status = new Status(StatusEffect.FAINT);
+    palafin2.faint();
     expect(palafin2.isFainted()).toBe(true);
 
     game.move.select(MoveId.SPLASH);

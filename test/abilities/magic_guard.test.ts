@@ -84,7 +84,7 @@ describe("Abilities - Magic Guard", () => {
      * - The Pokemon's CatchRateMultiplier should be 1.5
      */
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp());
-    expect(getStatusEffectCatchRateMultiplier(leadPokemon.status!.effect)).toBe(1.5);
+    expect(getStatusEffectCatchRateMultiplier(leadPokemon.getStatusEffect(true))).toBe(1.5);
   });
 
   it("ability effect should not persist when the ability is replaced", async () => {
@@ -125,7 +125,7 @@ describe("Abilities - Magic Guard", () => {
      * - The enemy Pokemon's hypothetical CatchRateMultiplier should be 1.5
      */
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
-    expect(getStatusEffectCatchRateMultiplier(enemyPokemon.status!.effect)).toBe(1.5);
+    expect(getStatusEffectCatchRateMultiplier(enemyPokemon.getStatusEffect(true))).toBe(1.5);
   });
 
   it("Magic Guard prevents damage caused by toxic but other non-damaging effects are still applied", async () => {
@@ -151,7 +151,7 @@ describe("Abilities - Magic Guard", () => {
      */
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
     expect(enemyPokemon.status!.toxicTurnCount).toBeGreaterThan(toxicStartCounter);
-    expect(getStatusEffectCatchRateMultiplier(enemyPokemon.status!.effect)).toBe(1.5);
+    expect(getStatusEffectCatchRateMultiplier(enemyPokemon.getStatusEffect(true))).toBe(1.5);
   });
 
   it("Magic Guard prevents damage caused by entry hazards", async () => {
@@ -195,8 +195,8 @@ describe("Abilities - Magic Guard", () => {
      * - The player Pokemon (with Magic Guard) has not taken damage from poison
      * - The enemy Pokemon (without Magic Guard) has taken damage from poison
      */
-    expect(leadPokemon.status!.effect).toBe(StatusEffect.POISON);
-    expect(enemyPokemon.status!.effect).toBe(StatusEffect.POISON);
+    expect(leadPokemon.getStatusEffect()).toBe(StatusEffect.POISON);
+    expect(enemyPokemon.getStatusEffect()).toBe(StatusEffect.POISON);
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp());
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
   });
@@ -343,7 +343,7 @@ describe("Abilities - Magic Guard", () => {
      * - The player Pokemon is asleep
      */
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp());
-    expect(leadPokemon.status!.effect).toBe(StatusEffect.SLEEP);
+    expect(leadPokemon.getStatusEffect()).toBe(StatusEffect.SLEEP);
   });
 
   it("Magic Guard prevents damage from abilities with PostFaintContactDamageAbAttr", async () => {

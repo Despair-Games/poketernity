@@ -1,8 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
-import { Status } from "#app/data/status-effect";
 import { Challenges } from "#enums/challenges";
-import { StatusEffect } from "#enums/status-effect";
 import { ElementalType } from "#enums/elemental-type";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
@@ -45,7 +43,7 @@ describe("Moves - Dragon Tail", () => {
 
     game.move.select(MoveId.DRAGON_TAIL);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const isVisible = enemyPokemon.visible;
     const hasFled = enemyPokemon.switchOutStatus;
@@ -64,7 +62,7 @@ describe("Moves - Dragon Tail", () => {
 
     game.move.select(MoveId.DRAGON_TAIL);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const isVisible = enemyPokemon.visible;
     const hasFled = enemyPokemon.switchOutStatus;
@@ -84,7 +82,7 @@ describe("Moves - Dragon Tail", () => {
     game.move.select(MoveId.DRAGON_TAIL, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     const isVisibleLead = enemyLeadPokemon.visible;
     const hasFledLead = enemyLeadPokemon.switchOutStatus;
@@ -97,7 +95,7 @@ describe("Moves - Dragon Tail", () => {
     game.move.select(MoveId.FLAMETHROWER, 0, BattlerIndex.ENEMY_2);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
     expect(enemySecPokemon.hp).toBeLessThan(enemySecPokemon.getMaxHp());
   });
 
@@ -115,7 +113,7 @@ describe("Moves - Dragon Tail", () => {
     // target the same pokemon, second move should be redirected after first flees
     game.move.select(MoveId.DRAGON_TAIL, 1, BattlerIndex.ENEMY);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const isVisibleLead = enemyLeadPokemon.visible;
     const hasFledLead = enemyLeadPokemon.switchOutStatus;
@@ -135,7 +133,7 @@ describe("Moves - Dragon Tail", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.DRAGON_TAIL);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(enemy.isFullHp()).toBe(false);
   });
@@ -256,8 +254,7 @@ describe("Moves - Dragon Tail", () => {
     const [lapras, eevee, toxapex, primarina] = game.scene.getPlayerParty();
 
     // Turn 1: Eevee faints
-    eevee.hp = 0;
-    eevee.status = new Status(StatusEffect.FAINT);
+    eevee.faint();
     expect(eevee.isFainted()).toBe(true);
     game.move.select(MoveId.SPLASH);
     await game.forceEnemyMove(MoveId.SPLASH);
@@ -285,8 +282,7 @@ describe("Moves - Dragon Tail", () => {
     const [lapras, eevee] = game.scene.getPlayerParty();
 
     // Turn 1: Eevee faints
-    eevee.hp = 0;
-    eevee.status = new Status(StatusEffect.FAINT);
+    eevee.faint();
     expect(eevee.isFainted()).toBe(true);
     game.move.select(MoveId.SPLASH);
     await game.forceEnemyMove(MoveId.SPLASH);

@@ -42,11 +42,11 @@ describe("Moves - Will-O-Wisp", () => {
     await game.move.forceHit();
     await game.toNextTurn();
 
-    expect(enemy.status?.effect).toBe(StatusEffect.BURN);
+    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.BURN);
 
     game.move.use(MoveId.SPLASH);
     await game.toNextTurn();
 
-    expect(enemy.status?.effect).toBe(StatusEffect.BURN);
+    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.BURN);
   });
 });

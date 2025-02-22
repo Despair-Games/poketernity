@@ -5,12 +5,12 @@ import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { type AbstractConstructor, randSeedInt } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { getWeatherClearMessage, getWeatherStartMessage, Weather } from "#app/data/weather";
+import { getWeatherClearMessage, getWeatherStartMessage, PRIMAL_WEATHER, Weather } from "#app/data/weather";
 import { CommonAnim } from "#enums/common-anim";
 import type { ElementalType } from "#enums/elemental-type";
 import type { Move } from "#app/data/move";
 import type { ArenaTag } from "#app/data/arena-tag";
-import { ArenaTrapTag, getArenaTag } from "#app/data/arena-tag";
+import { EntryHazardTag, getArenaTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { BattlerIndex } from "#enums/battler-index";
 import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
@@ -396,30 +396,49 @@ export class Arena {
   }
 
   /**
+   * Helper function that checks if it is possible to set a new weather given current weather conditions
+   * @param newWeather - The weather that the game is attempting to set
+   * @returns `true` if the weather can be set given current conditions | `false` if not
+   */
+  public canSetWeather(newWeather: WeatherType): boolean {
+    if (this.weather) {
+      if (newWeather === this.weather.weatherType) {
+        return false;
+      }
+      if (this.weather.isPrimal() && ![WeatherType.NONE, ...PRIMAL_WEATHER].includes(newWeather)) {
+        return false;
+      }
+    } else if (newWeather === WeatherType.NONE) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
    * Attempts to set a new weather to the battle
-   * @param weather {@linkcode WeatherType} new {@linkcode WeatherType} to set
+   * @param newWeather {@linkcode WeatherType} new {@linkcode WeatherType} to set
    * @param hasPokemonSource boolean if the new weather is from a pokemon
    * @returns true if new weather set, false if no weather provided or attempting to set the same weather as currently in use
    */
-  trySetWeather(weather: WeatherType, hasPokemonSource: boolean): boolean {
+  trySetWeather(newWeather: WeatherType, hasPokemonSource: boolean): boolean {
     if (Overrides.WEATHER_OVERRIDE) {
       return this.trySetWeatherOverride(Overrides.WEATHER_OVERRIDE);
     }
 
-    if (this.weather?.weatherType === (weather || undefined)) {
+    if (!this.canSetWeather(newWeather)) {
       return false;
     }
 
     const oldWeatherType = this.weather?.weatherType || WeatherType.NONE;
 
-    this.weather = weather ? new Weather(weather, hasPokemonSource ? 5 : 0) : null;
+    this.weather = newWeather !== WeatherType.NONE ? new Weather(newWeather, hasPokemonSource ? 5 : 0) : null;
 
     if (this.weather) {
       this.eventTarget.dispatchEvent(
         new WeatherChangedEvent(oldWeatherType, this.weather.weatherType, this.weather.turnsLeft),
       );
-      globalScene.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (weather - 1)));
-      globalScene.queueMessage(getWeatherStartMessage(weather) ?? "");
+      globalScene.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (newWeather - 1)));
+      globalScene.queueMessage(getWeatherStartMessage(newWeather) ?? "");
     } else {
       globalScene.queueMessage(getWeatherClearMessage(oldWeatherType) ?? "");
     }
@@ -429,9 +448,9 @@ export class Arena {
       .filter((p) => p.isOnField())
       .map((pokemon) => {
         pokemon.findAndRemoveTags(
-          (t) => "weatherTypes" in t && !(t.weatherTypes as WeatherType[]).find((t) => t === weather),
+          (t) => "weatherTypes" in t && !(t.weatherTypes as WeatherType[]).find((t) => t === newWeather),
         );
-        applyAbAttrs(AbAttrFlag.POST_WEATHER_CHANGE, pokemon, false, weather);
+        applyAbAttrs(AbAttrFlag.POST_WEATHER_CHANGE, pokemon, false, newWeather);
       });
 
     return true;
@@ -781,8 +800,8 @@ export class Arena {
     if (existingTag) {
       existingTag.onOverlap(this);
 
-      if (existingTag instanceof ArenaTrapTag) {
-        const { tagType, side, turnCount, layers, maxLayers } = existingTag as ArenaTrapTag;
+      if (existingTag instanceof EntryHazardTag) {
+        const { tagType, side, turnCount, layers, maxLayers } = existingTag as EntryHazardTag;
         this.eventTarget.dispatchEvent(new TagAddedEvent(tagType, side, turnCount, layers, maxLayers));
       }
 
@@ -795,7 +814,7 @@ export class Arena {
       this.tags.push(newTag);
       newTag.onAdd(this, quiet);
 
-      const { layers = 0, maxLayers = 0 } = newTag instanceof ArenaTrapTag ? newTag : {};
+      const { layers = 0, maxLayers = 0 } = newTag instanceof EntryHazardTag ? newTag : {};
 
       this.eventTarget.dispatchEvent(
         new TagAddedEvent(newTag.tagType, newTag.side, newTag.turnCount, layers, maxLayers),
