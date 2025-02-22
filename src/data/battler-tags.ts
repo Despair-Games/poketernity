@@ -3277,17 +3277,18 @@ export class ImprisoningTag extends BattlerTag implements RestrictingBattlerTag 
     );
   }
 
-  override apply(
-    pokemon: Pokemon,
-    simulated: boolean,
-    actingPokemon: Pokemon,
-    moveId: MoveId,
-    messages?: string[],
-  ): boolean {
+  /**
+   * Prevents opposing Pokemon from using moves that match with
+   * the tag owner's moveset.
+   * @param pokemon The {@linkcode Pokemon} with this tag
+   * @param simulated If `true`, suppresses the message triggered by an interruption
+   * @param actingPokemon The {@linkcode Pokemon} attempting to select or use a move
+   * @param moveId The {@linkcode MoveId} for the move being selected or used
+   * @returns `true` if the given move is disabled by this tag
+   */
+  override apply(pokemon: Pokemon, simulated: boolean, actingPokemon: Pokemon, moveId: MoveId): boolean {
     if (pokemon.getMoveset().some((mv) => mv.moveId === moveId)) {
-      if (messages) {
-        messages.push(this.interruptedText(actingPokemon, moveId));
-      } else if (!simulated) {
+      if (!simulated) {
         globalScene.queueMessage(this.interruptedText(actingPokemon, moveId));
       }
       return true;

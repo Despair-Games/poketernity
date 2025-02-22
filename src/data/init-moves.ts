@@ -815,7 +815,8 @@ export function initMoves() {
       .attr(RecoilAttr, true, 0.25, true)
       .attr(TypelessAttr)
       .ignoresVirtual()
-      .target(MoveTarget.RANDOM_NEAR_ENEMY),
+      .target(MoveTarget.RANDOM_NEAR_ENEMY)
+      .edgeCase(), // Pokemon are forced to use Struggle even if the responsible disabling effect is removed mid-turn
     new StatusMove(MoveId.SKETCH, ElementalType.NORMAL, -1, 1, -1, 0, 2)
       .ignoresSubstitute()
       .attr(SketchAttr)
