@@ -39,13 +39,13 @@ describe("Moves - Safeguard", () => {
 
   it("protects from damaging moves with additional effects", async () => {
     await game.classicMode.startBattle();
-    const enemy = game.scene.getEnemyPokemon()!;
+    const enemyPokemon = game.field.getEnemyPokemon();
 
     game.move.select(MoveId.NUZZLE);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
-    expect(enemy.status).toBeUndefined();
+    expect(enemyPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
   });
 
   it("protects from status moves", async () => {
@@ -56,7 +56,7 @@ describe("Moves - Safeguard", () => {
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
-    expect(enemyPokemon.status).toBeUndefined();
+    expect(enemyPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
   });
 
   it("protects from confusion", async () => {
@@ -85,8 +85,8 @@ describe("Moves - Safeguard", () => {
 
     const enemyPokemon = game.scene.getEnemyField();
 
-    expect(enemyPokemon[0].status).toBeUndefined();
-    expect(enemyPokemon[1].status).toBeUndefined();
+    expect(enemyPokemon[0].getStatusEffect()).toBe(StatusEffect.NONE);
+    expect(enemyPokemon[1].getStatusEffect()).toBe(StatusEffect.NONE);
   });
 
   it("protects from Yawn", async () => {
@@ -111,7 +111,7 @@ describe("Moves - Safeguard", () => {
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
-    expect(enemyPokemon.status?.effect).toEqual(StatusEffect.SLEEP);
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
   });
 
   it("doesn't protect from self-inflicted via Rest or Flame Orb", async () => {
@@ -124,7 +124,7 @@ describe("Moves - Safeguard", () => {
     await game.toNextTurn();
     enemyPokemon.damageAndUpdate(1);
 
-    expect(enemyPokemon.status?.effect).toEqual(StatusEffect.BURN);
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.BURN);
 
     game.override.enemyMoveset([MoveId.REST]);
     // Force the moveset to update mid-battle
@@ -134,7 +134,7 @@ describe("Moves - Safeguard", () => {
     enemyPokemon.damageAndUpdate(1);
     await game.toNextTurn();
 
-    expect(enemyPokemon.status?.effect).toEqual(StatusEffect.SLEEP);
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
   });
 
   it("protects from ability-inflicted status", async () => {
@@ -156,7 +156,7 @@ describe("Moves - Safeguard", () => {
     game.move.select(MoveId.SPLASH);
     await game.toNextTurn();
 
-    expect(enemyPokemon.status).toBeUndefined();
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
 
   it("should apply even if the user has a fainted ally", async () => {
@@ -177,6 +177,6 @@ describe("Moves - Safeguard", () => {
     expect(enemyPokemon[1].isFainted()).toBe(true);
 
     await game.toNextTurn();
-    expect(enemyPokemon[0].status).toBeUndefined();
+    expect(enemyPokemon[0].getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
 });

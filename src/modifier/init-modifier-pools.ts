@@ -111,7 +111,7 @@ export function initModifierPools() {
               && !!p.status
               && !p.getHeldItems().some((i) => {
                 if (i instanceof TurnStatusEffectModifier) {
-                  return (i as TurnStatusEffectModifier).getStatusEffect() === p.status?.effect;
+                  return (i as TurnStatusEffectModifier).getStatusEffect() === p.getStatusEffect(true);
                 }
                 return false;
               }),
@@ -177,7 +177,7 @@ export function initModifierPools() {
               && !!p.status
               && !p.getHeldItems().some((i) => {
                 if (i instanceof TurnStatusEffectModifier) {
-                  return (i as TurnStatusEffectModifier).getStatusEffect() === p.status?.effect;
+                  return (i as TurnStatusEffectModifier).getStatusEffect() === p.getStatusEffect(true);
                 }
                 return false;
               }),

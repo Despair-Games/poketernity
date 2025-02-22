@@ -5,6 +5,7 @@ import { UiMode } from "#enums/ui-mode";
 import { PlayerGender } from "#enums/player-gender";
 import i18next from "i18next";
 import { PhaseId } from "#enums/phase-id";
+import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 
 export class SelectGenderPhase extends Phase {
   override readonly id = PhaseId.SELECT_GENDER;
@@ -14,29 +15,32 @@ export class SelectGenderPhase extends Phase {
 
     const { gameData, ui } = globalScene;
 
+    const menuOptionsConfig: OptionSelectModeConfig = {
+      options: [
+        {
+          label: i18next.t("settings:boy"),
+          handler: () => {
+            settings.update("display", "playerGender", PlayerGender.MALE);
+            gameData.saveSystem().then(() => this.end());
+            return true;
+          },
+        },
+        {
+          label: i18next.t("settings:girl"),
+          handler: () => {
+            settings.update("display", "playerGender", PlayerGender.FEMALE);
+            gameData.saveSystem().then(() => this.end());
+            return true;
+          },
+        },
+      ],
+      inputDelay: 1000,
+      blockCancelButton: true,
+      yOffset: 48,
+    };
+
     ui.showText(i18next.t("menu:boyOrGirl"), null, () => {
-      ui.setMode(UiMode.OPTION_SELECT, {
-        options: [
-          {
-            label: i18next.t("settings:boy"),
-            handler: () => {
-              settings.update("display", "playerGender", PlayerGender.MALE);
-              gameData.saveSystem().then(() => this.end());
-              return true;
-            },
-          },
-          {
-            label: i18next.t("settings:girl"),
-            handler: () => {
-              settings.update("display", "playerGender", PlayerGender.FEMALE);
-              gameData.saveSystem().then(() => this.end());
-              return true;
-            },
-          },
-        ],
-        noCancel: true,
-        yOffset: 48,
-      });
+      ui.setMode(UiMode.OPTION_SELECT, menuOptionsConfig);
     });
   }
 

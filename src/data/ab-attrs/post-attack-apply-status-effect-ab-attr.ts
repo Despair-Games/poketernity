@@ -50,7 +50,7 @@ export class PostAttackApplyStatusEffectAbAttr extends PostAttackAbAttr {
       && target.id !== attacker.id
       && (!this.contactRequired || move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, target))
       && target.randSeedInt(100) < this.chance
-      && !target.status
+      && !target.hasNonVolatileStatusEffect()
     ) {
       const effect =
         this.effects.length === 1 ? this.effects[0] : this.effects[attacker.randSeedInt(this.effects.length)];

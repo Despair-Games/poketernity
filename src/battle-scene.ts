@@ -3164,7 +3164,7 @@ export default class BattleScene extends SceneBase {
               level: p.level,
               currentHP: p.hp,
               maxHP: p.getMaxHp(),
-              status: p.status?.effect ? StatusEffect[p.status.effect] : "",
+              status: StatusEffect[p.getStatusEffect()],
             };
           })
         : [],
