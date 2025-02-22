@@ -81,7 +81,7 @@ describe("Abilities - Triage", () => {
     game.move.select(MoveId.POLLEN_PUFF, 0, BattlerIndex.PLAYER_2);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("TurnEndPhase", false);
+    await game.toEndOfTurn();
 
     // The Pokemon using Pollen Puff on its ally should be after the enemy Pokemon using Quick Attack
     expect(allMoves[MoveId.POLLEN_PUFF].checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(false);

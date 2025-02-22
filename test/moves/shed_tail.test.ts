@@ -40,7 +40,7 @@ describe("Moves - Shed Tail", () => {
     game.move.select(MoveId.SHED_TAIL);
     game.doSelectPartyPokemon(1);
 
-    await game.phaseInterceptor.to("TurnEndPhase", false);
+    await game.toEndOfTurn();
 
     const feebas = game.scene.getPlayerPokemon()!;
     const substituteTag = feebas.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
@@ -64,7 +64,7 @@ describe("Moves - Shed Tail", () => {
 
     game.move.select(MoveId.SHED_TAIL);
 
-    await game.phaseInterceptor.to("TurnEndPhase", false);
+    await game.toEndOfTurn();
 
     expect(magikarp.isOnField()).toBeTruthy();
     expect(magikarp.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
