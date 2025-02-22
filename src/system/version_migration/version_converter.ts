@@ -2,7 +2,7 @@ import type { SessionSaveData } from "#app/@types/SessionData";
 import type { SystemSaveData } from "#app/@types/SystemData";
 import { compareVersions } from "compare-versions";
 import { version } from "../../../package.json";
-import { settings } from "#app/system/settings/settings-manager";
+import type { Settings } from "#app/@types/Settings";
 
 /*
 // template for save migrator creation
@@ -161,7 +161,7 @@ class SystemVersionConverter extends VersionConverter {
  * @extends VersionConverter
  */
 class SettingsVersionConverter extends VersionConverter {
-  override applyMigration(_data: Object, _prevVersion: string): void {
+  override applyMigration(_data: Partial<Settings>, _prevVersion: string): void {
     console.log(`Settings successfully migrated to v${version}!`);
   }
 }
