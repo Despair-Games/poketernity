@@ -39,7 +39,7 @@ export class PostDefendContactApplyStatusEffectAbAttr extends PostDefendAbAttr {
   override apply(pokemon: Pokemon, simulated: boolean, attacker: Pokemon, move: Move): boolean {
     if (
       move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
-      && !attacker.status
+      && !attacker.hasNonVolatileStatusEffect()
       && (this.chance === -1 || pokemon.randSeedInt(100) < this.chance)
     ) {
       const status =

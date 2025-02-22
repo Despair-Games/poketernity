@@ -232,7 +232,7 @@ describe("Fiery Fallout - Mystery Encounter", () => {
           pkm.getMaxHp() - Math.floor(pkm.getMaxHp() * 0.2),
         );
       });
-      expect(burnablePokemon.some((pkm) => pkm.status?.effect === StatusEffect.BURN)).toBeTruthy();
+      expect(burnablePokemon.some((pkm) => pkm.hasStatusEffect(StatusEffect.BURN, false, true))).toBeTruthy();
       expect(burnablePokemon.some((pkm) => pkm.customPokemonData.ability === Abilities.HEATPROOF));
       notBurnablePokemon.forEach((pkm) =>
         expect(pkm.hp, `${pkm.name} should be full hp: ${pkm.hp} / ${pkm.getMaxHp()} HP`).toBe(pkm.getMaxHp()),

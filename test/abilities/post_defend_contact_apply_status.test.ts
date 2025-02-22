@@ -55,7 +55,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     await game.toEndOfTurn();
 
     const attacker = game.scene.getEnemyPokemon();
-    expect(attacker?.status?.effect).toBe(status);
+    expect(attacker?.getStatusEffect(true)).toBe(status);
   });
 
   it.each([
@@ -79,7 +79,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     await game.toEndOfTurn();
 
     const attacker = game.scene.getEnemyPokemon();
-    expect(attacker?.status).toBeUndefined();
+    expect(attacker?.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
 
   it("Static can paralyze a Ground-type Pokemon", async () => {
@@ -100,6 +100,6 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
 
     const attacker = game.scene.getEnemyPokemon();
     expect(attacker?.getTypes()).toContain(ElementalType.GROUND);
-    expect(attacker?.status?.effect).toBe(StatusEffect.PARALYSIS);
+    expect(attacker?.getStatusEffect(true)).toBe(StatusEffect.PARALYSIS);
   });
 });

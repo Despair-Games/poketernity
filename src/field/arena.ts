@@ -10,7 +10,7 @@ import { CommonAnim } from "#enums/common-anim";
 import type { ElementalType } from "#enums/elemental-type";
 import type { Move } from "#app/data/move";
 import type { ArenaTag } from "#app/data/arena-tag";
-import { ArenaTrapTag, getArenaTag } from "#app/data/arena-tag";
+import { EntryHazardTag, getArenaTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { BattlerIndex } from "#enums/battler-index";
 import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
@@ -800,8 +800,8 @@ export class Arena {
     if (existingTag) {
       existingTag.onOverlap(this);
 
-      if (existingTag instanceof ArenaTrapTag) {
-        const { tagType, side, turnCount, layers, maxLayers } = existingTag as ArenaTrapTag;
+      if (existingTag instanceof EntryHazardTag) {
+        const { tagType, side, turnCount, layers, maxLayers } = existingTag as EntryHazardTag;
         this.eventTarget.dispatchEvent(new TagAddedEvent(tagType, side, turnCount, layers, maxLayers));
       }
 
@@ -814,7 +814,7 @@ export class Arena {
       this.tags.push(newTag);
       newTag.onAdd(this, quiet);
 
-      const { layers = 0, maxLayers = 0 } = newTag instanceof ArenaTrapTag ? newTag : {};
+      const { layers = 0, maxLayers = 0 } = newTag instanceof EntryHazardTag ? newTag : {};
 
       this.eventTarget.dispatchEvent(
         new TagAddedEvent(newTag.tagType, newTag.side, newTag.turnCount, layers, maxLayers),
