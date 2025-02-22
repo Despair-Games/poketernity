@@ -27,8 +27,8 @@ describe("Moves - Rollout", () => {
     game.override
       .disableCrits()
       .battleType("single")
-      .ability(Abilities.BALL_FETCH)
-      .enemySpecies(Species.STAKATAKA)
+      .ability(Abilities.NO_GUARD)
+      .enemySpecies(Species.AGGRON)
       .enemyAbility(Abilities.BALL_FETCH)
       .startingLevel(100)
       .enemyLevel(100)
@@ -37,7 +37,6 @@ describe("Moves - Rollout", () => {
 
   it("should double its power on sequential uses for up to 5 uses", async () => {
     const moveObj = allMoves[MoveId.ROLLOUT];
-    vi.spyOn(moveObj, "accuracy", "get").mockReturnValue(100); //always hit
     const spy = vi.spyOn(moveObj, "calculateBattlePower");
 
     await game.classicMode.startBattle([Species.FEEBAS]);
@@ -61,9 +60,22 @@ describe("Moves - Rollout", () => {
     expect(powerResults[5]).toBe(powerResults[0]);
   });
 
-  it("should lock the user into the move for 5 turns", async () => {
-    vi.spyOn(allMoves[MoveId.ROLLOUT], "accuracy", "get").mockReturnValue(100);
+  it("should double its power if the user previously used Defense Curl", async () => {
+    const moveObj = allMoves[MoveId.ROLLOUT];
+    vi.spyOn(moveObj, "calculateBattlePower");
 
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    game.move.use(MoveId.DEFENSE_CURL);
+    await game.toNextTurn();
+
+    game.move.use(MoveId.ROLLOUT);
+    await game.toNextTurn();
+
+    expect(moveObj.calculateBattlePower).toHaveLastReturnedWith(60);
+  });
+
+  it("should lock the user into the move for 5 turns", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
@@ -89,6 +101,8 @@ describe("Moves - Rollout", () => {
   });
 
   it("should stop its execution if an attack is unsuccessful", async () => {
+    game.override.ability(Abilities.BALL_FETCH);
+
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
