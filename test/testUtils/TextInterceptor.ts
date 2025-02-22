@@ -17,7 +17,7 @@ export class TextInterceptor {
     _prompt?: boolean,
     _promptDelay?: number,
   ): void {
-    console.log(text);
+    console.log(">>", this.formatText(text));
     this.logs.push(text);
   }
 
@@ -29,11 +29,23 @@ export class TextInterceptor {
     _callbackDelay?: number,
     _promptDelay?: number,
   ): void {
-    console.log(name, text);
+    console.log(">>", this.formatText(`${name}:\n"${text}"`));
     this.logs.push(name, text);
   }
 
   getLatestMessage(): string {
     return this.logs.pop() ?? "";
+  }
+
+  /**
+   * Formats text to be displayed to the unit test console.
+   * 1. Replaces new lines and new text boxes (marked by $) with indented new lines.
+   * 2. Removes all @c{}, @d{}, @s{}, and @f{} flags from the text.
+   */
+  private formatText(text: string): string {
+    return text
+      .replace(/\n/g, "\n   ")
+      .replace(/\$/g, "\n   ")
+      .replace(/@\w{.*?}/g, "");
   }
 }

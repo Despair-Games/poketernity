@@ -40,7 +40,7 @@ describe("Abilities - Sweet Veil", () => {
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    expect(game.scene.getPlayerField().every((p) => p.status?.effect)).toBe(false);
+    expect(game.scene.getPlayerField().every((p) => p.getStatusEffect(true))).toBe(false);
   });
 
   it("causes Rest to fail when used by the user or its allies", async () => {
@@ -52,7 +52,7 @@ describe("Abilities - Sweet Veil", () => {
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    expect(game.scene.getPlayerField().every((p) => p.status?.effect)).toBe(false);
+    expect(game.scene.getPlayerField().every((p) => p.getStatusEffect(true))).toBe(false);
   });
 
   it("causes Yawn to fail if used on the user or its allies", async () => {
@@ -86,6 +86,6 @@ describe("Abilities - Sweet Veil", () => {
     game.move.select(MoveId.SPLASH);
     game.doSwitchPokemon(2);
 
-    expect(game.scene.getPlayerField().every((p) => p.status?.effect)).toBe(false);
+    expect(game.scene.getPlayerField().every((p) => p.getStatusEffect(true))).toBe(false);
   });
 });

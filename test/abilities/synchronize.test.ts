@@ -38,7 +38,7 @@ describe("Abilities - Synchronize", () => {
     game.move.select(MoveId.SPLASH);
     await game.toEndOfTurn();
 
-    expect(game.scene.getPlayerPokemon()!.status).toBeUndefined();
+    expect(game.field.getPlayerPokemon().getStatusEffect()).toBe(StatusEffect.NONE);
     expect(game.phaseInterceptor.log).not.toContain("ShowAbilityPhase");
   });
 
@@ -48,8 +48,8 @@ describe("Abilities - Synchronize", () => {
     game.move.select(MoveId.THUNDER_WAVE);
     await game.toEndOfTurn();
 
-    expect(game.scene.getPlayerPokemon()!.status?.effect).toBe(StatusEffect.PARALYSIS);
-    expect(game.scene.getEnemyPokemon()!.status?.effect).toBe(StatusEffect.PARALYSIS);
+    expect(game.field.getPlayerPokemon().getStatusEffect(true)).toBe(StatusEffect.PARALYSIS);
+    expect(game.field.getEnemyPokemon().getStatusEffect(true)).toBe(StatusEffect.PARALYSIS);
     expect(game.phaseInterceptor.log).toContain("ShowAbilityPhase");
   });
 
@@ -60,8 +60,8 @@ describe("Abilities - Synchronize", () => {
 
     await game.toEndOfTurn();
 
-    expect(game.scene.getPlayerPokemon()!.status?.effect).toBeUndefined();
-    expect(game.scene.getEnemyPokemon()!.status?.effect).toBe(StatusEffect.SLEEP);
+    expect(game.field.getPlayerPokemon().getStatusEffect(true)).toBe(StatusEffect.NONE);
+    expect(game.field.getEnemyPokemon().getStatusEffect(true)).toBe(StatusEffect.SLEEP);
     expect(game.phaseInterceptor.log).not.toContain("ShowAbilityPhase");
   });
 
@@ -79,8 +79,8 @@ describe("Abilities - Synchronize", () => {
     game.doSwitchPokemon(1);
     await game.toEndOfTurn();
 
-    expect(game.scene.getPlayerPokemon()!.status?.effect).toBe(StatusEffect.POISON);
-    expect(game.scene.getEnemyPokemon()!.status?.effect).toBeUndefined();
+    expect(game.field.getPlayerPokemon().getStatusEffect(true)).toBe(StatusEffect.POISON);
+    expect(game.field.getEnemyPokemon().getStatusEffect(true)).toBe(StatusEffect.NONE);
     expect(game.phaseInterceptor.log).not.toContain("ShowAbilityPhase");
   });
 
@@ -90,8 +90,8 @@ describe("Abilities - Synchronize", () => {
     game.move.select(MoveId.THUNDER_WAVE);
     await game.toEndOfTurn();
 
-    expect(game.scene.getPlayerPokemon()!.status?.effect).toBeUndefined();
-    expect(game.scene.getEnemyPokemon()!.status?.effect).toBe(StatusEffect.PARALYSIS);
+    expect(game.field.getPlayerPokemon().getStatusEffect(true)).toBe(StatusEffect.NONE);
+    expect(game.field.getEnemyPokemon().getStatusEffect(true)).toBe(StatusEffect.PARALYSIS);
     expect(game.phaseInterceptor.log).toContain("ShowAbilityPhase");
   });
 });

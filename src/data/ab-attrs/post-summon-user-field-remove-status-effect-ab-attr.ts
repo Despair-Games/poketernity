@@ -10,7 +10,7 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
  * @extends PostSummonAbAttr
  */
 export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAttr {
-  private readonly statusEffect: StatusEffect[];
+  private readonly statusEffects: StatusEffect[];
 
   /**
    * @param statusEffect - The status effects to be removed from the user's field.
@@ -18,7 +18,7 @@ export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAtt
   constructor(...statusEffect: StatusEffect[]) {
     super(false);
 
-    this.statusEffect = statusEffect;
+    this.statusEffects = statusEffect;
   }
 
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
@@ -30,8 +30,10 @@ export class PostSummonUserFieldRemoveStatusEffectAbAttr extends PostSummonAbAtt
 
     if (!simulated) {
       for (const pokemon of allowedPokemon) {
-        if (pokemon.status && this.statusEffect.includes(pokemon.status.effect)) {
-          globalScene.queueMessage(getStatusEffectHealText(pokemon.status.effect, getPokemonNameWithAffix(pokemon)));
+        if (pokemon.hasStatusEffect(this.statusEffects, false, true)) {
+          globalScene.queueMessage(
+            getStatusEffectHealText(pokemon.getStatusEffect(true), getPokemonNameWithAffix(pokemon)),
+          );
           pokemon.resetStatus();
           pokemon.updateInfo();
         }

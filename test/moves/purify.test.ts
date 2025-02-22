@@ -49,7 +49,7 @@ describe("Moves - Purify", () => {
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to(MoveEndPhase);
 
-    expect(enemyPokemon.status).toBeNull();
+    expect(enemyPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
     expect(playerPokemon.isFullHp()).toBe(true);
   });
 

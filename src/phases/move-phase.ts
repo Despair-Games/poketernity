@@ -227,12 +227,16 @@ export class MovePhase extends BattlePhase {
    * Handles {@link StatusEffect.SLEEP Sleep}/{@link StatusEffect.PARALYSIS Paralysis}/{@link StatusEffect.FREEZE Freeze} rolls and side effects.
    */
   protected resolvePreMoveStatusEffects(): void {
-    if (!this.followUp && this.pokemon.status && !this.pokemon.status.isPostTurn()) {
-      this.pokemon.status.incrementTurn();
+    if (
+      !this.followUp
+      && this.pokemon.hasStatusEffect([StatusEffect.SLEEP, StatusEffect.PARALYSIS, StatusEffect.FREEZE], false, true)
+    ) {
+      this.pokemon.status!.incrementTurn();
       let activated = false;
       let healed = false;
 
-      switch (this.pokemon.status.effect) {
+      const statusEffect = this.pokemon.getStatusEffect(true);
+      switch (statusEffect) {
         case StatusEffect.PARALYSIS:
           activated =
             (!this.pokemon.randSeedInt(4) || Overrides.STATUS_ACTIVATION_OVERRIDE === true)
@@ -240,21 +244,15 @@ export class MovePhase extends BattlePhase {
           break;
         case StatusEffect.SLEEP:
           applyMoveAttrs(BypassSleepAttr, this.pokemon, null, this.move.getMove());
-          const turnsRemaining = new NumberHolder(this.pokemon.status.sleepTurnsRemaining ?? 0);
-          applyAbAttrs(
-            AbAttrFlag.REDUCE_SLEEP_DURATION,
-            this.pokemon,
-            false,
-            this.pokemon.status.effect,
-            turnsRemaining,
-          );
+          const turnsRemaining = new NumberHolder(this.pokemon.status!.sleepTurnsRemaining ?? 0);
+          applyAbAttrs(AbAttrFlag.REDUCE_SLEEP_DURATION, this.pokemon, false, statusEffect, turnsRemaining);
           if (Overrides.STATUS_ACTIVATION_OVERRIDE === true) {
             turnsRemaining.value = Math.max(turnsRemaining.value, 1);
           } else if (Overrides.STATUS_ACTIVATION_OVERRIDE === false) {
             turnsRemaining.value = 0;
           }
-          this.pokemon.status.sleepTurnsRemaining = turnsRemaining.value;
-          healed = this.pokemon.status.sleepTurnsRemaining <= 0;
+          this.pokemon.status!.sleepTurnsRemaining = turnsRemaining.value;
+          healed = this.pokemon.status!.sleepTurnsRemaining <= 0;
           activated = !healed && !this.pokemon.getTag(BattlerTagType.BYPASS_SLEEP);
           break;
         case StatusEffect.FREEZE:
@@ -274,20 +272,12 @@ export class MovePhase extends BattlePhase {
 
       if (activated) {
         this.cancel();
-        globalScene.queueMessage(
-          getStatusEffectActivationText(this.pokemon.status.effect, getPokemonNameWithAffix(this.pokemon)),
-        );
+        globalScene.queueMessage(getStatusEffectActivationText(statusEffect, getPokemonNameWithAffix(this.pokemon)));
         globalScene.unshiftPhase(
-          new CommonAnimPhase(
-            this.pokemon.getBattlerIndex(),
-            undefined,
-            CommonAnim.POISON + (this.pokemon.status.effect - 1),
-          ),
+          new CommonAnimPhase(this.pokemon.getBattlerIndex(), undefined, CommonAnim.POISON + (statusEffect - 1)),
         );
       } else if (healed) {
-        globalScene.queueMessage(
-          getStatusEffectHealText(this.pokemon.status.effect, getPokemonNameWithAffix(this.pokemon)),
-        );
+        globalScene.queueMessage(getStatusEffectHealText(statusEffect, getPokemonNameWithAffix(this.pokemon)));
         this.pokemon.resetStatus();
         this.pokemon.updateInfo();
       }

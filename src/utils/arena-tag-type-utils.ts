@@ -2,7 +2,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 
 export const WeakenMoveTypeArenaTagTypes = Object.freeze([ArenaTagType.MUD_SPORT, ArenaTagType.WATER_SPORT]);
 
-export const ArenaTrapArenaTagTypes = Object.freeze([
+export const EntryHazardArenaTagTypes = Object.freeze([
   ArenaTagType.SPIKES,
   ArenaTagType.TOXIC_SPIKES,
   ArenaTagType.STEALTH_ROCK,
