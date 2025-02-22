@@ -444,7 +444,7 @@ describe("Moves - Sky Drop", () => {
     game.move.use(MoveId.SKY_DROP);
     await game.move.forceEnemyMove(MoveId.THRASH);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     [player, enemy].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());

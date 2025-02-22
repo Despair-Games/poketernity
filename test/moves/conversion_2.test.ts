@@ -43,7 +43,7 @@ describe("Moves - Conversion 2", () => {
 
     game.move.use(MoveId.CONVERSION_2);
     await game.move.forceEnemyMove(MoveId.SPLASH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -62,7 +62,7 @@ describe("Moves - Conversion 2", () => {
 
     game.move.use(MoveId.CONVERSION_2);
     await game.move.forceEnemyMove(MoveId.NATURE_POWER);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -108,7 +108,7 @@ describe("Moves - Conversion 2", () => {
 
       game.move.use(MoveId.CONVERSION_2);
       await game.move.forceEnemyMove(MoveId.TACKLE);
-      await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+      game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
       await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -125,7 +125,7 @@ describe("Moves - Conversion 2", () => {
 
     game.move.use(MoveId.CONVERSION_2);
     await game.move.forceEnemyMove(MoveId.REVELATION_DANCE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -144,7 +144,7 @@ describe("Moves - Conversion 2", () => {
 
     game.move.use(MoveId.CONVERSION_2);
     await game.move.forceEnemyMove(MoveId.TACKLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -161,7 +161,7 @@ describe("Moves - Conversion 2", () => {
 
     game.move.use(MoveId.CONVERSION_2);
     await game.move.forceEnemyMove(MoveId.TACKLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
@@ -193,7 +193,7 @@ describe("Moves - Conversion 2", () => {
 
     game.move.use(MoveId.CONVERSION_2);
     await game.move.forceEnemyMove(MoveId.DRAGON_CLAW);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
 
