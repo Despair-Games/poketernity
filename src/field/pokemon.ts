@@ -4225,9 +4225,6 @@ export class PlayerPokemon extends Pokemon {
       if ([0, 1, 2].includes(this.abilityIndex)) {
         // Handles cases where a Pokemon with HA evolves into a Pokemon with no HA
         if (this.abilityIndex === 2 && this.getSpeciesForm().abilityHidden === Abilities.NONE) {
-          console.warn(
-            `${preEvolutionSpecies.getName()} with HA evolved into a Pokemon without HA, please report this.`,
-          );
           this.abilityIndex = 0;
         }
       } else {

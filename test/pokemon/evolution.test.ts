@@ -46,7 +46,7 @@ describe("Evolution", () => {
     expect(eevee.abilityIndex).toBe(2);
 
     await trapinch.evolve(pokemonEvolutions[Species.TRAPINCH][0]);
-    expect(trapinch.abilityIndex).toBe(1);
+    expect(trapinch.abilityIndex).toBe(0); // doesn't have an HA -> defaults to 1st ability
   });
 
   it("should keep same ability slot after evolving", async () => {
@@ -86,7 +86,7 @@ describe("Evolution", () => {
     const ninjask = game.scene.getPlayerParty()[0];
     const shedinja = game.scene.getPlayerParty()[1];
     expect(ninjask.abilityIndex).toBe(2);
-    expect(shedinja.abilityIndex).toBe(1);
+    expect(shedinja.abilityIndex).toBe(0); // doesn't have an HA -> defaults to 1st ability
     expect(ninjask.gender).toBe(Gender.FEMALE);
     expect(shedinja.gender).toBe(Gender.GENDERLESS);
     // Regression test
