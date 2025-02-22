@@ -2,6 +2,7 @@ import "vitest-canvas-mock";
 
 import { afterAll, beforeAll, vi } from "vitest";
 import { initDataForTests, initTestFile } from "#test/testUtils/testFileInitialization";
+import { MockConsole } from "#test/testUtils/mocks/mockConsole";
 
 //#region Mocking
 
@@ -71,5 +72,6 @@ beforeAll(() => {
 
 afterAll(() => {
   global.server.close();
+  MockConsole.printPostTestWarnings();
   console.log("Closing i18n MSW server!");
 });

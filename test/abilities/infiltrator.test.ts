@@ -77,7 +77,7 @@ describe("Abilities - Infiltrator", () => {
     game.move.select(MoveId.SPORE);
 
     await game.phaseInterceptor.to("BerryPhase", false);
-    expect(enemy.status?.effect).toBe(StatusEffect.SLEEP);
+    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
     expect(player.battleData.abilitiesApplied[0]).toBe(Abilities.INFILTRATOR);
   });
 

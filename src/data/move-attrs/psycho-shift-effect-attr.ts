@@ -1,4 +1,3 @@
-import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { StatusEffect } from "#enums/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
@@ -22,13 +21,13 @@ export class PsychoShiftEffectAttr extends MoveEffectAttr {
       return false;
     }
 
-    if (target.status) {
+    if (target.hasNonVolatileStatusEffect()) {
       return false;
     } else {
       const canSetStatus = target.canSetStatus(statusToApply, true, false, user);
       const trySetStatus = canSetStatus ? target.trySetStatus(statusToApply, true, user) : false;
 
-      if (trySetStatus && user.status) {
+      if (trySetStatus && user.hasNonVolatileStatusEffect()) {
         // PsychoShiftTag is added to the user if move succeeds so that the user is healed of its status effect after its move
         user.addTag(BattlerTagType.PSYCHO_SHIFT);
       }
@@ -39,10 +38,14 @@ export class PsychoShiftEffectAttr extends MoveEffectAttr {
 
   override getTargetBenefitScore(user: Pokemon, target: Pokemon, _move: Move): number {
     const statusToApply = this.getStatusToApply(user);
-    return !target.status && !!statusToApply && target.canSetStatus(statusToApply, true, false, user) ? -10 : 0;
+    return !target.hasNonVolatileStatusEffect()
+      && statusToApply !== StatusEffect.NONE
+      && target.canSetStatus(statusToApply, true, false, user)
+      ? -10
+      : 0;
   }
 
-  private getStatusToApply(user: Pokemon): StatusEffect | undefined {
-    return user.status?.effect ?? (user.hasAbility(Abilities.COMATOSE) ? StatusEffect.SLEEP : undefined);
+  private getStatusToApply(user: Pokemon): StatusEffect {
+    return user.getStatusEffect();
   }
 }

@@ -1,13 +1,12 @@
-import { BattlerIndex } from "#enums/battler-index";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { StatusEffect } from "#enums/status-effect";
+import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
-describe("Moves - Will-O-Wisp", () => {
+describe("Primal Weather", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
@@ -24,29 +23,24 @@ describe("Moves - Will-O-Wisp", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BALL_FETCH)
       .battleType("single")
-      .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
+      .ability(Abilities.BALL_FETCH)
       .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(Species.MAGIKARP)
       .enemyMoveset(MoveId.SPLASH);
   });
 
-  it("should burn the opponent", async () => {
+  it.each([
+    { weatherName: "Harsh Sun", ability: Abilities.DESOLATE_LAND, weatherType: WeatherType.HARSH_SUN },
+    { weatherName: "Heavy Rain", ability: Abilities.PRIMORDIAL_SEA, weatherType: WeatherType.HEAVY_RAIN },
+    { weatherName: "Strong Winds", ability: Abilities.DELTA_STREAM, weatherType: WeatherType.STRONG_WINDS },
+  ])("$weatherName can't be overwritten by non-primal weather", async ({ ability, weatherType }) => {
+    game.override.ability(ability);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    const enemy = game.field.getEnemyPokemon();
+    game.move.use(MoveId.SANDSTORM);
+    await game.toEndOfTurn();
 
-    game.move.use(MoveId.WILL_O_WISP);
-    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.move.forceHit();
-    await game.toNextTurn();
-
-    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.BURN);
-
-    game.move.use(MoveId.SPLASH);
-    await game.toNextTurn();
-
-    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.BURN);
+    expect(game.scene.arena.hasWeather(weatherType)).toBe(true);
   });
 });

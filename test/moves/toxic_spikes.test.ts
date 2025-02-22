@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import type { ArenaTrapTag } from "#app/data/arena-tag";
+import type { EntryHazardTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -49,7 +49,7 @@ describe("Moves - Toxic Spikes", () => {
     await game.toNextTurn();
 
     expect(enemy.hp).toBe(enemy.getMaxHp());
-    expect(enemy.status?.effect).toBeUndefined();
+    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
 
   it("should poison the opponent if they switch into 1 layer", async () => {
@@ -63,7 +63,7 @@ describe("Moves - Toxic Spikes", () => {
     const enemy = game.scene.getEnemyField()[0];
 
     expect(enemy.hp).toBeLessThan(enemy.getMaxHp());
-    expect(enemy.status?.effect).toBe(StatusEffect.POISON);
+    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.POISON);
   });
 
   it("should badly poison the opponent if they switch into 2 layers", async () => {
@@ -78,7 +78,7 @@ describe("Moves - Toxic Spikes", () => {
 
     const enemy = game.scene.getEnemyField()[0];
     expect(enemy.hp).toBeLessThan(enemy.getMaxHp());
-    expect(enemy.status?.effect).toBe(StatusEffect.TOXIC);
+    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.TOXIC);
   });
 
   it("should be removed if a grounded poison pokemon switches in", async () => {
@@ -100,7 +100,7 @@ describe("Moves - Toxic Spikes", () => {
     await game.toNextTurn();
 
     expect(muk.isFullHp()).toBe(true);
-    expect(muk.status?.effect).toBeUndefined();
+    expect(muk.getStatusEffect(true)).toBe(StatusEffect.NONE);
     expect(game.scene.arena.tags.length).toBe(0);
   });
 
@@ -112,7 +112,7 @@ describe("Moves - Toxic Spikes", () => {
     game.move.select(MoveId.SPLASH, 1);
     await game.toNextTurn();
 
-    const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
+    const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as EntryHazardTag;
     expect(arenaTags.tagType).toBe(ArenaTagType.TOXIC_SPIKES);
     expect(arenaTags.layers).toBe(1);
   });
@@ -130,7 +130,7 @@ describe("Moves - Toxic Spikes", () => {
 
     await game.reload.reloadSession();
 
-    const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
+    const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as EntryHazardTag;
     expect(arenaTags.tagType).toBe(ArenaTagType.TOXIC_SPIKES);
     expect(arenaTags.layers).toBe(1);
   });
@@ -147,7 +147,7 @@ describe("Moves - Toxic Spikes", () => {
     expect(enemyPokemon.isFainted()).toBe(true);
     await game.toNextTurn();
 
-    const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
+    const arenaTags = game.scene.arena.getTagOnSide(ArenaTagType.TOXIC_SPIKES, ArenaTagSide.ENEMY) as EntryHazardTag;
     expect(arenaTags.tagType).toBe(ArenaTagType.TOXIC_SPIKES);
     expect(arenaTags.layers).toBe(1);
   });

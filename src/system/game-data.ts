@@ -59,7 +59,7 @@ import { applySessionVersionMigration, applySystemVersionMigration } from "./ver
 import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { api } from "#app/plugins/api/api";
-import { ArenaTrapTag } from "#app/data/arena-tag";
+import { EntryHazardTag } from "#app/data/arena-tag";
 import { MAPPING_CONFIG_LS_KEY, SAVE_FILE_EXTENSION } from "#app/constants";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#app/@types/SystemData";
@@ -952,8 +952,8 @@ export class GameData {
           globalScene.arena.tags = sessionData.arena.tags;
           if (globalScene.arena.tags) {
             for (const tag of globalScene.arena.tags) {
-              if (tag instanceof ArenaTrapTag) {
-                const { tagType, side, turnCount, layers, maxLayers } = tag as ArenaTrapTag;
+              if (tag instanceof EntryHazardTag) {
+                const { tagType, side, turnCount, layers, maxLayers } = tag as EntryHazardTag;
                 globalScene.arena.eventTarget.dispatchEvent(
                   new TagAddedEvent(tagType, side, turnCount, layers, maxLayers),
                 );

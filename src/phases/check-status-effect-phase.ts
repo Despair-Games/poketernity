@@ -1,9 +1,10 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { PostTurnStatusEffectPhase } from "#app/phases/post-turn-status-effect-phase";
-import { isNullOrUndefined } from "#app/utils";
 import { Stat } from "#enums/stat";
 import { PhaseId } from "#enums/phase-id";
+import { StatusEffect } from "#enums/status-effect";
+import { isNullOrUndefined } from "#app/utils";
 
 /**
  * Queues a {@linkcode PostTurnStatusEffectPhase} for every active pokemon that needs one
@@ -21,7 +22,7 @@ export class CheckStatusEffectPhase extends Phase {
       .sort((a, b) => b.getEffectiveStat(Stat.SPD) - a.getEffectiveStat(Stat.SPD));
 
     pokemon.forEach((p) => {
-      if (!isNullOrUndefined(p) && p.status && p.status.isPostTurn()) {
+      if (!isNullOrUndefined(p) && p?.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC], false, true)) {
         globalScene.unshiftPhase(new PostTurnStatusEffectPhase(p.getBattlerIndex()));
       }
     });

@@ -6,7 +6,7 @@ import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 import { allMoves } from "#app/data/data-lists";
-import { ArenaTrapTag } from "#app/data/arena-tag";
+import { EntryHazardTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveResult } from "#enums/move-result";
@@ -66,7 +66,7 @@ describe("Moves - Protect", () => {
     await game.phaseInterceptor.to("BerryPhase", false);
 
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp());
-    expect(game.scene.arena.getTagOnSide(ArenaTrapTag, ArenaTagSide.ENEMY)).toBeUndefined();
+    expect(game.scene.arena.getTagOnSide(EntryHazardTag, ArenaTagSide.ENEMY)).toBeUndefined();
   });
 
   test("should protect the user from status moves", async () => {

@@ -1,6 +1,7 @@
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
+import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -34,13 +35,13 @@ describe("Abilities - Corrosion", () => {
     game.override.ability(Abilities.SYNCHRONIZE);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    const playerPokemon = game.scene.getPlayerPokemon();
-    const enemyPokemon = game.scene.getEnemyPokemon();
-    expect(playerPokemon!.status).toBeUndefined();
+    const playerPokemon = game.field.getPlayerPokemon();
+    const enemyPokemon = game.field.getEnemyPokemon();
+    expect(playerPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
 
     game.move.select(MoveId.SPLASH);
     await game.toEndOfTurn();
-    expect(playerPokemon!.status).toBeDefined();
-    expect(enemyPokemon!.status).toBeUndefined();
+    expect(playerPokemon.getStatusEffect()).toBe(StatusEffect.TOXIC);
+    expect(enemyPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
   });
 });
