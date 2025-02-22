@@ -22,7 +22,10 @@ export class CheckStatusEffectPhase extends Phase {
       .sort((a, b) => b.getEffectiveStat(Stat.SPD) - a.getEffectiveStat(Stat.SPD));
 
     pokemon.forEach((p) => {
-      if (!isNullOrUndefined(p) && p?.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC], false, true)) {
+      if (
+        !isNullOrUndefined(p)
+        && p?.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC], false, true)
+      ) {
         globalScene.unshiftPhase(new PostTurnStatusEffectPhase(p.getBattlerIndex()));
       }
     });
