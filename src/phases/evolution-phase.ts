@@ -5,10 +5,8 @@ import { type FormChangePhase } from "#app/phases/form-change-phase";
 
 import type { AnySound } from "#app/battle-scene";
 import type { SpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions";
-import { FusionSpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions";
 import { EVOLVE_MOVE } from "#app/data/balance/pokemon-level-moves";
 import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
-import { LearnMoveSituation } from "#enums/learn-move-situation";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { EndEvolutionPhase } from "#app/phases/end-evolution-phase";
@@ -35,8 +33,6 @@ export class EvolutionPhase extends FormChangeBasePhase {
 
   private readonly evolution: SpeciesFormEvolution | null;
   private evolutionBgm: AnySound;
-  /** `true` if the secondary species of a fused pokemon is evolving */
-  private readonly fusionSpeciesEvolved: boolean;
 
   /**
    * A {@linecode BooleanHolder} whose value indicates whether or not the player has cancelled the evolution.
@@ -49,7 +45,6 @@ export class EvolutionPhase extends FormChangeBasePhase {
     this.pokemon = pokemon;
     this.evolution = evolution;
     this.lastLevel = lastLevel;
-    this.fusionSpeciesEvolved = evolution instanceof FusionSpeciesFormEvolution;
   }
 
   public override validate(): boolean {
@@ -81,12 +76,11 @@ export class EvolutionPhase extends FormChangeBasePhase {
 
             sprite.setPipelineData("ignoreTimeTint", true);
             sprite.setPipelineData("spriteKey", evolvedPokemon.getSpriteKey());
-            ["spriteColors", "fusionSpriteColors"].map((k) => {
-              if (evolvedPokemon.summonData?.speciesForm) {
-                k += "Base";
-              }
-              sprite.pipelineData[k] = evolvedPokemon.getSprite().pipelineData[k];
-            });
+            let key = "spriteColors";
+            if (evolvedPokemon.summonData?.speciesForm) {
+              key += "Base";
+            }
+            sprite.pipelineData[key] = evolvedPokemon.getSprite().pipelineData[key];
           });
 
           time.delayedCall(1000, () => {
@@ -253,14 +247,9 @@ export class EvolutionPhase extends FormChangeBasePhase {
     time.delayedCall(900, () => {
       this.handler.canCancel = false;
 
-      this.pokemon.evolve(this.evolution, this.pokemon.species).then(() => {
-        const learnSituation: LearnMoveSituation = this.fusionSpeciesEvolved
-          ? LearnMoveSituation.EVOLUTION_FUSED
-          : this.pokemon.fusionSpecies
-            ? LearnMoveSituation.EVOLUTION_FUSED_BASE
-            : LearnMoveSituation.EVOLUTION;
+      this.pokemon.evolve(this.evolution).then(() => {
         const levelMoves = this.pokemon
-          .getLevelMoves(this.lastLevel + 1, true, false, false, learnSituation)
+          .getLevelMoves(this.lastLevel + 1, true, false, false)
           .filter((lm) => lm[0] === EVOLVE_MOVE);
         for (const lm of levelMoves) {
           globalScene.unshiftPhase(new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), lm[1]));

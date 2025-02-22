@@ -109,16 +109,6 @@ export class TitlePhase extends Phase {
               },
             ];
 
-            if (gameData.isUnlocked(Unlockables.SPLICED_ENDLESS_MODE)) {
-              options.push({
-                label: GameMode.getModeName(GameModes.SPLICED_ENDLESS),
-                handler: () => {
-                  setModeAndEnd(GameModes.SPLICED_ENDLESS);
-                  return true;
-                },
-              });
-            }
-
             options.push({
               label: i18next.t("menu:cancel"),
               handler: () => {

@@ -263,9 +263,6 @@ export function initModifierPools() {
     ),
     new WeightedModifierType(modifierTypes.BASE_STAT_BOOSTER, 3),
     new WeightedModifierType(modifierTypes.TERA_SHARD, 1),
-    new WeightedModifierType(modifierTypes.DNA_SPLICERS, (party: Pokemon[]) =>
-      globalScene.gameMode.isSplicedOnly && party.filter((p) => !p.fusionSpecies).length > 1 ? 4 : 0,
-    ),
     new WeightedModifierType(
       modifierTypes.VOUCHER,
       (_party: Pokemon[], rerollCount: number) => (!globalScene.gameMode.isDaily ? Math.max(1 - rerollCount, 0) : 0),
@@ -297,12 +294,8 @@ export function initModifierPools() {
       const { gameMode, gameData } = globalScene;
       if (gameMode.isDaily || (!gameMode.isFreshStartChallenge() && gameData.isUnlocked(Unlockables.EVIOLITE))) {
         return party.some((p) => {
-          // Check if Pokemon's species (or fusion species, if applicable) can evolve or if they're G-Max'd
-          if (
-            !p.isMax()
-            && (p.getSpeciesForm(true).speciesId in pokemonEvolutions
-              || (p.isFusion() && p.getFusionSpeciesForm(true).speciesId in pokemonEvolutions))
-          ) {
+          // Check if Pokemon's species can evolve or if they're G-Max'd
+          if (!p.isMax() && p.getSpeciesForm(true).speciesId in pokemonEvolutions) {
             // Check if Pokemon is already holding an Eviolite
             return !p.getHeldItems().some((i) => i.type.id === "EVIOLITE");
           }
@@ -499,16 +492,8 @@ export function initModifierPools() {
     new WeightedModifierType(
       modifierTypes.VOUCHER_PREMIUM,
       (_party: Pokemon[], rerollCount: number) =>
-        !globalScene.gameMode.isDaily && !globalScene.gameMode.isEndless && !globalScene.gameMode.isSplicedOnly
-          ? Math.max(5 - rerollCount * 2, 0)
-          : 0,
+        !globalScene.gameMode.isDaily && !globalScene.gameMode.isEndless ? Math.max(5 - rerollCount * 2, 0) : 0,
       5,
-    ),
-    new WeightedModifierType(
-      modifierTypes.DNA_SPLICERS,
-      (party: Pokemon[]) =>
-        !globalScene.gameMode.isSplicedOnly && party.filter((p) => !p.fusionSpecies).length > 1 ? 24 : 0,
-      24,
     ),
     new WeightedModifierType(
       modifierTypes.MINI_BLACK_HOLE,

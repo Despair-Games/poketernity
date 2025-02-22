@@ -42,7 +42,6 @@ import { type MoveAbilityBypassAbAttr } from "#app/data/ab-attrs/move-ability-by
 import { type MoveEffectChanceMultiplierAbAttr } from "#app/data/ab-attrs/move-effect-chance-multiplier-ab-attr";
 import { type MoveImmunityAbAttr } from "#app/data/ab-attrs/move-immunity-ab-attr";
 import { type MoveTypeChangeAbAttr } from "#app/data/ab-attrs/move-type-change-ab-attr";
-import { type NoFusionAbilityAbAttr } from "#app/data/ab-attrs/no-fusion-ability-ab-attr";
 import { type PokemonTypeChangeAbAttr } from "#app/data/ab-attrs/pokemon-type-change-ab-attr";
 import { type PostAttackAbAttr } from "#app/data/ab-attrs/post-attack-ab-attr";
 import { type PostAttackApplyBattlerTagAbAttr } from "#app/data/ab-attrs/post-attack-apply-battler-tag-ab-attr";
@@ -123,8 +122,6 @@ export enum AbAttrFlag {
   POST_DAMAGE_FORCE_SWITCH,
   /** @see {@linkcode SuppressFieldAbilitiesAbAttr} */
   SUPPRESS_FIELD_ABILITIES,
-  /** @see {@linkcode NoFusionAbilityAbAttr} */
-  NO_FUSION_ABILITY,
   /** @see {@linkcode BlockRedirectAbAttr} */
   BLOCK_REDIRECT,
   /** @see {@linkcode IgnoreMoveEffectsAbAttr} */
