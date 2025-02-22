@@ -205,7 +205,7 @@ export class EncounterPhase extends BattlePhase {
       ];
       const moveset: string[] = [];
       enemyPokemon.getMoveset().forEach((move) => {
-        moveset.push(move!.getName());
+        moveset.push(move.getName());
       });
 
       console.log(
