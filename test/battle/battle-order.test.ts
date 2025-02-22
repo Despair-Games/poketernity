@@ -119,7 +119,7 @@ describe("Battle order", () => {
 
     const turnOrder = game.field.getTurnOrder();
     expect(turnOrder).toHaveLength(4);
-    [playerPokemon[1], enemyPokemon[1]].forEach((p) => expect(turnOrder.slice(0, 2)).toContain(p.getBattlerIndex()));
-    [playerPokemon[0], enemyPokemon[0]].forEach((p) => expect(turnOrder.slice(2)).toContain(p.getBattlerIndex()));
+    [BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2].forEach((i) => expect(turnOrder.slice(0, 2)).toContain(i));
+    [BattlerIndex.PLAYER, BattlerIndex.ENEMY].forEach((i) => expect(turnOrder.slice(2)).toContain(i));
   });
 });
