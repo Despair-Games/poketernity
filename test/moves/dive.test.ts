@@ -85,7 +85,7 @@ describe("Moves - Dive", () => {
 
     await game.toEndOfTurn();
     expect(playerPokemon.getTag(BattlerTagType.UNDERWATER)).toBeUndefined();
-    expect(playerPokemon.status?.effect).toBe(StatusEffect.SLEEP);
+    expect(playerPokemon.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
 
     const playerDive = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === MoveId.DIVE);
     expect(playerDive?.ppUsed).toBe(0);

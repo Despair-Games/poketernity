@@ -29,6 +29,6 @@ export class MultiStatusEffectAttr extends StatusEffectAttr {
     const score = moveChance < 0 ? -10 : Math.floor(moveChance * -0.1);
     const pokemon = this.selfTarget ? user : target;
 
-    return !pokemon.status && pokemon.canSetStatus(this.effect, true, false, user) ? score : 0;
+    return !pokemon.hasNonVolatileStatusEffect() && pokemon.canSetStatus(this.effect, true, false, user) ? score : 0;
   }
 }

@@ -1,4 +1,4 @@
-import { ArenaTrapTag } from "#app/data/arena-tag";
+import { EntryHazardTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { allMoves } from "#app/data/data-lists";
 import { Abilities } from "#enums/abilities";
@@ -50,12 +50,12 @@ describe("Moves - Ceaseless Edge", () => {
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     // Spikes should not have any layers before move effect is applied
-    const tagBefore = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
-    expect(tagBefore instanceof ArenaTrapTag).toBeFalsy();
+    const tagBefore = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as EntryHazardTag;
+    expect(tagBefore instanceof EntryHazardTag).toBeFalsy();
 
     await game.phaseInterceptor.to(TurnEndPhase);
-    const tagAfter = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
-    expect(tagAfter instanceof ArenaTrapTag).toBeTruthy();
+    const tagAfter = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as EntryHazardTag;
+    expect(tagAfter instanceof EntryHazardTag).toBeTruthy();
     expect(tagAfter.layers).toBe(1);
     expect(enemyPokemon.hp).toBeLessThan(enemyStartingHp);
   });
@@ -68,12 +68,12 @@ describe("Moves - Ceaseless Edge", () => {
     game.move.select(MoveId.CEASELESS_EDGE);
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     // Spikes should not have any layers before move effect is applied
-    const tagBefore = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
-    expect(tagBefore instanceof ArenaTrapTag).toBeFalsy();
+    const tagBefore = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as EntryHazardTag;
+    expect(tagBefore instanceof EntryHazardTag).toBeFalsy();
 
     await game.toNextTurn();
-    const tagAfter = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
-    expect(tagAfter instanceof ArenaTrapTag).toBeTruthy();
+    const tagAfter = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as EntryHazardTag;
+    expect(tagAfter instanceof EntryHazardTag).toBeTruthy();
     expect(tagAfter.layers).toBe(2);
 
     game.forceEnemyToSwitch();

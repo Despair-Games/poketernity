@@ -67,7 +67,9 @@ export class AttemptCapturePhase extends PokemonPhase {
     const _2h = 2 * pokemon.hp;
     const catchRate = pokemon.species.catchRate;
     const pokeballMultiplier = getPokeballCatchMultiplier(this.pokeballType);
-    const statusMultiplier = pokemon.status ? getStatusEffectCatchRateMultiplier(pokemon.status.effect) : 1;
+    const statusMultiplier = pokemon.hasNonVolatileStatusEffect(false, true)
+      ? getStatusEffectCatchRateMultiplier(pokemon.getStatusEffect(true))
+      : 1;
     const modifiedCatchRate = Math.round((((_3m - _2h) * catchRate * pokeballMultiplier) / _3m) * statusMultiplier);
     const shakeProbability = Math.round(65536 / Math.pow(255 / modifiedCatchRate, 0.1875)); // Formula taken from gen 6
     const criticalCaptureChance = getCriticalCaptureChance(modifiedCatchRate);
@@ -199,7 +201,7 @@ export class AttemptCapturePhase extends PokemonPhase {
 
     globalScene.playSound("se/pb_rel");
     pokemon.setY(this.originalY);
-    if (pokemon.status?.effect !== StatusEffect.SLEEP) {
+    if (!pokemon.hasStatusEffect(StatusEffect.SLEEP, false, true)) {
       pokemon.cry(pokemon.getHpRatio() > 0.25 ? undefined : { rate: 0.85 });
     }
     pokemon.tint(getPokeballTintColor(this.pokeballType));

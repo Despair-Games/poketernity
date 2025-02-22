@@ -1,6 +1,6 @@
 import { SpeciesFormChangeTrigger } from "#app/data/species-form-change-triggers/species-form-change-trigger";
 import type { Pokemon } from "#app/field/pokemon";
-import { StatusEffect } from "#enums/status-effect";
+import type { StatusEffect } from "#enums/status-effect";
 
 export class SpeciesFormChangeStatusEffectTrigger extends SpeciesFormChangeTrigger {
   public statusEffects: StatusEffect[];
@@ -16,6 +16,7 @@ export class SpeciesFormChangeStatusEffectTrigger extends SpeciesFormChangeTrigg
   }
 
   override canChange(pokemon: Pokemon): boolean {
-    return this.statusEffects.indexOf(pokemon.status?.effect || StatusEffect.NONE) > -1 !== this.invert;
+    const hasStatus = pokemon.hasStatusEffect(this.statusEffects, false, true);
+    return this.invert ? hasStatus : !hasStatus;
   }
 }

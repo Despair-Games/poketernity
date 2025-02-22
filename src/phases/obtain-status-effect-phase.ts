@@ -52,7 +52,7 @@ export class ObtainStatusEffectPhase extends PokemonPhase {
         });
         return;
       }
-    } else if (pokemon.status?.effect === this.statusEffect) {
+    } else if (pokemon.getStatusEffect(true) === this.statusEffect) {
       globalScene.queueMessage(
         getStatusEffectOverlapText(this.statusEffect ?? StatusEffect.NONE, getPokemonNameWithAffix(pokemon)),
       );

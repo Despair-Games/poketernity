@@ -7,6 +7,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { StatusEffect } from "#enums/status-effect";
 
 describe("Moves - Revival Blessing", () => {
   let phaserGame: Phaser.Game;
@@ -52,7 +53,7 @@ describe("Moves - Revival Blessing", () => {
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
     const revivedPokemon = game.scene.getPlayerParty()[1];
-    expect(revivedPokemon.status?.effect).toBeFalsy();
+    expect(revivedPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
     expect(revivedPokemon.hp).toBe(Math.floor(revivedPokemon.getMaxHp() / 2));
   });
 
@@ -71,7 +72,7 @@ describe("Moves - Revival Blessing", () => {
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
     const revivedPokemon = game.scene.getEnemyParty()[1];
-    expect(revivedPokemon.status?.effect).toBeFalsy();
+    expect(revivedPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
     expect(revivedPokemon.hp).toBe(Math.floor(revivedPokemon.getMaxHp() / 2));
   });
 
