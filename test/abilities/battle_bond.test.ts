@@ -74,7 +74,7 @@ describe("Abilities - BATTLE BOND", () => {
     let expectedMultiHitType = MultiHitType._3;
 
     game.move.select(MoveId.WATER_SHURIKEN);
-    await game.toEndOfTurn();
+    await game.phaseInterceptor.to("BerryPhase", false);
     expect(waterShuriken.calculateBattlePower).toHaveLastReturnedWith(expectedBattlePower);
     expect(actualMultiHitType).toBe(expectedMultiHitType);
 
