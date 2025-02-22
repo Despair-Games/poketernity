@@ -15,14 +15,16 @@ export class TurnStartPhase extends FieldPhase {
     const { turnManager } = globalScene.currentBattle;
 
     turnManager.startTurn();
-    this.pushEndOfTurnPhases();
+
     this.end();
   }
 
-  private pushEndOfTurnPhases(): void {
+  public override end(): void {
     globalScene.pushPhase(new WeatherEffectPhase());
     globalScene.pushPhase(new BerryPhase());
     globalScene.pushPhase(new CheckStatusEffectPhase());
     globalScene.pushPhase(new TurnEndPhase());
+
+    super.end();
   }
 }

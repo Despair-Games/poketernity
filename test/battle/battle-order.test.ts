@@ -40,10 +40,10 @@ describe("Battle order", () => {
     game.scene.getField(true).forEach((p) => (p.hp = p.getMaxHp()));
 
     game.move.select(MoveId.TACKLE);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     const { turnManager } = game.scene.currentBattle;
-    expect(turnManager.empty()).toBeTruthy();
+    expect(turnManager.isEmpty()).toBeTruthy();
 
     const turnOrder = game.field.getTurnOrder();
     expect(turnOrder).toEqual([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
@@ -59,7 +59,7 @@ describe("Battle order", () => {
     game.scene.getField(true).forEach((p) => (p.hp = p.getMaxHp()));
 
     game.move.select(MoveId.TACKLE);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     const turnOrder = game.field.getTurnOrder();
     expect(turnOrder).toEqual([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
@@ -78,7 +78,7 @@ describe("Battle order", () => {
 
     game.move.select(MoveId.TACKLE);
     game.move.select(MoveId.TACKLE, 1);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     const turnOrder = game.field.getTurnOrder();
     enemyPokemon.forEach((p) => expect(turnOrder.slice(0, 2)).toContain(p.getBattlerIndex()));
@@ -99,7 +99,7 @@ describe("Battle order", () => {
     game.move.select(MoveId.TACKLE);
     game.move.select(MoveId.TACKLE, 1);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     const turnOrder = game.field.getTurnOrder();
     expect(turnOrder).toHaveLength(4);
@@ -121,7 +121,7 @@ describe("Battle order", () => {
     game.move.select(MoveId.TACKLE);
     game.move.select(MoveId.TACKLE, 1);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     const turnOrder = game.field.getTurnOrder();
     expect(turnOrder).toHaveLength(4);

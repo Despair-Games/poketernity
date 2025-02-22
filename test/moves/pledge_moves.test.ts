@@ -79,7 +79,7 @@ describe("Moves - Pledge Moves", () => {
     expect(firePledge.calculateBattlePower).toHaveLastReturnedWith(80);
     expect(playerPokemon[0].getMoveType).toHaveLastReturnedWith(ElementalType.FIRE);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(firePledge.calculateBattlePower).toHaveLastReturnedWith(80);
     expect(playerPokemon[1].getMoveType).toHaveLastReturnedWith(ElementalType.FIRE);
 
@@ -270,7 +270,7 @@ describe("Moves - Pledge Moves", () => {
     game.move.select(MoveId.IRON_HEAD, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(ironHeadFlinchAttr.getMoveChance).toHaveLastReturnedWith(60);
   });
@@ -290,7 +290,7 @@ describe("Moves - Pledge Moves", () => {
     await game.move.selectEnemyMove(MoveId.SPORE, BattlerIndex.PLAYER_2);
     await game.move.selectEnemyMove(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     enemyPokemon.forEach((p) => expect(p.hp).toBe(p.getMaxHp()));
   });
@@ -322,7 +322,7 @@ describe("Moves - Pledge Moves", () => {
     await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.move.selectEnemyMove(MoveId.FOLLOW_ME);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     const enemyPokemon = game.scene.getEnemyField();
     expect(enemyPokemon[0].hp).toBe(enemyPokemon[0].getMaxHp());

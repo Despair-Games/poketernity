@@ -50,7 +50,7 @@ describe("Abilities - Galvanize", () => {
 
     game.move.select(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(playerPokemon.getMoveType).toHaveLastReturnedWith(ElementalType.ELECTRIC);
     expect(enemyPokemon.getMoveEffectiveness).toHaveReturnedWith(1);
@@ -73,7 +73,7 @@ describe("Abilities - Galvanize", () => {
 
     game.move.select(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(playerPokemon.getMoveType).toHaveLastReturnedWith(ElementalType.ELECTRIC);
     expect(enemyPokemon.getMoveEffectiveness).toHaveReturnedWith(1);
@@ -92,7 +92,7 @@ describe("Abilities - Galvanize", () => {
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
 
     game.move.select(MoveId.REVELATION_DANCE);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(playerPokemon.getMoveType).not.toHaveLastReturnedWith(ElementalType.ELECTRIC);
     expect(enemyPokemon.getMoveEffectiveness).toHaveReturnedWith(0);

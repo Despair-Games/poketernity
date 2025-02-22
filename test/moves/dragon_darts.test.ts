@@ -233,7 +233,7 @@ describe("Moves - Dragon Darts", () => {
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     enemyPokemon.forEach((p) => expect(p.isFullHp()).toBeFalsy());
     expect(player.turnData.hitCount).toBe(2);
@@ -255,7 +255,7 @@ describe("Moves - Dragon Darts", () => {
 
     game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     playerPokemon.forEach((p) => expect(p.isFullHp()).toBeTruthy());
     expect(enemy1.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
@@ -275,7 +275,7 @@ describe("Moves - Dragon Darts", () => {
 
     game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     // Electrified Dragon Darts should have been redirected onto the second enemy, healing them
     expect(enemyPokemon[0].hp).toBe(enemyStartingHp[0]);
@@ -312,7 +312,7 @@ describe("Moves - Dragon Darts", () => {
     game.move.select(MoveId.DRAGON_DARTS, 0, BattlerIndex.PLAYER_2);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(player2.isFainted()).toBeTruthy();
     expect(player1.isFullHp()).toBeTruthy();

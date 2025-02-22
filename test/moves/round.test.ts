@@ -49,7 +49,7 @@ describe("Moves - Round", () => {
     await game.move.selectEnemyMove(MoveId.ROUND, BattlerIndex.PLAYER);
     await game.move.selectEnemyMove(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(game.field.getTurnOrder()).toEqual([
       BattlerIndex.PLAYER,

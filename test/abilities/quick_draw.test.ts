@@ -47,7 +47,7 @@ describe("Abilities - Quick Draw", () => {
     const enemy = game.field.getEnemyPokemon();
 
     game.move.use(MoveId.TACKLE);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(player.turnData.order).toBeLessThan(enemy.turnData.order);
     expect(player.battleData.abilitiesApplied).toContain(Abilities.QUICK_DRAW);
@@ -60,7 +60,7 @@ describe("Abilities - Quick Draw", () => {
     const enemy = game.field.getEnemyPokemon();
 
     game.move.use(MoveId.TAIL_WHIP);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(player.turnData.order).toBeGreaterThan(enemy.turnData.order);
     expect(player.battleData.abilitiesApplied).not.toContain(Abilities.QUICK_DRAW);
@@ -74,7 +74,7 @@ describe("Abilities - Quick Draw", () => {
 
     game.move.use(MoveId.TACKLE);
     await game.move.forceEnemyMove(MoveId.QUICK_ATTACK);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(player.turnData.order).toBeGreaterThan(enemy.turnData.order);
     expect(player.battleData.abilitiesApplied).contain(Abilities.QUICK_DRAW);

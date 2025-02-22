@@ -50,7 +50,7 @@ describe("Moves - Encore", () => {
     game.move.select(MoveId.SPLASH);
     // The enemy AI would normally be inclined to use Tackle, but should be
     // forced into using Splash.
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getLastXMoves().every((turnMove) => turnMove.move.id === MoveId.SPLASH)).toBeTruthy();
   });
@@ -81,7 +81,7 @@ describe("Moves - Encore", () => {
       const turnOrder = delay ? [BattlerIndex.PLAYER, BattlerIndex.ENEMY] : [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
       game.setTurnOrder(turnOrder);
 
-      await game.phaseInterceptor.to("BerryPhase", false);
+      await game.toEndOfTurn();
       expect(playerPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
       expect(enemyPokemon.getTag(BattlerTagType.ENCORE)).toBeUndefined();
     });

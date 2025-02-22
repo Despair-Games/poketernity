@@ -687,7 +687,7 @@ export function initAbilities() {
     new Ability(Abilities.WONDER_SKIN, 5).attr(WonderSkinAbAttr).ignorable(),
     new Ability(Abilities.ANALYTIC, 5).attr(
       MovePowerBoostAbAttr,
-      () => globalScene.currentBattle.turnManager.empty(),
+      () => globalScene.currentBattle.turnManager.isEmpty(),
       1.3,
     ),
     new Ability(Abilities.ILLUSION, 5).attr(UncopiableAbilityAbAttr).attr(UnswappableAbilityAbAttr).unimplemented(),

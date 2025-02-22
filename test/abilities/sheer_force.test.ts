@@ -50,7 +50,7 @@ describe("Abilities - Sheer Force", () => {
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(airSlashMove.calculateBattlePower).toHaveLastReturnedWith(airSlashMove.power * SHEER_FORCE_MULT);
     expect(airSlashFlinchAttr.getMoveChance).toHaveLastReturnedWith(0);
@@ -67,7 +67,7 @@ describe("Abilities - Sheer Force", () => {
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(bindMove.calculateBattlePower).toHaveLastReturnedWith(bindMove.power);
   }, 20000);
@@ -82,7 +82,7 @@ describe("Abilities - Sheer Force", () => {
     game.move.select(MoveId.TACKLE);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(tackleMove.calculateBattlePower).toHaveLastReturnedWith(tackleMove.power);
   });
@@ -105,7 +105,7 @@ describe("Abilities - Sheer Force", () => {
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon?.getTypes()[0]).toBe(ElementalType.WATER);
     expect(headbuttMove.calculateBattlePower).toHaveLastReturnedWith(headbuttMove.power * SHEER_FORCE_MULT);

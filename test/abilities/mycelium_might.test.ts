@@ -46,9 +46,10 @@ describe("Abilities - Mycelium Might", () => {
 
     game.move.select(MoveId.BABY_DOLL_EYES);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(game.field.getTurnOrder()).toEqual([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    expect(game.field.getTurnOrder()).not.toEqual(game.field.getSpeedOrder());
     expect(enemyPokemon?.getStatStage(Stat.ATK)).toBe(-1);
   });
 
@@ -60,7 +61,7 @@ describe("Abilities - Mycelium Might", () => {
 
     game.move.select(MoveId.BABY_DOLL_EYES);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(game.field.getTurnOrder()).toEqual([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     expect(enemyPokemon?.getStatStage(Stat.ATK)).toBe(-1);
@@ -71,8 +72,8 @@ describe("Abilities - Mycelium Might", () => {
 
     game.move.select(MoveId.QUICK_ATTACK);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
-    expect(game.field.getTurnOrder()).toEqual([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    expect(game.field.getTurnOrder()).toEqual(game.field.getSpeedOrder());
   });
 });

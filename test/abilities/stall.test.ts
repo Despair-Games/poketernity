@@ -41,9 +41,10 @@ describe("Abilities - Stall", () => {
 
     game.move.select(MoveId.QUICK_ATTACK);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(game.field.getTurnOrder()).toEqual([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    expect(game.field.getTurnOrder()).not.toEqual(game.field.getSpeedOrder());
   });
 
   it("should not cause the source to move after moves in a lower priority bracket", async () => {
@@ -51,7 +52,7 @@ describe("Abilities - Stall", () => {
 
     game.move.select(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(game.field.getTurnOrder()).toEqual([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
   });
@@ -62,8 +63,8 @@ describe("Abilities - Stall", () => {
 
     game.move.select(MoveId.QUICK_ATTACK);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
-    expect(game.field.getTurnOrder()).toEqual([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    expect(game.field.getTurnOrder()).toEqual(game.field.getSpeedOrder());
   });
 });

@@ -80,7 +80,7 @@ describe.todo("Items - Multi Lens", () => {
 
     game.move.select(MoveId.TRAILBLAZE);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(playerPokemon.getStatStage(Stat.SPD)).toBe(2);
   });
 
@@ -91,7 +91,7 @@ describe.todo("Items - Multi Lens", () => {
 
     game.move.select(MoveId.TACHYON_CUTTER);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(playerPokemon.turnData.hitCount).toBe(2);
   });
 

@@ -90,7 +90,7 @@ describe("Abilities - Tera Shell", () => {
 
     game.move.select(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(playerPokemon.getMoveEffectiveness).toHaveLastReturnedWith(1);
     expect(playerPokemon.hp).toBe(playerPokemon.getMaxHp() - 40);
   });

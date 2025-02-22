@@ -152,7 +152,7 @@ describe("Abilities - Dry Skin", () => {
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     await game.move.forceMiss();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(enemy.hp).toBe(enemy.getMaxHp());
   });
 });

@@ -61,20 +61,15 @@ export class TurnCommandManager {
    * Please use this class's API to access and modify turn commands instead
    * of accessing this array directly.
    */
-  public turnCommands: TurnCommand[];
-  private orderIndex: number;
-
-  constructor() {
-    this.turnCommands = [];
-    this.orderIndex = 0;
-  }
+  public turnCommands: TurnCommand[] = [];
+  private orderIndex: number = 0;
 
   // #region Public Methods
 
   /**
    * Adds a command to the command queue.
-   * After this is called, turn order should be reset
-   * using {@linkcode setTurnOrder}.
+   * After command(s) are added, {@linkcode setTurnOrder} should be called
+   * to order them correctly.
    * @param turnCommand the command to add
    */
   public addCommand(turnCommand: TurnCommand) {
@@ -114,7 +109,7 @@ export class TurnCommandManager {
    * @returns the {@linkcode TurnCommand} from the given Pokemon, or `undefined`
    * if no such turn command exists.
    */
-  public findPokemonCommand(pokemon: Pokemon): TurnCommand | undefined {
+  public findCommandFromPokemon(pokemon: Pokemon): TurnCommand | undefined {
     return this.findCommand((tc) => tc.pokemon === pokemon);
   }
 
@@ -130,7 +125,6 @@ export class TurnCommandManager {
     if (cmdIndex > -1) {
       return this.turnCommands.splice(cmdIndex, 1)[0];
     }
-    return undefined;
   }
 
   /**
@@ -139,7 +133,7 @@ export class TurnCommandManager {
    * @returns `true` if a command was modified
    */
   public tryAdjustMoveCommandTarget(pokemon: Pokemon, newTargets: BattlerIndex[]): boolean {
-    const turnCommand = this.findPokemonCommand(pokemon);
+    const turnCommand = this.findCommandFromPokemon(pokemon);
     if (turnCommand) {
       turnCommand.targets = newTargets;
       return true;
@@ -201,7 +195,7 @@ export class TurnCommandManager {
    * since it skips over invalid commands in the queue.
    */
   public scheduleNextValidCommand(): void {
-    while (!this.empty() && !this.shiftNextCommand());
+    while (!this.isEmpty() && !this.shiftNextCommand());
   }
 
   /**
@@ -259,7 +253,7 @@ export class TurnCommandManager {
     this.scheduleNextValidCommand();
   }
 
-  public empty(): boolean {
+  public isEmpty(): boolean {
     return !this.turnCommands.length;
   }
 
@@ -272,7 +266,7 @@ export class TurnCommandManager {
    * @returns `true` if a turn command was modified
    */
   public tryReplaceMove(pokemon: Pokemon, move: PokemonMove, targets: BattlerIndex[]): boolean {
-    const turnCommand = this.findPokemonCommand(pokemon);
+    const turnCommand = this.findCommandFromPokemon(pokemon);
     if (turnCommand?.command !== BattleCommand.FIGHT) {
       return false;
     }
@@ -309,15 +303,18 @@ export class TurnCommandManager {
    * order of Speed instead.
    */
   private sortBySpeed(): void {
+    this.turnCommands.sort((a, b) => {
+      const [aSpeed, bSpeed] = [a, b].map((command) => command.pokemon.getEffectiveStat(Stat.SPD));
+      return bSpeed - aSpeed;
+    });
+
     /** 'true' if Trick Room is on the field. */
     const speedReversed = new BooleanHolder(false);
     globalScene.arena.applyTags(ArenaTagType.TRICK_ROOM, false, speedReversed);
 
-    this.turnCommands.sort((a, b) => {
-      const [aSpeed, bSpeed] = [a, b].map((command) => command.pokemon.getEffectiveStat(Stat.SPD));
-
-      return speedReversed.value ? aSpeed - bSpeed : bSpeed - aSpeed;
-    });
+    if (speedReversed.value) {
+      this.turnCommands = this.turnCommands.reverse();
+    }
   }
 
   /**
@@ -359,7 +356,7 @@ export class TurnCommandManager {
 
   private handleFightCommand(turnCommand: TurnCommand): boolean {
     const { pokemon, cursor, move: queuedMove, targets } = turnCommand;
-    if (!pokemon?.isActive(true) || !queuedMove) {
+    if (!pokemon.isActive(true) || !queuedMove) {
       console.warn(`FIGHT command from ${pokemon?.name} is invalid`);
       return false;
     }
@@ -421,8 +418,8 @@ export class TurnCommandManager {
   }
 
   /**
-   * Shifts all {@linkcode Command.BALL | BALL}, {@linkcode Command.POKEMON | POKEMON},
-   * and {@linkcode Command.RUN | RUN} commands in the queue.
+   * Shifts all {@linkcode BattleCommand.BALL | BALL}, {@linkcode BattleCommand.POKEMON | POKEMON},
+   * and {@linkcode BattleCommand.RUN | RUN} commands in the queue.
    * Turn commands in the queue should be sorted with {@linkcode setTurnOrder}
    * before this function is called.
    */

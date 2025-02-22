@@ -1603,7 +1603,7 @@ export function initMoves() {
     ),
     new AttackMove(MoveId.PAYBACK, ElementalType.DARK, MoveCategory.PHYSICAL, 50, 100, 10, -1, 0, 4).attr(
       MovePowerMultiplierAttr,
-      (_user, target, _move) => (!globalScene.currentBattle.turnManager.findPokemonCommand(target) ? 2 : 1),
+      (_user, target, _move) => (target.turnData.acted ? 2 : 1),
     ),
     new AttackMove(MoveId.ASSURANCE, ElementalType.DARK, MoveCategory.PHYSICAL, 60, 100, 10, -1, 0, 4).attr(
       MovePowerMultiplierAttr,
@@ -1660,7 +1660,7 @@ export function initMoves() {
     ),
     new AttackMove(MoveId.SUCKER_PUNCH, ElementalType.DARK, MoveCategory.PHYSICAL, 70, 100, 5, -1, 1, 4).condition(
       (_user, target, _move) => {
-        const turnCommand = globalScene.currentBattle.turnManager.findPokemonCommand(target);
+        const turnCommand = globalScene.currentBattle.turnManager.findCommandFromPokemon(target);
         if (!turnCommand || !turnCommand.move) {
           return false;
         }
@@ -3970,7 +3970,7 @@ export function initMoves() {
       .condition(failIfLastCondition),
     new AttackMove(MoveId.THUNDERCLAP, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 70, 100, 5, -1, 1, 9).condition(
       (_user, target, _move) => {
-        const turnCommand = globalScene.currentBattle.turnManager.findPokemonCommand(target);
+        const turnCommand = globalScene.currentBattle.turnManager.findCommandFromPokemon(target);
         if (!turnCommand || !turnCommand.move) {
           return false;
         }

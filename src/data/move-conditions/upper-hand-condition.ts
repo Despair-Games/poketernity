@@ -13,7 +13,7 @@ import { MoveCategory } from "#enums/move-category";
 export class UpperHandCondition extends MoveCondition {
   constructor() {
     super((_user, target, _move) => {
-      const targetCommand = globalScene.currentBattle.turnManager.findPokemonCommand(target);
+      const targetCommand = globalScene.currentBattle.turnManager.findCommandFromPokemon(target);
 
       return (
         !!targetCommand

@@ -141,7 +141,7 @@ describe("Abilities - Wimp Out", () => {
     await game.classicMode.startBattle([Species.GOLISOPOD, Species.TYRUNT]);
     const RIVAL_NINJASK1 = game.scene.getEnemyPokemon()?.id;
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(game.scene.getEnemyPokemon()?.id !== RIVAL_NINJASK1);
   });
 

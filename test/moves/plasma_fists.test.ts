@@ -47,7 +47,7 @@ describe("Moves - Plasma Fists", () => {
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     field.forEach((p) => {
       expect(p.getMoveType).toHaveLastReturnedWith(ElementalType.ELECTRIC);
@@ -67,7 +67,7 @@ describe("Moves - Plasma Fists", () => {
     game.move.select(MoveId.PLASMA_FISTS);
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getMoveType).toHaveLastReturnedWith(ElementalType.FAIRY);
     expect(playerPokemon.hp).toBeLessThan(playerPokemon.getMaxHp());
@@ -85,7 +85,7 @@ describe("Moves - Plasma Fists", () => {
     game.move.select(MoveId.PLASMA_FISTS);
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getMoveType).toHaveLastReturnedWith(ElementalType.ELECTRIC);
     expect(playerPokemon.hp).toBeLessThan(playerPokemon.getMaxHp());

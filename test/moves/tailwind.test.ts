@@ -120,7 +120,7 @@ describe("Moves - Tailwind", () => {
     game.move.use(MoveId.TACKLE, 0, BattlerIndex.ENEMY);
     game.move.use(MoveId.TACKLE, 1, BattlerIndex.ENEMY_2);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     const firstTurnOrder = game.field.getTurnOrder();
     // Ursaluna should be last in the turn order without Tailwind
@@ -131,7 +131,7 @@ describe("Moves - Tailwind", () => {
     game.move.use(MoveId.TAILWIND, 0);
     game.move.use(MoveId.TACKLE, 1, BattlerIndex.ENEMY);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     const secondTurnOrder = game.field.getTurnOrder();
 

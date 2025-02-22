@@ -6008,7 +6008,7 @@ export class PokemonBattleSummonData {
 }
 
 export class PokemonTurnData {
-  public turnCommand: TurnCommand;
+  public turnCommand?: TurnCommand;
   public flinched: boolean = false;
   public acted: boolean = false;
   /** How many times the move should hit the target(s) */

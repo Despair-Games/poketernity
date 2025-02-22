@@ -41,7 +41,7 @@ describe("Moves - Floral Healing", () => {
     enemy.hp = 1;
 
     game.move.select(MoveId.FLORAL_HEALING);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemy.hp).toBe(51);
   });
@@ -56,7 +56,7 @@ describe("Moves - Floral Healing", () => {
     enemy.hp = 1;
 
     game.move.select(MoveId.FLORAL_HEALING);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemy.hp).toBe(67);
   });

@@ -22,7 +22,7 @@ export class SelectTargetPhase extends PokemonPhase {
     const { turnManager } = currentBattle;
     const pokemon = this.getPokemon();
 
-    const turnCommand = turnManager.findPokemonCommand(pokemon);
+    const turnCommand = turnManager.findCommandFromPokemon(pokemon);
     const move = turnCommand?.move?.moveId ?? MoveId.NONE;
 
     ui.setMode(UiMode.TARGET_SELECT, this.fieldIndex, move, (targets: BattlerIndex[]) => {
