@@ -34,8 +34,9 @@ export const sessionMigrators = [sessionMigratorA] as const;
  */
 export function applySystemVersionMigration(data: SystemSaveData) {
   const prevVersion = data.gameVersion;
+  const isCurrentVersionHigher = compareVersions(prevVersion, version) === -1;
 
-  if (compareVersions(prevVersion, version) === -1) {
+  if (isCurrentVersionHigher) {
     const converter = new SystemVersionConverter();
     converter.applyStaticPreprocessors(data);
     converter.applyMigration(data, prevVersion);
@@ -54,8 +55,9 @@ export function applySystemVersionMigration(data: SystemSaveData) {
  */
 export function applySessionVersionMigration(data: SessionSaveData) {
   const prevVersion = data.gameVersion;
+  const isCurrentVersionHigher = compareVersions(prevVersion, version) === -1;
 
-  if (compareVersions(prevVersion, version) === -1) {
+  if (isCurrentVersionHigher) {
     const converter = new SessionVersionConverter();
     converter.applyStaticPreprocessors(data);
     converter.applyMigration(data, prevVersion);
@@ -73,9 +75,11 @@ export function applySessionVersionMigration(data: SessionSaveData) {
  * @see {@link SettingsVersionConverter}
  */
 export function applySettingsVersionMigration(data: Object) {
+  // TODO: replace this later
   const prevVersion: string = data.hasOwnProperty("meta") ? (data["meta"]["gameVersion"] ?? "1.0.0") : "1.0.0";
+  const isCurrentVersionHigher = compareVersions(prevVersion, version) === -1;
 
-  if (compareVersions(prevVersion, version) === -1) {
+  if (isCurrentVersionHigher) {
     const converter = new SettingsVersionConverter();
     converter.applyStaticPreprocessors(data);
     converter.applyMigration(data, prevVersion);
