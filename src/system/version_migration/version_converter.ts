@@ -75,9 +75,9 @@ export function applySessionVersionMigration(data: SessionSaveData) {
  * @param data Settings data object
  * @see {@link SettingsVersionConverter}
  */
-export function applySettingsVersionMigration(data: Object) {
-  const prevVersion: string = settings.meta.gameVersion;
-  const isCurrentVersionHigher = compareVersions(prevVersion, version) === -1;
+export function applySettingsVersionMigration(data: Partial<Settings>) {
+  const prevVersion = data.meta?.gameVersion;
+  const isCurrentVersionHigher = prevVersion && compareVersions(prevVersion, version) === -1;
 
   if (isCurrentVersionHigher) {
     const converter = new SettingsVersionConverter();
@@ -125,7 +125,7 @@ abstract class VersionConverter {
    *                   [1] Current minor version
    *                   [2] Current patch version
    */
-  abstract applyMigration(data: any, curVersion: string): void;
+  abstract applyMigration(data: any, prevVersion: string): void;
 }
 
 /**
@@ -139,7 +139,7 @@ class SessionVersionConverter extends VersionConverter {
     data.money = Math.floor(data.money);
   }
 
-  override applyMigration(_data: SessionSaveData, _curVersion: string): void {
+  override applyMigration(_data: SessionSaveData, _prevVersion: string): void {
     console.log(`Session data successfully migrated to v${version}!`);
   }
 }
@@ -150,7 +150,7 @@ class SessionVersionConverter extends VersionConverter {
  * @extends VersionConverter
  */
 class SystemVersionConverter extends VersionConverter {
-  override applyMigration(_data: SystemSaveData, _curVersion: string): void {
+  override applyMigration(_data: SystemSaveData, _prevVersion: string): void {
     console.log(`System data successfully migrated to v${version}!`);
   }
 }
@@ -161,7 +161,7 @@ class SystemVersionConverter extends VersionConverter {
  * @extends VersionConverter
  */
 class SettingsVersionConverter extends VersionConverter {
-  override applyMigration(_data: Object, _curVersion: string): void {
+  override applyMigration(_data: Object, _prevVersion: string): void {
     console.log(`Settings successfully migrated to v${version}!`);
   }
 }
