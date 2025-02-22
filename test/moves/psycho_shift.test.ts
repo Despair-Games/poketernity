@@ -37,13 +37,13 @@ describe("Moves - Psycho Shift", () => {
   it("If Psycho Shift is used on a Pokémon with Synchronize, the user of Psycho Shift will already be afflicted with a status condition when Synchronize activates", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    const playerPokemon = game.scene.getPlayerPokemon();
-    const enemyPokemon = game.scene.getEnemyPokemon();
-    expect(enemyPokemon?.status).toBeUndefined();
+    const playerPokemon = game.field.getPlayerPokemon();
+    const enemyPokemon = game.field.getEnemyPokemon();
+    expect(enemyPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
 
     game.move.select(MoveId.PSYCHO_SHIFT);
     await game.toEndOfTurn();
-    expect(playerPokemon?.status).toBeNull();
-    expect(enemyPokemon?.status).toBeDefined();
+    expect(playerPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
+    expect(enemyPokemon.getStatusEffect()).toBe(StatusEffect.POISON);
   });
 });

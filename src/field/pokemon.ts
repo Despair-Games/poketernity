@@ -56,7 +56,6 @@ import {
   rgbToHsv,
   deltaRgb,
   isBetween,
-  randSeedItem,
 } from "#app/utils";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import { getTypeDamageMultiplier, getTypeRgb } from "#app/data/type";
@@ -92,7 +91,7 @@ import { PokeballType } from "#enums/pokeball";
 import { Gender } from "#enums/gender";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
 import { initMoveAnim } from "#app/data/init-move-anim";
-import { Status } from "#app/data/status-effect";
+import { Status, getNonVolatileStatusEffects } from "#app/data/status-effect";
 import type { SpeciesFormEvolution, SpeciesEvolutionCondition } from "#app/data/balance/pokemon-evolutions";
 import {
   pokemonEvolutions,
@@ -1196,7 +1195,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         if (this.getTag(BattlerTagType.SLOW_START)) {
           ret >>= 1;
         }
-        if (this.status && this.status.effect === StatusEffect.PARALYSIS) {
+        if (this.hasStatusEffect(StatusEffect.PARALYSIS)) {
           const paraSpeedReductionCancelled = new BooleanHolder(false);
           applyAbFunc(AbAttrFlag.BYPASS_PARA_SPEED_REDUCTION, this, simulated, paraSpeedReductionCancelled);
           if (!paraSpeedReductionCancelled.value) {
@@ -3278,7 +3277,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     /** Halves damage if the attacker is using a physical attack while burned */
     const burnMultiplier = new NumberHolder(1);
-    if (isPhysical && source.status && source.status.effect === StatusEffect.BURN) {
+    if (isPhysical && source.hasStatusEffect(StatusEffect.BURN)) {
       if (!move.hasAttr(BypassBurnDamageReductionAttr)) {
         const burnDamageReductionCancelled = new BooleanHolder(false);
         applyAbFunc(AbAttrFlag.BYPASS_BURN_DAMAGE_REDUCTION, source, simulated, burnDamageReductionCancelled);
@@ -4002,6 +4001,56 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
+   * Helper function that determines if a Pokemon has a specified non-volatile status effect and/or is Confused
+   * @param statusList the status(es) to be checked
+   * @param includeConfusion whether Confusion should also be considered
+   * @param ignoreMockAbility whether a status effect-mocking ability should be considered
+   * @returns `true` if the Pokemon has a status effect | `false` if it does not
+   */
+  hasStatusEffect(
+    statusList: StatusEffect | StatusEffect[],
+    includeConfusion: boolean = false,
+    ignoreMockAbility: boolean = false,
+  ): boolean {
+    if (!Array.isArray(statusList)) {
+      statusList = [statusList];
+    }
+    if (
+      statusList.includes(this.getStatusEffect(ignoreMockAbility))
+      || (includeConfusion && this.getTag(BattlerTagType.CONFUSED))
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Helper function that checks if a Pokemon has one of any non-volatile status effects and/or is confused (which is a volatile status effect but is lumped into this category for some status-recovery effects)
+   * @param includeConfusion whether Confusion should also be considered
+   * @param ignoreMockAbility whether a status effect-mocking ability should be considered
+   * @returns `true` if the Pokemon has any of the non-volatile status effects | `false` if not
+   */
+  hasNonVolatileStatusEffect(includeConfusion: boolean = false, ignoreMockAbility: boolean = false): boolean {
+    return this.hasStatusEffect(getNonVolatileStatusEffects(), includeConfusion, ignoreMockAbility);
+  }
+
+  /**
+   * Helper function that retrieves the Pokemon's non-volatile status effect
+   * @param ignoreMockAbility whether a status effect-mocking ability should be applied
+   * @returns {@linkcode StatusEffect} the status effect held by the Pokemon
+   */
+  getStatusEffect(ignoreMockAbility: boolean = false): StatusEffect {
+    const statusEffect = new NumberHolder(StatusEffect.NONE);
+    if (this.status) {
+      statusEffect.value = this.status.statusEffect;
+    }
+    if (!ignoreMockAbility) {
+      applyAbAttrs(AbAttrFlag.MOCK_STATUS_EFFECT, this, false, statusEffect);
+    }
+    return statusEffect.value as StatusEffect;
+  }
+
+  /**
    * Checks if a status effect can be applied to the Pokemon.
    *
    * @param effect The {@linkcode StatusEffect} whose applicability is being checked
@@ -4017,7 +4066,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     sourcePokemon: Pokemon | null = null,
     ignoreField: boolean = false,
   ): boolean {
-    if (overrideStatus ? this.status?.effect === effect : this.status) {
+    if (overrideStatus ? this.status?.statusEffect === effect : this.status) {
       return false;
     }
     if (this.isGrounded() && !ignoreField && globalScene.arena.hasTerrain(TerrainType.MISTY)) {
@@ -4172,7 +4221,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param reloadAssets Whether to reload the assets or not; defaults to `false`.
    */
   resetStatus(confusion: boolean = false, reloadAssets: boolean = false): void {
-    const lastStatus = this.status?.effect;
+    const lastStatus = this.getStatusEffect(true);
     this.status = null;
     if (lastStatus === StatusEffect.SLEEP) {
       this.setFrameRate(10);
@@ -5221,17 +5270,6 @@ export class PlayerPokemon extends Pokemon {
     if (!this.isFainted()) {
       // If this Pokemon hasn't fainted, make sure the HP wasn't set over the new maximum
       this.hp = Math.min(this.hp, maxHp);
-      const getRandomStatus = (statusA: Status | null, statusB: Status | null): Status | null => {
-        if (!statusA || statusA.effect === StatusEffect.NONE) {
-          return statusB;
-        }
-        if (!statusB || statusB.effect === StatusEffect.NONE) {
-          return statusA;
-        }
-
-        return randSeedItem([statusA, statusB]);
-      };
-      this.status = getRandomStatus(this.status, pokemon.status); // Get a random valid status between the two
     } else if (!pokemon.isFainted()) {
       // If this Pokemon fainted but the other hasn't, make sure the HP wasn't set to zero
       this.hp = Math.max(this.hp, 1);
