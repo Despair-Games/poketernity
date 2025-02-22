@@ -1206,7 +1206,7 @@ export class UproarTag extends MoveLockTag {
 
     // Wake up all sleeping Pokemon on the field
     globalScene.getField(true).forEach((p) => {
-      if (p.status?.effect === StatusEffect.SLEEP) {
+      if (p.hasStatusEffect(StatusEffect.SLEEP, false, true)) {
         p.resetStatus();
         // "The uproar woke {pokemonNameWithAffix}!"
         globalScene.queueMessage(

@@ -51,11 +51,15 @@ describe("Moves - Uproar", () => {
       ignorePP: true,
     });
 
+    const playerUproar = player.getMoveset().find((mv) => mv.moveId === MoveId.UPROAR);
+    expect(playerUproar?.ppUsed).toBe(1);
+
     await game.toNextTurn();
     await game.toNextTurn();
 
     expect(player.getTag(BattlerTagType.UPROAR)).toBeUndefined();
     expect(player.getMoveQueue()).toHaveLength(0);
+    expect(playerUproar?.ppUsed).toBe(1);
   });
 
   it("should stop execution after using Uproar has no effect", async () => {
@@ -90,7 +94,7 @@ describe("Moves - Uproar", () => {
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
-    enemyPokemon.forEach((p) => expect(p.status?.effect).toBeOneOf([StatusEffect.NONE, undefined]));
+    enemyPokemon.forEach((p) => expect(p.getStatusEffect()).toBe(StatusEffect.NONE));
   });
 
   it("should prevent active Pokemon from falling asleep during its execution", async () => {
@@ -106,7 +110,7 @@ describe("Moves - Uproar", () => {
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
-    enemyPokemon.forEach((p) => expect(p.status?.effect).toBeOneOf([StatusEffect.NONE, undefined]));
+    enemyPokemon.forEach((p) => expect(p.getStatusEffect()).toBe(StatusEffect.NONE));
   });
 
   it("should not have its execution interrupted by Torment", async () => {
