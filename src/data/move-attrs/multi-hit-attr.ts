@@ -65,6 +65,16 @@ export class MultiHitAttr extends MoveAttr {
   getHitCount(user: Pokemon, _target: Pokemon): number {
     switch (this.multiHitType) {
       case MultiHitType._2_TO_5: {
+        /**
+         * ```
+         * | Hits | RNG rolls | Chance | %  |
+         * |------|-----------|--------|----|
+         * | 2    | 13-19     | 7/20   | 35 |
+         * | 3    | 6-12      | 7/20   | 35 |
+         * | 4    | 3-5       | 3/20   | 15 |
+         * | 5    | 0-2       | 3/20   | 15 |
+         * ```
+         */
         const rand = user.randSeedInt(20);
         const hitValue = new NumberHolder(rand);
         applyAbAttrs(AbAttrFlag.MAX_MULTI_HIT, user, false, hitValue);
