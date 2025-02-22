@@ -9,7 +9,7 @@ import { FormChangeItem } from "#enums/form-change-item";
 import { StatusEffect } from "#enums/status-effect";
 import { ElementalType } from "#enums/elemental-type";
 import { WeatherType } from "#enums/weather-type";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import { isNullOrUndefined } from "#app/utils";
 import type { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
@@ -874,22 +874,17 @@ export class CanEvolveWithItemRequirement extends EncounterPokemonRequirement {
     return this.queryParty(partyPokemon).length >= this.minNumberOfPokemon;
   }
 
-  filterByEvo(pokemon, evolutionItem) {
+  // TODO: clean up MEs...
+  filterByEvo(pokemon: Pokemon | undefined, evolutionItem) {
+    if (!pokemon) {
+      return false;
+    }
     if (
       pokemonEvolutions.hasOwnProperty(pokemon.species.speciesId)
       && pokemonEvolutions[pokemon.species.speciesId].filter(
         (e) => e.item === evolutionItem && (!e.condition || e.condition.predicate(pokemon)),
       ).length
       && pokemon.getFormKey() !== SpeciesFormKey.GIGANTAMAX
-    ) {
-      return true;
-    } else if (
-      pokemon.isFusion()
-      && pokemonEvolutions.hasOwnProperty(pokemon.fusionSpecies.speciesId)
-      && pokemonEvolutions[pokemon.fusionSpecies.speciesId].filter(
-        (e) => e.item === evolutionItem && (!e.condition || e.condition.predicate(pokemon)),
-      ).length
-      && pokemon.getFusionFormKey() !== SpeciesFormKey.GIGANTAMAX
     ) {
       return true;
     }

@@ -1,5 +1,4 @@
 import FieldSpritePipeline from "#app/pipelines/field-sprite";
-import { settings } from "#app/system/settings/settings-manager";
 import { CANVAS_SCALE } from "#app/ui-constants";
 
 const spriteFragShader = `
@@ -36,8 +35,6 @@ uniform vec2 texSize;
 uniform float yOffset;
 uniform float yShadowOffset;
 uniform vec4 tone;
-uniform ivec4 spriteColors[32];
-uniform ivec4 fusionSpriteColors[32];
 
 const vec3 lumaF = vec3(.299, .587, .114);
 
@@ -156,20 +153,6 @@ void main() {
     vec4 texture = texture2D(uMainSampler[0], outTexCoord);
 
     ivec4 colorInt = ivec4(int(texture.r * 255.0), int(texture.g * 255.0), int(texture.b * 255.0), int(texture.a * 255.0));
-
-    for (int i = 0; i < 32; i++) {
-        if (spriteColors[i][3] == 0)
-            break;
-        if (texture.a > 0.0 && colorInt.r == spriteColors[i].r && colorInt.g == spriteColors[i].g && colorInt.b == spriteColors[i].b) {
-            vec3 fusionColor = vec3(float(fusionSpriteColors[i].r) / 255.0, float(fusionSpriteColors[i].g) / 255.0, float(fusionSpriteColors[i].b) / 255.0);
-            vec3 bg = vec3(float(spriteColors[i].r) / 255.0, float(spriteColors[i].g) / 255.0, float(spriteColors[i].b) / 255.0);
-            float gray = (bg.r + bg.g + bg.b) / 3.0;
-            bg = vec3(gray, gray, gray);
-            vec3 fg = fusionColor;
-            texture.rgb = mix(1.0 - 2.0 * (1.0 - bg) * (1.0 - fg), 2.0 * bg * fg, step(bg, vec3(0.5)));
-            break;
-        }
-    }
 
     vec4 texel = vec4(outTint.bgr * outTint.a, outTint.a);
 
@@ -340,7 +323,6 @@ export default class SpritePipeline extends FieldSpritePipeline {
     const hasShadow = data["hasShadow"] as boolean;
     const yShadowOffset = data["yShadowOffset"] as number;
     const ignoreFieldPos = data["ignoreFieldPos"] as boolean;
-    const ignoreOverride = data["ignoreOverride"] as boolean;
 
     const isEntityObj =
       sprite.parentContainer.type === "Pokemon"
@@ -378,32 +360,6 @@ export default class SpritePipeline extends FieldSpritePipeline {
     this.set1f("yShadowOffset", yShadowOffset ?? 0);
     this.set4fv("tone", tone);
     this.bindTexture(this.game.textures.get("tera").source[0].glTexture!, 1); // TODO: is this bang correct?
-
-    if (settings.display.enableFusionPaletteSwaps) {
-      const spriteColors = ((ignoreOverride && data["spriteColorsBase"]) || data["spriteColors"] || []) as number[][];
-      const fusionSpriteColors = ((ignoreOverride && data["fusionSpriteColorsBase"])
-        || data["fusionSpriteColors"]
-        || []) as number[][];
-
-      const emptyColors = [0, 0, 0, 0];
-      const flatSpriteColors: number[] = [];
-      const flatFusionSpriteColors: number[] = [];
-      for (let c = 0; c < 32; c++) {
-        flatSpriteColors.splice(
-          flatSpriteColors.length,
-          0,
-          ...(c < spriteColors.length ? spriteColors[c] : emptyColors),
-        );
-        flatFusionSpriteColors.splice(
-          flatFusionSpriteColors.length,
-          0,
-          ...(c < fusionSpriteColors.length ? fusionSpriteColors[c] : emptyColors),
-        );
-      }
-
-      this.set4iv("spriteColors", flatSpriteColors.flat());
-      this.set4iv("fusionSpriteColors", flatFusionSpriteColors.flat());
-    }
   }
 
   override batchQuad(

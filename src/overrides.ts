@@ -125,10 +125,6 @@ class DefaultOverrides {
    * @example SPECIES_OVERRIDE = Species.Bulbasaur;
    */
   readonly STARTER_SPECIES_OVERRIDE: Species | number = 0;
-  /** This will force your starter to be a random fusion */
-  readonly STARTER_FUSION_OVERRIDE: boolean = false;
-  /** This will override the species of the fusion */
-  readonly STARTER_FUSION_SPECIES_OVERRIDE: Species | number = 0;
   readonly ABILITY_OVERRIDE: Abilities = Abilities.NONE;
   readonly PASSIVE_ABILITY_OVERRIDE: Abilities = Abilities.NONE;
   readonly STATUS_OVERRIDE: StatusEffect = StatusEffect.NONE;
@@ -142,10 +138,6 @@ class DefaultOverrides {
   // --------------------------
 
   readonly ENEMY_SPECIES_OVERRIDE: Species | number = 0;
-  /** This will make all enemys be fused Pokemon */
-  readonly ENEMY_FUSION_OVERRIDE: boolean = false;
-  /** This will override the species of the fusion only when the enemy is already a fusion */
-  readonly ENEMY_FUSION_SPECIES_OVERRIDE: Species | number = 0;
   readonly ENEMY_LEVEL_OVERRIDE: number = 0;
   readonly ENEMY_ABILITY_OVERRIDE: Abilities = Abilities.NONE;
   readonly ENEMY_PASSIVE_ABILITY_OVERRIDE: Abilities = Abilities.NONE;
