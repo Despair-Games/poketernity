@@ -655,12 +655,11 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
       });
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", tradedPokemon.getSpriteKey());
-      ["spriteColors", "fusionSpriteColors"].map((k) => {
-        if (tradedPokemon.summonData?.speciesForm) {
-          k += "Base";
-        }
-        sprite.pipelineData[k] = tradedPokemon.getSprite().pipelineData[k];
-      });
+      let key = "spriteColors";
+      if (tradedPokemon.summonData?.speciesForm) {
+        key += "Base";
+      }
+      sprite.pipelineData[key] = tradedPokemon.getSprite().pipelineData[key];
     });
 
     [receivedPokemonSprite, receivedPokemonTintSprite].map((sprite) => {
@@ -678,12 +677,11 @@ function doPokemonTradeSequence(tradedPokemon: PlayerPokemon, receivedPokemon: P
       });
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", receivedPokemon.getSpriteKey());
-      ["spriteColors", "fusionSpriteColors"].map((k) => {
-        if (receivedPokemon.summonData?.speciesForm) {
-          k += "Base";
-        }
-        sprite.pipelineData[k] = receivedPokemon.getSprite().pipelineData[k];
-      });
+      let key = "spriteColors";
+      if (receivedPokemon.summonData?.speciesForm) {
+        key += "Base";
+      }
+      sprite.pipelineData[key] = receivedPokemon.getSprite().pipelineData[key];
     });
 
     // Traded pokemon pokeball

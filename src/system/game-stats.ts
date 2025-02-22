@@ -28,7 +28,6 @@ export class GameStats {
   public shinyPokemonSeen: number;
   public shinyPokemonCaught: number;
   public shinyPokemonHatched: number;
-  public pokemonFused: number;
   public trainersDefeated: number;
   public eggsPulled: number;
   public rareEggsPulled: number;
@@ -67,7 +66,6 @@ export class GameStats {
     this.shinyPokemonSeen = source?.shinyPokemonSeen || 0;
     this.shinyPokemonCaught = source?.shinyPokemonCaught || 0;
     this.shinyPokemonHatched = source?.shinyPokemonHatched || 0;
-    this.pokemonFused = source?.pokemonFused || 0;
     this.trainersDefeated = source?.trainersDefeated || 0;
     this.eggsPulled = source?.eggsPulled || 0;
     this.rareEggsPulled = source?.rareEggsPulled || 0;

@@ -35,7 +35,7 @@ export class MockTexture implements MockGameObject {
     this.firstFrame = "firstFrame";
   }
 
-  /** Mocks the function call that gets an HTMLImageElement, see {@link Pokemon.updateFusionPalette} */
+  /** Mocks the function call that gets an HTMLImageElement */
   getSourceImage() {
     return null;
   }

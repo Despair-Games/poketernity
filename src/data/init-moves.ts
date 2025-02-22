@@ -739,11 +739,7 @@ export function initMoves() {
       .ignoresVirtual(),
     new StatusMove(MoveId.TRANSFORM, ElementalType.NORMAL, -1, 10, -1, 0, 1)
       .attr(TransformAttr)
-      // transforming from or into fusion pokemon causes various problems (such as crashes)
-      .condition(
-        (user, target, _move) =>
-          !target.getTag(BattlerTagType.SUBSTITUTE) && !user.fusionSpecies && !target.fusionSpecies,
-      )
+      .condition((_user, target, _move) => !target.getTag(BattlerTagType.SUBSTITUTE))
       .ignoresProtect(),
     new AttackMove(MoveId.BUBBLE, ElementalType.WATER, MoveCategory.SPECIAL, 40, 100, 30, 10, 0, 1)
       .attr(StatStageChangeAttr, [Stat.SPD], -1)
@@ -3960,8 +3956,7 @@ export function initMoves() {
       .attr(TeraMoveCategoryAttr)
       .attr(TeraStarstormTypeAttr)
       .attr(VariableTargetAttr, (user, _target, _move) =>
-        (user.hasFusionSpecies(Species.TERAPAGOS) || user.species.speciesId === Species.TERAPAGOS)
-        && user.isTerastallized()
+        user.species.speciesId === Species.TERAPAGOS && user.isTerastallized()
           ? MoveTarget.ALL_NEAR_ENEMIES
           : MoveTarget.NEAR_OTHER,
       ),

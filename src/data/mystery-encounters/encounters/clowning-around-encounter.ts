@@ -386,17 +386,11 @@ export const ClowningAroundEncounter: MysteryEncounter = MysteryEncounterBuilder
           }
           newTypes.push(secondType);
 
-          // Apply the type changes (to both base and fusion, if pokemon is fused)
+          // Apply the type changes
           if (!pokemon.customPokemonData) {
             pokemon.customPokemonData = new CustomPokemonData();
           }
           pokemon.customPokemonData.types = newTypes;
-          if (pokemon.isFusion()) {
-            if (!pokemon.fusionCustomPokemonData) {
-              pokemon.fusionCustomPokemonData = new CustomPokemonData();
-            }
-            pokemon.fusionCustomPokemonData.types = newTypes;
-          }
         }
       })
       .withOptionPhase(async () => {
