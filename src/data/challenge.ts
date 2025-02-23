@@ -400,17 +400,7 @@ export class SingleGenerationChallenge extends Challenge {
   override applyPokemonInBattle(pokemon: Pokemon, valid: BooleanHolder): boolean {
     const baseGeneration =
       pokemon.species.speciesId === Species.VICTINI ? 5 : getPokemonSpecies(pokemon.species.speciesId).generation;
-    let fusionGeneration = 0;
-    if (pokemon.isFusion() && pokemon.fusionSpecies) {
-      fusionGeneration =
-        pokemon.fusionSpecies.speciesId === Species.VICTINI
-          ? 5
-          : getPokemonSpecies(pokemon.fusionSpecies.speciesId).generation;
-    }
-    if (
-      pokemon.isPlayer()
-      && (baseGeneration !== this.value || (pokemon.isFusion() && fusionGeneration !== this.value))
-    ) {
+    if (pokemon.isPlayer() && baseGeneration !== this.value) {
       valid.value = false;
       return true;
     }
@@ -545,17 +535,13 @@ interface monotypeOverride {
   species: Species;
   /** The type to count as */
   type: ElementalType;
-  /** If part of a fusion, should we check the fused species instead of the base species? */
-  fusion: boolean;
 }
 
 /**
  * Implements a mono type challenge.
  */
 export class SingleTypeChallenge extends Challenge {
-  private static TYPE_OVERRIDES: monotypeOverride[] = [
-    { species: Species.CASTFORM, type: ElementalType.NORMAL, fusion: false },
-  ];
+  private static TYPE_OVERRIDES: monotypeOverride[] = [{ species: Species.CASTFORM, type: ElementalType.NORMAL }];
   private static SPECIES_OVERRIDES: Species[] = [Species.MELOETTA];
 
   constructor() {
@@ -603,12 +589,9 @@ export class SingleTypeChallenge extends Challenge {
       pokemon.isPlayer()
       && !pokemon.isOfType(this.value - 1, false, false, true)
       && !SingleTypeChallenge.TYPE_OVERRIDES.some(
-        (o) =>
-          o.type === this.value - 1
-          && (pokemon.isFusion() && o.fusion ? pokemon.fusionSpecies! : pokemon.species).speciesId === o.species,
+        (o) => o.type === this.value - 1 && pokemon.species.speciesId === o.species,
       )
     ) {
-      // TODO: is the bang on fusionSpecies correct?
       valid.value = false;
       return true;
     }

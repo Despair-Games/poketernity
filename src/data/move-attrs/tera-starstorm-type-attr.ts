@@ -11,10 +11,7 @@ import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-at
  */
 export class TeraStarstormTypeAttr extends VariableMoveTypeAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, moveType: NumberHolder): boolean {
-    if (
-      user.isTerastallized()
-      && (user.hasFusionSpecies(Species.TERAPAGOS) || user.species.speciesId === Species.TERAPAGOS)
-    ) {
+    if (user.isTerastallized() && user.species.speciesId === Species.TERAPAGOS) {
       moveType.value = ElementalType.STELLAR;
       return true;
     }

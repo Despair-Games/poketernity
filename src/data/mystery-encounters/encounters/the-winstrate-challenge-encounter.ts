@@ -204,7 +204,6 @@ function endTrainerBattleAndShowDialogue(): Promise<void> {
 
       for (const pokemon of globalScene.getPlayerParty()) {
         // Only trigger form change when Eiscue is in Noice form
-        // Hardcoded Eiscue for now in case it is fused with another pokemon
         if (
           pokemon.species.speciesId === Species.EISCUE
           && pokemon.hasAbility(Abilities.ICE_FACE)
