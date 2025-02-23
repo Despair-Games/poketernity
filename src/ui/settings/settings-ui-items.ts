@@ -292,12 +292,6 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
     doWrap: true,
   },
   {
-    key: "enableFusionPaletteSwaps",
-    label: t("settings:fusionPaletteSwaps"),
-    options: useOnOffOptions(),
-    doWrap: true,
-  },
-  {
     key: "playerGender",
     label: t("settings:playerGender"),
     options: [

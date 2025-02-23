@@ -48,8 +48,6 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
   private championRibbon: Phaser.GameObjects.Sprite;
   private teraIcon: Phaser.GameObjects.Sprite;
   private shinyIcon: Phaser.GameObjects.Sprite;
-  private fusionShinyIcon: Phaser.GameObjects.Sprite;
-  private splicedIcon: Phaser.GameObjects.Sprite;
   private statusIndicator: Phaser.GameObjects.Sprite;
   private levelContainer: Phaser.GameObjects.Container;
   private hpBar: Phaser.GameObjects.Image;
@@ -151,23 +149,6 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     this.shinyIcon.setPositionRelative(this.nameText, 0, 2);
     this.shinyIcon.setInteractive(new Phaser.Geom.Rectangle(0, 0, 12, 15), Phaser.Geom.Rectangle.Contains);
     this.add(this.shinyIcon);
-
-    this.fusionShinyIcon = globalScene.add.sprite(0, 0, "shiny_star_2");
-    this.fusionShinyIcon.setName("icon_fusion_shiny");
-    this.fusionShinyIcon.setVisible(false);
-    this.fusionShinyIcon.setOrigin(0, 0);
-    this.fusionShinyIcon.setScale(0.5);
-    this.fusionShinyIcon.setPosition(this.shinyIcon.x, this.shinyIcon.y);
-    this.add(this.fusionShinyIcon);
-
-    this.splicedIcon = globalScene.add.sprite(0, 0, "icon_spliced");
-    this.splicedIcon.setName("icon_spliced");
-    this.splicedIcon.setVisible(false);
-    this.splicedIcon.setOrigin(0, 0);
-    this.splicedIcon.setScale(0.5);
-    this.splicedIcon.setPositionRelative(this.nameText, 0, 2);
-    this.splicedIcon.setInteractive(new Phaser.Geom.Rectangle(0, 0, 12, 15), Phaser.Geom.Rectangle.Contains);
-    this.add(this.splicedIcon);
 
     this.statusIndicator = globalScene.add.sprite(0, 0, "status_icons");
     this.statusIndicator.setName("icon_status");
@@ -364,44 +345,20 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     });
     this.teraIcon.on("pointerout", () => globalScene.ui.hideTooltip());
 
-    const isFusion = pokemon.isFusion();
+    const baseVariant = pokemon.getVariant();
 
-    this.splicedIcon.setPositionRelative(
+    this.shinyIcon.setPositionRelative(
       this.nameText,
       nameTextWidth + this.genderText.displayWidth + 1 + (this.teraIcon.visible ? this.teraIcon.displayWidth + 1 : 0),
       2.5,
     );
-    this.splicedIcon.setVisible(isFusion);
-    if (this.splicedIcon.visible) {
-      this.splicedIcon.on("pointerover", () =>
-        globalScene.ui.showTooltip(
-          "",
-          `${pokemon.species.getName(pokemon.formIndex)}/${pokemon.fusionSpecies?.getName(pokemon.fusionFormIndex)}`,
-        ),
-      );
-      this.splicedIcon.on("pointerout", () => globalScene.ui.hideTooltip());
-    }
-
-    const doubleShiny = isFusion && pokemon.shiny && pokemon.fusionShiny;
-    const baseVariant = !doubleShiny ? pokemon.getVariant() : pokemon.variant;
-
-    this.shinyIcon.setPositionRelative(
-      this.nameText,
-      nameTextWidth
-        + this.genderText.displayWidth
-        + 1
-        + (this.teraIcon.visible ? this.teraIcon.displayWidth + 1 : 0)
-        + (this.splicedIcon.visible ? this.splicedIcon.displayWidth + 1 : 0),
-      2.5,
-    );
-    this.shinyIcon.setTexture(`shiny_star${doubleShiny ? "_1" : ""}`);
+    this.shinyIcon.setTexture(`shiny_star`);
     this.shinyIcon.setVisible(pokemon.isShiny());
     this.shinyIcon.setTint(getVariantTint(baseVariant));
     if (this.shinyIcon.visible) {
-      const shinyDescriptor =
-        doubleShiny || baseVariant
-          ? `${baseVariant === 2 ? i18next.t("common:epicShiny") : baseVariant === 1 ? i18next.t("common:rareShiny") : i18next.t("common:commonShiny")}${doubleShiny ? `/${pokemon.fusionVariant === 2 ? i18next.t("common:epicShiny") : pokemon.fusionVariant === 1 ? i18next.t("common:rareShiny") : i18next.t("common:commonShiny")}` : ""}`
-          : "";
+      const shinyDescriptor = baseVariant
+        ? `${baseVariant === 2 ? i18next.t("common:epicShiny") : baseVariant === 1 ? i18next.t("common:rareShiny") : i18next.t("common:commonShiny")}`
+        : "";
       this.shinyIcon.on("pointerover", () =>
         globalScene.ui.showTooltip(
           "",
@@ -409,12 +366,6 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
         ),
       );
       this.shinyIcon.on("pointerout", () => globalScene.ui.hideTooltip());
-    }
-
-    this.fusionShinyIcon.setPosition(this.shinyIcon.x, this.shinyIcon.y);
-    this.fusionShinyIcon.setVisible(doubleShiny);
-    if (isFusion) {
-      this.fusionShinyIcon.setTint(getVariantTint(pokemon.fusionVariant));
     }
 
     if (!this.player) {
@@ -523,7 +474,6 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
       this.nameText,
       this.genderText,
       this.teraIcon,
-      this.splicedIcon,
       this.shinyIcon,
       this.statusIndicator,
       this.levelContainer,
@@ -561,7 +511,6 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
         this.nameText,
         this.genderText,
         this.teraIcon,
-        this.splicedIcon,
         this.shinyIcon,
         this.ownedIcon,
         this.championRibbon,
@@ -647,28 +596,17 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
       }
 
       if (nameUpdated || teraTypeUpdated) {
-        this.splicedIcon.setVisible(!!pokemon.fusionSpecies);
-
         this.teraIcon.setPositionRelative(
           this.nameText,
           this.nameText.displayWidth + this.genderText.displayWidth + 1,
           2,
-        );
-        this.splicedIcon.setPositionRelative(
-          this.nameText,
-          this.nameText.displayWidth
-            + this.genderText.displayWidth
-            + 1
-            + (this.teraIcon.visible ? this.teraIcon.displayWidth + 1 : 0),
-          1.5,
         );
         this.shinyIcon.setPositionRelative(
           this.nameText,
           this.nameText.displayWidth
             + this.genderText.displayWidth
             + 1
-            + (this.teraIcon.visible ? this.teraIcon.displayWidth + 1 : 0)
-            + (this.splicedIcon.visible ? this.splicedIcon.displayWidth + 1 : 0),
+            + (this.teraIcon.visible ? this.teraIcon.displayWidth + 1 : 0),
           2.5,
         );
       }
@@ -787,7 +725,6 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
       nameTextWidth
       > (this.player || !this.boss ? 60 : 98)
         - ((pokemon.gender !== Gender.GENDERLESS ? 6 : 0)
-          + (pokemon.fusionSpecies ? 8 : 0)
           + (pokemon.isShiny() ? 8 : 0)
           + (Math.min(pokemon.level.toString().length, 3) - 3) * 8)
     ) {

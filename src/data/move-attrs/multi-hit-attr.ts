@@ -1,12 +1,12 @@
-import { MultiHitType } from "#enums/multi-hit-type";
-import type { Pokemon } from "#app/field/pokemon";
-import { NumberHolder } from "#app/utils";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { type Move } from "#app/data/move";
-import { applyMoveAttrs } from "#app/utils/move-utils";
 import { ChangeMultiHitTypeAttr } from "#app/data/move-attrs/change-multi-hit-type-attr";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
+import type { Pokemon } from "#app/field/pokemon";
+import { NumberHolder } from "#app/utils";
+import { applyMoveAttrs } from "#app/utils/move-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { MultiHitType } from "#enums/multi-hit-type";
 
 /**
  * Attribute used for attack moves that hit multiple times per use, e.g. Bullet Seed.
@@ -65,14 +65,24 @@ export class MultiHitAttr extends MoveAttr {
   getHitCount(user: Pokemon, _target: Pokemon): number {
     switch (this.multiHitType) {
       case MultiHitType._2_TO_5: {
-        const rand = user.randSeedInt(16);
+        /**
+         * ```
+         * | Hits | RNG rolls | Chance | %  |
+         * |------|-----------|--------|----|
+         * | 2    | 13-19     | 7/20   | 35 |
+         * | 3    | 6-12      | 7/20   | 35 |
+         * | 4    | 3-5       | 3/20   | 15 |
+         * | 5    | 0-2       | 3/20   | 15 |
+         * ```
+         */
+        const rand = user.randSeedInt(20);
         const hitValue = new NumberHolder(rand);
         applyAbAttrs(AbAttrFlag.MAX_MULTI_HIT, user, false, hitValue);
-        if (hitValue.value >= 10) {
+        if (hitValue.value >= 13) {
           return 2;
-        } else if (hitValue.value >= 4) {
+        } else if (hitValue.value >= 6) {
           return 3;
-        } else if (hitValue.value >= 2) {
+        } else if (hitValue.value >= 3) {
           return 4;
         } else {
           return 5;

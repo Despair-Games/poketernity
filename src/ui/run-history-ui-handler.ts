@@ -357,15 +357,12 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
     }
 
     // Game Mode + Waves
-    // Because Endless (Spliced) tends to have the longest name across languages, the line tends to spill into the party icons.
-    // To fix this, the Spliced icon is used to indicate an Endless Spliced run
     const gameModeLabel = addTextObject(8, 19, "", TextStyle.WINDOW);
     let mode = "";
     switch (data.gameMode) {
       case GameModes.DAILY:
         mode = i18next.t("gameMode:dailyRun");
         break;
-      case GameModes.SPLICED_ENDLESS:
       case GameModes.ENDLESS:
         mode = i18next.t("gameMode:endless");
         break;
@@ -377,17 +374,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
         break;
     }
     gameModeLabel.appendText(mode, false);
-    if (data.gameMode === GameModes.SPLICED_ENDLESS) {
-      const splicedIcon = globalScene.add.image(0, 0, "icon_spliced");
-      splicedIcon.setScale(0.75);
-      const coords = gameModeLabel.getTopRight();
-      splicedIcon.setPosition(coords.x + 5, 27);
-      this.add(splicedIcon);
-      // 4 spaces of room for the Spliced icon
-      gameModeLabel.appendText("    - ", false);
-    } else {
-      gameModeLabel.appendText(" - ", false);
-    }
+    gameModeLabel.appendText(" - ", false);
     gameModeLabel.appendText(i18next.t("saveSlotSelectUiHandler:wave") + " " + data.waveIndex, false);
     this.add(gameModeLabel);
 

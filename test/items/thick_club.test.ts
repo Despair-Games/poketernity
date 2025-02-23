@@ -2,7 +2,7 @@ import { Stat } from "#enums/stat";
 import { SpeciesStatBoosterModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import i18next from "#app/plugins/i18n";
-import { NumberHolder, randInt } from "#app/utils";
+import { NumberHolder } from "#app/utils";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phase from "phaser";
@@ -131,80 +131,6 @@ describe("Items - Thick Club", () => {
     await game.startBattle([Species.ALOLA_MAROWAK]);
 
     const partyMember = game.scene.getPlayerParty()[0];
-
-    const atkStat = partyMember.getStat(Stat.ATK);
-
-    // Making sure modifier is not applied without holding item
-    const atkValue = new NumberHolder(atkStat);
-    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
-
-    expect(atkValue.value / atkStat).toBe(1);
-
-    // Giving Eviolite to party member and testing if it applies
-    game.scene.addModifier(
-      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["THICK_CLUB"])!.newModifier(partyMember),
-      true,
-    );
-    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
-
-    expect(atkValue.value / atkStat).toBe(2);
-  }, 20000);
-
-  it("THICK_CLUB held by fused CUBONE line (base)", async () => {
-    // Randomly choose from the Cubone line
-    const species = [Species.CUBONE, Species.MAROWAK, Species.ALOLA_MAROWAK];
-    const randSpecies = randInt(species.length);
-
-    await game.startBattle([species[randSpecies], Species.PIKACHU]);
-
-    const partyMember = game.scene.getPlayerParty()[0];
-    const ally = game.scene.getPlayerParty()[1];
-
-    // Fuse party members (taken from PlayerPokemon.fuse(...) function)
-    partyMember.fusionSpecies = ally.species;
-    partyMember.fusionFormIndex = ally.formIndex;
-    partyMember.fusionAbilityIndex = ally.abilityIndex;
-    partyMember.fusionShiny = ally.shiny;
-    partyMember.fusionVariant = ally.variant;
-    partyMember.fusionGender = ally.gender;
-    partyMember.fusionLuck = ally.luck;
-
-    const atkStat = partyMember.getStat(Stat.ATK);
-
-    // Making sure modifier is not applied without holding item
-    const atkValue = new NumberHolder(atkStat);
-    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
-
-    expect(atkValue.value / atkStat).toBe(1);
-
-    // Giving Eviolite to party member and testing if it applies
-    game.scene.addModifier(
-      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["THICK_CLUB"])!.newModifier(partyMember),
-      true,
-    );
-    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
-
-    expect(atkValue.value / atkStat).toBe(2);
-  }, 20000);
-
-  it("THICK_CLUB held by fused CUBONE line (part)", async () => {
-    // Randomly choose from the Cubone line
-    const species = [Species.CUBONE, Species.MAROWAK, Species.ALOLA_MAROWAK];
-    const randSpecies = randInt(species.length);
-
-    await game.startBattle([Species.PIKACHU, species[randSpecies]]);
-
-    const partyMember = game.scene.getPlayerParty()[0];
-    const ally = game.scene.getPlayerParty()[1];
-
-    // Fuse party members (taken from PlayerPokemon.fuse(...) function)
-    partyMember.fusionSpecies = ally.species;
-    partyMember.fusionFormIndex = ally.formIndex;
-    partyMember.fusionAbilityIndex = ally.abilityIndex;
-    partyMember.fusionShiny = ally.shiny;
-    partyMember.fusionVariant = ally.variant;
-    partyMember.fusionGender = ally.gender;
-    partyMember.fusionLuck = ally.luck;
 
     const atkStat = partyMember.getStat(Stat.ATK);
 
