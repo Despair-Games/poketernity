@@ -55,6 +55,6 @@ describe("Abilities - Sand Spit", () => {
     game.move.select(MoveId.GROWL);
     await game.toNextTurn();
 
-    expect(game.scene.arena.weather?.weatherType).not.toBe(WeatherType.SANDSTORM);
+    expect(game.scene.arena.weather).toBeUndefined();
   });
 });
