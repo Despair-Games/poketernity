@@ -15,7 +15,7 @@ export class OneHitKOAccuracyAttr extends VariableAccuracyAttr {
     if (user.level < target.level) {
       accuracy.value = 0;
     } else {
-      accuracy.value = Math.min(Math.max(30 + 100 * (1 - target.level / user.level), 0), 100);
+      accuracy.value = Math.min(30 + user.level - target.level, 100);
     }
     return true;
   }

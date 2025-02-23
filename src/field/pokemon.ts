@@ -1214,6 +1214,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   abstract isBoss(): boolean;
 
+  abstract getBossSegments(): number;
+
   getMoveset(baseOnly?: boolean): PokemonMove[] {
     const ret = !baseOnly && this.summonData?.moveset ? this.summonData.moveset : this.moveset;
 
@@ -2820,14 +2822,16 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       };
     }
 
-    // If the attack is a one-hit KO move, return a result with damage equal to this Pokemon's HP
+    /**
+     * If the attack is a one-hit KO move, return a result equal to the Pokemon's HP bar (or one segment if a boss)
+     */
     const isOneHitKo = new BooleanHolder(false);
     applyMoveAttrs(OneHitKOAttr, source, this, move, isOneHitKo);
     if (isOneHitKo.value) {
       return {
         cancelled: false,
         result: HitResult.ONE_HIT_KO,
-        damage: this.hp,
+        damage: this.isBoss() ? 1 + Math.floor(this.getMaxHp() / this.getBossSegments()) : this.hp,
       };
     }
 
@@ -4061,6 +4065,10 @@ export class PlayerPokemon extends Pokemon {
     return false;
   }
 
+  getBossSegments(): number {
+    return 0;
+  }
+
   getFieldIndex(): number {
     return globalScene.getPlayerField().indexOf(this);
   }
@@ -4851,6 +4859,10 @@ export class EnemyPokemon extends Pokemon {
 
   isBoss(): boolean {
     return !!this.bossSegments;
+  }
+
+  getBossSegments(): number {
+    return this.bossSegments;
   }
 
   getBossSegmentIndex(): number {
