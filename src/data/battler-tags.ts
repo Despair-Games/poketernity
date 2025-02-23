@@ -1870,7 +1870,7 @@ export class PerishSongTag extends BattlerTag {
         }),
       );
     } else {
-      pokemon.damageAndUpdate(pokemon.hp, HitResult.ONE_HIT_KO, false, true, true);
+      pokemon.damageAndUpdate(2 * pokemon.hp, HitResult.ONE_HIT_KO, false, true, true);
     }
 
     return ret;
