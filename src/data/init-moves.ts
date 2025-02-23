@@ -574,13 +574,13 @@ export function initMoves() {
       [Stat.SPDEF],
       -1,
     ),
-    new StatusMove(MoveId.HYPNOSIS, ElementalType.PSYCHIC, 60, 20, -1, 0, 1).attr(StatusEffectAttr, StatusEffect.SLEEP),
+    new StatusMove(MoveId.HYPNOSIS, ElementalType.PSYCHIC, 60, 20, -1, 0, 1).attr(StatusEffectAttr, StatusEffect.SLEEP).bounceable(),
     new SelfStatusMove(MoveId.MEDITATE, ElementalType.PSYCHIC, -1, 40, -1, 0, 1).attr(
       StatStageChangeAttr,
       [Stat.ATK],
       1,
       true,
-    ).bounceable(),
+    ),
     new SelfStatusMove(MoveId.AGILITY, ElementalType.PSYCHIC, -1, 30, -1, 0, 1).attr(
       StatStageChangeAttr,
       [Stat.SPD],
