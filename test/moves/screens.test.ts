@@ -179,7 +179,7 @@ describe("Moves - Screen Moves", () => {
       await testDamageMultiplier("single", MoveId.EARTHQUAKE, singleBattleMultiplier);
     });
 
-    it("should reduce of physical attacks by a third in a double battle", async () => {
+    it("should reduce damage of physical attacks by a third in a double battle", async () => {
       await testDamageMultiplier("double", MoveId.EARTHQUAKE, doubleBattleMultiplier);
     });
 
