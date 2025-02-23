@@ -222,7 +222,7 @@ export class StatStageChangePhase extends PokemonPhase {
       statSprite.setScale(CANVAS_SCALE);
       statSprite.setOrigin(0.5, 1);
 
-      globalScene.playSound(`se/stat_${stages.value >= 1 ? "up" : "down"}`);
+      globalScene.audioManager.playSound(`se/stat_${stages.value >= 1 ? "up" : "down"}`);
 
       statSprite.setMask(new Phaser.Display.Masks.BitmapMask(globalScene, pokemonMaskSprite ?? undefined));
 

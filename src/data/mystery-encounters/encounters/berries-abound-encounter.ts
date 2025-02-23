@@ -155,7 +155,7 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
       const doBerryRewards = () => {
         const berryText = i18next.t(`${namespace}:berries`);
 
-        globalScene.playSound("item_fanfare");
+        globalScene.audioManager.playSound("item_fanfare");
         queueEncounterMessage(i18next.t("battle:rewardGainCount", { modifierName: berryText, count: numBerries }));
 
         // Generate a random berry and give it to the first Pokemon with room for it
@@ -209,7 +209,7 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
           const doBerryRewards = () => {
             const berryText = i18next.t(`${namespace}:berries`);
 
-            globalScene.playSound("item_fanfare");
+            globalScene.audioManager.playSound("item_fanfare");
             queueEncounterMessage(i18next.t("battle:rewardGainCount", { modifierName: berryText, count: numBerries }));
 
             // Generate a random berry and give it to the first Pokemon with room for it
@@ -255,7 +255,7 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
           const doFasterBerryRewards = () => {
             const berryText = i18next.t(`${namespace}:berries`);
 
-            globalScene.playSound("item_fanfare");
+            globalScene.audioManager.playSound("item_fanfare");
             queueEncounterMessage(
               i18next.t("battle:rewardGainCount", { modifierName: berryText, count: numBerriesGrabbed }),
             );

@@ -25,7 +25,7 @@ export class TrainerVictoryPhase extends BattlePhase {
       return this.end();
     }
 
-    globalScene.playBgm(trainer.config.victoryBgm);
+    globalScene.audioManager.playBgm(trainer.config.victoryBgm);
 
     globalScene.unshiftPhase(new MoneyRewardPhase(trainer.config.moneyMultiplier));
 

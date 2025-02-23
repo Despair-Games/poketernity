@@ -137,7 +137,6 @@ import type { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerVariant } from "#enums/trainer-variant";
 import i18next from "i18next";
 import Phaser from "phaser";
-import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import type UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
 import type { ModifierPredicate } from "./@types/ModifierPredicate";
 import type { PokemonSpeciesFilter } from "./@types/PokemonSpeciesFilter";
@@ -150,11 +149,9 @@ import {
   ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET,
   ME_BASE_SPAWN_WEIGHT,
   ME_MAX_SPAWN_WEIGHT,
-  PRSFX_SOUND_ADJUSTMENT_RATIO,
 } from "./constants";
 import { applyAbAttrs } from "./data/apply-ab-attrs";
 import { allTrainerConfigs } from "./data/balance/trainer-configs/all-trainer-configs";
-import { bgmLoopPoint } from "./data/bgm-loop-point";
 import { initCommonAnims } from "./data/init-common-anims";
 import { initMoveAnim } from "./data/init-move-anim";
 import { populateAnims } from "./data/populate-anims";
@@ -188,14 +185,13 @@ import { getModifierPoolForType } from "./utils/modifier-pool-utils";
 import { getModifierType } from "./utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "./utils/move-anim-utils";
 import { getPokemonSpecies } from "./utils/pokemon-species-utils";
+import { AudioManager } from "./audioManager";
 
 //#region Types
 
 export interface PokeballCounts {
   [pb: string]: number;
 }
-
-export type AnySound = Phaser.Sound.WebAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.NoAudioSound;
 
 export interface InfoToggle {
   toggleInfo(force?: boolean): void;
@@ -332,9 +328,8 @@ export default class BattleScene extends SceneBase {
   public fieldSpritePipeline: FieldSpritePipeline;
   public spritePipeline: SpritePipeline;
 
-  private bgm: AnySound;
-  private bgmResumeTimer: Phaser.Time.TimerEvent | null;
-  private bgmCache: Set<string> = new Set();
+  public audioManager: AudioManager;
+
   private playTimeTimer: Phaser.Time.TimerEvent;
 
   public rngCounter: number = 0;
@@ -370,6 +365,7 @@ export default class BattleScene extends SceneBase {
     this.eventManager = new TimedEventManager();
     this.updateGameInfo();
     this.animations = new Animation(this);
+    this.audioManager = new AudioManager(this);
     initGlobalScene(this);
     this.initSettingsEventListeners();
   }
@@ -380,7 +376,7 @@ export default class BattleScene extends SceneBase {
     eventBus.on("settings/updated", ({ key, value }: SettingsUpdateEventArgs) => {
       if (updateSoundKeys.includes(key)) {
         //TODO: check if the effective volume changed to optimize
-        this.updateSoundVolume();
+        this.audioManager.updateSoundVolume();
       }
 
       if (key === "enableTouchControls") {
@@ -1234,7 +1230,7 @@ export default class BattleScene extends SceneBase {
       // Reload variant data in case sprite set has changed
       this.initVariantData();
 
-      this.fadeOutBgm(250, false);
+      this.audioManager.fadeOutBgm(250, false);
       this.tweens.add({
         targets: [this.uiContainer],
         alpha: 0,
@@ -2052,197 +2048,6 @@ export default class BattleScene extends SceneBase {
     return biomes[randSeedInt(biomes.length)];
   }
 
-  isBgmPlaying(): boolean {
-    return this.bgm && this.bgm.isPlaying;
-  }
-
-  playBgm(bgmName?: string, fadeOut?: boolean): void {
-    if (bgmName === undefined) {
-      bgmName = this.currentBattle?.getBgmOverride() || this.arena?.bgm;
-    }
-    if (this.bgm && bgmName === this.bgm.key) {
-      if (!this.bgm.isPlaying) {
-        this.bgm.play({
-          volume: settings.effectiveBgmVolume,
-        });
-      }
-      return;
-    }
-    if (fadeOut && !this.bgm) {
-      fadeOut = false;
-    }
-    this.bgmCache.add(bgmName);
-    this.loadBgm(bgmName);
-    let loopPoint = 0;
-    loopPoint = bgmName === this.arena.bgm ? this.arena.getBgmLoopPoint() : this.getBgmLoopPoint(bgmName);
-    let loaded = false;
-    const playNewBgm = () => {
-      this.ui.bgmBar.setBgmToBgmBar(bgmName);
-      if (bgmName === null && this.bgm && !this.bgm.pendingRemove) {
-        this.bgm.play({
-          volume: settings.effectiveBgmVolume,
-        });
-        return;
-      }
-      if (this.bgm && !this.bgm.pendingRemove && this.bgm.isPlaying) {
-        this.bgm.stop();
-      }
-      this.bgm = this.sound.add(bgmName, { loop: true });
-      this.bgm.play({
-        volume: settings.effectiveBgmVolume,
-      });
-      if (loopPoint) {
-        this.bgm.on("looped", () => this.bgm.play({ seek: loopPoint }));
-      }
-    };
-    this.load.once(Phaser.Loader.Events.COMPLETE, () => {
-      loaded = true;
-      if (!fadeOut || !this.bgm.isPlaying) {
-        playNewBgm();
-      }
-    });
-    if (fadeOut) {
-      const onBgmFaded = () => {
-        if (loaded && (!this.bgm.isPlaying || this.bgm.pendingRemove)) {
-          playNewBgm();
-        }
-      };
-      this.time.delayedCall(this.fadeOutBgm(500, true) ? 750 : 250, onBgmFaded);
-    }
-    if (!this.load.isLoading()) {
-      this.load.start();
-    }
-  }
-
-  pauseBgm(): boolean {
-    if (this.bgm && !this.bgm.pendingRemove && this.bgm.isPlaying) {
-      this.bgm.pause();
-      return true;
-    }
-    return false;
-  }
-
-  resumeBgm(): boolean {
-    if (this.bgm && !this.bgm.pendingRemove && this.bgm.isPaused) {
-      this.bgm.resume();
-      return true;
-    }
-    return false;
-  }
-
-  updateSoundVolume(): void {
-    if (this.sound) {
-      for (const sound of this.sound.getAllPlaying() as AnySound[]) {
-        if (this.bgmCache.has(sound.key)) {
-          sound.setVolume(settings.effectiveBgmVolume);
-        } else {
-          const soundDetails = sound.key.split("/");
-          switch (soundDetails[0]) {
-            case "battle_anims":
-            case "cry":
-              if (soundDetails[1].startsWith("PRSFX- ")) {
-                sound.setVolume(settings.effectiveFieldVolume * PRSFX_SOUND_ADJUSTMENT_RATIO);
-              } else {
-                sound.setVolume(settings.effectiveFieldVolume);
-              }
-              break;
-            case "se":
-            case "ui":
-              sound.setVolume(settings.effectiveSoundEffectsVolume);
-          }
-        }
-      }
-    }
-  }
-
-  fadeOutBgm(duration: number = 500, destroy: boolean = true): boolean {
-    if (!this.bgm) {
-      return false;
-    }
-    const bgm = this.sound.getAllPlaying().find((bgm) => bgm.key === this.bgm.key);
-    if (bgm) {
-      SoundFade.fadeOut(this, this.bgm, duration, destroy);
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
-   * Fades out current track for `delay` ms, then fades in new track.
-   * @param newBgmKey
-   * @param destroy
-   * @param delay
-   */
-  fadeAndSwitchBgm(newBgmKey: string, destroy: boolean = false, delay: number = 2000) {
-    this.fadeOutBgm(delay, destroy);
-    this.time.delayedCall(delay, () => {
-      this.playBgm(newBgmKey);
-    });
-  }
-
-  playSound(sound: string | AnySound, config?: object): AnySound {
-    const key = typeof sound === "string" ? sound : sound.key;
-    config = config ?? {};
-    try {
-      const keyDetails = key.split("/");
-      config["volume"] = config["volume"] ?? 1;
-      switch (keyDetails[0]) {
-        case "level_up_fanfare":
-        case "item_fanfare":
-        case "minor_fanfare":
-        case "heal":
-        case "evolution":
-        case "evolution_fanfare":
-          // These sounds are loaded in as BGM, but played as sound effects
-          // When these sounds are updated in updateVolume(), they are treated as BGM however because they are placed in the BGM Cache through being called by playSoundWithoutBGM()
-          config["volume"] *= settings.effectiveBgmVolume;
-          break;
-        case "battle_anims":
-        case "cry":
-          config["volume"] *= settings.effectiveFieldVolume;
-          //PRSFX sound files are unusually loud
-          if (keyDetails[1].startsWith("PRSFX- ")) {
-            config["volume"] *= PRSFX_SOUND_ADJUSTMENT_RATIO;
-          }
-          break;
-        case "ui":
-          //As of, right now this applies to the "select", "menu_open", "error" sound effects
-          config["volume"] *= settings.effectiveUiVolume;
-          break;
-        case "se":
-          config["volume"] *= settings.effectiveSoundEffectsVolume;
-          break;
-      }
-      this.sound.play(key, config);
-      return this.sound.get(key) as AnySound;
-    } catch {
-      console.log(`${key} not found`);
-      return sound as AnySound;
-    }
-  }
-
-  playSoundWithoutBgm(soundName: string, pauseDuration?: number): AnySound {
-    this.bgmCache.add(soundName);
-    const resumeBgm = this.pauseBgm();
-    this.playSound(soundName);
-    const sound = this.sound.get(soundName) as AnySound;
-    if (this.bgmResumeTimer) {
-      this.bgmResumeTimer.destroy();
-    }
-    if (resumeBgm) {
-      this.bgmResumeTimer = this.time.delayedCall(pauseDuration || fixedNumber(sound.totalDuration * 1000), () => {
-        this.resumeBgm();
-        this.bgmResumeTimer = null;
-      });
-    }
-    return sound;
-  }
-
-  getBgmLoopPoint(bgmName: string): number {
-    return bgmLoopPoint[bgmName] ?? 0;
-  }
-
   toggleInvert(invert: boolean): void {
     if (invert) {
       this.cameras.main.setPostPipeline(InvertPostFX);
@@ -2577,7 +2382,7 @@ export default class BattleScene extends SceneBase {
           }
         }
         if (playSound && !this.sound.get(soundName)) {
-          this.playSound(soundName);
+          this.audioManager.playSound(soundName);
         }
       } else if (!virtual) {
         const defaultModifierType = getDefaultModifierTypeForTier(modifier.type.tier);
@@ -2598,7 +2403,7 @@ export default class BattleScene extends SceneBase {
       }
     } else if (modifier instanceof ConsumableModifier) {
       if (playSound && !this.sound.get(soundName)) {
-        this.playSound(soundName);
+        this.audioManager.playSound(soundName);
       }
 
       if (modifier instanceof ConsumablePokemonModifier) {
@@ -3206,7 +3011,7 @@ export default class BattleScene extends SceneBase {
    */
   initFinalBossPhaseTwo(pokemon: Pokemon): void {
     if (pokemon.isEnemy() && pokemon.isBoss() && !pokemon.formIndex && pokemon.bossSegmentIndex < 1) {
-      this.fadeOutBgm(fixedNumber(2000), false);
+      this.audioManager.fadeOutBgm(fixedNumber(2000), false);
       this.ui.showDialogue(classicFinalBossDialogue.firstStageWin, pokemon.species.name, undefined, () => {
         const finalBossMBH = getModifierType(modifierTypes.MINI_BLACK_HOLE).newModifier(
           pokemon,
