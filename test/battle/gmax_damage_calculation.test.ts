@@ -117,5 +117,8 @@ describe("Battle Mechanics - Damage Calculation", () => {
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("VictoryPhase");
+
+    expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
+    expect(game.scene.getEnemyParty()[0].isFainted()).toBe(true);
   });
 });
