@@ -29,6 +29,7 @@ import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { CommonBattleAnim } from "./battle-anims/common-battle-anim";
 import { type SkyDropTag } from "./battler-tags";
+import { SCREEN_DOUBLES_DMG_FACTOR, SCREEN_SINGLES_DMG_FACTOR } from "#app/constants";
 
 export abstract class ArenaTag {
   constructor(
@@ -215,7 +216,7 @@ export abstract class WeakenMoveScreenTag extends ArenaTag {
       if (bypassed.value) {
         return false;
       }
-      damageMultiplier.value = globalScene.currentBattle.double ? 2732 / 4096 : 0.5;
+      damageMultiplier.value = globalScene.currentBattle.double ? SCREEN_DOUBLES_DMG_FACTOR : SCREEN_SINGLES_DMG_FACTOR;
       return true;
     }
     return false;
