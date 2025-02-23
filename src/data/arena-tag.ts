@@ -1295,7 +1295,7 @@ class FireGrassPledgeTag extends ArenaTag {
       this.side === ArenaTagSide.PLAYER ? globalScene.getPlayerField() : globalScene.getEnemyField();
 
     field
-      .filter((pokemon) => !pokemon.isOfType(ElementalType.FIRE) && !pokemon.switchOutStatus)
+      .filter((pokemon) => pokemon.isActive(true) && !pokemon.isOfType(ElementalType.FIRE) && !pokemon.switchOutStatus)
       .forEach((pokemon) => {
         const cancelled = new BooleanHolder(false);
         applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
@@ -1410,7 +1410,7 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
       this.side === ArenaTagSide.PLAYER ? globalScene.getPlayerField() : globalScene.getEnemyField();
 
     field
-      .filter((pokemon) => !pokemon.isOfType(this.immuneType) && !pokemon.switchOutStatus)
+      .filter((pokemon) => pokemon.isActive(true) && !pokemon.isOfType(this.immuneType) && !pokemon.switchOutStatus)
       .forEach((pokemon) => {
         const cancelled = new BooleanHolder(false);
         applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
