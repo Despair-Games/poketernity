@@ -2906,14 +2906,18 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     /** Reduces damage if this Pokemon has a relevant screen (e.g. Light Screen for special attacks) */
     const screenMultiplier = new NumberHolder(1);
-    globalScene.arena.applyTagsForSide(
-      [...WeakenMoveScreenArenaTagTypes],
-      defendingSide,
-      simulated,
-      source,
-      moveCategory,
-      screenMultiplier,
-    );
+
+    /** Critical hits ignore the damage reduction from screens */
+    if (!isCritical) {
+      globalScene.arena.applyTagsForSide(
+        [...WeakenMoveScreenArenaTagTypes],
+        defendingSide,
+        simulated,
+        source,
+        moveCategory,
+        screenMultiplier,
+      );
+    }
 
     /**
      * For each {@linkcode HitsTagAttr} the move has, doubles the damage of the move if:
