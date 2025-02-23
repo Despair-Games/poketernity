@@ -46,7 +46,7 @@ describe("Abilities - Pastel Veil", () => {
 
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    expect(magikarp.status?.effect).toBeUndefined();
+    expect(magikarp.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
 
   it("it heals the poisoned status condition of allies if user is sent out into battle", async () => {
@@ -61,13 +61,13 @@ describe("Abilities - Pastel Veil", () => {
     game.move.select(MoveId.TOXIC_THREAD, 1, BattlerIndex.PLAYER);
 
     await game.phaseInterceptor.to(TurnEndPhase);
-    expect(magikarp.status?.effect).toBe(StatusEffect.POISON);
+    expect(magikarp.getStatusEffect(true)).toBe(StatusEffect.POISON);
 
     await game.phaseInterceptor.to(CommandPhase);
     game.move.select(MoveId.SPLASH);
     game.doSwitchPokemon(2);
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    expect(magikarp.status?.effect).toBeUndefined();
+    expect(magikarp.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
 });

@@ -53,7 +53,6 @@ export interface DisplaySettings {
   showArenaFlyout: boolean;
   showTimeOfDayWidget: boolean;
   timeOfDayAnimation: EaseType;
-  enableFusionPaletteSwaps: boolean;
   playerGender: PlayerGender;
   enableTypeHints: boolean;
   showBgmBar: boolean;

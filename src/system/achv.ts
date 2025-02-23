@@ -252,7 +252,6 @@ export const achvs = {
   GIGANTAMAX: new Achv("GIGANTAMAX", "dynamax_band", 50),
   TERASTALLIZE: new Achv("TERASTALLIZE", "tera_orb", 25),
   STELLAR_TERASTALLIZE: new Achv("STELLAR_TERASTALLIZE", "stellar_tera_shard", 25).setSecret(true),
-  SPLICE: new Achv("SPLICE", "dna_splicers", 10),
   MINI_BLACK_HOLE: new ModifierAchv("MINI_BLACK_HOLE", "mini_black_hole", 25, (modifier) =>
     modifier.isTurnHeldItemTransferModifier(),
   ).setSecret(),

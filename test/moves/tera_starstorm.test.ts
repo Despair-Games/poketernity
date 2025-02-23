@@ -66,33 +66,4 @@ describe("Moves - Tera Starstorm", () => {
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemyField.every((pokemon) => pokemon.isFullHp())).toBe(false);
   });
-
-  it("applies the effects when Terapagos in Stellar Form is fused with another Pokemon", async () => {
-    await game.classicMode.startBattle([Species.TERAPAGOS, Species.CHARMANDER, Species.MAGIKARP]);
-
-    const fusionedMon = game.scene.getPlayerParty()[0];
-    const magikarp = game.scene.getPlayerParty()[2];
-
-    // Fuse party members (taken from PlayerPokemon.fuse(...) function)
-    fusionedMon.fusionSpecies = magikarp.species;
-    fusionedMon.fusionFormIndex = magikarp.formIndex;
-    fusionedMon.fusionAbilityIndex = magikarp.abilityIndex;
-    fusionedMon.fusionShiny = magikarp.shiny;
-    fusionedMon.fusionVariant = magikarp.variant;
-    fusionedMon.fusionGender = magikarp.gender;
-    fusionedMon.fusionLuck = magikarp.luck;
-
-    vi.spyOn(fusionedMon, "getMoveType");
-
-    game.move.select(MoveId.TERA_STARSTORM, 0);
-    game.move.select(MoveId.SPLASH, 1);
-    await game.toEndOfTurn();
-
-    // Fusion and terastallized
-    expect(fusionedMon.isFusion()).toBe(true);
-    expect(fusionedMon.isTerastallized()).toBe(true);
-    // Move effects should be applied
-    expect(fusionedMon.getMoveType).toHaveReturnedWith(ElementalType.STELLAR);
-    expect(game.scene.getEnemyField().every((pokemon) => pokemon.isFullHp())).toBe(false);
-  });
 });

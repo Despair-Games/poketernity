@@ -31,7 +31,11 @@ export class EffectSporeAbAttr extends PostDefendAbAttr {
       return false;
     }
     const roll = pokemon.randSeedInt(100);
-    if (move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon) && !attacker.status && roll < this.chance) {
+    if (
+      move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
+      && !attacker.hasNonVolatileStatusEffect()
+      && roll < this.chance
+    ) {
       const statusEffect = this.getStatus(roll);
       if (simulated) {
         return attacker.canSetStatus(statusEffect, true, false, pokemon);

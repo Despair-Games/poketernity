@@ -119,3 +119,6 @@ export const IV_MAX = 31;
  * Tweak this value if necessary for balancing purposes
  */
 export const DYNAMAX_DAMAGE_TAKEN_FACTOR = 2 / 3;
+
+/** Custom implementation. Mainline is 0.6. */
+export const FOG_ACCURACY_MULTIPLIER = 0.9;

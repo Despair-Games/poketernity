@@ -46,7 +46,7 @@ describe("Abilities - Poison Touch", () => {
     game.move.select(moveId);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
-    expect(enemyPokemon.status?.effect).toBe(StatusEffect.POISON);
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.POISON);
   }
 
   /**
@@ -56,7 +56,7 @@ describe("Abilities - Poison Touch", () => {
     game.move.select(moveId);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
-    expect(enemyPokemon.status?.effect).toBeUndefined();
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
   }
 
   it("should have a 30% chance of poisoning the target with an attack that makes contact", async () => {
@@ -135,7 +135,7 @@ describe("Abilities - Poison Touch", () => {
     game.move.select(MoveId.DRAINING_KISS);
     await game.toNextTurn();
 
-    expect(enemyPokemon.status?.effect).toBe(StatusEffect.BURN);
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.BURN);
   });
 
   it("should not apply against a target with Shield Dust, unless the contact-making move is Sunsteel Strike", async () => {
