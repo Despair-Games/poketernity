@@ -296,7 +296,8 @@ export function initMoves() {
       .attr(ForceSwitchOutAttr, false, SwitchType.FORCE_SWITCH)
       .ignoresSubstitute()
       .hidesTarget()
-      .windMove(),
+      .windMove()
+      .bounceable(),
     new ChargingAttackMove(MoveId.FLY, ElementalType.FLYING, MoveCategory.PHYSICAL, 90, 95, 15, -1, 0, 1)
       .chargeText(i18next.t("moveTriggers:flewUpHigh", { pokemonName: "{USER}" }))
       .chargeAttr(SemiInvulnerableAttr, BattlerTagType.FLYING)
@@ -329,7 +330,7 @@ export function initMoves() {
       StatStageChangeAttr,
       [Stat.ACC],
       -1,
-    ),
+    ).bounceable(),
     new AttackMove(MoveId.HEADBUTT, ElementalType.NORMAL, MoveCategory.PHYSICAL, 70, 100, 15, 30, 0, 1).attr(
       FlinchAttr,
     ),
@@ -360,6 +361,7 @@ export function initMoves() {
       .recklessMove(),
     new StatusMove(MoveId.TAIL_WHIP, ElementalType.NORMAL, 100, 30, -1, 0, 1)
       .attr(StatStageChangeAttr, [Stat.DEF], -1)
+      .bounceable()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new AttackMove(MoveId.POISON_STING, ElementalType.POISON, MoveCategory.PHYSICAL, 15, 100, 35, 30, 0, 1)
       .attr(StatusEffectAttr, StatusEffect.POISON)
@@ -373,6 +375,7 @@ export function initMoves() {
       .makesContact(false),
     new StatusMove(MoveId.LEER, ElementalType.NORMAL, 100, 30, -1, 0, 1)
       .attr(StatStageChangeAttr, [Stat.DEF], -1)
+      .bounceable()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new AttackMove(MoveId.BITE, ElementalType.DARK, MoveCategory.PHYSICAL, 60, 100, 25, 30, 0, 1)
       .attr(FlinchAttr)
@@ -380,15 +383,21 @@ export function initMoves() {
     new StatusMove(MoveId.GROWL, ElementalType.NORMAL, 100, 40, -1, 0, 1)
       .attr(StatStageChangeAttr, [Stat.ATK], -1)
       .soundMove()
+      .bounceable()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new StatusMove(MoveId.ROAR, ElementalType.NORMAL, -1, 20, -1, -6, 1)
       .attr(ForceSwitchOutAttr, false, SwitchType.FORCE_SWITCH)
       .soundMove()
-      .hidesTarget(),
+      .hidesTarget()
+      .bounceable(),
     new StatusMove(MoveId.SING, ElementalType.NORMAL, 55, 15, -1, 0, 1)
       .attr(StatusEffectAttr, StatusEffect.SLEEP)
-      .soundMove(),
-    new StatusMove(MoveId.SUPERSONIC, ElementalType.NORMAL, 55, 20, -1, 0, 1).attr(ConfuseAttr).soundMove(),
+      .soundMove()
+      .bounceable(),
+    new StatusMove(MoveId.SUPERSONIC, ElementalType.NORMAL, 55, 20, -1, 0, 1)
+      .attr(ConfuseAttr)
+      .soundMove()
+      .bounceable(),
     new AttackMove(MoveId.SONIC_BOOM, ElementalType.NORMAL, MoveCategory.SPECIAL, -1, 90, 20, -1, 0, 1).attr(
       FixedDamageAttr,
       20,
@@ -403,7 +412,8 @@ export function initMoves() {
             .reverse()
             .find((m) => m.move.id !== MoveId.NONE && m.move.id !== MoveId.STRUGGLE && !m.virtual) !== undefined,
       )
-      .ignoresSubstitute(),
+      .ignoresSubstitute()
+      .bounceable(),
     new AttackMove(MoveId.ACID, ElementalType.POISON, MoveCategory.SPECIAL, 40, 100, 30, 10, 0, 1)
       .attr(StatStageChangeAttr, [Stat.SPDEF], -1)
       .target(MoveTarget.ALL_NEAR_ENEMIES),
@@ -474,7 +484,8 @@ export function initMoves() {
       .attr(LeechSeedAttr)
       .condition(
         (_user, target, _move) => !target.getTag(BattlerTagType.SEEDED) && !target.isOfType(ElementalType.GRASS),
-      ),
+      )
+      .bounceable(),
     new SelfStatusMove(MoveId.GROWTH, ElementalType.NORMAL, -1, 20, -1, 0, 1).attr(GrowthStatStageChangeAttr),
     new AttackMove(MoveId.RAZOR_LEAF, ElementalType.GRASS, MoveCategory.PHYSICAL, 55, 95, 25, -1, 0, 1)
       .attr(HighCritAttr)
@@ -488,13 +499,16 @@ export function initMoves() {
       .ignoresVirtual(),
     new StatusMove(MoveId.POISON_POWDER, ElementalType.POISON, 75, 35, -1, 0, 1)
       .attr(StatusEffectAttr, StatusEffect.POISON)
-      .powderMove(),
+      .powderMove()
+      .bounceable(),
     new StatusMove(MoveId.STUN_SPORE, ElementalType.GRASS, 75, 30, -1, 0, 1)
       .attr(StatusEffectAttr, StatusEffect.PARALYSIS)
-      .powderMove(),
+      .powderMove()
+      .bounceable(),
     new StatusMove(MoveId.SLEEP_POWDER, ElementalType.GRASS, 75, 15, -1, 0, 1)
       .attr(StatusEffectAttr, StatusEffect.SLEEP)
-      .powderMove(),
+      .powderMove()
+      .bounceable(),
     new AttackMove(MoveId.PETAL_DANCE, ElementalType.GRASS, MoveCategory.SPECIAL, 120, 100, 10, -1, 0, 1)
       .attr(AddBattlerTagAttr, BattlerTagType.FRENZY, true, { turnCountMin: 2, turnCountMax: 3 })
       .makesContact()
@@ -502,6 +516,7 @@ export function initMoves() {
       .target(MoveTarget.RANDOM_NEAR_ENEMY),
     new StatusMove(MoveId.STRING_SHOT, ElementalType.BUG, 95, 40, -1, 0, 1)
       .attr(StatStageChangeAttr, [Stat.SPD], -2)
+      .bounceable()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new AttackMove(MoveId.DRAGON_RAGE, ElementalType.DRAGON, MoveCategory.SPECIAL, -1, 100, 10, -1, 0, 1).attr(
       FixedDamageAttr,
@@ -521,7 +536,8 @@ export function initMoves() {
     ),
     new StatusMove(MoveId.THUNDER_WAVE, ElementalType.ELECTRIC, 90, 20, -1, 0, 1)
       .attr(StatusEffectAttr, StatusEffect.PARALYSIS)
-      .attr(RespectAttackTypeImmunityAttr),
+      .attr(RespectAttackTypeImmunityAttr)
+      .bounceable(),
     new AttackMove(MoveId.THUNDER, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 110, 70, 10, 30, 0, 1)
       .attr(StatusEffectAttr, StatusEffect.PARALYSIS)
       .attr(ThunderAccuracyAttr)
@@ -548,7 +564,8 @@ export function initMoves() {
       .ignoresVirtual(),
     new StatusMove(MoveId.TOXIC, ElementalType.POISON, 90, 10, -1, 0, 1)
       .attr(StatusEffectAttr, StatusEffect.TOXIC)
-      .attr(ToxicAccuracyAttr),
+      .attr(ToxicAccuracyAttr)
+      .bounceable(),
     new AttackMove(MoveId.CONFUSION, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 50, 100, 25, 10, 0, 1).attr(
       ConfuseAttr,
     ),
@@ -563,7 +580,7 @@ export function initMoves() {
       [Stat.ATK],
       1,
       true,
-    ),
+    ).bounceable(),
     new SelfStatusMove(MoveId.AGILITY, ElementalType.PSYCHIC, -1, 30, -1, 0, 1).attr(
       StatStageChangeAttr,
       [Stat.SPD],
@@ -584,7 +601,8 @@ export function initMoves() {
       .ignoresVirtual(),
     new StatusMove(MoveId.SCREECH, ElementalType.NORMAL, 85, 40, -1, 0, 1)
       .attr(StatStageChangeAttr, [Stat.DEF], -2)
-      .soundMove(),
+      .soundMove()
+      .bounceable(),
     new SelfStatusMove(MoveId.DOUBLE_TEAM, ElementalType.NORMAL, -1, 15, -1, 0, 1).attr(
       StatStageChangeAttr,
       [Stat.EVA],
@@ -605,8 +623,10 @@ export function initMoves() {
       StatStageChangeAttr,
       [Stat.ACC],
       -1,
-    ),
-    new StatusMove(MoveId.CONFUSE_RAY, ElementalType.GHOST, 100, 10, -1, 0, 1).attr(ConfuseAttr),
+    ).bounceable(),
+    new StatusMove(MoveId.CONFUSE_RAY, ElementalType.GHOST, 100, 10, -1, 0, 1)
+      .attr(ConfuseAttr)
+      .bounceable(),
     new SelfStatusMove(MoveId.WITHDRAW, ElementalType.WATER, -1, 40, -1, 0, 1).attr(
       StatStageChangeAttr,
       [Stat.DEF],
@@ -702,7 +722,9 @@ export function initMoves() {
       2,
       true,
     ),
-    new StatusMove(MoveId.KINESIS, ElementalType.PSYCHIC, 80, 15, -1, 0, 1).attr(StatStageChangeAttr, [Stat.ACC], -1),
+    new StatusMove(MoveId.KINESIS, ElementalType.PSYCHIC, 80, 15, -1, 0, 1)
+      .attr(StatStageChangeAttr, [Stat.ACC], -1)
+      .bounceable(),
     new SelfStatusMove(MoveId.SOFT_BOILED, ElementalType.NORMAL, -1, 5, -1, 0, 1).attr(HealAttr, 0.5).triageMove(),
     new AttackMove(MoveId.HIGH_JUMP_KICK, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 130, 90, 10, -1, 0, 1)
       .attr(MissEffectAttr, crashDamageFunc)
@@ -712,13 +734,14 @@ export function initMoves() {
     new StatusMove(MoveId.GLARE, ElementalType.NORMAL, 100, 30, -1, 0, 1).attr(
       StatusEffectAttr,
       StatusEffect.PARALYSIS,
-    ),
+    ).bounceable(),
     new AttackMove(MoveId.DREAM_EATER, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 100, 100, 15, -1, 0, 1)
       .attr(HitHealAttr)
       .condition(targetSleptOrComatoseCondition)
       .triageMove(),
     new StatusMove(MoveId.POISON_GAS, ElementalType.POISON, 90, 40, -1, 0, 1)
       .attr(StatusEffectAttr, StatusEffect.POISON)
+      .bounceable()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new AttackMove(MoveId.BARRAGE, ElementalType.NORMAL, MoveCategory.PHYSICAL, 15, 85, 20, -1, 0, 1)
       .attr(MultiHitAttr)
@@ -730,7 +753,7 @@ export function initMoves() {
     new StatusMove(MoveId.LOVELY_KISS, ElementalType.NORMAL, 75, 10, -1, 0, 1).attr(
       StatusEffectAttr,
       StatusEffect.SLEEP,
-    ),
+    ).bounceable(),
     new ChargingAttackMove(MoveId.SKY_ATTACK, ElementalType.FLYING, MoveCategory.PHYSICAL, 140, 90, 5, 30, 0, 1)
       .chargeText(i18next.t("moveTriggers:isGlowing", { pokemonName: "{USER}" }))
       .attr(HighCritAttr)
@@ -749,8 +772,11 @@ export function initMoves() {
       .punchingMove(),
     new StatusMove(MoveId.SPORE, ElementalType.GRASS, 100, 15, -1, 0, 1)
       .attr(StatusEffectAttr, StatusEffect.SLEEP)
-      .powderMove(),
-    new StatusMove(MoveId.FLASH, ElementalType.NORMAL, 100, 20, -1, 0, 1).attr(StatStageChangeAttr, [Stat.ACC], -1),
+      .powderMove()
+      .bounceable(),
+    new StatusMove(MoveId.FLASH, ElementalType.NORMAL, 100, 20, -1, 0, 1)
+      .attr(StatStageChangeAttr, [Stat.ACC], -1)
+      .bounceable(),
     new AttackMove(MoveId.PSYWAVE, ElementalType.PSYCHIC, MoveCategory.SPECIAL, -1, 100, 15, -1, 0, 1).attr(
       RandomLevelDamageAttr,
     ),
@@ -827,7 +853,8 @@ export function initMoves() {
     new StatusMove(MoveId.SPIDER_WEB, ElementalType.BUG, -1, 10, -1, 0, 2)
       .condition(failIfGhostTypeCondition)
       .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED, false, { failOnOverlap: true })
-      .ignoresProtect(),
+      .ignoresProtect()
+      .bounceable(),
     new StatusMove(MoveId.MIND_READER, ElementalType.NORMAL, -1, 5, -1, 0, 2).attr(IgnoreAccuracyAttr),
     new StatusMove(MoveId.NIGHTMARE, ElementalType.GHOST, 100, 15, -1, 0, 2)
       .attr(AddBattlerTagAttr, BattlerTagType.NIGHTMARE)
@@ -857,11 +884,15 @@ export function initMoves() {
     new StatusMove(MoveId.COTTON_SPORE, ElementalType.GRASS, 100, 40, -1, 0, 2)
       .attr(StatStageChangeAttr, [Stat.SPD], -2)
       .powderMove()
+      .bounceable()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new AttackMove(MoveId.REVERSAL, ElementalType.FIGHTING, MoveCategory.PHYSICAL, -1, 100, 15, -1, 0, 2).attr(
       LowHpPowerAttr,
     ),
-    new StatusMove(MoveId.SPITE, ElementalType.GHOST, 100, 10, -1, 0, 2).ignoresSubstitute().attr(ReducePpMoveAttr, 4),
+    new StatusMove(MoveId.SPITE, ElementalType.GHOST, 100, 10, -1, 0, 2)
+      .attr(ReducePpMoveAttr, 4)
+      .ignoresSubstitute()
+      .bounceable(),
     new AttackMove(MoveId.POWDER_SNOW, ElementalType.ICE, MoveCategory.SPECIAL, 40, 100, 25, 10, 0, 2)
       .attr(StatusEffectAttr, StatusEffect.FREEZE)
       .target(MoveTarget.ALL_NEAR_ENEMIES),
@@ -883,9 +914,11 @@ export function initMoves() {
       StatStageChangeAttr,
       [Stat.SPD],
       -2,
-    ),
+    ).bounceable(),
     new AttackMove(MoveId.FEINT_ATTACK, ElementalType.DARK, MoveCategory.PHYSICAL, 60, -1, 20, -1, 0, 2),
-    new StatusMove(MoveId.SWEET_KISS, ElementalType.FAIRY, 75, 10, -1, 0, 2).attr(ConfuseAttr),
+    new StatusMove(MoveId.SWEET_KISS, ElementalType.FAIRY, 75, 10, -1, 0, 2)
+      .attr(ConfuseAttr)
+      .bounceable(),
     new SelfStatusMove(MoveId.BELLY_DRUM, ElementalType.NORMAL, -1, 10, -1, 0, 2).attr(
       CutHpStatStageBoostAttr,
       [Stat.ATK],
@@ -913,13 +946,15 @@ export function initMoves() {
       .bulletMove(),
     new StatusMove(MoveId.SPIKES, ElementalType.GROUND, -1, 20, -1, 0, 2)
       .attr(AddEntryHazardTagAttr, ArenaTagType.SPIKES)
+      .bounceable()
       .target(MoveTarget.ENEMY_SIDE),
     new AttackMove(MoveId.ZAP_CANNON, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 120, 50, 5, 100, 0, 2)
       .attr(StatusEffectAttr, StatusEffect.PARALYSIS)
       .bulletMove(),
     new StatusMove(MoveId.FORESIGHT, ElementalType.NORMAL, -1, 40, -1, 0, 2)
       .attr(ExposedMoveAttr, BattlerTagType.IGNORE_GHOST)
-      .ignoresSubstitute(),
+      .ignoresSubstitute()
+      .bounceable(),
     new SelfStatusMove(MoveId.DESTINY_BOND, ElementalType.GHOST, -1, 5, -1, 0, 2)
       .ignoresProtect()
       .attr(DestinyBondAttr)
@@ -965,7 +1000,9 @@ export function initMoves() {
     new SelfStatusMove(MoveId.ENDURE, ElementalType.NORMAL, -1, 10, -1, 4, 2)
       .attr(ProtectAttr, BattlerTagType.ENDURING)
       .condition(failIfLastCondition),
-    new StatusMove(MoveId.CHARM, ElementalType.FAIRY, 100, 20, -1, 0, 2).attr(StatStageChangeAttr, [Stat.ATK], -2),
+    new StatusMove(MoveId.CHARM, ElementalType.FAIRY, 100, 20, -1, 0, 2)
+      .attr(StatStageChangeAttr, [Stat.ATK], -2)
+      .bounceable(),
     new AttackMove(MoveId.ROLLOUT, ElementalType.ROCK, MoveCategory.PHYSICAL, 30, 90, 20, -1, 0, 2)
       .partial() // Does not lock the user, also does not increase damage properly
       .attr(ConsecutiveUseDoublePowerAttr, 5, true, true, MoveId.DEFENSE_CURL),
@@ -974,7 +1011,8 @@ export function initMoves() {
     ),
     new StatusMove(MoveId.SWAGGER, ElementalType.NORMAL, 85, 15, -1, 0, 2)
       .attr(StatStageChangeAttr, [Stat.ATK], 2)
-      .attr(ConfuseAttr),
+      .attr(ConfuseAttr)
+      .bounceable(),
     new SelfStatusMove(MoveId.MILK_DRINK, ElementalType.NORMAL, -1, 5, -1, 0, 2).attr(HealAttr, 0.5).triageMove(),
     new AttackMove(MoveId.SPARK, ElementalType.ELECTRIC, MoveCategory.PHYSICAL, 65, 100, 20, 30, 0, 2).attr(
       StatusEffectAttr,
@@ -992,10 +1030,12 @@ export function initMoves() {
     new StatusMove(MoveId.MEAN_LOOK, ElementalType.NORMAL, -1, 5, -1, 0, 2)
       .condition(failIfGhostTypeCondition)
       .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED, false, { failOnOverlap: true })
-      .ignoresProtect(),
+      .ignoresProtect()
+      .bounceable(),
     new StatusMove(MoveId.ATTRACT, ElementalType.NORMAL, 100, 15, -1, 0, 2)
       .attr(AddBattlerTagAttr, BattlerTagType.INFATUATED)
       .ignoresSubstitute()
+      .bounceable()
       .condition((user, target, _move) => user.isOppositeGender(target)),
     new SelfStatusMove(MoveId.SLEEP_TALK, ElementalType.NORMAL, -1, 10, -1, 0, 2)
       .attr(BypassSleepAttr)
@@ -1048,7 +1088,10 @@ export function initMoves() {
       .attr(ForceSwitchOutAttr, true, SwitchType.BATON_PASS)
       .condition(failIfLastInPartyCondition)
       .hidesUser(),
-    new StatusMove(MoveId.ENCORE, ElementalType.NORMAL, 100, 5, -1, 0, 2).attr(EncoreAttr).ignoresSubstitute(),
+    new StatusMove(MoveId.ENCORE, ElementalType.NORMAL, 100, 5, -1, 0, 2)
+      .attr(EncoreAttr)
+      .ignoresSubstitute()
+      .bounceable(),
     new AttackMove(MoveId.PURSUIT, ElementalType.DARK, MoveCategory.PHYSICAL, 40, 100, 20, -1, 0, 2).partial(), // No effect implemented
     new AttackMove(MoveId.RAPID_SPIN, ElementalType.NORMAL, MoveCategory.PHYSICAL, 50, 100, 40, 100, 0, 2)
       .attr(StatStageChangeAttr, [Stat.SPD], 1, true)
@@ -1056,6 +1099,7 @@ export function initMoves() {
       .attr(RemoveEntryHazardAttr),
     new StatusMove(MoveId.SWEET_SCENT, ElementalType.NORMAL, 100, 20, -1, 0, 2)
       .attr(StatStageChangeAttr, [Stat.EVA], -2)
+      .bounceable()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new AttackMove(MoveId.IRON_TAIL, ElementalType.STEEL, MoveCategory.PHYSICAL, 100, 75, 15, 30, 0, 2).attr(
       StatStageChangeAttr,
@@ -1156,13 +1200,15 @@ export function initMoves() {
       .attr(WeatherChangeAttr, WeatherType.HAIL)
       .target(MoveTarget.BOTH_SIDES),
     new StatusMove(MoveId.TORMENT, ElementalType.DARK, 100, 15, -1, 0, 3)
+      .attr(AddBattlerTagAttr, BattlerTagType.TORMENT, false, { failOnOverlap: true })
       .ignoresSubstitute()
-      .edgeCase() // Incomplete implementation because of Uproar's partial implementation
-      .attr(AddBattlerTagAttr, BattlerTagType.TORMENT, false, { failOnOverlap: true }),
+      .bounceable()
+      .edgeCase(), // Incomplete implementation because of Uproar's partial implementation
     new StatusMove(MoveId.FLATTER, ElementalType.DARK, 100, 15, -1, 0, 3)
       .attr(StatStageChangeAttr, [Stat.SPATK], 1)
-      .attr(ConfuseAttr),
-    new StatusMove(MoveId.WILL_O_WISP, ElementalType.FIRE, 85, 15, -1, 0, 3).attr(StatusEffectAttr, StatusEffect.BURN),
+      .attr(ConfuseAttr)
+      .bounceable(),
+    new StatusMove(MoveId.WILL_O_WISP, ElementalType.FIRE, 85, 15, -1, 0, 3).attr(StatusEffectAttr, StatusEffect.BURN).bounceable(),
     new StatusMove(MoveId.MEMENTO, ElementalType.DARK, 100, 10, -1, 0, 3)
       .attr(SacrificialAttr, true)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], -2),
@@ -1193,8 +1239,9 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.SPDEF], 1, true)
       .attr(AddBattlerTagAttr, BattlerTagType.CHARGED, true),
     new StatusMove(MoveId.TAUNT, ElementalType.DARK, 100, 20, -1, 0, 3)
-      .ignoresSubstitute()
-      .attr(AddBattlerTagAttr, BattlerTagType.TAUNT, false, { failOnOverlap: true, turnCountMin: 4 }),
+      .attr(AddBattlerTagAttr, BattlerTagType.TAUNT, false, { failOnOverlap: true, turnCountMin: 4 })
+      .bounceable()
+      .ignoresSubstitute(),
     new StatusMove(MoveId.HELPING_HAND, ElementalType.NORMAL, -1, 20, -1, 5, 3)
       .attr(AddBattlerTagAttr, BattlerTagType.HELPING_HAND)
       .ignoresSubstitute()
@@ -1228,6 +1275,7 @@ export function initMoves() {
     ),
     new StatusMove(MoveId.YAWN, ElementalType.NORMAL, -1, 10, -1, 0, 3)
       .attr(AddBattlerTagAttr, BattlerTagType.DROWSY, false, { failOnOverlap: true })
+      .bounceable()
       .condition((user, target, _move) => !target.hasNonVolatileStatusEffect() && !target.isSafeguarded(user)),
     new AttackMove(MoveId.KNOCK_OFF, ElementalType.DARK, MoveCategory.PHYSICAL, 65, 100, 20, -1, 0, 3)
       .attr(MovePowerMultiplierAttr, (_user, target, _move) =>
@@ -1295,7 +1343,8 @@ export function initMoves() {
       .bulletMove(),
     new StatusMove(MoveId.FEATHER_DANCE, ElementalType.FLYING, 100, 15, -1, 0, 3)
       .attr(StatStageChangeAttr, [Stat.ATK], -2)
-      .danceMove(),
+      .danceMove()
+      .bounceable(),
     new StatusMove(MoveId.TEETER_DANCE, ElementalType.NORMAL, 100, 20, -1, 0, 3)
       .attr(ConfuseAttr)
       .danceMove()
@@ -1362,11 +1411,9 @@ export function initMoves() {
     new StatusMove(MoveId.AROMATHERAPY, ElementalType.GRASS, -1, 5, -1, 0, 3)
       .attr(PartyStatusCureAttr, i18next.t("moveTriggers:soothingAromaWaftedThroughArea"), Abilities.SAP_SIPPER)
       .target(MoveTarget.PARTY),
-    new StatusMove(MoveId.FAKE_TEARS, ElementalType.DARK, 100, 20, -1, 0, 3).attr(
-      StatStageChangeAttr,
-      [Stat.SPDEF],
-      -2,
-    ),
+    new StatusMove(MoveId.FAKE_TEARS, ElementalType.DARK, 100, 20, -1, 0, 3)
+      .attr(StatStageChangeAttr, [Stat.SPDEF], -2)
+      .bounceable(),
     new AttackMove(MoveId.AIR_CUTTER, ElementalType.FLYING, MoveCategory.SPECIAL, 60, 95, 25, -1, 0, 3)
       .attr(HighCritAttr)
       .slicingMove()
@@ -1377,7 +1424,8 @@ export function initMoves() {
       .attr(HealStatusEffectAttr, true, StatusEffect.FREEZE),
     new StatusMove(MoveId.ODOR_SLEUTH, ElementalType.NORMAL, -1, 40, -1, 0, 3)
       .attr(ExposedMoveAttr, BattlerTagType.IGNORE_GHOST)
-      .ignoresSubstitute(),
+      .ignoresSubstitute()
+      .bounceable(),
     new AttackMove(MoveId.ROCK_TOMB, ElementalType.ROCK, MoveCategory.PHYSICAL, 60, 95, 15, 100, 0, 3)
       .attr(StatStageChangeAttr, [Stat.SPD], -1)
       .makesContact(false),
@@ -1386,15 +1434,17 @@ export function initMoves() {
       .windMove(),
     new StatusMove(MoveId.METAL_SOUND, ElementalType.STEEL, 85, 40, -1, 0, 3)
       .attr(StatStageChangeAttr, [Stat.SPDEF], -2)
-      .soundMove(),
+      .soundMove()
+      .bounceable(),
     new StatusMove(MoveId.GRASS_WHISTLE, ElementalType.GRASS, 55, 15, -1, 0, 3)
       .attr(StatusEffectAttr, StatusEffect.SLEEP)
-      .soundMove(),
+      .soundMove()
+      .bounceable(),
     new StatusMove(MoveId.TICKLE, ElementalType.NORMAL, 100, 20, -1, 0, 3).attr(
       StatStageChangeAttr,
       [Stat.ATK, Stat.DEF],
       -1,
-    ),
+    ).bounceable(),
     new SelfStatusMove(MoveId.COSMIC_POWER, ElementalType.PSYCHIC, -1, 20, -1, 0, 3).attr(
       StatStageChangeAttr,
       [Stat.DEF, Stat.SPDEF],
@@ -1450,9 +1500,10 @@ export function initMoves() {
       true,
     ),
     new StatusMove(MoveId.BLOCK, ElementalType.NORMAL, -1, 5, -1, 0, 3)
-      .condition(failIfGhostTypeCondition)
       .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED, false, { failOnOverlap: true })
-      .ignoresProtect(),
+      .ignoresProtect()
+      .bounceable()
+      .condition(failIfGhostTypeCondition),
     new StatusMove(MoveId.HOWL, ElementalType.NORMAL, -1, 40, -1, 0, 3)
       .attr(StatStageChangeAttr, [Stat.ATK], 1)
       .soundMove()
@@ -1539,7 +1590,8 @@ export function initMoves() {
       .edgeCase(), // does not prevent Bounce, Fly, etc. from being selected; only causes the moves to fail.
     new StatusMove(MoveId.MIRACLE_EYE, ElementalType.PSYCHIC, -1, 40, -1, 0, 4)
       .attr(ExposedMoveAttr, BattlerTagType.IGNORE_DARK)
-      .ignoresSubstitute(),
+      .ignoresSubstitute()
+      .bounceable(),
     new AttackMove(MoveId.WAKE_UP_SLAP, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 70, 100, 10, -1, 0, 4)
       .attr(MovePowerMultiplierAttr, (user, target, move) =>
         targetSleptOrComatoseCondition(user, target, move) ? 2 : 1,
@@ -1609,7 +1661,7 @@ export function initMoves() {
       MovePowerMultiplierAttr,
       (_user, target, _move) => (target.turnData.damageTaken > 0 ? 2 : 1),
     ),
-    new StatusMove(MoveId.EMBARGO, ElementalType.DARK, 100, 15, -1, 0, 4).unimplemented(),
+    new StatusMove(MoveId.EMBARGO, ElementalType.DARK, 100, 15, -1, 0, 4).bounceable().unimplemented(),
     new AttackMove(MoveId.FLING, ElementalType.DARK, MoveCategory.PHYSICAL, -1, 100, 10, -1, 0, 4)
       .makesContact(false)
       .unimplemented(),
@@ -1623,7 +1675,8 @@ export function initMoves() {
       .attr(LessPPMorePowerAttr),
     new StatusMove(MoveId.HEAL_BLOCK, ElementalType.PSYCHIC, 100, 15, -1, 0, 4)
       .attr(AddBattlerTagAttr, BattlerTagType.HEAL_BLOCK, false, { failOnOverlap: true, turnCountMin: 5 })
-      .target(MoveTarget.ALL_NEAR_ENEMIES),
+      .target(MoveTarget.ALL_NEAR_ENEMIES)
+      .bounceable(),
     new AttackMove(MoveId.WRING_OUT, ElementalType.NORMAL, MoveCategory.SPECIAL, -1, 100, 5, -1, 0, 4)
       .attr(OpponentHighHpPowerAttr, 120)
       .makesContact(),
@@ -1632,7 +1685,9 @@ export function initMoves() {
       BattlerTagType.POWER_TRICK,
       true,
     ),
-    new StatusMove(MoveId.GASTRO_ACID, ElementalType.POISON, 100, 10, -1, 0, 4).attr(SuppressAbilitiesAttr),
+    new StatusMove(MoveId.GASTRO_ACID, ElementalType.POISON, 100, 10, -1, 0, 4)
+      .attr(SuppressAbilitiesAttr)
+      .bounceable(),
     new StatusMove(MoveId.LUCKY_CHANT, ElementalType.NORMAL, -1, 30, -1, 0, 4)
       .attr(AddArenaTagAttr, ArenaTagType.NO_CRIT, ArenaTagRelativeSide.USER, { turnCount: 5, failOnOverlap: true })
       .target(MoveTarget.USER_SIDE),
@@ -1657,7 +1712,7 @@ export function initMoves() {
     new StatusMove(MoveId.WORRY_SEED, ElementalType.GRASS, 100, 10, -1, 0, 4).attr(
       AbilityChangeAttr,
       Abilities.INSOMNIA,
-    ),
+    ).bounceable(),
     new AttackMove(MoveId.SUCKER_PUNCH, ElementalType.DARK, MoveCategory.PHYSICAL, 70, 100, 5, -1, 1, 4).condition(
       (_user, target, _move) => {
         const turnCommand = globalScene.currentBattle.turnCommands[target.getBattlerIndex()];
@@ -1673,6 +1728,7 @@ export function initMoves() {
     ),
     new StatusMove(MoveId.TOXIC_SPIKES, ElementalType.POISON, -1, 20, -1, 0, 4)
       .attr(AddEntryHazardTagAttr, ArenaTagType.TOXIC_SPIKES)
+      .bounceable()
       .target(MoveTarget.ENEMY_SIDE),
     new StatusMove(MoveId.HEART_SWAP, ElementalType.PSYCHIC, -1, 10, -1, 0, 4)
       .attr(SwapStatStagesAttr, BATTLE_STATS)
@@ -1828,7 +1884,8 @@ export function initMoves() {
       .attr(ClearTerrainAttr)
       .attr(RemoveScreensAttr, false)
       .attr(RemoveEntryHazardAttr, true)
-      .attr(RemoveArenaTagsAttr, [ArenaTagType.SAFEGUARD, ArenaTagType.MIST], ArenaTagRelativeSide.TARGET),
+      .attr(RemoveArenaTagsAttr, [ArenaTagType.SAFEGUARD, ArenaTagType.MIST], ArenaTagRelativeSide.TARGET)
+      .bounceable(),
     new StatusMove(MoveId.TRICK_ROOM, ElementalType.PSYCHIC, -1, 5, -1, -7, 4)
       .attr(AddArenaTagAttr, ArenaTagType.TRICK_ROOM, ArenaTagRelativeSide.ALL, { turnCount: 5 })
       .ignoresProtect()
@@ -1874,10 +1931,12 @@ export function initMoves() {
       .makesContact(false),
     new StatusMove(MoveId.CAPTIVATE, ElementalType.NORMAL, 100, 20, -1, 0, 4)
       .attr(CaptivateAttr)
+      .bounceable()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new StatusMove(MoveId.STEALTH_ROCK, ElementalType.ROCK, -1, 20, -1, 0, 4)
       .attr(AddEntryHazardTagAttr, ArenaTagType.STEALTH_ROCK)
-      .target(MoveTarget.ENEMY_SIDE),
+      .target(MoveTarget.ENEMY_SIDE)
+      .bounceable(),
     new AttackMove(MoveId.GRASS_KNOT, ElementalType.GRASS, MoveCategory.SPECIAL, -1, 100, 20, -1, 0, 4)
       .condition(failOnMaxCondition)
       .attr(WeightPowerAttr)
@@ -1939,6 +1998,7 @@ export function initMoves() {
     ),
     new StatusMove(MoveId.DARK_VOID, ElementalType.DARK, 80, 10, -1, 0, 4) //Accuracy from Generations 4-6
       .attr(StatusEffectAttr, StatusEffect.SLEEP)
+      .bounceable()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new AttackMove(MoveId.SEED_FLARE, ElementalType.GRASS, MoveCategory.SPECIAL, 120, 85, 5, 40, 0, 4).attr(
       StatStageChangeAttr,
@@ -2014,7 +2074,8 @@ export function initMoves() {
           && isNullOrUndefined(target.getTag(BattlerTagType.IGNORE_FLYING)),
       )
       .attr(AddBattlerTagAttr, BattlerTagType.TELEKINESIS, false, { failOnOverlap: true, turnCountMin: 3 })
-      .attr(AddBattlerTagAttr, BattlerTagType.FLOATING, false, { failOnOverlap: true, turnCountMin: 3 }),
+      .attr(AddBattlerTagAttr, BattlerTagType.FLOATING, false, { failOnOverlap: true, turnCountMin: 3 })
+      .bounceable(),
     new StatusMove(MoveId.MAGIC_ROOM, ElementalType.PSYCHIC, -1, 10, -1, 0, 5)
       .ignoresProtect()
       .target(MoveTarget.BOTH_SIDES)
@@ -2051,7 +2112,9 @@ export function initMoves() {
     new AttackMove(MoveId.ELECTRO_BALL, ElementalType.ELECTRIC, MoveCategory.SPECIAL, -1, 100, 10, -1, 0, 5)
       .attr(ElectroBallPowerAttr)
       .bulletMove(),
-    new StatusMove(MoveId.SOAK, ElementalType.WATER, 100, 20, -1, 0, 5).attr(ChangeTypeAttr, ElementalType.WATER),
+    new StatusMove(MoveId.SOAK, ElementalType.WATER, 100, 20, -1, 0, 5)
+      .attr(ChangeTypeAttr, ElementalType.WATER)
+      .bounceable(),
     new AttackMove(MoveId.FLAME_CHARGE, ElementalType.FIRE, MoveCategory.PHYSICAL, 50, 100, 20, 100, 0, 5).attr(
       StatStageChangeAttr,
       [Stat.SPD],
@@ -2078,10 +2141,11 @@ export function initMoves() {
     new StatusMove(MoveId.SIMPLE_BEAM, ElementalType.NORMAL, 100, 15, -1, 0, 5).attr(
       AbilityChangeAttr,
       Abilities.SIMPLE,
-    ),
+    ).bounceable(),
     new StatusMove(MoveId.ENTRAINMENT, ElementalType.NORMAL, 100, 15, -1, 0, 5)
       .condition(failOnMaxCondition)
-      .attr(AbilityGiveAttr),
+      .attr(AbilityGiveAttr)
+      .bounceable(),
     new StatusMove(MoveId.AFTER_YOU, ElementalType.NORMAL, -1, 15, -1, 0, 5)
       .ignoresProtect()
       .ignoresSubstitute()
@@ -2121,7 +2185,8 @@ export function initMoves() {
     new StatusMove(MoveId.HEAL_PULSE, ElementalType.PSYCHIC, -1, 10, -1, 0, 5)
       .attr(HealAttr, 0.5, false, false)
       .pulseMove()
-      .triageMove(),
+      .triageMove()
+      .bounceable(),
     new AttackMove(MoveId.HEX, ElementalType.GHOST, MoveCategory.SPECIAL, 65, 100, 10, -1, 0, 5).attr(
       MovePowerMultiplierAttr,
       (_user, target, _move) => (target.hasNonVolatileStatusEffect() ? 2 : 1),
@@ -2382,6 +2447,7 @@ export function initMoves() {
       }),
     new StatusMove(MoveId.STICKY_WEB, ElementalType.BUG, -1, 20, -1, 0, 6)
       .attr(AddEntryHazardTagAttr, ArenaTagType.STICKY_WEB)
+      .bounceable()
       .target(MoveTarget.ENEMY_SIDE),
     new AttackMove(MoveId.FELL_STINGER, ElementalType.BUG, MoveCategory.PHYSICAL, 50, 100, 25, -1, 0, 6).attr(
       PostVictoryStatStageChangeAttr,
@@ -2397,10 +2463,11 @@ export function initMoves() {
     new StatusMove(MoveId.TRICK_OR_TREAT, ElementalType.GHOST, 100, 20, -1, 0, 6).attr(
       AddTypeAttr,
       ElementalType.GHOST,
-    ),
+    ).bounceable(),
     new StatusMove(MoveId.NOBLE_ROAR, ElementalType.NORMAL, 100, 30, -1, 0, 6)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], -1)
-      .soundMove(),
+      .soundMove()
+      .bounceable(),
     new StatusMove(MoveId.ION_DELUGE, ElementalType.ELECTRIC, -1, 25, -1, 1, 6)
       .attr(AddArenaTagAttr, ArenaTagType.ION_DELUGE, ArenaTagRelativeSide.ALL, { turnCount: 1 })
       .target(MoveTarget.BOTH_SIDES),
@@ -2408,7 +2475,9 @@ export function initMoves() {
       .attr(HitHealAttr)
       .target(MoveTarget.ALL_NEAR_OTHERS)
       .triageMove(),
-    new StatusMove(MoveId.FORESTS_CURSE, ElementalType.GRASS, 100, 20, -1, 0, 6).attr(AddTypeAttr, ElementalType.GRASS),
+    new StatusMove(MoveId.FORESTS_CURSE, ElementalType.GRASS, 100, 20, -1, 0, 6)
+      .attr(AddTypeAttr, ElementalType.GRASS)
+      .bounceable(),
     new AttackMove(MoveId.PETAL_BLIZZARD, ElementalType.GRASS, MoveCategory.PHYSICAL, 90, 100, 15, -1, 0, 6)
       .windMove()
       .makesContact(false)
@@ -2422,8 +2491,9 @@ export function initMoves() {
     new StatusMove(MoveId.PARTING_SHOT, ElementalType.DARK, 100, 20, -1, 0, 6)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], -1, false, { trigger: MoveEffectTrigger.PRE_APPLY })
       .attr(ForceSwitchOutAttr, true)
-      .soundMove(),
-    new StatusMove(MoveId.TOPSY_TURVY, ElementalType.DARK, -1, 20, -1, 0, 6).attr(InvertStatsAttr),
+      .soundMove()
+      .bounceable(),
+    new StatusMove(MoveId.TOPSY_TURVY, ElementalType.DARK, -1, 20, -1, 0, 6).attr(InvertStatsAttr).bounceable(),
     new AttackMove(MoveId.DRAINING_KISS, ElementalType.FAIRY, MoveCategory.SPECIAL, 50, 100, 10, -1, 0, 6)
       .attr(HitHealAttr, 0.75)
       .makesContact()
@@ -2477,10 +2547,12 @@ export function initMoves() {
       .condition(failIfLastCondition),
     new StatusMove(MoveId.PLAY_NICE, ElementalType.NORMAL, -1, 20, -1, 0, 6)
       .attr(StatStageChangeAttr, [Stat.ATK], -1)
-      .ignoresSubstitute(),
+      .ignoresSubstitute()
+      .bounceable(),
     new StatusMove(MoveId.CONFIDE, ElementalType.NORMAL, -1, 20, -1, 0, 6)
       .attr(StatStageChangeAttr, [Stat.SPATK], -1)
-      .soundMove(),
+      .soundMove()
+      .bounceable(),
     new AttackMove(MoveId.DIAMOND_STORM, ElementalType.ROCK, MoveCategory.PHYSICAL, 100, 95, 5, 50, 0, 6)
       .attr(StatStageChangeAttr, [Stat.DEF], 2, true, { firstTargetOnly: true })
       .makesContact(false)
@@ -2509,20 +2581,20 @@ export function initMoves() {
       .ignoresSubstitute()
       .condition(failIfSingleBattle)
       .target(MoveTarget.NEAR_ALLY),
-    new StatusMove(MoveId.EERIE_IMPULSE, ElementalType.ELECTRIC, 100, 15, -1, 0, 6).attr(
-      StatStageChangeAttr,
-      [Stat.SPATK],
-      -2,
-    ),
+    new StatusMove(MoveId.EERIE_IMPULSE, ElementalType.ELECTRIC, 100, 15, -1, 0, 6)
+      .attr(StatStageChangeAttr, [Stat.SPATK], -2)
+      .bounceable(),
     new StatusMove(MoveId.VENOM_DRENCH, ElementalType.POISON, 100, 20, -1, 0, 6)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK, Stat.SPD], -1, false, {
         condition: (_user, target, _move) => target.hasStatusEffect([StatusEffect.POISON, StatusEffect.TOXIC]),
       })
+      .bounceable()
       .target(MoveTarget.ALL_NEAR_ENEMIES),
     new StatusMove(MoveId.POWDER, ElementalType.BUG, 100, 20, -1, 1, 6)
       .attr(AddBattlerTagAttr, BattlerTagType.POWDER, false, { failOnOverlap: true })
       .ignoresSubstitute()
-      .powderMove(),
+      .powderMove()
+      .bounceable(),
     new ChargingSelfStatusMove(MoveId.GEOMANCY, ElementalType.FAIRY, -1, 10, -1, 0, 6)
       .chargeText(i18next.t("moveTriggers:isChargingPower", { pokemonName: "{USER}" }))
       .attr(StatStageChangeAttr, [Stat.SPATK, Stat.SPDEF, Stat.SPD], 2, true)
@@ -2560,11 +2632,9 @@ export function initMoves() {
       )
       .ignoresSubstitute()
       .target(MoveTarget.NEAR_ALLY),
-    new StatusMove(MoveId.BABY_DOLL_EYES, ElementalType.FAIRY, 100, 30, -1, 1, 6).attr(
-      StatStageChangeAttr,
-      [Stat.ATK],
-      -1,
-    ),
+    new StatusMove(MoveId.BABY_DOLL_EYES, ElementalType.FAIRY, 100, 30, -1, 1, 6)
+      .attr(StatStageChangeAttr, [Stat.ATK], -1)
+      .bounceable(),
     new AttackMove(MoveId.NUZZLE, ElementalType.ELECTRIC, MoveCategory.PHYSICAL, 20, 100, 20, 100, 0, 6).attr(
       StatusEffectAttr,
       StatusEffect.PARALYSIS,
@@ -2806,13 +2876,15 @@ export function initMoves() {
       .attr(BoostHealAttr, 0.5, 2 / 3, true, false, (_user, _target, _move) =>
         globalScene.arena.hasTerrain(TerrainType.GRASSY),
       )
-      .triageMove(),
+      .triageMove()
+      .bounceable(),
     new AttackMove(MoveId.HIGH_HORSEPOWER, ElementalType.GROUND, MoveCategory.PHYSICAL, 95, 95, 10, -1, 0, 7),
     new StatusMove(MoveId.STRENGTH_SAP, ElementalType.GRASS, 100, 10, -1, 0, 7)
       .attr(HitHealAttr, null, Stat.ATK)
       .attr(StatStageChangeAttr, [Stat.ATK], -1)
       .condition((_user, target, _move) => target.getStatStage(Stat.ATK) > -6)
-      .triageMove(),
+      .triageMove()
+      .bounceable(),
     new ChargingAttackMove(MoveId.SOLAR_BLADE, ElementalType.GRASS, MoveCategory.PHYSICAL, 125, 100, 10, -1, 0, 7)
       .chargeText(i18next.t("moveTriggers:isGlowing", { pokemonName: "{USER}" }))
       .chargeAttr(WeatherInstantChargeAttr, [WeatherType.SUNNY, WeatherType.HARSH_SUN])
@@ -2823,10 +2895,12 @@ export function initMoves() {
     ),
     new StatusMove(MoveId.SPOTLIGHT, ElementalType.NORMAL, -1, 15, -1, 3, 7)
       .attr(AddBattlerTagAttr, BattlerTagType.CENTER_OF_ATTENTION, false)
+      .bounceable()
       .condition(failIfSingleBattle),
     new StatusMove(MoveId.TOXIC_THREAD, ElementalType.POISON, 100, 20, -1, 0, 7)
       .attr(StatusEffectAttr, StatusEffect.POISON)
-      .attr(StatStageChangeAttr, [Stat.SPD], -1),
+      .attr(StatStageChangeAttr, [Stat.SPD], -1)
+      .bounceable(),
     new SelfStatusMove(MoveId.LASER_FOCUS, ElementalType.NORMAL, -1, 30, -1, 0, 7).attr(
       AddBattlerTagAttr,
       BattlerTagType.ALWAYS_CRIT,
@@ -2897,7 +2971,8 @@ export function initMoves() {
       })
       .attr(HealAttr, 0.5)
       .attr(HealStatusEffectAttr, false, getNonVolatileStatusEffects())
-      .triageMove(),
+      .triageMove()
+      .bounceable(),
     new AttackMove(MoveId.REVELATION_DANCE, ElementalType.NORMAL, MoveCategory.SPECIAL, 90, 100, 15, -1, 0, 7)
       .danceMove()
       .attr(MatchUserTypeAttr),
@@ -3034,7 +3109,7 @@ export function initMoves() {
       StatStageChangeAttr,
       [Stat.ATK, Stat.SPATK],
       -1,
-    ),
+    ).bounceable(),
     new AttackMove(MoveId.ZING_ZAP, ElementalType.ELECTRIC, MoveCategory.PHYSICAL, 80, 100, 10, 30, 0, 7).attr(
       FlinchAttr,
     ),
@@ -3187,10 +3262,12 @@ export function initMoves() {
       .condition((user, _target, _move) => user.getTag(...TrappedBattlerTagTypes)?.sourceMoveId !== MoveId.NO_RETREAT), // fails if the user is currently trapped by No Retreat
     new StatusMove(MoveId.TAR_SHOT, ElementalType.ROCK, 100, 15, -1, 0, 8)
       .attr(StatStageChangeAttr, [Stat.SPD], -1)
-      .attr(AddBattlerTagAttr, BattlerTagType.TAR_SHOT, false),
+      .attr(AddBattlerTagAttr, BattlerTagType.TAR_SHOT, false)
+      .bounceable(),
     new StatusMove(MoveId.MAGIC_POWDER, ElementalType.PSYCHIC, 100, 20, -1, 0, 8)
       .attr(ChangeTypeAttr, ElementalType.PSYCHIC)
-      .powderMove(),
+      .powderMove()
+      .bounceable(),
     new AttackMove(MoveId.DRAGON_DARTS, ElementalType.DRAGON, MoveCategory.PHYSICAL, 50, 100, 10, -1, 0, 8)
       .attr(MultiHitAttr, MultiHitType._2)
       .makesContact(false)
@@ -3425,6 +3502,7 @@ export function initMoves() {
       .makesContact(false),
     new StatusMove(MoveId.CORROSIVE_GAS, ElementalType.POISON, 100, 40, -1, 0, 8)
       .target(MoveTarget.ALL_NEAR_OTHERS)
+      .bounceable()
       .unimplemented(),
     new StatusMove(MoveId.COACHING, ElementalType.FIGHTING, -1, 10, -1, 0, 8)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.DEF], 1)
