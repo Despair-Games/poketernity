@@ -7,7 +7,7 @@ import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { FOG_ACCURACY_MODIFIER } from "#app/constants";
+import { FOG_ACCURACY_MULTIPLIER } from "#app/constants";
 
 describe("Weather - Fog", () => {
   let phaserGame: Phaser.Game;
@@ -43,7 +43,7 @@ describe("Weather - Fog", () => {
     game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to(MoveEffectPhase);
 
-    expect(moveToCheck.calculateBattleAccuracy).toHaveReturnedWith(100 * FOG_ACCURACY_MODIFIER);
+    expect(moveToCheck.calculateBattleAccuracy).toHaveReturnedWith(100 * FOG_ACCURACY_MULTIPLIER);
   });
 
   it("move accuracy is unaffected if fog is suppressed", async () => {

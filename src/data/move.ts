@@ -41,7 +41,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import type { ChargingAttackMove } from "#app/data/moves/charging-attack-move";
 import type { ChargingSelfStatusMove } from "#app/data/moves/charging-self-status-move";
-import { FOG_ACCURACY_MODIFIER } from "#app/constants";
+import { FOG_ACCURACY_MULTIPLIER } from "#app/constants";
 
 export abstract class Move implements Localizable {
   public id: MoveId;
@@ -730,7 +730,7 @@ export abstract class Move implements Localizable {
 
     // TODO: wide lens was calculated here
     if (globalScene.arena.hasWeather(WeatherType.FOG) && !globalScene.arena.weather?.isEffectSuppressed()) {
-      moveAccuracy.value = Math.floor(moveAccuracy.value * FOG_ACCURACY_MODIFIER);
+      moveAccuracy.value = Math.floor(moveAccuracy.value * FOG_ACCURACY_MULTIPLIER);
     }
 
     if (!isOhko && globalScene.arena.getTag(ArenaTagType.GRAVITY)) {

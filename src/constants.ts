@@ -120,5 +120,5 @@ export const IV_MAX = 31;
  */
 export const DYNAMAX_DAMAGE_TAKEN_FACTOR = 2 / 3;
 
-// Custom implementation. Mainline is 0.6
-export const FOG_ACCURACY_MODIFIER = 0.9;
+/** Custom implementation. Mainline is 0.6. */
+export const FOG_ACCURACY_MULTIPLIER = 0.9;
