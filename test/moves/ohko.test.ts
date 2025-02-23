@@ -41,7 +41,7 @@ describe("Moves - One Hit KO Moves", () => {
   });
 
   it("OHKO moves accuracy goes up by 1% for each level the user is above the target", async () => {
-    game.override.startingLevel(170).enemySpecies(Species.ARCEUS);
+    game.override.startingLevel(142).enemySpecies(Species.ARCEUS).ability(Abilities.BALL_FETCH);
     await game.classicMode.startBattle([Species.MACHAMP]);
     const moveToCheck = allMoves[MoveId.GUILLOTINE];
 
@@ -49,7 +49,7 @@ describe("Moves - One Hit KO Moves", () => {
 
     game.move.select(MoveId.GUILLOTINE);
     await game.toNextTurn();
-    expect(moveToCheck.calculateBattleAccuracy).toHaveReturnedWith(100);
+    expect(moveToCheck.calculateBattleAccuracy).toHaveReturnedWith(30 + 42);
   });
 
   it("OHKO moves should always fail if the opponent is higher level", async () => {
