@@ -14,11 +14,9 @@ export class PokemonSummonData {
   public abilitySuppressed: boolean = false;
   public abilitiesApplied: Abilities[] = [];
   public speciesForm: PokemonSpeciesForm | null;
-  public fusionSpeciesForm: PokemonSpeciesForm;
   public ability: Abilities = Abilities.NONE;
   public passiveAbility: Abilities = Abilities.NONE;
   public gender: Gender;
-  public fusionGender: Gender;
   public stats: number[] = [0, 0, 0, 0, 0, 0];
   public moveset: PokemonMove[];
   // If not initialized this value will not be populated from save data.

@@ -42,7 +42,6 @@ export class GameWrapper {
         frames: {} as any,
       }) as any;
     Pokemon.prototype.enableMask = () => null;
-    Pokemon.prototype.updateFusionPalette = () => null;
     Pokemon.prototype.cry = () => null as any;
     Pokemon.prototype.faintCry = (cb) => {
       if (cb) cb();

@@ -73,12 +73,11 @@ export function doPokemonTransformationSequence(
       });
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", previousPokemon.getSpriteKey());
-      ["spriteColors", "fusionSpriteColors"].map((k) => {
-        if (previousPokemon.summonData?.speciesForm) {
-          k += "Base";
-        }
-        sprite.pipelineData[k] = previousPokemon.getSprite().pipelineData[k];
-      });
+      let key = "spriteColors";
+      if (previousPokemon.summonData?.speciesForm) {
+        key += "Base";
+      }
+      sprite.pipelineData[key] = previousPokemon.getSprite().pipelineData[key];
     });
 
     [pokemonEvoSprite, pokemonEvoTintSprite].map((sprite) => {
@@ -91,12 +90,11 @@ export function doPokemonTransformationSequence(
 
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", transformPokemon.getSpriteKey());
-      ["spriteColors", "fusionSpriteColors"].map((k) => {
-        if (transformPokemon.summonData?.speciesForm) {
-          k += "Base";
-        }
-        sprite.pipelineData[k] = transformPokemon.getSprite().pipelineData[k];
-      });
+      let key = "spriteColors";
+      if (transformPokemon.summonData?.speciesForm) {
+        key += "Base";
+      }
+      sprite.pipelineData[key] = transformPokemon.getSprite().pipelineData[key];
     });
 
     globalScene.tweens.add({

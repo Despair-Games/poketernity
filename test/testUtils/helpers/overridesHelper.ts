@@ -91,27 +91,6 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
-   * Override the player (pokemon) to be a random fusion
-   * @returns `this`
-   */
-  public enableStarterFusion(): this {
-    vi.spyOn(Overrides, "STARTER_FUSION_OVERRIDE", "get").mockReturnValue(true);
-    this.log("Player Pokemon is a random fusion!");
-    return this;
-  }
-
-  /**
-   * Override the player (pokemon) fusion species
-   * @param species the fusion species to set
-   * @returns `this`
-   */
-  public starterFusionSpecies(species: Species | number): this {
-    vi.spyOn(Overrides, "STARTER_FUSION_SPECIES_OVERRIDE", "get").mockReturnValue(species);
-    this.log(`Player Pokemon fusion species set to ${Species[species]} (=${species})!`);
-    return this;
-  }
-
-  /**
    * Override the player (pokemons) forms
    * @param forms the (pokemon) forms to set
    * @returns `this`
@@ -262,27 +241,6 @@ export class OverridesHelper extends GameManagerHelper {
   public enemySpecies(species: Species | number): this {
     vi.spyOn(Overrides, "ENEMY_SPECIES_OVERRIDE", "get").mockReturnValue(species);
     this.log(`Enemy Pokemon species set to ${Species[species]} (=${species})!`);
-    return this;
-  }
-
-  /**
-   * Override the enemy (pokemon) to be a random fusion
-   * @returns `this`
-   */
-  public enableEnemyFusion(): this {
-    vi.spyOn(Overrides, "ENEMY_FUSION_OVERRIDE", "get").mockReturnValue(true);
-    this.log("Enemy Pokemon is a random fusion!");
-    return this;
-  }
-
-  /**
-   * Override the enemy (pokemon) fusion species
-   * @param species the fusion species to set
-   * @returns `this`
-   */
-  public enemyFusionSpecies(species: Species | number): this {
-    vi.spyOn(Overrides, "ENEMY_FUSION_SPECIES_OVERRIDE", "get").mockReturnValue(species);
-    this.log(`Enemy Pokemon fusion species set to ${Species[species]} (=${species})!`);
     return this;
   }
 

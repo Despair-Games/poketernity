@@ -159,7 +159,7 @@ export const sessionMigrators = [
         pokemon["mysteryEncounterPokemonData"] = null;
       }
       if (pokemon["fusionMysteryEncounterPokemonData"]) {
-        pokemon.fusionCustomPokemonData = new CustomPokemonData(pokemon["fusionMysteryEncounterPokemonData"]);
+        // pokemon.fusionCustomPokemonData = new CustomPokemonData(pokemon["fusionMysteryEncounterPokemonData"]);
         pokemon["fusionMysteryEncounterPokemonData"] = null;
       }
       pokemon.customPokemonData = pokemon.customPokemonData ?? new CustomPokemonData();

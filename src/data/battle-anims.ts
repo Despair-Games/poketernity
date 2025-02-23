@@ -258,17 +258,15 @@ export abstract class BattleAnim {
             if ((isUser ? u : t) === sprites.length) {
               if (isUser || !targetSubstitute) {
                 const sprite = globalScene.addPokemonSprite(
-                  isUser ? user! : target,
+                  isUser ? user : target,
                   0,
                   0,
-                  spriteSource!.texture,
-                  spriteSource!.frame.name,
+                  spriteSource.texture,
+                  spriteSource.frame.name,
                   true,
-                ); // TODO: are those bangs correct?
-                ["spriteColors", "fusionSpriteColors"].map(
-                  (k) => (sprite.pipelineData[k] = (isUser ? user! : target).getSprite().pipelineData[k]),
-                ); // TODO: are those bangs correct?
-                sprite.setPipelineData("spriteKey", (isUser ? user! : target).getBattleSpriteKey());
+                );
+                sprite.pipelineData["spriteColors"] = (isUser ? user : target).getSprite().pipelineData["spriteColors"];
+                sprite.setPipelineData("spriteKey", (isUser ? user : target).getBattleSpriteKey());
                 sprite.setPipelineData("ignoreFieldPos", true);
                 spriteSource.on("animationupdate", (_anim, frame) => sprite.setFrame(frame.textureFrame));
                 globalScene.field.add(sprite);

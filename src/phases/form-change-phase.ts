@@ -63,12 +63,11 @@ export class FormChangePhase extends FormChangeBasePhase {
 
         sprite.setPipelineData("ignoreTimeTint", true);
         sprite.setPipelineData("spriteKey", formChangedPokemon.getSpriteKey());
-        ["spriteColors", "fusionSpriteColors"].map((k) => {
-          if (formChangedPokemon.summonData?.speciesForm) {
-            k += "Base";
-          }
-          sprite.pipelineData[k] = formChangedPokemon.getSprite().pipelineData[k];
-        });
+        let key = "spriteColors";
+        if (formChangedPokemon.summonData?.speciesForm) {
+          key += "Base";
+        }
+        sprite.pipelineData[key] = formChangedPokemon.getSprite().pipelineData[key];
       });
 
       time.delayedCall(250, () => {
@@ -202,10 +201,6 @@ export class FormChangePhase extends FormChangeBasePhase {
   public override end(): void {
     const { ui } = globalScene;
 
-    /**
-     * @todo If a fused Pokemon has either of its halves change form then it will attempt to learn the
-     * EVOLVE_MOVE of both halves of the fusion
-     */
     const formChangeLearnMove = this.pokemon.getLevelMoves(EVOLVE_MOVE, true);
     for (const [, learnMoveId] of formChangeLearnMove) {
       globalScene.unshiftPhase(new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), learnMoveId));
