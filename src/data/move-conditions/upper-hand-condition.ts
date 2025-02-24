@@ -1,4 +1,3 @@
-import { allMoves } from "#app/data/data-lists";
 import { MoveCondition } from "#app/data/move-conditions/move-condition";
 import { globalScene } from "#app/global-scene";
 import { BattleCommand } from "#enums/battle-command";
@@ -19,9 +18,9 @@ export class UpperHandCondition extends MoveCondition {
         !!targetCommand
         && targetCommand.command === BattleCommand.FIGHT
         && !target.turnData.acted
-        && !!targetCommand.move?.moveId
-        && allMoves[targetCommand.move.moveId].category !== MoveCategory.STATUS
-        && allMoves[targetCommand.move.moveId].getPriority(target) > 0
+        && !!targetCommand.turnMove
+        && targetCommand.turnMove.move.category !== MoveCategory.STATUS
+        && targetCommand.turnMove.move.getPriority(target) > 0
       );
     });
   }

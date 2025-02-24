@@ -48,7 +48,7 @@ describe("Moves - Dig", () => {
     expect(enemyPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.MISS);
     expect(playerPokemon.hp).toBe(playerPokemon.getMaxHp());
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
-    expect(playerPokemon.getMoveQueue()[0].moveId).toBe(MoveId.DIG);
+    expect(playerPokemon.getMoveQueue()[0].move.id).toBe(MoveId.DIG);
 
     await game.toEndOfTurn();
     expect(playerPokemon.getTag(BattlerTagType.UNDERGROUND)).toBeUndefined();

@@ -101,7 +101,7 @@ export class EnemyCommandPhase extends FieldPhase {
     battle.turnManager.addCommand({
       pokemon: enemyPokemon,
       command: BattleCommand.FIGHT,
-      move: nextMove,
+      turnMove: nextMove,
     });
 
     battle.enemySwitchCounter = Math.max(battle.enemySwitchCounter - 1, 0);

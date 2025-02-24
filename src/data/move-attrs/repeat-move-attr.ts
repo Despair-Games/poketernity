@@ -1,14 +1,14 @@
-import { MoveEffectTrigger } from "#enums/move-effect-trigger";
-import { MoveId } from "#enums/move-id";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { allMoves } from "#app/data/data-lists";
+import { type Move } from "#app/data/move";
+import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import i18next from "i18next";
-import { type Move } from "#app/data/move";
-import { allMoves } from "#app/data/data-lists";
-import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { MoveEffectTrigger } from "#enums/move-effect-trigger";
+import { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";
+import i18next from "i18next";
 
 /**
  * Attribute used for moves that causes the target to repeat their last used move.
@@ -32,7 +32,9 @@ export class RepeatMoveAttr extends MoveEffectAttr {
         targetPokemonName: getPokemonNameWithAffix(target),
       }),
     );
-    target.getMoveQueue().unshift({ moveId: lastMove.move.id, targets: moveTargets, ignorePP: false });
+    target
+      .getMoveQueue()
+      .unshift({ move: lastMove.move, targets: moveTargets, ignorePP: false, type: target.getMoveType(lastMove.move) });
     target.turnData.extraTurns++;
     globalScene.useMove({
       pokemon: target,

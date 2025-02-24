@@ -1,5 +1,4 @@
 import type { Move } from "#app/data/move";
-import { allMoves } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BattleCommand } from "#enums/battle-command";
@@ -25,7 +24,7 @@ export class PreventBypassSpeedChanceAbAttr extends AbAttr {
   override apply(pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {
     const turnCommand = globalScene.currentBattle.turnManager.findCommandFromPokemon(pokemon);
     const isCommandFight = turnCommand?.command === BattleCommand.FIGHT;
-    const move = turnCommand?.move?.moveId ? allMoves[turnCommand.move.moveId] : null;
+    const move = turnCommand?.turnMove?.move;
     if (move && this.condition(pokemon, move) && isCommandFight) {
       cancelled.value = true;
       return true;

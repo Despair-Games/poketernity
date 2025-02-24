@@ -4,6 +4,6 @@ import type { Pokemon } from "#app/field/pokemon";
 export class SpeciesFormChangePreMoveTrigger extends SpeciesFormChangeMoveTrigger {
   override canChange(pokemon: Pokemon): boolean {
     const command = pokemon.turnData.turnCommand;
-    return !!command?.move && this.movePredicate(command.move.moveId) === this.used;
+    return !!command?.turnMove && this.movePredicate(command.turnMove.move.id) === this.used;
   }
 }

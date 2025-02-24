@@ -51,7 +51,7 @@ describe("Moves - Fly", () => {
     expect(enemyPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.MISS);
     expect(playerPokemon.hp).toBe(playerPokemon.getMaxHp());
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
-    expect(playerPokemon.getMoveQueue()[0].moveId).toBe(MoveId.FLY);
+    expect(playerPokemon.getMoveQueue()[0].move.id).toBe(MoveId.FLY);
 
     await game.toEndOfTurn();
     expect(playerPokemon.getTag(BattlerTagType.FLYING)).toBeUndefined();

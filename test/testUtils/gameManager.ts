@@ -63,6 +63,7 @@ import { globalScene } from "#app/global-scene";
 import type StarterSelectUiHandler from "#app/ui/starter-select-ui-handler";
 import { MockFetch } from "#test/testUtils/mocks/mockFetch";
 import type { TurnCommand } from "#app/turn-command-manager";
+import { allMoves } from "#app/data/data-lists";
 
 /**
  * Class to manage the game state and transitions between phases.
@@ -396,11 +397,12 @@ export class GameManager {
     const legalTargets = getMoveTargets(enemy, moveId);
 
     vi.spyOn(enemy, "getNextMove").mockReturnValueOnce({
-      moveId: moveId,
+      move: allMoves[moveId],
       targets:
         target !== undefined && !legalTargets.multiple && legalTargets.targets.includes(target)
           ? [target]
           : enemy.getNextTargets(moveId),
+      type: enemy.getMoveType(allMoves[moveId]),
     });
 
     /**
