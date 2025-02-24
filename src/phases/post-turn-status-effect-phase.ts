@@ -21,51 +21,50 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
   public override start(): void {
     const pokemon = this.getPokemon();
 
-    if (
-      pokemon?.isActive(true)
-      && pokemon.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC], false, true)
-    ) {
-      pokemon.status!.incrementTurn();
-
-      const cancelled = new BooleanHolder(false);
-      applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
-      applyAbAttrs(AbAttrFlag.BLOCK_STATUS_DAMAGE, pokemon, false, cancelled);
-
-      if (!cancelled.value) {
-        globalScene.queueMessage(
-          getStatusEffectActivationText(pokemon.getStatusEffect(true), getPokemonNameWithAffix(pokemon)),
-        );
-
-        const damage = new NumberHolder(0);
-        switch (pokemon.getStatusEffect(true)) {
-          case StatusEffect.POISON:
-            damage.value = Math.max(pokemon.getMaxHp() >> 3, 1);
-            break;
-          case StatusEffect.TOXIC:
-            damage.value = Math.max(Math.floor((pokemon.getMaxHp() / 16) * pokemon.status!.toxicTurnCount), 1);
-            break;
-          case StatusEffect.BURN:
-            damage.value = Math.max(pokemon.getMaxHp() >> 4, 1);
-            applyAbAttrs(AbAttrFlag.REDUCE_BURN_DAMAGE, pokemon, false, damage);
-            break;
-        }
-
-        if (damage.value) {
-          // Set preventEndure flag to avoid pokemon surviving thanks to focus band, sturdy, endure ...
-          globalScene.damageNumberHandler.add(this.getPokemon(), pokemon.damage(damage.value, false, true));
-          pokemon.updateInfo();
-          applyAbAttrs(AbAttrFlag.POST_DAMAGE, pokemon, false, damage.value);
-        }
-
-        new CommonBattleAnim(CommonAnim.POISON + (pokemon.getStatusEffect(true) - 1), pokemon).play(false, () =>
-          this.end(),
-        );
-      } else {
-        this.end();
-      }
-    } else {
-      this.end();
+    if (!pokemon?.isActive(true)) {
+      return this.end();
     }
+    if (!pokemon.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC], false, true)) {
+      return this.end();
+    }
+
+    pokemon.status!.incrementTurn();
+
+    const cancelled = new BooleanHolder(false);
+    applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
+    applyAbAttrs(AbAttrFlag.BLOCK_STATUS_DAMAGE, pokemon, false, cancelled);
+
+    if (cancelled.value) {
+      return this.end();
+    }
+
+    globalScene.queueMessage(
+      getStatusEffectActivationText(pokemon.getStatusEffect(true), getPokemonNameWithAffix(pokemon)),
+    );
+
+    const damage = new NumberHolder(0);
+    switch (pokemon.getStatusEffect(true)) {
+      case StatusEffect.POISON:
+        damage.value = Math.max(pokemon.getMaxHp() / 8, 1);
+        break;
+      case StatusEffect.TOXIC:
+        damage.value = Math.max(Math.floor((pokemon.getMaxHp() / 16) * pokemon.status!.toxicTurnCount), 1);
+        break;
+      case StatusEffect.BURN:
+        damage.value = Math.max(pokemon.getMaxHp() / 16, 1);
+        applyAbAttrs(AbAttrFlag.REDUCE_BURN_DAMAGE, pokemon, false, damage);
+        break;
+    }
+
+    if (damage.value) {
+      // Set preventEndure flag to avoid pokemon surviving thanks to focus band, sturdy, endure ...
+      pokemon.damageAndUpdate(damage.value, { preventEndure: true });
+      applyAbAttrs(AbAttrFlag.POST_DAMAGE, pokemon, false, damage.value);
+    }
+
+    new CommonBattleAnim(CommonAnim.POISON + (pokemon.getStatusEffect(true) - 1), pokemon).play(false, () =>
+      this.end(),
+    );
   }
 
   public override end(): void {
