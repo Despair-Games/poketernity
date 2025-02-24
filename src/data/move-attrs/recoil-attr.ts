@@ -48,7 +48,12 @@ export class RecoilAttr extends MoveEffectAttr {
       return false;
     }
 
-    user.damageAndUpdate(recoilDamage, { result: HitResult.OTHER, ignoreSegments: true, preventEndure: true });
+    user.damageAndUpdate(recoilDamage, {
+      result: HitResult.OTHER,
+      ignoreSegments: true,
+      preventEndure: true,
+      ignoreDynamaxReduction: this.useHp,
+    });
     globalScene.queueMessage(i18next.t("moveTriggers:hitWithRecoil", { pokemonName: getPokemonNameWithAffix(user) }));
     user.turnData.damageTaken += recoilDamage;
 

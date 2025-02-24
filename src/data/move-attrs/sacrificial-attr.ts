@@ -14,7 +14,12 @@ export class SacrificialAttr extends MoveEffectAttr {
   }
 
   override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
-    user.damageAndUpdate(user.hp, { result: HitResult.OTHER, ignoreSegments: true, preventEndure: true });
+    user.damageAndUpdate(user.hp, {
+      result: HitResult.OTHER,
+      ignoreSegments: true,
+      preventEndure: true,
+      ignoreDynamaxReduction: true,
+    });
     user.turnData.damageTaken += user.hp;
 
     return true;

@@ -838,7 +838,11 @@ export class DestinyBondTag extends BattlerTag {
         pokemonNameWithAffix2: getPokemonNameWithAffix(pokemon),
       }),
     );
-    pokemon.damageAndUpdate(pokemon.hp, { result: HitResult.ONE_HIT_KO, preventEndure: true });
+    pokemon.damageAndUpdate(pokemon.hp, {
+      result: HitResult.ONE_HIT_KO,
+      preventEndure: true,
+      ignoreDynamaxReduction: true,
+    });
     return false;
   }
 }
@@ -973,7 +977,7 @@ export class SeedTag extends BattlerTag {
             new CommonAnimPhase(source.getBattlerIndex(), pokemon.getBattlerIndex(), CommonAnim.LEECH_SEED),
           );
 
-          const damage = pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
+          const damage = pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8), { ignoreDynamaxReduction: true });
           const reverseDrain = pokemon.hasAbilityWithAttr(AbAttrFlag.REVERSE_DRAIN, false);
 
           globalScene.queuePokemonHeal(true, source.getBattlerIndex(), !reverseDrain ? damage : damage * -1, {
@@ -1041,7 +1045,10 @@ export class PowderTag extends BattlerTag {
           const cancelDamage = new BooleanHolder(false);
           applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelDamage);
           if (!cancelDamage.value) {
-            pokemon.damageAndUpdate(Math.floor(pokemon.getMaxHp() / 4), { result: HitResult.OTHER });
+            pokemon.damageAndUpdate(Math.floor(pokemon.getMaxHp() / 4), {
+              result: HitResult.OTHER,
+              ignoreDynamaxReduction: true,
+            });
           }
 
           // "When the flame touched the powder\non the Pokémon, it exploded!"
@@ -1089,7 +1096,7 @@ export class NightmareTag extends BattlerTag {
       applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
 
       if (!cancelled.value) {
-        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 4));
+        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 4), { ignoreDynamaxReduction: true });
       }
     }
 
@@ -1466,7 +1473,7 @@ export abstract class DamagingTrapTag extends TrappedTag {
       applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
 
       if (!cancelled.value) {
-        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
+        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8), { ignoreDynamaxReduction: true });
       }
     }
 
@@ -1708,7 +1715,10 @@ export class ContactDamageProtectedTag extends ProtectedTag {
 
     if (!simulated && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, null)) {
       if (!attacker.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)) {
-        attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), { result: HitResult.OTHER });
+        attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), {
+          result: HitResult.OTHER,
+          ignoreDynamaxReduction: true,
+        });
       }
     }
     return true;
@@ -2367,7 +2377,9 @@ export class SaltCuredTag extends BattlerTag {
 
       if (!cancelled.value) {
         const pokemonSteelOrWater = pokemon.isOfType(ElementalType.STEEL) || pokemon.isOfType(ElementalType.WATER);
-        pokemon.damageAndUpdate(toDmgValue(pokemonSteelOrWater ? pokemon.getMaxHp() / 4 : pokemon.getMaxHp() / 8));
+        pokemon.damageAndUpdate(toDmgValue(pokemonSteelOrWater ? pokemon.getMaxHp() / 4 : pokemon.getMaxHp() / 8), {
+          ignoreDynamaxReduction: true,
+        });
 
         globalScene.queueMessage(
           i18next.t("battlerTags:saltCuredLapse", {
@@ -2415,7 +2427,7 @@ export class CursedTag extends BattlerTag {
       applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
 
       if (!cancelled.value) {
-        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 4));
+        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 4), { ignoreDynamaxReduction: true });
         globalScene.queueMessage(
           i18next.t("battlerTags:cursedLapse", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         );
@@ -2747,7 +2759,10 @@ export class GulpMissileTag extends BattlerTag {
       applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, attacker, false, cancelled);
 
       if (!cancelled.value) {
-        attacker.damageAndUpdate(Math.max(1, Math.floor(attacker.getMaxHp() / 4)), { result: HitResult.OTHER });
+        attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() / 4), {
+          result: HitResult.OTHER,
+          ignoreDynamaxReduction: true,
+        });
       }
 
       if (this.tagType === BattlerTagType.GULP_MISSILE_ARROKUDA) {

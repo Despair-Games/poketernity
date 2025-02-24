@@ -50,7 +50,11 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
       }
       if (!simulated) {
         const abilityDamage = toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio));
-        attacker.damageAndUpdate(abilityDamage, { result: HitResult.OTHER, preventEndure: true });
+        attacker.damageAndUpdate(abilityDamage, {
+          result: HitResult.OTHER,
+          preventEndure: true,
+          ignoreDynamaxReduction: true,
+        });
         // TODO: This should be handled by `damage()`
         attacker.turnData.damageTaken += abilityDamage;
       }

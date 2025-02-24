@@ -33,7 +33,10 @@ export class FlameBurstAttr extends MoveEffectAttr {
       return false;
     }
 
-    targetAlly.damageAndUpdate(toDmgValue((1 / 16) * targetAlly.getMaxHp()), { result: HitResult.OTHER });
+    targetAlly.damageAndUpdate(toDmgValue((1 / 16) * targetAlly.getMaxHp()), {
+      result: HitResult.OTHER,
+      ignoreDynamaxReduction: true,
+    });
     return true;
   }
 

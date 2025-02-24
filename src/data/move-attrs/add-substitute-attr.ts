@@ -29,6 +29,7 @@ export class AddSubstituteAttr extends MoveEffectAttr {
       result: HitResult.OTHER,
       ignoreSegments: true,
       preventEndure: true,
+      ignoreDynamaxReduction: true,
     });
     user.addTag(BattlerTagType.SUBSTITUTE, 0, move.id, user.id);
     return true;

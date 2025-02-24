@@ -761,7 +761,7 @@ class SpikesTag extends EntryHazardTag {
         globalScene.queueMessage(
           i18next.t("arenaTag:spikesActivateTrap", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         );
-        pokemon.damageAndUpdate(damage, { result: HitResult.OTHER });
+        pokemon.damageAndUpdate(damage, { result: HitResult.OTHER, ignoreDynamaxReduction: true });
         if (pokemon.turnData) {
           pokemon.turnData.damageTaken += damage;
         }
@@ -970,7 +970,7 @@ class TypeHazardTag extends EntryHazardTag {
       globalScene.queueMessage(
         i18next.t(this.activateTrapKey, { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
-      pokemon.damageAndUpdate(damage, { result: HitResult.OTHER });
+      pokemon.damageAndUpdate(damage, { result: HitResult.OTHER, ignoreDynamaxReduction: true });
       if (pokemon.turnData) {
         pokemon.turnData.damageTaken += damage;
       }
@@ -1312,7 +1312,7 @@ class FireGrassPledgeTag extends ArenaTag {
         globalScene.unshiftPhase(
           new CommonAnimPhase(pokemon.getBattlerIndex(), pokemon.getBattlerIndex(), CommonAnim.MAGMA_STORM),
         );
-        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
+        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8), { ignoreDynamaxReduction: true });
       });
 
     return super.lapse(arena);
@@ -1428,7 +1428,7 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
         globalScene.unshiftPhase(
           new CommonAnimPhase(pokemon.getBattlerIndex(), pokemon.getBattlerIndex(), this.getAnimationForType()),
         );
-        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 6));
+        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 6), { ignoreDynamaxReduction: true });
       });
 
     return super.lapse(arena);

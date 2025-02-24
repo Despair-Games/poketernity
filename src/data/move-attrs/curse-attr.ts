@@ -27,7 +27,12 @@ export class CurseAttr extends MoveEffectAttr {
         return false;
       }
       const curseRecoilDamage = Math.max(1, Math.floor(user.getMaxHp() / 2));
-      user.damageAndUpdate(curseRecoilDamage, { result: HitResult.OTHER, ignoreSegments: true, preventEndure: true });
+      user.damageAndUpdate(curseRecoilDamage, {
+        result: HitResult.OTHER,
+        ignoreSegments: true,
+        preventEndure: true,
+        ignoreDynamaxReduction: true,
+      });
       globalScene.queueMessage(
         i18next.t("battlerTags:cursedOnAdd", {
           pokemonNameWithAffix: getPokemonNameWithAffix(user),
