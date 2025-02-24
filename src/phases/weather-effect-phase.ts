@@ -19,13 +19,13 @@ export class WeatherEffectPhase extends CommonAnimPhase {
     const { arena } = globalScene;
     const weather = arena?.weather;
 
-    if (weather && !weather.lapse()) {
-      arena.trySetWeather(WeatherType.NONE, false);
-      arena.triggerWeatherBasedFormChangesToNormal();
+    if (!weather) {
       return this.end();
     }
 
-    if (!weather) {
+    if (!weather.lapse()) {
+      arena.trySetWeather(WeatherType.NONE, false);
+      arena.triggerWeatherBasedFormChangesToNormal();
       return this.end();
     }
 
@@ -82,5 +82,7 @@ export class WeatherEffectPhase extends CommonAnimPhase {
         inflictDamage(pokemon);
       }
     });
+
+    return end();
   }
 }
