@@ -12,6 +12,7 @@ import { MoveId } from "#enums/move-id";
 import { getMovePosition } from "#test/testUtils/gameManagerUtils";
 import { GameManagerHelper } from "#test/testUtils/helpers/gameManagerHelper";
 import { vi } from "vitest";
+import { allMoves } from "#app/data/data-lists";
 
 /**
  * Helper to handle a Pokemon's move
@@ -136,11 +137,12 @@ export class MoveHelper extends GameManagerHelper {
     const legalTargets = getMoveTargets(enemy, moveId);
 
     vi.spyOn(enemy, "getNextMove").mockReturnValueOnce({
-      moveId: moveId,
+      move: allMoves[moveId],
       targets:
         target !== undefined && !legalTargets.multiple && legalTargets.targets.includes(target)
           ? [target]
           : enemy.getNextTargets(moveId),
+      type: enemy.getMoveType(allMoves[moveId]),
     });
 
     /**
@@ -180,11 +182,12 @@ export class MoveHelper extends GameManagerHelper {
     const legalTargets = getMoveTargets(enemy, moveId);
 
     vi.spyOn(enemy, "getNextMove").mockReturnValueOnce({
-      moveId: moveId,
+      move: allMoves[moveId],
       targets:
         target !== undefined && !legalTargets.multiple && legalTargets.targets.includes(target)
           ? [target]
           : enemy.getNextTargets(moveId),
+      type: enemy.getMoveType(allMoves[moveId]),
     });
 
     /**

@@ -48,7 +48,7 @@ describe("Moves - Sky Drop", () => {
 
     [player, enemy].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());
     expect(player.getTag(BattlerTagType.CHARGING)).toBeDefined();
-    expect(player.getMoveQueue()[0].moveId).toBe(MoveId.SKY_DROP);
+    expect(player.getMoveQueue()[0].move.id).toBe(MoveId.SKY_DROP);
     expect(enemy.turnData.acted).toBeFalsy();
 
     await game.toNextTurn();
@@ -77,7 +77,7 @@ describe("Moves - Sky Drop", () => {
 
     [player, enemy].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());
     expect(player.getTag(BattlerTagType.CHARGING)).toBeDefined();
-    expect(player.getMoveQueue()[0].moveId).toBe(MoveId.SKY_DROP);
+    expect(player.getMoveQueue()[0].move.id).toBe(MoveId.SKY_DROP);
     expect(enemy.turnData.acted).toBeFalsy();
 
     await game.toNextTurn();

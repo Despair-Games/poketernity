@@ -5,9 +5,10 @@ import type { MoveResult } from "#enums/move-result";
 
 export interface TurnMove {
   move: Move;
-  targets?: BattlerIndex[];
-  result: MoveResult;
+  targets: BattlerIndex[];
+  result?: MoveResult;
   type: ElementalType;
   virtual?: boolean;
   turn?: number;
+  ignorePP?: boolean;
 }
