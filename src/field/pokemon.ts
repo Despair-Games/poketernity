@@ -3099,6 +3099,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     amount = Math.min(amount, this.hp);
     this.hp = this.hp - amount;
+    if (this.turnData) {
+      this.turnData.damageTaken += amount;
+    }
     if (this.isFainted() && !ignoreFaintPhase) {
       globalScene.faintBattler(this.getBattlerIndex(), { preventEndure });
     }

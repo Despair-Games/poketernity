@@ -55,8 +55,6 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
           preventEndure: true,
           ignoreDynamaxReduction: true,
         });
-        // TODO: This should be handled by `damage()`
-        attacker.turnData.damageTaken += abilityDamage;
       }
       return true;
     }

@@ -506,7 +506,6 @@ export class MoveEffectPhase extends HitCheckPhase {
         }
         user.turnData.totalDamageDealt += damage;
         user.turnData.singleHitDamageDealt = damage;
-        target.turnData.damageTaken += damage;
         target.battleData.hitCount++;
 
         const attackResult: AttackMoveResult = {

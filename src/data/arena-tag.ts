@@ -762,9 +762,6 @@ class SpikesTag extends EntryHazardTag {
           i18next.t("arenaTag:spikesActivateTrap", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         );
         pokemon.damageAndUpdate(damage, { result: HitResult.OTHER, ignoreDynamaxReduction: true });
-        if (pokemon.turnData) {
-          pokemon.turnData.damageTaken += damage;
-        }
         return true;
       }
     }
@@ -971,9 +968,6 @@ class TypeHazardTag extends EntryHazardTag {
         i18next.t(this.activateTrapKey, { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
       pokemon.damageAndUpdate(damage, { result: HitResult.OTHER, ignoreDynamaxReduction: true });
-      if (pokemon.turnData) {
-        pokemon.turnData.damageTaken += damage;
-      }
       return true;
     }
 

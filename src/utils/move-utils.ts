@@ -28,7 +28,6 @@ export const crashDamageFunc = (user: Pokemon, _move: Move) => {
     ignoreDynamaxReduction: true,
   });
   globalScene.queueMessage(t("moveTriggers:keptGoingAndCrashed", { pokemonName: getPokemonNameWithAffix(user) }));
-  user.turnData.damageTaken += toDmgValue(user.getMaxHp() / 2);
 
   return true;
 };

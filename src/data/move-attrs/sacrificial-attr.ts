@@ -20,7 +20,6 @@ export class SacrificialAttr extends MoveEffectAttr {
       preventEndure: true,
       ignoreDynamaxReduction: true,
     });
-    user.turnData.damageTaken += user.hp;
 
     return true;
   }
