@@ -2,7 +2,6 @@ export enum MoveFlags {
   NONE = 0,
   MAKES_CONTACT = 1 << 0,
   IGNORE_PROTECT = 1 << 1,
-  IGNORE_VIRTUAL = 1 << 2,
   /**
    * Sound-based moves have the following effects:
    * - Pokemon with the {@linkcode Abilities.SOUNDPROOF Soundproof Ability} are unaffected by other Pokemon's sound-based moves.
@@ -13,35 +12,35 @@ export enum MoveFlags {
    *
    * cf https://bulbapedia.bulbagarden.net/wiki/Sound-based_move
    */
-  SOUND_MOVE = 1 << 3,
-  HIDE_USER = 1 << 4,
-  HIDE_TARGET = 1 << 5,
-  BITING_MOVE = 1 << 6,
-  PULSE_MOVE = 1 << 7,
-  PUNCHING_MOVE = 1 << 8,
-  SLICING_MOVE = 1 << 9,
+  SOUND_MOVE = 1 << 2,
+  HIDE_USER = 1 << 3,
+  HIDE_TARGET = 1 << 4,
+  BITING_MOVE = 1 << 5,
+  PULSE_MOVE = 1 << 6,
+  PUNCHING_MOVE = 1 << 7,
+  SLICING_MOVE = 1 << 8,
   /**
    * Indicates a move should be affected by {@linkcode Abilities.RECKLESS}
    * @see {@linkcode Move.recklessMove()}
    */
-  RECKLESS_MOVE = 1 << 10,
+  RECKLESS_MOVE = 1 << 9,
   /** Indicates a move should be affected by {@linkcode Abilities.BULLETPROOF} */
-  BULLET_MOVE = 1 << 11,
+  BULLET_MOVE = 1 << 10,
   /** Grass types and pokemon with {@linkcode Abilities.OVERCOAT} are immune to powder moves */
-  POWDER_MOVE = 1 << 12,
+  POWDER_MOVE = 1 << 11,
   /** Indicates a move should trigger {@linkcode Abilities.DANCER} */
-  DANCE_MOVE = 1 << 13,
+  DANCE_MOVE = 1 << 12,
   /** Indicates a move should trigger {@linkcode Abilities.WIND_RIDER} */
-  WIND_MOVE = 1 << 14,
+  WIND_MOVE = 1 << 13,
   /** Indicates a move should trigger {@linkcode Abilities.TRIAGE} */
-  TRIAGE_MOVE = 1 << 15,
-  IGNORE_ABILITIES = 1 << 16,
+  TRIAGE_MOVE = 1 << 14,
+  IGNORE_ABILITIES = 1 << 15,
   /** Enables all hits of a multi-hit move to be accuracy checked individually */
-  CHECK_ALL_HITS = 1 << 17,
+  CHECK_ALL_HITS = 1 << 16,
   /** Indicates a move is able to bypass its target's Substitute (if the target has one) */
-  IGNORE_SUBSTITUTE = 1 << 18,
+  IGNORE_SUBSTITUTE = 1 << 17,
   /** Indicates a move is able to be redirected to allies in a double battle if the attacker faints */
-  REDIRECT_COUNTER = 1 << 19,
+  REDIRECT_COUNTER = 1 << 18,
   /** Flag indicating whether a move is a G-Max Move or not */
-  G_MAX_MOVE = 1 << 20,
+  G_MAX_MOVE = 1 << 19,
 }

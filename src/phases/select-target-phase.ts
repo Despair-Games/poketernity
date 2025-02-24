@@ -22,21 +22,23 @@ export class SelectTargetPhase extends PokemonPhase {
     const { turnCommands } = currentBattle;
 
     const turnCommand = turnCommands[this.fieldIndex];
-    const move = turnCommand?.move?.moveId ?? MoveId.NONE;
+    const moveId = turnCommand?.turnMove?.move.id ?? MoveId.NONE;
 
-    ui.setMode(UiMode.TARGET_SELECT, this.fieldIndex, move, (targets: BattlerIndex[]) => {
+    ui.setMode(UiMode.TARGET_SELECT, this.fieldIndex, moveId, (targets: BattlerIndex[]) => {
       ui.setMode(UiMode.MESSAGE);
 
       const user = globalScene.getFieldPokemonByBattlerIndex(this.fieldIndex);
       const firstTarget = globalScene.getFieldPokemonByBattlerIndex(targets[0]);
-      const moveObject = allMoves[move];
+      const moveObject = allMoves[moveId];
 
       // TODO: Resolve bang
       if (user?.isMoveTargetRestricted(moveObject.id, user, firstTarget!)) {
-        const errorMessage = user.getRestrictingTag(move, user, firstTarget)?.selectionDeniedText(user, moveObject.id);
+        const errorMessage = user
+          .getRestrictingTag(moveId, user, firstTarget)
+          ?.selectionDeniedText(user, moveObject.id);
 
         globalScene.queueMessage(
-          errorMessage ?? i18next.t("battle:moveCannotBeSelected", { moveName: allMoves[move].name }),
+          errorMessage ?? i18next.t("battle:moveCannotBeSelected", { moveName: allMoves[moveId].name }),
           0,
           true,
         );

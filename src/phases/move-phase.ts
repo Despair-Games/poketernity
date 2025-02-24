@@ -7,7 +7,7 @@ import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
 import { BypassRedirectAttr } from "#app/data/move-attrs/bypass-redirect-attr";
 import { BypassSleepAttr } from "#app/data/move-attrs/bypass-sleep-attr";
-import { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
+import { CopycatAttr } from "#app/data/move-attrs/copycat-attr";
 import { HealStatusEffectAttr } from "#app/data/move-attrs/heal-status-effect-attr";
 import { PreMoveMessageAttr } from "#app/data/move-attrs/pre-move-message-attr";
 import { SpeciesFormChangePreMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-pre-move-trigger";
@@ -204,7 +204,7 @@ export class MovePhase extends BattlePhase {
 
     if (
       (targets.length === 0 && !isFieldTargeted(this.targets))
-      || (moveQueue.length && moveQueue[0].moveId === MoveId.NONE)
+      || (moveQueue.length && moveQueue[0].move.id === MoveId.NONE)
     ) {
       this.showMoveText();
       this.showFailedText();
@@ -321,11 +321,6 @@ export class MovePhase extends BattlePhase {
       globalScene.eventTarget.dispatchEvent(new MoveUsedEvent(this.pokemon?.id, this.move.getMove(), this.move.ppUsed));
     }
 
-    // Update the battle's "last move" pointer, unless we're currently mimicking a move.
-    if (!allMoves[this.move.moveId].hasAttr(CopyMoveAttr)) {
-      globalScene.currentBattle.lastMove = this.move.getMove();
-    }
-
     /**
      * Determine if the move is successful (meaning that its damage/effects can be attempted)
      * by checking that all of the following are true:
@@ -348,6 +343,8 @@ export class MovePhase extends BattlePhase {
     const failedDueToTerrain: boolean = globalScene.arena.isMoveTerrainCancelled(this.pokemon, this.targets, move);
 
     const success = passesConditions && !failedDueToWeather && !failedDueToTerrain;
+
+    this.updateLastMoveId(success);
 
     /**
      * If the move has not failed, trigger ability-based user type changes and then execute it.
@@ -410,6 +407,8 @@ export class MovePhase extends BattlePhase {
     const targets = this.getActiveTargetPokemon();
 
     if (move.applyConditions(this.pokemon, targets[0], move)) {
+      this.updateLastMoveId(true);
+
       // Protean and Libero apply on the charging turn of charge moves
       applyAbAttrs(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
 
@@ -430,6 +429,19 @@ export class MovePhase extends BattlePhase {
 
       // Remove the user from its semi-invulnerable state (if applicable)
       this.pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);
+    }
+  }
+
+  /**
+   * Update the battle's "last move" pointer, unless we're currently mimicking a move.
+   * The last move used is unaffected by moves that fail.
+   * @param success - Whether the move was successful or not.
+   */
+  protected updateLastMoveId(success: boolean): void {
+    if (!allMoves[this.move.moveId].hasAttr(CopycatAttr)) {
+      if (success) {
+        globalScene.currentBattle.lastMove = this.move.getMove();
+      }
     }
   }
 
@@ -575,6 +587,7 @@ export class MovePhase extends BattlePhase {
         move: SelfStatusMove.none(),
         result: MoveResult.FAIL,
         type: ElementalType.UNKNOWN,
+        targets: this.targets,
       });
 
       this.pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);

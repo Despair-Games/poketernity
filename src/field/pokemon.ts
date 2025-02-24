@@ -6,7 +6,6 @@ import type BattleScene from "#app/battle-scene";
 // -- end tsdoc imports --
 
 import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
-import type { QueuedMove } from "#app/@types/QueuedMove";
 import type { StarterMoveset } from "#app/@types/StarterData";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type { AnySound } from "#app/battle-scene";
@@ -18,10 +17,13 @@ import { applyAbAttrs, getAbApplyFunc } from "#app/data/apply-ab-attrs";
 import { NoCritTag } from "#app/data/arena-tag";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { starterPassiveAbilities } from "#app/data/balance/passives";
-import type { SpeciesEvolutionCondition, SpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions";
-import { pokemonEvolutions, pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
-import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
-import { EVOLVE_MOVE, RELEARN_MOVE } from "#app/data/balance/pokemon-level-moves";
+import {
+  pokemonEvolutions,
+  pokemonPrevolutions,
+  type SpeciesEvolutionCondition,
+  type SpeciesFormEvolution,
+} from "#app/data/balance/pokemon-evolutions";
+import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#app/data/balance/pokemon-level-moves";
 import {
   BASE_HIDDEN_ABILITY_CHANCE,
   BASE_SHINY_CHANCE,
@@ -53,8 +55,7 @@ import { allAbilities, allMoves } from "#app/data/data-lists";
 import { DexAttr } from "#app/data/dex-attributes";
 import { getLevelTotalExp } from "#app/data/exp";
 import { initMoveAnim } from "#app/data/init-move-anim";
-import type { Move } from "#app/data/move";
-import { getMoveTargets } from "#app/data/move";
+import { getMoveTargets, type Move } from "#app/data/move";
 import { BypassBurnDamageReductionAttr } from "#app/data/move-attrs/bypass-burn-damage-reduction-attr";
 import { CombinedPledgeStabBoostAttr } from "#app/data/move-attrs/combined-pledge-stab-boost-attr";
 import { CounterDamageAttr } from "#app/data/move-attrs/counter-damage-attr";
@@ -88,15 +89,12 @@ import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/species-form-chan
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-post-move-trigger";
 import { SpeciesFormChangeStatusEffectTrigger } from "#app/data/species-form-change-triggers/species-form-change-status-effect-trigger";
 import { Status, getNonVolatileStatusEffects } from "#app/data/status-effect";
-import type { TypeDamageMultiplier } from "#app/data/type";
-import { getTypeDamageMultiplier, getTypeRgb } from "#app/data/type";
-import type { Variant } from "#app/data/variant";
-import { variantData } from "#app/data/variant";
+import { getTypeDamageMultiplier, getTypeRgb, type TypeDamageMultiplier } from "#app/data/type";
+import { variantData, type Variant } from "#app/data/variant";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { TerastallizeModifier } from "#app/modifier/modifier";
 import {
   BaseStatModifier,
   EvoTrackerModifier,
@@ -112,6 +110,7 @@ import {
   TempCritBoosterModifier,
   TempStatStageBoosterModifier,
   type PokemonHeldItemModifier,
+  type TerastallizeModifier,
 } from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
@@ -192,7 +191,6 @@ import type { TrainerSlot } from "#enums/trainer-slot";
 import { UiMode } from "#enums/ui-mode";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-import Phaser from "phaser";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -3397,7 +3395,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
   }
 
-  getMoveQueue(): QueuedMove[] {
+  getMoveQueue(): TurnMove[] {
     return this.summonData.moveQueue;
   }
 
@@ -4553,21 +4551,22 @@ export class EnemyPokemon extends Pokemon {
    * the Pokemon the move will target.
    * @returns this Pokemon's next move in the format {move, moveTargets}
    */
-  getNextMove(): QueuedMove {
+  getNextMove(): TurnMove {
     // If this Pokemon has a move already queued, return it.
-    const queuedMove = this.getMoveQueue().length
-      ? this.getMoveset().find((m) => m.moveId === this.getMoveQueue()[0].moveId)
-      : null;
-    if (queuedMove) {
-      if (queuedMove.isUsable(this, this.getMoveQueue()[0].ignorePP)) {
-        return {
-          moveId: queuedMove.moveId,
-          targets: this.getMoveQueue()[0].targets,
-          ignorePP: this.getMoveQueue()[0].ignorePP,
-        };
-      } else {
-        this.getMoveQueue().shift();
-        return this.getNextMove();
+    const moveQueue = this.getMoveQueue();
+    if (moveQueue.length !== 0) {
+      const queuedMove = moveQueue[0];
+      if (queuedMove) {
+        const moveIndex = this.getMoveset().findIndex((m) => m?.moveId === queuedMove.move.id);
+        if (
+          (moveIndex > -1 && this.getMoveset()[moveIndex]!.isUsable(this, queuedMove.ignorePP))
+          || queuedMove.virtual
+        ) {
+          return queuedMove;
+        } else {
+          this.getMoveQueue().shift();
+          return this.getNextMove();
+        }
       }
     }
 
@@ -4577,20 +4576,22 @@ export class EnemyPokemon extends Pokemon {
     if (movePool.length) {
       // If there's only 1 move in the move pool, use it.
       if (movePool.length === 1) {
-        return { moveId: movePool[0].moveId, targets: this.getNextTargets(movePool[0].moveId) };
+        const move = movePool[0].getMove();
+        return { move, targets: this.getNextTargets(move.id), type: this.getMoveType(move) };
       }
       // If a move is forced because of Encore, use it.
       const encoreTag = this.getTag<EncoreTag>(BattlerTagType.ENCORE);
       if (encoreTag) {
         const encoreMove = movePool.find((m) => m.moveId === encoreTag.moveId);
         if (encoreMove) {
-          return { moveId: encoreMove.moveId, targets: this.getNextTargets(encoreMove.moveId) };
+          const move = encoreMove.getMove();
+          return { move, targets: this.getNextTargets(move.id), type: this.getMoveType(move) };
         }
       }
       switch (this.aiType) {
         case AiType.RANDOM: // No enemy should spawn with this AI type in-game
-          const moveId = movePool[globalScene.randBattleSeedInt(movePool.length)].moveId;
-          return { moveId: moveId, targets: this.getNextTargets(moveId) };
+          const move = movePool[globalScene.randBattleSeedInt(movePool.length)].getMove();
+          return { move, targets: this.getNextTargets(move.id), type: this.getMoveType(move) };
         case AiType.SMART_RANDOM:
         case AiType.SMART:
           /**
@@ -4741,11 +4742,15 @@ export class EnemyPokemon extends Pokemon {
             r,
             sortedMovePool.map((m) => m.getName()),
           );
-          return { moveId: sortedMovePool[r]!.moveId, targets: moveTargets[sortedMovePool[r]!.moveId] };
+          const retMove = sortedMovePool[r].getMove();
+          return { move: retMove, targets: moveTargets[retMove.id], type: this.getMoveType(retMove) };
       }
     }
-
-    return { moveId: MoveId.STRUGGLE, targets: this.getNextTargets(MoveId.STRUGGLE) };
+    return {
+      move: allMoves[MoveId.STRUGGLE],
+      targets: this.getNextTargets(MoveId.STRUGGLE),
+      type: ElementalType.UNKNOWN,
+    };
   }
 
   /**

@@ -445,7 +445,7 @@ export class RechargingTag extends BattlerTag {
     super.onAdd(pokemon);
 
     // Queue a placeholder move for the Pokemon to "use" next turn
-    pokemon.getMoveQueue().push({ moveId: MoveId.NONE, targets: [] });
+    pokemon.getMoveQueue().push({ move: SelfStatusMove.none(), targets: [], type: ElementalType.UNKNOWN });
   }
 
   /** Cancels the source's move this turn and queues a "__ must recharge!" message */
@@ -711,6 +711,7 @@ export class InterruptedTag extends BattlerTag {
       move: SelfStatusMove.none(),
       result: MoveResult.OTHER,
       type: ElementalType.UNKNOWN,
+      targets: [],
     });
   }
 
@@ -1137,7 +1138,8 @@ export abstract class MoveLockTag extends BattlerTag {
 
     if (ret) {
       const nextTargets = this.getNextTargets(pokemon, lastMove, lastTargets);
-      pokemon.getMoveQueue().push({ moveId: this.sourceMoveId, targets: nextTargets, ignorePP: true });
+      const move = allMoves[this.sourceMoveId];
+      pokemon.getMoveQueue().push({ move, targets: nextTargets, ignorePP: true, type: pokemon.getMoveType(move) });
     }
 
     return ret;
