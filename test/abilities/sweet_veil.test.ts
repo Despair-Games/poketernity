@@ -4,8 +4,7 @@ import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { allAbilities } from "#app/data/data-lists";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { BattlerIndex } from "#enums/battler-index";
 
 describe("Abilities - Sweet Veil", () => {
@@ -31,24 +30,10 @@ describe("Abilities - Sweet Veil", () => {
       .enemyAbility(Abilities.BALL_FETCH);
   });
 
-  /**
-   * Uses spying to force every Swirlix on the player's team to have Sweet Veil.
-   *
-   * We want only one Pokemon on the player's party to have Sweet Veil,
-   * so that we can properly test that the ability also protects allies.
-   */
-  function giveSweetVeilToSwirlix(): void {
-    for (const p of game.scene.getPlayerParty()) {
-      if (p.species.speciesId === Species.SWIRLIX) {
-        vi.spyOn(p, "getAbility").mockReturnValue(allAbilities[Abilities.SWEET_VEIL]);
-      }
-    }
-  }
-
   it("prevents the user and its allies from falling asleep", async () => {
     game.override.enemyMoveset(MoveId.SPORE);
     await game.classicMode.startBattle([Species.SWIRLIX, Species.MAGIKARP]);
-    giveSweetVeilToSwirlix();
+    game.forceSpeciesSpecificAbility(Species.SWIRLIX, Abilities.SWEET_VEIL);
 
     game.move.use(MoveId.SPLASH);
     game.move.use(MoveId.SPLASH, 1);
@@ -61,7 +46,7 @@ describe("Abilities - Sweet Veil", () => {
   it("causes Rest to fail when used by the user or its allies", async () => {
     game.override.enemyMoveset(MoveId.SPLASH);
     await game.classicMode.startBattle([Species.SWIRLIX, Species.MAGIKARP]);
-    giveSweetVeilToSwirlix();
+    game.forceSpeciesSpecificAbility(Species.SWIRLIX, Abilities.SWEET_VEIL);
     game.scene.getPlayerField().forEach((p) => (p.hp = 1)); // Damage Pokemon so they can attempt to use Rest
 
     game.move.use(MoveId.REST);
@@ -76,7 +61,7 @@ describe("Abilities - Sweet Veil", () => {
   it("causes Yawn to fail if used on the user or its allies", async () => {
     game.override.enemyMoveset(MoveId.YAWN);
     await game.classicMode.startBattle([Species.SWIRLIX, Species.MAGIKARP]);
-    giveSweetVeilToSwirlix();
+    game.forceSpeciesSpecificAbility(Species.SWIRLIX, Abilities.SWEET_VEIL);
 
     game.move.use(MoveId.SPLASH);
     game.move.use(MoveId.SPLASH, 1);
@@ -89,7 +74,7 @@ describe("Abilities - Sweet Veil", () => {
   it("prevents the user and its allies already drowsy due to Yawn from falling asleep.", async () => {
     game.override.enemyMoveset(MoveId.YAWN);
     await game.classicMode.startBattle([Species.FEEBAS, Species.SHUCKLE, Species.SWIRLIX]);
-    giveSweetVeilToSwirlix();
+    game.forceSpeciesSpecificAbility(Species.SWIRLIX, Abilities.SWEET_VEIL);
 
     game.move.use(MoveId.SPLASH);
     game.move.use(MoveId.YAWN, 1, BattlerIndex.PLAYER);
