@@ -42,12 +42,31 @@ describe("Abilities - Magic Bounce", () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
 
     game.move.use(MoveId.GROWL);
 
     await game.toEndOfTurn();
 
     expect(player.getStatStage(Stat.ATK)).toBe(-1);
+    expect(enemy.getStatStage(Stat.ATK)).toBe(0);
+  });
+
+  it("should reflect basic status moves (enemy)", async () => {
+    game.override.ability(Abilities.MAGIC_BOUNCE).enemyAbility(Abilities.BALL_FETCH);
+
+    await game.classicMode.startBattle([Species.MAGIKARP]);
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    game.move.use(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.GROWL);
+
+    await game.toEndOfTurn();
+
+    expect(player.getStatStage(Stat.ATK)).toBe(0);
+    expect(enemy.getStatStage(Stat.ATK)).toBe(-1);
   });
 
   it("should not bounce moves while the target is in the semi-invulnerable state", async () => {
@@ -96,22 +115,26 @@ describe("Abilities - Magic Bounce", () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
 
     game.move.use(MoveId.GROWL);
     await game.toEndOfTurn();
 
     expect(player.getStatStage(Stat.ATK)).toBe(-1);
+    expect(enemy.getStatStage(Stat.ATK)).toBe(0);
   });
 
   it("should receive the stat change after reflecting a move back to a mirror armor user", async () => {
     game.override.ability(Abilities.MIRROR_ARMOR);
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
+    const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
 
     game.move.use(MoveId.GROWL);
     await game.toEndOfTurn();
 
+    expect(player.getStatStage(Stat.ATK)).toBe(0);
     expect(enemy.getStatStage(Stat.ATK)).toBe(-1);
   });
 
@@ -119,11 +142,13 @@ describe("Abilities - Magic Bounce", () => {
     game.override.ability(Abilities.MOLD_BREAKER);
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
+    const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
 
     game.move.use(MoveId.GROWL);
     await game.toEndOfTurn();
 
+    expect(player.getStatStage(Stat.ATK)).toBe(0);
     expect(enemy.getStatStage(Stat.ATK)).toBe(-1);
   });
 
@@ -180,6 +205,7 @@ describe("Abilities - Magic Bounce", () => {
     expect(game.field.getEnemyPokemon().getTag(BattlerTagType.CURSED)).toBeDefined();
   });
 
+  /** @todo Encore creates issues with move history order */
   it.todo("should not cause encore to be interrupted after bouncing", async () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
     const player = game.field.getPlayerPokemon();
@@ -206,7 +232,7 @@ describe("Abilities - Magic Bounce", () => {
     expect(enemy.getLastXMoves()[0].move.id).toBe(MoveId.TACKLE);
   });
 
-  // TODO: encore is failing if the last move was virtual.
+  /** @todo Encore currently includes virtual moves when applying its effect */
   it.todo("should not cause the bounced move to count for encore", async () => {
     game.override.enemyMoveset([MoveId.GROWL, MoveId.TACKLE]);
     game.override.enemyAbility(Abilities.MAGIC_BOUNCE);

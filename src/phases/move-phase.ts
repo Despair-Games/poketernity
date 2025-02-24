@@ -25,7 +25,7 @@ import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
-import { BooleanHolder, NumberHolder } from "#app/utils";
+import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveFlags } from "#enums/move-flags";
@@ -181,17 +181,15 @@ export class MovePhase extends BattlePhase {
 
     this.lapsePreMoveAndMoveTags();
 
-    if (this.cancelled) {
-      return this.end();
+    if (!this.cancelled) {
+      this.showMoveText();
+
+      this.resolveRedirectTarget();
+
+      this.resolveCounterAttackTarget();
+
+      this.tryReflectMove();
     }
-
-    this.showMoveText();
-
-    this.resolveRedirectTarget();
-
-    this.resolveCounterAttackTarget();
-
-    this.tryReflectMove();
 
     if (!(this.failed || this.cancelled)) {
       this.resolveFinalPreMoveCancellationChecks();
@@ -338,7 +336,7 @@ export class MovePhase extends BattlePhase {
           break;
         default:
           const target = globalScene.getFieldPokemonByBattlerIndex(t);
-          if (target) {
+          if (!isNullOrUndefined(target)) {
             targets.push(target);
           }
           break;
