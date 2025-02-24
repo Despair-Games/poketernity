@@ -1,17 +1,17 @@
-import type { BattlerIndex } from "#enums/battler-index";
-import { CommonAnim } from "#enums/common-anim";
 import type { HealBlockTag } from "#app/data/battler-tags";
 import { getStatusEffectHealText } from "#app/data/status-effect";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { HealingBoosterModifier } from "#app/modifier/modifier";
+import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { NumberHolder } from "#app/utils";
+import { AchvCategory } from "#enums/achv-category";
+import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { CommonAnim } from "#enums/common-anim";
+import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
-import { CommonAnimPhase } from "./common-anim-phase";
-import { AchvCategory } from "#enums/achv-category";
-import { PhaseId } from "#enums/phase-id";
 
 export interface PokemonHealPhaseOptions {
   message?: string;
