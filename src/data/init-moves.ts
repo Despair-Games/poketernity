@@ -1,15 +1,15 @@
-import { allMoves } from "#app/data/data-lists";
 import { type ShellTrapTag, type StockpilingTag } from "#app/data/battler-tags";
+import { allMoves } from "#app/data/data-lists";
 import { AttackMove, SelfStatusMove, StatusMove, type Move } from "#app/data/move";
 import { AbilityChangeAttr } from "#app/data/move-attrs/ability-change-attr";
 import { AbilityCopyAttr } from "#app/data/move-attrs/ability-copy-attr";
 import { AbilityGiveAttr } from "#app/data/move-attrs/ability-give-attr";
 import { AcupressureStatStageChangeAttr } from "#app/data/move-attrs/acupressure-stat-stage-change-attr";
 import { AddArenaTagAttr } from "#app/data/move-attrs/add-arena-tag-attr";
-import { AddEntryHazardTagAttr } from "#app/data/move-attrs/add-entry-hazard-tag-attr";
 import { AddBattlerTagAttr } from "#app/data/move-attrs/add-battler-tag-attr";
 import { AddBattlerTagHeaderAttr } from "#app/data/move-attrs/add-battler-tag-header-attr";
 import { AddBattlerTagIfBoostedAttr } from "#app/data/move-attrs/add-battler-tag-if-boosted-attr";
+import { AddEntryHazardTagAttr } from "#app/data/move-attrs/add-entry-hazard-tag-attr";
 import { AddPledgeEffectAttr } from "#app/data/move-attrs/add-pledge-effect-attr";
 import { AddSubstituteAttr } from "#app/data/move-attrs/add-substitute-attr";
 import { AddTypeAttr } from "#app/data/move-attrs/add-type-attr";
@@ -28,6 +28,7 @@ import { BoostHealAttr } from "#app/data/move-attrs/boost-heal-attr";
 import { BypassBurnDamageReductionAttr } from "#app/data/move-attrs/bypass-burn-damage-reduction-attr";
 import { BypassRedirectAttr } from "#app/data/move-attrs/bypass-redirect-attr";
 import { BypassSleepAttr } from "#app/data/move-attrs/bypass-sleep-attr";
+import { CaptivateAttr } from "#app/data/move-attrs/captivate-attr";
 import { ChangeTypeAttr } from "#app/data/move-attrs/change-type-attr";
 import { ChillyReceptionAttr } from "#app/data/move-attrs/chilly-reception-attr";
 import { ClearTerrainAttr } from "#app/data/move-attrs/clear-terrain-attr";
@@ -42,6 +43,7 @@ import { ConsecutiveUseMultiBasePowerAttr } from "#app/data/move-attrs/consecuti
 import { CopyBiomeTypeAttr } from "#app/data/move-attrs/copy-biome-type-attr";
 import { CopyStatsAttr } from "#app/data/move-attrs/copy-stats-attr";
 import { CopyTypeAttr } from "#app/data/move-attrs/copy-type-attr";
+import { CopycatAttr } from "#app/data/move-attrs/copycat-attr";
 import { CounterDamageAttr } from "#app/data/move-attrs/counter-damage-attr";
 import { CritOnlyAttr } from "#app/data/move-attrs/crit-only-attr";
 import { CueNextRoundAttr } from "#app/data/move-attrs/cue-next-round-attr";
@@ -52,6 +54,8 @@ import { DefAtkAttr } from "#app/data/move-attrs/def-atk-attr";
 import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 import { DestinyBondAttr } from "#app/data/move-attrs/destiny-bond-attr";
 import { DiscourageFrequentUseAttr } from "#app/data/move-attrs/discourage-frequent-use-attr";
+import { DisplayMessageAttr } from "#app/data/move-attrs/display-message-attr";
+import { DoubleDamageToMaxAttr } from "#app/data/move-attrs/double-damage-to-max-attr";
 import { DoublePowerChanceAttr, doublePowerChanceMessageFunc } from "#app/data/move-attrs/double-power-chance-attr";
 import { EatBerryAttr } from "#app/data/move-attrs/eat-berry-attr";
 import { ElectroBallPowerAttr } from "#app/data/move-attrs/electro-ball-power-attr";
@@ -102,6 +106,8 @@ import { magnitudeMessageFunc, MagnitudePowerAttr } from "#app/data/move-attrs/m
 import { MatchHpAttr } from "#app/data/move-attrs/match-hp-attr";
 import { MatchUserTypeAttr } from "#app/data/move-attrs/match-user-type-attr";
 import { MessageHeaderAttr } from "#app/data/move-attrs/message-header-attr";
+import { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
+import { MirrorMoveAttr } from "#app/data/move-attrs/mirror-move-attr";
 import { MissEffectAttr } from "#app/data/move-attrs/miss-effect-attr";
 import { MoneyAttr } from "#app/data/move-attrs/money-attr";
 import { MovePowerMultiplierAttr } from "#app/data/move-attrs/move-power-multiplier-attr";
@@ -125,6 +131,7 @@ import { PreMoveMessageAttr } from "#app/data/move-attrs/pre-move-message-attr";
 import { PresentPowerAttr } from "#app/data/move-attrs/present-power-attr";
 import { ProtectAttr } from "#app/data/move-attrs/protect-attr";
 import { PsychoShiftEffectAttr } from "#app/data/move-attrs/psycho-shift-effect-attr";
+import { RageAttr } from "#app/data/move-attrs/rage-attr";
 import { RagingBullTypeAttr } from "#app/data/move-attrs/raging-bull-type-attr";
 import { RandomLevelDamageAttr } from "#app/data/move-attrs/random-level-damage-attr";
 import {
@@ -137,8 +144,8 @@ import { RecoilAttr } from "#app/data/move-attrs/recoil-attr";
 import { ReducePpMoveAttr } from "#app/data/move-attrs/reduce-pp-move-attr";
 import { RemoveAllSubstitutesAttr } from "#app/data/move-attrs/remove-all-substitutes-attr";
 import { RemoveArenaTagsAttr } from "#app/data/move-attrs/remove-arena-tags-attr";
-import { RemoveEntryHazardAttr } from "#app/data/move-attrs/remove-entry-hazard-attr";
 import { rapidSpinRemoveTags, RemoveBattlerTagAttr } from "#app/data/move-attrs/remove-battler-tag-attr";
+import { RemoveEntryHazardAttr } from "#app/data/move-attrs/remove-entry-hazard-attr";
 import { RemoveHeldItemAttr } from "#app/data/move-attrs/remove-held-item-attr";
 import { RemoveScreensAttr } from "#app/data/move-attrs/remove-screens-attr";
 import { RemoveTypeAttr } from "#app/data/move-attrs/remove-type-attr";
@@ -242,13 +249,6 @@ import { SwitchType } from "#enums/switch-type";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-import { RageAttr } from "./move-attrs/rage-attr";
-import { CaptivateAttr } from "./move-attrs/captivate-attr";
-import { DoubleDamageToMaxAttr } from "./move-attrs/double-damage-to-max-attr";
-import { DisplayMessageAttr } from "./move-attrs/display-message-attr";
-import { MirrorMoveAttr } from "#app/data/move-attrs/mirror-move-attr";
-import { CopycatAttr } from "#app/data/move-attrs/copycat-attr";
-import { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
 
 // prettier-ignore
 export function initMoves() {
@@ -642,8 +642,11 @@ export function initMoves() {
     new AttackMove(MoveId.BIDE, ElementalType.NORMAL, MoveCategory.PHYSICAL, -1, -1, 10, -1, 1, 1)
       .target(MoveTarget.USER)
       .unimplemented(),
-    new SelfStatusMove(MoveId.METRONOME, ElementalType.NORMAL, -1, 10, -1, 0, 1).attr(MetronomeAttr),
-    new StatusMove(MoveId.MIRROR_MOVE, ElementalType.FLYING, -1, 20, -1, 0, 1).attr(MirrorMoveAttr).edgeCase(), // Need to find out which moves are not copyable by Mirror Move
+    new SelfStatusMove(MoveId.METRONOME, ElementalType.NORMAL, -1, 10, -1, 0, 1)
+      .attr(MetronomeAttr),
+    new StatusMove(MoveId.MIRROR_MOVE, ElementalType.FLYING, -1, 20, -1, 0, 1)
+      .attr(MirrorMoveAttr)
+      .edgeCase(),
     new AttackMove(MoveId.SELF_DESTRUCT, ElementalType.NORMAL, MoveCategory.PHYSICAL, 200, 100, 5, -1, 0, 1)
       .attr(SacrificialAttr)
       .makesContact(false)
