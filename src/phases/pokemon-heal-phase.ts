@@ -2,8 +2,6 @@ import type { BattlerIndex } from "#enums/battler-index";
 import { CommonAnim } from "#enums/common-anim";
 import type { HealBlockTag } from "#app/data/battler-tags";
 import { getStatusEffectHealText } from "#app/data/status-effect";
-import { type DamageResult } from "#app/field/pokemon";
-import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { HealingBoosterModifier } from "#app/modifier/modifier";
@@ -69,7 +67,7 @@ export class PokemonHealPhase extends CommonAnimPhase {
     // (at which point it could be outdated)
     const hasMessage = !!this.message;
     const healOrDamage = !pokemon.isFullHp() || this.hpHealed < 0;
-    const healBlock = pokemon.getTag(BattlerTagType.HEAL_BLOCK) as HealBlockTag;
+    const healBlock = pokemon.getTag<HealBlockTag>(BattlerTagType.HEAL_BLOCK);
     let lastStatusEffect = StatusEffect.NONE;
 
     if (healBlock && this.hpHealed > 0) {
@@ -85,7 +83,7 @@ export class PokemonHealPhase extends CommonAnimPhase {
 
       const healAmount = new NumberHolder(Math.floor(this.hpHealed * hpRestoreMultiplier.value));
       if (healAmount.value < 0) {
-        pokemon.damageAndUpdate(healAmount.value * -1, HitResult.HEAL as DamageResult);
+        pokemon.damageAndUpdate(healAmount.value * -1);
         healAmount.value = 0;
       }
 
@@ -95,9 +93,6 @@ export class PokemonHealPhase extends CommonAnimPhase {
       }
 
       healAmount.value = pokemon.heal(healAmount.value);
-      if (healAmount.value) {
-        globalScene.damageNumberHandler.add(pokemon, healAmount.value, HitResult.HEAL);
-      }
 
       if (pokemon.isPlayer()) {
         globalScene.validateAchvs(AchvCategory.HEAL, healAmount);
