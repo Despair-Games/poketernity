@@ -1,11 +1,11 @@
-import { BattlerIndex } from "#enums/battler-index";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { allAbilities } from "#app/data/data-lists";
 
 describe("Abilities - Sweet Veil", () => {
   let phaserGame: Phaser.Game;
@@ -69,24 +69,23 @@ describe("Abilities - Sweet Veil", () => {
   });
 
   it("prevents the user and its allies already drowsy due to Yawn from falling asleep.", async () => {
+    game.override.enemyMoveset(MoveId.YAWN).ability(Abilities.BALL_FETCH);
     await game.classicMode.startBattle([Species.FEEBAS, Species.SHUCKLE, Species.SWIRLIX]);
 
-    game.move.use(MoveId.SPLASH);
-    game.move.use(MoveId.YAWN, 1, BattlerIndex.PLAYER);
+    // Prevent test failing due to Swirlix randomly rolling its HA
+    vi.spyOn(game.scene.getPlayerParty()[2], "getAbility").mockReturnValue(allAbilities[Abilities.SWEET_VEIL]);
 
-    // Use Gastro Acid to disable Sweet Veil on turn 1, so that Yawn can succeed
-    await game.move.forceEnemyMove(MoveId.GASTRO_ACID, BattlerIndex.PLAYER);
-    await game.move.forceEnemyMove(MoveId.GASTRO_ACID, BattlerIndex.PLAYER_2);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
+    game.move.use(MoveId.SPLASH);
+    game.move.use(MoveId.SPLASH, 1);
+
     await game.toNextTurn();
 
     expect(game.scene.getPlayerField().some((p) => !!p.getTag(BattlerTagType.DROWSY))).toBe(true);
 
-    // Switch into a new Pokemon on turn 2 to re-enable Sweet Veil
+    // Turn 2: Switch into Swirlix with Sweet Veil
     game.move.use(MoveId.SPLASH);
     game.doSwitchPokemon(2);
-    await game.move.forceEnemyMove(MoveId.SPLASH);
-    await game.move.forceEnemyMove(MoveId.SPLASH);
+
     await game.toEndOfTurn();
 
     expect(game.scene.getPlayerField().some((p) => p.hasNonVolatileStatusEffect(true, true))).toBe(false);
