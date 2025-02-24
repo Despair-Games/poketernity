@@ -5,7 +5,6 @@ import type { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import type { Move } from "#app/data/move";
 import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
-import { allMoves } from "#app/data/data-lists";
 
 /**
  * Attribute that cancels the associated move's effects when set to be combined
@@ -28,11 +27,11 @@ export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
     const { turnManager } = globalScene.currentBattle;
 
     const ret = turnManager.preemptFightCommand((tc) => {
-      const { pokemon, move: queuedMove } = tc;
-      if (!queuedMove || pokemon.isPlayer() !== user.isPlayer()) {
+      const { pokemon, turnMove } = tc;
+      if (!turnMove || pokemon.isPlayer() !== user.isPlayer()) {
         return false;
       }
-      const allyMove = allMoves[queuedMove.moveId];
+      const allyMove = turnMove.move;
       return allyMove !== move && allyMove.hasAttr(AwaitCombinedPledgeAttr);
     });
 

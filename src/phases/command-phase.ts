@@ -5,7 +5,7 @@ import { speciesStarterCosts } from "#app/data/balance/starters";
 import type { EncoreTag } from "#app/data/battler-tags";
 import { type SkyDropTag, type TrappedTag } from "#app/data/battler-tags";
 import { allMoves } from "#app/data/data-lists";
-import { getMoveTargets, SelfStatusMove, type MoveTargetSet } from "#app/data/move";
+import { getMoveTargets, type MoveTargetSet } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -20,7 +20,6 @@ import { BattleCommand } from "#enums/battle-command";
 import { BattleType } from "#enums/battle-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Biome } from "#enums/biome";
-import { ElementalType } from "#enums/elemental-type";
 import { FieldPosition } from "#enums/field-position";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
@@ -192,16 +191,16 @@ export class CommandPhase extends FieldPhase {
           }
 
           const turnCommand: TurnCommand = {
-            pokemon: pokemon,
+            pokemon,
             command: BattleCommand.FIGHT,
-            cursor: cursor,
+            cursor,
             turnMove: {
               move: allMoves[moveId],
               targets: [],
               ignorePP: ignorePp,
-              type: playerPokemon.getMoveType(allMoves[moveId]),
+              type: pokemon.getMoveType(allMoves[moveId]),
             },
-            args: args,
+            args,
           };
           const moveTargets: MoveTargetSet =
             turnMove === undefined

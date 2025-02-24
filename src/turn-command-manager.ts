@@ -7,11 +7,10 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { SwitchType } from "#enums/switch-type";
-import type { QueuedMove } from "./@types/QueuedMove";
 import type { TurnCommandFilter } from "./@types/TurnCommandFilter";
+import type { TurnMove } from "./@types/TurnMove";
 import type { BypassSpeedChanceAbAttr } from "./data/ab-attrs/bypass-speed-chance-ab-attr";
 import { applyAbAttrs } from "./data/apply-ab-attrs";
-import { allMoves } from "./data/data-lists";
 import { MoveHeaderAttr } from "./data/move-attrs/move-header-attr";
 import type { Pokemon } from "./field/pokemon";
 import { PokemonMove } from "./field/pokemon-move";
@@ -42,7 +41,7 @@ export interface TurnCommand {
    * The move for the Pokemon to use.
    * Used for {@linkcode Command.FIGHT | fight commands}.
    */
-  move?: QueuedMove;
+  turnMove?: TurnMove;
   /**
    * The {@linkcode Pokemon} to target with the action.
    * Used for {@linkcode Command.FIGHT | fight} and
@@ -215,19 +214,19 @@ export class TurnCommandManager {
     const turnCommand = this.tryRemoveCommand((tc) => tc.command === BattleCommand.FIGHT && commandFilter(tc));
 
     if (turnCommand) {
-      const { pokemon, cursor, move: queuedMove, targets } = turnCommand;
-      if (!pokemon.isActive(true) || !queuedMove) {
+      const { pokemon, cursor, turnMove: turnMove, targets } = turnCommand;
+      if (!pokemon.isActive(true) || !turnMove) {
         return false;
       }
 
       pokemon.turnData.order = this.orderIndex++;
 
       const move =
-        pokemon.getMoveset().find((m) => m.moveId === queuedMove.moveId && m.ppUsed < m.getMovePp())
-        ?? new PokemonMove(queuedMove.moveId);
+        pokemon.getMoveset().find((m) => m.moveId === turnMove.move.id && m.ppUsed < m.getMovePp())
+        ?? new PokemonMove(turnMove.move.id);
 
       globalScene.appendToPhase(
-        new MovePhase(pokemon, targets ?? queuedMove.targets, move, false, cursor !== -1 && queuedMove.ignorePP),
+        new MovePhase(pokemon, targets ?? turnMove.targets, move, false, cursor !== -1 && turnMove.ignorePP),
         PhaseId.MOVE_END,
       );
 
@@ -271,12 +270,13 @@ export class TurnCommandManager {
       return false;
     }
 
-    const newMove: QueuedMove = {
-      moveId: move.moveId,
+    const newMove: TurnMove = {
+      move: move.getMove(),
       targets,
+      type: pokemon.getMoveType(move.getMove()),
     };
 
-    turnCommand.move = newMove;
+    turnCommand.turnMove = newMove;
     turnCommand.targets = targets;
 
     return true;
@@ -333,7 +333,7 @@ export class TurnCommandManager {
         }
       } else if (a.command === BattleCommand.FIGHT) {
         const priority = [a, b].map((tc) => {
-          const move = allMoves[tc.move!.moveId];
+          const move = tc.turnMove!.move;
           return move.getPriority(tc.pokemon, quiet);
         });
 
@@ -355,8 +355,8 @@ export class TurnCommandManager {
   }
 
   private handleFightCommand(turnCommand: TurnCommand): boolean {
-    const { pokemon, cursor, move: queuedMove, targets } = turnCommand;
-    if (!pokemon.isActive(true) || !queuedMove) {
+    const { pokemon, cursor, turnMove, targets } = turnCommand;
+    if (!pokemon.isActive(true) || !turnMove) {
       console.warn(`FIGHT command from ${pokemon?.name} is invalid`);
       return false;
     }
@@ -364,11 +364,11 @@ export class TurnCommandManager {
     pokemon.turnData.order = this.orderIndex++;
 
     const move =
-      pokemon.getMoveset().find((m) => m.moveId === queuedMove.moveId && m.ppUsed < m.getMovePp())
-      ?? new PokemonMove(queuedMove.moveId);
+      pokemon.getMoveset().find((m) => m.moveId === turnMove.move.id && m.ppUsed < m.getMovePp())
+      ?? new PokemonMove(turnMove.move.id);
 
     globalScene.unshiftPhase(
-      new MovePhase(pokemon, targets ?? queuedMove.targets, move, false, cursor !== -1 && queuedMove.ignorePP),
+      new MovePhase(pokemon, targets ?? turnMove.targets, move, false, cursor !== -1 && turnMove.ignorePP),
     );
     return true;
   }
@@ -439,13 +439,13 @@ export class TurnCommandManager {
    */
   private applyBypassSpeedEffects(): void {
     this.turnCommands.forEach((tc) => {
-      const { pokemon, move } = tc;
+      const { pokemon, turnMove } = tc;
       // Only apply to fight commands
-      if (!move) {
+      if (!turnMove) {
         return;
       }
 
-      applyAbAttrs<BypassSpeedChanceAbAttr>(AbAttrFlag.BYPASS_SPEED_CHANCE, pokemon, false, allMoves[move.moveId]);
+      applyAbAttrs<BypassSpeedChanceAbAttr>(AbAttrFlag.BYPASS_SPEED_CHANCE, pokemon, false, turnMove.move);
       globalScene.applyModifiers(BypassSpeedChanceModifier, pokemon.isPlayer(), pokemon);
     });
   }
@@ -461,12 +461,12 @@ export class TurnCommandManager {
       if (tc.command !== BattleCommand.FIGHT) {
         return;
       }
-      const { pokemon, move: queuedMove } = tc;
-      if (!queuedMove) {
+      const { pokemon, turnMove } = tc;
+      if (!turnMove) {
         return;
       }
       const pokemonMove =
-        pokemon.getMoveset().find((mv) => mv.moveId === queuedMove.moveId) ?? new PokemonMove(queuedMove.moveId);
+        pokemon.getMoveset().find((mv) => mv.moveId === turnMove.move.id) ?? new PokemonMove(turnMove.move.id);
 
       if (pokemonMove.getMove().hasAttr(MoveHeaderAttr)) {
         globalScene.unshiftPhase(new MoveHeaderPhase(pokemon, pokemonMove));
