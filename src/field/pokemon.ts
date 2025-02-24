@@ -3049,8 +3049,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   /**
    * Deals damage to the pokemon. Called by {@linkcode damageAndUpdate}
    * @param amount - Amount of damage that should be dealt
-   * @param ignoreSegments - Only used by {@linkcode EnemyPokemon.damage}
-   * @param preventEndure - If `true`, bypasses the effects of Endure, Sturdy, etc. Default `false`
+   * @param ignoreSegments - If `true`, ignores the damage gating of boss bars.
+   *   Only used by {@linkcode EnemyPokemon.damage}. Default `false`
+   * @param preventEndure - If `true`, bypasses the effects of Endure and Sturdy.
+   *   Usually set to `true` for indirect damage (weather, statuses, etc). Default `false`
    * @param ignoreFaintPhase - If `true`, won't push a {@linkcode FaintPhase}. Default `false`
    * @param ignoreDynamaxReduction - If `true`, dynamax damage reduction will be ignored. Default `false`
    * @returns The amount of damage actually dealt.
