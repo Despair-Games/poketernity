@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { allMoves } from "#app/data/data-lists";
 import { CommonAnim } from "#enums/common-anim";
-import { type CenterOfAttentionTag } from "#app/data/battler-tags";
+import type { MagicCoatTag, CenterOfAttentionTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
 import { BypassRedirectAttr } from "#app/data/move-attrs/bypass-redirect-attr";
@@ -37,6 +37,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
 import { getMoveTargets, SelfStatusMove } from "#app/data/move";
 import { WeatherType } from "#enums/weather-type";
+import { type ReflectMovesAbAttr } from "#app/data/ab-attrs/reflect-moves-ab-attr";
 
 /**
  * Resolves the following:
@@ -175,7 +176,16 @@ export class MovePhase extends BattlePhase {
 
     this.resolvePreMoveStatusEffects();
 
+    // form changes happen even before we know that the move wll execute.
+    globalScene.triggerPokemonFormChange(this.pokemon, SpeciesFormChangePreMoveTrigger);
+
     this.lapsePreMoveAndMoveTags();
+
+    if (this.cancelled) {
+      return this.end();
+    }
+
+    this.showMoveText();
 
     this.resolveRedirectTarget();
 
@@ -211,7 +221,6 @@ export class MovePhase extends BattlePhase {
       (targets.length === 0 && !isFieldTargeted(this.targets))
       || (moveQueue.length && moveQueue[0].moveId === MoveId.NONE)
     ) {
-      this.showMoveText();
       this.showFailedText();
       this.cancel();
     }
@@ -311,6 +320,7 @@ export class MovePhase extends BattlePhase {
       return;
     }
 
+    /** The {@linkcode Pokemon} affected by the move in progress */
     const targets: Pokemon[] = [];
 
     for (const t of this.targets) {
@@ -337,8 +347,15 @@ export class MovePhase extends BattlePhase {
 
     const targetSet = new Set<Pokemon>(targets);
     for (const target of targetSet) {
-      /** @todo Apply Magic Bounce formally and include Magic Coat */
-      if (target.hasAbility(Abilities.MAGIC_BOUNCE) && !target.isSemiInvulnerable()) {
+      if (target.isSemiInvulnerable()) {
+        continue;
+      }
+
+      const reflected = new BooleanHolder(false);
+      target.getTag<MagicCoatTag>(BattlerTagType.MAGIC_COAT)?.apply(target, false, this.pokemon, move, reflected);
+      applyAbAttrs<ReflectMovesAbAttr>(AbAttrFlag.REFLECT_MOVES, target, false, this.pokemon, move, reflected);
+
+      if (reflected.value) {
         globalScene.useMove({
           pokemon: target,
           targets: this.getReflectionTargets(target),
@@ -348,10 +365,13 @@ export class MovePhase extends BattlePhase {
           when: "eager",
         });
 
+        // Only one Pokemon can reflect a field-targeting move (e.g. Spikes) at a time
         if (isFieldTargeted(this.targets)) {
           this.cancel();
           return;
         } else {
+          // Remove this target from the current move's list of targets.
+          // If no targets are left after this point, cancel the move.
           this.targets.splice(this.targets.indexOf(target.getBattlerIndex()), 1);
           if (this.targets.length === 0) {
             this.cancel();
@@ -370,6 +390,13 @@ export class MovePhase extends BattlePhase {
   protected getReflectionTargets(reflectSource: Pokemon): BattlerIndex[] {
     const { targets, multiple } = getMoveTargets(reflectSource, this.move.moveId);
 
+    /**
+     * - Moves that target multiple Pokemon are reflected in full, e.g. a reflected
+     * Growl will reduce both the original attacker and its ally's Attack
+     * - Moves that target a side of the field are reflected onto the other side of
+     * the field.
+     * - Single-target moves are reflected back at the original attacker.
+     */
     if (multiple || isFieldTargeted(targets)) {
       return targets;
     } else {
@@ -380,11 +407,6 @@ export class MovePhase extends BattlePhase {
   protected useMove(): void {
     const targets = this.getActiveTargetPokemon();
     const moveQueue = this.pokemon.getMoveQueue();
-
-    // form changes happen even before we know that the move wll execute.
-    globalScene.triggerPokemonFormChange(this.pokemon, SpeciesFormChangePreMoveTrigger);
-
-    this.showMoveText();
 
     if (moveQueue.length > 0) {
       // Using .shift here clears out two turn moves once they've been used
@@ -495,7 +517,6 @@ export class MovePhase extends BattlePhase {
       // Protean and Libero apply on the charging turn of charge moves
       applyAbAttrs(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
 
-      this.showMoveText();
       globalScene.chargeMove(this.pokemon.getBattlerIndex(), this.targets, this.move);
     } else {
       this.pokemon.pushMoveHistory({
@@ -507,7 +528,6 @@ export class MovePhase extends BattlePhase {
       });
 
       const failureMessage = move.getFailedText(this.pokemon, targets[0], move, new BooleanHolder(false));
-      this.showMoveText();
       this.showFailedText(failureMessage ?? undefined);
 
       // Remove the user from its semi-invulnerable state (if applicable)
@@ -623,7 +643,6 @@ export class MovePhase extends BattlePhase {
 
       if (this.targets[0] === BattlerIndex.ATTACKER) {
         this.fail();
-        this.showMoveText();
         this.showFailedText();
       }
     }

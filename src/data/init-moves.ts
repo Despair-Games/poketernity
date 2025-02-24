@@ -1091,7 +1091,8 @@ export function initMoves() {
     new StatusMove(MoveId.ENCORE, ElementalType.NORMAL, 100, 5, -1, 0, 2)
       .attr(EncoreAttr)
       .ignoresSubstitute()
-      .bounceable(),
+      .bounceable()
+      .edgeCase(), // wrongly interacts with moves reflected by Magic Coat/Bounce
     new AttackMove(MoveId.PURSUIT, ElementalType.DARK, MoveCategory.PHYSICAL, 40, 100, 20, -1, 0, 2).partial(), // No effect implemented
     new AttackMove(MoveId.RAPID_SPIN, ElementalType.NORMAL, MoveCategory.PHYSICAL, 50, 100, 40, 100, 0, 2)
       .attr(StatStageChangeAttr, [Stat.SPD], 1, true)
@@ -1265,7 +1266,8 @@ export function initMoves() {
       -1,
       true,
     ),
-    new SelfStatusMove(MoveId.MAGIC_COAT, ElementalType.PSYCHIC, -1, 15, -1, 4, 3).unimplemented(),
+    new SelfStatusMove(MoveId.MAGIC_COAT, ElementalType.PSYCHIC, -1, 15, -1, 4, 3)
+      .attr(AddBattlerTagAttr, BattlerTagType.MAGIC_COAT, true, { failOnOverlap: true }),
     new SelfStatusMove(MoveId.RECYCLE, ElementalType.NORMAL, -1, 10, -1, 0, 3).unimplemented(),
     new AttackMove(MoveId.REVENGE, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 60, 100, 10, -1, -4, 3).attr(
       TurnDamagedDoublePowerAttr,
