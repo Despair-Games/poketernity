@@ -92,7 +92,9 @@ export class PokemonHealPhase extends CommonAnimPhase {
         healAmount.value = pokemon.getMaxHp() - pokemon.hp - 1;
       }
 
-      healAmount.value = pokemon.heal(healAmount.value);
+      if (healAmount.value > 0) {
+        healAmount.value = pokemon.heal(healAmount.value);
+      }
 
       if (pokemon.isPlayer()) {
         globalScene.validateAchvs(AchvCategory.HEAL, healAmount);
