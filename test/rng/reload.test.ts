@@ -45,6 +45,7 @@ describe("Reload", () => {
       .battleType("single")
       .startingLevel(100) // Avoid levelling up
       .disableTrainerWaves()
+      .startingBiome(Biome.ICE_CAVE) // Guaranteed to go to snowy forest
       .moveset([MoveId.SPLASH])
       .enemyMoveset(MoveId.SPLASH);
     await game.dailyMode.startBattle();
