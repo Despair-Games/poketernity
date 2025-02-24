@@ -5,6 +5,8 @@ import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { Button } from "#enums/buttons";
+import { UiMode } from "#enums/ui-mode";
 
 describe("Reload", () => {
   let phaserGame: Phaser.Game;
@@ -45,13 +47,16 @@ describe("Reload", () => {
       .battleType("single")
       .startingLevel(100) // Avoid levelling up
       .disableTrainerWaves()
-      .startingBiome(Biome.ICE_CAVE) // Guaranteed to go to snowy forest
       .moveset([MoveId.SPLASH])
       .enemyMoveset(MoveId.SPLASH);
     await game.dailyMode.startBattle();
 
     // Transition from Wave 10 to Wave 11 in order to trigger biome switch
     game.move.select(MoveId.SPLASH);
+    game.onNextPrompt("SelectBiomePhase", UiMode.OPTION_SELECT, () => {
+      // Input first option for Map
+      game.scene.ui.getHandler().processInput(Button.ACTION);
+    });
     await game.doKillOpponents();
     await game.toNextWave();
     expect(game.phaseInterceptor.log).toContain("NewBiomeEncounterPhase");
