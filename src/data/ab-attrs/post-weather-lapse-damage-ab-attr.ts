@@ -1,13 +1,13 @@
+import { PostWeatherLapseAbAttr } from "#app/data/ab-attrs/post-weather-lapse-ab-attr";
 import type { Weather } from "#app/data/weather";
 import type { Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { toDmgValue } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { HitResult } from "#enums/hit-result";
 import type { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-import { PostWeatherLapseAbAttr } from "./post-weather-lapse-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
   private readonly damageFactor: number;
@@ -31,7 +31,7 @@ export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
           abilityName,
         }),
       );
-      pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / (16 / this.damageFactor)), HitResult.OTHER);
+      pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / (16 / this.damageFactor)), { result: HitResult.OTHER });
     }
 
     return true;

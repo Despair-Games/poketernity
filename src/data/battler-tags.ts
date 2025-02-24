@@ -1,54 +1,53 @@
-import { globalScene } from "#app/global-scene";
-import { applyAbAttrs } from "./apply-ab-attrs";
-import { CommonBattleAnim } from "./battle-anims/common-battle-anim";
-import { MoveChargeAnim } from "./battle-anims/move-charge-anim";
-import { CommonAnim } from "#enums/common-anim";
-import { ChargeAnim } from "#enums/charge-anim";
+import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { CommonBattleAnim } from "#app/data/battle-anims/common-battle-anim";
+import { MoveChargeAnim } from "#app/data/battle-anims/move-charge-anim";
+import { allAbilities, allMoves } from "#app/data/data-lists";
 import { getMoveTargets, SelfStatusMove, type Move } from "#app/data/move";
-import { applyMoveAttrs } from "#app/utils/move-utils";
-import { allMoves, allAbilities } from "#app/data/data-lists";
-import { StatusCategoryOnAllyAttr } from "./move-attrs/status-category-on-ally-attr";
-import { ConsecutiveUseDoublePowerAttr } from "./move-attrs/consecutive-use-double-power-attr";
-import { HealOnAllyAttr } from "./move-attrs/heal-on-ally-attr";
-import { MoveFlags } from "#enums/move-flags";
-import { MoveCategory } from "#enums/move-category";
-import { SpeciesFormChangeManualTrigger } from "./species-form-change-triggers/species-form-change-manual-trigger";
+import { ConsecutiveUseDoublePowerAttr } from "#app/data/move-attrs/consecutive-use-double-power-attr";
+import { HealOnAllyAttr } from "#app/data/move-attrs/heal-on-ally-attr";
+import { StatusCategoryOnAllyAttr } from "#app/data/move-attrs/status-category-on-ally-attr";
+import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
 import { getStatusEffectHealText } from "#app/data/status-effect";
-import { TerrainType } from "#enums/terrain-type";
-import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#app/field/pokemon";
-import { MoveResult } from "#enums/move-result";
-import { HitResult } from "#enums/hit-result";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import Overrides from "#app/overrides";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
 import type { MovePhase } from "#app/phases/move-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
-import { type StatStageChangeCallback } from "#app/phases/stat-stage-change-phase";
-import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
+import { StatStageChangePhase, type StatStageChangeCallback } from "#app/phases/stat-stage-change-phase";
 import i18next from "#app/plugins/i18n";
 import { BooleanHolder, getFrameMs, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
-import { Abilities } from "#enums/abilities";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { MoveId } from "#enums/move-id";
-import { PokemonAnimType } from "#enums/pokemon-anim-type";
-import { Species } from "#enums/species";
-import { EFFECTIVE_STATS, getStatKey, Stat, type BattleStat, type EffectiveStat } from "#enums/stat";
-import { StatusEffect } from "#enums/status-effect";
-import { WeatherType } from "#enums/weather-type";
-import Overrides from "#app/overrides";
-import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import {
   GulpMissileBattlerTagTypes,
   RemoveTypeBattlerTagTypes,
   SemiInvulnerableBattlerTagTypes,
   TrappedBattlerTagTypes,
 } from "#app/utils/battler-tag-type-utils";
+import { applyMoveAttrs } from "#app/utils/move-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { PhaseId } from "#enums/phase-id";
+import { Abilities } from "#enums/abilities";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import type { BattlerIndex } from "#enums/battler-index";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { ChargeAnim } from "#enums/charge-anim";
+import { CommonAnim } from "#enums/common-anim";
+import { ElementalType } from "#enums/elemental-type";
+import { HitResult } from "#enums/hit-result";
+import { MoveCategory } from "#enums/move-category";
+import { MoveFlags } from "#enums/move-flags";
+import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
 import { MoveTarget } from "#enums/move-target";
+import { PhaseId } from "#enums/phase-id";
+import { PokemonAnimType } from "#enums/pokemon-anim-type";
+import { Species } from "#enums/species";
+import { EFFECTIVE_STATS, getStatKey, Stat, type BattleStat, type EffectiveStat } from "#enums/stat";
+import { StatusEffect } from "#enums/status-effect";
+import { TerrainType } from "#enums/terrain-type";
+import { WeatherType } from "#enums/weather-type";
 
 export class BattlerTag {
   public tagType: BattlerTagType;
@@ -839,7 +838,7 @@ export class DestinyBondTag extends BattlerTag {
         pokemonNameWithAffix2: getPokemonNameWithAffix(pokemon),
       }),
     );
-    pokemon.damageAndUpdate(pokemon.hp, HitResult.ONE_HIT_KO, false, false, true);
+    pokemon.damageAndUpdate(pokemon.hp, { result: HitResult.ONE_HIT_KO, preventEndure: true });
     return false;
   }
 }
@@ -1042,7 +1041,7 @@ export class PowderTag extends BattlerTag {
           const cancelDamage = new BooleanHolder(false);
           applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelDamage);
           if (!cancelDamage.value) {
-            pokemon.damageAndUpdate(Math.floor(pokemon.getMaxHp() / 4), HitResult.OTHER);
+            pokemon.damageAndUpdate(Math.floor(pokemon.getMaxHp() / 4), { result: HitResult.OTHER });
           }
 
           // "When the flame touched the powder\non the Pokémon, it exploded!"
@@ -1709,7 +1708,7 @@ export class ContactDamageProtectedTag extends ProtectedTag {
 
     if (!simulated && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, null)) {
       if (!attacker.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)) {
-        attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), HitResult.OTHER);
+        attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), { result: HitResult.OTHER });
       }
     }
     return true;
@@ -1858,8 +1857,12 @@ export class PerishSongTag extends BattlerTag {
         }),
       );
     } else {
-      // The 2 here is just a number big enough to overcome the G-Max damage reduction
-      pokemon.damageAndUpdate(2 * pokemon.hp, HitResult.ONE_HIT_KO, false, true, true);
+      pokemon.damageAndUpdate(pokemon.hp, {
+        result: HitResult.ONE_HIT_KO,
+        ignoreSegments: true,
+        preventEndure: true,
+        ignoreDynamaxReduction: true,
+      });
     }
 
     return ret;
@@ -2744,7 +2747,7 @@ export class GulpMissileTag extends BattlerTag {
       applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, attacker, false, cancelled);
 
       if (!cancelled.value) {
-        attacker.damageAndUpdate(Math.max(1, Math.floor(attacker.getMaxHp() / 4)), HitResult.OTHER);
+        attacker.damageAndUpdate(Math.max(1, Math.floor(attacker.getMaxHp() / 4)), { result: HitResult.OTHER });
       }
 
       if (this.tagType === BattlerTagType.GULP_MISSILE_ARROKUDA) {

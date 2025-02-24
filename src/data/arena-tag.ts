@@ -1,4 +1,7 @@
+import { SCREEN_DOUBLES_DMG_FACTOR, SCREEN_SINGLES_DMG_FACTOR } from "#app/constants";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { CommonBattleAnim } from "#app/data/battle-anims/common-battle-anim";
+import { type SkyDropTag } from "#app/data/battler-tags";
 import { allMoves } from "#app/data/data-lists";
 import type { Arena } from "#app/field/arena";
 import type { Pokemon } from "#app/field/pokemon";
@@ -27,9 +30,6 @@ import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
-import { CommonBattleAnim } from "./battle-anims/common-battle-anim";
-import { type SkyDropTag } from "./battler-tags";
-import { SCREEN_DOUBLES_DMG_FACTOR, SCREEN_SINGLES_DMG_FACTOR } from "#app/constants";
 
 export abstract class ArenaTag {
   constructor(
@@ -761,7 +761,7 @@ class SpikesTag extends EntryHazardTag {
         globalScene.queueMessage(
           i18next.t("arenaTag:spikesActivateTrap", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         );
-        pokemon.damageAndUpdate(damage, HitResult.OTHER);
+        pokemon.damageAndUpdate(damage, { result: HitResult.OTHER });
         if (pokemon.turnData) {
           pokemon.turnData.damageTaken += damage;
         }
@@ -970,7 +970,7 @@ class TypeHazardTag extends EntryHazardTag {
       globalScene.queueMessage(
         i18next.t(this.activateTrapKey, { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
-      pokemon.damageAndUpdate(damage, HitResult.OTHER);
+      pokemon.damageAndUpdate(damage, { result: HitResult.OTHER });
       if (pokemon.turnData) {
         pokemon.turnData.damageTaken += damage;
       }

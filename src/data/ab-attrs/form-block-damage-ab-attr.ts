@@ -1,10 +1,10 @@
 import type { PokemonDefendCondition } from "#app/@types/PokemonDefendCondition";
+import { ReceivedMoveDamageMultiplierAbAttr } from "#app/data/ab-attrs/received-move-damage-multiplier-ab-attr";
 import type { Move } from "#app/data/move";
 import type { Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#enums/hit-result";
 import type { NumberHolder } from "#app/utils";
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import { ReceivedMoveDamageMultiplierAbAttr } from "./received-move-damage-multiplier-ab-attr";
+import { HitResult } from "#enums/hit-result";
 
 /**
  * Takes no damage from the first hit of a damaging move.
@@ -54,7 +54,11 @@ export class FormBlockDamageAbAttr extends ReceivedMoveDamageMultiplierAbAttr {
         multiplier.value *= this.multiplier;
         pokemon.removeTag(this.tagType);
         if (this.recoilDamageFunc) {
-          pokemon.damageAndUpdate(this.recoilDamageFunc(pokemon), HitResult.OTHER, false, false, true, true);
+          pokemon.damageAndUpdate(this.recoilDamageFunc(pokemon), {
+            result: HitResult.OTHER,
+            preventEndure: true,
+            ignoreFaintPhase: true,
+          });
         }
       }
       return true;

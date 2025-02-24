@@ -1,9 +1,8 @@
-import { BattlerIndex } from "#enums/battler-index";
+import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
+import type { TurnMove } from "#app/@types/TurnMove";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { MoveAnim } from "#app/data/battle-anims/move-anim";
 import { type SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
-import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import { applyFilteredMoveAttrs, applyMoveAttrs } from "#app/utils/move-utils";
 import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
 import { MissEffectAttr } from "#app/data/move-attrs/miss-effect-attr";
@@ -15,10 +14,6 @@ import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effec
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-post-move-trigger";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import type { DamageResult, Pokemon } from "#app/field/pokemon";
-import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
-import type { TurnMove } from "#app/@types/TurnMove";
-import { MoveResult } from "#enums/move-result";
-import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
@@ -27,21 +22,25 @@ import {
   FlinchChanceModifier,
   HitHealModifier,
 } from "#app/modifier/modifier";
+import { HitCheckPhase } from "#app/phases/hit-check-phase";
 import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils";
+import { applyFilteredMoveAttrs, applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import { AchvCategory } from "#enums/achv-category";
+import { BattlerIndex } from "#enums/battler-index";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitCheckResult } from "#enums/hit-check-result";
+import { HitResult } from "#enums/hit-result";
 import { MoveCategory } from "#enums/move-category";
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
-import { MoveTarget } from "#enums/move-target";
-import { MoveId } from "#enums/move-id";
-import i18next from "i18next";
-import { HitCheckPhase } from "./hit-check-phase";
 import { MoveFlags } from "#enums/move-flags";
-import { AbilityApplyMode } from "#enums/ability-apply-mode";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AchvCategory } from "#enums/achv-category";
+import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
+import { MoveTarget } from "#enums/move-target";
 import { PhaseId } from "#enums/phase-id";
-import { isFieldTargeted } from "#app/utils/move-utils";
+import i18next from "i18next";
 
 export class MoveEffectPhase extends HitCheckPhase {
   override readonly id = PhaseId.MOVE_EFFECT;
@@ -489,15 +488,14 @@ export class MoveEffectPhase extends HitCheckPhase {
        * We explicitly require to ignore the faint phase here, as we want to show the messages
        * about the critical hit and the super effective/not very effective messages before the faint phase.
        */
-      const damage = target.damageAndUpdate(
-        isBlockedBySubstitute ? 0 : dmg,
-        result as DamageResult,
-        isCritical,
-        isOneHitKo,
-        isOneHitKo,
-        true,
-        user,
-      );
+      const damage = target.damageAndUpdate(isBlockedBySubstitute ? 0 : dmg, {
+        result: result as DamageResult,
+        critical: isCritical,
+        ignoreSegments: isOneHitKo,
+        preventEndure: isOneHitKo,
+        ignoreFaintPhase: true,
+        source: user,
+      });
 
       if (damage > 0) {
         if (user.isPlayer()) {

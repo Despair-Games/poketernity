@@ -1,13 +1,13 @@
-import { type Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#enums/hit-result";
-import { globalScene } from "#app/global-scene";
-import { getPokemonNameWithAffix } from "#app/messages";
-import { BooleanHolder, toDmgValue } from "#app/utils";
-import i18next from "i18next";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import { type Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import { getPokemonNameWithAffix } from "#app/messages";
+import { BooleanHolder, toDmgValue } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { HitResult } from "#enums/hit-result";
+import i18next from "i18next";
 
 /**
  * Attribute to apply {@link https://bulbapedia.bulbagarden.net/wiki/Recoil | recoil damage} to the user.
@@ -48,7 +48,7 @@ export class RecoilAttr extends MoveEffectAttr {
       return false;
     }
 
-    user.damageAndUpdate(recoilDamage, HitResult.OTHER, false, true, true);
+    user.damageAndUpdate(recoilDamage, { result: HitResult.OTHER, ignoreSegments: true, preventEndure: true });
     globalScene.queueMessage(i18next.t("moveTriggers:hitWithRecoil", { pokemonName: getPokemonNameWithAffix(user) }));
     user.turnData.damageTaken += recoilDamage;
 
