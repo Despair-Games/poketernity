@@ -4573,7 +4573,7 @@ export class EnemyPokemon extends Pokemon {
       // If there's only 1 move in the move pool, use it.
       if (movePool.length === 1) {
         const move = movePool[0].getMove();
-        return { move, targets: this.getNextTargets(movePool[0].moveId), type: this.getMoveType(move) };
+        return { move, targets: this.getNextTargets(move.id), type: this.getMoveType(move) };
       }
       // If a move is forced because of Encore, use it.
       const encoreTag = this.getTag<EncoreTag>(BattlerTagType.ENCORE);
@@ -4581,7 +4581,7 @@ export class EnemyPokemon extends Pokemon {
         const encoreMove = movePool.find((m) => m.moveId === encoreTag.moveId);
         if (encoreMove) {
           const move = encoreMove.getMove();
-          return { move, targets: this.getNextTargets(encoreMove.moveId), type: this.getMoveType(move) };
+          return { move, targets: this.getNextTargets(move.id), type: this.getMoveType(move) };
         }
       }
       switch (this.aiType) {
