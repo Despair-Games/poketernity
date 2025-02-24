@@ -1259,7 +1259,8 @@ export function initMoves() {
       true,
     ),
     new SelfStatusMove(MoveId.MAGIC_COAT, ElementalType.PSYCHIC, -1, 15, -1, 4, 3)
-      .attr(AddBattlerTagAttr, BattlerTagType.MAGIC_COAT, true, { failOnOverlap: true }),
+      .attr(AddBattlerTagAttr, BattlerTagType.MAGIC_COAT, true, { failOnOverlap: true })
+      .condition(failIfLastCondition),
     new SelfStatusMove(MoveId.RECYCLE, ElementalType.NORMAL, -1, 10, -1, 0, 3).unimplemented(),
     new AttackMove(MoveId.REVENGE, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 60, 100, 10, -1, -4, 3).attr(
       TurnDamagedDoublePowerAttr,

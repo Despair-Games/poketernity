@@ -11,9 +11,10 @@ import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
-import { describe, beforeAll, afterEach, beforeEach, expect, it, vi } from "vitest";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
-describe("Abilities - Magic Bounce", () => {
+describe("Moves - Magic Coat", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
@@ -34,11 +35,37 @@ describe("Abilities - Magic Bounce", () => {
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.MAGIC_BOUNCE)
-      .enemyMoveset(MoveId.SPLASH);
+      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyMoveset(MoveId.MAGIC_COAT)
+      .startingLevel(100)
+      .enemyLevel(100);
   });
 
-  it("should reflect basic status moves", async () => {
+  it("should fail if used last in the turn", async () => {
+    await game.classicMode.startBattle([Species.MAGIKARP]);
+
+    const enemy = game.field.getEnemyPokemon();
+
+    game.move.use(MoveId.PROTECT);
+    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+
+    await game.toEndOfTurn();
+    expect(enemy.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
+    expect(enemy.getTag(BattlerTagType.MAGIC_COAT)).toBeUndefined();
+  });
+
+  it("should fail if the user already has Magic Coat in effect", async () => {
+    await game.classicMode.startBattle([Species.MAGIKARP]);
+
+    const enemy = game.field.getEnemyPokemon();
+
+    game.move.use(MoveId.INSTRUCT);
+
+    await game.toEndOfTurn();
+    expect(enemy.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
+  });
+
+  it("should reflect basic status moves (enemy)", async () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const player = game.field.getPlayerPokemon();
@@ -52,34 +79,19 @@ describe("Abilities - Magic Bounce", () => {
     expect(enemy.getStatStage(Stat.ATK)).toBe(0);
   });
 
-  it("should reflect basic status moves (enemy)", async () => {
-    game.override.ability(Abilities.MAGIC_BOUNCE).enemyAbility(Abilities.BALL_FETCH);
-
+  it("should reflect basic status moves (player)", async () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
 
-    game.move.use(MoveId.SPLASH);
+    game.move.use(MoveId.MAGIC_COAT);
     await game.move.forceEnemyMove(MoveId.GROWL);
 
     await game.toEndOfTurn();
 
     expect(player.getStatStage(Stat.ATK)).toBe(0);
     expect(enemy.getStatStage(Stat.ATK)).toBe(-1);
-  });
-
-  it("should not bounce moves while the target is in the semi-invulnerable state", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
-
-    const player = game.field.getPlayerPokemon();
-
-    game.move.use(MoveId.GROWL);
-    await game.move.forceEnemyMove(MoveId.FLY);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.toEndOfTurn();
-
-    expect(player.getStatStage(Stat.ATK)).toBe(0);
   });
 
   it("should individually bounce back multi-target moves", async () => {
@@ -138,20 +150,6 @@ describe("Abilities - Magic Bounce", () => {
     expect(enemy.getStatStage(Stat.ATK)).toBe(-1);
   });
 
-  it("should not bounce back a move from a mold breaker user", async () => {
-    game.override.ability(Abilities.MOLD_BREAKER);
-    await game.classicMode.startBattle([Species.MAGIKARP]);
-
-    const player = game.field.getPlayerPokemon();
-    const enemy = game.field.getEnemyPokemon();
-
-    game.move.use(MoveId.GROWL);
-    await game.toEndOfTurn();
-
-    expect(player.getStatStage(Stat.ATK)).toBe(0);
-    expect(enemy.getStatStage(Stat.ATK)).toBe(-1);
-  });
-
   it("should bounce back a spread status move against both pokemon", async () => {
     game.override.battleType("double");
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
@@ -165,7 +163,7 @@ describe("Abilities - Magic Bounce", () => {
     playerPokemon.forEach((p) => expect(p.getStatStage(Stat.ATK)).toBe(-2));
   });
 
-  it("should only bounce spikes back once in doubles when both targets have magic bounce", async () => {
+  it("should only bounce spikes back once in doubles when both targets use Magic Coat", async () => {
     game.override.battleType("double");
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -174,25 +172,6 @@ describe("Abilities - Magic Bounce", () => {
 
     expect(game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.PLAYER)?.["layers"]).toBe(1);
     expect(game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY)).toBeUndefined();
-  });
-
-  it("should bounce spikes even when the target is protected", async () => {
-    game.override.enemyMoveset(MoveId.PROTECT);
-    await game.classicMode.startBattle([Species.MAGIKARP]);
-
-    game.move.use(MoveId.SPIKES);
-    await game.toEndOfTurn();
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.PLAYER)?.["layers"]).toBe(1);
-  });
-
-  it("should not bounce spikes when the target is in the semi-invulnerable state", async () => {
-    game.override.enemyMoveset(MoveId.FLY);
-    await game.classicMode.startBattle([Species.MAGIKARP]);
-
-    game.move.use(MoveId.SPIKES);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.toEndOfTurn();
-    expect(game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY)!["layers"]).toBe(1);
   });
 
   it("should not bounce back curse", async () => {
@@ -282,7 +261,7 @@ describe("Abilities - Magic Bounce", () => {
     vi.spyOn(stomping_tantrum, "calculateBattlePower");
 
     game.move.use(MoveId.SPORE);
-    await game.move.forceEnemyMove(MoveId.CHARM);
+    await game.move.forceEnemyMove(MoveId.MAGIC_COAT);
     await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.toNextTurn();
@@ -331,7 +310,7 @@ describe("Abilities - Magic Bounce", () => {
     expect(game.field.getPlayerPokemon().getStatusEffect()).toBe(StatusEffect.SLEEP);
   });
 
-  it("should take the accuracy of the magic bounce user into account", async () => {
+  it("should take the accuracy of the Magic Coat user into account", async () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
     const opponent = game.field.getEnemyPokemon();
 
@@ -341,7 +320,7 @@ describe("Abilities - Magic Bounce", () => {
     expect(game.field.getPlayerPokemon().status).toBeUndefined();
   });
 
-  it("should always apply the leftmost available target's magic bounce when bouncing moves like sticky webs in doubles", async () => {
+  it("should always apply the leftmost available target's Magic Coat when bouncing moves like sticky webs in doubles", async () => {
     game.override.battleType("double");
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.MAGIKARP]);
@@ -372,22 +351,5 @@ describe("Abilities - Magic Bounce", () => {
         ?.getSourcePokemon()
         ?.getBattlerIndex(),
     ).toBe(BattlerIndex.ENEMY);
-  });
-
-  it("should not bounce back status moves that hit through semi-invulnerable states", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR]);
-    game.move.use(MoveId.TOXIC);
-    await game.move.forceEnemyMove(MoveId.FLY);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.toEndOfTurn();
-    expect(game.field.getEnemyPokemon().getStatusEffect()).toBe(StatusEffect.TOXIC);
-    expect(game.field.getPlayerPokemon().status).toBeUndefined();
-
-    game.override.ability(Abilities.NO_GUARD);
-    game.move.use(MoveId.CHARM);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.toEndOfTurn();
-    expect(game.field.getEnemyPokemon().getStatStage(Stat.ATK)).toBe(-2);
-    expect(game.field.getPlayerPokemon().getStatStage(Stat.ATK)).toBe(0);
   });
 });
