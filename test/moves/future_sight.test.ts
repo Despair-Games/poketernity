@@ -1,12 +1,14 @@
+import { allMoves } from "#app/data/data-lists";
+import { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex } from "#enums/battler-index";
-import { MoveResult } from "#enums/move-result";
 import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Moves - Future Sight", () => {
   let phaserGame: Phaser.Game;
@@ -253,5 +255,17 @@ describe("Moves - Future Sight", () => {
 
   it.todo("should not apply the user's held items when dealing damage if the user is inactive");
 
-  it.todo("should invoke the move's first phase when called by Metronome");
+  it.todo("should invoke the move's first phase when called by Metronome", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const randomMoveAttr = allMoves[MoveId.METRONOME].getAttrs(MetronomeAttr)[0];
+    vi.spyOn(randomMoveAttr, "getMoveOverride").mockReturnValue(MoveId.FUTURE_SIGHT);
+
+    const enemy = game.field.getEnemyPokemon();
+
+    game.move.use(MoveId.METRONOME);
+    await game.toNextTurn();
+
+    expect(enemy.isFullHp()).toBe(true);
+  });
 });

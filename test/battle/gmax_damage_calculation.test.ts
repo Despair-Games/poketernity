@@ -104,4 +104,21 @@ describe("Battle Mechanics - Damage Calculation", () => {
       (((1 / 16) * 2) / 3) * enemyPokemon.getMaxHp(),
     );
   });
+
+  it("Perish Song should still KO G-Max Pokemon", async () => {
+    game.override.moveset([MoveId.PERISH_SONG, MoveId.SPLASH]);
+    await game.classicMode.startBattle([Species.MAGIKARP, Species.MAGIKARP]);
+
+    game.move.select(MoveId.PERISH_SONG);
+    await game.toNextTurn();
+    game.move.select(MoveId.SPLASH);
+    await game.toNextTurn();
+    game.move.select(MoveId.SPLASH);
+    await game.toNextTurn();
+    game.move.select(MoveId.SPLASH);
+    await game.phaseInterceptor.to("VictoryPhase");
+
+    expect(game.scene.getPlayerParty()[0].isFainted()).toBe(true);
+    expect(game.scene.getEnemyParty()[0].isFainted()).toBe(true);
+  });
 });
