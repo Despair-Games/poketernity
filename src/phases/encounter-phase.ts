@@ -5,22 +5,17 @@ import { type NextEncounterPhase } from "#app/phases/next-encounter-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { BattlerIndex } from "#enums/battler-index";
-import { BattleType } from "#enums/battle-type";
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { ME_WEIGHT_INCREMENT_ON_SPAWN_MISS, PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { loadEncounterAnimAssets } from "#app/utils/anim-utils";
-import { initEncounterAnims } from "#app/data/init-encounter-anims";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
-import { ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants";
+import { initEncounterAnims } from "#app/data/init-encounter-anims";
 import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { doTrainerExclamation } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { getGoldenBugNetSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { TrainerSlot } from "#enums/trainer-slot";
+import { getNatureName } from "#app/data/nature";
 import { getRandomWeatherType } from "#app/data/weather";
 import { EncounterPhaseEvent } from "#app/events/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
-import { FieldPosition } from "#enums/field-position";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
@@ -31,7 +26,6 @@ import {
   TurnHeldItemTransferModifier,
 } from "#app/modifier/modifier";
 import { regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
-import { ModifierPoolType } from "#enums/modifier-pool-type";
 import Overrides from "#app/overrides";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { CheckSwitchPhase } from "#app/phases/check-switch-phase";
@@ -44,18 +38,24 @@ import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-ph
 import { achvs } from "#app/system/achv";
 import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
-import { Tutorial } from "#enums/tutorial";
-import { UiMode } from "#enums/ui-mode";
 import { randSeedInt, randSeedItem } from "#app/utils";
+import { loadEncounterAnimAssets } from "#app/utils/anim-utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { BattleType } from "#enums/battle-type";
+import { BattlerIndex } from "#enums/battler-index";
 import { Biome } from "#enums/biome";
+import { FieldPosition } from "#enums/field-position";
+import { ImagesFolder } from "#enums/images-folders";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
+import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { Species } from "#enums/species";
+import { TrainerSlot } from "#enums/trainer-slot";
+import { Tutorial } from "#enums/tutorial";
+import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { MysteryEncounterPhase } from "./mystery-encounter-phases/mystery-encounter-phase";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { PhaseId } from "#enums/phase-id";
-import { ImagesFolder } from "#enums/images-folders";
 
 /**
  * Starts the first encounter (wave 1) of a new run. Subsequent encounters are handled by
@@ -195,13 +195,31 @@ export class EncounterPhase extends BattlePhase {
 
       loadEnemyAssets.push(enemyPokemon.loadAssets());
 
+      const stats: string[] = [
+        `HP: ${enemyPokemon.stats[0]} (${enemyPokemon.ivs[0]})`,
+        ` Atk: ${enemyPokemon.stats[1]} (${enemyPokemon.ivs[1]})`,
+        ` Def: ${enemyPokemon.stats[2]} (${enemyPokemon.ivs[2]})`,
+        ` Spatk: ${enemyPokemon.stats[3]} (${enemyPokemon.ivs[3]})`,
+        ` Spdef: ${enemyPokemon.stats[4]} (${enemyPokemon.ivs[4]})`,
+        ` Spd: ${enemyPokemon.stats[5]} (${enemyPokemon.ivs[5]})`,
+      ];
+      const moveset: string[] = [];
+      enemyPokemon.getMoveset().forEach((move) => {
+        moveset.push(move.getName());
+      });
+
       console.log(
         `Pokemon: ${getPokemonNameWithAffix(enemyPokemon)}`,
-        `Species ID: ${enemyPokemon.species.speciesId}`,
-        `Stats: ${enemyPokemon.stats}`,
-        `Ability: ${enemyPokemon.getAbility().name}`,
-        `Passive Ability: ${enemyPokemon.getPassiveAbility().name}`,
+        `| Species ID: ${enemyPokemon.species.speciesId}`,
+        `| Nature: ${getNatureName(enemyPokemon.nature, true, true, true)}`,
       );
+      console.log(`Stats (IVs): ${stats}`);
+      console.log(
+        `Ability: ${enemyPokemon.getAbility().name}`,
+        `| Passive Ability${enemyPokemon.hasPassive() ? "" : " (inactive)"}: ${enemyPokemon.getPassiveAbility().name}`,
+        `${enemyPokemon.isBoss() ? `| Boss Bars: ${enemyPokemon.bossSegments}` : ""}`,
+      );
+      console.log("Moveset:", moveset);
       return true;
     });
 

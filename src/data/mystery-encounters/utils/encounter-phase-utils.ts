@@ -1,65 +1,67 @@
+import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
 import type Battle from "#app/battle";
-import { BattlerIndex } from "#enums/battler-index";
-import { BattleType } from "#enums/battle-type";
-import { biomeLinks } from "#app/data/balance/biomes";
-import { BiomePoolTier } from "#enums/biome-pool-tier";
-import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
 import { ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET, ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants";
+import { biomeLinks } from "#app/data/balance/biomes";
+import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import type { CustomPokemonData } from "#app/data/custom-pokemon-data";
+import { Egg, type IEggOptions } from "#app/data/egg";
+import { initMoveAnim } from "#app/data/init-move-anim";
+import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
+import { getNatureName } from "#app/data/nature";
+import type PokemonSpecies from "#app/data/pokemon-species";
+import { Status } from "#app/data/status-effect";
+import type { TrainerConfig } from "#app/data/trainer-config";
+import type { Variant } from "#app/data/variant";
 import { type PlayerPokemon, type Pokemon } from "#app/field/pokemon";
-import { PokemonSummonData } from "#app/field/pokemon-summon-data";
-import type { AiType } from "#enums/ai-type";
 import { PokemonMove } from "#app/field/pokemon-move";
-import { FieldPosition } from "#enums/field-position";
-import type { CustomModifierSettings, ModifierType } from "#app/modifier/modifier-type";
+import { PokemonSummonData } from "#app/field/pokemon-summon-data";
+import Trainer from "#app/field/trainer";
+import { globalScene } from "#app/global-scene";
+import type HeldModifierConfig from "#app/interfaces/held-modifier-config";
+import { getPokemonNameWithAffix } from "#app/messages";
 import {
   ModifierTypeGenerator,
   ModifierTypeOption,
   regenerateModifierPoolThresholds,
+  type CustomModifierSettings,
+  type ModifierType,
 } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { ModifierPoolType } from "#enums/modifier-pool-type";
+import { BattleEndPhase } from "#app/phases/battle-end-phase";
+import { EggLapsePhase } from "#app/phases/egg-lapse-phase";
 import { MysteryEncounterBattlePhase } from "#app/phases/mystery-encounter-phases/battle-phase";
-import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
 import { MysteryEncounterBattleStartCleanupPhase } from "#app/phases/mystery-encounter-phases/battle-start-cleanup-phase";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
+import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phases/rewards-phase";
+import { PartyExpPhase } from "#app/phases/party-exp-phase";
+import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import { TrainerVictoryPhase } from "#app/phases/trainer-victory-phase";
 import type PokemonData from "#app/system/pokemon-data";
-import type { OptionSelectModeConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
-import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
-import type { PartyOption } from "#enums/party-option";
-import { PartyUiMode } from "#enums/party-ui-mode";
-import { UiMode } from "#enums/ui-mode";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { isNullOrUndefined, randSeedInt, randomString } from "#app/utils";
+import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
+import type { AiType } from "#enums/ai-type";
+import { BattleType } from "#enums/battle-type";
+import { BattlerIndex } from "#enums/battler-index";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { Biome } from "#enums/biome";
-import type { TrainerType } from "#enums/trainer-type";
-import i18next from "i18next";
-import Trainer from "#app/field/trainer";
-import { TrainerVariant } from "#enums/trainer-variant";
+import { BiomePoolTier } from "#enums/biome-pool-tier";
+import { FieldPosition } from "#enums/field-position";
 import type { Gender } from "#enums/gender";
-import type { Nature } from "#enums/nature";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
 import type { MoveId } from "#enums/move-id";
-import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
-import { initMoveAnim } from "#app/data/init-move-anim";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
-import { Status } from "#app/data/status-effect";
-import type { TrainerConfig } from "#app/data/trainer-config";
-import { TrainerSlot } from "#enums/trainer-slot";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import type { IEggOptions } from "#app/data/egg";
-import { Egg } from "#app/data/egg";
-import type { CustomPokemonData } from "#app/data/custom-pokemon-data";
-import type HeldModifierConfig from "#app/interfaces/held-modifier-config";
-import { EggLapsePhase } from "#app/phases/egg-lapse-phase";
-import { TrainerVictoryPhase } from "#app/phases/trainer-victory-phase";
-import { BattleEndPhase } from "#app/phases/battle-end-phase";
-import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { PartyExpPhase } from "#app/phases/party-exp-phase";
-import type { Variant } from "#app/data/variant";
-import { StatusEffect } from "#enums/status-effect";
-import { globalScene } from "#app/global-scene";
-import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import type { Nature } from "#enums/nature";
+import type { PartyOption } from "#enums/party-option";
+import { PartyUiMode } from "#enums/party-ui-mode";
 import { PhaseId } from "#enums/phase-id";
+import { StatusEffect } from "#enums/status-effect";
+import { TrainerSlot } from "#enums/trainer-slot";
+import type { TrainerType } from "#enums/trainer-type";
+import { TrainerVariant } from "#enums/trainer-variant";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
 
 /**
  * Animates exclamation sprite over trainer's head at start of encounter
@@ -393,13 +395,31 @@ export async function initBattleWithEnemyConfig(partyConfig: EnemyPartyConfig): 
 
     loadEnemyAssets.push(enemyPokemon.loadAssets());
 
+    const stats: string[] = [
+      `HP: ${enemyPokemon.stats[0]} (${enemyPokemon.ivs[0]})`,
+      ` Atk: ${enemyPokemon.stats[1]} (${enemyPokemon.ivs[1]})`,
+      ` Def: ${enemyPokemon.stats[2]} (${enemyPokemon.ivs[2]})`,
+      ` Spatk: ${enemyPokemon.stats[3]} (${enemyPokemon.ivs[3]})`,
+      ` Spdef: ${enemyPokemon.stats[4]} (${enemyPokemon.ivs[4]})`,
+      ` Spd: ${enemyPokemon.stats[5]} (${enemyPokemon.ivs[5]})`,
+    ];
+    const moveset: string[] = [];
+    enemyPokemon.getMoveset().forEach((move) => {
+      moveset.push(move.getName());
+    });
+
     console.log(
-      `Pokemon: ${enemyPokemon.name}`,
-      `Species ID: ${enemyPokemon.species.speciesId}`,
-      `Stats: ${enemyPokemon.stats}`,
-      `Ability: ${enemyPokemon.getAbility().name}`,
-      `Passive Ability: ${enemyPokemon.getPassiveAbility().name}`,
+      `Pokemon: ${getPokemonNameWithAffix(enemyPokemon)}`,
+      `| Species ID: ${enemyPokemon.species.speciesId}`,
+      `| Nature: ${getNatureName(enemyPokemon.nature, true, true, true)}`,
     );
+    console.log(`Stats (IVs): ${stats}`);
+    console.log(
+      `Ability: ${enemyPokemon.getAbility().name}`,
+      `| Passive Ability${enemyPokemon.hasPassive() ? "" : " (inactive)"}: ${enemyPokemon.getPassiveAbility().name}`,
+      `${enemyPokemon.isBoss() ? `| Boss Bars: ${enemyPokemon.bossSegments}` : ""}`,
+    );
+    console.log("Moveset:", moveset);
   });
 
   globalScene.pushPhase(new MysteryEncounterBattlePhase(partyConfig.disableSwitch));
