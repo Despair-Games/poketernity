@@ -131,6 +131,10 @@ export class OverridesHelper extends GameManagerHelper {
 
   /**
    * Override the player (pokemon) {@linkcode Abilities | ability}
+   *
+   * TODO: It may be useful to add another override that sets the ability *index* of a Pokemon,
+   * which would facilitate tests where two different Pokemon need different abilities.
+   *
    * @param ability the (pokemon) {@linkcode Abilities | ability} to set
    * @returns `this`
    */
