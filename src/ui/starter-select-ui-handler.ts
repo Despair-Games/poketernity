@@ -2391,57 +2391,59 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.checkIconId(this.starterIcons[index], species, props.female, props.formIndex, props.shiny, props.variant);
   }
 
-  switchMoveHandler(i: number, newMoveId: MoveId, moveId: MoveId) {
+  /**
+   * Puts a move at the requested index in the current highlighted Pokemon's moveset.
+   * If the move was already present in the moveset, swap its position with the one in the new spot currently.
+   * @param targetIndex the index to put the move, between 0 and 3
+   * @param newMoveId the {@linkcode MoveId} of the move to add in
+   * @param previousMoveId the {@linkcode MoveId} of the move that was in that spot previously
+   */
+  switchMoveHandler(targetIndex: number, newMoveId: MoveId, previousMoveId: MoveId): void {
+    if (!this.starterMoveset) {
+      console.warn("Trying to update a non existing moveset");
+      return;
+    }
+
     const speciesId = this.lastSpecies.speciesId;
-    const existingMoveIndex = this.starterMoveset?.indexOf(newMoveId)!; // TODO: is this bang correct?
-    this.starterMoveset![i] = newMoveId; // TODO: is this bang correct?
+    const existingMoveIndex = this.starterMoveset.indexOf(newMoveId);
+    this.starterMoveset[targetIndex] = newMoveId;
     if (existingMoveIndex > -1) {
-      this.starterMoveset![existingMoveIndex] = moveId; // TODO: is this bang correct?
+      this.starterMoveset[existingMoveIndex] = previousMoveId;
     }
-    const props: DexAttrProps = globalScene.gameData.getSpeciesDexAttrProps(this.lastSpecies, this.dexAttrCursor);
-    // species has different forms
+    const updatedMoveset = this.starterMoveset.slice(0) as StarterMoveset;
+    const formIndex = globalScene.gameData.getSpeciesDexAttrProps(this.lastSpecies, this.dexAttrCursor).formIndex;
+    const starterData = globalScene.gameData.starterData[speciesId];
+
     if (pokemonFormLevelMoves.hasOwnProperty(speciesId)) {
-      // starterMoveData doesn't have base form moves or is using the single form format
-      if (
-        !globalScene.gameData.starterData[speciesId].moveset
-        || Array.isArray(globalScene.gameData.starterData[speciesId].moveset)
-      ) {
-        globalScene.gameData.starterData[speciesId].moveset = {
-          [props.formIndex]: this.starterMoveset?.slice(0) as StarterMoveset,
-        };
+      // Species has forms with different movesets
+      if (!starterData.moveset || Array.isArray(starterData.moveset)) {
+        starterData.moveset = {};
       }
-      const starterMoveData = globalScene.gameData.starterData[speciesId].moveset;
-
-      // starterMoveData doesn't have active form moves
-      if (!starterMoveData.hasOwnProperty(props.formIndex)) {
-        globalScene.gameData.starterData[speciesId].moveset[props.formIndex] = this.starterMoveset?.slice(
-          0,
-        ) as StarterMoveset;
-      }
-
-      // does the species' starter move data have its form's starter moves and has it been updated
-      if (starterMoveData.hasOwnProperty(props.formIndex)) {
-        // active form move hasn't been updated
-        if (starterMoveData[props.formIndex][existingMoveIndex] !== newMoveId) {
-          globalScene.gameData.starterData[speciesId].moveset[props.formIndex] = this.starterMoveset?.slice(
-            0,
-          ) as StarterMoveset;
-        }
-      }
+      starterData.moveset[formIndex] = updatedMoveset;
     } else {
-      globalScene.gameData.starterData[speciesId].moveset = this.starterMoveset?.slice(0) as StarterMoveset;
+      starterData.moveset = updatedMoveset;
     }
+
     this.setSpeciesDetails(this.lastSpecies, { forSeen: false });
 
-    // switch moves of starter if exists
-    if (this.starterMovesets.length) {
-      Array.from({ length: this.starterSpecies.length }, (_, i) => {
-        const starterSpecies = this.starterSpecies[i];
-        if (starterSpecies.speciesId === speciesId) {
-          this.starterMovesets[i] = this.starterMoveset!; // TODO: is this bang correct?
-        }
-      });
+    // switch moves of selected starter if it exists
+    this.updateSelectedStarterMoveset(speciesId);
+  }
+
+  /**
+   * Update the starter moveset for the given species, if it is part of the selected starters.
+   * @param speciesId the {@linkcode Species} to consider
+   */
+  private updateSelectedStarterMoveset(speciesId: Species): void {
+    if (!this.starterMoveset) {
+      return;
     }
+    // Find the Pokemon of that species in the team, and give them the correct moveset.
+    this.starterSpecies.forEach((species: PokemonSpecies, index: number) => {
+      if (species.speciesId === speciesId) {
+        this.starterMovesets[index] = this.starterMoveset!;
+      }
+    });
   }
 
   updateButtonIcon(iconSetting, gamepadType, iconElement, controlLabel): void {
@@ -3575,6 +3577,11 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         this.starterMoveset = this.starterMoveset.filter((move, i) => {
           return this.starterMoveset?.indexOf(move) === i;
         }) as StarterMoveset;
+
+        if (!isNullOrUndefined(formIndex)) {
+          // If we're switching form and the Pokemon is in the team, we need to update its moveset
+          this.updateSelectedStarterMoveset(species.speciesId);
+        }
 
         const speciesForm = getPokemonSpeciesForm(species.speciesId, formIndex!); // TODO: is the bang correct?
         const formText = capitalizeString(species?.forms[formIndex!]?.formKey, "-", false, false); // TODO: is the bang correct?

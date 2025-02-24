@@ -41,6 +41,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import type { ChargingAttackMove } from "#app/data/moves/charging-attack-move";
 import type { ChargingSelfStatusMove } from "#app/data/moves/charging-self-status-move";
+import { FOG_ACCURACY_MULTIPLIER } from "#app/constants";
 
 export abstract class Move implements Localizable {
   public id: MoveId;
@@ -728,12 +729,8 @@ export abstract class Move implements Localizable {
     const isOhko = this.hasAttr(OneHitKOAccuracyAttr);
 
     // TODO: wide lens was calculated here
-    if (globalScene.arena.hasWeather(WeatherType.FOG)) {
-      /**
-       *  The 0.9 multiplier is Game-specific implementation, Bulbapedia uses 3/5
-       *  See Fog {@link https://bulbapedia.bulbagarden.net/wiki/Fog}
-       */
-      moveAccuracy.value = Math.floor(moveAccuracy.value * 0.9);
+    if (globalScene.arena.hasWeather(WeatherType.FOG) && !globalScene.arena.weather?.isEffectSuppressed()) {
+      moveAccuracy.value = Math.floor(moveAccuracy.value * FOG_ACCURACY_MULTIPLIER);
     }
 
     if (!isOhko && globalScene.arena.getTag(ArenaTagType.GRAVITY)) {
