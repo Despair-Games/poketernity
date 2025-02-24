@@ -100,7 +100,7 @@ describe("Abilities - Disguise", () => {
     await game.toEndOfTurn();
 
     expect(mimikyu.formIndex).toBe(disguisedForm);
-    expect(mimikyu.status?.effect).toBe(StatusEffect.POISON);
+    expect(mimikyu.getStatusEffect(true)).toBe(StatusEffect.POISON);
     expect(mimikyu.getStatStage(Stat.SPD)).toBe(-1);
     expect(mimikyu.hp).toBeLessThan(mimikyu.getMaxHp());
   });

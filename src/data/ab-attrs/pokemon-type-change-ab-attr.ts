@@ -27,13 +27,7 @@ export class PokemonTypeChangeAbAttr extends PreAttackAbAttr {
        * Skip moves that call other moves because these moves generate a following move that will trigger this ability attribute
        * @see {@link https://bulbapedia.bulbagarden.net/wiki/Category:Moves_that_call_other_moves}
        */
-      && !move.findAttr(
-        (attr) =>
-          attr.isRandomMovesetMoveAttr()
-          || attr.isRandomMoveAttr()
-          || attr.isNaturePowerAttr()
-          || attr.isCopyMoveAttr(),
-      )
+      && !move.findAttr((attr) => attr.callsOtherMoves)
     ) {
       const moveType = pokemon.getMoveType(move);
 

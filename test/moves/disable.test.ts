@@ -61,6 +61,7 @@ describe("Moves - Disable", () => {
       move: expect.objectContaining({ id: MoveId.DISABLE }),
       result: MoveResult.FAIL,
       type: ElementalType.NORMAL,
+      targets: [2],
     });
     expect(enemyMon.isMoveRestricted(MoveId.SPLASH)).toBe(false);
   }, 20000);
@@ -118,6 +119,7 @@ describe("Moves - Disable", () => {
       move: expect.objectContaining({ id: MoveId.SPLASH }),
       result: MoveResult.SUCCESS,
       type: ElementalType.NORMAL,
+      targets: [2],
     });
     expect(enemyHistory[1].result).toBe(MoveResult.FAIL);
   }, 20000);

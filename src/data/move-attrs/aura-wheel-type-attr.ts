@@ -16,8 +16,8 @@ export class AuraWheelTypeAttr extends VariableMoveTypeAttr {
       return false;
     }
 
-    if ([user.species.speciesId, user.fusionSpecies?.speciesId].includes(Species.MORPEKO)) {
-      const form = user.species.speciesId === Species.MORPEKO ? user.formIndex : user.fusionSpecies?.formIndex;
+    if (user.species.speciesId === Species.MORPEKO) {
+      const form = user.formIndex;
 
       switch (form) {
         case 1: // Hangry Mode

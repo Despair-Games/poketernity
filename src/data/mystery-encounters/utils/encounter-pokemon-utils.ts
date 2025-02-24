@@ -443,7 +443,7 @@ export function trainerThrowPokeball(
     const _2h = 2 * pokemon.hp;
     const catchRate = pokemon.species.catchRate;
     const pokeballMultiplier = getPokeballCatchMultiplier(pokeballType);
-    const statusMultiplier = pokemon.status ? getStatusEffectCatchRateMultiplier(pokemon.status.effect) : 1;
+    const statusMultiplier = pokemon.status ? getStatusEffectCatchRateMultiplier(pokemon.getStatusEffect(true)) : 1;
     const x = Math.round((((_3m - _2h) * catchRate * pokeballMultiplier) / _3m) * statusMultiplier);
     ballTwitchRate = Math.round(65536 / Math.sqrt(Math.sqrt(255 / x)));
   }
@@ -589,7 +589,7 @@ function failCatch(
   return new Promise<void>((resolve) => {
     globalScene.playSound("se/pb_rel");
     pokemon.setY(originalY);
-    if (pokemon.status?.effect !== StatusEffect.SLEEP) {
+    if (pokemon.hasStatusEffect(StatusEffect.SLEEP, false, true)) {
       pokemon.cry(pokemon.getHpRatio() > 0.25 ? undefined : { rate: 0.85 });
     }
     pokemon.tint(getPokeballTintColor(pokeballType));
@@ -636,12 +636,9 @@ export async function catchPokemon(
   showCatchObtainMessage: boolean = true,
   isObtain: boolean = false,
 ): Promise<void> {
-  const speciesForm = !pokemon.fusionSpecies ? pokemon.getSpeciesForm() : pokemon.getFusionSpeciesForm();
+  const speciesForm = pokemon.getSpeciesForm();
 
-  if (
-    speciesForm.abilityHidden
-    && (pokemon.fusionSpecies ? pokemon.fusionAbilityIndex : pokemon.abilityIndex) === speciesForm.getAbilityCount() - 1
-  ) {
+  if (speciesForm.abilityHidden && pokemon.abilityIndex === speciesForm.getAbilityCount() - 1) {
     globalScene.validateAchv(achvs.HIDDEN_ABILITY);
   }
 
@@ -954,12 +951,9 @@ export function getEncounterPokemonLevelForWave(levelAdditiveModifier: number = 
  * @param pokemon - The newly obtained Pokemon
  */
 export async function addPokemonDataToDexAndValidateAchievements(pokemon: PlayerPokemon) {
-  const speciesForm = !pokemon.fusionSpecies ? pokemon.getSpeciesForm() : pokemon.getFusionSpeciesForm();
+  const speciesForm = pokemon.getSpeciesForm();
 
-  if (
-    speciesForm.abilityHidden
-    && (pokemon.fusionSpecies ? pokemon.fusionAbilityIndex : pokemon.abilityIndex) === speciesForm.getAbilityCount() - 1
-  ) {
+  if (speciesForm.abilityHidden && pokemon.abilityIndex === speciesForm.getAbilityCount() - 1) {
     globalScene.validateAchv(achvs.HIDDEN_ABILITY);
   }
 
@@ -1003,20 +997,12 @@ export function isPokemonValidForEncounterOptionSelection(
 
 /**
  * Permanently overrides the ability (not passive) of a pokemon.
- * If the pokemon is a fusion, instead overrides the fused pokemon's ability.
  * @param pokemon - The Pokemon with its ability being overriden
  * @param ability - The ability that is overriding
  */
 export function applyAbilityOverrideToPokemon(pokemon: Pokemon, ability: Abilities) {
-  if (pokemon.isFusion()) {
-    if (!pokemon.fusionCustomPokemonData) {
-      pokemon.fusionCustomPokemonData = new CustomPokemonData();
-    }
-    pokemon.fusionCustomPokemonData.ability = ability;
-  } else {
-    if (!pokemon.customPokemonData) {
-      pokemon.customPokemonData = new CustomPokemonData();
-    }
-    pokemon.customPokemonData.ability = ability;
+  if (!pokemon.customPokemonData) {
+    pokemon.customPokemonData = new CustomPokemonData();
   }
+  pokemon.customPokemonData.ability = ability;
 }

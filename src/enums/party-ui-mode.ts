@@ -48,11 +48,6 @@ export enum PartyUiMode {
    */
   MODIFIER_TRANSFER,
   /**
-   * Indicates that the party UI is open because of a DNA Splicer.  This
-   * type of selection can be cancelled.
-   */
-  SPLICE,
-  /**
    * Indicates that the party UI is open to release a party member.  This
    * type of selection can be cancelled.
    */

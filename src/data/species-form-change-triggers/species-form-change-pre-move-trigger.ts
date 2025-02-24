@@ -5,6 +5,6 @@ import { globalScene } from "#app/global-scene";
 export class SpeciesFormChangePreMoveTrigger extends SpeciesFormChangeMoveTrigger {
   override canChange(pokemon: Pokemon): boolean {
     const command = globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()];
-    return !!command?.move && this.movePredicate(command.move.moveId) === this.used;
+    return !!command?.turnMove && this.movePredicate(command.turnMove.move.id) === this.used;
   }
 }

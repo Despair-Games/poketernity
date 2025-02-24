@@ -59,9 +59,9 @@ export class TagAddedEvent extends ArenaEvent {
   public arenaTagType: ArenaTagType;
   /** The {@linkcode ArenaTagSide} the tag is being placed on */
   public arenaTagSide: ArenaTagSide;
-  /** The current number of layers of the arena trap. */
+  /** The current number of layers of the arena entry hazard. */
   public arenaTagLayers: number;
-  /** The maximum amount of layers of the arena trap. */
+  /** The maximum amount of layers of the arena entry hazard. */
   public arenaTagMaxLayers: number;
 
   constructor(

@@ -1,5 +1,4 @@
 import type { Move } from "#app/data/move";
-import { allMoves } from "#app/data/data-lists";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BattleCommand } from "#enums/battle-command";
@@ -34,7 +33,7 @@ export class PreventBypassSpeedChanceAbAttr extends AbAttr {
   ): boolean {
     const turnCommand = globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()];
     const isCommandFight = turnCommand?.command === BattleCommand.FIGHT;
-    const move = turnCommand?.move?.moveId ? allMoves[turnCommand.move.moveId] : null;
+    const move = turnCommand?.turnMove?.move;
     if (move && this.condition(pokemon, move) && isCommandFight) {
       bypassSpeed.value = false;
       canCheckHeldItems.value = false;
