@@ -43,7 +43,7 @@ describe("All Moves", async () => {
   };
 
   /**
-   * Custom Implementations as of 01/2025:
+   * Custom Implementations as of 02/2025:
    * - Horn Drill / Guillotine / Sheer Cold / Fissure : BP set to 200
    * - Imprison : Accuracy is set to 100 in PKTY, not -1
    * - Dark Void : Accuracy is set to pre-Gen VIII's 80

@@ -35,7 +35,7 @@ import { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
-import { SelfStatusMove } from "#app/data/move";
+import { getMoveTargets, SelfStatusMove } from "#app/data/move";
 import { WeatherType } from "#enums/weather-type";
 
 /**
@@ -64,6 +64,7 @@ export class MovePhase extends BattlePhase {
   protected _targets: BattlerIndex[];
   protected followUp: boolean;
   protected ignorePp: boolean;
+  protected reflected: boolean;
   protected failed: boolean = false;
   protected cancelled: boolean = false;
 
@@ -77,6 +78,7 @@ export class MovePhase extends BattlePhase {
     move: PokemonMove | MoveId,
     followUp: boolean = false,
     ignorePp: boolean = false,
+    reflected: boolean = false,
   ) {
     super();
 
@@ -85,6 +87,7 @@ export class MovePhase extends BattlePhase {
     this.move = typeof move === "number" ? new PokemonMove(move, 0, 0, true) : move;
     this.followUp = followUp;
     this.ignorePp = ignorePp;
+    this.reflected = reflected;
   }
 
   public get pokemon(): Pokemon {
@@ -170,13 +173,15 @@ export class MovePhase extends BattlePhase {
       }
     }
 
+    this.resolvePreMoveStatusEffects();
+
+    this.lapsePreMoveAndMoveTags();
+
     this.resolveRedirectTarget();
 
     this.resolveCounterAttackTarget();
 
-    this.resolvePreMoveStatusEffects();
-
-    this.lapsePreMoveAndMoveTags();
+    this.tryReflectMove();
 
     if (!(this.failed || this.cancelled)) {
       this.resolveFinalPreMoveCancellationChecks();
@@ -292,6 +297,83 @@ export class MovePhase extends BattlePhase {
     // TODO: does this intentionally happen before the no targets/MoveId.NONE on queue cancellation case is checked?
     if (!this.followUp && this.canMove() && !this.cancelled) {
       this.pokemon.lapseTags(BattlerTagLapseType.MOVE);
+    }
+  }
+
+  /**
+   * If applicable, applies the effects of the targets' Magic Bounce or Magic Coat
+   * to reflect this phase's move onto the user.
+   */
+  protected tryReflectMove(): void {
+    const move = this.move.getMove();
+
+    if (this.reflected || !move.checkFlag(MoveFlags.BOUNCEABLE, this.pokemon, null)) {
+      return;
+    }
+
+    const targets: Pokemon[] = [];
+
+    for (const t of this.targets) {
+      switch (t) {
+        case BattlerIndex.ATTACKER:
+          break;
+        case BattlerIndex.PLAYER_SIDE:
+          targets.push(...globalScene.getPlayerField().filter((p) => p.isActive(true)));
+          break;
+        case BattlerIndex.ENEMY_SIDE:
+          targets.push(...globalScene.getEnemyField().filter((p) => p.isActive(true)));
+          break;
+        case BattlerIndex.BOTH_SIDES:
+          targets.push(...globalScene.getField(true));
+          break;
+        default:
+          const target = globalScene.getFieldPokemonByBattlerIndex(t);
+          if (target) {
+            targets.push(target);
+          }
+          break;
+      }
+    }
+
+    const targetSet = new Set<Pokemon>(targets);
+    for (const target of targetSet) {
+      /** @todo Apply Magic Bounce formally and include Magic Coat */
+      if (target.hasAbility(Abilities.MAGIC_BOUNCE) && !target.isSemiInvulnerable()) {
+        globalScene.useMove({
+          pokemon: target,
+          targets: this.getReflectionTargets(target),
+          move: move.id,
+          followUp: true,
+          reflected: true,
+          when: "eager",
+        });
+
+        if (isFieldTargeted(this.targets)) {
+          this.cancel();
+          return;
+        } else {
+          this.targets.splice(this.targets.indexOf(target.getBattlerIndex()), 1);
+          if (this.targets.length === 0) {
+            this.cancel();
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Obtains the targets of a move reflected by the given Pokemon's
+   * Magic Bounce or Magic Coat
+   * @param reflectSource the {@linkcode Pokemon} reflecting the move
+   * @returns the new targets of the reflected move by {@linkcode BattlerIndex}
+   */
+  protected getReflectionTargets(reflectSource: Pokemon): BattlerIndex[] {
+    const { targets, multiple } = getMoveTargets(reflectSource, this.move.moveId);
+
+    if (multiple || isFieldTargeted(targets)) {
+      return targets;
+    } else {
+      return [this.pokemon.getBattlerIndex()];
     }
   }
 
@@ -588,7 +670,7 @@ export class MovePhase extends BattlePhase {
    * the pokemon is on a recharge turn (ie: {@link MoveId.HYPER_BEAM Hyper Beam}), or a 2-turn move was interrupted (ie: {@link MoveId.FLY Fly}).
    */
   public showMoveText(): void {
-    if (this.move.moveId === MoveId.NONE) {
+    if (this.reflected || this.move.moveId === MoveId.NONE) {
       return;
     }
 

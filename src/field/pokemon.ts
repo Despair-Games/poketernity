@@ -2548,6 +2548,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
+   * @returns the {@linkcode BattlerIndex} corresponding to this Pokemon's side of the field
+   */
+  getArenaSideIndex(): BattlerIndex.PLAYER_SIDE | BattlerIndex.ENEMY_SIDE {
+    return this.isPlayer() ? BattlerIndex.PLAYER_SIDE : BattlerIndex.ENEMY_SIDE;
+  }
+
+  /**
    * @returns the Pokemon on the opposing field
    */
   getOpposingField(): Pokemon[] {
