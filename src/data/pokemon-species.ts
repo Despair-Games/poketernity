@@ -186,7 +186,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
       if (!forTrainer && isRegionalEvolution) {
         evolutionChance = 0;
       } else {
-        if (ev.altLevel !== 0 && level > ev.altLevel) {
+        if ((ev.altLevel !== 0 && level > ev.altLevel) || level > ev.level) {
           evolutionChance = 1;
           noEvolutionChance = 0;
         }
