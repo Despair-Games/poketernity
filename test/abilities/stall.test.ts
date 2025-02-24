@@ -66,5 +66,6 @@ describe("Abilities - Stall", () => {
     await game.toEndOfTurn();
 
     expect(game.field.getTurnOrder()).toEqual(game.field.getSpeedOrder());
+    expect(game.field.getTurnOrder()).toEqual([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
   });
 });

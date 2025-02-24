@@ -75,5 +75,6 @@ describe("Abilities - Mycelium Might", () => {
     await game.toEndOfTurn();
 
     expect(game.field.getTurnOrder()).toEqual(game.field.getSpeedOrder());
+    expect(game.field.getTurnOrder()).toEqual([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
   });
 });

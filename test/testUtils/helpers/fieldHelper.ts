@@ -48,7 +48,7 @@ export class FieldHelper extends GameManagerHelper {
   }
 
   /**
-   * @returns the {@linkcode BattlerIndex | indexes} of Pokemon on the field in Speed order.
+   * @returns the {@linkcode BattlerIndex | indexes} of Pokemon on the field in order of decreasing Speed.
    * Speed ties are returned in increasing order of index.
    */
   public getSpeedOrder(): BattlerIndex[] {
