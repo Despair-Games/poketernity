@@ -3108,7 +3108,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param amount - The amount of damage to be dealt.
    * @param result - The {@linkcode DamageResult | type of hit} (super effective, etc).
    *   Passed to the `DamageAnimPhase`. Default {@linkcode HitResult.EFFECTIVE}
-   * @param critical - `true` if the move is a critical hit. Default `false`
+   * @param isCritical - `true` if the move is a critical hit. Default `false`
    * @param ignoreSegments - If `true`, boss bars are ignored. Only applies to {@linkcode EnemyPokemon}. Default `false`
    * @param preventEndure - If `true`, bypasses the effects of Endure, Sturdy, etc. Default `false`
    * @param ignoreFaintPhase - If `true`, doesn't push a {@linkcode FaintPhase}. Default `false`
@@ -3120,7 +3120,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     amount: number,
     {
       result,
-      critical = false,
+      isCritical = false,
       ignoreSegments = false,
       preventEndure = false,
       ignoreFaintPhase = false,
@@ -3128,7 +3128,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       ignoreDynamaxReduction = false,
     }: {
       result?: DamageResult;
-      critical?: boolean;
+      isCritical?: boolean;
       ignoreSegments?: boolean;
       preventEndure?: boolean;
       ignoreFaintPhase?: boolean;
@@ -3136,7 +3136,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       ignoreDynamaxReduction?: boolean;
     } = {},
   ): number {
-    const damagePhase = new DamageAnimPhase(this.getBattlerIndex(), amount, result, critical);
+    const damagePhase = new DamageAnimPhase(this.getBattlerIndex(), amount, result, isCritical);
     globalScene.unshiftPhase(damagePhase);
     if (this.switchOutStatus && source) {
       amount = 0;

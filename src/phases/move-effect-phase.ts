@@ -490,7 +490,7 @@ export class MoveEffectPhase extends HitCheckPhase {
        */
       const damage = target.damageAndUpdate(isBlockedBySubstitute ? 0 : dmg, {
         result: result as DamageResult,
-        critical: isCritical,
+        isCritical,
         ignoreSegments: isOneHitKo,
         preventEndure: isOneHitKo,
         ignoreFaintPhase: true,
