@@ -1,15 +1,15 @@
-import type { BattlerIndex } from "#enums/battler-index";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { CommonBattleAnim } from "#app/data/battle-anims/common-battle-anim";
-import { CommonAnim } from "#enums/common-anim";
 import { getStatusEffectActivationText } from "#app/data/status-effect";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { BooleanHolder, NumberHolder } from "#app/utils";
-import { StatusEffect } from "#enums/status-effect";
-import { PokemonPhase } from "./abstract-pokemon-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { BattlerIndex } from "#enums/battler-index";
+import { CommonAnim } from "#enums/common-anim";
 import { PhaseId } from "#enums/phase-id";
+import { StatusEffect } from "#enums/status-effect";
 
 export class PostTurnStatusEffectPhase extends PokemonPhase {
   override readonly id = PhaseId.POST_TURN_STATUS_EFFECT;
