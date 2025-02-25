@@ -1,4 +1,3 @@
-import { allMoves } from "#app/data/data-lists";
 import { Abilities } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -47,7 +46,7 @@ describe("Moves - Uproar", () => {
 
     expect(player.getTag(BattlerTagType.UPROAR)?.turnCount).toBe(2);
     expect(player.getMoveQueue()[0]).toMatchObject({
-      moveId: MoveId.UPROAR,
+      move: expect.objectContaining({ id: MoveId.UPROAR }),
       ignorePP: true,
     });
 
@@ -72,7 +71,7 @@ describe("Moves - Uproar", () => {
 
     expect(player.getTag(BattlerTagType.UPROAR)?.turnCount).toBe(2);
     expect(player.getMoveQueue()[0]).toMatchObject({
-      moveId: MoveId.UPROAR,
+      move: expect.objectContaining({ id: MoveId.UPROAR }),
       ignorePP: true,
     });
 
@@ -126,7 +125,7 @@ describe("Moves - Uproar", () => {
 
     expect(player.getTag(BattlerTagType.UPROAR)?.turnCount).toBe(2);
     expect(player.getMoveQueue()[0]).toMatchObject({
-      moveId: MoveId.UPROAR,
+      move: expect.objectContaining({ id: MoveId.UPROAR }),
       ignorePP: true,
     });
 
@@ -138,7 +137,7 @@ describe("Moves - Uproar", () => {
     expect(player.getMoveHistory()).toHaveLength(3);
     player.getMoveHistory().forEach((turnMove) =>
       expect(turnMove).toMatchObject({
-        move: allMoves[MoveId.UPROAR],
+        move: expect.objectContaining({ id: MoveId.UPROAR }),
         result: MoveResult.SUCCESS,
       }),
     );
