@@ -47,7 +47,7 @@ describe("Moves - Assist", () => {
 
     game.move.select(MoveId.ASSIST, 0);
     game.move.select(MoveId.SKETCH, 1);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER]);
     // Player_2 uses Sketch, copies Swords Dance, Player_1 uses Assist, uses Player_2's Sketched Swords Dance
     await game.toNextTurn();
 
@@ -75,7 +75,7 @@ describe("Moves - Assist", () => {
 
     game.move.select(MoveId.SKETCH, 0);
     game.move.select(MoveId.PROTECT, 1);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
     // Player uses Sketch to copy Swords Dance, Player_2 stalls a turn. Player will attempt Assist and should have no usable moves
     await game.toNextTurn();
     game.move.select(MoveId.ASSIST, 0);

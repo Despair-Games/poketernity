@@ -96,7 +96,7 @@ describe("Abilities - Good As Gold", () => {
 
     game.move.use(MoveId.HAZE);
     await game.move.forceEnemyMove(MoveId.SWORDS_DANCE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.toEndOfTurn();
 
