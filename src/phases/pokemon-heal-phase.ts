@@ -1,19 +1,19 @@
-import type { BattlerIndex } from "#enums/battler-index";
-import { CommonAnim } from "#enums/common-anim";
 import type { HealBlockTag } from "#app/data/battler-tags";
 import { getStatusEffectHealText } from "#app/data/status-effect";
 import { type DamageResult } from "#app/field/pokemon";
-import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { HealingBoosterModifier } from "#app/modifier/modifier";
+import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { NumberHolder } from "#app/utils";
+import { AchvCategory } from "#enums/achv-category";
+import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { CommonAnim } from "#enums/common-anim";
+import { HitResult } from "#enums/hit-result";
+import { PhaseId } from "#enums/phase-id";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
-import { CommonAnimPhase } from "./common-anim-phase";
-import { AchvCategory } from "#enums/achv-category";
-import { PhaseId } from "#enums/phase-id";
 
 export interface PokemonHealPhaseOptions {
   message?: string;
@@ -37,17 +37,29 @@ export class PokemonHealPhase extends CommonAnimPhase {
   private readonly preventFullHeal: boolean;
   private readonly fullRestorePP: boolean;
 
-  constructor(battlerIndex: BattlerIndex, hpHealed: number, options?: PokemonHealPhaseOptions) {
+  constructor(
+    battlerIndex: BattlerIndex,
+    hpHealed: number,
+    {
+      message,
+      showFullHpMessage = true,
+      skipAnim = false,
+      revive = false,
+      healStatus = false,
+      preventFullHeal = false,
+      fullRestorePP = false,
+    }: PokemonHealPhaseOptions = {},
+  ) {
     super(battlerIndex, undefined, CommonAnim.HEALTH_UP);
 
     this.hpHealed = hpHealed;
-    this.message = options?.message;
-    this.showFullHpMessage = options?.showFullHpMessage ?? true;
-    this.skipAnim = options?.skipAnim ?? false;
-    this.revive = options?.revive ?? false;
-    this.healStatus = options?.healStatus ?? false;
-    this.preventFullHeal = options?.preventFullHeal ?? false;
-    this.fullRestorePP = options?.fullRestorePP ?? false;
+    this.message = message;
+    this.showFullHpMessage = showFullHpMessage;
+    this.skipAnim = skipAnim;
+    this.revive = revive;
+    this.healStatus = healStatus;
+    this.preventFullHeal = preventFullHeal;
+    this.fullRestorePP = fullRestorePP;
   }
 
   public override start(): void {

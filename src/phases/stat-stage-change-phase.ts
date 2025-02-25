@@ -1,20 +1,20 @@
-import type { BattlerIndex } from "#enums/battler-index";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { ResetNegativeStatStageModifier } from "#app/modifier/modifier";
-import { handleTutorial } from "#app/tutorial";
-import { Tutorial } from "#enums/tutorial";
-import { BooleanHolder, NumberHolder } from "#app/utils";
-import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } from "#enums/stat";
-import i18next from "i18next";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { settings } from "#app/system/settings/settings-manager";
-import { PokemonPhase } from "./abstract-pokemon-phase";
+import { handleTutorial } from "#app/tutorial";
 import { CANVAS_SCALE } from "#app/ui-constants";
-import { ArenaTagType } from "#enums/arena-tag-type";
+import { BooleanHolder, NumberHolder } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import type { BattlerIndex } from "#enums/battler-index";
 import { PhaseId } from "#enums/phase-id";
+import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } from "#enums/stat";
+import { Tutorial } from "#enums/tutorial";
+import i18next from "i18next";
 
 //#region Types
 
@@ -41,26 +41,32 @@ export class StatStageChangePhase extends PokemonPhase {
   protected readonly canBeCopied: boolean;
   protected readonly bypassReflect: boolean;
   protected readonly onChange?: StatStageChangeCallback;
-  private readonly options?: SSCPhaseOptions;
+  private readonly options: SSCPhaseOptions;
 
   constructor(
     battlerIndex: BattlerIndex,
     source: Pokemon | null,
     stats: BattleStat[],
     stages: number,
-    options?: SSCPhaseOptions,
+    {
+      showMessage = true,
+      ignoreAbilities = false,
+      canBeCopied = true,
+      bypassReflect = false,
+      onChange,
+    }: SSCPhaseOptions = {},
   ) {
     super(battlerIndex);
 
     this.source = source;
     this.stats = stats;
     this.stages = stages;
-    this.showMessage = options?.showMessage ?? true;
-    this.ignoreAbilities = options?.ignoreAbilities ?? false;
-    this.canBeCopied = options?.canBeCopied ?? true;
-    this.bypassReflect = options?.bypassReflect ?? false;
-    this.onChange = options?.onChange;
-    this.options = options;
+    this.showMessage = showMessage;
+    this.ignoreAbilities = ignoreAbilities;
+    this.canBeCopied = canBeCopied;
+    this.bypassReflect = bypassReflect;
+    this.onChange = onChange;
+    this.options = { showMessage, ignoreAbilities, canBeCopied, bypassReflect, onChange };
   }
 
   public override start(): void {
