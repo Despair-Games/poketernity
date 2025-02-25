@@ -48,7 +48,7 @@ describe("Moves - Dig", () => {
     expect(enemyPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.MISS);
     expect(playerPokemon.hp).toBe(playerPokemon.getMaxHp());
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
-    expect(playerPokemon.getMoveQueue()[0].moveId).toBe(MoveId.DIG);
+    expect(playerPokemon.getMoveQueue()[0].move.id).toBe(MoveId.DIG);
 
     await game.toEndOfTurn();
     expect(playerPokemon.getTag(BattlerTagType.UNDERGROUND)).toBeUndefined();
@@ -100,7 +100,7 @@ describe("Moves - Dig", () => {
     const preDigEarthquakeDmg = playerPokemon.getAttackDamage(enemyPokemon, allMoves[MoveId.EARTHQUAKE]).damage;
 
     game.move.select(MoveId.DIG);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEffectPhase");
 

@@ -23,7 +23,7 @@ function getEnemyMoveChoices(pokemon: EnemyPokemon, moveChoices: MoveChoiceSet):
   });
   for (let i = 0; i < NUM_TRIALS; i++) {
     const queuedMove = pokemon.getNextMove();
-    moveChoices[queuedMove.moveId]++;
+    moveChoices[queuedMove.move.id]++;
   }
 
   for (const [moveId, count] of Object.entries(moveChoices)) {

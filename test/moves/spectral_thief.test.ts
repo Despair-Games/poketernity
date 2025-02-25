@@ -44,7 +44,7 @@ describe("Moves - Spectral Thief", () => {
     const spy = vi.spyOn(enemy, "getAttackDamage");
 
     game.move.select(MoveId.SPECTRAL_THIEF);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     const preEffectDamage = enemy.getAttackDamage(player, allMoves[MoveId.SPECTRAL_THIEF]).damage;
@@ -66,7 +66,7 @@ describe("Moves - Spectral Thief", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.SPECTRAL_THIEF);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     await game.phaseInterceptor.to("MoveEffectPhase");
@@ -91,7 +91,7 @@ describe("Moves - Spectral Thief", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.SPECTRAL_THIEF);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     await game.phaseInterceptor.to("MoveEffectPhase");
@@ -115,7 +115,7 @@ describe("Moves - Spectral Thief", () => {
       const enemy = game.scene.getEnemyPokemon()!;
 
       game.move.select(MoveId.SPECTRAL_THIEF);
-      await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+      game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
       await game.phaseInterceptor.to("MoveEndPhase");
       await game.phaseInterceptor.to("MoveEffectPhase");
@@ -134,7 +134,7 @@ describe("Moves - Spectral Thief", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.SPECTRAL_THIEF);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     await game.phaseInterceptor.to("MoveEffectPhase");

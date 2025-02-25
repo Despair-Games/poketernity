@@ -56,10 +56,6 @@ export default class PokemonData {
   /** Data that can customize a Pokemon in non-standard ways from its Species */
   public customPokemonData: CustomPokemonData;
 
-  // Deprecated attributes, needed for now to allow SessionData migration
-  public natureOverride: Nature | -1;
-  public mysteryEncounterPokemonData: CustomPokemonData | null;
-
   constructor(source: Pokemon | any, forHistory: boolean = false) {
     const sourcePokemon = source.type === "Pokemon" ? source : null;
     this.id = source.id;
@@ -99,12 +95,6 @@ export default class PokemonData {
     this.usedTMs = source.usedTMs ?? [];
 
     this.customPokemonData = new CustomPokemonData(source.customPokemonData);
-
-    // Deprecated, but needed for session data migration
-    this.natureOverride = source.natureOverride;
-    this.mysteryEncounterPokemonData = source.mysteryEncounterPokemonData
-      ? new CustomPokemonData(source.mysteryEncounterPokemonData)
-      : null;
 
     if (!forHistory) {
       this.boss = (source instanceof EnemyPokemon && !!source.bossSegments) || (!this.player && !!source.boss);

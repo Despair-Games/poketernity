@@ -52,7 +52,7 @@ describe("Moves - Destiny Bond", () => {
     const playerPokemon = game.scene.getPlayerPokemon();
 
     game.move.select(moveToUse);
-    await game.setTurnOrder(enemyFirst);
+    game.setTurnOrder(enemyFirst);
     await game.toEndOfTurn();
 
     expect(enemyPokemon?.isFainted()).toBe(true);
@@ -70,7 +70,7 @@ describe("Moves - Destiny Bond", () => {
 
     // Turn 1: Enemy uses Destiny Bond and doesn't faint
     game.move.select(MoveId.SPLASH);
-    await game.setTurnOrder(playerFirst);
+    game.setTurnOrder(playerFirst);
     await game.toNextTurn();
 
     expect(enemyPokemon?.isFainted()).toBe(false);
@@ -78,7 +78,7 @@ describe("Moves - Destiny Bond", () => {
 
     // Turn 2: Player KO's the enemy before the enemy's turn
     game.move.select(moveToUse);
-    await game.setTurnOrder(playerFirst);
+    game.setTurnOrder(playerFirst);
     await game.toEndOfTurn();
 
     expect(enemyPokemon?.isFainted()).toBe(true);
@@ -96,7 +96,7 @@ describe("Moves - Destiny Bond", () => {
 
     // Turn 1: Enemy uses Destiny Bond and doesn't faint
     game.move.select(MoveId.SPLASH);
-    await game.setTurnOrder(enemyFirst);
+    game.setTurnOrder(enemyFirst);
     await game.toNextTurn();
 
     expect(enemyPokemon?.isFainted()).toBe(false);
@@ -104,7 +104,7 @@ describe("Moves - Destiny Bond", () => {
 
     // Turn 2: Enemy should fail Destiny Bond then get KO'd
     game.move.select(moveToUse);
-    await game.setTurnOrder(enemyFirst);
+    game.setTurnOrder(enemyFirst);
     await game.toEndOfTurn();
 
     expect(enemyPokemon?.isFainted()).toBe(true);
@@ -122,7 +122,7 @@ describe("Moves - Destiny Bond", () => {
     const playerPokemon = game.scene.getPlayerPokemon();
 
     game.move.select(moveToUse);
-    await game.setTurnOrder(enemyFirst);
+    game.setTurnOrder(enemyFirst);
     await game.toEndOfTurn();
 
     expect(enemyPokemon?.isFainted()).toBe(true);
@@ -140,7 +140,7 @@ describe("Moves - Destiny Bond", () => {
 
     // Turn 1: Enemy uses Destiny Bond and doesn't faint
     game.move.select(MoveId.SPORE);
-    await game.setTurnOrder(enemyFirst);
+    game.setTurnOrder(enemyFirst);
     await game.toNextTurn();
 
     expect(enemyPokemon?.isFainted()).toBe(false);
@@ -149,7 +149,7 @@ describe("Moves - Destiny Bond", () => {
 
     // Turn 2: Enemy should skip a turn due to sleep, then get KO'd
     game.move.select(moveToUse);
-    await game.setTurnOrder(enemyFirst);
+    game.setTurnOrder(enemyFirst);
     await game.toEndOfTurn();
 
     expect(enemyPokemon?.isFainted()).toBe(true);
@@ -168,7 +168,7 @@ describe("Moves - Destiny Bond", () => {
     // Shedinja uses Destiny Bond, then ally Bulbasaur KO's Shedinja with Crunch
     game.move.select(MoveId.DESTINY_BOND, 0);
     game.move.select(MoveId.CRUNCH, 1, BattlerIndex.PLAYER);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.toEndOfTurn();
 
     expect(enemyPokemon0?.isFainted()).toBe(false);
@@ -188,7 +188,7 @@ describe("Moves - Destiny Bond", () => {
     const playerPokemon = game.scene.getPlayerPokemon();
 
     game.move.select(moveToUse);
-    await game.setTurnOrder(enemyFirst);
+    game.setTurnOrder(enemyFirst);
     await game.toEndOfTurn();
 
     expect(enemyPokemon?.isFainted()).toBe(true);
@@ -211,7 +211,7 @@ describe("Moves - Destiny Bond", () => {
 
     game.move.select(MoveId.GRASS_PLEDGE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.WATER_PLEDGE, 1, BattlerIndex.ENEMY);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
     await game.toEndOfTurn();
 
     expect(enemyPokemon0?.isFainted()).toBe(true);
@@ -238,7 +238,7 @@ describe("Moves - Destiny Bond", () => {
     const playerPokemon = game.scene.getPlayerPokemon();
 
     game.move.select(moveToUse);
-    await game.setTurnOrder(enemyFirst);
+    game.setTurnOrder(enemyFirst);
     await game.toEndOfTurn();
 
     expect(enemyPokemon?.isFainted()).toBe(true);

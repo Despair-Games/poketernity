@@ -85,7 +85,7 @@ describe("Moves - Thrash", () => {
     await game.toNextTurn();
 
     await game.move.forceEnemyMove(MoveId.SPORE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(player.getTag(BattlerTagType.FRENZY)).toBeUndefined();
@@ -101,7 +101,7 @@ describe("Moves - Thrash", () => {
     await game.toNextTurn();
 
     await game.move.forceEnemyMove(MoveId.ASTONISH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(player.getTag(BattlerTagType.FRENZY)).toBeUndefined();
@@ -125,7 +125,7 @@ describe("Moves - Thrash", () => {
     }
 
     await game.move.forceEnemyMove(MoveId.ASTONISH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(player.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);

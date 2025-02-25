@@ -236,7 +236,7 @@ describe("Moves - Powder", () => {
     game.move.select(MoveId.SPLASH, 1);
     await game.forceEnemyMove(MoveId.GRASS_PLEDGE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(MoveId.FIRE_PLEDGE, BattlerIndex.PLAYER);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to(BerryPhase, false);
     expect(enemyPokemon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
@@ -253,7 +253,7 @@ describe("Moves - Powder", () => {
     game.move.select(MoveId.SPLASH, 1);
     await game.forceEnemyMove(MoveId.FIRE_PLEDGE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(MoveId.WATER_PLEDGE, BattlerIndex.PLAYER);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to(BerryPhase, false);
     expect(enemyPokemon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
@@ -270,7 +270,7 @@ describe("Moves - Powder", () => {
     game.move.select(MoveId.SPLASH, 1);
     await game.forceEnemyMove(MoveId.FIRE_PLEDGE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(MoveId.WATER_PLEDGE, BattlerIndex.PLAYER);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to(BerryPhase, false);
     expect(enemyPokemon.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
