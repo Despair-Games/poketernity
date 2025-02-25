@@ -585,21 +585,11 @@ export class MoveRequirement extends EncounterPokemonRequirement {
   }
 
   override queryParty(partyPokemon: PlayerPokemon[]): PlayerPokemon[] {
-    if (!this.invertQuery) {
-      // get the Pokemon with at least one move in the required moves list
-      return partyPokemon.filter(
-        (pokemon) =>
-          (!this.excludeDisallowedPokemon || pokemon.isAllowedInBattle())
-          && pokemon.moveset.some((move) => move?.moveId && this.requiredMoves.includes(move.moveId)),
-      );
-    } else {
-      // for an inverted query, we only want to get the pokemon that don't have ANY of the listed moves
-      return partyPokemon.filter(
-        (pokemon) =>
-          (!this.excludeDisallowedPokemon || pokemon.isAllowedInBattle())
-          && !pokemon.moveset.some((move) => move?.moveId && this.requiredMoves.includes(move.moveId)),
-      );
-    }
+    return partyPokemon.filter((pokemon) => {
+      const movesetFilter = pokemon.moveset.some((move) => move.moveId && this.requiredMoves.includes(move.moveId));
+      const pokemonIsAllowed = !this.excludeDisallowedPokemon || pokemon.isAllowedInBattle();
+      return pokemonIsAllowed && (this.invertQuery ? !movesetFilter : movesetFilter);
+    });
   }
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
@@ -690,20 +680,11 @@ export class AbilityRequirement extends EncounterPokemonRequirement {
   }
 
   override queryParty(partyPokemon: PlayerPokemon[]): PlayerPokemon[] {
-    if (!this.invertQuery) {
-      return partyPokemon.filter(
-        (pokemon) =>
-          (!this.excludeDisallowedPokemon || pokemon.isAllowedInBattle())
-          && this.requiredAbilities.some((ability) => pokemon.hasAbility(ability, false)),
-      );
-    } else {
-      // for an inverted query, we only want to get the pokemon that don't have ANY of the listed abilities
-      return partyPokemon.filter(
-        (pokemon) =>
-          (!this.excludeDisallowedPokemon || pokemon.isAllowedInBattle())
-          && this.requiredAbilities.filter((ability) => pokemon.hasAbility(ability, false)).length === 0,
-      );
-    }
+    return partyPokemon.filter((pokemon) => {
+      const pokemonIsAllowed = !this.excludeDisallowedPokemon || pokemon.isAllowedInBattle();
+      const pokemonHasAbility = this.requiredAbilities.some((ability) => pokemon.hasAbility(ability, false));
+      return pokemonIsAllowed && (this.invertQuery ? !pokemonHasAbility : pokemonHasAbility);
+    });
   }
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
@@ -740,30 +721,17 @@ export class StatusEffectRequirement extends EncounterPokemonRequirement {
   }
 
   override queryParty(partyPokemon: PlayerPokemon[]): PlayerPokemon[] {
-    if (!this.invertQuery) {
-      return partyPokemon.filter((pokemon) => {
-        return this.requiredStatusEffect.some((statusEffect) => {
-          if (statusEffect === StatusEffect.NONE) {
-            // StatusEffect.NONE also checks for null or undefined status
-            return !pokemon.hasNonVolatileStatusEffect();
-          } else {
-            return pokemon.hasStatusEffect(statusEffect);
-          }
-        });
+    return partyPokemon.filter((pokemon) => {
+      const effectFilter = this.requiredStatusEffect.some((statusEffect) => {
+        if (statusEffect === StatusEffect.NONE) {
+          // StatusEffect.NONE also checks for null or undefined status
+          return !pokemon.hasNonVolatileStatusEffect();
+        } else {
+          return pokemon.hasStatusEffect(statusEffect);
+        }
       });
-    } else {
-      // for an inverted query, we only want to get the pokemon that don't have ANY of the listed StatusEffects
-      return partyPokemon.filter((pokemon) => {
-        return !this.requiredStatusEffect.some((statusEffect) => {
-          if (statusEffect === StatusEffect.NONE) {
-            // StatusEffect.NONE also checks for null or undefined status
-            return !pokemon.hasNonVolatileStatusEffect();
-          } else {
-            return pokemon.hasStatusEffect(statusEffect);
-          }
-        });
-      });
-    }
+      return this.invertQuery ? !effectFilter : effectFilter;
+    });
   }
 
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
