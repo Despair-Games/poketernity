@@ -17,7 +17,6 @@ import { MoneyMultiplierModifier, type PokemonHeldItemModifier } from "./modifie
 import type { PokeballType } from "#enums/pokeball";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
-import type { QueuedMove } from "./@types/QueuedMove";
 import type { Pokemon } from "#app/field/pokemon";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { PlayerGender } from "#enums/player-gender";
@@ -55,11 +54,12 @@ import {
   TUTORIAL_BATTLE_WAVE,
 } from "./data/special-waves";
 import type { Move } from "#app/data/move";
+import type { TurnMove } from "#app/@types/TurnMove";
 
 export interface TurnCommand {
   command: BattleCommand;
   cursor?: number;
-  move?: QueuedMove;
+  turnMove?: TurnMove;
   targets?: BattlerIndex[];
   skip?: boolean;
   args?: any[];

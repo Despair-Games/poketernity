@@ -9,7 +9,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 import { StatusEffect } from "#enums/status-effect";
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
-import { RandomMoveAttr } from "#app/data/move-attrs/random-move-attr";
+import { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
 
 describe("Moves - Sketch", () => {
   let phaserGame: Phaser.Game;
@@ -82,8 +82,8 @@ describe("Moves - Sketch", () => {
 
   it("should sketch moves that call other moves", async () => {
     const randomMoveAttr = allMoves[MoveId.METRONOME].findAttr(
-      (attr) => attr instanceof RandomMoveAttr,
-    ) as RandomMoveAttr;
+      (attr) => attr instanceof MetronomeAttr,
+    ) as MetronomeAttr;
     vi.spyOn(randomMoveAttr, "getMoveOverride").mockReturnValue(MoveId.FALSE_SWIPE);
 
     game.override.enemyMoveset([MoveId.METRONOME]);
