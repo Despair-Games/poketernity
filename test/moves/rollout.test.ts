@@ -88,7 +88,7 @@ describe("Moves - Rollout", () => {
     for (let i = 0; i < 4; i++) {
       expect(player.getTag(BattlerTagType.ROLLING)?.turnCount).toBe(4 - i);
       expect(player.getMoveQueue()[0]).toMatchObject({
-        moveId: MoveId.ROLLOUT,
+        move: expect.objectContaining({ id: MoveId.ROLLOUT }),
         ignorePP: true,
       });
 
@@ -114,7 +114,7 @@ describe("Moves - Rollout", () => {
     await game.toNextTurn();
 
     expect(player.getTag(BattlerTagType.ROLLING)).toBeDefined();
-    expect(player.getMoveQueue()[0]?.moveId).toBe(MoveId.ROLLOUT);
+    expect(player.getMoveQueue()[0]?.move.id).toBe(MoveId.ROLLOUT);
 
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceMiss();
