@@ -193,6 +193,7 @@ import type { TrainerSlot } from "#enums/trainer-slot";
 import { UiMode } from "#enums/ui-mode";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
+import type { DamageFunctionOptions } from "#app/@types/DamageFunctionOptions";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -3124,22 +3125,14 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public damageAndUpdate(
     amount: number,
     {
-      result,
+      result = HitResult.EFFECTIVE,
       isCritical = false,
       ignoreSegments = false,
       preventEndure = false,
       ignoreFaintPhase = false,
       source,
       ignoreDynamaxReduction = false,
-    }: {
-      result?: DamageResult;
-      isCritical?: boolean;
-      ignoreSegments?: boolean;
-      preventEndure?: boolean;
-      ignoreFaintPhase?: boolean;
-      source?: Pokemon;
-      ignoreDynamaxReduction?: boolean;
-    } = {},
+    }: DamageFunctionOptions = {},
   ): number {
     const damagePhase = new DamageAnimPhase(this.getBattlerIndex(), amount, result, isCritical);
     globalScene.unshiftPhase(damagePhase);
