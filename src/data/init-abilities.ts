@@ -1168,7 +1168,7 @@ export function initAbilities() {
       .attr(MoveFlagPowerBoostAbAttr, MoveFlags.SOUND_MOVE, 1.3)
       .attr(ReceivedMoveDamageMultiplierAbAttr, (_target, _user, move) => move.hasFlag(MoveFlags.SOUND_MOVE), 0.5)
       .ignorable(),
-    new Ability(Abilities.SAND_SPIT, 8).attr(
+    new Ability(Abilities.SAND_SPIT, 8).bypassFaint().attr(
       PostDefendWeatherChangeAbAttr,
       WeatherType.SANDSTORM,
       (_target, _user, move) => move.category !== MoveCategory.STATUS,
@@ -1282,7 +1282,7 @@ export function initAbilities() {
     new Ability(Abilities.LINGERING_AROMA, 9)
       .attr(PostDefendAbilityGiveAbAttr, Abilities.LINGERING_AROMA)
       .bypassFaint(),
-    new Ability(Abilities.SEED_SOWER, 9).attr(PostDefendTerrainChangeAbAttr, TerrainType.GRASSY),
+    new Ability(Abilities.SEED_SOWER, 9).bypassFaint().attr(PostDefendTerrainChangeAbAttr, TerrainType.GRASSY),
     new Ability(Abilities.THERMAL_EXCHANGE, 9)
       .attr(
         PostDefendStatStageChangeAbAttr,

@@ -41,6 +41,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import type { ChargingAttackMove } from "#app/data/moves/charging-attack-move";
 import type { ChargingSelfStatusMove } from "#app/data/moves/charging-self-status-move";
+import { FOG_ACCURACY_MULTIPLIER } from "#app/constants";
 
 export abstract class Move implements Localizable {
   public id: MoveId;
@@ -393,16 +394,6 @@ export abstract class Move implements Localizable {
   }
 
   /**
-   * Sets the {@linkcode MoveFlags.IGNORE_VIRTUAL} flag for the calling Move
-   * @see {@linkcode MoveId.NATURE_POWER}
-   * @returns The {@linkcode Move} that called this function
-   */
-  ignoresVirtual(): this {
-    this.setFlag(MoveFlags.IGNORE_VIRTUAL, true);
-    return this;
-  }
-
-  /**
    * Sets the {@linkcode MoveFlags.SOUND_MOVE} flag for the calling Move
    * @see {@linkcode MoveId.UPROAR}
    * @returns The {@linkcode Move} that called this function
@@ -728,12 +719,8 @@ export abstract class Move implements Localizable {
     const isOhko = this.hasAttr(OneHitKOAccuracyAttr);
 
     // TODO: wide lens was calculated here
-    if (globalScene.arena.hasWeather(WeatherType.FOG)) {
-      /**
-       *  The 0.9 multiplier is Game-specific implementation, Bulbapedia uses 3/5
-       *  See Fog {@link https://bulbapedia.bulbagarden.net/wiki/Fog}
-       */
-      moveAccuracy.value = Math.floor(moveAccuracy.value * 0.9);
+    if (globalScene.arena.hasWeather(WeatherType.FOG) && !globalScene.arena.weather?.isEffectSuppressed()) {
+      moveAccuracy.value = Math.floor(moveAccuracy.value * FOG_ACCURACY_MULTIPLIER);
     }
 
     if (!isOhko && globalScene.arena.getTag(ArenaTagType.GRAVITY)) {
@@ -981,17 +968,20 @@ export type MoveTargetSet = {
   multiple: boolean;
 };
 
-export function getMoveTargets(user: Pokemon, moveId: MoveId): MoveTargetSet {
+export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: MoveTarget): MoveTargetSet {
   const variableTarget = new NumberHolder(0);
   user.getOpponents().forEach((p) => applyMoveAttrs(VariableTargetAttr, user, p, allMoves[moveId], variableTarget));
 
-  const moveTarget = allMoves[moveId].hasAttr(VariableTargetAttr)
-    ? variableTarget.value
-    : moveId
-      ? allMoves[moveId].moveTarget
-      : moveId === undefined
-        ? MoveTarget.NEAR_ENEMY
-        : [];
+  let moveTarget: MoveTarget | undefined;
+  if (allMoves[moveId].hasAttr(VariableTargetAttr)) {
+    moveTarget = variableTarget.value;
+  } else if (replaceTarget !== undefined) {
+    moveTarget = replaceTarget;
+  } else if (moveId) {
+    moveTarget = allMoves[moveId].moveTarget;
+  } else if (moveId === undefined) {
+    moveTarget = MoveTarget.NEAR_ENEMY;
+  }
   const opponents = user.getOpponents();
 
   let set: Pokemon[] = [];
