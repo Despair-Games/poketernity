@@ -185,7 +185,7 @@ import { getModifierPoolForType } from "./utils/modifier-pool-utils";
 import { getModifierType } from "./utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "./utils/move-anim-utils";
 import { getPokemonSpecies } from "./utils/pokemon-species-utils";
-import { AudioManager } from "./audioManager";
+import { AudioManager } from "./audio-manager";
 
 //#region Types
 

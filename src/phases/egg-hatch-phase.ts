@@ -1,4 +1,4 @@
-import type { AnySound } from "#app/audioManager";
+import type { AnySound } from "#app/audio-manager";
 import type { Egg } from "#app/data/egg";
 import { EggCountChangedEvent } from "#app/events/egg";
 import type { PlayerPokemon } from "#app/field/pokemon";

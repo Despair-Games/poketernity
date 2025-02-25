@@ -1,9 +1,9 @@
+import type BattleScene from "#app/battle-scene";
+import { PRSFX_SOUND_ADJUSTMENT_RATIO } from "#app/constants";
+import { bgmLoopPoint } from "#app/data/bgm-loop-point";
+import { settings } from "#app/system/settings/settings-manager";
+import { fixedNumber } from "#app/utils";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
-import { bgmLoopPoint } from "./data/bgm-loop-point";
-import { settings } from "./system/settings/settings-manager";
-import { PRSFX_SOUND_ADJUSTMENT_RATIO } from "./constants";
-import { fixedNumber } from "./utils";
-import type BattleScene from "./battle-scene";
 
 export type AnySound = Phaser.Sound.WebAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.NoAudioSound;
 
@@ -220,7 +220,7 @@ export class AudioManager {
    * Checks if a BGM track is currently playing.
    * @returns `true` if a BGM track is playing, `false` otherwise.
    */
-  isBgmPlaying(): boolean {
+  public isBgmPlaying(): boolean {
     return this.bgm?.isPlaying;
   }
 
