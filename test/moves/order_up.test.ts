@@ -57,9 +57,13 @@ describe("Moves - Order Up", () => {
       expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
 
       game.move.select(MoveId.ORDER_UP, 1, BattlerIndex.ENEMY);
-      expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
 
-      await game.phaseInterceptor.to("BerryPhase", false);
+      await game.phaseInterceptor.to("TurnStartPhase", false);
+
+      const { turnManager } = game.scene.currentBattle;
+      expect(turnManager.findCommandFromPokemon(tatsugiri)).toBeUndefined();
+
+      await game.toEndOfTurn();
 
       const affectedStats: EffectiveStat[] = [Stat.ATK, Stat.DEF, Stat.SPATK, Stat.SPDEF, Stat.SPD];
       affectedStats.forEach((st) => expect(dondozo.getStatStage(st)).toBe(st === stat ? 3 : 2));
@@ -77,9 +81,13 @@ describe("Moves - Order Up", () => {
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
 
     game.move.select(MoveId.ORDER_UP, 1, BattlerIndex.ENEMY);
-    expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.phaseInterceptor.to("TurnStartPhase", false);
+
+    const { turnManager } = game.scene.currentBattle;
+    expect(turnManager.findCommandFromPokemon(tatsugiri)).toBeUndefined();
+
+    await game.toEndOfTurn();
 
     expect(dondozo.battleData.abilitiesApplied.includes(Abilities.SHEER_FORCE)).toBeTruthy();
     expect(dondozo.getStatStage(Stat.ATK)).toBe(3);

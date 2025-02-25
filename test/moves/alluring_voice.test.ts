@@ -42,7 +42,7 @@ describe("Moves - Alluring Voice", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.ALLURING_VOICE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
     expect(enemy.getTag(BattlerTagType.CONFUSED)).toBeDefined();

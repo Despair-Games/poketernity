@@ -1,131 +1,100 @@
+import { allMoves } from "#app/data/data-lists";
+import type { Move } from "#app/data/move";
+import { CallMoveAttr } from "#app/data/move-attrs/call-move-attr";
+import { type Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import type { BooleanHolder } from "#app/utils";
 import { Biome } from "#enums/biome";
 import { MoveId } from "#enums/move-id";
 import { TerrainType } from "#enums/terrain-type";
-import { type Pokemon } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
-import { LoadMoveAnimPhase } from "#app/phases/load-move-anim-phase";
-import type { Move } from "#app/data/move";
-import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
 
 /**
  * Attribute to invoke another move based on the current biome
  * (or terrain, if one is on the field).
  * Used by {@link https://bulbapedia.bulbagarden.net/wiki/Nature_Power_(move) | Nature Power}.
- * @extends OverrideMoveEffectAttr
+ * @extends CallMoveAttr
  */
-export class NaturePowerAttr extends OverrideMoveEffectAttr {
-  override apply(user: Pokemon, target: Pokemon, _move: Move): boolean {
+export class NaturePowerAttr extends CallMoveAttr {
+  override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder): boolean {
     let moveId: MoveId;
+    const getBiomeMoveId = (): MoveId => {
+      switch (globalScene.arena.biomeType) {
+        case Biome.TOWN:
+          return MoveId.ROUND;
+        case Biome.METROPOLIS:
+          return MoveId.TRI_ATTACK;
+        case Biome.SLUM:
+          return MoveId.SLUDGE_BOMB;
+        case Biome.PLAINS:
+          return MoveId.SILVER_WIND;
+        case Biome.GRASS:
+          return MoveId.GRASS_KNOT;
+        case Biome.TALL_GRASS:
+          return MoveId.POLLEN_PUFF;
+        case Biome.MEADOW:
+          return MoveId.GIGA_DRAIN;
+        case Biome.FOREST:
+          return MoveId.BUG_BUZZ;
+        case Biome.JUNGLE:
+          return MoveId.LEAF_STORM;
+        case Biome.SEA:
+          return MoveId.HYDRO_PUMP;
+        case Biome.SWAMP:
+          return MoveId.MUD_BOMB;
+        case Biome.BEACH:
+          return MoveId.SCALD;
+        case Biome.LAKE:
+          return MoveId.BUBBLE_BEAM;
+        case Biome.SEABED:
+          return MoveId.BRINE;
+        case Biome.ISLAND:
+          return MoveId.LEAF_TORNADO;
+        case Biome.MOUNTAIN:
+          return MoveId.AIR_SLASH;
+        case Biome.BADLANDS:
+          return MoveId.EARTH_POWER;
+        case Biome.DESERT:
+          return MoveId.SCORCHING_SANDS;
+        case Biome.WASTELAND:
+          return MoveId.DRAGON_PULSE;
+        case Biome.CONSTRUCTION_SITE:
+          return MoveId.STEEL_BEAM;
+        case Biome.CAVE:
+          return MoveId.POWER_GEM;
+        case Biome.ICE_CAVE:
+          return MoveId.ICE_BEAM;
+        case Biome.SNOWY_FOREST:
+          return MoveId.FROST_BREATH;
+        case Biome.VOLCANO:
+          return MoveId.LAVA_PLUME;
+        case Biome.GRAVEYARD:
+          return MoveId.SHADOW_BALL;
+        case Biome.RUINS:
+          return MoveId.ANCIENT_POWER;
+        case Biome.TEMPLE:
+          return MoveId.EXTRASENSORY;
+        case Biome.DOJO:
+          return MoveId.FOCUS_BLAST;
+        case Biome.FAIRY_CAVE:
+          return MoveId.ALLURING_VOICE;
+        case Biome.ABYSS:
+          return MoveId.OMINOUS_WIND;
+        case Biome.SPACE:
+          return MoveId.DRACO_METEOR;
+        case Biome.FACTORY:
+          return MoveId.FLASH_CANNON;
+        case Biome.LABORATORY:
+          return MoveId.ZAP_CANNON;
+        case Biome.POWER_PLANT:
+          return MoveId.CHARGE_BEAM;
+        case Biome.END:
+          return MoveId.ETERNABEAM;
+      }
+    };
     switch (globalScene.arena.getTerrainType()) {
-      // this allows terrains to 'override' the biome move
+      // terrain takes priority over biome
       case TerrainType.NONE:
-        switch (globalScene.arena.biomeType) {
-          case Biome.TOWN:
-            moveId = MoveId.ROUND;
-            break;
-          case Biome.METROPOLIS:
-            moveId = MoveId.TRI_ATTACK;
-            break;
-          case Biome.SLUM:
-            moveId = MoveId.SLUDGE_BOMB;
-            break;
-          case Biome.PLAINS:
-            moveId = MoveId.SILVER_WIND;
-            break;
-          case Biome.GRASS:
-            moveId = MoveId.GRASS_KNOT;
-            break;
-          case Biome.TALL_GRASS:
-            moveId = MoveId.POLLEN_PUFF;
-            break;
-          case Biome.MEADOW:
-            moveId = MoveId.GIGA_DRAIN;
-            break;
-          case Biome.FOREST:
-            moveId = MoveId.BUG_BUZZ;
-            break;
-          case Biome.JUNGLE:
-            moveId = MoveId.LEAF_STORM;
-            break;
-          case Biome.SEA:
-            moveId = MoveId.HYDRO_PUMP;
-            break;
-          case Biome.SWAMP:
-            moveId = MoveId.MUD_BOMB;
-            break;
-          case Biome.BEACH:
-            moveId = MoveId.SCALD;
-            break;
-          case Biome.LAKE:
-            moveId = MoveId.BUBBLE_BEAM;
-            break;
-          case Biome.SEABED:
-            moveId = MoveId.BRINE;
-            break;
-          case Biome.ISLAND:
-            moveId = MoveId.LEAF_TORNADO;
-            break;
-          case Biome.MOUNTAIN:
-            moveId = MoveId.AIR_SLASH;
-            break;
-          case Biome.BADLANDS:
-            moveId = MoveId.EARTH_POWER;
-            break;
-          case Biome.DESERT:
-            moveId = MoveId.SCORCHING_SANDS;
-            break;
-          case Biome.WASTELAND:
-            moveId = MoveId.DRAGON_PULSE;
-            break;
-          case Biome.CONSTRUCTION_SITE:
-            moveId = MoveId.STEEL_BEAM;
-            break;
-          case Biome.CAVE:
-            moveId = MoveId.POWER_GEM;
-            break;
-          case Biome.ICE_CAVE:
-            moveId = MoveId.ICE_BEAM;
-            break;
-          case Biome.SNOWY_FOREST:
-            moveId = MoveId.FROST_BREATH;
-            break;
-          case Biome.VOLCANO:
-            moveId = MoveId.LAVA_PLUME;
-            break;
-          case Biome.GRAVEYARD:
-            moveId = MoveId.SHADOW_BALL;
-            break;
-          case Biome.RUINS:
-            moveId = MoveId.ANCIENT_POWER;
-            break;
-          case Biome.TEMPLE:
-            moveId = MoveId.EXTRASENSORY;
-            break;
-          case Biome.DOJO:
-            moveId = MoveId.FOCUS_BLAST;
-            break;
-          case Biome.FAIRY_CAVE:
-            moveId = MoveId.ALLURING_VOICE;
-            break;
-          case Biome.ABYSS:
-            moveId = MoveId.OMINOUS_WIND;
-            break;
-          case Biome.SPACE:
-            moveId = MoveId.DRACO_METEOR;
-            break;
-          case Biome.FACTORY:
-            moveId = MoveId.FLASH_CANNON;
-            break;
-          case Biome.LABORATORY:
-            moveId = MoveId.ZAP_CANNON;
-            break;
-          case Biome.POWER_PLANT:
-            moveId = MoveId.CHARGE_BEAM;
-            break;
-          case Biome.END:
-            moveId = MoveId.ETERNABEAM;
-            break;
-        }
+        moveId = getBiomeMoveId();
         break;
       case TerrainType.MISTY:
         moveId = MoveId.MOONBLAST;
@@ -140,24 +109,10 @@ export class NaturePowerAttr extends OverrideMoveEffectAttr {
         moveId = MoveId.PSYCHIC;
         break;
       default:
-        // Just in case there's no match
         moveId = MoveId.TRI_ATTACK;
         break;
     }
 
-    user.getMoveQueue().push({ moveId: moveId, targets: [target.getBattlerIndex()], ignorePP: true });
-    globalScene.unshiftPhase(new LoadMoveAnimPhase(moveId));
-    globalScene.useMove({
-      pokemon: user,
-      targets: [target.getBattlerIndex()],
-      move: moveId,
-      followUp: true,
-      when: "eager",
-    });
-    return true;
-  }
-
-  override isNaturePowerAttr(): this is this {
-    return true;
+    return super.apply(user, target, allMoves[moveId], overridden);
   }
 }

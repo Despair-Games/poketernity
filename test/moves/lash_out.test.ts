@@ -41,7 +41,7 @@ describe("Moves - Lash Out", () => {
     await game.classicMode.startBattle();
 
     game.move.select(MoveId.LASH_OUT);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
     expect(allMoves[MoveId.LASH_OUT].calculateBattlePower).toHaveReturnedWith(150);

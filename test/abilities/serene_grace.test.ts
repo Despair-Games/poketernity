@@ -43,7 +43,7 @@ describe("Abilities - Serene Grace", () => {
     vi.spyOn(airSlashFlinchAttr, "getMoveChance");
 
     game.move.select(MoveId.AIR_SLASH);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
     await game.toEndOfTurn();
 

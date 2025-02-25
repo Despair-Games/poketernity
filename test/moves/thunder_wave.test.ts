@@ -40,7 +40,7 @@ describe("Moves - Thunder Wave", () => {
 
     game.move.select(MoveId.THUNDER_WAVE);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.PARALYSIS);
   });
@@ -53,7 +53,7 @@ describe("Moves - Thunder Wave", () => {
 
     game.move.select(MoveId.THUNDER_WAVE);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
@@ -66,7 +66,7 @@ describe("Moves - Thunder Wave", () => {
 
     game.move.select(MoveId.THUNDER_WAVE);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getStatusEffect(true)).not.toBe(StatusEffect.PARALYSIS);
   });
@@ -79,7 +79,7 @@ describe("Moves - Thunder Wave", () => {
 
     game.move.select(MoveId.THUNDER_WAVE);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.PARALYSIS);
   });
@@ -92,7 +92,7 @@ describe("Moves - Thunder Wave", () => {
 
     game.move.select(MoveId.THUNDER_WAVE);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });

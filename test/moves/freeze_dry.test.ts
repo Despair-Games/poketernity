@@ -40,7 +40,7 @@ describe("Moves - Freeze-Dry", () => {
     vi.spyOn(enemy, "getMoveEffectiveness");
 
     game.move.select(MoveId.FREEZE_DRY);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(2);
@@ -54,7 +54,7 @@ describe("Moves - Freeze-Dry", () => {
     vi.spyOn(enemy, "getMoveEffectiveness");
 
     game.move.select(MoveId.FREEZE_DRY);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(4);
@@ -68,7 +68,7 @@ describe("Moves - Freeze-Dry", () => {
     vi.spyOn(enemy, "getMoveEffectiveness");
 
     game.move.select(MoveId.FREEZE_DRY);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(1);
@@ -89,7 +89,7 @@ describe("Moves - Freeze-Dry", () => {
     vi.spyOn(enemy, "getMoveEffectiveness");
 
     game.move.select(MoveId.SOAK);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
     game.move.select(MoveId.FREEZE_DRY);
@@ -110,7 +110,7 @@ describe("Moves - Freeze-Dry", () => {
     await game.toNextTurn();
 
     game.move.select(MoveId.FREEZE_DRY);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(8);
@@ -124,7 +124,7 @@ describe("Moves - Freeze-Dry", () => {
     vi.spyOn(enemy, "getMoveEffectiveness");
 
     game.move.select(MoveId.FREEZE_DRY);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(2);
@@ -138,7 +138,7 @@ describe("Moves - Freeze-Dry", () => {
     vi.spyOn(enemy, "getMoveEffectiveness");
 
     game.move.select(MoveId.FREEZE_DRY);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(0.5);
@@ -155,7 +155,7 @@ describe("Moves - Freeze-Dry", () => {
     await game.toNextTurn();
 
     game.move.select(MoveId.FREEZE_DRY);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(0.5);
@@ -169,7 +169,7 @@ describe("Moves - Freeze-Dry", () => {
     vi.spyOn(enemy, "getMoveEffectiveness");
 
     game.move.select(MoveId.FREEZE_DRY);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(2);
@@ -183,7 +183,7 @@ describe("Moves - Freeze-Dry", () => {
     vi.spyOn(enemy, "getMoveEffectiveness");
 
     game.move.select(MoveId.FREEZE_DRY);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(0.25);
@@ -197,7 +197,7 @@ describe("Moves - Freeze-Dry", () => {
     vi.spyOn(enemy, "getMoveEffectiveness");
 
     game.move.select(MoveId.FREEZE_DRY);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toEndOfTurn();
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(0);
@@ -211,7 +211,7 @@ describe("Moves - Freeze-Dry", () => {
     vi.spyOn(enemy, "getMoveEffectiveness");
 
     game.move.select(MoveId.FREEZE_DRY);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(2);
@@ -225,7 +225,7 @@ describe("Moves - Freeze-Dry", () => {
     vi.spyOn(enemy, "getMoveEffectiveness");
 
     game.move.select(MoveId.FREEZE_DRY);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(4);
@@ -239,7 +239,7 @@ describe("Moves - Freeze-Dry", () => {
     vi.spyOn(enemy, "getMoveEffectiveness");
 
     game.move.select(MoveId.FREEZE_DRY);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(0);
@@ -253,7 +253,7 @@ describe("Moves - Freeze-Dry", () => {
     vi.spyOn(enemy, "getMoveEffectiveness");
 
     game.move.select(MoveId.FREEZE_DRY);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(0.25);
@@ -269,7 +269,7 @@ describe("Moves - Freeze-Dry", () => {
     vi.spyOn(enemy, "getMoveEffectiveness");
 
     game.move.select(MoveId.FREEZE_DRY);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(enemy.getMoveEffectiveness).toHaveLastReturnedWith(2);
@@ -285,7 +285,7 @@ describe("Moves - Freeze-Dry", () => {
     vi.spyOn(enemy, "getMoveEffectiveness");
 
     game.move.select(MoveId.FREEZE_DRY);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(enemy.getMoveEffectiveness).toHaveLastReturnedWith(2);
@@ -301,7 +301,7 @@ describe("Moves - Freeze-Dry", () => {
     vi.spyOn(enemy, "getMoveEffectiveness");
 
     game.move.select(MoveId.FREEZE_DRY);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(enemy.getMoveEffectiveness).toHaveLastReturnedWith(2);
@@ -318,7 +318,7 @@ describe("Moves - Freeze-Dry", () => {
     vi.spyOn(enemy, "getMoveEffectiveness");
 
     game.move.select(MoveId.FREEZE_DRY);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(1);

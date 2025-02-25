@@ -161,12 +161,7 @@ export class EggHatchPhase extends Phase {
 
       this.eggHatchContainer.add(this.infoContainer);
 
-      // The game will try to unfuse any Pokemon even though eggs should not generate fused Pokemon in the first place
       const pokemon = this.generatePokemon();
-      if (pokemon.fusionSpecies) {
-        console.warn("Egg generated fused pokemon!");
-        pokemon.clearFusionSpecies();
-      }
 
       this.pokemonSprite.setVisible(false);
 

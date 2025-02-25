@@ -49,7 +49,7 @@ describe("Moves - Synthesis", () => {
 
     game.move.select(MoveId.SYNTHESIS);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(player.hp).toBe(expRatio + 1);
   });

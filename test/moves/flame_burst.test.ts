@@ -111,7 +111,7 @@ describe("Moves - Flame Burst", () => {
     await game.forceEnemyMove(MoveId.SUBSTITUTE);
     await game.forceEnemyMove(MoveId.SPLASH);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
     await game.toEndOfTurn();
 
@@ -131,7 +131,7 @@ describe("Moves - Flame Burst", () => {
     await game.forceEnemyMove(MoveId.PROTECT);
     await game.forceEnemyMove(MoveId.SPLASH);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
     await game.toEndOfTurn();
 
@@ -153,7 +153,7 @@ describe("Moves - Flame Burst", () => {
     await game.forceEnemyMove(MoveId.ENDURE);
     await game.forceEnemyMove(MoveId.SPLASH);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
     await game.toEndOfTurn();
 
