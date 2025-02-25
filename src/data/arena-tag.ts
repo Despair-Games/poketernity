@@ -1064,11 +1064,24 @@ class StickyWebTag extends EntryHazardTag {
 }
 
 /**
+ * Base class for moves like Trick Room which should negate their effect when used a second time.
+ */
+export abstract class ArenaRoomTag extends ArenaTag {
+  constructor(tagType: ArenaTagType, turnCount: number, sourceMove: MoveId, sourceId: number) {
+    super(tagType, turnCount, sourceMove, sourceId);
+  }
+
+  override onOverlap(arena: Arena): void {
+    arena.removeTag(this.tagType);
+  }
+}
+
+/**
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Trick_Room_(move) Trick Room}.
  * Reverses the Speed stats for all Pokémon on the field as long as this arena tag is up,
  * also reversing the turn order for all Pokémon on the field as well.
  */
-export class TrickRoomTag extends ArenaTag {
+export class TrickRoomTag extends ArenaRoomTag {
   constructor(turnCount: number, sourceId: number) {
     super(ArenaTagType.TRICK_ROOM, turnCount, MoveId.TRICK_ROOM, sourceId);
   }
