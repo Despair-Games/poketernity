@@ -22,34 +22,39 @@ describe("Abilities - Sand Spit", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-    game.override.disableCrits();
-
-    game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
-
-    game.override.starterSpecies(Species.SILICOBRA);
-    game.override.ability(Abilities.SAND_SPIT);
-    game.override.moveset([MoveId.SPLASH, MoveId.COIL]);
+    game.override
+      .battleType("single")
+      .disableCrits()
+      .enemySpecies(Species.SILICOBRA)
+      .enemyAbility(Abilities.SAND_SPIT)
+      .enemyMoveset([MoveId.SPLASH])
+      .moveset([MoveId.TACKLE, MoveId.WATERFALL, MoveId.SURF, MoveId.GROWL]);
   });
 
   it("should trigger when hit with damaging move", async () => {
-    game.override.enemyMoveset([MoveId.TACKLE]);
-    await game.startBattle();
+    await game.classicMode.startBattle([Species.FEEBAS]);
 
-    game.move.select(MoveId.SPLASH);
+    game.move.select(MoveId.TACKLE);
     await game.toNextTurn();
 
     expect(game.scene.arena.weather?.weatherType).toBe(WeatherType.SANDSTORM);
-  }, 20000);
+  });
+
+  it("should trigger when KO'd", async () => {
+    game.override.startingLevel(1000).enemyLevel(1);
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    game.move.select(MoveId.WATERFALL);
+    await game.phaseInterceptor.to("FaintPhase");
+
+    expect(game.scene.arena.weather?.weatherType).toBe(WeatherType.SANDSTORM);
+  });
 
   it("should not trigger when targetted with status moves", async () => {
-    game.override.enemyMoveset([MoveId.GROWL]);
-    await game.startBattle();
-
-    game.move.select(MoveId.COIL);
+    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.move.select(MoveId.GROWL);
     await game.toNextTurn();
 
-    expect(game.scene.arena.weather?.weatherType).not.toBe(WeatherType.SANDSTORM);
-  }, 20000);
+    expect(game.scene.arena.weather).toBeUndefined();
+  });
 });

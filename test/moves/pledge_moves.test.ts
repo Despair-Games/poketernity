@@ -48,10 +48,11 @@ describe("Moves - Pledge Moves", () => {
     const playerPokemon = game.scene.getPlayerField();
     vi.spyOn(playerPokemon[0], "getMoveType");
 
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+
     game.move.select(MoveId.FIRE_PLEDGE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
     expect(firePledge.calculateBattlePower).toHaveLastReturnedWith(80);
@@ -69,16 +70,16 @@ describe("Moves - Pledge Moves", () => {
 
     const enemyPokemon = game.scene.getEnemyField();
 
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+
     game.move.select(MoveId.FIRE_PLEDGE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.FIRE_PLEDGE, 0, BattlerIndex.ENEMY_2);
-
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(firePledge.calculateBattlePower).toHaveLastReturnedWith(80);
     expect(playerPokemon[0].getMoveType).toHaveLastReturnedWith(ElementalType.FIRE);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(firePledge.calculateBattlePower).toHaveLastReturnedWith(80);
     expect(playerPokemon[1].getMoveType).toHaveLastReturnedWith(ElementalType.FIRE);
 
@@ -116,10 +117,11 @@ describe("Moves - Pledge Moves", () => {
     vi.spyOn(playerPokemon[1], "getMoveType");
     const baseDmgMock = vi.spyOn(enemyPokemon[0], "getBaseDamage");
 
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+
     game.move.select(MoveId.FIRE_PLEDGE, 0, BattlerIndex.ENEMY_2);
     game.move.select(MoveId.GRASS_PLEDGE, 1, BattlerIndex.ENEMY);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     // advance to the end of PLAYER_2's move this turn
     for (let i = 0; i < 2; i++) {
       await game.phaseInterceptor.to("MoveEndPhase");
@@ -146,7 +148,7 @@ describe("Moves - Pledge Moves", () => {
     game.move.select(MoveId.FIRE_PLEDGE, 0, BattlerIndex.ENEMY_2);
     game.move.select(MoveId.GRASS_PLEDGE, 1, BattlerIndex.ENEMY);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     // advance to the end of PLAYER_2's move this turn
     for (let i = 0; i < 2; i++) {
       await game.phaseInterceptor.to("MoveEndPhase");
@@ -173,10 +175,11 @@ describe("Moves - Pledge Moves", () => {
 
     vi.spyOn(playerPokemon[1], "getMoveType");
 
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+
     game.move.select(MoveId.WATER_PLEDGE, 0, BattlerIndex.ENEMY_2);
     game.move.select(MoveId.FIRE_PLEDGE, 1, BattlerIndex.ENEMY);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     // advance to the end of PLAYER_2's move this turn
     for (let i = 0; i < 2; i++) {
       await game.phaseInterceptor.to("MoveEndPhase");
@@ -188,9 +191,11 @@ describe("Moves - Pledge Moves", () => {
 
     await game.toNextTurn();
 
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+
     game.move.select(MoveId.FIERY_DANCE, 0, BattlerIndex.ENEMY_2);
     game.move.select(MoveId.SPLASH, 1);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+
     await game.phaseInterceptor.to("MoveEndPhase");
 
     // Rainbow effect should increase Fiery Dance's chance of raising Sp. Atk to 100%
@@ -209,10 +214,11 @@ describe("Moves - Pledge Moves", () => {
 
     vi.spyOn(playerPokemon[1], "getMoveType");
 
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+
     game.move.select(MoveId.GRASS_PLEDGE, 0, BattlerIndex.ENEMY_2);
     game.move.select(MoveId.WATER_PLEDGE, 1, BattlerIndex.ENEMY);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     // advance to the end of PLAYER_2's move this turn
     for (let i = 0; i < 2; i++) {
       await game.phaseInterceptor.to("MoveEndPhase");
@@ -231,10 +237,11 @@ describe("Moves - Pledge Moves", () => {
 
     const enemyPokemon = game.scene.getEnemyField();
 
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
+
     game.move.select(MoveId.WATER_PLEDGE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.FIRE_PLEDGE, 1, BattlerIndex.ENEMY_2);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
     // PLAYER_2 should act with a combined move immediately after PLAYER as the second move in the turn
     for (let i = 0; i < 2; i++) {
       await game.phaseInterceptor.to("MoveEndPhase");
@@ -263,7 +270,7 @@ describe("Moves - Pledge Moves", () => {
     game.move.select(MoveId.IRON_HEAD, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(ironHeadFlinchAttr.getMoveChance).toHaveLastReturnedWith(60);
   });
@@ -275,15 +282,15 @@ describe("Moves - Pledge Moves", () => {
 
     const enemyPokemon = game.scene.getEnemyField();
 
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
+
     game.move.select(MoveId.FIRE_PLEDGE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.GRASS_PLEDGE, 1, BattlerIndex.ENEMY_2);
 
-    await game.forceEnemyMove(MoveId.SPORE, BattlerIndex.PLAYER_2);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPORE, BattlerIndex.PLAYER_2);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
-
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     enemyPokemon.forEach((p) => expect(p.hp).toBe(p.getMaxHp()));
   });
@@ -294,10 +301,10 @@ describe("Moves - Pledge Moves", () => {
     const enemyPokemon = game.scene.getEnemyField();
     vi.spyOn(enemyPokemon[1], "getAbility").mockReturnValue(allAbilities[Abilities.STORM_DRAIN]);
 
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+
     game.move.select(MoveId.WATER_PLEDGE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
-
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
@@ -312,10 +319,10 @@ describe("Moves - Pledge Moves", () => {
     game.move.select(MoveId.WATER_PLEDGE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.forceEnemyMove(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.FOLLOW_ME);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.FOLLOW_ME);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     const enemyPokemon = game.scene.getEnemyField();
     expect(enemyPokemon[0].hp).toBe(enemyPokemon[0].getMaxHp());

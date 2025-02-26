@@ -43,9 +43,9 @@ describe("Moves - Conversion 2", () => {
 
     game.move.use(MoveId.CONVERSION_2);
     await game.move.forceEnemyMove(MoveId.SPLASH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     const playerTypes = player.getTypes();
     expect(playerTypes).toHaveLength(1);
@@ -62,9 +62,9 @@ describe("Moves - Conversion 2", () => {
 
     game.move.use(MoveId.CONVERSION_2);
     await game.move.forceEnemyMove(MoveId.NATURE_POWER);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     const playerTypes = player.getTypes();
     expect(playerTypes).toHaveLength(1);
@@ -108,9 +108,9 @@ describe("Moves - Conversion 2", () => {
 
       game.move.use(MoveId.CONVERSION_2);
       await game.move.forceEnemyMove(MoveId.TACKLE);
-      await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+      game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-      await game.phaseInterceptor.to("BerryPhase", false);
+      await game.toEndOfTurn();
 
       const playerTypes = player.getTypes();
       expect(playerTypes).toHaveLength(1);
@@ -125,9 +125,9 @@ describe("Moves - Conversion 2", () => {
 
     game.move.use(MoveId.CONVERSION_2);
     await game.move.forceEnemyMove(MoveId.REVELATION_DANCE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     const playerTypes = player.getTypes();
     expect(playerTypes).toHaveLength(1);
@@ -144,9 +144,9 @@ describe("Moves - Conversion 2", () => {
 
     game.move.use(MoveId.CONVERSION_2);
     await game.move.forceEnemyMove(MoveId.TACKLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(player.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
     expect(player.isOfType(ElementalType.WATER)).toBeTruthy();
@@ -161,9 +161,9 @@ describe("Moves - Conversion 2", () => {
 
     game.move.use(MoveId.CONVERSION_2);
     await game.move.forceEnemyMove(MoveId.TACKLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(player.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
     expect(player.isOfType(ElementalType.WATER)).toBeTruthy();
@@ -177,7 +177,7 @@ describe("Moves - Conversion 2", () => {
     game.move.use(MoveId.CONVERSION_2);
     await game.move.forceEnemyMove(MoveId.SHADOW_SNEAK);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     // Ghost is resisted only by Dark and Normal. Obstagoon is of both types.
     expect(player.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
@@ -193,9 +193,9 @@ describe("Moves - Conversion 2", () => {
 
     game.move.use(MoveId.CONVERSION_2);
     await game.move.forceEnemyMove(MoveId.DRAGON_CLAW);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(player.getTypes()).toHaveLength(1);
     expect(player.isOfType(ElementalType.DRAGON)).toBeTruthy();

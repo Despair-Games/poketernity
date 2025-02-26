@@ -1217,13 +1217,32 @@ export class TrainerConfig {
     this.setStaticParty();
     this.setHasVoucher(true);
     this.setVictoryBgm("victory_gym");
+
+    return this;
+  }
+
+  /**
+   * Function for generating Paldea gym leaders
+   *
+   * See {@linkcode initForGymLeader}
+   *
+   * The only difference is they will always tera their ace (final slot) Pokemon
+   * to their specialty type
+   *
+   * @param signatureSpecies The signature species for the Gym Leader.
+   * @param specialtyTypes The specialty types for the Gym Leader.
+   * @param isMale Whether the Gym Leader is Male or Not (for localization of the title).
+   * @returns The updated TrainerConfig instance.
+   */
+  initForPaldeaGymLeader(
+    signatureSpecies: (Species | Species[])[],
+    isMale: boolean,
+    ...specialtyTypes: ElementalType[]
+  ): TrainerConfig {
+    this.initForGymLeader(signatureSpecies, isMale, ...specialtyTypes);
+    this.setBattleBgm("battle_paldea_gym");
     this.setGenModifiersFunc((party) => {
-      const waveIndex = globalScene.currentBattle.waveIndex;
-      return getRandomTeraModifiers(
-        party,
-        waveIndex >= 100 ? 1 : 0,
-        specialtyTypes.length ? specialtyTypes : undefined,
-      );
+      return getSpecificTeraModifier(party, party.length - 1, specialtyTypes[0]);
     });
 
     return this;
@@ -1627,6 +1646,38 @@ export function getSpeciesFilterRandomPartyMemberFunc(
   };
 }
 
+/**
+ * Function to create a {@linkcode PersistentModifier} of applying a single tera on a specific trainer's party
+ * Only used in {@linkcode initForPaldeaGymLeader} right now
+ *
+ * @param party the party
+ * @param partySlot the party slot to apply the tera on (currently only the last slot)
+ * @param teraType the type that the Pokemon will be tera'd into
+ * @returns a PersistentModifier
+ */
+function getSpecificTeraModifier(
+  party: EnemyPokemon[],
+  partySlot: number,
+  teraType: ElementalType,
+): PersistentModifier[] {
+  const ret: PersistentModifier[] = [];
+  ret.push(
+    modifierTypes
+      .TERA_SHARD()
+      .generateType([], [teraType])!
+      .withIdFromFunc(modifierTypes.TERA_SHARD)
+      .newModifier(party[partySlot]) as PersistentModifier,
+  );
+  return ret;
+}
+
+/**
+ * Function to create a {@linkcode PersistentModifier} of applying random tera types to a trainer's team
+ * @param party the party
+ * @param count how many random teras will be applied
+ * @param types an array of possible ElementalTypes to apply the tera
+ * @returns a PersistentModifier
+ */
 function getRandomTeraModifiers(party: EnemyPokemon[], count: number, types?: ElementalType[]): PersistentModifier[] {
   const ret: PersistentModifier[] = [];
   const partyMemberIndexes = new Array(party.length).fill(null).map((_, i) => i);

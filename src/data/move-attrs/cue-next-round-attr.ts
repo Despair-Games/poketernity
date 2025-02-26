@@ -1,10 +1,8 @@
 import { MoveId } from "#enums/move-id";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { type MovePhase } from "#app/phases/move-phase";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import { PhaseId } from "#enums/phase-id";
 
 /**
  * Attribute for the "combo" effect of {@link https://bulbapedia.bulbagarden.net/wiki/Round_(move) | Round}.
@@ -19,23 +17,13 @@ export class CueNextRoundAttr extends MoveEffectAttr {
   }
 
   override applyEffect(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
-    const nextRoundPhase = globalScene.findPhase<MovePhase>(
-      (phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.move.moveId === MoveId.ROUND,
-    );
-
-    if (!nextRoundPhase) {
+    const { turnManager } = globalScene.currentBattle;
+    return turnManager.preemptFightCommand((tc) => {
+      if (tc.turnMove?.move.id === MoveId.ROUND) {
+        tc.pokemon.turnData.joinedRound = true;
+        return true;
+      }
       return false;
-    }
-
-    // Update the phase queue so that the next Pokemon using Round moves next
-    const nextRoundIndex = globalScene.phaseQueue.indexOf(nextRoundPhase);
-    const nextMoveIndex = globalScene.phaseQueue.findIndex((phase) => phase.is<MovePhase>(PhaseId.MOVE));
-    if (nextRoundIndex !== nextMoveIndex) {
-      globalScene.prependToPhase(globalScene.phaseQueue.splice(nextRoundIndex, 1)[0], PhaseId.MOVE);
-    }
-
-    // Mark the corresponding Pokemon as having "joined the Round" (for doubling power later)
-    nextRoundPhase.pokemon.turnData.joinedRound = true;
-    return true;
+    });
   }
 }

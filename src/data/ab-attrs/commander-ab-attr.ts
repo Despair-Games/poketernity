@@ -8,8 +8,8 @@ import { Species } from "#enums/species";
 import { AbAttr } from "./ab-attr";
 import { type SkyDropTag } from "../battler-tags";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import type { MovePhase } from "#app/phases/move-phase";
 import { PhaseId } from "#enums/phase-id";
-import { type MovePhase } from "#app/phases/move-phase";
 
 /**
  * Attribute implementing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Commander_(Ability) | Commander}.
@@ -41,10 +41,24 @@ export class CommanderAbAttr extends AbAttr {
         // Apply boosts from this effect to the ally Dondozo
         pokemon.getAlly().addTag(BattlerTagType.COMMANDED, 0, MoveId.NONE, pokemon.id);
         // Cancel the source Pokemon's next move (if a move is queued)
-        globalScene.tryRemovePhase((phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon === pokemon);
+        this.cancelQueuedMove(pokemon);
       }
       return true;
     }
     return false;
+  }
+
+  /**
+   * Cancels all commands from the given Pokemon for the current turn
+   * @param pokemon The {@linkcode Pokemon} with this ability
+   */
+  private cancelQueuedMove(pokemon: Pokemon): void {
+    const { turnManager } = globalScene.currentBattle;
+    turnManager.tryRemoveCommand((tc) => tc.pokemon === pokemon);
+    // The first move in the turn is already added to the phase queue at this point.
+    // If this move is from the source Pokemon, the turn manager needs to queue the next valid move command.
+    if (globalScene.tryRemovePhase((phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon === pokemon)) {
+      turnManager.scheduleNextValidCommand();
+    }
   }
 }

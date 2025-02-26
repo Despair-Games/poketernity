@@ -44,7 +44,7 @@ describe("Abilities - Toxic Chain", () => {
    */
   async function checkSucceedPoison(moveId: MoveId, enemyPokemon: EnemyPokemon) {
     game.move.select(moveId);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
     expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.TOXIC);
   }
@@ -54,7 +54,7 @@ describe("Abilities - Toxic Chain", () => {
    */
   async function checkFailPoison(moveId: MoveId, enemyPokemon: EnemyPokemon) {
     game.move.select(moveId);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
     expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
   }

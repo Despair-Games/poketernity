@@ -59,7 +59,7 @@ describe("Moves - Defog", () => {
 
     game.move.select(MoveId.DEFOG);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     [ArenaTagSide.PLAYER, ArenaTagSide.ENEMY].forEach((side) =>
       expect(game.scene.arena.getTagOnSide(tagType, side)).toBeUndefined(),
@@ -81,7 +81,7 @@ describe("Moves - Defog", () => {
 
     game.move.select(MoveId.DEFOG);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(game.scene.arena.getTagOnSide(tagType, ArenaTagSide.PLAYER)).toBeDefined();
     expect(game.scene.arena.getTagOnSide(tagType, ArenaTagSide.ENEMY)).toBeUndefined();

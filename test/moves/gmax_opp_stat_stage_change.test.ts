@@ -43,7 +43,7 @@ describe("Moves - G-Max debuff both opponents", () => {
     game.move.select(gmaxMoveId, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
     const enemyParty = game.scene.getEnemyParty();
@@ -63,7 +63,7 @@ describe("Moves - G-Max debuff both opponents", () => {
     game.move.select(MoveId.G_MAX_FOAM_BURST, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
     const enemyParty = game.scene.getEnemyParty();
@@ -80,7 +80,7 @@ describe("Moves - G-Max debuff both opponents", () => {
     game.move.select(MoveId.G_MAX_FOAM_BURST, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
     const enemyParty = game.scene.getEnemyParty();

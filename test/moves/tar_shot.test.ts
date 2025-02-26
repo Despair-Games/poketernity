@@ -48,7 +48,7 @@ describe("Moves - Tar Shot", () => {
     await game.toNextTurn();
 
     game.move.select(MoveId.FIRE_PUNCH);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(4);
@@ -76,7 +76,7 @@ describe("Moves - Tar Shot", () => {
     await game.toNextTurn();
 
     game.move.select(MoveId.FIRE_PUNCH);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(4);
@@ -98,7 +98,7 @@ describe("Moves - Tar Shot", () => {
     await game.toNextTurn();
 
     game.move.select(MoveId.FIRE_PUNCH);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(2);
@@ -122,7 +122,7 @@ describe("Moves - Tar Shot", () => {
     game.override.enemyHeldItems([{ name: "TERA_SHARD", type: ElementalType.GRASS }]);
 
     game.move.select(MoveId.FIRE_PUNCH);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemy.getMoveEffectiveness).toHaveReturnedWith(4);
