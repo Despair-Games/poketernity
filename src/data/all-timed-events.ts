@@ -12,7 +12,7 @@ export const allTimedEvents: TimedEvent[] = [
   {
     name: "Welcome to Pokéternity",
     startDate: new Date(Date.UTC(2025, 0, 1, 0)),
-    endDate: new Date(Date.UTC(2025, 5, 30, 0)),
+    endDate: new Date(Date.UTC(2025, 2, 15, 0)),
     banner: {
       key: "welcome",
       availableLangs: ["en", "fr"],
