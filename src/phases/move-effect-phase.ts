@@ -123,14 +123,6 @@ export class MoveEffectPhase extends HitCheckPhase {
       }
     });
 
-    // If the user is acting again (such as due to Instruct), reset hitsLeft/hitCount so that
-    // the move executes correctly (ensures all hits of a multi-hit are properly calculated)
-    if (user.turnData.hitsLeft === 0 && user.turnData.hitCount > 0 && user.turnData.extraTurns > 0) {
-      user.turnData.hitsLeft = -1;
-      user.turnData.hitCount = 0;
-      user.turnData.extraTurns--;
-    }
-
     /**
      * If this phase is for the first hit of the invoked move,
      * resolve the move's total hit count. This block combines the
@@ -218,6 +210,8 @@ export class MoveEffectPhase extends HitCheckPhase {
       || move.getAttrs(MoveEffectAttr).some((attr) => attr.trigger === MoveEffectTrigger.POST_TARGET)
         ? this.playMoveAnim(user)
         : Promise.resolve();
+
+    console.log(`hitCount: ${user.turnData.hitCount}, hitsLeft: ${user.turnData.hitsLeft}`);
 
     tryPlayAnim.then(() => {
       // If this phase represents the first strike of the given move,

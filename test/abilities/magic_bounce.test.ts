@@ -205,8 +205,7 @@ describe("Abilities - Magic Bounce", () => {
     expect(game.field.getEnemyPokemon().getTag(BattlerTagType.CURSED)).toBeDefined();
   });
 
-  /** @todo Encore creates issues with move history order */
-  it.todo("should not cause encore to be interrupted after bouncing", async () => {
+  it("should not cause encore to be interrupted after bouncing", async () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -232,8 +231,7 @@ describe("Abilities - Magic Bounce", () => {
     expect(enemy.getLastXMoves()[0].move.id).toBe(MoveId.TACKLE);
   });
 
-  /** @todo Encore currently includes virtual moves when applying its effect */
-  it.todo("should not cause the bounced move to count for encore", async () => {
+  it("should not cause the bounced move to count for encore", async () => {
     game.override.enemyMoveset([MoveId.GROWL, MoveId.TACKLE]);
     game.override.enemyAbility(Abilities.MAGIC_BOUNCE);
 
@@ -256,7 +254,7 @@ describe("Abilities - Magic Bounce", () => {
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toEndOfTurn();
     expect(enemyPokemon.getTag<EncoreTag>(BattlerTagType.ENCORE)?.moveId).toBe(MoveId.TACKLE);
-    expect(enemyPokemon.getLastXMoves()[0].move).toBe(MoveId.TACKLE);
+    expect(enemyPokemon.getLastXMoves()[0].move.id).toBe(MoveId.TACKLE);
   });
 
   it("should cause stomping tantrum to double in power when the last move was bounced", async () => {

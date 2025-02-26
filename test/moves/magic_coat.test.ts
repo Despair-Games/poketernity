@@ -184,8 +184,7 @@ describe("Moves - Magic Coat", () => {
     expect(game.field.getEnemyPokemon().getTag(BattlerTagType.CURSED)).toBeDefined();
   });
 
-  /** @todo Encore creates issues with move history order */
-  it.todo("should not cause encore to be interrupted after bouncing", async () => {
+  it("should not cause encore to be interrupted after bouncing", async () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -211,8 +210,7 @@ describe("Moves - Magic Coat", () => {
     expect(enemy.getLastXMoves()[0].move.id).toBe(MoveId.TACKLE);
   });
 
-  /** @todo Encore currently includes virtual moves when applying its effect */
-  it.todo("should not cause the bounced move to count for encore", async () => {
+  it("should not cause the bounced move to count for encore", async () => {
     game.override.enemyMoveset([MoveId.GROWL, MoveId.TACKLE]);
     game.override.enemyAbility(Abilities.MAGIC_BOUNCE);
 

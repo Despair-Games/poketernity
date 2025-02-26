@@ -162,10 +162,8 @@ export class MovePhase extends BattlePhase {
     this.pokemon.turnData.acted = true;
 
     // Reset hit-related turn data when starting follow-up moves (e.g. Metronomed moves, Dancer repeats)
-    if (this.followUp) {
-      this.pokemon.turnData.hitsLeft = -1;
-      this.pokemon.turnData.hitCount = 0;
-    }
+    this.pokemon.turnData.hitsLeft = -1;
+    this.pokemon.turnData.hitCount = 0;
 
     // Check move to see if arena.ignoreAbilities should be true.
     if (!this.followUp) {
