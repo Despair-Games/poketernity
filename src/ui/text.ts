@@ -6,9 +6,9 @@ import { globalScene } from "#app/global-scene";
 import { ModifierTier } from "#enums/modifier-tier";
 import i18next from "#app/plugins/i18n";
 import { TextStyle } from "#enums/text-style";
-import { getTextColorCombination } from "#app/ui/text-color";
+import { getTextStyle as getBaseTextStyleOptions } from "./text-style";
 
-export interface TextStyleOptions {
+interface CustomTextStyleOptions {
   scale: number;
   styleOptions: Phaser.Types.GameObjects.Text.TextStyle | InputText.IConfig;
   shadowColor: string;
@@ -84,124 +84,33 @@ export function addTextInputObject(
  * @param style the {@linkcode TextStyle} to use.
  */
 export function setTextColor(textObject: Phaser.GameObjects.Text, style: TextStyle): void {
-  const colorCombination = getTextColorCombination(style);
-  textObject.setColor(colorCombination.mainColor);
-  textObject.setShadowColor(colorCombination.shadowColor);
+  const { mainColor, shadowColor } = getBaseTextStyleOptions(style).color;
+  textObject.setColor(mainColor);
+  textObject.setShadowColor(shadowColor);
 }
 
 export function getTextStyleOptions(
   style: TextStyle,
   extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle,
-): TextStyleOptions {
-  const lang = i18next.resolvedLanguage;
-  let shadowXpos = 4;
-  let shadowYpos = 5;
-  // TODO scaling: figure this out
-  let scale = 0.1666666667;
-  const defaultFontSize = 96;
-  const { mainColor, shadowColor } = getTextColorCombination(style);
+): CustomTextStyleOptions {
+  const textStyleOptions = getBaseTextStyleOptions(style);
+  const { mainColor, shadowColor } = textStyleOptions.color;
+  const { fontFamily, fontSize, shadowYpos } = textStyleOptions.format;
+  let shadowXpos = textStyleOptions.format.shadowXpos;
 
   let styleOptions: Phaser.Types.GameObjects.Text.TextStyle = {
-    fontFamily: "emerald",
-    fontSize: 96,
+    fontFamily: fontFamily,
+    fontSize: fontSize,
     color: mainColor,
     padding: {
       bottom: 6,
     },
   };
 
+  let scale = 1 / 6;
   if (i18next.resolvedLanguage === "ja") {
-    scale = 0.1388888889;
+    scale = 5 / 36; // Don't ask me
     styleOptions.padding = { top: 2, bottom: 4 };
-  }
-
-  switch (style) {
-    case TextStyle.SUMMARY:
-    case TextStyle.SUMMARY_ALT:
-    case TextStyle.SUMMARY_BLUE:
-    case TextStyle.SUMMARY_RED:
-    case TextStyle.SUMMARY_PINK:
-    case TextStyle.SUMMARY_GOLD:
-    case TextStyle.SUMMARY_GRAY:
-    case TextStyle.SUMMARY_GREEN:
-    case TextStyle.WINDOW:
-    case TextStyle.WINDOW_ALT:
-    case TextStyle.ME_OPTION_DEFAULT:
-    case TextStyle.ME_OPTION_SPECIAL:
-      shadowXpos = 3;
-      shadowYpos = 3;
-      break;
-    case TextStyle.STATS_LABEL:
-      let fontSizeLabel = "96px";
-      switch (lang) {
-        case "de":
-          shadowXpos = 3;
-          shadowYpos = 3;
-          fontSizeLabel = "80px";
-          break;
-        default:
-          fontSizeLabel = "96px";
-          break;
-      }
-      styleOptions.fontSize = fontSizeLabel;
-      break;
-    case TextStyle.STATS_VALUE:
-      shadowXpos = 3;
-      shadowYpos = 3;
-      let fontSizeValue = "96px";
-      switch (lang) {
-        case "de":
-          fontSizeValue = "80px";
-          break;
-        default:
-          fontSizeValue = "96px";
-          break;
-      }
-      styleOptions.fontSize = fontSizeValue;
-      break;
-    case TextStyle.MESSAGE:
-    case TextStyle.SETTINGS_LABEL:
-    case TextStyle.SETTINGS_LOCKED:
-    case TextStyle.SETTINGS_SELECTED:
-      break;
-    case TextStyle.BATTLE_INFO:
-    case TextStyle.MONEY:
-    case TextStyle.MONEY_WINDOW:
-    case TextStyle.TOOLTIP_TITLE:
-      styleOptions.fontSize = defaultFontSize - 24;
-      shadowXpos = 3.5;
-      shadowYpos = 3.5;
-      break;
-    case TextStyle.PARTY:
-    case TextStyle.PARTY_RED:
-      styleOptions.fontSize = defaultFontSize - 30;
-      styleOptions.fontFamily = "pkmnems";
-      break;
-    case TextStyle.TOOLTIP_CONTENT:
-      styleOptions.fontSize = defaultFontSize - 32;
-      shadowXpos = 3;
-      shadowYpos = 3;
-      break;
-    case TextStyle.MOVE_INFO_CONTENT:
-      styleOptions.fontSize = defaultFontSize - 40;
-      shadowXpos = 3;
-      shadowYpos = 3;
-      break;
-    case TextStyle.SMALLER_WINDOW_ALT:
-      styleOptions.fontSize = defaultFontSize - 36;
-      shadowXpos = 3;
-      shadowYpos = 3;
-      break;
-    case TextStyle.BGM_BAR:
-      styleOptions.fontSize = defaultFontSize - 24;
-      shadowXpos = 3;
-      shadowYpos = 3;
-      break;
-    case TextStyle.CHALLENGE_DESCRIPTION:
-      styleOptions.fontSize = defaultFontSize - 12;
-      shadowXpos = 4;
-      shadowYpos = 5;
-      break;
   }
 
   if (extraStyleOptions) {
@@ -223,11 +132,11 @@ export function getBBCodeFragment(
   closeFragment: boolean = false,
   noShadow = false,
 ): string {
-  const colorCombination = getTextColorCombination(textStyle);
-  let openingFragment = `[color=${colorCombination.mainColor}]`;
+  const { mainColor, shadowColor } = getBaseTextStyleOptions(textStyle).color;
+  let openingFragment = `[color=${mainColor}]`;
   let closingFragment = closeFragment ? "[/color]" : "";
   if (!noShadow) {
-    openingFragment += `[shadow=${colorCombination.shadowColor}]`;
+    openingFragment += `[shadow=${shadowColor}]`;
     if (closeFragment) {
       closingFragment = "[/shadow]" + closingFragment;
     }
