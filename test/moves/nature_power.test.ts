@@ -1,4 +1,6 @@
 import { Abilities } from "#enums/abilities";
+import { BattlerIndex } from "#enums/battler-index";
+import { Biome } from "#enums/biome";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -48,5 +50,33 @@ describe("Moves - Nature Power", () => {
     await game.phaseInterceptor.to("MoveEndPhase");
 
     expect(game.field.getPlayerPokemon().getLastXMoves()[0].move.id).toBe(MoveId.THUNDERBOLT);
+  });
+
+  it("should be able to target the user's ally", async () => {
+    game.override.battleType("double");
+    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+
+    game.move.use(MoveId.NATURE_POWER, 0, BattlerIndex.PLAYER_2);
+    game.move.use(MoveId.SPLASH, 1);
+    await game.toEndOfTurn();
+
+    expect(game.scene.getPlayerParty()[1].isFullHp()).toBe(false);
+    for (const pokemon of game.scene.getEnemyParty()) {
+      expect(pokemon.isFullHp()).toBe(true);
+    }
+  });
+
+  it("should be able to target multiple Pokemon at once, if applicable for the called move", async () => {
+    game.override.battleType("double").startingBiome(Biome.VOLCANO); // Volcano -> Lava Plume
+    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+
+    game.move.use(MoveId.NATURE_POWER, 0, BattlerIndex.PLAYER_2);
+    game.move.use(MoveId.SPLASH, 1);
+    await game.toEndOfTurn();
+
+    expect(game.scene.getPlayerParty()[1].isFullHp()).toBe(false);
+    for (const pokemon of game.scene.getEnemyParty()) {
+      expect(pokemon.isFullHp()).toBe(false);
+    }
   });
 });
