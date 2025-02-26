@@ -43,14 +43,14 @@ describe("Moves - Dig", () => {
 
     game.move.select(MoveId.DIG);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(playerPokemon.getTag(BattlerTagType.UNDERGROUND)).toBeDefined();
     expect(enemyPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.MISS);
     expect(playerPokemon.hp).toBe(playerPokemon.getMaxHp());
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
-    expect(playerPokemon.getMoveQueue()[0].moveId).toBe(MoveId.DIG);
+    expect(playerPokemon.getMoveQueue()[0].move.id).toBe(MoveId.DIG);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(playerPokemon.getTag(BattlerTagType.UNDERGROUND)).toBeUndefined();
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveHistory()).toHaveLength(2);
@@ -69,7 +69,7 @@ describe("Moves - Dig", () => {
 
     game.move.select(MoveId.DIG);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(playerPokemon.hp).toBeLessThan(playerPokemon.getMaxHp());
     expect(enemyPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
   });
@@ -83,9 +83,9 @@ describe("Moves - Dig", () => {
 
     game.move.select(MoveId.DIG);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(playerPokemon.getTag(BattlerTagType.UNDERGROUND)).toBeUndefined();
-    expect(playerPokemon.status?.effect).toBe(StatusEffect.SLEEP);
+    expect(playerPokemon.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
 
     const playerDig = playerPokemon.getMoveset().find((mv) => mv && mv.moveId === MoveId.DIG);
     expect(playerDig?.ppUsed).toBe(0);
@@ -100,7 +100,7 @@ describe("Moves - Dig", () => {
     const preDigEarthquakeDmg = playerPokemon.getAttackDamage(enemyPokemon, allMoves[MoveId.EARTHQUAKE]).damage;
 
     game.move.select(MoveId.DIG);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEffectPhase");
 

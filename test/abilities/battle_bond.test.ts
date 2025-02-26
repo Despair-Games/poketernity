@@ -49,7 +49,7 @@ describe("Abilities - BATTLE BOND", () => {
 
     game.move.select(MoveId.SPLASH);
     await game.doKillOpponents();
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     game.doSelectModifier();
     await game.phaseInterceptor.to("QuietFormChangePhase");
 
@@ -86,7 +86,7 @@ describe("Abilities - BATTLE BOND", () => {
     expectedMultiHitType = MultiHitType._2_TO_5;
 
     game.move.select(MoveId.WATER_SHURIKEN);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(waterShuriken.calculateBattlePower).toHaveLastReturnedWith(expectedBattlePower);
     expect(actualMultiHitType).toBe(expectedMultiHitType);
   });

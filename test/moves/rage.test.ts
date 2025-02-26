@@ -44,7 +44,7 @@ describe("Moves - Rage", () => {
     await game.move.forceEnemyMove(MoveId.TRIPLE_AXEL); // Should give +3
     await game.move.forceEnemyMove(MoveId.TACKLE); // Should give +1
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.toNextTurn();
 
     expect(playerPokemon.getTag(BattlerTagType.RAGE)).toBeDefined();
@@ -54,7 +54,7 @@ describe("Moves - Rage", () => {
     await game.move.forceEnemyMove(MoveId.TRIPLE_AXEL); // Should give +0
     await game.move.forceEnemyMove(MoveId.TACKLE); // Should give +0
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.toNextTurn();
 
     expect(playerPokemon.getTag(BattlerTagType.RAGE)).toBeUndefined();
@@ -64,7 +64,7 @@ describe("Moves - Rage", () => {
     await game.move.forceEnemyMove(MoveId.SHADOW_PUNCH); // Should give +0
     await game.move.forceEnemyMove(MoveId.TACKLE); // Should give +1
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.toNextTurn();
 
     expect(playerPokemon.getTag(BattlerTagType.RAGE)).toBeDefined();

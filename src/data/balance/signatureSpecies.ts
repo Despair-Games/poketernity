@@ -91,14 +91,14 @@ export const signatureSpecies: SignatureSpecies = {
   RAIHAN: [Species.DURALUDON, Species.TURTONATOR, Species.GOOMY],
 
   // Paldea gym leaders
-  KATY: [Species.NYMBLE, Species.TAROUNTULA, Species.HERACROSS],
-  BRASSIUS: [Species.SMOLIV, Species.SHROOMISH, Species.ODDISH],
-  IONO: [Species.TADBULB, Species.WATTREL, Species.VOLTORB],
-  KOFU: [Species.VELUZA, Species.WIGLETT, Species.WINGULL],
-  LARRY: [Species.STARLY, Species.DUNSPARCE, Species.KOMALA],
-  RYME: [Species.GREAVARD, Species.SHUPPET, Species.MIMIKYU],
-  TULIP: [Species.GIRAFARIG, Species.FLITTLE, Species.RALTS],
-  GRUSHA: [Species.CETODDLE, Species.ALOLA_VULPIX, Species.CUBCHOO],
+  KATY: [Species.TEDDIURSA, Species.NYMBLE, Species.TAROUNTULA, Species.HERACROSS],
+  BRASSIUS: [Species.BONSLY, Species.SMOLIV, [Species.PETILIL, Species.ODDISH], Species.SUNKERN],
+  IONO: [Species.MISDREAVUS, Species.TADBULB, Species.WATTREL, [Species.SHINX, Species.VOLTORB]],
+  KOFU: [Species.CRABRAWLER, Species.VELUZA, Species.WIGLETT, Species.WINGULL, [Species.TOTODILE, Species.CLAUNCHER]],
+  LARRY: [Species.STARLY, Species.DUNSPARCE, Species.KOMALA, Species.LECHONK],
+  RYME: [Species.TOXEL, Species.GREAVARD, Species.SHUPPET, Species.MIMIKYU],
+  TULIP: [Species.FLABEBE, Species.FLITTLE, Species.GIRAFARIG, Species.RALTS],
+  GRUSHA: [Species.SWABLU, Species.CETODDLE, Species.SNOM, Species.ALOLA_VULPIX],
 
   // Kanto E4
   LORELEI: [

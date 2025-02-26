@@ -40,7 +40,11 @@ import { Tutorial } from "#enums/tutorial";
 import { handleTutorial } from "#app/tutorial";
 import { DropDown, DropDownLabel, DropDownOption } from "#app/ui/drop-down";
 import { FilterBar } from "#app/ui/filter-bar";
-import type { OptionSelectIconConfig, OptionSelectItem } from "#app/ui/interfaces/option-select-config";
+import type {
+  OptionSelectIconConfig,
+  OptionSelectItem,
+  OptionSelectModeConfig,
+} from "#app/ui/interfaces/option-select-config";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import MoveInfoOverlay from "#app/ui/move-info-overlay";
 import PokemonIconAnimHandler from "#app/ui/pokemon-icon-anim-handler";
@@ -1601,87 +1605,94 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
               },
             },
           );
+
+          // Manage Moves options
           if (this.speciesStarterMoves.length > 1) {
-            // this lets you change the pokemon moves
+            const getMoveOptions = (
+              moves: MoveId[],
+              selectHandler: (moveId: MoveId, index: number, currentMoveId?: MoveId, currentIndex?: number) => boolean,
+              cancelHandler: () => boolean,
+              currentMoveId?: MoveId,
+              currentIndex?: number,
+            ): OptionSelectModeConfig => {
+              const options: OptionSelectItem[] = moves.map((moveId: MoveId, index: number): OptionSelectItem => {
+                return {
+                  label: allMoves[moveId].name,
+                  handler: () => selectHandler(moveId, index, currentMoveId, currentIndex),
+                  onHover: () => {
+                    this.moveInfoOverlay.show(allMoves[moveId]);
+                  },
+                };
+              });
+              options.push({
+                label: i18next.t("menu:cancel"),
+                handler: cancelHandler,
+                onHover: () => {
+                  this.moveInfoOverlay.clear();
+                },
+              });
+
+              return {
+                options: options,
+                maxOptions: 8,
+                yOffset: 29,
+              };
+            };
+
+            const onSelectedMoveToSwapWith = (moveId: MoveId, index: number): boolean => {
+              this.blockInput = true;
+              ui.setMode(UiMode.STARTER_SELECT).then(() => {
+                ui.showText(
+                  `${i18next.t("starterSelectUiHandler:selectMoveSwapWith")} ${allMoves[moveId].name}.`,
+                  null,
+                  () => {
+                    const possibleMoves = this.speciesStarterMoves.filter((sm: MoveId) => sm !== moveId);
+                    this.moveInfoOverlay.show(allMoves[possibleMoves[0]]);
+                    const movesOptions = getMoveOptions(
+                      possibleMoves,
+                      onSelectedMoveToSwapTo,
+                      onCancelMoveToSwapTo,
+                      moveId,
+                      index,
+                    );
+                    ui.setModeWithoutClear(UiMode.OPTION_SELECT, movesOptions);
+                    this.blockInput = false;
+                  },
+                );
+              });
+              return true;
+            };
+
+            const onCancelMoveToSwapWith = () => {
+              this.moveInfoOverlay.clear();
+              this.clearText();
+              ui.setMode(UiMode.STARTER_SELECT);
+              return true;
+            };
+
+            const onSelectedMoveToSwapTo = (
+              moveId: MoveId,
+              _i: number,
+              baseMoveId: MoveId,
+              baseMoveIndex: number,
+            ): boolean => {
+              this.switchMoveHandler(baseMoveIndex, moveId, baseMoveId);
+              showSwapOptions(this.starterMoveset!); // TODO: is this bang correct?
+              return true;
+            };
+
+            const onCancelMoveToSwapTo = () => {
+              showSwapOptions(this.starterMoveset!); // TODO: is this bang correct?
+              return true;
+            };
+
             const showSwapOptions = (moveset: StarterMoveset) => {
               this.blockInput = true;
-
               ui.setMode(UiMode.STARTER_SELECT).then(() => {
                 ui.showText(i18next.t("starterSelectUiHandler:selectMoveSwapOut"), null, () => {
                   this.moveInfoOverlay.show(allMoves[moveset[0]]);
-
-                  ui.setModeWithoutClear(UiMode.OPTION_SELECT, {
-                    options: moveset
-                      .map((m: MoveId, i: number) => {
-                        const option: OptionSelectItem = {
-                          label: allMoves[m].name,
-                          handler: () => {
-                            this.blockInput = true;
-                            ui.setMode(UiMode.STARTER_SELECT).then(() => {
-                              ui.showText(
-                                `${i18next.t("starterSelectUiHandler:selectMoveSwapWith")} ${allMoves[m].name}.`,
-                                null,
-                                () => {
-                                  const possibleMoves = this.speciesStarterMoves.filter((sm: MoveId) => sm !== m);
-                                  this.moveInfoOverlay.show(allMoves[possibleMoves[0]]);
-
-                                  ui.setModeWithoutClear(UiMode.OPTION_SELECT, {
-                                    options: possibleMoves
-                                      .map((sm) => {
-                                        // make an option for each available starter move
-                                        const option = {
-                                          label: allMoves[sm].name,
-                                          handler: () => {
-                                            this.switchMoveHandler(i, sm, m);
-                                            showSwapOptions(this.starterMoveset!); // TODO: is this bang correct?
-                                            return true;
-                                          },
-                                          onHover: () => {
-                                            this.moveInfoOverlay.show(allMoves[sm]);
-                                          },
-                                        };
-                                        return option;
-                                      })
-                                      .concat({
-                                        label: i18next.t("menu:cancel"),
-                                        handler: () => {
-                                          showSwapOptions(this.starterMoveset!); // TODO: is this bang correct?
-                                          return true;
-                                        },
-                                        onHover: () => {
-                                          this.moveInfoOverlay.clear();
-                                        },
-                                      }),
-                                    maxOptions: 8,
-                                    yOffset: 29,
-                                  });
-                                  this.blockInput = false;
-                                },
-                              );
-                            });
-                            return true;
-                          },
-                          onHover: () => {
-                            this.moveInfoOverlay.show(allMoves[m]);
-                          },
-                        };
-                        return option;
-                      })
-                      .concat({
-                        label: i18next.t("menu:cancel"),
-                        handler: () => {
-                          this.moveInfoOverlay.clear();
-                          this.clearText();
-                          ui.setMode(UiMode.STARTER_SELECT);
-                          return true;
-                        },
-                        onHover: () => {
-                          this.moveInfoOverlay.clear();
-                        },
-                      }),
-                    maxOptions: 8,
-                    yOffset: 29,
-                  });
+                  const movesOptions = getMoveOptions(moveset, onSelectedMoveToSwapWith, onCancelMoveToSwapWith);
+                  ui.setModeWithoutClear(UiMode.OPTION_SELECT, movesOptions);
                   this.blockInput = false;
                 });
               });
@@ -2380,57 +2391,59 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.checkIconId(this.starterIcons[index], species, props.female, props.formIndex, props.shiny, props.variant);
   }
 
-  switchMoveHandler(i: number, newMoveId: MoveId, moveId: MoveId) {
+  /**
+   * Puts a move at the requested index in the current highlighted Pokemon's moveset.
+   * If the move was already present in the moveset, swap its position with the one in the new spot currently.
+   * @param targetIndex the index to put the move, between 0 and 3
+   * @param newMoveId the {@linkcode MoveId} of the move to add in
+   * @param previousMoveId the {@linkcode MoveId} of the move that was in that spot previously
+   */
+  switchMoveHandler(targetIndex: number, newMoveId: MoveId, previousMoveId: MoveId): void {
+    if (!this.starterMoveset) {
+      console.warn("Trying to update a non existing moveset");
+      return;
+    }
+
     const speciesId = this.lastSpecies.speciesId;
-    const existingMoveIndex = this.starterMoveset?.indexOf(newMoveId)!; // TODO: is this bang correct?
-    this.starterMoveset![i] = newMoveId; // TODO: is this bang correct?
+    const existingMoveIndex = this.starterMoveset.indexOf(newMoveId);
+    this.starterMoveset[targetIndex] = newMoveId;
     if (existingMoveIndex > -1) {
-      this.starterMoveset![existingMoveIndex] = moveId; // TODO: is this bang correct?
+      this.starterMoveset[existingMoveIndex] = previousMoveId;
     }
-    const props: DexAttrProps = globalScene.gameData.getSpeciesDexAttrProps(this.lastSpecies, this.dexAttrCursor);
-    // species has different forms
+    const updatedMoveset = this.starterMoveset.slice(0) as StarterMoveset;
+    const formIndex = globalScene.gameData.getSpeciesDexAttrProps(this.lastSpecies, this.dexAttrCursor).formIndex;
+    const starterData = globalScene.gameData.starterData[speciesId];
+
     if (pokemonFormLevelMoves.hasOwnProperty(speciesId)) {
-      // starterMoveData doesn't have base form moves or is using the single form format
-      if (
-        !globalScene.gameData.starterData[speciesId].moveset
-        || Array.isArray(globalScene.gameData.starterData[speciesId].moveset)
-      ) {
-        globalScene.gameData.starterData[speciesId].moveset = {
-          [props.formIndex]: this.starterMoveset?.slice(0) as StarterMoveset,
-        };
+      // Species has forms with different movesets
+      if (!starterData.moveset || Array.isArray(starterData.moveset)) {
+        starterData.moveset = {};
       }
-      const starterMoveData = globalScene.gameData.starterData[speciesId].moveset;
-
-      // starterMoveData doesn't have active form moves
-      if (!starterMoveData.hasOwnProperty(props.formIndex)) {
-        globalScene.gameData.starterData[speciesId].moveset[props.formIndex] = this.starterMoveset?.slice(
-          0,
-        ) as StarterMoveset;
-      }
-
-      // does the species' starter move data have its form's starter moves and has it been updated
-      if (starterMoveData.hasOwnProperty(props.formIndex)) {
-        // active form move hasn't been updated
-        if (starterMoveData[props.formIndex][existingMoveIndex] !== newMoveId) {
-          globalScene.gameData.starterData[speciesId].moveset[props.formIndex] = this.starterMoveset?.slice(
-            0,
-          ) as StarterMoveset;
-        }
-      }
+      starterData.moveset[formIndex] = updatedMoveset;
     } else {
-      globalScene.gameData.starterData[speciesId].moveset = this.starterMoveset?.slice(0) as StarterMoveset;
+      starterData.moveset = updatedMoveset;
     }
+
     this.setSpeciesDetails(this.lastSpecies, { forSeen: false });
 
-    // switch moves of starter if exists
-    if (this.starterMovesets.length) {
-      Array.from({ length: this.starterSpecies.length }, (_, i) => {
-        const starterSpecies = this.starterSpecies[i];
-        if (starterSpecies.speciesId === speciesId) {
-          this.starterMovesets[i] = this.starterMoveset!; // TODO: is this bang correct?
-        }
-      });
+    // switch moves of selected starter if it exists
+    this.updateSelectedStarterMoveset(speciesId);
+  }
+
+  /**
+   * Update the starter moveset for the given species, if it is part of the selected starters.
+   * @param speciesId the {@linkcode Species} to consider
+   */
+  private updateSelectedStarterMoveset(speciesId: Species): void {
+    if (!this.starterMoveset) {
+      return;
     }
+    // Find the Pokemon of that species in the team, and give them the correct moveset.
+    this.starterSpecies.forEach((species: PokemonSpecies, index: number) => {
+      if (species.speciesId === speciesId) {
+        this.starterMovesets[index] = this.starterMoveset!;
+      }
+    });
   }
 
   updateButtonIcon(iconSetting, gamepadType, iconElement, controlLabel): void {
@@ -2569,7 +2582,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     const valueLimit = new NumberHolder(0);
     switch (globalScene.gameMode.modeId) {
       case GameModes.ENDLESS:
-      case GameModes.SPLICED_ENDLESS:
         valueLimit.value = 15;
         break;
       default:
@@ -3565,6 +3577,11 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         this.starterMoveset = this.starterMoveset.filter((move, i) => {
           return this.starterMoveset?.indexOf(move) === i;
         }) as StarterMoveset;
+
+        if (!isNullOrUndefined(formIndex)) {
+          // If we're switching form and the Pokemon is in the team, we need to update its moveset
+          this.updateSelectedStarterMoveset(species.speciesId);
+        }
 
         const speciesForm = getPokemonSpeciesForm(species.speciesId, formIndex!); // TODO: is the bang correct?
         const formText = capitalizeString(species?.forms[formIndex!]?.formKey, "-", false, false); // TODO: is the bang correct?

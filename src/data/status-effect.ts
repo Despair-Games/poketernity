@@ -3,7 +3,7 @@ import type { ParseKeys } from "i18next";
 import i18next from "i18next";
 
 export class Status {
-  public effect: StatusEffect;
+  protected effect: StatusEffect;
   /** Toxic damage is `1/16 max HP * toxicTurnCount` */
   public toxicTurnCount: number = 0;
   public sleepTurnsRemaining?: number;
@@ -14,17 +14,15 @@ export class Status {
     this.sleepTurnsRemaining = sleepTurnsRemaining;
   }
 
+  get statusEffect(): StatusEffect {
+    return this.effect;
+  }
+
   incrementTurn(): void {
     this.toxicTurnCount++;
     if (this.sleepTurnsRemaining) {
       this.sleepTurnsRemaining--;
     }
-  }
-
-  isPostTurn(): boolean {
-    return (
-      this.effect === StatusEffect.POISON || this.effect === StatusEffect.TOXIC || this.effect === StatusEffect.BURN
-    );
   }
 }
 

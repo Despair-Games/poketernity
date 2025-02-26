@@ -36,7 +36,7 @@ describe("Moves - Endure", () => {
     await game.classicMode.startBattle([Species.ARCEUS]);
 
     game.move.select(MoveId.THUNDER);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.getEnemyPokemon()!.hp).toBe(1);
   });
@@ -45,7 +45,7 @@ describe("Moves - Endure", () => {
     await game.classicMode.startBattle([Species.ARCEUS]);
 
     game.move.select(MoveId.BULLET_SEED);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.getEnemyPokemon()!.hp).toBe(1);
   });

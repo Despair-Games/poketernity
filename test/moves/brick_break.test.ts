@@ -51,7 +51,7 @@ describe("Moves - Brick Break", () => {
 
     game.move.select(MoveId.BRICK_BREAK);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(game.scene.arena.getTagOnSide(tagType, ArenaTagSide.PLAYER)).toBeDefined();
     expect(game.scene.arena.getTagOnSide(tagType, ArenaTagSide.ENEMY)).toBeUndefined();
   });
@@ -66,7 +66,7 @@ describe("Moves - Brick Break", () => {
     const spy = vi.spyOn(enemy, "getAttackDamage");
 
     game.move.select(MoveId.BRICK_BREAK);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     const damage = spy.mock.results.at(-1)?.value.damage;
 
@@ -82,7 +82,7 @@ describe("Moves - Brick Break", () => {
 
     game.move.select(MoveId.BRICK_BREAK);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(game.scene.arena.getTagOnSide(ArenaTagType.REFLECT, ArenaTagSide.ENEMY)).toBeDefined();
   });

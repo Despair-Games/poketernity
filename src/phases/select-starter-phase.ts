@@ -41,7 +41,7 @@ export class SelectStarterPhase extends Phase {
   public initBattle(starters: Starter[]): void {
     const { arena, gameMode, gameData, sound, time } = globalScene;
     const { dexData, gameStats } = gameData;
-    const { isClassic, isSplicedOnly } = gameMode;
+    const { isClassic } = gameMode;
 
     const party = globalScene.getPlayerParty();
     const loadPokemonAssets: Promise<void>[] = [];
@@ -97,10 +97,6 @@ export class SelectStarterPhase extends Phase {
 
       if (nickname) {
         starterPokemon.nickname = nickname;
-      }
-
-      if (isSplicedOnly || Overrides.STARTER_FUSION_OVERRIDE) {
-        starterPokemon.generateFusionSpecies(true);
       }
 
       starterPokemon.setVisible(false);

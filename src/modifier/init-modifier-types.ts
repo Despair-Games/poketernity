@@ -51,7 +51,6 @@ import {
   EvolutionItemModifierTypeGenerator,
   ExpBoosterModifierType,
   FormChangeItemModifierTypeGenerator,
-  FusePokemonModifierType,
   ModifierType,
   ModifierTypeGenerator,
   MoneyRewardModifierType,
@@ -447,9 +446,6 @@ export function initModifierTypes() {
 
   modifierTypes.IV_SCANNER = () =>
     new ModifierType("modifierType:ModifierType.IV_SCANNER", "scanner", (type, _args) => new IvScannerModifier(type));
-
-  modifierTypes.DNA_SPLICERS = () =>
-    new FusePokemonModifierType("modifierType:ModifierType.DNA_SPLICERS", "dna_splicers");
 
   modifierTypes.MINI_BLACK_HOLE = () =>
     new TurnHeldItemTransferModifierType("modifierType:ModifierType.MINI_BLACK_HOLE", "mini_black_hole");

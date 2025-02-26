@@ -37,17 +37,17 @@ describe("Moves - Throat Chop", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.GROWL);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     // First turn, move is interrupted
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getStatStage(Stat.ATK)).toBe(0);
 
     // Second turn, struggle if no valid moves
     await game.toNextTurn();
 
     game.move.select(MoveId.GROWL);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemy.isFullHp()).toBe(false);

@@ -98,7 +98,7 @@ describe("check if every variant's sprite are correctly set", () => {
     if (errors.length) {
       console.log("errors", errors);
     }
-    expect(errors.length).toBe(0);
+    expect(errors).toEqual([]);
   });
 
   it("check female variant files", () => {
@@ -107,7 +107,7 @@ describe("check if every variant's sprite are correctly set", () => {
     if (errors.length) {
       console.log("errors", errors);
     }
-    expect(errors.length).toBe(0);
+    expect(errors).toEqual([]);
   });
 
   it("check back female variant files", () => {
@@ -116,7 +116,7 @@ describe("check if every variant's sprite are correctly set", () => {
     if (errors.length) {
       console.log("errors", errors);
     }
-    expect(errors.length).toBe(0);
+    expect(errors).toEqual([]);
   });
 
   it("check back male variant files", () => {
@@ -127,7 +127,7 @@ describe("check if every variant's sprite are correctly set", () => {
     if (errors.length) {
       console.log("errors", errors);
     }
-    expect(errors.length).toBe(0);
+    expect(errors).toEqual([]);
   });
 
   // check over every file if it's correctly set in the masterlist
@@ -138,7 +138,7 @@ describe("check if every variant's sprite are correctly set", () => {
     if (errors.length) {
       console.log("errors for ", dirPath, errors);
     }
-    expect(errors.length).toBe(0);
+    expect(errors).toEqual([]);
   });
 
   it("look over every file in variant back female and check if present in masterlist", () => {
@@ -147,7 +147,7 @@ describe("check if every variant's sprite are correctly set", () => {
     if (errors.length) {
       console.log("errors for ", dirPath, errors);
     }
-    expect(errors.length).toBe(0);
+    expect(errors).toEqual([]);
   });
 
   it("look over every file in variant back male and check if present in masterlist", () => {
@@ -157,7 +157,7 @@ describe("check if every variant's sprite are correctly set", () => {
     if (errors.length) {
       console.log("errors for ", dirPath, errors);
     }
-    expect(errors.length).toBe(0);
+    expect(errors).toEqual([]);
   });
 
   it("look over every file in variant root and check if present in masterlist", () => {
@@ -166,6 +166,6 @@ describe("check if every variant's sprite are correctly set", () => {
     if (errors.length) {
       console.log("errors for ", dirPath, errors);
     }
-    expect(errors.length).toBe(0);
+    expect(errors).toEqual([]);
   });
 });

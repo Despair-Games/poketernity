@@ -43,7 +43,7 @@ describe("Abilities - Good As Gold", () => {
     const enemy = game.field.getEnemyPokemon();
 
     game.move.use(MoveId.GROWL);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(player.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
     expect(enemy.getStatStage(Stat.ATK)).toBe(0);
@@ -56,7 +56,7 @@ describe("Abilities - Good As Gold", () => {
     const enemy = game.field.getEnemyPokemon();
 
     game.move.use(MoveId.TACKLE);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(player.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
     expect(enemy.isFullHp()).toBeFalsy();
@@ -70,7 +70,7 @@ describe("Abilities - Good As Gold", () => {
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.SWORDS_DANCE);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemy.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
     expect(enemy.getStatStage(Stat.ATK)).toBe(2);
@@ -83,7 +83,7 @@ describe("Abilities - Good As Gold", () => {
 
     game.move.use(MoveId.STEALTH_ROCK);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(player.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
     expect(game.scene.arena.getTagOnSide(ArenaTagType.STEALTH_ROCK, ArenaTagSide.ENEMY)).toBeDefined();
   });
@@ -96,9 +96,9 @@ describe("Abilities - Good As Gold", () => {
 
     game.move.use(MoveId.HAZE);
     await game.move.forceEnemyMove(MoveId.SWORDS_DANCE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(player.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
     expect(enemy.getStatStage(Stat.ATK)).toBe(0);

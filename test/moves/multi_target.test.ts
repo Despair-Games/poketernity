@@ -42,7 +42,7 @@ describe("Multi-target damage reduction", () => {
 
     game.move.select(MoveId.DAZZLING_GLEAM);
     game.move.select(MoveId.TACKLE, 1, BattlerIndex.ENEMY);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("MoveEndPhase");
 
     const gleam1 = enemy1.getMaxHp() - enemy1.hp;
@@ -58,7 +58,7 @@ describe("Multi-target damage reduction", () => {
 
     game.move.select(MoveId.DAZZLING_GLEAM);
     game.move.select(MoveId.TACKLE, 1, BattlerIndex.ENEMY);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
 
@@ -83,7 +83,7 @@ describe("Multi-target damage reduction", () => {
 
     game.move.select(MoveId.EARTHQUAKE);
     game.move.select(MoveId.SPLASH, 1);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
 
@@ -98,7 +98,7 @@ describe("Multi-target damage reduction", () => {
 
     game.move.select(MoveId.EARTHQUAKE);
     game.move.select(MoveId.SPLASH, 1);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
 
@@ -116,7 +116,7 @@ describe("Multi-target damage reduction", () => {
     await game.toNextTurn();
 
     game.move.select(MoveId.EARTHQUAKE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
 

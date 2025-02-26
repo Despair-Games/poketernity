@@ -3,7 +3,6 @@ import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { toDmgValue } from "#app/utils";
-import { Abilities } from "#enums/abilities";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { PostTurnAbAttr } from "./post-turn-ab-attr";
@@ -19,7 +18,7 @@ export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
     let hadEffect = false;
     for (const opp of pokemon.getOpponents()) {
       if (
-        (opp.status?.effect === StatusEffect.SLEEP || opp.hasAbility(Abilities.COMATOSE))
+        opp.hasStatusEffect(StatusEffect.SLEEP)
         && !opp.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)
         && !opp.switchOutStatus
       ) {

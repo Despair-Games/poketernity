@@ -527,7 +527,6 @@ export const evilBossTrainerConfigs: TrainerConfigs = {
       getRandomPartyMemberFunc([Species.GOLISOPOD], TrainerSlot.TRAINER, true, (p) => {
         p.setBoss(true, 2);
         p.generateAndPopulateMoveset();
-        p.abilityIndex = 2; //Anticipation
         p.gender = Gender.MALE;
         p.pokeball = PokeballType.ULTRA_BALL;
       }),
