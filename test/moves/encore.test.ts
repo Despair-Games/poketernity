@@ -50,7 +50,7 @@ describe("Moves - Encore", () => {
     game.move.select(MoveId.SPLASH);
     // The enemy AI would normally be inclined to use Tackle, but should be
     // forced into using Splash.
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getLastXMoves().every((turnMove) => turnMove.move.id === MoveId.SPLASH)).toBeTruthy();
   });
@@ -72,16 +72,16 @@ describe("Moves - Encore", () => {
 
       if (delay) {
         game.move.select(MoveId.SPLASH);
-        await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+        game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
         await game.toNextTurn();
       }
 
       game.move.select(MoveId.ENCORE);
 
       const turnOrder = delay ? [BattlerIndex.PLAYER, BattlerIndex.ENEMY] : [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
-      await game.setTurnOrder(turnOrder);
+      game.setTurnOrder(turnOrder);
 
-      await game.phaseInterceptor.to("BerryPhase", false);
+      await game.toEndOfTurn();
       expect(playerPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
       expect(enemyPokemon.getTag(BattlerTagType.ENCORE)).toBeUndefined();
     });
@@ -94,19 +94,19 @@ describe("Moves - Encore", () => {
 
     const enemyPokemon = game.scene.getEnemyPokemon();
     game.move.select(MoveId.ENCORE);
-    await game.setTurnOrder(turnOrder);
+    game.setTurnOrder(turnOrder);
     await game.toEndOfTurn();
     expect(enemyPokemon?.getTag(BattlerTagType.ENCORE)).toBeDefined();
 
     await game.toNextTurn();
     game.move.select(MoveId.TORMENT);
-    await game.setTurnOrder(turnOrder);
+    game.setTurnOrder(turnOrder);
     await game.toEndOfTurn();
     expect(enemyPokemon?.getTag(BattlerTagType.TORMENT)).toBeDefined();
 
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
-    await game.setTurnOrder(turnOrder);
+    game.setTurnOrder(turnOrder);
     await game.toEndOfTurn();
     const lastMove = enemyPokemon?.getLastXMoves()[0];
     expect(lastMove?.move.id).toBe(MoveId.STRUGGLE);

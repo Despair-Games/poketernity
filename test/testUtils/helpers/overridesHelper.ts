@@ -1,3 +1,7 @@
+// tsdoc imports
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { GameManager } from "#test/testUtils/gameManager";
+
 import type { Variant } from "#app/data/variant";
 import { Abilities } from "#enums/abilities";
 import type { ModifierOverride } from "#app/modifier/modifier-type";
@@ -131,6 +135,10 @@ export class OverridesHelper extends GameManagerHelper {
 
   /**
    * Override the player (pokemon) {@linkcode Abilities | ability}
+   *
+   * For more fine-grained control over setting specific species to have specific abilities,
+   * see {@linkcode GameManager.forceSpeciesSpecificAbility | game.forceSpeciesSpecificAbility}.
+   *
    * @param ability the (pokemon) {@linkcode Abilities | ability} to set
    * @returns `this`
    */
@@ -246,6 +254,10 @@ export class OverridesHelper extends GameManagerHelper {
 
   /**
    * Override the enemy (pokemon) {@linkcode Abilities | ability}
+   *
+   * For more fine-grained control over setting specific species to have specific abilities,
+   * see {@linkcode GameManager.forceSpeciesSpecificAbility | game.forceSpeciesSpecificAbility}.
+   *
    * @param ability the (pokemon) {@linkcode Abilities | ability} to set
    * @returns `this`
    */

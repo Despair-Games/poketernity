@@ -1,6 +1,5 @@
 import { type BypassSpeedChanceAbAttr } from "#app/data/ab-attrs/bypass-speed-chance-ab-attr";
 import { allAbilities } from "#app/data/data-lists";
-import { FaintPhase } from "#app/phases/faint-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
@@ -25,16 +24,14 @@ describe("Abilities - Quick Draw", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single");
-
-    game.override.starterSpecies(Species.MAGIKARP);
-    game.override.ability(Abilities.QUICK_DRAW);
-    game.override.moveset([MoveId.TACKLE, MoveId.TAIL_WHIP]);
-
-    game.override.enemyLevel(100);
-    game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
-    game.override.enemyMoveset([MoveId.TACKLE]);
+    game.override
+      .battleType("single")
+      .ability(Abilities.QUICK_DRAW)
+      .enemySpecies(Species.REGIELEKI)
+      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyMoveset(MoveId.SPLASH)
+      .startingLevel(100)
+      .enemyLevel(100);
 
     vi.spyOn(
       allAbilities[Abilities.QUICK_DRAW].getAttrs<BypassSpeedChanceAbAttr>(AbAttrFlag.BYPASS_SPEED_CHANCE)[0],
@@ -43,62 +40,43 @@ describe("Abilities - Quick Draw", () => {
     ).mockReturnValue(100);
   });
 
-  test("makes pokemon going first in its priority bracket", async () => {
-    await game.startBattle();
+  test("should cause the source to move first in its priority bracket", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS]);
 
-    const pokemon = game.scene.getPlayerPokemon()!;
-    const enemy = game.scene.getEnemyPokemon()!;
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
 
-    pokemon.hp = 1;
-    enemy.hp = 1;
+    game.move.use(MoveId.TACKLE);
+    await game.toEndOfTurn();
 
-    game.move.select(MoveId.TACKLE);
-    await game.phaseInterceptor.to(FaintPhase, false);
+    expect(player.turnData.order).toBeLessThan(enemy.turnData.order);
+    expect(player.battleData.abilitiesApplied).toContain(Abilities.QUICK_DRAW);
+  });
 
-    expect(pokemon.isFainted()).toBe(false);
-    expect(enemy.isFainted()).toBe(true);
-    expect(pokemon.battleData.abilitiesApplied).contain(Abilities.QUICK_DRAW);
-  }, 20000);
+  test("should not apply when the source uses a status move", async () => {
+    await game.classicMode.startBattle();
 
-  test(
-    "does not triggered by non damage moves",
-    {
-      retry: 5,
-    },
-    async () => {
-      await game.startBattle();
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
 
-      const pokemon = game.scene.getPlayerPokemon()!;
-      const enemy = game.scene.getEnemyPokemon()!;
+    game.move.use(MoveId.TAIL_WHIP);
+    await game.toEndOfTurn();
 
-      pokemon.hp = 1;
-      enemy.hp = 1;
+    expect(player.turnData.order).toBeGreaterThan(enemy.turnData.order);
+    expect(player.battleData.abilitiesApplied).not.toContain(Abilities.QUICK_DRAW);
+  });
 
-      game.move.select(MoveId.TAIL_WHIP);
-      await game.phaseInterceptor.to(FaintPhase, false);
+  test("should not cause the source to move before higher-priority moves", async () => {
+    await game.classicMode.startBattle();
 
-      expect(pokemon.isFainted()).toBe(true);
-      expect(enemy.isFainted()).toBe(false);
-      expect(pokemon.battleData.abilitiesApplied).not.contain(Abilities.QUICK_DRAW);
-    },
-  );
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
 
-  test("does not increase priority", async () => {
-    game.override.enemyMoveset([MoveId.EXTREME_SPEED]);
+    game.move.use(MoveId.TACKLE);
+    await game.move.forceEnemyMove(MoveId.QUICK_ATTACK);
+    await game.toEndOfTurn();
 
-    await game.startBattle();
-
-    const pokemon = game.scene.getPlayerPokemon()!;
-    const enemy = game.scene.getEnemyPokemon()!;
-
-    pokemon.hp = 1;
-    enemy.hp = 1;
-
-    game.move.select(MoveId.TACKLE);
-    await game.phaseInterceptor.to(FaintPhase, false);
-
-    expect(pokemon.isFainted()).toBe(true);
-    expect(enemy.isFainted()).toBe(false);
-    expect(pokemon.battleData.abilitiesApplied).contain(Abilities.QUICK_DRAW);
-  }, 20000);
+    expect(player.turnData.order).toBeGreaterThan(enemy.turnData.order);
+    expect(player.battleData.abilitiesApplied).contain(Abilities.QUICK_DRAW);
+  });
 });

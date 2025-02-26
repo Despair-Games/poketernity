@@ -46,7 +46,7 @@ describe("Moves - Purify", () => {
     enemyPokemon.status = new Status(StatusEffect.BURN);
 
     game.move.select(MoveId.PURIFY);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to(MoveEndPhase);
 
     expect(enemyPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
@@ -62,7 +62,7 @@ describe("Moves - Purify", () => {
     const playerInitialHp = playerPokemon.hp;
 
     game.move.select(MoveId.PURIFY);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to(MoveEndPhase);
 
     expect(playerPokemon.hp).toBe(playerInitialHp);

@@ -43,7 +43,7 @@ describe("Abilities - Mirror Armor", () => {
 
     game.move.use(MoveId.GROWL);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemy.getStatStage(Stat.ATK)).toBe(0);
     expect(player.getStatStage(Stat.ATK)).toBe(-1);
@@ -69,10 +69,10 @@ describe("Abilities - Mirror Armor", () => {
 
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.OVERHEAT);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.move.forceHit();
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(enemy.getStatStage(Stat.SPATK)).toBe(-2);
     expect(player.getStatStage(Stat.SPATK)).toBe(0);
   });
@@ -85,7 +85,7 @@ describe("Abilities - Mirror Armor", () => {
 
     game.move.use(MoveId.SPICY_EXTRACT);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(enemy.getStatStage(Stat.ATK)).toBe(2);
     expect(enemy.getStatStage(Stat.DEF)).toBe(0);
     expect(player.getStatStage(Stat.ATK)).toBe(0);
@@ -117,7 +117,7 @@ describe("Abilities - Mirror Armor", () => {
 
     game.move.use(MoveId.GROWL);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemy.getStatStage(Stat.ATK)).toBe(0);
     expect(player.getStatStage(Stat.ATK)).toBe(-1);
@@ -130,9 +130,9 @@ describe("Abilities - Mirror Armor", () => {
 
     game.move.use(MoveId.STICKY_WEB);
     await game.move.forceEnemyMove(MoveId.U_TURN);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -151,10 +151,10 @@ describe("Abilities - Mirror Armor", () => {
 
     game.move.use(MoveId.U_TURN);
     await game.move.forceEnemyMove(MoveId.U_TURN);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     game.doSelectPartyPokemon(1, "SwitchPhase");
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -176,7 +176,7 @@ describe("Abilities - Mirror Armor", () => {
     game.move.use(MoveId.GROWL, 0);
     game.move.use(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(player.getStatStage(Stat.ATK)).toBe(-1);
     expect(enemyPokemon[1].getStatStage(Stat.ATK)).toBe(-1);
@@ -191,7 +191,7 @@ describe("Abilities - Mirror Armor", () => {
     enemy.setStatStage(Stat.ATK, -6);
 
     game.move.use(MoveId.NOBLE_ROAR);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(player.getStatStage(Stat.ATK)).toBe(0);
     expect(player.getStatStage(Stat.SPATK)).toBe(-1);
@@ -207,9 +207,9 @@ describe("Abilities - Mirror Armor", () => {
 
     game.move.use(MoveId.FEATHER_DANCE);
     await game.move.forceEnemyMove(MoveId.SUBSTITUTE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(player.getStatStage(Stat.ATK)).toBe(0);
     expect(enemy.getStatStage(Stat.ATK)).toBe(0);
   });
@@ -223,7 +223,7 @@ describe("Abilities - Mirror Armor", () => {
     const enemy = game.field.getEnemyPokemon();
 
     game.move.use(MoveId.GROWL);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemy.getStatStage(Stat.ATK)).toBe(-1);
     expect(player.getStatStage(Stat.ATK)).toBe(0);
@@ -238,7 +238,7 @@ describe("Abilities - Mirror Armor", () => {
     const enemy = game.field.getEnemyPokemon();
 
     game.move.use(MoveId.GROWL);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(player.battleData.abilitiesApplied).toContain(Abilities.CLEAR_BODY);
     expect(player.getStatStage(Stat.ATK)).toBe(0);
