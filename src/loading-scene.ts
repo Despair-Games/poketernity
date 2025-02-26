@@ -197,13 +197,13 @@ export class LoadingScene extends SceneBase {
 
     // Load the banner for the current or next event with a banner, if any
     const eventBanner = timedEventManager.getActiveOrNextEventBanner();
-    if (eventBanner) {
-      if (eventBanner.availableLangs) {
-        const bannerLang = eventBanner.availableLangs.includes(lang) ? lang : "en";
-        this.loadImage(eventBanner.key, ImagesFolder.BANNERS, { languageKey: bannerLang });
-      } else {
-        this.loadImage(eventBanner.key, ImagesFolder.BANNERS);
-      }
+    if (eventBanner?.availableLangs) {
+      // Banner with different localized versions
+      const bannerLang = eventBanner.availableLangs.includes(lang) ? lang : "en";
+      this.loadImage(eventBanner.key, ImagesFolder.BANNERS, { languageKey: bannerLang });
+    } else if (eventBanner) {
+      // Non localized banner
+      this.loadImage(eventBanner.key, ImagesFolder.BANNERS);
     }
 
     // Load arena images

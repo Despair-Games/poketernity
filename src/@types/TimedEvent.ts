@@ -1,12 +1,19 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { EventModifierType } from "#enums/event-modifier-type";
+import type { SupportedLanguage } from "#app/@types/Language";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
 export interface EventBanner {
+  /** The base filename of the banner (without any language key or the extension). e.g. `welcome-event` */
   key: string;
+  /**
+   * The keys of all {@linkcode SupportedLanguage}s with their own banner for the event.
+   * The banner images should be of form `{bannerKey}_{languageKey}.png`, e.g. `welcome-event_zh-CW.png`.
+   * "en" should always be part of it. If the banner isn't localized at all, this should be undefined.
+   */
   availableLangs?: string[];
+  /** Whether to show the time before the end of the event below the banner. */
   showTimer?: boolean;
   xOffset?: number;
   yOffset?: number;
