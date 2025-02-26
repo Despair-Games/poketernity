@@ -41,7 +41,7 @@ describe("Moves - Rage Powder", () => {
     await game.forceEnemyMove(MoveId.RAGE_POWDER);
     await game.forceEnemyMove(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     // If redirection was bypassed, both enemies should be damaged
     expect(enemyPokemon[0].hp).toBeLessThan(enemyPokemon[0].getMaxHp());
@@ -64,7 +64,7 @@ describe("Moves - Rage Powder", () => {
     await game.forceEnemyMove(MoveId.RAGE_POWDER);
     await game.forceEnemyMove(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     // If redirection was bypassed, both enemies should be damaged
     expect(enemyPokemon[0].hp).toBeLessThan(enemyStartingHp[0]);

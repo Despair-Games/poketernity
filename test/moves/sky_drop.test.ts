@@ -43,19 +43,19 @@ describe("Moves - Sky Drop", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.SKY_DROP);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    await game.toEndOfTurn();
 
     [player, enemy].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());
     expect(player.getTag(BattlerTagType.CHARGING)).toBeDefined();
-    expect(player.getMoveQueue()[0].moveId).toBe(MoveId.SKY_DROP);
+    expect(player.getMoveQueue()[0].move.id).toBe(MoveId.SKY_DROP);
     expect(enemy.turnData.acted).toBeFalsy();
 
     await game.toNextTurn();
 
     // player's move selection should be skipped
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    await game.toEndOfTurn();
 
     [player, enemy].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeUndefined());
     expect(player.getTag(BattlerTagType.CHARGING)).toBeUndefined();
@@ -72,19 +72,19 @@ describe("Moves - Sky Drop", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.SKY_DROP);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    await game.toEndOfTurn();
 
     [player, enemy].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());
     expect(player.getTag(BattlerTagType.CHARGING)).toBeDefined();
-    expect(player.getMoveQueue()[0].moveId).toBe(MoveId.SKY_DROP);
+    expect(player.getMoveQueue()[0].move.id).toBe(MoveId.SKY_DROP);
     expect(enemy.turnData.acted).toBeFalsy();
 
     await game.toNextTurn();
 
     // player's move selection should be skipped
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    await game.toEndOfTurn();
 
     [player, enemy].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeUndefined());
     expect(player.getTag(BattlerTagType.CHARGING)).toBeUndefined();
@@ -107,9 +107,9 @@ describe("Moves - Sky Drop", () => {
     await game.forceEnemyMove(MoveId.SPLASH);
     await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     [playerPokemon, enemyPokemon].forEach((field) => expect(field[0].isFullHp()).toBeTruthy());
     expect(enemyPokemon[0].turnData.acted).toBeFalsy();
@@ -129,9 +129,9 @@ describe("Moves - Sky Drop", () => {
     await game.forceEnemyMove(MoveId.SPLASH);
     await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     [playerPokemon, enemyPokemon].forEach((field) => expect(field[0].isFullHp()).toBeFalsy());
     expect(enemyPokemon[0].turnData.acted).toBeFalsy();
@@ -151,9 +151,9 @@ describe("Moves - Sky Drop", () => {
     await game.forceEnemyMove(MoveId.SPLASH);
     await game.forceEnemyMove(MoveId.LOCK_ON, BattlerIndex.PLAYER);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2]);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     [playerPokemon, enemyPokemon].forEach((field) => expect(field[0].getTag(BattlerTagType.SKY_DROP)).toBeDefined());
     expect(enemyPokemon[0].turnData.acted).toBeFalsy();
@@ -166,7 +166,7 @@ describe("Moves - Sky Drop", () => {
     await game.forceEnemyMove(MoveId.SPLASH);
     await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(playerPokemon[0].isFullHp()).toBeFalsy();
@@ -178,9 +178,9 @@ describe("Moves - Sky Drop", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.SKY_DROP);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     game.scene.getField(true).forEach((p) => {
       expect(p.getTag(BattlerTagType.SKY_DROP)).toBeUndefined();
@@ -194,9 +194,9 @@ describe("Moves - Sky Drop", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.SKY_DROP);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     game.scene.getField(true).forEach((p) => {
       expect(p.getTag(BattlerTagType.SKY_DROP)).toBeUndefined();
@@ -214,7 +214,7 @@ describe("Moves - Sky Drop", () => {
     game.move.select(MoveId.SKY_DROP, 0, BattlerIndex.PLAYER_2);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
 
@@ -233,7 +233,7 @@ describe("Moves - Sky Drop", () => {
 
     game.move.select(MoveId.SKY_DROP);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEndPhase");
 
     expect(player.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
@@ -250,8 +250,8 @@ describe("Moves - Sky Drop", () => {
 
     game.move.select(MoveId.SKY_DROP);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    await game.toEndOfTurn();
 
     expect(player.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
     [player, enemy].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeUndefined());
@@ -269,8 +269,8 @@ describe("Moves - Sky Drop", () => {
     game.move.use(MoveId.TOXIC, 1, BattlerIndex.ENEMY);
     await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.SPLASH);
-    await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    await game.toEndOfTurn();
 
     expect(enemy1.isFainted()).toBeTruthy();
     expect(player1.getTag(BattlerTagType.SKY_DROP)).toBeUndefined();
@@ -287,8 +287,8 @@ describe("Moves - Sky Drop", () => {
 
     game.move.use(MoveId.TOXIC);
     await game.move.forceEnemyMove(MoveId.SKY_DROP);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.isFainted()).toBeTruthy();
     expect(playerPokemon.getTag(BattlerTagType.SKY_DROP)).toBeUndefined();
@@ -306,7 +306,7 @@ describe("Moves - Sky Drop", () => {
     game.move.select(MoveId.SKY_DROP, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.GRAVITY, 1);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     // player 1 uses Sky Drop
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -338,9 +338,9 @@ describe("Moves - Sky Drop", () => {
     await game.forceEnemyMove(MoveId.SPLASH);
     await game.forceEnemyMove(MoveId.FOLLOW_ME);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2]);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     [player1, enemy1].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());
     expect(enemy1.turnData.acted).toBeFalsy();
@@ -367,7 +367,7 @@ describe("Moves - Sky Drop", () => {
     await game.forceEnemyMove(MoveId.SKY_DROP, BattlerIndex.PLAYER_2);
     await game.forceEnemyMove(MoveId.SPLASH);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
 
@@ -397,7 +397,7 @@ describe("Moves - Sky Drop", () => {
     await game.move.forceEnemyMove(MoveId.SKY_DROP, BattlerIndex.PLAYER);
     await game.move.forceEnemyMove(MoveId.SKY_DROP, BattlerIndex.PLAYER);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     for (const enemyPokemon of game.scene.getEnemyField()) {
       expect(enemyPokemon.getTag(BattlerTagType.SKY_DROP)).toBeUndefined();
@@ -426,7 +426,7 @@ describe("Moves - Sky Drop", () => {
 
     game.move.use(MoveId.GRASSY_TERRAIN);
     await game.move.forceEnemyMove(MoveId.SKY_DROP);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
     for (const pokemon of game.scene.getField()) {
@@ -444,7 +444,7 @@ describe("Moves - Sky Drop", () => {
     game.move.use(MoveId.SKY_DROP);
     await game.move.forceEnemyMove(MoveId.THRASH);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     [player, enemy].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());

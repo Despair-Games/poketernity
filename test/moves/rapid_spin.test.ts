@@ -42,7 +42,7 @@ describe("Moves - Rapid Spin", () => {
     const player = game.scene.getPlayerPokemon()!;
 
     game.move.select(MoveId.RAPID_SPIN);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(player.getStatStage(Stat.SPD)).toBe(1);
   });
@@ -55,9 +55,9 @@ describe("Moves - Rapid Spin", () => {
     const player = game.scene.getPlayerPokemon()!;
 
     game.move.select(MoveId.RAPID_SPIN);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(player.getTag(BattlerTagType.INFESTATION)).toBeUndefined();
   });
@@ -76,7 +76,7 @@ describe("Moves - Rapid Spin", () => {
 
     game.move.select(MoveId.RAPID_SPIN);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(game.scene.arena.getTagOnSide(tagType, ArenaTagSide.PLAYER)).toBeUndefined();
     expect(game.scene.arena.getTagOnSide(tagType, ArenaTagSide.ENEMY)).toBeDefined();

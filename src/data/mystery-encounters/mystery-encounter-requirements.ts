@@ -9,7 +9,7 @@ import { FormChangeItem } from "#enums/form-change-item";
 import { StatusEffect } from "#enums/status-effect";
 import { ElementalType } from "#enums/elemental-type";
 import { WeatherType } from "#enums/weather-type";
-import type { PlayerPokemon } from "#app/field/pokemon";
+import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import { isNullOrUndefined } from "#app/utils";
 import type { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
@@ -745,13 +745,9 @@ export class StatusEffectRequirement extends EncounterPokemonRequirement {
         return this.requiredStatusEffect.some((statusEffect) => {
           if (statusEffect === StatusEffect.NONE) {
             // StatusEffect.NONE also checks for null or undefined status
-            return (
-              isNullOrUndefined(pokemon.status)
-              || isNullOrUndefined(pokemon.status.effect)
-              || pokemon.status.effect === statusEffect
-            );
+            return !pokemon.hasNonVolatileStatusEffect();
           } else {
-            return pokemon.status?.effect === statusEffect;
+            return pokemon.hasStatusEffect(statusEffect);
           }
         });
       });
@@ -761,13 +757,9 @@ export class StatusEffectRequirement extends EncounterPokemonRequirement {
         return !this.requiredStatusEffect.some((statusEffect) => {
           if (statusEffect === StatusEffect.NONE) {
             // StatusEffect.NONE also checks for null or undefined status
-            return (
-              isNullOrUndefined(pokemon.status)
-              || isNullOrUndefined(pokemon.status.effect)
-              || pokemon.status.effect === statusEffect
-            );
+            return !pokemon.hasNonVolatileStatusEffect();
           } else {
-            return pokemon.status?.effect === statusEffect;
+            return pokemon.hasStatusEffect(statusEffect);
           }
         });
       });
@@ -777,11 +769,9 @@ export class StatusEffectRequirement extends EncounterPokemonRequirement {
   override getDialogueToken(pokemon?: PlayerPokemon): [string, string] {
     const reqStatus = this.requiredStatusEffect.filter((a) => {
       if (a === StatusEffect.NONE) {
-        return (
-          isNullOrUndefined(pokemon?.status) || isNullOrUndefined(pokemon.status.effect) || pokemon.status.effect === a
-        );
+        return pokemon && !pokemon.hasNonVolatileStatusEffect();
       }
-      return pokemon!.status?.effect === a;
+      return pokemon && pokemon.hasStatusEffect(a);
     });
     if (reqStatus.length > 0) {
       return ["status", StatusEffect[reqStatus[0]]];
@@ -884,22 +874,17 @@ export class CanEvolveWithItemRequirement extends EncounterPokemonRequirement {
     return this.queryParty(partyPokemon).length >= this.minNumberOfPokemon;
   }
 
-  filterByEvo(pokemon, evolutionItem) {
+  // TODO: clean up MEs...
+  filterByEvo(pokemon: Pokemon | undefined, evolutionItem) {
+    if (!pokemon) {
+      return false;
+    }
     if (
       pokemonEvolutions.hasOwnProperty(pokemon.species.speciesId)
       && pokemonEvolutions[pokemon.species.speciesId].filter(
         (e) => e.item === evolutionItem && (!e.condition || e.condition.predicate(pokemon)),
       ).length
       && pokemon.getFormKey() !== SpeciesFormKey.GIGANTAMAX
-    ) {
-      return true;
-    } else if (
-      pokemon.isFusion()
-      && pokemonEvolutions.hasOwnProperty(pokemon.fusionSpecies.speciesId)
-      && pokemonEvolutions[pokemon.fusionSpecies.speciesId].filter(
-        (e) => e.item === evolutionItem && (!e.condition || e.condition.predicate(pokemon)),
-      ).length
-      && pokemon.getFusionFormKey() !== SpeciesFormKey.GIGANTAMAX
     ) {
       return true;
     }

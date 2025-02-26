@@ -534,16 +534,11 @@ export default class RunInfoUiHandler extends UiHandler {
       const enemy = enemyData.toPokemon();
       const enemyIcon = globalScene.addPokemonIcon(enemy, 0, 0, 0, 0);
       // Applying Terastallizing Type tint to Pokemon icon
-      // If the Pokemon is a fusion, it has two sprites and so, the tint has to be applied to each icon separately
       const enemySprite1 = enemyIcon.list[0] as Phaser.GameObjects.Sprite;
-      const enemySprite2 = enemyIcon.list.length > 1 ? (enemyIcon.list[1] as Phaser.GameObjects.Sprite) : undefined;
       if (teraPokemon[enemyData.id]) {
         const teraTint = getTypeRgb(teraPokemon[enemyData.id]);
         const teraColor = new Phaser.Display.Color(teraTint[0], teraTint[1], teraTint[2]);
         enemySprite1.setTint(teraColor.color);
-        if (enemySprite2) {
-          enemySprite2.setTint(teraColor.color);
-        }
       }
       enemyIcon.setPosition(39 * (e % 3) + 5, 35 * pokemonRowHeight);
       const enemyLevel = addTextObject(
@@ -582,9 +577,6 @@ export default class RunInfoUiHandler extends UiHandler {
       case GameModes.DAILY:
         modeText.appendText(`${i18next.t("gameMode:dailyRun")}`, false);
         break;
-      case GameModes.SPLICED_ENDLESS:
-        modeText.appendText(`${i18next.t("gameMode:endlessSpliced")}`, false);
-        break;
       case GameModes.CHALLENGE:
         modeText.appendText(`${i18next.t("gameMode:challenge")}`, false);
         modeText.appendText(`${i18next.t("runHistory:challengeRules")}: `);
@@ -610,7 +602,7 @@ export default class RunInfoUiHandler extends UiHandler {
 
     // If the player achieves a personal best in Endless, the mode text will be tinted similarly to SSS luck to celebrate their achievement.
     if (
-      (this.runInfo.gameMode === GameModes.ENDLESS || this.runInfo.gameMode === GameModes.SPLICED_ENDLESS)
+      this.runInfo.gameMode === GameModes.ENDLESS
       && this.runInfo.waveIndex === globalScene.gameData.gameStats.highestEndlessWave
     ) {
       modeText.appendText(` [${i18next.t("runHistory:personalBest")}]`);
@@ -724,7 +716,7 @@ export default class RunInfoUiHandler extends UiHandler {
 
   /**
    * Parses and displays the run's player party.
-   * Default Information: Icon, Level, Nature, Ability, Passive, Shiny Status, Fusion Status, Stats, and MoveId.
+   * Default Information: Icon, Level, Nature, Ability, Passive, Shiny Status, Stats, and MoveId.
    * B-Side Information: Icon + Held Items (Can be displayed to the user through pressing the abilityButton)
    */
   private parsePartyInfo(): void {
@@ -825,36 +817,16 @@ export default class RunInfoUiHandler extends UiHandler {
       pokeStatText2.appendText(speed);
       pokeStatTextContainer.add(pokeStatText2);
 
-      // Shiny + Fusion Status
+      // Shiny
       const marksContainer = globalScene.add.container(0, 0);
-      if (pokemon.fusionSpecies) {
-        const splicedIcon = globalScene.add.image(0, 0, "icon_spliced");
-        splicedIcon.setScale(0.35);
-        splicedIcon.setOrigin(0, 0);
-        pokemon.isShiny()
-          ? splicedIcon.setPositionRelative(pokeInfoTextContainer, 35, 0)
-          : splicedIcon.setPositionRelative(pokeInfoTextContainer, 28, 0);
-        marksContainer.add(splicedIcon);
-        this.getUi().bringToTop(splicedIcon);
-      }
       if (pokemon.isShiny()) {
-        const doubleShiny = pokemon.isFusion() && pokemon.shiny && pokemon.fusionShiny;
-        const shinyStar = globalScene.add.image(0, 0, `shiny_star_small${doubleShiny ? "_1" : ""}`);
+        const shinyStar = globalScene.add.image(0, 0, `shiny_star_small`);
         shinyStar.setOrigin(0, 0);
         shinyStar.setScale(0.65);
         shinyStar.setPositionRelative(pokeInfoTextContainer, 28, 0);
-        shinyStar.setTint(getVariantTint(!doubleShiny ? pokemon.getVariant() : pokemon.variant));
+        shinyStar.setTint(getVariantTint(pokemon.getVariant()));
         marksContainer.add(shinyStar);
         this.getUi().bringToTop(shinyStar);
-        if (doubleShiny) {
-          const fusionShinyStar = globalScene.add.image(0, 0, "shiny_star_small_2");
-          fusionShinyStar.setOrigin(0, 0);
-          fusionShinyStar.setScale(0.5);
-          fusionShinyStar.setPosition(shinyStar.x + 1, shinyStar.y + 1);
-          fusionShinyStar.setTint(getVariantTint(pokemon.fusionVariant));
-          marksContainer.add(fusionShinyStar);
-          this.getUi().bringToTop(fusionShinyStar);
-        }
       }
 
       // Pokemon Moveset
@@ -888,9 +860,8 @@ export default class RunInfoUiHandler extends UiHandler {
       }
 
       // Pokemon Held Items - not displayed by default
-      // Endless/Endless Spliced have a different scale because Pokemon tend to accumulate more items in these runs.
-      const heldItemsScale =
-        this.runInfo.gameMode === GameModes.SPLICED_ENDLESS || this.runInfo.gameMode === GameModes.ENDLESS ? 0.25 : 0.5;
+      // Endless has a different scale because Pokemon tend to accumulate more items in these runs.
+      const heldItemsScale = this.runInfo.gameMode === GameModes.ENDLESS ? 0.25 : 0.5;
       const heldItemsContainer = globalScene.add.container(-82, 2);
       const heldItemsList: Modifier.PokemonHeldItemModifier[] = [];
       if (this.runInfo.modifiers.length) {
@@ -996,8 +967,6 @@ export default class RunInfoUiHandler extends UiHandler {
     const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
     const isFemale = genderIndex === PlayerGender.FEMALE;
     const genderStr = PlayerGender[genderIndex].toLowerCase();
-    // Issue Note (08-05-2024): It seems as if fused pokemon do not appear with the averaged color b/c pokemonData's loadAsset requires there to be some active battle?
-    // As an alternative, the icons of the second/bottom fused Pokemon have been placed next to their fellow fused Pokemon in Hall of Fame
     this.hallofFameContainer = globalScene.add.container(0, 0);
     const overlayColor = isFemale ? "red" : "blue";
     const hallofFameBg = globalScene.add.image(-1, -1, "hall_of_fame_" + overlayColor);
@@ -1033,13 +1002,6 @@ export default class RunInfoUiHandler extends UiHandler {
         pokemonSprite.setPipelineData("spriteKey", species.getSpriteKey(female, formIndex, shiny, variant));
         pokemonSprite.setVisible(true);
       });
-      if (pkmn.isFusion()) {
-        const fusionIcon = globalScene.add.sprite(80 + 40 * i, 50 + row * 80, pkmn.getFusionIconAtlasKey());
-        fusionIcon.setName("sprite-fusion-icon");
-        fusionIcon.setOrigin(0.5, 0);
-        fusionIcon.setFrame(pkmn.getFusionIconId(true));
-        this.hallofFameContainer.add(fusionIcon);
-      }
       pkmn.destroy();
     });
     this.hallofFameContainer.setVisible(false);

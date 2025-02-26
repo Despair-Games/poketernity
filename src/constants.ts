@@ -119,3 +119,12 @@ export const IV_MAX = 31;
  * Tweak this value if necessary for balancing purposes
  */
 export const DYNAMAX_DAMAGE_TAKEN_FACTOR = 2 / 3;
+
+/** Custom implementation. Mainline is 0.6. */
+export const FOG_ACCURACY_MULTIPLIER = 0.9;
+
+/** The damage multiplier applied by Reflect, Light Screen, and Aurora Veil in single battles.*/
+export const SCREEN_SINGLES_DMG_FACTOR = 0.5;
+
+/** The damage multiplier applied by Reflect, Light Screen, and Aurora Veil in double battles.*/
+export const SCREEN_DOUBLES_DMG_FACTOR = 2732 / 4096;

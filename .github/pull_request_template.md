@@ -66,7 +66,8 @@ Do the reviewers need to do something special in order to test your changes?
 
 ## Checklist
 
-- [ ] **I'm using `beta` as my base branch**
+- [ ] ⚠️ If this is a PR for `main` (such as a hotfix), has the game version been updated (`npm run update-version:patch` / `npm run update version:minor`?
+- [ ] Otherwise: **I'm using `beta` as my base branch**
 - [ ] There is no overlap with another PR?
 - [ ] The PR is self-contained and cannot be split into smaller PRs?
 - [ ] Have I provided a clear explanation of the changes?

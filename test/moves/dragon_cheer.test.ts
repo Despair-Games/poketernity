@@ -40,10 +40,10 @@ describe("Moves - Dragon Cheer", () => {
     game.move.select(MoveId.DRAGON_CHEER, 0);
     game.move.select(MoveId.TACKLE, 1, BattlerIndex.ENEMY);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     // After Tackle
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getCritStage).toHaveReturnedWith(1); // getCritStage is called on defender
   });
 
@@ -57,10 +57,10 @@ describe("Moves - Dragon Cheer", () => {
     game.move.select(MoveId.DRAGON_CHEER, 0);
     game.move.select(MoveId.TACKLE, 1, BattlerIndex.ENEMY);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     // After Tackle
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getCritStage).toHaveReturnedWith(2); // getCritStage is called on defender
   });
 
@@ -75,10 +75,10 @@ describe("Moves - Dragon Cheer", () => {
     game.move.select(MoveId.DRAGON_CHEER, 0);
     game.move.select(MoveId.TACKLE, 1, BattlerIndex.ENEMY);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     // After Tackle
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemy.getCritStage).toHaveReturnedWith(1); // getCritStage is called on defender
 
     await game.toNextTurn();
@@ -90,7 +90,7 @@ describe("Moves - Dragon Cheer", () => {
     game.move.select(MoveId.SPLASH, 0);
     game.move.select(MoveId.TACKLE, 1, BattlerIndex.ENEMY);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemy.getCritStage).toHaveReturnedWith(1); // getCritStage is called on defender

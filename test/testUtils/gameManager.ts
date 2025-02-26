@@ -3,7 +3,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import BattleScene from "#app/battle-scene";
 import { getMoveTargets } from "#app/data/move";
 import { settings } from "#app/system/settings/settings-manager";
-import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
+import type { EnemyPokemon, PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import Trainer from "#app/field/trainer";
 import { getGameMode } from "#app/game-mode";
 import { GameModes } from "#enums/game-modes";
@@ -62,6 +62,9 @@ import { expect, vi } from "vitest";
 import { globalScene } from "#app/global-scene";
 import type StarterSelectUiHandler from "#app/ui/starter-select-ui-handler";
 import { MockFetch } from "#test/testUtils/mocks/mockFetch";
+import type { TurnCommand } from "#app/turn-command-manager";
+import type { Abilities } from "#enums/abilities";
+import { allAbilities, allMoves } from "#app/data/data-lists";
 
 /**
  * Class to manage the game state and transitions between phases.
@@ -395,11 +398,12 @@ export class GameManager {
     const legalTargets = getMoveTargets(enemy, moveId);
 
     vi.spyOn(enemy, "getNextMove").mockReturnValueOnce({
-      moveId: moveId,
+      move: allMoves[moveId],
       targets:
         target !== undefined && !legalTargets.multiple && legalTargets.targets.includes(target)
           ? [target]
           : enemy.getNextTargets(moveId),
+      type: enemy.getMoveType(allMoves[moveId]),
     });
 
     /**
@@ -425,6 +429,11 @@ export class GameManager {
   async toNextTurn() {
     await this.phaseInterceptor.to(TurnInitPhase);
     await this.phaseInterceptor.to(CommandPhase);
+  }
+
+  /** Transition to the {@linkcode TurnEndPhase | end of the current turn}. */
+  async toEndOfTurn() {
+    await this.phaseInterceptor.to(TurnEndPhase);
   }
 
   /** Emulate selecting a modifier (item) and transition to the next upcoming {@linkcode CommandPhase} */
@@ -556,18 +565,28 @@ export class GameManager {
   }
 
   /**
-   * Intercepts `TurnStartPhase` and mocks the getSpeedOrder's return value {@linkcode TurnStartPhase.getSpeedOrder}
-   * Used to modify the turn order.
+   * Mocks the game's {@linkcode TurnCommandManager} to set a certain turn order for future turns.
    * @param order The turn order to set
    * @example
    * ```ts
-   * await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
+   * game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
    * ```
    */
-  async setTurnOrder(order: BattlerIndex[]): Promise<void> {
-    await this.phaseInterceptor.to(TurnStartPhase, false);
+  setTurnOrder(order: BattlerIndex[]): void {
+    expect(order.length).toBe(this.scene.getField(true).length);
+    const { turnManager } = this.scene.currentBattle;
 
-    vi.spyOn(this.scene.getCurrentPhase() as TurnStartPhase, "getSpeedOrder").mockReturnValue(order);
+    vi.spyOn(turnManager, "setTurnOrder").mockImplementation(() => {
+      const newTurnOrder: TurnCommand[] = [];
+      order.forEach((bi) => {
+        const turnCommand = turnManager.findCommand((tc) => tc.pokemon.getBattlerIndex() === bi);
+        if (turnCommand) {
+          newTurnOrder.push(turnCommand);
+        }
+      });
+
+      turnManager.turnCommands = newTurnOrder;
+    });
   }
 
   /**
@@ -577,5 +596,23 @@ export class GameManager {
     this.scene.clearEnemyHeldItemModifiers();
     this.scene.clearEnemyModifiers();
     console.log("Enemy held items removed");
+  }
+
+  /**
+   * Forces every player and enemy Pokemon of a certain species to have a certain ability.
+   *
+   * This function has higher priority over {@linkcode OverridesHelper.ability | override.ability}
+   * and {@linkcode OverridesHelper.enemyAbility | override.enemyAbility}.
+   * Also, unlike the overrides, this function can only be called after `startBattle()` has finished.
+   *
+   * @param speciesId The ID of the species that is to receive the ability.
+   * @param abilityId The ID of the ability to give.
+   */
+  forceSpeciesSpecificAbility(speciesId: Species, abilityId: Abilities): void {
+    for (const p of (this.scene.getPlayerParty() as Pokemon[]).concat(this.scene.getEnemyParty())) {
+      if (p.species.speciesId === speciesId) {
+        vi.spyOn(p, "getAbility").mockReturnValue(allAbilities[abilityId]);
+      }
+    }
   }
 }

@@ -178,11 +178,6 @@ const displayStats: DisplayStats = {
     sourceFunc: (gameData) => gameData.gameStats.shinyPokemonHatched.toString(),
     hidden: true,
   },
-  pokemonFused: {
-    label_key: "pokemonFused",
-    sourceFunc: (gameData) => gameData.gameStats.pokemonFused.toString(),
-    hidden: true,
-  },
   trainersDefeated: {
     label_key: "trainersDefeated",
     sourceFunc: (gameData) => gameData.gameStats.trainersDefeated.toString(),

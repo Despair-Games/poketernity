@@ -43,10 +43,10 @@ describe("Moves - Burning Jealousy", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.BURNING_JEALOUSY);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    await game.toEndOfTurn();
 
-    expect(enemy.status?.effect).toBe(StatusEffect.BURN);
+    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.BURN);
   });
 
   it("should still burn the opponent if their stat stages were both raised and lowered in the same turn", async () => {
@@ -57,10 +57,10 @@ describe("Moves - Burning Jealousy", () => {
 
     game.move.select(MoveId.BURNING_JEALOUSY);
     game.move.select(MoveId.GROWL, 1);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
+    await game.toEndOfTurn();
 
-    expect(enemy.status?.effect).toBe(StatusEffect.BURN);
+    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.BURN);
   });
 
   it("should ignore stat stages raised by IMPOSTER", async () => {
@@ -70,9 +70,9 @@ describe("Moves - Burning Jealousy", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.BURNING_JEALOUSY);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
-    expect(enemy.status?.effect).toBeUndefined();
+    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
 
   // TODO: Make this test if WP is implemented
@@ -86,10 +86,10 @@ describe("Moves - Burning Jealousy", () => {
     await game.classicMode.startBattle();
 
     game.move.select(MoveId.BURNING_JEALOUSY);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(allMoves[MoveId.BURNING_JEALOUSY].calculateBattlePower).toHaveReturnedWith(
-      (allMoves[MoveId.BURNING_JEALOUSY].power * 5461) / 4096,
+      allMoves[MoveId.BURNING_JEALOUSY].power * 1.3,
     );
   });
 });

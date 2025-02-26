@@ -7,7 +7,7 @@ import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
 import { BypassRedirectAttr } from "#app/data/move-attrs/bypass-redirect-attr";
 import { BypassSleepAttr } from "#app/data/move-attrs/bypass-sleep-attr";
-import { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
+import { CopycatAttr } from "#app/data/move-attrs/copycat-attr";
 import { HealStatusEffectAttr } from "#app/data/move-attrs/heal-status-effect-attr";
 import { PreMoveMessageAttr } from "#app/data/move-attrs/pre-move-message-attr";
 import { SpeciesFormChangePreMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-pre-move-trigger";
@@ -204,7 +204,7 @@ export class MovePhase extends BattlePhase {
 
     if (
       (targets.length === 0 && !isFieldTargeted(this.targets))
-      || (moveQueue.length && moveQueue[0].moveId === MoveId.NONE)
+      || (moveQueue.length && moveQueue[0].move.id === MoveId.NONE)
     ) {
       this.showMoveText();
       this.showFailedText();
@@ -225,12 +225,16 @@ export class MovePhase extends BattlePhase {
    * Handles {@link StatusEffect.SLEEP Sleep}/{@link StatusEffect.PARALYSIS Paralysis}/{@link StatusEffect.FREEZE Freeze} rolls and side effects.
    */
   protected resolvePreMoveStatusEffects(): void {
-    if (!this.followUp && this.pokemon.status && !this.pokemon.status.isPostTurn()) {
-      this.pokemon.status.incrementTurn();
+    if (
+      !this.followUp
+      && this.pokemon.hasStatusEffect([StatusEffect.SLEEP, StatusEffect.PARALYSIS, StatusEffect.FREEZE], false, true)
+    ) {
+      this.pokemon.status!.incrementTurn();
       let activated = false;
       let healed = false;
 
-      switch (this.pokemon.status.effect) {
+      const statusEffect = this.pokemon.getStatusEffect(true);
+      switch (statusEffect) {
         case StatusEffect.PARALYSIS:
           activated =
             (!this.pokemon.randSeedInt(4) || Overrides.STATUS_ACTIVATION_OVERRIDE === true)
@@ -238,21 +242,15 @@ export class MovePhase extends BattlePhase {
           break;
         case StatusEffect.SLEEP:
           applyMoveAttrs(BypassSleepAttr, this.pokemon, null, this.move.getMove());
-          const turnsRemaining = new NumberHolder(this.pokemon.status.sleepTurnsRemaining ?? 0);
-          applyAbAttrs(
-            AbAttrFlag.REDUCE_SLEEP_DURATION,
-            this.pokemon,
-            false,
-            this.pokemon.status.effect,
-            turnsRemaining,
-          );
+          const turnsRemaining = new NumberHolder(this.pokemon.status!.sleepTurnsRemaining ?? 0);
+          applyAbAttrs(AbAttrFlag.REDUCE_SLEEP_DURATION, this.pokemon, false, statusEffect, turnsRemaining);
           if (Overrides.STATUS_ACTIVATION_OVERRIDE === true) {
             turnsRemaining.value = Math.max(turnsRemaining.value, 1);
           } else if (Overrides.STATUS_ACTIVATION_OVERRIDE === false) {
             turnsRemaining.value = 0;
           }
-          this.pokemon.status.sleepTurnsRemaining = turnsRemaining.value;
-          healed = this.pokemon.status.sleepTurnsRemaining <= 0;
+          this.pokemon.status!.sleepTurnsRemaining = turnsRemaining.value;
+          healed = this.pokemon.status!.sleepTurnsRemaining <= 0;
           activated = !healed && !this.pokemon.getTag(BattlerTagType.BYPASS_SLEEP);
           break;
         case StatusEffect.FREEZE:
@@ -272,20 +270,12 @@ export class MovePhase extends BattlePhase {
 
       if (activated) {
         this.cancel();
-        globalScene.queueMessage(
-          getStatusEffectActivationText(this.pokemon.status.effect, getPokemonNameWithAffix(this.pokemon)),
-        );
+        globalScene.queueMessage(getStatusEffectActivationText(statusEffect, getPokemonNameWithAffix(this.pokemon)));
         globalScene.unshiftPhase(
-          new CommonAnimPhase(
-            this.pokemon.getBattlerIndex(),
-            undefined,
-            CommonAnim.POISON + (this.pokemon.status.effect - 1),
-          ),
+          new CommonAnimPhase(this.pokemon.getBattlerIndex(), undefined, CommonAnim.POISON + (statusEffect - 1)),
         );
       } else if (healed) {
-        globalScene.queueMessage(
-          getStatusEffectHealText(this.pokemon.status.effect, getPokemonNameWithAffix(this.pokemon)),
-        );
+        globalScene.queueMessage(getStatusEffectHealText(statusEffect, getPokemonNameWithAffix(this.pokemon)));
         this.pokemon.resetStatus();
         this.pokemon.updateInfo();
       }
@@ -331,11 +321,6 @@ export class MovePhase extends BattlePhase {
       globalScene.eventTarget.dispatchEvent(new MoveUsedEvent(this.pokemon?.id, this.move.getMove(), this.move.ppUsed));
     }
 
-    // Update the battle's "last move" pointer, unless we're currently mimicking a move.
-    if (!allMoves[this.move.moveId].hasAttr(CopyMoveAttr)) {
-      globalScene.currentBattle.lastMove = this.move.getMove();
-    }
-
     /**
      * Determine if the move is successful (meaning that its damage/effects can be attempted)
      * by checking that all of the following are true:
@@ -358,6 +343,8 @@ export class MovePhase extends BattlePhase {
     const failedDueToTerrain: boolean = globalScene.arena.isMoveTerrainCancelled(this.pokemon, this.targets, move);
 
     const success = passesConditions && !failedDueToWeather && !failedDueToTerrain;
+
+    this.updateLastMoveId(success);
 
     /**
      * If the move has not failed, trigger ability-based user type changes and then execute it.
@@ -420,6 +407,8 @@ export class MovePhase extends BattlePhase {
     const targets = this.getActiveTargetPokemon();
 
     if (move.applyConditions(this.pokemon, targets[0], move)) {
+      this.updateLastMoveId(true);
+
       // Protean and Libero apply on the charging turn of charge moves
       applyAbAttrs(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
 
@@ -444,11 +433,24 @@ export class MovePhase extends BattlePhase {
   }
 
   /**
-   * Queues a {@linkcode MoveEndPhase} if the move wasn't a {@linkcode followUp} and {@linkcode canMove()} returns `true`,
+   * Update the battle's "last move" pointer, unless we're currently mimicking a move.
+   * The last move used is unaffected by moves that fail.
+   * @param success - Whether the move was successful or not.
+   */
+  protected updateLastMoveId(success: boolean): void {
+    if (!allMoves[this.move.moveId].hasAttr(CopycatAttr)) {
+      if (success) {
+        globalScene.currentBattle.lastMove = this.move.getMove();
+      }
+    }
+  }
+
+  /**
+   * Queues a {@linkcode MoveEndPhase} if the move wasn't a {@linkcode followUp},
    * then ends the phase.
    */
   public override end(): void {
-    if (!this.followUp && this.canMove()) {
+    if (!this.followUp) {
       globalScene.unshiftPhase(new MoveEndPhase(this.pokemon.getBattlerIndex()));
     }
 
@@ -585,6 +587,7 @@ export class MovePhase extends BattlePhase {
         move: SelfStatusMove.none(),
         result: MoveResult.FAIL,
         type: ElementalType.UNKNOWN,
+        targets: this.targets,
       });
 
       this.pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);

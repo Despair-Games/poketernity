@@ -59,7 +59,7 @@ describe("Moves - Spotlight", () => {
     await game.forceEnemyMove(MoveId.SPLASH);
     await game.forceEnemyMove(MoveId.FOLLOW_ME);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon[0].hp).toBeLessThan(enemyPokemon[0].getMaxHp());
     expect(enemyPokemon[1].hp).toBe(enemyPokemon[1].getMaxHp());

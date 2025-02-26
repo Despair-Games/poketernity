@@ -1,12 +1,11 @@
-import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
-import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
-import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { Abilities } from "#enums/abilities";
+import { BattlerTagType } from "#enums/battler-tag-type";
 
 describe("Moves - Dynamax Cannon", () => {
   let phaserGame: Phaser.Game;
@@ -26,130 +25,102 @@ describe("Moves - Dynamax Cannon", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-
-    game.override.moveset([dynamaxCannon.id]);
-    game.override.startingLevel(200);
-
-    // Note that, for Waves 1-10, the level cap is 10
-    game.override.startingWave(1);
-    game.override.battleType("single");
-    game.override.disableCrits();
-
-    game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyMoveset([MoveId.SPLASH, MoveId.SPLASH, MoveId.SPLASH, MoveId.SPLASH]);
-
-    vi.spyOn(dynamaxCannon, "calculateBattlePower");
+    game.override
+      .battleType("single")
+      .enemySpecies(Species.SNORLAX)
+      .enemyForms({ [Species.SNORLAX]: 1 })
+      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyMoveset(MoveId.SPLASH)
+      .startingLevel(100)
+      .enemyLevel(100)
+      .disableCrits()
+      .moveset([MoveId.DYNAMAX_CANNON, MoveId.EARTHQUAKE]);
   });
 
-  it("should return 100 power against an enemy below level cap", async () => {
-    game.override.enemyLevel(1);
-    await game.startBattle([Species.ETERNATUS]);
+  it("should deal double damage against a dynamax'd Pokemon", async () => {
+    await game.classicMode.startBattle([Species.CHARIZARD]);
+
+    const playerPokemon = game.scene.getPlayerPokemon()!;
+    vi.spyOn(playerPokemon, "getEffectiveStat").mockReturnValue(80);
+
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
+    vi.spyOn(enemyPokemon, "getEffectiveStat").mockReturnValue(90);
+
+    game.move.select(MoveId.EARTHQUAKE);
+    await game.toNextTurn();
+
+    // expected base damage = [(2*level/5 + 2) * power * playerATK / enemyDEF / 50] + 2
+    //                      = 76.666...
+    // Dynamax damage reduction of 1/3 -> 51.11
+    expect(enemyPokemon.getMaxHp() - enemyPokemon.hp).toBeCloseTo(50);
+
+    // Heal the opponent back to full
+    enemyPokemon.hp = enemyPokemon.getMaxHp();
+    game.move.select(MoveId.DYNAMAX_CANNON);
+    await game.toNextTurn();
+
+    expect(enemyPokemon.getMaxHp() - enemyPokemon.hp).toBeCloseTo(102);
+  });
+
+  it("should not deal double damage against non max Pokemon", async () => {
+    game.override.enemySpecies(Species.SNORLAX).enemyForms({ [Species.SNORLAX]: 0 });
+    await game.classicMode.startBattle([Species.CHARIZARD]);
+
+    const playerPokemon = game.scene.getPlayerPokemon()!;
+    vi.spyOn(playerPokemon, "getEffectiveStat").mockReturnValue(80);
+
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
+    vi.spyOn(enemyPokemon, "getEffectiveStat").mockReturnValue(90);
+
+    game.move.select(MoveId.EARTHQUAKE);
+    await game.toNextTurn();
+
+    // expected base damage = [(2*level/5 + 2) * power * playerATK / enemyDEF / 50] + 2
+    //                      = 76.666...
+    expect(enemyPokemon.getMaxHp() - enemyPokemon.hp).toBeCloseTo(76);
+
+    // Heal the opponent back to full
+    enemyPokemon.hp = enemyPokemon.getMaxHp();
+    game.move.select(MoveId.DYNAMAX_CANNON);
+    await game.toNextTurn();
+
+    expect(enemyPokemon.getMaxHp() - enemyPokemon.hp).toBeCloseTo(76);
+  });
+
+  it("should not deal double damage against Eternamax", async () => {
+    game.override.enemySpecies(Species.ETERNATUS).enemyForms({ [Species.ETERNATUS]: 1 });
+    await game.classicMode.startBattle([Species.CHARIZARD]);
+
+    const playerPokemon = game.scene.getPlayerPokemon()!;
+    vi.spyOn(playerPokemon, "getEffectiveStat").mockReturnValue(80);
+
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
+    vi.spyOn(enemyPokemon, "getEffectiveStat").mockReturnValue(90);
+
+    game.move.select(MoveId.EARTHQUAKE);
+    await game.toNextTurn();
+
+    // expected base damage = [(2*level/5 + 2) * power * playerATK / enemyDEF / 50] + 2
+    //                      = 76.666...
+    // Super effective *2
+    expect(enemyPokemon.getMaxHp() - enemyPokemon.hp).toBeCloseTo(153);
+
+    // Heal the opponent back to full
+    enemyPokemon.hp = enemyPokemon.getMaxHp();
+    game.move.select(MoveId.DYNAMAX_CANNON);
+    await game.toNextTurn();
+
+    expect(enemyPokemon.getMaxHp() - enemyPokemon.hp).toBeCloseTo(153);
+  });
+
+  it("Dynamax cannon cannot be encored", async () => {
+    game.override.enemySpecies(Species.SHUCKLE).enemyAbility(Abilities.STURDY).enemyMoveset(MoveId.ENCORE);
+    await game.classicMode.startBattle([Species.ETERNATUS]);
 
     game.move.select(dynamaxCannon.id);
+    await game.toNextTurn();
 
-    await game.phaseInterceptor.to(MoveEffectPhase, false);
-    expect((game.scene.getCurrentPhase() as MoveEffectPhase).move.moveId).toBe(dynamaxCannon.id);
-    await game.phaseInterceptor.to(DamageAnimPhase, false);
-    expect(dynamaxCannon.calculateBattlePower).toHaveLastReturnedWith(100);
-  }, 20000);
-
-  it("should return 100 power against an enemy at level cap", async () => {
-    game.override.enemyLevel(10);
-    await game.startBattle([Species.ETERNATUS]);
-
-    game.move.select(dynamaxCannon.id);
-
-    await game.phaseInterceptor.to(MoveEffectPhase, false);
-    expect((game.scene.getCurrentPhase() as MoveEffectPhase).move.moveId).toBe(dynamaxCannon.id);
-    await game.phaseInterceptor.to(DamageAnimPhase, false);
-    expect(dynamaxCannon.calculateBattlePower).toHaveLastReturnedWith(100);
-  }, 20000);
-
-  it("should return 120 power against an enemy 1% above level cap", async () => {
-    game.override.enemyLevel(101);
-    await game.startBattle([Species.ETERNATUS]);
-
-    game.move.select(dynamaxCannon.id);
-
-    await game.phaseInterceptor.to(MoveEffectPhase, false);
-    const phase = game.scene.getCurrentPhase() as MoveEffectPhase;
-    expect(phase.move.moveId).toBe(dynamaxCannon.id);
-    // Force level cap to be 100
-    vi.spyOn(game.scene, "getMaxExpLevel").mockReturnValue(100);
-    await game.phaseInterceptor.to(DamageAnimPhase, false);
-    expect(dynamaxCannon.calculateBattlePower).toHaveLastReturnedWith(120);
-  }, 20000);
-
-  it("should return 140 power against an enemy 2% above level capp", async () => {
-    game.override.enemyLevel(102);
-    await game.startBattle([Species.ETERNATUS]);
-
-    game.move.select(dynamaxCannon.id);
-
-    await game.phaseInterceptor.to(MoveEffectPhase, false);
-    const phase = game.scene.getCurrentPhase() as MoveEffectPhase;
-    expect(phase.move.moveId).toBe(dynamaxCannon.id);
-    // Force level cap to be 100
-    vi.spyOn(game.scene, "getMaxExpLevel").mockReturnValue(100);
-    await game.phaseInterceptor.to(DamageAnimPhase, false);
-    expect(dynamaxCannon.calculateBattlePower).toHaveLastReturnedWith(140);
-  }, 20000);
-
-  it("should return 160 power against an enemy 3% above level cap", async () => {
-    game.override.enemyLevel(103);
-    await game.startBattle([Species.ETERNATUS]);
-
-    game.move.select(dynamaxCannon.id);
-
-    await game.phaseInterceptor.to(MoveEffectPhase, false);
-    const phase = game.scene.getCurrentPhase() as MoveEffectPhase;
-    expect(phase.move.moveId).toBe(dynamaxCannon.id);
-    // Force level cap to be 100
-    vi.spyOn(game.scene, "getMaxExpLevel").mockReturnValue(100);
-    await game.phaseInterceptor.to(DamageAnimPhase, false);
-    expect(dynamaxCannon.calculateBattlePower).toHaveLastReturnedWith(160);
-  }, 20000);
-
-  it("should return 180 power against an enemy 4% above level cap", async () => {
-    game.override.enemyLevel(104);
-    await game.startBattle([Species.ETERNATUS]);
-
-    game.move.select(dynamaxCannon.id);
-
-    await game.phaseInterceptor.to(MoveEffectPhase, false);
-    const phase = game.scene.getCurrentPhase() as MoveEffectPhase;
-    expect(phase.move.moveId).toBe(dynamaxCannon.id);
-    // Force level cap to be 100
-    vi.spyOn(game.scene, "getMaxExpLevel").mockReturnValue(100);
-    await game.phaseInterceptor.to(DamageAnimPhase, false);
-    expect(dynamaxCannon.calculateBattlePower).toHaveLastReturnedWith(180);
-  }, 20000);
-
-  it("should return 200 power against an enemy 5% above level cap", async () => {
-    game.override.enemyLevel(105);
-    await game.startBattle([Species.ETERNATUS]);
-
-    game.move.select(dynamaxCannon.id);
-
-    await game.phaseInterceptor.to(MoveEffectPhase, false);
-    const phase = game.scene.getCurrentPhase() as MoveEffectPhase;
-    expect(phase.move.moveId).toBe(dynamaxCannon.id);
-    // Force level cap to be 100
-    vi.spyOn(game.scene, "getMaxExpLevel").mockReturnValue(100);
-    await game.phaseInterceptor.to(DamageAnimPhase, false);
-    expect(dynamaxCannon.calculateBattlePower).toHaveLastReturnedWith(200);
-  }, 20000);
-
-  it("should return 200 power against an enemy way above level cap", async () => {
-    game.override.enemyLevel(999);
-    await game.startBattle([Species.ETERNATUS]);
-
-    game.move.select(dynamaxCannon.id);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-
-    await game.phaseInterceptor.to(MoveEffectPhase, false);
-    expect((game.scene.getCurrentPhase() as MoveEffectPhase).move.moveId).toBe(dynamaxCannon.id);
-    await game.phaseInterceptor.to(DamageAnimPhase, false);
-    expect(dynamaxCannon.calculateBattlePower).toHaveLastReturnedWith(200);
-  }, 20000);
+    const playerPokemon = game.scene.getPlayerPokemon()!;
+    expect(playerPokemon.getTag(BattlerTagType.ENCORE)).toBeUndefined();
+  });
 });

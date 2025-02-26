@@ -7,7 +7,7 @@ import { RemoveArenaTagsAttr } from "./remove-arena-tags-attr";
  * from the field.
  * @extends MoveEffectAttr
  */
-export class RemoveArenaTrapAttr extends RemoveArenaTagsAttr {
+export class RemoveEntryHazardAttr extends RemoveArenaTagsAttr {
   constructor(targetBothSides: boolean = false) {
     super(
       [

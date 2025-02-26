@@ -50,7 +50,7 @@ describe("Ability Attribute - Weather Heal", () => {
     playerPokemon.hp = 1;
 
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(playerPokemon.hp).toBe(expectedHeal + 1);
   });
@@ -62,7 +62,7 @@ describe("Ability Attribute - Weather Heal", () => {
     playerPokemon.hp = 1;
 
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(playerPokemon.hp).toBe(1);
   });

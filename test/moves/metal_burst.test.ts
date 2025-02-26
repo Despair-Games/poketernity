@@ -45,7 +45,7 @@ describe("Moves - Metal Burst", () => {
     await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER_2);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     await game.move.forceHit();
@@ -66,12 +66,12 @@ describe("Moves - Metal Burst", () => {
     await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
     await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER_2);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     await game.move.forceHit();
     await game.phaseInterceptor.to("MoveEndPhase");
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(enemy1.isFainted()).toBe(true);
     expect(enemy2.isFainted()).toBe(true);

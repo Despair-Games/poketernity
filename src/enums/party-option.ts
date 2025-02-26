@@ -8,8 +8,6 @@ export enum PartyOption {
   TRANSFER,
   SUMMARY,
   UNPAUSE_EVOLUTION,
-  SPLICE,
-  UNSPLICE,
   RELEASE,
   RENAME,
   SELECT,

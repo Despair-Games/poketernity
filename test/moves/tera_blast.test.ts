@@ -51,7 +51,7 @@ describe("Moves - Tera Blast", () => {
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
 
     game.move.select(MoveId.TERA_BLAST);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(enemyPokemon.getMoveEffectiveness).toHaveReturnedWith(2);
@@ -63,7 +63,7 @@ describe("Moves - Tera Blast", () => {
     await game.classicMode.startBattle();
 
     game.move.select(MoveId.TERA_BLAST);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(moveToCheck.calculateBattlePower).toHaveReturnedWith(100);
@@ -79,7 +79,7 @@ describe("Moves - Tera Blast", () => {
     vi.spyOn(enemyPokemon, "isTerastallized").mockReturnValue(true);
 
     game.move.select(MoveId.TERA_BLAST);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(enemyPokemon.getMoveEffectiveness).toHaveReturnedWith(2);
@@ -97,7 +97,7 @@ describe("Moves - Tera Blast", () => {
       playerPokemon.stats[Stat.SPATK] = 1;
 
       game.move.select(MoveId.TERA_BLAST);
-      await game.phaseInterceptor.to("TurnEndPhase");
+      await game.toEndOfTurn();
       expect(game.scene.getEnemyPokemon()!.battleData.abilitiesApplied).toContain(Abilities.TOXIC_DEBRIS);
     },
     20000,
@@ -110,7 +110,7 @@ describe("Moves - Tera Blast", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
     game.move.select(MoveId.TERA_BLAST);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEndPhase");
 
     expect(playerPokemon.getStatStage(Stat.SPATK)).toBe(-1);

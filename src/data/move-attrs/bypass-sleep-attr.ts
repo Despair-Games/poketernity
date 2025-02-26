@@ -12,7 +12,7 @@ import { MoveAttr } from "#app/data/move-attrs/move-attr";
  */
 export class BypassSleepAttr extends MoveAttr {
   override apply(user: Pokemon, _target: Pokemon | null, move: Move): boolean {
-    if (user.status?.effect === StatusEffect.SLEEP) {
+    if (user.hasStatusEffect(StatusEffect.SLEEP)) {
       user.addTag(BattlerTagType.BYPASS_SLEEP, 1, move.id, user.id);
       return true;
     }
@@ -22,6 +22,6 @@ export class BypassSleepAttr extends MoveAttr {
 
   /** Returns arbitrarily high score when Pokemon is asleep, otherwise shouldn't be used */
   override getUserBenefitScore(user: Pokemon, _target: Pokemon, _move: Move): number {
-    return user.status && user.status.effect === StatusEffect.SLEEP ? 200 : -10;
+    return user.hasStatusEffect(StatusEffect.SLEEP) ? 200 : -10;
   }
 }

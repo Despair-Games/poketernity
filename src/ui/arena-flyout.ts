@@ -1,7 +1,7 @@
 import { addTextObject } from "./text";
 import { TextStyle } from "#enums/text-style";
 import { globalScene } from "#app/global-scene";
-import { ArenaTrapTag } from "#app/data/arena-tag";
+import { EntryHazardTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { WeatherType } from "#enums/weather-type";
 import { TerrainType } from "#enums/terrain-type";
@@ -288,7 +288,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
           return;
         }
 
-        const isArenaTrapTag = globalScene.arena.getTag(tagAddedEvent.arenaTagType) instanceof ArenaTrapTag;
+        const isEntryHazardTag = globalScene.arena.getTag(tagAddedEvent.arenaTagType) instanceof EntryHazardTag;
         let arenaEffectType: ArenaEffectType;
 
         if (tagAddedEvent.arenaTagSide === ArenaTagSide.BOTH) {
@@ -299,14 +299,14 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
           arenaEffectType = ArenaEffectType.ENEMY;
         }
 
-        const existingTrapTagIndex = isArenaTrapTag
+        const existingTrapTagIndex = isEntryHazardTag
           ? this.fieldEffectInfo.findIndex(
               (e) => tagAddedEvent.arenaTagType === e.tagType && arenaEffectType === e.effecType,
             )
           : -1;
         let name: string = getFieldEffectText(ArenaTagType[tagAddedEvent.arenaTagType]);
 
-        if (isArenaTrapTag) {
+        if (isEntryHazardTag) {
           if (existingTrapTagIndex !== -1) {
             const layers = tagAddedEvent.arenaTagMaxLayers > 1 ? ` (${tagAddedEvent.arenaTagLayers})` : "";
             this.fieldEffectInfo[existingTrapTagIndex].name = `${name}${layers}`;
