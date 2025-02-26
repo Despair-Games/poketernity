@@ -25,6 +25,17 @@ export interface PokemonHealPhaseOptions {
   fullRestorePP?: boolean;
 }
 
+/**
+ * @param battlerIndex - The {@linkcode BattlerIndex} of the pokemon to heal
+ * @param hpHealed - The amount of HP to heal
+ * @param message - (Optional) Alternate message to be displayed during the heal phase.
+ * @param showFullHpMessage - If `true`, displays a message if the pokemon is already at full HP. Default `true`
+ * @param skipAnim - If `true`, skips animations. Default `false`
+ * @param revive - If `true`, will revive a fainted pokemon. Default `false`
+ * @param healStatus - If `true`, will clear a pokemon's status effect. Default `false`
+ * @param preventFullHeal - If `true`, will not allow healing beyond 1 less than the pokemon's max HP. Default `false`
+ * @param fullRestorePP - If `true`, will restore the pokemon's moves to full PP. Default `false`
+ */
 export class PokemonHealPhase extends CommonAnimPhase {
   override readonly id = PhaseId.POKEMON_HEAL;
 
