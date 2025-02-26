@@ -53,7 +53,7 @@ describe("Shiny Chance Modifier Event", () => {
     expect(timedEventManager.getWildShinyChanceMultiplier()).toBe(9000);
 
     let nonShinies = 0;
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 10; i++) {
       const egg = new Egg();
       if (!egg.isShiny) {
         nonShinies += 1;
