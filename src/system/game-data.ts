@@ -1610,7 +1610,7 @@ export class GameData {
       // Unlock nature
       dexEntry.natureAttr |= 1 << (pokemon.nature + 1);
 
-      const hasPrevolution = pokemonPrevolutions.hasOwnProperty(species.speciesId);
+      const hasPreEvolution = pokemonPrevolutions.hasOwnProperty(species.speciesId);
       const newCatch = !caughtAttr;
       const hasNewAttr = (caughtAttr & dexAttr) !== dexAttr;
 
@@ -1625,7 +1625,7 @@ export class GameData {
       }
 
       // Once at the root species, give starter candy
-      if (giveCandy && !hasPrevolution && (!globalScene.gameMode.isDaily || hasNewAttr || fromEgg)) {
+      if (giveCandy && !hasPreEvolution && (!globalScene.gameMode.isDaily || hasNewAttr || fromEgg)) {
         let candyMultiplier = 1;
         if (pokemon.isShiny()) {
           candyMultiplier *= getCandyGainMultiplierForShinies(pokemon.variant);
@@ -1638,12 +1638,12 @@ export class GameData {
         this.addStarterCandy(species, STARTER_CANDY_GAIN_FROM_CATCH * candyMultiplier);
       }
 
-      const checkPrevolution = (unlockedStarters: Species[]) => {
-        if (hasPrevolution) {
-          const prevolutionSpecies = pokemonPrevolutions[species.speciesId];
+      const checkPreEvolution = (unlockedStarters: Species[]) => {
+        if (hasPreEvolution) {
+          const preEvolutionSpecies = pokemonPrevolutions[species.speciesId];
           this.setPokemonSpeciesCaught(
             pokemon,
-            getPokemonSpecies(prevolutionSpecies),
+            getPokemonSpecies(preEvolutionSpecies),
             false, // pre-volutions don't update game stats
             giveCandy,
             fromEgg,
@@ -1658,19 +1658,19 @@ export class GameData {
       if (newCatch && speciesStarterCosts.hasOwnProperty(species.speciesId)) {
         unlockedStarters.push(species.speciesId);
         if (!showMessage) {
-          checkPrevolution(unlockedStarters);
+          checkPreEvolution(unlockedStarters);
         } else {
           globalScene.playSound("level_up_fanfare");
           globalScene.ui.showText(
             i18next.t("battle:addedAsAStarter", { pokemonName: species.name }),
             null,
-            () => checkPrevolution(unlockedStarters),
+            () => checkPreEvolution(unlockedStarters),
             null,
             true,
           );
         }
       } else {
-        checkPrevolution(unlockedStarters);
+        checkPreEvolution(unlockedStarters);
       }
     });
   }
@@ -1807,7 +1807,7 @@ export class GameData {
   }
 
   /**
-   * Unlocks the given {@linkcode Nature} for a {@linkcode PokemonSpecies} and its prevolutions.
+   * Unlocks the given {@linkcode Nature} for a {@linkcode PokemonSpecies} and its pre-evolutions.
    * Will fail silently if root species has not been unlocked
    */
   unlockSpeciesNature(species: PokemonSpecies, nature: Nature): void {
@@ -1815,7 +1815,7 @@ export class GameData {
       return;
     }
 
-    //recursively unlock nature for species and prevolutions
+    //recursively unlock nature for species and pre-evolutions
     const _unlockSpeciesNature = (speciesId: Species) => {
       this.dexData[speciesId].natureAttr |= 1 << (nature + 1);
       if (pokemonPrevolutions.hasOwnProperty(speciesId)) {

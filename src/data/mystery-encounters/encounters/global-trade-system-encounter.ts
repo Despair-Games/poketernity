@@ -453,6 +453,10 @@ function generateTradeOption(alreadyUsedSpecies: PokemonSpecies[], originalBst?:
   return newSpecies!;
 }
 
+/**
+ * OptionPhaseCallback that trades the selected Pokemon `encounter.misc.tradedPokemon` with `encounter.misc.receivedPokemon`.
+ * Updates player party and dex, plays the trade animation and displays unlocked starters if any, then finishes the encounter.
+ */
 async function doTradeOptionPhaseCallback(): Promise<void> {
   const encounter = globalScene.currentBattle.mysteryEncounter!;
   const tradedPokemon: PlayerPokemon = encounter.misc.tradedPokemon;
