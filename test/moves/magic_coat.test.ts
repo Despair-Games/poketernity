@@ -233,7 +233,7 @@ describe("Moves - Magic Coat", () => {
     await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toEndOfTurn();
     expect(enemyPokemon.getTag<EncoreTag>(BattlerTagType.ENCORE)?.moveId).toBe(MoveId.TACKLE);
-    expect(enemyPokemon.getLastXMoves()[0].move).toBe(MoveId.TACKLE);
+    expect(enemyPokemon.getLastXMoves()[0].move.id).toBe(MoveId.TACKLE);
   });
 
   it("should cause stomping tantrum to double in power when the last move was bounced", async () => {
