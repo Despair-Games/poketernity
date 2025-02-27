@@ -49,6 +49,14 @@ describe("Timed Event Manager", () => {
         wildShinyMultiplier: 9000,
       },
     },
+    {
+      name: "Invalid July 15th to July 14th Event",
+      startDate: new Date(Date.UTC(2025, 6, 15, 0)), // July 15th
+      endDate: new Date(Date.UTC(2025, 6, 14, 0)), // July 14th
+      banner: {
+        key: "invalidEventBanner",
+      },
+    },
   ];
 
   beforeAll(() => {
@@ -65,7 +73,7 @@ describe("Timed Event Manager", () => {
     game.phaseInterceptor.restoreOg();
   });
 
-  it("should filter out past events at initialization", () => {
+  it("should filter out past events and events with invalid dates at initialization", () => {
     game.override.timedEvents(testEvents, february2nd);
     expect(timedEventManager.getActiveEvent()).toBeDefined();
     expect(timedEventManager.getActiveEvent(true)).toBeDefined(); // active event has a banner
@@ -80,39 +88,43 @@ describe("Timed Event Manager", () => {
     // Go back to the February event date, the event should not be active
     vi.setSystemTime(february2nd);
     expect(timedEventManager.getActiveEvent()).toBeUndefined();
+
+    // Go to a date after all valid events are done, there should be no upcoming event
+    vi.setSystemTime(july10th);
+    expect(timedEventManager.getActiveOrNextEventBanner()).toBeUndefined();
   });
 
-  it("should retrieve the banner for the current or next event with one"),
-    () => {
-      game.override.timedEvents(testEvents, january1st);
+  it("should retrieve the banner for the current or next event with one", () => {
+    game.override.timedEvents(testEvents, january1st);
 
-      expect(timedEventManager.getActiveEvent()).toBeUndefined();
-      let eventBanner = timedEventManager.getActiveOrNextEventBanner();
-      expect(eventBanner).toBeDefined();
-      expect(eventBanner?.key).toBe("februaryBanner");
+    expect(timedEventManager.getActiveEvent()).toBeUndefined();
+    let eventBanner = timedEventManager.getActiveOrNextEventBanner();
+    expect(eventBanner).toBeDefined();
+    expect(eventBanner?.key).toBe("februaryBanner");
 
-      vi.setSystemTime(february2nd);
-      expect(timedEventManager.getActiveEvent()).toBeDefined();
-      eventBanner = timedEventManager.getActiveOrNextEventBanner();
-      expect(eventBanner).toBeDefined();
-      expect(eventBanner?.key).toBe("februaryBanner");
+    vi.setSystemTime(february2nd);
+    expect(timedEventManager.getActiveEvent()).toBeDefined();
+    eventBanner = timedEventManager.getActiveOrNextEventBanner();
+    expect(eventBanner).toBeDefined();
+    expect(eventBanner?.key).toBe("februaryBanner");
 
-      vi.setSystemTime(march1st);
-      expect(timedEventManager.getActiveEvent()).toBeUndefined();
-      eventBanner = timedEventManager.getActiveOrNextEventBanner();
-      expect(eventBanner).toBeDefined();
-      expect(eventBanner?.key).toBe("juneBanner");
+    vi.setSystemTime(march1st);
+    expect(timedEventManager.getActiveEvent()).toBeUndefined();
+    eventBanner = timedEventManager.getActiveOrNextEventBanner();
+    expect(eventBanner).toBeDefined();
+    expect(eventBanner?.key).toBe("juneBanner");
 
-      vi.setSystemTime(june9th);
-      expect(timedEventManager.getActiveEvent()).toBeDefined();
-      eventBanner = timedEventManager.getActiveOrNextEventBanner();
-      expect(eventBanner).toBeDefined();
-      expect(eventBanner?.key).toBe("juneBanner");
+    vi.setSystemTime(june9th);
+    expect(timedEventManager.getActiveEvent()).toBeDefined();
+    console.log(timedEventManager.getActiveEvent());
+    eventBanner = timedEventManager.getActiveOrNextEventBanner();
+    expect(eventBanner).toBeDefined();
+    expect(eventBanner?.key).toBe("juneBanner");
 
-      vi.setSystemTime(july10th);
-      expect(timedEventManager.getActiveEvent()).toBeUndefined();
-      expect(timedEventManager.getActiveOrNextEventBanner()).toBeUndefined();
-    };
+    vi.setSystemTime(july10th);
+    expect(timedEventManager.getActiveEvent()).toBeUndefined();
+    expect(timedEventManager.getActiveOrNextEventBanner()).toBeUndefined();
+  });
 
   it("should give the right property for ongoing events", () => {
     game.override.timedEvents(testEvents, february2nd);

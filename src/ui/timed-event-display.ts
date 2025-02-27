@@ -93,10 +93,7 @@ export class TimedEventDisplay extends Phaser.GameObjects.Container {
       return (n < 10 ? "0" : "") + n;
     }
     const now = new Date();
-    let diff = Math.abs(date.getTime() - now.getTime());
-
-    // Allow for previous times
-    diff = Math.abs(diff);
+    const diff = Math.max(date.getTime() - now.getTime(), 0); // Make sure the timer does not keep counting past zero
 
     // Get time components
     const days = (diff / 8.64e7) | 0;

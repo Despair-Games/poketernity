@@ -8,7 +8,7 @@ function isActive(event: TimedEvent) {
 }
 
 function isActiveOrUpcoming(event: TimedEvent) {
-  return event.startDate >= new Date() || new Date() < event.endDate;
+  return new Date() < event.endDate;
 }
 
 class TimedEventManager {
@@ -19,10 +19,16 @@ class TimedEventManager {
   }
 
   private setEvents(events: TimedEvent[]) {
-    // Filter out any expired event from the list
-    this.events = events.filter((te: TimedEvent) => te.endDate >= new Date());
+    // Filter out any expired event from the list or events with invalid start and end dates
+    this.events = events.filter((te: TimedEvent) => {
+      if (te.endDate <= te.startDate) {
+        console.warn(`Invalid start and end dates for event ${te.name}. Ignoring.`);
+        return false;
+      }
+      return isActiveOrUpcoming(te);
+    });
     // Sort so that active events appear before upcoming ones
-    this.events.sort((event1, event2) => event2.startDate.getDate() - event1.startDate.getDate());
+    this.events.sort((event1, event2) => event1.startDate.getTime() - event2.startDate.getTime());
   }
 
   /**
