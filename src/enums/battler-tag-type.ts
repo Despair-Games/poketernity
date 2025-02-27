@@ -107,6 +107,7 @@ export enum BattlerTagType {
   PSYCHO_SHIFT,
   POWDER,
   SKY_DROP,
+  BYPASS_SPEED,
   CRIT_BOOST_STACKABLE,
   RAGE,
 }

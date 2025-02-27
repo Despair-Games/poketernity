@@ -37,8 +37,9 @@ describe("Abilities - Fur Coat", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getEffectiveStat");
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     game.move.select(MoveId.TACKLE);
-    await game.toEndOfTurn();
+    await game.phaseInterceptor.to("MoveEndPhase", false);
 
     expect(enemyPokemon.getEffectiveStat).toHaveReturnedWith(enemyPokemon.stats[Stat.DEF] * 2);
   });
@@ -47,8 +48,9 @@ describe("Abilities - Fur Coat", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getEffectiveStat");
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     game.move.select(MoveId.PSYSHOCK);
-    await game.toEndOfTurn();
+    await game.phaseInterceptor.to("MoveEndPhase", false);
 
     expect(enemyPokemon.getEffectiveStat).toHaveReturnedWith(enemyPokemon.getStat(Stat.DEF) * 2);
   });
@@ -60,9 +62,10 @@ describe("Abilities - Fur Coat", () => {
     vi.spyOn(enemyPokemon, "getEffectiveStat");
 
     game.move.select(MoveId.SWEET_KISS);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
-    await game.toEndOfTurn();
+    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("MoveEndPhase", false);
 
     expect(enemyPokemon.getEffectiveStat).toHaveReturnedWith(enemyPokemon.getStat(Stat.DEF));
   });
@@ -74,9 +77,9 @@ describe("Abilities - Fur Coat", () => {
     vi.spyOn(enemyPokemon, "getEffectiveStat");
 
     game.move.select(MoveId.SPLASH);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.move.forceHit();
-    await game.toEndOfTurn();
+    await game.phaseInterceptor.to("MoveEndPhase", false);
 
     expect(enemyPokemon.getEffectiveStat).toHaveReturnedWith(enemyPokemon.getStat(Stat.DEF));
   });

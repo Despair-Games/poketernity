@@ -71,7 +71,7 @@ describe("Moves - Copycat", () => {
     vi.spyOn(randomMoveAttr, "getMoveOverride").mockReturnValue(MoveId.SWORDS_DANCE);
 
     game.move.select(MoveId.METRONOME);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]); // Player moves first, so enemy can copy Swords Dance
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]); // Player moves first, so enemy can copy Swords Dance
     await game.toNextTurn();
 
     expect(game.scene.getEnemyPokemon()!.getStatStage(Stat.ATK)).toBe(2);
@@ -82,7 +82,7 @@ describe("Moves - Copycat", () => {
     await game.classicMode.startBattle();
 
     game.move.select(MoveId.COPYCAT);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(game.scene.getEnemyPokemon()!.getStatStage(Stat.SPDEF)).toBe(-2);

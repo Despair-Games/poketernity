@@ -31,7 +31,7 @@ describe("Moves - Toxic", () => {
     await game.classicMode.startBattle([Species.TOXAPEX]);
 
     game.move.select(MoveId.TOXIC);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(game.field.getEnemyPokemon().getStatusEffect(true)).toBe(StatusEffect.TOXIC);
   });
@@ -41,7 +41,7 @@ describe("Moves - Toxic", () => {
     await game.classicMode.startBattle([Species.UMBREON]);
 
     game.move.select(MoveId.TOXIC);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(game.scene.getEnemyPokemon()!.status).toBeUndefined();
   });
@@ -52,8 +52,8 @@ describe("Moves - Toxic", () => {
     await game.classicMode.startBattle([Species.TOXAPEX]);
 
     game.move.select(MoveId.TOXIC);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    await game.toEndOfTurn();
 
     expect(game.field.getEnemyPokemon().getStatusEffect(true)).toBe(StatusEffect.TOXIC);
   });
@@ -64,8 +64,8 @@ describe("Moves - Toxic", () => {
     await game.classicMode.startBattle([Species.UMBREON]);
 
     game.move.select(MoveId.TOXIC);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    await game.toEndOfTurn();
 
     expect(game.scene.getEnemyPokemon()!.status).toBeUndefined();
   });
@@ -76,8 +76,8 @@ describe("Moves - Toxic", () => {
     await game.classicMode.startBattle([Species.TOXAPEX]);
 
     game.move.select(MoveId.SWIFT);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    await game.toEndOfTurn();
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());

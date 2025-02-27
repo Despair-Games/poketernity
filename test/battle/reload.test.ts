@@ -5,6 +5,7 @@ import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { StatusEffect } from "#enums/status-effect";
 
 describe("Reload", () => {
   let phaserGame: Phaser.Game;
@@ -37,7 +38,7 @@ describe("Reload", () => {
     const postReloadRngState = Phaser.Math.RND.state();
 
     expect(preReloadRngState).toBe(postReloadRngState);
-  }, 20000);
+  });
 
   it("should not have RNG inconsistencies after a biome switch", async () => {
     game.override
@@ -62,7 +63,7 @@ describe("Reload", () => {
     const postReloadRngState = Phaser.Math.RND.state();
 
     expect(preReloadRngState).toBe(postReloadRngState);
-  }, 20000);
+  });
 
   it("should not have weather inconsistencies after a biome switch", async () => {
     game.override
@@ -88,7 +89,7 @@ describe("Reload", () => {
     const postReloadWeather = game.scene.arena.weather;
 
     expect(postReloadWeather).toStrictEqual(preReloadWeather);
-  }, 20000);
+  });
 
   it("should not have RNG inconsistencies at a Daily run wild Pokemon fight", async () => {
     await game.dailyMode.startBattle();
@@ -100,7 +101,7 @@ describe("Reload", () => {
     const postReloadRngState = Phaser.Math.RND.state();
 
     expect(preReloadRngState).toBe(postReloadRngState);
-  }, 20000);
+  });
 
   it("should not have RNG inconsistencies at a Daily run double battle", async () => {
     game.override.battleType("double");
@@ -113,7 +114,7 @@ describe("Reload", () => {
     const postReloadRngState = Phaser.Math.RND.state();
 
     expect(preReloadRngState).toBe(postReloadRngState);
-  }, 20000);
+  });
 
   it("should not have RNG inconsistencies at a Daily run Gym Leader fight", async () => {
     game.override.battleType("single").startingWave(40);
@@ -126,7 +127,7 @@ describe("Reload", () => {
     const postReloadRngState = Phaser.Math.RND.state();
 
     expect(preReloadRngState).toBe(postReloadRngState);
-  }, 20000);
+  });
 
   it("should not have RNG inconsistencies at a Daily run regular trainer fight", async () => {
     game.override.battleType("single").startingWave(45);
@@ -139,7 +140,7 @@ describe("Reload", () => {
     const postReloadRngState = Phaser.Math.RND.state();
 
     expect(preReloadRngState).toBe(postReloadRngState);
-  }, 20000);
+  });
 
   it("should not have RNG inconsistencies at a Daily run wave 50 Boss fight", async () => {
     game.override.battleType("single").startingWave(50);
@@ -152,5 +153,24 @@ describe("Reload", () => {
     const postReloadRngState = Phaser.Math.RND.state();
 
     expect(preReloadRngState).toBe(postReloadRngState);
-  }, 20000);
+  });
+
+  it("should save status effects properly", async () => {
+    game.override.battleType("single").enemySpecies(Species.MAREANIE).enemyMoveset(MoveId.TOXIC);
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    game.move.use(MoveId.SPLASH);
+    await game.toNextTurn();
+    game.move.use(MoveId.SPLASH);
+    await game.doKillOpponents();
+    await game.toNextWave();
+
+    expect(game.field.getPlayerPokemon().getStatusEffect(true)).toBe(StatusEffect.TOXIC);
+
+    await game.reload.reloadSession();
+
+    const newPokemon = game.field.getPlayerPokemon();
+    expect(newPokemon.getStatusEffect(true)).toBe(StatusEffect.TOXIC);
+    expect(newPokemon.status?.toxicTurnCount).toBe(2);
+  });
 });

@@ -446,11 +446,11 @@ export class MovePhase extends BattlePhase {
   }
 
   /**
-   * Queues a {@linkcode MoveEndPhase} if the move wasn't a {@linkcode followUp} and {@linkcode canMove()} returns `true`,
+   * Queues a {@linkcode MoveEndPhase} if the move wasn't a {@linkcode followUp},
    * then ends the phase.
    */
   public override end(): void {
-    if (!this.followUp && this.canMove()) {
+    if (!this.followUp) {
       globalScene.unshiftPhase(new MoveEndPhase(this.pokemon.getBattlerIndex()));
     }
 

@@ -34,7 +34,7 @@ describe("Weather - Hail", () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     game.move.select(MoveId.SPLASH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.toEndOfTurn();
 
@@ -48,7 +48,7 @@ describe("Weather - Hail", () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     game.move.select(MoveId.DIG);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.toEndOfTurn();
 

@@ -191,7 +191,7 @@ describe("Abilities - Gulp Missile", () => {
     const cramorant = game.scene.getPlayerPokemon()!;
 
     game.move.select(MoveId.DIVE);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)).toBeDefined();
     expect(cramorant.formIndex).toBe(GULPING_FORM);
@@ -248,7 +248,7 @@ describe("Abilities - Gulp Missile", () => {
 
     game.move.select(MoveId.SUBSTITUTE);
     await game.forceEnemyMove(MoveId.POWER_TRIP);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
     expect(game.scene.getPlayerPokemon()!.formIndex).toBe(GULPING_FORM);

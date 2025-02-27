@@ -22,7 +22,7 @@ import { HitResult } from "#enums/hit-result";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { MovePhase } from "#app/phases/move-phase";
+import type { MovePhase } from "#app/phases/move-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { type StatStageChangeCallback } from "#app/phases/stat-stage-change-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
@@ -564,18 +564,8 @@ export class ShellTrapTag extends BattlerTag {
 
       // Trap should only be triggered by opponent's Physical moves
       if (phaseData?.move.category === MoveCategory.PHYSICAL && pokemon.isOpponent(phaseData.attacker)) {
-        const shellTrapPhaseIndex = globalScene.phaseQueue.findIndex(
-          (phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon === pokemon,
-        );
-        const firstMovePhaseIndex = globalScene.phaseQueue.findIndex((phase) => phase.is<MovePhase>(PhaseId.MOVE));
-
-        // Only shift MovePhase timing if it's not already next up
-        if (shellTrapPhaseIndex !== -1 && shellTrapPhaseIndex !== firstMovePhaseIndex) {
-          const shellTrapMovePhase = globalScene.phaseQueue.splice(shellTrapPhaseIndex, 1)[0];
-          globalScene.prependToPhase(shellTrapMovePhase, PhaseId.MOVE);
-        }
-
-        this.activated = true;
+        const { turnManager } = globalScene.currentBattle;
+        this.activated = turnManager.preemptFightCommand((tc) => tc.pokemon === pokemon);
       }
 
       return true;
@@ -1216,16 +1206,12 @@ export class EncoreTag extends MoveRestrictionBattlerTag {
       i18next.t("battlerTags:encoreOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
     );
 
-    const movePhase = globalScene.findPhase((m) => m.is<MovePhase>(PhaseId.MOVE) && m.pokemon === pokemon);
-    if (movePhase) {
-      const movesetMove = pokemon.getMoveset().find((m) => m.moveId === this.moveId);
-      if (movesetMove) {
-        const lastMove = pokemon.getLastXMoves(1)[0];
-        globalScene.tryReplacePhase(
-          (m) => m.is<MovePhase>(PhaseId.MOVE) && m.pokemon === pokemon,
-          new MovePhase(pokemon, lastMove.targets ?? [], movesetMove),
-        );
-      }
+    const { turnManager } = globalScene.currentBattle;
+
+    const movesetMove = pokemon.getMoveset().find((m) => m.moveId === this.moveId);
+    if (movesetMove) {
+      const lastMove = pokemon.getLastXMoves(1)[0];
+      turnManager.tryReplaceMove(pokemon, movesetMove, lastMove?.targets ?? []);
     }
   }
 
@@ -2155,7 +2141,14 @@ export class SkyDropTag extends BattlerTag {
       if (pokemon?.getTag(BattlerTagType.SKY_DROP)?.sourceId === this.sourceId) {
         // Cancel the Sky Drop user's next use of Sky Drop
         if (this.sourceId === pokemon.id) {
-          globalScene.tryRemovePhase((phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon.id === pokemon.id);
+          globalScene.currentBattle.turnManager.tryRemoveCommand((tc) => tc.pokemon === pokemon);
+          if (
+            globalScene.tryRemovePhase((phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon.id === pokemon.id)
+          ) {
+            // Just in case we removed a queued `MovePhase`, queue the next `MovePhase`.
+            const { turnManager } = globalScene.currentBattle;
+            turnManager.scheduleNextValidCommand();
+          }
           pokemon.getMoveQueue().shift();
           pokemon.removeTag(BattlerTagType.CHARGING);
         }
@@ -3499,6 +3492,23 @@ export class PsychoShiftTag extends BattlerTag {
 }
 
 /**
+ * Tag to allow the affected Pokemon's move to go first in its priority bracket.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Quick_Draw_(Ability) Quick Draw}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Quick_Claw Quick Claw}.
+ */
+export class BypassSpeedTag extends BattlerTag {
+  constructor() {
+    super(BattlerTagType.BYPASS_SPEED, BattlerTagLapseType.TURN_END, 1);
+  }
+
+  override canAdd(pokemon: Pokemon): boolean {
+    const cancelled = new BooleanHolder(false);
+    applyAbAttrs(AbAttrFlag.PREVENT_BYPASS_SPEED_CHANCE, pokemon, false, cancelled);
+    return !cancelled.value;
+  }
+}
+
+/**
  * Retrieves a {@linkcode BattlerTag} based on the provided tag type, turn count, source move, and source ID.
  * @param sourceId - The ID of the pokemon adding the tag
  * @returns The corresponding {@linkcode BattlerTag} object.
@@ -3705,6 +3715,8 @@ export function getBattlerTag(
       return new GrudgeTag();
     case BattlerTagType.PSYCHO_SHIFT:
       return new PsychoShiftTag();
+    case BattlerTagType.BYPASS_SPEED:
+      return new BypassSpeedTag();
     case BattlerTagType.NONE:
     default:
       return new BattlerTag(tagType, BattlerTagLapseType.CUSTOM, turnCount, sourceMoveId, sourceId);

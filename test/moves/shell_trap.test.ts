@@ -47,7 +47,7 @@ describe("Moves - Shell Trap", () => {
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SHELL_TRAP, 1);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
     await game.phaseInterceptor.to(MoveEndPhase);
 
@@ -70,7 +70,7 @@ describe("Moves - Shell Trap", () => {
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SHELL_TRAP, 1);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
     await game.phaseInterceptor.to(MoveEndPhase);
 
@@ -93,7 +93,7 @@ describe("Moves - Shell Trap", () => {
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SHELL_TRAP, 1);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
     await game.phaseInterceptor.to(MoveEndPhase);
 

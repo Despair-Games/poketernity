@@ -120,6 +120,7 @@ import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { achvs } from "#app/system/achv";
 import type PokemonData from "#app/system/pokemon-data";
+import type { TurnCommand } from "#app/turn-command-manager";
 import { settings } from "#app/system/settings/settings-manager";
 import type BattleInfo from "#app/ui/battle-info";
 import { EnemyBattleInfo, PlayerBattleInfo } from "#app/ui/battle-info";
@@ -5082,6 +5083,7 @@ export class PokemonBattleSummonData {
 }
 
 export class PokemonTurnData {
+  public turnCommand?: TurnCommand;
   public flinched: boolean = false;
   public acted: boolean = false;
   /** How many times the move should hit the target(s) */

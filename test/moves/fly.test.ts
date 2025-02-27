@@ -108,7 +108,7 @@ describe("Moves - Fly", () => {
 
     await game.toNextTurn();
     await game.forceEnemyMove(MoveId.GRAVITY);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.toEndOfTurn();
     expect(playerPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
