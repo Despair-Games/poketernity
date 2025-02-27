@@ -91,7 +91,7 @@ describe("Abilities - Flash Fire", () => {
 
     // ensure use baton pass after enemy moved
     game.move.select(MoveId.BATON_PASS);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     game.doSelectPartyPokemon(1);
 
@@ -111,7 +111,7 @@ describe("Abilities - Flash Fire", () => {
 
     // first turn
     game.move.select(MoveId.EMBER);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to(TurnEndPhase);
     const originalDmg = initialHP - blissey.hp;
 
@@ -138,7 +138,7 @@ describe("Abilities - Flash Fire", () => {
 
     // first turn
     game.move.select(MoveId.FIRE_PLEDGE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.phaseInterceptor.to("MoveEffectPhase");
     await game.move.forceMiss();
     await game.phaseInterceptor.to(TurnEndPhase);

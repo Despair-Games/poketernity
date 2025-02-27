@@ -39,7 +39,7 @@ describe("Moves - G-Max damage over time arena moves", () => {
     game.move.select(MoveId.G_MAX_WILDFIRE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
     const enemyParty = game.scene.getEnemyParty();
@@ -58,7 +58,7 @@ describe("Moves - G-Max damage over time arena moves", () => {
     game.move.select(MoveId.G_MAX_VOLCALITH, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
     const enemyParty = game.scene.getEnemyParty();
@@ -78,7 +78,7 @@ describe("Moves - G-Max damage over time arena moves", () => {
     game.move.select(MoveId.G_MAX_WILDFIRE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("MoveEndPhase", false);
 
     const enemyParty = game.scene.getEnemyParty();

@@ -29,6 +29,7 @@ import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { CommonBattleAnim } from "./battle-anims/common-battle-anim";
 import { type SkyDropTag } from "./battler-tags";
+import { SCREEN_DOUBLES_DMG_FACTOR, SCREEN_SINGLES_DMG_FACTOR } from "#app/constants";
 
 export abstract class ArenaTag {
   constructor(
@@ -215,7 +216,7 @@ export abstract class WeakenMoveScreenTag extends ArenaTag {
       if (bypassed.value) {
         return false;
       }
-      damageMultiplier.value = globalScene.currentBattle.double ? 2732 / 4096 : 0.5;
+      damageMultiplier.value = globalScene.currentBattle.double ? SCREEN_DOUBLES_DMG_FACTOR : SCREEN_SINGLES_DMG_FACTOR;
       return true;
     }
     return false;
@@ -1295,7 +1296,7 @@ class FireGrassPledgeTag extends ArenaTag {
       this.side === ArenaTagSide.PLAYER ? globalScene.getPlayerField() : globalScene.getEnemyField();
 
     field
-      .filter((pokemon) => !pokemon.isOfType(ElementalType.FIRE) && !pokemon.switchOutStatus)
+      .filter((pokemon) => pokemon.isActive(true) && !pokemon.isOfType(ElementalType.FIRE) && !pokemon.switchOutStatus)
       .forEach((pokemon) => {
         const cancelled = new BooleanHolder(false);
         applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
@@ -1410,7 +1411,7 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
       this.side === ArenaTagSide.PLAYER ? globalScene.getPlayerField() : globalScene.getEnemyField();
 
     field
-      .filter((pokemon) => !pokemon.isOfType(this.immuneType) && !pokemon.switchOutStatus)
+      .filter((pokemon) => pokemon.isActive(true) && !pokemon.isOfType(this.immuneType) && !pokemon.switchOutStatus)
       .forEach((pokemon) => {
         const cancelled = new BooleanHolder(false);
         applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);

@@ -90,7 +90,7 @@ describe("Moves - Upper Hand", () => {
 
     game.move.select(MoveId.UPPER_HAND);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
     expect(feebas.getLastXMoves()[0].result).toBe(MoveResult.FAIL);

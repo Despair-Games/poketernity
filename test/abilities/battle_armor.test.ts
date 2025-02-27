@@ -42,7 +42,7 @@ describe("Abilities - Battle Armor/Shell Armor", () => {
 
     game.move.select(MoveId.SPLASH);
     await game.move.forceHit();
-    await game.setTurnOrder[(BattlerIndex.ENEMY, BattlerIndex.PLAYER)];
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
     const lastAttackReceived = playerPokemon?.turnData.attacksReceived[0];

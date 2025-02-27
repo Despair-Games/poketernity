@@ -141,7 +141,7 @@ describe("Abilities - Wimp Out", () => {
     await game.classicMode.startBattle([Species.GOLISOPOD, Species.TYRUNT]);
     const RIVAL_NINJASK1 = game.scene.getEnemyPokemon()?.id;
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(game.scene.getEnemyPokemon()?.id !== RIVAL_NINJASK1);
   });
 
@@ -518,7 +518,7 @@ describe("Abilities - Wimp Out", () => {
 
     game.move.select(MoveId.FALSE_SWIPE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.MATCHA_GOTCHA, 1);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.toEndOfTurn();
 
     expect(wimpod0.hp).toBeGreaterThan(0);
@@ -550,7 +550,7 @@ describe("Abilities - Wimp Out", () => {
     game.move.select(MoveId.SKY_DROP, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.FALSE_SWIPE, 1, BattlerIndex.PLAYER);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     [player1, enemy1].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());
