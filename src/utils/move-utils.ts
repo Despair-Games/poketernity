@@ -60,12 +60,13 @@ export function applyMoveChargeAttrs<TAttr extends MoveAttr>(
 export function getGmaxMoveList(): MoveId[] {
   const ret: MoveId[] = [];
   for (const move_name of getEnumKeys(MoveId)) {
-    if (move_name.slice(0, 6) === "G_MAX_") {
+    if (move_name.startsWith("G_MAX_")) {
       ret.push(MoveId[move_name]);
     }
   }
   return ret;
 }
+
 /**
  * Returns a list of all Max Moves, including G-max Moves, based on the move's name.
  *
@@ -75,7 +76,7 @@ export function getGmaxMoveList(): MoveId[] {
 export function getMaxMoveList(): MoveId[] {
   const ret = getGmaxMoveList();
   for (const move_name of getEnumKeys(MoveId)) {
-    if (move_name.slice(0, 4) === "MAX_") {
+    if (move_name.startsWith("MAX_")) {
       ret.push(MoveId[move_name]);
     }
   }
