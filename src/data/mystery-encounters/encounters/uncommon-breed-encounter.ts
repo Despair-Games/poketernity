@@ -152,7 +152,7 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
       onComplete: () => encounter.introVisuals?.playShinySparkles(),
     });
 
-    globalScene.time.delayedCall(500, () => globalScene.playSound("battle_anims/PRSFX- Spotlight2"));
+    globalScene.time.delayedCall(500, () => globalScene.audioManager.playSound("battle_anims/PRSFX- Spotlight2"));
     return true;
   })
   .setLocalizationKey(`${namespace}`)

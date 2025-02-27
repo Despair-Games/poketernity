@@ -93,7 +93,7 @@ export class QuietFormChangePhase extends BattlePhase {
     pokemonFormTintSprite.setVisible(false);
     pokemonFormTintSprite.setTintFill(0xffffff);
 
-    globalScene.playSound("battle_anims/PRSFX- Transform");
+    globalScene.audioManager.playSound("battle_anims/PRSFX- Transform");
 
     tweens.add({
       targets: pokemonTintSprite,
@@ -158,7 +158,7 @@ export class QuietFormChangePhase extends BattlePhase {
     this.pokemon.findAndRemoveTags((t) => t.tagType === BattlerTagType.AUTOTOMIZED);
 
     if (globalScene?.currentBattle.isClassicFinalBoss && this.pokemon.isEnemy()) {
-      globalScene.playBgm();
+      globalScene.audioManager.playBgm();
       globalScene.queuePokemonHeal(true, this.pokemon.getBattlerIndex(), this.pokemon.getMaxHp(), {
         showFullHpMessage: false,
         healStatus: true,

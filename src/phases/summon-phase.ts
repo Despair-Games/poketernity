@@ -161,7 +161,7 @@ export class SummonPhase extends PartyMemberPokemonPhase {
           angle: 1440,
           y: (this.isPlayer ? 132 : 86) + fpOffset[1],
           onComplete: () => {
-            globalScene.playSound("se/pb_rel");
+            globalScene.audioManager.playSound("se/pb_rel");
             pokeball.destroy();
 
             add.existing(pokemon);

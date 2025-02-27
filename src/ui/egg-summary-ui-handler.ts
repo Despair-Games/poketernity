@@ -180,7 +180,7 @@ export default class EggSummaryUiHandler extends MessageUiHandler {
     this.updatePokemonIcons();
     this.setCursor(0);
 
-    globalScene.playSoundWithoutBgm("evolution_fanfare");
+    globalScene.audioManager.playSoundWithoutBgm("evolution_fanfare");
 
     // Prevent exiting the egg summary for 2 seconds if the egg hatching
     // was skipped automatically and for 1 second otherwise
