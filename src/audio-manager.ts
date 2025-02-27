@@ -221,7 +221,7 @@ export class AudioManager {
    * @returns `true` if a BGM track is playing, `false` otherwise.
    */
   public isBgmPlaying(): boolean {
-    return this.bgm?.isPlaying;
+    return !!this.bgm?.isPlaying;
   }
 
   /**
