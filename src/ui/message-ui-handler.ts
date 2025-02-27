@@ -155,7 +155,7 @@ export default abstract class MessageUiHandler extends AwaitableUiHandler {
               globalScene.charSprite.setVariant(charVar);
             }
             if (charSound) {
-              globalScene.playSound(charSound);
+              globalScene.audioManager.playSound(charSound);
             }
             if (callback && !this.textTimer?.repeatCount) {
               if (callbackDelay && !prompt) {

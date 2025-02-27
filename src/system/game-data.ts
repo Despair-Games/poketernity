@@ -1639,7 +1639,7 @@ export class GameData {
           resolve(true);
           return;
         }
-        globalScene.playSound("level_up_fanfare");
+        globalScene.audioManager.playSound("level_up_fanfare");
         globalScene.ui.showText(
           i18next.t("battle:addedAsAStarter", { pokemonName: species.name }),
           null,
@@ -1736,7 +1736,7 @@ export class GameData {
         resolve(true);
         return;
       }
-      globalScene.playSound("level_up_fanfare");
+      globalScene.audioManager.playSound("level_up_fanfare");
       const moveName = allMoves[speciesEggMoves[speciesId][eggMoveIndex]].name;
       let message = prependSpeciesToMessage ? species.getName() + " " : "";
       message +=

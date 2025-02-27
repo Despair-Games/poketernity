@@ -8,7 +8,7 @@ import type BattleScene from "#app/battle-scene";
 import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
 import type { StarterMoveset } from "#app/@types/StarterData";
 import type { TurnMove } from "#app/@types/TurnMove";
-import type { AnySound } from "#app/battle-scene";
+import type { AnySound } from "#app/audio-manager";
 import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import type { AbAttr } from "#app/data/ab-attrs/ab-attr";
 import type { Ability } from "#app/data/ability";
@@ -3429,7 +3429,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   faintCry(callback: Function): void {
     const key = this.species.getCryKey(this.formIndex);
     let rate = 0.85;
-    const cry = globalScene.playSound(key, { rate: rate }) as AnySound;
+    const cry = globalScene.audioManager.playSound(key, { rate: rate }) as AnySound;
     if (!cry || settings.effectiveFieldVolume === 0) {
       return callback();
     }

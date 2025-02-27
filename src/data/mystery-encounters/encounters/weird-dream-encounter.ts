@@ -117,7 +117,7 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
     return true;
   })
   .withOnVisualsStart(() => {
-    globalScene.fadeAndSwitchBgm("mystery_encounter_weird_dream");
+    globalScene.audioManager.fadeAndSwitchBgm("mystery_encounter_weird_dream");
     return true;
   })
   .withOption(
@@ -434,7 +434,7 @@ async function doNewTeamPostProcess(transformations: PokemonTransformation[]) {
 
   // If at least one new starter was unlocked, play 1 fanfare
   if (atLeastOneNewStarter) {
-    globalScene.playSound("level_up_fanfare");
+    globalScene.audioManager.playSound("level_up_fanfare");
   }
 }
 

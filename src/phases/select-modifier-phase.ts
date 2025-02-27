@@ -160,7 +160,7 @@ export class SelectModifierPhase extends BattlePhase {
                   globalScene.updateMoneyText();
                   globalScene.animateMoneyChanged(false);
                 }
-                globalScene.playSound("se/buy");
+                globalScene.audioManager.playSound("se/buy");
               }
               break;
             case 1:
@@ -279,7 +279,7 @@ export class SelectModifierPhase extends BattlePhase {
               globalScene.animateMoneyChanged(false);
             }
 
-            globalScene.playSound("se/buy");
+            globalScene.audioManager.playSound("se/buy");
             ui.getHandler<ModifierSelectUiHandler>().updateCostText();
           } else {
             ui.playError();
