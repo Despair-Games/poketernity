@@ -3,7 +3,7 @@ import { APP_ABBREVIATION, bypassLogin, SETTINGS_LS_KEY, TUTORIALS_LS_KEY } from
 import { globalScene } from "#app/global-scene";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
+import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions/pokemon-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { noStarterFormKeys } from "#app/data/no-starter-form-keys";
 import { allSpecies } from "#app/data/data-lists";

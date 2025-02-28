@@ -5,7 +5,7 @@ import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { starterPassiveAbilities } from "#app/data/balance/passives";
-import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
+import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions/pokemon-evolutions";
 import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
 import { pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";
 import { pokemonFormLevelMoves } from "#app/data/balance/pokemon-form-level-moves";

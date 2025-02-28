@@ -1,6 +1,8 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { Species } from "#enums/species";
 import { EvolutionItem } from "#enums/evolution-item";
+import { SpeciesFormKey } from "#enums/species-form-key";
+import { pokemonEvolutions } from "./init-pokemon-evolutions";
 
 /**
  * Pokemon Evolution tuple type consisting of:
@@ -77,4 +79,25 @@ export class SpeciesFriendshipEvolutionCondition extends SpeciesEvolutionConditi
 
 export interface PokemonEvolutions {
   [key: string]: SpeciesFormEvolution[];
+}
+interface PokemonPrevolutions {
+  [key: string]: Species;
+}
+
+export const pokemonPrevolutions: PokemonPrevolutions = {};
+
+export function initPokemonPrevolutions(): void {
+  const megaFormKeys = [SpeciesFormKey.MEGA, "", SpeciesFormKey.MEGA_X, "", SpeciesFormKey.MEGA_Y].map(
+    (sfk) => sfk as string,
+  );
+  const prevolutionKeys = Object.keys(pokemonEvolutions);
+  prevolutionKeys.forEach((pk) => {
+    const evolutions = pokemonEvolutions[pk];
+    for (const ev of evolutions) {
+      if (ev.evoFormKey && megaFormKeys.indexOf(ev.evoFormKey) > -1) {
+        continue;
+      }
+      pokemonPrevolutions[ev.speciesId] = parseInt(pk) as Species;
+    }
+  });
 }

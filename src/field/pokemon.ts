@@ -21,7 +21,8 @@ import {
   type SpeciesEvolutionCondition,
   type SpeciesFormEvolution,
 } from "#app/data/balance/pokemon-evolutions/pokemon-evolutions";
-import { pokemonEvolutions, pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
+import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions/pokemon-evolutions";
 import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#app/data/balance/pokemon-level-moves";
 import {
   BASE_HIDDEN_ABILITY_CHANCE,

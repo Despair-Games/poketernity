@@ -8,18 +8,16 @@ import { MoveId } from "#enums/move-id";
 import { Nature } from "#enums/nature";
 import { PokeballType } from "#enums/pokeball";
 import { Species } from "#enums/species";
-import { SpeciesFormKey } from "#enums/species-form-key";
 import { TimeOfDay } from "#enums/time-of-day";
 import { WeatherType } from "#enums/weather-type";
 import { gen1Evolutions } from "./gen1-pokemon-evolutions";
 import { GENERIC_ITEM_EVO_LEVEL, HAPPINESS_EVO_LEVEL, KNOW_MOVE_EVO_LEVEL } from "./pokemon-evolution-alt-levels";
-import type {
-  PokemonEvolutions} from "./pokemon-evolutions";
+import type { PokemonEvolutions } from "./pokemon-evolutions";
 import {
   SpeciesFormEvolution,
   SpeciesEvolution,
   SpeciesEvolutionCondition,
-  SpeciesFriendshipEvolutionCondition
+  SpeciesFriendshipEvolutionCondition,
 } from "./pokemon-evolutions";
 
 export const pokemonEvolutions: PokemonEvolutions = {
@@ -1328,24 +1326,3 @@ export const pokemonEvolutions: PokemonEvolutions = {
     ),
   ],
 };
-interface PokemonPrevolutions {
-  [key: string]: Species;
-}
-
-export const pokemonPrevolutions: PokemonPrevolutions = {};
-
-export function initPokemonPrevolutions(): void {
-  const megaFormKeys = [SpeciesFormKey.MEGA, "", SpeciesFormKey.MEGA_X, "", SpeciesFormKey.MEGA_Y].map(
-    (sfk) => sfk as string,
-  );
-  const prevolutionKeys = Object.keys(pokemonEvolutions);
-  prevolutionKeys.forEach((pk) => {
-    const evolutions = pokemonEvolutions[pk];
-    for (const ev of evolutions) {
-      if (ev.evoFormKey && megaFormKeys.indexOf(ev.evoFormKey) > -1) {
-        continue;
-      }
-      pokemonPrevolutions[ev.speciesId] = parseInt(pk) as Species;
-    }
-  });
-}
