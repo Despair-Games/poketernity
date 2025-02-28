@@ -14,16 +14,15 @@ import {
   MR_MIME_LEVEL,
   TANGROWTH_LEVEL,
 } from "./pokemon-evolution-alt-levels";
-import type {
-  PokemonEvolutions} from "./pokemon-evolutions";
+import type { PokemonEvolutions } from "./pokemon-evolutions";
 import {
   SpeciesFormEvolution,
   SpeciesEvolution,
   SpeciesEvolutionCondition,
-  SpeciesFriendshipEvolutionCondition
+  SpeciesFriendshipEvolutionCondition,
 } from "./pokemon-evolutions";
 
-export const gen1Evolutions: PokemonEvolutions = {
+export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.BULBASAUR]: [new SpeciesEvolution(Species.IVYSAUR, 16, null, null)],
   [Species.IVYSAUR]: [new SpeciesEvolution(Species.VENUSAUR, 32, null, null)],
   [Species.CHARMANDER]: [new SpeciesEvolution(Species.CHARMELEON, 16, null, null)],

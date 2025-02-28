@@ -10,7 +10,7 @@ import { PokeballType } from "#enums/pokeball";
 import { Species } from "#enums/species";
 import { TimeOfDay } from "#enums/time-of-day";
 import { WeatherType } from "#enums/weather-type";
-import { gen1Evolutions } from "./gen1-pokemon-evolutions";
+import { gen1pokemonFamilyEvolutions } from "./gen1-pokemon-family-evolutions";
 import { GENERIC_ITEM_EVO_LEVEL, HAPPINESS_EVO_LEVEL, KNOW_MOVE_EVO_LEVEL } from "./pokemon-evolution-alt-levels";
 import type { PokemonEvolutions } from "./pokemon-evolutions";
 import {
@@ -21,7 +21,7 @@ import {
 } from "./pokemon-evolutions";
 
 export const pokemonEvolutions: PokemonEvolutions = {
-  ...gen1Evolutions,
+  ...gen1pokemonFamilyEvolutions,
   [Species.CHIKORITA]: [new SpeciesEvolution(Species.BAYLEEF, 16, null, null)],
   [Species.BAYLEEF]: [new SpeciesEvolution(Species.MEGANIUM, 32, null, null)],
   [Species.CYNDAQUIL]: [new SpeciesEvolution(Species.QUILAVA, 14, null, null)],
