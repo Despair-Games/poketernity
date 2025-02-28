@@ -5,7 +5,6 @@ import { MockClock } from "#test/testUtils/mocks/mockClock";
 import { MockGameObjectCreator } from "#test/testUtils/mocks/mockGameObjectCreator";
 import { MockLoader } from "#test/testUtils/mocks/mockLoader";
 import { MockTextureManager } from "#test/testUtils/mocks/mockTextureManager";
-import { MockTimedEventManager } from "#test/testUtils/mocks/mockTimedEventManager";
 import fs from "fs";
 import Phaser from "phaser";
 import { vi } from "vitest";
@@ -248,7 +247,6 @@ export class GameWrapper {
     this.scene.time = new MockClock(this.scene);
     // @ts-ignore
     this.scene.remove = vi.fn();
-    this.scene.eventManager = new MockTimedEventManager(); // Disable Timed Events
 
     Pokemon.prototype.updateInfo = async () => {};
   }

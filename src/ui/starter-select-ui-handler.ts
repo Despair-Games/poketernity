@@ -1884,7 +1884,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                     });
                     ui.setMode(UiMode.STARTER_SELECT);
                     this.setSpeciesDetails(this.lastSpecies);
-                    globalScene.playSound("se/buy");
+                    globalScene.audioManager.playSound("se/buy");
 
                     // update the passive background
                     if (starterContainer) {
@@ -1922,7 +1922,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                     });
                     this.tryUpdateValue(0);
                     ui.setMode(UiMode.STARTER_SELECT);
-                    globalScene.playSound("se/buy");
+                    globalScene.audioManager.playSound("se/buy");
 
                     // update the value label
                     if (starterContainer) {
@@ -1972,7 +1972,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
                     }
                   });
                   ui.setMode(UiMode.STARTER_SELECT);
-                  globalScene.playSound("se/buy");
+                  globalScene.audioManager.playSound("se/buy");
 
                   return true;
                 }
@@ -2307,7 +2307,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       starterPrefs.variant = newVariant;
       this.setSpeciesDetails(this.lastSpecies, { shiny: true, variant: newVariant });
 
-      globalScene.playSound("se/sparkle");
+      globalScene.audioManager.playSound("se/sparkle");
       // Set the variant label to the shiny tint
       const tint = getVariantTint(newVariant);
       this.pokemonShinyIcon.setFrame(getVariantTierForVariant(newVariant));

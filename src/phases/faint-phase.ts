@@ -228,7 +228,7 @@ export class FaintPhase extends PokemonPhase {
         pokemon.addFriendship(-FRIENDSHIP_LOSS_FROM_FAINT);
       }
       pokemon.hideInfo();
-      globalScene.playSound("se/faint");
+      globalScene.audioManager.playSound("se/faint");
       tweens.add({
         targets: pokemon,
         duration: 500,
