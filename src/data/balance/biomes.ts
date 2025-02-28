@@ -1,7 +1,7 @@
 import { ElementalType } from "#enums/elemental-type";
 import { randSeedInt, getEnumValues } from "#app/utils";
-import type { SpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions";
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import type { SpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions/pokemon-evolutions";
+import { pokemonEvolutions } from "./pokemon-evolutions/init-pokemon-evolutions";
 import i18next from "i18next";
 import { Biome } from "#enums/biome";
 import { Species } from "#enums/species";

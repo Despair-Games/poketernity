@@ -1,5 +1,5 @@
 import { type Modifier } from "#app/modifier/modifier";
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
 import i18next from "i18next";
 import { NumberHolder } from "#app/utils";
 import { PlayerGender } from "#enums/player-gender";

@@ -18,11 +18,10 @@ import { NoCritTag } from "#app/data/arena-tag";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { starterPassiveAbilities } from "#app/data/balance/passives";
 import {
-  pokemonEvolutions,
-  pokemonPrevolutions,
   type SpeciesEvolutionCondition,
   type SpeciesFormEvolution,
-} from "#app/data/balance/pokemon-evolutions";
+} from "#app/data/balance/pokemon-evolutions/pokemon-evolutions";
+import { pokemonEvolutions, pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
 import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#app/data/balance/pokemon-level-moves";
 import {
   BASE_HIDDEN_ABILITY_CHANCE,

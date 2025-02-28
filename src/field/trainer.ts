@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import type { TrainerConfig, TrainerPartyTemplate } from "#app/data/trainer-config";
