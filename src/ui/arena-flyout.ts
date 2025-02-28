@@ -42,8 +42,8 @@ interface ArenaEffectInfo {
 }
 
 export function getFieldEffectText(arenaTagType: string): string {
-  if (!arenaTagType || arenaTagType === ArenaTagType[ArenaTagType.NONE]) {
-    return arenaTagType;
+  if (arenaTagType === ArenaTagType[ArenaTagType.NONE]) {
+    return "";
   }
   const effectName = toCamelCaseString(arenaTagType);
   const i18nKey = `arenaFlyout:${effectName}` as ParseKeys;
@@ -336,14 +336,8 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
 
       case WeatherChangedEvent:
         const weatherEvent = arenaEffectChangedEvent as WeatherChangedEvent;
-        const oldWeatherName =
-          weatherEvent.oldWeatherType !== WeatherType.NONE
-            ? getFieldEffectText(WeatherType[weatherEvent.oldWeatherType])
-            : "";
-        const newWeatherName =
-          weatherEvent.newWeatherType !== WeatherType.NONE
-            ? getFieldEffectText(WeatherType[weatherEvent.newWeatherType])
-            : "";
+        const oldWeatherName = getFieldEffectText(WeatherType[weatherEvent.oldWeatherType]);
+        const newWeatherName = getFieldEffectText(WeatherType[weatherEvent.newWeatherType]);
         const newWeatherInfo = {
           name: newWeatherName,
           effectType: ArenaEffectType.WEATHER,
@@ -354,14 +348,8 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
         break;
       case TerrainChangedEvent:
         const terrainEvent = arenaEffectChangedEvent as TerrainChangedEvent;
-        const oldTerrainName =
-          terrainEvent.oldTerrainType !== TerrainType.NONE
-            ? getFieldEffectText(TerrainType[terrainEvent.oldTerrainType])
-            : "";
-        const newTerrainName =
-          terrainEvent.newTerrainType !== TerrainType.NONE
-            ? getFieldEffectText(TerrainType[terrainEvent.newTerrainType])
-            : "";
+        const oldTerrainName = getFieldEffectText(TerrainType[terrainEvent.oldTerrainType]);
+        const newTerrainName = getFieldEffectText(TerrainType[terrainEvent.newTerrainType]);
         // Stores the new Weather/Terrain info
         const newTerrainInfo = {
           name: newTerrainName,
