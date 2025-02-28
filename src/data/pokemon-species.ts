@@ -177,8 +177,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
         continue;
       }
 
-      let evolutionChance: number;
-      evolutionChance = 0;
+      let evolutionChance: number = 0;
 
       const evolutionSpecies = getPokemonSpecies(ev.speciesId);
       const isRegionalEvolution = !this.isRegional() && evolutionSpecies.isRegional();
