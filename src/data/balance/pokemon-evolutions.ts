@@ -130,7 +130,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
   [Species.GEODUDE]: [new SpeciesEvolution(Species.GRAVELER, 25, null, null)],
   [Species.PONYTA]: [new SpeciesEvolution(Species.RAPIDASH, 40, null, null)],
   [Species.SLOWPOKE]: [
-    new SpeciesEvolution(Species.SLOWBRO, 37, null, null, 0),
+    new SpeciesEvolution(Species.SLOWBRO, 37, null, null),
     new SpeciesEvolution(Species.SLOWKING, 1, EvolutionItem.LINKING_CORD, null, 37),
   ],
   [Species.MAGNEMITE]: [new SpeciesEvolution(Species.MAGNETON, 30, null, null)],
@@ -320,7 +320,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
   [Species.SLAKOTH]: [new SpeciesEvolution(Species.VIGOROTH, 18, null, null)],
   [Species.VIGOROTH]: [new SpeciesEvolution(Species.SLAKING, 36, null, null)],
   [Species.NINCADA]: [
-    new SpeciesEvolution(Species.NINJASK, 20, null, null, 20),
+    new SpeciesEvolution(Species.NINJASK, 20, null, null),
     new SpeciesEvolution(
       Species.SHEDINJA,
       20,
@@ -766,7 +766,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
           ].indexOf(p.getNature()) > -1,
       ),
     ),
-    new SpeciesFormEvolution(Species.TOXTRICITY, "", "amped", 30, null, null, 30),
+    new SpeciesFormEvolution(Species.TOXTRICITY, "", "amped", 30, null, null),
   ],
   [Species.SIZZLIPEDE]: [new SpeciesEvolution(Species.CENTISKORCH, 28, null, null)],
   [Species.HATENNA]: [new SpeciesEvolution(Species.HATTREM, 32, null, null)],
@@ -856,7 +856,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
         return ret;
       }),
     ),
-    new SpeciesEvolution(Species.MAUSHOLD, 25, null, null, 0),
+    new SpeciesEvolution(Species.MAUSHOLD, 25, null, null),
   ],
   [Species.FIDOUGH]: [new SpeciesEvolution(Species.DACHSBUN, 26, null, null)],
   [Species.SMOLIV]: [new SpeciesEvolution(Species.DOLLIV, 25, null, null)],
