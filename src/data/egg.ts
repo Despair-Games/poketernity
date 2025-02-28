@@ -6,7 +6,7 @@ import { speciesStarterCosts } from "#app/data/balance/starters";
 import { VariantTier } from "#enums/variant-tier";
 import { randInt, randomString, randSeedInt, getIvsFromId } from "#app/utils";
 import Overrides from "#app/overrides";
-import { pokemonPrevolutions } from "./balance/pokemon-evolutions/pokemon-prevolutions";
+import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions/pokemon-prevolutions";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import i18next from "i18next";
 import { EggTier } from "#enums/egg-type";

@@ -8,7 +8,7 @@ import { randSeedInt, randSeedGauss } from "#app/utils";
 import type { GrowthRate } from "#enums/growth-rates";
 import type { EvolutionLevel } from "#app/data/balance/pokemon-evolutions/pokemon-evolutions";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
-import { pokemonPrevolutions } from "./balance/pokemon-evolutions/pokemon-prevolutions";
+import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions/pokemon-prevolutions";
 import type { ElementalType } from "#enums/elemental-type";
 import { variantData } from "#app/data/variant";
 import { SpeciesFormKey } from "#enums/species-form-key";

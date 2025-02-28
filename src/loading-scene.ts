@@ -10,7 +10,7 @@ import { getWindowVariantSuffix } from "#app/ui/ui-theme";
 import { WindowVariant } from "#enums/window-variant";
 import { isMobile } from "#app/touch-controls";
 import { getEnumValues, getEnumKeys } from "#app/utils";
-import { initPokemonPrevolutions } from "./data/balance/pokemon-evolutions/pokemon-prevolutions";
+import { initPokemonPrevolutions } from "#app/data/balance/pokemon-evolutions/pokemon-prevolutions";
 import { initBiomes } from "#app/data/balance/biomes";
 import { initEggMoves } from "#app/data/balance/egg-moves";
 import { initPokemonForms } from "#app/data/pokemon-forms";
