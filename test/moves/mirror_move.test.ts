@@ -79,4 +79,16 @@ describe("Moves - Mirror Move", () => {
 
     expect(game.scene.getPlayerPokemon()!.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
   });
+
+  it("should fail if the target last used Mirror Move, without any infinite loop", async () => {
+    game.override.enemyMoveset(MoveId.MIRROR_MOVE);
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    game.move.select(MoveId.MIRROR_MOVE);
+    await game.toEndOfTurn();
+
+    for (const pokemon of game.scene.getField()) {
+      expect(pokemon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
+    }
+  });
 });

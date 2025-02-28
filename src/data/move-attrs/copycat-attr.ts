@@ -4,6 +4,7 @@ import { CallMoveAttr } from "#app/data/move-attrs/call-move-attr";
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { BooleanHolder } from "#app/utils";
+import { getMaxMoveList } from "#app/utils/move-utils";
 import { MoveId } from "#enums/move-id";
 
 /**
@@ -34,6 +35,7 @@ export class CopycatAttr extends CallMoveAttr {
 }
 
 const invalidCopycatMoves = [
+  ...getMaxMoveList(),
   MoveId.ASSIST,
   MoveId.BANEFUL_BUNKER,
   MoveId.BEAK_BLAST,

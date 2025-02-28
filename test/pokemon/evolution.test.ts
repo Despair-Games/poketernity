@@ -1,5 +1,4 @@
-import { pokemonEvolutions, SpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions";
-import { SpeciesWildEvolutionDelay } from "#enums/species-wild-evolution-delay";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -91,12 +90,6 @@ describe("Evolution", () => {
     expect(shedinja.gender).toBe(Gender.GENDERLESS);
     // Regression test
     expect(shedinja.metBiome).toBe(-1);
-  });
-
-  it("should set wild delay to NONE by default", () => {
-    const speciesFormEvo = new SpeciesFormEvolution(Species.ABRA, null, null, 1000, null, null);
-
-    expect(speciesFormEvo.wildDelay).toBe(SpeciesWildEvolutionDelay.NONE);
   });
 
   it("should increase both HP and max HP when evolving", async () => {

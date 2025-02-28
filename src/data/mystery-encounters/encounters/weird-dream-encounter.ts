@@ -117,7 +117,7 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
     return true;
   })
   .withOnVisualsStart(() => {
-    globalScene.fadeAndSwitchBgm("mystery_encounter_weird_dream");
+    globalScene.audioManager.fadeAndSwitchBgm("mystery_encounter_weird_dream");
     return true;
   })
   .withOption(
@@ -475,7 +475,7 @@ async function postProcessTransformedPokemon(
       newPokemon.getSpeciesForm().getBaseStatTotal() <= NON_LEGENDARY_BST_THRESHOLD || newPokemon.isShiny();
     const unlockedStarters = await addPokemonDataToDexAndValidateAchievements(newPokemon, shouldUnlockStarters);
     if (unlockedStarters.length > 0) {
-      globalScene.playSound("level_up_fanfare");
+      globalScene.audioManager.playSound("level_up_fanfare");
       for (const speciesId of unlockedStarters) {
         await showEncounterText(
           i18next.t("battle:addedAsAStarter", { pokemonName: getPokemonSpecies(speciesId).getName() }),

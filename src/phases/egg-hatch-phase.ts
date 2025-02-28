@@ -1,4 +1,4 @@
-import type { AnySound } from "#app/battle-scene";
+import type { AnySound } from "#app/audio-manager";
 import type { Egg } from "#app/data/egg";
 import { EggCountChangedEvent } from "#app/events/egg";
 import type { PlayerPokemon } from "#app/field/pokemon";
@@ -97,7 +97,7 @@ export class EggHatchPhase extends Phase {
 
       globalScene.gameData.eggs.splice(eggIndex, 1);
 
-      globalScene.fadeOutBgm(undefined, false);
+      globalScene.audioManager.fadeOutBgm(undefined, false);
 
       this.eggHatchHandler = globalScene.ui.getHandler() as EggHatchSceneHandler;
 
@@ -172,7 +172,7 @@ export class EggHatchPhase extends Phase {
 
         globalScene.time.delayedCall(1000, () => {
           if (!this.hatched) {
-            this.evolutionBgm = globalScene.playSoundWithoutBgm("evolution");
+            this.evolutionBgm = globalScene.audioManager.playSoundWithoutBgm("evolution");
           }
         });
 
@@ -202,7 +202,7 @@ export class EggHatchPhase extends Phase {
                   if (this.hatched) {
                     return;
                   }
-                  globalScene.playSound("se/egg_crack");
+                  globalScene.audioManager.playSound("se/egg_crack");
                   this.doSpray(4);
                   this.eggCrackSprite.setFrame("3");
                   globalScene.time.delayedCall(125, () => this.eggCrackSprite.setFrame("4"));
@@ -238,7 +238,7 @@ export class EggHatchPhase extends Phase {
    */
   protected doEggShake(intensity: number, repeatCount: number = 0, count: number = 0): Promise<void> {
     return new Promise((resolve) => {
-      globalScene.playSound("se/pb_move");
+      globalScene.audioManager.playSound("se/pb_move");
       globalScene.tweens.add({
         targets: this.eggContainer,
         x: `-=${intensity / (count ? 1 : 2)}`,
@@ -300,7 +300,7 @@ export class EggHatchPhase extends Phase {
     }
     for (let e = 0; e < 5; e++) {
       globalScene.time.delayedCall(fixedNumber(375 * e), () =>
-        globalScene.playSound("se/egg_hatch", { volume: 1 - e * 0.2 }),
+        globalScene.audioManager.playSound("se/egg_hatch", { volume: 1 - e * 0.2 }),
       );
     }
     this.eggLightraysOverlay.setVisible(true);
@@ -367,7 +367,7 @@ export class EggHatchPhase extends Phase {
       globalScene.time.delayedCall(fixedNumber((isShiny ? 750 : 250) + (!this.skipped ? 1000 : 0)), () => {
         this.infoContainer.show(this.pokemon, false, this.skipped ? 2 : 1);
 
-        globalScene.playSoundWithoutBgm("evolution_fanfare");
+        globalScene.audioManager.playSoundWithoutBgm("evolution_fanfare");
 
         globalScene.ui.showText(
           i18next.t("egg:hatchFromTheEgg", { pokemonName: getPokemonNameWithAffix(this.pokemon) }),

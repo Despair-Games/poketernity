@@ -1,5 +1,5 @@
 import type { StarterMoveset } from "#app/@types/StarterData";
-import type { AnySound } from "#app/battle-scene";
+import type { AnySound } from "#app/audio-manager";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import { type LevelMoves, pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";
@@ -466,7 +466,7 @@ export abstract class PokemonSpeciesForm {
     if (cry?.pendingRemove) {
       cry = null;
     }
-    cry = globalScene.playSound(cry ?? cryKey, soundConfig);
+    cry = globalScene.audioManager.playSound(cry ?? cryKey, soundConfig);
     if (ignorePlay) {
       cry.stop();
     }

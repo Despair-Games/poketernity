@@ -325,7 +325,7 @@ export class EncounterPhase extends BattlePhase {
   }
 
   protected doEncounter(): void {
-    globalScene.playBgm(undefined, true);
+    globalScene.audioManager.playBgm(undefined, true);
     globalScene.updateModifiers(false);
     globalScene.setFieldScale(1);
 
@@ -430,7 +430,7 @@ export class EncounterPhase extends BattlePhase {
 
       const doSummon = (): void => {
         currentBattle.started = true;
-        globalScene.playBgm(undefined);
+        globalScene.audioManager.playBgm(undefined);
         pbTray.showPbTray(globalScene.getPlayerParty());
         pbTrayEnemy.showPbTray(globalScene.getEnemyParty());
         const doTrainerSummon = (): void => {

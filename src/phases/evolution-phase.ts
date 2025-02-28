@@ -3,7 +3,7 @@
 import { type FormChangePhase } from "#app/phases/form-change-phase";
 // -- end tsdoc imports --
 
-import type { AnySound } from "#app/battle-scene";
+import type { AnySound } from "#app/audio-manager";
 import type { SpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions";
 import { EVOLVE_MOVE } from "#app/data/balance/pokemon-level-moves";
 import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
@@ -86,7 +86,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
           });
 
           time.delayedCall(1000, () => {
-            this.evolutionBgm = globalScene.playSoundWithoutBgm("evolution");
+            this.evolutionBgm = globalScene.audioManager.playSoundWithoutBgm("evolution");
             tweens.add({
               targets: this.bgOverlay,
               alpha: 1,
@@ -103,7 +103,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
                   this.bgVideo.setVisible(true);
                   this.bgVideo.play();
                 });
-                globalScene.playSound("se/charge");
+                globalScene.audioManager.playSound("se/charge");
                 animations.doSpiralUpward(this.baseBgImg, this.container);
                 tweens.addCounter({
                   from: 0,
@@ -115,7 +115,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
                   onComplete: () => {
                     this.pokemonSprite.setVisible(false);
                     time.delayedCall(1100, () => {
-                      globalScene.playSound("se/beam");
+                      globalScene.audioManager.playSound("se/beam");
                       animations.doArcDownward(this.baseBgImg, this.container);
                       time.delayedCall(1500, () => {
                         this.pokemonNewFormTintSprite.setScale(0.25);
@@ -182,7 +182,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
           () => {
             const end = (): void => {
               ui.showText("", 0);
-              globalScene.playBgm();
+              globalScene.audioManager.playBgm();
               evolvedPokemon.destroy();
               this.end();
             };
@@ -218,7 +218,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
   private handleSuccessEvolution(evolvedPokemon: Pokemon): void {
     const { time, tweens, ui, animations } = globalScene;
 
-    globalScene.playSound("se/sparkle");
+    globalScene.audioManager.playSound("se/sparkle");
     this.pokemonNewFormSprite.setVisible(true);
     animations.doCircleInward(this.baseBgImg, this.container);
 
@@ -242,7 +242,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
       time.delayedCall(250, () => {
         this.pokemon.cry();
         time.delayedCall(1250, () => {
-          globalScene.playSoundWithoutBgm("evolution_fanfare");
+          globalScene.audioManager.playSoundWithoutBgm("evolution_fanfare");
 
           evolvedPokemon.destroy();
           ui.showText(
@@ -258,7 +258,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
             true,
             fixedNumber(4000),
           );
-          time.delayedCall(fixedNumber(4250), () => globalScene.playBgm());
+          time.delayedCall(fixedNumber(4250), () => globalScene.audioManager.playBgm());
         });
       });
     };
@@ -275,7 +275,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
         }
         globalScene.unshiftPhase(new EndEvolutionPhase());
 
-        globalScene.playSound("se/shine");
+        globalScene.audioManager.playSound("se/shine");
         animations.doSpray(this.baseBgImg, this.container);
         tweens.add({
           targets: this.overlay,

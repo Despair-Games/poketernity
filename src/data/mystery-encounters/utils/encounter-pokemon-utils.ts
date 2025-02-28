@@ -463,7 +463,7 @@ export function trainerThrowPokeball(
       `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
     );
     globalScene.time.delayedCall(512, () => {
-      globalScene.playSound("se/pb_throw");
+      globalScene.audioManager.playSound("se/pb_throw");
 
       // Trainer throw frames
       globalScene.trainer.setFrame("2");
@@ -485,7 +485,7 @@ export function trainerThrowPokeball(
         onComplete: () => {
           pokeball.setTexture("pb", `${pokeballAtlasKey}_opening`);
           globalScene.time.delayedCall(17, () => pokeball.setTexture("pb", `${pokeballAtlasKey}_open`));
-          globalScene.playSound("se/pb_rel");
+          globalScene.audioManager.playSound("se/pb_rel");
           pokemon.tint(getPokeballTintColor(pokeballType));
 
           globalScene.animations.addPokeballOpenParticles(pokeball.x, pokeball.y, pokeballType);
@@ -499,7 +499,7 @@ export function trainerThrowPokeball(
             onComplete: () => {
               pokeball.setTexture("pb", `${pokeballAtlasKey}_opening`);
               pokemon.setVisible(false);
-              globalScene.playSound("se/pb_catch");
+              globalScene.audioManager.playSound("se/pb_catch");
               globalScene.time.delayedCall(17, () => pokeball.setTexture("pb", `${pokeballAtlasKey}`));
 
               const doShake = () => {
@@ -527,13 +527,13 @@ export function trainerThrowPokeball(
                       failCatch(pokemon, originalY, pokeball, pokeballType).then(() => resolve(false));
                     } else if (shakeCount++ < 3) {
                       if (randSeedInt(65536) < ballTwitchRate) {
-                        globalScene.playSound("se/pb_move");
+                        globalScene.audioManager.playSound("se/pb_move");
                       } else {
                         shakeCounter.stop();
                         failCatch(pokemon, originalY, pokeball, pokeballType).then(() => resolve(false));
                       }
                     } else {
-                      globalScene.playSound("se/pb_lock");
+                      globalScene.audioManager.playSound("se/pb_lock");
                       globalScene.animations.addPokeballCaptureStars(pokeball);
 
                       const pbTint = globalScene.add.sprite(pokeball.x, pokeball.y, "pb", "pb");
@@ -587,7 +587,7 @@ function failCatch(
   pokeballType: PokeballType,
 ) {
   return new Promise<void>((resolve) => {
-    globalScene.playSound("se/pb_rel");
+    globalScene.audioManager.playSound("se/pb_rel");
     pokemon.setY(originalY);
     if (pokemon.hasStatusEffect(StatusEffect.SLEEP, false, true)) {
       pokemon.cry(pokemon.getHpRatio() > 0.25 ? undefined : { rate: 0.85 });
@@ -821,7 +821,7 @@ function removePb(pokeball: Phaser.GameObjects.Sprite) {
  */
 export async function doPokemonFlee(pokemon: EnemyPokemon): Promise<void> {
   await new Promise<void>((resolve) => {
-    globalScene.playSound("se/flee");
+    globalScene.audioManager.playSound("se/flee");
     // Ease pokemon out
     globalScene.tweens.add({
       targets: pokemon,
