@@ -116,6 +116,8 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.TELEKINESIS:
       case BattlerTagType.POWDER:
         return -2;
+      case BattlerTagType.QUASHED:
+        return -1;
       case BattlerTagType.NONE:
       /**
        * @todo: Burned Up and Double Shocked terastallization considerations

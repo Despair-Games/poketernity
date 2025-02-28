@@ -110,4 +110,5 @@ export enum BattlerTagType {
   BYPASS_SPEED,
   CRIT_BOOST_STACKABLE,
   RAGE,
+  QUASHED,
 }

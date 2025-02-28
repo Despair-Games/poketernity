@@ -131,6 +131,7 @@ import { PreMoveMessageAttr } from "#app/data/move-attrs/pre-move-message-attr";
 import { PresentPowerAttr } from "#app/data/move-attrs/present-power-attr";
 import { ProtectAttr } from "#app/data/move-attrs/protect-attr";
 import { PsychoShiftEffectAttr } from "#app/data/move-attrs/psycho-shift-effect-attr";
+import { QuashAttr } from "#app/data/move-attrs/quash-attr";
 import { RageAttr } from "#app/data/move-attrs/rage-attr";
 import { RagingBullTypeAttr } from "#app/data/move-attrs/raging-bull-type-attr";
 import { RandomLevelDamageAttr } from "#app/data/move-attrs/random-level-damage-attr";
@@ -2125,7 +2126,8 @@ export function initMoves() {
     new AttackMove(MoveId.INCINERATE, ElementalType.FIRE, MoveCategory.SPECIAL, 60, 100, 15, -1, 0, 5)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
       .attr(RemoveHeldItemAttr, true),
-    new StatusMove(MoveId.QUASH, ElementalType.DARK, 100, 15, -1, 0, 5).condition(failIfSingleBattle).unimplemented(),
+    new StatusMove(MoveId.QUASH, ElementalType.DARK, 100, 15, -1, 0, 5)
+      .attr(QuashAttr),
     new AttackMove(MoveId.ACROBATICS, ElementalType.FLYING, MoveCategory.PHYSICAL, 55, 100, 15, -1, 0, 5).attr(
       MovePowerMultiplierAttr,
       (user, _target, _move) =>

@@ -3509,6 +3509,25 @@ export class BypassSpeedTag extends BattlerTag {
 }
 
 /**
+ * Tag to force the affected Pokemon to move last in the turn.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Quash_(move) | Quash}.
+ */
+export class QuashedTag extends BattlerTag {
+  constructor() {
+    super(BattlerTagType.QUASHED, BattlerTagLapseType.TURN_END, 1);
+  }
+
+  override onAdd(pokemon: Pokemon) {
+    // "{pokemonNameWithAffix}'s move was postponed!"
+    globalScene.queueMessage(
+      i18next.t("battlerTags:quashOnAdd", {
+        pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
+      }),
+    );
+  }
+}
+
+/**
  * Retrieves a {@linkcode BattlerTag} based on the provided tag type, turn count, source move, and source ID.
  * @param sourceId - The ID of the pokemon adding the tag
  * @returns The corresponding {@linkcode BattlerTag} object.
@@ -3717,6 +3736,8 @@ export function getBattlerTag(
       return new PsychoShiftTag();
     case BattlerTagType.BYPASS_SPEED:
       return new BypassSpeedTag();
+    case BattlerTagType.QUASHED:
+      return new QuashedTag();
     case BattlerTagType.NONE:
     default:
       return new BattlerTag(tagType, BattlerTagLapseType.CUSTOM, turnCount, sourceMoveId, sourceId);
