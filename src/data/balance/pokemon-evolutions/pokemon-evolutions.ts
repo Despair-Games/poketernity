@@ -2,7 +2,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { Species } from "#enums/species";
 import { EvolutionItem } from "#enums/evolution-item";
 import { SpeciesFormKey } from "#enums/species-form-key";
-import { pokemonEvolutions } from "./init-pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
 
 /**
  * Pokemon Evolution tuple type consisting of:
