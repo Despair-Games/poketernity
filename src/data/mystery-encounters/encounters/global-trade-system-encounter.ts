@@ -477,7 +477,7 @@ async function doTradeOptionPhaseCallback(): Promise<void> {
   // Set data properly, then generate the new Pokemon's assets
   receivedPokemonData.passive = tradedPokemon.passive;
   // Pokeball to Ultra ball, randomly
-  receivedPokemonData.pokeball = randInt(4) as PokeballType;
+  receivedPokemonData.pokeball = randInt(3) as PokeballType;
   const dataSource = new PokemonData(receivedPokemonData);
   const newPlayerPokemon = globalScene.addPlayerPokemon(
     receivedPokemonData.species,

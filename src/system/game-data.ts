@@ -1520,11 +1520,14 @@ export class GameData {
   }
 
   /**
-   * Set the given Pokemon (and its pre-evolutions, if any) as caught and update the dex data based on its characteristics
-   * (nature, ability, shinyness, variant, ...) updates games stats and gives starter candy.
+   * Set the given Pokemon (and its pre-evolutions, if any) as caught, update the dex data based on its characteristics
+   * (nature, ability, shinyness, variant, ...), update game stats, and give starter candy.
+   *
    * Note: it does not update the Pokemon IVs (TODO: why??). See {@linkcode updateSpeciesDexIvs} for that.
+   *
    * By default, shows a message for each starter unlocked in the process.
-   * The function exits early if the Pokemon is a "rental" Pokemon (ie was given through an event for the current run only)
+   *
+   * The function exits early if the Pokemon is a "rental" Pokemon (i.e. was given through an event for the current run only)
    * unless that species had already been captured before, in which case any new form, gender, etc. gets unlocked.
    *
    * @param pokemon the {@linkcode Pokemon} that was caught.

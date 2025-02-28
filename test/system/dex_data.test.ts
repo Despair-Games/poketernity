@@ -42,9 +42,15 @@ describe("Dex Data", () => {
       expect(dexData).toBeDefined();
       expect(starterData).toBeDefined();
 
+      expect(starterData.eggMoves).toBe(0);
+      expect(starterData.candyCount).toBe(0);
+      expect(starterData.friendship).toBe(0);
       expect(starterData.abilityAttr & AbilityAttr.ABILITY_1).toBeTruthy();
       expect(starterData.abilityAttr & AbilityAttr.ABILITY_2).toBeFalsy();
       expect(starterData.abilityAttr & AbilityAttr.ABILITY_HIDDEN).toBeFalsy();
+      expect(starterData.passiveAttr).toBe(0);
+      expect(starterData.valueReduction).toBe(0);
+      expect(starterData.classicWinCount).toBe(0);
 
       const unlockedNatures = gameData.getNaturesForAttr(dexData.natureAttr);
       expect(unlockedNatures.length).toBe(1);

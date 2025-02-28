@@ -222,20 +222,20 @@ export class EvolutionPhase extends FormChangeBasePhase {
     this.pokemonNewFormSprite.setVisible(true);
     animations.doCircleInward(this.baseBgImg, this.container);
 
-    const showStarterUnlockText = (unlockedStarters: Species[]): Promise<void> => {
-      return new Promise<void>((resolve) => {
-        if (unlockedStarters.length === 0) {
-          return resolve();
-        }
-        ui.showText(
-          i18next.t("battle:addedAsAStarter", { pokemonName: getPokemonSpecies(unlockedStarters.shift()).getName() }),
-          null,
-          () => showStarterUnlockText(unlockedStarters).then(() => resolve()),
-          null,
-          true,
-        );
-      });
-    };
+    async function showStarterUnlockText(unlockedStarters: Species[]): Promise<void> {
+      for (const speciesId of unlockedStarters) {
+        globalScene.audioManager.playSound("level_up_fanfare");
+        await new Promise<void>((resolve) => {
+          ui.showText(
+            i18next.t("battle:addedAsAStarter", { pokemonName: getPokemonSpecies(speciesId).getName() }),
+            null,
+            () => resolve(),
+            null,
+            true,
+          );
+        });
+      }
+    }
 
     const onEvolutionComplete = (unlockedStarters: Species[]): void => {
       SoundFade.fadeOut(globalScene, this.evolutionBgm, 100);
