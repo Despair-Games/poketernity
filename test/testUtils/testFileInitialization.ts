@@ -3,7 +3,7 @@ import { SESSION_ID_COOKIE } from "#app/constants";
 import { allMoves } from "#app/data/data-lists";
 import { initBiomes } from "#app/data/balance/biomes";
 import { initEggMoves } from "#app/data/balance/egg-moves";
-import { initPokemonPrevolutions } from "#app/data/balance/pokemon-evolutions/pokemon-evolutions";
+import { initPokemonPrevolutions } from "#app/data/balance/pokemon-evolutions/pokemon-prevolutions";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
 import { initPokemonForms } from "#app/data/pokemon-forms";
 import { initSpecies } from "#app/data/init-species";

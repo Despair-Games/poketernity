@@ -20,7 +20,7 @@ import {
 } from "#app/constants";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { biomeDepths, getBiomeName } from "#app/data/balance/biomes";
-import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions/pokemon-evolutions";
+import { pokemonPrevolutions } from "./data/balance/pokemon-evolutions/pokemon-prevolutions";
 import { FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import { MoveChargeAnim } from "#app/data/battle-anims/move-charge-anim";
