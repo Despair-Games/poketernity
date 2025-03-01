@@ -343,15 +343,11 @@ export default class Trainer extends Phaser.GameObjects.Container {
           }
         }
 
-        // Create an empty species pool (which will be set to one of the species pools based on the index)
+        // Create an empty species pool (which will be set to one of the species pools based on the index, if applicable)
         let newSpeciesPool: Species[] = [];
-        let useNewSpeciesPool = false;
 
         // If we are in a double battle of named trainers, we need to use alternate species pools (generate half the party from each trainer)
         if (this.config.trainerTypeDouble && this.isDouble() && !this.config.doubleOnly) {
-          // Use the new species pool for this party generation
-          useNewSpeciesPool = true;
-
           // Get the species pool for the partner trainer and the current trainer
           const speciesPoolPartner = signatureSpecies[TrainerType[this.config.trainerTypeDouble]];
           const speciesPool = signatureSpecies[TrainerType[this.config.trainerType]];
@@ -402,23 +398,19 @@ export default class Trainer extends Phaser.GameObjects.Container {
               newSpeciesPool = speciesPoolPartnerFiltered;
             }
           }
-          // Fallback for when the species pool is empty
-          if (newSpeciesPool.length === 0) {
-            // If all pokemon from this pool are already in the party, generate a random species
-            useNewSpeciesPool = false;
-          }
         }
 
-        // If useNewSpeciesPool is true, we need to generate a new species from the new species pool, otherwise we generate a random species
-        let species = useNewSpeciesPool
-          ? getPokemonSpecies(newSpeciesPool[Math.floor(randSeedInt(newSpeciesPool.length))])
-          : template.isSameSpecies(index) && index > offset
-            ? battle.enemyParty[offset].species
-            : this.genNewPartyMemberSpecies(level, strength);
-
-        // If the species is from newSpeciesPool, we need to adjust it based on the level and strength
-        if (useNewSpeciesPool) {
-          species = getPokemonSpecies(species.getEnemySpeciesForLevel(level, true));
+        let species: PokemonSpecies;
+        if (newSpeciesPool.length > 0) {
+          // If the new species pool is non-empty, select a species from it and set it to its correct evolution stage.
+          const rawSpecies = getPokemonSpecies(randSeedItem(newSpeciesPool));
+          species = getPokemonSpecies(rawSpecies.getEnemySpeciesForLevel(level, true));
+        } else if (template.isSameSpecies(index) && index > offset) {
+          // If the template calls for using the same species as the previous Pokemon, then copy the species.
+          species = battle.enemyParty[offset].species;
+        } else {
+          // If none of the above applies, pick a random species from the trainer's regular pool.
+          species = this.genNewPartyMemberSpecies(level, strength);
         }
 
         ret = globalScene.addEnemyPokemon(
