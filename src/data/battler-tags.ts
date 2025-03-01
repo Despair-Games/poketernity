@@ -1108,11 +1108,28 @@ export class NightmareTag extends BattlerTag {
  * @extends BattlerTag
  */
 export abstract class MoveLockTag extends BattlerTag {
+  protected lastTargets: BattlerIndex[];
+
   constructor(tagType: BattlerTagType, turnCount: number, sourceMoveId: MoveId) {
     super(tagType, BattlerTagLapseType.AFTER_MOVE, turnCount, sourceMoveId);
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
+    if (lapseType === BattlerTagLapseType.CUSTOM) {
+      return this.handleCustomLapse(pokemon);
+    } else {
+      return this.handleAfterMoveLapse(pokemon);
+    }
+  }
+
+  /**
+   * Queues the tag's source move on all turns except this tag's last turn
+   * if the tag holder's last move was successful. The queued move initially
+   * has no targets; the move targeting is instead resolved by this tag's custom lapse.
+   * @param pokemon the {@linkcode Pokemon} with this tag
+   * @returns `true` if the tag is to be retained after lapsing
+   */
+  protected handleAfterMoveLapse(pokemon: Pokemon): boolean {
     const { move: lastMove, targets: lastTargets, result: lastMoveResult } = pokemon.getLastXMoves()?.[0];
 
     // If this pokemon somehow used another move (e.g. via Dancer), don't advance this tag
@@ -1121,34 +1138,71 @@ export abstract class MoveLockTag extends BattlerTag {
     }
 
     const ret =
-      super.lapse(pokemon, lapseType)
+      super.lapse(pokemon, BattlerTagLapseType.AFTER_MOVE)
       && !!lastTargets
       && lastTargets.length > 0
       && lastMoveResult === MoveResult.SUCCESS;
 
     if (ret) {
-      const nextTargets = this.getNextTargets(pokemon, lastMove, lastTargets);
       const move = allMoves[this.sourceMoveId];
-      pokemon.getMoveQueue().push({ move, targets: nextTargets, ignorePP: true, type: pokemon.getMoveType(move) });
+      this.lastTargets = lastTargets;
+      pokemon.getMoveQueue().push({ move, targets: [], ignorePP: true, type: pokemon.getMoveType(move) });
     }
 
     return ret;
   }
 
   /**
+   * Determines the next queued move's target during command selection
+   * @param pokemon the {@linkcode Pokemon} with this tag
+   */
+  protected handleCustomLapse(pokemon: Pokemon): boolean {
+    const queuedMove = pokemon.getMoveQueue()[0];
+
+    /**
+     * If the pokemon somehow doesn't have a queued move, abort
+     * target adjustment and remove this tag. This is just a failsafe;
+     * under normal circumstances, this should never happen.
+     */
+    if (!queuedMove) {
+      return false;
+    }
+
+    queuedMove.targets = this.getNextTargets(pokemon, queuedMove.move);
+    return true;
+  }
+
+  /**
    * Obtains the target(s) for move actions queued by this tag
    * @param pokemon the {@linkcode Pokemon} with this tag
    * @param move the {@linkcode Move} queued by this tag
-   * @param lastTargets the target(s), by {@linkcode BattlerIndex}, attacked by
-   * the source Pokemon's last use of the move.
    * @returns the target(s), by {@linkcode BattlerIndex}, for the next usage of this tag's move
    */
-  protected getNextTargets(pokemon: Pokemon, move: Move, lastTargets: BattlerIndex[]): BattlerIndex[] {
+  protected getNextTargets(pokemon: Pokemon, move: Move): BattlerIndex[] {
     if ((move.moveTarget = MoveTarget.RANDOM_NEAR_ENEMY)) {
       return getMoveTargets(pokemon, move.id).targets;
     } else {
-      return lastTargets;
+      // Note: this assumes the locked move is single-target
+      const lastTarget = globalScene.getFieldPokemonByBattlerIndex(this.lastTargets[0]);
+      const adjacentIndex = this.lastTargets[0] + (this.lastTargets[0] % 2 === 0 ? 1 : -1);
+      const adjacentTarget = globalScene.getFieldPokemonByBattlerIndex(adjacentIndex);
+
+      if (
+        !lastTarget?.isActive(true)
+        && globalScene.currentBattle.double
+        && adjacentTarget?.isActive(true)
+        && adjacentTarget !== pokemon
+      ) {
+        return [adjacentIndex];
+      } else {
+        return this.lastTargets;
+      }
     }
+  }
+
+  override loadTag(source: BattlerTag | any): void {
+    super.loadTag(source);
+    this.lastTargets = source.lastTargets;
   }
 }
 

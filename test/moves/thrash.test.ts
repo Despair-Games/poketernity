@@ -132,4 +132,27 @@ describe("Moves - Thrash", () => {
     expect(player.getTag(BattlerTagType.FRENZY)).toBeUndefined();
     expect(player.getTag(BattlerTagType.CONFUSED)).toBeDefined();
   });
+
+  it("should continue execution between waves", async () => {
+    game.override.enemyLevel(1);
+
+    await game.classicMode.startBattle([Species.MAGIKARP]);
+
+    const player = game.field.getPlayerPokemon();
+
+    game.move.use(MoveId.THRASH);
+    await game.toNextWave();
+
+    expect(player.getTag(BattlerTagType.FRENZY)).toBeDefined();
+    expect(player.getMoveQueue()[0]).toMatchObject({
+      move: expect.objectContaining({ id: MoveId.THRASH }),
+      targets: [BattlerIndex.ENEMY],
+      ignorePP: true,
+    });
+
+    const nextEnemy = game.field.getEnemyPokemon();
+
+    await game.phaseInterceptor.to("FaintPhase", false);
+    expect(nextEnemy.isFainted()).toBeTruthy();
+  });
 });
