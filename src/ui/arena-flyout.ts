@@ -30,7 +30,7 @@ enum ArenaEffectType {
 interface ArenaEffectInfo {
   /** The enum string representation of the effect */
   name: string;
-  /** {@linkcode ArenaEffectType} type of effect */
+  /** {@linkcode ArenaEffectType | type of effect} */
   effectType: ArenaEffectType;
 
   /** The maximum duration set by the effect */
@@ -365,8 +365,8 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
 
   /**
    * Helper function that determines where to insert information about a new weather or terrain in the `fieldEffectInfo` array
-   * @param newInfo {@linkcode ArenaEffectInfo} the new weather or terrain event info
-   * @param oldName the previous weather or terrain
+   * @param newInfo - The new weather or terrain {@linkcode ArenaEffectInfo | effect info}
+   * @param oldName - The name of the previous weather or terrain
    */
   private insertFieldEffectInfo(newInfo: ArenaEffectInfo, oldName: string): void {
     if (isNullOrUndefined(newInfo.name)) {
