@@ -182,7 +182,7 @@ export default class SummaryUiHandler extends UiHandler {
     this.candyShadow.setInteractive(new Phaser.Geom.Rectangle(0, 0, 30, 16), Phaser.Geom.Rectangle.Contains);
     this.summaryContainer.add(this.candyShadow);
 
-    this.candyCountText = addTextObject(20, -146, "x0", TextStyle.WINDOW_ALT, { fontSize: "76px" });
+    this.candyCountText = addTextObject(20, -146, "x0", TextStyle.SUMMARY_ALT_SMALL);
     this.candyCountText.setOrigin(0, 0);
     this.summaryContainer.add(this.candyCountText);
 
@@ -201,7 +201,7 @@ export default class SummaryUiHandler extends UiHandler {
     this.friendshipShadow.setInteractive(new Phaser.Geom.Rectangle(0, 0, 50, 16), Phaser.Geom.Rectangle.Contains);
     this.summaryContainer.add(this.friendshipShadow);
 
-    this.friendshipText = addTextObject(20, -66, "x0", TextStyle.WINDOW_ALT, { fontSize: "76px" });
+    this.friendshipText = addTextObject(20, -66, "x0", TextStyle.SUMMARY_ALT_SMALL);
     this.friendshipText.setOrigin(0, 0);
     this.summaryContainer.add(this.friendshipText);
 

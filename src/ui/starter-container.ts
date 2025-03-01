@@ -56,7 +56,7 @@ export class StarterContainer extends Phaser.GameObjects.Container {
     this.add(this.shinyIcons);
 
     // value label
-    const label = addTextObject(1, 2, "0", TextStyle.WINDOW, { fontSize: "32px" });
+    const label = addTextObject(1, 2, "0", TextStyle.STARTER_COST);
     label.setShadowOffset(2, 2);
     label.setOrigin(0, 0);
     label.setVisible(false);

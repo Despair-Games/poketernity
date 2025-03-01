@@ -153,6 +153,10 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
     color: TextColor.DARK_GREY_LIGHT_SHADOW,
     format: TextFormat.DEFAULT_FONT_96PX,
   },
+  [TextStyle.SUMMARY_ALT_SMALL]: {
+    color: TextColor.DARK_GREY_LIGHT_SHADOW,
+    format: TextFormat.DEFAULT_FONT_76PX,
+  },
   [TextStyle.SUMMARY_GRAY]: {
     color: TextColor.GREY_DARK_SHADOW,
     format: TextFormat.DEFAULT_FONT_96PX,
@@ -220,7 +224,7 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
   [TextStyle.STATS_LABEL]: {
     color: TextColor.ORANGE_DARK_SHADOW,
     format: {
-      ["en"]: TextFormat.DEFAULT_FONT_96PX_BIG_SHADOW,
+      [DEFAULT_LANGUAGE_KEY]: TextFormat.DEFAULT_FONT_96PX_BIG_SHADOW,
       ["de"]: TextFormat.DEFAULT_FONT_80PX,
     },
   },
@@ -255,6 +259,48 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
   [TextStyle.BOSS_POKEMON_LEVEL_SMALL]: {
     color: TextColor.PINK_DARK_GREY_SHADOW,
     format: TextFormat.ALT_FONT_44PX_STROKE,
+  },
+
+  [TextStyle.STARTER_COST]: {
+    color: TextColor.WHITE_DARK_PURPLE_SHADOW,
+    format: TextFormat.DEFAULT_FONT_32PX,
+  },
+  [TextStyle.STARTER_STATS]: {
+    color: TextColor.DARK_GREY_LIGHT_SHADOW,
+    format: TextFormat.DEFAULT_FONT_56PX,
+  },
+  [TextStyle.STARTER_LUCK]: {
+    color: TextColor.WHITE_DARK_PURPLE_SHADOW, // White because it gets tinted
+    format: TextFormat.DEFAULT_FONT_56PX,
+  },
+  [TextStyle.STARTER_FORM]: {
+    color: TextColor.DARK_GREY_LIGHT_SHADOW,
+    format: TextFormat.DEFAULT_FONT_42PX,
+  },
+  [TextStyle.STARTER_GROWTH_RATE]: {
+    color: TextColor.DARK_GREY_LIGHT_SHADOW,
+    format: TextFormat.DEFAULT_FONT_36PX,
+  },
+  [TextStyle.STARTER_INFO]: {
+    color: TextColor.DARK_GREY_LIGHT_SHADOW,
+    format: {
+      [DEFAULT_LANGUAGE_KEY]: TextFormat.DEFAULT_FONT_56PX,
+      ["de"]: TextFormat.DEFAULT_FONT_48PX,
+      ["fr"]: TextFormat.DEFAULT_FONT_54PX,
+      ["ja"]: TextFormat.DEFAULT_FONT_52PX,
+      ["ko"]: TextFormat.DEFAULT_FONT_52PX,
+      ["pt-BR"]: TextFormat.DEFAULT_FONT_48PX,
+      ["zh-CN"]: TextFormat.DEFAULT_FONT_48PX,
+      ["zh-TW"]: TextFormat.DEFAULT_FONT_48PX,
+    },
+  },
+  [TextStyle.STARTER_INSTRUCTIONS]: {
+    color: TextColor.WHITE_GREY_SHADOW,
+    format: {
+      [DEFAULT_LANGUAGE_KEY]: TextFormat.ALT_FONT_38PX,
+      ["de"]: TextFormat.ALT_FONT_35PX,
+      ["es-ES"]: TextFormat.ALT_FONT_35PX,
+    },
   },
 };
 

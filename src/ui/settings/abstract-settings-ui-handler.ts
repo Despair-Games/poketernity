@@ -111,13 +111,10 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
       0,
       0,
       `*: ${i18next.t("settings:requireReload")}`,
-      TextStyle.SUMMARY_GRAY,
-      {
-        fontSize: "5rem",
-      },
+      TextStyle.SETTINGS_LOCKED,
     );
-    requiresReloadInfoText.setOrigin(0, 0.35);
-    requiresReloadInfoText.setPositionRelative(actionsBg, 10, 10);
+    requiresReloadInfoText.setOrigin(0, 0.15);
+    requiresReloadInfoText.setPositionRelative(actionsBg, 5, 5);
 
     this.optionsContainer = globalScene.add.container(0, 0);
 
