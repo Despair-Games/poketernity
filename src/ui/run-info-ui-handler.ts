@@ -931,8 +931,7 @@ export default class RunInfoUiHandler extends UiHandler {
       GAME_WIDTH / 2,
       GAME_HEIGHT - 16,
       i18next.t("battle:congratulations"),
-      TextStyle.SUMMARY,
-      { fontSize: "128px" },
+      TextStyle.END_CARD,
     );
     text.setOrigin(0.5);
     this.endCardContainer.add(endCard);

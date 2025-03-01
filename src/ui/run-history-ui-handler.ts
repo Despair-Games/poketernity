@@ -189,9 +189,7 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
     const emptyWindow = addWindow(0, 0, 304, 165);
     this.runsContainer.add(emptyWindow);
     const emptyWindowCoordinates = emptyWindow.getCenter();
-    const emptyText = addTextObject(0, 0, i18next.t("saveSlotSelectUiHandler:empty"), TextStyle.WINDOW, {
-      fontSize: "128px",
-    });
+    const emptyText = addTextObject(0, 0, i18next.t("saveSlotSelectUiHandler:empty"), TextStyle.END_CARD);
     emptyText.setPosition(emptyWindowCoordinates.x - 18, emptyWindowCoordinates.y - 15);
     this.runsContainer.add(emptyText);
   }

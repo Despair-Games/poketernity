@@ -235,6 +235,11 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
     },
   },
 
+  [TextStyle.END_CARD]: {
+    color: TextColor.WHITE_GREY_SHADOW,
+    format: TextFormat.DEFAULT_FONT_128PX,
+  },
+
   [TextStyle.POKEMON_LEVEL]: {
     color: TextColor.WHITE_DARK_GREY_SHADOW,
     format: TextFormat.ALT_FONT_54PX_STROKE,

@@ -5,6 +5,11 @@ import type { TextFormatOptions } from "#app/ui/interfaces/text-format-options";
  * Object linking each {@linkcode TextFormat} to a {@linkcode TextFormatOptions}.
  */
 export const allTextFormats: Record<TextFormat, TextFormatOptions> = {
+  [TextFormat.DEFAULT_FONT_128PX]: {
+    fontFamily: "emerald",
+    fontSize: 128,
+    shadow: { xPosition: 3, yPosition: 3 },
+  },
   [TextFormat.DEFAULT_FONT_96PX]: {
     fontFamily: "emerald",
     fontSize: 96,

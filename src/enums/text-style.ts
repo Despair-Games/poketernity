@@ -42,6 +42,7 @@ export enum TextStyle {
   /** Style for challenge description */
   CHALLENGE_DESCRIPTION,
   TITLE_SCREEN,
+  END_CARD,
   SCORE,
   POKEMON_LEVEL,
   POKEMON_LEVEL_SMALL,
