@@ -200,7 +200,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     return prevolutionLevels;
   }
 
-  // TODO: This could definitely be written better and more accurate to the getSpeciesForLevel logic, but it is only for generating movesets for evolved Pokemon
+  // TODO: This could definitely be written better and more accurate to the getEnemySpeciesForLevel logic, but it is only for generating movesets for evolved Pokemon
   getSimulatedEvolutionChain(
     currentLevel: number,
     forTrainer: boolean = false,
