@@ -1604,7 +1604,7 @@ export function getRandomPartyMemberFunc(
   return (level: number, _strength: PartyMemberStrength) => {
     let species = randSeedItem(speciesPool);
     if (!ignoreEvolution) {
-      species = getPokemonSpecies(species).getTrainerSpeciesForLevel(level, true);
+      species = getPokemonSpecies(species).getTrainerSpeciesForLevel(level);
     }
     return globalScene.addEnemyPokemon(
       getPokemonSpecies(species),
@@ -1632,7 +1632,7 @@ export function getSpeciesFilterRandomPartyMemberFunc(
   return (level: number, _strength: PartyMemberStrength) => {
     const waveIndex = globalScene.currentBattle.waveIndex;
     const species = getPokemonSpecies(
-      globalScene.randomSpecies(waveIndex, level, false, speciesFilter).getTrainerSpeciesForLevel(level, true),
+      globalScene.randomSpecies(waveIndex, level, false, speciesFilter).getTrainerSpeciesForLevel(level),
     );
 
     return globalScene.addEnemyPokemon(species, level, trainerSlot, undefined, false, undefined, postProcess);

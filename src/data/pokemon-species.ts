@@ -128,35 +128,32 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
    * Calculates the correct evolution stage for a wild enemy Pokemon based on its level,
    * applying pre-evolutions and evolutions as necessary.
    * @param level The level of the Pokemon.
-   * @param allowEvolving Whether or not to allow further evolution.
    * @returns The {@linkcode Species | species ID} of the desired evolution stage.
    */
-  getWildSpeciesForLevel(level: number, allowEvolving: boolean): Species {
-    return this.getSpeciesForLevel(level, allowEvolving, false);
+  getWildSpeciesForLevel(level: number): Species {
+    return this.getSpeciesForLevel(level, false);
   }
 
   /**
    * Calculates the correct evolution stage for an enemy trainer's Pokemon based on its level,
    * applying pre-evolutions and evolutions as necessary.
    * @param level The level of the Pokemon.
-   * @param allowEvolving Whether or not to allow further evolution. Default: `false`.
    * @returns The {@linkcode Species | species ID} of the desired evolution stage.
    */
-  getTrainerSpeciesForLevel(level: number, allowEvolving: boolean = false): Species {
-    return this.getSpeciesForLevel(level, allowEvolving, true);
+  getTrainerSpeciesForLevel(level: number): Species {
+    return this.getSpeciesForLevel(level, true);
   }
 
   /**
    * Calculates the correct evolution stage for an enemy Pokemon based on its level,
    * applying pre-evolutions and evolutions as necessary.
    * @param level The level of the Pokemon.
-   * @param allowEvolving Whether or not to allow further evolution. Default: `false`.
    * @param forTrainer Whether or not this Pokemon belongs to an enemy trainer. Default: `false`.
    * @returns The {@linkcode Species | species ID} of the desired evolution stage.
    */
-  getSpeciesForLevel(level: number, allowEvolving: boolean = false, forTrainer: boolean = false): Species {
+  getSpeciesForLevel(level: number, forTrainer: boolean = false): Species {
+    // Apply pre-evolutions
     const prevolutionLevels = this.getPrevolutionLevels();
-
     if (prevolutionLevels.length) {
       for (let pl = prevolutionLevels.length - 1; pl >= 0; pl--) {
         const prevolutionLevel = prevolutionLevels[pl];
@@ -166,10 +163,12 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
       }
     }
 
-    if (!allowEvolving || !pokemonEvolutions.hasOwnProperty(this.speciesId)) {
+    // If the species cannot evolve, we are done
+    if (!pokemonEvolutions.hasOwnProperty(this.speciesId)) {
       return this.speciesId;
     }
 
+    // Apply evolutions
     const evolutions = pokemonEvolutions[this.speciesId];
     const eligibleEvolutions: Species[] = [];
 
@@ -191,7 +190,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
 
     if (eligibleEvolutions.length > 0) {
       const randSpecies = randSeedItem(eligibleEvolutions);
-      return getPokemonSpecies(randSpecies).getSpeciesForLevel(level, true, forTrainer);
+      return getPokemonSpecies(randSpecies).getSpeciesForLevel(level, forTrainer);
     } else {
       return this.speciesId;
     }
