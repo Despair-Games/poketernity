@@ -6,10 +6,12 @@ import type { TextColorCombination } from "#app/ui/interfaces/text-color-combina
  */
 export const allTextColors: Record<TextColor, TextColorCombination> = Object.freeze({
   [TextColor.WHITE_DARK_PURPLE_SHADOW]: { mainColor: CommonColor.OFF_WHITE, shadowColor: ShadowColor.PURPLE },
-  [TextColor.WHITE_DARK_GREY_SHADOW]: { mainColor: CommonColor.OFF_WHITE, shadowColor: ShadowColor.GREY },
+  [TextColor.WHITE_GREY_SHADOW]: { mainColor: CommonColor.OFF_WHITE, shadowColor: ShadowColor.GREY },
+  [TextColor.WHITE_DARK_GREY_SHADOW]: { mainColor: CommonColor.OFF_WHITE, shadowColor: ShadowColor.DARKER_GREY },
   [TextColor.GREY_DARK_SHADOW]: { mainColor: CommonColor.LIGHT_GREY, shadowColor: ShadowColor.GREY },
   [TextColor.DARK_GREY_LIGHT_SHADOW]: { mainColor: CommonColor.GREY, shadowColor: ShadowColor.LIGHT_GREY },
 
+  [TextColor.PINK_DARK_GREY_SHADOW]: { mainColor: CommonColor.SOFT_PINK, shadowColor: ShadowColor.DARKER_GREY },
   [TextColor.PINK_DARK_BROWN_SHADOW]: { mainColor: CommonColor.SOFT_PINK, shadowColor: ShadowColor.DEEP_RED },
   [TextColor.PINK_DARK_RED_SHADOW]: { mainColor: CommonColor.CORAL_PINK, shadowColor: ShadowColor.BRIGHT_RED },
 

@@ -139,7 +139,7 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
   },
 
   [TextStyle.SUMMARY]: {
-    color: TextColor.WHITE_DARK_GREY_SHADOW,
+    color: TextColor.WHITE_GREY_SHADOW,
     format: TextFormat.DEFAULT_FONT_96PX,
   },
   [TextStyle.SUMMARY_ALT]: {
@@ -172,12 +172,12 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
   },
 
   [TextStyle.SCORE]: {
-    color: TextColor.WHITE_DARK_GREY_SHADOW,
+    color: TextColor.WHITE_GREY_SHADOW,
     format: TextFormat.ALT_FONT_54PX,
   },
 
   [TextStyle.PARTY]: {
-    color: TextColor.WHITE_DARK_GREY_SHADOW,
+    color: TextColor.WHITE_GREY_SHADOW,
     format: TextFormat.ALT_FONT_66PX,
   },
   [TextStyle.PARTY_RED]: {
@@ -226,6 +226,23 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
       [DEFAULT_LANGUAGE_KEY]: TextFormat.DEFAULT_FONT_96PX,
       ["de"]: TextFormat.DEFAULT_FONT_80PX,
     },
+  },
+
+  [TextStyle.POKEMON_LEVEL]: {
+    color: TextColor.WHITE_DARK_GREY_SHADOW,
+    format: TextFormat.ALT_FONT_54PX_STROKE,
+  },
+  [TextStyle.POKEMON_LEVEL_SMALL]: {
+    color: TextColor.WHITE_DARK_GREY_SHADOW,
+    format: TextFormat.ALT_FONT_44PX_STROKE,
+  },
+  [TextStyle.BOSS_POKEMON_LEVEL]: {
+    color: TextColor.PINK_DARK_GREY_SHADOW,
+    format: TextFormat.ALT_FONT_54PX_STROKE,
+  },
+  [TextStyle.BOSS_POKEMON_LEVEL_SMALL]: {
+    color: TextColor.PINK_DARK_GREY_SHADOW,
+    format: TextFormat.ALT_FONT_44PX_STROKE,
   },
 };
 

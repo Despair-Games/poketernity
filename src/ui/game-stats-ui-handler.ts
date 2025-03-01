@@ -4,7 +4,7 @@ import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import UiHandler from "#app/ui/ui-handler";
 import { addWindow } from "#app/ui/ui-theme";
-import { getPlayTimeString, formatFancyLargeNumber, toReadableString } from "#app/utils";
+import { getPlayTimeString, formatLargeNumberFixedDigits, toReadableString } from "#app/utils";
 import type { GameData } from "#app/system/game-data";
 import { DexAttr } from "#app/data/dex-attributes";
 import { speciesStarterCosts } from "#app/data/balance/starters";
@@ -92,7 +92,7 @@ const displayStats: DisplayStats = {
   },
   highestMoney: {
     label_key: "highestMoney",
-    sourceFunc: (gameData) => formatFancyLargeNumber(gameData.gameStats.highestMoney),
+    sourceFunc: (gameData) => formatLargeNumberFixedDigits(gameData.gameStats.highestMoney),
   },
   highestDamage: {
     label_key: "highestDamage",

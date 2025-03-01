@@ -1,6 +1,9 @@
 export interface TextFormatOptions {
   fontFamily: "emerald" | "pkmnems";
   fontSize: number;
-  shadowXpos: number;
-  shadowYpos: number;
+  shadow?: {
+    xPosition: number;
+    yPosition: number;
+  };
+  strokeThickness?: number;
 }

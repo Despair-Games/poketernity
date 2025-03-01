@@ -12,8 +12,11 @@ interface CustomTextStyleOptions {
   scale: number;
   styleOptions: Phaser.Types.GameObjects.Text.TextStyle | InputText.IConfig;
   shadowColor: string;
-  shadowXpos: number;
-  shadowYpos: number;
+  shadow?: {
+    xPosition: number;
+    yPosition: number;
+  };
+  strokeThickness?: number;
 }
 
 export function addTextObject(
@@ -23,11 +26,15 @@ export function addTextObject(
   style: TextStyle,
   extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle,
 ): Phaser.GameObjects.Text {
-  const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(style, extraStyleOptions);
+  const { scale, styleOptions, shadowColor, shadow, strokeThickness } = getTextStyleOptions(style, extraStyleOptions);
 
   const ret = globalScene.add.text(x, y, content, styleOptions);
   ret.setScale(scale);
-  ret.setShadow(shadowXpos, shadowYpos, shadowColor);
+  if (shadow) {
+    ret.setShadow(shadow.xPosition, shadow.yPosition, shadowColor);
+  } else if (strokeThickness) {
+    ret.setStroke(shadowColor, strokeThickness);
+  }
   if (!(styleOptions as Phaser.Types.GameObjects.Text.TextStyle).lineSpacing) {
     ret.setLineSpacing(scale * 30);
   }
@@ -46,11 +53,15 @@ export function addBBCodeTextObject(
   style: TextStyle,
   extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle,
 ): BBCodeText {
-  const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(style, extraStyleOptions);
+  const { scale, styleOptions, shadowColor, shadow, strokeThickness } = getTextStyleOptions(style, extraStyleOptions);
 
   const ret = globalScene.add.rexBBCodeText(x, y, content, styleOptions as BBCodeText.TextStyle);
   ret.setScale(scale);
-  ret.setShadow(shadowXpos, shadowYpos, shadowColor);
+  if (shadow) {
+    ret.setShadow(shadow.xPosition, shadow.yPosition, shadowColor);
+  } else if (strokeThickness) {
+    ret.setStroke(shadowColor, strokeThickness);
+  }
   if (!(styleOptions as BBCodeText.TextStyle).lineSpacing) {
     ret.setLineSpacing(scale * 60);
   }
@@ -95,8 +106,9 @@ export function getTextStyleOptions(
 ): CustomTextStyleOptions {
   const textStyleOptions = getBaseTextStyleOptions(style);
   const { mainColor, shadowColor } = textStyleOptions.color;
-  const { fontFamily, fontSize, shadowYpos } = textStyleOptions.format;
-  let shadowXpos = textStyleOptions.format.shadowXpos;
+  const { fontFamily, fontSize, shadow, strokeThickness } = textStyleOptions.format;
+  let shadowXpos = shadow?.xPosition ?? 0;
+  const shadowYpos = shadow?.yPosition ?? 0;
 
   let styleOptions: Phaser.Types.GameObjects.Text.TextStyle = {
     fontFamily: fontFamily,
@@ -123,7 +135,10 @@ export function getTextStyleOptions(
     styleOptions = Object.assign(styleOptions, extraStyleOptions);
   }
 
-  return { scale, styleOptions, shadowColor, shadowXpos, shadowYpos };
+  if (shadow) {
+    return { scale, styleOptions, shadowColor, shadow: { xPosition: shadowXpos, yPosition: shadowYpos } };
+  }
+  return { scale, styleOptions, shadowColor, strokeThickness };
 }
 
 export function getBBCodeFragment(

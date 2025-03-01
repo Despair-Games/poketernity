@@ -8,74 +8,72 @@ export const allTextFormats: Record<TextFormat, TextFormatOptions> = {
   [TextFormat.DEFAULT_FONT_96PX]: {
     fontFamily: "emerald",
     fontSize: 96,
-    shadowXpos: 3,
-    shadowYpos: 3,
+    shadow: { xPosition: 3, yPosition: 3 },
   },
   [TextFormat.DEFAULT_FONT_96PX_BIG_SHADOW]: {
     fontFamily: "emerald",
     fontSize: 96,
-    shadowXpos: 4,
-    shadowYpos: 5,
+    shadow: { xPosition: 4, yPosition: 5 },
   },
   [TextFormat.DEFAULT_FONT_84PX_BIG_SHADOW]: {
     fontFamily: "emerald",
     fontSize: 84,
-    shadowXpos: 4,
-    shadowYpos: 5,
+    shadow: { xPosition: 4, yPosition: 5 },
   },
   [TextFormat.DEFAULT_FONT_80PX]: {
     fontFamily: "emerald",
     fontSize: 80,
-    shadowXpos: 3,
-    shadowYpos: 3,
+    shadow: { xPosition: 3, yPosition: 3 },
   },
   [TextFormat.DEFAULT_FONT_72PX]: {
     fontFamily: "emerald",
     fontSize: 72,
-    shadowXpos: 3,
-    shadowYpos: 3,
+    shadow: { xPosition: 3, yPosition: 3 },
   },
   [TextFormat.DEFAULT_FONT_72PX_MEDIUM_SHADOW]: {
     fontFamily: "emerald",
     fontSize: 72,
-    shadowXpos: 3.5, // why
-    shadowYpos: 3.5,
+    shadow: { xPosition: 3.5, yPosition: 3.5 }, // why 3.5
   },
   [TextFormat.DEFAULT_FONT_64PX]: {
     fontFamily: "emerald",
     fontSize: 64,
-    shadowXpos: 3,
-    shadowYpos: 3,
+    shadow: { xPosition: 3, yPosition: 3 },
   },
   [TextFormat.DEFAULT_FONT_60PX]: {
     fontFamily: "emerald",
     fontSize: 60,
-    shadowXpos: 3,
-    shadowYpos: 3,
+    shadow: { xPosition: 3, yPosition: 3 },
   },
   [TextFormat.DEFAULT_FONT_56PX]: {
     fontFamily: "emerald",
     fontSize: 56,
-    shadowXpos: 3,
-    shadowYpos: 3,
+    shadow: { xPosition: 3, yPosition: 3 },
   },
   [TextFormat.DEFAULT_FONT_54PX]: {
     fontFamily: "emerald",
     fontSize: 54,
-    shadowXpos: 3,
-    shadowYpos: 3,
+    shadow: { xPosition: 3, yPosition: 3 },
   },
 
   [TextFormat.ALT_FONT_66PX]: {
     fontFamily: "pkmnems",
     fontSize: 66,
-    shadowXpos: 4,
-    shadowYpos: 5,
+    shadow: { xPosition: 4, yPosition: 5 },
   },
   [TextFormat.ALT_FONT_54PX]: {
     fontFamily: "pkmnems",
     fontSize: 54,
-    shadowXpos: 4,
-    shadowYpos: 5,
+    shadow: { xPosition: 4, yPosition: 5 },
+  },
+  [TextFormat.ALT_FONT_54PX_STROKE]: {
+    fontFamily: "pkmnems",
+    fontSize: 54,
+    strokeThickness: 14,
+  },
+  [TextFormat.ALT_FONT_44PX_STROKE]: {
+    fontFamily: "pkmnems",
+    fontSize: 44,
+    strokeThickness: 14,
   },
 };

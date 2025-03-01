@@ -7,13 +7,13 @@ import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "./ui-theme";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
 import {
-  formatLargeNumber,
   getPlayTimeString,
   formatMoney,
-  formatFancyLargeNumber,
+  formatLargeNumberFixedDigits,
   isNullOrUndefined,
+  getPokemonLevelText,
 } from "#app/utils";
-import type PokemonData from "../system/pokemon-data";
+import type PokemonData from "#app/system/pokemon-data";
 import i18next from "i18next";
 import { Button } from "#enums/buttons";
 import { BattleType } from "#enums/battle-type";
@@ -395,22 +395,14 @@ export default class RunInfoUiHandler extends UiHandler {
   private parseWildSingleDefeat(enemyContainer: Phaser.GameObjects.Container) {
     const enemyIconContainer = globalScene.add.container(0, 0);
     const enemyData = this.runInfo.enemyParty[0];
-    const bossStatus = enemyData.boss;
+    const isBoss = enemyData.boss;
     enemyData.boss = false;
     enemyData["player"] = true;
     //addPokemonIcon() throws an error if the Pokemon used is a boss
     const enemy = enemyData.toPokemon();
     const enemyIcon = globalScene.addPokemonIcon(enemy, 0, 0, 0, 0);
-    const enemyLevelStyle = bossStatus ? TextStyle.PARTY_RED : TextStyle.PARTY;
-    const enemyLevel = addTextObject(
-      36,
-      26,
-      `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(enemy.level, 1000)}`,
-      enemyLevelStyle,
-      { fontSize: "44px", color: CommonColor.OFF_WHITE },
-    );
-    enemyLevel.setShadow(0, 0, undefined);
-    enemyLevel.setStroke(CommonColor.DARK_GREY, 14);
+    const enemyLevelStyle = isBoss ? TextStyle.BOSS_POKEMON_LEVEL_SMALL : TextStyle.POKEMON_LEVEL_SMALL;
+    const enemyLevel = addTextObject(36, 26, getPokemonLevelText(enemy), enemyLevelStyle);
     enemyLevel.setOrigin(1, 0);
     enemyIconContainer.add(enemyIcon);
     enemyIconContainer.add(enemyLevel);
@@ -427,20 +419,13 @@ export default class RunInfoUiHandler extends UiHandler {
   private parseWildDoubleDefeat(enemyContainer: Phaser.GameObjects.Container) {
     this.runInfo.enemyParty.forEach((enemyData, e) => {
       const enemyIconContainer = globalScene.add.container(0, 0);
-      const bossStatus = enemyData.boss;
+      const isBoss = enemyData.boss;
       enemyData.boss = false;
       enemyData["player"] = true;
       const enemy = enemyData.toPokemon();
       const enemyIcon = globalScene.addPokemonIcon(enemy, 0, 0, 0, 0);
-      const enemyLevel = addTextObject(
-        36,
-        26,
-        `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(enemy.level, 1000)}`,
-        bossStatus ? TextStyle.PARTY_RED : TextStyle.PARTY,
-        { fontSize: "44px", color: CommonColor.OFF_WHITE },
-      );
-      enemyLevel.setShadow(0, 0, undefined);
-      enemyLevel.setStroke(CommonColor.DARK_GREY, 14);
+      const enemyLevelStyle = isBoss ? TextStyle.BOSS_POKEMON_LEVEL_SMALL : TextStyle.POKEMON_LEVEL_SMALL;
+      const enemyLevel = addTextObject(36, 26, getPokemonLevelText(enemy), enemyLevelStyle);
       enemyLevel.setOrigin(1, 0);
       enemyIconContainer.add(enemyIcon);
       enemyIconContainer.add(enemyLevel);
@@ -544,12 +529,9 @@ export default class RunInfoUiHandler extends UiHandler {
       const enemyLevel = addTextObject(
         43 * (e % 3),
         27 * (pokemonRowHeight + 1),
-        `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(enemy.level, 1000)}`,
-        isBoss ? TextStyle.PARTY_RED : TextStyle.PARTY,
-        { fontSize: "54px" },
+        getPokemonLevelText(enemy),
+        isBoss ? TextStyle.BOSS_POKEMON_LEVEL : TextStyle.POKEMON_LEVEL,
       );
-      enemyLevel.setShadow(0, 0, undefined);
-      enemyLevel.setStroke(CommonColor.DARK_GREY, 14);
       enemyLevel.setOrigin(0, 0);
 
       enemyIconContainer.add(enemyIcon);
@@ -773,9 +755,7 @@ export default class RunInfoUiHandler extends UiHandler {
         fontSize: textContainerFontSize,
         lineSpacing: lineSpacing,
       });
-      pokeInfoText.appendText(
-        `${i18next.t("saveSlotSelectUiHandler:lv")}${formatFancyLargeNumber(pokemon.level, 1)} - ${pNatureName}`,
-      );
+      pokeInfoText.appendText(`${getPokemonLevelText(pokemon)} - ${pNatureName}`);
       pokeInfoText.appendText(pAbilityInfo);
       pokeInfoText.appendText(pPassiveInfo);
       pokeInfoTextContainer.add(pokeInfoText);
@@ -784,7 +764,7 @@ export default class RunInfoUiHandler extends UiHandler {
       // Colored Arrows (Red/Blue) are placed by stats that are boosted from natures
       const pokeStatTextContainer = globalScene.add.container(-35, 6);
       const pStats: string[] = [];
-      pokemon.stats.forEach((element) => pStats.push(formatFancyLargeNumber(element, 1)));
+      pokemon.stats.forEach((element) => pStats.push(formatLargeNumberFixedDigits(element, 1)));
       for (let i = 0; i < pStats.length; i++) {
         const isMult = getNatureStatMultiplier(pNature, i);
         pStats[i] = isMult < 1 ? pStats[i] + `[color=${CommonColor.LIGHT_BLUE}]↓[/color]` : pStats[i];
