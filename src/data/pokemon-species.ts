@@ -4,7 +4,7 @@ import { PartyMemberStrength } from "#enums/party-member-strength";
 import { Species } from "#enums/species";
 import i18next from "i18next";
 import type { GameMode } from "#app/game-mode";
-import { randSeedInt, randSeedGauss } from "#app/utils";
+import { randSeedGauss, randSeedItem } from "#app/utils";
 import type { GrowthRate } from "#enums/growth-rates";
 import type { EvolutionLevel } from "#app/data/balance/pokemon-evolutions";
 import { pokemonEvolutions, pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
@@ -168,66 +168,41 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
 
     const evolutions = pokemonEvolutions[this.speciesId];
 
-    const evolutionPool: Map<number, Species> = new Map();
-    const totalWeight = 0;
-    let noEvolutionChance = 1;
+    const evolutionPool: Species[] = [];
 
     for (const ev of evolutions) {
       if (ev.level > level) {
         continue;
       }
 
-      let evolutionChance: number = 0;
-
       const evolutionSpecies = getPokemonSpecies(ev.speciesId);
       const isRegionalEvolution = !this.isRegional() && evolutionSpecies.isRegional();
 
       if (!forTrainer && isRegionalEvolution) {
-        evolutionChance = 0;
-      } else {
-        if ((ev.altLevel !== 0 && level > ev.altLevel) || level > ev.level) {
-          evolutionChance = 1;
-          noEvolutionChance = 0;
-        }
+        continue;
       }
-
-      if (evolutionChance === 1) {
-        evolutionPool.set(evolutionChance, ev.speciesId);
+      if (((ev.altLevel !== 0 && level > ev.altLevel) || level > ev.level) && !evolutionPool.includes(ev.speciesId)) {
+        evolutionPool.push(ev.speciesId);
       }
     }
 
-    if (noEvolutionChance === 1) {
+    if (evolutionPool.length === 0) {
       return this.speciesId;
     }
 
-    const randValue = evolutionPool.size === 1 ? 0 : randSeedInt(totalWeight);
+    const evolution = getPokemonSpecies(randSeedItem(evolutionPool));
 
-    for (const weight of evolutionPool.keys()) {
-      if (randValue < weight) {
-        return getPokemonSpecies(evolutionPool.get(weight)).getSpeciesForLevel(
-          level,
-          true,
-          forTrainer,
-          strength,
-          currentWave,
-        );
-      }
-    }
-
-    return this.speciesId;
+    return evolution.getSpeciesForLevel(level, true, forTrainer, strength, currentWave);
   }
 
   getEvolutionLevels(): EvolutionLevel[] {
     const evolutionLevels: EvolutionLevel[] = [];
-
-    //console.log(Species[this.speciesId], pokemonEvolutions[this.speciesId])
 
     if (pokemonEvolutions.hasOwnProperty(this.speciesId)) {
       for (const e of pokemonEvolutions[this.speciesId]) {
         const speciesId = e.speciesId;
         const level = e.level;
         evolutionLevels.push([speciesId, level]);
-        //console.log(Species[speciesId], getPokemonSpecies(speciesId), getPokemonSpecies(speciesId).getEvolutionLevels());
         const nextEvolutionLevels = getPokemonSpecies(speciesId).getEvolutionLevels();
         for (const npl of nextEvolutionLevels) {
           evolutionLevels.push(npl);
