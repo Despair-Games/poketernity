@@ -284,7 +284,7 @@ async function summonSafariPokemon() {
     () => {
       enemySpecies = getSafariSpeciesSpawn();
       const level = globalScene.currentBattle.getLevelForWave();
-      enemySpecies = getPokemonSpecies(enemySpecies.getWildSpeciesForLevel(level));
+      enemySpecies = getPokemonSpecies(enemySpecies.getSpeciesForLevel(level));
       pokemon = globalScene.addEnemyPokemon(enemySpecies, level, TrainerSlot.NONE, false);
 
       // Roll shiny twice

@@ -188,7 +188,7 @@ describe("Evolution", () => {
     const trials = 8; // For all 8 Eeveelutions
     for (let i = 0; i < trials; i++) {
       rngSweepProgress = (2 * i + 1) / (2 * trials);
-      actualEvolutions.add(getPokemonSpecies(Species.EEVEE).getWildSpeciesForLevel(100));
+      actualEvolutions.add(getPokemonSpecies(Species.EEVEE).getEnemySpeciesForLevel(100));
     }
     expect(actualEvolutions.size).toBe(trials);
   });

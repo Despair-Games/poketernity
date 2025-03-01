@@ -125,33 +125,13 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
   }
 
   /**
-   * Calculates the correct evolution stage for a wild enemy Pokemon based on its level,
-   * applying pre-evolutions and evolutions as necessary.
+   * Calculates the correct evolution stage for an enemy Pokemon, applying pre-evolutions
+   * and evolutions as necessary based on the Pokemon's level.
    * @param level The level of the Pokemon.
+   * @param forTrainer Whether or not this Pokemon belongs to an enemy trainer (as opposed to being a wild Pokemon). Default: `false`.
    * @returns The {@linkcode Species | species ID} of the desired evolution stage.
    */
-  getWildSpeciesForLevel(level: number): Species {
-    return this.getSpeciesForLevel(level, false);
-  }
-
-  /**
-   * Calculates the correct evolution stage for an enemy trainer's Pokemon based on its level,
-   * applying pre-evolutions and evolutions as necessary.
-   * @param level The level of the Pokemon.
-   * @returns The {@linkcode Species | species ID} of the desired evolution stage.
-   */
-  getTrainerSpeciesForLevel(level: number): Species {
-    return this.getSpeciesForLevel(level, true);
-  }
-
-  /**
-   * Calculates the correct evolution stage for an enemy Pokemon based on its level,
-   * applying pre-evolutions and evolutions as necessary.
-   * @param level The level of the Pokemon.
-   * @param forTrainer Whether or not this Pokemon belongs to an enemy trainer. Default: `false`.
-   * @returns The {@linkcode Species | species ID} of the desired evolution stage.
-   */
-  getSpeciesForLevel(level: number, forTrainer: boolean = false): Species {
+  getEnemySpeciesForLevel(level: number, forTrainer: boolean = false): Species {
     // Apply pre-evolutions
     const prevolutionLevels = this.getPrevolutionLevels();
     if (prevolutionLevels.length) {
@@ -189,7 +169,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
 
     if (eligibleEvolutions.length > 0) {
       const randSpecies = randSeedItem(eligibleEvolutions);
-      return getPokemonSpecies(randSpecies).getSpeciesForLevel(level, forTrainer);
+      return getPokemonSpecies(randSpecies).getEnemySpeciesForLevel(level, forTrainer);
     } else {
       return this.speciesId;
     }
