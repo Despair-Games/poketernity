@@ -6,7 +6,7 @@ import { globalScene } from "#app/global-scene";
 import { ModifierTier } from "#enums/modifier-tier";
 import i18next from "#app/plugins/i18n";
 import { TextStyle } from "#enums/text-style";
-import { getTextStyle as getBaseTextStyleOptions } from "./text-style";
+import { getTextStyle } from "./text-style";
 
 interface CustomTextStyleOptions {
   scale: number;
@@ -95,7 +95,7 @@ export function addTextInputObject(
  * @param style the {@linkcode TextStyle} to use.
  */
 export function setTextColor(textObject: Phaser.GameObjects.Text, style: TextStyle): void {
-  const { mainColor, shadowColor } = getBaseTextStyleOptions(style).color;
+  const { mainColor, shadowColor } = getTextStyle(style).color;
   textObject.setColor(mainColor);
   textObject.setShadowColor(shadowColor);
 }
@@ -104,7 +104,7 @@ export function getTextStyleOptions(
   style: TextStyle,
   extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle,
 ): CustomTextStyleOptions {
-  const textStyleOptions = getBaseTextStyleOptions(style);
+  const textStyleOptions = getTextStyle(style);
   const { mainColor, shadowColor } = textStyleOptions.color;
   const { fontFamily, fontSize, shadow, strokeThickness } = textStyleOptions.format;
   let shadowXpos = shadow?.xPosition ?? 0;
@@ -147,7 +147,7 @@ export function getBBCodeFragment(
   closeFragment: boolean = false,
   noShadow = false,
 ): string {
-  const { mainColor, shadowColor } = getBaseTextStyleOptions(textStyle).color;
+  const { mainColor, shadowColor } = getTextStyle(textStyle).color;
   let openingFragment = `[color=${mainColor}]`;
   let closingFragment = closeFragment ? "[/color]" : "";
   if (!noShadow) {

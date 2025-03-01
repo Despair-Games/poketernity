@@ -3,6 +3,8 @@ export enum TextStyle {
   WINDOW,
   WINDOW_SMALL,
   WINDOW_ALT,
+  WINDOW_ALT_SMALL,
+  WINDOW_MODAL,
   BATTLE_INFO,
   PARTY,
   PARTY_RED,
@@ -31,7 +33,6 @@ export enum TextStyle {
   MOVE_PP_HALF_FULL,
   MOVE_PP_NEAR_EMPTY,
   MOVE_PP_EMPTY,
-  WINDOW_ALT_SMALL,
   BGM_BAR,
   PERFECT_IV,
   /** Default style for choices in ME */

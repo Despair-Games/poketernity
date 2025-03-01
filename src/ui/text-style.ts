@@ -38,6 +38,13 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
     },
     format: TextFormat.DEFAULT_FONT_54PX,
   },
+  [TextStyle.WINDOW_MODAL]: {
+    color: {
+      [UiTheme.DARK]: TextColor.WHITE_DARK_PURPLE_SHADOW,
+      [UiTheme.LIGHT]: TextColor.DARK_GREY_LIGHT_SHADOW,
+    },
+    format: TextFormat.DEFAULT_FONT_48PX,
+  },
   [TextStyle.WINDOW_ALT]: {
     color: TextColor.DARK_GREY_LIGHT_SHADOW,
     format: TextFormat.DEFAULT_FONT_96PX,
