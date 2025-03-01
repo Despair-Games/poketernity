@@ -106,7 +106,7 @@ export function getTextStyleOptions(
 ): CustomTextStyleOptions {
   const textStyleOptions = getTextStyle(style);
   const { mainColor, shadowColor } = textStyleOptions.color;
-  const { fontFamily, fontSize, shadow, strokeThickness } = textStyleOptions.format;
+  const { fontFamily, fontSize, shadow, strokeThickness } = textStyleOptions.fontStyle;
   let shadowXpos = shadow?.xPosition ?? 0;
   const shadowYpos = shadow?.yPosition ?? 0;
 

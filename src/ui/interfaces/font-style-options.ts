@@ -1,4 +1,4 @@
-export interface TextFormatOptions {
+export interface FontStyleOptions {
   fontFamily: "emerald" | "pkmnems";
   fontSize: number;
   shadow?: {

@@ -1,7 +1,7 @@
 import type { TextColorCombination } from "#app/ui/interfaces/text-color-combination";
-import type { TextFormatOptions } from "#app/ui/interfaces/text-format-options";
+import type { FontStyleOptions } from "#app/ui/interfaces/font-style-options";
 
 export interface TextStyleOptions {
   color: TextColorCombination;
-  format: TextFormatOptions;
+  fontStyle: FontStyleOptions;
 }

@@ -1,4 +1,4 @@
-export enum TextFormat {
+export enum FontStyle {
   // note: please don't judge me for the naming of these, they will not stay when we rework the UI
   DEFAULT_FONT_128PX,
   DEFAULT_FONT_96PX,
