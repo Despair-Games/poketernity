@@ -31,11 +31,18 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
     },
     format: TextFormat.DEFAULT_FONT_96PX,
   },
+  [TextStyle.WINDOW_SMALL]: {
+    color: {
+      [UiTheme.DARK]: TextColor.WHITE_DARK_PURPLE_SHADOW,
+      [UiTheme.LIGHT]: TextColor.DARK_GREY_LIGHT_SHADOW,
+    },
+    format: TextFormat.DEFAULT_FONT_54PX,
+  },
   [TextStyle.WINDOW_ALT]: {
     color: TextColor.DARK_GREY_LIGHT_SHADOW,
     format: TextFormat.DEFAULT_FONT_96PX,
   },
-  [TextStyle.SMALLER_WINDOW_ALT]: {
+  [TextStyle.WINDOW_ALT_SMALL]: {
     color: TextColor.DARK_GREY_LIGHT_SHADOW,
     format: TextFormat.DEFAULT_FONT_60PX,
   },
@@ -162,6 +169,11 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
   [TextStyle.SUMMARY_RED]: {
     color: TextColor.RED_LIGHT_ORANGE_SHADOW,
     format: TextFormat.DEFAULT_FONT_96PX,
+  },
+
+  [TextStyle.SCORE]: {
+    color: TextColor.WHITE_DARK_GREY_SHADOW,
+    format: TextFormat.ALT_FONT_54PX,
   },
 
   [TextStyle.PARTY]: {

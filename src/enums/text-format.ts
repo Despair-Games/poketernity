@@ -12,4 +12,5 @@ export enum TextFormat {
   DEFAULT_FONT_54PX,
 
   ALT_FONT_66PX,
+  ALT_FONT_54PX,
 }

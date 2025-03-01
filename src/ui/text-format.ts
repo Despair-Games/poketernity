@@ -72,4 +72,10 @@ export const allTextFormats: Record<TextFormat, TextFormatOptions> = {
     shadowXpos: 4,
     shadowYpos: 5,
   },
+  [TextFormat.ALT_FONT_54PX]: {
+    fontFamily: "pkmnems",
+    fontSize: 54,
+    shadowXpos: 4,
+    shadowYpos: 5,
+  },
 };

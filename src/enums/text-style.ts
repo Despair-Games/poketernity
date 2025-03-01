@@ -1,6 +1,7 @@
 export enum TextStyle {
   MESSAGE,
   WINDOW,
+  WINDOW_SMALL,
   WINDOW_ALT,
   BATTLE_INFO,
   PARTY,
@@ -30,7 +31,7 @@ export enum TextStyle {
   MOVE_PP_HALF_FULL,
   MOVE_PP_NEAR_EMPTY,
   MOVE_PP_EMPTY,
-  SMALLER_WINDOW_ALT,
+  WINDOW_ALT_SMALL,
   BGM_BAR,
   PERFECT_IV,
   /** Default style for choices in ME */
@@ -40,4 +41,5 @@ export enum TextStyle {
   /** Style for challenge description */
   CHALLENGE_DESCRIPTION,
   TITLE_SCREEN,
+  SCORE,
 }

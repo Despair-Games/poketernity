@@ -52,7 +52,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
       GAME_WIDTH - 5,
       0,
       `? ${i18next.t("menu:playersOnline")}`,
-      TextStyle.TITLE_SCREEN,
+      TextStyle.WINDOW_SMALL,
     );
     this.playerCountLabel.setOrigin(1, 1);
     this.titleContainer.add(this.playerCountLabel);

@@ -117,7 +117,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
       let pokemonIconY = 6;
 
       if (["de", "es-ES", "fr", "ko", "pt-BR"].includes(currentLanguage)) {
-        gachaTextStyle = TextStyle.SMALLER_WINDOW_ALT;
+        gachaTextStyle = TextStyle.WINDOW_ALT_SMALL;
         gachaX = 2;
         gachaY = 2;
       }
