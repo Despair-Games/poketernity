@@ -173,7 +173,8 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     const eligibleEvolutions: Species[] = [];
 
     for (const ev of evolutions) {
-      if (ev.level > level) {
+      // TODO: Should enemy Pokemon have a random chance of evolving if they are close to the level threshold?
+      if (ev.enemyEvolveLevel > level) {
         continue;
       }
 
@@ -182,9 +183,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
 
       // Random non-trainer spawns are not eligible for regional evolutions (e.g. Alolan Raichu)
       if (forTrainer || !isRegionalEvolution) {
-        if (level > ev.enemyEvolveLevel) {
-          eligibleEvolutions.push(ev.speciesId);
-        }
+        eligibleEvolutions.push(ev.speciesId);
       }
     }
 
@@ -221,7 +220,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     return prevolutionLevels;
   }
 
-  // This could definitely be written better and more accurate to the getSpeciesForLevel logic, but it is only for generating movesets for evolved Pokemon
+  // TODO: This could definitely be written better and more accurate to the getSpeciesForLevel logic, but it is only for generating movesets for evolved Pokemon
   getSimulatedEvolutionChain(
     currentLevel: number,
     forTrainer: boolean = false,
@@ -241,9 +240,9 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
           prevolutionLevels[l][0],
           Math.min(
             Math.max(
-              evolution?.level! + Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * 0.5 * 5) - 1,
+              evolution?.enemyEvolveLevel! + Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * 0.5 * 5) - 1,
               2,
-              evolution?.level!,
+              evolution?.enemyEvolveLevel!,
             ),
             currentLevel - 1,
           ),
@@ -259,7 +258,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
           Math.max(
             lastPrevolutionLevel + Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * 0.5 * 5),
             lastPrevolutionLevel + 1,
-            evolution?.level!,
+            evolution?.enemyEvolveLevel!,
           ),
           currentLevel,
         ),
