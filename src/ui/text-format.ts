@@ -59,6 +59,12 @@ export const allTextFormats: Record<TextFormat, TextFormatOptions> = {
     shadowXpos: 3,
     shadowYpos: 3,
   },
+  [TextFormat.DEFAULT_FONT_54PX]: {
+    fontFamily: "emerald",
+    fontSize: 54,
+    shadowXpos: 3,
+    shadowYpos: 3,
+  },
 
   [TextFormat.ALT_FONT_66PX]: {
     fontFamily: "pkmnems",

@@ -39,4 +39,5 @@ export enum TextStyle {
   ME_OPTION_SPECIAL,
   /** Style for challenge description */
   CHALLENGE_DESCRIPTION,
+  TITLE_SCREEN,
 }

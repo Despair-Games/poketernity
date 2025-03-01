@@ -52,6 +52,11 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
     format: TextFormat.DEFAULT_FONT_64PX,
   },
 
+  [TextStyle.TITLE_SCREEN]: {
+    color: TextColor.LIGHT_YELLOW_DARK_SHADOW,
+    format: TextFormat.DEFAULT_FONT_54PX,
+  },
+
   [TextStyle.MONEY]: {
     color: TextColor.LIGHT_YELLOW_DARK_SHADOW,
     format: TextFormat.DEFAULT_FONT_72PX_MEDIUM_SHADOW,
