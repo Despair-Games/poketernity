@@ -174,7 +174,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
 
     for (const ev of evolutions) {
       // TODO: Should enemy Pokemon have a random chance of evolving if they are close to the level threshold?
-      if (ev.enemyEvolveLevel > level) {
+      if (level < ev.enemyEvolveLevel) {
         continue;
       }
 
