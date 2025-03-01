@@ -365,7 +365,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
 
   /**
    * Helper function that determines where to insert information about a new weather or terrain in the `fieldEffectInfo` array
-   * @param newInfo the new weather or terrain event
+   * @param newInfo {@linkcode ArenaEffectInfo} the new weather or terrain event info
    * @param oldName the previous weather or terrain
    */
   private insertFieldEffectInfo(newInfo: ArenaEffectInfo, oldName: string): void {
