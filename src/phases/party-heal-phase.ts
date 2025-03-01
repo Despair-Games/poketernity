@@ -22,9 +22,9 @@ export class PartyHealPhase extends BattlePhase {
     super.start();
     const { time, ui } = globalScene;
 
-    const bgmPlaying = globalScene.isBgmPlaying();
+    const bgmPlaying = globalScene.audioManager.isBgmPlaying();
     if (bgmPlaying) {
-      globalScene.fadeOutBgm(1000, false);
+      globalScene.audioManager.fadeOutBgm(1000, false);
     }
 
     ui.fadeOut(1000).then(() => {
@@ -36,11 +36,11 @@ export class PartyHealPhase extends BattlePhase {
         }
         pokemon.updateInfo(true);
       }
-      const healSong = globalScene.playSoundWithoutBgm("heal");
+      const healSong = globalScene.audioManager.playSoundWithoutBgm("heal");
       time.delayedCall(fixedNumber(healSong.totalDuration * 1000), () => {
         healSong.destroy();
         if (this.resumeBgm && bgmPlaying) {
-          globalScene.playBgm();
+          globalScene.audioManager.playBgm();
         }
         ui.fadeIn(500).then(() => this.end());
       });

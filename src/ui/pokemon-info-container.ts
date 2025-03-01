@@ -1,7 +1,7 @@
 import { getVariantTint } from "#app/data/variant";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import { globalScene } from "#app/global-scene";
-import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
+import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
 import { Gender } from "#enums/gender";
 import { getNatureName } from "../data/nature";
 import { ElementalType } from "#enums/elemental-type";
@@ -44,7 +44,6 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
   private pokemonNatureText: BBCodeText;
   private pokemonShinyIcon: Phaser.GameObjects.Image;
   private pokemonShinyNewIcon: Phaser.GameObjects.Text;
-  private pokemonFusionShinyIcon: Phaser.GameObjects.Image;
   private pokemonMovesContainer: Phaser.GameObjects.Container;
   private pokemonMovesContainers: Phaser.GameObjects.Container[];
   private pokemonMoveBgs: Phaser.GameObjects.NineSlice[];
@@ -223,16 +222,6 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
     this.add(this.pokemonShinyNewIcon);
     this.pokemonShinyNewIcon.setVisible(false);
 
-    this.pokemonFusionShinyIcon = globalScene.add.image(
-      this.pokemonShinyIcon.x,
-      this.pokemonShinyIcon.y,
-      "shiny_star_2",
-    );
-    this.pokemonFusionShinyIcon.setOrigin(0, 0);
-    this.pokemonFusionShinyIcon.setScale(0.75);
-    this.pokemonFusionShinyIcon.setName("img-pkmn-fusion-shiny-icon");
-    this.add(this.pokemonFusionShinyIcon);
-
     this.setVisible(false);
   }
 
@@ -255,14 +244,13 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
       const caughtAttr = BigInt(dexEntry.caughtAttr);
       if (pokemon.gender > Gender.GENDERLESS) {
         this.pokemonGenderText.setText(getGenderSymbol(pokemon.gender));
-        this.pokemonGenderText.setColor(getGenderColor(pokemon.gender));
-        this.pokemonGenderText.setShadowColor(getGenderShadowColor(pokemon.gender));
         this.pokemonGenderText.setVisible(true);
+        setTextColor(this.pokemonGenderText, getGenderTextStyle(pokemon.gender));
 
         const newGender = BigInt(1 << pokemon.gender) * DexAttr.MALE;
         this.pokemonGenderNewText.setText("(+)");
         this.pokemonGenderNewText.setVisible((newGender & caughtAttr) === BigInt(0));
-        setTextColor(this.pokemonGenderText, TextStyle.SUMMARY_BLUE);
+        setTextColor(this.pokemonGenderNewText, TextStyle.SUMMARY_BLUE);
       } else {
         this.pokemonGenderNewText.setVisible(false);
         this.pokemonGenderText.setVisible(false);
@@ -339,18 +327,15 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
         setTextColor(this.pokemonNatureLabelText, TextStyle.WINDOW);
       }
 
-      const isFusion = pokemon.isFusion();
-      const doubleShiny = isFusion && pokemon.shiny && pokemon.fusionShiny;
-      const baseVariant = !doubleShiny ? pokemon.getVariant() : pokemon.variant;
+      const baseVariant = pokemon.getVariant();
 
-      this.pokemonShinyIcon.setTexture(`shiny_star${doubleShiny ? "_1" : ""}`);
+      this.pokemonShinyIcon.setTexture(`shiny_star`);
       this.pokemonShinyIcon.setVisible(pokemon.isShiny());
       this.pokemonShinyIcon.setTint(getVariantTint(baseVariant));
       if (this.pokemonShinyIcon.visible) {
-        const shinyDescriptor =
-          doubleShiny || baseVariant
-            ? `${baseVariant === 2 ? i18next.t("common:epicShiny") : baseVariant === 1 ? i18next.t("common:rareShiny") : i18next.t("common:commonShiny")}${doubleShiny ? `/${pokemon.fusionVariant === 2 ? i18next.t("common:epicShiny") : pokemon.fusionVariant === 1 ? i18next.t("common:rareShiny") : i18next.t("common:commonShiny")}` : ""}`
-            : "";
+        const shinyDescriptor = baseVariant
+          ? `${baseVariant === 2 ? i18next.t("common:epicShiny") : baseVariant === 1 ? i18next.t("common:rareShiny") : i18next.t("common:commonShiny")}`
+          : "";
         this.pokemonShinyIcon.on("pointerover", () =>
           globalScene.ui.showTooltip(
             "",
@@ -374,12 +359,6 @@ export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
         setTextColor(this.pokemonShinyNewIcon, TextStyle.SUMMARY_BLUE);
       } else {
         this.pokemonShinyNewIcon.setVisible(false);
-      }
-
-      this.pokemonFusionShinyIcon.setPosition(this.pokemonShinyIcon.x, this.pokemonShinyIcon.y);
-      this.pokemonFusionShinyIcon.setVisible(doubleShiny);
-      if (isFusion) {
-        this.pokemonFusionShinyIcon.setTint(getVariantTint(pokemon.fusionVariant));
       }
 
       const starterSpeciesId = pokemon.species.getRootSpeciesId();

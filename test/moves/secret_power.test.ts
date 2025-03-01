@@ -50,7 +50,7 @@ describe("Moves - Secret Power", () => {
     game.move.select(MoveId.SECRET_POWER);
     await game.forceEnemyMove(MoveId.SPLASH);
     await game.toEndOfTurn();
-    expect(enemyPokemon.status?.effect).toBe(StatusEffect.BURN);
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.BURN);
 
     // Misty Terrain --> SpAtk -1
     game.move.select(MoveId.SECRET_POWER);
@@ -84,7 +84,7 @@ describe("Moves - Secret Power", () => {
     game.move.select(MoveId.SECRET_POWER, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(sereneGraceAttr.apply).toHaveBeenCalledOnce();
     expect(sereneGraceAttr.apply).toHaveLastReturnedWith(true);

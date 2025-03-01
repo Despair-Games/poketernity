@@ -44,9 +44,9 @@ describe("Abilities - Toxic Chain", () => {
    */
   async function checkSucceedPoison(moveId: MoveId, enemyPokemon: EnemyPokemon) {
     game.move.select(moveId);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
-    expect(enemyPokemon.status?.effect).toBe(StatusEffect.TOXIC);
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.TOXIC);
   }
 
   /**
@@ -54,9 +54,9 @@ describe("Abilities - Toxic Chain", () => {
    */
   async function checkFailPoison(moveId: MoveId, enemyPokemon: EnemyPokemon) {
     game.move.select(moveId);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
-    expect(enemyPokemon.status?.effect).toBeUndefined();
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
   }
 
   it("should have a 30% chance of badly poisoning the target", async () => {
@@ -127,7 +127,7 @@ describe("Abilities - Toxic Chain", () => {
     game.move.select(MoveId.TACKLE);
     await game.toNextTurn();
 
-    expect(enemyPokemon.status?.effect).toBe(StatusEffect.BURN);
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.BURN);
   });
 
   it("should not apply against a target with Shield Dust, unless the attack ignores abilities", async () => {

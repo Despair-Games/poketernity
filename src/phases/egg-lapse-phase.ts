@@ -119,9 +119,6 @@ export class EggLapsePhase extends Phase {
 
     const data = this.generatePokemon(egg);
     const pokemon = data.pokemon;
-    if (pokemon.fusionSpecies) {
-      pokemon.clearFusionSpecies();
-    }
 
     if (pokemon.species.isLegendLike()) {
       if (pokemon.species.isSubLegendary()) {

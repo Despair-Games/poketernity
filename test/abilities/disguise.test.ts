@@ -100,7 +100,7 @@ describe("Abilities - Disguise", () => {
     await game.toEndOfTurn();
 
     expect(mimikyu.formIndex).toBe(disguisedForm);
-    expect(mimikyu.status?.effect).toBe(StatusEffect.POISON);
+    expect(mimikyu.getStatusEffect(true)).toBe(StatusEffect.POISON);
     expect(mimikyu.getStatStage(Stat.SPD)).toBe(-1);
     expect(mimikyu.hp).toBeLessThan(mimikyu.getMaxHp());
   });
@@ -228,7 +228,7 @@ describe("Abilities - Disguise", () => {
     await game.classicMode.startBattle();
 
     game.move.select(MoveId.POWER_TRIP);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(game.scene.getEnemyPokemon()!.formIndex).toBe(disguisedForm);

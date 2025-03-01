@@ -59,7 +59,7 @@ export class PokemonTransformPhase extends PokemonPhase {
     const promises = [user.updateInfo()];
 
     if (this.playSound) {
-      globalScene.playSound("battle_anims/PRSFX- Transform");
+      globalScene.audioManager.playSound("battle_anims/PRSFX- Transform");
     }
 
     promises.push(

@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import { type PokeballCounts } from "#app/battle-scene";
-import { Gender } from "#enums/gender";
 import { Variant } from "#app/data/variant";
 import { type ModifierOverride } from "#app/modifier/modifier-type";
-import { Unlockables } from "#enums/unlockables";
 import { Abilities } from "#enums/abilities";
 import { Biome } from "#enums/biome";
 import { EggTier } from "#enums/egg-type";
+import { Gender } from "#enums/gender";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
@@ -14,6 +13,7 @@ import { PokeballType } from "#enums/pokeball";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { TimeOfDay } from "#enums/time-of-day";
+import { Unlockables } from "#enums/unlockables";
 import { VariantTier } from "#enums/variant-tier";
 import { WeatherType } from "#enums/weather-type";
 
@@ -125,10 +125,6 @@ class DefaultOverrides {
    * @example SPECIES_OVERRIDE = Species.Bulbasaur;
    */
   readonly STARTER_SPECIES_OVERRIDE: Species | number = 0;
-  /** This will force your starter to be a random fusion */
-  readonly STARTER_FUSION_OVERRIDE: boolean = false;
-  /** This will override the species of the fusion */
-  readonly STARTER_FUSION_SPECIES_OVERRIDE: Species | number = 0;
   readonly ABILITY_OVERRIDE: Abilities = Abilities.NONE;
   readonly PASSIVE_ABILITY_OVERRIDE: Abilities = Abilities.NONE;
   readonly STATUS_OVERRIDE: StatusEffect = StatusEffect.NONE;
@@ -142,10 +138,6 @@ class DefaultOverrides {
   // --------------------------
 
   readonly ENEMY_SPECIES_OVERRIDE: Species | number = 0;
-  /** This will make all enemys be fused Pokemon */
-  readonly ENEMY_FUSION_OVERRIDE: boolean = false;
-  /** This will override the species of the fusion only when the enemy is already a fusion */
-  readonly ENEMY_FUSION_SPECIES_OVERRIDE: Species | number = 0;
   readonly ENEMY_LEVEL_OVERRIDE: number = 0;
   readonly ENEMY_ABILITY_OVERRIDE: Abilities = Abilities.NONE;
   readonly ENEMY_PASSIVE_ABILITY_OVERRIDE: Abilities = Abilities.NONE;

@@ -50,7 +50,7 @@ describe("Abilities - Effect Spore", () => {
     await game.toEndOfTurn();
 
     expect(abilityAttr.apply).toHaveLastReturnedWith(true);
-    expect(enemyPokemon.status).toBeDefined();
+    expect(enemyPokemon.getStatusEffect()).not.toBe(StatusEffect.NONE);
   });
 
   it("should not affect Pokemon with the ability Overcoat", async () => {

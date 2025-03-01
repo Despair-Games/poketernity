@@ -42,10 +42,10 @@ describe("Moves - Baneful Bunker", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.SLASH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    await game.toEndOfTurn();
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
-    expect(leadPokemon.status?.effect === StatusEffect.POISON).toBeTruthy();
+    expect(leadPokemon.getStatusEffect(true)).toBe(StatusEffect.POISON);
   });
   test("should protect the user and poison attackers that make contact, regardless of accuracy checks", async () => {
     await game.classicMode.startBattle([Species.CHARIZARD]);
@@ -54,13 +54,13 @@ describe("Moves - Baneful Bunker", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.SLASH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     await game.move.forceMiss();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
-    expect(leadPokemon.status?.effect === StatusEffect.POISON).toBeTruthy();
+    expect(leadPokemon.getStatusEffect(true)).toBe(StatusEffect.POISON);
   });
 
   test("should not poison attackers that don't make contact", async () => {
@@ -71,12 +71,12 @@ describe("Moves - Baneful Bunker", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.FLASH_CANNON);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     await game.move.forceMiss();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
-    expect(leadPokemon.status?.effect === StatusEffect.POISON).toBeFalsy();
+    expect(leadPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
 });

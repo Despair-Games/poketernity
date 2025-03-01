@@ -57,7 +57,7 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
         .then(() => this.end());
 
     if (settings.general.partyExpNotificationMode === ExpNotification.DEFAULT) {
-      globalScene.playSound("level_up_fanfare");
+      globalScene.audioManager.playSound("level_up_fanfare");
 
       const levelUpText = i18next.t("battle:levelUp", {
         pokemonName: getPokemonNameWithAffix(this.pokemon),

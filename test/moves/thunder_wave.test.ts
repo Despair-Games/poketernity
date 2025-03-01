@@ -40,9 +40,9 @@ describe("Moves - Thunder Wave", () => {
 
     game.move.select(MoveId.THUNDER_WAVE);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
-    expect(enemyPokemon.status?.effect).toBe(StatusEffect.PARALYSIS);
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.PARALYSIS);
   });
 
   it("does not paralyze if the Pokemon is a Ground-type", async () => {
@@ -53,9 +53,9 @@ describe("Moves - Thunder Wave", () => {
 
     game.move.select(MoveId.THUNDER_WAVE);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
-    expect(enemyPokemon.status).toBeUndefined();
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
 
   it("does not paralyze if the Pokemon already has a status effect", async () => {
@@ -66,9 +66,9 @@ describe("Moves - Thunder Wave", () => {
 
     game.move.select(MoveId.THUNDER_WAVE);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
-    expect(enemyPokemon.status?.effect).not.toBe(StatusEffect.PARALYSIS);
+    expect(enemyPokemon.getStatusEffect(true)).not.toBe(StatusEffect.PARALYSIS);
   });
 
   it("affects Ground types if the user has Normalize", async () => {
@@ -79,9 +79,9 @@ describe("Moves - Thunder Wave", () => {
 
     game.move.select(MoveId.THUNDER_WAVE);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
-    expect(enemyPokemon.status?.effect).toBe(StatusEffect.PARALYSIS);
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.PARALYSIS);
   });
 
   it("does not affect Ghost types if the user has Normalize", async () => {
@@ -92,8 +92,8 @@ describe("Moves - Thunder Wave", () => {
 
     game.move.select(MoveId.THUNDER_WAVE);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
-    expect(enemyPokemon.status).toBeUndefined();
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
 });

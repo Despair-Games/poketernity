@@ -19,7 +19,7 @@ export class SelectStarterPhase extends Phase {
   public override start(): void {
     super.start();
 
-    globalScene.playBgm("menu");
+    globalScene.audioManager.playBgm("menu");
 
     globalScene.ui.setMode(UiMode.STARTER_SELECT, (starters: Starter[]) => {
       globalScene.ui.clearText();
@@ -41,7 +41,7 @@ export class SelectStarterPhase extends Phase {
   public initBattle(starters: Starter[]): void {
     const { arena, gameMode, gameData, sound, time } = globalScene;
     const { dexData, gameStats } = gameData;
-    const { isClassic, isSplicedOnly } = gameMode;
+    const { isClassic } = gameMode;
 
     const party = globalScene.getPlayerParty();
     const loadPokemonAssets: Promise<void>[] = [];
@@ -99,10 +99,6 @@ export class SelectStarterPhase extends Phase {
         starterPokemon.nickname = nickname;
       }
 
-      if (isSplicedOnly || Overrides.STARTER_FUSION_OVERRIDE) {
-        starterPokemon.generateFusionSpecies(true);
-      }
-
       starterPokemon.setVisible(false);
       applyChallenges(gameMode, ChallengeType.STARTER_MODIFY, starterPokemon);
       party.push(starterPokemon);
@@ -114,7 +110,7 @@ export class SelectStarterPhase extends Phase {
 
     Promise.all(loadPokemonAssets).then(() => {
       SoundFade.fadeOut(globalScene, sound.get("menu"), 500, true);
-      time.delayedCall(500, () => globalScene.playBgm());
+      time.delayedCall(500, () => globalScene.audioManager.playBgm());
 
       if (isClassic) {
         gameStats.classicSessionsPlayed++;

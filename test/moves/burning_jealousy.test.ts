@@ -43,10 +43,10 @@ describe("Moves - Burning Jealousy", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.BURNING_JEALOUSY);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
-    expect(enemy.status?.effect).toBe(StatusEffect.BURN);
+    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.BURN);
   });
 
   it("should still burn the opponent if their stat stages were both raised and lowered in the same turn", async () => {
@@ -57,10 +57,10 @@ describe("Moves - Burning Jealousy", () => {
 
     game.move.select(MoveId.BURNING_JEALOUSY);
     game.move.select(MoveId.GROWL, 1);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
     await game.toEndOfTurn();
 
-    expect(enemy.status?.effect).toBe(StatusEffect.BURN);
+    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.BURN);
   });
 
   it("should ignore stat stages raised by IMPOSTER", async () => {
@@ -72,7 +72,7 @@ describe("Moves - Burning Jealousy", () => {
     game.move.select(MoveId.BURNING_JEALOUSY);
     await game.toEndOfTurn();
 
-    expect(enemy.status?.effect).toBeUndefined();
+    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
 
   // TODO: Make this test if WP is implemented

@@ -144,7 +144,7 @@ export class GameOverPhase extends BattlePhase {
         }
 
         const fadeDuration = this.isVictory ? 10000 : 5000;
-        globalScene.fadeOutBgm(fadeDuration, true);
+        globalScene.audioManager.fadeOutBgm(fadeDuration, true);
         const activeBattlers = globalScene.getField().filter((p) => p?.isActive(true));
         activeBattlers.map((p) => p.hideInfo());
 
@@ -247,13 +247,6 @@ export class GameOverPhase extends BattlePhase {
     if (this.isVictory && gameMode.isClassic) {
       if (!gameData.unlocks[Unlockables.ENDLESS_MODE]) {
         globalScene.unshiftPhase(new UnlockPhase(Unlockables.ENDLESS_MODE));
-      }
-
-      if (
-        globalScene.getPlayerParty().filter((p) => p.fusionSpecies).length
-        && !gameData.unlocks[Unlockables.SPLICED_ENDLESS_MODE]
-      ) {
-        globalScene.unshiftPhase(new UnlockPhase(Unlockables.SPLICED_ENDLESS_MODE));
       }
 
       if (!gameData.unlocks[Unlockables.MINI_BLACK_HOLE]) {

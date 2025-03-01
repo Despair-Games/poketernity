@@ -20,7 +20,7 @@ export function getBerryPredicate(berryType: BerryType): BerryPredicate {
     case BerryType.SITRUS:
       return (pokemon: Pokemon) => pokemon.getHpRatio() < 0.5;
     case BerryType.LUM:
-      return (pokemon: Pokemon) => !!pokemon.status || !!pokemon.getTag(BattlerTagType.CONFUSED);
+      return (pokemon: Pokemon) => pokemon.hasNonVolatileStatusEffect(true, true);
     case BerryType.ENIGMA:
       return (pokemon: Pokemon) =>
         !!pokemon.turnData.attacksReceived.filter((a) => a.result === HitResult.SUPER_EFFECTIVE).length;
@@ -82,8 +82,10 @@ export function getBerryEffectFunc(berryType: BerryType): BerryEffectFunc {
         if (pokemon.battleData) {
           pokemon.battleData.berriesEaten.push(berryType);
         }
-        if (pokemon.status) {
-          globalScene.queueMessage(getStatusEffectHealText(pokemon.status.effect, getPokemonNameWithAffix(pokemon)));
+        if (pokemon.hasNonVolatileStatusEffect(false, true)) {
+          globalScene.queueMessage(
+            getStatusEffectHealText(pokemon.getStatusEffect(true), getPokemonNameWithAffix(pokemon)),
+          );
         }
         pokemon.resetStatus(true);
         pokemon.updateInfo();

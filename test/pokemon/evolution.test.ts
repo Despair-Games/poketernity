@@ -1,5 +1,4 @@
-import { pokemonEvolutions, SpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions";
-import { SpeciesWildEvolutionDelay } from "#enums/species-wild-evolution-delay";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -42,11 +41,11 @@ describe("Evolution", () => {
     eevee.abilityIndex = 2;
     trapinch.abilityIndex = 2;
 
-    await eevee.evolve(pokemonEvolutions[Species.EEVEE][6], eevee.getSpeciesForm());
+    await eevee.evolve(pokemonEvolutions[Species.EEVEE][6]);
     expect(eevee.abilityIndex).toBe(2);
 
-    await trapinch.evolve(pokemonEvolutions[Species.TRAPINCH][0], trapinch.getSpeciesForm());
-    expect(trapinch.abilityIndex).toBe(1);
+    await trapinch.evolve(pokemonEvolutions[Species.TRAPINCH][0]);
+    expect(trapinch.abilityIndex).toBe(0); // doesn't have an HA -> defaults to 1st ability
   });
 
   it("should keep same ability slot after evolving", async () => {
@@ -57,10 +56,10 @@ describe("Evolution", () => {
     bulbasaur.abilityIndex = 0;
     charmander.abilityIndex = 1;
 
-    await bulbasaur.evolve(pokemonEvolutions[Species.BULBASAUR][0], bulbasaur.getSpeciesForm());
+    await bulbasaur.evolve(pokemonEvolutions[Species.BULBASAUR][0]);
     expect(bulbasaur.abilityIndex).toBe(0);
 
-    await charmander.evolve(pokemonEvolutions[Species.CHARMANDER][0], charmander.getSpeciesForm());
+    await charmander.evolve(pokemonEvolutions[Species.CHARMANDER][0]);
     expect(charmander.abilityIndex).toBe(1);
   });
 
@@ -70,7 +69,7 @@ describe("Evolution", () => {
     const squirtle = game.scene.getPlayerPokemon()!;
     squirtle.abilityIndex = 5;
 
-    await squirtle.evolve(pokemonEvolutions[Species.SQUIRTLE][0], squirtle.getSpeciesForm());
+    await squirtle.evolve(pokemonEvolutions[Species.SQUIRTLE][0]);
     expect(squirtle.abilityIndex).toBe(0);
   });
 
@@ -82,21 +81,15 @@ describe("Evolution", () => {
     nincada.metBiome = -1;
     nincada.gender = Gender.FEMALE;
 
-    await nincada.evolve(pokemonEvolutions[Species.NINCADA][0], nincada.getSpeciesForm());
+    await nincada.evolve(pokemonEvolutions[Species.NINCADA][0]);
     const ninjask = game.scene.getPlayerParty()[0];
     const shedinja = game.scene.getPlayerParty()[1];
     expect(ninjask.abilityIndex).toBe(2);
-    expect(shedinja.abilityIndex).toBe(1);
+    expect(shedinja.abilityIndex).toBe(0); // doesn't have an HA -> defaults to 1st ability
     expect(ninjask.gender).toBe(Gender.FEMALE);
     expect(shedinja.gender).toBe(Gender.GENDERLESS);
     // Regression test
     expect(shedinja.metBiome).toBe(-1);
-  });
-
-  it("should set wild delay to NONE by default", () => {
-    const speciesFormEvo = new SpeciesFormEvolution(Species.ABRA, null, null, 1000, null, null);
-
-    expect(speciesFormEvo.wildDelay).toBe(SpeciesWildEvolutionDelay.NONE);
   });
 
   it("should increase both HP and max HP when evolving", async () => {

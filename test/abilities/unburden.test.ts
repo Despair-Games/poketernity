@@ -376,7 +376,7 @@ describe("Abilities - Unburden", () => {
     game.move.select(MoveId.REVIVAL_BLESSING, 1);
     await game.forceEnemyMove(MoveId.THIEF, BattlerIndex.PLAYER);
     await game.forceEnemyMove(MoveId.SPLASH);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
     game.doSelectPartyPokemon(0, "RevivalBlessingPhase");
     await game.toNextTurn();
 

@@ -367,7 +367,7 @@ async function throwBait(pokemon: EnemyPokemon): Promise<boolean> {
       `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
     );
     globalScene.time.delayedCall(TRAINER_THROW_ANIMATION_TIMES[0], () => {
-      globalScene.playSound("se/pb_throw");
+      globalScene.audioManager.playSound("se/pb_throw");
 
       // Trainer throw frames
       globalScene.trainer.setFrame("2");
@@ -397,12 +397,12 @@ async function throwBait(pokemon: EnemyPokemon): Promise<boolean> {
               y: originalY - 5,
               loop: 6,
               onStart: () => {
-                globalScene.playSound("battle_anims/PRSFX- Bug Bite");
+                globalScene.audioManager.playSound("battle_anims/PRSFX- Bug Bite");
                 bait.setFrame("0002.png");
               },
               onLoop: () => {
                 if (index % 2 === 0) {
-                  globalScene.playSound("battle_anims/PRSFX- Bug Bite");
+                  globalScene.audioManager.playSound("battle_anims/PRSFX- Bug Bite");
                 }
                 if (index === 4) {
                   bait.setFrame("0003.png");
@@ -436,7 +436,7 @@ async function throwMud(pokemon: EnemyPokemon): Promise<boolean> {
       `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
     );
     globalScene.time.delayedCall(TRAINER_THROW_ANIMATION_TIMES[0], () => {
-      globalScene.playSound("se/pb_throw");
+      globalScene.audioManager.playSound("se/pb_throw");
 
       // Trainer throw frames
       globalScene.trainer.setFrame("2");
@@ -457,7 +457,7 @@ async function throwMud(pokemon: EnemyPokemon): Promise<boolean> {
         duration: 500,
         onComplete: () => {
           // Mud frame 2
-          globalScene.playSound("battle_anims/PRSFX- Sludge Bomb2");
+          globalScene.audioManager.playSound("battle_anims/PRSFX- Sludge Bomb2");
           mud.setFrame("0002.png");
           // Mud splat
           globalScene.time.delayedCall(200, () => {
@@ -483,10 +483,10 @@ async function throwMud(pokemon: EnemyPokemon): Promise<boolean> {
                 y: originalY - 20,
                 loop: 1,
                 onStart: () => {
-                  globalScene.playSound("battle_anims/PRSFX- Taunt2");
+                  globalScene.audioManager.playSound("battle_anims/PRSFX- Taunt2");
                 },
                 onLoop: () => {
-                  globalScene.playSound("battle_anims/PRSFX- Taunt2");
+                  globalScene.audioManager.playSound("battle_anims/PRSFX- Taunt2");
                 },
                 onComplete: () => {
                   resolve(true);

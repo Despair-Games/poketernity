@@ -20,26 +20,12 @@ export class PostSummonTransformAbAttr extends PostSummonAbAttr {
     let target: Pokemon;
     if (targets.length > 1) {
       globalScene.executeWithSeedOffset(() => {
-        // in a double battle, if one of the opposing pokemon is fused the other one will be chosen
-        // if both are fused, then Imposter will fail below
-        if (targets[0].fusionSpecies) {
-          target = targets[1];
-          return;
-        } else if (targets[1].fusionSpecies) {
-          target = targets[0];
-          return;
-        }
         target = randSeedItem(targets);
       }, globalScene.currentBattle.waveIndex);
     } else {
       target = targets[0];
     }
     target = target!;
-
-    // transforming from or into fusion pokemon causes various problems (including crashes and save corruption)
-    if (target.fusionSpecies || pokemon.fusionSpecies) {
-      return false;
-    }
 
     globalScene.unshiftPhase(new PokemonTransformPhase(pokemon.getBattlerIndex(), target.getBattlerIndex(), true));
 

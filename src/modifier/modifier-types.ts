@@ -87,7 +87,6 @@ interface ModifierTypes {
   ABILITY_CHARM: () => ModifierType;
   CATCHING_CHARM: () => ModifierType;
   IV_SCANNER: () => ModifierType;
-  DNA_SPLICERS: () => ModifierType;
   MINI_BLACK_HOLE: () => ModifierType;
   VOUCHER: () => ModifierType;
   VOUCHER_PLUS: () => ModifierType;

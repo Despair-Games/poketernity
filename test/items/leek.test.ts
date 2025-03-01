@@ -1,5 +1,4 @@
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { randInt } from "#app/utils";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -60,62 +59,6 @@ describe.todo("Items - Leek", () => {
 
   it("should raise CRIT stage by 2 when held by SIRFETCHD", async () => {
     await game.startBattle([Species.SIRFETCHD]);
-
-    const enemyMember = game.scene.getEnemyPokemon()!;
-
-    vi.spyOn(enemyMember, "getCritStage");
-
-    game.move.select(MoveId.TACKLE);
-
-    await game.phaseInterceptor.to(TurnEndPhase);
-
-    expect(enemyMember.getCritStage).toHaveReturnedWith(2);
-  }, 20000);
-
-  it("should raise CRIT stage by 2 when held by FARFETCHD line fused with Pokemon", async () => {
-    // Randomly choose from the Farfetch'd line
-    const species = [Species.FARFETCHD, Species.GALAR_FARFETCHD, Species.SIRFETCHD];
-
-    await game.startBattle([species[randInt(species.length)], Species.PIKACHU]);
-
-    const [partyMember, ally] = game.scene.getPlayerParty();
-
-    // Fuse party members (taken from PlayerPokemon.fuse(...) function)
-    partyMember.fusionSpecies = ally.species;
-    partyMember.fusionFormIndex = ally.formIndex;
-    partyMember.fusionAbilityIndex = ally.abilityIndex;
-    partyMember.fusionShiny = ally.shiny;
-    partyMember.fusionVariant = ally.variant;
-    partyMember.fusionGender = ally.gender;
-    partyMember.fusionLuck = ally.luck;
-
-    const enemyMember = game.scene.getEnemyPokemon()!;
-
-    vi.spyOn(enemyMember, "getCritStage");
-
-    game.move.select(MoveId.TACKLE);
-
-    await game.phaseInterceptor.to(TurnEndPhase);
-
-    expect(enemyMember.getCritStage).toHaveReturnedWith(2);
-  }, 20000);
-
-  it("should raise CRIT stage by 2 when held by Pokemon fused with FARFETCHD line", async () => {
-    // Randomly choose from the Farfetch'd line
-    const species = [Species.FARFETCHD, Species.GALAR_FARFETCHD, Species.SIRFETCHD];
-
-    await game.startBattle([Species.PIKACHU, species[randInt(species.length)]]);
-
-    const [partyMember, ally] = game.scene.getPlayerParty();
-
-    // Fuse party members (taken from PlayerPokemon.fuse(...) function)
-    partyMember.fusionSpecies = ally.species;
-    partyMember.fusionFormIndex = ally.formIndex;
-    partyMember.fusionAbilityIndex = ally.abilityIndex;
-    partyMember.fusionShiny = ally.shiny;
-    partyMember.fusionVariant = ally.variant;
-    partyMember.fusionGender = ally.gender;
-    partyMember.fusionLuck = ally.luck;
 
     const enemyMember = game.scene.getEnemyPokemon()!;
 

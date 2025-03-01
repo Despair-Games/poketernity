@@ -2,13 +2,11 @@ import { globalScene } from "#app/global-scene";
 import {
   ExtraModifierModifier,
   HealShopCostModifier,
-  type PokemonHeldItemModifier,
   TempExtraModifierModifier,
   type Modifier,
+  type PokemonHeldItemModifier,
 } from "#app/modifier/modifier";
-import type { ModifierTier } from "#enums/modifier-tier";
 import {
-  FusePokemonModifierType,
   getPlayerModifierTypeOptions,
   getPlayerShopModifierTypeOptionsForWave,
   PokemonModifierType,
@@ -22,19 +20,20 @@ import {
   type ModifierType,
   type ModifierTypeOption,
 } from "#app/modifier/modifier-type";
-import { ModifierPoolType } from "#enums/modifier-pool-type";
 import Overrides from "#app/overrides";
+import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
 import { SHOP_OPTIONS_ROW_LIMIT } from "#app/ui/modifier-select-ui-handler";
+import { NumberHolder } from "#app/utils";
+import { FilterItemMaxStacks } from "#app/utils/item-utils";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
+import type { ModifierTier } from "#enums/modifier-tier";
 import { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
-import { UiMode } from "#enums/ui-mode";
-import { NumberHolder } from "#app/utils";
-import i18next from "i18next";
-import { BattlePhase } from "./abstract-battle-phase";
-import { FilterItemMaxStacks } from "#app/utils/item-utils";
 import { PhaseId } from "#enums/phase-id";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
 
 //#region Types
 
@@ -57,13 +56,18 @@ export class SelectModifierPhase extends BattlePhase {
 
   private typeOptions: ModifierTypeOption[];
 
-  constructor(options?: SelectModifierPhaseOptions) {
+  constructor({
+    rerollCount = 0,
+    modifierTiers,
+    customModifierSettings,
+    isCopy = false,
+  }: SelectModifierPhaseOptions = {}) {
     super();
 
-    this.rerollCount = options?.rerollCount ?? 0;
-    this.modifierTiers = options?.modifierTiers;
-    this.customModifierSettings = options?.customModifierSettings;
-    this.isCopy = options?.isCopy ?? false;
+    this.rerollCount = rerollCount;
+    this.modifierTiers = modifierTiers;
+    this.customModifierSettings = customModifierSettings;
+    this.isCopy = isCopy;
   }
 
   public override start(): void {
@@ -156,7 +160,7 @@ export class SelectModifierPhase extends BattlePhase {
                   globalScene.updateMoneyText();
                   globalScene.animateMoneyChanged(false);
                 }
-                globalScene.playSound("se/buy");
+                globalScene.audioManager.playSound("se/buy");
               }
               break;
             case 1:
@@ -275,7 +279,7 @@ export class SelectModifierPhase extends BattlePhase {
               globalScene.animateMoneyChanged(false);
             }
 
-            globalScene.playSound("se/buy");
+            globalScene.audioManager.playSound("se/buy");
             ui.getHandler<ModifierSelectUiHandler>().updateCostText();
           } else {
             ui.playError();
@@ -288,81 +292,51 @@ export class SelectModifierPhase extends BattlePhase {
       };
 
       if (modifierType instanceof PokemonModifierType) {
-        if (modifierType instanceof FusePokemonModifierType) {
-          ui.setModeWithoutClear(
-            UiMode.PARTY,
-            PartyUiMode.SPLICE,
-            -1,
-            (fromSlotIndex: number, spliceSlotIndex: number) => {
-              if (
-                spliceSlotIndex !== undefined
-                && fromSlotIndex < 6
-                && spliceSlotIndex < 6
-                && fromSlotIndex !== spliceSlotIndex
-              ) {
-                ui.setMode(UiMode.MODIFIER_SELECT, this.isPlayer()).then(() => {
-                  const modifier = modifierType.newModifier(party[fromSlotIndex], party[spliceSlotIndex])!; //TODO: is the bang correct?
-                  applyModifier(modifier, true);
-                });
-              } else {
-                ui.setMode(
-                  UiMode.MODIFIER_SELECT,
-                  this.isPlayer(),
-                  this.typeOptions,
-                  modifierSelectCallback,
-                  this.getRerollCost(globalScene.lockModifierTiers),
-                );
-              }
-            },
-            modifierType.selectFilter,
-          );
-        } else {
-          const pokemonModifierType = modifierType as PokemonModifierType;
-          const isMoveModifier = modifierType instanceof PokemonMoveModifierType;
-          const isTmModifier = modifierType instanceof TmModifierType;
-          const isRememberMoveModifier = modifierType instanceof RememberMoveModifierType;
-          const isPpRestoreModifier =
-            modifierType instanceof PokemonPpRestoreModifierType || modifierType instanceof PokemonPpUpModifierType;
-          const partyUiMode = isMoveModifier
-            ? PartyUiMode.MOVE_MODIFIER
-            : isTmModifier
-              ? PartyUiMode.TM_MODIFIER
-              : isRememberMoveModifier
-                ? PartyUiMode.REMEMBER_MOVE_MODIFIER
-                : PartyUiMode.MODIFIER;
-          const tmMoveId = isTmModifier ? (modifierType as TmModifierType).moveId : undefined;
-          ui.setModeWithoutClear(
-            UiMode.PARTY,
-            partyUiMode,
-            -1,
-            (slotIndex: number, option: PartyOption) => {
-              if (slotIndex < 6) {
-                ui.setMode(UiMode.MODIFIER_SELECT, this.isPlayer()).then(() => {
-                  const modifier = !isMoveModifier
-                    ? !isRememberMoveModifier
-                      ? modifierType.newModifier(party[slotIndex])
-                      : modifierType.newModifier(party[slotIndex], option as number)
-                    : modifierType.newModifier(party[slotIndex], option - PartyOption.MOVE_1);
-                  applyModifier(modifier!, true); // TODO: is the bang correct?
-                });
-              } else {
-                ui.setMode(
-                  UiMode.MODIFIER_SELECT,
-                  this.isPlayer(),
-                  this.typeOptions,
-                  modifierSelectCallback,
-                  this.getRerollCost(globalScene.lockModifierTiers),
-                );
-              }
-            },
-            pokemonModifierType.selectFilter,
-            modifierType instanceof PokemonMoveModifierType
-              ? (modifierType as PokemonMoveModifierType).moveSelectFilter
-              : undefined,
-            tmMoveId,
-            isPpRestoreModifier,
-          );
-        }
+        const pokemonModifierType = modifierType as PokemonModifierType;
+        const isMoveModifier = modifierType instanceof PokemonMoveModifierType;
+        const isTmModifier = modifierType instanceof TmModifierType;
+        const isRememberMoveModifier = modifierType instanceof RememberMoveModifierType;
+        const isPpRestoreModifier =
+          modifierType instanceof PokemonPpRestoreModifierType || modifierType instanceof PokemonPpUpModifierType;
+        const partyUiMode = isMoveModifier
+          ? PartyUiMode.MOVE_MODIFIER
+          : isTmModifier
+            ? PartyUiMode.TM_MODIFIER
+            : isRememberMoveModifier
+              ? PartyUiMode.REMEMBER_MOVE_MODIFIER
+              : PartyUiMode.MODIFIER;
+        const tmMoveId = isTmModifier ? (modifierType as TmModifierType).moveId : undefined;
+        ui.setModeWithoutClear(
+          UiMode.PARTY,
+          partyUiMode,
+          -1,
+          (slotIndex: number, option: PartyOption) => {
+            if (slotIndex < 6) {
+              ui.setMode(UiMode.MODIFIER_SELECT, this.isPlayer()).then(() => {
+                const modifier = !isMoveModifier
+                  ? !isRememberMoveModifier
+                    ? modifierType.newModifier(party[slotIndex])
+                    : modifierType.newModifier(party[slotIndex], option as number)
+                  : modifierType.newModifier(party[slotIndex], option - PartyOption.MOVE_1);
+                applyModifier(modifier!, true); // TODO: is the bang correct?
+              });
+            } else {
+              ui.setMode(
+                UiMode.MODIFIER_SELECT,
+                this.isPlayer(),
+                this.typeOptions,
+                modifierSelectCallback,
+                this.getRerollCost(globalScene.lockModifierTiers),
+              );
+            }
+          },
+          pokemonModifierType.selectFilter,
+          modifierType instanceof PokemonMoveModifierType
+            ? (modifierType as PokemonMoveModifierType).moveSelectFilter
+            : undefined,
+          tmMoveId,
+          isPpRestoreModifier,
+        );
       } else {
         if (modifierType) {
           const newModifier = modifierType.newModifier();

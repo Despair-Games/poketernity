@@ -59,7 +59,7 @@ describe("Items - Grip Claw", () => {
     game.move.select(MoveId.TACKLE, 0, BattlerIndex.ENEMY_2);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     const playerHeldItemCountAfter = getHeldItemCount(playerPokemon);
     const enemy1HeldItemCountsAfter = getHeldItemCount(enemyPokemon[0]);
@@ -88,7 +88,7 @@ describe("Items - Grip Claw", () => {
     game.move.select(MoveId.ATTRACT, 0, BattlerIndex.ENEMY_2);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     const playerHeldItemCountAfter = getHeldItemCount(playerPokemon);
     const enemy1HeldItemCountsAfter = getHeldItemCount(enemyPokemon[0]);
