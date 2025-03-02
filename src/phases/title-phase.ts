@@ -40,7 +40,7 @@ export class TitlePhase extends Phase {
     ui.clearText();
     ui.fadeIn(250);
 
-    globalScene.playBgm("title", true);
+    globalScene.audioManager.playBgm("title", true);
 
     gameData
       .getSession(loggedInUser?.lastSessionSlot ?? -1)
@@ -262,7 +262,7 @@ export class TitlePhase extends Phase {
         globalScene.updateModifiers(true, true);
 
         Promise.all(loadPokemonAssets).then(() => {
-          time.delayedCall(500, () => globalScene.playBgm());
+          time.delayedCall(500, () => globalScene.audioManager.playBgm());
           gameData.gameStats.dailyRunSessionsPlayed++;
           const arena = globalScene.newArena(gameMode.getStartingBiome());
           globalScene.newBattle();
@@ -305,7 +305,7 @@ export class TitlePhase extends Phase {
       }
       globalScene.newArena(globalScene.gameMode.getStartingBiome());
     } else {
-      globalScene.playBgm();
+      globalScene.audioManager.playBgm();
     }
 
     globalScene.pushPhase(new EncounterPhase(this.loaded));

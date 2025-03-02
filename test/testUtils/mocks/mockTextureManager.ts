@@ -124,4 +124,8 @@ export class MockTextureManager {
     this.list.push(polygon);
     return polygon;
   }
+
+  exists(key: string): boolean {
+    return this.textures.has(key);
+  }
 }

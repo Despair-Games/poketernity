@@ -185,7 +185,7 @@ async function doBiomeTransitionDialogueAndBattleInit() {
   // Show dialogue and transition biome
   await showEncounterText(`${namespace}:transport`);
   await Promise.all([animateBiomeChange(newBiome), transitionMysteryEncounterIntroVisuals()]);
-  globalScene.playBgm();
+  globalScene.audioManager.playBgm();
   await showEncounterText(`${namespace}:attacked`);
 
   // Init enemy

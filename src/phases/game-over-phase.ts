@@ -144,7 +144,7 @@ export class GameOverPhase extends BattlePhase {
         }
 
         const fadeDuration = this.isVictory ? 10000 : 5000;
-        globalScene.fadeOutBgm(fadeDuration, true);
+        globalScene.audioManager.fadeOutBgm(fadeDuration, true);
         const activeBattlers = globalScene.getField().filter((p) => p?.isActive(true));
         activeBattlers.map((p) => p.hideInfo());
 

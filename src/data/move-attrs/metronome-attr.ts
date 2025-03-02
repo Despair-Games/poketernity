@@ -3,6 +3,7 @@ import { type Move } from "#app/data/move";
 import { CallMoveAttr } from "#app/data/move-attrs/call-move-attr";
 import { type Pokemon } from "#app/field/pokemon";
 import { getEnumValues, type BooleanHolder } from "#app/utils";
+import { getMaxMoveList } from "#app/utils/move-utils";
 import { MoveId } from "#enums/move-id";
 
 /**
@@ -18,10 +19,16 @@ export class MetronomeAttr extends CallMoveAttr {
   }
 
   /**
-   * This function exists solely to allow tests to override the randomly selected move by mocking this function.
+   * Selects a random move among all valid callable moves.
+   *
+   * This function is only public for usage by automated tests. Please use {@linkcode apply} instead.
    */
-  public getMoveOverride(): MoveId | null {
-    return null;
+  public getRandomMove(user: Pokemon): MoveId {
+    const moveIds = getEnumValues(MoveId).filter(
+      (m) => !this.invalidMoves.includes(m) && !allMoves[m].name.endsWith(" (N)"),
+    );
+
+    return moveIds[user.randSeedInt(moveIds.length)];
   }
 
   /**
@@ -34,17 +41,12 @@ export class MetronomeAttr extends CallMoveAttr {
    * @param args Unused
    */
   override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder): boolean {
-    const moveIds = getEnumValues(MoveId).filter(
-      (m) => !this.invalidMoves.includes(m) && !allMoves[m].name.endsWith(" (N)"),
-    );
-
-    const moveId = this.getMoveOverride() ?? moveIds[user.randSeedInt(moveIds.length)];
-
-    return super.apply(user, target, allMoves[moveId], overridden);
+    return super.apply(user, target, allMoves[this.getRandomMove(user)], overridden);
   }
 }
 
 const invalidMetronomeMoves: MoveId[] = [
+  ...getMaxMoveList(),
   MoveId.AFTER_YOU,
   MoveId.APPLE_ACID,
   MoveId.ARMOR_CANNON,

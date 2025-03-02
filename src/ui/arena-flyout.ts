@@ -14,7 +14,7 @@ import type { TurnEndEvent } from "../events/battle-scene";
 import { BattleSceneEventType } from "#enums/battle-scene-event-type";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import TimeOfDayWidget from "./time-of-day-widget";
-import { toCamelCaseString, formatText, fixedNumber } from "#app/utils";
+import { toCamelCaseString, formatText, fixedNumber, isNullOrUndefined } from "#app/utils";
 import type { ParseKeys } from "i18next";
 import i18next from "i18next";
 
@@ -30,8 +30,8 @@ enum ArenaEffectType {
 interface ArenaEffectInfo {
   /** The enum string representation of the effect */
   name: string;
-  /** {@linkcode ArenaEffectType} type of effect */
-  effecType: ArenaEffectType;
+  /** {@linkcode ArenaEffectType | type of effect} */
+  effectType: ArenaEffectType;
 
   /** The maximum duration set by the effect */
   maxDuration: number;
@@ -43,7 +43,7 @@ interface ArenaEffectInfo {
 
 export function getFieldEffectText(arenaTagType: string): string {
   if (!arenaTagType || arenaTagType === ArenaTagType[ArenaTagType.NONE]) {
-    return arenaTagType;
+    return "";
   }
   const effectName = toCamelCaseString(arenaTagType);
   const i18nKey = `arenaFlyout:${effectName}` as ParseKeys;
@@ -241,7 +241,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
 
       // Creates a proxy object to decide which text object needs to be updated
       let textObject: Phaser.GameObjects.Text;
-      switch (fieldEffectInfo.effecType) {
+      switch (fieldEffectInfo.effectType) {
         case ArenaEffectType.PLAYER:
           textObject = this.flyoutTextPlayer;
           break;
@@ -299,17 +299,17 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
           arenaEffectType = ArenaEffectType.ENEMY;
         }
 
-        const existingTrapTagIndex = isEntryHazardTag
+        const existingEntryHazardIndex = isEntryHazardTag
           ? this.fieldEffectInfo.findIndex(
-              (e) => tagAddedEvent.arenaTagType === e.tagType && arenaEffectType === e.effecType,
+              (e) => tagAddedEvent.arenaTagType === e.tagType && arenaEffectType === e.effectType,
             )
           : -1;
         let name: string = getFieldEffectText(ArenaTagType[tagAddedEvent.arenaTagType]);
 
         if (isEntryHazardTag) {
-          if (existingTrapTagIndex !== -1) {
+          if (existingEntryHazardIndex !== -1) {
             const layers = tagAddedEvent.arenaTagMaxLayers > 1 ? ` (${tagAddedEvent.arenaTagLayers})` : "";
-            this.fieldEffectInfo[existingTrapTagIndex].name = `${name}${layers}`;
+            this.fieldEffectInfo[existingEntryHazardIndex].name = `${name}${layers}`;
             break;
           } else if (tagAddedEvent.arenaTagMaxLayers > 1) {
             name = `${name} (${tagAddedEvent.arenaTagLayers})`;
@@ -318,7 +318,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
 
         this.fieldEffectInfo.push({
           name,
-          effecType: arenaEffectType,
+          effectType: arenaEffectType,
           maxDuration: tagAddedEvent.duration,
           duration: tagAddedEvent.duration,
           tagType: tagAddedEvent.arenaTagType,
@@ -335,42 +335,53 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
         break;
 
       case WeatherChangedEvent:
-      case TerrainChangedEvent:
-        const fieldEffectChangedEvent = arenaEffectChangedEvent as WeatherChangedEvent | TerrainChangedEvent;
-
-        // Stores the old Weather/Terrain name in case it's in the array already
-        const oldName = getFieldEffectText(
-          fieldEffectChangedEvent instanceof WeatherChangedEvent
-            ? WeatherType[fieldEffectChangedEvent.oldWeatherType]
-            : TerrainType[fieldEffectChangedEvent.oldTerrainType],
-        );
-        // Stores the new Weather/Terrain info
-        const newInfo = {
-          name: getFieldEffectText(
-            fieldEffectChangedEvent instanceof WeatherChangedEvent
-              ? WeatherType[fieldEffectChangedEvent.newWeatherType]
-              : TerrainType[fieldEffectChangedEvent.newTerrainType],
-          ),
-          effecType:
-            fieldEffectChangedEvent instanceof WeatherChangedEvent ? ArenaEffectType.WEATHER : ArenaEffectType.TERRAIN,
-          maxDuration: fieldEffectChangedEvent.duration,
-          duration: fieldEffectChangedEvent.duration,
+        const weatherEvent = arenaEffectChangedEvent as WeatherChangedEvent;
+        const oldWeatherName = getFieldEffectText(WeatherType[weatherEvent.oldWeatherType]);
+        const newWeatherName = getFieldEffectText(WeatherType[weatherEvent.newWeatherType]);
+        const newWeatherInfo = {
+          name: newWeatherName,
+          effectType: ArenaEffectType.WEATHER,
+          maxDuration: weatherEvent.duration,
+          duration: weatherEvent.duration,
         };
-
-        foundIndex = this.fieldEffectInfo.findIndex((info) => [newInfo.name, oldName].includes(info.name));
-        if (foundIndex === -1) {
-          if (newInfo.name !== undefined) {
-            this.fieldEffectInfo.push(newInfo); // Adds the info to the array if it doesn't already exist and is defined
-          }
-        } else if (!newInfo.name) {
-          this.fieldEffectInfo.splice(foundIndex, 1); // Removes the old info if the new one is undefined
-        } else {
-          this.fieldEffectInfo[foundIndex] = newInfo; // Otherwise, replace the old info
-        }
+        this.insertFieldEffectInfo(newWeatherInfo, oldWeatherName);
+        break;
+      case TerrainChangedEvent:
+        const terrainEvent = arenaEffectChangedEvent as TerrainChangedEvent;
+        const oldTerrainName = getFieldEffectText(TerrainType[terrainEvent.oldTerrainType]);
+        const newTerrainName = getFieldEffectText(TerrainType[terrainEvent.newTerrainType]);
+        // Stores the new Weather/Terrain info
+        const newTerrainInfo = {
+          name: newTerrainName,
+          effectType: ArenaEffectType.TERRAIN,
+          maxDuration: terrainEvent.duration,
+          duration: terrainEvent.duration,
+        };
+        this.insertFieldEffectInfo(newTerrainInfo, oldTerrainName);
         break;
     }
-
     this.updateFieldText();
+  }
+
+  /**
+   * Helper function that determines where to insert information about a new weather or terrain in the `fieldEffectInfo` array
+   * @param newInfo - The new weather or terrain {@linkcode ArenaEffectInfo | effect info}
+   * @param oldName - The name of the previous weather or terrain
+   */
+  private insertFieldEffectInfo(newInfo: ArenaEffectInfo, oldName: string): void {
+    if (isNullOrUndefined(newInfo.name)) {
+      return;
+    }
+    const foundIndex = this.fieldEffectInfo.findIndex((info) => [newInfo.name, oldName].includes(info.name));
+    if (newInfo.name.length > 0) {
+      if (foundIndex === -1) {
+        this.fieldEffectInfo.push(newInfo); // Adds the info to the array if it doesn't already exist and is defined
+      } else {
+        this.fieldEffectInfo[foundIndex] = newInfo; // Otherwise, replace the old info
+      }
+    } else if (foundIndex > -1) {
+      this.fieldEffectInfo.splice(foundIndex, 1); // Removes the old info if the new one is undefined
+    }
   }
 
   /**

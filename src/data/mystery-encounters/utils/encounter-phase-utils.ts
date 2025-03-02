@@ -86,7 +86,7 @@ export function doTrainerExclamation() {
     },
   });
 
-  globalScene.playSound("battle_anims/GEN8- Exclaim", { volume: 0.7 });
+  globalScene.audioManager.playSound("battle_anims/GEN8- Exclaim", { volume: 0.7 });
 }
 
 export interface EnemyPokemonConfig {
@@ -470,7 +470,7 @@ export function updatePlayerMoney(changeValue: number, playSound: boolean = true
   globalScene.updateMoneyText();
   globalScene.animateMoneyChanged(false);
   if (playSound) {
-    globalScene.playSound("se/buy");
+    globalScene.audioManager.playSound("se/buy");
   }
   if (showMessage) {
     if (changeValue < 0) {

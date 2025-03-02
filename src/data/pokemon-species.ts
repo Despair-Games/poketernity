@@ -8,7 +8,6 @@ import { randSeedInt, randSeedGauss } from "#app/utils";
 import type { GrowthRate } from "#enums/growth-rates";
 import type { EvolutionLevel } from "#app/data/balance/pokemon-evolutions";
 import { pokemonEvolutions, pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
-import { SpeciesWildEvolutionDelay } from "#enums/species-wild-evolution-delay";
 import type { ElementalType } from "#enums/elemental-type";
 import { variantData } from "#app/data/variant";
 import { SpeciesFormKey } from "#enums/species-form-key";
@@ -145,41 +144,6 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     return this.getSpeciesForLevel(level, allowEvolving, true, strength, currentWave);
   }
 
-  /**
-   * @see {@linkcode getSpeciesForLevel} uses an ease in and ease out sine function:
-   * @see {@link https://easings.net/#easeInSine}
-   * @see {@link https://easings.net/#easeOutSine}
-   * Ease in is similar to an exponential function with slower growth, as in, x is directly related to y, and increase in y is higher for higher x.
-   * Ease out looks more similar to a logarithmic function shifted to the left. It's still a direct relation but it plateaus instead of increasing in growth.
-   *
-   * This function is used to calculate the x given to these functions, which is used for evolution chance.
-   *
-   * First is maxLevelDiff, which is a denominator for evolution chance for mons without wild evolution delay.
-   * This means a lower value of x will lead to a higher evolution chance.
-   *
-   * It's also used for preferredMinLevel, which is used when an evolution delay exists.
-   * The calculation with evolution delay is a weighted average of the easeIn and easeOut functions where preferredMinLevel is the denominator.
-   * This also means a lower value of x will lead to a higher evolution chance.
-   * @param strength {@linkcode PartyMemberStrength} The strength of the party member in question
-   * @returns The level difference from expected evolution level tolerated for a mon to be unevolved. Lower value = higher evolution chance.
-   */
-  private getStrengthLevelDiff(strength: PartyMemberStrength): number {
-    switch (Math.min(strength, PartyMemberStrength.STRONGER)) {
-      case PartyMemberStrength.WEAKEST:
-        return 60;
-      case PartyMemberStrength.WEAKER:
-        return 40;
-      case PartyMemberStrength.WEAK:
-        return 20;
-      case PartyMemberStrength.AVERAGE:
-        return 8;
-      case PartyMemberStrength.STRONG:
-        return 4;
-      default:
-        return 0;
-    }
-  }
-
   getSpeciesForLevel(
     level: number,
     allowEvolving: boolean = false,
@@ -204,11 +168,8 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
 
     const evolutions = pokemonEvolutions[this.speciesId];
 
-    const easeInFunc = Phaser.Tweens.Builders.GetEaseFunction("Sine.easeIn");
-    const easeOutFunc = Phaser.Tweens.Builders.GetEaseFunction("Sine.easeOut");
-
     const evolutionPool: Map<number, Species> = new Map();
-    let totalWeight = 0;
+    const totalWeight = 0;
     let noEvolutionChance = 1;
 
     for (const ev of evolutions) {
@@ -216,7 +177,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
         continue;
       }
 
-      let evolutionChance: number;
+      let evolutionChance: number = 0;
 
       const evolutionSpecies = getPokemonSpecies(ev.speciesId);
       const isRegionalEvolution = !this.isRegional() && evolutionSpecies.isRegional();
@@ -224,65 +185,18 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
       if (!forTrainer && isRegionalEvolution) {
         evolutionChance = 0;
       } else {
-        if (ev.wildDelay === SpeciesWildEvolutionDelay.NONE) {
-          if (strength === PartyMemberStrength.STRONGER) {
-            evolutionChance = 1;
-          } else {
-            const maxLevelDiff = this.getStrengthLevelDiff(strength); //The maximum distance from the evolution level tolerated for the mon to not evolve
-            const minChance: number = 0.875 - 0.125 * strength;
-
-            evolutionChance = Math.min(
-              minChance + easeInFunc(Math.min(level - ev.level, maxLevelDiff) / maxLevelDiff) * (1 - minChance),
-              1,
-            );
-          }
-        } else {
-          const preferredMinLevel = Math.max(ev.level - 1 + ev.wildDelay! * this.getStrengthLevelDiff(strength), 1); // TODO: is the bang correct?
-          let evolutionLevel = Math.max(ev.level > 1 ? ev.level : Math.floor(preferredMinLevel / 2), 1);
-
-          if (ev.level <= 1 && pokemonPrevolutions.hasOwnProperty(this.speciesId)) {
-            const prevolutionLevel = pokemonEvolutions[pokemonPrevolutions[this.speciesId]].find(
-              (ev) => ev.speciesId === this.speciesId,
-            )!.level; // TODO: is the bang correct?
-            if (prevolutionLevel > 1) {
-              evolutionLevel = prevolutionLevel;
-            }
-          }
-
-          evolutionChance = Math.min(
-            0.65 * easeInFunc(Math.min(Math.max(level - evolutionLevel, 0), preferredMinLevel) / preferredMinLevel)
-              + 0.35
-                * easeOutFunc(
-                  Math.min(Math.max(level - evolutionLevel, 0), preferredMinLevel * 2.5) / (preferredMinLevel * 2.5),
-                ),
-            1,
-          );
+        if ((ev.altLevel !== 0 && level > ev.altLevel) || level > ev.level) {
+          evolutionChance = 1;
+          noEvolutionChance = 0;
         }
       }
 
-      //TODO: Adjust templates and delays so we don't have to hardcode it
-      /* TEMPORARY! (Most) Trainers shouldn't be using unevolved Pokemon by the third gym leader / wave 80. Exceptions to this include Breeders, whose large teams are balanced by the use of weaker pokemon */
-      if (currentWave >= 80 && forTrainer && strength > PartyMemberStrength.WEAKER) {
-        evolutionChance = 1;
-        noEvolutionChance = 0;
-      }
-
-      if (evolutionChance > 0) {
-        if (isRegionalEvolution) {
-          evolutionChance /= evolutionSpecies.isRareRegional() ? 16 : 4;
-        }
-
-        totalWeight += evolutionChance;
-
-        evolutionPool.set(totalWeight, ev.speciesId);
-
-        if (1 - evolutionChance < noEvolutionChance) {
-          noEvolutionChance = 1 - evolutionChance;
-        }
+      if (evolutionChance === 1) {
+        evolutionPool.set(evolutionChance, ev.speciesId);
       }
     }
 
-    if (noEvolutionChance === 1 || Phaser.Math.RND.realInRange(0, 1) < noEvolutionChance) {
+    if (noEvolutionChance === 1) {
       return this.speciesId;
     }
 
@@ -369,9 +283,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
           prevolutionLevels[l][0],
           Math.min(
             Math.max(
-              evolution?.level!
-                + Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * Math.max(evolution?.wildDelay!, 0.5) * 5)
-                - 1,
+              evolution?.level! + Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * 0.5 * 5) - 1,
               2,
               evolution?.level!,
             ),
@@ -387,8 +299,7 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
         this.speciesId,
         Math.min(
           Math.max(
-            lastPrevolutionLevel
-              + Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * Math.max(evolution?.wildDelay!, 0.5) * 5),
+            lastPrevolutionLevel + Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * 0.5 * 5),
             lastPrevolutionLevel + 1,
             evolution?.level!,
           ),

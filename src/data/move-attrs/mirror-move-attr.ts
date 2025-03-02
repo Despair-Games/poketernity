@@ -3,6 +3,7 @@ import { type Move } from "#app/data/move";
 import { CallMoveAttr } from "#app/data/move-attrs/call-move-attr";
 import { type Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
+import { getMaxMoveList } from "#app/utils/move-utils";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
 
@@ -30,13 +31,15 @@ export class MirrorMoveAttr extends CallMoveAttr {
 
   override getCondition(): MoveConditionFunc {
     return (_user, target, _move) => {
-      return target.getMoveHistory().length !== 0;
+      const lastMove = target.getLastXMoves()[0]?.move;
+      return !!lastMove && !this.invalidMoves.includes(lastMove.id);
     };
   }
 }
 
 // TODO: Z-Moves can't be copied (if they are ever implemented)
 const invalidMirrorMoveMoves: MoveId[] = [
+  ...getMaxMoveList(),
   MoveId.ACUPRESSURE,
   MoveId.AFTER_YOU,
   MoveId.AROMATHERAPY,
@@ -93,6 +96,7 @@ const invalidMirrorMoveMoves: MoveId[] = [
   MoveId.MISTY_TERRAIN,
   MoveId.MUD_SPORT,
   MoveId.NATURE_POWER,
+  MoveId.NONE,
   MoveId.NOXIOUS_TORQUE,
   MoveId.ORDER_UP,
   MoveId.PERISH_SONG,
