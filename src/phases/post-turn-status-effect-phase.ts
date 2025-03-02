@@ -4,7 +4,7 @@ import { getStatusEffectActivationText } from "#app/data/status-effect";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
-import { BooleanHolder, NumberHolder } from "#app/utils";
+import { BooleanHolder, NumberHolder, toDmgValue } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { BattlerIndex } from "#enums/battler-index";
 import { CommonAnim } from "#enums/common-anim";
@@ -45,20 +45,20 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
     const damage = new NumberHolder(0);
     switch (pokemon.getStatusEffect(true)) {
       case StatusEffect.POISON:
-        damage.value = Math.max(pokemon.getMaxHp() / 8, 1);
+        damage.value = pokemon.getMaxHp() / 8;
         break;
       case StatusEffect.TOXIC:
-        damage.value = Math.max(Math.floor((pokemon.getMaxHp() / 16) * pokemon.status!.toxicTurnCount), 1);
+        damage.value = (pokemon.getMaxHp() / 16) * pokemon.status!.toxicTurnCount;
         break;
       case StatusEffect.BURN:
-        damage.value = Math.max(pokemon.getMaxHp() / 16, 1);
+        damage.value = pokemon.getMaxHp() / 16;
         applyAbAttrs(AbAttrFlag.REDUCE_BURN_DAMAGE, pokemon, false, damage);
         break;
     }
 
     if (damage.value) {
       // Set preventEndure flag to avoid pokemon surviving thanks to focus band, sturdy, endure ...
-      pokemon.damageAndUpdate(damage.value, { preventEndure: true });
+      pokemon.damageAndUpdate(toDmgValue(damage.value), { preventEndure: true });
       applyAbAttrs(AbAttrFlag.POST_DAMAGE, pokemon, false, damage.value);
     }
 
