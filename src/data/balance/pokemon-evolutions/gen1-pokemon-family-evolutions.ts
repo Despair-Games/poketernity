@@ -38,6 +38,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.RATTATA]: [new SpeciesEvolution(Species.RATICATE, 20, null, null)],
   [Species.SPEAROW]: [new SpeciesEvolution(Species.FEAROW, 20, null, null)],
   [Species.EKANS]: [new SpeciesEvolution(Species.ARBOK, 22, null, null)],
+  /** Pichu is from gen 2 */
   [Species.PICHU]: [
     new SpeciesFormEvolution(
       Species.PIKACHU,
@@ -90,6 +91,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.NIDORINO]: [
     new SpeciesEvolution(Species.NIDOKING, 1, EvolutionItem.MOON_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
+  /** Cleffa is from gen 2 */
   [Species.CLEFFA]: [
     new SpeciesEvolution(
       Species.CLEFAIRY,
@@ -106,6 +108,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.VULPIX]: [
     new SpeciesEvolution(Species.NINETALES, 1, EvolutionItem.FIRE_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
+  /** Igglybuff is from gen 2 */
   [Species.IGGLYBUFF]: [
     new SpeciesEvolution(Species.JIGGLYPUFF, 1, null, new SpeciesFriendshipEvolutionCondition(70), HAPPINESS_EVO_LEVEL),
   ],
@@ -202,6 +205,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
     ),
   ],
+  /** Tyrogue is from gen 2 */
   [Species.TYROGUE]: [
     /**
      * Custom: Evolves into Hitmonlee, Hitmonchan or Hitmontop at level 20
@@ -273,6 +277,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.RHYDON]: [
     new SpeciesEvolution(Species.RHYPERIOR, 1, EvolutionItem.PROTECTOR, null, ADVANCED_ITEM_EVO_LEVEL),
   ],
+  /** Happiny is from gen 4 */
   [Species.HAPPINY]: [
     new SpeciesEvolution(
       Species.CHANSEY,
@@ -300,6 +305,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   ],
   [Species.GOLDEEN]: [new SpeciesEvolution(Species.SEAKING, 33, null, null)],
   [Species.STARYU]: [new SpeciesEvolution(Species.STARMIE, 1, EvolutionItem.WATER_STONE, null, GENERIC_ITEM_EVO_LEVEL)],
+  /** Mime Jr is from gen 4 */
   [Species.MIME_JR]: [
     new SpeciesEvolution(
       Species.GALAR_MR_MIME,
@@ -324,16 +330,20 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       MR_MIME_LEVEL,
     ),
   ],
+  /** Galar Mr Mime is from gen 8 */
   [Species.GALAR_MR_MIME]: [new SpeciesEvolution(Species.MR_RIME, 42, null, null)],
   [Species.SCYTHER]: [
     new SpeciesEvolution(Species.SCIZOR, 1, EvolutionItem.LINKING_CORD, null, GENERIC_ITEM_EVO_LEVEL),
     new SpeciesEvolution(Species.KLEAVOR, 1, EvolutionItem.BLACK_AUGURITE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
+  /** Smoochum is from gen 2 */
   [Species.SMOOCHUM]: [new SpeciesEvolution(Species.JYNX, 30, null, null)],
+  /** Elekid is from gen 2 */
   [Species.ELEKID]: [new SpeciesEvolution(Species.ELECTABUZZ, 30, null, null)],
   [Species.ELECTABUZZ]: [
     new SpeciesEvolution(Species.ELECTIVIRE, 1, EvolutionItem.ELECTIRIZER, null, ADVANCED_ITEM_EVO_LEVEL),
   ],
+  /** Magby is from gen 2 */
   [Species.MAGBY]: [new SpeciesEvolution(Species.MAGMAR, 30, null, null)],
   [Species.MAGMAR]: [
     new SpeciesEvolution(Species.MAGMORTAR, 1, EvolutionItem.MAGMARIZER, null, ADVANCED_ITEM_EVO_LEVEL),
@@ -429,6 +439,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
     new SpeciesFormEvolution(Species.GLACEON, "partner", "", 1, EvolutionItem.ICE_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
   [Species.PORYGON]: [new SpeciesEvolution(Species.PORYGON2, 1, EvolutionItem.UPGRADE, null, GENERIC_ITEM_EVO_LEVEL)],
+  /** Porygon2 is from gen 2 */
   [Species.PORYGON2]: [
     new SpeciesEvolution(Species.PORYGON_Z, 1, EvolutionItem.DUBIOUS_DISC, null, ADVANCED_ITEM_EVO_LEVEL),
   ],
