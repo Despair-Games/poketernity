@@ -808,8 +808,7 @@ export function initMoves() {
     new AttackMove(MoveId.STRUGGLE, ElementalType.NORMAL, MoveCategory.PHYSICAL, 50, -1, 1, -1, 0, 1)
       .attr(RecoilAttr, true, 0.25, true)
       .attr(TypelessAttr)
-      .target(MoveTarget.RANDOM_NEAR_ENEMY)
-      .edgeCase(), // Pokemon are forced to use Struggle even if the responsible disabling effect is removed mid-turn
+      .target(MoveTarget.RANDOM_NEAR_ENEMY),
     new StatusMove(MoveId.SKETCH, ElementalType.NORMAL, -1, 1, -1, 0, 2).ignoresSubstitute().attr(SketchAttr),
     new AttackMove(MoveId.TRIPLE_KICK, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 10, 90, 10, -1, 0, 2)
       .attr(MultiHitAttr, MultiHitType._3)
