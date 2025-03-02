@@ -307,9 +307,9 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
         let name: string = getFieldEffectText(ArenaTagType[tagAddedEvent.arenaTagType]);
 
         if (isEntryHazardTag) {
-          if (existingTrapTagIndex !== -1) {
+          if (existingEntryHazardIndex !== -1) {
             const layers = tagAddedEvent.arenaTagMaxLayers > 1 ? ` (${tagAddedEvent.arenaTagLayers})` : "";
-            this.fieldEffectInfo[existingTrapTagIndex].name = `${name}${layers}`;
+            this.fieldEffectInfo[existingEntryHazardIndex].name = `${name}${layers}`;
             break;
           } else if (tagAddedEvent.arenaTagMaxLayers > 1) {
             name = `${name} (${tagAddedEvent.arenaTagLayers})`;
