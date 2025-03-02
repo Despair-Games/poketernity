@@ -299,7 +299,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
           arenaEffectType = ArenaEffectType.ENEMY;
         }
 
-        const existingTrapTagIndex = isEntryHazardTag
+        const existingEntryHazardIndex = isEntryHazardTag
           ? this.fieldEffectInfo.findIndex(
               (e) => tagAddedEvent.arenaTagType === e.tagType && arenaEffectType === e.effectType,
             )
