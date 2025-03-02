@@ -431,7 +431,7 @@ export class Arena {
 
     const oldWeatherType = this.weather?.weatherType || WeatherType.NONE;
 
-    const newWeatherDuration = hasPokemonSource ? 5 : 0;
+    const newWeatherDuration = hasPokemonSource && !PRIMAL_WEATHER.includes(newWeatherType) ? 5 : 0;
 
     if (newWeatherType !== WeatherType.NONE) {
       globalScene.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (newWeatherType - 1)));

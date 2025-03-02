@@ -42,7 +42,7 @@ interface ArenaEffectInfo {
 }
 
 export function getFieldEffectText(arenaTagType: string): string {
-  if (arenaTagType === ArenaTagType[ArenaTagType.NONE]) {
+  if (!arenaTagType || arenaTagType === ArenaTagType[ArenaTagType.NONE]) {
     return "";
   }
   const effectName = toCamelCaseString(arenaTagType);
@@ -379,7 +379,7 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
       } else {
         this.fieldEffectInfo[foundIndex] = newInfo; // Otherwise, replace the old info
       }
-    } else {
+    } else if (foundIndex > -1) {
       this.fieldEffectInfo.splice(foundIndex, 1); // Removes the old info if the new one is undefined
     }
   }
