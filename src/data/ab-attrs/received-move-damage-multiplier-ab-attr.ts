@@ -22,6 +22,14 @@ export class ReceivedMoveDamageMultiplierAbAttr extends PreDefendAbAttr {
     this.damageMultiplier = damageMultiplier;
   }
 
+  /**
+   * @param pokemon - The Pokémon with the ability.
+   * @param simulated - If `true` then the game state will not be modified.
+   * @param attacker - The attacking Pokémon.
+   * @param move - The move being used.
+   * @param multiplier - The damage multiplier.
+   * @returns `true` if the ability was applied.
+   */
   override apply(
     pokemon: Pokemon,
     _simulated: boolean,
