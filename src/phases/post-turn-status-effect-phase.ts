@@ -62,6 +62,7 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
       applyAbAttrs(AbAttrFlag.POST_DAMAGE, pokemon, false, damage.value);
     }
 
+    // TODO: this should be handled by some sort of animation manager instead of instantiating a new `CommonBattleAnim` class
     new CommonBattleAnim(CommonAnim.POISON + (pokemon.getStatusEffect(true) - 1), pokemon).play(false, () =>
       this.end(),
     );
