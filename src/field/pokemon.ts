@@ -3118,8 +3118,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * @param ignoreSegments - If `true`, boss bars are ignored. Only applies to {@linkcode EnemyPokemon}. Default `false`
    * @param preventEndure - If `true`, bypasses the effects of Endure, Sturdy, etc. Default `false`
    * @param ignoreFaintPhase - If `true`, doesn't push a {@linkcode FaintPhase}. Default `false`
-   * @param source - The source of the damage if it was a {@linkcode Pokemon}. Optional.
    * @param ignoreDynamaxReduction - If `true`, dynamax damage reduction will be ignored. Default `false`
+   * @param source - The source of the damage if it was a {@linkcode Pokemon}. Optional.
    * @returns The amount of damage actually dealt.
    */
   public damageAndUpdate(
@@ -3130,8 +3130,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       ignoreSegments = false,
       preventEndure = false,
       ignoreFaintPhase = false,
-      source,
       ignoreDynamaxReduction = false,
+      source,
     }: DamageFunctionOptions = {},
   ): number {
     const damagePhase = new DamageAnimPhase(this.getBattlerIndex(), amount, result, isCritical);
