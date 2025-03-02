@@ -15,7 +15,7 @@ import { initBiomes } from "#app/data/balance/biomes";
 import { initEggMoves } from "#app/data/balance/egg-moves";
 import { initPokemonForms } from "#app/data/pokemon-forms";
 import { initSpecies } from "./data/init-species";
-import { initAchievements } from "#app/system/achv";
+import { initAchievements } from "#app/system/achievements";
 import { initTrainerTypeDialogue } from "./data/init-trainer-type-dialogue";
 import { initChallenges } from "#app/data/challenge";
 import i18next from "i18next";

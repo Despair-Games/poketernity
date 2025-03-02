@@ -7,7 +7,7 @@ import type { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achievements";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";

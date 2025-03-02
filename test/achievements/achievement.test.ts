@@ -1,6 +1,6 @@
 import { TurnHeldItemTransferModifier } from "#app/modifier/modifier";
 import {
-  Achv,
+  Achievement,
   ChallengeAchv,
   DamageAchv,
   HealAchv,
@@ -11,7 +11,7 @@ import {
   MonoTypeAchv,
   RibbonAchv,
   achvs,
-} from "#app/system/achv";
+} from "#app/system/achievements";
 import { AchvTier } from "#enums/achv-tier";
 import { NumberHolder } from "#app/utils";
 import { GameManager } from "#test/testUtils/gameManager";
@@ -21,10 +21,10 @@ import { InverseBattleChallenge, SingleGenerationChallenge, SingleTypeChallenge 
 import { ElementalType } from "#enums/elemental-type";
 
 describe("Achv", () => {
-  let achv: Achv;
+  let achv: Achievement;
 
   beforeEach(() => {
-    achv = new Achv("TestAchievement", "test_icon", 10);
+    achv = new Achievement("TestAchievement", "test_icon", 10);
   });
 
   it("should have the correct attributes", () => {
@@ -45,11 +45,11 @@ describe("Achv", () => {
   });
 
   it("should return the correct tier based on the score", () => {
-    const achv1 = new Achv("", "test_icon", 10);
-    const achv2 = new Achv("", "test_icon", 25);
-    const achv3 = new Achv("", "test_icon", 50);
-    const achv4 = new Achv("", "test_icon", 75);
-    const achv5 = new Achv("", "test_icon", 100);
+    const achv1 = new Achievement("", "test_icon", 10);
+    const achv2 = new Achievement("", "test_icon", 25);
+    const achv3 = new Achievement("", "test_icon", 50);
+    const achv4 = new Achievement("", "test_icon", 75);
+    const achv5 = new Achievement("", "test_icon", 100);
 
     expect(achv1.getTier()).toBe(AchvTier.COMMON);
     expect(achv2.getTier()).toBe(AchvTier.GREAT);
@@ -60,7 +60,7 @@ describe("Achv", () => {
 
   it("should validate the achievement based on the condition function", () => {
     const conditionFunc = vi.fn((value: number) => value === 10);
-    const achv = new Achv("", "test_icon", 10, conditionFunc);
+    const achv = new Achievement("", "test_icon", 10, conditionFunc);
 
     expect(achv.validate(5)).toBe(false);
     expect(achv.validate(10)).toBe(true);
@@ -89,7 +89,7 @@ describe("MoneyAchv", () => {
   it("should create an instance of MoneyAchv", () => {
     const moneyAchv = new MoneyAchv("", 10000, "money_icon", 10);
     expect(moneyAchv).toBeInstanceOf(MoneyAchv);
-    expect(moneyAchv instanceof Achv).toBe(true);
+    expect(moneyAchv instanceof Achievement).toBe(true);
   });
 
   it("should validate the achievement based on the money amount", () => {
@@ -124,7 +124,7 @@ describe("RibbonAchv", () => {
   it("should create an instance of RibbonAchv", () => {
     const ribbonAchv = new RibbonAchv("", 10, "ribbon_icon", 10);
     expect(ribbonAchv).toBeInstanceOf(RibbonAchv);
-    expect(ribbonAchv instanceof Achv).toBe(true);
+    expect(ribbonAchv instanceof Achievement).toBe(true);
   });
 
   it("should validate the achievement based on the ribbon amount", () => {
@@ -142,7 +142,7 @@ describe("DamageAchv", () => {
   it("should create an instance of DamageAchv", () => {
     const damageAchv = new DamageAchv("", 250, "damage_icon", 10);
     expect(damageAchv).toBeInstanceOf(DamageAchv);
-    expect(damageAchv instanceof Achv).toBe(true);
+    expect(damageAchv instanceof Achievement).toBe(true);
   });
 
   it("should validate the achievement based on the damage amount", () => {
@@ -160,7 +160,7 @@ describe("HealAchv", () => {
   it("should create an instance of HealAchv", () => {
     const healAchv = new HealAchv("", 250, "heal_icon", 10);
     expect(healAchv).toBeInstanceOf(HealAchv);
-    expect(healAchv instanceof Achv).toBe(true);
+    expect(healAchv instanceof Achievement).toBe(true);
   });
 
   it("should validate the achievement based on the heal amount", () => {
@@ -178,7 +178,7 @@ describe("LevelAchv", () => {
   it("should create an instance of LevelAchv", () => {
     const levelAchv = new LevelAchv("", 100, "level_icon", 10);
     expect(levelAchv).toBeInstanceOf(LevelAchv);
-    expect(levelAchv instanceof Achv).toBe(true);
+    expect(levelAchv instanceof Achievement).toBe(true);
   });
 
   it("should validate the achievement based on the level", () => {
@@ -196,7 +196,7 @@ describe("ModifierAchv", () => {
   it("should create an instance of ModifierAchv", () => {
     const modifierAchv = new ModifierAchv("", "modifier_icon", 10, () => true);
     expect(modifierAchv).toBeInstanceOf(ModifierAchv);
-    expect(modifierAchv instanceof Achv).toBe(true);
+    expect(modifierAchv instanceof Achievement).toBe(true);
   });
 
   it("should validate the achievement based on the modifier function", () => {
@@ -229,7 +229,7 @@ describe("MonoGenAchv", () => {
   it("should create an instance of MonoGenAchv", () => {
     const monoGenAchv = new MonoGenAchv("SomeAchv", 3, "monotype_icon", 10);
     expect(monoGenAchv).toBeInstanceOf(MonoGenAchv);
-    expect(monoGenAchv instanceof Achv).toBe(true);
+    expect(monoGenAchv instanceof Achievement).toBe(true);
     expect(monoGenAchv.name).toBe("SomeAchv.name");
     expect(monoGenAchv.description).toBe("SomeAchv.description");
   });
@@ -282,7 +282,7 @@ describe("MonoTypeAchv", () => {
   it("should create an instance of MonoTypeAchv", () => {
     const monoTypeAchv = new MonoTypeAchv(ElementalType.STELLAR, "monotype_icon", 10);
     expect(monoTypeAchv).toBeInstanceOf(MonoTypeAchv);
-    expect(monoTypeAchv instanceof Achv).toBe(true);
+    expect(monoTypeAchv instanceof Achievement).toBe(true);
     expect(monoTypeAchv.name).toBe("MONO_STELLAR.name");
     expect(monoTypeAchv.description).toBe("Complete the Stellar monotype challenge.");
   });
@@ -336,29 +336,29 @@ describe("achvs", () => {
     expect(achvs._50_RIBBONS).toBeInstanceOf(RibbonAchv);
     expect(achvs._75_RIBBONS).toBeInstanceOf(RibbonAchv);
     expect(achvs._100_RIBBONS).toBeInstanceOf(RibbonAchv);
-    expect(achvs.TRANSFER_MAX_STAT_STAGE).toBeInstanceOf(Achv);
-    expect(achvs.MAX_FRIENDSHIP).toBeInstanceOf(Achv);
-    expect(achvs.MEGA_EVOLVE).toBeInstanceOf(Achv);
-    expect(achvs.GIGANTAMAX).toBeInstanceOf(Achv);
-    expect(achvs.TERASTALLIZE).toBeInstanceOf(Achv);
-    expect(achvs.STELLAR_TERASTALLIZE).toBeInstanceOf(Achv);
+    expect(achvs.TRANSFER_MAX_STAT_STAGE).toBeInstanceOf(Achievement);
+    expect(achvs.MAX_FRIENDSHIP).toBeInstanceOf(Achievement);
+    expect(achvs.MEGA_EVOLVE).toBeInstanceOf(Achievement);
+    expect(achvs.GIGANTAMAX).toBeInstanceOf(Achievement);
+    expect(achvs.TERASTALLIZE).toBeInstanceOf(Achievement);
+    expect(achvs.STELLAR_TERASTALLIZE).toBeInstanceOf(Achievement);
     expect(achvs.MINI_BLACK_HOLE).toBeInstanceOf(ModifierAchv);
-    expect(achvs.CATCH_MYTHICAL).toBeInstanceOf(Achv);
-    expect(achvs.CATCH_SUB_LEGENDARY).toBeInstanceOf(Achv);
-    expect(achvs.CATCH_LEGENDARY).toBeInstanceOf(Achv);
-    expect(achvs.SEE_SHINY).toBeInstanceOf(Achv);
-    expect(achvs.SHINY_PARTY).toBeInstanceOf(Achv);
-    expect(achvs.HATCH_MYTHICAL).toBeInstanceOf(Achv);
-    expect(achvs.HATCH_SUB_LEGENDARY).toBeInstanceOf(Achv);
-    expect(achvs.HATCH_LEGENDARY).toBeInstanceOf(Achv);
-    expect(achvs.HATCH_SHINY).toBeInstanceOf(Achv);
-    expect(achvs.HIDDEN_ABILITY).toBeInstanceOf(Achv);
-    expect(achvs.PERFECT_IVS).toBeInstanceOf(Achv);
-    expect(achvs.CLASSIC_VICTORY).toBeInstanceOf(Achv);
-    expect(achvs.UNEVOLVED_CLASSIC_VICTORY).toBeInstanceOf(Achv);
+    expect(achvs.CATCH_MYTHICAL).toBeInstanceOf(Achievement);
+    expect(achvs.CATCH_SUB_LEGENDARY).toBeInstanceOf(Achievement);
+    expect(achvs.CATCH_LEGENDARY).toBeInstanceOf(Achievement);
+    expect(achvs.SEE_SHINY).toBeInstanceOf(Achievement);
+    expect(achvs.SHINY_PARTY).toBeInstanceOf(Achievement);
+    expect(achvs.HATCH_MYTHICAL).toBeInstanceOf(Achievement);
+    expect(achvs.HATCH_SUB_LEGENDARY).toBeInstanceOf(Achievement);
+    expect(achvs.HATCH_LEGENDARY).toBeInstanceOf(Achievement);
+    expect(achvs.HATCH_SHINY).toBeInstanceOf(Achievement);
+    expect(achvs.HIDDEN_ABILITY).toBeInstanceOf(Achievement);
+    expect(achvs.PERFECT_IVS).toBeInstanceOf(Achievement);
+    expect(achvs.CLASSIC_VICTORY).toBeInstanceOf(Achievement);
+    expect(achvs.UNEVOLVED_CLASSIC_VICTORY).toBeInstanceOf(Achievement);
     expect(achvs.FRESH_START).toBeInstanceOf(ChallengeAchv);
     expect(achvs.INVERSE_BATTLE).toBeInstanceOf(ChallengeAchv);
-    expect(achvs.BREEDERS_IN_SPACE).toBeInstanceOf(Achv);
+    expect(achvs.BREEDERS_IN_SPACE).toBeInstanceOf(Achievement);
     expect(achvs.MONO_GEN_ONE_VICTORY).toBeInstanceOf(MonoGenAchv);
     expect(achvs.MONO_GEN_TWO_VICTORY).toBeInstanceOf(MonoGenAchv);
     expect(achvs.MONO_GEN_THREE_VICTORY).toBeInstanceOf(MonoGenAchv);

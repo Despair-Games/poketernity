@@ -1,7 +1,7 @@
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achievements";
 import { vouchers } from "#app/system/voucher";
 import { randSeedItem } from "#app/utils";
 import { Biome } from "#enums/biome";

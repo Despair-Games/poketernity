@@ -7,7 +7,7 @@ import { initPokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
 import { initPokemonForms } from "#app/data/pokemon-forms";
 import { initSpecies } from "#app/data/init-species";
-import { initAchievements } from "#app/system/achv";
+import { initAchievements } from "#app/system/achievements";
 import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { setCookie } from "#app/utils";
 import { blobToString } from "#test/testUtils/gameManagerUtils";

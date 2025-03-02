@@ -12,7 +12,7 @@ import {
 } from "#app/data/pokeball";
 import { PlayerGender } from "#enums/player-gender";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achievements";
 import { UiMode } from "#enums/ui-mode";
 import type { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";

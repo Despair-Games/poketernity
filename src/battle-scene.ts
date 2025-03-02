@@ -117,7 +117,7 @@ import FieldSpritePipeline from "#app/pipelines/field-sprite";
 import InvertPostFX from "#app/pipelines/invert";
 import SpritePipeline from "#app/pipelines/sprite";
 import { SceneBase } from "#app/scene-base";
-import { type Achv, achvs } from "#app/system/achv";
+import { type Achievement, achvs } from "#app/system/achievements";
 import { GameData } from "#app/system/game-data";
 import { initGameSpeed } from "#app/system/game-speed";
 import type PokemonData from "#app/system/pokemon-data";
@@ -156,7 +156,7 @@ import { getModifierType } from "#app/utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AchvCategory } from "#enums/achv-category";
+import type { AchvCategory } from "#enums/achv-category";
 import { BattleType } from "#enums/battle-type";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -2334,7 +2334,6 @@ export default class BattleScene extends SceneBase {
     this.money = Math.min(this.money + amount, Number.MAX_SAFE_INTEGER);
     this.updateMoneyText();
     this.animateMoneyChanged(true);
-    this.validateAchvs(AchvCategory.MONEY);
   }
 
   /**
@@ -2372,7 +2371,6 @@ export default class BattleScene extends SceneBase {
     }
     let success = false;
     const soundName = modifier.type.soundName;
-    this.validateAchvs(AchvCategory.MODIFIER, modifier);
     const modifiersToRemove: PersistentModifier[] = [];
     if (modifier.isPersistentModifier()) {
       if (modifier.isTerastallizeModifier()) {
@@ -2939,7 +2937,7 @@ export default class BattleScene extends SceneBase {
     }
   }
 
-  validateAchv(achv: Achv, ...args: unknown[]): boolean {
+  validateAchv(achv: Achievement, ...args: unknown[]): boolean {
     if (
       (!this.gameData.achvUnlocks.hasOwnProperty(achv.id) || Overrides.ACHIEVEMENTS_REUNLOCK_OVERRIDE)
       && achv.validate(...args)
