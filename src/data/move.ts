@@ -583,6 +583,16 @@ export abstract class Move implements Localizable {
   }
 
   /**
+   * Sets the {@linkcode MoveFlags.SNATCHABLE} flag for the calling move
+   * @returns the {@linkcode Move} that called this function
+   * @see {@link https://bulbapedia.bulbagarden.net/wiki/Snatch_(move) | Snatch}
+   */
+  snatchable(): this {
+    this.setFlag(MoveFlags.SNATCHABLE, true);
+    return this;
+  }
+
+  /**
    * Checks if the move flag applies to the pokemon(s) using/receiving the move
    * @param flag {@linkcode MoveFlags} MoveFlag to check on user and/or target
    * @param user {@linkcode Pokemon} the Pokemon using the move

@@ -43,4 +43,6 @@ export enum MoveFlags {
   REDIRECT_COUNTER = 1 << 18,
   /** Flag indicating whether a move is a G-Max Move or not */
   G_MAX_MOVE = 1 << 19,
+  /** Indicates a move can be stolen by another Pokemon with {@linkcode MoveId.SNATCH} */
+  SNATCHABLE = 1 << 20,
 }

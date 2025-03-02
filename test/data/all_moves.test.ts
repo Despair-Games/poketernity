@@ -30,6 +30,7 @@ describe("All Moves", async () => {
    */
   const flagsToCheck = {
     1: MoveFlags.MAKES_CONTACT,
+    6: MoveFlags.SNATCHABLE,
     8: MoveFlags.PUNCHING_MOVE,
     9: MoveFlags.SOUND_MOVE,
     13: MoveFlags.TRIAGE_MOVE,
