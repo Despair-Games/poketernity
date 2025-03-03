@@ -7,14 +7,7 @@ import { Voucher, vouchers } from "./voucher";
 
 export function initVouchers() {
   for (const achv of [achvs.CLASSIC_VICTORY]) {
-    const voucherType =
-      achv.score >= 150
-        ? VoucherType.GOLDEN
-        : achv.score >= 100
-          ? VoucherType.PREMIUM
-          : achv.score >= 75
-            ? VoucherType.PLUS
-            : VoucherType.REGULAR;
+    const voucherType = VoucherType.REGULAR;
     vouchers[achv.id] = new Voucher(voucherType, achv.description);
   }
 

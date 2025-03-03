@@ -73,17 +73,11 @@ export default class AchvBar extends Phaser.GameObjects.Container {
       return;
     }
 
-    const tier = achv.getTier();
-
-    this.bg.setTexture(`achv_bar${tier ? `_${tier + 1}` : ""}`);
+    this.bg.setTexture(`achv_bar`);
     this.icon.setFrame(achv.iconImage);
     this.titleText.setText(achv.name);
     this.scoreText.setVisible(achv instanceof Achievement);
     this.descriptionText.setText(achv.description);
-
-    if (achv instanceof Achievement) {
-      this.scoreText.setText(`+${achv.score}pt`);
-    }
 
     // Take the width of the default interface or the title if longest
     this.bg.width = Math.max(
