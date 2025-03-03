@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/data-lists";
 import { AnimConfig } from "#app/data/anim-config";
 import { BattleAnim } from "#app/data/battle-anims";
-import { moveAnims } from "#app/data/move-anims";
+import { moveAnims } from "#app/data/moves/move-anims";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { BattlerIndex } from "#enums/battler-index";

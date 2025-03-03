@@ -1,6 +1,6 @@
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { type Move, type MoveAttrFilter } from "#app/data/move";
-import type { MoveAttr } from "#app/data/move-attrs/move-attr";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import { type Move, type MoveAttrFilter } from "#app/data/moves/move";
+import type { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";

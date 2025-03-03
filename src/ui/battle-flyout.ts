@@ -3,7 +3,7 @@ import { addTextObject } from "./text";
 import { TextStyle } from "#enums/text-style";
 import { fixedNumber } from "#app/utils";
 import { globalScene } from "#app/global-scene";
-import type { Move } from "#app/data/move";
+import type { Move } from "#app/data/moves/move";
 import type { BerryUsedEvent, MoveUsedEvent } from "../events/battle-scene";
 import { BattleSceneEventType } from "#enums/battle-scene-event-type";
 import { BerryType } from "#enums/berry-type";

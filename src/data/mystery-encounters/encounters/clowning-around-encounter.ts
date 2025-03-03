@@ -35,7 +35,7 @@ import { showEncounterDialogue, showEncounterText } from "#app/data/mystery-enco
 import { UiMode } from "#enums/ui-mode";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
-import { Ability } from "#app/data/ability";
+import { Ability } from "#app/data/abilities/ability";
 import { BerryType } from "#enums/berry-type";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";

@@ -1,4 +1,4 @@
-import { AttackMove } from "#app/data/move";
+import { AttackMove } from "#app/data/moves/move";
 import { ChargeMove } from "./charge-move";
 
 export class ChargingAttackMove extends ChargeMove(AttackMove) {

@@ -3,7 +3,7 @@ import type { Pokemon } from "../field/pokemon";
 import { HitResult } from "#enums/hit-result";
 import { getStatusEffectHealText } from "./status-effect";
 import { NumberHolder, toDmgValue, randSeedInt } from "#app/utils";
-import { applyAbAttrs } from "./apply-ab-attrs";
+import { applyAbAttrs } from "./abilities/apply-ab-attrs";
 import i18next from "i18next";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";

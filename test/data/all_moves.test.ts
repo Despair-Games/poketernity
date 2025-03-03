@@ -4,7 +4,7 @@ import { readFileSync } from "fs";
 import { describe, expect, it } from "vitest";
 import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
-import type { Move } from "#app/data/move";
+import type { Move } from "#app/data/moves/move";
 import { MoveFlags } from "#enums/move-flags";
 import { ElementalType } from "#enums/elemental-type";
 

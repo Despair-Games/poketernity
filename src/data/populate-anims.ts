@@ -8,7 +8,7 @@ import {
 } from "#app/data/anim-config";
 import { commonAnims } from "./common-anims";
 import { chargeAnims } from "./charge-anims";
-import { moveAnims } from "./move-anims";
+import { moveAnims } from "./moves/move-anims";
 import { getEnumKeys, getEnumValues } from "#app/utils";
 import type { AnimFocus } from "#enums/anim-focus";
 import { ChargeAnim } from "#enums/charge-anim";

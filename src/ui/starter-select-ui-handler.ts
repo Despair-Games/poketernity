@@ -4,7 +4,7 @@ import { starterColors } from "#app/data/starter-colors";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
-import { starterPassiveAbilities } from "#app/data/balance/passives";
+import { starterPassiveAbilities } from "#app/data/abilities/passives";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
 import { pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";

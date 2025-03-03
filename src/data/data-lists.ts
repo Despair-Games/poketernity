@@ -1,7 +1,7 @@
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { type Move } from "#app/data/move";
+import { type Move } from "#app/data/moves/move";
 import { type MoveId } from "#enums/move-id";
-import type { Ability } from "#app/data/ability";
+import type { Ability } from "#app/data/abilities/ability";
 
 //#region Type
 

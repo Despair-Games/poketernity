@@ -43,7 +43,7 @@ import { modifierTypes } from "./modifier-types";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { CommonColor, ShadowColor } from "#enums/color";
 import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";

@@ -29,7 +29,7 @@ import { Species } from "#enums/species";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { type CommandPhase } from "#app/phases/command-phase";
 import { globalScene } from "#app/global-scene";
-import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
+import { ForceSwitchOutAttr } from "#app/data/moves/move-attrs/force-switch-out-attr";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { PartyOption } from "#enums/party-option";

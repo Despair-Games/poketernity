@@ -5,7 +5,7 @@ import { speciesStarterCosts } from "#app/data/balance/starters";
 import type { EncoreTag } from "#app/data/battler-tags";
 import { type SkyDropTag, type TrappedTag } from "#app/data/battler-tags";
 import { allMoves } from "#app/data/data-lists";
-import { getMoveTargets, type MoveTargetSet } from "#app/data/move";
+import { getMoveTargets, type MoveTargetSet } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";

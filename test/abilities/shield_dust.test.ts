@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";

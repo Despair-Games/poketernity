@@ -14,7 +14,7 @@ import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { StealHeldItemChanceAttr } from "#app/data/move-attrs/steal-held-item-chance-attr";
+import { StealHeldItemChanceAttr } from "#app/data/moves/move-attrs/steal-held-item-chance-attr";
 import { MoveResult } from "#enums/move-result";
 import { BattlerIndex } from "#enums/battler-index";
 import { ArenaTagSide } from "#enums/arena-tag-side";
