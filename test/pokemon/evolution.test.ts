@@ -7,6 +7,8 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { Gender } from "#enums/gender";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { BiomePoolTier } from "#enums/biome-pool-tier";
 
 describe("Evolution", () => {
   let phaserGame: Phaser.Game;
@@ -173,5 +175,50 @@ describe("Evolution", () => {
       const fourForm = playerPokemon.getEvolution()!;
       expect(fourForm.evoFormKey).toBe(null); // meanwhile, according to the pokemon-forms, the evoFormKey for a 4 family maushold is null
     }
+  });
+
+  it("wild Pokemon with multiple possible evolutions should pick a random evolution", async () => {
+    let rngSweepProgress = 0; // Will simulate full range of RNG rolls by steadily increasing from 0 to 1
+
+    vi.spyOn(Phaser.Math.RND, "realInRange").mockImplementation((min: number, max: number) => {
+      return rngSweepProgress * (max - min) + min;
+    });
+
+    const actualEvolutions = new Set<Species>();
+    const trials = 8; // For all 8 Eeveelutions
+    for (let i = 0; i < trials; i++) {
+      rngSweepProgress = (2 * i + 1) / (2 * trials);
+      actualEvolutions.add(getPokemonSpecies(Species.EEVEE).getEnemySpeciesForLevel(100));
+    }
+    expect(actualEvolutions.size).toBe(trials);
+  });
+
+  it("wild Pokemon should not already be evolved at level 1", async () => {
+    for (const evoArray of Object.values(pokemonEvolutions)) {
+      for (const evo of evoArray) {
+        expect(evo.enemyEvolveLevel).toBeGreaterThan(1);
+      }
+    }
+  });
+
+  it("wild Pokemon should be pre-evolved if they are at a sufficiently low level", async () => {
+    game.override.enemySpecies(0); // Disable the enemy species override
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    game.move.use(MoveId.SPLASH);
+    await game.doKillOpponents();
+
+    // Mock the next wave's Pokemon pool
+    vi.spyOn(game.scene.arena as any, "pokemonPool", "get").mockReturnValue({
+      [BiomePoolTier.COMMON]: [Species.SLOWKING],
+      [BiomePoolTier.UNCOMMON]: [],
+      [BiomePoolTier.RARE]: [],
+      [BiomePoolTier.SUPER_RARE]: [],
+      [BiomePoolTier.ULTRA_RARE]: [],
+    });
+
+    await game.toNextWave();
+
+    expect(game.field.getEnemyPokemon().species.speciesId).toBe(Species.SLOWPOKE);
   });
 });

@@ -1,7 +1,7 @@
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
-import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { BattleCommand } from "#enums/battle-command";
 import MessageUiHandler from "#app/ui/message-ui-handler";
@@ -9,7 +9,7 @@ import { UiMode } from "#enums/ui-mode";
 import { BooleanHolder, toReadableString } from "#app/utils";
 import { type PokemonHeldItemModifier, type PokemonFormChangeItemModifier } from "#app/modifier/modifier";
 import { allMoves } from "#app/data/data-lists";
-import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
+import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
 import { StatusEffect } from "#enums/status-effect";
 import PokemonIconAnimHandler from "#app/ui/pokemon-icon-anim-handler";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
@@ -1256,14 +1256,13 @@ class PartySlot extends Phaser.GameObjects.Container {
 
     if (genderSymbol) {
       const slotGenderText = addTextObject(0, 0, genderSymbol, TextStyle.PARTY);
-      slotGenderText.setColor(getGenderColor(this.pokemon.getGender(true)));
-      slotGenderText.setShadowColor(getGenderShadowColor(this.pokemon.getGender(true)));
       if (this.slotIndex >= battlerCount) {
         slotGenderText.setPositionRelative(slotLevelLabel, 36, 0);
       } else {
         slotGenderText.setPositionRelative(this.slotName, 76, 3);
       }
       slotGenderText.setOrigin(0, 0.25);
+      setTextColor(slotGenderText, getGenderTextStyle(this.pokemon.getGender(true)));
 
       slotInfoContainer.add(slotGenderText);
     }

@@ -343,15 +343,11 @@ export default class Trainer extends Phaser.GameObjects.Container {
           }
         }
 
-        // Create an empty species pool (which will be set to one of the species pools based on the index)
+        // Create an empty species pool (which will be set to one of the species pools based on the index, if applicable)
         let newSpeciesPool: Species[] = [];
-        let useNewSpeciesPool = false;
 
         // If we are in a double battle of named trainers, we need to use alternate species pools (generate half the party from each trainer)
         if (this.config.trainerTypeDouble && this.isDouble() && !this.config.doubleOnly) {
-          // Use the new species pool for this party generation
-          useNewSpeciesPool = true;
-
           // Get the species pool for the partner trainer and the current trainer
           const speciesPoolPartner = signatureSpecies[TrainerType[this.config.trainerTypeDouble]];
           const speciesPool = signatureSpecies[TrainerType[this.config.trainerType]];
@@ -402,32 +398,19 @@ export default class Trainer extends Phaser.GameObjects.Container {
               newSpeciesPool = speciesPoolPartnerFiltered;
             }
           }
-          // Fallback for when the species pool is empty
-          if (newSpeciesPool.length === 0) {
-            // If all pokemon from this pool are already in the party, generate a random species
-            useNewSpeciesPool = false;
-          }
         }
 
-        // If useNewSpeciesPool is true, we need to generate a new species from the new species pool, otherwise we generate a random species
-        let species = useNewSpeciesPool
-          ? getPokemonSpecies(newSpeciesPool[Math.floor(randSeedInt(newSpeciesPool.length))])
-          : template.isSameSpecies(index) && index > offset
-            ? getPokemonSpecies(
-                battle.enemyParty[offset].species.getTrainerSpeciesForLevel(
-                  level,
-                  false,
-                  template.getStrength(offset),
-                  globalScene.currentBattle.waveIndex,
-                ),
-              )
-            : this.genNewPartyMemberSpecies(level, strength);
-
-        // If the species is from newSpeciesPool, we need to adjust it based on the level and strength
-        if (newSpeciesPool) {
-          species = getPokemonSpecies(
-            species.getSpeciesForLevel(level, true, true, strength, globalScene.currentBattle.waveIndex),
-          );
+        let species: PokemonSpecies;
+        if (newSpeciesPool.length > 0) {
+          // If the new species pool is non-empty, select a species from it and set it to its correct evolution stage.
+          const rawSpecies = getPokemonSpecies(randSeedItem(newSpeciesPool));
+          species = getPokemonSpecies(rawSpecies.getEnemySpeciesForLevel(level, true));
+        } else if (template.isSameSpecies(index) && index > offset) {
+          // If the template calls for using the same species as the previous Pokemon, then copy the species.
+          species = battle.enemyParty[offset].species;
+        } else {
+          // If none of the above applies, pick a random species from the trainer's regular pool.
+          species = this.genNewPartyMemberSpecies(level, strength);
         }
 
         ret = globalScene.addEnemyPokemon(
@@ -476,9 +459,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
       baseSpecies = globalScene.randomSpecies(battle.waveIndex, level, false, this.config.speciesFilter);
     }
 
-    let ret = getPokemonSpecies(
-      baseSpecies.getTrainerSpeciesForLevel(level, true, strength, globalScene.currentBattle.waveIndex),
-    );
+    let ret = getPokemonSpecies(baseSpecies.getEnemySpeciesForLevel(level, true));
     let retry = false;
 
     console.log(ret.getName());
@@ -500,9 +481,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
       console.log("Attempting reroll of species evolution to fit specialty type...");
       let evoAttempt = 0;
       while (retry && evoAttempt++ < 10) {
-        ret = getPokemonSpecies(
-          baseSpecies.getTrainerSpeciesForLevel(level, true, strength, globalScene.currentBattle.waveIndex),
-        );
+        ret = getPokemonSpecies(baseSpecies.getEnemySpeciesForLevel(level, true));
         console.log(ret.name);
         if (this.config.specialtyTypes.find((t) => ret.isOfType(t))) {
           retry = false;
