@@ -4,11 +4,9 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { PlayerPartyMemberPokemonPhase } from "#app/phases/abstract-player-party-member-pokemon-phase";
 import { EvolutionPhase } from "#app/phases/evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
-import { NumberHolder } from "#app/utils";
 import { ExpNotification } from "#enums/exp-notification";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
-import { AchvCategory } from "#enums/achv-category";
 import { PhaseId } from "#enums/phase-id";
 
 /**
@@ -43,8 +41,6 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
     if (this.level > gameData.gameStats.highestLevel) {
       gameData.gameStats.highestLevel = this.level;
     }
-
-    globalScene.validateAchvs(AchvCategory.LEVEL, new NumberHolder(this.level));
 
     const prevStats = this.pokemon.stats.slice(0);
     this.pokemon.calculateStats();

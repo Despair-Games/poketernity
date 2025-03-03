@@ -3297,9 +3297,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     // Copy all stat stages
     for (const s of BATTLE_STATS) {
       const sourceStage = source.getStatStage(s);
-      if (this instanceof PlayerPokemon && sourceStage === 6) {
-        globalScene.validateAchv(achvs.TRANSFER_MAX_STAT_STAGE);
-      }
       this.setStatStage(s, sourceStage);
     }
 
