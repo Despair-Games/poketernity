@@ -3258,7 +3258,7 @@ export class TauntTag extends MoveRestrictionBattlerTag {
 /**
  * BattlerTag representing the move-disabling effect of
  * {@link https://bulbapedia.bulbagarden.net/wiki/Imprison_(move) | Imprison}.
- * Disables all other Pokemon's moves that are also found in the tag owner's moveset.
+ * Disables all opposing Pokemon's moves that are also found in the tag owner's moveset.
  * @extends BattlerTag
  * @implements RestrictingBattlerTag
  */
