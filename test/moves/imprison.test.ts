@@ -47,7 +47,7 @@ describe("Moves - Imprison", () => {
 
     // Second turn, Imprison forces Struggle to occur
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
     expect(player.getLastXMoves()[0]?.move.id).toBe(MoveId.STRUGGLE);
   });
@@ -63,7 +63,7 @@ describe("Moves - Imprison", () => {
     game.move.select(MoveId.IMPRISON, 0);
     game.move.select(MoveId.SPLASH);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.toNextTurn();
     playerPokemon.forEach((p) => expect(p.getLastXMoves()[0]?.result).toBe(MoveResult.SUCCESS));
@@ -82,7 +82,7 @@ describe("Moves - Imprison", () => {
 
     game.move.select(MoveId.IMPRISON);
     await game.move.selectEnemyMove(MoveId.SLEEP_TALK);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.toNextTurn();
     expect(enemyPokemon.getMoveHistory().map((turnMove) => turnMove.result)).toEqual(Array(2).fill(MoveResult.SUCCESS));
@@ -107,7 +107,7 @@ describe("Moves - Imprison", () => {
 
     await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.move.selectEnemyMove(MoveId.SPLASH);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.toNextTurn();
 
@@ -120,5 +120,27 @@ describe("Moves - Imprison", () => {
     await game.toNextTurn();
 
     enemyPokemon.forEach((p) => expect(p.getLastXMoves()[0]?.move.id).toBe(MoveId.STRUGGLE));
+  });
+
+  it("should disable matching moves for opponents that enter the field afterward", async () => {
+    game.override.moveset([MoveId.SPLASH, MoveId.GROWL]);
+
+    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+
+    game.move.select(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.IMPRISON);
+    await game.toNextTurn();
+
+    game.doSwitchPokemon(1);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
+    await game.toNextTurn();
+
+    game.move.select(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
+    await game.toEndOfTurn();
+
+    const player = game.field.getPlayerPokemon();
+
+    expect(player.getLastXMoves()[0]?.move.id).toBe(MoveId.STRUGGLE);
   });
 });

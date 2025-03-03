@@ -37,14 +37,16 @@ describe("Moves - Aroma Veil", () => {
 
     const playerPokemon = game.scene.getPlayerField();
 
-    game.move.select(MoveId.SPLASH);
-    game.move.select(MoveId.SPLASH);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
+    game.move.use(MoveId.ABSORB, 0, BattlerIndex.ENEMY);
+    game.move.use(MoveId.ABSORB, 1, BattlerIndex.ENEMY_2);
     await game.move.selectEnemyMove(MoveId.HEAL_BLOCK);
     await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
     playerPokemon.forEach((p) => {
       expect(p.getTag(BattlerTagType.HEAL_BLOCK)).toBeUndefined();
+      expect(p.getLastXMoves()[0]?.result).toBe(MoveResult.SUCCESS);
     });
   });
 
@@ -57,7 +59,7 @@ describe("Moves - Aroma Veil", () => {
     game.move.select(MoveId.SPLASH);
     await game.move.selectEnemyMove(MoveId.IMPRISON);
     await game.move.selectEnemyMove(MoveId.SPLASH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
     await game.toNextTurn();
 
     playerPokemon.forEach((p) => expect(p.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL));
