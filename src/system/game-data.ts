@@ -931,22 +931,26 @@ export class GameData {
           });
 
           globalScene.arena.weather = sessionData.arena.weather;
-          globalScene.arena.eventTarget.dispatchEvent(
-            new WeatherChangedEvent(
-              WeatherType.NONE,
-              globalScene.arena.weather?.weatherType!,
-              globalScene.arena.weather?.turnsLeft!,
-            ),
-          ); // TODO: is this bang correct?
+          if (globalScene.arena.weather) {
+            globalScene.arena.eventTarget.dispatchEvent(
+              new WeatherChangedEvent(
+                WeatherType.NONE,
+                globalScene.arena.weather.weatherType,
+                globalScene.arena.weather.turnsLeft,
+              ),
+            );
+          }
 
           globalScene.arena.terrain = sessionData.arena.terrain;
-          globalScene.arena.eventTarget.dispatchEvent(
-            new TerrainChangedEvent(
-              TerrainType.NONE,
-              globalScene.arena.terrain?.terrainType!,
-              globalScene.arena.terrain?.turnsLeft!,
-            ),
-          ); // TODO: is this bang correct?
+          if (globalScene.arena.terrain) {
+            globalScene.arena.eventTarget.dispatchEvent(
+              new TerrainChangedEvent(
+                TerrainType.NONE,
+                globalScene.arena.terrain.terrainType,
+                globalScene.arena.terrain.turnsLeft,
+              ),
+            );
+          }
 
           globalScene.arena.tags = sessionData.arena.tags;
           if (globalScene.arena.tags) {
