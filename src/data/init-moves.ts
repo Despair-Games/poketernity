@@ -3344,6 +3344,7 @@ export function initMoves() {
       .attr(HealAttr, 0.25, true, false)
       .attr(HealStatusEffectAttr, false, getNonVolatileStatusEffects())
       .triageMove()
+      .snatchable()
       .target(MoveTarget.USER_AND_ALLIES),
     new AttackMove(MoveId.WICKED_BLOW, ElementalType.DARK, MoveCategory.PHYSICAL, 75, 100, 5, -1, 0, 8)
       .attr(CritOnlyAttr)
@@ -3392,7 +3393,8 @@ export function initMoves() {
     ),
     new SelfStatusMove(MoveId.POWER_SHIFT, ElementalType.NORMAL, -1, 10, -1, 0, 8)
       .target(MoveTarget.USER)
-      .attr(ShiftStatAttr, Stat.ATK, Stat.DEF),
+      .attr(ShiftStatAttr, Stat.ATK, Stat.DEF)
+      .snatchable(),
     new AttackMove(MoveId.STONE_AXE, ElementalType.ROCK, MoveCategory.PHYSICAL, 65, 90, 15, 100, 0, 8)
       .attr(AddEntryHazardTagAttr, ArenaTagType.STEALTH_ROCK)
       .slicingMove(),
@@ -3423,7 +3425,8 @@ export function initMoves() {
       .attr(FlinchAttr),
     new SelfStatusMove(MoveId.VICTORY_DANCE, ElementalType.FIGHTING, -1, 10, -1, 0, 8)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.DEF, Stat.SPD], 1, true)
-      .danceMove(),
+      .danceMove()
+      .snatchable(),
     new AttackMove(MoveId.HEADLONG_RUSH, ElementalType.GROUND, MoveCategory.PHYSICAL, 120, 100, 5, -1, 0, 8)
       .attr(StatStageChangeAttr, [Stat.DEF, Stat.SPDEF], -1, true)
       .makesContact()
@@ -3447,7 +3450,7 @@ export function initMoves() {
       [Stat.DEF],
       2,
       true,
-    ),
+    ).snatchable(),
     new AttackMove(MoveId.TRIPLE_ARROWS, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 90, 100, 10, 30, 0, 8)
       .makesContact(false)
       .attr(HighCritAttr)
@@ -3478,7 +3481,8 @@ export function initMoves() {
       .attr(HealAttr, 0.25, true, false)
       .attr(HealStatusEffectAttr, false, getNonVolatileStatusEffects())
       .target(MoveTarget.USER_AND_ALLIES)
-      .triageMove(),
+      .triageMove()
+      .snatchable(),
     new SelfStatusMove(MoveId.TAKE_HEART, ElementalType.PSYCHIC, -1, 15, -1, 0, 8)
       .attr(StatStageChangeAttr, [Stat.SPATK, Stat.SPDEF], 1, true)
       .attr(HealStatusEffectAttr, true, [
@@ -3487,7 +3491,8 @@ export function initMoves() {
         StatusEffect.TOXIC,
         StatusEffect.BURN,
         StatusEffect.SLEEP,
-      ]),
+      ])
+      .snatchable(),
     new AttackMove(MoveId.G_MAX_WILDFIRE, ElementalType.FIRE, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
       .gMaxMove(Species.CHARIZARD)
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_WILDFIRE),
@@ -3671,7 +3676,7 @@ export function initMoves() {
       [Stat.ATK, Stat.SPATK, Stat.SPD],
       2,
       2,
-    ),
+    ).snatchable(),
     new AttackMove(MoveId.KOWTOW_CLEAVE, ElementalType.DARK, MoveCategory.PHYSICAL, 85, -1, 10, -1, 0, 9).slicingMove(),
     new AttackMove(MoveId.FLOWER_TRICK, ElementalType.GRASS, MoveCategory.PHYSICAL, 70, -1, 10, -1, 0, 9)
       .attr(CritOnlyAttr)
@@ -3721,6 +3726,7 @@ export function initMoves() {
     new SelfStatusMove(MoveId.SHED_TAIL, ElementalType.NORMAL, -1, 10, -1, 0, 9)
       .attr(AddSubstituteAttr, 0.5)
       .attr(ForceSwitchOutAttr, true, SwitchType.SHED_TAIL)
+      .snatchable()
       .condition(failIfLastInPartyCondition),
     new SelfStatusMove(MoveId.CHILLY_RECEPTION, ElementalType.ICE, -1, 10, -1, 0, 9)
       .attr(PreMoveMessageAttr, (user, _move) =>
@@ -3730,7 +3736,8 @@ export function initMoves() {
     new SelfStatusMove(MoveId.TIDY_UP, ElementalType.NORMAL, -1, 10, -1, 0, 9)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPD], 1, true)
       .attr(RemoveEntryHazardAttr, true)
-      .attr(RemoveAllSubstitutesAttr),
+      .attr(RemoveAllSubstitutesAttr)
+      .snatchable(),
     new StatusMove(MoveId.SNOWSCAPE, ElementalType.ICE, -1, 10, -1, 0, 9)
       .attr(WeatherChangeAttr, WeatherType.SNOW)
       .target(MoveTarget.BOTH_SIDES),

@@ -43,12 +43,26 @@ describe("All Moves", async () => {
   };
 
   /**
-   * Custom Implementations as of 01/2025:
+   * Custom Implementations as of 03/2025:
    * - Horn Drill / Guillotine / Sheer Cold / Fissure : BP set to 200
    * - Imprison : Accuracy is set to 100 in PKTY, not -1
    * - Dark Void : Accurary is set to pre-Gen VIII's 80
    * - Zippy Zap : Uses LGPE's implementation. PP: 10 -> 15, BP: 90 -> 50
    * - Court Change : Accuracy is set to 100 in PKTY, not -1
+   * - The following moves from Gens 8-9 have been made stealable by another Pokemon with Snatch:
+   *   - Jungle Healing
+   *   - Power Shift
+   *   - Victory Dance
+   *   - Shelter
+   *   - Lunar Blessing
+   *   - Life Dew
+   *   - Clangorous Soul
+   *   - No Retreat
+   *   - Stuff Cheeks
+   *   - Take Heart
+   *   - Fillet Away
+   *   - Shed Tail
+   *   - Tidy Up
    */
 
   const filename = resolve("./test/data/all_moves.json");
