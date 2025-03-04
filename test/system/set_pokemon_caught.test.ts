@@ -207,7 +207,7 @@ describe("Dex Data - Set Pokemon caught", () => {
     let species = getPokemonSpecies(Species.DONPHAN);
     let newCatch = new PlayerPokemon(species, 5, 2, 0, Gender.FEMALE, false, 0, [], Nature.MILD);
     let newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
-    expect(newStarters.length).toBe(1);
+    expect(newStarters).toStrictEqual([Species.PHANPY]);
 
     // Hatch a shiny Phanpy
     species = getPokemonSpecies(Species.PHANPY);
@@ -258,7 +258,7 @@ describe("Dex Data - Set Pokemon caught", () => {
     // Catch cosplay pikachu > no equivalent form in pichu > unlock default form
     const newCatch = new PlayerPokemon(species, 5, 0, 2, Gender.FEMALE, false, 0, [], Nature.MILD);
     const newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
-    expect(newStarters.length).toBe(2);
+    expect(newStarters).toStrictEqual([Species.PIKACHU, Species.PICHU]);
 
     expect(pikachuDexData.caughtAttr & gameData.getFormAttr(0)).toBeFalsy();
     expect(pikachuDexData.caughtAttr & gameData.getFormAttr(2)).toBeTruthy(); // cosplay pikachu
@@ -277,7 +277,7 @@ describe("Dex Data - Set Pokemon caught", () => {
     // Catch partner Pikachu
     let newCatch = new PlayerPokemon(species, 5, 0, 1, Gender.FEMALE, false, 0, [], Nature.MILD);
     let newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
-    expect(newStarters.length).toBe(2);
+    expect(newStarters).toStrictEqual([Species.PIKACHU, Species.PICHU]);
 
     expect(pikachuDexData.caughtAttr & gameData.getFormAttr(1)).toBeTruthy(); //partner pikachu
     expect(pichuDexData.caughtAttr & gameData.getFormAttr(0)).toBeFalsy();
@@ -308,8 +308,9 @@ describe("Dex Data - Set Pokemon caught", () => {
     const newCatch = new PlayerPokemon(species, 5, 0, 2, Gender.FEMALE, false, 0, [], Nature.MILD);
     const newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
 
-    expect(newStarters.length).toBe(1);
+    expect(newStarters).toStrictEqual([Species.EEVEE]);
     expect(newCatch.formIndex).toBe(2);
+    expect(newCatch.getSpeciesForm().isStarterSelectable).toBeFalsy();
 
     expect(dexData.caughtAttr & gameData.getFormAttr(0)).toBeTruthy(); // normal eevee
     expect(dexData.caughtAttr & gameData.getFormAttr(1)).toBeFalsy(); // partner eevee
@@ -319,7 +320,7 @@ describe("Dex Data - Set Pokemon caught", () => {
   it.each([
     { formIndex: 0, formName: "Male", gender: Gender.MALE },
     { formIndex: 1, formName: "Female", gender: Gender.FEMALE },
-  ])("should unlock white-striped Basculin when catching $formName Basculegion", async ({ formIndex, gender }) => {
+  ])("should unlock White-striped Basculin when catching $formName Basculegion", async ({ formIndex, gender }) => {
     await game.scene.initStarterColors();
     const species = getPokemonSpecies(Species.BASCULEGION);
     const basculegionDexData = gameData.dexData[Species.BASCULEGION];
@@ -331,7 +332,7 @@ describe("Dex Data - Set Pokemon caught", () => {
     const newCatch = new PlayerPokemon(species, 5, 0, formIndex, gender, false, 0, [], Nature.MILD);
     const newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
 
-    expect(newStarters.length).toBe(1);
+    expect(newStarters).toStrictEqual([Species.BASCULIN]);
     expect(newCatch.formIndex).toBe(formIndex);
 
     expect(basculegionDexData.caughtAttr & gameData.getFormAttr(0)).toBeTruthy(); // male
@@ -342,7 +343,7 @@ describe("Dex Data - Set Pokemon caught", () => {
     expect(basculinDexData.caughtAttr & gameData.getFormAttr(2)).toBeFalsy(); // blue striped
   });
 
-  it("should unlock battle bond froakie when catching ash Greninja", async () => {
+  it("should unlock Battle-bond Froakie when catching Ash form Greninja", async () => {
     await game.scene.initStarterColors();
     const species = getPokemonSpecies(Species.GRENINJA);
     const greninjaDexData = gameData.dexData[Species.GRENINJA];
@@ -370,6 +371,31 @@ describe("Dex Data - Set Pokemon caught", () => {
       expect(dexData.caughtAttr & gameData.getFormAttr(1)).toBeTruthy(); // battle bond form
       expect(dexData.caughtAttr & gameData.getFormAttr(2)).toBeFalsy(); // ash form
     });
+  });
+
+  it("should unlock Own Tempo Rockruff when catching Dusk form Lycanroc", async () => {
+    await game.scene.initStarterColors();
+    const species = getPokemonSpecies(Species.LYCANROC);
+    const lycanrocDexData = gameData.dexData[Species.LYCANROC];
+    const rockruffDexData = gameData.dexData[Species.ROCKRUFF];
+
+    expect(rockruffDexData.caughtAttr).toBeFalsy();
+    expect(lycanrocDexData.caughtAttr).toBeFalsy();
+
+    // Catch Dusk form Lycanroc
+    const newCatch = new PlayerPokemon(species, 5, 0, 1, Gender.FEMALE, false, 0, [], Nature.MILD);
+    const newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
+
+    expect(species.forms[newCatch.formIndex].formName).toBe("Dusk Form");
+    expect(newStarters).toStrictEqual([Species.ROCKRUFF]);
+    expect(newCatch.formIndex).toBe(1);
+
+    expect(rockruffDexData.caughtAttr & gameData.getFormAttr(0)).toBeFalsy(); // normal form
+    expect(rockruffDexData.caughtAttr & gameData.getFormAttr(1)).toBeTruthy(); // own tempo
+
+    expect(lycanrocDexData.caughtAttr & gameData.getFormAttr(0)).toBeFalsy(); // midday
+    expect(lycanrocDexData.caughtAttr & gameData.getFormAttr(1)).toBeTruthy(); // dusk
+    expect(lycanrocDexData.caughtAttr & gameData.getFormAttr(2)).toBeFalsy(); // midnight
   });
 
   it.each([
@@ -401,7 +427,7 @@ describe("Dex Data - Set Pokemon caught", () => {
       const newCatch = new PlayerPokemon(species, 5, 0, caughtFormIndex, Gender.GENDERLESS, false, 0, [], Nature.MILD);
       const newStarters = await gameData.setPokemonCaught(newCatch, true, false, false);
 
-      expect(newStarters.length).toBe(1);
+      expect(newStarters).toStrictEqual([Species.ZYGARDE]);
       expect(newCatch.formIndex).toBe(caughtFormIndex);
 
       expect(zygardeDexData.caughtAttr & gameData.getFormAttr(unlockedFormIndex)).toBeTruthy();
