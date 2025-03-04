@@ -5,7 +5,7 @@ import { Stat } from "#enums/stat";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import { getWeatherCondition } from "#app/utils/ability-utils";
-import type { Move } from "../move";
+import type { Move } from "#app/data/moves/move";
 
 /**
  * Ability attribute that doubles speed if specific weather(s) are active

@@ -4,7 +4,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import i18next from "i18next";
 import { ArenaTagSide } from "#enums/arena-tag-side";
-import type { Move } from "../move";
+import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr } from "./move-effect-attr";
 
 export const courtChangeArenaTags = [

@@ -4,7 +4,7 @@ import i18next from "i18next";
 import { AbAttr } from "./ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import type { Move } from "../move";
+import type { Move } from "#app/data/moves/move";
 import { MoveCategory } from "#enums/move-category";
 
 /**

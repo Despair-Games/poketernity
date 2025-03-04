@@ -4,7 +4,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";
-import { HitHealAttr } from "../move-attrs/hit-heal-attr";
+import { HitHealAttr } from "#app/data/moves/move-attrs/hit-heal-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**

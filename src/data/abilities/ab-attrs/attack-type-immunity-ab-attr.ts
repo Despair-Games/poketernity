@@ -1,6 +1,6 @@
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { type Move } from "#app/data/moves/move";
-import { NeutralDamageAgainstFlyingTypeMultiplierAttr } from "../move-attrs/neutral-damage-against-flying-type-multiplier-attr";
+import { NeutralDamageAgainstFlyingTypeMultiplierAttr } from "#app/data/moves/move-attrs/neutral-damage-against-flying-type-multiplier-attr";
 import { MoveCategory } from "#enums/move-category";
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";

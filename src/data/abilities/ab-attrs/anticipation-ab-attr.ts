@@ -1,6 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { MoveId } from "#enums/move-id";
-import { OneHitKOAttr } from "../move-attrs/one-hit-ko-attr";
+import { OneHitKOAttr } from "#app/data/moves/move-attrs/one-hit-ko-attr";
 import { PostSummonMessageAbAttr } from "./post-summon-message-ab-attr";
 
 /**

@@ -1,4 +1,4 @@
-import { OneHitKOAttr } from "../move-attrs/one-hit-ko-attr";
+import { OneHitKOAttr } from "#app/data/moves/move-attrs/one-hit-ko-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";

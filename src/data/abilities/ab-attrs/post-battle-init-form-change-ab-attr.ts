@@ -1,4 +1,4 @@
-import { SpeciesFormChangeManualTrigger } from "../species-form-change-triggers/species-form-change-manual-trigger";
+import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { PostBattleInitAbAttr } from "./post-battle-init-ab-attr";
