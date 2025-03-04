@@ -72,7 +72,6 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
       level,
       0,
       getPartyLuckValue(globalScene.getPlayerParty()),
-      true,
     );
     const bossPokemon = new EnemyPokemon(bossSpecies, level, TrainerSlot.NONE, true);
     encounter.setDialogueToken("enemyPokemon", getPokemonNameWithAffix(bossPokemon));

@@ -30,11 +30,17 @@ export class SpeciesFormEvolution {
   public level: number;
   public item: EvolutionItem | null;
   public condition: SpeciesEvolutionCondition | null;
-  /** A numerical level for Pokemon that don't evolve with level
-   * Is 0 if it is a level evolution
-   */
-  public altLevel: number;
+  public enemyEvolveLevel: number;
 
+  /**
+   * @param speciesId The ID of the species that the Pokemon will evolve into.
+   * @param preFormKey The form key that a Pokemon must have before being eligible for this evolution.
+   * @param evoFormKey The form key for the form that the Pokemon will evolve into.
+   * @param level The minimum level that a Pokemon must have for this evolution.
+   * @param item If applicable, the evolution item that the Pokemon must use for this evolution.
+   * @param condition If applicable, an extra condition that the Pokemon must satisfy for this evolution.
+   * @param enemyEvolveLevel The level at which enemy spawns will undergo this evolution. Default: Equal to `level`.
+   */
   constructor(
     speciesId: Species,
     preFormKey: string | null,
@@ -42,7 +48,7 @@ export class SpeciesFormEvolution {
     level: number,
     item: EvolutionItem | null,
     condition: SpeciesEvolutionCondition | null,
-    altLevel: number = 0,
+    enemyEvolveLevel: number = level,
   ) {
     this.speciesId = speciesId;
     this.preFormKey = preFormKey;
@@ -50,7 +56,7 @@ export class SpeciesFormEvolution {
     this.level = level;
     this.item = item || EvolutionItem.NONE;
     this.condition = condition;
-    this.altLevel = altLevel;
+    this.enemyEvolveLevel = enemyEvolveLevel;
   }
 }
 
@@ -60,9 +66,9 @@ export class SpeciesEvolution extends SpeciesFormEvolution {
     level: number,
     item: EvolutionItem | null,
     condition: SpeciesEvolutionCondition | null,
-    altLevel: number = 0,
+    enemyEvolveLevel: number = level,
   ) {
-    super(speciesId, null, null, level, item, condition, altLevel);
+    super(speciesId, null, null, level, item, condition, enemyEvolveLevel);
   }
 }
 
