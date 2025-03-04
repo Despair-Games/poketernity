@@ -16,7 +16,7 @@ import { MoveId } from "#enums/move-id";
 import { ElementalType } from "#enums/elemental-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-import { type FieldMoveTypePowerBoostAbAttr } from "#app/data/ab-attrs/field-move-type-power-boost-ab-attr";
+import { type FieldMoveTypePowerBoostAbAttr } from "#app/data/abilities/ab-attrs/field-move-type-power-boost-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { type TypeBoostTag } from "#app/data/battler-tags";
 import { IncrementMovePriorityAttr } from "#app/data/moves/move-attrs/increment-move-priority-attr";
@@ -29,7 +29,7 @@ import { VariableAccuracyAttr } from "#app/data/moves/move-attrs/variable-accura
 import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
 import { VariableTargetAttr } from "#app/data/moves/move-attrs/variable-target-attr";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { MoveCondition } from "#app/data/move-conditions/move-condition";
+import { MoveCondition } from "#app/data/moves/move-conditions/move-condition";
 import { Stat } from "#enums/stat";
 import { allMoves } from "#app/data/data-lists";
 import { UseHigherAttackingStatAttr } from "./move-attrs/use-higher-attacking-stat-attr";

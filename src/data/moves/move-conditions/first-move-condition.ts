@@ -1,5 +1,5 @@
 import type { Move } from "#app/data/moves/move";
-import { MoveCondition } from "#app/data/move-conditions/move-condition";
+import { MoveCondition } from "#app/data/moves/move-conditions/move-condition";
 import type { Pokemon } from "#app/field/pokemon";
 
 export class FirstMoveCondition extends MoveCondition {

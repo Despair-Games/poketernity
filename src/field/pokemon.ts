@@ -10,7 +10,7 @@ import type { StarterMoveset } from "#app/@types/StarterData";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type { AnySound } from "#app/audio-manager";
 import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants";
-import type { AbAttr } from "#app/data/ab-attrs/ab-attr";
+import type { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 import type { Ability } from "#app/data/abilities/ability";
 import type { AbilityFilterOptions } from "#app/data/ability-filter-options";
 import { applyAbAttrs, getAbApplyFunc } from "#app/data/abilities/apply-ab-attrs";

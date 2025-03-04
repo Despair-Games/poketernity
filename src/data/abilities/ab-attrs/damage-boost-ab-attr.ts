@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { VariableMovePowerAbAttr } from "#app/data/ab-attrs/variable-move-power-ab-attr";
+import type { VariableMovePowerAbAttr } from "#app/data/abilities/ab-attrs/variable-move-power-ab-attr";
 // -- end tsdoc imports --
 
 import type { PokemonAttackCondition } from "#app/@types/PokemonAttackCondition";

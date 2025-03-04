@@ -1,4 +1,4 @@
-import { MoveCondition } from "#app/data/move-conditions/move-condition";
+import { MoveCondition } from "#app/data/moves/move-conditions/move-condition";
 import { globalScene } from "#app/global-scene";
 import { BattleCommand } from "#enums/battle-command";
 import { MoveCategory } from "#enums/move-category";

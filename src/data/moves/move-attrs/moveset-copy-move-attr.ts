@@ -5,7 +5,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
 import { type Move } from "#app/data/moves/move";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { targetMoveCopiableCondition } from "#app/data/move-conditions/target-move-copiable-condition";
+import { targetMoveCopiableCondition } from "#app/data/moves/move-conditions/target-move-copiable-condition";
 import { OverrideMoveEffectAttr } from "#app/data/moves/move-attrs/override-move-effect-attr";
 
 /**

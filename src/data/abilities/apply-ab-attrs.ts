@@ -1,4 +1,4 @@
-import type { AbAttr } from "#app/data/ab-attrs/ab-attr";
+import type { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 import type { AbilityFilterOptions } from "#app/data/ability-filter-options";
 import { queueShowAbility } from "#app/utils/ability-utils";
 import { globalScene } from "#app/global-scene";
