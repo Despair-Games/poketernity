@@ -1591,17 +1591,22 @@ export class GameData {
       const dexEntry = this.dexData[species.speciesId];
       const caughtAttr = dexEntry.caughtAttr;
 
-      /*
-       * Ensure that the form index is valid for this species. An invalid index can happen when an evolved Species
-       * and its pre evolution Species doen't have the same number of forms. For example when catching any Pikachu
-       * other than normal and partner it should not unlock the caught form for Pichu since it doesn't have them.
-       */
-      const formIndex = pokemon.formIndex;
-      if (pokemon.formIndex >= species.forms.length) {
-        pokemon.formIndex = this.getFormIndex(caughtAttr); // Get the first unlocked form index, or 0 if none
+      const currentFormIndex = pokemon.formIndex;
+
+      if (!pokemon.getSpeciesForm().isStarterSelectable) {
+        pokemon.formIndex = pokemon.getSelectableFormIndex(); // Only unlock starter selectable forms
       }
-      const dexAttr = pokemon.getDexAttr(); // Get the dex attr with the valid form index
-      pokemon.formIndex = formIndex; // Give the caught pokemon its correct form back
+      /*
+       * Ensure that the form index is valid for this species.
+       * An invalid form can happen when an evolved Species and its pre evolution Species don't have the same number of forms.
+       * For example when catching a Pikachu, it should not unlock a form index other than normal or spiky eared for Pichu.
+       * In this case it will default to using the first already unlocked form, or 0 if there is no unlocked form.
+       */
+      if (!species.forms[pokemon.formIndex]) {
+        pokemon.formIndex = this.getFormIndex(caughtAttr);
+      }
+
+      const dexAttr = pokemon.getDexAttr(); // Get the dex attr with the valid and starter selectable form index
 
       // Mark as caught
       dexEntry.caughtAttr |= dexAttr;
@@ -1651,13 +1656,17 @@ export class GameData {
           this.setPokemonSpeciesCaught(
             pokemon,
             getPokemonSpecies(preEvolutionSpecies),
-            false, // pre-volutions don't update game stats
+            false, // pre-evolutions don't update game stats
             giveCandy,
             fromEgg,
             showMessage,
             unlockedStarters,
-          ).then((result) => resolve(result));
+          ).then((result) => {
+            pokemon.formIndex = currentFormIndex; // Give the caught pokemon its correct form back
+            resolve(result);
+          });
         } else {
+          pokemon.formIndex = currentFormIndex; // Give the caught pokemon its correct form back
           resolve(unlockedStarters);
         }
       };
