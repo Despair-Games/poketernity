@@ -16,7 +16,6 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
 import { EndEvolutionPhase } from "./end-evolution-phase";
-import { EVOLVE_MOVE } from "#app/data/balance/pokemon-level-moves";
 import { LearnMovePhase } from "./learn-move-phase";
 import { PhaseId } from "#enums/phase-id";
 
@@ -200,8 +199,7 @@ export class FormChangePhase extends FormChangeBasePhase {
     const { ui } = globalScene;
 
     if (!this.modal) {
-      const formChangeLearnMove = this.pokemon.getLevelMoves(EVOLVE_MOVE, true);
-      for (const [, learnMoveId] of formChangeLearnMove) {
+      for (const learnMoveId of this.formChange.movesToLearn) {
         globalScene.unshiftPhase(new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), learnMoveId));
       }
       globalScene.unshiftPhase(new EndEvolutionPhase());
