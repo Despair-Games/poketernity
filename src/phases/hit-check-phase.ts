@@ -122,7 +122,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
     /** Is the target protected by Protect, etc. or a relevant conditional protection effect? */
     const isProtected =
       hasConditionalProtectApplied.value
-      || applyBattlerTags<ProtectedTag>(ProtectionBattlerTagTypes, target, false, user, move);
+      || applyBattlerTags<ProtectedTag>(ProtectionBattlerTagTypes, target, simulated, user, move);
 
     if (isProtected) {
       return [HitCheckResult.PROTECTED, 0];
