@@ -139,6 +139,7 @@ import {
 import { WeakenMoveScreenArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import {
   CritBoostBattlerTagTypes,
+  MoveLockTagTypes,
   SemiInvulnerableBattlerTagTypes,
   TrappedBattlerTagTypes,
 } from "#app/utils/battler-tag-type-utils";
@@ -4568,6 +4569,7 @@ export class EnemyPokemon extends Pokemon {
           (moveIndex > -1 && this.getMoveset()[moveIndex]!.isUsable(this, queuedMove.ignorePP))
           || queuedMove.virtual
         ) {
+          MoveLockTagTypes.forEach((tagType) => this.lapseTag(tagType));
           return queuedMove;
         } else {
           this.getMoveQueue().shift();
