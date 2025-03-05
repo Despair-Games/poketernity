@@ -10,7 +10,8 @@ export const GENERIC_ITEM_EVO_LEVEL = 36;
  * Used for rarer evolutionary items or when the base Pokemon
  * is already pretty strong or evolves after GENERIC_ITEM_EVO_LEVEL
  *
- * Used for Rhydon, Electabuzz, Magmar, Porygon2
+ * Used for Rhydon, Electabuzz, Magmar, Porygon2,
+ * Ursaring, Piloswine
  */
 export const ADVANCED_ITEM_EVO_LEVEL = 45;
 /**
@@ -32,5 +33,15 @@ export const TANGROWTH_EVO_LEVEL = 24;
 export const LICKILICKY_EVO_LEVEL = 33;
 /** Learns mimic at level 32 in gen 8 and 15 in gen 7 */
 export const MR_MIME_EVO_LEVEL = 15;
+/** Learns mimic at level 16 in gen 8 */
+export const SUDOWOODO_EVO_LEVEL = 16;
+/** Learns double hit at level 32 in gen 9 */
+export const AMBIPOM_EVO_LEVEL = 32;
+/** Learns ancient power at level 33 in gen 9 */
+export const YANMEGA_EVO_LEVEL = 33;
+/** Learns twin beam at level 32 in gen 9 */
+export const FARIGARIF_EVO_LEVEL = 32;
+/** Learns hyper drill at level 32 in gen 9 */
+export const DUDUNSPARCE_EVO_LEVEL = 32;
 /** Temporary value for now */
 export const SUPER_LATE_EVO_LEVEL = 64;

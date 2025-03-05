@@ -19,51 +19,11 @@ import {
   SpeciesEvolutionCondition,
   SpeciesFriendshipEvolutionCondition,
 } from "#app/data/pokemon-evolutions";
+import { gen2pokemonFamilyEvolutions } from "#app/data/balance/pokemon-evolutions/gen2-pokemon-family-evolutions";
 
 export const pokemonEvolutions: PokemonEvolutions = {
   ...gen1pokemonFamilyEvolutions,
-  [Species.CHIKORITA]: [new SpeciesEvolution(Species.BAYLEEF, 16, null, null)],
-  [Species.BAYLEEF]: [new SpeciesEvolution(Species.MEGANIUM, 32, null, null)],
-  [Species.CYNDAQUIL]: [new SpeciesEvolution(Species.QUILAVA, 14, null, null)],
-  [Species.QUILAVA]: [
-    new SpeciesEvolution(
-      Species.HISUI_TYPHLOSION,
-      36,
-      null,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
-    ),
-    new SpeciesEvolution(
-      Species.TYPHLOSION,
-      36,
-      null,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
-    ),
-  ],
-  [Species.TOTODILE]: [new SpeciesEvolution(Species.CROCONAW, 18, null, null)],
-  [Species.CROCONAW]: [new SpeciesEvolution(Species.FERALIGATR, 30, null, null)],
-  [Species.SENTRET]: [new SpeciesEvolution(Species.FURRET, 15, null, null)],
-  [Species.HOOTHOOT]: [new SpeciesEvolution(Species.NOCTOWL, 20, null, null)],
-  [Species.LEDYBA]: [new SpeciesEvolution(Species.LEDIAN, 18, null, null)],
-  [Species.SPINARAK]: [new SpeciesEvolution(Species.ARIADOS, 22, null, null)],
-  [Species.CHINCHOU]: [new SpeciesEvolution(Species.LANTURN, 27, null, null)],
-  [Species.NATU]: [new SpeciesEvolution(Species.XATU, 25, null, null)],
-  [Species.MAREEP]: [new SpeciesEvolution(Species.FLAAFFY, 15, null, null)],
-  [Species.FLAAFFY]: [new SpeciesEvolution(Species.AMPHAROS, 30, null, null)],
-  [Species.MARILL]: [new SpeciesEvolution(Species.AZUMARILL, 18, null, null)],
-  [Species.HOPPIP]: [new SpeciesEvolution(Species.SKIPLOOM, 18, null, null)],
-  [Species.SKIPLOOM]: [new SpeciesEvolution(Species.JUMPLUFF, 27, null, null)],
-  [Species.WOOPER]: [new SpeciesEvolution(Species.QUAGSIRE, 20, null, null)],
-  [Species.WYNAUT]: [new SpeciesEvolution(Species.WOBBUFFET, 15, null, null)],
-  [Species.PINECO]: [new SpeciesEvolution(Species.FORRETRESS, 31, null, null)],
-  [Species.SNUBBULL]: [new SpeciesEvolution(Species.GRANBULL, 23, null, null)],
-  [Species.TEDDIURSA]: [new SpeciesEvolution(Species.URSARING, 30, null, null)],
-  [Species.SLUGMA]: [new SpeciesEvolution(Species.MAGCARGO, 38, null, null)],
-  [Species.SWINUB]: [new SpeciesEvolution(Species.PILOSWINE, 33, null, null)],
-  [Species.REMORAID]: [new SpeciesEvolution(Species.OCTILLERY, 25, null, null)],
-  [Species.HOUNDOUR]: [new SpeciesEvolution(Species.HOUNDOOM, 24, null, null)],
-  [Species.PHANPY]: [new SpeciesEvolution(Species.DONPHAN, 25, null, null)],
-  [Species.LARVITAR]: [new SpeciesEvolution(Species.PUPITAR, 30, null, null)],
-  [Species.PUPITAR]: [new SpeciesEvolution(Species.TYRANITAR, 55, null, null)],
+  ...gen2pokemonFamilyEvolutions,
   [Species.TREECKO]: [new SpeciesEvolution(Species.GROVYLE, 16, null, null)],
   [Species.GROVYLE]: [new SpeciesEvolution(Species.SCEPTILE, 36, null, null)],
   [Species.TORCHIC]: [new SpeciesEvolution(Species.COMBUSKEN, 16, null, null)],
@@ -235,14 +195,6 @@ export const pokemonEvolutions: PokemonEvolutions = {
   [Species.SKORUPI]: [new SpeciesEvolution(Species.DRAPION, 40, null, null)],
   [Species.CROAGUNK]: [new SpeciesEvolution(Species.TOXICROAK, 37, null, null)],
   [Species.FINNEON]: [new SpeciesEvolution(Species.LUMINEON, 31, null, null)],
-  [Species.MANTYKE]: [
-    new SpeciesEvolution(
-      Species.MANTINE,
-      32,
-      null,
-      new SpeciesEvolutionCondition((_p) => !!globalScene.gameData.dexData[Species.REMORAID].caughtAttr),
-    ),
-  ],
   [Species.SNOVER]: [new SpeciesEvolution(Species.ABOMASNOW, 40, null, null)],
   [Species.SNIVY]: [new SpeciesEvolution(Species.SERVINE, 17, null, null)],
   [Species.SERVINE]: [new SpeciesEvolution(Species.SERPERIOR, 36, null, null)],
@@ -684,108 +636,6 @@ export const pokemonEvolutions: PokemonEvolutions = {
   [Species.FRIGIBAX]: [new SpeciesEvolution(Species.ARCTIBAX, 35, null, null)],
   [Species.ARCTIBAX]: [new SpeciesEvolution(Species.BAXCALIBUR, 54, null, null)],
   [Species.PALDEA_WOOPER]: [new SpeciesEvolution(Species.CLODSIRE, 20, null, null)],
-  [Species.TOGETIC]: [new SpeciesEvolution(Species.TOGEKISS, 1, EvolutionItem.SHINY_STONE, null, HAPPINESS_EVO_LEVEL)],
-  [Species.AIPOM]: [
-    new SpeciesEvolution(
-      Species.AMBIPOM,
-      1,
-      null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.DOUBLE_HIT).length > 0),
-      KNOW_MOVE_EVO_LEVEL,
-    ),
-  ],
-  [Species.SUNKERN]: [new SpeciesEvolution(Species.SUNFLORA, 1, EvolutionItem.SUN_STONE, null, GENERIC_ITEM_EVO_LEVEL)],
-  [Species.YANMA]: [
-    new SpeciesEvolution(
-      Species.YANMEGA,
-      1,
-      null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.ANCIENT_POWER).length > 0),
-      KNOW_MOVE_EVO_LEVEL,
-    ),
-  ],
-  [Species.MURKROW]: [
-    new SpeciesEvolution(Species.HONCHKROW, 1, EvolutionItem.DUSK_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-  ],
-  [Species.MISDREAVUS]: [
-    new SpeciesEvolution(Species.MISMAGIUS, 1, EvolutionItem.DUSK_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-  ],
-  [Species.GIRAFARIG]: [
-    new SpeciesEvolution(
-      Species.FARIGIRAF,
-      1,
-      null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.TWIN_BEAM).length > 0),
-      KNOW_MOVE_EVO_LEVEL,
-    ),
-  ],
-  [Species.DUNSPARCE]: [
-    new SpeciesFormEvolution(
-      Species.DUDUNSPARCE,
-      "",
-      "three-segment",
-      1,
-      null,
-      new SpeciesEvolutionCondition((p) => {
-        let ret = false;
-        if (p.moveset.filter((m) => m.moveId === MoveId.HYPER_DRILL).length > 0) {
-          globalScene.executeWithSeedOffset(() => (ret = !randSeedInt(4)), p.id);
-        }
-        return ret;
-      }),
-      KNOW_MOVE_EVO_LEVEL,
-    ),
-    new SpeciesEvolution(
-      Species.DUDUNSPARCE,
-      1,
-      null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.HYPER_DRILL).length > 0),
-      KNOW_MOVE_EVO_LEVEL,
-    ),
-  ],
-  [Species.GLIGAR]: [
-    new SpeciesEvolution(
-      Species.GLISCOR,
-      1,
-      EvolutionItem.RAZOR_FANG,
-      new SpeciesEvolutionCondition(
-        (_p) => globalScene.arena.isTimeOfDay([TimeOfDay.NIGHT, TimeOfDay.DUSK]) /* Razor fang at night*/,
-      ),
-      GENERIC_ITEM_EVO_LEVEL,
-    ),
-  ],
-  [Species.SNEASEL]: [
-    new SpeciesEvolution(
-      Species.WEAVILE,
-      1,
-      EvolutionItem.RAZOR_CLAW,
-      new SpeciesEvolutionCondition(
-        (_p) => globalScene.arena.isTimeOfDay([TimeOfDay.NIGHT, TimeOfDay.DUSK]) /* Razor claw at night*/,
-      ),
-      GENERIC_ITEM_EVO_LEVEL,
-    ),
-  ],
-  [Species.URSARING]: [
-    new SpeciesEvolution(Species.URSALUNA, 1, EvolutionItem.PEAT_BLOCK, null, GENERIC_ITEM_EVO_LEVEL), //Ursaring does not evolve into Bloodmoon Ursaluna
-  ],
-  [Species.PILOSWINE]: [
-    new SpeciesEvolution(
-      Species.MAMOSWINE,
-      1,
-      null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.ANCIENT_POWER).length > 0),
-      KNOW_MOVE_EVO_LEVEL,
-    ),
-  ],
-  [Species.STANTLER]: [
-    new SpeciesEvolution(
-      Species.WYRDEER,
-      1,
-      null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.PSYSHIELD_BASH).length > 0),
-      KNOW_MOVE_EVO_LEVEL,
-    ),
-  ],
   [Species.LOMBRE]: [
     new SpeciesEvolution(Species.LUDICOLO, 1, EvolutionItem.WATER_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
@@ -797,16 +647,6 @@ export const pokemonEvolutions: PokemonEvolutions = {
   [Species.ROSELIA]: [
     new SpeciesEvolution(Species.ROSERADE, 1, EvolutionItem.SHINY_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
-  [Species.BONSLY]: [
-    new SpeciesEvolution(
-      Species.SUDOWOODO,
-      1,
-      null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.MIMIC).length > 0),
-      KNOW_MOVE_EVO_LEVEL,
-    ),
-  ],
-
   [Species.PANSAGE]: [
     new SpeciesEvolution(Species.SIMISAGE, 1, EvolutionItem.LEAF_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
@@ -1218,12 +1058,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
   [Species.ALOLA_GRAVELER]: [
     new SpeciesEvolution(Species.ALOLA_GOLEM, 1, EvolutionItem.LINKING_CORD, null, GENERIC_ITEM_EVO_LEVEL),
   ],
-  [Species.TOGEPI]: [
-    new SpeciesEvolution(Species.TOGETIC, 1, null, new SpeciesFriendshipEvolutionCondition(70), HAPPINESS_EVO_LEVEL),
-  ],
-  [Species.AZURILL]: [
-    new SpeciesEvolution(Species.MARILL, 1, null, new SpeciesFriendshipEvolutionCondition(70), HAPPINESS_EVO_LEVEL),
-  ],
+
   [Species.BUDEW]: [
     new SpeciesEvolution(
       Species.ROSELIA,
