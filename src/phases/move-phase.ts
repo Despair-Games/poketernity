@@ -37,6 +37,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
 import { SelfStatusMove } from "#app/data/move";
 import { WeatherType } from "#enums/weather-type";
+import { applyBattlerTags } from "#app/data/apply-battler-tags";
 
 /**
  * Resolves the following:
@@ -309,8 +310,9 @@ export class MovePhase extends BattlePhase {
     }
 
     for (const opponent of this.pokemon.getOpponents()) {
-      const imprisoningTag = opponent.getTag<ImprisoningTag>(BattlerTagType.IMPRISONING);
-      if (imprisoningTag?.apply(opponent, false, this.pokemon, this.move.moveId)) {
+      if (
+        applyBattlerTags<ImprisoningTag>(BattlerTagType.IMPRISONING, opponent, false, this.pokemon, this.move.moveId)
+      ) {
         this.cancel();
         break;
       }
