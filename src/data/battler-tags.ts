@@ -141,8 +141,8 @@ export interface TerrainBattlerTag {
 }
 
 export interface RestrictingBattlerTag {
-  interruptedText: (pokemon: Pokemon, moveId: MoveId) => string;
-  selectionDeniedText: (pokemon: Pokemon, moveId: MoveId) => string;
+  getInterruptedText: (pokemon: Pokemon, moveId: MoveId) => string;
+  getSelectionDeniedText: (pokemon: Pokemon, moveId: MoveId) => string;
 }
 
 /**
@@ -172,8 +172,8 @@ export abstract class MoveRestrictionBattlerTag extends BattlerTag implements Re
       const move = phase.move;
 
       if (this.isMoveRestricted(move.moveId, pokemon)) {
-        if (this.interruptedText(pokemon, move.moveId)) {
-          globalScene.queueMessage(this.interruptedText(pokemon, move.moveId));
+        if (this.getInterruptedText(pokemon, move.moveId)) {
+          globalScene.queueMessage(this.getInterruptedText(pokemon, move.moveId));
         }
         phase.cancel();
       }
@@ -211,7 +211,7 @@ export abstract class MoveRestrictionBattlerTag extends BattlerTag implements Re
    * @param moveId - {@linkcode MoveId | move} that is having its selection denied
    * @returns text to display when the player attempts to select the restricted move
    */
-  abstract selectionDeniedText(pokemon: Pokemon, moveId: MoveId): string;
+  abstract getSelectionDeniedText(pokemon: Pokemon, moveId: MoveId): string;
 
   /**
    * Gets the text to display when a move's execution is prevented as a result of the restriction.
@@ -222,9 +222,7 @@ export abstract class MoveRestrictionBattlerTag extends BattlerTag implements Re
    * @param _moveId - The {@linkcode MoveId | move} being interrupted
    * @returns text to display when the move is interrupted
    */
-  public interruptedText(_pokemon: Pokemon, _moveId: MoveId): string {
-    return "";
-  }
+  abstract getInterruptedText(_pokemon: Pokemon, _moveId: MoveId): string;
 
   /**
    * Gets the last valid move from the pokemon's move history.
@@ -271,7 +269,7 @@ export class ThroatChoppedTag extends MoveRestrictionBattlerTag {
    * @param moveId - The {@linkcode MoveId | move} that is being restricted
    * @returns the message to display when the player attempts to select the restricted move
    */
-  override selectionDeniedText(_pokemon: Pokemon, moveId: MoveId): string {
+  override getSelectionDeniedText(_pokemon: Pokemon, moveId: MoveId): string {
     return i18next.t("battle:moveCannotBeSelected", { moveName: allMoves[moveId].name });
   }
 
@@ -282,7 +280,7 @@ export class ThroatChoppedTag extends MoveRestrictionBattlerTag {
    * @param _moveId - The {@linkcode MoveId | move} that was interrupted
    * @returns the message to display when the move is interrupted
    */
-  override interruptedText(pokemon: Pokemon, _moveId: MoveId): string {
+  override getInterruptedText(pokemon: Pokemon, _moveId: MoveId): string {
     return i18next.t("battle:throatChopInterruptedMove", { pokemonName: getPokemonNameWithAffix(pokemon) });
   }
 }
@@ -347,7 +345,7 @@ export class DisabledTag extends MoveRestrictionBattlerTag {
   }
 
   /** @override */
-  override selectionDeniedText(_pokemon: Pokemon, moveId: MoveId): string {
+  override getSelectionDeniedText(_pokemon: Pokemon, moveId: MoveId): string {
     return i18next.t("battle:moveDisabled", { moveName: allMoves[moveId].name });
   }
 
@@ -357,7 +355,7 @@ export class DisabledTag extends MoveRestrictionBattlerTag {
    * @param moveId - The {@linkcode MoveId | move} being interrupted
    * @returns text to display when the move is interrupted
    */
-  override interruptedText(pokemon: Pokemon, moveId: MoveId): string {
+  override getInterruptedText(pokemon: Pokemon, moveId: MoveId): string {
     return i18next.t("battle:disableInterruptedMove", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       moveName: allMoves[moveId].name,
@@ -430,11 +428,15 @@ export class GorillaTacticsTag extends MoveRestrictionBattlerTag {
    * @param _moveId {@linkcode MoveId} ID of the move being denied
    * @returns text to display when the move is denied
    */
-  override selectionDeniedText(pokemon: Pokemon, _moveId: MoveId): string {
+  override getSelectionDeniedText(pokemon: Pokemon, _moveId: MoveId): string {
     return i18next.t("battle:canOnlyUseMove", {
       moveName: allMoves[this.moveId].name,
       pokemonName: getPokemonNameWithAffix(pokemon),
     });
+  }
+
+  override getInterruptedText(_pokemon: Pokemon, _moveId: MoveId): string {
+    return "";
   }
 }
 
@@ -1249,8 +1251,12 @@ export class EncoreTag extends MoveRestrictionBattlerTag {
     return false;
   }
 
-  override selectionDeniedText(_pokemon: Pokemon, moveId: MoveId): string {
+  override getSelectionDeniedText(_pokemon: Pokemon, moveId: MoveId): string {
     return i18next.t("battle:moveDisabled", { moveName: allMoves[moveId].name });
+  }
+
+  override getInterruptedText(_pokemon: Pokemon, _moveId: MoveId): string {
+    return "";
   }
 
   override onRemove(pokemon: Pokemon): void {
@@ -2880,9 +2886,9 @@ export class HealBlockTag extends MoveRestrictionBattlerTag {
   }
 
   /**
-   * Uses its own unique selectionDeniedText() message
+   * Uses its own unique getSelectionDeniedText() message
    */
-  override selectionDeniedText(pokemon: Pokemon, moveId: MoveId): string {
+  override getSelectionDeniedText(pokemon: Pokemon, moveId: MoveId): string {
     return i18next.t("battle:moveDisabledHealBlock", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       moveName: allMoves[moveId].name,
@@ -2896,7 +2902,7 @@ export class HealBlockTag extends MoveRestrictionBattlerTag {
    * @param moveId {@linkcode MoveId} ID of the move being interrupted
    * @returns text to display when the move is interrupted
    */
-  override interruptedText(pokemon: Pokemon, moveId: MoveId): string {
+  override getInterruptedText(pokemon: Pokemon, moveId: MoveId): string {
     return i18next.t("battle:moveDisabledHealBlock", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       moveName: allMoves[moveId].name,
@@ -3208,8 +3214,12 @@ export class TormentTag extends MoveRestrictionBattlerTag {
     return false;
   }
 
-  override selectionDeniedText(pokemon: Pokemon, _moveId: MoveId): string {
+  override getSelectionDeniedText(pokemon: Pokemon, _moveId: MoveId): string {
     return i18next.t("battle:moveDisabledTorment", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) });
+  }
+
+  override getInterruptedText(_pokemon: Pokemon, _moveId: MoveId): string {
+    return "";
   }
 }
 
@@ -3240,14 +3250,14 @@ export class TauntTag extends MoveRestrictionBattlerTag {
     return allMoves[moveId].category === MoveCategory.STATUS;
   }
 
-  override selectionDeniedText(pokemon: Pokemon, moveId: MoveId): string {
+  override getSelectionDeniedText(pokemon: Pokemon, moveId: MoveId): string {
     return i18next.t("battle:moveDisabledTaunt", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       moveName: allMoves[moveId].name,
     });
   }
 
-  override interruptedText(pokemon: Pokemon, moveId: MoveId): string {
+  override getInterruptedText(pokemon: Pokemon, moveId: MoveId): string {
     return i18next.t("battle:moveDisabledTaunt", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       moveName: allMoves[moveId].name,
@@ -3285,22 +3295,22 @@ export class ImprisoningTag extends BattlerTag implements RestrictingBattlerTag 
   override apply(pokemon: Pokemon, simulated: boolean, actingPokemon: Pokemon, moveId: MoveId): boolean {
     if (pokemon.getMoveset().some((mv) => mv.moveId === moveId)) {
       if (!simulated) {
-        globalScene.queueMessage(this.interruptedText(actingPokemon, moveId));
+        globalScene.queueMessage(this.getInterruptedText(actingPokemon, moveId));
       }
       return true;
     }
     return false;
   }
 
-  public interruptedText(pokemon: Pokemon, moveId: MoveId): string {
+  public getInterruptedText(pokemon: Pokemon, moveId: MoveId): string {
     return i18next.t("battle:moveDisabledImprison", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
       moveName: allMoves[moveId].name,
     });
   }
 
-  public selectionDeniedText(pokemon: Pokemon, moveId: MoveId): string {
-    return this.interruptedText(pokemon, moveId);
+  public getSelectionDeniedText(pokemon: Pokemon, moveId: MoveId): string {
+    return this.getInterruptedText(pokemon, moveId);
   }
 }
 

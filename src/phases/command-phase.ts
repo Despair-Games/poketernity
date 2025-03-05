@@ -239,7 +239,7 @@ export class CommandPhase extends FieldPhase {
           let errorMessageKey: string;
           if (pokemon.isMoveRestricted(move.moveId, pokemon)) {
             errorMessageKey =
-              pokemon.getRestrictingTag(move.moveId, pokemon)?.selectionDeniedText(pokemon, move.moveId)
+              pokemon.getRestrictingTag(move.moveId, pokemon)?.getSelectionDeniedText(pokemon, move.moveId)
               ?? "battle:moveDisabled";
           } else if (move.getName().endsWith(" (N)")) {
             errorMessageKey = "battle:moveNotImplemented";
