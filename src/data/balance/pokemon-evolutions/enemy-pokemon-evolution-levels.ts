@@ -11,7 +11,8 @@ export const GENERIC_ITEM_EVO_LEVEL = 36;
  * is already pretty strong or evolves after GENERIC_ITEM_EVO_LEVEL
  *
  * Used for Rhydon, Electabuzz, Magmar, Porygon2,
- * Ursaring, Piloswine
+ * Ursaring, Piloswine,
+ * Dusclops
  */
 export const ADVANCED_ITEM_EVO_LEVEL = 45;
 /**
@@ -43,5 +44,7 @@ export const YANMEGA_EVO_LEVEL = 33;
 export const FARIGARIF_EVO_LEVEL = 32;
 /** Learns hyper drill at level 32 in gen 9 */
 export const DUDUNSPARCE_EVO_LEVEL = 32;
+/** Learns psyshield bash at level 21, masters it at 31 in PLA */
+export const WYRDEER_EVO_LEVEL = 21;
 /** Temporary value for now */
 export const SUPER_LATE_EVO_LEVEL = 64;

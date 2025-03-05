@@ -167,7 +167,6 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
       GENERIC_ITEM_EVO_LEVEL,
     ),
   ],
-
   [Species.TEDDIURSA]: [new SpeciesEvolution(Species.URSARING, 30, null, null)],
   [Species.URSARING]: [
     new SpeciesEvolution(
