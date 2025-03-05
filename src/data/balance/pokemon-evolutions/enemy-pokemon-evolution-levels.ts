@@ -13,6 +13,7 @@ export const GENERIC_ITEM_EVO_LEVEL = 36;
  * Used for Rhydon, Electabuzz, Magmar, Porygon2,
  * Ursaring, Piloswine,
  * Dusclops
+ * Eelektrick, Lampent
  */
 export const ADVANCED_ITEM_EVO_LEVEL = 45;
 /**
@@ -46,5 +47,7 @@ export const FARIGARIF_EVO_LEVEL = 32;
 export const DUDUNSPARCE_EVO_LEVEL = 32;
 /** Learns psyshield bash at level 21, masters it at 31 in PLA */
 export const WYRDEER_EVO_LEVEL = 21;
-/** Temporary value for now */
-export const SUPER_LATE_EVO_LEVEL = 64;
+/** Learns wave crash at level 44 in gen 9 */
+export const BASCULEGION_EVO_LEVEL = 44;
+/** Level obtained from Geeta's Kingambit */
+export const KINGAMBIT_EVO_LEVEL = 61;

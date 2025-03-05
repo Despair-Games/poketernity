@@ -382,56 +382,6 @@ export const pokemonEvolutions: PokemonEvolutions = {
   [Species.ARCTIBAX]: [new SpeciesEvolution(Species.BAXCALIBUR, 54, null, null)],
   [Species.PALDEA_WOOPER]: [new SpeciesEvolution(Species.CLODSIRE, 20, null, null)],
 
-  [Species.PANSAGE]: [
-    new SpeciesEvolution(Species.SIMISAGE, 1, EvolutionItem.LEAF_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-  ],
-  [Species.PANSEAR]: [
-    new SpeciesEvolution(Species.SIMISEAR, 1, EvolutionItem.FIRE_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-  ],
-  [Species.PANPOUR]: [
-    new SpeciesEvolution(Species.SIMIPOUR, 1, EvolutionItem.WATER_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-  ],
-  [Species.MUNNA]: [new SpeciesEvolution(Species.MUSHARNA, 1, EvolutionItem.MOON_STONE, null, GENERIC_ITEM_EVO_LEVEL)],
-  [Species.COTTONEE]: [
-    new SpeciesEvolution(Species.WHIMSICOTT, 1, EvolutionItem.SUN_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-  ],
-  [Species.PETILIL]: [
-    new SpeciesEvolution(Species.HISUI_LILLIGANT, 1, EvolutionItem.SHINY_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-    new SpeciesEvolution(Species.LILLIGANT, 1, EvolutionItem.SUN_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-  ],
-  [Species.BASCULIN]: [
-    new SpeciesFormEvolution(
-      Species.BASCULEGION,
-      "white-striped",
-      "female",
-      40,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) => p.gender === Gender.FEMALE,
-        (p) => (p.gender = Gender.FEMALE),
-      ),
-    ),
-    new SpeciesFormEvolution(
-      Species.BASCULEGION,
-      "white-striped",
-      "male",
-      40,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) => p.gender === Gender.MALE,
-        (p) => (p.gender = Gender.MALE),
-      ),
-    ),
-  ],
-  [Species.MINCCINO]: [
-    new SpeciesEvolution(Species.CINCCINO, 1, EvolutionItem.SHINY_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-  ],
-  [Species.EELEKTRIK]: [
-    new SpeciesEvolution(Species.EELEKTROSS, 1, EvolutionItem.THUNDER_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-  ],
-  [Species.LAMPENT]: [
-    new SpeciesEvolution(Species.CHANDELURE, 1, EvolutionItem.DUSK_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-  ],
   [Species.FLOETTE]: [
     new SpeciesEvolution(Species.FLORGES, 1, EvolutionItem.SHINY_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
@@ -731,30 +681,6 @@ export const pokemonEvolutions: PokemonEvolutions = {
     ),
   ],
 
-  [Species.BOLDORE]: [
-    new SpeciesEvolution(Species.GIGALITH, 1, EvolutionItem.LINKING_CORD, null, GENERIC_ITEM_EVO_LEVEL),
-  ],
-  [Species.GURDURR]: [
-    new SpeciesEvolution(Species.CONKELDURR, 1, EvolutionItem.LINKING_CORD, null, GENERIC_ITEM_EVO_LEVEL),
-  ],
-  [Species.KARRABLAST]: [
-    new SpeciesEvolution(
-      Species.ESCAVALIER,
-      1,
-      EvolutionItem.LINKING_CORD,
-      new SpeciesEvolutionCondition((_p) => !!globalScene.gameData.dexData[Species.SHELMET].caughtAttr),
-      GENERIC_ITEM_EVO_LEVEL,
-    ),
-  ],
-  [Species.SHELMET]: [
-    new SpeciesEvolution(
-      Species.ACCELGOR,
-      1,
-      EvolutionItem.LINKING_CORD,
-      new SpeciesEvolutionCondition((_p) => !!globalScene.gameData.dexData[Species.KARRABLAST].caughtAttr),
-      GENERIC_ITEM_EVO_LEVEL,
-    ),
-  ],
   [Species.SPRITZEE]: [new SpeciesEvolution(Species.AROMATISSE, 1, EvolutionItem.SACHET, null, GENERIC_ITEM_EVO_LEVEL)],
   [Species.SWIRLIX]: [
     new SpeciesEvolution(Species.SLURPUFF, 1, EvolutionItem.WHIPPED_DREAM, null, GENERIC_ITEM_EVO_LEVEL),
@@ -768,9 +694,7 @@ export const pokemonEvolutions: PokemonEvolutions = {
   [Species.ALOLA_GRAVELER]: [
     new SpeciesEvolution(Species.ALOLA_GOLEM, 1, EvolutionItem.LINKING_CORD, null, GENERIC_ITEM_EVO_LEVEL),
   ],
-  [Species.WOOBAT]: [
-    new SpeciesEvolution(Species.SWOOBAT, 1, null, new SpeciesFriendshipEvolutionCondition(90), HAPPINESS_EVO_LEVEL),
-  ],
+
   [Species.SWADLOON]: [
     new SpeciesEvolution(Species.LEAVANNY, 1, null, new SpeciesFriendshipEvolutionCondition(120), HAPPINESS_EVO_LEVEL),
   ],
