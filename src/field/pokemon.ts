@@ -44,6 +44,8 @@ import {
   getBattlerTag,
   type AutotomizedTag,
   type CritBoostStackableTag,
+  type ImprisoningTag,
+  type RestrictingBattlerTag,
   type EncoreTag,
   type SubstituteTag,
 } from "#app/data/battler-tags";
@@ -137,6 +139,7 @@ import {
 import { WeakenMoveScreenArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import {
   CritBoostBattlerTagTypes,
+  MoveLockTagTypes,
   SemiInvulnerableBattlerTagTypes,
   TrappedBattlerTagTypes,
 } from "#app/utils/battler-tag-type-utils";
@@ -2536,7 +2539,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getOpponents(): Pokemon[] {
-    return this.getOpposingField().filter((p) => p.isActive());
+    return this.getOpposingField().filter((p) => p.isActive(true));
   }
 
   getOpponentDescriptor(): string {
@@ -3372,14 +3375,21 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Gets the {@link MoveRestrictionBattlerTag} that is restricting a move, if it exists.
+   * Gets the {@link RestrictingBattlerTag} that is restricting a move, if it exists.
    *
    * @param moveId ID of the {@linkcode MoveId | move} to check
    * @param user {@linkcode Pokemon} using the move, used when the target is a factor in the move's restricted status
    * @param target the {@linkcode Pokemon | target} of the move, used when the target is a factor in the move's restricted status
-   * @returns the first {@linkcode MoveRestrictionBattlerTag | tag} on this Pokemon that restricts the move, or `null` if the move is not restricted.
+   * @returns the first {@linkcode RestrictingBattlerTag | tag} on this Pokemon that restricts the move, or `null` if the move is not restricted.
    */
-  getRestrictingTag(moveId: MoveId, user?: Pokemon, target?: Pokemon): MoveRestrictionBattlerTag | null {
+  getRestrictingTag(moveId: MoveId, user?: Pokemon, target?: Pokemon): RestrictingBattlerTag | null {
+    for (const opponent of this.getOpponents()) {
+      const imprisoningTag = opponent.getTag<ImprisoningTag>(BattlerTagType.IMPRISONING);
+      if (imprisoningTag?.apply(opponent, true, this, moveId)) {
+        return imprisoningTag;
+      }
+    }
+
     for (const tag of this.findTags((t) => t instanceof MoveRestrictionBattlerTag)) {
       if ((tag as MoveRestrictionBattlerTag).isMoveRestricted(moveId, user)) {
         return tag as MoveRestrictionBattlerTag;
@@ -4592,6 +4602,7 @@ export class EnemyPokemon extends Pokemon {
           (moveIndex > -1 && this.getMoveset()[moveIndex]!.isUsable(this, queuedMove.ignorePP))
           || queuedMove.virtual
         ) {
+          MoveLockTagTypes.forEach((tagType) => this.lapseTag(tagType));
           return queuedMove;
         } else {
           this.getMoveQueue().shift();
