@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { applyAbAttrs } from "./abilities/apply-ab-attrs";
-import { CommonBattleAnim } from "./battle-anims/common-battle-anim";
-import { MoveChargeAnim } from "./battle-anims/move-charge-anim";
+import { CommonBattleAnim } from "./animations/common-battle-anim";
+import { MoveChargeAnim } from "./animations/move-charge-anim";
 import { CommonAnim } from "#enums/common-anim";
 import { ChargeAnim } from "#enums/charge-anim";
 import { getMoveTargets, SelfStatusMove, type Move } from "#app/data/moves/move";

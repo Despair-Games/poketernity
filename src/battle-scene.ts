@@ -23,7 +23,7 @@ import { biomeDepths, getBiomeName } from "#app/data/balance/biomes";
 import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
 import { FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
-import { MoveChargeAnim } from "#app/data/battle-anims/move-charge-anim";
+import { MoveChargeAnim } from "#app/data/animations/move-charge-anim";
 import type { DestinyBondTag, GrudgeTag } from "#app/data/battler-tags";
 import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
@@ -34,7 +34,7 @@ import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-e
 import { allMysteryEncounters, mysteryEncountersByBiome } from "#app/data/mystery-encounters/mystery-encounters";
 import { pokemonFormChanges, type SpeciesFormChange } from "#app/data/pokemon-forms";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { populateAnims } from "#app/data/populate-anims";
+import { populateAnims } from "#app/data/init/init-anims";
 import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
 import { SpeciesFormChangeTimeOfDayTrigger } from "#app/data/species-form-change-triggers/species-form-change-time-of-day-trigger";
 import type { SpeciesFormChangeTrigger } from "#app/data/species-form-change-triggers/species-form-change-trigger";

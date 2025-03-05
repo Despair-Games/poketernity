@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/data-lists";
-import { chargeAnims } from "#app/data/charge-anims";
-import { moveAnims } from "#app/data/moves/move-anims";
-import { AnimConfig } from "#app/data/anim-config";
+import { chargeAnims } from "#app/data/animations/charge-anims";
+import { moveAnims } from "#app/data/animations/move-anims";
+import { AnimConfig } from "#app/data/animations/anim-config";
 import { BeakBlastHeaderAttr } from "#app/data/moves/move-attrs/beak-blast-header-attr";
 import { DelayedAttackAttr } from "#app/data/moves/move-attrs/delayed-attack-attr";
 import { loadAnimAssets } from "#app/utils/anim-utils";

@@ -1,5 +1,5 @@
-import { type BattleAnim } from "#app/data/battle-anims";
-import { type MoveAnim } from "./battle-anims/move-anim";
+import { type BattleAnim } from "./battle-anims";
+import { type MoveAnim } from "./move-anim";
 import { globalScene } from "#app/global-scene";
 import { getFrameMs, isNullOrUndefined } from "#app/utils";
 import { AnimBlendType } from "#enums/anim-blend-type";

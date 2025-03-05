@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { MoveAnim } from "#app/data/battle-anims/move-anim";
+import { MoveAnim } from "#app/data/animations/move-anim";
 import { type SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { applyFilteredMoveAttrs, applyMoveAttrs } from "#app/utils/move-utils";

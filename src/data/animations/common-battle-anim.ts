@@ -1,6 +1,6 @@
-import type { AnimConfig } from "#app/data/anim-config";
-import { BattleAnim } from "#app/data/battle-anims";
-import { commonAnims } from "#app/data/common-anims";
+import type { AnimConfig } from "#app/data/animations/anim-config";
+import { BattleAnim } from "./battle-anims";
+import { commonAnims } from "#app/data/animations/common-anims";
 import type { Pokemon } from "#app/field/pokemon";
 import type { CommonAnim } from "#enums/common-anim";
 

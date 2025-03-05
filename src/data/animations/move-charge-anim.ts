@@ -1,6 +1,6 @@
-import { AnimConfig } from "#app/data/anim-config";
+import { AnimConfig } from "#app/data/animations/anim-config";
 import { MoveAnim } from "./move-anim";
-import { chargeAnims } from "#app/data/charge-anims";
+import { chargeAnims } from "#app/data/animations/charge-anims";
 import type { Pokemon } from "#app/field/pokemon";
 import { BattlerIndex } from "#enums/battler-index";
 import type { ChargeAnim } from "#enums/charge-anim";

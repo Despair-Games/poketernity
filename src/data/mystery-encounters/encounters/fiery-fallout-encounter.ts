@@ -28,7 +28,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { MoveId } from "#enums/move-id";
-import { EncounterBattleAnim } from "#app/data/battle-anims/encounter-battle-anim";
+import { EncounterBattleAnim } from "#app/data/animations/encounter-battle-anim";
 import { WeatherType } from "#enums/weather-type";
 import { randSeedInt } from "#app/utils";
 import { StatusEffect } from "#enums/status-effect";
