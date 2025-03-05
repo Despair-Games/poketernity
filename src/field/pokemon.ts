@@ -17,12 +17,9 @@ import { applyAbAttrs, getAbApplyFunc } from "#app/data/apply-ab-attrs";
 import { NoCritTag } from "#app/data/arena-tag";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { starterPassiveAbilities } from "#app/data/balance/passives";
-import {
-  pokemonEvolutions,
-  pokemonPrevolutions,
-  type SpeciesEvolutionCondition,
-  type SpeciesFormEvolution,
-} from "#app/data/balance/pokemon-evolutions";
+import { type SpeciesEvolutionCondition, type SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
+import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#app/data/balance/pokemon-level-moves";
 import {
   BASE_HIDDEN_ABILITY_CHANCE,
@@ -118,7 +115,7 @@ import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { ObtainStatusEffectPhase } from "#app/phases/obtain-status-effect-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achievements";
 import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
 import { timedEventManager } from "#app/timed-event-manager";
@@ -140,6 +137,7 @@ import {
 import { WeakenMoveScreenArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import {
   CritBoostBattlerTagTypes,
+  MoveLockTagTypes,
   SemiInvulnerableBattlerTagTypes,
   TrappedBattlerTagTypes,
 } from "#app/utils/battler-tag-type-utils";
@@ -1411,8 +1409,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     let starterSpeciesId = this.species.speciesId;
-    while (pokemonPrevolutions.hasOwnProperty(starterSpeciesId)) {
-      starterSpeciesId = pokemonPrevolutions[starterSpeciesId];
+    while (pokemonPreEvolutions.hasOwnProperty(starterSpeciesId)) {
+      starterSpeciesId = pokemonPreEvolutions[starterSpeciesId];
     }
     return allAbilities[starterPassiveAbilities[starterSpeciesId]];
   }
@@ -3297,9 +3295,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     // Copy all stat stages
     for (const s of BATTLE_STATS) {
       const sourceStage = source.getStatStage(s);
-      if (this instanceof PlayerPokemon && sourceStage === 6) {
-        globalScene.validateAchv(achvs.TRANSFER_MAX_STAT_STAGE);
-      }
       this.setStatStage(s, sourceStage);
     }
 
@@ -4470,16 +4465,16 @@ export class EnemyPokemon extends Pokemon {
 
       this.luck = this.shiny ? this.variant + 1 : 0;
 
-      let prevolution: Species;
+      let preEvolution: Species;
       let speciesId = species.speciesId;
-      while ((prevolution = pokemonPrevolutions[speciesId])) {
-        const evolution = pokemonEvolutions[prevolution].find(
+      while ((preEvolution = pokemonPreEvolutions[speciesId])) {
+        const evolution = pokemonEvolutions[preEvolution].find(
           (pe) => pe.speciesId === speciesId && (!pe.evoFormKey || pe.evoFormKey === this.getFormKey()),
         );
         if (evolution?.condition?.enforceFunc) {
           evolution.condition.enforceFunc(this);
         }
-        speciesId = prevolution;
+        speciesId = preEvolution;
       }
     }
 
@@ -4565,6 +4560,7 @@ export class EnemyPokemon extends Pokemon {
           (moveIndex > -1 && this.getMoveset()[moveIndex]!.isUsable(this, queuedMove.ignorePP))
           || queuedMove.virtual
         ) {
+          MoveLockTagTypes.forEach((tagType) => this.lapseTag(tagType));
           return queuedMove;
         } else {
           this.getMoveQueue().shift();

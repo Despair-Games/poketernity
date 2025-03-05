@@ -4,7 +4,7 @@ import { type FormChangePhase } from "#app/phases/form-change-phase";
 // -- end tsdoc imports --
 
 import type { AnySound } from "#app/audio-manager";
-import type { SpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions";
+import type { SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
 import { EVOLVE_MOVE } from "#app/data/balance/pokemon-level-moves";
 import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

@@ -5,7 +5,7 @@ import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { starterPassiveAbilities } from "#app/data/balance/passives";
-import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
 import { pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";
 import { pokemonFormLevelMoves } from "#app/data/balance/pokemon-form-level-moves";
@@ -22,7 +22,7 @@ import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
 import { Egg, getEggTierForSpecies } from "#app/data/egg";
 import { GrowthRate } from "#enums/growth-rates";
 import { getGrowthRateColor } from "#app/data/exp";
-import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
+import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
 import { getNatureName } from "#app/data/nature";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
 import type PokemonSpecies from "#app/data/pokemon-species";
@@ -1991,7 +1991,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
               options: options,
             });
           };
-          if (!pokemonPrevolutions.hasOwnProperty(this.lastSpecies.speciesId)) {
+          if (!pokemonPreEvolutions.hasOwnProperty(this.lastSpecies.speciesId)) {
             options.push({
               label: i18next.t("starterSelectUiHandler:useCandies"),
               handler: () => {
@@ -3108,7 +3108,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         this.pokemonCaughtHatchedContainer.setVisible(true);
         this.pokemonFormText.setVisible(true);
 
-        if (pokemonPrevolutions.hasOwnProperty(species.speciesId)) {
+        if (pokemonPreEvolutions.hasOwnProperty(species.speciesId)) {
           this.pokemonCaughtHatchedContainer.setY(16);
           this.pokemonShinyIcon.setY(135);
           this.pokemonShinyIcon.setFrame(getVariantTierForVariant(variant));
@@ -3453,8 +3453,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       if (dexEntry.caughtAttr && species.malePercent !== null) {
         const gender = !female ? Gender.MALE : Gender.FEMALE;
         this.pokemonGenderText.setText(getGenderSymbol(gender));
-        this.pokemonGenderText.setColor(getGenderColor(gender));
-        this.pokemonGenderText.setShadowColor(getGenderShadowColor(gender));
+        setTextColor(this.pokemonGenderText, getGenderTextStyle(gender));
       } else {
         this.pokemonGenderText.setText("");
       }

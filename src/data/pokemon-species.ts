@@ -1,13 +1,12 @@
 import type { Localizable } from "#app/interfaces/locales";
 import type { Abilities } from "#enums/abilities";
-import { PartyMemberStrength } from "#enums/party-member-strength";
 import { Species } from "#enums/species";
 import i18next from "i18next";
-import type { GameMode } from "#app/game-mode";
-import { randSeedInt, randSeedGauss } from "#app/utils";
+import { randSeedGauss, randSeedItem } from "#app/utils";
 import type { GrowthRate } from "#enums/growth-rates";
-import type { EvolutionLevel } from "#app/data/balance/pokemon-evolutions";
-import { pokemonEvolutions, pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
+import type { EvolutionLevel } from "#app/data/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
+import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type { ElementalType } from "#enums/elemental-type";
 import { variantData } from "#app/data/variant";
 import { SpeciesFormKey } from "#enums/species-form-key";
@@ -126,120 +125,59 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     this.name = i18next.t(`pokemon:${Species[this.speciesId].toLowerCase()}`);
   }
 
-  getWildSpeciesForLevel(level: number, allowEvolving: boolean, isBoss: boolean, gameMode: GameMode): Species {
-    return this.getSpeciesForLevel(
-      level,
-      allowEvolving,
-      false,
-      (isBoss ? PartyMemberStrength.WEAKER : PartyMemberStrength.AVERAGE) + (gameMode?.isEndless ? 1 : 0),
-    );
-  }
-
-  getTrainerSpeciesForLevel(
-    level: number,
-    allowEvolving: boolean = false,
-    strength: PartyMemberStrength,
-    currentWave: number = 0,
-  ): Species {
-    return this.getSpeciesForLevel(level, allowEvolving, true, strength, currentWave);
-  }
-
-  getSpeciesForLevel(
-    level: number,
-    allowEvolving: boolean = false,
-    forTrainer: boolean = false,
-    strength: PartyMemberStrength = PartyMemberStrength.WEAKER,
-    currentWave: number = 0,
-  ): Species {
-    const prevolutionLevels = this.getPrevolutionLevels();
-
-    if (prevolutionLevels.length) {
-      for (let pl = prevolutionLevels.length - 1; pl >= 0; pl--) {
-        const prevolutionLevel = prevolutionLevels[pl];
-        if (level < prevolutionLevel[1]) {
-          return prevolutionLevel[0];
+  /**
+   * Calculates the correct evolution stage for an enemy Pokemon, applying pre-evolutions
+   * and evolutions as necessary based on the Pokemon's level.
+   * @param level The level of the Pokemon.
+   * @param forTrainer Whether or not this Pokemon belongs to an enemy trainer (as opposed to being a wild Pokemon). Default: `false`.
+   * @returns The {@linkcode Species | species ID} of the desired evolution stage.
+   */
+  getEnemySpeciesForLevel(level: number, forTrainer: boolean = false): Species {
+    // Apply pre-evolutions
+    const preEvolutionLevels = this.getPreEvolutionLevels();
+    if (preEvolutionLevels.length) {
+      for (let pl = preEvolutionLevels.length - 1; pl >= 0; pl--) {
+        const preEvolutionLevel = preEvolutionLevels[pl];
+        if (level < preEvolutionLevel[1]) {
+          return preEvolutionLevel[0];
         }
       }
     }
 
-    if (!allowEvolving || !pokemonEvolutions.hasOwnProperty(this.speciesId)) {
+    // If the species cannot evolve, we are done
+    if (!pokemonEvolutions.hasOwnProperty(this.speciesId)) {
       return this.speciesId;
     }
 
+    // Apply evolutions
     const evolutions = pokemonEvolutions[this.speciesId];
-
-    const evolutionPool: Map<number, Species> = new Map();
-    const totalWeight = 0;
-    let noEvolutionChance = 1;
+    const eligibleEvolutions: Species[] = [];
 
     for (const ev of evolutions) {
-      if (ev.level > level) {
+      // TODO: Should enemy Pokemon have a random chance of evolving if they are close to the level threshold?
+      if (level < ev.enemyEvolveLevel) {
         continue;
       }
-
-      let evolutionChance: number = 0;
 
       const evolutionSpecies = getPokemonSpecies(ev.speciesId);
       const isRegionalEvolution = !this.isRegional() && evolutionSpecies.isRegional();
 
-      if (!forTrainer && isRegionalEvolution) {
-        evolutionChance = 0;
-      } else {
-        if ((ev.altLevel !== 0 && level > ev.altLevel) || level > ev.level) {
-          evolutionChance = 1;
-          noEvolutionChance = 0;
-        }
-      }
-
-      if (evolutionChance === 1) {
-        evolutionPool.set(evolutionChance, ev.speciesId);
+      // Random non-trainer spawns are not eligible for regional evolutions (e.g. Alolan Raichu)
+      if (forTrainer || !isRegionalEvolution) {
+        eligibleEvolutions.push(ev.speciesId);
       }
     }
 
-    if (noEvolutionChance === 1) {
+    if (eligibleEvolutions.length > 0) {
+      const randSpecies = randSeedItem(eligibleEvolutions);
+      return getPokemonSpecies(randSpecies).getEnemySpeciesForLevel(level, forTrainer);
+    } else {
       return this.speciesId;
     }
-
-    const randValue = evolutionPool.size === 1 ? 0 : randSeedInt(totalWeight);
-
-    for (const weight of evolutionPool.keys()) {
-      if (randValue < weight) {
-        return getPokemonSpecies(evolutionPool.get(weight)).getSpeciesForLevel(
-          level,
-          true,
-          forTrainer,
-          strength,
-          currentWave,
-        );
-      }
-    }
-
-    return this.speciesId;
   }
 
-  getEvolutionLevels(): EvolutionLevel[] {
-    const evolutionLevels: EvolutionLevel[] = [];
-
-    //console.log(Species[this.speciesId], pokemonEvolutions[this.speciesId])
-
-    if (pokemonEvolutions.hasOwnProperty(this.speciesId)) {
-      for (const e of pokemonEvolutions[this.speciesId]) {
-        const speciesId = e.speciesId;
-        const level = e.level;
-        evolutionLevels.push([speciesId, level]);
-        //console.log(Species[speciesId], getPokemonSpecies(speciesId), getPokemonSpecies(speciesId).getEvolutionLevels());
-        const nextEvolutionLevels = getPokemonSpecies(speciesId).getEvolutionLevels();
-        for (const npl of nextEvolutionLevels) {
-          evolutionLevels.push(npl);
-        }
-      }
-    }
-
-    return evolutionLevels;
-  }
-
-  getPrevolutionLevels(): EvolutionLevel[] {
-    const prevolutionLevels: EvolutionLevel[] = [];
+  getPreEvolutionLevels(): EvolutionLevel[] {
+    const preEvolutionLevels: EvolutionLevel[] = [];
 
     const allEvolvingPokemon = Object.keys(pokemonEvolutions);
     for (const p of allEvolvingPokemon) {
@@ -247,23 +185,23 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
         if (
           e.speciesId === this.speciesId
           && (!this.forms.length || !e.evoFormKey || e.evoFormKey === this.forms[this.formIndex].formKey)
-          && prevolutionLevels.every((pe) => pe[0] !== parseInt(p))
+          && preEvolutionLevels.every((pe) => pe[0] !== parseInt(p))
         ) {
           const speciesId = parseInt(p) as Species;
-          const level = e.level;
-          prevolutionLevels.push([speciesId, level]);
-          const subPrevolutionLevels = getPokemonSpecies(speciesId).getPrevolutionLevels();
-          for (const spl of subPrevolutionLevels) {
-            prevolutionLevels.push(spl);
+          const level = e.enemyEvolveLevel;
+          preEvolutionLevels.push([speciesId, level]);
+          const subPreEvolutionLevels = getPokemonSpecies(speciesId).getPreEvolutionLevels();
+          for (const spl of subPreEvolutionLevels) {
+            preEvolutionLevels.push(spl);
           }
         }
       }
     }
 
-    return prevolutionLevels;
+    return preEvolutionLevels;
   }
 
-  // This could definitely be written better and more accurate to the getSpeciesForLevel logic, but it is only for generating movesets for evolved Pokemon
+  // TODO: This could definitely be written better and more accurate to the getEnemySpeciesForLevel logic, but it is only for generating movesets for evolved Pokemon
   getSimulatedEvolutionChain(
     currentLevel: number,
     forTrainer: boolean = false,
@@ -271,37 +209,37 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     player: boolean = false,
   ): EvolutionLevel[] {
     const ret: EvolutionLevel[] = [];
-    if (pokemonPrevolutions.hasOwnProperty(this.speciesId)) {
-      const prevolutionLevels = this.getPrevolutionLevels().reverse();
+    if (pokemonPreEvolutions.hasOwnProperty(this.speciesId)) {
+      const preEvolutionLevels = this.getPreEvolutionLevels().reverse();
       const levelDiff = player ? 0 : forTrainer || isBoss ? (forTrainer && isBoss ? 2.5 : 5) : 10;
-      ret.push([prevolutionLevels[0][0], 1]);
-      for (let l = 1; l < prevolutionLevels.length; l++) {
-        const evolution = pokemonEvolutions[prevolutionLevels[l - 1][0]].find(
-          (e) => e.speciesId === prevolutionLevels[l][0],
+      ret.push([preEvolutionLevels[0][0], 1]);
+      for (let l = 1; l < preEvolutionLevels.length; l++) {
+        const evolution = pokemonEvolutions[preEvolutionLevels[l - 1][0]].find(
+          (e) => e.speciesId === preEvolutionLevels[l][0],
         );
         ret.push([
-          prevolutionLevels[l][0],
+          preEvolutionLevels[l][0],
           Math.min(
             Math.max(
-              evolution?.level! + Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * 0.5 * 5) - 1,
+              evolution?.enemyEvolveLevel! + Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * 0.5 * 5) - 1,
               2,
-              evolution?.level!,
+              evolution?.enemyEvolveLevel!,
             ),
             currentLevel - 1,
           ),
         ]); // TODO: are those bangs correct?
       }
-      const lastPrevolutionLevel = ret[prevolutionLevels.length - 1][1];
-      const evolution = pokemonEvolutions[prevolutionLevels[prevolutionLevels.length - 1][0]].find(
+      const lastPreEvolutionLevel = ret[preEvolutionLevels.length - 1][1];
+      const evolution = pokemonEvolutions[preEvolutionLevels[preEvolutionLevels.length - 1][0]].find(
         (e) => e.speciesId === this.speciesId,
       );
       ret.push([
         this.speciesId,
         Math.min(
           Math.max(
-            lastPrevolutionLevel + Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * 0.5 * 5),
-            lastPrevolutionLevel + 1,
-            evolution?.level!,
+            lastPreEvolutionLevel + Math.round(randSeedGauss(0.5, 1 + levelDiff * 0.2) * 0.5 * 5),
+            lastPreEvolutionLevel + 1,
+            evolution?.enemyEvolveLevel!,
           ),
           currentLevel,
         ),
@@ -315,13 +253,13 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
 
   getCompatibleFusionSpeciesFilter(): PokemonSpeciesFilter {
     const hasEvolution = pokemonEvolutions.hasOwnProperty(this.speciesId);
-    const hasPrevolution = pokemonPrevolutions.hasOwnProperty(this.speciesId);
+    const hasPreEvolution = pokemonPreEvolutions.hasOwnProperty(this.speciesId);
     const category = this.group;
     return (species) => {
       return (
         (category !== SpeciesGroups.COMMON
           || (pokemonEvolutions.hasOwnProperty(species.speciesId) === hasEvolution
-            && pokemonPrevolutions.hasOwnProperty(species.speciesId) === hasPrevolution))
+            && pokemonPreEvolutions.hasOwnProperty(species.speciesId) === hasPreEvolution))
         && species.group === category
         && (this.isTrainerForbidden() || !species.isTrainerForbidden())
         && species.speciesId !== Species.DITTO

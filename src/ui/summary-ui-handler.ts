@@ -14,7 +14,7 @@ import { TextStyle } from "#enums/text-style";
 import type { Move } from "#app/data/move";
 import { MoveCategory } from "#enums/move-category";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
-import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
+import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
 import { getLevelRelExp, getLevelTotalExp } from "#app/data/exp";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { StatusEffect } from "#enums/status-effect";
@@ -396,8 +396,7 @@ export default class SummaryUiHandler extends UiHandler {
     this.pokeball.setFrame(getPokeballAtlasKey(this.pokemon.pokeball));
     this.levelText.setText(this.pokemon.level.toString());
     this.genderText.setText(getGenderSymbol(this.pokemon.getGender(true)));
-    this.genderText.setColor(getGenderColor(this.pokemon.getGender(true)));
-    this.genderText.setShadowColor(getGenderShadowColor(this.pokemon.getGender(true)));
+    setTextColor(this.genderText, getGenderTextStyle(this.pokemon.getGender(true)));
 
     switch (this.summaryUiMode) {
       case SummaryUiMode.DEFAULT:

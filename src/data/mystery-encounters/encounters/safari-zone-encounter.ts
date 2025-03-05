@@ -278,13 +278,12 @@ async function summonSafariPokemon() {
 
   // Generate pokemon using safariPokemonRemaining so they are always the same pokemon no matter how many turns are taken
   // Safari pokemon roll twice on shiny and HA chances, but are otherwise normal
-  let enemySpecies;
-  let pokemon;
+  let enemySpecies: PokemonSpecies;
+  let pokemon: EnemyPokemon;
   globalScene.executeWithSeedOffset(
     () => {
-      enemySpecies = getSafariSpeciesSpawn();
       const level = globalScene.currentBattle.getLevelForWave();
-      enemySpecies = getPokemonSpecies(enemySpecies.getWildSpeciesForLevel(level, true, false, globalScene.gameMode));
+      enemySpecies = getPokemonSpecies(getSafariSpeciesSpawn().getEnemySpeciesForLevel(level));
       pokemon = globalScene.addEnemyPokemon(enemySpecies, level, TrainerSlot.NONE, false);
 
       // Roll shiny twice
@@ -313,6 +312,7 @@ async function summonSafariPokemon() {
     },
     globalScene.currentBattle.waveIndex * 1000 * encounter.misc.safariPokemonRemaining,
   );
+  pokemon = pokemon!; // Tell the compiler it's defined
 
   globalScene.gameData.setPokemonSeen(pokemon, true);
   await pokemon.loadAssets();
