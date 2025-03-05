@@ -177,12 +177,12 @@ export class MovePhase extends BattlePhase {
 
     this.resolveImprisoningEffects();
 
-    // pre-move form changes (e.g. Aegislash's stance) happen even before we know that the move will execute.
-    globalScene.triggerPokemonFormChange(this.pokemon, SpeciesFormChangePreMoveTrigger);
-
     this.lapsePreMoveAndMoveTags();
 
     if (!this.cancelled) {
+      // trigger pre-move form changes (e.g. Aegislash's stance change)
+      globalScene.triggerPokemonFormChange(this.pokemon, SpeciesFormChangePreMoveTrigger);
+
       this.showMoveText();
 
       this.resolveRedirectTarget();
@@ -372,7 +372,7 @@ export class MovePhase extends BattlePhase {
       }
 
       const reflected = new BooleanHolder(false);
-      target.getTag<MagicCoatTag>(BattlerTagType.MAGIC_COAT)?.apply(target, false, this.pokemon, move, reflected);
+      applyBattlerTags<MagicCoatTag>(BattlerTagType.MAGIC_COAT, target, false, this.pokemon, move, reflected);
       applyAbAttrs<ReflectMovesAbAttr>(AbAttrFlag.REFLECT_MOVES, target, false, this.pokemon, move, reflected);
 
       if (reflected.value) {
