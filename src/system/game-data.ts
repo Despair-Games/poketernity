@@ -1534,12 +1534,12 @@ export class GameData {
    * The function exits early if the Pokemon is a "rental" Pokemon (i.e. was given through an event for the current run only)
    * unless that species had already been captured before, in which case any new form, gender, etc. gets unlocked.
    *
-   * @param pokemon the {@linkcode Pokemon} that was caught.
-   * @param isNonRentalCatch `true` if we are in a catching or hatching situation, and if the Pokemon is not being "rented"
+   * @param pokemon - The {@linkcode Pokemon} that was caught.
+   * @param isNonRentalCatch - `true` if we are in a catching or hatching situation, and if the Pokemon is not being "rented"
    *   as part of an event. If `false` and the Pokemon wasn't already caught (e.g. rental mon), no data will get updated,
    *   otherwise (e.g. evolution situation) the nature, ability and other unlocks will get updated, but no the game stats.
-   * @param fromEgg whether the Pokemon was obtained through an egg. Default: `false`
-   * @param showMessage whether to display a message if (a) new Starter(s) was unlocked. Default: `true`
+   * @param fromEgg - Whether the Pokemon was obtained through an egg. Default: `false`
+   * @param showMessage - Whether to display a message if (a) new Starter(s) was unlocked. Default: `true`
    * @returns array of {@linkcode Species} of unlocked starters, if any (root species will be last in the array)
    */
   setPokemonCaught(
@@ -1570,12 +1570,12 @@ export class GameData {
    * By default, updates games stats and starter candy count, and shows a message if the catch unlocked a new starter.
    * Calls itself recursively for all pre-evolved species of the provided one.
    *
-   * @param pokemon the {@linkcode Pokemon} that was caught
-   * @param species the {@linkcode PokemonSpecies} to mark as caught based on the pokemon's characteristics
-   * @param updateStats whether to increment game stats and the species's caught/hatched count. Default: `true`
-   * @param giveCandy whether to give starter candy for the root species. Default: `true`
-   * @param fromEgg whether the Pokemon was obtained through an egg. Default: `false`
-   * @param showMessage whether to display a message if (a) new Starter(s) was unlocked. Default: `true`
+   * @param pokemon - The {@linkcode Pokemon} that was caught
+   * @param species - The {@linkcode PokemonSpecies} to mark as caught based on the pokemon's characteristics
+   * @param updateStats - Whether to increment game stats and the species's caught/hatched count. Default: `true`
+   * @param giveCandy - Whether to give starter candy for the root species. Default: `true`
+   * @param fromEgg - Whether the Pokemon was obtained through an egg. Default: `false`
+   * @param showMessage - Whether to display a message if (a) new Starter(s) was unlocked. Default: `true`
    * @returns array of {@linkcode Species} of unlocked starters, if any (root species will be last in the array)
    */
   private setPokemonSpeciesCaught(

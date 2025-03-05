@@ -16,7 +16,7 @@ export const STARTER_CANDY_MULIPLIER_FOR_EGG = 2;
 /**
  * Get the starter candy multiplier for catching (or hatching) a shiny Pokemon based on its variant.
  * Common shinies gives a x5 multiplier and every tier above that doubles that (common: x5, rare: x10, epic: x20).
- * @param variant the {@linkcode VariantTier} to consider.
+ * @param variant - The {@linkcode VariantTier} to consider.
  * @returns the amount to multiply candy gain by.
  */
 export function getCandyGainMultiplierForShinies(variantTier: VariantTier): number {

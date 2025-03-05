@@ -4236,7 +4236,7 @@ export class PlayerPokemon extends Pokemon {
   }
 
   /**
-   * @param evolution the {@linkcode SpeciesFormEvolution} to use
+   * @param evolution - The {@linkcode SpeciesFormEvolution} to use
    * @returns array of {@linkcode Species} of unlocked starters, if any (root species will be last in the array)
    */
   public evolve(evolution: SpeciesFormEvolution | null): Promise<Species[]> {
