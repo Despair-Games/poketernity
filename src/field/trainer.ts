@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import type { TrainerConfig, TrainerPartyTemplate } from "#app/data/trainer-config";
@@ -464,7 +464,7 @@ export default class Trainer extends Phaser.GameObjects.Container {
 
     console.log(ret.getName());
 
-    if (pokemonPrevolutions.hasOwnProperty(baseSpecies.speciesId) && ret.speciesId !== baseSpecies.speciesId) {
+    if (pokemonPreEvolutions.hasOwnProperty(baseSpecies.speciesId) && ret.speciesId !== baseSpecies.speciesId) {
       retry = true;
     } else if (template.isBalanced(battle.enemyParty.length)) {
       const partyMemberTypes = battle.enemyParty.map((p) => p.getTypes(true)).flat();

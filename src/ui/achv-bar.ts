@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { Achv } from "#app/system/achv";
+import { Achievement } from "#app/system/achievements";
 import type { Voucher } from "#app/system/voucher";
 import { addTextObject } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
@@ -15,7 +15,7 @@ export default class AchvBar extends Phaser.GameObjects.Container {
   private scoreText: Phaser.GameObjects.Text;
   private descriptionText: Phaser.GameObjects.Text;
 
-  private queue: (Achv | Voucher)[] = [];
+  private queue: (Achievement | Voucher)[] = [];
 
   public shown: boolean;
 
@@ -67,23 +67,17 @@ export default class AchvBar extends Phaser.GameObjects.Container {
     this.shown = false;
   }
 
-  showAchv(achv: Achv | Voucher): void {
+  showAchv(achv: Achievement | Voucher): void {
     if (this.shown) {
       this.queue.push(achv);
       return;
     }
 
-    const tier = achv.getTier();
-
-    this.bg.setTexture(`achv_bar${tier ? `_${tier + 1}` : ""}`);
+    this.bg.setTexture(`achv_bar`);
     this.icon.setFrame(achv.iconImage);
     this.titleText.setText(achv.name);
-    this.scoreText.setVisible(achv instanceof Achv);
+    this.scoreText.setVisible(achv instanceof Achievement);
     this.descriptionText.setText(achv.description);
-
-    if (achv instanceof Achv) {
-      this.scoreText.setText(`+${achv.score}pt`);
-    }
 
     // Take the width of the default interface or the title if longest
     this.bg.width = Math.max(

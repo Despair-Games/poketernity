@@ -1,4 +1,4 @@
-import { ProtectedTag } from "#app/data/battler-tags";
+import type { ProtectedTag } from "#app/data/battler-tags";
 import { HitsTagAttr } from "#app/data/move-attrs/hits-tag-attr";
 import { OneHitKOAttr } from "#app/data/move-attrs/one-hit-ko-attr";
 import { ToxicAccuracyAttr } from "#app/data/move-attrs/toxic-accuracy-attr";
@@ -8,7 +8,7 @@ import type { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { BooleanHolder } from "#app/utils";
 import { ConditionalProtectArenaTagTypes } from "#app/utils/arena-tag-type-utils";
-import { SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { ProtectionBattlerTagTypes, SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -18,6 +18,7 @@ import { MoveTarget } from "#enums/move-target";
 import { ElementalType } from "#enums/elemental-type";
 import { PokemonPhase } from "./abstract-pokemon-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { applyBattlerTags } from "#app/data/apply-battler-tags";
 
 //#region Types
 
@@ -121,7 +122,7 @@ export abstract class HitCheckPhase extends PokemonPhase {
     /** Is the target protected by Protect, etc. or a relevant conditional protection effect? */
     const isProtected =
       hasConditionalProtectApplied.value
-      || target.findTags((t) => t instanceof ProtectedTag)[0]?.apply(target, simulated, user, move);
+      || applyBattlerTags<ProtectedTag>(ProtectionBattlerTagTypes, target, simulated, user, move);
 
     if (isProtected) {
       return [HitCheckResult.PROTECTED, 0];
