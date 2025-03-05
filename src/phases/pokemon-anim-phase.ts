@@ -85,7 +85,7 @@ export class PokemonAnimPhase extends BattlePhase {
       field.bringToTop(this.pokemon);
     }
 
-    globalScene.playSound("PRSFX- Transform");
+    globalScene.audioManager.playSound("PRSFX- Transform");
 
     tweens.add({
       targets: this.pokemon,
@@ -219,7 +219,7 @@ export class PokemonAnimPhase extends BattlePhase {
           repeat: 7,
           startAt: 200,
           callback: () => {
-            globalScene.playSound("PRSFX- Substitute2.wav");
+            globalScene.audioManager.playSound("PRSFX- Substitute2.wav");
 
             subTintSprite.setVisible(flashTimer.repeatCount % 2 === 0);
             if (!flashTimer.repeatCount) {
@@ -290,7 +290,7 @@ export class PokemonAnimPhase extends BattlePhase {
     const sourceFpOffset = this.pokemon.getFieldPositionOffset();
     const dondozoFpOffset = dondozo.getFieldPositionOffset();
 
-    globalScene.playSound("se/pb_throw");
+    globalScene.audioManager.playSound("se/pb_throw");
 
     tweens.add({
       targets: sourceSprite,
@@ -308,7 +308,7 @@ export class PokemonAnimPhase extends BattlePhase {
           y: { value: dondozo.y + dondozo.height / 2, ease: "Sine.easeIn" },
           onComplete: () => {
             sourceSprite.destroy();
-            globalScene.playSound("battle_anims/PRSFX- Liquidation1.wav");
+            globalScene.audioManager.playSound("battle_anims/PRSFX- Liquidation1.wav");
             tweens.add({
               targets: dondozo,
               duration: 250,
@@ -362,7 +362,7 @@ export class PokemonAnimPhase extends BattlePhase {
       scale: 1.15,
       yoyo: true,
       onComplete: () => {
-        globalScene.playSound("battle_anims/PRSFX- Liquidation4.wav");
+        globalScene.audioManager.playSound("battle_anims/PRSFX- Liquidation4.wav");
         tweens.add({
           targets: tatsuSprite,
           duration: 500,

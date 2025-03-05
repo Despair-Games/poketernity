@@ -99,10 +99,12 @@ function getDefaultTextColor(textStyle: TextStyle): TextColor {
       return TextColor.GREEN_DARK_SHADOW;
     // Light blue text, blue shadow
     case TextStyle.SUMMARY_BLUE:
+    case TextStyle.GENDER_MALE:
       return TextColor.BLUE_DARK_SHADOW;
     // Pink text, red shadow
     case TextStyle.PARTY_RED:
     case TextStyle.SUMMARY_PINK:
+    case TextStyle.GENDER_FEMALE:
       return TextColor.PINK_DARK_BROWN_SHADOW;
     // Deep red text, light orange shadow
     case TextStyle.SUMMARY_RED:

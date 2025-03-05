@@ -15,7 +15,7 @@ export class NextEncounterPhase extends EncounterPhase {
       globalScene;
     const { isClassicFinalBoss, mysteryEncounter, trainer } = currentBattle;
 
-    globalScene.playBgm(undefined, true);
+    globalScene.audioManager.playBgm(undefined, true);
 
     for (const pokemon of globalScene.getPlayerParty()) {
       if (pokemon) {

@@ -259,7 +259,7 @@ describe("Moves - Future Sight", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const randomMoveAttr = allMoves[MoveId.METRONOME].getAttrs(MetronomeAttr)[0];
-    vi.spyOn(randomMoveAttr, "getMoveOverride").mockReturnValue(MoveId.FUTURE_SIGHT);
+    vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.FUTURE_SIGHT);
 
     const enemy = game.field.getEnemyPokemon();
 

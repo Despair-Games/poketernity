@@ -87,7 +87,7 @@ export class FormChangePhase extends FormChangeBasePhase {
               this.bgVideo.setVisible(true);
               this.bgVideo.play();
             });
-            globalScene.playSound("se/charge");
+            globalScene.audioManager.playSound("se/charge");
             animations.doSpiralUpward(this.baseBgImg, this.container);
             tweens.addCounter({
               from: 0,
@@ -99,7 +99,7 @@ export class FormChangePhase extends FormChangeBasePhase {
               onComplete: () => {
                 this.pokemonSprite.setVisible(false);
                 time.delayedCall(1100, () => {
-                  globalScene.playSound("se/beam");
+                  globalScene.audioManager.playSound("se/beam");
                   animations.doArcDownward(this.baseBgImg, this.container);
                   time.delayedCall(1000, () => {
                     this.pokemonNewFormTintSprite.setScale(0.25);
@@ -147,7 +147,9 @@ export class FormChangePhase extends FormChangeBasePhase {
               }
 
               const delay = playEvolutionFanfare ? 4000 : 1750;
-              globalScene.playSoundWithoutBgm(playEvolutionFanfare ? "evolution_fanfare" : "minor_fanfare");
+              globalScene.audioManager.playSoundWithoutBgm(
+                playEvolutionFanfare ? "evolution_fanfare" : "minor_fanfare",
+              );
 
               formChangedPokemon.destroy();
               ui.showText(
@@ -158,14 +160,14 @@ export class FormChangePhase extends FormChangeBasePhase {
                 true,
                 fixedNumber(delay),
               );
-              time.delayedCall(fixedNumber(delay + 250), () => globalScene.playBgm());
+              time.delayedCall(fixedNumber(delay + 250), () => globalScene.audioManager.playBgm());
             });
           });
         },
       });
     };
 
-    globalScene.playSound("se/sparkle");
+    globalScene.audioManager.playSound("se/sparkle");
     this.pokemonNewFormSprite.setVisible(true);
     animations.doCircleInward(this.baseBgImg, this.container);
     time.delayedCall(900, () => {
@@ -174,7 +176,7 @@ export class FormChangePhase extends FormChangeBasePhase {
           globalScene.unshiftPhase(new EndEvolutionPhase());
         }
 
-        globalScene.playSound("se/shine");
+        globalScene.audioManager.playSound("se/shine");
         animations.doSpray(this.baseBgImg, this.container);
         tweens.add({
           targets: this.overlay,

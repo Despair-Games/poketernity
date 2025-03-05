@@ -19,7 +19,7 @@ export class SelectStarterPhase extends Phase {
   public override start(): void {
     super.start();
 
-    globalScene.playBgm("menu");
+    globalScene.audioManager.playBgm("menu");
 
     globalScene.ui.setMode(UiMode.STARTER_SELECT, (starters: Starter[]) => {
       globalScene.ui.clearText();
@@ -110,7 +110,7 @@ export class SelectStarterPhase extends Phase {
 
     Promise.all(loadPokemonAssets).then(() => {
       SoundFade.fadeOut(globalScene, sound.get("menu"), 500, true);
-      time.delayedCall(500, () => globalScene.playBgm());
+      time.delayedCall(500, () => globalScene.audioManager.playBgm());
 
       if (isClassic) {
         gameStats.classicSessionsPlayed++;

@@ -1,9 +1,9 @@
 import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
 import { getLevelRelExp } from "#app/data/exp";
 import { fixedNumber } from "#app/utils";
-import { addTextObject } from "#app/ui/text";
+import { addTextObject, setTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
-import { getGenderSymbol, getGenderColor } from "#app/data/gender";
+import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
 import { Gender } from "#enums/gender";
 import { StatusEffect } from "#enums/status-effect";
 import { globalScene } from "#app/global-scene";
@@ -326,8 +326,8 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
     this.flyoutMenu?.initInfo(pokemon);
 
     this.genderText.setText(getGenderSymbol(pokemon.gender));
-    this.genderText.setColor(getGenderColor(pokemon.gender));
     this.genderText.setPositionRelative(this.nameText, nameTextWidth, 0);
+    setTextColor(this.genderText, getGenderTextStyle(pokemon.gender));
 
     this.lastTeraType = pokemon.getTeraType();
 
@@ -782,7 +782,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
         this.lastLevelExp = pokemon.levelExp;
       }
       if (duration) {
-        globalScene.playSound("se/exp");
+        globalScene.audioManager.playSound("se/exp");
       }
       globalScene.tweens.add({
         targets: this.expMaskRect,
@@ -797,7 +797,7 @@ export default class BattleInfo extends Phaser.GameObjects.Container {
             globalScene.sound.stopByKey("se/exp");
           }
           if (ratio === 1) {
-            globalScene.playSound("se/level_up");
+            globalScene.audioManager.playSound("se/level_up");
             this.setLevel(this.lastLevel);
             globalScene.time.delayedCall(500 * levelDurationMultiplier, () => {
               this.expMaskRect.x = 0;
