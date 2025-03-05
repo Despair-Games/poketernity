@@ -1,10 +1,8 @@
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { achvs } from "#app/system/achv";
 import { vouchers } from "#app/system/voucher";
 import { randSeedItem } from "#app/utils";
-import { Biome } from "#enums/biome";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
 import { BattlePhase } from "./abstract-battle-phase";
@@ -19,7 +17,7 @@ export class TrainerVictoryPhase extends BattlePhase {
   override readonly id = PhaseId.TRAINER_VICTORY;
 
   public override start(): void {
-    const { arena, charSprite, currentBattle, ui } = globalScene;
+    const { charSprite, currentBattle, ui } = globalScene;
     const { trainer, waveIndex } = currentBattle;
     globalScene.disableMenu = true;
 
@@ -54,13 +52,6 @@ export class TrainerVictoryPhase extends BattlePhase {
           ),
         );
       }
-    }
-    // Breeders in Space achievement
-    if (
-      arena.biomeType === Biome.SPACE
-      && (trainerType === TrainerType.BREEDER || trainerType === TrainerType.EXPERT_POKEMON_BREEDER)
-    ) {
-      globalScene.validateAchv(achvs.BREEDERS_IN_SPACE);
     }
 
     ui.showText(

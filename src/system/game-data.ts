@@ -3,7 +3,7 @@ import { APP_ABBREVIATION, bypassLogin, SETTINGS_LS_KEY, TUTORIALS_LS_KEY } from
 import { globalScene } from "#app/global-scene";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { allSpecies } from "#app/data/data-lists";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
@@ -32,7 +32,7 @@ import { getGameMode } from "#app/game-mode";
 import { GameModes } from "#enums/game-modes";
 import { BattleType } from "#enums/battle-type";
 import TrainerData from "#app/system/trainer-data";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achievements";
 import EggData from "#app/system/egg-data";
 import type { Egg } from "#app/data/egg";
 import { vouchers } from "#app/system/voucher";
@@ -1622,7 +1622,7 @@ export class GameData {
       // Unlock nature
       dexEntry.natureAttr |= 1 << (pokemon.nature + 1);
 
-      const hasPreEvolution = pokemonPrevolutions.hasOwnProperty(species.speciesId);
+      const hasPreEvolution = pokemonPreEvolutions.hasOwnProperty(species.speciesId);
       const newCatch = !caughtAttr;
       const hasNewAttr = (caughtAttr & dexAttr) !== dexAttr;
 
@@ -1652,7 +1652,7 @@ export class GameData {
 
       const checkPreEvolution = (unlockedStarters: Species[]) => {
         if (hasPreEvolution) {
-          const preEvolutionSpecies = pokemonPrevolutions[species.speciesId];
+          const preEvolutionSpecies = pokemonPreEvolutions[species.speciesId];
           this.setPokemonSpeciesCaught(
             pokemon,
             getPokemonSpecies(preEvolutionSpecies),
@@ -1831,11 +1831,10 @@ export class GameData {
       return;
     }
 
-    //recursively unlock nature for species and pre-evolutions
     const _unlockSpeciesNature = (speciesId: Species) => {
       this.dexData[speciesId].natureAttr |= 1 << (nature + 1);
-      if (pokemonPrevolutions.hasOwnProperty(speciesId)) {
-        _unlockSpeciesNature(pokemonPrevolutions[speciesId]);
+      if (pokemonPreEvolutions.hasOwnProperty(speciesId)) {
+        _unlockSpeciesNature(pokemonPreEvolutions[speciesId]);
       }
     };
     _unlockSpeciesNature(species.speciesId);
@@ -1854,7 +1853,7 @@ export class GameData {
       if (dexIvs.filter((iv) => iv === 31).length === 6) {
         globalScene.validateAchv(achvs.PERFECT_IVS);
       }
-    } while (pokemonPrevolutions.hasOwnProperty(speciesId) && (speciesId = pokemonPrevolutions[speciesId]));
+    } while (pokemonPreEvolutions.hasOwnProperty(speciesId) && (speciesId = pokemonPreEvolutions[speciesId]));
   }
 
   getSpeciesCount(dexEntryPredicate: (entry: DexEntry) => boolean): number {
