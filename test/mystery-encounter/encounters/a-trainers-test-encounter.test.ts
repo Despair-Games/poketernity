@@ -139,7 +139,7 @@ describe("A Trainer's Test - Mystery Encounter", () => {
   describe("Option 2 - Decline the Challenge", () => {
     beforeEach(() => {
       // Mock sound object
-      vi.spyOn(scene, "playSoundWithoutBgm").mockImplementation(() => {
+      vi.spyOn(scene.audioManager, "playSoundWithoutBgm").mockImplementation(() => {
         return {
           totalDuration: 1,
           destroy: () => null,

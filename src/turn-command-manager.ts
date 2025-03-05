@@ -332,6 +332,11 @@ export class TurnCommandManager {
           return -1;
         }
       } else if (a.command === BattleCommand.FIGHT) {
+        const [aQuashed, bQuashed] = [a, b].map((tc) => !!tc.pokemon.getTag(BattlerTagType.QUASHED));
+        if ((aQuashed || bQuashed) && aQuashed !== bQuashed) {
+          return aQuashed ? 1 : -1;
+        }
+
         const priority = [a, b].map((tc) => {
           const move = tc.turnMove!.move;
           return move.getPriority(tc.pokemon, quiet);

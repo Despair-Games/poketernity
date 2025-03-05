@@ -96,7 +96,7 @@ export const FunAndGamesEncounter: MysteryEncounter = MysteryEncounterBuilder.wi
     return true;
   })
   .withOnVisualsStart(() => {
-    globalScene.fadeAndSwitchBgm("mystery_encounter_fun_and_games");
+    globalScene.audioManager.fadeAndSwitchBgm("mystery_encounter_fun_and_games");
     return true;
   })
   .withOption(
@@ -370,7 +370,7 @@ function summonPlayerPokemonAnimation(pokemon: PlayerPokemon): Promise<void> {
           angle: 1440,
           y: 132 + fpOffset[1],
           onComplete: () => {
-            globalScene.playSound("se/pb_rel");
+            globalScene.audioManager.playSound("se/pb_rel");
             pokeball.destroy();
             globalScene.add.existing(pokemon);
             globalScene.field.add(pokemon);

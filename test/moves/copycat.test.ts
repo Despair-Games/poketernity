@@ -68,7 +68,7 @@ describe("Moves - Copycat", () => {
   it("should copy the called move when the last move successfully calls another", async () => {
     game.override.moveset([MoveId.SPLASH, MoveId.METRONOME]).enemyMoveset(MoveId.COPYCAT);
     await game.classicMode.startBattle();
-    vi.spyOn(randomMoveAttr, "getMoveOverride").mockReturnValue(MoveId.SWORDS_DANCE);
+    vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.SWORDS_DANCE);
 
     game.move.select(MoveId.METRONOME);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]); // Player moves first, so enemy can copy Swords Dance

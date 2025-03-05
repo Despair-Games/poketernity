@@ -23,7 +23,7 @@ import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-spe
 import { allSpecies } from "#app/data/data-lists";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { HiddenAbilityRateBoosterModifier } from "#app/modifier/modifier";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achievements";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
@@ -117,7 +117,7 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
     return true;
   })
   .withOnVisualsStart(() => {
-    globalScene.fadeAndSwitchBgm("mystery_encounter_weird_dream");
+    globalScene.audioManager.fadeAndSwitchBgm("mystery_encounter_weird_dream");
     return true;
   })
   .withOption(
@@ -434,7 +434,7 @@ async function doNewTeamPostProcess(transformations: PokemonTransformation[]) {
 
   // If at least one new starter was unlocked, play 1 fanfare
   if (atLeastOneNewStarter) {
-    globalScene.playSound("level_up_fanfare");
+    globalScene.audioManager.playSound("level_up_fanfare");
   }
 }
 

@@ -1210,69 +1210,6 @@ class NoneTag extends ArenaTag {
     super(ArenaTagType.NONE, 0);
   }
 }
-/**
- * This arena tag facilitates the application of the move Imprison.
- * Imprison remains in effect as long as the source Pokemon is active and present on the field.
- * Imprison will apply to any opposing Pokemon that switch onto the field as well.
- */
-class ImprisonTag extends EntryHazardTag {
-  constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.IMPRISON, MoveId.IMPRISON, sourceId, side, 1);
-  }
-
-  /**
-   * This function applies the effects of Imprison to the opposing Pokemon already present on the field.
-   * @param arena
-   */
-  override onAdd() {
-    const source = this.getSourcePokemon();
-    if (source) {
-      const party = this.getAffectedPokemon();
-      party?.forEach((p: Pokemon) => {
-        if (p.isAllowedInBattle()) {
-          p.addTag(BattlerTagType.IMPRISON, 1, MoveId.IMPRISON, this.sourceId);
-        }
-      });
-      globalScene.queueMessage(
-        i18next.t("battlerTags:imprisonOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(source) }),
-      );
-    }
-  }
-
-  /**
-   * Checks if the source Pokemon is still active on the field
-   * @param _arena
-   * @returns `true` if the source of the tag is still active on the field | `false` if not
-   */
-  override lapse(): boolean {
-    const source = this.getSourcePokemon();
-    return source ? source.isActive(true) : false;
-  }
-
-  /**
-   * This applies the effects of Imprison to any opposing Pokemon that switch into the field while the source Pokemon is still active
-   * @param pokemon - the {@linkcode Pokemon} Imprison is applied to
-   * @returns `true`
-   */
-  override activateTrap(pokemon: Pokemon): boolean {
-    const source = this.getSourcePokemon();
-    if (source && source.isActive(true) && pokemon.isAllowedInBattle()) {
-      pokemon.addTag(BattlerTagType.IMPRISON, 1, MoveId.IMPRISON, this.sourceId);
-    }
-    return true;
-  }
-
-  /**
-   * When the arena tag is removed, it also attempts to remove any related Battler Tags if they haven't already been removed from the affected Pokemon
-   * @param arena
-   */
-  override onRemove(): void {
-    const party = this.getAffectedPokemon();
-    party?.forEach((p: Pokemon) => {
-      p.removeTag(BattlerTagType.IMPRISON);
-    });
-  }
-}
 
 /**
  * Arena Tag implementing the "sea of fire" effect from the combination
@@ -1507,8 +1444,6 @@ export function getArenaTag(
       return new HappyHourTag(sourceId, side);
     case ArenaTagType.SAFEGUARD:
       return new SafeguardTag(turnCount, sourceId, side);
-    case ArenaTagType.IMPRISON:
-      return new ImprisonTag(sourceId, side);
     case ArenaTagType.FIRE_GRASS_PLEDGE:
       return new FireGrassPledgeTag(sourceId, side);
     case ArenaTagType.WATER_FIRE_PLEDGE:

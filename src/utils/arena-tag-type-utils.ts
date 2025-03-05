@@ -8,7 +8,6 @@ export const EntryHazardArenaTagTypes = Object.freeze([
   ArenaTagType.STEALTH_ROCK,
   ArenaTagType.SHARP_STEEL,
   ArenaTagType.STICKY_WEB,
-  ArenaTagType.IMPRISON,
 ]);
 
 export const WeakenMoveScreenArenaTagTypes = Object.freeze([

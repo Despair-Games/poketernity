@@ -55,14 +55,14 @@ export class DamageAnimPhase extends PokemonPhase {
   protected displayDamage(): void {
     switch (this.damageResult) {
       case HitResult.EFFECTIVE:
-        globalScene.playSound("se/hit");
+        globalScene.audioManager.playSound("se/hit");
         break;
       case HitResult.SUPER_EFFECTIVE:
       case HitResult.ONE_HIT_KO:
-        globalScene.playSound("se/hit_strong");
+        globalScene.audioManager.playSound("se/hit_strong");
         break;
       case HitResult.NOT_VERY_EFFECTIVE:
-        globalScene.playSound("se/hit_weak");
+        globalScene.audioManager.playSound("se/hit_weak");
         break;
     }
 

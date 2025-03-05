@@ -12,10 +12,7 @@ import { globalScene } from "#app/global-scene";
  * @param species The species to fetch
  * @returns The associated {@linkcode PokemonSpecies} object
  */
-export function getPokemonSpecies(species: Species | Species[] | undefined): PokemonSpecies {
-  if (!species) {
-    throw new Error("`species` must not be undefined in `getPokemonSpecies()`");
-  }
+export function getPokemonSpecies(species: Species | Species[]): PokemonSpecies {
   // If a special pool (named trainers) is used here it CAN happen that they have a array as species (which means choose one of those two). So we catch that with this code block
   if (Array.isArray(species)) {
     // Pick a random species from the list

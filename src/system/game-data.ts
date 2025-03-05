@@ -3,7 +3,7 @@ import { APP_ABBREVIATION, bypassLogin, SETTINGS_LS_KEY, TUTORIALS_LS_KEY } from
 import { globalScene } from "#app/global-scene";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { noStarterFormKeys } from "#app/data/no-starter-form-keys";
 import { allSpecies } from "#app/data/data-lists";
@@ -27,7 +27,7 @@ import { getGameMode } from "#app/game-mode";
 import { GameModes } from "#enums/game-modes";
 import { BattleType } from "#enums/battle-type";
 import TrainerData from "#app/system/trainer-data";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achievements";
 import EggData from "#app/system/egg-data";
 import type { Egg } from "#app/data/egg";
 import { vouchers } from "#app/system/voucher";
@@ -931,22 +931,26 @@ export class GameData {
           });
 
           globalScene.arena.weather = sessionData.arena.weather;
-          globalScene.arena.eventTarget.dispatchEvent(
-            new WeatherChangedEvent(
-              WeatherType.NONE,
-              globalScene.arena.weather?.weatherType!,
-              globalScene.arena.weather?.turnsLeft!,
-            ),
-          ); // TODO: is this bang correct?
+          if (globalScene.arena.weather) {
+            globalScene.arena.eventTarget.dispatchEvent(
+              new WeatherChangedEvent(
+                WeatherType.NONE,
+                globalScene.arena.weather.weatherType,
+                globalScene.arena.weather.turnsLeft,
+              ),
+            );
+          }
 
           globalScene.arena.terrain = sessionData.arena.terrain;
-          globalScene.arena.eventTarget.dispatchEvent(
-            new TerrainChangedEvent(
-              TerrainType.NONE,
-              globalScene.arena.terrain?.terrainType!,
-              globalScene.arena.terrain?.turnsLeft!,
-            ),
-          ); // TODO: is this bang correct?
+          if (globalScene.arena.terrain) {
+            globalScene.arena.eventTarget.dispatchEvent(
+              new TerrainChangedEvent(
+                TerrainType.NONE,
+                globalScene.arena.terrain.terrainType,
+                globalScene.arena.terrain.turnsLeft,
+              ),
+            );
+          }
 
           globalScene.arena.tags = sessionData.arena.tags;
           if (globalScene.arena.tags) {
@@ -1578,7 +1582,7 @@ export class GameData {
       // Unlock nature
       dexEntry.natureAttr |= 1 << (pokemon.nature + 1);
 
-      const hasPrevolution = pokemonPrevolutions.hasOwnProperty(species.speciesId);
+      const hasPreEvolution = pokemonPreEvolutions.hasOwnProperty(species.speciesId);
       const newCatch = !caughtAttr;
       const hasNewAttr = (caughtAttr & dexAttr) !== dexAttr;
 
@@ -1611,7 +1615,7 @@ export class GameData {
           }
         }
 
-        if (!hasPrevolution && (!globalScene.gameMode.isDaily || hasNewAttr || fromEgg)) {
+        if (!hasPreEvolution && (!globalScene.gameMode.isDaily || hasNewAttr || fromEgg)) {
           this.addStarterCandy(
             species,
             1 * (pokemon.isShiny() ? 5 * (1 << (pokemon.variant ?? 0)) : 1) * (fromEgg || pokemon.isBoss() ? 2 : 1),
@@ -1619,12 +1623,12 @@ export class GameData {
         }
       }
 
-      const checkPrevolution = (newStarter: boolean) => {
-        if (hasPrevolution) {
-          const prevolutionSpecies = pokemonPrevolutions[species.speciesId];
+      const checkPreEvolution = (newStarter: boolean) => {
+        if (hasPreEvolution) {
+          const preEvolutionSpecies = pokemonPreEvolutions[species.speciesId];
           this.setPokemonSpeciesCaught(
             pokemon,
-            getPokemonSpecies(prevolutionSpecies),
+            getPokemonSpecies(preEvolutionSpecies),
             incrementCount,
             fromEgg,
             showMessage,
@@ -1639,16 +1643,16 @@ export class GameData {
           resolve(true);
           return;
         }
-        globalScene.playSound("level_up_fanfare");
+        globalScene.audioManager.playSound("level_up_fanfare");
         globalScene.ui.showText(
           i18next.t("battle:addedAsAStarter", { pokemonName: species.name }),
           null,
-          () => checkPrevolution(true),
+          () => checkPreEvolution(true),
           null,
           true,
         );
       } else {
-        checkPrevolution(false);
+        checkPreEvolution(false);
       }
     });
   }
@@ -1736,7 +1740,7 @@ export class GameData {
         resolve(true);
         return;
       }
-      globalScene.playSound("level_up_fanfare");
+      globalScene.audioManager.playSound("level_up_fanfare");
       const moveName = allMoves[speciesEggMoves[speciesId][eggMoveIndex]].name;
       let message = prependSpeciesToMessage ? species.getName() + " " : "";
       message +=
@@ -1756,7 +1760,7 @@ export class GameData {
   }
 
   /**
-   * Unlocks the given {@linkcode Nature} for a {@linkcode PokemonSpecies} and its prevolutions.
+   * Unlocks the given {@linkcode Nature} for a {@linkcode PokemonSpecies} and its preEvolutions.
    * Will fail silently if root species has not been unlocked
    */
   unlockSpeciesNature(species: PokemonSpecies, nature: Nature): void {
@@ -1764,11 +1768,11 @@ export class GameData {
       return;
     }
 
-    //recursively unlock nature for species and prevolutions
+    //recursively unlock nature for species and preEvolutions
     const _unlockSpeciesNature = (speciesId: Species) => {
       this.dexData[speciesId].natureAttr |= 1 << (nature + 1);
-      if (pokemonPrevolutions.hasOwnProperty(speciesId)) {
-        _unlockSpeciesNature(pokemonPrevolutions[speciesId]);
+      if (pokemonPreEvolutions.hasOwnProperty(speciesId)) {
+        _unlockSpeciesNature(pokemonPreEvolutions[speciesId]);
       }
     };
     _unlockSpeciesNature(species.speciesId);
@@ -1787,7 +1791,7 @@ export class GameData {
       if (dexIvs.filter((iv) => iv === 31).length === 6) {
         globalScene.validateAchv(achvs.PERFECT_IVS);
       }
-    } while (pokemonPrevolutions.hasOwnProperty(speciesId) && (speciesId = pokemonPrevolutions[speciesId]));
+    } while (pokemonPreEvolutions.hasOwnProperty(speciesId) && (speciesId = pokemonPreEvolutions[speciesId]));
   }
 
   getSpeciesCount(dexEntryPredicate: (entry: DexEntry) => boolean): number {
