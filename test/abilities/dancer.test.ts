@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import type { MovePhase } from "#app/phases/move-phase";
+import { type MovePhase } from "#app/phases/move-phase";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -40,7 +40,7 @@ describe("Abilities - Dancer", () => {
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.FEATHER_DANCE, 1, BattlerIndex.ENEMY);
-    await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("MovePhase");
     // immediately copies ally move Feather Dance, and uses it on opponent
     await game.phaseInterceptor.to("MovePhase", false);
@@ -56,7 +56,7 @@ describe("Abilities - Dancer", () => {
     expect(currentPhase.pokemon).toBe(oricorio);
     expect(currentPhase.targets).toEqual([BattlerIndex.PLAYER]);
     expect(currentPhase.move.moveId).toBe(MoveId.VICTORY_DANCE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     // doesn't use PP if copied move is also in moveset
     expect(oricorio.moveset[0]?.ppUsed).toBe(0);

@@ -5,6 +5,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
 import type { ElementalType } from "#enums/elemental-type";
 import { PreDefendAbAttr } from "./pre-defend-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Determines whether a Pokemon is immune to a move because of an ability.
@@ -18,6 +19,7 @@ export class TypeImmunityAbAttr extends PreDefendAbAttr {
 
   constructor(immuneType: ElementalType | null, condition?: AbAttrCondition) {
     super();
+    this._flags.add(AbAttrFlag.TYPE_IMMUNITY);
 
     this.immuneType = immuneType;
     this.condition = condition ?? null;

@@ -1,12 +1,12 @@
-import { PartyMemberStrength } from "#enums/party-member-strength";
 import type { Species } from "#enums/species";
 import { globalScene } from "#app/global-scene";
 import { PlayerPokemon } from "#app/field/pokemon";
 import type { Starter } from "#app/ui/starter-select-ui-handler";
 import { randSeedGauss, randSeedInt, randSeedItem } from "#app/utils";
 import type { PokemonSpeciesForm } from "./pokemon-species-form";
-import PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
+import type PokemonSpecies from "#app/data/pokemon-species";
+import { getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import { api } from "#app/plugins/api/api";
 
@@ -53,9 +53,7 @@ export function getDailyRunStarters(seed: string): Starter[] {
           .map((s) => parseInt(s) as Species)
           .filter((s) => speciesStarterCosts[s] === cost);
         const randPkmSpecies = getPokemonSpecies(randSeedItem(costSpecies));
-        const starterSpecies = getPokemonSpecies(
-          randPkmSpecies.getTrainerSpeciesForLevel(startingLevel, true, PartyMemberStrength.STRONGER),
-        );
+        const starterSpecies = getPokemonSpecies(randPkmSpecies.getEnemySpeciesForLevel(startingLevel, true));
         starters.push(getDailyRunStarter(starterSpecies, startingLevel));
       }
     },
@@ -68,8 +66,10 @@ export function getDailyRunStarters(seed: string): Starter[] {
 
 function getDailyRunStarter(starterSpeciesForm: PokemonSpeciesForm, startingLevel: number): Starter {
   const starterSpecies =
-    starterSpeciesForm instanceof PokemonSpecies ? starterSpeciesForm : getPokemonSpecies(starterSpeciesForm.speciesId);
-  const formIndex = starterSpeciesForm instanceof PokemonSpecies ? undefined : starterSpeciesForm.formIndex;
+    starterSpeciesForm.type === "PokemonSpecies"
+      ? (starterSpeciesForm as PokemonSpecies)
+      : getPokemonSpecies(starterSpeciesForm.speciesId);
+  const formIndex = starterSpeciesForm.type === "PokemonSpecies" ? undefined : starterSpeciesForm.formIndex;
   const pokemon = new PlayerPokemon(
     starterSpecies,
     startingLevel,

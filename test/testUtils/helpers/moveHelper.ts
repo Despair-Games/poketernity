@@ -3,8 +3,8 @@ import { getMoveTargets } from "#app/data/move";
 import { type Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import Overrides from "#app/overrides";
-import type { CommandPhase } from "#app/phases/command-phase";
-import type { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
+import { type CommandPhase } from "#app/phases/command-phase";
+import { type EnemyCommandPhase } from "#app/phases/enemy-command-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { BattleCommand } from "#enums/battle-command";
 import { UiMode } from "#enums/ui-mode";
@@ -12,6 +12,7 @@ import { MoveId } from "#enums/move-id";
 import { getMovePosition } from "#test/testUtils/gameManagerUtils";
 import { GameManagerHelper } from "#test/testUtils/helpers/gameManagerHelper";
 import { vi } from "vitest";
+import { allMoves } from "#app/data/data-lists";
 
 /**
  * Helper to handle a Pokemon's move
@@ -136,11 +137,12 @@ export class MoveHelper extends GameManagerHelper {
     const legalTargets = getMoveTargets(enemy, moveId);
 
     vi.spyOn(enemy, "getNextMove").mockReturnValueOnce({
-      moveId: moveId,
+      move: allMoves[moveId],
       targets:
         target !== undefined && !legalTargets.multiple && legalTargets.targets.includes(target)
           ? [target]
           : enemy.getNextTargets(moveId),
+      type: enemy.getMoveType(allMoves[moveId]),
     });
 
     /**
@@ -180,11 +182,12 @@ export class MoveHelper extends GameManagerHelper {
     const legalTargets = getMoveTargets(enemy, moveId);
 
     vi.spyOn(enemy, "getNextMove").mockReturnValueOnce({
-      moveId: moveId,
+      move: allMoves[moveId],
       targets:
         target !== undefined && !legalTargets.multiple && legalTargets.targets.includes(target)
           ? [target]
           : enemy.getNextTargets(moveId),
+      type: enemy.getMoveType(allMoves[moveId]),
     });
 
     /**

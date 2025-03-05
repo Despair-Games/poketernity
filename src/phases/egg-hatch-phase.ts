@@ -1,11 +1,10 @@
-import type { AnySound } from "#app/battle-scene";
+import type { AnySound } from "#app/audio-manager";
 import type { Egg } from "#app/data/egg";
 import { EggCountChangedEvent } from "#app/events/egg";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Phase } from "#app/phase";
-import { achvs } from "#app/system/achv";
 import EggCounterContainer from "#app/ui/egg-counter-container";
 import type EggHatchSceneHandler from "#app/ui/egg-hatch-scene-handler";
 import PokemonInfoContainer from "#app/ui/pokemon-info-container";
@@ -16,12 +15,15 @@ import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import type { EggLapsePhase } from "./egg-lapse-phase";
 import type { EggHatchData } from "#app/data/egg-hatch-data";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Class that represents egg hatching
  * @extends Phase
  */
 export class EggHatchPhase extends Phase {
+  override readonly id = PhaseId.EGG_HATCH;
+
   /** The egg that is hatching */
   private readonly egg: Egg;
   /** The new EggHatchData for the egg/pokemon that hatches */
@@ -72,6 +74,7 @@ export class EggHatchPhase extends Phase {
 
   constructor(hatchScene: EggLapsePhase, egg: Egg, eggsToHatchCount: number) {
     super();
+
     this.eggLapsePhase = hatchScene;
     this.egg = egg;
     this.eggsToHatchCount = eggsToHatchCount;
@@ -93,7 +96,7 @@ export class EggHatchPhase extends Phase {
 
       globalScene.gameData.eggs.splice(eggIndex, 1);
 
-      globalScene.fadeOutBgm(undefined, false);
+      globalScene.audioManager.fadeOutBgm(undefined, false);
 
       this.eggHatchHandler = globalScene.ui.getHandler() as EggHatchSceneHandler;
 
@@ -157,12 +160,7 @@ export class EggHatchPhase extends Phase {
 
       this.eggHatchContainer.add(this.infoContainer);
 
-      // The game will try to unfuse any Pokemon even though eggs should not generate fused Pokemon in the first place
       const pokemon = this.generatePokemon();
-      if (pokemon.fusionSpecies) {
-        console.warn("Egg generated fused pokemon!");
-        pokemon.clearFusionSpecies();
-      }
 
       this.pokemonSprite.setVisible(false);
 
@@ -173,7 +171,7 @@ export class EggHatchPhase extends Phase {
 
         globalScene.time.delayedCall(1000, () => {
           if (!this.hatched) {
-            this.evolutionBgm = globalScene.playSoundWithoutBgm("evolution");
+            this.evolutionBgm = globalScene.audioManager.playSoundWithoutBgm("evolution");
           }
         });
 
@@ -203,7 +201,7 @@ export class EggHatchPhase extends Phase {
                   if (this.hatched) {
                     return;
                   }
-                  globalScene.playSound("se/egg_crack");
+                  globalScene.audioManager.playSound("se/egg_crack");
                   this.doSpray(4);
                   this.eggCrackSprite.setFrame("3");
                   globalScene.time.delayedCall(125, () => this.eggCrackSprite.setFrame("4"));
@@ -239,7 +237,7 @@ export class EggHatchPhase extends Phase {
    */
   protected doEggShake(intensity: number, repeatCount: number = 0, count: number = 0): Promise<void> {
     return new Promise((resolve) => {
-      globalScene.playSound("se/pb_move");
+      globalScene.audioManager.playSound("se/pb_move");
       globalScene.tweens.add({
         targets: this.eggContainer,
         x: `-=${intensity / (count ? 1 : 2)}`,
@@ -301,7 +299,7 @@ export class EggHatchPhase extends Phase {
     }
     for (let e = 0; e < 5; e++) {
       globalScene.time.delayedCall(fixedNumber(375 * e), () =>
-        globalScene.playSound("se/egg_hatch", { volume: 1 - e * 0.2 }),
+        globalScene.audioManager.playSound("se/egg_hatch", { volume: 1 - e * 0.2 }),
       );
     }
     this.eggLightraysOverlay.setVisible(true);
@@ -330,19 +328,6 @@ export class EggHatchPhase extends Phase {
   protected doReveal(): void {
     // set the previous dex data so info container can show new unlocks in egg summary
     const isShiny = this.pokemon.isShiny();
-    if (this.pokemon.species.isSubLegendary()) {
-      globalScene.validateAchv(achvs.HATCH_SUB_LEGENDARY);
-    }
-    if (this.pokemon.species.isLegendary()) {
-      globalScene.validateAchv(achvs.HATCH_LEGENDARY);
-    }
-    if (this.pokemon.species.isMythical()) {
-      globalScene.validateAchv(achvs.HATCH_MYTHICAL);
-    }
-    if (isShiny) {
-      globalScene.validateAchv(achvs.HATCH_SHINY);
-    }
-
     this.eggContainer.setVisible(false);
 
     const spriteKey = this.pokemon.getSpriteKey(true);
@@ -368,7 +353,7 @@ export class EggHatchPhase extends Phase {
       globalScene.time.delayedCall(fixedNumber((isShiny ? 750 : 250) + (!this.skipped ? 1000 : 0)), () => {
         this.infoContainer.show(this.pokemon, false, this.skipped ? 2 : 1);
 
-        globalScene.playSoundWithoutBgm("evolution_fanfare");
+        globalScene.audioManager.playSoundWithoutBgm("evolution_fanfare");
 
         globalScene.ui.showText(
           i18next.t("egg:hatchFromTheEgg", { pokemonName: getPokemonNameWithAffix(this.pokemon) }),

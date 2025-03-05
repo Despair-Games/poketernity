@@ -6,7 +6,7 @@ import MessageUiHandler from "#app/ui/message-ui-handler";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-handler";
 import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigationMenu";
-import { addTextObject } from "#app/ui/text";
+import { addTextObject, setTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "#app/ui/ui-theme";
@@ -136,18 +136,9 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
       this.optionsContainer.add(this.settingLabels[i]);
       this.optionValueLabels.push(
         uiItem.options.map((option) => {
-          const valueLabel = addTextObject(
-            0,
-            0,
-            option.label,
-            option.value === settingsManager[this.category][uiItem.key]
-              ? TextStyle.SETTINGS_SELECTED
-              : TextStyle.SETTINGS_VALUE,
-          );
+          const valueLabel = addTextObject(0, 0, option.label, TextStyle.SETTINGS_VALUE);
           valueLabel.setOrigin(0, 0);
-
           this.optionsContainer.add(valueLabel);
-
           return valueLabel;
         }),
       );
@@ -169,26 +160,8 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
       }
     });
 
-    this.optionCursors = this.uiItems.map((uiItem) => {
-      const value = settingsManager[this.category][uiItem.key];
-      let index = 0;
-
-      if (value !== undefined) {
-        index = uiItem.options.findIndex((o) => {
-          return o.value === value;
-        });
-      }
-
-      if (index < 0) {
-        console.warn(
-          `Could not find index for ${uiItem.key}.`,
-          `\nExpected value: ${settingsManager[this.category][uiItem.key]}`,
-          `\nAvailable values:`,
-          uiItem.options,
-        );
-      }
-      return Math.max(index, 0);
-    });
+    // Treat all settings as having the first options selected. These get properly updated in show()
+    this.optionCursors = new Array(this.uiItems.length).fill(0);
 
     this.scrollBar = new ScrollBar(
       this.optionsBg.width - 9,
@@ -412,7 +385,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
     if (!this.cursorObj) {
       const cursorWidth = GAME_WIDTH - (this.scrollBar.visible ? 16 : 10);
-      this.cursorObj = globalScene.add.nineslice(0, 0, "summary_moves_cursor", undefined, cursorWidth, 16, 1, 1, 1, 1);
+      this.cursorObj = globalScene.add.nineslice(0, 0, "summary_moves_cursor", "select", cursorWidth, 16, 1, 1, 1, 1);
       this.cursorObj.setOrigin(0, 0);
       this.optionsContainer.add(this.cursorObj);
     }
@@ -440,8 +413,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
     const lastValueLabel = this.optionValueLabels[settingIndex][lastCursor];
     if (lastValueLabel) {
-      lastValueLabel.setColor(this.getTextColor(TextStyle.SETTINGS_VALUE));
-      lastValueLabel.setShadowColor(this.getTextColor(TextStyle.SETTINGS_VALUE, true));
+      setTextColor(lastValueLabel, TextStyle.SETTINGS_VALUE);
     } else {
       console.warn(
         "Could no determine lastValue label for ",
@@ -456,8 +428,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
 
     const newValueLabel = this.optionValueLabels[settingIndex][cursor];
     if (newValueLabel) {
-      newValueLabel.setColor(this.getTextColor(TextStyle.SETTINGS_SELECTED));
-      newValueLabel.setShadowColor(this.getTextColor(TextStyle.SETTINGS_SELECTED, true));
+      setTextColor(newValueLabel, TextStyle.SETTINGS_SELECTED);
     } else {
       console.warn(
         "Could no determine newValueLabel label for ",

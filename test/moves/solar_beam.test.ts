@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { WeatherType } from "#enums/weather-type";
 import { MoveResult } from "#enums/move-result";
@@ -43,12 +43,12 @@ describe("Moves - Solar Beam", () => {
 
     game.move.select(MoveId.SOLAR_BEAM);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(playerPokemon.getTag(BattlerTagType.CHARGING)).toBeDefined();
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
     expect(playerPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.OTHER);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(playerPokemon.getTag(BattlerTagType.CHARGING)).toBeUndefined();
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveHistory()).toHaveLength(2);
@@ -71,7 +71,7 @@ describe("Moves - Solar Beam", () => {
 
     game.move.select(MoveId.SOLAR_BEAM);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(playerPokemon.getTag(BattlerTagType.CHARGING)).toBeUndefined();
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
     expect(playerPokemon.getMoveHistory()).toHaveLength(2);
@@ -95,8 +95,8 @@ describe("Moves - Solar Beam", () => {
 
     game.move.select(MoveId.SOLAR_BEAM);
 
-    await game.phaseInterceptor.to("TurnEndPhase");
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
+    await game.toEndOfTurn();
     expect(solarBeam.calculateBattlePower).toHaveLastReturnedWith(60);
   });
 });

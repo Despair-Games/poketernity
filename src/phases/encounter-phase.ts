@@ -1,26 +1,21 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { NewBiomeEncounterPhase } from "#app/phases/new-biome-encounter-phase";
-import type { NextEncounterPhase } from "#app/phases/next-encounter-phase";
+import { type NewBiomeEncounterPhase } from "#app/phases/new-biome-encounter-phase";
+import { type NextEncounterPhase } from "#app/phases/next-encounter-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { BattlerIndex } from "#enums/battler-index";
-import { BattleType } from "#enums/battle-type";
-import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
-import { SyncEncounterNatureAbAttr } from "#app/data/ab-attrs/sync-encounter-nature-ab-attr";
+import { ME_WEIGHT_INCREMENT_ON_SPAWN_MISS, PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { initEncounterAnims, loadEncounterAnimAssets } from "#app/data/battle-anims";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
-import { ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants";
+import { initEncounterAnims } from "#app/data/init-encounter-anims";
 import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { doTrainerExclamation } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { getGoldenBugNetSpecies } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import { TrainerSlot } from "#enums/trainer-slot";
+import { getNatureName } from "#app/data/nature";
 import { getRandomWeatherType } from "#app/data/weather";
 import { EncounterPhaseEvent } from "#app/events/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
-import { FieldPosition } from "#enums/field-position";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import {
@@ -31,27 +26,34 @@ import {
   TurnHeldItemTransferModifier,
 } from "#app/modifier/modifier";
 import { regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
-import { ModifierPoolType } from "#enums/modifier-pool-type";
 import Overrides from "#app/overrides";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { CheckSwitchPhase } from "#app/phases/check-switch-phase";
-import { GameOverPhase } from "#app/phases/game-over-phase";
 import { PostSummonPhase } from "#app/phases/post-summon-phase";
 import { ReturnPhase } from "#app/phases/return-phase";
 import { ScanIvsPhase } from "#app/phases/scan-ivs-phase";
 import { ShinySparklePhase } from "#app/phases/shiny-sparkle-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achievements";
 import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
-import { Tutorial } from "#enums/tutorial";
-import { UiMode } from "#enums/ui-mode";
 import { randSeedInt, randSeedItem } from "#app/utils";
+import { loadEncounterAnimAssets } from "#app/utils/anim-utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { BattleType } from "#enums/battle-type";
+import { BattlerIndex } from "#enums/battler-index";
 import { Biome } from "#enums/biome";
+import { FieldPosition } from "#enums/field-position";
+import { ImagesFolder } from "#enums/images-folders";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
+import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { Species } from "#enums/species";
+import { TrainerSlot } from "#enums/trainer-slot";
+import { Tutorial } from "#enums/tutorial";
+import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { MysteryEncounterPhase } from "./mystery-encounter-phases/mystery-encounter-phase";
 
@@ -63,6 +65,9 @@ import { MysteryEncounterPhase } from "./mystery-encounter-phases/mystery-encoun
  * @extends BattlePhase
  */
 export class EncounterPhase extends BattlePhase {
+  /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode EncounterPhase} is extended by other phases */
+  override readonly id: PhaseId = PhaseId.ENCOUNTER;
+
   private readonly loaded: boolean;
 
   constructor(loaded: boolean = false) {
@@ -86,7 +91,7 @@ export class EncounterPhase extends BattlePhase {
 
     // Failsafe if players somehow skip floor 200 in classic mode
     if (gameMode.isClassic && waveIndex > 200) {
-      globalScene.unshiftPhase(new GameOverPhase());
+      globalScene.gameOver({ clearPhaseQueue: false });
     }
 
     const loadEnemyAssets: Promise<void>[] = [];
@@ -158,7 +163,7 @@ export class EncounterPhase extends BattlePhase {
             .slice(0, !double ? 1 : 2)
             .reverse()
             .forEach((playerPokemon) => {
-              applyAbAttrs(SyncEncounterNatureAbAttr, playerPokemon, false, currentBattle.enemyParty[e]);
+              applyAbAttrs(AbAttrFlag.SYNC_ENCOUNTER_NATURE, playerPokemon, false, currentBattle.enemyParty[e]);
             });
         }
       }
@@ -190,13 +195,31 @@ export class EncounterPhase extends BattlePhase {
 
       loadEnemyAssets.push(enemyPokemon.loadAssets());
 
+      const stats: string[] = [
+        `HP: ${enemyPokemon.stats[0]} (${enemyPokemon.ivs[0]})`,
+        ` Atk: ${enemyPokemon.stats[1]} (${enemyPokemon.ivs[1]})`,
+        ` Def: ${enemyPokemon.stats[2]} (${enemyPokemon.ivs[2]})`,
+        ` Spatk: ${enemyPokemon.stats[3]} (${enemyPokemon.ivs[3]})`,
+        ` Spdef: ${enemyPokemon.stats[4]} (${enemyPokemon.ivs[4]})`,
+        ` Spd: ${enemyPokemon.stats[5]} (${enemyPokemon.ivs[5]})`,
+      ];
+      const moveset: string[] = [];
+      enemyPokemon.getMoveset().forEach((move) => {
+        moveset.push(move.getName());
+      });
+
       console.log(
         `Pokemon: ${getPokemonNameWithAffix(enemyPokemon)}`,
-        `Species ID: ${enemyPokemon.species.speciesId}`,
-        `Stats: ${enemyPokemon.stats}`,
-        `Ability: ${enemyPokemon.getAbility().name}`,
-        `Passive Ability: ${enemyPokemon.getPassiveAbility().name}`,
+        `| Species ID: ${enemyPokemon.species.speciesId}`,
+        `| Nature: ${getNatureName(enemyPokemon.nature, true, true, true)}`,
       );
+      console.log(`Stats (IVs): ${stats}`);
+      console.log(
+        `Ability: ${enemyPokemon.getAbility().name}`,
+        `| Passive Ability${enemyPokemon.hasPassive() ? "" : " (inactive)"}: ${enemyPokemon.getPassiveAbility().name}`,
+        `${enemyPokemon.isBoss() ? `| Boss Bars: ${enemyPokemon.bossSegments}` : ""}`,
+      );
+      console.log("Moveset:", moveset);
       return true;
     });
 
@@ -219,7 +242,7 @@ export class EncounterPhase extends BattlePhase {
       loadEnemyAssets.push(
         new Promise<void>((resolve) => {
           globalScene.loadSe("GEN8- Exclaim", "battle_anims", "GEN8- Exclaim.wav");
-          globalScene.loadImage("encounter_exclaim", "mystery-encounters");
+          globalScene.loadImage("encounter_exclaim", ImagesFolder.BATTLE_ANIMS);
           load.once(Phaser.Loader.Events.COMPLETE, () => resolve());
           if (!load.isLoading()) {
             load.start();
@@ -302,7 +325,7 @@ export class EncounterPhase extends BattlePhase {
   }
 
   protected doEncounter(): void {
-    globalScene.playBgm(undefined, true);
+    globalScene.audioManager.playBgm(undefined, true);
     globalScene.updateModifiers(false);
     globalScene.setFieldScale(1);
 
@@ -407,7 +430,7 @@ export class EncounterPhase extends BattlePhase {
 
       const doSummon = (): void => {
         currentBattle.started = true;
-        globalScene.playBgm(undefined);
+        globalScene.audioManager.playBgm(undefined);
         pbTray.showPbTray(globalScene.getPlayerParty());
         pbTrayEnemy.showPbTray(globalScene.getEnemyParty());
         const doTrainerSummon = (): void => {

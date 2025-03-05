@@ -25,6 +25,7 @@ describe("Arena - Type Hazards", () => {
     game.override
       .battleType("single")
       .moveset([MoveId.STEALTH_ROCK, MoveId.G_MAX_STEELSURGE, MoveId.ROAR, MoveId.SPLASH])
+      .enemyLevel(100)
       .enemyMoveset(MoveId.SPLASH)
       .enemySpecies(Species.RAMPARDOS);
   });
@@ -74,7 +75,7 @@ describe("Arena - Type Hazards", () => {
     const enemy = game.scene.getEnemyParty()[0];
     const damage = enemy.getMaxHp() - enemy.hp;
     expect(damage).toBe(toDmgValue(enemy.getMaxHp() / 8));
-  }, 20000);
+  });
 
   it("should not damage opposing pokemon with magic guard", async () => {
     game.override.startingWave(5);
@@ -91,7 +92,7 @@ describe("Arena - Type Hazards", () => {
     const enemy = game.scene.getEnemyParty()[0];
     const damage = enemy.getMaxHp() - enemy.hp;
     expect(damage).toBe(0);
-  }, 20000);
+  });
 
   it("should respect type matchups", async () => {
     game.override.startingWave(5);
@@ -107,5 +108,5 @@ describe("Arena - Type Hazards", () => {
     const enemy = game.scene.getEnemyParty()[0];
     const damage = enemy.getMaxHp() - enemy.hp;
     expect(damage).toBe(toDmgValue(enemy.getMaxHp() / 4));
-  }, 20000);
+  });
 });

@@ -1,9 +1,9 @@
-import type { ModalConfig } from "./modal-ui-handler";
-import { ModalUiHandler } from "./modal-ui-handler";
+import type { ModalConfig } from "#app/ui/modal-ui-handler";
+import { ModalUiHandler } from "#app/ui/modal-ui-handler";
 import type { UiMode } from "#enums/ui-mode";
-import { addTextInputObject, addTextObject } from "./text";
+import { addTextInputObject, addTextObject, setTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
-import { addWindow } from "./ui-theme";
+import { addWindow } from "#app/ui/ui-theme";
 import { WindowVariant } from "#enums/window-variant";
 import type InputText from "phaser3-rex-plugins/plugins/inputtext";
 import { fixedNumber } from "#app/utils";
@@ -74,8 +74,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
       "",
       TextStyle.TOOLTIP_CONTENT,
     );
-    this.errorMessage.setColor(this.getTextColor(TextStyle.SUMMARY_PINK));
-    this.errorMessage.setShadowColor(this.getTextColor(TextStyle.SUMMARY_PINK, true));
+    setTextColor(this.errorMessage, TextStyle.SUMMARY_PINK);
     this.errorMessage.setVisible(false);
     this.modalContainer.add(this.errorMessage);
   }

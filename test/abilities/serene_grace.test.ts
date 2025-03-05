@@ -4,7 +4,7 @@ import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
 
@@ -43,9 +43,9 @@ describe("Abilities - Serene Grace", () => {
     vi.spyOn(airSlashFlinchAttr, "getMoveChance");
 
     game.move.select(MoveId.AIR_SLASH);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(airSlashFlinchAttr.getMoveChance).toHaveLastReturnedWith(60);
   });

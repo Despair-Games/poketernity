@@ -1,14 +1,15 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { MoveResult } from "#enums/move-result";
 import { BerryPhase } from "#app/phases/berry-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
-import type { MovePhase } from "#app/phases/move-phase";
+import { type MovePhase } from "#app/phases/move-phase";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { PhaseId } from "#enums/phase-id";
 
 describe("Moves - Shell Trap", () => {
   let phaserGame: Phaser.Game;
@@ -46,12 +47,12 @@ describe("Moves - Shell Trap", () => {
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SHELL_TRAP, 1);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
     await game.phaseInterceptor.to(MoveEndPhase);
 
     const movePhase = game.scene.getCurrentPhase();
-    expect(movePhase?.isMovePhase()).toBeTruthy();
+    expect(movePhase?.is<MovePhase>(PhaseId.MOVE)).toBeTruthy();
     expect((movePhase as MovePhase).pokemon).toBe(playerPokemon[1]);
 
     await game.phaseInterceptor.to(MoveEndPhase);
@@ -69,12 +70,12 @@ describe("Moves - Shell Trap", () => {
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SHELL_TRAP, 1);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
     await game.phaseInterceptor.to(MoveEndPhase);
 
     const movePhase = game.scene.getCurrentPhase();
-    expect(movePhase?.isMovePhase()).toBeTruthy();
+    expect(movePhase?.is<MovePhase>(PhaseId.MOVE)).toBeTruthy();
     expect((movePhase as MovePhase).pokemon).not.toBe(playerPokemon[1]);
 
     await game.phaseInterceptor.to(BerryPhase, false);
@@ -92,12 +93,12 @@ describe("Moves - Shell Trap", () => {
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SHELL_TRAP, 1);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
     await game.phaseInterceptor.to(MoveEndPhase);
 
     const movePhase = game.scene.getCurrentPhase();
-    expect(movePhase?.isMovePhase()).toBeTruthy();
+    expect(movePhase?.is<MovePhase>(PhaseId.MOVE)).toBeTruthy();
     expect((movePhase as MovePhase).pokemon).not.toBe(playerPokemon[1]);
 
     await game.phaseInterceptor.to(BerryPhase, false);
@@ -118,7 +119,7 @@ describe("Moves - Shell Trap", () => {
     await game.phaseInterceptor.to(MoveEndPhase);
 
     const movePhase = game.scene.getCurrentPhase();
-    expect(movePhase?.isMovePhase()).toBeTruthy();
+    expect(movePhase?.is<MovePhase>(PhaseId.MOVE)).toBeTruthy();
     expect((movePhase as MovePhase).pokemon).not.toBe(playerPokemon[1]);
 
     const enemyStartingHp = enemyPokemon.map((p) => p.hp);

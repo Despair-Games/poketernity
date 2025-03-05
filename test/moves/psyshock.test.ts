@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -39,7 +39,7 @@ describe("Moves - Psyshock", () => {
     const enemy = game.field.getEnemyPokemon();
 
     game.move.use(MoveId.PSYSHOCK);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(enemy.battleData.abilitiesApplied).toContain(Abilities.FUR_COAT);
   });

@@ -1,7 +1,8 @@
 import "vitest-canvas-mock";
 
 import { afterAll, beforeAll, vi } from "vitest";
-import { initTestFile } from "#test/testUtils/testFileInitialization";
+import { initDataForTests, initTestFile } from "#test/testUtils/testFileInitialization";
+import { MockConsole } from "#test/testUtils/mocks/mockConsole";
 
 //#region Mocking
 
@@ -63,6 +64,7 @@ vi.mock("#app/plugins/i18n", async (importOriginal) => {
 //#region
 
 global.testFailed = false;
+initDataForTests();
 
 beforeAll(() => {
   initTestFile();
@@ -70,5 +72,6 @@ beforeAll(() => {
 
 afterAll(() => {
   global.server.close();
+  MockConsole.printPostTestWarnings();
   console.log("Closing i18n MSW server!");
 });

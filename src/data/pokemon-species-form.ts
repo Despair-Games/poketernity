@@ -1,7 +1,7 @@
 import type { StarterMoveset } from "#app/@types/StarterData";
-import type { AnySound } from "#app/battle-scene";
+import type { AnySound } from "#app/audio-manager";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
-import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { type LevelMoves, pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";
 import { pokemonFormLevelMoves } from "./balance/pokemon-form-level-moves";
 import { speciesStarterCosts } from "#app/data/balance/starters";
@@ -18,7 +18,15 @@ import type { Stat } from "#enums/stat";
 import { argbFromRgba, QuantizerCelebi, rgbaFromArgb } from "@material/material-color-utilities";
 import type { ElementalType } from "#enums/elemental-type";
 
+//#region Types
+
+type PokemonSpeciesFormType = "PokemonSpeciesForm" | "PokemonForm" | "PokemonSpecies";
+
+//#endregion
+
 export abstract class PokemonSpeciesForm {
+  /** Identifier for the class. HAS NOTHING TO DO WITH {@linkcode type1} and {@linkcode type2}. The name is derived from {@linkcode Phaser.GameObjects.Container} */
+  public type: PokemonSpeciesFormType;
   public speciesId: Species;
   protected _formIndex: number;
   protected _generation: number;
@@ -58,6 +66,7 @@ export abstract class PokemonSpeciesForm {
     genderDiffs: boolean,
     isStarterSelectable: boolean,
   ) {
+    this.type = "PokemonSpeciesForm";
     this.type1 = type1;
     this.type2 = type2;
     this.height = height;
@@ -86,8 +95,8 @@ export abstract class PokemonSpeciesForm {
    */
   getRootSpeciesId(forStarter: boolean = false): Species {
     let ret = this.speciesId;
-    while (pokemonPrevolutions.hasOwnProperty(ret) && (!forStarter || !speciesStarterCosts.hasOwnProperty(ret))) {
-      ret = pokemonPrevolutions[ret];
+    while (pokemonPreEvolutions.hasOwnProperty(ret) && (!forStarter || !speciesStarterCosts.hasOwnProperty(ret))) {
+      ret = pokemonPreEvolutions[ret];
     }
     return ret;
   }
@@ -152,7 +161,7 @@ export abstract class PokemonSpeciesForm {
   }
 
   isObtainable(): boolean {
-    return this.generation <= 9 || pokemonPrevolutions.hasOwnProperty(this.speciesId);
+    return this.generation <= 9 || pokemonPreEvolutions.hasOwnProperty(this.speciesId);
   }
 
   isCatchable(): boolean {
@@ -457,7 +466,7 @@ export abstract class PokemonSpeciesForm {
     if (cry?.pendingRemove) {
       cry = null;
     }
-    cry = globalScene.playSound(cry ?? cryKey, soundConfig);
+    cry = globalScene.audioManager.playSound(cry ?? cryKey, soundConfig);
     if (ignorePlay) {
       cry.stop();
     }

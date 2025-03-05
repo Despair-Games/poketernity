@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { allAbilities } from "#app/data/ability";
+import { allAbilities } from "#app/data/data-lists";
 import { Abilities } from "#enums/abilities";
 import { WeatherType } from "#enums/weather-type";
 import { MoveId } from "#enums/move-id";
@@ -188,7 +188,7 @@ describe("Abilities - Forecast", () => {
     await game.classicMode.startBattle([Species.CASTFORM]);
 
     game.move.select(MoveId.RAIN_DANCE);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.getPlayerPokemon()?.formIndex).toBe(RAINY_FORM);
     expect(game.scene.getEnemyPokemon()?.formIndex).not.toBe(RAINY_FORM);
@@ -207,7 +207,7 @@ describe("Abilities - Forecast", () => {
 
     game.move.select(MoveId.SKILL_SWAP, 0, BattlerIndex.PLAYER_2);
     game.move.select(MoveId.SKILL_SWAP, 1, BattlerIndex.PLAYER);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(castform.formIndex).toBe(NORMAL_FORM);
@@ -219,7 +219,7 @@ describe("Abilities - Forecast", () => {
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.WORRY_SEED, 1, BattlerIndex.PLAYER);
-    await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("MoveEndPhase");
 
     expect(castform.formIndex).toBe(NORMAL_FORM);
@@ -234,10 +234,10 @@ describe("Abilities - Forecast", () => {
 
     // First turn - Forecast is suppressed
     game.move.select(MoveId.SPLASH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.move.forceHit();
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(castform.summonData.abilitySuppressed).toBe(true);
     expect(castform.formIndex).toBe(NORMAL_FORM);

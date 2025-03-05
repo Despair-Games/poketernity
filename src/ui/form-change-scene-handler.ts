@@ -6,6 +6,8 @@ import { Button } from "#enums/buttons";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT } from "#app/ui-constants";
+import { type EvolutionPhase } from "#app/phases/evolution-phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * A handler for Pokemon form change and evolution scenes
@@ -29,7 +31,7 @@ export default class FormChangeSceneHandler extends MessageUiHandler {
     this.container = globalScene.add.container(0, -GAME_HEIGHT);
     ui.add(this.container);
 
-    const messageBg = globalScene.add.sprite(0, 0, "bg", settings.display.uiWindowType);
+    const messageBg = globalScene.add.sprite(0, 0, "battle_message_box", settings.display.uiWindowStyle);
     messageBg.setOrigin(0, 1);
     messageBg.setVisible(false);
     ui.add(messageBg);
@@ -69,7 +71,7 @@ export default class FormChangeSceneHandler extends MessageUiHandler {
     if (this.canCancel && button === Button.CANCEL) {
       this.canCancel = false;
       const currentPhase = globalScene.getCurrentPhase();
-      if (currentPhase?.isEvolutionPhase()) {
+      if (currentPhase?.is<EvolutionPhase>(PhaseId.EVOLUTION)) {
         currentPhase.cancelEvolution();
       }
       return true;

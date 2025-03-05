@@ -1,5 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder, NumberHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { Stat } from "#enums/stat";
 import { AbAttr } from "./ab-attr";
 
@@ -15,6 +16,7 @@ export class FieldMultiplyStatAbAttr extends AbAttr {
 
   constructor(stat: Stat, multiplier: number, canStack: boolean = false) {
     super(false);
+    this._flags.add(AbAttrFlag.FIELD_MULTIPLY_STAT);
 
     this.stat = stat;
     this.multiplier = multiplier;
@@ -46,7 +48,7 @@ export class FieldMultiplyStatAbAttr extends AbAttr {
     if (
       this.stat === stat
       && checkedPokemon
-        .getAbilityAttrs(FieldMultiplyStatAbAttr)
+        .getAbilityAttrs(AbAttrFlag.FIELD_MULTIPLY_STAT)
         .every((attr) => (attr as FieldMultiplyStatAbAttr).stat !== stat)
     ) {
       statValue.value *= this.multiplier;

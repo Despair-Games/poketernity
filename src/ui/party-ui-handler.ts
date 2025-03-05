@@ -1,26 +1,25 @@
 import type { PlayerPokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
 import type { Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
-import { addBBCodeTextObject, addTextObject, getTextColor } from "#app/ui/text";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { BattleCommand } from "#enums/battle-command";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { UiMode } from "#enums/ui-mode";
-import { BooleanHolder, toReadableString, getLocalizedSpriteKey } from "#app/utils";
+import { BooleanHolder, toReadableString } from "#app/utils";
 import { type PokemonHeldItemModifier, type PokemonFormChangeItemModifier } from "#app/modifier/modifier";
-import { allMoves } from "#app/data/all-moves";
-import { getGenderColor, getGenderShadowColor, getGenderSymbol } from "#app/data/gender";
+import { allMoves } from "#app/data/data-lists";
+import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
 import { StatusEffect } from "#enums/status-effect";
 import PokemonIconAnimHandler from "#app/ui/pokemon-icon-anim-handler";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
 import { addWindow } from "#app/ui/ui-theme";
-import { SpeciesFormChangeItemTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
 import { FormChangeItem } from "#enums/form-change-item";
 import { getVariantTint } from "#app/data/variant";
 import { Button } from "#enums/buttons";
-import { applyChallenges } from "#app/data/challenge";
+import { applyChallenges } from "#app/utils/challenge-utils";
 import { ChallengeType } from "#enums/challenge-type";
 import MoveInfoOverlay from "#app/ui/move-info-overlay";
 import i18next from "i18next";
@@ -28,7 +27,7 @@ import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { getPokemonNameWithAffix } from "#app/messages";
-import type { CommandPhase } from "#app/phases/command-phase";
+import { type CommandPhase } from "#app/phases/command-phase";
 import { globalScene } from "#app/global-scene";
 import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
@@ -37,10 +36,14 @@ import { PartyOption } from "#enums/party-option";
 import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
 import type { PartySelectCallback } from "#app/@types/PartySelectCallback";
 import type { PartyModifierTransferSelectCallback } from "#app/@types/PartyModifierTransferSelectCallback";
-import type { PartyModifierSpliceSelectCallback } from "#app/@types/PartyModifierSpliceSelectCallback";
 import type { PokemonModifierTransferSelectFilter } from "#app/@types/PokemonModifierTransferSelectFilter";
 import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilter";
+import { PartyFilterAll } from "#app/utils/party-ui-utils";
+import { FilterAllMoves } from "#app/utils/move-utils";
 import { GAME_WIDTH } from "#app/ui-constants";
+import { CommonColor, ShadowColor } from "#enums/color";
+import { type SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import { PhaseId } from "#enums/phase-id";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
 
@@ -88,22 +91,6 @@ export default class PartyUiHandler extends MessageUiHandler {
 
   private blockInput: boolean;
 
-  private static FilterAll = (_pokemon: PlayerPokemon) => null;
-
-  public static FilterNonFainted = (pokemon: PlayerPokemon) => {
-    if (pokemon.isFainted()) {
-      return i18next.t("partyUiHandler:noEnergy", { pokemonName: getPokemonNameWithAffix(pokemon) });
-    }
-    return null;
-  };
-
-  public static FilterFainted = (pokemon: PlayerPokemon) => {
-    if (!pokemon.isFainted()) {
-      return i18next.t("partyUiHandler:hasEnergy", { pokemonName: getPokemonNameWithAffix(pokemon) });
-    }
-    return null;
-  };
-
   /**
    * For consistency reasons, this looks like the above filters. However this is used only internally and is always enforced for switching.
    * @param pokemon The pokemon to check.
@@ -117,8 +104,6 @@ export default class PartyUiHandler extends MessageUiHandler {
     }
     return null;
   };
-
-  private static FilterAllMoves = (_pokemonMove: PokemonMove) => null;
 
   public static FilterItemMaxStacks = (pokemon: PlayerPokemon, modifier: PokemonHeldItemModifier) => {
     const matchingModifier = globalScene.findModifier(
@@ -137,8 +122,6 @@ export default class PartyUiHandler extends MessageUiHandler {
     PartyOption.APPLY,
     PartyOption.RELEASE,
     PartyOption.TEACH,
-    PartyOption.SPLICE,
-    PartyOption.UNSPLICE,
     PartyOption.REVIVE,
     PartyOption.TRANSFER,
     PartyOption.UNPAUSE_EVOLUTION,
@@ -235,11 +218,9 @@ export default class PartyUiHandler extends MessageUiHandler {
 
     this.selectCallback = args.length > 2 && args[2] instanceof Function ? args[2] : undefined;
     this.selectFilter =
-      args.length > 3 && args[3] instanceof Function ? (args[3] as PokemonSelectFilter) : PartyUiHandler.FilterAll;
+      args.length > 3 && args[3] instanceof Function ? (args[3] as PokemonSelectFilter) : PartyFilterAll;
     this.moveSelectFilter =
-      args.length > 4 && args[4] instanceof Function
-        ? (args[4] as PokemonMoveSelectFilter)
-        : PartyUiHandler.FilterAllMoves;
+      args.length > 4 && args[4] instanceof Function ? (args[4] as PokemonMoveSelectFilter) : FilterAllMoves;
     this.tmMoveId = args.length > 5 && args[5] ? args[5] : MoveId.NONE;
     this.showMovePp = args.length > 6 && args[6];
 
@@ -341,7 +322,6 @@ export default class PartyUiHandler extends MessageUiHandler {
         } else if (
           (option !== PartyOption.SUMMARY
             && option !== PartyOption.UNPAUSE_EVOLUTION
-            && option !== PartyOption.UNSPLICE
             && option !== PartyOption.RELEASE
             && option !== PartyOption.CANCEL
             && option !== PartyOption.RENAME)
@@ -352,7 +332,7 @@ export default class PartyUiHandler extends MessageUiHandler {
             globalScene.findModifiers<PokemonHeldItemModifier>(
               (m) => m.isPokemonHeldItemModifier() && m.isTransferable && m.pokemonId === pokemon.id,
             );
-          if (option !== PartyOption.TRANSFER && option !== PartyOption.SPLICE) {
+          if (option !== PartyOption.TRANSFER) {
             filterResult = (this.selectFilter as PokemonSelectFilter)(pokemon);
             if (filterResult === null && (option === PartyOption.SEND_OUT || option === PartyOption.PASS_BATON)) {
               filterResult = this.FilterChallengeLegal(pokemon);
@@ -369,9 +349,7 @@ export default class PartyUiHandler extends MessageUiHandler {
             );
           }
           if (filterResult === null) {
-            if (this.partyUiMode !== PartyUiMode.SPLICE) {
-              this.clearOptions();
-            }
+            this.clearOptions();
             if (this.selectCallback && this.partyUiMode !== PartyUiMode.CHECK) {
               if (option === PartyOption.TRANSFER) {
                 if (this.transferCursor !== this.cursor) {
@@ -395,14 +373,6 @@ export default class PartyUiHandler extends MessageUiHandler {
                   }
                 }
                 this.clearTransfer();
-              } else if (this.partyUiMode === PartyUiMode.SPLICE) {
-                if (option === PartyOption.SPLICE) {
-                  (this.selectCallback as PartyModifierSpliceSelectCallback)(this.transferCursor, this.cursor);
-                  this.clearTransfer();
-                } else {
-                  this.startTransfer();
-                }
-                this.clearOptions();
               } else if (option === PartyOption.RELEASE) {
                 this.tryRelease(this.cursor);
               } else {
@@ -411,7 +381,10 @@ export default class PartyUiHandler extends MessageUiHandler {
                 selectCallback(this.cursor, option);
               }
             } else {
-              if (option >= PartyOption.FORM_CHANGE_ITEM && globalScene.getCurrentPhase()?.isSelectModifierPhase()) {
+              if (
+                option >= PartyOption.FORM_CHANGE_ITEM
+                && globalScene.getCurrentPhase()?.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER)
+              ) {
                 if (this.partyUiMode === PartyUiMode.CHECK) {
                   const formChangeItemModifiers = this.getFormChangeItemsModifiers(pokemon);
                   const modifier = formChangeItemModifiers[option - PartyOption.FORM_CHANGE_ITEM];
@@ -455,43 +428,6 @@ export default class PartyUiHandler extends MessageUiHandler {
             () => this.showText("", 0),
             null,
             true,
-          );
-        } else if (option === PartyOption.UNSPLICE) {
-          this.clearOptions();
-          ui.playSelect();
-          this.showText(
-            i18next.t("partyUiHandler:unspliceConfirmation", {
-              fusionName: pokemon.fusionSpecies?.name,
-              pokemonName: pokemon.name,
-            }),
-            null,
-            () => {
-              const options: ConfirmModeConfig = {
-                yesHandler: () => {
-                  const fusionName = pokemon.name;
-                  pokemon.unfuse().then(() => {
-                    this.clearPartySlots();
-                    this.populatePartySlots();
-                    ui.setMode(UiMode.PARTY);
-                    this.showText(
-                      i18next.t("partyUiHandler:wasReverted", { fusionName: fusionName, pokemonName: pokemon.name }),
-                      undefined,
-                      () => {
-                        ui.setMode(UiMode.PARTY);
-                        this.showText("", 0);
-                      },
-                      null,
-                      true,
-                    );
-                  });
-                },
-                noHandler: () => {
-                  ui.setMode(UiMode.PARTY);
-                  this.showText("", 0);
-                },
-              };
-              ui.setModeWithoutClear(UiMode.CONFIRM, options);
-            },
           );
         } else if (option === PartyOption.RELEASE) {
           this.clearOptions();
@@ -643,10 +579,7 @@ export default class PartyUiHandler extends MessageUiHandler {
         }
         return true;
       } else if (button === Button.CANCEL) {
-        if (
-          (this.partyUiMode === PartyUiMode.MODIFIER_TRANSFER || this.partyUiMode === PartyUiMode.SPLICE)
-          && this.transferMode
-        ) {
+        if (this.partyUiMode === PartyUiMode.MODIFIER_TRANSFER && this.transferMode) {
           this.clearTransfer();
           ui.playSelect();
         } else if (this.partyUiMode !== PartyUiMode.FAINT_SWITCH && this.partyUiMode !== PartyUiMode.REVIVAL_BLESSING) {
@@ -828,11 +761,6 @@ export default class PartyUiHandler extends MessageUiHandler {
           optionsMessage = i18next.t("partyUiHandler:changeQuantity");
         }
         break;
-      case PartyUiMode.SPLICE:
-        if (!this.transferMode) {
-          optionsMessage = i18next.t("partyUiHandler:selectAnotherPokemonToSplice");
-        }
-        break;
     }
 
     this.showText(optionsMessage, 0);
@@ -897,7 +825,7 @@ export default class PartyUiHandler extends MessageUiHandler {
             const isBatonPassMove =
               this.partyUiMode === PartyUiMode.FAINT_SWITCH
               && moveHistory.length
-              && allMoves[moveHistory[moveHistory.length - 1].moveId].getAttrs(ForceSwitchOutAttr)[0]?.isBatonPass()
+              && allMoves[moveHistory[moveHistory.length - 1].move.id].getAttrs(ForceSwitchOutAttr)[0]?.isBatonPass()
               && moveHistory[moveHistory.length - 1].result === MoveResult.SUCCESS;
 
             // isBatonPassMove and allowBatonModifierSwitch shouldn't ever be true
@@ -925,20 +853,11 @@ export default class PartyUiHandler extends MessageUiHandler {
         case PartyUiMode.MODIFIER_TRANSFER:
           this.options.push(PartyOption.TRANSFER);
           break;
-        case PartyUiMode.SPLICE:
-          if (this.transferMode) {
-            if (this.cursor !== this.transferCursor) {
-              this.options.push(PartyOption.SPLICE);
-            }
-          } else {
-            this.options.push(PartyOption.APPLY);
-          }
-          break;
         case PartyUiMode.RELEASE:
           this.options.push(PartyOption.RELEASE);
           break;
         case PartyUiMode.CHECK:
-          if (globalScene.getCurrentPhase()?.isSelectModifierPhase()) {
+          if (globalScene.getCurrentPhase()?.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER)) {
             formChangeItemModifiers = this.getFormChangeItemsModifiers(pokemon);
             for (let i = 0; i < formChangeItemModifiers.length; i++) {
               this.options.push(PartyOption.FORM_CHANGE_ITEM + i);
@@ -953,22 +872,12 @@ export default class PartyUiHandler extends MessageUiHandler {
       this.options.push(PartyOption.SUMMARY);
       this.options.push(PartyOption.RENAME);
 
-      if (
-        pokemonEvolutions.hasOwnProperty(pokemon.species.speciesId)
-        || (pokemon.isFusion()
-          && pokemon.fusionSpecies
-          && pokemonEvolutions.hasOwnProperty(pokemon.fusionSpecies.speciesId))
-      ) {
+      if (pokemonEvolutions.hasOwnProperty(pokemon.species.speciesId)) {
         this.options.push(PartyOption.UNPAUSE_EVOLUTION);
       }
 
       if (this.partyUiMode === PartyUiMode.SWITCH) {
-        if (pokemon.isFusion()) {
-          this.options.push(PartyOption.UNSPLICE);
-        }
         this.options.push(PartyOption.RELEASE);
-      } else if (this.partyUiMode === PartyUiMode.SPLICE && pokemon.isFusion()) {
-        this.options.push(PartyOption.UNSPLICE);
       }
     } else if (this.partyUiMode === PartyUiMode.MOVE_MODIFIER) {
       for (let m = 0; m < pokemon.moveset.length; m++) {
@@ -1080,8 +989,8 @@ export default class PartyUiHandler extends MessageUiHandler {
       const yCoord = -6 - 16 * o;
       const optionText = addBBCodeTextObject(0, yCoord - 16, optionName, TextStyle.WINDOW, { maxLines: 1 });
       if (altText) {
-        optionText.setColor("#40c8f8");
-        optionText.setShadowColor("#006090");
+        optionText.setColor(CommonColor.LIGHT_BLUE);
+        optionText.setShadowColor(ShadowColor.BLUE);
       }
       optionText.setOrigin(0, 0);
 
@@ -1098,7 +1007,7 @@ export default class PartyUiHandler extends MessageUiHandler {
 
         /** If the amount held is the maximum, display the count in red */
         if (this.transferQuantitiesMax[option] === itemModifier.getMaxHeldItemCount(undefined)) {
-          amountText = `[color=${getTextColor(TextStyle.SUMMARY_RED)}]${amountText}[/color]`;
+          amountText = getBBCodeFragment(amountText, TextStyle.SUMMARY_RED, true, true);
         }
 
         optionText.setText(optionName + amountText);
@@ -1167,7 +1076,7 @@ export default class PartyUiHandler extends MessageUiHandler {
         true,
       );
     } else {
-      this.showText(i18next.t("partyUihandler:cannotReleasePokemon"), null, () => this.showText("", 0), null, true);
+      this.showText(i18next.t("partyUiHandler:cannotReleasePokemon"), null, () => this.showText("", 0), null, true);
     }
   }
 
@@ -1247,7 +1156,6 @@ class PartySlot extends Phaser.GameObjects.Container {
   private pokemon: PlayerPokemon;
 
   private slotBg: Phaser.GameObjects.Image;
-  private slotPb: Phaser.GameObjects.Sprite;
   public slotName: Phaser.GameObjects.Text;
   public slotHpBar: Phaser.GameObjects.Image;
   public slotHpOverlay: Phaser.GameObjects.Sprite;
@@ -1295,16 +1203,10 @@ class PartySlot extends Phaser.GameObjects.Container {
 
     this.add(slotBg);
 
-    const slotPb = globalScene.add.sprite(
-      this.slotIndex >= battlerCount ? -85.5 : -51,
-      this.slotIndex >= battlerCount ? 0 : -20.5,
-      "party_pb",
-    );
-    this.slotPb = slotPb;
-
-    this.add(slotPb);
-
-    this.pokemonIcon = globalScene.addPokemonIcon(this.pokemon, slotPb.x, slotPb.y, 0.5, 0.5, true);
+    // TODO: positions/sizes should not use decimal values
+    const iconX = this.slotIndex >= battlerCount ? -85.5 : -51;
+    const iconY = this.slotIndex >= battlerCount ? 0 : -20.5;
+    this.pokemonIcon = globalScene.addPokemonIcon(this.pokemon, iconX, iconY, 0.5, 0.5, true);
 
     this.add(this.pokemonIcon);
 
@@ -1319,7 +1221,7 @@ class PartySlot extends Phaser.GameObjects.Container {
     const nameSizeTest = addTextObject(0, 0, displayName, TextStyle.PARTY);
     nameTextWidth = nameSizeTest.displayWidth;
 
-    while (nameTextWidth > (this.slotIndex >= battlerCount ? 52 : 76 - (this.pokemon.fusionSpecies ? 8 : 0))) {
+    while (nameTextWidth > (this.slotIndex >= battlerCount ? 52 : 76)) {
       displayName = `${displayName.slice(0, displayName.endsWith(".") ? -2 : -1).trimEnd()}.`;
       nameSizeTest.setText(displayName);
       nameTextWidth = nameSizeTest.displayWidth;
@@ -1354,34 +1256,23 @@ class PartySlot extends Phaser.GameObjects.Container {
 
     if (genderSymbol) {
       const slotGenderText = addTextObject(0, 0, genderSymbol, TextStyle.PARTY);
-      slotGenderText.setColor(getGenderColor(this.pokemon.getGender(true)));
-      slotGenderText.setShadowColor(getGenderShadowColor(this.pokemon.getGender(true)));
       if (this.slotIndex >= battlerCount) {
         slotGenderText.setPositionRelative(slotLevelLabel, 36, 0);
       } else {
-        slotGenderText.setPositionRelative(this.slotName, 76 - (this.pokemon.fusionSpecies ? 8 : 0), 3);
+        slotGenderText.setPositionRelative(this.slotName, 76, 3);
       }
       slotGenderText.setOrigin(0, 0.25);
+      setTextColor(slotGenderText, getGenderTextStyle(this.pokemon.getGender(true)));
 
       slotInfoContainer.add(slotGenderText);
     }
 
-    if (this.pokemon.fusionSpecies) {
-      const splicedIcon = globalScene.add.image(0, 0, "icon_spliced");
-      splicedIcon.setScale(0.5);
-      splicedIcon.setOrigin(0, 0);
-      if (this.slotIndex >= battlerCount) {
-        splicedIcon.setPositionRelative(slotLevelLabel, 36 + (genderSymbol ? 8 : 0), 0.5);
-      } else {
-        splicedIcon.setPositionRelative(this.slotName, 76, 3.5);
-      }
-
-      slotInfoContainer.add(splicedIcon);
-    }
-
-    if (this.pokemon.status) {
-      const statusIndicator = globalScene.add.sprite(0, 0, getLocalizedSpriteKey("statuses"));
-      statusIndicator.setFrame(StatusEffect[this.pokemon.status?.effect].toLowerCase());
+    if (this.pokemon.hasNonVolatileStatusEffect(false, true) || this.pokemon.isFainted()) {
+      const effectIconKey = this.pokemon.isFainted()
+        ? "faint"
+        : StatusEffect[this.pokemon.getStatusEffect(true)].toLowerCase();
+      const statusIndicator = globalScene.add.sprite(0, 0, "status_icons");
+      statusIndicator.setFrame(effectIconKey);
       statusIndicator.setOrigin(0, 0);
       statusIndicator.setPositionRelative(slotLevelLabel, this.slotIndex >= battlerCount ? 43 : 55, 0);
 
@@ -1389,23 +1280,12 @@ class PartySlot extends Phaser.GameObjects.Container {
     }
 
     if (this.pokemon.isShiny()) {
-      const doubleShiny = this.pokemon.isFusion() && this.pokemon.shiny && this.pokemon.fusionShiny;
-
-      const shinyStar = globalScene.add.image(0, 0, `shiny_star_small${doubleShiny ? "_1" : ""}`);
+      const shinyStar = globalScene.add.image(0, 0, `shiny_star_small`);
       shinyStar.setOrigin(0, 0);
       shinyStar.setPositionRelative(this.slotName, -9, 3);
-      shinyStar.setTint(getVariantTint(!doubleShiny ? this.pokemon.getVariant() : this.pokemon.variant));
+      shinyStar.setTint(getVariantTint(this.pokemon.getVariant()));
 
       slotInfoContainer.add(shinyStar);
-
-      if (doubleShiny) {
-        const fusionShinyStar = globalScene.add.image(0, 0, "shiny_star_small_2");
-        fusionShinyStar.setOrigin(0, 0);
-        fusionShinyStar.setPosition(shinyStar.x, shinyStar.y);
-        fusionShinyStar.setTint(getVariantTint(this.pokemon.fusionVariant));
-
-        slotInfoContainer.add(fusionShinyStar);
-      }
     }
 
     this.slotHpBar = globalScene.add.image(0, 0, "party_slot_hp_bar");
@@ -1479,7 +1359,6 @@ class PartySlot extends Phaser.GameObjects.Container {
     this.iconAnimHandler.addOrUpdate(this.pokemonIcon, PokemonIconAnimMode.ACTIVE);
 
     this.updateSlotTexture();
-    this.slotPb.setFrame("party_pb_sel");
   }
 
   deselect(): void {
@@ -1491,7 +1370,6 @@ class PartySlot extends Phaser.GameObjects.Container {
     this.iconAnimHandler.addOrUpdate(this.pokemonIcon, PokemonIconAnimMode.PASSIVE);
 
     this.updateSlotTexture();
-    this.slotPb.setFrame("party_pb");
   }
 
   setTransfer(transfer: boolean): void {
@@ -1516,7 +1394,6 @@ class PartyCancelButton extends Phaser.GameObjects.Container {
   private selected: boolean;
 
   private partyCancelBg: Phaser.GameObjects.Sprite;
-  private partyCancelPb: Phaser.GameObjects.Sprite;
 
   constructor(x: number, y: number) {
     super(globalScene, x, y);
@@ -1530,11 +1407,6 @@ class PartyCancelButton extends Phaser.GameObjects.Container {
 
     this.partyCancelBg = partyCancelBg;
 
-    const partyCancelPb = globalScene.add.sprite(-17, 0, "party_pb");
-    this.add(partyCancelPb);
-
-    this.partyCancelPb = partyCancelPb;
-
     const partyCancelText = addTextObject(-8, -7, i18next.t("partyUiHandler:cancel"), TextStyle.PARTY);
     this.add(partyCancelText);
   }
@@ -1547,7 +1419,6 @@ class PartyCancelButton extends Phaser.GameObjects.Container {
     this.selected = true;
 
     this.partyCancelBg.setFrame("party_cancel_sel");
-    this.partyCancelPb.setFrame("party_pb_sel");
   }
 
   deselect() {
@@ -1558,6 +1429,5 @@ class PartyCancelButton extends Phaser.GameObjects.Container {
     this.selected = false;
 
     this.partyCancelBg.setFrame("party_cancel");
-    this.partyCancelPb.setFrame("party_pb");
   }
 }

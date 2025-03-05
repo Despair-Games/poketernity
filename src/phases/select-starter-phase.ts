@@ -1,30 +1,31 @@
-import { applyChallenges } from "#app/data/challenge";
+import { applyChallenges } from "#app/utils/challenge-utils";
 import { ChallengeType } from "#enums/challenge-type";
-import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/species-form-change-triggers/species-form-change-move-learned-trigger";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { globalScene } from "#app/global-scene";
 import { overrideHeldItems, overrideModifiers } from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
-import { TitlePhase } from "#app/phases/title-phase";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import type { Starter } from "#app/ui/starter-select-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { Gender } from "#enums/gender";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
+import { PhaseId } from "#enums/phase-id";
 
 export class SelectStarterPhase extends Phase {
+  override readonly id = PhaseId.SELECT_STARTER;
+
   public override start(): void {
     super.start();
 
-    globalScene.playBgm("menu");
+    globalScene.audioManager.playBgm("menu");
 
     globalScene.ui.setMode(UiMode.STARTER_SELECT, (starters: Starter[]) => {
       globalScene.ui.clearText();
       globalScene.ui.setMode(UiMode.SAVE_SLOT, SaveSlotUiMode.SAVE, (slotId: number) => {
         if (slotId === -1) {
-          globalScene.clearPhaseQueue();
-          globalScene.pushPhase(new TitlePhase());
+          globalScene.toTitleScreen({ clearPhaseQueue: true });
           return this.end();
         }
         globalScene.sessionSlotId = slotId;
@@ -40,7 +41,7 @@ export class SelectStarterPhase extends Phase {
   public initBattle(starters: Starter[]): void {
     const { arena, gameMode, gameData, sound, time } = globalScene;
     const { dexData, gameStats } = gameData;
-    const { isClassic, isSplicedOnly } = gameMode;
+    const { isClassic } = gameMode;
 
     const party = globalScene.getPlayerParty();
     const loadPokemonAssets: Promise<void>[] = [];
@@ -98,10 +99,6 @@ export class SelectStarterPhase extends Phase {
         starterPokemon.nickname = nickname;
       }
 
-      if (isSplicedOnly || Overrides.STARTER_FUSION_OVERRIDE) {
-        starterPokemon.generateFusionSpecies(true);
-      }
-
       starterPokemon.setVisible(false);
       applyChallenges(gameMode, ChallengeType.STARTER_MODIFY, starterPokemon);
       party.push(starterPokemon);
@@ -113,7 +110,7 @@ export class SelectStarterPhase extends Phase {
 
     Promise.all(loadPokemonAssets).then(() => {
       SoundFade.fadeOut(globalScene, sound.get("menu"), 500, true);
-      time.delayedCall(500, () => globalScene.playBgm());
+      time.delayedCall(500, () => globalScene.audioManager.playBgm());
 
       if (isClassic) {
         gameStats.classicSessionsPlayed++;

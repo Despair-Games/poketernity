@@ -7,7 +7,7 @@ import i18next from "i18next";
 import { addTextObject } from "./text";
 import { TextStyle } from "#enums/text-style";
 import { addWindow } from "./ui-theme";
-import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
 import JSZip from "jszip";
@@ -230,12 +230,12 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
             },
           });
         }
-        globalScene.ui.setOverlayMode(UiMode.OPTION_SELECT, {
+        const optionSelectConfig: OptionSelectModeConfig = {
           options: options,
-          delay: 1000,
           xOffset: GAME_WIDTH,
           yOffset: GAME_HEIGHT - this.usernameInfoImage.displayHeight - 16 * dataKeys.length - 22,
-        });
+        };
+        globalScene.ui.setOverlayMode(UiMode.OPTION_SELECT, optionSelectConfig);
       } else {
         if (dataKeys.length > 2) {
           return onFail(this.ERR_TOO_MANY_SAVES);

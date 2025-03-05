@@ -1,6 +1,6 @@
-import type { ArenaTrapTag } from "#app/data/arena-tag";
+import type { EntryHazardTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
@@ -52,8 +52,8 @@ describe("Moves - Destiny Bond", () => {
     const playerPokemon = game.scene.getPlayerPokemon();
 
     game.move.select(moveToUse);
-    await game.setTurnOrder(enemyFirst);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.setTurnOrder(enemyFirst);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon?.isFainted()).toBe(true);
     expect(playerPokemon?.isFainted()).toBe(true);
@@ -70,7 +70,7 @@ describe("Moves - Destiny Bond", () => {
 
     // Turn 1: Enemy uses Destiny Bond and doesn't faint
     game.move.select(MoveId.SPLASH);
-    await game.setTurnOrder(playerFirst);
+    game.setTurnOrder(playerFirst);
     await game.toNextTurn();
 
     expect(enemyPokemon?.isFainted()).toBe(false);
@@ -78,8 +78,8 @@ describe("Moves - Destiny Bond", () => {
 
     // Turn 2: Player KO's the enemy before the enemy's turn
     game.move.select(moveToUse);
-    await game.setTurnOrder(playerFirst);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.setTurnOrder(playerFirst);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon?.isFainted()).toBe(true);
     expect(playerPokemon?.isFainted()).toBe(true);
@@ -96,7 +96,7 @@ describe("Moves - Destiny Bond", () => {
 
     // Turn 1: Enemy uses Destiny Bond and doesn't faint
     game.move.select(MoveId.SPLASH);
-    await game.setTurnOrder(enemyFirst);
+    game.setTurnOrder(enemyFirst);
     await game.toNextTurn();
 
     expect(enemyPokemon?.isFainted()).toBe(false);
@@ -104,8 +104,8 @@ describe("Moves - Destiny Bond", () => {
 
     // Turn 2: Enemy should fail Destiny Bond then get KO'd
     game.move.select(moveToUse);
-    await game.setTurnOrder(enemyFirst);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.setTurnOrder(enemyFirst);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon?.isFainted()).toBe(true);
     expect(playerPokemon?.isFainted()).toBe(false);
@@ -122,8 +122,8 @@ describe("Moves - Destiny Bond", () => {
     const playerPokemon = game.scene.getPlayerPokemon();
 
     game.move.select(moveToUse);
-    await game.setTurnOrder(enemyFirst);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.setTurnOrder(enemyFirst);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon?.isFainted()).toBe(true);
     expect(playerPokemon?.isFainted()).toBe(false);
@@ -140,17 +140,17 @@ describe("Moves - Destiny Bond", () => {
 
     // Turn 1: Enemy uses Destiny Bond and doesn't faint
     game.move.select(MoveId.SPORE);
-    await game.setTurnOrder(enemyFirst);
+    game.setTurnOrder(enemyFirst);
     await game.toNextTurn();
 
     expect(enemyPokemon?.isFainted()).toBe(false);
     expect(playerPokemon?.isFainted()).toBe(false);
-    expect(enemyPokemon?.status?.effect).toBe(StatusEffect.SLEEP);
+    expect(enemyPokemon?.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
 
     // Turn 2: Enemy should skip a turn due to sleep, then get KO'd
     game.move.select(moveToUse);
-    await game.setTurnOrder(enemyFirst);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.setTurnOrder(enemyFirst);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon?.isFainted()).toBe(true);
     expect(playerPokemon?.isFainted()).toBe(false);
@@ -168,8 +168,8 @@ describe("Moves - Destiny Bond", () => {
     // Shedinja uses Destiny Bond, then ally Bulbasaur KO's Shedinja with Crunch
     game.move.select(MoveId.DESTINY_BOND, 0);
     game.move.select(MoveId.CRUNCH, 1, BattlerIndex.PLAYER);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon0?.isFainted()).toBe(false);
     expect(enemyPokemon1?.isFainted()).toBe(false);
@@ -188,14 +188,14 @@ describe("Moves - Destiny Bond", () => {
     const playerPokemon = game.scene.getPlayerPokemon();
 
     game.move.select(moveToUse);
-    await game.setTurnOrder(enemyFirst);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.setTurnOrder(enemyFirst);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon?.isFainted()).toBe(true);
     expect(playerPokemon?.isFainted()).toBe(true);
 
     // Ceaseless Edge spikes effect should still activate
-    const tagAfter = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as ArenaTrapTag;
+    const tagAfter = game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY) as EntryHazardTag;
     expect(tagAfter.tagType).toBe(ArenaTagType.SPIKES);
     expect(tagAfter.layers).toBe(1);
   });
@@ -211,8 +211,8 @@ describe("Moves - Destiny Bond", () => {
 
     game.move.select(MoveId.GRASS_PLEDGE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.WATER_PLEDGE, 1, BattlerIndex.ENEMY);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon0?.isFainted()).toBe(true);
     expect(enemyPokemon1?.isFainted()).toBe(false);
@@ -220,8 +220,8 @@ describe("Moves - Destiny Bond", () => {
     expect(playerPokemon1?.isFainted()).toBe(true);
 
     // Pledge secondary effect should still activate
-    const tagAfter = game.scene.arena.getTagOnSide(ArenaTagType.GRASS_WATER_PLEDGE, ArenaTagSide.ENEMY) as ArenaTrapTag;
-    expect(tagAfter.tagType).toBe(ArenaTagType.GRASS_WATER_PLEDGE);
+    const tagAfter = game.scene.arena.getTagOnSide(ArenaTagType.GRASS_WATER_PLEDGE, ArenaTagSide.ENEMY);
+    expect(tagAfter?.tagType).toBe(ArenaTagType.GRASS_WATER_PLEDGE);
   });
 
   /**
@@ -238,8 +238,8 @@ describe("Moves - Destiny Bond", () => {
     const playerPokemon = game.scene.getPlayerPokemon();
 
     game.move.select(moveToUse);
-    await game.setTurnOrder(enemyFirst);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.setTurnOrder(enemyFirst);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon?.isFainted()).toBe(true);
     expect(playerPokemon?.isFainted()).toBe(true);

@@ -3,6 +3,7 @@ import type { BooleanHolder } from "#app/utils";
 import type { StatusEffect } from "#enums/status-effect";
 import type { ElementalType } from "#enums/elemental-type";
 import { AbAttr } from "./ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * If the defender is normally immune to a status effect due to its type, ignore that immunity.
@@ -15,6 +16,7 @@ export class IgnoreTypeStatusEffectImmunityAbAttr extends AbAttr {
 
   constructor(statusEffect: StatusEffect[], defenderType: ElementalType[]) {
     super(true);
+    this._flags.add(AbAttrFlag.IGNORE_TYPE_STATUS_EFFECT_IMMUNITY);
 
     this.statusEffect = statusEffect;
     this.defenderType = defenderType;

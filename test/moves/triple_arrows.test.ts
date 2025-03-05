@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
 import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
 import { Abilities } from "#enums/abilities";
@@ -43,7 +43,7 @@ describe("Moves - Triple Arrows", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.TRIPLE_ARROWS);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(flinchAttr.getMoveChance).toHaveReturnedWith(30);
     expect(defDropAttr.getMoveChance).toHaveReturnedWith(50);
@@ -54,7 +54,7 @@ describe("Moves - Triple Arrows", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.TRIPLE_ARROWS);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(flinchAttr.getMoveChance).toHaveReturnedWith(60);
     expect(defDropAttr.getMoveChance).toHaveReturnedWith(100);

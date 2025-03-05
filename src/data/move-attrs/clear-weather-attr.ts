@@ -19,7 +19,7 @@ export class ClearWeatherAttr extends MoveEffectAttr {
   }
 
   override applyEffect(_user: Pokemon, _target: Pokemon, _move: Move): boolean {
-    if (globalScene.arena.weather?.weatherType === this.weatherType) {
+    if (globalScene.arena.hasWeather(this.weatherType)) {
       return globalScene.arena.trySetWeather(WeatherType.NONE, true);
     }
 

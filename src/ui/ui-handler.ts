@@ -1,9 +1,6 @@
 import { globalScene } from "#app/global-scene";
-import type { TextStyle } from "#enums/text-style";
-import { getTextColor } from "./text";
 import type { UiMode } from "#enums/ui-mode";
 import type { Button } from "#enums/buttons";
-import { settings } from "#app/system/settings/settings-manager";
 import type AwaitableUiHandler from "#app/ui/awaitable-ui-handler";
 
 /**
@@ -33,10 +30,6 @@ export default abstract class UiHandler {
 
   getUi() {
     return globalScene.ui;
-  }
-
-  getTextColor(style: TextStyle, shadow: boolean = false): string {
-    return getTextColor(style, shadow, settings.display.uiTheme);
   }
 
   getCursor(): number {

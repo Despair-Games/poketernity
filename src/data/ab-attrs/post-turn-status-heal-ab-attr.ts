@@ -1,7 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { PokemonHealPhase } from "#app/phases/pokemon-heal-phase";
 import { toDmgValue } from "#app/utils";
 import type { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
@@ -13,27 +12,25 @@ import { PostTurnAbAttr } from "./post-turn-ab-attr";
  * @extends PostTurnAbAttr
  */
 export class PostTurnStatusHealAbAttr extends PostTurnAbAttr {
-  private readonly effects: StatusEffect[];
+  private readonly statusEffects: StatusEffect[];
 
   constructor(...effects: StatusEffect[]) {
     super(false);
 
-    this.effects = effects;
+    this.statusEffects = effects;
   }
 
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    if (pokemon.status && this.effects.includes(pokemon.status.effect)) {
+    if (pokemon.hasStatusEffect(this.statusEffects)) {
       if (!pokemon.isFullHp()) {
         if (!simulated) {
           const abilityName = this.source.name;
-          globalScene.unshiftPhase(
-            new PokemonHealPhase(pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 8), {
-              message: i18next.t("abilityTriggers:poisonHeal", {
-                pokemonName: getPokemonNameWithAffix(pokemon),
-                abilityName,
-              }),
+          globalScene.queuePokemonHeal(true, pokemon.getBattlerIndex(), toDmgValue(pokemon.getMaxHp() / 8), {
+            message: i18next.t("abilityTriggers:poisonHeal", {
+              pokemonName: getPokemonNameWithAffix(pokemon),
+              abilityName,
             }),
-          );
+          });
         }
         return true;
       }

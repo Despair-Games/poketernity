@@ -1,5 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { StatusEffect } from "#enums/status-effect";
 import { AbAttr } from "./ab-attr";
 
@@ -9,12 +10,13 @@ import { AbAttr } from "./ab-attr";
  * @extends AbAttr
  */
 export class BlockStatusDamageAbAttr extends AbAttr {
-  private readonly effects: StatusEffect[];
+  private readonly statusEffects: StatusEffect[];
 
   constructor(...effects: StatusEffect[]) {
     super(false);
+    this._flags.add(AbAttrFlag.BLOCK_STATUS_DAMAGE);
 
-    this.effects = effects;
+    this.statusEffects = effects;
   }
 
   /**
@@ -25,7 +27,7 @@ export class BlockStatusDamageAbAttr extends AbAttr {
    * @returns Returns `true` if status damage is blocked
    */
   override apply(pokemon: Pokemon, _simulated: boolean, cancelled: BooleanHolder): boolean {
-    if (pokemon.status && this.effects.includes(pokemon.status.effect)) {
+    if (pokemon.hasStatusEffect(this.statusEffects)) {
       cancelled.value = true;
       return true;
     }

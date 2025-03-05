@@ -3,10 +3,10 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
-import { type Move } from "../move";
-import { allMoves } from "#app/data/all-moves";
-import { targetMoveCopiableCondition, type MoveConditionFunc } from "../move-conditions";
-import { OverrideMoveEffectAttr } from "./override-move-effect-attr";
+import { type Move } from "#app/data/move";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { targetMoveCopiableCondition } from "#app/data/move-conditions/target-move-copiable-condition";
+import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
 
 /**
  * Attribute to copy the target's last used move into the user's moveset,
@@ -21,7 +21,7 @@ export class MovesetCopyMoveAttr extends OverrideMoveEffectAttr {
       return false;
     }
 
-    const copiedMove = allMoves[targetMoves[0].moveId];
+    const copiedMove = targetMoves[0];
 
     const thisMoveIndex = user.getMoveset().findIndex((m) => m.moveId === move.id);
 
@@ -30,10 +30,13 @@ export class MovesetCopyMoveAttr extends OverrideMoveEffectAttr {
     }
 
     user.summonData.moveset = user.getMoveset().slice(0);
-    user.summonData.moveset[thisMoveIndex] = new PokemonMove(copiedMove.id, 0, 0);
+    user.summonData.moveset[thisMoveIndex] = new PokemonMove(copiedMove.move.id, 0, 0);
 
     globalScene.queueMessage(
-      i18next.t("moveTriggers:copiedMove", { pokemonName: getPokemonNameWithAffix(user), moveName: copiedMove.name }),
+      i18next.t("moveTriggers:copiedMove", {
+        pokemonName: getPokemonNameWithAffix(user),
+        moveName: copiedMove.move?.name,
+      }),
     );
 
     return true;

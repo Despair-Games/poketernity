@@ -20,13 +20,14 @@ import { PokemonMove } from "#app/field/pokemon-move";
 import { NumberHolder, isNullOrUndefined, randSeedInt, randSeedShuffle } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
-import { allSpecies } from "#app/data/all-species";
-import { HiddenAbilityRateBoosterModifier, type PokemonHeldItemModifier } from "#app/modifier/modifier";
-import { achvs } from "#app/system/achv";
+import { allSpecies } from "#app/data/data-lists";
+import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
+import { HiddenAbilityRateBoosterModifier } from "#app/modifier/modifier";
+import { achvs } from "#app/system/achievements";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import i18next from "#app/plugins/i18n";
 import { doPokemonTransformationSequence } from "#app/data/mystery-encounters/utils/encounter-transformation-sequence";
 import { TransformationScreenPosition } from "#enums/transformation-screen-position";
@@ -116,7 +117,7 @@ export const WeirdDreamEncounter: MysteryEncounter = MysteryEncounterBuilder.wit
     return true;
   })
   .withOnVisualsStart(() => {
-    globalScene.fadeAndSwitchBgm("mystery_encounter_weird_dream");
+    globalScene.audioManager.fadeAndSwitchBgm("mystery_encounter_weird_dream");
     return true;
   })
   .withOption(
@@ -348,7 +349,7 @@ function getTeamTransformations(): PokemonTransformation[] {
       .getHeldItems()
       .filter((m) => !m.isPokemonFormChangeItemModifier());
 
-    const bst = removed.calculateBaseStats().reduce((a, b) => a + b, 0);
+    const bst = removed.getSpeciesForm().getBaseStatTotal();
     let newBstRange: [number, number];
     if (i < 2) {
       newBstRange = HIGH_BST_TRANSFORM_BASE_VALUES;
@@ -433,7 +434,7 @@ async function doNewTeamPostProcess(transformations: PokemonTransformation[]) {
 
   // If at least one new starter was unlocked, play 1 fanfare
   if (atLeastOneNewStarter) {
-    globalScene.playSound("level_up_fanfare");
+    globalScene.audioManager.playSound("level_up_fanfare");
   }
 }
 

@@ -6,11 +6,11 @@ import {
   leaveEncounterWithoutBattle,
   setEncounterExp,
   setEncounterRewards,
-  transitionMysteryEncounterIntroVisuals,
   generateModifierType,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 import type { AttackTypeBoosterModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
@@ -28,9 +28,9 @@ import { BattlerIndex } from "#enums/battler-index";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { MoveId } from "#enums/move-id";
-import { EncounterBattleAnim } from "#app/data/battle-anims";
+import { EncounterBattleAnim } from "#app/data/battle-anims/encounter-battle-anim";
 import { WeatherType } from "#enums/weather-type";
-import { isNullOrUndefined, randSeedInt } from "#app/utils";
+import { randSeedInt } from "#app/utils";
 import { StatusEffect } from "#enums/status-effect";
 import { queueEncounterMessage } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import {
@@ -228,10 +228,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
       }
 
       // Burn random member
-      const burnable = nonFireTypes.filter(
-        (p) =>
-          isNullOrUndefined(p.status) || isNullOrUndefined(p.status.effect) || p.status.effect === StatusEffect.NONE,
-      );
+      const burnable = nonFireTypes.filter((p) => p.canSetStatus(StatusEffect.BURN, true));
       if (burnable?.length > 0) {
         const roll = randSeedInt(burnable.length);
         const chosenPokemon = burnable[roll];

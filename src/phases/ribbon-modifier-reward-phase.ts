@@ -4,8 +4,11 @@ import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { ModifierRewardPhase } from "./modifier-reward-phase";
+import { PhaseId } from "#enums/phase-id";
 
 export class RibbonModifierRewardPhase extends ModifierRewardPhase {
+  override readonly id = PhaseId.RIBBON_MODIFIER_REWARD;
+
   private readonly species: PokemonSpecies;
 
   constructor(modifierTypeFunc: ModifierTypeFunc, species: PokemonSpecies) {
@@ -18,7 +21,7 @@ export class RibbonModifierRewardPhase extends ModifierRewardPhase {
     return new Promise<void>((resolve) => {
       const newModifier = this.modifierType.newModifier();
       globalScene.addModifier(newModifier);
-      globalScene.playSound("level_up_fanfare");
+      globalScene.audioManager.playSound("level_up_fanfare");
       globalScene.ui.setMode(UiMode.MESSAGE);
       globalScene.ui.showText(
         i18next.t("battle:beatModeFirstTime", {

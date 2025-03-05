@@ -5,10 +5,10 @@ import {
   leaveEncounterWithoutBattle,
   loadCustomMovesForEncounter,
   setEncounterRewards,
-  transitionMysteryEncounterIntroVisuals,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
@@ -23,10 +23,10 @@ import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-
 import i18next from "#app/plugins/i18n";
 import { ModifierTier } from "#enums/modifier-tier";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { MoveId } from "#enums/move-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import { MoveId } from "#enums/move-id";
 
 /** the i18n namespace for this encounter */
 const namespace = "mysteryEncounters/trashToTreasure";
@@ -124,7 +124,7 @@ export const TrashToTreasureEncounter: MysteryEncounter = MysteryEncounterBuilde
         const modifier = blackSludge?.newModifier();
         if (modifier) {
           globalScene.addModifier(modifier, false, false, false, true);
-          globalScene.playSound("battle_anims/PRSFX- Venom Drench", { volume: 2 });
+          globalScene.audioManager.playSound("battle_anims/PRSFX- Venom Drench", { volume: 2 });
           await showEncounterText(
             i18next.t("battle:rewardGain", { modifierName: modifier.type.name }),
             null,
@@ -215,7 +215,7 @@ async function tryApplyDigRewardItems() {
     }
   }
 
-  globalScene.playSound("item_fanfare");
+  globalScene.audioManager.playSound("item_fanfare");
   await showEncounterText(
     i18next.t("battle:rewardGainCount", { modifierName: leftovers.name, count: 2 }),
     null,
@@ -251,7 +251,7 @@ async function tryApplyDigRewardItems() {
     }
   }
 
-  globalScene.playSound("item_fanfare");
+  globalScene.audioManager.playSound("item_fanfare");
   await showEncounterText(
     i18next.t("battle:rewardGainCount", { modifierName: shellBell.name, count: 2 }),
     null,
@@ -261,12 +261,12 @@ async function tryApplyDigRewardItems() {
 }
 
 function doGarbageDig() {
-  globalScene.playSound("battle_anims/PRSFX- Dig2");
+  globalScene.audioManager.playSound("battle_anims/PRSFX- Dig2");
   globalScene.time.delayedCall(SOUND_EFFECT_WAIT_TIME, () => {
-    globalScene.playSound("battle_anims/PRSFX- Dig2");
-    globalScene.playSound("battle_anims/PRSFX- Venom Drench", { volume: 2 });
+    globalScene.audioManager.playSound("battle_anims/PRSFX- Dig2");
+    globalScene.audioManager.playSound("battle_anims/PRSFX- Venom Drench", { volume: 2 });
   });
   globalScene.time.delayedCall(SOUND_EFFECT_WAIT_TIME * 2, () => {
-    globalScene.playSound("battle_anims/PRSFX- Dig2");
+    globalScene.audioManager.playSound("battle_anims/PRSFX- Dig2");
   });
 }

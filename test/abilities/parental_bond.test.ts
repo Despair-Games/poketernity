@@ -9,7 +9,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { BattlerIndex } from "#enums/battler-index";
 
 describe("Abilities - Parental Bond", () => {
@@ -54,7 +54,7 @@ describe("Abilities - Parental Bond", () => {
     const firstStrikeDamage = enemyStartingHp - enemyPokemon.hp;
     enemyStartingHp = enemyPokemon.hp;
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     const secondStrikeDamage = enemyStartingHp - enemyPokemon.hp;
 
@@ -72,7 +72,7 @@ describe("Abilities - Parental Bond", () => {
 
     game.move.select(MoveId.POWER_UP_PUNCH);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.turnData.hitCount).toBe(2);
     expect(leadPokemon.getStatStage(Stat.ATK)).toBe(2);
@@ -87,7 +87,7 @@ describe("Abilities - Parental Bond", () => {
 
     game.move.select(MoveId.BABY_DOLL_EYES);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(-1);
   });
@@ -102,7 +102,7 @@ describe("Abilities - Parental Bond", () => {
     game.move.select(MoveId.DOUBLE_HIT);
     await game.move.forceHit();
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.turnData.hitCount).toBe(2);
   });
@@ -144,7 +144,7 @@ describe("Abilities - Parental Bond", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.DRAGON_RAGE);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp() - 80);
   });
@@ -163,7 +163,7 @@ describe("Abilities - Parental Bond", () => {
 
     const playerDamage = leadPokemon.getMaxHp() - leadPokemon.hp;
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp() - 4 * playerDamage);
   });
@@ -180,7 +180,7 @@ describe("Abilities - Parental Bond", () => {
     game.move.select(MoveId.EARTHQUAKE);
     game.move.select(MoveId.EARTHQUAKE, 1);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     playerPokemon.forEach((p) => expect(p.turnData.hitCount).toBe(1));
   });
@@ -212,7 +212,7 @@ describe("Abilities - Parental Bond", () => {
     expect(leadPokemon.turnData.hitCount).toBe(2);
 
     // This test will time out if the user faints
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.hp).toBe(Math.ceil(leadPokemon.getMaxHp() / 2));
   });
@@ -233,7 +233,7 @@ describe("Abilities - Parental Bond", () => {
     expect(enemyPokemon.hp).toBeGreaterThan(0);
     expect(leadPokemon.isOfType(ElementalType.FIRE)).toBe(true);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.isOfType(ElementalType.FIRE)).toBe(false);
   });
@@ -289,7 +289,7 @@ describe("Abilities - Parental Bond", () => {
     expect(leadPokemon.turnData.hitCount).toBe(2);
     expect(leadPokemon.getTag(BattlerTagType.RECHARGING)).toBeUndefined();
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(leadPokemon.getTag(BattlerTagType.RECHARGING)).toBeDefined();
   });
@@ -313,7 +313,7 @@ describe("Abilities - Parental Bond", () => {
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemyPokemon.getTag(BattlerTagType.TRAPPED)).toBeDefined();
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getTag(BattlerTagType.TRAPPED)).toBeDefined();
   });
@@ -334,7 +334,7 @@ describe("Abilities - Parental Bond", () => {
     expect(leadPokemon.turnData.hitCount).toBe(2);
     expect(enemyPokemon.getTag(BattlerTagType.IGNORE_FLYING)).toBeUndefined();
 
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getTag(BattlerTagType.IGNORE_FLYING)).toBeDefined();
   });
@@ -370,11 +370,11 @@ describe("Abilities - Parental Bond", () => {
     await game.phaseInterceptor.to("DamageAnimPhase");
 
     expect(leadPokemon.turnData.hitCount).toBe(2);
-    expect(enemyPokemon.status?.effect).toBe(StatusEffect.SLEEP);
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
-    expect(enemyPokemon.status?.effect).toBeUndefined();
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
 
   it("should not cause user to hit into King's Shield more than once", async () => {
@@ -387,7 +387,7 @@ describe("Abilities - Parental Bond", () => {
 
     game.move.select(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.getStatStage(Stat.ATK)).toBe(-1);
   });
@@ -402,7 +402,7 @@ describe("Abilities - Parental Bond", () => {
 
     game.move.select(MoveId.WATER_GUN);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(1);
   });
@@ -438,7 +438,7 @@ describe("Abilities - Parental Bond", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.SECRET_POWER);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("MoveEndPhase");
 
     await game.phaseInterceptor.to("MoveEffectPhase");

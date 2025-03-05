@@ -1,9 +1,10 @@
 import { Gender } from "#enums/gender";
+import { TextStyle } from "#enums/text-style";
 
 /**
  * Gets the gender symbol for an associated gender
- * @param gender - The {@linkcode Gender} being checked
- * @returns - The associated symbol
+ * @param gender The {@linkcode Gender} being checked
+ * @returns The associated symbol
  */
 export function getGenderSymbol(gender: Gender) {
   switch (gender) {
@@ -16,31 +17,16 @@ export function getGenderSymbol(gender: Gender) {
 }
 
 /**
- * Gets a color for a gender
- * @param gender - The {@linkcode Gender}
- * @returns a hex representation of color
+ * Gets the {@linkcode TextStyle} for an associated gender
+ * @param gender The {@linkcode Gender} being checked
+ * @returns The associated text style
  */
-export function getGenderColor(gender: Gender) {
+export function getGenderTextStyle(gender: Gender): TextStyle {
   switch (gender) {
     case Gender.MALE:
-      return "#40c8f8"; // light blue
+      return TextStyle.GENDER_MALE;
     case Gender.FEMALE:
-      return "#f89890"; // pink
+      return TextStyle.GENDER_FEMALE;
   }
-  return "#ffffff"; // White
-}
-
-/**
- * Gets a color for a gender shadow
- * @param gender - The {@linkcode Gender}
- * @returns a hex representation of color
- */
-export function getGenderShadowColor(gender: Gender) {
-  switch (gender) {
-    case Gender.MALE:
-      return "#006090"; // Dark blue
-    case Gender.FEMALE:
-      return "#984038"; // Red
-  }
-  return "#ffffff"; // White
+  return TextStyle.SUMMARY;
 }

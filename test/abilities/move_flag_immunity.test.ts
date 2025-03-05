@@ -6,7 +6,7 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveResult } from "#enums/move-result";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 
 describe("Ability Attribute - Move Flag Immunity", () => {
   let phaserGame: Phaser.Game;
@@ -62,7 +62,7 @@ describe("Ability Attribute - Move Flag Immunity", () => {
 
       game.move.select(MoveId.SPLASH);
       await game.move.forceHit();
-      await game.phaseInterceptor.to("BerryPhase");
+      await game.toEndOfTurn();
 
       const lastEnemyMove = enemyPokemon.getLastXMoves()[0];
       expect(lastEnemyMove.result).toBe(MoveResult.FAIL);

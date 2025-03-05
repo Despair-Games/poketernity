@@ -3,7 +3,7 @@ import Phaser from "phaser";
 import { GameManager } from "#test/testUtils/gameManager";
 import { Species } from "#enums/species";
 import { MoveId } from "#enums/move-id";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 
 describe("Moves - Retaliate", () => {
   let phaserGame: Phaser.Game;
@@ -37,7 +37,7 @@ describe("Moves - Retaliate", () => {
     vi.spyOn(retaliate, "calculateBattlePower");
     await game.startBattle([Species.ABRA, Species.COBALION]);
     game.move.select(MoveId.RETALIATE);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(retaliate.calculateBattlePower).toHaveLastReturnedWith(70);
     game.doSelectPartyPokemon(1);
 

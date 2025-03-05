@@ -6,7 +6,7 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect, vi } from "vitest";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import type { Move } from "#app/data/move";
 import { BattlerIndex } from "#enums/battler-index";
 
@@ -60,7 +60,7 @@ describe("Moves - Flail", () => {
     playerPokemon.hp = 10 * hpRatio;
 
     game.move.select(MoveId.FLAIL, 0);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     expect((game.scene.getCurrentPhase() as MoveEffectPhase).move.moveId).toBe(flail.id);

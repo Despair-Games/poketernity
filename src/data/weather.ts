@@ -1,14 +1,20 @@
 import { Biome } from "#enums/biome";
-import { getPokemonNameWithAffix } from "../messages";
-import type { Pokemon } from "../field/pokemon";
+import { getPokemonNameWithAffix } from "#app/messages";
+import type { Pokemon } from "#app/field/pokemon";
 import { ElementalType } from "#enums/elemental-type";
-import type { Move } from "./move";
+import type { Move } from "#app/data/move";
 import { randSeedInt } from "#app/utils";
-import { SuppressWeatherEffectAbAttr } from "./ab-attrs/suppress-weather-effect-ab-attr";
+import { type SuppressWeatherEffectAbAttr } from "#app/data/ab-attrs/suppress-weather-effect-ab-attr";
 import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 import type { Arena } from "#app/field/arena";
 import { WeatherType } from "#enums/weather-type";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+
+/**
+ * Weather types that are associated with the primal forms of the Generation III cover legendaries and cannot be overwritten by weaker weather types
+ */
+export const PRIMAL_WEATHER = Object.freeze([WeatherType.HARSH_SUN, WeatherType.HEAVY_RAIN, WeatherType.STRONG_WINDS]);
 
 /**
  * Class representing Weather effects
@@ -19,9 +25,9 @@ export class Weather {
   public weatherType: WeatherType;
   public turnsLeft: number;
 
-  constructor(weatherType: WeatherType, turnsLeft?: number) {
+  constructor(weatherType: WeatherType, turnsLeft: number = 0) {
     this.weatherType = weatherType;
-    this.turnsLeft = !this.isImmutable() ? turnsLeft || 0 : 0;
+    this.turnsLeft = !this.isPrimal() ? turnsLeft : 0;
   }
 
   /**
@@ -29,7 +35,7 @@ export class Weather {
    * @returns false if turnsLeft is set to 0. True otherwise
    */
   lapse(): boolean {
-    if (this.isImmutable()) {
+    if (this.isPrimal()) {
       return true;
     }
     if (this.turnsLeft) {
@@ -43,15 +49,8 @@ export class Weather {
    * Checks if the weather is immutable (heavy rain, harsh sun, or strong winds)
    * @returns true if {@linkcode WeatherType} is immutable, false otherwise
    */
-  isImmutable(): boolean {
-    switch (this.weatherType) {
-      case WeatherType.HEAVY_RAIN:
-      case WeatherType.HARSH_SUN:
-      case WeatherType.STRONG_WINDS:
-        return true;
-    }
-
-    return false;
+  isPrimal(): boolean {
+    return PRIMAL_WEATHER.includes(this.weatherType);
   }
 
   /**
@@ -59,13 +58,7 @@ export class Weather {
    * @returns true for sandstorm or hail, false otherwise
    */
   isDamaging(): boolean {
-    switch (this.weatherType) {
-      case WeatherType.SANDSTORM:
-      case WeatherType.HAIL:
-        return true;
-    }
-
-    return false;
+    return [WeatherType.SANDSTORM, WeatherType.HAIL].includes(this.weatherType);
   }
 
   /**
@@ -150,13 +143,13 @@ export class Weather {
     for (const pokemon of field) {
       let suppressWeatherEffectAbAttr: SuppressWeatherEffectAbAttr | null = pokemon
         .getAbility()
-        .getAttrs(SuppressWeatherEffectAbAttr)[0];
+        .getAttrs<SuppressWeatherEffectAbAttr>(AbAttrFlag.SUPPRESS_WEATHER_EFFECT)[0];
       if (!suppressWeatherEffectAbAttr) {
         suppressWeatherEffectAbAttr = pokemon.hasPassive()
-          ? pokemon.getPassiveAbility().getAttrs(SuppressWeatherEffectAbAttr)[0]
+          ? pokemon.getPassiveAbility().getAttrs<SuppressWeatherEffectAbAttr>(AbAttrFlag.SUPPRESS_WEATHER_EFFECT)[0]
           : null;
       }
-      if (suppressWeatherEffectAbAttr && (!this.isImmutable() || suppressWeatherEffectAbAttr.affectsImmutable)) {
+      if (suppressWeatherEffectAbAttr && (!this.isPrimal() || suppressWeatherEffectAbAttr.affectsPrimal)) {
         return true;
       }
     }

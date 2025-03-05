@@ -6,9 +6,13 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { toDmgValue } from "#app/utils";
 import type { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-import { BlockNonDirectDamageAbAttr } from "./block-non-direct-damage-ab-attr";
 import { PostWeatherLapseAbAttr } from "./post-weather-lapse-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
+/**
+ * Ability attribute that inflicts damage on the ability holder in certain weather conditions
+ * Used by the abilities Dry Skin and Solar Power, which both inflict 1/8 of the ability holder's HP in sun or harsh sun
+ */
 export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
   private readonly damageFactor: number;
 
@@ -19,7 +23,7 @@ export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
   }
 
   override apply(pokemon: Pokemon, simulated: boolean, _weather: Weather): boolean {
-    if (pokemon.hasAbilityWithAttr(BlockNonDirectDamageAbAttr)) {
+    if (pokemon.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)) {
       return false;
     }
 
@@ -31,7 +35,7 @@ export class PostWeatherLapseDamageAbAttr extends PostWeatherLapseAbAttr {
           abilityName,
         }),
       );
-      pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / (16 / this.damageFactor)), HitResult.OTHER);
+      pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() * this.damageFactor), HitResult.OTHER);
     }
 
     return true;

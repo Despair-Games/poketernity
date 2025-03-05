@@ -16,6 +16,8 @@ import { TrainerVariant } from "#enums/trainer-variant";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { settings } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { ImagesFolder } from "#enums/images-folders";
+import { CommonColor } from "#enums/color";
 
 export type RunSelectCallback = (cursor: number) => void;
 
@@ -64,12 +66,12 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
 
     this.runs = [];
 
-    globalScene.loadImage("hall_of_fame_red", "ui");
-    globalScene.loadImage("hall_of_fame_blue", "ui");
+    globalScene.loadImage("hall_of_fame_red", ImagesFolder.UI);
+    globalScene.loadImage("hall_of_fame_blue", ImagesFolder.UI);
     // For some reason, the game deletes/unloads the rival sprites. As a result, Run Info cannot access the rival sprites.
     // The rivals are loaded here to have some way of accessing those sprites.
-    globalScene.loadAtlas("rival_f", "trainer");
-    globalScene.loadAtlas("rival_m", "trainer");
+    globalScene.loadAtlas("rival_f", ImagesFolder.TRAINER);
+    globalScene.loadAtlas("rival_m", ImagesFolder.TRAINER);
   }
 
   override show(args: any[]): boolean {
@@ -314,10 +316,10 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
             20,
             `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(enemy.level, 1000)}`,
             TextStyle.PARTY,
-            { fontSize: "54px", color: "#f8f8f8" },
+            { fontSize: "54px", color: CommonColor.OFF_WHITE },
           );
           enemyLevel.setShadow(0, 0, undefined);
-          enemyLevel.setStroke("#424242", 14);
+          enemyLevel.setStroke(CommonColor.DARK_GREY, 14);
           enemyLevel.setOrigin(1, 0);
           enemyIconContainer.add(enemyIcon);
           enemyIconContainer.add(enemyLevel);
@@ -355,15 +357,12 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
     }
 
     // Game Mode + Waves
-    // Because Endless (Spliced) tends to have the longest name across languages, the line tends to spill into the party icons.
-    // To fix this, the Spliced icon is used to indicate an Endless Spliced run
     const gameModeLabel = addTextObject(8, 19, "", TextStyle.WINDOW);
     let mode = "";
     switch (data.gameMode) {
       case GameModes.DAILY:
         mode = i18next.t("gameMode:dailyRun");
         break;
-      case GameModes.SPLICED_ENDLESS:
       case GameModes.ENDLESS:
         mode = i18next.t("gameMode:endless");
         break;
@@ -375,17 +374,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
         break;
     }
     gameModeLabel.appendText(mode, false);
-    if (data.gameMode === GameModes.SPLICED_ENDLESS) {
-      const splicedIcon = globalScene.add.image(0, 0, "icon_spliced");
-      splicedIcon.setScale(0.75);
-      const coords = gameModeLabel.getTopRight();
-      splicedIcon.setPosition(coords.x + 5, 27);
-      this.add(splicedIcon);
-      // 4 spaces of room for the Spliced icon
-      gameModeLabel.appendText("    - ", false);
-    } else {
-      gameModeLabel.appendText(" - ", false);
-    }
+    gameModeLabel.appendText(" - ", false);
     gameModeLabel.appendText(i18next.t("saveSlotSelectUiHandler:wave") + " " + data.waveIndex, false);
     this.add(gameModeLabel);
 
@@ -408,10 +397,10 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
         20,
         `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(pokemon.level, 1000)}`,
         TextStyle.PARTY,
-        { fontSize: "54px", color: "#f8f8f8" },
+        { fontSize: "54px", color: CommonColor.OFF_WHITE },
       );
       text.setShadow(0, 0, undefined);
-      text.setStroke("#424242", 14);
+      text.setStroke(CommonColor.DARK_GREY, 14);
       text.setOrigin(1, 0);
 
       iconContainer.add(icon);

@@ -3,7 +3,7 @@ import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { MoveFlags } from "#enums/move-flags";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -41,7 +41,7 @@ describe("Abilities - Mega Launcher", () => {
     enemyPokemon.hp = 1;
     const pulseMove = allMoves[MoveId.HEAL_PULSE];
     game.move.select(MoveId.HEAL_PULSE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(pulseMove.checkFlag(MoveFlags.PULSE_MOVE, playerPokemon, null)).toBe(true);
     expect(enemyPokemon.hp - 1).toBe(enemyHpRecovered);

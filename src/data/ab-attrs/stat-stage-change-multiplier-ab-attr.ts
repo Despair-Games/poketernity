@@ -1,5 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbAttr } from "./ab-attr";
 
 export class StatStageChangeMultiplierAbAttr extends AbAttr {
@@ -7,6 +8,7 @@ export class StatStageChangeMultiplierAbAttr extends AbAttr {
 
   constructor(multiplier: number) {
     super(true);
+    this._flags.add(AbAttrFlag.STAT_STAGE_CHANGE_MULTIPLIER);
 
     this.multiplier = multiplier;
   }

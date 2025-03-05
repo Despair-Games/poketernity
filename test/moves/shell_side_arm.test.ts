@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { ShellSideArmCategoryAttr } from "#app/data/move-attrs/shell-side-arm-category-attr";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
@@ -98,8 +98,8 @@ describe("Moves - Shell Side Arm", () => {
     await game.toNextTurn();
 
     game.move.select(MoveId.SHELL_SIDE_ARM);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    await game.toEndOfTurn();
 
     expect(shellSideArmAttr.apply).toHaveLastReturnedWith(false);
   });
@@ -115,7 +115,7 @@ describe("Moves - Shell Side Arm", () => {
     vi.spyOn(enemy, "stats", "get").mockReturnValue([100, 100, 75, 100, 100, 100]);
 
     game.move.select(MoveId.SHELL_SIDE_ARM);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(shellSideArmAttr.apply).toHaveLastReturnedWith(true);
   });

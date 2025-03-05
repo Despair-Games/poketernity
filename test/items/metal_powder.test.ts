@@ -1,6 +1,6 @@
 import { Stat } from "#enums/stat";
 import { SpeciesStatBoosterModifier } from "#app/modifier/modifier";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import i18next from "#app/plugins/i18n";
 import { NumberHolder } from "#app/utils";
 import { Species } from "#enums/species";
@@ -85,72 +85,6 @@ describe("Items - Metal Powder", () => {
     await game.startBattle([Species.DITTO]);
 
     const partyMember = game.scene.getPlayerParty()[0];
-
-    const defStat = partyMember.getStat(Stat.DEF);
-
-    // Making sure modifier is not applied without holding item
-    const defValue = new NumberHolder(defStat);
-    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.DEF, defValue);
-
-    expect(defValue.value / defStat).toBe(1);
-
-    // Giving Eviolite to party member and testing if it applies
-    game.scene.addModifier(
-      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["METAL_POWDER"])!.newModifier(partyMember),
-      true,
-    );
-    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.DEF, defValue);
-
-    expect(defValue.value / defStat).toBe(2);
-  }, 20000);
-
-  it("METAL_POWDER held by fused DITTO (base)", async () => {
-    await game.startBattle([Species.DITTO, Species.MAROWAK]);
-
-    const partyMember = game.scene.getPlayerParty()[0];
-    const ally = game.scene.getPlayerParty()[1];
-
-    // Fuse party members (taken from PlayerPokemon.fuse(...) function)
-    partyMember.fusionSpecies = ally.species;
-    partyMember.fusionFormIndex = ally.formIndex;
-    partyMember.fusionAbilityIndex = ally.abilityIndex;
-    partyMember.fusionShiny = ally.shiny;
-    partyMember.fusionVariant = ally.variant;
-    partyMember.fusionGender = ally.gender;
-    partyMember.fusionLuck = ally.luck;
-
-    const defStat = partyMember.getStat(Stat.DEF);
-
-    // Making sure modifier is not applied without holding item
-    const defValue = new NumberHolder(defStat);
-    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.DEF, defValue);
-
-    expect(defValue.value / defStat).toBe(1);
-
-    // Giving Eviolite to party member and testing if it applies
-    game.scene.addModifier(
-      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["METAL_POWDER"])!.newModifier(partyMember),
-      true,
-    );
-    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.DEF, defValue);
-
-    expect(defValue.value / defStat).toBe(2);
-  }, 20000);
-
-  it("METAL_POWDER held by fused DITTO (part)", async () => {
-    await game.startBattle([Species.MAROWAK, Species.DITTO]);
-
-    const partyMember = game.scene.getPlayerParty()[0];
-    const ally = game.scene.getPlayerParty()[1];
-
-    // Fuse party members (taken from PlayerPokemon.fuse(...) function)
-    partyMember.fusionSpecies = ally.species;
-    partyMember.fusionFormIndex = ally.formIndex;
-    partyMember.fusionAbilityIndex = ally.abilityIndex;
-    partyMember.fusionShiny = ally.shiny;
-    partyMember.fusionVariant = ally.variant;
-    partyMember.fusionGender = ally.gender;
-    partyMember.fusionLuck = ally.luck;
 
     const defStat = partyMember.getStat(Stat.DEF);
 

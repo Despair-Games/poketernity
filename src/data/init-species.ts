@@ -1,4 +1,4 @@
-import { allSpecies } from "#app/data/all-species";
+import { allSpecies } from "#app/data/data-lists";
 import PokemonSpecies from "#app/data/pokemon-species";
 import { PokemonForm } from "./pokemon-form";
 import { Abilities } from "#enums/abilities";
@@ -974,6 +974,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
+      // Cosplay and G-Max Pikachu use Partner Pokemon stats
       Species.PIKACHU,
       1,
       SpeciesGroups.COMMON,
@@ -1200,13 +1201,13 @@ export function initSpecies() {
         Abilities.STATIC,
         Abilities.NONE,
         Abilities.LIGHTNING_ROD,
-        320,
-        35,
-        55,
-        40,
+        430,
+        45,
+        80,
         50,
-        50,
-        90,
+        75,
+        60,
+        120,
         190,
         50,
         112,
@@ -4371,6 +4372,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
+      // G-Max uses Partner Eevee stats
       Species.EEVEE,
       1,
       SpeciesGroups.COMMON,
@@ -4453,13 +4455,13 @@ export function initSpecies() {
         Abilities.RUN_AWAY,
         Abilities.ADAPTABILITY,
         Abilities.ANTICIPATION,
-        325,
-        55,
-        55,
-        50,
-        45,
+        435,
         65,
-        55,
+        75,
+        70,
+        65,
+        85,
+        75,
         45,
         50,
         65,
@@ -9646,7 +9648,7 @@ export function initSpecies() {
       24,
       Abilities.TRUANT,
       Abilities.NONE,
-      Abilities.STALL,
+      Abilities.NONE,
       280,
       60,
       60,
@@ -9660,7 +9662,7 @@ export function initSpecies() {
       GrowthRate.SLOW,
       50,
       false,
-    ), //Custom Hidden
+    ),
     new PokemonSpecies(
       Species.VIGOROTH,
       3,
@@ -9671,7 +9673,7 @@ export function initSpecies() {
       46.5,
       Abilities.VITAL_SPIRIT,
       Abilities.NONE,
-      Abilities.INSOMNIA,
+      Abilities.NONE,
       440,
       80,
       80,
@@ -9685,7 +9687,7 @@ export function initSpecies() {
       GrowthRate.SLOW,
       50,
       false,
-    ), //Custom Hidden
+    ),
     new PokemonSpecies(
       Species.SLAKING,
       3,
@@ -9696,7 +9698,7 @@ export function initSpecies() {
       130.5,
       Abilities.TRUANT,
       Abilities.NONE,
-      Abilities.STALL,
+      Abilities.NONE,
       670,
       150,
       160,
@@ -9710,7 +9712,7 @@ export function initSpecies() {
       GrowthRate.SLOW,
       50,
       false,
-    ), //Custom Hidden
+    ),
     new PokemonSpecies(
       Species.NINCADA,
       3,
@@ -16385,7 +16387,7 @@ export function initSpecies() {
       420,
       Abilities.SLOW_START,
       Abilities.NONE,
-      Abilities.NORMALIZE,
+      Abilities.NONE,
       670,
       110,
       160,
@@ -16458,7 +16460,7 @@ export function initSpecies() {
         650,
         Abilities.LEVITATE,
         Abilities.NONE,
-        Abilities.NONE,
+        Abilities.LEVITATE,
         680,
         150,
         120,
@@ -19045,7 +19047,7 @@ export function initSpecies() {
       9.5,
       Abilities.DEFEATIST,
       Abilities.NONE,
-      Abilities.EMERGENCY_EXIT,
+      Abilities.NONE,
       401,
       55,
       112,
@@ -19059,7 +19061,7 @@ export function initSpecies() {
       GrowthRate.MEDIUM_FAST,
       87.5,
       false,
-    ), //Custom Hidden
+    ),
     new PokemonSpecies(
       Species.ARCHEOPS,
       5,
@@ -19070,7 +19072,7 @@ export function initSpecies() {
       32,
       Abilities.DEFEATIST,
       Abilities.NONE,
-      Abilities.EMERGENCY_EXIT,
+      Abilities.NONE,
       567,
       75,
       140,
@@ -19084,7 +19086,7 @@ export function initSpecies() {
       GrowthRate.MEDIUM_FAST,
       87.5,
       false,
-    ), //Custom Hidden
+    ),
     new PokemonSpecies(
       Species.TRUBBISH,
       5,
@@ -27767,7 +27769,7 @@ export function initSpecies() {
       12,
       Abilities.WIMP_OUT,
       Abilities.NONE,
-      Abilities.RUN_AWAY,
+      Abilities.NONE,
       230,
       25,
       35,
@@ -27781,7 +27783,7 @@ export function initSpecies() {
       GrowthRate.MEDIUM_FAST,
       50,
       false,
-    ), //Custom Hidden
+    ),
     new PokemonSpecies(
       Species.GOLISOPOD,
       7,
@@ -27792,7 +27794,7 @@ export function initSpecies() {
       108,
       Abilities.EMERGENCY_EXIT,
       Abilities.NONE,
-      Abilities.ANTICIPATION,
+      Abilities.NONE,
       530,
       75,
       125,
@@ -27806,7 +27808,7 @@ export function initSpecies() {
       GrowthRate.MEDIUM_FAST,
       50,
       false,
-    ), //Custom Hidden
+    ),
     new PokemonSpecies(
       Species.SANDYGAST,
       7,
@@ -31409,7 +31411,7 @@ export function initSpecies() {
         24,
         40,
         Abilities.PUNK_ROCK,
-        Abilities.MINUS,
+        Abilities.PLUS,
         Abilities.TECHNICIAN,
         502,
         75,

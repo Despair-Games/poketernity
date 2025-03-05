@@ -4,8 +4,10 @@ import { getUnlockableName } from "#app/system/unlockables";
 import { type Unlockables } from "#enums/unlockables";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
+import { PhaseId } from "#enums/phase-id";
 
 export class UnlockPhase extends Phase {
+  override readonly id = PhaseId.UNLOCK;
   private readonly unlockable: Unlockables;
 
   constructor(unlockable: Unlockables) {
@@ -20,7 +22,7 @@ export class UnlockPhase extends Phase {
     time.delayedCall(2000, () => {
       gameData.unlocks[this.unlockable] = true;
       // Sound loaded into game as is
-      globalScene.playSound("level_up_fanfare");
+      globalScene.audioManager.playSound("level_up_fanfare");
       ui.setMode(UiMode.MESSAGE);
       ui.showText(
         i18next.t("battle:unlockedSomething", { unlockedThing: getUnlockableName(this.unlockable) }),

@@ -1,7 +1,9 @@
-import type { BattlerIndex } from "#enums/battler-index";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { PostTurnStatusEffectPhase } from "#app/phases/post-turn-status-effect-phase";
+import { Stat } from "#enums/stat";
+import { PhaseId } from "#enums/phase-id";
+import { StatusEffect } from "#enums/status-effect";
 import { isNullOrUndefined } from "#app/utils";
 
 /**
@@ -9,24 +11,25 @@ import { isNullOrUndefined } from "#app/utils";
  * @extends Phase
  */
 export class CheckStatusEffectPhase extends Phase {
-  /** The pokemon being checked, ordered by turn order */
-  private readonly activePokemon: BattlerIndex[];
-
-  constructor(activePokemon: BattlerIndex[]) {
-    super();
-
-    this.activePokemon = activePokemon;
-  }
+  override readonly id = PhaseId.CHECK_STATUS_EFFECT;
 
   public override start(): void {
     super.start();
 
-    for (const p of this.activePokemon) {
-      const pokemon = globalScene.getFieldPokemonByBattlerIndex(p);
-      if (!isNullOrUndefined(pokemon) && pokemon.status && pokemon.status.isPostTurn()) {
-        globalScene.unshiftPhase(new PostTurnStatusEffectPhase(p));
+    /** @todo Shuffle this before sorting to resolve speed ties */
+    const pokemon = globalScene
+      .getField(true)
+      .sort((a, b) => b.getEffectiveStat(Stat.SPD) - a.getEffectiveStat(Stat.SPD));
+
+    pokemon.forEach((p) => {
+      if (
+        !isNullOrUndefined(p)
+        && p.hasStatusEffect([StatusEffect.BURN, StatusEffect.POISON, StatusEffect.TOXIC], false, true)
+      ) {
+        globalScene.unshiftPhase(new PostTurnStatusEffectPhase(p.getBattlerIndex()));
       }
-    }
+    });
+
     this.end();
   }
 }

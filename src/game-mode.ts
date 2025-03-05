@@ -2,10 +2,11 @@ import i18next from "i18next";
 import type { FixedBattleConfigs } from "./battle";
 import { classicFixedBattles, FixedBattleConfig } from "./battle";
 import type { Challenge } from "./data/challenge";
-import { allChallenges, applyChallenges, copyChallenge } from "./data/challenge";
+import { allChallenges, copyChallenge } from "./data/challenge";
+import { applyChallenges } from "./utils/challenge-utils";
 import { ChallengeType } from "#enums/challenge-type";
 import type PokemonSpecies from "./data/pokemon-species";
-import { allSpecies } from "./data/all-species";
+import { allSpecies } from "#app/data/data-lists";
 import type { Arena } from "./field/arena";
 import Overrides from "#app/overrides";
 import { randSeedInt, randSeedItem } from "#app/utils";
@@ -25,7 +26,6 @@ interface GameModeConfig {
   hasShortBiomes?: boolean;
   hasRandomBiomes?: boolean;
   hasRandomBosses?: boolean;
-  isSplicedOnly?: boolean;
   isChallenge?: boolean;
   hasMysteryEncounters?: boolean;
 }
@@ -40,7 +40,6 @@ export class GameMode implements GameModeConfig {
   public hasShortBiomes: boolean;
   public hasRandomBiomes: boolean;
   public hasRandomBosses: boolean;
-  public isSplicedOnly: boolean;
   public isChallenge: boolean;
   public challenges: Challenge[];
   public battleConfig: FixedBattleConfigs;
@@ -222,7 +221,6 @@ export class GameMode implements GameModeConfig {
       case GameModes.CHALLENGE:
         return waveIndex === 200;
       case GameModes.ENDLESS:
-      case GameModes.SPLICED_ENDLESS:
         return !(waveIndex % 250);
       case GameModes.DAILY:
         return waveIndex === 50;
@@ -250,7 +248,7 @@ export class GameMode implements GameModeConfig {
    * @returns true if waveIndex is a multiple of 50 in Endless
    */
   isEndlessBoss(waveIndex: number): boolean {
-    return waveIndex % 50 === 0 && (this.modeId === GameModes.ENDLESS || this.modeId === GameModes.SPLICED_ENDLESS);
+    return waveIndex % 50 === 0 && this.modeId === GameModes.ENDLESS;
   }
 
   /**
@@ -259,7 +257,7 @@ export class GameMode implements GameModeConfig {
    * @returns true if waveIndex is a multiple of 250 in Endless
    */
   isEndlessMinorBoss(waveIndex: number): boolean {
-    return waveIndex % 250 === 0 && (this.modeId === GameModes.ENDLESS || this.modeId === GameModes.SPLICED_ENDLESS);
+    return waveIndex % 250 === 0 && this.modeId === GameModes.ENDLESS;
   }
 
   /**
@@ -268,7 +266,7 @@ export class GameMode implements GameModeConfig {
    * @returns true if waveIndex is a multiple of 1000 in Endless
    */
   isEndlessMajorBoss(waveIndex: number): boolean {
-    return waveIndex % 1000 === 0 && (this.modeId === GameModes.ENDLESS || this.modeId === GameModes.SPLICED_ENDLESS);
+    return waveIndex % 1000 === 0 && this.modeId === GameModes.ENDLESS;
   }
 
   /**
@@ -317,7 +315,6 @@ export class GameMode implements GameModeConfig {
       case GameModes.DAILY:
         return !isBoss ? 18 : 6;
       case GameModes.ENDLESS:
-      case GameModes.SPLICED_ENDLESS:
         return !isBoss ? 12 : 4;
     }
   }
@@ -328,8 +325,6 @@ export class GameMode implements GameModeConfig {
         return i18next.t("gameMode:classic");
       case GameModes.ENDLESS:
         return i18next.t("gameMode:endless");
-      case GameModes.SPLICED_ENDLESS:
-        return i18next.t("gameMode:endlessSpliced");
       case GameModes.DAILY:
         return i18next.t("gameMode:dailyRun");
       case GameModes.CHALLENGE:
@@ -357,8 +352,6 @@ export class GameMode implements GameModeConfig {
         return i18next.t("gameMode:classic");
       case GameModes.ENDLESS:
         return i18next.t("gameMode:endless");
-      case GameModes.SPLICED_ENDLESS:
-        return i18next.t("gameMode:endlessSpliced");
       case GameModes.DAILY:
         return i18next.t("gameMode:dailyRun");
       case GameModes.CHALLENGE:
@@ -377,13 +370,6 @@ export function getGameMode(gameMode: GameModes): GameMode {
       );
     case GameModes.ENDLESS:
       return new GameMode(GameModes.ENDLESS, { isEndless: true, hasShortBiomes: true, hasRandomBosses: true });
-    case GameModes.SPLICED_ENDLESS:
-      return new GameMode(GameModes.SPLICED_ENDLESS, {
-        isEndless: true,
-        hasShortBiomes: true,
-        hasRandomBosses: true,
-        isSplicedOnly: true,
-      });
     case GameModes.DAILY:
       return new GameMode(GameModes.DAILY, { isDaily: true, hasTrainers: true, hasNoShop: true });
     case GameModes.CHALLENGE:

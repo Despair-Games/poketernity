@@ -1,15 +1,13 @@
 import { type Pokemon } from "#app/field/pokemon";
-import { MoveResult } from "#enums/move-result";
 import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder, toDmgValue } from "#app/utils";
 import i18next from "i18next";
-import { BlockNonDirectDamageAbAttr } from "#app/data/ab-attrs/block-non-direct-damage-ab-attr";
-import { BlockRecoilDamageAttr } from "#app/data/ab-attrs/block-recoil-damage-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Attribute to apply {@link https://bulbapedia.bulbagarden.net/wiki/Recoil | recoil damage} to the user.
@@ -31,16 +29,11 @@ export class RecoilAttr extends MoveEffectAttr {
   override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
     const cancelled = new BooleanHolder(false);
     if (!this.unblockable) {
-      applyAbAttrs(BlockRecoilDamageAttr, user, false, cancelled);
-      applyAbAttrs(BlockNonDirectDamageAbAttr, user, false, cancelled);
+      applyAbAttrs(AbAttrFlag.BLOCK_RECOIL_DAMAGE, user, false, cancelled);
+      applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, user, false, cancelled);
     }
 
     if (cancelled.value) {
-      return false;
-    }
-
-    // Chloroblast and Struggle should not deal recoil damage if the move was not successful
-    if (this.useHp && [MoveResult.FAIL, MoveResult.MISS].includes(user.getLastXMoves(1)[0]?.result)) {
       return false;
     }
 

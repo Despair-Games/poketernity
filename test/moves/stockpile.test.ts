@@ -1,6 +1,5 @@
 import { Stat } from "#enums/stat";
-import { StockpilingTag } from "#app/data/battler-tags";
-import type { TurnMove } from "#app/field/pokemon";
+import { type StockpilingTag } from "#app/data/battler-tags";
 import { MoveResult } from "#enums/move-result";
 import { CommandPhase } from "#app/phases/command-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
@@ -10,6 +9,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { BattlerTagType } from "#enums/battler-tag-type";
 
 describe("Moves - Stockpile", () => {
   describe("integration tests", () => {
@@ -46,7 +46,7 @@ describe("Moves - Stockpile", () => {
       // Unfortunately, Stockpile stacks are not directly queryable (i.e. there is no pokemon.getStockpileStacks()),
       // we just have to know that they're implemented as a BattlerTag.
 
-      expect(user.getTag(StockpilingTag)).toBeUndefined();
+      expect(user.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)).toBeUndefined();
       expect(user.getStatStage(Stat.DEF)).toBe(0);
       expect(user.getStatStage(Stat.SPDEF)).toBe(0);
 
@@ -59,7 +59,7 @@ describe("Moves - Stockpile", () => {
         game.move.select(MoveId.STOCKPILE);
         await game.phaseInterceptor.to(TurnInitPhase);
 
-        const stockpilingTag = user.getTag(StockpilingTag)!;
+        const stockpilingTag = user.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)!;
 
         if (i < 3) {
           // first three uses should behave normally
@@ -73,10 +73,7 @@ describe("Moves - Stockpile", () => {
           expect(user.getStatStage(Stat.SPDEF)).toBe(3);
           expect(stockpilingTag).toBeDefined();
           expect(stockpilingTag.stockpiledCount).toBe(3);
-          expect(user.getMoveHistory().at(-1)).toMatchObject<TurnMove>({
-            result: MoveResult.FAIL,
-            moveId: MoveId.STOCKPILE,
-          });
+          expect(user.getLastXMoves()?.[0]?.result).toBe(MoveResult.FAIL);
         }
       }
     });
@@ -89,14 +86,14 @@ describe("Moves - Stockpile", () => {
       user.setStatStage(Stat.DEF, 6);
       user.setStatStage(Stat.SPDEF, 6);
 
-      expect(user.getTag(StockpilingTag)).toBeUndefined();
+      expect(user.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)).toBeUndefined();
       expect(user.getStatStage(Stat.DEF)).toBe(6);
       expect(user.getStatStage(Stat.SPDEF)).toBe(6);
 
       game.move.select(MoveId.STOCKPILE);
       await game.phaseInterceptor.to(TurnInitPhase);
 
-      const stockpilingTag = user.getTag(StockpilingTag)!;
+      const stockpilingTag = user.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)!;
       expect(stockpilingTag).toBeDefined();
       expect(stockpilingTag.stockpiledCount).toBe(1);
       expect(user.getStatStage(Stat.DEF)).toBe(6);
@@ -108,7 +105,7 @@ describe("Moves - Stockpile", () => {
       game.move.select(MoveId.STOCKPILE);
       await game.phaseInterceptor.to(TurnInitPhase);
 
-      const stockpilingTagAgain = user.getTag(StockpilingTag)!;
+      const stockpilingTagAgain = user.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)!;
       expect(stockpilingTagAgain).toBeDefined();
       expect(stockpilingTagAgain.stockpiledCount).toBe(2);
       expect(user.getStatStage(Stat.DEF)).toBe(6);

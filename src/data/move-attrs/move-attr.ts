@@ -1,7 +1,8 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
-import type { MoveCondition, MoveConditionFunc } from "../move-conditions";
+import type { MoveCondition } from "../move-conditions/move-condition";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
 /**
  * Base class defining all {@linkcode Move} Attributes
@@ -11,6 +12,7 @@ import type { MoveCondition, MoveConditionFunc } from "../move-conditions";
 export abstract class MoveAttr {
   /** Should this {@linkcode Move} target the user? */
   public selfTarget: boolean;
+  public readonly callsOtherMoves: boolean = false;
 
   constructor(selfTarget: boolean = false) {
     this.selfTarget = selfTarget;

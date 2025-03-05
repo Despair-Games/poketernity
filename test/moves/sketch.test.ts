@@ -8,8 +8,8 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { StatusEffect } from "#enums/status-effect";
 import { BattlerIndex } from "#enums/battler-index";
-import { allMoves } from "#app/data/all-moves";
-import { RandomMoveAttr } from "#app/data/move-attrs/random-move-attr";
+import { allMoves } from "#app/data/data-lists";
+import { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
 
 describe("Moves - Sketch", () => {
   let phaserGame: Phaser.Game;
@@ -43,7 +43,7 @@ describe("Moves - Sketch", () => {
     playerPokemon.moveset = [new PokemonMove(MoveId.SKETCH), new PokemonMove(MoveId.SKETCH)];
 
     game.move.select(MoveId.SKETCH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(playerPokemon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
     const moveSlot0 = playerPokemon.getMoveset()[0]!;
     expect(moveSlot0.moveId).toBe(MoveId.SKETCH);
@@ -51,7 +51,7 @@ describe("Moves - Sketch", () => {
 
     await game.toNextTurn();
     game.move.select(MoveId.SKETCH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(playerPokemon.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
     expect(playerPokemon.moveset[0]?.moveId).toBe(MoveId.SPLASH);
     expect(playerPokemon.moveset[1]?.moveId).toBe(MoveId.SKETCH);
@@ -65,16 +65,16 @@ describe("Moves - Sketch", () => {
     playerPokemon.moveset = [new PokemonMove(MoveId.SKETCH), new PokemonMove(MoveId.GROWL)];
 
     game.move.select(MoveId.GROWL);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.move.forceStatusActivation(false);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(enemyPokemon.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
 
     await game.toNextTurn();
     game.move.select(MoveId.SKETCH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.move.forceStatusActivation(true);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(playerPokemon.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
     expect(playerPokemon.moveset[0]?.moveId).toBe(MoveId.SPLASH);
     expect(playerPokemon.moveset[1]?.moveId).toBe(MoveId.GROWL);
@@ -82,9 +82,9 @@ describe("Moves - Sketch", () => {
 
   it("should sketch moves that call other moves", async () => {
     const randomMoveAttr = allMoves[MoveId.METRONOME].findAttr(
-      (attr) => attr instanceof RandomMoveAttr,
-    ) as RandomMoveAttr;
-    vi.spyOn(randomMoveAttr, "getMoveOverride").mockReturnValue(MoveId.FALSE_SWIPE);
+      (attr) => attr instanceof MetronomeAttr,
+    ) as MetronomeAttr;
+    vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.FALSE_SWIPE);
 
     game.override.enemyMoveset([MoveId.METRONOME]);
     await game.classicMode.startBattle([Species.REGIELEKI]);
@@ -93,8 +93,8 @@ describe("Moves - Sketch", () => {
 
     // Opponent uses Metronome -> False Swipe, then player uses Sketch, which should sketch Metronome
     game.move.select(MoveId.SKETCH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    await game.toEndOfTurn();
     expect(playerPokemon.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
     expect(playerPokemon.moveset[0]?.moveId).toBe(MoveId.METRONOME);
     expect(playerPokemon.hp).toBeLessThan(playerPokemon.getMaxHp()); // Make sure opponent actually used False Swipe

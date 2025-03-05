@@ -1,11 +1,11 @@
-import { addBBCodeTextObject, getBBCodeFrag } from "./text";
+import { addBBCodeTextObject, getBBCodeFragment } from "./text";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
 import { Button } from "#enums/buttons";
 import { addWindow } from "./ui-theme";
 import { WindowVariant } from "#enums/window-variant";
-import type { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
+import { type MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
 import { fixedNumber, isNullOrUndefined } from "#app/utils";
@@ -471,7 +471,7 @@ export default class MysteryEncounterUiHandler extends UiHandler {
     const viewPartyText = addBBCodeTextObject(
       GAME_WIDTH,
       -24,
-      getBBCodeFrag(i18next.t("mysteryEncounterMessages:view_party_button"), TextStyle.PARTY),
+      getBBCodeFragment(i18next.t("mysteryEncounterMessages:view_party_button"), TextStyle.PARTY),
       TextStyle.PARTY,
     );
     this.optionsContainer.add(viewPartyText);
@@ -594,18 +594,12 @@ export default class MysteryEncounterUiHandler extends UiHandler {
       text = text.replace(
         /(\(\+\)[^\(\[]*)/gi,
         (substring) =>
-          "[/color][/shadow]"
-          + getBBCodeFrag(substring, TextStyle.SUMMARY_GREEN)
-          + "[/color][/shadow]"
-          + primaryStyleString,
+          "[/color][/shadow]" + getBBCodeFragment(substring, TextStyle.SUMMARY_GREEN, true) + primaryStyleString,
       );
       text = text.replace(
         /(\(\-\)[^\(\[]*)/gi,
         (substring) =>
-          "[/color][/shadow]"
-          + getBBCodeFrag(substring, TextStyle.SUMMARY_BLUE)
-          + "[/color][/shadow]"
-          + primaryStyleString,
+          "[/color][/shadow]" + getBBCodeFragment(substring, TextStyle.SUMMARY_BLUE, true) + primaryStyleString,
       );
     }
 

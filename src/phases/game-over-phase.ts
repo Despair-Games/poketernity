@@ -1,14 +1,14 @@
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { clientSessionId } from "#app/account";
 import { BattleType } from "#enums/battle-type";
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { CheckSwitchPhase } from "#app/phases/check-switch-phase";
 import { EncounterPhase } from "#app/phases/encounter-phase";
@@ -19,16 +19,17 @@ import { RibbonModifierRewardPhase } from "#app/phases/ribbon-modifier-reward-ph
 import { SummonPhase } from "#app/phases/summon-phase";
 import { UnlockPhase } from "#app/phases/unlock-phase";
 import { api } from "#app/plugins/api/api";
-import { achvs, ChallengeAchv } from "#app/system/achv";
+import { achvs } from "#app/system/achievements";
 import { settings } from "#app/system/settings/settings-manager";
 import TrainerData from "#app/system/trainer-data";
 import { Unlockables } from "#enums/unlockables";
 import { UiMode } from "#enums/ui-mode";
-import { isLocal, isLocalServerConnected } from "#app/utils";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
+import { AchvCategory } from "#enums/achv-category";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Handles the effects of the player ending a run:
@@ -38,6 +39,8 @@ import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
  * - Award ribbons + vouchers per player pokemon if a victory
  */
 export class GameOverPhase extends BattlePhase {
+  override readonly id = PhaseId.GAME_OVER;
+
   private isVictory: boolean;
   private readonly firstRibbons: PokemonSpecies[] = [];
 
@@ -141,7 +144,7 @@ export class GameOverPhase extends BattlePhase {
         }
 
         const fadeDuration = this.isVictory ? 10000 : 5000;
-        globalScene.fadeOutBgm(fadeDuration, true);
+        globalScene.audioManager.fadeOutBgm(fadeDuration, true);
         const activeBattlers = globalScene.getField().filter((p) => p?.isActive(true));
         activeBattlers.map((p) => p.hideInfo());
 
@@ -152,7 +155,7 @@ export class GameOverPhase extends BattlePhase {
           ui.clearText();
 
           if (this.isVictory && gameMode.isChallenge) {
-            gameMode.challenges.forEach((c) => globalScene.validateAchvs(ChallengeAchv, c));
+            gameMode.challenges.forEach((c) => globalScene.validateAchvs(AchvCategory.CHALLENGE, c));
           }
 
           const clear = (endCardPhase?: EndCardPhase): void => {
@@ -225,7 +228,7 @@ export class GameOverPhase extends BattlePhase {
      * If Online, execute apiFetch as intended
      * If Offline, execute offlineNewClear() only for victory, a localStorage implementation of newClear daily run checks
      */
-    if (!isLocal || isLocalServerConnected) {
+    if (!api.isLocal || api.isConnected) {
       api.savedata.session
         .newclear({ slot: globalScene.sessionSlotId, isVictory: this.isVictory, clientSessionId: clientSessionId })
         .then((success) => doGameOver(success));
@@ -244,13 +247,6 @@ export class GameOverPhase extends BattlePhase {
     if (this.isVictory && gameMode.isClassic) {
       if (!gameData.unlocks[Unlockables.ENDLESS_MODE]) {
         globalScene.unshiftPhase(new UnlockPhase(Unlockables.ENDLESS_MODE));
-      }
-
-      if (
-        globalScene.getPlayerParty().filter((p) => p.fusionSpecies).length
-        && !gameData.unlocks[Unlockables.SPLICED_ENDLESS_MODE]
-      ) {
-        globalScene.unshiftPhase(new UnlockPhase(Unlockables.SPLICED_ENDLESS_MODE));
       }
 
       if (!gameData.unlocks[Unlockables.MINI_BLACK_HOLE]) {
