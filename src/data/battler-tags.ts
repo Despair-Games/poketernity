@@ -1115,8 +1115,8 @@ export abstract class MoveLockTag extends BattlerTag {
   }
 
   override onRemove(pokemon: Pokemon): void {
-    const moveHistory = pokemon.getMoveHistory();
-    moveHistory.splice(0, moveHistory.length);
+    const moveQueue = pokemon.getMoveQueue();
+    moveQueue.splice(0, moveQueue.length);
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
