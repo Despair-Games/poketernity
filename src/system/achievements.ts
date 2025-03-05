@@ -9,6 +9,7 @@ import { settings } from "#app/system/settings/settings-manager";
 import { ElementalType } from "#enums/elemental-type";
 import { AchvCategory } from "#enums/achv-category";
 
+// Note: Refer to https://github.com/Despair-Games/poketernity/pull/775/files for removed achv code
 export class Achievement {
   protected _category: AchvCategory;
   protected readonly localizationKey: string;
