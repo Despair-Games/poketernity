@@ -211,8 +211,6 @@ export class MoveEffectPhase extends HitCheckPhase {
         ? this.playMoveAnim(user)
         : Promise.resolve();
 
-    console.log(`hitCount: ${user.turnData.hitCount}, hitsLeft: ${user.turnData.hitsLeft}`);
-
     tryPlayAnim.then(() => {
       // If this phase represents the first strike of the given move,
       // log the move in the user's move history.

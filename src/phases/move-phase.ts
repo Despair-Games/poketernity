@@ -161,7 +161,7 @@ export class MovePhase extends BattlePhase {
 
     this.pokemon.turnData.acted = true;
 
-    // Reset hit-related turn data when starting follow-up moves (e.g. Metronomed moves, Dancer repeats)
+    // Reset hit-related turn data
     this.pokemon.turnData.hitsLeft = -1;
     this.pokemon.turnData.hitCount = 0;
 
@@ -174,7 +174,7 @@ export class MovePhase extends BattlePhase {
 
     this.resolvePreMoveStatusEffects();
 
-    // form changes happen even before we know that the move wll execute.
+    // pre-move form changes (e.g. Aegislash's stance) happen even before we know that the move will execute.
     globalScene.triggerPokemonFormChange(this.pokemon, SpeciesFormChangePreMoveTrigger);
 
     this.lapsePreMoveAndMoveTags();
