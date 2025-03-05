@@ -12,6 +12,7 @@ import { Gender } from "#enums/gender";
 import { EvolutionItem } from "#enums/evolution-item";
 import {
   ADVANCED_ITEM_EVO_LEVEL,
+  BASCULEGION_EVO_LEVEL,
   GENERIC_ITEM_EVO_LEVEL,
   HAPPINESS_EVO_LEVEL,
   KINGAMBIT_EVO_LEVEL,
@@ -94,6 +95,7 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
         (p) => p.moveset.filter((m) => m.moveId === MoveId.WAVE_CRASH).length > 0 && p.gender === Gender.FEMALE,
         (p) => (p.gender = Gender.FEMALE),
       ),
+      BASCULEGION_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
       Species.BASCULEGION,
@@ -105,6 +107,7 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
         (p) => p.moveset.filter((m) => m.moveId === MoveId.WAVE_CRASH).length > 0 && p.gender === Gender.MALE,
         (p) => (p.gender = Gender.MALE),
       ),
+      BASCULEGION_EVO_LEVEL,
     ),
   ],
   [Species.SANDILE]: [new SpeciesEvolution(Species.KROKOROK, 29, null, null)],
