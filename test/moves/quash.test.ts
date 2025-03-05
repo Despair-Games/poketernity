@@ -136,4 +136,18 @@ describe("Moves - Quash", () => {
     expect(turnOrder).toEqual([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2, BattlerIndex.ENEMY]);
     expect(turnOrder).not.toEqual(game.field.getSpeedOrder());
   });
+
+  it("if multiple Pokemon are simultaneously affected by Quash, they should move from fastest to slowest", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+
+    setFieldSpeed();
+
+    game.move.use(MoveId.QUASH, 0, BattlerIndex.ENEMY_2);
+    game.move.use(MoveId.QUASH, 1, BattlerIndex.ENEMY);
+
+    await game.toEndOfTurn();
+
+    // Both player Pokemon naturally outspeed the opponents, so turn order should match speed order
+    expect(game.field.getTurnOrder()).toEqual(game.field.getSpeedOrder());
+  });
 });
