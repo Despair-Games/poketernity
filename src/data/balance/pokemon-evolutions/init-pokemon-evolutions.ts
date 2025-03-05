@@ -566,10 +566,6 @@ export const pokemonEvolutions: PokemonEvolutions = {
   [Species.ALOLA_GRAVELER]: [
     new SpeciesEvolution(Species.ALOLA_GOLEM, 1, EvolutionItem.LINKING_CORD, null, GENERIC_ITEM_EVO_LEVEL),
   ],
-
-  [Species.SWADLOON]: [
-    new SpeciesEvolution(Species.LEAVANNY, 1, null, new SpeciesFriendshipEvolutionCondition(120), HAPPINESS_EVO_LEVEL),
-  ],
   [Species.TYPE_NULL]: [
     new SpeciesEvolution(Species.SILVALLY, 1, null, new SpeciesFriendshipEvolutionCondition(100), HAPPINESS_EVO_LEVEL),
   ],

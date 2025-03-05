@@ -70,6 +70,9 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.TYMPOLE]: [new SpeciesEvolution(Species.PALPITOAD, 25, null, null)],
   [Species.PALPITOAD]: [new SpeciesEvolution(Species.SEISMITOAD, 36, null, null)],
   [Species.SEWADDLE]: [new SpeciesEvolution(Species.SWADLOON, 20, null, null)],
+  [Species.SWADLOON]: [
+    new SpeciesEvolution(Species.LEAVANNY, 1, null, new SpeciesFriendshipEvolutionCondition(120), HAPPINESS_EVO_LEVEL),
+  ],
   [Species.VENIPEDE]: [new SpeciesEvolution(Species.WHIRLIPEDE, 22, null, null)],
   [Species.WHIRLIPEDE]: [new SpeciesEvolution(Species.SCOLIPEDE, 30, null, null)],
   [Species.COTTONEE]: [
