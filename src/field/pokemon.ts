@@ -17,12 +17,9 @@ import { applyAbAttrs, getAbApplyFunc } from "#app/data/apply-ab-attrs";
 import { NoCritTag } from "#app/data/arena-tag";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { starterPassiveAbilities } from "#app/data/balance/passives";
-import {
-  type SpeciesEvolutionCondition,
-  type SpeciesFormEvolution,
-} from "#app/data/balance/pokemon-evolutions/pokemon-evolutions";
+import { type SpeciesEvolutionCondition, type SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
-import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions/pokemon-prevolutions";
+import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#app/data/balance/pokemon-level-moves";
 import {
   BASE_HIDDEN_ABILITY_CHANCE,
@@ -1411,8 +1408,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     let starterSpeciesId = this.species.speciesId;
-    while (pokemonPrevolutions.hasOwnProperty(starterSpeciesId)) {
-      starterSpeciesId = pokemonPrevolutions[starterSpeciesId];
+    while (pokemonPreEvolutions.hasOwnProperty(starterSpeciesId)) {
+      starterSpeciesId = pokemonPreEvolutions[starterSpeciesId];
     }
     return allAbilities[starterPassiveAbilities[starterSpeciesId]];
   }
@@ -4470,16 +4467,16 @@ export class EnemyPokemon extends Pokemon {
 
       this.luck = this.shiny ? this.variant + 1 : 0;
 
-      let prevolution: Species;
+      let preEvolution: Species;
       let speciesId = species.speciesId;
-      while ((prevolution = pokemonPrevolutions[speciesId])) {
-        const evolution = pokemonEvolutions[prevolution].find(
+      while ((preEvolution = pokemonPreEvolutions[speciesId])) {
+        const evolution = pokemonEvolutions[preEvolution].find(
           (pe) => pe.speciesId === speciesId && (!pe.evoFormKey || pe.evoFormKey === this.getFormKey()),
         );
         if (evolution?.condition?.enforceFunc) {
           evolution.condition.enforceFunc(this);
         }
-        speciesId = prevolution;
+        speciesId = preEvolution;
       }
     }
 

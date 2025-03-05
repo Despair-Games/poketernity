@@ -11,14 +11,14 @@ import { Species } from "#enums/species";
 import { TimeOfDay } from "#enums/time-of-day";
 import { WeatherType } from "#enums/weather-type";
 import { gen1pokemonFamilyEvolutions } from "./gen1-pokemon-family-evolutions";
-import { GENERIC_ITEM_EVO_LEVEL, HAPPINESS_EVO_LEVEL, KNOW_MOVE_EVO_LEVEL } from "./pokemon-evolution-alt-levels";
-import type { PokemonEvolutions } from "./pokemon-evolutions";
+import { GENERIC_ITEM_EVO_LEVEL, HAPPINESS_EVO_LEVEL, KNOW_MOVE_EVO_LEVEL } from "./enemy-pokemon-evolution-levels";
+import type { PokemonEvolutions } from "../../pokemon-evolutions";
 import {
   SpeciesFormEvolution,
   SpeciesEvolution,
   SpeciesEvolutionCondition,
   SpeciesFriendshipEvolutionCondition,
-} from "./pokemon-evolutions";
+} from "../../pokemon-evolutions";
 
 export const pokemonEvolutions: PokemonEvolutions = {
   ...gen1pokemonFamilyEvolutions,

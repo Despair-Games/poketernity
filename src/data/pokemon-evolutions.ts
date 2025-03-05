@@ -12,6 +12,13 @@ export type EvolutionLevel = [species: Species, level: number];
 export type EvolutionConditionPredicate = (p: Pokemon) => boolean;
 export type EvolutionConditionEnforceFunc = (p: Pokemon) => void;
 
+export interface PokemonEvolutions {
+  [key: string]: SpeciesFormEvolution[];
+}
+export interface PokemonPreEvolutions {
+  [key: string]: Species;
+}
+
 export class SpeciesFormEvolution {
   public speciesId: Species;
   public preFormKey: string | null;
@@ -79,11 +86,4 @@ export class SpeciesFriendshipEvolutionCondition extends SpeciesEvolutionConditi
   ) {
     super((p) => p.friendship >= friendshipAmount && (!predicate || predicate(p)), enforceFunc);
   }
-}
-
-export interface PokemonEvolutions {
-  [key: string]: SpeciesFormEvolution[];
-}
-export interface PokemonPrevolutions {
-  [key: string]: Species;
 }

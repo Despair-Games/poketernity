@@ -6,21 +6,21 @@ import { Species } from "#enums/species";
 import { TimeOfDay } from "#enums/time-of-day";
 import {
   ADVANCED_ITEM_EVO_LEVEL,
-  ANNIHILAPE_LEVEL,
+  ANNIHILAPE_EVO_LEVEL,
   BABY_HAPPINESS_EVO_LEVEL,
   GENERIC_ITEM_EVO_LEVEL,
   HAPPINESS_EVO_LEVEL,
-  LICKILICKY_LEVEL,
-  MR_MIME_LEVEL,
-  TANGROWTH_LEVEL,
-} from "./pokemon-evolution-alt-levels";
-import type { PokemonEvolutions } from "./pokemon-evolutions";
+  LICKILICKY_EVO_LEVEL,
+  MR_MIME_EVO_LEVEL,
+  TANGROWTH_EVO_LEVEL,
+} from "./enemy-pokemon-evolution-levels";
+import type { PokemonEvolutions } from "../../pokemon-evolutions";
 import {
   SpeciesFormEvolution,
   SpeciesEvolution,
   SpeciesEvolutionCondition,
   SpeciesFriendshipEvolutionCondition,
-} from "./pokemon-evolutions";
+} from "../../pokemon-evolutions";
 
 export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.BULBASAUR]: [new SpeciesEvolution(Species.IVYSAUR, 16, null, null)],
@@ -110,7 +110,13 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   ],
   /** Igglybuff is from gen 2 */
   [Species.IGGLYBUFF]: [
-    new SpeciesEvolution(Species.JIGGLYPUFF, 1, null, new SpeciesFriendshipEvolutionCondition(70), HAPPINESS_EVO_LEVEL),
+    new SpeciesEvolution(
+      Species.JIGGLYPUFF,
+      1,
+      null,
+      new SpeciesFriendshipEvolutionCondition(70),
+      BABY_HAPPINESS_EVO_LEVEL,
+    ),
   ],
   [Species.JIGGLYPUFF]: [
     new SpeciesEvolution(Species.WIGGLYTUFF, 1, EvolutionItem.MOON_STONE, null, GENERIC_ITEM_EVO_LEVEL),
@@ -136,7 +142,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       1,
       null,
       new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.RAGE_FIST).length > 0),
-      ANNIHILAPE_LEVEL,
+      ANNIHILAPE_EVO_LEVEL,
     ),
   ],
   [Species.GROWLITHE]: [
@@ -256,7 +262,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       1,
       null,
       new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.ROLLOUT).length > 0),
-      LICKILICKY_LEVEL,
+      LICKILICKY_EVO_LEVEL,
     ),
   ],
   [Species.KOFFING]: [
@@ -296,7 +302,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       1,
       null,
       new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.ANCIENT_POWER).length > 0),
-      TANGROWTH_LEVEL,
+      TANGROWTH_EVO_LEVEL,
     ),
   ],
   [Species.HORSEA]: [new SpeciesEvolution(Species.SEADRA, 32, null, null)],
@@ -316,7 +322,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
           p.moveset.filter((m) => m.moveId === MoveId.MIMIC).length > 0
           && globalScene.arena.isTimeOfDay([TimeOfDay.NIGHT, TimeOfDay.DUSK]),
       ),
-      MR_MIME_LEVEL,
+      MR_MIME_EVO_LEVEL,
     ),
     new SpeciesEvolution(
       Species.MR_MIME,
@@ -327,7 +333,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
           p.moveset.filter((m) => m.moveId === MoveId.MIMIC).length > 0
           && globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]),
       ),
-      MR_MIME_LEVEL,
+      MR_MIME_EVO_LEVEL,
     ),
   ],
   /** Galar Mr Mime is from gen 8 */

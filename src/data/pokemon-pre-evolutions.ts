@@ -1,11 +1,11 @@
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
-import type { PokemonPrevolutions } from "#app/data/balance/pokemon-evolutions/pokemon-evolutions";
+import type { PokemonPreEvolutions as PokemonPreEvolutions } from "#app/data/pokemon-evolutions";
 import type { Species } from "#enums/species";
 import { SpeciesFormKey } from "#enums/species-form-key";
 
-export const pokemonPrevolutions: PokemonPrevolutions = {};
+export const pokemonPreEvolutions: PokemonPreEvolutions = {};
 
-export function initPokemonPrevolutions(): void {
+export function initPokemonPreEvolutions(): void {
   const megaFormKeys = [SpeciesFormKey.MEGA, "", SpeciesFormKey.MEGA_X, "", SpeciesFormKey.MEGA_Y].map(
     (sfk) => sfk as string,
   );
@@ -16,7 +16,7 @@ export function initPokemonPrevolutions(): void {
       if (ev.evoFormKey && megaFormKeys.indexOf(ev.evoFormKey) > -1) {
         continue;
       }
-      pokemonPrevolutions[ev.speciesId] = parseInt(pk) as Species;
+      pokemonPreEvolutions[ev.speciesId] = parseInt(pk) as Species;
     }
   });
 }
