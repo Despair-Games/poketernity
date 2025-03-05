@@ -1114,6 +1114,11 @@ export abstract class MoveLockTag extends BattlerTag {
     super(tagType, BattlerTagLapseType.AFTER_MOVE, turnCount, sourceMoveId);
   }
 
+  override onRemove(pokemon: Pokemon): void {
+    const moveHistory = pokemon.getMoveHistory();
+    moveHistory.splice(0, moveHistory.length);
+  }
+
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
     if (lapseType === BattlerTagLapseType.CUSTOM) {
       return this.handleCustomLapse(pokemon);
@@ -1226,6 +1231,8 @@ export class FrenzyTag extends MoveLockTag {
   }
 
   override onRemove(pokemon: Pokemon): void {
+    super.onRemove(pokemon);
+
     if (this.turnCount <= 0) {
       // Only add CONFUSED tag if a disruption occurs on the final confusion-inducing turn of FRENZY
       pokemon.addTag(BattlerTagType.CONFUSED, pokemon.randSeedIntRange(2, 4));
