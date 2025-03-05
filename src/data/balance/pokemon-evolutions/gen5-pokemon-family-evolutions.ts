@@ -79,6 +79,7 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
     new SpeciesEvolution(Species.HISUI_LILLIGANT, 1, EvolutionItem.SHINY_STONE, null, GENERIC_ITEM_EVO_LEVEL),
     new SpeciesEvolution(Species.LILLIGANT, 1, EvolutionItem.SUN_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
+  /** Custom: Requires knowing Wave Crash instead of surviving 294 recoil damage */
   [Species.BASCULIN]: [
     new SpeciesFormEvolution(
       Species.BASCULEGION,
