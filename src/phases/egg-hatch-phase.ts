@@ -5,7 +5,6 @@ import type { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Phase } from "#app/phase";
-import { achvs } from "#app/system/achv";
 import EggCounterContainer from "#app/ui/egg-counter-container";
 import type EggHatchSceneHandler from "#app/ui/egg-hatch-scene-handler";
 import PokemonInfoContainer from "#app/ui/pokemon-info-container";
@@ -329,19 +328,6 @@ export class EggHatchPhase extends Phase {
   protected doReveal(): void {
     // set the previous dex data so info container can show new unlocks in egg summary
     const isShiny = this.pokemon.isShiny();
-    if (this.pokemon.species.isSubLegendary()) {
-      globalScene.validateAchv(achvs.HATCH_SUB_LEGENDARY);
-    }
-    if (this.pokemon.species.isLegendary()) {
-      globalScene.validateAchv(achvs.HATCH_LEGENDARY);
-    }
-    if (this.pokemon.species.isMythical()) {
-      globalScene.validateAchv(achvs.HATCH_MYTHICAL);
-    }
-    if (isShiny) {
-      globalScene.validateAchv(achvs.HATCH_SHINY);
-    }
-
     this.eggContainer.setVisible(false);
 
     const spriteKey = this.pokemon.getSpriteKey(true);

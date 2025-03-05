@@ -19,7 +19,7 @@ import { RibbonModifierRewardPhase } from "#app/phases/ribbon-modifier-reward-ph
 import { SummonPhase } from "#app/phases/summon-phase";
 import { UnlockPhase } from "#app/phases/unlock-phase";
 import { api } from "#app/plugins/api/api";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achievements";
 import { settings } from "#app/system/settings/settings-manager";
 import TrainerData from "#app/system/trainer-data";
 import { Unlockables } from "#enums/unlockables";

@@ -27,7 +27,7 @@ import { getGameMode } from "#app/game-mode";
 import { GameModes } from "#enums/game-modes";
 import { BattleType } from "#enums/battle-type";
 import TrainerData from "#app/system/trainer-data";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achievements";
 import EggData from "#app/system/egg-data";
 import type { Egg } from "#app/data/egg";
 import { vouchers } from "#app/system/voucher";
