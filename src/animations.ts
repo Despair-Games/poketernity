@@ -270,7 +270,7 @@ export class Animation {
 
     // Play the animation
     sparkleSprite.play(animationKey);
-    this.scene.playSound("se/sparkle");
+    this.scene.audioManager.playSound("se/sparkle");
   }
 
   public cos(index: number, amplitude: number): number {

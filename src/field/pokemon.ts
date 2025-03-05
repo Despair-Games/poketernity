@@ -8,7 +8,7 @@ import type BattleScene from "#app/battle-scene";
 import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
 import type { StarterMoveset } from "#app/@types/StarterData";
 import type { TurnMove } from "#app/@types/TurnMove";
-import type { AnySound } from "#app/battle-scene";
+import type { AnySound } from "#app/audio-manager";
 import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import type { AbAttr } from "#app/data/ab-attrs/ab-attr";
 import type { Ability } from "#app/data/ability";
@@ -17,12 +17,9 @@ import { applyAbAttrs, getAbApplyFunc } from "#app/data/apply-ab-attrs";
 import { NoCritTag } from "#app/data/arena-tag";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { starterPassiveAbilities } from "#app/data/balance/passives";
-import {
-  pokemonEvolutions,
-  pokemonPrevolutions,
-  type SpeciesEvolutionCondition,
-  type SpeciesFormEvolution,
-} from "#app/data/balance/pokemon-evolutions";
+import { type SpeciesEvolutionCondition, type SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
+import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#app/data/balance/pokemon-level-moves";
 import {
   BASE_HIDDEN_ABILITY_CHANCE,
@@ -118,10 +115,11 @@ import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { ObtainStatusEffectPhase } from "#app/phases/obtain-status-effect-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achievements";
 import type PokemonData from "#app/system/pokemon-data";
-import type { TurnCommand } from "#app/turn-command-manager";
 import { settings } from "#app/system/settings/settings-manager";
+import { timedEventManager } from "#app/timed-event-manager";
+import type { TurnCommand } from "#app/turn-command-manager";
 import type BattleInfo from "#app/ui/battle-info";
 import { EnemyBattleInfo, PlayerBattleInfo } from "#app/ui/battle-info";
 import {
@@ -161,6 +159,7 @@ import { Biome } from "#enums/biome";
 import { ChallengeType } from "#enums/challenge-type";
 import { Challenges } from "#enums/challenges";
 import { ElementalType } from "#enums/elemental-type";
+import { EventModifierType } from "#enums/event-modifier-type";
 import { FieldPosition } from "#enums/field-position";
 import { Gender } from "#enums/gender";
 import { HitResult } from "#enums/hit-result";
@@ -1409,8 +1408,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     let starterSpeciesId = this.species.speciesId;
-    while (pokemonPrevolutions.hasOwnProperty(starterSpeciesId)) {
-      starterSpeciesId = pokemonPrevolutions[starterSpeciesId];
+    while (pokemonPreEvolutions.hasOwnProperty(starterSpeciesId)) {
+      starterSpeciesId = pokemonPreEvolutions[starterSpeciesId];
     }
     return allAbilities[starterPassiveAbilities[starterSpeciesId]];
   }
@@ -2084,8 +2083,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     const shinyThreshold = new NumberHolder(BASE_SHINY_CHANCE);
     if (thresholdOverride === undefined) {
-      if (globalScene.eventManager.isEventActive()) {
-        shinyThreshold.value *= globalScene.eventManager.getShinyMultiplier();
+      if (timedEventManager.isEventActive(EventModifierType.WILD_SHINY_CHANCE)) {
+        shinyThreshold.value *= timedEventManager.getWildShinyChanceMultiplier();
       }
       if (!this.hasTrainer()) {
         globalScene.applyModifiers(ShinyRateBoosterModifier, true, shinyThreshold);
@@ -2119,8 +2118,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       if (thresholdOverride !== undefined && applyModifiersToOverride) {
         shinyThreshold.value = thresholdOverride;
       }
-      if (globalScene.eventManager.isEventActive()) {
-        shinyThreshold.value *= globalScene.eventManager.getShinyMultiplier();
+      if (timedEventManager.isEventActive(EventModifierType.WILD_SHINY_CHANCE)) {
+        shinyThreshold.value *= timedEventManager.getWildShinyChanceMultiplier();
       }
       if (!this.hasTrainer()) {
         globalScene.applyModifiers(ShinyRateBoosterModifier, true, shinyThreshold);
@@ -3295,9 +3294,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     // Copy all stat stages
     for (const s of BATTLE_STATS) {
       const sourceStage = source.getStatStage(s);
-      if (this instanceof PlayerPokemon && sourceStage === 6) {
-        globalScene.validateAchv(achvs.TRANSFER_MAX_STAT_STAGE);
-      }
       this.setStatStage(s, sourceStage);
     }
 
@@ -3429,7 +3425,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   faintCry(callback: Function): void {
     const key = this.species.getCryKey(this.formIndex);
     let rate = 0.85;
-    const cry = globalScene.playSound(key, { rate: rate }) as AnySound;
+    const cry = globalScene.audioManager.playSound(key, { rate: rate }) as AnySound;
     if (!cry || settings.effectiveFieldVolume === 0) {
       return callback();
     }
@@ -4151,8 +4147,8 @@ export class PlayerPokemon extends Pokemon {
       const amount = new NumberHolder(friendship);
       globalScene.applyModifier(PokemonFriendshipBoosterModifier, true, this, amount);
       let candyFriendshipMultiplier = CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER;
-      if (globalScene.eventManager.isEventActive()) {
-        candyFriendshipMultiplier *= globalScene.eventManager.getFriendshipMultiplier();
+      if (timedEventManager.isEventActive(EventModifierType.CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER)) {
+        candyFriendshipMultiplier *= timedEventManager.getClassicCandyFriendshipMultiplier();
       }
       const starterAmount = new NumberHolder(
         Math.floor(amount.value * (globalScene.gameMode.isClassic ? candyFriendshipMultiplier : 1)),
@@ -4468,16 +4464,16 @@ export class EnemyPokemon extends Pokemon {
 
       this.luck = this.shiny ? this.variant + 1 : 0;
 
-      let prevolution: Species;
+      let preEvolution: Species;
       let speciesId = species.speciesId;
-      while ((prevolution = pokemonPrevolutions[speciesId])) {
-        const evolution = pokemonEvolutions[prevolution].find(
+      while ((preEvolution = pokemonPreEvolutions[speciesId])) {
+        const evolution = pokemonEvolutions[preEvolution].find(
           (pe) => pe.speciesId === speciesId && (!pe.evoFormKey || pe.evoFormKey === this.getFormKey()),
         );
         if (evolution?.condition?.enforceFunc) {
           evolution.condition.enforceFunc(this);
         }
-        speciesId = prevolution;
+        speciesId = preEvolution;
       }
     }
 

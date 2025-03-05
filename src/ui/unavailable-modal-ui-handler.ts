@@ -64,7 +64,7 @@ export default class UnavailableModalUiHandler extends ModalUiHandler {
       if (response[0] || [200, 400].includes(response[1])) {
         this.reconnectTimer = null;
         this.reconnectDuration = this.minTime;
-        globalScene.playSound("se/pb_bounce_1");
+        globalScene.audioManager.playSound("se/pb_bounce_1");
         this.reconnectCallback();
       } else if (response[1] === 401) {
         removeCookie(SESSION_ID_COOKIE);

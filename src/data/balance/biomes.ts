@@ -1,7 +1,7 @@
 import { ElementalType } from "#enums/elemental-type";
 import { randSeedInt, getEnumValues } from "#app/utils";
-import type { SpeciesFormEvolution } from "#app/data/balance/pokemon-evolutions";
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import type { SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
 import i18next from "i18next";
 import { Biome } from "#enums/biome";
 import { Species } from "#enums/species";
@@ -11106,14 +11106,14 @@ export function initBiomes() {
             };
             for (let s = 1; s < entry.length; s++) {
               const speciesId = entry[s];
-              const prevolution = entry
+              const preEvolution = entry
                 .map((s) => pokemonEvolutions[s])
                 .flat()
                 .find((e) => e && e.speciesId === speciesId);
               const level =
-                prevolution.level
-                - (prevolution.level === 1 ? 1 : 0)
-                + prevolution.wildDelay * 10
+                preEvolution.level
+                - (preEvolution.level === 1 ? 1 : 0)
+                + preEvolution.wildDelay * 10
                 - (tier >= BiomePoolTier.BOSS ? 10 : 0);
               if (!newEntry.hasOwnProperty(level)) {
                 newEntry[level] = [speciesId];

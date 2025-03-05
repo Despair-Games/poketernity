@@ -302,6 +302,15 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
       ["es-ES"]: FontStyle.ALT_FONT_35PX,
     },
   },
+  // TODO: these are not really textstyles and only used to update the color of existing text
+  [TextStyle.GENDER_FEMALE]: {
+    color: TextColor.PINK_DARK_BROWN_SHADOW,
+    fontStyle: FontStyle.DEFAULT_FONT_96PX,
+  },
+  [TextStyle.GENDER_MALE]: {
+    color: TextColor.BLUE_DARK_SHADOW,
+    fontStyle: FontStyle.DEFAULT_FONT_96PX,
+  },
 };
 
 export function getTextStyle(style: TextStyle): TextStyleOptions {

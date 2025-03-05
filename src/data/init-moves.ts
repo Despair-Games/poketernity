@@ -3035,7 +3035,8 @@ export function initMoves() {
       .punchingMove(),
     new SelfStatusMove(MoveId.MAX_GUARD, ElementalType.NORMAL, -1, 10, -1, 4, 8)
       .attr(ProtectAttr)
-      .condition(failIfLastCondition),
+      .condition(failIfLastCondition)
+      .unimplemented(),
     new AttackMove(MoveId.DYNAMAX_CANNON, ElementalType.DRAGON, MoveCategory.SPECIAL, 100, 100, 5, -1, 0, 8)
       .attr(DoubleDamageToMaxAttr)
       .attr(DiscourageFrequentUseAttr),

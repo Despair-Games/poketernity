@@ -278,13 +278,12 @@ async function summonSafariPokemon() {
 
   // Generate pokemon using safariPokemonRemaining so they are always the same pokemon no matter how many turns are taken
   // Safari pokemon roll twice on shiny and HA chances, but are otherwise normal
-  let enemySpecies;
-  let pokemon;
+  let enemySpecies: PokemonSpecies;
+  let pokemon: EnemyPokemon;
   globalScene.executeWithSeedOffset(
     () => {
-      enemySpecies = getSafariSpeciesSpawn();
       const level = globalScene.currentBattle.getLevelForWave();
-      enemySpecies = getPokemonSpecies(enemySpecies.getWildSpeciesForLevel(level, true, false, globalScene.gameMode));
+      enemySpecies = getPokemonSpecies(getSafariSpeciesSpawn().getEnemySpeciesForLevel(level));
       pokemon = globalScene.addEnemyPokemon(enemySpecies, level, TrainerSlot.NONE, false);
 
       // Roll shiny twice
@@ -313,6 +312,7 @@ async function summonSafariPokemon() {
     },
     globalScene.currentBattle.waveIndex * 1000 * encounter.misc.safariPokemonRemaining,
   );
+  pokemon = pokemon!; // Tell the compiler it's defined
 
   globalScene.gameData.setPokemonSeen(pokemon, true);
   await pokemon.loadAssets();
@@ -367,7 +367,7 @@ async function throwBait(pokemon: EnemyPokemon): Promise<boolean> {
       `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
     );
     globalScene.time.delayedCall(TRAINER_THROW_ANIMATION_TIMES[0], () => {
-      globalScene.playSound("se/pb_throw");
+      globalScene.audioManager.playSound("se/pb_throw");
 
       // Trainer throw frames
       globalScene.trainer.setFrame("2");
@@ -397,12 +397,12 @@ async function throwBait(pokemon: EnemyPokemon): Promise<boolean> {
               y: originalY - 5,
               loop: 6,
               onStart: () => {
-                globalScene.playSound("battle_anims/PRSFX- Bug Bite");
+                globalScene.audioManager.playSound("battle_anims/PRSFX- Bug Bite");
                 bait.setFrame("0002.png");
               },
               onLoop: () => {
                 if (index % 2 === 0) {
-                  globalScene.playSound("battle_anims/PRSFX- Bug Bite");
+                  globalScene.audioManager.playSound("battle_anims/PRSFX- Bug Bite");
                 }
                 if (index === 4) {
                   bait.setFrame("0003.png");
@@ -436,7 +436,7 @@ async function throwMud(pokemon: EnemyPokemon): Promise<boolean> {
       `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
     );
     globalScene.time.delayedCall(TRAINER_THROW_ANIMATION_TIMES[0], () => {
-      globalScene.playSound("se/pb_throw");
+      globalScene.audioManager.playSound("se/pb_throw");
 
       // Trainer throw frames
       globalScene.trainer.setFrame("2");
@@ -457,7 +457,7 @@ async function throwMud(pokemon: EnemyPokemon): Promise<boolean> {
         duration: 500,
         onComplete: () => {
           // Mud frame 2
-          globalScene.playSound("battle_anims/PRSFX- Sludge Bomb2");
+          globalScene.audioManager.playSound("battle_anims/PRSFX- Sludge Bomb2");
           mud.setFrame("0002.png");
           // Mud splat
           globalScene.time.delayedCall(200, () => {
@@ -483,10 +483,10 @@ async function throwMud(pokemon: EnemyPokemon): Promise<boolean> {
                 y: originalY - 20,
                 loop: 1,
                 onStart: () => {
-                  globalScene.playSound("battle_anims/PRSFX- Taunt2");
+                  globalScene.audioManager.playSound("battle_anims/PRSFX- Taunt2");
                 },
                 onLoop: () => {
-                  globalScene.playSound("battle_anims/PRSFX- Taunt2");
+                  globalScene.audioManager.playSound("battle_anims/PRSFX- Taunt2");
                 },
                 onComplete: () => {
                   resolve(true);

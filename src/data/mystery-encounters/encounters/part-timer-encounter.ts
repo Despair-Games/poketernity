@@ -294,50 +294,50 @@ export const PartTimerEncounter: MysteryEncounter = MysteryEncounterBuilder.with
   .build();
 
 function doStrongWorkSfx() {
-  globalScene.playSound("battle_anims/PRSFX- Horn Drill1");
-  globalScene.playSound("battle_anims/PRSFX- Horn Drill1");
+  globalScene.audioManager.playSound("battle_anims/PRSFX- Horn Drill1");
+  globalScene.audioManager.playSound("battle_anims/PRSFX- Horn Drill1");
 
   globalScene.time.delayedCall(1000, () => {
-    globalScene.playSound("battle_anims/PRSFX- Guillotine2");
+    globalScene.audioManager.playSound("battle_anims/PRSFX- Guillotine2");
   });
 
   globalScene.time.delayedCall(2000, () => {
-    globalScene.playSound("battle_anims/PRSFX- Heavy Slam2");
+    globalScene.audioManager.playSound("battle_anims/PRSFX- Heavy Slam2");
   });
 
   globalScene.time.delayedCall(2500, () => {
-    globalScene.playSound("battle_anims/PRSFX- Guillotine2");
+    globalScene.audioManager.playSound("battle_anims/PRSFX- Guillotine2");
   });
 }
 
 function doDeliverySfx() {
-  globalScene.playSound("battle_anims/PRSFX- Accelerock1");
+  globalScene.audioManager.playSound("battle_anims/PRSFX- Accelerock1");
 
   globalScene.time.delayedCall(1500, () => {
-    globalScene.playSound("battle_anims/PRSFX- Extremespeed1");
+    globalScene.audioManager.playSound("battle_anims/PRSFX- Extremespeed1");
   });
 
   globalScene.time.delayedCall(2000, () => {
-    globalScene.playSound("battle_anims/PRSFX- Extremespeed1");
+    globalScene.audioManager.playSound("battle_anims/PRSFX- Extremespeed1");
   });
 
   globalScene.time.delayedCall(2250, () => {
-    globalScene.playSound("battle_anims/PRSFX- Agility");
+    globalScene.audioManager.playSound("battle_anims/PRSFX- Agility");
   });
 }
 
 function doSalesSfx() {
-  globalScene.playSound("battle_anims/PRSFX- Captivate");
+  globalScene.audioManager.playSound("battle_anims/PRSFX- Captivate");
 
   globalScene.time.delayedCall(1500, () => {
-    globalScene.playSound("battle_anims/PRSFX- Attract2");
+    globalScene.audioManager.playSound("battle_anims/PRSFX- Attract2");
   });
 
   globalScene.time.delayedCall(2000, () => {
-    globalScene.playSound("battle_anims/PRSFX- Aurora Veil2");
+    globalScene.audioManager.playSound("battle_anims/PRSFX- Aurora Veil2");
   });
 
   globalScene.time.delayedCall(3000, () => {
-    globalScene.playSound("battle_anims/PRSFX- Attract2");
+    globalScene.audioManager.playSound("battle_anims/PRSFX- Attract2");
   });
 }

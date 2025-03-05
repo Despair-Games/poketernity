@@ -10,12 +10,12 @@ import { getWindowVariantSuffix } from "#app/ui/ui-theme";
 import { WindowVariant } from "#enums/window-variant";
 import { isMobile } from "#app/touch-controls";
 import { getEnumValues, getEnumKeys } from "#app/utils";
-import { initPokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
+import { initPokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { initBiomes } from "#app/data/balance/biomes";
 import { initEggMoves } from "#app/data/balance/egg-moves";
 import { initPokemonForms } from "#app/data/pokemon-forms";
 import { initSpecies } from "./data/init-species";
-import { initAchievements } from "#app/system/achv";
+import { initAchievements } from "#app/system/achievements";
 import { initTrainerTypeDialogue } from "./data/init-trainer-type-dialogue";
 import { initChallenges } from "#app/data/challenge";
 import i18next from "i18next";
@@ -31,6 +31,7 @@ import { api } from "#app/plugins/api/api";
 import { initMoves } from "#app/data/init-moves";
 import { initModifierTypes } from "#app/modifier/init-modifier-types";
 import { initModifierPools } from "#app/modifier/init-modifier-pools";
+import { timedEventManager } from "#app/timed-event-manager";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";
@@ -194,12 +195,15 @@ export class LoadingScene extends SceneBase {
     this.loadAtlas("status_icons", ImagesFolder.UI_STATUS_ICONS, { languageKey: lang });
     this.loadAtlas("type_icons", ImagesFolder.UI_TYPE_ICONS, { languageKey: lang });
 
-    // TODO: cleanup event images loading
-    const availableLangs = ["en", "de", "it", "fr", "ja", "ko", "es-ES", "pt-BR", "zh-CN"];
-    if (lang && availableLangs.includes(lang)) {
-      this.loadImage("halloween2024-event-" + lang, ImagesFolder.EVENTS);
-    } else {
-      this.loadImage("halloween2024-event-en", ImagesFolder.EVENTS);
+    // Load the banner for the current or next event with a banner, if any
+    const eventBanner = timedEventManager.getActiveOrNextEventBanner();
+    if (eventBanner?.availableLangs) {
+      // Banner with different localized versions
+      const bannerLang = eventBanner.availableLangs.includes(lang) ? lang : "en";
+      this.loadImage(eventBanner.key, ImagesFolder.BANNERS, { languageKey: bannerLang });
+    } else if (eventBanner) {
+      // Non localized banner
+      this.loadImage(eventBanner.key, ImagesFolder.BANNERS);
     }
 
     // Load arena images
@@ -366,7 +370,7 @@ export class LoadingScene extends SceneBase {
     initAchievements();
     initVouchers();
     initStatsKeys();
-    initPokemonPrevolutions();
+    initPokemonPreEvolutions();
     initBiomes();
     initEggMoves();
     initPokemonForms();

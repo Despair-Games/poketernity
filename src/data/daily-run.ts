@@ -1,4 +1,3 @@
-import { PartyMemberStrength } from "#enums/party-member-strength";
 import type { Species } from "#enums/species";
 import { globalScene } from "#app/global-scene";
 import { PlayerPokemon } from "#app/field/pokemon";
@@ -54,9 +53,7 @@ export function getDailyRunStarters(seed: string): Starter[] {
           .map((s) => parseInt(s) as Species)
           .filter((s) => speciesStarterCosts[s] === cost);
         const randPkmSpecies = getPokemonSpecies(randSeedItem(costSpecies));
-        const starterSpecies = getPokemonSpecies(
-          randPkmSpecies.getTrainerSpeciesForLevel(startingLevel, true, PartyMemberStrength.STRONGER),
-        );
+        const starterSpecies = getPokemonSpecies(randPkmSpecies.getEnemySpeciesForLevel(startingLevel, true));
         starters.push(getDailyRunStarter(starterSpecies, startingLevel));
       }
     },

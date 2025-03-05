@@ -78,7 +78,7 @@ export default class PokeballTray extends Phaser.GameObjects.Container {
         ball.setFrame(ballFrame);
       });
 
-      globalScene.playSound("se/pb_tray_enter");
+      globalScene.audioManager.playSound("se/pb_tray_enter");
 
       globalScene.tweens.add({
         targets: this,
@@ -92,7 +92,8 @@ export default class PokeballTray extends Phaser.GameObjects.Container {
               x: `${this.player ? "-" : "+"}=104`,
               duration: b * 100,
               ease: "Sine.easeIn",
-              onComplete: () => globalScene.playSound(`se/${b < party.length ? "pb_tray_ball" : "pb_tray_empty"}`),
+              onComplete: () =>
+                globalScene.audioManager.playSound(`se/${b < party.length ? "pb_tray_ball" : "pb_tray_empty"}`),
             });
           });
         },
