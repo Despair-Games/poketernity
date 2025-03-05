@@ -14,6 +14,7 @@ export const GENERIC_ITEM_EVO_LEVEL = 36;
  * Ursaring, Piloswine,
  * Dusclops
  * Eelektrick, Lampent
+ * Doublade
  */
 export const ADVANCED_ITEM_EVO_LEVEL = 45;
 /**
