@@ -13,14 +13,14 @@ import {
   LICKILICKY_EVO_LEVEL,
   MR_MIME_EVO_LEVEL,
   TANGROWTH_EVO_LEVEL,
-} from "./enemy-pokemon-evolution-levels";
-import type { PokemonEvolutions } from "../../pokemon-evolutions";
+} from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
 import {
+  type PokemonEvolutions,
   SpeciesFormEvolution,
   SpeciesEvolution,
   SpeciesEvolutionCondition,
   SpeciesFriendshipEvolutionCondition,
-} from "../../pokemon-evolutions";
+} from "#app/data/pokemon-evolutions";
 
 export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.BULBASAUR]: [new SpeciesEvolution(Species.IVYSAUR, 16, null, null)],

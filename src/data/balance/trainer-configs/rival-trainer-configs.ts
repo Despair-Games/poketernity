@@ -1,5 +1,5 @@
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
-import { pokemonPreEvolutions } from "../../pokemon-pre-evolutions";
+import { pokemonPreEvolutions } from "app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import {
   getRandomPartyMemberFunc,
