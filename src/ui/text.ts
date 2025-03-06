@@ -95,9 +95,17 @@ export function addTextInputObject(
  * @param style the {@linkcode TextStyle} to use.
  */
 export function setTextColor(textObject: Phaser.GameObjects.Text, style: TextStyle): void {
-  const { mainColor, shadowColor } = getTextStyle(style).color;
+  const {
+    color: { mainColor, shadowColor },
+    fontStyle: { shadow, strokeThickness },
+  } = getTextStyle(style);
   textObject.setColor(mainColor);
-  textObject.setShadowColor(shadowColor);
+  if (shadow) {
+    textObject.setShadowColor(shadowColor);
+  }
+  if (strokeThickness) {
+    textObject.setStroke(shadowColor, strokeThickness);
+  }
 }
 
 export function getTextStyleOptions(
