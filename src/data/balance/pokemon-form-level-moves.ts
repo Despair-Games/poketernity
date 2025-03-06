@@ -1,7 +1,7 @@
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import type { PokemonSpeciesFormLevelMoves } from "./pokemon-level-moves";
-import { EVOLVE_MOVE, RELEARN_MOVE } from "./pokemon-level-moves";
+import { EVOLVE_MOVE, FORM_CHANGE_MOVE, RELEARN_MOVE } from "./pokemon-level-moves";
 
 /**
  * Note: Logic for learning moves during a form change, such as G-Max moves,
@@ -12,7 +12,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.VENUSAUR]: {
     2: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_VINE_LASH],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_VINE_LASH],
       [EVOLVE_MOVE, MoveId.PETAL_BLIZZARD],
       [1, MoveId.GROWTH],
       [1, MoveId.PETAL_DANCE],
@@ -35,7 +35,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.CHARIZARD]: {
     3: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_WILDFIRE],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_WILDFIRE],
       [EVOLVE_MOVE, MoveId.AIR_SLASH],
       [1, MoveId.SCRATCH],
       [1, MoveId.GROWL],
@@ -56,7 +56,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.BLASTOISE]: {
     2: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_CANNONADE],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_CANNONADE],
       [EVOLVE_MOVE, MoveId.FLASH_CANNON],
       [1, MoveId.TACKLE],
       [1, MoveId.TAIL_WHIP],
@@ -77,7 +77,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.BUTTERFREE]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_BEFUDDLE],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_BEFUDDLE],
       [EVOLVE_MOVE, MoveId.GUST],
       [1, MoveId.TACKLE],
       [1, MoveId.STRING_SHOT],
@@ -277,7 +277,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     ],
     8: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_VOLT_CRASH],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_VOLT_CRASH],
       [1, MoveId.TAIL_WHIP],
       [1, MoveId.GROWL],
       [1, MoveId.THUNDER_SHOCK],
@@ -306,7 +306,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.MEOWTH]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_GOLD_RUSH],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_GOLD_RUSH],
       [1, MoveId.GROWL],
       [1, MoveId.FAKE_OUT],
       [1, MoveId.SWITCHEROO], // From Persian
@@ -326,7 +326,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.MACHAMP]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_CHI_STRIKE],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_CHI_STRIKE],
       [1, MoveId.LEER],
       [1, MoveId.LOW_KICK],
       [1, MoveId.FOCUS_ENERGY],
@@ -349,7 +349,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.GENGAR]: {
     2: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_TERROR],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_TERROR],
       [1, MoveId.HYPNOSIS],
       [1, MoveId.CONFUSE_RAY],
       [1, MoveId.LICK],
@@ -373,7 +373,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.KINGLER]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_FOAM_BURST],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_FOAM_BURST],
       [1, MoveId.LEER],
       [1, MoveId.WATER_GUN],
       [1, MoveId.HARDEN],
@@ -396,7 +396,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.LAPRAS]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_RESONANCE],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_RESONANCE],
       [1, MoveId.GROWL],
       [1, MoveId.WATER_GUN],
       [5, MoveId.SING],
@@ -445,7 +445,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     ],
     2: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_CUDDLE],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_CUDDLE],
       [1, MoveId.TACKLE],
       [1, MoveId.TAIL_WHIP],
       [1, MoveId.GROWL],
@@ -475,7 +475,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.SNORLAX]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_REPLENISH],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_REPLENISH],
       [1, MoveId.TACKLE],
       [1, MoveId.SCREECH],
       [1, MoveId.ODOR_SLEUTH], // Previous Stage Move
@@ -719,7 +719,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.GARBODOR]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_MALODOR],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_MALODOR],
       [1, MoveId.POUND],
       [1, MoveId.TAKE_DOWN],
       [1, MoveId.POISON_GAS],
@@ -904,7 +904,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.NECROZMA]: {
     1: [
       // Dusk Mane
-      [RELEARN_MOVE, MoveId.SUNSTEEL_STRIKE],
+      [FORM_CHANGE_MOVE, MoveId.SUNSTEEL_STRIKE],
       [1, MoveId.CONFUSION],
       [1, MoveId.METAL_CLAW],
       [1, MoveId.MORNING_SUN],
@@ -925,7 +925,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     ],
     2: [
       // Dawn Wings
-      [RELEARN_MOVE, MoveId.MOONGEIST_BEAM],
+      [FORM_CHANGE_MOVE, MoveId.MOONGEIST_BEAM],
       [1, MoveId.CONFUSION],
       [1, MoveId.METAL_CLAW],
       [1, MoveId.MORNING_SUN],
@@ -946,8 +946,8 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     ],
     3: [
       // Ultra
-      [RELEARN_MOVE, MoveId.SUNSTEEL_STRIKE],
-      [RELEARN_MOVE, MoveId.MOONGEIST_BEAM],
+      [FORM_CHANGE_MOVE, MoveId.SUNSTEEL_STRIKE],
+      [FORM_CHANGE_MOVE, MoveId.MOONGEIST_BEAM],
       [1, MoveId.CONFUSION],
       [1, MoveId.METAL_CLAW],
       [1, MoveId.MORNING_SUN],
@@ -970,7 +970,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.MELMETAL]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_MELTDOWN],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_MELTDOWN],
       [EVOLVE_MOVE, MoveId.THUNDER_PUNCH],
       [1, MoveId.HEADBUTT],
       [1, MoveId.TAIL_WHIP],
@@ -991,7 +991,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.CORVIKNIGHT]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_WIND_RAGE],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_WIND_RAGE],
       [EVOLVE_MOVE, MoveId.STEEL_WING],
       [1, MoveId.LEER],
       [1, MoveId.PECK],
@@ -1012,7 +1012,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.ORBEETLE]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_GRAVITAS],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_GRAVITAS],
       [1, MoveId.CONFUSION],
       [1, MoveId.LIGHT_SCREEN],
       [1, MoveId.REFLECT],
@@ -1034,7 +1034,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.DREDNAW]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_STONESURGE],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_STONESURGE],
       [EVOLVE_MOVE, MoveId.ROCK_TOMB],
       [1, MoveId.TACKLE],
       [1, MoveId.BITE],
@@ -1054,7 +1054,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.COALOSSAL]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_VOLCALITH],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_VOLCALITH],
       [EVOLVE_MOVE, MoveId.TAR_SHOT],
       [1, MoveId.TACKLE],
       [1, MoveId.SMOKESCREEN],
@@ -1073,7 +1073,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.FLAPPLE]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_TARTNESS],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_TARTNESS],
       [EVOLVE_MOVE, MoveId.WING_ATTACK],
       [1, MoveId.LEAFAGE], // Previous Stage Move, Custom
       [1, MoveId.GROWTH],
@@ -1097,7 +1097,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.APPLETUN]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_SWEETNESS],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_SWEETNESS],
       [EVOLVE_MOVE, MoveId.HEADBUTT],
       [1, MoveId.LEAFAGE], // Previous Stage Move, Custom
       [1, MoveId.GROWTH],
@@ -1121,7 +1121,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.SANDACONDA]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_SANDBLAST],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_SANDBLAST],
       [1, MoveId.SAND_ATTACK],
       [1, MoveId.WRAP],
       [1, MoveId.MUD_SLAP], // Previous Stage Move, Custom
@@ -1166,7 +1166,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     ],
     2: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_STUN_SHOCK],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_STUN_SHOCK],
       [EVOLVE_MOVE, MoveId.SPARK],
       [1, MoveId.LEER],
       [1, MoveId.GROWL],
@@ -1196,7 +1196,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.CENTISKORCH]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_CENTIFERNO],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_CENTIFERNO],
       [1, MoveId.WRAP],
       [1, MoveId.BITE],
       [1, MoveId.EMBER],
@@ -1216,7 +1216,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.HATTERENE]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_SMITE],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_SMITE],
       [EVOLVE_MOVE, MoveId.PSYCHO_CUT],
       [1, MoveId.CONFUSION],
       [1, MoveId.DISARMING_VOICE],
@@ -1236,7 +1236,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.GRIMMSNARL]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_SNOOZE],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_SNOOZE],
       [EVOLVE_MOVE, MoveId.SPIRIT_BREAK],
       [1, MoveId.BITE],
       [1, MoveId.FAKE_OUT],
@@ -1259,7 +1259,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.ALCREMIE]: {
     9: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_FINALE],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_FINALE],
       [EVOLVE_MOVE, MoveId.DECORATE],
       [1, MoveId.TACKLE],
       [1, MoveId.SWEET_KISS],
@@ -1295,7 +1295,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.COPPERAJAH]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_STEELSURGE],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_STEELSURGE],
       [EVOLVE_MOVE, MoveId.HEAVY_SLAM],
       [1, MoveId.TACKLE],
       [1, MoveId.GROWL],
@@ -1315,7 +1315,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.DURALUDON]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_DEPLETION],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_DEPLETION],
       [1, MoveId.LEER],
       [1, MoveId.METAL_CLAW],
       [6, MoveId.ROCK_SMASH],
@@ -1373,7 +1373,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.RILLABOOM]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_DRUM_SOLO],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_DRUM_SOLO],
       [EVOLVE_MOVE, MoveId.DRUM_BEATING],
       [1, MoveId.SCRATCH],
       [1, MoveId.GROWL],
@@ -1395,7 +1395,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.CINDERACE]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_FIREBALL],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_FIREBALL],
       [EVOLVE_MOVE, MoveId.PYRO_BALL],
       [1, MoveId.TACKLE],
       [1, MoveId.GROWL],
@@ -1415,7 +1415,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.INTELEON]: {
     1: [
       // G-Max
-      [RELEARN_MOVE, MoveId.G_MAX_HYDROSNIPE],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_HYDROSNIPE],
       [EVOLVE_MOVE, MoveId.SNIPE_SHOT],
       [1, MoveId.POUND],
       [1, MoveId.BIND],
@@ -1475,7 +1475,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     ],
     2: [
       // G-Max Single Strike Style
-      [RELEARN_MOVE, MoveId.G_MAX_ONE_BLOW],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_ONE_BLOW],
       [EVOLVE_MOVE, MoveId.WICKED_BLOW],
       [1, MoveId.LEER],
       [1, MoveId.FOCUS_ENERGY],
@@ -1496,7 +1496,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     ],
     3: [
       // G-Max Rapid Style
-      [RELEARN_MOVE, MoveId.G_MAX_RAPID_FLOW],
+      [FORM_CHANGE_MOVE, MoveId.G_MAX_RAPID_FLOW],
       [EVOLVE_MOVE, MoveId.SURGING_STRIKES],
       [1, MoveId.LEER],
       [1, MoveId.FOCUS_ENERGY],
@@ -1519,7 +1519,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.CALYREX]: {
     1: [
       // Ice Rider
-      [RELEARN_MOVE, MoveId.GLACIAL_LANCE],
+      [FORM_CHANGE_MOVE, MoveId.GLACIAL_LANCE],
       [1, MoveId.POUND],
       [1, MoveId.SWORDS_DANCE],
       [1, MoveId.STOMP],
@@ -1553,7 +1553,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
     ],
     2: [
       // Shadow Rider
-      [RELEARN_MOVE, MoveId.ASTRAL_BARRAGE],
+      [FORM_CHANGE_MOVE, MoveId.ASTRAL_BARRAGE],
       [1, MoveId.POUND],
       [1, MoveId.STOMP],
       [1, MoveId.DOUBLE_KICK],
