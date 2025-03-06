@@ -2,6 +2,7 @@ import {
   BRAMBLEGHAST_EVO_LEVEL,
   GENERIC_ITEM_EVO_LEVEL,
   PAWMOT_EVO_LEVEL,
+  RABSCA_EVO_LEVEL,
 } from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
 import {
   SpeciesEvolution,
@@ -83,11 +84,15 @@ export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.SHROODLE]: [new SpeciesEvolution(Species.GRAFAIAI, 28, null, null)],
   [Species.BRAMBLIN]: [new SpeciesEvolution(Species.BRAMBLEGHAST, BRAMBLEGHAST_EVO_LEVEL, null, null)],
   [Species.TOEDSCOOL]: [new SpeciesEvolution(Species.TOEDSCRUEL, 30, null, null)],
-  [Species.RELLOR]: [new SpeciesEvolution(Species.RABSCA, 29, null, null)],
+  [Species.CAPSAKID]: [
+    new SpeciesEvolution(Species.SCOVILLAIN, 1, EvolutionItem.FIRE_STONE, null, GENERIC_ITEM_EVO_LEVEL),
+  ],
+  [Species.RELLOR]: [new SpeciesEvolution(Species.RABSCA, RABSCA_EVO_LEVEL, null, null)],
   [Species.FLITTLE]: [new SpeciesEvolution(Species.ESPATHRA, 35, null, null)],
   [Species.TINKATINK]: [new SpeciesEvolution(Species.TINKATUFF, 24, null, null)],
   [Species.TINKATUFF]: [new SpeciesEvolution(Species.TINKATON, 38, null, null)],
   [Species.WIGLETT]: [new SpeciesEvolution(Species.WUGTRIO, 26, null, null)],
+  /** Does not need union circle */
   [Species.FINIZEN]: [new SpeciesEvolution(Species.PALAFIN, 38, null, null)],
   [Species.VAROOM]: [new SpeciesEvolution(Species.REVAVROOM, 40, null, null)],
   [Species.GLIMMET]: [new SpeciesEvolution(Species.GLIMMORA, 35, null, null)],
@@ -99,34 +104,12 @@ export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
       new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
   ],
+  [Species.CETODDLE]: [new SpeciesEvolution(Species.CETITAN, 1, EvolutionItem.ICE_STONE, null, GENERIC_ITEM_EVO_LEVEL)],
+  /** Since this is the only Paldea Pokemon that evolves, I am leaving it in dex order */
+  [Species.PALDEA_WOOPER]: [new SpeciesEvolution(Species.CLODSIRE, 20, null, null)],
   [Species.FRIGIBAX]: [new SpeciesEvolution(Species.ARCTIBAX, 35, null, null)],
   [Species.ARCTIBAX]: [new SpeciesEvolution(Species.BAXCALIBUR, 54, null, null)],
-  [Species.PALDEA_WOOPER]: [new SpeciesEvolution(Species.CLODSIRE, 20, null, null)],
-
-  [Species.CAPSAKID]: [
-    new SpeciesEvolution(Species.SCOVILLAIN, 1, EvolutionItem.FIRE_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-  ],
-  [Species.CETODDLE]: [new SpeciesEvolution(Species.CETITAN, 1, EvolutionItem.ICE_STONE, null, GENERIC_ITEM_EVO_LEVEL)],
-  [Species.POLTCHAGEIST]: [
-    new SpeciesFormEvolution(
-      Species.SINISTCHA,
-      "counterfeit",
-      "unremarkable",
-      1,
-      EvolutionItem.UNREMARKABLE_TEACUP,
-      null,
-      GENERIC_ITEM_EVO_LEVEL,
-    ),
-    new SpeciesFormEvolution(
-      Species.SINISTCHA,
-      "artisan",
-      "masterpiece",
-      1,
-      EvolutionItem.MASTERPIECE_TEACUP,
-      null,
-      GENERIC_ITEM_EVO_LEVEL,
-    ),
-  ],
+  /** Custom evolution method */
   [Species.GIMMIGHOUL]: [
     new SpeciesFormEvolution(
       Species.GHOLDENGO,
@@ -160,6 +143,26 @@ export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
             ).length
           > 9,
       ),
+      GENERIC_ITEM_EVO_LEVEL,
+    ),
+  ],
+  [Species.POLTCHAGEIST]: [
+    new SpeciesFormEvolution(
+      Species.SINISTCHA,
+      "counterfeit",
+      "unremarkable",
+      1,
+      EvolutionItem.UNREMARKABLE_TEACUP,
+      null,
+      GENERIC_ITEM_EVO_LEVEL,
+    ),
+    new SpeciesFormEvolution(
+      Species.SINISTCHA,
+      "artisan",
+      "masterpiece",
+      1,
+      EvolutionItem.MASTERPIECE_TEACUP,
+      null,
       GENERIC_ITEM_EVO_LEVEL,
     ),
   ],
