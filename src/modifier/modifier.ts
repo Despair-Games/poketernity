@@ -1,4 +1,4 @@
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
 import { getBerryEffectFunc, getBerryPredicate } from "#app/data/berry";
 import { getLevelTotalExp } from "#app/data/exp";
 import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";

@@ -1,4 +1,4 @@
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";

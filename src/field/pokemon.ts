@@ -17,12 +17,9 @@ import { applyAbAttrs, getAbApplyFunc } from "#app/data/apply-ab-attrs";
 import { NoCritTag } from "#app/data/arena-tag";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { starterPassiveAbilities } from "#app/data/balance/passives";
-import {
-  pokemonEvolutions,
-  pokemonPrevolutions,
-  type SpeciesEvolutionCondition,
-  type SpeciesFormEvolution,
-} from "#app/data/balance/pokemon-evolutions";
+import { type SpeciesEvolutionCondition, type SpeciesFormEvolution } from "#app/data/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
+import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { EVOLVE_MOVE, RELEARN_MOVE, type LevelMoves } from "#app/data/balance/pokemon-level-moves";
 import {
   BASE_HIDDEN_ABILITY_CHANCE,
@@ -47,6 +44,8 @@ import {
   getBattlerTag,
   type AutotomizedTag,
   type CritBoostStackableTag,
+  type ImprisoningTag,
+  type RestrictingBattlerTag,
   type EncoreTag,
   type SubstituteTag,
 } from "#app/data/battler-tags";
@@ -139,6 +138,7 @@ import {
 import { WeakenMoveScreenArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import {
   CritBoostBattlerTagTypes,
+  MoveLockTagTypes,
   SemiInvulnerableBattlerTagTypes,
   TrappedBattlerTagTypes,
 } from "#app/utils/battler-tag-type-utils";
@@ -513,8 +513,35 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     ret |= this.gender !== Gender.FEMALE ? DexAttr.MALE : DexAttr.FEMALE;
     ret |= !this.shiny ? DexAttr.NON_SHINY : DexAttr.SHINY;
     ret |= this.variant >= 2 ? DexAttr.VARIANT_3 : this.variant === 1 ? DexAttr.VARIANT_2 : DexAttr.DEFAULT_VARIANT;
-    ret |= globalScene.gameData.getFormAttr(this.formIndex);
+    ret |= globalScene.gameData.getFormAttr(this.getSelectableFormIndex());
     return ret;
+  }
+
+  /**
+   * Get the form index of this Pokemon that is selectable as a starter, if different from the current one.
+   *
+   * Forms that are not selectable as starters (like Megas, battle specific transformation, or item only transformations)
+   * get ignored in the Pokemon's dex attribute. They are to be considered as seen/caught as soon as a corresponding,
+   * starter selectable, "base" form is seen/caught. This function returns said starter selectable form index,
+   * rather than the current form index and should only be used when manipulating dex data.
+   *
+   * If the current form is starter selectable, returns `this.formIndex`. If not, looks for a Pokemon with the current form's
+   * `baseFormKey` attribute. Defaults to form index 0 if it can't find one.
+   *
+   * @example for transformed ash Greninja this will return the form index of the non transformed battle bond Greninja.
+   *
+   * @returns the form index of the starter selectable form corresponding to the current one. Defaults to 0
+   */
+  public getSelectableFormIndex() {
+    const speciesForm = this.getSpeciesForm();
+    if (!speciesForm.isStarterSelectable && speciesForm.isPokemonForm()) {
+      if (speciesForm.baseFormKey) {
+        const baseFormIndex = this.species.forms.findIndex((form) => form.formKey === speciesForm.baseFormKey);
+        return baseFormIndex !== -1 ? baseFormIndex : 0;
+      }
+      return 0;
+    }
+    return this.formIndex;
   }
 
   /**
@@ -1411,8 +1438,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     let starterSpeciesId = this.species.speciesId;
-    while (pokemonPrevolutions.hasOwnProperty(starterSpeciesId)) {
-      starterSpeciesId = pokemonPrevolutions[starterSpeciesId];
+    while (pokemonPreEvolutions.hasOwnProperty(starterSpeciesId)) {
+      starterSpeciesId = pokemonPreEvolutions[starterSpeciesId];
     }
     return allAbilities[starterPassiveAbilities[starterSpeciesId]];
   }
@@ -2512,7 +2539,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   getOpponents(): Pokemon[] {
-    return this.getOpposingField().filter((p) => p.isActive());
+    return this.getOpposingField().filter((p) => p.isActive(true));
   }
 
   getOpponentDescriptor(): string {
@@ -3348,14 +3375,21 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Gets the {@link MoveRestrictionBattlerTag} that is restricting a move, if it exists.
+   * Gets the {@link RestrictingBattlerTag} that is restricting a move, if it exists.
    *
    * @param moveId ID of the {@linkcode MoveId | move} to check
    * @param user {@linkcode Pokemon} using the move, used when the target is a factor in the move's restricted status
    * @param target the {@linkcode Pokemon | target} of the move, used when the target is a factor in the move's restricted status
-   * @returns the first {@linkcode MoveRestrictionBattlerTag | tag} on this Pokemon that restricts the move, or `null` if the move is not restricted.
+   * @returns the first {@linkcode RestrictingBattlerTag | tag} on this Pokemon that restricts the move, or `null` if the move is not restricted.
    */
-  getRestrictingTag(moveId: MoveId, user?: Pokemon, target?: Pokemon): MoveRestrictionBattlerTag | null {
+  getRestrictingTag(moveId: MoveId, user?: Pokemon, target?: Pokemon): RestrictingBattlerTag | null {
+    for (const opponent of this.getOpponents()) {
+      const imprisoningTag = opponent.getTag<ImprisoningTag>(BattlerTagType.IMPRISONING);
+      if (imprisoningTag?.apply(opponent, true, this, moveId)) {
+        return imprisoningTag;
+      }
+    }
+
     for (const tag of this.findTags((t) => t instanceof MoveRestrictionBattlerTag)) {
       if ((tag as MoveRestrictionBattlerTag).isMoveRestricted(moveId, user)) {
         return tag as MoveRestrictionBattlerTag;
@@ -4203,9 +4237,13 @@ export class PlayerPokemon extends Pokemon {
     });
   }
 
-  public evolve(evolution: SpeciesFormEvolution | null): Promise<void> {
+  /**
+   * @param evolution - The {@linkcode SpeciesFormEvolution} to use
+   * @returns array of {@linkcode Species} of unlocked starters, if any (root species will be last in the array)
+   */
+  public evolve(evolution: SpeciesFormEvolution | null): Promise<Species[]> {
     if (!evolution) {
-      return new Promise((resolve) => resolve());
+      return new Promise((resolve) => resolve([]));
     }
     return new Promise((resolve) => {
       const preEvolutionSpecies = this.species;
@@ -4236,10 +4274,10 @@ export class PlayerPokemon extends Pokemon {
       }
       this.compatibleTms.splice(0, this.compatibleTms.length);
       this.generateCompatibleTms();
-      const updateAndResolve = () => {
+      const updateAndResolve = (unlockedStarters: Species[]) => {
         this.loadAssets().then(() => {
           this.calculateStats();
-          this.updateInfo(true).then(() => resolve());
+          this.updateInfo(true).then(() => resolve(unlockedStarters));
         });
       };
       // TODO: should this be done in "handleSpecialEvolutions" to keep all species-specific things in the same spot?
@@ -4252,9 +4290,11 @@ export class PlayerPokemon extends Pokemon {
       if (!globalScene.gameMode.isDaily || this.metBiome > -1) {
         globalScene.gameData.updateSpeciesDexIvs(this.species.speciesId, this.ivs);
         globalScene.gameData.setPokemonSeen(this, false);
-        globalScene.gameData.setPokemonCaught(this, false).then(() => updateAndResolve());
+        globalScene.gameData.setPokemonCaught(this, false, false, false).then((unlockedStarters) => {
+          updateAndResolve(unlockedStarters);
+        });
       } else {
-        updateAndResolve();
+        updateAndResolve([]);
       }
     });
   }
@@ -4465,16 +4505,16 @@ export class EnemyPokemon extends Pokemon {
 
       this.luck = this.shiny ? this.variant + 1 : 0;
 
-      let prevolution: Species;
+      let preEvolution: Species;
       let speciesId = species.speciesId;
-      while ((prevolution = pokemonPrevolutions[speciesId])) {
-        const evolution = pokemonEvolutions[prevolution].find(
+      while ((preEvolution = pokemonPreEvolutions[speciesId])) {
+        const evolution = pokemonEvolutions[preEvolution].find(
           (pe) => pe.speciesId === speciesId && (!pe.evoFormKey || pe.evoFormKey === this.getFormKey()),
         );
         if (evolution?.condition?.enforceFunc) {
           evolution.condition.enforceFunc(this);
         }
-        speciesId = prevolution;
+        speciesId = preEvolution;
       }
     }
 
@@ -4560,6 +4600,7 @@ export class EnemyPokemon extends Pokemon {
           (moveIndex > -1 && this.getMoveset()[moveIndex]!.isUsable(this, queuedMove.ignorePP))
           || queuedMove.virtual
         ) {
+          MoveLockTagTypes.forEach((tagType) => this.lapseTag(tagType));
           return queuedMove;
         } else {
           this.getMoveQueue().shift();

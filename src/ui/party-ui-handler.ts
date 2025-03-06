@@ -13,7 +13,7 @@ import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
 import { StatusEffect } from "#enums/status-effect";
 import PokemonIconAnimHandler from "#app/ui/pokemon-icon-anim-handler";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
 import { addWindow } from "#app/ui/ui-theme";
 import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
 import { FormChangeItem } from "#enums/form-change-item";
