@@ -13,7 +13,7 @@ import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constan
 import type { AbAttr } from "#app/data/ab-attrs/ab-attr";
 import type { Ability } from "#app/data/ability";
 import type { AbilityFilterOptions } from "#app/data/ability-filter-options";
-import { applyAbAttrs, AttackMove, getAbApplyFunc } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs, getAbApplyFunc } from "#app/data/apply-ab-attrs";
 import { NoCritTag } from "#app/data/arena-tag";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { starterPassiveAbilities } from "#app/data/balance/passives";
@@ -46,7 +46,6 @@ import {
   type CritBoostStackableTag,
   type ImprisoningTag,
   type RestrictingBattlerTag,
-  type EncoreTag,
   type SubstituteTag,
 } from "#app/data/battler-tags";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
@@ -54,7 +53,7 @@ import { allAbilities, allMoves } from "#app/data/data-lists";
 import { DexAttr } from "#app/data/dex-attributes";
 import { getLevelTotalExp } from "#app/data/exp";
 import { initMoveAnim } from "#app/data/init-move-anim";
-import { getMoveTargets, type Move } from "#app/data/move";
+import { AttackMove, getMoveTargets, type Move } from "#app/data/move";
 import { BypassBurnDamageReductionAttr } from "#app/data/move-attrs/bypass-burn-damage-reduction-attr";
 import { CombinedPledgeStabBoostAttr } from "#app/data/move-attrs/combined-pledge-stab-boost-attr";
 import { CounterDamageAttr } from "#app/data/move-attrs/counter-damage-attr";
@@ -133,13 +132,13 @@ import {
   isBetween,
   isNullOrUndefined,
   randSeedInt,
+  randSeedShuffle,
   toDmgValue,
   type nil,
 } from "#app/utils";
 import { WeakenMoveScreenArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import {
   CritBoostBattlerTagTypes,
-  MoveLockTagTypes,
   SemiInvulnerableBattlerTagTypes,
   TrappedBattlerTagTypes,
 } from "#app/utils/battler-tag-type-utils";
@@ -194,6 +193,8 @@ import type { TrainerSlot } from "#enums/trainer-slot";
 import { UiMode } from "#enums/ui-mode";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
+import type { ConditionalCritAbAttr } from "#app/data/ab-attrs/conditional-crit-ab-attr";
+import { BattleCommand } from "#enums/battle-command";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -3569,7 +3570,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
     turnMove.turn = globalScene.currentBattle?.turn;
     this.getMoveHistory().push(turnMove);
-    this.battleData.revealedMoves.add(turnMove.moveId);
+    this.battleData.revealedMoves.add(turnMove.move.id);
   }
 
   /**
@@ -4799,13 +4800,13 @@ export class EnemyPokemon extends Pokemon {
     const defendingSide = this.getArenaTagSide();
     const noCritTag = globalScene.arena.getTagOnSide(NoCritTag, defendingSide);
 
-    if (noCritTag || move.hasAttr(FixedDamageAttr) || target.hasAbilityWithAttr(BlockCritAbAttr)) {
+    if (noCritTag || move.hasAttr(FixedDamageAttr) || target.hasAbilityWithAttr(AbAttrFlag.BLOCK_CRIT)) {
       return -1;
     }
 
     const isCritical = new BooleanHolder(!!this.getTag(BattlerTagType.ALWAYS_CRIT));
     applyMoveAttrs(CritOnlyAttr, this, target, move, isCritical);
-    applyAbAttrs(ConditionalCritAbAttr, this, true, isCritical, target, move);
+    applyAbAttrs<ConditionalCritAbAttr>(AbAttrFlag.CONDITIONAL_CRIT, this, true, isCritical, target, move);
 
     if (isCritical.value) {
       return 100;
@@ -4854,12 +4855,14 @@ export class EnemyPokemon extends Pokemon {
 
     const nextMove = this.getNextMove();
     console.log(
-      `${BattlerIndex[this.getBattlerIndex()]}: selecting ${MoveId[nextMove.moveId]} against ${nextMove.targets.map((i) => BattlerIndex[i])}`,
+      `${BattlerIndex[this.getBattlerIndex()]}: selecting ${MoveId[nextMove.move.id]} against ${nextMove.targets.map((i) => BattlerIndex[i])}`,
     );
 
     return {
+      pokemon: this,
       command: BattleCommand.FIGHT,
-      move: nextMove,
+      turnMove: nextMove,
+      targets: nextMove.targets,
     };
   }
 
@@ -4893,6 +4896,7 @@ export class EnemyPokemon extends Pokemon {
     // whichever's higher between this Pokemon's MUS + 2 or twice this Pokemon's MUS.
     if (candScore > Math.max(matchupScore + 2, matchupScore * 2)) {
       return {
+        pokemon: this,
         command: BattleCommand.POKEMON,
         cursor: candIndex,
         args: [false],
@@ -4910,15 +4914,16 @@ export class EnemyPokemon extends Pokemon {
    * score, then the final move selection is random between the tied move actions.
    * @returns The {@linkcode QueuedMove} representing the optimal move action.
    */
-  public getNextMove(): QueuedMove {
+  public getNextMove(): TurnMove {
     // If this Pokemon has already queued a move before this turn, it will try to use it.
     const queuedMove = this.getMoveQueue()[0];
     if (queuedMove) {
-      const queuedMovesetMove = this.getMoveset().find((m) => m.moveId === queuedMove.moveId);
+      const queuedMovesetMove = this.getMoveset().find((m) => m.moveId === queuedMove.move.id);
       if (queuedMovesetMove?.isUsable(this, queuedMove.ignorePP)) {
         return {
-          moveId: queuedMovesetMove.moveId,
+          move: queuedMovesetMove.getMove(),
           targets: queuedMove.targets,
+          type: ElementalType.UNKNOWN,
           ignorePP: queuedMove.ignorePP,
         };
       } else {
@@ -4932,8 +4937,9 @@ export class EnemyPokemon extends Pokemon {
     // If this Pokemon has no usable moves, it will use Struggle.
     if (movePool.length === 0) {
       return {
-        moveId: MoveId.STRUGGLE,
+        move: allMoves[MoveId.STRUGGLE],
         targets: getMoveTargets(this, MoveId.STRUGGLE).targets,
+        type: ElementalType.UNKNOWN,
       };
     }
 
@@ -4945,15 +4951,15 @@ export class EnemyPokemon extends Pokemon {
     const moveActions = movePool.map((mv) => this.getOptimalMoveAction(mv.getMove()));
 
     /**
-     * Following similar logic to finding {@linkcode optTarget}, this shuffles
-     * and sorts {@linkcode moveActions} to obtain the best overall
+     * Shuffle and sort {@linkcode moveActions} to obtain the best overall
      * move action among all entries in the move pool.
      */
     const optMoveAction = randSeedShuffle(moveActions).sort((actionA, actionB) => actionB.score - actionA.score)[0];
 
     return {
-      moveId: optMoveAction.moveId,
+      move: allMoves[optMoveAction.moveId],
       targets: optMoveAction.targets,
+      type: ElementalType.UNKNOWN,
     };
   }
 
@@ -4978,6 +4984,18 @@ export class EnemyPokemon extends Pokemon {
       return {
         moveId: move.id,
         targets: [BattlerIndex.ATTACKER],
+        score,
+      };
+    } else if (move.isFieldTarget()) {
+      /**
+       * Field-targeting effects are internally self-targeted when
+       * evaluating score.
+       */
+      const score = move.getEffectScore(this, this);
+
+      return {
+        moveId: move.id,
+        targets: getMoveTargets(this, move.id).targets,
         score,
       };
     }

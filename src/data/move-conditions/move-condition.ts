@@ -1,6 +1,6 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { type Move } from "#app/data/move";
-import { type Pokemon } from "#app/field/pokemon";
+import { type EnemyPokemon, type Pokemon } from "#app/field/pokemon";
 
 export class MoveCondition {
   protected func: MoveConditionFunc;
@@ -14,6 +14,10 @@ export class MoveCondition {
   }
 
   getUserBenefitScore(_user: Pokemon, _target: Pokemon, _move: Move): number {
+    return 0;
+  }
+
+  public getConditionScore(_user: EnemyPokemon, _target?: Pokemon, _move?: Move): number {
     return 0;
   }
 }

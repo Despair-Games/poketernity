@@ -1589,7 +1589,7 @@ export function initMoves() {
     ),
     new AttackMove(MoveId.PAYBACK, ElementalType.DARK, MoveCategory.PHYSICAL, 50, 100, 10, -1, 0, 4).attr(
       MovePowerMultiplierAttr,
-      (_user, target, _move) => (target.turnData.acted ? 2 : 1),
+      (_user, target, _move) => (target.turnData?.acted ? 2 : 1),
     ),
     new AttackMove(MoveId.ASSURANCE, ElementalType.DARK, MoveCategory.PHYSICAL, 60, 100, 10, -1, 0, 4).attr(
       MovePowerMultiplierAttr,

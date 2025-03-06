@@ -42,11 +42,9 @@ import { applyMoveAttrs } from "#app/utils/move-utils";
 import type { ChargingAttackMove } from "#app/data/moves/charging-attack-move";
 import type { ChargingSelfStatusMove } from "#app/data/moves/charging-self-status-move";
 import { FOG_ACCURACY_MULTIPLIER } from "#app/constants";
-import { AlwaysHitAbAttr } from "./ab-attrs/always-hit-ab-attr";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { MultiHitPowerIncrementAttr } from "./move-attrs/multi-hit-power-increment-attr";
 import { MultiHitType } from "#enums/multi-hit-type";
-import { MaxMultiHitAbAttr } from "./ab-attrs/max-multi-hit-ab-attr";
 
 export abstract class Move implements Localizable {
   public id: MoveId;
@@ -802,7 +800,7 @@ export abstract class Move implements Localizable {
      * @todo the target's No Guard can be discovered prematurely here
      */
     if (
-      [user, target].some((p) => p.hasAbilityWithAttr(AlwaysHitAbAttr))
+      [user, target].some((p) => p.hasAbilityWithAttr(AbAttrFlag.ALWAYS_HIT))
       || user.getTag(BattlerTagType.IGNORE_ACCURACY)
       || target.getTag(BattlerTagType.ALWAYS_GET_HIT)
       || target.getTag(BattlerTagType.TELEKINESIS)
@@ -917,7 +915,7 @@ export abstract class Move implements Localizable {
    * @see {@linkcode Pokemon.getAttackScore}
    */
   public getMultiHitAttackScoreMultiplier(user: Pokemon): number {
-    const userHasSkillLink = user.hasAbilityWithAttr(MaxMultiHitAbAttr);
+    const userHasSkillLink = user.hasAbilityWithAttr(AbAttrFlag.MAX_MULTI_HIT);
     if (this.hasAttr(MultiHitPowerIncrementAttr)) {
       /**
        * Triple Axel / Triple Kick have a combined power of 6x the first strike,
