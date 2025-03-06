@@ -42,7 +42,7 @@ describe("Moves - Mirror Move", () => {
     game.move.select(MoveId.SPLASH, 1);
     await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER_2);
     await game.forceEnemyMove(MoveId.GROWL, BattlerIndex.PLAYER_2);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(game.scene.getEnemyField()[0].isFullHp()).toBeFalsy();
@@ -53,7 +53,7 @@ describe("Moves - Mirror Move", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.MIRROR_MOVE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(game.scene.getEnemyPokemon()!.getStatStage(Stat.SPDEF)).toBe(-2);
@@ -64,7 +64,7 @@ describe("Moves - Mirror Move", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.MIRROR_MOVE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(game.scene.getEnemyPokemon()!.getStatStage(Stat.ATK)).toBe(-1);
@@ -74,9 +74,21 @@ describe("Moves - Mirror Move", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.MIRROR_MOVE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
     expect(game.scene.getPlayerPokemon()!.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
+  });
+
+  it("should fail if the target last used Mirror Move, without any infinite loop", async () => {
+    game.override.enemyMoveset(MoveId.MIRROR_MOVE);
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    game.move.select(MoveId.MIRROR_MOVE);
+    await game.toEndOfTurn();
+
+    for (const pokemon of game.scene.getField()) {
+      expect(pokemon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
+    }
   });
 });

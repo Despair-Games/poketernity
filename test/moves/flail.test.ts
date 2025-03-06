@@ -60,7 +60,7 @@ describe("Moves - Flail", () => {
     playerPokemon.hp = 10 * hpRatio;
 
     game.move.select(MoveId.FLAIL, 0);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     expect((game.scene.getCurrentPhase() as MoveEffectPhase).move.moveId).toBe(flail.id);

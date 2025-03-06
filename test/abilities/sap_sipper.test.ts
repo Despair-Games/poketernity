@@ -134,7 +134,7 @@ describe("Abilities - Sap Sipper", () => {
     const randomMoveAttr = allMoves[MoveId.METRONOME].findAttr(
       (attr) => attr instanceof MetronomeAttr,
     ) as MetronomeAttr;
-    vi.spyOn(randomMoveAttr, "getMoveOverride").mockReturnValue(MoveId.BULLET_SEED);
+    vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.BULLET_SEED);
 
     game.override.moveset(moveToUse);
 
@@ -162,7 +162,7 @@ describe("Abilities - Sap Sipper", () => {
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     await game.move.forceMiss();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(1);
   });
 });

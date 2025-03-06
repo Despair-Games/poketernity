@@ -1,6 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
-import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -29,7 +28,7 @@ describe("Moves - Round", () => {
       .ability(Abilities.BALL_FETCH)
       .battleType("double")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(Species.BLISSEY)
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyMoveset([MoveId.SPLASH, MoveId.ROUND])
       .startingLevel(100)
@@ -37,7 +36,7 @@ describe("Moves - Round", () => {
   });
 
   it("should cue other instances of Round together in Speed order", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
+    await game.classicMode.startBattle([Species.BLISSEY, Species.FEEBAS]);
 
     const round = allMoves[MoveId.ROUND];
     const spy = vi.spyOn(round, "calculateBattlePower");
@@ -45,20 +44,14 @@ describe("Moves - Round", () => {
     game.move.select(MoveId.ROUND, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.ROUND, 1, BattlerIndex.ENEMY_2);
 
-    await game.forceEnemyMove(MoveId.ROUND, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY]);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY]);
+    await game.move.selectEnemyMove(MoveId.ROUND, BattlerIndex.PLAYER);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
 
-    const actualTurnOrder: BattlerIndex[] = [];
+    await game.toEndOfTurn();
 
-    for (let i = 0; i < 4; i++) {
-      await game.phaseInterceptor.to("MoveEffectPhase", false);
-      actualTurnOrder.push((game.scene.getCurrentPhase() as MoveEffectPhase).getUserPokemon()!.getBattlerIndex());
-      await game.phaseInterceptor.to("MoveEndPhase");
-    }
-
-    expect(actualTurnOrder).toEqual([
+    expect(game.field.getTurnOrder()).toEqual([
       BattlerIndex.PLAYER,
       BattlerIndex.PLAYER_2,
       BattlerIndex.ENEMY,

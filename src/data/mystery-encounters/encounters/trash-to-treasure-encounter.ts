@@ -124,7 +124,7 @@ export const TrashToTreasureEncounter: MysteryEncounter = MysteryEncounterBuilde
         const modifier = blackSludge?.newModifier();
         if (modifier) {
           globalScene.addModifier(modifier, false, false, false, true);
-          globalScene.playSound("battle_anims/PRSFX- Venom Drench", { volume: 2 });
+          globalScene.audioManager.playSound("battle_anims/PRSFX- Venom Drench", { volume: 2 });
           await showEncounterText(
             i18next.t("battle:rewardGain", { modifierName: modifier.type.name }),
             null,
@@ -215,7 +215,7 @@ async function tryApplyDigRewardItems() {
     }
   }
 
-  globalScene.playSound("item_fanfare");
+  globalScene.audioManager.playSound("item_fanfare");
   await showEncounterText(
     i18next.t("battle:rewardGainCount", { modifierName: leftovers.name, count: 2 }),
     null,
@@ -251,7 +251,7 @@ async function tryApplyDigRewardItems() {
     }
   }
 
-  globalScene.playSound("item_fanfare");
+  globalScene.audioManager.playSound("item_fanfare");
   await showEncounterText(
     i18next.t("battle:rewardGainCount", { modifierName: shellBell.name, count: 2 }),
     null,
@@ -261,12 +261,12 @@ async function tryApplyDigRewardItems() {
 }
 
 function doGarbageDig() {
-  globalScene.playSound("battle_anims/PRSFX- Dig2");
+  globalScene.audioManager.playSound("battle_anims/PRSFX- Dig2");
   globalScene.time.delayedCall(SOUND_EFFECT_WAIT_TIME, () => {
-    globalScene.playSound("battle_anims/PRSFX- Dig2");
-    globalScene.playSound("battle_anims/PRSFX- Venom Drench", { volume: 2 });
+    globalScene.audioManager.playSound("battle_anims/PRSFX- Dig2");
+    globalScene.audioManager.playSound("battle_anims/PRSFX- Venom Drench", { volume: 2 });
   });
   globalScene.time.delayedCall(SOUND_EFFECT_WAIT_TIME * 2, () => {
-    globalScene.playSound("battle_anims/PRSFX- Dig2");
+    globalScene.audioManager.playSound("battle_anims/PRSFX- Dig2");
   });
 }

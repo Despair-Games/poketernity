@@ -1,15 +1,15 @@
 import type { Pokemon } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { BattleCommand } from "#enums/battle-command";
-import type { BooleanHolder } from "#app/utils";
 import i18next from "i18next";
 import { AbAttr } from "./ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import type { Move } from "../move";
+import { MoveCategory } from "#enums/move-category";
 
 /**
- * If a Pokémon with this Ability selects a damaging move, it has a 30% chance of going first in its priority bracket. If the Ability activates, this is announced at the start of the turn (after move selection).
- *
+ * If a Pokémon with this Ability selects a damaging move, it has a 30% chance of going first in its priority bracket.
+ * If the Ability activates, this is announced at the start of the turn (after move selection).
  * @extends AbAttr
  */
 export class BypassSpeedChanceAbAttr extends AbAttr {
@@ -24,26 +24,16 @@ export class BypassSpeedChanceAbAttr extends AbAttr {
     this.chance = chance;
   }
 
-  /**
-   * bypass move order in their priority bracket when pokemon choose damaging move
-   * @param pokemon {@linkcode Pokemon} applying this ability
-   * @param simulated if `true`, suppresses changes to game state
-   * @param bypassSpeed {@linkcode BooleanHolder} set to true when the ability activated
-   * @returns whether the ability was activated
-   */
-  override apply(pokemon: Pokemon, simulated: boolean, bypassSpeed: BooleanHolder): boolean {
-    if (simulated) {
+  override apply(pokemon: Pokemon, simulated: boolean, move: Move): boolean {
+    if (move.category === MoveCategory.STATUS) {
       return false;
     }
 
-    if (!bypassSpeed.value && pokemon.randSeedInt(100) < this.chance) {
-      const turnCommand = globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()];
-      const isCommandFight = turnCommand?.command === BattleCommand.FIGHT;
-
-      if (isCommandFight && turnCommand?.turnMove?.move?.isAttackMove()) {
-        bypassSpeed.value = true;
-        return true;
+    if (pokemon.randSeedInt(100) < this.chance) {
+      if (!simulated) {
+        return pokemon.addTag(BattlerTagType.BYPASS_SPEED);
       }
+      return true;
     }
 
     return false;

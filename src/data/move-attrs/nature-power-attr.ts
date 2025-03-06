@@ -15,6 +15,11 @@ import { TerrainType } from "#enums/terrain-type";
  * @extends CallMoveAttr
  */
 export class NaturePowerAttr extends CallMoveAttr {
+  constructor() {
+    super();
+    this.hasTarget = true;
+  }
+
   override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder): boolean {
     let moveId: MoveId;
     const getBiomeMoveId = (): MoveId => {

@@ -12,7 +12,7 @@ import {
 } from "#app/data/pokeball";
 import { PlayerGender } from "#enums/player-gender";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achievements";
 import { UiMode } from "#enums/ui-mode";
 import type { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
@@ -463,7 +463,7 @@ export function trainerThrowPokeball(
       `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
     );
     globalScene.time.delayedCall(512, () => {
-      globalScene.playSound("se/pb_throw");
+      globalScene.audioManager.playSound("se/pb_throw");
 
       // Trainer throw frames
       globalScene.trainer.setFrame("2");
@@ -485,7 +485,7 @@ export function trainerThrowPokeball(
         onComplete: () => {
           pokeball.setTexture("pb", `${pokeballAtlasKey}_opening`);
           globalScene.time.delayedCall(17, () => pokeball.setTexture("pb", `${pokeballAtlasKey}_open`));
-          globalScene.playSound("se/pb_rel");
+          globalScene.audioManager.playSound("se/pb_rel");
           pokemon.tint(getPokeballTintColor(pokeballType));
 
           globalScene.animations.addPokeballOpenParticles(pokeball.x, pokeball.y, pokeballType);
@@ -499,7 +499,7 @@ export function trainerThrowPokeball(
             onComplete: () => {
               pokeball.setTexture("pb", `${pokeballAtlasKey}_opening`);
               pokemon.setVisible(false);
-              globalScene.playSound("se/pb_catch");
+              globalScene.audioManager.playSound("se/pb_catch");
               globalScene.time.delayedCall(17, () => pokeball.setTexture("pb", `${pokeballAtlasKey}`));
 
               const doShake = () => {
@@ -527,13 +527,13 @@ export function trainerThrowPokeball(
                       failCatch(pokemon, originalY, pokeball, pokeballType).then(() => resolve(false));
                     } else if (shakeCount++ < 3) {
                       if (randSeedInt(65536) < ballTwitchRate) {
-                        globalScene.playSound("se/pb_move");
+                        globalScene.audioManager.playSound("se/pb_move");
                       } else {
                         shakeCounter.stop();
                         failCatch(pokemon, originalY, pokeball, pokeballType).then(() => resolve(false));
                       }
                     } else {
-                      globalScene.playSound("se/pb_lock");
+                      globalScene.audioManager.playSound("se/pb_lock");
                       globalScene.animations.addPokeballCaptureStars(pokeball);
 
                       const pbTint = globalScene.add.sprite(pokeball.x, pokeball.y, "pb", "pb");
@@ -587,7 +587,7 @@ function failCatch(
   pokeballType: PokeballType,
 ) {
   return new Promise<void>((resolve) => {
-    globalScene.playSound("se/pb_rel");
+    globalScene.audioManager.playSound("se/pb_rel");
     pokemon.setY(originalY);
     if (pokemon.hasStatusEffect(StatusEffect.SLEEP, false, true)) {
       pokemon.cry(pokemon.getHpRatio() > 0.25 ? undefined : { rate: 0.85 });
@@ -821,7 +821,7 @@ function removePb(pokeball: Phaser.GameObjects.Sprite) {
  */
 export async function doPokemonFlee(pokemon: EnemyPokemon): Promise<void> {
   await new Promise<void>((resolve) => {
-    globalScene.playSound("se/flee");
+    globalScene.audioManager.playSound("se/flee");
     // Ease pokemon out
     globalScene.tweens.add({
       targets: pokemon,
@@ -926,7 +926,7 @@ export function getGoldenBugNetSpecies(level: number): PokemonSpecies {
     w += speciesWeightPair[1];
     if (roll < w) {
       const initialSpecies = getPokemonSpecies(speciesWeightPair[0]);
-      return getPokemonSpecies(initialSpecies.getSpeciesForLevel(level, true));
+      return getPokemonSpecies(initialSpecies.getEnemySpeciesForLevel(level));
     }
   }
 
@@ -947,30 +947,42 @@ export function getEncounterPokemonLevelForWave(levelAdditiveModifier: number = 
 }
 
 /**
- * Helper async function to update a player's dex and award achievements
+ * Helper async function to update a player's dex and award achievements.
+ *
+ * The function exits early if the Pokemon is a "rental" Pokemon (ie was given through an event for the current run only)
+ * unless that species had already been captured before, in which case any new form, gender, etc. gets unlocked.
+ *
  * @param pokemon - The newly obtained Pokemon
+ * @param includeNewCatch - Whether to update the data if the catch would unlock a new starter. Default: `true`.
+ *   Use `false` for "rental" Pokemon, so that the function exits early.
+ * @returns Promise of an array of the unlocked {@linkcode Species}, if any. Otherwise, an empty array.
  */
-export async function addPokemonDataToDexAndValidateAchievements(pokemon: PlayerPokemon) {
-  const speciesForm = pokemon.getSpeciesForm();
+export async function addPokemonDataToDexAndValidateAchievements(
+  pokemon: PlayerPokemon,
+  includeNewCatch: boolean = true,
+): Promise<Species[]> {
+  const isNewCatch = !globalScene.gameData.dexData[pokemon.species.getRootSpeciesId()].caughtAttr;
+  if (!isNewCatch || includeNewCatch) {
+    const speciesForm = pokemon.getSpeciesForm();
+    if (speciesForm.abilityHidden && pokemon.abilityIndex === speciesForm.getAbilityCount() - 1) {
+      globalScene.validateAchv(achvs.HIDDEN_ABILITY);
+    }
 
-  if (speciesForm.abilityHidden && pokemon.abilityIndex === speciesForm.getAbilityCount() - 1) {
-    globalScene.validateAchv(achvs.HIDDEN_ABILITY);
+    if (pokemon.species.isSubLegendary()) {
+      globalScene.validateAchv(achvs.CATCH_SUB_LEGENDARY);
+    }
+
+    if (pokemon.species.isLegendary()) {
+      globalScene.validateAchv(achvs.CATCH_LEGENDARY);
+    }
+
+    if (pokemon.species.isMythical()) {
+      globalScene.validateAchv(achvs.CATCH_MYTHICAL);
+    }
+
+    globalScene.gameData.updateSpeciesDexIvs(pokemon.species.getRootSpeciesId(true), pokemon.ivs);
   }
-
-  if (pokemon.species.isSubLegendary()) {
-    globalScene.validateAchv(achvs.CATCH_SUB_LEGENDARY);
-  }
-
-  if (pokemon.species.isLegendary()) {
-    globalScene.validateAchv(achvs.CATCH_LEGENDARY);
-  }
-
-  if (pokemon.species.isMythical()) {
-    globalScene.validateAchv(achvs.CATCH_MYTHICAL);
-  }
-
-  globalScene.gameData.updateSpeciesDexIvs(pokemon.species.getRootSpeciesId(true), pokemon.ivs);
-  return globalScene.gameData.setPokemonCaught(pokemon, true, false, false);
+  return globalScene.gameData.setPokemonCaught(pokemon, includeNewCatch, false, false);
 }
 
 /**

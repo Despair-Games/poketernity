@@ -74,7 +74,7 @@ describe("Moves - Substitute", () => {
     expect(leadPokemon.getTag(BattlerTagType.SUBSTITUTE)).toBeDefined();
     const postSubHp = leadPokemon.hp;
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.hp).toBe(postSubHp);
     expect(leadPokemon.getTag(BattlerTagType.SUBSTITUTE)).toBeDefined();
@@ -97,7 +97,7 @@ describe("Moves - Substitute", () => {
     expect(leadPokemon.getTag(BattlerTagType.SUBSTITUTE)).toBeDefined();
     const postSubHp = leadPokemon.hp;
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.hp).toBe(postSubHp);
     expect(leadPokemon.getTag(BattlerTagType.SUBSTITUTE)).toBeUndefined();
@@ -112,7 +112,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.SUBSTITUTE);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.getStatStage(Stat.ATK)).toBe(0);
     expect(leadPokemon.getTag(BattlerTagType.SUBSTITUTE)).toBeDefined();
@@ -132,7 +132,7 @@ describe("Moves - Substitute", () => {
     expect(leadPokemon.getTag(BattlerTagType.SUBSTITUTE)).toBeDefined();
     const postSubHp = leadPokemon.hp;
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.getTag(BattlerTagType.SUBSTITUTE)).toBeDefined();
     expect(leadPokemon.hp).toBeLessThan(postSubHp);
@@ -153,7 +153,7 @@ describe("Moves - Substitute", () => {
     expect(leadPokemon.getTag(BattlerTagType.SUBSTITUTE)).toBeDefined();
     const postSubHp = leadPokemon.hp;
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.getTag(BattlerTagType.SUBSTITUTE)).toBeDefined();
     expect(leadPokemon.hp).toBeLessThan(postSubHp);
@@ -243,7 +243,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
   });
@@ -260,7 +260,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.getTag(...TrappedBattlerTagTypes)).toBeUndefined();
   });
@@ -277,7 +277,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.getStatStage(Stat.DEF)).toBe(0);
   });
@@ -293,7 +293,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.getStatusEffect(true)).not.toBe(StatusEffect.PARALYSIS);
   });
@@ -311,7 +311,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.getHeldItems().length).toBe(1);
   });
@@ -350,7 +350,7 @@ describe("Moves - Substitute", () => {
     await game.phaseInterceptor.to("MoveEndPhase", false);
     const enemyPostAttackHp = enemyPokemon.hp;
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.getHeldItems().length).toBe(1);
     expect(enemyPokemon.hp).toBe(enemyPostAttackHp);
@@ -367,7 +367,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.SWORDS_DANCE);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.getStatStage(Stat.ATK)).toBe(2);
   });
@@ -384,7 +384,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.SWORDS_DANCE);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.getTag(BattlerTagType.CONFUSED)).toBeUndefined();
     expect(leadPokemon.getStatStage(Stat.ATK)).toBe(2);
@@ -422,7 +422,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.SUBSTITUTE);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
   });
@@ -443,7 +443,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.FOCUS_PUNCH);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(playerPokemon.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
@@ -461,7 +461,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.SHELL_TRAP);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(playerPokemon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
   });
@@ -497,7 +497,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.COUNTER);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(playerPokemon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
@@ -514,7 +514,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.SPLASH);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]); // enemy uses Sappy Seed first
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]); // enemy uses Sappy Seed first
     await game.move.forceHit(); // forces Sappy Seed to hit
     await game.phaseInterceptor.to("MoveEndPhase");
 

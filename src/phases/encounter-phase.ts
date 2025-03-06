@@ -35,7 +35,7 @@ import { ScanIvsPhase } from "#app/phases/scan-ivs-phase";
 import { ShinySparklePhase } from "#app/phases/shiny-sparkle-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achievements";
 import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
 import { randSeedInt, randSeedItem } from "#app/utils";
@@ -325,7 +325,7 @@ export class EncounterPhase extends BattlePhase {
   }
 
   protected doEncounter(): void {
-    globalScene.playBgm(undefined, true);
+    globalScene.audioManager.playBgm(undefined, true);
     globalScene.updateModifiers(false);
     globalScene.setFieldScale(1);
 
@@ -430,7 +430,7 @@ export class EncounterPhase extends BattlePhase {
 
       const doSummon = (): void => {
         currentBattle.started = true;
-        globalScene.playBgm(undefined);
+        globalScene.audioManager.playBgm(undefined);
         pbTray.showPbTray(globalScene.getPlayerParty());
         pbTrayEnemy.showPbTray(globalScene.getEnemyParty());
         const doTrainerSummon = (): void => {

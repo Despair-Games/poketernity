@@ -71,7 +71,6 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
       level,
       0,
       getPartyLuckValue(globalScene.getPlayerParty()),
-      true,
     );
     const pokemon = new EnemyPokemon(species, level, TrainerSlot.NONE, true);
 
@@ -152,7 +151,7 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
       onComplete: () => encounter.introVisuals?.playShinySparkles(),
     });
 
-    globalScene.time.delayedCall(500, () => globalScene.playSound("battle_anims/PRSFX- Spotlight2"));
+    globalScene.time.delayedCall(500, () => globalScene.audioManager.playSound("battle_anims/PRSFX- Spotlight2"));
     return true;
   })
   .setLocalizationKey(`${namespace}`)

@@ -96,7 +96,7 @@ export class SwitchSummonPhase extends SummonPhase {
           }),
     );
 
-    globalScene.playSound("se/pb_rel");
+    globalScene.audioManager.playSound("se/pb_rel");
     pokemon.hideInfo();
     pokemon.tint(getPokeballTintColor(pokemon.pokeball), 1, 250, "Sine.easeIn");
     tweens.add({
