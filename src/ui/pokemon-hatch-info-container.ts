@@ -34,7 +34,7 @@ export default class PokemonHatchInfoContainer extends PokemonInfoContainer {
   private pokemonCandyCountText: Phaser.GameObjects.Text;
 
   constructor(listContainer: Phaser.GameObjects.Container, x: number = 115, y: number = 9) {
-    super(x, y);
+    super(x, y, TextStyle.EGG_SUMMARY_LABEL);
     this.pokemonListContainer = listContainer;
   }
   override setup(): void {
@@ -50,11 +50,11 @@ export default class PokemonHatchInfoContainer extends PokemonInfoContainer {
     this.pokemonListContainer.add(this.currentPokemonSprite);
 
     // setup name and number
-    this.pokemonNumberText = addTextObject(80, 107.5, "0000", TextStyle.SUMMARY, { fontSize: 74 });
+    this.pokemonNumberText = addTextObject(80, 108, "0000", TextStyle.EGG_SUMMARY_HEADER);
     this.pokemonNumberText.setOrigin(0, 0);
     this.pokemonListContainer.add(this.pokemonNumberText);
 
-    this.pokemonNameText = addTextObject(7, 107.5, "", TextStyle.SUMMARY, { fontSize: 74 });
+    this.pokemonNameText = addTextObject(7, 108, "", TextStyle.EGG_SUMMARY_HEADER);
     this.pokemonNameText.setOrigin(0, 0);
     this.pokemonListContainer.add(this.pokemonNameText);
 
@@ -74,7 +74,7 @@ export default class PokemonHatchInfoContainer extends PokemonInfoContainer {
     this.pokemonCandyOverlayIcon.setOrigin(0, 0);
     this.pokemonListContainer.add(this.pokemonCandyOverlayIcon);
 
-    this.pokemonCandyCountText = addTextObject(14, 40, "x0", TextStyle.SUMMARY, { fontSize: "56px" });
+    this.pokemonCandyCountText = addTextObject(14, 40, "x0", TextStyle.EGG_SUMMARY_CANDY);
     this.pokemonCandyCountText.setOrigin(0, 0);
     this.pokemonListContainer.add(this.pokemonCandyCountText);
 

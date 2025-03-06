@@ -134,6 +134,7 @@ export function getTextStyleOptions(
   }
 
   if (extraStyleOptions) {
+    // TODO: remove or add warning
     if (extraStyleOptions.fontSize) {
       const sizeRatio =
         parseInt(extraStyleOptions.fontSize.toString().slice(0, -2))

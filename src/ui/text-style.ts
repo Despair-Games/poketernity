@@ -112,6 +112,39 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
     fontStyle: FontStyle.DEFAULT_FONT_72PX_MEDIUM_SHADOW,
   },
 
+  [TextStyle.CATCH_PANEL_LABEL]: {
+    color: {
+      [UiTheme.DARK]: TextColor.WHITE_DARK_PURPLE_SHADOW,
+      [UiTheme.LIGHT]: TextColor.DARK_GREY_LIGHT_SHADOW,
+    },
+    fontStyle: {
+      [DEFAULT_LANGUAGE_KEY]: FontStyle.DEFAULT_FONT_64PX,
+      ["pt-BR"]: FontStyle.DEFAULT_FONT_60PX,
+    },
+  },
+  [TextStyle.CATCH_PANEL_HEADER]: {
+    color: {
+      [UiTheme.DARK]: TextColor.WHITE_DARK_PURPLE_SHADOW,
+      [UiTheme.LIGHT]: TextColor.DARK_GREY_LIGHT_SHADOW,
+    },
+    fontStyle: FontStyle.DEFAULT_FONT_64PX,
+  },
+  [TextStyle.EGG_SUMMARY_LABEL]: {
+    color: TextColor.WHITE_GREY_SHADOW,
+    fontStyle: {
+      [DEFAULT_LANGUAGE_KEY]: FontStyle.DEFAULT_FONT_64PX,
+      ["pt-BR"]: FontStyle.DEFAULT_FONT_60PX,
+    },
+  },
+  [TextStyle.EGG_SUMMARY_CANDY]: {
+    color: TextColor.WHITE_GREY_SHADOW,
+    fontStyle: FontStyle.DEFAULT_FONT_56PX,
+  },
+  [TextStyle.EGG_SUMMARY_HEADER]: {
+    color: TextColor.WHITE_GREY_SHADOW,
+    fontStyle: FontStyle.DEFAULT_FONT_72PX,
+  },
+
   // TODO: once light theme has its own window color in battle, we will need a different color in light theme
   // for ME_OPTION_DEFAULT: DARK_GREY_LIGHT_SHADOW and for ME_OPTION_SPECIAL: ORANGE_DARK_SHADOW
   [TextStyle.ME_OPTION_DEFAULT]: {
