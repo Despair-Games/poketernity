@@ -60,7 +60,7 @@ describe("Form Change Phase", () => {
     game.move.use(MoveId.SPLASH);
     await game.toNextTurn();
 
-    // After the form change: Should be G-Max form
+    // After the form change: Should be the desired new form
     expect(game.phaseInterceptor.log.includes("FormChangePhase")).toBe(true);
     expect(pokemon.getFormKey()).toBe(newFormKey);
     expect(pokemon.moveset.map((m) => m.moveId).includes(learnedMoveId)).toBe(expectedToLearn);

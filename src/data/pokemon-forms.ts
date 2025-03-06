@@ -1,3 +1,11 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { FORM_CHANGE_MOVE } from "#app/data/balance/pokemon-level-moves";
+import { FormChangePhase } from "#app/phases/form-change-phase";
+import { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import type { Pokemon } from "../field/pokemon";
 import { allMoves } from "#app/data/data-lists";
 import { MoveCategory } from "#enums/move-category";
@@ -25,12 +33,41 @@ export type SpeciesFormChangeConditionPredicate = (p: Pokemon) => boolean;
 export type SpeciesFormChangeConditionEnforceFunc = (p: Pokemon) => void;
 
 export class SpeciesFormChange {
+  /**
+   * The ID of the species that this form change applies to.
+   */
   public speciesId: Species;
+
+  /**
+   * The form key that the Pokemon must have before applying this form change.
+   */
   public preFormKey: string;
+
+  /**
+   * The form key that the Pokemon will have after applying this form change.
+   */
   public formKey: string;
+
+  /**
+   * The trigger for when to apply this form change.
+   */
   public trigger: SpeciesFormChangeTrigger;
+
+  /**
+   * If `false`, and if the Pokemon belongs to the player, play a cutscene using {@linkcode FormChangePhase}.
+   * Otherwise, transform the Pokemon in place using {@linkcode QuietFormChangePhase}.
+   */
   public quiet: boolean;
+
+  /**
+   * A list of moves that the Pokemon learns upon form change if its level is high enough.
+   * If the indicated level is {@linkcode FORM_CHANGE_MOVE}, the move can be learned at any level.
+   */
   public readonly movesToLearn: MoveId[];
+
+  /**
+   * A list of extra conditions that the Pokemon must satisfy before applying this form change.
+   */
   public readonly conditions: SpeciesFormChangeCondition[];
 
   constructor(

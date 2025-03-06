@@ -1,12 +1,18 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { SpeciesFormChange } from "#app/data/pokemon-forms";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import type { PokemonSpeciesFormLevelMoves } from "./pokemon-level-moves";
 import { EVOLVE_MOVE, FORM_CHANGE_MOVE } from "./pokemon-level-moves";
 
 /**
- * Note: Logic for learning moves during a form change, such as G-Max moves,
- * is handled by data stored in `pokemon-forms.ts`. They are also listed
- * here for Memory Mushroom purposes.
+ * Note: The logic that distinguishes regular level-up moves from moves that are learned
+ * upon form change (e.g., G-max moves) is handled by
+ * {@link SpeciesFormChange.movesToLearn | data stored in `pokemon-forms.ts`}.
  */
 export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.VENUSAUR]: {
