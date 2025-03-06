@@ -15,6 +15,7 @@ export const GENERIC_ITEM_EVO_LEVEL = 36;
  * Dusclops
  * Eelektrick, Lampent
  * Doublade
+ * Duraludon
  */
 export const ADVANCED_ITEM_EVO_LEVEL = 45;
 /**
@@ -54,3 +55,12 @@ export const BASCULEGION_EVO_LEVEL = 44;
 export const KINGAMBIT_EVO_LEVEL = 61;
 /** Learns stomp at level 28 in gen 9 */
 export const TSAREENA_EVO_LEVEL = 28;
+/** Learns taunt at level 35 in gen 8 */
+export const GRAPPLOCT_EVO_LEVEL = 35;
+/** Completely custom implementation.
+ * Maybe change to 25 for air cutter
+ * or 40 for slash (high crit move Farfetch learns)?
+ * */
+export const SIRFETCHD_EVO_LEVEL = 30;
+/** Learns barb barage at level 28 in gen 9 */
+export const OVERQWIL_EVO_LEVEL = 28;

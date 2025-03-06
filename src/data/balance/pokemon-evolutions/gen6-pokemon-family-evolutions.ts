@@ -115,6 +115,17 @@ export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
       new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
     ),
   ],
+  /** Hisui Sliggoo is from Gen 8 */
+  [Species.HISUI_SLIGGOO]: [
+    new SpeciesEvolution(
+      Species.HISUI_GOODRA,
+      50,
+      null,
+      new SpeciesEvolutionCondition((_p) =>
+        globalScene.arena.hasWeather([WeatherType.RAIN, WeatherType.FOG, WeatherType.HEAVY_RAIN]),
+      ),
+    ),
+  ],
   [Species.SLIGGOO]: [
     new SpeciesEvolution(
       Species.GOODRA,
