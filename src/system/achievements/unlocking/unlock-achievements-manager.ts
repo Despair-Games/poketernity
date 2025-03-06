@@ -32,11 +32,11 @@ export class UnlockAchievementsManager extends SceneBase {
   }
 
   create() {
-    achievementsBus.on("achievements/validate", (...params) => this.validateAchievements(...params));
+    achievementsBus.once("achievements/validate", (params) => this.validateAchievements(params));
     achievementsBus.on("achievements/display_banner", () => this.displayBanner());
     achievementsBus.on("achievements/queue_next_banner", () => this.queueNextBanner());
     achievementsBus.on("achievements/validation_completed", () =>
-      battleSceneBus.emit("scene/achievements_manager/stop"),
+      battleSceneBus.emit("scene/achievement_manager/stop"),
     );
   }
 
@@ -44,9 +44,9 @@ export class UnlockAchievementsManager extends SceneBase {
     achievementsBus.removeAllListeners();
   }
 
-  private validateAchievements(...params: any[]): void {
+  private validateAchievements(params: any): void {
     this.lockedAchievements.forEach((achv) => {
-      if (newAchvs[achv].conditionFunc(...params)) {
+      if (newAchvs[achv].conditionFunc(params) && !this.validAchievements.includes(achv)) {
         this.validAchievements.push(achv);
       }
     });
@@ -71,7 +71,9 @@ export class UnlockAchievementsManager extends SceneBase {
   }
 
   private queueNextBanner(): void {
-    this.achievementBanners[0].destroy();
+    if (this.achievementBanners.length > 0) {
+      this.achievementBanners[0].destroy();
+    }
     this.achievementBanners.shift();
     if (this.achievementBanners.length === 0) {
       achievementsBus.emit("achievements/validation_completed");

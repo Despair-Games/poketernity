@@ -2932,16 +2932,16 @@ export default class BattleScene extends SceneBase {
     return true;
   }
 
-  validAchievements(achievementCategory: AchvCategory, ...data: any[]) {
+  validAchievements(achievementCategory: AchvCategory, data: any) {
     this.scene.launch("Achievements_Manager", {
       context: achievementCategory,
       unlockedAchievements: this.gameData.achvUnlocks,
     });
-    battleSceneBus.on("scene/achievement_manager/ready", () => achievementsBus.emit("achievements/validate", ...data));
-    battleSceneBus.on("game_data/update/achievements", (unlocks: string[]) =>
+    battleSceneBus.once("scene/achievement_manager/ready", () => achievementsBus.emit("achievements/validate", data));
+    battleSceneBus.once("game_data/update/achievements", (unlocks: string[]) =>
       this.gameData.addUnlockedAchievements(unlocks),
     );
-    battleSceneBus.on("scene/achievement_manager/stop", () => {
+    battleSceneBus.once("scene/achievement_manager/stop", () => {
       this.scene.stop("Achievements_Manager");
     });
   }

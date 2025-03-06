@@ -223,8 +223,6 @@ export class EncounterPhase extends BattlePhase {
       return true;
     });
 
-    globalScene.validAchievements(AchvCategory.PARTY, globalScene.getPlayerParty());
-
     if (battleType === BattleType.TRAINER && trainer) {
       loadEnemyAssets.push(trainer.loadAssets().then(() => trainer.initSprite()));
     } else if (currentBattle.isBattleMysteryEncounter()) {
@@ -343,6 +341,7 @@ export class EncounterPhase extends BattlePhase {
         pokemon.resetBattleData();
       }
     }
+    globalScene.validAchievements(AchvCategory.PARTY, globalScene.getPlayerParty());
 
     const enemyField = globalScene.getEnemyField();
     tweens.add({

@@ -90,7 +90,7 @@ export default class AchvBanner extends Phaser.GameObjects.Container {
 
     this.tween = globalScene.tweens.add({
       targets: this,
-      x: (GAME_WIDTH - this.bg.width) * (CANVAS_SCALE * 2) - 24,
+      x: (GAME_WIDTH - this.bg.width) * (CANVAS_SCALE * 2) - 72,
       duration: 500,
       ease: "Sine.easeOut",
       yoyo: true,
