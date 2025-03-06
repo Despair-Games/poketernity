@@ -10,6 +10,7 @@ import {
   DUDUNSPARCE_EVO_LEVEL,
   FARIGARIF_EVO_LEVEL,
   GENERIC_ITEM_EVO_LEVEL,
+  MAMOSWINE_EVO_LEVEL,
   SUDOWOODO_EVO_LEVEL,
   WYRDEER_EVO_LEVEL,
   YANMEGA_EVO_LEVEL,
@@ -175,18 +176,17 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
       EvolutionItem.PEAT_BLOCK,
       new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.NIGHT, TimeOfDay.DUSK])),
       ADVANCED_ITEM_EVO_LEVEL,
-    ), //Ursaring does not evolve into Bloodmoon Ursaluna
+    ), // Note: Ursaring does not evolve into Bloodmoon Ursaluna
   ],
   [Species.SLUGMA]: [new SpeciesEvolution(Species.MAGCARGO, 38, null, null)],
   [Species.SWINUB]: [new SpeciesEvolution(Species.PILOSWINE, 33, null, null)],
-  /** Piloswine learns Ancient Power at level 1 so enemy evolve level here is changed */
   [Species.PILOSWINE]: [
     new SpeciesEvolution(
       Species.MAMOSWINE,
       1,
       null,
       new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.ANCIENT_POWER).length > 0),
-      ADVANCED_ITEM_EVO_LEVEL,
+      MAMOSWINE_EVO_LEVEL,
     ),
   ],
   [Species.REMORAID]: [new SpeciesEvolution(Species.OCTILLERY, 25, null, null)],
