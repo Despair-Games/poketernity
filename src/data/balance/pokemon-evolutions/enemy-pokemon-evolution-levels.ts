@@ -44,6 +44,8 @@ export const AMBIPOM_EVO_LEVEL = 32;
 export const YANMEGA_EVO_LEVEL = 33;
 /** Learns twin beam at level 32 in gen 9 */
 export const FARIGARIF_EVO_LEVEL = 32;
+/** Piloswine learns Ancient Power at level 1 so enemy evolve level here is changed */
+export const MAMOSWINE_EVO_LEVEL = ADVANCED_ITEM_EVO_LEVEL;
 /** Learns hyper drill at level 32 in gen 9 */
 export const DUDUNSPARCE_EVO_LEVEL = 32;
 /** Learns psyshield bash at level 21, masters it at 31 in PLA */
