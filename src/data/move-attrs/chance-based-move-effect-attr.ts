@@ -48,7 +48,7 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
    * @param user the {@linkcode Pokemon} using this move
    * @param target the {@linkcode Pokemon} targeted by the move
    * @param move the {@linkcode Move} being used
-   * @param selfEffect `true` if move targets user.
+   * @param showAbility `true` if this function call should prompt the ability flyout to show. Defaults to `false`.
    * @returns The final percent chance of this attribute's effect applying. If negative, the
    * effect is guaranteed to apply.
    */
@@ -94,7 +94,7 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
      */
     const tierUpChance = Math.floor((chanceWeightedScore % 1) * 100);
 
-    return this.getRandomScore(user, tierUpChance, minScore + 1, minScore);
+    return minScore + this.getRandomScore(user, tierUpChance);
   }
 
   /**

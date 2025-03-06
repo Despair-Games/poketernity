@@ -720,7 +720,6 @@ export abstract class Move implements Localizable {
    * @param isKnockOut `true` if the move is already known to KO the target (default `false`)
    * @param isFail `true` if the move is already known to fail or have no effect (default `false`)
    * @returns a score value accumulated from effect score modifiers.
-   * @todo Add Low Accuracy Penalty and Ally Target Penalty
    */
   public getEffectScore(
     user: EnemyPokemon,
@@ -783,7 +782,7 @@ export abstract class Move implements Localizable {
       } else {
         return allyTargetAttrs
           .map((attr) => attr.getEffectScore(user, target, this))
-          .reduce((total, score) => total + score);
+          .reduce((total, score) => total + score, 0);
       }
     } else {
       let attrs: MoveAttr[] = this.attrs;
