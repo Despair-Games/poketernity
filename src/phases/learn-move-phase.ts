@@ -45,7 +45,9 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
     const { ui } = globalScene;
     const pokemon = this.getPokemon();
 
+    // This should never happen, but if there is no Pokemon learning the move, exit now to avoid crashes.
     if (!pokemon) {
+      console.error("Pokemon is missing from LearnMovePhase!");
       return this.end();
     }
 

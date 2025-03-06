@@ -20,14 +20,23 @@ import { LearnMovePhase } from "./learn-move-phase";
 import { PhaseId } from "#enums/phase-id";
 
 /**
- * A phase for handling Pokemon form changes, this does not cover evolutions
+ * A phase for handling certain form changes for player Pokemon.
+ * This does not cover evolutions, and this does not cover form changes for enemy Pokemon.
  * @see {@linkcode EvolutionPhase} for evolutions
  * @extends FormChangeBasePhase
  */
 export class FormChangePhase extends FormChangeBasePhase {
   override readonly id = PhaseId.FORM_CHANGE;
 
+  /**
+   * The form change that occurs during this phase.
+   */
   private readonly formChange: SpeciesFormChange;
+
+  /**
+   * If `true`, this indicates that the form change was triggered via the "Check Team" UI.
+   * In particular, this disables learning new moves linked to the form change.
+   */
   private readonly modal: boolean;
 
   constructor(pokemon: PlayerPokemon, formChange: SpeciesFormChange, modal: boolean) {
@@ -198,15 +207,9 @@ export class FormChangePhase extends FormChangeBasePhase {
   public override end(): void {
     const { ui } = globalScene;
 
-    if (!this.modal) {
-      for (const learnMoveId of this.formChange.movesToLearn) {
-        globalScene.unshiftPhase(new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), learnMoveId));
-      }
-      globalScene.unshiftPhase(new EndEvolutionPhase());
-    }
-
     this.pokemon.findAndRemoveTags((t) => t.tagType === BattlerTagType.AUTOTOMIZED);
     if (this.modal) {
+      // If the form change was triggered via the "Check Team" UI, go back to the "Check Team" UI without learning new moves.
       ui.revertMode().then(() => {
         if (ui.getMode() === UiMode.PARTY) {
           const partyUiHandler = ui.getHandler() as PartyUiHandler;
@@ -217,6 +220,12 @@ export class FormChangePhase extends FormChangeBasePhase {
         super.end();
       });
     } else {
+      // Otherwise, learn new moves if applicable, then end the evolution cutscene via `EndEvolutionPhase`.
+      for (const learnMoveId of this.formChange.movesToLearn) {
+        globalScene.unshiftPhase(new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), learnMoveId));
+      }
+      globalScene.unshiftPhase(new EndEvolutionPhase());
+
       super.end();
     }
   }
