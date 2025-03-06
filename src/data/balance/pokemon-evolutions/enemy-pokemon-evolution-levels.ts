@@ -58,9 +58,16 @@ export const TSAREENA_EVO_LEVEL = 28;
 /** Learns taunt at level 35 in gen 8 */
 export const GRAPPLOCT_EVO_LEVEL = 35;
 /** Completely custom implementation.
- * Maybe change to 25 for air cutter
- * or 40 for slash (high crit move Farfetch learns)?
+ * Using 25 for air cutter, the first high crit move
+ * that Farfetch'd learns. Also learns slash at 40
  * */
-export const SIRFETCHD_EVO_LEVEL = 30;
+export const SIRFETCHD_EVO_LEVEL = 25;
 /** Learns barb barage at level 28 in gen 9 */
 export const OVERQWIL_EVO_LEVEL = 28;
+/** All 3 of these pokemon evolve with the let's go walking 1000 steps feature */
+/** Chosen because that's when Pawmot learns arm thrust */
+export const PAWMOT_EVO_LEVEL = 25;
+/** Bramblin and Brambleghast have the same learnset... */
+export const BRAMBLEGHAST_EVO_LEVEL = 20;
+/** Chosen because that's when Rabsca learns psybeam */
+export const RABSCA_EVO_LEVEL = 15;
