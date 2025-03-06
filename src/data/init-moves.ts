@@ -1127,8 +1127,8 @@ export function initMoves() {
       .attr(AddBattlerTagAttr, BattlerTagType.UPROAR, true)
       .attr(MessageHeaderAttr, (user, _move) =>
         !!user.getTag(BattlerTagType.UPROAR)
-          ? // "{pokemonName} is making an uproar!"
-            i18next.t("moveTriggers:isMakingAnUproar", { pokemonName: getPokemonNameWithAffix(user) })
+          ? // "{pokemonNameWithAffix} is making an uproar!"
+            i18next.t("moveTriggers:isMakingAnUproar", { pokemonNameWithAffix: getPokemonNameWithAffix(user) })
           : undefined,
       )
       .soundMove()
