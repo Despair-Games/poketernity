@@ -73,7 +73,7 @@ export const gen4pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.LUCARIO,
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(120, (_p) =>
+      new SpeciesFriendshipEvolutionCondition(120, () =>
         globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]),
       ),
       HAPPINESS_EVO_LEVEL,

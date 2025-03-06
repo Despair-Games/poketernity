@@ -31,13 +31,13 @@ export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.SILCOON,
       7,
       null,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
+      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
     ),
     new SpeciesEvolution(
       Species.CASCOON,
       7,
       null,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
+      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
   ],
   [Species.SILCOON]: [new SpeciesEvolution(Species.BEAUTIFLY, 10, null, null)],
@@ -83,7 +83,7 @@ export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
       20,
       null,
       new SpeciesEvolutionCondition(
-        (_p) => globalScene.getPlayerParty().length < 6 && globalScene.pokeballCounts[PokeballType.POKEBALL] > 0,
+        () => globalScene.getPlayerParty().length < 6 && globalScene.pokeballCounts[PokeballType.POKEBALL] > 0,
       ),
     ),
   ],
@@ -104,9 +104,7 @@ export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.ROSELIA,
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(70, (_p) =>
-        globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]),
-      ),
+      new SpeciesFriendshipEvolutionCondition(70, () => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
       BABY_HAPPINESS_EVO_LEVEL,
     ),
   ],
@@ -139,7 +137,7 @@ export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.CHIMECHO,
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(90, (_p) =>
+      new SpeciesFriendshipEvolutionCondition(90, () =>
         globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT]),
       ),
       BABY_HAPPINESS_EVO_LEVEL,
