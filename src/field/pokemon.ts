@@ -41,12 +41,12 @@ import {
   MoveRestrictionBattlerTag,
   PowerTrickTag,
   TypeImmuneTag,
+  type UproarTag,
   getBattlerTag,
   type AutotomizedTag,
   type CritBoostStackableTag,
   type ImprisoningTag,
   type RestrictingBattlerTag,
-  type UproarTag,
   type EncoreTag,
   type SubstituteTag,
 } from "#app/data/battler-tags";
@@ -195,6 +195,7 @@ import type { TrainerSlot } from "#enums/trainer-slot";
 import { UiMode } from "#enums/ui-mode";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
+import { applyBattlerTags } from "#app/data/apply-battler-tags";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -3648,7 +3649,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         const preventSleep = new BooleanHolder(false);
         globalScene
           .getField(true)
-          .forEach((p) => p.getTag<UproarTag>(BattlerTagType.UPROAR)?.apply(p, quiet, this, preventSleep));
+          .forEach((p) => applyBattlerTags<UproarTag>(BattlerTagType.UPROAR, p, quiet, this, preventSleep));
 
         if (preventSleep.value || (this.isGrounded() && globalScene.arena.hasTerrain(TerrainType.ELECTRIC))) {
           return false;
