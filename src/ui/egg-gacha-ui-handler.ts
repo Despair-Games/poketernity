@@ -18,6 +18,7 @@ import i18next from "i18next";
 import { EggTier } from "#enums/egg-type";
 import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 
 /**
  * TODO: this should extend AbstractOptionSelectUiHandler
@@ -109,21 +110,23 @@ export default class EggGachaUiHandler extends MessageUiHandler {
 
       const gachaInfoContainer = globalScene.add.container(160, 46);
 
-      const currentLanguage = i18next.resolvedLanguage ?? "en";
-      let gachaTextStyle = TextStyle.WINDOW_ALT;
+      const currentLanguage = i18next.resolvedLanguage ?? DEFAULT_LANGUAGE_KEY;
       let gachaX = 4;
       let gachaY = 0;
       let pokemonIconX = -20;
       let pokemonIconY = 6;
 
       if (["de", "es-ES", "fr", "ko", "pt-BR"].includes(currentLanguage)) {
-        gachaTextStyle = TextStyle.WINDOW_ALT_SMALL;
         gachaX = 2;
         gachaY = 2;
       }
 
       let legendaryLabelX = gachaX;
       let legendaryLabelY = gachaY;
+      if (["pt-BR"].includes(currentLanguage)) {
+        legendaryLabelX -= 2;
+        pokemonIconX -= 2;
+      }
       if (["de", "es-ES"].includes(currentLanguage)) {
         pokemonIconX = -25;
         pokemonIconY = 10;
@@ -131,7 +134,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
         legendaryLabelY = 0;
       }
 
-      const gachaUpLabel = addTextObject(gachaX, gachaY, i18next.t("egg:legendaryUPGacha"), gachaTextStyle);
+      const gachaUpLabel = addTextObject(gachaX, gachaY, i18next.t("egg:legendaryUPGacha"), TextStyle.GACHA_LABEL);
       gachaUpLabel.setOrigin(0, 0);
       gachaInfoContainer.add(gachaUpLabel);
 
@@ -141,17 +144,9 @@ export default class EggGachaUiHandler extends MessageUiHandler {
             gachaUpLabel.setAlign("center");
             gachaUpLabel.setY(0);
           }
-          if (["pt-BR"].includes(currentLanguage)) {
-            gachaUpLabel.setX(legendaryLabelX - 2);
-          } else {
-            gachaUpLabel.setX(legendaryLabelX);
-          }
-          gachaUpLabel.setY(legendaryLabelY);
+          gachaUpLabel.setPosition(legendaryLabelX, legendaryLabelY);
 
           const pokemonIcon = globalScene.add.sprite(pokemonIconX, pokemonIconY, "pokemon_icons_0");
-          if (["pt-BR"].includes(currentLanguage)) {
-            pokemonIcon.setX(pokemonIconX - 2);
-          }
           pokemonIcon.setScale(0.5);
           pokemonIcon.setOrigin(0, 0.5);
 
@@ -248,7 +243,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
       },
     ];
 
-    const resolvedLanguage = i18next.resolvedLanguage ?? "en";
+    const resolvedLanguage = i18next.resolvedLanguage ?? DEFAULT_LANGUAGE_KEY;
     const pullOptionsText = pullOptions
       .map((option) => {
         const desc = option.description.split(" ");

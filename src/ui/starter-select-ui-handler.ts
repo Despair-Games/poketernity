@@ -87,6 +87,7 @@ import { DropDownType } from "#enums/drop-down-type";
 import { SortCriteria } from "#enums/sort-criteria";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 
 export type StarterSelectCallback = (starters: Starter[]) => void;
 
@@ -330,8 +331,9 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
   setup() {
     const ui = this.getUi();
-    const currentLanguage = i18next.resolvedLanguage ?? "en";
-    const langSettingKey = Object.keys(languageSettings).find((lang) => currentLanguage.includes(lang)) ?? "en";
+    const currentLanguage = i18next.resolvedLanguage ?? DEFAULT_LANGUAGE_KEY;
+    const langSettingKey =
+      Object.keys(languageSettings).find((lang) => currentLanguage.includes(lang)) ?? DEFAULT_LANGUAGE_KEY;
     const textSettings = languageSettings[langSettingKey];
 
     this.starterSelectContainer = globalScene.add.container(0, -GAME_HEIGHT);

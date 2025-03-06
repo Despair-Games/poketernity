@@ -32,7 +32,14 @@ import { WeatherType } from "#enums/weather-type";
  * }
  * ```
  */
-const overrides = {} satisfies Partial<InstanceType<typeof DefaultOverrides>>;
+const overrides = {
+  EGG_FREE_GACHA_PULLS_OVERRIDE: true,
+  EGG_IMMEDIATE_HATCH_OVERRIDE: true,
+  ITEM_REWARD_OVERRIDE: [{name: "LURE"}],
+  STARTING_LEVEL_OVERRIDE: 100,
+  //MYSTERY_ENCOUNTER_RATE_OVERRIDE: 255,
+  //STARTING_WAVE_OVERRIDE: 11,
+} satisfies Partial<InstanceType<typeof DefaultOverrides>>;
 
 /**
  * If you need to add Overrides values for local testing do that inside {@linkcode overrides}

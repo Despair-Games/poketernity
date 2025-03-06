@@ -32,6 +32,7 @@ import { initMoves } from "#app/data/init-moves";
 import { initModifierTypes } from "#app/modifier/init-modifier-types";
 import { initModifierPools } from "#app/modifier/init-modifier-pools";
 import { timedEventManager } from "#app/timed-event-manager";
+import { DEFAULT_LANGUAGE_KEY } from "./system/settings/supported-languages";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";
@@ -191,7 +192,7 @@ export class LoadingScene extends SceneBase {
     this.loadImage("passive_bg", ImagesFolder.UI);
 
     // Get current language and load the different localized images and atlases for it
-    const lang = i18next.resolvedLanguage ?? "en";
+    const lang = i18next.resolvedLanguage ?? DEFAULT_LANGUAGE_KEY;
     this.loadAtlas("status_icons", ImagesFolder.UI_STATUS_ICONS, { languageKey: lang });
     this.loadAtlas("type_icons", ImagesFolder.UI_TYPE_ICONS, { languageKey: lang });
 
@@ -199,7 +200,7 @@ export class LoadingScene extends SceneBase {
     const eventBanner = timedEventManager.getActiveOrNextEventBanner();
     if (eventBanner?.availableLangs) {
       // Banner with different localized versions
-      const bannerLang = eventBanner.availableLangs.includes(lang) ? lang : "en";
+      const bannerLang = eventBanner.availableLangs.includes(lang) ? lang : DEFAULT_LANGUAGE_KEY;
       this.loadImage(eventBanner.key, ImagesFolder.BANNERS, { languageKey: bannerLang });
     } else if (eventBanner) {
       // Non localized banner

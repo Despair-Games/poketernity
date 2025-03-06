@@ -25,6 +25,7 @@ export enum TextStyle {
   MONEY,
   /** Money displayed in Windows (needs different colors based on theme) */
   MONEY_WINDOW,
+  GACHA_LABEL,
   STATS_LABEL,
   STATS_VALUE,
   SETTINGS_VALUE,

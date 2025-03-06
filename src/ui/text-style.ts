@@ -260,6 +260,18 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
     fontStyle: FontStyle.DEFAULT_FONT_84PX_BIG_SHADOW,
   },
 
+  [TextStyle.GACHA_LABEL]: {
+    color: TextColor.DARK_GREY_LIGHT_SHADOW,
+    fontStyle: {
+      [DEFAULT_LANGUAGE_KEY]: FontStyle.DEFAULT_FONT_96PX,
+      ["de"]: FontStyle.DEFAULT_FONT_60PX,
+      ["es-ES"]: FontStyle.DEFAULT_FONT_60PX,
+      ["fr"]: FontStyle.DEFAULT_FONT_60PX,
+      ["ko"]: FontStyle.DEFAULT_FONT_60PX,
+      ["pt-BR"]: FontStyle.DEFAULT_FONT_60PX,
+    },
+  },
+
   [TextStyle.STATS_LABEL]: {
     color: TextColor.ORANGE_DARK_SHADOW,
     fontStyle: {

@@ -38,6 +38,7 @@ import { RunDisplayMode } from "#enums/run-display-mode";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import { ImagesFolder } from "#enums/images-folders";
+import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 
 /**
  * RunInfoUiMode indicates possible overlays of RunInfoUiHandler.
@@ -703,7 +704,7 @@ export default class RunInfoUiHandler extends UiHandler {
    */
   private parsePartyInfo(): void {
     const party = this.runInfo.party;
-    const currentLanguage = i18next.resolvedLanguage ?? "en";
+    const currentLanguage = i18next.resolvedLanguage ?? DEFAULT_LANGUAGE_KEY;
     const windowHeight = (GAME_HEIGHT - 23) / PLAYER_PARTY_MAX_SIZE;
 
     party.forEach((p: PokemonData, i: number) => {

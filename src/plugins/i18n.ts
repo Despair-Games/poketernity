@@ -1,5 +1,5 @@
 import { LOCALE_LS_KEY } from "#app/constants";
-import { supportedLanguages } from "#app/system/settings/supported-languages";
+import { DEFAULT_LANGUAGE_KEY, supportedLanguages } from "#app/system/settings/supported-languages";
 import { camelCaseToKebabCase } from "#app/utils";
 import i18next from "i18next";
 import pkg from "../../package.json";
@@ -170,7 +170,7 @@ export async function initI18n(): Promise<void> {
   i18next.use(koreanProcessor);
   i18next.use(new KoreanPostpositionProcessor());
   await i18next.init({
-    fallbackLng: "en",
+    fallbackLng: DEFAULT_LANGUAGE_KEY,
     supportedLngs: supportedLanguages.map((l) => l.key),
     backend: {
       loadPath(lng: string, [ns]: string[]) {

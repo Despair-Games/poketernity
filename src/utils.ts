@@ -5,7 +5,7 @@ import type { initGameSpeed } from "#app/system/game-speed";
 import { MoneyFormat } from "#enums/money-format";
 import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
-import { supportedLanguages } from "#app/system/settings/supported-languages";
+import { DEFAULT_LANGUAGE_KEY, supportedLanguages } from "#app/system/settings/supported-languages";
 import type { Pokemon } from "#app/field/pokemon";
 
 export type nil = null | undefined;
@@ -467,9 +467,9 @@ function hasAllLocalizedSprites(key: string): boolean {
  */
 export function getLocalizedFilename(baseName: string, langKey?: string): string {
   if (!langKey) {
-    langKey = i18next.resolvedLanguage ?? "en";
+    langKey = i18next.resolvedLanguage ?? DEFAULT_LANGUAGE_KEY;
   }
-  return `${baseName}_${hasAllLocalizedSprites(langKey) ? `${langKey}` : "en"}`;
+  return `${baseName}_${hasAllLocalizedSprites(langKey) ? `${langKey}` : DEFAULT_LANGUAGE_KEY}`;
 }
 
 /**
