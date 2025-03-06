@@ -5,10 +5,15 @@ import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { noStarterFormKeys } from "#app/data/no-starter-form-keys";
 import { allSpecies } from "#app/data/data-lists";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { speciesStarterCosts } from "#app/data/balance/starters";
+import {
+  STARTER_CANDY_GAIN_FROM_CATCH,
+  STARTER_CANDY_MULIPLIER_FOR_BOSS,
+  STARTER_CANDY_MULIPLIER_FOR_EGG,
+  getCandyGainMultiplierForShinies,
+  speciesStarterCosts,
+} from "#app/data/balance/starters";
 import {
   randInt,
   getEnumKeys,
@@ -1519,54 +1524,89 @@ export class GameData {
   }
 
   /**
+   * Set the given Pokemon (and its pre-evolutions, if any) as caught, update the dex data based on its characteristics
+   * (nature, ability, shinyness, variant, ...), update game stats, and give starter candy.
    *
-   * @param pokemon
-   * @param incrementCount
-   * @param fromEgg
-   * @param showMessage
-   * @returns `true` if Pokemon catch unlocked a new starter, `false` if Pokemon catch did not unlock a starter
+   * Note: it does not update the Pokemon IVs (TODO: why??). See {@linkcode updateSpeciesDexIvs} for that.
+   *
+   * By default, shows a message for each starter unlocked in the process.
+   *
+   * The function exits early if the Pokemon is a "rental" Pokemon (i.e. was given through an event for the current run only)
+   * unless that species had already been captured before, in which case any new form, gender, etc. gets unlocked.
+   *
+   * @param pokemon - The {@linkcode Pokemon} that was caught.
+   * @param isNonRentalCatch - `true` if we are in a catching or hatching situation, and if the Pokemon is not being "rented"
+   *   as part of an event. If `false` and the Pokemon wasn't already caught (e.g. rental mon), no data will get updated,
+   *   otherwise (e.g. evolution situation) the nature, ability and other unlocks will get updated, but no the game stats.
+   * @param fromEgg - Whether the Pokemon was obtained through an egg. Default: `false`
+   * @param showMessage - Whether to display a message if (a) new Starter(s) was unlocked. Default: `true`
+   * @returns array of {@linkcode Species} of unlocked starters, if any (root species will be last in the array)
    */
   setPokemonCaught(
     pokemon: Pokemon,
-    incrementCount: boolean = true,
+    isNonRentalCatch: boolean = true,
     fromEgg: boolean = false,
     showMessage: boolean = true,
-  ): Promise<boolean> {
-    // If incrementCount === false (not a catch scenario), only update the pokemon's dex data if the Pokemon has already been marked as caught in dex
+  ): Promise<Species[]> {
+    // If isNonRentalCatch === false, only update the pokemon's dex data if the Pokemon has already been marked as caught in dex
     // Prevents form changes, nature changes, etc. from unintentionally updating the dex data of a "rental" pokemon
     const speciesRootForm = pokemon.species.getRootSpeciesId();
-    if (!incrementCount && !globalScene.gameData.dexData[speciesRootForm].caughtAttr) {
-      return Promise.resolve(false);
+    if (!isNonRentalCatch && !globalScene.gameData.dexData[speciesRootForm].caughtAttr) {
+      return Promise.resolve([]);
     } else {
-      return this.setPokemonSpeciesCaught(pokemon, pokemon.species, incrementCount, fromEgg, showMessage);
+      return this.setPokemonSpeciesCaught(
+        pokemon,
+        pokemon.species,
+        isNonRentalCatch,
+        isNonRentalCatch,
+        fromEgg,
+        showMessage,
+      );
     }
   }
 
   /**
+   * Set the given PokemonSpecies as caught based on the characteristics of a caught Pokemon.
+   * By default, updates games stats and starter candy count, and shows a message if the catch unlocked a new starter.
+   * Calls itself recursively for all pre-evolved species of the provided one.
    *
-   * @param pokemon
-   * @param species
-   * @param incrementCount
-   * @param fromEgg
-   * @param showMessage
-   * @returns `true` if Pokemon catch unlocked a new starter, `false` if Pokemon catch did not unlock a starter
+   * @param pokemon - The {@linkcode Pokemon} that was caught
+   * @param species - The {@linkcode PokemonSpecies} to mark as caught based on the pokemon's characteristics
+   * @param updateStats - Whether to increment game stats and the species's caught/hatched count. Default: `true`
+   * @param giveCandy - Whether to give starter candy for the root species. Default: `true`
+   * @param fromEgg - Whether the Pokemon was obtained through an egg. Default: `false`
+   * @param showMessage - Whether to display a message if (a) new Starter(s) was unlocked. Default: `true`
+   * @returns array of {@linkcode Species} of unlocked starters, if any (root species will be last in the array)
    */
-  setPokemonSpeciesCaught(
+  private setPokemonSpeciesCaught(
     pokemon: Pokemon,
     species: PokemonSpecies,
-    incrementCount: boolean = true,
+    updateStats: boolean = true,
+    giveCandy: boolean = true,
     fromEgg: boolean = false,
     showMessage: boolean = true,
-  ): Promise<boolean> {
-    return new Promise<boolean>((resolve) => {
+    unlockedStarters: Species[] = [],
+  ): Promise<Species[]> {
+    return new Promise<Species[]>((resolve) => {
       const dexEntry = this.dexData[species.speciesId];
       const caughtAttr = dexEntry.caughtAttr;
-      const formIndex = pokemon.formIndex;
-      if (noStarterFormKeys.includes(pokemon.getFormKey())) {
-        pokemon.formIndex = 0;
+
+      const currentFormIndex = pokemon.formIndex;
+
+      if (!pokemon.getSpeciesForm().isStarterSelectable) {
+        pokemon.formIndex = pokemon.getSelectableFormIndex(); // Only unlock starter selectable forms
       }
-      const dexAttr = pokemon.getDexAttr();
-      pokemon.formIndex = formIndex;
+      /*
+       * Ensure that the form index is valid for this species.
+       * An invalid form can happen when an evolved Species and its pre evolution Species don't have the same number of forms.
+       * For example when catching a Pikachu, it should not unlock a form index other than normal or spiky eared for Pichu.
+       * In this case it will default to using the first already unlocked form, or 0 if there is no unlocked form.
+       */
+      if (!species.forms[pokemon.formIndex]) {
+        pokemon.formIndex = this.getFormIndex(caughtAttr);
+      }
+
+      const dexAttr = pokemon.getDexAttr(); // Get the dex attr with the valid and starter selectable form index
 
       // Mark as caught
       dexEntry.caughtAttr |= dexAttr;
@@ -1586,75 +1626,97 @@ export class GameData {
       const newCatch = !caughtAttr;
       const hasNewAttr = (caughtAttr & dexAttr) !== dexAttr;
 
-      if (incrementCount) {
-        if (!fromEgg) {
-          dexEntry.caughtCount++;
-          this.gameStats.pokemonCaught++;
-          if (pokemon.species.isSubLegendary()) {
-            this.gameStats.subLegendaryPokemonCaught++;
-          } else if (pokemon.species.isLegendary()) {
-            this.gameStats.legendaryPokemonCaught++;
-          } else if (pokemon.species.isMythical()) {
-            this.gameStats.mythicalPokemonCaught++;
-          }
-          if (pokemon.isShiny()) {
-            this.gameStats.shinyPokemonCaught++;
-          }
-        } else {
+      if (updateStats) {
+        if (fromEgg) {
           dexEntry.hatchedCount++;
-          this.gameStats.pokemonHatched++;
-          if (pokemon.species.isSubLegendary()) {
-            this.gameStats.subLegendaryPokemonHatched++;
-          } else if (pokemon.species.isLegendary()) {
-            this.gameStats.legendaryPokemonHatched++;
-          } else if (pokemon.species.isMythical()) {
-            this.gameStats.mythicalPokemonHatched++;
-          }
-          if (pokemon.isShiny()) {
-            this.gameStats.shinyPokemonHatched++;
-          }
-        }
-
-        if (!hasPreEvolution && (!globalScene.gameMode.isDaily || hasNewAttr || fromEgg)) {
-          this.addStarterCandy(
-            species,
-            1 * (pokemon.isShiny() ? 5 * (1 << (pokemon.variant ?? 0)) : 1) * (fromEgg || pokemon.isBoss() ? 2 : 1),
-          );
+          this.incrementHatchedPokemonStats(pokemon);
+        } else {
+          dexEntry.caughtCount++;
+          this.incrementCaughtPokemonStats(pokemon);
         }
       }
 
-      const checkPreEvolution = (newStarter: boolean) => {
+      // Once at the root species, give starter candy
+      if (giveCandy && !hasPreEvolution && (!globalScene.gameMode.isDaily || hasNewAttr || fromEgg)) {
+        let candyMultiplier = 1;
+        if (pokemon.isShiny()) {
+          candyMultiplier *= getCandyGainMultiplierForShinies(pokemon.variant);
+        }
+        if (fromEgg) {
+          candyMultiplier *= STARTER_CANDY_MULIPLIER_FOR_EGG;
+        } else if (pokemon.isBoss()) {
+          candyMultiplier *= STARTER_CANDY_MULIPLIER_FOR_BOSS;
+        }
+        this.addStarterCandy(species, STARTER_CANDY_GAIN_FROM_CATCH * candyMultiplier);
+      }
+
+      const checkPreEvolution = (unlockedStarters: Species[]) => {
         if (hasPreEvolution) {
           const preEvolutionSpecies = pokemonPreEvolutions[species.speciesId];
           this.setPokemonSpeciesCaught(
             pokemon,
             getPokemonSpecies(preEvolutionSpecies),
-            incrementCount,
+            false, // pre-evolutions don't update game stats
+            giveCandy,
             fromEgg,
             showMessage,
-          ).then((result) => resolve(result));
+            unlockedStarters,
+          ).then((result) => {
+            pokemon.formIndex = currentFormIndex; // Give the caught pokemon its correct form back
+            resolve(result);
+          });
         } else {
-          resolve(newStarter);
+          pokemon.formIndex = currentFormIndex; // Give the caught pokemon its correct form back
+          resolve(unlockedStarters);
         }
       };
 
       if (newCatch && speciesStarterCosts.hasOwnProperty(species.speciesId)) {
+        unlockedStarters.push(species.speciesId);
         if (!showMessage) {
-          resolve(true);
-          return;
+          checkPreEvolution(unlockedStarters);
+        } else {
+          globalScene.audioManager.playSound("level_up_fanfare");
+          globalScene.ui.showText(
+            i18next.t("battle:addedAsAStarter", { pokemonName: species.name }),
+            null,
+            () => checkPreEvolution(unlockedStarters),
+            null,
+            true,
+          );
         }
-        globalScene.audioManager.playSound("level_up_fanfare");
-        globalScene.ui.showText(
-          i18next.t("battle:addedAsAStarter", { pokemonName: species.name }),
-          null,
-          () => checkPreEvolution(true),
-          null,
-          true,
-        );
       } else {
-        checkPreEvolution(false);
+        checkPreEvolution(unlockedStarters);
       }
     });
+  }
+
+  private incrementCaughtPokemonStats(pokemon: Pokemon) {
+    this.gameStats.pokemonCaught++;
+    if (pokemon.species.isSubLegendary()) {
+      this.gameStats.subLegendaryPokemonCaught++;
+    } else if (pokemon.species.isLegendary()) {
+      this.gameStats.legendaryPokemonCaught++;
+    } else if (pokemon.species.isMythical()) {
+      this.gameStats.mythicalPokemonCaught++;
+    }
+    if (pokemon.isShiny()) {
+      this.gameStats.shinyPokemonCaught++;
+    }
+  }
+
+  private incrementHatchedPokemonStats(pokemon: Pokemon) {
+    this.gameStats.pokemonHatched++;
+    if (pokemon.species.isSubLegendary()) {
+      this.gameStats.subLegendaryPokemonHatched++;
+    } else if (pokemon.species.isLegendary()) {
+      this.gameStats.legendaryPokemonHatched++;
+    } else if (pokemon.species.isMythical()) {
+      this.gameStats.mythicalPokemonHatched++;
+    }
+    if (pokemon.isShiny()) {
+      this.gameStats.shinyPokemonHatched++;
+    }
   }
 
   incrementRibbonCount(species: PokemonSpecies, forStarter: boolean = false): number {
@@ -1742,6 +1804,7 @@ export class GameData {
       }
       globalScene.audioManager.playSound("level_up_fanfare");
       const moveName = allMoves[speciesEggMoves[speciesId][eggMoveIndex]].name;
+      // TODO: use a proper localized message in this case
       let message = prependSpeciesToMessage ? species.getName() + " " : "";
       message +=
         eggMoveIndex === 3
@@ -1760,7 +1823,7 @@ export class GameData {
   }
 
   /**
-   * Unlocks the given {@linkcode Nature} for a {@linkcode PokemonSpecies} and its preEvolutions.
+   * Unlocks the given {@linkcode Nature} for a {@linkcode PokemonSpecies} and its pre-evolutions.
    * Will fail silently if root species has not been unlocked
    */
   unlockSpeciesNature(species: PokemonSpecies, nature: Nature): void {
@@ -1768,7 +1831,6 @@ export class GameData {
       return;
     }
 
-    //recursively unlock nature for species and preEvolutions
     const _unlockSpeciesNature = (speciesId: Species) => {
       this.dexData[speciesId].natureAttr |= 1 << (nature + 1);
       if (pokemonPreEvolutions.hasOwnProperty(speciesId)) {

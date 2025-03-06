@@ -18,6 +18,8 @@ import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
 import { PhaseId } from "#enums/phase-id";
+import type { Species } from "#enums/species";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 
 /**
  * A phase for handling Pokemon evolution
@@ -220,7 +222,22 @@ export class EvolutionPhase extends FormChangeBasePhase {
     this.pokemonNewFormSprite.setVisible(true);
     animations.doCircleInward(this.baseBgImg, this.container);
 
-    const onEvolutionComplete = (): void => {
+    async function showStarterUnlockText(unlockedStarters: Species[]): Promise<void> {
+      for (const speciesId of unlockedStarters) {
+        globalScene.audioManager.playSound("level_up_fanfare");
+        await new Promise<void>((resolve) => {
+          ui.showText(
+            i18next.t("battle:addedAsAStarter", { pokemonName: getPokemonSpecies(speciesId).getName() }),
+            null,
+            () => resolve(),
+            null,
+            true,
+          );
+        });
+      }
+    }
+
+    const onEvolutionComplete = (unlockedStarters: Species[]): void => {
       SoundFade.fadeOut(globalScene, this.evolutionBgm, 100);
       time.delayedCall(250, () => {
         this.pokemon.cry();
@@ -234,7 +251,9 @@ export class EvolutionPhase extends FormChangeBasePhase {
               evolvedPokemonName: this.pokemon.name,
             }),
             null,
-            () => this.end(),
+            () => {
+              showStarterUnlockText(unlockedStarters).then(() => this.end());
+            },
             null,
             true,
             fixedNumber(4000),
@@ -247,7 +266,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
     time.delayedCall(900, () => {
       this.handler.canCancel = false;
 
-      this.pokemon.evolve(this.evolution).then(() => {
+      this.pokemon.evolve(this.evolution).then((unlockedStarters: Species[]) => {
         const levelMoves = this.pokemon
           .getLevelMoves(this.lastLevel + 1, true, false, false)
           .filter((lm) => lm[0] === EVOLVE_MOVE);
@@ -277,7 +296,7 @@ export class EvolutionPhase extends FormChangeBasePhase {
                   targets: this.bgOverlay,
                   alpha: 0,
                   duration: 250,
-                  onComplete: onEvolutionComplete,
+                  onComplete: () => onEvolutionComplete(unlockedStarters),
                 });
               },
             });

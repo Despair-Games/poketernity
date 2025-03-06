@@ -23,7 +23,6 @@ import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-spe
 import { allSpecies } from "#app/data/data-lists";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { HiddenAbilityRateBoosterModifier } from "#app/modifier/modifier";
-import { achvs } from "#app/system/achievements";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
@@ -46,6 +45,7 @@ import { SpeciesGroups } from "#enums/pokemon-species-groups";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import { settings } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { addPokemonDataToDexAndValidateAchievements } from "../utils/encounter-pokemon-utils";
 
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/weirdDream";
@@ -392,15 +392,12 @@ function getTeamTransformations(): PokemonTransformation[] {
 }
 
 async function doNewTeamPostProcess(transformations: PokemonTransformation[]) {
-  let atLeastOneNewStarter = false;
   for (const transformation of transformations) {
     const previousPokemon = transformation.previousPokemon;
     const newPokemon = transformation.newPokemon;
     const speciesRootForm = newPokemon.species.getRootSpeciesId();
 
-    if (await postProcessTransformedPokemon(previousPokemon, newPokemon, speciesRootForm)) {
-      atLeastOneNewStarter = true;
-    }
+    await postProcessTransformedPokemon(previousPokemon, newPokemon, speciesRootForm);
 
     // Copy old items to new pokemon
     for (const item of transformation.heldItems) {
@@ -431,11 +428,6 @@ async function doNewTeamPostProcess(transformations: PokemonTransformation[]) {
     enablePassiveMon.passive = true;
     await enablePassiveMon.updateInfo(true);
   }
-
-  // If at least one new starter was unlocked, play 1 fanfare
-  if (atLeastOneNewStarter) {
-    globalScene.audioManager.playSound("level_up_fanfare");
-  }
 }
 
 /**
@@ -451,8 +443,7 @@ async function postProcessTransformedPokemon(
   newPokemon: PlayerPokemon,
   speciesRootForm: Species,
   forBattle: boolean = false,
-): Promise<boolean> {
-  let isNewStarter = false;
+): Promise<void> {
   // Roll HA a second time
   if (newPokemon.species.abilityHidden) {
     const hiddenIndex = newPokemon.species.ability2 ? 2 : 1;
@@ -477,37 +468,19 @@ async function postProcessTransformedPokemon(
   // Roll a neutral nature
   newPokemon.nature = [Nature.HARDY, Nature.DOCILE, Nature.BASHFUL, Nature.QUIRKY, Nature.SERIOUS][randSeedInt(5)];
 
-  // For pokemon at/below 570 BST or any shiny pokemon, unlock it permanently as if you had caught it
-  if (
-    !forBattle
-    && (newPokemon.getSpeciesForm().getBaseStatTotal() <= NON_LEGENDARY_BST_THRESHOLD || newPokemon.isShiny())
-  ) {
-    if (
-      newPokemon.getSpeciesForm().abilityHidden
-      && newPokemon.abilityIndex === newPokemon.getSpeciesForm().getAbilityCount() - 1
-    ) {
-      globalScene.validateAchv(achvs.HIDDEN_ABILITY);
-    }
-
-    if (newPokemon.species.isSubLegendary()) {
-      globalScene.validateAchv(achvs.CATCH_SUB_LEGENDARY);
-    }
-
-    if (newPokemon.species.isLegendary()) {
-      globalScene.validateAchv(achvs.CATCH_LEGENDARY);
-    }
-
-    if (newPokemon.species.isMythical()) {
-      globalScene.validateAchv(achvs.CATCH_MYTHICAL);
-    }
-
-    globalScene.gameData.updateSpeciesDexIvs(newPokemon.species.getRootSpeciesId(true), newPokemon.ivs);
-    const newStarterUnlocked = await globalScene.gameData.setPokemonCaught(newPokemon, true, false, false);
-    if (newStarterUnlocked) {
-      isNewStarter = true;
-      await showEncounterText(
-        i18next.t("battle:addedAsAStarter", { pokemonName: getPokemonSpecies(speciesRootForm).getName() }),
-      );
+  if (!forBattle) {
+    // For pokemon at/below 570 BST or any shiny pokemon, unlock it permanently as if you had caught it
+    // For other mons, update their dex data as long as they had been unlocked previously
+    const shouldUnlockStarters =
+      newPokemon.getSpeciesForm().getBaseStatTotal() <= NON_LEGENDARY_BST_THRESHOLD || newPokemon.isShiny();
+    const unlockedStarters = await addPokemonDataToDexAndValidateAchievements(newPokemon, shouldUnlockStarters);
+    if (unlockedStarters.length > 0) {
+      globalScene.audioManager.playSound("level_up_fanfare");
+      for (const speciesId of unlockedStarters) {
+        await showEncounterText(
+          i18next.t("battle:addedAsAStarter", { pokemonName: getPokemonSpecies(speciesId).getName() }),
+        );
+      }
     }
   }
 
@@ -521,11 +494,6 @@ async function postProcessTransformedPokemon(
   newPokemon.ivs = newPokemon.ivs.map((iv, index) => {
     return previousPokemon.ivs[index] > iv ? previousPokemon.ivs[index] : iv;
   });
-
-  // For pokemon that the player owns (including ones just caught), gain a candy
-  if (!forBattle && !!globalScene.gameData.dexData[speciesRootForm].caughtAttr) {
-    globalScene.gameData.addStarterCandy(getPokemonSpecies(speciesRootForm), 1);
-  }
 
   // Set the moveset of the new pokemon to be the same as previous, but with 1 egg move and 1 (attempted) STAB move of the new species
   newPokemon.generateAndPopulateMoveset();
@@ -554,8 +522,6 @@ async function postProcessTransformedPokemon(
 
   // Enable passive if previous had it
   newPokemon.passive = previousPokemon.passive;
-
-  return isNewStarter;
 }
 
 /**
@@ -766,7 +732,12 @@ async function addEggMoveToNewPokemonMoveset(
         && !isNullOrUndefined(randomEggMoveIndex)
         && !!globalScene.gameData.dexData[speciesRootForm].caughtAttr
       ) {
-        await globalScene.gameData.setEggMoveUnlocked(getPokemonSpecies(speciesRootForm), randomEggMoveIndex, true);
+        await globalScene.gameData.setEggMoveUnlocked(
+          getPokemonSpecies(speciesRootForm),
+          randomEggMoveIndex,
+          true,
+          true,
+        );
       }
     }
   }

@@ -947,30 +947,42 @@ export function getEncounterPokemonLevelForWave(levelAdditiveModifier: number = 
 }
 
 /**
- * Helper async function to update a player's dex and award achievements
+ * Helper async function to update a player's dex and award achievements.
+ *
+ * The function exits early if the Pokemon is a "rental" Pokemon (ie was given through an event for the current run only)
+ * unless that species had already been captured before, in which case any new form, gender, etc. gets unlocked.
+ *
  * @param pokemon - The newly obtained Pokemon
+ * @param includeNewCatch - Whether to update the data if the catch would unlock a new starter. Default: `true`.
+ *   Use `false` for "rental" Pokemon, so that the function exits early.
+ * @returns Promise of an array of the unlocked {@linkcode Species}, if any. Otherwise, an empty array.
  */
-export async function addPokemonDataToDexAndValidateAchievements(pokemon: PlayerPokemon) {
-  const speciesForm = pokemon.getSpeciesForm();
+export async function addPokemonDataToDexAndValidateAchievements(
+  pokemon: PlayerPokemon,
+  includeNewCatch: boolean = true,
+): Promise<Species[]> {
+  const isNewCatch = !globalScene.gameData.dexData[pokemon.species.getRootSpeciesId()].caughtAttr;
+  if (!isNewCatch || includeNewCatch) {
+    const speciesForm = pokemon.getSpeciesForm();
+    if (speciesForm.abilityHidden && pokemon.abilityIndex === speciesForm.getAbilityCount() - 1) {
+      globalScene.validateAchv(achvs.HIDDEN_ABILITY);
+    }
 
-  if (speciesForm.abilityHidden && pokemon.abilityIndex === speciesForm.getAbilityCount() - 1) {
-    globalScene.validateAchv(achvs.HIDDEN_ABILITY);
+    if (pokemon.species.isSubLegendary()) {
+      globalScene.validateAchv(achvs.CATCH_SUB_LEGENDARY);
+    }
+
+    if (pokemon.species.isLegendary()) {
+      globalScene.validateAchv(achvs.CATCH_LEGENDARY);
+    }
+
+    if (pokemon.species.isMythical()) {
+      globalScene.validateAchv(achvs.CATCH_MYTHICAL);
+    }
+
+    globalScene.gameData.updateSpeciesDexIvs(pokemon.species.getRootSpeciesId(true), pokemon.ivs);
   }
-
-  if (pokemon.species.isSubLegendary()) {
-    globalScene.validateAchv(achvs.CATCH_SUB_LEGENDARY);
-  }
-
-  if (pokemon.species.isLegendary()) {
-    globalScene.validateAchv(achvs.CATCH_LEGENDARY);
-  }
-
-  if (pokemon.species.isMythical()) {
-    globalScene.validateAchv(achvs.CATCH_MYTHICAL);
-  }
-
-  globalScene.gameData.updateSpeciesDexIvs(pokemon.species.getRootSpeciesId(true), pokemon.ivs);
-  return globalScene.gameData.setPokemonCaught(pokemon, true, false, false);
+  return globalScene.gameData.setPokemonCaught(pokemon, includeNewCatch, false, false);
 }
 
 /**
