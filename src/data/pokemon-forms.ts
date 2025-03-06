@@ -1,8 +1,8 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FORM_CHANGE_MOVE } from "#app/data/balance/pokemon-level-moves";
-import { FormChangePhase } from "#app/phases/form-change-phase";
-import { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
+import type { FORM_CHANGE_MOVE } from "#app/data/balance/pokemon-level-moves";
+import type { FormChangePhase } from "#app/phases/form-change-phase";
+import type { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
