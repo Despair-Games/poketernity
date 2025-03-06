@@ -8,7 +8,7 @@ import { getSpeciesFormChangeMessage } from "#app/data/pokemon-forms";
 import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achievements";
 import type PartyUiHandler from "#app/ui/party-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { fixedNumber } from "#app/utils";

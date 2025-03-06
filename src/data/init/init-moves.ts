@@ -145,6 +145,7 @@ import {
   invalidSleepTalkMoves,
   RandomMovesetMoveAttr,
 } from "#app/data/moves/move-attrs/random-moveset-move-attr";
+import { QuashAttr } from "../moves/move-attrs/quash-attr";
 import { RechargeAttr } from "#app/data/moves/move-attrs/recharge-attr";
 import { RecoilAttr } from "#app/data/moves/move-attrs/recoil-attr";
 import { ReducePpMoveAttr } from "#app/data/moves/move-attrs/reduce-pp-move-attr";
@@ -1242,10 +1243,9 @@ export function initMoves() {
       .condition(failOnMaxCondition)
       .ignoresSubstitute()
       .attr(SwitchAbilitiesAttr),
-    new StatusMove(MoveId.IMPRISON, ElementalType.PSYCHIC, 100, 10, -1, 0, 3)
+    new SelfStatusMove(MoveId.IMPRISON, ElementalType.PSYCHIC, 100, 10, -1, 0, 3)
       .ignoresSubstitute()
-      .attr(AddArenaTagAttr, ArenaTagType.IMPRISON, ArenaTagRelativeSide.TARGET, { failOnOverlap: true })
-      .target(MoveTarget.ENEMY_SIDE),
+      .attr(AddBattlerTagAttr, BattlerTagType.IMPRISONING, true, { failOnOverlap: true }),
     new SelfStatusMove(MoveId.REFRESH, ElementalType.NORMAL, -1, 20, -1, 0, 3)
       .attr(HealStatusEffectAttr, true, [
         StatusEffect.PARALYSIS,
@@ -2131,7 +2131,8 @@ export function initMoves() {
     new AttackMove(MoveId.INCINERATE, ElementalType.FIRE, MoveCategory.SPECIAL, 60, 100, 15, -1, 0, 5)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
       .attr(RemoveHeldItemAttr, true),
-    new StatusMove(MoveId.QUASH, ElementalType.DARK, 100, 15, -1, 0, 5).condition(failIfSingleBattle).unimplemented(),
+    new StatusMove(MoveId.QUASH, ElementalType.DARK, 100, 15, -1, 0, 5)
+      .attr(QuashAttr),
     new AttackMove(MoveId.ACROBATICS, ElementalType.FLYING, MoveCategory.PHYSICAL, 55, 100, 15, -1, 0, 5).attr(
       MovePowerMultiplierAttr,
       (user, _target, _move) =>

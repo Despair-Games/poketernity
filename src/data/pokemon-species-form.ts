@@ -1,7 +1,7 @@
 import type { StarterMoveset } from "#app/@types/StarterData";
 import type { AnySound } from "#app/audio-manager";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
-import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { type LevelMoves, pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";
 import { pokemonFormLevelMoves } from "./balance/pokemon-form-level-moves";
 import { speciesStarterCosts } from "#app/data/balance/starters";
@@ -95,8 +95,8 @@ export abstract class PokemonSpeciesForm {
    */
   getRootSpeciesId(forStarter: boolean = false): Species {
     let ret = this.speciesId;
-    while (pokemonPrevolutions.hasOwnProperty(ret) && (!forStarter || !speciesStarterCosts.hasOwnProperty(ret))) {
-      ret = pokemonPrevolutions[ret];
+    while (pokemonPreEvolutions.hasOwnProperty(ret) && (!forStarter || !speciesStarterCosts.hasOwnProperty(ret))) {
+      ret = pokemonPreEvolutions[ret];
     }
     return ret;
   }
@@ -161,7 +161,7 @@ export abstract class PokemonSpeciesForm {
   }
 
   isObtainable(): boolean {
-    return this.generation <= 9 || pokemonPrevolutions.hasOwnProperty(this.speciesId);
+    return this.generation <= 9 || pokemonPreEvolutions.hasOwnProperty(this.speciesId);
   }
 
   isCatchable(): boolean {

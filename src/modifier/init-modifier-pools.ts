@@ -1,4 +1,4 @@
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
 import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

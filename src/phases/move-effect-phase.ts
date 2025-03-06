@@ -39,7 +39,6 @@ import { HitCheckPhase } from "./hit-check-phase";
 import { MoveFlags } from "#enums/move-flags";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AchvCategory } from "#enums/achv-category";
 import { PhaseId } from "#enums/phase-id";
 import { isFieldTargeted } from "#app/utils/move-utils";
 
@@ -501,7 +500,6 @@ export class MoveEffectPhase extends HitCheckPhase {
 
       if (damage > 0) {
         if (user.isPlayer()) {
-          globalScene.validateAchvs(AchvCategory.DAMAGE, new NumberHolder(damage));
           if (damage > globalScene.gameData.gameStats.highestDamage) {
             globalScene.gameData.gameStats.highestDamage = damage;
           }
