@@ -271,6 +271,11 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
     fontStyle: FontStyle.ALT_FONT_44PX_STROKE,
   },
 
+  [TextStyle.LAPSING_MODIFIER_COUNT]: {
+    color: TextColor.PINK_DARK_BROWN_SHADOW,
+    fontStyle: FontStyle.ALT_FONT_66PX_STROKE,
+  },
+
   [TextStyle.STARTER_COST]: {
     color: TextColor.WHITE_DARK_PURPLE_SHADOW,
     fontStyle: FontStyle.DEFAULT_FONT_32PX,

@@ -96,6 +96,11 @@ export const allTextFormats: Record<FontStyle, FontStyleOptions> = {
     fontSize: 66,
     shadow: { xPosition: 4, yPosition: 5 },
   },
+  [FontStyle.ALT_FONT_66PX_STROKE]: {
+    fontFamily: "pkmnems",
+    fontSize: 66,
+    strokeThickness: 16,
+  },
   [FontStyle.ALT_FONT_54PX]: {
     fontFamily: "pkmnems",
     fontSize: 54,
