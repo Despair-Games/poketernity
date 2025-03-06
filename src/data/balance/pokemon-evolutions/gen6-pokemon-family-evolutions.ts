@@ -40,7 +40,7 @@ export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
       32,
       null,
       new SpeciesEvolutionCondition(
-        (_p) =>
+        () =>
           !!globalScene.getPlayerParty().find((p) => p.getTypes(false, false, true).indexOf(ElementalType.DARK) > -1),
       ),
     ),
@@ -90,7 +90,7 @@ export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.TYRANTRUM,
       39,
       null,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
+      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
     ),
   ],
   [Species.AMAURA]: [
@@ -98,7 +98,7 @@ export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.AURORUS,
       39,
       null,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
+      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
   ],
   [Species.GOOMY]: [
@@ -106,13 +106,24 @@ export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.HISUI_SLIGGOO,
       40,
       null,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
+      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
     new SpeciesEvolution(
       Species.SLIGGOO,
       40,
       null,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
+      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
+    ),
+  ],
+  /** Hisui Sliggoo is from Gen 8 */
+  [Species.HISUI_SLIGGOO]: [
+    new SpeciesEvolution(
+      Species.HISUI_GOODRA,
+      50,
+      null,
+      new SpeciesEvolutionCondition(() =>
+        globalScene.arena.hasWeather([WeatherType.RAIN, WeatherType.FOG, WeatherType.HEAVY_RAIN]),
+      ),
     ),
   ],
   [Species.SLIGGOO]: [
@@ -120,7 +131,7 @@ export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.GOODRA,
       50,
       null,
-      new SpeciesEvolutionCondition((_p) =>
+      new SpeciesEvolutionCondition(() =>
         globalScene.arena.hasWeather([WeatherType.RAIN, WeatherType.FOG, WeatherType.HEAVY_RAIN]),
       ),
     ),
@@ -136,13 +147,13 @@ export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.HISUI_AVALUGG,
       37,
       null,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
+      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
     new SpeciesEvolution(
       Species.AVALUGG,
       37,
       null,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
+      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
     ),
   ],
   [Species.NOIBAT]: [new SpeciesEvolution(Species.NOIVERN, 48, null, null)],

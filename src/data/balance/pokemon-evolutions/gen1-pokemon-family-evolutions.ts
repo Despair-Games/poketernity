@@ -12,6 +12,7 @@ import {
   HAPPINESS_EVO_LEVEL,
   LICKILICKY_EVO_LEVEL,
   MR_MIME_EVO_LEVEL,
+  SLOWPOKE_FAMILY_EVO_LEVEL,
   TANGROWTH_EVO_LEVEL,
 } from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
 import {
@@ -173,7 +174,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.PONYTA]: [new SpeciesEvolution(Species.RAPIDASH, 40, null, null)],
   [Species.SLOWPOKE]: [
     new SpeciesEvolution(Species.SLOWBRO, 37, null, null),
-    new SpeciesEvolution(Species.SLOWKING, 1, EvolutionItem.LINKING_CORD, null, 37),
+    new SpeciesEvolution(Species.SLOWKING, 1, EvolutionItem.LINKING_CORD, null, SLOWPOKE_FAMILY_EVO_LEVEL),
   ],
   [Species.MAGNEMITE]: [new SpeciesEvolution(Species.MAGNETON, 30, null, null)],
   [Species.MAGNETON]: [
