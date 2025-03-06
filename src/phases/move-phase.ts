@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { allMoves } from "#app/data/data-lists";
 import { CommonAnim } from "#enums/common-anim";
-import { type CenterOfAttentionTag } from "#app/data/battler-tags";
+import type { ImprisoningTag, CenterOfAttentionTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
 import { BypassRedirectAttr } from "#app/data/move-attrs/bypass-redirect-attr";
@@ -37,6 +37,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
 import { SelfStatusMove } from "#app/data/move";
 import { WeatherType } from "#enums/weather-type";
+import { applyBattlerTags } from "#app/data/apply-battler-tags";
 
 /**
  * Resolves the following:
@@ -176,6 +177,8 @@ export class MovePhase extends BattlePhase {
 
     this.resolvePreMoveStatusEffects();
 
+    this.resolveImprisoningEffects();
+
     this.lapsePreMoveAndMoveTags();
 
     if (!(this.failed || this.cancelled)) {
@@ -292,6 +295,27 @@ export class MovePhase extends BattlePhase {
     // TODO: does this intentionally happen before the no targets/MoveId.NONE on queue cancellation case is checked?
     if (!this.followUp && this.canMove() && !this.cancelled) {
       this.pokemon.lapseTags(BattlerTagLapseType.MOVE);
+    }
+  }
+
+  /**
+   * Checks this phase's move against all opponents with ongoing effects from
+   * {@link https://bulbapedia.bulbagarden.net/wiki/Imprison_(move) | Imprison}.
+   * If an opponent currently has a matching move in their moveset, the move is
+   * cancelled, and the corresponding tag's interrupting message is played.
+   */
+  protected resolveImprisoningEffects(): void {
+    if (this.followUp || this.cancelled || this.failed) {
+      return;
+    }
+
+    for (const opponent of this.pokemon.getOpponents()) {
+      if (
+        applyBattlerTags<ImprisoningTag>(BattlerTagType.IMPRISONING, opponent, false, this.pokemon, this.move.moveId)
+      ) {
+        this.cancel();
+        break;
+      }
     }
   }
 

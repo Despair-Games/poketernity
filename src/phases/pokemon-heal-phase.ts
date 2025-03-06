@@ -5,7 +5,6 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { HealingBoosterModifier } from "#app/modifier/modifier";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { NumberHolder } from "#app/utils";
-import { AchvCategory } from "#enums/achv-category";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { CommonAnim } from "#enums/common-anim";
@@ -120,7 +119,6 @@ export class PokemonHealPhase extends CommonAnimPhase {
       }
 
       if (pokemon.isPlayer()) {
-        globalScene.validateAchvs(AchvCategory.HEAL, healAmount);
         const { gameStats } = globalScene.gameData;
         if (healAmount.value > gameStats.highestHeal) {
           gameStats.highestHeal = healAmount.value;

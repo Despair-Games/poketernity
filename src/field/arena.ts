@@ -134,16 +134,9 @@ export class Arena {
    * @param luckValue - The player's luck value
    * - If the spawned Pokemon is a boss then the RNG ceiling is decreased by half the luck value
    * - If the spawned Pokemon is not a boss then the RNG ceiling is decreased by twice the luck value
-   * @param isBoss - Whether or not to force a boss
    * @returns a Pokemon species
    */
-  randomSpecies(
-    waveIndex: number,
-    level: number,
-    attempt?: number,
-    luckValue?: number,
-    isBoss?: boolean,
-  ): PokemonSpecies {
+  randomSpecies(waveIndex: number, level: number, attempt?: number, luckValue?: number): PokemonSpecies {
     const overrideSpecies = globalScene.gameMode.getOverrideSpecies(waveIndex);
     if (overrideSpecies) {
       return overrideSpecies;
@@ -209,7 +202,7 @@ export class Arena {
       return this.randomSpecies(waveIndex, level, (attempt || 0) + 1);
     }
 
-    const newSpeciesId = ret.getWildSpeciesForLevel(level, true, isBoss ?? isBossSpecies, globalScene.gameMode);
+    const newSpeciesId = ret.getEnemySpeciesForLevel(level);
     if (newSpeciesId !== ret.speciesId) {
       console.log("Replaced", Species[ret.speciesId], "with", Species[newSpeciesId]);
       ret = getPokemonSpecies(newSpeciesId);
