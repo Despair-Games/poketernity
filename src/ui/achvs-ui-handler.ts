@@ -20,16 +20,6 @@ enum Page {
   VOUCHERS,
 }
 
-interface LanguageSetting {
-  TextSize: string;
-}
-
-const languageSettings: { [key: string]: LanguageSetting } = {
-  de: {
-    TextSize: "80px",
-  },
-};
-
 export default class AchvsUiHandler extends MessageUiHandler {
   private readonly ROWS = 4;
   private readonly COLS = 17;
@@ -125,9 +115,7 @@ export default class AchvsUiHandler extends MessageUiHandler {
     titleBg.setOrigin(0, 0);
     this.titleBg = titleBg;
 
-    this.titleText = addTextObject(0, 0, "", TextStyle.WINDOW);
-    const textSize = languageSettings[i18next.language]?.TextSize ?? this.titleText.style.fontSize;
-    this.titleText.setFontSize(textSize);
+    this.titleText = addTextObject(0, 0, "", TextStyle.STATS_VALUE);
     const titleBgCenterX = titleBg.x + titleBg.width / 2;
     const titleBgCenterY = titleBg.y + titleBg.height / 2;
     this.titleText.setOrigin(0.5, 0.5);

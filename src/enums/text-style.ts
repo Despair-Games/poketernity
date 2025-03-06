@@ -26,6 +26,8 @@ export enum TextStyle {
   /** Money displayed in Windows (needs different colors based on theme) */
   MONEY_WINDOW,
   GACHA_LABEL,
+  /** TODO: no longer needed once Gacha UI extends OptionSelectUiHandler */
+  GACHA_OPTIONS,
   STATS_LABEL,
   STATS_VALUE,
   SETTINGS_VALUE,

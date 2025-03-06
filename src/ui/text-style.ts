@@ -271,6 +271,13 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
       ["pt-BR"]: FontStyle.DEFAULT_FONT_60PX,
     },
   },
+  [TextStyle.GACHA_OPTIONS]: {
+    color: {
+      [UiTheme.DARK]: TextColor.WHITE_DARK_PURPLE_SHADOW,
+      [UiTheme.LIGHT]: TextColor.DARK_GREY_LIGHT_SHADOW,
+    },
+    fontStyle: FontStyle.DEFAULT_FONT_80PX,
+  },
 
   [TextStyle.STATS_LABEL]: {
     color: TextColor.ORANGE_DARK_SHADOW,
