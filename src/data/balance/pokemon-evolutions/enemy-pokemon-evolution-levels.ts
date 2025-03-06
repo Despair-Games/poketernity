@@ -52,3 +52,5 @@ export const WYRDEER_EVO_LEVEL = 21;
 export const BASCULEGION_EVO_LEVEL = 44;
 /** Level obtained from Geeta's Kingambit */
 export const KINGAMBIT_EVO_LEVEL = 61;
+/** Learns stomp at level 28 in gen 9 */
+export const TSAREENA_EVO_LEVEL = 28;
