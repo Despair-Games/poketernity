@@ -1,7 +1,7 @@
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import type { PokemonSpeciesFormLevelMoves } from "./pokemon-level-moves";
-import { EVOLVE_MOVE, FORM_CHANGE_MOVE, RELEARN_MOVE } from "./pokemon-level-moves";
+import { EVOLVE_MOVE, FORM_CHANGE_MOVE } from "./pokemon-level-moves";
 
 /**
  * Note: Logic for learning moves during a form change, such as G-Max moves,
@@ -744,8 +744,6 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.KYUREM]: {
     1: [
       // Kyurem-Black
-      [RELEARN_MOVE, MoveId.FUSION_BOLT],
-      [RELEARN_MOVE, MoveId.FREEZE_SHOCK],
       [1, MoveId.DRAGON_BREATH],
       [1, MoveId.ANCIENT_POWER],
       [1, MoveId.NOBLE_ROAR],
@@ -755,15 +753,15 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [24, MoveId.DRAGON_PULSE],
       [32, MoveId.ICE_BEAM],
       [40, MoveId.HYPER_VOICE],
+      [48, MoveId.FUSION_BOLT],
       [56, MoveId.BLIZZARD],
       [64, MoveId.IMPRISON],
       [72, MoveId.OUTRAGE],
+      [80, MoveId.FREEZE_SHOCK],
       [88, MoveId.SHEER_COLD],
     ],
     2: [
       // Kyurem-White
-      [RELEARN_MOVE, MoveId.FUSION_FLARE],
-      [RELEARN_MOVE, MoveId.ICE_BURN],
       [1, MoveId.DRAGON_BREATH],
       [1, MoveId.ANCIENT_POWER],
       [1, MoveId.NOBLE_ROAR],
@@ -773,9 +771,11 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [24, MoveId.DRAGON_PULSE],
       [32, MoveId.ICE_BEAM],
       [40, MoveId.HYPER_VOICE],
+      [48, MoveId.FUSION_FLARE],
       [56, MoveId.BLIZZARD],
       [64, MoveId.IMPRISON],
       [72, MoveId.OUTRAGE],
+      [80, MoveId.ICE_BURN],
       [88, MoveId.SHEER_COLD],
     ],
   },
@@ -806,7 +806,6 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.HOOPA]: {
     1: [
       // Unbound
-      [RELEARN_MOVE, MoveId.HYPERSPACE_FURY],
       [1, MoveId.CONFUSION],
       [1, MoveId.DESTINY_BOND],
       [1, MoveId.ALLY_SWITCH],
@@ -822,6 +821,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [50, MoveId.WONDER_ROOM],
       [55, MoveId.DARK_PULSE],
       [75, MoveId.PSYCHIC],
+      [85, MoveId.HYPERSPACE_FURY],
     ],
   },
   [Species.GRENINJA]: {
@@ -1334,7 +1334,6 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.ZACIAN]: {
     1: [
       // Crowned
-      [RELEARN_MOVE, MoveId.BEHEMOTH_BLADE],
       [1, MoveId.BITE],
       [1, MoveId.QUICK_ATTACK],
       [1, MoveId.METAL_CLAW],
@@ -1343,7 +1342,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [1, MoveId.SACRED_SWORD],
       [11, MoveId.SLASH],
       [22, MoveId.SWORDS_DANCE],
-      [33, MoveId.IRON_HEAD],
+      [33, MoveId.BEHEMOTH_BLADE],
       [44, MoveId.NOBLE_ROAR],
       [55, MoveId.CRUNCH],
       [66, MoveId.MOONBLAST],
@@ -1354,7 +1353,6 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.ZAMAZENTA]: {
     1: [
       // Crowned
-      [RELEARN_MOVE, MoveId.BEHEMOTH_BASH],
       [1, MoveId.BITE],
       [1, MoveId.QUICK_ATTACK],
       [1, MoveId.METAL_CLAW],
@@ -1362,7 +1360,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [1, MoveId.WIDE_GUARD],
       [11, MoveId.SLASH],
       [22, MoveId.IRON_DEFENSE],
-      [33, MoveId.IRON_HEAD],
+      [33, MoveId.BEHEMOTH_BASH],
       [44, MoveId.METAL_BURST],
       [55, MoveId.CRUNCH],
       [66, MoveId.MOONBLAST],
@@ -1435,7 +1433,6 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
   [Species.ETERNATUS]: {
     1: [
       // E-Max
-      [RELEARN_MOVE, MoveId.ETERNABEAM],
       [1, MoveId.AGILITY],
       [1, MoveId.CONFUSE_RAY],
       [1, MoveId.POISON_TAIL],
@@ -1450,6 +1447,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [64, MoveId.COSMIC_POWER],
       [72, MoveId.RECOVER],
       [80, MoveId.HYPER_BEAM],
+      [88, MoveId.ETERNABEAM],
     ],
   },
   [Species.URSHIFU]: {

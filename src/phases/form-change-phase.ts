@@ -220,9 +220,12 @@ export class FormChangePhase extends FormChangeBasePhase {
         super.end();
       });
     } else {
-      // Otherwise, learn new moves if applicable, then end the evolution cutscene via `EndEvolutionPhase`.
-      for (const learnMoveId of this.formChange.movesToLearn) {
-        globalScene.unshiftPhase(new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), learnMoveId));
+      // Otherwise, learn new moves if applicable and at a high enough level,
+      // then end the form change cutscene via `EndEvolutionPhase`.
+      for (const [, learnMoveId] of this.pokemon.getLevelMoves(1, true)) {
+        if (this.formChange.movesToLearn.includes(learnMoveId)) {
+          globalScene.unshiftPhase(new LearnMovePhase(globalScene.getPlayerParty().indexOf(this.pokemon), learnMoveId));
+        }
       }
       globalScene.unshiftPhase(new EndEvolutionPhase());
 
