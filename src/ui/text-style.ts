@@ -38,13 +38,6 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
     },
     fontStyle: FontStyle.DEFAULT_FONT_54PX,
   },
-  [TextStyle.WINDOW_MODAL]: {
-    color: {
-      [UiTheme.DARK]: TextColor.WHITE_DARK_PURPLE_SHADOW,
-      [UiTheme.LIGHT]: TextColor.DARK_GREY_LIGHT_SHADOW,
-    },
-    fontStyle: FontStyle.DEFAULT_FONT_48PX,
-  },
   [TextStyle.WINDOW_ALT]: {
     color: TextColor.DARK_GREY_LIGHT_SHADOW,
     fontStyle: FontStyle.DEFAULT_FONT_96PX,
@@ -52,6 +45,42 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
   [TextStyle.WINDOW_ALT_SMALL]: {
     color: TextColor.DARK_GREY_LIGHT_SHADOW,
     fontStyle: FontStyle.DEFAULT_FONT_60PX,
+  },
+
+  [TextStyle.WINDOW_MODAL_INFO]: {
+    color: {
+      [UiTheme.DARK]: TextColor.WHITE_DARK_PURPLE_SHADOW,
+      [UiTheme.LIGHT]: TextColor.DARK_GREY_LIGHT_SHADOW,
+    },
+    fontStyle: FontStyle.DEFAULT_FONT_48PX,
+  },
+  [TextStyle.WINDOW_MODAL_ERROR]: {
+    color: TextColor.PINK_DARK_BROWN_SHADOW,
+    fontStyle: FontStyle.DEFAULT_FONT_64PX,
+  },
+  [TextStyle.REGISTRATION_FORM_WARNING]: {
+    color: {
+      [UiTheme.DARK]: TextColor.WHITE_DARK_PURPLE_SHADOW,
+      [UiTheme.LIGHT]: TextColor.DARK_GREY_LIGHT_SHADOW,
+    },
+    fontStyle: FontStyle.DEFAULT_FONT_42PX,
+  },
+  [TextStyle.REGISTRATION_FORM_ERROR]: {
+    color: TextColor.PINK_DARK_BROWN_SHADOW,
+    fontStyle: {
+      [DEFAULT_LANGUAGE_KEY]: FontStyle.DEFAULT_FONT_64PX,
+      ["es-ES"]: FontStyle.DEFAULT_FONT_40PX,
+    },
+  },
+  [TextStyle.REGISTRATION_FORM_LABEL]: {
+    color: {
+      [UiTheme.DARK]: TextColor.WHITE_DARK_PURPLE_SHADOW,
+      [UiTheme.LIGHT]: TextColor.DARK_GREY_LIGHT_SHADOW,
+    },
+    fontStyle: {
+      [DEFAULT_LANGUAGE_KEY]: FontStyle.DEFAULT_FONT_64PX,
+      ["es-ES"]: FontStyle.DEFAULT_FONT_50PX,
+    },
   },
 
   [TextStyle.TOOLTIP_TITLE]: {

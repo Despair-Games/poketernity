@@ -83,9 +83,8 @@ export default class AchvsUiHandler extends MessageUiHandler {
     this.headerActionButton = new Phaser.GameObjects.Sprite(globalScene, 0, 0, "keyboard", "ACTION.png");
     this.headerActionButton.setOrigin(0, 0);
     this.headerActionButton.setPositionRelative(this.headerBg, 236, 6);
-    this.headerActionText = addTextObject(0, 0, "", TextStyle.WINDOW, { fontSize: "60px" });
-    this.headerActionText.setOrigin(0, 0);
-    this.headerActionText.setPositionRelative(this.headerBg, 264, 8);
+    this.headerActionText = addTextObject(GAME_WIDTH - 10, 12, "", TextStyle.TOOLTIP_CONTENT);
+    this.headerActionText.setOrigin(1, 0.5);
 
     // We need to get the player gender from the game data to add the correct prefix to the achievement name
     const genderIndex = settings.display.playerGender ?? PlayerGender.MALE;
@@ -378,8 +377,7 @@ export default class AchvsUiHandler extends MessageUiHandler {
     this.headerText.text = this.achvsName;
     this.headerActionText.text = this.vouchersName;
     const textPosition = this.headerBgX - this.headerActionText.displayWidth - 8;
-    this.headerActionText.setX(textPosition);
-    this.headerActionButton.setX(textPosition - this.headerActionButton.displayWidth - 4);
+    this.headerActionButton.setX(textPosition - this.headerActionButton.displayWidth - 2);
 
     const achvUnlocks = globalScene.gameData.achvUnlocks;
 
@@ -418,8 +416,7 @@ export default class AchvsUiHandler extends MessageUiHandler {
     this.headerText.text = this.vouchersName;
     this.headerActionText.text = this.achvsName;
     const textPosition = this.headerBgX - this.headerActionText.displayWidth - 8;
-    this.headerActionText.setX(textPosition);
-    this.headerActionButton.setX(textPosition - this.headerActionButton.displayWidth - 4);
+    this.headerActionButton.setX(textPosition - this.headerActionButton.displayWidth - 2);
 
     const voucherUnlocks = globalScene.gameData.voucherUnlocks;
 

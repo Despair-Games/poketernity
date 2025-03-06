@@ -65,6 +65,11 @@ export const allTextFormats: Record<FontStyle, FontStyleOptions> = {
     fontSize: 54,
     shadow: { xPosition: 3, yPosition: 3 },
   },
+  [FontStyle.DEFAULT_FONT_50PX]: {
+    fontFamily: "emerald",
+    fontSize: 50,
+    shadow: { xPosition: 3, yPosition: 3 },
+  },
   [FontStyle.DEFAULT_FONT_52PX]: {
     fontFamily: "emerald",
     fontSize: 52,
@@ -78,6 +83,11 @@ export const allTextFormats: Record<FontStyle, FontStyleOptions> = {
   [FontStyle.DEFAULT_FONT_42PX]: {
     fontFamily: "emerald",
     fontSize: 42,
+    shadow: { xPosition: 2, yPosition: 2 },
+  },
+  [FontStyle.DEFAULT_FONT_40PX]: {
+    fontFamily: "emerald",
+    fontSize: 40,
     shadow: { xPosition: 2, yPosition: 2 },
   },
   [FontStyle.DEFAULT_FONT_36PX]: {

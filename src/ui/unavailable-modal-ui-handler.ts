@@ -51,7 +51,7 @@ export default class UnavailableModalUiHandler extends ModalUiHandler {
       this.getWidth() / 2,
       this.getHeight() / 2,
       i18next.t("menu:errorServerDown"),
-      TextStyle.WINDOW_MODAL,
+      TextStyle.WINDOW_MODAL_INFO,
       { align: "center" },
     );
     label.setOrigin(0.5, 0.5);
