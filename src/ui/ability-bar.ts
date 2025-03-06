@@ -28,7 +28,7 @@ export default class AbilityBar extends Phaser.GameObjects.Container {
 
     this.add(this.bg);
 
-    this.abilityBarText = addTextObject(15, 3, "", TextStyle.MESSAGE, { fontSize: "72px" });
+    this.abilityBarText = addTextObject(15, 3, "", TextStyle.NOTIFICATION_BAR_LIGHT);
     this.abilityBarText.setOrigin(0, 0);
     this.abilityBarText.setWordWrapWidth(600, true);
     this.add(this.abilityBarText);

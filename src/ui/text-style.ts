@@ -83,16 +83,22 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
     fontStyle: FontStyle.DEFAULT_FONT_72PX_MEDIUM_SHADOW,
   },
 
+  // TODO: once light theme has its own window color in battle, we will need a different color in light theme
+  // for ME_OPTION_DEFAULT: DARK_GREY_LIGHT_SHADOW and for ME_OPTION_SPECIAL: ORANGE_DARK_SHADOW
   [TextStyle.ME_OPTION_DEFAULT]: {
     color: TextColor.WHITE_DARK_PURPLE_SHADOW,
-    fontStyle: FontStyle.DEFAULT_FONT_96PX,
+    fontStyle: FontStyle.DEFAULT_FONT_80PX,
   },
   [TextStyle.ME_OPTION_SPECIAL]: {
+    color: TextColor.GREEN_DARK_SHADOW,
+    fontStyle: FontStyle.DEFAULT_FONT_80PX,
+  },
+  [TextStyle.ME_OPTION_DETAILS]: {
     color: {
-      [UiTheme.DARK]: TextColor.GREEN_DARK_SHADOW,
-      [UiTheme.LIGHT]: TextColor.ORANGE_DARK_SHADOW,
+      [UiTheme.DARK]: TextColor.WHITE_DARK_PURPLE_SHADOW,
+      [UiTheme.LIGHT]: TextColor.DARK_GREY_LIGHT_SHADOW,
     },
-    fontStyle: FontStyle.DEFAULT_FONT_96PX,
+    fontStyle: FontStyle.DEFAULT_FONT_72PX,
   },
 
   [TextStyle.BATTLE_INFO]: {
@@ -140,8 +146,12 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
     fontStyle: FontStyle.DEFAULT_FONT_96PX_BIG_SHADOW,
   },
 
-  [TextStyle.BGM_BAR]: {
+  [TextStyle.NOTIFICATION_BAR_LIGHT]: {
     color: TextColor.WHITE_DARK_PURPLE_SHADOW,
+    fontStyle: FontStyle.DEFAULT_FONT_72PX,
+  },
+  [TextStyle.NOTIFICATION_BAR_DARK]: {
+    color: TextColor.DARK_GREY_LIGHT_SHADOW,
     fontStyle: FontStyle.DEFAULT_FONT_72PX,
   },
 

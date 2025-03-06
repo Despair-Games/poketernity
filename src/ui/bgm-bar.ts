@@ -42,7 +42,7 @@ export default class BgmBar extends Phaser.GameObjects.Container {
 
     this.add(this.bg);
 
-    this.musicText = addTextObject(5, 5, "", TextStyle.BGM_BAR);
+    this.musicText = addTextObject(5, 5, "", TextStyle.NOTIFICATION_BAR_LIGHT);
     this.musicText.setOrigin(0, 0);
     this.musicText.setWordWrapWidth(650, true);
 

@@ -64,8 +64,7 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
       titleWindow.displayWidth / 2,
       titleWindow.displayHeight / 2,
       i18next.t("menu:loading"),
-      TextStyle.WINDOW,
-      { fontSize: "64px" },
+      TextStyle.TOOLTIP_CONTENT,
     );
     this.titleLabel.setOrigin(0.5, 0.5);
     this.add(this.titleLabel);
@@ -118,8 +117,7 @@ export class DailyRunScoreboard extends Phaser.GameObjects.Container {
       window.displayWidth / 2,
       titleWindow.displayHeight + window.displayHeight - 16,
       "1",
-      TextStyle.WINDOW,
-      { fontSize: "64px" },
+      TextStyle.TOOLTIP_CONTENT,
     );
     this.pageNumberLabel.setOrigin(0.5, 0);
     this.add(this.pageNumberLabel);

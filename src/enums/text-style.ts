@@ -34,12 +34,15 @@ export enum TextStyle {
   MOVE_PP_HALF_FULL,
   MOVE_PP_NEAR_EMPTY,
   MOVE_PP_EMPTY,
-  BGM_BAR,
+  NOTIFICATION_BAR_LIGHT,
+  NOTIFICATION_BAR_DARK,
   PERFECT_IV,
   /** Default style for choices in ME */
   ME_OPTION_DEFAULT,
   /** Style for choices with special requirements in ME */
   ME_OPTION_SPECIAL,
+  /** Style for the tooltip that contains information of what a choice entails in ME */
+  ME_OPTION_DETAILS,
   /** Style for challenge description */
   CHALLENGE_DESCRIPTION,
   TITLE_SCREEN,
