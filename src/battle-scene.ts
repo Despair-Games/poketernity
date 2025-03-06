@@ -185,6 +185,8 @@ import { TrainerVariant } from "#enums/trainer-variant";
 import i18next from "i18next";
 import Phaser from "phaser";
 import type UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
+import { achievementsBus } from "./system/achievements/achievements-events";
+import { battleSceneBus } from "./battle-scene-bus";
 
 //#region Types
 
@@ -2928,6 +2930,20 @@ export default class BattleScene extends SceneBase {
       this.unshiftPhase(phase);
     }
     return true;
+  }
+
+  validAchievements(achievementCategory: AchvCategory, ...data: any[]) {
+    this.scene.launch("Achievements_Manager", {
+      context: achievementCategory,
+      unlockedAchievements: this.gameData.achvUnlocks,
+    });
+    battleSceneBus.on("scene/achievement_manager/ready", () => achievementsBus.emit("achievements/validate", ...data));
+    battleSceneBus.on("game_data/update/achievements", (unlocks: string[]) =>
+      this.gameData.addUnlockedAchievements(unlocks),
+    );
+    battleSceneBus.on("scene/achievement_manager/stop", () => {
+      this.scene.stop("Achievements_Manager");
+    });
   }
 
   validateAchvs(achvFlag: AchvCategory, ...args: unknown[]): void {

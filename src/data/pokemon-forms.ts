@@ -92,6 +92,22 @@ export class SpeciesFormChange {
 
     return trigger;
   }
+
+  /**
+   * Helper function that checks if the form change is to a Mega Evolution
+   * @returns `true` if the form change is to a Mega Evolution | `false` if not
+   */
+  isMegaEvolution(): boolean {
+    return this.formKey.includes(SpeciesFormKey.MEGA);
+  }
+
+  /**
+   * Helper function that checks if the form change is to a G-Max/E-Max form
+   * @returns `false` if the form change is to a G-Max/E-Max | `false` if not
+   */
+  isMax(): boolean {
+    return this.formKey.includes(SpeciesFormKey.GIGANTAMAX) || this.formKey.includes(SpeciesFormKey.ETERNAMAX);
+  }
 }
 
 export class SpeciesFormChangeCondition {
@@ -240,18 +256,15 @@ export class SpeciesFormChangeRevertWeatherFormTrigger extends SpeciesFormChange
 }
 
 export function getSpeciesFormChangeMessage(pokemon: Pokemon, formChange: SpeciesFormChange, preName: string): string {
-  const isMega = formChange.formKey.indexOf(SpeciesFormKey.MEGA) > -1;
-  const isGmax = formChange.formKey.indexOf(SpeciesFormKey.GIGANTAMAX) > -1;
-  const isEmax = formChange.formKey.indexOf(SpeciesFormKey.ETERNAMAX) > -1;
+  const isMega = formChange.isMegaEvolution();
   const isRevert = !isMega && formChange.formKey === pokemon.species.forms[0].formKey;
   if (isMega) {
     return i18next.t("battlePokemonForm:megaChange", { preName, pokemonName: pokemon.name });
   }
-  if (isGmax) {
-    return i18next.t("battlePokemonForm:gigantamaxChange", { preName, pokemonName: pokemon.name });
-  }
-  if (isEmax) {
-    return i18next.t("battlePokemonForm:eternamaxChange", { preName, pokemonName: pokemon.name });
+  if (formChange.isMax()) {
+    return formChange.formKey.indexOf(SpeciesFormKey.GIGANTAMAX) > -1
+      ? i18next.t("battlePokemonForm:gigantamaxChange", { preName, pokemonName: pokemon.name })
+      : i18next.t("battlePokemonForm:eternamaxChange", { preName, pokemonName: pokemon.name });
   }
   if (isRevert) {
     return i18next.t("battlePokemonForm:revertChange", { pokemonName: getPokemonNameWithAffix(pokemon) });

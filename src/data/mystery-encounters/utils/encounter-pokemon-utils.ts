@@ -39,6 +39,7 @@ import type { PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { settings } from "#app/system/settings/settings-manager";
+import { AchvCategory } from "#enums/achv-category";
 
 /** Will give +1 level every 10 waves */
 export const STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER = 1;
@@ -681,9 +682,7 @@ export async function catchPokemon(
       const addToParty = (slotIndex?: number) => {
         const newPokemon = pokemon.addToParty(pokeballType, slotIndex);
         const modifiers = globalScene.findModifiers((m) => m.isPokemonHeldItemModifier(), false);
-        if (globalScene.getPlayerParty().filter((p) => p.isShiny()).length === 6) {
-          globalScene.validateAchv(achvs.SHINY_PARTY);
-        }
+        globalScene.validAchievements(AchvCategory.PARTY, globalScene.getPlayerParty());
         Promise.all(modifiers.map((m) => globalScene.addModifier(m, true))).then(() => {
           globalScene.updateModifiers(true);
           removePokemon();

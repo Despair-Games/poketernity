@@ -8,6 +8,7 @@ import InvertPostFX from "./pipelines/invert";
 import { LoadingScene } from "./loading-scene";
 import BattleScene from "./battle-scene";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "./ui-constants";
+import { UnlockAchievementsManager } from "./system/achievements/unlocking/unlock-achievements-manager";
 
 export const game = new Phaser.Game({
   type: Phaser.WEBGL,
@@ -57,6 +58,6 @@ export const game = new Phaser.Game({
   },
   pixelArt: true,
   pipeline: [InvertPostFX] as unknown as Phaser.Types.Core.PipelineConfig,
-  scene: [LoadingScene, BattleScene],
+  scene: [LoadingScene, BattleScene, UnlockAchievementsManager],
   version: pkg.version,
 });

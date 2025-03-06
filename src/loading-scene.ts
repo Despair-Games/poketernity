@@ -32,6 +32,7 @@ import { initMoves } from "#app/data/init-moves";
 import { initModifierTypes } from "#app/modifier/init-modifier-types";
 import { initModifierPools } from "#app/modifier/init-modifier-pools";
 import { timedEventManager } from "#app/timed-event-manager";
+import { initNewAchvs } from "./system/achievements/achievements";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";
@@ -367,6 +368,7 @@ export class LoadingScene extends SceneBase {
 
     initModifierTypes();
     initModifierPools();
+    initNewAchvs();
     initAchievements();
     initVouchers();
     initStatsKeys();

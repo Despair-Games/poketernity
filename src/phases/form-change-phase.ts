@@ -8,7 +8,6 @@ import { getSpeciesFormChangeMessage } from "#app/data/pokemon-forms";
 import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { achvs } from "#app/system/achievements";
 import type PartyUiHandler from "#app/ui/party-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { fixedNumber } from "#app/utils";
@@ -19,6 +18,7 @@ import { EndEvolutionPhase } from "./end-evolution-phase";
 import { EVOLVE_MOVE } from "#app/data/balance/pokemon-level-moves";
 import { LearnMovePhase } from "./learn-move-phase";
 import { PhaseId } from "#enums/phase-id";
+import { AchvCategory } from "#enums/achv-category";
 
 /**
  * A phase for handling Pokemon form changes, this does not cover evolutions
@@ -134,17 +134,13 @@ export class FormChangePhase extends FormChangeBasePhase {
           time.delayedCall(250, () => {
             this.pokemon.cry();
             time.delayedCall(1250, () => {
-              let playEvolutionFanfare = false;
-              if (this.formChange.formKey.includes(SpeciesFormKey.MEGA)) {
-                globalScene.validateAchv(achvs.MEGA_EVOLVE);
-                playEvolutionFanfare = true;
-              } else if (
-                this.formChange.formKey.includes(SpeciesFormKey.GIGANTAMAX)
+              const playEvolutionFanfare =
+                this.formChange.formKey.includes(SpeciesFormKey.MEGA)
+                || this.formChange.formKey.includes(SpeciesFormKey.GIGANTAMAX)
                 || this.formChange.formKey.includes(SpeciesFormKey.ETERNAMAX)
-              ) {
-                globalScene.validateAchv(achvs.GIGANTAMAX);
-                playEvolutionFanfare = true;
-              }
+                  ? true
+                  : false;
+              globalScene.validAchievements(AchvCategory.FORM_CHANGE, this.formChange);
 
               const delay = playEvolutionFanfare ? 4000 : 1750;
               globalScene.audioManager.playSoundWithoutBgm(

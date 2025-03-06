@@ -118,7 +118,6 @@ import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { ObtainStatusEffectPhase } from "#app/phases/obtain-status-effect-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
-import { achvs } from "#app/system/achievements";
 import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
 import { timedEventManager } from "#app/timed-event-manager";
@@ -194,6 +193,7 @@ import type { TrainerSlot } from "#enums/trainer-slot";
 import { UiMode } from "#enums/ui-mode";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
+import { AchvCategory } from "#enums/achv-category";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -4159,9 +4159,7 @@ export class PlayerPokemon extends Pokemon {
 
       // Add friendship to this PlayerPokemon
       this.friendship = Math.min(this.friendship + amount.value, 255);
-      if (this.friendship === 255) {
-        globalScene.validateAchv(achvs.MAX_FRIENDSHIP);
-      }
+      globalScene.validAchievements(AchvCategory.FRIENDSHIP, this);
       // Add to candy progress for this mon's starter species
       if (starterData) {
         starterData.friendship = (starterData.friendship || 0) + starterAmount.value;

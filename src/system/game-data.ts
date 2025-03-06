@@ -70,6 +70,8 @@ import type { SessionSaveData } from "#app/@types/SessionData";
 import { defaultStarterSpecies } from "#app/data/balance/default-starters";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { settings } from "#app/system/settings/settings-manager";
+import { AchvCategory } from "#enums/achv-category";
+import { newAchvs } from "./achievements/achievements";
 
 const saveKey = "x0i2O7WRiANTqPmZ"; // Temporary; secure encryption is not yet necessary
 
@@ -1670,23 +1672,15 @@ export class GameData {
 
     const ribbonsInStats: number = globalScene.gameData.gameStats.ribbonsOwned;
 
-    if (ribbonsInStats >= 100) {
-      globalScene.validateAchv(achvs._100_RIBBONS);
-    }
-    if (ribbonsInStats >= 75) {
-      globalScene.validateAchv(achvs._75_RIBBONS);
-    }
-    if (ribbonsInStats >= 50) {
-      globalScene.validateAchv(achvs._50_RIBBONS);
-    }
-    if (ribbonsInStats >= 25) {
-      globalScene.validateAchv(achvs._25_RIBBONS);
-    }
-    if (ribbonsInStats >= 10) {
-      globalScene.validateAchv(achvs._10_RIBBONS);
-    }
+    globalScene.validAchievements(AchvCategory.RIBBON_COUNT, ribbonsInStats);
 
     return ++this.starterData[speciesIdToIncrement].classicWinCount;
+  }
+
+  addUnlockedAchievements(achvs: string[]): void {
+    achvs.forEach((aName) => {
+      this.achvUnlocks[newAchvs[aName]] = new Date().getTime();
+    });
   }
 
   /**
@@ -1788,6 +1782,7 @@ export class GameData {
           dexIvs[i] = ivs[i];
         }
       }
+      globalScene.validAchievements(AchvCategory.POKEDEX, dexEntry);
       if (dexIvs.filter((iv) => iv === 31).length === 6) {
         globalScene.validateAchv(achvs.PERFECT_IVS);
       }

@@ -12,7 +12,6 @@ import { EvolutionPhase } from "#app/phases/evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { LearnMoveType } from "#enums/learn-move-type";
 import { LevelUpPhase } from "#app/phases/level-up-phase";
-import { achvs } from "#app/system/achievements";
 import type { VoucherType } from "#enums/voucher-type";
 import { addTextObject } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
@@ -23,7 +22,7 @@ import type { PokeballType } from "#enums/pokeball";
 import { Species } from "#enums/species";
 import { type PermanentStat, type TempBattleStat, BATTLE_STATS, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
-import { ElementalType } from "#enums/elemental-type";
+import type { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";
 import {
   type AttackTypeBoosterModifierType,
@@ -47,6 +46,7 @@ import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { AchvCategory } from "#enums/achv-category";
 
 const iconOverflowIndex = 24;
 
@@ -960,10 +960,7 @@ export class TerastallizeModifier extends LapsingPokemonHeldItemModifier {
   override apply(pokemon: Pokemon): boolean {
     if (pokemon.isPlayer()) {
       globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeTeraTrigger);
-      globalScene.validateAchv(achvs.TERASTALLIZE);
-      if (this.teraType === ElementalType.STELLAR) {
-        globalScene.validateAchv(achvs.STELLAR_TERASTALLIZE);
-      }
+      globalScene.validAchievements(AchvCategory.TERASTALLIZE, this.teraType);
     }
     pokemon.updateSpritePipelineData();
     return true;

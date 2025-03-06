@@ -129,7 +129,7 @@ export class GameOverPhase extends BattlePhase {
         if (this.isVictory && newClear) {
           if (gameMode.isClassic) {
             firstClear = globalScene.validateAchv(achvs.CLASSIC_VICTORY);
-            globalScene.validateAchv(achvs.UNEVOLVED_CLASSIC_VICTORY);
+            globalScene.validAchievements(AchvCategory.CLASSIC_VICTORY);
             gameData.gameStats.sessionsWon++;
             for (const pokemon of globalScene.getPlayerParty()) {
               this.awardRibbon(pokemon);
@@ -155,7 +155,7 @@ export class GameOverPhase extends BattlePhase {
           ui.clearText();
 
           if (this.isVictory && gameMode.isChallenge) {
-            gameMode.challenges.forEach((c) => globalScene.validateAchvs(AchvCategory.CHALLENGE, c));
+            globalScene.validAchievements(AchvCategory.CHALLENGE_VICTORY);
           }
 
           const clear = (endCardPhase?: EndCardPhase): void => {
