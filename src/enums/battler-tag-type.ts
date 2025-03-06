@@ -98,7 +98,7 @@ export enum BattlerTagType {
   HEAL_BLOCK,
   TORMENT,
   TAUNT,
-  IMPRISON,
+  IMPRISONING,
   SYRUP_BOMB,
   ELECTRIFIED,
   TELEKINESIS,
@@ -110,4 +110,5 @@ export enum BattlerTagType {
   BYPASS_SPEED,
   CRIT_BOOST_STACKABLE,
   RAGE,
+  QUASHED,
 }
