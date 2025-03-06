@@ -1,6 +1,6 @@
 import { G_MAX_FORM_KEYS } from "#app/constants";
 import { pokemonFormLevelMoves } from "#app/data/balance/pokemon-form-level-moves";
-import { RELEARN_MOVE } from "#app/data/balance/pokemon-level-moves";
+import { FORM_CHANGE_MOVE } from "#app/data/balance/pokemon-level-moves";
 import { allMoves } from "#app/data/data-lists";
 import { GMaxPowerAttr } from "#app/data/move-attrs/gmax-power-attr";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
@@ -34,7 +34,7 @@ describe("Moveset Data", async () => {
           const gmaxAttr = allMoves[moveId].getAttrs(GMaxPowerAttr)[0];
           if (gmaxAttr) {
             expect(gmaxAttr.signatureSpecies).toBe(Number(species));
-            expect(level).toBe(RELEARN_MOVE);
+            expect(level).toBe(FORM_CHANGE_MOVE);
           }
         }
       }
