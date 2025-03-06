@@ -10,7 +10,7 @@ export enum ImagesFolder {
   CHARACTER = "character", // Dialogue portraits
   EFFECTS = "effects", // Special animations (shiny sparkles, tera, ...)
   EGG = "egg", // Egg hatching and gacha images and animations
-  EVENTS = "events", // Banners for in game events or updates
+  BANNERS = "banners", // Banners for in game events or updates
   INPUTS = "inputs", // Icons for gamepad buttons / keyboard keys
   ITEMS = "items", // Icons for items (should only be used to create the items atlas)
   ME = "mystery-encounters", // ME specific images

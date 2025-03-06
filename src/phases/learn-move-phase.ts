@@ -211,7 +211,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
           globalScene.updateMoneyText();
           globalScene.animateMoneyChanged(false);
         }
-        globalScene.playSound("se/buy");
+        globalScene.audioManager.playSound("se/buy");
       } else {
         globalScene.tryRemovePhase((phase) => phase.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER));
       }
@@ -232,7 +232,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
       await ui.showTextPromise(textMessage);
     }
 
-    globalScene.playSound("level_up_fanfare"); // Sound loaded into game as is
+    globalScene.audioManager.playSound("level_up_fanfare"); // Sound loaded into game as is
     ui.showText(
       learnMoveText,
       null,

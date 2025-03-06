@@ -1,4 +1,4 @@
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
 import { getBerryEffectFunc, getBerryPredicate } from "#app/data/berry";
 import { getLevelTotalExp } from "#app/data/exp";
 import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
@@ -12,7 +12,7 @@ import { EvolutionPhase } from "#app/phases/evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { LearnMoveType } from "#enums/learn-move-type";
 import { LevelUpPhase } from "#app/phases/level-up-phase";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achievements";
 import type { VoucherType } from "#enums/voucher-type";
 import { addTextObject } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
@@ -452,7 +452,7 @@ export abstract class LapsingPersistentModifier extends PersistentModifier {
         const modifierInstance = modifier as LapsingPersistentModifier;
         if (modifierInstance.getBattleCount() < modifierInstance.getMaxBattles()) {
           modifierInstance.resetBattleCount();
-          globalScene.playSound("se/restore");
+          globalScene.audioManager.playSound("se/restore");
           return true;
         }
         // should never get here
@@ -3447,7 +3447,7 @@ export class TempExtraModifierModifier extends LapsingPersistentModifier {
         const newBattleCount = this.getMaxBattles() + modifierInstance.getBattleCount();
 
         modifierInstance.setNewBattleCount(newBattleCount);
-        globalScene.playSound("se/restore");
+        globalScene.audioManager.playSound("se/restore");
         return true;
       }
     }

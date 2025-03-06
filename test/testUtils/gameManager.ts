@@ -134,6 +134,9 @@ export class GameManager {
     // Disables Mystery Encounters on all tests (can be overridden at test level)
     this.override.mysteryEncounterChance(0);
 
+    // Disables timed events on all tests (can be overriden at test level)
+    this.override.timedEvents([]);
+
     global.fetch = vi.fn(MockFetch) as any;
   }
 

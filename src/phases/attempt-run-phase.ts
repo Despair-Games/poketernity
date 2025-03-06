@@ -37,7 +37,7 @@ export class AttemptRunPhase extends PokemonPhase {
     applyAbAttrs(AbAttrFlag.RUN_SUCCESS, playerPokemon, false, escapeChance);
 
     if (playerPokemon.randSeedInt(100) < escapeChance.value && !this.forceFailEscape) {
-      globalScene.playSound("se/flee");
+      globalScene.audioManager.playSound("se/flee");
       globalScene.queueMessage(i18next.t("battle:runAwaySuccess"), null, true, 500);
 
       globalScene.tweens.add({

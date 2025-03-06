@@ -4,12 +4,13 @@ import { addTextObject, getTextStyleOptions } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { getSplashMessages } from "#app/data/splash-messages";
 import i18next from "i18next";
-import { TimedEventDisplay } from "#app/timed-event-manager";
+import { TimedEventDisplay } from "#app/ui/timed-event-display";
 import { version } from "../../package.json";
 import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
 import OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { timedEventManager } from "#app/timed-event-manager";
 
 export default class TitleUiHandler extends OptionSelectUiHandler {
   /** If the stats can not be retrieved, use this fallback value */
@@ -19,8 +20,8 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
   private playerCountLabel: Phaser.GameObjects.Text;
   private splashMessage: string;
   private splashMessageText: Phaser.GameObjects.Text;
-  private eventDisplay: TimedEventDisplay;
   private appVersionText: Phaser.GameObjects.Text;
+  private eventDisplay?: TimedEventDisplay;
 
   private titleStatsTimer: NodeJS.Timeout | null;
 
@@ -41,12 +42,6 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
     const logo = globalScene.add.image(GAME_WIDTH / 2, 8, "logo");
     logo.setOrigin(0.5, 0);
     this.titleContainer.add(logo);
-
-    if (globalScene.eventManager.isEventActive()) {
-      this.eventDisplay = new TimedEventDisplay(0, 0, globalScene.eventManager.activeEvent());
-      this.eventDisplay.setup();
-      this.titleContainer.add(this.eventDisplay);
-    }
 
     this.playerCountLabel = addTextObject(
       GAME_WIDTH - 2,
@@ -110,9 +105,17 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
 
       const ui = this.getUi();
 
-      if (globalScene.eventManager.isEventActive()) {
-        this.eventDisplay.setWidth(GAME_WIDTH - this.optionSelectBg.width - this.optionSelectBg.x);
+      const activeBannerEvent = timedEventManager.getActiveEvent(true);
+      if (activeBannerEvent) {
+        if (!this.eventDisplay) {
+          const availableBannerWidth = GAME_WIDTH - this.optionSelectBg.width - this.optionSelectBg.x;
+          this.eventDisplay = new TimedEventDisplay(0, 0, availableBannerWidth);
+          this.titleContainer.add(this.eventDisplay);
+        }
+        this.eventDisplay.setEvent(activeBannerEvent);
         this.eventDisplay.show();
+      } else {
+        this.eventDisplay?.hide();
       }
 
       this.updateTitleStats();

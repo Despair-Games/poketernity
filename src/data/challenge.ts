@@ -21,7 +21,7 @@ import { TrainerType } from "#enums/trainer-type";
 import { Nature } from "#enums/nature";
 import type { MoveId } from "#enums/move-id";
 import { TypeColor, TypeShadowColor } from "#enums/color";
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
 import type { MoveSourceType } from "#enums/move-source-type";
 

@@ -131,6 +131,7 @@ import { PreMoveMessageAttr } from "#app/data/move-attrs/pre-move-message-attr";
 import { PresentPowerAttr } from "#app/data/move-attrs/present-power-attr";
 import { ProtectAttr } from "#app/data/move-attrs/protect-attr";
 import { PsychoShiftEffectAttr } from "#app/data/move-attrs/psycho-shift-effect-attr";
+import { QuashAttr } from "#app/data/move-attrs/quash-attr";
 import { RageAttr } from "#app/data/move-attrs/rage-attr";
 import { RagingBullTypeAttr } from "#app/data/move-attrs/raging-bull-type-attr";
 import { RandomLevelDamageAttr } from "#app/data/move-attrs/random-level-damage-attr";
@@ -1237,10 +1238,9 @@ export function initMoves() {
       .condition(failOnMaxCondition)
       .ignoresSubstitute()
       .attr(SwitchAbilitiesAttr),
-    new StatusMove(MoveId.IMPRISON, ElementalType.PSYCHIC, 100, 10, -1, 0, 3)
+    new SelfStatusMove(MoveId.IMPRISON, ElementalType.PSYCHIC, 100, 10, -1, 0, 3)
       .ignoresSubstitute()
-      .attr(AddArenaTagAttr, ArenaTagType.IMPRISON, ArenaTagRelativeSide.TARGET, { failOnOverlap: true })
-      .target(MoveTarget.ENEMY_SIDE),
+      .attr(AddBattlerTagAttr, BattlerTagType.IMPRISONING, true, { failOnOverlap: true }),
     new SelfStatusMove(MoveId.REFRESH, ElementalType.NORMAL, -1, 20, -1, 0, 3)
       .attr(HealStatusEffectAttr, true, [
         StatusEffect.PARALYSIS,
@@ -2126,7 +2126,8 @@ export function initMoves() {
     new AttackMove(MoveId.INCINERATE, ElementalType.FIRE, MoveCategory.SPECIAL, 60, 100, 15, -1, 0, 5)
       .target(MoveTarget.ALL_NEAR_ENEMIES)
       .attr(RemoveHeldItemAttr, true),
-    new StatusMove(MoveId.QUASH, ElementalType.DARK, 100, 15, -1, 0, 5).condition(failIfSingleBattle).unimplemented(),
+    new StatusMove(MoveId.QUASH, ElementalType.DARK, 100, 15, -1, 0, 5)
+      .attr(QuashAttr),
     new AttackMove(MoveId.ACROBATICS, ElementalType.FLYING, MoveCategory.PHYSICAL, 55, 100, 15, -1, 0, 5).attr(
       MovePowerMultiplierAttr,
       (user, _target, _move) =>
@@ -3036,7 +3037,8 @@ export function initMoves() {
       .punchingMove(),
     new SelfStatusMove(MoveId.MAX_GUARD, ElementalType.NORMAL, -1, 10, -1, 4, 8)
       .attr(ProtectAttr)
-      .condition(failIfLastCondition),
+      .condition(failIfLastCondition)
+      .unimplemented(),
     new AttackMove(MoveId.DYNAMAX_CANNON, ElementalType.DRAGON, MoveCategory.SPECIAL, 100, 100, 5, -1, 0, 8)
       .attr(DoubleDamageToMaxAttr)
       .attr(DiscourageFrequentUseAttr),
