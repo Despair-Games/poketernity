@@ -1,5 +1,5 @@
-import { allMoves } from "#app/data/all-moves";
-import { RandomMoveAttr } from "#app/data/move-attrs/random-move-attr";
+import { allMoves } from "#app/data/data-lists";
+import { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -41,7 +41,7 @@ describe("Moves - Moongeist Beam", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.MOONGEIST_BEAM);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(enemy.isFainted()).toBe(true);
   });
@@ -49,14 +49,14 @@ describe("Moves - Moongeist Beam", () => {
   // Also covers Photon Geyser and Sunsteel Strike
   it("should not ignore enemy abilities when called by another move, such as metronome", async () => {
     await game.classicMode.startBattle([Species.MILOTIC]);
-    vi.spyOn(allMoves[MoveId.METRONOME].getAttrs(RandomMoveAttr)[0], "getMoveOverride").mockReturnValue(
+    vi.spyOn(allMoves[MoveId.METRONOME].getAttrs(MetronomeAttr)[0], "getRandomMove").mockReturnValue(
       MoveId.MOONGEIST_BEAM,
     );
 
     game.move.select(MoveId.METRONOME);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.getEnemyPokemon()!.isFainted()).toBe(false);
-    expect(game.scene.getPlayerPokemon()!.getLastXMoves()[0].moveId).toBe(MoveId.MOONGEIST_BEAM);
+    expect(game.scene.getPlayerPokemon()!.getLastXMoves()[0].move.id).toBe(MoveId.MOONGEIST_BEAM);
   });
 });

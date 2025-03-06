@@ -3,16 +3,15 @@ import { APP_ABBREVIATION, bypassLogin, SETTINGS_LS_KEY, TUTORIALS_LS_KEY } from
 import { globalScene } from "#app/global-scene";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
-import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { noStarterFormKeys } from "#app/data/no-starter-form-keys";
-import { allSpecies } from "#app/data/all-species";
+import { allSpecies } from "#app/data/data-lists";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import {
   randInt,
   getEnumKeys,
-  isLocal,
   executeIf,
   fixedNumber,
   randSeedItem,
@@ -28,7 +27,7 @@ import { getGameMode } from "#app/game-mode";
 import { GameModes } from "#enums/game-modes";
 import { BattleType } from "#enums/battle-type";
 import TrainerData from "#app/system/trainer-data";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achievements";
 import EggData from "#app/system/egg-data";
 import type { Egg } from "#app/data/egg";
 import { vouchers } from "#app/system/voucher";
@@ -40,7 +39,7 @@ import { Nature } from "#enums/nature";
 import { GameStats } from "#app/system/game-stats";
 import type { Tutorial } from "#enums/tutorial";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { TrainerVariant } from "#enums/trainer-variant";
 import type { Variant } from "#app/data/variant";
 import { TagAddedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
@@ -50,7 +49,7 @@ import type { Device } from "#enums/devices";
 import { GameDataType } from "#enums/game-data-type";
 import { PlayerGender } from "#enums/player-gender";
 import type { Species } from "#enums/species";
-import { applyChallenges } from "#app/data/challenge";
+import { applyChallenges } from "#app/utils/challenge-utils";
 import { ChallengeType } from "#enums/challenge-type";
 import { WeatherType } from "#enums/weather-type";
 import { TerrainType } from "#enums/terrain-type";
@@ -60,7 +59,7 @@ import { applySessionVersionMigration, applySystemVersionMigration } from "./ver
 import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { api } from "#app/plugins/api/api";
-import { ArenaTrapTag } from "#app/data/arena-tag";
+import { EntryHazardTag } from "#app/data/arena-tag";
 import { MAPPING_CONFIG_LS_KEY, SAVE_FILE_EXTENSION } from "#app/constants";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import type { AchvUnlocks, SystemSaveData, Unlocks, VoucherCounts, VoucherUnlocks } from "#app/@types/SystemData";
@@ -226,7 +225,6 @@ export class GameData {
     this.unlocks = {
       [Unlockables.ENDLESS_MODE]: false,
       [Unlockables.MINI_BLACK_HOLE]: false,
-      [Unlockables.SPLICED_ENDLESS_MODE]: false,
       [Unlockables.EVIOLITE]: false,
     };
     this.achvUnlocks = {};
@@ -474,7 +472,7 @@ export class GameData {
    * At the moment, only retrievable from locale cache
    */
   async getRunHistoryData(): Promise<RunHistoryData> {
-    if (!isLocal) {
+    if (!api.isLocal) {
       /**
        * Networking Code DO NOT DELETE!
        * Note: Might have to be migrated to `api.ts`
@@ -933,28 +931,32 @@ export class GameData {
           });
 
           globalScene.arena.weather = sessionData.arena.weather;
-          globalScene.arena.eventTarget.dispatchEvent(
-            new WeatherChangedEvent(
-              WeatherType.NONE,
-              globalScene.arena.weather?.weatherType!,
-              globalScene.arena.weather?.turnsLeft!,
-            ),
-          ); // TODO: is this bang correct?
+          if (globalScene.arena.weather) {
+            globalScene.arena.eventTarget.dispatchEvent(
+              new WeatherChangedEvent(
+                WeatherType.NONE,
+                globalScene.arena.weather.weatherType,
+                globalScene.arena.weather.turnsLeft,
+              ),
+            );
+          }
 
           globalScene.arena.terrain = sessionData.arena.terrain;
-          globalScene.arena.eventTarget.dispatchEvent(
-            new TerrainChangedEvent(
-              TerrainType.NONE,
-              globalScene.arena.terrain?.terrainType!,
-              globalScene.arena.terrain?.turnsLeft!,
-            ),
-          ); // TODO: is this bang correct?
+          if (globalScene.arena.terrain) {
+            globalScene.arena.eventTarget.dispatchEvent(
+              new TerrainChangedEvent(
+                TerrainType.NONE,
+                globalScene.arena.terrain.terrainType,
+                globalScene.arena.terrain.turnsLeft,
+              ),
+            );
+          }
 
           globalScene.arena.tags = sessionData.arena.tags;
           if (globalScene.arena.tags) {
             for (const tag of globalScene.arena.tags) {
-              if (tag instanceof ArenaTrapTag) {
-                const { tagType, side, turnCount, layers, maxLayers } = tag as ArenaTrapTag;
+              if (tag instanceof EntryHazardTag) {
+                const { tagType, side, turnCount, layers, maxLayers } = tag as EntryHazardTag;
                 globalScene.arena.eventTarget.dispatchEvent(
                   new TagAddedEvent(tagType, side, turnCount, layers, maxLayers),
                 );
@@ -1580,7 +1582,7 @@ export class GameData {
       // Unlock nature
       dexEntry.natureAttr |= 1 << (pokemon.nature + 1);
 
-      const hasPrevolution = pokemonPrevolutions.hasOwnProperty(species.speciesId);
+      const hasPreEvolution = pokemonPreEvolutions.hasOwnProperty(species.speciesId);
       const newCatch = !caughtAttr;
       const hasNewAttr = (caughtAttr & dexAttr) !== dexAttr;
 
@@ -1613,7 +1615,7 @@ export class GameData {
           }
         }
 
-        if (!hasPrevolution && (!globalScene.gameMode.isDaily || hasNewAttr || fromEgg)) {
+        if (!hasPreEvolution && (!globalScene.gameMode.isDaily || hasNewAttr || fromEgg)) {
           this.addStarterCandy(
             species,
             1 * (pokemon.isShiny() ? 5 * (1 << (pokemon.variant ?? 0)) : 1) * (fromEgg || pokemon.isBoss() ? 2 : 1),
@@ -1621,12 +1623,12 @@ export class GameData {
         }
       }
 
-      const checkPrevolution = (newStarter: boolean) => {
-        if (hasPrevolution) {
-          const prevolutionSpecies = pokemonPrevolutions[species.speciesId];
+      const checkPreEvolution = (newStarter: boolean) => {
+        if (hasPreEvolution) {
+          const preEvolutionSpecies = pokemonPreEvolutions[species.speciesId];
           this.setPokemonSpeciesCaught(
             pokemon,
-            getPokemonSpecies(prevolutionSpecies),
+            getPokemonSpecies(preEvolutionSpecies),
             incrementCount,
             fromEgg,
             showMessage,
@@ -1641,16 +1643,16 @@ export class GameData {
           resolve(true);
           return;
         }
-        globalScene.playSound("level_up_fanfare");
+        globalScene.audioManager.playSound("level_up_fanfare");
         globalScene.ui.showText(
           i18next.t("battle:addedAsAStarter", { pokemonName: species.name }),
           null,
-          () => checkPrevolution(true),
+          () => checkPreEvolution(true),
           null,
           true,
         );
       } else {
-        checkPrevolution(false);
+        checkPreEvolution(false);
       }
     });
   }
@@ -1738,7 +1740,7 @@ export class GameData {
         resolve(true);
         return;
       }
-      globalScene.playSound("level_up_fanfare");
+      globalScene.audioManager.playSound("level_up_fanfare");
       const moveName = allMoves[speciesEggMoves[speciesId][eggMoveIndex]].name;
       let message = prependSpeciesToMessage ? species.getName() + " " : "";
       message +=
@@ -1758,7 +1760,7 @@ export class GameData {
   }
 
   /**
-   * Unlocks the given {@linkcode Nature} for a {@linkcode PokemonSpecies} and its prevolutions.
+   * Unlocks the given {@linkcode Nature} for a {@linkcode PokemonSpecies} and its preEvolutions.
    * Will fail silently if root species has not been unlocked
    */
   unlockSpeciesNature(species: PokemonSpecies, nature: Nature): void {
@@ -1766,11 +1768,11 @@ export class GameData {
       return;
     }
 
-    //recursively unlock nature for species and prevolutions
+    //recursively unlock nature for species and preEvolutions
     const _unlockSpeciesNature = (speciesId: Species) => {
       this.dexData[speciesId].natureAttr |= 1 << (nature + 1);
-      if (pokemonPrevolutions.hasOwnProperty(speciesId)) {
-        _unlockSpeciesNature(pokemonPrevolutions[speciesId]);
+      if (pokemonPreEvolutions.hasOwnProperty(speciesId)) {
+        _unlockSpeciesNature(pokemonPreEvolutions[speciesId]);
       }
     };
     _unlockSpeciesNature(species.speciesId);
@@ -1789,7 +1791,7 @@ export class GameData {
       if (dexIvs.filter((iv) => iv === 31).length === 6) {
         globalScene.validateAchv(achvs.PERFECT_IVS);
       }
-    } while (pokemonPrevolutions.hasOwnProperty(speciesId) && (speciesId = pokemonPrevolutions[speciesId]));
+    } while (pokemonPreEvolutions.hasOwnProperty(speciesId) && (speciesId = pokemonPreEvolutions[speciesId]));
   }
 
   getSpeciesCount(dexEntryPredicate: (entry: DexEntry) => boolean): number {

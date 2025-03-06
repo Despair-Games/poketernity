@@ -4,13 +4,13 @@ import {
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
   setEncounterRewards,
-  transitionMysteryEncounterIntroVisuals,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 import type { Pokemon } from "#app/field/pokemon";
 import { EnemyPokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
 import type { BerryModifierType, PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { globalScene } from "#app/global-scene";
@@ -397,7 +397,7 @@ function doGreedentSpriteSteal() {
 
   const greedentSprites = globalScene.currentBattle.mysteryEncounter!.introVisuals?.getSpriteAtIndex(1);
 
-  globalScene.playSound("battle_anims/Follow Me");
+  globalScene.audioManager.playSound("battle_anims/Follow Me");
   globalScene.tweens.chain({
     targets: greedentSprites,
     tweens: [
@@ -488,11 +488,11 @@ function doGreedentEatBerries() {
     y: "-=8",
     loop: 5,
     onStart: () => {
-      globalScene.playSound("battle_anims/PRSFX- Bug Bite");
+      globalScene.audioManager.playSound("battle_anims/PRSFX- Bug Bite");
     },
     onLoop: () => {
       if (index % 2 === 0) {
-        globalScene.playSound("battle_anims/PRSFX- Bug Bite");
+        globalScene.audioManager.playSound("battle_anims/PRSFX- Bug Bite");
       }
       index++;
     },

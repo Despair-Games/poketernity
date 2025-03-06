@@ -3,7 +3,7 @@ import {
   setEncounterRewards,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import type { ModifierTypeFunc } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { randSeedInt } from "#app/utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";

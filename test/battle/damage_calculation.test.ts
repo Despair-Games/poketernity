@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
@@ -57,7 +57,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
 
     game.move.select(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     // Lvl 1 0 Atk Magikarp Tackle vs. 0 HP / 0 Def Aggron: 1-1 (0.3 - 0.3%) -- possibly the worst move ever
     expect(aggron.hp).toBe(aggron.getMaxHp() - 1);

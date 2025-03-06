@@ -2,19 +2,12 @@ import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer
 import { TrainerType } from "#enums/trainer-type";
 import { VoucherType } from "#enums/voucher-type";
 import i18next from "i18next";
-import { achvs } from "./achv";
+import { achvs } from "./achievements";
 import { Voucher, vouchers } from "./voucher";
 
 export function initVouchers() {
   for (const achv of [achvs.CLASSIC_VICTORY]) {
-    const voucherType =
-      achv.score >= 150
-        ? VoucherType.GOLDEN
-        : achv.score >= 100
-          ? VoucherType.PREMIUM
-          : achv.score >= 75
-            ? VoucherType.PLUS
-            : VoucherType.REGULAR;
+    const voucherType = VoucherType.REGULAR;
     vouchers[achv.id] = new Voucher(voucherType, achv.description);
   }
 

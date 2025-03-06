@@ -9,11 +9,13 @@ import i18next from "i18next";
 import { FieldPhase } from "./abstract-field-phase";
 import { CommandPhase } from "./command-phase";
 import { EnemyCommandPhase } from "./enemy-command-phase";
-import { GameOverPhase } from "./game-over-phase";
 import { ToggleDoublePositionPhase } from "./toggle-double-position-phase";
 import { TurnStartPhase } from "./turn-start-phase";
+import { PhaseId } from "#enums/phase-id";
 
 export class TurnInitPhase extends FieldPhase {
+  override readonly id = PhaseId.TURN_INIT;
+
   public override start(): void {
     super.start();
 
@@ -28,8 +30,7 @@ export class TurnInitPhase extends FieldPhase {
 
         if (!allowedPokemon.length) {
           // If there are no longer any legal pokemon in the party, game over.
-          globalScene.clearPhaseQueue();
-          globalScene.unshiftPhase(new GameOverPhase());
+          globalScene.gameOver({ clearPhaseQueue: true });
         } else if (
           allowedPokemon.length >= currentBattle.getBattlerCount()
           || (currentBattle.double && !allowedPokemon[0].isActive(true))

@@ -1,7 +1,8 @@
-import { allMoves } from "#app/data/all-moves";
-import { initMoveAnim, loadMoveAnimAssets } from "#app/data/battle-anims";
+import { allMoves } from "#app/data/data-lists";
+import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
+import { initMoveAnim } from "#app/data/init-move-anim";
 import type { Move } from "#app/data/move";
-import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/species-form-change-triggers/species-form-change-move-learned-trigger";
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -14,8 +15,12 @@ import { UiMode } from "#enums/ui-mode";
 import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 import { LearnMoveType } from "#enums/learn-move-type";
+import { PhaseId } from "#enums/phase-id";
+import { type SelectModifierPhase } from "#app/phases/select-modifier-phase";
 
 export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
+  override readonly id = PhaseId.LEARN_MOVE;
+
   private readonly moveId: MoveId;
   private messageMode: UiMode;
   private readonly learnMoveType: LearnMoveType;
@@ -28,6 +33,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
     cost: number = -1,
   ) {
     super(partyMemberIndex);
+
     this.moveId = moveId;
     this.learnMoveType = learnMoveType;
     this.cost = cost;
@@ -197,7 +203,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
         pokemon.usedTMs = [];
       }
       pokemon.usedTMs.push(this.moveId);
-      globalScene.tryRemovePhase((phase) => phase.isSelectModifierPhase());
+      globalScene.tryRemovePhase((phase) => phase.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER));
     } else if (this.learnMoveType === LearnMoveType.MEMORY) {
       if (this.cost !== -1) {
         if (!Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
@@ -205,9 +211,9 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
           globalScene.updateMoneyText();
           globalScene.animateMoneyChanged(false);
         }
-        globalScene.playSound("se/buy");
+        globalScene.audioManager.playSound("se/buy");
       } else {
-        globalScene.tryRemovePhase((phase) => phase.isSelectModifierPhase());
+        globalScene.tryRemovePhase((phase) => phase.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER));
       }
     }
 
@@ -226,7 +232,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
       await ui.showTextPromise(textMessage);
     }
 
-    globalScene.playSound("level_up_fanfare"); // Sound loaded into game as is
+    globalScene.audioManager.playSound("level_up_fanfare"); // Sound loaded into game as is
     ui.showText(
       learnMoveText,
       null,

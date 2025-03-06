@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { StatusEffect } from "#enums/status-effect";
 import { TurnStartPhase } from "#app/phases/turn-start-phase";
 import { Abilities } from "#enums/abilities";
@@ -86,7 +86,7 @@ describe("Weather - Strong Winds", () => {
     enemy.hp = 1;
 
     game.move.select(MoveId.SPLASH);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(game.scene.arena.weather?.weatherType).toBeUndefined();
   });

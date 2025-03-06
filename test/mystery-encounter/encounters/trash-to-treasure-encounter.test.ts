@@ -5,7 +5,8 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import * as BattleAnims from "#app/data/battle-anims";
+import * as InitMoveAnim from "#app/data/init-move-anim";
+import * as MoveAnimUtils from "#app/utils/move-anim-utils";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
   runMysteryEncounterToEnd,
@@ -23,7 +24,8 @@ import { TrashToTreasureEncounter } from "#app/data/mystery-encounters/encounter
 import { ModifierTier } from "#enums/modifier-tier";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { CommandPhase } from "#app/phases/command-phase";
-import type { MovePhase } from "#app/phases/move-phase";
+import { type MovePhase } from "#app/phases/move-phase";
+import { PhaseId } from "#enums/phase-id";
 
 const namespace = "mysteryEncounters/trashToTreasure";
 const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
@@ -74,8 +76,8 @@ describe("Trash to Treasure - Mystery Encounter", () => {
   it("should initialize fully", async () => {
     initSceneWithoutEncounterPhase(scene, defaultParty);
     scene.currentBattle.mysteryEncounter = TrashToTreasureEncounter;
-    const moveInitSpy = vi.spyOn(BattleAnims, "initMoveAnim");
-    const moveLoadSpy = vi.spyOn(BattleAnims, "loadMoveAnimAssets");
+    const moveInitSpy = vi.spyOn(InitMoveAnim, "initMoveAnim");
+    const moveLoadSpy = vi.spyOn(MoveAnimUtils, "loadMoveAnimAssets");
 
     const { onInit } = TrashToTreasureEncounter;
 
@@ -184,7 +186,7 @@ describe("Trash to Treasure - Mystery Encounter", () => {
       ]);
 
       // Should have used moves pre-battle
-      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].isMovePhase()).map((p) => p[0]);
+      const movePhases = phaseSpy.mock.calls.filter((p) => p[0].is<MovePhase>(PhaseId.MOVE)).map((p) => p[0]);
       expect(movePhases.length).toBe(2);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.TOXIC).length).toBe(1);
       expect(movePhases.filter((p) => (p as MovePhase).move.moveId === MoveId.AMNESIA).length).toBe(1);

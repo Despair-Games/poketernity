@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
@@ -45,7 +45,7 @@ describe("Moves - Scale Shot", () => {
     const minccino = game.scene.getPlayerPokemon()!;
     game.move.select(MoveId.SCALE_SHOT);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to(MoveEffectPhase);
     await game.phaseInterceptor.to(DamageAnimPhase);

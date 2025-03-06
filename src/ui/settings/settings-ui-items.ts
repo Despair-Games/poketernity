@@ -6,20 +6,21 @@ import type {
   SettingUiItemOption,
 } from "#app/@types/Settings";
 import { GAME_SPEEDS } from "#app/constants";
-import { BattleStyle } from "#app/enums/battle-style";
-import { DamageNumbersMode } from "#app/enums/damage-numbers-mode";
-import { EaseType } from "#app/enums/ease-type";
-import { EggSkipPreference } from "#app/enums/egg-skip-preference";
-import { ExpGainsSpeed } from "#app/enums/exp-gains-speed";
-import { ExpNotification } from "#app/enums/exp-notification";
-import { HpBarSpeed } from "#app/enums/hp-bar-speed";
-import { MoneyFormat } from "#app/enums/money-format";
-import { PlayerGender } from "#app/enums/player-gender";
-import { ShopCursorTarget } from "#app/enums/shop-cursor-target";
-import { UiTheme } from "#app/enums/ui-theme";
+import { BattleStyle } from "#enums/battle-style";
+import { DamageNumbersMode } from "#enums/damage-numbers-mode";
+import { EaseType } from "#enums/ease-type";
+import { EggSkipPreference } from "#enums/egg-skip-preference";
+import { ExpGainsSpeed } from "#enums/exp-gains-speed";
+import { ExpNotification } from "#enums/exp-notification";
+import { HpBarSpeed } from "#enums/hp-bar-speed";
+import { MoneyFormat } from "#enums/money-format";
+import { PlayerGender } from "#enums/player-gender";
+import { ShopCursorTarget } from "#enums/shop-cursor-target";
+import { UiTheme } from "#enums/ui-theme";
 import { supportedLanguages } from "#app/system/settings/supported-languages";
-import { isLandscapeMode } from "#app/utils";
+import { getEnumLength, isLandscapeMode } from "#app/utils";
 import i18next, { t } from "i18next";
+import { UiWindowStyle } from "#enums/ui-window-style";
 
 //#region Types
 
@@ -215,15 +216,15 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
     key: "uiTheme",
     label: t("settings:uiTheme"),
     options: [
-      { value: UiTheme.DEFAULT, label: t("settings:default") },
-      { value: UiTheme.LEGACY, label: t("settings:legacy") },
+      { value: UiTheme.DARK, label: t("settings:darkTheme") },
+      { value: UiTheme.LIGHT, label: t("settings:lightTheme") },
     ],
     requiresReload: true,
   },
   {
-    key: "uiWindowType",
+    key: "uiWindowStyle",
     label: t("settings:windowType"),
-    options: Array.from({ length: 5 }).map((_, i) => ({ value: i + 1, label: `${i + 1}` })),
+    options: Array.from({ length: getEnumLength(UiWindowStyle) }).map((_, i) => ({ value: i, label: `${i + 1}` })),
     doWrap: true,
   },
   {
@@ -288,12 +289,6 @@ export const displaySettingUiItems: SettingsUiItem<DisplaySettingsKey>[] = [
       { value: EaseType.BOUNCE, label: t("settings:bounce") },
       { value: EaseType.BACK, label: t("settings:timeOfDay_back") },
     ],
-    doWrap: true,
-  },
-  {
-    key: "enableFusionPaletteSwaps",
-    label: t("settings:fusionPaletteSwaps"),
-    options: useOnOffOptions(),
     doWrap: true,
   },
   {

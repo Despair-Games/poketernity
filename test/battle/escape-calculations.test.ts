@@ -1,5 +1,5 @@
 import { AttemptRunPhase } from "#app/phases/attempt-run-phase";
-import type { CommandPhase } from "#app/phases/command-phase";
+import { type CommandPhase } from "#app/phases/command-phase";
 import { BattleCommand } from "#enums/battle-command";
 import { NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";

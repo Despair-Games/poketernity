@@ -12,7 +12,8 @@ import type { PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { EnemyPokemon } from "#app/field/pokemon";
 import type { BerryModifierType, ModifierTypeOption } from "#app/modifier/modifier-type";
-import { getPartyLuckValue, modifierTypes, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
+import { getPartyLuckValue, regenerateModifierPoolThresholds } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { randSeedInt } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -71,7 +72,6 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
       level,
       0,
       getPartyLuckValue(globalScene.getPlayerParty()),
-      true,
     );
     const bossPokemon = new EnemyPokemon(bossSpecies, level, TrainerSlot.NONE, true);
     encounter.setDialogueToken("enemyPokemon", getPokemonNameWithAffix(bossPokemon));
@@ -154,7 +154,7 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
       const doBerryRewards = () => {
         const berryText = i18next.t(`${namespace}:berries`);
 
-        globalScene.playSound("item_fanfare");
+        globalScene.audioManager.playSound("item_fanfare");
         queueEncounterMessage(i18next.t("battle:rewardGainCount", { modifierName: berryText, count: numBerries }));
 
         // Generate a random berry and give it to the first Pokemon with room for it
@@ -208,7 +208,7 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
           const doBerryRewards = () => {
             const berryText = i18next.t(`${namespace}:berries`);
 
-            globalScene.playSound("item_fanfare");
+            globalScene.audioManager.playSound("item_fanfare");
             queueEncounterMessage(i18next.t("battle:rewardGainCount", { modifierName: berryText, count: numBerries }));
 
             // Generate a random berry and give it to the first Pokemon with room for it
@@ -254,7 +254,7 @@ export const BerriesAboundEncounter: MysteryEncounter = MysteryEncounterBuilder.
           const doFasterBerryRewards = () => {
             const berryText = i18next.t(`${namespace}:berries`);
 
-            globalScene.playSound("item_fanfare");
+            globalScene.audioManager.playSound("item_fanfare");
             queueEncounterMessage(
               i18next.t("battle:rewardGainCount", { modifierName: berryText, count: numBerriesGrabbed }),
             );

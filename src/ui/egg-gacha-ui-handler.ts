@@ -17,7 +17,6 @@ import { GachaType } from "#enums/gacha-types";
 import i18next from "i18next";
 import { EggTier } from "#enums/egg-type";
 import { globalScene } from "#app/global-scene";
-import { settings } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 /**
@@ -63,7 +62,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
 
   setup() {
     this.gachaCursor = 0;
-    this.scale = getTextStyleOptions(TextStyle.WINDOW, settings.display.uiTheme).scale;
+    this.scale = getTextStyleOptions(TextStyle.WINDOW).scale;
 
     const ui = this.getUi();
 
@@ -385,9 +384,9 @@ export default class EggGachaUiHandler extends MessageUiHandler {
       this.gachaContainers[this.gachaCursor].moveTo(egg, 2);
 
       const doPullAnim = () => {
-        globalScene.playSound("se/gacha_running", { loop: true });
+        globalScene.audioManager.playSound("se/gacha_running", { loop: true });
         globalScene.time.delayedCall(this.getDelayValue(count ? 500 : 1250), () => {
-          globalScene.playSound("se/gacha_dispense");
+          globalScene.audioManager.playSound("se/gacha_dispense");
           globalScene.time.delayedCall(this.getDelayValue(750), () => {
             globalScene.sound.stopByKey("se/gacha_running");
             globalScene.tweens.add({
@@ -397,7 +396,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
               ease: "Bounce.easeOut",
               onComplete: () => {
                 globalScene.time.delayedCall(this.getDelayValue(125), () => {
-                  globalScene.playSound("se/pb_catch");
+                  globalScene.audioManager.playSound("se/pb_catch");
                   this.gachaHatches[this.gachaCursor].play("open");
                   globalScene.tweens.add({
                     targets: egg,
@@ -435,7 +434,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
       };
 
       if (!count) {
-        globalScene.playSound("se/gacha_dial");
+        globalScene.audioManager.playSound("se/gacha_dial");
         globalScene.tweens.add({
           targets: this.gachaKnobs[this.gachaCursor],
           duration: this.getDelayValue(350),

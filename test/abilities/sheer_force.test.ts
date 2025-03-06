@@ -7,7 +7,7 @@ import { Stat } from "#enums/stat";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
 
 describe("Abilities - Sheer Force", () => {
@@ -35,7 +35,7 @@ describe("Abilities - Sheer Force", () => {
       .disableCrits();
   });
 
-  const SHEER_FORCE_MULT = 5461 / 4096;
+  const SHEER_FORCE_MULT = 1.3;
 
   it("Sheer Force should boost the power of the move but disable secondary effects", async () => {
     game.override.moveset([MoveId.AIR_SLASH]);
@@ -48,9 +48,9 @@ describe("Abilities - Sheer Force", () => {
 
     game.move.select(MoveId.AIR_SLASH);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(airSlashMove.calculateBattlePower).toHaveLastReturnedWith(airSlashMove.power * SHEER_FORCE_MULT);
     expect(airSlashFlinchAttr.getMoveChance).toHaveLastReturnedWith(0);
@@ -65,9 +65,9 @@ describe("Abilities - Sheer Force", () => {
 
     game.move.select(MoveId.BIND);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(bindMove.calculateBattlePower).toHaveLastReturnedWith(bindMove.power);
   }, 20000);
@@ -80,9 +80,9 @@ describe("Abilities - Sheer Force", () => {
     vi.spyOn(tackleMove, "calculateBattlePower");
 
     game.move.select(MoveId.TACKLE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(tackleMove.calculateBattlePower).toHaveLastReturnedWith(tackleMove.power);
   });
@@ -103,9 +103,9 @@ describe("Abilities - Sheer Force", () => {
 
     game.move.select(MoveId.HEADBUTT);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon?.getTypes()[0]).toBe(ElementalType.WATER);
     expect(headbuttMove.calculateBattlePower).toHaveLastReturnedWith(headbuttMove.power * SHEER_FORCE_MULT);
@@ -149,7 +149,7 @@ describe("Abilities - Sheer Force", () => {
     const formKeyStart = playerPokemon?.getFormKey();
 
     game.move.select(MoveId.RELIC_SONG);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
     expect(formKeyStart).toBe(playerPokemon?.getFormKey());
   });
 });

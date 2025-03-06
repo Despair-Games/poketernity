@@ -1,4 +1,5 @@
-import { pokemonEvolutions, pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
+import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import {
   getRandomPartyMemberFunc,
@@ -9,7 +10,7 @@ import {
 } from "#app/data/trainer-config";
 import { TrainerSlot } from "#enums/trainer-slot";
 import type { PersistentModifier } from "#app/modifier/modifier";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { PokeballType } from "#enums/pokeball";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
@@ -160,7 +161,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
           !pokemonEvolutions.hasOwnProperty(species.speciesId)
-          && !pokemonPrevolutions.hasOwnProperty(species.speciesId)
+          && !pokemonPreEvolutions.hasOwnProperty(species.speciesId)
           && species.baseTotal >= 450,
       ),
     ),
@@ -234,7 +235,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
           !pokemonEvolutions.hasOwnProperty(species.speciesId)
-          && !pokemonPrevolutions.hasOwnProperty(species.speciesId)
+          && !pokemonPreEvolutions.hasOwnProperty(species.speciesId)
           && species.baseTotal >= 450,
       ),
     )
@@ -310,7 +311,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
           !pokemonEvolutions.hasOwnProperty(species.speciesId)
-          && !pokemonPrevolutions.hasOwnProperty(species.speciesId)
+          && !pokemonPreEvolutions.hasOwnProperty(species.speciesId)
           && species.baseTotal >= 450,
       ),
     )
@@ -399,7 +400,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
           !pokemonEvolutions.hasOwnProperty(species.speciesId)
-          && !pokemonPrevolutions.hasOwnProperty(species.speciesId)
+          && !pokemonPreEvolutions.hasOwnProperty(species.speciesId)
           && species.baseTotal >= 450,
       ),
     )
@@ -502,7 +503,7 @@ export const rivalTrainerConfigs: TrainerConfigs = {
       getSpeciesFilterRandomPartyMemberFunc(
         (species: PokemonSpecies) =>
           !pokemonEvolutions.hasOwnProperty(species.speciesId)
-          && !pokemonPrevolutions.hasOwnProperty(species.speciesId)
+          && !pokemonPreEvolutions.hasOwnProperty(species.speciesId)
           && species.baseTotal >= 450,
       ),
     )

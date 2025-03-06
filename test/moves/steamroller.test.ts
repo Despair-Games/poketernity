@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { DamageCalculationResult } from "#app/field/pokemon";
 import { Abilities } from "#enums/abilities";
@@ -41,7 +41,7 @@ describe("Moves - Steamroller", () => {
     vi.spyOn(ironBoulder, "getAccuracyMultiplier");
     // Turn 1
     game.move.select(MoveId.STEAMROLLER);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
     // Turn 2
     game.move.select(MoveId.STEAMROLLER);

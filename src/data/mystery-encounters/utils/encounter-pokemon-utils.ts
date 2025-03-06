@@ -12,7 +12,7 @@ import {
 } from "#app/data/pokeball";
 import { PlayerGender } from "#enums/player-gender";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achievements";
 import { UiMode } from "#enums/ui-mode";
 import type { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
@@ -28,7 +28,7 @@ import {
 } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { Gender } from "#enums/gender";
 import type { PermanentStat } from "#enums/stat";
 import { VictoryPhase } from "#app/phases/victory-phase";
@@ -311,8 +311,7 @@ export function getRandomSpeciesByStarterCost(
  * @param pokemon the player pokemon to KO
  */
 export function koPlayerPokemon(pokemon: PlayerPokemon) {
-  pokemon.hp = 0;
-  pokemon.trySetStatus(StatusEffect.FAINT);
+  pokemon.faint();
   pokemon.updateInfo();
   queueEncounterMessage(i18next.t("battle:fainted", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }));
 }
@@ -444,7 +443,7 @@ export function trainerThrowPokeball(
     const _2h = 2 * pokemon.hp;
     const catchRate = pokemon.species.catchRate;
     const pokeballMultiplier = getPokeballCatchMultiplier(pokeballType);
-    const statusMultiplier = pokemon.status ? getStatusEffectCatchRateMultiplier(pokemon.status.effect) : 1;
+    const statusMultiplier = pokemon.status ? getStatusEffectCatchRateMultiplier(pokemon.getStatusEffect(true)) : 1;
     const x = Math.round((((_3m - _2h) * catchRate * pokeballMultiplier) / _3m) * statusMultiplier);
     ballTwitchRate = Math.round(65536 / Math.sqrt(Math.sqrt(255 / x)));
   }
@@ -464,7 +463,7 @@ export function trainerThrowPokeball(
       `trainer_${settings.display.playerGender === PlayerGender.FEMALE ? "f" : "m"}_back_pb`,
     );
     globalScene.time.delayedCall(512, () => {
-      globalScene.playSound("se/pb_throw");
+      globalScene.audioManager.playSound("se/pb_throw");
 
       // Trainer throw frames
       globalScene.trainer.setFrame("2");
@@ -486,7 +485,7 @@ export function trainerThrowPokeball(
         onComplete: () => {
           pokeball.setTexture("pb", `${pokeballAtlasKey}_opening`);
           globalScene.time.delayedCall(17, () => pokeball.setTexture("pb", `${pokeballAtlasKey}_open`));
-          globalScene.playSound("se/pb_rel");
+          globalScene.audioManager.playSound("se/pb_rel");
           pokemon.tint(getPokeballTintColor(pokeballType));
 
           globalScene.animations.addPokeballOpenParticles(pokeball.x, pokeball.y, pokeballType);
@@ -500,7 +499,7 @@ export function trainerThrowPokeball(
             onComplete: () => {
               pokeball.setTexture("pb", `${pokeballAtlasKey}_opening`);
               pokemon.setVisible(false);
-              globalScene.playSound("se/pb_catch");
+              globalScene.audioManager.playSound("se/pb_catch");
               globalScene.time.delayedCall(17, () => pokeball.setTexture("pb", `${pokeballAtlasKey}`));
 
               const doShake = () => {
@@ -528,13 +527,13 @@ export function trainerThrowPokeball(
                       failCatch(pokemon, originalY, pokeball, pokeballType).then(() => resolve(false));
                     } else if (shakeCount++ < 3) {
                       if (randSeedInt(65536) < ballTwitchRate) {
-                        globalScene.playSound("se/pb_move");
+                        globalScene.audioManager.playSound("se/pb_move");
                       } else {
                         shakeCounter.stop();
                         failCatch(pokemon, originalY, pokeball, pokeballType).then(() => resolve(false));
                       }
                     } else {
-                      globalScene.playSound("se/pb_lock");
+                      globalScene.audioManager.playSound("se/pb_lock");
                       globalScene.animations.addPokeballCaptureStars(pokeball);
 
                       const pbTint = globalScene.add.sprite(pokeball.x, pokeball.y, "pb", "pb");
@@ -588,9 +587,9 @@ function failCatch(
   pokeballType: PokeballType,
 ) {
   return new Promise<void>((resolve) => {
-    globalScene.playSound("se/pb_rel");
+    globalScene.audioManager.playSound("se/pb_rel");
     pokemon.setY(originalY);
-    if (pokemon.status?.effect !== StatusEffect.SLEEP) {
+    if (pokemon.hasStatusEffect(StatusEffect.SLEEP, false, true)) {
       pokemon.cry(pokemon.getHpRatio() > 0.25 ? undefined : { rate: 0.85 });
     }
     pokemon.tint(getPokeballTintColor(pokeballType));
@@ -637,12 +636,9 @@ export async function catchPokemon(
   showCatchObtainMessage: boolean = true,
   isObtain: boolean = false,
 ): Promise<void> {
-  const speciesForm = !pokemon.fusionSpecies ? pokemon.getSpeciesForm() : pokemon.getFusionSpeciesForm();
+  const speciesForm = pokemon.getSpeciesForm();
 
-  if (
-    speciesForm.abilityHidden
-    && (pokemon.fusionSpecies ? pokemon.fusionAbilityIndex : pokemon.abilityIndex) === speciesForm.getAbilityCount() - 1
-  ) {
+  if (speciesForm.abilityHidden && pokemon.abilityIndex === speciesForm.getAbilityCount() - 1) {
     globalScene.validateAchv(achvs.HIDDEN_ABILITY);
   }
 
@@ -825,7 +821,7 @@ function removePb(pokeball: Phaser.GameObjects.Sprite) {
  */
 export async function doPokemonFlee(pokemon: EnemyPokemon): Promise<void> {
   await new Promise<void>((resolve) => {
-    globalScene.playSound("se/flee");
+    globalScene.audioManager.playSound("se/flee");
     // Ease pokemon out
     globalScene.tweens.add({
       targets: pokemon,
@@ -930,7 +926,7 @@ export function getGoldenBugNetSpecies(level: number): PokemonSpecies {
     w += speciesWeightPair[1];
     if (roll < w) {
       const initialSpecies = getPokemonSpecies(speciesWeightPair[0]);
-      return getPokemonSpecies(initialSpecies.getSpeciesForLevel(level, true));
+      return getPokemonSpecies(initialSpecies.getEnemySpeciesForLevel(level));
     }
   }
 
@@ -955,12 +951,9 @@ export function getEncounterPokemonLevelForWave(levelAdditiveModifier: number = 
  * @param pokemon - The newly obtained Pokemon
  */
 export async function addPokemonDataToDexAndValidateAchievements(pokemon: PlayerPokemon) {
-  const speciesForm = !pokemon.fusionSpecies ? pokemon.getSpeciesForm() : pokemon.getFusionSpeciesForm();
+  const speciesForm = pokemon.getSpeciesForm();
 
-  if (
-    speciesForm.abilityHidden
-    && (pokemon.fusionSpecies ? pokemon.fusionAbilityIndex : pokemon.abilityIndex) === speciesForm.getAbilityCount() - 1
-  ) {
+  if (speciesForm.abilityHidden && pokemon.abilityIndex === speciesForm.getAbilityCount() - 1) {
     globalScene.validateAchv(achvs.HIDDEN_ABILITY);
   }
 
@@ -1004,20 +997,12 @@ export function isPokemonValidForEncounterOptionSelection(
 
 /**
  * Permanently overrides the ability (not passive) of a pokemon.
- * If the pokemon is a fusion, instead overrides the fused pokemon's ability.
  * @param pokemon - The Pokemon with its ability being overriden
  * @param ability - The ability that is overriding
  */
 export function applyAbilityOverrideToPokemon(pokemon: Pokemon, ability: Abilities) {
-  if (pokemon.isFusion()) {
-    if (!pokemon.fusionCustomPokemonData) {
-      pokemon.fusionCustomPokemonData = new CustomPokemonData();
-    }
-    pokemon.fusionCustomPokemonData.ability = ability;
-  } else {
-    if (!pokemon.customPokemonData) {
-      pokemon.customPokemonData = new CustomPokemonData();
-    }
-    pokemon.customPokemonData.ability = ability;
+  if (!pokemon.customPokemonData) {
+    pokemon.customPokemonData = new CustomPokemonData();
   }
+  pokemon.customPokemonData.ability = ability;
 }

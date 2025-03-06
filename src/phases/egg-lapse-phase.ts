@@ -7,12 +7,12 @@ import type { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
-import { achvs } from "#app/system/achv";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { EggHatchPhase } from "./egg-hatch-phase";
 import { EggSummaryPhase } from "./egg-summary-phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Phase that handles updating eggs, and hatching any ready eggs.
@@ -21,6 +21,8 @@ import { EggSummaryPhase } from "./egg-summary-phase";
  * @extends Phase
  */
 export class EggLapsePhase extends Phase {
+  override readonly id = PhaseId.EGG_LAPSE;
+
   private eggHatchData: EggHatchData[] = [];
   private readonly minEggsToSkip: number = 2;
 
@@ -113,26 +115,6 @@ export class EggLapsePhase extends Phase {
       return this.end();
     }
     globalScene.gameData.eggs.splice(eggIndex, 1);
-
-    const data = this.generatePokemon(egg);
-    const pokemon = data.pokemon;
-    if (pokemon.fusionSpecies) {
-      pokemon.clearFusionSpecies();
-    }
-
-    if (pokemon.species.isLegendLike()) {
-      if (pokemon.species.isSubLegendary()) {
-        globalScene.validateAchv(achvs.HATCH_SUB_LEGENDARY);
-      } else if (pokemon.species.isLegendary()) {
-        globalScene.validateAchv(achvs.HATCH_LEGENDARY);
-      } else if (pokemon.species.isMythical()) {
-        globalScene.validateAchv(achvs.HATCH_MYTHICAL);
-      }
-    }
-
-    if (pokemon.isShiny()) {
-      globalScene.validateAchv(achvs.HATCH_SHINY);
-    }
   }
 
   /**

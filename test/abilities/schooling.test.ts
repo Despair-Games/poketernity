@@ -1,10 +1,8 @@
-import { Status } from "#app/data/status-effect";
 import { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 
@@ -45,8 +43,7 @@ describe("Abilities - SCHOOLING", () => {
     expect(wishiwashi).not.toBe(undefined);
     expect(wishiwashi.formIndex).toBe(schoolForm);
 
-    wishiwashi.hp = 0;
-    wishiwashi.status = new Status(StatusEffect.FAINT);
+    wishiwashi.faint();
     expect(wishiwashi.isFainted()).toBe(true);
 
     game.move.select(MoveId.SPLASH);

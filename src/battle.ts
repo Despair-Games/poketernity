@@ -1,25 +1,14 @@
 import { globalScene } from "#app/global-scene";
-import type { BattleCommand } from "#enums/battle-command";
-import {
-  randomString,
-  getEnumValues,
-  NumberHolder,
-  randSeedInt,
-  shiftCharCodes,
-  randSeedItem,
-  randInt,
-  isBetween,
-} from "#app/utils";
+import { randomString, NumberHolder, randSeedInt, shiftCharCodes, randSeedItem, randInt, isBetween } from "#app/utils";
 import { TrainerVariant } from "#enums/trainer-variant";
 import Trainer from "./field/trainer";
 import type { GameMode } from "./game-mode";
 import { MoneyMultiplierModifier, type PokemonHeldItemModifier } from "./modifier/modifier";
 import type { PokeballType } from "#enums/pokeball";
 import { SpeciesFormKey } from "#enums/species-form-key";
-import type { EnemyPokemon, PlayerPokemon, QueuedMove } from "#app/field/pokemon";
+import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import type { MoveId } from "#enums/move-id";
 import { PlayerGender } from "#enums/player-gender";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
@@ -30,9 +19,9 @@ import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
+import { TurnCommandManager } from "./turn-command-manager";
 import { settings } from "./system/settings/settings-manager";
 import { BattleType } from "#enums/battle-type";
-import { BattlerIndex } from "#enums/battler-index";
 import {
   CHAMPION_WAVE,
   ELITE_FOUR_1_WAVE,
@@ -54,23 +43,11 @@ import {
   RIVAL_WAVE,
   TUTORIAL_BATTLE_WAVE,
 } from "./data/special-waves";
-
-export interface TurnCommand {
-  command: BattleCommand;
-  cursor?: number;
-  move?: QueuedMove;
-  targets?: BattlerIndex[];
-  skip?: boolean;
-  args?: any[];
-}
+import type { Move } from "#app/data/move";
 
 export interface FaintLogEntry {
   pokemon: Pokemon;
   turn: number;
-}
-
-interface TurnCommands {
-  [key: number]: TurnCommand | null;
 }
 
 /**
@@ -93,12 +70,12 @@ export default class Battle {
   public started: boolean = false;
   public enemySwitchCounter: number = 0;
   public turn: number = 0;
-  public turnCommands: TurnCommands;
+  public turnManager: TurnCommandManager;
   public playerParticipantIds: Set<number> = new Set<number>();
   public battleScore: number = 0;
   public postBattleLoot: PokemonHeldItemModifier[] = [];
   public escapeAttempts: number = 0;
-  public lastMoveId: MoveId;
+  public lastMove: Move;
   public battleSeed: string = generateBattleSeed();
   private battleSeedState: string | null = null;
   public moneyScattered: number = 0;
@@ -127,6 +104,7 @@ export default class Battle {
         ? new Array(double ? 2 : 1).fill(null).map(() => this.getLevelForWave())
         : trainer?.getPartyLevels(this.waveIndex);
     this.double = double ?? false;
+    this.turnManager = new TurnCommandManager();
   }
 
   public getLevelForWave(): number {
@@ -168,7 +146,7 @@ export default class Battle {
 
   incrementTurn(): void {
     this.turn++;
-    this.turnCommands = Object.fromEntries(getEnumValues(BattlerIndex).map((bt) => [bt, null]));
+    this.turnManager = new TurnCommandManager();
     this.battleSeedState = null;
   }
 

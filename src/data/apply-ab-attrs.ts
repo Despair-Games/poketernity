@@ -1,19 +1,47 @@
 import type { AbAttr } from "#app/data/ab-attrs/ab-attr";
 import type { AbilityFilterOptions } from "#app/data/ability-filter-options";
-import { queueShowAbility } from "#app/data/ability-utils";
+import { queueShowAbility } from "#app/utils/ability-utils";
 import { globalScene } from "#app/global-scene";
-import type { AbstractConstructor } from "#app/utils";
+import { AbilityApplyMode } from "#enums/ability-apply-mode";
+import type { AbAttrFlag } from "#enums/ab-attr-flag";
+
+//#region Exports
 
 export function applyAbAttrs<TAttr extends AbAttr>(
-  attrType: AbstractConstructor<TAttr>,
+  abAttrFlag: AbAttrFlag,
   ...params: Parameters<TAttr["apply"]>
 ): string[] {
-  return applyAbAttrsInternal({ canApplyOnly: true }, attrType, ...params);
+  return applyAbAttrsInternal({ canApplyOnly: true }, abAttrFlag, ...params);
 }
 
 /**
+ * Obtains the function to apply abilities corresponding to the given mode
+ * @param mode the {@linkcode AbilityApplyMode} determining how abilities are applied:
+ * @returns the function to apply abilities based on the mode:
+ * - {@linkcode AbilityApplyMode.DEFAULT} applies abilities without restriction
+ * (as long as they meet conditions to apply).
+ * - {@linkcode AbilityApplyMode.REVEALED} only applies abilities that have
+ * previously applied in the current battle.
+ * - {@linkcode AbilityApplyMode.IGNORE} does nothing and returns an empty
+ * message array.
+ */
+export function getAbApplyFunc(mode: AbilityApplyMode) {
+  switch (mode) {
+    case AbilityApplyMode.DEFAULT:
+      return applyAbAttrs;
+    case AbilityApplyMode.REVEALED:
+      return applyRevealedAbAttrs;
+    case AbilityApplyMode.IGNORE:
+      return () => [];
+  }
+}
+
+//#endregion
+//#region Helpers
+
+/**
  * Applies a Pokemon's ability attributes of matching type
- * @param attrType The type of attribute to apply
+ * @param abAttrFlag The type of attribute to apply
  * @param params The parameters for the given attribute's `apply` function. This should include:
  * - `pokemon`: The {@linkcode Pokemon} with the ability
  * - `simulated`: If `true`, suppresses changes to game state when applying.
@@ -23,7 +51,7 @@ export function applyAbAttrs<TAttr extends AbAttr>(
  */
 function applyAbAttrsInternal<TAttr extends AbAttr>(
   abFilterOptions: AbilityFilterOptions,
-  attrType: AbstractConstructor<TAttr>,
+  abAttrFlag: AbAttrFlag,
   ...params: Parameters<TAttr["apply"]>
 ): string[] {
   const messages: string[] = [];
@@ -34,7 +62,7 @@ function applyAbAttrsInternal<TAttr extends AbAttr>(
       return;
     }
 
-    const matchingAttrs = ability.getAttrs(attrType).filter((attr) => {
+    const matchingAttrs = ability.getAttrs(abAttrFlag).filter((attr) => {
       const condition = attr.getCondition();
       return !condition || condition(pokemon);
     });
@@ -76,9 +104,11 @@ function applyAbAttrsInternal<TAttr extends AbAttr>(
   return messages;
 }
 
-export function applyRevealedAbAttrs<TAttr extends AbAttr>(
-  attrType: AbstractConstructor<TAttr>,
+function applyRevealedAbAttrs<TAttr extends AbAttr>(
+  abAttrFlag: AbAttrFlag,
   ...params: Parameters<TAttr["apply"]>
 ): string[] {
-  return applyAbAttrsInternal({ canApplyOnly: true, revealedOnly: true }, attrType, ...params);
+  return applyAbAttrsInternal({ canApplyOnly: true, revealedOnly: true }, abAttrFlag, ...params);
 }
+
+//#endregion

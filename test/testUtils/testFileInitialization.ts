@@ -1,24 +1,50 @@
 import { initLoggedInUser } from "#app/account";
 import { SESSION_ID_COOKIE } from "#app/constants";
-import { initAbilities } from "#app/data/all-abilities";
-import { allMoves, initMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { initBiomes } from "#app/data/balance/biomes";
 import { initEggMoves } from "#app/data/balance/egg-moves";
-import { initPokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
+import { initPokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
 import { initPokemonForms } from "#app/data/pokemon-forms";
 import { initSpecies } from "#app/data/init-species";
-import { initAchievements } from "#app/system/achv";
+import { initAchievements } from "#app/system/achievements";
 import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { setCookie } from "#app/utils";
 import { blobToString } from "#test/testUtils/gameManagerUtils";
-import { MockConsoleLog } from "#test/testUtils/mocks/mockConsoleLog";
+import { MockConsole } from "#test/testUtils/mocks/mockConsole";
 import { mockContext } from "#test/testUtils/mocks/mockContext";
 import { mockLocalStorage } from "#test/testUtils/mocks/mockLocalStorage";
 import { MockImage } from "#test/testUtils/mocks/mocksContainer/mockImage";
 import Phaser from "phaser";
 import { manageListeners } from "./listenersManager";
 import { initVouchers } from "#app/system/init-vouchers";
+import { initAbilities } from "#app/data/init-abilities";
+import { initMoves } from "#app/data/init-moves";
+import { initModifierTypes } from "#app/modifier/init-modifier-types";
+import { initModifierPools } from "#app/modifier/init-modifier-pools";
+
+/**
+ * A function to initialize game data before running any other test-related code.
+ */
+export function initDataForTests() {
+  // Initialize all of these things if and only if they have not been initialized yet
+  if (Object.values(allMoves).length === 0) {
+    initModifierTypes();
+    initModifierPools();
+    initMoves();
+    initVouchers();
+    initAchievements();
+    initStatsKeys();
+    initPokemonPreEvolutions();
+    initBiomes();
+    initEggMoves();
+    initPokemonForms();
+    initSpecies();
+    initAbilities();
+    initLoggedInUser();
+    initMysteryEncounters();
+  }
+}
 
 /**
  * An initialization function that is run at the beginning of every test file (via `beforeAll()`).
@@ -31,7 +57,7 @@ export function initTestFile() {
     value: mockLocalStorage(),
   });
   Object.defineProperty(window, "console", {
-    value: new MockConsoleLog(false),
+    value: new MockConsole(),
   });
   Object.defineProperty(document, "fonts", {
     writable: true,
@@ -74,22 +100,6 @@ export function initTestFile() {
   Phaser.GameObjects.Text.prototype.setPositionRelative = setPositionRelative;
   Phaser.GameObjects.Rectangle.prototype.setPositionRelative = setPositionRelative;
   HTMLCanvasElement.prototype.getContext = () => mockContext;
-
-  // Initialize all of these things if and only if they have not been initialized yet
-  if (Object.values(allMoves).length === 0) {
-    initMoves();
-    initVouchers();
-    initAchievements();
-    initStatsKeys();
-    initPokemonPrevolutions();
-    initBiomes();
-    initEggMoves();
-    initPokemonForms();
-    initSpecies();
-    initAbilities();
-    initLoggedInUser();
-    initMysteryEncounters();
-  }
 
   manageListeners();
 }

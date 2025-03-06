@@ -1,5 +1,5 @@
 import type BattleScene from "#app/battle-scene";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { randSeedInt } from "#app/utils";
 import { vi } from "vitest";
@@ -15,7 +15,7 @@ export function getEnemyMoveChoices(scene: BattleScene, pokemon: EnemyPokemon, m
   });
   for (let i = 0; i < NUM_TRIALS; i++) {
     const queuedMove = pokemon.getNextMove();
-    moveChoices[queuedMove.moveId]++;
+    moveChoices[queuedMove.move.id]++;
   }
 
   for (const [moveId, count] of Object.entries(moveChoices)) {

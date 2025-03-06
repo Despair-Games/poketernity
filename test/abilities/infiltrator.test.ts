@@ -1,5 +1,5 @@
 import { ArenaTagSide } from "#enums/arena-tag-side";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Stat } from "#enums/stat";
@@ -76,8 +76,8 @@ describe("Abilities - Infiltrator", () => {
 
     game.move.select(MoveId.SPORE);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
-    expect(enemy.status?.effect).toBe(StatusEffect.SLEEP);
+    await game.toEndOfTurn();
+    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
     expect(player.battleData.abilitiesApplied[0]).toBe(Abilities.INFILTRATOR);
   });
 

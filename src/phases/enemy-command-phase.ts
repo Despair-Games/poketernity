@@ -1,6 +1,6 @@
-import { BattlerIndex } from "#enums/battler-index";
 import { globalScene } from "#app/global-scene";
 import { FieldPhase } from "./abstract-field-phase";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Phase for determining an enemy AI's action for the next turn.
@@ -9,20 +9,22 @@ import { FieldPhase } from "./abstract-field-phase";
  * @extends FieldPhase
  */
 export class EnemyCommandPhase extends FieldPhase {
+  override readonly id = PhaseId.ENEMY_COMMAND;
+
   protected readonly fieldIndex: number;
-  protected skipTurn: boolean = false;
 
   constructor(fieldIndex: number) {
     super();
 
     this.fieldIndex = fieldIndex;
-    if (globalScene.currentBattle.mysteryEncounter?.skipEnemyBattleTurns) {
-      this.skipTurn = true;
-    }
   }
 
   public override start(): void {
     super.start();
+
+    if (globalScene.currentBattle.mysteryEncounter?.skipEnemyBattleTurns) {
+      return this.end();
+    }
 
     const pokemon = globalScene.getEnemyField()[this.fieldIndex];
     if (!pokemon) {
@@ -35,7 +37,7 @@ export class EnemyCommandPhase extends FieldPhase {
     }
 
     const battle = globalScene.currentBattle;
-    battle.turnCommands[this.fieldIndex + BattlerIndex.ENEMY] = nextCommand;
+    battle.turnManager.addCommand(nextCommand);
     /**
      * @todo Should we keep this? it was a factor in the old switch logic
      * that might still be useful

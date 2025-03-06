@@ -2,6 +2,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import type { BooleanHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { BattleStat } from "#enums/stat";
 import { AbAttr } from "./ab-attr";
 
@@ -12,6 +13,7 @@ export class PostIntimidateStatStageChangeAbAttr extends AbAttr {
 
   constructor(stats: BattleStat[], stages: number, overwrites: boolean = false) {
     super(true);
+    this._flags.add(AbAttrFlag.POST_INTIMIDATE_STAT_STAGE_CHANGE);
     this.stats = stats;
     this.stages = stages;
     this.overwrites = overwrites;

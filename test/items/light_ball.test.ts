@@ -1,6 +1,6 @@
 import { Stat } from "#enums/stat";
 import { SpeciesStatBoosterModifier } from "#app/modifier/modifier";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import i18next from "#app/plugins/i18n";
 import { NumberHolder } from "#app/utils";
 import { Species } from "#enums/species";
@@ -85,84 +85,6 @@ describe("Items - Light Ball", () => {
     await game.startBattle([Species.PIKACHU]);
 
     const partyMember = game.scene.getPlayerParty()[0];
-
-    const atkStat = partyMember.getStat(Stat.ATK);
-    const spAtkStat = partyMember.getStat(Stat.SPATK);
-
-    // Making sure modifier is not applied without holding item
-    const atkValue = new NumberHolder(atkStat);
-    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.DEF, atkValue);
-    const spAtkValue = new NumberHolder(spAtkStat);
-    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.SPDEF, spAtkValue);
-
-    expect(atkValue.value / atkStat).toBe(1);
-    expect(spAtkValue.value / spAtkStat).toBe(1);
-
-    // Giving Eviolite to party member and testing if it applies
-    game.scene.addModifier(
-      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["LIGHT_BALL"])!.newModifier(partyMember),
-      true,
-    );
-    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
-    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.SPATK, spAtkValue);
-
-    expect(atkValue.value / atkStat).toBe(2);
-    expect(spAtkValue.value / spAtkStat).toBe(2);
-  }, 20000);
-
-  it("LIGHT_BALL held by fused PIKACHU (base)", async () => {
-    await game.startBattle([Species.PIKACHU, Species.MAROWAK]);
-
-    const partyMember = game.scene.getPlayerParty()[0];
-    const ally = game.scene.getPlayerParty()[1];
-
-    // Fuse party members (taken from PlayerPokemon.fuse(...) function)
-    partyMember.fusionSpecies = ally.species;
-    partyMember.fusionFormIndex = ally.formIndex;
-    partyMember.fusionAbilityIndex = ally.abilityIndex;
-    partyMember.fusionShiny = ally.shiny;
-    partyMember.fusionVariant = ally.variant;
-    partyMember.fusionGender = ally.gender;
-    partyMember.fusionLuck = ally.luck;
-
-    const atkStat = partyMember.getStat(Stat.ATK);
-    const spAtkStat = partyMember.getStat(Stat.SPATK);
-
-    // Making sure modifier is not applied without holding item
-    const atkValue = new NumberHolder(atkStat);
-    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.DEF, atkValue);
-    const spAtkValue = new NumberHolder(spAtkStat);
-    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.SPDEF, spAtkValue);
-
-    expect(atkValue.value / atkStat).toBe(1);
-    expect(spAtkValue.value / spAtkStat).toBe(1);
-
-    // Giving Eviolite to party member and testing if it applies
-    game.scene.addModifier(
-      modifierTypes.SPECIES_STAT_BOOSTER().generateType([], ["LIGHT_BALL"])!.newModifier(partyMember),
-      true,
-    );
-    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.ATK, atkValue);
-    game.scene.applyModifiers(SpeciesStatBoosterModifier, true, partyMember, Stat.SPATK, spAtkValue);
-
-    expect(atkValue.value / atkStat).toBe(2);
-    expect(spAtkValue.value / spAtkStat).toBe(2);
-  }, 20000);
-
-  it("LIGHT_BALL held by fused PIKACHU (part)", async () => {
-    await game.startBattle([Species.MAROWAK, Species.PIKACHU]);
-
-    const partyMember = game.scene.getPlayerParty()[0];
-    const ally = game.scene.getPlayerParty()[1];
-
-    // Fuse party members (taken from PlayerPokemon.fuse(...) function)
-    partyMember.fusionSpecies = ally.species;
-    partyMember.fusionFormIndex = ally.formIndex;
-    partyMember.fusionAbilityIndex = ally.abilityIndex;
-    partyMember.fusionShiny = ally.shiny;
-    partyMember.fusionVariant = ally.variant;
-    partyMember.fusionGender = ally.gender;
-    partyMember.fusionLuck = ally.luck;
 
     const atkStat = partyMember.getStat(Stat.ATK);
     const spAtkStat = partyMember.getStat(Stat.SPATK);

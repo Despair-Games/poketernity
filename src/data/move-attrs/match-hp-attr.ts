@@ -2,7 +2,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { FixedDamageAttr } from "#app/data/move-attrs/fixed-damage-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
 /**
  * Attribute to set move damage such that the target is brought down to the user's HP.

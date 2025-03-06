@@ -40,7 +40,7 @@ describe("Moves - Mist", () => {
     game.move.select(MoveId.MIST, 0);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     playerPokemon.forEach((p) => expect(p.getStatStage(Stat.ATK)).toBe(0));
   });

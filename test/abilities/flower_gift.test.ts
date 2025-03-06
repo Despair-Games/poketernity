@@ -62,8 +62,8 @@ describe("Abilities - Flower Gift", () => {
     game.move.select(MoveId.SUNNY_DAY, 0);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    await game.toEndOfTurn();
 
     expect(cherrim.formIndex).toBe(SUNSHINE_FORM);
     expect(cherrim.getEffectiveStat(Stat.ATK)).toBe(Math.floor(cherrimAtkStat * 1.5));
@@ -119,8 +119,8 @@ describe("Abilities - Flower Gift", () => {
     expect(cherrim.formIndex).toBe(SUNSHINE_FORM);
 
     game.move.select(MoveId.SPLASH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    await game.toEndOfTurn();
 
     expect(cherrim.summonData.abilitySuppressed).toBe(true);
     expect(cherrim.formIndex).toBe(OVERCAST_FORM);

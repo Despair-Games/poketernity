@@ -4,11 +4,10 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { PlayerPartyMemberPokemonPhase } from "#app/phases/abstract-player-party-member-pokemon-phase";
 import { EvolutionPhase } from "#app/phases/evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
-import { LevelAchv } from "#app/system/achv";
-import { NumberHolder } from "#app/utils";
 import { ExpNotification } from "#enums/exp-notification";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
+import { PhaseId } from "#enums/phase-id";
 
 /**
  * Handles the effects of a pokemon levelling up:
@@ -22,6 +21,8 @@ import { settings } from "#app/system/settings/settings-manager";
  * @extends PlayerPartyMemberPokemonPhase
  */
 export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
+  override readonly id = PhaseId.LEVEL_UP;
+
   protected readonly lastLevel: number;
   protected readonly level: number;
   protected readonly pokemon: PlayerPokemon = this.getPlayerPokemon();
@@ -41,8 +42,6 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
       gameData.gameStats.highestLevel = this.level;
     }
 
-    globalScene.validateAchvs(LevelAchv, new NumberHolder(this.level));
-
     const prevStats = this.pokemon.stats.slice(0);
     this.pokemon.calculateStats();
     this.pokemon.updateInfo();
@@ -54,7 +53,7 @@ export class LevelUpPhase extends PlayerPartyMemberPokemonPhase {
         .then(() => this.end());
 
     if (settings.general.partyExpNotificationMode === ExpNotification.DEFAULT) {
-      globalScene.playSound("level_up_fanfare");
+      globalScene.audioManager.playSound("level_up_fanfare");
 
       const levelUpText = i18next.t("battle:levelUp", {
         pokemonName: getPokemonNameWithAffix(this.pokemon),

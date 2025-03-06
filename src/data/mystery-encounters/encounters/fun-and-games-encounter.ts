@@ -2,9 +2,9 @@ import {
   leaveEncounterWithoutBattle,
   selectPokemonForOption,
   setEncounterRewards,
-  transitionMysteryEncounterIntroVisuals,
   updatePlayerMoney,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
@@ -25,9 +25,9 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { PlayerGender } from "#enums/player-gender";
 import { getPokeballAtlasKey, getPokeballTintColor } from "#app/data/pokeball";
 import { ShinySparklePhase } from "#app/phases/shiny-sparkle-phase";
-import { SpeciesFormChangeActiveTrigger } from "#app/data/pokemon-forms";
+import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
 import { PostSummonPhase } from "#app/phases/post-summon-phase";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { Nature } from "#enums/nature";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { isPokemonValidForEncounterOptionSelection } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
@@ -96,7 +96,7 @@ export const FunAndGamesEncounter: MysteryEncounter = MysteryEncounterBuilder.wi
     return true;
   })
   .withOnVisualsStart(() => {
-    globalScene.fadeAndSwitchBgm("mystery_encounter_fun_and_games");
+    globalScene.audioManager.fadeAndSwitchBgm("mystery_encounter_fun_and_games");
     return true;
   })
   .withOption(
@@ -238,7 +238,7 @@ function handleLoseMinigame() {
   return new Promise<void>(async (resolve) => {
     // Check Wobbuffet is still alive
     const wobbuffet = globalScene.getEnemyPokemon();
-    if (!wobbuffet || wobbuffet.isFainted(true) || wobbuffet.hp === 0) {
+    if (!wobbuffet || wobbuffet.isFainted()) {
       // Player loses
       // End the battle
       if (wobbuffet) {
@@ -370,7 +370,7 @@ function summonPlayerPokemonAnimation(pokemon: PlayerPokemon): Promise<void> {
           angle: 1440,
           y: 132 + fpOffset[1],
           onComplete: () => {
-            globalScene.playSound("se/pb_rel");
+            globalScene.audioManager.playSound("se/pb_rel");
             pokeball.destroy();
             globalScene.add.existing(pokemon);
             globalScene.field.add(pokemon);

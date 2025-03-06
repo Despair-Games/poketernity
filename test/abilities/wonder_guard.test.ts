@@ -37,7 +37,7 @@ describe("Abilities - Wonder Guard", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.TACKLE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(enemy.hp).toBe(1);
   });

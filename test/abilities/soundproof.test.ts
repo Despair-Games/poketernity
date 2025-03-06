@@ -1,4 +1,4 @@
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { Abilities } from "#enums/abilities";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveResult } from "#enums/move-result";
@@ -39,7 +39,7 @@ describe("Abilities - Soundproof", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
     game.move.select(MoveId.CLANGOROUS_SOUL);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const soundMove = allMoves[MoveId.CLANGOROUS_SOUL];
     const lastMove = playerPokemon.getLastXMoves()[0];

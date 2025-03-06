@@ -1,4 +1,5 @@
 import { globalScene } from "#app/global-scene";
+import { PhaseId } from "#enums/phase-id";
 import { EncounterPhase } from "./encounter-phase";
 
 /**
@@ -6,12 +7,15 @@ import { EncounterPhase } from "./encounter-phase";
  * @extends EncounterPhase
  */
 export class NextEncounterPhase extends EncounterPhase {
+  /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode NextEncounterPhase} is extended by other phases */
+  override readonly id: PhaseId = PhaseId.NEXT_ENCOUNTER;
+
   protected override doEncounter(): void {
     const { arena, arenaEnemy, arenaNextEnemy, currentBattle, field, lastEnemyTrainer, lastMysteryEncounter, tweens } =
       globalScene;
     const { isClassicFinalBoss, mysteryEncounter, trainer } = currentBattle;
 
-    globalScene.playBgm(undefined, true);
+    globalScene.audioManager.playBgm(undefined, true);
 
     for (const pokemon of globalScene.getPlayerParty()) {
       if (pokemon) {

@@ -1,5 +1,5 @@
-import { allMoves } from "#app/data/all-moves";
-import { PhotonGeyserCategoryAttr } from "#app/data/move-attrs/photon-geyser-category-attr";
+import { allMoves } from "#app/data/data-lists";
+import { UseHigherAttackingStatAttr } from "#app/data/move-attrs/use-higher-attacking-stat-attr";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -10,7 +10,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 describe("Moves - Photon Geyser", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
-  const photonGeyserAttr = allMoves[MoveId.PHOTON_GEYSER].getAttrs(PhotonGeyserCategoryAttr)[0];
+  const photonGeyserAttr = allMoves[MoveId.PHOTON_GEYSER].getAttrs(UseHigherAttackingStatAttr)[0];
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({
@@ -40,7 +40,7 @@ describe("Moves - Photon Geyser", () => {
     await game.classicMode.startBattle([Species.CHANDELURE]);
 
     game.move.select(MoveId.PHOTON_GEYSER);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(photonGeyserAttr.apply).toHaveReturnedWith(false);
   });
@@ -49,7 +49,7 @@ describe("Moves - Photon Geyser", () => {
     await game.classicMode.startBattle([Species.KARTANA]);
 
     game.move.select(MoveId.PHOTON_GEYSER);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(photonGeyserAttr.apply).toHaveReturnedWith(true);
   });
@@ -63,7 +63,7 @@ describe("Moves - Photon Geyser", () => {
     vi.spyOn(player, "stats", "get").mockReturnValue([100, 75, 100, 100, 100, 100]);
 
     game.move.select(MoveId.PHOTON_GEYSER);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(photonGeyserAttr.apply).toHaveReturnedWith(false);
   });

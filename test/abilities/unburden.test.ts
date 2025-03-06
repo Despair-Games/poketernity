@@ -1,6 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { PostItemLostAbAttr } from "#app/data/ab-attrs/post-item-lost-ab-attr";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { StealHeldItemChanceAttr } from "#app/data/move-attrs/steal-held-item-chance-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import type { ContactHeldItemTransferChanceModifier } from "#app/modifier/modifier";
@@ -13,6 +12,7 @@ import { Stat } from "#enums/stat";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Abilities - Unburden", () => {
   let phaserGame: Phaser.Game;
@@ -248,7 +248,7 @@ describe("Abilities - Unburden", () => {
     game.move.select(MoveId.SPLASH, 1);
     await game.forceEnemyMove(MoveId.FALSE_SWIPE, 0);
     await game.forceEnemyMove(MoveId.FALSE_SWIPE, 0);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(getHeldItemCount(treecko)).toBeLessThan(playerHeldItems);
     expect(treecko.getEffectiveStat(Stat.SPD)).toBe(initialPlayerSpeed * 2);
@@ -257,7 +257,7 @@ describe("Abilities - Unburden", () => {
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
     game.doSwitchPokemon(2);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(getHeldItemCount(treecko)).toBeLessThan(playerHeldItems);
     expect(treecko.getEffectiveStat(Stat.SPD)).toBe(initialPlayerSpeed);
@@ -266,7 +266,7 @@ describe("Abilities - Unburden", () => {
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
     game.doSwitchPokemon(2);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(getHeldItemCount(treecko)).toBeLessThan(playerHeldItems);
     expect(treecko.getEffectiveStat(Stat.SPD)).toBe(initialPlayerSpeed * 2);
@@ -279,7 +279,7 @@ describe("Abilities - Unburden", () => {
     const [treecko, purrloin] = game.scene.getPlayerParty();
     const initialTreeckoSpeed = treecko.getStat(Stat.SPD);
     const initialPurrloinSpeed = purrloin.getStat(Stat.SPD);
-    const unburdenAttr = treecko.getAbilityAttrs(PostItemLostAbAttr)[0];
+    const unburdenAttr = treecko.getAbilityAttrs(AbAttrFlag.POST_ITEM_LOST)[0];
     vi.spyOn(unburdenAttr, "apply");
 
     // Player uses Baton Pass, which also passes the Baton item
@@ -376,7 +376,7 @@ describe("Abilities - Unburden", () => {
     game.move.select(MoveId.REVIVAL_BLESSING, 1);
     await game.forceEnemyMove(MoveId.THIEF, BattlerIndex.PLAYER);
     await game.forceEnemyMove(MoveId.SPLASH);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
     game.doSelectPartyPokemon(0, "RevivalBlessingPhase");
     await game.toNextTurn();
 

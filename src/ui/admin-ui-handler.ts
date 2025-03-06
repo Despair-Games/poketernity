@@ -8,6 +8,7 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { globalScene } from "#app/global-scene";
 import { AdminMode } from "#enums/admin-mode";
+import { setTextColor } from "#app/ui/text";
 
 type AdminUiHandlerService = "discord" | "google";
 type AdminUiHandlerServiceMode = "Link" | "Unlink";
@@ -119,11 +120,9 @@ export default class AdminUiHandler extends FormModalUiHandler {
 
     this.errorMessage.setPosition(10, (hasTitle ? 31 : 5) + 20 * (fields.length - 1) + 16 + this.getButtonTopMargin()); // sets the position of the message dynamically
     if (isMessageError) {
-      this.errorMessage.setColor(this.getTextColor(TextStyle.SUMMARY_PINK));
-      this.errorMessage.setShadowColor(this.getTextColor(TextStyle.SUMMARY_PINK, true));
+      setTextColor(this.errorMessage, TextStyle.SUMMARY_PINK);
     } else {
-      this.errorMessage.setColor(this.getTextColor(TextStyle.SUMMARY_GREEN));
-      this.errorMessage.setShadowColor(this.getTextColor(TextStyle.SUMMARY_GREEN, true));
+      setTextColor(this.errorMessage, TextStyle.SUMMARY_GREEN);
     }
 
     if (super.show(args)) {

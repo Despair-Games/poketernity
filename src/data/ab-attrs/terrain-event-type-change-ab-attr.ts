@@ -5,6 +5,7 @@ import { TerrainType } from "#enums/terrain-type";
 import { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";
 import { PostSummonAbAttr } from "./post-summon-ab-attr";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * This applies a terrain-based type change to the Pokemon.
@@ -12,6 +13,11 @@ import { PostSummonAbAttr } from "./post-summon-ab-attr";
  * @extends PostSummonAbAttr
  */
 export class TerrainEventTypeChangeAbAttr extends PostSummonAbAttr {
+  constructor(showAbility: boolean = true, showAbilityInstant: boolean = false) {
+    super(showAbility, showAbilityInstant);
+    this._flags.add(AbAttrFlag.TERRAIN_EVENT_TYPE_CHANGE);
+  }
+
   override apply(pokemon: Pokemon, _simulated: boolean, onSummon: boolean = true): boolean {
     if (pokemon.isTerastallized()) {
       return false;

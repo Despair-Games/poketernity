@@ -1,13 +1,17 @@
-import { SubstituteTag } from "#app/data/battler-tags";
-import type { Pokemon } from "#app/field/pokemon";
+import { type SubstituteTag } from "#app/data/battler-tags";
+import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { isNullOrUndefined } from "#app/utils";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { PhaseId } from "#enums/phase-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { Species } from "#enums/species";
 
 // TODO: This should probably be made into an abstract base class
 export class PokemonAnimPhase extends BattlePhase {
+  override readonly id = PhaseId.POKEMON_ANIM;
+
   /** The type of animation to play in this phase */
   protected readonly key: PokemonAnimType;
   /** The Pokemon to which this animation applies */
@@ -53,7 +57,7 @@ export class PokemonAnimPhase extends BattlePhase {
   private doSubstituteAddAnim(): void {
     const { field, tweens } = globalScene;
 
-    const substitute = this.pokemon.getTag(SubstituteTag);
+    const substitute = this.pokemon.getTag<SubstituteTag>(BattlerTagType.SUBSTITUTE);
     if (isNullOrUndefined(substitute)) {
       return this.end();
     }
@@ -81,7 +85,7 @@ export class PokemonAnimPhase extends BattlePhase {
       field.bringToTop(this.pokemon);
     }
 
-    globalScene.playSound("PRSFX- Transform");
+    globalScene.audioManager.playSound("PRSFX- Transform");
 
     tweens.add({
       targets: this.pokemon,
@@ -215,7 +219,7 @@ export class PokemonAnimPhase extends BattlePhase {
           repeat: 7,
           startAt: 200,
           callback: () => {
-            globalScene.playSound("PRSFX- Substitute2.wav");
+            globalScene.audioManager.playSound("PRSFX- Substitute2.wav");
 
             subTintSprite.setVisible(flashTimer.repeatCount % 2 === 0);
             if (!flashTimer.repeatCount) {
@@ -270,9 +274,7 @@ export class PokemonAnimPhase extends BattlePhase {
         this.pokemon.getSprite()!.frame.name,
         true,
       );
-      ["spriteColors", "fusionSpriteColors"].map(
-        (k) => (sprite.pipelineData[k] = this.pokemon.getSprite().pipelineData[k]),
-      );
+      sprite.pipelineData["spriteColors"] = this.pokemon.getSprite().pipelineData["spriteColors"];
       sprite.setPipelineData("spriteKey", this.pokemon.getBattleSpriteKey());
       sprite.setPipelineData("ignoreFieldPos", true);
       sprite.setOrigin(0.5, 1);
@@ -288,7 +290,7 @@ export class PokemonAnimPhase extends BattlePhase {
     const sourceFpOffset = this.pokemon.getFieldPositionOffset();
     const dondozoFpOffset = dondozo.getFieldPositionOffset();
 
-    globalScene.playSound("se/pb_throw");
+    globalScene.audioManager.playSound("se/pb_throw");
 
     tweens.add({
       targets: sourceSprite,
@@ -306,7 +308,7 @@ export class PokemonAnimPhase extends BattlePhase {
           y: { value: dondozo.y + dondozo.height / 2, ease: "Sine.easeIn" },
           onComplete: () => {
             sourceSprite.destroy();
-            globalScene.playSound("battle_anims/PRSFX- Liquidation1.wav");
+            globalScene.audioManager.playSound("battle_anims/PRSFX- Liquidation1.wav");
             tweens.add({
               targets: dondozo,
               duration: 250,
@@ -341,10 +343,7 @@ export class PokemonAnimPhase extends BattlePhase {
       true,
     );
 
-    ["spriteColors", "fusionSpriteColors"].map(
-      (k) => (tatsuSprite.pipelineData[k] = tatsugiri.getSprite().pipelineData[k]),
-    );
-
+    tatsuSprite.pipelineData["spriteColors"] = tatsugiri.getSprite().pipelineData["spriteColors"];
     tatsuSprite.setPipelineData("spriteKey", tatsugiri.getBattleSpriteKey());
     tatsuSprite.setPipelineData("ignoreFieldPos", true);
     this.pokemon.getSprite().on("animationupdate", (_anim, frame) => tatsuSprite.setFrame(frame.textureFrame));
@@ -363,7 +362,7 @@ export class PokemonAnimPhase extends BattlePhase {
       scale: 1.15,
       yoyo: true,
       onComplete: () => {
-        globalScene.playSound("battle_anims/PRSFX- Liquidation4.wav");
+        globalScene.audioManager.playSound("battle_anims/PRSFX- Liquidation4.wav");
         tweens.add({
           targets: tatsuSprite,
           duration: 500,

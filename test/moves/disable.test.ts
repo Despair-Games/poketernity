@@ -5,7 +5,8 @@ import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import type { TurnMove } from "#app/field/pokemon";
+import type { TurnMove } from "#app/@types/TurnMove";
+import { ElementalType } from "#enums/elemental-type";
 
 describe("Moves - Disable", () => {
   let phaserGame: Phaser.Game;
@@ -39,7 +40,7 @@ describe("Moves - Disable", () => {
     const enemyMon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.DISABLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(enemyMon.getMoveHistory()).toHaveLength(1);
@@ -53,10 +54,15 @@ describe("Moves - Disable", () => {
     const enemyMon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.DISABLE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
-    expect(playerMon.getMoveHistory()[0]).toMatchObject<TurnMove>({ moveId: MoveId.DISABLE, result: MoveResult.FAIL });
+    expect(playerMon.getMoveHistory()[0]).toMatchObject<TurnMove>({
+      move: expect.objectContaining({ id: MoveId.DISABLE }),
+      result: MoveResult.FAIL,
+      type: ElementalType.NORMAL,
+      targets: [2],
+    });
     expect(enemyMon.isMoveRestricted(MoveId.SPLASH)).toBe(false);
   }, 20000);
 
@@ -66,7 +72,7 @@ describe("Moves - Disable", () => {
     const enemyMon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.DISABLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     game.move.select(MoveId.SPLASH);
@@ -74,8 +80,8 @@ describe("Moves - Disable", () => {
 
     const enemyHistory = enemyMon.getMoveHistory();
     expect(enemyHistory).toHaveLength(2);
-    expect(enemyHistory[0].moveId).toBe(MoveId.SPLASH);
-    expect(enemyHistory[1].moveId).toBe(MoveId.STRUGGLE);
+    expect(enemyHistory[0].move.id).toBe(MoveId.SPLASH);
+    expect(enemyHistory[1].move.id).toBe(MoveId.STRUGGLE);
   }, 20000);
 
   it("cannot disable STRUGGLE", async () => {
@@ -86,11 +92,11 @@ describe("Moves - Disable", () => {
     const enemyMon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.DISABLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(playerMon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
-    expect(enemyMon.getLastXMoves()[0].moveId).toBe(MoveId.STRUGGLE);
+    expect(enemyMon.getLastXMoves()[0].move.id).toBe(MoveId.STRUGGLE);
     expect(enemyMon.isMoveRestricted(MoveId.STRUGGLE)).toBe(false);
   }, 20000);
 
@@ -104,12 +110,17 @@ describe("Moves - Disable", () => {
 
     // Both mons just used Splash last turn; now have player use Disable.
     game.move.select(MoveId.DISABLE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
     const enemyHistory = enemyMon.getMoveHistory();
     expect(enemyHistory).toHaveLength(2);
-    expect(enemyHistory[0]).toMatchObject<TurnMove>({ moveId: MoveId.SPLASH, result: MoveResult.SUCCESS });
+    expect(enemyHistory[0]).toMatchObject<TurnMove>({
+      move: expect.objectContaining({ id: MoveId.SPLASH }),
+      result: MoveResult.SUCCESS,
+      type: ElementalType.NORMAL,
+      targets: [2],
+    });
     expect(enemyHistory[1].result).toBe(MoveResult.FAIL);
   }, 20000);
 
@@ -120,10 +131,10 @@ describe("Moves - Disable", () => {
     const enemyMon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.DISABLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(enemyMon.isMoveRestricted(MoveId.NATURE_POWER)).toBe(true);
-    expect(enemyMon.isMoveRestricted(enemyMon.getLastXMoves(2)[1].moveId)).toBe(false);
+    expect(enemyMon.isMoveRestricted(enemyMon.getLastXMoves(2)[1].move.id)).toBe(false);
   }, 20000);
 });

@@ -42,7 +42,7 @@ describe("Abilities - Damp", () => {
 
     game.move.select(MoveId.SPLASH);
     game.move.select(moveId, 1);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const player2MoveResult = playerPokemon2.getMoveHistory()[0];
     const enemy1MoveResult = enemyPokemon1.getMoveHistory()[0];
@@ -62,7 +62,7 @@ describe("Abilities - Damp", () => {
     const enemyPokemon = game.scene.getEnemyPokemon();
 
     game.move.select(MoveId.TACKLE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     expect(playerPokemon?.isFullHp()).toBe(true);
     expect(enemyPokemon?.isFainted()).toBe(true);

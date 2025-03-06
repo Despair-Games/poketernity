@@ -4,6 +4,8 @@ import { expect } from "vitest";
 // tsdoc imports
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { type globalScene } from "#app/global-scene";
+import type { BattlerIndex } from "#enums/battler-index";
+import { Stat } from "#enums/stat";
 
 /** Helper to manage pokemon */
 export class FieldHelper extends GameManagerHelper {
@@ -35,5 +37,24 @@ export class FieldHelper extends GameManagerHelper {
     const pokemon = this.game.scene.getEnemyPokemon(includeSwitching);
     expect(pokemon).toBeDefined();
     return pokemon!;
+  }
+
+  /** @returns the order of commands executed in the last turn by {@linkcode BattlerIndex}. */
+  public getTurnOrder(): BattlerIndex[] {
+    return this.game.scene
+      .getField(true)
+      .sort((pA, pB) => pA.turnData.order - pB.turnData.order)
+      .map((p) => p.getBattlerIndex());
+  }
+
+  /**
+   * @returns the {@linkcode BattlerIndex | indexes} of Pokemon on the field in order of decreasing Speed.
+   * Speed ties are returned in increasing order of index.
+   */
+  public getSpeedOrder(): BattlerIndex[] {
+    return this.game.scene
+      .getField(true)
+      .sort((pA, pB) => pB.getEffectiveStat(Stat.SPD) - pA.getEffectiveStat(Stat.SPD))
+      .map((p) => p.getBattlerIndex());
   }
 }

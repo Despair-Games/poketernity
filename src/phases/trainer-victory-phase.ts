@@ -1,20 +1,23 @@
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import { globalScene } from "#app/global-scene";
-import { modifierTypes } from "#app/modifier/modifier-type";
-import { achvs } from "#app/system/achv";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { vouchers } from "#app/system/voucher";
 import { randSeedItem } from "#app/utils";
-import { Biome } from "#enums/biome";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
 import { BattlePhase } from "./abstract-battle-phase";
 import { ModifierRewardPhase } from "./modifier-reward-phase";
 import { MoneyRewardPhase } from "./money-reward-phase";
 import { TrainerSlot } from "#enums/trainer-slot";
+import { PhaseId } from "#enums/phase-id";
+import { timedEventManager } from "#app/timed-event-manager";
+import { EventModifierType } from "#enums/event-modifier-type";
 
 export class TrainerVictoryPhase extends BattlePhase {
+  override readonly id = PhaseId.TRAINER_VICTORY;
+
   public override start(): void {
-    const { arena, charSprite, currentBattle, eventManager, ui } = globalScene;
+    const { charSprite, currentBattle, ui } = globalScene;
     const { trainer, waveIndex } = currentBattle;
     globalScene.disableMenu = true;
 
@@ -22,7 +25,7 @@ export class TrainerVictoryPhase extends BattlePhase {
       return this.end();
     }
 
-    globalScene.playBgm(trainer.config.victoryBgm);
+    globalScene.audioManager.playBgm(trainer.config.victoryBgm);
 
     globalScene.unshiftPhase(new MoneyRewardPhase(trainer.config.moneyMultiplier));
 
@@ -31,7 +34,7 @@ export class TrainerVictoryPhase extends BattlePhase {
       globalScene.unshiftPhase(new ModifierRewardPhase(modifierRewardFunc));
     }
 
-    if (eventManager.isEventActive()) {
+    if (timedEventManager.isEventActive(EventModifierType.EXTRA_TRAINER_REWARDS)) {
       for (const rewardFunc of trainer.config.eventRewardFuncs) {
         globalScene.unshiftPhase(new ModifierRewardPhase(rewardFunc));
       }
@@ -49,13 +52,6 @@ export class TrainerVictoryPhase extends BattlePhase {
           ),
         );
       }
-    }
-    // Breeders in Space achievement
-    if (
-      arena.biomeType === Biome.SPACE
-      && (trainerType === TrainerType.BREEDER || trainerType === TrainerType.EXPERT_POKEMON_BREEDER)
-    ) {
-      globalScene.validateAchv(achvs.BREEDERS_IN_SPACE);
     }
 
     ui.showText(

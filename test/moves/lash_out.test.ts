@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { allMoves } from "#app/data/all-moves";
+import { allMoves } from "#app/data/data-lists";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -41,8 +41,8 @@ describe("Moves - Lash Out", () => {
     await game.classicMode.startBattle();
 
     game.move.select(MoveId.LASH_OUT);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    await game.toEndOfTurn();
 
     expect(allMoves[MoveId.LASH_OUT].calculateBattlePower).toHaveReturnedWith(150);
   });

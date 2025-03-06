@@ -8,8 +8,6 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { Status } from "#app/data/status-effect";
-import { StatusEffect } from "#enums/status-effect";
 import { BattlerIndex } from "#enums/battler-index";
 
 describe("Moves - Whirlwind", () => {
@@ -42,7 +40,7 @@ describe("Moves - Whirlwind", () => {
     game.move.use(moveId);
     await game.move.forceEnemyMove(MoveId.WHIRLWIND);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(staraptor.findTag((t) => t.tagType === BattlerTagType.FLYING)).toBeDefined();
     expect(game.scene.getEnemyPokemon()!.getLastXMoves(1)[0].result).toBe(MoveResult.MISS);
@@ -59,9 +57,9 @@ describe("Moves - Whirlwind", () => {
     game.move.select(MoveId.SKY_DROP, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.WHIRLWIND, 1, BattlerIndex.ENEMY);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     [staraptor, enemyPokemon[0]].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());
     expect(pidgeot.getLastXMoves()[0]?.result).toBe(MoveResult.MISS);
@@ -124,8 +122,7 @@ describe("Moves - Whirlwind", () => {
     const [lapras, eevee, toxapex, primarina] = game.scene.getPlayerParty();
 
     // Turn 1: Eevee faints
-    eevee.hp = 0;
-    eevee.status = new Status(StatusEffect.FAINT);
+    eevee.faint();
     expect(eevee.isFainted()).toBe(true);
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.SPLASH);
@@ -151,8 +148,7 @@ describe("Moves - Whirlwind", () => {
     const [lapras, eevee] = game.scene.getPlayerParty();
 
     // Turn 1: Eevee faints
-    eevee.hp = 0;
-    eevee.status = new Status(StatusEffect.FAINT);
+    eevee.faint();
     expect(eevee.isFainted()).toBe(true);
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.SPLASH);

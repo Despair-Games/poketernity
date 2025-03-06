@@ -38,10 +38,10 @@ describe("Abilities - Poison Puppeteer", () => {
     await game.classicMode.startBattle([Species.MAREANIE]);
 
     game.move.use(MoveId.MORTAL_SPIN);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const enemyPokemon = game.field.getEnemyPokemon();
-    expect(enemyPokemon.status?.effect).toBe(StatusEffect.POISON);
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.POISON);
     expect(enemyPokemon.getTag(BattlerTagType.CONFUSED)).toBeDefined();
   });
 
@@ -49,10 +49,10 @@ describe("Abilities - Poison Puppeteer", () => {
     await game.classicMode.startBattle([Species.MAREANIE]);
 
     game.move.use(MoveId.TOXIC);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const enemyPokemon = game.field.getEnemyPokemon();
-    expect(enemyPokemon.status?.effect).toBe(StatusEffect.TOXIC);
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.TOXIC);
     expect(enemyPokemon.getTag(BattlerTagType.CONFUSED)).toBeDefined();
   });
 
@@ -65,10 +65,10 @@ describe("Abilities - Poison Puppeteer", () => {
 
     game.move.use(MoveId.SPLASH);
     await game.forceEnemyToSwitch();
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const enemyPokemon = game.field.getEnemyPokemon();
-    expect(enemyPokemon.status?.effect).toBe(StatusEffect.POISON);
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.POISON);
     expect(enemyPokemon.getTag(BattlerTagType.CONFUSED)).toBeUndefined();
   });
 
@@ -76,10 +76,10 @@ describe("Abilities - Poison Puppeteer", () => {
     await game.classicMode.startBattle([Species.MAREANIE]);
 
     game.move.use(MoveId.NUZZLE);
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
 
     const enemyPokemon = game.field.getEnemyPokemon();
-    expect(enemyPokemon.status?.effect).toBe(StatusEffect.PARALYSIS);
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.PARALYSIS);
     expect(enemyPokemon.getTag(BattlerTagType.CONFUSED)).toBeUndefined();
   });
 });

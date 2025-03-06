@@ -1,7 +1,7 @@
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
-import type { Achv } from "#app/system/achv";
-import { achvs } from "#app/system/achv";
+import type { Achievement } from "#app/system/achievements";
+import { achvs } from "#app/system/achievements";
 import type { Voucher } from "#app/system/voucher";
 import { getVoucherTypeIcon, getVoucherTypeName, vouchers } from "#app/system/voucher";
 import MessageUiHandler from "#app/ui/message-ui-handler";
@@ -48,7 +48,6 @@ export default class AchvsUiHandler extends MessageUiHandler {
   private titleBg: Phaser.GameObjects.NineSlice;
   private titleText: Phaser.GameObjects.Text;
   private scoreContainer: Phaser.GameObjects.Container;
-  private scoreText: Phaser.GameObjects.Text;
   private unlockText: Phaser.GameObjects.Text;
 
   private achvsName: string;
@@ -140,10 +139,6 @@ export default class AchvsUiHandler extends MessageUiHandler {
     scoreBg.setOrigin(0, 0);
     this.scoreContainer.add(scoreBg);
 
-    this.scoreText = addTextObject(scoreBg.width / 2, scoreBg.height / 2, "", TextStyle.WINDOW);
-    this.scoreText.setOrigin(0.5, 0.5);
-    this.scoreContainer.add(this.scoreText);
-
     const unlockBg = addWindow(this.scoreContainer.x + scoreBg.width, titleBg.y, 98, 24);
     unlockBg.setOrigin(0, 0);
 
@@ -202,13 +197,12 @@ export default class AchvsUiHandler extends MessageUiHandler {
     return true;
   }
 
-  protected showAchv(achv: Achv) {
+  protected showAchv(achv: Achievement) {
     const achvUnlocks = globalScene.gameData.achvUnlocks;
     const unlocked = achvUnlocks.hasOwnProperty(achv.id);
     const hidden = !unlocked && achv.secret && (!achv.parentId || !achvUnlocks.hasOwnProperty(achv.parentId));
     this.titleText.setText(unlocked ? achv.name : "???");
     this.showText(!hidden ? achv.description : "");
-    this.scoreText.setText(`${achv.score}pt`);
     this.unlockText.setText(
       unlocked ? new Date(achvUnlocks[achv.id]).toLocaleDateString() : i18next.t("achv:Locked.name"),
     );
@@ -394,7 +388,7 @@ export default class AchvsUiHandler extends MessageUiHandler {
 
     const achvRange = Object.values(achvs).slice(itemOffset, itemLimit + itemOffset);
 
-    achvRange.forEach((achv: Achv, i: number) => {
+    achvRange.forEach((achv: Achievement, i: number) => {
       const icon = this.icons[i];
       const unlocked = achvUnlocks.hasOwnProperty(achv.id);
       const hidden = !unlocked && achv.secret && (!achv.parentId || !achvUnlocks.hasOwnProperty(achv.parentId));

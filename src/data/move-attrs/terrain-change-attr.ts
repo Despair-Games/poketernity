@@ -3,7 +3,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
 /**
  * Attribute to add terrain of a set type to the field.
@@ -14,7 +14,7 @@ export class TerrainChangeAttr extends MoveEffectAttr {
   private terrainType: TerrainType;
 
   constructor(terrainType: TerrainType) {
-    super();
+    super(true);
 
     this.terrainType = terrainType;
   }
@@ -24,8 +24,7 @@ export class TerrainChangeAttr extends MoveEffectAttr {
   }
 
   override getCondition(): MoveConditionFunc {
-    return (_user, _target, _move) =>
-      !globalScene.arena.terrain || globalScene.arena.terrain.terrainType !== this.terrainType;
+    return (_user, _target, _move) => !globalScene.arena.hasTerrain(this.terrainType);
   }
 
   override getUserBenefitScore(_user: Pokemon, _target: Pokemon, _move: Move): number {

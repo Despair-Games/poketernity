@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { PostAttackApplyStatusEffectAbAttr } from "#app/data/ab-attrs/post-attack-apply-status-effect-ab-attr";
+import { type PostAttackApplyStatusEffectAbAttr } from "#app/data/ab-attrs/post-attack-apply-status-effect-ab-attr";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { Abilities } from "#enums/abilities";
@@ -9,6 +9,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Abilities - Poison Touch", () => {
   let phaserGame: Phaser.Game;
@@ -43,9 +44,9 @@ describe("Abilities - Poison Touch", () => {
    */
   async function checkSucceedPoison(moveId: MoveId, enemyPokemon: EnemyPokemon) {
     game.move.select(moveId);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
-    expect(enemyPokemon.status?.effect).toBe(StatusEffect.POISON);
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.POISON);
   }
 
   /**
@@ -53,9 +54,9 @@ describe("Abilities - Poison Touch", () => {
    */
   async function checkFailPoison(moveId: MoveId, enemyPokemon: EnemyPokemon) {
     game.move.select(moveId);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
-    expect(enemyPokemon.status?.effect).toBeUndefined();
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
   }
 
   it("should have a 30% chance of poisoning the target with an attack that makes contact", async () => {
@@ -65,7 +66,7 @@ describe("Abilities - Poison Touch", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const abilityAttr = playerPokemon
       .getAbility()
-      .getAttrs(PostAttackApplyStatusEffectAbAttr)[0] as PostAttackApplyStatusEffectAbAttr;
+      .getAttrs<PostAttackApplyStatusEffectAbAttr>(AbAttrFlag.POST_ATTACK_APPLY_STATUS_EFFECT)[0];
 
     await checkSucceedPoison(MoveId.DRAINING_KISS, enemyPokemon);
     expect(abilityAttr.chance).toBe(30);
@@ -134,7 +135,7 @@ describe("Abilities - Poison Touch", () => {
     game.move.select(MoveId.DRAINING_KISS);
     await game.toNextTurn();
 
-    expect(enemyPokemon.status?.effect).toBe(StatusEffect.BURN);
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.BURN);
   });
 
   it("should not apply against a target with Shield Dust, unless the contact-making move is Sunsteel Strike", async () => {

@@ -1,23 +1,22 @@
-import type { BattlerIndex } from "#enums/battler-index";
-import { PostStatStageChangeAbAttr } from "#app/data/ab-attrs/post-stat-stage-change-ab-attr";
-import { ProtectStatAbAttr } from "#app/data/ab-attrs/protect-stat-ab-attr";
-import { StatStageChangeCopyAbAttr } from "#app/data/ab-attrs/stat-stage-change-copy-ab-attr";
-import { StatStageChangeMultiplierAbAttr } from "#app/data/ab-attrs/stat-stage-change-multiplier-ab-attr";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { MistTag } from "#app/data/arena-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { ResetNegativeStatStageModifier } from "#app/modifier/modifier";
-import { handleTutorial } from "#app/tutorial";
-import { Tutorial } from "#enums/tutorial";
-import { BooleanHolder, NumberHolder } from "#app/utils";
-import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } from "#enums/stat";
-import i18next from "i18next";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { settings } from "#app/system/settings/settings-manager";
-import { PokemonPhase } from "./abstract-pokemon-phase";
-import { ReflectStatStageChangeAbAttr } from "#app/data/ab-attrs/reflect-stat-stage-change-ab-attr";
+import { handleTutorial } from "#app/tutorial";
 import { CANVAS_SCALE } from "#app/ui-constants";
+import { BooleanHolder, NumberHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import type { BattlerIndex } from "#enums/battler-index";
+import { PhaseId } from "#enums/phase-id";
+import { getStatKey, getStatStageChangeDescriptionKey, Stat, type BattleStat } from "#enums/stat";
+import { Tutorial } from "#enums/tutorial";
+import i18next from "i18next";
+
+//#region Types
 
 export type StatStageChangeCallback = (changed: BattleStat[], relativeChanges: number[], target?: Pokemon) => void;
 
@@ -29,7 +28,11 @@ interface SSCPhaseOptions {
   onChange?: StatStageChangeCallback;
 }
 
+//#endregion
+
 export class StatStageChangePhase extends PokemonPhase {
+  override readonly id = PhaseId.STAT_STAGE_CHANGE;
+
   protected readonly stats: BattleStat[];
   protected readonly source: Pokemon | null;
   protected stages: number;
@@ -38,26 +41,32 @@ export class StatStageChangePhase extends PokemonPhase {
   protected readonly canBeCopied: boolean;
   protected readonly bypassReflect: boolean;
   protected readonly onChange?: StatStageChangeCallback;
-  private readonly options?: SSCPhaseOptions;
+  private readonly options: SSCPhaseOptions;
 
   constructor(
     battlerIndex: BattlerIndex,
     source: Pokemon | null,
     stats: BattleStat[],
     stages: number,
-    options?: SSCPhaseOptions,
+    {
+      showMessage = true,
+      ignoreAbilities = false,
+      canBeCopied = true,
+      bypassReflect = false,
+      onChange,
+    }: SSCPhaseOptions = {},
   ) {
     super(battlerIndex);
 
     this.source = source;
     this.stats = stats;
     this.stages = stages;
-    this.showMessage = options?.showMessage ?? true;
-    this.ignoreAbilities = options?.ignoreAbilities ?? false;
-    this.canBeCopied = options?.canBeCopied ?? true;
-    this.bypassReflect = options?.bypassReflect ?? false;
-    this.onChange = options?.onChange;
-    this.options = options;
+    this.showMessage = showMessage;
+    this.ignoreAbilities = ignoreAbilities;
+    this.canBeCopied = canBeCopied;
+    this.bypassReflect = bypassReflect;
+    this.onChange = onChange;
+    this.options = { showMessage, ignoreAbilities, canBeCopied, bypassReflect, onChange };
   }
 
   public override start(): void {
@@ -72,7 +81,15 @@ export class StatStageChangePhase extends PokemonPhase {
 
     if (!this.ignoreAbilities && !this.bypassReflect) {
       const reflected = new BooleanHolder(false);
-      applyAbAttrs(ReflectStatStageChangeAbAttr, pokemon, false, this.source, this.stats, this.stages, reflected);
+      applyAbAttrs(
+        AbAttrFlag.REFLECT_STAT_STAGE_CHANGE,
+        pokemon,
+        false,
+        this.source,
+        this.stats,
+        this.stages,
+        reflected,
+      );
       if (reflected.value) {
         return super.end();
       }
@@ -92,7 +109,7 @@ export class StatStageChangePhase extends PokemonPhase {
     const stages = new NumberHolder(this.stages);
 
     if (!this.ignoreAbilities) {
-      applyAbAttrs(StatStageChangeMultiplierAbAttr, pokemon, false, stages);
+      applyAbAttrs(AbAttrFlag.STAT_STAGE_CHANGE_MULTIPLIER, pokemon, false, stages);
     }
 
     let simulate = false;
@@ -101,11 +118,11 @@ export class StatStageChangePhase extends PokemonPhase {
       const cancelled = new BooleanHolder(false);
 
       if (!selfTarget && stages.value < 0) {
-        arena.applyTagsForSide(MistTag, pokemon.getArenaTagSide(), false, this.source, cancelled);
+        arena.applyTagsForSide(ArenaTagType.MIST, pokemon.getArenaTagSide(), false, this.source, cancelled);
       }
 
       if (!cancelled.value && !selfTarget && stages.value < 0) {
-        applyAbAttrs(ProtectStatAbAttr, pokemon, simulate, stat, cancelled);
+        applyAbAttrs(AbAttrFlag.PROTECT_STAT, pokemon, simulate, stat, cancelled);
       }
 
       // If one stat stage decrease is cancelled, simulate the rest of the applications
@@ -163,11 +180,11 @@ export class StatStageChangePhase extends PokemonPhase {
 
       if (stages.value > 0 && this.canBeCopied) {
         for (const opponent of pokemon.getOpponents()) {
-          applyAbAttrs(StatStageChangeCopyAbAttr, opponent, false, this.stats, stages.value);
+          applyAbAttrs(AbAttrFlag.STAT_STAGE_CHANGE_COPY, opponent, false, this.stats, stages.value);
         }
       }
 
-      applyAbAttrs(PostStatStageChangeAbAttr, pokemon, false, filteredStats, this.stages, selfTarget);
+      applyAbAttrs(AbAttrFlag.POST_STAT_STAGE_CHANGE, pokemon, false, filteredStats, this.stages, selfTarget);
 
       // Look for any other stat change phases; if this is the last one, do White Herb check
       const existingPhase = globalScene.findPhase(
@@ -211,7 +228,7 @@ export class StatStageChangePhase extends PokemonPhase {
       statSprite.setScale(CANVAS_SCALE);
       statSprite.setOrigin(0.5, 1);
 
-      globalScene.playSound(`se/stat_${stages.value >= 1 ? "up" : "down"}`);
+      globalScene.audioManager.playSound(`se/stat_${stages.value >= 1 ? "up" : "down"}`);
 
       statSprite.setMask(new Phaser.Display.Masks.BitmapMask(globalScene, pokemonMaskSprite ?? undefined));
 

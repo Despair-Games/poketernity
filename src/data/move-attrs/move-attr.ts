@@ -1,7 +1,8 @@
 import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
 import type { BooleanHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
-import type { MoveCondition, MoveConditionFunc } from "../move-conditions";
+import type { MoveCondition } from "../move-conditions/move-condition";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
 export interface MoveAttrOptions {
   /** Does this attribute contribute to AI effect score when the move KOs its target? */
@@ -20,6 +21,7 @@ export interface MoveAttrOptions {
 export abstract class MoveAttr {
   /** Should this {@linkcode Move} target the user? */
   public selfTarget: boolean;
+  public readonly callsOtherMoves: boolean = false;
   protected options?: MoveAttrOptions;
 
   constructor(selfTarget: boolean = false, options?: MoveAttrOptions) {

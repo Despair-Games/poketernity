@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { PostAttackApplyBattlerTagAbAttr } from "#app/data/ab-attrs/post-attack-apply-battler-tag-ab-attr";
+import { type PostAttackApplyBattlerTagAbAttr } from "#app/data/ab-attrs/post-attack-apply-battler-tag-ab-attr";
 import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
@@ -7,6 +7,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Abilities - Stench", () => {
   let phaserGame: Phaser.Game;
@@ -39,13 +40,13 @@ describe("Abilities - Stench", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
-    const abilityAttr = playerPokemon
-      ?.getAbility()
-      .getAttrs(PostAttackApplyBattlerTagAbAttr)[0] as PostAttackApplyBattlerTagAbAttr;
+    const abilityAttr = playerPokemon!
+      .getAbility()
+      .getAttrs<PostAttackApplyBattlerTagAbAttr>(AbAttrFlag.POST_ATTACK_APPLY_BATTLER_TAG)[0];
     vi.spyOn(abilityAttr, "getChance");
     game.move.select(MoveId.TACKLE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    await game.toEndOfTurn();
 
     expect(abilityAttr.getChance).toHaveLastReturnedWith(10);
   });
@@ -54,17 +55,17 @@ describe("Abilities - Stench", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
-    const abilityAttr = playerPokemon
-      ?.getAbility()
-      .getAttrs(PostAttackApplyBattlerTagAbAttr)[0] as PostAttackApplyBattlerTagAbAttr;
+    const abilityAttr = playerPokemon!
+      .getAbility()
+      .getAttrs<PostAttackApplyBattlerTagAbAttr>(AbAttrFlag.POST_ATTACK_APPLY_BATTLER_TAG)[0];
     const headbuttMove = playerPokemon
       ?.getMoveset()
       .find((m) => m?.moveId === MoveId.HEADBUTT)
       ?.getMove();
     vi.spyOn(abilityAttr, "getChance");
     game.move.select(MoveId.HEADBUTT);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    await game.toEndOfTurn();
 
     expect(headbuttMove?.hasAttr(FlinchAttr)).toBe(true);
     expect(abilityAttr.getChance).toHaveLastReturnedWith(0);
@@ -75,9 +76,9 @@ describe("Abilities - Stench", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
-    const abilityAttr = playerPokemon
-      ?.getAbility()
-      .getAttrs(PostAttackApplyBattlerTagAbAttr)[0] as PostAttackApplyBattlerTagAbAttr;
+    const abilityAttr = playerPokemon!
+      .getAbility()
+      .getAttrs<PostAttackApplyBattlerTagAbAttr>(AbAttrFlag.POST_ATTACK_APPLY_BATTLER_TAG)[0];
 
     game.move.select(MoveId.SPLASH);
     await game.forceEnemyMove(MoveId.SUBSTITUTE);
@@ -85,9 +86,9 @@ describe("Abilities - Stench", () => {
     vi.spyOn(abilityAttr, "getChance");
     game.move.select(MoveId.TACKLE);
     await game.forceEnemyMove(MoveId.SPLASH);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to("BerryPhase");
+    await game.toEndOfTurn();
     expect(abilityAttr.getChance).not.toHaveBeenCalled();
   });
 
@@ -98,19 +99,19 @@ describe("Abilities - Stench", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const abilityAttr = playerPokemon
       .getAbility()
-      .getAttrs(PostAttackApplyBattlerTagAbAttr)[0] as PostAttackApplyBattlerTagAbAttr;
+      .getAttrs<PostAttackApplyBattlerTagAbAttr>(AbAttrFlag.POST_ATTACK_APPLY_BATTLER_TAG)[0];
 
     vi.spyOn(abilityAttr, "getChance");
 
     game.move.select(MoveId.TACKLE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    await game.toEndOfTurn();
     expect(abilityAttr.getChance).not.toHaveBeenCalled();
 
     await game.toNextTurn();
     game.move.select(MoveId.MOONGEIST_BEAM);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("BerryPhase");
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    await game.toEndOfTurn();
     expect(abilityAttr.getChance).toHaveLastReturnedWith(10);
   });
 });

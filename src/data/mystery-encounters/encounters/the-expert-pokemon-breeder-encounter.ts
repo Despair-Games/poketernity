@@ -28,7 +28,7 @@ import { EggTier } from "#enums/egg-type";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
-import { modifierTypes } from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
 import { ElementalType } from "#enums/elemental-type";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
@@ -465,7 +465,7 @@ function getPartyConfig(): EnemyPartyConfig {
     ],
   };
 
-  if (globalScene.arena.biomeType === Biome.SPACE) {
+  if (globalScene.arena.isInBiome(Biome.SPACE)) {
     // All 3 members always Cleffa line, but different configs
     baseConfig.pokemonConfigs!.push(
       {
@@ -529,7 +529,7 @@ function getSpeciesFromPool(speciesPool: (Species | BreederSpeciesEvolution)[][]
 }
 
 function calculateEggRewardsForPokemon(pokemon: PlayerPokemon): [number, number] {
-  const bst = pokemon.calculateBaseStats().reduce((a, b) => a + b, 0);
+  const bst = pokemon.getSpeciesForm().getBaseStatTotal();
   // 1 point for every 20 points below 680 BST the pokemon is, (max 18, min 1)
   const pointsFromBst = Math.min(Math.max(Math.floor((680 - bst) / 20), 1), 18);
 
@@ -631,7 +631,7 @@ function onGameOver() {
   encounter.misc.encounterFailed = true;
 
   // Revert BGM
-  globalScene.playBgm(globalScene.arena.bgm);
+  globalScene.audioManager.playBgm(globalScene.arena.bgm);
 
   // Clear any leftover battle phases
   globalScene.clearPhaseQueue();
@@ -640,7 +640,7 @@ function onGameOver() {
   // Return enemy Pokemon
   const pokemon = globalScene.getEnemyPokemon();
   if (pokemon) {
-    globalScene.playSound("se/pb_rel");
+    globalScene.audioManager.playSound("se/pb_rel");
     pokemon.hideInfo();
     pokemon.tint(getPokeballTintColor(pokemon.pokeball), 1, 250, "Sine.easeIn");
     globalScene.tweens.add({

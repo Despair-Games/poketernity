@@ -3,7 +3,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Move } from "#app/data/move";
 import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "../move-conditions";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 
 /**
  * Attribute to set weather of a specified type on the field.
@@ -13,7 +13,7 @@ export class WeatherChangeAttr extends MoveEffectAttr {
   private weatherType: WeatherType;
 
   constructor(weatherType: WeatherType) {
-    super();
+    super(true);
 
     this.weatherType = weatherType;
   }
@@ -23,8 +23,6 @@ export class WeatherChangeAttr extends MoveEffectAttr {
   }
 
   override getCondition(): MoveConditionFunc {
-    return (_user, _target, _move) =>
-      !globalScene.arena.weather
-      || (globalScene.arena.weather.weatherType !== this.weatherType && !globalScene.arena.weather.isImmutable());
+    return (_user, _target, _move) => globalScene.arena.canSetWeather(this.weatherType);
   }
 }
