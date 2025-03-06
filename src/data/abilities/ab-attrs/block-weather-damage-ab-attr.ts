@@ -17,7 +17,7 @@ import { PreWeatherDamageAbAttr } from "./pre-weather-damage-ab-attr";
 +-----------+----------------------------------+
  * ```
  */
-export class BlockWeatherDamageAttr extends PreWeatherDamageAbAttr {
+export class BlockWeatherDamageAbAttr extends PreWeatherDamageAbAttr {
   private readonly weatherTypes: WeatherType[];
 
   constructor(...weatherTypes: WeatherType[]) {

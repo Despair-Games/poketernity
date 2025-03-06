@@ -14,7 +14,7 @@ import { BlockOneHitKOAbAttr } from "#app/data/abilities/ab-attrs/block-one-hit-
 import { BlockRecoilDamageAbAttr } from "#app/data/abilities/ab-attrs/block-recoil-damage-ab-attr";
 import { BlockRedirectAbAttr } from "#app/data/abilities/ab-attrs/block-redirect-ab-attr";
 import { BlockStatusDamageAbAttr } from "#app/data/abilities/ab-attrs/block-status-damage-ab-attr";
-import { BlockWeatherDamageAttr } from "#app/data/abilities/ab-attrs/block-weather-damage-attr";
+import { BlockWeatherDamageAbAttr } from "#app/data/abilities/ab-attrs/block-weather-damage-ab-attr";
 import { BonusCritAbAttr } from "#app/data/abilities/ab-attrs/bonus-crit-ab-attr";
 import { BypassBurnDamageReductionAbAttr } from "#app/data/abilities/ab-attrs/bypass-burn-damage-reduction-ab-attr";
 import { BypassSpeedChanceAbAttr } from "#app/data/abilities/ab-attrs/bypass-speed-chance-ab-attr";
@@ -118,7 +118,7 @@ import { PostSummonUnnamedMessageAbAttr } from "#app/data/abilities/ab-attrs/pos
 import { PostSummonUserFieldRemoveStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/post-summon-user-field-remove-status-effect-ab-attr";
 import { PostSummonWeatherChangeAbAttr } from "#app/data/abilities/ab-attrs/post-summon-weather-change-ab-attr";
 import { PostSummonWeatherSuppressedFormChangeAbAttr } from "#app/data/abilities/ab-attrs/post-summon-weather-suppressed-form-change-ab-attr";
-import { PostTerrainChangeAddBattlerTagAttr } from "#app/data/abilities/ab-attrs/post-terrain-change-add-battler-tag-attr";
+import { PostTerrainChangeAddBattlerTagAbAttr } from "#app/data/abilities/ab-attrs/post-terrain-change-add-battler-tag-ab-attr";
 import { PostTurnFormChangeAbAttr } from "#app/data/abilities/ab-attrs/post-turn-form-change-ab-attr";
 import { PostTurnHurtIfSleepingAbAttr } from "#app/data/abilities/ab-attrs/post-turn-hurt-if-sleeping-ab-attr";
 import { PostTurnLootAbAttr } from "#app/data/abilities/ab-attrs/post-turn-loot-ab-attr";
@@ -126,7 +126,7 @@ import { PostTurnResetStatusAbAttr } from "#app/data/abilities/ab-attrs/post-tur
 import { PostTurnStatusHealAbAttr } from "#app/data/abilities/ab-attrs/post-turn-status-heal-ab-attr";
 import { PostVictoryFormChangeAbAttr } from "#app/data/abilities/ab-attrs/post-victory-form-change-ab-attr";
 import { PostVictoryStatStageChangeAbAttr } from "#app/data/abilities/ab-attrs/post-victory-stat-stage-change-ab-attr";
-import { PostWeatherChangeAddBattlerTagAttr } from "#app/data/abilities/ab-attrs/post-weather-change-add-battler-tag-ab-attr";
+import { PostWeatherChangeAddBattlerTagAbAttr } from "#app/data/abilities/ab-attrs/post-weather-change-add-battler-tag-ab-attr";
 import { PostWeatherChangeFormChangeAbAttr } from "#app/data/abilities/ab-attrs/post-weather-change-form-change-ab-attr";
 import { PostWeatherLapseDamageAbAttr } from "#app/data/abilities/ab-attrs/post-weather-lapse-damage-ab-attr";
 import { PostWeatherLapseHealAbAttr } from "#app/data/abilities/ab-attrs/post-weather-lapse-heal-ab-attr";
@@ -222,7 +222,7 @@ export function initAbilities() {
     new Ability(Abilities.LIMBER, 3).attr(StatusEffectImmunityAbAttr, StatusEffect.PARALYSIS).ignorable(),
     new Ability(Abilities.SAND_VEIL, 3)
       .attr(StatMultiplierAbAttr, Stat.EVA, 1.2)
-      .attr(BlockWeatherDamageAttr, WeatherType.SANDSTORM)
+      .attr(BlockWeatherDamageAbAttr, WeatherType.SANDSTORM)
       .condition(getWeatherCondition(WeatherType.SANDSTORM))
       .ignorable(),
     new Ability(Abilities.STATIC, 3)
@@ -443,7 +443,7 @@ export function initAbilities() {
     new Ability(Abilities.STEADFAST, 4).attr(FlinchStatStageChangeAbAttr, [Stat.SPD], 1),
     new Ability(Abilities.SNOW_CLOAK, 4)
       .attr(StatMultiplierAbAttr, Stat.EVA, 1.2)
-      .attr(BlockWeatherDamageAttr, WeatherType.HAIL)
+      .attr(BlockWeatherDamageAbAttr, WeatherType.HAIL)
       .condition(getWeatherCondition(WeatherType.HAIL, WeatherType.SNOW))
       .ignorable(),
     new Ability(Abilities.GLUTTONY, 4).attr(ReduceBerryUseThresholdAbAttr),
@@ -555,7 +555,7 @@ export function initAbilities() {
       .attr(TypeImmunityStatStageChangeAbAttr, ElementalType.WATER, Stat.SPATK, 1)
       .ignorable(),
     new Ability(Abilities.ICE_BODY, 4)
-      .attr(BlockWeatherDamageAttr, WeatherType.HAIL)
+      .attr(BlockWeatherDamageAbAttr, WeatherType.HAIL)
       .attr(PostWeatherLapseHealAbAttr, 1 / 16, WeatherType.HAIL, WeatherType.SNOW),
     new Ability(Abilities.SOLID_ROCK, 4)
       .attr(
@@ -668,7 +668,7 @@ export function initAbilities() {
       .ignorable(),
     new Ability(Abilities.MOODY, 5).attr(MoodyAbAttr),
     new Ability(Abilities.OVERCOAT, 5)
-      .attr(BlockWeatherDamageAttr, WeatherType.HAIL, WeatherType.SANDSTORM)
+      .attr(BlockWeatherDamageAbAttr, WeatherType.HAIL, WeatherType.SANDSTORM)
       .attr(MoveFlagImmunityAbAttr, MoveFlags.POWDER_MOVE)
       .ignorable(),
     new Ability(Abilities.POISON_TOUCH, 5)
@@ -678,7 +678,7 @@ export function initAbilities() {
     new Ability(Abilities.BIG_PECKS, 5).attr(ProtectStatAbAttr, Stat.DEF).ignorable(),
     new Ability(Abilities.SAND_RUSH, 5)
       .attr(WeatherBasedSpeedDoublerAbAttr, [WeatherType.SANDSTORM])
-      .attr(BlockWeatherDamageAttr, WeatherType.SANDSTORM),
+      .attr(BlockWeatherDamageAbAttr, WeatherType.SANDSTORM),
     new Ability(Abilities.WONDER_SKIN, 5).attr(WonderSkinAbAttr).ignorable(),
     new Ability(Abilities.ANALYTIC, 5).attr(
       MovePowerBoostAbAttr,
@@ -723,7 +723,7 @@ export function initAbilities() {
       .attr(MoveTypePowerBoostAbAttr, ElementalType.ROCK, 1.3)
       .attr(MoveTypePowerBoostAbAttr, ElementalType.GROUND, 1.3)
       .attr(MoveTypePowerBoostAbAttr, ElementalType.STEEL, 1.3)
-      .attr(BlockWeatherDamageAttr, WeatherType.SANDSTORM)
+      .attr(BlockWeatherDamageAbAttr, WeatherType.SANDSTORM)
       .condition(getWeatherCondition(WeatherType.SANDSTORM)),
     new Ability(Abilities.IRON_BARBS, 5).attr(PostDefendContactDamageAbAttr, 8).bypassFaint(),
     new Ability(Abilities.ZEN_MODE, 5)
@@ -1190,7 +1190,7 @@ export function initAbilities() {
         0,
       )
       // When weather changes to HAIL or SNOW while pokemon is fielded, add BattlerTagType.ICE_FACE
-      .attr(PostWeatherChangeAddBattlerTagAttr, BattlerTagType.ICE_FACE, 0, WeatherType.HAIL, WeatherType.SNOW)
+      .attr(PostWeatherChangeAddBattlerTagAbAttr, BattlerTagType.ICE_FACE, 0, WeatherType.HAIL, WeatherType.SNOW)
       .attr(
         FormBlockDamageAbAttr,
         (target, _user, move) => move.category === MoveCategory.PHYSICAL && !!target.getTag(BattlerTagType.ICE_FACE),
@@ -1355,7 +1355,7 @@ export function initAbilities() {
         true,
       )
       .attr(
-        PostWeatherChangeAddBattlerTagAttr,
+        PostWeatherChangeAddBattlerTagAbAttr,
         BattlerTagType.PROTOSYNTHESIS,
         0,
         WeatherType.SUNNY,
@@ -1373,7 +1373,7 @@ export function initAbilities() {
         0,
         true,
       )
-      .attr(PostTerrainChangeAddBattlerTagAttr, BattlerTagType.QUARK_DRIVE, 0, TerrainType.ELECTRIC)
+      .attr(PostTerrainChangeAddBattlerTagAbAttr, BattlerTagType.QUARK_DRIVE, 0, TerrainType.ELECTRIC)
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
       .attr(NoTransformAbilityAbAttr)

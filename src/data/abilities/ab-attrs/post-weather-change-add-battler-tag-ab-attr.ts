@@ -3,7 +3,7 @@ import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { WeatherType } from "#enums/weather-type";
 import { PostWeatherChangeAbAttr } from "./post-weather-change-ab-attr";
 
-export class PostWeatherChangeAddBattlerTagAttr extends PostWeatherChangeAbAttr {
+export class PostWeatherChangeAddBattlerTagAbAttr extends PostWeatherChangeAbAttr {
   private readonly tagType: BattlerTagType;
   private readonly turnCount: number;
   private readonly weatherTypes: WeatherType[];

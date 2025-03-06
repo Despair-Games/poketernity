@@ -12,7 +12,7 @@ import type { AnySound } from "#app/audio-manager";
 import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import type { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 import type { Ability } from "#app/data/abilities/ability";
-import type { AbilityFilterOptions } from "#app/data/ability-filter-options";
+import type { AbilityFilterOptions } from "#app/@types/ability-filter-options";
 import { applyAbAttrs, getAbApplyFunc } from "#app/data/abilities/apply-ab-attrs";
 import { NoCritTag } from "#app/data/arena-tag";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
