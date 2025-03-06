@@ -52,7 +52,7 @@ export class EggHatchData {
       moveset: currStarterDataEntry.moveset,
       eggMoves: currStarterDataEntry.eggMoves,
       candyCount: currStarterDataEntry.candyCount,
-      friendship: currStarterDataEntry.friendship,
+      metaProgressionFriendship: currStarterDataEntry.metaProgressionFriendship,
       abilityAttr: currStarterDataEntry.abilityAttr,
       passiveAttr: currStarterDataEntry.passiveAttr,
       valueReduction: currStarterDataEntry.valueReduction,

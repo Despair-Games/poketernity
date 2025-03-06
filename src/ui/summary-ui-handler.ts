@@ -341,7 +341,8 @@ export default class SummaryUiHandler extends UiHandler {
       this.championRibbon.setVisible(false);
     }
 
-    let currentFriendship = globalScene.gameData.starterData[this.pokemon.species.getRootSpeciesId()].friendship;
+    let currentFriendship =
+      globalScene.gameData.starterData[this.pokemon.species.getRootSpeciesId()].metaProgressionFriendship;
     if (!currentFriendship || currentFriendship === undefined) {
       currentFriendship = 0;
     }

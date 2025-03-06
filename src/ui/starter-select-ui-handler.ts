@@ -2995,7 +2995,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
   }
 
   getFriendship(speciesId: number) {
-    let currentFriendship = globalScene.gameData.starterData[speciesId].friendship;
+    let currentFriendship = globalScene.gameData.starterData[speciesId].metaProgressionFriendship;
     if (!currentFriendship || currentFriendship === undefined) {
       currentFriendship = 0;
     }
