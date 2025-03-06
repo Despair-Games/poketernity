@@ -130,6 +130,37 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
     fontStyle: FontStyle.DEFAULT_FONT_72PX,
   },
 
+  [TextStyle.ARENA_FLYOUT_HEADER]: {
+    color: {
+      [UiTheme.DARK]: TextColor.WHITE_DARK_PURPLE_SHADOW,
+      [UiTheme.LIGHT]: TextColor.DARK_GREY_LIGHT_SHADOW,
+    },
+    fontStyle: FontStyle.DEFAULT_FONT_54PX,
+  },
+  [TextStyle.ARENA_FLYOUT_PLAYER_HEADER]: {
+    color: TextColor.BLUE_DARK_SHADOW,
+    fontStyle: FontStyle.DEFAULT_FONT_54PX,
+  },
+  [TextStyle.ARENA_FLYOUT_NEUTRAL_HEADER]: {
+    color: TextColor.GREEN_DARK_SHADOW,
+    fontStyle: FontStyle.DEFAULT_FONT_54PX,
+  },
+  [TextStyle.ARENA_FLYOUT_ENEMY_HEADER]: {
+    color: TextColor.RED_LIGHT_ORANGE_SHADOW,
+    fontStyle: FontStyle.DEFAULT_FONT_54PX,
+  },
+  [TextStyle.ARENA_FLYOUT_CONTENT]: {
+    color: {
+      [UiTheme.DARK]: TextColor.WHITE_DARK_PURPLE_SHADOW,
+      [UiTheme.LIGHT]: TextColor.DARK_GREY_LIGHT_SHADOW,
+    },
+    fontStyle: FontStyle.DEFAULT_FONT_48PX,
+  },
+
+  [TextStyle.BATTLE_FLYOUT_MOVE_INFO]: {
+    color: TextColor.WHITE_DARK_PURPLE_SHADOW,
+    fontStyle: FontStyle.DEFAULT_FONT_44PX,
+  },
   [TextStyle.BATTLE_INFO]: {
     color: TextColor.WHITE_DARK_PURPLE_SHADOW,
     fontStyle: FontStyle.DEFAULT_FONT_72PX_MEDIUM_SHADOW,

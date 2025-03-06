@@ -32,7 +32,7 @@ import { initMoves } from "#app/data/init-moves";
 import { initModifierTypes } from "#app/modifier/init-modifier-types";
 import { initModifierPools } from "#app/modifier/init-modifier-pools";
 import { timedEventManager } from "#app/timed-event-manager";
-import { DEFAULT_LANGUAGE_KEY } from "./system/settings/supported-languages";
+import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";
