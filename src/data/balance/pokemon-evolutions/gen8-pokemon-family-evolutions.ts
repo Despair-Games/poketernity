@@ -45,7 +45,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
     new SpeciesEvolution(Species.FLAPPLE, 1, EvolutionItem.TART_APPLE, null, GENERIC_ITEM_EVO_LEVEL),
     new SpeciesEvolution(Species.APPLETUN, 1, EvolutionItem.SWEET_APPLE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
-  /** Dipplin is from Gen 9 */
+  /** Dipplin is from Gen 9, has a custom implementation to have dragon cheer as a remember move */
   [Species.DIPPLIN]: [
     new SpeciesEvolution(
       Species.HYDRAPPLE,
