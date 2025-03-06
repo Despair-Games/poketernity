@@ -1,6 +1,7 @@
 import {
   BRAMBLEGHAST_EVO_LEVEL,
   GENERIC_ITEM_EVO_LEVEL,
+  GHOLDENGO_EVO_LEVEL,
   PAWMOT_EVO_LEVEL,
   RABSCA_EVO_LEVEL,
 } from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
@@ -101,7 +102,7 @@ export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.HOUNDSTONE,
       30,
       null,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
+      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
   ],
   [Species.CETODDLE]: [new SpeciesEvolution(Species.CETITAN, 1, EvolutionItem.ICE_STONE, null, GENERIC_ITEM_EVO_LEVEL)],
@@ -126,7 +127,7 @@ export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
             ).length
           > 9,
       ),
-      GENERIC_ITEM_EVO_LEVEL,
+      GHOLDENGO_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
       Species.GHOLDENGO,
@@ -143,7 +144,7 @@ export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
             ).length
           > 9,
       ),
-      GENERIC_ITEM_EVO_LEVEL,
+      GHOLDENGO_EVO_LEVEL,
     ),
   ],
   [Species.POLTCHAGEIST]: [

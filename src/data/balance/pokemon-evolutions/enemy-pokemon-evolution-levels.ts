@@ -24,11 +24,8 @@ export const ADVANCED_ITEM_EVO_LEVEL = 45;
  */
 export const BABY_HAPPINESS_EVO_LEVEL = 10;
 export const HAPPINESS_EVO_LEVEL = 25;
-/**
- * Default level at which evolutions that require a move will be applied for opponent Pokemon.
- * Note: filler value for now, meant to be broken down for individual Pokemon
- */
-export const KNOW_MOVE_EVO_LEVEL = 36;
+/** Enemy evolve level for Slowking and Galar Slowbro and Galar Slowking */
+export const SLOWPOKE_FAMILY_EVO_LEVEL = 37;
 /** Learns Rage Fist at level 35 in gen 9 */
 export const ANNIHILAPE_EVO_LEVEL = 35;
 /** Learns Ancient Power at level 24 in gen 8 */
@@ -57,8 +54,14 @@ export const BASCULEGION_EVO_LEVEL = 44;
 export const KINGAMBIT_EVO_LEVEL = 61;
 /** Learns stomp at level 28 in gen 9 */
 export const TSAREENA_EVO_LEVEL = 28;
+/** Poipole learns dragon pulse at level 1 so enemy evolve level is changed */
+export const NAGANADEL_EVO_LEVEL = ADVANCED_ITEM_EVO_LEVEL;
 /** Learns taunt at level 35 in gen 8 */
 export const GRAPPLOCT_EVO_LEVEL = 35;
+/** Dipplin learns dragon cheer at level 1 (custom implementation)
+ * and should have a different enemy evolve level than Applin
+ */
+export const HYDRAPPLE_EVO_LEVEL = ADVANCED_ITEM_EVO_LEVEL;
 /** Completely custom implementation.
  * Using 25 for air cutter, the first high crit move
  * that Farfetch'd learns. Also learns slash at 40
@@ -73,3 +76,5 @@ export const PAWMOT_EVO_LEVEL = 25;
 export const BRAMBLEGHAST_EVO_LEVEL = 20;
 /** Chosen because that's when Rabsca learns psybeam */
 export const RABSCA_EVO_LEVEL = 15;
+/** Gholdengo is strong and has a complex custom evolution method */
+export const GHOLDENGO_EVO_LEVEL = ADVANCED_ITEM_EVO_LEVEL;

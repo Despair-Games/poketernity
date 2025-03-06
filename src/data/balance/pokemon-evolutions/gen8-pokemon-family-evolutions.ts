@@ -16,6 +16,7 @@ import {
   HAPPINESS_EVO_LEVEL,
   OVERQWIL_EVO_LEVEL,
   SIRFETCHD_EVO_LEVEL,
+  SLOWPOKE_FAMILY_EVO_LEVEL,
 } from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
 import { MoveId } from "#enums/move-id";
 import { Nature } from "#enums/nature";
@@ -45,7 +46,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
     new SpeciesEvolution(Species.FLAPPLE, 1, EvolutionItem.TART_APPLE, null, GENERIC_ITEM_EVO_LEVEL),
     new SpeciesEvolution(Species.APPLETUN, 1, EvolutionItem.SWEET_APPLE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
-  /** Dipplin is from Gen 9, has a custom implementation to have dragon cheer as a remember move */
+  /** Dipplin is from Gen 9 */
   [Species.DIPPLIN]: [
     new SpeciesEvolution(
       Species.HYDRAPPLE,
@@ -126,7 +127,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "vanilla-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition((_p) =>
+      new SpeciesEvolutionCondition(() =>
         globalScene.arena.isInBiome([Biome.TOWN, Biome.PLAINS, Biome.GRASS, Biome.TALL_GRASS, Biome.METROPOLIS]),
       ),
       GENERIC_ITEM_EVO_LEVEL,
@@ -137,7 +138,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "ruby-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition((_p) =>
+      new SpeciesEvolutionCondition(() =>
         globalScene.arena.isInBiome([Biome.BADLANDS, Biome.VOLCANO, Biome.GRAVEYARD, Biome.FACTORY, Biome.SLUM]),
       ),
       GENERIC_ITEM_EVO_LEVEL,
@@ -148,7 +149,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "matcha-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition((_p) =>
+      new SpeciesEvolutionCondition(() =>
         globalScene.arena.isInBiome([Biome.FOREST, Biome.SWAMP, Biome.MEADOW, Biome.JUNGLE]),
       ),
       GENERIC_ITEM_EVO_LEVEL,
@@ -159,7 +160,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "mint-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition((_p) =>
+      new SpeciesEvolutionCondition(() =>
         globalScene.arena.isInBiome([Biome.SEA, Biome.BEACH, Biome.LAKE, Biome.SEABED]),
       ),
       GENERIC_ITEM_EVO_LEVEL,
@@ -170,7 +171,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "lemon-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition((_p) =>
+      new SpeciesEvolutionCondition(() =>
         globalScene.arena.isInBiome([
           Biome.DESERT,
           Biome.POWER_PLANT,
@@ -187,7 +188,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "salted-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition((_p) =>
+      new SpeciesEvolutionCondition(() =>
         globalScene.arena.isInBiome([Biome.MOUNTAIN, Biome.CAVE, Biome.ICE_CAVE, Biome.FAIRY_CAVE, Biome.SNOWY_FOREST]),
       ),
       GENERIC_ITEM_EVO_LEVEL,
@@ -198,7 +199,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "ruby-swirl",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isInBiome([Biome.WASTELAND, Biome.LABORATORY])),
+      new SpeciesEvolutionCondition(() => globalScene.arena.isInBiome([Biome.WASTELAND, Biome.LABORATORY])),
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -207,7 +208,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "caramel-swirl",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isInBiome([Biome.TEMPLE, Biome.ISLAND])),
+      new SpeciesEvolutionCondition(() => globalScene.arena.isInBiome([Biome.TEMPLE, Biome.ISLAND])),
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -216,7 +217,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "rainbow-swirl",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isInBiome([Biome.SPACE, Biome.ABYSS, Biome.END])),
+      new SpeciesEvolutionCondition(() => globalScene.arena.isInBiome([Biome.SPACE, Biome.ABYSS, Biome.END])),
       GENERIC_ITEM_EVO_LEVEL,
     ),
   ],
@@ -225,7 +226,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.FROSMOTH,
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(90, (_p) =>
+      new SpeciesFriendshipEvolutionCondition(90, () =>
         globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT]),
       ),
       HAPPINESS_EVO_LEVEL,
@@ -264,8 +265,8 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.GALAR_PONYTA]: [new SpeciesEvolution(Species.GALAR_RAPIDASH, 40, null, null)],
   /** Same enemy evolve levels as Slowbro evolve level */
   [Species.GALAR_SLOWPOKE]: [
-    new SpeciesEvolution(Species.GALAR_SLOWBRO, 1, EvolutionItem.GALARICA_CUFF, null, 37),
-    new SpeciesEvolution(Species.GALAR_SLOWKING, 1, EvolutionItem.GALARICA_WREATH, null, 37),
+    new SpeciesEvolution(Species.GALAR_SLOWBRO, 1, EvolutionItem.GALARICA_CUFF, null, SLOWPOKE_FAMILY_EVO_LEVEL),
+    new SpeciesEvolution(Species.GALAR_SLOWKING, 1, EvolutionItem.GALARICA_WREATH, null, SLOWPOKE_FAMILY_EVO_LEVEL),
   ],
   /** Custom: level for evolving */
   [Species.GALAR_FARFETCHD]: [new SpeciesEvolution(Species.SIRFETCHD, SIRFETCHD_EVO_LEVEL, null, null)],
@@ -276,7 +277,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.OBSTAGOON,
       35,
       null,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
+      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
   ],
   [Species.GALAR_DARUMAKA]: [
@@ -308,7 +309,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       1,
       EvolutionItem.RAZOR_CLAW,
       new SpeciesEvolutionCondition(
-        (_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]) /* Razor claw at day */,
+        () => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]) /* Razor claw at day */,
       ),
       GENERIC_ITEM_EVO_LEVEL,
     ),
