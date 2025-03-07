@@ -44,15 +44,6 @@ export class Achievement {
     this.secret = true;
   }
 }
-
-export class CatchAchievement extends Achievement {
-  constructor(id: string, iconKey: string, conditionFunc: ConditionFn) {
-    super(id, iconKey);
-    this.category = AchvCategory.CATCH;
-    this.conditionFunc = conditionFunc;
-  }
-}
-
 export class ClassicCompletionAchievement extends Achievement {
   constructor(id: string, iconKey: string, conditionFunc: ConditionFn) {
     super(id, iconKey, conditionFunc);
@@ -170,16 +161,16 @@ export const newAchvs = {
     },
     AchvCategory.FRIENDSHIP,
   ),
-  CATCH_MYTHICAL: new CatchAchievement("CATCH_MYTHICAL", "strange_ball", (pokemon: Pokemon) => {
+  CATCH_MYTHICAL: new Achievement("CATCH_MYTHICAL", "strange_ball", (pokemon: Pokemon) => {
     return pokemon.species.isMythical();
   }),
-  CATCH_SUB_LEGENDARY: new CatchAchievement("CATCH_SUB_LEGENDARY", "rb", (pokemon: Pokemon) => {
+  CATCH_SUB_LEGENDARY: new Achievement("CATCH_SUB_LEGENDARY", "rb", (pokemon: Pokemon) => {
     return pokemon.species.isLegendLike();
   }),
-  CATCH_LEGENDARY: new CatchAchievement("CATCH_LEGENDARY", "mb", (pokemon: Pokemon) => {
+  CATCH_LEGENDARY: new Achievement("CATCH_LEGENDARY", "mb", (pokemon: Pokemon) => {
     return pokemon.species.isLegendary();
   }),
-  HIDDEN_ABILITY: new CatchAchievement("HIDDEN_ABILITY", "ability_charm", (pokemon: Pokemon) => {
+  HIDDEN_ABILITY: new Achievement("HIDDEN_ABILITY", "ability_charm", (pokemon: Pokemon) => {
     return !!pokemon.species.abilityHidden && pokemon.abilityIndex === pokemon.species.getAbilityCount() - 1;
   }),
   _10_RIBBONS: new RibbonAchievement("10_RIBBONS", "bronze_ribbon", 10),

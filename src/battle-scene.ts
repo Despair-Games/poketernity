@@ -2934,6 +2934,11 @@ export default class BattleScene extends SceneBase {
     return true;
   }
 
+  /**
+   * Function that checks if any achievements based on a specific context can be unlocked
+   * @param achievementCategory the in-game context of the achievement's unlock condition
+   * @param data relevant data needed for the game to determine if an achievement has been unlocked
+   */
   validateAchievements(achievementCategory: AchvCategory.PARTY, data: Pokemon[]);
   validateAchievements(achievementCategory: AchvCategory.ENCOUNTER, data: Pokemon[]);
   validateAchievements(achievementCategory: AchvCategory.CATCH, data: Pokemon);
@@ -2944,7 +2949,6 @@ export default class BattleScene extends SceneBase {
   validateAchievements(achievementCategory: AchvCategory.FRIENDSHIP, data: number);
   validateAchievements(achievementCategory: AchvCategory.POKEDEX, data: DexEntry);
   validateAchievements(achievementCategory: AchvCategory.RIBBON_COUNT, data: number);
-
   validateAchievements(achievementCategory: AchvCategory, data?: any) {
     this.scene.launch("Achievements_Manager", {
       context: achievementCategory,

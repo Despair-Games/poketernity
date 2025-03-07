@@ -1739,6 +1739,10 @@ export class GameData {
     return ++this.starterData[speciesIdToIncrement].classicWinCount;
   }
 
+  /**
+   * Updates the player's data with newly unlocked achievements
+   * @param achvs the list of unlocked achievements
+   */
   addUnlockedAchievements(achvs: string[]): void {
     achvs.forEach((aName) => {
       this.achvUnlocks[newAchvs[aName]] = new Date().getTime();
