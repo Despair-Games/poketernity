@@ -1244,6 +1244,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   abstract getBossSegments(): number;
 
+  abstract getClearedBossSegmentIndex(): number;
+
   getMoveset(baseOnly?: boolean): PokemonMove[] {
     const ret = !baseOnly && this.summonData?.moveset ? this.summonData.moveset : this.moveset;
 
@@ -2851,15 +2853,27 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     /**
-     * If the attack is a one-hit KO move, return a result equal to the Pokemon's HP bar (or one segment if a boss)
+     * If the attack is a one-hit KO move, return a result equal to the Pokemon's HP bar
+     * Or to the next unbroken health segment if the target is a boss
      */
     const isOneHitKo = new BooleanHolder(false);
     applyMoveAttrs(OneHitKOAttr, source, this, move, isOneHitKo);
+
+    let ohkoDamage = 0;
+    if (!this.isBoss()) {
+      ohkoDamage = this.hp;
+    } else {
+      // TODO: Potentially can cause a softlock against the pkr Eternatus boss on floor 200
+      const segmentIndex = this.getClearedBossSegmentIndex();
+      const enemyHpAfter = (this.getMaxHp() * (segmentIndex - 1)) / this.getBossSegments();
+      ohkoDamage = toDmgValue(this.hp - enemyHpAfter);
+    }
+    const ohkoResult = ohkoDamage >= this.hp ? HitResult.ONE_HIT_KO : HitResult.EFFECTIVE;
     if (isOneHitKo.value) {
       return {
         cancelled: false,
-        result: HitResult.ONE_HIT_KO,
-        damage: this.isBoss() ? 1 + Math.floor(this.getMaxHp() / this.getBossSegments()) : this.hp,
+        result: ohkoResult,
+        damage: ohkoDamage,
       };
     }
 
@@ -4105,6 +4119,10 @@ export class PlayerPokemon extends Pokemon {
     return 0;
   }
 
+  getClearedBossSegmentIndex(): number {
+    return 0;
+  }
+
   getFieldIndex(): number {
     return globalScene.getPlayerField().indexOf(this);
   }
@@ -4915,17 +4933,8 @@ export class EnemyPokemon extends Pokemon {
     return this.bossSegments;
   }
 
-  getBossSegmentIndex(): number {
-    const segments = (this as EnemyPokemon).bossSegments;
-    const segmentSize = this.getMaxHp() / segments;
-    for (let s = segments - 1; s > 0; s--) {
-      const hpThreshold = Math.round(segmentSize * s);
-      if (this.hp > hpThreshold) {
-        return s;
-      }
-    }
-
-    return 0;
+  getClearedBossSegmentIndex(): number {
+    return this.isBoss() ? this.bossSegmentIndex + 1 : 0;
   }
 
   override damage(
