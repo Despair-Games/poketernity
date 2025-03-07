@@ -161,18 +161,38 @@ export const newAchvs = {
     },
     AchvCategory.FRIENDSHIP,
   ),
-  CATCH_MYTHICAL: new Achievement("CATCH_MYTHICAL", "strange_ball", (pokemon: Pokemon) => {
-    return pokemon.species.isMythical();
-  }),
-  CATCH_SUB_LEGENDARY: new Achievement("CATCH_SUB_LEGENDARY", "rb", (pokemon: Pokemon) => {
-    return pokemon.species.isLegendLike();
-  }),
-  CATCH_LEGENDARY: new Achievement("CATCH_LEGENDARY", "mb", (pokemon: Pokemon) => {
-    return pokemon.species.isLegendary();
-  }),
-  HIDDEN_ABILITY: new Achievement("HIDDEN_ABILITY", "ability_charm", (pokemon: Pokemon) => {
-    return !!pokemon.species.abilityHidden && pokemon.abilityIndex === pokemon.species.getAbilityCount() - 1;
-  }),
+  CATCH_MYTHICAL: new Achievement(
+    "CATCH_MYTHICAL",
+    "strange_ball",
+    (pokemon: Pokemon) => {
+      return pokemon.species.isMythical();
+    },
+    AchvCategory.CATCH,
+  ),
+  CATCH_SUB_LEGENDARY: new Achievement(
+    "CATCH_SUB_LEGENDARY",
+    "rb",
+    (pokemon: Pokemon) => {
+      return pokemon.species.isLegendLike();
+    },
+    AchvCategory.CATCH,
+  ),
+  CATCH_LEGENDARY: new Achievement(
+    "CATCH_LEGENDARY",
+    "mb",
+    (pokemon: Pokemon) => {
+      return pokemon.species.isLegendary();
+    },
+    AchvCategory.CATCH,
+  ),
+  HIDDEN_ABILITY: new Achievement(
+    "HIDDEN_ABILITY",
+    "ability_charm",
+    (pokemon: Pokemon) => {
+      return !!pokemon.species.abilityHidden && pokemon.abilityIndex === pokemon.species.getAbilityCount() - 1;
+    },
+    AchvCategory.CATCH,
+  ),
   _10_RIBBONS: new RibbonAchievement("10_RIBBONS", "bronze_ribbon", 10),
   _25_RIBBONS: new RibbonAchievement("25_RIBBONS", "great_ribbon", 25),
   _50_RIBBONS: new RibbonAchievement("50_RIBBONS", "ultra_ribbon", 50),
