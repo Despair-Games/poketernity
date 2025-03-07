@@ -31,7 +31,7 @@ export class OneHitKOAttr extends MoveAttr {
     return (user, target, _move) => {
       const cancelled = new BooleanHolder(false);
       applyAbAttrs(AbAttrFlag.BLOCK_ONE_HIT_KO, target, false, cancelled);
-      return !cancelled.value && user.level >= target.level && !target.isMax();
+      return !cancelled.value && user.level >= target.level && !target.isMax(false);
     };
   }
 }
