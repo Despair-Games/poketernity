@@ -48,7 +48,7 @@ describe("Abilities - Anger Point", () => {
     const pokemon = game.scene.getPlayerPokemon();
 
     game.move.select(MoveId.SUBSTITUTE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toEndOfTurn();
 
     expect(pokemon?.getStatStage(Stat.ATK)).toBe(0);

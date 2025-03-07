@@ -6,7 +6,7 @@ import { speciesStarterCosts } from "#app/data/balance/starters";
 import { VariantTier } from "#enums/variant-tier";
 import { randInt, randomString, randSeedInt, getIvsFromId } from "#app/utils";
 import Overrides from "#app/overrides";
-import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import i18next from "i18next";
 import { EggTier } from "#enums/egg-type";
@@ -449,7 +449,7 @@ export class Egg {
       .map((s) => parseInt(s) as Species)
       .filter(
         (s) =>
-          !pokemonPrevolutions.hasOwnProperty(s)
+          !pokemonPreEvolutions.hasOwnProperty(s)
           && getPokemonSpecies(s).isObtainable()
           && ignoredSpecies.indexOf(s) === -1,
       );

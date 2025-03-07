@@ -1,4 +1,4 @@
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
 import { getBerryEffectFunc, getBerryPredicate } from "#app/data/berry";
 import { getLevelTotalExp } from "#app/data/exp";
 import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
@@ -12,9 +12,8 @@ import { EvolutionPhase } from "#app/phases/evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { LearnMoveType } from "#enums/learn-move-type";
 import { LevelUpPhase } from "#app/phases/level-up-phase";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achievements";
 import type { VoucherType } from "#enums/voucher-type";
-import { BattleCommand } from "#enums/battle-command";
 import { addTextObject } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { BooleanHolder, hslToHex, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
@@ -46,6 +45,7 @@ import { CommonColor, ShadowColor } from "#enums/color";
 import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 const iconOverflowIndex = 24;
@@ -452,7 +452,7 @@ export abstract class LapsingPersistentModifier extends PersistentModifier {
         const modifierInstance = modifier as LapsingPersistentModifier;
         if (modifierInstance.getBattleCount() < modifierInstance.getMaxBattles()) {
           modifierInstance.resetBattleCount();
-          globalScene.playSound("se/restore");
+          globalScene.audioManager.playSound("se/restore");
           return true;
         }
         // should never get here
@@ -1670,29 +1670,15 @@ export class BypassSpeedChanceModifier extends PokemonHeldItemModifier {
   }
 
   /**
-   * Checks if {@linkcode BypassSpeedChanceModifier} should be applied
-   * @param pokemon the {@linkcode Pokemon} that holds the item
-   * @param doBypassSpeed {@linkcode BooleanHolder} that is `true` if speed should be bypassed
-   * @returns `true` if {@linkcode BypassSpeedChanceModifier} should be applied
-   */
-  override shouldApply(pokemon?: Pokemon, doBypassSpeed?: BooleanHolder): boolean {
-    return super.shouldApply(pokemon, doBypassSpeed) && !!doBypassSpeed;
-  }
-
-  /**
    * Applies {@linkcode BypassSpeedChanceModifier}
    * @param pokemon the {@linkcode Pokemon} that holds the item
-   * @param doBypassSpeed {@linkcode BooleanHolder} that is `true` if speed should be bypassed
    * @returns `true` if {@linkcode BypassSpeedChanceModifier} has been applied
    */
-  override apply(pokemon: Pokemon, doBypassSpeed: BooleanHolder): boolean {
-    if (!doBypassSpeed.value && pokemon.randSeedInt(10) < this.getStackCount()) {
-      doBypassSpeed.value = true;
-      const isCommandFight =
-        globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()]?.command === BattleCommand.FIGHT;
+  override apply(pokemon: Pokemon): boolean {
+    if (pokemon.randSeedInt(10) < this.getStackCount() && pokemon.addTag(BattlerTagType.BYPASS_SPEED)) {
       const hasQuickClaw = this.type.isPokemonHeldItemModifierType() && this.type.id === "QUICK_CLAW";
 
-      if (isCommandFight && hasQuickClaw) {
+      if (hasQuickClaw) {
         globalScene.queueMessage(
           i18next.t("modifier:bypassSpeedChanceApply", {
             pokemonName: getPokemonNameWithAffix(pokemon),
@@ -3461,7 +3447,7 @@ export class TempExtraModifierModifier extends LapsingPersistentModifier {
         const newBattleCount = this.getMaxBattles() + modifierInstance.getBattleCount();
 
         modifierInstance.setNewBattleCount(newBattleCount);
-        globalScene.playSound("se/restore");
+        globalScene.audioManager.playSound("se/restore");
         return true;
       }
     }

@@ -45,7 +45,7 @@ describe("Abilities - Stench", () => {
       .getAttrs<PostAttackApplyBattlerTagAbAttr>(AbAttrFlag.POST_ATTACK_APPLY_BATTLER_TAG)[0];
     vi.spyOn(abilityAttr, "getChance");
     game.move.select(MoveId.TACKLE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toEndOfTurn();
 
     expect(abilityAttr.getChance).toHaveLastReturnedWith(10);
@@ -64,7 +64,7 @@ describe("Abilities - Stench", () => {
       ?.getMove();
     vi.spyOn(abilityAttr, "getChance");
     game.move.select(MoveId.HEADBUTT);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toEndOfTurn();
 
     expect(headbuttMove?.hasAttr(FlinchAttr)).toBe(true);
@@ -86,7 +86,7 @@ describe("Abilities - Stench", () => {
     vi.spyOn(abilityAttr, "getChance");
     game.move.select(MoveId.TACKLE);
     await game.forceEnemyMove(MoveId.SPLASH);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.toEndOfTurn();
     expect(abilityAttr.getChance).not.toHaveBeenCalled();
@@ -104,13 +104,13 @@ describe("Abilities - Stench", () => {
     vi.spyOn(abilityAttr, "getChance");
 
     game.move.select(MoveId.TACKLE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toEndOfTurn();
     expect(abilityAttr.getChance).not.toHaveBeenCalled();
 
     await game.toNextTurn();
     game.move.select(MoveId.MOONGEIST_BEAM);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toEndOfTurn();
     expect(abilityAttr.getChance).toHaveLastReturnedWith(10);
   });

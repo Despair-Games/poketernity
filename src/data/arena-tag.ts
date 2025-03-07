@@ -29,6 +29,7 @@ import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { CommonBattleAnim } from "./battle-anims/common-battle-anim";
 import { type SkyDropTag } from "./battler-tags";
+import { SCREEN_DOUBLES_DMG_FACTOR, SCREEN_SINGLES_DMG_FACTOR } from "#app/constants";
 
 export abstract class ArenaTag {
   constructor(
@@ -215,7 +216,7 @@ export abstract class WeakenMoveScreenTag extends ArenaTag {
       if (bypassed.value) {
         return false;
       }
-      damageMultiplier.value = globalScene.currentBattle.double ? 2732 / 4096 : 0.5;
+      damageMultiplier.value = globalScene.currentBattle.double ? SCREEN_DOUBLES_DMG_FACTOR : SCREEN_SINGLES_DMG_FACTOR;
       return true;
     }
     return false;
@@ -1209,69 +1210,6 @@ class NoneTag extends ArenaTag {
     super(ArenaTagType.NONE, 0);
   }
 }
-/**
- * This arena tag facilitates the application of the move Imprison.
- * Imprison remains in effect as long as the source Pokemon is active and present on the field.
- * Imprison will apply to any opposing Pokemon that switch onto the field as well.
- */
-class ImprisonTag extends EntryHazardTag {
-  constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.IMPRISON, MoveId.IMPRISON, sourceId, side, 1);
-  }
-
-  /**
-   * This function applies the effects of Imprison to the opposing Pokemon already present on the field.
-   * @param arena
-   */
-  override onAdd() {
-    const source = this.getSourcePokemon();
-    if (source) {
-      const party = this.getAffectedPokemon();
-      party?.forEach((p: Pokemon) => {
-        if (p.isAllowedInBattle()) {
-          p.addTag(BattlerTagType.IMPRISON, 1, MoveId.IMPRISON, this.sourceId);
-        }
-      });
-      globalScene.queueMessage(
-        i18next.t("battlerTags:imprisonOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(source) }),
-      );
-    }
-  }
-
-  /**
-   * Checks if the source Pokemon is still active on the field
-   * @param _arena
-   * @returns `true` if the source of the tag is still active on the field | `false` if not
-   */
-  override lapse(): boolean {
-    const source = this.getSourcePokemon();
-    return source ? source.isActive(true) : false;
-  }
-
-  /**
-   * This applies the effects of Imprison to any opposing Pokemon that switch into the field while the source Pokemon is still active
-   * @param pokemon - the {@linkcode Pokemon} Imprison is applied to
-   * @returns `true`
-   */
-  override activateTrap(pokemon: Pokemon): boolean {
-    const source = this.getSourcePokemon();
-    if (source && source.isActive(true) && pokemon.isAllowedInBattle()) {
-      pokemon.addTag(BattlerTagType.IMPRISON, 1, MoveId.IMPRISON, this.sourceId);
-    }
-    return true;
-  }
-
-  /**
-   * When the arena tag is removed, it also attempts to remove any related Battler Tags if they haven't already been removed from the affected Pokemon
-   * @param arena
-   */
-  override onRemove(): void {
-    const party = this.getAffectedPokemon();
-    party?.forEach((p: Pokemon) => {
-      p.removeTag(BattlerTagType.IMPRISON);
-    });
-  }
-}
 
 /**
  * Arena Tag implementing the "sea of fire" effect from the combination
@@ -1295,7 +1233,7 @@ class FireGrassPledgeTag extends ArenaTag {
       this.side === ArenaTagSide.PLAYER ? globalScene.getPlayerField() : globalScene.getEnemyField();
 
     field
-      .filter((pokemon) => !pokemon.isOfType(ElementalType.FIRE) && !pokemon.switchOutStatus)
+      .filter((pokemon) => pokemon.isActive(true) && !pokemon.isOfType(ElementalType.FIRE) && !pokemon.switchOutStatus)
       .forEach((pokemon) => {
         const cancelled = new BooleanHolder(false);
         applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
@@ -1410,7 +1348,7 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
       this.side === ArenaTagSide.PLAYER ? globalScene.getPlayerField() : globalScene.getEnemyField();
 
     field
-      .filter((pokemon) => !pokemon.isOfType(this.immuneType) && !pokemon.switchOutStatus)
+      .filter((pokemon) => pokemon.isActive(true) && !pokemon.isOfType(this.immuneType) && !pokemon.switchOutStatus)
       .forEach((pokemon) => {
         const cancelled = new BooleanHolder(false);
         applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
@@ -1506,8 +1444,6 @@ export function getArenaTag(
       return new HappyHourTag(sourceId, side);
     case ArenaTagType.SAFEGUARD:
       return new SafeguardTag(turnCount, sourceId, side);
-    case ArenaTagType.IMPRISON:
-      return new ImprisonTag(sourceId, side);
     case ArenaTagType.FIRE_GRASS_PLEDGE:
       return new FireGrassPledgeTag(sourceId, side);
     case ArenaTagType.WATER_FIRE_PLEDGE:

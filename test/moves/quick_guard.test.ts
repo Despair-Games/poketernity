@@ -45,7 +45,7 @@ describe("Moves - Quick Guard", () => {
     game.move.select(MoveId.QUICK_GUARD);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     playerPokemon.forEach((p) => expect(p.hp).toBe(p.getMaxHp()));
   });
@@ -61,7 +61,7 @@ describe("Moves - Quick Guard", () => {
     game.move.select(MoveId.QUICK_GUARD);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     playerPokemon.forEach((p) => expect(p.getStatStage(Stat.ATK)).toBe(0));
   });
@@ -77,7 +77,7 @@ describe("Moves - Quick Guard", () => {
     game.move.select(MoveId.QUICK_GUARD);
     game.move.select(MoveId.FOLLOW_ME, 1);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     playerPokemon.forEach((p) => expect(p.hp).toBe(p.getMaxHp()));
     enemyPokemon.forEach((p) => expect(p.turnData.hitCount).toBe(1));
@@ -94,9 +94,9 @@ describe("Moves - Quick Guard", () => {
 
     game.move.select(MoveId.QUICK_GUARD);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
     expect(playerPokemon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);

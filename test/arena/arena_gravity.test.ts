@@ -145,7 +145,7 @@ describe("Arena - Gravity", () => {
     expect(snorlax.getTag(BattlerTagType.FLYING)).toBeDefined();
 
     game.move.select(MoveId.GRAVITY);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEffectPhase");
     expect(snorlax.getTag(BattlerTagType.INTERRUPTED)).toBeDefined();

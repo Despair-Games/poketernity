@@ -221,29 +221,38 @@ export const gymLeaderTrainerConfigs: TrainerConfigs = {
     .setName("Raihan")
     .initForGymLeader(signatureSpecies["RAIHAN"], true, ElementalType.DRAGON)
     .setBattleBgm("battle_galar_gym"),
-  [TrainerType.KATY]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["KATY"], false, ElementalType.BUG)
-    .setBattleBgm("battle_paldea_gym"),
-  [TrainerType.BRASSIUS]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["BRASSIUS"], true, ElementalType.GRASS)
-    .setBattleBgm("battle_paldea_gym"),
-  [TrainerType.IONO]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["IONO"], false, ElementalType.ELECTRIC)
-    .setBattleBgm("battle_paldea_gym"),
-  [TrainerType.KOFU]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["KOFU"], true, ElementalType.WATER)
-    .setBattleBgm("battle_paldea_gym"),
+  [TrainerType.KATY]: new TrainerConfig(++t).initForPaldeaGymLeader(signatureSpecies["KATY"], false, ElementalType.BUG),
+  [TrainerType.BRASSIUS]: new TrainerConfig(++t).initForPaldeaGymLeader(
+    signatureSpecies["BRASSIUS"],
+    true,
+    ElementalType.GRASS,
+  ),
+  [TrainerType.IONO]: new TrainerConfig(++t).initForPaldeaGymLeader(
+    signatureSpecies["IONO"],
+    false,
+    ElementalType.ELECTRIC,
+  ),
+  [TrainerType.KOFU]: new TrainerConfig(++t).initForPaldeaGymLeader(
+    signatureSpecies["KOFU"],
+    true,
+    ElementalType.WATER,
+  ),
   [TrainerType.LARRY]: new TrainerConfig(++t)
     .setName("Larry")
-    .initForGymLeader(signatureSpecies["LARRY"], true, ElementalType.NORMAL)
-    .setBattleBgm("battle_paldea_gym"),
-  [TrainerType.RYME]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["RYME"], false, ElementalType.GHOST)
-    .setBattleBgm("battle_paldea_gym"),
-  [TrainerType.TULIP]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["TULIP"], false, ElementalType.PSYCHIC)
-    .setBattleBgm("battle_paldea_gym"),
-  [TrainerType.GRUSHA]: new TrainerConfig(++t)
-    .initForGymLeader(signatureSpecies["GRUSHA"], true, ElementalType.ICE)
-    .setBattleBgm("battle_paldea_gym"),
+    .initForPaldeaGymLeader(signatureSpecies["LARRY"], true, ElementalType.NORMAL),
+  [TrainerType.RYME]: new TrainerConfig(++t).initForPaldeaGymLeader(
+    signatureSpecies["RYME"],
+    false,
+    ElementalType.GHOST,
+  ),
+  [TrainerType.TULIP]: new TrainerConfig(++t).initForPaldeaGymLeader(
+    signatureSpecies["TULIP"],
+    false,
+    ElementalType.PSYCHIC,
+  ),
+  [TrainerType.GRUSHA]: new TrainerConfig(++t).initForPaldeaGymLeader(
+    signatureSpecies["GRUSHA"],
+    true,
+    ElementalType.ICE,
+  ),
 };

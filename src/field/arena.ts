@@ -134,16 +134,9 @@ export class Arena {
    * @param luckValue - The player's luck value
    * - If the spawned Pokemon is a boss then the RNG ceiling is decreased by half the luck value
    * - If the spawned Pokemon is not a boss then the RNG ceiling is decreased by twice the luck value
-   * @param isBoss - Whether or not to force a boss
    * @returns a Pokemon species
    */
-  randomSpecies(
-    waveIndex: number,
-    level: number,
-    attempt?: number,
-    luckValue?: number,
-    isBoss?: boolean,
-  ): PokemonSpecies {
+  randomSpecies(waveIndex: number, level: number, attempt?: number, luckValue?: number): PokemonSpecies {
     const overrideSpecies = globalScene.gameMode.getOverrideSpecies(waveIndex);
     if (overrideSpecies) {
       return overrideSpecies;
@@ -209,7 +202,7 @@ export class Arena {
       return this.randomSpecies(waveIndex, level, (attempt || 0) + 1);
     }
 
-    const newSpeciesId = ret.getWildSpeciesForLevel(level, true, isBoss ?? isBossSpecies, globalScene.gameMode);
+    const newSpeciesId = ret.getEnemySpeciesForLevel(level);
     if (newSpeciesId !== ret.speciesId) {
       console.log("Replaced", Species[ret.speciesId], "with", Species[newSpeciesId]);
       ret = getPokemonSpecies(newSpeciesId);
@@ -416,41 +409,42 @@ export class Arena {
 
   /**
    * Attempts to set a new weather to the battle
-   * @param newWeather {@linkcode WeatherType} new {@linkcode WeatherType} to set
+   * @param newWeatherType {@linkcode WeatherType} new {@linkcode WeatherType} to set
    * @param hasPokemonSource boolean if the new weather is from a pokemon
    * @returns true if new weather set, false if no weather provided or attempting to set the same weather as currently in use
    */
-  trySetWeather(newWeather: WeatherType, hasPokemonSource: boolean): boolean {
+  trySetWeather(newWeatherType: WeatherType, hasPokemonSource: boolean): boolean {
     if (Overrides.WEATHER_OVERRIDE) {
       return this.trySetWeatherOverride(Overrides.WEATHER_OVERRIDE);
     }
 
-    if (!this.canSetWeather(newWeather)) {
+    if (!this.canSetWeather(newWeatherType)) {
       return false;
     }
 
     const oldWeatherType = this.weather?.weatherType || WeatherType.NONE;
 
-    this.weather = newWeather !== WeatherType.NONE ? new Weather(newWeather, hasPokemonSource ? 5 : 0) : null;
+    const newWeatherDuration = hasPokemonSource && !PRIMAL_WEATHER.includes(newWeatherType) ? 5 : 0;
 
-    if (this.weather) {
-      this.eventTarget.dispatchEvent(
-        new WeatherChangedEvent(oldWeatherType, this.weather.weatherType, this.weather.turnsLeft),
-      );
-      globalScene.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (newWeather - 1)));
-      globalScene.queueMessage(getWeatherStartMessage(newWeather) ?? "");
+    if (newWeatherType !== WeatherType.NONE) {
+      globalScene.unshiftPhase(new CommonAnimPhase(undefined, undefined, CommonAnim.SUNNY + (newWeatherType - 1)));
+      globalScene.queueMessage(getWeatherStartMessage(newWeatherType) ?? "");
+      this.weather = new Weather(newWeatherType, newWeatherDuration);
     } else {
       globalScene.queueMessage(getWeatherClearMessage(oldWeatherType) ?? "");
+      this.weather = null;
     }
+
+    this.eventTarget.dispatchEvent(new WeatherChangedEvent(oldWeatherType, newWeatherType, newWeatherDuration));
 
     globalScene
       .getField(true)
       .filter((p) => p.isOnField())
       .map((pokemon) => {
         pokemon.findAndRemoveTags(
-          (t) => "weatherTypes" in t && !(t.weatherTypes as WeatherType[]).find((t) => t === newWeather),
+          (t) => "weatherTypes" in t && !(t.weatherTypes as WeatherType[]).find((t) => t === newWeatherType),
         );
-        applyAbAttrs(AbAttrFlag.POST_WEATHER_CHANGE, pokemon, false, newWeather);
+        applyAbAttrs(AbAttrFlag.POST_WEATHER_CHANGE, pokemon, false, newWeatherType);
       });
 
     return true;

@@ -182,8 +182,7 @@ import { getNonVolatileStatusEffects } from "#app/data/status-effect";
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import { type MovePhase } from "#app/phases/move-phase";
-import { isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
+import { NumberHolder, toDmgValue } from "#app/utils";
 import { getWeatherCondition } from "#app/utils/ability-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { Abilities } from "#enums/abilities";
@@ -194,7 +193,6 @@ import { Gender } from "#enums/gender";
 import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 import { type EffectiveStat, EFFECTIVE_STATS, getStatKey, Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
@@ -460,7 +458,7 @@ export function initAbilities() {
       .ignorable(),
     new Ability(Abilities.SIMPLE, 4).attr(StatStageChangeMultiplierAbAttr, 2).ignorable(),
     new Ability(Abilities.DRY_SKIN, 4)
-      .attr(PostWeatherLapseDamageAbAttr, 2, WeatherType.SUNNY, WeatherType.HARSH_SUN)
+      .attr(PostWeatherLapseDamageAbAttr, 1 / 8, WeatherType.SUNNY, WeatherType.HARSH_SUN)
       .attr(PostWeatherLapseHealAbAttr, 1 / 8, WeatherType.RAIN, WeatherType.HEAVY_RAIN)
       .attr(ReceivedTypeDamageMultiplierAbAttr, ElementalType.FIRE, 1.25)
       .attr(TypeImmunityHealAbAttr, ElementalType.WATER)
@@ -476,9 +474,8 @@ export function initAbilities() {
       .attr(PostTurnResetStatusAbAttr)
       .condition(getWeatherCondition(WeatherType.RAIN, WeatherType.HEAVY_RAIN)),
     new Ability(Abilities.SOLAR_POWER, 4)
-      .attr(PostWeatherLapseDamageAbAttr, 2, WeatherType.SUNNY, WeatherType.HARSH_SUN)
-      .attr(StatMultiplierAbAttr, Stat.SPATK, 1.5)
-      .condition(getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN)),
+      .attr(PostWeatherLapseDamageAbAttr, 1 / 8, WeatherType.SUNNY, WeatherType.HARSH_SUN)
+      .attr(StatMultiplierAbAttr, Stat.SPATK, 1.5, getWeatherCondition(WeatherType.SUNNY, WeatherType.HARSH_SUN)),
     new Ability(Abilities.QUICK_FEET, 4)
       .attr(BypassParaSpeedReductionAbAttr)
       .conditionalAttr((pokemon) => pokemon.hasNonVolatileStatusEffect(), StatMultiplierAbAttr, Stat.SPD, 1.5),
@@ -685,12 +682,7 @@ export function initAbilities() {
     new Ability(Abilities.WONDER_SKIN, 5).attr(WonderSkinAbAttr).ignorable(),
     new Ability(Abilities.ANALYTIC, 5).attr(
       MovePowerBoostAbAttr,
-      (user, _target, _move) => {
-        const movePhase = globalScene.findPhase(
-          (phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon.id !== user?.id,
-        );
-        return isNullOrUndefined(movePhase);
-      },
+      () => globalScene.currentBattle.turnManager.isEmpty(),
       1.3,
     ),
     new Ability(Abilities.ILLUSION, 5).attr(UncopiableAbilityAbAttr).attr(UnswappableAbilityAbAttr).unimplemented(),
@@ -1168,7 +1160,7 @@ export function initAbilities() {
       .attr(MoveFlagPowerBoostAbAttr, MoveFlags.SOUND_MOVE, 1.3)
       .attr(ReceivedMoveDamageMultiplierAbAttr, (_target, _user, move) => move.hasFlag(MoveFlags.SOUND_MOVE), 0.5)
       .ignorable(),
-    new Ability(Abilities.SAND_SPIT, 8).attr(
+    new Ability(Abilities.SAND_SPIT, 8).bypassFaint().attr(
       PostDefendWeatherChangeAbAttr,
       WeatherType.SANDSTORM,
       (_target, _user, move) => move.category !== MoveCategory.STATUS,
@@ -1282,7 +1274,7 @@ export function initAbilities() {
     new Ability(Abilities.LINGERING_AROMA, 9)
       .attr(PostDefendAbilityGiveAbAttr, Abilities.LINGERING_AROMA)
       .bypassFaint(),
-    new Ability(Abilities.SEED_SOWER, 9).attr(PostDefendTerrainChangeAbAttr, TerrainType.GRASSY),
+    new Ability(Abilities.SEED_SOWER, 9).bypassFaint().attr(PostDefendTerrainChangeAbAttr, TerrainType.GRASSY),
     new Ability(Abilities.THERMAL_EXCHANGE, 9)
       .attr(
         PostDefendStatStageChangeAbAttr,

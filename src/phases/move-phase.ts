@@ -2,12 +2,12 @@ import { BattlerIndex } from "#enums/battler-index";
 import { applyAbAttrs } from "#app/data/apply-ab-attrs";
 import { allMoves } from "#app/data/data-lists";
 import { CommonAnim } from "#enums/common-anim";
-import { type CenterOfAttentionTag } from "#app/data/battler-tags";
+import type { ImprisoningTag, CenterOfAttentionTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
 import { BypassRedirectAttr } from "#app/data/move-attrs/bypass-redirect-attr";
 import { BypassSleepAttr } from "#app/data/move-attrs/bypass-sleep-attr";
-import { CopyMoveAttr } from "#app/data/move-attrs/copy-move-attr";
+import { CopycatAttr } from "#app/data/move-attrs/copycat-attr";
 import { HealStatusEffectAttr } from "#app/data/move-attrs/heal-status-effect-attr";
 import { PreMoveMessageAttr } from "#app/data/move-attrs/pre-move-message-attr";
 import { SpeciesFormChangePreMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-pre-move-trigger";
@@ -37,6 +37,7 @@ import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
 import { SelfStatusMove } from "#app/data/move";
 import { WeatherType } from "#enums/weather-type";
+import { applyBattlerTags } from "#app/data/apply-battler-tags";
 
 /**
  * Resolves the following:
@@ -176,6 +177,8 @@ export class MovePhase extends BattlePhase {
 
     this.resolvePreMoveStatusEffects();
 
+    this.resolveImprisoningEffects();
+
     this.lapsePreMoveAndMoveTags();
 
     if (!(this.failed || this.cancelled)) {
@@ -204,7 +207,7 @@ export class MovePhase extends BattlePhase {
 
     if (
       (targets.length === 0 && !isFieldTargeted(this.targets))
-      || (moveQueue.length && moveQueue[0].moveId === MoveId.NONE)
+      || (moveQueue.length && moveQueue[0].move.id === MoveId.NONE)
     ) {
       this.showMoveText();
       this.showFailedText();
@@ -295,6 +298,27 @@ export class MovePhase extends BattlePhase {
     }
   }
 
+  /**
+   * Checks this phase's move against all opponents with ongoing effects from
+   * {@link https://bulbapedia.bulbagarden.net/wiki/Imprison_(move) | Imprison}.
+   * If an opponent currently has a matching move in their moveset, the move is
+   * cancelled, and the corresponding tag's interrupting message is played.
+   */
+  protected resolveImprisoningEffects(): void {
+    if (this.followUp || this.cancelled || this.failed) {
+      return;
+    }
+
+    for (const opponent of this.pokemon.getOpponents()) {
+      if (
+        applyBattlerTags<ImprisoningTag>(BattlerTagType.IMPRISONING, opponent, false, this.pokemon, this.move.moveId)
+      ) {
+        this.cancel();
+        break;
+      }
+    }
+  }
+
   protected useMove(): void {
     const targets = this.getActiveTargetPokemon();
     const moveQueue = this.pokemon.getMoveQueue();
@@ -321,11 +345,6 @@ export class MovePhase extends BattlePhase {
       globalScene.eventTarget.dispatchEvent(new MoveUsedEvent(this.pokemon?.id, this.move.getMove(), this.move.ppUsed));
     }
 
-    // Update the battle's "last move" pointer, unless we're currently mimicking a move.
-    if (!allMoves[this.move.moveId].hasAttr(CopyMoveAttr)) {
-      globalScene.currentBattle.lastMove = this.move.getMove();
-    }
-
     /**
      * Determine if the move is successful (meaning that its damage/effects can be attempted)
      * by checking that all of the following are true:
@@ -348,6 +367,8 @@ export class MovePhase extends BattlePhase {
     const failedDueToTerrain: boolean = globalScene.arena.isMoveTerrainCancelled(this.pokemon, this.targets, move);
 
     const success = passesConditions && !failedDueToWeather && !failedDueToTerrain;
+
+    this.updateLastMoveId(success);
 
     /**
      * If the move has not failed, trigger ability-based user type changes and then execute it.
@@ -410,6 +431,8 @@ export class MovePhase extends BattlePhase {
     const targets = this.getActiveTargetPokemon();
 
     if (move.applyConditions(this.pokemon, targets[0], move)) {
+      this.updateLastMoveId(true);
+
       // Protean and Libero apply on the charging turn of charge moves
       applyAbAttrs(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
 
@@ -434,11 +457,24 @@ export class MovePhase extends BattlePhase {
   }
 
   /**
-   * Queues a {@linkcode MoveEndPhase} if the move wasn't a {@linkcode followUp} and {@linkcode canMove()} returns `true`,
+   * Update the battle's "last move" pointer, unless we're currently mimicking a move.
+   * The last move used is unaffected by moves that fail.
+   * @param success - Whether the move was successful or not.
+   */
+  protected updateLastMoveId(success: boolean): void {
+    if (!allMoves[this.move.moveId].hasAttr(CopycatAttr)) {
+      if (success) {
+        globalScene.currentBattle.lastMove = this.move.getMove();
+      }
+    }
+  }
+
+  /**
+   * Queues a {@linkcode MoveEndPhase} if the move wasn't a {@linkcode followUp},
    * then ends the phase.
    */
   public override end(): void {
-    if (!this.followUp && this.canMove()) {
+    if (!this.followUp) {
       globalScene.unshiftPhase(new MoveEndPhase(this.pokemon.getBattlerIndex()));
     }
 
@@ -575,6 +611,7 @@ export class MovePhase extends BattlePhase {
         move: SelfStatusMove.none(),
         result: MoveResult.FAIL,
         type: ElementalType.UNKNOWN,
+        targets: this.targets,
       });
 
       this.pokemon.lapseTags(BattlerTagLapseType.MOVE_EFFECT);

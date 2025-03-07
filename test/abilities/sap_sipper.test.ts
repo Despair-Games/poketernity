@@ -10,7 +10,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { allMoves } from "#app/data/data-lists";
-import { RandomMoveAttr } from "#app/data/move-attrs/random-move-attr";
+import { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
 import { StatusEffect } from "#enums/status-effect";
 
 // See also: TypeImmunityAbAttr
@@ -132,9 +132,9 @@ describe("Abilities - Sap Sipper", () => {
     const moveToUse = MoveId.METRONOME;
 
     const randomMoveAttr = allMoves[MoveId.METRONOME].findAttr(
-      (attr) => attr instanceof RandomMoveAttr,
-    ) as RandomMoveAttr;
-    vi.spyOn(randomMoveAttr, "getMoveOverride").mockReturnValue(MoveId.BULLET_SEED);
+      (attr) => attr instanceof MetronomeAttr,
+    ) as MetronomeAttr;
+    vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.BULLET_SEED);
 
     game.override.moveset(moveToUse);
 
@@ -162,7 +162,7 @@ describe("Abilities - Sap Sipper", () => {
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     await game.move.forceMiss();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(enemyPokemon.getStatStage(Stat.ATK)).toBe(1);
   });
 });

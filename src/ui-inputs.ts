@@ -192,7 +192,7 @@ export class UiInputs {
         break;
       case UiMode.MENU:
         globalScene.ui.revertMode();
-        globalScene.playSound("ui/select");
+        globalScene.audioManager.playSound("ui/select");
         break;
       default:
         return;

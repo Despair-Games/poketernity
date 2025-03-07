@@ -46,7 +46,7 @@ describe("Moves - Jaw Lock", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.JAW_LOCK);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
 
@@ -67,7 +67,7 @@ describe("Moves - Jaw Lock", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.JAW_LOCK);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
 
@@ -92,7 +92,7 @@ describe("Moves - Jaw Lock", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.JAW_LOCK);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to(MoveEffectPhase);
 
@@ -116,7 +116,7 @@ describe("Moves - Jaw Lock", () => {
 
     game.move.select(MoveId.JAW_LOCK, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to(MoveEffectPhase);
 

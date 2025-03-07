@@ -42,7 +42,7 @@ export class LoginPhase extends Phase {
             ui.showText(i18next.t("menu:logInOrCreateAccount"));
           }
 
-          globalScene.playSound("menu_open");
+          globalScene.audioManager.playSound("menu_open");
 
           const loadData = (): void => {
             updateUserInfo().then((success) => {
@@ -62,7 +62,7 @@ export class LoginPhase extends Phase {
                 loadData();
               },
               (): void => {
-                globalScene.playSound("menu_open");
+                globalScene.audioManager.playSound("menu_open");
                 ui.setMode(UiMode.REGISTRATION_FORM, {
                   buttonActions: [
                     (): void => {

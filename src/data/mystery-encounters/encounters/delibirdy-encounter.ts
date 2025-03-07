@@ -122,7 +122,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
     return true;
   })
   .withOnVisualsStart(() => {
-    globalScene.fadeAndSwitchBgm("mystery_encounter_fun_and_games");
+    globalScene.audioManager.fadeAndSwitchBgm("mystery_encounter_fun_and_games");
     return true;
   })
   .withOption(
@@ -153,7 +153,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
           // At max stacks, give the first party pokemon a Shell Bell instead
           const shellBell = generateModifierType(modifierTypes.SHELL_BELL) as PokemonHeldItemModifierType;
           await applyModifierTypeToPlayerPokemon(globalScene.getPlayerPokemon()!, shellBell);
-          globalScene.playSound("item_fanfare");
+          globalScene.audioManager.playSound("item_fanfare");
           await showEncounterText(
             i18next.t("battle:rewardGain", { modifierName: shellBell.name }),
             null,
@@ -234,7 +234,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
             // At max stacks, give the first party pokemon a Shell Bell instead
             const shellBell = generateModifierType(modifierTypes.SHELL_BELL) as PokemonHeldItemModifierType;
             await applyModifierTypeToPlayerPokemon(globalScene.getPlayerPokemon()!, shellBell);
-            globalScene.playSound("item_fanfare");
+            globalScene.audioManager.playSound("item_fanfare");
             await showEncounterText(
               i18next.t("battle:rewardGain", { modifierName: shellBell.name }),
               null,
@@ -252,7 +252,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
             // At max stacks, give the first party pokemon a Shell Bell instead
             const shellBell = generateModifierType(modifierTypes.SHELL_BELL) as PokemonHeldItemModifierType;
             await applyModifierTypeToPlayerPokemon(globalScene.getPlayerPokemon()!, shellBell);
-            globalScene.playSound("item_fanfare");
+            globalScene.audioManager.playSound("item_fanfare");
             await showEncounterText(
               i18next.t("battle:rewardGain", { modifierName: shellBell.name }),
               null,
@@ -334,7 +334,7 @@ export const DelibirdyEncounter: MysteryEncounter = MysteryEncounterBuilder.with
           // At max stacks, give the first party pokemon a Shell Bell instead
           const shellBell = generateModifierType(modifierTypes.SHELL_BELL) as PokemonHeldItemModifierType;
           await applyModifierTypeToPlayerPokemon(globalScene.getPlayerParty()[0], shellBell);
-          globalScene.playSound("item_fanfare");
+          globalScene.audioManager.playSound("item_fanfare");
           await showEncounterText(
             i18next.t("battle:rewardGain", { modifierName: shellBell.name }),
             null,

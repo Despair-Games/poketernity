@@ -1,14 +1,14 @@
-import { globalScene } from "#app/global-scene";
-import type { Pokemon } from "#app/field/pokemon";
-import { getFrameMs, getEnumValues, isNullOrUndefined } from "#app/utils";
-import { type SubstituteTag } from "#app/data/battler-tags";
-import Phaser from "phaser";
-import { settings } from "#app/system/settings/settings-manager";
-import { AnimFrameTarget } from "#enums/anim-frame-target";
-import { BattlerTagType } from "#enums/battler-tag-type";
 import { type AnimConfig, type AnimFrame } from "#app/data/anim-config";
+import { type SubstituteTag } from "#app/data/battler-tags";
+import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import { settings } from "#app/system/settings/settings-manager";
+import { getEnumValues, getFrameMs, isNullOrUndefined } from "#app/utils";
 import { AnimBlendType } from "#enums/anim-blend-type";
 import { AnimFocus } from "#enums/anim-focus";
+import { AnimFrameTarget } from "#enums/anim-frame-target";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import Phaser from "phaser";
 
 interface GraphicFrameData {
   x: number;

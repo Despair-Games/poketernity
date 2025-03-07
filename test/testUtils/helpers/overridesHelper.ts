@@ -1,3 +1,7 @@
+// tsdoc imports
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { GameManager } from "#test/testUtils/gameManager";
+
 import type { Variant } from "#app/data/variant";
 import { Abilities } from "#enums/abilities";
 import type { ModifierOverride } from "#app/modifier/modifier-type";
@@ -14,6 +18,8 @@ import { WeatherType } from "#enums/weather-type";
 import { expect, vi } from "vitest";
 import { GameManagerHelper } from "#test/testUtils/helpers/gameManagerHelper";
 import { shiftCharCodes } from "#app/utils";
+import type { TimedEvent } from "#app/@types/TimedEvent";
+import { timedEventManager } from "#app/timed-event-manager";
 
 /**
  * Helper to handle overrides in tests
@@ -131,6 +137,10 @@ export class OverridesHelper extends GameManagerHelper {
 
   /**
    * Override the player (pokemon) {@linkcode Abilities | ability}
+   *
+   * For more fine-grained control over setting specific species to have specific abilities,
+   * see {@linkcode GameManager.forceSpeciesSpecificAbility | game.forceSpeciesSpecificAbility}.
+   *
    * @param ability the (pokemon) {@linkcode Abilities | ability} to set
    * @returns `this`
    */
@@ -246,6 +256,10 @@ export class OverridesHelper extends GameManagerHelper {
 
   /**
    * Override the enemy (pokemon) {@linkcode Abilities | ability}
+   *
+   * For more fine-grained control over setting specific species to have specific abilities,
+   * see {@linkcode GameManager.forceSpeciesSpecificAbility | game.forceSpeciesSpecificAbility}.
+   *
    * @param ability the (pokemon) {@linkcode Abilities | ability} to set
    * @returns `this`
    */
@@ -456,6 +470,22 @@ export class OverridesHelper extends GameManagerHelper {
   public mysteryEncounter(encounterType: MysteryEncounterType): this {
     vi.spyOn(Overrides, "MYSTERY_ENCOUNTER_OVERRIDE", "get").mockReturnValue(encounterType);
     this.log(`Mystery encounter override set to ${encounterType}!`);
+    return this;
+  }
+
+  /**
+   * Override the ongoing timed events.
+   * @param events array of {@linkcode TimedEvents}
+   * @param systemDate optional date to set the system time to
+   * @returns `this`
+   */
+  public timedEvents(events: TimedEvent[], systemDate?: Date): this {
+    if (systemDate) {
+      vi.setSystemTime(systemDate);
+      this.log("System time set to:", systemDate);
+    }
+    (timedEventManager as any).setEvents(events);
+    this.log("Timed events overriden to:", events);
     return this;
   }
 

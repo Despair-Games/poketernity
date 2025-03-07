@@ -1,4 +1,3 @@
-import { allMoves } from "#app/data/data-lists";
 import { MoveCondition } from "#app/data/move-conditions/move-condition";
 import { globalScene } from "#app/global-scene";
 import { BattleCommand } from "#enums/battle-command";
@@ -13,15 +12,15 @@ import { MoveCategory } from "#enums/move-category";
 export class UpperHandCondition extends MoveCondition {
   constructor() {
     super((_user, target, _move) => {
-      const targetCommand = globalScene.currentBattle.turnCommands[target.getBattlerIndex()];
+      const targetCommand = globalScene.currentBattle.turnManager.findCommandFromPokemon(target);
 
       return (
         !!targetCommand
         && targetCommand.command === BattleCommand.FIGHT
         && !target.turnData.acted
-        && !!targetCommand.move?.moveId
-        && allMoves[targetCommand.move.moveId].category !== MoveCategory.STATUS
-        && allMoves[targetCommand.move.moveId].getPriority(target) > 0
+        && !!targetCommand.turnMove
+        && targetCommand.turnMove.move.category !== MoveCategory.STATUS
+        && targetCommand.turnMove.move.getPriority(target) > 0
       );
     });
   }

@@ -7,6 +7,7 @@ import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { FOG_ACCURACY_MULTIPLIER } from "#app/constants";
 
 describe("Weather - Fog", () => {
   let phaserGame: Phaser.Game;
@@ -24,23 +25,36 @@ describe("Weather - Fog", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.weather(WeatherType.FOG).battleType("single");
-    game.override.moveset([MoveId.TACKLE]);
-    game.override.ability(Abilities.BALL_FETCH);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
-    game.override.enemySpecies(Species.MAGIKARP);
-    game.override.enemyMoveset([MoveId.SPLASH]);
+    game.override
+      .weather(WeatherType.FOG)
+      .battleType("single")
+      .enemySpecies(Species.MAGIKARP)
+      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyMoveset([MoveId.SPLASH])
+      .moveset([MoveId.TACKLE]);
   });
 
-  it("move accuracy is multiplied by 90%", async () => {
+  it("move accuracy is changed in fog", async () => {
     const moveToCheck = allMoves[MoveId.TACKLE];
 
     vi.spyOn(moveToCheck, "calculateBattleAccuracy");
 
-    await game.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([Species.FEEBAS]);
     game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to(MoveEffectPhase);
 
-    expect(moveToCheck.calculateBattleAccuracy).toHaveReturnedWith(100 * 0.9);
+    expect(moveToCheck.calculateBattleAccuracy).toHaveReturnedWith(100 * FOG_ACCURACY_MULTIPLIER);
+  });
+
+  it("move accuracy is unaffected if fog is suppressed", async () => {
+    const moveToCheck = allMoves[MoveId.TACKLE];
+
+    vi.spyOn(moveToCheck, "calculateBattleAccuracy");
+    game.override.ability(Abilities.AIR_LOCK);
+    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.move.select(MoveId.TACKLE);
+    await game.phaseInterceptor.to(MoveEffectPhase);
+
+    expect(moveToCheck.calculateBattleAccuracy).toHaveReturnedWith(100);
   });
 });

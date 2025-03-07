@@ -151,7 +151,6 @@ export const TeleportingHijinksEncounter: MysteryEncounter = MysteryEncounterBui
         level,
         0,
         getPartyLuckValue(globalScene.getPlayerParty()),
-        true,
       );
       const bossPokemon = new EnemyPokemon(bossSpecies, level, TrainerSlot.NONE, true);
       encounter.setDialogueToken("enemyPokemon", getPokemonNameWithAffix(bossPokemon));
@@ -185,7 +184,7 @@ async function doBiomeTransitionDialogueAndBattleInit() {
   // Show dialogue and transition biome
   await showEncounterText(`${namespace}:transport`);
   await Promise.all([animateBiomeChange(newBiome), transitionMysteryEncounterIntroVisuals()]);
-  globalScene.playBgm();
+  globalScene.audioManager.playBgm();
   await showEncounterText(`${namespace}:attacked`);
 
   // Init enemy
@@ -195,7 +194,6 @@ async function doBiomeTransitionDialogueAndBattleInit() {
     level,
     0,
     getPartyLuckValue(globalScene.getPlayerParty()),
-    true,
   );
   const bossPokemon = new EnemyPokemon(bossSpecies, level, TrainerSlot.NONE, true);
   encounter.setDialogueToken("enemyPokemon", getPokemonNameWithAffix(bossPokemon));

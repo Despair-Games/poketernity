@@ -129,7 +129,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
 
     this.getUi().hideTooltip();
 
-    globalScene.playSound("ui/menu_open");
+    globalScene.audioManager.playSound("ui/menu_open");
 
     this.cursorObj?.setVisible(false);
     handleTutorial(Tutorial.MENU).then(() => {
