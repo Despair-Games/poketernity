@@ -331,7 +331,7 @@ describe("The Expert Pokémon Breeder - Mystery Encounter", () => {
       expect(scene.getPlayerParty().length).toBe(1);
     });
 
-    it.todo("Should reward the player with friendship and eggs based on pokemon selected", async () => {
+    it("Should reward the player with friendship and eggs based on pokemon selected", async () => {
       await game.runToMysteryEncounter(MysteryEncounterType.THE_EXPERT_POKEMON_BREEDER, defaultParty);
 
       const friendshipBefore = scene.currentBattle.mysteryEncounter!.misc.pokemon3.friendship;
