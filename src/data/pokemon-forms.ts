@@ -1,3 +1,11 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { FORM_CHANGE_MOVE } from "#app/data/balance/pokemon-level-moves";
+import type { FormChangePhase } from "#app/phases/form-change-phase";
+import type { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 import type { Pokemon } from "../field/pokemon";
 import { allMoves } from "#app/data/data-lists";
 import { MoveCategory } from "#enums/move-category";
@@ -25,11 +33,41 @@ export type SpeciesFormChangeConditionPredicate = (p: Pokemon) => boolean;
 export type SpeciesFormChangeConditionEnforceFunc = (p: Pokemon) => void;
 
 export class SpeciesFormChange {
+  /**
+   * The ID of the species that this form change applies to.
+   */
   public speciesId: Species;
+
+  /**
+   * The form key that the Pokemon must have before applying this form change.
+   */
   public preFormKey: string;
+
+  /**
+   * The form key that the Pokemon will have after applying this form change.
+   */
   public formKey: string;
+
+  /**
+   * The trigger for when to apply this form change.
+   */
   public trigger: SpeciesFormChangeTrigger;
+
+  /**
+   * If `false`, and if the Pokemon belongs to the player, play a cutscene using {@linkcode FormChangePhase}.
+   * Otherwise, transform the Pokemon in place using {@linkcode QuietFormChangePhase}.
+   */
   public quiet: boolean;
+
+  /**
+   * A list of moves that the Pokemon learns upon form change if its level is high enough.
+   * If the indicated level is {@linkcode FORM_CHANGE_MOVE}, the move can be learned at any level.
+   */
+  public readonly movesToLearn: MoveId[];
+
+  /**
+   * A list of extra conditions that the Pokemon must satisfy before applying this form change.
+   */
   public readonly conditions: SpeciesFormChangeCondition[];
 
   constructor(
@@ -38,6 +76,7 @@ export class SpeciesFormChange {
     evoFormKey: string,
     trigger: SpeciesFormChangeTrigger,
     quiet: boolean = false,
+    movesToLearn: MoveId[] = [],
     ...conditions: SpeciesFormChangeCondition[]
   ) {
     this.speciesId = speciesId;
@@ -45,6 +84,7 @@ export class SpeciesFormChange {
     this.formKey = evoFormKey;
     this.trigger = trigger;
     this.quiet = quiet;
+    this.movesToLearn = movesToLearn;
     this.conditions = conditions;
   }
 
@@ -289,6 +329,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_VINE_LASH],
     ),
   ],
   [Species.BLASTOISE]: [
@@ -303,6 +345,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_CANNONADE],
     ),
   ],
   [Species.CHARIZARD]: [
@@ -323,6 +367,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_WILDFIRE],
     ),
   ],
   [Species.BUTTERFREE]: [
@@ -331,6 +377,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_BEFUDDLE],
     ),
   ],
   [Species.BEEDRILL]: [
@@ -355,12 +403,16 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_VOLT_CRASH],
     ),
     new SpeciesFormChange(
       Species.PIKACHU,
       "partner",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_VOLT_CRASH],
     ),
   ],
   [Species.MEOWTH]: [
@@ -369,6 +421,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_GOLD_RUSH],
     ),
   ],
   [Species.ALAKAZAM]: [
@@ -385,6 +439,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_CHI_STRIKE],
     ),
   ],
   [Species.SLOWBRO]: [
@@ -407,6 +463,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_TERROR],
     ),
   ],
   [Species.KINGLER]: [
@@ -415,6 +473,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_FOAM_BURST],
     ),
   ],
   [Species.KANGASKHAN]: [
@@ -447,6 +507,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_RESONANCE],
     ),
   ],
   [Species.EEVEE]: [
@@ -455,12 +517,16 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_CUDDLE],
     ),
     new SpeciesFormChange(
       Species.EEVEE,
       "partner",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_CUDDLE],
     ),
   ],
   [Species.SNORLAX]: [
@@ -469,6 +535,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_REPLENISH],
     ),
   ],
   [Species.AERODACTYL]: [
@@ -1056,6 +1124,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_MALODOR],
     ),
   ],
   [Species.TORNADUS]: [
@@ -1089,6 +1159,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "black",
       new SpeciesFormChangeItemTrigger(FormChangeItem.DARK_STONE),
       false,
+      [MoveId.FUSION_BOLT, MoveId.FREEZE_SHOCK],
       getSpeciesDependentFormChangeCondition(Species.ZEKROM),
     ),
     new SpeciesFormChange(
@@ -1097,6 +1168,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "white",
       new SpeciesFormChangeItemTrigger(FormChangeItem.LIGHT_STONE),
       false,
+      [MoveId.FUSION_FLARE, MoveId.ICE_BURN],
       getSpeciesDependentFormChangeCondition(Species.RESHIRAM),
     ),
   ],
@@ -1151,6 +1223,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "shield",
       new SpeciesFormChangePreMoveTrigger(MoveId.KINGS_SHIELD),
       true,
+      [],
       new SpeciesFormChangeCondition((p) => p.hasAbility(Abilities.STANCE_CHANGE)),
     ),
     new SpeciesFormChange(
@@ -1159,6 +1232,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "blade",
       new SpeciesFormChangePreMoveTrigger((m) => allMoves[m].category !== MoveCategory.STATUS),
       true,
+      [],
       new SpeciesFormChangeCondition((p) => p.hasAbility(Abilities.STANCE_CHANGE)),
     ),
     new SpeciesFormChange(Species.AEGISLASH, "blade", "shield", new SpeciesFormChangeActiveTrigger(false), true),
@@ -1182,7 +1256,14 @@ export const pokemonFormChanges: PokemonFormChanges = {
     ),
   ],
   [Species.HOOPA]: [
-    new SpeciesFormChange(Species.HOOPA, "", "unbound", new SpeciesFormChangeItemTrigger(FormChangeItem.PRISON_BOTTLE)),
+    new SpeciesFormChange(
+      Species.HOOPA,
+      "",
+      "unbound",
+      new SpeciesFormChangeItemTrigger(FormChangeItem.PRISON_BOTTLE),
+      false,
+      [MoveId.HYPERSPACE_FURY], // Custom: This form change does not automatically trigger learning this move in mainline
+    ),
   ],
   [Species.WISHIWASHI]: [
     new SpeciesFormChange(Species.WISHIWASHI, "", "school", new SpeciesFormChangeManualTrigger(), true),
@@ -1319,6 +1400,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "dawn-wings",
       new SpeciesFormChangeItemTrigger(FormChangeItem.N_LUNARIZER),
       false,
+      [MoveId.MOONGEIST_BEAM],
       getSpeciesDependentFormChangeCondition(Species.LUNALA),
     ),
     new SpeciesFormChange(
@@ -1327,6 +1409,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "dusk-mane",
       new SpeciesFormChangeItemTrigger(FormChangeItem.N_SOLARIZER),
       false,
+      [MoveId.SUNSTEEL_STRIKE],
       getSpeciesDependentFormChangeCondition(Species.SOLGALEO),
     ),
     new SpeciesFormChange(
@@ -1334,12 +1417,16 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "dawn-wings",
       "ultra",
       new SpeciesFormChangeItemTrigger(FormChangeItem.ULTRANECROZIUM_Z),
+      false,
+      [MoveId.MOONGEIST_BEAM, MoveId.SUNSTEEL_STRIKE],
     ),
     new SpeciesFormChange(
       Species.NECROZMA,
       "dusk-mane",
       "ultra",
       new SpeciesFormChangeItemTrigger(FormChangeItem.ULTRANECROZIUM_Z),
+      false,
+      [MoveId.SUNSTEEL_STRIKE, MoveId.MOONGEIST_BEAM],
     ),
   ],
   [Species.MELMETAL]: [
@@ -1348,6 +1435,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_MELTDOWN],
     ),
   ],
   [Species.RILLABOOM]: [
@@ -1356,6 +1445,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_DRUM_SOLO],
     ),
   ],
   [Species.CINDERACE]: [
@@ -1364,6 +1455,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_FIREBALL],
     ),
   ],
   [Species.INTELEON]: [
@@ -1372,6 +1465,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_HYDROSNIPE],
     ),
   ],
   [Species.CORVIKNIGHT]: [
@@ -1380,6 +1475,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_WIND_RAGE],
     ),
   ],
   [Species.ORBEETLE]: [
@@ -1388,6 +1485,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_GRAVITAS],
     ),
   ],
   [Species.DREDNAW]: [
@@ -1396,6 +1495,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_STONESURGE],
     ),
   ],
   [Species.COALOSSAL]: [
@@ -1404,6 +1505,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_VOLCALITH],
     ),
   ],
   [Species.FLAPPLE]: [
@@ -1412,6 +1515,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_TARTNESS],
     ),
   ],
   [Species.APPLETUN]: [
@@ -1420,6 +1525,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_SWEETNESS],
     ),
   ],
   [Species.SANDACONDA]: [
@@ -1428,6 +1535,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_SANDBLAST],
     ),
   ],
   [Species.CRAMORANT]: [
@@ -1437,6 +1546,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "gulping",
       new SpeciesFormChangeManualTrigger(),
       true,
+      [],
       new SpeciesFormChangeCondition((p) => p.getHpRatio() >= 0.5),
     ),
     new SpeciesFormChange(
@@ -1445,6 +1555,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "gorging",
       new SpeciesFormChangeManualTrigger(),
       true,
+      [],
       new SpeciesFormChangeCondition((p) => p.getHpRatio() < 0.5),
     ),
     new SpeciesFormChange(Species.CRAMORANT, "gulping", "", new SpeciesFormChangeManualTrigger(), true),
@@ -1458,12 +1569,16 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "amped",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_STUN_SHOCK],
     ),
     new SpeciesFormChange(
       Species.TOXTRICITY,
       "lowkey",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_STUN_SHOCK],
     ),
     new SpeciesFormChange(
       Species.TOXTRICITY,
@@ -1490,6 +1605,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_CENTIFERNO],
     ),
   ],
   [Species.HATTERENE]: [
@@ -1498,6 +1615,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_SMITE],
     ),
   ],
   [Species.GRIMMSNARL]: [
@@ -1506,6 +1625,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_SNOOZE],
     ),
   ],
   [Species.ALCREMIE]: [
@@ -1514,54 +1635,72 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "vanilla-cream",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_FINALE],
     ),
     new SpeciesFormChange(
       Species.ALCREMIE,
       "ruby-cream",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_FINALE],
     ),
     new SpeciesFormChange(
       Species.ALCREMIE,
       "matcha-cream",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_FINALE],
     ),
     new SpeciesFormChange(
       Species.ALCREMIE,
       "mint-cream",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_FINALE],
     ),
     new SpeciesFormChange(
       Species.ALCREMIE,
       "lemon-cream",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_FINALE],
     ),
     new SpeciesFormChange(
       Species.ALCREMIE,
       "salted-cream",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_FINALE],
     ),
     new SpeciesFormChange(
       Species.ALCREMIE,
       "ruby-swirl",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_FINALE],
     ),
     new SpeciesFormChange(
       Species.ALCREMIE,
       "caramel-swirl",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_FINALE],
     ),
     new SpeciesFormChange(
       Species.ALCREMIE,
       "rainbow-swirl",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_FINALE],
     ),
   ],
   [Species.EISCUE]: [
@@ -1578,6 +1717,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_STEELSURGE],
     ),
   ],
   [Species.DURALUDON]: [
@@ -1586,6 +1727,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.GIGANTAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_DEPLETION],
     ),
   ],
   [Species.ZACIAN]: [
@@ -1594,6 +1737,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "hero-of-many-battles",
       "crowned",
       new SpeciesFormChangeItemTrigger(FormChangeItem.RUSTED_SWORD),
+      false,
+      [MoveId.BEHEMOTH_BLADE],
     ),
   ],
   [Species.ZAMAZENTA]: [
@@ -1602,8 +1747,11 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "hero-of-many-battles",
       "crowned",
       new SpeciesFormChangeItemTrigger(FormChangeItem.RUSTED_SHIELD),
+      false,
+      [MoveId.BEHEMOTH_BASH],
     ),
   ],
+  // Custom: E-max is not obtainable by the player in mainline
   [Species.ETERNATUS]: [
     new SpeciesFormChange(Species.ETERNATUS, "", SpeciesFormKey.ETERNAMAX, new SpeciesFormChangeManualTrigger()),
     new SpeciesFormChange(
@@ -1611,6 +1759,8 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "",
       SpeciesFormKey.ETERNAMAX,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.ETERNABEAM],
     ),
   ],
   [Species.URSHIFU]: [
@@ -1619,12 +1769,16 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "single-strike",
       SpeciesFormKey.GIGANTAMAX_SINGLE,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_ONE_BLOW],
     ),
     new SpeciesFormChange(
       Species.URSHIFU,
       "rapid-strike",
       SpeciesFormKey.GIGANTAMAX_RAPID,
       new SpeciesFormChangeItemTrigger(FormChangeItem.MAX_MUSHROOMS),
+      false,
+      [MoveId.G_MAX_RAPID_FLOW],
     ),
   ],
   [Species.CALYREX]: [
@@ -1634,6 +1788,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "ice",
       new SpeciesFormChangeItemTrigger(FormChangeItem.ICY_REINS_OF_UNITY),
       false,
+      [MoveId.GLACIAL_LANCE],
       getSpeciesDependentFormChangeCondition(Species.GLASTRIER),
     ),
     new SpeciesFormChange(
@@ -1642,6 +1797,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "shadow",
       new SpeciesFormChangeItemTrigger(FormChangeItem.SHADOW_REINS_OF_UNITY),
       false,
+      [MoveId.ASTRAL_BARRAGE],
       getSpeciesDependentFormChangeCondition(Species.SPECTRIER),
     ),
   ],
@@ -1684,6 +1840,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "teal-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
+      [],
       new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.GRASS),
     ),
     new SpeciesFormChange(
@@ -1698,6 +1855,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "wellspring-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
+      [],
       new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.WATER),
     ),
     new SpeciesFormChange(
@@ -1712,6 +1870,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "hearthflame-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
+      [],
       new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.FIRE),
     ),
     new SpeciesFormChange(
@@ -1726,6 +1885,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "cornerstone-mask",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
+      [],
       new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.ROCK),
     ),
   ],
@@ -1743,6 +1903,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       "terastal",
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
+      [],
       new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.STELLAR),
     ),
   ],

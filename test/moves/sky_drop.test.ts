@@ -436,6 +436,7 @@ describe("Moves - Sky Drop", () => {
   });
 
   it("should stop the target's consecutive uses of frenzy moves", async () => {
+    game.override.startingLevel(200); // Ensures that player Pokemon survives Thrash
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
