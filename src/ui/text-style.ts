@@ -145,6 +145,47 @@ const allTextStyles: Record<TextStyle, ModularTextStyleOptions> = {
     fontStyle: FontStyle.DEFAULT_FONT_72PX,
   },
 
+  [TextStyle.RUN_HISTORY_TRAINER_INFO]: {
+    color: {
+      [UiTheme.DARK]: TextColor.WHITE_DARK_PURPLE_SHADOW,
+      [UiTheme.LIGHT]: TextColor.DARK_GREY_LIGHT_SHADOW,
+    },
+    fontStyle: FontStyle.DEFAULT_FONT_34PX,
+  },
+  [TextStyle.RUN_HISTORY_POKEMON_INFO]: {
+    color: TextColor.WHITE_GREY_SHADOW,
+    fontStyle: FontStyle.DEFAULT_FONT_34PX,
+  },
+  [TextStyle.RUN_HISTORY_ME_INFO]: {
+    color: {
+      [UiTheme.DARK]: TextColor.WHITE_DARK_PURPLE_SHADOW,
+      [UiTheme.LIGHT]: TextColor.DARK_GREY_LIGHT_SHADOW,
+    },
+    fontStyle: FontStyle.DEFAULT_FONT_44PX,
+  },
+  [TextStyle.RUN_HISTORY_VICTORY]: {
+    color: TextColor.ORANGE_DARK_SHADOW,
+    fontStyle: FontStyle.DEFAULT_FONT_64PX,
+  },
+  [TextStyle.RUN_HISTORY_DEFEAT]: {
+    color: TextColor.RED_LIGHT_ORANGE_SHADOW,
+    fontStyle: FontStyle.DEFAULT_FONT_64PX,
+  },
+  [TextStyle.RUN_PREVIEW_STATUS]: {
+    color: {
+      [UiTheme.DARK]: TextColor.WHITE_DARK_PURPLE_SHADOW,
+      [UiTheme.LIGHT]: TextColor.DARK_GREY_LIGHT_SHADOW,
+    },
+    fontStyle: FontStyle.DEFAULT_FONT_60PX,
+  },
+  [TextStyle.RUN_PREVIEW_DETAILS]: {
+    color: {
+      [UiTheme.DARK]: TextColor.WHITE_DARK_PURPLE_SHADOW,
+      [UiTheme.LIGHT]: TextColor.DARK_GREY_LIGHT_SHADOW,
+    },
+    fontStyle: FontStyle.DEFAULT_FONT_50PX,
+  },
+
   // TODO: once light theme has its own window color in battle, we will need a different color in light theme
   // for ME_OPTION_DEFAULT: DARK_GREY_LIGHT_SHADOW and for ME_OPTION_SPECIAL: ORANGE_DARK_SHADOW
   [TextStyle.ME_OPTION_DEFAULT]: {

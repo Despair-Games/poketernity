@@ -100,6 +100,11 @@ export const allTextFormats: Record<FontStyle, FontStyleOptions> = {
     fontSize: 36,
     shadow: { xPosition: 2, yPosition: 2 },
   },
+  [FontStyle.DEFAULT_FONT_34PX]: {
+    fontFamily: "emerald",
+    fontSize: 34,
+    shadow: { xPosition: 2, yPosition: 2 },
+  },
   [FontStyle.DEFAULT_FONT_32PX]: {
     fontFamily: "emerald",
     fontSize: 32,

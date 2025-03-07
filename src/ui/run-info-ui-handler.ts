@@ -174,30 +174,30 @@ export default class RunInfoUiHandler extends UiHandler {
     headerBg.setOrigin(0, 0);
     this.runContainer.add(headerBg);
     if (this.runInfo.modifiers.length !== 0) {
-      const headerBgCoords = headerBg.getTopRight();
-      const abilityButtonContainer = globalScene.add.container(0, 0);
-      const abilityButtonText = addTextObject(8, 0, i18next.t("runHistory:viewHeldItems"), TextStyle.WINDOW, {
-        fontSize: "34px",
-      });
+      const headerBgCoords = headerBg.getRightCenter();
+      const actionButtonContainer = globalScene.add.container(headerBgCoords.x, headerBgCoords.y);
+      const viewItemsLabel = addTextObject(-7, 0, i18next.t("runHistory:viewHeldItems"), TextStyle.TOOLTIP_CONTENT);
+      viewItemsLabel.setOrigin(1, 0.5);
       const gamepadType = this.getUi().getGamepadType();
-      let abilityButtonElement: Phaser.GameObjects.Sprite;
+      let viewItemsIcon: Phaser.GameObjects.Sprite;
+      const iconXPosition = Math.floor(-viewItemsLabel.displayWidth - 8);
       if (gamepadType === "touch") {
-        abilityButtonElement = new Phaser.GameObjects.Sprite(globalScene, 0, 2, "keyboard", "E.png");
+        viewItemsIcon = globalScene.add.sprite(iconXPosition, 0, "keyboard", "E.png");
       } else {
-        abilityButtonElement = new Phaser.GameObjects.Sprite(
-          globalScene,
+        viewItemsIcon = globalScene.add.sprite(
+          iconXPosition,
           0,
-          2,
           gamepadType,
           globalScene.inputController?.getIconForLatestInputRecorded(SettingKeyboard.Button_Cycle_Ability),
         );
       }
-      abilityButtonContainer.add([abilityButtonText, abilityButtonElement]);
-      abilityButtonContainer.setPosition(
-        headerBgCoords.x - abilityButtonText.displayWidth - abilityButtonElement.displayWidth - 8,
+      viewItemsIcon.setOrigin(1, 0.5);
+      actionButtonContainer.add([viewItemsLabel, viewItemsIcon]);
+      /*actionButtonContainer.setPosition(
+        headerBgCoords.x - viewItemsLabel.displayWidth - viewItemsIcon.displayWidth - 8,
         10,
-      );
-      this.runContainer.add(abilityButtonContainer);
+      );*/
+      this.runContainer.add(actionButtonContainer);
     }
     const headerText = addTextObject(0, 0, i18next.t("runHistory:runInfo"), TextStyle.SETTINGS_LABEL);
     headerText.setOrigin(0, 0);
@@ -216,7 +216,7 @@ export default class RunInfoUiHandler extends UiHandler {
   private async parseRunResult() {
     const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
     const genderStr = PlayerGender[genderIndex];
-    const runResultTextStyle = this.isVictory ? TextStyle.PERFECT_IV : TextStyle.SUMMARY_RED;
+    const runResultTextStyle = this.isVictory ? TextStyle.RUN_HISTORY_VICTORY : TextStyle.RUN_HISTORY_DEFEAT;
     const runResultTitle = this.isVictory
       ? i18next.t("runHistory:victory")
       : i18next.t("runHistory:defeated", { context: genderStr });
@@ -225,32 +225,33 @@ export default class RunInfoUiHandler extends UiHandler {
       5,
       `${runResultTitle} - ${i18next.t("saveSlotSelectUiHandler:wave")} ${this.runInfo.waveIndex}`,
       runResultTextStyle,
-      { fontSize: "65px", lineSpacing: 0.1 },
+      { lineSpacing: 0.1 },
     );
 
     if (this.isVictory) {
       const hallofFameInstructionContainer = globalScene.add.container(0, 0);
-      const shinyButtonText = addTextObject(8, 0, i18next.t("runHistory:viewHallOfFame"), TextStyle.WINDOW, {
-        fontSize: "65px",
-      });
-      const formButtonText = addTextObject(8, 12, i18next.t("runHistory:viewEndingSplash"), TextStyle.WINDOW, {
-        fontSize: "65px",
-      });
+      const viewHallOfFameLabel = addTextObject(
+        8,
+        0,
+        i18next.t("runHistory:viewHallOfFame"),
+        TextStyle.TOOLTIP_CONTENT,
+      );
+      const viewEndArtLabel = addTextObject(8, 12, i18next.t("runHistory:viewEndingSplash"), TextStyle.TOOLTIP_CONTENT);
       const gamepadType = this.getUi().getGamepadType();
-      let shinyButtonElement: Phaser.GameObjects.Sprite;
-      let formButtonElement: Phaser.GameObjects.Sprite;
+      let viewHallOfFameIcon: Phaser.GameObjects.Sprite;
+      let viewEndArtIcon: Phaser.GameObjects.Sprite;
       if (gamepadType === "touch") {
-        shinyButtonElement = new Phaser.GameObjects.Sprite(globalScene, 0, 4, "keyboard", "R.png");
-        formButtonElement = new Phaser.GameObjects.Sprite(globalScene, 0, 16, "keyboard", "F.png");
+        viewHallOfFameIcon = new Phaser.GameObjects.Sprite(globalScene, 0, 4, "keyboard", "R.png");
+        viewEndArtIcon = new Phaser.GameObjects.Sprite(globalScene, 0, 16, "keyboard", "F.png");
       } else {
-        shinyButtonElement = new Phaser.GameObjects.Sprite(
+        viewHallOfFameIcon = new Phaser.GameObjects.Sprite(
           globalScene,
           0,
           4,
           gamepadType,
           globalScene.inputController?.getIconForLatestInputRecorded(SettingKeyboard.Button_Cycle_Shiny),
         );
-        formButtonElement = new Phaser.GameObjects.Sprite(
+        viewEndArtIcon = new Phaser.GameObjects.Sprite(
           globalScene,
           0,
           16,
@@ -258,9 +259,9 @@ export default class RunInfoUiHandler extends UiHandler {
           globalScene.inputController?.getIconForLatestInputRecorded(SettingKeyboard.Button_Cycle_Form),
         );
       }
-      hallofFameInstructionContainer.add([shinyButtonText, shinyButtonElement]);
+      hallofFameInstructionContainer.add([viewHallOfFameLabel, viewHallOfFameIcon]);
 
-      hallofFameInstructionContainer.add([formButtonText, formButtonElement]);
+      hallofFameInstructionContainer.add([viewEndArtLabel, viewEndArtIcon]);
 
       hallofFameInstructionContainer.setPosition(12, 25);
       this.runResultContainer.add(hallofFameInstructionContainer);
@@ -338,7 +339,8 @@ export default class RunInfoUiHandler extends UiHandler {
         })
         .replace(/\n/g, " ");
       const descContainer = globalScene.add.container(0, 0);
-      const textBox = addTextObject(0, 0, boxString, TextStyle.WINDOW, { fontSize: "35px", wordWrap: { width: 200 } });
+      // todo: wordcrap not correct for japanese
+      const textBox = addTextObject(0, 0, boxString, TextStyle.RUN_HISTORY_TRAINER_INFO, { wordWrap: { width: 200 } });
       descContainer.add(textBox);
       descContainer.setPosition(55, 32);
       this.runResultContainer.add(descContainer);
@@ -354,9 +356,8 @@ export default class RunInfoUiHandler extends UiHandler {
           + ":title",
       );
       const descContainer = globalScene.add.container(0, 0);
-      const textBox = addTextObject(0, 0, mysteryEncounterTitle, TextStyle.WINDOW, {
-        fontSize: "45px",
-        wordWrap: { width: 160 },
+      const textBox = addTextObject(0, 0, mysteryEncounterTitle, TextStyle.RUN_HISTORY_POKEMON_INFO, {
+        wordWrap: { width: 160 }, // todo: not correct for japanese text
       });
       descContainer.add(textBox);
       descContainer.setPosition(47, 37);
@@ -371,8 +372,8 @@ export default class RunInfoUiHandler extends UiHandler {
       windowCenterX,
       5,
       `${i18next.t("saveSlotSelectUiHandler:wave")} ${this.runInfo.waveIndex}`,
-      TextStyle.WINDOW,
-      { fontSize: "60px", lineSpacing: 0.1 },
+      TextStyle.RUN_PREVIEW_STATUS,
+      { lineSpacing: 0.1 },
     );
     runStatusText.setOrigin(0.5, 0);
 
@@ -380,8 +381,7 @@ export default class RunInfoUiHandler extends UiHandler {
       windowCenterX,
       windowBottomY - 5,
       `${getBiomeName(this.runInfo.arena.biome)}`,
-      TextStyle.WINDOW,
-      { fontSize: "60px" },
+      TextStyle.RUN_PREVIEW_STATUS,
     );
     currentBiomeText.setOrigin(0.5, 1);
 
@@ -553,7 +553,7 @@ export default class RunInfoUiHandler extends UiHandler {
   private async parseRunInfo(windowX: number, windowY: number) {
     // Parsing and displaying the mode.
     // In the future, parsing Challenges + Challenge Rules may have to be reworked as the game adds additional challenges and users can stack these challenges in various ways.
-    const modeText = addBBCodeTextObject(7, 0, "", TextStyle.WINDOW, { fontSize: "50px", lineSpacing: 3 });
+    const modeText = addBBCodeTextObject(7, 0, "", TextStyle.RUN_PREVIEW_DETAILS, { lineSpacing: 3 });
     modeText.setPosition(7, 5);
     modeText.appendText(i18next.t("runHistory:mode") + ": ", false);
     switch (this.runInfo.gameMode) {
@@ -563,8 +563,8 @@ export default class RunInfoUiHandler extends UiHandler {
       case GameModes.CHALLENGE:
         modeText.appendText(`${i18next.t("gameMode:challenge")}`, false);
         modeText.appendText(`${i18next.t("runHistory:challengeRules")}: `);
-        modeText.setWrapMode(1); // wrap by word
-        modeText.setWrapWidth(500);
+        modeText.setWrapMode("word");
+        modeText.setWrapWidth(500); // todo: not correct in Japanese
         const rules: string[] = this.challengeParser();
         if (rules) {
           for (let i = 0; i < rules.length; i++) {
@@ -596,7 +596,7 @@ export default class RunInfoUiHandler extends UiHandler {
     const runInfoTextContainer = globalScene.add.container(0, 0);
     // Japanese is set to a greater line spacing of 35px in addBBCodeTextObject() if lineSpacing < 12.
     const lineSpacing = i18next.resolvedLanguage === "ja" ? 12 : 3;
-    const runInfoText = addBBCodeTextObject(7, 0, "", TextStyle.WINDOW, { fontSize: "50px", lineSpacing: lineSpacing });
+    const runInfoText = addBBCodeTextObject(7, 0, "", TextStyle.RUN_PREVIEW_DETAILS, { lineSpacing: lineSpacing });
     const runTime = getPlayTimeString(this.runInfo.playTime);
     runInfoText.appendText(`${i18next.t("runHistory:runLength")}: ${runTime}`, false);
     const runMoney = formatMoney(settings.display.moneyFormat, this.runInfo.money);
@@ -604,9 +604,8 @@ export default class RunInfoUiHandler extends UiHandler {
     runInfoText.appendText(getBBCodeFragment(moneyText, TextStyle.MONEY_WINDOW, true, false));
     runInfoText.setPosition(7, 70);
     runInfoTextContainer.add(runInfoText);
+
     // Luck
-    // Uses the parameters windowX and windowY to dynamically position the luck value neatly into the bottom right corner
-    const luckText = addBBCodeTextObject(0, 0, "", TextStyle.WINDOW, { fontSize: "55px" });
     const luckValue = Phaser.Math.Clamp(
       this.runInfo.party
         .map((p) => p.toPokemon().getLuck())
@@ -614,14 +613,14 @@ export default class RunInfoUiHandler extends UiHandler {
       0,
       14,
     );
-    let luckInfo = i18next.t("runHistory:luck") + ": " + getLuckString(luckValue);
+    const luckText = addTextObject(windowX - 6, windowY - 4, "", TextStyle.SCORE);
+    luckText.setOrigin(1, 1);
+    luckText.setText(i18next.t("runHistory:luck") + ": " + getLuckString(luckValue)); // TODO: localize properly
     if (luckValue < 14) {
-      luckInfo = "[color=#" + getLuckTextTint(luckValue).toString(16) + "]" + luckInfo + "[/color]";
+      luckText.setTint(getLuckTextTint(luckValue));
     } else {
       luckText.setTint(0xffef5c, 0x47ff69, 0x6b6bff, 0xff6969);
     }
-    luckText.appendText("[align=right]" + luckInfo + "[/align]", false);
-    luckText.setPosition(windowX - luckText.displayWidth - 5, windowY - 13);
     runInfoTextContainer.add(luckText);
 
     // Player Held Items
@@ -734,7 +733,6 @@ export default class RunInfoUiHandler extends UiHandler {
 
       // Contains Name, Level + Nature, Ability, Passive
       const pokeInfoTextContainer = globalScene.add.container(-85, 3.5);
-      const textContainerFontSize = "34px";
       // This checks if the Pokemon's nature has been overwritten during the run and displays the change accurately
       const pNature = pokemon.getNature();
       const pNatureName = getNatureName(pNature);
@@ -752,8 +750,7 @@ export default class RunInfoUiHandler extends UiHandler {
       const pAbilityInfo = abilityLabel + ": " + pokemon.getAbility().name;
       // Japanese is set to a greater line spacing of 35px in addBBCodeTextObject() if lineSpacing < 12.
       const lineSpacing = i18next.resolvedLanguage === "ja" ? 12 : 3;
-      const pokeInfoText = addBBCodeTextObject(0, 0, pName, TextStyle.SUMMARY, {
-        fontSize: textContainerFontSize,
+      const pokeInfoText = addBBCodeTextObject(0, 0, pName, TextStyle.RUN_HISTORY_POKEMON_INFO, {
         lineSpacing: lineSpacing,
       });
       pokeInfoText.appendText(`${getPokemonLevelText(pokemon)} - ${pNatureName}`);
@@ -782,16 +779,14 @@ export default class RunInfoUiHandler extends UiHandler {
           : i18next.t("pokemonInfo:Stat.SPDshortened");
       const speed = speedLabel + ": " + pStats[5];
       // Column 1: HP Atk Def
-      const pokeStatText1 = addBBCodeTextObject(-5, 0, hp, TextStyle.SUMMARY, {
-        fontSize: textContainerFontSize,
+      const pokeStatText1 = addBBCodeTextObject(-5, 0, hp, TextStyle.RUN_HISTORY_POKEMON_INFO, {
         lineSpacing: lineSpacing,
       });
       pokeStatText1.appendText(atk);
       pokeStatText1.appendText(def);
       pokeStatTextContainer.add(pokeStatText1);
       // Column 2: SpAtk SpDef Speed
-      const pokeStatText2 = addBBCodeTextObject(25, 0, spatk, TextStyle.SUMMARY, {
-        fontSize: textContainerFontSize,
+      const pokeStatText2 = addBBCodeTextObject(25, 0, spatk, TextStyle.RUN_HISTORY_POKEMON_INFO, {
         lineSpacing: lineSpacing,
       });
       pokeStatText2.appendText(spdef);
