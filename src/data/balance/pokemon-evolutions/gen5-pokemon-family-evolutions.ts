@@ -93,7 +93,6 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
       null,
       new SpeciesEvolutionCondition(
         (p) => p.moveset.filter((m) => m.moveId === MoveId.WAVE_CRASH).length > 0 && p.gender === Gender.FEMALE,
-        (p) => (p.gender = Gender.FEMALE),
       ),
       BASCULEGION_EVO_LEVEL,
     ),
@@ -105,7 +104,6 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
       null,
       new SpeciesEvolutionCondition(
         (p) => p.moveset.filter((m) => m.moveId === MoveId.WAVE_CRASH).length > 0 && p.gender === Gender.MALE,
-        (p) => (p.gender = Gender.MALE),
       ),
       BASCULEGION_EVO_LEVEL,
     ),
