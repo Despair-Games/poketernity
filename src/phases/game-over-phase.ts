@@ -19,7 +19,6 @@ import { RibbonModifierRewardPhase } from "#app/phases/ribbon-modifier-reward-ph
 import { SummonPhase } from "#app/phases/summon-phase";
 import { UnlockPhase } from "#app/phases/unlock-phase";
 import { api } from "#app/plugins/api/api";
-import { achvs } from "#app/system/achievements";
 import { settings } from "#app/system/settings/settings-manager";
 import TrainerData from "#app/system/trainer-data";
 import { Unlockables } from "#enums/unlockables";
@@ -124,12 +123,12 @@ export class GameOverPhase extends BattlePhase {
     const doGameOver = (newClear: boolean): void => {
       globalScene.disableMenu = true;
       globalScene.time.delayedCall(1000, () => {
-        let firstClear = false;
+        let isFirstClear = false;
 
         if (this.isVictory && newClear) {
           if (gameMode.isClassic) {
-            firstClear = globalScene.validateAchv(achvs.CLASSIC_VICTORY);
-            globalScene.validAchievements(AchvCategory.CLASSIC_VICTORY);
+            isFirstClear = globalScene.gameData.gameStats.sessionsWon === 0;
+            globalScene.validateAchievements(AchvCategory.CLASSIC_VICTORY);
             gameData.gameStats.sessionsWon++;
             for (const pokemon of globalScene.getPlayerParty()) {
               this.awardRibbon(pokemon);
@@ -155,7 +154,7 @@ export class GameOverPhase extends BattlePhase {
           ui.clearText();
 
           if (this.isVictory && gameMode.isChallenge) {
-            globalScene.validAchievements(AchvCategory.CHALLENGE_VICTORY);
+            globalScene.validateAchievements(AchvCategory.CHALLENGE_VICTORY, globalScene.gameMode.challenges);
           }
 
           const clear = (endCardPhase?: EndCardPhase): void => {
@@ -166,7 +165,7 @@ export class GameOverPhase extends BattlePhase {
                 globalScene.unshiftPhase(new RibbonModifierRewardPhase(modifierTypes.VOUCHER_PLUS, species));
               }
 
-              if (!firstClear) {
+              if (!isFirstClear) {
                 globalScene.unshiftPhase(new GameOverModifierRewardPhase(modifierTypes.VOUCHER_PREMIUM));
               }
             }

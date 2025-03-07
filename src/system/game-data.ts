@@ -1734,7 +1734,7 @@ export class GameData {
 
     const ribbonsInStats: number = globalScene.gameData.gameStats.ribbonsOwned;
 
-    globalScene.validAchievements(AchvCategory.RIBBON_COUNT, ribbonsInStats);
+    globalScene.validateAchievements(AchvCategory.RIBBON_COUNT, ribbonsInStats);
 
     return ++this.starterData[speciesIdToIncrement].classicWinCount;
   }
@@ -1844,7 +1844,7 @@ export class GameData {
           dexIvs[i] = ivs[i];
         }
       }
-      globalScene.validAchievements(AchvCategory.POKEDEX, dexEntry);
+      globalScene.validateAchievements(AchvCategory.POKEDEX, dexEntry);
       if (dexIvs.filter((iv) => iv === 31).length === 6) {
         globalScene.validateAchv(achvs.PERFECT_IVS);
       }

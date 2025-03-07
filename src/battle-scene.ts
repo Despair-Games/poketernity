@@ -187,6 +187,8 @@ import Phaser from "phaser";
 import type UIPlugin from "phaser3-rex-plugins/templates/ui/ui-plugin";
 import { achievementsBus } from "./system/achievements/achievements-events";
 import { battleSceneBus } from "./battle-scene-bus";
+import type { Challenge } from "./data/challenge";
+import type { DexEntry } from "./@types/DexData";
 
 //#region Types
 
@@ -2932,7 +2934,18 @@ export default class BattleScene extends SceneBase {
     return true;
   }
 
-  validAchievements(achievementCategory: AchvCategory, data: any) {
+  validateAchievements(achievementCategory: AchvCategory.PARTY, data: Pokemon[]);
+  validateAchievements(achievementCategory: AchvCategory.ENCOUNTER, data: Pokemon[]);
+  validateAchievements(achievementCategory: AchvCategory.CATCH, data: Pokemon);
+  validateAchievements(achievementCategory: AchvCategory.CHALLENGE_VICTORY, data: Challenge[]);
+  validateAchievements(achievementCategory: AchvCategory.CLASSIC_VICTORY);
+  validateAchievements(achievementCategory: AchvCategory.FORM_CHANGE, data: SpeciesFormChange);
+  validateAchievements(achievementCategory: AchvCategory.TERASTALLIZE, data: ElementalType);
+  validateAchievements(achievementCategory: AchvCategory.FRIENDSHIP, data: number);
+  validateAchievements(achievementCategory: AchvCategory.POKEDEX, data: DexEntry);
+  validateAchievements(achievementCategory: AchvCategory.RIBBON_COUNT, data: number);
+
+  validateAchievements(achievementCategory: AchvCategory, data?: any) {
     this.scene.launch("Achievements_Manager", {
       context: achievementCategory,
       unlockedAchievements: this.gameData.achvUnlocks,

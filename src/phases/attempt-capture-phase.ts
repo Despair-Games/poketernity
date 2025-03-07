@@ -234,7 +234,7 @@ export class AttemptCapturePhase extends PokemonPhase {
 
     const pokemon = this.getPokemon() as EnemyPokemon;
 
-    globalScene.validAchievements(AchvCategory.CATCH, pokemon);
+    globalScene.validateAchievements(AchvCategory.CATCH, pokemon);
 
     pokemonInfoContainer.show(pokemon, true);
 
@@ -264,7 +264,7 @@ export class AttemptCapturePhase extends PokemonPhase {
         const addToParty = (slotIndex?: number): void => {
           const newPokemon = pokemon.addToParty(this.pokeballType, slotIndex);
           const modifiers = globalScene.findModifiers((m) => m.isPokemonHeldItemModifier(), false);
-          globalScene.validAchievements(AchvCategory.PARTY, globalScene.getPlayerParty());
+          globalScene.validateAchievements(AchvCategory.PARTY, globalScene.getPlayerParty());
           modifiers.forEach((m) => globalScene.addModifier(m, true));
           globalScene.updateModifiers(true);
           removePokemon();

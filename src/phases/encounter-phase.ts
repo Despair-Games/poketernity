@@ -341,7 +341,7 @@ export class EncounterPhase extends BattlePhase {
         pokemon.resetBattleData();
       }
     }
-    globalScene.validAchievements(AchvCategory.PARTY, globalScene.getPlayerParty());
+    globalScene.validateAchievements(AchvCategory.PARTY, globalScene.getPlayerParty());
 
     const enemyField = globalScene.getEnemyField();
     tweens.add({
@@ -412,7 +412,7 @@ export class EncounterPhase extends BattlePhase {
         enemyPokemon.cry();
         enemyPokemon.showInfo();
       });
-      globalScene.validAchievements(AchvCategory.ENCOUNTER, enemyField);
+      globalScene.validateAchievements(AchvCategory.ENCOUNTER, enemyField);
       globalScene.updateFieldScale();
       if (showEncounterMessage) {
         ui.showText(this.getEncounterMessage(), null, () => this.end(), 1500);

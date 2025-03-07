@@ -4193,7 +4193,7 @@ export class PlayerPokemon extends Pokemon {
 
       // Add friendship to this PlayerPokemon
       this.friendship = Math.min(this.friendship + amount.value, 255);
-      globalScene.validAchievements(AchvCategory.FRIENDSHIP, this);
+      globalScene.validateAchievements(AchvCategory.FRIENDSHIP, this);
       // Add to candy progress for this mon's starter species
       if (starterData) {
         starterData.friendship = (starterData.friendship || 0) + starterAmount.value;

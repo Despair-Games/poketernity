@@ -960,7 +960,7 @@ export class TerastallizeModifier extends LapsingPokemonHeldItemModifier {
   override apply(pokemon: Pokemon): boolean {
     if (pokemon.isPlayer()) {
       globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeTeraTrigger);
-      globalScene.validAchievements(AchvCategory.TERASTALLIZE, this.teraType);
+      globalScene.validateAchievements(AchvCategory.TERASTALLIZE, this.teraType);
     }
     pokemon.updateSpritePipelineData();
     return true;

@@ -1,7 +1,7 @@
 import type { ConditionFn } from "#app/@types/common";
 import type { DexEntry } from "#app/@types/DexData";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
 import type { Challenge } from "#app/data/challenge";
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";
 import type { Pokemon } from "#app/field/pokemon";
@@ -70,13 +70,11 @@ export class ChallengeCompletionAchievement extends Achievement {
 export class MonoGenAchievement extends ChallengeCompletionAchievement {
   constructor(id: string, iconKey: string, generation: number) {
     super(id, iconKey);
-    this.conditionFunc = () => {
+    this.conditionFunc = (challanges: Challenge[]) => {
       return (
-        globalScene.gameMode.challenges.length > 0
-        && !!globalScene.gameMode.challenges.find(
-          (c: Challenge) => c.isSingleGenerationChallenge() && c.value === generation,
-        )
-        && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0)
+        challanges.length > 0
+        && !!challanges.find((c: Challenge) => c.isSingleGenerationChallenge() && c.value === generation)
+        && !challanges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0)
       );
     };
   }
@@ -87,11 +85,11 @@ export class MonoTypeAchievement extends ChallengeCompletionAchievement {
     super("MONO_" + ElementalType[type], iconKey);
     this.localizationInformation.descriptionKey = "MonoType";
     this.localizationInformation.descriptionArgs = { type: i18next.t(`pokemonInfo:Type.${ElementalType[type]}`) };
-    this.conditionFunc = () => {
+    this.conditionFunc = (challenges: Challenge[]) => {
       return (
-        globalScene.gameMode.challenges.length > 0
-        && !!globalScene.gameMode.challenges.find((c: Challenge) => c.isSingleTypeChallenge() && c.value === type + 1)
-        && !globalScene.gameMode.challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0)
+        challenges.length > 0
+        && !!challenges.find((c: Challenge) => c.isSingleTypeChallenge() && c.value === type + 1)
+        && !challenges.some((c) => c.id === Challenges.INVERSE_BATTLE && c.value > 0)
       );
     };
   }
@@ -225,16 +223,15 @@ export const newAchvs = {
   FRESH_START: new ChallengeCompletionAchievement(
     "FRESH_START",
     "reviver_seed",
-    () =>
-      globalScene.gameMode.challenges.length > 0
-      && !!globalScene.gameMode.challenges.find((c: Challenge) => c.isFreshStartChallenge() && c.value > 0),
+    (challenges: Challenge[]) =>
+      challenges.length > 0 && !!challenges.find((c: Challenge) => c.isFreshStartChallenge() && c.value > 0),
   ),
   INVERSE_BATTLE: new ChallengeCompletionAchievement(
     "INVERSE_BATTLE",
     "inverse",
-    () =>
-      globalScene.gameMode.challenges.length > 0
-      && !!globalScene.gameMode.challenges.find(
+    (challenges: Challenge[]) =>
+      challenges.length > 0
+      && !!challenges.find(
         (c: Challenge) =>
           c.isInverseBattleChallenge()
           && c.value > 0

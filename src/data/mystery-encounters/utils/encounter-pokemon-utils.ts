@@ -682,7 +682,7 @@ export async function catchPokemon(
       const addToParty = (slotIndex?: number) => {
         const newPokemon = pokemon.addToParty(pokeballType, slotIndex);
         const modifiers = globalScene.findModifiers((m) => m.isPokemonHeldItemModifier(), false);
-        globalScene.validAchievements(AchvCategory.PARTY, globalScene.getPlayerParty());
+        globalScene.validateAchievements(AchvCategory.PARTY, globalScene.getPlayerParty());
         Promise.all(modifiers.map((m) => globalScene.addModifier(m, true))).then(() => {
           globalScene.updateModifiers(true);
           removePokemon();

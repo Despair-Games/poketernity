@@ -140,7 +140,7 @@ export class FormChangePhase extends FormChangeBasePhase {
                 || this.formChange.formKey.includes(SpeciesFormKey.ETERNAMAX)
                   ? true
                   : false;
-              globalScene.validAchievements(AchvCategory.FORM_CHANGE, this.formChange);
+              globalScene.validateAchievements(AchvCategory.FORM_CHANGE, this.formChange);
 
               const delay = playEvolutionFanfare ? 4000 : 1750;
               globalScene.audioManager.playSoundWithoutBgm(
