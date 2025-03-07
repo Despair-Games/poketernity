@@ -29,7 +29,7 @@ import {
 } from "#app/data/balance/rates";
 import {
   CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER,
-  getStarterValueFriendshipCap,
+  getCandyProgressRequirement,
   speciesStarterCosts,
 } from "#app/data/balance/starters";
 import { reverseCompatibleTms, tmPoolTiers, tmSpecies } from "#app/data/balance/tms";
@@ -4178,37 +4178,46 @@ export class PlayerPokemon extends Pokemon {
   }
 
   /**
-   * Updates the Pokemon's friendship value and calls {@linkcode addMetaProgressionFriendship}
+   * Updates the Pokemon's friendship value and calls {@linkcode addCandyProgress}
    * to also the update the metaProgressionFriendship value of the Pokemon's root species in
    * the game data if there is a postive gain
    * @param friendshipChange the amount of friendship to add
    */
   addFriendship(friendshipChange: number): void {
-    if (friendshipChange > 0) {
-      const amount = new NumberHolder(friendshipChange);
-      globalScene.applyModifier(PokemonFriendshipBoosterModifier, true, this, amount);
-
-      // Add friendship to this PlayerPokemon
-      this.friendship = Math.min(this.friendship + amount.value, 255);
-      if (this.friendship === 255) {
-        globalScene.validateAchv(achvs.MAX_FRIENDSHIP);
-      }
-
-      // Add to candy progress for this mon's starter species
-      this.addMetaProgressionFriendship(amount.value);
-    } else {
+    if (friendshipChange <= 0) {
       // Multipliers do not apply for friendship loss. A Pokemon's friendship cannot go below 0
       this.friendship = Math.max(this.friendship + friendshipChange, 0);
+      return;
     }
+    const amount = new NumberHolder(friendshipChange);
+    // Soothe bell multiplier applies here
+    globalScene.applyModifier(PokemonFriendshipBoosterModifier, true, this, amount);
+
+    // Add friendship to this PlayerPokemon
+    this.friendship = Math.min(this.friendship + amount.value, 255);
+    if (this.friendship === 255) {
+      globalScene.validateAchv(achvs.MAX_FRIENDSHIP);
+    }
+
+    // Add to candy progress for this mon's starter species
+    this.addCandyProgress(amount.value);
   }
 
   /**
    * Helper function being called in {@linkcode addFriendship}
-   * Updates the metaProgressionFriendship of a starter and grants candy
+   * Updates the candyProgress of a starter and grants candy
    * if the requirement is met
-   * @param metaProgresionFriendshipChange the amount
+   * @param candyProgressChange the amount
    */
-  addMetaProgressionFriendship(metaProgresionFriendshipChange: number): void {
+  addCandyProgress(candyProgressChange: number): void {
+    const starterSpeciesId = this.species.getRootSpeciesId();
+    const starterData = globalScene.gameData.starterData[starterSpeciesId];
+
+    // If a player does not have the starter unlocked, do nothing
+    if (!starterData) {
+      return;
+    }
+
     // Calculate bonuses
     let candyFriendshipMultiplier = CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER;
     if (timedEventManager.isEventActive(EventModifierType.CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER)) {
@@ -4217,22 +4226,14 @@ export class PlayerPokemon extends Pokemon {
 
     // Apply bonus only if in classic mode
     const starterAmount = new NumberHolder(
-      Math.floor(metaProgresionFriendshipChange * (globalScene.gameMode.isClassic ? candyFriendshipMultiplier : 1)),
+      Math.floor(candyProgressChange * (globalScene.gameMode.isClassic ? candyFriendshipMultiplier : 1)),
     );
 
-    /**
-     * Update metaProgressionFriendship for the starter if the player owns it
-     * If the requirement is met, add a candy
-     */
-    const starterSpeciesId = this.species.getRootSpeciesId();
-    const starterData = globalScene.gameData.starterData[starterSpeciesId];
-    if (starterData) {
-      const metaProgressionFriendshipCap = getStarterValueFriendshipCap(speciesStarterCosts[starterSpeciesId]);
-      starterData.metaProgressionFriendship = (starterData.metaProgressionFriendship || 0) + starterAmount.value;
-      if (starterData.metaProgressionFriendship >= metaProgressionFriendshipCap) {
-        globalScene.gameData.addStarterCandy(getPokemonSpecies(starterSpeciesId), 1);
-        starterData.metaProgressionFriendship -= metaProgressionFriendshipCap;
-      }
+    const candyProgressReq = getCandyProgressRequirement(speciesStarterCosts[starterSpeciesId]);
+    starterData.candyProgress = (starterData.candyProgress || 0) + starterAmount.value;
+    if (starterData.candyProgress >= candyProgressReq) {
+      globalScene.gameData.addStarterCandy(getPokemonSpecies(starterSpeciesId), 1);
+      starterData.candyProgress -= candyProgressReq;
     }
   }
 

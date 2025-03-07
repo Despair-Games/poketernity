@@ -7,7 +7,7 @@ export interface StarterDataEntry {
   moveset: StarterMoveset | StarterFormMoveData | null;
   eggMoves: number;
   candyCount: number;
-  metaProgressionFriendship: number;
+  candyProgress: number;
   abilityAttr: number;
   passiveAttr: number;
   valueReduction: number;
