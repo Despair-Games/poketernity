@@ -1,4 +1,5 @@
 import { Abilities } from "#enums/abilities";
+import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -51,6 +52,7 @@ describe("Moves - Trick Room", () => {
 
     expect(game.field.getSpeedOrder()).toEqual([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     expect(game.field.getTurnOrder()).toEqual([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    expect(game.scene.arena.getTag(ArenaTagType.TRICK_ROOM)).toBeDefined();
   });
 
   it("should cancel an active Trick Room if used again", async () => {
@@ -67,5 +69,6 @@ describe("Moves - Trick Room", () => {
 
     expect(game.field.getSpeedOrder()).toEqual([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     expect(game.field.getTurnOrder()).toEqual(game.field.getSpeedOrder());
+    expect(game.scene.arena.getTag(ArenaTagType.TRICK_ROOM)).toBeUndefined();
   });
 });
