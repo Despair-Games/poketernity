@@ -2949,7 +2949,7 @@ export default class BattleScene extends SceneBase {
   validateAchievements(achievementCategory: AchvCategory.FRIENDSHIP, data: number);
   validateAchievements(achievementCategory: AchvCategory.POKEDEX, data: DexEntry);
   validateAchievements(achievementCategory: AchvCategory.RIBBON_COUNT, data: number);
-  validateAchievements(achievementCategory: AchvCategory, data?: any) {
+  validateAchievements(achievementCategory: AchvCategory, data?: any): void {
     this.scene.launch("Achievements_Manager", {
       context: achievementCategory,
       unlockedAchievements: this.gameData.achvUnlocks,
