@@ -1244,7 +1244,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
   abstract getBossSegments(): number;
 
-  abstract getClearedBossSegmentIndex(): number;
+  abstract getBossSegmentIndex(): number;
 
   getMoveset(baseOnly?: boolean): PokemonMove[] {
     const ret = !baseOnly && this.summonData?.moveset ? this.summonData.moveset : this.moveset;
@@ -2864,8 +2864,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       ohkoDamage = this.hp;
     } else {
       // TODO: Potentially can cause a softlock against the pkr Eternatus boss on floor 200
-      const segmentIndex = this.getClearedBossSegmentIndex();
-      const enemyHpAfter = (this.getMaxHp() * (segmentIndex - 1)) / this.getBossSegments();
+      const segmentIndex = this.getBossSegmentIndex();
+      const enemyHpAfter = Math.floor((this.getMaxHp() * segmentIndex) / this.getBossSegments());
       ohkoDamage = toDmgValue(this.hp - enemyHpAfter);
     }
     const ohkoResult = ohkoDamage >= this.hp ? HitResult.ONE_HIT_KO : HitResult.EFFECTIVE;
@@ -4119,7 +4119,7 @@ export class PlayerPokemon extends Pokemon {
     return 0;
   }
 
-  getClearedBossSegmentIndex(): number {
+  getBossSegmentIndex(): number {
     return 0;
   }
 
@@ -4933,8 +4933,8 @@ export class EnemyPokemon extends Pokemon {
     return this.bossSegments;
   }
 
-  getClearedBossSegmentIndex(): number {
-    return this.isBoss() ? this.bossSegmentIndex + 1 : 0;
+  getBossSegmentIndex(): number {
+    return this.bossSegmentIndex;
   }
 
   override damage(
