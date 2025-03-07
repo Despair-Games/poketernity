@@ -345,4 +345,33 @@ describe("Test Battle Phase", () => {
     );
     await game.phaseInterceptor.to("SwitchPhase");
   });
+
+  it("moves between waves normally", async () => {
+    game.override
+      .battleType("single")
+      .enemySpecies(Species.SUNKERN)
+      .enemyAbility(Abilities.BALL_FETCH)
+      .startingWave(8)
+      .startingLevel(1000)
+      .enemyMoveset(MoveId.SPLASH);
+
+    await game.classicMode.startBattle([Species.ARCEUS]);
+
+    game.move.use(MoveId.FLAMETHROWER);
+    await game.toNextTurn();
+    game.move.use(MoveId.FLAMETHROWER);
+    await game.toNextWave();
+
+    expect(game.scene.currentBattle.waveIndex).toBe(9);
+
+    game.move.use(MoveId.FLAMETHROWER);
+    await game.toNextWave();
+
+    expect(game.scene.currentBattle.waveIndex).toBe(10);
+
+    game.move.use(MoveId.FLAMETHROWER);
+    await game.toNextTurn();
+
+    expect(game.scene.currentBattle.waveIndex).toBe(11);
+  });
 });
