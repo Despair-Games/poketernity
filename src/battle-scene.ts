@@ -2946,7 +2946,7 @@ export default class BattleScene extends SceneBase {
   validateAchievements(achievementCategory: AchvCategory.CLASSIC_VICTORY);
   validateAchievements(achievementCategory: AchvCategory.FORM_CHANGE, data: SpeciesFormChange);
   validateAchievements(achievementCategory: AchvCategory.TERASTALLIZE, data: ElementalType);
-  validateAchievements(achievementCategory: AchvCategory.FRIENDSHIP, data: number);
+  validateAchievements(achievementCategory: AchvCategory.FRIENDSHIP, data: Pokemon);
   validateAchievements(achievementCategory: AchvCategory.POKEDEX, data: DexEntry);
   validateAchievements(achievementCategory: AchvCategory.RIBBON_COUNT, data: number);
   validateAchievements(achievementCategory: AchvCategory, data?: any): void {
