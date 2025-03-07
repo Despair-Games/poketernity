@@ -8,8 +8,8 @@ import { ElementalType } from "#enums/elemental-type";
 import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { Button } from "#enums/buttons";
-import { pokemonFormChanges } from "#app/data/pokemon-forms";
-import { FormChangePhase } from "#app/phases/form-change-phase";
+import { FormChangeItem } from "#enums/form-change-item";
+import { SpeciesFormKey } from "#enums/species-form-key";
 
 describe("Form Change Phase", () => {
   let phaserGame: Phaser.Game;
@@ -31,11 +31,41 @@ describe("Form Change Phase", () => {
       .ability(Abilities.BALL_FETCH)
       .battleType("single")
       .disableCrits()
+      .startingLevel(100)
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
-      .startingModifier([{ name: "DYNAMAX_BAND" }]);
+      .startingModifier([{ name: "DYNAMAX_BAND" }, { name: "MEGA_BRACELET" }]);
   });
+
+  /**
+   * A helper function to test form changes triggering learned moves.
+   * @param newFormKey The form key of the form that the Pokemon will transform into.
+   * @param moveId The ID of the move to check.
+   * @param expectedToLearn If `true`, check that the move gets learned; otherwise, check that it does not get learned.
+   */
+  async function testMoveLearning(newFormKey: string, learnedMoveId: MoveId, expectedToLearn: boolean) {
+    // Before the form change: Should be normal form
+    const pokemon = game.scene.getPlayerParty()[0];
+    expect(pokemon.getFormKey()).toBe("");
+    expect(pokemon.moveset.map((m) => m.moveId)).not.toContain(learnedMoveId);
+
+    // Give a form change item to activate the form change
+    const formChangeItemType =
+      generateModifierType(modifierTypes.RARE_FORM_CHANGE_ITEM)
+      ?? generateModifierType(modifierTypes.FORM_CHANGE_ITEM)!;
+    const formChangeItem = formChangeItemType.newModifier(pokemon);
+    game.scene.addModifier(formChangeItem);
+
+    game.move.use(MoveId.SPLASH);
+    await game.toNextTurn();
+
+    // After the form change: Should be the desired new form
+    expect(game.phaseInterceptor.log.includes("FormChangePhase")).toBe(true);
+    expect(pokemon.getFormKey()).toBe(newFormKey);
+    expect(pokemon.moveset.map((m) => m.moveId).includes(learnedMoveId)).toBe(expectedToLearn);
+    expect(game.phaseInterceptor.log.includes("LearnMovePhase")).toBe(expectedToLearn);
+  }
 
   it("should not be cancellable", async () => {
     await game.classicMode.startBattle([Species.ZACIAN]);
@@ -76,46 +106,74 @@ describe("Form Change Phase", () => {
     expect(zacian.moveset.map((m) => m.moveId)).toContain(MoveId.BEHEMOTH_BLADE);
   });
 
-  it("should allow a G-Max Pokemon to learn its respective G-Max move", async () => {
+  it("should allow a G-Max Pokemon to learn its respective G-Max move at any level", async () => {
+    game.override.startingLevel(1);
     await game.classicMode.startBattle([Species.RILLABOOM]);
-
-    // Before the form change: Should be normal form
-    const rillaboom = game.scene.getPlayerParty()[0];
-    expect(rillaboom.getFormKey()).toBe("");
-    expect(rillaboom.moveset.map((m) => m.moveId)).not.toContain(MoveId.G_MAX_DRUM_SOLO);
-
-    // Give Rillaboom max mushrooms
-    const maxMushroomsType = generateModifierType(modifierTypes.RARE_FORM_CHANGE_ITEM)!;
-    const maxMushrooms = maxMushroomsType.newModifier(rillaboom);
-    game.scene.addModifier(maxMushrooms);
-
-    game.move.use(MoveId.SPLASH);
-    await game.toNextTurn();
-
-    // After the form change: Should be G-Max form
-    expect(game.phaseInterceptor.log.includes("FormChangePhase")).toBe(true);
-    expect(rillaboom.getFormKey()).toBe("gigantamax");
-    expect(rillaboom.moveset.map((m) => m.moveId)).toContain(MoveId.G_MAX_DRUM_SOLO);
+    await testMoveLearning(SpeciesFormKey.GIGANTAMAX, MoveId.G_MAX_DRUM_SOLO, true);
   });
 
-  it("should not allow a Pokemon reverting into its normal form to learn its respective G-Max move", async () => {
-    game.override.starterForms({ [Species.RILLABOOM]: 1 }).startingHeldItems([{ name: "RARE_FORM_CHANGE_ITEM" }]);
+  it("should not cause a Mega-evolving Pokemon to learn a move", async () => {
+    await game.classicMode.startBattle([Species.BEEDRILL]);
+    await testMoveLearning(SpeciesFormKey.MEGA, MoveId.TWINEEDLE, false);
+  });
+
+  it("should allow learning certain moves at a high enough level", async () => {
+    // For example, Hoopa-Unbound learns Hyperspace Fury at level 85
+    game.override.startingLevel(85);
+    await game.classicMode.startBattle([Species.HOOPA]);
+    await testMoveLearning("unbound", MoveId.HYPERSPACE_FURY, true);
+  });
+
+  it("should not allow learning certain moves if not at a high enough level", async () => {
+    // For example, Hoopa-Unbound learns Hyperspace Fury at level 85
+    game.override.startingLevel(84);
+    await game.classicMode.startBattle([Species.HOOPA]);
+    await testMoveLearning("unbound", MoveId.HYPERSPACE_FURY, false);
+  });
+
+  it("should not cause a Pokemon to learn moves when deactivating and reactivating Form Change Items", async () => {
+    game.override
+      .starterForms({ [Species.RILLABOOM]: 1 })
+      .startingHeldItems([{ name: "FORM_CHANGE_ITEM", type: FormChangeItem.MAX_MUSHROOMS }]);
     await game.classicMode.startBattle([Species.RILLABOOM]);
 
     // Before the form change: Should be G-Max form
     const rillaboom = game.scene.getPlayerParty()[0];
     expect(rillaboom.getFormKey()).toBe("gigantamax");
-    expect(rillaboom.moveset.map((m) => m.moveId)).not.toContain(MoveId.G_MAX_DRUM_SOLO);
-
-    // Manually trigger a form change
-    game.scene.unshiftPhase(new FormChangePhase(rillaboom, pokemonFormChanges[Species.RILLABOOM][1], false));
 
     game.move.use(MoveId.SPLASH);
-    await game.toNextTurn();
+    await game.doKillOpponents();
+    await game.phaseInterceptor.to("SelectModifierPhase");
 
-    // After the form change: Should be normal form
-    expect(game.phaseInterceptor.log.includes("FormChangePhase")).toBe(true);
+    // Navigate UI: Access "Check Party" menu from modifier selection
+    await new Promise<void>((r) => setTimeout(r, 10));
+    game.scene.ui.processInput(Button.DOWN);
+    game.scene.ui.processInput(Button.DOWN);
+    game.scene.ui.processInput(Button.DOWN);
+    game.scene.ui.processInput(Button.RIGHT);
+    game.scene.ui.processInput(Button.RIGHT);
+    game.scene.ui.processInput(Button.ACTION);
+
+    // Navigate UI: Deactivate Max Mushrooms
+    await new Promise<void>((r) => setTimeout(r, 10));
+    game.scene.ui.processInput(Button.ACTION);
+    game.scene.ui.processInput(Button.ACTION);
+    await game.phaseInterceptor.run("FormChangePhase");
     expect(rillaboom.getFormKey()).toBe("");
+
+    // Navigate UI: Reactivate Max Mushrooms
+    game.scene.ui.processInput(Button.ACTION);
+    game.scene.ui.processInput(Button.ACTION);
+    await game.phaseInterceptor.run("FormChangePhase");
+    expect(rillaboom.getFormKey()).toBe("gigantamax");
+
+    // Navigate UI: Exit "Check Party" menu
+    game.scene.ui.processInput(Button.CANCEL);
+    await game.toNextWave();
+
+    // Expect no new moves to be learned
     expect(rillaboom.moveset.map((m) => m.moveId)).not.toContain(MoveId.G_MAX_DRUM_SOLO);
+    expect(rillaboom.moveset.map((m) => m.moveId)).not.toContain(MoveId.DRUM_BEATING);
+    expect(game.phaseInterceptor.log.includes("LearnMovePhase")).toBe(false);
   });
 });
