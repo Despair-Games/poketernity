@@ -4928,6 +4928,12 @@ export class EnemyPokemon extends Pokemon {
 
     let clearedBossSegmentIndex = this.isBoss() ? this.bossSegmentIndex + 1 : 0;
 
+    /**
+     * Modify the damage with the {@linkcode DYNAMAX_DAMAGE_TAKEN_FACTOR} for the checks
+     * involving whether or not HP bars should break
+     */
+    damage = this.isMax(false) ? toDmgValue(damage * DYNAMAX_DAMAGE_TAKEN_FACTOR) : damage;
+
     if (this.isBoss() && !ignoreSegments) {
       const segmentSize = this.getMaxHp() / this.bossSegments;
       for (let s = this.bossSegmentIndex; s > 0; s--) {
@@ -4947,6 +4953,12 @@ export class EnemyPokemon extends Pokemon {
             }
 
             damage = toDmgValue(this.hp - hpThreshold + segmentSize * segmentsBypassed);
+            /**
+             * The actual place that the dynamax damage taken factor is applied is in Pokemon.damage
+             * so here we divide by the dynamax damage taken factor and then it will be the proper value
+             * when it is multiplied there
+             */
+            damage = this.isMax(false) ? toDmgValue(damage / DYNAMAX_DAMAGE_TAKEN_FACTOR) : damage;
             clearedBossSegmentIndex = s - segmentsBypassed;
           }
           break;
