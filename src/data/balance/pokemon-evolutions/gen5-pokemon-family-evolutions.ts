@@ -1,7 +1,8 @@
 import { globalScene } from "#app/global-scene";
 import { Species } from "#enums/species";
-import { TimeOfDay } from "#enums/time-of-day";
 import {
+  DayEvolutionCondition,
+  NightEvolutionCondition,
   type PokemonEvolutions,
   SpeciesEvolution,
   SpeciesEvolutionCondition,
@@ -26,18 +27,8 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.PIGNITE]: [new SpeciesEvolution(Species.EMBOAR, 36, null, null)],
   [Species.OSHAWOTT]: [new SpeciesEvolution(Species.DEWOTT, 17, null, null)],
   [Species.DEWOTT]: [
-    new SpeciesEvolution(
-      Species.HISUI_SAMUROTT,
-      36,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
-    ),
-    new SpeciesEvolution(
-      Species.SAMUROTT,
-      36,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
-    ),
+    new SpeciesEvolution(Species.HISUI_SAMUROTT, 36, null, new NightEvolutionCondition()),
+    new SpeciesEvolution(Species.SAMUROTT, 36, null, new DayEvolutionCondition()),
   ],
   [Species.PATRAT]: [new SpeciesEvolution(Species.WATCHOG, 20, null, null)],
   [Species.LILLIPUP]: [new SpeciesEvolution(Species.HERDIER, 16, null, null)],
@@ -175,18 +166,8 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
     new SpeciesEvolution(Species.KINGAMBIT, 1, EvolutionItem.LEADERS_CREST, null, KINGAMBIT_EVO_LEVEL),
   ],
   [Species.RUFFLET]: [
-    new SpeciesEvolution(
-      Species.HISUI_BRAVIARY,
-      54,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
-    ),
-    new SpeciesEvolution(
-      Species.BRAVIARY,
-      54,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
-    ),
+    new SpeciesEvolution(Species.HISUI_BRAVIARY, 54, null, new DayEvolutionCondition()),
+    new SpeciesEvolution(Species.BRAVIARY, 54, null, new NightEvolutionCondition()),
   ],
   [Species.VULLABY]: [new SpeciesEvolution(Species.MANDIBUZZ, 54, null, null)],
   [Species.DEINO]: [new SpeciesEvolution(Species.ZWEILOUS, 50, null, null)],

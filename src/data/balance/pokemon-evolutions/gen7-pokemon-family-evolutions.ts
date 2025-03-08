@@ -2,6 +2,9 @@ import { globalScene } from "#app/global-scene";
 import { Species } from "#enums/species";
 import { TimeOfDay } from "#enums/time-of-day";
 import {
+  DayEvolutionCondition,
+  GenderEvolutionCondition,
+  NightEvolutionCondition,
   type PokemonEvolutions,
   SpeciesEvolution,
   SpeciesEvolutionCondition,
@@ -98,9 +101,7 @@ export const gen7pokemonFamilyEvolutions: PokemonEvolutions = {
     ),
   ],
   [Species.MORELULL]: [new SpeciesEvolution(Species.SHIINOTIC, 24, null, null)],
-  [Species.SALANDIT]: [
-    new SpeciesEvolution(Species.SALAZZLE, 33, null, new SpeciesEvolutionCondition((p) => p.gender === Gender.FEMALE)),
-  ],
+  [Species.SALANDIT]: [new SpeciesEvolution(Species.SALAZZLE, 33, null, new GenderEvolutionCondition(Gender.FEMALE))],
   [Species.STUFFUL]: [new SpeciesEvolution(Species.BEWEAR, 27, null, null)],
   [Species.BOUNSWEET]: [new SpeciesEvolution(Species.STEENEE, 18, null, null)],
   [Species.STEENEE]: [
@@ -121,18 +122,8 @@ export const gen7pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.HAKAMO_O]: [new SpeciesEvolution(Species.KOMMO_O, 45, null, null)],
   [Species.COSMOG]: [new SpeciesEvolution(Species.COSMOEM, 23, null, null)],
   [Species.COSMOEM]: [
-    new SpeciesEvolution(
-      Species.LUNALA,
-      53,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
-    ),
-    new SpeciesEvolution(
-      Species.SOLGALEO,
-      53,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
-    ),
+    new SpeciesEvolution(Species.LUNALA, 53, null, new DayEvolutionCondition()),
+    new SpeciesEvolution(Species.SOLGALEO, 53, null, new NightEvolutionCondition()),
   ],
   [Species.MELTAN]: [new SpeciesEvolution(Species.MELMETAL, 48, null, null)],
   /** Poipole learns dragon pulse at level 1 so enemy evolve level here is changed */

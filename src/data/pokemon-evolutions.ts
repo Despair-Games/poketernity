@@ -1,6 +1,11 @@
 import type { Pokemon } from "#app/field/pokemon";
 import type { Species } from "#enums/species";
 import { EvolutionItem } from "#enums/evolution-item";
+import { globalScene } from "#app/global-scene";
+import { TimeOfDay } from "#enums/time-of-day";
+import { MoveId } from "#enums/move-id";
+import { ElementalType } from "#enums/elemental-type";
+import type { Gender } from "#enums/gender";
 
 /**
  * Pokemon Evolution tuple type consisting of:
@@ -65,18 +70,97 @@ export class SpeciesEvolution extends SpeciesFormEvolution {
   ) {
     super(speciesId, null, null, level, item, condition, enemyEvolveLevel);
   }
+  // Todo: return level or item along with condition descriptions
 }
 
 export class SpeciesEvolutionCondition {
   public predicate: EvolutionConditionPredicate;
+  // TODO: Use localization instead of hardcoded strings
+  public description: string = "";
 
   constructor(predicate: EvolutionConditionPredicate) {
     this.predicate = predicate;
   }
 }
 
+// TODO: Break this up into a MaleCondition and FemaleCondition?
+export class GenderEvolutionCondition extends SpeciesEvolutionCondition {
+  constructor(requiredGender: Gender) {
+    super((p) => p.gender === requiredGender);
+    this.description = "requires gender";
+  }
+}
+
+export class DayEvolutionCondition extends SpeciesEvolutionCondition {
+  constructor() {
+    super(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]));
+    this.description = "during Dawn or Day";
+  }
+}
+
+export class NightEvolutionCondition extends SpeciesEvolutionCondition {
+  constructor() {
+    super(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT]));
+    this.description = "during Dusk or Night";
+  }
+}
+
+/**
+ * Used for Espeon, Roselia, and Riolu
+ */
+export class FriendshipAndDayCondition extends SpeciesEvolutionCondition {
+  constructor(friendshipAmount: number) {
+    super((p) => p.friendship >= friendshipAmount && globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]));
+    this.description = "with friendship during Dawn or Day";
+  }
+}
+
+/**
+ * Used for Umbreon and Chimeco
+ */
+export class FriendshipAndNightCondition extends SpeciesEvolutionCondition {
+  constructor(friendshipAmount: number) {
+    super((p) => p.friendship >= friendshipAmount && globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT]));
+    this.description = "with friendship during Dusk or Night";
+  }
+}
+
+/**
+ * Mime Jr has a regional evo based on time of day
+ */
+export class MrMimeCondition extends SpeciesEvolutionCondition {
+  constructor(forGalar: boolean) {
+    if (forGalar) {
+      super(
+        (p) =>
+          p.moveset.filter((m) => m.moveId === MoveId.MIMIC).length > 0
+          && globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT]),
+      );
+      this.description = "knowing mimic during dusk or night";
+    } else {
+      super(
+        (p) =>
+          p.moveset.filter((m) => m.moveId === MoveId.MIMIC).length > 0
+          && globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]),
+      );
+      this.description = "knowing mimic during dawn or day";
+    }
+  }
+}
+
+/** Sylveon requires high friendship and knowing a fairy type move */
+export class SylveonEvoCondition extends SpeciesEvolutionCondition {
+  constructor(friendshipAmount: number) {
+    super(
+      (p) => p.friendship >= friendshipAmount && !!p.getMoveset().find((m) => m.getMove().type === ElementalType.FAIRY),
+    );
+    this.description = "with high friendship and knowing a Fairy type move";
+  }
+}
+
 export class SpeciesFriendshipEvolutionCondition extends SpeciesEvolutionCondition {
-  constructor(friendshipAmount: number, predicate?: EvolutionConditionPredicate) {
-    super((p) => p.friendship >= friendshipAmount && (!predicate || predicate(p)));
+  constructor(friendshipAmount: number) {
+    super((p) => p.friendship >= friendshipAmount);
+    this.description = "with friendship: " + friendshipAmount;
   }
 }

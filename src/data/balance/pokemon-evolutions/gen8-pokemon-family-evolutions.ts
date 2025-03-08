@@ -1,12 +1,13 @@
 import { globalScene } from "#app/global-scene";
 import { Species } from "#enums/species";
-import { TimeOfDay } from "#enums/time-of-day";
 import {
+  DayEvolutionCondition,
+  FriendshipAndNightCondition,
+  NightEvolutionCondition,
   type PokemonEvolutions,
   SpeciesEvolution,
   SpeciesEvolutionCondition,
   SpeciesFormEvolution,
-  SpeciesFriendshipEvolutionCondition,
 } from "#app/data/pokemon-evolutions";
 import { EvolutionItem } from "#enums/evolution-item";
 import {
@@ -222,15 +223,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
     ),
   ],
   [Species.SNOM]: [
-    new SpeciesEvolution(
-      Species.FROSMOTH,
-      1,
-      null,
-      new SpeciesFriendshipEvolutionCondition(90, () =>
-        globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT]),
-      ),
-      HAPPINESS_EVO_LEVEL,
-    ),
+    new SpeciesEvolution(Species.FROSMOTH, 1, null, new FriendshipAndNightCondition(90), HAPPINESS_EVO_LEVEL),
   ],
   [Species.CUFANT]: [new SpeciesEvolution(Species.COPPERAJAH, 34, null, null)],
   [Species.DURALUDON]: [
@@ -272,14 +265,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.GALAR_FARFETCHD]: [new SpeciesEvolution(Species.SIRFETCHD, SIRFETCHD_EVO_LEVEL, null, null)],
   [Species.GALAR_CORSOLA]: [new SpeciesEvolution(Species.CURSOLA, 38, null, null)],
   [Species.GALAR_ZIGZAGOON]: [new SpeciesEvolution(Species.GALAR_LINOONE, 20, null, null)],
-  [Species.GALAR_LINOONE]: [
-    new SpeciesEvolution(
-      Species.OBSTAGOON,
-      35,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
-    ),
-  ],
+  [Species.GALAR_LINOONE]: [new SpeciesEvolution(Species.OBSTAGOON, 35, null, new NightEvolutionCondition())],
   [Species.GALAR_DARUMAKA]: [
     new SpeciesEvolution(Species.GALAR_DARMANITAN, 1, EvolutionItem.ICE_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
@@ -308,9 +294,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.SNEASLER,
       1,
       EvolutionItem.RAZOR_CLAW,
-      new SpeciesEvolutionCondition(
-        () => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]) /* Razor claw at day */,
-      ),
+      new DayEvolutionCondition(),
       GENERIC_ITEM_EVO_LEVEL,
     ),
   ],

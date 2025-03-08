@@ -1,13 +1,11 @@
-import { globalScene } from "#app/global-scene";
-import { ElementalType } from "#enums/elemental-type";
 import { EvolutionItem } from "#enums/evolution-item";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { TimeOfDay } from "#enums/time-of-day";
 import {
   ADVANCED_ITEM_EVO_LEVEL,
   ANNIHILAPE_EVO_LEVEL,
   BABY_HAPPINESS_EVO_LEVEL,
+  EEVEE_FAMILY_EVO_LEVEL,
   GENERIC_ITEM_EVO_LEVEL,
   HAPPINESS_EVO_LEVEL,
   LICKILICKY_EVO_LEVEL,
@@ -21,6 +19,12 @@ import {
   SpeciesEvolution,
   SpeciesEvolutionCondition,
   SpeciesFriendshipEvolutionCondition,
+  NightEvolutionCondition,
+  DayEvolutionCondition,
+  FriendshipAndDayCondition,
+  FriendshipAndNightCondition,
+  MrMimeCondition,
+  SylveonEvoCondition,
 } from "#app/data/pokemon-evolutions";
 
 export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
@@ -62,16 +66,6 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   ],
   /** Custom method of evolving into Alolan Raichu */
   [Species.PIKACHU]: [
-    new SpeciesFormEvolution(Species.ALOLA_RAICHU, "", "", 1, EvolutionItem.SHINY_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-    new SpeciesFormEvolution(
-      Species.ALOLA_RAICHU,
-      "partner",
-      "",
-      1,
-      EvolutionItem.SHINY_STONE,
-      null,
-      GENERIC_ITEM_EVO_LEVEL,
-    ),
     new SpeciesFormEvolution(Species.RAICHU, "", "", 1, EvolutionItem.THUNDER_STONE, null, GENERIC_ITEM_EVO_LEVEL),
     new SpeciesFormEvolution(
       Species.RAICHU,
@@ -79,6 +73,16 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       EvolutionItem.THUNDER_STONE,
+      null,
+      GENERIC_ITEM_EVO_LEVEL,
+    ),
+    new SpeciesFormEvolution(Species.ALOLA_RAICHU, "", "", 1, EvolutionItem.SHINY_STONE, null, GENERIC_ITEM_EVO_LEVEL),
+    new SpeciesFormEvolution(
+      Species.ALOLA_RAICHU,
+      "partner",
+      "",
+      1,
+      EvolutionItem.SHINY_STONE,
       null,
       GENERIC_ITEM_EVO_LEVEL,
     ),
@@ -195,22 +199,12 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.KRABBY]: [new SpeciesEvolution(Species.KINGLER, 28, null, null)],
   [Species.VOLTORB]: [new SpeciesEvolution(Species.ELECTRODE, 30, null, null)],
   [Species.EXEGGCUTE]: [
-    new SpeciesEvolution(Species.ALOLA_EXEGGUTOR, 1, EvolutionItem.SUN_STONE, null, GENERIC_ITEM_EVO_LEVEL),
     new SpeciesEvolution(Species.EXEGGUTOR, 1, EvolutionItem.LEAF_STONE, null, GENERIC_ITEM_EVO_LEVEL),
+    new SpeciesEvolution(Species.ALOLA_EXEGGUTOR, 1, EvolutionItem.SUN_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
   [Species.CUBONE]: [
-    new SpeciesEvolution(
-      Species.ALOLA_MAROWAK,
-      28,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
-    ),
-    new SpeciesEvolution(
-      Species.MAROWAK,
-      28,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
-    ),
+    new SpeciesEvolution(Species.MAROWAK, 28, null, new DayEvolutionCondition()),
+    new SpeciesEvolution(Species.ALOLA_MAROWAK, 28, null, new NightEvolutionCondition()),
   ],
   /** Tyrogue is from gen 2 */
   [Species.TYROGUE]: [
@@ -267,18 +261,8 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
     ),
   ],
   [Species.KOFFING]: [
-    new SpeciesEvolution(
-      Species.GALAR_WEEZING,
-      35,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
-    ),
-    new SpeciesEvolution(
-      Species.WEEZING,
-      35,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
-    ),
+    new SpeciesEvolution(Species.WEEZING, 35, null, new DayEvolutionCondition()),
+    new SpeciesEvolution(Species.GALAR_WEEZING, 35, null, new NightEvolutionCondition()),
   ],
   [Species.RHYHORN]: [new SpeciesEvolution(Species.RHYDON, 42, null, null)],
   [Species.RHYDON]: [
@@ -314,28 +298,8 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.STARYU]: [new SpeciesEvolution(Species.STARMIE, 1, EvolutionItem.WATER_STONE, null, GENERIC_ITEM_EVO_LEVEL)],
   /** Mime Jr is from gen 4 */
   [Species.MIME_JR]: [
-    new SpeciesEvolution(
-      Species.GALAR_MR_MIME,
-      1,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) =>
-          p.moveset.filter((m) => m.moveId === MoveId.MIMIC).length > 0
-          && globalScene.arena.isTimeOfDay([TimeOfDay.NIGHT, TimeOfDay.DUSK]),
-      ),
-      MR_MIME_EVO_LEVEL,
-    ),
-    new SpeciesEvolution(
-      Species.MR_MIME,
-      1,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) =>
-          p.moveset.filter((m) => m.moveId === MoveId.MIMIC).length > 0
-          && globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]),
-      ),
-      MR_MIME_EVO_LEVEL,
-    ),
+    new SpeciesEvolution(Species.MR_MIME, 1, null, new MrMimeCondition(false), MR_MIME_EVO_LEVEL),
+    new SpeciesEvolution(Species.GALAR_MR_MIME, 1, null, new MrMimeCondition(true), MR_MIME_EVO_LEVEL),
   ],
   /** Galar Mr Mime is from gen 8 */
   [Species.GALAR_MR_MIME]: [new SpeciesEvolution(Species.MR_RIME, 42, null, null)],
@@ -358,29 +322,15 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.MAGIKARP]: [new SpeciesEvolution(Species.GYARADOS, 20, null, null)],
   /** Keeping all of Eevee's alt level's the same for consistency */
   [Species.EEVEE]: [
-    new SpeciesFormEvolution(
-      Species.SYLVEON,
-      "",
-      "",
-      1,
-      null,
-      new SpeciesFriendshipEvolutionCondition(
-        120,
-        (p) => !!p.getMoveset().find((m) => m.getMove().type === ElementalType.FAIRY),
-      ),
-      GENERIC_ITEM_EVO_LEVEL,
-    ),
+    new SpeciesFormEvolution(Species.SYLVEON, "", "", 1, null, new SylveonEvoCondition(120), EEVEE_FAMILY_EVO_LEVEL),
     new SpeciesFormEvolution(
       Species.SYLVEON,
       "partner",
       "",
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(
-        120,
-        (p) => !!p.getMoveset().find((m) => m.getMove().type === ElementalType.FAIRY),
-      ),
-      GENERIC_ITEM_EVO_LEVEL,
+      new SylveonEvoCondition(120),
+      EEVEE_FAMILY_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
       Species.ESPEON,
@@ -388,7 +338,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(120, () => globalScene.arena.isTimeOfDay(TimeOfDay.DAY)),
+      new FriendshipAndDayCondition(120),
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -397,8 +347,8 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(120, () => globalScene.arena.isTimeOfDay(TimeOfDay.DAY)),
-      GENERIC_ITEM_EVO_LEVEL,
+      new FriendshipAndDayCondition(120),
+      EEVEE_FAMILY_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
       Species.UMBREON,
@@ -406,8 +356,8 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(120, () => globalScene.arena.isTimeOfDay(TimeOfDay.NIGHT)),
-      GENERIC_ITEM_EVO_LEVEL,
+      new FriendshipAndNightCondition(120),
+      EEVEE_FAMILY_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
       Species.UMBREON,
@@ -415,10 +365,10 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(120, () => globalScene.arena.isTimeOfDay(TimeOfDay.NIGHT)),
-      GENERIC_ITEM_EVO_LEVEL,
+      new FriendshipAndNightCondition(120),
+      EEVEE_FAMILY_EVO_LEVEL,
     ),
-    new SpeciesFormEvolution(Species.VAPOREON, "", "", 1, EvolutionItem.WATER_STONE, null, GENERIC_ITEM_EVO_LEVEL),
+    new SpeciesFormEvolution(Species.VAPOREON, "", "", 1, EvolutionItem.WATER_STONE, null, EEVEE_FAMILY_EVO_LEVEL),
     new SpeciesFormEvolution(
       Species.VAPOREON,
       "partner",
@@ -426,9 +376,9 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       1,
       EvolutionItem.WATER_STONE,
       null,
-      GENERIC_ITEM_EVO_LEVEL,
+      EEVEE_FAMILY_EVO_LEVEL,
     ),
-    new SpeciesFormEvolution(Species.JOLTEON, "", "", 1, EvolutionItem.THUNDER_STONE, null, GENERIC_ITEM_EVO_LEVEL),
+    new SpeciesFormEvolution(Species.JOLTEON, "", "", 1, EvolutionItem.THUNDER_STONE, null, EEVEE_FAMILY_EVO_LEVEL),
     new SpeciesFormEvolution(
       Species.JOLTEON,
       "partner",
@@ -436,14 +386,14 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       1,
       EvolutionItem.THUNDER_STONE,
       null,
-      GENERIC_ITEM_EVO_LEVEL,
+      EEVEE_FAMILY_EVO_LEVEL,
     ),
-    new SpeciesFormEvolution(Species.FLAREON, "", "", 1, EvolutionItem.FIRE_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-    new SpeciesFormEvolution(Species.FLAREON, "partner", "", 1, EvolutionItem.FIRE_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-    new SpeciesFormEvolution(Species.LEAFEON, "", "", 1, EvolutionItem.LEAF_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-    new SpeciesFormEvolution(Species.LEAFEON, "partner", "", 1, EvolutionItem.LEAF_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-    new SpeciesFormEvolution(Species.GLACEON, "", "", 1, EvolutionItem.ICE_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-    new SpeciesFormEvolution(Species.GLACEON, "partner", "", 1, EvolutionItem.ICE_STONE, null, GENERIC_ITEM_EVO_LEVEL),
+    new SpeciesFormEvolution(Species.FLAREON, "", "", 1, EvolutionItem.FIRE_STONE, null, EEVEE_FAMILY_EVO_LEVEL),
+    new SpeciesFormEvolution(Species.FLAREON, "partner", "", 1, EvolutionItem.FIRE_STONE, null, EEVEE_FAMILY_EVO_LEVEL),
+    new SpeciesFormEvolution(Species.LEAFEON, "", "", 1, EvolutionItem.LEAF_STONE, null, EEVEE_FAMILY_EVO_LEVEL),
+    new SpeciesFormEvolution(Species.LEAFEON, "partner", "", 1, EvolutionItem.LEAF_STONE, null, EEVEE_FAMILY_EVO_LEVEL),
+    new SpeciesFormEvolution(Species.GLACEON, "", "", 1, EvolutionItem.ICE_STONE, null, EEVEE_FAMILY_EVO_LEVEL),
+    new SpeciesFormEvolution(Species.GLACEON, "partner", "", 1, EvolutionItem.ICE_STONE, null, EEVEE_FAMILY_EVO_LEVEL),
   ],
   [Species.PORYGON]: [new SpeciesEvolution(Species.PORYGON2, 1, EvolutionItem.UPGRADE, null, GENERIC_ITEM_EVO_LEVEL)],
   /** Porygon2 is from gen 2 */

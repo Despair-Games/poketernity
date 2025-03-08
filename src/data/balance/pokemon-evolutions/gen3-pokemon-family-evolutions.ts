@@ -1,11 +1,14 @@
 import { globalScene } from "#app/global-scene";
 import { Species } from "#enums/species";
-import { TimeOfDay } from "#enums/time-of-day";
 import {
+  DayEvolutionCondition,
+  FriendshipAndDayCondition,
+  FriendshipAndNightCondition,
+  GenderEvolutionCondition,
+  NightEvolutionCondition,
   type PokemonEvolutions,
   SpeciesEvolution,
   SpeciesEvolutionCondition,
-  SpeciesFriendshipEvolutionCondition,
 } from "#app/data/pokemon-evolutions";
 import { Gender } from "#enums/gender";
 import { PokeballType } from "#enums/pokeball";
@@ -27,18 +30,8 @@ export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.ZIGZAGOON]: [new SpeciesEvolution(Species.LINOONE, 20, null, null)],
   /** Custom: Wurmple evolves based on time of day instead of by personality value */
   [Species.WURMPLE]: [
-    new SpeciesEvolution(
-      Species.SILCOON,
-      7,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
-    ),
-    new SpeciesEvolution(
-      Species.CASCOON,
-      7,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
-    ),
+    new SpeciesEvolution(Species.SILCOON, 7, null, new NightEvolutionCondition()),
+    new SpeciesEvolution(Species.CASCOON, 7, null, new DayEvolutionCondition()),
   ],
   [Species.SILCOON]: [new SpeciesEvolution(Species.BEAUTIFLY, 10, null, null)],
   [Species.CASCOON]: [new SpeciesEvolution(Species.DUSTOX, 10, null, null)],
@@ -53,8 +46,8 @@ export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.RALTS]: [new SpeciesEvolution(Species.KIRLIA, 20, null, null)],
   /** Custom: Gallade evolves by level instead of dawn stone */
   [Species.KIRLIA]: [
-    new SpeciesEvolution(Species.GARDEVOIR, 30, null, new SpeciesEvolutionCondition((p) => p.gender === Gender.FEMALE)),
-    new SpeciesEvolution(Species.GALLADE, 30, null, new SpeciesEvolutionCondition((p) => p.gender === Gender.MALE)),
+    new SpeciesEvolution(Species.GARDEVOIR, 30, null, new GenderEvolutionCondition(Gender.FEMALE)),
+    new SpeciesEvolution(Species.GALLADE, 30, null, new GenderEvolutionCondition(Gender.MALE)),
   ],
   [Species.SURSKIT]: [new SpeciesEvolution(Species.MASQUERAIN, 22, null, null)],
   [Species.SHROOMISH]: [new SpeciesEvolution(Species.BRELOOM, 23, null, null)],
@@ -84,13 +77,7 @@ export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.ELECTRIKE]: [new SpeciesEvolution(Species.MANECTRIC, 26, null, null)],
   /** Budew is from Gen 4 */
   [Species.BUDEW]: [
-    new SpeciesEvolution(
-      Species.ROSELIA,
-      1,
-      null,
-      new SpeciesFriendshipEvolutionCondition(70, () => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
-      BABY_HAPPINESS_EVO_LEVEL,
-    ),
+    new SpeciesEvolution(Species.ROSELIA, 1, null, new FriendshipAndDayCondition(70), BABY_HAPPINESS_EVO_LEVEL),
   ],
   [Species.ROSELIA]: [
     new SpeciesEvolution(Species.ROSERADE, 1, EvolutionItem.SHINY_STONE, null, GENERIC_ITEM_EVO_LEVEL),
@@ -117,20 +104,12 @@ export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
   ],
   /** Chingling is from Gen 4 */
   [Species.CHINGLING]: [
-    new SpeciesEvolution(
-      Species.CHIMECHO,
-      1,
-      null,
-      new SpeciesFriendshipEvolutionCondition(90, () =>
-        globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT]),
-      ),
-      BABY_HAPPINESS_EVO_LEVEL,
-    ),
+    new SpeciesEvolution(Species.CHIMECHO, 1, null, new FriendshipAndNightCondition(90), BABY_HAPPINESS_EVO_LEVEL),
   ],
   /** Custom: Froslass evolves by level instead of Dawn Stone */
   [Species.SNORUNT]: [
-    new SpeciesEvolution(Species.GLALIE, 42, null, new SpeciesEvolutionCondition((p) => p.gender === Gender.MALE)),
-    new SpeciesEvolution(Species.FROSLASS, 42, null, new SpeciesEvolutionCondition((p) => p.gender === Gender.FEMALE)),
+    new SpeciesEvolution(Species.GLALIE, 42, null, new GenderEvolutionCondition(Gender.MALE)),
+    new SpeciesEvolution(Species.FROSLASS, 42, null, new GenderEvolutionCondition(Gender.FEMALE)),
   ],
   [Species.SPHEAL]: [new SpeciesEvolution(Species.SEALEO, 32, null, null)],
   [Species.SEALEO]: [new SpeciesEvolution(Species.WALREIN, 44, null, null)],
@@ -139,15 +118,15 @@ export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
     new SpeciesEvolution(
       Species.HUNTAIL,
       1,
-      EvolutionItem.LINKING_CORD,
-      new SpeciesEvolutionCondition((p) => p.gender === Gender.MALE /* Deep Sea Tooth */),
+      EvolutionItem.LINKING_CORD /* Deep Sea Tooth */,
+      new GenderEvolutionCondition(Gender.MALE),
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesEvolution(
       Species.GOREBYSS,
       1,
-      EvolutionItem.LINKING_CORD,
-      new SpeciesEvolutionCondition((p) => p.gender === Gender.FEMALE /* Deep Sea Scale */),
+      EvolutionItem.LINKING_CORD /* Deep Sea Scale */,
+      new GenderEvolutionCondition(Gender.FEMALE),
       GENERIC_ITEM_EVO_LEVEL,
     ),
   ],

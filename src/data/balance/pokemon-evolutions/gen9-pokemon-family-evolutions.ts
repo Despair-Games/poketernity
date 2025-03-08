@@ -6,6 +6,8 @@ import {
   RABSCA_EVO_LEVEL,
 } from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
 import {
+  GenderEvolutionCondition,
+  NightEvolutionCondition,
   SpeciesEvolution,
   SpeciesEvolutionCondition,
   SpeciesFormEvolution,
@@ -16,7 +18,6 @@ import { randSeedInt } from "#app/utils";
 import { EvolutionItem } from "#enums/evolution-item";
 import { Gender } from "#enums/gender";
 import { Species } from "#enums/species";
-import { TimeOfDay } from "#enums/time-of-day";
 
 export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.SPRIGATITO]: [new SpeciesEvolution(Species.FLORAGATO, 16, null, null)],
@@ -26,22 +27,8 @@ export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.QUAXLY]: [new SpeciesEvolution(Species.QUAXWELL, 16, null, null)],
   [Species.QUAXWELL]: [new SpeciesEvolution(Species.QUAQUAVAL, 36, null, null)],
   [Species.LECHONK]: [
-    new SpeciesFormEvolution(
-      Species.OINKOLOGNE,
-      "",
-      "female",
-      18,
-      null,
-      new SpeciesEvolutionCondition((p) => p.gender === Gender.FEMALE),
-    ),
-    new SpeciesFormEvolution(
-      Species.OINKOLOGNE,
-      "",
-      "",
-      18,
-      null,
-      new SpeciesEvolutionCondition((p) => p.gender === Gender.MALE),
-    ),
+    new SpeciesFormEvolution(Species.OINKOLOGNE, "", "", 18, null, new GenderEvolutionCondition(Gender.MALE)),
+    new SpeciesFormEvolution(Species.OINKOLOGNE, "", "female", 18, null, new GenderEvolutionCondition(Gender.FEMALE)),
   ],
   [Species.TAROUNTULA]: [new SpeciesEvolution(Species.SPIDOPS, 15, null, null)],
   [Species.NYMBLE]: [new SpeciesEvolution(Species.LOKIX, 24, null, null)],
@@ -91,14 +78,7 @@ export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.FINIZEN]: [new SpeciesEvolution(Species.PALAFIN, 38, null, null)],
   [Species.VAROOM]: [new SpeciesEvolution(Species.REVAVROOM, 40, null, null)],
   [Species.GLIMMET]: [new SpeciesEvolution(Species.GLIMMORA, 35, null, null)],
-  [Species.GREAVARD]: [
-    new SpeciesEvolution(
-      Species.HOUNDSTONE,
-      30,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
-    ),
-  ],
+  [Species.GREAVARD]: [new SpeciesEvolution(Species.HOUNDSTONE, 30, null, new NightEvolutionCondition())],
   [Species.CETODDLE]: [new SpeciesEvolution(Species.CETITAN, 1, EvolutionItem.ICE_STONE, null, GENERIC_ITEM_EVO_LEVEL)],
   /** Since this is the only Paldea Pokemon that evolves, I am leaving it in dex order */
   [Species.PALDEA_WOOPER]: [new SpeciesEvolution(Species.CLODSIRE, 20, null, null)],
