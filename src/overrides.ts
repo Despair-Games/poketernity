@@ -250,7 +250,7 @@ class DefaultOverrides {
    * ITEM_REWARD_OVERRIDE: [{ name: "RARER_CANDY" }, { name: "DYNAMAX_BAND" }, { name: "RARE_EVOLUTION_ITEM" }]
    * 
    * // Example of a vitamin that boosts def (Iron)
-   * ITEM_REWARD_OVERRIDE: [{ name:"BASE_STAT_BOOSTER", type: Stat.DEF }]
+   * ITEM_REWARD_OVERRIDE: [{ name: "BASE_STAT_BOOSTER", type: Stat.DEF }]
    * 
    * // Example of a type boosting item (Charcoal)
    * { name: "ATTACK_TYPE_BOOSTER", type: ElementalType.FIRE }
