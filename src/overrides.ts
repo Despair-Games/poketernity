@@ -247,13 +247,13 @@ class DefaultOverrides {
    * @example
    * ```
    * // Attempts to make the first item reward a rarer candy, the second one a dynamax band, and the third a rare evolution item
-   * ITEM_REWARD_OVERRIDE:[{name:"RARER_CANDY"},{name:"DYNAMAX_BAND"},{name:"RARE_EVOLUTION_ITEM"}]
+   * ITEM_REWARD_OVERRIDE: [{ name: "RARER_CANDY" }, { name: "DYNAMAX_BAND" }, { name: "RARE_EVOLUTION_ITEM" }]
    * 
    * // Example of a vitamin that boosts def (Iron)
-   * ITEM_REWARD_OVERRIDE:[{name:"BASE_STAT_BOOSTER", type: Stat.DEF}]
+   * ITEM_REWARD_OVERRIDE: [{ name:"BASE_STAT_BOOSTER", type: Stat.DEF }]
    * 
    * // Example of a type boosting item (Charcoal)
-   * {name: "ATTACK_TYPE_BOOSTER", type: ElementalType.FIRE}
+   * { name: "ATTACK_TYPE_BOOSTER", type: ElementalType.FIRE }
    * ```
    */
   readonly ITEM_REWARD_OVERRIDE: ModifierOverride[] = [];
