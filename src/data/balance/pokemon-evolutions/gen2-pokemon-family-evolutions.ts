@@ -30,8 +30,8 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.BAYLEEF]: [new SpeciesEvolution(Species.MEGANIUM, 32, null, null)],
   [Species.CYNDAQUIL]: [new SpeciesEvolution(Species.QUILAVA, 14, null, null)],
   [Species.QUILAVA]: [
-    new SpeciesEvolution(Species.HISUI_TYPHLOSION, 36, null, new NightEvolutionCondition()),
     new SpeciesEvolution(Species.TYPHLOSION, 36, null, new DayEvolutionCondition()),
+    new SpeciesEvolution(Species.HISUI_TYPHLOSION, 36, null, new NightEvolutionCondition()),
   ],
   [Species.TOTODILE]: [new SpeciesEvolution(Species.CROCONAW, 18, null, null)],
   [Species.CROCONAW]: [new SpeciesEvolution(Species.FERALIGATR, 30, null, null)],

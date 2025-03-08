@@ -27,8 +27,8 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.PIGNITE]: [new SpeciesEvolution(Species.EMBOAR, 36, null, null)],
   [Species.OSHAWOTT]: [new SpeciesEvolution(Species.DEWOTT, 17, null, null)],
   [Species.DEWOTT]: [
-    new SpeciesEvolution(Species.HISUI_SAMUROTT, 36, null, new NightEvolutionCondition()),
     new SpeciesEvolution(Species.SAMUROTT, 36, null, new DayEvolutionCondition()),
+    new SpeciesEvolution(Species.HISUI_SAMUROTT, 36, null, new NightEvolutionCondition()),
   ],
   [Species.PATRAT]: [new SpeciesEvolution(Species.WATCHOG, 20, null, null)],
   [Species.LILLIPUP]: [new SpeciesEvolution(Species.HERDIER, 16, null, null)],

@@ -25,16 +25,16 @@ export const gen7pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.ROWLET]: [new SpeciesEvolution(Species.DARTRIX, 17, null, null)],
   [Species.DARTRIX]: [
     new SpeciesEvolution(
-      Species.HISUI_DECIDUEYE,
-      36,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
-    ),
-    new SpeciesEvolution(
       Species.DECIDUEYE,
       34,
       null,
       new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
+    ),
+    new SpeciesEvolution(
+      Species.HISUI_DECIDUEYE,
+      36,
+      null,
+      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
   ],
   [Species.LITTEN]: [new SpeciesEvolution(Species.TORRACAT, 17, null, null)],
