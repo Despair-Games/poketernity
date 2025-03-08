@@ -67,7 +67,8 @@ export default class DamageNumberHandler {
       damageNumber.setColor(textColor);
     }
     if (shadowColor) {
-      if (critical) {
+      // Only moves that deal damage should display critical animation
+      if (critical && result !== HitResult.HEAL && amount > 0) {
         damageNumber.setShadowOffset(0, 0);
         damageNumber.setStroke(shadowColor, 12);
       } else {

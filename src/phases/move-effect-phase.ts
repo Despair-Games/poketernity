@@ -524,7 +524,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       }
     }
 
-    if (isCritical) {
+    if (isCritical && dmg > 0) {
       globalScene.queueMessage(i18next.t("battle:hitResultCriticalHit"));
     }
 
