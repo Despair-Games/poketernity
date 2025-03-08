@@ -1067,10 +1067,6 @@ class StickyWebTag extends EntryHazardTag {
  * Base class for moves like Trick Room which should negate their effect when used a second time.
  */
 export abstract class ArenaRoomTag extends ArenaTag {
-  constructor(tagType: ArenaTagType, turnCount: number, sourceMove: MoveId, sourceId: number) {
-    super(tagType, turnCount, sourceMove, sourceId);
-  }
-
   override onOverlap(arena: Arena): void {
     arena.removeTag(this.tagType);
   }
@@ -1078,8 +1074,7 @@ export abstract class ArenaRoomTag extends ArenaTag {
 
 /**
  * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Trick_Room_(move) Trick Room}.
- * Reverses the Speed stats for all Pokémon on the field as long as this arena tag is up,
- * also reversing the turn order for all Pokémon on the field as well.
+ * Reverses the Speed calculation for all Pokémon on the field as long as this arena tag is up.
  */
 export class TrickRoomTag extends ArenaRoomTag {
   constructor(turnCount: number, sourceId: number) {
@@ -1087,12 +1082,9 @@ export class TrickRoomTag extends ArenaRoomTag {
   }
 
   /**
-   * Reverses Speed-based turn order for all Pokemon on the field
-   * @param _arena n/a
-   * @param _simulated n/a
-   * @param speedReversed a {@linkcode BooleanHolder} used to flag if Speed-based
+   * @param speedReversed - A {@linkcode BooleanHolder} used to flag if Speed-based
    * turn order should be reversed.
-   * @returns `true` if turn order is successfully reversed; `false` otherwise
+   * @returns `true`
    */
   override apply(_arena: Arena, _simulated: boolean, speedReversed: BooleanHolder): boolean {
     speedReversed.value = !speedReversed.value;
