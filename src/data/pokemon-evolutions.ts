@@ -10,7 +10,6 @@ import { EvolutionItem } from "#enums/evolution-item";
 export type EvolutionLevel = [species: Species, level: number];
 
 export type EvolutionConditionPredicate = (p: Pokemon) => boolean;
-export type EvolutionConditionEnforceFunc = (p: Pokemon) => void;
 
 export interface PokemonEvolutions {
   [key: string]: SpeciesFormEvolution[];
@@ -70,20 +69,14 @@ export class SpeciesEvolution extends SpeciesFormEvolution {
 
 export class SpeciesEvolutionCondition {
   public predicate: EvolutionConditionPredicate;
-  public enforceFunc: EvolutionConditionEnforceFunc | undefined;
 
-  constructor(predicate: EvolutionConditionPredicate, enforceFunc?: EvolutionConditionEnforceFunc) {
+  constructor(predicate: EvolutionConditionPredicate) {
     this.predicate = predicate;
-    this.enforceFunc = enforceFunc;
   }
 }
 
 export class SpeciesFriendshipEvolutionCondition extends SpeciesEvolutionCondition {
-  constructor(
-    friendshipAmount: number,
-    predicate?: EvolutionConditionPredicate,
-    enforceFunc?: EvolutionConditionEnforceFunc,
-  ) {
-    super((p) => p.friendship >= friendshipAmount && (!predicate || predicate(p)), enforceFunc);
+  constructor(friendshipAmount: number, predicate?: EvolutionConditionPredicate) {
+    super((p) => p.friendship >= friendshipAmount && (!predicate || predicate(p)));
   }
 }

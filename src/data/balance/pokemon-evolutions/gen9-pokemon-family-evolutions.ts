@@ -32,10 +32,7 @@ export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
       "female",
       18,
       null,
-      new SpeciesEvolutionCondition(
-        (p) => p.gender === Gender.FEMALE,
-        (p) => (p.gender = Gender.FEMALE),
-      ),
+      new SpeciesEvolutionCondition((p) => p.gender === Gender.FEMALE),
     ),
     new SpeciesFormEvolution(
       Species.OINKOLOGNE,
@@ -43,10 +40,7 @@ export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       18,
       null,
-      new SpeciesEvolutionCondition(
-        (p) => p.gender === Gender.MALE,
-        (p) => (p.gender = Gender.MALE),
-      ),
+      new SpeciesEvolutionCondition((p) => p.gender === Gender.MALE),
     ),
   ],
   [Species.TAROUNTULA]: [new SpeciesEvolution(Species.SPIDOPS, 15, null, null)],
