@@ -4179,9 +4179,9 @@ export class PlayerPokemon extends Pokemon {
 
   /**
    * Updates the Pokemon's friendship value and calls {@linkcode addCandyProgress}
-   * to also the update the metaProgressionFriendship value of the Pokemon's root species in
+   * to also the update the `candyProgress` value of the Pokemon's root species in
    * the game data if there is a postive gain
-   * @param friendshipChange the amount of friendship to add
+   * @param friendshipChange - The amount of friendship to add or remove
    */
   addFriendship(friendshipChange: number): void {
     if (friendshipChange <= 0) {
@@ -4204,10 +4204,10 @@ export class PlayerPokemon extends Pokemon {
   }
 
   /**
-   * Helper function being called in {@linkcode addFriendship}
-   * Updates the candyProgress of a starter and grants candy
+   * Helper function being called in {@linkcode addFriendship}.
+   * Updates the `candyProgress` of a starter and grants candy
    * if the requirement is met
-   * @param candyProgressChange the amount
+   * @param candyProgressChange - The amount to increase the candy progress value by
    */
   addCandyProgress(candyProgressChange: number): void {
     const starterSpeciesId = this.species.getRootSpeciesId();
