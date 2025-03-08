@@ -280,7 +280,7 @@ export function initMoves() {
       .punchingMove(),
     new AttackMove(MoveId.SCRATCH, ElementalType.NORMAL, MoveCategory.PHYSICAL, 40, 100, 35, -1, 0, 1),
     new AttackMove(MoveId.VISE_GRIP, ElementalType.NORMAL, MoveCategory.PHYSICAL, 55, 100, 30, -1, 0, 1),
-    new AttackMove(MoveId.GUILLOTINE, ElementalType.NORMAL, MoveCategory.PHYSICAL, 200, 30, 5, -1, 0, 1)
+    new AttackMove(MoveId.GUILLOTINE, ElementalType.NORMAL, MoveCategory.PHYSICAL, -1, 30, 5, -1, 0, 1)
       .attr(OneHitKOAttr)
       .attr(OneHitKOAccuracyAttr),
     new ChargingAttackMove(MoveId.RAZOR_WIND, ElementalType.NORMAL, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 1)
@@ -341,7 +341,7 @@ export function initMoves() {
     new AttackMove(MoveId.FURY_ATTACK, ElementalType.NORMAL, MoveCategory.PHYSICAL, 15, 85, 20, -1, 0, 1).attr(
       MultiHitAttr,
     ),
-    new AttackMove(MoveId.HORN_DRILL, ElementalType.NORMAL, MoveCategory.PHYSICAL, 200, 30, 5, -1, 0, 1)
+    new AttackMove(MoveId.HORN_DRILL, ElementalType.NORMAL, MoveCategory.PHYSICAL, -1, 30, 5, -1, 0, 1)
       .attr(OneHitKOAttr)
       .attr(OneHitKOAccuracyAttr),
     new AttackMove(MoveId.TACKLE, ElementalType.NORMAL, MoveCategory.PHYSICAL, 40, 100, 35, -1, 0, 1),
@@ -540,7 +540,7 @@ export function initMoves() {
       )
       .makesContact(false)
       .target(MoveTarget.ALL_NEAR_OTHERS),
-    new AttackMove(MoveId.FISSURE, ElementalType.GROUND, MoveCategory.PHYSICAL, 200, 30, 5, -1, 0, 1)
+    new AttackMove(MoveId.FISSURE, ElementalType.GROUND, MoveCategory.PHYSICAL, -1, 30, 5, -1, 0, 1)
       .attr(OneHitKOAttr)
       .attr(OneHitKOAccuracyAttr)
       .attr(HitsTagAttr, BattlerTagType.UNDERGROUND)
@@ -1419,7 +1419,7 @@ export function initMoves() {
     new AttackMove(MoveId.SAND_TOMB, ElementalType.GROUND, MoveCategory.PHYSICAL, 35, 85, 15, -1, 0, 3)
       .attr(TrapAttr, BattlerTagType.SAND_TOMB)
       .makesContact(false),
-    new AttackMove(MoveId.SHEER_COLD, ElementalType.ICE, MoveCategory.SPECIAL, 200, 30, 5, -1, 0, 3)
+    new AttackMove(MoveId.SHEER_COLD, ElementalType.ICE, MoveCategory.SPECIAL, -1, 30, 5, -1, 0, 3)
       .attr(IceNoEffectTypeAttr)
       .attr(OneHitKOAttr)
       .attr(SheerColdAccuracyAttr),

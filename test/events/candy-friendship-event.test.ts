@@ -58,14 +58,14 @@ describe("Candy Friendship Modifier Event", () => {
     const playerPokemon = game.field.getPlayerPokemon();
     const baseFriendship = playerPokemon.friendship;
     const starterData = game.scene.gameData.starterData[playerPokemon.species.getRootSpeciesId()];
-    expect(starterData.friendship).toBe(0); // candy friendship
+    expect(starterData.candyProgress).toBe(0); // candy friendship
 
     game.move.use(MoveId.SPLASH);
     await game.doKillOpponents();
     await game.phaseInterceptor.to("VictoryPhase", true);
 
     expect(playerPokemon.friendship).toBe(baseFriendship + FRIENDSHIP_GAIN_FROM_BATTLE);
-    expect(starterData.friendship).toBe(FRIENDSHIP_GAIN_FROM_BATTLE * CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER * 3);
+    expect(starterData.candyProgress).toBe(FRIENDSHIP_GAIN_FROM_BATTLE * CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER * 3);
   });
 
   it("should not apply the event's multiplier when it is not active", async () => {
@@ -78,14 +78,14 @@ describe("Candy Friendship Modifier Event", () => {
     const playerPokemon = game.field.getPlayerPokemon();
     const baseFriendship = playerPokemon.friendship;
     const starterData = game.scene.gameData.starterData[playerPokemon.species.getRootSpeciesId()];
-    expect(starterData.friendship).toBe(0); // candy friendship
+    expect(starterData.candyProgress).toBe(0); // candy friendship
 
     game.move.use(MoveId.SPLASH);
     await game.doKillOpponents();
     await game.phaseInterceptor.to("VictoryPhase", true);
 
     expect(playerPokemon.friendship).toBe(baseFriendship + FRIENDSHIP_GAIN_FROM_BATTLE);
-    expect(starterData.friendship).toBe(FRIENDSHIP_GAIN_FROM_BATTLE * CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER);
+    expect(starterData.candyProgress).toBe(FRIENDSHIP_GAIN_FROM_BATTLE * CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER);
   });
 
   it("should not apply the event's multiplier in daily mode", async () => {
@@ -100,13 +100,13 @@ describe("Candy Friendship Modifier Event", () => {
     const playerPokemon = game.field.getPlayerPokemon();
     const baseFriendship = playerPokemon.friendship;
     const starterData = game.scene.gameData.starterData[playerPokemon.species.getRootSpeciesId()];
-    expect(starterData.friendship).toBe(0); // candy friendship
+    expect(starterData.candyProgress).toBe(0); // candy friendship
 
     game.move.use(MoveId.SPLASH);
     await game.doKillOpponents();
     await game.phaseInterceptor.to("VictoryPhase", true);
 
     expect(playerPokemon.friendship).toBe(baseFriendship + FRIENDSHIP_GAIN_FROM_BATTLE);
-    expect(starterData.friendship).toBe(FRIENDSHIP_GAIN_FROM_BATTLE);
+    expect(starterData.candyProgress).toBe(FRIENDSHIP_GAIN_FROM_BATTLE);
   });
 });
