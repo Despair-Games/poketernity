@@ -50,6 +50,29 @@ describe("Abilities - Lightning Rod", () => {
     expect(enemyPokemon[0].getStatStage(Stat.SPATK)).toBe(1);
   });
 
+  it("should redirect moves from the source's ally, but not from the source", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+
+    const playerPokemon = game.scene.getPlayerField();
+    const enemyPokemon = game.scene.getEnemyField();
+
+    vi.spyOn(playerPokemon[0], "getAbility").mockReturnValue(allAbilities[Abilities.LIGHTNING_ROD]);
+
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.move.use(MoveId.THUNDER_SHOCK, 0, BattlerIndex.ENEMY);
+    game.move.use(MoveId.THUNDER_SHOCK, 1, BattlerIndex.ENEMY_2);
+    await game.toEndOfTurn();
+
+    /**
+     * Player 1's attack should have successfully hit Enemy 1, while
+     * Player 2's attack should be absorbed by Player 1's Lightning Rod,
+     * increasing Player 1's Sp. Atk by 1 stage.
+     */
+    expect(enemyPokemon[0].isFullHp()).toBeFalsy();
+    expect(enemyPokemon[1].isFullHp()).toBeTruthy();
+    expect(playerPokemon[0].getStatStage(Stat.SPATK)).toBe(1);
+  });
+
   it("should not redirect multi-target moves", async () => {
     await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 
