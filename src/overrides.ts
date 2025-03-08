@@ -243,6 +243,12 @@ class DefaultOverrides {
    * If more entries are listed than rolled, only the first X entries will be used, where X is the number of items rolled.
    *
    * Note that, for all items in the array, `count` is not used.
+   * 
+   * @example
+   * ```
+   * // Attempts to make the first item reward a rarer candy, the second one a dynamax band, and the third a rare evolution item
+   * ITEM_REWARD_OVERRIDE:[{name:"RARER_CANDY"},{name:"DYNAMAX_BAND"},{name:"RARE_EVOLUTION_ITEM"}]
+   * ```
    */
   readonly ITEM_REWARD_OVERRIDE: ModifierOverride[] = [];
 
