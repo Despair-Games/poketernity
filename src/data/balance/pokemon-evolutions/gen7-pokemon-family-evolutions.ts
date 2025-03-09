@@ -1,7 +1,6 @@
 import { Species } from "#enums/species";
 import {
   DayEvolutionCondition,
-  DuskEvolutionCondition,
   GenderEvolutionCondition,
   KnowMoveEvoCondition,
   NightEvolutionCondition,
@@ -44,9 +43,8 @@ export const gen7pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.ROCKRUFF]: [
     new SpeciesFormEvolution(Species.LYCANROC, "", "midday", 25, null, new DayEvolutionCondition()),
     new SpeciesFormEvolution(Species.LYCANROC, "", "midnight", 25, null, new NightEvolutionCondition()),
-    new SpeciesFormEvolution(Species.LYCANROC, "own-tempo", "midday", 25, null, new DayEvolutionCondition()),
-    new SpeciesFormEvolution(Species.LYCANROC, "own-tempo", "dusk", 25, null, new DuskEvolutionCondition()),
-    new SpeciesFormEvolution(Species.LYCANROC, "own-tempo", "midnight", 25, null, new NightEvolutionCondition()),
+    // Custom: Own Tempo Rockruff evolves into Dusk Lycanroc regardless of time
+    new SpeciesFormEvolution(Species.LYCANROC, "own-tempo", "dusk", 25, null, null),
   ],
   [Species.MAREANIE]: [new SpeciesEvolution(Species.TOXAPEX, 38, null, null)],
   [Species.MUDBRAY]: [new SpeciesEvolution(Species.MUDSDALE, 30, null, null)],
