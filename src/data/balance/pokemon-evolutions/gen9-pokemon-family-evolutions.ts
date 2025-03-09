@@ -7,14 +7,13 @@ import {
 } from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
 import {
   GenderEvolutionCondition,
+  GholdengoEvoCondition,
   NightEvolutionCondition,
   SpeciesEvolution,
-  SpeciesEvolutionCondition,
   SpeciesFormEvolution,
+  TandemausFamilyOfThreeEvoCondition,
   type PokemonEvolutions,
 } from "#app/data/pokemon-evolutions";
-import { globalScene } from "#app/global-scene";
-import { randSeedInt } from "#app/utils";
 import { EvolutionItem } from "#enums/evolution-item";
 import { Gender } from "#enums/gender";
 import { Species } from "#enums/species";
@@ -35,18 +34,7 @@ export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.PAWMI]: [new SpeciesEvolution(Species.PAWMO, 18, null, null)],
   [Species.PAWMO]: [new SpeciesEvolution(Species.PAWMOT, PAWMOT_EVO_LEVEL, null, null)],
   [Species.TANDEMAUS]: [
-    new SpeciesFormEvolution(
-      Species.MAUSHOLD,
-      "",
-      "three",
-      25,
-      null,
-      new SpeciesEvolutionCondition((p) => {
-        let ret = false;
-        globalScene.executeWithSeedOffset(() => (ret = !randSeedInt(4)), p.id);
-        return ret;
-      }),
-    ),
+    new SpeciesFormEvolution(Species.MAUSHOLD, "", "three", 25, null, new TandemausFamilyOfThreeEvoCondition()),
     new SpeciesEvolution(Species.MAUSHOLD, 25, null, null),
   ],
   [Species.FIDOUGH]: [new SpeciesEvolution(Species.DACHSBUN, 26, null, null)],
@@ -86,38 +74,14 @@ export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.ARCTIBAX]: [new SpeciesEvolution(Species.BAXCALIBUR, 54, null, null)],
   /** Custom evolution method */
   [Species.GIMMIGHOUL]: [
-    new SpeciesFormEvolution(
-      Species.GHOLDENGO,
-      "chest",
-      "",
-      1,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) =>
-          p.evoCounter
-            + p.getHeldItems().filter((m) => m.isDamageMoneyRewardModifier()).length
-            + globalScene.findModifiers(
-              (m) => m.isMoneyMultiplierModifier() || m.isExtraModifierModifier() || m.isTempExtraModifierModifier(),
-            ).length
-          > 9,
-      ),
-      GHOLDENGO_EVO_LEVEL,
-    ),
+    new SpeciesFormEvolution(Species.GHOLDENGO, "chest", "", 1, null, new GholdengoEvoCondition(), GHOLDENGO_EVO_LEVEL),
     new SpeciesFormEvolution(
       Species.GHOLDENGO,
       "roaming",
       "",
       1,
       null,
-      new SpeciesEvolutionCondition(
-        (p) =>
-          p.evoCounter
-            + p.getHeldItems().filter((m) => m.isDamageMoneyRewardModifier()).length
-            + globalScene.findModifiers(
-              (m) => m.isMoneyMultiplierModifier() || m.isExtraModifierModifier() || m.isTempExtraModifierModifier(),
-            ).length
-          > 9,
-      ),
+      new GholdengoEvoCondition(),
       GHOLDENGO_EVO_LEVEL,
     ),
   ],
