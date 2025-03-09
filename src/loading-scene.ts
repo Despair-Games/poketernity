@@ -23,7 +23,7 @@ import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { Biome } from "#enums/biome";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
 import { initVouchers } from "#app/system/init-vouchers";
-import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTEMENT } from "#app/ui-constants";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTMENT } from "#app/ui-constants";
 import { ImagesFolder } from "#enums/images-folders";
 import { CommonColor } from "#enums/color";
 import { initAbilities } from "#app/data/init-abilities";
@@ -413,12 +413,12 @@ export class LoadingScene extends SceneBase {
     const logo = this.add.image(midWidth, height / 5, "");
     logo.setVisible(false);
     logo.setOrigin(0.5, 0.5);
-    logo.setScale(4 * TEMP_SCALE_ADJUSTEMENT);
+    logo.setScale(4 * TEMP_SCALE_ADJUSTMENT);
 
     const percentText = this.make.text({
       x: midWidth,
       y: midHeight - 4 * CANVAS_SCALE,
-      scale: TEMP_SCALE_ADJUSTEMENT,
+      scale: TEMP_SCALE_ADJUSTMENT,
       text: "0%",
       style: {
         font: "72px emerald",
@@ -430,7 +430,7 @@ export class LoadingScene extends SceneBase {
     const assetText = this.make.text({
       x: midWidth,
       y: midHeight + 8 * CANVAS_SCALE,
-      scale: TEMP_SCALE_ADJUSTEMENT,
+      scale: TEMP_SCALE_ADJUSTMENT,
       text: "",
       style: {
         font: "48px emerald",
@@ -442,7 +442,7 @@ export class LoadingScene extends SceneBase {
     const disclaimerText = this.make.text({
       x: midWidth,
       y: assetText.y + 25 * CANVAS_SCALE,
-      scale: TEMP_SCALE_ADJUSTEMENT,
+      scale: TEMP_SCALE_ADJUSTMENT,
       text: i18next.t("menu:disclaimer"),
       style: {
         font: "72px emerald",
@@ -454,7 +454,7 @@ export class LoadingScene extends SceneBase {
     const disclaimerDescriptionText = this.make.text({
       x: midWidth,
       y: disclaimerText.y + 20 * CANVAS_SCALE,
-      scale: TEMP_SCALE_ADJUSTEMENT,
+      scale: TEMP_SCALE_ADJUSTMENT,
       text: i18next.t("menu:disclaimerDescription"),
       style: {
         font: "48px emerald",

@@ -123,7 +123,9 @@ function getTextStyleOptions(
     styleOptions = Object.assign(styleOptions, extraStyleOptions);
   }
 
+  /** Needed for the text to look crisp with the current font, see {@linkcode TEXT_SCALE} */
   const scale = 1 / TEXT_SCALE;
+
   if (shadow) {
     return { scale, styleOptions, shadowColor, shadow };
   }

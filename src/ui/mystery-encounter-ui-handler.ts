@@ -436,7 +436,7 @@ export default class MysteryEncounterUiHandler extends UiHandler {
       }
 
       if (text) {
-        optionText.setLineSpacing(-8); // TODO: this is broken
+        optionText.setLineSpacing(-8);
         optionText.setText(text);
       }
 
