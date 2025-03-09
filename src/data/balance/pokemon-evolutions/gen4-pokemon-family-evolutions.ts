@@ -26,35 +26,11 @@ export const gen4pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.CRANIDOS]: [new SpeciesEvolution(Species.RAMPARDOS, 30, null, null)],
   [Species.SHIELDON]: [new SpeciesEvolution(Species.BASTIODON, 30, null, null)],
   [Species.BURMY]: [
-    new SpeciesEvolution(
-      Species.MOTHIM,
-      20,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) => p.gender === Gender.MALE,
-        (p) => (p.gender = Gender.MALE),
-      ),
-    ),
-    new SpeciesEvolution(
-      Species.WORMADAM,
-      20,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) => p.gender === Gender.FEMALE,
-        (p) => (p.gender = Gender.FEMALE),
-      ),
-    ),
+    new SpeciesEvolution(Species.MOTHIM, 20, null, new SpeciesEvolutionCondition((p) => p.gender === Gender.MALE)),
+    new SpeciesEvolution(Species.WORMADAM, 20, null, new SpeciesEvolutionCondition((p) => p.gender === Gender.FEMALE)),
   ],
   [Species.COMBEE]: [
-    new SpeciesEvolution(
-      Species.VESPIQUEN,
-      21,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) => p.gender === Gender.FEMALE,
-        (p) => (p.gender = Gender.FEMALE),
-      ),
-    ),
+    new SpeciesEvolution(Species.VESPIQUEN, 21, null, new SpeciesEvolutionCondition((p) => p.gender === Gender.FEMALE)),
   ],
   [Species.BUIZEL]: [new SpeciesEvolution(Species.FLOATZEL, 26, null, null)],
   [Species.CHERUBI]: [new SpeciesEvolution(Species.CHERRIM, 25, null, null)],
