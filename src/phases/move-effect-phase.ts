@@ -521,26 +521,26 @@ export class MoveEffectPhase extends HitCheckPhase {
         if (user.isPlayer() && !target.isPlayer()) {
           globalScene.applyModifiers(DamageMoneyRewardModifier, true, user, new NumberHolder(damage));
         }
-      }
-    }
 
-    if (isCritical) {
-      globalScene.queueMessage(i18next.t("battle:hitResultCriticalHit"));
-    }
+        if (isCritical) {
+          globalScene.queueMessage(i18next.t("battle:hitResultCriticalHit"));
+        }
 
-    // `.isFainted()` is here in case a multi hit move ends early
-    // we still want to queue the appropriate message
-    if (user.turnData.hitsLeft === 1 || target.isFainted()) {
-      switch (result) {
-        case HitResult.SUPER_EFFECTIVE:
-          globalScene.queueMessage(i18next.t("battle:hitResultSuperEffective"));
-          break;
-        case HitResult.NOT_VERY_EFFECTIVE:
-          globalScene.queueMessage(i18next.t("battle:hitResultNotVeryEffective"));
-          break;
-        case HitResult.ONE_HIT_KO:
-          globalScene.queueMessage(i18next.t("battle:hitResultOneHitKO"));
-          break;
+        // `.isFainted()` is here in case a multi hit move ends early
+        // we still want to queue the appropriate message
+        if (user.turnData.hitsLeft === 1 || target.isFainted()) {
+          switch (result) {
+            case HitResult.SUPER_EFFECTIVE:
+              globalScene.queueMessage(i18next.t("battle:hitResultSuperEffective"));
+              break;
+            case HitResult.NOT_VERY_EFFECTIVE:
+              globalScene.queueMessage(i18next.t("battle:hitResultNotVeryEffective"));
+              break;
+            case HitResult.ONE_HIT_KO:
+              globalScene.queueMessage(i18next.t("battle:hitResultOneHitKO"));
+              break;
+          }
+        }
       }
     }
 

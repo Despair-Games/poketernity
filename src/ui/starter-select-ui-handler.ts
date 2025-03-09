@@ -13,7 +13,7 @@ import {
   POKERUS_STARTER_COUNT,
   getPassiveCandyCount,
   getSameSpeciesEggCandyCounts,
-  getStarterValueFriendshipCap,
+  getCandyProgressRequirement,
   getValueReductionCandyCounts,
   speciesStarterCosts,
 } from "#app/data/balance/starters";
@@ -2995,12 +2995,12 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
   }
 
   getFriendship(speciesId: number) {
-    let currentFriendship = globalScene.gameData.starterData[speciesId].friendship;
+    let currentFriendship = globalScene.gameData.starterData[speciesId].candyProgress;
     if (!currentFriendship || currentFriendship === undefined) {
       currentFriendship = 0;
     }
 
-    const friendshipCap = getStarterValueFriendshipCap(speciesStarterCosts[speciesId]);
+    const friendshipCap = getCandyProgressRequirement(speciesStarterCosts[speciesId]);
 
     return { currentFriendship, friendshipCap };
   }

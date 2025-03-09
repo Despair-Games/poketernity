@@ -15,8 +15,9 @@ export class SheerColdAccuracyAttr extends OneHitKOAccuracyAttr {
     if (user.level < target.level) {
       accuracy.value = 0;
     } else {
+      /** TODO: In game should still display 30 */
       const baseAccuracy = user.isOfType(ElementalType.ICE) ? 30 : 20;
-      accuracy.value = Math.min(Math.max(baseAccuracy + 100 * (1 - target.level / user.level), 0), 100);
+      accuracy.value = Math.min(baseAccuracy + user.level - target.level, 100);
     }
     return true;
   }

@@ -53,24 +53,8 @@ export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.RALTS]: [new SpeciesEvolution(Species.KIRLIA, 20, null, null)],
   /** Custom: Gallade evolves by level instead of dawn stone */
   [Species.KIRLIA]: [
-    new SpeciesEvolution(
-      Species.GARDEVOIR,
-      30,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) => p.gender === Gender.FEMALE,
-        (p) => (p.gender = Gender.FEMALE),
-      ),
-    ),
-    new SpeciesEvolution(
-      Species.GALLADE,
-      30,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) => p.gender === Gender.MALE,
-        (p) => (p.gender = Gender.MALE),
-      ),
-    ),
+    new SpeciesEvolution(Species.GARDEVOIR, 30, null, new SpeciesEvolutionCondition((p) => p.gender === Gender.FEMALE)),
+    new SpeciesEvolution(Species.GALLADE, 30, null, new SpeciesEvolutionCondition((p) => p.gender === Gender.MALE)),
   ],
   [Species.SURSKIT]: [new SpeciesEvolution(Species.MASQUERAIN, 22, null, null)],
   [Species.SHROOMISH]: [new SpeciesEvolution(Species.BRELOOM, 23, null, null)],
@@ -145,24 +129,8 @@ export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
   ],
   /** Custom: Froslass evolves by level instead of Dawn Stone */
   [Species.SNORUNT]: [
-    new SpeciesEvolution(
-      Species.GLALIE,
-      42,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) => p.gender === Gender.MALE,
-        (p) => (p.gender = Gender.MALE),
-      ),
-    ),
-    new SpeciesEvolution(
-      Species.FROSLASS,
-      42,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) => p.gender === Gender.FEMALE,
-        (p) => (p.gender = Gender.FEMALE),
-      ),
-    ),
+    new SpeciesEvolution(Species.GLALIE, 42, null, new SpeciesEvolutionCondition((p) => p.gender === Gender.MALE)),
+    new SpeciesEvolution(Species.FROSLASS, 42, null, new SpeciesEvolutionCondition((p) => p.gender === Gender.FEMALE)),
   ],
   [Species.SPHEAL]: [new SpeciesEvolution(Species.SEALEO, 32, null, null)],
   [Species.SEALEO]: [new SpeciesEvolution(Species.WALREIN, 44, null, null)],
@@ -172,20 +140,14 @@ export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.HUNTAIL,
       1,
       EvolutionItem.LINKING_CORD,
-      new SpeciesEvolutionCondition(
-        (p) => p.gender === Gender.MALE,
-        (p) => (p.gender = Gender.MALE) /* Deep Sea Tooth */,
-      ),
+      new SpeciesEvolutionCondition((p) => p.gender === Gender.MALE /* Deep Sea Tooth */),
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesEvolution(
       Species.GOREBYSS,
       1,
       EvolutionItem.LINKING_CORD,
-      new SpeciesEvolutionCondition(
-        (p) => p.gender === Gender.FEMALE,
-        (p) => (p.gender = Gender.FEMALE) /* Deep Sea Scale */,
-      ),
+      new SpeciesEvolutionCondition((p) => p.gender === Gender.FEMALE /* Deep Sea Scale */),
       GENERIC_ITEM_EVO_LEVEL,
     ),
   ],

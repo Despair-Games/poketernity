@@ -29,7 +29,7 @@ import {
 } from "#app/data/balance/rates";
 import {
   CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER,
-  getStarterValueFriendshipCap,
+  getCandyProgressRequirement,
   speciesStarterCosts,
 } from "#app/data/balance/starters";
 import { reverseCompatibleTms, tmPoolTiers, tmSpecies } from "#app/data/balance/tms";
@@ -1241,6 +1241,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   abstract isBoss(): boolean;
+
+  abstract getBossSegments(): number;
+
+  abstract getBossSegmentIndex(): number;
 
   getMoveset(baseOnly?: boolean): PokemonMove[] {
     const ret = !baseOnly && this.summonData?.moveset ? this.summonData.moveset : this.moveset;
@@ -2848,14 +2852,28 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       };
     }
 
-    // If the attack is a one-hit KO move, return a result with damage equal to this Pokemon's HP
+    /**
+     * If the attack is a one-hit KO move, return a result equal to the Pokemon's HP bar
+     * Or to the next unbroken health segment if the target is a boss
+     */
     const isOneHitKo = new BooleanHolder(false);
     applyMoveAttrs(OneHitKOAttr, source, this, move, isOneHitKo);
+
+    let ohkoDamage = 0;
+    if (!this.isBoss()) {
+      ohkoDamage = this.hp;
+    } else {
+      // TODO: Potentially can cause a softlock against the pkr Eternatus boss on floor 200
+      const segmentIndex = this.getBossSegmentIndex();
+      const enemyHpAfter = Math.floor((this.getMaxHp() * segmentIndex) / this.getBossSegments());
+      ohkoDamage = toDmgValue(this.hp - enemyHpAfter);
+    }
+    const ohkoResult = ohkoDamage >= this.hp ? HitResult.ONE_HIT_KO : HitResult.EFFECTIVE;
     if (isOneHitKo.value) {
       return {
         cancelled: false,
-        result: HitResult.ONE_HIT_KO,
-        damage: this.hp,
+        result: ohkoResult,
+        damage: ohkoDamage,
       };
     }
 
@@ -4097,6 +4115,14 @@ export class PlayerPokemon extends Pokemon {
     return false;
   }
 
+  getBossSegments(): number {
+    return 0;
+  }
+
+  getBossSegmentIndex(): number {
+    return 0;
+  }
+
   getFieldIndex(): number {
     return globalScene.getPlayerField().indexOf(this);
   }
@@ -4177,36 +4203,63 @@ export class PlayerPokemon extends Pokemon {
     });
   }
 
-  addFriendship(friendship: number): void {
-    if (friendship > 0) {
-      const starterSpeciesId = this.species.getRootSpeciesId();
-      const starterData = globalScene.gameData.starterData[starterSpeciesId];
-      const amount = new NumberHolder(friendship);
-      globalScene.applyModifier(PokemonFriendshipBoosterModifier, true, this, amount);
-      let candyFriendshipMultiplier = CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER;
-      if (timedEventManager.isEventActive(EventModifierType.CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER)) {
-        candyFriendshipMultiplier *= timedEventManager.getClassicCandyFriendshipMultiplier();
-      }
-      const starterAmount = new NumberHolder(
-        Math.floor(amount.value * (globalScene.gameMode.isClassic ? candyFriendshipMultiplier : 1)),
-      );
+  /**
+   * Updates the Pokemon's friendship value and calls {@linkcode addCandyProgress}
+   * to also the update the `candyProgress` value of the Pokemon's root species in
+   * the game data if there is a postive gain
+   * @param friendshipChange - The amount of friendship to add or remove
+   */
+  addFriendship(friendshipChange: number): void {
+    if (friendshipChange <= 0) {
+      // Multipliers do not apply for friendship loss. A Pokemon's friendship cannot go below 0
+      this.friendship = Math.max(this.friendship + friendshipChange, 0);
+      return;
+    }
+    const amount = new NumberHolder(friendshipChange);
+    // Soothe bell multiplier applies here
+    globalScene.applyModifier(PokemonFriendshipBoosterModifier, true, this, amount);
 
-      // Add friendship to this PlayerPokemon
-      this.friendship = Math.min(this.friendship + amount.value, 255);
-      if (this.friendship === 255) {
-        globalScene.validateAchv(achvs.MAX_FRIENDSHIP);
-      }
-      // Add to candy progress for this mon's starter species
-      if (starterData) {
-        starterData.friendship = (starterData.friendship || 0) + starterAmount.value;
-        if (starterData.friendship >= getStarterValueFriendshipCap(speciesStarterCosts[starterSpeciesId])) {
-          globalScene.gameData.addStarterCandy(getPokemonSpecies(starterSpeciesId), 1);
-          starterData.friendship = 0;
-        }
-      }
-    } else {
-      // Lose friendship upon fainting
-      this.friendship = Math.max(this.friendship + friendship, 0);
+    // Add friendship to this PlayerPokemon
+    this.friendship = Math.min(this.friendship + amount.value, 255);
+    if (this.friendship === 255) {
+      globalScene.validateAchv(achvs.MAX_FRIENDSHIP);
+    }
+
+    // Add to candy progress for this mon's starter species
+    this.addCandyProgress(amount.value);
+  }
+
+  /**
+   * Helper function being called in {@linkcode addFriendship}.
+   * Updates the `candyProgress` of a starter and grants candy
+   * if the requirement is met
+   * @param candyProgressChange - The amount to increase the candy progress value by
+   */
+  addCandyProgress(candyProgressChange: number): void {
+    const starterSpeciesId = this.species.getRootSpeciesId();
+    const starterData = globalScene.gameData.starterData[starterSpeciesId];
+
+    // If a player does not have the starter unlocked, do nothing
+    if (!starterData) {
+      return;
+    }
+
+    // Calculate bonuses
+    let candyFriendshipMultiplier = CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER;
+    if (timedEventManager.isEventActive(EventModifierType.CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER)) {
+      candyFriendshipMultiplier *= timedEventManager.getClassicCandyFriendshipMultiplier();
+    }
+
+    // Apply bonus only if in classic mode
+    const starterAmount = new NumberHolder(
+      Math.floor(candyProgressChange * (globalScene.gameMode.isClassic ? candyFriendshipMultiplier : 1)),
+    );
+
+    const candyProgressReq = getCandyProgressRequirement(speciesStarterCosts[starterSpeciesId]);
+    starterData.candyProgress = (starterData.candyProgress || 0) + starterAmount.value;
+    if (starterData.candyProgress >= candyProgressReq) {
+      globalScene.gameData.addStarterCandy(getPokemonSpecies(starterSpeciesId), 1);
+      starterData.candyProgress -= candyProgressReq;
     }
   }
 
@@ -4510,12 +4563,6 @@ export class EnemyPokemon extends Pokemon {
       let preEvolution: Species;
       let speciesId = species.speciesId;
       while ((preEvolution = pokemonPreEvolutions[speciesId])) {
-        const evolution = pokemonEvolutions[preEvolution].find(
-          (pe) => pe.speciesId === speciesId && (!pe.evoFormKey || pe.evoFormKey === this.getFormKey()),
-        );
-        if (evolution?.condition?.enforceFunc) {
-          evolution.condition.enforceFunc(this);
-        }
         speciesId = preEvolution;
       }
     }
@@ -4903,17 +4950,12 @@ export class EnemyPokemon extends Pokemon {
     return !!this.bossSegments;
   }
 
-  getBossSegmentIndex(): number {
-    const segments = (this as EnemyPokemon).bossSegments;
-    const segmentSize = this.getMaxHp() / segments;
-    for (let s = segments - 1; s > 0; s--) {
-      const hpThreshold = Math.round(segmentSize * s);
-      if (this.hp > hpThreshold) {
-        return s;
-      }
-    }
+  getBossSegments(): number {
+    return this.bossSegments;
+  }
 
-    return 0;
+  getBossSegmentIndex(): number {
+    return this.bossSegmentIndex;
   }
 
   override damage(
@@ -4927,6 +4969,12 @@ export class EnemyPokemon extends Pokemon {
     }
 
     let clearedBossSegmentIndex = this.isBoss() ? this.bossSegmentIndex + 1 : 0;
+
+    /**
+     * Modify the damage with the {@linkcode DYNAMAX_DAMAGE_TAKEN_FACTOR} for the checks
+     * involving whether or not HP bars should break
+     */
+    damage = this.isMax(false) ? toDmgValue(damage * DYNAMAX_DAMAGE_TAKEN_FACTOR) : damage;
 
     if (this.isBoss() && !ignoreSegments) {
       const segmentSize = this.getMaxHp() / this.bossSegments;
@@ -4953,6 +5001,13 @@ export class EnemyPokemon extends Pokemon {
         }
       }
     }
+
+    /**
+     * The actual place that the dynamax damage taken factor is applied is in Pokemon.damage
+     * so here we divide by the dynamax damage taken factor and then it will be the proper value
+     * when it is multiplied there
+     */
+    damage = this.isMax(false) ? toDmgValue(damage / DYNAMAX_DAMAGE_TAKEN_FACTOR) : damage;
 
     if (globalScene.currentBattle.isClassicFinalBoss) {
       if (!this.formIndex && this.bossSegmentIndex < 1) {
