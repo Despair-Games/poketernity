@@ -110,6 +110,14 @@ export class NightEvolutionCondition extends SpeciesEvolutionCondition {
   }
 }
 
+/** Only used for Dusk Lycanroc, which requires own-tempo and dusk */
+export class DuskEvolutionCondition extends SpeciesEvolutionCondition {
+  constructor() {
+    super(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK]));
+    this.description = "during Dusk";
+  }
+}
+
 /**
  * Used for Espeon, Roselia, and Riolu
  */
