@@ -282,6 +282,7 @@ export class TandemausFamilyOfThreeEvoCondition extends SpeciesEvolutionConditio
   }
 }
 
+/** Custom evo method requires grabbing 9 or more money items */
 export class GholdengoEvoCondition extends SpeciesEvolutionCondition {
   constructor() {
     super(
@@ -297,6 +298,9 @@ export class GholdengoEvoCondition extends SpeciesEvolutionCondition {
   }
 }
 
+/**
+ * For evolutions that require friendship
+ */
 export class SpeciesFriendshipEvolutionCondition extends SpeciesEvolutionCondition {
   constructor(friendshipAmount: number) {
     super((p) => p.friendship >= friendshipAmount);
