@@ -36,7 +36,7 @@ import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 import { ImagesFolder } from "#enums/images-folders";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 
@@ -339,8 +339,9 @@ export default class RunInfoUiHandler extends UiHandler {
         })
         .replace(/\n/g, " ");
       const descContainer = globalScene.add.container(0, 0);
-      // todo: wordcrap not correct for japanese
-      const textBox = addTextObject(0, 0, boxString, TextStyle.RUN_HISTORY_TRAINER_INFO, { wordWrap: { width: 200 } });
+      const textBox = addTextObject(0, 0, boxString, TextStyle.RUN_HISTORY_TRAINER_INFO, {
+        wordWrap: { width: 33 * TEXT_SCALE },
+      });
       descContainer.add(textBox);
       descContainer.setPosition(55, 32);
       this.runResultContainer.add(descContainer);
@@ -357,7 +358,7 @@ export default class RunInfoUiHandler extends UiHandler {
       );
       const descContainer = globalScene.add.container(0, 0);
       const textBox = addTextObject(0, 0, mysteryEncounterTitle, TextStyle.RUN_HISTORY_POKEMON_INFO, {
-        wordWrap: { width: 160 }, // todo: not correct for japanese text
+        wordWrap: { width: 26 * TEXT_SCALE },
       });
       descContainer.add(textBox);
       descContainer.setPosition(47, 37);
@@ -564,7 +565,7 @@ export default class RunInfoUiHandler extends UiHandler {
         modeText.appendText(`${i18next.t("gameMode:challenge")}`, false);
         modeText.appendText(`${i18next.t("runHistory:challengeRules")}: `);
         modeText.setWrapMode("word");
-        modeText.setWrapWidth(500); // todo: not correct in Japanese
+        modeText.setWrapWidth(80 * TEXT_SCALE);
         const rules: string[] = this.challengeParser();
         if (rules) {
           for (let i = 0; i < rules.length; i++) {
@@ -594,9 +595,7 @@ export default class RunInfoUiHandler extends UiHandler {
 
     // Duration + Money
     const runInfoTextContainer = globalScene.add.container(0, 0);
-    // Japanese is set to a greater line spacing of 35px in addBBCodeTextObject() if lineSpacing < 12.
-    const lineSpacing = i18next.resolvedLanguage === "ja" ? 12 : 3;
-    const runInfoText = addBBCodeTextObject(7, 0, "", TextStyle.RUN_PREVIEW_DETAILS, { lineSpacing: lineSpacing });
+    const runInfoText = addBBCodeTextObject(7, 0, "", TextStyle.RUN_PREVIEW_DETAILS, { lineSpacing: 3 });
     const runTime = getPlayTimeString(this.runInfo.playTime);
     runInfoText.appendText(`${i18next.t("runHistory:runLength")}: ${runTime}`, false);
     const runMoney = formatMoney(settings.display.moneyFormat, this.runInfo.money);
@@ -748,10 +747,8 @@ export default class RunInfoUiHandler extends UiHandler {
       }
       const pPassiveInfo = pokemon.passive ? passiveLabel + ": " + pokemon.getPassiveAbility().name : "";
       const pAbilityInfo = abilityLabel + ": " + pokemon.getAbility().name;
-      // Japanese is set to a greater line spacing of 35px in addBBCodeTextObject() if lineSpacing < 12.
-      const lineSpacing = i18next.resolvedLanguage === "ja" ? 12 : 3;
       const pokeInfoText = addBBCodeTextObject(0, 0, pName, TextStyle.RUN_HISTORY_POKEMON_INFO, {
-        lineSpacing: lineSpacing,
+        lineSpacing: 3,
       });
       pokeInfoText.appendText(`${getPokemonLevelText(pokemon)} - ${pNatureName}`);
       pokeInfoText.appendText(pAbilityInfo);
@@ -780,14 +777,14 @@ export default class RunInfoUiHandler extends UiHandler {
       const speed = speedLabel + ": " + pStats[5];
       // Column 1: HP Atk Def
       const pokeStatText1 = addBBCodeTextObject(-5, 0, hp, TextStyle.RUN_HISTORY_POKEMON_INFO, {
-        lineSpacing: lineSpacing,
+        lineSpacing: 3,
       });
       pokeStatText1.appendText(atk);
       pokeStatText1.appendText(def);
       pokeStatTextContainer.add(pokeStatText1);
       // Column 2: SpAtk SpDef Speed
       const pokeStatText2 = addBBCodeTextObject(25, 0, spatk, TextStyle.RUN_HISTORY_POKEMON_INFO, {
-        lineSpacing: lineSpacing,
+        lineSpacing: 3,
       });
       pokeStatText2.appendText(spdef);
       pokeStatText2.appendText(speed);

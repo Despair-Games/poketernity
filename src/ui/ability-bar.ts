@@ -4,6 +4,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { addTextObject } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import i18next from "i18next";
+import { TEXT_SCALE } from "#app/ui-constants";
 
 const hiddenX = -118;
 const shownX = 0;
@@ -30,7 +31,7 @@ export default class AbilityBar extends Phaser.GameObjects.Container {
 
     this.abilityBarText = addTextObject(15, 3, "", TextStyle.NOTIFICATION_BAR_LIGHT);
     this.abilityBarText.setOrigin(0, 0);
-    this.abilityBarText.setWordWrapWidth(600, true);
+    this.abilityBarText.setWordWrapWidth(100 * TEXT_SCALE, true);
     this.add(this.abilityBarText);
 
     this.setVisible(false);

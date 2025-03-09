@@ -17,7 +17,7 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import { globalScene } from "#app/global-scene";
-import { CANVAS_SCALE, GAME_WIDTH } from "#app/ui-constants";
+import { CANVAS_SCALE, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 import { PokeballType } from "#enums/pokeball";
 
 const DESCRIPTION_WINDOW_WIDTH = 150;
@@ -495,8 +495,8 @@ export default class MysteryEncounterUiHandler extends UiHandler {
     // Description Window
     const titleTextXPosition = DESCRIPTION_WINDOW_WIDTH / 2 - 3;
     const titleTextObject = addBBCodeTextObject(titleTextXPosition, 5, titleText ?? "", TextStyle.TOOLTIP_TITLE, {
-      wordWrap: { width: 750 }, // TODO: not correct in Japanese
-      lineSpacing: -8, // TODO: not correct in Japanese
+      wordWrap: { width: (DESCRIPTION_WINDOW_WIDTH - 25) * TEXT_SCALE },
+      lineSpacing: -8,
     });
     titleTextObject.setOrigin(0.5, 0);
     this.descriptionContainer.add(titleTextObject);
@@ -521,7 +521,7 @@ export default class MysteryEncounterUiHandler extends UiHandler {
     this.rarityBall.setTexture("pb", ballType);
 
     const descriptionTextObject = addBBCodeTextObject(6, 25, descriptionText ?? "", TextStyle.TOOLTIP_CONTENT, {
-      wordWrap: { width: 830 }, // TODO: not correct in Japanese
+      wordWrap: { width: (DESCRIPTION_WINDOW_WIDTH - 12) * TEXT_SCALE },
     });
 
     // Sets up the mask that hides the description text to give an illusion of scrolling
@@ -557,7 +557,7 @@ export default class MysteryEncounterUiHandler extends UiHandler {
     this.descriptionContainer.add(descriptionTextObject);
 
     const queryTextObject = addBBCodeTextObject(0, 0, queryText ?? "", TextStyle.TOOLTIP_CONTENT, {
-      wordWrap: { width: 830 }, // TODO: not correct in Japanese
+      wordWrap: { width: (DESCRIPTION_WINDOW_WIDTH - 12) * TEXT_SCALE },
     });
     this.descriptionContainer.add(queryTextObject);
     queryTextObject.setPosition(75 - queryTextObject.displayWidth / 2, 90);
@@ -624,7 +624,7 @@ export default class MysteryEncounterUiHandler extends UiHandler {
 
     if (text) {
       const tooltipTextObject = addBBCodeTextObject(6, 7, text, TextStyle.ME_OPTION_DETAILS, {
-        wordWrap: { width: 600 }, // TODO: not correct with japanese text scaling
+        wordWrap: { width: (TOOLTIP_WINDOW_WIDTH - 10) * TEXT_SCALE },
       });
       this.tooltipContainer.add(tooltipTextObject);
 

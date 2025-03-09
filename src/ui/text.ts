@@ -4,9 +4,9 @@ import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbc
 import type InputText from "phaser3-rex-plugins/plugins/inputtext";
 import { globalScene } from "#app/global-scene";
 import { ModifierTier } from "#enums/modifier-tier";
-import i18next from "#app/plugins/i18n";
 import { TextStyle } from "#enums/text-style";
 import { getTextStyle } from "./text-style";
+import { TEXT_SCALE } from "#app/ui-constants";
 
 interface CustomTextStyleOptions {
   scale: number;
@@ -36,13 +36,8 @@ export function addTextObject(
     ret.setStroke(shadowColor, strokeThickness);
   }
   if (!(styleOptions as Phaser.Types.GameObjects.Text.TextStyle).lineSpacing) {
-    ret.setLineSpacing(scale * 30);
+    ret.setLineSpacing(scale * 30); // Todo: check this value
   }
-
-  if (ret.lineSpacing < 12 && i18next.resolvedLanguage === "ja") {
-    ret.setLineSpacing(ret.lineSpacing + 35);
-  }
-
   return ret;
 }
 
@@ -63,13 +58,8 @@ export function addBBCodeTextObject(
     ret.setStroke(shadowColor, strokeThickness);
   }
   if (!(styleOptions as BBCodeText.TextStyle).lineSpacing) {
-    ret.setLineSpacing(scale * 60);
+    ret.setLineSpacing(scale * 60); // Todo: check this value
   }
-
-  if (ret.lineSpacing < 12 && i18next.resolvedLanguage === "ja") {
-    ret.setLineSpacing(ret.lineSpacing + 35);
-  }
-
   return ret;
 }
 
@@ -108,15 +98,13 @@ export function setTextColor(textObject: Phaser.GameObjects.Text, style: TextSty
   }
 }
 
-export function getTextStyleOptions(
+function getTextStyleOptions(
   style: TextStyle,
   extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle,
 ): CustomTextStyleOptions {
   const textStyleOptions = getTextStyle(style);
   const { mainColor, shadowColor } = textStyleOptions.color;
   const { fontFamily, fontSize, shadow, strokeThickness } = textStyleOptions.fontStyle;
-  let shadowXpos = shadow?.xPosition ?? 0;
-  const shadowYpos = shadow?.yPosition ?? 0;
 
   let styleOptions: Phaser.Types.GameObjects.Text.TextStyle = {
     fontFamily: fontFamily,
@@ -127,27 +115,27 @@ export function getTextStyleOptions(
     },
   };
 
-  let scale = 1 / 6;
-  if (i18next.resolvedLanguage === "ja") {
-    scale = 5 / 36; // Don't ask me
-    styleOptions.padding = { top: 2, bottom: 4 };
-  }
-
   if (extraStyleOptions) {
-    // TODO: remove or add warning
     if (extraStyleOptions.fontSize) {
-      const sizeRatio =
-        parseInt(extraStyleOptions.fontSize.toString().slice(0, -2))
-        / parseInt(styleOptions.fontSize?.toString().slice(0, -2) ?? "1");
-      shadowXpos *= sizeRatio;
+      // We should not define custom font sizes
+      showTextStyleOptionWarning("font size", extraStyleOptions.fontSize);
     }
     styleOptions = Object.assign(styleOptions, extraStyleOptions);
   }
 
+  const scale = 1 / TEXT_SCALE;
   if (shadow) {
-    return { scale, styleOptions, shadowColor, shadow: { xPosition: shadowXpos, yPosition: shadowYpos } };
+    return { scale, styleOptions, shadowColor, shadow };
   }
   return { scale, styleOptions, shadowColor, strokeThickness };
+}
+
+function showTextStyleOptionWarning(option: string, value: any) {
+  console.warn(
+    `A Text Object is using a custom ${option} of value ${value}`,
+    "Only specific values defined in the FontStyle enum should be used to preserve the characters readibility.",
+    "Either use an existing TextStyle, or create a new one that makes use of one of the existing FontStyles.",
+  );
 }
 
 export function getBBCodeFragment(

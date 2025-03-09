@@ -1,5 +1,5 @@
 import { UiMode } from "#enums/ui-mode";
-import { addTextObject, getEggTierTextTint, getTextStyleOptions } from "./text";
+import { addTextObject, getEggTierTextTint } from "./text";
 import { TextStyle } from "#enums/text-style";
 import MessageUiHandler from "./message-ui-handler";
 import { getEnumValues, getEnumKeys, fixedNumber, randSeedShuffle } from "#app/utils";
@@ -17,7 +17,7 @@ import { GachaType } from "#enums/gacha-types";
 import i18next from "i18next";
 import { EggTier } from "#enums/egg-type";
 import { globalScene } from "#app/global-scene";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 
 /**
@@ -46,8 +46,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
   private summaryFinished: boolean;
   private defaultText: string;
 
-  // TODO scaling: find a way to improve this. currently needed for japanese
-  private scale: number = 0.1666666667;
+  private scale: number = 1 / TEXT_SCALE;
 
   constructor() {
     super(UiMode.EGG_GACHA);
@@ -63,7 +62,6 @@ export default class EggGachaUiHandler extends MessageUiHandler {
 
   setup() {
     this.gachaCursor = 0;
-    this.scale = getTextStyleOptions(TextStyle.WINDOW).scale;
 
     const ui = this.getUi();
 

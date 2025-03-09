@@ -13,7 +13,7 @@ import { ScrollBar } from "#app/ui/scroll-bar";
 import { PlayerGender } from "#enums/player-gender";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 
 enum Page {
   ACHIEVEMENTS,
@@ -137,7 +137,7 @@ export default class AchvsUiHandler extends MessageUiHandler {
     descriptionBg.setOrigin(0, 0);
 
     const descriptionText = addTextObject(0, 0, "", TextStyle.WINDOW, { maxLines: 2 });
-    descriptionText.setWordWrapWidth(1870);
+    descriptionText.setWordWrapWidth((GAME_WIDTH - 16) * TEXT_SCALE);
     descriptionText.setOrigin(0, 0);
     descriptionText.setPositionRelative(descriptionBg, 8, 4);
 

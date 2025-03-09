@@ -32,7 +32,7 @@ import { Stat, PERMANENT_STATS, getStatKey } from "#enums/stat";
 import { Nature } from "#enums/nature";
 import { settings } from "#app/system/settings/settings-manager";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
-import { CANVAS_SCALE } from "#app/ui-constants";
+import { CANVAS_SCALE, TEXT_SCALE } from "#app/ui-constants";
 
 enum Page {
   PROFILE,
@@ -835,7 +835,7 @@ export default class SummaryUiHandler extends UiHandler {
           profileContainer.add(abilityInfo.nameText);
 
           abilityInfo.descriptionText = addTextObject(7, 69, abilityInfo.ability?.description!, TextStyle.WINDOW_ALT, {
-            wordWrap: { width: 1224 },
+            wordWrap: { width: 204 * TEXT_SCALE },
           }); // TODO: is this bang correct?
           abilityInfo.descriptionText.setOrigin(0, 0);
           profileContainer.add(abilityInfo.descriptionText);
@@ -1060,7 +1060,9 @@ export default class SummaryUiHandler extends UiHandler {
           moveRowContainer.add(ppText);
         }
 
-        this.moveDescriptionText = addTextObject(2, 84, "", TextStyle.WINDOW_ALT, { wordWrap: { width: 1212 } });
+        this.moveDescriptionText = addTextObject(2, 84, "", TextStyle.WINDOW_ALT, {
+          wordWrap: { width: 202 * TEXT_SCALE },
+        });
         this.movesContainer.add(this.moveDescriptionText);
 
         const moveDescriptionTextMaskRect = globalScene.make.graphics({});

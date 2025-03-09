@@ -9,7 +9,7 @@ import { MoveCategory } from "#enums/move-category";
 import { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
-import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 
 export interface MoveInfoOverlaySettings {
   delayVisibility?: boolean; // if true, showing the overlay will only set it to active and populate the fields and the handler using this field has to manually call setVisible later.
@@ -76,9 +76,13 @@ export default class MoveInfoOverlay extends Phaser.GameObjects.Container implem
       (options?.top ? EFF_HEIGHT : 0) + BORDER - 2,
       "",
       TextStyle.BATTLE_INFO,
+      {
+        lineSpacing: 5,
+        wordWrap: {
+          width: (width - (BORDER - 2) * 2 - (options?.onSide ? EFF_WIDTH : 0)) * TEXT_SCALE,
+        },
+      },
     );
-    this.desc.setWordWrapWidth((width - (BORDER - 2) * 2 - (options?.onSide ? EFF_WIDTH : 0)) / this.desc.scale);
-    this.desc.setLineSpacing(i18next.resolvedLanguage === "ja" ? 25 : 5);
 
     // limit the text rendering, required for scrolling later on
     const maskPointOrigin = {
