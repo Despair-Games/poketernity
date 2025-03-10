@@ -33,7 +33,7 @@ export class SketchAttr extends MoveEffectAttr {
       return false;
     }
 
-    const sketchedMove = allMoves[targetMove.move.id];
+    const sketchedMove = allMoves.get(targetMove.move.id);
     const sketchIndex = user.getMoveset().findIndex((m) => m.moveId === move.id);
     if (sketchIndex === -1) {
       return false;

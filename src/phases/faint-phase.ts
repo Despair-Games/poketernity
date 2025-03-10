@@ -161,7 +161,7 @@ export class FaintPhase extends PokemonPhase {
 
     if (this.source && pokemon.turnData?.attacksReceived?.length) {
       const lastAttack = pokemon.turnData.attacksReceived[0];
-      applyAbAttrs(AbAttrFlag.POST_FAINT, pokemon, false, this.source, allMoves[lastAttack.moveId]);
+      applyAbAttrs(AbAttrFlag.POST_FAINT, pokemon, false, this.source, allMoves.get(lastAttack.moveId));
     } else {
       //If killed by indirect damage, apply post-faint abilities without providing the source of fatal damage
       applyAbAttrs(AbAttrFlag.POST_FAINT, pokemon, false);
@@ -174,7 +174,7 @@ export class FaintPhase extends PokemonPhase {
       if (defeatSource?.isOnField()) {
         applyAbAttrs(AbAttrFlag.POST_VICTORY, defeatSource, false);
         // TODO: Refactor Fell Stinger
-        const pvmove = allMoves[pokemon.turnData.attacksReceived[0].moveId];
+        const pvmove = allMoves.get(pokemon.turnData.attacksReceived[0].moveId);
         const pvattrs = pvmove.getAttrs(PostVictoryStatStageChangeAttr);
         if (pvattrs.length) {
           for (const pvattr of pvattrs) {

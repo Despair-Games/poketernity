@@ -69,7 +69,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
         if (forbiddenDefendingMoves.includes(enemyLastMoveUsed.move.id) || pokemon.getTag(BattlerTagType.SKY_DROP)) {
           return false;
           // Will not activate if the Pokémon's HP falls below half by a move affected by Sheer Force.
-        } else if (allMoves[enemyLastMoveUsed.move.id].chance >= 0 && source.hasAbility(Abilities.SHEER_FORCE)) {
+        } else if (allMoves.get(enemyLastMoveUsed.move.id).chance >= 0 && source.hasAbility(Abilities.SHEER_FORCE)) {
           return false;
           // Activate only after the last hit of multistrike moves
         } else if (source.turnData.hitsLeft > 1) {

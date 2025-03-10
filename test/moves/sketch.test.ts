@@ -81,9 +81,9 @@ describe("Moves - Sketch", () => {
   });
 
   it("should sketch moves that call other moves", async () => {
-    const randomMoveAttr = allMoves[MoveId.METRONOME].findAttr(
-      (attr) => attr instanceof MetronomeAttr,
-    ) as MetronomeAttr;
+    const randomMoveAttr = allMoves
+      .get(MoveId.METRONOME)
+      .findAttr((attr) => attr instanceof MetronomeAttr) as MetronomeAttr;
     vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.FALSE_SWIPE);
 
     game.override.enemyMoveset([MoveId.METRONOME]);

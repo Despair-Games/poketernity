@@ -462,7 +462,7 @@ export class MovePhase extends BattlePhase {
    * @param success - Whether the move was successful or not.
    */
   protected updateLastMoveId(success: boolean): void {
-    if (!allMoves[this.move.moveId].hasAttr(CopycatAttr)) {
+    if (!allMoves.get(this.move.moveId).hasAttr(CopycatAttr)) {
       if (success) {
         globalScene.currentBattle.lastMove = this.move.getMove();
       }

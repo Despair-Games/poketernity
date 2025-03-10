@@ -30,7 +30,7 @@ export class SelectTargetPhase extends PokemonPhase {
 
       const user = globalScene.getFieldPokemonByBattlerIndex(this.fieldIndex);
       const firstTarget = globalScene.getFieldPokemonByBattlerIndex(targets[0]);
-      const moveObject = allMoves[moveId];
+      const moveObject = allMoves.get(moveId);
 
       // TODO: Resolve bang
       if (user?.isMoveTargetRestricted(moveObject.id, user, firstTarget!)) {
@@ -39,7 +39,7 @@ export class SelectTargetPhase extends PokemonPhase {
           ?.getSelectionDeniedText(user, moveObject.id);
 
         globalScene.queueMessage(
-          errorMessage ?? i18next.t("battle:moveCannotBeSelected", { moveName: allMoves[moveId].name }),
+          errorMessage ?? i18next.t("battle:moveCannotBeSelected", { moveName: allMoves.get(moveId).name }),
           0,
           true,
         );

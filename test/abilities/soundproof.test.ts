@@ -41,7 +41,7 @@ describe("Abilities - Soundproof", () => {
     game.move.select(MoveId.CLANGOROUS_SOUL);
     await game.toEndOfTurn();
 
-    const soundMove = allMoves[MoveId.CLANGOROUS_SOUL];
+    const soundMove = allMoves.get(MoveId.CLANGOROUS_SOUL);
     const lastMove = playerPokemon.getLastXMoves()[0];
 
     expect(lastMove.result).toBe(MoveResult.SUCCESS);

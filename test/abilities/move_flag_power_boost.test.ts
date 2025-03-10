@@ -88,7 +88,7 @@ describe("Abilities - Move Flag Power Boost Ability Attr", () => {
       game.override.moveset(move).ability(ability);
       await game.classicMode.startBattle([Species.FEEBAS]);
       const playerPokemon = game.scene.getPlayerPokemon()!;
-      const moveUsed = allMoves[move];
+      const moveUsed = allMoves.get(move);
       vi.spyOn(moveUsed, "calculateBattlePower");
 
       game.move.select(move);

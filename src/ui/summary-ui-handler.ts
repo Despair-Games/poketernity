@@ -5,7 +5,7 @@ import UiHandler from "#app/ui/ui-handler";
 import { rgbHexToRgba, leftPad, getEnumValues, fixedNumber, toReadableString, formatStat } from "#app/utils";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";
-import { getStarterValueFriendshipCap, speciesStarterCosts } from "#app/data/balance/starters";
+import { getCandyProgressRequirement, speciesStarterCosts } from "#app/data/balance/starters";
 import { argbFromRgba } from "@material/material-color-utilities";
 import { getTypeRgb } from "#app/data/type";
 import { ElementalType } from "#enums/elemental-type";
@@ -341,12 +341,12 @@ export default class SummaryUiHandler extends UiHandler {
       this.championRibbon.setVisible(false);
     }
 
-    let currentFriendship = globalScene.gameData.starterData[this.pokemon.species.getRootSpeciesId()].friendship;
+    let currentFriendship = globalScene.gameData.starterData[this.pokemon.species.getRootSpeciesId()].candyProgress;
     if (!currentFriendship || currentFriendship === undefined) {
       currentFriendship = 0;
     }
 
-    const friendshipCap = getStarterValueFriendshipCap(speciesStarterCosts[this.pokemon.species.getRootSpeciesId()]);
+    const friendshipCap = getCandyProgressRequirement(speciesStarterCosts[this.pokemon.species.getRootSpeciesId()]);
     const candyCropY = 16 - 16 * (currentFriendship / friendshipCap);
 
     if (this.candyShadow.visible) {

@@ -1,9 +1,9 @@
+import { AnimConfig } from "#app/data/anim-config";
+import { chargeAnims } from "#app/data/charge-anims";
 import { allMoves } from "#app/data/data-lists";
-import { chargeAnims } from "./charge-anims";
-import { moveAnims } from "./move-anims";
-import { AnimConfig } from "./anim-config";
-import { initMoveChargeAnim } from "./init-move-charge-anim";
-import type { Move } from "#app/data/move";
+import { initMoveChargeAnim } from "#app/data/init-move-charge-anim";
+import type { ChargingMove } from "#app/data/move";
+import { moveAnims } from "#app/data/move-anims";
 import { BeakBlastHeaderAttr } from "#app/data/move-attrs/beak-blast-header-attr";
 import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
 import { globalScene } from "#app/global-scene";
@@ -20,9 +20,10 @@ export function initMoveAnim(move: MoveId): Promise<void> {
       } else {
         const loadedCheckTimer = setInterval(() => {
           if (moveAnims.get(move) !== null) {
-            const chargeAnimSource = allMoves[move].isChargingMove()
-              ? allMoves[move]
-              : (allMoves[move].getAttrs(DelayedAttackAttr)[0] ?? allMoves[move].getAttrs(BeakBlastHeaderAttr)[0]);
+            const chargeAnimSource = allMoves.get(move).isChargingMove()
+              ? (allMoves.get(move) as ChargingMove)
+              : (allMoves.get(move).getAttrs(DelayedAttackAttr)[0]
+                ?? allMoves.get(move).getAttrs(BeakBlastHeaderAttr)[0]);
             if (chargeAnimSource && chargeAnims.get(chargeAnimSource.chargeAnim) === null) {
               return;
             }
@@ -33,9 +34,9 @@ export function initMoveAnim(move: MoveId): Promise<void> {
       }
     } else {
       moveAnims.set(move, null);
-      const defaultMoveAnim = allMoves[move].isAttackMove()
+      const defaultMoveAnim = allMoves.get(move).isAttackMove()
         ? MoveId.TACKLE
-        : (allMoves[move] as Move).isSelfStatusMove() // as Move is necessary for the ts-compiler
+        : allMoves.get(move).isSelfStatusMove()
           ? MoveId.FOCUS_ENERGY
           : MoveId.TAIL_WHIP;
 
@@ -58,9 +59,10 @@ export function initMoveAnim(move: MoveId): Promise<void> {
             } else {
               populateMoveAnim(move, ba);
             }
-            const chargeAnimSource = allMoves[move].isChargingMove()
-              ? allMoves[move]
-              : (allMoves[move].getAttrs(DelayedAttackAttr)[0] ?? allMoves[move].getAttrs(BeakBlastHeaderAttr)[0]);
+            const chargeAnimSource = allMoves.get(move).isChargingMove()
+              ? (allMoves.get(move) as ChargingMove)
+              : (allMoves.get(move).getAttrs(DelayedAttackAttr)[0]
+                ?? allMoves.get(move).getAttrs(BeakBlastHeaderAttr)[0]);
             if (chargeAnimSource) {
               initMoveChargeAnim(chargeAnimSource.chargeAnim).then(() => resolve());
             } else {

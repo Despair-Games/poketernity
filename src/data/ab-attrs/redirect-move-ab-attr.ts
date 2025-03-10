@@ -25,7 +25,7 @@ export class RedirectMoveAbAttr extends AbAttr {
   }
 
   canRedirect(moveId: MoveId): boolean {
-    const move = allMoves[moveId];
+    const move = allMoves.get(moveId);
     return !![MoveTarget.NEAR_OTHER, MoveTarget.OTHER].find((t) => move.moveTarget === t);
   }
 }

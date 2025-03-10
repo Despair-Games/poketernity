@@ -45,7 +45,7 @@ describe("Abilities - Galvanize", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
 
-    const move = allMoves[MoveId.TACKLE];
+    const move = allMoves.get(MoveId.TACKLE);
     vi.spyOn(move, "calculateBattlePower");
 
     game.move.select(MoveId.TACKLE);

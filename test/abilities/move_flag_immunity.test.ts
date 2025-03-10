@@ -66,7 +66,7 @@ describe("Ability Attribute - Move Flag Immunity", () => {
 
       const lastEnemyMove = enemyPokemon.getLastXMoves()[0];
       expect(lastEnemyMove.result).toBe(MoveResult.FAIL);
-      expect(allMoves[enemyMove].checkFlag(moveFlag, enemyPokemon, null)).toBe(true);
+      expect(allMoves.get(enemyMove).checkFlag(moveFlag, enemyPokemon, null)).toBe(true);
     },
   );
 });

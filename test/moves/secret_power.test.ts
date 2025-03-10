@@ -41,7 +41,7 @@ describe("Moves - Secret Power", () => {
 
   it("Secret Power checks for an active terrain first then looks at the biome for its secondary effect", async () => {
     game.override.startingBiome(Biome.VOLCANO).enemyMoveset([MoveId.SPLASH, MoveId.MISTY_TERRAIN]);
-    vi.spyOn(allMoves[MoveId.SECRET_POWER], "chance", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.SECRET_POWER), "chance", "get").mockReturnValue(100);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;

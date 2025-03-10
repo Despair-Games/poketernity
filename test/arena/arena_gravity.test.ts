@@ -38,7 +38,7 @@ describe("Arena - Gravity", () => {
   // Reference: https://bulbapedia.bulbagarden.net/wiki/Gravity_(move)
 
   it("non-OHKO move accuracy is multiplied by 1.67", async () => {
-    const moveToCheck = allMoves[MoveId.TACKLE];
+    const moveToCheck = allMoves.get(MoveId.TACKLE);
 
     vi.spyOn(moveToCheck, "calculateBattleAccuracy");
 
@@ -59,7 +59,7 @@ describe("Arena - Gravity", () => {
 
   it("OHKO move accuracy is not affected", async () => {
     /** See Fissure {@link https://bulbapedia.bulbagarden.net/wiki/Fissure_(move)} */
-    const moveToCheck = allMoves[MoveId.FISSURE];
+    const moveToCheck = allMoves.get(MoveId.FISSURE);
 
     vi.spyOn(moveToCheck, "calculateBattleAccuracy");
 

@@ -12,6 +12,6 @@ export class RedirectTypeMoveAbAttr extends RedirectMoveAbAttr {
   }
 
   override canRedirect(moveId: MoveId): boolean {
-    return super.canRedirect(moveId) && allMoves[moveId].type === this.type;
+    return super.canRedirect(moveId) && allMoves.get(moveId).type === this.type;
   }
 }

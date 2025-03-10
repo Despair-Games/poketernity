@@ -30,7 +30,7 @@ function testMoveEffectiveness(
     overrideHeldItems(target, false);
   }
 
-  expect(target.getMoveEffectiveness(user, allMoves[moveId])).toBe(expected);
+  expect(target.getMoveEffectiveness(user, allMoves.get(moveId))).toBe(expected);
   user.destroy();
   target.destroy();
 }

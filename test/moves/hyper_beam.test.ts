@@ -34,7 +34,7 @@ describe("Moves - Hyper Beam", () => {
     game.override.enemyLevel(100);
 
     game.override.moveset([MoveId.HYPER_BEAM, MoveId.TACKLE]);
-    vi.spyOn(allMoves[MoveId.HYPER_BEAM], "accuracy", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.HYPER_BEAM), "accuracy", "get").mockReturnValue(100);
   });
 
   it("should force the user to recharge on the next turn (and only that turn)", async () => {

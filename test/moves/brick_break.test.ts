@@ -70,7 +70,9 @@ describe("Moves - Brick Break", () => {
 
     const damage = spy.mock.results.at(-1)?.value.damage;
 
-    expect(damage).toBe(toDmgValue(enemy.getBaseDamage(player, allMoves[MoveId.BRICK_BREAK], MoveCategory.PHYSICAL)));
+    expect(damage).toBe(
+      toDmgValue(enemy.getBaseDamage(player, allMoves.get(MoveId.BRICK_BREAK), MoveCategory.PHYSICAL)),
+    );
   });
 
   it("should not remove screens if the move has no effect", async () => {
