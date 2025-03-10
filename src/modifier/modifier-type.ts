@@ -1046,7 +1046,7 @@ export class TmModifierType extends PokemonModifierType {
   constructor(moveId: MoveId) {
     super(
       "",
-      `tm_${ElementalType[allMoves[moveId].type].toLowerCase()}`,
+      `tm_${ElementalType[allMoves.get(moveId).type].toLowerCase()}`,
       (_type, args) => new TmModifier(this, (args[0] as PlayerPokemon).id),
       (pokemon: PlayerPokemon) => {
         if (
@@ -1066,7 +1066,7 @@ export class TmModifierType extends PokemonModifierType {
   override get name(): string {
     return i18next.t("modifierType:ModifierType.TmModifierType.name", {
       moveId: leftPad(Object.keys(tmSpecies).indexOf(this.moveId.toString()) + 1, 3),
-      moveName: allMoves[this.moveId].name,
+      moveName: allMoves.get(this.moveId).name,
     });
   }
 
@@ -1075,7 +1075,7 @@ export class TmModifierType extends PokemonModifierType {
       settings.display.enableMoveInfo
         ? "modifierType:ModifierType.TmModifierTypeWithInfo.description"
         : "modifierType:ModifierType.TmModifierType.description",
-      { moveName: allMoves[this.moveId].name },
+      { moveName: allMoves.get(this.moveId).name },
     );
   }
 }
@@ -1364,7 +1364,7 @@ export class TmModifierTypeGenerator extends ModifierTypeGenerator {
       const tierUniqueCompatibleTms = partyMemberCompatibleTms
         .flat()
         .filter((tm) => tmPoolTiers[tm] === tier)
-        .filter((tm) => !allMoves[tm].name.endsWith(" (N)"))
+        .filter((tm) => !allMoves.get(tm).name.endsWith(" (N)"))
         .filter((tm, i, array) => array.indexOf(tm) === i);
       if (!tierUniqueCompatibleTms.length) {
         return null;

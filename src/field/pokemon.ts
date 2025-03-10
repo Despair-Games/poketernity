@@ -10,10 +10,10 @@ import type { StarterMoveset } from "#app/@types/StarterData";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type { AnySound } from "#app/audio-manager";
 import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants";
-import type { AbAttr } from "#app/data/ab-attrs/ab-attr";
-import type { Ability } from "#app/data/ability";
-import type { AbilityFilterOptions } from "#app/data/ability-filter-options";
-import { applyAbAttrs, getAbApplyFunc } from "#app/data/apply-ab-attrs";
+import type { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
+import type { Ability } from "#app/data/abilities/ability";
+import type { AbilityFilterOptions } from "#app/@types/ability-filter-options";
+import { applyAbAttrs, getAbApplyFunc } from "#app/data/abilities/apply-ab-attrs";
 import { NoCritTag } from "#app/data/arena-tag";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { starterPassiveAbilities } from "#app/data/balance/passives";
@@ -53,32 +53,32 @@ import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { allAbilities, allMoves } from "#app/data/data-lists";
 import { DexAttr } from "#app/data/dex-attributes";
 import { getLevelTotalExp } from "#app/data/exp";
-import { initMoveAnim } from "#app/data/init-move-anim";
-import { getMoveTargets, type Move } from "#app/data/move";
-import { BypassBurnDamageReductionAttr } from "#app/data/move-attrs/bypass-burn-damage-reduction-attr";
-import { CombinedPledgeStabBoostAttr } from "#app/data/move-attrs/combined-pledge-stab-boost-attr";
-import { CounterDamageAttr } from "#app/data/move-attrs/counter-damage-attr";
-import { CritOnlyAttr } from "#app/data/move-attrs/crit-only-attr";
-import { DoubleDamageToMaxAttr } from "#app/data/move-attrs/double-damage-to-max-attr";
-import { FixedDamageAttr } from "#app/data/move-attrs/fixed-damage-attr";
-import { HighCritAttr } from "#app/data/move-attrs/high-crit-attr";
-import { HitsTagAttr } from "#app/data/move-attrs/hits-tag-attr";
-import { IgnoreOpponentStatStagesAttr } from "#app/data/move-attrs/ignore-opponent-stat-stages-attr";
-import { IgnoreWeatherTypeDebuffAttr } from "#app/data/move-attrs/ignore-weather-type-debuff-attr";
-import { ModifiedDamageAttr } from "#app/data/move-attrs/modified-damage-attr";
-import { OneHitKOAccuracyAttr } from "#app/data/move-attrs/one-hit-ko-accuracy-attr";
-import { OneHitKOAttr } from "#app/data/move-attrs/one-hit-ko-attr";
-import { RechargeAttr } from "#app/data/move-attrs/recharge-attr";
-import { RespectAttackTypeImmunityAttr } from "#app/data/move-attrs/respect-attack-type-immunity-attr";
-import { SacrificialAttr } from "#app/data/move-attrs/sacrificial-attr";
-import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
-import { TypelessAttr } from "#app/data/move-attrs/typeless-attr";
-import { VariableAtkAttr } from "#app/data/move-attrs/variable-atk-attr";
-import { VariableDefAttr } from "#app/data/move-attrs/variable-def-attr";
-import { VariableMoveCategoryAttr } from "#app/data/move-attrs/variable-move-category-attr";
-import { VariableMoveTypeAttr } from "#app/data/move-attrs/variable-move-type-attr";
-import { VariableMoveTypeChartAttr } from "#app/data/move-attrs/variable-move-type-chart-attr";
-import { VariableMoveTypeMultiplierAttr } from "#app/data/move-attrs/variable-move-type-multiplier-attr";
+import { initMoveAnim } from "#app/data/init/init-move-anim";
+import { getMoveTargets, type Move } from "#app/data/moves/move";
+import { BypassBurnDamageReductionAttr } from "#app/data/moves/move-attrs/bypass-burn-damage-reduction-attr";
+import { CombinedPledgeStabBoostAttr } from "#app/data/moves/move-attrs/combined-pledge-stab-boost-attr";
+import { CounterDamageAttr } from "#app/data/moves/move-attrs/counter-damage-attr";
+import { CritOnlyAttr } from "#app/data/moves/move-attrs/crit-only-attr";
+import { DoubleDamageToMaxAttr } from "#app/data/moves/move-attrs/double-damage-to-max-attr";
+import { FixedDamageAttr } from "#app/data/moves/move-attrs/fixed-damage-attr";
+import { HighCritAttr } from "#app/data/moves/move-attrs/high-crit-attr";
+import { HitsTagAttr } from "#app/data/moves/move-attrs/hits-tag-attr";
+import { IgnoreOpponentStatStagesAttr } from "#app/data/moves/move-attrs/ignore-opponent-stat-stages-attr";
+import { IgnoreWeatherTypeDebuffAttr } from "#app/data/moves/move-attrs/ignore-weather-type-debuff-attr";
+import { ModifiedDamageAttr } from "#app/data/moves/move-attrs/modified-damage-attr";
+import { OneHitKOAccuracyAttr } from "#app/data/moves/move-attrs/one-hit-ko-accuracy-attr";
+import { OneHitKOAttr } from "#app/data/moves/move-attrs/one-hit-ko-attr";
+import { RechargeAttr } from "#app/data/moves/move-attrs/recharge-attr";
+import { RespectAttackTypeImmunityAttr } from "#app/data/moves/move-attrs/respect-attack-type-immunity-attr";
+import { SacrificialAttr } from "#app/data/moves/move-attrs/sacrificial-attr";
+import { StatStageChangeAttr } from "#app/data/moves/move-attrs/stat-stage-change-attr";
+import { TypelessAttr } from "#app/data/moves/move-attrs/typeless-attr";
+import { VariableAtkAttr } from "#app/data/moves/move-attrs/variable-atk-attr";
+import { VariableDefAttr } from "#app/data/moves/move-attrs/variable-def-attr";
+import { VariableMoveCategoryAttr } from "#app/data/moves/move-attrs/variable-move-category-attr";
+import { VariableMoveTypeAttr } from "#app/data/moves/move-attrs/variable-move-type-attr";
+import { VariableMoveTypeChartAttr } from "#app/data/moves/move-attrs/variable-move-type-chart-attr";
+import { VariableMoveTypeMultiplierAttr } from "#app/data/moves/move-attrs/variable-move-type-multiplier-attr";
 import { getNatureStatMultiplier } from "#app/data/nature";
 import type { SpeciesFormChange } from "#app/data/pokemon-forms";
 import type PokemonSpecies from "#app/data/pokemon-species";
@@ -1262,7 +1262,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
       overrideArray.forEach((moveId: MoveId, index: number) => {
         const ppUsed = this.moveset[index]?.ppUsed ?? 0;
-        this.moveset[index] = new PokemonMove(moveId, Math.min(ppUsed, allMoves[moveId].pp));
+        this.moveset[index] = new PokemonMove(moveId, Math.min(ppUsed, allMoves.get(moveId).pp));
       });
     }
 
@@ -2234,10 +2234,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         weight = 50;
       }
       // Assume level 1 moves with 80+ BP are "move reminder" moves and bump their weight
-      if (weight === 1 && allMoves[levelMove[1]].power >= 80) {
+      if (weight === 1 && allMoves.get(levelMove[1]).power >= 80) {
         weight = 40;
       }
-      if (!movePool.some((m) => m[0] === levelMove[1]) && !allMoves[levelMove[1]].name.endsWith(" (N)")) {
+      if (!movePool.some((m) => m[0] === levelMove[1]) && !allMoves.get(levelMove[1]).name.endsWith(" (N)")) {
         movePool.push([levelMove[1], weight]);
       }
     }
@@ -2258,7 +2258,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
             break;
           }
         }
-        if (compatible && !movePool.some((m) => m[0] === moveId) && !allMoves[moveId].name.endsWith(" (N)")) {
+        if (compatible && !movePool.some((m) => m[0] === moveId) && !allMoves.get(moveId).name.endsWith(" (N)")) {
           if (tmPoolTiers[moveId] === ModifierTier.COMMON && this.level >= 15) {
             movePool.push([moveId, 4]);
           } else if (tmPoolTiers[moveId] === ModifierTier.GREAT && this.level >= 30) {
@@ -2273,7 +2273,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       if (this.level >= 60) {
         for (let i = 0; i < 3; i++) {
           const moveId = speciesEggMoves[this.species.getRootSpeciesId()][i];
-          if (!movePool.some((m) => m[0] === moveId) && !allMoves[moveId].name.endsWith(" (N)")) {
+          if (!movePool.some((m) => m[0] === moveId) && !allMoves.get(moveId).name.endsWith(" (N)")) {
             movePool.push([moveId, 40]);
           }
         }
@@ -2282,7 +2282,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         if (
           this.level >= 170
           && !movePool.some((m) => m[0] === moveId)
-          && !allMoves[moveId].name.endsWith(" (N)")
+          && !allMoves.get(moveId).name.endsWith(" (N)")
           && !this.isBoss()
         ) {
           movePool.push([moveId, 30]);
@@ -2292,22 +2292,28 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     // Bosses never get self ko moves
     if (this.isBoss()) {
-      movePool = movePool.filter((m) => !allMoves[m[0]].hasAttr(SacrificialAttr));
+      movePool = movePool.filter((m) => !allMoves.get(m[0]).hasAttr(SacrificialAttr));
     }
     if (this.hasTrainer()) {
       // Trainers never get OHKO moves
-      movePool = movePool.filter((m) => !allMoves[m[0]].hasAttr(OneHitKOAttr));
+      movePool = movePool.filter((m) => !allMoves.get(m[0]).hasAttr(OneHitKOAttr));
       // Half the weight of self KO moves
-      movePool = movePool.map((m) => [m[0], m[1] * (!!allMoves[m[0]].hasAttr(SacrificialAttr) ? 0.5 : 1)]);
+      movePool = movePool.map((m) => [m[0], m[1] * (allMoves.get(m[0]).hasAttr(SacrificialAttr) ? 0.5 : 1)]);
       // Trainers get a weight bump to stat buffing moves
       movePool = movePool.map((m) => [
         m[0],
-        m[1] * (allMoves[m[0]].getAttrs(StatStageChangeAttr).some((a) => a.stages > 1 && a.selfTarget) ? 1.25 : 1),
+        m[1]
+          * (allMoves
+            .get(m[0])
+            .getAttrs(StatStageChangeAttr)
+            .some((a) => a.stages > 1 && a.selfTarget)
+            ? 1.25
+            : 1),
       ]);
       // Trainers get a weight decrease to multiturn moves
       movePool = movePool.map((m) => [
         m[0],
-        m[1] * (!!allMoves[m[0]].isChargingMove() || !!allMoves[m[0]].hasAttr(RechargeAttr) ? 0.7 : 1),
+        m[1] * (allMoves.get(m[0]).isChargingMove() || allMoves.get(m[0]).hasAttr(RechargeAttr) ? 0.7 : 1),
       ]);
     }
 
@@ -2315,15 +2321,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     // Caps max power at 90 to avoid something like hyper beam ruining the stats.
     // This is a pretty soft weighting factor, although it is scaled with the weight multiplier.
     const maxPower = Math.min(
-      movePool.reduce((v, m) => Math.max(allMoves[m[0]].power, v), 40),
+      movePool.reduce((v, m) => Math.max(allMoves.get(m[0]).power, v), 40),
       90,
     );
     movePool = movePool.map((m) => [
       m[0],
       m[1]
-        * (allMoves[m[0]].category === MoveCategory.STATUS
+        * (allMoves.get(m[0]).category === MoveCategory.STATUS
           ? 1
-          : Math.max(Math.min(allMoves[m[0]].power / maxPower, 1), 0.5)),
+          : Math.max(Math.min(allMoves.get(m[0]).power / maxPower, 1), 0.5)),
     ]);
 
     // Weight damaging moves against the lower stat
@@ -2331,7 +2337,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const spAtk = this.getStat(Stat.SPATK);
     const worseCategory: MoveCategory = atk > spAtk ? MoveCategory.SPECIAL : MoveCategory.PHYSICAL;
     const statRatio = worseCategory === MoveCategory.PHYSICAL ? atk / spAtk : spAtk / atk;
-    movePool = movePool.map((m) => [m[0], m[1] * (allMoves[m[0]].category === worseCategory ? statRatio : 1)]);
+    movePool = movePool.map((m) => [m[0], m[1] * (allMoves.get(m[0]).category === worseCategory ? statRatio : 1)]);
 
     /** The higher this is the more the game weights towards higher level moves. At `0` all moves are equal weight. */
     let weightMultiplier = 0.9;
@@ -2349,7 +2355,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     // Trainers and bosses always force a stab move
     if (this.hasTrainer() || this.isBoss()) {
       const stabMovePool = baseWeights.filter(
-        (m) => allMoves[m[0]].category !== MoveCategory.STATUS && this.isOfType(allMoves[m[0]].type),
+        (m) => allMoves.get(m[0]).category !== MoveCategory.STATUS && this.isOfType(allMoves.get(m[0]).type),
       );
 
       if (stabMovePool.length) {
@@ -2363,7 +2369,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
     } else {
       // Normal wild pokemon just force a random damaging move
-      const attackMovePool = baseWeights.filter((m) => allMoves[m[0]].category !== MoveCategory.STATUS);
+      const attackMovePool = baseWeights.filter((m) => allMoves.get(m[0]).category !== MoveCategory.STATUS);
       if (attackMovePool.length) {
         const totalWeight = attackMovePool.reduce((v, m) => v + m[1], 0);
         let rand = randSeedInt(totalWeight);
@@ -2381,20 +2387,20 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         // Other damaging moves 2x weight if 0-1 damaging moves, 0.5x if 2, 0.125x if 3. These weights double if STAB.
         // Status moves remain unchanged on weight, this encourages 1-2
         movePool = baseWeights
-          .filter((m) => !this.moveset.some((mo) => m[0] === mo?.moveId))
+          .filter((m) => !this.moveset.some((mo) => m[0] === mo.moveId))
           .map((m) => {
             let ret: number;
             if (
               this.moveset.some(
-                (mo) => mo?.getMove().category !== MoveCategory.STATUS && mo?.getMove().type === allMoves[m[0]].type,
+                (mo) => mo.getMove().category !== MoveCategory.STATUS && mo.getMove().type === allMoves.get(m[0]).type,
               )
             ) {
               ret = Math.ceil(Math.sqrt(m[1]));
-            } else if (allMoves[m[0]].category !== MoveCategory.STATUS) {
+            } else if (allMoves.get(m[0]).category !== MoveCategory.STATUS) {
               ret = Math.ceil(
                 (m[1]
-                  / Math.max(Math.pow(4, this.moveset.filter((mo) => (mo?.getMove().power ?? 0) > 1).length) / 8, 0.5))
-                  * (this.isOfType(allMoves[m[0]].type) ? 2 : 1),
+                  / Math.max(Math.pow(4, this.moveset.filter((mo) => (mo.getMove().power ?? 0) > 1).length) / 8, 0.5))
+                  * (this.isOfType(allMoves.get(m[0]).type) ? 2 : 1),
               );
             } else {
               ret = m[1];
@@ -2403,7 +2409,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           });
       } else {
         // Non-trainer pokemon just use normal weights
-        movePool = baseWeights.filter((m) => !this.moveset.some((mo) => m[0] === mo?.moveId));
+        movePool = baseWeights.filter((m) => !this.moveset.some((mo) => m[0] === mo.moveId));
       }
       const totalWeight = movePool.reduce((v, m) => v + m[1], 0);
       let rand = randSeedInt(totalWeight);
@@ -4835,7 +4841,7 @@ export class EnemyPokemon extends Pokemon {
       }
     }
     return {
-      move: allMoves[MoveId.STRUGGLE],
+      move: allMoves.get(MoveId.STRUGGLE),
       targets: this.getNextTargets(MoveId.STRUGGLE),
       type: ElementalType.UNKNOWN,
     };
@@ -4861,7 +4867,7 @@ export class EnemyPokemon extends Pokemon {
       return targets.map((p) => p.getBattlerIndex());
     }
 
-    const move = allMoves[moveId];
+    const move = allMoves.get(moveId);
 
     /**
      * Get the move's target benefit score against each potential target.

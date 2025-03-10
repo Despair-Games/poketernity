@@ -18,23 +18,23 @@ import {
   ME_BASE_SPAWN_WEIGHT,
   ME_MAX_SPAWN_WEIGHT,
 } from "#app/constants";
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { biomeDepths, getBiomeName } from "#app/data/balance/biomes";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
-import { MoveChargeAnim } from "#app/data/battle-anims/move-charge-anim";
+import { MoveChargeAnim } from "#app/data/animations/move-charge-anim";
 import type { DestinyBondTag, GrudgeTag } from "#app/data/battler-tags";
 import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
-import { initCommonAnims } from "#app/data/init-common-anims";
-import { initMoveAnim } from "#app/data/init-move-anim";
+import { initCommonAnims } from "#app/data/init/init-common-anims";
+import { initMoveAnim } from "#app/data/init/init-move-anim";
 import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
 import { allMysteryEncounters, mysteryEncountersByBiome } from "#app/data/mystery-encounters/mystery-encounters";
 import { pokemonFormChanges, type SpeciesFormChange } from "#app/data/pokemon-forms";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { populateAnims } from "#app/data/populate-anims";
+import { populateAnims } from "#app/data/init/init-anims";
 import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
 import { SpeciesFormChangeTimeOfDayTrigger } from "#app/data/species-form-change-triggers/species-form-change-time-of-day-trigger";
 import type { SpeciesFormChangeTrigger } from "#app/data/species-form-change-triggers/species-form-change-trigger";
@@ -1212,7 +1212,7 @@ export default class BattleScene extends SceneBase {
     if (reloadI18n) {
       const localizable: Localizable[] = [
         ...allSpecies,
-        ...Object.values(allMoves),
+        ...allMoves.values(),
         ...allAbilities,
         ...getEnumValues(ModifierPoolType)
           .map((mpt) => getModifierPoolForType(mpt))

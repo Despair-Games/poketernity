@@ -4,7 +4,7 @@ import { addTextObject } from "./text";
 import { TextStyle } from "#enums/text-style";
 import { addWindow } from "./ui-theme";
 import { fixedNumber } from "#app/utils";
-import type { Move } from "../data/move";
+import type { Move } from "../data/moves/move";
 import { MoveCategory } from "#enums/move-category";
 import { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";

@@ -8,7 +8,7 @@ import { type TurnEndPhase } from "#app/phases/turn-end-phase";
 import { updateUserInfo } from "#app/account";
 import { BattlerIndex } from "#enums/battler-index";
 import BattleScene from "#app/battle-scene";
-import { getMoveTargets } from "#app/data/move";
+import { getMoveTargets } from "#app/data/moves/move";
 import { settings } from "#app/system/settings/settings-manager";
 import type { EnemyPokemon, PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import Trainer from "#app/field/trainer";
@@ -401,12 +401,12 @@ export class GameManager {
     const legalTargets = getMoveTargets(enemy, moveId);
 
     vi.spyOn(enemy, "getNextMove").mockReturnValueOnce({
-      move: allMoves[moveId],
+      move: allMoves.get(moveId),
       targets:
         target !== undefined && !legalTargets.multiple && legalTargets.targets.includes(target)
           ? [target]
           : enemy.getNextTargets(moveId),
-      type: enemy.getMoveType(allMoves[moveId]),
+      type: enemy.getMoveType(allMoves.get(moveId)),
     });
 
     /**

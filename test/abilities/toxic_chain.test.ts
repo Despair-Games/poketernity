@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { type PostAttackApplyStatusEffectAbAttr } from "#app/data/ab-attrs/post-attack-apply-status-effect-ab-attr";
+import { type PostAttackApplyStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/post-attack-apply-status-effect-ab-attr";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { Abilities } from "#enums/abilities";

@@ -35,7 +35,7 @@ describe("Moves - Shell Trap", () => {
       .startingLevel(100)
       .enemyLevel(100);
 
-    vi.spyOn(allMoves[MoveId.RAZOR_LEAF], "accuracy", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.RAZOR_LEAF), "accuracy", "get").mockReturnValue(100);
   });
 
   it("should activate after the user is hit by a physical attack", async () => {
@@ -130,7 +130,7 @@ describe("Moves - Shell Trap", () => {
 
   it("should not activate from a subsequent physical attack", async () => {
     game.override.battleType("single");
-    vi.spyOn(allMoves[MoveId.RAZOR_LEAF], "priority", "get").mockReturnValue(-4);
+    vi.spyOn(allMoves.get(MoveId.RAZOR_LEAF), "priority", "get").mockReturnValue(-4);
 
     await game.startBattle([Species.CHARIZARD]);
 

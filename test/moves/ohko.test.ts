@@ -90,7 +90,7 @@ describe("Moves - One Hit KO Moves", () => {
   it("OHKO moves accuracy goes up by 1% for each level the user is above the target", async () => {
     game.override.startingLevel(142).enemySpecies(Species.ARCEUS).ability(Abilities.BALL_FETCH);
     await game.classicMode.startBattle([Species.ALAKAZAM]);
-    const moveToCheck = allMoves[MoveId.GUILLOTINE];
+    const moveToCheck = allMoves.get(MoveId.GUILLOTINE);
 
     vi.spyOn(moveToCheck, "calculateBattleAccuracy");
 

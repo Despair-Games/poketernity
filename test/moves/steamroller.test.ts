@@ -35,7 +35,7 @@ describe("Moves - Steamroller", () => {
     const ditto = game.scene.getEnemyPokemon()!;
     vi.spyOn(ditto, "getAttackDamage");
     ditto.hp = 5000;
-    const steamroller = allMoves[MoveId.STEAMROLLER];
+    const steamroller = allMoves.get(MoveId.STEAMROLLER);
     vi.spyOn(steamroller, "calculateBattleAccuracy");
     const ironBoulder = game.scene.getPlayerPokemon()!;
     vi.spyOn(ironBoulder, "getAccuracyMultiplier");

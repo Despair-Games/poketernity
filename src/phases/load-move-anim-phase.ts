@@ -1,5 +1,5 @@
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
-import { initMoveAnim } from "#app/data/init-move-anim";
+import { initMoveAnim } from "#app/data/init/init-move-anim";
 import { Phase } from "#app/phase";
 import type { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";

@@ -1803,7 +1803,7 @@ export class GameData {
         return;
       }
       globalScene.audioManager.playSound("level_up_fanfare");
-      const moveName = allMoves[speciesEggMoves[speciesId][eggMoveIndex]].name;
+      const moveName = allMoves.get(speciesEggMoves[speciesId][eggMoveIndex]).name;
       // TODO: use a proper localized message in this case
       let message = prependSpeciesToMessage ? species.getName() + " " : "";
       message +=

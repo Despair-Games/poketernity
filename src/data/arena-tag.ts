@@ -1,4 +1,4 @@
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { allMoves } from "#app/data/data-lists";
 import type { Arena } from "#app/field/arena";
 import type { Pokemon } from "#app/field/pokemon";
@@ -27,7 +27,7 @@ import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
-import { CommonBattleAnim } from "./battle-anims/common-battle-anim";
+import { CommonBattleAnim } from "./animations/common-battle-anim";
 import { type SkyDropTag } from "./battler-tags";
 import { SCREEN_DOUBLES_DMG_FACTOR, SCREEN_SINGLES_DMG_FACTOR } from "#app/constants";
 
@@ -70,7 +70,7 @@ export abstract class ArenaTag {
   }
 
   public getMoveName(): string | null {
-    return this.sourceMoveId ? allMoves[this.sourceMoveId].name : null;
+    return this.sourceMoveId ? allMoves.get(this.sourceMoveId).name : null;
   }
 
   /**
@@ -332,7 +332,7 @@ export abstract class ConditionalProtectTag extends ArenaTag {
     if (
       (this.side === ArenaTagSide.PLAYER) === defender.isPlayer()
       && this.protectConditionFunc(arena, moveId)
-      && (this.ignoresBypass || !allMoves[moveId].checkFlag(MoveFlags.IGNORE_PROTECT, attacker, defender))
+      && (this.ignoresBypass || !allMoves.get(moveId).checkFlag(MoveFlags.IGNORE_PROTECT, attacker, defender))
     ) {
       if (!isProtected.value) {
         isProtected.value = true;
@@ -361,7 +361,7 @@ export abstract class ConditionalProtectTag extends ArenaTag {
  *   This includes moves with modified priorities from abilities (e.g. Prankster)
  */
 const QuickGuardConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
-  const move = allMoves[moveId];
+  const move = allMoves.get(moveId);
   const effectPhase = globalScene.getCurrentPhase();
 
   if (effectPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
@@ -391,7 +391,7 @@ class QuickGuardTag extends ConditionalProtectTag {
  * @returns `true` if the incoming move is multi-targeted (even if it's only used against one Pokemon).
  */
 const WideGuardConditionFunc: ProtectConditionFunc = (_arena, moveId): boolean => {
-  const move = allMoves[moveId];
+  const move = allMoves.get(moveId);
 
   switch (move.moveTarget) {
     case MoveTarget.ALL_ENEMIES:
@@ -422,7 +422,7 @@ class WideGuardTag extends ConditionalProtectTag {
  * @returns `true` if the incoming move is not a Status move.
  */
 const MatBlockConditionFunc: ProtectConditionFunc = (_arena, moveId): boolean => {
-  const move = allMoves[moveId];
+  const move = allMoves.get(moveId);
   return move.category !== MoveCategory.STATUS;
 };
 
@@ -458,7 +458,7 @@ class MatBlockTag extends ConditionalProtectTag {
  * Pokemon or sides of the field.
  */
 const CraftyShieldConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
-  const move = allMoves[moveId];
+  const move = allMoves.get(moveId);
   return (
     move.category === MoveCategory.STATUS
     && move.moveTarget !== MoveTarget.ENEMY_SIDE

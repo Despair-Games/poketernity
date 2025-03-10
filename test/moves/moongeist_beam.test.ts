@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
-import { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
+import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -49,7 +49,7 @@ describe("Moves - Moongeist Beam", () => {
   // Also covers Photon Geyser and Sunsteel Strike
   it("should not ignore enemy abilities when called by another move, such as metronome", async () => {
     await game.classicMode.startBattle([Species.MILOTIC]);
-    vi.spyOn(allMoves[MoveId.METRONOME].getAttrs(MetronomeAttr)[0], "getRandomMove").mockReturnValue(
+    vi.spyOn(allMoves.get(MoveId.METRONOME).getAttrs(MetronomeAttr)[0], "getRandomMove").mockReturnValue(
       MoveId.MOONGEIST_BEAM,
     );
 
