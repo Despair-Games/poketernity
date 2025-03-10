@@ -25,7 +25,7 @@ import {
   FriendshipAndNightCondition,
   MrMimeCondition,
   SylveonEvoCondition,
-  KnowMoveEvoCondition,
+  MoveKnownEvoCondition,
 } from "#app/data/pokemon-evolutions";
 
 export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
@@ -215,12 +215,12 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
      * If Tyrogue knows multiple of these moves, its evolution is based on
      * the first qualifying move in its moveset.
      */
-    new SpeciesEvolution(Species.HITMONLEE, 20, null, new KnowMoveEvoCondition(MoveId.LOW_SWEEP)),
-    new SpeciesEvolution(Species.HITMONCHAN, 20, null, new KnowMoveEvoCondition(MoveId.MACH_PUNCH)),
-    new SpeciesEvolution(Species.HITMONTOP, 20, null, new KnowMoveEvoCondition(MoveId.RAPID_SPIN)),
+    new SpeciesEvolution(Species.HITMONLEE, 20, null, new MoveKnownEvoCondition(MoveId.LOW_SWEEP)),
+    new SpeciesEvolution(Species.HITMONCHAN, 20, null, new MoveKnownEvoCondition(MoveId.MACH_PUNCH)),
+    new SpeciesEvolution(Species.HITMONTOP, 20, null, new MoveKnownEvoCondition(MoveId.RAPID_SPIN)),
   ],
   [Species.LICKITUNG]: [
-    new SpeciesEvolution(Species.LICKILICKY, 1, null, new KnowMoveEvoCondition(MoveId.ROLLOUT), LICKILICKY_EVO_LEVEL),
+    new SpeciesEvolution(Species.LICKILICKY, 1, null, new MoveKnownEvoCondition(MoveId.ROLLOUT), LICKILICKY_EVO_LEVEL),
   ],
   [Species.KOFFING]: [
     new SpeciesEvolution(Species.WEEZING, 35, null, new DayEvolutionCondition()),
@@ -248,7 +248,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.TANGROWTH,
       1,
       null,
-      new KnowMoveEvoCondition(MoveId.ANCIENT_POWER),
+      new MoveKnownEvoCondition(MoveId.ANCIENT_POWER),
       TANGROWTH_EVO_LEVEL,
     ),
   ],

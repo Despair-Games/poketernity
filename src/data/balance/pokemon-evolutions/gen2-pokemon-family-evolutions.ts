@@ -20,7 +20,7 @@ import {
   SpeciesFriendshipEvolutionCondition,
   NightEvolutionCondition,
   DayEvolutionCondition,
-  KnowMoveEvoCondition,
+  MoveKnownEvoCondition,
   DudunsparceThreeSegmentEvoCondition,
   SpeciesOwnedEvoCondition,
 } from "#app/data/pokemon-evolutions";
@@ -68,16 +68,16 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.MARILL]: [new SpeciesEvolution(Species.AZUMARILL, 18, null, null)],
   /** Bonsly is from Gen 4 */
   [Species.BONSLY]: [
-    new SpeciesEvolution(Species.SUDOWOODO, 1, null, new KnowMoveEvoCondition(MoveId.MIMIC), SUDOWOODO_EVO_LEVEL),
+    new SpeciesEvolution(Species.SUDOWOODO, 1, null, new MoveKnownEvoCondition(MoveId.MIMIC), SUDOWOODO_EVO_LEVEL),
   ],
   [Species.HOPPIP]: [new SpeciesEvolution(Species.SKIPLOOM, 18, null, null)],
   [Species.SKIPLOOM]: [new SpeciesEvolution(Species.JUMPLUFF, 27, null, null)],
   [Species.AIPOM]: [
-    new SpeciesEvolution(Species.AMBIPOM, 1, null, new KnowMoveEvoCondition(MoveId.DOUBLE_HIT), AMBIPOM_EVO_LEVEL),
+    new SpeciesEvolution(Species.AMBIPOM, 1, null, new MoveKnownEvoCondition(MoveId.DOUBLE_HIT), AMBIPOM_EVO_LEVEL),
   ],
   [Species.SUNKERN]: [new SpeciesEvolution(Species.SUNFLORA, 1, EvolutionItem.SUN_STONE, null, GENERIC_ITEM_EVO_LEVEL)],
   [Species.YANMA]: [
-    new SpeciesEvolution(Species.YANMEGA, 1, null, new KnowMoveEvoCondition(MoveId.ANCIENT_POWER), YANMEGA_EVO_LEVEL),
+    new SpeciesEvolution(Species.YANMEGA, 1, null, new MoveKnownEvoCondition(MoveId.ANCIENT_POWER), YANMEGA_EVO_LEVEL),
   ],
   [Species.WOOPER]: [new SpeciesEvolution(Species.QUAGSIRE, 20, null, null)],
   [Species.MURKROW]: [
@@ -89,7 +89,7 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
   /** Wynaut is from Gen 3 */
   [Species.WYNAUT]: [new SpeciesEvolution(Species.WOBBUFFET, 15, null, null)],
   [Species.GIRAFARIG]: [
-    new SpeciesEvolution(Species.FARIGIRAF, 1, null, new KnowMoveEvoCondition(MoveId.TWIN_BEAM), FARIGARIF_EVO_LEVEL),
+    new SpeciesEvolution(Species.FARIGIRAF, 1, null, new MoveKnownEvoCondition(MoveId.TWIN_BEAM), FARIGARIF_EVO_LEVEL),
   ],
   [Species.PINECO]: [new SpeciesEvolution(Species.FORRETRESS, 31, null, null)],
   [Species.DUNSPARCE]: [
@@ -106,7 +106,7 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.DUDUNSPARCE,
       1,
       null,
-      new KnowMoveEvoCondition(MoveId.HYPER_DRILL),
+      new MoveKnownEvoCondition(MoveId.HYPER_DRILL),
       DUDUNSPARCE_EVO_LEVEL,
     ),
   ],
@@ -146,7 +146,7 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.MAMOSWINE,
       1,
       null,
-      new KnowMoveEvoCondition(MoveId.ANCIENT_POWER),
+      new MoveKnownEvoCondition(MoveId.ANCIENT_POWER),
       MAMOSWINE_EVO_LEVEL,
     ),
   ],
@@ -156,7 +156,7 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.HOUNDOUR]: [new SpeciesEvolution(Species.HOUNDOOM, 24, null, null)],
   [Species.PHANPY]: [new SpeciesEvolution(Species.DONPHAN, 25, null, null)],
   [Species.STANTLER]: [
-    new SpeciesEvolution(Species.WYRDEER, 1, null, new KnowMoveEvoCondition(MoveId.PSYSHIELD_BASH), WYRDEER_EVO_LEVEL),
+    new SpeciesEvolution(Species.WYRDEER, 1, null, new MoveKnownEvoCondition(MoveId.PSYSHIELD_BASH), WYRDEER_EVO_LEVEL),
   ],
   [Species.LARVITAR]: [new SpeciesEvolution(Species.PUPITAR, 30, null, null)],
   [Species.PUPITAR]: [new SpeciesEvolution(Species.TYRANITAR, 55, null, null)],

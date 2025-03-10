@@ -3,7 +3,7 @@ import {
   BiomeEvoCondition,
   DayEvolutionCondition,
   FriendshipAndNightCondition,
-  KnowMoveEvoCondition,
+  MoveKnownEvoCondition,
   LowKeyToxtricityEvoCondition,
   NightEvolutionCondition,
   type PokemonEvolutions,
@@ -53,7 +53,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.HYDRAPPLE,
       1,
       null,
-      new KnowMoveEvoCondition(MoveId.DRAGON_CHEER),
+      new MoveKnownEvoCondition(MoveId.DRAGON_CHEER),
       GENERIC_ITEM_EVO_LEVEL,
     ),
   ],
@@ -65,7 +65,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
   ],
   [Species.SIZZLIPEDE]: [new SpeciesEvolution(Species.CENTISKORCH, 28, null, null)],
   [Species.CLOBBOPUS]: [
-    new SpeciesEvolution(Species.GRAPPLOCT, 1, null, new KnowMoveEvoCondition(MoveId.TAUNT), GRAPPLOCT_EVO_LEVEL),
+    new SpeciesEvolution(Species.GRAPPLOCT, 1, null, new MoveKnownEvoCondition(MoveId.TAUNT), GRAPPLOCT_EVO_LEVEL),
   ],
   [Species.SINISTEA]: [
     new SpeciesFormEvolution(
@@ -234,7 +234,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
     new SpeciesEvolution(Species.HISUI_ELECTRODE, 1, EvolutionItem.LEAF_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
   [Species.HISUI_QWILFISH]: [
-    new SpeciesEvolution(Species.OVERQWIL, 1, null, new KnowMoveEvoCondition(MoveId.BARB_BARRAGE), OVERQWIL_EVO_LEVEL),
+    new SpeciesEvolution(Species.OVERQWIL, 1, null, new MoveKnownEvoCondition(MoveId.BARB_BARRAGE), OVERQWIL_EVO_LEVEL),
   ],
   [Species.HISUI_SNEASEL]: [
     new SpeciesEvolution(

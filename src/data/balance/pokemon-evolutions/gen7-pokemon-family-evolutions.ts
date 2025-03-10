@@ -2,7 +2,7 @@ import { Species } from "#enums/species";
 import {
   DayEvolutionCondition,
   GenderEvolutionCondition,
-  KnowMoveEvoCondition,
+  MoveKnownEvoCondition,
   NightEvolutionCondition,
   type PokemonEvolutions,
   SpeciesEvolution,
@@ -55,7 +55,7 @@ export const gen7pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.STUFFUL]: [new SpeciesEvolution(Species.BEWEAR, 27, null, null)],
   [Species.BOUNSWEET]: [new SpeciesEvolution(Species.STEENEE, 18, null, null)],
   [Species.STEENEE]: [
-    new SpeciesEvolution(Species.TSAREENA, 1, null, new KnowMoveEvoCondition(MoveId.STOMP), TSAREENA_EVO_LEVEL),
+    new SpeciesEvolution(Species.TSAREENA, 1, null, new MoveKnownEvoCondition(MoveId.STOMP), TSAREENA_EVO_LEVEL),
   ],
   [Species.WIMPOD]: [new SpeciesEvolution(Species.GOLISOPOD, 30, null, null)],
   [Species.SANDYGAST]: [new SpeciesEvolution(Species.PALOSSAND, 42, null, null)],
@@ -76,7 +76,7 @@ export const gen7pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.NAGANADEL,
       1,
       null,
-      new KnowMoveEvoCondition(MoveId.DRAGON_PULSE),
+      new MoveKnownEvoCondition(MoveId.DRAGON_PULSE),
       NAGANADEL_EVO_LEVEL,
     ),
   ],

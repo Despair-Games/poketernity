@@ -174,12 +174,17 @@ export class SylveonEvoCondition extends SpeciesEvolutionCondition {
  * Dunsparce - Hyper drill
  * Dipplin - Dragon cheer
  */
-export class KnowMoveEvoCondition extends SpeciesEvolutionCondition {
+export class MoveKnownEvoCondition extends SpeciesEvolutionCondition {
   constructor(requiredMoveId: MoveId) {
     super((p) => p.moveset.filter((m) => m.moveId === requiredMoveId).length > 0);
     this.description = "needs to know " + allMoves.get(requiredMoveId).name;
   }
 }
+
+/** Dunsparce and Tandemous have a 1/100 chance of evolving into their alternate forms
+ * TODO: Make a new evolution condition for them
+ */
+const RANDOM_FORM_EVO_CHANCE = 100;
 
 /** Dudunsparce has a 1/100 chance of being 3 segments on evolution */
 export class DudunsparceThreeSegmentEvoCondition extends SpeciesEvolutionCondition {
@@ -187,7 +192,7 @@ export class DudunsparceThreeSegmentEvoCondition extends SpeciesEvolutionConditi
     super((p) => {
       let ret = false;
       if (p.moveset.filter((m) => m.moveId === requiredMoveId).length > 0) {
-        globalScene.executeWithSeedOffset(() => (ret = !randSeedInt(100)), p.id);
+        globalScene.executeWithSeedOffset(() => (ret = !randSeedInt(RANDOM_FORM_EVO_CHANCE)), p.id);
       }
       return ret;
     });
@@ -295,7 +300,7 @@ export class TandemausFamilyOfThreeEvoCondition extends SpeciesEvolutionConditio
   constructor() {
     super((p) => {
       let ret = false;
-      globalScene.executeWithSeedOffset(() => (ret = !randSeedInt(100)), p.id);
+      globalScene.executeWithSeedOffset(() => (ret = !randSeedInt(RANDOM_FORM_EVO_CHANCE)), p.id);
       return ret;
     });
     this.description = "has a 1% of happening";
