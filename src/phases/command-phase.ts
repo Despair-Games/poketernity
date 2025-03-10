@@ -194,10 +194,10 @@ export class CommandPhase extends FieldPhase {
             command: BattleCommand.FIGHT,
             cursor,
             turnMove: {
-              move: allMoves[moveId],
+              move: allMoves.get(moveId),
               targets: [],
               ignorePP: ignorePp,
-              type: pokemon.getMoveType(allMoves[moveId]),
+              type: pokemon.getMoveType(allMoves.get(moveId)),
             },
             args,
           };
