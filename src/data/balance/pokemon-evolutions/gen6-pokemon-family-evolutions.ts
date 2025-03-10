@@ -1,13 +1,12 @@
-import { globalScene } from "#app/global-scene";
 import { Species } from "#enums/species";
 import {
   DayEvolutionCondition,
   GenderEvolutionCondition,
   GoodraEvoCondition,
   NightEvolutionCondition,
+  PangoroEvoCondition,
   type PokemonEvolutions,
   SpeciesEvolution,
-  SpeciesEvolutionCondition,
   SpeciesFormEvolution,
 } from "#app/data/pokemon-evolutions";
 import { Gender } from "#enums/gender";
@@ -16,7 +15,6 @@ import {
   ADVANCED_ITEM_EVO_LEVEL,
   GENERIC_ITEM_EVO_LEVEL,
 } from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
-import { ElementalType } from "#enums/elemental-type";
 
 export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.CHESPIN]: [new SpeciesEvolution(Species.QUILLADIN, 16, null, null)],
@@ -36,17 +34,7 @@ export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
     new SpeciesEvolution(Species.FLORGES, 1, EvolutionItem.SHINY_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
   [Species.SKIDDO]: [new SpeciesEvolution(Species.GOGOAT, 32, null, null)],
-  [Species.PANCHAM]: [
-    new SpeciesEvolution(
-      Species.PANGORO,
-      32,
-      null,
-      new SpeciesEvolutionCondition(
-        () =>
-          !!globalScene.getPlayerParty().find((p) => p.getTypes(false, false, true).indexOf(ElementalType.DARK) > -1),
-      ),
-    ),
-  ],
+  [Species.PANCHAM]: [new SpeciesEvolution(Species.PANGORO, 32, null, new PangoroEvoCondition())],
   [Species.ESPURR]: [
     new SpeciesFormEvolution(Species.MEOWSTIC, "", "", 25, null, new GenderEvolutionCondition(Gender.MALE)),
     new SpeciesFormEvolution(Species.MEOWSTIC, "", "female", 25, null, new GenderEvolutionCondition(Gender.FEMALE)),

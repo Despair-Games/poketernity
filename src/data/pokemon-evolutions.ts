@@ -11,6 +11,7 @@ import { PokeballType } from "#enums/pokeball";
 import { WeatherType } from "#enums/weather-type";
 import type { Biome } from "#enums/biome";
 import { Nature } from "#enums/nature";
+import { allMoves } from "#app/data/data-lists";
 
 /**
  * Pokemon Evolution tuple type consisting of:
@@ -155,11 +156,28 @@ export class SylveonEvoCondition extends SpeciesEvolutionCondition {
   }
 }
 
+/** For Pokemon that require knowing a certain move to evolve
+ * Used for the following:
+ * Lickitung - Ancient power
+ * Tangela - Ancient power
+ * Aipom - Double Hit
+ * Yanma - Ancient power
+ * Piloswine - Ancient power
+ * Bonsly - Mimic
+ * Steenee - Stomp
+ * Poipole - Dragon pulse
+ * Clobbopus - Taunt
+ * Hisui Qwilfish - Barb barrage
+ * Stantler - Psyshield bash
+ * Primeape - Rage fist
+ * Girafarig - Twin beam
+ * Dunsparce - Hyper drill
+ * Dipplin - Dragon cheer
+ */
 export class KnowMoveEvoCondition extends SpeciesEvolutionCondition {
   constructor(requiredMoveId: MoveId) {
     super((p) => p.moveset.filter((m) => m.moveId === requiredMoveId).length > 0);
-    // Todo: find efficient way to get from Move.MoveId to Move.name
-    this.description = "needs to know " + requiredMoveId;
+    this.description = "needs to know " + allMoves.get(requiredMoveId).name;
   }
 }
 
@@ -239,6 +257,16 @@ export class LowKeyToxtricityEvoCondition extends SpeciesEvolutionCondition {
     );
     this.description =
       "Requires lonely, bold, relaxed, timid, serious, modest, mild, quiet, bashful, calm, gentle, or careful nature";
+  }
+}
+
+/** Pancham requires the player to have a Dark type Pokemon (not including Tera) on the team */
+export class PangoroEvoCondition extends SpeciesEvolutionCondition {
+  constructor() {
+    super(
+      () => !!globalScene.getPlayerParty().find((p) => p.getTypes(false, false, true).indexOf(ElementalType.DARK) > -1),
+    );
+    this.description = "Requires a Dark type Pokemon on the team";
   }
 }
 
