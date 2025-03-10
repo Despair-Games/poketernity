@@ -50,13 +50,19 @@ describe("Abilities - Infiltrator", () => {
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    const preScreenDmg = enemy.getAttackDamage(player, allMoves[moveId], AbilityApplyMode.DEFAULT, false, false).damage;
+    const preScreenDmg = enemy.getAttackDamage(
+      player,
+      allMoves.get(moveId),
+      AbilityApplyMode.DEFAULT,
+      false,
+      false,
+    ).damage;
 
     game.scene.arena.addTag(tagType, enemy.id, 1, MoveId.NONE, ArenaTagSide.ENEMY, true);
 
     const postScreenDmg = enemy.getAttackDamage(
       player,
-      allMoves[moveId],
+      allMoves.get(moveId),
       AbilityApplyMode.DEFAULT,
       false,
       false,
