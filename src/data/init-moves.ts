@@ -3249,10 +3249,11 @@ export function initMoves() {
       )
       .condition(failIfDampCondition)
       .makesContact(false),
-    new AttackMove(MoveId.GRASSY_GLIDE, ElementalType.GRASS, MoveCategory.PHYSICAL, 55, 100, 20, -1, 0, 8).attr(
-      IncrementMovePriorityAttr,
-      (user, _target, _move) => globalScene.arena.hasTerrain(TerrainType.GRASSY) && user.isGrounded(),
-    ),
+    new AttackMove(MoveId.GRASSY_GLIDE, ElementalType.GRASS, MoveCategory.PHYSICAL, 55, 100, 20, -1, 0, 8)
+      .attr(
+        IncrementMovePriorityAttr,
+        (user) => globalScene.arena.hasTerrain(TerrainType.GRASSY) && user.isGrounded(),
+      ),
     new AttackMove(MoveId.RISING_VOLTAGE, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 70, 100, 20, -1, 0, 8).attr(
       MovePowerMultiplierAttr,
       (_user, target, _move) => (globalScene.arena.hasTerrain(TerrainType.ELECTRIC) && target.isGrounded() ? 2 : 1),

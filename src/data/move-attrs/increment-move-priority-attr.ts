@@ -3,7 +3,7 @@ import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/move";
 import { MoveAttr } from "#app/data/move-attrs/move-attr";
 
-type MoveIncrementFunc = (pokemon: Pokemon, target: Pokemon | null, move: Move) => boolean;
+type MoveIncrementFunc = (pokemon: Pokemon) => boolean;
 
 /**
  * Attribute used for moves that change priority in a turn given a condition.
@@ -31,8 +31,8 @@ export class IncrementMovePriorityAttr extends MoveAttr {
    * @param priority {@linkcode NumberHolder} containing the move's priority for this turn.
    * @returns true if function succeeds
    */
-  override apply(user: Pokemon, target: Pokemon | null, move: Move, priority: NumberHolder): boolean {
-    if (!this.moveIncrementFunc(user, target, move)) {
+  override apply(user: Pokemon, _target: Pokemon | null, _move: Move, priority: NumberHolder): boolean {
+    if (!this.moveIncrementFunc(user)) {
       return false;
     }
 
