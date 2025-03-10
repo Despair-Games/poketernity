@@ -1,4 +1,4 @@
-import type { Pokemon } from "#app/field/pokemon";
+import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { NumberHolder } from "#app/utils";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -34,7 +34,7 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
 
   public override canApply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (super.canApply(user, target, move)) {
-      const effectChance = this.getMoveChance(user, target, move, this.selfTarget, true);
+      const effectChance = this.getMoveChance(user, target, move, true);
       return effectChance < 0 || user.randSeedInt(100) < effectChance;
     }
     return false;
@@ -48,17 +48,11 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
    * @param user the {@linkcode Pokemon} using this move
    * @param target the {@linkcode Pokemon} targeted by the move
    * @param move the {@linkcode Move} being used
-   * @param selfEffect `true` if move targets user.
+   * @param showAbility `true` if this function call should prompt the ability flyout to show. Defaults to `false`.
    * @returns The final percent chance of this attribute's effect applying. If negative, the
    * effect is guaranteed to apply.
    */
-  public getMoveChance(
-    user: Pokemon,
-    target: Pokemon,
-    move: Move,
-    selfEffect: boolean,
-    showAbility: boolean = false,
-  ): number {
+  public getMoveChance(user: Pokemon, target: Pokemon, move: Move, showAbility: boolean = false): number {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
     applyAbAttrs(AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER, user, false, moveChance, move, showAbility);
@@ -66,9 +60,52 @@ export abstract class ChanceBasedMoveEffectAttr extends MoveEffectAttr {
     const userSide = user.getArenaTagSide();
     globalScene.arena.applyTagsForSide(ArenaTagType.WATER_FIRE_PLEDGE, userSide, false, moveChance);
 
-    if (!selfEffect) {
+    if (!this.selfTarget) {
       applyAbAttrs(AbAttrFlag.IGNORE_MOVE_EFFECTS, target, false, user, move, moveChance);
     }
     return moveChance.value;
+  }
+
+  /**
+   * Calculates effect score, factoring in this attribute's {@linkcode getRawEffectScore | raw effect score}
+   * and {@linkcode getMoveChance | chance to apply}.
+   */
+  public override getEffectScore(user: EnemyPokemon, target: Pokemon, move: Move): number {
+    /**
+     * The attribute's chance to apply its effect
+     * @todo this chance calculation may prematurely reveal abilities
+     */
+    const chance = this.getMoveChance(user, target, move);
+    /** The attribute's effect score, assuming its effect always applies */
+    const rawScore = this.getRawEffectScore(user, target, move);
+
+    /**
+     * The attribute's effect score after factoring in effect chance.
+     * This may be a decimal number; the final output is either
+     * `floor(chanceWeightedScore)` or `floor(chanceWeightedScore) + 1`
+     */
+    const chanceWeightedScore = chance * rawScore;
+    /** The minimum integer score this function can return */
+    const minScore = Math.floor(chanceWeightedScore);
+    /**
+     * The chance to return `minScore + 1` instead of `minScore`.
+     * This is the decimal component of `chanceWeightedScore` scaled
+     * up to a percent value, then rounded down.
+     */
+    const tierUpChance = Math.floor((chanceWeightedScore % 1) * 100);
+
+    return minScore + this.getRandomScore(user, tierUpChance);
+  }
+
+  /**
+   * Calculates the move action's raw effect score (before effect chance is accounted for).
+   * Unlike other attributes' scores, this can be a decimal value.
+   * @param user the {@linkcode EnemyPokemon} evaluating the move
+   * @param target the {@linkcode Pokemon} the move is evaluated against
+   * @param move the {@linkcode Move} being evaluated
+   * @todo make this `abstract` once attribute scores are filled in
+   */
+  protected getRawEffectScore(_user: EnemyPokemon, _target: Pokemon, _move: Move): number {
+    return 0;
   }
 }

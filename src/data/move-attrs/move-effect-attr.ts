@@ -1,9 +1,9 @@
 import { MoveEffectTrigger } from "#enums/move-effect-trigger";
 import type { Pokemon } from "#app/field/pokemon";
 import { type Move } from "#app/data/move";
-import { MoveAttr } from "#app/data/move-attrs/move-attr";
+import { MoveAttr, type MoveAttrOptions } from "#app/data/move-attrs/move-attr";
 
-export interface MoveEffectAttrOptions {
+export interface MoveEffectAttrOptions extends MoveAttrOptions {
   /**
    * Defines when this effect should trigger in the move's effect order
    * @see {@linkcode MoveEffectPhase}
@@ -27,7 +27,7 @@ export abstract class MoveEffectAttr extends MoveAttr {
    * A container for this attribute's optional parameters
    * @see {@linkcode MoveEffectAttrOptions} for supported params.
    */
-  protected options?: MoveEffectAttrOptions;
+  protected override options?: MoveEffectAttrOptions;
 
   constructor(selfTarget: boolean = false, options?: MoveEffectAttrOptions) {
     super(selfTarget);
