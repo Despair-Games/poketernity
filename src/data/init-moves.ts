@@ -3875,7 +3875,7 @@ export function initMoves() {
 
   for (const move of rawAllMoves) {
     // Make sure `allMoves` assigns correct ID to every move
-    allMoves[move.id] = move;
+    allMoves.set(move.id, move);
     addFireMovesThawFrozenTargetAttribute(move);
   }
 }
