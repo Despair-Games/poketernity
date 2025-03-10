@@ -60,7 +60,7 @@ export class PokemonMove {
   }
 
   getMove(): Move {
-    return allMoves[this.moveId];
+    return allMoves.get(this.moveId);
   }
 
   /**
