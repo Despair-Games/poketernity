@@ -1617,10 +1617,10 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
             ): OptionSelectModeConfig => {
               const options: OptionSelectItem[] = moves.map((moveId: MoveId, index: number): OptionSelectItem => {
                 return {
-                  label: allMoves[moveId].name,
+                  label: allMoves.get(moveId).name,
                   handler: () => selectHandler(moveId, index, currentMoveId, currentIndex),
                   onHover: () => {
-                    this.moveInfoOverlay.show(allMoves[moveId]);
+                    this.moveInfoOverlay.show(allMoves.get(moveId));
                   },
                 };
               });
@@ -1643,11 +1643,11 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
               this.blockInput = true;
               ui.setMode(UiMode.STARTER_SELECT).then(() => {
                 ui.showText(
-                  `${i18next.t("starterSelectUiHandler:selectMoveSwapWith")} ${allMoves[moveId].name}.`,
+                  `${i18next.t("starterSelectUiHandler:selectMoveSwapWith")} ${allMoves.get(moveId).name}.`,
                   null,
                   () => {
                     const possibleMoves = this.speciesStarterMoves.filter((sm: MoveId) => sm !== moveId);
-                    this.moveInfoOverlay.show(allMoves[possibleMoves[0]]);
+                    this.moveInfoOverlay.show(allMoves.get(possibleMoves[0]));
                     const movesOptions = getMoveOptions(
                       possibleMoves,
                       onSelectedMoveToSwapTo,
@@ -1690,7 +1690,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
               this.blockInput = true;
               ui.setMode(UiMode.STARTER_SELECT).then(() => {
                 ui.showText(i18next.t("starterSelectUiHandler:selectMoveSwapOut"), null, () => {
-                  this.moveInfoOverlay.show(allMoves[moveset[0]]);
+                  this.moveInfoOverlay.show(allMoves.get(moveset[0]));
                   const movesOptions = getMoveOptions(moveset, onSelectedMoveToSwapWith, onCancelMoveToSwapWith);
                   ui.setModeWithoutClear(UiMode.OPTION_SELECT, movesOptions);
                   this.blockInput = false;
@@ -3037,8 +3037,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
         this.showStats();
       } else {
         this.statsContainer.setVisible(false);
-        //@ts-ignore
-        this.statsContainer.updateIvs(null); // TODO: resolve ts-ignore. what. how? huh?
+        this.statsContainer.updateIvs(null);
       }
     }
 
@@ -3615,7 +3614,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     }
 
     for (let m = 0; m < 4; m++) {
-      const move = m < this.starterMoveset.length ? allMoves[this.starterMoveset[m]] : null;
+      const move = m < this.starterMoveset.length ? allMoves.get(this.starterMoveset[m]) : null;
       this.pokemonMoveBgs[m].setFrame(ElementalType[move ? move.type : ElementalType.UNKNOWN].toString().toLowerCase());
       this.pokemonMoveLabels[m].setText(move ? move.name : "-");
       this.pokemonMoveContainers[m].setVisible(!!move);
@@ -3624,7 +3623,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     const hasEggMoves = species && speciesEggMoves.hasOwnProperty(species.speciesId);
 
     for (let em = 0; em < 4; em++) {
-      const eggMove = hasEggMoves ? allMoves[speciesEggMoves[species.speciesId][em]] : null;
+      const eggMove = hasEggMoves ? allMoves.get(speciesEggMoves[species.speciesId][em]) : null;
       const eggMoveUnlocked = eggMove && globalScene.gameData.starterData[species.speciesId].eggMoves & (1 << em);
       this.pokemonEggMoveBgs[em].setFrame(
         ElementalType[eggMove ? eggMove.type : ElementalType.UNKNOWN].toString().toLowerCase(),
@@ -4035,8 +4034,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       this.statsMode = false;
       this.statsContainer.setVisible(false);
       this.pokemonSprite.setVisible(!!this.speciesStarterDexEntry?.caughtAttr);
-      //@ts-ignore
-      this.statsContainer.updateIvs(null); // TODO: resolve ts-ignore. !?!?
+      this.statsContainer.updateIvs(null);
     }
   }
 

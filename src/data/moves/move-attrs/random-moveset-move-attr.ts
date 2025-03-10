@@ -34,7 +34,7 @@ export class RandomMovesetMoveAttr extends CallMoveAttr {
    * @param overridden - {@linkcode BooleanHolder} for if the move is overridden
    */
   override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder): boolean {
-    return super.apply(user, target, allMoves[this.moveId], overridden);
+    return super.apply(user, target, allMoves.get(this.moveId), overridden);
   }
 
   override getCondition(): MoveConditionFunc {

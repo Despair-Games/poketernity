@@ -11,7 +11,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 describe("Moves - Triple Arrows", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
-  const tripleArrows = allMoves[MoveId.TRIPLE_ARROWS];
+  const tripleArrows = allMoves.get(MoveId.TRIPLE_ARROWS);
   const flinchAttr = tripleArrows.getAttrs(FlinchAttr)[0];
   const defDropAttr = tripleArrows.getAttrs(StatStageChangeAttr)[0];
 

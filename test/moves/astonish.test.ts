@@ -35,7 +35,7 @@ describe("Moves - Astonish", () => {
     game.override.startingLevel(100);
     game.override.enemyLevel(100);
 
-    vi.spyOn(allMoves[MoveId.ASTONISH], "chance", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.ASTONISH), "chance", "get").mockReturnValue(100);
   });
 
   test("move effect should cancel the target's move on the turn it applies", async () => {

@@ -43,9 +43,9 @@ describe("Abilities - Sticky Hold", () => {
   )("should prevent the user from losing a held item when hit by the move $name", async ({ moveId: move }) => {
     // Force item removal RNG calls to succeed
     if (move === MoveId.THIEF) {
-      vi.spyOn(allMoves[move].getAttrs(StealHeldItemChanceAttr)[0], "chance", "get").mockReturnValue(1.0);
+      vi.spyOn(allMoves.get(move).getAttrs(StealHeldItemChanceAttr)[0], "chance", "get").mockReturnValue(1.0);
     }
-    vi.spyOn(allMoves[move], "chance", "get").mockReturnValue(-1);
+    vi.spyOn(allMoves.get(move), "chance", "get").mockReturnValue(-1);
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 

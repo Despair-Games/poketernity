@@ -14,7 +14,7 @@ describe("Moves - Copycat", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
-  const randomMoveAttr = allMoves[MoveId.METRONOME].getAttrs(MetronomeAttr)[0];
+  const randomMoveAttr = allMoves.get(MoveId.METRONOME).getAttrs(MetronomeAttr)[0];
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({

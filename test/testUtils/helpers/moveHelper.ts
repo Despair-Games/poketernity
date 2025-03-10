@@ -137,12 +137,12 @@ export class MoveHelper extends GameManagerHelper {
     const legalTargets = getMoveTargets(enemy, moveId);
 
     vi.spyOn(enemy, "getNextMove").mockReturnValueOnce({
-      move: allMoves[moveId],
+      move: allMoves.get(moveId),
       targets:
         target !== undefined && !legalTargets.multiple && legalTargets.targets.includes(target)
           ? [target]
           : enemy.getNextTargets(moveId),
-      type: enemy.getMoveType(allMoves[moveId]),
+      type: enemy.getMoveType(allMoves.get(moveId)),
     });
 
     /**
@@ -182,12 +182,12 @@ export class MoveHelper extends GameManagerHelper {
     const legalTargets = getMoveTargets(enemy, moveId);
 
     vi.spyOn(enemy, "getNextMove").mockReturnValueOnce({
-      move: allMoves[moveId],
+      move: allMoves.get(moveId),
       targets:
         target !== undefined && !legalTargets.multiple && legalTargets.targets.includes(target)
           ? [target]
           : enemy.getNextTargets(moveId),
-      type: enemy.getMoveType(allMoves[moveId]),
+      type: enemy.getMoveType(allMoves.get(moveId)),
     });
 
     /**

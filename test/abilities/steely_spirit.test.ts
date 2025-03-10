@@ -11,7 +11,7 @@ describe("Abilities - Steely Spirit", () => {
   let game: GameManager;
   const steelySpiritMultiplier = 1.5;
   const moveToCheck = MoveId.IRON_HEAD;
-  const ironHeadPower = allMoves[moveToCheck].power;
+  const ironHeadPower = allMoves.get(moveToCheck).power;
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({
@@ -30,7 +30,7 @@ describe("Abilities - Steely Spirit", () => {
     game.override.enemyAbility(Abilities.BALL_FETCH);
     game.override.moveset([MoveId.IRON_HEAD, MoveId.SPLASH]);
     game.override.enemyMoveset(MoveId.SPLASH);
-    vi.spyOn(allMoves[moveToCheck], "calculateBattlePower");
+    vi.spyOn(allMoves.get(moveToCheck), "calculateBattlePower");
   });
 
   it("increases Steel-type moves' power used by the user and its allies by 50%", async () => {
@@ -46,7 +46,7 @@ describe("Abilities - Steely Spirit", () => {
     game.move.select(MoveId.SPLASH, 1);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
-    expect(allMoves[moveToCheck].calculateBattlePower).toHaveReturnedWith(ironHeadPower * steelySpiritMultiplier);
+    expect(allMoves.get(moveToCheck).calculateBattlePower).toHaveReturnedWith(ironHeadPower * steelySpiritMultiplier);
   });
 
   it("stacks if multiple users with this ability are on the field.", async () => {
@@ -63,7 +63,7 @@ describe("Abilities - Steely Spirit", () => {
     game.move.select(moveToCheck, 1, enemyToCheck.getBattlerIndex());
     await game.phaseInterceptor.to("MoveEffectPhase");
 
-    expect(allMoves[moveToCheck].calculateBattlePower).toHaveReturnedWith(
+    expect(allMoves.get(moveToCheck).calculateBattlePower).toHaveReturnedWith(
       ironHeadPower * Math.pow(steelySpiritMultiplier, 2),
     );
   });
@@ -85,13 +85,13 @@ describe("Abilities - Steely Spirit", () => {
     game.move.select(MoveId.SPLASH, 1);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
-    expect(allMoves[moveToCheck].calculateBattlePower).toHaveReturnedWith(ironHeadPower);
+    expect(allMoves.get(moveToCheck).calculateBattlePower).toHaveReturnedWith(ironHeadPower);
   });
 
   it("affects variable-type moves if their resolved type is Steel", async () => {
     game.override.ability(Abilities.STEELY_SPIRIT).moveset([MoveId.REVELATION_DANCE]);
 
-    const revelationDance = allMoves[MoveId.REVELATION_DANCE];
+    const revelationDance = allMoves.get(MoveId.REVELATION_DANCE);
     vi.spyOn(revelationDance, "calculateBattlePower");
 
     await game.classicMode.startBattle([Species.KLINKLANG]);

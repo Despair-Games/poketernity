@@ -111,7 +111,7 @@ export class RepeatMoveAttr extends MoveEffectAttr {
       if (
         !movesetMove // called move not in target's moveset (dancer, forgetting the move, etc.)
         || movesetMove.ppUsed === movesetMove.getMovePp() // move out of pp
-        || allMoves[lastMove?.move.id ?? MoveId.NONE].isChargingMove() // called move is a charging/recharging move
+        || allMoves.get(lastMove?.move.id ?? MoveId.NONE).isChargingMove() // called move is a charging/recharging move
         || !moveTargets.length // called move has no targets
         || unrepeatablemoves.includes(lastMove?.move.id ?? MoveId.NONE)
       ) {

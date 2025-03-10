@@ -94,7 +94,7 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
       await game.phaseInterceptor.to("MoveEndPhase", false);
 
       const statUsed =
-        playerPokemon.getMoveCategory(game.scene.getEnemyPokemon()!, allMoves[moveId]) === MoveCategory.PHYSICAL
+        playerPokemon.getMoveCategory(game.scene.getEnemyPokemon()!, allMoves.get(moveId)) === MoveCategory.PHYSICAL
           ? Stat.ATK
           : Stat.SPATK;
       expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(Math.floor(playerPokemon.stats[statUsed]));

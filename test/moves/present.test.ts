@@ -37,7 +37,7 @@ describe("Moves - Present", () => {
     { descriptor: "first hit", hitsLeft: 2, totalOutcomes: 100, expectedHeals: 20 },
     { descriptor: "subsequent hits", hitsLeft: 1, totalOutcomes: 80, expectedHeals: 0 },
   ])("should have correct probabilities on $descriptor", async ({ hitsLeft, totalOutcomes, expectedHeals }) => {
-    const presentAttr = allMoves[MoveId.PRESENT].getAttrs(PresentPowerAttr)[0];
+    const presentAttr = allMoves.get(MoveId.PRESENT).getAttrs(PresentPowerAttr)[0];
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 
@@ -60,7 +60,7 @@ describe("Moves - Present", () => {
       rngSweepProgress = (2 * i + 1) / (2 * totalOutcomes);
 
       const power = new NumberHolder(-1);
-      presentAttr.apply(player, enemy, allMoves[MoveId.PRESENT], power);
+      presentAttr.apply(player, enemy, allMoves.get(MoveId.PRESENT), power);
       switch (power.value) {
         case 40:
           count40power++;

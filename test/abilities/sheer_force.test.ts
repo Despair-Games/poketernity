@@ -41,7 +41,7 @@ describe("Abilities - Sheer Force", () => {
     game.override.moveset([MoveId.AIR_SLASH]);
     await game.classicMode.startBattle([Species.SHUCKLE]);
 
-    const airSlashMove = allMoves[MoveId.AIR_SLASH];
+    const airSlashMove = allMoves.get(MoveId.AIR_SLASH);
     vi.spyOn(airSlashMove, "calculateBattlePower");
     const airSlashFlinchAttr = airSlashMove.getAttrs(FlinchAttr)[0];
     vi.spyOn(airSlashFlinchAttr, "getMoveChance");
@@ -60,7 +60,7 @@ describe("Abilities - Sheer Force", () => {
     game.override.moveset([MoveId.BIND]);
     await game.classicMode.startBattle([Species.SHUCKLE]);
 
-    const bindMove = allMoves[MoveId.BIND];
+    const bindMove = allMoves.get(MoveId.BIND);
     vi.spyOn(bindMove, "calculateBattlePower");
 
     game.move.select(MoveId.BIND);
@@ -76,7 +76,7 @@ describe("Abilities - Sheer Force", () => {
     game.override.moveset([MoveId.TACKLE]);
     await game.classicMode.startBattle([Species.PIDGEOT]);
 
-    const tackleMove = allMoves[MoveId.TACKLE];
+    const tackleMove = allMoves.get(MoveId.TACKLE);
     vi.spyOn(tackleMove, "calculateBattlePower");
 
     game.move.select(MoveId.TACKLE);
@@ -96,7 +96,7 @@ describe("Abilities - Sheer Force", () => {
 
     await game.classicMode.startBattle([Species.PIDGEOT]);
     const enemyPokemon = game.scene.getEnemyPokemon();
-    const headbuttMove = allMoves[MoveId.HEADBUTT];
+    const headbuttMove = allMoves.get(MoveId.HEADBUTT);
     vi.spyOn(headbuttMove, "calculateBattlePower");
     const headbuttFlinchAttr = headbuttMove.getAttrs(FlinchAttr)[0];
     vi.spyOn(headbuttFlinchAttr, "getMoveChance");
@@ -132,7 +132,7 @@ describe("Abilities - Sheer Force", () => {
     await game.toNextTurn();
 
     // Check that both Pokemon's Color Change activated
-    const expectedTypes = [allMoves[moveToUse].type];
+    const expectedTypes = [allMoves.get(moveToUse).type];
     expect(pidgeot.getTypes()).toStrictEqual(expectedTypes);
     expect(onix.getTypes()).toStrictEqual(expectedTypes);
   });

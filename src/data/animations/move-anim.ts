@@ -28,10 +28,10 @@ export class MoveAnim extends BattleAnim {
   }
 
   protected override isHideUser(): boolean {
-    return allMoves[this.moveId].hasFlag(MoveFlags.HIDE_USER);
+    return allMoves.get(this.moveId).hasFlag(MoveFlags.HIDE_USER);
   }
 
   protected override isHideTarget(): boolean {
-    return allMoves[this.moveId].hasFlag(MoveFlags.HIDE_TARGET);
+    return allMoves.get(this.moveId).hasFlag(MoveFlags.HIDE_TARGET);
   }
 }

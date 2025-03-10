@@ -810,8 +810,6 @@ export abstract class Move implements Localizable {
   getPriority(user: Pokemon, simulated: boolean = true) {
     const priority = new NumberHolder(this.priority);
 
-    // TODO: Let this attribute accept null targets
-    // @ts-ignore
     applyMoveAttrs(IncrementMovePriorityAttr, user, null, this, priority);
     applyAbAttrs(AbAttrFlag.CHANGE_MOVE_PRIORITY, user, simulated, this, priority);
 
@@ -970,15 +968,15 @@ export type MoveTargetSet = {
 
 export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: MoveTarget): MoveTargetSet {
   const variableTarget = new NumberHolder(0);
-  user.getOpponents().forEach((p) => applyMoveAttrs(VariableTargetAttr, user, p, allMoves[moveId], variableTarget));
+  user.getOpponents().forEach((p) => applyMoveAttrs(VariableTargetAttr, user, p, allMoves.get(moveId), variableTarget));
 
   let moveTarget: MoveTarget | undefined;
-  if (allMoves[moveId].hasAttr(VariableTargetAttr)) {
+  if (allMoves.get(moveId).hasAttr(VariableTargetAttr)) {
     moveTarget = variableTarget.value;
   } else if (replaceTarget !== undefined) {
     moveTarget = replaceTarget;
   } else if (moveId) {
-    moveTarget = allMoves[moveId].moveTarget;
+    moveTarget = allMoves.get(moveId).moveTarget;
   } else if (moveId === undefined) {
     moveTarget = MoveTarget.NEAR_ENEMY;
   }

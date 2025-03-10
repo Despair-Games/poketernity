@@ -16,7 +16,7 @@ describe("Moves - Metronome", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
-  const randomMoveAttr = allMoves[MoveId.METRONOME].getAttrs(MetronomeAttr)[0];
+  const randomMoveAttr = allMoves.get(MoveId.METRONOME).getAttrs(MetronomeAttr)[0];
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({
@@ -72,7 +72,7 @@ describe("Moves - Metronome", () => {
     await game.classicMode.startBattle();
     const player = game.scene.getPlayerPokemon()!;
     vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.HYPER_BEAM);
-    vi.spyOn(allMoves[MoveId.HYPER_BEAM], "accuracy", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.HYPER_BEAM), "accuracy", "get").mockReturnValue(100);
 
     game.move.select(MoveId.METRONOME);
     await game.toNextTurn();
@@ -128,7 +128,7 @@ describe("Moves - Metronome", () => {
       rngSweepProgress = (2 * i + 1) / (2 * trials);
 
       const moveId = randomMoveAttr.getRandomMove(user);
-      expect(allMoves[moveId].hasFlag(MoveFlags.G_MAX_MOVE)).toBe(false);
+      expect(allMoves.get(moveId).hasFlag(MoveFlags.G_MAX_MOVE)).toBe(false);
     }
   });
 });

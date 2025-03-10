@@ -83,13 +83,13 @@ describe("Abilities - Hustle", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     vi.spyOn(pikachu, "getAccuracyMultiplier");
-    vi.spyOn(allMoves[MoveId.FISSURE], "calculateBattleAccuracy");
+    vi.spyOn(allMoves.get(MoveId.FISSURE), "calculateBattleAccuracy");
 
     game.move.select(MoveId.FISSURE);
     await game.phaseInterceptor.to("DamageAnimPhase");
 
     expect(enemyPokemon.turnData.damageTaken).toBe(enemyPokemon.getMaxHp());
     expect(pikachu.getAccuracyMultiplier).toHaveReturnedWith(1);
-    expect(allMoves[MoveId.FISSURE].calculateBattleAccuracy).toHaveReturnedWith(100);
+    expect(allMoves.get(MoveId.FISSURE).calculateBattleAccuracy).toHaveReturnedWith(100);
   });
 });

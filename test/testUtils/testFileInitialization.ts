@@ -28,7 +28,7 @@ import { initModifierPools } from "#app/modifier/init-modifier-pools";
  */
 export function initDataForTests() {
   // Initialize all of these things if and only if they have not been initialized yet
-  if (Object.values(allMoves).length === 0) {
+  if (allMoves.size === 0) {
     initModifierTypes();
     initModifierPools();
     initMoves();

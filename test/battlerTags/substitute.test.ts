@@ -202,7 +202,7 @@ describe("BattlerTag - SubstituteTag", () => {
       vi.spyOn(mockPokemon.scene as BattleScene, "queueMessage").mockReturnValue();
 
       const pokemonMove = {
-        getMove: vi.fn().mockReturnValue(allMoves[MoveId.TACKLE]) as PokemonMove["getMove"],
+        getMove: vi.fn().mockReturnValue(allMoves.get(MoveId.TACKLE)) as PokemonMove["getMove"],
       } as PokemonMove;
 
       const moveEffectPhase = {
@@ -211,7 +211,7 @@ describe("BattlerTag - SubstituteTag", () => {
       } as MoveEffectPhase;
 
       vi.spyOn(mockPokemon.scene as BattleScene, "getCurrentPhase").mockReturnValue(moveEffectPhase);
-      vi.spyOn(allMoves[MoveId.TACKLE], "hitsSubstitute").mockReturnValue(true);
+      vi.spyOn(allMoves.get(MoveId.TACKLE), "hitsSubstitute").mockReturnValue(true);
 
       expect(subject.lapse(mockPokemon, BattlerTagLapseType.HIT)).toBeTruthy();
 

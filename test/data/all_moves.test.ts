@@ -54,7 +54,7 @@ describe("All Moves", async () => {
   const moveData: MoveData[] = JSON.parse(file);
 
   it.each(moveData)("$identifier, if implemented, should have correct move data", async (move: MoveData) => {
-    const pktyMove = allMoves[move.id as MoveId] as Move;
+    const pktyMove = allMoves.get(move.id as MoveId) as Move;
     if (pktyMove && !isUnimplemented(pktyMove.name)) {
       expect(
         pktyMove.type,

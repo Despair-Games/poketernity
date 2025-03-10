@@ -258,7 +258,7 @@ describe("Moves - Future Sight", () => {
   it.todo("should invoke the move's first phase when called by Metronome", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    const randomMoveAttr = allMoves[MoveId.METRONOME].getAttrs(MetronomeAttr)[0];
+    const randomMoveAttr = allMoves.get(MoveId.METRONOME).getAttrs(MetronomeAttr)[0];
     vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.FUTURE_SIGHT);
 
     const enemy = game.field.getEnemyPokemon();

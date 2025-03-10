@@ -1262,7 +1262,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
       overrideArray.forEach((moveId: MoveId, index: number) => {
         const ppUsed = this.moveset[index]?.ppUsed ?? 0;
-        this.moveset[index] = new PokemonMove(moveId, Math.min(ppUsed, allMoves[moveId].pp));
+        this.moveset[index] = new PokemonMove(moveId, Math.min(ppUsed, allMoves.get(moveId).pp));
       });
     }
 
@@ -2234,10 +2234,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         weight = 50;
       }
       // Assume level 1 moves with 80+ BP are "move reminder" moves and bump their weight
-      if (weight === 1 && allMoves[levelMove[1]].power >= 80) {
+      if (weight === 1 && allMoves.get(levelMove[1]).power >= 80) {
         weight = 40;
       }
-      if (!movePool.some((m) => m[0] === levelMove[1]) && !allMoves[levelMove[1]].name.endsWith(" (N)")) {
+      if (!movePool.some((m) => m[0] === levelMove[1]) && !allMoves.get(levelMove[1]).name.endsWith(" (N)")) {
         movePool.push([levelMove[1], weight]);
       }
     }
@@ -2258,7 +2258,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
             break;
           }
         }
-        if (compatible && !movePool.some((m) => m[0] === moveId) && !allMoves[moveId].name.endsWith(" (N)")) {
+        if (compatible && !movePool.some((m) => m[0] === moveId) && !allMoves.get(moveId).name.endsWith(" (N)")) {
           if (tmPoolTiers[moveId] === ModifierTier.COMMON && this.level >= 15) {
             movePool.push([moveId, 4]);
           } else if (tmPoolTiers[moveId] === ModifierTier.GREAT && this.level >= 30) {
@@ -2273,7 +2273,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       if (this.level >= 60) {
         for (let i = 0; i < 3; i++) {
           const moveId = speciesEggMoves[this.species.getRootSpeciesId()][i];
-          if (!movePool.some((m) => m[0] === moveId) && !allMoves[moveId].name.endsWith(" (N)")) {
+          if (!movePool.some((m) => m[0] === moveId) && !allMoves.get(moveId).name.endsWith(" (N)")) {
             movePool.push([moveId, 40]);
           }
         }
@@ -2282,7 +2282,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         if (
           this.level >= 170
           && !movePool.some((m) => m[0] === moveId)
-          && !allMoves[moveId].name.endsWith(" (N)")
+          && !allMoves.get(moveId).name.endsWith(" (N)")
           && !this.isBoss()
         ) {
           movePool.push([moveId, 30]);
@@ -2292,22 +2292,28 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
 
     // Bosses never get self ko moves
     if (this.isBoss()) {
-      movePool = movePool.filter((m) => !allMoves[m[0]].hasAttr(SacrificialAttr));
+      movePool = movePool.filter((m) => !allMoves.get(m[0]).hasAttr(SacrificialAttr));
     }
     if (this.hasTrainer()) {
       // Trainers never get OHKO moves
-      movePool = movePool.filter((m) => !allMoves[m[0]].hasAttr(OneHitKOAttr));
+      movePool = movePool.filter((m) => !allMoves.get(m[0]).hasAttr(OneHitKOAttr));
       // Half the weight of self KO moves
-      movePool = movePool.map((m) => [m[0], m[1] * (!!allMoves[m[0]].hasAttr(SacrificialAttr) ? 0.5 : 1)]);
+      movePool = movePool.map((m) => [m[0], m[1] * (allMoves.get(m[0]).hasAttr(SacrificialAttr) ? 0.5 : 1)]);
       // Trainers get a weight bump to stat buffing moves
       movePool = movePool.map((m) => [
         m[0],
-        m[1] * (allMoves[m[0]].getAttrs(StatStageChangeAttr).some((a) => a.stages > 1 && a.selfTarget) ? 1.25 : 1),
+        m[1]
+          * (allMoves
+            .get(m[0])
+            .getAttrs(StatStageChangeAttr)
+            .some((a) => a.stages > 1 && a.selfTarget)
+            ? 1.25
+            : 1),
       ]);
       // Trainers get a weight decrease to multiturn moves
       movePool = movePool.map((m) => [
         m[0],
-        m[1] * (!!allMoves[m[0]].isChargingMove() || !!allMoves[m[0]].hasAttr(RechargeAttr) ? 0.7 : 1),
+        m[1] * (allMoves.get(m[0]).isChargingMove() || allMoves.get(m[0]).hasAttr(RechargeAttr) ? 0.7 : 1),
       ]);
     }
 
@@ -2315,15 +2321,15 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     // Caps max power at 90 to avoid something like hyper beam ruining the stats.
     // This is a pretty soft weighting factor, although it is scaled with the weight multiplier.
     const maxPower = Math.min(
-      movePool.reduce((v, m) => Math.max(allMoves[m[0]].power, v), 40),
+      movePool.reduce((v, m) => Math.max(allMoves.get(m[0]).power, v), 40),
       90,
     );
     movePool = movePool.map((m) => [
       m[0],
       m[1]
-        * (allMoves[m[0]].category === MoveCategory.STATUS
+        * (allMoves.get(m[0]).category === MoveCategory.STATUS
           ? 1
-          : Math.max(Math.min(allMoves[m[0]].power / maxPower, 1), 0.5)),
+          : Math.max(Math.min(allMoves.get(m[0]).power / maxPower, 1), 0.5)),
     ]);
 
     // Weight damaging moves against the lower stat
@@ -2331,7 +2337,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const spAtk = this.getStat(Stat.SPATK);
     const worseCategory: MoveCategory = atk > spAtk ? MoveCategory.SPECIAL : MoveCategory.PHYSICAL;
     const statRatio = worseCategory === MoveCategory.PHYSICAL ? atk / spAtk : spAtk / atk;
-    movePool = movePool.map((m) => [m[0], m[1] * (allMoves[m[0]].category === worseCategory ? statRatio : 1)]);
+    movePool = movePool.map((m) => [m[0], m[1] * (allMoves.get(m[0]).category === worseCategory ? statRatio : 1)]);
 
     /** The higher this is the more the game weights towards higher level moves. At `0` all moves are equal weight. */
     let weightMultiplier = 0.9;
@@ -2349,7 +2355,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     // Trainers and bosses always force a stab move
     if (this.hasTrainer() || this.isBoss()) {
       const stabMovePool = baseWeights.filter(
-        (m) => allMoves[m[0]].category !== MoveCategory.STATUS && this.isOfType(allMoves[m[0]].type),
+        (m) => allMoves.get(m[0]).category !== MoveCategory.STATUS && this.isOfType(allMoves.get(m[0]).type),
       );
 
       if (stabMovePool.length) {
@@ -2363,7 +2369,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       }
     } else {
       // Normal wild pokemon just force a random damaging move
-      const attackMovePool = baseWeights.filter((m) => allMoves[m[0]].category !== MoveCategory.STATUS);
+      const attackMovePool = baseWeights.filter((m) => allMoves.get(m[0]).category !== MoveCategory.STATUS);
       if (attackMovePool.length) {
         const totalWeight = attackMovePool.reduce((v, m) => v + m[1], 0);
         let rand = randSeedInt(totalWeight);
@@ -2381,20 +2387,20 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         // Other damaging moves 2x weight if 0-1 damaging moves, 0.5x if 2, 0.125x if 3. These weights double if STAB.
         // Status moves remain unchanged on weight, this encourages 1-2
         movePool = baseWeights
-          .filter((m) => !this.moveset.some((mo) => m[0] === mo?.moveId))
+          .filter((m) => !this.moveset.some((mo) => m[0] === mo.moveId))
           .map((m) => {
             let ret: number;
             if (
               this.moveset.some(
-                (mo) => mo?.getMove().category !== MoveCategory.STATUS && mo?.getMove().type === allMoves[m[0]].type,
+                (mo) => mo.getMove().category !== MoveCategory.STATUS && mo.getMove().type === allMoves.get(m[0]).type,
               )
             ) {
               ret = Math.ceil(Math.sqrt(m[1]));
-            } else if (allMoves[m[0]].category !== MoveCategory.STATUS) {
+            } else if (allMoves.get(m[0]).category !== MoveCategory.STATUS) {
               ret = Math.ceil(
                 (m[1]
-                  / Math.max(Math.pow(4, this.moveset.filter((mo) => (mo?.getMove().power ?? 0) > 1).length) / 8, 0.5))
-                  * (this.isOfType(allMoves[m[0]].type) ? 2 : 1),
+                  / Math.max(Math.pow(4, this.moveset.filter((mo) => (mo.getMove().power ?? 0) > 1).length) / 8, 0.5))
+                  * (this.isOfType(allMoves.get(m[0]).type) ? 2 : 1),
               );
             } else {
               ret = m[1];
@@ -2403,7 +2409,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           });
       } else {
         // Non-trainer pokemon just use normal weights
-        movePool = baseWeights.filter((m) => !this.moveset.some((mo) => m[0] === mo?.moveId));
+        movePool = baseWeights.filter((m) => !this.moveset.some((mo) => m[0] === mo.moveId));
       }
       const totalWeight = movePool.reduce((v, m) => v + m[1], 0);
       let rand = randSeedInt(totalWeight);
@@ -4835,7 +4841,7 @@ export class EnemyPokemon extends Pokemon {
       }
     }
     return {
-      move: allMoves[MoveId.STRUGGLE],
+      move: allMoves.get(MoveId.STRUGGLE),
       targets: this.getNextTargets(MoveId.STRUGGLE),
       type: ElementalType.UNKNOWN,
     };
@@ -4861,7 +4867,7 @@ export class EnemyPokemon extends Pokemon {
       return targets.map((p) => p.getBattlerIndex());
     }
 
-    const move = allMoves[moveId];
+    const move = allMoves.get(moveId);
 
     /**
      * Get the move's target benefit score against each potential target.

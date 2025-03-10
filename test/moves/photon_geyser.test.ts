@@ -10,7 +10,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 describe("Moves - Photon Geyser", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
-  const photonGeyserAttr = allMoves[MoveId.PHOTON_GEYSER].getAttrs(UseHigherAttackingStatAttr)[0];
+  const photonGeyserAttr = allMoves.get(MoveId.PHOTON_GEYSER).getAttrs(UseHigherAttackingStatAttr)[0];
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({
