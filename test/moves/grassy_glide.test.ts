@@ -63,4 +63,16 @@ describe("Moves - Grassy Glide", () => {
     expect(game.field.getSpeedOrder()).toEqual([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     expect(game.field.getTurnOrder()).toEqual(game.field.getSpeedOrder());
   });
+
+  it("should not have increased priority if the user is ungrounded in Grassy Terrain", async () => {
+    game.override.ability(Abilities.GRASSY_SURGE);
+    await game.classicMode.startBattle([Species.VESPIQUEN]);
+
+    game.move.use(MoveId.GRASSY_GLIDE);
+    await game.toEndOfTurn();
+
+    expect(game.scene.arena.getTerrainType()).toEqual(TerrainType.GRASSY);
+    expect(game.field.getSpeedOrder()).toEqual([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    expect(game.field.getTurnOrder()).toEqual(game.field.getSpeedOrder());
+  });
 });
