@@ -42,7 +42,7 @@ describe("Moves - Pledge Moves", () => {
   it("Fire Pledge - should be an 80-power Fire-type attack outside of combination", async () => {
     await game.classicMode.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
 
-    const firePledge = allMoves[MoveId.FIRE_PLEDGE];
+    const firePledge = allMoves.get(MoveId.FIRE_PLEDGE);
     vi.spyOn(firePledge, "calculateBattlePower");
 
     const playerPokemon = game.scene.getPlayerField();
@@ -62,7 +62,7 @@ describe("Moves - Pledge Moves", () => {
   it("Fire Pledge - should not combine with an ally using Fire Pledge", async () => {
     await game.classicMode.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
 
-    const firePledge = allMoves[MoveId.FIRE_PLEDGE];
+    const firePledge = allMoves.get(MoveId.FIRE_PLEDGE);
     vi.spyOn(firePledge, "calculateBattlePower");
 
     const playerPokemon = game.scene.getPlayerField();
@@ -108,7 +108,7 @@ describe("Moves - Pledge Moves", () => {
   it("Grass Pledge - should combine with Fire Pledge to form a 150-power Fire-type attack that creates a 'sea of fire'", async () => {
     await game.classicMode.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
 
-    const grassPledge = allMoves[MoveId.GRASS_PLEDGE];
+    const grassPledge = allMoves.get(MoveId.GRASS_PLEDGE);
     vi.spyOn(grassPledge, "calculateBattlePower");
 
     const playerPokemon = game.scene.getPlayerField();
@@ -167,7 +167,7 @@ describe("Moves - Pledge Moves", () => {
 
     await game.classicMode.startBattle([Species.BLASTOISE, Species.VENUSAUR]);
 
-    const firePledge = allMoves[MoveId.FIRE_PLEDGE];
+    const firePledge = allMoves.get(MoveId.FIRE_PLEDGE);
     vi.spyOn(firePledge, "calculateBattlePower");
 
     const playerPokemon = game.scene.getPlayerField();
@@ -205,7 +205,7 @@ describe("Moves - Pledge Moves", () => {
   it("Water Pledge - should combine with Grass Pledge to form a 150-power Grass-type attack that creates a 'swamp'", async () => {
     await game.classicMode.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
 
-    const waterPledge = allMoves[MoveId.WATER_PLEDGE];
+    const waterPledge = allMoves.get(MoveId.WATER_PLEDGE);
     vi.spyOn(waterPledge, "calculateBattlePower");
 
     const playerPokemon = game.scene.getPlayerField();
@@ -257,7 +257,7 @@ describe("Moves - Pledge Moves", () => {
 
     await game.classicMode.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
 
-    const ironHeadFlinchAttr = allMoves[MoveId.IRON_HEAD].getAttrs(FlinchAttr)[0];
+    const ironHeadFlinchAttr = allMoves.get(MoveId.IRON_HEAD).getAttrs(FlinchAttr)[0];
     vi.spyOn(ironHeadFlinchAttr, "getMoveChance");
 
     game.move.select(MoveId.WATER_PLEDGE, 0, BattlerIndex.ENEMY);

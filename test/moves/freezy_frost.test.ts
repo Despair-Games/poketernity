@@ -33,7 +33,7 @@ describe("Moves - Freezy Frost", () => {
       .moveset([MoveId.FREEZY_FROST, MoveId.HOWL, MoveId.SPLASH])
       .ability(Abilities.BALL_FETCH);
 
-    vi.spyOn(allMoves[MoveId.FREEZY_FROST], "accuracy", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.FREEZY_FROST), "accuracy", "get").mockReturnValue(100);
   });
 
   it("should clear stat changes of user and opponent", async () => {

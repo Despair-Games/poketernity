@@ -191,7 +191,7 @@ const systemShortKeys = {
   moveset: "$m",
   eggMoves: "$em",
   candyCount: "$x",
-  friendship: "$f",
+  candyProgress: "$f",
   abilityAttr: "$a",
   passiveAttr: "$pa",
   valueReduction: "$vr",
@@ -1486,7 +1486,7 @@ export class GameData {
         moveset: null,
         eggMoves: 0,
         candyCount: 0,
-        friendship: 0,
+        candyProgress: 0,
         abilityAttr: defaultStarterSpecies.includes(speciesId) ? AbilityAttr.ABILITY_1 : 0,
         passiveAttr: 0,
         valueReduction: 0,
@@ -1803,7 +1803,7 @@ export class GameData {
         return;
       }
       globalScene.audioManager.playSound("level_up_fanfare");
-      const moveName = allMoves[speciesEggMoves[speciesId][eggMoveIndex]].name;
+      const moveName = allMoves.get(speciesEggMoves[speciesId][eggMoveIndex]).name;
       // TODO: use a proper localized message in this case
       let message = prependSpeciesToMessage ? species.getName() + " " : "";
       message +=

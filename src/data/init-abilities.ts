@@ -1548,7 +1548,7 @@ function getSheerForceHitDisableAbCondition(): AbAttrCondition {
 
     /**if the last move chance is greater than or equal to cero, and the last attacker's ability is sheer force*/
     const SheerForceAffected =
-      allMoves[lastReceivedAttack.moveId].chance >= 0 && lastAttacker.hasAbility(Abilities.SHEER_FORCE);
+      allMoves.get(lastReceivedAttack.moveId).chance >= 0 && lastAttacker.hasAbility(Abilities.SHEER_FORCE);
 
     return !SheerForceAffected;
   };

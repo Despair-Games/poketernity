@@ -59,7 +59,7 @@ describe("Abilities - BATTLE BOND", () => {
   it("should not keep buffing Water Shuriken after Greninja switches to base form", async () => {
     await game.classicMode.startBattle([Species.GRENINJA]);
 
-    const waterShuriken = allMoves[MoveId.WATER_SHURIKEN];
+    const waterShuriken = allMoves.get(MoveId.WATER_SHURIKEN);
     vi.spyOn(waterShuriken, "calculateBattlePower");
 
     let actualMultiHitType: MultiHitType | null = null;

@@ -131,9 +131,9 @@ describe("Abilities - Sap Sipper", () => {
   it("activate once against multi-hit grass attacks (metronome)", async () => {
     const moveToUse = MoveId.METRONOME;
 
-    const randomMoveAttr = allMoves[MoveId.METRONOME].findAttr(
-      (attr) => attr instanceof MetronomeAttr,
-    ) as MetronomeAttr;
+    const randomMoveAttr = allMoves
+      .get(MoveId.METRONOME)
+      .findAttr((attr) => attr instanceof MetronomeAttr) as MetronomeAttr;
     vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.BULLET_SEED);
 
     game.override.moveset(moveToUse);

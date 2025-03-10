@@ -280,7 +280,7 @@ export function initMoves() {
       .punchingMove(),
     new AttackMove(MoveId.SCRATCH, ElementalType.NORMAL, MoveCategory.PHYSICAL, 40, 100, 35, -1, 0, 1),
     new AttackMove(MoveId.VISE_GRIP, ElementalType.NORMAL, MoveCategory.PHYSICAL, 55, 100, 30, -1, 0, 1),
-    new AttackMove(MoveId.GUILLOTINE, ElementalType.NORMAL, MoveCategory.PHYSICAL, 200, 30, 5, -1, 0, 1)
+    new AttackMove(MoveId.GUILLOTINE, ElementalType.NORMAL, MoveCategory.PHYSICAL, -1, 30, 5, -1, 0, 1)
       .attr(OneHitKOAttr)
       .attr(OneHitKOAccuracyAttr),
     new ChargingAttackMove(MoveId.RAZOR_WIND, ElementalType.NORMAL, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 1)
@@ -341,7 +341,7 @@ export function initMoves() {
     new AttackMove(MoveId.FURY_ATTACK, ElementalType.NORMAL, MoveCategory.PHYSICAL, 15, 85, 20, -1, 0, 1).attr(
       MultiHitAttr,
     ),
-    new AttackMove(MoveId.HORN_DRILL, ElementalType.NORMAL, MoveCategory.PHYSICAL, 200, 30, 5, -1, 0, 1)
+    new AttackMove(MoveId.HORN_DRILL, ElementalType.NORMAL, MoveCategory.PHYSICAL, -1, 30, 5, -1, 0, 1)
       .attr(OneHitKOAttr)
       .attr(OneHitKOAccuracyAttr),
     new AttackMove(MoveId.TACKLE, ElementalType.NORMAL, MoveCategory.PHYSICAL, 40, 100, 35, -1, 0, 1),
@@ -462,7 +462,7 @@ export function initMoves() {
       .condition(failOnMaxCondition)
       .attr(WeightPowerAttr),
     new AttackMove(MoveId.COUNTER, ElementalType.FIGHTING, MoveCategory.PHYSICAL, -1, 100, 20, -1, -5, 1)
-      .attr(CounterDamageAttr, (moveId) => allMoves[moveId].category === MoveCategory.PHYSICAL, 2)
+      .attr(CounterDamageAttr, (moveId) => allMoves.get(moveId).category === MoveCategory.PHYSICAL, 2)
       .target(MoveTarget.ATTACKER),
     new AttackMove(MoveId.SEISMIC_TOSS, ElementalType.FIGHTING, MoveCategory.PHYSICAL, -1, 100, 20, -1, 0, 1).attr(
       LevelDamageAttr,
@@ -540,7 +540,7 @@ export function initMoves() {
       )
       .makesContact(false)
       .target(MoveTarget.ALL_NEAR_OTHERS),
-    new AttackMove(MoveId.FISSURE, ElementalType.GROUND, MoveCategory.PHYSICAL, 200, 30, 5, -1, 0, 1)
+    new AttackMove(MoveId.FISSURE, ElementalType.GROUND, MoveCategory.PHYSICAL, -1, 30, 5, -1, 0, 1)
       .attr(OneHitKOAttr)
       .attr(OneHitKOAccuracyAttr)
       .attr(HitsTagAttr, BattlerTagType.UNDERGROUND)
@@ -1087,7 +1087,7 @@ export function initMoves() {
       .attr(StatStageChangeAttr, [Stat.DEF], -1)
       .bitingMove(),
     new AttackMove(MoveId.MIRROR_COAT, ElementalType.PSYCHIC, MoveCategory.SPECIAL, -1, 100, 20, -1, -5, 2)
-      .attr(CounterDamageAttr, (moveId) => allMoves[moveId].category === MoveCategory.SPECIAL, 2)
+      .attr(CounterDamageAttr, (moveId) => allMoves.get(moveId).category === MoveCategory.SPECIAL, 2)
       .target(MoveTarget.ATTACKER),
     new StatusMove(MoveId.PSYCH_UP, ElementalType.NORMAL, -1, 10, -1, 0, 2).ignoresSubstitute().attr(CopyStatsAttr),
     new AttackMove(MoveId.EXTREME_SPEED, ElementalType.NORMAL, MoveCategory.PHYSICAL, 80, 100, 5, -1, 2, 2),
@@ -1419,7 +1419,7 @@ export function initMoves() {
     new AttackMove(MoveId.SAND_TOMB, ElementalType.GROUND, MoveCategory.PHYSICAL, 35, 85, 15, -1, 0, 3)
       .attr(TrapAttr, BattlerTagType.SAND_TOMB)
       .makesContact(false),
-    new AttackMove(MoveId.SHEER_COLD, ElementalType.ICE, MoveCategory.SPECIAL, 200, 30, 5, -1, 0, 3)
+    new AttackMove(MoveId.SHEER_COLD, ElementalType.ICE, MoveCategory.SPECIAL, -1, 30, 5, -1, 0, 3)
       .attr(IceNoEffectTypeAttr)
       .attr(OneHitKOAttr)
       .attr(SheerColdAccuracyAttr),
@@ -1573,7 +1573,7 @@ export function initMoves() {
       .attr(AcupressureStatStageChangeAttr)
       .target(MoveTarget.USER_OR_NEAR_ALLY),
     new AttackMove(MoveId.METAL_BURST, ElementalType.STEEL, MoveCategory.PHYSICAL, -1, 100, 10, -1, 0, 4)
-      .attr(CounterDamageAttr, (moveId) => allMoves[moveId].isAttackMove(), 1.5)
+      .attr(CounterDamageAttr, (moveId) => allMoves.get(moveId).isAttackMove(), 1.5)
       .redirectCounter()
       .makesContact(false)
       .target(MoveTarget.ATTACKER),
@@ -3249,10 +3249,11 @@ export function initMoves() {
       )
       .condition(failIfDampCondition)
       .makesContact(false),
-    new AttackMove(MoveId.GRASSY_GLIDE, ElementalType.GRASS, MoveCategory.PHYSICAL, 55, 100, 20, -1, 0, 8).attr(
-      IncrementMovePriorityAttr,
-      (user, _target, _move) => globalScene.arena.hasTerrain(TerrainType.GRASSY) && user.isGrounded(),
-    ),
+    new AttackMove(MoveId.GRASSY_GLIDE, ElementalType.GRASS, MoveCategory.PHYSICAL, 55, 100, 20, -1, 0, 8)
+      .attr(
+        IncrementMovePriorityAttr,
+        (user) => globalScene.arena.hasTerrain(TerrainType.GRASSY) && user.isGrounded(),
+      ),
     new AttackMove(MoveId.RISING_VOLTAGE, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 70, 100, 20, -1, 0, 8).attr(
       MovePowerMultiplierAttr,
       (_user, target, _move) => (globalScene.arena.hasTerrain(TerrainType.ELECTRIC) && target.isGrounded() ? 2 : 1),
@@ -3760,7 +3761,7 @@ export function initMoves() {
       }) // TODO Add Instruct/Encore interaction
       .edgeCase(), // should be unselectable the turn after its used
     new AttackMove(MoveId.COMEUPPANCE, ElementalType.DARK, MoveCategory.PHYSICAL, -1, 100, 10, -1, 0, 9)
-      .attr(CounterDamageAttr, (moveId) => allMoves[moveId].isAttackMove(), 1.5)
+      .attr(CounterDamageAttr, (moveId) => allMoves.get(moveId).isAttackMove(), 1.5)
       .redirectCounter()
       .target(MoveTarget.ATTACKER),
     new AttackMove(MoveId.AQUA_CUTTER, ElementalType.WATER, MoveCategory.PHYSICAL, 70, 100, 20, -1, 0, 9)
@@ -3875,7 +3876,7 @@ export function initMoves() {
 
   for (const move of rawAllMoves) {
     // Make sure `allMoves` assigns correct ID to every move
-    allMoves[move.id] = move;
+    allMoves.set(move.id, move);
     addFireMovesThawFrozenTargetAttribute(move);
   }
 }

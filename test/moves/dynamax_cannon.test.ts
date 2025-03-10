@@ -11,7 +11,7 @@ describe("Moves - Dynamax Cannon", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
-  const dynamaxCannon = allMoves[MoveId.DYNAMAX_CANNON];
+  const dynamaxCannon = allMoves.get(MoveId.DYNAMAX_CANNON);
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({

@@ -27,7 +27,7 @@ describe("Moves - Flail", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    flail = allMoves[MoveId.FLAIL];
+    flail = allMoves.get(MoveId.FLAIL);
     game.override
       .moveset(MoveId.FLAIL)
       .battleType("single")

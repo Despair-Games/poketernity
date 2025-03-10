@@ -40,7 +40,7 @@ export function getCandyGainMultiplierForShinies(variantTier: VariantTier): numb
  * @param starterCost The cost of the starter, found in {@linkcode speciesStarterCosts}
  * @returns aforementioned threshold
  */
-export function getStarterValueFriendshipCap(starterCost: number): number {
+export function getCandyProgressRequirement(starterCost: number): number {
   switch (starterCost) {
     case 1:
       return 25;

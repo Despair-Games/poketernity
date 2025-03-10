@@ -70,7 +70,7 @@ export abstract class ArenaTag {
   }
 
   public getMoveName(): string | null {
-    return this.sourceMoveId ? allMoves[this.sourceMoveId].name : null;
+    return this.sourceMoveId ? allMoves.get(this.sourceMoveId).name : null;
   }
 
   /**
@@ -332,7 +332,7 @@ export abstract class ConditionalProtectTag extends ArenaTag {
     if (
       (this.side === ArenaTagSide.PLAYER) === defender.isPlayer()
       && this.protectConditionFunc(arena, moveId)
-      && (this.ignoresBypass || !allMoves[moveId].checkFlag(MoveFlags.IGNORE_PROTECT, attacker, defender))
+      && (this.ignoresBypass || !allMoves.get(moveId).checkFlag(MoveFlags.IGNORE_PROTECT, attacker, defender))
     ) {
       if (!isProtected.value) {
         isProtected.value = true;
@@ -361,7 +361,7 @@ export abstract class ConditionalProtectTag extends ArenaTag {
  *   This includes moves with modified priorities from abilities (e.g. Prankster)
  */
 const QuickGuardConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
-  const move = allMoves[moveId];
+  const move = allMoves.get(moveId);
   const effectPhase = globalScene.getCurrentPhase();
 
   if (effectPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
@@ -391,7 +391,7 @@ class QuickGuardTag extends ConditionalProtectTag {
  * @returns `true` if the incoming move is multi-targeted (even if it's only used against one Pokemon).
  */
 const WideGuardConditionFunc: ProtectConditionFunc = (_arena, moveId): boolean => {
-  const move = allMoves[moveId];
+  const move = allMoves.get(moveId);
 
   switch (move.moveTarget) {
     case MoveTarget.ALL_ENEMIES:
@@ -422,7 +422,7 @@ class WideGuardTag extends ConditionalProtectTag {
  * @returns `true` if the incoming move is not a Status move.
  */
 const MatBlockConditionFunc: ProtectConditionFunc = (_arena, moveId): boolean => {
-  const move = allMoves[moveId];
+  const move = allMoves.get(moveId);
   return move.category !== MoveCategory.STATUS;
 };
 
@@ -458,7 +458,7 @@ class MatBlockTag extends ConditionalProtectTag {
  * Pokemon or sides of the field.
  */
 const CraftyShieldConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
-  const move = allMoves[moveId];
+  const move = allMoves.get(moveId);
   return (
     move.category === MoveCategory.STATUS
     && move.moveTarget !== MoveTarget.ENEMY_SIDE
@@ -1064,22 +1064,27 @@ class StickyWebTag extends EntryHazardTag {
 }
 
 /**
- * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Trick_Room_(move) Trick Room}.
- * Reverses the Speed stats for all Pokémon on the field as long as this arena tag is up,
- * also reversing the turn order for all Pokémon on the field as well.
+ * Base class for moves like Trick Room which should negate their effect when used a second time.
  */
-export class TrickRoomTag extends ArenaTag {
+export abstract class ArenaRoomTag extends ArenaTag {
+  override onOverlap(arena: Arena): void {
+    arena.removeTag(this.tagType);
+  }
+}
+
+/**
+ * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Trick_Room_(move) Trick Room}.
+ * Reverses the Speed calculation for all Pokémon on the field as long as this arena tag is up.
+ */
+export class TrickRoomTag extends ArenaRoomTag {
   constructor(turnCount: number, sourceId: number) {
     super(ArenaTagType.TRICK_ROOM, turnCount, MoveId.TRICK_ROOM, sourceId);
   }
 
   /**
-   * Reverses Speed-based turn order for all Pokemon on the field
-   * @param _arena n/a
-   * @param _simulated n/a
-   * @param speedReversed a {@linkcode BooleanHolder} used to flag if Speed-based
+   * @param speedReversed - A {@linkcode BooleanHolder} used to flag if Speed-based
    * turn order should be reversed.
-   * @returns `true` if turn order is successfully reversed; `false` otherwise
+   * @returns `true`
    */
   override apply(_arena: Arena, _simulated: boolean, speedReversed: BooleanHolder): boolean {
     speedReversed.value = !speedReversed.value;

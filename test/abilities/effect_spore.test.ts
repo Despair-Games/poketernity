@@ -131,7 +131,7 @@ describe("Abilities - Effect Spore", () => {
     // Apply the Effect Spore attr while simulating the full range of possible RNG rolls.
     // Unfortunately, actually using Tackle 100 times takes too long, so we only apply the attr.
     for (rngSweepProgress = 0; rngSweepProgress < 100; rngSweepProgress++) {
-      abilityAttr.apply(playerPokemon, false, enemyPokemon, allMoves[MoveId.TACKLE]);
+      abilityAttr.apply(playerPokemon, false, enemyPokemon, allMoves.get(MoveId.TACKLE));
     }
 
     expect(sleepCount).toBe(11);

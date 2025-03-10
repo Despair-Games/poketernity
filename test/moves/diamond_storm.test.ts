@@ -33,7 +33,7 @@ describe("Moves - Diamond Storm", () => {
 
   it("should only increase defense once even if hitting 2 pokemon", async () => {
     game.override.battleType("double");
-    const diamondStorm = allMoves[MoveId.DIAMOND_STORM];
+    const diamondStorm = allMoves.get(MoveId.DIAMOND_STORM);
     vi.spyOn(diamondStorm, "chance", "get").mockReturnValue(100);
     vi.spyOn(diamondStorm, "accuracy", "get").mockReturnValue(100);
     await game.classicMode.startBattle([Species.FEEBAS]);

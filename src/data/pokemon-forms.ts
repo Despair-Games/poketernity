@@ -1230,7 +1230,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       Species.AEGISLASH,
       "shield",
       "blade",
-      new SpeciesFormChangePreMoveTrigger((m) => allMoves[m].category !== MoveCategory.STATUS),
+      new SpeciesFormChangePreMoveTrigger((m) => allMoves.get(m).category !== MoveCategory.STATUS),
       true,
       [],
       new SpeciesFormChangeCondition((p) => p.hasAbility(Abilities.STANCE_CHANGE)),

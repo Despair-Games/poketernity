@@ -530,7 +530,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
       type && ui.showText(type.getDescription());
       if (type instanceof TmModifierType) {
         // prepare the move overlay to be shown with the toggle
-        this.moveInfoOverlay.show(allMoves[type.moveId]);
+        this.moveInfoOverlay.show(allMoves.get(type.moveId));
       }
     } else if (cursor === 0) {
       this.cursorObj.setPosition(

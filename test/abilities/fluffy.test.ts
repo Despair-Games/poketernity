@@ -44,7 +44,7 @@ describe("Abilities - Fluffy", () => {
     await game.toEndOfTurn();
 
     const damageMultiplier = (abilitySpy.mock.lastCall?.[4] as NumberHolder).value;
-    expect(allMoves[MoveId.TACKLE].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    expect(allMoves.get(MoveId.TACKLE).hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
     expect(damageMultiplier).toBe(0.5);
   });
 
@@ -70,7 +70,7 @@ describe("Abilities - Fluffy", () => {
     await game.toEndOfTurn();
 
     const damageMultiplier = (abilitySpy.mock.lastCall?.[4] as NumberHolder).value;
-    expect(allMoves[MoveId.FIRE_FANG].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    expect(allMoves.get(MoveId.FIRE_FANG).hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
     expect(damageMultiplier).toBe(1);
   });
 
@@ -84,7 +84,7 @@ describe("Abilities - Fluffy", () => {
     await game.toEndOfTurn();
 
     const damageMultiplier = (abilitySpy.mock.lastCall?.[4] as NumberHolder).value;
-    expect(allMoves[MoveId.TACKLE].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    expect(allMoves.get(MoveId.TACKLE).hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
     expect(damageMultiplier).toBe(1);
   });
 });

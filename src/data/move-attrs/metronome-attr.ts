@@ -25,7 +25,7 @@ export class MetronomeAttr extends CallMoveAttr {
    */
   public getRandomMove(user: Pokemon): MoveId {
     const moveIds = getEnumValues(MoveId).filter(
-      (m) => !this.invalidMoves.includes(m) && !allMoves[m].name.endsWith(" (N)"),
+      (m) => !this.invalidMoves.includes(m) && !allMoves.get(m).name.endsWith(" (N)"),
     );
 
     return moveIds[user.randSeedInt(moveIds.length)];
@@ -41,7 +41,7 @@ export class MetronomeAttr extends CallMoveAttr {
    * @param args Unused
    */
   override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder): boolean {
-    return super.apply(user, target, allMoves[this.getRandomMove(user)], overridden);
+    return super.apply(user, target, allMoves.get(this.getRandomMove(user)), overridden);
   }
 }
 
