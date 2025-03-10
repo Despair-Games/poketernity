@@ -2387,20 +2387,19 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         // Other damaging moves 2x weight if 0-1 damaging moves, 0.5x if 2, 0.125x if 3. These weights double if STAB.
         // Status moves remain unchanged on weight, this encourages 1-2
         movePool = baseWeights
-          .filter((m) => !this.moveset.some((mo) => m[0] === mo?.moveId))
+          .filter((m) => !this.moveset.some((mo) => m[0] === mo.moveId))
           .map((m) => {
             let ret: number;
             if (
               this.moveset.some(
-                (mo) =>
-                  mo?.getMove().category !== MoveCategory.STATUS && mo?.getMove().type === allMoves.get(m[0]).type,
+                (mo) => mo.getMove().category !== MoveCategory.STATUS && mo.getMove().type === allMoves.get(m[0]).type,
               )
             ) {
               ret = Math.ceil(Math.sqrt(m[1]));
             } else if (allMoves.get(m[0]).category !== MoveCategory.STATUS) {
               ret = Math.ceil(
                 (m[1]
-                  / Math.max(Math.pow(4, this.moveset.filter((mo) => (mo?.getMove().power ?? 0) > 1).length) / 8, 0.5))
+                  / Math.max(Math.pow(4, this.moveset.filter((mo) => (mo.getMove().power ?? 0) > 1).length) / 8, 0.5))
                   * (this.isOfType(allMoves.get(m[0]).type) ? 2 : 1),
               );
             } else {
@@ -2410,7 +2409,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           });
       } else {
         // Non-trainer pokemon just use normal weights
-        movePool = baseWeights.filter((m) => !this.moveset.some((mo) => m[0] === mo?.moveId));
+        movePool = baseWeights.filter((m) => !this.moveset.some((mo) => m[0] === mo.moveId));
       }
       const totalWeight = movePool.reduce((v, m) => v + m[1], 0);
       let rand = randSeedInt(totalWeight);
