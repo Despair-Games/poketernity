@@ -126,25 +126,17 @@ export class FriendshipAndNightCondition extends SpeciesEvolutionCondition {
 }
 
 /**
- * Mime Jr has a regional evo based on time of day
+ * Mime Jr has a regional evo based on time of day that also requires knowing mimic
  */
 export class MrMimeCondition extends SpeciesEvolutionCondition {
   constructor(forGalar: boolean) {
-    if (forGalar) {
-      super(
-        (p) =>
-          p.moveset.filter((m) => m.moveId === MoveId.MIMIC).length > 0
-          && globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT]),
-      );
-      this.description = "knowing mimic during dusk or night";
-    } else {
-      super(
-        (p) =>
-          p.moveset.filter((m) => m.moveId === MoveId.MIMIC).length > 0
-          && globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]),
-      );
-      this.description = "knowing mimic during dawn or day";
-    }
+    const requiredTimeOfDay = forGalar ? [TimeOfDay.DUSK, TimeOfDay.NIGHT] : [TimeOfDay.DAWN, TimeOfDay.DAY];
+    super(
+      (p) =>
+        p.moveset.filter((m) => m.moveId === MoveId.MIMIC).length > 0
+        && globalScene.arena.isTimeOfDay(requiredTimeOfDay),
+    );
+    this.description = "Knowing Mimic during " + forGalar ? "dusk or night" : "dawn or day";
   }
 }
 
