@@ -1,4 +1,3 @@
-import { AnimConfig } from "#app/data/anim-config";
 import { chargeAnims } from "#app/data/charge-anims";
 import { allMoves } from "#app/data/data-lists";
 import type { ChargingMove } from "#app/data/move";
@@ -10,7 +9,7 @@ import type { MoveId } from "#enums/move-id";
 
 export function loadMoveAnimAssets(moveIds: MoveId[], startLoad?: boolean): Promise<void> {
   return new Promise((resolve) => {
-    const moveAnimations = moveIds.map((m) => moveAnims.get(m) as AnimConfig).flat();
+    const moveAnimations = moveIds.map((m) => moveAnims.get(m)!).flat();
 
     for (const moveId of moveIds) {
       const chargeAnimSource = allMoves.get(moveId).isChargingMove()
@@ -27,7 +26,7 @@ export function loadMoveAnimAssets(moveIds: MoveId[], startLoad?: boolean): Prom
       if (Array.isArray(moveChargeAnims)) {
         moveAnimations.push(moveChargeAnims[0]);
         moveAnimations.push(moveChargeAnims[1]);
-      } else if (moveChargeAnims instanceof AnimConfig) {
+      } else if (moveChargeAnims) {
         moveAnimations.push(moveChargeAnims);
       }
     }
