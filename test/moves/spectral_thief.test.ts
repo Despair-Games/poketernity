@@ -47,7 +47,7 @@ describe("Moves - Spectral Thief", () => {
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
-    const preEffectDamage = enemy.getAttackDamage(player, allMoves[MoveId.SPECTRAL_THIEF]).damage;
+    const preEffectDamage = enemy.getAttackDamage(player, allMoves.get(MoveId.SPECTRAL_THIEF)).damage;
 
     await game.phaseInterceptor.to("MoveEffectPhase");
 

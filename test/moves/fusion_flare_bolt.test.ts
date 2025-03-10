@@ -31,8 +31,8 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    fusionFlare = allMoves[MoveId.FUSION_FLARE];
-    fusionBolt = allMoves[MoveId.FUSION_BOLT];
+    fusionFlare = allMoves.get(MoveId.FUSION_FLARE);
+    fusionBolt = allMoves.get(MoveId.FUSION_BOLT);
     game.override.moveset([fusionFlare.id, fusionBolt.id]);
     game.override.startingLevel(1);
 

@@ -9,7 +9,7 @@ describe("Moves - Retaliate", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
-  const retaliate = allMoves[MoveId.RETALIATE];
+  const retaliate = allMoves.get(MoveId.RETALIATE);
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({

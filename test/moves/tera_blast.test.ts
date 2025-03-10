@@ -12,7 +12,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 describe("Moves - Tera Blast", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
-  const moveToCheck = allMoves[MoveId.TERA_BLAST];
+  const moveToCheck = allMoves.get(MoveId.TERA_BLAST);
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({

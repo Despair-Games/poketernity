@@ -33,7 +33,7 @@ describe("Moves - Dragon Tail", () => {
       .startingLevel(5)
       .enemyLevel(5);
 
-    vi.spyOn(allMoves[MoveId.DRAGON_TAIL], "accuracy", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.DRAGON_TAIL), "accuracy", "get").mockReturnValue(100);
   });
 
   it("should cause opponent to flee, and not crash", async () => {

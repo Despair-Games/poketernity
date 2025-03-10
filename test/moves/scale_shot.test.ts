@@ -62,7 +62,7 @@ describe("Moves - Scale Shot", () => {
   });
 
   it("unaffected by sheer force", async () => {
-    const moveToCheck = allMoves[MoveId.SCALE_SHOT];
+    const moveToCheck = allMoves.get(MoveId.SCALE_SHOT);
     const basePower = moveToCheck.power;
 
     game.override.enemySpecies(Species.WOBBUFFET);
