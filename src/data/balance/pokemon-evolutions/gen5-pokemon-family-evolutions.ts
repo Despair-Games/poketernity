@@ -1,13 +1,13 @@
-import { globalScene } from "#app/global-scene";
 import { Species } from "#enums/species";
 import {
+  BasculegionEvoCondition,
   DayEvolutionCondition,
   NightEvolutionCondition,
   type PokemonEvolutions,
   SpeciesEvolution,
-  SpeciesEvolutionCondition,
   SpeciesFormEvolution,
   SpeciesFriendshipEvolutionCondition,
+  SpeciesOwnedEvoCondition,
 } from "#app/data/pokemon-evolutions";
 import { Gender } from "#enums/gender";
 import { EvolutionItem } from "#enums/evolution-item";
@@ -79,23 +79,19 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
     new SpeciesFormEvolution(
       Species.BASCULEGION,
       "white-striped",
-      "female",
+      "male",
       1,
       null,
-      new SpeciesEvolutionCondition(
-        (p) => p.moveset.filter((m) => m.moveId === MoveId.WAVE_CRASH).length > 0 && p.gender === Gender.FEMALE,
-      ),
+      new BasculegionEvoCondition(MoveId.WAVE_CRASH, Gender.MALE),
       BASCULEGION_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
       Species.BASCULEGION,
       "white-striped",
-      "male",
+      "female",
       1,
       null,
-      new SpeciesEvolutionCondition(
-        (p) => p.moveset.filter((m) => m.moveId === MoveId.WAVE_CRASH).length > 0 && p.gender === Gender.MALE,
-      ),
+      new BasculegionEvoCondition(MoveId.WAVE_CRASH, Gender.FEMALE),
       BASCULEGION_EVO_LEVEL,
     ),
   ],
@@ -120,13 +116,12 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.VANILLITE]: [new SpeciesEvolution(Species.VANILLISH, 35, null, null)],
   [Species.VANILLISH]: [new SpeciesEvolution(Species.VANILLUXE, 47, null, null)],
   [Species.DEERLING]: [new SpeciesEvolution(Species.SAWSBUCK, 34, null, null)],
-  /** Karrablast requires the player to have owned Shelmet */
   [Species.KARRABLAST]: [
     new SpeciesEvolution(
       Species.ESCAVALIER,
       1,
       EvolutionItem.LINKING_CORD,
-      new SpeciesEvolutionCondition(() => !!globalScene.gameData.dexData[Species.SHELMET].caughtAttr),
+      new SpeciesOwnedEvoCondition(Species.SHELMET),
       GENERIC_ITEM_EVO_LEVEL,
     ),
   ],
@@ -149,13 +144,12 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.AXEW]: [new SpeciesEvolution(Species.FRAXURE, 38, null, null)],
   [Species.FRAXURE]: [new SpeciesEvolution(Species.HAXORUS, 48, null, null)],
   [Species.CUBCHOO]: [new SpeciesEvolution(Species.BEARTIC, 37, null, null)],
-  /** Shelmet requires the player to have owned Karrablast */
   [Species.SHELMET]: [
     new SpeciesEvolution(
       Species.ACCELGOR,
       1,
       EvolutionItem.LINKING_CORD,
-      new SpeciesEvolutionCondition(() => !!globalScene.gameData.dexData[Species.KARRABLAST].caughtAttr),
+      new SpeciesOwnedEvoCondition(Species.KARRABLAST),
       GENERIC_ITEM_EVO_LEVEL,
     ),
   ],

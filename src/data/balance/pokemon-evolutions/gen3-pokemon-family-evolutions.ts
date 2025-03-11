@@ -1,4 +1,3 @@
-import { globalScene } from "#app/global-scene";
 import { Species } from "#enums/species";
 import {
   DayEvolutionCondition,
@@ -7,11 +6,10 @@ import {
   GenderEvolutionCondition,
   NightEvolutionCondition,
   type PokemonEvolutions,
+  ShedinjaEvoCondition,
   SpeciesEvolution,
-  SpeciesEvolutionCondition,
 } from "#app/data/pokemon-evolutions";
 import { Gender } from "#enums/gender";
-import { PokeballType } from "#enums/pokeball";
 import { EvolutionItem } from "#enums/evolution-item";
 import {
   ADVANCED_ITEM_EVO_LEVEL,
@@ -55,14 +53,7 @@ export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.VIGOROTH]: [new SpeciesEvolution(Species.SLAKING, 36, null, null)],
   [Species.NINCADA]: [
     new SpeciesEvolution(Species.NINJASK, 20, null, null),
-    new SpeciesEvolution(
-      Species.SHEDINJA,
-      20,
-      null,
-      new SpeciesEvolutionCondition(
-        () => globalScene.getPlayerParty().length < 6 && globalScene.pokeballCounts[PokeballType.POKEBALL] > 0,
-      ),
-    ),
+    new SpeciesEvolution(Species.SHEDINJA, 20, null, new ShedinjaEvoCondition()),
   ],
   [Species.WHISMUR]: [new SpeciesEvolution(Species.LOUDRED, 20, null, null)],
   [Species.LOUDRED]: [new SpeciesEvolution(Species.EXPLOUD, 40, null, null)],

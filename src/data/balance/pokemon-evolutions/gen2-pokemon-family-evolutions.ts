@@ -1,4 +1,3 @@
-import { globalScene } from "#app/global-scene";
 import { EvolutionItem } from "#enums/evolution-item";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -18,12 +17,13 @@ import {
   type PokemonEvolutions,
   SpeciesFormEvolution,
   SpeciesEvolution,
-  SpeciesEvolutionCondition,
   SpeciesFriendshipEvolutionCondition,
   NightEvolutionCondition,
   DayEvolutionCondition,
+  MoveKnownEvoCondition,
+  DudunsparceThreeSegmentEvoCondition,
+  SpeciesOwnedEvoCondition,
 } from "#app/data/pokemon-evolutions";
-import { randSeedInt } from "#app/utils";
 
 export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.CHIKORITA]: [new SpeciesEvolution(Species.BAYLEEF, 16, null, null)],
@@ -68,34 +68,16 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.MARILL]: [new SpeciesEvolution(Species.AZUMARILL, 18, null, null)],
   /** Bonsly is from Gen 4 */
   [Species.BONSLY]: [
-    new SpeciesEvolution(
-      Species.SUDOWOODO,
-      1,
-      null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.MIMIC).length > 0),
-      SUDOWOODO_EVO_LEVEL,
-    ),
+    new SpeciesEvolution(Species.SUDOWOODO, 1, null, new MoveKnownEvoCondition(MoveId.MIMIC), SUDOWOODO_EVO_LEVEL),
   ],
   [Species.HOPPIP]: [new SpeciesEvolution(Species.SKIPLOOM, 18, null, null)],
   [Species.SKIPLOOM]: [new SpeciesEvolution(Species.JUMPLUFF, 27, null, null)],
   [Species.AIPOM]: [
-    new SpeciesEvolution(
-      Species.AMBIPOM,
-      1,
-      null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.DOUBLE_HIT).length > 0),
-      AMBIPOM_EVO_LEVEL,
-    ),
+    new SpeciesEvolution(Species.AMBIPOM, 1, null, new MoveKnownEvoCondition(MoveId.DOUBLE_HIT), AMBIPOM_EVO_LEVEL),
   ],
   [Species.SUNKERN]: [new SpeciesEvolution(Species.SUNFLORA, 1, EvolutionItem.SUN_STONE, null, GENERIC_ITEM_EVO_LEVEL)],
   [Species.YANMA]: [
-    new SpeciesEvolution(
-      Species.YANMEGA,
-      1,
-      null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.ANCIENT_POWER).length > 0),
-      YANMEGA_EVO_LEVEL,
-    ),
+    new SpeciesEvolution(Species.YANMEGA, 1, null, new MoveKnownEvoCondition(MoveId.ANCIENT_POWER), YANMEGA_EVO_LEVEL),
   ],
   [Species.WOOPER]: [new SpeciesEvolution(Species.QUAGSIRE, 20, null, null)],
   [Species.MURKROW]: [
@@ -107,13 +89,7 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
   /** Wynaut is from Gen 3 */
   [Species.WYNAUT]: [new SpeciesEvolution(Species.WOBBUFFET, 15, null, null)],
   [Species.GIRAFARIG]: [
-    new SpeciesEvolution(
-      Species.FARIGIRAF,
-      1,
-      null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.TWIN_BEAM).length > 0),
-      FARIGARIF_EVO_LEVEL,
-    ),
+    new SpeciesEvolution(Species.FARIGIRAF, 1, null, new MoveKnownEvoCondition(MoveId.TWIN_BEAM), FARIGARIF_EVO_LEVEL),
   ],
   [Species.PINECO]: [new SpeciesEvolution(Species.FORRETRESS, 31, null, null)],
   [Species.DUNSPARCE]: [
@@ -123,20 +99,14 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
       "three-segment",
       1,
       null,
-      new SpeciesEvolutionCondition((p) => {
-        let ret = false;
-        if (p.moveset.filter((m) => m.moveId === MoveId.HYPER_DRILL).length > 0) {
-          globalScene.executeWithSeedOffset(() => (ret = !randSeedInt(4)), p.id);
-        }
-        return ret;
-      }),
+      new DudunsparceThreeSegmentEvoCondition(MoveId.HYPER_DRILL),
       DUDUNSPARCE_EVO_LEVEL,
     ),
     new SpeciesEvolution(
       Species.DUDUNSPARCE,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.HYPER_DRILL).length > 0),
+      new MoveKnownEvoCondition(MoveId.HYPER_DRILL),
       DUDUNSPARCE_EVO_LEVEL,
     ),
   ],
@@ -176,31 +146,17 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.MAMOSWINE,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.ANCIENT_POWER).length > 0),
+      new MoveKnownEvoCondition(MoveId.ANCIENT_POWER),
       MAMOSWINE_EVO_LEVEL,
     ),
   ],
   [Species.REMORAID]: [new SpeciesEvolution(Species.OCTILLERY, 25, null, null)],
   /** Mantyke is from Gen 4 */
-  [Species.MANTYKE]: [
-    new SpeciesEvolution(
-      Species.MANTINE,
-      32,
-      null,
-      /** Requires the player to have caught a Remoraid before */
-      new SpeciesEvolutionCondition(() => !!globalScene.gameData.dexData[Species.REMORAID].caughtAttr),
-    ),
-  ],
+  [Species.MANTYKE]: [new SpeciesEvolution(Species.MANTINE, 32, null, new SpeciesOwnedEvoCondition(Species.REMORAID))],
   [Species.HOUNDOUR]: [new SpeciesEvolution(Species.HOUNDOOM, 24, null, null)],
   [Species.PHANPY]: [new SpeciesEvolution(Species.DONPHAN, 25, null, null)],
   [Species.STANTLER]: [
-    new SpeciesEvolution(
-      Species.WYRDEER,
-      1,
-      null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.PSYSHIELD_BASH).length > 0),
-      WYRDEER_EVO_LEVEL,
-    ),
+    new SpeciesEvolution(Species.WYRDEER, 1, null, new MoveKnownEvoCondition(MoveId.PSYSHIELD_BASH), WYRDEER_EVO_LEVEL),
   ],
   [Species.LARVITAR]: [new SpeciesEvolution(Species.PUPITAR, 30, null, null)],
   [Species.PUPITAR]: [new SpeciesEvolution(Species.TYRANITAR, 55, null, null)],

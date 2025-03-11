@@ -1,13 +1,11 @@
-import { globalScene } from "#app/global-scene";
 import { Species } from "#enums/species";
-import { TimeOfDay } from "#enums/time-of-day";
 import {
   DayEvolutionCondition,
   GenderEvolutionCondition,
+  MoveKnownEvoCondition,
   NightEvolutionCondition,
   type PokemonEvolutions,
   SpeciesEvolution,
-  SpeciesEvolutionCondition,
   SpeciesFormEvolution,
   SpeciesFriendshipEvolutionCondition,
 } from "#app/data/pokemon-evolutions";
@@ -24,18 +22,8 @@ import { MoveId } from "#enums/move-id";
 export const gen7pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.ROWLET]: [new SpeciesEvolution(Species.DARTRIX, 17, null, null)],
   [Species.DARTRIX]: [
-    new SpeciesEvolution(
-      Species.DECIDUEYE,
-      34,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
-    ),
-    new SpeciesEvolution(
-      Species.HISUI_DECIDUEYE,
-      36,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
-    ),
+    new SpeciesEvolution(Species.DECIDUEYE, 34, null, new DayEvolutionCondition()),
+    new SpeciesEvolution(Species.HISUI_DECIDUEYE, 36, null, new NightEvolutionCondition()),
   ],
   [Species.LITTEN]: [new SpeciesEvolution(Species.TORRACAT, 17, null, null)],
   [Species.TORRACAT]: [new SpeciesEvolution(Species.INCINEROAR, 34, null, null)],
@@ -43,14 +31,7 @@ export const gen7pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.BRIONNE]: [new SpeciesEvolution(Species.PRIMARINA, 34, null, null)],
   [Species.PIKIPEK]: [new SpeciesEvolution(Species.TRUMBEAK, 14, null, null)],
   [Species.TRUMBEAK]: [new SpeciesEvolution(Species.TOUCANNON, 28, null, null)],
-  [Species.YUNGOOS]: [
-    new SpeciesEvolution(
-      Species.GUMSHOOS,
-      20,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
-    ),
-  ],
+  [Species.YUNGOOS]: [new SpeciesEvolution(Species.GUMSHOOS, 20, null, new DayEvolutionCondition())],
   [Species.GRUBBIN]: [new SpeciesEvolution(Species.CHARJABUG, 20, null, null)],
   [Species.CHARJABUG]: [
     new SpeciesEvolution(Species.VIKAVOLT, 1, EvolutionItem.THUNDER_STONE, null, GENERIC_ITEM_EVO_LEVEL),
@@ -60,58 +41,21 @@ export const gen7pokemonFamilyEvolutions: PokemonEvolutions = {
   ],
   [Species.CUTIEFLY]: [new SpeciesEvolution(Species.RIBOMBEE, 25, null, null)],
   [Species.ROCKRUFF]: [
-    new SpeciesFormEvolution(
-      Species.LYCANROC,
-      "",
-      "midday",
-      25,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]) && p.formIndex === 0,
-      ),
-    ),
-    new SpeciesFormEvolution(
-      Species.LYCANROC,
-      "own-tempo",
-      "dusk",
-      25,
-      null,
-      new SpeciesEvolutionCondition((p) => p.formIndex === 1),
-    ),
-    new SpeciesFormEvolution(
-      Species.LYCANROC,
-      "",
-      "midnight",
-      25,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT]) && p.formIndex === 0,
-      ),
-    ),
+    new SpeciesFormEvolution(Species.LYCANROC, "", "midday", 25, null, new DayEvolutionCondition()),
+    new SpeciesFormEvolution(Species.LYCANROC, "", "midnight", 25, null, new NightEvolutionCondition()),
+    // Custom: Own Tempo Rockruff evolves into Dusk Lycanroc regardless of time
+    new SpeciesFormEvolution(Species.LYCANROC, "own-tempo", "dusk", 25, null, null),
   ],
   [Species.MAREANIE]: [new SpeciesEvolution(Species.TOXAPEX, 38, null, null)],
   [Species.MUDBRAY]: [new SpeciesEvolution(Species.MUDSDALE, 30, null, null)],
   [Species.DEWPIDER]: [new SpeciesEvolution(Species.ARAQUANID, 22, null, null)],
-  [Species.FOMANTIS]: [
-    new SpeciesEvolution(
-      Species.LURANTIS,
-      34,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
-    ),
-  ],
+  [Species.FOMANTIS]: [new SpeciesEvolution(Species.LURANTIS, 34, null, new DayEvolutionCondition())],
   [Species.MORELULL]: [new SpeciesEvolution(Species.SHIINOTIC, 24, null, null)],
   [Species.SALANDIT]: [new SpeciesEvolution(Species.SALAZZLE, 33, null, new GenderEvolutionCondition(Gender.FEMALE))],
   [Species.STUFFUL]: [new SpeciesEvolution(Species.BEWEAR, 27, null, null)],
   [Species.BOUNSWEET]: [new SpeciesEvolution(Species.STEENEE, 18, null, null)],
   [Species.STEENEE]: [
-    new SpeciesEvolution(
-      Species.TSAREENA,
-      1,
-      null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.STOMP).length > 0),
-      TSAREENA_EVO_LEVEL,
-    ),
+    new SpeciesEvolution(Species.TSAREENA, 1, null, new MoveKnownEvoCondition(MoveId.STOMP), TSAREENA_EVO_LEVEL),
   ],
   [Species.WIMPOD]: [new SpeciesEvolution(Species.GOLISOPOD, 30, null, null)],
   [Species.SANDYGAST]: [new SpeciesEvolution(Species.PALOSSAND, 42, null, null)],
@@ -132,21 +76,14 @@ export const gen7pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.NAGANADEL,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.DRAGON_PULSE).length > 0),
+      new MoveKnownEvoCondition(MoveId.DRAGON_PULSE),
       NAGANADEL_EVO_LEVEL,
     ),
   ],
 
   /** Alola Pokemon also go in this file */
 
-  [Species.ALOLA_RATTATA]: [
-    new SpeciesEvolution(
-      Species.ALOLA_RATICATE,
-      20,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
-    ),
-  ],
+  [Species.ALOLA_RATTATA]: [new SpeciesEvolution(Species.ALOLA_RATICATE, 20, null, new NightEvolutionCondition())],
   [Species.ALOLA_SANDSHREW]: [
     new SpeciesEvolution(Species.ALOLA_SANDSLASH, 1, EvolutionItem.ICE_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],

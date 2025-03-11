@@ -25,6 +25,7 @@ import {
   FriendshipAndNightCondition,
   MrMimeCondition,
   SylveonEvoCondition,
+  MoveKnownEvoCondition,
 } from "#app/data/pokemon-evolutions";
 
 export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
@@ -214,51 +215,12 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
      * If Tyrogue knows multiple of these moves, its evolution is based on
      * the first qualifying move in its moveset.
      */
-    new SpeciesEvolution(
-      Species.HITMONLEE,
-      20,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) =>
-          p
-            .getMoveset(true)
-            .find((move) => move && [MoveId.LOW_SWEEP, MoveId.MACH_PUNCH, MoveId.RAPID_SPIN].includes(move?.moveId))
-            ?.moveId === MoveId.LOW_SWEEP,
-      ),
-    ),
-    new SpeciesEvolution(
-      Species.HITMONCHAN,
-      20,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) =>
-          p
-            .getMoveset(true)
-            .find((move) => move && [MoveId.LOW_SWEEP, MoveId.MACH_PUNCH, MoveId.RAPID_SPIN].includes(move?.moveId))
-            ?.moveId === MoveId.MACH_PUNCH,
-      ),
-    ),
-    new SpeciesEvolution(
-      Species.HITMONTOP,
-      20,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) =>
-          p
-            .getMoveset(true)
-            .find((move) => move && [MoveId.LOW_SWEEP, MoveId.MACH_PUNCH, MoveId.RAPID_SPIN].includes(move?.moveId))
-            ?.moveId === MoveId.RAPID_SPIN,
-      ),
-    ),
+    new SpeciesEvolution(Species.HITMONLEE, 20, null, new MoveKnownEvoCondition(MoveId.LOW_SWEEP)),
+    new SpeciesEvolution(Species.HITMONCHAN, 20, null, new MoveKnownEvoCondition(MoveId.MACH_PUNCH)),
+    new SpeciesEvolution(Species.HITMONTOP, 20, null, new MoveKnownEvoCondition(MoveId.RAPID_SPIN)),
   ],
   [Species.LICKITUNG]: [
-    new SpeciesEvolution(
-      Species.LICKILICKY,
-      1,
-      null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.ROLLOUT).length > 0),
-      LICKILICKY_EVO_LEVEL,
-    ),
+    new SpeciesEvolution(Species.LICKILICKY, 1, null, new MoveKnownEvoCondition(MoveId.ROLLOUT), LICKILICKY_EVO_LEVEL),
   ],
   [Species.KOFFING]: [
     new SpeciesEvolution(Species.WEEZING, 35, null, new DayEvolutionCondition()),
@@ -286,7 +248,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.TANGROWTH,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.ANCIENT_POWER).length > 0),
+      new MoveKnownEvoCondition(MoveId.ANCIENT_POWER),
       TANGROWTH_EVO_LEVEL,
     ),
   ],
