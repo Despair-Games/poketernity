@@ -1,6 +1,6 @@
 import { UiMode } from "#enums/ui-mode";
 import { fixedNumber, randItem } from "#app/utils";
-import { addTextObject, getTextStyleOptions } from "#app/ui/text";
+import { addTextObject } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { getSplashMessages } from "#app/data/splash-messages";
 import i18next from "i18next";
@@ -44,18 +44,15 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
     this.titleContainer.add(logo);
 
     this.playerCountLabel = addTextObject(
-      GAME_WIDTH - 2,
-      GAME_HEIGHT - 13 - 576 * getTextStyleOptions(TextStyle.WINDOW).scale,
+      GAME_WIDTH - 5,
+      0,
       `? ${i18next.t("menu:playersOnline")}`,
-      TextStyle.MESSAGE,
-      { fontSize: "54px" },
+      TextStyle.TITLE_SCREEN,
     );
-    this.playerCountLabel.setOrigin(1, 0);
+    this.playerCountLabel.setOrigin(1, 1);
     this.titleContainer.add(this.playerCountLabel);
 
-    this.splashMessageText = addTextObject(logo.x + 64, logo.y + logo.displayHeight - 8, "", TextStyle.MONEY, {
-      fontSize: "54px",
-    });
+    this.splashMessageText = addTextObject(logo.x + 64, logo.y + logo.displayHeight - 8, "", TextStyle.TITLE_SCREEN);
     this.splashMessageText.setOrigin(0.5, 0.5);
     this.splashMessageText.setAngle(-20);
     this.titleContainer.add(this.splashMessageText);
@@ -70,9 +67,7 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
       yoyo: true,
     });
 
-    this.appVersionText = addTextObject(logo.x - 60, logo.y + logo.displayHeight + 4, "", TextStyle.MONEY, {
-      fontSize: "54px",
-    });
+    this.appVersionText = addTextObject(logo.x - 60, logo.y + logo.displayHeight + 4, "", TextStyle.TITLE_SCREEN);
     this.appVersionText.setOrigin(0.5, 0.5);
     this.appVersionText.setAngle(0);
     this.titleContainer.add(this.appVersionText);
@@ -117,6 +112,8 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
       } else {
         this.eventDisplay?.hide();
       }
+
+      this.playerCountLabel.y = GAME_HEIGHT - this.optionSelectBg.height - 3;
 
       this.updateTitleStats();
 

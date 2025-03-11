@@ -27,7 +27,7 @@ function getEnemyMoveChoices(pokemon: EnemyPokemon, moveChoices: MoveChoiceSet):
   }
 
   for (const [moveId, count] of Object.entries(moveChoices)) {
-    console.log(`Move: ${allMoves[moveId].name}   Count: ${count} (${(count / NUM_TRIALS) * 100}%)`);
+    console.log(`Move: ${allMoves.get(Number(moveId)).name}   Count: ${count} (${(count / NUM_TRIALS) * 100}%)`);
   }
 }
 

@@ -10,10 +10,10 @@ import i18next from "i18next";
 import type { Stat } from "#enums/stat";
 import { PERMANENT_STATS, getStatKey } from "#enums/stat";
 import { settings } from "#app/system/settings/settings-manager";
-import { GAME_WIDTH } from "#app/ui-constants";
+import { GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 
 export default class BattleMessageUiHandler extends MessageUiHandler {
-  private readonly wordWrapWidth: number = 1780;
+  private readonly wordWrapWidth: number = (GAME_WIDTH - 24) * TEXT_SCALE;
 
   private levelUpStatsContainer: Phaser.GameObjects.Container;
   private levelUpStatsIncrContent: Phaser.GameObjects.Text;
@@ -108,8 +108,8 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
 
     const levelUpStatsLabelsContent = addTextObject(GAME_WIDTH - 73, -94, "", TextStyle.WINDOW, {
       maxLines: 6,
+      lineSpacing: 5,
     });
-    levelUpStatsLabelsContent.setLineSpacing(i18next.resolvedLanguage === "ja" ? 25 : 5);
     let levelUpStatsLabelText = "";
 
     for (const s of PERMANENT_STATS) {
@@ -126,8 +126,8 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
 
     const levelUpStatsIncrContent = addTextObject(GAME_WIDTH - 50, -94, "+\n+\n+\n+\n+\n+", TextStyle.WINDOW, {
       maxLines: 6,
+      lineSpacing: 5,
     });
-    levelUpStatsIncrContent.setLineSpacing(i18next.resolvedLanguage === "ja" ? 25 : 5);
     levelUpStatsContainer.add(levelUpStatsIncrContent);
 
     this.levelUpStatsIncrContent = levelUpStatsIncrContent;
@@ -136,7 +136,6 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
       maxLines: 6,
       lineSpacing: 5,
     });
-    levelUpStatsValuesContent.setLineSpacing(i18next.resolvedLanguage === "ja" ? 25 : 5);
     levelUpStatsValuesContent.setOrigin(1, 0);
     levelUpStatsValuesContent.setAlign("right");
     levelUpStatsContainer.add(levelUpStatsValuesContent);

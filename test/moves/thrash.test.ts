@@ -35,7 +35,7 @@ describe("Moves - Thrash", () => {
       .startingLevel(100)
       .enemyLevel(100);
 
-    vi.spyOn(allMoves[MoveId.ASTONISH], "chance", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.ASTONISH), "chance", "get").mockReturnValue(100);
   });
 
   it("should lock the user into using Thrash for 1-2 turns, then confuse the user", async () => {

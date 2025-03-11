@@ -37,13 +37,13 @@ describe("Moves - Lash Out", () => {
   });
 
   it("should deal double damage if the user's stat stages were lowered this turn", async () => {
-    vi.spyOn(allMoves[MoveId.LASH_OUT], "calculateBattlePower");
+    vi.spyOn(allMoves.get(MoveId.LASH_OUT), "calculateBattlePower");
     await game.classicMode.startBattle();
 
     game.move.select(MoveId.LASH_OUT);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
-    expect(allMoves[MoveId.LASH_OUT].calculateBattlePower).toHaveReturnedWith(150);
+    expect(allMoves.get(MoveId.LASH_OUT).calculateBattlePower).toHaveReturnedWith(150);
   });
 });

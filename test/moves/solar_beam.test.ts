@@ -89,7 +89,7 @@ describe("Moves - Solar Beam", () => {
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
-    const solarBeam = allMoves[MoveId.SOLAR_BEAM];
+    const solarBeam = allMoves.get(MoveId.SOLAR_BEAM);
 
     vi.spyOn(solarBeam, "calculateBattlePower");
 

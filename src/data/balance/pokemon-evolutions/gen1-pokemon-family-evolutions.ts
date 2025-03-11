@@ -12,6 +12,7 @@ import {
   HAPPINESS_EVO_LEVEL,
   LICKILICKY_EVO_LEVEL,
   MR_MIME_EVO_LEVEL,
+  SLOWPOKE_FAMILY_EVO_LEVEL,
   TANGROWTH_EVO_LEVEL,
 } from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
 import {
@@ -173,7 +174,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.PONYTA]: [new SpeciesEvolution(Species.RAPIDASH, 40, null, null)],
   [Species.SLOWPOKE]: [
     new SpeciesEvolution(Species.SLOWBRO, 37, null, null),
-    new SpeciesEvolution(Species.SLOWKING, 1, EvolutionItem.LINKING_CORD, null, 37),
+    new SpeciesEvolution(Species.SLOWKING, 1, EvolutionItem.LINKING_CORD, null, SLOWPOKE_FAMILY_EVO_LEVEL),
   ],
   [Species.MAGNEMITE]: [new SpeciesEvolution(Species.MAGNETON, 30, null, null)],
   [Species.MAGNETON]: [
@@ -202,13 +203,13 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.ALOLA_MAROWAK,
       28,
       null,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
+      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
     new SpeciesEvolution(
       Species.MAROWAK,
       28,
       null,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
+      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
     ),
   ],
   /** Tyrogue is from gen 2 */
@@ -270,13 +271,13 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.GALAR_WEEZING,
       35,
       null,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
+      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
     ),
     new SpeciesEvolution(
       Species.WEEZING,
       35,
       null,
-      new SpeciesEvolutionCondition((_p) => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
+      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
     ),
   ],
   [Species.RHYHORN]: [new SpeciesEvolution(Species.RHYDON, 42, null, null)],
@@ -387,7 +388,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(120, (_p) => globalScene.arena.isTimeOfDay(TimeOfDay.DAY)),
+      new SpeciesFriendshipEvolutionCondition(120, () => globalScene.arena.isTimeOfDay(TimeOfDay.DAY)),
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -396,7 +397,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(120, (_p) => globalScene.arena.isTimeOfDay(TimeOfDay.DAY)),
+      new SpeciesFriendshipEvolutionCondition(120, () => globalScene.arena.isTimeOfDay(TimeOfDay.DAY)),
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -405,7 +406,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(120, (_p) => globalScene.arena.isTimeOfDay(TimeOfDay.NIGHT)),
+      new SpeciesFriendshipEvolutionCondition(120, () => globalScene.arena.isTimeOfDay(TimeOfDay.NIGHT)),
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -414,7 +415,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(120, (_p) => globalScene.arena.isTimeOfDay(TimeOfDay.NIGHT)),
+      new SpeciesFriendshipEvolutionCondition(120, () => globalScene.arena.isTimeOfDay(TimeOfDay.NIGHT)),
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(Species.VAPOREON, "", "", 1, EvolutionItem.WATER_STONE, null, GENERIC_ITEM_EVO_LEVEL),

@@ -37,7 +37,7 @@ describe("Abilities - Super Luck", () => {
 
     const playerPokemon = game.field.getPlayerPokemon();
 
-    expect(playerPokemon.getCritStage(playerPokemon, allMoves[MoveId.TACKLE])).toBe(1);
-    expect(playerPokemon.getCritStage(playerPokemon, allMoves[MoveId.RAZOR_LEAF])).toBe(2);
+    expect(playerPokemon.getCritStage(playerPokemon, allMoves.get(MoveId.TACKLE))).toBe(1);
+    expect(playerPokemon.getCritStage(playerPokemon, allMoves.get(MoveId.RAZOR_LEAF))).toBe(2);
   });
 });

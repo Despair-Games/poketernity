@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/data-lists";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
-import { initMoveAnim } from "#app/data/init-move-anim";
-import type { Move } from "#app/data/move";
+import { initMoveAnim } from "#app/data/init/init-move-anim";
+import type { Move } from "#app/data/moves/move";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/species-form-change-triggers/species-form-change-move-learned-trigger";
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
@@ -44,7 +44,14 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
 
     const { ui } = globalScene;
     const pokemon = this.getPokemon();
-    const move = allMoves[this.moveId];
+
+    // This should never happen, but if there is no Pokemon learning the move, exit now to avoid crashes.
+    if (!pokemon) {
+      console.error("Pokemon is missing from LearnMovePhase!");
+      return this.end();
+    }
+
+    const move = allMoves.get(this.moveId);
     const currentMoveset = pokemon.getMoveset();
 
     // The game first checks if the Pokemon already has the move and ends the phase if it does.

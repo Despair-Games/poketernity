@@ -4,7 +4,7 @@ import { readFileSync } from "fs";
 import { describe, expect, it } from "vitest";
 import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
-import type { Move } from "#app/data/move";
+import type { Move } from "#app/data/moves/move";
 import { MoveFlags } from "#enums/move-flags";
 import { ElementalType } from "#enums/elemental-type";
 
@@ -44,7 +44,6 @@ describe("All Moves", async () => {
 
   /**
    * Custom Implementations as of 02/2025:
-   * - Horn Drill / Guillotine / Sheer Cold / Fissure : BP set to 200
    * - Imprison : Accuracy is set to 100 in PKTY, not -1
    * - Dark Void : Accuracy is set to pre-Gen VIII's 80
    * - Zippy Zap : Uses LGPE's implementation. PP: 10 -> 15, BP: 90 -> 50
@@ -57,7 +56,7 @@ describe("All Moves", async () => {
   const moveData: MoveData[] = JSON.parse(file);
 
   it.each(moveData)("$identifier, if implemented, should have correct move data", async (move: MoveData) => {
-    const pktyMove = allMoves[move.id as MoveId] as Move;
+    const pktyMove = allMoves.get(move.id as MoveId) as Move;
     if (pktyMove && !isUnimplemented(pktyMove.name)) {
       expect(
         pktyMove.type,

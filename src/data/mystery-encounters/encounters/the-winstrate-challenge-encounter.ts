@@ -23,7 +23,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { BerryType } from "#enums/berry-type";
 import { Stat } from "#enums/stat";
 import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { showEncounterDialogue, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";

@@ -1,5 +1,5 @@
 import type { BattlerIndex } from "#enums/battler-index";
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { StatusEffect } from "#enums/status-effect";
