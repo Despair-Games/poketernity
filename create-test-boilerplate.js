@@ -79,15 +79,15 @@ async function runInteractive() {
   const fileNameAnswer = await promptFileName(typeAnswer.selectedOption);
 
   const type = typeAnswer.selectedOption.toLowerCase();
-  // Convert fileName from kebab-case or camelCase to snake_case
+  // Convert fileName from snake_case or camelCase to kebab-case
   const fileName = fileNameAnswer.userInput
-    .replace(/-+/g, "_") // Convert kebab-case (dashes) to underscores
-    .replace(/([a-z])([A-Z])/g, "$1_$2") // Convert camelCase to snake_case
-    .replace(/\s+/g, "_") // Replace spaces with underscores
+    .replace(/_+/g, "-") // Convert snake_case (underscore) to kebab-case (dashes)
+    .replace(/([a-z])([A-Z])/g, "$1-$2") // Convert camelCase to kebab-case
+    .replace(/\s+/g, "-") // Replace spaces with dashes
     .toLowerCase(); // Ensure all lowercase
   // Format the description for the test case
 
-  const formattedName = fileName.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
+  const formattedName = fileName.replace(/-/g, " ").replace(/\b\w/g, (char) => char.toUpperCase());
   // Determine the directory based on the type
   let dir;
   let description;
