@@ -41,23 +41,13 @@ describe("Moves - Rollout", () => {
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    const powerResults: number[] = [];
-
     for (let i = 0; i < 6; i++) {
       game.move.use(MoveId.ROLLOUT);
       await game.toNextTurn();
-
-      const lastReturnedPower = spy.mock.results.at(-1)?.value;
-      if (lastReturnedPower) {
-        powerResults.push(lastReturnedPower);
-      }
     }
 
-    expect(powerResults).toHaveLength(6);
-    powerResults
-      .slice(1, 5)
-      .forEach((power, i) => expect(power).toBe(Math.floor(Math.pow(2, i + 1) * powerResults[0])));
-    expect(powerResults[5]).toBe(powerResults[0]);
+    const powerResults = spy.mock.results.map((result) => result.value);
+    expect(powerResults).toStrictEqual([30, 60, 120, 240, 480, 30]);
   });
 
   it("should double its power if the user previously used Defense Curl", async () => {
