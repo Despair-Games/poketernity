@@ -261,7 +261,7 @@ describe("Abilities - Magic Bounce", () => {
     game.override.battleType("single");
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
-    const stomping_tantrum = allMoves[MoveId.STOMPING_TANTRUM];
+    const stomping_tantrum = allMoves.get(MoveId.STOMPING_TANTRUM);
     vi.spyOn(stomping_tantrum, "calculateBattlePower");
 
     game.move.use(MoveId.CHARM);
@@ -275,7 +275,7 @@ describe("Abilities - Magic Bounce", () => {
   it("should properly cause the enemy's stomping tantrum to be doubled in power after bouncing and failing", async () => {
     await game.classicMode.startBattle([Species.BULBASAUR]);
 
-    const stomping_tantrum = allMoves[MoveId.STOMPING_TANTRUM];
+    const stomping_tantrum = allMoves.get(MoveId.STOMPING_TANTRUM);
     const enemy = game.field.getEnemyPokemon();
     vi.spyOn(stomping_tantrum, "calculateBattlePower");
 
@@ -303,7 +303,7 @@ describe("Abilities - Magic Bounce", () => {
   });
 
   it("should respect immunities when bouncing a move", async () => {
-    vi.spyOn(allMoves[MoveId.THUNDER_WAVE], "accuracy", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.THUNDER_WAVE), "accuracy", "get").mockReturnValue(100);
     game.override.ability(Abilities.SOUNDPROOF);
     await game.classicMode.startBattle([Species.PHANPY]);
 
