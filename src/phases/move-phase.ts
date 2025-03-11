@@ -38,7 +38,7 @@ import { PhaseId } from "#enums/phase-id";
 import { SelfStatusMove } from "#app/data/moves/move";
 import { WeatherType } from "#enums/weather-type";
 import { applyBattlerTags } from "#app/data/apply-battler-tags";
-import type { RedirectMoveAbAttr } from "#app/data/ab-attrs/redirect-move-ab-attr";
+import type { RedirectMoveAbAttr } from "#app/data/abilities/ab-attrs/redirect-move-ab-attr";
 
 /**
  * Resolves the following:
