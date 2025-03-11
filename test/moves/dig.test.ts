@@ -97,14 +97,14 @@ describe("Moves - Dig", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    const preDigEarthquakeDmg = playerPokemon.getAttackDamage(enemyPokemon, allMoves[MoveId.EARTHQUAKE]).damage;
+    const preDigEarthquakeDmg = playerPokemon.getAttackDamage(enemyPokemon, allMoves.get(MoveId.EARTHQUAKE)).damage;
 
     game.move.select(MoveId.DIG);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEffectPhase");
 
-    const postDigEarthquakeDmg = playerPokemon.getAttackDamage(enemyPokemon, allMoves[MoveId.EARTHQUAKE]).damage;
+    const postDigEarthquakeDmg = playerPokemon.getAttackDamage(enemyPokemon, allMoves.get(MoveId.EARTHQUAKE)).damage;
     // these hopefully get avoid rounding errors :shrug:
     expect(postDigEarthquakeDmg).toBeGreaterThanOrEqual(2 * preDigEarthquakeDmg);
     expect(postDigEarthquakeDmg).toBeLessThan(2 * (preDigEarthquakeDmg + 1));

@@ -40,7 +40,7 @@ describe("Dex Data", () => {
 
       expect(starterData.eggMoves).toBe(0);
       expect(starterData.candyCount).toBe(0);
-      expect(starterData.friendship).toBe(0);
+      expect(starterData.candyProgress).toBe(0);
       expect(starterData.abilityAttr & AbilityAttr.ABILITY_1).toBeTruthy();
       expect(starterData.abilityAttr & AbilityAttr.ABILITY_2).toBeFalsy();
       expect(starterData.abilityAttr & AbilityAttr.ABILITY_HIDDEN).toBeFalsy();

@@ -1,6 +1,6 @@
 import { allMoves } from "#app/data/data-lists";
-import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
-import { StatStageChangeAttr } from "#app/data/move-attrs/stat-stage-change-attr";
+import { FlinchAttr } from "#app/data/moves/move-attrs/flinch-attr";
+import { StatStageChangeAttr } from "#app/data/moves/move-attrs/stat-stage-change-attr";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -11,7 +11,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 describe("Moves - Triple Arrows", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
-  const tripleArrows = allMoves[MoveId.TRIPLE_ARROWS];
+  const tripleArrows = allMoves.get(MoveId.TRIPLE_ARROWS);
   const flinchAttr = tripleArrows.getAttrs(FlinchAttr)[0];
   const defDropAttr = tripleArrows.getAttrs(StatStageChangeAttr)[0];
 

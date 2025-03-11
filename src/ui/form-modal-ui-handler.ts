@@ -1,7 +1,7 @@
 import type { ModalConfig } from "#app/ui/modal-ui-handler";
 import { ModalUiHandler } from "#app/ui/modal-ui-handler";
 import type { UiMode } from "#enums/ui-mode";
-import { addTextInputObject, addTextObject, setTextColor } from "#app/ui/text";
+import { addTextInputObject, addTextObject } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
 import { addWindow } from "#app/ui/ui-theme";
 import { WindowVariant } from "#enums/window-variant";
@@ -23,13 +23,23 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
   protected tween: Phaser.Tweens.Tween;
   protected formLabels: Phaser.GameObjects.Text[];
 
-  constructor(mode: UiMode | null = null) {
+  protected labelTextStyle: TextStyle;
+  protected errorMessageTextStyle: TextStyle;
+
+  constructor(
+    mode: UiMode | null = null,
+    labelStyle: TextStyle = TextStyle.TOOLTIP_CONTENT,
+    errorMessageStyle: TextStyle = TextStyle.WINDOW_MODAL_ERROR,
+  ) {
     super(mode);
 
     this.editing = false;
     this.inputContainers = [];
     this.inputs = [];
     this.formLabels = [];
+
+    this.labelTextStyle = labelStyle;
+    this.errorMessageTextStyle = errorMessageStyle;
   }
 
   /**
@@ -68,13 +78,8 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
       this.updateFields(config, hasTitle);
     }
 
-    this.errorMessage = addTextObject(
-      10,
-      (hasTitle ? 31 : 5) + 20 * (config.length - 1) + 16 + this.getButtonTopMargin(),
-      "",
-      TextStyle.TOOLTIP_CONTENT,
-    );
-    setTextColor(this.errorMessage, TextStyle.SUMMARY_PINK);
+    const errorMessageY = (hasTitle ? 31 : 5) + 20 * (config.length - 1) + 16 + this.getButtonTopMargin();
+    this.errorMessage = addTextObject(10, errorMessageY, "", this.errorMessageTextStyle);
     this.errorMessage.setVisible(false);
     this.modalContainer.add(this.errorMessage);
   }
@@ -84,7 +89,7 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
     this.inputs = [];
     this.formLabels = [];
     fieldsConfig.forEach((config, f) => {
-      const label = addTextObject(10, (hasTitle ? 31 : 5) + 20 * f, config.label, TextStyle.TOOLTIP_CONTENT);
+      const label = addTextObject(10, (hasTitle ? 31 : 5) + 20 * f, config.label, this.labelTextStyle);
       label.name = "formLabel" + f;
 
       this.formLabels.push(label);

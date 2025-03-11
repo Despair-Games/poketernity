@@ -49,7 +49,9 @@ describe("Moves - Friend Guard", () => {
     // Get the last return value from `getAttackDamage`
     const turn1Damage = spy.mock.results[spy.mock.results.length - 1].value.damage;
     // Making sure the test is controlled; turn 1 damage is equal to base damage (after rounding)
-    expect(turn1Damage).toBe(Math.floor(player1.getBaseDamage(enemy1, allMoves[MoveId.TACKLE], MoveCategory.PHYSICAL)));
+    expect(turn1Damage).toBe(
+      Math.floor(player1.getBaseDamage(enemy1, allMoves.get(MoveId.TACKLE), MoveCategory.PHYSICAL)),
+    );
 
     vi.spyOn(player2, "getAbility").mockReturnValue(allAbilities[Abilities.FRIEND_GUARD]);
 
@@ -63,7 +65,7 @@ describe("Moves - Friend Guard", () => {
     const turn2Damage = spy.mock.results[spy.mock.results.length - 1].value.damage;
     // With the ally's Friend Guard, damage should have been reduced from base damage by 25%
     expect(turn2Damage).toBe(
-      Math.floor(player1.getBaseDamage(enemy1, allMoves[MoveId.TACKLE], MoveCategory.PHYSICAL) * 0.75),
+      Math.floor(player1.getBaseDamage(enemy1, allMoves.get(MoveId.TACKLE), MoveCategory.PHYSICAL) * 0.75),
     );
   });
 

@@ -1,4 +1,4 @@
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { CommonAnim } from "#enums/common-anim";
 import { getWeatherDamageMessage, getWeatherLapseMessage } from "#app/data/weather";
 import { type Pokemon } from "#app/field/pokemon";

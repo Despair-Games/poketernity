@@ -36,7 +36,7 @@ describe("Moves - Rollout", () => {
   });
 
   it("should double its power on sequential uses for up to 5 uses", async () => {
-    const moveObj = allMoves[MoveId.ROLLOUT];
+    const moveObj = allMoves.get(MoveId.ROLLOUT);
     const spy = vi.spyOn(moveObj, "calculateBattlePower");
 
     await game.classicMode.startBattle([Species.FEEBAS]);
@@ -61,7 +61,7 @@ describe("Moves - Rollout", () => {
   });
 
   it("should double its power if the user previously used Defense Curl", async () => {
-    const moveObj = allMoves[MoveId.ROLLOUT];
+    const moveObj = allMoves.get(MoveId.ROLLOUT);
     vi.spyOn(moveObj, "calculateBattlePower");
 
     await game.classicMode.startBattle([Species.FEEBAS]);

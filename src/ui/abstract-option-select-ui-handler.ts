@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import MessageUiHandler from "#app/ui/message-ui-handler";
 import { ScrollBar } from "#app/ui/scroll-bar";
-import { addBBCodeTextObject, getBBCodeFragment, getTextStyleOptions } from "#app/ui/text";
+import { addBBCodeTextObject, getBBCodeFragment } from "#app/ui/text";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, isNullOrUndefined } from "#app/utils";
 import { Button } from "#enums/buttons";
@@ -10,7 +10,7 @@ import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbc
 import type { UIOptionSelectItem } from "./interfaces/option-select-ui-item";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import { GAME_WIDTH } from "#app/ui-constants";
+import { GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 
 const SCROLLBAR_PADDING = 5;
 const SCROLLBAR_WIDTH = 3;
@@ -50,8 +50,7 @@ export default abstract class AbstractOptionSelectUiHandler<T extends OptionSele
 
   protected scrollCursor: number = 0;
 
-  // TODO scaling: find a way to improve this. currently needed for languages with different text size like japanese
-  protected scale: number = 0.1666666667;
+  protected readonly scale: number = 1 / TEXT_SCALE;
 
   constructor(mode: UiMode = UiMode.OPTION_SELECT) {
     super(mode);
@@ -64,8 +63,6 @@ export default abstract class AbstractOptionSelectUiHandler<T extends OptionSele
 
   override setup() {
     const ui = this.getUi();
-
-    this.scale = getTextStyleOptions(DEFAULT_TEXT_STYLE).scale;
 
     this.optionSelectContainer = globalScene.add.container(GAME_WIDTH - 1, -1);
     this.optionSelectContainer.setName(`option-select-${this.mode ? UiMode[this.mode] : "UNKNOWN"}`);

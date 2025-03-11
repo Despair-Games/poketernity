@@ -1,5 +1,5 @@
 import { allAbilities } from "#app/data/data-lists";
-import { type StatMultiplierAbAttr } from "#app/data/ab-attrs/stat-multiplier-ab-attr";
+import { type StatMultiplierAbAttr } from "#app/data/abilities/ab-attrs/stat-multiplier-ab-attr";
 import { CommandPhase } from "#app/phases/command-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";

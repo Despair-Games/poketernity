@@ -430,7 +430,7 @@ describe("Abilities - Parental Bond", () => {
   it("should only apply the effects of Secret Power on the final hit", async () => {
     game.override.moveset(MoveId.SECRET_POWER).enemyMoveset(MoveId.MISTY_TERRAIN); // Secret Power lowers Sp Atk in Misty Terrain
 
-    vi.spyOn(allMoves[MoveId.SECRET_POWER], "chance", "get").mockReturnValue(-1);
+    vi.spyOn(allMoves.get(MoveId.SECRET_POWER), "chance", "get").mockReturnValue(-1);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 

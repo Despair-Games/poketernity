@@ -39,7 +39,7 @@ describe("Abilities - Mega Launcher", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     const enemyHpRecovered = Math.floor(enemyPokemon.hp * 0.75);
     enemyPokemon.hp = 1;
-    const pulseMove = allMoves[MoveId.HEAL_PULSE];
+    const pulseMove = allMoves.get(MoveId.HEAL_PULSE);
     game.move.select(MoveId.HEAL_PULSE);
     await game.toEndOfTurn();
 

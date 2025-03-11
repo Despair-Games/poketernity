@@ -38,8 +38,7 @@ export class EndCardPhase extends Phase {
       GAME_WIDTH / 2,
       GAME_HEIGHT - 16,
       i18next.t("battle:congratulations"),
-      TextStyle.SUMMARY,
-      { fontSize: "128px" },
+      TextStyle.END_CARD,
     );
     this.text.setOrigin(0.5);
     field.add(this.text);

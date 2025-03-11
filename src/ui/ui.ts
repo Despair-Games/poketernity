@@ -55,7 +55,7 @@ import MysteryEncounterUiHandler from "./mystery-encounter-ui-handler";
 import { settings } from "#app/system/settings/settings-manager";
 import FormChangeSceneHandler from "./form-change-scene-handler";
 import { UiMode } from "#enums/ui-mode";
-import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 
 /** All modes that are part of the settings UI. */
 export const settingsUiModes = [
@@ -215,7 +215,7 @@ export default class UI extends Phaser.GameObjects.Container {
 
     this.tooltipContent = addTextObject(6, 16, "", TextStyle.TOOLTIP_CONTENT);
     this.tooltipContent.setName("text-tooltip-content");
-    this.tooltipContent.setWordWrapWidth(850);
+    this.tooltipContent.setWordWrapWidth(120 * TEXT_SCALE);
 
     this.tooltipContainer.add(this.tooltipBg);
     this.tooltipContainer.add(this.tooltipTitle);

@@ -189,7 +189,7 @@ type PhaseString =
   | "PostGameOverPhase"
   | "RevivalBlessingPhase";
 
-type PhaseInterceptorPhase = PhaseClass | PhaseString;
+export type PhaseInterceptorPhase = PhaseClass | PhaseString;
 
 export class PhaseInterceptor {
   public scene;

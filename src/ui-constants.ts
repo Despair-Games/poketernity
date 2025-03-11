@@ -16,4 +16,18 @@ export const GAME_HEIGHT = 180;
 export const CANVAS_SCALE = 6;
 
 /** Temporary value to use for adjusting scale of images/sprites to the legacy x6 scale */
-export const TEMP_SCALE_ADJUSTEMENT = CANVAS_SCALE / 6;
+export const TEMP_SCALE_ADJUSTMENT = CANVAS_SCALE / 6;
+
+/**
+ * This is used as an internal value to scale text objects so that the end result looks crisp.
+ * This value should not be modified unless the fonts and font styles used are modified.
+ *
+ * With the current font, a font size of 96 with scale of 1/6 makes the text looks crisp.
+ * Using a font size of 16 with no scaling makes the text extremely blurry.
+ * Using other scale values doesn't work either, except for 8.
+ *
+ * This scale should be used when setting a text object's wrapping width. For example,
+ * for a text object that should be at most 100 pixels wide (not taking in account CANVAS_SCALE),
+ * the wrap width should be set to `100 * TEXT_SCALE`.
+ */
+export const TEXT_SCALE = 6;
