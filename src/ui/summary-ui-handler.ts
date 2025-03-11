@@ -11,7 +11,7 @@ import { getTypeRgb } from "#app/data/type";
 import { ElementalType } from "#enums/elemental-type";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
-import type { Move } from "#app/data/move";
+import type { Move } from "#app/data/moves/move";
 import { MoveCategory } from "#enums/move-category";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
 import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
@@ -24,7 +24,7 @@ import { loggedInUser } from "#app/account";
 import type { Variant } from "#app/data/variant";
 import { getVariantTint } from "#app/data/variant";
 import { Button } from "#enums/buttons";
-import type { Ability } from "#app/data/ability";
+import type { Ability } from "#app/data/abilities/ability";
 import i18next from "i18next";
 import { modifierSortFunc } from "#app/modifier/modifier";
 import { PlayerGender } from "#enums/player-gender";
@@ -32,7 +32,7 @@ import { Stat, PERMANENT_STATS, getStatKey } from "#enums/stat";
 import { Nature } from "#enums/nature";
 import { settings } from "#app/system/settings/settings-manager";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
-import { CANVAS_SCALE } from "#app/ui-constants";
+import { CANVAS_SCALE, TEXT_SCALE } from "#app/ui-constants";
 
 enum Page {
   PROFILE,
@@ -182,7 +182,7 @@ export default class SummaryUiHandler extends UiHandler {
     this.candyShadow.setInteractive(new Phaser.Geom.Rectangle(0, 0, 30, 16), Phaser.Geom.Rectangle.Contains);
     this.summaryContainer.add(this.candyShadow);
 
-    this.candyCountText = addTextObject(20, -146, "x0", TextStyle.WINDOW_ALT, { fontSize: "76px" });
+    this.candyCountText = addTextObject(20, -146, "x0", TextStyle.SUMMARY_ALT_SMALL);
     this.candyCountText.setOrigin(0, 0);
     this.summaryContainer.add(this.candyCountText);
 
@@ -201,7 +201,7 @@ export default class SummaryUiHandler extends UiHandler {
     this.friendshipShadow.setInteractive(new Phaser.Geom.Rectangle(0, 0, 50, 16), Phaser.Geom.Rectangle.Contains);
     this.summaryContainer.add(this.friendshipShadow);
 
-    this.friendshipText = addTextObject(20, -66, "x0", TextStyle.WINDOW_ALT, { fontSize: "76px" });
+    this.friendshipText = addTextObject(20, -66, "x0", TextStyle.SUMMARY_ALT_SMALL);
     this.friendshipText.setOrigin(0, 0);
     this.summaryContainer.add(this.friendshipText);
 
@@ -835,7 +835,7 @@ export default class SummaryUiHandler extends UiHandler {
           profileContainer.add(abilityInfo.nameText);
 
           abilityInfo.descriptionText = addTextObject(7, 69, abilityInfo.ability?.description!, TextStyle.WINDOW_ALT, {
-            wordWrap: { width: 1224 },
+            wordWrap: { width: 204 * TEXT_SCALE },
           }); // TODO: is this bang correct?
           abilityInfo.descriptionText.setOrigin(0, 0);
           profileContainer.add(abilityInfo.descriptionText);
@@ -1060,7 +1060,9 @@ export default class SummaryUiHandler extends UiHandler {
           moveRowContainer.add(ppText);
         }
 
-        this.moveDescriptionText = addTextObject(2, 84, "", TextStyle.WINDOW_ALT, { wordWrap: { width: 1212 } });
+        this.moveDescriptionText = addTextObject(2, 84, "", TextStyle.WINDOW_ALT, {
+          wordWrap: { width: 202 * TEXT_SCALE },
+        });
         this.movesContainer.add(this.moveDescriptionText);
 
         const moveDescriptionTextMaskRect = globalScene.make.graphics({});

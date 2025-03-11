@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
-import { StealHeldItemChanceAttr } from "#app/data/move-attrs/steal-held-item-chance-attr";
+import { StealHeldItemChanceAttr } from "#app/data/moves/move-attrs/steal-held-item-chance-attr";
 import { Abilities } from "#enums/abilities";
 import { BerryType } from "#enums/berry-type";
 import { MoveId } from "#enums/move-id";

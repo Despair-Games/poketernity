@@ -4,14 +4,15 @@ import i18next from "i18next";
 import { formatText } from "#app/utils";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
+import { TEXT_SCALE } from "#app/ui-constants";
 
 const hiddenX = -150;
 const shownX = 0;
 const baseY = 0;
 
 export default class BgmBar extends Phaser.GameObjects.Container {
-  private defaultWidth: number;
-  private defaultHeight: number;
+  private maxWidth: number;
+  private maxHeight: number;
 
   private bg: Phaser.GameObjects.NineSlice;
   private musicText: Phaser.GameObjects.Text;
@@ -23,28 +24,17 @@ export default class BgmBar extends Phaser.GameObjects.Container {
   }
 
   setup(): void {
-    this.defaultWidth = 230;
-    this.defaultHeight = 100;
+    this.maxWidth = 150;
+    this.maxHeight = 100;
 
-    this.bg = globalScene.add.nineslice(
-      -5,
-      -5,
-      "bgm_bar",
-      undefined,
-      this.defaultWidth,
-      this.defaultHeight,
-      0,
-      0,
-      10,
-      10,
-    );
+    this.bg = globalScene.add.nineslice(-5, -5, "bgm_bar", undefined, this.maxWidth, this.maxHeight, 0, 0, 10, 10);
     this.bg.setOrigin(0, 0);
 
     this.add(this.bg);
 
-    this.musicText = addTextObject(5, 5, "", TextStyle.BGM_BAR);
+    this.musicText = addTextObject(5, 5, "", TextStyle.NOTIFICATION_BAR_LIGHT);
     this.musicText.setOrigin(0, 0);
-    this.musicText.setWordWrapWidth(650, true);
+    this.musicText.setWordWrapWidth((this.maxWidth - 12) * TEXT_SCALE);
 
     this.add(this.musicText);
 
@@ -59,11 +49,8 @@ export default class BgmBar extends Phaser.GameObjects.Container {
   setBgmToBgmBar(bgmName: string): void {
     this.musicText.setText(`${i18next.t("bgmName:music")}${this.getRealBgmName(bgmName)}`);
 
-    this.musicText.width = this.bg.width - 20;
-    this.musicText.setWordWrapWidth(this.defaultWidth * 4);
-
-    this.bg.width = Math.min(this.defaultWidth, this.musicText.displayWidth + 23);
-    this.bg.height = Math.min(this.defaultHeight, this.musicText.displayHeight + 20);
+    this.bg.width = Math.min(this.maxWidth, this.musicText.displayWidth + 23);
+    this.bg.height = Math.min(this.maxHeight, this.musicText.displayHeight + 20);
 
     globalScene.fieldUI.bringToTop(this);
 

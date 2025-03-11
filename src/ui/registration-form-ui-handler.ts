@@ -8,20 +8,11 @@ import i18next from "i18next";
 import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
 
-interface LanguageSetting {
-  inputFieldFontSize?: string;
-  warningMessageFontSize?: string;
-  errorMessageFontSize?: string;
-}
-
-const languageSettings: { [key: string]: LanguageSetting } = {
-  "es-ES": {
-    inputFieldFontSize: "50px",
-    errorMessageFontSize: "40px",
-  },
-};
-
 export default class RegistrationFormUiHandler extends FormModalUiHandler {
+  constructor() {
+    super(UiMode.REGISTRATION_FORM, TextStyle.REGISTRATION_FORM_LABEL, TextStyle.REGISTRATION_FORM_ERROR);
+  }
+
   getModalTitle(_config?: ModalConfig): string {
     return i18next.t("menu:register");
   }
@@ -48,10 +39,14 @@ export default class RegistrationFormUiHandler extends FormModalUiHandler {
       error = error.slice(0, colonIndex);
     }
     switch (error) {
+      case "empty username":
+        return i18next.t("menu:emptyUsername");
       case "invalid username":
         return i18next.t("menu:invalidRegisterUsername");
       case "invalid password":
         return i18next.t("menu:invalidRegisterPassword");
+      case "password doesn't match":
+        return i18next.t("menu:passwordNotMatchingConfirmPassword");
       case "failed to add account record":
         return i18next.t("menu:usernameAlreadyUsed");
     }
@@ -70,19 +65,7 @@ export default class RegistrationFormUiHandler extends FormModalUiHandler {
   override setup(): void {
     super.setup();
 
-    this.modalContainer.list.forEach((child: Phaser.GameObjects.GameObject) => {
-      if (child instanceof Phaser.GameObjects.Text && child !== this.titleText) {
-        const inputFieldFontSize = languageSettings[i18next.resolvedLanguage!]?.inputFieldFontSize;
-        if (inputFieldFontSize) {
-          child.setFontSize(inputFieldFontSize);
-        }
-      }
-    });
-
-    const warningMessageFontSize = languageSettings[i18next.resolvedLanguage!]?.warningMessageFontSize ?? "42px";
-    const label = addTextObject(10, 87, i18next.t("menu:registrationAgeWarning"), TextStyle.TOOLTIP_CONTENT, {
-      fontSize: warningMessageFontSize,
-    });
+    const label = addTextObject(10, 87, i18next.t("menu:registrationAgeWarning"), TextStyle.REGISTRATION_FORM_WARNING);
 
     this.modalContainer.add(label);
   }
@@ -97,22 +80,19 @@ export default class RegistrationFormUiHandler extends FormModalUiHandler {
         this.submitAction = originalRegistrationAction;
         this.sanitizeInputs();
         globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
-        const onFail = (error) => {
-          globalScene.ui.setMode(UiMode.REGISTRATION_FORM, Object.assign(config, { errorMessage: error?.trim() }));
+        const onFail = (error: string) => {
+          const message = this.getReadableErrorMessage(error);
+          globalScene.ui.setMode(UiMode.REGISTRATION_FORM, Object.assign(config, { errorMessage: message.trim() }));
           globalScene.ui.playError();
-          const errorMessageFontSize = languageSettings[i18next.resolvedLanguage!]?.errorMessageFontSize;
-          if (errorMessageFontSize) {
-            this.errorMessage.setFontSize(errorMessageFontSize);
-          }
         };
         if (!this.inputs[0].text) {
-          return onFail(i18next.t("menu:emptyUsername"));
+          return onFail("empty username");
         }
         if (!this.inputs[1].text) {
-          return onFail(this.getReadableErrorMessage("invalid password"));
+          return onFail("invalid password");
         }
         if (this.inputs[1].text !== this.inputs[2].text) {
-          return onFail(i18next.t("menu:passwordNotMatchingConfirmPassword"));
+          return onFail("password doesn't match");
         }
         const [usernameInput, passwordInput] = this.inputs;
         api.account.register({ username: usernameInput.text, password: passwordInput.text }).then((registerError) => {

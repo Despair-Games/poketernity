@@ -28,10 +28,13 @@ export class StatsContainer extends Phaser.GameObjects.Container {
   private ivChart: Phaser.GameObjects.Polygon;
   private ivStatValueTexts: BBCodeText[];
 
-  constructor(x: number, y: number, showDiff?: boolean) {
+  private defaultTextStyle: TextStyle;
+
+  constructor(x: number, y: number, showDiff?: boolean, defaultTextStyle: TextStyle = TextStyle.TOOLTIP_CONTENT) {
     super(globalScene, x, y);
 
     this.showDiff = !!showDiff;
+    this.defaultTextStyle = defaultTextStyle;
 
     this.setup();
   }
@@ -88,7 +91,7 @@ export class StatsContainer extends Phaser.GameObjects.Container {
           - 4
           + (this.showDiff ? 0 : ivChartLabelyOffset[s]),
         i18next.t(getStatKey(s)),
-        TextStyle.TOOLTIP_CONTENT,
+        this.defaultTextStyle,
       );
       statLabel.setOrigin(0.5);
 
@@ -96,7 +99,7 @@ export class StatsContainer extends Phaser.GameObjects.Container {
         statLabel.x - (this.showDiff ? 0 : ivLabelOffset[s]),
         statLabel.y + 8,
         "0",
-        TextStyle.TOOLTIP_CONTENT,
+        this.defaultTextStyle,
       );
       this.ivStatValueTexts[s].setOrigin(0.5);
 

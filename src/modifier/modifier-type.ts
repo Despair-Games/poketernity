@@ -2195,5 +2195,6 @@ export function getLuckTextTint(luckValue: number): number {
   } else {
     modifierTier = ModifierTier.COMMON;
   }
+  // todo: this makes D luck appear white on white in light mode
   return getModifierTierTextTint(modifierTier);
 }

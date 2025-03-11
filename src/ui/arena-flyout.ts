@@ -139,20 +139,20 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
       this.flyoutWidth / 2,
       0,
       i18next.t("arenaFlyout:activeBattleEffects"),
-      TextStyle.BATTLE_INFO,
+      TextStyle.ARENA_FLYOUT_HEADER,
     );
-    this.flyoutTextHeader.setFontSize(54);
-    this.flyoutTextHeader.setAlign("center");
     this.flyoutTextHeader.setOrigin();
-
     this.flyoutContainer.add(this.flyoutTextHeader);
 
     this.timeOfDayWidget = new TimeOfDayWidget(this.flyoutWidth / 2 + this.flyoutWindowHeader.displayWidth / 2);
     this.flyoutContainer.add(this.timeOfDayWidget);
 
-    this.flyoutTextHeaderPlayer = addTextObject(6, 5, i18next.t("arenaFlyout:player"), TextStyle.SUMMARY_BLUE);
-    this.flyoutTextHeaderPlayer.setFontSize(54);
-    this.flyoutTextHeaderPlayer.setAlign("left");
+    this.flyoutTextHeaderPlayer = addTextObject(
+      6,
+      5,
+      i18next.t("arenaFlyout:player"),
+      TextStyle.ARENA_FLYOUT_PLAYER_HEADER,
+    );
     this.flyoutTextHeaderPlayer.setOrigin(0, 0);
 
     this.flyoutContainer.add(this.flyoutTextHeaderPlayer);
@@ -161,10 +161,8 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
       this.flyoutWidth / 2,
       5,
       i18next.t("arenaFlyout:neutral"),
-      TextStyle.SUMMARY_GREEN,
+      TextStyle.ARENA_FLYOUT_NEUTRAL_HEADER,
     );
-    this.flyoutTextHeaderField.setFontSize(54);
-    this.flyoutTextHeaderField.setAlign("center");
     this.flyoutTextHeaderField.setOrigin(0.5, 0);
 
     this.flyoutContainer.add(this.flyoutTextHeaderField);
@@ -173,34 +171,26 @@ export class ArenaFlyout extends Phaser.GameObjects.Container {
       this.flyoutWidth - 6,
       5,
       i18next.t("arenaFlyout:enemy"),
-      TextStyle.SUMMARY_RED,
+      TextStyle.ARENA_FLYOUT_ENEMY_HEADER,
     );
-    this.flyoutTextHeaderEnemy.setFontSize(54);
-    this.flyoutTextHeaderEnemy.setAlign("right");
     this.flyoutTextHeaderEnemy.setOrigin(1, 0);
 
     this.flyoutContainer.add(this.flyoutTextHeaderEnemy);
 
-    this.flyoutTextPlayer = addTextObject(6, 13, "", TextStyle.BATTLE_INFO);
+    this.flyoutTextPlayer = addTextObject(6, 13, "", TextStyle.ARENA_FLYOUT_CONTENT);
     this.flyoutTextPlayer.setLineSpacing(-1);
-    this.flyoutTextPlayer.setFontSize(48);
-    this.flyoutTextPlayer.setAlign("left");
     this.flyoutTextPlayer.setOrigin(0, 0);
 
     this.flyoutContainer.add(this.flyoutTextPlayer);
 
-    this.flyoutTextField = addTextObject(this.flyoutWidth / 2, 13, "", TextStyle.BATTLE_INFO);
+    this.flyoutTextField = addTextObject(this.flyoutWidth / 2, 13, "", TextStyle.ARENA_FLYOUT_CONTENT);
     this.flyoutTextField.setLineSpacing(-1);
-    this.flyoutTextField.setFontSize(48);
-    this.flyoutTextField.setAlign("center");
     this.flyoutTextField.setOrigin(0.5, 0);
 
     this.flyoutContainer.add(this.flyoutTextField);
 
-    this.flyoutTextEnemy = addTextObject(this.flyoutWidth - 6, 13, "", TextStyle.BATTLE_INFO);
+    this.flyoutTextEnemy = addTextObject(this.flyoutWidth - 6, 13, "", TextStyle.ARENA_FLYOUT_CONTENT);
     this.flyoutTextEnemy.setLineSpacing(-1);
-    this.flyoutTextEnemy.setFontSize(48);
-    this.flyoutTextEnemy.setAlign("right");
     this.flyoutTextEnemy.setOrigin(1, 0);
 
     this.flyoutContainer.add(this.flyoutTextEnemy);

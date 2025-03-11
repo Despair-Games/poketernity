@@ -87,6 +87,7 @@ import { DropDownType } from "#enums/drop-down-type";
 import { SortCriteria } from "#enums/sort-criteria";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 
 export type StarterSelectCallback = (starters: Starter[]) => void;
 
@@ -102,61 +103,17 @@ export interface Starter {
 }
 
 interface LanguageSetting {
-  starterInfoTextSize: string;
-  instructionTextSize: string;
   starterInfoXPos?: number;
   starterInfoYOffset?: number;
 }
 
 const languageSettings: { [key: string]: LanguageSetting } = {
-  en: {
-    starterInfoTextSize: "56px",
-    instructionTextSize: "38px",
-  },
-  de: {
-    starterInfoTextSize: "48px",
-    instructionTextSize: "35px",
-    starterInfoXPos: 33,
-  },
-  "es-ES": {
-    starterInfoTextSize: "56px",
-    instructionTextSize: "35px",
-  },
-  fr: {
-    starterInfoTextSize: "54px",
-    instructionTextSize: "38px",
-  },
-  it: {
-    starterInfoTextSize: "56px",
-    instructionTextSize: "38px",
-  },
   pt_BR: {
-    starterInfoTextSize: "47px",
-    instructionTextSize: "38px",
     starterInfoXPos: 33,
   },
   zh: {
-    starterInfoTextSize: "47px",
-    instructionTextSize: "38px",
     starterInfoYOffset: 1,
     starterInfoXPos: 24,
-  },
-  pt: {
-    starterInfoTextSize: "48px",
-    instructionTextSize: "42px",
-    starterInfoXPos: 33,
-  },
-  ko: {
-    starterInfoTextSize: "52px",
-    instructionTextSize: "38px",
-  },
-  ja: {
-    starterInfoTextSize: "51px",
-    instructionTextSize: "38px",
-  },
-  "ca-ES": {
-    starterInfoTextSize: "56px",
-    instructionTextSize: "38px",
   },
 };
 
@@ -374,8 +331,9 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
   setup() {
     const ui = this.getUi();
-    const currentLanguage = i18next.resolvedLanguage ?? "en";
-    const langSettingKey = Object.keys(languageSettings).find((lang) => currentLanguage.includes(lang)) ?? "en";
+    const currentLanguage = i18next.resolvedLanguage ?? DEFAULT_LANGUAGE_KEY;
+    const langSettingKey =
+      Object.keys(languageSettings).find((lang) => currentLanguage.includes(lang)) ?? DEFAULT_LANGUAGE_KEY;
     const textSettings = languageSettings[langSettingKey];
 
     this.starterSelectContainer = globalScene.add.container(0, -GAME_HEIGHT);
@@ -578,14 +536,13 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       8,
       106,
       i18next.t("starterSelectUiHandler:growthRate"),
-      TextStyle.SUMMARY_ALT,
-      { fontSize: "36px" },
+      TextStyle.STARTER_GROWTH_RATE,
     );
     this.pokemonGrowthRateLabelText.setOrigin(0, 0);
     this.pokemonGrowthRateLabelText.setVisible(false);
     this.starterSelectContainer.add(this.pokemonGrowthRateLabelText);
 
-    this.pokemonGrowthRateText = addTextObject(34, 106, "", TextStyle.SUMMARY_PINK, { fontSize: "36px" });
+    this.pokemonGrowthRateText = addTextObject(34, 106, "", TextStyle.STARTER_GROWTH_RATE);
     this.pokemonGrowthRateText.setOrigin(0, 0);
     this.starterSelectContainer.add(this.pokemonGrowthRateText);
 
@@ -597,8 +554,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       6,
       127,
       i18next.t("starterSelectUiHandler:uncaught"),
-      TextStyle.SUMMARY_ALT,
-      { fontSize: "56px" },
+      TextStyle.STARTER_STATS,
     );
     this.pokemonUncaughtText.setOrigin(0, 0);
     this.starterSelectContainer.add(this.pokemonUncaughtText);
@@ -607,24 +563,18 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     const starterInfoXPos = textSettings?.starterInfoXPos || 31;
     const starterInfoYOffset = textSettings?.starterInfoYOffset || 0;
 
-    // The font size should be set per language
-    const starterInfoTextSize = textSettings?.starterInfoTextSize || 56;
-
     this.pokemonAbilityLabelText = addTextObject(
       6,
       127 + starterInfoYOffset,
       i18next.t("starterSelectUiHandler:ability"),
-      TextStyle.SUMMARY_ALT,
-      { fontSize: starterInfoTextSize },
+      TextStyle.STARTER_INFO,
     );
     this.pokemonAbilityLabelText.setOrigin(0, 0);
     this.pokemonAbilityLabelText.setVisible(false);
 
     this.starterSelectContainer.add(this.pokemonAbilityLabelText);
 
-    this.pokemonAbilityText = addTextObject(starterInfoXPos, 127 + starterInfoYOffset, "", TextStyle.SUMMARY_ALT, {
-      fontSize: starterInfoTextSize,
-    });
+    this.pokemonAbilityText = addTextObject(starterInfoXPos, 127 + starterInfoYOffset, "", TextStyle.STARTER_INFO);
     this.pokemonAbilityText.setOrigin(0, 0);
     this.pokemonAbilityText.setInteractive(new Phaser.Geom.Rectangle(0, 0, 250, 55), Phaser.Geom.Rectangle.Contains);
 
@@ -634,16 +584,13 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       6,
       136 + starterInfoYOffset,
       i18next.t("starterSelectUiHandler:passive"),
-      TextStyle.SUMMARY_ALT,
-      { fontSize: starterInfoTextSize },
+      TextStyle.STARTER_INFO,
     );
     this.pokemonPassiveLabelText.setOrigin(0, 0);
     this.pokemonPassiveLabelText.setVisible(false);
     this.starterSelectContainer.add(this.pokemonPassiveLabelText);
 
-    this.pokemonPassiveText = addTextObject(starterInfoXPos, 136 + starterInfoYOffset, "", TextStyle.SUMMARY_ALT, {
-      fontSize: starterInfoTextSize,
-    });
+    this.pokemonPassiveText = addTextObject(starterInfoXPos, 136 + starterInfoYOffset, "", TextStyle.STARTER_INFO);
     this.pokemonPassiveText.setOrigin(0, 0);
     this.pokemonPassiveText.setInteractive(new Phaser.Geom.Rectangle(0, 0, 250, 55), Phaser.Geom.Rectangle.Contains);
     this.starterSelectContainer.add(this.pokemonPassiveText);
@@ -664,16 +611,13 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       6,
       145 + starterInfoYOffset,
       i18next.t("starterSelectUiHandler:nature"),
-      TextStyle.SUMMARY_ALT,
-      { fontSize: starterInfoTextSize },
+      TextStyle.STARTER_INFO,
     );
     this.pokemonNatureLabelText.setOrigin(0, 0);
     this.pokemonNatureLabelText.setVisible(false);
     this.starterSelectContainer.add(this.pokemonNatureLabelText);
 
-    this.pokemonNatureText = addBBCodeTextObject(starterInfoXPos, 145 + starterInfoYOffset, "", TextStyle.SUMMARY_ALT, {
-      fontSize: starterInfoTextSize,
-    });
+    this.pokemonNatureText = addBBCodeTextObject(starterInfoXPos, 145 + starterInfoYOffset, "", TextStyle.STARTER_INFO);
     this.pokemonNatureText.setOrigin(0, 0);
     this.starterSelectContainer.add(this.pokemonNatureText);
 
@@ -784,15 +728,16 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.type2Icon.setOrigin(0, 0);
     this.starterSelectContainer.add(this.type2Icon);
 
-    this.pokemonLuckLabelText = addTextObject(8, 89, i18next.t("common:luckIndicator"), TextStyle.WINDOW_ALT, {
-      fontSize: "56px",
-    });
+    this.pokemonLuckLabelText = addTextObject(8, 89, i18next.t("common:luckIndicator"), TextStyle.STARTER_STATS);
     this.pokemonLuckLabelText.setOrigin(0, 0);
     this.starterSelectContainer.add(this.pokemonLuckLabelText);
 
-    this.pokemonLuckText = addTextObject(8 + this.pokemonLuckLabelText.displayWidth + 2, 89, "0", TextStyle.WINDOW, {
-      fontSize: "56px",
-    });
+    this.pokemonLuckText = addTextObject(
+      8 + this.pokemonLuckLabelText.displayWidth + 2,
+      89,
+      "0",
+      TextStyle.STARTER_LUCK,
+    );
     this.pokemonLuckText.setOrigin(0, 0);
     this.starterSelectContainer.add(this.pokemonLuckText);
 
@@ -816,14 +761,14 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.pokemonCandyDarknessOverlay.setAlpha(0.5);
     this.pokemonCandyContainer.add(this.pokemonCandyDarknessOverlay);
 
-    this.pokemonCandyCountText = addTextObject(9.5, 0, "x0", TextStyle.WINDOW_ALT, { fontSize: "56px" });
+    this.pokemonCandyCountText = addTextObject(9.5, 0, "x0", TextStyle.STARTER_STATS);
     this.pokemonCandyCountText.setOrigin(0, 0);
     this.pokemonCandyContainer.add(this.pokemonCandyCountText);
 
     this.pokemonCandyContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, 30, 20), Phaser.Geom.Rectangle.Contains);
     this.starterSelectContainer.add(this.pokemonCandyContainer);
 
-    this.pokemonFormText = addTextObject(6, 42, "Form", TextStyle.WINDOW_ALT, { fontSize: "42px" });
+    this.pokemonFormText = addTextObject(6, 42, "Form", TextStyle.STARTER_FORM);
     this.pokemonFormText.setOrigin(0, 0);
     this.starterSelectContainer.add(this.pokemonFormText);
 
@@ -918,9 +863,6 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
 
     this.starterSelectContainer.add(this.pokemonEggMovesContainer);
 
-    // The font size should be set per language
-    const instructionTextSize = textSettings.instructionTextSize;
-
     this.instructionsContainer = globalScene.add.container(4, 156);
     this.instructionsContainer.setVisible(true);
     this.starterSelectContainer.add(this.instructionsContainer);
@@ -941,8 +883,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       this.instructionRowX + this.instructionRowTextOffset,
       this.instructionRowY,
       i18next.t("starterSelectUiHandler:cycleShiny"),
-      TextStyle.PARTY,
-      { fontSize: instructionTextSize },
+      TextStyle.STARTER_INSTRUCTIONS,
     );
     this.shinyLabel.setName("text-shiny-label");
 
@@ -960,8 +901,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       this.instructionRowX + this.instructionRowTextOffset,
       this.instructionRowY,
       i18next.t("starterSelectUiHandler:cycleForm"),
-      TextStyle.PARTY,
-      { fontSize: instructionTextSize },
+      TextStyle.STARTER_INSTRUCTIONS,
     );
     this.formLabel.setName("text-form-label");
 
@@ -979,8 +919,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       this.instructionRowX + this.instructionRowTextOffset,
       this.instructionRowY,
       i18next.t("starterSelectUiHandler:cycleGender"),
-      TextStyle.PARTY,
-      { fontSize: instructionTextSize },
+      TextStyle.STARTER_INSTRUCTIONS,
     );
     this.genderLabel.setName("text-gender-label");
 
@@ -998,8 +937,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       this.instructionRowX + this.instructionRowTextOffset,
       this.instructionRowY,
       i18next.t("starterSelectUiHandler:cycleAbility"),
-      TextStyle.PARTY,
-      { fontSize: instructionTextSize },
+      TextStyle.STARTER_INSTRUCTIONS,
     );
     this.abilityLabel.setName("text-ability-label");
 
@@ -1017,8 +955,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       this.instructionRowX + this.instructionRowTextOffset,
       this.instructionRowY,
       i18next.t("starterSelectUiHandler:cycleNature"),
-      TextStyle.PARTY,
-      { fontSize: instructionTextSize },
+      TextStyle.STARTER_INSTRUCTIONS,
     );
     this.natureLabel.setName("text-nature-label");
 
@@ -1036,8 +973,7 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
       this.filterInstructionRowX + this.instructionRowTextOffset,
       this.filterInstructionRowY,
       i18next.t("starterSelectUiHandler:goFilter"),
-      TextStyle.PARTY,
-      { fontSize: instructionTextSize },
+      TextStyle.STARTER_INSTRUCTIONS,
     );
     this.goFilterLabel.setName("text-goFilter-label");
 
@@ -3525,7 +3461,9 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
           globalScene.ui.hideTooltip();
         }
 
-        this.pokemonNatureText.setText(getNatureName(natureIndex as unknown as Nature, true, true, false));
+        this.pokemonNatureText.setText(
+          getNatureName(natureIndex as unknown as Nature, true, true, false, TextStyle.STARTER_INFO),
+        );
 
         let levelMoves: LevelMoves;
         if (

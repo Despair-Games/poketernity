@@ -1,4 +1,4 @@
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { allMoves } from "#app/data/data-lists";
 import type { Arena } from "#app/field/arena";
 import type { Pokemon } from "#app/field/pokemon";
@@ -27,7 +27,7 @@ import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
-import { CommonBattleAnim } from "./battle-anims/common-battle-anim";
+import { CommonBattleAnim } from "./animations/common-battle-anim";
 import { type SkyDropTag } from "./battler-tags";
 import { SCREEN_DOUBLES_DMG_FACTOR, SCREEN_SINGLES_DMG_FACTOR } from "#app/constants";
 

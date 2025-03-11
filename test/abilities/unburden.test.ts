@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
-import { StealHeldItemChanceAttr } from "#app/data/move-attrs/steal-held-item-chance-attr";
+import { StealHeldItemChanceAttr } from "#app/data/moves/move-attrs/steal-held-item-chance-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import type { ContactHeldItemTransferChanceModifier } from "#app/modifier/modifier";
 import { Abilities } from "#enums/abilities";

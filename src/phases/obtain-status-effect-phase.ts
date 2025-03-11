@@ -1,5 +1,5 @@
 import type { BattlerIndex } from "#enums/battler-index";
-import { CommonBattleAnim } from "#app/data/battle-anims/common-battle-anim";
+import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
 import { CommonAnim } from "#enums/common-anim";
 import { getStatusEffectObtainText, getStatusEffectOverlapText } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";

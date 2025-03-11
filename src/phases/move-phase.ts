@@ -1,15 +1,15 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { allMoves } from "#app/data/data-lists";
 import { CommonAnim } from "#enums/common-anim";
 import type { ImprisoningTag, CenterOfAttentionTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
-import { BypassRedirectAttr } from "#app/data/move-attrs/bypass-redirect-attr";
-import { BypassSleepAttr } from "#app/data/move-attrs/bypass-sleep-attr";
-import { CopycatAttr } from "#app/data/move-attrs/copycat-attr";
-import { HealStatusEffectAttr } from "#app/data/move-attrs/heal-status-effect-attr";
-import { PreMoveMessageAttr } from "#app/data/move-attrs/pre-move-message-attr";
+import { BypassRedirectAttr } from "#app/data/moves/move-attrs/bypass-redirect-attr";
+import { BypassSleepAttr } from "#app/data/moves/move-attrs/bypass-sleep-attr";
+import { CopycatAttr } from "#app/data/moves/move-attrs/copycat-attr";
+import { HealStatusEffectAttr } from "#app/data/moves/move-attrs/heal-status-effect-attr";
+import { PreMoveMessageAttr } from "#app/data/moves/move-attrs/pre-move-message-attr";
 import { SpeciesFormChangePreMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-pre-move-trigger";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/data/status-effect";
 import { getTerrainBlockMessage } from "#app/data/terrain";
@@ -35,9 +35,10 @@ import { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
-import { SelfStatusMove } from "#app/data/move";
+import { SelfStatusMove } from "#app/data/moves/move";
 import { WeatherType } from "#enums/weather-type";
 import { applyBattlerTags } from "#app/data/apply-battler-tags";
+import type { RedirectMoveAbAttr } from "#app/data/abilities/ab-attrs/redirect-move-ab-attr";
 
 /**
  * Resolves the following:
@@ -508,7 +509,16 @@ export class MovePhase extends BattlePhase {
       globalScene
         .getField(true)
         .filter((p) => p !== this.pokemon)
-        .forEach((p) => applyAbAttrs(AbAttrFlag.REDIRECT_MOVE, p, false, this.move.moveId, redirectTarget));
+        .forEach((p) =>
+          applyAbAttrs<RedirectMoveAbAttr>(
+            AbAttrFlag.REDIRECT_MOVE,
+            p,
+            false,
+            this.move.moveId,
+            this.pokemon,
+            redirectTarget,
+          ),
+        );
 
       /** `true` if an Ability is responsible for redirecting the move to another target; `false` otherwise */
       let redirectedByAbility = currentTarget !== redirectTarget.value;

@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
-import type { Move } from "#app/data/move";
+import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { toDmgValue } from "#app/utils";
 import type { MoveId } from "#enums/move-id";

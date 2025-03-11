@@ -10,7 +10,7 @@ import i18next from "i18next";
 import ScrollableGridUiHandler from "#app/ui/scrollable-grid-handler";
 import { ScrollBar } from "#app/ui/scroll-bar";
 import { globalScene } from "#app/global-scene";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 
 export default class EggListUiHandler extends MessageUiHandler {
   private readonly ROWS = 9;
@@ -58,7 +58,7 @@ export default class EggListUiHandler extends MessageUiHandler {
     this.iconAnimHandler = new PokemonIconAnimHandler();
     this.iconAnimHandler.setup();
 
-    this.eggNameText = addTextObject(8, 68, "", TextStyle.SUMMARY);
+    this.eggNameText = addTextObject(8, 68, "", TextStyle.SUMMARY_ALT);
     this.eggNameText.setOrigin(0, 0);
     this.eggListContainer.add(this.eggNameText);
 
@@ -66,11 +66,11 @@ export default class EggListUiHandler extends MessageUiHandler {
     this.eggListContainer.add(this.eggDateText);
 
     this.eggHatchWavesText = addTextObject(8, 108, "", TextStyle.TOOLTIP_CONTENT);
-    this.eggHatchWavesText.setWordWrapWidth(540);
+    this.eggHatchWavesText.setWordWrapWidth(90 * TEXT_SCALE);
     this.eggListContainer.add(this.eggHatchWavesText);
 
     this.eggGachaInfoText = addTextObject(8, 152, "", TextStyle.TOOLTIP_CONTENT);
-    this.eggGachaInfoText.setWordWrapWidth(540);
+    this.eggGachaInfoText.setWordWrapWidth(90 * TEXT_SCALE);
     this.eggListContainer.add(this.eggGachaInfoText);
 
     this.eggListIconContainer = globalScene.add.container(113, 5);

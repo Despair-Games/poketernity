@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
-import { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
+import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex } from "#enums/battler-index";

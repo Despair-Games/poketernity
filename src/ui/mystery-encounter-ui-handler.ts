@@ -1,4 +1,4 @@
-import { addBBCodeTextObject, getBBCodeFragment } from "./text";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "./text";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import UiHandler from "./ui-handler";
@@ -17,7 +17,13 @@ import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import { globalScene } from "#app/global-scene";
-import { CANVAS_SCALE, GAME_WIDTH } from "#app/ui-constants";
+import { CANVAS_SCALE, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
+import { PokeballType } from "#enums/pokeball";
+
+const DESCRIPTION_WINDOW_WIDTH = 150;
+const DESCRIPTION_WINDOW_HEIGHT = 105;
+const TOOLTIP_WINDOW_WIDTH = 110;
+const TOOLTIP_WINDOW_HEIGHT = 48;
 
 export default class MysteryEncounterUiHandler extends UiHandler {
   private cursorContainer: Phaser.GameObjects.Container;
@@ -74,10 +80,30 @@ export default class MysteryEncounterUiHandler extends UiHandler {
 
     this.setCursor(this.getCursor());
 
-    this.descriptionWindow = addWindow(0, 0, 150, 105, false, false, 0, 0, WindowVariant.THIN);
+    this.descriptionWindow = addWindow(
+      0,
+      0,
+      DESCRIPTION_WINDOW_WIDTH,
+      DESCRIPTION_WINDOW_HEIGHT,
+      false,
+      false,
+      0,
+      0,
+      WindowVariant.THIN,
+    );
     this.descriptionContainer.add(this.descriptionWindow);
 
-    this.tooltipWindow = addWindow(0, 0, 110, 48, false, false, 0, 0, WindowVariant.THIN);
+    this.tooltipWindow = addWindow(
+      0,
+      0,
+      TOOLTIP_WINDOW_WIDTH,
+      TOOLTIP_WINDOW_HEIGHT,
+      false,
+      false,
+      0,
+      0,
+      WindowVariant.THIN,
+    );
     this.tooltipContainer.add(this.tooltipWindow);
 
     this.dexProgressWindow = addWindow(0, 0, 24, 28, false, false, 0, 0, WindowVariant.THIN);
@@ -335,7 +361,7 @@ export default class MysteryEncounterUiHandler extends UiHandler {
     }
 
     if (cursor === this.viewPartyIndex) {
-      this.cursorObj.setPosition(this.viewPartyXPosition, -17);
+      this.cursorObj.setPosition(this.viewPartyXPosition - this.cursorObj.displayWidth - 6, -17);
     } else if (this.optionsContainer.getAll()?.length === 3) {
       // 2 Options
       this.cursorObj.setPosition(-10.5 + (cursor % 2 === 1 ? 100 : 0), 15);
@@ -380,22 +406,13 @@ export default class MysteryEncounterUiHandler extends UiHandler {
       switch (this.encounterOptions.length) {
         default:
         case 2:
-          optionText = addBBCodeTextObject(i % 2 === 0 ? 0 : 100, 8, "-", TextStyle.WINDOW, {
-            fontSize: "80px",
-            lineSpacing: -8,
-          });
+          optionText = addBBCodeTextObject(i % 2 === 0 ? 0 : 100, 8, "-", TextStyle.ME_OPTION_DEFAULT);
           break;
         case 3:
-          optionText = addBBCodeTextObject(i % 2 === 0 ? 0 : 100, i < 2 ? 0 : 16, "-", TextStyle.WINDOW, {
-            fontSize: "80px",
-            lineSpacing: -8,
-          });
+          optionText = addBBCodeTextObject(i % 2 === 0 ? 0 : 100, i < 2 ? 0 : 16, "-", TextStyle.ME_OPTION_DEFAULT);
           break;
         case 4:
-          optionText = addBBCodeTextObject(i % 2 === 0 ? 0 : 100, i < 2 ? 0 : 16, "-", TextStyle.WINDOW, {
-            fontSize: "80px",
-            lineSpacing: -8,
-          });
+          optionText = addBBCodeTextObject(i % 2 === 0 ? 0 : 100, i < 2 ? 0 : 16, "-", TextStyle.ME_OPTION_DEFAULT);
           break;
       }
 
@@ -419,6 +436,7 @@ export default class MysteryEncounterUiHandler extends UiHandler {
       }
 
       if (text) {
+        optionText.setLineSpacing(-8);
         optionText.setText(text);
       }
 
@@ -468,41 +486,42 @@ export default class MysteryEncounterUiHandler extends UiHandler {
     }
 
     // View Party Button
-    const viewPartyText = addBBCodeTextObject(
-      GAME_WIDTH,
-      -24,
-      getBBCodeFragment(i18next.t("mysteryEncounterMessages:view_party_button"), TextStyle.PARTY),
-      TextStyle.PARTY,
-    );
+    const viewPartyLabel = i18next.t("mysteryEncounterMessages:view_party_button");
+    const viewPartyText = addTextObject(GAME_WIDTH - 16, -24, viewPartyLabel, TextStyle.PARTY);
+    viewPartyText.setOrigin(1, 0);
     this.optionsContainer.add(viewPartyText);
-    viewPartyText.x -= viewPartyText.displayWidth + 16;
-    this.viewPartyXPosition = viewPartyText.x - 10;
+    this.viewPartyXPosition = viewPartyText.x - viewPartyText.displayWidth;
 
     // Description Window
-    const titleTextObject = addBBCodeTextObject(0, 0, titleText ?? "", TextStyle.TOOLTIP_TITLE, {
-      wordWrap: { width: 750 },
-      align: "center",
+    const titleTextXPosition = DESCRIPTION_WINDOW_WIDTH / 2 - 3;
+    const titleTextObject = addBBCodeTextObject(titleTextXPosition, 5, titleText ?? "", TextStyle.TOOLTIP_TITLE, {
+      wordWrap: { width: (DESCRIPTION_WINDOW_WIDTH - 25) * TEXT_SCALE },
       lineSpacing: -8,
     });
+    titleTextObject.setOrigin(0.5, 0);
     this.descriptionContainer.add(titleTextObject);
-    titleTextObject.setPosition(72 - titleTextObject.displayWidth / 2, 5.5);
 
     // Rarity of encounter
-    const index =
-      mysteryEncounter.encounterTier === MysteryEncounterTier.COMMON
-        ? 0
-        : mysteryEncounter.encounterTier === MysteryEncounterTier.GREAT
-          ? 1
-          : mysteryEncounter.encounterTier === MysteryEncounterTier.ULTRA
-            ? 2
-            : mysteryEncounter.encounterTier === MysteryEncounterTier.EPIC
-              ? 3
-              : 3; // There is no 4th ball rn
-    const ballType = getPokeballAtlasKey(index);
+    let pokeBallType = PokeballType.POKEBALL;
+    switch (mysteryEncounter.encounterTier) {
+      case MysteryEncounterTier.COMMON:
+        pokeBallType = PokeballType.POKEBALL;
+        break;
+      case MysteryEncounterTier.GREAT:
+        pokeBallType = PokeballType.GREAT_BALL;
+        break;
+      case MysteryEncounterTier.ULTRA:
+        pokeBallType = PokeballType.ULTRA_BALL;
+        break;
+      case MysteryEncounterTier.EPIC:
+        pokeBallType = PokeballType.LUXURY_BALL;
+        break;
+    }
+    const ballType = getPokeballAtlasKey(pokeBallType);
     this.rarityBall.setTexture("pb", ballType);
 
     const descriptionTextObject = addBBCodeTextObject(6, 25, descriptionText ?? "", TextStyle.TOOLTIP_CONTENT, {
-      wordWrap: { width: 830 },
+      wordWrap: { width: (DESCRIPTION_WINDOW_WIDTH - 12) * TEXT_SCALE },
     });
 
     // Sets up the mask that hides the description text to give an illusion of scrolling
@@ -538,7 +557,7 @@ export default class MysteryEncounterUiHandler extends UiHandler {
     this.descriptionContainer.add(descriptionTextObject);
 
     const queryTextObject = addBBCodeTextObject(0, 0, queryText ?? "", TextStyle.TOOLTIP_CONTENT, {
-      wordWrap: { width: 830 },
+      wordWrap: { width: (DESCRIPTION_WINDOW_WIDTH - 12) * TEXT_SCALE },
     });
     this.descriptionContainer.add(queryTextObject);
     queryTextObject.setPosition(75 - queryTextObject.displayWidth / 2, 90);
@@ -604,9 +623,8 @@ export default class MysteryEncounterUiHandler extends UiHandler {
     }
 
     if (text) {
-      const tooltipTextObject = addBBCodeTextObject(6, 7, text, TextStyle.TOOLTIP_CONTENT, {
-        wordWrap: { width: 600 },
-        fontSize: "72px",
+      const tooltipTextObject = addBBCodeTextObject(6, 7, text, TextStyle.ME_OPTION_DETAILS, {
+        wordWrap: { width: (TOOLTIP_WINDOW_WIDTH - 10) * TEXT_SCALE },
       });
       this.tooltipContainer.add(tooltipTextObject);
 

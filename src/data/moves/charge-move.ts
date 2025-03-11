@@ -1,7 +1,7 @@
-import type { ChargingMove } from "#app/data/move";
+import type { ChargingMove } from "#app/data/moves/move";
 import type { SubMove } from "#app/@types/SubMove";
-import type { MoveAttr } from "#app/data/move-attrs/move-attr";
-import { MoveCondition } from "#app/data/move-conditions/move-condition";
+import type { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
+import { MoveCondition } from "#app/data/moves/move-conditions/move-condition";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";

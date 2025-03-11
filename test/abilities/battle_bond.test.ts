@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
-import { MultiHitAttr } from "#app/data/move-attrs/multi-hit-attr";
+import { MultiHitAttr } from "#app/data/moves/move-attrs/multi-hit-attr";
 import { MultiHitType } from "#enums/multi-hit-type";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";

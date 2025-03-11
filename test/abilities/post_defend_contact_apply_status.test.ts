@@ -4,7 +4,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { type PostDefendContactApplyStatusEffectAbAttr } from "#app/data/ab-attrs/post-defend-contact-apply-status-effect-ab-attr";
+import { type PostDefendContactApplyStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/post-defend-contact-apply-status-effect-ab-attr";
 import { StatusEffect } from "#enums/status-effect";
 import { ElementalType } from "#enums/elemental-type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";

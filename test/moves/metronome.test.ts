@@ -1,6 +1,6 @@
 import type { RechargingTag, SemiInvulnerableTag } from "#app/data/battler-tags";
 import { allMoves } from "#app/data/data-lists";
-import { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
+import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
 import { SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";

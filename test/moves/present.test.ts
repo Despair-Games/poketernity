@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
-import { PresentPowerAttr } from "#app/data/move-attrs/present-power-attr";
+import { PresentPowerAttr } from "#app/data/moves/move-attrs/present-power-attr";
 import { NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";

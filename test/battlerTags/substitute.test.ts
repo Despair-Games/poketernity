@@ -13,7 +13,7 @@ import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { GameManager } from "#test/testUtils/gameManager";
 import { MoveResult } from "#enums/move-result";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import { AttackMove } from "#app/data/move";
+import { AttackMove } from "#app/data/moves/move";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
 

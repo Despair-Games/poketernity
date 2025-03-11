@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
-import { ShellSideArmCategoryAttr } from "#app/data/move-attrs/shell-side-arm-category-attr";
+import { ShellSideArmCategoryAttr } from "#app/data/moves/move-attrs/shell-side-arm-category-attr";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";

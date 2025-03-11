@@ -11,7 +11,7 @@ import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import { CommonColor, ShadowColor } from "#enums/color";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { globalScene } from "#app/global-scene";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 
 /**
  * Handles all the UI for choosing optional challenges.
@@ -104,7 +104,7 @@ export default class GameChallengesUiHandler extends UiHandler {
     this.descriptionText.setName("text-desc");
     this.descriptionText.setOrigin(0, 0);
     this.descriptionText.setWrapMode("word");
-    this.descriptionText.setWordWrapWidth((descriptionBg.width - 10) / this.descriptionText.scale);
+    this.descriptionText.setWordWrapWidth((descriptionBg.width - 10) * TEXT_SCALE);
 
     this.startBg = addWindow(0, 0, descriptionBg.width, 24);
     this.startBg.setName("window-start-bg");

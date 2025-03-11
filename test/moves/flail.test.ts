@@ -7,7 +7,7 @@ import { afterEach, beforeAll, beforeEach, describe, it, expect, vi } from "vite
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import { allMoves } from "#app/data/data-lists";
-import type { Move } from "#app/data/move";
+import type { Move } from "#app/data/moves/move";
 import { BattlerIndex } from "#enums/battler-index";
 
 describe("Moves - Flail", () => {
