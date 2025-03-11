@@ -2,6 +2,7 @@ import { allMoves } from "#app/data/data-lists";
 import type { MoveId } from "#enums/move-id";
 import type { ElementalType } from "#enums/elemental-type";
 import { RedirectMoveAbAttr } from "./redirect-move-ab-attr";
+import type { Pokemon } from "#app/field/pokemon";
 
 export class RedirectTypeMoveAbAttr extends RedirectMoveAbAttr {
   public readonly type: ElementalType;
@@ -11,7 +12,7 @@ export class RedirectTypeMoveAbAttr extends RedirectMoveAbAttr {
     this.type = type;
   }
 
-  override canRedirect(moveId: MoveId): boolean {
-    return super.canRedirect(moveId) && allMoves.get(moveId).type === this.type;
+  override canRedirect(moveId: MoveId, user: Pokemon): boolean {
+    return super.canRedirect(moveId, user) && user.getMoveType(allMoves.get(moveId)) === this.type;
   }
 }

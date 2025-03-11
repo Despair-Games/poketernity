@@ -12,8 +12,8 @@ export class RedirectMoveAbAttr extends AbAttr {
     this._flags.add(AbAttrFlag.REDIRECT_MOVE);
   }
 
-  override apply(pokemon: Pokemon, _simulated: boolean, moveId: MoveId, target: NumberHolder): boolean {
-    if (this.canRedirect(moveId)) {
+  override apply(pokemon: Pokemon, _simulated: boolean, moveId: MoveId, user: Pokemon, target: NumberHolder): boolean {
+    if (this.canRedirect(moveId, user)) {
       const newTarget = pokemon.getBattlerIndex();
       if (target.value !== newTarget) {
         target.value = newTarget;
@@ -24,8 +24,8 @@ export class RedirectMoveAbAttr extends AbAttr {
     return false;
   }
 
-  canRedirect(moveId: MoveId): boolean {
+  canRedirect(moveId: MoveId, _user: Pokemon): boolean {
     const move = allMoves.get(moveId);
-    return !![MoveTarget.NEAR_OTHER, MoveTarget.OTHER].find((t) => move.moveTarget === t);
+    return [MoveTarget.NEAR_OTHER, MoveTarget.OTHER].includes(move.moveTarget);
   }
 }
