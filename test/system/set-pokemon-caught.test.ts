@@ -5,7 +5,7 @@ import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { Gender } from "#enums/gender";
 import { Nature } from "#enums/nature";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import { describe, beforeAll, afterEach, beforeEach, it, expect } from "vitest";
 
 describe("Dex Data - Set Pokemon caught", () => {

@@ -1,4 +1,4 @@
-import { getAppRootDir } from "#test/testUtils/testUtils";
+import { getAppRootDir } from "#test/test-utils/testUtils";
 import fs from "fs";
 import path from "path";
 import { beforeAll, describe, expect, it } from "vitest";

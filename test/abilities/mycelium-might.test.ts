@@ -1,4 +1,4 @@
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import { Abilities } from "#enums/abilities";
 import { Stat } from "#enums/stat";
 import { MoveId } from "#enums/move-id";

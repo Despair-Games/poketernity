@@ -2,7 +2,7 @@ import { api } from "#app/plugins/api/api";
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import * as account from "#app/account";

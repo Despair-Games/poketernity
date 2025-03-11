@@ -1,7 +1,7 @@
 import { Stat } from "#enums/stat";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect } from "vitest";
 

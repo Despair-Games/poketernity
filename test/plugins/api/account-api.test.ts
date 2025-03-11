@@ -1,12 +1,12 @@
 import type { AccountInfoResponse } from "#app/@types/AccountApi";
 import { SESSION_ID_COOKIE } from "#app/constants";
 import { AccountApi } from "#app/plugins/api/account-api";
-import { getApiBaseUrl } from "#test/testUtils/testUtils";
+import { getApiBaseUrl } from "#test/test-utils/testUtils";
 import * as Utils from "#app/utils";
 import { setCookie, removeCookie } from "#app/utils";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { initServerForApiTests } from "#test/testUtils/testFileInitialization";
+import { initServerForApiTests } from "#test/test-utils/testFileInitialization";
 
 const apiBase = getApiBaseUrl();
 const accountApi = new AccountApi(apiBase);

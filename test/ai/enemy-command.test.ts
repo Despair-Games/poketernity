@@ -7,7 +7,7 @@ import { Species } from "#enums/species";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { AiType } from "#enums/ai-type";
 import { randSeedInt } from "#app/utils";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

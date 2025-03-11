@@ -1,4 +1,4 @@
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import { describe, beforeAll, afterEach, beforeEach, it, expect } from "vitest";
 import { timedEventManager } from "#app/timed-event-manager";
 import type { TimedEvent } from "#app/@types/TimedEvent";

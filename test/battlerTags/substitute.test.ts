@@ -10,7 +10,7 @@ import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import * as messages from "#app/messages";
 import { allMoves } from "#app/data/data-lists";
 import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import { MoveResult } from "#enums/move-result";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { AttackMove } from "#app/data/moves/move";

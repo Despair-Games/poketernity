@@ -2,7 +2,7 @@ import { defaultStarterSpecies } from "#app/data/balance/default-starters";
 import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
 import type { GameData } from "#app/system/game-data";
 import { Nature } from "#enums/nature";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import { describe, beforeAll, afterEach, beforeEach, it, expect } from "vitest";
 
 describe("Dex Data", () => {

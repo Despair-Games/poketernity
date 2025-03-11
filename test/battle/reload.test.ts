@@ -3,7 +3,7 @@ import { api } from "#app/plugins/api/api";
 import { Biome } from "#enums/biome";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { Button } from "#enums/buttons";
 import { UiMode } from "#enums/ui-mode";

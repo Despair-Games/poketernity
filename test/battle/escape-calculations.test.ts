@@ -4,7 +4,7 @@ import { BattleCommand } from "#enums/battle-command";
 import { NumberHolder } from "#app/utils";
 import { Abilities } from "#enums/abilities";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

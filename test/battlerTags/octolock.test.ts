@@ -4,7 +4,7 @@ import { OctolockTag, TrappedTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { Stat } from "#enums/stat";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 
 describe("BattlerTag - OctolockTag", () => {
   describe("lapse behavior", () => {

@@ -6,7 +6,7 @@ import { MoveResult } from "#enums/move-result";
 import { BerryPhase } from "#app/phases/berry-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { type MovePhase } from "#app/phases/move-phase";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { PhaseId } from "#enums/phase-id";
