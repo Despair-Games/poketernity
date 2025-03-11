@@ -64,10 +64,10 @@ export const gen7pokemonFamilyEvolutions: PokemonEvolutions = {
   ],
   [Species.JANGMO_O]: [new SpeciesEvolution(Species.HAKAMO_O, 35, null, null)],
   [Species.HAKAMO_O]: [new SpeciesEvolution(Species.KOMMO_O, 45, null, null)],
-  [Species.COSMOG]: [new SpeciesEvolution(Species.COSMOEM, 23, null, null)],
+  [Species.COSMOG]: [new SpeciesEvolution(Species.COSMOEM, 43, null, null)],
   [Species.COSMOEM]: [
-    new SpeciesEvolution(Species.LUNALA, 53, null, new DayEvolutionCondition()),
-    new SpeciesEvolution(Species.SOLGALEO, 53, null, new NightEvolutionCondition()),
+    new SpeciesEvolution(Species.SOLGALEO, 53, null, new DayEvolutionCondition()),
+    new SpeciesEvolution(Species.LUNALA, 53, null, new NightEvolutionCondition()),
   ],
   [Species.MELTAN]: [new SpeciesEvolution(Species.MELMETAL, 48, null, null)],
   /** Poipole learns dragon pulse at level 1 so enemy evolve level here is changed */

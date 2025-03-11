@@ -160,8 +160,8 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
     new SpeciesEvolution(Species.KINGAMBIT, 1, EvolutionItem.LEADERS_CREST, null, KINGAMBIT_EVO_LEVEL),
   ],
   [Species.RUFFLET]: [
-    new SpeciesEvolution(Species.HISUI_BRAVIARY, 54, null, new DayEvolutionCondition()),
-    new SpeciesEvolution(Species.BRAVIARY, 54, null, new NightEvolutionCondition()),
+    new SpeciesEvolution(Species.BRAVIARY, 54, null, new DayEvolutionCondition()),
+    new SpeciesEvolution(Species.HISUI_BRAVIARY, 54, null, new NightEvolutionCondition()),
   ],
   [Species.VULLABY]: [new SpeciesEvolution(Species.MANDIBUZZ, 54, null, null)],
   [Species.DEINO]: [new SpeciesEvolution(Species.ZWEILOUS, 50, null, null)],

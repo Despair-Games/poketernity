@@ -11,7 +11,6 @@ import { PokeballType } from "#enums/pokeball";
 import { WeatherType } from "#enums/weather-type";
 import type { Biome } from "#enums/biome";
 import { Nature } from "#enums/nature";
-import { allMoves } from "#app/data/data-lists";
 
 /**
  * Pokemon Evolution tuple type consisting of:
@@ -177,7 +176,8 @@ export class SylveonEvoCondition extends SpeciesEvolutionCondition {
 export class MoveKnownEvoCondition extends SpeciesEvolutionCondition {
   constructor(requiredMoveId: MoveId) {
     super((p) => p.moveset.filter((m) => m.moveId === requiredMoveId).length > 0);
-    this.description = "needs to know " + allMoves.get(requiredMoveId).name;
+    // TODO: Needs to load call initMoves befeore this
+    this.description = "needs to know "; // + allMoves.get(requiredMoveId).name;
   }
 }
 

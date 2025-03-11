@@ -28,8 +28,8 @@ export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.ZIGZAGOON]: [new SpeciesEvolution(Species.LINOONE, 20, null, null)],
   /** Custom: Wurmple evolves based on time of day instead of by personality value */
   [Species.WURMPLE]: [
-    new SpeciesEvolution(Species.SILCOON, 7, null, new NightEvolutionCondition()),
-    new SpeciesEvolution(Species.CASCOON, 7, null, new DayEvolutionCondition()),
+    new SpeciesEvolution(Species.SILCOON, 7, null, new DayEvolutionCondition()),
+    new SpeciesEvolution(Species.CASCOON, 7, null, new NightEvolutionCondition()),
   ],
   [Species.SILCOON]: [new SpeciesEvolution(Species.BEAUTIFLY, 10, null, null)],
   [Species.CASCOON]: [new SpeciesEvolution(Species.DUSTOX, 10, null, null)],
