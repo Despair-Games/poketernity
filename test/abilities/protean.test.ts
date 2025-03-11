@@ -69,7 +69,7 @@ describe("Abilities - Protean", () => {
 
     expect(leadPokemon.summonData.abilitiesApplied.filter((a) => a === Abilities.PROTEAN)).toHaveLength(1);
     const leadPokemonType = ElementalType[leadPokemon.getTypes()[0]];
-    const moveType = ElementalType[allMoves[MoveId.AGILITY].type];
+    const moveType = ElementalType[allMoves.get(MoveId.AGILITY).type];
     expect(leadPokemonType).not.toBe(moveType);
 
     await game.toNextTurn();
@@ -210,7 +210,7 @@ describe("Abilities - Protean", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
 
-    leadPokemon.summonData.types = [allMoves[MoveId.SPLASH].type];
+    leadPokemon.summonData.types = [allMoves.get(MoveId.SPLASH).type];
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -296,6 +296,6 @@ function testPokemonTypeMatchesDefaultMoveType(pokemon: PlayerPokemon, moveId: M
   expect(pokemon.summonData.abilitiesApplied).toContain(Abilities.PROTEAN);
   expect(pokemon.getTypes()).toHaveLength(1);
   const pokemonType = ElementalType[pokemon.getTypes()[0]],
-    moveType = ElementalType[allMoves[moveId].type];
+    moveType = ElementalType[allMoves.get(moveId).type];
   expect(pokemonType).toBe(moveType);
 }

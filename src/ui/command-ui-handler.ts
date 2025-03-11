@@ -10,6 +10,7 @@ import { CommandPhase } from "#app/phases/command-phase";
 import { globalScene } from "#app/global-scene";
 import { BattleCommand } from "#enums/battle-command";
 import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
+import { TEXT_SCALE } from "#app/ui-constants";
 
 export default class CommandUiHandler extends UiHandler {
   private commandsContainer: Phaser.GameObjects.Container;
@@ -62,7 +63,7 @@ export default class CommandUiHandler extends UiHandler {
     messageHandler.bg.setVisible(true);
     messageHandler.commandWindow.setVisible(true);
     messageHandler.movesWindowContainer.setVisible(false);
-    messageHandler.message.setWordWrapWidth(1110);
+    messageHandler.message.setWordWrapWidth(185 * TEXT_SCALE);
     messageHandler.showText(
       i18next.t("commandUiHandler:actionMessage", { pokemonName: getPokemonNameWithAffix(commandPhase.getPokemon()) }),
       0,

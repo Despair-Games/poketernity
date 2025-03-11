@@ -4,20 +4,19 @@ import { addTextObject } from "./text";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "./ui-theme";
-import { fixedNumber, formatLargeNumber, isNullOrUndefined } from "#app/utils";
-import type PokemonData from "../system/pokemon-data";
-import MessageUiHandler from "./message-ui-handler";
+import { fixedNumber, getPokemonLevelText, isNullOrUndefined } from "#app/utils";
+import type PokemonData from "#app/system/pokemon-data";
+import MessageUiHandler from "#app/ui/message-ui-handler";
 import i18next from "i18next";
 import { Button } from "#enums/buttons";
 import { BattleType } from "#enums/battle-type";
-import type { RunEntry } from "../system/game-data";
+import type { RunEntry } from "#app/system/game-data";
 import { PlayerGender } from "#enums/player-gender";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { settings } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import { ImagesFolder } from "#enums/images-folders";
-import { CommonColor } from "#enums/color";
 
 export type RunSelectCallback = (cursor: number) => void;
 
@@ -190,9 +189,7 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
     const emptyWindow = addWindow(0, 0, 304, 165);
     this.runsContainer.add(emptyWindow);
     const emptyWindowCoordinates = emptyWindow.getCenter();
-    const emptyText = addTextObject(0, 0, i18next.t("saveSlotSelectUiHandler:empty"), TextStyle.WINDOW, {
-      fontSize: "128px",
-    });
+    const emptyText = addTextObject(0, 0, i18next.t("saveSlotSelectUiHandler:empty"), TextStyle.END_CARD);
     emptyText.setPosition(emptyWindowCoordinates.x - 18, emptyWindowCoordinates.y - 15);
     this.runsContainer.add(emptyText);
   }
@@ -311,15 +308,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
           enemyData["player"] = true;
           const enemy = enemyData.toPokemon();
           const enemyIcon = globalScene.addPokemonIcon(enemy, 0, 0, 0, 0);
-          const enemyLevel = addTextObject(
-            32,
-            20,
-            `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(enemy.level, 1000)}`,
-            TextStyle.PARTY,
-            { fontSize: "54px", color: CommonColor.OFF_WHITE },
-          );
-          enemyLevel.setShadow(0, 0, undefined);
-          enemyLevel.setStroke(CommonColor.DARK_GREY, 14);
+          const enemyLevel = addTextObject(32, 20, getPokemonLevelText(enemy), TextStyle.POKEMON_LEVEL);
           enemyLevel.setOrigin(1, 0);
           enemyIconContainer.add(enemyIcon);
           enemyIconContainer.add(enemyLevel);
@@ -392,15 +381,7 @@ class RunEntryContainer extends Phaser.GameObjects.Container {
       const pokemon = p.toPokemon();
       const icon = globalScene.addPokemonIcon(pokemon, 0, 0, 0, 0);
 
-      const text = addTextObject(
-        32,
-        20,
-        `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(pokemon.level, 1000)}`,
-        TextStyle.PARTY,
-        { fontSize: "54px", color: CommonColor.OFF_WHITE },
-      );
-      text.setShadow(0, 0, undefined);
-      text.setStroke(CommonColor.DARK_GREY, 14);
+      const text = addTextObject(32, 20, getPokemonLevelText(pokemon), TextStyle.POKEMON_LEVEL);
       text.setOrigin(1, 0);
 
       iconContainer.add(icon);

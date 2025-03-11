@@ -1,4 +1,6 @@
-import type { SupportedLanguage } from "#app/@types/Language";
+import type { SupportedLanguage, SupportedLanguageKey } from "#app/@types/Language";
+
+export const DEFAULT_LANGUAGE_KEY: SupportedLanguageKey = "en";
 
 export const supportedLanguages: SupportedLanguage[] = [
   {

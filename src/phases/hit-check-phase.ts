@@ -1,7 +1,7 @@
 import type { ProtectedTag } from "#app/data/battler-tags";
-import { HitsTagAttr } from "#app/data/move-attrs/hits-tag-attr";
-import { OneHitKOAttr } from "#app/data/move-attrs/one-hit-ko-attr";
-import { ToxicAccuracyAttr } from "#app/data/move-attrs/toxic-accuracy-attr";
+import { HitsTagAttr } from "#app/data/moves/move-attrs/hits-tag-attr";
+import { OneHitKOAttr } from "#app/data/moves/move-attrs/one-hit-ko-attr";
+import { ToxicAccuracyAttr } from "#app/data/moves/move-attrs/toxic-accuracy-attr";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { PokemonMove } from "#app/field/pokemon-move";

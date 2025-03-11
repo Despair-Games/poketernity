@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { globalScene } from "#app/global-scene";
-import { EncounterBattleAnim } from "#app/data/battle-anims/encounter-battle-anim";
+import { EncounterBattleAnim } from "#app/data/animations/encounter-battle-anim";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterOptionBuilder } from "#app/data/mystery-encounters/mystery-encounter-option";

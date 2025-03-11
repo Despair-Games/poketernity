@@ -733,7 +733,7 @@ function doBugTypeMoveTutor(): Promise<void> {
         },
         onHover: () => {
           moveInfoOverlay.active = true;
-          moveInfoOverlay.show(allMoves[move.moveId]);
+          moveInfoOverlay.show(allMoves.get(move.moveId));
         },
       };
       return option;

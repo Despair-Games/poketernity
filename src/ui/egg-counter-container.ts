@@ -11,8 +11,8 @@ import type EggHatchSceneHandler from "./egg-hatch-scene-handler";
  * @extends Phaser.GameObjects.Container
  */
 export default class EggCounterContainer extends Phaser.GameObjects.Container {
-  private readonly WINDOW_DEFAULT_WIDTH = 37;
-  private readonly WINDOW_MEDIUM_WIDTH = 42;
+  private readonly WINDOW_DEFAULT_WIDTH = 40;
+  private readonly WINDOW_MEDIUM_WIDTH = 46;
   private readonly WINDOW_HEIGHT = 26;
   private readonly onEggCountChangedEvent = (event: Event) => this.onEggCountChanged(event);
 
@@ -39,16 +39,18 @@ export default class EggCounterContainer extends Phaser.GameObjects.Container {
   private setup(): void {
     const windowWidth = this.eggCount > 9 ? this.WINDOW_MEDIUM_WIDTH : this.WINDOW_DEFAULT_WIDTH;
 
-    this.eggCountWindow = addWindow(5, 5, windowWidth, this.WINDOW_HEIGHT);
+    this.eggCountWindow = addWindow(1, 1, windowWidth, this.WINDOW_HEIGHT);
     this.setVisible(this.eggCount > 1);
 
     this.add(this.eggCountWindow);
 
-    const eggSprite = globalScene.add.sprite(19, 18, "egg", "egg_0");
-    eggSprite.setScale(0.32);
+    const eggSprite = globalScene.add.sprite(10, 1 + this.WINDOW_HEIGHT / 2, "egg", "egg_0");
+    eggSprite.setScale(0.4);
+    eggSprite.setOrigin(0, 0.5);
 
-    this.eggCountText = addTextObject(28, 13, `${this.eggCount}`, TextStyle.MESSAGE, { fontSize: "66px" });
+    this.eggCountText = addTextObject(26, 1 + this.WINDOW_HEIGHT / 2, `${this.eggCount}`, TextStyle.WINDOW);
     this.eggCountText.setName("text-egg-count");
+    this.eggCountText.setOrigin(0, 0.5);
 
     this.add(eggSprite);
     this.add(this.eggCountText);

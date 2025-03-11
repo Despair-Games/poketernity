@@ -115,6 +115,7 @@ export class EggLapsePhase extends Phase {
       return this.end();
     }
     globalScene.gameData.eggs.splice(eggIndex, 1);
+    this.generatePokemon(egg);
   }
 
   /**

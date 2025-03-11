@@ -82,14 +82,14 @@ describe("Moves - Burning Jealousy", () => {
 
   it("should be boosted by Sheer Force even if opponent didn't raise stat stages", async () => {
     game.override.ability(Abilities.SHEER_FORCE).enemyMoveset(MoveId.SPLASH);
-    vi.spyOn(allMoves[MoveId.BURNING_JEALOUSY], "calculateBattlePower");
+    vi.spyOn(allMoves.get(MoveId.BURNING_JEALOUSY), "calculateBattlePower");
     await game.classicMode.startBattle();
 
     game.move.select(MoveId.BURNING_JEALOUSY);
     await game.toEndOfTurn();
 
-    expect(allMoves[MoveId.BURNING_JEALOUSY].calculateBattlePower).toHaveReturnedWith(
-      allMoves[MoveId.BURNING_JEALOUSY].power * 1.3,
+    expect(allMoves.get(MoveId.BURNING_JEALOUSY).calculateBattlePower).toHaveReturnedWith(
+      allMoves.get(MoveId.BURNING_JEALOUSY).power * 1.3,
     );
   });
 });

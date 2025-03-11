@@ -11,7 +11,7 @@ describe("Moves - Hard Press", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
-  const moveToCheck = allMoves[MoveId.HARD_PRESS];
+  const moveToCheck = allMoves.get(MoveId.HARD_PRESS);
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({

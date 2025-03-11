@@ -179,7 +179,7 @@ describe("Moves - Destiny Bond", () => {
 
   it("should not cause a crash if the user is KO'd by Ceaseless Edge", async () => {
     const moveToUse = MoveId.CEASELESS_EDGE;
-    vi.spyOn(allMoves[moveToUse], "accuracy", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(moveToUse), "accuracy", "get").mockReturnValue(100);
 
     game.override.moveset(moveToUse);
     await game.classicMode.startBattle(defaultParty);
