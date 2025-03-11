@@ -1,6 +1,6 @@
+import type { RollingTag } from "#app/data/battler-tags";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
-import type { RollingTag } from "../battler-tags";
 import { MovePowerMultiplierAttr } from "./move-power-multiplier-attr";
 
 /**

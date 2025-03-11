@@ -256,7 +256,7 @@ import { SwitchType } from "#enums/switch-type";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-import { RollingPowerMultiplierAttr } from "./move-attrs/rolling-power-multiplier-attr";
+import { RollingPowerMultiplierAttr } from "#app/data/moves/move-attrs/rolling-power-multiplier-attr";
 
 // prettier-ignore
 export function initMoves() {
