@@ -1,5 +1,5 @@
 import BattleScene from "#app/battle-scene";
-import { MoveAnim } from "#app/data/battle-anims/move-anim";
+import { MoveAnim } from "#app/data/animations/move-anim";
 import { Pokemon } from "#app/field/pokemon";
 import { MockClock } from "#test/testUtils/mocks/mockClock";
 import { MockGameObjectCreator } from "#test/testUtils/mocks/mockGameObjectCreator";

@@ -1,6 +1,6 @@
 import type { SessionSaveData } from "#app/@types/SessionData";
 import { globalScene } from "#app/global-scene";
-import { fixedNumber, formatLargeNumber, getPlayTimeString, isNullOrUndefined } from "#app/utils";
+import { fixedNumber, getPlayTimeString, getPokemonLevelText, isNullOrUndefined } from "#app/utils";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import { GameMode } from "../game-mode";
@@ -15,7 +15,6 @@ import { addWindow } from "./ui-theme";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
-import { CommonColor } from "#enums/color";
 
 const SESSION_SLOTS_COUNT = 5;
 const SLOTS_ON_SCREEN = 3;
@@ -396,15 +395,7 @@ class SessionSlot extends Phaser.GameObjects.Container {
       const pokemon = p.toPokemon();
       const icon = globalScene.addPokemonIcon(pokemon, 0, 0, 0, 0);
 
-      const text = addTextObject(
-        32,
-        20,
-        `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(pokemon.level, 1000)}`,
-        TextStyle.PARTY,
-        { fontSize: "54px", color: CommonColor.OFF_WHITE },
-      );
-      text.setShadow(0, 0, undefined);
-      text.setStroke(CommonColor.DARK_GREY, 14);
+      const text = addTextObject(32, 20, getPokemonLevelText(pokemon), TextStyle.POKEMON_LEVEL);
       text.setOrigin(1, 0);
 
       iconContainer.add(icon);

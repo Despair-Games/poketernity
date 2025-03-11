@@ -6,7 +6,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { allMoves } from "#app/data/data-lists";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
+import { FlinchAttr } from "#app/data/moves/move-attrs/flinch-attr";
 
 describe("Abilities - Serene Grace", () => {
   let phaserGame: Phaser.Game;
@@ -38,7 +38,7 @@ describe("Abilities - Serene Grace", () => {
   it("Serene Grace should double the secondary effect chance of a move", async () => {
     await game.classicMode.startBattle([Species.SHUCKLE]);
 
-    const airSlashMove = allMoves[MoveId.AIR_SLASH];
+    const airSlashMove = allMoves.get(MoveId.AIR_SLASH);
     const airSlashFlinchAttr = airSlashMove.getAttrs(FlinchAttr)[0];
     vi.spyOn(airSlashFlinchAttr, "getMoveChance");
 

@@ -8,7 +8,7 @@ import { FieryFalloutEncounter } from "#app/data/mystery-encounters/encounters/f
 import { Gender } from "#enums/gender";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import * as MoveAnimUtils from "#app/utils/move-anim-utils";
-import * as InitMoveAnim from "#app/data/init-move-anim";
+import * as InitMoveAnim from "#app/data/init/init-move-anim";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {
   runMysteryEncounterToEnd,

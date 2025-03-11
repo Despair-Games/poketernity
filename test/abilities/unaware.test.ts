@@ -77,7 +77,7 @@ describe("Abilities - Unaware", () => {
   });
 
   it("should not cause the opponent's Stored Power to ignore the opponent's stat stages", async () => {
-    const storedPowerMove = allMoves[MoveId.STORED_POWER];
+    const storedPowerMove = allMoves.get(MoveId.STORED_POWER);
     vi.spyOn(storedPowerMove, "calculateBattlePower");
 
     await game.classicMode.startBattle([Species.FEEBAS]);
@@ -93,7 +93,7 @@ describe("Abilities - Unaware", () => {
   });
 
   it("should not cause the move Punishment to ignore the opponent's stat stages", async () => {
-    const punishmentMove = allMoves[MoveId.PUNISHMENT];
+    const punishmentMove = allMoves.get(MoveId.PUNISHMENT);
     vi.spyOn(punishmentMove, "calculateBattlePower");
 
     game.override.startingLevel(5).enemyLevel(100);
@@ -171,7 +171,7 @@ describe("Abilities - Unaware", () => {
 
   it("should not ignore an opponent's physical damage reduction from a Burn status", async () => {
     // TODO: Is there a more direct way to test for Burn damage reduction?
-    vi.spyOn(allMoves[MoveId.WILL_O_WISP], "accuracy", "get").mockReturnValue(-1);
+    vi.spyOn(allMoves.get(MoveId.WILL_O_WISP), "accuracy", "get").mockReturnValue(-1);
     game.override.startingLevel(1000).enemyLevel(1000);
     await game.classicMode.startBattle([Species.FEEBAS]);
 

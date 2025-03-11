@@ -99,15 +99,7 @@ export const gen7pokemonFamilyEvolutions: PokemonEvolutions = {
   ],
   [Species.MORELULL]: [new SpeciesEvolution(Species.SHIINOTIC, 24, null, null)],
   [Species.SALANDIT]: [
-    new SpeciesEvolution(
-      Species.SALAZZLE,
-      33,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) => p.gender === Gender.FEMALE,
-        (p) => (p.gender = Gender.FEMALE),
-      ),
-    ),
+    new SpeciesEvolution(Species.SALAZZLE, 33, null, new SpeciesEvolutionCondition((p) => p.gender === Gender.FEMALE)),
   ],
   [Species.STUFFUL]: [new SpeciesEvolution(Species.BEWEAR, 27, null, null)],
   [Species.BOUNSWEET]: [new SpeciesEvolution(Species.STEENEE, 18, null, null)],

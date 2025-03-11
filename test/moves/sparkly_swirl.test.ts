@@ -30,7 +30,7 @@ describe("Moves - Sparkly Swirl", () => {
       .moveset([MoveId.SPARKLY_SWIRL, MoveId.SPLASH])
       .ability(Abilities.BALL_FETCH);
 
-    vi.spyOn(allMoves[MoveId.SPARKLY_SWIRL], "accuracy", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.SPARKLY_SWIRL), "accuracy", "get").mockReturnValue(100);
   });
 
   it("should cure status effect of the user, its ally, and all party pokemon", async () => {

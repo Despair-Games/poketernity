@@ -4,16 +4,19 @@ import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbc
 import type InputText from "phaser3-rex-plugins/plugins/inputtext";
 import { globalScene } from "#app/global-scene";
 import { ModifierTier } from "#enums/modifier-tier";
-import i18next from "#app/plugins/i18n";
 import { TextStyle } from "#enums/text-style";
-import { getTextColorCombination } from "#app/ui/text-color";
+import { getTextStyle } from "./text-style";
+import { TEXT_SCALE } from "#app/ui-constants";
 
-export interface TextStyleOptions {
+interface CustomTextStyleOptions {
   scale: number;
   styleOptions: Phaser.Types.GameObjects.Text.TextStyle | InputText.IConfig;
   shadowColor: string;
-  shadowXpos: number;
-  shadowYpos: number;
+  shadow?: {
+    xPosition: number;
+    yPosition: number;
+  };
+  strokeThickness?: number;
 }
 
 export function addTextObject(
@@ -23,19 +26,18 @@ export function addTextObject(
   style: TextStyle,
   extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle,
 ): Phaser.GameObjects.Text {
-  const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(style, extraStyleOptions);
+  const { scale, styleOptions, shadowColor, shadow, strokeThickness } = getTextStyleOptions(style, extraStyleOptions);
 
   const ret = globalScene.add.text(x, y, content, styleOptions);
   ret.setScale(scale);
-  ret.setShadow(shadowXpos, shadowYpos, shadowColor);
+  if (shadow) {
+    ret.setShadow(shadow.xPosition, shadow.yPosition, shadowColor);
+  } else if (strokeThickness) {
+    ret.setStroke(shadowColor, strokeThickness);
+  }
   if (!(styleOptions as Phaser.Types.GameObjects.Text.TextStyle).lineSpacing) {
-    ret.setLineSpacing(scale * 30);
+    ret.setLineSpacing(scale * 30); // Todo: check this value
   }
-
-  if (ret.lineSpacing < 12 && i18next.resolvedLanguage === "ja") {
-    ret.setLineSpacing(ret.lineSpacing + 35);
-  }
-
   return ret;
 }
 
@@ -46,19 +48,18 @@ export function addBBCodeTextObject(
   style: TextStyle,
   extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle,
 ): BBCodeText {
-  const { scale, styleOptions, shadowColor, shadowXpos, shadowYpos } = getTextStyleOptions(style, extraStyleOptions);
+  const { scale, styleOptions, shadowColor, shadow, strokeThickness } = getTextStyleOptions(style, extraStyleOptions);
 
   const ret = globalScene.add.rexBBCodeText(x, y, content, styleOptions as BBCodeText.TextStyle);
   ret.setScale(scale);
-  ret.setShadow(shadowXpos, shadowYpos, shadowColor);
+  if (shadow) {
+    ret.setShadow(shadow.xPosition, shadow.yPosition, shadowColor);
+  } else if (strokeThickness) {
+    ret.setStroke(shadowColor, strokeThickness);
+  }
   if (!(styleOptions as BBCodeText.TextStyle).lineSpacing) {
-    ret.setLineSpacing(scale * 60);
+    ret.setLineSpacing(scale * 60); // Todo: check this value
   }
-
-  if (ret.lineSpacing < 12 && i18next.resolvedLanguage === "ja") {
-    ret.setLineSpacing(ret.lineSpacing + 35);
-  }
-
   return ret;
 }
 
@@ -84,137 +85,59 @@ export function addTextInputObject(
  * @param style the {@linkcode TextStyle} to use.
  */
 export function setTextColor(textObject: Phaser.GameObjects.Text, style: TextStyle): void {
-  const colorCombination = getTextColorCombination(style);
-  textObject.setColor(colorCombination.mainColor);
-  textObject.setShadowColor(colorCombination.shadowColor);
+  const {
+    color: { mainColor, shadowColor },
+    fontStyle: { shadow, strokeThickness },
+  } = getTextStyle(style);
+  textObject.setColor(mainColor);
+  if (shadow) {
+    textObject.setShadowColor(shadowColor);
+  }
+  if (strokeThickness) {
+    textObject.setStroke(shadowColor, strokeThickness);
+  }
 }
 
-export function getTextStyleOptions(
+function getTextStyleOptions(
   style: TextStyle,
   extraStyleOptions?: Phaser.Types.GameObjects.Text.TextStyle,
-): TextStyleOptions {
-  const lang = i18next.resolvedLanguage;
-  let shadowXpos = 4;
-  let shadowYpos = 5;
-  // TODO scaling: figure this out
-  let scale = 0.1666666667;
-  const defaultFontSize = 96;
-  const { mainColor, shadowColor } = getTextColorCombination(style);
+): CustomTextStyleOptions {
+  const textStyleOptions = getTextStyle(style);
+  const { mainColor, shadowColor } = textStyleOptions.color;
+  const { fontFamily, fontSize, shadow, strokeThickness } = textStyleOptions.fontStyle;
 
   let styleOptions: Phaser.Types.GameObjects.Text.TextStyle = {
-    fontFamily: "emerald",
-    fontSize: 96,
+    fontFamily: fontFamily,
+    fontSize: fontSize,
     color: mainColor,
     padding: {
       bottom: 6,
     },
   };
 
-  if (i18next.resolvedLanguage === "ja") {
-    scale = 0.1388888889;
-    styleOptions.padding = { top: 2, bottom: 4 };
-  }
-
-  switch (style) {
-    case TextStyle.SUMMARY:
-    case TextStyle.SUMMARY_ALT:
-    case TextStyle.SUMMARY_BLUE:
-    case TextStyle.SUMMARY_RED:
-    case TextStyle.SUMMARY_PINK:
-    case TextStyle.SUMMARY_GOLD:
-    case TextStyle.SUMMARY_GRAY:
-    case TextStyle.SUMMARY_GREEN:
-    case TextStyle.WINDOW:
-    case TextStyle.WINDOW_ALT:
-    case TextStyle.ME_OPTION_DEFAULT:
-    case TextStyle.ME_OPTION_SPECIAL:
-      shadowXpos = 3;
-      shadowYpos = 3;
-      break;
-    case TextStyle.STATS_LABEL:
-      let fontSizeLabel = "96px";
-      switch (lang) {
-        case "de":
-          shadowXpos = 3;
-          shadowYpos = 3;
-          fontSizeLabel = "80px";
-          break;
-        default:
-          fontSizeLabel = "96px";
-          break;
-      }
-      styleOptions.fontSize = fontSizeLabel;
-      break;
-    case TextStyle.STATS_VALUE:
-      shadowXpos = 3;
-      shadowYpos = 3;
-      let fontSizeValue = "96px";
-      switch (lang) {
-        case "de":
-          fontSizeValue = "80px";
-          break;
-        default:
-          fontSizeValue = "96px";
-          break;
-      }
-      styleOptions.fontSize = fontSizeValue;
-      break;
-    case TextStyle.MESSAGE:
-    case TextStyle.SETTINGS_LABEL:
-    case TextStyle.SETTINGS_LOCKED:
-    case TextStyle.SETTINGS_SELECTED:
-      break;
-    case TextStyle.BATTLE_INFO:
-    case TextStyle.MONEY:
-    case TextStyle.MONEY_WINDOW:
-    case TextStyle.TOOLTIP_TITLE:
-      styleOptions.fontSize = defaultFontSize - 24;
-      shadowXpos = 3.5;
-      shadowYpos = 3.5;
-      break;
-    case TextStyle.PARTY:
-    case TextStyle.PARTY_RED:
-      styleOptions.fontSize = defaultFontSize - 30;
-      styleOptions.fontFamily = "pkmnems";
-      break;
-    case TextStyle.TOOLTIP_CONTENT:
-      styleOptions.fontSize = defaultFontSize - 32;
-      shadowXpos = 3;
-      shadowYpos = 3;
-      break;
-    case TextStyle.MOVE_INFO_CONTENT:
-      styleOptions.fontSize = defaultFontSize - 40;
-      shadowXpos = 3;
-      shadowYpos = 3;
-      break;
-    case TextStyle.SMALLER_WINDOW_ALT:
-      styleOptions.fontSize = defaultFontSize - 36;
-      shadowXpos = 3;
-      shadowYpos = 3;
-      break;
-    case TextStyle.BGM_BAR:
-      styleOptions.fontSize = defaultFontSize - 24;
-      shadowXpos = 3;
-      shadowYpos = 3;
-      break;
-    case TextStyle.CHALLENGE_DESCRIPTION:
-      styleOptions.fontSize = defaultFontSize - 12;
-      shadowXpos = 4;
-      shadowYpos = 5;
-      break;
-  }
-
   if (extraStyleOptions) {
     if (extraStyleOptions.fontSize) {
-      const sizeRatio =
-        parseInt(extraStyleOptions.fontSize.toString().slice(0, -2))
-        / parseInt(styleOptions.fontSize?.toString().slice(0, -2) ?? "1");
-      shadowXpos *= sizeRatio;
+      // We should not define custom font sizes
+      showTextStyleOptionWarning("font size", extraStyleOptions.fontSize);
     }
     styleOptions = Object.assign(styleOptions, extraStyleOptions);
   }
 
-  return { scale, styleOptions, shadowColor, shadowXpos, shadowYpos };
+  /** Needed for the text to look crisp with the current font, see {@linkcode TEXT_SCALE} */
+  const scale = 1 / TEXT_SCALE;
+
+  if (shadow) {
+    return { scale, styleOptions, shadowColor, shadow };
+  }
+  return { scale, styleOptions, shadowColor, strokeThickness };
+}
+
+function showTextStyleOptionWarning(option: string, value: any) {
+  console.warn(
+    `A Text Object is using a custom ${option} of value ${value}`,
+    "Only specific values defined in the FontStyle enum should be used to preserve the characters readibility.",
+    "Either use an existing TextStyle, or create a new one that makes use of one of the existing FontStyles.",
+  );
 }
 
 export function getBBCodeFragment(
@@ -223,11 +146,11 @@ export function getBBCodeFragment(
   closeFragment: boolean = false,
   noShadow = false,
 ): string {
-  const colorCombination = getTextColorCombination(textStyle);
-  let openingFragment = `[color=${colorCombination.mainColor}]`;
+  const { mainColor, shadowColor } = getTextStyle(textStyle).color;
+  let openingFragment = `[color=${mainColor}]`;
   let closingFragment = closeFragment ? "[/color]" : "";
   if (!noShadow) {
-    openingFragment += `[shadow=${colorCombination.shadowColor}]`;
+    openingFragment += `[shadow=${shadowColor}]`;
     if (closeFragment) {
       closingFragment = "[/shadow]" + closingFragment;
     }

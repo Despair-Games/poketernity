@@ -3,7 +3,7 @@ import { addTextObject } from "./text";
 import { TextStyle } from "#enums/text-style";
 import { fixedNumber } from "#app/utils";
 import { globalScene } from "#app/global-scene";
-import type { Move } from "#app/data/move";
+import type { Move } from "#app/data/moves/move";
 import type { BerryUsedEvent, MoveUsedEvent } from "../events/battle-scene";
 import { BattleSceneEventType } from "#enums/battle-scene-event-type";
 import { BerryType } from "#enums/berry-type";
@@ -90,11 +90,9 @@ export default class BattleFlyout extends Phaser.GameObjects.Container {
         this.flyoutWidth / 4 + (this.flyoutWidth / 2) * (i % 2),
         this.flyoutHeight / 4 + (this.flyoutHeight / 2) * (i < 2 ? 0 : 1),
         "???",
-        TextStyle.BATTLE_INFO,
+        TextStyle.BATTLE_FLYOUT_MOVE_INFO,
       );
-      this.flyoutText[i].setFontSize(45);
       this.flyoutText[i].setLineSpacing(-10);
-      this.flyoutText[i].setAlign("center");
       this.flyoutText[i].setOrigin();
     }
 

@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
-import { StealHeldItemChanceAttr } from "#app/data/move-attrs/steal-held-item-chance-attr";
+import { StealHeldItemChanceAttr } from "#app/data/moves/move-attrs/steal-held-item-chance-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import type { ContactHeldItemTransferChanceModifier } from "#app/modifier/modifier";
 import { Abilities } from "#enums/abilities";
@@ -62,7 +62,7 @@ describe("Abilities - Unburden", () => {
         { name: "BERRY", type: BerryType.LUM, count: 1 },
       ]);
     // For the various tests that use Thief, give it a 100% steal rate
-    vi.spyOn(allMoves[MoveId.THIEF], "attrs", "get").mockReturnValue([new StealHeldItemChanceAttr(1.0)]);
+    vi.spyOn(allMoves.get(MoveId.THIEF), "attrs", "get").mockReturnValue([new StealHeldItemChanceAttr(1.0)]);
   });
 
   it("should activate when a berry is eaten", async () => {

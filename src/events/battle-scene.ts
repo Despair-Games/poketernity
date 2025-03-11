@@ -1,5 +1,5 @@
 import { BattleSceneEventType } from "#enums/battle-scene-event-type";
-import type { Move } from "../data/move";
+import type { Move } from "../data/moves/move";
 import type { BerryModifier } from "../modifier/modifier";
 
 /**

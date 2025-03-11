@@ -18,23 +18,23 @@ import {
   ME_BASE_SPAWN_WEIGHT,
   ME_MAX_SPAWN_WEIGHT,
 } from "#app/constants";
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { biomeDepths, getBiomeName } from "#app/data/balance/biomes";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
-import { MoveChargeAnim } from "#app/data/battle-anims/move-charge-anim";
+import { MoveChargeAnim } from "#app/data/animations/move-charge-anim";
 import type { DestinyBondTag, GrudgeTag } from "#app/data/battler-tags";
 import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
-import { initCommonAnims } from "#app/data/init-common-anims";
-import { initMoveAnim } from "#app/data/init-move-anim";
+import { initCommonAnims } from "#app/data/init/init-common-anims";
+import { initMoveAnim } from "#app/data/init/init-move-anim";
 import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
 import { allMysteryEncounters, mysteryEncountersByBiome } from "#app/data/mystery-encounters/mystery-encounters";
 import { pokemonFormChanges, type SpeciesFormChange } from "#app/data/pokemon-forms";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { populateAnims } from "#app/data/populate-anims";
+import { populateAnims } from "#app/data/init/init-anims";
 import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
 import { SpeciesFormChangeTimeOfDayTrigger } from "#app/data/species-form-change-triggers/species-form-change-time-of-day-trigger";
 import type { SpeciesFormChangeTrigger } from "#app/data/species-form-change-triggers/species-form-change-trigger";
@@ -621,20 +621,18 @@ export default class BattleScene extends SceneBase {
     this.moneyText.setOrigin(1, 0.5);
     this.fieldUI.add(this.moneyText);
 
-    this.scoreText = addTextObject(GAME_WIDTH - 2, 0, "", TextStyle.PARTY, { fontSize: "54px" });
+    this.scoreText = addTextObject(GAME_WIDTH - 2, 0, "", TextStyle.SCORE);
     this.scoreText.setName("text-score");
     this.scoreText.setOrigin(1, 0.5);
     this.fieldUI.add(this.scoreText);
 
-    this.luckText = addTextObject(GAME_WIDTH - 2, 0, "", TextStyle.PARTY, { fontSize: "54px" });
+    this.luckText = addTextObject(GAME_WIDTH - 2, 0, "", TextStyle.SCORE);
     this.luckText.setName("text-luck");
     this.luckText.setOrigin(1, 0.5);
     this.luckText.setVisible(false);
     this.fieldUI.add(this.luckText);
 
-    this.luckLabelText = addTextObject(GAME_WIDTH - 2, 0, i18next.t("common:luckIndicator"), TextStyle.PARTY, {
-      fontSize: "54px",
-    });
+    this.luckLabelText = addTextObject(GAME_WIDTH - 2, 0, i18next.t("common:luckIndicator"), TextStyle.SCORE);
     this.luckLabelText.setName("text-luck-label");
     this.luckLabelText.setOrigin(1, 0.5);
     this.luckLabelText.setVisible(false);
@@ -1214,7 +1212,7 @@ export default class BattleScene extends SceneBase {
     if (reloadI18n) {
       const localizable: Localizable[] = [
         ...allSpecies,
-        ...Object.values(allMoves),
+        ...allMoves.values(),
         ...allAbilities,
         ...getEnumValues(ModifierPoolType)
           .map((mpt) => getModifierPoolForType(mpt))
@@ -1921,6 +1919,7 @@ export default class BattleScene extends SceneBase {
     if (luckValue < 14) {
       this.luckText.setTint(getLuckTextTint(luckValue));
     } else {
+      // TODO: create helper function
       this.luckText.setTint(0xffef5c, 0x47ff69, 0x6b6bff, 0xff6969);
     }
     this.luckLabelText.setX(GAME_WIDTH - 2 - (this.luckText.displayWidth + 2));

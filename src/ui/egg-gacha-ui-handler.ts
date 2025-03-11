@@ -1,5 +1,5 @@
 import { UiMode } from "#enums/ui-mode";
-import { addTextObject, getEggTierTextTint, getTextStyleOptions } from "./text";
+import { addTextObject, getEggTierTextTint } from "./text";
 import { TextStyle } from "#enums/text-style";
 import MessageUiHandler from "./message-ui-handler";
 import { getEnumValues, getEnumKeys, fixedNumber, randSeedShuffle } from "#app/utils";
@@ -17,7 +17,8 @@ import { GachaType } from "#enums/gacha-types";
 import i18next from "i18next";
 import { EggTier } from "#enums/egg-type";
 import { globalScene } from "#app/global-scene";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
+import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 
 /**
  * TODO: this should extend AbstractOptionSelectUiHandler
@@ -45,8 +46,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
   private summaryFinished: boolean;
   private defaultText: string;
 
-  // TODO scaling: find a way to improve this. currently needed for japanese
-  private scale: number = 0.1666666667;
+  private scale: number = 1 / TEXT_SCALE;
 
   constructor() {
     super(UiMode.EGG_GACHA);
@@ -62,7 +62,6 @@ export default class EggGachaUiHandler extends MessageUiHandler {
 
   setup() {
     this.gachaCursor = 0;
-    this.scale = getTextStyleOptions(TextStyle.WINDOW).scale;
 
     const ui = this.getUi();
 
@@ -109,21 +108,23 @@ export default class EggGachaUiHandler extends MessageUiHandler {
 
       const gachaInfoContainer = globalScene.add.container(160, 46);
 
-      const currentLanguage = i18next.resolvedLanguage ?? "en";
-      let gachaTextStyle = TextStyle.WINDOW_ALT;
+      const currentLanguage = i18next.resolvedLanguage ?? DEFAULT_LANGUAGE_KEY;
       let gachaX = 4;
       let gachaY = 0;
       let pokemonIconX = -20;
       let pokemonIconY = 6;
 
       if (["de", "es-ES", "fr", "ko", "pt-BR"].includes(currentLanguage)) {
-        gachaTextStyle = TextStyle.SMALLER_WINDOW_ALT;
         gachaX = 2;
         gachaY = 2;
       }
 
       let legendaryLabelX = gachaX;
       let legendaryLabelY = gachaY;
+      if (["pt-BR"].includes(currentLanguage)) {
+        legendaryLabelX -= 2;
+        pokemonIconX -= 2;
+      }
       if (["de", "es-ES"].includes(currentLanguage)) {
         pokemonIconX = -25;
         pokemonIconY = 10;
@@ -131,7 +132,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
         legendaryLabelY = 0;
       }
 
-      const gachaUpLabel = addTextObject(gachaX, gachaY, i18next.t("egg:legendaryUPGacha"), gachaTextStyle);
+      const gachaUpLabel = addTextObject(gachaX, gachaY, i18next.t("egg:legendaryUPGacha"), TextStyle.GACHA_LABEL);
       gachaUpLabel.setOrigin(0, 0);
       gachaInfoContainer.add(gachaUpLabel);
 
@@ -141,17 +142,9 @@ export default class EggGachaUiHandler extends MessageUiHandler {
             gachaUpLabel.setAlign("center");
             gachaUpLabel.setY(0);
           }
-          if (["pt-BR"].includes(currentLanguage)) {
-            gachaUpLabel.setX(legendaryLabelX - 2);
-          } else {
-            gachaUpLabel.setX(legendaryLabelX);
-          }
-          gachaUpLabel.setY(legendaryLabelY);
+          gachaUpLabel.setPosition(legendaryLabelX, legendaryLabelY);
 
           const pokemonIcon = globalScene.add.sprite(pokemonIconX, pokemonIconY, "pokemon_icons_0");
-          if (["pt-BR"].includes(currentLanguage)) {
-            pokemonIcon.setX(pokemonIconX - 2);
-          }
           pokemonIcon.setScale(0.5);
           pokemonIcon.setOrigin(0, 0.5);
 
@@ -248,7 +241,7 @@ export default class EggGachaUiHandler extends MessageUiHandler {
       },
     ];
 
-    const resolvedLanguage = i18next.resolvedLanguage ?? "en";
+    const resolvedLanguage = i18next.resolvedLanguage ?? DEFAULT_LANGUAGE_KEY;
     const pullOptionsText = pullOptions
       .map((option) => {
         const desc = option.description.split(" ");
@@ -262,10 +255,8 @@ export default class EggGachaUiHandler extends MessageUiHandler {
       })
       .join("\n");
 
-    const optionText = addTextObject(0, 0, `${pullOptionsText}\n${i18next.t("menu:cancel")}`, TextStyle.WINDOW);
-
+    const optionText = addTextObject(0, 0, `${pullOptionsText}\n${i18next.t("menu:cancel")}`, TextStyle.GACHA_OPTIONS);
     optionText.setLineSpacing(28);
-    optionText.setFontSize("80px");
 
     this.eggGachaOptionsContainer.add(optionText);
 

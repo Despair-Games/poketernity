@@ -13,7 +13,7 @@ import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { GameManager } from "#test/testUtils/gameManager";
 import { MoveResult } from "#enums/move-result";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import { AttackMove } from "#app/data/move";
+import { AttackMove } from "#app/data/moves/move";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
 
@@ -202,7 +202,7 @@ describe("BattlerTag - SubstituteTag", () => {
       vi.spyOn(mockPokemon.scene as BattleScene, "queueMessage").mockReturnValue();
 
       const pokemonMove = {
-        getMove: vi.fn().mockReturnValue(allMoves[MoveId.TACKLE]) as PokemonMove["getMove"],
+        getMove: vi.fn().mockReturnValue(allMoves.get(MoveId.TACKLE)) as PokemonMove["getMove"],
       } as PokemonMove;
 
       const moveEffectPhase = {
@@ -211,7 +211,7 @@ describe("BattlerTag - SubstituteTag", () => {
       } as MoveEffectPhase;
 
       vi.spyOn(mockPokemon.scene as BattleScene, "getCurrentPhase").mockReturnValue(moveEffectPhase);
-      vi.spyOn(allMoves[MoveId.TACKLE], "hitsSubstitute").mockReturnValue(true);
+      vi.spyOn(allMoves.get(MoveId.TACKLE), "hitsSubstitute").mockReturnValue(true);
 
       expect(subject.lapse(mockPokemon, BattlerTagLapseType.HIT)).toBeTruthy();
 

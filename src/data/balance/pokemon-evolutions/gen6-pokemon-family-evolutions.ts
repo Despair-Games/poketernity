@@ -52,10 +52,7 @@ export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
       "female",
       25,
       null,
-      new SpeciesEvolutionCondition(
-        (p) => p.gender === Gender.FEMALE,
-        (p) => (p.gender = Gender.FEMALE),
-      ),
+      new SpeciesEvolutionCondition((p) => p.gender === Gender.FEMALE),
     ),
     new SpeciesFormEvolution(
       Species.MEOWSTIC,
@@ -63,10 +60,7 @@ export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       25,
       null,
-      new SpeciesEvolutionCondition(
-        (p) => p.gender === Gender.MALE,
-        (p) => (p.gender = Gender.MALE),
-      ),
+      new SpeciesEvolutionCondition((p) => p.gender === Gender.MALE),
     ),
   ],
   [Species.HONEDGE]: [new SpeciesEvolution(Species.DOUBLADE, 35, null, null)],

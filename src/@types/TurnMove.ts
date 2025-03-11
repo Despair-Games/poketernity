@@ -1,4 +1,4 @@
-import type { Move } from "#app/data/move";
+import type { Move } from "#app/data/moves/move";
 import type { BattlerIndex } from "#enums/battler-index";
 import type { ElementalType } from "#enums/elemental-type";
 import type { MoveResult } from "#enums/move-result";

@@ -1,3 +1,3 @@
-import type { Move } from "#app/data/move";
+import type { Move } from "#app/data/moves/move";
 
 export type SubMove = new (...args: any[]) => Move;

@@ -32,7 +32,7 @@ describe("Abilities - Aura Break", () => {
   });
 
   it("reverses the effect of Fairy Aura", async () => {
-    const moveToCheck = allMoves[MoveId.MOONBLAST];
+    const moveToCheck = allMoves.get(MoveId.MOONBLAST);
     const basePower = moveToCheck.power;
 
     game.override.ability(Abilities.FAIRY_AURA);
@@ -46,7 +46,7 @@ describe("Abilities - Aura Break", () => {
   });
 
   it("reverses the effect of Dark Aura", async () => {
-    const moveToCheck = allMoves[MoveId.DARK_PULSE];
+    const moveToCheck = allMoves.get(MoveId.DARK_PULSE);
     const basePower = moveToCheck.power;
 
     game.override.ability(Abilities.DARK_AURA);
@@ -60,7 +60,7 @@ describe("Abilities - Aura Break", () => {
   });
 
   it("has no effect if neither Fairy Aura nor Dark Aura are present", async () => {
-    const moveToCheck = allMoves[MoveId.MOONBLAST];
+    const moveToCheck = allMoves.get(MoveId.MOONBLAST);
     const basePower = moveToCheck.power;
 
     game.override.ability(Abilities.BALL_FETCH);

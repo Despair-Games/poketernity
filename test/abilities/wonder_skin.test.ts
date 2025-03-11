@@ -32,7 +32,7 @@ describe("Abilities - Wonder Skin", () => {
   });
 
   it("lowers accuracy of status moves to 50%", async () => {
-    const moveToCheck = allMoves[MoveId.CHARM];
+    const moveToCheck = allMoves.get(MoveId.CHARM);
 
     vi.spyOn(moveToCheck, "calculateBattleAccuracy");
 
@@ -44,7 +44,7 @@ describe("Abilities - Wonder Skin", () => {
   });
 
   it("does not lower accuracy of non-status moves", async () => {
-    const moveToCheck = allMoves[MoveId.TACKLE];
+    const moveToCheck = allMoves.get(MoveId.TACKLE);
 
     vi.spyOn(moveToCheck, "calculateBattleAccuracy");
 
@@ -59,7 +59,7 @@ describe("Abilities - Wonder Skin", () => {
 
   bypassAbilities.forEach((ability) => {
     it(`does not affect pokemon with ${allAbilities[ability].name}`, async () => {
-      const moveToCheck = allMoves[MoveId.CHARM];
+      const moveToCheck = allMoves.get(MoveId.CHARM);
 
       game.override.ability(ability);
       vi.spyOn(moveToCheck, "calculateBattleAccuracy");

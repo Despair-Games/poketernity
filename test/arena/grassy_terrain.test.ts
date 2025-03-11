@@ -38,7 +38,7 @@ describe("Arena - Grassy Terrain", () => {
   it("should halve the damage of Earthquake", async () => {
     await game.classicMode.startBattle([Species.TAUROS]);
 
-    const eq = allMoves[MoveId.EARTHQUAKE];
+    const eq = allMoves.get(MoveId.EARTHQUAKE);
     vi.spyOn(eq, "calculateBattlePower");
 
     game.move.select(MoveId.EARTHQUAKE);
@@ -60,7 +60,7 @@ describe("Arena - Grassy Terrain", () => {
     game.challengeMode.addChallenge(Challenges.INVERSE_BATTLE, 1, 1); // So that Earthquake actually has an effect
     await game.challengeMode.startBattle([Species.FEEBAS]);
 
-    const eq = allMoves[MoveId.EARTHQUAKE];
+    const eq = allMoves.get(MoveId.EARTHQUAKE);
     vi.spyOn(eq, "calculateBattlePower");
 
     game.move.select(MoveId.GRASSY_TERRAIN);
