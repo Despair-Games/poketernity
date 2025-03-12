@@ -882,7 +882,9 @@ export class CanEvolveWithItemRequirement extends EncounterPokemonRequirement {
     if (
       pokemonEvolutions.hasOwnProperty(pokemon.species.speciesId)
       && pokemonEvolutions[pokemon.species.speciesId].filter(
-        (e) => e.item === evolutionItem && (!e.conditions || e.conditions.predicate(pokemon)),
+        (e) =>
+          e.item === evolutionItem
+          && (!e.conditions || e.conditions.every((condition) => condition.predicate(pokemon))),
       ).length
       && pokemon.getFormKey() !== SpeciesFormKey.GIGANTAMAX
     ) {

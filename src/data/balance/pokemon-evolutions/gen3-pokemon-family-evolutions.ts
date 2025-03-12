@@ -71,7 +71,7 @@ export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.ROSELIA,
       1,
       null,
-      [new SpeciesFriendshipEvolutionCondition(70), DayEvolutionCondition],
+      [new SpeciesFriendshipEvolutionCondition(70), new DayEvolutionCondition()],
       BABY_HAPPINESS_EVO_LEVEL,
     ),
   ],

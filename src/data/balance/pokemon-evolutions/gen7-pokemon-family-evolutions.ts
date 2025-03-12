@@ -51,7 +51,7 @@ export const gen7pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.DEWPIDER]: [new SpeciesEvolution(Species.ARAQUANID, 22, null, null)],
   [Species.FOMANTIS]: [new SpeciesEvolution(Species.LURANTIS, 34, null, [new DayEvolutionCondition()])],
   [Species.MORELULL]: [new SpeciesEvolution(Species.SHIINOTIC, 24, null, null)],
-  [Species.SALANDIT]: [new SpeciesEvolution(Species.SALAZZLE, 33, null, new GenderEvolutionCondition(Gender.FEMALE))],
+  [Species.SALANDIT]: [new SpeciesEvolution(Species.SALAZZLE, 33, null, [new GenderEvolutionCondition(Gender.FEMALE)])],
   [Species.STUFFUL]: [new SpeciesEvolution(Species.BEWEAR, 27, null, null)],
   [Species.BOUNSWEET]: [new SpeciesEvolution(Species.STEENEE, 18, null, null)],
   [Species.STEENEE]: [
