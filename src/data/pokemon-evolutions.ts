@@ -3,7 +3,7 @@ import type { Species } from "#enums/species";
 import { EvolutionItem } from "#enums/evolution-item";
 import { globalScene } from "#app/global-scene";
 import { TimeOfDay } from "#enums/time-of-day";
-import { MoveId } from "#enums/move-id";
+import type { MoveId } from "#enums/move-id";
 import { ElementalType } from "#enums/elemental-type";
 import type { Gender } from "#enums/gender";
 import { randSeedInt } from "#app/utils";
@@ -34,7 +34,7 @@ export class SpeciesFormEvolution {
   public evoFormKey: string | null;
   public level: number;
   public item: EvolutionItem | null;
-  public condition: SpeciesEvolutionCondition | null;
+  public conditions: SpeciesEvolutionCondition[] | null;
   public enemyEvolveLevel: number;
 
   /**
@@ -43,7 +43,7 @@ export class SpeciesFormEvolution {
    * @param evoFormKey The form key for the form that the Pokemon will evolve into.
    * @param level The minimum level that a Pokemon must have for this evolution.
    * @param item If applicable, the evolution item that the Pokemon must use for this evolution.
-   * @param condition If applicable, an extra condition that the Pokemon must satisfy for this evolution.
+   * @param conditions If applicable, extra conditions that the Pokemon must satisfy for this evolution.
    * @param enemyEvolveLevel The level at which enemy spawns will undergo this evolution. Default: Equal to `level`.
    */
   constructor(
@@ -52,7 +52,7 @@ export class SpeciesFormEvolution {
     evoFormKey: string | null,
     level: number,
     item: EvolutionItem | null,
-    condition: SpeciesEvolutionCondition | null,
+    conditions: SpeciesEvolutionCondition[] | null,
     enemyEvolveLevel: number = level,
   ) {
     this.speciesId = speciesId;
@@ -60,7 +60,7 @@ export class SpeciesFormEvolution {
     this.evoFormKey = evoFormKey;
     this.level = level;
     this.item = item || EvolutionItem.NONE;
-    this.condition = condition;
+    this.conditions = conditions;
     this.enemyEvolveLevel = enemyEvolveLevel;
   }
 }
@@ -70,10 +70,10 @@ export class SpeciesEvolution extends SpeciesFormEvolution {
     speciesId: Species,
     level: number,
     item: EvolutionItem | null,
-    condition: SpeciesEvolutionCondition | null,
+    conditions: SpeciesEvolutionCondition[] | null,
     enemyEvolveLevel: number = level,
   ) {
-    super(speciesId, null, null, level, item, condition, enemyEvolveLevel);
+    super(speciesId, null, null, level, item, conditions, enemyEvolveLevel);
   }
   // Todo: return level or item along with condition descriptions
 }
@@ -111,47 +111,12 @@ export class NightEvolutionCondition extends SpeciesEvolutionCondition {
 }
 
 /**
- * Used for Espeon, Roselia, and Riolu
+ * Only used for Sylveon (fairy)
  */
-export class FriendshipAndDayCondition extends SpeciesEvolutionCondition {
-  constructor(friendshipAmount: number) {
-    super((p) => p.friendship >= friendshipAmount && globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]));
-    this.description = "with friendship during Dawn or Day";
-  }
-}
-
-/**
- * Used for Umbreon and Chimeco
- */
-export class FriendshipAndNightCondition extends SpeciesEvolutionCondition {
-  constructor(friendshipAmount: number) {
-    super((p) => p.friendship >= friendshipAmount && globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT]));
-    this.description = "with friendship during Dusk or Night";
-  }
-}
-
-/**
- * Mime Jr has a regional evo based on time of day that also requires knowing mimic
- */
-export class MrMimeCondition extends SpeciesEvolutionCondition {
-  constructor(forGalar: boolean) {
-    const requiredTimeOfDay = forGalar ? [TimeOfDay.DUSK, TimeOfDay.NIGHT] : [TimeOfDay.DAWN, TimeOfDay.DAY];
-    super(
-      (p) =>
-        p.moveset.filter((m) => m.moveId === MoveId.MIMIC).length > 0
-        && globalScene.arena.isTimeOfDay(requiredTimeOfDay),
-    );
-    this.description = "Knowing Mimic during " + forGalar ? "dusk or night" : "dawn or day";
-  }
-}
-
-/** Sylveon requires high friendship and knowing a fairy type move */
-export class SylveonEvoCondition extends SpeciesEvolutionCondition {
-  constructor(friendshipAmount: number) {
-    super(
-      (p) => p.friendship >= friendshipAmount && !!p.getMoveset().find((m) => m.getMove().type === ElementalType.FAIRY),
-    );
-    this.description = "with high friendship and knowing a Fairy type move";
+export class TypeKnownEvoCondition extends SpeciesEvolutionCondition {
+  constructor(requiredType: ElementalType) {
+    super((p) => p.moveset.filter((m) => m.getMove().type === requiredType).length > 0);
+    this.description = "Needs to know a type move";
   }
 }
 
@@ -186,17 +151,14 @@ export class MoveKnownEvoCondition extends SpeciesEvolutionCondition {
  */
 const RANDOM_FORM_EVO_CHANCE = 100;
 
-/** Dudunsparce has a 1/100 chance of being 3 segments on evolution */
-export class DudunsparceThreeSegmentEvoCondition extends SpeciesEvolutionCondition {
-  constructor(requiredMoveId: MoveId) {
+export class RngFormEvoCondition extends SpeciesEvolutionCondition {
+  constructor() {
     super((p) => {
       let ret = false;
-      if (p.moveset.filter((m) => m.moveId === requiredMoveId).length > 0) {
-        globalScene.executeWithSeedOffset(() => (ret = !randSeedInt(RANDOM_FORM_EVO_CHANCE)), p.id);
-      }
+      globalScene.executeWithSeedOffset(() => (ret = !randSeedInt(RANDOM_FORM_EVO_CHANCE)), p.id);
       return ret;
     });
-    this.description = "needs to know hypder drill and has a 1% of happening";
+    this.description = "Happens with 1%";
   }
 }
 
@@ -222,18 +184,6 @@ export class ShedinjaEvoCondition extends SpeciesEvolutionCondition {
   constructor() {
     super(() => globalScene.getPlayerParty().length < 6 && globalScene.pokeballCounts[PokeballType.POKEBALL] > 0);
     this.description = "Have an empty slot in the party and a Pokeball";
-  }
-}
-
-/**
- * Requires knowing Wave Crash instead of surviving 294 recoil damage
- * Basculegion has different male and female forms
- */
-export class BasculegionEvoCondition extends SpeciesEvolutionCondition {
-  constructor(requiredMoveId: MoveId, requiredGender: Gender) {
-    super((p) => p.moveset.filter((m) => m.moveId === requiredMoveId).length > 0 && p.gender === requiredGender);
-    // Todo: convert MoveId and Gender into readable strings
-    this.description = "Needs " + requiredMoveId + " and be: " + requiredGender;
   }
 }
 
@@ -292,18 +242,6 @@ export class BiomeEvoCondition extends SpeciesEvolutionCondition {
   constructor(requiredBiomes: Biome[]) {
     super(() => globalScene.arena.isInBiome(requiredBiomes));
     this.description = "Needs to be in certain biomes";
-  }
-}
-
-/** Tandemous has a 1/100 chance of being a family of 3 on evolution */
-export class TandemausFamilyOfThreeEvoCondition extends SpeciesEvolutionCondition {
-  constructor() {
-    super((p) => {
-      let ret = false;
-      globalScene.executeWithSeedOffset(() => (ret = !randSeedInt(RANDOM_FORM_EVO_CHANCE)), p.id);
-      return ret;
-    });
-    this.description = "has a 1% of happening";
   }
 }
 
