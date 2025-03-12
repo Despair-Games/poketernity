@@ -111,4 +111,5 @@ export enum BattlerTagType {
   CRIT_BOOST_STACKABLE,
   RAGE,
   QUASHED,
+  ME_FIRST_POWER_BOOST,
 }

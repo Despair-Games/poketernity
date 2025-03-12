@@ -1351,6 +1351,17 @@ export class HelpingHandTag extends BattlerTag {
   }
 }
 
+export class MeFirstPowerBoostTag extends BattlerTag {
+  constructor() {
+    super(BattlerTagType.ME_FIRST_POWER_BOOST, BattlerTagLapseType.AFTER_MOVE, 1, MoveId.ME_FIRST);
+  }
+
+  override apply(_pokemon: Pokemon, _simulated: boolean, power: NumberHolder): boolean {
+    power.value *= 1.5;
+    return true;
+  }
+}
+
 /**
  * Applies the Ingrain tag to a pokemon
  * @extends TrappedTag
@@ -3637,6 +3648,8 @@ export function getBattlerTag(
       return new EncoreTag(sourceId);
     case BattlerTagType.HELPING_HAND:
       return new HelpingHandTag(sourceId);
+    case BattlerTagType.ME_FIRST_POWER_BOOST:
+      return new MeFirstPowerBoostTag();
     case BattlerTagType.INGRAIN:
       return new IngrainTag(sourceId);
     case BattlerTagType.AQUA_RING:

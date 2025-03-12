@@ -18,7 +18,6 @@ import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { type FieldMoveTypePowerBoostAbAttr } from "#app/data/abilities/ab-attrs/field-move-type-power-boost-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { type TypeBoostTag } from "#app/data/battler-tags";
 import { IncrementMovePriorityAttr } from "#app/data/moves/move-attrs/increment-move-priority-attr";
 import type { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
 import { MultiHitAttr } from "#app/data/moves/move-attrs/multi-hit-attr";
@@ -42,6 +41,8 @@ import { applyMoveAttrs } from "#app/utils/move-utils";
 import type { ChargingAttackMove } from "#app/data/moves/charging-attack-move";
 import type { ChargingSelfStatusMove } from "#app/data/moves/charging-self-status-move";
 import { FOG_ACCURACY_MULTIPLIER } from "#app/constants";
+import { applyBattlerTags } from "#app/data/apply-battler-tags";
+import type { TypeBoostTag, MeFirstPowerBoostTag } from "#app/data/battler-tags";
 
 export abstract class Move implements Localizable {
   public id: MoveId;
@@ -803,6 +804,8 @@ export abstract class Move implements Localizable {
     if (source.getTag(BattlerTagType.HELPING_HAND)) {
       power.value *= 1.5;
     }
+
+    applyBattlerTags<MeFirstPowerBoostTag>(BattlerTagType.ME_FIRST_POWER_BOOST, source, simulated, power);
 
     return power.value;
   }

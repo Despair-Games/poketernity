@@ -256,6 +256,7 @@ import { SwitchType } from "#enums/switch-type";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
+import { MeFirstAttr } from "#app/data/moves/move-attrs/me-first-attr";
 
 // prettier-ignore
 export function initMoves() {
@@ -1629,9 +1630,9 @@ export function initMoves() {
       .attr(AddArenaTagAttr, ArenaTagType.NO_CRIT, ArenaTagRelativeSide.USER, { turnCount: 5, failOnOverlap: true })
       .target(MoveTarget.USER_SIDE),
     new StatusMove(MoveId.ME_FIRST, ElementalType.NORMAL, -1, 20, -1, 0, 4)
+      .attr(MeFirstAttr)
       .ignoresSubstitute()
-      .target(MoveTarget.NEAR_ENEMY)
-      .unimplemented(),
+      .target(MoveTarget.NEAR_ENEMY),
     new SelfStatusMove(MoveId.COPYCAT, ElementalType.NORMAL, -1, 20, -1, 0, 4).attr(CopycatAttr),
     new StatusMove(MoveId.POWER_SWAP, ElementalType.PSYCHIC, -1, 10, 100, 0, 4)
       .attr(SwapStatStagesAttr, [Stat.ATK, Stat.SPATK])
