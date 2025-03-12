@@ -4314,7 +4314,7 @@ export class PlayerPokemon extends Pokemon {
 
       this.pauseEvolutions = false;
       // Handles Nincada evolving into Ninjask + Shedinja
-      this.handleSpecialEvolutions(evolution);
+      this.handleShedinjaEvolution(evolution);
       this.species = getPokemonSpecies(evolution.speciesId);
       if (evolution.preFormKey !== null) {
         const formIndex = Math.max(
@@ -4363,12 +4363,12 @@ export class PlayerPokemon extends Pokemon {
     });
   }
 
-  private handleSpecialEvolutions(evolution: SpeciesFormEvolution) {
+  private handleShedinjaEvolution(evolution: SpeciesFormEvolution) {
     const { speciesId } = this.species;
     if (speciesId === Species.NINCADA && evolution.speciesId === Species.NINJASK) {
       const newEvolution = pokemonEvolutions[speciesId][1];
 
-      if (newEvolution.conditions?.predicate(this)) {
+      if (newEvolution.conditions?.every((condition) => condition.predicate(this))) {
         const newPokemon = globalScene.addPlayerPokemon(
           this.species,
           this.level,

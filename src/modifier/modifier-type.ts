@@ -1396,7 +1396,7 @@ export class EvolutionItemModifierTypeGenerator extends ModifierTypeGenerator {
             (e) =>
               e.item !== EvolutionItem.NONE
               && (e.evoFormKey === null || (e.preFormKey || "") === p.getFormKey())
-              && (!e.conditions || e.conditions.predicate(p)),
+              && (!e.conditions || e.conditions.every((condition) => condition.predicate(p))),
           );
         })
         .flatMap((e) => e.item)
