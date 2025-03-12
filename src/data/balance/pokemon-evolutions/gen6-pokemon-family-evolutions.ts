@@ -34,10 +34,10 @@ export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
     new SpeciesEvolution(Species.FLORGES, 1, EvolutionItem.SHINY_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
   [Species.SKIDDO]: [new SpeciesEvolution(Species.GOGOAT, 32, null, null)],
-  [Species.PANCHAM]: [new SpeciesEvolution(Species.PANGORO, 32, null, new PangoroEvoCondition())],
+  [Species.PANCHAM]: [new SpeciesEvolution(Species.PANGORO, 32, null, [new PangoroEvoCondition()])],
   [Species.ESPURR]: [
-    new SpeciesFormEvolution(Species.MEOWSTIC, "", "", 25, null, new GenderEvolutionCondition(Gender.MALE)),
-    new SpeciesFormEvolution(Species.MEOWSTIC, "", "female", 25, null, new GenderEvolutionCondition(Gender.FEMALE)),
+    new SpeciesFormEvolution(Species.MEOWSTIC, "", "", 25, null, [new GenderEvolutionCondition(Gender.MALE)]),
+    new SpeciesFormEvolution(Species.MEOWSTIC, "", "female", 25, null, [new GenderEvolutionCondition(Gender.FEMALE)]),
   ],
   [Species.HONEDGE]: [new SpeciesEvolution(Species.DOUBLADE, 35, null, null)],
   [Species.DOUBLADE]: [
@@ -55,15 +55,15 @@ export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.HELIOPTILE]: [
     new SpeciesEvolution(Species.HELIOLISK, 1, EvolutionItem.SUN_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
-  [Species.TYRUNT]: [new SpeciesEvolution(Species.TYRANTRUM, 39, null, new DayEvolutionCondition())],
-  [Species.AMAURA]: [new SpeciesEvolution(Species.AURORUS, 39, null, new NightEvolutionCondition())],
+  [Species.TYRUNT]: [new SpeciesEvolution(Species.TYRANTRUM, 39, null, [new DayEvolutionCondition()])],
+  [Species.AMAURA]: [new SpeciesEvolution(Species.AURORUS, 39, null, [new NightEvolutionCondition()])],
   [Species.GOOMY]: [
-    new SpeciesEvolution(Species.SLIGGOO, 40, null, new DayEvolutionCondition()),
-    new SpeciesEvolution(Species.HISUI_SLIGGOO, 40, null, new NightEvolutionCondition()),
+    new SpeciesEvolution(Species.SLIGGOO, 40, null, [new DayEvolutionCondition()]),
+    new SpeciesEvolution(Species.HISUI_SLIGGOO, 40, null, [new NightEvolutionCondition()]),
   ],
-  [Species.SLIGGOO]: [new SpeciesEvolution(Species.GOODRA, 50, null, new GoodraEvoCondition())],
+  [Species.SLIGGOO]: [new SpeciesEvolution(Species.GOODRA, 50, null, [new GoodraEvoCondition()])],
   /** Hisui Sliggoo is from Gen 8 */
-  [Species.HISUI_SLIGGOO]: [new SpeciesEvolution(Species.HISUI_GOODRA, 50, null, new GoodraEvoCondition())],
+  [Species.HISUI_SLIGGOO]: [new SpeciesEvolution(Species.HISUI_GOODRA, 50, null, [new GoodraEvoCondition()])],
   [Species.PHANTUMP]: [
     new SpeciesEvolution(Species.TREVENANT, 1, EvolutionItem.LINKING_CORD, null, GENERIC_ITEM_EVO_LEVEL),
   ],
@@ -71,8 +71,8 @@ export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
     new SpeciesEvolution(Species.GOURGEIST, 1, EvolutionItem.LINKING_CORD, null, GENERIC_ITEM_EVO_LEVEL),
   ],
   [Species.BERGMITE]: [
-    new SpeciesEvolution(Species.AVALUGG, 37, null, new DayEvolutionCondition()),
-    new SpeciesEvolution(Species.HISUI_AVALUGG, 37, null, new NightEvolutionCondition()),
+    new SpeciesEvolution(Species.AVALUGG, 37, null, [new DayEvolutionCondition()]),
+    new SpeciesEvolution(Species.HISUI_AVALUGG, 37, null, [new NightEvolutionCondition()]),
   ],
   [Species.NOIBAT]: [new SpeciesEvolution(Species.NOIVERN, 48, null, null)],
 };

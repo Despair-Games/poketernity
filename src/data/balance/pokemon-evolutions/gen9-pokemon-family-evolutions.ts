@@ -9,9 +9,9 @@ import {
   GenderEvolutionCondition,
   GholdengoEvoCondition,
   NightEvolutionCondition,
+  RngFormEvoCondition,
   SpeciesEvolution,
   SpeciesFormEvolution,
-  TandemausFamilyOfThreeEvoCondition,
   type PokemonEvolutions,
 } from "#app/data/pokemon-evolutions";
 import { EvolutionItem } from "#enums/evolution-item";
@@ -26,15 +26,15 @@ export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.QUAXLY]: [new SpeciesEvolution(Species.QUAXWELL, 16, null, null)],
   [Species.QUAXWELL]: [new SpeciesEvolution(Species.QUAQUAVAL, 36, null, null)],
   [Species.LECHONK]: [
-    new SpeciesFormEvolution(Species.OINKOLOGNE, "", "", 18, null, new GenderEvolutionCondition(Gender.MALE)),
-    new SpeciesFormEvolution(Species.OINKOLOGNE, "", "female", 18, null, new GenderEvolutionCondition(Gender.FEMALE)),
+    new SpeciesFormEvolution(Species.OINKOLOGNE, "", "", 18, null, [new GenderEvolutionCondition(Gender.MALE)]),
+    new SpeciesFormEvolution(Species.OINKOLOGNE, "", "female", 18, null, [new GenderEvolutionCondition(Gender.FEMALE)]),
   ],
   [Species.TAROUNTULA]: [new SpeciesEvolution(Species.SPIDOPS, 15, null, null)],
   [Species.NYMBLE]: [new SpeciesEvolution(Species.LOKIX, 24, null, null)],
   [Species.PAWMI]: [new SpeciesEvolution(Species.PAWMO, 18, null, null)],
   [Species.PAWMO]: [new SpeciesEvolution(Species.PAWMOT, PAWMOT_EVO_LEVEL, null, null)],
   [Species.TANDEMAUS]: [
-    new SpeciesFormEvolution(Species.MAUSHOLD, "", "three", 25, null, new TandemausFamilyOfThreeEvoCondition()),
+    new SpeciesFormEvolution(Species.MAUSHOLD, "", "three", 25, null, [new RngFormEvoCondition()]),
     new SpeciesEvolution(Species.MAUSHOLD, 25, null, null),
   ],
   [Species.FIDOUGH]: [new SpeciesEvolution(Species.DACHSBUN, 26, null, null)],
@@ -66,7 +66,7 @@ export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.FINIZEN]: [new SpeciesEvolution(Species.PALAFIN, 38, null, null)],
   [Species.VAROOM]: [new SpeciesEvolution(Species.REVAVROOM, 40, null, null)],
   [Species.GLIMMET]: [new SpeciesEvolution(Species.GLIMMORA, 35, null, null)],
-  [Species.GREAVARD]: [new SpeciesEvolution(Species.HOUNDSTONE, 30, null, new NightEvolutionCondition())],
+  [Species.GREAVARD]: [new SpeciesEvolution(Species.HOUNDSTONE, 30, null, [new NightEvolutionCondition()])],
   [Species.CETODDLE]: [new SpeciesEvolution(Species.CETITAN, 1, EvolutionItem.ICE_STONE, null, GENERIC_ITEM_EVO_LEVEL)],
   /** Since this is the only Paldea Pokemon that evolves, I am leaving it in dex order */
   [Species.PALDEA_WOOPER]: [new SpeciesEvolution(Species.CLODSIRE, 20, null, null)],
@@ -74,14 +74,22 @@ export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.ARCTIBAX]: [new SpeciesEvolution(Species.BAXCALIBUR, 54, null, null)],
   /** Custom evolution method */
   [Species.GIMMIGHOUL]: [
-    new SpeciesFormEvolution(Species.GHOLDENGO, "chest", "", 1, null, new GholdengoEvoCondition(), GHOLDENGO_EVO_LEVEL),
+    new SpeciesFormEvolution(
+      Species.GHOLDENGO,
+      "chest",
+      "",
+      1,
+      null,
+      [new GholdengoEvoCondition()],
+      GHOLDENGO_EVO_LEVEL,
+    ),
     new SpeciesFormEvolution(
       Species.GHOLDENGO,
       "roaming",
       "",
       1,
       null,
-      new GholdengoEvoCondition(),
+      [new GholdengoEvoCondition()],
       GHOLDENGO_EVO_LEVEL,
     ),
   ],

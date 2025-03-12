@@ -1966,7 +1966,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           && this.level >= e.level
           && (isNullOrUndefined(e.preFormKey) || this.getFormKey() === e.preFormKey)
         ) {
-          if (e.condition === null || (e.condition as SpeciesEvolutionCondition).predicate(this)) {
+          if (
+            e.conditions === null
+            || (e.conditions as SpeciesEvolutionCondition[]).every((condition) => condition.predicate(this))
+          ) {
             return e;
           }
         }
@@ -4365,7 +4368,7 @@ export class PlayerPokemon extends Pokemon {
     if (speciesId === Species.NINCADA && evolution.speciesId === Species.NINJASK) {
       const newEvolution = pokemonEvolutions[speciesId][1];
 
-      if (newEvolution.condition?.predicate(this)) {
+      if (newEvolution.conditions?.predicate(this)) {
         const newPokemon = globalScene.addPlayerPokemon(
           this.species,
           this.level,
