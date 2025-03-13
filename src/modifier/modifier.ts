@@ -2450,7 +2450,7 @@ export class EvolutionItemModifier extends ConsumablePokemonModifier {
           (e) =>
             e.item === this.type.evolutionItem
             && (e.evoFormKey === null || (e.preFormKey || "") === playerPokemon.getFormKey())
-            && (!e.condition || e.condition.predicate(playerPokemon)),
+            && (!e.conditions || e.conditions.every((condition) => condition.predicate(playerPokemon))),
         )
       : null;
 

@@ -1094,7 +1094,7 @@ export class EvolutionItemModifierType extends PokemonModifierType implements Ge
           && pokemonEvolutions[pokemon.species.speciesId].filter(
             (e) =>
               e.item === this.evolutionItem
-              && (!e.condition || e.condition.predicate(pokemon))
+              && (!e.conditions || e.conditions.every((condition) => condition.predicate(pokemon)))
               && (e.preFormKey === null || e.preFormKey === pokemon.getFormKey()),
           ).length
           && pokemon.getFormKey() !== SpeciesFormKey.GIGANTAMAX
@@ -1396,7 +1396,7 @@ export class EvolutionItemModifierTypeGenerator extends ModifierTypeGenerator {
             (e) =>
               e.item !== EvolutionItem.NONE
               && (e.evoFormKey === null || (e.preFormKey || "") === p.getFormKey())
-              && (!e.condition || e.condition.predicate(p)),
+              && (!e.conditions || e.conditions.every((condition) => condition.predicate(p))),
           );
         })
         .flatMap((e) => e.item)

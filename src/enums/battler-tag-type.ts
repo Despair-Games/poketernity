@@ -111,4 +111,5 @@ export enum BattlerTagType {
   CRIT_BOOST_STACKABLE,
   RAGE,
   QUASHED,
+  UPROAR,
 }
