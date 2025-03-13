@@ -1,0 +1,32 @@
+import { type Pokemon } from "#app/field/pokemon";
+import { HitResult } from "#enums/hit-result";
+import { globalScene } from "#app/global-scene";
+import type { Move } from "#app/data/moves/move";
+import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
+
+/**
+ * Attribute to split HP evenly between the user and target.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Pain_Split_(move) | Pain Split}.
+ * @extends MoveEffectAttr
+ */
+export class HpSplitAttr extends MoveEffectAttr {
+  override applyEffect(user: Pokemon, target: Pokemon, _move: Move): boolean {
+    const hpValue = Math.floor((target.hp + user.hp) / 2);
+    [user, target].forEach((p) => {
+      if (p.hp < hpValue) {
+        const healing = p.heal(hpValue - p.hp);
+        if (healing) {
+          globalScene.damageNumberHandler.add(p, healing, HitResult.HEAL);
+        }
+      } else if (p.hp > hpValue) {
+        const damage = p.damage(p.hp - hpValue, true);
+        if (damage) {
+          globalScene.damageNumberHandler.add(p, damage);
+        }
+      }
+      p.updateInfo();
+    });
+
+    return true;
+  }
+}

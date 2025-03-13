@@ -35,9 +35,9 @@ export default class SessionReloadModalUiHandler extends ModalUiHandler {
     const label = addTextObject(
       this.getWidth() / 2,
       this.getHeight() / 2,
-      "Your session is out of date.\nYour data will be reloaded…",
-      TextStyle.WINDOW,
-      { fontSize: "48px", align: "center" },
+      "Your session is out of date.\nYour data will be reloaded…", // TODO: localize
+      TextStyle.WINDOW_MODAL_INFO,
+      { align: "center" },
     );
     label.setOrigin(0.5, 0.5);
 

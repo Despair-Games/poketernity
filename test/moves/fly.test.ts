@@ -35,7 +35,7 @@ describe("Moves - Fly", () => {
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyMoveset(MoveId.TACKLE);
 
-    vi.spyOn(allMoves[MoveId.FLY], "accuracy", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.FLY), "accuracy", "get").mockReturnValue(100);
   });
 
   it("should make the user semi-invulnerable, then attack over 2 turns", async () => {

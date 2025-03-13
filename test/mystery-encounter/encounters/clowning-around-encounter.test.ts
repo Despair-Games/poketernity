@@ -6,7 +6,7 @@ import { GameManager } from "#test/testUtils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import * as MoveAnimUtils from "#app/utils/move-anim-utils";
-import * as InitMoveAnim from "#app/data/init-move-anim";
+import * as InitMoveAnim from "#app/data/init/init-move-anim";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { generateModifierType } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import {

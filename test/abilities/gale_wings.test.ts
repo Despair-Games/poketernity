@@ -37,7 +37,7 @@ describe("Abilities - Gale Wings", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon();
 
-    const flyingMove = allMoves[MoveId.WING_ATTACK];
+    const flyingMove = allMoves.get(MoveId.WING_ATTACK);
     vi.spyOn(flyingMove, "getPriority");
 
     game.move.select(MoveId.WING_ATTACK);
@@ -52,7 +52,7 @@ describe("Abilities - Gale Wings", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     playerPokemon.hp = 1;
 
-    const flyingMove = allMoves[MoveId.WING_ATTACK];
+    const flyingMove = allMoves.get(MoveId.WING_ATTACK);
     vi.spyOn(flyingMove, "getPriority");
 
     game.move.select(MoveId.WING_ATTACK);
@@ -69,7 +69,7 @@ describe("Abilities - Gale Wings", () => {
     //IVs for Flying-Type Hidden Power
     playerPokemon.ivs = [31, 31, 31, 30, 30, 30];
 
-    const flyingMove = allMoves[MoveId.HIDDEN_POWER];
+    const flyingMove = allMoves.get(MoveId.HIDDEN_POWER);
     vi.spyOn(flyingMove, "getPriority");
 
     game.move.select(MoveId.HIDDEN_POWER);
@@ -85,7 +85,7 @@ describe("Abilities - Gale Wings", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    const flyingMove = allMoves[MoveId.TACKLE];
+    const flyingMove = allMoves.get(MoveId.TACKLE);
     vi.spyOn(flyingMove, "getPriority");
 
     game.move.select(MoveId.TACKLE);

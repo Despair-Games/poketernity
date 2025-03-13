@@ -34,7 +34,7 @@ describe("Abilities - Battery", () => {
   });
 
   it("raises the power of allies' special moves by 30%", async () => {
-    const moveToCheck = allMoves[MoveId.DAZZLING_GLEAM];
+    const moveToCheck = allMoves.get(MoveId.DAZZLING_GLEAM);
     const basePower = moveToCheck.power;
 
     vi.spyOn(moveToCheck, "calculateBattlePower");
@@ -49,7 +49,7 @@ describe("Abilities - Battery", () => {
   });
 
   it("does not raise the power of allies' non-special moves", async () => {
-    const moveToCheck = allMoves[MoveId.BREAKING_SWIPE];
+    const moveToCheck = allMoves.get(MoveId.BREAKING_SWIPE);
     const basePower = moveToCheck.power;
 
     vi.spyOn(moveToCheck, "calculateBattlePower");
@@ -64,7 +64,7 @@ describe("Abilities - Battery", () => {
   });
 
   it("does not raise the power of the ability owner's special moves", async () => {
-    const moveToCheck = allMoves[MoveId.DAZZLING_GLEAM];
+    const moveToCheck = allMoves.get(MoveId.DAZZLING_GLEAM);
     const basePower = moveToCheck.power;
 
     vi.spyOn(moveToCheck, "calculateBattlePower");

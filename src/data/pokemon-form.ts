@@ -3,24 +3,14 @@ import type { Abilities } from "#enums/abilities";
 import type { ElementalType } from "#enums/elemental-type";
 
 export class PokemonForm extends PokemonSpeciesForm {
-  public formName: string;
-  public formKey: string;
-  public formSpriteKey: string | null;
-
-  // This is a collection of form keys that have in-run form changes, but should still be separately selectable from the start screen
-  private starterSelectableKeys: string[] = [
-    "10",
-    "50",
-    "10-pc",
-    "50-pc",
-    "red",
-    "orange",
-    "yellow",
-    "green",
-    "blue",
-    "indigo",
-    "violet",
-  ];
+  public readonly formName: string;
+  public readonly formKey: string;
+  public readonly formSpriteKey: string | null;
+  /**
+   * For non starter selectable Pokemon only. This is the formKey corresponding to the form that should
+   * be marked as seen or caught in the dex data instead of the non starter selectable form.
+   */
+  public readonly baseFormKey: string | null;
 
   constructor(
     formName: string,
@@ -45,6 +35,7 @@ export class PokemonForm extends PokemonSpeciesForm {
     genderDiffs: boolean = false,
     formSpriteKey: string | null = null,
     isStarterSelectable: boolean = false,
+    baseFormKey: string | null = null,
   ) {
     super(
       type1,
@@ -71,6 +62,7 @@ export class PokemonForm extends PokemonSpeciesForm {
     this.formName = formName;
     this.formKey = formKey;
     this.formSpriteKey = formSpriteKey;
+    this.baseFormKey = baseFormKey;
   }
 
   getFormSpriteKey(_formIndex?: number) {

@@ -36,7 +36,7 @@ describe("Moves - Ceaseless Edge", () => {
     game.override.enemyLevel(100);
     game.override.moveset([MoveId.CEASELESS_EDGE, MoveId.SPLASH, MoveId.ROAR]);
     game.override.enemyMoveset(MoveId.SPLASH);
-    vi.spyOn(allMoves[MoveId.CEASELESS_EDGE], "accuracy", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.CEASELESS_EDGE), "accuracy", "get").mockReturnValue(100);
   });
 
   test("move should hit and apply spikes", async () => {

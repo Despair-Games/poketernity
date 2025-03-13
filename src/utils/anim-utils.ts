@@ -1,12 +1,12 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { type initCommonAnims } from "#app/data/init-common-anims";
-import { type initEncounterAnims } from "#app/data/init-encounter-anims";
+import { type initCommonAnims } from "#app/data/init/init-common-anims";
+import { type initEncounterAnims } from "#app/data/init/init-encounter-anims";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
-import type { AnimConfig } from "#app/data/anim-config";
-import { commonAnims } from "#app/data/common-anims";
-import { encounterAnims } from "#app/data/encounter-anims";
+import type { AnimConfig } from "#app/data/animations/anim-config";
+import { commonAnims } from "#app/data/animations/common-anims";
+import { encounterAnims } from "#app/data/animations/encounter-anims";
 import { globalScene } from "#app/global-scene";
 import Phaser from "phaser";
 import { ImagesFolder } from "#enums/images-folders";

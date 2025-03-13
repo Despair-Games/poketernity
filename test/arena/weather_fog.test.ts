@@ -35,7 +35,7 @@ describe("Weather - Fog", () => {
   });
 
   it("move accuracy is changed in fog", async () => {
-    const moveToCheck = allMoves[MoveId.TACKLE];
+    const moveToCheck = allMoves.get(MoveId.TACKLE);
 
     vi.spyOn(moveToCheck, "calculateBattleAccuracy");
 
@@ -47,7 +47,7 @@ describe("Weather - Fog", () => {
   });
 
   it("move accuracy is unaffected if fog is suppressed", async () => {
-    const moveToCheck = allMoves[MoveId.TACKLE];
+    const moveToCheck = allMoves.get(MoveId.TACKLE);
 
     vi.spyOn(moveToCheck, "calculateBattleAccuracy");
     game.override.ability(Abilities.AIR_LOCK);

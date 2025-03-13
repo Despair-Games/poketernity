@@ -55,7 +55,7 @@ describe("Moves - Protect", () => {
 
   test("should prevent secondary effects from the opponent's attack", async () => {
     game.override.enemyMoveset([MoveId.CEASELESS_EDGE]);
-    vi.spyOn(allMoves[MoveId.CEASELESS_EDGE], "accuracy", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.CEASELESS_EDGE), "accuracy", "get").mockReturnValue(100);
 
     await game.classicMode.startBattle([Species.CHARIZARD]);
 

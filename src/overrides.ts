@@ -1,22 +1,33 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import { type PokeballCounts } from "#app/battle-scene";
 import { Variant } from "#app/data/variant";
 import { type ModifierOverride } from "#app/modifier/modifier-type";
 import { Abilities } from "#enums/abilities";
+import { BerryType } from "#enums/berry-type";
 import { Biome } from "#enums/biome";
 import { EggTier } from "#enums/egg-type";
+import { ElementalType } from "#enums/elemental-type";
+import { EvolutionItem } from "#enums/evolution-item";
+import { FormChangeItem } from "#enums/form-change-item";
 import { Gender } from "#enums/gender";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PokeballType } from "#enums/pokeball";
 import { Species } from "#enums/species";
+import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TimeOfDay } from "#enums/time-of-day";
 import { Unlockables } from "#enums/unlockables";
 import { VariantTier } from "#enums/variant-tier";
 import { WeatherType } from "#enums/weather-type";
 
+/**
+ * This comment block exists to prevent IDEs from automatically removing unused imports
+ * {@linkcode BerryType}, {@linkcode ElementalType}, {@linkcode EvolutionItem}
+ * {@linkcode FormChangeItem}, {@linkcode Stat}
+ */
 /**
  * Overrides that are used to test different in game situations
  *
@@ -238,6 +249,18 @@ class DefaultOverrides {
    * If more entries are listed than rolled, only the first X entries will be used, where X is the number of items rolled.
    *
    * Note that, for all items in the array, `count` is not used.
+   * 
+   * @example
+   * ```
+   * // Attempts to make the first item reward a rarer candy, the second one a dynamax band, and the third a rare evolution item
+   * ITEM_REWARD_OVERRIDE: [{ name: "RARER_CANDY" }, { name: "DYNAMAX_BAND" }, { name: "RARE_EVOLUTION_ITEM" }]
+   * 
+   * // Example of a vitamin that boosts def (Iron)
+   * ITEM_REWARD_OVERRIDE: [{ name: "BASE_STAT_BOOSTER", type: Stat.DEF }]
+   * 
+   * // Example of a type boosting item (Charcoal)
+   * { name: "ATTACK_TYPE_BOOSTER", type: ElementalType.FIRE }
+   * ```
    */
   readonly ITEM_REWARD_OVERRIDE: ModifierOverride[] = [];
 

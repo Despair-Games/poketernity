@@ -8,8 +8,9 @@ import { Stat, EFFECTIVE_STATS, getShortenedStatKey } from "#enums/stat";
 export function getNatureName(
   nature: Nature,
   includeStatEffects: boolean = false,
-  forStarterSelect: boolean = false,
+  singleLine: boolean = false,
   ignoreBBCode: boolean = false,
+  baseTextStyle: TextStyle = TextStyle.WINDOW,
 ): string {
   let ret = toReadableString(Nature[nature]);
   //Translating nature
@@ -27,14 +28,19 @@ export function getNatureName(
         decreasedStat = stat;
       }
     }
-    const textStyle = forStarterSelect ? TextStyle.SUMMARY_ALT : TextStyle.WINDOW;
+
     const getTextFrag = !ignoreBBCode
-      ? (text: string, style: TextStyle) => getBBCodeFragment(text, style)
+      ? (text: string, style: TextStyle) => getBBCodeFragment(text, style, true)
       : (text: string, _style: TextStyle) => text;
+
     if (increasedStat && decreasedStat) {
-      ret = `${getTextFrag(`${ret}${!forStarterSelect ? "\n" : " "}(`, textStyle)}${getTextFrag(`+${i18next.t(getShortenedStatKey(increasedStat))}`, TextStyle.SUMMARY_PINK)}${getTextFrag("/", textStyle)}${getTextFrag(`-${i18next.t(getShortenedStatKey(decreasedStat))}`, TextStyle.SUMMARY_BLUE)}${getTextFrag(")", textStyle)}`;
+      ret =
+        `${ret}${singleLine ? " " : "\n"}`
+        + `(${getTextFrag(`+${i18next.t(getShortenedStatKey(increasedStat))}`, TextStyle.SUMMARY_PINK)}`
+        + `/${getTextFrag(`-${i18next.t(getShortenedStatKey(decreasedStat))}`, TextStyle.SUMMARY_BLUE)})`;
+      ret = getTextFrag(ret, baseTextStyle);
     } else {
-      ret = getTextFrag(`${ret}${!forStarterSelect ? "\n" : " "}(-)`, textStyle);
+      ret = getTextFrag(`${ret}${singleLine ? " " : "\n"}(-)`, baseTextStyle);
     }
   }
   return ret;

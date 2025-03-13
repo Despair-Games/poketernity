@@ -34,7 +34,7 @@ describe("Abilities - Power Spot", () => {
   });
 
   it("raises the power of allies' special moves by 30%", async () => {
-    const moveToCheck = allMoves[MoveId.DAZZLING_GLEAM];
+    const moveToCheck = allMoves.get(MoveId.DAZZLING_GLEAM);
     const basePower = moveToCheck.power;
 
     vi.spyOn(moveToCheck, "calculateBattlePower");
@@ -48,7 +48,7 @@ describe("Abilities - Power Spot", () => {
   });
 
   it("raises the power of allies' physical moves by 30%", async () => {
-    const moveToCheck = allMoves[MoveId.BREAKING_SWIPE];
+    const moveToCheck = allMoves.get(MoveId.BREAKING_SWIPE);
     const basePower = moveToCheck.power;
 
     vi.spyOn(moveToCheck, "calculateBattlePower");
@@ -62,7 +62,7 @@ describe("Abilities - Power Spot", () => {
   });
 
   it("does not raise the power of the ability owner's moves", async () => {
-    const moveToCheck = allMoves[MoveId.BREAKING_SWIPE];
+    const moveToCheck = allMoves.get(MoveId.BREAKING_SWIPE);
     const basePower = moveToCheck.power;
 
     vi.spyOn(moveToCheck, "calculateBattlePower");

@@ -1,3 +1,5 @@
+import { SpeciesFormKey } from "#enums/species-form-key";
+
 /** Abbreviated name of the application/game. */
 export const APP_ABBREVIATION: string = import.meta.env.VITE_APP_ABBREVIATION ?? "game";
 
@@ -128,3 +130,12 @@ export const SCREEN_SINGLES_DMG_FACTOR = 0.5;
 
 /** The damage multiplier applied by Reflect, Light Screen, and Aurora Veil in double battles.*/
 export const SCREEN_DOUBLES_DMG_FACTOR = 2732 / 4096;
+
+/**
+ * A list of all Gigantamax form keys, excluding Eternamax.
+ */
+export const G_MAX_FORM_KEYS = Object.freeze([
+  SpeciesFormKey.GIGANTAMAX,
+  SpeciesFormKey.GIGANTAMAX_RAPID,
+  SpeciesFormKey.GIGANTAMAX_SINGLE,
+]) as readonly string[];

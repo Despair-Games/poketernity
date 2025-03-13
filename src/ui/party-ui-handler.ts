@@ -29,7 +29,7 @@ import { Species } from "#enums/species";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { type CommandPhase } from "#app/phases/command-phase";
 import { globalScene } from "#app/global-scene";
-import { ForceSwitchOutAttr } from "#app/data/move-attrs/force-switch-out-attr";
+import { ForceSwitchOutAttr } from "#app/data/moves/move-attrs/force-switch-out-attr";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { PartyOption } from "#enums/party-option";
@@ -547,7 +547,7 @@ export default class PartyUiHandler extends MessageUiHandler {
         if (this.partyUiMode === PartyUiMode.REMEMBER_MOVE_MODIFIER) {
           const option = this.options[this.optionsCursor];
           const pokemon = globalScene.getPlayerParty()[this.cursor];
-          const move = allMoves[pokemon.getLearnableLevelMoves()[option]];
+          const move = allMoves.get(pokemon.getLearnableLevelMoves()[option]);
           if (move) {
             this.moveInfoOverlay.show(move);
           } else {
@@ -785,7 +785,7 @@ export default class PartyUiHandler extends MessageUiHandler {
 
     if (this.partyUiMode === PartyUiMode.REMEMBER_MOVE_MODIFIER && learnableLevelMoves?.length) {
       // show the move overlay with info for the first move
-      this.moveInfoOverlay.show(allMoves[learnableLevelMoves[0]]);
+      this.moveInfoOverlay.show(allMoves.get(learnableLevelMoves[0]));
     }
 
     const itemModifiers =
@@ -825,7 +825,10 @@ export default class PartyUiHandler extends MessageUiHandler {
             const isBatonPassMove =
               this.partyUiMode === PartyUiMode.FAINT_SWITCH
               && moveHistory.length
-              && allMoves[moveHistory[moveHistory.length - 1].move.id].getAttrs(ForceSwitchOutAttr)[0]?.isBatonPass()
+              && allMoves
+                .get(moveHistory[moveHistory.length - 1].move.id)
+                .getAttrs(ForceSwitchOutAttr)[0]
+                ?.isBatonPass()
               && moveHistory[moveHistory.length - 1].result === MoveResult.SUCCESS;
 
             // isBatonPassMove and allowBatonModifierSwitch shouldn't ever be true
@@ -974,7 +977,7 @@ export default class PartyUiHandler extends MessageUiHandler {
         }
       } else if (this.partyUiMode === PartyUiMode.REMEMBER_MOVE_MODIFIER) {
         const move = learnableLevelMoves[option];
-        optionName = allMoves[move].name;
+        optionName = allMoves.get(move).name;
         altText = !pokemon
           .getSpeciesForm()
           .getLevelMoves()

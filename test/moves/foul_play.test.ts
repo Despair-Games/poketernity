@@ -35,7 +35,7 @@ describe("Moves - Foul Play", () => {
 
   it("should use the target's Attack stat to calculate damage", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
-    const foulPlay = allMoves[MoveId.FOUL_PLAY];
+    const foulPlay = allMoves.get(MoveId.FOUL_PLAY);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -54,7 +54,7 @@ describe("Moves - Foul Play", () => {
 
   it("should use the target's Attack stat stages during damage calculation", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
-    const foulPlay = allMoves[MoveId.FOUL_PLAY];
+    const foulPlay = allMoves.get(MoveId.FOUL_PLAY);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -73,7 +73,7 @@ describe("Moves - Foul Play", () => {
 
   it("should only apply the user's Attack stat multipliers from abilities for damage", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
-    const foulPlay = allMoves[MoveId.FOUL_PLAY];
+    const foulPlay = allMoves.get(MoveId.FOUL_PLAY);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -90,7 +90,7 @@ describe("Moves - Foul Play", () => {
 
   it("should apply damage reduction from the user's burn and not the target's", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
-    const foulPlay = allMoves[MoveId.FOUL_PLAY];
+    const foulPlay = allMoves.get(MoveId.FOUL_PLAY);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();

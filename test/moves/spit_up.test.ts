@@ -16,7 +16,7 @@ describe("Moves - Spit Up", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
-  const spitUp = allMoves[MoveId.SPIT_UP];
+  const spitUp = allMoves.get(MoveId.SPIT_UP);
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({ type: Phaser.HEADLESS });

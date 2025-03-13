@@ -6,7 +6,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/testUtils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { Move } from "#app/data/move";
+import type { Move } from "#app/data/moves/move";
 import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 
 describe("Moves - Fusion Flare and Fusion Bolt", () => {
@@ -28,8 +28,8 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    fusionFlare = allMoves[MoveId.FUSION_FLARE];
-    fusionBolt = allMoves[MoveId.FUSION_BOLT];
+    fusionFlare = allMoves.get(MoveId.FUSION_FLARE);
+    fusionBolt = allMoves.get(MoveId.FUSION_BOLT);
     game.override.moveset([fusionFlare.id, fusionBolt.id]);
     game.override.startingLevel(1);
 

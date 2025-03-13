@@ -35,7 +35,7 @@ describe("Moves - Body Press", () => {
 
   it("should use the user's Defense stat to calculate damage", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
-    const bodyPress = allMoves[MoveId.BODY_PRESS];
+    const bodyPress = allMoves.get(MoveId.BODY_PRESS);
 
     const player = game.field.getPlayerPokemon();
     vi.spyOn(player, "stats", "get").mockReturnValue(Array(6).fill(100));
@@ -55,7 +55,7 @@ describe("Moves - Body Press", () => {
 
   it("should use Defense stat stages during damage calculation", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
-    const bodyPress = allMoves[MoveId.BODY_PRESS];
+    const bodyPress = allMoves.get(MoveId.BODY_PRESS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -74,7 +74,7 @@ describe("Moves - Body Press", () => {
 
   it("should only apply Attack stat multipliers from abilities for damage", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
-    const bodyPress = allMoves[MoveId.BODY_PRESS];
+    const bodyPress = allMoves.get(MoveId.BODY_PRESS);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();

@@ -11,6 +11,7 @@ import { SwitchType } from "#enums/switch-type";
 import { settings } from "#app/system/settings/settings-manager";
 import i18next from "i18next";
 import { PhaseId } from "#enums/phase-id";
+import { MoveLockTagTypes } from "#app/utils/battler-tag-type-utils";
 
 /**
  * Handles the prompt to switch pokemon at the start of a battle when the player is playing in Switch mode
@@ -60,7 +61,7 @@ export class CheckSwitchPhase extends BattlePhase {
 
     // ...or if any player Pokemon has an effect that prevents the checked Pokemon from switching
     if (
-      pokemon.getTag(BattlerTagType.FRENZY)
+      pokemon.getTag(...MoveLockTagTypes)
       || pokemon.isTrapped()
       || globalScene.getPlayerField().some((p) => p.getTag(BattlerTagType.COMMANDED))
     ) {

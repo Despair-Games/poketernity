@@ -38,7 +38,7 @@ describe("Moves - Round", () => {
   it("should cue other instances of Round together in Speed order", async () => {
     await game.classicMode.startBattle([Species.BLISSEY, Species.FEEBAS]);
 
-    const round = allMoves[MoveId.ROUND];
+    const round = allMoves.get(MoveId.ROUND);
     const spy = vi.spyOn(round, "calculateBattlePower");
 
     game.move.select(MoveId.ROUND, 0, BattlerIndex.ENEMY);

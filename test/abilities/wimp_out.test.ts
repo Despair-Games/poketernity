@@ -405,7 +405,7 @@ describe("Abilities - Wimp Out", () => {
   it("triggers status on the wimp out user before a new pokemon is switched in", async () => {
     game.override.enemyMoveset(MoveId.SLUDGE_BOMB).startingLevel(80);
     await game.classicMode.startBattle([Species.WIMPOD, Species.TYRUNT]);
-    vi.spyOn(allMoves[MoveId.SLUDGE_BOMB], "chance", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.SLUDGE_BOMB), "chance", "get").mockReturnValue(100);
 
     game.move.select(MoveId.SPLASH);
     game.doSelectPartyPokemon(1);
