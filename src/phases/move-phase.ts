@@ -38,6 +38,7 @@ import { PhaseId } from "#enums/phase-id";
 import { SelfStatusMove } from "#app/data/moves/move";
 import { WeatherType } from "#enums/weather-type";
 import { applyBattlerTags } from "#app/data/apply-battler-tags";
+import type { RedirectMoveAbAttr } from "#app/data/abilities/ab-attrs/redirect-move-ab-attr";
 
 /**
  * Resolves the following:
@@ -508,7 +509,16 @@ export class MovePhase extends BattlePhase {
       globalScene
         .getField(true)
         .filter((p) => p !== this.pokemon)
-        .forEach((p) => applyAbAttrs(AbAttrFlag.REDIRECT_MOVE, p, false, this.move.moveId, redirectTarget));
+        .forEach((p) =>
+          applyAbAttrs<RedirectMoveAbAttr>(
+            AbAttrFlag.REDIRECT_MOVE,
+            p,
+            false,
+            this.move.moveId,
+            this.pokemon,
+            redirectTarget,
+          ),
+        );
 
       /** `true` if an Ability is responsible for redirecting the move to another target; `false` otherwise */
       let redirectedByAbility = currentTarget !== redirectTarget.value;

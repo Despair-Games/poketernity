@@ -34,6 +34,8 @@ export const TANGROWTH_EVO_LEVEL = 24;
 export const LICKILICKY_EVO_LEVEL = 33;
 /** Learns mimic at level 32 in gen 8 and 15 in gen 7 */
 export const MR_MIME_EVO_LEVEL = 15;
+/** In case the enemy evolution level for the Eevee family ever changes */
+export const EEVEE_FAMILY_EVO_LEVEL = GENERIC_ITEM_EVO_LEVEL;
 /** Learns mimic at level 16 in gen 8 */
 export const SUDOWOODO_EVO_LEVEL = 16;
 /** Learns double hit at level 32 in gen 9 */

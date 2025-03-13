@@ -112,4 +112,5 @@ export enum BattlerTagType {
   RAGE,
   QUASHED,
   ROLLING,
+  UPROAR,
 }

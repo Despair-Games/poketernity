@@ -1,8 +1,6 @@
-import { globalScene } from "#app/global-scene";
 import { EvolutionItem } from "#enums/evolution-item";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { TimeOfDay } from "#enums/time-of-day";
 import {
   ADVANCED_ITEM_EVO_LEVEL,
   AMBIPOM_EVO_LEVEL,
@@ -19,28 +17,21 @@ import {
   type PokemonEvolutions,
   SpeciesFormEvolution,
   SpeciesEvolution,
-  SpeciesEvolutionCondition,
   SpeciesFriendshipEvolutionCondition,
+  NightEvolutionCondition,
+  DayEvolutionCondition,
+  MoveKnownEvoCondition,
+  SpeciesOwnedEvoCondition,
+  RngFormEvoCondition,
 } from "#app/data/pokemon-evolutions";
-import { randSeedInt } from "#app/utils";
 
 export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.CHIKORITA]: [new SpeciesEvolution(Species.BAYLEEF, 16, null, null)],
   [Species.BAYLEEF]: [new SpeciesEvolution(Species.MEGANIUM, 32, null, null)],
   [Species.CYNDAQUIL]: [new SpeciesEvolution(Species.QUILAVA, 14, null, null)],
   [Species.QUILAVA]: [
-    new SpeciesEvolution(
-      Species.HISUI_TYPHLOSION,
-      36,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
-    ),
-    new SpeciesEvolution(
-      Species.TYPHLOSION,
-      36,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
-    ),
+    new SpeciesEvolution(Species.TYPHLOSION, 36, null, [new DayEvolutionCondition()]),
+    new SpeciesEvolution(Species.HISUI_TYPHLOSION, 36, null, [new NightEvolutionCondition()]),
   ],
   [Species.TOTODILE]: [new SpeciesEvolution(Species.CROCONAW, 18, null, null)],
   [Species.CROCONAW]: [new SpeciesEvolution(Species.FERALIGATR, 30, null, null)],
@@ -54,7 +45,7 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.TOGETIC,
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(70),
+      [new SpeciesFriendshipEvolutionCondition(70)],
       BABY_HAPPINESS_EVO_LEVEL,
     ),
   ],
@@ -70,31 +61,19 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.MARILL,
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(70),
+      [new SpeciesFriendshipEvolutionCondition(70)],
       BABY_HAPPINESS_EVO_LEVEL,
     ),
   ],
   [Species.MARILL]: [new SpeciesEvolution(Species.AZUMARILL, 18, null, null)],
   /** Bonsly is from Gen 4 */
   [Species.BONSLY]: [
-    new SpeciesEvolution(
-      Species.SUDOWOODO,
-      1,
-      null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.MIMIC).length > 0),
-      SUDOWOODO_EVO_LEVEL,
-    ),
+    new SpeciesEvolution(Species.SUDOWOODO, 1, null, [new MoveKnownEvoCondition(MoveId.MIMIC)], SUDOWOODO_EVO_LEVEL),
   ],
   [Species.HOPPIP]: [new SpeciesEvolution(Species.SKIPLOOM, 18, null, null)],
   [Species.SKIPLOOM]: [new SpeciesEvolution(Species.JUMPLUFF, 27, null, null)],
   [Species.AIPOM]: [
-    new SpeciesEvolution(
-      Species.AMBIPOM,
-      1,
-      null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.DOUBLE_HIT).length > 0),
-      AMBIPOM_EVO_LEVEL,
-    ),
+    new SpeciesEvolution(Species.AMBIPOM, 1, null, [new MoveKnownEvoCondition(MoveId.DOUBLE_HIT)], AMBIPOM_EVO_LEVEL),
   ],
   [Species.SUNKERN]: [new SpeciesEvolution(Species.SUNFLORA, 1, EvolutionItem.SUN_STONE, null, GENERIC_ITEM_EVO_LEVEL)],
   [Species.YANMA]: [
@@ -102,7 +81,7 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.YANMEGA,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.ANCIENT_POWER).length > 0),
+      [new MoveKnownEvoCondition(MoveId.ANCIENT_POWER)],
       YANMEGA_EVO_LEVEL,
     ),
   ],
@@ -120,7 +99,7 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.FARIGIRAF,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.TWIN_BEAM).length > 0),
+      [new MoveKnownEvoCondition(MoveId.TWIN_BEAM)],
       FARIGARIF_EVO_LEVEL,
     ),
   ],
@@ -132,20 +111,14 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
       "three-segment",
       1,
       null,
-      new SpeciesEvolutionCondition((p) => {
-        let ret = false;
-        if (p.moveset.filter((m) => m.moveId === MoveId.HYPER_DRILL).length > 0) {
-          globalScene.executeWithSeedOffset(() => (ret = !randSeedInt(4)), p.id);
-        }
-        return ret;
-      }),
+      [new MoveKnownEvoCondition(MoveId.HYPER_DRILL), new RngFormEvoCondition()],
       DUDUNSPARCE_EVO_LEVEL,
     ),
     new SpeciesEvolution(
       Species.DUDUNSPARCE,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.HYPER_DRILL).length > 0),
+      [new MoveKnownEvoCondition(MoveId.HYPER_DRILL)],
       DUDUNSPARCE_EVO_LEVEL,
     ),
   ],
@@ -154,7 +127,7 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.GLISCOR,
       1,
       EvolutionItem.RAZOR_FANG,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.NIGHT, TimeOfDay.DUSK])),
+      [new NightEvolutionCondition()],
       GENERIC_ITEM_EVO_LEVEL,
     ),
   ],
@@ -164,7 +137,7 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.WEAVILE,
       1,
       EvolutionItem.RAZOR_CLAW,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.NIGHT, TimeOfDay.DUSK])),
+      [new NightEvolutionCondition()],
       GENERIC_ITEM_EVO_LEVEL,
     ),
   ],
@@ -174,7 +147,7 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.URSALUNA,
       1,
       EvolutionItem.PEAT_BLOCK,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.NIGHT, TimeOfDay.DUSK])),
+      [new NightEvolutionCondition()],
       ADVANCED_ITEM_EVO_LEVEL,
     ), // Note: Ursaring does not evolve into Bloodmoon Ursaluna
   ],
@@ -185,20 +158,14 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.MAMOSWINE,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.ANCIENT_POWER).length > 0),
+      [new MoveKnownEvoCondition(MoveId.ANCIENT_POWER)],
       MAMOSWINE_EVO_LEVEL,
     ),
   ],
   [Species.REMORAID]: [new SpeciesEvolution(Species.OCTILLERY, 25, null, null)],
   /** Mantyke is from Gen 4 */
   [Species.MANTYKE]: [
-    new SpeciesEvolution(
-      Species.MANTINE,
-      32,
-      null,
-      /** Requires the player to have caught a Remoraid before */
-      new SpeciesEvolutionCondition(() => !!globalScene.gameData.dexData[Species.REMORAID].caughtAttr),
-    ),
+    new SpeciesEvolution(Species.MANTINE, 32, null, [new SpeciesOwnedEvoCondition(Species.REMORAID)]),
   ],
   [Species.HOUNDOUR]: [new SpeciesEvolution(Species.HOUNDOOM, 24, null, null)],
   [Species.PHANPY]: [new SpeciesEvolution(Species.DONPHAN, 25, null, null)],
@@ -207,7 +174,7 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.WYRDEER,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.PSYSHIELD_BASH).length > 0),
+      [new MoveKnownEvoCondition(MoveId.PSYSHIELD_BASH)],
       WYRDEER_EVO_LEVEL,
     ),
   ],

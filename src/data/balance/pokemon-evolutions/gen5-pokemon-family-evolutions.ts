@@ -1,12 +1,14 @@
-import { globalScene } from "#app/global-scene";
 import { Species } from "#enums/species";
-import { TimeOfDay } from "#enums/time-of-day";
 import {
+  DayEvolutionCondition,
+  GenderEvolutionCondition,
+  MoveKnownEvoCondition,
+  NightEvolutionCondition,
   type PokemonEvolutions,
   SpeciesEvolution,
-  SpeciesEvolutionCondition,
   SpeciesFormEvolution,
   SpeciesFriendshipEvolutionCondition,
+  SpeciesOwnedEvoCondition,
 } from "#app/data/pokemon-evolutions";
 import { Gender } from "#enums/gender";
 import { EvolutionItem } from "#enums/evolution-item";
@@ -26,18 +28,8 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.PIGNITE]: [new SpeciesEvolution(Species.EMBOAR, 36, null, null)],
   [Species.OSHAWOTT]: [new SpeciesEvolution(Species.DEWOTT, 17, null, null)],
   [Species.DEWOTT]: [
-    new SpeciesEvolution(
-      Species.HISUI_SAMUROTT,
-      36,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
-    ),
-    new SpeciesEvolution(
-      Species.SAMUROTT,
-      36,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
-    ),
+    new SpeciesEvolution(Species.SAMUROTT, 36, null, [new DayEvolutionCondition()]),
+    new SpeciesEvolution(Species.HISUI_SAMUROTT, 36, null, [new NightEvolutionCondition()]),
   ],
   [Species.PATRAT]: [new SpeciesEvolution(Species.WATCHOG, 20, null, null)],
   [Species.LILLIPUP]: [new SpeciesEvolution(Species.HERDIER, 16, null, null)],
@@ -61,7 +53,7 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
     new SpeciesEvolution(Species.GIGALITH, 1, EvolutionItem.LINKING_CORD, null, GENERIC_ITEM_EVO_LEVEL),
   ],
   [Species.WOOBAT]: [
-    new SpeciesEvolution(Species.SWOOBAT, 1, null, new SpeciesFriendshipEvolutionCondition(90), HAPPINESS_EVO_LEVEL),
+    new SpeciesEvolution(Species.SWOOBAT, 1, null, [new SpeciesFriendshipEvolutionCondition(90)], HAPPINESS_EVO_LEVEL),
   ],
   [Species.DRILBUR]: [new SpeciesEvolution(Species.EXCADRILL, 31, null, null)],
   [Species.TIMBURR]: [new SpeciesEvolution(Species.GURDURR, 25, null, null)],
@@ -72,7 +64,13 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.PALPITOAD]: [new SpeciesEvolution(Species.SEISMITOAD, 36, null, null)],
   [Species.SEWADDLE]: [new SpeciesEvolution(Species.SWADLOON, 20, null, null)],
   [Species.SWADLOON]: [
-    new SpeciesEvolution(Species.LEAVANNY, 1, null, new SpeciesFriendshipEvolutionCondition(120), HAPPINESS_EVO_LEVEL),
+    new SpeciesEvolution(
+      Species.LEAVANNY,
+      1,
+      null,
+      [new SpeciesFriendshipEvolutionCondition(120)],
+      HAPPINESS_EVO_LEVEL,
+    ),
   ],
   [Species.VENIPEDE]: [new SpeciesEvolution(Species.WHIRLIPEDE, 22, null, null)],
   [Species.WHIRLIPEDE]: [new SpeciesEvolution(Species.SCOLIPEDE, 30, null, null)],
@@ -88,23 +86,19 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
     new SpeciesFormEvolution(
       Species.BASCULEGION,
       "white-striped",
-      "female",
+      "male",
       1,
       null,
-      new SpeciesEvolutionCondition(
-        (p) => p.moveset.filter((m) => m.moveId === MoveId.WAVE_CRASH).length > 0 && p.gender === Gender.FEMALE,
-      ),
+      [new MoveKnownEvoCondition(MoveId.WAVE_CRASH), new GenderEvolutionCondition(Gender.MALE)],
       BASCULEGION_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
       Species.BASCULEGION,
       "white-striped",
-      "male",
+      "female",
       1,
       null,
-      new SpeciesEvolutionCondition(
-        (p) => p.moveset.filter((m) => m.moveId === MoveId.WAVE_CRASH).length > 0 && p.gender === Gender.MALE,
-      ),
+      [new MoveKnownEvoCondition(MoveId.WAVE_CRASH), new GenderEvolutionCondition(Gender.FEMALE)],
       BASCULEGION_EVO_LEVEL,
     ),
   ],
@@ -129,13 +123,12 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.VANILLITE]: [new SpeciesEvolution(Species.VANILLISH, 35, null, null)],
   [Species.VANILLISH]: [new SpeciesEvolution(Species.VANILLUXE, 47, null, null)],
   [Species.DEERLING]: [new SpeciesEvolution(Species.SAWSBUCK, 34, null, null)],
-  /** Karrablast requires the player to have owned Shelmet */
   [Species.KARRABLAST]: [
     new SpeciesEvolution(
       Species.ESCAVALIER,
       1,
       EvolutionItem.LINKING_CORD,
-      new SpeciesEvolutionCondition(() => !!globalScene.gameData.dexData[Species.SHELMET].caughtAttr),
+      [new SpeciesOwnedEvoCondition(Species.SHELMET)],
       GENERIC_ITEM_EVO_LEVEL,
     ),
   ],
@@ -158,13 +151,12 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.AXEW]: [new SpeciesEvolution(Species.FRAXURE, 38, null, null)],
   [Species.FRAXURE]: [new SpeciesEvolution(Species.HAXORUS, 48, null, null)],
   [Species.CUBCHOO]: [new SpeciesEvolution(Species.BEARTIC, 37, null, null)],
-  /** Shelmet requires the player to have owned Karrablast */
   [Species.SHELMET]: [
     new SpeciesEvolution(
       Species.ACCELGOR,
       1,
       EvolutionItem.LINKING_CORD,
-      new SpeciesEvolutionCondition(() => !!globalScene.gameData.dexData[Species.KARRABLAST].caughtAttr),
+      [new SpeciesOwnedEvoCondition(Species.KARRABLAST)],
       GENERIC_ITEM_EVO_LEVEL,
     ),
   ],
@@ -175,18 +167,8 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
     new SpeciesEvolution(Species.KINGAMBIT, 1, EvolutionItem.LEADERS_CREST, null, KINGAMBIT_EVO_LEVEL),
   ],
   [Species.RUFFLET]: [
-    new SpeciesEvolution(
-      Species.HISUI_BRAVIARY,
-      54,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
-    ),
-    new SpeciesEvolution(
-      Species.BRAVIARY,
-      54,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
-    ),
+    new SpeciesEvolution(Species.BRAVIARY, 54, null, [new DayEvolutionCondition()]),
+    new SpeciesEvolution(Species.HISUI_BRAVIARY, 54, null, [new NightEvolutionCondition()]),
   ],
   [Species.VULLABY]: [new SpeciesEvolution(Species.MANDIBUZZ, 54, null, null)],
   [Species.DEINO]: [new SpeciesEvolution(Species.ZWEILOUS, 50, null, null)],
