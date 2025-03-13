@@ -8,7 +8,6 @@ import { getMoveTargets, SelfStatusMove, type Move } from "#app/data/moves/move"
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { allMoves, allAbilities } from "#app/data/data-lists";
 import { StatusCategoryOnAllyAttr } from "./moves/move-attrs/status-category-on-ally-attr";
-import { ConsecutiveUseDoublePowerAttr } from "./moves/move-attrs/consecutive-use-double-power-attr";
 import { HealOnAllyAttr } from "./moves/move-attrs/heal-on-ally-attr";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveCategory } from "#enums/move-category";
@@ -3357,18 +3356,12 @@ export class TormentTag extends MoveRestrictionBattlerTag {
       return false;
     }
 
-    const moveObj = allMoves.get(lastMoveTurn.move.id);
-    /**
-     * Consecutively-executed moves are not interrupted by Torment
-     * @todo remove the additional attribute check once Rollout/Ice Ball are reimplemented
-     */
-    const isUnaffected = moveObj.hasAttr(ConsecutiveUseDoublePowerAttr) || user.getTag(...MoveLockTagTypes);
     const validLastMoveResult = lastMoveTurn.result === MoveResult.SUCCESS || lastMoveTurn.result === MoveResult.MISS;
     if (
       lastMoveTurn.move.id === moveId
       && validLastMoveResult
       && lastMoveTurn.move.id !== MoveId.STRUGGLE
-      && !isUnaffected
+      && !user.getTag(...MoveLockTagTypes)
     ) {
       return true;
     }
