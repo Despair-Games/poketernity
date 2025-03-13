@@ -19,7 +19,7 @@ import { initAchievements } from "#app/system/achievements";
 import { initTrainerTypeDialogue } from "./data/init/init-trainer-type-dialogue";
 import { initChallenges } from "#app/data/challenge";
 import i18next from "i18next";
-import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
+import { initStatsKeys } from "#app/ui/handlers/game-stats-ui-handler";
 import { Biome } from "#enums/biome";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
 import { initVouchers } from "#app/system/init-vouchers";

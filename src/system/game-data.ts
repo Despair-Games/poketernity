@@ -59,7 +59,7 @@ import { ChallengeType } from "#enums/challenge-type";
 import { WeatherType } from "#enums/weather-type";
 import { TerrainType } from "#enums/terrain-type";
 import { ReloadSessionPhase } from "#app/phases/reload-session-phase";
-import { RUN_HISTORY_LIMIT } from "#app/ui/run-history-ui-handler";
+import { RUN_HISTORY_LIMIT } from "#app/ui/handlers/run-history-ui-handler";
 import { applySessionVersionMigration, applySystemVersionMigration } from "./version_migration/version_converter";
 import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";

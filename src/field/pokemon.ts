@@ -123,8 +123,8 @@ import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
 import { timedEventManager } from "#app/timed-event-manager";
 import type { TurnCommand } from "#app/turn-command-manager";
-import type BattleInfo from "#app/ui/battle-info";
-import { EnemyBattleInfo, PlayerBattleInfo } from "#app/ui/battle-info";
+import type BattleInfo from "#app/ui/components/battle-info";
+import { EnemyBattleInfo, PlayerBattleInfo } from "#app/ui/components/battle-info";
 import {
   BooleanHolder,
   NumberHolder,

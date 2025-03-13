@@ -1,7 +1,7 @@
 import type { Species } from "#enums/species";
 import { globalScene } from "#app/global-scene";
 import { PlayerPokemon } from "#app/field/pokemon";
-import type { Starter } from "#app/ui/starter-select-ui-handler";
+import type { Starter } from "#app/ui/handlers/starter-select-ui-handler";
 import { randSeedGauss, randSeedInt, randSeedItem } from "#app/utils";
 import type { PokemonSpeciesForm } from "./pokemon-species-form";
 import type PokemonSpecies from "#app/data/pokemon-species";

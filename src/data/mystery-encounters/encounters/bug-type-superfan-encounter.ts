@@ -46,7 +46,7 @@ import {
   MegaEvolutionAccessModifier,
 } from "#app/modifier/modifier";
 import i18next from "i18next";
-import MoveInfoOverlay from "#app/ui/move-info-overlay";
+import MoveInfoOverlay from "#app/ui/components/move-info-overlay";
 import { allMoves } from "#app/data/data-lists";
 import { ModifierTier } from "#enums/modifier-tier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";

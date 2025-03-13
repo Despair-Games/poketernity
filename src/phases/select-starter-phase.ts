@@ -7,7 +7,7 @@ import { overrideHeldItems, overrideModifiers } from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
-import type { Starter } from "#app/ui/starter-select-ui-handler";
+import type { Starter } from "#app/ui/handlers/starter-select-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { Gender } from "#enums/gender";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";

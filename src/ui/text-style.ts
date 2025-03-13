@@ -8,7 +8,7 @@ import { FontStyle } from "#enums/font-style";
 import { TextStyle } from "#enums/text-style";
 import { UiTheme } from "#enums/ui-theme";
 import i18next from "i18next";
-import { allTextFormats } from "./font-style";
+import { allTextFormats } from "#app/ui/font-style";
 
 interface ModularTextStyleOptions {
   color: TextColor | Record<UiTheme, TextColor>;

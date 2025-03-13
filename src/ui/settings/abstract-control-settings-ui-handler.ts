@@ -1,10 +1,10 @@
-import UiHandler from "#app/ui/ui-handler";
+import UiHandler from "#app/ui/handlers/abstract-ui-handler";
 import type { UiMode } from "#enums/ui-mode";
 import type { InterfaceConfig } from "#app/inputs-controller";
 import { addWindow } from "#app/ui/ui-theme";
 import { addTextObject, setTextColor } from "#app/ui/text";
 import { TextStyle } from "#enums/text-style";
-import { ScrollBar } from "#app/ui/scroll-bar";
+import { ScrollBar } from "#app/ui/components/scroll-bar";
 import { getIconWithSettingName } from "#app/configs/inputs/configHandler";
 import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigationMenu";
 import type { Device } from "#enums/devices";

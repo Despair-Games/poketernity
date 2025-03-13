@@ -8,7 +8,7 @@ import { PlayerPokemon } from "#app/field/pokemon";
 import { getGameMode } from "#app/game-mode";
 import { GameModes } from "#enums/game-modes";
 import type { StarterMoveset } from "#app/@types/StarterData";
-import type { Starter } from "#app/ui/starter-select-ui-handler";
+import type { Starter } from "#app/ui/handlers/starter-select-ui-handler";
 import { MoveId } from "#enums/move-id";
 import type { Species } from "#enums/species";
 

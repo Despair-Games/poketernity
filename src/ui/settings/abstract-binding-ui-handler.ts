@@ -1,4 +1,4 @@
-import UiHandler from "#app/ui/ui-handler";
+import UiHandler from "#app/ui/handlers/abstract-ui-handler";
 import type { UiMode } from "#enums/ui-mode";
 import { addWindow } from "#app/ui/ui-theme";
 import { addTextObject, setTextColor } from "#app/ui/text";

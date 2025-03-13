@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import type UiHandler from "./ui/ui-handler";
+import type UiHandler from "./ui/handlers/abstract-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import Overrides from "#app/overrides";
