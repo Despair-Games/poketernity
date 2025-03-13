@@ -34,6 +34,12 @@ interface BiomeDepths {
   [key: number]: [number, number];
 }
 
+/**
+ * A map representing connections between biomes
+ * The key is the starting biome.
+ *
+ * The value is either one biome, an array of biomes, or an array of biomes with associated weights
+ */
 export const biomeLinks: BiomeLinks = {
   [Biome.TOWN]: Biome.PLAINS,
   [Biome.PLAINS]: [Biome.GRASS, Biome.METROPOLIS, Biome.LAKE],
@@ -97,6 +103,20 @@ export interface BiomeTrainerPools {
   [key: number]: BiomeTierTrainerPools;
 }
 
+/**
+ * NOTE!!!!! biomePokemonPools and biomeTrainerPools have hardcoded data that is NOT used
+ *
+ * Both these constants have their data cleared and populated instead by the data in
+ * pokemonBiomes and trainerBiomes
+ */
+
+/**
+ * A mapping of biome -> [BiomePoolTier -> [TimeOfDay -> Array of Pokemon or Map of level->Pokemon]]
+ *
+ * The Map of Level->Pokemon should no longer be necessary with the addition of EnemyEvolveLevel
+ *
+ * In addition to this file, used by Arena.updatePoolsForTimeOfDay
+ */
 export const biomePokemonPools: BiomePokemonPools = {
   [Biome.TOWN]: {
     [BiomePoolTier.COMMON]: {
@@ -3601,6 +3621,11 @@ export const biomePokemonPools: BiomePokemonPools = {
   },
 };
 
+/**
+ * A mapping of biome -> [BiomePoolTier -> TrainerType[]]
+ *
+ * Used as Arena.TrainerPool
+ */
 export const biomeTrainerPools: BiomeTrainerPools = {
   [Biome.TOWN]: {
     [BiomePoolTier.COMMON]: [TrainerType.YOUNGSTER],
@@ -3990,6 +4015,7 @@ export const biomeTrainerPools: BiomeTrainerPools = {
 };
 
 export function initBiomes() {
+  /** A list of every Pokemon, their types, and which Biomes they appear in at which rarity tiers */
   const pokemonBiomes = [
     [Species.BULBASAUR, ElementalType.GRASS, ElementalType.POISON, [[Biome.GRASS, BiomePoolTier.RARE]]],
     [Species.IVYSAUR, ElementalType.GRASS, ElementalType.POISON, [[Biome.GRASS, BiomePoolTier.RARE]]],
@@ -10668,6 +10694,7 @@ export function initBiomes() {
     ],
   ];
 
+  /** A list of [TrainerType, [Every biome they appear in, the rarity they appear at]] for every trainer type */
   const trainerBiomes = [
     [
       TrainerType.ACE_TRAINER,
@@ -10975,16 +11002,27 @@ export function initBiomes() {
 
   biomeDepths[Biome.TOWN] = [0, 1];
 
+  /**
+   * A function used to initialize biomeDepths
+   * @param biome The current biome
+   * @param depth how far the biome is away from the start
+   */
   const traverseBiome = (biome: Biome, depth: number) => {
+    // Biome goes to any random non END non Town biome
     if (biome === Biome.END) {
       const biomeList = Object.keys(Biome).filter((key) => !isNaN(Number(key)));
       biomeList.pop(); // Removes Biome.END from the list
       const randIndex = randSeedInt(biomeList.length, 1); // Will never be Biome.TOWN
       biome = Biome[biomeList[randIndex]];
     }
+
+    // Gets an array of possible biomes that succeed the current biome
+    // TODO: Instead of a (Biome | [Biome, number], can just be an Array of Biomes for all)
     const linkedBiomes: (Biome | [Biome, number])[] = Array.isArray(biomeLinks[biome])
       ? (biomeLinks[biome] as (Biome | [Biome, number])[])
       : [biomeLinks[biome] as Biome];
+
+    // Grants weights to all the biomes. Default of 1
     for (const linkedBiomeEntry of linkedBiomes) {
       const linkedBiome = !Array.isArray(linkedBiomeEntry) ? (linkedBiomeEntry as Biome) : linkedBiomeEntry[0];
       const biomeChance = !Array.isArray(linkedBiomeEntry) ? 1 : linkedBiomeEntry[1];
@@ -10993,6 +11031,7 @@ export function initBiomes() {
         || biomeChance < biomeDepths[linkedBiome][1]
         || (depth < biomeDepths[linkedBiome][0] && biomeChance === biomeDepths[linkedBiome][1])
       ) {
+        // When does this stop?
         biomeDepths[linkedBiome] = [depth + 1, biomeChance];
         traverseBiome(linkedBiome, depth + 1);
       }
@@ -11000,6 +11039,7 @@ export function initBiomes() {
   };
 
   traverseBiome(Biome.TOWN, 0);
+  // biomeDepths is only used in battle-scene.generateRandomBiome
   biomeDepths[Biome.END] = [
     Object.values(biomeDepths)
       .map((d) => d[0])
@@ -11007,6 +11047,7 @@ export function initBiomes() {
     1,
   ];
 
+  // This clears `biomePokemonPools` and `biomeTrainerPools` :pikastare:
   for (const biome of getEnumValues(Biome)) {
     biomePokemonPools[biome] = {};
     biomeTrainerPools[biome] = {};
@@ -11021,6 +11062,7 @@ export function initBiomes() {
     }
   }
 
+  // Updates `biomePokemonPools` based off the data in pokemonBiomes
   for (const pb of pokemonBiomes) {
     const speciesId = pb[0] as Species;
     const biomeEntries = pb[3] as (Biome | BiomePoolTier)[][];
@@ -11128,6 +11170,7 @@ export function initBiomes() {
     }
   }
 
+  // Updates `biomeTrainerPools` based off the data in trainerBiomes
   for (const tb of trainerBiomes) {
     const trainerType = tb[0] as TrainerType;
     const biomeEntries = tb[1] as BiomePoolTier[][];
