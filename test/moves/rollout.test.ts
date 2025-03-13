@@ -98,7 +98,7 @@ describe("Moves - Rollout", () => {
     const player = game.field.getPlayerPokemon();
 
     game.move.use(MoveId.ROLLOUT);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
 
     await game.toNextTurn();
@@ -106,7 +106,7 @@ describe("Moves - Rollout", () => {
     expect(player.getTag(BattlerTagType.ROLLING)).toBeDefined();
     expect(player.getMoveQueue()[0]?.move.id).toBe(MoveId.ROLLOUT);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceMiss();
 
     await game.toNextTurn();
