@@ -1,0 +1,157 @@
+import { allMoves } from "#app/data/data-lists";
+import { Abilities } from "#enums/abilities";
+import { BattlerIndex } from "#enums/battler-index";
+import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
+import { Species } from "#enums/species";
+import { Stat } from "#enums/stat";
+import { GameManager } from "#test/test-utils/gameManager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+
+describe("Moves - Me First", () => {
+  let phaserGame: Phaser.Game;
+  let game: GameManager;
+
+  beforeAll(() => {
+    phaserGame = new Phaser.Game({
+      type: Phaser.HEADLESS,
+    });
+  });
+
+  afterEach(() => {
+    game.phaseInterceptor.restoreOg();
+  });
+
+  beforeEach(() => {
+    game = new GameManager(phaserGame);
+    game.override
+      .ability(Abilities.BALL_FETCH)
+      .battleType("single")
+      .disableCrits()
+      .enemySpecies(Species.MAGIKARP)
+      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyMoveset(MoveId.SWORDS_DANCE)
+      .startingLevel(100)
+      .enemyLevel(100);
+  });
+
+  it("should copy the target's selected move", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.move.use(MoveId.ME_FIRST);
+
+    await game.toEndOfTurn();
+
+    expect(player.getLastXMoves()[0]?.move.id).toBe(MoveId.SWORDS_DANCE);
+    expect(player.getStatStage(Stat.ATK)).toBe(2);
+    expect(enemy.getStatStage(Stat.ATK)).toBe(2);
+  });
+
+  it("should increase the power of copied attacks by 50%", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const tackle = allMoves.get(MoveId.TACKLE);
+    vi.spyOn(tackle, "calculateBattlePower");
+
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.move.use(MoveId.ME_FIRST);
+    await game.move.forceEnemyMove(MoveId.TACKLE);
+
+    await game.phaseInterceptor.to("MoveEndPhase");
+    expect(tackle.calculateBattlePower).toHaveReturnedWith(60);
+
+    await game.phaseInterceptor.to("MoveEndPhase");
+    expect(tackle.calculateBattlePower).toHaveReturnedWith(40);
+  });
+
+  it.todo("should put the user in a frenzy if Outrage is copied", async () => {
+    game.override.enemySpecies(Species.BASTIODON);
+    await game.classicMode.startBattle([Species.BASTIODON]);
+
+    const outrage = allMoves.get(MoveId.OUTRAGE);
+    vi.spyOn(outrage, "calculateBattlePower");
+
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.move.use(MoveId.ME_FIRST);
+    await game.move.forceEnemyMove(MoveId.OUTRAGE);
+
+    // Player uses Me First - should call Outrage with increased power
+    await game.phaseInterceptor.to("MoveEndPhase");
+    expect(outrage.calculateBattlePower).toHaveLastReturnedWith(180);
+
+    // Enemy uses Outrage - should have base power
+    await game.phaseInterceptor.to("MoveEndPhase");
+    expect(outrage.calculateBattlePower).toHaveLastReturnedWith(120);
+
+    game.scene.getField(true).forEach((p) => expect(p.getMoveQueue()).toHaveLength(1));
+
+    await game.toNextTurn();
+
+    // Me First should not boost subsequent uses of Outrage
+    await game.phaseInterceptor.to("MoveEndPhase");
+    expect(outrage.calculateBattlePower).toHaveLastReturnedWith(120);
+
+    await game.phaseInterceptor.to("MoveEndPhase");
+    expect(outrage.calculateBattlePower).toHaveLastReturnedWith(120);
+  });
+
+  it("should fail if the target has already used their selected move for the turn", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.move.use(MoveId.ME_FIRST);
+
+    await game.toEndOfTurn();
+
+    expect(player.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
+    expect(player.getStatStage(Stat.ATK)).toBe(0);
+    expect(enemy.getStatStage(Stat.ATK)).toBe(2);
+  });
+
+  it.each([
+    { moveId: MoveId.BEAK_BLAST, moveName: "Beak Blast" },
+    { moveId: MoveId.BELCH, moveName: "Belch" },
+    { moveId: MoveId.CHATTER, moveName: "Chatter" },
+    { moveId: MoveId.COUNTER, moveName: "Counter" },
+    { moveId: MoveId.COVET, moveName: "Covet" },
+    { moveId: MoveId.FOCUS_PUNCH, moveName: "Focus Punch" },
+    { moveId: MoveId.METAL_BURST, moveName: "Metal Burst" },
+    { moveId: MoveId.MIRROR_COAT, moveName: "Mirror Coat" },
+    { moveId: MoveId.SHELL_TRAP, moveName: "Shell Trap" },
+    { moveId: MoveId.STRUGGLE, moveName: "Struggle" },
+    { moveId: MoveId.THIEF, moveName: "Thief" },
+
+    /**
+     * {@linkcode https://bulbapedia.bulbagarden.net/wiki/Category:Moves_that_call_other_moves | Moves that call other moves}
+     * also cause Me First to fail if the target selects them
+     */
+    { moveId: MoveId.ASSIST, moveName: "Assist" },
+    { moveId: MoveId.COPYCAT, moveName: "Copycat" },
+    { moveId: MoveId.ME_FIRST, moveName: "Me First" },
+    { moveId: MoveId.METRONOME, moveName: "Metronome" },
+    { moveId: MoveId.MIRROR_MOVE, moveName: "Mirror Move" },
+    { moveId: MoveId.NATURE_POWER, moveName: "Nature Power" },
+    { moveId: MoveId.SLEEP_TALK, moveName: "Sleep Talk" },
+    { moveId: MoveId.SNATCH, moveName: "Snatch" },
+  ])("should fail if the target selected $moveName for the turn", async ({ moveId }) => {
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const player = game.field.getPlayerPokemon();
+
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.move.use(MoveId.ME_FIRST);
+    await game.move.forceEnemyMove(moveId);
+
+    await game.phaseInterceptor.to("MoveEndPhase");
+
+    expect(player.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
+  });
+});

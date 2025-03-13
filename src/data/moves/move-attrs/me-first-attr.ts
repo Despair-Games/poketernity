@@ -43,6 +43,7 @@ export const invalidMeFirstMoves: Set<MoveId> = new Set([
   MoveId.CHATTER,
   MoveId.COPYCAT,
   MoveId.COUNTER,
+  MoveId.COVET,
   MoveId.FOCUS_PUNCH,
   MoveId.ME_FIRST,
   MoveId.METAL_BURST,
