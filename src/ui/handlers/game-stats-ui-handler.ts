@@ -4,7 +4,7 @@ import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import UiHandler from "#app/ui/handlers/abstract-ui-handler";
 import { addWindow } from "#app/ui/ui-theme";
-import { getPlayTimeString, formatLargeNumberFixedDigits, toReadableString } from "#app/utils";
+import { getPlayTimeString, formatLargeNumberFixedDigits } from "#app/utils";
 import type { GameData } from "#app/system/game-data";
 import { DexAttr } from "#app/data/dex-attributes";
 import { speciesStarterCosts } from "#app/data/balance/starters";
@@ -14,13 +14,13 @@ import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 interface DisplayStat {
-  label_key?: string;
-  sourceFunc?: (gameData: GameData) => string;
-  hidden?: boolean;
+  readonly label_key: string;
+  readonly sourceFunc: (gameData: GameData) => string;
+  readonly hidden?: boolean;
 }
 
 interface DisplayStats {
-  [key: string]: DisplayStat | string;
+  [key: string]: DisplayStat;
 }
 
 const displayStats: DisplayStats = {
@@ -391,35 +391,5 @@ export default class GameStatsUiHandler extends UiHandler {
   override clear() {
     super.clear();
     this.gameStatsContainer.setVisible(false);
-  }
-}
-
-export function initStatsKeys() {
-  const statKeys = Object.keys(displayStats);
-
-  for (const key of statKeys) {
-    if (typeof displayStats[key] === "string") {
-      let label = displayStats[key] as string;
-      let hidden = false;
-      if (label.endsWith("?")) {
-        label = label.slice(0, -1);
-        hidden = true;
-      }
-      displayStats[key] = {
-        label_key: label,
-        sourceFunc: (gameData) => gameData.gameStats[key].toString(),
-        hidden: hidden,
-      };
-    } else if (displayStats[key] === null) {
-      displayStats[key] = {
-        sourceFunc: (gameData) => gameData.gameStats[key].toString(),
-      };
-    }
-    if (!(displayStats[key] as DisplayStat).label_key) {
-      const splittableKey = key.replace(/([a-z]{2,})([A-Z]{1}(?:[^A-Z]|$))/g, "$1_$2");
-      (displayStats[key] as DisplayStat).label_key = toReadableString(
-        `${splittableKey[0].toUpperCase()}${splittableKey.slice(1)}`,
-      );
-    }
   }
 }
