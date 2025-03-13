@@ -13,11 +13,11 @@ import { UiMode } from "#enums/ui-mode";
 import { Abilities } from "#enums/abilities";
 import { Button } from "#enums/buttons";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import i18next from "i18next";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { EVERYTHING_SAVE_FILE_PATH } from "#test/testUtils/testUtils";
+import { EVERYTHING_SAVE_FILE_PATH } from "#test/test-utils/testUtils";
 
 describe("UI - Starter select", () => {
   let phaserGame: Phaser.Game;

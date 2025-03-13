@@ -4547,10 +4547,10 @@ export class EnemyPokemon extends Pokemon {
 
     if (
       speciesId in Overrides.ENEMY_FORM_OVERRIDES
-      && Overrides.ENEMY_FORM_OVERRIDES[speciesId]
+      && !isNullOrUndefined(Overrides.ENEMY_FORM_OVERRIDES[speciesId])
       && this.species.forms[Overrides.ENEMY_FORM_OVERRIDES[speciesId]]
     ) {
-      this.formIndex = Overrides.ENEMY_FORM_OVERRIDES[speciesId] ?? 0;
+      this.formIndex = Overrides.ENEMY_FORM_OVERRIDES[speciesId];
     }
 
     if (!dataSource) {

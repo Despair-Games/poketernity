@@ -1,0 +1,75 @@
+import { BattlerIndex } from "#enums/battler-index";
+import { MoveId } from "#enums/move-id";
+import { Species } from "#enums/species";
+import { WeatherType } from "#enums/weather-type";
+import { GameManager } from "#test/test-utils/gameManager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+
+describe("Weather - Hail", () => {
+  let phaserGame: Phaser.Game;
+  let game: GameManager;
+
+  beforeAll(() => {
+    phaserGame = new Phaser.Game({
+      type: Phaser.HEADLESS,
+    });
+  });
+
+  afterEach(() => {
+    game.phaseInterceptor.restoreOg();
+  });
+
+  beforeEach(() => {
+    game = new GameManager(phaserGame);
+    game.override
+      .weather(WeatherType.HAIL)
+      .battleType("single")
+      .moveset(MoveId.SPLASH)
+      .enemyMoveset(MoveId.SPLASH)
+      .enemySpecies(Species.MAGIKARP);
+  });
+
+  it("inflicts damage equal to 1/16 of Pokemon's max HP at turn end", async () => {
+    await game.classicMode.startBattle([Species.MAGIKARP]);
+
+    game.move.select(MoveId.SPLASH);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+
+    await game.toEndOfTurn();
+
+    game.scene.getField(true).forEach((pokemon) => {
+      expect(pokemon.hp).toBe(pokemon.getMaxHp() - Math.max(Math.floor(pokemon.getMaxHp() / 16), 1));
+    });
+  });
+
+  it("does not inflict damage to a Pokemon that is underwater (Dive) or underground (Dig)", async () => {
+    game.override.moveset([MoveId.DIG]);
+    await game.classicMode.startBattle([Species.MAGIKARP]);
+
+    game.move.select(MoveId.DIG);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+
+    await game.toEndOfTurn();
+
+    const playerPokemon = game.scene.getPlayerPokemon()!;
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
+
+    expect(playerPokemon.hp).toBe(playerPokemon.getMaxHp());
+    expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp() - Math.max(Math.floor(enemyPokemon.getMaxHp() / 16), 1));
+  });
+
+  it("does not inflict damage to Ice type Pokemon", async () => {
+    await game.classicMode.startBattle([Species.CLOYSTER]);
+
+    game.move.select(MoveId.SPLASH);
+
+    await game.toEndOfTurn();
+
+    const playerPokemon = game.scene.getPlayerPokemon()!;
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
+
+    expect(playerPokemon.hp).toBe(playerPokemon.getMaxHp());
+    expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp() - Math.max(Math.floor(enemyPokemon.getMaxHp() / 16), 1));
+  });
+});
