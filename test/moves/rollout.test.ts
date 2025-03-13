@@ -41,13 +41,13 @@ describe("Moves - Rollout", () => {
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 7; i++) {
       game.move.use(MoveId.ROLLOUT);
       await game.toNextTurn();
     }
 
     const powerResults = spy.mock.results.map((result) => result.value);
-    expect(powerResults).toStrictEqual([30, 60, 120, 240, 480, 30]);
+    expect(powerResults).toStrictEqual([30, 60, 120, 240, 480, 30, 60]);
   });
 
   it("should double its power if the user previously used Defense Curl", async () => {
