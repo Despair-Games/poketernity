@@ -195,8 +195,8 @@ import { UiMode } from "#enums/ui-mode";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { applyBattlerTags } from "#app/data/apply-battler-tags";
-import type { ConditionalCritAbAttr } from "#app/data/ab-attrs/conditional-crit-ab-attr";
 import { BattleCommand } from "#enums/battle-command";
+import type { ConditionalCritAbAttr } from "#app/data/abilities/ab-attrs/conditional-crit-ab-attr";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
