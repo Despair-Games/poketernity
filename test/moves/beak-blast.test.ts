@@ -1,0 +1,118 @@
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { StatusEffect } from "#enums/status-effect";
+import { BerryPhase } from "#app/phases/berry-phase";
+import { MovePhase } from "#app/phases/move-phase";
+import { TurnEndPhase } from "#app/phases/turn-end-phase";
+import { Abilities } from "#enums/abilities";
+import { MoveId } from "#enums/move-id";
+import { Species } from "#enums/species";
+import { GameManager } from "#test/test-utils/gameManager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+
+describe("Moves - Beak Blast", () => {
+  let phaserGame: Phaser.Game;
+  let game: GameManager;
+
+  beforeAll(() => {
+    phaserGame = new Phaser.Game({
+      type: Phaser.HEADLESS,
+    });
+  });
+
+  afterEach(() => {
+    game.phaseInterceptor.restoreOg();
+  });
+
+  beforeEach(() => {
+    game = new GameManager(phaserGame);
+    game.override
+      .battleType("single")
+      .ability(Abilities.UNNERVE)
+      .moveset([MoveId.BEAK_BLAST])
+      .enemySpecies(Species.SNORLAX)
+      .enemyAbility(Abilities.INSOMNIA)
+      .enemyMoveset([MoveId.TACKLE])
+      .startingLevel(100)
+      .enemyLevel(100);
+  });
+
+  it("should add a charge effect that burns attackers on contact", async () => {
+    await game.startBattle([Species.BLASTOISE]);
+
+    const leadPokemon = game.scene.getPlayerPokemon()!;
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
+
+    game.move.select(MoveId.BEAK_BLAST);
+
+    await game.phaseInterceptor.to(MovePhase, false);
+    expect(leadPokemon.getTag(BattlerTagType.BEAK_BLAST_CHARGING)).toBeDefined();
+
+    await game.phaseInterceptor.to(BerryPhase, false);
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.BURN);
+  });
+
+  it("should still charge and burn opponents if the user is sleeping", async () => {
+    game.override.statusEffect(StatusEffect.SLEEP);
+
+    await game.startBattle([Species.BLASTOISE]);
+
+    const leadPokemon = game.scene.getPlayerPokemon()!;
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
+
+    game.move.select(MoveId.BEAK_BLAST);
+
+    await game.phaseInterceptor.to(MovePhase, false);
+    expect(leadPokemon.getTag(BattlerTagType.BEAK_BLAST_CHARGING)).toBeDefined();
+
+    await game.phaseInterceptor.to(BerryPhase, false);
+    expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.BURN);
+  });
+
+  it("should not burn attackers that don't make contact", async () => {
+    game.override.enemyMoveset([MoveId.WATER_GUN]);
+
+    await game.startBattle([Species.BLASTOISE]);
+
+    const leadPokemon = game.scene.getPlayerPokemon()!;
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
+
+    game.move.select(MoveId.BEAK_BLAST);
+
+    await game.phaseInterceptor.to(MovePhase, false);
+    expect(leadPokemon.getTag(BattlerTagType.BEAK_BLAST_CHARGING)).toBeDefined();
+
+    await game.phaseInterceptor.to(BerryPhase, false);
+    expect(enemyPokemon.getStatusEffect(true)).not.toBe(StatusEffect.BURN);
+  });
+
+  it("should only hit twice with Parental Bond", async () => {
+    game.override.ability(Abilities.PARENTAL_BOND);
+    await game.classicMode.startBattle([Species.BLASTOISE]);
+
+    const leadPokemon = game.scene.getPlayerPokemon()!;
+
+    game.move.select(MoveId.BEAK_BLAST);
+
+    await game.phaseInterceptor.to(BerryPhase, false);
+    expect(leadPokemon.turnData.hitCount).toBe(2);
+  });
+
+  it("should be blocked by Protect", async () => {
+    game.override.enemyMoveset([MoveId.PROTECT]);
+
+    await game.startBattle([Species.BLASTOISE]);
+
+    const leadPokemon = game.scene.getPlayerPokemon()!;
+    const enemyPokemon = game.scene.getEnemyPokemon()!;
+
+    game.move.select(MoveId.BEAK_BLAST);
+
+    await game.phaseInterceptor.to(MovePhase, false);
+    expect(leadPokemon.getTag(BattlerTagType.BEAK_BLAST_CHARGING)).toBeDefined();
+
+    await game.phaseInterceptor.to(TurnEndPhase);
+    expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
+    expect(leadPokemon.getTag(BattlerTagType.BEAK_BLAST_CHARGING)).toBeUndefined();
+  });
+});

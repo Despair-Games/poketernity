@@ -11,9 +11,9 @@ import { PlayerGender } from "#enums/player-gender";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { UiMode } from "#enums/ui-mode";
-import { GameManager } from "#test/testUtils/gameManager";
-import { generateStarter } from "#test/testUtils/gameManagerUtils";
-import { EVERYTHING_SAVE_FILE_PATH } from "#test/testUtils/testUtils";
+import { GameManager } from "#test/test-utils/gameManager";
+import { generateStarter } from "#test/test-utils/gameManagerUtils";
+import { EVERYTHING_SAVE_FILE_PATH } from "#test/test-utils/testUtils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

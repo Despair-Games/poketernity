@@ -71,6 +71,19 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.modifierContainer = globalScene.add.container(0, 0);
     ui.add(this.modifierContainer);
 
+    // Check team button
+    this.checkButtonContainer = globalScene.add.container(GAME_WIDTH - 1, OPTION_BUTTON_YPOSITION);
+    this.checkButtonContainer.setName("use-btn");
+    this.checkButtonContainer.setVisible(false);
+    ui.add(this.checkButtonContainer);
+
+    const checkButtonText = addTextObject(-4, -2, i18next.t("modifierSelectUiHandler:checkTeam"), TextStyle.PARTY);
+    checkButtonText.setName("text-use-btn");
+    checkButtonText.setOrigin(1, 0);
+    this.checkButtonWidth = checkButtonText.displayWidth;
+    this.checkButtonContainer.add(checkButtonText);
+
+    // Transfer item button
     this.transferButtonContainer = globalScene.add.container(
       GAME_WIDTH - this.checkButtonWidth - 21,
       OPTION_BUTTON_YPOSITION,
@@ -85,17 +98,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.transferButtonWidth = transferButtonText.displayWidth;
     this.transferButtonContainer.add(transferButtonText);
 
-    this.checkButtonContainer = globalScene.add.container(GAME_WIDTH - 1, OPTION_BUTTON_YPOSITION);
-    this.checkButtonContainer.setName("use-btn");
-    this.checkButtonContainer.setVisible(false);
-    ui.add(this.checkButtonContainer);
-
-    const checkButtonText = addTextObject(-4, -2, i18next.t("modifierSelectUiHandler:checkTeam"), TextStyle.PARTY);
-    checkButtonText.setName("text-use-btn");
-    checkButtonText.setOrigin(1, 0);
-    this.checkButtonWidth = checkButtonText.displayWidth;
-    this.checkButtonContainer.add(checkButtonText);
-
+    // Reroll button and cost
     this.rerollButtonContainer = globalScene.add.container(16, OPTION_BUTTON_YPOSITION);
     this.rerollButtonContainer.setName("reroll-brn");
     this.rerollButtonContainer.setVisible(false);
@@ -112,6 +115,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.rerollCostText.setPositionRelative(rerollButtonText, rerollButtonText.displayWidth + 5, 1);
     this.rerollButtonContainer.add(this.rerollCostText);
 
+    // Lock rarity button
     this.lockRarityButtonContainer = globalScene.add.container(16, OPTION_BUTTON_YPOSITION);
     this.lockRarityButtonContainer.setVisible(false);
     ui.add(this.lockRarityButtonContainer);
