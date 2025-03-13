@@ -90,7 +90,7 @@ describe("Moves - Uproar", () => {
     const enemyPokemon = game.scene.getEnemyField();
 
     game.move.use(MoveId.UPROAR, 0);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     enemyPokemon.forEach((p) => expect(p.getStatusEffect()).toBe(StatusEffect.NONE));
@@ -106,7 +106,7 @@ describe("Moves - Uproar", () => {
     game.move.use(MoveId.SPORE, 1, BattlerIndex.ENEMY_2);
     await game.move.forceEnemyMove(MoveId.REST);
     await game.move.forceEnemyMove(MoveId.SPLASH);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("BerryPhase", false);
     enemyPokemon.forEach((p) => expect(p.getStatusEffect()).toBe(StatusEffect.NONE));

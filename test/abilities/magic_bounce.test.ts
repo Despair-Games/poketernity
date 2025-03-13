@@ -76,7 +76,7 @@ describe("Abilities - Magic Bounce", () => {
 
     game.move.use(MoveId.GROWL);
     await game.move.forceEnemyMove(MoveId.FLY);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
     expect(player.getStatStage(Stat.ATK)).toBe(0);
@@ -190,7 +190,7 @@ describe("Abilities - Magic Bounce", () => {
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     game.move.use(MoveId.SPIKES);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
     expect(game.scene.arena.getTagOnSide(ArenaTagType.SPIKES, ArenaTagSide.ENEMY)!["layers"]).toBe(1);
   });
@@ -216,7 +216,7 @@ describe("Abilities - Magic Bounce", () => {
     // turn 1
     game.move.use(MoveId.ENCORE);
     await game.move.forceEnemyMove(MoveId.TACKLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
     expect(enemy.getTag<EncoreTag>(BattlerTagType.ENCORE)?.moveId).toBe(MoveId.TACKLE);
 
@@ -224,7 +224,7 @@ describe("Abilities - Magic Bounce", () => {
     vi.spyOn(player, "getAbility").mockRestore();
 
     game.move.use(MoveId.GROWL);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toEndOfTurn();
     expect(enemy.getTag<EncoreTag>(BattlerTagType.ENCORE)?.moveId).toBe(MoveId.TACKLE);
     console.log(enemy.getMoveHistory().map((turnMove) => MoveId[turnMove.move.id]));
@@ -242,7 +242,7 @@ describe("Abilities - Magic Bounce", () => {
     // turn 1
     game.move.use(MoveId.GROWL);
     await game.move.forceEnemyMove(MoveId.TACKLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     // Give the player MOLD_BREAKER for this turn to bypass Magic Bounce.
@@ -251,7 +251,7 @@ describe("Abilities - Magic Bounce", () => {
     // turn 2
     game.move.use(MoveId.ENCORE);
     await game.move.forceEnemyMove(MoveId.TACKLE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toEndOfTurn();
     expect(enemyPokemon.getTag<EncoreTag>(BattlerTagType.ENCORE)?.moveId).toBe(MoveId.TACKLE);
     expect(enemyPokemon.getLastXMoves()[0].move.id).toBe(MoveId.TACKLE);
@@ -281,21 +281,21 @@ describe("Abilities - Magic Bounce", () => {
 
     game.move.use(MoveId.SPORE);
     await game.move.forceEnemyMove(MoveId.CHARM);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.toNextTurn();
     expect(enemy.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
 
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.STOMPING_TANTRUM);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.toNextTurn();
     expect(stomping_tantrum.calculateBattlePower).toHaveReturnedWith(150);
 
     game.move.use(MoveId.GROWL);
     await game.move.forceEnemyMove(MoveId.STOMPING_TANTRUM);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.toNextTurn();
 
@@ -350,7 +350,7 @@ describe("Abilities - Magic Bounce", () => {
     // turn 1
     game.move.use(MoveId.STICKY_WEB, 0);
     game.move.use(MoveId.TRICK_ROOM, 1);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(
       game.scene.arena
@@ -376,14 +376,14 @@ describe("Abilities - Magic Bounce", () => {
     await game.classicMode.startBattle([Species.BULBASAUR]);
     game.move.use(MoveId.TOXIC);
     await game.move.forceEnemyMove(MoveId.FLY);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
     expect(game.field.getEnemyPokemon().getStatusEffect()).toBe(StatusEffect.TOXIC);
     expect(game.field.getPlayerPokemon().status).toBeUndefined();
 
     game.override.ability(Abilities.NO_GUARD);
     game.move.use(MoveId.CHARM);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toEndOfTurn();
     expect(game.field.getEnemyPokemon().getStatStage(Stat.ATK)).toBe(-2);
     expect(game.field.getPlayerPokemon().getStatStage(Stat.ATK)).toBe(0);

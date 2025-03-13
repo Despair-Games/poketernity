@@ -47,7 +47,7 @@ describe("Moves - Magic Coat", () => {
     const enemy = game.field.getEnemyPokemon();
 
     game.move.use(MoveId.PROTECT);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.toEndOfTurn();
     expect(enemy.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
@@ -195,7 +195,7 @@ describe("Moves - Magic Coat", () => {
     // turn 1
     game.move.use(MoveId.ENCORE);
     await game.move.forceEnemyMove(MoveId.TACKLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
     expect(enemy.getTag<EncoreTag>(BattlerTagType.ENCORE)?.moveId).toBe(MoveId.TACKLE);
 
@@ -203,7 +203,7 @@ describe("Moves - Magic Coat", () => {
     vi.spyOn(player, "getAbility").mockRestore();
 
     game.move.use(MoveId.GROWL);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toEndOfTurn();
     expect(enemy.getTag<EncoreTag>(BattlerTagType.ENCORE)?.moveId).toBe(MoveId.TACKLE);
     console.log(enemy.getMoveHistory().map((turnMove) => MoveId[turnMove.move.id]));
@@ -221,7 +221,7 @@ describe("Moves - Magic Coat", () => {
     // turn 1
     game.move.use(MoveId.GROWL);
     await game.move.forceEnemyMove(MoveId.TACKLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     // Give the player MOLD_BREAKER for this turn to bypass Magic Bounce.
@@ -230,7 +230,7 @@ describe("Moves - Magic Coat", () => {
     // turn 2
     game.move.use(MoveId.ENCORE);
     await game.move.forceEnemyMove(MoveId.TACKLE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toEndOfTurn();
     expect(enemyPokemon.getTag<EncoreTag>(BattlerTagType.ENCORE)?.moveId).toBe(MoveId.TACKLE);
     expect(enemyPokemon.getLastXMoves()[0].move.id).toBe(MoveId.TACKLE);
@@ -260,21 +260,21 @@ describe("Moves - Magic Coat", () => {
 
     game.move.use(MoveId.SPORE);
     await game.move.forceEnemyMove(MoveId.MAGIC_COAT);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.toNextTurn();
     expect(enemy.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
 
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.STOMPING_TANTRUM);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.toNextTurn();
     expect(stomping_tantrum.calculateBattlePower).toHaveReturnedWith(150);
 
     game.move.use(MoveId.GROWL);
     await game.move.forceEnemyMove(MoveId.STOMPING_TANTRUM);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.toNextTurn();
 
@@ -329,7 +329,7 @@ describe("Moves - Magic Coat", () => {
     // turn 1
     game.move.use(MoveId.STICKY_WEB, 0);
     game.move.use(MoveId.TRICK_ROOM, 1);
-    await game.phaseInterceptor.to("TurnEndPhase");
+    await game.toEndOfTurn();
 
     expect(
       game.scene.arena
