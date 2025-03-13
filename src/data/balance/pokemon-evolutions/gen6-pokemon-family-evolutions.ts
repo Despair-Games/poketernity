@@ -1,10 +1,12 @@
-import { globalScene } from "#app/global-scene";
 import { Species } from "#enums/species";
-import { TimeOfDay } from "#enums/time-of-day";
 import {
+  DayEvolutionCondition,
+  GenderEvolutionCondition,
+  GoodraEvoCondition,
+  NightEvolutionCondition,
+  PangoroEvoCondition,
   type PokemonEvolutions,
   SpeciesEvolution,
-  SpeciesEvolutionCondition,
   SpeciesFormEvolution,
 } from "#app/data/pokemon-evolutions";
 import { Gender } from "#enums/gender";
@@ -13,8 +15,6 @@ import {
   ADVANCED_ITEM_EVO_LEVEL,
   GENERIC_ITEM_EVO_LEVEL,
 } from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
-import { ElementalType } from "#enums/elemental-type";
-import { WeatherType } from "#enums/weather-type";
 
 export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.CHESPIN]: [new SpeciesEvolution(Species.QUILLADIN, 16, null, null)],
@@ -34,34 +34,10 @@ export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
     new SpeciesEvolution(Species.FLORGES, 1, EvolutionItem.SHINY_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
   [Species.SKIDDO]: [new SpeciesEvolution(Species.GOGOAT, 32, null, null)],
-  [Species.PANCHAM]: [
-    new SpeciesEvolution(
-      Species.PANGORO,
-      32,
-      null,
-      new SpeciesEvolutionCondition(
-        () =>
-          !!globalScene.getPlayerParty().find((p) => p.getTypes(false, false, true).indexOf(ElementalType.DARK) > -1),
-      ),
-    ),
-  ],
+  [Species.PANCHAM]: [new SpeciesEvolution(Species.PANGORO, 32, null, [new PangoroEvoCondition()])],
   [Species.ESPURR]: [
-    new SpeciesFormEvolution(
-      Species.MEOWSTIC,
-      "",
-      "female",
-      25,
-      null,
-      new SpeciesEvolutionCondition((p) => p.gender === Gender.FEMALE),
-    ),
-    new SpeciesFormEvolution(
-      Species.MEOWSTIC,
-      "",
-      "",
-      25,
-      null,
-      new SpeciesEvolutionCondition((p) => p.gender === Gender.MALE),
-    ),
+    new SpeciesFormEvolution(Species.MEOWSTIC, "", "", 25, null, [new GenderEvolutionCondition(Gender.MALE)]),
+    new SpeciesFormEvolution(Species.MEOWSTIC, "", "female", 25, null, [new GenderEvolutionCondition(Gender.FEMALE)]),
   ],
   [Species.HONEDGE]: [new SpeciesEvolution(Species.DOUBLADE, 35, null, null)],
   [Species.DOUBLADE]: [
@@ -79,57 +55,15 @@ export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.HELIOPTILE]: [
     new SpeciesEvolution(Species.HELIOLISK, 1, EvolutionItem.SUN_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
-  [Species.TYRUNT]: [
-    new SpeciesEvolution(
-      Species.TYRANTRUM,
-      39,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
-    ),
-  ],
-  [Species.AMAURA]: [
-    new SpeciesEvolution(
-      Species.AURORUS,
-      39,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
-    ),
-  ],
+  [Species.TYRUNT]: [new SpeciesEvolution(Species.TYRANTRUM, 39, null, [new DayEvolutionCondition()])],
+  [Species.AMAURA]: [new SpeciesEvolution(Species.AURORUS, 39, null, [new NightEvolutionCondition()])],
   [Species.GOOMY]: [
-    new SpeciesEvolution(
-      Species.HISUI_SLIGGOO,
-      40,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
-    ),
-    new SpeciesEvolution(
-      Species.SLIGGOO,
-      40,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
-    ),
+    new SpeciesEvolution(Species.SLIGGOO, 40, null, [new DayEvolutionCondition()]),
+    new SpeciesEvolution(Species.HISUI_SLIGGOO, 40, null, [new NightEvolutionCondition()]),
   ],
+  [Species.SLIGGOO]: [new SpeciesEvolution(Species.GOODRA, 50, null, [new GoodraEvoCondition()])],
   /** Hisui Sliggoo is from Gen 8 */
-  [Species.HISUI_SLIGGOO]: [
-    new SpeciesEvolution(
-      Species.HISUI_GOODRA,
-      50,
-      null,
-      new SpeciesEvolutionCondition(() =>
-        globalScene.arena.hasWeather([WeatherType.RAIN, WeatherType.FOG, WeatherType.HEAVY_RAIN]),
-      ),
-    ),
-  ],
-  [Species.SLIGGOO]: [
-    new SpeciesEvolution(
-      Species.GOODRA,
-      50,
-      null,
-      new SpeciesEvolutionCondition(() =>
-        globalScene.arena.hasWeather([WeatherType.RAIN, WeatherType.FOG, WeatherType.HEAVY_RAIN]),
-      ),
-    ),
-  ],
+  [Species.HISUI_SLIGGOO]: [new SpeciesEvolution(Species.HISUI_GOODRA, 50, null, [new GoodraEvoCondition()])],
   [Species.PHANTUMP]: [
     new SpeciesEvolution(Species.TREVENANT, 1, EvolutionItem.LINKING_CORD, null, GENERIC_ITEM_EVO_LEVEL),
   ],
@@ -137,18 +71,8 @@ export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
     new SpeciesEvolution(Species.GOURGEIST, 1, EvolutionItem.LINKING_CORD, null, GENERIC_ITEM_EVO_LEVEL),
   ],
   [Species.BERGMITE]: [
-    new SpeciesEvolution(
-      Species.HISUI_AVALUGG,
-      37,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
-    ),
-    new SpeciesEvolution(
-      Species.AVALUGG,
-      37,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
-    ),
+    new SpeciesEvolution(Species.AVALUGG, 37, null, [new DayEvolutionCondition()]),
+    new SpeciesEvolution(Species.HISUI_AVALUGG, 37, null, [new NightEvolutionCondition()]),
   ],
   [Species.NOIBAT]: [new SpeciesEvolution(Species.NOIVERN, 48, null, null)],
 };

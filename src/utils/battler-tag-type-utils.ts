@@ -17,7 +17,7 @@ export const ProtectionBattlerTagTypes = Object.freeze([
   BattlerTagType.OBSTRUCT,
 ]);
 
-export const MoveLockTagTypes = Object.freeze([BattlerTagType.FRENZY]);
+export const MoveLockTagTypes = Object.freeze([BattlerTagType.FRENZY, BattlerTagType.UPROAR]);
 
 export const CritBoostBattlerTagTypes = Object.freeze([BattlerTagType.CRIT_BOOST, BattlerTagType.DRAGON_CHEER]);
 

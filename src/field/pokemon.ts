@@ -41,6 +41,7 @@ import {
   MoveRestrictionBattlerTag,
   PowerTrickTag,
   TypeImmuneTag,
+  type UproarTag,
   getBattlerTag,
   type AutotomizedTag,
   type CritBoostStackableTag,
@@ -194,6 +195,7 @@ import type { TrainerSlot } from "#enums/trainer-slot";
 import { UiMode } from "#enums/ui-mode";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
+import { applyBattlerTags } from "#app/data/apply-battler-tags";
 
 export abstract class Pokemon extends Phaser.GameObjects.Container {
   public id: number;
@@ -1966,7 +1968,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
           && this.level >= e.level
           && (isNullOrUndefined(e.preFormKey) || this.getFormKey() === e.preFormKey)
         ) {
-          if (e.condition === null || (e.condition as SpeciesEvolutionCondition).predicate(this)) {
+          if (
+            e.conditions === null
+            || (e.conditions as SpeciesEvolutionCondition[]).every((condition) => condition.predicate(this))
+          ) {
             return e;
           }
         }
@@ -3668,7 +3673,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
         }
         break;
       case StatusEffect.SLEEP:
-        if (this.isGrounded() && globalScene.arena.hasTerrain(TerrainType.ELECTRIC)) {
+        const preventSleep = new BooleanHolder(false);
+        globalScene
+          .getField(true)
+          .forEach((p) => applyBattlerTags<UproarTag>(BattlerTagType.UPROAR, p, quiet, this, preventSleep));
+
+        if (preventSleep.value || (this.isGrounded() && globalScene.arena.hasTerrain(TerrainType.ELECTRIC))) {
           return false;
         }
         break;
@@ -3711,7 +3721,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     turnsRemaining: number = 0,
     sourceText: string | null = null,
   ): boolean {
-    if (!this.canSetStatus(effect, asPhase, false, sourcePokemon)) {
+    if (!this.canSetStatus(effect, !asPhase, false, sourcePokemon)) {
       return false;
     }
     if (this.isFainted()) {
@@ -4311,7 +4321,7 @@ export class PlayerPokemon extends Pokemon {
 
       this.pauseEvolutions = false;
       // Handles Nincada evolving into Ninjask + Shedinja
-      this.handleSpecialEvolutions(evolution);
+      this.handleShedinjaEvolution(evolution);
       this.species = getPokemonSpecies(evolution.speciesId);
       if (evolution.preFormKey !== null) {
         const formIndex = Math.max(
@@ -4360,12 +4370,12 @@ export class PlayerPokemon extends Pokemon {
     });
   }
 
-  private handleSpecialEvolutions(evolution: SpeciesFormEvolution) {
+  private handleShedinjaEvolution(evolution: SpeciesFormEvolution) {
     const { speciesId } = this.species;
     if (speciesId === Species.NINCADA && evolution.speciesId === Species.NINJASK) {
       const newEvolution = pokemonEvolutions[speciesId][1];
 
-      if (newEvolution.condition?.predicate(this)) {
+      if (newEvolution.conditions?.every((condition) => condition.predicate(this))) {
         const newPokemon = globalScene.addPlayerPokemon(
           this.species,
           this.level,
@@ -4537,10 +4547,10 @@ export class EnemyPokemon extends Pokemon {
 
     if (
       speciesId in Overrides.ENEMY_FORM_OVERRIDES
-      && Overrides.ENEMY_FORM_OVERRIDES[speciesId]
+      && !isNullOrUndefined(Overrides.ENEMY_FORM_OVERRIDES[speciesId])
       && this.species.forms[Overrides.ENEMY_FORM_OVERRIDES[speciesId]]
     ) {
-      this.formIndex = Overrides.ENEMY_FORM_OVERRIDES[speciesId] ?? 0;
+      this.formIndex = Overrides.ENEMY_FORM_OVERRIDES[speciesId];
     }
 
     if (!dataSource) {

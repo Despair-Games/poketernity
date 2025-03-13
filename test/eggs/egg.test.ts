@@ -1,4 +1,4 @@
-import { EVERYTHING_SAVE_FILE_PATH } from "#test/testUtils/testUtils";
+import { EVERYTHING_SAVE_FILE_PATH } from "#test/test-utils/testUtils";
 import { speciesEggTiers } from "#app/data/balance/species-egg-tiers";
 import { Egg, getLegendaryGachaSpeciesForTimestamp, getValidLegendaryGachaSpecies } from "#app/data/egg";
 import { allSpecies } from "#app/data/data-lists";
@@ -9,7 +9,7 @@ import EggData from "#app/system/egg-data";
 import * as Utils from "#app/utils";
 import { isNullOrUndefined } from "#app/utils";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

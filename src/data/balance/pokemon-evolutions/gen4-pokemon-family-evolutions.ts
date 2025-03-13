@@ -1,10 +1,9 @@
-import { globalScene } from "#app/global-scene";
 import { Species } from "#enums/species";
-import { TimeOfDay } from "#enums/time-of-day";
 import {
+  DayEvolutionCondition,
+  GenderEvolutionCondition,
   type PokemonEvolutions,
   SpeciesEvolution,
-  SpeciesEvolutionCondition,
   SpeciesFriendshipEvolutionCondition,
 } from "#app/data/pokemon-evolutions";
 import { Gender } from "#enums/gender";
@@ -26,18 +25,16 @@ export const gen4pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.CRANIDOS]: [new SpeciesEvolution(Species.RAMPARDOS, 30, null, null)],
   [Species.SHIELDON]: [new SpeciesEvolution(Species.BASTIODON, 30, null, null)],
   [Species.BURMY]: [
-    new SpeciesEvolution(Species.MOTHIM, 20, null, new SpeciesEvolutionCondition((p) => p.gender === Gender.MALE)),
-    new SpeciesEvolution(Species.WORMADAM, 20, null, new SpeciesEvolutionCondition((p) => p.gender === Gender.FEMALE)),
+    new SpeciesEvolution(Species.MOTHIM, 20, null, [new GenderEvolutionCondition(Gender.MALE)]),
+    new SpeciesEvolution(Species.WORMADAM, 20, null, [new GenderEvolutionCondition(Gender.FEMALE)]),
   ],
-  [Species.COMBEE]: [
-    new SpeciesEvolution(Species.VESPIQUEN, 21, null, new SpeciesEvolutionCondition((p) => p.gender === Gender.FEMALE)),
-  ],
+  [Species.COMBEE]: [new SpeciesEvolution(Species.VESPIQUEN, 21, null, [new GenderEvolutionCondition(Gender.FEMALE)])],
   [Species.BUIZEL]: [new SpeciesEvolution(Species.FLOATZEL, 26, null, null)],
   [Species.CHERUBI]: [new SpeciesEvolution(Species.CHERRIM, 25, null, null)],
   [Species.SHELLOS]: [new SpeciesEvolution(Species.GASTRODON, 30, null, null)],
   [Species.DRIFLOON]: [new SpeciesEvolution(Species.DRIFBLIM, 28, null, null)],
   [Species.BUNEARY]: [
-    new SpeciesEvolution(Species.LOPUNNY, 1, null, new SpeciesFriendshipEvolutionCondition(70), HAPPINESS_EVO_LEVEL),
+    new SpeciesEvolution(Species.LOPUNNY, 1, null, [new SpeciesFriendshipEvolutionCondition(70)], HAPPINESS_EVO_LEVEL),
   ],
   [Species.GLAMEOW]: [new SpeciesEvolution(Species.PURUGLY, 38, null, null)],
   [Species.STUNKY]: [new SpeciesEvolution(Species.SKUNTANK, 34, null, null)],
@@ -49,9 +46,7 @@ export const gen4pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.LUCARIO,
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(120, () =>
-        globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]),
-      ),
+      [new SpeciesFriendshipEvolutionCondition(120), new DayEvolutionCondition()],
       HAPPINESS_EVO_LEVEL,
     ),
   ],

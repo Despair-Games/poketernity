@@ -13,7 +13,7 @@ import type OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { isNullOrUndefined } from "#app/utils";
 import { Button } from "#enums/buttons";
-import type { GameManager } from "#test/testUtils/gameManager";
+import type { GameManager } from "#test/test-utils/gameManager";
 import { expect, vi } from "vitest";
 
 /**

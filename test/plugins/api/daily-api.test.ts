@@ -1,11 +1,11 @@
 import type { GetDailyRankingsPageCountRequest, GetDailyRankingsRequest } from "#app/@types/DailyApi";
 import { DailyApi } from "#app/plugins/api/daily-api";
-import { getApiBaseUrl } from "#test/testUtils/testUtils";
+import { getApiBaseUrl } from "#test/test-utils/testUtils";
 import { type RankingEntry } from "#app/ui/daily-run-scoreboard";
 import { ScoreboardCategory } from "#enums/scoreboard-category";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { initServerForApiTests } from "#test/testUtils/testFileInitialization";
+import { initServerForApiTests } from "#test/test-utils/testFileInitialization";
 
 const apiBase = getApiBaseUrl();
 const dailyApi = new DailyApi(apiBase);

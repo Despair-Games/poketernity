@@ -1,5 +1,5 @@
 import { afterEach, beforeAll, beforeEach, expect, describe, it, vi } from "vitest";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { Species } from "#enums/species";
 import { MysteryEncounterOptionSelectedPhase } from "#app/phases/mystery-encounter-phases/option-selected-phase";

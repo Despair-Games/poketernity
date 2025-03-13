@@ -1,5 +1,5 @@
 import { Achievement, ChallengeAchv, MonoGenAchv, MonoTypeAchv, RibbonAchv, achvs } from "#app/system/achievements";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { InverseBattleChallenge, SingleGenerationChallenge, SingleTypeChallenge } from "#app/data/challenge";
