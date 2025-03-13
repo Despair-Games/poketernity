@@ -10,7 +10,7 @@ import { MoveResult } from "#enums/move-result";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import { describe, beforeAll, afterEach, beforeEach, expect, it, vi } from "vitest";
 
 describe("Abilities - Magic Bounce", () => {
