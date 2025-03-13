@@ -8,9 +8,9 @@ import { MoveHeaderAttr } from "#app/data/moves/move-attrs/move-header-attr";
  * @extends MoveHeaderAttr
  */
 export class MessageHeaderAttr extends MoveHeaderAttr {
-  private message: string | ((user: Pokemon, move: Move) => string);
+  private message: string | ((user: Pokemon, move: Move) => string | undefined);
 
-  constructor(message: string | ((user: Pokemon, move: Move) => string)) {
+  constructor(message: string | ((user: Pokemon, move: Move) => string | undefined)) {
     super();
     this.message = message;
   }

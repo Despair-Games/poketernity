@@ -1175,9 +1175,15 @@ export function initMoves() {
       .attr(FlinchAttr)
       .condition(new FirstMoveCondition()),
     new AttackMove(MoveId.UPROAR, ElementalType.NORMAL, MoveCategory.SPECIAL, 90, 100, 10, -1, 0, 3)
+      .attr(AddBattlerTagAttr, BattlerTagType.UPROAR, true)
+      .attr(MessageHeaderAttr, (user, _move) =>
+        !!user.getTag(BattlerTagType.UPROAR)
+          ? // "{pokemonNameWithAffix} is making an uproar!"
+            i18next.t("moveTriggers:isMakingAnUproar", { pokemonNameWithAffix: getPokemonNameWithAffix(user) })
+          : undefined,
+      )
       .soundMove()
-      .target(MoveTarget.RANDOM_NEAR_ENEMY)
-      .partial(), // Does not lock the user, does not stop Pokemon from sleeping
+      .target(MoveTarget.RANDOM_NEAR_ENEMY),
     new SelfStatusMove(MoveId.STOCKPILE, ElementalType.NORMAL, -1, 20, -1, 0, 3)
       .condition((user) => (user.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)?.stockpiledCount ?? 0) < 3)
       .attr(AddBattlerTagAttr, BattlerTagType.STOCKPILING, true),

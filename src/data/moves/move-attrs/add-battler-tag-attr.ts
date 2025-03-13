@@ -89,6 +89,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.SALT_CURED:
       case BattlerTagType.CURSED:
       case BattlerTagType.FRENZY:
+      case BattlerTagType.UPROAR:
       case BattlerTagType.TRAPPED:
       case BattlerTagType.OCTOLOCK:
       case BattlerTagType.NO_RETREAT:
