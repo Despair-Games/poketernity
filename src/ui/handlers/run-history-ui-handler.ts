@@ -18,9 +18,7 @@ import { settings } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import { ImagesFolder } from "#enums/images-folders";
 
-export type RunSelectCallback = (cursor: number) => void;
-
-export const RUN_HISTORY_LIMIT: number = 25;
+type RunSelectCallback = (cursor: number) => void;
 
 /**
  * RunHistoryUiHandler handles the UI of the Run History Menu
