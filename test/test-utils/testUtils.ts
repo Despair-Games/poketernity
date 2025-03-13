@@ -4,7 +4,8 @@ import path from "path";
 import { vi } from "vitest";
 import { APP_ABBREVIATION, SAVE_FILE_EXTENSION } from "#app/constants";
 
-export const EVERYTHING_SAVE_FILE_PATH = `test/testUtils/saves/everything.${APP_ABBREVIATION}.${SAVE_FILE_EXTENSION}`;
+export const RESOURCES_FOLDER_PATH = `test/test-utils/resources`;
+export const EVERYTHING_SAVE_FILE_PATH = `${RESOURCES_FOLDER_PATH}/saves/everything.${APP_ABBREVIATION}.${SAVE_FILE_EXTENSION}`;
 
 /**
  * Sets up the i18next mock.

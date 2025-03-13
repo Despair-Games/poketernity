@@ -58,9 +58,9 @@ class MySequencer extends BaseSequencer {
  * or else it breaks due to running tests with `--no-isolate.`
  */
 function getTestOrder(testName: string): number {
-  if (testName.includes("battle_scene.test.ts")) {
+  if (testName.includes("battle-scene.test.ts")) {
     return 1;
-  } else if (testName.includes("inputs.test.ts") || testName.includes("all_moves.test.ts")) {
+  } else if (testName.includes("inputs.test.ts") || testName.includes("all-moves.test.ts")) {
     return 2;
   } else {
     return 3;

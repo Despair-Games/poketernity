@@ -6,6 +6,7 @@ import { holdOn } from "#test/test-utils/gameManagerUtils";
 import fs from "fs";
 import { JSDOM } from "jsdom";
 import Phaser from "phaser";
+import { RESOURCES_FOLDER_PATH } from "#test/test-utils/testUtils";
 
 interface LogEntry {
   type: string;
@@ -98,7 +99,10 @@ class Fakepad extends Phaser.Input.Gamepad.Gamepad {
 
 class FakeMobile {
   constructor() {
-    const fakeMobilePage = fs.readFileSync("./test/testUtils/fakeMobile.html", { encoding: "utf8", flag: "r" });
+    const fakeMobilePage = fs.readFileSync(`${RESOURCES_FOLDER_PATH}/fake-mobile.html`, {
+      encoding: "utf8",
+      flag: "r",
+    });
     const dom = new JSDOM(fakeMobilePage);
     Object.defineProperty(window, "document", {
       value: dom.window.document,
