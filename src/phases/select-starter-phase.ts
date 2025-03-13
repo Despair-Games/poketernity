@@ -7,7 +7,7 @@ import { overrideHeldItems, overrideModifiers } from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
-import type { Starter } from "#app/ui/handlers/starter-select-ui-handler";
+import type { StarterConfig } from "#app/@types/StarterConfig";
 import { UiMode } from "#enums/ui-mode";
 import { Gender } from "#enums/gender";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
@@ -21,7 +21,7 @@ export class SelectStarterPhase extends Phase {
 
     globalScene.audioManager.playBgm("menu");
 
-    globalScene.ui.setMode(UiMode.STARTER_SELECT, (starters: Starter[]) => {
+    globalScene.ui.setMode(UiMode.STARTER_SELECT, (starters: StarterConfig[]) => {
       globalScene.ui.clearText();
       globalScene.ui.setMode(UiMode.SAVE_SLOT, SaveSlotUiMode.SAVE, (slotId: number) => {
         if (slotId === -1) {
@@ -38,7 +38,7 @@ export class SelectStarterPhase extends Phase {
    * Initialize starters before starting the first battle
    * @param starters {@linkcode Pokemon} with which to start the first battle
    */
-  public initBattle(starters: Starter[]): void {
+  public initBattle(starters: StarterConfig[]): void {
     const { arena, gameMode, gameData, sound, time } = globalScene;
     const { dexData, gameStats } = gameData;
     const { isClassic } = gameMode;
@@ -46,7 +46,7 @@ export class SelectStarterPhase extends Phase {
     const party = globalScene.getPlayerParty();
     const loadPokemonAssets: Promise<void>[] = [];
 
-    starters.forEach((starter: Starter, i: number) => {
+    starters.forEach((starter: StarterConfig, i: number) => {
       if (!i && Overrides.STARTER_SPECIES_OVERRIDE) {
         starter.species = getPokemonSpecies(Overrides.STARTER_SPECIES_OVERRIDE);
       }

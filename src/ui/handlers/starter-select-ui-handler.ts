@@ -88,19 +88,9 @@ import { SortCriteria } from "#enums/sort-criteria";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
+import type { StarterConfig } from "#app/@types/StarterConfig";
 
-export type StarterSelectCallback = (starters: Starter[]) => void;
-
-export interface Starter {
-  species: PokemonSpecies;
-  dexAttr: bigint;
-  abilityIndex: number;
-  passive: boolean;
-  nature: Nature;
-  moveset?: StarterMoveset;
-  pokerus: boolean;
-  nickname?: string;
-}
+type StarterSelectCallback = (starters: StarterConfig[]) => void;
 
 interface LanguageSetting {
   starterInfoXPos?: number;
