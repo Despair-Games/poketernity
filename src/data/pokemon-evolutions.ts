@@ -89,16 +89,20 @@ export class SpeciesEvolutionCondition {
 }
 
 /**
- * For Pokemon that require being male, including
+ * For Pokemon that require being male, including:
+ * ```
  * Gallade
  * Mothim
  * Basculegion
  * Oinkalogne
  * Meowstic
+ * ```
  *
  * Custom:
+ * ```
  * Glalie
  * Huntail
+ * ```
  */
 export class MaleEvolutionCondition extends SpeciesEvolutionCondition {
   constructor() {
@@ -108,17 +112,21 @@ export class MaleEvolutionCondition extends SpeciesEvolutionCondition {
 }
 
 /**
- * For Pokemon that require being female, including
+ * For Pokemon that require being female, including:
+ * ```
  * Froslass
  * Wormadam, Vespiquen
  * Basculegion
  * Salazzle
  * Oinkalogne
  * Meowstic
+ * ```
  *
  * Custom:
+ * ```
  * Gardevoir
  * Gorebyss
+ * ```
  */
 export class FemaleEvolutionCondition extends SpeciesEvolutionCondition {
   constructor() {
@@ -128,21 +136,25 @@ export class FemaleEvolutionCondition extends SpeciesEvolutionCondition {
 }
 
 /**
- * For Pokemon that have mainline evolutions requiring day time. Includes
+ * For Pokemon that have mainline evolutions requiring day time. Includes:
+ * ```
  * Eevee
  * Budew, Happiny, Riolu
  * Tyrunt
  * Yungoos
  * Rockruff, Formantis
  * Hisui Sneasel
+ * ```
  *
- * Also includes Pokemon that have alternate forms like
+ * Also includes Pokemon that have alternate forms like:
+ * ```
  * Cubone, Koffing, Mime Jr
  * Quilava
  * Wurmple
  * Samurott, Rufflet
  * Goomy
  * Dartrix, Cosmoem
+ * ```
  */
 export class DayEvolutionCondition extends SpeciesEvolutionCondition {
   constructor() {
@@ -152,7 +164,8 @@ export class DayEvolutionCondition extends SpeciesEvolutionCondition {
 }
 
 /**
- * For Pokemon that have mainline evolutions requiring night time. Includes
+ * For Pokemon that have mainline evolutions requiring night time. Includes:
+ * ```
  * Eevee
  * Gligar, Sneasel, Chingling
  * Amaura
@@ -161,14 +174,17 @@ export class DayEvolutionCondition extends SpeciesEvolutionCondition {
  * Galar Linoone, Snom
  * Ursaring
  * Greavard
+ * ```
  *
- * Also includes Pokemon that have alternate forms like
+ * Also includes Pokemon that have alternate forms like:
+ * ```
  * Cubone, Koffing, Mime Jr
  * Quilava
  * Wurmple
  * Samurott, Rufflet
  * Goomy
  * Dartrix, Cosmoem
+ * ```
  */
 export class NightEvolutionCondition extends SpeciesEvolutionCondition {
   constructor() {
