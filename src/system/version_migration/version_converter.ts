@@ -1,12 +1,20 @@
 import type { SessionSaveData } from "#app/@types/SessionData";
+import type { SessionSaveMigrator } from "#app/@types/SessionSaveMigrator";
 import type { Settings } from "#app/@types/Settings";
+import type { SettingsSaveMigrator } from "#app/@types/SettingsSaveMigrator";
 import type { SystemSaveData } from "#app/@types/SystemData";
+import type { SystemSaveMigrator } from "#app/@types/SystemSaveMigrator";
 import { compareVersions } from "compare-versions";
 import { version } from "../../../package.json";
 
 /*
 // template for save migrator creation
 // versions/vA_B_C.ts
+
+// The version for each migrator should match the filename, ie: `vA_B_C.ts` -> `version: "A.B.C"
+
+// The name for each migrator should match its purpose. For example, if you're fixing
+// the ability index of a pokemon, it might be called `migratePokemonAbilityIndex`
 
 const systemMigratorA: SystemSaveMigrator = {
   version: "A.B.C",
@@ -42,34 +50,24 @@ export const vA_B_C_SettingsMigrators: SettingsSaveMigrator[] = [settingsMigrato
 /** Current game version */
 const LATEST_VERSION = version;
 
-interface SystemSaveMigrator {
-  version: string;
-  migrate: (data: SystemSaveData) => void;
-}
-
-interface SessionSaveMigrator {
-  version: string;
-  migrate: (data: SessionSaveData) => void;
-}
-
-interface SettingsSaveMigrator {
-  version: string;
-  migrate: (data: Partial<Settings>) => void;
-}
-
 type SaveMigrator = SystemSaveMigrator | SessionSaveMigrator | SettingsSaveMigrator;
 
 type SaveData = SystemSaveData | SessionSaveData | Partial<Settings>;
 
-// Add new migrators within the appropriate `.concat()`
-// Example: `const systemMigrators: SystemSaveMigrator[] = [].concat(v1_1_0_SystemMigrators, v1_3_1_SystemMigrators);`
+// To add new migrators, create a new `.push()` line like so:
+// `systemMigrators.push(...v1_1_0_SystemMigrators);`
 
 /** All system save migrators */
-const systemMigrators: SystemSaveMigrator[] = [].concat();
+const systemMigrators: SystemSaveMigrator[] = [];
+systemMigrators.push(/* ...vA_B_C_SystemMigrators */);
+
 /** All session save migrators */
-const sessionMigrators: SessionSaveMigrator[] = [].concat();
+const sessionMigrators: SessionSaveMigrator[] = [];
+sessionMigrators.push(/* ...vA_B_C_SessionMigrators */);
+
 /** All settings migrators */
-const settingsMigrators: SettingsSaveMigrator[] = [].concat();
+const settingsMigrators: SettingsSaveMigrator[] = [];
+settingsMigrators.push(/* ...vA_B_C_SettingsMigrators */);
 
 /** Sorts migrators by their stated version, ensuring they are applied in order from oldest to newest */
 const sortMigrators = (migrators: SaveMigrator[]): void => {
