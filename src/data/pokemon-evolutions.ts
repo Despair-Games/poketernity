@@ -130,14 +130,14 @@ export class FemaleEvolutionCondition extends SpeciesEvolutionCondition {
 /**
  * For Pokemon that have mainline evolutions requiring day time. Includes
  * Eevee
- * Budew, Happiny, Riolu,
+ * Budew, Happiny, Riolu
  * Tyrunt
  * Yungoos
  * Rockruff, Formantis
  * Hisui Sneasel
  *
  * Also includes Pokemon that have alternate forms like
- * Cubone, Koffing, Mime Jr,
+ * Cubone, Koffing, Mime Jr
  * Quilava
  * Wurmple
  * Samurott, Rufflet
@@ -152,7 +152,7 @@ export class DayEvolutionCondition extends SpeciesEvolutionCondition {
 }
 
 /**
- * For Pokemon that have mainline evolutions requiring day time. Includes
+ * For Pokemon that have mainline evolutions requiring night time. Includes
  * Eevee
  * Gligar, Sneasel, Chingling
  * Amaura
@@ -163,7 +163,7 @@ export class DayEvolutionCondition extends SpeciesEvolutionCondition {
  * Greavard
  *
  * Also includes Pokemon that have alternate forms like
- * Cubone, Koffing, Mime Jr,
+ * Cubone, Koffing, Mime Jr
  * Quilava
  * Wurmple
  * Samurott, Rufflet
