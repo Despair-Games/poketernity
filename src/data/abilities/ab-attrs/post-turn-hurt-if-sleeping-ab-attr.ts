@@ -1,4 +1,4 @@
-import { PostTurnAbAttr } from "#app/data/ab-attrs/post-turn-ab-attr";
+import { PostTurnAbAttr } from "#app/data/abilities/ab-attrs/post-turn-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
