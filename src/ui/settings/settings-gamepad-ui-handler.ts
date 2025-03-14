@@ -1,4 +1,4 @@
-import { addTextObject } from "../text";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import {
@@ -6,7 +6,7 @@ import {
   settingGamepadBlackList,
   settingGamepadDefaults,
   settingGamepadOptions,
-} from "../../system/settings/settings-gamepad";
+} from "#app/system/settings/settings-gamepad";
 import { SettingGamepad } from "#enums/setting-gamepad";
 import pad_xbox360 from "#app/configs/inputs/pad_xbox360";
 import pad_dualshock from "#app/configs/inputs/pad_dualshock";

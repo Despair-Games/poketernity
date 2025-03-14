@@ -1,61 +1,61 @@
 import { globalScene } from "#app/global-scene";
-import type UiHandler from "./ui-handler";
-import BattleMessageUiHandler from "./battle-message-ui-handler";
-import CommandUiHandler from "./command-ui-handler";
-import PartyUiHandler from "./party-ui-handler";
-import FightUiHandler from "./fight-ui-handler";
-import MessageUiHandler from "./message-ui-handler";
-import ConfirmUiHandler from "./confirm-ui-handler";
-import ModifierSelectUiHandler from "./modifier-select-ui-handler";
-import BallUiHandler from "./ball-ui-handler";
-import SummaryUiHandler from "./summary-ui-handler";
-import StarterSelectUiHandler from "./starter-select-ui-handler";
-import TargetSelectUiHandler from "./target-select-ui-handler";
-import SettingsUiHandler from "./settings/settings-ui-handler";
-import SettingsGamepadUiHandler from "./settings/settings-gamepad-ui-handler";
-import GameChallengesUiHandler from "./challenges-select-ui-handler";
-import { addTextObject } from "./text";
-import { TextStyle } from "#enums/text-style";
-import AchvBar from "./achv-bar";
-import MenuUiHandler from "./menu-ui-handler";
-import AchvsUiHandler from "./achvs-ui-handler";
-import OptionSelectUiHandler from "./option-select-ui-handler";
-import EggHatchSceneHandler from "./egg-hatch-scene-handler";
-import EggListUiHandler from "./egg-list-ui-handler";
-import EggGachaUiHandler from "./egg-gacha-ui-handler";
-import { addWindow } from "./ui-theme";
-import LoginFormUiHandler from "./login-form-ui-handler";
-import RegistrationFormUiHandler from "./registration-form-ui-handler";
-import LoadingModalUiHandler from "./loading-modal-ui-handler";
-import { executeIf } from "#app/utils";
-import GameStatsUiHandler from "./game-stats-ui-handler";
-import SaveSlotSelectUiHandler from "./save-slot-select-ui-handler";
-import TitleUiHandler from "./title-ui-handler";
-import SavingIconHandler from "./saving-icon-handler";
-import UnavailableModalUiHandler from "./unavailable-modal-ui-handler";
-import SessionReloadModalUiHandler from "./session-reload-modal-ui-handler";
-import type { Button } from "#enums/buttons";
-import i18next from "i18next";
-import GamepadBindingUiHandler from "./settings/gamepad-binding-ui-handler";
-import SettingsKeyboardUiHandler from "#app/ui/settings/settings-keyboard-ui-handler";
-import KeyboardBindingUiHandler from "#app/ui/settings/keyboard-binding-ui-handler";
-import SettingsDisplayUiHandler from "./settings/settings-display-ui-handler";
-import SettingsAudioUiHandler from "./settings/settings-audio-ui-handler";
-import { PlayerGender } from "#enums/player-gender";
-import type BgmBar from "#app/ui/bgm-bar";
-import RenameFormUiHandler from "./rename-form-ui-handler";
-import AdminUiHandler from "./admin-ui-handler";
-import RunHistoryUiHandler from "./run-history-ui-handler";
-import RunInfoUiHandler from "./run-info-ui-handler";
-import EggSummaryUiHandler from "./egg-summary-ui-handler";
-import TestDialogueUiHandler from "#app/ui/test-dialogue-ui-handler";
-import AutoCompleteUiHandler from "./autocomplete-ui-handler";
-import { Device } from "#enums/devices";
-import MysteryEncounterUiHandler from "./mystery-encounter-ui-handler";
 import { settings } from "#app/system/settings/settings-manager";
-import FormChangeSceneHandler from "./form-change-scene-handler";
-import { UiMode } from "#enums/ui-mode";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
+import AchvBar from "#app/ui/components/achv-bar";
+import type BgmBar from "#app/ui/components/bgm-bar";
+import SavingIcon from "#app/ui/components/saving-icon";
+import type UiHandler from "#app/ui/handlers/abstract-ui-handler";
+import AchvsUiHandler from "#app/ui/handlers/achvs-ui-handler";
+import AdminUiHandler from "#app/ui/handlers/admin-ui-handler";
+import AutoCompleteUiHandler from "#app/ui/handlers/autocomplete-ui-handler";
+import BallUiHandler from "#app/ui/handlers/ball-ui-handler";
+import BattleMessageUiHandler from "#app/ui/handlers/battle-message-ui-handler";
+import GameChallengesUiHandler from "#app/ui/handlers/challenges-select-ui-handler";
+import CommandUiHandler from "#app/ui/handlers/command-ui-handler";
+import ConfirmUiHandler from "#app/ui/handlers/confirm-ui-handler";
+import EggGachaUiHandler from "#app/ui/handlers/egg-gacha-ui-handler";
+import EggHatchSceneUiHandler from "#app/ui/handlers/egg-hatch-scene-ui-handler";
+import EggListUiHandler from "#app/ui/handlers/egg-list-ui-handler";
+import EggSummaryUiHandler from "#app/ui/handlers/egg-summary-ui-handler";
+import FightUiHandler from "#app/ui/handlers/fight-ui-handler";
+import FormChangeSceneUiHandler from "#app/ui/handlers/form-change-scene-ui-handler";
+import GameStatsUiHandler from "#app/ui/handlers/game-stats-ui-handler";
+import LoadingModalUiHandler from "#app/ui/handlers/loading-modal-ui-handler";
+import LoginFormUiHandler from "#app/ui/handlers/login-form-ui-handler";
+import MenuUiHandler from "#app/ui/handlers/menu-ui-handler";
+import MessageUiHandler from "#app/ui/handlers/message-ui-handler";
+import ModifierSelectUiHandler from "#app/ui/handlers/modifier-select-ui-handler";
+import MysteryEncounterUiHandler from "#app/ui/handlers/mystery-encounter-ui-handler";
+import OptionSelectUiHandler from "#app/ui/handlers/option-select-ui-handler";
+import PartyUiHandler from "#app/ui/handlers/party-ui-handler";
+import RegistrationFormUiHandler from "#app/ui/handlers/registration-form-ui-handler";
+import RenameFormUiHandler from "#app/ui/handlers/rename-form-ui-handler";
+import RunHistoryUiHandler from "#app/ui/handlers/run-history-ui-handler";
+import RunInfoUiHandler from "#app/ui/handlers/run-info-ui-handler";
+import SaveSlotSelectUiHandler from "#app/ui/handlers/save-slot-select-ui-handler";
+import SessionReloadModalUiHandler from "#app/ui/handlers/session-reload-modal-ui-handler";
+import StarterSelectUiHandler from "#app/ui/handlers/starter-select-ui-handler";
+import SummaryUiHandler from "#app/ui/handlers/summary-ui-handler";
+import TargetSelectUiHandler from "#app/ui/handlers/target-select-ui-handler";
+import TestDialogueUiHandler from "#app/ui/handlers/test-dialogue-ui-handler";
+import TitleUiHandler from "#app/ui/handlers/title-ui-handler";
+import UnavailableModalUiHandler from "#app/ui/handlers/unavailable-modal-ui-handler";
+import GamepadBindingUiHandler from "#app/ui/settings/gamepad-binding-ui-handler";
+import KeyboardBindingUiHandler from "#app/ui/settings/keyboard-binding-ui-handler";
+import SettingsAudioUiHandler from "#app/ui/settings/settings-audio-ui-handler";
+import SettingsDisplayUiHandler from "#app/ui/settings/settings-display-ui-handler";
+import SettingsGamepadUiHandler from "#app/ui/settings/settings-gamepad-ui-handler";
+import SettingsKeyboardUiHandler from "#app/ui/settings/settings-keyboard-ui-handler";
+import SettingsUiHandler from "#app/ui/settings/settings-ui-handler";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { addWindow } from "#app/ui/ui-theme";
+import { executeIf } from "#app/utils";
+import type { Button } from "#enums/buttons";
+import { Device } from "#enums/devices";
+import { PlayerGender } from "#enums/player-gender";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
 
 /** All modes that are part of the settings UI. */
 export const settingsUiModes = [
@@ -116,7 +116,7 @@ export default class UI extends Phaser.GameObjects.Container {
   private overlay: Phaser.GameObjects.Rectangle;
   public achvBar: AchvBar;
   public bgmBar: BgmBar;
-  public savingIcon: SavingIconHandler;
+  public savingIcon: SavingIcon;
 
   private tooltipContainer: Phaser.GameObjects.Container;
   private tooltipBg: Phaser.GameObjects.NineSlice;
@@ -142,8 +142,8 @@ export default class UI extends Phaser.GameObjects.Container {
       new PartyUiHandler(),
       new SummaryUiHandler(),
       new StarterSelectUiHandler(),
-      new FormChangeSceneHandler(),
-      new EggHatchSceneHandler(),
+      new FormChangeSceneUiHandler(),
+      new EggHatchSceneUiHandler(),
       new EggSummaryUiHandler(),
       new ConfirmUiHandler(),
       new OptionSelectUiHandler(),
@@ -194,7 +194,7 @@ export default class UI extends Phaser.GameObjects.Container {
 
     globalScene.uiContainer.add(this.achvBar);
 
-    this.savingIcon = new SavingIconHandler();
+    this.savingIcon = new SavingIcon();
     this.savingIcon.setup();
 
     globalScene.uiContainer.add(this.savingIcon);

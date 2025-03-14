@@ -2,7 +2,7 @@ import { getTypeRgb } from "#app/data/type";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import type FormChangeSceneHandler from "#app/ui/form-change-scene-handler";
+import type FormChangeSceneUiHandler from "#app/ui/handlers/form-change-scene-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
@@ -13,7 +13,7 @@ import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 export abstract class FormChangeBasePhase extends Phase {
   protected pokemon: PlayerPokemon;
 
-  protected handler: FormChangeSceneHandler;
+  protected handler: FormChangeSceneUiHandler;
 
   protected container: Phaser.GameObjects.Container;
   protected baseBgImg: Phaser.GameObjects.Image;
@@ -50,7 +50,7 @@ export abstract class FormChangeBasePhase extends Phase {
 
       globalScene.audioManager.fadeOutBgm(undefined, false);
 
-      this.handler = ui.getHandler() as FormChangeSceneHandler;
+      this.handler = ui.getHandler() as FormChangeSceneUiHandler;
 
       this.container = this.handler.container;
 

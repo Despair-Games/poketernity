@@ -1,5 +1,5 @@
-import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
-import PartyUiHandler from "#app/ui/party-ui-handler";
+import ModifierSelectUiHandler from "#app/ui/handlers/modifier-select-ui-handler";
+import PartyUiHandler from "#app/ui/handlers/party-ui-handler";
 import { BerryType } from "#enums/berry-type";
 import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";

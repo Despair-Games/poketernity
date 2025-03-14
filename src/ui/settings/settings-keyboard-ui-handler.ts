@@ -10,8 +10,8 @@ import {
 } from "#app/system/settings/settings-keyboard";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import AbstractControlSettingsUiHandler from "#app/ui/settings/abstract-control-settings-ui-handler";
-import { NavigationManager } from "#app/ui/settings/navigationMenu";
-import { addTextObject } from "#app/ui/text";
+import { NavigationManager } from "#app/ui/settings/navigation-menu";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { reverseValueToKeySetting, truncateString } from "#app/utils";
 import { Device } from "#enums/devices";
