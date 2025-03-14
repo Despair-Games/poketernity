@@ -1,7 +1,8 @@
 import { Species } from "#enums/species";
 import {
   DayEvolutionCondition,
-  GenderEvolutionCondition,
+  FemaleEvolutionCondition,
+  MaleEvolutionCondition,
   MoveKnownEvoCondition,
   NightEvolutionCondition,
   type PokemonEvolutions,
@@ -10,7 +11,6 @@ import {
   SpeciesFriendshipEvolutionCondition,
   SpeciesOwnedEvoCondition,
 } from "#app/data/pokemon-evolutions";
-import { Gender } from "#enums/gender";
 import { EvolutionItem } from "#enums/evolution-item";
 import {
   ADVANCED_ITEM_EVO_LEVEL,
@@ -89,7 +89,7 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
       "male",
       1,
       null,
-      [new MoveKnownEvoCondition(MoveId.WAVE_CRASH), new GenderEvolutionCondition(Gender.MALE)],
+      [new MoveKnownEvoCondition(MoveId.WAVE_CRASH), new MaleEvolutionCondition()],
       BASCULEGION_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -98,7 +98,7 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
       "female",
       1,
       null,
-      [new MoveKnownEvoCondition(MoveId.WAVE_CRASH), new GenderEvolutionCondition(Gender.FEMALE)],
+      [new MoveKnownEvoCondition(MoveId.WAVE_CRASH), new FemaleEvolutionCondition()],
       BASCULEGION_EVO_LEVEL,
     ),
   ],
