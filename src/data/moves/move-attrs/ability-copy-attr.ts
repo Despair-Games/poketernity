@@ -1,4 +1,4 @@
-import type { Pokemon } from "#app/field/pokemon";
+import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import i18next from "i18next";
@@ -7,6 +7,7 @@ import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { detrimentalAbilities } from "#app/utils/ability-utils";
 
 /**
  * Attribute to copy the target's ability onto the user (and, optionally, the user's ally).
@@ -61,5 +62,27 @@ export class AbilityCopyAttr extends MoveEffectAttr {
       }
       return ret;
     };
+  }
+
+  /**
+   * If the target's ability is detrimental, grants a (-5) penalty.
+   * Otherwise, grants (+2) effect score for each Pokemon whose detrimental ability is overridden
+   * by this effect. The total bonus cannot exceed (+3).
+   * @see {@linkcode detrimentalAbilities}
+   */
+  override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    const targetRevealedAbilityId = target.getAbilities({ revealedOnly: true }).find((ab) => !ab.passive)?.ability.id;
+
+    if (!targetRevealedAbilityId || detrimentalAbilities.includes(targetRevealedAbilityId)) {
+      return -5;
+    }
+
+    const affectedPokemon: Pokemon[] = [user];
+    if (this.copyToPartner && user.getAlly()?.isActive(true)) {
+      affectedPokemon.push(user.getAlly());
+    }
+
+    const numBenefit = affectedPokemon.filter((p) => detrimentalAbilities.includes(p.getAbility().id)).length;
+    return Math.min(numBenefit * 2, 3);
   }
 }
