@@ -8,7 +8,6 @@ import { getMoveTargets, SelfStatusMove, type Move } from "#app/data/moves/move"
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { allMoves, allAbilities } from "#app/data/data-lists";
 import { StatusCategoryOnAllyAttr } from "./moves/move-attrs/status-category-on-ally-attr";
-import { ConsecutiveUseDoublePowerAttr } from "./moves/move-attrs/consecutive-use-double-power-attr";
 import { HealOnAllyAttr } from "./moves/move-attrs/heal-on-ally-attr";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveCategory } from "#enums/move-category";
@@ -1245,6 +1244,23 @@ export class FrenzyTag extends MoveLockTag {
       // Only add CONFUSED tag if a disruption occurs on the final confusion-inducing turn of FRENZY
       pokemon.addTag(BattlerTagType.CONFUSED, pokemon.randSeedIntRange(2, 4));
     }
+  }
+}
+
+/**
+ * Applies the move-locking effect of {@link https://bulbapedia.bulbagarden.net/wiki/Rollout_(move) Rollout}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Ice_Ball_(move) Ice Ball}.
+ * Also defines a power multiplier for the respective move based on
+ * the tag's turn count.
+ * @extends MoveLockTag
+ */
+export class RollingTag extends MoveLockTag {
+  constructor(sourceMoveId: MoveId) {
+    super(BattlerTagType.ROLLING, 5, sourceMoveId);
+  }
+
+  public get powerMultiplier() {
+    return Math.pow(2, 5 - this.turnCount);
   }
 }
 
@@ -3340,18 +3356,12 @@ export class TormentTag extends MoveRestrictionBattlerTag {
       return false;
     }
 
-    const moveObj = allMoves.get(lastMoveTurn.move.id);
-    /**
-     * Consecutively-executed moves are not interrupted by Torment
-     * @todo remove the additional attribute check once Rollout/Ice Ball are reimplemented
-     */
-    const isUnaffected = moveObj.hasAttr(ConsecutiveUseDoublePowerAttr) || user.getTag(...MoveLockTagTypes);
     const validLastMoveResult = lastMoveTurn.result === MoveResult.SUCCESS || lastMoveTurn.result === MoveResult.MISS;
     if (
       lastMoveTurn.move.id === moveId
       && validLastMoveResult
       && lastMoveTurn.move.id !== MoveId.STRUGGLE
-      && !isUnaffected
+      && !user.getTag(...MoveLockTagTypes)
     ) {
       return true;
     }
@@ -3707,6 +3717,8 @@ export function getBattlerTag(
       return new NightmareTag();
     case BattlerTagType.FRENZY:
       return new FrenzyTag(turnCount, sourceMoveId);
+    case BattlerTagType.ROLLING:
+      return new RollingTag(sourceMoveId);
     case BattlerTagType.UPROAR:
       return new UproarTag();
     case BattlerTagType.CHARGING:

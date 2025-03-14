@@ -256,6 +256,7 @@ import { SwitchType } from "#enums/switch-type";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
+import { RollingPowerMultiplierAttr } from "#app/data/moves/move-attrs/rolling-power-multiplier-attr";
 
 // prettier-ignore
 export function initMoves() {
@@ -968,8 +969,8 @@ export function initMoves() {
       .condition(failIfLastCondition),
     new StatusMove(MoveId.CHARM, ElementalType.FAIRY, 100, 20, -1, 0, 2).attr(StatStageChangeAttr, [Stat.ATK], -2),
     new AttackMove(MoveId.ROLLOUT, ElementalType.ROCK, MoveCategory.PHYSICAL, 30, 90, 20, -1, 0, 2)
-      .partial() // Does not lock the user, also does not increase damage properly
-      .attr(ConsecutiveUseDoublePowerAttr, 5, true, true, MoveId.DEFENSE_CURL),
+      .attr(AddBattlerTagAttr, BattlerTagType.ROLLING, true)
+      .attr(RollingPowerMultiplierAttr),
     new AttackMove(MoveId.FALSE_SWIPE, ElementalType.NORMAL, MoveCategory.PHYSICAL, 40, 100, 40, -1, 0, 2).attr(
       SurviveDamageAttr,
     ),
@@ -1310,8 +1311,8 @@ export function initMoves() {
       .attr(AddArenaTagAttr, ArenaTagType.MUD_SPORT, ArenaTagRelativeSide.ALL, { turnCount: 5 })
       .target(MoveTarget.BOTH_SIDES),
     new AttackMove(MoveId.ICE_BALL, ElementalType.ICE, MoveCategory.PHYSICAL, 30, 90, 20, -1, 0, 3)
-      .partial() // Does not lock the user properly, does not increase damage correctly
-      .attr(ConsecutiveUseDoublePowerAttr, 5, true, true, MoveId.DEFENSE_CURL)
+      .attr(AddBattlerTagAttr, BattlerTagType.ROLLING, true)
+      .attr(RollingPowerMultiplierAttr)
       .bulletMove(),
     new AttackMove(MoveId.NEEDLE_ARM, ElementalType.GRASS, MoveCategory.PHYSICAL, 60, 100, 15, 30, 0, 3).attr(
       FlinchAttr,
