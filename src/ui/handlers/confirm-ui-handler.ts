@@ -1,25 +1,19 @@
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import OptionSelectUiHandler from "#app/ui/handlers/option-select-ui-handler";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
+import AbstractOptionSelectUiHandler from "./abstract-option-select-ui-handler";
 
 /**
  * Handler that displays a simple Yes/No menu.
  * @extends OptionSelectUiHandler
  */
-export default class ConfirmUiHandler extends OptionSelectUiHandler {
+export default class ConfirmUiHandler extends AbstractOptionSelectUiHandler<OptionSelectItem> {
   constructor() {
     super(UiMode.CONFIRM);
   }
 
-  override show(args: any[]): boolean {
-    if (!args[0] || !args[0].yesHandler || !args[0].noHandler) {
-      console.error("Missing `ConfirmModeConfig` argument for Mode.CONFIRM");
-      return false;
-    }
-
-    const config = args[0] as ConfirmModeConfig;
+  override show(config: ConfirmModeConfig): boolean {
     const fullConfig: OptionSelectModeConfig = {
       ...config,
       yOffset: config.yOffset ?? 48,
@@ -41,6 +35,6 @@ export default class ConfirmUiHandler extends OptionSelectUiHandler {
       ],
     };
 
-    return super.show([fullConfig]);
+    return super.show(fullConfig);
   }
 }

@@ -143,8 +143,8 @@ export default class BattleMessageUiHandler extends MessageUiHandler {
     this.levelUpStatsValuesContent = levelUpStatsValuesContent;
   }
 
-  override show(args: any[]): boolean {
-    super.show(args);
+  override show(): boolean {
+    super.show();
 
     this.commandWindow.setVisible(false);
     this.movesWindowContainer.setVisible(false);

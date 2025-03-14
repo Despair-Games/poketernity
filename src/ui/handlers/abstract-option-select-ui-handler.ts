@@ -83,13 +83,16 @@ export default abstract class AbstractOptionSelectUiHandler<T extends OptionSele
     this.setCursor(0);
   }
 
-  override show(args: any[]): boolean {
-    if (!args.length || !args[0].options || !args[0].options.length) {
+  /**
+   * @param args - args[0] should be of type `OptionSelectModeConfig<T>`.
+   */
+  override show(...args: unknown[]): boolean {
+    if (!args[0]?.hasOwnProperty("options")) {
       console.error("Missing `OptionSelectModeConfig` argument for Mode.OPTION_SELECT");
       return false;
     }
 
-    super.show(args);
+    super.show();
 
     this.initOptions(args[0] as OptionSelectModeConfig<T>);
 

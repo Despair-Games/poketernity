@@ -55,8 +55,8 @@ export default class FormChangeSceneUiHandler extends MessageUiHandler {
     this.initPromptSprite(this.messageContainer);
   }
 
-  override show(_args: any[]): boolean {
-    super.show(_args);
+  override show(): boolean {
+    super.show();
 
     globalScene.ui.bringToTop(this.container);
     globalScene.ui.bringToTop(this.messageBg);

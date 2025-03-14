@@ -2,6 +2,7 @@ import { getIconWithSettingName, getKeyWithKeycode } from "#app/configs/inputs/c
 import { globalScene } from "#app/global-scene";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { Device } from "#enums/devices";
+import type { SettingGamepad } from "#enums/setting-gamepad";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import AbstractBindingUiHandler from "./abstract-binding-ui-handler";
@@ -42,6 +43,10 @@ export default class GamepadBindingUiHandler extends AbstractBindingUiHandler {
     this.optionSelectContainer.add(this.newButtonIcon);
     this.optionSelectContainer.add(this.swapText);
     this.optionSelectContainer.add(this.targetButtonIcon);
+  }
+
+  override show(target: SettingGamepad, cancelHandler: (success: boolean) => boolean): boolean {
+    return super.show(target, cancelHandler);
   }
 
   getSelectedDevice() {

@@ -119,11 +119,9 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
     });
   }
 
-  override show(args: any[]): boolean {
-    if (super.show(args)) {
+  override show(config: FormModalConfig, ..._args: unknown[]): boolean {
+    if (super.show(config)) {
       this.inputContainers.map((ic) => ic.setVisible(true));
-
-      const config = args[0] as FormModalConfig;
 
       this.submitAction = config.buttonActions.length ? config.buttonActions[0] : null;
 

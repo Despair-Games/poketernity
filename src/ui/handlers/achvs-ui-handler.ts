@@ -165,8 +165,8 @@ export default class AchvsUiHandler extends MessageUiHandler {
     this.mainContainer.setVisible(false);
   }
 
-  override show(args: any[]): boolean {
-    super.show(args);
+  override show(): boolean {
+    super.show();
 
     this.headerBgX = this.headerBg.getTopRight().x;
     this.updateAchvIcons();

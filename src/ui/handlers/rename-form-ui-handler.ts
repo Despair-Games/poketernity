@@ -34,13 +34,12 @@ export default class RenameFormUiHandler extends FormModalUiHandler {
     return [{ label: i18next.t("menu:nickname") }];
   }
 
-  override show(args: any[]): boolean {
-    if (super.show(args)) {
-      const config = args[0] as ModalConfig;
-      if (args[1] && typeof (args[1] as PlayerPokemon).getNameToRender === "function") {
-        this.inputs[0].text = (args[1] as PlayerPokemon).getNameToRender();
+  override show(config: ModalConfig, target: string | PlayerPokemon): boolean {
+    if (super.show(config)) {
+      if (typeof target === "string") {
+        this.inputs[0].text = target;
       } else {
-        this.inputs[0].text = args[1];
+        this.inputs[0].text = target.getNameToRender();
       }
       this.submitAction = (_) => {
         this.sanitizeInputs();

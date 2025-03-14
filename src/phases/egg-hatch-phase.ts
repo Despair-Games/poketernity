@@ -220,6 +220,8 @@ export class EggHatchPhase extends Phase {
   }
 
   public override end(): void {
+    // ????
+    // TODO: destroy PlayerPokemon object from EggHatchData
     if (globalScene.findPhase((p) => p instanceof EggHatchPhase)) {
       this.eggHatchHandler.clear();
     } else {

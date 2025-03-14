@@ -119,10 +119,8 @@ export default class MysteryEncounterUiHandler extends UiHandler {
     this.dexProgressContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, 24, 28), Phaser.Geom.Rectangle.Contains);
   }
 
-  override show(args: any[]): boolean {
-    super.show(args);
-
-    this.overrideSettings = (args[0] as OptionSelectSettings) ?? {};
+  override show(settings?: OptionSelectSettings): boolean {
+    this.overrideSettings = settings ?? {};
     const showDescriptionContainer = isNullOrUndefined(this.overrideSettings?.hideDescription)
       ? true
       : !this.overrideSettings.hideDescription;

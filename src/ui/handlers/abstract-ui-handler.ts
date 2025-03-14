@@ -20,7 +20,7 @@ export default abstract class UiHandler {
 
   abstract setup(): void;
 
-  show(_args: any[]): boolean {
+  show(..._args: unknown[]): boolean {
     this.active = true;
 
     return true;

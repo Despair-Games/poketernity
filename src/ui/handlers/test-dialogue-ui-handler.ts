@@ -2,15 +2,14 @@ import type { InputFieldConfig } from "./form-modal-ui-handler";
 import { FormModalUiHandler } from "./form-modal-ui-handler";
 import type { ModalConfig } from "./modal-ui-handler";
 import i18next from "i18next";
-import type { PlayerPokemon } from "#app/field/pokemon";
-import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { isNullOrUndefined } from "#app/utils";
 import { UiMode } from "#enums/ui-mode";
 
 export default class TestDialogueUiHandler extends FormModalUiHandler {
   keys: string[];
 
-  constructor(mode) {
+  constructor(mode: UiMode = UiMode.TEST_DIALOGUE) {
     super(mode);
   }
 
@@ -76,11 +75,11 @@ export default class TestDialogueUiHandler extends FormModalUiHandler {
     return [{ label: "Dialogue" }];
   }
 
-  override show(args: any[]): boolean {
+  override show(config: ModalConfig, prefilledText: string): boolean {
     const ui = this.getUi();
     const hasTitle = !!this.getModalTitle();
     this.updateFields(this.getInputFieldConfigs(), hasTitle);
-    this.updateContainer(args[0] as ModalConfig);
+    this.updateContainer(config);
     const input = this.inputs[0];
     input.setMaxLength(255);
 
@@ -127,24 +126,18 @@ export default class TestDialogueUiHandler extends FormModalUiHandler {
       }
 
       if (options.length > 0) {
-        const modalOpts = {
+        const modalOpts: OptionSelectModeConfig = {
           options: options,
           maxOptions: 5,
-          modalContainer: this.modalContainer,
         };
-        ui.setOverlayMode(UiMode.AUTO_COMPLETE, modalOpts);
+        ui.setOverlayMode(UiMode.AUTO_COMPLETE, modalOpts, this.modalContainer);
       }
     });
 
-    if (super.show(args)) {
-      const config = args[0] as ModalConfig;
+    if (super.show(config)) {
       this.inputs[0].resize(1150, 116);
       this.inputContainers[0].list[0].width = 200;
-      if (args[1] && typeof (args[1] as PlayerPokemon).getNameToRender === "function") {
-        this.inputs[0].text = (args[1] as PlayerPokemon).getNameToRender();
-      } else {
-        this.inputs[0].text = args[1];
-      }
+      this.inputs[0].text = prefilledText;
       this.submitAction = (_) => {
         if (ui.getMode() === UiMode.TEST_DIALOGUE) {
           this.sanitizeInputs();

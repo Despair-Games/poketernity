@@ -232,11 +232,10 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
   /**
    * Show the UI with the provided arguments.
    *
-   * @param args - Arguments to be passed to the show method.
    * @returns `true` if successful.
    */
-  override show(args: any[]): boolean {
-    super.show(args);
+  override show(): boolean {
+    super.show();
     this.updateBindings();
 
     this.uiItems.forEach((uiItem, s) => {

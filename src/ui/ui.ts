@@ -170,7 +170,7 @@ export default class UI extends Phaser.GameObjects.Container {
       new RenameFormUiHandler(),
       new RunHistoryUiHandler(),
       new RunInfoUiHandler(),
-      new TestDialogueUiHandler(UiMode.TEST_DIALOGUE),
+      new TestDialogueUiHandler(),
       new AutoCompleteUiHandler(),
       new AdminUiHandler(),
       new MysteryEncounterUiHandler(),
@@ -483,12 +483,35 @@ export default class UI extends Phaser.GameObjects.Container {
     });
   }
 
-  private setModeInternal(
+  getMode(): UiMode {
+    return this.mode;
+  }
+
+  setMode<THandler extends UiHandler>(mode: UiMode, ...args: Parameters<THandler["show"]>): Promise<void> {
+    return this.setModeInternal<THandler>(mode, true, false, false, ...args);
+  }
+
+  setModeForceTransition<THandler extends UiHandler>(
+    mode: UiMode,
+    ...args: Parameters<THandler["show"]>
+  ): Promise<void> {
+    return this.setModeInternal<THandler>(mode, true, true, false, ...args);
+  }
+
+  setModeWithoutClear<THandler extends UiHandler>(mode: UiMode, ...args: Parameters<THandler["show"]>): Promise<void> {
+    return this.setModeInternal<THandler>(mode, false, false, false, ...args);
+  }
+
+  setOverlayMode<THandler extends UiHandler>(mode: UiMode, ...args: Parameters<THandler["show"]>): Promise<void> {
+    return this.setModeInternal<THandler>(mode, false, false, true, ...args);
+  }
+
+  private setModeInternal<THandler extends UiHandler>(
     mode: UiMode,
     clear: boolean,
     forceTransition: boolean,
     chainMode: boolean,
-    args: any[],
+    ...params: Parameters<THandler["show"]>
   ): Promise<void> {
     return new Promise((resolve) => {
       if (this.mode === mode && !forceTransition) {
@@ -509,7 +532,7 @@ export default class UI extends Phaser.GameObjects.Container {
           if (touchControls) {
             touchControls.dataset.uiMode = UiMode[mode];
           }
-          this.getHandler().show(args);
+          this.getHandler().show(...params);
         }
         resolve();
       };
@@ -530,26 +553,6 @@ export default class UI extends Phaser.GameObjects.Container {
         doSetMode();
       }
     });
-  }
-
-  getMode(): UiMode {
-    return this.mode;
-  }
-
-  setMode(mode: UiMode, ...args: any[]): Promise<void> {
-    return this.setModeInternal(mode, true, false, false, args);
-  }
-
-  setModeForceTransition(mode: UiMode, ...args: any[]): Promise<void> {
-    return this.setModeInternal(mode, true, true, false, args);
-  }
-
-  setModeWithoutClear(mode: UiMode, ...args: any[]): Promise<void> {
-    return this.setModeInternal(mode, false, false, false, args);
-  }
-
-  setOverlayMode(mode: UiMode, ...args: any[]): Promise<void> {
-    return this.setModeInternal(mode, false, false, true, args);
   }
 
   resetModeChain(): void {

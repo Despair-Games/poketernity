@@ -25,6 +25,8 @@ import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
+import type SummaryUiHandler from "#app/ui/handlers/summary-ui-handler";
+import { SummaryUiPage } from "#enums/summary-ui-page";
 
 /**
  * Handles catching a pokemon after the player throws a ball
@@ -315,11 +317,11 @@ export class AttemptCapturePhase extends PokemonPhase {
                       pokemon.nature,
                       pokemon,
                     );
-                    ui.setMode(
+                    ui.setMode<SummaryUiHandler>(
                       UiMode.SUMMARY,
                       newPokemon,
-                      0,
                       SummaryUiMode.DEFAULT,
+                      SummaryUiPage.PROFILE,
                       () => {
                         ui.setMode(UiMode.MESSAGE).then(() => {
                           promptRelease();

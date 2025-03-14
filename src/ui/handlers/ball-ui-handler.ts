@@ -63,8 +63,8 @@ export default class BallUiHandler extends UiHandler {
     this.setCursor(0);
   }
 
-  override show(args: any[]): boolean {
-    super.show(args);
+  override show(): boolean {
+    super.show();
 
     this.updateCounts();
     this.pokeballSelectContainer.setVisible(true);

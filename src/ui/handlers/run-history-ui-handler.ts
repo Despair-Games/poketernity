@@ -71,8 +71,8 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
     globalScene.loadAtlas("rival_m", ImagesFolder.TRAINER);
   }
 
-  override show(args: any[]): boolean {
-    super.show(args);
+  override show(): boolean {
+    super.show();
 
     this.getUi().bringToTop(this.runSelectContainer);
     this.runSelectContainer.setVisible(true);

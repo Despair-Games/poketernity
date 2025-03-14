@@ -44,10 +44,10 @@ export default class CommandUiHandler extends UiHandler {
     }
   }
 
-  override show(args: any[]): boolean {
-    super.show(args);
+  override show(fieldIndex: number = 0): boolean {
+    super.show();
 
-    this.fieldIndex = args.length ? (args[0] as number) : 0;
+    this.fieldIndex = fieldIndex;
 
     this.commandsContainer.setVisible(true);
 

@@ -80,19 +80,18 @@ export default class UnavailableModalUiHandler extends ModalUiHandler {
     });
   }
 
-  override show(args: any[]): boolean {
-    if (args.length >= 1 && args[0] instanceof Function) {
-      const config: ModalConfig = {
-        buttonActions: [],
-      };
-
-      this.reconnectCallback = args[0];
-      this.reconnectDuration = this.minTime;
-      this.reconnectTimer = setTimeout(() => this.tryReconnect(), this.reconnectDuration);
-
-      return super.show([config]);
+  override show(reconnectCallback: () => void): boolean {
+    if (!reconnectCallback) {
+      return false;
     }
+    const config: ModalConfig = {
+      buttonActions: [],
+    };
 
-    return false;
+    this.reconnectCallback = reconnectCallback;
+    this.reconnectDuration = this.minTime;
+    this.reconnectTimer = setTimeout(() => this.tryReconnect(), this.reconnectDuration);
+
+    return super.show(config);
   }
 }

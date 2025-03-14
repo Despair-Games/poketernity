@@ -128,15 +128,16 @@ export default abstract class AbstractBindingUiHandler extends UiHandler {
   /**
    * Show the UI with the provided arguments.
    *
-   * @param args - Arguments to be passed to the show method.
+   * @param target - The binding to update
+   * @param cancelHandler - Handler to call if the binding gets cancelled
    * @returns `true` if successful.
    */
-  override show(args: any[]): boolean {
-    super.show(args);
+  override show(target: string, cancelHandler: (success: boolean) => boolean): boolean {
+    super.show();
     this.buttonPressed = null;
     this.timeLeftAutoClose = 5;
-    this.cancelFn = args[0].cancelHandler;
-    this.target = args[0].target;
+    this.cancelFn = cancelHandler;
+    this.target = target;
 
     // Bring the option and action containers to the front of the UI.
     this.getUi().bringToTop(this.optionSelectContainer);

@@ -44,11 +44,11 @@ export default class SessionReloadModalUiHandler extends ModalUiHandler {
     this.modalContainer.add(label);
   }
 
-  override show(_args: any[]): boolean {
+  override show(): boolean {
     const config: ModalConfig = {
       buttonActions: [],
     };
 
-    return super.show([config]);
+    return super.show(config);
   }
 }

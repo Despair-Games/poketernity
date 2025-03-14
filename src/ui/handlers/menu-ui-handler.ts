@@ -118,10 +118,10 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
     this.initCommunityMenuOptions();
   }
 
-  override show(_args: any[]): boolean {
-    const config: OptionSelectModeConfig = this.getMenuOptionsConfig();
+  override show(): boolean {
+    const config = this.getMenuOptionsConfig();
 
-    super.show([config]);
+    super.show(config);
 
     // Make sure the tutorial overlay sits above everything, but below the message box
     this.menuContainer.bringToTop(this.tutorialOverlay);

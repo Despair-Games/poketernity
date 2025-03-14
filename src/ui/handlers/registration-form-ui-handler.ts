@@ -70,10 +70,8 @@ export default class RegistrationFormUiHandler extends FormModalUiHandler {
     this.modalContainer.add(label);
   }
 
-  override show(args: any[]): boolean {
-    if (super.show(args)) {
-      const config = args[0] as ModalConfig;
-
+  override show(config: ModalConfig): boolean {
+    if (super.show(config)) {
       const originalRegistrationAction = this.submitAction;
       this.submitAction = (_) => {
         // Prevent overlapping overrides on action modification

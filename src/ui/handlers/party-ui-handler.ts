@@ -44,6 +44,7 @@ import { GAME_WIDTH } from "#app/ui-constants";
 import { CommonColor, ShadowColor } from "#enums/color";
 import { type SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { PhaseId } from "#enums/phase-id";
+import type SummaryUiHandler from "./summary-ui-handler";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
 
@@ -413,7 +414,7 @@ export default class PartyUiHandler extends MessageUiHandler {
           }
         } else if (option === PartyOption.SUMMARY) {
           ui.playSelect();
-          ui.setModeWithoutClear(UiMode.SUMMARY, pokemon).then(() => this.clearOptions());
+          ui.setModeWithoutClear<SummaryUiHandler>(UiMode.SUMMARY, pokemon).then(() => this.clearOptions());
           return true;
         } else if (option === PartyOption.UNPAUSE_EVOLUTION) {
           this.clearOptions();

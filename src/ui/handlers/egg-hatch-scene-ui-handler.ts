@@ -34,8 +34,8 @@ export default class EggHatchSceneUiHandler extends UiHandler {
     }
   }
 
-  override show(_args: any[]): boolean {
-    super.show(_args);
+  override show(): boolean {
+    super.show();
 
     this.getUi().showText("", 0);
 

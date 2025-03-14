@@ -101,11 +101,15 @@ export default class AdminUiHandler extends FormModalUiHandler {
     return false;
   }
 
-  override show(args: any[]): boolean {
-    this.config = args[0] as ModalConfig; // config
-    this.adminMode = args[1] as AdminMode; // admin mode
-    this.adminResult = args[2] ?? { username: "", discordId: "", googleId: "", lastLoggedIn: "", registered: "" }; // admin result, if any
-    const isMessageError = args[3]; // is the message shown a success or error
+  override show(
+    config: ModalConfig,
+    adminMode: AdminMode,
+    adminResult?: AdminSearchInfo,
+    isMessageError?: boolean,
+  ): boolean {
+    this.config = config;
+    this.adminMode = adminMode;
+    this.adminResult = adminResult ?? { username: "", discordId: "", googleId: "", lastLoggedIn: "", registered: "" };
 
     const fields = this.getInputFieldConfigs();
     const hasTitle = !!this.getModalTitle();
@@ -125,7 +129,7 @@ export default class AdminUiHandler extends FormModalUiHandler {
       setTextColor(this.errorMessage, TextStyle.SUMMARY_GREEN);
     }
 
-    if (super.show(args)) {
+    if (super.show(config)) {
       this.populateFields(this.adminMode, this.adminResult);
       const originalSubmitAction = this.submitAction;
       this.submitAction = (_) => {

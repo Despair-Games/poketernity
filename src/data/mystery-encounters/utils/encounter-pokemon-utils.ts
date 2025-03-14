@@ -39,6 +39,8 @@ import type { PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { settings } from "#app/system/settings/settings-manager";
+import type SummaryUiHandler from "#app/ui/handlers/summary-ui-handler";
+import { SummaryUiPage } from "#enums/summary-ui-page";
 
 /** Will give +1 level every 10 waves */
 export const STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER = 1;
@@ -723,11 +725,11 @@ export async function catchPokemon(
                     pokemon.nature,
                     pokemon,
                   );
-                  globalScene.ui.setMode(
+                  globalScene.ui.setMode<SummaryUiHandler>(
                     UiMode.SUMMARY,
                     newPokemon,
-                    0,
                     SummaryUiMode.DEFAULT,
+                    SummaryUiPage.PROFILE,
                     () => {
                       globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
                         promptRelease();
