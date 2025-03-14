@@ -82,9 +82,9 @@ export class AttemptCapturePhase extends PokemonPhase {
     field.add(this.pokeball);
 
     if (isCritical) {
-      globalScene.audioManager.playSound("se/pb_throw");
-    } else {
       globalScene.audioManager.playSound("se/crit_throw");
+    } else {
+      globalScene.audioManager.playSound("se/pb_throw");
     }
     time.delayedCall(300, () => {
       field.moveBelow(this.pokeball as Phaser.GameObjects.GameObject, pokemon);
