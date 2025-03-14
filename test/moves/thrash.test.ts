@@ -5,7 +5,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -35,7 +35,7 @@ describe("Moves - Thrash", () => {
       .startingLevel(100)
       .enemyLevel(100);
 
-    vi.spyOn(allMoves[MoveId.ASTONISH], "chance", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.ASTONISH), "chance", "get").mockReturnValue(100);
   });
 
   it("should lock the user into using Thrash for 1-2 turns, then confuse the user", async () => {

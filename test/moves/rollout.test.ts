@@ -3,7 +3,7 @@ import { CommandPhase } from "#app/phases/command-phase";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -36,7 +36,7 @@ describe("Moves - Rollout", () => {
 
   it("should double it's dmg on sequential uses but reset after 5", async () => {
     game.override.moveset([MoveId.ROLLOUT]);
-    vi.spyOn(allMoves[MoveId.ROLLOUT], "accuracy", "get").mockReturnValue(100); //always hit
+    vi.spyOn(allMoves.get(MoveId.ROLLOUT), "accuracy", "get").mockReturnValue(100); //always hit
 
     const variance = 5;
     const turns = 6;

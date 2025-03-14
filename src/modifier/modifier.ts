@@ -41,9 +41,8 @@ import {
 import { getModifierType } from "#app/utils/modifier-type-utils";
 import { modifierTypes } from "./modifier-types";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
-import { CommonColor, ShadowColor } from "#enums/color";
 import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -481,14 +480,13 @@ export abstract class LapsingPersistentModifier extends PersistentModifier {
     const hue = Math.floor(120 * (this.battleCount / this.maxBattles) + 5);
 
     // Generates the color hex code with a constant saturation and lightness but varying hue
+    // TODO use pre defined values and textstyle
     const typeHex = hslToHex(hue, 0.5, 0.9);
     const strokeHex = hslToHex(hue, 0.7, 0.3);
 
-    const battleCountText = addTextObject(27, 0, this.battleCount.toString(), TextStyle.PARTY, {
-      fontSize: "66px",
+    const battleCountText = addTextObject(27, 0, this.battleCount.toString(), TextStyle.LAPSING_MODIFIER_COUNT, {
       color: typeHex,
     });
-    battleCountText.setShadow(0, 0);
     battleCountText.setStroke(strokeHex, 16);
     battleCountText.setOrigin(1, 0);
     container.add(battleCountText);
@@ -894,12 +892,8 @@ export abstract class LapsingPokemonHeldItemModifier extends PokemonHeldItemModi
     const container = super.getIcon(forSummary);
 
     if (this.getPokemon()?.isPlayer()) {
-      const battleCountText = addTextObject(27, 0, this.battlesLeft.toString(), TextStyle.PARTY, {
-        fontSize: "66px",
-        color: CommonColor.SOFT_PINK,
-      });
-      battleCountText.setShadow(0, 0);
-      battleCountText.setStroke(ShadowColor.DEEP_RED, 16);
+      // todo: why is this not using the bitmap text like the other item counts
+      const battleCountText = addTextObject(27, 0, this.battlesLeft.toString(), TextStyle.LAPSING_MODIFIER_COUNT);
       battleCountText.setOrigin(1, 0);
       container.add(battleCountText);
     }
@@ -2456,7 +2450,7 @@ export class EvolutionItemModifier extends ConsumablePokemonModifier {
           (e) =>
             e.item === this.type.evolutionItem
             && (e.evoFormKey === null || (e.preFormKey || "") === playerPokemon.getFormKey())
-            && (!e.condition || e.condition.predicate(playerPokemon)),
+            && (!e.conditions || e.conditions.every((condition) => condition.predicate(playerPokemon))),
         )
       : null;
 

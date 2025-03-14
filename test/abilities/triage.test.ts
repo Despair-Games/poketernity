@@ -3,7 +3,7 @@ import { Abilities } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { MoveFlags } from "#enums/move-flags";
@@ -44,7 +44,7 @@ describe("Abilities - Triage", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    const moveToUse = allMoves[moveId];
+    const moveToUse = allMoves.get(moveId);
     const originalPriority = moveToUse.priority;
     expect(moveToUse.checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(true);
     expect(moveToUse.getPriority(playerPokemon)).toBe(originalPriority + 3);
@@ -62,7 +62,7 @@ describe("Abilities - Triage", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
-    const moveToUse = allMoves[moveId];
+    const moveToUse = allMoves.get(moveId);
     const originalPriority = moveToUse.priority;
     expect(moveToUse.checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(false);
     expect(moveToUse.getPriority(playerPokemon)).toBe(originalPriority);
@@ -84,7 +84,7 @@ describe("Abilities - Triage", () => {
     await game.toEndOfTurn();
 
     // The Pokemon using Pollen Puff on its ally should be after the enemy Pokemon using Quick Attack
-    expect(allMoves[MoveId.POLLEN_PUFF].checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(false);
+    expect(allMoves.get(MoveId.POLLEN_PUFF).checkFlag(MoveFlags.TRIAGE_MOVE, playerPokemon, null)).toBe(false);
     expect(playerPokemon.turnData.order).toBeGreaterThanOrEqual(2);
   });
 });

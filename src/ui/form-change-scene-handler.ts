@@ -5,7 +5,7 @@ import { UiMode } from "#enums/ui-mode";
 import { Button } from "#enums/buttons";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";
-import { GAME_HEIGHT } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 import { type EvolutionPhase } from "#app/phases/evolution-phase";
 import { PhaseId } from "#enums/phase-id";
 
@@ -45,7 +45,7 @@ export default class FormChangeSceneHandler extends MessageUiHandler {
     const message = addTextObject(0, 0, "", TextStyle.MESSAGE, {
       maxLines: 2,
       wordWrap: {
-        width: 1780,
+        width: (GAME_WIDTH - 24) * TEXT_SCALE,
       },
     });
     this.messageContainer.add(message);

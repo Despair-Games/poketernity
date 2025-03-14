@@ -4,7 +4,7 @@ import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { MoveResult } from "#enums/move-result";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect, vi } from "vitest";
 
@@ -44,7 +44,7 @@ describe("Moves - Telekinesis", () => {
     expect(enemyOpponent.getTag(BattlerTagType.FLOATING)).toBeDefined();
 
     await game.toNextTurn();
-    vi.spyOn(allMoves[MoveId.TACKLE], "accuracy", "get").mockReturnValue(0);
+    vi.spyOn(allMoves.get(MoveId.TACKLE), "accuracy", "get").mockReturnValue(0);
     game.move.select(MoveId.TACKLE);
     await game.toEndOfTurn();
     expect(enemyOpponent.isFullHp()).toBe(false);
@@ -61,7 +61,7 @@ describe("Moves - Telekinesis", () => {
     expect(enemyOpponent.getTag(BattlerTagType.FLOATING)).toBeDefined();
 
     await game.toNextTurn();
-    vi.spyOn(allMoves[MoveId.MUD_SHOT], "accuracy", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.MUD_SHOT), "accuracy", "get").mockReturnValue(100);
     game.move.select(MoveId.MUD_SHOT);
     await game.toEndOfTurn();
     expect(enemyOpponent.isFullHp()).toBe(true);
@@ -111,7 +111,7 @@ describe("Moves - Telekinesis", () => {
     expect(enemyOpponent.getTag(BattlerTagType.FLOATING)).toBeDefined();
 
     await game.toNextTurn();
-    vi.spyOn(allMoves[MoveId.MUD_SHOT], "accuracy", "get").mockReturnValue(0);
+    vi.spyOn(allMoves.get(MoveId.MUD_SHOT), "accuracy", "get").mockReturnValue(0);
     game.move.select(MoveId.MUD_SHOT);
     await game.forceEnemyMove(MoveId.INGRAIN);
     await game.toEndOfTurn();

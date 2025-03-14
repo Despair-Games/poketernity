@@ -1,13 +1,11 @@
-import { globalScene } from "#app/global-scene";
-import { ElementalType } from "#enums/elemental-type";
 import { EvolutionItem } from "#enums/evolution-item";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { TimeOfDay } from "#enums/time-of-day";
 import {
   ADVANCED_ITEM_EVO_LEVEL,
   ANNIHILAPE_EVO_LEVEL,
   BABY_HAPPINESS_EVO_LEVEL,
+  EEVEE_FAMILY_EVO_LEVEL,
   GENERIC_ITEM_EVO_LEVEL,
   HAPPINESS_EVO_LEVEL,
   LICKILICKY_EVO_LEVEL,
@@ -19,9 +17,13 @@ import {
   type PokemonEvolutions,
   SpeciesFormEvolution,
   SpeciesEvolution,
-  SpeciesEvolutionCondition,
   SpeciesFriendshipEvolutionCondition,
+  NightEvolutionCondition,
+  DayEvolutionCondition,
+  MoveKnownEvoCondition,
+  TypeKnownEvoCondition,
 } from "#app/data/pokemon-evolutions";
+import { ElementalType } from "#enums/elemental-type";
 
 export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.BULBASAUR]: [new SpeciesEvolution(Species.IVYSAUR, 16, null, null)],
@@ -47,7 +49,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "partner",
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(90),
+      [new SpeciesFriendshipEvolutionCondition(90)],
       BABY_HAPPINESS_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -56,22 +58,12 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(90),
+      [new SpeciesFriendshipEvolutionCondition(90)],
       BABY_HAPPINESS_EVO_LEVEL,
     ),
   ],
   /** Custom method of evolving into Alolan Raichu */
   [Species.PIKACHU]: [
-    new SpeciesFormEvolution(Species.ALOLA_RAICHU, "", "", 1, EvolutionItem.SHINY_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-    new SpeciesFormEvolution(
-      Species.ALOLA_RAICHU,
-      "partner",
-      "",
-      1,
-      EvolutionItem.SHINY_STONE,
-      null,
-      GENERIC_ITEM_EVO_LEVEL,
-    ),
     new SpeciesFormEvolution(Species.RAICHU, "", "", 1, EvolutionItem.THUNDER_STONE, null, GENERIC_ITEM_EVO_LEVEL),
     new SpeciesFormEvolution(
       Species.RAICHU,
@@ -79,6 +71,16 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       EvolutionItem.THUNDER_STONE,
+      null,
+      GENERIC_ITEM_EVO_LEVEL,
+    ),
+    new SpeciesFormEvolution(Species.ALOLA_RAICHU, "", "", 1, EvolutionItem.SHINY_STONE, null, GENERIC_ITEM_EVO_LEVEL),
+    new SpeciesFormEvolution(
+      Species.ALOLA_RAICHU,
+      "partner",
+      "",
+      1,
+      EvolutionItem.SHINY_STONE,
       null,
       GENERIC_ITEM_EVO_LEVEL,
     ),
@@ -98,7 +100,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.CLEFAIRY,
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(70),
+      [new SpeciesFriendshipEvolutionCondition(70)],
       BABY_HAPPINESS_EVO_LEVEL,
     ),
   ],
@@ -115,7 +117,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.JIGGLYPUFF,
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(70),
+      [new SpeciesFriendshipEvolutionCondition(70)],
       BABY_HAPPINESS_EVO_LEVEL,
     ),
   ],
@@ -124,7 +126,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   ],
   [Species.ZUBAT]: [new SpeciesEvolution(Species.GOLBAT, 22, null, null)],
   [Species.GOLBAT]: [
-    new SpeciesEvolution(Species.CROBAT, 1, null, new SpeciesFriendshipEvolutionCondition(120), HAPPINESS_EVO_LEVEL),
+    new SpeciesEvolution(Species.CROBAT, 1, null, [new SpeciesFriendshipEvolutionCondition(120)], HAPPINESS_EVO_LEVEL),
   ],
   [Species.ODDISH]: [new SpeciesEvolution(Species.GLOOM, 21, null, null)],
   [Species.GLOOM]: [
@@ -142,7 +144,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.ANNIHILAPE,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.RAGE_FIST).length > 0),
+      [new MoveKnownEvoCondition(MoveId.RAGE_FIST)],
       ANNIHILAPE_EVO_LEVEL,
     ),
   ],
@@ -195,22 +197,12 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.KRABBY]: [new SpeciesEvolution(Species.KINGLER, 28, null, null)],
   [Species.VOLTORB]: [new SpeciesEvolution(Species.ELECTRODE, 30, null, null)],
   [Species.EXEGGCUTE]: [
-    new SpeciesEvolution(Species.ALOLA_EXEGGUTOR, 1, EvolutionItem.SUN_STONE, null, GENERIC_ITEM_EVO_LEVEL),
     new SpeciesEvolution(Species.EXEGGUTOR, 1, EvolutionItem.LEAF_STONE, null, GENERIC_ITEM_EVO_LEVEL),
+    new SpeciesEvolution(Species.ALOLA_EXEGGUTOR, 1, EvolutionItem.SUN_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
   [Species.CUBONE]: [
-    new SpeciesEvolution(
-      Species.ALOLA_MAROWAK,
-      28,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
-    ),
-    new SpeciesEvolution(
-      Species.MAROWAK,
-      28,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
-    ),
+    new SpeciesEvolution(Species.MAROWAK, 28, null, [new DayEvolutionCondition()]),
+    new SpeciesEvolution(Species.ALOLA_MAROWAK, 28, null, [new NightEvolutionCondition()]),
   ],
   /** Tyrogue is from gen 2 */
   [Species.TYROGUE]: [
@@ -220,65 +212,22 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
      * If Tyrogue knows multiple of these moves, its evolution is based on
      * the first qualifying move in its moveset.
      */
-    new SpeciesEvolution(
-      Species.HITMONLEE,
-      20,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) =>
-          p
-            .getMoveset(true)
-            .find((move) => move && [MoveId.LOW_SWEEP, MoveId.MACH_PUNCH, MoveId.RAPID_SPIN].includes(move?.moveId))
-            ?.moveId === MoveId.LOW_SWEEP,
-      ),
-    ),
-    new SpeciesEvolution(
-      Species.HITMONCHAN,
-      20,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) =>
-          p
-            .getMoveset(true)
-            .find((move) => move && [MoveId.LOW_SWEEP, MoveId.MACH_PUNCH, MoveId.RAPID_SPIN].includes(move?.moveId))
-            ?.moveId === MoveId.MACH_PUNCH,
-      ),
-    ),
-    new SpeciesEvolution(
-      Species.HITMONTOP,
-      20,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) =>
-          p
-            .getMoveset(true)
-            .find((move) => move && [MoveId.LOW_SWEEP, MoveId.MACH_PUNCH, MoveId.RAPID_SPIN].includes(move?.moveId))
-            ?.moveId === MoveId.RAPID_SPIN,
-      ),
-    ),
+    new SpeciesEvolution(Species.HITMONLEE, 20, null, [new MoveKnownEvoCondition(MoveId.LOW_SWEEP)]),
+    new SpeciesEvolution(Species.HITMONCHAN, 20, null, [new MoveKnownEvoCondition(MoveId.MACH_PUNCH)]),
+    new SpeciesEvolution(Species.HITMONTOP, 20, null, [new MoveKnownEvoCondition(MoveId.RAPID_SPIN)]),
   ],
   [Species.LICKITUNG]: [
     new SpeciesEvolution(
       Species.LICKILICKY,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.ROLLOUT).length > 0),
+      [new MoveKnownEvoCondition(MoveId.ROLLOUT)],
       LICKILICKY_EVO_LEVEL,
     ),
   ],
   [Species.KOFFING]: [
-    new SpeciesEvolution(
-      Species.GALAR_WEEZING,
-      35,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
-    ),
-    new SpeciesEvolution(
-      Species.WEEZING,
-      35,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY])),
-    ),
+    new SpeciesEvolution(Species.WEEZING, 35, null, [new DayEvolutionCondition()]),
+    new SpeciesEvolution(Species.GALAR_WEEZING, 35, null, [new NightEvolutionCondition()]),
   ],
   [Species.RHYHORN]: [new SpeciesEvolution(Species.RHYDON, 42, null, null)],
   [Species.RHYDON]: [
@@ -290,19 +239,19 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.CHANSEY,
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(70),
+      [new SpeciesFriendshipEvolutionCondition(70)],
       BABY_HAPPINESS_EVO_LEVEL,
     ),
   ],
   [Species.CHANSEY]: [
-    new SpeciesEvolution(Species.BLISSEY, 1, null, new SpeciesFriendshipEvolutionCondition(200), HAPPINESS_EVO_LEVEL),
+    new SpeciesEvolution(Species.BLISSEY, 1, null, [new SpeciesFriendshipEvolutionCondition(200)], HAPPINESS_EVO_LEVEL),
   ],
   [Species.TANGELA]: [
     new SpeciesEvolution(
       Species.TANGROWTH,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.ANCIENT_POWER).length > 0),
+      [new MoveKnownEvoCondition(MoveId.ANCIENT_POWER)],
       TANGROWTH_EVO_LEVEL,
     ),
   ],
@@ -315,25 +264,17 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   /** Mime Jr is from gen 4 */
   [Species.MIME_JR]: [
     new SpeciesEvolution(
-      Species.GALAR_MR_MIME,
-      1,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) =>
-          p.moveset.filter((m) => m.moveId === MoveId.MIMIC).length > 0
-          && globalScene.arena.isTimeOfDay([TimeOfDay.NIGHT, TimeOfDay.DUSK]),
-      ),
-      MR_MIME_EVO_LEVEL,
-    ),
-    new SpeciesEvolution(
       Species.MR_MIME,
       1,
       null,
-      new SpeciesEvolutionCondition(
-        (p) =>
-          p.moveset.filter((m) => m.moveId === MoveId.MIMIC).length > 0
-          && globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]),
-      ),
+      [new DayEvolutionCondition(), new MoveKnownEvoCondition(MoveId.MIMIC)],
+      MR_MIME_EVO_LEVEL,
+    ),
+    new SpeciesEvolution(
+      Species.GALAR_MR_MIME,
+      1,
+      null,
+      [new NightEvolutionCondition(), new MoveKnownEvoCondition(MoveId.MIMIC)],
       MR_MIME_EVO_LEVEL,
     ),
   ],
@@ -364,11 +305,8 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(
-        120,
-        (p) => !!p.getMoveset().find((m) => m.getMove().type === ElementalType.FAIRY),
-      ),
-      GENERIC_ITEM_EVO_LEVEL,
+      [new SpeciesFriendshipEvolutionCondition(120), new TypeKnownEvoCondition(ElementalType.FAIRY)],
+      EEVEE_FAMILY_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
       Species.SYLVEON,
@@ -376,11 +314,8 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(
-        120,
-        (p) => !!p.getMoveset().find((m) => m.getMove().type === ElementalType.FAIRY),
-      ),
-      GENERIC_ITEM_EVO_LEVEL,
+      [new SpeciesFriendshipEvolutionCondition(120), new TypeKnownEvoCondition(ElementalType.FAIRY)],
+      EEVEE_FAMILY_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
       Species.ESPEON,
@@ -388,7 +323,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(120, () => globalScene.arena.isTimeOfDay(TimeOfDay.DAY)),
+      [new SpeciesFriendshipEvolutionCondition(120), new DayEvolutionCondition()],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -397,8 +332,8 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(120, () => globalScene.arena.isTimeOfDay(TimeOfDay.DAY)),
-      GENERIC_ITEM_EVO_LEVEL,
+      [new SpeciesFriendshipEvolutionCondition(120), new DayEvolutionCondition()],
+      EEVEE_FAMILY_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
       Species.UMBREON,
@@ -406,8 +341,8 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(120, () => globalScene.arena.isTimeOfDay(TimeOfDay.NIGHT)),
-      GENERIC_ITEM_EVO_LEVEL,
+      [new SpeciesFriendshipEvolutionCondition(120), new NightEvolutionCondition()],
+      EEVEE_FAMILY_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
       Species.UMBREON,
@@ -415,10 +350,10 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(120, () => globalScene.arena.isTimeOfDay(TimeOfDay.NIGHT)),
-      GENERIC_ITEM_EVO_LEVEL,
+      [new SpeciesFriendshipEvolutionCondition(120), new NightEvolutionCondition()],
+      EEVEE_FAMILY_EVO_LEVEL,
     ),
-    new SpeciesFormEvolution(Species.VAPOREON, "", "", 1, EvolutionItem.WATER_STONE, null, GENERIC_ITEM_EVO_LEVEL),
+    new SpeciesFormEvolution(Species.VAPOREON, "", "", 1, EvolutionItem.WATER_STONE, null, EEVEE_FAMILY_EVO_LEVEL),
     new SpeciesFormEvolution(
       Species.VAPOREON,
       "partner",
@@ -426,9 +361,9 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       1,
       EvolutionItem.WATER_STONE,
       null,
-      GENERIC_ITEM_EVO_LEVEL,
+      EEVEE_FAMILY_EVO_LEVEL,
     ),
-    new SpeciesFormEvolution(Species.JOLTEON, "", "", 1, EvolutionItem.THUNDER_STONE, null, GENERIC_ITEM_EVO_LEVEL),
+    new SpeciesFormEvolution(Species.JOLTEON, "", "", 1, EvolutionItem.THUNDER_STONE, null, EEVEE_FAMILY_EVO_LEVEL),
     new SpeciesFormEvolution(
       Species.JOLTEON,
       "partner",
@@ -436,14 +371,14 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       1,
       EvolutionItem.THUNDER_STONE,
       null,
-      GENERIC_ITEM_EVO_LEVEL,
+      EEVEE_FAMILY_EVO_LEVEL,
     ),
-    new SpeciesFormEvolution(Species.FLAREON, "", "", 1, EvolutionItem.FIRE_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-    new SpeciesFormEvolution(Species.FLAREON, "partner", "", 1, EvolutionItem.FIRE_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-    new SpeciesFormEvolution(Species.LEAFEON, "", "", 1, EvolutionItem.LEAF_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-    new SpeciesFormEvolution(Species.LEAFEON, "partner", "", 1, EvolutionItem.LEAF_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-    new SpeciesFormEvolution(Species.GLACEON, "", "", 1, EvolutionItem.ICE_STONE, null, GENERIC_ITEM_EVO_LEVEL),
-    new SpeciesFormEvolution(Species.GLACEON, "partner", "", 1, EvolutionItem.ICE_STONE, null, GENERIC_ITEM_EVO_LEVEL),
+    new SpeciesFormEvolution(Species.FLAREON, "", "", 1, EvolutionItem.FIRE_STONE, null, EEVEE_FAMILY_EVO_LEVEL),
+    new SpeciesFormEvolution(Species.FLAREON, "partner", "", 1, EvolutionItem.FIRE_STONE, null, EEVEE_FAMILY_EVO_LEVEL),
+    new SpeciesFormEvolution(Species.LEAFEON, "", "", 1, EvolutionItem.LEAF_STONE, null, EEVEE_FAMILY_EVO_LEVEL),
+    new SpeciesFormEvolution(Species.LEAFEON, "partner", "", 1, EvolutionItem.LEAF_STONE, null, EEVEE_FAMILY_EVO_LEVEL),
+    new SpeciesFormEvolution(Species.GLACEON, "", "", 1, EvolutionItem.ICE_STONE, null, EEVEE_FAMILY_EVO_LEVEL),
+    new SpeciesFormEvolution(Species.GLACEON, "partner", "", 1, EvolutionItem.ICE_STONE, null, EEVEE_FAMILY_EVO_LEVEL),
   ],
   [Species.PORYGON]: [new SpeciesEvolution(Species.PORYGON2, 1, EvolutionItem.UPGRADE, null, GENERIC_ITEM_EVO_LEVEL)],
   /** Porygon2 is from gen 2 */
@@ -453,7 +388,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.OMANYTE]: [new SpeciesEvolution(Species.OMASTAR, 40, null, null)],
   [Species.KABUTO]: [new SpeciesEvolution(Species.KABUTOPS, 40, null, null)],
   [Species.MUNCHLAX]: [
-    new SpeciesEvolution(Species.SNORLAX, 1, null, new SpeciesFriendshipEvolutionCondition(120), HAPPINESS_EVO_LEVEL),
+    new SpeciesEvolution(Species.SNORLAX, 1, null, [new SpeciesFriendshipEvolutionCondition(120)], HAPPINESS_EVO_LEVEL),
   ],
   [Species.DRATINI]: [new SpeciesEvolution(Species.DRAGONAIR, 30, null, null)],
   [Species.DRAGONAIR]: [new SpeciesEvolution(Species.DRAGONITE, 55, null, null)],

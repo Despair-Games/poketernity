@@ -1,5 +1,5 @@
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { CommonBattleAnim } from "#app/data/battle-anims/common-battle-anim";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
 import { getStatusEffectActivationText } from "#app/data/status-effect";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";

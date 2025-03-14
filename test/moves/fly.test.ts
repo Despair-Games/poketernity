@@ -4,7 +4,7 @@ import { MoveResult } from "#enums/move-result";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect, vi } from "vitest";
 import { BattlerIndex } from "#enums/battler-index";
@@ -35,7 +35,7 @@ describe("Moves - Fly", () => {
       .enemyAbility(Abilities.BALL_FETCH)
       .enemyMoveset(MoveId.TACKLE);
 
-    vi.spyOn(allMoves[MoveId.FLY], "accuracy", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.FLY), "accuracy", "get").mockReturnValue(100);
   });
 
   it("should make the user semi-invulnerable, then attack over 2 turns", async () => {

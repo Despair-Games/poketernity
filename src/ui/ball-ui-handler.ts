@@ -1,5 +1,5 @@
 import { getPokeballName } from "../data/pokeball";
-import { addTextObject, getTextStyleOptions } from "./text";
+import { addTextObject } from "./text";
 import { TextStyle } from "#enums/text-style";
 import { BattleCommand } from "#enums/battle-command";
 import { UiMode } from "#enums/ui-mode";
@@ -8,7 +8,7 @@ import { addWindow } from "./ui-theme";
 import { Button } from "#enums/buttons";
 import { type CommandPhase } from "#app/phases/command-phase";
 import { globalScene } from "#app/global-scene";
-import { GAME_WIDTH } from "#app/ui-constants";
+import { GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 
 /**
  * TODO: This should extend AbstractOptionSelectUiHandler
@@ -20,8 +20,7 @@ export default class BallUiHandler extends UiHandler {
 
   private cursorObj: Phaser.GameObjects.Image | null;
 
-  // TODO scaling: find a way to improve this. currently needed for japanese
-  private scale: number = 0.1666666667;
+  private scale: number = 1 / TEXT_SCALE;
 
   constructor() {
     super(UiMode.BALL);
@@ -29,8 +28,6 @@ export default class BallUiHandler extends UiHandler {
 
   setup() {
     const ui = this.getUi();
-
-    this.scale = getTextStyleOptions(TextStyle.WINDOW).scale;
 
     let optionsTextContent = "";
     const pokeballTypeCount = Object.keys(globalScene.pokeballCounts).length;

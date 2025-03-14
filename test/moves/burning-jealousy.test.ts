@@ -1,0 +1,95 @@
+import { BattlerIndex } from "#enums/battler-index";
+import { allMoves } from "#app/data/data-lists";
+import { Abilities } from "#enums/abilities";
+import { StatusEffect } from "#enums/status-effect";
+import { MoveId } from "#enums/move-id";
+import { Species } from "#enums/species";
+import { GameManager } from "#test/test-utils/gameManager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+
+describe("Moves - Burning Jealousy", () => {
+  let phaserGame: Phaser.Game;
+  let game: GameManager;
+
+  beforeAll(() => {
+    phaserGame = new Phaser.Game({
+      type: Phaser.HEADLESS,
+    });
+  });
+
+  afterEach(() => {
+    game.phaseInterceptor.restoreOg();
+  });
+
+  beforeEach(() => {
+    game = new GameManager(phaserGame);
+    game.override
+      .battleType("single")
+      .disableCrits()
+      .enemySpecies(Species.MAGIKARP)
+      .enemyAbility(Abilities.ICE_SCALES)
+      .enemyMoveset([MoveId.HOWL])
+      .startingLevel(10)
+      .enemyLevel(10)
+      .starterSpecies(Species.FEEBAS)
+      .ability(Abilities.BALL_FETCH)
+      .moveset([MoveId.BURNING_JEALOUSY, MoveId.GROWL]);
+  });
+
+  it("should burn the opponent if their stat stages were raised", async () => {
+    await game.classicMode.startBattle();
+
+    const enemy = game.scene.getEnemyPokemon()!;
+
+    game.move.select(MoveId.BURNING_JEALOUSY);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    await game.toEndOfTurn();
+
+    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.BURN);
+  });
+
+  it("should still burn the opponent if their stat stages were both raised and lowered in the same turn", async () => {
+    game.override.starterSpecies(0).battleType("double");
+    await game.classicMode.startBattle([Species.FEEBAS, Species.ABRA]);
+
+    const enemy = game.scene.getEnemyPokemon()!;
+
+    game.move.select(MoveId.BURNING_JEALOUSY);
+    game.move.select(MoveId.GROWL, 1);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
+    await game.toEndOfTurn();
+
+    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.BURN);
+  });
+
+  it("should ignore stat stages raised by IMPOSTER", async () => {
+    game.override.enemySpecies(Species.DITTO).enemyAbility(Abilities.IMPOSTER).enemyMoveset(MoveId.SPLASH);
+    await game.classicMode.startBattle();
+
+    const enemy = game.scene.getEnemyPokemon()!;
+
+    game.move.select(MoveId.BURNING_JEALOUSY);
+    await game.toEndOfTurn();
+
+    expect(enemy.getStatusEffect(true)).toBe(StatusEffect.NONE);
+  });
+
+  // TODO: Make this test if WP is implemented
+  it.todo("should ignore weakness policy", async () => {
+    await game.classicMode.startBattle();
+  });
+
+  it("should be boosted by Sheer Force even if opponent didn't raise stat stages", async () => {
+    game.override.ability(Abilities.SHEER_FORCE).enemyMoveset(MoveId.SPLASH);
+    vi.spyOn(allMoves.get(MoveId.BURNING_JEALOUSY), "calculateBattlePower");
+    await game.classicMode.startBattle();
+
+    game.move.select(MoveId.BURNING_JEALOUSY);
+    await game.toEndOfTurn();
+
+    expect(allMoves.get(MoveId.BURNING_JEALOUSY).calculateBattlePower).toHaveReturnedWith(
+      allMoves.get(MoveId.BURNING_JEALOUSY).power * 1.3,
+    );
+  });
+});

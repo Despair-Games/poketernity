@@ -1,10 +1,12 @@
-import { globalScene } from "#app/global-scene";
 import { Species } from "#enums/species";
-import { TimeOfDay } from "#enums/time-of-day";
 import {
+  BiomeEvoCondition,
+  DayEvolutionCondition,
+  MoveKnownEvoCondition,
+  LowKeyToxtricityEvoCondition,
+  NightEvolutionCondition,
   type PokemonEvolutions,
   SpeciesEvolution,
-  SpeciesEvolutionCondition,
   SpeciesFormEvolution,
   SpeciesFriendshipEvolutionCondition,
 } from "#app/data/pokemon-evolutions";
@@ -19,7 +21,6 @@ import {
   SLOWPOKE_FAMILY_EVO_LEVEL,
 } from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
 import { MoveId } from "#enums/move-id";
-import { Nature } from "#enums/nature";
 import { Biome } from "#enums/biome";
 
 export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
@@ -52,48 +53,19 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.HYDRAPPLE,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.DRAGON_CHEER).length > 0),
-      GENERIC_ITEM_EVO_LEVEL,
+      [new MoveKnownEvoCondition(MoveId.DRAGON_CHEER)],
+      ADVANCED_ITEM_EVO_LEVEL,
     ),
   ],
   [Species.SILICOBRA]: [new SpeciesEvolution(Species.SANDACONDA, 36, null, null)],
   [Species.ARROKUDA]: [new SpeciesEvolution(Species.BARRASKEWDA, 26, null, null)],
   [Species.TOXEL]: [
-    new SpeciesFormEvolution(
-      Species.TOXTRICITY,
-      "",
-      "lowkey",
-      30,
-      null,
-      new SpeciesEvolutionCondition(
-        (p) =>
-          [
-            Nature.LONELY,
-            Nature.BOLD,
-            Nature.RELAXED,
-            Nature.TIMID,
-            Nature.SERIOUS,
-            Nature.MODEST,
-            Nature.MILD,
-            Nature.QUIET,
-            Nature.BASHFUL,
-            Nature.CALM,
-            Nature.GENTLE,
-            Nature.CAREFUL,
-          ].indexOf(p.getNature()) > -1,
-      ),
-    ),
+    new SpeciesFormEvolution(Species.TOXTRICITY, "", "lowkey", 30, null, [new LowKeyToxtricityEvoCondition()]),
     new SpeciesFormEvolution(Species.TOXTRICITY, "", "amped", 30, null, null),
   ],
   [Species.SIZZLIPEDE]: [new SpeciesEvolution(Species.CENTISKORCH, 28, null, null)],
   [Species.CLOBBOPUS]: [
-    new SpeciesEvolution(
-      Species.GRAPPLOCT,
-      1,
-      null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.TAUNT).length > 0),
-      GRAPPLOCT_EVO_LEVEL,
-    ),
+    new SpeciesEvolution(Species.GRAPPLOCT, 1, null, [new MoveKnownEvoCondition(MoveId.TAUNT)], GRAPPLOCT_EVO_LEVEL),
   ],
   [Species.SINISTEA]: [
     new SpeciesFormEvolution(
@@ -127,9 +99,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "vanilla-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition(() =>
-        globalScene.arena.isInBiome([Biome.TOWN, Biome.PLAINS, Biome.GRASS, Biome.TALL_GRASS, Biome.METROPOLIS]),
-      ),
+      [new BiomeEvoCondition([Biome.TOWN, Biome.PLAINS, Biome.GRASS, Biome.TALL_GRASS, Biome.METROPOLIS])],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -138,9 +108,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "ruby-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition(() =>
-        globalScene.arena.isInBiome([Biome.BADLANDS, Biome.VOLCANO, Biome.GRAVEYARD, Biome.FACTORY, Biome.SLUM]),
-      ),
+      [new BiomeEvoCondition([Biome.BADLANDS, Biome.VOLCANO, Biome.GRAVEYARD, Biome.FACTORY, Biome.SLUM])],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -149,9 +117,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "matcha-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition(() =>
-        globalScene.arena.isInBiome([Biome.FOREST, Biome.SWAMP, Biome.MEADOW, Biome.JUNGLE]),
-      ),
+      [new BiomeEvoCondition([Biome.FOREST, Biome.SWAMP, Biome.MEADOW, Biome.JUNGLE])],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -160,9 +126,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "mint-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition(() =>
-        globalScene.arena.isInBiome([Biome.SEA, Biome.BEACH, Biome.LAKE, Biome.SEABED]),
-      ),
+      [new BiomeEvoCondition([Biome.SEA, Biome.BEACH, Biome.LAKE, Biome.SEABED])],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -171,15 +135,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "lemon-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition(() =>
-        globalScene.arena.isInBiome([
-          Biome.DESERT,
-          Biome.POWER_PLANT,
-          Biome.DOJO,
-          Biome.RUINS,
-          Biome.CONSTRUCTION_SITE,
-        ]),
-      ),
+      [new BiomeEvoCondition([Biome.DESERT, Biome.POWER_PLANT, Biome.DOJO, Biome.RUINS, Biome.CONSTRUCTION_SITE])],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -188,9 +144,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "salted-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition(() =>
-        globalScene.arena.isInBiome([Biome.MOUNTAIN, Biome.CAVE, Biome.ICE_CAVE, Biome.FAIRY_CAVE, Biome.SNOWY_FOREST]),
-      ),
+      [new BiomeEvoCondition([Biome.MOUNTAIN, Biome.CAVE, Biome.ICE_CAVE, Biome.FAIRY_CAVE, Biome.SNOWY_FOREST])],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -199,7 +153,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "ruby-swirl",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isInBiome([Biome.WASTELAND, Biome.LABORATORY])),
+      [new BiomeEvoCondition([Biome.WASTELAND, Biome.LABORATORY])],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -208,7 +162,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "caramel-swirl",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isInBiome([Biome.TEMPLE, Biome.ISLAND])),
+      [new BiomeEvoCondition([Biome.TEMPLE, Biome.ISLAND])],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -217,7 +171,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "rainbow-swirl",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isInBiome([Biome.SPACE, Biome.ABYSS, Biome.END])),
+      [new BiomeEvoCondition([Biome.SPACE, Biome.ABYSS, Biome.END])],
       GENERIC_ITEM_EVO_LEVEL,
     ),
   ],
@@ -226,9 +180,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.FROSMOTH,
       1,
       null,
-      new SpeciesFriendshipEvolutionCondition(90, () =>
-        globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT]),
-      ),
+      [new SpeciesFriendshipEvolutionCondition(90), new NightEvolutionCondition()],
       HAPPINESS_EVO_LEVEL,
     ),
   ],
@@ -272,14 +224,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.GALAR_FARFETCHD]: [new SpeciesEvolution(Species.SIRFETCHD, SIRFETCHD_EVO_LEVEL, null, null)],
   [Species.GALAR_CORSOLA]: [new SpeciesEvolution(Species.CURSOLA, 38, null, null)],
   [Species.GALAR_ZIGZAGOON]: [new SpeciesEvolution(Species.GALAR_LINOONE, 20, null, null)],
-  [Species.GALAR_LINOONE]: [
-    new SpeciesEvolution(
-      Species.OBSTAGOON,
-      35,
-      null,
-      new SpeciesEvolutionCondition(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT])),
-    ),
-  ],
+  [Species.GALAR_LINOONE]: [new SpeciesEvolution(Species.OBSTAGOON, 35, null, [new NightEvolutionCondition()])],
   [Species.GALAR_DARUMAKA]: [
     new SpeciesEvolution(Species.GALAR_DARMANITAN, 1, EvolutionItem.ICE_STONE, null, GENERIC_ITEM_EVO_LEVEL),
   ],
@@ -299,7 +244,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.OVERQWIL,
       1,
       null,
-      new SpeciesEvolutionCondition((p) => p.moveset.filter((m) => m.moveId === MoveId.BARB_BARRAGE).length > 0),
+      [new MoveKnownEvoCondition(MoveId.BARB_BARRAGE)],
       OVERQWIL_EVO_LEVEL,
     ),
   ],
@@ -308,9 +253,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.SNEASLER,
       1,
       EvolutionItem.RAZOR_CLAW,
-      new SpeciesEvolutionCondition(
-        () => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]) /* Razor claw at day */,
-      ),
+      [new DayEvolutionCondition()],
       GENERIC_ITEM_EVO_LEVEL,
     ),
   ],

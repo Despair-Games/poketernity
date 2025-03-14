@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import { Species } from "#enums/species";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
@@ -55,7 +55,7 @@ describe("Moves - Protect", () => {
 
   test("should prevent secondary effects from the opponent's attack", async () => {
     game.override.enemyMoveset([MoveId.CEASELESS_EDGE]);
-    vi.spyOn(allMoves[MoveId.CEASELESS_EDGE], "accuracy", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.CEASELESS_EDGE), "accuracy", "get").mockReturnValue(100);
 
     await game.classicMode.startBattle([Species.CHARIZARD]);
 

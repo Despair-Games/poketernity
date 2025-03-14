@@ -14,7 +14,7 @@ import { capitalizeFirstLetter, hasTouchscreen, isNullOrUndefined } from "#app/u
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 
 /**
  * Abstract class for handling UI elements related to settings.
@@ -111,13 +111,10 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
       0,
       0,
       `*: ${i18next.t("settings:requireReload")}`,
-      TextStyle.SUMMARY_GRAY,
-      {
-        fontSize: "5rem",
-      },
+      TextStyle.SETTINGS_LOCKED,
     );
-    requiresReloadInfoText.setOrigin(0, 0.35);
-    requiresReloadInfoText.setPositionRelative(actionsBg, 10, 10);
+    requiresReloadInfoText.setOrigin(0, 0.15);
+    requiresReloadInfoText.setPositionRelative(actionsBg, 5, 5);
 
     this.optionsContainer = globalScene.add.container(0, 0);
 
@@ -182,7 +179,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     this.messageBoxContainer.add(settingsMessageBox);
 
     const messageText = addTextObject(8, -40, "", TextStyle.WINDOW, { maxLines: 2 });
-    messageText.setWordWrapWidth((GAME_WIDTH - 10) / messageText.scale);
+    messageText.setWordWrapWidth((GAME_WIDTH - 10) * TEXT_SCALE);
     messageText.setName("settings-message");
     messageText.setOrigin(0, 0);
 

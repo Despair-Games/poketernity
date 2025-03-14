@@ -1,7 +1,7 @@
 import { type SubstituteTag } from "#app/data/battler-tags";
 import { allMoves } from "#app/data/data-lists";
 import { type CommandPhase } from "#app/phases/command-phase";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import { BattleCommand } from "#enums/battle-command";
 import { UiMode } from "#enums/ui-mode";
 import { Abilities } from "#enums/abilities";
@@ -14,7 +14,7 @@ import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { StealHeldItemChanceAttr } from "#app/data/move-attrs/steal-held-item-chance-attr";
+import { StealHeldItemChanceAttr } from "#app/data/moves/move-attrs/steal-held-item-chance-attr";
 import { MoveResult } from "#enums/move-result";
 import { BattlerIndex } from "#enums/battler-index";
 import { ArenaTagSide } from "#enums/arena-tag-side";
@@ -83,7 +83,7 @@ describe("Moves - Substitute", () => {
   it("should fade after redirecting more damage than its remaining HP", async () => {
     // Giga Impact OHKOs Magikarp if substitute isn't up
     game.override.enemyMoveset(MoveId.GIGA_IMPACT);
-    vi.spyOn(allMoves[MoveId.GIGA_IMPACT], "accuracy", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.GIGA_IMPACT), "accuracy", "get").mockReturnValue(100);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -249,7 +249,7 @@ describe("Moves - Substitute", () => {
   });
 
   it("should protect the user from being trapped", async () => {
-    vi.spyOn(allMoves[MoveId.SAND_TOMB], "accuracy", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.SAND_TOMB), "accuracy", "get").mockReturnValue(100);
     game.override.enemyMoveset(MoveId.SAND_TOMB);
 
     await game.classicMode.startBattle([Species.BLASTOISE]);
@@ -266,7 +266,7 @@ describe("Moves - Substitute", () => {
   });
 
   it("should prevent the user's stats from being lowered", async () => {
-    vi.spyOn(allMoves[MoveId.LIQUIDATION], "chance", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.LIQUIDATION), "chance", "get").mockReturnValue(100);
     game.override.enemyMoveset(MoveId.LIQUIDATION);
 
     await game.classicMode.startBattle([Species.BLASTOISE]);
@@ -300,7 +300,7 @@ describe("Moves - Substitute", () => {
 
   it("should prevent the user's items from being stolen", async () => {
     game.override.enemyMoveset(MoveId.THIEF);
-    vi.spyOn(allMoves[MoveId.THIEF], "attrs", "get").mockReturnValue([new StealHeldItemChanceAttr(1.0)]); // give Thief 100% steal rate
+    vi.spyOn(allMoves.get(MoveId.THIEF), "attrs", "get").mockReturnValue([new StealHeldItemChanceAttr(1.0)]); // give Thief 100% steal rate
     game.override.startingHeldItems([{ name: "BERRY", type: BerryType.SITRUS }]);
 
     await game.classicMode.startBattle([Species.BLASTOISE]);
@@ -374,7 +374,7 @@ describe("Moves - Substitute", () => {
 
   it("should prevent the user from becoming confused", async () => {
     game.override.enemyMoveset(MoveId.MAGICAL_TORQUE);
-    vi.spyOn(allMoves[MoveId.MAGICAL_TORQUE], "chance", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.MAGICAL_TORQUE), "chance", "get").mockReturnValue(100);
 
     await game.classicMode.startBattle([Species.BLASTOISE]);
 
@@ -432,7 +432,7 @@ describe("Moves - Substitute", () => {
     game.override.moveset([MoveId.FOCUS_PUNCH]);
 
     // Make Focus Punch 40 power to avoid a KO
-    vi.spyOn(allMoves[MoveId.FOCUS_PUNCH], "calculateBattlePower").mockReturnValue(40);
+    vi.spyOn(allMoves.get(MoveId.FOCUS_PUNCH), "calculateBattlePower").mockReturnValue(40);
 
     await game.classicMode.startBattle([Species.BLASTOISE]);
 

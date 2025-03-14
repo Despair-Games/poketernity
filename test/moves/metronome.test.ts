@@ -1,6 +1,6 @@
 import type { RechargingTag, SemiInvulnerableTag } from "#app/data/battler-tags";
 import { allMoves } from "#app/data/data-lists";
-import { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
+import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
 import { SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -8,7 +8,7 @@ import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -16,7 +16,7 @@ describe("Moves - Metronome", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
-  const randomMoveAttr = allMoves[MoveId.METRONOME].getAttrs(MetronomeAttr)[0];
+  const randomMoveAttr = allMoves.get(MoveId.METRONOME).getAttrs(MetronomeAttr)[0];
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({
@@ -72,7 +72,7 @@ describe("Moves - Metronome", () => {
     await game.classicMode.startBattle();
     const player = game.scene.getPlayerPokemon()!;
     vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.HYPER_BEAM);
-    vi.spyOn(allMoves[MoveId.HYPER_BEAM], "accuracy", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.HYPER_BEAM), "accuracy", "get").mockReturnValue(100);
 
     game.move.select(MoveId.METRONOME);
     await game.toNextTurn();
@@ -128,7 +128,7 @@ describe("Moves - Metronome", () => {
       rngSweepProgress = (2 * i + 1) / (2 * trials);
 
       const moveId = randomMoveAttr.getRandomMove(user);
-      expect(allMoves[moveId].hasFlag(MoveFlags.G_MAX_MOVE)).toBe(false);
+      expect(allMoves.get(moveId).hasFlag(MoveFlags.G_MAX_MOVE)).toBe(false);
     }
   });
 });

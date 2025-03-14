@@ -1,0 +1,86 @@
+import { MoveResult } from "#enums/move-result";
+import { Abilities } from "#enums/abilities";
+import { MoveId } from "#enums/move-id";
+import { Species } from "#enums/species";
+import { StatusEffect } from "#enums/status-effect";
+import { GameManager } from "#test/test-utils/gameManager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+
+describe("Abilities - Early Bird", () => {
+  let phaserGame: Phaser.Game;
+  let game: GameManager;
+
+  beforeAll(() => {
+    phaserGame = new Phaser.Game({
+      type: Phaser.HEADLESS,
+    });
+  });
+
+  afterEach(() => {
+    game.phaseInterceptor.restoreOg();
+  });
+
+  beforeEach(() => {
+    game = new GameManager(phaserGame);
+    game.override
+      .moveset([MoveId.REST, MoveId.BELLY_DRUM, MoveId.SPLASH])
+      .ability(Abilities.EARLY_BIRD)
+      .battleType("single")
+      .disableCrits()
+      .enemySpecies(Species.MAGIKARP)
+      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyMoveset(MoveId.SPLASH);
+  });
+
+  it("reduces Rest's sleep time to 1 turn", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const player = game.scene.getPlayerPokemon()!;
+
+    game.move.select(MoveId.BELLY_DRUM);
+    await game.toNextTurn();
+    game.move.select(MoveId.REST);
+    await game.toNextTurn();
+
+    expect(player.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
+
+    game.move.select(MoveId.SPLASH);
+    await game.toNextTurn();
+
+    expect(player.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
+    expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
+
+    game.move.select(MoveId.SPLASH);
+    await game.toNextTurn();
+
+    expect(player.getStatusEffect(true)).toBe(StatusEffect.NONE);
+    expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
+  });
+
+  it("reduces 3-turn sleep to 1 turn", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const player = game.scene.getPlayerPokemon()!;
+    player.trySetStatus(StatusEffect.SLEEP, false, null, 3);
+
+    game.move.select(MoveId.SPLASH);
+    await game.toNextTurn();
+
+    expect(player.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
+    expect(player.status?.sleepTurnsRemaining).toBe(1);
+  });
+
+  it("reduces 1-turn sleep to 0 turns", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const player = game.scene.getPlayerPokemon()!;
+    player.trySetStatus(StatusEffect.SLEEP, false, null, 1);
+
+    game.move.select(MoveId.SPLASH);
+    await game.toNextTurn();
+
+    expect(player.getStatusEffect(true)).toBe(StatusEffect.NONE);
+    expect(player.getLastXMoves(1)[0].result).toBe(MoveResult.SUCCESS);
+  });
+});

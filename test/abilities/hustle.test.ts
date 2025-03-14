@@ -3,7 +3,7 @@ import { Abilities } from "#enums/abilities";
 import { Stat } from "#enums/stat";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -83,13 +83,13 @@ describe("Abilities - Hustle", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     vi.spyOn(pikachu, "getAccuracyMultiplier");
-    vi.spyOn(allMoves[MoveId.FISSURE], "calculateBattleAccuracy");
+    vi.spyOn(allMoves.get(MoveId.FISSURE), "calculateBattleAccuracy");
 
     game.move.select(MoveId.FISSURE);
     await game.phaseInterceptor.to("DamageAnimPhase");
 
     expect(enemyPokemon.turnData.damageTaken).toBe(enemyPokemon.getMaxHp());
     expect(pikachu.getAccuracyMultiplier).toHaveReturnedWith(1);
-    expect(allMoves[MoveId.FISSURE].calculateBattleAccuracy).toHaveReturnedWith(100);
+    expect(allMoves.get(MoveId.FISSURE).calculateBattleAccuracy).toHaveReturnedWith(100);
   });
 });

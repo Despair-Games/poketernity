@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import type { ModifierTypeOption } from "../modifier/modifier-type";
 import { getPlayerShopModifierTypeOptionsForWave, TmModifierType } from "../modifier/modifier-type";
 import { getPokeballAtlasKey } from "#app/data/pokeball";
-import { addTextObject, getTextStyleOptions, getModifierTierTextTint, setTextColor } from "./text";
+import { addTextObject, getModifierTierTextTint, setTextColor } from "./text";
 import { TextStyle } from "#enums/text-style";
 import AwaitableUiHandler from "./awaitable-ui-handler";
 import { UiMode } from "#enums/ui-mode";
@@ -71,17 +71,19 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.modifierContainer = globalScene.add.container(0, 0);
     ui.add(this.modifierContainer);
 
-    const canvas = document.createElement("canvas");
-    const context = canvas.getContext("2d");
-    const { styleOptions, scale } = getTextStyleOptions(TextStyle.PARTY);
+    // Check team button
+    this.checkButtonContainer = globalScene.add.container(GAME_WIDTH - 1, OPTION_BUTTON_YPOSITION);
+    this.checkButtonContainer.setName("use-btn");
+    this.checkButtonContainer.setVisible(false);
+    ui.add(this.checkButtonContainer);
 
-    if (context) {
-      context.font = styleOptions.fontSize + "px " + styleOptions.fontFamily;
-      // TODO scaling: replace this with using displayWidth once text scaling is changed?
-      this.transferButtonWidth = context.measureText(i18next.t("modifierSelectUiHandler:transfer")).width * scale;
-      this.checkButtonWidth = context.measureText(i18next.t("modifierSelectUiHandler:checkTeam")).width * scale;
-    }
+    const checkButtonText = addTextObject(-4, -2, i18next.t("modifierSelectUiHandler:checkTeam"), TextStyle.PARTY);
+    checkButtonText.setName("text-use-btn");
+    checkButtonText.setOrigin(1, 0);
+    this.checkButtonWidth = checkButtonText.displayWidth;
+    this.checkButtonContainer.add(checkButtonText);
 
+    // Transfer item button
     this.transferButtonContainer = globalScene.add.container(
       GAME_WIDTH - this.checkButtonWidth - 21,
       OPTION_BUTTON_YPOSITION,
@@ -93,18 +95,10 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     const transferButtonText = addTextObject(-4, -2, i18next.t("modifierSelectUiHandler:transfer"), TextStyle.PARTY);
     transferButtonText.setName("text-transfer-btn");
     transferButtonText.setOrigin(1, 0);
+    this.transferButtonWidth = transferButtonText.displayWidth;
     this.transferButtonContainer.add(transferButtonText);
 
-    this.checkButtonContainer = globalScene.add.container(GAME_WIDTH - 1, OPTION_BUTTON_YPOSITION);
-    this.checkButtonContainer.setName("use-btn");
-    this.checkButtonContainer.setVisible(false);
-    ui.add(this.checkButtonContainer);
-
-    const checkButtonText = addTextObject(-4, -2, i18next.t("modifierSelectUiHandler:checkTeam"), TextStyle.PARTY);
-    checkButtonText.setName("text-use-btn");
-    checkButtonText.setOrigin(1, 0);
-    this.checkButtonContainer.add(checkButtonText);
-
+    // Reroll button and cost
     this.rerollButtonContainer = globalScene.add.container(16, OPTION_BUTTON_YPOSITION);
     this.rerollButtonContainer.setName("reroll-brn");
     this.rerollButtonContainer.setVisible(false);
@@ -121,6 +115,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     this.rerollCostText.setPositionRelative(rerollButtonText, rerollButtonText.displayWidth + 5, 1);
     this.rerollButtonContainer.add(this.rerollCostText);
 
+    // Lock rarity button
     this.lockRarityButtonContainer = globalScene.add.container(16, OPTION_BUTTON_YPOSITION);
     this.lockRarityButtonContainer.setVisible(false);
     ui.add(this.lockRarityButtonContainer);
@@ -530,7 +525,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
       type && ui.showText(type.getDescription());
       if (type instanceof TmModifierType) {
         // prepare the move overlay to be shown with the toggle
-        this.moveInfoOverlay.show(allMoves[type.moveId]);
+        this.moveInfoOverlay.show(allMoves.get(type.moveId));
       }
     } else if (cursor === 0) {
       this.cursorObj.setPosition(

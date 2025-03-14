@@ -1,26 +1,27 @@
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { CommonBattleAnim } from "#app/data/battle-anims/common-battle-anim";
-import { MoveChargeAnim } from "#app/data/battle-anims/move-charge-anim";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
+import { MoveChargeAnim } from "#app/data/animations/move-charge-anim";
 import { allAbilities, allMoves } from "#app/data/data-lists";
-import { getMoveTargets, SelfStatusMove, type Move } from "#app/data/move";
-import { ConsecutiveUseDoublePowerAttr } from "#app/data/move-attrs/consecutive-use-double-power-attr";
-import { HealOnAllyAttr } from "#app/data/move-attrs/heal-on-ally-attr";
-import { StatusCategoryOnAllyAttr } from "#app/data/move-attrs/status-category-on-ally-attr";
+import { getMoveTargets, SelfStatusMove, type Move } from "#app/data/moves/move";
+import { ConsecutiveUseDoublePowerAttr } from "#app/data/moves/move-attrs/consecutive-use-double-power-attr";
+import { HealOnAllyAttr } from "#app/data/moves/move-attrs/heal-on-ally-attr";
+import { StatusCategoryOnAllyAttr } from "#app/data/moves/move-attrs/status-category-on-ally-attr";
 import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
 import { getStatusEffectHealText } from "#app/data/status-effect";
-import type { Pokemon } from "#app/field/pokemon";
+import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { type MoveEffectPhase } from "#app/phases/move-effect-phase";
-import type { MovePhase } from "#app/phases/move-phase";
+import { type MovePhase } from "#app/phases/move-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { StatStageChangePhase, type StatStageChangeCallback } from "#app/phases/stat-stage-change-phase";
 import i18next from "#app/plugins/i18n";
 import { BooleanHolder, getFrameMs, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
 import {
   GulpMissileBattlerTagTypes,
+  MoveLockTagTypes,
   RemoveTypeBattlerTagTypes,
   SemiInvulnerableBattlerTagTypes,
   TrappedBattlerTagTypes,
@@ -100,7 +101,7 @@ export class BattlerTag {
   }
 
   getMoveName(): string | null {
-    return this.sourceMoveId ? allMoves[this.sourceMoveId].name : null;
+    return this.sourceMoveId ? allMoves.get(this.sourceMoveId).name : null;
   }
 
   /**
@@ -258,7 +259,7 @@ export class ThroatChoppedTag extends MoveRestrictionBattlerTag {
    * @returns `true` if the move is sound-based, `false` otherwise
    */
   override isMoveRestricted(moveId: MoveId): boolean {
-    return allMoves[moveId].hasFlag(MoveFlags.SOUND_MOVE);
+    return allMoves.get(moveId).hasFlag(MoveFlags.SOUND_MOVE);
   }
 
   /**
@@ -269,7 +270,7 @@ export class ThroatChoppedTag extends MoveRestrictionBattlerTag {
    * @returns the message to display when the player attempts to select the restricted move
    */
   override getSelectionDeniedText(_pokemon: Pokemon, moveId: MoveId): string {
-    return i18next.t("battle:moveCannotBeSelected", { moveName: allMoves[moveId].name });
+    return i18next.t("battle:moveCannotBeSelected", { moveName: allMoves.get(moveId).name });
   }
 
   /**
@@ -326,7 +327,7 @@ export class DisabledTag extends MoveRestrictionBattlerTag {
     globalScene.queueMessage(
       i18next.t("battlerTags:disabledOnAdd", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-        moveName: allMoves[this.moveId].name,
+        moveName: allMoves.get(this.moveId).name,
       }),
     );
   }
@@ -338,14 +339,14 @@ export class DisabledTag extends MoveRestrictionBattlerTag {
     globalScene.queueMessage(
       i18next.t("battlerTags:disabledLapse", {
         pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-        moveName: allMoves[this.moveId].name,
+        moveName: allMoves.get(this.moveId).name,
       }),
     );
   }
 
   /** @override */
   override getSelectionDeniedText(_pokemon: Pokemon, moveId: MoveId): string {
-    return i18next.t("battle:moveDisabled", { moveName: allMoves[moveId].name });
+    return i18next.t("battle:moveDisabled", { moveName: allMoves.get(moveId).name });
   }
 
   /**
@@ -357,7 +358,7 @@ export class DisabledTag extends MoveRestrictionBattlerTag {
   override getInterruptedText(pokemon: Pokemon, moveId: MoveId): string {
     return i18next.t("battle:disableInterruptedMove", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      moveName: allMoves[moveId].name,
+      moveName: allMoves.get(moveId).name,
     });
   }
 
@@ -429,7 +430,7 @@ export class GorillaTacticsTag extends MoveRestrictionBattlerTag {
    */
   override getSelectionDeniedText(pokemon: Pokemon, _moveId: MoveId): string {
     return i18next.t("battle:canOnlyUseMove", {
-      moveName: allMoves[this.moveId].name,
+      moveName: allMoves.get(this.moveId).name,
       pokemonName: getPokemonNameWithAffix(pokemon),
     });
   }
@@ -594,7 +595,7 @@ export class TrappedTag extends BattlerTag {
 
   override canAdd(pokemon: Pokemon): boolean {
     const source = globalScene.getPokemonById(this.sourceId!)!;
-    const move = allMoves[this.sourceMoveId];
+    const move = allMoves.get(this.sourceMoveId);
 
     const isGhost = pokemon.isOfType(ElementalType.GHOST);
     const isTrapped = pokemon.getTag(...TrappedBattlerTagTypes);
@@ -1164,7 +1165,7 @@ export abstract class MoveLockTag extends BattlerTag {
       && lastMoveResult === MoveResult.SUCCESS;
 
     if (ret) {
-      const move = allMoves[this.sourceMoveId];
+      const move = allMoves.get(this.sourceMoveId);
       this.lastTargets = lastTargets;
       pokemon.getMoveQueue().push({ move, targets: [], ignorePP: true, type: pokemon.getMoveType(move) });
     }
@@ -1254,6 +1255,78 @@ export class FrenzyTag extends MoveLockTag {
 }
 
 /**
+ * Puts the source {@linkcode Pokemon} into an uproar, locking them into using
+ * Uproar for 2 turns after the initial usage and preventing all
+ * Pokemon on the field from sleeping. All Pokemon on the field also
+ * wake up when this tag is added.
+ * @extends MoveLockTag
+ * @see {@link https://bulbapedia.bulbagarden.net/wiki/Uproar_(move) Uproar}
+ */
+export class UproarTag extends MoveLockTag {
+  constructor() {
+    super(BattlerTagType.UPROAR, 3, MoveId.UPROAR);
+  }
+
+  /**
+   * Plays a "started an uproar" message, then wakes up all active Pokemon
+   * @param pokemon the {@linkcode Pokemon} with this tag
+   */
+  override onAdd(pokemon: Pokemon): void {
+    // "{pokemonNameWithAffix} caused an uproar!"
+    globalScene.queueMessage(
+      i18next.t("battlerTags:uproarOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+    );
+
+    // Wake up all sleeping Pokemon on the field
+    globalScene.getField(true).forEach((p) => {
+      if (p.hasStatusEffect(StatusEffect.SLEEP, false, true)) {
+        p.resetStatus();
+        // "The uproar woke {pokemonNameWithAffix}!"
+        globalScene.queueMessage(
+          i18next.t("battlerTags:uproarOnCureSleep", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+        );
+      }
+    });
+  }
+
+  override onRemove(pokemon: Pokemon): void {
+    // "{pokemonNameWithAffix} calmed down."
+    globalScene.queueMessage(
+      i18next.t("battlerTags:uproarOnRemove", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+    );
+
+    super.onRemove(pokemon);
+  }
+
+  /**
+   * Prevents Pokemon on the field from falling asleep
+   * @param pokemon the {@linkcode Pokemon} with this tag
+   * @param simulated if `true`, suppresses changes to game state
+   * @param affectedPokemon the {@linkcode Pokemon} to be afflicted with sleep
+   * @param preventSleep a {@linkcode BooleanHolder} which, if `true`, cancels attempts to afflict sleep
+   * @returns `true`
+   */
+  override apply(
+    _pokemon: Pokemon,
+    simulated: boolean,
+    affectedPokemon: Pokemon,
+    preventSleep: BooleanHolder,
+  ): boolean {
+    if (!simulated) {
+      // "But the uproar kept {pokemonNameWithAffix} awake!"
+      globalScene.queueMessage(
+        i18next.t("battlerTags:uproarOnPreventSleep", {
+          pokemonNameWithAffix: getPokemonNameWithAffix(affectedPokemon),
+        }),
+      );
+    }
+
+    preventSleep.value = true;
+    return true;
+  }
+}
+
+/**
  * Applies the effects of the move Encore onto the target Pokemon
  * Encore forces the target Pokemon to use its most-recent move for 3 turns
  */
@@ -1326,7 +1399,7 @@ export class EncoreTag extends MoveRestrictionBattlerTag {
   }
 
   override getSelectionDeniedText(_pokemon: Pokemon, moveId: MoveId): string {
-    return i18next.t("battle:moveDisabled", { moveName: allMoves[moveId].name });
+    return i18next.t("battle:moveDisabled", { moveName: allMoves.get(moveId).name });
   }
 
   override getInterruptedText(_pokemon: Pokemon, _moveId: MoveId): string {
@@ -2948,7 +3021,7 @@ export class HealBlockTag extends MoveRestrictionBattlerTag {
    * @returns `true` if the move has a TRIAGE_MOVE flag
    */
   override isMoveRestricted(moveId: MoveId): boolean {
-    if (allMoves[moveId].hasFlag(MoveFlags.TRIAGE_MOVE)) {
+    if (allMoves.get(moveId).hasFlag(MoveFlags.TRIAGE_MOVE)) {
       return true;
     }
     return false;
@@ -2963,9 +3036,9 @@ export class HealBlockTag extends MoveRestrictionBattlerTag {
    * @returns `true` if the move cannot be used because the target is an ally
    */
   override isMoveTargetRestricted(moveId: MoveId, user: Pokemon, target: Pokemon) {
-    const moveCategory = new NumberHolder(allMoves[moveId].category);
-    applyMoveAttrs(StatusCategoryOnAllyAttr, user, target, allMoves[moveId], moveCategory);
-    if (allMoves[moveId].hasAttr(HealOnAllyAttr) && moveCategory.value === MoveCategory.STATUS) {
+    const moveCategory = new NumberHolder(allMoves.get(moveId).category);
+    applyMoveAttrs(StatusCategoryOnAllyAttr, user, target, allMoves.get(moveId), moveCategory);
+    if (allMoves.get(moveId).hasAttr(HealOnAllyAttr) && moveCategory.value === MoveCategory.STATUS) {
       return true;
     }
     return false;
@@ -2977,8 +3050,8 @@ export class HealBlockTag extends MoveRestrictionBattlerTag {
   override getSelectionDeniedText(pokemon: Pokemon, moveId: MoveId): string {
     return i18next.t("battle:moveDisabledHealBlock", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      moveName: allMoves[moveId].name,
-      healBlockName: allMoves[MoveId.HEAL_BLOCK].name,
+      moveName: allMoves.get(moveId).name,
+      healBlockName: allMoves.get(MoveId.HEAL_BLOCK).name,
     });
   }
 
@@ -2991,8 +3064,8 @@ export class HealBlockTag extends MoveRestrictionBattlerTag {
   override getInterruptedText(pokemon: Pokemon, moveId: MoveId): string {
     return i18next.t("battle:moveDisabledHealBlock", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      moveName: allMoves[moveId].name,
-      healBlockName: allMoves[MoveId.HEAL_BLOCK].name,
+      moveName: allMoves.get(moveId).name,
+      healBlockName: allMoves.get(MoveId.HEAL_BLOCK).name,
     });
   }
 
@@ -3284,10 +3357,13 @@ export class TormentTag extends MoveRestrictionBattlerTag {
     if (!lastMoveTurn) {
       return false;
     }
-    // This checks for locking / momentum moves like Rollout and Hydro Cannon + if the user is under the influence of BattlerTagType.FRENZY
-    // Because Uproar's unique behavior is not implemented, it does not check for Uproar. Torment has been marked as partial in moves.ts
-    const moveObj = allMoves[lastMoveTurn.move.id];
-    const isUnaffected = moveObj.hasAttr(ConsecutiveUseDoublePowerAttr) || user.getTag(BattlerTagType.FRENZY);
+
+    const moveObj = allMoves.get(lastMoveTurn.move.id);
+    /**
+     * Consecutively-executed moves are not interrupted by Torment
+     * @todo remove the additional attribute check once Rollout/Ice Ball are reimplemented
+     */
+    const isUnaffected = moveObj.hasAttr(ConsecutiveUseDoublePowerAttr) || user.getTag(...MoveLockTagTypes);
     const validLastMoveResult = lastMoveTurn.result === MoveResult.SUCCESS || lastMoveTurn.result === MoveResult.MISS;
     if (
       lastMoveTurn.move.id === moveId
@@ -3333,20 +3409,20 @@ export class TauntTag extends MoveRestrictionBattlerTag {
    * @returns `true` if the move is a status move
    */
   override isMoveRestricted(moveId: MoveId): boolean {
-    return allMoves[moveId].category === MoveCategory.STATUS;
+    return allMoves.get(moveId).category === MoveCategory.STATUS;
   }
 
   override getSelectionDeniedText(pokemon: Pokemon, moveId: MoveId): string {
     return i18next.t("battle:moveDisabledTaunt", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      moveName: allMoves[moveId].name,
+      moveName: allMoves.get(moveId).name,
     });
   }
 
   override getInterruptedText(pokemon: Pokemon, moveId: MoveId): string {
     return i18next.t("battle:moveDisabledTaunt", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      moveName: allMoves[moveId].name,
+      moveName: allMoves.get(moveId).name,
     });
   }
 }
@@ -3391,7 +3467,7 @@ export class ImprisoningTag extends BattlerTag implements RestrictingBattlerTag 
   public getInterruptedText(pokemon: Pokemon, moveId: MoveId): string {
     return i18next.t("battle:moveDisabledImprison", {
       pokemonNameWithAffix: getPokemonNameWithAffix(pokemon),
-      moveName: allMoves[moveId].name,
+      moveName: allMoves.get(moveId).name,
     });
   }
 
@@ -3649,6 +3725,8 @@ export function getBattlerTag(
       return new NightmareTag();
     case BattlerTagType.FRENZY:
       return new FrenzyTag(turnCount, sourceMoveId);
+    case BattlerTagType.UPROAR:
+      return new UproarTag();
     case BattlerTagType.CHARGING:
       return new BattlerTag(tagType, BattlerTagLapseType.CUSTOM, 1, sourceMoveId, sourceId);
     case BattlerTagType.ENCORE:

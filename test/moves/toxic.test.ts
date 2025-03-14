@@ -1,6 +1,6 @@
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { StatusEffect } from "#enums/status-effect";
@@ -27,7 +27,7 @@ describe("Moves - Toxic", () => {
   });
 
   it("should be guaranteed to hit if user is Poison-type", async () => {
-    vi.spyOn(allMoves[MoveId.TOXIC], "accuracy", "get").mockReturnValue(0);
+    vi.spyOn(allMoves.get(MoveId.TOXIC), "accuracy", "get").mockReturnValue(0);
     await game.classicMode.startBattle([Species.TOXAPEX]);
 
     game.move.select(MoveId.TOXIC);
@@ -37,7 +37,7 @@ describe("Moves - Toxic", () => {
   });
 
   it("may miss if user is not Poison-type", async () => {
-    vi.spyOn(allMoves[MoveId.TOXIC], "accuracy", "get").mockReturnValue(0);
+    vi.spyOn(allMoves.get(MoveId.TOXIC), "accuracy", "get").mockReturnValue(0);
     await game.classicMode.startBattle([Species.UMBREON]);
 
     game.move.select(MoveId.TOXIC);
@@ -47,7 +47,7 @@ describe("Moves - Toxic", () => {
   });
 
   it("should hit semi-invulnerable targets if user is Poison-type", async () => {
-    vi.spyOn(allMoves[MoveId.TOXIC], "accuracy", "get").mockReturnValue(0);
+    vi.spyOn(allMoves.get(MoveId.TOXIC), "accuracy", "get").mockReturnValue(0);
     game.override.enemyMoveset(MoveId.FLY);
     await game.classicMode.startBattle([Species.TOXAPEX]);
 
@@ -59,7 +59,7 @@ describe("Moves - Toxic", () => {
   });
 
   it("should miss semi-invulnerable targets if user is not Poison-type", async () => {
-    vi.spyOn(allMoves[MoveId.TOXIC], "accuracy", "get").mockReturnValue(-1);
+    vi.spyOn(allMoves.get(MoveId.TOXIC), "accuracy", "get").mockReturnValue(-1);
     game.override.enemyMoveset(MoveId.FLY);
     await game.classicMode.startBattle([Species.UMBREON]);
 
