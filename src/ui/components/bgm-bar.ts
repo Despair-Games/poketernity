@@ -1,4 +1,4 @@
-import { addTextObject } from "../text";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import i18next from "i18next";
 import { formatText } from "#app/utils";

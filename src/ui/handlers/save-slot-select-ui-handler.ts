@@ -8,7 +8,7 @@ import * as Modifier from "../../modifier/modifier";
 import type PokemonData from "../../system/pokemon-data";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import MessageUiHandler from "./message-ui-handler";
-import { addTextObject } from "../text";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "../ui-theme";

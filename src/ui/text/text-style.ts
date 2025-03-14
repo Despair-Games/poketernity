@@ -2,13 +2,13 @@ import type { SupportedLanguageKey } from "#app/@types/Language";
 import { settings } from "#app/system/settings/settings-manager";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 import type { TextStyleOptions } from "#app/ui/interfaces/text-style-options";
-import { allTextColors } from "#app/ui/text-color";
+import { allTextFormats } from "#app/ui/text/font-style";
+import { allTextColors } from "#app/ui/text/text-color";
 import { TextColor } from "#enums/color";
 import { FontStyle } from "#enums/font-style";
 import { TextStyle } from "#enums/text-style";
 import { UiTheme } from "#enums/ui-theme";
 import i18next from "i18next";
-import { allTextFormats } from "#app/ui/font-style";
 
 interface ModularTextStyleOptions {
   color: TextColor | Record<UiTheme, TextColor>;

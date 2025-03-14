@@ -1,7 +1,7 @@
 import type { DropDown } from "./drop-down";
 import { DropDownType } from "#enums/drop-down-type";
 import type { StarterContainer } from "./starter-container";
-import { addTextObject, setTextColor } from "../text";
+import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { addWindow } from "../ui-theme";
 import { WindowVariant } from "#enums/window-variant";

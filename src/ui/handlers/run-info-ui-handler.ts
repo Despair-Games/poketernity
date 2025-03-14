@@ -1,7 +1,7 @@
 import { GameModes } from "#enums/game-modes";
 import UiHandler from "./abstract-ui-handler";
 import type { SessionSaveData } from "#app/@types/SessionData";
-import { addTextObject, addBBCodeTextObject, getBBCodeFragment } from "../text";
+import { addTextObject, addBBCodeTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "../ui-theme";

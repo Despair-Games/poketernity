@@ -1,6 +1,6 @@
 import { starterColors } from "#app/data/starter-colors";
 import { globalScene } from "#app/global-scene";
-import { addTextObject } from "../text";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { argbFromRgba } from "@material/material-color-utilities";
 import { rgbHexToRgba } from "#app/utils";

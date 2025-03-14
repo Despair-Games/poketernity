@@ -1,7 +1,7 @@
 import { UiMode } from "#enums/ui-mode";
 import PokemonIconAnimHelper from "#app/ui/helpers/pokemon-icon-anim-helper";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
-import { addTextObject } from "#app/ui/text";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import MessageUiHandler from "#app/ui/handlers/message-ui-handler";
 import { addWindow } from "#app/ui/ui-theme";

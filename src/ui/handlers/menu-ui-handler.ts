@@ -10,7 +10,7 @@ import BgmBar from "#app/ui/components/bgm-bar";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import OptionSelectUiHandler from "#app/ui/handlers/option-select-ui-handler";
-import { addTextObject } from "#app/ui/text";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, getCookie, getEnumKeys, isBeta } from "#app/utils";
 import { Button } from "#enums/buttons";

@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "../text";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import MessageUiHandler from "./message-ui-handler";

@@ -1,5 +1,5 @@
 import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
-import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { PERMANENT_STATS, getStatKey } from "#enums/stat";
 import i18next from "i18next";

@@ -1,6 +1,6 @@
 import i18next from "i18next";
 import { ModalUiHandler } from "./modal-ui-handler";
-import { addTextObject } from "../text";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 

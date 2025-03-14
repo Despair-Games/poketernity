@@ -9,7 +9,7 @@ import { getCandyProgressRequirement, speciesStarterCosts } from "#app/data/bala
 import { argbFromRgba } from "@material/material-color-utilities";
 import { getTypeRgb } from "#app/data/type";
 import { ElementalType } from "#enums/elemental-type";
-import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import type { Move } from "#app/data/moves/move";
 import { MoveCategory } from "#enums/move-category";

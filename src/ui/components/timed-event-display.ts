@@ -3,7 +3,7 @@ import { GAME_HEIGHT } from "#app/ui-constants";
 import { TextStyle } from "#enums/text-style";
 import type { TimedEvent } from "#app/@types/TimedEvent";
 import i18next from "i18next";
-import { addTextObject } from "#app/ui/text";
+import { addTextObject } from "#app/ui/text/text-utils";
 
 export class TimedEventDisplay extends Phaser.GameObjects.Container {
   private event?: TimedEvent;

@@ -1,7 +1,7 @@
 import type { ModalConfig } from "#app/ui/handlers/modal-ui-handler";
 import { ModalUiHandler } from "#app/ui/handlers/modal-ui-handler";
 import type { UiMode } from "#enums/ui-mode";
-import { addTextInputObject, addTextObject } from "#app/ui/text";
+import { addTextInputObject, addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { addWindow } from "#app/ui/ui-theme";
 import { WindowVariant } from "#enums/window-variant";

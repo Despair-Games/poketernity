@@ -5,7 +5,7 @@ import type InputText from "phaser3-rex-plugins/plugins/inputtext";
 import { globalScene } from "#app/global-scene";
 import { ModifierTier } from "#enums/modifier-tier";
 import { TextStyle } from "#enums/text-style";
-import { getTextStyle } from "#app/ui/text-style";
+import { getTextStyle } from "#app/ui/text/text-style";
 import { TEXT_SCALE } from "#app/ui-constants";
 
 interface CustomTextStyleOptions {

@@ -2,7 +2,7 @@ import { globalScene } from "#app/global-scene";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import MessageUiHandler from "#app/ui/handlers/message-ui-handler";
 import { ScrollBar } from "#app/ui/components/scroll-bar";
-import { addBBCodeTextObject, getBBCodeFragment } from "#app/ui/text";
+import { addBBCodeTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, isNullOrUndefined } from "#app/utils";
 import { Button } from "#enums/buttons";

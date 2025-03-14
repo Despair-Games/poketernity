@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { addWindow } from "../ui-theme";
-import { addTextObject } from "../text";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import type { EggCountChangedEvent } from "#app/events/egg";
 import { EggEventType } from "#enums/egg-event-type";

@@ -1,4 +1,4 @@
-import { addTextObject } from "../text";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { globalScene } from "#app/global-scene";
 import { EntryHazardTag } from "#app/data/arena-tag";

@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import type PokemonSpecies from "../../data/pokemon-species";
-import { addTextObject } from "../text";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 
 export class StarterContainer extends Phaser.GameObjects.Container {

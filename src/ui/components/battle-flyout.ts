@@ -1,5 +1,5 @@
 import type { Pokemon } from "../../field/pokemon";
-import { addTextObject } from "../text";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { fixedNumber } from "#app/utils";
 import { globalScene } from "#app/global-scene";

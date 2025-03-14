@@ -12,7 +12,7 @@ import type { DexEntry } from "#app/@types/DexData";
 import type { StarterDataEntry } from "#app/@types/StarterData";
 import { capitalizeString, fixedNumber } from "#app/utils";
 import { IVGraph } from "./iv-graph";
-import { addBBCodeTextObject, addTextObject, setTextColor } from "../text";
+import { addBBCodeTextObject, addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { addWindow } from "../ui-theme";
 import { Species } from "#enums/species";

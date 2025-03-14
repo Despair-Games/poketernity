@@ -133,7 +133,7 @@ import CharSprite from "#app/ui/components/char-sprite";
 import PartyExpBar from "#app/ui/components/party-exp-bar";
 import PokeballTray from "#app/ui/components/pokeball-tray";
 import PokemonInfoContainer from "#app/ui/components/pokemon-info-container";
-import { addTextObject } from "#app/ui/text";
+import { addTextObject } from "#app/ui/text/text-utils";
 import UI from "#app/ui/ui";
 import { updateWindowStyle } from "#app/ui/ui-theme";
 import {

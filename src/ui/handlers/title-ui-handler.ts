@@ -1,6 +1,6 @@
 import { UiMode } from "#enums/ui-mode";
 import { fixedNumber, randItem } from "#app/utils";
-import { addTextObject } from "#app/ui/text";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { getSplashMessages } from "#app/data/splash-messages";
 import i18next from "i18next";

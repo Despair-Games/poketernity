@@ -1,7 +1,7 @@
 import { getPokemonNameWithAffix } from "#app/messages";
 import { globalScene } from "#app/global-scene";
 import type { Pokemon } from "#app/field/pokemon";
-import { addTextObject } from "#app/ui/text";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import i18next from "i18next";
 import { TEXT_SCALE } from "#app/ui-constants";

@@ -4,7 +4,7 @@ import type { ModalConfig } from "./modal-ui-handler";
 import { fixedNumber } from "#app/utils";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import { addTextObject } from "../text";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { addWindow } from "../ui-theme";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";

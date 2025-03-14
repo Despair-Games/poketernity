@@ -8,7 +8,7 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { globalScene } from "#app/global-scene";
 import { AdminMode } from "#enums/admin-mode";
-import { setTextColor } from "#app/ui/text";
+import { setTextColor } from "#app/ui/text/text-utils";
 
 type AdminUiHandlerService = "discord" | "google";
 type AdminUiHandlerServiceMode = "Link" | "Unlink";

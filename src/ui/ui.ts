@@ -47,7 +47,7 @@ import SettingsDisplayUiHandler from "#app/ui/settings/settings-display-ui-handl
 import SettingsGamepadUiHandler from "#app/ui/settings/settings-gamepad-ui-handler";
 import SettingsKeyboardUiHandler from "#app/ui/settings/settings-keyboard-ui-handler";
 import SettingsUiHandler from "#app/ui/settings/settings-ui-handler";
-import { addTextObject } from "#app/ui/text";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { executeIf } from "#app/utils";
 import type { Button } from "#enums/buttons";

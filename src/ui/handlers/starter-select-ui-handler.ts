@@ -52,7 +52,7 @@ import { ScrollBar } from "#app/ui/components/scroll-bar";
 import { StarterContainer } from "#app/ui/components/starter-container";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 import { IVGraph } from "#app/ui/components/iv-graph";
-import { addBBCodeTextObject, addTextObject, setTextColor } from "#app/ui/text";
+import { addBBCodeTextObject, addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "#app/ui/ui-theme";
