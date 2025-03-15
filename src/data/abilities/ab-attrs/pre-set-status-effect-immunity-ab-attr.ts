@@ -2,7 +2,7 @@ import { getStatusEffectDescriptor } from "#app/data/status-effect";
 import type { Pokemon } from "#app/field/pokemon";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { BooleanHolder } from "#app/utils";
-import type { StatusEffect } from "#enums/status-effect";
+import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { PreSetStatusAbAttr } from "./pre-set-status-ab-attr";
 
@@ -21,7 +21,7 @@ export class PreSetStatusEffectImmunityAbAttr extends PreSetStatusAbAttr {
   }
 
   override apply(_pokemon: Pokemon, _simulated: boolean, effect: StatusEffect, cancelled: BooleanHolder): boolean {
-    if (this.immuneEffects.length < 1 || this.immuneEffects.includes(effect)) {
+    if ((effect !== StatusEffect.FAINT && this.immuneEffects.length < 1) || this.immuneEffects.includes(effect)) {
       cancelled.value = true;
       return true;
     }

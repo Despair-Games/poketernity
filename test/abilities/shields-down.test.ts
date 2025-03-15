@@ -1,8 +1,10 @@
+import { BattlerTagType } from "#app/enums/battler-tag-type";
 import { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
+import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 
@@ -26,7 +28,7 @@ describe("Abilities - SHIELDS DOWN", () => {
     game.override.battleType("single");
     game.override.ability(Abilities.SHIELDS_DOWN);
     game.override.moveset([moveToUse]);
-    game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
+    game.override.enemyMoveset([MoveId.TACKLE]);
   });
 
   test("check if fainted pokemon switched to base form on arena reset", async () => {
@@ -37,7 +39,7 @@ describe("Abilities - SHIELDS DOWN", () => {
       [Species.MINIOR]: coreForm,
     });
 
-    await game.startBattle([Species.MAGIKARP, Species.MINIOR]);
+    await game.classicMode.startBattle([Species.MAGIKARP, Species.MINIOR]);
 
     const minior = game.scene.getPlayerParty().find((p) => p.species.speciesId === Species.MINIOR)!;
     expect(minior).not.toBe(undefined);
@@ -53,5 +55,131 @@ describe("Abilities - SHIELDS DOWN", () => {
     await game.phaseInterceptor.to(QuietFormChangePhase);
 
     expect(minior.formIndex).toBe(meteorForm);
+  });
+
+  test("should ignore non-volatile status moves", async () => {
+    game.override.enemyMoveset([MoveId.SPORE]);
+
+    await game.classicMode.startBattle([Species.MINIOR]);
+    game.move.use(MoveId.SPLASH);
+    await game.phaseInterceptor.to(TurnEndPhase);
+
+    expect(game.field.getPlayerPokemon()!.status).toBe(undefined);
+  });
+
+  test("should still ignore non-volatile status moves used by a pokemon with mold breaker", async () => {
+    game.override.enemyAbility(Abilities.MOLD_BREAKER);
+    game.override.enemyMoveset([MoveId.SPORE]);
+
+    await game.classicMode.startBattle([Species.MINIOR]);
+
+    game.move.use(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.SPORE);
+    await game.phaseInterceptor.to(TurnEndPhase);
+
+    expect(game.field.getPlayerPokemon()!.status).toBe(undefined);
+  });
+
+  test("should ignore non-volatile secondary status effects", async () => {
+    game.override.enemyMoveset([MoveId.NUZZLE]);
+
+    await game.classicMode.startBattle([Species.MINIOR]);
+
+    game.move.use(MoveId.SPLASH);
+    await game.phaseInterceptor.to(TurnEndPhase);
+
+    expect(game.field.getPlayerPokemon()!.status).toBe(undefined);
+  });
+
+  test("should ignore status moves even through mold breaker", async () => {
+    game.override.enemyMoveset([MoveId.SPORE]);
+    game.override.enemyAbility(Abilities.MOLD_BREAKER);
+
+    await game.classicMode.startBattle([Species.MINIOR]);
+
+    game.move.use(MoveId.SPLASH);
+
+    await game.phaseInterceptor.to(TurnEndPhase);
+
+    expect(game.field.getPlayerPokemon()!.status).toBe(undefined);
+  });
+
+  // toxic spikes currently does not poison flying types when gravity is in effect
+  test.todo("should become poisoned by toxic spikes when grounded", async () => {
+    game.override.enemyMoveset([MoveId.GRAVITY, MoveId.TOXIC_SPIKES, MoveId.SPLASH]);
+    game.override.moveset([MoveId.GRAVITY, MoveId.SPLASH]);
+
+    await game.classicMode.startBattle([Species.MAGIKARP, Species.MINIOR]);
+
+    // turn 1
+    game.move.use(MoveId.GRAVITY);
+    await game.move.forceEnemyMove(MoveId.TOXIC_SPIKES);
+    await game.toNextTurn();
+
+    // turn 2
+    game.doSwitchPokemon(1);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
+    await game.toNextTurn();
+
+    expect(game.field.getPlayerPokemon()!.species.speciesId).toBe(Species.MINIOR);
+    expect(game.field.getPlayerPokemon()!.species.formIndex).toBe(0);
+    expect(game.field.getPlayerPokemon().hasStatusEffect(StatusEffect.POISON)).toBe(true);
+  });
+
+  test("should ignore yawn", async () => {
+    game.override.enemyMoveset([MoveId.YAWN]);
+
+    await game.classicMode.startBattle([Species.MAGIKARP, Species.MINIOR]);
+
+    game.move.use(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.YAWN);
+
+    await game.phaseInterceptor.to(TurnEndPhase);
+    expect(game.field.getPlayerPokemon()!.findTag((tag) => tag.tagType === BattlerTagType.DROWSY)).toBe(undefined);
+  });
+
+  test("should not ignore volatile status effects", async () => {
+    game.override.enemyMoveset([MoveId.CONFUSE_RAY]);
+
+    await game.classicMode.startBattle([Species.MINIOR]);
+
+    game.move.use(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.CONFUSE_RAY);
+
+    await game.phaseInterceptor.to(TurnEndPhase);
+
+    expect(game.field.getPlayerPokemon()!.findTag((tag) => tag.tagType === BattlerTagType.CONFUSED)).not.toBe(
+      undefined,
+    );
+  });
+
+  // the `NoTransformAbilityAbAttr` attribute is not checked anywhere, so this test cannot pass.
+  test.todo("ditto should not be immune to status after transforming", async () => {
+    game.override.enemySpecies(Species.DITTO);
+    game.override.enemyAbility(Abilities.IMPOSTER);
+    game.override.moveset([MoveId.SPLASH, MoveId.SPORE]);
+
+    await game.classicMode.startBattle([Species.MINIOR]);
+
+    game.move.use(MoveId.SPORE);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
+
+    await game.phaseInterceptor.to(TurnEndPhase);
+    expect(game.field.getPlayerPokemon().hasStatusEffect(StatusEffect.SLEEP)).toBe(true);
+  });
+
+  test("should not prevent minior from receiving the fainted status effect in trainer battles", async () => {
+    game.override.enemyMoveset([MoveId.TACKLE]);
+    game.override.moveset([MoveId.THUNDERBOLT]);
+    game.override.startingLevel(100);
+    game.override.startingWave(5);
+    game.override.enemySpecies(Species.MINIOR);
+    await game.classicMode.startBattle([Species.REGIELEKI]);
+    const minior = game.scene.getEnemyPokemon()!;
+
+    game.move.select(MoveId.THUNDERBOLT);
+    await game.toNextTurn();
+    expect(minior.isFainted()).toBe(true);
+    expect(game.field.getPlayerPokemon().hasStatusEffect(StatusEffect.FAINT)).toBe(true);
   });
 });
