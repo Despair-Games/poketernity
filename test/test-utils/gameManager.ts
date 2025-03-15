@@ -6,7 +6,7 @@ import { type TurnEndPhase } from "#app/phases/turn-end-phase";
 // -- end tsdoc imports --
 
 import { updateUserInfo } from "#app/account";
-import { BattlerIndex } from "#enums/battler-index";
+import type { BattlerIndex } from "#enums/battler-index";
 import BattleScene from "#app/battle-scene";
 import { getMoveTargets } from "#app/data/moves/move";
 import { settings } from "#app/system/settings/settings-manager";
@@ -22,13 +22,11 @@ import type { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
 import { FaintPhase } from "#app/phases/faint-phase";
 import { LoginPhase } from "#app/phases/login-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
-import { type SelectTargetPhase } from "#app/phases/select-target-phase";
 import { TitlePhase } from "#app/phases/title-phase";
 import type BattleMessageUiHandler from "#app/ui/handlers/battle-message-ui-handler";
 import type CommandUiHandler from "#app/ui/handlers/command-ui-handler";
 import type ModifierSelectUiHandler from "#app/ui/handlers/modifier-select-ui-handler";
 import type PartyUiHandler from "#app/ui/handlers/party-ui-handler";
-import type TargetSelectUiHandler from "#app/ui/handlers/target-select-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { isNullOrUndefined } from "#app/utils";
 import { BattleStyle } from "#enums/battle-style";
@@ -313,38 +311,6 @@ export class GameManager {
 
     await this.phaseInterceptor.to("CommandPhase");
     console.log("==================[New Turn]==================");
-  }
-
-  /**
-   * Emulate a player's target selection after a move is chosen, usually called automatically by {@linkcode MoveHelper.select}.
-   * Will trigger during the next {@linkcode SelectTargetPhase}
-   * @param targetIndex The index of the attack target, or `undefined` for multi-target attacks
-   * @param movePosition The index of the move in the pokemon's moveset array
-   */
-  selectTarget(movePosition: number, targetIndex?: BattlerIndex) {
-    this.onNextPrompt(
-      "SelectTargetPhase",
-      UiMode.TARGET_SELECT,
-      () => {
-        const handler = this.scene.ui.getHandler() as TargetSelectUiHandler;
-        const move = (this.scene.getCurrentPhase() as SelectTargetPhase)
-          .getPokemon()
-          .getMoveset()
-          [movePosition].getMove();
-        if (!move.isMultiTarget()) {
-          handler.setCursor(targetIndex !== undefined ? targetIndex : BattlerIndex.ENEMY);
-        }
-        if (move.isMultiTarget() && targetIndex !== undefined) {
-          throw new Error(`targetIndex was passed to selectMove() but move ("${move.name}") is not targetted`);
-        }
-        handler.processInput(Button.ACTION);
-      },
-      () =>
-        this.isCurrentPhase("CommandPhase")
-        || this.isCurrentPhase("MovePhase")
-        || this.isCurrentPhase("TurnStartPhase")
-        || this.isCurrentPhase("TurnEndPhase"),
-    );
   }
 
   /** Faint all opponents currently on the field */
