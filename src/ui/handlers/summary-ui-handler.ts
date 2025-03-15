@@ -294,9 +294,9 @@ export default class SummaryUiHandler extends UiHandler {
   }
 
   /**
-   * Show the Summary UI. There are 2 possible modes
-   * If LEARN_MOVE, need to provide a Move and callback for when the move is selected.
-   * Otherwise, need to provide a SummaryUiPage and optional callback for when the summary is exited
+   * Show the Summary UI. There are 2 possible {@linkcode SummaryUiMode}s
+   * If `DEFAULT`, need to provide a {@linkcode SummaryUiPage} and optional {@linkcode ExitCallBack} for when the summary is exited
+   * If `LEARN_MOVE`, need to provide a {@linkcode Move} and {@linkcode MoveSelectCallback} for when the move is selected.
    *
    * @param pokemon - the Pokemon displayed in the Summary-UI
    * @param mode - the summaryUiMode (defaults to 0)
@@ -305,8 +305,6 @@ export default class SummaryUiHandler extends UiHandler {
    * @param isPlayerParty - boolean used to determine if the Pokemon is part of the player's party or not. Default: `true` (see PKR#2921)
    * @returns `true` is the UI was initiliazed properly
    */
-  //override show(pokemon: Pokemon, mode?: SummaryUiMode.DEFAULT, page?: SummaryUiPage, exitCallback?: ExitCallBack, isPlayerParty?: boolean): boolean;
-  //override show(pokemon: Pokemon, mode: SummaryUiMode.LEARN_MOVE, move: Move, moveSelectCallback?: MoveSelectCallback, isPlayerParty?: boolean): boolean;
   override show(
     pokemon: Pokemon,
     mode: SummaryUiMode = SummaryUiMode.DEFAULT,
