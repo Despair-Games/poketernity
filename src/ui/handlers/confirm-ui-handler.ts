@@ -13,7 +13,12 @@ export default class ConfirmUiHandler extends AbstractOptionSelectUiHandler<Opti
     super(UiMode.CONFIRM);
   }
 
-  override show(config: ConfirmModeConfig): boolean {
+  override show(config?: ConfirmModeConfig): boolean {
+    if (!config) {
+      console.warn("Missing `ConfirmModeConfig` argument for Mode.CONFIRM");
+      return false;
+    }
+
     const fullConfig: OptionSelectModeConfig = {
       ...config,
       yOffset: config.yOffset ?? 48,

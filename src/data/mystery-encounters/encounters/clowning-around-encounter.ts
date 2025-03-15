@@ -420,22 +420,19 @@ async function handleSwapAbility() {
     await showEncounterDialogue(`${namespace}:option.1.apply_ability_dialogue`, `${namespace}:speaker`);
     await showEncounterText(`${namespace}:option.1.apply_ability_message`);
 
-    globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
-      displayYesNoOptions(resolve);
-    });
+    await globalScene.ui.setMode(UiMode.MESSAGE);
+    await showEncounterText(`${namespace}:option.1.ability_prompt`, null, 500, false);
+    displayYesNoOptions(resolve);
   });
 }
 
 function displayYesNoOptions(resolve) {
-  showEncounterText(`${namespace}:option.1.ability_prompt`, null, 500, false);
   const confirmMenuConfig: ConfirmModeConfig = {
     yesHandler: () => {
       onYesAbilitySwap(resolve);
-      return true;
     },
     noHandler: () => {
       resolve(false);
-      return true;
     },
   };
   globalScene.ui.setModeWithoutClear(UiMode.CONFIRM, confirmMenuConfig);

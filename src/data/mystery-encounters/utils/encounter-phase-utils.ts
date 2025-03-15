@@ -547,6 +547,8 @@ export function selectPokemonForOption(
       -1,
       (slotIndex: number, _option: PartyOption) => {
         if (slotIndex < globalScene.getPlayerParty().length) {
+          // TODO: we should make use of ui.revertMode because
+          // the mode getting set here does not get the parameters it may expect
           globalScene.ui.setMode(modeToSetOnExit).then(() => {
             const pokemon = globalScene.getPlayerParty()[slotIndex];
             const secondaryOptions = onPokemonSelected(pokemon);
@@ -583,6 +585,8 @@ export function selectPokemonForOption(
                     label: i18next.t("menu:cancel"),
                     handler: () => {
                       globalScene.ui.clearText();
+                      // TODO: we should make use of ui.revertMode because
+                      // the mode getting set here does not get the parameters it may expect
                       globalScene.ui.setMode(modeToSetOnExit);
                       resolve(false);
                       return true;
@@ -615,6 +619,8 @@ export function selectPokemonForOption(
             });
           });
         } else {
+          // TODO: we should make use of ui.revertMode because
+          // the mode getting set here does not get the parameters it may expect
           globalScene.ui.setMode(modeToSetOnExit).then(() => {
             if (onPokemonNotSelected) {
               onPokemonNotSelected();
@@ -682,6 +688,8 @@ export function selectOptionThenPokemon(
         (slotIndex: number, _option: PartyOption) => {
           if (slotIndex < globalScene.getPlayerParty().length) {
             // Pokemon and option selected
+            // TODO: we should make use of ui.revertMode because
+            // the mode getting set here does not get the parameters it may expect
             globalScene.ui.setMode(modeToSetOnExit).then(() => {
               const result: PokemonAndOptionSelected = {
                 selectedPokemonIndex: slotIndex,
@@ -715,6 +723,8 @@ export function selectOptionThenPokemon(
         label: i18next.t("menu:cancel"),
         handler: () => {
           globalScene.ui.clearText();
+          // TODO: we should make use of ui.revertMode because
+          // the mode getting set here does not get the parameters it may expect
           globalScene.ui.setMode(modeToSetOnExit);
           resolve(null);
           return true;
