@@ -3,7 +3,7 @@ import { GameModes } from "#enums/game-modes";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import { addWindow } from "../ui-theme";
+import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, getPokemonLevelText, isNullOrUndefined } from "#app/utils";
 import type PokemonData from "#app/system/pokemon-data";
 import MessageUiHandler from "#app/ui/handlers/message-ui-handler";
@@ -17,6 +17,7 @@ import { RunDisplayMode } from "#enums/run-display-mode";
 import { settings } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import { ImagesFolder } from "#enums/images-folders";
+import type RunInfoUiHandler from "./run-info-ui-handler";
 
 type RunSelectCallback = (cursor: number) => void;
 
@@ -106,7 +107,13 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
       if (button === Button.ACTION) {
         const cursor = this.cursor + this.scrollCursor;
         if (this.runs[cursor]) {
-          globalScene.ui.setOverlayMode(UiMode.RUN_INFO, this.runs[cursor].entryData, RunDisplayMode.RUN_HISTORY, true);
+          const runEntry = this.runs[cursor].entryData;
+          globalScene.ui.setOverlayMode<RunInfoUiHandler>(
+            UiMode.RUN_INFO,
+            RunDisplayMode.RUN_HISTORY,
+            globalScene.gameData.parseSessionData(JSON.stringify(runEntry.entry)),
+            runEntry.isVictory,
+          );
         } else {
           return false;
         }

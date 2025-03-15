@@ -7,7 +7,7 @@ import { GameMode } from "#app/game-mode";
 import * as Modifier from "#app/modifier/modifier";
 import type PokemonData from "#app/system/pokemon-data";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import MessageUiHandler from "./message-ui-handler";
+import type MessageUiHandler from "./message-ui-handler";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
@@ -15,6 +15,7 @@ import { addWindow } from "#app/ui/ui-theme";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import type RunInfoUiHandler from "./run-info-ui-handler";
 
 const SESSION_SLOTS_COUNT = 5;
 const SLOTS_ON_SCREEN = 3;
@@ -170,10 +171,10 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
           break;
         case Button.RIGHT:
           if (this.sessionSlots[cursorPosition].hasData && this.sessionSlots[cursorPosition].saveData) {
-            globalScene.ui.setOverlayMode(
+            globalScene.ui.setOverlayMode<RunInfoUiHandler>(
               UiMode.RUN_INFO,
-              this.sessionSlots[cursorPosition].saveData,
               RunDisplayMode.SESSION_PREVIEW,
+              this.sessionSlots[cursorPosition].saveData,
             );
             success = true;
           }
