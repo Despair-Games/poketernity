@@ -1,18 +1,14 @@
-import type { ModalConfig } from "#app/ui/handlers/modal-ui-handler";
-import { ModalUiHandler } from "#app/ui/handlers/modal-ui-handler";
-import type { UiMode } from "#enums/ui-mode";
+import { globalScene } from "#app/global-scene";
+import type { FormModalConfig, InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
 import { addTextInputObject, addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
 import { addWindow } from "#app/ui/ui-theme";
-import { WindowVariant } from "#enums/window-variant";
-import type InputText from "phaser3-rex-plugins/plugins/inputtext";
 import { fixedNumber } from "#app/utils";
 import { Button } from "#enums/buttons";
-import { globalScene } from "#app/global-scene";
-
-export interface FormModalConfig extends ModalConfig {
-  errorMessage?: string;
-}
+import { TextStyle } from "#enums/text-style";
+import type { UiMode } from "#enums/ui-mode";
+import { WindowVariant } from "#enums/window-variant";
+import type InputText from "phaser3-rex-plugins/plugins/inputtext";
+import { ModalUiHandler } from "./modal-ui-handler";
 
 export abstract class FormModalUiHandler extends ModalUiHandler {
   protected editing: boolean;
@@ -185,10 +181,4 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
       this.tween.remove();
     }
   }
-}
-
-export interface InputFieldConfig {
-  label: string;
-  isPassword?: boolean;
-  isReadOnly?: boolean;
 }

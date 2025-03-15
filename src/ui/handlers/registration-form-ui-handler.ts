@@ -1,27 +1,26 @@
-import type { InputFieldConfig } from "./form-modal-ui-handler";
-import { FormModalUiHandler } from "./form-modal-ui-handler";
-import type { ModalConfig } from "./modal-ui-handler";
-import { UiMode } from "#enums/ui-mode";
+import { globalScene } from "#app/global-scene";
+import { api } from "#app/plugins/api/api";
+import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import { api } from "#app/plugins/api/api";
-import { globalScene } from "#app/global-scene";
+import { FormModalUiHandler } from "./form-modal-ui-handler";
 
 export default class RegistrationFormUiHandler extends FormModalUiHandler {
   constructor() {
     super(UiMode.REGISTRATION_FORM, TextStyle.REGISTRATION_FORM_LABEL, TextStyle.REGISTRATION_FORM_ERROR);
   }
 
-  getModalTitle(_config?: ModalConfig): string {
+  getModalTitle(): string {
     return i18next.t("menu:register");
   }
 
-  getWidth(_config?: ModalConfig): number {
+  getWidth(): number {
     return 160;
   }
 
-  getMargin(_config?: ModalConfig): [number, number, number, number] {
+  getMargin(): [number, number, number, number] {
     return [0, 0, 48, 0];
   }
 
@@ -29,7 +28,7 @@ export default class RegistrationFormUiHandler extends FormModalUiHandler {
     return 8;
   }
 
-  getButtonLabels(_config?: ModalConfig): string[] {
+  getButtonLabels(): string[] {
     return [i18next.t("menu:register"), i18next.t("menu:backToLogin")];
   }
 

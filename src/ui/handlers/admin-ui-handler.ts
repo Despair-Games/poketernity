@@ -1,14 +1,13 @@
-import { Button } from "#enums/buttons";
+import { globalScene } from "#app/global-scene";
 import { api } from "#app/plugins/api/api";
+import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
+import { setTextColor } from "#app/ui/text/text-utils";
 import { formatText } from "#app/utils";
-import type { InputFieldConfig } from "./form-modal-ui-handler";
-import { FormModalUiHandler } from "./form-modal-ui-handler";
-import type { ModalConfig } from "./modal-ui-handler";
+import { AdminMode } from "#enums/admin-mode";
+import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import { globalScene } from "#app/global-scene";
-import { AdminMode } from "#enums/admin-mode";
-import { setTextColor } from "#app/ui/text/text-utils";
+import { FormModalUiHandler } from "./form-modal-ui-handler";
 
 type AdminUiHandlerService = "discord" | "google";
 type AdminUiHandlerServiceMode = "Link" | "Unlink";

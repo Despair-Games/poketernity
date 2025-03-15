@@ -1,16 +1,16 @@
 import { globalScene } from "#app/global-scene";
-import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import MessageUiHandler from "#app/ui/handlers/message-ui-handler";
+import { GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 import { ScrollBar } from "#app/ui/components/scroll-bar";
+import MessageUiHandler from "#app/ui/handlers/message-ui-handler";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
+import type { UIOptionSelectItem } from "#app/ui/interfaces/option-select-ui-item";
 import { addBBCodeTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, isNullOrUndefined } from "#app/utils";
 import { Button } from "#enums/buttons";
-import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
-import type { UIOptionSelectItem } from "../interfaces/option-select-ui-item";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import { GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
+import type BBCodeText from "phaser3-rex-plugins/plugins/gameobjects/tagtext/bbcodetext/BBCodeText";
 
 const SCROLLBAR_PADDING = 5;
 const SCROLLBAR_WIDTH = 3;

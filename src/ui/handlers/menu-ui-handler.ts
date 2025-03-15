@@ -1,28 +1,27 @@
 import { loggedInUser, updateUserInfo } from "#app/account";
-import { bypassLogin } from "#app/constants";
-import { SESSION_ID_COOKIE } from "#app/constants";
+import { bypassLogin, SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
+import { type SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { api } from "#app/plugins/api/api";
 import { handleTutorial } from "#app/tutorial";
-import { Tutorial } from "#enums/tutorial";
-import { getAdminModeName } from "#app/ui/handlers/admin-ui-handler";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import BgmBar from "#app/ui/components/bgm-bar";
+import { getAdminModeName } from "#app/ui/handlers/admin-ui-handler";
+import OptionSelectUiHandler from "#app/ui/handlers/option-select-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import OptionSelectUiHandler from "#app/ui/handlers/option-select-ui-handler";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber, getCookie, getEnumKeys, isBeta } from "#app/utils";
+import { AdminMode } from "#enums/admin-mode";
 import { Button } from "#enums/buttons";
 import { GameDataType } from "#enums/game-data-type";
+import { PhaseId } from "#enums/phase-id";
+import { TextStyle } from "#enums/text-style";
+import { Tutorial } from "#enums/tutorial";
+import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import type AwaitableUiHandler from "./awaitable-ui-handler";
-import { UiMode } from "#enums/ui-mode";
-import { TextStyle } from "#enums/text-style";
-import { AdminMode } from "#enums/admin-mode";
-import { GAME_WIDTH, GAME_HEIGHT } from "#app/ui-constants";
-import { PhaseId } from "#enums/phase-id";
-import { type SelectModifierPhase } from "#app/phases/select-modifier-phase";
 
 enum MenuOptions {
   GAME_SETTINGS,

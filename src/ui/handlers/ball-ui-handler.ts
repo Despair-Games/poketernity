@@ -1,14 +1,14 @@
-import { getPokeballName } from "../../data/pokeball";
+import { getPokeballName } from "#app/data/pokeball";
+import { globalScene } from "#app/global-scene";
+import { type CommandPhase } from "#app/phases/command-phase";
+import { GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
+import { addWindow } from "#app/ui/ui-theme";
 import { BattleCommand } from "#enums/battle-command";
+import { Button } from "#enums/buttons";
+import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import UiHandler from "./abstract-ui-handler";
-import { addWindow } from "../ui-theme";
-import { Button } from "#enums/buttons";
-import { type CommandPhase } from "#app/phases/command-phase";
-import { globalScene } from "#app/global-scene";
-import { GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 
 /**
  * TODO: This should extend AbstractOptionSelectUiHandler

@@ -4,7 +4,6 @@ import { api } from "#app/plugins/api/api";
 import { timedEventManager } from "#app/timed-event-manager";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import { TimedEventDisplay } from "#app/ui/components/timed-event-display";
-import OptionSelectUiHandler from "#app/ui/handlers/option-select-ui-handler";
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { fixedNumber, randItem } from "#app/utils";
@@ -12,6 +11,7 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { version } from "../../../package.json";
+import OptionSelectUiHandler from "./option-select-ui-handler";
 
 export default class TitleUiHandler extends OptionSelectUiHandler {
   /** If the stats can not be retrieved, use this fallback value */

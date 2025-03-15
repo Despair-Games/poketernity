@@ -1,18 +1,17 @@
-import type { InputFieldConfig } from "./form-modal-ui-handler";
-import { FormModalUiHandler } from "./form-modal-ui-handler";
-import type { ModalConfig } from "./modal-ui-handler";
+import { APP_ABBREVIATION, SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#app/constants";
+import { globalScene } from "#app/global-scene";
+import { api } from "#app/plugins/api/api";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber } from "#app/utils";
+import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { addWindow } from "../ui-theme";
-import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import { api } from "#app/plugins/api/api";
-import { globalScene } from "#app/global-scene";
 import JSZip from "jszip";
-import { APP_ABBREVIATION, SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#app/constants";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { FormModalUiHandler } from "./form-modal-ui-handler";
 
 interface BuildInteractableImageOpts {
   scale?: number;
@@ -86,19 +85,19 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     this.externalPartyContainer.setVisible(false);
   }
 
-  override getModalTitle(_config?: ModalConfig): string {
+  override getModalTitle(): string {
     return i18next.t("menu:login");
   }
 
-  override getWidth(_config?: ModalConfig): number {
+  override getWidth(): number {
     return 160;
   }
 
-  override getMargin(_config?: ModalConfig): [number, number, number, number] {
+  override getMargin(): [number, number, number, number] {
     return [0, 0, 48, 0];
   }
 
-  override getButtonLabels(_config?: ModalConfig): string[] {
+  override getButtonLabels(): string[] {
     return [i18next.t("menu:login"), i18next.t("menu:register")];
   }
 

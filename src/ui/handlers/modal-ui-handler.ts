@@ -1,17 +1,13 @@
-import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import type { UiMode } from "#enums/ui-mode";
-import UiHandler from "./abstract-ui-handler";
-import { addWindow } from "../ui-theme";
-import { WindowVariant } from "#enums/window-variant";
-import type { Button } from "#enums/buttons";
 import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
-
-export interface ModalConfig {
-  buttonActions: Function[];
-  fadeOut?: () => void;
-}
+import type { ModalConfig } from "#app/ui/interfaces/modal-config";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { addWindow } from "#app/ui/ui-theme";
+import type { Button } from "#enums/buttons";
+import { TextStyle } from "#enums/text-style";
+import type { UiMode } from "#enums/ui-mode";
+import { WindowVariant } from "#enums/window-variant";
+import UiHandler from "./abstract-ui-handler";
 
 export abstract class ModalUiHandler extends UiHandler {
   protected modalContainer: Phaser.GameObjects.Container;

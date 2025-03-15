@@ -1,23 +1,22 @@
-import type { InputFieldConfig } from "./form-modal-ui-handler";
-import { FormModalUiHandler } from "./form-modal-ui-handler";
-import type { ModalConfig } from "./modal-ui-handler";
-import i18next from "i18next";
 import type { PlayerPokemon } from "#app/field/pokemon";
+import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
+import i18next from "i18next";
+import { FormModalUiHandler } from "./form-modal-ui-handler";
 
 export default class RenameFormUiHandler extends FormModalUiHandler {
-  getModalTitle(_config?: ModalConfig): string {
+  getModalTitle(): string {
     return i18next.t("menu:renamePokemon");
   }
 
-  getWidth(_config?: ModalConfig): number {
+  getWidth(): number {
     return 160;
   }
 
-  getMargin(_config?: ModalConfig): [number, number, number, number] {
+  getMargin(): [number, number, number, number] {
     return [0, 0, 48, 0];
   }
 
-  getButtonLabels(_config?: ModalConfig): string[] {
+  getButtonLabels(): string[] {
     return [i18next.t("menu:rename"), i18next.t("menu:cancel")];
   }
 
