@@ -1,47 +1,48 @@
-import { starterColors } from "#app/data/starter-colors";
-import { globalScene } from "#app/global-scene";
-import { UiMode } from "#enums/ui-mode";
-import UiHandler from "#app/ui/handlers/abstract-ui-handler";
-import {
-  rgbHexToRgba,
-  leftPad,
-  getEnumValues,
-  fixedNumber,
-  toReadableString,
-  formatStat,
-  isNullOrUndefined,
-} from "#app/utils";
-import type { Pokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
-import { getCandyProgressRequirement, speciesStarterCosts } from "#app/data/balance/starters";
-import { argbFromRgba } from "@material/material-color-utilities";
-import { getTypeRgb } from "#app/data/type";
-import { ElementalType } from "#enums/elemental-type";
-import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import type { Move } from "#app/data/moves/move";
-import { MoveCategory } from "#enums/move-category";
-import { getPokeballAtlasKey } from "#app/data/pokeball";
-import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
-import { getLevelRelExp, getLevelTotalExp } from "#app/data/exp";
-import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import { StatusEffect } from "#enums/status-effect";
-import { getBiomeName } from "#app/data/balance/biomes";
-import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { loggedInUser } from "#app/account";
+import type { Ability } from "#app/data/abilities/ability";
+import { getBiomeName } from "#app/data/balance/biomes";
+import { getCandyProgressRequirement, speciesStarterCosts } from "#app/data/balance/starters";
+import { getLevelRelExp, getLevelTotalExp } from "#app/data/exp";
+import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
+import type { Move } from "#app/data/moves/move";
+import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
+import { getPokeballAtlasKey } from "#app/data/pokeball";
+import { starterColors } from "#app/data/starter-colors";
+import { getTypeRgb } from "#app/data/type";
 import type { Variant } from "#app/data/variant";
 import { getVariantTint } from "#app/data/variant";
-import { Button } from "#enums/buttons";
-import type { Ability } from "#app/data/abilities/ability";
-import i18next from "i18next";
+import type { Pokemon } from "#app/field/pokemon";
+import type { PokemonMove } from "#app/field/pokemon-move";
+import { globalScene } from "#app/global-scene";
+import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { modifierSortFunc } from "#app/modifier/modifier";
-import { PlayerGender } from "#enums/player-gender";
-import { Stat, PERMANENT_STATS, getStatKey } from "#enums/stat";
-import { Nature } from "#enums/nature";
 import { settings } from "#app/system/settings/settings-manager";
+import { CANVAS_SCALE, TEXT_SCALE } from "#app/ui-constants";
+import UiHandler from "#app/ui/handlers/abstract-ui-handler";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text/text-utils";
+import {
+  fixedNumber,
+  formatStat,
+  getEnumValues,
+  isNullOrUndefined,
+  leftPad,
+  rgbHexToRgba,
+  toReadableString,
+} from "#app/utils";
+import { Button } from "#enums/buttons";
+import { ElementalType } from "#enums/elemental-type";
+import { MoveCategory } from "#enums/move-category";
+import { Nature } from "#enums/nature";
+import { PlayerGender } from "#enums/player-gender";
+import { PERMANENT_STATS, Stat, getStatKey } from "#enums/stat";
+import { StatusEffect } from "#enums/status-effect";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { SummaryUiPage } from "#enums/summary-ui-page";
-import { CANVAS_SCALE, TEXT_SCALE } from "#app/ui-constants";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
+import { argbFromRgba } from "@material/material-color-utilities";
+import i18next from "i18next";
+import type PartyUiHandler from "./party-ui-handler";
 
 /** Holds all objects related to an ability for each iteration */
 interface abilityContainer {
@@ -557,7 +558,7 @@ export default class SummaryUiHandler extends UiHandler {
           if (!fromPartyMode) {
             ui.setMode(UiMode.MESSAGE);
           } else {
-            ui.setMode(UiMode.PARTY);
+            ui.setMode<PartyUiHandler>(UiMode.PARTY);
           }
         }
         success = true;

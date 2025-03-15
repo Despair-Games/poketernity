@@ -24,6 +24,7 @@ import Overrides from "#app/overrides";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import type ModifierSelectUiHandler from "#app/ui/handlers/modifier-select-ui-handler";
 import { SHOP_OPTIONS_ROW_LIMIT } from "#app/ui/handlers/modifier-select-ui-handler";
+import type PartyUiHandler from "#app/ui/handlers/party-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { NumberHolder } from "#app/utils";
 import { FilterItemMaxStacks } from "#app/utils/item-utils";
@@ -164,7 +165,7 @@ export class SelectModifierPhase extends BattlePhase {
               }
               break;
             case 1:
-              ui.setModeWithoutClear(
+              ui.setModeWithoutClear<PartyUiHandler>(
                 UiMode.PARTY,
                 PartyUiMode.MODIFIER_TRANSFER,
                 -1,
@@ -306,7 +307,7 @@ export class SelectModifierPhase extends BattlePhase {
               ? PartyUiMode.REMEMBER_MOVE_MODIFIER
               : PartyUiMode.MODIFIER;
         const tmMoveId = isTmModifier ? (modifierType as TmModifierType).moveId : undefined;
-        ui.setModeWithoutClear(
+        ui.setModeWithoutClear<PartyUiHandler>(
           UiMode.PARTY,
           partyUiMode,
           -1,
