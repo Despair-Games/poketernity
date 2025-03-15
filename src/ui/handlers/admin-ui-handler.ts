@@ -32,8 +32,8 @@ export default class AdminUiHandler extends FormModalUiHandler {
     return `Username and ${service} successfully ${mode.toLowerCase()}ed`;
   };
 
-  constructor(mode: UiMode | null = null) {
-    super(mode);
+  constructor() {
+    super(UiMode.ADMIN);
   }
 
   override getModalTitle(): string {
@@ -380,7 +380,7 @@ export default class AdminUiHandler extends FormModalUiHandler {
 
   private updateAdminPanelInfo(adminSearchResult: AdminSearchInfo, mode?: AdminMode) {
     mode = mode ?? AdminMode.ADMIN;
-    globalScene.ui.setMode(
+    globalScene.ui.setMode<AdminUiHandler>(
       UiMode.ADMIN,
       {
         buttonActions: [

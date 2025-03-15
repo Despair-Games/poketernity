@@ -6,8 +6,6 @@ import { api } from "#app/plugins/api/api";
 import { handleTutorial } from "#app/tutorial";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import BgmBar from "#app/ui/components/bgm-bar";
-import { getAdminModeName } from "#app/ui/handlers/admin-ui-handler";
-import OptionSelectUiHandler from "#app/ui/handlers/option-select-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { addTextObject } from "#app/ui/text/text-utils";
@@ -21,7 +19,10 @@ import { TextStyle } from "#enums/text-style";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
+import type AdminUiHandler from "./admin-ui-handler";
+import { getAdminModeName } from "./admin-ui-handler";
 import type AwaitableUiHandler from "./awaitable-ui-handler";
+import OptionSelectUiHandler from "./option-select-ui-handler";
 
 enum MenuOptions {
   GAME_SETTINGS,
@@ -457,7 +458,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
                 label: getAdminModeName(mode as AdminMode),
                 handler: () => {
                   ui.playSelect();
-                  ui.setOverlayMode(
+                  ui.setOverlayMode<AdminUiHandler>(
                     UiMode.ADMIN,
                     {
                       buttonActions: [
@@ -472,7 +473,7 @@ export default class MenuUiHandler extends OptionSelectUiHandler {
                         },
                       ],
                     },
-                    mode,
+                    mode as AdminMode,
                   ); // mode is our AdminMode enum
                   return true;
                 },
