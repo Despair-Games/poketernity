@@ -11,7 +11,6 @@ import { WindowVariant } from "#enums/window-variant";
 import { isMobile } from "#app/touch-controls";
 import { getEnumValues, getEnumKeys } from "#app/utils";
 import { initPokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
-import { initBiomes } from "#app/data/balance/biomes";
 import { initEggMoves } from "#app/data/balance/egg-moves";
 import { initPokemonForms } from "#app/data/pokemon-forms";
 import { initSpecies } from "./data/init/init-species";
@@ -33,6 +32,7 @@ import { initModifierTypes } from "#app/modifier/init-modifier-types";
 import { initModifierPools } from "#app/modifier/init-modifier-pools";
 import { timedEventManager } from "#app/timed-event-manager";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
+import { initBiomes } from "#app/data/init/init-biomes";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";

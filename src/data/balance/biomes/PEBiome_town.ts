@@ -7,77 +7,77 @@ import { TrainerType } from "#enums/trainer-type";
 import { WeatherType } from "#enums/weather-type";
 
 /**
- * This file represents all the data of biomeExample1
+ * This file represents all the data of the town biome
  */
 
-export const biomeExample1pokemonPool = {
+export const townPokemonPool = {
   [BiomePoolTier.COMMON]: {
-    [TimeOfDay.DAWN]: [Species.CHIKORITA],
-    [TimeOfDay.DAY]: [Species.CYNDAQUIL],
-    [TimeOfDay.DUSK]: [Species.TOTODILE],
+    [TimeOfDay.DAWN]: [],
+    [TimeOfDay.DAY]: [],
+    [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [Species.HOOTHOOT],
     // Instead of a TimeofDay.ALL, should these just be in the other TimeOfDays' lists?
     [TimeOfDay.ALL]: [Species.SENTRET],
   },
   [BiomePoolTier.UNCOMMON]: {
-    [TimeOfDay.DAWN]: [Species.CHIKORITA],
-    [TimeOfDay.DAY]: [Species.CYNDAQUIL],
-    [TimeOfDay.DUSK]: [Species.TOTODILE],
+    [TimeOfDay.DAWN]: [],
+    [TimeOfDay.DAY]: [],
+    [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [Species.HOOTHOOT],
     [TimeOfDay.ALL]: [Species.SENTRET],
   },
   [BiomePoolTier.RARE]: {
-    [TimeOfDay.DAWN]: [Species.CHIKORITA],
-    [TimeOfDay.DAY]: [Species.CYNDAQUIL],
-    [TimeOfDay.DUSK]: [Species.TOTODILE],
+    [TimeOfDay.DAWN]: [],
+    [TimeOfDay.DAY]: [],
+    [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [Species.HOOTHOOT],
     [TimeOfDay.ALL]: [Species.SENTRET],
   },
   [BiomePoolTier.SUPER_RARE]: {
-    [TimeOfDay.DAWN]: [Species.CHIKORITA],
-    [TimeOfDay.DAY]: [Species.CYNDAQUIL],
-    [TimeOfDay.DUSK]: [Species.TOTODILE],
+    [TimeOfDay.DAWN]: [],
+    [TimeOfDay.DAY]: [],
+    [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [Species.HOOTHOOT],
     [TimeOfDay.ALL]: [Species.SENTRET],
   },
   [BiomePoolTier.ULTRA_RARE]: {
-    [TimeOfDay.DAWN]: [Species.CHIKORITA],
-    [TimeOfDay.DAY]: [Species.CYNDAQUIL],
-    [TimeOfDay.DUSK]: [Species.TOTODILE],
+    [TimeOfDay.DAWN]: [],
+    [TimeOfDay.DAY]: [],
+    [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [Species.HOOTHOOT],
     [TimeOfDay.ALL]: [Species.SENTRET],
   },
   [BiomePoolTier.BOSS]: {
-    [TimeOfDay.DAWN]: [Species.CHIKORITA],
-    [TimeOfDay.DAY]: [Species.CYNDAQUIL],
-    [TimeOfDay.DUSK]: [Species.TOTODILE],
+    [TimeOfDay.DAWN]: [],
+    [TimeOfDay.DAY]: [],
+    [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [Species.HOOTHOOT],
     [TimeOfDay.ALL]: [Species.SENTRET],
   },
   [BiomePoolTier.BOSS_RARE]: {
-    [TimeOfDay.DAWN]: [Species.CHIKORITA],
-    [TimeOfDay.DAY]: [Species.CYNDAQUIL],
-    [TimeOfDay.DUSK]: [Species.TOTODILE],
+    [TimeOfDay.DAWN]: [],
+    [TimeOfDay.DAY]: [],
+    [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [Species.HOOTHOOT],
     [TimeOfDay.ALL]: [Species.SENTRET],
   },
   [BiomePoolTier.BOSS_SUPER_RARE]: {
-    [TimeOfDay.DAWN]: [Species.CHIKORITA],
-    [TimeOfDay.DAY]: [Species.CYNDAQUIL],
-    [TimeOfDay.DUSK]: [Species.TOTODILE],
+    [TimeOfDay.DAWN]: [],
+    [TimeOfDay.DAY]: [],
+    [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [Species.HOOTHOOT],
     [TimeOfDay.ALL]: [Species.SENTRET],
   },
   [BiomePoolTier.BOSS_ULTRA_RARE]: {
-    [TimeOfDay.DAWN]: [Species.CHIKORITA],
-    [TimeOfDay.DAY]: [Species.CYNDAQUIL],
-    [TimeOfDay.DUSK]: [Species.TOTODILE],
+    [TimeOfDay.DAWN]: [],
+    [TimeOfDay.DAY]: [],
+    [TimeOfDay.DUSK]: [],
     [TimeOfDay.NIGHT]: [Species.HOOTHOOT],
     [TimeOfDay.ALL]: [Species.SENTRET],
   },
 };
 
-export const biomeExample1trainerPool = {
+export const townTrainerPool = {
   [BiomePoolTier.COMMON]: [TrainerType.YOUNGSTER],
   [BiomePoolTier.UNCOMMON]: [],
   [BiomePoolTier.RARE]: [],
@@ -89,7 +89,7 @@ export const biomeExample1trainerPool = {
   [BiomePoolTier.BOSS_ULTRA_RARE]: [],
 };
 
-export const biomeExample1weatherPool = {
+export const townWeatherPool = {
   [WeatherType.NONE]: 1,
   [WeatherType.SUNNY]: 1,
   [WeatherType.RAIN]: 0,
@@ -102,15 +102,14 @@ export const biomeExample1weatherPool = {
   [WeatherType.STRONG_WINDS]: 0,
 };
 
-export const biomeExample1terrainPool = {
+export const townTerrainPool = {
   [TerrainType.NONE]: 99,
   [TerrainType.MISTY]: 1,
   [TerrainType.ELECTRIC]: 0,
   [TerrainType.GRASSY]: 0,
   [TerrainType.PSYCHIC]: 0,
 };
-export const biomeExample1OutgoingLinks = {
-  [Biome.TOWN]: 50,
-  [Biome.END]: 30,
-  [Biome.VOLCANO]: 20,
+export const townOutgoingLinks = {
+  [Biome.CAVE]: 50,
+  [Biome.VOLCANO]: 30,
 };

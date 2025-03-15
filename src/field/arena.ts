@@ -1,6 +1,5 @@
 import { globalScene } from "#app/global-scene";
 import type { BiomeTierTrainerPools, PokemonPools } from "#app/data/balance/biomes";
-import { biomePokemonPools, biomeTrainerPools } from "#app/data/balance/biomes";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { type AbstractConstructor, randSeedInt } from "#app/utils";
 import type PokemonSpecies from "#app/data/pokemon-species";
@@ -31,6 +30,7 @@ import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { WeatherType } from "#enums/weather-type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { allBiomes } from "#app/data/data-lists";
 
 export class Arena {
   public biomeType: Biome;
@@ -52,7 +52,7 @@ export class Arena {
     this.biomeType = biome;
     this.tags = [];
     this.bgm = bgm;
-    this.trainerPool = biomeTrainerPools[biome];
+    this.trainerPool = allBiomes.get(biome).trainerPool;
     this.updatePoolsForTimeOfDay();
   }
 
@@ -115,10 +115,11 @@ export class Arena {
     const timeOfDay = this.getTimeOfDay();
     if (timeOfDay !== this.lastTimeOfDay) {
       this.pokemonPool = {};
-      for (const tier of Object.keys(biomePokemonPools[this.biomeType])) {
-        this.pokemonPool[tier] = Object.assign([], biomePokemonPools[this.biomeType][tier][TimeOfDay.ALL]).concat(
-          biomePokemonPools[this.biomeType][tier][timeOfDay],
-        );
+      for (const tier of Object.keys(allBiomes.get(this.biomeType).pokemonPool)) {
+        this.pokemonPool[tier] = Object.assign(
+          [],
+          allBiomes.get(this.biomeType).pokemonPool[tier][TimeOfDay.ALL],
+        ).concat(allBiomes.get(this.biomeType).pokemonPool[tier][timeOfDay]);
       }
       this.lastTimeOfDay = timeOfDay;
     }

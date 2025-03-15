@@ -1,10 +1,3 @@
-import {
-  biomeExample1OutgoingLinks,
-  biomeExample1pokemonPool,
-  biomeExample1terrainPool,
-  biomeExample1trainerPool,
-  biomeExample1weatherPool,
-} from "#app/data/balance/biomeExample1";
 import { Biome } from "#enums/biome";
 import type { BiomePoolTier } from "#enums/biome-pool-tier";
 import type { Species } from "#enums/species";
@@ -13,7 +6,10 @@ import type { TimeOfDay } from "#enums/time-of-day";
 import type { TrainerType } from "#enums/trainer-type";
 import type { WeatherType } from "#enums/weather-type";
 
-export class BiomeClassExample {
+/**
+ * Calling it PEBiome for now to distinguish from Biome.ts and Biome the enum
+ */
+export class PEBiome {
   public biomeType: Biome;
   // TODO: consider `partial` and `Omit`
   public pokemonPool: Record<BiomePoolTier, Record<TimeOfDay, Species[]>>;
@@ -21,6 +17,7 @@ export class BiomeClassExample {
   public weatherPool: Record<WeatherType, number>;
   public terrainPool: Record<TerrainType, number>;
   public outgoingPaths: Partial<Record<Biome, number>>;
+  public bgm: string;
 
   constructor(
     biomeType: Biome,
@@ -29,6 +26,7 @@ export class BiomeClassExample {
     weatherPool: Record<WeatherType, number>,
     terrainPool: Record<TerrainType, number>,
     outgoingPaths: Partial<Record<Biome, number>>,
+    bgm: string,
   ) {
     this.biomeType = biomeType;
     this.pokemonPool = pokemonPool;
@@ -36,17 +34,11 @@ export class BiomeClassExample {
     this.weatherPool = weatherPool;
     this.terrainPool = terrainPool;
     this.outgoingPaths = outgoingPaths;
+    this.bgm = bgm;
+  }
+
+  getNextBiome() {
+    // TODO: calculate the next biome to go to based off outgoingPaths
+    return Biome.TOWN;
   }
 }
-
-// Do this in its own file
-export const allNewBiomes = [
-  new BiomeClassExample(
-    Biome.END,
-    biomeExample1pokemonPool,
-    biomeExample1trainerPool,
-    biomeExample1weatherPool,
-    biomeExample1terrainPool,
-    biomeExample1OutgoingLinks,
-  ),
-];

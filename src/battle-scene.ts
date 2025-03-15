@@ -19,13 +19,13 @@ import {
   ME_MAX_SPAWN_WEIGHT,
 } from "#app/constants";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { biomeDepths, getBiomeName } from "#app/data/balance/biomes";
+import { getBiomeName } from "#app/data/balance/biomes";
 import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import { MoveChargeAnim } from "#app/data/animations/move-charge-anim";
 import type { DestinyBondTag, GrudgeTag } from "#app/data/battler-tags";
-import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
+import { allAbilities, allBiomes, allMoves, allSpecies } from "#app/data/data-lists";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
 import { initCommonAnims } from "#app/data/init/init-common-anims";
 import { initMoveAnim } from "#app/data/init/init-move-anim";
@@ -1466,7 +1466,7 @@ export default class BattleScene extends SceneBase {
   }
 
   newArena(biome: Biome): Arena {
-    this.arena = new Arena(biome, Biome[biome].toLowerCase());
+    this.arena = new Arena(biome, allBiomes.get(biome).bgm);
     this.eventTarget.dispatchEvent(new NewArenaEvent());
 
     this.arenaBg.pipelineData = { terrainColorRatio: this.arena.getBgTerrainColorRatioForBiome() };
@@ -2028,29 +2028,11 @@ export default class BattleScene extends SceneBase {
     return filteredSpecies[randSeedInt(filteredSpecies.length)];
   }
 
-  generateRandomBiome(waveIndex: number): Biome {
-    const relWave = waveIndex % 250;
-    const biomes = getEnumValues(Biome).slice(1, getEnumValues(Biome).filter((b) => b >= 40).length * -1);
-    const maxDepth = biomeDepths[Biome.END][0] - 2;
-    const depthWeights = new Array(maxDepth + 1)
-      .fill(null)
-      .map((_, i: number) => ((1 - Math.min(Math.abs(i / (maxDepth - 1) - relWave / 250) + 0.25, 1)) / 0.75) * 250);
-    const biomeThresholds: number[] = [];
-    let totalWeight = 0;
-    for (const biome of biomes) {
-      totalWeight += Math.ceil(depthWeights[biomeDepths[biome][0] - 1] / biomeDepths[biome][1]);
-      biomeThresholds.push(totalWeight);
-    }
-
-    const randInt = randSeedInt(totalWeight);
-
-    for (const biome of biomes) {
-      if (randInt < biomeThresholds[biome]) {
-        return biome;
-      }
-    }
-
-    return biomes[randSeedInt(biomes.length)];
+  /**
+   * TODO: Rewrite this later
+   */
+  generateRandomBiome(_waveIndex: number): Biome {
+    return Biome.TOWN;
   }
 
   toggleInvert(invert: boolean): void {

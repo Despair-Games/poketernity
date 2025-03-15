@@ -1,9 +1,9 @@
 import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
 import type Battle from "#app/battle";
 import { ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET, ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants";
-import { biomeLinks } from "#app/data/balance/biomes";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import type { CustomPokemonData } from "#app/data/custom-pokemon-data";
+import { allBiomes } from "#app/data/data-lists";
 import { Egg, type IEggOptions } from "#app/data/egg";
 import { initMoveAnim } from "#app/data/init/init-move-anim";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
@@ -977,16 +977,16 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
   const numRuns = 1000;
   let run = 0;
   const biomes = Object.keys(Biome).filter((key) => isNaN(Number(key)));
-  const alwaysPickTheseBiomes = [
-    Biome.ISLAND,
-    Biome.ABYSS,
-    Biome.WASTELAND,
-    Biome.FAIRY_CAVE,
-    Biome.TEMPLE,
-    Biome.LABORATORY,
-    Biome.SPACE,
-    Biome.WASTELAND,
-  ];
+  // const alwaysPickTheseBiomes = [
+  //   Biome.ISLAND,
+  //   Biome.ABYSS,
+  //   Biome.WASTELAND,
+  //   Biome.FAIRY_CAVE,
+  //   Biome.TEMPLE,
+  //   Biome.LABORATORY,
+  //   Biome.SPACE,
+  //   Biome.WASTELAND,
+  // ];
 
   const calculateNumEncounters = (): any[] => {
     let encounterRate = baseSpawnWeight; // BASE_MYSTERY_ENCOUNTER_SPAWN_WEIGHT
@@ -1006,34 +1006,15 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
 
       // New biome
       if (i % 10 === 1) {
-        if (Array.isArray(biomeLinks[currentBiome])) {
-          let biomes: Biome[];
-          globalScene.executeWithSeedOffset(() => {
-            biomes = (biomeLinks[currentBiome] as (Biome | [Biome, number])[])
-              .filter((b) => {
-                return !Array.isArray(b) || !randSeedInt(b[1]);
-              })
-              .map((b) => (!Array.isArray(b) ? b : b[0]));
-          }, i * 100);
-          if (biomes! && biomes.length > 0) {
-            const specialBiomes = biomes.filter((b) => alwaysPickTheseBiomes.includes(b));
-            if (specialBiomes.length > 0) {
-              currentBiome = specialBiomes[randSeedInt(specialBiomes.length)];
-            } else {
-              currentBiome = biomes[randSeedInt(biomes.length)];
-            }
-          }
-        } else if (biomeLinks.hasOwnProperty(currentBiome)) {
-          currentBiome = biomeLinks[currentBiome] as Biome;
-        } else {
-          if (!(i % 50)) {
-            currentBiome = Biome.END;
-          } else {
-            currentBiome = globalScene.generateRandomBiome(i);
-          }
-        }
-
+        const currentBiomeType = globalScene.arena.biomeType;
+        const currentBiome = allBiomes.get(currentBiomeType).getNextBiome();
         currentArena = globalScene.newArena(currentBiome);
+      } else {
+        if (!(i % 50)) {
+          currentBiome = Biome.END;
+        } else {
+          currentBiome = globalScene.generateRandomBiome(i);
+        }
       }
 
       // Fixed battle
