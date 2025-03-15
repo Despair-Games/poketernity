@@ -9,6 +9,7 @@ import {
   SpeciesEvolution,
   SpeciesFormEvolution,
   SpeciesFriendshipEvolutionCondition,
+  AmpedToxtricityEvoCondition,
 } from "#app/data/pokemon-evolutions";
 import { EvolutionItem } from "#enums/evolution-item";
 import {
@@ -60,8 +61,8 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.SILICOBRA]: [new SpeciesEvolution(Species.SANDACONDA, 36, null, null)],
   [Species.ARROKUDA]: [new SpeciesEvolution(Species.BARRASKEWDA, 26, null, null)],
   [Species.TOXEL]: [
+    new SpeciesFormEvolution(Species.TOXTRICITY, "", "amped", 30, null, [new AmpedToxtricityEvoCondition()]),
     new SpeciesFormEvolution(Species.TOXTRICITY, "", "lowkey", 30, null, [new LowKeyToxtricityEvoCondition()]),
-    new SpeciesFormEvolution(Species.TOXTRICITY, "", "amped", 30, null, null),
   ],
   [Species.SIZZLIPEDE]: [new SpeciesEvolution(Species.CENTISKORCH, 28, null, null)],
   [Species.CLOBBOPUS]: [
@@ -92,6 +93,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.IMPIDIMP]: [new SpeciesEvolution(Species.MORGREM, 32, null, null)],
   [Species.MORGREM]: [new SpeciesEvolution(Species.GRIMMSNARL, 42, null, null)],
   /** TODO: Will need to change these when biomes are changed */
+  // Custom: None of these require time of day
   [Species.MILCERY]: [
     new SpeciesFormEvolution(
       Species.ALCREMIE,

@@ -27,8 +27,7 @@ describe("Abilities - Mimicry", () => {
       .ability(Abilities.MIMICRY)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
-      .enemyMoveset(MoveId.SPLASH);
+      .enemySpecies(Species.MAGIKARP);
   });
 
   it("Mimicry activates after the Pokémon with Mimicry is switched in while terrain is present, or whenever there is a change in terrain", async () => {
@@ -47,15 +46,12 @@ describe("Abilities - Mimicry", () => {
   });
 
   it("Pokemon should revert back to its original, root type once terrain ends", async () => {
-    game.override
-      .moveset([MoveId.SPLASH, MoveId.TRANSFORM])
-      .enemyAbility(Abilities.MIMICRY)
-      .enemyMoveset([MoveId.SPLASH, MoveId.PSYCHIC_TERRAIN]);
+    game.override.moveset([MoveId.SPLASH, MoveId.TRANSFORM]).enemyAbility(Abilities.MIMICRY);
     await game.classicMode.startBattle([Species.REGIELEKI]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
     game.move.select(MoveId.TRANSFORM);
-    await game.forceEnemyMove(MoveId.PSYCHIC_TERRAIN);
+    await game.move.forceEnemyMove(MoveId.PSYCHIC_TERRAIN);
     await game.toNextTurn();
     expect(playerPokemon?.getTypes().includes(ElementalType.PSYCHIC)).toBe(true);
 
@@ -64,24 +60,23 @@ describe("Abilities - Mimicry", () => {
     }
 
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
     expect(playerPokemon?.getTypes().includes(ElementalType.ELECTRIC)).toBe(true);
   });
 
   it("If the Pokemon is under the effect of a type-adding move and an equivalent terrain activates, the move's effect disappears", async () => {
-    game.override.enemyMoveset([MoveId.FORESTS_CURSE, MoveId.GRASSY_TERRAIN]);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.FORESTS_CURSE);
+    await game.move.forceEnemyMove(MoveId.FORESTS_CURSE);
     await game.toNextTurn();
 
     expect(playerPokemon?.summonData.addedType).toBe(ElementalType.GRASS);
 
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.GRASSY_TERRAIN);
+    await game.move.forceEnemyMove(MoveId.GRASSY_TERRAIN);
     await game.toEndOfTurn();
 
     expect(playerPokemon?.summonData.addedType).toBeNull();
