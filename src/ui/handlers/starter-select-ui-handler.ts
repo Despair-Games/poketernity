@@ -1014,48 +1014,51 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.updateInstructions();
   }
 
-  override show(args: any[]): boolean {
+  override show(selectedStarterCallback?: StarterSelectCallback): boolean {
     if (!this.starterPreferences) {
       // starterPreferences haven't been loaded yet
       this.starterPreferences = StarterPrefs.load();
     }
-    this.moveInfoOverlay.clear(); // clear this when removing a menu; the cancel button doesn't seem to trigger this automatically on controllers
     this.pokerusSpecies = getPokerusStarters();
 
-    if (args.length >= 1 && args[0] instanceof Function) {
-      super.show(args);
-      this.starterSelectCallback = args[0] as StarterSelectCallback;
+    // clear this when removing a menu; the cancel button doesn't seem to trigger this automatically on controllers
+    this.moveInfoOverlay.clear();
 
-      this.starterSelectContainer.setVisible(true);
-
-      this.allSpecies.forEach((species, s) => {
-        const icon = this.starterContainers[s].icon;
-        const dexEntry = globalScene.gameData.dexData[species.speciesId];
-
-        // Initialize the StarterAttributes for this species
-        this.starterPreferences[species.speciesId] = this.initStarterPrefs(species);
-
-        if (dexEntry.caughtAttr) {
-          icon.clearTint();
-        } else if (dexEntry.seenAttr) {
-          icon.setTint(0x808080);
-        }
-      });
-
-      this.resetFilters();
-      this.updateStarters();
-
-      this.setFilterMode(false);
-      this.filterBarCursor = 0;
-      this.setCursor(0);
-      this.tryUpdateValue(0);
-
-      handleTutorial(Tutorial.STARTER_SELECT);
-
-      return true;
+    if (!selectedStarterCallback) {
+      // This happens when the handler calls itself so it is already active, we can exit early
+      return false;
     }
 
-    return false;
+    super.show();
+    this.starterSelectCallback = selectedStarterCallback;
+
+    this.starterSelectContainer.setVisible(true);
+
+    this.allSpecies.forEach((species, s) => {
+      const icon = this.starterContainers[s].icon;
+      const dexEntry = globalScene.gameData.dexData[species.speciesId];
+
+      // Initialize the StarterAttributes for this species
+      this.starterPreferences[species.speciesId] = this.initStarterPrefs(species);
+
+      if (dexEntry.caughtAttr) {
+        icon.clearTint();
+      } else if (dexEntry.seenAttr) {
+        icon.setTint(0x808080);
+      }
+    });
+
+    this.resetFilters();
+    this.updateStarters();
+
+    this.setFilterMode(false);
+    this.filterBarCursor = 0;
+    this.setCursor(0);
+    this.tryUpdateValue(0);
+
+    handleTutorial(Tutorial.STARTER_SELECT);
+
+    return true;
   }
 
   /**
