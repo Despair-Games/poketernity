@@ -71,46 +71,46 @@ export default class RegistrationFormUiHandler extends FormModalUiHandler {
   }
 
   override show(config: ModalConfig): boolean {
-    if (super.show(config)) {
-      const originalRegistrationAction = this.submitAction;
-      this.submitAction = (_) => {
-        // Prevent overlapping overrides on action modification
-        this.submitAction = originalRegistrationAction;
-        this.sanitizeInputs();
-        globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
-        const onFail = (error: string) => {
-          const message = this.getReadableErrorMessage(error);
-          globalScene.ui.setMode(UiMode.REGISTRATION_FORM, Object.assign(config, { errorMessage: message.trim() }));
-          globalScene.ui.playError();
-        };
-        if (!this.inputs[0].text) {
-          return onFail("empty username");
-        }
-        if (!this.inputs[1].text) {
-          return onFail("invalid password");
-        }
-        if (this.inputs[1].text !== this.inputs[2].text) {
-          return onFail("password doesn't match");
-        }
-        const [usernameInput, passwordInput] = this.inputs;
-        api.account.register({ username: usernameInput.text, password: passwordInput.text }).then((registerError) => {
-          if (!registerError) {
-            api.account.login({ username: usernameInput.text, password: passwordInput.text }).then((loginError) => {
-              if (!loginError) {
-                originalRegistrationAction && originalRegistrationAction();
-              } else {
-                onFail(loginError);
-              }
-            });
-          } else {
-            onFail(registerError);
-          }
-        });
-      };
-
-      return true;
+    if (!super.show(config)) {
+      return false;
     }
 
-    return false;
+    const originalRegistrationAction = this.submitAction;
+    this.submitAction = (_) => {
+      // Prevent overlapping overrides on action modification
+      this.submitAction = originalRegistrationAction;
+      this.sanitizeInputs();
+      globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
+      const onFail = (error: string) => {
+        const message = this.getReadableErrorMessage(error);
+        globalScene.ui.setMode(UiMode.REGISTRATION_FORM, Object.assign(config, { errorMessage: message.trim() }));
+        globalScene.ui.playError();
+      };
+      if (!this.inputs[0].text) {
+        return onFail("empty username");
+      }
+      if (!this.inputs[1].text) {
+        return onFail("invalid password");
+      }
+      if (this.inputs[1].text !== this.inputs[2].text) {
+        return onFail("password doesn't match");
+      }
+      const [usernameInput, passwordInput] = this.inputs;
+      api.account.register({ username: usernameInput.text, password: passwordInput.text }).then((registerError) => {
+        if (!registerError) {
+          api.account.login({ username: usernameInput.text, password: passwordInput.text }).then((loginError) => {
+            if (!loginError) {
+              originalRegistrationAction && originalRegistrationAction();
+            } else {
+              onFail(loginError);
+            }
+          });
+        } else {
+          onFail(registerError);
+        }
+      });
+    };
+
+    return true;
   }
 }

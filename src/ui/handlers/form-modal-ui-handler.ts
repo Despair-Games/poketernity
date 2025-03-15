@@ -120,35 +120,35 @@ export abstract class FormModalUiHandler extends ModalUiHandler {
   }
 
   override show(config: FormModalConfig, ..._args: unknown[]): boolean {
-    if (super.show(config)) {
-      this.inputContainers.map((ic) => ic.setVisible(true));
-
-      this.submitAction = config.buttonActions.length ? config.buttonActions[0] : null;
-
-      if (this.buttonBgs.length) {
-        this.buttonBgs[0].off("pointerdown");
-        this.buttonBgs[0].on("pointerdown", () => {
-          if (this.submitAction) {
-            this.submitAction();
-          }
-        });
-      }
-
-      this.modalContainer.y += 24;
-      this.modalContainer.setAlpha(0);
-
-      this.tween = globalScene.tweens.add({
-        targets: this.modalContainer,
-        duration: fixedNumber(1000),
-        ease: "Sine.easeInOut",
-        y: "-=24",
-        alpha: 1,
-      });
-
-      return true;
+    if (!super.show(config)) {
+      return false;
     }
 
-    return false;
+    this.inputContainers.map((ic) => ic.setVisible(true));
+
+    this.submitAction = config.buttonActions.length ? config.buttonActions[0] : null;
+
+    if (this.buttonBgs.length) {
+      this.buttonBgs[0].off("pointerdown");
+      this.buttonBgs[0].on("pointerdown", () => {
+        if (this.submitAction) {
+          this.submitAction();
+        }
+      });
+    }
+
+    this.modalContainer.y += 24;
+    this.modalContainer.setAlpha(0);
+
+    this.tween = globalScene.tweens.add({
+      targets: this.modalContainer,
+      duration: fixedNumber(1000),
+      ease: "Sine.easeInOut",
+      y: "-=24",
+      alpha: 1,
+    });
+
+    return true;
   }
 
   override processInput(button: Button): boolean {

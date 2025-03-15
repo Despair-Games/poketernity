@@ -35,20 +35,21 @@ export default class RenameFormUiHandler extends FormModalUiHandler {
   }
 
   override show(config: ModalConfig, target: string | PlayerPokemon): boolean {
-    if (super.show(config)) {
-      if (typeof target === "string") {
-        this.inputs[0].text = target;
-      } else {
-        this.inputs[0].text = target.getNameToRender();
-      }
-      this.submitAction = (_) => {
-        this.sanitizeInputs();
-        const sanitizedName = btoa(unescape(encodeURIComponent(this.inputs[0].text)));
-        config.buttonActions[0](sanitizedName);
-        return true;
-      };
-      return true;
+    if (!super.show(config)) {
+      return false;
     }
-    return false;
+
+    if (typeof target === "string") {
+      this.inputs[0].text = target;
+    } else {
+      this.inputs[0].text = target.getNameToRender();
+    }
+    this.submitAction = (_) => {
+      this.sanitizeInputs();
+      const sanitizedName = btoa(unescape(encodeURIComponent(this.inputs[0].text)));
+      config.buttonActions[0](sanitizedName);
+      return true;
+    };
+    return true;
   }
 }

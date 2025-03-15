@@ -134,21 +134,22 @@ export default class TestDialogueUiHandler extends FormModalUiHandler {
       }
     });
 
-    if (super.show(config)) {
-      this.inputs[0].resize(1150, 116);
-      this.inputContainers[0].list[0].width = 200;
-      this.inputs[0].text = prefilledText;
-      this.submitAction = (_) => {
-        if (ui.getMode() === UiMode.TEST_DIALOGUE) {
-          this.sanitizeInputs();
-          const sanitizedName = btoa(unescape(encodeURIComponent(this.inputs[0].text)));
-          config.buttonActions[0](sanitizedName);
-          return true;
-        }
-        return false;
-      };
-      return true;
+    if (!super.show(config)) {
+      return false;
     }
-    return false;
+
+    this.inputs[0].resize(1150, 116);
+    this.inputContainers[0].list[0].width = 200;
+    this.inputs[0].text = prefilledText;
+    this.submitAction = (_) => {
+      if (ui.getMode() === UiMode.TEST_DIALOGUE) {
+        this.sanitizeInputs();
+        const sanitizedName = btoa(unescape(encodeURIComponent(this.inputs[0].text)));
+        config.buttonActions[0](sanitizedName);
+        return true;
+      }
+      return false;
+    };
+    return true;
   }
 }

@@ -129,42 +129,43 @@ export default class AdminUiHandler extends FormModalUiHandler {
       setTextColor(this.errorMessage, TextStyle.SUMMARY_GREEN);
     }
 
-    if (super.show(config)) {
-      this.populateFields(this.adminMode, this.adminResult);
-      const originalSubmitAction = this.submitAction;
-      this.submitAction = (_) => {
-        this.submitAction = originalSubmitAction;
-        const adminSearchResult: AdminSearchInfo = this.convertInputsToAdmin(); // this converts the input texts into a single object for use later
-        const validFields = this.areFieldsValid(this.adminMode);
-        if (validFields.error) {
-          globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] }); // this is here to force a loading screen to allow the admin tool to reopen again if there's an error
-          return this.showMessage(validFields.errorMessage ?? "", adminSearchResult, true);
-        }
-        globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
-        if (this.adminMode === AdminMode.LINK) {
-          this.adminLinkUnlink(adminSearchResult, "discord", "Link") // calls server to link discord
-            .then((response) => {
-              if (response.error) {
-                return this.showMessage(response.errorType, adminSearchResult, true); // error or some kind
-              } else {
-                return this.showMessage(this.SUCCESS_SERVICE_MODE("discord", "link"), adminSearchResult, false); // success
-              }
-            });
-        } else if (this.adminMode === AdminMode.SEARCH) {
-          this.adminSearch(adminSearchResult) // admin search for username
-            .then((response) => {
-              if (response.error) {
-                return this.showMessage(response.errorType, adminSearchResult, true); // failure
-              }
-              this.updateAdminPanelInfo(response.adminSearchResult ?? adminSearchResult); // success
-            });
-        } else if (this.adminMode === AdminMode.ADMIN) {
-          this.updateAdminPanelInfo(adminSearchResult, AdminMode.SEARCH);
-        }
-      };
-      return true;
+    if (!super.show(config)) {
+      return false;
     }
-    return false;
+
+    this.populateFields(this.adminMode, this.adminResult);
+    const originalSubmitAction = this.submitAction;
+    this.submitAction = (_) => {
+      this.submitAction = originalSubmitAction;
+      const adminSearchResult: AdminSearchInfo = this.convertInputsToAdmin(); // this converts the input texts into a single object for use later
+      const validFields = this.areFieldsValid(this.adminMode);
+      if (validFields.error) {
+        globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] }); // this is here to force a loading screen to allow the admin tool to reopen again if there's an error
+        return this.showMessage(validFields.errorMessage ?? "", adminSearchResult, true);
+      }
+      globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
+      if (this.adminMode === AdminMode.LINK) {
+        this.adminLinkUnlink(adminSearchResult, "discord", "Link") // calls server to link discord
+          .then((response) => {
+            if (response.error) {
+              return this.showMessage(response.errorType, adminSearchResult, true); // error or some kind
+            } else {
+              return this.showMessage(this.SUCCESS_SERVICE_MODE("discord", "link"), adminSearchResult, false); // success
+            }
+          });
+      } else if (this.adminMode === AdminMode.SEARCH) {
+        this.adminSearch(adminSearchResult) // admin search for username
+          .then((response) => {
+            if (response.error) {
+              return this.showMessage(response.errorType, adminSearchResult, true); // failure
+            }
+            this.updateAdminPanelInfo(response.adminSearchResult ?? adminSearchResult); // success
+          });
+      } else if (this.adminMode === AdminMode.ADMIN) {
+        this.updateAdminPanelInfo(adminSearchResult, AdminMode.SEARCH);
+      }
+    };
+    return true;
   }
 
   showMessage(message: string, adminResult: AdminSearchInfo, isError: boolean) {

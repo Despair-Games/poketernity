@@ -133,37 +133,37 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
   }
 
   override show(config: ModalConfig): boolean {
-    if (super.show(config)) {
-      this.processExternalProvider(config);
-      const originalLoginAction = this.submitAction;
-      this.submitAction = (_) => {
-        // Prevent overlapping overrides on action modification
-        this.submitAction = originalLoginAction;
-        this.sanitizeInputs();
-        globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
-        const onFail = (error) => {
-          globalScene.ui.setMode(UiMode.LOGIN_FORM, Object.assign(config, { errorMessage: error?.trim() }));
-          globalScene.ui.playError();
-        };
-        if (!this.inputs[0].text) {
-          return onFail(i18next.t("menu:emptyUsername"));
-        }
-
-        const [usernameInput, passwordInput] = this.inputs;
-
-        api.account.login({ username: usernameInput.text, password: passwordInput.text }).then((error) => {
-          if (!error) {
-            originalLoginAction && originalLoginAction();
-          } else {
-            onFail(error);
-          }
-        });
-      };
-
-      return true;
+    if (!super.show(config)) {
+      return false;
     }
 
-    return false;
+    this.processExternalProvider(config);
+    const originalLoginAction = this.submitAction;
+    this.submitAction = (_) => {
+      // Prevent overlapping overrides on action modification
+      this.submitAction = originalLoginAction;
+      this.sanitizeInputs();
+      globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
+      const onFail = (error: string) => {
+        globalScene.ui.setMode(UiMode.LOGIN_FORM, Object.assign(config, { errorMessage: error?.trim() }));
+        globalScene.ui.playError();
+      };
+      if (!this.inputs[0].text) {
+        return onFail(i18next.t("menu:emptyUsername"));
+      }
+
+      const [usernameInput, passwordInput] = this.inputs;
+
+      api.account.login({ username: usernameInput.text, password: passwordInput.text }).then((error) => {
+        if (!error) {
+          originalLoginAction && originalLoginAction();
+        } else {
+          onFail(error);
+        }
+      });
+    };
+
+    return true;
   }
 
   override clear() {
