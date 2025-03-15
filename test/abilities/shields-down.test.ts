@@ -180,6 +180,6 @@ describe("Abilities - SHIELDS DOWN", () => {
     game.move.select(MoveId.THUNDERBOLT);
     await game.toNextTurn();
     expect(minior.isFainted()).toBe(true);
-    expect(game.field.getPlayerPokemon().hasStatusEffect(StatusEffect.FAINT)).toBe(true);
+    expect(game.field.getPlayerPokemon().faint()).toBe(true);
   });
 });
