@@ -39,8 +39,8 @@ describe("Moves - Fairy Lock", () => {
 
     game.move.select(MoveId.FAIRY_LOCK);
     game.move.select(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.SPLASH, 1);
+    await game.move.selectEnemyMove(MoveId.SPLASH, 1);
+    await game.move.selectEnemyMove(MoveId.SPLASH, 1);
 
     await game.toEndOfTurn();
     expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER)).toBeDefined();
@@ -54,8 +54,8 @@ describe("Moves - Fairy Lock", () => {
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.SPLASH, 1);
+    await game.move.selectEnemyMove(MoveId.SPLASH, 1);
+    await game.move.selectEnemyMove(MoveId.SPLASH, 1);
 
     await game.toNextTurn();
     game.scene.getField().forEach((pokemon) => {
@@ -68,8 +68,8 @@ describe("Moves - Fairy Lock", () => {
 
     game.move.select(MoveId.FAIRY_LOCK);
     game.move.select(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.SPLASH, 1);
+    await game.move.selectEnemyMove(MoveId.SPLASH, 1);
+    await game.move.selectEnemyMove(MoveId.SPLASH, 1);
     await game.toEndOfTurn();
 
     expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER)).toBeDefined();
@@ -83,8 +83,8 @@ describe("Moves - Fairy Lock", () => {
 
     game.move.select(MoveId.SPLASH);
     game.doSwitchPokemon(2);
-    await game.forceEnemyMove(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.SPLASH, 1);
+    await game.move.selectEnemyMove(MoveId.SPLASH, 1);
+    await game.move.selectEnemyMove(MoveId.SPLASH, 1);
     await game.toEndOfTurn();
     await game.toNextTurn();
 
@@ -97,8 +97,8 @@ describe("Moves - Fairy Lock", () => {
 
     game.move.select(MoveId.FAIRY_LOCK);
     game.move.select(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.SPLASH, 1);
+    await game.move.selectEnemyMove(MoveId.SPLASH, 1);
+    await game.move.selectEnemyMove(MoveId.SPLASH, 1);
     await game.toEndOfTurn();
 
     expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER)).toBeDefined();
@@ -107,9 +107,9 @@ describe("Moves - Fairy Lock", () => {
     await game.toNextTurn();
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.WHIRLWIND, 0);
+    await game.move.selectEnemyMove(MoveId.WHIRLWIND, 0);
     game.doSelectPartyPokemon(2);
-    await game.forceEnemyMove(MoveId.WHIRLWIND, 1);
+    await game.move.selectEnemyMove(MoveId.WHIRLWIND, 1);
     game.doSelectPartyPokemon(2);
     await game.toEndOfTurn();
     await game.toNextTurn();
@@ -125,8 +125,8 @@ describe("Moves - Fairy Lock", () => {
     game.move.select(MoveId.FAIRY_LOCK);
     game.move.select(MoveId.MEMENTO, 1);
     game.doSelectPartyPokemon(2);
-    await game.forceEnemyMove(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.SPLASH, 1);
+    await game.move.selectEnemyMove(MoveId.SPLASH, 1);
+    await game.move.selectEnemyMove(MoveId.SPLASH, 1);
     await game.toEndOfTurn();
     expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.PLAYER)).toBeDefined();
     expect(game.scene.arena.getTagOnSide(ArenaTagType.FAIRY_LOCK, ArenaTagSide.ENEMY)).toBeDefined();
@@ -139,8 +139,8 @@ describe("Moves - Fairy Lock", () => {
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.SPLASH, 1);
+    await game.move.selectEnemyMove(MoveId.SPLASH, 1);
+    await game.move.selectEnemyMove(MoveId.SPLASH, 1);
     await game.toEndOfTurn();
   });
 
@@ -149,8 +149,8 @@ describe("Moves - Fairy Lock", () => {
 
     game.move.use(MoveId.FAIRY_LOCK);
     game.move.use(MoveId.MEMENTO, 1, BattlerIndex.PLAYER);
-    await game.move.forceEnemyMove(MoveId.MEMENTO, BattlerIndex.PLAYER);
-    await game.move.forceEnemyMove(MoveId.MEMENTO, BattlerIndex.PLAYER);
+    await game.move.selectEnemyMove(MoveId.MEMENTO, BattlerIndex.PLAYER);
+    await game.move.selectEnemyMove(MoveId.MEMENTO, BattlerIndex.PLAYER);
     game.doSelectPartyPokemon(2);
     game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER]);
 

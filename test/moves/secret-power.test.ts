@@ -48,13 +48,13 @@ describe("Moves - Secret Power", () => {
 
     // No Terrain + Biome.VOLCANO --> Burn
     game.move.select(MoveId.SECRET_POWER);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toEndOfTurn();
     expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.BURN);
 
     // Misty Terrain --> SpAtk -1
     game.move.select(MoveId.SECRET_POWER);
-    await game.forceEnemyMove(MoveId.MISTY_TERRAIN);
+    await game.move.selectEnemyMove(MoveId.MISTY_TERRAIN);
     await game.toEndOfTurn();
     expect(enemyPokemon.getStatStage(Stat.SPATK)).toBe(-1);
   });

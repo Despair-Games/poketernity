@@ -84,9 +84,7 @@ export class MoveHelper extends GameManagerHelper {
       : [Overrides.MOVESET_OVERRIDE];
     if (movesetOverride.length > 0) {
       vi.spyOn(Overrides, "MOVESET_OVERRIDE", "get").mockReturnValue([]);
-      console.warn(
-        "Warning: Player moveset override disabled! Do not use the moveset override when using this function!",
-      );
+      console.warn("Warning: `use` overwrites the Pokemon's moveset and disables the player moveset override!");
     }
 
     const pokemon = this.game.scene.getPlayerField()[pkmIndex];
@@ -175,7 +173,7 @@ export class MoveHelper extends GameManagerHelper {
     if (movesetOverride.length > 0) {
       vi.spyOn(Overrides, "ENEMY_MOVESET_OVERRIDE", "get").mockReturnValue([]);
       console.warn(
-        "Warning: Enemy moveset override disabled! Do not use the moveset override when using this function!",
+        "Warning: `forceEnemyMove` overwrites the Pokemon's moveset and disables the enemy moveset override!",
       );
     }
     enemy.moveset = [new PokemonMove(moveId)];

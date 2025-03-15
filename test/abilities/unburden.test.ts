@@ -233,7 +233,7 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should deactivate temporarily when a neutralizing gas user is on the field", async () => {
-    game.override.battleType("double").ability(Abilities.NONE); // Disable ability override so that we can properly set abilities below
+    game.override.battleType("double").ability(Abilities.NONE).moveset(MoveId.FALSE_SWIPE); // Disable ability override so that we can properly set abilities below
     await game.classicMode.startBattle([Species.TREECKO, Species.MEOWTH, Species.WEEZING]);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -246,8 +246,8 @@ describe("Abilities - Unburden", () => {
     // Turn 1: Treecko gets hit by False Swipe and eats Sitrus Berry, activating Unburden
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.FALSE_SWIPE, 0);
-    await game.forceEnemyMove(MoveId.FALSE_SWIPE, 0);
+    await game.move.selectEnemyMove(MoveId.FALSE_SWIPE, 0);
+    await game.move.selectEnemyMove(MoveId.FALSE_SWIPE, 0);
     await game.toEndOfTurn();
 
     expect(getHeldItemCount(treecko)).toBeLessThan(playerHeldItems);
@@ -304,7 +304,7 @@ describe("Abilities - Unburden", () => {
 
     // Turn 1: Get hit by False Swipe and eat Sitrus Berry, activating Unburden
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.FALSE_SWIPE);
+    await game.move.selectEnemyMove(MoveId.FALSE_SWIPE);
     await game.toNextTurn();
 
     expect(getHeldItemCount(playerPokemon)).toBeLessThan(playerHeldItems);
@@ -312,7 +312,7 @@ describe("Abilities - Unburden", () => {
 
     // Turn 2: Get hit by Worry Seed, deactivating Unburden
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.WORRY_SEED);
+    await game.move.selectEnemyMove(MoveId.WORRY_SEED);
     await game.toNextTurn();
 
     expect(getHeldItemCount(playerPokemon)).toBeLessThan(playerHeldItems);
@@ -345,13 +345,13 @@ describe("Abilities - Unburden", () => {
     const initialSpeed = treecko.getStat(Stat.SPD);
 
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.THIEF);
+    await game.move.selectEnemyMove(MoveId.THIEF);
     game.doSelectPartyPokemon(1);
     await game.toNextTurn();
 
     game.doRevivePokemon(1);
     game.doSwitchPokemon(1);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
     expect(game.scene.getPlayerPokemon()!).toBe(treecko);
@@ -374,8 +374,8 @@ describe("Abilities - Unburden", () => {
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.REVIVAL_BLESSING, 1);
-    await game.forceEnemyMove(MoveId.THIEF, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.THIEF, BattlerIndex.PLAYER);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
     game.doSelectPartyPokemon(0, "RevivalBlessingPhase");
     await game.toNextTurn();

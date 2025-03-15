@@ -37,8 +37,7 @@ describe("Abilities - Commander", () => {
       .battleType("double")
       .disableCrits()
       .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(MoveId.TACKLE);
+      .enemyAbility(Abilities.BALL_FETCH);
 
     vi.spyOn(game.scene, "triggerPokemonBattleAnim").mockReturnValue(true);
   });
@@ -57,8 +56,8 @@ describe("Abilities - Commander", () => {
     game.move.select(MoveId.SPLASH, 1);
 
     // Force both enemies to target the Tatsugiri
-    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
+    await game.move.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
+    await game.move.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
 
     await game.phaseInterceptor.to("TurnStartPhase", false);
 
@@ -103,8 +102,8 @@ describe("Abilities - Commander", () => {
 
     game.move.select(MoveId.MEMENTO, 1, BattlerIndex.ENEMY);
 
-    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
+    await game.move.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
+    await game.move.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
 
     await game.phaseInterceptor.to("TurnStartPhase", false);
 
@@ -185,8 +184,6 @@ describe("Abilities - Commander", () => {
   });
 
   it("should make Dondozo immune to being forced out", async () => {
-    game.override.enemyMoveset([MoveId.SPLASH, MoveId.WHIRLWIND]);
-
     await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
 
     const [tatsugiri, dondozo] = game.scene.getPlayerField();
@@ -196,8 +193,8 @@ describe("Abilities - Commander", () => {
 
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.forceEnemyMove(MoveId.WHIRLWIND, BattlerIndex.PLAYER_2);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.WHIRLWIND, BattlerIndex.PLAYER_2);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
 
     await game.phaseInterceptor.to("TurnStartPhase", false);
 

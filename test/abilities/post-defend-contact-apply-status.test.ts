@@ -30,8 +30,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset([MoveId.TACKLE, MoveId.WATER_GUN]);
+      .enemyAbility(Abilities.BALL_FETCH);
   });
 
   it.each([
@@ -51,7 +50,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     ).mockReturnValue(100);
 
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.TACKLE);
+    await game.move.forceEnemyMove(MoveId.TACKLE);
     await game.toEndOfTurn();
 
     const attacker = game.scene.getEnemyPokemon();
@@ -75,7 +74,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     ).mockReturnValue(100);
 
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.WATER_GUN);
+    await game.move.forceEnemyMove(MoveId.WATER_GUN);
     await game.toEndOfTurn();
 
     const attacker = game.scene.getEnemyPokemon();
@@ -95,7 +94,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     ).mockReturnValue(100);
 
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.TACKLE);
+    await game.move.forceEnemyMove(MoveId.TACKLE);
     await game.toEndOfTurn();
 
     const attacker = game.scene.getEnemyPokemon();
