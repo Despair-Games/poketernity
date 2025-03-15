@@ -3,15 +3,15 @@ import { globalScene } from "#app/global-scene";
 import { fixedNumber, getPlayTimeString, getPokemonLevelText, isNullOrUndefined } from "#app/utils";
 import { Button } from "#enums/buttons";
 import i18next from "i18next";
-import { GameMode } from "../../game-mode";
-import * as Modifier from "../../modifier/modifier";
-import type PokemonData from "../../system/pokemon-data";
+import { GameMode } from "#app/game-mode";
+import * as Modifier from "#app/modifier/modifier";
+import type PokemonData from "#app/system/pokemon-data";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import MessageUiHandler from "./message-ui-handler";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import { addWindow } from "../ui-theme";
+import { addWindow } from "#app/ui/ui-theme";
 import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
@@ -72,21 +72,18 @@ export default class SaveSlotSelectUiHandler extends MessageUiHandler {
     this.sessionSlots = [];
   }
 
-  override show(args: any[]): boolean {
-    if (args.length < 2 || !(args[1] instanceof Function)) {
-      return false;
-    }
+  override show(mode: SaveSlotUiMode, slotSelectCallback: SaveSlotSelectCallback): boolean {
+    super.show();
 
-    super.show(args);
-
-    this.uiMode = args[0] as SaveSlotUiMode;
-    this.saveSlotSelectCallback = args[1] as SaveSlotSelectCallback;
+    this.uiMode = mode;
+    this.saveSlotSelectCallback = slotSelectCallback;
 
     this.saveSlotSelectContainer.setVisible(true);
     this.populateSessionSlots();
 
     this.setScrollCursor(0);
     this.setCursor(0);
+
     return true;
   }
 
