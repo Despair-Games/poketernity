@@ -14,6 +14,12 @@ export default class ConfirmUiHandler extends AbstractOptionSelectUiHandler<Opti
   }
 
   override show(config?: ConfirmModeConfig): boolean {
+    /*
+     * `config` is optional but the function exists early if undefined because ME phase utils' `selectPokemonForOption`
+     * and `selectOptionThenPokemon` finish by calling `ui.setMode(modeThatWasUsedWhenItWasCalled)`
+     * which results in some cases in setMode(UiMode.CONFIRM) being called without parameters.
+     * TODO: Once those functions' behavior is fixed config should no longer be optional.
+     */
     if (!config) {
       console.warn("Missing `ConfirmModeConfig` argument for Mode.CONFIRM");
       return false;
