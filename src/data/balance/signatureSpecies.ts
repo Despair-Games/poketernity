@@ -178,4 +178,14 @@ export const signatureSpecies: SignatureSpecies = {
   AMARYS: [Species.METAGROSS, Species.SKARMORY, Species.EMPOLEON, Species.SCIZOR],
   LACEY: [Species.EXCADRILL, Species.PRIMARINA, [Species.ALCREMIE, Species.GRANBULL], Species.WHIMSICOTT],
   DRAYTON: [Species.ARCHALUDON, Species.DRAGONITE, Species.HAXORUS, Species.SCEPTILE],
+
+  // Double Partners (Only 3 Pokemon since they wont be used in single battles and can max have 3 pokemon in doubles)
+  SILVER: [[Species.TYPHLOSION, Species.FERALIGATR, Species.MEGANIUM], Species.CROBAT, Species.GENGAR], // Johto starter + Crobat and Gengar which he always has regardless of starter in HGSS
+  MAY: [[Species.BLAZIKEN, Species.SWAMPERT, Species.SCEPTILE], Species.SWELLOW, Species.RAICHU], // Hoenn starter + Swellow and Raichu which she always has regardless of starter in ORAS
+  BRENDAN: [[Species.BLAZIKEN, Species.SWAMPERT, Species.SCEPTILE], Species.SWELLOW, Species.RAICHU], // Hoenn starter + Swellow and Raichu which he always has regardless of starter in ORAS
+  SERENA: [[Species.CHESNAUGHT, Species.DELPHOX, Species.GRENINJA], Species.ABSOL, Species.MEOWSTIC], // Kalos starter + Absol and MEOWSTIC which she always has regardless of starter in XY
+  WALLACE: [Species.MILOTIC, Species.LUDICOLO, Species.WHISCASH], // (Exists as a champ but champs dont have signature species pools so he's here)
+  IRIS: [Species.HAXORUS, Species.DRAGONITE, Species.SALAMENCE], // (Exists as a champ but champs dont have signature species pools so she's here)
+  BIANCA: [[Species.EMBOAR, Species.SAMUROTT, Species.SERPERIOR], Species.CHANDELURE, Species.MUSHARNA], // Unova starter + Chandelure and Musharna which she always has regardless of starter in BW2
+  LEON: [[Species.RILLABOOM, Species.CINDERACE, Species.INTELEON], Species.DRAGAPULT, Species.CHARIZARD], // Galar starter + Dragapult and Charizard which he always has regardless of starter in SwSh
 };

@@ -372,6 +372,11 @@ export class TrainerConfig {
     // Make the title lowercase and replace spaces with underscores
     title = title.toLowerCase().replace(/\s/g, "_");
     // Get the title from the i18n file
+    // Check first if it is even in the i18n file to prevent errors (for example if title is none or was set already before)
+    if (!i18next.exists(`titles:${title}`)) {
+      console.log("Could not find " + title + " in i18n file");
+      return this;
+    }
     this.title = i18next.t(`titles:${title}`);
     return this;
   }
@@ -1210,6 +1215,102 @@ export class TrainerConfig {
     if (!isMale) {
       this.setTitle("gym_leader_female");
     }
+
+    // Configure various properties for the Gym Leader.
+    this.setMoneyMultiplier(2.5);
+    this.setBoss();
+    this.setStaticParty();
+    this.setHasVoucher(true);
+    this.setVictoryBgm("victory_gym");
+
+    return this;
+  }
+
+  /**
+   * Initializes the trainer configuration for a Gym Leader Double Fight.
+   * @param signatureSpeciesLeft The signature species for the left (first) Gym Leader.
+   * @param signatureSpeciesRight The signature species for the right (second) Gym Leader.
+   * @param specialtyTypesLeft The specialty types for the left (first) Gym Leader.
+   * @param specialtyTypesRight The specialty types for the right (second) Gym Leader.
+   * @returns The updated TrainerConfig instance.
+   * **/
+  initForDoubleGymLeader(
+    signatureSpeciesLeft: (Species | Species[])[],
+    signatureSpeciesRight: (Species | Species[])[],
+    specialtyTypesLeft: ElementalType[],
+    specialtyTypesRight: ElementalType[],
+    battleBgm: string[],
+  ): TrainerConfig {
+    // Check if the internationalization (i18n) system is initialized.
+    if (!getIsInitialized()) {
+      initI18n();
+    }
+
+    // Set the function to generate the Gym Leader's party template.
+    this.setPartyTemplateFunc(() =>
+      getWavePartyTemplate(
+        trainerPartyTemplates.GYM_LEADER_1,
+        trainerPartyTemplates.GYM_LEADER_2,
+        trainerPartyTemplates.GYM_LEADER_3,
+        trainerPartyTemplates.GYM_LEADER_4,
+        trainerPartyTemplates.GYM_LEADER_5,
+      ),
+    );
+
+    // TODO: make this seeded
+    this.setBattleBgm(randItem(battleBgm));
+
+    // Set  1,3,5 (Slot 0,2,4) of the party members from the left Gym Leader and 2,4,6 (Slot 1,3,5) from the right Gym Leader
+    // Assign up to 3 Pokémon to alternating slots by slicing the signature species arrays to have a length of 3.
+    signatureSpeciesLeft.slice(0, 3).forEach((speciesPool, s) => {
+      // Ensure speciesPool is an array.
+      if (!Array.isArray(speciesPool)) {
+        speciesPool = [speciesPool];
+      }
+      // Assign left Gym Leader's Pokémon to slots 0, 2, 4.
+      this.setPartyMemberFunc(s * 2, getRandomPartyMemberFunc(speciesPool, TrainerSlot.TRAINER));
+    });
+
+    signatureSpeciesRight.slice(0, 3).forEach((speciesPool, s) => {
+      // Ensure speciesPool is an array.
+      if (!Array.isArray(speciesPool)) {
+        speciesPool = [speciesPool];
+      }
+      // Assign right Gym Leader's Pokémon to slots 1, 3, 5.
+      this.setPartyMemberFunc(s * 2 + 1, getRandomPartyMemberFunc(speciesPool, TrainerSlot.TRAINER_PARTNER));
+    });
+
+    // Speciality types for both Gym Leaders will be combined into a single array.
+    const specialtyTypes = specialtyTypesLeft.concat(specialtyTypesRight);
+    if (specialtyTypes.length) {
+      this.setSpeciesFilter((p) => specialtyTypes.find((t) => p.isOfType(t)) !== undefined);
+      this.setSpecialtyTypes(...specialtyTypes);
+    }
+
+    // Other than in initForChampion we KNOW we have a double battle here always. Still check for the filled variables
+    if (this.nameDouble && this.spriteNameLeft && this.spriteNameRight) {
+      const nameDoubleForCall = this.nameDouble.toLowerCase().replace(/\s/g, "_");
+      this.nameDouble = i18next.t(`trainerNames:${nameDoubleForCall}`);
+      this.name = i18next.t(`trainerNames:${this.spriteNameLeft.toLowerCase().replace(/\s/g, "_")}`);
+      this.nameFemale = i18next.t(`trainerNames:${this.spriteNameRight.toLowerCase().replace(/\s/g, "_")}`);
+    }
+
+    // Only set title here if it's not already set in the trainer config itself
+    if (!this.title) {
+      // Set the title to "gym_leader_double". (this is the key in the i18n file)
+      this.setTitle("gym_leader_double");
+    }
+
+    console.log(
+      "Double Gym Leader",
+      this.name,
+      this.nameFemale,
+      this.nameDouble,
+      this.spriteNameLeft,
+      this.spriteNameRight,
+      this.title,
+      this.titleDouble,
+    );
 
     // Configure various properties for the Gym Leader.
     this.setMoneyMultiplier(2.5);

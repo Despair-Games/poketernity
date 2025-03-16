@@ -3,3 +3,6 @@ For a list of Pokérogue contributors, see: https://github.com/pagefaultgames/po
 
 # Pokéternity Contributors
 For now, see: https://github.com/Despair-Games/poketernity/graphs/contributors
+
+# Trainer Sprites:
+- hyo-oppae

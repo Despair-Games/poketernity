@@ -540,7 +540,12 @@ export const classicFixedBattles: FixedBattleConfigs = {
   [TUTORIAL_BATTLE_WAVE]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)
     .setGetTrainerFunc(
-      () => new Trainer(TrainerType.YOUNGSTER, randSeedInt(2) ? TrainerVariant.FEMALE : TrainerVariant.DEFAULT),
+      () => new Trainer(TrainerType.YOUNGSTER, randSeedInt(2) ? TrainerVariant.DEFAULT : TrainerVariant.FEMALE),
+    ),
+  [194]: new FixedBattleConfig()
+    .setBattleType(BattleType.TRAINER)
+    .setGetTrainerFunc(
+      () => new Trainer(TrainerType.BRASSIUS_HASSEL, randSeedInt(2) ? TrainerVariant.DOUBLE : TrainerVariant.DOUBLE),
     ),
   [RIVAL_WAVE]: new FixedBattleConfig()
     .setBattleType(BattleType.TRAINER)

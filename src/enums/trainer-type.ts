@@ -254,6 +254,12 @@ export enum TrainerType {
   RIVAL_4,
   RIVAL_5,
   RIVAL_6,
+  // Special Trainers (Rivals/Other trainers that only appear as double partners)
+  SILVER = 450,
+  MAY,
+  BRENDAN,
+  BIANCA,
+  SERENA,
   // Double Champion
   BLUE_RED = 500,
   LANCE_CLAIR,
@@ -266,42 +272,42 @@ export enum TrainerType {
   KIERAN_CARMINE,
   // Double Gym Leader
   // Gen 1
-  BROCK_MISTY = 600,
-  KOGA_JANINE,
+  MISTY_BROCK = 600,
+  KOGA_JANINE_GYM,
   SABRINA_BRYCEN,
   GIOVANNI_SILVER,
   // Gen 2
   CHUCK_BRAWLY,
   // Gen 3
-  NORMAN_BRENDON,
+  NORMAN_BRENDAN,
   NORMAN_MAY,
-  TATE_LIZA,
+  LIZA_TATE,
   WALLACE_JUAN,
   // Gen 4
-  ROARK_BYRON,
+  BYRON_ROARK,
   VOLKNER_FLINT,
   // Gen 5
-  CILAN_CHILI,
-  CILIAN_CRESS,
-  CHILI_CRESS,
-  ELESE_SKYLA,
+  CHILI_CILAN,
+  CILAN_CRESS,
+  CRESS_CHILI,
+  ELESA_SKYLA,
   CLAY_LACEY,
-  DRAYDEN_IRIS,
+  IRIS_DRAYDEN,
   CHEREN_BIANCA,
   // Gen 6
   CLEMONT_SERENA,
-  // Gen 7
-  ILIMA_MINA,
-  LANA_MALLOW,
-  SOPHOCLES_MOLAYNE,
-  HALA_HAU,
+  // Gen 7 (Currently no Gen 7 Single Gym Leader exists)
+  //ILIMA_MINA,
+  //LANA_MALLOW,
+  //SOPHOCLES_MOLAYNE,
+  //HALA_HAU,
   // Gen 8
   MILO_NESSA,
   BEA_ALLISTER,
   OPAL_BEDE,
   GORDIE_MELONY,
   PIERS_MARNIE,
-  RAIHAN_LEON,
+  LEON_RAIHAN,
   // Gen 9
   KATY_KOFU,
   BRASSIUS_HASSEL,
