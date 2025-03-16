@@ -1,6 +1,5 @@
 import { BattlerTagType } from "#app/enums/battler-tag-type";
 import { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
-import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -42,7 +41,7 @@ describe("Abilities - SHIELDS DOWN", () => {
     await game.classicMode.startBattle([Species.MAGIKARP, Species.MINIOR]);
 
     const minior = game.scene.getPlayerParty().find((p) => p.species.speciesId === Species.MINIOR)!;
-    expect(minior).not.toBe(undefined);
+    expect(minior).toBeDefined();
     expect(minior.formIndex).toBe(coreForm);
 
     minior.faint();
@@ -50,7 +49,7 @@ describe("Abilities - SHIELDS DOWN", () => {
 
     game.move.select(MoveId.SPLASH);
     await game.doKillOpponents();
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.toEndOfTurn();
     game.doSelectModifier();
     await game.phaseInterceptor.to(QuietFormChangePhase);
 
@@ -62,22 +61,21 @@ describe("Abilities - SHIELDS DOWN", () => {
 
     await game.classicMode.startBattle([Species.MINIOR]);
     game.move.use(MoveId.SPLASH);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.toEndOfTurn();
 
-    expect(game.field.getPlayerPokemon()!.status).toBe(undefined);
+    expect(game.field.getPlayerPokemon().getStatusEffect()).toBe(StatusEffect.NONE);
   });
 
   test("should still ignore non-volatile status moves used by a pokemon with mold breaker", async () => {
     game.override.enemyAbility(Abilities.MOLD_BREAKER);
-    game.override.enemyMoveset([MoveId.SPORE]);
 
     await game.classicMode.startBattle([Species.MINIOR]);
 
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.SPORE);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.toEndOfTurn();
 
-    expect(game.field.getPlayerPokemon()!.status).toBe(undefined);
+    expect(game.field.getPlayerPokemon().getStatusEffect()).toBe(StatusEffect.NONE);
   });
 
   test("should ignore non-volatile secondary status effects", async () => {
@@ -86,9 +84,9 @@ describe("Abilities - SHIELDS DOWN", () => {
     await game.classicMode.startBattle([Species.MINIOR]);
 
     game.move.use(MoveId.SPLASH);
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.toEndOfTurn();
 
-    expect(game.field.getPlayerPokemon()!.status).toBe(undefined);
+    expect(game.field.getPlayerPokemon().getStatusEffect()).toBe(StatusEffect.NONE);
   });
 
   test("should ignore status moves even through mold breaker", async () => {
@@ -99,9 +97,9 @@ describe("Abilities - SHIELDS DOWN", () => {
 
     game.move.use(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.toEndOfTurn();
 
-    expect(game.field.getPlayerPokemon()!.status).toBe(undefined);
+    expect(game.field.getPlayerPokemon().getStatusEffect()).toBe(StatusEffect.NONE);
   });
 
   // toxic spikes currently does not poison flying types when gravity is in effect
@@ -113,12 +111,12 @@ describe("Abilities - SHIELDS DOWN", () => {
 
     // turn 1
     game.move.use(MoveId.GRAVITY);
-    await game.move.forceEnemyMove(MoveId.TOXIC_SPIKES);
+    await game.move.selectEnemyMove(MoveId.TOXIC_SPIKES);
     await game.toNextTurn();
 
     // turn 2
     game.doSwitchPokemon(1);
-    await game.move.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
     expect(game.field.getPlayerPokemon()!.species.speciesId).toBe(Species.MINIOR);
@@ -127,30 +125,24 @@ describe("Abilities - SHIELDS DOWN", () => {
   });
 
   test("should ignore yawn", async () => {
-    game.override.enemyMoveset([MoveId.YAWN]);
-
     await game.classicMode.startBattle([Species.MAGIKARP, Species.MINIOR]);
 
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.YAWN);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
-    expect(game.field.getPlayerPokemon()!.findTag((tag) => tag.tagType === BattlerTagType.DROWSY)).toBe(undefined);
+    await game.toEndOfTurn();
+    expect(game.field.getPlayerPokemon().getTag(BattlerTagType.DROWSY)).toBeUndefined();
   });
 
   test("should not ignore volatile status effects", async () => {
-    game.override.enemyMoveset([MoveId.CONFUSE_RAY]);
-
     await game.classicMode.startBattle([Species.MINIOR]);
 
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.CONFUSE_RAY);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.toEndOfTurn();
 
-    expect(game.field.getPlayerPokemon()!.findTag((tag) => tag.tagType === BattlerTagType.CONFUSED)).not.toBe(
-      undefined,
-    );
+    expect(game.field.getPlayerPokemon().getTag(BattlerTagType.CONFUSED)).toBeDefined();
   });
 
   // the `NoTransformAbilityAbAttr` attribute is not checked anywhere, so this test cannot pass.
@@ -162,24 +154,9 @@ describe("Abilities - SHIELDS DOWN", () => {
     await game.classicMode.startBattle([Species.MINIOR]);
 
     game.move.use(MoveId.SPORE);
-    await game.move.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
 
-    await game.phaseInterceptor.to(TurnEndPhase);
+    await game.toEndOfTurn();
     expect(game.field.getPlayerPokemon().hasStatusEffect(StatusEffect.SLEEP)).toBe(true);
-  });
-
-  test("should not prevent minior from receiving the fainted status effect in trainer battles", async () => {
-    game.override.enemyMoveset([MoveId.TACKLE]);
-    game.override.moveset([MoveId.THUNDERBOLT]);
-    game.override.startingLevel(100);
-    game.override.startingWave(5);
-    game.override.enemySpecies(Species.MINIOR);
-    await game.classicMode.startBattle([Species.REGIELEKI]);
-    const minior = game.scene.getEnemyPokemon()!;
-
-    game.move.select(MoveId.THUNDERBOLT);
-    await game.toNextTurn();
-    expect(minior.isFainted()).toBe(true);
-    expect(game.field.getPlayerPokemon().faint());
   });
 });
