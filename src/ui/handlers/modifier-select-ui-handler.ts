@@ -158,7 +158,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
   }
 
   override show(
-    player?: boolean,
+    player: boolean = false,
     typeOptions?: ModifierTypeOption[],
     actionCallback?: ModifierSelectCallback,
     rerollCost?: number,
@@ -182,7 +182,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
 
     this.getUi().clearText();
 
-    this.player = !!player;
+    this.player = player;
 
     const partyHasHeldItem =
       this.player && !!globalScene.findModifiers((m) => m.isPokemonHeldItemModifier() && m.isTransferable).length;

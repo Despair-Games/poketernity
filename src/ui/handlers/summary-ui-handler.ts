@@ -310,12 +310,12 @@ export default class SummaryUiHandler extends UiHandler {
     mode: SummaryUiMode = SummaryUiMode.DEFAULT,
     pageOrMove?: SummaryUiPage | Move,
     callback?: ExitCallBack | MoveSelectCallback,
-    isPlayerParty?: boolean,
+    isPlayerParty: boolean = true,
   ): boolean {
     super.show();
     this.pokemon = pokemon;
     this.summaryUiMode = mode;
-    this.playerParty = isPlayerParty ?? true;
+    this.playerParty = isPlayerParty;
     globalScene.ui.bringToTop(this.summaryContainer);
 
     this.summaryContainer.setVisible(true);

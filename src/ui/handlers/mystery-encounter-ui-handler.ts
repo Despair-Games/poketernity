@@ -121,7 +121,7 @@ export default class MysteryEncounterUiHandler extends UiHandler {
   }
 
   override show(settings?: OptionSelectSettings): boolean {
-    this.overrideSettings = settings ?? {};
+    this.overrideSettings = settings;
     const showDescriptionContainer = isNullOrUndefined(this.overrideSettings?.hideDescription)
       ? true
       : !this.overrideSettings.hideDescription;
