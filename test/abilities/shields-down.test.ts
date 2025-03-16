@@ -28,7 +28,7 @@ describe("Abilities - SHIELDS DOWN", () => {
     game.override.battleType("single");
     game.override.ability(Abilities.SHIELDS_DOWN);
     game.override.moveset([moveToUse]);
-    game.override.enemyMoveset([MoveId.TACKLE]);
+    game.override.enemyMoveset(MoveId.TACKLE);
   });
 
   test("check if fainted pokemon switched to base form on arena reset", async () => {
