@@ -19,6 +19,16 @@ html {
   touch-action: none;
 }
 
+/** colors used for auto filled input texts */
+html[data-ui-theme="DARK"] {
+  --color-autofill: #f8f8f8;
+}
+
+html[data-ui-theme="LIGHT"] {
+  --color-autofill: #484848;
+}
+
+/** colors used for the touch buttons look, based on the window style */
 html[data-window-style="RED_ORANGE"] {
   --color-base: #6b5a73;
   --color-light: #DD5748;
@@ -108,9 +118,10 @@ input:-internal-autofill-selected {
   background-clip: text;
 }
 
-/*So autofill text appears in gray instead of default black*/
+/* autofill text and cursor appears in a color that depends on the ui theme */
 input:-webkit-autofill {
-  -webkit-text-fill-color: #a1a1a1;
+  -webkit-text-fill-color: var(--color-autofill);
+  caret-color: var(--color-autofill);
 }
 
 /* Need adjust input font-size */
