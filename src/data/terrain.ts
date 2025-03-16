@@ -83,8 +83,11 @@ export class Terrain {
         break;
 
       case TerrainType.MISTY:
-        if (move.hasAttr(StatusEffectAttr)) {
-          return user.getOpponents().some((o) => targets.includes(o.getBattlerIndex()) && o.isGrounded());
+        if (!move.hasAttr(ProtectAttr)) {
+          return (
+            move.hasAttr(StatusEffectAttr)
+            && user.getOpponents().some((o) => targets.includes(o.getBattlerIndex()) && o.isGrounded())
+          );
         }
         break;
     }
