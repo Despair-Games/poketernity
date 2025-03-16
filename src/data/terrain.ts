@@ -6,6 +6,7 @@ import type { BattlerIndex } from "#enums/battler-index";
 import i18next from "i18next";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { TerrainType } from "#enums/terrain-type";
+import { StatusEffectAttr } from "./moves/move-attrs/status-effect-attr";
 
 /**
  * Class representing Terrain effects
@@ -79,6 +80,13 @@ export class Terrain {
             && user.getOpponents().some((o) => targets.includes(o.getBattlerIndex()) && o.isGrounded())
           );
         }
+        break;
+
+      case TerrainType.MISTY:
+        if (move.hasAttr(StatusEffectAttr)) {
+          return user.getOpponents().some((o) => targets.includes(o.getBattlerIndex()) && o.isGrounded());
+        }
+        break;
     }
 
     return false;
