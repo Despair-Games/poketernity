@@ -138,7 +138,7 @@ import { PokeballTray } from "#app/ui/components/pokeball-tray";
 import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container";
 import { addTextObject } from "#app/ui/text/text-utils";
 import { UI } from "#app/ui/ui";
-import { updateWindowStyle } from "#app/ui/ui-theme";
+import { setDocumentUiTheme, updateWindowStyle } from "#app/ui/ui-theme";
 import {
   type AbstractConstructor,
   BooleanHolder,
@@ -481,6 +481,10 @@ export default class BattleScene extends SceneBase {
   create() {
     this.scene.remove(LoadingScene.KEY);
     initGameSpeed.apply(this);
+
+    // Set the uiTheme and windowType to use for elements that require css specifics
+    setDocumentUiTheme();
+
     this.inputController = new InputsController();
     this.uiInputs = new UiInputs(this.inputController);
 
