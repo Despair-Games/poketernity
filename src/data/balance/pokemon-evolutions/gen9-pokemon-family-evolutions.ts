@@ -6,8 +6,9 @@ import {
   RABSCA_EVO_LEVEL,
 } from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
 import {
-  GenderEvolutionCondition,
+  FemaleEvolutionCondition,
   GholdengoEvoCondition,
+  MaleEvolutionCondition,
   NightEvolutionCondition,
   RngFormEvoCondition,
   SpeciesEvolution,
@@ -15,7 +16,6 @@ import {
   type PokemonEvolutions,
 } from "#app/data/pokemon-evolutions";
 import { EvolutionItem } from "#enums/evolution-item";
-import { Gender } from "#enums/gender";
 import { Species } from "#enums/species";
 
 export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
@@ -26,8 +26,8 @@ export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.QUAXLY]: [new SpeciesEvolution(Species.QUAXWELL, 16, null, null)],
   [Species.QUAXWELL]: [new SpeciesEvolution(Species.QUAQUAVAL, 36, null, null)],
   [Species.LECHONK]: [
-    new SpeciesFormEvolution(Species.OINKOLOGNE, "", "", 18, null, [new GenderEvolutionCondition(Gender.MALE)]),
-    new SpeciesFormEvolution(Species.OINKOLOGNE, "", "female", 18, null, [new GenderEvolutionCondition(Gender.FEMALE)]),
+    new SpeciesFormEvolution(Species.OINKOLOGNE, "", "", 18, null, [new MaleEvolutionCondition()]),
+    new SpeciesFormEvolution(Species.OINKOLOGNE, "", "female", 18, null, [new FemaleEvolutionCondition()]),
   ],
   [Species.TAROUNTULA]: [new SpeciesEvolution(Species.SPIDOPS, 15, null, null)],
   [Species.NYMBLE]: [new SpeciesEvolution(Species.LOKIX, 24, null, null)],

@@ -1,0 +1,395 @@
+import { globalScene } from "#app/global-scene";
+import { GameModes } from "#enums/game-modes";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
+import { addWindow } from "../ui-theme";
+import { fixedNumber, getPokemonLevelText, isNullOrUndefined } from "#app/utils";
+import type PokemonData from "#app/system/pokemon-data";
+import MessageUiHandler from "#app/ui/handlers/message-ui-handler";
+import i18next from "i18next";
+import { Button } from "#enums/buttons";
+import { BattleType } from "#enums/battle-type";
+import type { RunEntry } from "#app/system/game-data";
+import { PlayerGender } from "#enums/player-gender";
+import { TrainerVariant } from "#enums/trainer-variant";
+import { RunDisplayMode } from "#enums/run-display-mode";
+import { settings } from "#app/system/settings/settings-manager";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { ImagesFolder } from "#enums/images-folders";
+
+type RunSelectCallback = (cursor: number) => void;
+
+/**
+ * RunHistoryUiHandler handles the UI of the Run History Menu
+ * Run History itself is broken into an array of RunEntryContainer objects that can show the user basic details about their run and allow them to access more details about their run through cursor action.
+ * It navigates similarly to the UI of the save slot select menu.
+ * The only valid input buttons are Button.ACTION and Button.CANCEL.
+ */
+export default class RunHistoryUiHandler extends MessageUiHandler {
+  private readonly maxRows = 3;
+
+  private runSelectContainer: Phaser.GameObjects.Container;
+  private runsContainer: Phaser.GameObjects.Container;
+  private runs: RunEntryContainer[];
+
+  private runSelectCallback: RunSelectCallback | null;
+
+  private scrollCursor: number = 0;
+
+  private cursorObj: Phaser.GameObjects.NineSlice | null;
+
+  private runContainerInitialY: number;
+
+  constructor() {
+    super(UiMode.RUN_HISTORY);
+  }
+
+  override setup() {
+    const ui = this.getUi();
+
+    this.runSelectContainer = globalScene.add.container(0, 0);
+    this.runSelectContainer.setVisible(false);
+    ui.add(this.runSelectContainer);
+
+    const loadSessionBg = globalScene.add.rectangle(0, 0, GAME_WIDTH, -GAME_HEIGHT, 0x006860);
+    loadSessionBg.setOrigin(0, 0);
+    this.runSelectContainer.add(loadSessionBg);
+
+    this.runContainerInitialY = -GAME_HEIGHT + 8;
+
+    this.runsContainer = globalScene.add.container(8, this.runContainerInitialY);
+    this.runSelectContainer.add(this.runsContainer);
+
+    this.runs = [];
+
+    globalScene.loadImage("hall_of_fame_red", ImagesFolder.UI);
+    globalScene.loadImage("hall_of_fame_blue", ImagesFolder.UI);
+    // For some reason, the game deletes/unloads the rival sprites. As a result, Run Info cannot access the rival sprites.
+    // The rivals are loaded here to have some way of accessing those sprites.
+    globalScene.loadAtlas("rival_f", ImagesFolder.TRAINER);
+    globalScene.loadAtlas("rival_m", ImagesFolder.TRAINER);
+  }
+
+  override show(args: any[]): boolean {
+    super.show(args);
+
+    this.getUi().bringToTop(this.runSelectContainer);
+    this.runSelectContainer.setVisible(true);
+    this.populateRuns().then(() => {
+      this.setScrollCursor(0);
+      this.setCursor(0);
+
+      //Destroys the cursor if there are no runs saved so far.
+      if (this.runs.length === 0) {
+        this.clearCursor();
+      }
+    });
+
+    return true;
+  }
+
+  /**
+   * Performs a certain action based on the button pressed by the user
+   * @param button
+   * The user can navigate through the runs with Button.UP/Button.DOWN.
+   * Button.ACTION allows the user to access more information about their runs.
+   * Button.CANCEL allows the user to go back.
+   */
+  override processInput(button: Button): boolean {
+    const ui = this.getUi();
+
+    let success = false;
+    const error = false;
+
+    if ([Button.ACTION, Button.CANCEL].includes(button)) {
+      if (button === Button.ACTION) {
+        const cursor = this.cursor + this.scrollCursor;
+        if (this.runs[cursor]) {
+          globalScene.ui.setOverlayMode(UiMode.RUN_INFO, this.runs[cursor].entryData, RunDisplayMode.RUN_HISTORY, true);
+        } else {
+          return false;
+        }
+        success = true;
+        return success;
+      } else {
+        this.runSelectCallback = null;
+        success = true;
+        globalScene.ui.revertMode();
+      }
+    } else if (this.runs.length > 0) {
+      switch (button) {
+        case Button.UP:
+          if (this.cursor) {
+            success = this.setCursor(this.cursor - 1);
+          } else if (this.scrollCursor) {
+            success = this.setScrollCursor(this.scrollCursor - 1);
+          } else if (this.runs.length > 1) {
+            // wrap around to the bottom
+            success = this.setCursor(Math.min(this.runs.length - 1, this.maxRows - 1));
+            success = this.setScrollCursor(Math.max(0, this.runs.length - this.maxRows)) || success;
+          }
+          break;
+        case Button.DOWN:
+          if (this.cursor < Math.min(this.maxRows - 1, this.runs.length - this.scrollCursor - 1)) {
+            success = this.setCursor(this.cursor + 1);
+          } else if (this.scrollCursor < this.runs.length - this.maxRows) {
+            success = this.setScrollCursor(this.scrollCursor + 1);
+          } else if (this.runs.length > 1) {
+            // wrap around to the top
+            success = this.setCursor(0);
+            success = this.setScrollCursor(0) || success;
+          }
+          break;
+      }
+    }
+
+    if (success) {
+      ui.playSelect();
+    } else if (error) {
+      ui.playError();
+    }
+    return success || error;
+  }
+
+  /**
+   * This retrieves the player's run history and facilitates the processes necessary for the output display.
+   * Runs are displayed from newest --> oldest in descending order.
+   * In the for loop, each run is processed to create an RunEntryContainer used to display and store the run's unique information
+   */
+  private async populateRuns() {
+    const response = await globalScene.gameData.getRunHistoryData();
+    const timestamps = Object.keys(response);
+    if (timestamps.length === 0) {
+      this.showEmpty();
+      return;
+    }
+    const timestampsNo = timestamps.map(Number);
+    if (timestamps.length > 1) {
+      timestampsNo.sort((a, b) => b - a);
+    }
+    const entryCount = timestamps.length;
+    for (let s = 0; s < entryCount; s++) {
+      const entry = new RunEntryContainer(response[timestampsNo[s]], s);
+      globalScene.add.existing(entry);
+      this.runsContainer.add(entry);
+      this.runs.push(entry);
+    }
+    if (this.cursorObj && timestamps.length > 0) {
+      this.runsContainer.bringToTop(this.cursorObj);
+    }
+  }
+
+  /**
+   * If the player has no runs saved so far, this creates a giant window labeled empty instead.
+   */
+  private async showEmpty() {
+    const emptyWindow = addWindow(0, 0, 304, 165);
+    this.runsContainer.add(emptyWindow);
+    const emptyWindowCoordinates = emptyWindow.getCenter();
+    const emptyText = addTextObject(0, 0, i18next.t("saveSlotSelectUiHandler:empty"), TextStyle.END_CARD);
+    emptyText.setPosition(emptyWindowCoordinates.x - 18, emptyWindowCoordinates.y - 15);
+    this.runsContainer.add(emptyText);
+  }
+
+  override setCursor(cursor: number): boolean {
+    const changed = super.setCursor(cursor);
+
+    if (!this.cursorObj) {
+      this.cursorObj = globalScene.add.nineslice(0, 0, "select_cursor_highlight_thick", undefined, 296, 46, 6, 6, 6, 6);
+      this.cursorObj.setOrigin(0, 0);
+      this.runsContainer.add(this.cursorObj);
+    }
+    this.cursorObj.setPosition(4, 4 + (cursor + this.scrollCursor) * 56);
+    return changed;
+  }
+
+  private setScrollCursor(scrollCursor: number): boolean {
+    const changed = scrollCursor !== this.scrollCursor;
+
+    if (changed) {
+      this.scrollCursor = scrollCursor;
+      this.setCursor(this.cursor);
+      globalScene.tweens.add({
+        targets: this.runsContainer,
+        y: this.runContainerInitialY - 56 * scrollCursor,
+        duration: fixedNumber(325),
+        ease: "Sine.easeInOut",
+      });
+    }
+    return changed;
+  }
+
+  /**
+   * Called when the player returns back to the menu
+   * Uses the functions clearCursor() and clearRuns()
+   */
+  override clear() {
+    super.clear();
+    this.runSelectContainer.setVisible(false);
+    this.setScrollCursor(0);
+    this.clearCursor();
+    this.runSelectCallback = null;
+    this.clearRuns();
+  }
+
+  private clearCursor() {
+    if (this.cursorObj) {
+      this.cursorObj.destroy();
+    }
+    this.cursorObj = null;
+  }
+
+  private clearRuns() {
+    this.runs.splice(0, this.runs.length);
+    this.runsContainer.removeAll(true);
+  }
+}
+
+/**
+ * RunEntryContainer : stores/displays an individual run
+ * slotId: necessary for positioning
+ * entryData: the data of an individual run
+ */
+class RunEntryContainer extends Phaser.GameObjects.Container {
+  private slotId: number;
+  public entryData: RunEntry;
+
+  constructor(entryData: RunEntry, slotId: number) {
+    super(globalScene, 0, slotId * 56);
+
+    this.slotId = slotId;
+    this.entryData = entryData;
+
+    this.setup(this.entryData);
+  }
+
+  /**
+   * This processes the individual run's data for display.
+   *
+   * Each RunEntryContainer displayed should have the following information:
+   * Run Result: Victory || Defeat
+   * Game Mode + Final Wave
+   * Time Stamp
+   *
+   * The player's party and their levels at the time of the last wave of the run are also displayed.
+   */
+  private setup(run: RunEntry) {
+    const victory = run.isVictory;
+    const data = globalScene.gameData.parseSessionData(JSON.stringify(run.entry));
+
+    const slotWindow = addWindow(0, 0, 304, 52);
+    this.add(slotWindow);
+
+    // Run Result: Victory
+    if (victory) {
+      const gameOutcomeLabel = addTextObject(8, 5, `${i18next.t("runHistory:victory")}`, TextStyle.WINDOW);
+      this.add(gameOutcomeLabel);
+    } else {
+      // Run Result: Defeats
+      const genderIndex = settings.display.playerGender ?? PlayerGender.UNSET;
+      const genderStr = PlayerGender[genderIndex].toLowerCase();
+      // Defeats from wild Pokemon battles will show the Pokemon responsible by the text of the run result.
+      if (data.battleType === BattleType.WILD || (data.battleType === BattleType.MYSTERY_ENCOUNTER && !data.trainer)) {
+        const enemyContainer = globalScene.add.container(8, 5);
+        const gameOutcomeLabel = addTextObject(
+          0,
+          0,
+          `${i18next.t("runHistory:defeatedWild", { context: genderStr })}`,
+          TextStyle.WINDOW,
+        );
+        enemyContainer.add(gameOutcomeLabel);
+        data.enemyParty.forEach((enemyData, e) => {
+          const enemyIconContainer = globalScene.add.container(65 + e * 25, -8);
+          enemyIconContainer.setScale(0.75);
+          enemyData.boss = false;
+          enemyData["player"] = true;
+          const enemy = enemyData.toPokemon();
+          const enemyIcon = globalScene.addPokemonIcon(enemy, 0, 0, 0, 0);
+          const enemyLevel = addTextObject(32, 20, getPokemonLevelText(enemy), TextStyle.POKEMON_LEVEL);
+          enemyLevel.setOrigin(1, 0);
+          enemyIconContainer.add(enemyIcon);
+          enemyIconContainer.add(enemyLevel);
+          enemyContainer.add(enemyIconContainer);
+          enemy.destroy();
+        });
+        this.add(enemyContainer);
+      } else if (
+        (data.battleType === BattleType.TRAINER || data.battleType === BattleType.MYSTERY_ENCOUNTER)
+        && !isNullOrUndefined(data.trainer)
+      ) {
+        // Defeats from Trainers show the trainer's title and name
+        const tObj = data.trainer.toTrainer();
+        // Because of the interesting mechanics behind rival names, the rival name and title have to be retrieved differently
+        const RIVAL_TRAINER_ID_THRESHOLD = 375;
+        if (data.trainer.trainerType >= RIVAL_TRAINER_ID_THRESHOLD) {
+          const rivalName = tObj.variant === TrainerVariant.FEMALE ? "trainerNames:rival_female" : "trainerNames:rival";
+          const gameOutcomeLabel = addTextObject(
+            8,
+            5,
+            `${i18next.t("runHistory:defeatedRival", { context: genderStr })} ${i18next.t(rivalName)}`,
+            TextStyle.WINDOW,
+          );
+          this.add(gameOutcomeLabel);
+        } else {
+          const gameOutcomeLabel = addTextObject(
+            8,
+            5,
+            `${i18next.t("runHistory:defeatedTrainer", { context: genderStr })}${tObj.getName(0, true)}`,
+            TextStyle.WINDOW,
+          );
+          this.add(gameOutcomeLabel);
+        }
+      }
+    }
+
+    // Game Mode + Waves
+    const gameModeLabel = addTextObject(8, 19, "", TextStyle.WINDOW);
+    let mode = "";
+    switch (data.gameMode) {
+      case GameModes.DAILY:
+        mode = i18next.t("gameMode:dailyRun");
+        break;
+      case GameModes.ENDLESS:
+        mode = i18next.t("gameMode:endless");
+        break;
+      case GameModes.CLASSIC:
+        mode = i18next.t("gameMode:classic");
+        break;
+      case GameModes.CHALLENGE:
+        mode = i18next.t("gameMode:challenge");
+        break;
+    }
+    gameModeLabel.appendText(mode, false);
+    gameModeLabel.appendText(" - ", false);
+    gameModeLabel.appendText(i18next.t("saveSlotSelectUiHandler:wave") + " " + data.waveIndex, false);
+    this.add(gameModeLabel);
+
+    const timestampLabel = addTextObject(8, 33, new Date(data.timestamp).toLocaleString(), TextStyle.WINDOW);
+    this.add(timestampLabel);
+
+    // pokemonIconsContainer holds the run's party Pokemon icons and levels
+    // Icons should be level with each other here, but there are significant number of icons that have a center axis / position far from the norm.
+    // The code here does not account for icon weirdness.
+    const pokemonIconsContainer = globalScene.add.container(140, 17);
+
+    data.party.forEach((p: PokemonData, i: number) => {
+      const iconContainer = globalScene.add.container(26 * i, 0);
+      iconContainer.setScale(0.75);
+      const pokemon = p.toPokemon();
+      const icon = globalScene.addPokemonIcon(pokemon, 0, 0, 0, 0);
+
+      const text = addTextObject(32, 20, getPokemonLevelText(pokemon), TextStyle.POKEMON_LEVEL);
+      text.setOrigin(1, 0);
+
+      iconContainer.add(icon);
+      iconContainer.add(text);
+
+      pokemonIconsContainer.add(iconContainer);
+
+      pokemon.destroy();
+    });
+
+    this.add(pokemonIconsContainer);
+  }
+}

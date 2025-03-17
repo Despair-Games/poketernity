@@ -9,7 +9,7 @@ import { Abilities } from "#enums/abilities";
 import { TempStatStageBoosterModifier } from "#app/modifier/modifier";
 import { UiMode } from "#enums/ui-mode";
 import { Button } from "#enums/buttons";
-import type ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
+import type ModifierSelectUiHandler from "#app/ui/handlers/modifier-select-ui-handler";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";
 
 describe("Items - Temporary Stat Stage Boosters", () => {

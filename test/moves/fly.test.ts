@@ -104,10 +104,10 @@ describe("Moves - Fly", () => {
 
     game.move.select(MoveId.FLY);
 
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
 
     await game.toNextTurn();
-    await game.forceEnemyMove(MoveId.GRAVITY);
+    await game.move.selectEnemyMove(MoveId.GRAVITY);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.toEndOfTurn();

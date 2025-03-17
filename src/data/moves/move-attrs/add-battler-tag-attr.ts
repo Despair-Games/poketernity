@@ -107,6 +107,7 @@ export class AddBattlerTagAttr extends ChanceBasedMoveEffectAttr {
       case BattlerTagType.INFESTATION:
         return -3;
       case BattlerTagType.ENCORE:
+      case BattlerTagType.ROLLING:
       case BattlerTagType.GORILLA_TACTICS:
       case BattlerTagType.THROAT_CHOPPED:
       case BattlerTagType.TAR_SHOT:

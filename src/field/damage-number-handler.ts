@@ -1,4 +1,4 @@
-import { addTextObject } from "#app/ui/text";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import type { DamageResult } from "./pokemon";
 import type { Pokemon } from "./pokemon";

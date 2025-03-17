@@ -108,8 +108,8 @@ describe("Moves - Flame Burst", () => {
     game.move.select(MoveId.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.forceEnemyMove(MoveId.SUBSTITUTE);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SUBSTITUTE);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
@@ -128,8 +128,8 @@ describe("Moves - Flame Burst", () => {
     game.move.select(MoveId.FLAME_BURST, 0, BattlerIndex.ENEMY_2);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.forceEnemyMove(MoveId.PROTECT);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.PROTECT);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
@@ -150,8 +150,8 @@ describe("Moves - Flame Burst", () => {
     game.move.select(MoveId.FLAME_BURST, 0, BattlerIndex.ENEMY_2);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.forceEnemyMove(MoveId.ENDURE);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.ENDURE);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 

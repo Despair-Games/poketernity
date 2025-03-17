@@ -53,7 +53,7 @@ import { modifierTypes } from "#app/modifier/modifier-types";
 import Overrides from "#app/overrides";
 import { settings } from "#app/system/settings/settings-manager";
 import { getVoucherTypeIcon, getVoucherTypeName } from "#app/system/voucher";
-import { getModifierTierTextTint } from "#app/ui/text";
+import { getModifierTierTextTint } from "#app/ui/text/text-utils";
 import {
   formatMoney,
   getEnumKeys,

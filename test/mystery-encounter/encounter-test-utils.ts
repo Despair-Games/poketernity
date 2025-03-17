@@ -6,10 +6,10 @@ import { MysteryEncounterRewardsPhase } from "#app/phases/mystery-encounter-phas
 import { MysteryEncounterOptionSelectedPhase } from "#app/phases/mystery-encounter-phases/option-selected-phase";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { VictoryPhase } from "#app/phases/victory-phase";
-import type MessageUiHandler from "#app/ui/message-ui-handler";
-import type MysteryEncounterUiHandler from "#app/ui/mystery-encounter-ui-handler";
-import type PartyUiHandler from "#app/ui/party-ui-handler";
-import type OptionSelectUiHandler from "#app/ui/option-select-ui-handler";
+import type MessageUiHandler from "#app/ui/handlers/message-ui-handler";
+import type MysteryEncounterUiHandler from "#app/ui/handlers/mystery-encounter-ui-handler";
+import type PartyUiHandler from "#app/ui/handlers/party-ui-handler";
+import type OptionSelectUiHandler from "#app/ui/handlers/option-select-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { isNullOrUndefined } from "#app/utils";
 import { Button } from "#enums/buttons";

@@ -1,15 +1,15 @@
 import { Species } from "#enums/species";
 import {
   DayEvolutionCondition,
-  GenderEvolutionCondition,
+  FemaleEvolutionCondition,
   GoodraEvoCondition,
+  MaleEvolutionCondition,
   NightEvolutionCondition,
   PangoroEvoCondition,
   type PokemonEvolutions,
   SpeciesEvolution,
   SpeciesFormEvolution,
 } from "#app/data/pokemon-evolutions";
-import { Gender } from "#enums/gender";
 import { EvolutionItem } from "#enums/evolution-item";
 import {
   ADVANCED_ITEM_EVO_LEVEL,
@@ -36,8 +36,8 @@ export const gen6pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.SKIDDO]: [new SpeciesEvolution(Species.GOGOAT, 32, null, null)],
   [Species.PANCHAM]: [new SpeciesEvolution(Species.PANGORO, 32, null, [new PangoroEvoCondition()])],
   [Species.ESPURR]: [
-    new SpeciesFormEvolution(Species.MEOWSTIC, "", "", 25, null, [new GenderEvolutionCondition(Gender.MALE)]),
-    new SpeciesFormEvolution(Species.MEOWSTIC, "", "female", 25, null, [new GenderEvolutionCondition(Gender.FEMALE)]),
+    new SpeciesFormEvolution(Species.MEOWSTIC, "", "", 25, null, [new MaleEvolutionCondition()]),
+    new SpeciesFormEvolution(Species.MEOWSTIC, "", "female", 25, null, [new FemaleEvolutionCondition()]),
   ],
   [Species.HONEDGE]: [new SpeciesEvolution(Species.DOUBLADE, 35, null, null)],
   [Species.DOUBLADE]: [

@@ -8,7 +8,6 @@ import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-enco
 import { initPokemonForms } from "#app/data/pokemon-forms";
 import { initSpecies } from "#app/data/init/init-species";
 import { initAchievements } from "#app/system/achievements";
-import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { setCookie } from "#app/utils";
 import { blobToString } from "#test/test-utils/gameManagerUtils";
 import { MockConsole } from "#test/test-utils/mocks/mockConsole";
@@ -34,7 +33,6 @@ export function initDataForTests() {
     initMoves();
     initVouchers();
     initAchievements();
-    initStatsKeys();
     initPokemonPreEvolutions();
     initBiomes();
     initEggMoves();
