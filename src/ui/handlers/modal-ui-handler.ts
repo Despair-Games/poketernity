@@ -77,7 +77,7 @@ export abstract class ModalUiHandler extends UiHandler {
     const buttonLabel = addTextObject(0, 8, label, TextStyle.TOOLTIP_CONTENT);
     buttonLabel.setOrigin(0.5, 0.5);
 
-    const buttonBg = addWindow(0, 0, buttonLabel.getBounds().width + 8, 16, false, false, 0, 0, WindowVariant.THIN);
+    const buttonBg = addWindow(0, 0, buttonLabel.getBounds().width + 11, 16, false, false, 0, 0, WindowVariant.THIN);
     buttonBg.setOrigin(0.5, 0);
     buttonBg.setInteractive(
       new Phaser.Geom.Rectangle(0, 0, buttonBg.width, buttonBg.height),
