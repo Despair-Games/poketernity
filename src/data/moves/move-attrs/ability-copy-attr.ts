@@ -66,8 +66,8 @@ export class AbilityCopyAttr extends MoveEffectAttr {
 
   /**
    * If the target's ability is detrimental, grants a (-5) penalty.
-   * Otherwise, grants (+2) effect score for each Pokemon whose detrimental ability is overridden
-   * by this effect. The total bonus cannot exceed (+3).
+   * Otherwise, grants (+2) effect score if one Pokemon's detrimental ability is overridden
+   * by this effect, and (+3) if more than one Pokemon's detrimental ability is overridden.
    * @see {@linkcode detrimentalAbilities}
    */
   override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {

@@ -41,6 +41,10 @@ export class AbilityGiveAttr extends MoveEffectAttr {
    * grants (+1) with a 50% chance of additional (+1) to effect score.
    */
   override getEffectScore(user: EnemyPokemon, target: Pokemon, _move: Move): number {
+    if (highValueAbilities.includes(user.getAbility().id)) {
+      return -5;
+    }
+
     const userHasDetrimentalAbility = detrimentalAbilities.includes(user.getAbility().id);
     const targetHasHighValueAbility = target
       .getAbilities({ revealedOnly: true })
