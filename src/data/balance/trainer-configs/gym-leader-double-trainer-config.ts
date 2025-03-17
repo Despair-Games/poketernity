@@ -112,7 +112,7 @@ export const gymLeaderDoubleTrainerConfig = {
     .initForDoubleGymLeader(
       signatureSpecies["BYRON"],
       signatureSpecies["ROARK"],
-      [ElementalType.ROCK],
+      [ElementalType.STEEL],
       [ElementalType.ROCK],
       ["battle_sinnoh_gym"],
     ),
