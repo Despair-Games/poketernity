@@ -1,6 +1,7 @@
 import { allMoves } from "#app/data/data-lists";
 import { Abilities } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { Species } from "#enums/species";
@@ -69,7 +70,7 @@ describe("Moves - Me First", () => {
     expect(tackle.calculateBattlePower).toHaveReturnedWith(40);
   });
 
-  it.todo("should put the user in a frenzy if Outrage is copied", async () => {
+  it("should put the user in a frenzy if Outrage is copied", async () => {
     game.override.enemySpecies(Species.BASTIODON);
     await game.classicMode.startBattle([Species.BASTIODON]);
 
@@ -83,10 +84,12 @@ describe("Moves - Me First", () => {
     // Player uses Me First - should call Outrage with increased power
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(outrage.calculateBattlePower).toHaveLastReturnedWith(180);
+    expect(game.field.getPlayerPokemon().getTag(BattlerTagType.FRENZY)).toBeDefined();
 
     // Enemy uses Outrage - should have base power
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(outrage.calculateBattlePower).toHaveLastReturnedWith(120);
+    expect(game.field.getEnemyPokemon().getTag(BattlerTagType.FRENZY)).toBeDefined();
 
     game.scene.getField(true).forEach((p) => expect(p.getMoveQueue()).toHaveLength(1));
 

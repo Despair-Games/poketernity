@@ -1161,7 +1161,9 @@ export abstract class MoveLockTag extends BattlerTag {
     if (ret) {
       const move = allMoves.get(this.sourceMoveId);
       this.lastTargets = lastTargets;
-      pokemon.getMoveQueue().push({ move, targets: [], ignorePP: true, type: pokemon.getMoveType(move) });
+      pokemon
+        .getMoveQueue()
+        .push({ move, targets: [], ignorePP: true, type: pokemon.getMoveType(move), virtual: true });
     }
 
     return ret;
