@@ -26,7 +26,7 @@ export class MeFirstAttr extends CallMoveAttr {
   override getCondition(): MoveConditionFunc {
     return (_user, target, _move) => {
       const targetMove = this.getTargetMove(target);
-      return !!targetMove && !invalidMeFirstMoves.has(targetMove.id);
+      return !!targetMove?.isAttackMove() && !invalidMeFirstMoves.has(targetMove.id);
     };
   }
 

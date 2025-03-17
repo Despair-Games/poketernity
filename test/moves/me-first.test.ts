@@ -32,28 +32,11 @@ describe("Moves - Me First", () => {
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(MoveId.SWORDS_DANCE)
       .startingLevel(100)
       .enemyLevel(100);
   });
 
-  it("should copy the target's selected move", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
-
-    const player = game.field.getPlayerPokemon();
-    const enemy = game.field.getEnemyPokemon();
-
-    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    game.move.use(MoveId.ME_FIRST);
-
-    await game.toEndOfTurn();
-
-    expect(player.getLastXMoves()[0]?.move.id).toBe(MoveId.SWORDS_DANCE);
-    expect(player.getStatStage(Stat.ATK)).toBe(2);
-    expect(enemy.getStatStage(Stat.ATK)).toBe(2);
-  });
-
-  it("should increase the power of copied attacks by 50%", async () => {
+  it("should copy the target's selected attack and use it with 50% more power", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const tackle = allMoves.get(MoveId.TACKLE);
@@ -103,6 +86,23 @@ describe("Moves - Me First", () => {
     expect(outrage.calculateBattlePower).toHaveLastReturnedWith(120);
   });
 
+  it("should fail if the target selected a non-damaging move", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.move.use(MoveId.ME_FIRST);
+    await game.move.forceEnemyMove(MoveId.SWORDS_DANCE);
+
+    await game.toEndOfTurn();
+
+    expect(player.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
+    expect(player.getStatStage(Stat.ATK)).toBe(0);
+    expect(enemy.getStatStage(Stat.ATK)).toBe(2);
+  });
+
   it("should fail if the target has already used their selected move for the turn", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
@@ -111,12 +111,13 @@ describe("Moves - Me First", () => {
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     game.move.use(MoveId.ME_FIRST);
+    await game.move.forceEnemyMove(MoveId.TACKLE);
 
     await game.toEndOfTurn();
 
     expect(player.getLastXMoves()[0]?.result).toBe(MoveResult.FAIL);
-    expect(player.getStatStage(Stat.ATK)).toBe(0);
-    expect(enemy.getStatStage(Stat.ATK)).toBe(2);
+    expect(player.isFullHp()).toBeFalsy();
+    expect(enemy.isFullHp()).toBeTruthy();
   });
 
   it.each([
