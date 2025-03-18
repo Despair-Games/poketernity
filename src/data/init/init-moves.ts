@@ -411,7 +411,8 @@ export function initMoves() {
             .find((m) => m.move.id !== MoveId.NONE && m.move.id !== MoveId.STRUGGLE && !m.virtual) !== undefined,
       )
       .ignoresSubstitute()
-      .bounceable(),
+      .bounceable()
+      .edgeCase(), // Does not disable itself when reflected by Magic Coat/Bounce
     new AttackMove(MoveId.ACID, ElementalType.POISON, MoveCategory.SPECIAL, 40, 100, 30, 10, 0, 1)
       .attr(StatStageChangeAttr, [Stat.SPDEF], -1)
       .target(MoveTarget.ALL_NEAR_ENEMIES),
