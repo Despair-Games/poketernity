@@ -42,23 +42,15 @@ export class MeFirstAttr extends CallMoveAttr {
 }
 
 export const invalidMeFirstMoves: Set<MoveId> = new Set([
-  MoveId.ASSIST,
   MoveId.BEAK_BLAST,
   MoveId.BELCH,
   MoveId.CHATTER,
-  MoveId.COPYCAT,
   MoveId.COUNTER,
   MoveId.COVET,
   MoveId.FOCUS_PUNCH,
-  MoveId.ME_FIRST,
   MoveId.METAL_BURST,
-  MoveId.METRONOME,
   MoveId.MIRROR_COAT,
-  MoveId.MIRROR_MOVE,
-  MoveId.NATURE_POWER,
   MoveId.SHELL_TRAP,
-  MoveId.SLEEP_TALK,
-  MoveId.SNATCH,
   MoveId.STRUGGLE,
   MoveId.THIEF,
 ]);
