@@ -38,8 +38,8 @@ describe("Moves - Rage Powder", () => {
     game.move.select(MoveId.QUICK_ATTACK, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.QUICK_ATTACK, 1, BattlerIndex.ENEMY_2);
 
-    await game.forceEnemyMove(MoveId.RAGE_POWDER);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.RAGE_POWDER);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
 
     await game.toEndOfTurn();
 
@@ -61,8 +61,8 @@ describe("Moves - Rage Powder", () => {
     game.move.select(MoveId.QUICK_ATTACK, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.QUICK_ATTACK, 1, BattlerIndex.ENEMY_2);
 
-    await game.forceEnemyMove(MoveId.RAGE_POWDER);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.RAGE_POWDER);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
 
     await game.toEndOfTurn();
 

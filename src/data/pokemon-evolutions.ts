@@ -5,7 +5,7 @@ import { globalScene } from "#app/global-scene";
 import { TimeOfDay } from "#enums/time-of-day";
 import type { MoveId } from "#enums/move-id";
 import { ElementalType } from "#enums/elemental-type";
-import type { Gender } from "#enums/gender";
+import { Gender } from "#enums/gender";
 import { randSeedInt } from "#app/utils";
 import { PokeballType } from "#enums/pokeball";
 import { WeatherType } from "#enums/weather-type";
@@ -88,14 +88,74 @@ export class SpeciesEvolutionCondition {
   }
 }
 
-// TODO: Break this up into a MaleCondition and FemaleCondition?
-export class GenderEvolutionCondition extends SpeciesEvolutionCondition {
-  constructor(requiredGender: Gender) {
-    super((p) => p.gender === requiredGender);
-    this.description = "requires gender";
+/**
+ * For Pokemon that require being male, including:
+ * ```
+ * Gallade
+ * Mothim
+ * Basculegion
+ * Oinkalogne
+ * Meowstic
+ * ```
+ *
+ * Custom:
+ * ```
+ * Glalie
+ * Huntail
+ * ```
+ */
+export class MaleEvolutionCondition extends SpeciesEvolutionCondition {
+  constructor() {
+    super((p) => p.gender === Gender.MALE);
+    this.description = "requires male";
   }
 }
 
+/**
+ * For Pokemon that require being female, including:
+ * ```
+ * Froslass
+ * Wormadam, Vespiquen
+ * Basculegion
+ * Salazzle
+ * Oinkalogne
+ * Meowstic
+ * ```
+ *
+ * Custom:
+ * ```
+ * Gardevoir
+ * Gorebyss
+ * ```
+ */
+export class FemaleEvolutionCondition extends SpeciesEvolutionCondition {
+  constructor() {
+    super((p) => p.gender === Gender.FEMALE);
+    this.description = "requires female";
+  }
+}
+
+/**
+ * For Pokemon that have mainline evolutions requiring day time. Includes:
+ * ```
+ * Eevee
+ * Budew, Happiny, Riolu
+ * Tyrunt
+ * Yungoos
+ * Rockruff, Formantis
+ * Hisui Sneasel
+ * ```
+ *
+ * Also includes Pokemon that have alternate forms like:
+ * ```
+ * Cubone, Koffing, Mime Jr
+ * Quilava
+ * Wurmple
+ * Samurott, Rufflet
+ * Goomy
+ * Dartrix, Cosmoem
+ * ```
+ */
 export class DayEvolutionCondition extends SpeciesEvolutionCondition {
   constructor() {
     super(() => globalScene.arena.isTimeOfDay([TimeOfDay.DAWN, TimeOfDay.DAY]));
@@ -103,6 +163,29 @@ export class DayEvolutionCondition extends SpeciesEvolutionCondition {
   }
 }
 
+/**
+ * For Pokemon that have mainline evolutions requiring night time. Includes:
+ * ```
+ * Eevee
+ * Gligar, Sneasel, Chingling
+ * Amaura
+ * Alola Rattata
+ * Rockruff
+ * Galar Linoone, Snom
+ * Ursaring
+ * Greavard
+ * ```
+ *
+ * Also includes Pokemon that have alternate forms like:
+ * ```
+ * Cubone, Koffing, Mime Jr
+ * Quilava
+ * Wurmple
+ * Samurott, Rufflet
+ * Goomy
+ * Dartrix, Cosmoem
+ * ```
+ */
 export class NightEvolutionCondition extends SpeciesEvolutionCondition {
   constructor() {
     super(() => globalScene.arena.isTimeOfDay([TimeOfDay.DUSK, TimeOfDay.NIGHT]));
@@ -188,6 +271,35 @@ export class ShedinjaEvoCondition extends SpeciesEvolutionCondition {
 }
 
 /**
+ * Amped Toxtricity requires a specific nature.
+ * All other natures result in amped form
+ */
+export class AmpedToxtricityEvoCondition extends SpeciesEvolutionCondition {
+  constructor() {
+    super(
+      (p) =>
+        [
+          Nature.HARDY,
+          Nature.BRAVE,
+          Nature.ADAMANT,
+          Nature.NAUGHTY,
+          Nature.DOCILE,
+          Nature.IMPISH,
+          Nature.LAX,
+          Nature.HASTY,
+          Nature.JOLLY,
+          Nature.NAIVE,
+          Nature.RASH,
+          Nature.SASSY,
+          Nature.QUIRKY,
+        ].indexOf(p.getNature()) > -1,
+    );
+    this.description =
+      "Nature is Hardy, Brave, Adamant, Naughty, Docile, Impish, Lax, Hasty, Jolly, Naive, Rash, Sassy, or Quirky.";
+  }
+}
+
+/**
  * Low key Toxtricity requires a specific nature.
  * All other natures result in amped form
  */
@@ -211,7 +323,7 @@ export class LowKeyToxtricityEvoCondition extends SpeciesEvolutionCondition {
         ].indexOf(p.getNature()) > -1,
     );
     this.description =
-      "Requires lonely, bold, relaxed, timid, serious, modest, mild, quiet, bashful, calm, gentle, or careful nature";
+      "Nature is Lonely, Bold, Relaxed, Timid, Serious, Modest, Mild, Quiet, Bashful, Calm, Gentle, or Careful.";
   }
 }
 

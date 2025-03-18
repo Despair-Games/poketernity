@@ -5,9 +5,9 @@ import type { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Phase } from "#app/phase";
-import EggCounterContainer from "#app/ui/egg-counter-container";
-import type EggHatchSceneHandler from "#app/ui/egg-hatch-scene-handler";
-import PokemonInfoContainer from "#app/ui/pokemon-info-container";
+import EggCounterContainer from "#app/ui/components/egg-counter-container";
+import type EggHatchSceneUiHandler from "#app/ui/handlers/egg-hatch-scene-ui-handler";
+import PokemonInfoContainer from "#app/ui/components/pokemon-info-container";
 import { UiMode } from "#enums/ui-mode";
 import { fixedNumber, getFrameMs, randInt } from "#app/utils";
 import i18next from "i18next";
@@ -35,7 +35,7 @@ export class EggHatchPhase extends Phase {
   private eggCounterContainer: EggCounterContainer;
 
   /** The scene handler for egg hatching */
-  private eggHatchHandler: EggHatchSceneHandler;
+  private eggHatchHandler: EggHatchSceneUiHandler;
   /** The phaser gameobject container that holds everything */
   private eggHatchContainer: Phaser.GameObjects.Container;
   /** The phaser image that is the background */
@@ -98,7 +98,7 @@ export class EggHatchPhase extends Phase {
 
       globalScene.audioManager.fadeOutBgm(undefined, false);
 
-      this.eggHatchHandler = globalScene.ui.getHandler() as EggHatchSceneHandler;
+      this.eggHatchHandler = globalScene.ui.getHandler() as EggHatchSceneUiHandler;
 
       this.eggHatchContainer = this.eggHatchHandler.eggHatchContainer;
 

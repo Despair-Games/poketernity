@@ -213,15 +213,15 @@ describe("Moves - Future Sight", () => {
     const [feebas, milotic] = game.scene.getPlayerParty();
 
     game.move.select(MoveId.FUTURE_SIGHT);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
     game.doSwitchPokemon(1);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.DESTINY_BOND);
+    await game.move.selectEnemyMove(MoveId.DESTINY_BOND);
     await game.phaseInterceptor.to("SelectModifierPhase", false);
 
     expect(game.scene.getPlayerPokemon()!.species.speciesId).toBe(Species.MILOTIC);

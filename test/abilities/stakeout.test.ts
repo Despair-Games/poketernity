@@ -32,7 +32,6 @@ describe("Abilities - Stakeout", () => {
       .enemyLevel(100)
       .enemySpecies(Species.SNORLAX)
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset([MoveId.SPLASH, MoveId.FLIP_TURN])
       .startingWave(5);
   });
 
@@ -42,7 +41,7 @@ describe("Abilities - Stakeout", () => {
     const [enemy1] = game.scene.getEnemyParty();
 
     game.move.select(MoveId.SURF);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
     const damage1 = enemy1.getInverseHp();
     enemy1.hp = enemy1.getMaxHp();
@@ -65,17 +64,17 @@ describe("Abilities - Stakeout", () => {
     const [enemy1] = game.scene.getEnemyParty();
 
     game.move.select(MoveId.SURF);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
     const damage1 = enemy1.getInverseHp();
     enemy1.hp = enemy1.getMaxHp();
 
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.FLIP_TURN);
+    await game.move.forceEnemyMove(MoveId.FLIP_TURN);
     await game.toNextTurn();
 
     game.move.select(MoveId.SURF);
-    await game.forceEnemyMove(MoveId.FLIP_TURN);
+    await game.move.forceEnemyMove(MoveId.FLIP_TURN);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 

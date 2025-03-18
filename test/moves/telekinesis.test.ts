@@ -105,7 +105,7 @@ describe("Moves - Telekinesis", () => {
     const enemyOpponent = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.TELEKINESIS);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toEndOfTurn();
     expect(enemyOpponent.getTag(BattlerTagType.TELEKINESIS)).toBeDefined();
     expect(enemyOpponent.getTag(BattlerTagType.FLOATING)).toBeDefined();
@@ -113,7 +113,7 @@ describe("Moves - Telekinesis", () => {
     await game.toNextTurn();
     vi.spyOn(allMoves.get(MoveId.MUD_SHOT), "accuracy", "get").mockReturnValue(0);
     game.move.select(MoveId.MUD_SHOT);
-    await game.forceEnemyMove(MoveId.INGRAIN);
+    await game.move.selectEnemyMove(MoveId.INGRAIN);
     await game.toEndOfTurn();
     expect(enemyOpponent.getTag(BattlerTagType.TELEKINESIS)).toBeDefined();
     expect(enemyOpponent.getTag(BattlerTagType.INGRAIN)).toBeDefined();

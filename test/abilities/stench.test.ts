@@ -32,8 +32,7 @@ describe("Abilities - Stench", () => {
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyLevel(100)
-      .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(MoveId.SPLASH);
+      .enemyAbility(Abilities.BALL_FETCH);
   });
 
   it("Stench should have a base 10% chance of applying flinch to the target Pokemon", async () => {
@@ -72,7 +71,6 @@ describe("Abilities - Stench", () => {
   });
 
   it("Stench should not bypass the enemy Pokemon's substitute under normal conditions", async () => {
-    game.override.enemyMoveset([MoveId.SPLASH, MoveId.SUBSTITUTE]);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
@@ -81,11 +79,11 @@ describe("Abilities - Stench", () => {
       .getAttrs<PostAttackApplyBattlerTagAbAttr>(AbAttrFlag.POST_ATTACK_APPLY_BATTLER_TAG)[0];
 
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.SUBSTITUTE);
+    await game.move.forceEnemyMove(MoveId.SUBSTITUTE);
     await game.toNextTurn();
     vi.spyOn(abilityAttr, "getChance");
     game.move.select(MoveId.TACKLE);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.toEndOfTurn();
@@ -93,7 +91,10 @@ describe("Abilities - Stench", () => {
   });
 
   it("Stench should not apply against a target with Shield Dust, unless the attack ignores abilities", async () => {
-    game.override.enemyAbility(Abilities.SHIELD_DUST).moveset([MoveId.TACKLE, MoveId.MOONGEIST_BEAM]);
+    game.override
+      .enemyAbility(Abilities.SHIELD_DUST)
+      .moveset([MoveId.TACKLE, MoveId.MOONGEIST_BEAM])
+      .enemyMoveset(MoveId.SPLASH);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;

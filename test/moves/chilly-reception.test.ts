@@ -4,7 +4,6 @@ import { Species } from "#enums/species";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
-//import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Moves - Chilly Reception", () => {
@@ -78,7 +77,7 @@ describe("Moves - Chilly Reception", () => {
     await game.classicMode.startBattle([Species.SLOWKING, Species.MEOWTH]);
 
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.TACKLE);
+    await game.move.selectEnemyMove(MoveId.TACKLE);
 
     await game.toEndOfTurn();
     expect(game.scene.arena.weather?.weatherType).toBe(undefined);

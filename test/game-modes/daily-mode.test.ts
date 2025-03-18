@@ -2,7 +2,7 @@ import { Biome } from "#enums/biome";
 import { MoveId } from "#enums/move-id";
 import { MapModifier } from "#app/modifier/modifier";
 import { api } from "#app/plugins/api/api";
-import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
+import ModifierSelectUiHandler from "#app/ui/handlers/modifier-select-ui-handler";
 import { Species } from "#enums/species";
 import { UiMode } from "#enums/ui-mode";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
