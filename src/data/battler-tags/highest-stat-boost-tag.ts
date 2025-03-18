@@ -10,7 +10,14 @@ import type { BattlerTagType } from "#enums/battler-tag-type";
 import { EFFECTIVE_STATS, Stat, type EffectiveStat, getStatKey } from "#enums/stat";
 import i18next from "i18next";
 
-export class HighestStatBoostTag extends AbilityBattlerTag {
+/**
+ * Tag representing the stat boost granted from abilities such as
+ * {@link https://bulbapedia.bulbagarden.net/wiki/Protosynthesis_(Ability) | Protosynthesis}
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Quark_Drive_(Ability)}.
+ * Boosts the owner's highest {@linkcode EFFECTIVE_STATS | effective stat} by 30%
+ * @extends AbilityBattlerTag
+ */
+export abstract class HighestStatBoostTag extends AbilityBattlerTag {
   public stat: Stat;
   public multiplier: number;
 

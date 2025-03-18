@@ -8,6 +8,12 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";
 
+/**
+ * Tag representing {@link https://bulbapedia.bulbagarden.net/wiki/Sky_Drop_(move) | Sky Drop}'s
+ * airborne state for both the user and the target. While airborne, both Pokemon
+ * are {@link https://bulbapedia.bulbagarden.net/wiki/Semi-invulnerable_turn | semi-invulnerable}
+ * to most attacks, and the target's moves are cancelled.
+ */
 export class SkyDropTag extends BattlerTag {
   constructor(sourceId: number) {
     super(BattlerTagType.SKY_DROP, BattlerTagLapseType.CUSTOM, 1, MoveId.SKY_DROP, sourceId);

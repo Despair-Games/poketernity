@@ -5,6 +5,13 @@ import type { Abilities } from "#enums/abilities";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { TerrainType } from "#enums/terrain-type";
 
+/**
+ * Tag representing the stat boost from an ability
+ * (i.e. {@link https://bulbapedia.bulbagarden.net/wiki/Quark_Drive_(Ability) | Quark Drive})
+ * while a given {@linkcode TerrainType | terrain} is active.
+ * @extends HighestStatBoostTag
+ * @implements `TerrainBattlerTag`
+ */
 export class TerrainHighestStatBoostTag extends HighestStatBoostTag implements TerrainBattlerTag {
   public terrainTypes: TerrainType[];
 

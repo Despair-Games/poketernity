@@ -10,7 +10,8 @@ import { Stat } from "#enums/stat";
 import i18next from "i18next";
 
 /**
- * Battler tag enabling the Stockpile mechanic. This tag handles:
+ * Tag enabling the "energy storage" effect of {@link https://bulbapedia.bulbagarden.net/wiki/Stockpile_(move) | Stockpile}.
+ * This tag handles:
  * - Stack tracking, including max limit enforcement (which is replicated in Stockpile for redundancy).
  *
  * - Stat changes on adding a stack. Adding a stockpile stack attempts to raise the pokemon's DEF and SPDEF by +1.
@@ -18,6 +19,7 @@ import i18next from "i18next";
  * - Stat changes on removal of (all) stacks.
  *   - Removing stacks decreases DEF and SPDEF, independently, by one stage for each stack that successfully changed
  *     the stat when added.
+ * @extends BattlerTag
  */
 export class StockpilingTag extends BattlerTag {
   public stockpiledCount: number = 0;

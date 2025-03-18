@@ -10,6 +10,10 @@ import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 
+/**
+ * Tag to prevent the owner from switching out or fleeing from battle.
+ * @extends BattlerTag
+ */
 export class TrappedTag extends BattlerTag {
   constructor(
     tagType: BattlerTagType,

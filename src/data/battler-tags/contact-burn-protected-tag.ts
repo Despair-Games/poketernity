@@ -9,6 +9,7 @@ import { StatusEffect } from "#enums/status-effect";
 /**
  * `BattlerTag` class for moves that block damaging moves and burn the enemy if the enemy's move makes contact
  * Used by {@linkcode MoveId.BURNING_BULWARK}
+ * @extends DamageProtectedTag
  */
 export class ContactBurnProtectedTag extends DamageProtectedTag {
   constructor(sourceMoveId: MoveId) {

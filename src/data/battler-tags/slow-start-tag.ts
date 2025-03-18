@@ -7,6 +7,11 @@ import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import i18next from "i18next";
 
+/**
+ * Tag representing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Slow_Start_(Ability) | Slow Start}.
+ * Halves the owner's Attack and Speed stats for 5 turns.
+ * @extends AbilityBattlerTag
+ */
 export class SlowStartTag extends AbilityBattlerTag {
   constructor() {
     super(BattlerTagType.SLOW_START, Abilities.SLOW_START, BattlerTagLapseType.TURN_END, 5);

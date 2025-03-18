@@ -7,6 +7,7 @@ import { MoveId } from "#enums/move-id";
 /**
  * Used for G-Max Centiferno that leaves a fire spin
  * that persists even on the user leaving the field
+ * @extends FireSpinTag
  */
 export class GMaxFireSpinTag extends FireSpinTag {
   constructor(turnCount: number, sourceId: number) {

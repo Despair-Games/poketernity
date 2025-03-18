@@ -13,6 +13,12 @@ import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 
+/**
+ * Battler tag indicating the owner is afflicted by the secondary effect of
+ * {@link https://bulbapedia.bulbagarden.net/wiki/Salt_Cure_(move) | Salt Cure}.
+ * Deals 1/8 of the owner's maximum HP as damage at the end of each turn, or
+ * 1/4 if the owner is Water- or Steel-type.
+ */
 export class SaltCuredTag extends BattlerTag {
   private sourceIndex: number;
 

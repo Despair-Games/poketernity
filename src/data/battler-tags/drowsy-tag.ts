@@ -9,6 +9,11 @@ import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
 import i18next from "i18next";
 
+/**
+ * Tag representing the effects of drowsiness set by {@link https://bulbapedia.bulbagarden.net/wiki/Yawn_(move) | Yawn}.
+ * Puts the tag's owner to sleep after one turn.
+ * @extends BattlerTag
+ */
 export class DrowsyTag extends BattlerTag {
   constructor() {
     super(BattlerTagType.DROWSY, BattlerTagLapseType.TURN_END, 2, MoveId.YAWN);

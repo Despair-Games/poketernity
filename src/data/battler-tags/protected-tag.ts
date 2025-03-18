@@ -11,6 +11,11 @@ import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 
+/**
+ * Tag to protect the owner from most incoming moves for the rest of the turn.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Protect_(move) | Protect} and related moves.
+ * @extends BattlerTag
+ */
 export class ProtectedTag extends BattlerTag {
   constructor(sourceMoveId: MoveId, tagType: BattlerTagType = BattlerTagType.PROTECTED) {
     super(tagType, BattlerTagLapseType.TURN_END, 0, sourceMoveId);

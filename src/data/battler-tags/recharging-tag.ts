@@ -11,7 +11,9 @@ import type { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 
 /**
- * BattlerTag that represents the "recharge" effects of moves like Hyper Beam.
+ * Tag representing the "recharge" effects of moves
+ * e.g. {@link https://bulbapedia.bulbagarden.net/wiki/Hyper_Beam_(move) | Hyper Beam}
+ * @extends BattlerTag
  */
 export class RechargingTag extends BattlerTag {
   constructor(sourceMoveId: MoveId) {

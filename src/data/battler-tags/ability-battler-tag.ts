@@ -3,7 +3,11 @@ import type { Abilities } from "#enums/abilities";
 import type { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 
-export class AbilityBattlerTag extends BattlerTag {
+/**
+ * Tag representing the effect(s) of an ability.
+ * @extends BattlerTag
+ */
+export abstract class AbilityBattlerTag extends BattlerTag {
   public ability: Abilities;
 
   constructor(tagType: BattlerTagType, ability: Abilities, lapseType: BattlerTagLapseType, turnCount: number) {

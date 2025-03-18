@@ -9,7 +9,8 @@ import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 
 /**
- * Applies the Ingrain tag to a pokemon
+ * Tag representing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Ingrain_(move) | Ingrain}.
+ * Traps the owner and restores 1/16 of its maximum HP at the end of each turn.
  * @extends TrappedTag
  */
 export class IngrainTag extends TrappedTag {

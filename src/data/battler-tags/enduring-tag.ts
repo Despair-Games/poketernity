@@ -8,9 +8,9 @@ import type { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 
 /**
- * `BattlerTag` class for effects that cause the affected Pokemon to survive lethal attacks at 1 HP.
- * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Endure_(move) | Endure} and
- * Endure Tokens.
+ * Tag to allow the affected Pokemon to survive lethal attacks at 1 HP.
+ * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Endure_(move) | Endure}.
+ * @extends BattlerTag
  */
 export class EnduringTag extends BattlerTag {
   constructor(tagType: BattlerTagType, lapseType: BattlerTagLapseType, sourceMoveId: MoveId) {

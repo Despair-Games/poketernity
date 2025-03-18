@@ -11,7 +11,6 @@ import i18next from "i18next";
 /**
  * Tag applied to the {@linkcode Move.DESTINY_BOND} user.
  * @extends BattlerTag
- * @see {@linkcode apply}
  */
 export class DestinyBondTag extends BattlerTag {
   constructor(sourceMoveId: MoveId, sourceId: number) {

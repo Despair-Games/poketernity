@@ -8,7 +8,9 @@ import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 
 /**
- * BattlerTag representing the rage effect where a Pokemon will gain +1 attack for each time it is hit
+ * BattlerTag representing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Rage_(move) | Rage}.
+ * The owner gains +1 Attack after receiving an attack as long as
+ * Rage is continuously used.
  * @extends BattlerTag
  */
 export class RageTag extends BattlerTag {

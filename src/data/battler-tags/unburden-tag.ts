@@ -5,7 +5,8 @@ import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 
 /**
- * Tag used by Unburden to double speed
+ * Tag used by {@link https://bulbapedia.bulbagarden.net/wiki/Unburden_(Ability) | Unburden}
+ * to double the owner's Speed stat
  * @extends AbilityBattlerTag
  */
 export class UnburdenTag extends AbilityBattlerTag {

@@ -12,25 +12,17 @@ import { CommonAnim } from "#enums/common-anim";
 import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 
+/**
+ * Battler tag representing the effect of Ghost-type {@link https://bulbapedia.bulbagarden.net/wiki/Curse_(move) | Curse},
+ * which damages a Pokemon for 1/4th of its max HP each turn
+ */
 export class CursedTag extends BattlerTag {
-  private sourceIndex: number;
-
   constructor(sourceId: number) {
     super(BattlerTagType.CURSED, BattlerTagLapseType.TURN_END, 1, MoveId.CURSE, sourceId, true);
   }
 
-  /**
-   * When given a battler tag or json representing one, load the data for it.
-   * @param source A battler tag
-   */
-  override loadTag(source: BattlerTag | any): void {
-    super.loadTag(source);
-    this.sourceIndex = source.sourceIndex;
-  }
-
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
-    this.sourceIndex = globalScene.getPokemonById(this.sourceId!)!.getBattlerIndex(); // TODO: are those bangs correct?
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {

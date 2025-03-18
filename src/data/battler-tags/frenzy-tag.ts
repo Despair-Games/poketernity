@@ -8,7 +8,6 @@ import type { MoveId } from "#enums/move-id";
  * move for `turnCount - 1` turns. If this effect isn't interrupted,
  * the source {@linkcode Pokemon} becomes confused at the end of those turns.
  * @extends MoveLockTag
- * @see {@linkcode FrenzyAttr}
  */
 export class FrenzyTag extends MoveLockTag {
   constructor(turnCount: number, sourceMoveId: MoveId) {

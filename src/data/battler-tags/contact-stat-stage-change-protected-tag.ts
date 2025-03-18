@@ -10,8 +10,9 @@ import type { MoveId } from "#enums/move-id";
 import type { BattleStat } from "#enums/stat";
 
 /**
- * `BattlerTag` class for moves that block damaging moves and lower enemy stats if the enemy's move makes contact
- * Used by {@linkcode MoveId.KINGS_SHIELD}, {@linkcode MoveId.OBSTRUCT}, {@linkcode MoveId.SILK_TRAP}
+ * Tag for moves that block damaging moves and lower enemy stats if the enemy's move makes contact
+ * Used by {@linkcode MoveId.KINGS_SHIELD}, {@linkcode MoveId.OBSTRUCT}, and {@linkcode MoveId.SILK_TRAP}
+ * @extends DamageProtectedTag
  */
 export class ContactStatStageChangeProtectedTag extends DamageProtectedTag {
   private stat: BattleStat;

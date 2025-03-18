@@ -10,8 +10,9 @@ import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 
 /**
- * Applies the effects of the move Encore onto the target Pokemon
+ * Applies the effects of the move Encore onto the target Pokemon.
  * Encore forces the target Pokemon to use its most-recent move for 3 turns
+ * @extends MoveRestrictionBattlerTag
  */
 export class EncoreTag extends MoveRestrictionBattlerTag {
   public moveId: MoveId;

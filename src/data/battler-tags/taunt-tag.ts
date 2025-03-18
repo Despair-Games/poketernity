@@ -13,6 +13,7 @@ import i18next from "i18next";
  * BattlerTag that applies the effects of Taunt to the target Pokemon
  * Taunt restricts the use of status moves.
  * The tag is removed after 4 turns.
+ * @extends MoveRestrictionBattlerTag
  */
 export class TauntTag extends MoveRestrictionBattlerTag {
   constructor() {

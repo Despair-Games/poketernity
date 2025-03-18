@@ -11,7 +11,8 @@ import type { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 
 /**
- * BattlerTag that represents the {@link https://bulbapedia.bulbagarden.net/wiki/Flinch Flinch} status condition
+ * Tag representing the {@link https://bulbapedia.bulbagarden.net/wiki/Flinch Flinch} status condition
+ * @extends BattlerTag
  */
 export class FlinchedTag extends BattlerTag {
   constructor(sourceMoveId: MoveId) {

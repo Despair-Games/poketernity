@@ -17,7 +17,8 @@ import { isNullOrUndefined } from "util";
 import Overrides from "#app/overrides";
 
 /**
- * BattlerTag that represents the {@link https://bulbapedia.bulbagarden.net/wiki/Confusion_(status_condition) Confusion} status condition
+ * Tag representing the {@link https://bulbapedia.bulbagarden.net/wiki/Confusion_(status_condition) Confusion} status condition
+ * @extends BattlerTag
  */
 export class ConfusedTag extends BattlerTag {
   public readonly ACTIVATION_CHANCE: number = 33;

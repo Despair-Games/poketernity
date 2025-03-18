@@ -7,8 +7,9 @@ import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 
 /**
- * @description `ROOSTED`: Tag for temporary grounding if only source of ungrounding is flying and pokemon uses Roost.
- * Roost removes flying type from a pokemon for a single turn.
+ * Tag representing the secondary effect of {@link https://bulbapedia.bulbagarden.net/wiki/Roost_(move) | Roost}.
+ * Removes Flying type from the owner for the rest of the turn.
+ * @extends BattlerTag
  */
 export class RoostedTag extends BattlerTag {
   private isBaseFlying: boolean;

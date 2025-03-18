@@ -256,7 +256,7 @@ export function getBattlerTag(
     case BattlerTagType.ICE_FACE:
       return new IceFaceBlockDamageTag(tagType);
     case BattlerTagType.DISGUISE:
-      return new FormBlockDamageTag(tagType);
+      return new FormBlockDamageTag(tagType, Abilities.DISGUISE);
     case BattlerTagType.COMMANDED:
       return new CommandedTag(sourceId);
     case BattlerTagType.STOCKPILING:
@@ -311,7 +311,6 @@ export function getBattlerTag(
     case BattlerTagType.QUASHED:
       return new QuashedTag();
     case BattlerTagType.NONE:
-    default:
       return new BattlerTag(tagType, BattlerTagLapseType.CUSTOM, turnCount, sourceMoveId, sourceId);
   }
 }

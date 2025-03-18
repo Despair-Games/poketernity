@@ -5,8 +5,8 @@ import type { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 
 /**
- * Tag for the effects of Dragon Cheer, which boosts the critical hit ratio of the user's allies.
- * @extends {CritBoostTag}
+ * Tag for the effects of Dragon Cheer, which boosts the critical hit ratio of the user's ally.
+ * @extends CritBoostTag
  */
 export class DragonCheerTag extends CritBoostTag {
   /** The types of the user's ally when the tag is added */

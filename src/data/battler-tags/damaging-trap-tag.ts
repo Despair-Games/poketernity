@@ -14,6 +14,10 @@ import type { CommonAnim } from "#enums/common-anim";
 import type { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 
+/**
+ * Tag representing all effects that trap and damage a Pokemon over the course of multiple turns
+ * @extends TrappedTag
+ */
 export abstract class DamagingTrapTag extends TrappedTag {
   private commonAnim: CommonAnim;
 

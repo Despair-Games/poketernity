@@ -1,4 +1,4 @@
-import { ProtectedTag } from "#app/data/battler-tags/protected-tag";
+import { DamageProtectedTag } from "#app/data/battler-tags/damage-protected-tag";
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -6,7 +6,12 @@ import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
 import { StatusEffect } from "#enums/status-effect";
 
-export class ContactPoisonProtectedTag extends ProtectedTag {
+/**
+ * Tag for moves that block damaging moves and try to poison attacking enemies that make contact.
+ * Used by {@linkcode MoveId.BANEFUL_BUNKER}
+ * @extends DamageProtectedTag
+ */
+export class ContactPoisonProtectedTag extends DamageProtectedTag {
   constructor(sourceMoveId: MoveId) {
     super(sourceMoveId, BattlerTagType.BANEFUL_BUNKER);
   }

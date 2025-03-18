@@ -5,6 +5,10 @@ import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { ElementalType } from "#enums/elemental-type";
 import type { MoveId } from "#enums/move-id";
 
+/**
+ * Tag to amplify the power of the owner's attacks of a specified type.
+ * @extends BattlerTag
+ */
 export class TypeBoostTag extends BattlerTag {
   public boostedType: ElementalType;
   public boostValue: number;

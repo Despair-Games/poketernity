@@ -6,7 +6,7 @@ import type { MoveId } from "#enums/move-id";
  * Applies the move-locking effect of {@link https://bulbapedia.bulbagarden.net/wiki/Rollout_(move) Rollout}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Ice_Ball_(move) Ice Ball}.
  * Also defines a power multiplier for the respective move based on
- * the tag's turn count.
+ * the tag's {@linkcode turnCount}.
  * @extends MoveLockTag
  */
 export class RollingTag extends MoveLockTag {

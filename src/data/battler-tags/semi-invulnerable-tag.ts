@@ -6,6 +6,11 @@ import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
 
+/**
+ * Tag representing the {@link https://bulbapedia.bulbagarden.net/wiki/Semi-invulnerable_turn | Semi-invulnerable} state
+ * during the execution of several two-turn moves.
+ * @extends BattlerTag
+ */
 export class SemiInvulnerableTag extends BattlerTag {
   constructor(tagType: BattlerTagType, turnCount: number, sourceMoveId: MoveId) {
     super(tagType, BattlerTagLapseType.MOVE_EFFECT, turnCount, sourceMoveId);

@@ -8,6 +8,13 @@ import { HitResult } from "#enums/hit-result";
 import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 
+/**
+ * Tag representing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Perish_Song_(move) | Perish Song}.
+ * Causes the owner to faint when {@linkcode turnCount} is depleted.
+ *
+ * Custom implementation: Boss Pokemon are immune to this effect
+ * @extends BattlerTag
+ */
 export class PerishSongTag extends BattlerTag {
   constructor(turnCount: number) {
     super(BattlerTagType.PERISH_SONG, BattlerTagLapseType.TURN_END, turnCount, MoveId.PERISH_SONG, undefined, true);

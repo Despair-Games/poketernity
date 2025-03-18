@@ -5,7 +5,7 @@ import type { ElementalType } from "#enums/elemental-type";
 import type { MoveId } from "#enums/move-id";
 
 /**
- * Tag that makes the target drop all of it type immunities
+ * Tag that makes the target drop all of its type immunities
  * and all accuracy checks ignore its evasiveness stat.
  *
  * Applied by moves: {@linkcode MoveId.ODOR_SLEUTH | Odor Sleuth},
@@ -44,7 +44,7 @@ export class ExposedTag extends BattlerTag {
    * @param moveType {@linkcode ElementalType} of the move targetting it
    * @returns `true` if the move should be allowed to target the defender.
    */
-  ignoreImmunity(type: ElementalType, moveType: ElementalType): boolean {
+  public ignoreImmunity(type: ElementalType, moveType: ElementalType): boolean {
     return type === this.defenderType && this.allowedTypes.includes(moveType);
   }
 }

@@ -8,8 +8,10 @@ import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 
 /**
- * Battler Tag that keeps track of how many times the user has Autotomized
- * Each count of Autotomization reduces the weight by 100kg
+ * Tag representing the weight reduction effect of
+ * {@link https://bulbapedia.bulbagarden.net/wiki/Autotomize_(move) | Autotomize}.
+ * Each count of Autotomization reduces the owner's weight by 100kg
+ * @extends BattlerTag
  */
 export class AutotomizedTag extends BattlerTag {
   public autotomizeCount: number = 0;

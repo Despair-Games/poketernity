@@ -1,14 +1,18 @@
-import { BattlerTag } from "#app/data/battler-tags/battler-tag";
+import { AbilityBattlerTag } from "#app/data/battler-tags/ability-battler-tag";
 import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
+import type { Abilities } from "#enums/abilities";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 
-/** Common attributes of form change abilities that block damage */
-export class FormBlockDamageTag extends BattlerTag {
-  constructor(tagType: BattlerTagType) {
-    super(tagType, BattlerTagLapseType.CUSTOM, 1);
+/**
+ * Common attributes of form change abilities that block damage
+ * @extends AbilityBattlerTag
+ */
+export class FormBlockDamageTag extends AbilityBattlerTag {
+  constructor(tagType: BattlerTagType, ability: Abilities) {
+    super(tagType, ability, BattlerTagLapseType.CUSTOM, 1);
   }
 
   /**

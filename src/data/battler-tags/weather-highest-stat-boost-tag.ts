@@ -5,6 +5,13 @@ import type { Abilities } from "#enums/abilities";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { WeatherType } from "#enums/weather-type";
 
+/**
+ * Tag representing the stat boost from an ability
+ * (i.e. {@link https://bulbapedia.bulbagarden.net/wiki/Protosynthesis_(Ability) | Protosynthesis})
+ * while a given {@linkcode WeatherType | weather} is active.
+ * @extends HighestStatBoostTag
+ * @implements `WeatherBattlerTag`
+ */
 export class WeatherHighestStatBoostTag extends HighestStatBoostTag implements WeatherBattlerTag {
   public weatherTypes: WeatherType[];
 

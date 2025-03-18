@@ -7,6 +7,13 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 
+/**
+ * Tag to manage messages related to the enduring effect of
+ * {@link https://bulbapedia.bulbagarden.net/wiki/Sturdy_(Ability) | Sturdy}.
+ * This is added to Pokemon with the ability whenever they receive
+ * lethal attack damage from full HP.
+ * @extends BattlerTag
+ */
 export class SturdyTag extends BattlerTag {
   constructor(sourceMoveId: MoveId) {
     super(BattlerTagType.STURDY, BattlerTagLapseType.TURN_END, 0, sourceMoveId);

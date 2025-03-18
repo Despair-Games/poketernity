@@ -10,6 +10,11 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 
+/**
+ * Tag representing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Truant_(Ability) | Truant}.
+ * Prevents the owner from using a move every other turn.
+ * @extends AbilityBattlerTag
+ */
 export class TruantTag extends AbilityBattlerTag {
   constructor() {
     super(BattlerTagType.TRUANT, Abilities.TRUANT, BattlerTagLapseType.MOVE, 1);
