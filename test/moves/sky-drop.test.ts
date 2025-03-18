@@ -104,8 +104,8 @@ describe("Moves - Sky Drop", () => {
     game.move.select(MoveId.SKY_DROP, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.TACKLE, 1, BattlerIndex.ENEMY);
 
-    await game.forceEnemyMove(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
@@ -126,8 +126,8 @@ describe("Moves - Sky Drop", () => {
     game.move.select(MoveId.SKY_DROP, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.TACKLE, 1, BattlerIndex.ENEMY);
 
-    await game.forceEnemyMove(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
@@ -148,8 +148,8 @@ describe("Moves - Sky Drop", () => {
     game.move.select(MoveId.SKY_DROP, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.forceEnemyMove(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.LOCK_ON, BattlerIndex.PLAYER);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.LOCK_ON, BattlerIndex.PLAYER);
 
     game.setTurnOrder([BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2]);
 
@@ -163,8 +163,8 @@ describe("Moves - Sky Drop", () => {
     // the first player should be locked into Sky Drop.
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.forceEnemyMove(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
 
     game.setTurnOrder([BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2]);
 
@@ -267,8 +267,8 @@ describe("Moves - Sky Drop", () => {
 
     game.move.use(MoveId.SKY_DROP, 0, BattlerIndex.ENEMY);
     game.move.use(MoveId.TOXIC, 1, BattlerIndex.ENEMY);
-    await game.move.forceEnemyMove(MoveId.SPLASH);
-    await game.move.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.toEndOfTurn();
 
@@ -335,8 +335,8 @@ describe("Moves - Sky Drop", () => {
     game.move.select(MoveId.SKY_DROP, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.forceEnemyMove(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.FOLLOW_ME);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.FOLLOW_ME);
 
     game.setTurnOrder([BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.PLAYER_2]);
 
@@ -364,8 +364,8 @@ describe("Moves - Sky Drop", () => {
     game.move.select(MoveId.FLIP_TURN, 0, BattlerIndex.ENEMY_2);
     game.move.select(MoveId.SPLASH);
 
-    await game.forceEnemyMove(MoveId.SKY_DROP, BattlerIndex.PLAYER_2);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SKY_DROP, BattlerIndex.PLAYER_2);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
 

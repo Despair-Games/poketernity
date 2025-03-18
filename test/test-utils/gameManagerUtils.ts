@@ -8,7 +8,7 @@ import { PlayerPokemon } from "#app/field/pokemon";
 import { getGameMode } from "#app/game-mode";
 import { GameModes } from "#enums/game-modes";
 import type { StarterMoveset } from "#app/@types/StarterData";
-import type { Starter } from "#app/ui/starter-select-ui-handler";
+import type { StarterConfig } from "#app/@types/StarterConfig";
 import { MoveId } from "#enums/move-id";
 import type { Species } from "#enums/species";
 
@@ -33,7 +33,7 @@ export function holdOn(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export function generateStarter(scene: BattleScene, species?: Species[]): Starter[] {
+export function generateStarter(scene: BattleScene, species?: Species[]): StarterConfig[] {
   const seed = "test";
   const starters = getTestRunStarters(seed, species);
   const startingLevel = scene.gameMode.getStartingLevel();
@@ -62,18 +62,18 @@ export function generateStarter(scene: BattleScene, species?: Species[]): Starte
   return starters;
 }
 
-function getTestRunStarters(seed: string, species?: Species[]): Starter[] {
+function getTestRunStarters(seed: string, species?: Species[]): StarterConfig[] {
   if (!species) {
     return getDailyRunStarters(seed);
   }
-  const starters: Starter[] = [];
+  const starters: StarterConfig[] = [];
   const startingLevel = getGameMode(GameModes.CLASSIC).getStartingLevel();
 
   for (const specie of species) {
     const starterSpeciesForm = getPokemonSpeciesForm(specie, 0);
     const starterSpecies = getPokemonSpecies(starterSpeciesForm.speciesId);
     const pokemon = new PlayerPokemon(starterSpecies, startingLevel, undefined, 0);
-    const starter: Starter = {
+    const starter: StarterConfig = {
       species: starterSpecies,
       dexAttr: pokemon.getDexAttr(),
       abilityIndex: pokemon.abilityIndex,

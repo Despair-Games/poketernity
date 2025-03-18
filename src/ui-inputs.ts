@@ -2,8 +2,8 @@ import type Phaser from "phaser";
 import { settingsUiModes } from "#app/ui/ui";
 import { UiMode } from "#enums/ui-mode";
 import type { InputsController } from "./inputs-controller";
-import type MessageUiHandler from "./ui/message-ui-handler";
-import StarterSelectUiHandler from "./ui/starter-select-ui-handler";
+import type MessageUiHandler from "./ui/handlers/message-ui-handler";
+import StarterSelectUiHandler from "./ui/handlers/starter-select-ui-handler";
 import SettingsUiHandler from "./ui/settings/settings-ui-handler";
 import { Button } from "#enums/buttons";
 import SettingsGamepadUiHandler from "./ui/settings/settings-gamepad-ui-handler";
@@ -11,7 +11,7 @@ import SettingsKeyboardUiHandler from "#app/ui/settings/settings-keyboard-ui-han
 import { globalScene } from "#app/global-scene";
 import SettingsDisplayUiHandler from "./ui/settings/settings-display-ui-handler";
 import SettingsAudioUiHandler from "./ui/settings/settings-audio-ui-handler";
-import RunInfoUiHandler from "./ui/run-info-ui-handler";
+import RunInfoUiHandler from "./ui/handlers/run-info-ui-handler";
 import { settings } from "./system/settings/settings-manager";
 import { GAME_SPEEDS } from "./constants";
 

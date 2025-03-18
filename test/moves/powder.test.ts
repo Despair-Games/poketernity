@@ -234,8 +234,8 @@ describe("Moves - Powder", () => {
 
     game.move.select(MoveId.POWDER, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.GRASS_PLEDGE, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(MoveId.FIRE_PLEDGE, BattlerIndex.PLAYER);
+    await game.move.selectEnemyMove(MoveId.GRASS_PLEDGE, BattlerIndex.PLAYER);
+    await game.move.selectEnemyMove(MoveId.FIRE_PLEDGE, BattlerIndex.PLAYER);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to(BerryPhase, false);
@@ -251,8 +251,8 @@ describe("Moves - Powder", () => {
 
     game.move.select(MoveId.POWDER, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.FIRE_PLEDGE, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(MoveId.WATER_PLEDGE, BattlerIndex.PLAYER);
+    await game.move.selectEnemyMove(MoveId.FIRE_PLEDGE, BattlerIndex.PLAYER);
+    await game.move.selectEnemyMove(MoveId.WATER_PLEDGE, BattlerIndex.PLAYER);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to(BerryPhase, false);
@@ -268,8 +268,8 @@ describe("Moves - Powder", () => {
 
     game.move.select(MoveId.POWDER, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.FIRE_PLEDGE, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(MoveId.WATER_PLEDGE, BattlerIndex.PLAYER);
+    await game.move.selectEnemyMove(MoveId.FIRE_PLEDGE, BattlerIndex.PLAYER);
+    await game.move.selectEnemyMove(MoveId.WATER_PLEDGE, BattlerIndex.PLAYER);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to(BerryPhase, false);

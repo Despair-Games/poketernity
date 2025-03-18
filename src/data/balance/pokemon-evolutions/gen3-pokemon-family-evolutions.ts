@@ -1,14 +1,14 @@
 import { Species } from "#enums/species";
 import {
   DayEvolutionCondition,
-  GenderEvolutionCondition,
+  FemaleEvolutionCondition,
+  MaleEvolutionCondition,
   NightEvolutionCondition,
   type PokemonEvolutions,
   ShedinjaEvoCondition,
   SpeciesEvolution,
   SpeciesFriendshipEvolutionCondition,
 } from "#app/data/pokemon-evolutions";
-import { Gender } from "#enums/gender";
 import { EvolutionItem } from "#enums/evolution-item";
 import {
   ADVANCED_ITEM_EVO_LEVEL,
@@ -43,8 +43,8 @@ export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.RALTS]: [new SpeciesEvolution(Species.KIRLIA, 20, null, null)],
   /** Custom: Gallade evolves by level instead of dawn stone */
   [Species.KIRLIA]: [
-    new SpeciesEvolution(Species.GARDEVOIR, 30, null, [new GenderEvolutionCondition(Gender.FEMALE)]),
-    new SpeciesEvolution(Species.GALLADE, 30, null, [new GenderEvolutionCondition(Gender.MALE)]),
+    new SpeciesEvolution(Species.GARDEVOIR, 30, null, [new FemaleEvolutionCondition()]),
+    new SpeciesEvolution(Species.GALLADE, 30, null, [new MaleEvolutionCondition()]),
   ],
   [Species.SURSKIT]: [new SpeciesEvolution(Species.MASQUERAIN, 22, null, null)],
   [Species.SHROOMISH]: [new SpeciesEvolution(Species.BRELOOM, 23, null, null)],
@@ -110,8 +110,8 @@ export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
   ],
   /** Custom: Froslass evolves by level instead of Dawn Stone */
   [Species.SNORUNT]: [
-    new SpeciesEvolution(Species.GLALIE, 42, null, [new GenderEvolutionCondition(Gender.MALE)]),
-    new SpeciesEvolution(Species.FROSLASS, 42, null, [new GenderEvolutionCondition(Gender.FEMALE)]),
+    new SpeciesEvolution(Species.GLALIE, 42, null, [new MaleEvolutionCondition()]),
+    new SpeciesEvolution(Species.FROSLASS, 42, null, [new FemaleEvolutionCondition()]),
   ],
   [Species.SPHEAL]: [new SpeciesEvolution(Species.SEALEO, 32, null, null)],
   [Species.SEALEO]: [new SpeciesEvolution(Species.WALREIN, 44, null, null)],
@@ -121,14 +121,14 @@ export const gen3pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.HUNTAIL,
       1,
       EvolutionItem.LINKING_CORD /* Deep Sea Tooth */,
-      [new GenderEvolutionCondition(Gender.MALE)],
+      [new MaleEvolutionCondition()],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesEvolution(
       Species.GOREBYSS,
       1,
       EvolutionItem.LINKING_CORD /* Deep Sea Scale */,
-      [new GenderEvolutionCondition(Gender.FEMALE)],
+      [new FemaleEvolutionCondition()],
       GENERIC_ITEM_EVO_LEVEL,
     ),
   ],

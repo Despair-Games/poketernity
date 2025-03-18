@@ -100,8 +100,8 @@ describe("Moves - Revival Blessing", () => {
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.REVIVAL_BLESSING, 1);
-    await game.forceEnemyMove(MoveId.FISSURE, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.FISSURE, BattlerIndex.PLAYER);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");

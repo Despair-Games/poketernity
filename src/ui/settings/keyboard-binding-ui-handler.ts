@@ -1,10 +1,10 @@
-import AbstractBindingUiHandler from "./abstract-binding-ui-handler";
-import type { UiMode } from "#enums/ui-mode";
 import { getKeyWithKeycode } from "#app/configs/inputs/configHandler";
-import { Device } from "#enums/devices";
-import { addTextObject } from "#app/ui/text";
-import { TextStyle } from "#enums/text-style";
 import { globalScene } from "#app/global-scene";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { Device } from "#enums/devices";
+import { TextStyle } from "#enums/text-style";
+import type { UiMode } from "#enums/ui-mode";
+import AbstractBindingUiHandler from "./abstract-binding-ui-handler";
 
 export default class KeyboardBindingUiHandler extends AbstractBindingUiHandler {
   constructor(mode: UiMode | null = null) {

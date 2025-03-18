@@ -5,7 +5,7 @@ import { CommandPhase } from "#app/phases/command-phase";
 import { EncounterPhase } from "#app/phases/encounter-phase";
 import { TitlePhase } from "#app/phases/title-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
-import type SaveSlotSelectUiHandler from "#app/ui/save-slot-select-ui-handler";
+import type SaveSlotSelectUiHandler from "#app/ui/handlers/save-slot-select-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
 import { settings } from "#app/system/settings/settings-manager";

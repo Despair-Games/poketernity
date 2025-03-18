@@ -30,8 +30,7 @@ describe("Abilities - Effect Spore", () => {
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset([MoveId.TACKLE, MoveId.WATER_GUN]);
+      .enemyAbility(Abilities.BALL_FETCH);
 
     // Force minimum RNG roll so that Effect Spore's RNG roll succeeds
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: 0) => min);
@@ -45,7 +44,7 @@ describe("Abilities - Effect Spore", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.TACKLE);
+    await game.move.forceEnemyMove(MoveId.TACKLE);
     await game.move.forceHit();
     await game.toEndOfTurn();
 
@@ -61,7 +60,7 @@ describe("Abilities - Effect Spore", () => {
     vi.spyOn(abilityAttr, "apply");
 
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.TACKLE);
+    await game.move.forceEnemyMove(MoveId.TACKLE);
     await game.move.forceHit();
     await game.toEndOfTurn();
 
@@ -76,7 +75,7 @@ describe("Abilities - Effect Spore", () => {
     vi.spyOn(abilityAttr, "apply");
 
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.TACKLE);
+    await game.move.forceEnemyMove(MoveId.TACKLE);
     await game.move.forceHit();
     await game.toEndOfTurn();
 
@@ -90,7 +89,7 @@ describe("Abilities - Effect Spore", () => {
     vi.spyOn(abilityAttr, "apply");
 
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.WATER_GUN);
+    await game.move.forceEnemyMove(MoveId.WATER_GUN);
     await game.move.forceHit();
     await game.toEndOfTurn();
 

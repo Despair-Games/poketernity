@@ -8,7 +8,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
 import { PlayerPartyMemberPokemonPhase } from "#app/phases/abstract-player-party-member-pokemon-phase";
-import FormChangeSceneHandler from "#app/ui/form-change-scene-handler";
+import FormChangeSceneUiHandler from "#app/ui/handlers/form-change-scene-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { UiMode } from "#enums/ui-mode";
@@ -60,7 +60,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
       return this.end();
     }
 
-    this.messageMode = ui.getHandler() instanceof FormChangeSceneHandler ? UiMode.FORM_CHANGE_SCENE : UiMode.MESSAGE;
+    this.messageMode = ui.getHandler() instanceof FormChangeSceneUiHandler ? UiMode.FORM_CHANGE_SCENE : UiMode.MESSAGE;
     ui.setMode(this.messageMode);
     // If the Pokemon has less than 4 moves, the new move is added to the largest empty moveset index
     // If it has 4 moves, the phase then checks if the player wants to replace the move itself.

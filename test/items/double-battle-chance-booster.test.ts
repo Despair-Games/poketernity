@@ -6,7 +6,7 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { ShopCursorTarget } from "#enums/shop-cursor-target";
 import { UiMode } from "#enums/ui-mode";
-import type ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
+import type ModifierSelectUiHandler from "#app/ui/handlers/modifier-select-ui-handler";
 import { Button } from "#enums/buttons";
 
 describe("Items - Double Battle Chance Boosters", () => {

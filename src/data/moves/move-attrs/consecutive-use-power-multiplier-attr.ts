@@ -1,4 +1,3 @@
-import { MoveId } from "#enums/move-id";
 import { type Pokemon } from "#app/field/pokemon";
 import { type TurnMove } from "#app/@types/TurnMove";
 import { MoveResult } from "#enums/move-result";
@@ -11,7 +10,7 @@ import { MovePowerMultiplierAttr } from "#app/data/moves/move-attrs/move-power-m
  * @extends MovePowerMultiplierAttr
  */
 export abstract class ConsecutiveUsePowerMultiplierAttr extends MovePowerMultiplierAttr {
-  constructor(limit: number, resetOnFail: boolean, resetOnLimit?: boolean, ...comboMoves: MoveId[]) {
+  constructor(limit: number, resetOnFail: boolean) {
     super((user: Pokemon, _target: Pokemon, move: Move): number => {
       const moveHistory = user.getLastXMoves(limit + 1).slice(1);
 
@@ -19,14 +18,11 @@ export abstract class ConsecutiveUsePowerMultiplierAttr extends MovePowerMultipl
       let turnMove: TurnMove | undefined;
 
       while (
-        ((turnMove = moveHistory.shift())?.move.id === move.id
-          || (comboMoves.length && comboMoves.includes(turnMove?.move.id ?? MoveId.NONE)))
+        (turnMove = moveHistory.shift())?.move.id === move.id
         && (!resetOnFail || turnMove?.result === MoveResult.SUCCESS)
       ) {
         if (count < limit - 1) {
           count++;
-        } else if (resetOnLimit) {
-          count = 0;
         } else {
           break;
         }
