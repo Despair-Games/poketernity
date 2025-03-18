@@ -1,24 +1,24 @@
-import { type SubstituteTag } from "#app/data/battler-tags";
+import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import { allMoves } from "#app/data/data-lists";
+import { StealHeldItemChanceAttr } from "#app/data/moves/move-attrs/steal-held-item-chance-attr";
 import { type CommandPhase } from "#app/phases/command-phase";
-import { GameManager } from "#test/test-utils/gameManager";
-import { BattleCommand } from "#enums/battle-command";
-import { UiMode } from "#enums/ui-mode";
+import { TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { Abilities } from "#enums/abilities";
+import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
+import { BattleCommand } from "#enums/battle-command";
+import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
 import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
+import { UiMode } from "#enums/ui-mode";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { StealHeldItemChanceAttr } from "#app/data/moves/move-attrs/steal-held-item-chance-attr";
-import { MoveResult } from "#enums/move-result";
-import { BattlerIndex } from "#enums/battler-index";
-import { ArenaTagSide } from "#enums/arena-tag-side";
-import { TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 
 describe("Moves - Substitute", () => {
   let phaserGame: Phaser.Game;

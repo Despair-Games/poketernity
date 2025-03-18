@@ -1,4 +1,4 @@
-import type { HealBlockTag } from "#app/data/battler-tags";
+import type { HealBlockTag } from "#app/data/battler-tags/heal-block-tag";
 import { getStatusEffectHealText } from "#app/data/status-effect";
 import { type DamageResult } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";

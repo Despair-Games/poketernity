@@ -1,4 +1,5 @@
-import type { RechargingTag, SemiInvulnerableTag } from "#app/data/battler-tags";
+import type { RechargingTag } from "#app/data/battler-tags/recharging-tag";
+import type { SemiInvulnerableTag } from "#app/data/battler-tags/semi-invulnerable-tag";
 import { allMoves } from "#app/data/data-lists";
 import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
 import { SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";

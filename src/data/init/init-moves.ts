@@ -1,5 +1,8 @@
-import { type ShellTrapTag, type StockpilingTag } from "#app/data/battler-tags";
+import type { ShellTrapTag } from "#app/data/battler-tags/shell-trap-tag";
+import type { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
 import { allMoves } from "#app/data/data-lists";
+import { ChargingAttackMove } from "#app/data/moves/charging-attack-move";
+import { ChargingSelfStatusMove } from "#app/data/moves/charging-self-status-move";
 import { AttackMove, SelfStatusMove, StatusMove, type Move } from "#app/data/moves/move";
 import { AbilityChangeAttr } from "#app/data/moves/move-attrs/ability-change-attr";
 import { AbilityCopyAttr } from "#app/data/moves/move-attrs/ability-copy-attr";
@@ -137,6 +140,7 @@ import { PreMoveMessageAttr } from "#app/data/moves/move-attrs/pre-move-message-
 import { PresentPowerAttr } from "#app/data/moves/move-attrs/present-power-attr";
 import { ProtectAttr } from "#app/data/moves/move-attrs/protect-attr";
 import { PsychoShiftEffectAttr } from "#app/data/moves/move-attrs/psycho-shift-effect-attr";
+import { QuashAttr } from "#app/data/moves/move-attrs/quash-attr";
 import { RageAttr } from "#app/data/moves/move-attrs/rage-attr";
 import { RagingBullTypeAttr } from "#app/data/moves/move-attrs/raging-bull-type-attr";
 import { RandomLevelDamageAttr } from "#app/data/moves/move-attrs/random-level-damage-attr";
@@ -145,7 +149,6 @@ import {
   invalidSleepTalkMoves,
   RandomMovesetMoveAttr,
 } from "#app/data/moves/move-attrs/random-moveset-move-attr";
-import { QuashAttr } from "../moves/move-attrs/quash-attr";
 import { RechargeAttr } from "#app/data/moves/move-attrs/recharge-attr";
 import { RecoilAttr } from "#app/data/moves/move-attrs/recoil-attr";
 import { ReducePpMoveAttr } from "#app/data/moves/move-attrs/reduce-pp-move-attr";
@@ -161,6 +164,7 @@ import { ResetStatsAttr } from "#app/data/moves/move-attrs/reset-stats-attr";
 import { ResistLastMoveTypeAttr } from "#app/data/moves/move-attrs/resist-last-move-type-attr";
 import { RespectAttackTypeImmunityAttr } from "#app/data/moves/move-attrs/respect-attack-type-immunity-attr";
 import { RevivalBlessingAttr } from "#app/data/moves/move-attrs/revival-blessing-attr";
+import { RollingPowerMultiplierAttr } from "#app/data/moves/move-attrs/rolling-power-multiplier-attr";
 import { RoundPowerAttr } from "#app/data/moves/move-attrs/round-power-attr";
 import { SacrificialAttr } from "#app/data/moves/move-attrs/sacrificial-attr";
 import { SacrificialFullRestoreAttr } from "#app/data/moves/move-attrs/sacrificial-full-restore-attr";
@@ -227,8 +231,6 @@ import { targetSleptOrComatoseCondition } from "#app/data/moves/move-conditions/
 import { unknownTypeCondition } from "#app/data/moves/move-conditions/unknown-type-condition";
 import { UpperHandCondition } from "#app/data/moves/move-conditions/upper-hand-condition";
 import { userSleptOrComatoseCondition } from "#app/data/moves/move-conditions/user-slept-or-comatose-condition";
-import { ChargingAttackMove } from "#app/data/moves/charging-attack-move";
-import { ChargingSelfStatusMove } from "#app/data/moves/charging-self-status-move";
 import { getNonVolatileStatusEffects } from "#app/data/status-effect";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -256,7 +258,6 @@ import { SwitchType } from "#enums/switch-type";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-import { RollingPowerMultiplierAttr } from "#app/data/moves/move-attrs/rolling-power-multiplier-attr";
 
 // prettier-ignore
 export function initMoves() {

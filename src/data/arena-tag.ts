@@ -28,7 +28,7 @@ import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
 import { CommonBattleAnim } from "./animations/common-battle-anim";
-import { type SkyDropTag } from "./battler-tags";
+import { type SkyDropTag } from "./battler-tags/sky-drop-tag";
 import { SCREEN_DOUBLES_DMG_FACTOR, SCREEN_SINGLES_DMG_FACTOR } from "#app/constants";
 
 export abstract class ArenaTag {
