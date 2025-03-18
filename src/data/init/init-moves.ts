@@ -1078,8 +1078,7 @@ export function initMoves() {
     new StatusMove(MoveId.TORMENT, ElementalType.DARK, 100, 15, -1, 0, 3)
       .attr(AddBattlerTagAttr, BattlerTagType.TORMENT, false, { failOnOverlap: true })
       .ignoresSubstitute()
-      .bounceable()
-      .edgeCase(), // Incomplete implementation because of Uproar's partial implementation
+      .bounceable(),
     new StatusMove(MoveId.FLATTER, ElementalType.DARK, 100, 15, -1, 0, 3)
       .attr(StatStageChangeAttr, [Stat.SPATK], 1)
       .attr(ConfuseAttr)
