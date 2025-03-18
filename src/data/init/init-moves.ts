@@ -139,6 +139,7 @@ import { PreMoveMessageAttr } from "#app/data/moves/move-attrs/pre-move-message-
 import { PresentPowerAttr } from "#app/data/moves/move-attrs/present-power-attr";
 import { ProtectAttr } from "#app/data/moves/move-attrs/protect-attr";
 import { PsychoShiftEffectAttr } from "#app/data/moves/move-attrs/psycho-shift-effect-attr";
+import { QuashAttr } from "#app/data/moves/move-attrs/quash-attr";
 import { RageAttr } from "#app/data/moves/move-attrs/rage-attr";
 import { RagingBullTypeAttr } from "#app/data/moves/move-attrs/raging-bull-type-attr";
 import { RandomLevelDamageAttr } from "#app/data/moves/move-attrs/random-level-damage-attr";
@@ -256,7 +257,6 @@ import { SwitchType } from "#enums/switch-type";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-import { QuashAttr } from "../moves/move-attrs/quash-attr";
 
 // prettier-ignore
 export function initMoves() {
