@@ -1,9 +1,9 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allAbilities } from "#app/data/data-lists";
-import { type PostDefendContactApplyStatusEffectAbAttr } from "#app/data/ab-attrs/post-defend-contact-apply-status-effect-ab-attr";
+import { type PostDefendContactApplyStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/post-defend-contact-apply-status-effect-ab-attr";
 import { Abilities } from "#enums/abilities";
 import { StatusEffect } from "#enums/status-effect";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import Phaser from "phaser";
@@ -42,7 +42,7 @@ describe("Moves - Safeguard", () => {
     const enemyPokemon = game.field.getEnemyPokemon();
 
     game.move.select(MoveId.NUZZLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(enemyPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
@@ -53,7 +53,7 @@ describe("Moves - Safeguard", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.SPORE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(enemyPokemon.getStatusEffect()).toBe(StatusEffect.NONE);
@@ -65,7 +65,7 @@ describe("Moves - Safeguard", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.CONFUSE_RAY);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(enemyPokemon.summonData.tags).toEqual([]);
@@ -79,7 +79,7 @@ describe("Moves - Safeguard", () => {
     game.move.select(MoveId.SPORE, 0, BattlerIndex.ENEMY_2);
     game.move.select(MoveId.NUZZLE, 1, BattlerIndex.ENEMY_2);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
     await game.toEndOfTurn();
 
@@ -94,7 +94,7 @@ describe("Moves - Safeguard", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.YAWN);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(enemyPokemon.summonData.tags).toEqual([]);
@@ -105,7 +105,7 @@ describe("Moves - Safeguard", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.YAWN);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
     game.move.select(MoveId.SPLASH);
@@ -120,7 +120,7 @@ describe("Moves - Safeguard", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.SPLASH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
     enemyPokemon.damageAndUpdate(1);
 
@@ -150,7 +150,7 @@ describe("Moves - Safeguard", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.SPLASH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
     game.override.enemyMoveset([MoveId.TACKLE]);
     game.move.select(MoveId.SPLASH);
@@ -169,7 +169,7 @@ describe("Moves - Safeguard", () => {
     await game.move.forceEnemyMove(MoveId.SAFEGUARD);
     await game.move.forceEnemyMove(MoveId.MEMENTO, BattlerIndex.PLAYER);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
+    game.setTurnOrder([BattlerIndex.ENEMY_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
     const enemyPokemon = game.scene.getEnemyField();
 

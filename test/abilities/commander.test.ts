@@ -9,7 +9,7 @@ import type { EffectiveStat } from "#enums/stat";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -37,8 +37,7 @@ describe("Abilities - Commander", () => {
       .battleType("double")
       .disableCrits()
       .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset(MoveId.TACKLE);
+      .enemyAbility(Abilities.BALL_FETCH);
 
     vi.spyOn(game.scene, "triggerPokemonBattleAnim").mockReturnValue(true);
   });
@@ -56,13 +55,16 @@ describe("Abilities - Commander", () => {
 
     game.move.select(MoveId.SPLASH, 1);
 
-    expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
-
     // Force both enemies to target the Tatsugiri
-    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
+    await game.move.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
+    await game.move.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.phaseInterceptor.to("TurnStartPhase", false);
+
+    const { turnManager } = game.scene.currentBattle;
+    expect(turnManager.findCommandFromPokemon(tatsugiri)).toBeUndefined();
+
+    await game.toEndOfTurn();
     game.scene.getEnemyField().forEach((enemy) => expect(enemy.getLastXMoves(1)[0].result).toBe(MoveResult.MISS));
     expect(tatsugiri.isFullHp()).toBeTruthy();
   });
@@ -83,7 +85,7 @@ describe("Abilities - Commander", () => {
     const dondozo = game.scene.getPlayerField()[1];
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(tatsugiri.getMoveHistory()).toHaveLength(0);
     expect(game.scene.getEnemyField()[0].isFullHp()).toBeTruthy();
   });
@@ -96,20 +98,23 @@ describe("Abilities - Commander", () => {
     expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(tatsugiri, PokemonAnimType.COMMANDER_APPLY);
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeDefined();
 
+    game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER]);
+
     game.move.select(MoveId.MEMENTO, 1, BattlerIndex.ENEMY);
 
-    expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
+    await game.move.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
+    await game.move.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
 
-    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
+    await game.phaseInterceptor.to("TurnStartPhase", false);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER]);
+    const { turnManager } = game.scene.currentBattle;
+    expect(turnManager.findCommandFromPokemon(tatsugiri)).toBeUndefined();
 
     await game.phaseInterceptor.to("FaintPhase");
     expect(dondozo.getTag(BattlerTagType.COMMANDED)).toBeUndefined();
     expect(game.scene.triggerPokemonBattleAnim).toHaveBeenLastCalledWith(dondozo, PokemonAnimType.COMMANDER_REMOVE);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(tatsugiri.isFullHp()).toBeFalsy();
   });
 
@@ -125,7 +130,10 @@ describe("Abilities - Commander", () => {
 
     game.move.select(MoveId.SPLASH, 1);
 
-    expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
+    await game.phaseInterceptor.to("TurnStartPhase", false);
+
+    const { turnManager } = game.scene.currentBattle;
+    expect(turnManager.findCommandFromPokemon(tatsugiri)).toBeUndefined();
 
     await game.toEndOfTurn();
     expect(tatsugiri.isFullHp()).toBeFalsy();
@@ -145,7 +153,10 @@ describe("Abilities - Commander", () => {
 
     game.move.select(MoveId.SPLASH, 1);
 
-    expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
+    await game.phaseInterceptor.to("TurnStartPhase", false);
+
+    const { turnManager } = game.scene.currentBattle;
+    expect(turnManager.findCommandFromPokemon(tatsugiri)).toBeUndefined();
 
     await game.toEndOfTurn();
     expect(tatsugiri.isFullHp()).toBeFalsy();
@@ -163,15 +174,16 @@ describe("Abilities - Commander", () => {
 
     game.move.select(MoveId.SPLASH, 1);
 
-    expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
+    await game.phaseInterceptor.to("TurnStartPhase", false);
+
+    const { turnManager } = game.scene.currentBattle;
+    expect(turnManager.findCommandFromPokemon(tatsugiri)).toBeUndefined();
 
     await game.toEndOfTurn();
     expect(tatsugiri.isFullHp()).toBeFalsy();
   });
 
   it("should make Dondozo immune to being forced out", async () => {
-    game.override.enemyMoveset([MoveId.SPLASH, MoveId.WHIRLWIND]);
-
     await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
 
     const [tatsugiri, dondozo] = game.scene.getPlayerField();
@@ -181,10 +193,13 @@ describe("Abilities - Commander", () => {
 
     game.move.select(MoveId.SPLASH, 1);
 
-    expect(game.scene.currentBattle.turnCommands[0]?.skip).toBeTruthy();
+    await game.move.forceEnemyMove(MoveId.WHIRLWIND, BattlerIndex.PLAYER_2);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
 
-    await game.forceEnemyMove(MoveId.WHIRLWIND, BattlerIndex.PLAYER_2);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.phaseInterceptor.to("TurnStartPhase", false);
+
+    const { turnManager } = game.scene.currentBattle;
+    expect(turnManager.findCommandFromPokemon(tatsugiri)).toBeUndefined();
 
     // Test may time out here if Whirlwind forced out a Pokemon
     await game.toEndOfTurn();

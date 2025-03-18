@@ -2,7 +2,7 @@ import type { PokemonMoveSelectFilter } from "#app/@types/PokemonMoveSelectFilte
 import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
 import { PARTY_UI_NO_EFFECT_MSG_i18N_KEY } from "#app/constants";
 import { allMoves } from "#app/data/data-lists";
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
 import { tmPoolTiers, tmSpecies } from "#app/data/balance/tms";
 import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { getPokeballCatchMultiplier, getPokeballName } from "#app/data/pokeball";
@@ -53,7 +53,7 @@ import { modifierTypes } from "#app/modifier/modifier-types";
 import Overrides from "#app/overrides";
 import { settings } from "#app/system/settings/settings-manager";
 import { getVoucherTypeIcon, getVoucherTypeName } from "#app/system/voucher";
-import { getModifierTierTextTint } from "#app/ui/text";
+import { getModifierTierTextTint } from "#app/ui/text/text-utils";
 import {
   formatMoney,
   getEnumKeys,
@@ -1046,7 +1046,7 @@ export class TmModifierType extends PokemonModifierType {
   constructor(moveId: MoveId) {
     super(
       "",
-      `tm_${ElementalType[allMoves[moveId].type].toLowerCase()}`,
+      `tm_${ElementalType[allMoves.get(moveId).type].toLowerCase()}`,
       (_type, args) => new TmModifier(this, (args[0] as PlayerPokemon).id),
       (pokemon: PlayerPokemon) => {
         if (
@@ -1066,7 +1066,7 @@ export class TmModifierType extends PokemonModifierType {
   override get name(): string {
     return i18next.t("modifierType:ModifierType.TmModifierType.name", {
       moveId: leftPad(Object.keys(tmSpecies).indexOf(this.moveId.toString()) + 1, 3),
-      moveName: allMoves[this.moveId].name,
+      moveName: allMoves.get(this.moveId).name,
     });
   }
 
@@ -1075,7 +1075,7 @@ export class TmModifierType extends PokemonModifierType {
       settings.display.enableMoveInfo
         ? "modifierType:ModifierType.TmModifierTypeWithInfo.description"
         : "modifierType:ModifierType.TmModifierType.description",
-      { moveName: allMoves[this.moveId].name },
+      { moveName: allMoves.get(this.moveId).name },
     );
   }
 }
@@ -1094,7 +1094,7 @@ export class EvolutionItemModifierType extends PokemonModifierType implements Ge
           && pokemonEvolutions[pokemon.species.speciesId].filter(
             (e) =>
               e.item === this.evolutionItem
-              && (!e.condition || e.condition.predicate(pokemon))
+              && (!e.conditions || e.conditions.every((condition) => condition.predicate(pokemon)))
               && (e.preFormKey === null || e.preFormKey === pokemon.getFormKey()),
           ).length
           && pokemon.getFormKey() !== SpeciesFormKey.GIGANTAMAX
@@ -1364,7 +1364,7 @@ export class TmModifierTypeGenerator extends ModifierTypeGenerator {
       const tierUniqueCompatibleTms = partyMemberCompatibleTms
         .flat()
         .filter((tm) => tmPoolTiers[tm] === tier)
-        .filter((tm) => !allMoves[tm].name.endsWith(" (N)"))
+        .filter((tm) => !allMoves.get(tm).name.endsWith(" (N)"))
         .filter((tm, i, array) => array.indexOf(tm) === i);
       if (!tierUniqueCompatibleTms.length) {
         return null;
@@ -1396,7 +1396,7 @@ export class EvolutionItemModifierTypeGenerator extends ModifierTypeGenerator {
             (e) =>
               e.item !== EvolutionItem.NONE
               && (e.evoFormKey === null || (e.preFormKey || "") === p.getFormKey())
-              && (!e.condition || e.condition.predicate(p)),
+              && (!e.conditions || e.conditions.every((condition) => condition.predicate(p))),
           );
         })
         .flatMap((e) => e.item)
@@ -2195,5 +2195,6 @@ export function getLuckTextTint(luckValue: number): number {
   } else {
     modifierTier = ModifierTier.COMMON;
   }
+  // todo: this makes D luck appear white on white in light mode
   return getModifierTierTextTint(modifierTier);
 }

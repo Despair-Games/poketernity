@@ -3,7 +3,7 @@ import { Abilities } from "#enums/abilities";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import type { NumberHolder } from "#app/utils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -44,7 +44,7 @@ describe("Abilities - Fluffy", () => {
     await game.toEndOfTurn();
 
     const damageMultiplier = (abilitySpy.mock.lastCall?.[4] as NumberHolder).value;
-    expect(allMoves[MoveId.TACKLE].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    expect(allMoves.get(MoveId.TACKLE).hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
     expect(damageMultiplier).toBe(0.5);
   });
 
@@ -70,7 +70,7 @@ describe("Abilities - Fluffy", () => {
     await game.toEndOfTurn();
 
     const damageMultiplier = (abilitySpy.mock.lastCall?.[4] as NumberHolder).value;
-    expect(allMoves[MoveId.FIRE_FANG].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    expect(allMoves.get(MoveId.FIRE_FANG).hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
     expect(damageMultiplier).toBe(1);
   });
 
@@ -84,7 +84,7 @@ describe("Abilities - Fluffy", () => {
     await game.toEndOfTurn();
 
     const damageMultiplier = (abilitySpy.mock.lastCall?.[4] as NumberHolder).value;
-    expect(allMoves[MoveId.TACKLE].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    expect(allMoves.get(MoveId.TACKLE).hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
     expect(damageMultiplier).toBe(1);
   });
 });

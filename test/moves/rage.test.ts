@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect } from "vitest";
 import { Stat } from "#enums/stat";
@@ -44,7 +44,7 @@ describe("Moves - Rage", () => {
     await game.move.forceEnemyMove(MoveId.TRIPLE_AXEL); // Should give +3
     await game.move.forceEnemyMove(MoveId.TACKLE); // Should give +1
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.toNextTurn();
 
     expect(playerPokemon.getTag(BattlerTagType.RAGE)).toBeDefined();
@@ -54,7 +54,7 @@ describe("Moves - Rage", () => {
     await game.move.forceEnemyMove(MoveId.TRIPLE_AXEL); // Should give +0
     await game.move.forceEnemyMove(MoveId.TACKLE); // Should give +0
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.toNextTurn();
 
     expect(playerPokemon.getTag(BattlerTagType.RAGE)).toBeUndefined();
@@ -64,7 +64,7 @@ describe("Moves - Rage", () => {
     await game.move.forceEnemyMove(MoveId.SHADOW_PUNCH); // Should give +0
     await game.move.forceEnemyMove(MoveId.TACKLE); // Should give +1
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.toNextTurn();
 
     expect(playerPokemon.getTag(BattlerTagType.RAGE)).toBeDefined();

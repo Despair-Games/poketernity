@@ -5,7 +5,7 @@ import { MoveResult } from "#enums/move-result";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { BattlerIndex } from "#enums/battler-index";
@@ -40,7 +40,7 @@ describe("Moves - Whirlwind", () => {
     game.move.use(moveId);
     await game.move.forceEnemyMove(MoveId.WHIRLWIND);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(staraptor.findTag((t) => t.tagType === BattlerTagType.FLYING)).toBeDefined();
     expect(game.scene.getEnemyPokemon()!.getLastXMoves(1)[0].result).toBe(MoveResult.MISS);
@@ -57,9 +57,9 @@ describe("Moves - Whirlwind", () => {
     game.move.select(MoveId.SKY_DROP, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.WHIRLWIND, 1, BattlerIndex.ENEMY);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     [staraptor, enemyPokemon[0]].forEach((p) => expect(p.getTag(BattlerTagType.SKY_DROP)).toBeDefined());
     expect(pidgeot.getLastXMoves()[0]?.result).toBe(MoveResult.MISS);

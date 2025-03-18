@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import AbstractOptionSelectUiHandler from "#app/ui/abstract-option-select-ui-handler";
+import AbstractOptionSelectUiHandler from "#app/ui/handlers/abstract-option-select-ui-handler";
 // -- end tsdoc imports --
 import type { OptionSelectItem } from "./option-select-config";
 

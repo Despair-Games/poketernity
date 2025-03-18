@@ -7,7 +7,7 @@ import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { MoveResult } from "#enums/move-result";
 import { describe, beforeAll, afterEach, beforeEach, it, expect } from "vitest";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 
 describe("Moves - Dig", () => {
   let phaserGame: Phaser.Game;
@@ -97,14 +97,14 @@ describe("Moves - Dig", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
-    const preDigEarthquakeDmg = playerPokemon.getAttackDamage(enemyPokemon, allMoves[MoveId.EARTHQUAKE]).damage;
+    const preDigEarthquakeDmg = playerPokemon.getAttackDamage(enemyPokemon, allMoves.get(MoveId.EARTHQUAKE)).damage;
 
     game.move.select(MoveId.DIG);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEffectPhase");
 
-    const postDigEarthquakeDmg = playerPokemon.getAttackDamage(enemyPokemon, allMoves[MoveId.EARTHQUAKE]).damage;
+    const postDigEarthquakeDmg = playerPokemon.getAttackDamage(enemyPokemon, allMoves.get(MoveId.EARTHQUAKE)).damage;
     // these hopefully get avoid rounding errors :shrug:
     expect(postDigEarthquakeDmg).toBeGreaterThanOrEqual(2 * preDigEarthquakeDmg);
     expect(postDigEarthquakeDmg).toBeLessThan(2 * (preDigEarthquakeDmg + 1));

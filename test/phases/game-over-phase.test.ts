@@ -2,10 +2,10 @@ import { Biome } from "#enums/biome";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achievements";
 import { Unlockables } from "#enums/unlockables";
 
 describe("Game Over Phase", () => {

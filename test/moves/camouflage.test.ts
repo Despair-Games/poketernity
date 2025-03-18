@@ -4,7 +4,7 @@ import { Species } from "#enums/species";
 import { TerrainType } from "#enums/terrain-type";
 import { ElementalType } from "#enums/elemental-type";
 import { BattlerIndex } from "#enums/battler-index";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -40,7 +40,7 @@ describe("Moves - Camouflage", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
     game.move.select(MoveId.CAMOUFLAGE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
     expect(game.scene.arena.hasTerrain(TerrainType.PSYCHIC)).toBe(true);
     const pokemonType = playerPokemon.getTypes()[0];

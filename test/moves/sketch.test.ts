@@ -3,13 +3,13 @@ import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { MoveResult } from "#enums/move-result";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { StatusEffect } from "#enums/status-effect";
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
-import { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
+import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
 
 describe("Moves - Sketch", () => {
   let phaserGame: Phaser.Game;
@@ -65,14 +65,14 @@ describe("Moves - Sketch", () => {
     playerPokemon.moveset = [new PokemonMove(MoveId.SKETCH), new PokemonMove(MoveId.GROWL)];
 
     game.move.select(MoveId.GROWL);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.move.forceStatusActivation(false);
     await game.toEndOfTurn();
     expect(enemyPokemon.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
 
     await game.toNextTurn();
     game.move.select(MoveId.SKETCH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.move.forceStatusActivation(true);
     await game.toEndOfTurn();
     expect(playerPokemon.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
@@ -81,10 +81,10 @@ describe("Moves - Sketch", () => {
   });
 
   it("should sketch moves that call other moves", async () => {
-    const randomMoveAttr = allMoves[MoveId.METRONOME].findAttr(
-      (attr) => attr instanceof MetronomeAttr,
-    ) as MetronomeAttr;
-    vi.spyOn(randomMoveAttr, "getMoveOverride").mockReturnValue(MoveId.FALSE_SWIPE);
+    const randomMoveAttr = allMoves
+      .get(MoveId.METRONOME)
+      .findAttr((attr) => attr instanceof MetronomeAttr) as MetronomeAttr;
+    vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.FALSE_SWIPE);
 
     game.override.enemyMoveset([MoveId.METRONOME]);
     await game.classicMode.startBattle([Species.REGIELEKI]);
@@ -93,7 +93,7 @@ describe("Moves - Sketch", () => {
 
     // Opponent uses Metronome -> False Swipe, then player uses Sketch, which should sketch Metronome
     game.move.select(MoveId.SKETCH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
     expect(playerPokemon.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
     expect(playerPokemon.moveset[0]?.moveId).toBe(MoveId.METRONOME);

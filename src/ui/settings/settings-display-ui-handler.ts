@@ -2,12 +2,11 @@ import type { SupportedLanguage } from "#app/@types/Language";
 import { LANGUAGE_MAX_OPTIONS } from "#app/constants";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
-import { displaySettingUiItems } from "#app/ui/settings/settings-ui-items";
 import { supportedLanguages } from "#app/system/settings/supported-languages";
-import i18next from "i18next";
+import { displaySettingUiItems } from "#app/ui/settings/settings-ui-items";
 import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
 import AbstractSettingsUiHandler from "./abstract-settings-ui-handler";
-("#app/inputs-controller");
 
 export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler {
   /**

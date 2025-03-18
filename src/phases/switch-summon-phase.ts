@@ -1,4 +1,4 @@
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { type SubstituteTag } from "#app/data/battler-tags";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
@@ -96,7 +96,7 @@ export class SwitchSummonPhase extends SummonPhase {
           }),
     );
 
-    globalScene.playSound("se/pb_rel");
+    globalScene.audioManager.playSound("se/pb_rel");
     pokemon.hideInfo();
     pokemon.tint(getPokeballTintColor(pokemon.pokeball), 1, 250, "Sine.easeIn");
     tweens.add({

@@ -2,19 +2,19 @@ import type { SettingsCategory, SettingsUiItem } from "#app/@types/Settings";
 import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import { settings as settingsManager } from "#app/system/settings/settings-manager";
-import MessageUiHandler from "#app/ui/message-ui-handler";
-import { ScrollBar } from "#app/ui/scroll-bar";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
+import { ScrollBar } from "#app/ui/components/scroll-bar";
+import MessageUiHandler from "#app/ui/handlers/message-ui-handler";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-handler";
-import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigationMenu";
-import { addTextObject, setTextColor } from "#app/ui/text";
-import { TextStyle } from "#enums/text-style";
-import { UiMode } from "#enums/ui-mode";
+import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigation-menu";
+import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { capitalizeFirstLetter, hasTouchscreen, isNullOrUndefined } from "#app/utils";
 import { Button } from "#enums/buttons";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 /**
  * Abstract class for handling UI elements related to settings.
@@ -111,13 +111,10 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
       0,
       0,
       `*: ${i18next.t("settings:requireReload")}`,
-      TextStyle.SUMMARY_GRAY,
-      {
-        fontSize: "5rem",
-      },
+      TextStyle.SETTINGS_LOCKED,
     );
-    requiresReloadInfoText.setOrigin(0, 0.35);
-    requiresReloadInfoText.setPositionRelative(actionsBg, 10, 10);
+    requiresReloadInfoText.setOrigin(0, 0.15);
+    requiresReloadInfoText.setPositionRelative(actionsBg, 5, 5);
 
     this.optionsContainer = globalScene.add.container(0, 0);
 
@@ -182,7 +179,7 @@ export default class AbstractSettingsUiHandler extends MessageUiHandler {
     this.messageBoxContainer.add(settingsMessageBox);
 
     const messageText = addTextObject(8, -40, "", TextStyle.WINDOW, { maxLines: 2 });
-    messageText.setWordWrapWidth((GAME_WIDTH - 10) / messageText.scale);
+    messageText.setWordWrapWidth((GAME_WIDTH - 10) * TEXT_SCALE);
     messageText.setName("settings-message");
     messageText.setOrigin(0, 0);
 

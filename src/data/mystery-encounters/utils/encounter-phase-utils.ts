@@ -5,7 +5,7 @@ import { biomeLinks } from "#app/data/balance/biomes";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import type { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { Egg, type IEggOptions } from "#app/data/egg";
-import { initMoveAnim } from "#app/data/init-move-anim";
+import { initMoveAnim } from "#app/data/init/init-move-anim";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
 import { showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { getNatureName } from "#app/data/nature";
@@ -86,7 +86,7 @@ export function doTrainerExclamation() {
     },
   });
 
-  globalScene.playSound("battle_anims/GEN8- Exclaim", { volume: 0.7 });
+  globalScene.audioManager.playSound("battle_anims/GEN8- Exclaim", { volume: 0.7 });
 }
 
 export interface EnemyPokemonConfig {
@@ -470,7 +470,7 @@ export function updatePlayerMoney(changeValue: number, playSound: boolean = true
   globalScene.updateMoneyText();
   globalScene.animateMoneyChanged(false);
   if (playSound) {
-    globalScene.playSound("se/buy");
+    globalScene.audioManager.playSound("se/buy");
   }
   if (showMessage) {
     if (changeValue < 0) {

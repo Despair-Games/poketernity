@@ -3,7 +3,7 @@ import { MoveResult } from "#enums/move-result";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import type { TurnMove } from "#app/@types/TurnMove";
 import { ElementalType } from "#enums/elemental-type";
@@ -40,7 +40,7 @@ describe("Moves - Disable", () => {
     const enemyMon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.DISABLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(enemyMon.getMoveHistory()).toHaveLength(1);
@@ -54,7 +54,7 @@ describe("Moves - Disable", () => {
     const enemyMon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.DISABLE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
     expect(playerMon.getMoveHistory()[0]).toMatchObject<TurnMove>({
@@ -72,7 +72,7 @@ describe("Moves - Disable", () => {
     const enemyMon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.DISABLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     game.move.select(MoveId.SPLASH);
@@ -92,7 +92,7 @@ describe("Moves - Disable", () => {
     const enemyMon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.DISABLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(playerMon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);
@@ -110,7 +110,7 @@ describe("Moves - Disable", () => {
 
     // Both mons just used Splash last turn; now have player use Disable.
     game.move.select(MoveId.DISABLE);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
     const enemyHistory = enemyMon.getMoveHistory();
@@ -131,7 +131,7 @@ describe("Moves - Disable", () => {
     const enemyMon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.DISABLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(enemyMon.isMoveRestricted(MoveId.NATURE_POWER)).toBe(true);

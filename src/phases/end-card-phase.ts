@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { addTextObject } from "#app/ui/text";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { PlayerGender } from "#enums/player-gender";
 import i18next from "i18next";
@@ -38,8 +38,7 @@ export class EndCardPhase extends Phase {
       GAME_WIDTH / 2,
       GAME_HEIGHT - 16,
       i18next.t("battle:congratulations"),
-      TextStyle.SUMMARY,
-      { fontSize: "128px" },
+      TextStyle.END_CARD,
     );
     this.text.setOrigin(0.5);
     field.add(this.text);

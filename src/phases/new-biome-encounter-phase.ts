@@ -1,4 +1,4 @@
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { getRandomWeatherType } from "#app/data/weather";
 import { globalScene } from "#app/global-scene";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -15,7 +15,7 @@ export class NewBiomeEncounterPhase extends NextEncounterPhase {
   protected override doEncounter(): void {
     const { arenaEnemy, currentBattle, tweens } = globalScene;
 
-    globalScene.playBgm(undefined, true);
+    globalScene.audioManager.playBgm(undefined, true);
 
     for (const pokemon of globalScene.getPlayerParty()) {
       if (pokemon) {

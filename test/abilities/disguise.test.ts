@@ -5,7 +5,7 @@ import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Abilities - Disguise", () => {
@@ -228,7 +228,7 @@ describe("Abilities - Disguise", () => {
     await game.classicMode.startBattle();
 
     game.move.select(MoveId.POWER_TRIP);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(game.scene.getEnemyPokemon()!.formIndex).toBe(disguisedForm);

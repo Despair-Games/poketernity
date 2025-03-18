@@ -1,7 +1,7 @@
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Abilities } from "#enums/abilities";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { MoveResult } from "#enums/move-result";
@@ -37,7 +37,7 @@ describe("Moves - Taunt", () => {
 
     // First turn, Player Pokemon succeeds using Growl without Taunt
     game.move.select(MoveId.GROWL);
-    await game.forceEnemyMove(MoveId.TAUNT);
+    await game.move.selectEnemyMove(MoveId.TAUNT);
     await game.toNextTurn();
     const move1 = playerPokemon.getLastXMoves(1)[0]!;
     expect(move1.move.id).toBe(MoveId.GROWL);
@@ -46,7 +46,7 @@ describe("Moves - Taunt", () => {
 
     // Second turn, Taunt forces Struggle to occur
     game.move.select(MoveId.GROWL);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
     const move2 = playerPokemon.getLastXMoves(1)[0]!;
     expect(move2.move.id).toBe(MoveId.STRUGGLE);

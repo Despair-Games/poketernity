@@ -4,7 +4,7 @@ import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { BattlerIndex } from "#enums/battler-index";
@@ -65,11 +65,11 @@ describe("Abilities - Volt Absorb", () => {
 
     game.move.select(MoveId.THUNDERBOLT);
     enemyPokemon.hp = enemyPokemon.hp - 1;
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.phaseInterceptor.to("MoveEffectPhase");
 
     await game.move.forceMiss();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
   });
 
@@ -85,9 +85,9 @@ describe("Abilities - Volt Absorb", () => {
 
     game.move.select(MoveId.THUNDERBOLT);
     enemyPokemon.hp = enemyPokemon.hp - 1;
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(enemyPokemon.hp).toBeLessThan(enemyPokemon.getMaxHp());
   });
 });

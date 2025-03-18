@@ -1,4 +1,4 @@
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { EnemyPokemon, PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
@@ -37,7 +37,7 @@ export class AttemptRunPhase extends PokemonPhase {
     applyAbAttrs(AbAttrFlag.RUN_SUCCESS, playerPokemon, false, escapeChance);
 
     if (playerPokemon.randSeedInt(100) < escapeChance.value && !this.forceFailEscape) {
-      globalScene.playSound("se/flee");
+      globalScene.audioManager.playSound("se/flee");
       globalScene.queueMessage(i18next.t("battle:runAwaySuccess"), null, true, 500);
 
       globalScene.tweens.add({

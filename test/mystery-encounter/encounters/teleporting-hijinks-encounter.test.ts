@@ -8,8 +8,8 @@ import { Species } from "#enums/species";
 import { CommandPhase } from "#app/phases/command-phase";
 import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import { GameManager } from "#test/testUtils/gameManager";
-import ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
+import { GameManager } from "#test/test-utils/gameManager";
+import ModifierSelectUiHandler from "#app/ui/handlers/modifier-select-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
@@ -18,7 +18,7 @@ import {
   runSelectMysteryEncounterOption,
   skipBattleRunMysteryEncounterRewardsPhase,
 } from "#test/mystery-encounter/encounter-test-utils";
-import { initSceneWithoutEncounterPhase } from "#test/testUtils/gameManagerUtils";
+import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
 import i18next from "i18next";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

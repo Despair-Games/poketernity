@@ -1,7 +1,7 @@
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Abilities } from "#enums/abilities";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { MoveResult } from "#enums/move-result";
@@ -40,7 +40,7 @@ describe("Moves - Torment", () => {
 
     // First turn, Player Pokemon uses Tackle successfully
     game.move.select(MoveId.TACKLE);
-    await game.forceEnemyMove(MoveId.TORMENT);
+    await game.move.selectEnemyMove(MoveId.TORMENT);
     await game.toNextTurn();
     const move1 = playerPokemon.getLastXMoves(1)[0]!;
     expect(move1.move.id).toBe(MoveId.TACKLE);
@@ -49,14 +49,14 @@ describe("Moves - Torment", () => {
 
     // Second turn, Torment forces Struggle to occur
     game.move.select(MoveId.TACKLE);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
     const move2 = playerPokemon.getLastXMoves(1)[0]!;
     expect(move2.move.id).toBe(MoveId.STRUGGLE);
 
     // Third turn, Tackle can be used.
     game.move.select(MoveId.TACKLE);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase);
     const move3 = playerPokemon.getLastXMoves(1)[0]!;
     expect(move3.move.id).toBe(MoveId.TACKLE);

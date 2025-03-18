@@ -3,7 +3,7 @@ import { type MovePhase } from "#app/phases/move-phase";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -40,7 +40,7 @@ describe("Abilities - Dancer", () => {
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.FEATHER_DANCE, 1, BattlerIndex.ENEMY);
-    await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("MovePhase");
     // immediately copies ally move Feather Dance, and uses it on opponent
     await game.phaseInterceptor.to("MovePhase", false);

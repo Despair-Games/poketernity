@@ -10,27 +10,28 @@ import { getWindowVariantSuffix } from "#app/ui/ui-theme";
 import { WindowVariant } from "#enums/window-variant";
 import { isMobile } from "#app/touch-controls";
 import { getEnumValues, getEnumKeys } from "#app/utils";
-import { initPokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
+import { initPokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { initBiomes } from "#app/data/balance/biomes";
 import { initEggMoves } from "#app/data/balance/egg-moves";
 import { initPokemonForms } from "#app/data/pokemon-forms";
-import { initSpecies } from "./data/init-species";
-import { initAchievements } from "#app/system/achv";
-import { initTrainerTypeDialogue } from "./data/init-trainer-type-dialogue";
+import { initSpecies } from "./data/init/init-species";
+import { initAchievements } from "#app/system/achievements";
+import { initTrainerTypeDialogue } from "./data/init/init-trainer-type-dialogue";
 import { initChallenges } from "#app/data/challenge";
 import i18next from "i18next";
-import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { Biome } from "#enums/biome";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
 import { initVouchers } from "#app/system/init-vouchers";
-import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTEMENT } from "#app/ui-constants";
+import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEMP_SCALE_ADJUSTMENT } from "#app/ui-constants";
 import { ImagesFolder } from "#enums/images-folders";
 import { CommonColor } from "#enums/color";
-import { initAbilities } from "#app/data/init-abilities";
+import { initAbilities } from "#app/data/init/init-abilities";
 import { api } from "#app/plugins/api/api";
-import { initMoves } from "#app/data/init-moves";
+import { initMoves } from "#app/data/init/init-moves";
 import { initModifierTypes } from "#app/modifier/init-modifier-types";
 import { initModifierPools } from "#app/modifier/init-modifier-pools";
+import { timedEventManager } from "#app/timed-event-manager";
+import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 
 export class LoadingScene extends SceneBase {
   public static readonly KEY = "loading";
@@ -190,16 +191,19 @@ export class LoadingScene extends SceneBase {
     this.loadImage("passive_bg", ImagesFolder.UI);
 
     // Get current language and load the different localized images and atlases for it
-    const lang = i18next.resolvedLanguage ?? "en";
+    const lang = i18next.resolvedLanguage ?? DEFAULT_LANGUAGE_KEY;
     this.loadAtlas("status_icons", ImagesFolder.UI_STATUS_ICONS, { languageKey: lang });
     this.loadAtlas("type_icons", ImagesFolder.UI_TYPE_ICONS, { languageKey: lang });
 
-    // TODO: cleanup event images loading
-    const availableLangs = ["en", "de", "it", "fr", "ja", "ko", "es-ES", "pt-BR", "zh-CN"];
-    if (lang && availableLangs.includes(lang)) {
-      this.loadImage("halloween2024-event-" + lang, ImagesFolder.EVENTS);
-    } else {
-      this.loadImage("halloween2024-event-en", ImagesFolder.EVENTS);
+    // Load the banner for the current or next event with a banner, if any
+    const eventBanner = timedEventManager.getActiveOrNextEventBanner();
+    if (eventBanner?.availableLangs) {
+      // Banner with different localized versions
+      const bannerLang = eventBanner.availableLangs.includes(lang) ? lang : DEFAULT_LANGUAGE_KEY;
+      this.loadImage(eventBanner.key, ImagesFolder.BANNERS, { languageKey: bannerLang });
+    } else if (eventBanner) {
+      // Non localized banner
+      this.loadImage(eventBanner.key, ImagesFolder.BANNERS);
     }
 
     // Load arena images
@@ -327,6 +331,7 @@ export class LoadingScene extends SceneBase {
     this.loadSe("pb_move");
     this.loadSe("pb_catch");
     this.loadSe("pb_lock");
+    this.loadSe("crit_throw");
 
     this.loadSe("pb_tray_enter");
     this.loadSe("pb_tray_ball");
@@ -365,8 +370,7 @@ export class LoadingScene extends SceneBase {
     initModifierPools();
     initAchievements();
     initVouchers();
-    initStatsKeys();
-    initPokemonPrevolutions();
+    initPokemonPreEvolutions();
     initBiomes();
     initEggMoves();
     initPokemonForms();
@@ -408,12 +412,12 @@ export class LoadingScene extends SceneBase {
     const logo = this.add.image(midWidth, height / 5, "");
     logo.setVisible(false);
     logo.setOrigin(0.5, 0.5);
-    logo.setScale(4 * TEMP_SCALE_ADJUSTEMENT);
+    logo.setScale(4 * TEMP_SCALE_ADJUSTMENT);
 
     const percentText = this.make.text({
       x: midWidth,
       y: midHeight - 4 * CANVAS_SCALE,
-      scale: TEMP_SCALE_ADJUSTEMENT,
+      scale: TEMP_SCALE_ADJUSTMENT,
       text: "0%",
       style: {
         font: "72px emerald",
@@ -425,7 +429,7 @@ export class LoadingScene extends SceneBase {
     const assetText = this.make.text({
       x: midWidth,
       y: midHeight + 8 * CANVAS_SCALE,
-      scale: TEMP_SCALE_ADJUSTEMENT,
+      scale: TEMP_SCALE_ADJUSTMENT,
       text: "",
       style: {
         font: "48px emerald",
@@ -437,7 +441,7 @@ export class LoadingScene extends SceneBase {
     const disclaimerText = this.make.text({
       x: midWidth,
       y: assetText.y + 25 * CANVAS_SCALE,
-      scale: TEMP_SCALE_ADJUSTEMENT,
+      scale: TEMP_SCALE_ADJUSTMENT,
       text: i18next.t("menu:disclaimer"),
       style: {
         font: "72px emerald",
@@ -449,11 +453,11 @@ export class LoadingScene extends SceneBase {
     const disclaimerDescriptionText = this.make.text({
       x: midWidth,
       y: disclaimerText.y + 20 * CANVAS_SCALE,
-      scale: TEMP_SCALE_ADJUSTEMENT,
+      scale: TEMP_SCALE_ADJUSTMENT,
       text: i18next.t("menu:disclaimerDescription"),
       style: {
         font: "48px emerald",
-        color: CommonColor.WHITE,
+        color: CommonColor.OFF_WHITE,
         align: "center",
       },
     });

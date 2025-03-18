@@ -5,7 +5,7 @@ import type { DamageCalculationResult } from "#app/field/pokemon";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -35,13 +35,13 @@ describe("Moves - Steamroller", () => {
     const ditto = game.scene.getEnemyPokemon()!;
     vi.spyOn(ditto, "getAttackDamage");
     ditto.hp = 5000;
-    const steamroller = allMoves[MoveId.STEAMROLLER];
+    const steamroller = allMoves.get(MoveId.STEAMROLLER);
     vi.spyOn(steamroller, "calculateBattleAccuracy");
     const ironBoulder = game.scene.getPlayerPokemon()!;
     vi.spyOn(ironBoulder, "getAccuracyMultiplier");
     // Turn 1
     game.move.select(MoveId.STEAMROLLER);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
     // Turn 2
     game.move.select(MoveId.STEAMROLLER);

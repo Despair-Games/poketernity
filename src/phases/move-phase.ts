@@ -1,15 +1,15 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { allMoves } from "#app/data/data-lists";
 import { CommonAnim } from "#enums/common-anim";
-import { type CenterOfAttentionTag } from "#app/data/battler-tags";
+import type { ImprisoningTag, CenterOfAttentionTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
-import { BypassRedirectAttr } from "#app/data/move-attrs/bypass-redirect-attr";
-import { BypassSleepAttr } from "#app/data/move-attrs/bypass-sleep-attr";
-import { CopycatAttr } from "#app/data/move-attrs/copycat-attr";
-import { HealStatusEffectAttr } from "#app/data/move-attrs/heal-status-effect-attr";
-import { PreMoveMessageAttr } from "#app/data/move-attrs/pre-move-message-attr";
+import { BypassRedirectAttr } from "#app/data/moves/move-attrs/bypass-redirect-attr";
+import { BypassSleepAttr } from "#app/data/moves/move-attrs/bypass-sleep-attr";
+import { CopycatAttr } from "#app/data/moves/move-attrs/copycat-attr";
+import { HealStatusEffectAttr } from "#app/data/moves/move-attrs/heal-status-effect-attr";
+import { PreMoveMessageAttr } from "#app/data/moves/move-attrs/pre-move-message-attr";
 import { SpeciesFormChangePreMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-pre-move-trigger";
 import { getStatusEffectActivationText, getStatusEffectHealText } from "#app/data/status-effect";
 import { getTerrainBlockMessage } from "#app/data/terrain";
@@ -35,8 +35,10 @@ import { ElementalType } from "#enums/elemental-type";
 import i18next from "i18next";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { PhaseId } from "#enums/phase-id";
-import { SelfStatusMove } from "#app/data/move";
+import { SelfStatusMove } from "#app/data/moves/move";
 import { WeatherType } from "#enums/weather-type";
+import { applyBattlerTags } from "#app/data/apply-battler-tags";
+import type { RedirectMoveAbAttr } from "#app/data/abilities/ab-attrs/redirect-move-ab-attr";
 
 /**
  * Resolves the following:
@@ -176,6 +178,8 @@ export class MovePhase extends BattlePhase {
 
     this.resolvePreMoveStatusEffects();
 
+    this.resolveImprisoningEffects();
+
     this.lapsePreMoveAndMoveTags();
 
     if (!(this.failed || this.cancelled)) {
@@ -292,6 +296,27 @@ export class MovePhase extends BattlePhase {
     // TODO: does this intentionally happen before the no targets/MoveId.NONE on queue cancellation case is checked?
     if (!this.followUp && this.canMove() && !this.cancelled) {
       this.pokemon.lapseTags(BattlerTagLapseType.MOVE);
+    }
+  }
+
+  /**
+   * Checks this phase's move against all opponents with ongoing effects from
+   * {@link https://bulbapedia.bulbagarden.net/wiki/Imprison_(move) | Imprison}.
+   * If an opponent currently has a matching move in their moveset, the move is
+   * cancelled, and the corresponding tag's interrupting message is played.
+   */
+  protected resolveImprisoningEffects(): void {
+    if (this.followUp || this.cancelled || this.failed) {
+      return;
+    }
+
+    for (const opponent of this.pokemon.getOpponents()) {
+      if (
+        applyBattlerTags<ImprisoningTag>(BattlerTagType.IMPRISONING, opponent, false, this.pokemon, this.move.moveId)
+      ) {
+        this.cancel();
+        break;
+      }
     }
   }
 
@@ -438,7 +463,7 @@ export class MovePhase extends BattlePhase {
    * @param success - Whether the move was successful or not.
    */
   protected updateLastMoveId(success: boolean): void {
-    if (!allMoves[this.move.moveId].hasAttr(CopycatAttr)) {
+    if (!allMoves.get(this.move.moveId).hasAttr(CopycatAttr)) {
       if (success) {
         globalScene.currentBattle.lastMove = this.move.getMove();
       }
@@ -446,11 +471,11 @@ export class MovePhase extends BattlePhase {
   }
 
   /**
-   * Queues a {@linkcode MoveEndPhase} if the move wasn't a {@linkcode followUp} and {@linkcode canMove()} returns `true`,
+   * Queues a {@linkcode MoveEndPhase} if the move wasn't a {@linkcode followUp},
    * then ends the phase.
    */
   public override end(): void {
-    if (!this.followUp && this.canMove()) {
+    if (!this.followUp) {
       globalScene.unshiftPhase(new MoveEndPhase(this.pokemon.getBattlerIndex()));
     }
 
@@ -484,7 +509,16 @@ export class MovePhase extends BattlePhase {
       globalScene
         .getField(true)
         .filter((p) => p !== this.pokemon)
-        .forEach((p) => applyAbAttrs(AbAttrFlag.REDIRECT_MOVE, p, false, this.move.moveId, redirectTarget));
+        .forEach((p) =>
+          applyAbAttrs<RedirectMoveAbAttr>(
+            AbAttrFlag.REDIRECT_MOVE,
+            p,
+            false,
+            this.move.moveId,
+            this.pokemon,
+            redirectTarget,
+          ),
+        );
 
       /** `true` if an Ability is responsible for redirecting the move to another target; `false` otherwise */
       let redirectedByAbility = currentTarget !== redirectTarget.value;

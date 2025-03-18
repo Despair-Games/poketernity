@@ -2,7 +2,7 @@ import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { allMoves } from "#app/data/data-lists";
@@ -46,7 +46,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
       game.move.select(MoveId.TACKLE);
       await game.toEndOfTurn();
 
-      expect(allMoves[MoveId.TACKLE].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+      expect(allMoves.get(MoveId.TACKLE).hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
       expect(pokemon.getStatStage(Stat.SPD)).toBe(-1);
     },
   );
@@ -64,7 +64,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
       game.move.select(MoveId.TACKLE);
       await game.toEndOfTurn();
 
-      expect(allMoves[MoveId.TACKLE].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+      expect(allMoves.get(MoveId.TACKLE).hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
       expect(pokemon.getStatStage(Stat.SPD)).toBe(0);
     },
   );
@@ -82,7 +82,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
       game.move.select(MoveId.EMBER);
       await game.toEndOfTurn();
 
-      expect(allMoves[MoveId.EMBER].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(false);
+      expect(allMoves.get(MoveId.EMBER).hasFlag(MoveFlags.MAKES_CONTACT)).toBe(false);
       expect(pokemon.getStatStage(Stat.SPD)).toBe(0);
     },
   );
@@ -98,7 +98,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
     game.move.select(MoveId.DOUBLE_IRON_BASH);
     await game.toEndOfTurn();
 
-    expect(allMoves[MoveId.DOUBLE_IRON_BASH].hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
+    expect(allMoves.get(MoveId.DOUBLE_IRON_BASH).hasFlag(MoveFlags.MAKES_CONTACT)).toBe(true);
     expect(pokemon.getStatStage(Stat.SPD)).toBe(-2);
   });
 });

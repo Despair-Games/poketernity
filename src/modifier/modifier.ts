@@ -1,4 +1,4 @@
-import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
 import { getBerryEffectFunc, getBerryPredicate } from "#app/data/berry";
 import { getLevelTotalExp } from "#app/data/exp";
 import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
@@ -12,10 +12,9 @@ import { EvolutionPhase } from "#app/phases/evolution-phase";
 import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { LearnMoveType } from "#enums/learn-move-type";
 import { LevelUpPhase } from "#app/phases/level-up-phase";
-import { achvs } from "#app/system/achv";
+import { achvs } from "#app/system/achievements";
 import type { VoucherType } from "#enums/voucher-type";
-import { BattleCommand } from "#enums/battle-command";
-import { addTextObject } from "#app/ui/text";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { BooleanHolder, hslToHex, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
 import { BerryType } from "#enums/berry-type";
@@ -42,10 +41,10 @@ import {
 import { getModifierType } from "#app/utils/modifier-type-utils";
 import { modifierTypes } from "./modifier-types";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
-import { CommonColor, ShadowColor } from "#enums/color";
 import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { globalScene } from "#app/global-scene";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 const iconOverflowIndex = 24;
@@ -452,7 +451,7 @@ export abstract class LapsingPersistentModifier extends PersistentModifier {
         const modifierInstance = modifier as LapsingPersistentModifier;
         if (modifierInstance.getBattleCount() < modifierInstance.getMaxBattles()) {
           modifierInstance.resetBattleCount();
-          globalScene.playSound("se/restore");
+          globalScene.audioManager.playSound("se/restore");
           return true;
         }
         // should never get here
@@ -481,14 +480,13 @@ export abstract class LapsingPersistentModifier extends PersistentModifier {
     const hue = Math.floor(120 * (this.battleCount / this.maxBattles) + 5);
 
     // Generates the color hex code with a constant saturation and lightness but varying hue
+    // TODO use pre defined values and textstyle
     const typeHex = hslToHex(hue, 0.5, 0.9);
     const strokeHex = hslToHex(hue, 0.7, 0.3);
 
-    const battleCountText = addTextObject(27, 0, this.battleCount.toString(), TextStyle.PARTY, {
-      fontSize: "66px",
+    const battleCountText = addTextObject(27, 0, this.battleCount.toString(), TextStyle.LAPSING_MODIFIER_COUNT, {
       color: typeHex,
     });
-    battleCountText.setShadow(0, 0);
     battleCountText.setStroke(strokeHex, 16);
     battleCountText.setOrigin(1, 0);
     container.add(battleCountText);
@@ -894,12 +892,8 @@ export abstract class LapsingPokemonHeldItemModifier extends PokemonHeldItemModi
     const container = super.getIcon(forSummary);
 
     if (this.getPokemon()?.isPlayer()) {
-      const battleCountText = addTextObject(27, 0, this.battlesLeft.toString(), TextStyle.PARTY, {
-        fontSize: "66px",
-        color: CommonColor.SOFT_PINK,
-      });
-      battleCountText.setShadow(0, 0);
-      battleCountText.setStroke(ShadowColor.DEEP_RED, 16);
+      // todo: why is this not using the bitmap text like the other item counts
+      const battleCountText = addTextObject(27, 0, this.battlesLeft.toString(), TextStyle.LAPSING_MODIFIER_COUNT);
       battleCountText.setOrigin(1, 0);
       container.add(battleCountText);
     }
@@ -1670,29 +1664,15 @@ export class BypassSpeedChanceModifier extends PokemonHeldItemModifier {
   }
 
   /**
-   * Checks if {@linkcode BypassSpeedChanceModifier} should be applied
-   * @param pokemon the {@linkcode Pokemon} that holds the item
-   * @param doBypassSpeed {@linkcode BooleanHolder} that is `true` if speed should be bypassed
-   * @returns `true` if {@linkcode BypassSpeedChanceModifier} should be applied
-   */
-  override shouldApply(pokemon?: Pokemon, doBypassSpeed?: BooleanHolder): boolean {
-    return super.shouldApply(pokemon, doBypassSpeed) && !!doBypassSpeed;
-  }
-
-  /**
    * Applies {@linkcode BypassSpeedChanceModifier}
    * @param pokemon the {@linkcode Pokemon} that holds the item
-   * @param doBypassSpeed {@linkcode BooleanHolder} that is `true` if speed should be bypassed
    * @returns `true` if {@linkcode BypassSpeedChanceModifier} has been applied
    */
-  override apply(pokemon: Pokemon, doBypassSpeed: BooleanHolder): boolean {
-    if (!doBypassSpeed.value && pokemon.randSeedInt(10) < this.getStackCount()) {
-      doBypassSpeed.value = true;
-      const isCommandFight =
-        globalScene.currentBattle.turnCommands[pokemon.getBattlerIndex()]?.command === BattleCommand.FIGHT;
+  override apply(pokemon: Pokemon): boolean {
+    if (pokemon.randSeedInt(10) < this.getStackCount() && pokemon.addTag(BattlerTagType.BYPASS_SPEED)) {
       const hasQuickClaw = this.type.isPokemonHeldItemModifierType() && this.type.id === "QUICK_CLAW";
 
-      if (isCommandFight && hasQuickClaw) {
+      if (hasQuickClaw) {
         globalScene.queueMessage(
           i18next.t("modifier:bypassSpeedChanceApply", {
             pokemonName: getPokemonNameWithAffix(pokemon),
@@ -2470,7 +2450,7 @@ export class EvolutionItemModifier extends ConsumablePokemonModifier {
           (e) =>
             e.item === this.type.evolutionItem
             && (e.evoFormKey === null || (e.preFormKey || "") === playerPokemon.getFormKey())
-            && (!e.condition || e.condition.predicate(playerPokemon)),
+            && (!e.conditions || e.conditions.every((condition) => condition.predicate(playerPokemon))),
         )
       : null;
 
@@ -3461,7 +3441,7 @@ export class TempExtraModifierModifier extends LapsingPersistentModifier {
         const newBattleCount = this.getMaxBattles() + modifierInstance.getBattleCount();
 
         modifierInstance.setNewBattleCount(newBattleCount);
-        globalScene.playSound("se/restore");
+        globalScene.audioManager.playSound("se/restore");
         return true;
       }
     }

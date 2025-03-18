@@ -9,13 +9,13 @@ import { type GameOverPhase } from "./game-over-phase";
 import { type SkyDropTag } from "#app/data/battler-tags";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattleType } from "#enums/battle-type";
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { allMoves } from "#app/data/data-lists";
 import { FRIENDSHIP_LOSS_FROM_FAINT } from "#app/data/balance/starters";
 import { type DestinyBondTag, type GrudgeTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
-import { PostVictoryStatStageChangeAttr } from "#app/data/move-attrs/post-victory-stat-stage-change-attr";
+import { PostVictoryStatStageChangeAttr } from "#app/data/moves/move-attrs/post-victory-stat-stage-change-attr";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
 import type { Pokemon, EnemyPokemon } from "#app/field/pokemon";
 import { HitResult } from "#enums/hit-result";
@@ -161,7 +161,7 @@ export class FaintPhase extends PokemonPhase {
 
     if (this.source && pokemon.turnData?.attacksReceived?.length) {
       const lastAttack = pokemon.turnData.attacksReceived[0];
-      applyAbAttrs(AbAttrFlag.POST_FAINT, pokemon, false, this.source, allMoves[lastAttack.moveId]);
+      applyAbAttrs(AbAttrFlag.POST_FAINT, pokemon, false, this.source, allMoves.get(lastAttack.moveId));
     } else {
       //If killed by indirect damage, apply post-faint abilities without providing the source of fatal damage
       applyAbAttrs(AbAttrFlag.POST_FAINT, pokemon, false);
@@ -174,7 +174,7 @@ export class FaintPhase extends PokemonPhase {
       if (defeatSource?.isOnField()) {
         applyAbAttrs(AbAttrFlag.POST_VICTORY, defeatSource, false);
         // TODO: Refactor Fell Stinger
-        const pvmove = allMoves[pokemon.turnData.attacksReceived[0].moveId];
+        const pvmove = allMoves.get(pokemon.turnData.attacksReceived[0].moveId);
         const pvattrs = pvmove.getAttrs(PostVictoryStatStageChangeAttr);
         if (pvattrs.length) {
           for (const pvattr of pvattrs) {
@@ -228,7 +228,7 @@ export class FaintPhase extends PokemonPhase {
         pokemon.addFriendship(-FRIENDSHIP_LOSS_FROM_FAINT);
       }
       pokemon.hideInfo();
-      globalScene.playSound("se/faint");
+      globalScene.audioManager.playSound("se/faint");
       tweens.add({
         targets: pokemon,
         duration: 500,

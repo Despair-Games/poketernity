@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
-import { StealHeldItemChanceAttr } from "#app/data/move-attrs/steal-held-item-chance-attr";
+import { StealHeldItemChanceAttr } from "#app/data/moves/move-attrs/steal-held-item-chance-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import type { ContactHeldItemTransferChanceModifier } from "#app/modifier/modifier";
 import { Abilities } from "#enums/abilities";
@@ -9,7 +9,7 @@ import { BerryType } from "#enums/berry-type";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -62,7 +62,7 @@ describe("Abilities - Unburden", () => {
         { name: "BERRY", type: BerryType.LUM, count: 1 },
       ]);
     // For the various tests that use Thief, give it a 100% steal rate
-    vi.spyOn(allMoves[MoveId.THIEF], "attrs", "get").mockReturnValue([new StealHeldItemChanceAttr(1.0)]);
+    vi.spyOn(allMoves.get(MoveId.THIEF), "attrs", "get").mockReturnValue([new StealHeldItemChanceAttr(1.0)]);
   });
 
   it("should activate when a berry is eaten", async () => {
@@ -233,7 +233,7 @@ describe("Abilities - Unburden", () => {
   });
 
   it("should deactivate temporarily when a neutralizing gas user is on the field", async () => {
-    game.override.battleType("double").ability(Abilities.NONE); // Disable ability override so that we can properly set abilities below
+    game.override.battleType("double").ability(Abilities.NONE).moveset(MoveId.FALSE_SWIPE); // Disable ability override so that we can properly set abilities below
     await game.classicMode.startBattle([Species.TREECKO, Species.MEOWTH, Species.WEEZING]);
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -246,8 +246,8 @@ describe("Abilities - Unburden", () => {
     // Turn 1: Treecko gets hit by False Swipe and eats Sitrus Berry, activating Unburden
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.FALSE_SWIPE, 0);
-    await game.forceEnemyMove(MoveId.FALSE_SWIPE, 0);
+    await game.move.selectEnemyMove(MoveId.FALSE_SWIPE, 0);
+    await game.move.selectEnemyMove(MoveId.FALSE_SWIPE, 0);
     await game.toEndOfTurn();
 
     expect(getHeldItemCount(treecko)).toBeLessThan(playerHeldItems);
@@ -304,7 +304,7 @@ describe("Abilities - Unburden", () => {
 
     // Turn 1: Get hit by False Swipe and eat Sitrus Berry, activating Unburden
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.FALSE_SWIPE);
+    await game.move.selectEnemyMove(MoveId.FALSE_SWIPE);
     await game.toNextTurn();
 
     expect(getHeldItemCount(playerPokemon)).toBeLessThan(playerHeldItems);
@@ -312,7 +312,7 @@ describe("Abilities - Unburden", () => {
 
     // Turn 2: Get hit by Worry Seed, deactivating Unburden
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.WORRY_SEED);
+    await game.move.selectEnemyMove(MoveId.WORRY_SEED);
     await game.toNextTurn();
 
     expect(getHeldItemCount(playerPokemon)).toBeLessThan(playerHeldItems);
@@ -345,13 +345,13 @@ describe("Abilities - Unburden", () => {
     const initialSpeed = treecko.getStat(Stat.SPD);
 
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.THIEF);
+    await game.move.selectEnemyMove(MoveId.THIEF);
     game.doSelectPartyPokemon(1);
     await game.toNextTurn();
 
     game.doRevivePokemon(1);
     game.doSwitchPokemon(1);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
     expect(game.scene.getPlayerPokemon()!).toBe(treecko);
@@ -374,9 +374,9 @@ describe("Abilities - Unburden", () => {
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.REVIVAL_BLESSING, 1);
-    await game.forceEnemyMove(MoveId.THIEF, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(MoveId.SPLASH);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
+    await game.move.selectEnemyMove(MoveId.THIEF, BattlerIndex.PLAYER);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER_2]);
     game.doSelectPartyPokemon(0, "RevivalBlessingPhase");
     await game.toNextTurn();
 

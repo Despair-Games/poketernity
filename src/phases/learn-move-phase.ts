@@ -1,14 +1,14 @@
 import { allMoves } from "#app/data/data-lists";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
-import { initMoveAnim } from "#app/data/init-move-anim";
-import type { Move } from "#app/data/move";
+import { initMoveAnim } from "#app/data/init/init-move-anim";
+import type { Move } from "#app/data/moves/move";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/species-form-change-triggers/species-form-change-move-learned-trigger";
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
 import { PlayerPartyMemberPokemonPhase } from "#app/phases/abstract-player-party-member-pokemon-phase";
-import FormChangeSceneHandler from "#app/ui/form-change-scene-handler";
+import FormChangeSceneUiHandler from "#app/ui/handlers/form-change-scene-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { UiMode } from "#enums/ui-mode";
@@ -44,7 +44,14 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
 
     const { ui } = globalScene;
     const pokemon = this.getPokemon();
-    const move = allMoves[this.moveId];
+
+    // This should never happen, but if there is no Pokemon learning the move, exit now to avoid crashes.
+    if (!pokemon) {
+      console.error("Pokemon is missing from LearnMovePhase!");
+      return this.end();
+    }
+
+    const move = allMoves.get(this.moveId);
     const currentMoveset = pokemon.getMoveset();
 
     // The game first checks if the Pokemon already has the move and ends the phase if it does.
@@ -53,7 +60,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
       return this.end();
     }
 
-    this.messageMode = ui.getHandler() instanceof FormChangeSceneHandler ? UiMode.FORM_CHANGE_SCENE : UiMode.MESSAGE;
+    this.messageMode = ui.getHandler() instanceof FormChangeSceneUiHandler ? UiMode.FORM_CHANGE_SCENE : UiMode.MESSAGE;
     ui.setMode(this.messageMode);
     // If the Pokemon has less than 4 moves, the new move is added to the largest empty moveset index
     // If it has 4 moves, the phase then checks if the player wants to replace the move itself.
@@ -211,7 +218,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
           globalScene.updateMoneyText();
           globalScene.animateMoneyChanged(false);
         }
-        globalScene.playSound("se/buy");
+        globalScene.audioManager.playSound("se/buy");
       } else {
         globalScene.tryRemovePhase((phase) => phase.is<SelectModifierPhase>(PhaseId.SELECT_MODIFIER));
       }
@@ -232,7 +239,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
       await ui.showTextPromise(textMessage);
     }
 
-    globalScene.playSound("level_up_fanfare"); // Sound loaded into game as is
+    globalScene.audioManager.playSound("level_up_fanfare"); // Sound loaded into game as is
     ui.showText(
       learnMoveText,
       null,

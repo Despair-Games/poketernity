@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { BattleAnim } from "./data/battle-anims";
+import type { BattleAnim } from "./data/animations/battle-anims";
 // -- end tsdoc imports --
 import { getFrameMs, randGauss, randInt, type BooleanHolder } from "#app/utils";
 import { PokeballType } from "#enums/pokeball";
@@ -270,7 +270,7 @@ export class Animation {
 
     // Play the animation
     sparkleSprite.play(animationKey);
-    this.scene.playSound("se/sparkle");
+    this.scene.audioManager.playSound("se/sparkle");
   }
 
   public cos(index: number, amplitude: number): number {

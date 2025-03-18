@@ -7,7 +7,7 @@ import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
 
@@ -35,7 +35,7 @@ describe("Moves - Astonish", () => {
     game.override.startingLevel(100);
     game.override.enemyLevel(100);
 
-    vi.spyOn(allMoves[MoveId.ASTONISH], "chance", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.ASTONISH), "chance", "get").mockReturnValue(100);
   });
 
   test("move effect should cancel the target's move on the turn it applies", async () => {

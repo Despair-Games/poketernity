@@ -3,7 +3,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect, vi } from "vitest";
 
@@ -42,9 +42,9 @@ describe("Moves - Electrify", () => {
 
     game.move.select(MoveId.ELECTRIFY);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(enemyPokemon.getMoveType).toHaveLastReturnedWith(ElementalType.ELECTRIC);
     expect(playerPokemon.hp).toBe(playerPokemon.getMaxHp());
   });
@@ -60,9 +60,9 @@ describe("Moves - Electrify", () => {
 
     game.move.select(MoveId.ELECTRIFY);
 
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(enemyPokemon.getMoveType).toHaveLastReturnedWith(ElementalType.ELECTRIC);
     expect(playerPokemon.hp).toBe(playerPokemon.getMaxHp());
   });

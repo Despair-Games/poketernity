@@ -3,7 +3,7 @@ import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { Abilities } from "#enums/abilities";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect } from "vitest";
 
@@ -37,7 +37,7 @@ describe("Moves - Throat Chop", () => {
     const enemy = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.GROWL);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     // First turn, move is interrupted
     await game.toEndOfTurn();
@@ -47,7 +47,7 @@ describe("Moves - Throat Chop", () => {
     await game.toNextTurn();
 
     game.move.select(MoveId.GROWL);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(enemy.isFullHp()).toBe(false);

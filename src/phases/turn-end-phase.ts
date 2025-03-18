@@ -1,4 +1,4 @@
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { TurnEndEvent } from "#app/events/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";

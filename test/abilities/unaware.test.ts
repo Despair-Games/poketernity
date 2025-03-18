@@ -5,7 +5,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { EFFECTIVE_STATS, Stat } from "#enums/stat";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -77,7 +77,7 @@ describe("Abilities - Unaware", () => {
   });
 
   it("should not cause the opponent's Stored Power to ignore the opponent's stat stages", async () => {
-    const storedPowerMove = allMoves[MoveId.STORED_POWER];
+    const storedPowerMove = allMoves.get(MoveId.STORED_POWER);
     vi.spyOn(storedPowerMove, "calculateBattlePower");
 
     await game.classicMode.startBattle([Species.FEEBAS]);
@@ -93,7 +93,7 @@ describe("Abilities - Unaware", () => {
   });
 
   it("should not cause the move Punishment to ignore the opponent's stat stages", async () => {
-    const punishmentMove = allMoves[MoveId.PUNISHMENT];
+    const punishmentMove = allMoves.get(MoveId.PUNISHMENT);
     vi.spyOn(punishmentMove, "calculateBattlePower");
 
     game.override.startingLevel(5).enemyLevel(100);
@@ -116,12 +116,17 @@ describe("Abilities - Unaware", () => {
     vi.spyOn(enemyPokemon, "getEffectiveStat");
     const expectedDef = enemyPokemon.getStat(Stat.DEF);
 
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.IRON_DEFENSE);
     await game.toNextTurn();
+
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.BODY_PRESS);
-    await game.toNextTurn();
+    await game.phaseInterceptor.to("MoveEffectPhase");
 
     expect(enemyPokemon.getEffectiveStat).toHaveLastReturnedWith(expectedDef);
   });
@@ -146,17 +151,19 @@ describe("Abilities - Unaware", () => {
     playerPokemon.addTag(BattlerTagType.CONFUSED);
     enemyPokemon.addTag(BattlerTagType.CONFUSED);
 
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     game.move.use(MoveId.SPLASH);
     await game.move.forceEnemyMove(MoveId.SPLASH);
-    await game.toNextTurn();
 
-    expect(playerPokemon.isFullHp()).toBe(false);
-    expect(enemyPokemon.isFullHp()).toBe(false);
+    await game.phaseInterceptor.to("MovePhase");
 
-    // Check that each Pokemon's most recently computed stat is either their boosted Atk or their boosted Def
+    expect(playerPokemon.isFullHp()).toBeFalsy();
     expect(playerPokemon.getEffectiveStat).toHaveLastReturnedWith(
       expect.toBeOneOf([expectedPlayerAtk, expectedPlayerDef]),
     );
+
+    await game.phaseInterceptor.to("MovePhase");
+    expect(enemyPokemon.isFullHp()).toBe(false);
     expect(enemyPokemon.getEffectiveStat).toHaveLastReturnedWith(
       expect.toBeOneOf([expectedEnemyAtk, expectedEnemyDef]),
     );
@@ -164,7 +171,7 @@ describe("Abilities - Unaware", () => {
 
   it("should not ignore an opponent's physical damage reduction from a Burn status", async () => {
     // TODO: Is there a more direct way to test for Burn damage reduction?
-    vi.spyOn(allMoves[MoveId.WILL_O_WISP], "accuracy", "get").mockReturnValue(-1);
+    vi.spyOn(allMoves.get(MoveId.WILL_O_WISP), "accuracy", "get").mockReturnValue(-1);
     game.override.startingLevel(1000).enemyLevel(1000);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
@@ -173,14 +180,14 @@ describe("Abilities - Unaware", () => {
 
     game.move.use(MoveId.WILL_O_WISP);
     await game.move.forceEnemyMove(MoveId.TACKLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     hpAmounts.push(playerPokemon.hp);
 
     game.move.use(MoveId.WILL_O_WISP);
     await game.move.forceEnemyMove(MoveId.TACKLE);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     hpAmounts.push(playerPokemon.hp);

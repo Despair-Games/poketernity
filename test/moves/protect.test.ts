@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import { Species } from "#enums/species";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
@@ -48,14 +48,14 @@ describe("Moves - Protect", () => {
 
     game.move.select(MoveId.PROTECT);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp());
   });
 
   test("should prevent secondary effects from the opponent's attack", async () => {
     game.override.enemyMoveset([MoveId.CEASELESS_EDGE]);
-    vi.spyOn(allMoves[MoveId.CEASELESS_EDGE], "accuracy", "get").mockReturnValue(100);
+    vi.spyOn(allMoves.get(MoveId.CEASELESS_EDGE), "accuracy", "get").mockReturnValue(100);
 
     await game.classicMode.startBattle([Species.CHARIZARD]);
 
@@ -63,7 +63,7 @@ describe("Moves - Protect", () => {
 
     game.move.select(MoveId.PROTECT);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp());
     expect(game.scene.arena.getTagOnSide(EntryHazardTag, ArenaTagSide.ENEMY)).toBeUndefined();
@@ -78,7 +78,7 @@ describe("Moves - Protect", () => {
 
     game.move.select(MoveId.PROTECT);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.getStatStage(Stat.ATK)).toBe(0);
   });
@@ -93,7 +93,7 @@ describe("Moves - Protect", () => {
 
     game.move.select(MoveId.PROTECT);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.hp).toBe(leadPokemon.getMaxHp());
     expect(enemyPokemon.turnData.hitCount).toBe(1);
@@ -108,7 +108,7 @@ describe("Moves - Protect", () => {
 
     game.move.select(MoveId.PROTECT);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(leadPokemon.findTag((t) => t instanceof TrappedTag)).toBeDefined();
   });
@@ -123,9 +123,9 @@ describe("Moves - Protect", () => {
 
     game.move.select(MoveId.PROTECT);
 
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getLastXMoves()[0].result).toBe(MoveResult.SUCCESS);
     expect(leadPokemon.getLastXMoves()[0].result).toBe(MoveResult.FAIL);

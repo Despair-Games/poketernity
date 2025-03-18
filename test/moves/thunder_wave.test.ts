@@ -3,7 +3,7 @@ import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -40,7 +40,7 @@ describe("Moves - Thunder Wave", () => {
 
     game.move.select(MoveId.THUNDER_WAVE);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.PARALYSIS);
   });
@@ -53,7 +53,7 @@ describe("Moves - Thunder Wave", () => {
 
     game.move.select(MoveId.THUNDER_WAVE);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });
@@ -66,7 +66,7 @@ describe("Moves - Thunder Wave", () => {
 
     game.move.select(MoveId.THUNDER_WAVE);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getStatusEffect(true)).not.toBe(StatusEffect.PARALYSIS);
   });
@@ -79,7 +79,7 @@ describe("Moves - Thunder Wave", () => {
 
     game.move.select(MoveId.THUNDER_WAVE);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.PARALYSIS);
   });
@@ -92,7 +92,7 @@ describe("Moves - Thunder Wave", () => {
 
     game.move.select(MoveId.THUNDER_WAVE);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(enemyPokemon.getStatusEffect(true)).toBe(StatusEffect.NONE);
   });

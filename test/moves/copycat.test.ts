@@ -1,12 +1,12 @@
 import { allMoves } from "#app/data/data-lists";
-import { MetronomeAttr } from "#app/data/move-attrs/metronome-attr";
+import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
 import { Abilities } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -14,7 +14,7 @@ describe("Moves - Copycat", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
-  const randomMoveAttr = allMoves[MoveId.METRONOME].getAttrs(MetronomeAttr)[0];
+  const randomMoveAttr = allMoves.get(MoveId.METRONOME).getAttrs(MetronomeAttr)[0];
 
   beforeAll(() => {
     phaserGame = new Phaser.Game({
@@ -68,10 +68,10 @@ describe("Moves - Copycat", () => {
   it("should copy the called move when the last move successfully calls another", async () => {
     game.override.moveset([MoveId.SPLASH, MoveId.METRONOME]).enemyMoveset(MoveId.COPYCAT);
     await game.classicMode.startBattle();
-    vi.spyOn(randomMoveAttr, "getMoveOverride").mockReturnValue(MoveId.SWORDS_DANCE);
+    vi.spyOn(randomMoveAttr, "getRandomMove").mockReturnValue(MoveId.SWORDS_DANCE);
 
     game.move.select(MoveId.METRONOME);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]); // Player moves first, so enemy can copy Swords Dance
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]); // Player moves first, so enemy can copy Swords Dance
     await game.toNextTurn();
 
     expect(game.scene.getEnemyPokemon()!.getStatStage(Stat.ATK)).toBe(2);
@@ -82,7 +82,7 @@ describe("Moves - Copycat", () => {
     await game.classicMode.startBattle();
 
     game.move.select(MoveId.COPYCAT);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     expect(game.scene.getEnemyPokemon()!.getStatStage(Stat.SPDEF)).toBe(-2);

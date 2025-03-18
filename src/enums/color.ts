@@ -75,6 +75,8 @@ export enum ShadowColor {
   MEDIUM_GRAY = "#707070",
   /** #807870 */
   DARK_GREY = "#807870",
+  /** #404040 */
+  DARKER_GREY = "#404040",
 
   // Browns
   /** #69402a */
@@ -136,12 +138,16 @@ export enum TextColor {
   /** #f8f8f8 and #6b5a73 */
   WHITE_DARK_PURPLE_SHADOW,
   /** #f8f8f8 and #636363 */
+  WHITE_GREY_SHADOW,
+  /** #f8f8f8 and #404040 */
   WHITE_DARK_GREY_SHADOW,
   /** #a0a0a0 and #636363 */
   GREY_DARK_SHADOW,
   /** #484848 and #d0d0c8 */
   DARK_GREY_LIGHT_SHADOW,
 
+  /** #f89890 and #404040 */
+  PINK_DARK_GREY_SHADOW,
   /** #f89890 and #984038 */
   PINK_DARK_BROWN_SHADOW,
   /** #f88880 and #f83018 */

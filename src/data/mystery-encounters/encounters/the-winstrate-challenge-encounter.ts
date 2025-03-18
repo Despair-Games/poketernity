@@ -23,7 +23,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { BerryType } from "#enums/berry-type";
 import { Stat } from "#enums/stat";
 import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { showEncounterDialogue, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";
@@ -160,7 +160,7 @@ async function spawnNextTrainerOrEndEncounter() {
     // Give 10x Voucher
     const newModifier = modifierTypes.VOUCHER_PREMIUM().newModifier();
     globalScene.addModifier(newModifier);
-    globalScene.playSound("item_fanfare");
+    globalScene.audioManager.playSound("item_fanfare");
     await showEncounterText(i18next.t("battle:rewardGain", { modifierName: newModifier?.type.name }));
 
     await showEncounterDialogue(`${namespace}:victory_2`, `${namespace}:speaker`);

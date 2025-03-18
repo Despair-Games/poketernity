@@ -4,7 +4,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -45,12 +45,12 @@ describe("Abilities - Galvanize", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
 
-    const move = allMoves[MoveId.TACKLE];
+    const move = allMoves.get(MoveId.TACKLE);
     vi.spyOn(move, "calculateBattlePower");
 
     game.move.select(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(playerPokemon.getMoveType).toHaveLastReturnedWith(ElementalType.ELECTRIC);
     expect(enemyPokemon.getMoveEffectiveness).toHaveReturnedWith(1);
@@ -73,7 +73,7 @@ describe("Abilities - Galvanize", () => {
 
     game.move.select(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(playerPokemon.getMoveType).toHaveLastReturnedWith(ElementalType.ELECTRIC);
     expect(enemyPokemon.getMoveEffectiveness).toHaveReturnedWith(1);
@@ -92,7 +92,7 @@ describe("Abilities - Galvanize", () => {
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
 
     game.move.select(MoveId.REVELATION_DANCE);
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
 
     expect(playerPokemon.getMoveType).not.toHaveLastReturnedWith(ElementalType.ELECTRIC);
     expect(enemyPokemon.getMoveEffectiveness).toHaveReturnedWith(0);
@@ -109,7 +109,7 @@ describe("Abilities - Galvanize", () => {
     vi.spyOn(enemyPokemon, "getMoveEffectiveness");
 
     game.move.select(MoveId.FURY_SWIPES);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
 
     await game.phaseInterceptor.to("MoveEffectPhase");

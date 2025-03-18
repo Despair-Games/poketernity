@@ -7,7 +7,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
@@ -50,13 +50,19 @@ describe("Abilities - Infiltrator", () => {
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
 
-    const preScreenDmg = enemy.getAttackDamage(player, allMoves[moveId], AbilityApplyMode.DEFAULT, false, false).damage;
+    const preScreenDmg = enemy.getAttackDamage(
+      player,
+      allMoves.get(moveId),
+      AbilityApplyMode.DEFAULT,
+      false,
+      false,
+    ).damage;
 
     game.scene.arena.addTag(tagType, enemy.id, 1, MoveId.NONE, ArenaTagSide.ENEMY, true);
 
     const postScreenDmg = enemy.getAttackDamage(
       player,
-      allMoves[moveId],
+      allMoves.get(moveId),
       AbilityApplyMode.DEFAULT,
       false,
       false,
@@ -76,7 +82,7 @@ describe("Abilities - Infiltrator", () => {
 
     game.move.select(MoveId.SPORE);
 
-    await game.phaseInterceptor.to("BerryPhase", false);
+    await game.toEndOfTurn();
     expect(enemy.getStatusEffect(true)).toBe(StatusEffect.SLEEP);
     expect(player.battleData.abilitiesApplied[0]).toBe(Abilities.INFILTRATOR);
   });

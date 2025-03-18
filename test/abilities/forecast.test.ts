@@ -4,7 +4,7 @@ import { Abilities } from "#enums/abilities";
 import { WeatherType } from "#enums/weather-type";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -207,7 +207,7 @@ describe("Abilities - Forecast", () => {
 
     game.move.select(MoveId.SKILL_SWAP, 0, BattlerIndex.PLAYER_2);
     game.move.select(MoveId.SKILL_SWAP, 1, BattlerIndex.PLAYER);
-    await game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
     await game.phaseInterceptor.to("MoveEndPhase");
     expect(castform.formIndex).toBe(NORMAL_FORM);
@@ -219,7 +219,7 @@ describe("Abilities - Forecast", () => {
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.WORRY_SEED, 1, BattlerIndex.PLAYER);
-    await game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
+    game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.phaseInterceptor.to("MoveEndPhase");
 
     expect(castform.formIndex).toBe(NORMAL_FORM);
@@ -234,7 +234,7 @@ describe("Abilities - Forecast", () => {
 
     // First turn - Forecast is suppressed
     game.move.select(MoveId.SPLASH);
-    await game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
+    game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.move.forceHit();
 
     await game.toEndOfTurn();
