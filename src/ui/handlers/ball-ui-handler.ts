@@ -8,12 +8,12 @@ import { BattleCommand } from "#enums/battle-command";
 import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import UiHandler from "./abstract-ui-handler";
+import { UiHandler } from "./abstract-ui-handler";
 
 /**
  * TODO: This should extend AbstractOptionSelectUiHandler
  */
-export default class BallUiHandler extends UiHandler {
+export class BallUiHandler extends UiHandler {
   private pokeballSelectContainer: Phaser.GameObjects.Container;
   private pokeballSelectBg: Phaser.GameObjects.NineSlice;
   private countsText: Phaser.GameObjects.Text;

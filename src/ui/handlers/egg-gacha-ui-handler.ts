@@ -18,12 +18,12 @@ import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import { VoucherType } from "#enums/voucher-type";
 import i18next from "i18next";
-import MessageUiHandler from "./message-ui-handler";
+import { MessageUiHandler } from "./message-ui-handler";
 
 /**
  * TODO: this should extend AbstractOptionSelectUiHandler
  */
-export default class EggGachaUiHandler extends MessageUiHandler {
+export class EggGachaUiHandler extends MessageUiHandler {
   private eggGachaContainer: Phaser.GameObjects.Container;
   private eggGachaMessageBox: Phaser.GameObjects.NineSlice;
   private eggGachaOptionsContainer: Phaser.GameObjects.Container;

@@ -1,7 +1,7 @@
 import { globalScene } from "#app/global-scene";
 import { GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 import { ScrollBar } from "#app/ui/components/scroll-bar";
-import MessageUiHandler from "#app/ui/handlers/message-ui-handler";
+import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import type { UIOptionSelectItem } from "#app/ui/interfaces/option-select-ui-item";
 import { addBBCodeTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
@@ -33,7 +33,7 @@ const DEFAULT_TEXT_STYLE = TextStyle.WINDOW;
  *
  * @template T the specifc type of {@linkcode OptionSelectItem} that this handler displays
  */
-export default abstract class AbstractOptionSelectUiHandler<T extends OptionSelectItem> extends MessageUiHandler {
+export abstract class AbstractOptionSelectUiHandler<T extends OptionSelectItem> extends MessageUiHandler {
   private config: OptionSelectModeConfig<T> | null;
   private options: (UIOptionSelectItem & T)[];
   private maxOptions: number;

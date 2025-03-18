@@ -16,8 +16,8 @@ import { TextStyle } from "#enums/text-style";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import MessageUiHandler from "./message-ui-handler";
-import type RunInfoUiHandler from "./run-info-ui-handler";
+import { MessageUiHandler } from "./message-ui-handler";
+import type { RunInfoUiHandler } from "./run-info-ui-handler";
 
 type RunSelectCallback = (cursor: number) => void;
 
@@ -27,7 +27,7 @@ type RunSelectCallback = (cursor: number) => void;
  * It navigates similarly to the UI of the save slot select menu.
  * The only valid input buttons are Button.ACTION and Button.CANCEL.
  */
-export default class RunHistoryUiHandler extends MessageUiHandler {
+export class RunHistoryUiHandler extends MessageUiHandler {
   private readonly maxRows = 3;
 
   private runSelectContainer: Phaser.GameObjects.Container;

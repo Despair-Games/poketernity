@@ -18,15 +18,15 @@ import { UiMode } from "#enums/ui-mode";
 import { WindowVariant } from "#enums/window-variant";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import UiHandler from "./abstract-ui-handler";
-import type PartyUiHandler from "./party-ui-handler";
+import { UiHandler } from "./abstract-ui-handler";
+import type { PartyUiHandler } from "./party-ui-handler";
 
 const DESCRIPTION_WINDOW_WIDTH = 150;
 const DESCRIPTION_WINDOW_HEIGHT = 105;
 const TOOLTIP_WINDOW_WIDTH = 110;
 const TOOLTIP_WINDOW_HEIGHT = 48;
 
-export default class MysteryEncounterUiHandler extends UiHandler {
+export class MysteryEncounterUiHandler extends UiHandler {
   private cursorContainer: Phaser.GameObjects.Container;
   private cursorObj?: Phaser.GameObjects.Image;
 

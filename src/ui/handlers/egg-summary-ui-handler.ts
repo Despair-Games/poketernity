@@ -13,7 +13,7 @@ import { Button } from "#enums/buttons";
 import { EggSkipPreference } from "#enums/egg-skip-preference";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 import { UiMode } from "#enums/ui-mode";
-import MessageUiHandler from "./message-ui-handler";
+import { MessageUiHandler } from "./message-ui-handler";
 
 const iconContainerX = 112;
 const iconContainerY = 9;
@@ -26,7 +26,7 @@ const iconSize = 18;
  * Handles navigation and display of each pokemon as a list
  * Also handles display of the pokemon-hatch-info-container
  */
-export default class EggSummaryUiHandler extends MessageUiHandler {
+export class EggSummaryUiHandler extends MessageUiHandler {
   /** holds all elements in the scene */
   private eggHatchContainer: Phaser.GameObjects.Container;
   /** holds the icon containers and info container */

@@ -20,7 +20,7 @@ import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import Phaser from "phaser";
-import AwaitableUiHandler from "./awaitable-ui-handler";
+import { AwaitableUiHandler } from "./awaitable-ui-handler";
 
 export const SHOP_OPTIONS_ROW_LIMIT = 7;
 const SINGLE_SHOP_ROW_YOFFSET = 12;
@@ -29,7 +29,7 @@ const OPTION_BUTTON_YPOSITION = -62;
 
 type ModifierSelectCallback = (rowCursor?: number, cursor?: number) => boolean;
 
-export default class ModifierSelectUiHandler extends AwaitableUiHandler {
+export class ModifierSelectUiHandler extends AwaitableUiHandler {
   private modifierContainer: Phaser.GameObjects.Container;
   private rerollButtonContainer: Phaser.GameObjects.Container;
   private lockRarityButtonContainer: Phaser.GameObjects.Container;

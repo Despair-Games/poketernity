@@ -10,7 +10,7 @@ import { modifierTypes } from "#app/modifier/modifier-types";
 import { Phase } from "#app/phase";
 import { api } from "#app/plugins/api/api";
 import { vouchers } from "#app/system/voucher";
-import type SaveSlotSelectUiHandler from "#app/ui/handlers/save-slot-select-ui-handler";
+import type { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { BattleType } from "#enums/battle-type";
 import { GameModes } from "#enums/game-modes";

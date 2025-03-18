@@ -7,7 +7,7 @@ import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { FormModalUiHandler } from "./form-modal-ui-handler";
 
-export default class RegistrationFormUiHandler extends FormModalUiHandler {
+export class RegistrationFormUiHandler extends FormModalUiHandler {
   constructor() {
     super(UiMode.REGISTRATION_FORM, TextStyle.REGISTRATION_FORM_LABEL, TextStyle.REGISTRATION_FORM_ERROR);
   }

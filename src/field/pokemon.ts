@@ -126,7 +126,7 @@ import { timedEventManager } from "#app/timed-event-manager";
 import type { TurnCommand } from "#app/turn-command-manager";
 import type BattleInfo from "#app/ui/components/battle-info";
 import { EnemyBattleInfo, PlayerBattleInfo } from "#app/ui/components/battle-info";
-import type PartyUiHandler from "#app/ui/handlers/party-ui-handler";
+import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import {
   BooleanHolder,
   NumberHolder,

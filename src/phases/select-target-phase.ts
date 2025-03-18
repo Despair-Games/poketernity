@@ -1,6 +1,6 @@
 import { allMoves } from "#app/data/data-lists";
 import { globalScene } from "#app/global-scene";
-import type TargetSelectUiHandler from "#app/ui/handlers/target-select-ui-handler";
+import type { TargetSelectUiHandler } from "#app/ui/handlers/target-select-ui-handler";
 import type { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";

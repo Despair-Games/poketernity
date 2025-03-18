@@ -6,7 +6,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Phase } from "#app/phase";
 import EggCounterContainer from "#app/ui/components/egg-counter-container";
-import type EggHatchSceneUiHandler from "#app/ui/handlers/egg-hatch-scene-ui-handler";
+import type { EggHatchSceneUiHandler } from "#app/ui/handlers/egg-hatch-scene-ui-handler";
 import PokemonInfoContainer from "#app/ui/components/pokemon-info-container";
 import { UiMode } from "#enums/ui-mode";
 import { fixedNumber, getFrameMs, randInt } from "#app/utils";

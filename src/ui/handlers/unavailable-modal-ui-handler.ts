@@ -9,7 +9,7 @@ import type { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { ModalUiHandler } from "./modal-ui-handler";
 
-export default class UnavailableModalUiHandler extends ModalUiHandler {
+export class UnavailableModalUiHandler extends ModalUiHandler {
   private reconnectTimer: NodeJS.Timeout | null;
   private reconnectDuration: number;
   private reconnectCallback: () => void;

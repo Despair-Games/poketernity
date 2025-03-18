@@ -4,7 +4,7 @@ import { globalScene } from "#app/global-scene";
 import { settings as settingsManager } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 import { ScrollBar } from "#app/ui/components/scroll-bar";
-import MessageUiHandler from "#app/ui/handlers/message-ui-handler";
+import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-handler";
 import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigation-menu";
@@ -19,7 +19,7 @@ import i18next from "i18next";
 /**
  * Abstract class for handling UI elements related to settings.
  */
-export default class AbstractSettingsUiHandler extends MessageUiHandler {
+export class AbstractSettingsUiHandler extends MessageUiHandler {
   private settingsContainer: Phaser.GameObjects.Container;
   private optionsContainer: Phaser.GameObjects.Container;
   private messageBoxContainer: Phaser.GameObjects.Container;

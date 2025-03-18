@@ -18,9 +18,9 @@ import { MoveCategory } from "#enums/move-category";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import UiHandler from "./abstract-ui-handler";
+import { UiHandler } from "./abstract-ui-handler";
 
-export default class FightUiHandler extends UiHandler implements InfoToggle {
+export class FightUiHandler extends UiHandler implements InfoToggle {
   public static readonly MOVES_CONTAINER_NAME = "moves";
 
   private movesContainer: Phaser.GameObjects.Container;

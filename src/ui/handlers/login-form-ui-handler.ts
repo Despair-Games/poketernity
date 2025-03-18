@@ -20,7 +20,7 @@ interface BuildInteractableImageOpts {
   origin?: { x: number; y: number };
 }
 
-export default class LoginFormUiHandler extends FormModalUiHandler {
+export class LoginFormUiHandler extends FormModalUiHandler {
   private readonly ERR_USERNAME: string = "invalid username";
   private readonly ERR_PASSWORD: string = "invalid password";
   private readonly ERR_ACCOUNT_EXIST: string = "account doesn't exist";

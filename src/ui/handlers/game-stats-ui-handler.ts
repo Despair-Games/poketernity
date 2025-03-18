@@ -11,7 +11,7 @@ import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import type Phaser from "phaser";
-import UiHandler from "./abstract-ui-handler";
+import { UiHandler } from "./abstract-ui-handler";
 
 interface DisplayStat {
   readonly label_key: string;
@@ -209,7 +209,7 @@ const displayStats: DisplayStats = {
   },
 };
 
-export default class GameStatsUiHandler extends UiHandler {
+export class GameStatsUiHandler extends UiHandler {
   private gameStatsContainer: Phaser.GameObjects.Container;
   private statsContainer: Phaser.GameObjects.Container;
 

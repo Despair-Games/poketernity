@@ -10,10 +10,10 @@ import { PartyUiMode } from "#enums/party-ui-mode";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import UiHandler from "./abstract-ui-handler";
-import type PartyUiHandler from "./party-ui-handler";
+import { UiHandler } from "./abstract-ui-handler";
+import type { PartyUiHandler } from "./party-ui-handler";
 
-export default class CommandUiHandler extends UiHandler {
+export class CommandUiHandler extends UiHandler {
   private commandsContainer: Phaser.GameObjects.Container;
   private cursorObj: Phaser.GameObjects.Image | null;
 

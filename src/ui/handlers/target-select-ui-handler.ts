@@ -9,11 +9,11 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { Button } from "#enums/buttons";
 import type { MoveId } from "#enums/move-id";
 import { UiMode } from "#enums/ui-mode";
-import UiHandler from "./abstract-ui-handler";
+import { UiHandler } from "./abstract-ui-handler";
 
 export type TargetSelectCallback = (targets: BattlerIndex[]) => void;
 
-export default class TargetSelectUiHandler extends UiHandler {
+export class TargetSelectUiHandler extends UiHandler {
   private fieldIndex: number;
   private moveId: MoveId;
   private targetSelectCallback: TargetSelectCallback;

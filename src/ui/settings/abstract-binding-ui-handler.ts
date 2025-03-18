@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
-import UiHandler from "#app/ui/handlers/abstract-ui-handler";
+import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import { NavigationManager } from "#app/ui/settings/navigation-menu";
 import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
@@ -14,7 +14,7 @@ type CancelFn = (succes?: boolean) => boolean;
 /**
  * Abstract class for handling UI elements related to button bindings.
  */
-export default abstract class AbstractBindingUiHandler extends UiHandler {
+export abstract class AbstractBindingUiHandler extends UiHandler {
   // Containers for different segments of the UI.
   protected optionSelectContainer: Phaser.GameObjects.Container;
   protected actionsContainer: Phaser.GameObjects.Container;

@@ -1,12 +1,12 @@
 import { globalScene } from "#app/global-scene";
 import type { UiMode } from "#enums/ui-mode";
 import type { Button } from "#enums/buttons";
-import type AwaitableUiHandler from "#app/ui/handlers/awaitable-ui-handler";
+import type { AwaitableUiHandler } from "#app/ui/handlers/awaitable-ui-handler";
 
 /**
  * A basic abstract class to act as a holder and processor for UI elements.
  */
-export default abstract class UiHandler {
+export abstract class UiHandler {
   protected mode: number | null;
   protected cursor: number = 0;
   public active: boolean = false;

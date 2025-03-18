@@ -11,9 +11,9 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { version } from "../../../package.json";
-import OptionSelectUiHandler from "./option-select-ui-handler";
+import { OptionSelectUiHandler } from "./option-select-ui-handler";
 
-export default class TitleUiHandler extends OptionSelectUiHandler {
+export class TitleUiHandler extends OptionSelectUiHandler {
   /** If the stats can not be retrieved, use this fallback value */
   private static readonly BATTLES_WON_FALLBACK: number = -99999999;
 

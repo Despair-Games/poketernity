@@ -11,12 +11,12 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import UiHandler from "./abstract-ui-handler";
+import { UiHandler } from "./abstract-ui-handler";
 
 /**
  * Handles all the UI for choosing optional challenges.
  */
-export default class GameChallengesUiHandler extends UiHandler {
+export class GameChallengesUiHandler extends UiHandler {
   private challengesContainer: Phaser.GameObjects.Container;
   private valuesContainer: Phaser.GameObjects.Container;
 

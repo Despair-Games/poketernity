@@ -4,7 +4,7 @@ import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import type { EggCountChangedEvent } from "#app/events/egg";
 import { EggEventType } from "#enums/egg-event-type";
-import type EggHatchSceneUiHandler from "../handlers/egg-hatch-scene-ui-handler";
+import type { EggHatchSceneUiHandler } from "../handlers/egg-hatch-scene-ui-handler";
 
 /**
  * A container that displays the count of hatching eggs.

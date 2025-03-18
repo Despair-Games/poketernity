@@ -13,14 +13,14 @@ import { PlayerGender } from "#enums/player-gender";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import MessageUiHandler from "./message-ui-handler";
+import { MessageUiHandler } from "./message-ui-handler";
 
 enum Page {
   ACHIEVEMENTS,
   VOUCHERS,
 }
 
-export default class AchvsUiHandler extends MessageUiHandler {
+export class AchvsUiHandler extends MessageUiHandler {
   private readonly ROWS = 4;
   private readonly COLS = 17;
 

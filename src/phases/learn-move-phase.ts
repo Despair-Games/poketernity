@@ -8,7 +8,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
 import { PlayerPartyMemberPokemonPhase } from "#app/phases/abstract-player-party-member-pokemon-phase";
-import FormChangeSceneUiHandler from "#app/ui/handlers/form-change-scene-ui-handler";
+import { FormChangeSceneUiHandler } from "#app/ui/handlers/form-change-scene-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { UiMode } from "#enums/ui-mode";
@@ -17,7 +17,7 @@ import i18next from "i18next";
 import { LearnMoveType } from "#enums/learn-move-type";
 import { PhaseId } from "#enums/phase-id";
 import { type SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import type SummaryUiHandler from "#app/ui/handlers/summary-ui-handler";
+import type { SummaryUiHandler } from "#app/ui/handlers/summary-ui-handler";
 
 export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
   override readonly id = PhaseId.LEARN_MOVE;

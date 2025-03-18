@@ -42,7 +42,7 @@ import { IVGraph } from "#app/ui/components/iv-graph";
 import MoveInfoOverlay from "#app/ui/components/move-info-overlay";
 import { ScrollBar } from "#app/ui/components/scroll-bar";
 import { StarterContainer } from "#app/ui/components/starter-container";
-import MessageUiHandler from "#app/ui/handlers/message-ui-handler";
+import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import PokemonIconAnimHelper from "#app/ui/helpers/pokemon-icon-anim-helper";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type {
@@ -191,7 +191,7 @@ interface SpeciesDetails {
   forSeen?: boolean; // default = false
 }
 
-export default class StarterSelectUiHandler extends MessageUiHandler {
+export class StarterSelectUiHandler extends MessageUiHandler {
   private starterSelectContainer: Phaser.GameObjects.Container;
   private starterSelectScrollBar: ScrollBar;
   private filterBarContainer: Phaser.GameObjects.Container;

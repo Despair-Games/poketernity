@@ -1,4 +1,4 @@
-import type SettingsGamepadUiHandler from "../../ui/settings/settings-gamepad-ui-handler";
+import type { SettingsGamepadUiHandler } from "../../ui/settings/settings-gamepad-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { truncateString } from "../../utils";
 import { Button } from "#enums/buttons";
@@ -6,7 +6,7 @@ import { SettingKeyboard } from "#enums/setting-keyboard";
 import { globalScene } from "#app/global-scene";
 import { settings } from "./settings-manager";
 import { SettingGamepad } from "#enums/setting-gamepad";
-import type GamepadBindingUiHandler from "#app/ui/settings/gamepad-binding-ui-handler";
+import type { GamepadBindingUiHandler } from "#app/ui/settings/gamepad-binding-ui-handler";
 
 const pressAction = "Press action to assign"; // TODO localize
 

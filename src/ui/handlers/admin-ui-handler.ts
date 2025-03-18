@@ -12,7 +12,7 @@ import { FormModalUiHandler } from "./form-modal-ui-handler";
 type AdminUiHandlerService = "discord" | "google";
 type AdminUiHandlerServiceMode = "Link" | "Unlink";
 
-export default class AdminUiHandler extends FormModalUiHandler {
+export class AdminUiHandler extends FormModalUiHandler {
   private adminMode: AdminMode;
   private adminResult: AdminSearchInfo;
   private config: ModalConfig;

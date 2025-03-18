@@ -17,7 +17,7 @@ import { type CommandPhase } from "#app/phases/command-phase";
 import { type SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { GAME_WIDTH } from "#app/ui-constants";
 import MoveInfoOverlay from "#app/ui/components/move-info-overlay";
-import MessageUiHandler from "#app/ui/handlers/message-ui-handler";
+import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import PokemonIconAnimHelper from "#app/ui/helpers/pokemon-icon-anim-helper";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text/text-utils";
@@ -43,11 +43,11 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import type SummaryUiHandler from "./summary-ui-handler";
+import type { SummaryUiHandler } from "./summary-ui-handler";
 
 const defaultMessage = i18next.t("partyUiHandler:choosePokemon");
 
-export default class PartyUiHandler extends MessageUiHandler {
+export class PartyUiHandler extends MessageUiHandler {
   private partyUiMode: PartyUiMode;
   private fieldIndex: number;
 

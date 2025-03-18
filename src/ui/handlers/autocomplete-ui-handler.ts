@@ -1,8 +1,8 @@
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { Button } from "#enums/buttons";
-import OptionSelectUiHandler from "./option-select-ui-handler";
+import { OptionSelectUiHandler } from "./option-select-ui-handler";
 
-export default class AutoCompleteUiHandler extends OptionSelectUiHandler {
+export class AutoCompleteUiHandler extends OptionSelectUiHandler {
   private modalContainer: Phaser.GameObjects.Container;
 
   override show(config: OptionSelectModeConfig, container: Phaser.GameObjects.Container): boolean {

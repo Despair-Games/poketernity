@@ -7,13 +7,13 @@ import { Button } from "#enums/buttons";
 import { PhaseId } from "#enums/phase-id";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
-import MessageUiHandler from "./message-ui-handler";
+import { MessageUiHandler } from "./message-ui-handler";
 
 /**
  * A handler for Pokemon form change and evolution scenes
  * @extends MessageUiHandler
  */
-export default class FormChangeSceneUiHandler extends MessageUiHandler {
+export class FormChangeSceneUiHandler extends MessageUiHandler {
   public container: Phaser.GameObjects.Container;
   public messageBg: Phaser.GameObjects.Image;
   public messageContainer: Phaser.GameObjects.Container;

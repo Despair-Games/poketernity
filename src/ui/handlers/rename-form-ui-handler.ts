@@ -3,7 +3,7 @@ import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-con
 import i18next from "i18next";
 import { FormModalUiHandler } from "./form-modal-ui-handler";
 
-export default class RenameFormUiHandler extends FormModalUiHandler {
+export class RenameFormUiHandler extends FormModalUiHandler {
   getModalTitle(): string {
     return i18next.t("menu:renamePokemon");
   }

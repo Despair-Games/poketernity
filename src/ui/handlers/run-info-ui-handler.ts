@@ -38,7 +38,7 @@ import { TrainerVariant } from "#enums/trainer-variant";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
-import UiHandler from "./abstract-ui-handler";
+import { UiHandler } from "./abstract-ui-handler";
 
 /**
  * RunInfoUiMode indicates possible overlays of RunInfoUiHandler.
@@ -57,7 +57,7 @@ enum RunInfoUiMode {
  * I believe that it is possible that the contents/methods of the first page will be placed in their own class that is an extension of RunInfoUiHandler as more pages are added.
  * For now, I leave as is.
  */
-export default class RunInfoUiHandler extends UiHandler {
+export class RunInfoUiHandler extends UiHandler {
   protected runDisplayMode: RunDisplayMode;
   protected runInfo: SessionSaveData;
   protected isVictory: boolean;

@@ -14,15 +14,15 @@ import { SaveSlotUiMode } from "#enums/save-slot-ui-mode";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import MessageUiHandler from "./message-ui-handler";
-import type RunInfoUiHandler from "./run-info-ui-handler";
+import { MessageUiHandler } from "./message-ui-handler";
+import type { RunInfoUiHandler } from "./run-info-ui-handler";
 
 const SESSION_SLOTS_COUNT = 5;
 const SLOTS_ON_SCREEN = 3;
 
 export type SaveSlotSelectCallback = (cursor: number) => void;
 
-export default class SaveSlotSelectUiHandler extends MessageUiHandler {
+export class SaveSlotSelectUiHandler extends MessageUiHandler {
   private saveSlotSelectContainer: Phaser.GameObjects.Container;
   private sessionSlotsContainer: Phaser.GameObjects.Container;
   private saveSlotSelectMessageBox: Phaser.GameObjects.NineSlice;

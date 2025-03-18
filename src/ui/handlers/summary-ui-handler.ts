@@ -18,7 +18,7 @@ import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { modifierSortFunc } from "#app/modifier/modifier";
 import { settings } from "#app/system/settings/settings-manager";
 import { CANVAS_SCALE, TEXT_SCALE } from "#app/ui-constants";
-import UiHandler from "#app/ui/handlers/abstract-ui-handler";
+import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text/text-utils";
 import {
   fixedNumber,
@@ -42,7 +42,7 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
-import type PartyUiHandler from "./party-ui-handler";
+import type { PartyUiHandler } from "./party-ui-handler";
 
 /** Holds all objects related to an ability for each iteration */
 interface abilityContainer {
@@ -59,7 +59,7 @@ interface abilityContainer {
 type MoveSelectCallback = (index: number) => void;
 type ExitCallBack = () => void;
 
-export default class SummaryUiHandler extends UiHandler {
+export class SummaryUiHandler extends UiHandler {
   private summaryUiMode: SummaryUiMode;
 
   private summaryContainer: Phaser.GameObjects.Container;

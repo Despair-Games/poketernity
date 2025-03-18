@@ -10,9 +10,9 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import MessageUiHandler from "./message-ui-handler";
+import { MessageUiHandler } from "./message-ui-handler";
 
-export default class BattleMessageUiHandler extends MessageUiHandler {
+export class BattleMessageUiHandler extends MessageUiHandler {
   private readonly wordWrapWidth: number = (GAME_WIDTH - 24) * TEXT_SCALE;
 
   private levelUpStatsContainer: Phaser.GameObjects.Container;

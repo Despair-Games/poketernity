@@ -5,7 +5,7 @@ import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { FormModalUiHandler } from "./form-modal-ui-handler";
 
-export default class TestDialogueUiHandler extends FormModalUiHandler {
+export class TestDialogueUiHandler extends FormModalUiHandler {
   keys: string[];
 
   constructor(mode: UiMode = UiMode.TEST_DIALOGUE) {

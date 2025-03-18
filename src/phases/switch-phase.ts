@@ -1,5 +1,5 @@
 import { globalScene } from "#app/global-scene";
-import type PartyUiHandler from "#app/ui/handlers/party-ui-handler";
+import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
 import { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";

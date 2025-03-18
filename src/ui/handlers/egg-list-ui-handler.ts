@@ -10,9 +10,9 @@ import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import MessageUiHandler from "./message-ui-handler";
+import { MessageUiHandler } from "./message-ui-handler";
 
-export default class EggListUiHandler extends MessageUiHandler {
+export class EggListUiHandler extends MessageUiHandler {
   private readonly ROWS = 9;
   private readonly COLUMNS = 11;
 

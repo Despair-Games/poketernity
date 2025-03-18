@@ -5,9 +5,9 @@ import { Device } from "#enums/devices";
 import type { SettingKeyboard } from "#enums/setting-keyboard";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
-import AbstractBindingUiHandler from "./abstract-binding-ui-handler";
+import { AbstractBindingUiHandler } from "./abstract-binding-ui-handler";
 
-export default class KeyboardBindingUiHandler extends AbstractBindingUiHandler {
+export class KeyboardBindingUiHandler extends AbstractBindingUiHandler {
   constructor(mode: UiMode | null = null) {
     super(mode);
     // Listen to gamepad button down events to initiate binding.

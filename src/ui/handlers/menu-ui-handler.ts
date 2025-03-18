@@ -19,10 +19,10 @@ import { TextStyle } from "#enums/text-style";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import type AdminUiHandler from "./admin-ui-handler";
+import type { AdminUiHandler } from "./admin-ui-handler";
 import { getAdminModeName } from "./admin-ui-handler";
-import type AwaitableUiHandler from "./awaitable-ui-handler";
-import OptionSelectUiHandler from "./option-select-ui-handler";
+import type { AwaitableUiHandler } from "./awaitable-ui-handler";
+import { OptionSelectUiHandler } from "./option-select-ui-handler";
 
 enum MenuOptions {
   GAME_SETTINGS,
@@ -39,7 +39,7 @@ enum MenuOptions {
 
 const { VITE_WIKI_URL, VITE_DISCORD_URL, VITE_GITHUB_URL, VITE_REDDIT_URL, VITE_DONATE_URL } = import.meta.env;
 
-export default class MenuUiHandler extends OptionSelectUiHandler {
+export class MenuUiHandler extends OptionSelectUiHandler {
   private readonly textPadding = 8;
 
   private menuContainer: Phaser.GameObjects.Container;

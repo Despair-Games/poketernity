@@ -4,7 +4,7 @@ import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import { ModalUiHandler } from "./modal-ui-handler";
 
-export default class SessionReloadModalUiHandler extends ModalUiHandler {
+export class SessionReloadModalUiHandler extends ModalUiHandler {
   constructor(mode: UiMode | null = null) {
     super(mode);
   }

@@ -8,7 +8,7 @@ import type { CustomModifierSettings } from "#app/modifier/modifier-type";
 import { ModifierTypeOption } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import ModifierSelectUiHandler from "#app/ui/handlers/modifier-select-ui-handler";
+import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { shiftCharCodes } from "#app/utils";
 import { Abilities } from "#enums/abilities";
