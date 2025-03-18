@@ -16,7 +16,7 @@ import type { SettingKeyboard } from "#enums/setting-keyboard";
 import TouchControl from "#app/touch-controls";
 import { Button } from "#enums/buttons";
 import { Device } from "#enums/devices";
-import MoveTouchControlsHandler from "#app/ui/settings/move-touch-controls-handler";
+import { MoveTouchControlsHandler } from "#app/ui/settings/move-touch-controls-handler";
 import type { SettingsUpdateEventArgs } from "#app/@types/Settings";
 import { eventBus } from "#app/event-bus";
 import { settings } from "#app/system/settings/settings-manager";

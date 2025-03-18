@@ -7,7 +7,7 @@ import { ScrollBar } from "#app/ui/components/scroll-bar";
 import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-handler";
-import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigation-menu";
+import { NavigationManager, NavigationMenu } from "#app/ui/settings/navigation-menu";
 import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { capitalizeFirstLetter, hasTouchscreen, isNullOrUndefined } from "#app/utils";

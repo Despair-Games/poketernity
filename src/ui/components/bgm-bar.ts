@@ -10,7 +10,7 @@ const hiddenX = -150;
 const shownX = 0;
 const baseY = 0;
 
-export default class BgmBar extends Phaser.GameObjects.Container {
+export class BgmBar extends Phaser.GameObjects.Container {
   private maxWidth: number;
   private maxHeight: number;
 

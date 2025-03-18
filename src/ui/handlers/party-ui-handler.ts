@@ -16,9 +16,9 @@ import { type PokemonFormChangeItemModifier, type PokemonHeldItemModifier } from
 import { type CommandPhase } from "#app/phases/command-phase";
 import { type SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { GAME_WIDTH } from "#app/ui-constants";
-import MoveInfoOverlay from "#app/ui/components/move-info-overlay";
+import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
 import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
-import PokemonIconAnimHelper from "#app/ui/helpers/pokemon-icon-anim-helper";
+import { PokemonIconAnimHelper } from "#app/ui/helpers/pokemon-icon-anim-helper";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";

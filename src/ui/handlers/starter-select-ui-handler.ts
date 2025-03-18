@@ -39,11 +39,11 @@ import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import { DropDown, DropDownLabel, DropDownOption } from "#app/ui/components/drop-down";
 import { FilterBar } from "#app/ui/components/filter-bar";
 import { IVGraph } from "#app/ui/components/iv-graph";
-import MoveInfoOverlay from "#app/ui/components/move-info-overlay";
+import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
 import { ScrollBar } from "#app/ui/components/scroll-bar";
 import { StarterContainer } from "#app/ui/components/starter-container";
 import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
-import PokemonIconAnimHelper from "#app/ui/helpers/pokemon-icon-anim-helper";
+import { PokemonIconAnimHelper } from "#app/ui/helpers/pokemon-icon-anim-helper";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type {
   OptionSelectIconConfig,

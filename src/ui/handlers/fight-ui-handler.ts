@@ -6,7 +6,7 @@ import { globalScene } from "#app/global-scene";
 import type { CommandPhase } from "#app/phases/command-phase";
 import { settings } from "#app/system/settings/settings-manager";
 import { GAME_WIDTH } from "#app/ui-constants";
-import MoveInfoOverlay from "#app/ui/components/move-info-overlay";
+import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
 import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { fixedNumber, leftPad } from "#app/utils";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";

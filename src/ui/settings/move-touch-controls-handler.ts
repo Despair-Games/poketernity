@@ -21,7 +21,7 @@ type ConfigurationEventListeners = {
 /**
  * Handles the dragging of touch controls around the screen.
  */
-export default class MoveTouchControlsHandler {
+export class MoveTouchControlsHandler {
   /** The element that is currently being dragged */
   private draggingElement: HTMLElement | null = null;
 

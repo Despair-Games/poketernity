@@ -8,7 +8,7 @@ import Overrides from "#app/overrides";
 import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
-import MoveInfoOverlay from "#app/ui/components/move-info-overlay";
+import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
 import { addTextObject, getModifierTierTextTint, setTextColor } from "#app/ui/text/text-utils";
 import { formatMoney, isNullOrUndefined, NumberHolder } from "#app/utils";
 import { Button } from "#enums/buttons";

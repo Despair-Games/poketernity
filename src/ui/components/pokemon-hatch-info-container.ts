@@ -1,4 +1,4 @@
-import PokemonInfoContainer from "#app/ui/components/pokemon-info-container";
+import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container";
 import { Gender } from "#enums/gender";
 import { ElementalType } from "#enums/elemental-type";
 import { rgbHexToRgba, leftPad } from "#app/utils";
@@ -19,7 +19,7 @@ import { getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
  * Class for the hatch info summary of each pokemon
  * Holds an info container as well as an additional egg sprite, name, egg moves and main sprite
  */
-export default class PokemonHatchInfoContainer extends PokemonInfoContainer {
+export class PokemonHatchInfoContainer extends PokemonInfoContainer {
   private currentPokemonSprite: Phaser.GameObjects.Sprite;
   private pokemonNumberText: Phaser.GameObjects.Text;
   private pokemonNameText: Phaser.GameObjects.Text;

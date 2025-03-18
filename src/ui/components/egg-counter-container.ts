@@ -10,7 +10,7 @@ import type { EggHatchSceneUiHandler } from "../handlers/egg-hatch-scene-ui-hand
  * A container that displays the count of hatching eggs.
  * @extends Phaser.GameObjects.Container
  */
-export default class EggCounterContainer extends Phaser.GameObjects.Container {
+export class EggCounterContainer extends Phaser.GameObjects.Container {
   private readonly WINDOW_DEFAULT_WIDTH = 40;
   private readonly WINDOW_MEDIUM_WIDTH = 46;
   private readonly WINDOW_HEIGHT = 26;

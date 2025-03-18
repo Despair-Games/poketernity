@@ -5,7 +5,7 @@ import { settings } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import { ScrollBar } from "#app/ui/components/scroll-bar";
 import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
-import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigation-menu";
+import { NavigationManager, NavigationMenu } from "#app/ui/settings/navigation-menu";
 import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
 import { Button } from "#enums/buttons";

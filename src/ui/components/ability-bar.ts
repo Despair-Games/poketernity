@@ -10,7 +10,7 @@ const hiddenX = -118;
 const shownX = 0;
 const baseY = -116;
 
-export default class AbilityBar extends Phaser.GameObjects.Container {
+export class AbilityBar extends Phaser.GameObjects.Container {
   private bg: Phaser.GameObjects.Image;
   private abilityBarText: Phaser.GameObjects.Text;
 
