@@ -14,6 +14,11 @@ import { MoveId } from "#enums/move-id";
  * @extends CallMoveAttr
  */
 export class MeFirstAttr extends CallMoveAttr {
+  constructor() {
+    super();
+    this.hasTarget = true;
+  }
+
   override apply(user: Pokemon, target: Pokemon, _move: Move, overridden: BooleanHolder): boolean {
     const targetMove = this.getTargetMove(target);
     if (targetMove) {
