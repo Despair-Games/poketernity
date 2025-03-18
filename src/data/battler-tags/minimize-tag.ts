@@ -5,7 +5,6 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 
 /** Tag used to allow moves that interact with {@link MoveId.MINIMIZE} to function */
-
 export class MinimizeTag extends BattlerTag {
   constructor() {
     super(BattlerTagType.MINIMIZED, BattlerTagLapseType.TURN_END, 1, MoveId.MINIMIZE);

@@ -12,7 +12,6 @@ import { Stat } from "#enums/stat";
  * Battler tag indicating a Tatsugiri with {@link https://bulbapedia.bulbagarden.net/wiki/Commander_(Ability) | Commander}
  * has entered the tagged Pokemon's mouth.
  */
-
 export class CommandedTag extends BattlerTag {
   private _tatsugiriFormKey: string;
 

@@ -13,7 +13,6 @@ import type { MoveId } from "#enums/move-id";
  * `BattlerTag` class for moves that block damaging moves damage the enemy if the enemy's move makes contact
  * Used by {@linkcode MoveId.SPIKY_SHIELD}
  */
-
 export class ContactDamageProtectedTag extends ProtectedTag {
   private damageRatio: number;
 

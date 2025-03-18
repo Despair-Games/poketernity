@@ -8,7 +8,6 @@ import { BattlerTagType } from "#enums/battler-tag-type";
  * Tag used by Unburden to double speed
  * @extends AbilityBattlerTag
  */
-
 export class UnburdenTag extends AbilityBattlerTag {
   constructor() {
     super(BattlerTagType.UNBURDEN, Abilities.UNBURDEN, BattlerTagLapseType.CUSTOM, 1);
