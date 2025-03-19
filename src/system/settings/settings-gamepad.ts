@@ -1,4 +1,4 @@
-import type SettingsGamepadUiHandler from "../../ui/settings/settings-gamepad-ui-handler";
+import type { SettingsGamepadUiHandler } from "../../ui/settings/settings-gamepad-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { truncateString } from "../../utils";
 import { Button } from "#enums/buttons";
@@ -6,6 +6,7 @@ import { SettingKeyboard } from "#enums/setting-keyboard";
 import { globalScene } from "#app/global-scene";
 import { settings } from "./settings-manager";
 import { SettingGamepad } from "#enums/setting-gamepad";
+import type { GamepadBindingUiHandler } from "#app/ui/settings/gamepad-binding-ui-handler";
 
 const pressAction = "Press action to assign"; // TODO localize
 
@@ -87,10 +88,7 @@ export function setSettingGamepad(setting: SettingGamepad, value: number): boole
             (globalScene.ui.getHandler() as SettingsGamepadUiHandler).updateBindings();
             return success;
           };
-          globalScene.ui.setOverlayMode(UiMode.GAMEPAD_BINDING, {
-            target: setting,
-            cancelHandler: cancelHandler,
-          });
+          globalScene.ui.setOverlayMode<GamepadBindingUiHandler>(UiMode.GAMEPAD_BINDING, setting, cancelHandler);
         }
       }
       break;

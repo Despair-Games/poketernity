@@ -1,22 +1,22 @@
-import { addBBCodeTextObject, addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import type { UiMode } from "#enums/ui-mode";
-import UiHandler from "./abstract-ui-handler";
-import { addWindow } from "../ui-theme";
-import { Button } from "#enums/buttons";
-import i18next from "i18next";
 import type { Challenge } from "#app/data/challenge";
-import { Challenges } from "#enums/challenges";
-import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import { CommonColor, ShadowColor } from "#enums/color";
-import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { globalScene } from "#app/global-scene";
+import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
+import { addBBCodeTextObject, addTextObject } from "#app/ui/text/text-utils";
+import { addWindow } from "#app/ui/ui-theme";
+import { Button } from "#enums/buttons";
+import { Challenges } from "#enums/challenges";
+import { CommonColor, ShadowColor } from "#enums/color";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
+import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
+import { UiHandler } from "./abstract-ui-handler";
 
 /**
  * Handles all the UI for choosing optional challenges.
  */
-export default class GameChallengesUiHandler extends UiHandler {
+export class GameChallengesUiHandler extends UiHandler {
   private challengesContainer: Phaser.GameObjects.Container;
   private valuesContainer: Phaser.GameObjects.Container;
 
@@ -48,8 +48,8 @@ export default class GameChallengesUiHandler extends UiHandler {
   private readonly leftArrowGap: number = 90; // distance from the label to the left arrow
   private readonly arrowSpacing: number = 3; // distance between the arrows and the value area
 
-  constructor(mode: UiMode | null = null) {
-    super(mode);
+  constructor() {
+    super(UiMode.CHALLENGE_SELECT);
   }
 
   setup() {
@@ -304,8 +304,8 @@ export default class GameChallengesUiHandler extends UiHandler {
     this.challengesContainer.update();
   }
 
-  override show(args: any[]): boolean {
-    super.show(args);
+  override show(): boolean {
+    super.show();
 
     this.startCursor.setVisible(false);
     this.updateChallengeArrows(false);

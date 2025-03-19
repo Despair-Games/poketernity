@@ -13,7 +13,7 @@ import { getMovePosition } from "#test/test-utils/gameManagerUtils";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
 import { vi } from "vitest";
 import { allMoves } from "#app/data/data-lists";
-import type TargetSelectUiHandler from "#app/ui/handlers/target-select-ui-handler";
+import type { TargetSelectUiHandler } from "#app/ui/handlers/target-select-ui-handler";
 import type { SelectTargetPhase } from "#app/phases/select-target-phase";
 import { Button } from "#enums/buttons";
 

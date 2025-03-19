@@ -1,44 +1,44 @@
-import { GameModes } from "#enums/game-modes";
-import UiHandler from "./abstract-ui-handler";
 import type { SessionSaveData } from "#app/@types/SessionData";
-import { addTextObject, addBBCodeTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { UiMode } from "#enums/ui-mode";
-import { addWindow } from "../ui-theme";
-import { getPokeballAtlasKey } from "#app/data/pokeball";
-import {
-  getPlayTimeString,
-  formatMoney,
-  formatLargeNumberFixedDigits,
-  isNullOrUndefined,
-  getPokemonLevelText,
-} from "#app/utils";
-import type PokemonData from "#app/system/pokemon-data";
-import i18next from "i18next";
-import { Button } from "#enums/buttons";
-import { BattleType } from "#enums/battle-type";
-import { TrainerVariant } from "#enums/trainer-variant";
-import { Challenges } from "#enums/challenges";
-import { getLuckString, getLuckTextTint } from "../../modifier/modifier-type";
-import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
-import { getTypeRgb } from "#app/data/type";
-import { ElementalType } from "#enums/elemental-type";
-import { CommonColor, TypeColor, TypeShadowColor } from "#enums/color";
-import { getNatureStatMultiplier, getNatureName } from "../../data/nature";
-import { getVariantTint } from "#app/data/variant";
-import * as Modifier from "../../modifier/modifier";
-import type { Species } from "#enums/species";
-import { PlayerGender } from "#enums/player-gender";
-import { SettingKeyboard } from "#enums/setting-keyboard";
-import { getBiomeName } from "#app/data/balance/biomes";
-import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { globalScene } from "#app/global-scene";
-import { settings } from "#app/system/settings/settings-manager";
-import { RunDisplayMode } from "#enums/run-display-mode";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
-import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
-import { ImagesFolder } from "#enums/images-folders";
+import { getBiomeName } from "#app/data/balance/biomes";
+import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
+import { getPokeballAtlasKey } from "#app/data/pokeball";
+import { getTypeRgb } from "#app/data/type";
+import { getVariantTint } from "#app/data/variant";
+import { globalScene } from "#app/global-scene";
+import * as Modifier from "#app/modifier/modifier";
+import { getLuckString, getLuckTextTint } from "#app/modifier/modifier-type";
+import type PokemonData from "#app/system/pokemon-data";
+import { settings } from "#app/system/settings/settings-manager";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
+import { addWindow } from "#app/ui/ui-theme";
+import {
+  formatLargeNumberFixedDigits,
+  formatMoney,
+  getPlayTimeString,
+  getPokemonLevelText,
+  isNullOrUndefined,
+} from "#app/utils";
+import { BattleType } from "#enums/battle-type";
+import { Button } from "#enums/buttons";
+import { Challenges } from "#enums/challenges";
+import { CommonColor, TypeColor, TypeShadowColor } from "#enums/color";
+import { ElementalType } from "#enums/elemental-type";
+import { GameModes } from "#enums/game-modes";
+import { ImagesFolder } from "#enums/images-folders";
+import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { PlayerGender } from "#enums/player-gender";
+import { RunDisplayMode } from "#enums/run-display-mode";
+import { SettingKeyboard } from "#enums/setting-keyboard";
+import type { Species } from "#enums/species";
+import { TextStyle } from "#enums/text-style";
+import { TrainerVariant } from "#enums/trainer-variant";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
+import RoundRectangle from "phaser3-rex-plugins/plugins/roundrectangle";
+import { UiHandler } from "./abstract-ui-handler";
 
 /**
  * RunInfoUiMode indicates possible overlays of RunInfoUiHandler.
@@ -57,7 +57,7 @@ enum RunInfoUiMode {
  * I believe that it is possible that the contents/methods of the first page will be placed in their own class that is an extension of RunInfoUiHandler as more pages are added.
  * For now, I leave as is.
  */
-export default class RunInfoUiHandler extends UiHandler {
+export class RunInfoUiHandler extends UiHandler {
   protected runDisplayMode: RunDisplayMode;
   protected runInfo: SessionSaveData;
   protected isVictory: boolean;
@@ -88,33 +88,24 @@ export default class RunInfoUiHandler extends UiHandler {
   }
 
   /**
-   * This takes a run's RunEntry and uses the information provided to display essential information about the player's run.
-   * @param args[0] : a RunEntry object
+   * This takes a past or ongoing run's data and displays its information.
    *
-   * show() creates these UI objects in order -
-   * A solid-color background used to hide RunHistoryUiHandler
-   * Header: Page Title + Option to Display Modifiers
-   * Run Result Container:
-   * Party Container:
-   * this.isVictory === true --> Hall of Fame Container:
+   * @param mode - the {@linkcode RunDisplayMode} to use (either run history or session preview).
+   * @param sessionData - The {@linkcode SessionSaveData} for the run to show information for.
+   * @param isVictory - optional. `true` is this is the data for a finished, victorious run.
    */
-  override show(args: any[]): boolean {
-    super.show(args);
+  override show(mode: RunDisplayMode, sessionData: SessionSaveData, isVictory?: boolean): boolean {
+    super.show();
 
     const runInfoBg = globalScene.add.rectangle(-1, -1, GAME_WIDTH, GAME_HEIGHT, 0x006860);
     runInfoBg.setOrigin(0, 0);
     this.runContainer.add(runInfoBg);
 
-    const run = args[0];
-    this.runDisplayMode = args[1];
-    if (this.runDisplayMode === RunDisplayMode.RUN_HISTORY) {
-      this.runInfo = globalScene.gameData.parseSessionData(JSON.stringify(run.entry));
-      this.isVictory = run.isVictory ?? false;
-    } else if (this.runDisplayMode === RunDisplayMode.SESSION_PREVIEW) {
-      this.runInfo = args[0];
-    }
-    // Assigning information necessary for the UI's creation
+    this.runDisplayMode = mode;
+    this.runInfo = sessionData;
+    this.isVictory = isVictory ?? false;
 
+    // Assigning information necessary for the UI's creation
     this.pageMode = RunInfoUiMode.MAIN;
 
     // Creates Header and adds to this.runContainer

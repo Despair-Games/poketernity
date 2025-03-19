@@ -32,7 +32,7 @@ const EFF_WIDTH = 82;
 const DESC_HEIGHT = 48;
 const BORDER = 8;
 
-export default class MoveInfoOverlay extends Phaser.GameObjects.Container implements InfoToggle {
+export class MoveInfoOverlay extends Phaser.GameObjects.Container implements InfoToggle {
   public override active: boolean = false;
 
   private move: Move;

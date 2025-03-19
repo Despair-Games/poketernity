@@ -1,17 +1,14 @@
-import OptionSelectUiHandler from "#app/ui/handlers/option-select-ui-handler";
+import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { Button } from "#enums/buttons";
+import { OptionSelectUiHandler } from "./option-select-ui-handler";
 
-export default class AutoCompleteUiHandler extends OptionSelectUiHandler {
+export class AutoCompleteUiHandler extends OptionSelectUiHandler {
   private modalContainer: Phaser.GameObjects.Container;
 
-  override show(args: any[]): boolean {
-    if (args[0]?.modalContainer) {
-      const { modalContainer } = args[0];
-      this.modalContainer = modalContainer;
+  override show(config: OptionSelectModeConfig, container: Phaser.GameObjects.Container): boolean {
+    this.modalContainer = container;
 
-      return super.show(args);
-    }
-    return false;
+    return super.show(config);
   }
 
   override updateSizeForOptions(options: any): void {

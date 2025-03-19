@@ -4,7 +4,7 @@ import { getVariantTint } from "#app/data/variant";
 import { DexAttr } from "#app/data/dex-attributes";
 import { globalScene } from "#app/global-scene";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import type PokemonIconAnimHelper from "../helpers/pokemon-icon-anim-helper";
+import type { PokemonIconAnimHelper } from "../helpers/pokemon-icon-anim-helper";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 
 /**

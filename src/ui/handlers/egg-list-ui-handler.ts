@@ -1,18 +1,18 @@
-import { UiMode } from "#enums/ui-mode";
-import PokemonIconAnimHelper from "#app/ui/helpers/pokemon-icon-anim-helper";
-import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import MessageUiHandler from "#app/ui/handlers/message-ui-handler";
-import { addWindow } from "#app/ui/ui-theme";
-import { Button } from "#enums/buttons";
-import i18next from "i18next";
-import ScrollableGridController from "#app/ui/helpers/scrollable-grid-controller";
-import { ScrollBar } from "#app/ui/components/scroll-bar";
 import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
+import { ScrollBar } from "#app/ui/components/scroll-bar";
+import { PokemonIconAnimHelper } from "#app/ui/helpers/pokemon-icon-anim-helper";
+import { ScrollableGridController } from "#app/ui/helpers/scrollable-grid-controller";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { addWindow } from "#app/ui/ui-theme";
+import { Button } from "#enums/buttons";
+import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
+import { MessageUiHandler } from "./message-ui-handler";
 
-export default class EggListUiHandler extends MessageUiHandler {
+export class EggListUiHandler extends MessageUiHandler {
   private readonly ROWS = 9;
   private readonly COLUMNS = 11;
 
@@ -106,8 +106,8 @@ export default class EggListUiHandler extends MessageUiHandler {
     this.cursor = -1;
   }
 
-  override show(args: any[]): boolean {
-    super.show(args);
+  override show(): boolean {
+    super.show();
 
     this.initEggIcons();
 

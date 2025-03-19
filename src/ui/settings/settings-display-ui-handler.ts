@@ -6,9 +6,9 @@ import { supportedLanguages } from "#app/system/settings/supported-languages";
 import { displaySettingUiItems } from "#app/ui/settings/settings-ui-items";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import AbstractSettingsUiHandler from "./abstract-settings-ui-handler";
+import { AbstractSettingsUiHandler } from "./abstract-settings-ui-handler";
 
-export default class SettingsDisplayUiHandler extends AbstractSettingsUiHandler {
+export class SettingsDisplayUiHandler extends AbstractSettingsUiHandler {
   /**
    * Creates an instance of SettingsGamepadUiHandler.
    *

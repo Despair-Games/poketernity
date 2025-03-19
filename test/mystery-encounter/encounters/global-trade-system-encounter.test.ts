@@ -16,7 +16,7 @@ import { GlobalTradeSystemEncounter } from "#app/data/mystery-encounters/encount
 import { CIVILIZATION_ENCOUNTER_BIOMES } from "#app/data/mystery-encounters/mystery-encounters";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { UiMode } from "#enums/ui-mode";
-import ModifierSelectUiHandler from "#app/ui/handlers/modifier-select-ui-handler";
+import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { ModifierTier } from "#enums/modifier-tier";
 import * as Utils from "#app/utils";
 

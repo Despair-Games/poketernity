@@ -32,7 +32,7 @@ const languageSettings: { [key: string]: LanguageSetting } = {
   },
 };
 
-export default class PokemonInfoContainer extends Phaser.GameObjects.Container {
+export class PokemonInfoContainer extends Phaser.GameObjects.Container {
   private readonly infoWindowWidth = 104;
 
   private pokemonFormLabelText: Phaser.GameObjects.Text;

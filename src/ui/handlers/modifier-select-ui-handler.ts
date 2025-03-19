@@ -1,34 +1,35 @@
-import { globalScene } from "#app/global-scene";
-import type { ModifierTypeOption } from "../../modifier/modifier-type";
-import { getPlayerShopModifierTypeOptionsForWave, TmModifierType } from "../../modifier/modifier-type";
-import { getPokeballAtlasKey } from "#app/data/pokeball";
-import { addTextObject, getModifierTierTextTint, setTextColor } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import AwaitableUiHandler from "./awaitable-ui-handler";
-import { UiMode } from "#enums/ui-mode";
-import { LockModifierTiersModifier, HealShopCostModifier } from "../../modifier/modifier";
-import { handleTutorial } from "../../tutorial";
-import { Tutorial } from "#enums/tutorial";
-import { Button } from "#enums/buttons";
-import MoveInfoOverlay from "../components/move-info-overlay";
 import { allMoves } from "#app/data/data-lists";
-import { formatMoney } from "#app/utils";
+import { getPokeballAtlasKey } from "#app/data/pokeball";
+import { globalScene } from "#app/global-scene";
+import { HealShopCostModifier, LockModifierTiersModifier } from "#app/modifier/modifier";
+import type { ModifierTypeOption } from "#app/modifier/modifier-type";
+import { getPlayerShopModifierTypeOptionsForWave, TmModifierType } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
-import i18next from "i18next";
-import { ShopCursorTarget } from "#enums/shop-cursor-target";
-import { NumberHolder } from "#app/utils";
-import Phaser from "phaser";
-import { PokeballType } from "#enums/pokeball";
-import { ModifierTier } from "#enums/modifier-tier";
 import { settings } from "#app/system/settings/settings-manager";
+import { handleTutorial } from "#app/tutorial";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
+import { addTextObject, getModifierTierTextTint, setTextColor } from "#app/ui/text/text-utils";
+import { formatMoney, isNullOrUndefined, NumberHolder } from "#app/utils";
+import { Button } from "#enums/buttons";
+import { ModifierTier } from "#enums/modifier-tier";
+import { PokeballType } from "#enums/pokeball";
+import { ShopCursorTarget } from "#enums/shop-cursor-target";
+import { TextStyle } from "#enums/text-style";
+import { Tutorial } from "#enums/tutorial";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
+import Phaser from "phaser";
+import { AwaitableUiHandler } from "./awaitable-ui-handler";
 
 export const SHOP_OPTIONS_ROW_LIMIT = 7;
 const SINGLE_SHOP_ROW_YOFFSET = 12;
 const DOUBLE_SHOP_ROW_YOFFSET = 24;
 const OPTION_BUTTON_YPOSITION = -62;
 
-export default class ModifierSelectUiHandler extends AwaitableUiHandler {
+type ModifierSelectCallback = (rowCursor?: number, cursor?: number) => boolean;
+
+export class ModifierSelectUiHandler extends AwaitableUiHandler {
   private modifierContainer: Phaser.GameObjects.Container;
   private rerollButtonContainer: Phaser.GameObjects.Container;
   private lockRarityButtonContainer: Phaser.GameObjects.Container;
@@ -55,11 +56,8 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
 
   private cursorObj: Phaser.GameObjects.Image | null;
 
-  /**
-   * @todo Why does it use {@linkcode UiMode.CONFIRM} and not {@linkcode UiMode.MODIFIER_SELECT} (for the `super` call)?
-   */
   constructor() {
-    super(UiMode.CONFIRM);
+    super(UiMode.MODIFIER_SELECT);
 
     this.options = [];
     this.shopOptionsRows = [];
@@ -159,27 +157,32 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
     globalScene.addInfoToggle(this.moveInfoOverlay);
   }
 
-  override show(args: any[]): boolean {
+  override show(
+    player: boolean = false,
+    typeOptions?: ModifierTypeOption[],
+    actionCallback?: ModifierSelectCallback,
+    rerollCost?: number,
+  ): boolean {
     globalScene.disableMenu = false;
 
     if (this.active) {
-      if (args.length >= 3) {
+      if (actionCallback) {
         this.awaitingActionInput = true;
-        this.onActionInput = args[2];
+        this.onActionInput = actionCallback;
       }
       this.moveInfoOverlay.active = this.moveInfoOverlayActive;
       return false;
     }
 
-    if (args.length !== 4 || !(args[1] instanceof Array) || !(args[2] instanceof Function)) {
+    if (isNullOrUndefined(typeOptions) || isNullOrUndefined(actionCallback) || isNullOrUndefined(rerollCost)) {
       return false;
     }
 
-    super.show(args);
+    super.show();
 
     this.getUi().clearText();
 
-    this.player = args[0];
+    this.player = player;
 
     const partyHasHeldItem =
       this.player && !!globalScene.findModifiers((m) => m.isPokemonHeldItemModifier() && m.isTransferable).length;
@@ -202,11 +205,10 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
 
     this.rerollButtonContainer.setPositionRelative(this.lockRarityButtonContainer, 0, canLockRarities ? -12 : 0);
 
-    this.rerollCost = args[3] as number;
+    this.rerollCost = rerollCost;
 
     this.updateRerollCostText();
 
-    const typeOptions = args[1] as ModifierTypeOption[];
     const removeHealShop = globalScene.gameMode.hasNoShop;
     const baseShopCost = new NumberHolder(globalScene.getWaveMoneyAmount(1));
     globalScene.applyModifier(HealShopCostModifier, true, baseShopCost);
@@ -347,7 +349,7 @@ export default class ModifierSelectUiHandler extends AwaitableUiHandler {
           updateCursorTarget();
         }
         this.awaitingActionInput = true;
-        this.onActionInput = args[2];
+        this.onActionInput = actionCallback;
       });
     });
 

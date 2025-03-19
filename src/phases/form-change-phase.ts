@@ -9,7 +9,7 @@ import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { achvs } from "#app/system/achievements";
-import type PartyUiHandler from "#app/ui/handlers/party-ui-handler";
+import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { fixedNumber } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";

@@ -1,31 +1,32 @@
-import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { UiMode } from "#enums/ui-mode";
-import UiHandler from "./abstract-ui-handler";
-import { Button } from "#enums/buttons";
-import { addWindow } from "../ui-theme";
-import { WindowVariant } from "#enums/window-variant";
-import { type MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
-import { PartyUiMode } from "#enums/party-ui-mode";
 import type MysteryEncounterOption from "#app/data/mystery-encounters/mystery-encounter-option";
-import { fixedNumber, isNullOrUndefined } from "#app/utils";
-import { getPokeballAtlasKey } from "../../data/pokeball";
-import type { OptionSelectSettings } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import i18next from "i18next";
+import type { OptionSelectSettings } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { getPokeballAtlasKey } from "#app/data/pokeball";
+import { globalScene } from "#app/global-scene";
+import { type MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/mystery-encounter-phase";
+import { CANVAS_SCALE, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment } from "#app/ui/text/text-utils";
+import { addWindow } from "#app/ui/ui-theme";
+import { fixedNumber, isNullOrUndefined } from "#app/utils";
+import { Button } from "#enums/buttons";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import { globalScene } from "#app/global-scene";
-import { CANVAS_SCALE, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
+import { PartyUiMode } from "#enums/party-ui-mode";
 import { PokeballType } from "#enums/pokeball";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
+import { WindowVariant } from "#enums/window-variant";
+import i18next from "i18next";
+import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
+import { UiHandler } from "./abstract-ui-handler";
+import type { PartyUiHandler } from "./party-ui-handler";
 
 const DESCRIPTION_WINDOW_WIDTH = 150;
 const DESCRIPTION_WINDOW_HEIGHT = 105;
 const TOOLTIP_WINDOW_WIDTH = 110;
 const TOOLTIP_WINDOW_HEIGHT = 48;
 
-export default class MysteryEncounterUiHandler extends UiHandler {
+export class MysteryEncounterUiHandler extends UiHandler {
   private cursorContainer: Phaser.GameObjects.Container;
   private cursorObj?: Phaser.GameObjects.Image;
 
@@ -119,10 +120,8 @@ export default class MysteryEncounterUiHandler extends UiHandler {
     this.dexProgressContainer.setInteractive(new Phaser.Geom.Rectangle(0, 0, 24, 28), Phaser.Geom.Rectangle.Contains);
   }
 
-  override show(args: any[]): boolean {
-    super.show(args);
-
-    this.overrideSettings = (args[0] as OptionSelectSettings) ?? {};
+  override show(settings?: OptionSelectSettings): boolean {
+    this.overrideSettings = settings;
     const showDescriptionContainer = isNullOrUndefined(this.overrideSettings?.hideDescription)
       ? true
       : !this.overrideSettings.hideDescription;
@@ -170,7 +169,7 @@ export default class MysteryEncounterUiHandler extends UiHandler {
             ...this.overrideSettings,
             slideInDescription: false,
           };
-          globalScene.ui.setMode(UiMode.PARTY, PartyUiMode.CHECK, -1, () => {
+          globalScene.ui.setMode<PartyUiHandler>(UiMode.PARTY, PartyUiMode.CHECK, -1, () => {
             globalScene.ui.setMode(UiMode.MYSTERY_ENCOUNTER, overrideSettings);
             setTimeout(() => {
               this.setCursor(this.viewPartyIndex);

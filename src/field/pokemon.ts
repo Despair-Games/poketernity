@@ -122,8 +122,9 @@ import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
 import { timedEventManager } from "#app/timed-event-manager";
 import type { TurnCommand } from "#app/turn-command-manager";
-import type BattleInfo from "#app/ui/components/battle-info";
+import type { BattleInfo } from "#app/ui/components/battle-info";
 import { EnemyBattleInfo, PlayerBattleInfo } from "#app/ui/components/battle-info";
+import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import {
   BooleanHolder,
   NumberHolder,
@@ -4199,7 +4200,7 @@ export class PlayerPokemon extends Pokemon {
     return new Promise((resolve) => {
       this.leaveField(switchType === SwitchType.SWITCH);
 
-      globalScene.ui.setMode(
+      globalScene.ui.setMode<PartyUiHandler>(
         UiMode.PARTY,
         PartyUiMode.FAINT_SWITCH,
         this.getFieldIndex(),

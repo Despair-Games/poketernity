@@ -20,7 +20,7 @@ import { BerryType } from "#enums/berry-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { UiMode } from "#enums/ui-mode";
-import ModifierSelectUiHandler from "#app/ui/handlers/modifier-select-ui-handler";
+import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { PokemonBaseStatTotalModifier } from "#app/modifier/modifier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";

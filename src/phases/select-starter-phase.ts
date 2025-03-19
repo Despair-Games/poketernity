@@ -4,6 +4,8 @@ import { globalScene } from "#app/global-scene";
 import { overrideHeldItems, overrideModifiers } from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import { Phase } from "#app/phase";
+import type { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-ui-handler";
+import type { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
 import { isNullOrUndefined } from "#app/utils";
 import { applyChallenges } from "#app/utils/challenge-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
@@ -22,9 +24,9 @@ export class SelectStarterPhase extends Phase {
 
     globalScene.audioManager.playBgm("menu");
 
-    globalScene.ui.setMode(UiMode.STARTER_SELECT, (starters: StarterConfig[]) => {
+    globalScene.ui.setMode<StarterSelectUiHandler>(UiMode.STARTER_SELECT, (starters: StarterConfig[]) => {
       globalScene.ui.clearText();
-      globalScene.ui.setMode(UiMode.SAVE_SLOT, SaveSlotUiMode.SAVE, (slotId: number) => {
+      globalScene.ui.setMode<SaveSlotSelectUiHandler>(UiMode.SAVE_SLOT, SaveSlotUiMode.SAVE, (slotId: number) => {
         if (slotId === -1) {
           globalScene.toTitleScreen({ clearPhaseQueue: true });
           return this.end();

@@ -5,9 +5,9 @@ import type { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Phase } from "#app/phase";
-import EggCounterContainer from "#app/ui/components/egg-counter-container";
-import type EggHatchSceneUiHandler from "#app/ui/handlers/egg-hatch-scene-ui-handler";
-import PokemonInfoContainer from "#app/ui/components/pokemon-info-container";
+import { EggCounterContainer } from "#app/ui/components/egg-counter-container";
+import type { EggHatchSceneUiHandler } from "#app/ui/handlers/egg-hatch-scene-ui-handler";
+import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container";
 import { UiMode } from "#enums/ui-mode";
 import { fixedNumber, getFrameMs, randInt } from "#app/utils";
 import i18next from "i18next";
@@ -220,6 +220,8 @@ export class EggHatchPhase extends Phase {
   }
 
   public override end(): void {
+    // ????
+    // TODO: destroy PlayerPokemon object from EggHatchData
     if (globalScene.findPhase((p) => p instanceof EggHatchPhase)) {
       this.eggHatchHandler.clear();
     } else {
