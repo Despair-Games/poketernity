@@ -37,8 +37,8 @@ export class EncoreTag extends MoveRestrictionBattlerTag {
   }
 
   override onAdd(pokemon: Pokemon): void {
-    super.onRemove(pokemon);
-    this.moveId = pokemon.getLastXMoves(1)[0].move.id;
+    const lastMove = pokemon.getLastXMoves(-1).filter((mv) => !mv.virtual)[0];
+    this.moveId = lastMove?.move.id;
 
     globalScene.queueMessage(
       i18next.t("battlerTags:encoreOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
@@ -48,7 +48,6 @@ export class EncoreTag extends MoveRestrictionBattlerTag {
 
     const movesetMove = pokemon.getMoveset().find((m) => m.moveId === this.moveId);
     if (movesetMove) {
-      const lastMove = pokemon.getLastXMoves(1)[0];
       turnManager.tryReplaceMove(pokemon, movesetMove, lastMove?.targets ?? []);
     }
   }
