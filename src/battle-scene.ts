@@ -126,15 +126,15 @@ import type TrainerData from "#app/system/trainer-data";
 import { type Voucher, vouchers } from "#app/system/voucher";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import { UiInputs } from "#app/ui-inputs";
-import AbilityBar from "#app/ui/components/ability-bar";
+import { AbilityBar } from "#app/ui/components/ability-bar";
 import { ArenaFlyout } from "#app/ui/components/arena-flyout";
-import CandyBar from "#app/ui/components/candy-bar";
-import CharSprite from "#app/ui/components/char-sprite";
-import PartyExpBar from "#app/ui/components/party-exp-bar";
-import PokeballTray from "#app/ui/components/pokeball-tray";
-import PokemonInfoContainer from "#app/ui/components/pokemon-info-container";
+import { CandyBar } from "#app/ui/components/candy-bar";
+import { CharSprite } from "#app/ui/components/char-sprite";
+import { PartyExpBar } from "#app/ui/components/party-exp-bar";
+import { PokeballTray } from "#app/ui/components/pokeball-tray";
+import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container";
 import { addTextObject } from "#app/ui/text/text-utils";
-import UI from "#app/ui/ui";
+import { UI } from "#app/ui/ui";
 import { updateWindowStyle } from "#app/ui/ui-theme";
 import {
   type AbstractConstructor,

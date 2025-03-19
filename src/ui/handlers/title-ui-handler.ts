@@ -1,18 +1,19 @@
-import { UiMode } from "#enums/ui-mode";
-import { fixedNumber, randItem } from "#app/utils";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
 import { getSplashMessages } from "#app/data/splash-messages";
-import i18next from "i18next";
-import { TimedEventDisplay } from "#app/ui/components/timed-event-display";
-import { version } from "../../../package.json";
-import { api } from "#app/plugins/api/api";
 import { globalScene } from "#app/global-scene";
-import OptionSelectUiHandler from "#app/ui/handlers/option-select-ui-handler";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { api } from "#app/plugins/api/api";
 import { timedEventManager } from "#app/timed-event-manager";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { TimedEventDisplay } from "#app/ui/components/timed-event-display";
+import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { fixedNumber, randItem } from "#app/utils";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
+import { version } from "../../../package.json";
+import { OptionSelectUiHandler } from "./option-select-ui-handler";
 
-export default class TitleUiHandler extends OptionSelectUiHandler {
+export class TitleUiHandler extends OptionSelectUiHandler {
   /** If the stats can not be retrieved, use this fallback value */
   private static readonly BATTLES_WON_FALLBACK: number = -99999999;
 
@@ -89,8 +90,8 @@ export default class TitleUiHandler extends OptionSelectUiHandler {
       });
   }
 
-  override show(args: any[]): boolean {
-    const ret = super.show(args);
+  override show(config: OptionSelectModeConfig): boolean {
+    const ret = super.show(config);
 
     if (ret) {
       this.splashMessage = randItem(getSplashMessages());

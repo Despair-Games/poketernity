@@ -1,6 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
-import UiHandler from "#app/ui/handlers/abstract-ui-handler";
+import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import { NavigationManager } from "#app/ui/settings/navigation-menu";
 import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { addWindow } from "#app/ui/ui-theme";
@@ -14,7 +14,7 @@ type CancelFn = (succes?: boolean) => boolean;
 /**
  * Abstract class for handling UI elements related to button bindings.
  */
-export default abstract class AbstractBindingUiHandler extends UiHandler {
+export abstract class AbstractBindingUiHandler extends UiHandler {
   // Containers for different segments of the UI.
   protected optionSelectContainer: Phaser.GameObjects.Container;
   protected actionsContainer: Phaser.GameObjects.Container;
@@ -128,15 +128,16 @@ export default abstract class AbstractBindingUiHandler extends UiHandler {
   /**
    * Show the UI with the provided arguments.
    *
-   * @param args - Arguments to be passed to the show method.
+   * @param target - The binding to update
+   * @param cancelHandler - Handler to call if the binding gets cancelled
    * @returns `true` if successful.
    */
-  override show(args: any[]): boolean {
-    super.show(args);
+  override show(target: string, cancelHandler: (success: boolean) => boolean): boolean {
+    super.show();
     this.buttonPressed = null;
     this.timeLeftAutoClose = 5;
-    this.cancelFn = args[0].cancelHandler;
-    this.target = args[0].target;
+    this.cancelFn = cancelHandler;
+    this.target = target;
 
     // Bring the option and action containers to the front of the UI.
     this.getUi().bringToTop(this.optionSelectContainer);

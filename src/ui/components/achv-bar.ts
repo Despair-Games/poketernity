@@ -5,7 +5,7 @@ import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 
-export default class AchvBar extends Phaser.GameObjects.Container {
+export class AchvBar extends Phaser.GameObjects.Container {
   private defaultWidth: number;
   private defaultHeight: number;
 

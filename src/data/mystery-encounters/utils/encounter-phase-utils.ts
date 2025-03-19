@@ -38,6 +38,7 @@ import { PartyExpPhase } from "#app/phases/party-exp-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { TrainerVictoryPhase } from "#app/phases/trainer-victory-phase";
 import type PokemonData from "#app/system/pokemon-data";
+import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { isNullOrUndefined, randSeedInt, randomString } from "#app/utils";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
@@ -540,12 +541,14 @@ export function selectPokemonForOption(
     const modeToSetOnExit = globalScene.ui.getMode();
 
     // Open party screen to choose pokemon
-    globalScene.ui.setMode(
+    globalScene.ui.setMode<PartyUiHandler>(
       UiMode.PARTY,
       PartyUiMode.SELECT,
       -1,
       (slotIndex: number, _option: PartyOption) => {
         if (slotIndex < globalScene.getPlayerParty().length) {
+          // TODO: we should make use of ui.revertMode because
+          // the mode getting set here does not get the parameters it may expect
           globalScene.ui.setMode(modeToSetOnExit).then(() => {
             const pokemon = globalScene.getPlayerParty()[slotIndex];
             const secondaryOptions = onPokemonSelected(pokemon);
@@ -582,6 +585,8 @@ export function selectPokemonForOption(
                     label: i18next.t("menu:cancel"),
                     handler: () => {
                       globalScene.ui.clearText();
+                      // TODO: we should make use of ui.revertMode because
+                      // the mode getting set here does not get the parameters it may expect
                       globalScene.ui.setMode(modeToSetOnExit);
                       resolve(false);
                       return true;
@@ -614,6 +619,8 @@ export function selectPokemonForOption(
             });
           });
         } else {
+          // TODO: we should make use of ui.revertMode because
+          // the mode getting set here does not get the parameters it may expect
           globalScene.ui.setMode(modeToSetOnExit).then(() => {
             if (onPokemonNotSelected) {
               onPokemonNotSelected();
@@ -674,13 +681,15 @@ export function selectOptionThenPokemon(
 
     const selectPokemonAfterOption = (selectedOptionIndex: number) => {
       // Open party screen to choose a Pokemon
-      globalScene.ui.setMode(
+      globalScene.ui.setMode<PartyUiHandler>(
         UiMode.PARTY,
         PartyUiMode.SELECT,
         -1,
         (slotIndex: number, _option: PartyOption) => {
           if (slotIndex < globalScene.getPlayerParty().length) {
             // Pokemon and option selected
+            // TODO: we should make use of ui.revertMode because
+            // the mode getting set here does not get the parameters it may expect
             globalScene.ui.setMode(modeToSetOnExit).then(() => {
               const result: PokemonAndOptionSelected = {
                 selectedPokemonIndex: slotIndex,
@@ -714,6 +723,8 @@ export function selectOptionThenPokemon(
         label: i18next.t("menu:cancel"),
         handler: () => {
           globalScene.ui.clearText();
+          // TODO: we should make use of ui.revertMode because
+          // the mode getting set here does not get the parameters it may expect
           globalScene.ui.setMode(modeToSetOnExit);
           resolve(null);
           return true;

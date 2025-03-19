@@ -1,19 +1,19 @@
-import { UiMode } from "#enums/ui-mode";
-import PokemonIconAnimHelper from "../helpers/pokemon-icon-anim-helper";
-import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
-import MessageUiHandler from "./message-ui-handler";
-import { getEggTierForSpecies } from "../../data/egg";
-import { Button } from "#enums/buttons";
-import PokemonHatchInfoContainer from "../components/pokemon-hatch-info-container";
-import { EggSummaryPhase } from "#app/phases/egg-summary-phase";
+import { getEggTierForSpecies } from "#app/data/egg";
 import type { EggHatchData } from "#app/data/egg-hatch-data";
-import ScrollableGridController from "../helpers/scrollable-grid-controller";
-import { HatchedPokemonContainer } from "../components/hatched-pokemon-container";
-import { ScrollBar } from "#app/ui/components/scroll-bar";
 import { globalScene } from "#app/global-scene";
+import { EggSummaryPhase } from "#app/phases/egg-summary-phase";
 import { settings } from "#app/system/settings/settings-manager";
-import { EggSkipPreference } from "#enums/egg-skip-preference";
 import { GAME_HEIGHT } from "#app/ui-constants";
+import { HatchedPokemonContainer } from "#app/ui/components/hatched-pokemon-container";
+import { PokemonHatchInfoContainer } from "#app/ui/components/pokemon-hatch-info-container";
+import { ScrollBar } from "#app/ui/components/scroll-bar";
+import { PokemonIconAnimHelper } from "#app/ui/helpers/pokemon-icon-anim-helper";
+import { ScrollableGridController } from "#app/ui/helpers/scrollable-grid-controller";
+import { Button } from "#enums/buttons";
+import { EggSkipPreference } from "#enums/egg-skip-preference";
+import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
+import { UiMode } from "#enums/ui-mode";
+import { MessageUiHandler } from "./message-ui-handler";
 
 const iconContainerX = 112;
 const iconContainerY = 9;
@@ -26,7 +26,7 @@ const iconSize = 18;
  * Handles navigation and display of each pokemon as a list
  * Also handles display of the pokemon-hatch-info-container
  */
-export default class EggSummaryUiHandler extends MessageUiHandler {
+export class EggSummaryUiHandler extends MessageUiHandler {
   /** holds all elements in the scene */
   private eggHatchContainer: Phaser.GameObjects.Container;
   /** holds the icon containers and info container */
@@ -144,31 +144,34 @@ export default class EggSummaryUiHandler extends MessageUiHandler {
   }
 
   /**
-   * @param args EggHatchData[][]
-   * args[0]: list of EggHatchData for each egg/pokemon hatched
+   * @param hatchData - The {@linkcode EggHatchData} for each egg/pokemon hatched
    */
-  override show(args: EggHatchData[][]): boolean {
-    super.show(args);
-    if (args.length >= 1) {
-      // sort the egg hatch data by egg tier then by species number (then by order hatched)
-      this.eggHatchData = args[0].sort(function sortHatchData(a: EggHatchData, b: EggHatchData) {
-        const speciesA = a.pokemon.species;
-        const speciesB = b.pokemon.species;
-        if (getEggTierForSpecies(speciesA) < getEggTierForSpecies(speciesB)) {
+  override show(hatchData: EggHatchData[]): boolean {
+    if (hatchData.length === 0) {
+      console.log("Missing Egg Hatch Data in Egg Summary UI");
+      return false;
+    }
+
+    super.show();
+
+    // sort the egg hatch data by egg tier then by species number (then by order hatched)
+    this.eggHatchData = hatchData.sort(function sortHatchData(a: EggHatchData, b: EggHatchData) {
+      const speciesA = a.pokemon.species;
+      const speciesB = b.pokemon.species;
+      if (getEggTierForSpecies(speciesA) < getEggTierForSpecies(speciesB)) {
+        return -1;
+      } else if (getEggTierForSpecies(speciesA) > getEggTierForSpecies(speciesB)) {
+        return 1;
+      } else {
+        if (speciesA.speciesId < speciesB.speciesId) {
           return -1;
-        } else if (getEggTierForSpecies(speciesA) > getEggTierForSpecies(speciesB)) {
+        } else if (speciesA.speciesId > speciesB.speciesId) {
           return 1;
         } else {
-          if (speciesA.speciesId < speciesB.speciesId) {
-            return -1;
-          } else if (speciesA.speciesId > speciesB.speciesId) {
-            return 1;
-          } else {
-            return 0;
-          }
+          return 0;
         }
-      });
-    }
+      }
+    });
 
     this.getUi().bringToTop(this.summaryContainer);
     this.summaryContainer.setVisible(true);

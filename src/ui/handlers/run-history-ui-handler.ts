@@ -1,22 +1,23 @@
 import { globalScene } from "#app/global-scene";
-import { GameModes } from "#enums/game-modes";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { UiMode } from "#enums/ui-mode";
-import { addWindow } from "../ui-theme";
-import { fixedNumber, getPokemonLevelText, isNullOrUndefined } from "#app/utils";
-import type PokemonData from "#app/system/pokemon-data";
-import MessageUiHandler from "#app/ui/handlers/message-ui-handler";
-import i18next from "i18next";
-import { Button } from "#enums/buttons";
-import { BattleType } from "#enums/battle-type";
 import type { RunEntry } from "#app/system/game-data";
-import { PlayerGender } from "#enums/player-gender";
-import { TrainerVariant } from "#enums/trainer-variant";
-import { RunDisplayMode } from "#enums/run-display-mode";
+import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { addWindow } from "#app/ui/ui-theme";
+import { fixedNumber, getPokemonLevelText, isNullOrUndefined } from "#app/utils";
+import { BattleType } from "#enums/battle-type";
+import { Button } from "#enums/buttons";
+import { GameModes } from "#enums/game-modes";
 import { ImagesFolder } from "#enums/images-folders";
+import { PlayerGender } from "#enums/player-gender";
+import { RunDisplayMode } from "#enums/run-display-mode";
+import { TextStyle } from "#enums/text-style";
+import { TrainerVariant } from "#enums/trainer-variant";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
+import { MessageUiHandler } from "./message-ui-handler";
+import type { RunInfoUiHandler } from "./run-info-ui-handler";
 
 type RunSelectCallback = (cursor: number) => void;
 
@@ -26,7 +27,7 @@ type RunSelectCallback = (cursor: number) => void;
  * It navigates similarly to the UI of the save slot select menu.
  * The only valid input buttons are Button.ACTION and Button.CANCEL.
  */
-export default class RunHistoryUiHandler extends MessageUiHandler {
+export class RunHistoryUiHandler extends MessageUiHandler {
   private readonly maxRows = 3;
 
   private runSelectContainer: Phaser.GameObjects.Container;
@@ -71,8 +72,8 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
     globalScene.loadAtlas("rival_m", ImagesFolder.TRAINER);
   }
 
-  override show(args: any[]): boolean {
-    super.show(args);
+  override show(): boolean {
+    super.show();
 
     this.getUi().bringToTop(this.runSelectContainer);
     this.runSelectContainer.setVisible(true);
@@ -106,7 +107,13 @@ export default class RunHistoryUiHandler extends MessageUiHandler {
       if (button === Button.ACTION) {
         const cursor = this.cursor + this.scrollCursor;
         if (this.runs[cursor]) {
-          globalScene.ui.setOverlayMode(UiMode.RUN_INFO, this.runs[cursor].entryData, RunDisplayMode.RUN_HISTORY, true);
+          const runEntry = this.runs[cursor].entryData;
+          globalScene.ui.setOverlayMode<RunInfoUiHandler>(
+            UiMode.RUN_INFO,
+            RunDisplayMode.RUN_HISTORY,
+            globalScene.gameData.parseSessionData(JSON.stringify(runEntry.entry)),
+            runEntry.isVictory,
+          );
         } else {
           return false;
         }

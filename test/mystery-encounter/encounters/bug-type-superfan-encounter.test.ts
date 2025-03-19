@@ -24,7 +24,7 @@ import { CommandPhase } from "#app/phases/command-phase";
 import { BugTypeSuperfanEncounter } from "#app/data/mystery-encounters/encounters/bug-type-superfan-encounter";
 import * as encounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
-import ModifierSelectUiHandler from "#app/ui/handlers/modifier-select-ui-handler";
+import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 
 const namespace = "mysteryEncounters/bugTypeSuperfan";
 const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.WEEDLE];

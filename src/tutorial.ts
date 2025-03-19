@@ -1,10 +1,11 @@
 import { globalScene } from "#app/global-scene";
-import type UiHandler from "./ui/handlers/abstract-ui-handler";
+import Overrides from "#app/overrides";
+import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import Overrides from "#app/overrides";
-import { settings } from "./system/settings/settings-manager";
-import { Tutorial } from "#enums/tutorial";
+import { settings } from "#app/system/settings/settings-manager";
+import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
+import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 
 const tutorialHandlers = {
   [Tutorial.INTRO]: () => {
@@ -80,6 +81,7 @@ const tutorialHandlers = {
     });
   },
   [Tutorial.SELECT_ITEM]: () => {
+    // TODO: fix up that tutorial up so that ModifierSelectUiHandler is not called like this
     return new Promise<void>((resolve) => {
       globalScene.ui.setModeWithoutClear(UiMode.MESSAGE).then(() => {
         globalScene.ui.showText(
@@ -87,7 +89,7 @@ const tutorialHandlers = {
           null,
           () =>
             globalScene.ui.showText("", null, () =>
-              globalScene.ui.setModeWithoutClear(UiMode.MODIFIER_SELECT).then(() => resolve()),
+              globalScene.ui.setModeWithoutClear<ModifierSelectUiHandler>(UiMode.MODIFIER_SELECT).then(() => resolve()),
             ),
           null,
           true,

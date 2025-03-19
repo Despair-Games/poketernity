@@ -1,15 +1,15 @@
-import type { ModalConfig } from "./modal-ui-handler";
-import { ModalUiHandler } from "./modal-ui-handler";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import type { UiMode } from "#enums/ui-mode";
 import { updateUserInfo } from "#app/account";
-import { removeCookie } from "#app/utils";
-import i18next from "i18next";
 import { SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
+import type { ModalConfig } from "#app/ui/interfaces/modal-config";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { removeCookie } from "#app/utils";
+import { TextStyle } from "#enums/text-style";
+import type { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
+import { ModalUiHandler } from "./modal-ui-handler";
 
-export default class UnavailableModalUiHandler extends ModalUiHandler {
+export class UnavailableModalUiHandler extends ModalUiHandler {
   private reconnectTimer: NodeJS.Timeout | null;
   private reconnectDuration: number;
   private reconnectCallback: () => void;
@@ -80,19 +80,18 @@ export default class UnavailableModalUiHandler extends ModalUiHandler {
     });
   }
 
-  override show(args: any[]): boolean {
-    if (args.length >= 1 && args[0] instanceof Function) {
-      const config: ModalConfig = {
-        buttonActions: [],
-      };
-
-      this.reconnectCallback = args[0];
-      this.reconnectDuration = this.minTime;
-      this.reconnectTimer = setTimeout(() => this.tryReconnect(), this.reconnectDuration);
-
-      return super.show([config]);
+  override show(reconnectCallback: () => void): boolean {
+    if (!reconnectCallback) {
+      return false;
     }
+    const config: ModalConfig = {
+      buttonActions: [],
+    };
 
-    return false;
+    this.reconnectCallback = reconnectCallback;
+    this.reconnectDuration = this.minTime;
+    this.reconnectTimer = setTimeout(() => this.tryReconnect(), this.reconnectDuration);
+
+    return super.show(config);
   }
 }

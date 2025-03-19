@@ -1,19 +1,19 @@
-import { BattlerIndex } from "#enums/battler-index";
-import { UiMode } from "#enums/ui-mode";
-import UiHandler from "./abstract-ui-handler";
-import { isNullOrUndefined, fixedNumber } from "#app/utils";
-import { getMoveTargets } from "../../data/moves/move";
+import { getMoveTargets } from "#app/data/moves/move";
+import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import type { ModifierBar } from "#app/modifier/modifier";
+import { fixedNumber, isNullOrUndefined } from "#app/utils";
 import { isFieldTargeted } from "#app/utils/move-utils";
+import { BattlerIndex } from "#enums/battler-index";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { Button } from "#enums/buttons";
 import type { MoveId } from "#enums/move-id";
-import type { Pokemon } from "#app/field/pokemon";
-import type { ModifierBar } from "#app/modifier/modifier";
-import { globalScene } from "#app/global-scene";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { UiMode } from "#enums/ui-mode";
+import { UiHandler } from "./abstract-ui-handler";
 
 export type TargetSelectCallback = (targets: BattlerIndex[]) => void;
 
-export default class TargetSelectUiHandler extends UiHandler {
+export class TargetSelectUiHandler extends UiHandler {
   private fieldIndex: number;
   private moveId: MoveId;
   private targetSelectCallback: TargetSelectCallback;
@@ -36,16 +36,13 @@ export default class TargetSelectUiHandler extends UiHandler {
 
   setup(): void {}
 
-  override show(args: any[]): boolean {
-    if (args.length < 3) {
-      return false;
-    }
+  override show(fieldIndex: number, moveId: MoveId, callback: TargetSelectCallback): boolean {
+    super.show();
 
-    super.show(args);
+    this.fieldIndex = fieldIndex;
+    this.moveId = moveId;
+    this.targetSelectCallback = callback;
 
-    this.fieldIndex = args[0] as number;
-    this.moveId = args[1] as MoveId;
-    this.targetSelectCallback = args[2] as TargetSelectCallback;
     const user = globalScene.getPlayerField()[this.fieldIndex];
 
     const moveTargets = getMoveTargets(user, this.moveId);

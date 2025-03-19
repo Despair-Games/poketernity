@@ -7,7 +7,7 @@ import { rgbHexToRgba } from "#app/utils";
 import type { Species } from "#enums/species";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
-export default class CandyBar extends Phaser.GameObjects.Container {
+export class CandyBar extends Phaser.GameObjects.Container {
   private bg: Phaser.GameObjects.NineSlice;
   private candyIcon: Phaser.GameObjects.Sprite;
   private candyOverlayIcon: Phaser.GameObjects.Sprite;
