@@ -110,6 +110,7 @@ import { LowHpPowerAttr } from "#app/data/moves/move-attrs/low-hp-power-attr";
 import { magnitudeMessageFunc, MagnitudePowerAttr } from "#app/data/moves/move-attrs/magnitude-power-attr";
 import { MatchHpAttr } from "#app/data/moves/move-attrs/match-hp-attr";
 import { MatchUserTypeAttr } from "#app/data/moves/move-attrs/match-user-type-attr";
+import { MeFirstAttr } from "#app/data/moves/move-attrs/me-first-attr";
 import { MessageHeaderAttr } from "#app/data/moves/move-attrs/message-header-attr";
 import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
 import { MirrorMoveAttr } from "#app/data/moves/move-attrs/mirror-move-attr";
@@ -257,7 +258,6 @@ import { SwitchType } from "#enums/switch-type";
 import { TerrainType } from "#enums/terrain-type";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-import { MeFirstAttr } from "#app/data/moves/move-attrs/me-first-attr";
 
 // prettier-ignore
 export function initMoves() {
