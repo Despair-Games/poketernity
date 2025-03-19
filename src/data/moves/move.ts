@@ -762,7 +762,7 @@ export abstract class Move implements Localizable {
     applyAbAttrs(AbAttrFlag.VARIABLE_MOVE_POWER, source, simulated, this, target, power);
 
     if (source.getAlly()) {
-      applyAbAttrs(AbAttrFlag.ALLY_MOVE_CATEGORY_POWER_BOOST, source.getAlly(), simulated, this, target, power);
+      applyAbAttrs(AbAttrFlag.ALLY_MOVE_CATEGORY_POWER_BOOST, source.getAlly()!, simulated, this, target, power);
     }
 
     const fieldAuras = new Set(
@@ -996,7 +996,9 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: Mo
     case MoveTarget.DRAGON_DARTS:
     case MoveTarget.ALL_NEAR_OTHERS:
     case MoveTarget.ALL_OTHERS:
-      set = opponents.concat([user.getAlly()]);
+      if (user.getAlly()) {
+        set = opponents.concat([user.getAlly()!]);
+      }
       multiple = moveTarget === MoveTarget.ALL_NEAR_OTHERS || moveTarget === MoveTarget.ALL_OTHERS;
       break;
     case MoveTarget.NEAR_ENEMY:
@@ -1012,15 +1014,22 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: Mo
       return { targets: [-1 as BattlerIndex], multiple: false };
     case MoveTarget.NEAR_ALLY:
     case MoveTarget.ALLY:
-      set = [user.getAlly()];
+      set = [user.getAlly()!];
       break;
     case MoveTarget.USER_OR_NEAR_ALLY:
     case MoveTarget.USER_AND_ALLIES:
-      set = [user, user.getAlly()];
+      set = [user];
+      if (user.getAlly()) {
+        set.concat(user.getAlly()!);
+      }
       multiple = moveTarget !== MoveTarget.USER_OR_NEAR_ALLY;
       break;
     case MoveTarget.ALL:
-      set = [user, user.getAlly()].concat(opponents);
+      set = [user];
+      if (user.getAlly()) {
+        set.concat([user.getAlly()!]);
+      }
+      set.concat(opponents);
       multiple = true;
       break;
     case MoveTarget.USER_SIDE:
@@ -1034,7 +1043,13 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: Mo
       targets = [BattlerIndex.BOTH_SIDES];
       break;
     case MoveTarget.CURSE:
-      set = user.getTypes(true).includes(ElementalType.GHOST) ? opponents.concat([user.getAlly()]) : [user];
+      if (user.getTypes(true).includes(ElementalType.GHOST)) {
+        if (user.getAlly()) {
+          set = opponents.concat([user.getAlly()!]);
+        }
+      } else {
+        set = [user];
+      }
       break;
   }
 

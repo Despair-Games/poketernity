@@ -2529,7 +2529,7 @@ export function initMoves() {
       .target(MoveTarget.USER_AND_ALLIES)
       .condition(
         (user, _target, _move) =>
-          !![user, user.getAlly()]
+          !![user, user.getAlly()!]
             .filter((p) => p?.isActive())
             .find((p) => !![Abilities.PLUS, Abilities.MINUS].find((a) => p.hasAbility(a, false))),
       ),
@@ -2747,7 +2747,7 @@ export function initMoves() {
       .target(MoveTarget.USER_AND_ALLIES)
       .condition(
         (user, _target, _move) =>
-          !![user, user.getAlly()]
+          !![user, user.getAlly()!]
             .filter((p) => p?.isActive())
             .find((p) => !![Abilities.PLUS, Abilities.MINUS].find((a) => p.hasAbility(a, false))),
       ),
