@@ -368,11 +368,8 @@ export class MovePhase extends BattlePhase {
       });
 
     /**
-     * The first Pokemon in Speed order to have Snatch in effect uses this phase's move
+     * The first Pokemon in turn order to have Snatch in effect uses this phase's move
      * for itself and cancels the original move's execution.
-     *
-     * @todo This is slightly different from mainline in that multiple Snatches are
-     * resolved in order of their execution, not just in Speed order
      */
     for (const p of otherPokemon) {
       if (applyBattlerTags<SnatchTag>(BattlerTagType.SNATCH, p, false, this.pokemon)) {
