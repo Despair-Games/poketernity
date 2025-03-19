@@ -215,10 +215,10 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
   showPrompt(callback?: Function | null, callbackDelay?: number | null) {
     const wrappedTextLines = this.message.runWordWrap(this.message.text).split(/\n/g);
     const textLinesCount = wrappedTextLines.length;
-    const lastTextLine = wrappedTextLines[wrappedTextLines.length - 1];
-    const lastLineTest = addTextObject(0, 0, lastTextLine, TextStyle.MESSAGE);
-    const lastLineWidth = lastLineTest.displayWidth;
-    lastLineTest.destroy();
+    const lastTextLine = wrappedTextLines[textLinesCount - 1];
+    const lastLineTextObject = addTextObject(0, 0, lastTextLine, TextStyle.MESSAGE);
+    const lastLineWidth = lastLineTextObject.displayWidth;
+    lastLineTextObject.destroy();
     if (this.prompt) {
       this.prompt.setPosition(this.message.x + lastLineWidth + 2, this.message.y + (textLinesCount - 1) * 18 + 2);
       this.prompt.play("prompt");
