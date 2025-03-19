@@ -68,7 +68,7 @@ export class MovePhase extends BattlePhase {
   protected followUp: boolean;
   protected ignorePp: boolean;
   protected reflected: boolean;
-  protected snatched: boolean;
+  public snatched: boolean;
   protected failed: boolean = false;
   protected cancelled: boolean = false;
 
@@ -378,6 +378,7 @@ export class MovePhase extends BattlePhase {
           targets: getMoveTargets(p, this.move.moveId).targets,
           move: this.move,
           followUp: true,
+          snatched: true,
           when: "eager",
         });
 

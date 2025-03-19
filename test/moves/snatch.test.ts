@@ -1,12 +1,14 @@
+import type { StockpilingTag } from "#app/data/battler-tags";
 import { Abilities } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Moves - Snatch", () => {
   let phaserGame: Phaser.Game;
@@ -88,6 +90,52 @@ describe("Moves - Snatch", () => {
         virtual: true,
       }),
     );
+  });
+
+  it("should steal Rest if it would affect the original user", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    game.move.use(MoveId.FALSE_SWIPE);
+    await game.move.forceEnemyMove(MoveId.FALSE_SWIPE);
+    await game.toNextTurn();
+
+    game.move.use(MoveId.SNATCH);
+    await game.move.forceEnemyMove(MoveId.REST);
+    await game.toEndOfTurn();
+
+    expect(player.isFullHp()).toBeTruthy();
+    expect(player.getStatusEffect()).toBe(StatusEffect.SLEEP);
+    expect(enemy.isFullHp()).toBeFalsy();
+    expect(enemy.getStatusEffect()).toBe(StatusEffect.NONE);
+  });
+
+  it("should steal Swallow if the original user has Stockpiled, restoring 25% HP", async () => {
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const player = game.field.getPlayerPokemon();
+    const enemy = game.field.getEnemyPokemon();
+
+    player.hp = 1;
+    enemy.hp = 1;
+
+    vi.spyOn(player, "getMaxHp").mockReturnValue(100);
+
+    for (let i = 0; i < 3; i++) {
+      game.move.use(MoveId.SPLASH);
+      await game.move.forceEnemyMove(MoveId.STOCKPILE);
+      await game.toNextTurn();
+    }
+
+    game.move.use(MoveId.SNATCH);
+    await game.move.forceEnemyMove(MoveId.SWALLOW);
+    await game.toEndOfTurn();
+
+    expect(player.hp).toBe(26);
+    expect(enemy.hp).toBe(1);
+    expect(enemy.getTag<StockpilingTag>(BattlerTagType.STOCKPILING)?.stockpiledCount).toBe(3);
   });
 
   it("should only activate for the first Pokemon to use Snatch", async () => {
