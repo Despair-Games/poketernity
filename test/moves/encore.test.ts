@@ -42,7 +42,7 @@ describe("Moves - Encore", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.ENCORE);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
 
     await game.toNextTurn();
     expect(enemyPokemon.getTag(BattlerTagType.ENCORE)).toBeDefined();

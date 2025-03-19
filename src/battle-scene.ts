@@ -126,15 +126,15 @@ import type TrainerData from "#app/system/trainer-data";
 import { type Voucher, vouchers } from "#app/system/voucher";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import { UiInputs } from "#app/ui-inputs";
-import AbilityBar from "#app/ui/components/ability-bar";
+import { AbilityBar } from "#app/ui/components/ability-bar";
 import { ArenaFlyout } from "#app/ui/components/arena-flyout";
-import CandyBar from "#app/ui/components/candy-bar";
-import CharSprite from "#app/ui/components/char-sprite";
-import PartyExpBar from "#app/ui/components/party-exp-bar";
-import PokeballTray from "#app/ui/components/pokeball-tray";
-import PokemonInfoContainer from "#app/ui/components/pokemon-info-container";
+import { CandyBar } from "#app/ui/components/candy-bar";
+import { CharSprite } from "#app/ui/components/char-sprite";
+import { PartyExpBar } from "#app/ui/components/party-exp-bar";
+import { PokeballTray } from "#app/ui/components/pokeball-tray";
+import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container";
 import { addTextObject } from "#app/ui/text/text-utils";
-import UI from "#app/ui/ui";
+import { UI } from "#app/ui/ui";
 import { updateWindowStyle } from "#app/ui/ui-theme";
 import {
   type AbstractConstructor,
@@ -232,6 +232,7 @@ interface UseMoveInit {
   phaseId?: PhaseId;
   followUp?: boolean;
   ignorePp?: boolean;
+  reflected?: boolean;
 }
 
 //#endregion
@@ -3533,8 +3534,17 @@ export default class BattleScene extends SceneBase {
     this.unshiftPhase(new MoveAnimPhase(new MoveChargeAnim(chargeAnim, moveId, user)));
   }
 
-  useMove({ pokemon, targets, move, followUp = false, ignorePp = false, when, phaseId }: UseMoveInit) {
-    const movePhase = new MovePhase(pokemon, targets, move, followUp, ignorePp);
+  useMove({
+    pokemon,
+    targets,
+    move,
+    followUp = false,
+    ignorePp = false,
+    reflected = false,
+    when,
+    phaseId,
+  }: UseMoveInit) {
+    const movePhase = new MovePhase(pokemon, targets, move, followUp, ignorePp, reflected);
 
     if ((when === "before" || when === "after") && !phaseId) {
       throw new Error("phaseId is required for useMove.when === 'before' or 'after'");

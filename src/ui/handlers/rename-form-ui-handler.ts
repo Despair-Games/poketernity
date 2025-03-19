@@ -1,23 +1,22 @@
-import type { InputFieldConfig } from "./form-modal-ui-handler";
-import { FormModalUiHandler } from "./form-modal-ui-handler";
-import type { ModalConfig } from "./modal-ui-handler";
-import i18next from "i18next";
 import type { PlayerPokemon } from "#app/field/pokemon";
+import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
+import i18next from "i18next";
+import { FormModalUiHandler } from "./form-modal-ui-handler";
 
-export default class RenameFormUiHandler extends FormModalUiHandler {
-  getModalTitle(_config?: ModalConfig): string {
+export class RenameFormUiHandler extends FormModalUiHandler {
+  getModalTitle(): string {
     return i18next.t("menu:renamePokemon");
   }
 
-  getWidth(_config?: ModalConfig): number {
+  getWidth(): number {
     return 160;
   }
 
-  getMargin(_config?: ModalConfig): [number, number, number, number] {
+  getMargin(): [number, number, number, number] {
     return [0, 0, 48, 0];
   }
 
-  getButtonLabels(_config?: ModalConfig): string[] {
+  getButtonLabels(): string[] {
     return [i18next.t("menu:rename"), i18next.t("menu:cancel")];
   }
 
@@ -34,22 +33,22 @@ export default class RenameFormUiHandler extends FormModalUiHandler {
     return [{ label: i18next.t("menu:nickname") }];
   }
 
-  override show(args: any[]): boolean {
-    if (super.show(args)) {
-      const config = args[0] as ModalConfig;
-      if (args[1] && typeof (args[1] as PlayerPokemon).getNameToRender === "function") {
-        this.inputs[0].text = (args[1] as PlayerPokemon).getNameToRender();
-      } else {
-        this.inputs[0].text = args[1];
-      }
-      this.submitAction = (_) => {
-        this.sanitizeInputs();
-        const sanitizedName = btoa(unescape(encodeURIComponent(this.inputs[0].text)));
-        config.buttonActions[0](sanitizedName);
-        return true;
-      };
-      return true;
+  override show(config: ModalConfig, target: string | PlayerPokemon): boolean {
+    if (!super.show(config)) {
+      return false;
     }
-    return false;
+
+    if (typeof target === "string") {
+      this.inputs[0].text = target;
+    } else {
+      this.inputs[0].text = target.getNameToRender();
+    }
+    this.submitAction = (_) => {
+      this.sanitizeInputs();
+      const sanitizedName = btoa(unescape(encodeURIComponent(this.inputs[0].text)));
+      config.buttonActions[0](sanitizedName);
+      return true;
+    };
+    return true;
   }
 }

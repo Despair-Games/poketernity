@@ -1,9 +1,10 @@
-import { Button } from "#enums/buttons";
-import { UiMode } from "#enums/ui-mode";
-import type SettingsKeyboardUiHandler from "#app/ui/settings/settings-keyboard-ui-handler";
-import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
+import type { KeyboardBindingUiHandler } from "#app/ui/settings/keyboard-binding-ui-handler";
+import type { SettingsKeyboardUiHandler } from "#app/ui/settings/settings-keyboard-ui-handler";
+import { Button } from "#enums/buttons";
 import { SettingKeyboard } from "#enums/setting-keyboard";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
 
 const pressAction = i18next.t("settings:pressToBind");
 
@@ -137,10 +138,7 @@ export function setSettingKeyboard(setting: SettingKeyboard, value: number): boo
             (globalScene.ui.getHandler() as SettingsKeyboardUiHandler).updateBindings();
             return success;
           };
-          globalScene.ui.setOverlayMode(UiMode.KEYBOARD_BINDING, {
-            target: setting,
-            cancelHandler: cancelHandler,
-          });
+          globalScene.ui.setOverlayMode<KeyboardBindingUiHandler>(UiMode.KEYBOARD_BINDING, setting, cancelHandler);
         }
       }
       break;

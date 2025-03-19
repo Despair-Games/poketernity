@@ -49,7 +49,7 @@ describe("Moves - Instruct", () => {
     game.move.changeMoveset(enemy, MoveId.SONIC_BOOM);
 
     game.move.select(MoveId.INSTRUCT, BattlerIndex.PLAYER, BattlerIndex.ENEMY);
-    await game.forceEnemyMove(MoveId.SONIC_BOOM, BattlerIndex.PLAYER);
+    await game.move.forceEnemyMove(MoveId.SONIC_BOOM, BattlerIndex.PLAYER);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
@@ -64,12 +64,12 @@ describe("Moves - Instruct", () => {
     game.move.changeMoveset(enemy, [MoveId.SONIC_BOOM, MoveId.SUBSTITUTE]);
 
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.SUBSTITUTE);
+    await game.move.forceEnemyMove(MoveId.SUBSTITUTE);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
     game.move.select(MoveId.INSTRUCT);
-    await game.forceEnemyMove(MoveId.SONIC_BOOM);
+    await game.move.forceEnemyMove(MoveId.SONIC_BOOM);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
@@ -87,8 +87,8 @@ describe("Moves - Instruct", () => {
 
     game.move.select(MoveId.INSTRUCT, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2);
     game.move.select(MoveId.SONIC_BOOM, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY);
-    await game.forceEnemyMove(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
     game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.toEndOfTurn();
 
@@ -116,12 +116,12 @@ describe("Moves - Instruct", () => {
     await game.classicMode.startBattle([Species.AMOONGUSS]);
 
     game.move.select(MoveId.THUNDER_WAVE);
-    await game.forceEnemyMove(MoveId.SONIC_BOOM);
+    await game.move.selectEnemyMove(MoveId.SONIC_BOOM);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
     game.move.select(MoveId.INSTRUCT);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.move.forceStatusActivation(true);
     await game.phaseInterceptor.to("MovePhase");
@@ -145,7 +145,7 @@ describe("Moves - Instruct", () => {
     moveUsed.ppUsed = moveUsed.getMovePp() - 1;
 
     game.move.select(MoveId.INSTRUCT);
-    await game.forceEnemyMove(MoveId.HIDDEN_POWER);
+    await game.move.selectEnemyMove(MoveId.HIDDEN_POWER);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
@@ -159,7 +159,7 @@ describe("Moves - Instruct", () => {
     await game.classicMode.startBattle([Species.AMOONGUSS]);
 
     game.move.select(MoveId.INSTRUCT);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toEndOfTurn();
 
@@ -176,8 +176,8 @@ describe("Moves - Instruct", () => {
 
     game.move.select(MoveId.INSTRUCT, BattlerIndex.PLAYER, BattlerIndex.ENEMY);
     game.move.select(MoveId.DISABLE, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY);
-    await game.forceEnemyMove(MoveId.SONIC_BOOM, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.SONIC_BOOM, BattlerIndex.PLAYER);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
     await game.toEndOfTurn();
 
@@ -199,7 +199,7 @@ describe("Moves - Instruct", () => {
     const enemyPokemon = game.scene.getEnemyPokemon()!;
     game.move.changeMoveset(enemyPokemon, MoveToUse);
     game.move.select(MoveId.INSTRUCT);
-    await game.forceEnemyMove(MoveId.PROTECT);
+    await game.move.forceEnemyMove(MoveId.PROTECT);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
@@ -225,7 +225,7 @@ describe("Moves - Instruct", () => {
     ];
 
     game.move.select(MoveId.INSTRUCT);
-    await game.forceEnemyMove(MoveId.HYPER_BEAM);
+    await game.move.selectEnemyMove(MoveId.HYPER_BEAM);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toNextTurn();
 
@@ -248,8 +248,8 @@ describe("Moves - Instruct", () => {
 
     game.move.select(MoveId.INSTRUCT, BattlerIndex.PLAYER, BattlerIndex.ENEMY);
     game.move.select(MoveId.FIERY_DANCE, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY);
-    await game.forceEnemyMove(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.toEndOfTurn();
 
@@ -291,14 +291,14 @@ describe("Moves - Instruct", () => {
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.BULLET_SEED, BattlerIndex.PLAYER_2);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.BULLET_SEED, BattlerIndex.PLAYER_2);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
     game.move.select(MoveId.INSTRUCT, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.INSTRUCT, 1, BattlerIndex.ENEMY);
-    await game.forceEnemyMove(MoveId.BULLET_SEED, BattlerIndex.PLAYER_2);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.BULLET_SEED, BattlerIndex.PLAYER_2);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     await game.toEndOfTurn();
 
@@ -307,8 +307,8 @@ describe("Moves - Instruct", () => {
     await game.toNextTurn();
     game.move.select(MoveId.INSTRUCT, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.INSTRUCT, 1, BattlerIndex.ENEMY);
-    await game.forceEnemyMove(MoveId.BULLET_SEED, BattlerIndex.PLAYER_2);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.BULLET_SEED, BattlerIndex.PLAYER_2);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
     await game.toEndOfTurn();
 

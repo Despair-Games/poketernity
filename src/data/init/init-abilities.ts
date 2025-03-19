@@ -200,6 +200,7 @@ import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { BypassParaSpeedReductionAbAttr } from "#app/data/abilities/ab-attrs/bypass-para-speed-reduction-ab-attr";
 import { MockStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/mock-status-effect-ab-attr";
+import { ReflectMovesAbAttr } from "#app/data/abilities/ab-attrs/reflect-moves-ab-attr";
 
 // prettier-ignore
 export function initAbilities() {
@@ -710,7 +711,9 @@ export function initAbilities() {
         1,
       )
       .attr(PostIntimidateStatStageChangeAbAttr, [Stat.SPD], 1),
-    new Ability(Abilities.MAGIC_BOUNCE, 5).ignorable().unimplemented(),
+    new Ability(Abilities.MAGIC_BOUNCE, 5)
+      .attr(ReflectMovesAbAttr)
+      .ignorable(),
     new Ability(Abilities.SAP_SIPPER, 5)
       .attr(TypeImmunityStatStageChangeAbAttr, ElementalType.GRASS, Stat.ATK, 1)
       .ignorable(),

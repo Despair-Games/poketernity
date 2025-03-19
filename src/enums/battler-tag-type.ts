@@ -113,4 +113,5 @@ export enum BattlerTagType {
   QUASHED,
   ROLLING,
   UPROAR,
+  MAGIC_COAT,
 }

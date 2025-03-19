@@ -1,29 +1,29 @@
-import { UiMode } from "#enums/ui-mode";
-import { addTextObject, getEggTierTextTint } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import MessageUiHandler from "./message-ui-handler";
-import { getEnumValues, getEnumKeys, fixedNumber, randSeedShuffle } from "#app/utils";
-import type { IEggOptions } from "../../data/egg";
-import { Egg, getLegendaryGachaSpeciesForTimestamp } from "../../data/egg";
-import { getVoucherTypeIcon } from "../../system/voucher";
-import { VoucherType } from "#enums/voucher-type";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { addWindow } from "../ui-theme";
-import { handleTutorial } from "../../tutorial";
-import { Tutorial } from "#enums/tutorial";
-import { Button } from "#enums/buttons";
-import Overrides from "#app/overrides";
-import { GachaType } from "#enums/gacha-types";
-import i18next from "i18next";
-import { EggTier } from "#enums/egg-type";
+import type { IEggOptions } from "#app/data/egg";
+import { Egg, getLegendaryGachaSpeciesForTimestamp } from "#app/data/egg";
 import { globalScene } from "#app/global-scene";
-import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
+import Overrides from "#app/overrides";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
+import { getVoucherTypeIcon } from "#app/system/voucher";
+import { handleTutorial } from "#app/tutorial";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
+import { addTextObject, getEggTierTextTint } from "#app/ui/text/text-utils";
+import { addWindow } from "#app/ui/ui-theme";
+import { fixedNumber, getEnumKeys, getEnumValues, randSeedShuffle } from "#app/utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import { Button } from "#enums/buttons";
+import { EggTier } from "#enums/egg-type";
+import { GachaType } from "#enums/gacha-types";
+import { TextStyle } from "#enums/text-style";
+import { Tutorial } from "#enums/tutorial";
+import { UiMode } from "#enums/ui-mode";
+import { VoucherType } from "#enums/voucher-type";
+import i18next from "i18next";
+import { MessageUiHandler } from "./message-ui-handler";
 
 /**
  * TODO: this should extend AbstractOptionSelectUiHandler
  */
-export default class EggGachaUiHandler extends MessageUiHandler {
+export class EggGachaUiHandler extends MessageUiHandler {
   private eggGachaContainer: Phaser.GameObjects.Container;
   private eggGachaMessageBox: Phaser.GameObjects.NineSlice;
   private eggGachaOptionsContainer: Phaser.GameObjects.Container;
@@ -326,8 +326,8 @@ export default class EggGachaUiHandler extends MessageUiHandler {
     this.setCursor(0);
   }
 
-  override show(args: any[]): boolean {
-    super.show(args);
+  override show(): boolean {
+    super.show();
 
     this.getUi().showText(this.defaultText, 0);
 

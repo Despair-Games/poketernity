@@ -1,4 +1,4 @@
-import UI from "#app/ui/ui";
+import { UI } from "#app/ui/ui";
 import type { MockGameObject } from "#test/test-utils/mocks/mockGameObject";
 
 export class MockText implements MockGameObject {

@@ -1363,8 +1363,8 @@ export class EncoreTag extends MoveRestrictionBattlerTag {
   }
 
   override onAdd(pokemon: Pokemon): void {
-    super.onRemove(pokemon);
-    this.moveId = pokemon.getLastXMoves(1)[0].move.id;
+    const lastMove = pokemon.getLastXMoves(-1).filter((mv) => !mv.virtual)[0];
+    this.moveId = lastMove?.move.id;
 
     globalScene.queueMessage(
       i18next.t("battlerTags:encoreOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
@@ -1374,7 +1374,6 @@ export class EncoreTag extends MoveRestrictionBattlerTag {
 
     const movesetMove = pokemon.getMoveset().find((m) => m.moveId === this.moveId);
     if (movesetMove) {
-      const lastMove = pokemon.getLastXMoves(1)[0];
       turnManager.tryReplaceMove(pokemon, movesetMove, lastMove?.targets ?? []);
     }
   }
@@ -1986,6 +1985,46 @@ export class EnduringTag extends BattlerTag {
     }
 
     return super.lapse(pokemon, lapseType);
+  }
+}
+
+/**
+ * BattlerTag for the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Magic_Coat_(move) | Magic Coat}.
+ * Reflects status moves back at the attacker.
+ * @extends BattlerTag
+ * @see {@linkcode MovePhase.tryReflectMove}
+ */
+export class MagicCoatTag extends BattlerTag {
+  constructor() {
+    super(BattlerTagType.MAGIC_COAT, BattlerTagLapseType.TURN_END, 1);
+  }
+
+  override onAdd(pokemon: Pokemon): void {
+    globalScene.queueMessage(
+      i18next.t("battlerTags:magicCoatOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+    );
+  }
+
+  override apply(
+    _pokemon: Pokemon,
+    simulated: boolean,
+    attacker: Pokemon,
+    move: Move,
+    reflected: BooleanHolder,
+  ): boolean {
+    if (!simulated) {
+      globalScene.queueMessage(this.getReflectionMessage(attacker, move));
+    }
+    reflected.value = true;
+    return true;
+  }
+
+  private getReflectionMessage(attacker: Pokemon, move: Move) {
+    // "{pokemonNameWithAffix}'s {moveName} was bounced back by Magic Coat!"
+    return i18next.t("battlerTags:magicCoatOnApply", {
+      pokemonNameWithAffix: getPokemonNameWithAffix(attacker),
+      moveName: move.name,
+    });
   }
 }
 
@@ -3777,6 +3816,8 @@ export function getBattlerTag(
       return new ContactBurnProtectedTag(sourceMoveId);
     case BattlerTagType.ENDURING:
       return new EnduringTag(tagType, BattlerTagLapseType.TURN_END, sourceMoveId);
+    case BattlerTagType.MAGIC_COAT:
+      return new MagicCoatTag();
     case BattlerTagType.STURDY:
       return new SturdyTag(sourceMoveId);
     case BattlerTagType.PERISH_SONG:

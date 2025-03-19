@@ -25,7 +25,6 @@ describe("Abilities - Gorilla Tactics", () => {
     game.override
       .battleType("single")
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset([MoveId.SPLASH, MoveId.DISABLE])
       .enemySpecies(Species.MAGIKARP)
       .enemyLevel(30)
       .moveset([MoveId.SPLASH, MoveId.TACKLE, MoveId.GROWL])
@@ -39,7 +38,7 @@ describe("Abilities - Gorilla Tactics", () => {
     const initialAtkStat = darmanitan.getStat(Stat.ATK);
 
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
 
     await game.toEndOfTurn();
 
@@ -57,13 +56,13 @@ describe("Abilities - Gorilla Tactics", () => {
 
     // First turn, lock move to Growl
     game.move.select(MoveId.GROWL);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
 
     // Second turn, Growl is interrupted by Disable
     await game.toNextTurn();
 
     game.move.select(MoveId.GROWL);
-    await game.forceEnemyMove(MoveId.DISABLE);
+    await game.move.forceEnemyMove(MoveId.DISABLE);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
 
     await game.toEndOfTurn();

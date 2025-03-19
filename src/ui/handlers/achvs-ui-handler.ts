@@ -1,26 +1,26 @@
-import { Button } from "#enums/buttons";
-import i18next from "i18next";
+import { globalScene } from "#app/global-scene";
 import type { Achievement } from "#app/system/achievements";
 import { achvs } from "#app/system/achievements";
+import { settings } from "#app/system/settings/settings-manager";
 import type { Voucher } from "#app/system/voucher";
 import { getVoucherTypeIcon, getVoucherTypeName, vouchers } from "#app/system/voucher";
-import MessageUiHandler from "#app/ui/handlers/message-ui-handler";
+import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
+import { ScrollBar } from "#app/ui/components/scroll-bar";
 import { addTextObject } from "#app/ui/text/text-utils";
+import { addWindow } from "#app/ui/ui-theme";
+import { Button } from "#enums/buttons";
+import { PlayerGender } from "#enums/player-gender";
 import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
-import { addWindow } from "#app/ui/ui-theme";
-import { ScrollBar } from "#app/ui/components/scroll-bar";
-import { PlayerGender } from "#enums/player-gender";
-import { globalScene } from "#app/global-scene";
-import { settings } from "#app/system/settings/settings-manager";
-import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
+import i18next from "i18next";
+import { MessageUiHandler } from "./message-ui-handler";
 
 enum Page {
   ACHIEVEMENTS,
   VOUCHERS,
 }
 
-export default class AchvsUiHandler extends MessageUiHandler {
+export class AchvsUiHandler extends MessageUiHandler {
   private readonly ROWS = 4;
   private readonly COLS = 17;
 
@@ -165,8 +165,8 @@ export default class AchvsUiHandler extends MessageUiHandler {
     this.mainContainer.setVisible(false);
   }
 
-  override show(args: any[]): boolean {
-    super.show(args);
+  override show(): boolean {
+    super.show();
 
     this.headerBgX = this.headerBg.getTopRight().x;
     this.updateAchvIcons();

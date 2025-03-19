@@ -13,7 +13,7 @@ import { FieldTripEncounter } from "#app/data/mystery-encounters/encounters/fiel
 import { MoveId } from "#enums/move-id";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { UiMode } from "#enums/ui-mode";
-import ModifierSelectUiHandler from "#app/ui/handlers/modifier-select-ui-handler";
+import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import i18next from "i18next";
 
 const namespace = "mysteryEncounters/fieldTrip";

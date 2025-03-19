@@ -6,7 +6,7 @@ import { TimeOfDay } from "#enums/time-of-day";
 import { settings } from "#app/system/settings/settings-manager";
 
 /** A small self contained UI element that displays the time of day as an icon */
-export default class TimeOfDayWidget extends Phaser.GameObjects.Container {
+export class TimeOfDayWidget extends Phaser.GameObjects.Container {
   /** The {@linkcode Phaser.GameObjects.Sprite} that represents the foreground of the current time of day */
   private readonly timeOfDayIconFgs: Phaser.GameObjects.Sprite[] = new Array(2);
   /** The {@linkcode Phaser.GameObjects.Sprite} that represents the middle-ground of the current time of day */

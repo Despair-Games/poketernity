@@ -2,7 +2,7 @@ import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { CommandPhase } from "#app/phases/command-phase";
-import FightUiHandler from "#app/ui/handlers/fight-ui-handler";
+import { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";

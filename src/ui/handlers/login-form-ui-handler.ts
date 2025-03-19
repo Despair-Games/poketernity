@@ -1,18 +1,17 @@
-import type { InputFieldConfig } from "./form-modal-ui-handler";
-import { FormModalUiHandler } from "./form-modal-ui-handler";
-import type { ModalConfig } from "./modal-ui-handler";
+import { APP_ABBREVIATION, SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#app/constants";
+import { globalScene } from "#app/global-scene";
+import { api } from "#app/plugins/api/api";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { addWindow } from "#app/ui/ui-theme";
 import { fixedNumber } from "#app/utils";
+import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { addWindow } from "../ui-theme";
-import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
-import { api } from "#app/plugins/api/api";
-import { globalScene } from "#app/global-scene";
 import JSZip from "jszip";
-import { APP_ABBREVIATION, SAVE_FILE_EXTENSION, SAVES_ZIP_PREFIX } from "#app/constants";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { FormModalUiHandler } from "./form-modal-ui-handler";
 
 interface BuildInteractableImageOpts {
   scale?: number;
@@ -21,7 +20,7 @@ interface BuildInteractableImageOpts {
   origin?: { x: number; y: number };
 }
 
-export default class LoginFormUiHandler extends FormModalUiHandler {
+export class LoginFormUiHandler extends FormModalUiHandler {
   private readonly ERR_USERNAME: string = "invalid username";
   private readonly ERR_PASSWORD: string = "invalid password";
   private readonly ERR_ACCOUNT_EXIST: string = "account doesn't exist";
@@ -86,19 +85,19 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     this.externalPartyContainer.setVisible(false);
   }
 
-  override getModalTitle(_config?: ModalConfig): string {
+  override getModalTitle(): string {
     return i18next.t("menu:login");
   }
 
-  override getWidth(_config?: ModalConfig): number {
+  override getWidth(): number {
     return 160;
   }
 
-  override getMargin(_config?: ModalConfig): [number, number, number, number] {
+  override getMargin(): [number, number, number, number] {
     return [0, 0, 48, 0];
   }
 
-  override getButtonLabels(_config?: ModalConfig): string[] {
+  override getButtonLabels(): string[] {
     return [i18next.t("menu:login"), i18next.t("menu:register")];
   }
 
@@ -132,39 +131,38 @@ export default class LoginFormUiHandler extends FormModalUiHandler {
     return inputFieldConfigs;
   }
 
-  override show(args: any[]): boolean {
-    if (super.show(args)) {
-      const config = args[0] as ModalConfig;
-      this.processExternalProvider(config);
-      const originalLoginAction = this.submitAction;
-      this.submitAction = (_) => {
-        // Prevent overlapping overrides on action modification
-        this.submitAction = originalLoginAction;
-        this.sanitizeInputs();
-        globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
-        const onFail = (error) => {
-          globalScene.ui.setMode(UiMode.LOGIN_FORM, Object.assign(config, { errorMessage: error?.trim() }));
-          globalScene.ui.playError();
-        };
-        if (!this.inputs[0].text) {
-          return onFail(i18next.t("menu:emptyUsername"));
-        }
-
-        const [usernameInput, passwordInput] = this.inputs;
-
-        api.account.login({ username: usernameInput.text, password: passwordInput.text }).then((error) => {
-          if (!error) {
-            originalLoginAction && originalLoginAction();
-          } else {
-            onFail(error);
-          }
-        });
-      };
-
-      return true;
+  override show(config: ModalConfig): boolean {
+    if (!super.show(config)) {
+      return false;
     }
 
-    return false;
+    this.processExternalProvider(config);
+    const originalLoginAction = this.submitAction;
+    this.submitAction = (_) => {
+      // Prevent overlapping overrides on action modification
+      this.submitAction = originalLoginAction;
+      this.sanitizeInputs();
+      globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
+      const onFail = (error: string) => {
+        globalScene.ui.setMode(UiMode.LOGIN_FORM, Object.assign(config, { errorMessage: error?.trim() }));
+        globalScene.ui.playError();
+      };
+      if (!this.inputs[0].text) {
+        return onFail(i18next.t("menu:emptyUsername"));
+      }
+
+      const [usernameInput, passwordInput] = this.inputs;
+
+      api.account.login({ username: usernameInput.text, password: passwordInput.text }).then((error) => {
+        if (!error) {
+          originalLoginAction && originalLoginAction();
+        } else {
+          onFail(error);
+        }
+      });
+    };
+
+    return true;
   }
 
   override clear() {

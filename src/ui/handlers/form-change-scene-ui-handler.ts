@@ -1,19 +1,19 @@
-import MessageUiHandler from "./message-ui-handler";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { UiMode } from "#enums/ui-mode";
-import { Button } from "#enums/buttons";
 import { globalScene } from "#app/global-scene";
+import { type EvolutionPhase } from "#app/phases/evolution-phase";
 import { settings } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
-import { type EvolutionPhase } from "#app/phases/evolution-phase";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { Button } from "#enums/buttons";
 import { PhaseId } from "#enums/phase-id";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
+import { MessageUiHandler } from "./message-ui-handler";
 
 /**
  * A handler for Pokemon form change and evolution scenes
  * @extends MessageUiHandler
  */
-export default class FormChangeSceneUiHandler extends MessageUiHandler {
+export class FormChangeSceneUiHandler extends MessageUiHandler {
   public container: Phaser.GameObjects.Container;
   public messageBg: Phaser.GameObjects.Image;
   public messageContainer: Phaser.GameObjects.Container;
@@ -55,8 +55,8 @@ export default class FormChangeSceneUiHandler extends MessageUiHandler {
     this.initPromptSprite(this.messageContainer);
   }
 
-  override show(_args: any[]): boolean {
-    super.show(_args);
+  override show(): boolean {
+    super.show();
 
     globalScene.ui.bringToTop(this.container);
     globalScene.ui.bringToTop(this.messageBg);

@@ -22,9 +22,10 @@ import {
 } from "#app/modifier/modifier-type";
 import Overrides from "#app/overrides";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
-import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import type ModifierSelectUiHandler from "#app/ui/handlers/modifier-select-ui-handler";
+import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { SHOP_OPTIONS_ROW_LIMIT } from "#app/ui/handlers/modifier-select-ui-handler";
+import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { NumberHolder } from "#app/utils";
 import { FilterItemMaxStacks } from "#app/utils/item-utils";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
@@ -116,7 +117,7 @@ export class SelectModifierPhase extends BattlePhase {
             super.end();
           },
           noHandler: () => {
-            ui.setMode(
+            ui.setMode<ModifierSelectUiHandler>(
               UiMode.MODIFIER_SELECT,
               this.isPlayer(),
               this.typeOptions,
@@ -164,7 +165,7 @@ export class SelectModifierPhase extends BattlePhase {
               }
               break;
             case 1:
-              ui.setModeWithoutClear(
+              ui.setModeWithoutClear<PartyUiHandler>(
                 UiMode.PARTY,
                 PartyUiMode.MODIFIER_TRANSFER,
                 -1,
@@ -191,7 +192,7 @@ export class SelectModifierPhase extends BattlePhase {
                       false,
                     );
                   } else {
-                    ui.setMode(
+                    ui.setMode<ModifierSelectUiHandler>(
                       UiMode.MODIFIER_SELECT,
                       this.isPlayer(),
                       this.typeOptions,
@@ -205,7 +206,7 @@ export class SelectModifierPhase extends BattlePhase {
               break;
             case 2:
               ui.setModeWithoutClear(UiMode.PARTY, PartyUiMode.CHECK, -1, () => {
-                ui.setMode(
+                ui.setMode<ModifierSelectUiHandler>(
                   UiMode.MODIFIER_SELECT,
                   this.isPlayer(),
                   this.typeOptions,
@@ -306,13 +307,13 @@ export class SelectModifierPhase extends BattlePhase {
               ? PartyUiMode.REMEMBER_MOVE_MODIFIER
               : PartyUiMode.MODIFIER;
         const tmMoveId = isTmModifier ? (modifierType as TmModifierType).moveId : undefined;
-        ui.setModeWithoutClear(
+        ui.setModeWithoutClear<PartyUiHandler>(
           UiMode.PARTY,
           partyUiMode,
           -1,
           (slotIndex: number, option: PartyOption) => {
             if (slotIndex < 6) {
-              ui.setMode(UiMode.MODIFIER_SELECT, this.isPlayer()).then(() => {
+              ui.setMode<ModifierSelectUiHandler>(UiMode.MODIFIER_SELECT, this.isPlayer()).then(() => {
                 const modifier = !isMoveModifier
                   ? !isRememberMoveModifier
                     ? modifierType.newModifier(party[slotIndex])
@@ -321,7 +322,7 @@ export class SelectModifierPhase extends BattlePhase {
                 applyModifier(modifier!, true); // TODO: is the bang correct?
               });
             } else {
-              ui.setMode(
+              ui.setMode<ModifierSelectUiHandler>(
                 UiMode.MODIFIER_SELECT,
                 this.isPlayer(),
                 this.typeOptions,
@@ -348,7 +349,7 @@ export class SelectModifierPhase extends BattlePhase {
 
       return !cost;
     };
-    ui.setMode(
+    ui.setMode<ModifierSelectUiHandler>(
       UiMode.MODIFIER_SELECT,
       this.isPlayer(),
       this.typeOptions,

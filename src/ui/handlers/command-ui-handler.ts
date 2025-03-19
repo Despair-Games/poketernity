@@ -1,18 +1,19 @@
-import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { PartyUiMode } from "#enums/party-ui-mode";
-import { UiMode } from "#enums/ui-mode";
-import UiHandler from "./abstract-ui-handler";
-import i18next from "i18next";
-import { Button } from "#enums/buttons";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { CommandPhase } from "#app/phases/command-phase";
-import { globalScene } from "#app/global-scene";
-import { BattleCommand } from "#enums/battle-command";
-import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
 import { TEXT_SCALE } from "#app/ui-constants";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
+import { BattleCommand } from "#enums/battle-command";
+import { Button } from "#enums/buttons";
+import { PartyUiMode } from "#enums/party-ui-mode";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
+import { UiHandler } from "./abstract-ui-handler";
+import type { PartyUiHandler } from "./party-ui-handler";
 
-export default class CommandUiHandler extends UiHandler {
+export class CommandUiHandler extends UiHandler {
   private commandsContainer: Phaser.GameObjects.Container;
   private cursorObj: Phaser.GameObjects.Image | null;
 
@@ -44,10 +45,10 @@ export default class CommandUiHandler extends UiHandler {
     }
   }
 
-  override show(args: any[]): boolean {
-    super.show(args);
+  override show(fieldIndex: number = 0): boolean {
+    super.show();
 
-    this.fieldIndex = args.length ? (args[0] as number) : 0;
+    this.fieldIndex = fieldIndex;
 
     this.commandsContainer.setVisible(true);
 
@@ -99,7 +100,7 @@ export default class CommandUiHandler extends UiHandler {
             break;
           // Pokemon
           case BattleCommand.POKEMON:
-            ui.setMode(
+            ui.setMode<PartyUiHandler>(
               UiMode.PARTY,
               PartyUiMode.SWITCH,
               (globalScene.getCurrentPhase() as CommandPhase).getPokemon().getFieldIndex(),

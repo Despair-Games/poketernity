@@ -1,16 +1,14 @@
-import type { InputFieldConfig } from "./form-modal-ui-handler";
-import { FormModalUiHandler } from "./form-modal-ui-handler";
-import type { ModalConfig } from "./modal-ui-handler";
-import i18next from "i18next";
-import type { PlayerPokemon } from "#app/field/pokemon";
-import type { OptionSelectItem } from "#app/ui/interfaces/option-select-config";
+import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
+import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { isNullOrUndefined } from "#app/utils";
 import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
+import { FormModalUiHandler } from "./form-modal-ui-handler";
 
-export default class TestDialogueUiHandler extends FormModalUiHandler {
+export class TestDialogueUiHandler extends FormModalUiHandler {
   keys: string[];
 
-  constructor(mode) {
+  constructor(mode: UiMode = UiMode.TEST_DIALOGUE) {
     super(mode);
   }
 
@@ -47,19 +45,19 @@ export default class TestDialogueUiHandler extends FormModalUiHandler {
     this.keys = keys;
   }
 
-  getModalTitle(_config?: ModalConfig): string {
+  getModalTitle(): string {
     return "Test Dialogue";
   }
 
-  getWidth(_config?: ModalConfig): number {
+  getWidth(): number {
     return 300;
   }
 
-  getMargin(_config?: ModalConfig): [number, number, number, number] {
+  getMargin(): [number, number, number, number] {
     return [0, 0, 48, 0];
   }
 
-  getButtonLabels(_config?: ModalConfig): string[] {
+  getButtonLabels(): string[] {
     return ["Check", "Cancel"];
   }
 
@@ -76,11 +74,11 @@ export default class TestDialogueUiHandler extends FormModalUiHandler {
     return [{ label: "Dialogue" }];
   }
 
-  override show(args: any[]): boolean {
+  override show(config: ModalConfig, prefilledText: string): boolean {
     const ui = this.getUi();
     const hasTitle = !!this.getModalTitle();
     this.updateFields(this.getInputFieldConfigs(), hasTitle);
-    this.updateContainer(args[0] as ModalConfig);
+    this.updateContainer(config);
     const input = this.inputs[0];
     input.setMaxLength(255);
 
@@ -127,35 +125,30 @@ export default class TestDialogueUiHandler extends FormModalUiHandler {
       }
 
       if (options.length > 0) {
-        const modalOpts = {
+        const modalOpts: OptionSelectModeConfig = {
           options: options,
           maxOptions: 5,
-          modalContainer: this.modalContainer,
         };
-        ui.setOverlayMode(UiMode.AUTO_COMPLETE, modalOpts);
+        ui.setOverlayMode(UiMode.AUTO_COMPLETE, modalOpts, this.modalContainer);
       }
     });
 
-    if (super.show(args)) {
-      const config = args[0] as ModalConfig;
-      this.inputs[0].resize(1150, 116);
-      this.inputContainers[0].list[0].width = 200;
-      if (args[1] && typeof (args[1] as PlayerPokemon).getNameToRender === "function") {
-        this.inputs[0].text = (args[1] as PlayerPokemon).getNameToRender();
-      } else {
-        this.inputs[0].text = args[1];
-      }
-      this.submitAction = (_) => {
-        if (ui.getMode() === UiMode.TEST_DIALOGUE) {
-          this.sanitizeInputs();
-          const sanitizedName = btoa(unescape(encodeURIComponent(this.inputs[0].text)));
-          config.buttonActions[0](sanitizedName);
-          return true;
-        }
-        return false;
-      };
-      return true;
+    if (!super.show(config)) {
+      return false;
     }
-    return false;
+
+    this.inputs[0].resize(1150, 116);
+    this.inputContainers[0].list[0].width = 200;
+    this.inputs[0].text = prefilledText;
+    this.submitAction = (_) => {
+      if (ui.getMode() === UiMode.TEST_DIALOGUE) {
+        this.sanitizeInputs();
+        const sanitizedName = btoa(unescape(encodeURIComponent(this.inputs[0].text)));
+        config.buttonActions[0](sanitizedName);
+        return true;
+      }
+      return false;
+    };
+    return true;
   }
 }
