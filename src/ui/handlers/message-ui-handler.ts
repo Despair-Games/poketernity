@@ -1,5 +1,7 @@
 import { globalScene } from "#app/global-scene";
+import { addTextObject } from "#app/ui/text/text-utils";
 import { getFrameMs } from "#app/utils";
+import { TextStyle } from "#enums/text-style";
 import type { UiMode } from "#enums/ui-mode";
 import { AwaitableUiHandler } from "./awaitable-ui-handler";
 
@@ -214,8 +216,7 @@ export abstract class MessageUiHandler extends AwaitableUiHandler {
     const wrappedTextLines = this.message.runWordWrap(this.message.text).split(/\n/g);
     const textLinesCount = wrappedTextLines.length;
     const lastTextLine = wrappedTextLines[wrappedTextLines.length - 1];
-    const lastLineTest = globalScene.add.text(0, 0, lastTextLine, { font: "96px emerald" });
-    lastLineTest.setScale(this.message.scale);
+    const lastLineTest = addTextObject(0, 0, lastTextLine, TextStyle.MESSAGE);
     const lastLineWidth = lastLineTest.displayWidth;
     lastLineTest.destroy();
     if (this.prompt) {
