@@ -34,7 +34,7 @@ export class LastMoveDoublePowerAttr extends VariablePowerAttr {
       const userAlly = user.getAlly();
       const enemyAlly = enemy?.getAlly();
 
-      if (userAlly && userAlly.turnData.acted) {
+      if (userAlly.isAllowedInBattle() && userAlly.turnData.acted) {
         pokemonActed.push(userAlly);
       }
       if (enemyAlly && enemyAlly.turnData.acted) {
