@@ -4147,6 +4147,14 @@ export class PlayerPokemon extends Pokemon {
     return this.getFieldIndex();
   }
 
+  override getAlly(): Pokemon {
+    const ally = globalScene.getPlayerField()[this.getFieldIndex() ? 0 : 1];
+    if (ally && ally.isAllowedInBattle()) {
+      return ally;
+    }
+    return this;
+  }
+
   generateCompatibleTms(): void {
     this.compatibleTms = [];
 

@@ -34,8 +34,7 @@ export class LastMoveDoublePowerAttr extends VariablePowerAttr {
       const userAlly = user.getAlly();
       const enemyAlly = enemy?.getAlly();
 
-      // Only players are affected by the clause of legal Pokemon
-      if (userAlly && userAlly.isAllowedInBattle() && userAlly.turnData.acted) {
+      if (userAlly && userAlly.turnData.acted) {
         pokemonActed.push(userAlly);
       }
       if (enemyAlly && enemyAlly.turnData.acted) {
