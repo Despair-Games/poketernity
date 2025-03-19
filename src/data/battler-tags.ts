@@ -2028,6 +2028,32 @@ export class MagicCoatTag extends BattlerTag {
   }
 }
 
+export class SnatchTag extends BattlerTag {
+  constructor() {
+    super(BattlerTagType.SNATCH, BattlerTagLapseType.TURN_END, 1);
+  }
+
+  override onAdd(pokemon: Pokemon) {
+    // "{pokemonNameWithAffix" waits for a target to make a move!"
+    globalScene.queueMessage(
+      i18next.t("battlerTags:snatchOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
+    );
+  }
+
+  override apply(pokemon: Pokemon, simulated: boolean, target: Pokemon): boolean {
+    if (!simulated) {
+      // "{sourceNameWithAffix} snatched {targetNameWithAffix}'s move!"
+      globalScene.queueMessage(
+        i18next.t("battlerTags:snatchOnApply", {
+          sourceNameWithAffix: getPokemonNameWithAffix(pokemon),
+          targetNameWithAffix: getPokemonNameWithAffix(target),
+        }),
+      );
+    }
+    return true;
+  }
+}
+
 export class SturdyTag extends BattlerTag {
   constructor(sourceMoveId: MoveId) {
     super(BattlerTagType.STURDY, BattlerTagLapseType.TURN_END, 0, sourceMoveId);
@@ -3818,6 +3844,8 @@ export function getBattlerTag(
       return new EnduringTag(tagType, BattlerTagLapseType.TURN_END, sourceMoveId);
     case BattlerTagType.MAGIC_COAT:
       return new MagicCoatTag();
+    case BattlerTagType.SNATCH:
+      return new SnatchTag();
     case BattlerTagType.STURDY:
       return new SturdyTag(sourceMoveId);
     case BattlerTagType.PERISH_SONG:

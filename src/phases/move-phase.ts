@@ -1,10 +1,10 @@
-import { BattlerIndex } from "#enums/battler-index";
+import type { RedirectMoveAbAttr } from "#app/data/abilities/ab-attrs/redirect-move-ab-attr";
+import type { ReflectMovesAbAttr } from "#app/data/abilities/ab-attrs/reflect-moves-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import { applyBattlerTags } from "#app/data/apply-battler-tags";
+import type { CenterOfAttentionTag, ImprisoningTag, MagicCoatTag, SnatchTag } from "#app/data/battler-tags";
 import { allMoves } from "#app/data/data-lists";
-import { CommonAnim } from "#enums/common-anim";
-import type { ImprisoningTag, MagicCoatTag, CenterOfAttentionTag } from "#app/data/battler-tags";
-import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import { applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
+import { getMoveTargets, SelfStatusMove } from "#app/data/moves/move";
 import { BypassRedirectAttr } from "#app/data/moves/move-attrs/bypass-redirect-attr";
 import { BypassSleepAttr } from "#app/data/moves/move-attrs/bypass-sleep-attr";
 import { CopycatAttr } from "#app/data/moves/move-attrs/copycat-attr";
@@ -16,7 +16,6 @@ import { getTerrainBlockMessage } from "#app/data/terrain";
 import { MoveUsedEvent } from "#app/events/battle-scene";
 import { type Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
-import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
@@ -26,20 +25,21 @@ import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils";
+import { applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { Abilities } from "#enums/abilities";
+import { BattlerIndex } from "#enums/battler-index";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { CommonAnim } from "#enums/common-anim";
+import { ElementalType } from "#enums/elemental-type";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
-import { StatusEffect } from "#enums/status-effect";
-import { ElementalType } from "#enums/elemental-type";
-import i18next from "i18next";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { MoveResult } from "#enums/move-result";
 import { PhaseId } from "#enums/phase-id";
-import { getMoveTargets, SelfStatusMove } from "#app/data/moves/move";
+import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
-import { applyBattlerTags } from "#app/data/apply-battler-tags";
-import type { RedirectMoveAbAttr } from "#app/data/abilities/ab-attrs/redirect-move-ab-attr";
-import type { ReflectMovesAbAttr } from "#app/data/abilities/ab-attrs/reflect-moves-ab-attr";
+import i18next from "i18next";
 
 /**
  * Resolves the following:
@@ -68,6 +68,7 @@ export class MovePhase extends BattlePhase {
   protected followUp: boolean;
   protected ignorePp: boolean;
   protected reflected: boolean;
+  protected snatched: boolean;
   protected failed: boolean = false;
   protected cancelled: boolean = false;
 
@@ -82,6 +83,7 @@ export class MovePhase extends BattlePhase {
     followUp: boolean = false,
     ignorePp: boolean = false,
     reflected: boolean = false,
+    snatched: boolean = false,
   ) {
     super();
 
@@ -91,6 +93,7 @@ export class MovePhase extends BattlePhase {
     this.followUp = followUp;
     this.ignorePp = ignorePp;
     this.reflected = reflected;
+    this.snatched = snatched;
   }
 
   public get pokemon(): Pokemon {
@@ -189,6 +192,8 @@ export class MovePhase extends BattlePhase {
       this.resolveRedirectTarget();
 
       this.resolveCounterAttackTarget();
+
+      this.trySnatchMove();
 
       this.tryReflectMove();
     }
@@ -326,6 +331,70 @@ export class MovePhase extends BattlePhase {
       ) {
         this.cancel();
         break;
+      }
+    }
+  }
+
+  /**
+   * Checks if any active Pokemon's Snatch can steal this phase's move. If so, the
+   * Pokemon with Snatch steals the move, cancelling this phase and starting a duplicate phase
+   * with the snatching Pokemon as the user.
+   */
+  protected trySnatchMove(): void {
+    const move = this.move.getMove();
+
+    if (this.snatched || !move.checkFlag(MoveFlags.SNATCHABLE, this.pokemon, null)) {
+      return;
+    }
+
+    // Rest and Swallow are only stolen if they would have an effect on the original user
+    if (
+      [MoveId.REST, MoveId.SWALLOW].includes(this.move.moveId)
+      && !this.move.getMove().applyConditions(this.pokemon, this.pokemon, this.move.getMove())
+    ) {
+      return;
+    }
+
+    /**
+     * All Pokemon on the field that have acted this turn, excluding the user and any Pokemon
+     * under the effects of Sky Drop, in order of when they acted.
+     */
+    const otherPokemon = globalScene
+      .getField(true)
+      .filter((p) => p !== this.pokemon && p.turnData.acted && !p.getTag(BattlerTagType.SKY_DROP))
+      .sort((pokemonA, pokemonB) => {
+        const [orderA, orderB] = [pokemonA, pokemonB].map((p) => p.turnData.order);
+        return orderA - orderB;
+      });
+
+    /**
+     * The first Pokemon in Speed order to have Snatch in effect uses this phase's move
+     * for itself and cancels the original move's execution.
+     *
+     * @todo This is slightly different from mainline in that multiple Snatches are
+     * resolved in order of their execution, not just in Speed order
+     */
+    for (const p of otherPokemon) {
+      if (applyBattlerTags<SnatchTag>(BattlerTagType.SNATCH, p, false, this.pokemon)) {
+        globalScene.useMove({
+          pokemon: p,
+          targets: getMoveTargets(p, this.move.moveId).targets,
+          move: this.move,
+          followUp: true,
+          when: "eager",
+        });
+
+        /**
+         * Remove Snatch's effect from the Pokemon to prevent it from
+         * stealing subsequent moves in the turn.
+         * @todo Verify this behavior. {@link https://bulbapedia.bulbagarden.net/wiki/Snatch_(move) | Bulbapedia}
+         * and {@link https://www.smogon.com/dex/sm/moves/snatch/ | Smogon} have
+         * conflicting info on whether Snatch can steal multiple moves
+         */
+        p.removeTag(BattlerTagType.SNATCH);
+        // Cancel the original move
+        this.cancel();
+        return;
       }
     }
   }
@@ -732,7 +801,7 @@ export class MovePhase extends BattlePhase {
    * the pokemon is on a recharge turn (ie: {@link MoveId.HYPER_BEAM Hyper Beam}), or a 2-turn move was interrupted (ie: {@link MoveId.FLY Fly}).
    */
   public showMoveText(): void {
-    if (this.reflected || this.move.moveId === MoveId.NONE) {
+    if (this.reflected || this.snatched || this.move.moveId === MoveId.NONE) {
       return;
     }
 
