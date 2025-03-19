@@ -2565,7 +2565,10 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.isPlayer() ? i18next.t("arenaTag:opposingTeam") : i18next.t("arenaTag:yourTeam");
   }
 
-  getAlly(): Pokemon {
+  /**
+   * @returns the ally Pokemon or undefined if the ally is a PlayerPokemon illegal in the challenge
+   */
+  getAlly(): Pokemon | undefined {
     return this.getField()[this.getFieldIndex() ? 0 : 1];
   }
 
@@ -4147,12 +4150,12 @@ export class PlayerPokemon extends Pokemon {
     return this.getFieldIndex();
   }
 
-  override getAlly(): Pokemon {
+  override getAlly(): Pokemon | undefined {
     const ally = globalScene.getPlayerField()[this.getFieldIndex() ? 0 : 1];
-    if (ally && ally.isAllowedInBattle()) {
+    if (ally && ally.isAllowedInChallenge()) {
       return ally;
     }
-    return this;
+    return undefined;
   }
 
   generateCompatibleTms(): void {
