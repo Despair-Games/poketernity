@@ -19,8 +19,8 @@ export class PostTurnResetStatusAbAttr extends PostTurnAbAttr {
   }
 
   override apply(pokemon: Pokemon, simulated: boolean): boolean {
-    if (this.allyTarget) {
-      this.target = pokemon.getAlly();
+    if (this.allyTarget && pokemon.getAlly()) {
+      this.target = pokemon.getAlly()!;
     } else {
       this.target = pokemon;
     }

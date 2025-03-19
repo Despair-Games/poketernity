@@ -51,7 +51,7 @@ export class PostDefendStatStageChangeAbAttr extends PostDefendAbAttr {
 
       if (this.allOthers) {
         const otherPokemon = pokemon.getAlly()
-          ? pokemon.getOpponents().concat([pokemon.getAlly()])
+          ? pokemon.getOpponents().concat([pokemon.getAlly()!])
           : pokemon.getOpponents();
         for (const other of otherPokemon) {
           globalScene.unshiftPhase(

@@ -34,8 +34,8 @@ export class AbilityCopyAttr extends MoveEffectAttr {
       }),
     );
 
-    if (this.copyToPartner && globalScene.currentBattle?.double && user.getAlly().hp) {
-      user.getAlly().summonData.ability = target.getAbility().id;
+    if (this.copyToPartner && globalScene.currentBattle?.double && user.getAlly()?.hp) {
+      user.getAlly()!.summonData.ability = target.getAbility().id;
       globalScene.queueMessage(
         i18next.t("moveTriggers:copiedTargetAbility", {
           pokemonName: getPokemonNameWithAffix(user.getAlly()),
@@ -55,7 +55,7 @@ export class AbilityCopyAttr extends MoveEffectAttr {
         && !user.getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY);
       if (this.copyToPartner && globalScene.currentBattle?.double) {
         ret =
-          ret && (!user.getAlly().hp || !user.getAlly().getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY));
+          ret && (!user.getAlly()?.hp || !user.getAlly()?.getAbility().hasAttrFlag(AbAttrFlag.UNSUPPRESSABLE_ABILITY));
       } else {
         ret = ret && user.getAbility().id !== target.getAbility().id;
       }

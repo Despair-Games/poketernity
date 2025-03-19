@@ -164,9 +164,8 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         );
 
         // in double battles redirect potential moves off fled pokemon
-        if (globalScene.currentBattle.double) {
-          const allyPokemon = switchOutTarget.getAlly();
-          globalScene.redirectPokemonMoves(switchOutTarget, allyPokemon);
+        if (globalScene.currentBattle.double && switchOutTarget.getAlly()) {
+          globalScene.redirectPokemonMoves(switchOutTarget, switchOutTarget.getAlly()!);
         }
       }
 

@@ -3015,7 +3015,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (globalScene.currentBattle.double && this.getAlly()?.isActive(true)) {
       applyAbFunc(
         AbAttrFlag.ALLIED_FIELD_DAMAGE_REDUCTION,
-        this.getAlly(),
+        this.getAlly()!,
         simulated,
         source,
         move,
@@ -4151,7 +4151,7 @@ export class PlayerPokemon extends Pokemon {
   }
 
   override getAlly(): Pokemon | undefined {
-    const ally = globalScene.getPlayerField()[this.getFieldIndex() ? 0 : 1];
+    const ally = super.getAlly();
     if (ally && ally.isAllowedInChallenge()) {
       return ally;
     }

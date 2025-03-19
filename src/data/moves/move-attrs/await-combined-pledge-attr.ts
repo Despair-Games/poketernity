@@ -36,7 +36,7 @@ export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
     });
 
     if (ret) {
-      const ally = user.getAlly();
+      const ally = user.getAlly()!;
       // "{userPokemonName} is waiting for {allyPokemonName}'s move..."
       globalScene.queueMessage(
         i18next.t("moveTriggers:awaitingPledge", {

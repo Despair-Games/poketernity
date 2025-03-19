@@ -190,9 +190,8 @@ class ForceSwitchOutHelper {
           500,
         );
 
-        if (globalScene.currentBattle.double) {
-          const allyPokemon = switchOutTarget.getAlly();
-          globalScene.redirectPokemonMoves(switchOutTarget, allyPokemon);
+        if (globalScene.currentBattle.double && switchOutTarget.getAlly()) {
+          globalScene.redirectPokemonMoves(switchOutTarget, switchOutTarget.getAlly()!);
         }
       }
 
