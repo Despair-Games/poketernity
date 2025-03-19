@@ -1,4 +1,5 @@
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import {
   doPokeballBounceAnim,
   getCriticalCaptureChance,
@@ -27,7 +28,6 @@ import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { SummaryUiPage } from "#enums/summary-ui-page";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 
 /**
  * Handles catching a pokemon after the player throws a ball

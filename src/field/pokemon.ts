@@ -14,7 +14,7 @@ import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constan
 import type { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 import type { Ability } from "#app/data/abilities/ability";
 import { applyAbAttrs, getAbApplyFunc } from "#app/data/abilities/apply-ab-attrs";
-import { applyBattlerTags } from "#app/data/apply-battler-tags";
+import { applyBattlerTags } from "#app/data/battler-tags/utils/apply-battler-tags";
 import { NoCritTag } from "#app/data/arena-tag";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { starterPassiveAbilities } from "#app/data/balance/passives";

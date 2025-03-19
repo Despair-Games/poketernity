@@ -1,4 +1,4 @@
-import { applyBattlerTags } from "#app/data/apply-battler-tags";
+import { applyBattlerTags } from "#app/data/battler-tags/utils/apply-battler-tags";
 import type { ProtectedTag } from "#app/data/battler-tags/protected-tag";
 import { HitsTagAttr } from "#app/data/moves/move-attrs/hits-tag-attr";
 import { OneHitKOAttr } from "#app/data/moves/move-attrs/one-hit-ko-attr";

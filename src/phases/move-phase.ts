@@ -1,6 +1,6 @@
 import type { RedirectMoveAbAttr } from "#app/data/abilities/ab-attrs/redirect-move-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { applyBattlerTags } from "#app/data/apply-battler-tags";
+import { applyBattlerTags } from "#app/data/battler-tags/utils/apply-battler-tags";
 import type { CenterOfAttentionTag } from "#app/data/battler-tags/center-of-attention-tag";
 import type { ImprisoningTag } from "#app/data/battler-tags/imprisoning-tag";
 import { allMoves } from "#app/data/data-lists";
