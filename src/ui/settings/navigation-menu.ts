@@ -99,7 +99,7 @@ export class NavigationManager {
 }
 
 // TODO: this could be a reusable component not tied to settings
-export default class NavigationMenu extends Phaser.GameObjects.Container {
+export class NavigationMenu extends Phaser.GameObjects.Container {
   private navigationIcons: InputsIcons;
   protected headerTitles: Phaser.GameObjects.Text[] = new Array<Phaser.GameObjects.Text>();
 

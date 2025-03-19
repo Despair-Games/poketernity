@@ -126,8 +126,9 @@ import type PokemonData from "#app/system/pokemon-data";
 import { settings } from "#app/system/settings/settings-manager";
 import { timedEventManager } from "#app/timed-event-manager";
 import type { TurnCommand } from "#app/turn-command-manager";
-import type BattleInfo from "#app/ui/components/battle-info";
+import type { BattleInfo } from "#app/ui/components/battle-info";
 import { EnemyBattleInfo, PlayerBattleInfo } from "#app/ui/components/battle-info";
+import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import {
   BooleanHolder,
   NumberHolder,
@@ -2593,6 +2594,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
+   * @returns the {@linkcode BattlerIndex} corresponding to this Pokemon's side of the field
+   */
+  getArenaSideIndex(): BattlerIndex.PLAYER_SIDE | BattlerIndex.ENEMY_SIDE {
+    return this.isPlayer() ? BattlerIndex.PLAYER_SIDE : BattlerIndex.ENEMY_SIDE;
+  }
+
+  /**
    * @returns the Pokemon on the opposing field
    */
   getOpposingField(): Pokemon[] {
@@ -4238,7 +4246,7 @@ export class PlayerPokemon extends Pokemon {
     return new Promise((resolve) => {
       this.leaveField(switchType === SwitchType.SWITCH);
 
-      globalScene.ui.setMode(
+      globalScene.ui.setMode<PartyUiHandler>(
         UiMode.PARTY,
         PartyUiMode.FAINT_SWITCH,
         this.getFieldIndex(),
@@ -5260,11 +5268,6 @@ export class PokemonTurnData {
   public switchedInThisTurn: boolean = false;
   public failedRunAway: boolean = false;
   public joinedRound: boolean = false;
-  /**
-   * Used to make sure multi-hits occur properly when the user is
-   * forced to act again in the same turn
-   */
-  public extraTurns: number = 0;
 }
 
 export type DamageResult =

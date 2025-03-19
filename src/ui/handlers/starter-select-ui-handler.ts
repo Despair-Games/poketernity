@@ -1,60 +1,56 @@
 import type { DexEntry } from "#app/@types/DexData";
+import type { StarterConfig } from "#app/@types/StarterConfig";
 import type { StarterMoveset } from "#app/@types/StarterData";
-import { starterColors } from "#app/data/starter-colors";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
-import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { starterPassiveAbilities } from "#app/data/balance/passives";
-import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
+import { pokemonFormLevelMoves } from "#app/data/balance/pokemon-form-level-moves";
 import type { LevelMoves } from "#app/data/balance/pokemon-level-moves";
 import { pokemonSpeciesLevelMoves } from "#app/data/balance/pokemon-level-moves";
-import { pokemonFormLevelMoves } from "#app/data/balance/pokemon-form-level-moves";
 import {
   POKERUS_STARTER_COUNT,
+  getCandyProgressRequirement,
   getPassiveCandyCount,
   getSameSpeciesEggCandyCounts,
-  getCandyProgressRequirement,
   getValueReductionCandyCounts,
   speciesStarterCosts,
 } from "#app/data/balance/starters";
-import { applyChallenges } from "#app/utils/challenge-utils";
+import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
 import { AbilityAttr, DexAttr } from "#app/data/dex-attributes";
 import { Egg, getEggTierForSpecies } from "#app/data/egg";
-import { GrowthRate } from "#enums/growth-rates";
 import { getGrowthRateColor } from "#app/data/exp";
 import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
 import { getNatureName } from "#app/data/nature";
 import { pokemonFormChanges } from "#app/data/pokemon-forms";
+import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpeciesForm, getPokerusStarters } from "#app/utils/pokemon-species-utils";
+import { starterColors } from "#app/data/starter-colors";
 import type { Variant } from "#app/data/variant";
 import { getVariantTierForVariant, getVariantTint } from "#app/data/variant";
-import { GameModes } from "#enums/game-modes";
 import { globalScene } from "#app/global-scene";
 import Overrides from "#app/overrides";
 import { EncounterPhase } from "#app/phases/encounter-phase";
 import { SelectChallengePhase } from "#app/phases/select-challenge-phase";
 import type { DexAttrProps, StarterAttributes, StarterPreferences } from "#app/system/game-data";
 import { StarterPrefs } from "#app/system/game-data";
-import { Tutorial } from "#enums/tutorial";
+import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 import { handleTutorial } from "#app/tutorial";
+import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import { DropDown, DropDownLabel, DropDownOption } from "#app/ui/components/drop-down";
 import { FilterBar } from "#app/ui/components/filter-bar";
+import { IVGraph } from "#app/ui/components/iv-graph";
+import { MoveInfoOverlay } from "#app/ui/components/move-info-overlay";
+import { ScrollBar } from "#app/ui/components/scroll-bar";
+import { StarterContainer } from "#app/ui/components/starter-container";
+import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
+import { PokemonIconAnimHelper } from "#app/ui/helpers/pokemon-icon-anim-helper";
+import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type {
   OptionSelectIconConfig,
   OptionSelectItem,
   OptionSelectModeConfig,
 } from "#app/ui/interfaces/option-select-config";
-import MessageUiHandler from "#app/ui/handlers/message-ui-handler";
-import MoveInfoOverlay from "#app/ui/components/move-info-overlay";
-import PokemonIconAnimHelper from "#app/ui/helpers/pokemon-icon-anim-helper";
-import { ScrollBar } from "#app/ui/components/scroll-bar";
-import { StarterContainer } from "#app/ui/components/starter-container";
-import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
-import { IVGraph } from "#app/ui/components/iv-graph";
 import { addBBCodeTextObject, addTextObject, setTextColor } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { UiMode } from "#enums/ui-mode";
 import { addWindow } from "#app/ui/ui-theme";
 import {
   BooleanHolder,
@@ -66,29 +62,33 @@ import {
   rgbHexToRgba,
   toReadableString,
 } from "#app/utils";
+import { applyChallenges } from "#app/utils/challenge-utils";
+import { getPokemonSpeciesForm, getPokerusStarters } from "#app/utils/pokemon-species-utils";
 import { Abilities } from "#enums/abilities";
 import { Button } from "#enums/buttons";
 import { ChallengeType } from "#enums/challenge-type";
 import { Device } from "#enums/devices";
+import { DropDownColumn } from "#enums/drop-down-column";
+import { DropDownState } from "#enums/drop-down-state";
+import { DropDownType } from "#enums/drop-down-type";
 import { EggSourceType } from "#enums/egg-source-types";
+import { ElementalType } from "#enums/elemental-type";
+import { GameModes } from "#enums/game-modes";
 import { Gender } from "#enums/gender";
+import { GrowthRate } from "#enums/growth-rates";
 import type { MoveId } from "#enums/move-id";
 import type { Nature } from "#enums/nature";
 import { Passive as PassiveAttr } from "#enums/passive";
+import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
+import { SettingKeyboard } from "#enums/setting-keyboard";
+import { SortCriteria } from "#enums/sort-criteria";
 import { Species } from "#enums/species";
-import { ElementalType } from "#enums/elemental-type";
+import { TextStyle } from "#enums/text-style";
+import { Tutorial } from "#enums/tutorial";
+import { UiMode } from "#enums/ui-mode";
 import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
-import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
-import { DropDownState } from "#enums/drop-down-state";
-import { DropDownColumn } from "#enums/drop-down-column";
-import { DropDownType } from "#enums/drop-down-type";
-import { SortCriteria } from "#enums/sort-criteria";
-import { SettingKeyboard } from "#enums/setting-keyboard";
-import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
-import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
-import type { StarterConfig } from "#app/@types/StarterConfig";
 
 type StarterSelectCallback = (starters: StarterConfig[]) => void;
 
@@ -191,7 +191,7 @@ interface SpeciesDetails {
   forSeen?: boolean; // default = false
 }
 
-export default class StarterSelectUiHandler extends MessageUiHandler {
+export class StarterSelectUiHandler extends MessageUiHandler {
   private starterSelectContainer: Phaser.GameObjects.Container;
   private starterSelectScrollBar: ScrollBar;
   private filterBarContainer: Phaser.GameObjects.Container;
@@ -1014,48 +1014,51 @@ export default class StarterSelectUiHandler extends MessageUiHandler {
     this.updateInstructions();
   }
 
-  override show(args: any[]): boolean {
+  override show(selectedStarterCallback?: StarterSelectCallback): boolean {
     if (!this.starterPreferences) {
       // starterPreferences haven't been loaded yet
       this.starterPreferences = StarterPrefs.load();
     }
-    this.moveInfoOverlay.clear(); // clear this when removing a menu; the cancel button doesn't seem to trigger this automatically on controllers
     this.pokerusSpecies = getPokerusStarters();
 
-    if (args.length >= 1 && args[0] instanceof Function) {
-      super.show(args);
-      this.starterSelectCallback = args[0] as StarterSelectCallback;
+    // clear this when removing a menu; the cancel button doesn't seem to trigger this automatically on controllers
+    this.moveInfoOverlay.clear();
 
-      this.starterSelectContainer.setVisible(true);
-
-      this.allSpecies.forEach((species, s) => {
-        const icon = this.starterContainers[s].icon;
-        const dexEntry = globalScene.gameData.dexData[species.speciesId];
-
-        // Initialize the StarterAttributes for this species
-        this.starterPreferences[species.speciesId] = this.initStarterPrefs(species);
-
-        if (dexEntry.caughtAttr) {
-          icon.clearTint();
-        } else if (dexEntry.seenAttr) {
-          icon.setTint(0x808080);
-        }
-      });
-
-      this.resetFilters();
-      this.updateStarters();
-
-      this.setFilterMode(false);
-      this.filterBarCursor = 0;
-      this.setCursor(0);
-      this.tryUpdateValue(0);
-
-      handleTutorial(Tutorial.STARTER_SELECT);
-
-      return true;
+    if (!selectedStarterCallback) {
+      // This happens when the handler calls itself so it is already active, we can exit early
+      return false;
     }
 
-    return false;
+    super.show();
+    this.starterSelectCallback = selectedStarterCallback;
+
+    this.starterSelectContainer.setVisible(true);
+
+    this.allSpecies.forEach((species, s) => {
+      const icon = this.starterContainers[s].icon;
+      const dexEntry = globalScene.gameData.dexData[species.speciesId];
+
+      // Initialize the StarterAttributes for this species
+      this.starterPreferences[species.speciesId] = this.initStarterPrefs(species);
+
+      if (dexEntry.caughtAttr) {
+        icon.clearTint();
+      } else if (dexEntry.seenAttr) {
+        icon.setTint(0x808080);
+      }
+    });
+
+    this.resetFilters();
+    this.updateStarters();
+
+    this.setFilterMode(false);
+    this.filterBarCursor = 0;
+    this.setCursor(0);
+    this.tryUpdateValue(0);
+
+    handleTutorial(Tutorial.STARTER_SELECT);
+
+    return true;
   }
 
   /**

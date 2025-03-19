@@ -1,9 +1,9 @@
 import { generalSettingsUiItems } from "#app/ui/settings/settings-ui-items";
 import { hasTouchscreen, isLandscapeMode } from "#app/utils";
 import { t } from "i18next";
-import AbstractSettingsUiHandler from "./abstract-settings-ui-handler";
+import { AbstractSettingsUiHandler } from "./abstract-settings-ui-handler";
 
-export default class SettingsUiHandler extends AbstractSettingsUiHandler {
+export class SettingsUiHandler extends AbstractSettingsUiHandler {
   /**
    * Creates an instance of SettingsGamepadUiHandler.
    *

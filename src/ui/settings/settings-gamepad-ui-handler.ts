@@ -12,7 +12,7 @@ import pad_xbox360 from "#app/configs/inputs/pad_xbox360";
 import pad_dualshock from "#app/configs/inputs/pad_dualshock";
 import pad_unlicensedSNES from "#app/configs/inputs/pad_unlicensedSNES";
 import type { InterfaceConfig } from "#app/inputs-controller";
-import AbstractControlSettingsUiHandler from "#app/ui/settings/abstract-control-settings-ui-handler";
+import { AbstractControlSettingsUiHandler } from "#app/ui/settings/abstract-control-settings-ui-handler";
 import { Device } from "#enums/devices";
 import { truncateString } from "#app/utils";
 import i18next from "i18next";
@@ -25,7 +25,7 @@ import { MAPPING_CONFIG_LS_KEY } from "#app/constants";
  * @extends AbstractControlSettingsUiHandler
  */
 
-export default class SettingsGamepadUiHandler extends AbstractControlSettingsUiHandler {
+export class SettingsGamepadUiHandler extends AbstractControlSettingsUiHandler {
   /**
    * Creates an instance of SettingsGamepadUiHandler.
    *

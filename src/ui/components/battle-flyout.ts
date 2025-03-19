@@ -22,7 +22,7 @@ interface MoveInfo {
 }
 
 /** A Flyout Menu attached to each {@linkcode BattleInfo} object on the field UI */
-export default class BattleFlyout extends Phaser.GameObjects.Container {
+export class BattleFlyout extends Phaser.GameObjects.Container {
   /** Is this object linked to a player's Pokemon? */
   private player: boolean;
 

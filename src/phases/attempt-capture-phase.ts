@@ -1,4 +1,3 @@
-import { BattlerIndex } from "#enums/battler-index";
 import { PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import { type SubstituteTag } from "#app/data/battler-tags";
 import {
@@ -10,21 +9,25 @@ import {
 } from "#app/data/pokeball";
 import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
 import { type EnemyPokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { VictoryPhase } from "#app/phases/victory-phase";
 import { achvs } from "#app/system/achievements";
+import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
+import type { SummaryUiHandler } from "#app/ui/handlers/summary-ui-handler";
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
+import { BattlerIndex } from "#enums/battler-index";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { type PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
-import { SummaryUiMode } from "#enums/summary-ui-mode";
-import { UiMode } from "#enums/ui-mode";
+import { PhaseId } from "#enums/phase-id";
 import { type PokeballType } from "#enums/pokeball";
 import { StatusEffect } from "#enums/status-effect";
+import { SummaryUiMode } from "#enums/summary-ui-mode";
+import { SummaryUiPage } from "#enums/summary-ui-page";
+import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
-import { globalScene } from "#app/global-scene";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { PhaseId } from "#enums/phase-id";
 
 /**
  * Handles catching a pokemon after the player throws a ball
@@ -315,11 +318,11 @@ export class AttemptCapturePhase extends PokemonPhase {
                       pokemon.nature,
                       pokemon,
                     );
-                    ui.setMode(
+                    ui.setMode<SummaryUiHandler>(
                       UiMode.SUMMARY,
                       newPokemon,
-                      0,
                       SummaryUiMode.DEFAULT,
+                      SummaryUiPage.PROFILE,
                       () => {
                         ui.setMode(UiMode.MESSAGE).then(() => {
                           promptRelease();
@@ -333,7 +336,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                 {
                   label: i18next.t("menu:yes"),
                   handler: () => {
-                    ui.setMode(
+                    ui.setMode<PartyUiHandler>(
                       UiMode.PARTY,
                       PartyUiMode.RELEASE,
                       this.fieldIndex,

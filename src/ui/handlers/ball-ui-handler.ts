@@ -1,19 +1,19 @@
-import { getPokeballName } from "../../data/pokeball";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { BattleCommand } from "#enums/battle-command";
-import { UiMode } from "#enums/ui-mode";
-import UiHandler from "./abstract-ui-handler";
-import { addWindow } from "../ui-theme";
-import { Button } from "#enums/buttons";
-import { type CommandPhase } from "#app/phases/command-phase";
+import { getPokeballName } from "#app/data/pokeball";
 import { globalScene } from "#app/global-scene";
+import { type CommandPhase } from "#app/phases/command-phase";
 import { GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { addWindow } from "#app/ui/ui-theme";
+import { BattleCommand } from "#enums/battle-command";
+import { Button } from "#enums/buttons";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
+import { UiHandler } from "./abstract-ui-handler";
 
 /**
  * TODO: This should extend AbstractOptionSelectUiHandler
  */
-export default class BallUiHandler extends UiHandler {
+export class BallUiHandler extends UiHandler {
   private pokeballSelectContainer: Phaser.GameObjects.Container;
   private pokeballSelectBg: Phaser.GameObjects.NineSlice;
   private countsText: Phaser.GameObjects.Text;
@@ -63,8 +63,8 @@ export default class BallUiHandler extends UiHandler {
     this.setCursor(0);
   }
 
-  override show(args: any[]): boolean {
-    super.show(args);
+  override show(): boolean {
+    super.show();
 
     this.updateCounts();
     this.pokeballSelectContainer.setVisible(true);

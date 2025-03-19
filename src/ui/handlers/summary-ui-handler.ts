@@ -1,44 +1,48 @@
-import { starterColors } from "#app/data/starter-colors";
-import { globalScene } from "#app/global-scene";
-import { UiMode } from "#enums/ui-mode";
-import UiHandler from "#app/ui/handlers/abstract-ui-handler";
-import { rgbHexToRgba, leftPad, getEnumValues, fixedNumber, toReadableString, formatStat } from "#app/utils";
-import type { PlayerPokemon } from "#app/field/pokemon";
-import type { PokemonMove } from "#app/field/pokemon-move";
-import { getCandyProgressRequirement, speciesStarterCosts } from "#app/data/balance/starters";
-import { argbFromRgba } from "@material/material-color-utilities";
-import { getTypeRgb } from "#app/data/type";
-import { ElementalType } from "#enums/elemental-type";
-import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import type { Move } from "#app/data/moves/move";
-import { MoveCategory } from "#enums/move-category";
-import { getPokeballAtlasKey } from "#app/data/pokeball";
-import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
-import { getLevelRelExp, getLevelTotalExp } from "#app/data/exp";
-import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import { StatusEffect } from "#enums/status-effect";
-import { getBiomeName } from "#app/data/balance/biomes";
-import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
 import { loggedInUser } from "#app/account";
+import type { Ability } from "#app/data/abilities/ability";
+import { getBiomeName } from "#app/data/balance/biomes";
+import { getCandyProgressRequirement, speciesStarterCosts } from "#app/data/balance/starters";
+import { getLevelRelExp, getLevelTotalExp } from "#app/data/exp";
+import { getGenderSymbol, getGenderTextStyle } from "#app/data/gender";
+import type { Move } from "#app/data/moves/move";
+import { getNatureName, getNatureStatMultiplier } from "#app/data/nature";
+import { getPokeballAtlasKey } from "#app/data/pokeball";
+import { starterColors } from "#app/data/starter-colors";
+import { getTypeRgb } from "#app/data/type";
 import type { Variant } from "#app/data/variant";
 import { getVariantTint } from "#app/data/variant";
-import { Button } from "#enums/buttons";
-import type { Ability } from "#app/data/abilities/ability";
-import i18next from "i18next";
+import type { Pokemon } from "#app/field/pokemon";
+import type { PokemonMove } from "#app/field/pokemon-move";
+import { globalScene } from "#app/global-scene";
+import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import { modifierSortFunc } from "#app/modifier/modifier";
-import { PlayerGender } from "#enums/player-gender";
-import { Stat, PERMANENT_STATS, getStatKey } from "#enums/stat";
-import { Nature } from "#enums/nature";
 import { settings } from "#app/system/settings/settings-manager";
-import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { CANVAS_SCALE, TEXT_SCALE } from "#app/ui-constants";
-
-enum Page {
-  PROFILE,
-  STATS,
-  MOVES,
-}
+import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
+import { addBBCodeTextObject, addTextObject, getBBCodeFragment, setTextColor } from "#app/ui/text/text-utils";
+import {
+  fixedNumber,
+  formatStat,
+  getEnumValues,
+  isNullOrUndefined,
+  leftPad,
+  rgbHexToRgba,
+  toReadableString,
+} from "#app/utils";
+import { Button } from "#enums/buttons";
+import { ElementalType } from "#enums/elemental-type";
+import { MoveCategory } from "#enums/move-category";
+import { Nature } from "#enums/nature";
+import { PlayerGender } from "#enums/player-gender";
+import { PERMANENT_STATS, Stat, getStatKey } from "#enums/stat";
+import { StatusEffect } from "#enums/status-effect";
+import { SummaryUiMode } from "#enums/summary-ui-mode";
+import { SummaryUiPage } from "#enums/summary-ui-page";
+import { TextStyle } from "#enums/text-style";
+import { UiMode } from "#enums/ui-mode";
+import { argbFromRgba } from "@material/material-color-utilities";
+import i18next from "i18next";
+import type { PartyUiHandler } from "./party-ui-handler";
 
 /** Holds all objects related to an ability for each iteration */
 interface abilityContainer {
@@ -52,7 +56,10 @@ interface abilityContainer {
   descriptionText: Phaser.GameObjects.Text | null;
 }
 
-export default class SummaryUiHandler extends UiHandler {
+type MoveSelectCallback = (index: number) => void;
+type ExitCallBack = () => void;
+
+export class SummaryUiHandler extends UiHandler {
   private summaryUiMode: SummaryUiMode;
 
   private summaryContainer: Phaser.GameObjects.Container;
@@ -98,11 +105,11 @@ export default class SummaryUiHandler extends UiHandler {
   private descriptionScrollTween: Phaser.Tweens.Tween | null;
   private moveCursorBlinkTimer: Phaser.Time.TimerEvent | null;
 
-  private pokemon: PlayerPokemon | null;
+  private pokemon: Pokemon | null;
   private playerParty: boolean;
   /**This is set to false when checking the summary of a freshly caught Pokemon as it is not part of a player's party yet but still needs to display its items**/
   private newMove: Move | null;
-  private moveSelectFunction: Function | null;
+  private moveSelectFunction: MoveSelectCallback | null;
   private transitioning: boolean;
   private statusVisible: boolean;
   private moveEffectsVisible: boolean;
@@ -110,7 +117,7 @@ export default class SummaryUiHandler extends UiHandler {
   private moveSelect: boolean;
   private moveCursor: number;
   private selectedMoveIndex: number;
-  private selectCallback: Function | null;
+  private exitCallback: ExitCallBack | null;
 
   constructor() {
     super(UiMode.SUMMARY);
@@ -283,22 +290,32 @@ export default class SummaryUiHandler extends UiHandler {
     if (page === undefined) {
       page = this.cursor;
     }
-    return `summary_${Page[page].toLowerCase()}`;
+    return `summary_${SummaryUiPage[page].toLowerCase()}`;
   }
 
-  override show(args: any[]): boolean {
-    super.show(args);
-
-    /* args[] information
-     * args[0] : the Pokemon displayed in the Summary-UI
-     * args[1] : the summaryUiMode (defaults to 0)
-     * args[2] : the start page (defaults to Page.PROFILE)
-     * args[3] : contains the function executed when the user exits out of Summary UI
-     * args[4] : optional boolean used to determine if the Pokemon is part of the player's party or not (defaults to true, necessary for PR #2921 to display all relevant information)
-     */
-    this.pokemon = args[0] as PlayerPokemon;
-    this.summaryUiMode = args.length > 1 ? (args[1] as SummaryUiMode) : SummaryUiMode.DEFAULT;
-    this.playerParty = args[4] ?? true;
+  /**
+   * Show the Summary UI. There are 2 possible {@linkcode SummaryUiMode}s
+   * If `DEFAULT`, need to provide a {@linkcode SummaryUiPage} and optional {@linkcode ExitCallBack} for when the summary is exited
+   * If `LEARN_MOVE`, need to provide a {@linkcode Move} and {@linkcode MoveSelectCallback} for when the move is selected.
+   *
+   * @param pokemon - the Pokemon displayed in the Summary-UI
+   * @param mode - the summaryUiMode (defaults to 0)
+   * @param pageOrMove - the start {@linkcode SummaryUiPage} or {@linkcode Move} to show, depending. Default: `Page.PROFILE`
+   * @param callback - the function executed when the user exits out of Summary UI or when a move is selected, depending on the case
+   * @param isPlayerParty - boolean used to determine if the Pokemon is part of the player's party or not. Default: `true` (see PKR#2921)
+   * @returns `true` is the UI was initiliazed properly
+   */
+  override show(
+    pokemon: Pokemon,
+    mode: SummaryUiMode = SummaryUiMode.DEFAULT,
+    pageOrMove?: SummaryUiPage | Move,
+    callback?: ExitCallBack | MoveSelectCallback,
+    isPlayerParty: boolean = true,
+  ): boolean {
+    super.show();
+    this.pokemon = pokemon;
+    this.summaryUiMode = mode;
+    this.playerParty = isPlayerParty;
     globalScene.ui.bringToTop(this.summaryContainer);
 
     this.summaryContainer.setVisible(true);
@@ -400,24 +417,21 @@ export default class SummaryUiHandler extends UiHandler {
 
     switch (this.summaryUiMode) {
       case SummaryUiMode.DEFAULT:
-        const page = args.length < 2 ? Page.PROFILE : (args[2] as Page);
         this.hideMoveEffect(true);
-        this.setCursor(page);
-        if (args.length > 3) {
-          this.selectCallback = args[3];
-        }
+        this.setCursor(typeof pageOrMove === "number" ? pageOrMove : SummaryUiPage.PROFILE);
+        this.exitCallback = callback as ExitCallBack;
         break;
       case SummaryUiMode.LEARN_MOVE:
-        this.newMove = args[2] as Move;
-        this.moveSelectFunction = args[3] as Function;
+        this.newMove = typeof pageOrMove === "number" ? null : (pageOrMove ?? null);
+        this.moveSelectFunction = callback as MoveSelectCallback;
 
         this.showMoveEffect(true);
-        this.setCursor(Page.MOVES);
+        this.setCursor(SummaryUiPage.MOVES);
         this.showMoveSelect();
         break;
     }
 
-    const fromSummary = args.length >= 2;
+    const fromSummary = !isNullOrUndefined(pageOrMove);
 
     let statusTextKey: string | undefined;
     if (this.pokemon.isFainted()) {
@@ -500,7 +514,7 @@ export default class SummaryUiHandler extends UiHandler {
             break;
           case Button.LEFT:
             this.moveSelect = false;
-            this.setCursor(Page.STATS);
+            this.setCursor(SummaryUiPage.STATS);
             if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE) {
               this.hideMoveEffect();
               this.destroyBlinkCursor();
@@ -515,10 +529,10 @@ export default class SummaryUiHandler extends UiHandler {
       }
     } else {
       if (button === Button.ACTION) {
-        if (this.cursor === Page.MOVES) {
+        if (this.cursor === SummaryUiPage.MOVES) {
           this.showMoveSelect();
           success = true;
-        } else if (this.cursor === Page.PROFILE && this.pokemon?.hasPassive()) {
+        } else if (this.cursor === SummaryUiPage.PROFILE && this.pokemon?.hasPassive()) {
           // if we're on the PROFILE page and this pokemon has a passive unlocked..
           // Since abilities are displayed by default, all we need to do is toggle visibility on all elements to show passives
           this.abilityContainer.nameText?.setVisible(!this.abilityContainer.descriptionText?.visible);
@@ -533,21 +547,21 @@ export default class SummaryUiHandler extends UiHandler {
         if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE) {
           this.hideMoveSelect();
         } else {
-          if (this.selectCallback instanceof Function) {
-            const selectCallback = this.selectCallback;
-            this.selectCallback = null;
+          if (this.exitCallback instanceof Function) {
+            const selectCallback = this.exitCallback;
+            this.exitCallback = null;
             selectCallback();
           }
 
           if (!fromPartyMode) {
             ui.setMode(UiMode.MESSAGE);
           } else {
-            ui.setMode(UiMode.PARTY);
+            ui.setMode<PartyUiHandler>(UiMode.PARTY);
           }
         }
         success = true;
       } else {
-        const pages = getEnumValues(Page);
+        const pages = getEnumValues(SummaryUiPage);
         switch (button) {
           case Button.UP:
           case Button.DOWN:
@@ -558,11 +572,11 @@ export default class SummaryUiHandler extends UiHandler {
             }
             const isDown = button === Button.DOWN;
             const party = globalScene.getPlayerParty();
-            const partyMemberIndex = this.pokemon ? party.indexOf(this.pokemon) : -1;
+            const partyMemberIndex = this.pokemon?.isPlayer() ? party.indexOf(this.pokemon) : -1;
             if ((isDown && partyMemberIndex < party.length - 1) || (!isDown && partyMemberIndex)) {
               const page = this.cursor;
               this.clear();
-              this.show([party[partyMemberIndex + (isDown ? 1 : -1)], this.summaryUiMode, page]);
+              this.show(party[partyMemberIndex + (isDown ? 1 : -1)], this.summaryUiMode, page);
             }
             break;
           case Button.LEFT:
@@ -573,7 +587,7 @@ export default class SummaryUiHandler extends UiHandler {
           case Button.RIGHT:
             if (this.cursor < pages.length - 1) {
               success = this.setCursor(this.cursor + 1);
-              if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE && this.cursor === Page.MOVES) {
+              if (this.summaryUiMode === SummaryUiMode.LEARN_MOVE && this.cursor === SummaryUiPage.MOVES) {
                 this.moveSelect = true;
               }
             }
@@ -688,7 +702,7 @@ export default class SummaryUiHandler extends UiHandler {
             onComplete: () => {
               if (forward) {
                 this.populatePageContainer(this.summaryPageContainer);
-                if (this.cursor === Page.MOVES) {
+                if (this.cursor === SummaryUiPage.MOVES) {
                   this.moveCursorObj = null;
                   this.showMoveSelect();
                   this.showMoveEffect();
@@ -711,7 +725,7 @@ export default class SummaryUiHandler extends UiHandler {
     return changed;
   }
 
-  populatePageContainer(pageContainer: Phaser.GameObjects.Container, page?: Page) {
+  populatePageContainer(pageContainer: Phaser.GameObjects.Container, page?: SummaryUiPage) {
     if (page === undefined) {
       page = this.cursor;
     }
@@ -733,7 +747,7 @@ export default class SummaryUiHandler extends UiHandler {
     }
 
     switch (page) {
-      case Page.PROFILE:
+      case SummaryUiPage.PROFILE:
         const profileContainer = globalScene.add.container(0, -pageBg.height);
         pageContainer.add(profileContainer);
 
@@ -891,7 +905,7 @@ export default class SummaryUiHandler extends UiHandler {
         memoText.setOrigin(0, 0);
         profileContainer.add(memoText);
         break;
-      case Page.STATS:
+      case SummaryUiPage.STATS:
         const statsContainer = globalScene.add.container(0, -pageBg.height);
         pageContainer.add(statsContainer);
 
@@ -982,7 +996,7 @@ export default class SummaryUiHandler extends UiHandler {
 
         expOverlay.setMask(expMask);
         break;
-      case Page.MOVES:
+      case SummaryUiPage.MOVES:
         this.movesContainer = globalScene.add.container(5, -pageBg.height + 26);
         pageContainer.add(this.movesContainer);
 
@@ -1105,7 +1119,7 @@ export default class SummaryUiHandler extends UiHandler {
   }
 
   getSelectedMove(): Move | null {
-    if (this.cursor !== Page.MOVES) {
+    if (this.cursor !== SummaryUiPage.MOVES) {
       return null;
     }
 

@@ -3,7 +3,7 @@ import { eventBus } from "#app/event-bus";
 import { globalScene } from "#app/global-scene";
 import type TouchControl from "#app/touch-controls";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
-import type UI from "#app/ui/ui";
+import type { UI } from "#app/ui/ui";
 import { t } from "i18next";
 
 //#region Types
@@ -21,7 +21,7 @@ type ConfigurationEventListeners = {
 /**
  * Handles the dragging of touch controls around the screen.
  */
-export default class MoveTouchControlsHandler {
+export class MoveTouchControlsHandler {
   /** The element that is currently being dragged */
   private draggingElement: HTMLElement | null = null;
 

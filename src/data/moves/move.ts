@@ -583,6 +583,16 @@ export abstract class Move implements Localizable {
   }
 
   /**
+   * Sets the {@linkcode MoveFlags.BOUNCEABLE} flag for the calling Move
+   * @see {@link https://bulbapedia.bulbagarden.net/wiki/Magic_Coat_(move)#Affected_moves | Moves affected by Magic Coat}
+   * @returns The {@linkcode Move} that called this function
+   */
+  bounceable(): this {
+    this.setFlag(MoveFlags.BOUNCEABLE, true);
+    return this;
+  }
+
+  /**
    * Checks if the move flag applies to the pokemon(s) using/receiving the move
    * @param flag {@linkcode MoveFlags} MoveFlag to check on user and/or target
    * @param user {@linkcode Pokemon} the Pokemon using the move
