@@ -42,6 +42,7 @@ import { InfatuatedTag } from "#app/data/battler-tags/infatuated-tag";
 import { InfestationTag } from "#app/data/battler-tags/infestation-tag";
 import { IngrainTag } from "#app/data/battler-tags/ingrain-tag";
 import { InterruptedTag } from "#app/data/battler-tags/interrupted-tag";
+import { MagicCoatTag } from "#app/data/battler-tags/magic-coat-tag";
 import { MagmaStormTag } from "#app/data/battler-tags/magma-storm-tag";
 import { MinimizeTag } from "#app/data/battler-tags/minimize-tag";
 import { MysteryEncounterPostSummonTag } from "#app/data/battler-tags/mystery-encounter-post-summon-tag";
@@ -310,6 +311,8 @@ export function getBattlerTag(
       return new BypassSpeedTag();
     case BattlerTagType.QUASHED:
       return new QuashedTag();
+    case BattlerTagType.MAGIC_COAT:
+      return new MagicCoatTag();
     case BattlerTagType.NONE:
       return new BattlerTag(tagType, BattlerTagLapseType.CUSTOM, turnCount, sourceMoveId, sourceId);
   }
