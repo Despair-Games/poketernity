@@ -7,7 +7,7 @@ import type { MoveId } from "#enums/move-id";
 import { StatusEffect } from "#enums/status-effect";
 
 /**
- * `BattlerTag` class for moves that block damaging moves and burn the enemy if the enemy's move makes contact
+ * Tag used to block damaging moves and burn the attacker if the move makes contact.
  * Used by {@linkcode MoveId.BURNING_BULWARK}
  * @extends DamageProtectedTag
  */

@@ -17,7 +17,7 @@ import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 
 /**
- * BattlerTag representing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Powder_(move) | Powder}.
+ * Tag representing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Powder_(move) | Powder}.
  * When the afflicted Pokemon uses a Fire-type move, the move is cancelled, and the
  * Pokemon takes damage equal to 1/4 of it's maximum HP (rounded down).
  * @extends BattlerTag

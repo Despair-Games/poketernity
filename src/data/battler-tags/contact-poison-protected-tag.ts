@@ -7,7 +7,7 @@ import type { MoveId } from "#enums/move-id";
 import { StatusEffect } from "#enums/status-effect";
 
 /**
- * Tag for moves that block damaging moves and try to poison attacking enemies that make contact.
+ * Tag used to block damaging moves and poison the attacker if the move makes contact.
  * Used by {@linkcode MoveId.BANEFUL_BUNKER}
  * @extends DamageProtectedTag
  */

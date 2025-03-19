@@ -5,7 +5,10 @@ import { Abilities } from "#enums/abilities";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import { WeatherType } from "#enums/weather-type";
 
-/** Provides the additional weather-based effects of the Ice Face ability */
+/**
+ * Provides the additional weather-based effects of the Ice Face ability
+ * @extends FormBlockDamageTag
+ */
 export class IceFaceBlockDamageTag extends FormBlockDamageTag {
   constructor(tagType: BattlerTagType) {
     super(tagType, Abilities.ICE_FACE);

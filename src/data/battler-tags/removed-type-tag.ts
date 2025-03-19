@@ -4,7 +4,7 @@ import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
 
 /**
- * Battler tag for attacks that remove a type post use.
+ * Tag for attacks that remove a type post use.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Burn_Up_(move) | Burn Up}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Double_Shock_(move) | Double Shock}
  * @extends BattlerTag

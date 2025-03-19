@@ -10,7 +10,7 @@ import type { MoveId } from "#enums/move-id";
 import type { BattleStat } from "#enums/stat";
 
 /**
- * Tag for moves that block damaging moves and lower enemy stats if the enemy's move makes contact
+ * Tag used to block damaging moves and change the attacker's stats if the move makes contact.
  * Used by {@linkcode MoveId.KINGS_SHIELD}, {@linkcode MoveId.OBSTRUCT}, and {@linkcode MoveId.SILK_TRAP}
  * @extends DamageProtectedTag
  */

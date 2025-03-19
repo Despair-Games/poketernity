@@ -3,7 +3,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import type { MoveId } from "#enums/move-id";
 
 /**
- * Applies the move-locking effect of {@link https://bulbapedia.bulbagarden.net/wiki/Rollout_(move) Rollout}
+ * Tag that applies the move-locking effect of {@link https://bulbapedia.bulbagarden.net/wiki/Rollout_(move) | Rollout}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Ice_Ball_(move) Ice Ball}.
  * Also defines a power multiplier for the respective move based on
  * the tag's {@linkcode turnCount}.

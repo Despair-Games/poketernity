@@ -13,7 +13,7 @@ import i18next from "i18next";
 /**
  * Tag representing the stat boost granted from abilities such as
  * {@link https://bulbapedia.bulbagarden.net/wiki/Protosynthesis_(Ability) | Protosynthesis}
- * and {@link https://bulbapedia.bulbagarden.net/wiki/Quark_Drive_(Ability)}.
+ * and {@link https://bulbapedia.bulbagarden.net/wiki/Quark_Drive_(Ability) | Quark Drive}.
  * Boosts the owner's highest {@linkcode EFFECTIVE_STATS | effective stat} by 30%
  * @extends AbilityBattlerTag
  */

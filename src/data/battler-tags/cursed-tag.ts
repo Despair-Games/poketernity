@@ -13,7 +13,7 @@ import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 
 /**
- * Battler tag representing the effect of Ghost-type {@link https://bulbapedia.bulbagarden.net/wiki/Curse_(move) | Curse},
+ * Tag representing the effect of Ghost-type {@link https://bulbapedia.bulbagarden.net/wiki/Curse_(move) | Curse},
  * which damages a Pokemon for 1/4th of its max HP each turn
  */
 export class CursedTag extends BattlerTag {

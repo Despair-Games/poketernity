@@ -15,6 +15,8 @@ import { MoveId } from "#enums/move-id";
  * Descendants can override {@linkcode isMoveRestricted} to restrict moves that
  * match a condition. A restricted move gets cancelled before it is used. Players and enemies should not be allowed
  * to select restricted moves.
+ * @extends BattlerTag
+ * @implements `RestrictingBattlerTag`
  */
 export abstract class MoveRestrictionBattlerTag extends BattlerTag implements RestrictingBattlerTag {
   constructor(

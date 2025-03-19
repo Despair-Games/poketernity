@@ -8,7 +8,7 @@ import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
 
 /**
- * Battler Tag that lifts the affected Pokemon into the air and provides immunity to Ground type moves.
+ * Tag that lifts the affected Pokemon into the air and provides immunity to Ground type moves.
  * Used for {@link https://bulbapedia.bulbagarden.net/wiki/Magnet_Rise_(move) | Magnet Rise}
  * and {@link https://bulbapedia.bulbagarden.net/wiki/Telekinesis_(move) | Telekinesis}
  * @extends TypeImmuneTag

@@ -10,7 +10,7 @@ import { MoveFlags } from "#enums/move-flags";
 import type { MoveId } from "#enums/move-id";
 
 /**
- * `BattlerTag` class for moves that block damaging moves damage the enemy if the enemy's move makes contact
+ * Tag used to block damaging moves and damage the attacker if the move makes contact.
  * Used by {@linkcode MoveId.SPIKY_SHIELD}
  * @extends DamageProtectedTag
  */
