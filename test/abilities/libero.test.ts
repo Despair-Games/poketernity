@@ -9,7 +9,7 @@ import { Biome } from "#enums/biome";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { WeatherType } from "#enums/weather-type";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
 
@@ -69,7 +69,7 @@ describe("Abilities - Libero", () => {
 
     expect(leadPokemon.summonData.abilitiesApplied.filter((a) => a === Abilities.LIBERO)).toHaveLength(1);
     const leadPokemonType = ElementalType[leadPokemon.getTypes()[0]];
-    const moveType = ElementalType[allMoves[MoveId.AGILITY].type];
+    const moveType = ElementalType[allMoves.get(MoveId.AGILITY).type];
     expect(leadPokemonType).not.toBe(moveType);
 
     await game.toNextTurn();
@@ -210,7 +210,7 @@ describe("Abilities - Libero", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
 
-    leadPokemon.summonData.types = [allMoves[MoveId.SPLASH].type];
+    leadPokemon.summonData.types = [allMoves.get(MoveId.SPLASH).type];
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase);
 
@@ -296,6 +296,6 @@ function testPokemonTypeMatchesDefaultMoveType(pokemon: PlayerPokemon, moveId: M
   expect(pokemon.summonData.abilitiesApplied).toContain(Abilities.LIBERO);
   expect(pokemon.getTypes()).toHaveLength(1);
   const pokemonType = ElementalType[pokemon.getTypes()[0]],
-    moveType = ElementalType[allMoves[moveId].type];
+    moveType = ElementalType[allMoves.get(moveId).type];
   expect(pokemonType).toBe(moveType);
 }

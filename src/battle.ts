@@ -43,7 +43,7 @@ import {
   RIVAL_WAVE,
   TUTORIAL_BATTLE_WAVE,
 } from "./data/special-waves";
-import type { Move } from "#app/data/move";
+import type { Move } from "#app/data/moves/move";
 
 export interface FaintLogEntry {
   pokemon: Pokemon;

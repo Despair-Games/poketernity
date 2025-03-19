@@ -5,10 +5,9 @@ import type { PlayerPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { Phase } from "#app/phase";
-import { achvs } from "#app/system/achv";
-import EggCounterContainer from "#app/ui/egg-counter-container";
-import type EggHatchSceneHandler from "#app/ui/egg-hatch-scene-handler";
-import PokemonInfoContainer from "#app/ui/pokemon-info-container";
+import { EggCounterContainer } from "#app/ui/components/egg-counter-container";
+import type { EggHatchSceneUiHandler } from "#app/ui/handlers/egg-hatch-scene-ui-handler";
+import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container";
 import { UiMode } from "#enums/ui-mode";
 import { fixedNumber, getFrameMs, randInt } from "#app/utils";
 import i18next from "i18next";
@@ -36,7 +35,7 @@ export class EggHatchPhase extends Phase {
   private eggCounterContainer: EggCounterContainer;
 
   /** The scene handler for egg hatching */
-  private eggHatchHandler: EggHatchSceneHandler;
+  private eggHatchHandler: EggHatchSceneUiHandler;
   /** The phaser gameobject container that holds everything */
   private eggHatchContainer: Phaser.GameObjects.Container;
   /** The phaser image that is the background */
@@ -99,7 +98,7 @@ export class EggHatchPhase extends Phase {
 
       globalScene.audioManager.fadeOutBgm(undefined, false);
 
-      this.eggHatchHandler = globalScene.ui.getHandler() as EggHatchSceneHandler;
+      this.eggHatchHandler = globalScene.ui.getHandler() as EggHatchSceneUiHandler;
 
       this.eggHatchContainer = this.eggHatchHandler.eggHatchContainer;
 
@@ -221,6 +220,8 @@ export class EggHatchPhase extends Phase {
   }
 
   public override end(): void {
+    // ????
+    // TODO: destroy PlayerPokemon object from EggHatchData
     if (globalScene.findPhase((p) => p instanceof EggHatchPhase)) {
       this.eggHatchHandler.clear();
     } else {
@@ -329,19 +330,6 @@ export class EggHatchPhase extends Phase {
   protected doReveal(): void {
     // set the previous dex data so info container can show new unlocks in egg summary
     const isShiny = this.pokemon.isShiny();
-    if (this.pokemon.species.isSubLegendary()) {
-      globalScene.validateAchv(achvs.HATCH_SUB_LEGENDARY);
-    }
-    if (this.pokemon.species.isLegendary()) {
-      globalScene.validateAchv(achvs.HATCH_LEGENDARY);
-    }
-    if (this.pokemon.species.isMythical()) {
-      globalScene.validateAchv(achvs.HATCH_MYTHICAL);
-    }
-    if (isShiny) {
-      globalScene.validateAchv(achvs.HATCH_SHINY);
-    }
-
     this.eggContainer.setVisible(false);
 
     const spriteKey = this.pokemon.getSpriteKey(true);

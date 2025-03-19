@@ -1,8 +1,7 @@
 import { audioSettingsUiItems } from "#app/ui/settings/settings-ui-items";
-import AbstractSettingsUiHandler from "./abstract-settings-ui-handler";
-("#app/inputs-controller");
+import { AbstractSettingsUiHandler } from "./abstract-settings-ui-handler";
 
-export default class SettingsAudioUiHandler extends AbstractSettingsUiHandler {
+export class SettingsAudioUiHandler extends AbstractSettingsUiHandler {
   /**
    * Creates an instance of SettingsAudioUiHandler.
    *

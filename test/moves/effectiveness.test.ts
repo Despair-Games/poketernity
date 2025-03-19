@@ -7,7 +7,7 @@ import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import * as Messages from "#app/messages";
 import { TerastallizeModifier, overrideHeldItems } from "#app/modifier/modifier";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 
@@ -30,7 +30,7 @@ function testMoveEffectiveness(
     overrideHeldItems(target, false);
   }
 
-  expect(target.getMoveEffectiveness(user, allMoves[moveId])).toBe(expected);
+  expect(target.getMoveEffectiveness(user, allMoves.get(moveId))).toBe(expected);
   user.destroy();
   target.destroy();
 }

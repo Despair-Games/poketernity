@@ -5,7 +5,8 @@ import type { initGameSpeed } from "#app/system/game-speed";
 import { MoneyFormat } from "#enums/money-format";
 import { MoveId } from "#enums/move-id";
 import i18next from "i18next";
-import { supportedLanguages } from "./system/settings/supported-languages";
+import { DEFAULT_LANGUAGE_KEY, supportedLanguages } from "#app/system/settings/supported-languages";
+import type { Pokemon } from "#app/field/pokemon";
 
 export type nil = null | undefined;
 
@@ -174,43 +175,40 @@ export function getIvsFromId(id?: number): number[] {
   ];
 }
 
-export function formatLargeNumber(count: number, threshold: number): string {
+// Abbreviations from 10^0 to 10^33
+// TODO: localize these
+const AbbreviationsLargeNumber: string[] = ["", "K", "M", "B", "t", "q", "Q", "s", "S", "o", "n", "d"];
+
+/**
+ * Return an abbreviated representation of the given number, with up to 2 digits past the decimal point.
+ * @example `formatLargeNumber(2300)` will return `2.3K`
+ * @param number the number to format
+ * @param fractionDigits the threshold under which not to abbreviate the number. Default: 1000
+ * @returns the formatted string
+ */
+export function formatLargeNumber(count: number, threshold: number = 1000): string {
   if (count < threshold) {
     return count.toString();
   }
   const ret = count.toString();
-  let suffix = "";
-  switch (Math.ceil(ret.length / 3) - 1) {
-    case 1:
-      suffix = "K";
-      break;
-    case 2:
-      suffix = "M";
-      break;
-    case 3:
-      suffix = "B";
-      break;
-    case 4:
-      suffix = "T";
-      break;
-    case 5:
-      suffix = "q";
-      break;
-    default:
-      return "?";
-  }
+  const suffix = AbbreviationsLargeNumber[Math.ceil(ret.length / 3) - 1] ?? "?";
   const digits = ((ret.length + 2) % 3) + 1;
   let decimalNumber = ret.slice(digits, digits + 2);
   while (decimalNumber.endsWith("0")) {
     decimalNumber = decimalNumber.slice(0, -1);
   }
+  // TODO: need to localize this properly. Not all languages use . as decimal part separator
   return `${ret.slice(0, digits)}${decimalNumber ? `.${decimalNumber}` : ""}${suffix}`;
 }
 
-// Abbreviations from 10^0 to 10^33
-const AbbreviationsLargeNumber: string[] = ["", "K", "M", "B", "t", "q", "Q", "s", "S", "o", "n", "d"];
-
-export function formatFancyLargeNumber(number: number, rounded: number = 3): string {
+/**
+ * Return an abbreviated representation of the given number, with a fixed number of digits past the decimal point.
+ * @example `formatLargeNumberFixedDigits(2300, 2)` will return `2.30K`
+ * @param number the number to format
+ * @param fractionDigits the number of digits to show after the decimal point. Default: 3
+ * @returns the formatted string
+ */
+export function formatLargeNumberFixedDigits(number: number, fractionDigits: number = 3): string {
   let exponent: number;
 
   if (number < 1000) {
@@ -224,20 +222,27 @@ export function formatFancyLargeNumber(number: number, rounded: number = 3): str
     number /= Math.pow(1000, exponent);
   }
 
-  return `${exponent === 0 || number % 1 === 0 ? number : number.toFixed(rounded)}${
+  return `${exponent === 0 || number % 1 === 0 ? number : number.toFixed(fractionDigits)}${
     AbbreviationsLargeNumber[exponent]
   }`;
 }
 
 export function formatMoney(format: MoneyFormat, amount: number): string {
   if (format === MoneyFormat.ABBREVIATED) {
-    return formatFancyLargeNumber(amount);
+    return formatLargeNumberFixedDigits(amount);
   }
   return amount.toLocaleString();
 }
 
 export function formatStat(stat: number, forHp: boolean = false): string {
   return formatLargeNumber(stat, forHp ? 100000 : 1000000);
+}
+
+/**
+ * Get the abbreviated representation of a Pokemon's level. For example `Lv2.3K`
+ */
+export function getPokemonLevelText(pokemon: Pokemon): string {
+  return `${i18next.t("saveSlotSelectUiHandler:lv")}${formatLargeNumber(pokemon.level)}`;
 }
 
 export function getEnumKeys(enumType: any): string[] {
@@ -462,9 +467,9 @@ function hasAllLocalizedSprites(key: string): boolean {
  */
 export function getLocalizedFilename(baseName: string, langKey?: string): string {
   if (!langKey) {
-    langKey = i18next.resolvedLanguage ?? "en";
+    langKey = i18next.resolvedLanguage ?? DEFAULT_LANGUAGE_KEY;
   }
-  return `${baseName}_${hasAllLocalizedSprites(langKey) ? `${langKey}` : "en"}`;
+  return `${baseName}_${hasAllLocalizedSprites(langKey) ? `${langKey}` : DEFAULT_LANGUAGE_KEY}`;
 }
 
 /**

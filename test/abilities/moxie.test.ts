@@ -1,5 +1,5 @@
 import { Stat } from "#enums/stat";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -64,8 +64,7 @@ describe("Abilities - Moxie", () => {
 
       secondPokemon.hp = 1;
 
-      game.move.select(moveToUse);
-      game.selectTarget(BattlerIndex.PLAYER_2);
+      game.move.select(moveToUse, BattlerIndex.PLAYER_2);
 
       await game.phaseInterceptor.to(TurnEndPhase);
 

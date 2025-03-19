@@ -71,7 +71,6 @@ export const UncommonBreedEncounter: MysteryEncounter = MysteryEncounterBuilder.
       level,
       0,
       getPartyLuckValue(globalScene.getPlayerParty()),
-      true,
     );
     const pokemon = new EnemyPokemon(species, level, TrainerSlot.NONE, true);
 

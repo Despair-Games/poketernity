@@ -1,4 +1,4 @@
-import type { MoveAnim } from "#app/data/battle-anims/move-anim";
+import type { MoveAnim } from "#app/data/animations/move-anim";
 import { Phase } from "#app/phase";
 import { PhaseId } from "#enums/phase-id";
 

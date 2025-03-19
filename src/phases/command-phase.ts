@@ -5,13 +5,13 @@ import { speciesStarterCosts } from "#app/data/balance/starters";
 import type { EncoreTag } from "#app/data/battler-tags";
 import { type SkyDropTag, type TrappedTag } from "#app/data/battler-tags";
 import { allMoves } from "#app/data/data-lists";
-import { getMoveTargets, type MoveTargetSet } from "#app/data/move";
+import { getMoveTargets, type MoveTargetSet } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { FieldPhase } from "#app/phases/abstract-field-phase";
 import { isNullOrUndefined } from "#app/utils";
-import { TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
+import { MoveLockTagTypes, TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { isFieldTargeted } from "#app/utils/move-utils";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagSide } from "#enums/arena-tag-side";
@@ -96,12 +96,10 @@ export class CommandPhase extends FieldPhase {
       && moveQueue[0]
       && moveQueue[0].move.id !== MoveId.NONE
       && !moveQueue[0].virtual
-      && (!pokemon.getMoveset().find((m) => m.moveId === moveQueue[0].move.id)
-        || !pokemon
-          .getMoveset()
-          [
-            pokemon.getMoveset().findIndex((m) => m.moveId === moveQueue[0].move.id)
-          ].isUsable(pokemon, moveQueue[0].ignorePP))
+      && !pokemon
+        .getMoveset()
+        .find((m) => m.moveId === moveQueue[0].move.id)
+        ?.isUsable(pokemon, moveQueue[0].ignorePP)
     ) {
       moveQueue.shift();
     }
@@ -116,6 +114,7 @@ export class CommandPhase extends FieldPhase {
           (moveIndex > -1 && pokemon.getMoveset()[moveIndex].isUsable(pokemon, queuedMove.ignorePP))
           || queuedMove.virtual
         ) {
+          MoveLockTagTypes.forEach((tagType) => pokemon.lapseTag(tagType));
           this.handleCommand(BattleCommand.FIGHT, moveIndex, queuedMove.ignorePP, queuedMove);
         } else {
           ui.setMode(UiMode.COMMAND, this.fieldIndex);
@@ -195,10 +194,10 @@ export class CommandPhase extends FieldPhase {
             command: BattleCommand.FIGHT,
             cursor,
             turnMove: {
-              move: allMoves[moveId],
+              move: allMoves.get(moveId),
               targets: [],
               ignorePP: ignorePp,
-              type: pokemon.getMoveType(allMoves[moveId]),
+              type: pokemon.getMoveType(allMoves.get(moveId)),
             },
             args,
           };
@@ -239,7 +238,7 @@ export class CommandPhase extends FieldPhase {
           let errorMessageKey: string;
           if (pokemon.isMoveRestricted(move.moveId, pokemon)) {
             errorMessageKey =
-              pokemon.getRestrictingTag(move.moveId, pokemon)?.selectionDeniedText(pokemon, move.moveId)
+              pokemon.getRestrictingTag(move.moveId, pokemon)?.getSelectionDeniedText(pokemon, move.moveId)
               ?? "battle:moveDisabled";
           } else if (move.getName().endsWith(" (N)")) {
             errorMessageKey = "battle:moveNotImplemented";

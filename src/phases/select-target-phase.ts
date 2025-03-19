@@ -1,12 +1,13 @@
-import type { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
 import { globalScene } from "#app/global-scene";
-import { UiMode } from "#enums/ui-mode";
+import type { TargetSelectUiHandler } from "#app/ui/handlers/target-select-ui-handler";
+import type { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
+import { PhaseId } from "#enums/phase-id";
+import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { PokemonPhase } from "./abstract-pokemon-phase";
 import { CommandPhase } from "./command-phase";
-import { PhaseId } from "#enums/phase-id";
 
 export class SelectTargetPhase extends PokemonPhase {
   override readonly id = PhaseId.SELECT_TARGET;
@@ -25,21 +26,21 @@ export class SelectTargetPhase extends PokemonPhase {
     const turnCommand = turnManager.findCommandFromPokemon(pokemon);
     const moveId = turnCommand?.turnMove?.move.id ?? MoveId.NONE;
 
-    ui.setMode(UiMode.TARGET_SELECT, this.fieldIndex, moveId, (targets: BattlerIndex[]) => {
+    const targetSelectedCallback = (targets: BattlerIndex[]) => {
       ui.setMode(UiMode.MESSAGE);
 
       const user = globalScene.getFieldPokemonByBattlerIndex(this.fieldIndex);
       const firstTarget = globalScene.getFieldPokemonByBattlerIndex(targets[0]);
-      const moveObject = allMoves[moveId];
+      const moveObject = allMoves.get(moveId);
 
       // TODO: Resolve bang
       if (user?.isMoveTargetRestricted(moveObject.id, user, firstTarget!)) {
         const errorMessage = user
           .getRestrictingTag(moveId, user, firstTarget)
-          ?.selectionDeniedText(user, moveObject.id);
+          ?.getSelectionDeniedText(user, moveObject.id);
 
         globalScene.queueMessage(
-          errorMessage ?? i18next.t("battle:moveCannotBeSelected", { moveName: allMoves[moveId].name }),
+          errorMessage ?? i18next.t("battle:moveCannotBeSelected", { moveName: allMoves.get(moveId).name }),
           0,
           true,
         );
@@ -56,6 +57,8 @@ export class SelectTargetPhase extends PokemonPhase {
       }
 
       this.end();
-    });
+    };
+
+    ui.setMode<TargetSelectUiHandler>(UiMode.TARGET_SELECT, this.fieldIndex, moveId, targetSelectedCallback);
   }
 }

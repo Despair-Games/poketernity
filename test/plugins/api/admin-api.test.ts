@@ -7,8 +7,8 @@ import type {
   UnlinkAccountFromGoogledIdRequest,
 } from "#app/@types/AdminApi";
 import { AdminApi } from "#app/plugins/api/admin-api";
-import { initServerForApiTests } from "#test/testUtils/testFileInitialization";
-import { getApiBaseUrl } from "#test/testUtils/testUtils";
+import { initServerForApiTests } from "#test/test-utils/testFileInitialization";
+import { getApiBaseUrl } from "#test/test-utils/testUtils";
 import { http, HttpResponse } from "msw";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

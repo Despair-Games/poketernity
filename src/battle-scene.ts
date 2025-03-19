@@ -18,23 +18,23 @@ import {
   ME_BASE_SPAWN_WEIGHT,
   ME_MAX_SPAWN_WEIGHT,
 } from "#app/constants";
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { biomeDepths, getBiomeName } from "#app/data/balance/biomes";
-import { pokemonPrevolutions } from "#app/data/balance/pokemon-evolutions";
+import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
-import { MoveChargeAnim } from "#app/data/battle-anims/move-charge-anim";
+import { MoveChargeAnim } from "#app/data/animations/move-charge-anim";
 import type { DestinyBondTag, GrudgeTag } from "#app/data/battler-tags";
 import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
-import { initCommonAnims } from "#app/data/init-common-anims";
-import { initMoveAnim } from "#app/data/init-move-anim";
+import { initCommonAnims } from "#app/data/init/init-common-anims";
+import { initMoveAnim } from "#app/data/init/init-move-anim";
 import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
 import { allMysteryEncounters, mysteryEncountersByBiome } from "#app/data/mystery-encounters/mystery-encounters";
 import { pokemonFormChanges, type SpeciesFormChange } from "#app/data/pokemon-forms";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { populateAnims } from "#app/data/populate-anims";
+import { populateAnims } from "#app/data/init/init-anims";
 import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
 import { SpeciesFormChangeTimeOfDayTrigger } from "#app/data/species-form-change-triggers/species-form-change-time-of-day-trigger";
 import type { SpeciesFormChangeTrigger } from "#app/data/species-form-change-triggers/species-form-change-trigger";
@@ -117,7 +117,7 @@ import FieldSpritePipeline from "#app/pipelines/field-sprite";
 import InvertPostFX from "#app/pipelines/invert";
 import SpritePipeline from "#app/pipelines/sprite";
 import { SceneBase } from "#app/scene-base";
-import { type Achv, achvs } from "#app/system/achv";
+import { type Achievement, achvs } from "#app/system/achievements";
 import { GameData } from "#app/system/game-data";
 import { initGameSpeed } from "#app/system/game-speed";
 import type PokemonData from "#app/system/pokemon-data";
@@ -126,15 +126,15 @@ import type TrainerData from "#app/system/trainer-data";
 import { type Voucher, vouchers } from "#app/system/voucher";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import { UiInputs } from "#app/ui-inputs";
-import AbilityBar from "#app/ui/ability-bar";
-import { ArenaFlyout } from "#app/ui/arena-flyout";
-import CandyBar from "#app/ui/candy-bar";
-import CharSprite from "#app/ui/char-sprite";
-import PartyExpBar from "#app/ui/party-exp-bar";
-import PokeballTray from "#app/ui/pokeball-tray";
-import PokemonInfoContainer from "#app/ui/pokemon-info-container";
-import { addTextObject } from "#app/ui/text";
-import UI from "#app/ui/ui";
+import { AbilityBar } from "#app/ui/components/ability-bar";
+import { ArenaFlyout } from "#app/ui/components/arena-flyout";
+import { CandyBar } from "#app/ui/components/candy-bar";
+import { CharSprite } from "#app/ui/components/char-sprite";
+import { PartyExpBar } from "#app/ui/components/party-exp-bar";
+import { PokeballTray } from "#app/ui/components/pokeball-tray";
+import { PokemonInfoContainer } from "#app/ui/components/pokemon-info-container";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { UI } from "#app/ui/ui";
 import { updateWindowStyle } from "#app/ui/ui-theme";
 import {
   type AbstractConstructor,
@@ -156,7 +156,7 @@ import { getModifierType } from "#app/utils/modifier-type-utils";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AchvCategory } from "#enums/achv-category";
+import type { AchvCategory } from "#enums/achv-category";
 import { BattleType } from "#enums/battle-type";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -232,6 +232,7 @@ interface UseMoveInit {
   phaseId?: PhaseId;
   followUp?: boolean;
   ignorePp?: boolean;
+  reflected?: boolean;
 }
 
 //#endregion
@@ -621,20 +622,18 @@ export default class BattleScene extends SceneBase {
     this.moneyText.setOrigin(1, 0.5);
     this.fieldUI.add(this.moneyText);
 
-    this.scoreText = addTextObject(GAME_WIDTH - 2, 0, "", TextStyle.PARTY, { fontSize: "54px" });
+    this.scoreText = addTextObject(GAME_WIDTH - 2, 0, "", TextStyle.SCORE);
     this.scoreText.setName("text-score");
     this.scoreText.setOrigin(1, 0.5);
     this.fieldUI.add(this.scoreText);
 
-    this.luckText = addTextObject(GAME_WIDTH - 2, 0, "", TextStyle.PARTY, { fontSize: "54px" });
+    this.luckText = addTextObject(GAME_WIDTH - 2, 0, "", TextStyle.SCORE);
     this.luckText.setName("text-luck");
     this.luckText.setOrigin(1, 0.5);
     this.luckText.setVisible(false);
     this.fieldUI.add(this.luckText);
 
-    this.luckLabelText = addTextObject(GAME_WIDTH - 2, 0, i18next.t("common:luckIndicator"), TextStyle.PARTY, {
-      fontSize: "54px",
-    });
+    this.luckLabelText = addTextObject(GAME_WIDTH - 2, 0, i18next.t("common:luckIndicator"), TextStyle.SCORE);
     this.luckLabelText.setName("text-luck-label");
     this.luckLabelText.setOrigin(1, 0.5);
     this.luckLabelText.setVisible(false);
@@ -1214,7 +1213,7 @@ export default class BattleScene extends SceneBase {
     if (reloadI18n) {
       const localizable: Localizable[] = [
         ...allSpecies,
-        ...Object.values(allMoves),
+        ...allMoves.values(),
         ...allAbilities,
         ...getEnumValues(ModifierPoolType)
           .map((mpt) => getModifierPoolForType(mpt))
@@ -1921,6 +1920,7 @@ export default class BattleScene extends SceneBase {
     if (luckValue < 14) {
       this.luckText.setTint(getLuckTextTint(luckValue));
     } else {
+      // TODO: create helper function
       this.luckText.setTint(0xffef5c, 0x47ff69, 0x6b6bff, 0xff6969);
     }
     this.luckLabelText.setX(GAME_WIDTH - 2 - (this.luckText.displayWidth + 2));
@@ -2017,8 +2017,8 @@ export default class BattleScene extends SceneBase {
               .filter(speciesFilter)
               .map((s) => {
                 if (!filterAllEvolutions) {
-                  while (pokemonPrevolutions.hasOwnProperty(s.speciesId)) {
-                    s = getPokemonSpecies(pokemonPrevolutions[s.speciesId]);
+                  while (pokemonPreEvolutions.hasOwnProperty(s.speciesId)) {
+                    s = getPokemonSpecies(pokemonPreEvolutions[s.speciesId]);
                   }
                 }
                 return s;
@@ -2334,7 +2334,6 @@ export default class BattleScene extends SceneBase {
     this.money = Math.min(this.money + amount, Number.MAX_SAFE_INTEGER);
     this.updateMoneyText();
     this.animateMoneyChanged(true);
-    this.validateAchvs(AchvCategory.MONEY);
   }
 
   /**
@@ -2372,7 +2371,6 @@ export default class BattleScene extends SceneBase {
     }
     let success = false;
     const soundName = modifier.type.soundName;
-    this.validateAchvs(AchvCategory.MODIFIER, modifier);
     const modifiersToRemove: PersistentModifier[] = [];
     if (modifier.isPersistentModifier()) {
       if (modifier.isTerastallizeModifier()) {
@@ -2939,7 +2937,7 @@ export default class BattleScene extends SceneBase {
     }
   }
 
-  validateAchv(achv: Achv, ...args: unknown[]): boolean {
+  validateAchv(achv: Achievement, ...args: unknown[]): boolean {
     if (
       (!this.gameData.achvUnlocks.hasOwnProperty(achv.id) || Overrides.ACHIEVEMENTS_REUNLOCK_OVERRIDE)
       && achv.validate(...args)
@@ -3536,8 +3534,17 @@ export default class BattleScene extends SceneBase {
     this.unshiftPhase(new MoveAnimPhase(new MoveChargeAnim(chargeAnim, moveId, user)));
   }
 
-  useMove({ pokemon, targets, move, followUp = false, ignorePp = false, when, phaseId }: UseMoveInit) {
-    const movePhase = new MovePhase(pokemon, targets, move, followUp, ignorePp);
+  useMove({
+    pokemon,
+    targets,
+    move,
+    followUp = false,
+    ignorePp = false,
+    reflected = false,
+    when,
+    phaseId,
+  }: UseMoveInit) {
+    const movePhase = new MovePhase(pokemon, targets, move, followUp, ignorePp, reflected);
 
     if ((when === "before" || when === "after") && !phaseId) {
       throw new Error("phaseId is required for useMove.when === 'before' or 'after'");

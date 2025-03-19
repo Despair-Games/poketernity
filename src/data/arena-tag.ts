@@ -1,4 +1,4 @@
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { allMoves } from "#app/data/data-lists";
 import type { Arena } from "#app/field/arena";
 import type { Pokemon } from "#app/field/pokemon";
@@ -27,7 +27,7 @@ import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
-import { CommonBattleAnim } from "./battle-anims/common-battle-anim";
+import { CommonBattleAnim } from "./animations/common-battle-anim";
 import { type SkyDropTag } from "./battler-tags";
 import { SCREEN_DOUBLES_DMG_FACTOR, SCREEN_SINGLES_DMG_FACTOR } from "#app/constants";
 
@@ -70,7 +70,7 @@ export abstract class ArenaTag {
   }
 
   public getMoveName(): string | null {
-    return this.sourceMoveId ? allMoves[this.sourceMoveId].name : null;
+    return this.sourceMoveId ? allMoves.get(this.sourceMoveId).name : null;
   }
 
   /**
@@ -332,7 +332,7 @@ export abstract class ConditionalProtectTag extends ArenaTag {
     if (
       (this.side === ArenaTagSide.PLAYER) === defender.isPlayer()
       && this.protectConditionFunc(arena, moveId)
-      && (this.ignoresBypass || !allMoves[moveId].checkFlag(MoveFlags.IGNORE_PROTECT, attacker, defender))
+      && (this.ignoresBypass || !allMoves.get(moveId).checkFlag(MoveFlags.IGNORE_PROTECT, attacker, defender))
     ) {
       if (!isProtected.value) {
         isProtected.value = true;
@@ -361,7 +361,7 @@ export abstract class ConditionalProtectTag extends ArenaTag {
  *   This includes moves with modified priorities from abilities (e.g. Prankster)
  */
 const QuickGuardConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
-  const move = allMoves[moveId];
+  const move = allMoves.get(moveId);
   const effectPhase = globalScene.getCurrentPhase();
 
   if (effectPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT)) {
@@ -391,7 +391,7 @@ class QuickGuardTag extends ConditionalProtectTag {
  * @returns `true` if the incoming move is multi-targeted (even if it's only used against one Pokemon).
  */
 const WideGuardConditionFunc: ProtectConditionFunc = (_arena, moveId): boolean => {
-  const move = allMoves[moveId];
+  const move = allMoves.get(moveId);
 
   switch (move.moveTarget) {
     case MoveTarget.ALL_ENEMIES:
@@ -422,7 +422,7 @@ class WideGuardTag extends ConditionalProtectTag {
  * @returns `true` if the incoming move is not a Status move.
  */
 const MatBlockConditionFunc: ProtectConditionFunc = (_arena, moveId): boolean => {
-  const move = allMoves[moveId];
+  const move = allMoves.get(moveId);
   return move.category !== MoveCategory.STATUS;
 };
 
@@ -458,7 +458,7 @@ class MatBlockTag extends ConditionalProtectTag {
  * Pokemon or sides of the field.
  */
 const CraftyShieldConditionFunc: ProtectConditionFunc = (_arena, moveId) => {
-  const move = allMoves[moveId];
+  const move = allMoves.get(moveId);
   return (
     move.category === MoveCategory.STATUS
     && move.moveTarget !== MoveTarget.ENEMY_SIDE
@@ -1064,22 +1064,27 @@ class StickyWebTag extends EntryHazardTag {
 }
 
 /**
- * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Trick_Room_(move) Trick Room}.
- * Reverses the Speed stats for all Pokémon on the field as long as this arena tag is up,
- * also reversing the turn order for all Pokémon on the field as well.
+ * Base class for moves like Trick Room which should negate their effect when used a second time.
  */
-export class TrickRoomTag extends ArenaTag {
+export abstract class ArenaRoomTag extends ArenaTag {
+  override onOverlap(arena: Arena): void {
+    arena.removeTag(this.tagType);
+  }
+}
+
+/**
+ * Arena Tag class for {@link https://bulbapedia.bulbagarden.net/wiki/Trick_Room_(move) Trick Room}.
+ * Reverses the Speed calculation for all Pokémon on the field as long as this arena tag is up.
+ */
+export class TrickRoomTag extends ArenaRoomTag {
   constructor(turnCount: number, sourceId: number) {
     super(ArenaTagType.TRICK_ROOM, turnCount, MoveId.TRICK_ROOM, sourceId);
   }
 
   /**
-   * Reverses Speed-based turn order for all Pokemon on the field
-   * @param _arena n/a
-   * @param _simulated n/a
-   * @param speedReversed a {@linkcode BooleanHolder} used to flag if Speed-based
+   * @param speedReversed - A {@linkcode BooleanHolder} used to flag if Speed-based
    * turn order should be reversed.
-   * @returns `true` if turn order is successfully reversed; `false` otherwise
+   * @returns `true`
    */
   override apply(_arena: Arena, _simulated: boolean, speedReversed: BooleanHolder): boolean {
     speedReversed.value = !speedReversed.value;
@@ -1208,69 +1213,6 @@ class SafeguardTag extends ArenaTag {
 class NoneTag extends ArenaTag {
   constructor() {
     super(ArenaTagType.NONE, 0);
-  }
-}
-/**
- * This arena tag facilitates the application of the move Imprison.
- * Imprison remains in effect as long as the source Pokemon is active and present on the field.
- * Imprison will apply to any opposing Pokemon that switch onto the field as well.
- */
-class ImprisonTag extends EntryHazardTag {
-  constructor(sourceId: number, side: ArenaTagSide) {
-    super(ArenaTagType.IMPRISON, MoveId.IMPRISON, sourceId, side, 1);
-  }
-
-  /**
-   * This function applies the effects of Imprison to the opposing Pokemon already present on the field.
-   * @param arena
-   */
-  override onAdd() {
-    const source = this.getSourcePokemon();
-    if (source) {
-      const party = this.getAffectedPokemon();
-      party?.forEach((p: Pokemon) => {
-        if (p.isAllowedInBattle()) {
-          p.addTag(BattlerTagType.IMPRISON, 1, MoveId.IMPRISON, this.sourceId);
-        }
-      });
-      globalScene.queueMessage(
-        i18next.t("battlerTags:imprisonOnAdd", { pokemonNameWithAffix: getPokemonNameWithAffix(source) }),
-      );
-    }
-  }
-
-  /**
-   * Checks if the source Pokemon is still active on the field
-   * @param _arena
-   * @returns `true` if the source of the tag is still active on the field | `false` if not
-   */
-  override lapse(): boolean {
-    const source = this.getSourcePokemon();
-    return source ? source.isActive(true) : false;
-  }
-
-  /**
-   * This applies the effects of Imprison to any opposing Pokemon that switch into the field while the source Pokemon is still active
-   * @param pokemon - the {@linkcode Pokemon} Imprison is applied to
-   * @returns `true`
-   */
-  override activateTrap(pokemon: Pokemon): boolean {
-    const source = this.getSourcePokemon();
-    if (source && source.isActive(true) && pokemon.isAllowedInBattle()) {
-      pokemon.addTag(BattlerTagType.IMPRISON, 1, MoveId.IMPRISON, this.sourceId);
-    }
-    return true;
-  }
-
-  /**
-   * When the arena tag is removed, it also attempts to remove any related Battler Tags if they haven't already been removed from the affected Pokemon
-   * @param arena
-   */
-  override onRemove(): void {
-    const party = this.getAffectedPokemon();
-    party?.forEach((p: Pokemon) => {
-      p.removeTag(BattlerTagType.IMPRISON);
-    });
   }
 }
 
@@ -1507,8 +1449,6 @@ export function getArenaTag(
       return new HappyHourTag(sourceId, side);
     case ArenaTagType.SAFEGUARD:
       return new SafeguardTag(turnCount, sourceId, side);
-    case ArenaTagType.IMPRISON:
-      return new ImprisonTag(sourceId, side);
     case ArenaTagType.FIRE_GRASS_PLEDGE:
       return new FireGrassPledgeTag(sourceId, side);
     case ArenaTagType.WATER_FIRE_PLEDGE:

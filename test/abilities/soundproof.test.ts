@@ -4,7 +4,7 @@ import { MoveFlags } from "#enums/move-flags";
 import { MoveResult } from "#enums/move-result";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -41,7 +41,7 @@ describe("Abilities - Soundproof", () => {
     game.move.select(MoveId.CLANGOROUS_SOUL);
     await game.toEndOfTurn();
 
-    const soundMove = allMoves[MoveId.CLANGOROUS_SOUL];
+    const soundMove = allMoves.get(MoveId.CLANGOROUS_SOUL);
     const lastMove = playerPokemon.getLastXMoves()[0];
 
     expect(lastMove.result).toBe(MoveResult.SUCCESS);

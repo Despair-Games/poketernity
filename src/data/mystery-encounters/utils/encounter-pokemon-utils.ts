@@ -1,44 +1,46 @@
-import { globalScene } from "#app/global-scene";
-import i18next from "i18next";
-import { isNullOrUndefined, randSeedInt } from "#app/utils";
-import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
-import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
-import type { Pokemon } from "#app/field/pokemon";
+import { speciesStarterCosts } from "#app/data/balance/starters";
+import { CustomPokemonData } from "#app/data/custom-pokemon-data";
+import {
+  getEncounterText,
+  queueEncounterMessage,
+  showEncounterText,
+} from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import {
   doPokeballBounceAnim,
   getPokeballAtlasKey,
   getPokeballCatchMultiplier,
   getPokeballTintColor,
 } from "#app/data/pokeball";
-import { PlayerGender } from "#enums/player-gender";
-import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
-import { achvs } from "#app/system/achv";
-import { UiMode } from "#enums/ui-mode";
-import type { PartyOption } from "#enums/party-option";
-import { PartyUiMode } from "#enums/party-ui-mode";
-import { Species } from "#enums/species";
-import type { ElementalType } from "#enums/elemental-type";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { speciesStarterCosts } from "#app/data/balance/starters";
-import {
-  getEncounterText,
-  queueEncounterMessage,
-  showEncounterText,
-} from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
+import { getStatusEffectCatchRateMultiplier } from "#app/data/status-effect";
+import type { EnemyPokemon, PlayerPokemon, Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
+import type { PokemonHeldItemModifier } from "#app/modifier/modifier";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { Gender } from "#enums/gender";
-import type { PermanentStat } from "#enums/stat";
 import { VictoryPhase } from "#app/phases/victory-phase";
-import { SummaryUiMode } from "#enums/summary-ui-mode";
-import { CustomPokemonData } from "#app/data/custom-pokemon-data";
-import type { Abilities } from "#enums/abilities";
-import type { PokeballType } from "#enums/pokeball";
-import { StatusEffect } from "#enums/status-effect";
-import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
+import { achvs } from "#app/system/achievements";
 import { settings } from "#app/system/settings/settings-manager";
+import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
+import type { SummaryUiHandler } from "#app/ui/handlers/summary-ui-handler";
+import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
+import { isNullOrUndefined, randSeedInt } from "#app/utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
+import type { Abilities } from "#enums/abilities";
+import type { ElementalType } from "#enums/elemental-type";
+import { Gender } from "#enums/gender";
+import type { PartyOption } from "#enums/party-option";
+import { PartyUiMode } from "#enums/party-ui-mode";
+import { PlayerGender } from "#enums/player-gender";
+import type { PokeballType } from "#enums/pokeball";
+import { Species } from "#enums/species";
+import type { PermanentStat } from "#enums/stat";
+import { StatusEffect } from "#enums/status-effect";
+import { SummaryUiMode } from "#enums/summary-ui-mode";
+import { SummaryUiPage } from "#enums/summary-ui-page";
+import { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
 
 /** Will give +1 level every 10 waves */
 export const STANDARD_ENCOUNTER_BOOSTED_LEVEL_MODIFIER = 1;
@@ -723,11 +725,11 @@ export async function catchPokemon(
                     pokemon.nature,
                     pokemon,
                   );
-                  globalScene.ui.setMode(
+                  globalScene.ui.setMode<SummaryUiHandler>(
                     UiMode.SUMMARY,
                     newPokemon,
-                    0,
                     SummaryUiMode.DEFAULT,
+                    SummaryUiPage.PROFILE,
                     () => {
                       globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
                         promptRelease();
@@ -741,7 +743,7 @@ export async function catchPokemon(
               {
                 label: i18next.t("menu:no"),
                 handler: () => {
-                  globalScene.ui.setMode(
+                  globalScene.ui.setMode<PartyUiHandler>(
                     UiMode.PARTY,
                     PartyUiMode.RELEASE,
                     0,
@@ -926,7 +928,7 @@ export function getGoldenBugNetSpecies(level: number): PokemonSpecies {
     w += speciesWeightPair[1];
     if (roll < w) {
       const initialSpecies = getPokemonSpecies(speciesWeightPair[0]);
-      return getPokemonSpecies(initialSpecies.getSpeciesForLevel(level, true));
+      return getPokemonSpecies(initialSpecies.getEnemySpeciesForLevel(level));
     }
   }
 
@@ -947,30 +949,42 @@ export function getEncounterPokemonLevelForWave(levelAdditiveModifier: number = 
 }
 
 /**
- * Helper async function to update a player's dex and award achievements
+ * Helper async function to update a player's dex and award achievements.
+ *
+ * The function exits early if the Pokemon is a "rental" Pokemon (ie was given through an event for the current run only)
+ * unless that species had already been captured before, in which case any new form, gender, etc. gets unlocked.
+ *
  * @param pokemon - The newly obtained Pokemon
+ * @param includeNewCatch - Whether to update the data if the catch would unlock a new starter. Default: `true`.
+ *   Use `false` for "rental" Pokemon, so that the function exits early.
+ * @returns Promise of an array of the unlocked {@linkcode Species}, if any. Otherwise, an empty array.
  */
-export async function addPokemonDataToDexAndValidateAchievements(pokemon: PlayerPokemon) {
-  const speciesForm = pokemon.getSpeciesForm();
+export async function addPokemonDataToDexAndValidateAchievements(
+  pokemon: PlayerPokemon,
+  includeNewCatch: boolean = true,
+): Promise<Species[]> {
+  const isNewCatch = !globalScene.gameData.dexData[pokemon.species.getRootSpeciesId()].caughtAttr;
+  if (!isNewCatch || includeNewCatch) {
+    const speciesForm = pokemon.getSpeciesForm();
+    if (speciesForm.abilityHidden && pokemon.abilityIndex === speciesForm.getAbilityCount() - 1) {
+      globalScene.validateAchv(achvs.HIDDEN_ABILITY);
+    }
 
-  if (speciesForm.abilityHidden && pokemon.abilityIndex === speciesForm.getAbilityCount() - 1) {
-    globalScene.validateAchv(achvs.HIDDEN_ABILITY);
+    if (pokemon.species.isSubLegendary()) {
+      globalScene.validateAchv(achvs.CATCH_SUB_LEGENDARY);
+    }
+
+    if (pokemon.species.isLegendary()) {
+      globalScene.validateAchv(achvs.CATCH_LEGENDARY);
+    }
+
+    if (pokemon.species.isMythical()) {
+      globalScene.validateAchv(achvs.CATCH_MYTHICAL);
+    }
+
+    globalScene.gameData.updateSpeciesDexIvs(pokemon.species.getRootSpeciesId(true), pokemon.ivs);
   }
-
-  if (pokemon.species.isSubLegendary()) {
-    globalScene.validateAchv(achvs.CATCH_SUB_LEGENDARY);
-  }
-
-  if (pokemon.species.isLegendary()) {
-    globalScene.validateAchv(achvs.CATCH_LEGENDARY);
-  }
-
-  if (pokemon.species.isMythical()) {
-    globalScene.validateAchv(achvs.CATCH_MYTHICAL);
-  }
-
-  globalScene.gameData.updateSpeciesDexIvs(pokemon.species.getRootSpeciesId(true), pokemon.ivs);
-  return globalScene.gameData.setPokemonCaught(pokemon, true, false, false);
+  return globalScene.gameData.setPokemonCaught(pokemon, includeNewCatch, false, false);
 }
 
 /**

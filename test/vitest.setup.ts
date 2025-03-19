@@ -1,8 +1,8 @@
 import "vitest-canvas-mock";
 
 import { afterAll, beforeAll, vi } from "vitest";
-import { initDataForTests, initTestFile } from "#test/testUtils/testFileInitialization";
-import { MockConsole } from "#test/testUtils/mocks/mockConsole";
+import { initDataForTests, initTestFile } from "#test/test-utils/testFileInitialization";
+import { MockConsole } from "#test/test-utils/mocks/mockConsole";
 
 //#region Mocking
 
@@ -35,7 +35,8 @@ vi.mock("i18next", async (importOriginal) => {
       const filename = req.params[0];
 
       try {
-        const json = await import(`../public/locales/en/${req.params[0]}`);
+        const localeFiles = import.meta.glob("../public/locales/en/**/*.json", { eager: true });
+        const json = localeFiles[`../public/locales/en/${filename}`] || {};
         console.log("Loaded locale", filename);
         return HttpResponse.json(json);
       } catch (err) {

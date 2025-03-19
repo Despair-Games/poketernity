@@ -2,12 +2,12 @@ import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { CommandPhase } from "#app/phases/command-phase";
-import FightUiHandler from "#app/ui/fight-ui-handler";
+import { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
 import { UiMode } from "#enums/ui-mode";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import type { MockText } from "#test/testUtils/mocks/mocksContainer/mockText";
+import type { MockText } from "#test/test-utils/mocks/mocksContainer/mockText";
 import i18next from "i18next";
 import { TypeEffectivenessColor } from "#enums/color";
 

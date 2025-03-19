@@ -1,14 +1,14 @@
 import { allMoves } from "#app/data/data-lists";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
-import { initMoveAnim } from "#app/data/init-move-anim";
-import type { Move } from "#app/data/move";
+import { initMoveAnim } from "#app/data/init/init-move-anim";
+import type { Move } from "#app/data/moves/move";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/species-form-change-triggers/species-form-change-move-learned-trigger";
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
 import { PlayerPartyMemberPokemonPhase } from "#app/phases/abstract-player-party-member-pokemon-phase";
-import FormChangeSceneHandler from "#app/ui/form-change-scene-handler";
+import { FormChangeSceneUiHandler } from "#app/ui/handlers/form-change-scene-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { SummaryUiMode } from "#enums/summary-ui-mode";
 import { UiMode } from "#enums/ui-mode";
@@ -17,6 +17,7 @@ import i18next from "i18next";
 import { LearnMoveType } from "#enums/learn-move-type";
 import { PhaseId } from "#enums/phase-id";
 import { type SelectModifierPhase } from "#app/phases/select-modifier-phase";
+import type { SummaryUiHandler } from "#app/ui/handlers/summary-ui-handler";
 
 export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
   override readonly id = PhaseId.LEARN_MOVE;
@@ -44,7 +45,14 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
 
     const { ui } = globalScene;
     const pokemon = this.getPokemon();
-    const move = allMoves[this.moveId];
+
+    // This should never happen, but if there is no Pokemon learning the move, exit now to avoid crashes.
+    if (!pokemon) {
+      console.error("Pokemon is missing from LearnMovePhase!");
+      return this.end();
+    }
+
+    const move = allMoves.get(this.moveId);
     const currentMoveset = pokemon.getMoveset();
 
     // The game first checks if the Pokemon already has the move and ends the phase if it does.
@@ -53,7 +61,7 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
       return this.end();
     }
 
-    this.messageMode = ui.getHandler() instanceof FormChangeSceneHandler ? UiMode.FORM_CHANGE_SCENE : UiMode.MESSAGE;
+    this.messageMode = ui.getHandler() instanceof FormChangeSceneUiHandler ? UiMode.FORM_CHANGE_SCENE : UiMode.MESSAGE;
     ui.setMode(this.messageMode);
     // If the Pokemon has less than 4 moves, the new move is added to the largest empty moveset index
     // If it has 4 moves, the phase then checks if the player wants to replace the move itself.
@@ -121,22 +129,28 @@ export class LearnMovePhase extends PlayerPartyMemberPokemonPhase {
 
     ui.setMode(this.messageMode);
     await ui.showTextPromise(i18next.t("battle:learnMoveForgetQuestion"), undefined, true);
-    await ui.setModeWithoutClear(UiMode.SUMMARY, pokemon, SummaryUiMode.LEARN_MOVE, move, (moveIndex: number) => {
-      if (moveIndex === 4) {
-        ui.setMode(this.messageMode).then(() => this.rejectMoveAndEnd(move, pokemon));
-        return;
-      }
+    await ui.setModeWithoutClear<SummaryUiHandler>(
+      UiMode.SUMMARY,
+      pokemon,
+      SummaryUiMode.LEARN_MOVE,
+      move,
+      (moveIndex: number) => {
+        if (moveIndex === 4) {
+          ui.setMode(this.messageMode).then(() => this.rejectMoveAndEnd(move, pokemon));
+          return;
+        }
 
-      const forgetSuccessText = i18next.t("battle:learnMoveForgetSuccess", {
-        pokemonName: getPokemonNameWithAffix(pokemon),
-        moveName: pokemon.moveset[moveIndex]!.getName(),
-      });
-      const fullText = [i18next.t("battle:countdownPoof"), forgetSuccessText, i18next.t("battle:learnMoveAnd")].join(
-        "$",
-      );
+        const forgetSuccessText = i18next.t("battle:learnMoveForgetSuccess", {
+          pokemonName: getPokemonNameWithAffix(pokemon),
+          moveName: pokemon.moveset[moveIndex]!.getName(),
+        });
+        const fullText = [i18next.t("battle:countdownPoof"), forgetSuccessText, i18next.t("battle:learnMoveAnd")].join(
+          "$",
+        );
 
-      ui.setMode(this.messageMode).then(() => this.learnMove(moveIndex, move, pokemon, fullText));
-    });
+        ui.setMode(this.messageMode).then(() => this.learnMove(moveIndex, move, pokemon, fullText));
+      },
+    );
   }
 
   /**

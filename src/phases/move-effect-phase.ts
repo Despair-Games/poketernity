@@ -1,17 +1,17 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { applyAbAttrs } from "#app/data/apply-ab-attrs";
-import { MoveAnim } from "#app/data/battle-anims/move-anim";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import { MoveAnim } from "#app/data/animations/move-anim";
 import { type SubstituteTag, TypeBoostTag } from "#app/data/battler-tags";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { applyFilteredMoveAttrs, applyMoveAttrs } from "#app/utils/move-utils";
-import { DelayedAttackAttr } from "#app/data/move-attrs/delayed-attack-attr";
-import { FlinchAttr } from "#app/data/move-attrs/flinch-attr";
-import { MissEffectAttr } from "#app/data/move-attrs/miss-effect-attr";
-import type { MoveAttr } from "#app/data/move-attrs/move-attr";
-import { MoveEffectAttr } from "#app/data/move-attrs/move-effect-attr";
-import { MultiHitAttr } from "#app/data/move-attrs/multi-hit-attr";
-import { NoEffectAttr } from "#app/data/move-attrs/no-effect-attr";
-import { OverrideMoveEffectAttr } from "#app/data/move-attrs/override-move-effect-attr";
+import { DelayedAttackAttr } from "#app/data/moves/move-attrs/delayed-attack-attr";
+import { FlinchAttr } from "#app/data/moves/move-attrs/flinch-attr";
+import { MissEffectAttr } from "#app/data/moves/move-attrs/miss-effect-attr";
+import type { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
+import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
+import { MultiHitAttr } from "#app/data/moves/move-attrs/multi-hit-attr";
+import { NoEffectAttr } from "#app/data/moves/move-attrs/no-effect-attr";
+import { OverrideMoveEffectAttr } from "#app/data/moves/move-attrs/override-move-effect-attr";
 import { SpeciesFormChangePostMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-post-move-trigger";
 import type { TypeDamageMultiplier } from "#app/data/type";
 import type { DamageResult, Pokemon } from "#app/field/pokemon";
@@ -39,7 +39,6 @@ import { HitCheckPhase } from "./hit-check-phase";
 import { MoveFlags } from "#enums/move-flags";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AchvCategory } from "#enums/achv-category";
 import { PhaseId } from "#enums/phase-id";
 import { isFieldTargeted } from "#app/utils/move-utils";
 
@@ -122,14 +121,6 @@ export class MoveEffectPhase extends HitCheckPhase {
         p.removeTag(BattlerTagType.SKY_DROP);
       }
     });
-
-    // If the user is acting again (such as due to Instruct), reset hitsLeft/hitCount so that
-    // the move executes correctly (ensures all hits of a multi-hit are properly calculated)
-    if (user.turnData.hitsLeft === 0 && user.turnData.hitCount > 0 && user.turnData.extraTurns > 0) {
-      user.turnData.hitsLeft = -1;
-      user.turnData.hitCount = 0;
-      user.turnData.extraTurns--;
-    }
 
     /**
      * If this phase is for the first hit of the invoked move,
@@ -501,7 +492,6 @@ export class MoveEffectPhase extends HitCheckPhase {
 
       if (damage > 0) {
         if (user.isPlayer()) {
-          globalScene.validateAchvs(AchvCategory.DAMAGE, new NumberHolder(damage));
           if (damage > globalScene.gameData.gameStats.highestDamage) {
             globalScene.gameData.gameStats.highestDamage = damage;
           }
@@ -523,26 +513,26 @@ export class MoveEffectPhase extends HitCheckPhase {
         if (user.isPlayer() && !target.isPlayer()) {
           globalScene.applyModifiers(DamageMoneyRewardModifier, true, user, new NumberHolder(damage));
         }
-      }
-    }
 
-    if (isCritical) {
-      globalScene.queueMessage(i18next.t("battle:hitResultCriticalHit"));
-    }
+        if (isCritical) {
+          globalScene.queueMessage(i18next.t("battle:hitResultCriticalHit"));
+        }
 
-    // `.isFainted()` is here in case a multi hit move ends early
-    // we still want to queue the appropriate message
-    if (user.turnData.hitsLeft === 1 || target.isFainted()) {
-      switch (result) {
-        case HitResult.SUPER_EFFECTIVE:
-          globalScene.queueMessage(i18next.t("battle:hitResultSuperEffective"));
-          break;
-        case HitResult.NOT_VERY_EFFECTIVE:
-          globalScene.queueMessage(i18next.t("battle:hitResultNotVeryEffective"));
-          break;
-        case HitResult.ONE_HIT_KO:
-          globalScene.queueMessage(i18next.t("battle:hitResultOneHitKO"));
-          break;
+        // `.isFainted()` is here in case a multi hit move ends early
+        // we still want to queue the appropriate message
+        if (user.turnData.hitsLeft === 1 || target.isFainted()) {
+          switch (result) {
+            case HitResult.SUPER_EFFECTIVE:
+              globalScene.queueMessage(i18next.t("battle:hitResultSuperEffective"));
+              break;
+            case HitResult.NOT_VERY_EFFECTIVE:
+              globalScene.queueMessage(i18next.t("battle:hitResultNotVeryEffective"));
+              break;
+            case HitResult.ONE_HIT_KO:
+              globalScene.queueMessage(i18next.t("battle:hitResultOneHitKO"));
+              break;
+          }
+        }
       }
     }
 

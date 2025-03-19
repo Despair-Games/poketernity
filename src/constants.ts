@@ -1,3 +1,5 @@
+import { SpeciesFormKey } from "#enums/species-form-key";
+
 /** Abbreviated name of the application/game. */
 export const APP_ABBREVIATION: string = import.meta.env.VITE_APP_ABBREVIATION ?? "game";
 
@@ -45,6 +47,9 @@ export const LANGUAGE_MAX_OPTIONS = 7;
 
 /** All available game speeds. */
 export const GAME_SPEEDS = [1, 1.25, 1.5, 2, 2.5, 3, 4, 5];
+
+/** The maximum number of runs stored in the run history. */
+export const RUN_HISTORY_LIMIT: number = 25;
 
 /** Min - Max waves for mystery encounter in classic mode. */
 export const CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES: [min: number, max: number] = [10, 180];
@@ -128,3 +133,12 @@ export const SCREEN_SINGLES_DMG_FACTOR = 0.5;
 
 /** The damage multiplier applied by Reflect, Light Screen, and Aurora Veil in double battles.*/
 export const SCREEN_DOUBLES_DMG_FACTOR = 2732 / 4096;
+
+/**
+ * A list of all Gigantamax form keys, excluding Eternamax.
+ */
+export const G_MAX_FORM_KEYS = Object.freeze([
+  SpeciesFormKey.GIGANTAMAX,
+  SpeciesFormKey.GIGANTAMAX_RAPID,
+  SpeciesFormKey.GIGANTAMAX_SINGLE,
+]) as readonly string[];

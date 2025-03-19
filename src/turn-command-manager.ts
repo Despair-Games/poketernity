@@ -9,9 +9,9 @@ import { Stat } from "#enums/stat";
 import { SwitchType } from "#enums/switch-type";
 import type { TurnCommandFilter } from "./@types/TurnCommandFilter";
 import type { TurnMove } from "./@types/TurnMove";
-import type { BypassSpeedChanceAbAttr } from "./data/ab-attrs/bypass-speed-chance-ab-attr";
-import { applyAbAttrs } from "./data/apply-ab-attrs";
-import { MoveHeaderAttr } from "./data/move-attrs/move-header-attr";
+import type { BypassSpeedChanceAbAttr } from "./data/abilities/ab-attrs/bypass-speed-chance-ab-attr";
+import { applyAbAttrs } from "./data/abilities/apply-ab-attrs";
+import { MoveHeaderAttr } from "./data/moves/move-attrs/move-header-attr";
 import type { Pokemon } from "./field/pokemon";
 import { PokemonMove } from "./field/pokemon-move";
 import { globalScene } from "./global-scene";
@@ -332,6 +332,11 @@ export class TurnCommandManager {
           return -1;
         }
       } else if (a.command === BattleCommand.FIGHT) {
+        const [aQuashed, bQuashed] = [a, b].map((tc) => !!tc.pokemon.getTag(BattlerTagType.QUASHED));
+        if ((aQuashed || bQuashed) && aQuashed !== bQuashed) {
+          return aQuashed ? 1 : -1;
+        }
+
         const priority = [a, b].map((tc) => {
           const move = tc.turnMove!.move;
           return move.getPriority(tc.pokemon, quiet);

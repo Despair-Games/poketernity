@@ -2,7 +2,7 @@ import { allMoves } from "#app/data/data-lists";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { GameManager } from "#test/testUtils/gameManager";
+import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
@@ -46,7 +46,7 @@ describe("Moves - Psyshock", () => {
 
   it("should use the user's Sp. Atk stat stages during damage calculation", async () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
-    const psyshock = allMoves[MoveId.PSYSHOCK];
+    const psyshock = allMoves.get(MoveId.PSYSHOCK);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
