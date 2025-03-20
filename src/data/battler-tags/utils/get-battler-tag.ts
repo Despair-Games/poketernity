@@ -44,6 +44,7 @@ import { IngrainTag } from "#app/data/battler-tags/ingrain-tag";
 import { InterruptedTag } from "#app/data/battler-tags/interrupted-tag";
 import { MagicCoatTag } from "#app/data/battler-tags/magic-coat-tag";
 import { MagmaStormTag } from "#app/data/battler-tags/magma-storm-tag";
+import { MeFirstPowerBoostTag } from "#app/data/battler-tags/me-first-power-boost-tag";
 import { MinimizeTag } from "#app/data/battler-tags/minimize-tag";
 import { MysteryEncounterPostSummonTag } from "#app/data/battler-tags/mystery-encounter-post-summon-tag";
 import { NightmareTag } from "#app/data/battler-tags/nightmare-tag";
@@ -313,6 +314,8 @@ export function getBattlerTag(
       return new QuashedTag();
     case BattlerTagType.MAGIC_COAT:
       return new MagicCoatTag();
+    case BattlerTagType.ME_FIRST_POWER_BOOST:
+      return new MeFirstPowerBoostTag();
     case BattlerTagType.NONE:
       return new BattlerTag(tagType, BattlerTagLapseType.CUSTOM, turnCount, sourceMoveId, sourceId);
   }
