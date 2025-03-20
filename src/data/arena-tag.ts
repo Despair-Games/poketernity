@@ -1,7 +1,7 @@
 import { SCREEN_DOUBLES_DMG_FACTOR, SCREEN_SINGLES_DMG_FACTOR } from "#app/constants";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
-import { type SkyDropTag } from "#app/data/battler-tags";
+import type { SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
 import { allMoves } from "#app/data/data-lists";
 import type { Arena } from "#app/field/arena";
 import type { Pokemon } from "#app/field/pokemon";
