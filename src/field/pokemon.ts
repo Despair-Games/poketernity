@@ -2592,6 +2592,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
+   * @returns the {@linkcode BattlerIndex} corresponding to this Pokemon's side of the field
+   */
+  getArenaSideIndex(): BattlerIndex.PLAYER_SIDE | BattlerIndex.ENEMY_SIDE {
+    return this.isPlayer() ? BattlerIndex.PLAYER_SIDE : BattlerIndex.ENEMY_SIDE;
+  }
+
+  /**
    * @returns the Pokemon on the opposing field
    */
   getOpposingField(): Pokemon[] {
@@ -5217,11 +5224,6 @@ export class PokemonTurnData {
   public switchedInThisTurn: boolean = false;
   public failedRunAway: boolean = false;
   public joinedRound: boolean = false;
-  /**
-   * Used to make sure multi-hits occur properly when the user is
-   * forced to act again in the same turn
-   */
-  public extraTurns: number = 0;
 }
 
 export type DamageResult =

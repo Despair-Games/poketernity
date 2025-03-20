@@ -113,5 +113,6 @@ export enum BattlerTagType {
   QUASHED,
   ROLLING,
   UPROAR,
+  MAGIC_COAT,
   ME_FIRST_POWER_BOOST,
 }

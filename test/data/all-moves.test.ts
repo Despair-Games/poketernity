@@ -30,6 +30,7 @@ describe("All Moves", async () => {
    */
   const flagsToCheck = {
     1: MoveFlags.MAKES_CONTACT,
+    5: MoveFlags.BOUNCEABLE,
     8: MoveFlags.PUNCHING_MOVE,
     9: MoveFlags.SOUND_MOVE,
     13: MoveFlags.TRIAGE_MOVE,
@@ -42,10 +43,11 @@ describe("All Moves", async () => {
   };
 
   /**
-   * Custom Implementations as of 01/2025:
+   * Custom Implementations as of 02/2025:
    * - Imprison : Accuracy is set to 100 in PKTY, not -1
-   * - Dark Void : Accurary is set to pre-Gen VIII's 80
+   * - Dark Void : Accuracy is set to pre-Gen VIII's 80
    * - Zippy Zap : Uses LGPE's implementation. PP: 10 -> 15, BP: 90 -> 50
+   * - Sappy Seed : Cannot be reflected by Magic Coat or Magic Bounce
    * - Court Change : Accuracy is set to 100 in PKTY, not -1
    */
 
