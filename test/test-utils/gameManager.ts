@@ -6,13 +6,11 @@ import { type TurnEndPhase } from "#app/phases/turn-end-phase";
 // -- end tsdoc imports --
 
 import { updateUserInfo } from "#app/account";
-import type { BattlerIndex } from "#enums/battler-index";
 import BattleScene from "#app/battle-scene";
-import { settings } from "#app/system/settings/settings-manager";
 import type { EnemyPokemon, PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import Trainer from "#app/field/trainer";
 import { getGameMode } from "#app/game-mode";
-import { GameModes } from "#enums/game-modes";
+import { globalScene } from "#app/global-scene";
 import { ModifierTypeOption } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import overrides from "#app/overrides";
@@ -21,45 +19,45 @@ import { FaintPhase } from "#app/phases/faint-phase";
 import { LoginPhase } from "#app/phases/login-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { TitlePhase } from "#app/phases/title-phase";
+import { settings } from "#app/system/settings/settings-manager";
+import type { TurnCommand } from "#app/turn-command-manager";
 import type { BattleMessageUiHandler } from "#app/ui/handlers/battle-message-ui-handler";
 import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
 import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
-import { UiMode } from "#enums/ui-mode";
+import type { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
 import { isNullOrUndefined } from "#app/utils";
+import type { Abilities } from "#enums/abilities";
 import { BattleStyle } from "#enums/battle-style";
+import type { BattlerIndex } from "#enums/battler-index";
 import { Button } from "#enums/buttons";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { ExpNotification } from "#enums/exp-notification";
+import { GameModes } from "#enums/game-modes";
 import { HpBarSpeed } from "#enums/hp-bar-speed";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PlayerGender } from "#enums/player-gender";
 import type { Species } from "#enums/species";
+import { UiMode } from "#enums/ui-mode";
 import { ErrorInterceptor } from "#test/test-utils/errorInterceptor";
 import { generateStarter, waitUntil } from "#test/test-utils/gameManagerUtils";
 import { GameWrapper } from "#test/test-utils/gameWrapper";
 import { ChallengeModeHelper } from "#test/test-utils/helpers/challengeModeHelper";
 import { ClassicModeHelper } from "#test/test-utils/helpers/classicModeHelper";
 import { DailyModeHelper } from "#test/test-utils/helpers/dailyModeHelper";
+import { FieldHelper } from "#test/test-utils/helpers/fieldHelper";
 import { ModifierHelper } from "#test/test-utils/helpers/modifiersHelper";
 import { MoveHelper } from "#test/test-utils/helpers/moveHelper";
 import { OverridesHelper } from "#test/test-utils/helpers/overridesHelper";
-import { FieldHelper } from "#test/test-utils/helpers/fieldHelper";
 import { ReloadHelper } from "#test/test-utils/helpers/reloadHelper";
 import { SettingsHelper } from "#test/test-utils/helpers/settingsHelper";
 import type { InputsHandler } from "#test/test-utils/inputsHandler";
-import type { PhaseInterceptorPhase } from "#test/test-utils/phaseInterceptor";
-import { PhaseInterceptor } from "#test/test-utils/phaseInterceptor";
+import { MockFetch } from "#test/test-utils/mocks/mockFetch";
+import { PhaseInterceptor, type PhaseInterceptorPhase } from "#test/test-utils/phaseInterceptor";
 import { TextInterceptor } from "#test/test-utils/TextInterceptor";
 import { AES, enc } from "crypto-js";
 import fs from "fs";
 import { expect, vi } from "vitest";
-import { globalScene } from "#app/global-scene";
-import type { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
-import { MockFetch } from "#test/test-utils/mocks/mockFetch";
-import type { TurnCommand } from "#app/turn-command-manager";
-import type { Abilities } from "#enums/abilities";
-import { allAbilities } from "#app/data/data-lists";
 
 /**
  * Class to manage the game state and transitions between phases.
@@ -539,13 +537,13 @@ export class GameManager {
    * and {@linkcode OverridesHelper.enemyAbility | override.enemyAbility}.
    * Also, unlike the overrides, this function can only be called after `startBattle()` has finished.
    *
-   * @param speciesId The ID of the species that is to receive the ability.
-   * @param abilityId The ID of the ability to give.
+   * @param speciesId - The ID of the species that is to receive the ability.
+   * @param abilityId - The ID of the ability to give.
    */
   forceSpeciesSpecificAbility(speciesId: Species, abilityId: Abilities): void {
     for (const p of (this.scene.getPlayerParty() as Pokemon[]).concat(this.scene.getEnemyParty())) {
       if (p.species.speciesId === speciesId) {
-        vi.spyOn(p, "getAbility").mockReturnValue(allAbilities[abilityId]);
+        this.field.mockAbility(p, abilityId);
       }
     }
   }

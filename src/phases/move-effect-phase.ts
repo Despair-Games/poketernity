@@ -23,6 +23,7 @@ import {
   FlinchChanceModifier,
   HitHealModifier,
 } from "#app/modifier/modifier";
+import { HitCheckPhase } from "#app/phases/hit-check-phase";
 import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils";
 import { applyFilteredMoveAttrs, applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -40,7 +41,6 @@ import { MoveResult } from "#enums/move-result";
 import { MoveTarget } from "#enums/move-target";
 import { PhaseId } from "#enums/phase-id";
 import i18next from "i18next";
-import { HitCheckPhase } from "./hit-check-phase";
 
 export class MoveEffectPhase extends HitCheckPhase {
   override readonly id = PhaseId.MOVE_EFFECT;
@@ -480,15 +480,14 @@ export class MoveEffectPhase extends HitCheckPhase {
        * We explicitly require to ignore the faint phase here, as we want to show the messages
        * about the critical hit and the super effective/not very effective messages before the faint phase.
        */
-      const damage = target.damageAndUpdate(
-        isBlockedBySubstitute ? 0 : dmg,
-        result as DamageResult,
+      const damage = target.damageAndUpdate(isBlockedBySubstitute ? 0 : dmg, {
+        result: result as DamageResult,
         isCritical,
-        isOneHitKo,
-        isOneHitKo,
-        true,
-        user,
-      );
+        ignoreSegments: isOneHitKo,
+        preventEndure: isOneHitKo,
+        ignoreFaintPhase: true,
+        source: user,
+      });
 
       if (damage > 0) {
         if (user.isPlayer()) {
@@ -498,7 +497,6 @@ export class MoveEffectPhase extends HitCheckPhase {
         }
         user.turnData.totalDamageDealt += damage;
         user.turnData.singleHitDamageDealt = damage;
-        target.turnData.damageTaken += damage;
         target.battleData.hitCount++;
 
         const attackResult: AttackMoveResult = {

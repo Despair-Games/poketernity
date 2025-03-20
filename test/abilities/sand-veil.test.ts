@@ -1,8 +1,9 @@
-import { allAbilities } from "#app/data/data-lists";
 import { type StatMultiplierAbAttr } from "#app/data/abilities/ab-attrs/stat-multiplier-ab-attr";
+import { allAbilities } from "#app/data/data-lists";
 import { CommandPhase } from "#app/phases/command-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -11,7 +12,6 @@ import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 describe("Abilities - Sand Veil", () => {
   let phaserGame: Phaser.Game;
@@ -43,7 +43,7 @@ describe("Abilities - Sand Veil", () => {
 
     const leadPokemon = game.scene.getPlayerField();
 
-    vi.spyOn(leadPokemon[0], "getAbility").mockReturnValue(allAbilities[Abilities.SAND_VEIL]);
+    game.field.mockAbility(leadPokemon[0], Abilities.SAND_VEIL);
 
     const sandVeilAttr = allAbilities[Abilities.SAND_VEIL].getAttrs<StatMultiplierAbAttr>(
       AbAttrFlag.STAT_MULTIPLIER,

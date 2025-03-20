@@ -1,10 +1,10 @@
-import type { BattleStat } from "#enums/stat";
-import { type Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#enums/hit-result";
-import { toDmgValue } from "#app/utils";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import type { Move } from "#app/data/moves/move";
 import { StatStageChangeAttr } from "#app/data/moves/move-attrs/stat-stage-change-attr";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { type Pokemon } from "#app/field/pokemon";
+import { toDmgValue } from "#app/utils";
+import { HitResult } from "#enums/hit-result";
+import type { BattleStat } from "#enums/stat";
 
 /**
  * Attribute to grant a stat stage boost to the user
@@ -30,7 +30,11 @@ export class CutHpStatStageBoostAttr extends StatStageChangeAttr {
   }
 
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
-    user.damageAndUpdate(toDmgValue(user.getMaxHp() / this.cutRatio), HitResult.OTHER, false, true);
+    user.damageAndUpdate(toDmgValue(user.getMaxHp() / this.cutRatio), {
+      result: HitResult.OTHER,
+      ignoreSegments: true,
+      ignoreDynamaxReduction: true,
+    });
     user.updateInfo();
     const ret = super.applyEffect(user, target, move);
     if (this.messageCallback) {

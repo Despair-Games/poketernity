@@ -1,14 +1,14 @@
-import { MoveEffectTrigger } from "#enums/move-effect-trigger";
-import { type Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#enums/hit-result";
-import { globalScene } from "#app/global-scene";
-import { getPokemonNameWithAffix } from "#app/messages";
-import { BooleanHolder, toDmgValue } from "#app/utils";
-import i18next from "i18next";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
+import { type Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import { getPokemonNameWithAffix } from "#app/messages";
+import { BooleanHolder, toDmgValue } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { HitResult } from "#enums/hit-result";
+import { MoveEffectTrigger } from "#enums/move-effect-trigger";
+import i18next from "i18next";
 
 /**
  * Attribute used for moves which cut the user's Max HP in half.
@@ -26,7 +26,12 @@ export class HalfSacrificialAttr extends MoveEffectAttr {
     // Check to see if the Pokemon has an ability that blocks non-direct damage
     applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, user, false, cancelled);
     if (!cancelled.value) {
-      user.damageAndUpdate(toDmgValue(user.getMaxHp() / 2), HitResult.OTHER, false, true, true);
+      user.damageAndUpdate(toDmgValue(user.getMaxHp() / 2), {
+        result: HitResult.OTHER,
+        ignoreSegments: true,
+        preventEndure: true,
+        ignoreDynamaxReduction: true,
+      });
       globalScene.queueMessage(
         i18next.t("moveTriggers:cutHpPowerUpMove", { pokemonName: getPokemonNameWithAffix(user) }),
       ); // Queue recoil message
