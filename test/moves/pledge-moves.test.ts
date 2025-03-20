@@ -1,17 +1,17 @@
-import { BattlerIndex } from "#enums/battler-index";
-import { allAbilities, allMoves } from "#app/data/data-lists";
-import { ArenaTagSide } from "#enums/arena-tag-side";
+import { allMoves } from "#app/data/data-lists";
 import { FlinchAttr } from "#app/data/moves/move-attrs/flinch-attr";
-import { ElementalType } from "#enums/elemental-type";
-import { ArenaTagType } from "#enums/arena-tag-type";
-import { Stat } from "#enums/stat";
 import { toDmgValue } from "#app/utils";
 import { Abilities } from "#enums/abilities";
+import { ArenaTagSide } from "#enums/arena-tag-side";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import { BattlerIndex } from "#enums/battler-index";
+import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
+import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, it, expect, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Moves - Pledge Moves", () => {
   let phaserGame: Phaser.Game;
@@ -299,7 +299,7 @@ describe("Moves - Pledge Moves", () => {
     await game.classicMode.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
 
     const enemyPokemon = game.scene.getEnemyField();
-    vi.spyOn(enemyPokemon[1], "getAbility").mockReturnValue(allAbilities[Abilities.STORM_DRAIN]);
+    game.field.mockAbility(enemyPokemon[1], Abilities.STORM_DRAIN);
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 

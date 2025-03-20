@@ -1,4 +1,4 @@
-import { allAbilities, allMoves } from "#app/data/data-lists";
+import { allMoves } from "#app/data/data-lists";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -38,7 +38,7 @@ describe("Abilities - Steely Spirit", () => {
     const boostSource = game.scene.getPlayerField()[1];
     const enemyToCheck = game.scene.getEnemyPokemon()!;
 
-    vi.spyOn(boostSource, "getAbility").mockReturnValue(allAbilities[Abilities.STEELY_SPIRIT]);
+    game.field.mockAbility(boostSource, Abilities.STEELY_SPIRIT);
 
     expect(boostSource.hasAbility(Abilities.STEELY_SPIRIT)).toBe(true);
 
@@ -54,7 +54,7 @@ describe("Abilities - Steely Spirit", () => {
     const enemyToCheck = game.scene.getEnemyPokemon()!;
 
     game.scene.getPlayerField().forEach((p) => {
-      vi.spyOn(p, "getAbility").mockReturnValue(allAbilities[Abilities.STEELY_SPIRIT]);
+      game.field.mockAbility(p, Abilities.STEELY_SPIRIT);
     });
 
     expect(game.scene.getPlayerField().every((p) => p.hasAbility(Abilities.STEELY_SPIRIT))).toBe(true);
@@ -73,7 +73,7 @@ describe("Abilities - Steely Spirit", () => {
     const boostSource = game.scene.getPlayerField()[1];
     const enemyToCheck = game.scene.getEnemyPokemon()!;
 
-    vi.spyOn(boostSource, "getAbility").mockReturnValue(allAbilities[Abilities.STEELY_SPIRIT]);
+    game.field.mockAbility(boostSource, Abilities.STEELY_SPIRIT);
     expect(boostSource.hasAbility(Abilities.STEELY_SPIRIT)).toBe(true);
 
     boostSource.summonData.abilitySuppressed = true;

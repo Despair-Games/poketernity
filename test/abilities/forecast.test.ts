@@ -1,12 +1,11 @@
-import { BattlerIndex } from "#enums/battler-index";
-import { allAbilities } from "#app/data/data-lists";
 import { Abilities } from "#enums/abilities";
-import { WeatherType } from "#enums/weather-type";
+import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
+import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Abilities - Forecast", () => {
   let phaserGame: Phaser.Game;
@@ -86,7 +85,7 @@ describe("Abilities - Forecast", () => {
         Species.ALTARIA,
       ]);
 
-      vi.spyOn(game.scene.getPlayerParty()[5], "getAbility").mockReturnValue(allAbilities[Abilities.CLOUD_NINE]);
+      game.field.mockAbility(game.scene.getPlayerParty()[5], Abilities.CLOUD_NINE);
 
       const castform = game.scene.getPlayerField()[0];
       expect(castform.formIndex).toBe(NORMAL_FORM);

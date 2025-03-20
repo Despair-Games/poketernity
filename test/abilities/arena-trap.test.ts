@@ -1,10 +1,9 @@
-import { allAbilities } from "#app/data/data-lists";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, it, expect, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Abilities - Arena Trap", () => {
   let phaserGame: Phaser.Game;
@@ -70,7 +69,7 @@ describe("Abilities - Arena Trap", () => {
     const [enemy1, enemy2] = game.scene.getEnemyField();
     const [player1, player2] = game.scene.getPlayerField();
 
-    vi.spyOn(enemy1, "getAbility").mockReturnValue(allAbilities[Abilities.ARENA_TRAP]);
+    game.field.mockAbility(enemy1, Abilities.ARENA_TRAP);
 
     game.move.select(MoveId.ROAR);
     game.move.select(MoveId.SPLASH, 1);
