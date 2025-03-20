@@ -369,8 +369,9 @@ export class MoveEffectPhase extends HitCheckPhase {
     this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target, firstTarget, true);
 
     // G-Max Gold Rush should not give money twice for double battles
-    if (this.move.getMove().id !== MoveId.G_MAX_GOLD_RUSH && user.getAlly()?.isActive(true)) {
-      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user.getAlly()!, target, firstTarget, true);
+    const allyPokemon = user.getAlly();
+    if (this.move.getMove().id !== MoveId.G_MAX_GOLD_RUSH && allyPokemon?.isActive(true)) {
+      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, allyPokemon, target, firstTarget, true);
     }
   }
 
@@ -390,8 +391,9 @@ export class MoveEffectPhase extends HitCheckPhase {
     }
 
     // G-Max Snooze is the only G-Max move to only apply its effect on a single target
-    if (move.id !== MoveId.G_MAX_SNOOZE && target.getAlly()?.isActive(true)) {
-      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, target.getAlly()!, firstTarget, false);
+    const allyPokemon = target.getAlly();
+    if (move.id !== MoveId.G_MAX_SNOOZE && allyPokemon?.isActive(true)) {
+      this.triggerMoveEffects(MoveEffectTrigger.POST_APPLY, user, allyPokemon, firstTarget, false);
     }
   }
 
@@ -587,12 +589,9 @@ export class MoveEffectPhase extends HitCheckPhase {
      */
     if (this.move.getMove().moveTarget === MoveTarget.DRAGON_DARTS) {
       const ogTarget = globalScene.getFieldPokemonByBattlerIndex(this.targets[0]);
-      if (
-        ogTarget?.isFainted()
-        && ogTarget.getAlly()?.isActive(true)
-        && ogTarget.getAlly()!.id !== this.getUserPokemon()?.id
-      ) {
-        this.targets = [ogTarget.getAlly()!.getBattlerIndex()];
+      const allyPokemon = ogTarget?.getAlly();
+      if (ogTarget?.isFainted() && allyPokemon?.isActive(true) && allyPokemon.id !== this.getUserPokemon()?.id) {
+        this.targets = [allyPokemon.getBattlerIndex()];
       }
     }
     /**

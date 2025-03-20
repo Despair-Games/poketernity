@@ -2569,7 +2569,9 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * @returns the ally Pokemon or undefined if the ally is a PlayerPokemon illegal in the challenge
+   * @returns The allied {@linkcode Pokemon} or `undefined` if there is no allied pokemon
+   * or the ally is {@linkcode Pokemon.isAllowedInBattle | not allowed} on the field
+   * @see {@linkcode PlayerPokemon.getAlly}
    */
   getAlly(): Pokemon | undefined {
     return this.getField()[this.getFieldIndex() ? 0 : 1];
@@ -4197,7 +4199,7 @@ export class PlayerPokemon extends Pokemon {
 
   override getAlly(): Pokemon | undefined {
     const ally = super.getAlly();
-    if (ally && ally.isAllowedInChallenge()) {
+    if (ally?.isAllowedInChallenge()) {
       return ally;
     }
     return undefined;

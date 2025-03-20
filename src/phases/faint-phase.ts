@@ -218,8 +218,9 @@ export class FaintPhase extends PokemonPhase {
     }
 
     // in double battles redirect potential moves off fainted pokemon
-    if (double && pokemon.getAlly()) {
-      globalScene.redirectPokemonMoves(pokemon, pokemon.getAlly()!);
+    const allyPokemon = pokemon.getAlly();
+    if (double && allyPokemon) {
+      globalScene.redirectPokemonMoves(pokemon, allyPokemon);
     }
 
     pokemon.faintCry(() => {
