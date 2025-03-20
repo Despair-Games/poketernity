@@ -19,22 +19,23 @@ import {
   ME_MAX_SPAWN_WEIGHT,
 } from "#app/constants";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import { MoveChargeAnim } from "#app/data/animations/move-charge-anim";
 import { biomeDepths, getBiomeName } from "#app/data/balance/biomes";
-import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
-import { MoveChargeAnim } from "#app/data/animations/move-charge-anim";
-import type { DestinyBondTag, GrudgeTag } from "#app/data/battler-tags";
+import type { DestinyBondTag } from "#app/data/battler-tags/destiny-bond-tag";
+import type { GrudgeTag } from "#app/data/battler-tags/grudge-tag";
 import { allAbilities, allMoves, allSpecies } from "#app/data/data-lists";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
+import { populateAnims } from "#app/data/init/init-anims";
 import { initCommonAnims } from "#app/data/init/init-common-anims";
 import { initMoveAnim } from "#app/data/init/init-move-anim";
 import MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterSaveData } from "#app/data/mystery-encounters/mystery-encounter-save-data";
 import { allMysteryEncounters, mysteryEncountersByBiome } from "#app/data/mystery-encounters/mystery-encounters";
 import { pokemonFormChanges, type SpeciesFormChange } from "#app/data/pokemon-forms";
+import { pokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import type PokemonSpecies from "#app/data/pokemon-species";
-import { populateAnims } from "#app/data/init/init-anims";
 import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
 import { SpeciesFormChangeTimeOfDayTrigger } from "#app/data/species-form-change-triggers/species-form-change-time-of-day-trigger";
 import type { SpeciesFormChangeTrigger } from "#app/data/species-form-change-triggers/species-form-change-trigger";

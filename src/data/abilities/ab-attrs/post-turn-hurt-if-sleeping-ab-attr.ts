@@ -1,12 +1,12 @@
+import { PostTurnAbAttr } from "#app/data/abilities/ab-attrs/post-turn-ab-attr";
 import type { Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { toDmgValue } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { HitResult } from "#enums/hit-result";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
-import { PostTurnAbAttr } from "./post-turn-ab-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Attribute to damage all sleeping opponents by 1/8 of their max hp at the end of turn.
@@ -23,7 +23,10 @@ export class PostTurnHurtIfSleepingAbAttr extends PostTurnAbAttr {
         && !opp.switchOutStatus
       ) {
         if (!simulated) {
-          opp.damageAndUpdate(toDmgValue(opp.getMaxHp() / 8), HitResult.OTHER);
+          opp.damageAndUpdate(toDmgValue(opp.getMaxHp() / 8), {
+            result: HitResult.OTHER,
+            ignoreDynamaxReduction: true,
+          });
           globalScene.queueMessage(
             i18next.t("abilityTriggers:badDreams", { pokemonName: getPokemonNameWithAffix(opp) }),
           );

@@ -1,5 +1,5 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import type { StockpilingTag } from "#app/data/battler-tags";
+import type { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
 import { globalScene } from "#app/global-scene";
 import type { MovePhase } from "#app/phases/move-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";

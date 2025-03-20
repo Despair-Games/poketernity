@@ -1,19 +1,19 @@
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { type SubstituteTag } from "#app/data/battler-tags";
+import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import { getPokeballTintColor } from "#app/data/pokeball";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
-import { TrainerSlot } from "#enums/trainer-slot";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { SwitchEffectTransferModifier } from "#app/modifier/modifier";
-import { SwitchType } from "#enums/switch-type";
-import i18next from "i18next";
 import { PostSummonPhase } from "#app/phases/post-summon-phase";
 import { SummonPhase } from "#app/phases/summon-phase";
-import { BattlerTagType } from "#enums/battler-tag-type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
+import { SwitchType } from "#enums/switch-type";
+import { TrainerSlot } from "#enums/trainer-slot";
+import i18next from "i18next";
 
 export class SwitchSummonPhase extends SummonPhase {
   /** @override **Must** use generic {@linkcode PhaseId} since {@linkcode SummonPhase} is extended by other phases */

@@ -18,7 +18,7 @@ import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { type FieldMoveTypePowerBoostAbAttr } from "#app/data/abilities/ab-attrs/field-move-type-power-boost-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { type TypeBoostTag } from "#app/data/battler-tags";
+import { type TypeBoostTag } from "#app/data/battler-tags/type-boost-tag";
 import { IncrementMovePriorityAttr } from "#app/data/moves/move-attrs/increment-move-priority-attr";
 import type { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
 import { MultiHitAttr } from "#app/data/moves/move-attrs/multi-hit-attr";

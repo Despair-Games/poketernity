@@ -1,4 +1,4 @@
-import type { BattlerTag } from "#app/data/battler-tags";
+import type { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 
 /**

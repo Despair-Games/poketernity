@@ -1,4 +1,5 @@
-import { type ShellTrapTag, type StockpilingTag } from "#app/data/battler-tags";
+import type { ShellTrapTag } from "#app/data/battler-tags/shell-trap-tag";
+import type { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
 import { allMoves } from "#app/data/data-lists";
 import { ChargingAttackMove } from "#app/data/moves/charging-attack-move";
 import { ChargingSelfStatusMove } from "#app/data/moves/charging-self-status-move";

@@ -92,16 +92,13 @@ describe("Moves - Present", () => {
     // Force RNG rolls to be maximum, which corresponds to Present healing
     vi.spyOn(player, "randSeedInt").mockImplementation((range: number, min: number = 0) => min + range - 1);
 
-    // Check that enemy never takes positive damage
-    vi.spyOn(enemy, "damage").mockImplementation((damage: number) => {
-      expect(damage).toBe(0);
-      return damage;
-    });
+    vi.spyOn(enemy, "damageAndUpdate");
 
     enemy.hp = 1;
     game.move.use(MoveId.PRESENT);
     await game.toNextTurn();
 
     expect(enemy.hp).toBe(1 + Math.floor(enemy.getMaxHp() / 4));
+    expect(enemy.damageAndUpdate).toHaveBeenCalledTimes(0);
   });
 });

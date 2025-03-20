@@ -1,4 +1,4 @@
-import { StockpilingTag } from "#app/data/battler-tags";
+import { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { PokemonSummonData } from "#app/field/pokemon-summon-data";
 import * as messages from "#app/messages";

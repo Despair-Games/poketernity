@@ -1,16 +1,16 @@
-import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
-import { GameManager } from "#test/test-utils/gameManager";
-import { Species } from "#enums/species";
-import { Abilities } from "#enums/abilities";
-import { MoveId } from "#enums/move-id";
-import { Stat } from "#enums/stat";
-import { allMoves } from "#app/data/data-lists";
 import { EntryHazardTag } from "#app/data/arena-tag";
+import { TrappedTag } from "#app/data/battler-tags/trapped-tag";
+import { allMoves } from "#app/data/data-lists";
+import { Abilities } from "#enums/abilities";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { BattlerIndex } from "#enums/battler-index";
+import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
-import { TrappedTag } from "#app/data/battler-tags";
+import { Species } from "#enums/species";
+import { Stat } from "#enums/stat";
+import { GameManager } from "#test/test-utils/gameManager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
 
 describe("Moves - Protect", () => {
   let phaserGame: Phaser.Game;

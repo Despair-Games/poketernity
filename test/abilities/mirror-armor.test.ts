@@ -1,4 +1,3 @@
-import { allAbilities } from "#app/data/data-lists";
 import { Abilities } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
@@ -6,7 +5,7 @@ import { Species } from "#enums/species";
 import { Stat, type BattleStat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Abilities - Mirror Armor", () => {
   let phaserGame: Phaser.Game;
@@ -169,7 +168,7 @@ describe("Abilities - Mirror Armor", () => {
     await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 
     const enemyPokemon = game.scene.getEnemyField();
-    vi.spyOn(enemyPokemon[0], "getAbility").mockReturnValue(allAbilities[Abilities.MIRROR_ARMOR]);
+    game.field.mockAbility(enemyPokemon[0], Abilities.MIRROR_ARMOR);
 
     const [player] = game.scene.getPlayerField();
 

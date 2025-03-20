@@ -1,14 +1,14 @@
+import type { Move } from "#app/data/moves/move";
+import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 import { type Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { Stat } from "#enums/stat";
 import { ElementalType } from "#enums/elemental-type";
+import { HitResult } from "#enums/hit-result";
+import { Stat } from "#enums/stat";
 import i18next from "i18next";
-import type { Move } from "../move";
-import { MoveEffectAttr } from "./move-effect-attr";
 
 /**
  * Attribute for {@link https://bulbapedia.bulbagarden.net/wiki/Curse_(move) | Curse}
@@ -27,7 +27,12 @@ export class CurseAttr extends MoveEffectAttr {
         return false;
       }
       const curseRecoilDamage = Math.max(1, Math.floor(user.getMaxHp() / 2));
-      user.damageAndUpdate(curseRecoilDamage, HitResult.OTHER, false, true, true);
+      user.damageAndUpdate(curseRecoilDamage, {
+        result: HitResult.OTHER,
+        ignoreSegments: true,
+        preventEndure: true,
+        ignoreDynamaxReduction: true,
+      });
       globalScene.queueMessage(
         i18next.t("battlerTags:cursedOnAdd", {
           pokemonNameWithAffix: getPokemonNameWithAffix(user),
