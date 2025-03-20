@@ -1,15 +1,15 @@
 import type { InfoToggle } from "#app/battle-scene";
+import type { Move } from "#app/data/moves/move";
 import { globalScene } from "#app/global-scene";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { addWindow } from "../ui-theme";
-import { fixedNumber } from "#app/utils";
-import type { Move } from "../../data/moves/move";
-import { MoveCategory } from "#enums/move-category";
-import { ElementalType } from "#enums/elemental-type";
-import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
 import { CANVAS_SCALE, GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { addWindow } from "#app/ui/ui-theme";
+import { fixedNumber } from "#app/utils";
+import { ElementalType } from "#enums/elemental-type";
+import { MoveCategory } from "#enums/move-category";
+import { TextStyle } from "#enums/text-style";
+import i18next from "i18next";
 
 export interface MoveInfoOverlaySettings {
   delayVisibility?: boolean; // if true, showing the overlay will only set it to active and populate the fields and the handler using this field has to manually call setVisible later.
@@ -34,8 +34,6 @@ const BORDER = 8;
 
 export class MoveInfoOverlay extends Phaser.GameObjects.Container implements InfoToggle {
   public override active: boolean = false;
-
-  private move: Move;
 
   private desc: Phaser.GameObjects.Text;
   private descScroll: Phaser.Tweens.Tween | null = null;
@@ -75,7 +73,7 @@ export class MoveInfoOverlay extends Phaser.GameObjects.Container implements Inf
       (options?.onSide && !options?.right ? EFF_WIDTH : 0) + BORDER,
       (options?.top ? EFF_HEIGHT : 0) + BORDER - 2,
       "",
-      TextStyle.BATTLE_INFO,
+      TextStyle.MOVE_INFO_DESCRIPTION,
       {
         lineSpacing: 5,
         wordWrap: {
@@ -170,10 +168,10 @@ export class MoveInfoOverlay extends Phaser.GameObjects.Container implements Inf
 
   // show this component with infos for the specific move
   show(move: Move): boolean {
+    // TODO: I'm not sure the move info should get disabled outside of battle if the setting is disabled
     if (!settings.display.enableMoveInfo) {
-      return false; // move infos have been disabled // TODO:: is `false` correct? i used to be `undeefined`
+      return false; // move infos have been disabled
     }
-    this.move = move;
     this.pow.setText(move.power >= 0 ? move.power.toString() : "---");
     this.acc.setText(move.accuracy >= 0 ? move.accuracy.toString() : "---");
     this.pp.setText(move.pp >= 0 ? move.pp.toString() : "---");
