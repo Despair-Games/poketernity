@@ -991,6 +991,7 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: Mo
     moveTarget = MoveTarget.NEAR_ENEMY;
   }
   const opponents = user.getOpponents();
+  const allyPokemon = user.getAlly();
 
   let set: Pokemon[] = [];
   let targets: BattlerIndex[] | undefined;
@@ -1006,8 +1007,9 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: Mo
     case MoveTarget.DRAGON_DARTS:
     case MoveTarget.ALL_NEAR_OTHERS:
     case MoveTarget.ALL_OTHERS:
-      if (user.getAlly()) {
-        set = opponents.concat([user.getAlly()!]);
+      set = opponents;
+      if (allyPokemon) {
+        set.push(allyPokemon);
       }
       multiple = moveTarget === MoveTarget.ALL_NEAR_OTHERS || moveTarget === MoveTarget.ALL_OTHERS;
       break;
@@ -1024,22 +1026,24 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: Mo
       return { targets: [-1 as BattlerIndex], multiple: false };
     case MoveTarget.NEAR_ALLY:
     case MoveTarget.ALLY:
-      set = [user.getAlly()!];
+      if (allyPokemon) {
+        set.push(allyPokemon);
+      }
       break;
     case MoveTarget.USER_OR_NEAR_ALLY:
     case MoveTarget.USER_AND_ALLIES:
       set = [user];
-      if (user.getAlly()) {
-        set.concat(user.getAlly()!);
+      if (allyPokemon) {
+        set.push(allyPokemon);
       }
       multiple = moveTarget !== MoveTarget.USER_OR_NEAR_ALLY;
       break;
     case MoveTarget.ALL:
       set = [user];
-      if (user.getAlly()) {
-        set.concat([user.getAlly()!]);
+      if (allyPokemon) {
+        set.push(allyPokemon);
       }
-      set.concat(opponents);
+      set.push(...opponents);
       multiple = true;
       break;
     case MoveTarget.USER_SIDE:
@@ -1054,8 +1058,9 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: Mo
       break;
     case MoveTarget.CURSE:
       if (user.getTypes(true).includes(ElementalType.GHOST)) {
-        if (user.getAlly()) {
-          set = opponents.concat([user.getAlly()!]);
+        set = opponents;
+        if (allyPokemon) {
+          set.push(allyPokemon);
         }
       } else {
         set = [user];
