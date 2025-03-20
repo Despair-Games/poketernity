@@ -36,7 +36,12 @@ export class PerishSongTag extends BattlerTag {
       );
     } else {
       // The 2 here is just a number big enough to overcome the G-Max damage reduction
-      pokemon.damageAndUpdate(2 * pokemon.hp, HitResult.ONE_HIT_KO, false, true, true);
+      pokemon.damageAndUpdate(pokemon.hp, {
+        result: HitResult.ONE_HIT_KO,
+        ignoreSegments: true,
+        preventEndure: true,
+        ignoreDynamaxReduction: true,
+      });
     }
 
     return ret;

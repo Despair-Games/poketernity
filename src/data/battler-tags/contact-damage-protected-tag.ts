@@ -39,7 +39,10 @@ export class ContactDamageProtectedTag extends DamageProtectedTag {
 
     if (!simulated && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, null)) {
       if (!attacker.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)) {
-        attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), HitResult.OTHER);
+        attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), {
+          result: HitResult.OTHER,
+          ignoreDynamaxReduction: true,
+        });
       }
     }
     return true;

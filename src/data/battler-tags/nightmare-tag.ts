@@ -51,7 +51,7 @@ export class NightmareTag extends BattlerTag {
       applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
 
       if (!cancelled.value) {
-        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 4));
+        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 4), { ignoreDynamaxReduction: true });
       }
     }
 

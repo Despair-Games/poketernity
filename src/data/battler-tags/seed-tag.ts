@@ -62,7 +62,7 @@ export class SeedTag extends BattlerTag {
             new CommonAnimPhase(source.getBattlerIndex(), pokemon.getBattlerIndex(), CommonAnim.LEECH_SEED),
           );
 
-          const damage = pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
+          const damage = pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8), { ignoreDynamaxReduction: true });
           const reverseDrain = pokemon.hasAbilityWithAttr(AbAttrFlag.REVERSE_DRAIN, false);
 
           globalScene.queuePokemonHeal(true, source.getBattlerIndex(), !reverseDrain ? damage : damage * -1, {

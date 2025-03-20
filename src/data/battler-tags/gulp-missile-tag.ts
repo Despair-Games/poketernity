@@ -5,7 +5,7 @@ import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { BooleanHolder } from "#app/utils";
+import { BooleanHolder, toDmgValue } from "#app/utils";
 import { GulpMissileBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
@@ -47,7 +47,10 @@ export class GulpMissileTag extends BattlerTag {
       applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, attacker, false, cancelled);
 
       if (!cancelled.value) {
-        attacker.damageAndUpdate(Math.max(1, Math.floor(attacker.getMaxHp() / 4)), HitResult.OTHER);
+        attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() / 4), {
+          result: HitResult.OTHER,
+          ignoreDynamaxReduction: true,
+        });
       }
 
       if (this.tagType === BattlerTagType.GULP_MISSILE_ARROKUDA) {

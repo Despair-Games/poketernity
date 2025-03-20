@@ -63,7 +63,10 @@ export class PowderTag extends BattlerTag {
           const cancelDamage = new BooleanHolder(false);
           applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelDamage);
           if (!cancelDamage.value) {
-            pokemon.damageAndUpdate(Math.floor(pokemon.getMaxHp() / 4), HitResult.OTHER);
+            pokemon.damageAndUpdate(Math.floor(pokemon.getMaxHp() / 4), {
+              result: HitResult.OTHER,
+              ignoreDynamaxReduction: true,
+            });
           }
 
           // "When the flame touched the powder\non the Pokémon, it exploded!"
