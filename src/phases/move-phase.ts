@@ -4,6 +4,7 @@ import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { CenterOfAttentionTag } from "#app/data/battler-tags/center-of-attention-tag";
 import type { ImprisoningTag } from "#app/data/battler-tags/imprisoning-tag";
 import type { MagicCoatTag } from "#app/data/battler-tags/magic-coat-tag";
+import type { SnatchTag } from "#app/data/battler-tags/snatch-tag";
 import { applyBattlerTags } from "#app/data/battler-tags/utils/apply-battler-tags";
 import { allMoves } from "#app/data/data-lists";
 import { getMoveTargets, SelfStatusMove } from "#app/data/moves/move";
