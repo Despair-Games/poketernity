@@ -1,10 +1,10 @@
-import { type Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#enums/hit-result";
-import { BooleanHolder } from "#app/utils";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
+import { type Pokemon } from "#app/field/pokemon";
+import { BooleanHolder, toDmgValue } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { HitResult } from "#enums/hit-result";
 
 /**
  * Applies damage to the target's ally equal to 1/16 of that ally's max HP.
@@ -33,7 +33,10 @@ export class FlameBurstAttr extends MoveEffectAttr {
       return false;
     }
 
-    targetAlly.damageAndUpdate(Math.max(1, Math.floor((1 / 16) * targetAlly.getMaxHp())), HitResult.OTHER);
+    targetAlly.damageAndUpdate(toDmgValue((1 / 16) * targetAlly.getMaxHp()), {
+      result: HitResult.OTHER,
+      ignoreDynamaxReduction: true,
+    });
     return true;
   }
 

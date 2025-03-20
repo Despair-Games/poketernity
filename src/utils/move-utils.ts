@@ -23,9 +23,12 @@ export const crashDamageFunc = (user: Pokemon, _move: Move) => {
     return false;
   }
 
-  user.damageAndUpdate(toDmgValue(user.getMaxHp() / 2), HitResult.OTHER, false, true);
+  user.damageAndUpdate(toDmgValue(user.getMaxHp() / 2), {
+    result: HitResult.OTHER,
+    ignoreSegments: true,
+    ignoreDynamaxReduction: true,
+  });
   globalScene.queueMessage(t("moveTriggers:keptGoingAndCrashed", { pokemonName: getPokemonNameWithAffix(user) }));
-  user.turnData.damageTaken += toDmgValue(user.getMaxHp() / 2);
 
   return true;
 };

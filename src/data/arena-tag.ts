@@ -1,4 +1,7 @@
+import { SCREEN_DOUBLES_DMG_FACTOR, SCREEN_SINGLES_DMG_FACTOR } from "#app/constants";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
+import { type SkyDropTag } from "#app/data/battler-tags";
 import { allMoves } from "#app/data/data-lists";
 import type { Arena } from "#app/field/arena";
 import type { Pokemon } from "#app/field/pokemon";
@@ -27,9 +30,6 @@ import { PhaseId } from "#enums/phase-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import i18next from "i18next";
-import { CommonBattleAnim } from "./animations/common-battle-anim";
-import { type SkyDropTag } from "./battler-tags";
-import { SCREEN_DOUBLES_DMG_FACTOR, SCREEN_SINGLES_DMG_FACTOR } from "#app/constants";
 
 export abstract class ArenaTag {
   constructor(
@@ -761,10 +761,7 @@ class SpikesTag extends EntryHazardTag {
         globalScene.queueMessage(
           i18next.t("arenaTag:spikesActivateTrap", { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
         );
-        pokemon.damageAndUpdate(damage, HitResult.OTHER);
-        if (pokemon.turnData) {
-          pokemon.turnData.damageTaken += damage;
-        }
+        pokemon.damageAndUpdate(damage, { result: HitResult.OTHER, ignoreDynamaxReduction: true });
         return true;
       }
     }
@@ -970,10 +967,7 @@ class TypeHazardTag extends EntryHazardTag {
       globalScene.queueMessage(
         i18next.t(this.activateTrapKey, { pokemonNameWithAffix: getPokemonNameWithAffix(pokemon) }),
       );
-      pokemon.damageAndUpdate(damage, HitResult.OTHER);
-      if (pokemon.turnData) {
-        pokemon.turnData.damageTaken += damage;
-      }
+      pokemon.damageAndUpdate(damage, { result: HitResult.OTHER, ignoreDynamaxReduction: true });
       return true;
     }
 
@@ -1254,7 +1248,7 @@ class FireGrassPledgeTag extends ArenaTag {
         globalScene.unshiftPhase(
           new CommonAnimPhase(pokemon.getBattlerIndex(), pokemon.getBattlerIndex(), CommonAnim.MAGMA_STORM),
         );
-        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8));
+        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 8), { ignoreDynamaxReduction: true });
       });
 
     return super.lapse(arena);
@@ -1370,7 +1364,7 @@ export class TypeImmuneDamageOverTimeTag extends ArenaTag {
         globalScene.unshiftPhase(
           new CommonAnimPhase(pokemon.getBattlerIndex(), pokemon.getBattlerIndex(), this.getAnimationForType()),
         );
-        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 6));
+        pokemon.damageAndUpdate(toDmgValue(pokemon.getMaxHp() / 6), { ignoreDynamaxReduction: true });
       });
 
     return super.lapse(arena);

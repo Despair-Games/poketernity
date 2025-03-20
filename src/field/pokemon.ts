@@ -2,11 +2,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type Battle from "#app/battle";
 import type BattleScene from "#app/battle-scene";
+import type { FaintPhase } from "#app/phases/faint-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
 import type { AbilityFilterOptions } from "#app/@types/ability-filter-options";
 import type { AttackMoveResult } from "#app/@types/AttackMoveResult";
+import type { DamageFunctionOptions } from "#app/@types/DamageFunctionOptions";
 import type { StarterMoveset } from "#app/@types/StarterData";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type { AnySound } from "#app/audio-manager";
@@ -3115,78 +3117,103 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   }
 
   /**
-   * Called by damageAndUpdate()
-   * @param damage integer
-   * @param ignoreSegments boolean, not currently used
-   * @param preventEndure  used to update damage if endure or sturdy
-   * @param ignoreFaintPhase  flag on wheter to add FaintPhase if pokemon after applying damage faints
-   * @returns integer representing damage
+   * Deals damage to the pokemon. Called by {@linkcode damageAndUpdate}
+   * @param amount - Amount of damage that should be dealt
+   * @param ignoreSegments - If `true`, ignores the damage gating of boss bars.
+   *   Only used by {@linkcode EnemyPokemon.damage}. Default `false`
+   * @param preventEndure - If `true`, bypasses the effects of Endure and Sturdy.
+   *   Usually set to `true` for indirect damage (weather, statuses, etc). Default `false`
+   * @param ignoreFaintPhase - If `true`, won't push a {@linkcode FaintPhase}. Default `false`
+   * @param ignoreDynamaxReduction - If `true`, dynamax damage reduction will be ignored. Default `false`
+   * @returns The amount of damage actually dealt.
    */
-  damage(
-    damage: number,
-    _ignoreSegments: boolean = false,
-    preventEndure: boolean = false,
-    ignoreFaintPhase: boolean = false,
+  protected damage(
+    amount: number,
+    {
+      preventEndure = false,
+      ignoreFaintPhase = false,
+      ignoreDynamaxReduction = false,
+    }: {
+      ignoreSegments?: boolean;
+      preventEndure?: boolean;
+      ignoreFaintPhase?: boolean;
+      ignoreDynamaxReduction?: boolean;
+    } = {},
   ): number {
     if (this.isFainted()) {
       return 0;
     }
-    const surviveDamage = new BooleanHolder(false);
 
     // Eternatus does not need the damage reduction as its emax form has increased hp/defenses
-    if (this.isMax(false)) {
-      damage = toDmgValue(damage * DYNAMAX_DAMAGE_TAKEN_FACTOR);
+    if (this.isMax(false) && !ignoreDynamaxReduction) {
+      amount = toDmgValue(amount * DYNAMAX_DAMAGE_TAKEN_FACTOR);
     }
 
-    if (!preventEndure && this.hp - damage <= 0) {
+    const surviveDamage = new BooleanHolder(false);
+
+    if (!preventEndure && amount >= this.hp) {
       if (this.hp >= 1 && this.getTag(BattlerTagType.ENDURING)) {
         surviveDamage.value = this.lapseTag(BattlerTagType.ENDURING);
       } else if (this.hp > 1 && this.getTag(BattlerTagType.STURDY)) {
         surviveDamage.value = this.lapseTag(BattlerTagType.STURDY);
       }
+
       if (!surviveDamage.value) {
         globalScene.applyModifiers(SurviveDamageModifier, this.isPlayer(), this, surviveDamage);
       }
+
       if (surviveDamage.value) {
-        damage = this.hp - 1;
+        amount = this.hp - 1;
       }
     }
 
-    damage = Math.min(damage, this.hp);
-    this.hp = this.hp - damage;
+    amount = Math.min(amount, this.hp);
+    this.hp = this.hp - amount;
+    if (this.turnData) {
+      this.turnData.damageTaken += amount;
+    }
     if (this.isFainted() && !ignoreFaintPhase) {
       globalScene.faintBattler(this.getBattlerIndex(), { preventEndure });
     }
-    return damage;
+    return amount;
   }
 
   /**
-   * Called by apply(), given the damage, adds a new DamagePhase and actually updates HP values, etc.
-   * @param damage integer - passed to damage()
-   * @param result an enum if it's super effective, not very, etc.
-   * @param critical boolean if move is a critical hit
-   * @param ignoreSegments boolean, passed to damage() and not used currently
-   * @param preventEndure boolean, ignore endure properties of pokemon, passed to damage()
-   * @param ignoreFaintPhase boolean to ignore adding a FaintPhase, passsed to damage()
-   * @returns integer of damage done
+   * Unshifts a {@linkcode DamageAnimPhase}, deals damage to the pokemon, and updates the battle UI.
+   * @param amount - The amount of damage to be dealt.
+   * @param result - The {@linkcode DamageResult | type of hit} (super effective, etc).
+   *   Passed to the `DamageAnimPhase`. Default {@linkcode HitResult.EFFECTIVE}
+   * @param isCritical - `true` if the move is a critical hit. Default `false`
+   * @param ignoreSegments - If `true`, boss bars are ignored. Only applies to {@linkcode EnemyPokemon}. Default `false`
+   * @param preventEndure - If `true`, bypasses the effects of Endure, Sturdy, etc. Default `false`
+   * @param ignoreFaintPhase - If `true`, doesn't push a {@linkcode FaintPhase}. Default `false`
+   * @param ignoreDynamaxReduction - If `true`, dynamax damage reduction will be ignored. Default `false`
+   * @param source - The source of the damage if it was a {@linkcode Pokemon}. Optional.
+   * @returns The amount of damage actually dealt.
    */
-  damageAndUpdate(
-    damage: number,
-    result?: DamageResult,
-    critical: boolean = false,
-    ignoreSegments: boolean = false,
-    preventEndure: boolean = false,
-    ignoreFaintPhase: boolean = false,
-    source?: Pokemon,
+  public damageAndUpdate(
+    amount: number,
+    {
+      result = HitResult.EFFECTIVE,
+      isCritical = false,
+      ignoreSegments = false,
+      preventEndure = false,
+      ignoreFaintPhase = false,
+      ignoreDynamaxReduction = false,
+      source,
+    }: DamageFunctionOptions = {},
   ): number {
-    const damagePhase = new DamageAnimPhase(this.getBattlerIndex(), damage, result as DamageResult, critical);
+    const damagePhase = new DamageAnimPhase(this.getBattlerIndex(), amount, result, isCritical);
     globalScene.unshiftPhase(damagePhase);
     if (this.switchOutStatus && source) {
-      damage = 0;
+      amount = 0;
     }
-    damage = this.damage(damage, ignoreSegments, preventEndure, ignoreFaintPhase);
+
+    const damage = this.damage(amount, { ignoreSegments, preventEndure, ignoreFaintPhase, ignoreDynamaxReduction });
+
     // Damage amount may have changed, but needed to be queued before calling damage function
     damagePhase.updateAmount(damage);
+
     /**
      * Run PostDamageAbAttr from any source of damage that is not from a multi-hit
      * Multi-hits are handled in move-effect-phase.ts for PostDamageAbAttr
@@ -3194,12 +3221,22 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (!source || source.turnData.hitCount <= 1) {
       applyAbAttrs(AbAttrFlag.POST_DAMAGE, this, false, damage, source);
     }
+
     return damage;
   }
 
-  heal(amount: number): number {
+  /**
+   * Heals a pokemon by the amount specified.
+   * @param amount - The amount of HP to heal.
+   * @param quiet - If `true`, won't display a number above the pokemon. Default `false`
+   * @returns The actual amount of HP healed.
+   */
+  public heal(amount: number, quiet: boolean = false): number {
     const healAmount = Math.min(amount, this.getMaxHp() - this.hp);
     this.hp += healAmount;
+    if (!quiet && this.isOnField()) {
+      globalScene.damageNumberHandler.add(this, amount, HitResult.HEAL);
+    }
     return healAmount;
   }
 
@@ -4993,11 +5030,19 @@ export class EnemyPokemon extends Pokemon {
     return this.bossSegmentIndex;
   }
 
-  override damage(
-    damage: number,
-    ignoreSegments: boolean = false,
-    preventEndure: boolean = false,
-    ignoreFaintPhase: boolean = false,
+  protected override damage(
+    amount: number,
+    {
+      ignoreSegments = false,
+      preventEndure = false,
+      ignoreFaintPhase = false,
+      ignoreDynamaxReduction = false,
+    }: {
+      ignoreSegments?: boolean;
+      preventEndure?: boolean;
+      ignoreFaintPhase?: boolean;
+      ignoreDynamaxReduction?: boolean;
+    } = {},
   ): number {
     if (this.isFainted()) {
       return 0;
@@ -5009,7 +5054,7 @@ export class EnemyPokemon extends Pokemon {
      * Modify the damage with the {@linkcode DYNAMAX_DAMAGE_TAKEN_FACTOR} for the checks
      * involving whether or not HP bars should break
      */
-    damage = this.isMax(false) ? toDmgValue(damage * DYNAMAX_DAMAGE_TAKEN_FACTOR) : damage;
+    amount = this.isMax(false) && !ignoreDynamaxReduction ? toDmgValue(amount * DYNAMAX_DAMAGE_TAKEN_FACTOR) : amount;
 
     if (this.isBoss() && !ignoreSegments) {
       const segmentSize = this.getMaxHp() / this.bossSegments;
@@ -5017,19 +5062,18 @@ export class EnemyPokemon extends Pokemon {
         const hpThreshold = segmentSize * s;
         const roundedHpThreshold = Math.round(hpThreshold);
         if (this.hp >= roundedHpThreshold) {
-          if (this.hp - damage <= roundedHpThreshold) {
+          if (this.hp - amount <= roundedHpThreshold) {
             const hpRemainder = this.hp - roundedHpThreshold;
             let segmentsBypassed = 0;
             while (
               segmentsBypassed < this.bossSegmentIndex
               && this.canBypassBossSegments(segmentsBypassed + 1)
-              && damage - hpRemainder >= Math.round(segmentSize * Math.pow(2, segmentsBypassed + 1))
+              && amount - hpRemainder >= Math.round(segmentSize * Math.pow(2, segmentsBypassed + 1))
             ) {
               segmentsBypassed++;
-              //console.log('damage', damage, 'segment', segmentsBypassed + 1, 'segment size', segmentSize, 'damage needed', Math.round(segmentSize * Math.pow(2, segmentsBypassed + 1)));
             }
 
-            damage = toDmgValue(this.hp - hpThreshold + segmentSize * segmentsBypassed);
+            amount = toDmgValue(this.hp - hpThreshold + segmentSize * segmentsBypassed);
             clearedBossSegmentIndex = s - segmentsBypassed;
           }
           break;
@@ -5042,15 +5086,15 @@ export class EnemyPokemon extends Pokemon {
      * so here we divide by the dynamax damage taken factor and then it will be the proper value
      * when it is multiplied there
      */
-    damage = this.isMax(false) ? toDmgValue(damage / DYNAMAX_DAMAGE_TAKEN_FACTOR) : damage;
+    amount = this.isMax(false) && !ignoreDynamaxReduction ? toDmgValue(amount / DYNAMAX_DAMAGE_TAKEN_FACTOR) : amount;
 
     if (globalScene.currentBattle.isClassicFinalBoss) {
       if (!this.formIndex && this.bossSegmentIndex < 1) {
-        damage = Math.min(damage, this.hp - 1);
+        amount = Math.min(amount, this.hp - 1);
       }
     }
 
-    const ret = super.damage(damage, ignoreSegments, preventEndure, ignoreFaintPhase);
+    const damage = super.damage(amount, { preventEndure, ignoreFaintPhase, ignoreDynamaxReduction });
 
     if (this.isBoss()) {
       if (ignoreSegments) {
@@ -5063,7 +5107,7 @@ export class EnemyPokemon extends Pokemon {
       this.battleInfo.updateBossSegments(this);
     }
 
-    return ret;
+    return damage;
   }
 
   canBypassBossSegments(segmentCount: number = 1): boolean {

@@ -1,5 +1,5 @@
 import type { EncoreTag } from "#app/data/battler-tags";
-import { allAbilities, allMoves } from "#app/data/data-lists";
+import { allMoves } from "#app/data/data-lists";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
@@ -11,7 +11,7 @@ import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
-import { describe, beforeAll, afterEach, beforeEach, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Abilities - Magic Bounce", () => {
   let phaserGame: Phaser.Game;
@@ -211,7 +211,7 @@ describe("Abilities - Magic Bounce", () => {
     const enemy = game.field.getEnemyPokemon();
 
     // Give the player MOLD_BREAKER for this turn to bypass Magic Bounce.
-    vi.spyOn(player, "getAbility").mockReturnValue(allAbilities[Abilities.MOLD_BREAKER]);
+    game.field.mockAbility(player, Abilities.MOLD_BREAKER);
 
     // turn 1
     game.move.use(MoveId.ENCORE);
@@ -246,7 +246,7 @@ describe("Abilities - Magic Bounce", () => {
     await game.toNextTurn();
 
     // Give the player MOLD_BREAKER for this turn to bypass Magic Bounce.
-    vi.spyOn(playerPokemon, "getAbility").mockReturnValue(allAbilities[Abilities.MOLD_BREAKER]);
+    game.field.mockAbility(playerPokemon, Abilities.MOLD_BREAKER);
 
     // turn 2
     game.move.use(MoveId.ENCORE);

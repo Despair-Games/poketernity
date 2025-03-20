@@ -1,4 +1,3 @@
-import { allAbilities } from "#app/data/data-lists";
 import { Abilities } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
@@ -6,7 +5,7 @@ import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Abilities - Lightning Rod", () => {
   let phaserGame: Phaser.Game;
@@ -40,7 +39,7 @@ describe("Abilities - Lightning Rod", () => {
 
     const enemyPokemon = game.scene.getEnemyField();
 
-    vi.spyOn(enemyPokemon[0], "getAbility").mockReturnValue(allAbilities[Abilities.LIGHTNING_ROD]);
+    game.field.mockAbility(enemyPokemon[0], Abilities.LIGHTNING_ROD);
 
     game.move.use(MoveId.THUNDER_SHOCK, 0, BattlerIndex.ENEMY_2);
     game.move.use(MoveId.SPLASH, 1);
@@ -56,7 +55,7 @@ describe("Abilities - Lightning Rod", () => {
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    vi.spyOn(playerPokemon[0], "getAbility").mockReturnValue(allAbilities[Abilities.LIGHTNING_ROD]);
+    game.field.mockAbility(playerPokemon[0], Abilities.LIGHTNING_ROD);
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     game.move.use(MoveId.THUNDER_SHOCK, 0, BattlerIndex.ENEMY);
@@ -78,7 +77,7 @@ describe("Abilities - Lightning Rod", () => {
 
     const enemyPokemon = game.scene.getEnemyField();
 
-    vi.spyOn(enemyPokemon[0], "getAbility").mockReturnValue(allAbilities[Abilities.LIGHTNING_ROD]);
+    game.field.mockAbility(enemyPokemon[0], Abilities.LIGHTNING_ROD);
 
     game.move.use(MoveId.DISCHARGE, 0);
     game.move.use(MoveId.SPLASH, 1);
@@ -96,7 +95,7 @@ describe("Abilities - Lightning Rod", () => {
 
     const enemyPokemon = game.scene.getEnemyField();
 
-    vi.spyOn(enemyPokemon[0], "getAbility").mockReturnValue(allAbilities[Abilities.LIGHTNING_ROD]);
+    game.field.mockAbility(enemyPokemon[0], Abilities.LIGHTNING_ROD);
 
     game.move.use(MoveId.THUNDER_SHOCK, 0, BattlerIndex.ENEMY_2);
     game.move.use(MoveId.SPLASH, 1);

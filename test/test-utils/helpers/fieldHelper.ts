@@ -1,11 +1,16 @@
-import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
-import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
-import { expect } from "vitest";
-// tsdoc imports
+// -- start tsdoc imports --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { type globalScene } from "#app/global-scene";
+// -- end tsdoc imports --
+
+import type { Ability } from "#app/data/abilities/ability";
+import { allAbilities } from "#app/data/data-lists";
+import type { EnemyPokemon, PlayerPokemon, Pokemon } from "#app/field/pokemon";
+import type { Abilities } from "#enums/abilities";
 import type { BattlerIndex } from "#enums/battler-index";
 import { Stat } from "#enums/stat";
+import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
+import { expect, type MockInstance, vi } from "vitest";
 
 /** Helper to manage pokemon */
 export class FieldHelper extends GameManagerHelper {
@@ -56,5 +61,17 @@ export class FieldHelper extends GameManagerHelper {
       .getField(true)
       .sort((pA, pB) => pB.getEffectiveStat(Stat.SPD) - pA.getEffectiveStat(Stat.SPD))
       .map((p) => p.getBattlerIndex());
+  }
+
+  /**
+   * Mocks a pokemon's ability, overriding its existing ability (takes precedence over global overrides)
+   * @param pokemon - The pokemon to mock the ability of
+   * @param ability - The ability to be mocked
+   * @returns A {@linkcode MockInstance} object
+   * @see {@linkcode vi.spyOn}
+   * @see https://vitest.dev/api/mock#mockreturnvalue
+   */
+  public mockAbility(pokemon: Pokemon, ability: Abilities): MockInstance<(baseOnly?: boolean) => Ability> {
+    return vi.spyOn(pokemon, "getAbility").mockReturnValue(allAbilities[ability]);
   }
 }
