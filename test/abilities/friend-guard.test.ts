@@ -1,12 +1,12 @@
+import { allMoves } from "#app/data/data-lists";
+import { Abilities } from "#enums/abilities";
+import { BattlerIndex } from "#enums/battler-index";
+import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { Abilities } from "#enums/abilities";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { BattlerIndex } from "#enums/battler-index";
-import { allAbilities, allMoves } from "#app/data/data-lists";
-import { MoveCategory } from "#enums/move-category";
 
 describe("Moves - Friend Guard", () => {
   let phaserGame: Phaser.Game;
@@ -52,7 +52,7 @@ describe("Moves - Friend Guard", () => {
       Math.floor(player1.getBaseDamage(enemy1, allMoves.get(MoveId.TACKLE), MoveCategory.PHYSICAL)),
     );
 
-    vi.spyOn(player2, "getAbility").mockReturnValue(allAbilities[Abilities.FRIEND_GUARD]);
+    game.field.mockAbility(player2, Abilities.FRIEND_GUARD);
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SPLASH, 1);
@@ -82,7 +82,7 @@ describe("Moves - Friend Guard", () => {
 
     const turn1Damage = spy.mock.results[spy.mock.results.length - 1].value.damage;
 
-    vi.spyOn(player2, "getAbility").mockReturnValue(allAbilities[Abilities.FRIEND_GUARD]);
+    game.field.mockAbility(player2, Abilities.FRIEND_GUARD);
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SPLASH, 1);
@@ -109,7 +109,7 @@ describe("Moves - Friend Guard", () => {
     const turn1Damage = spy.mock.results[spy.mock.results.length - 1].value.damage;
     expect(turn1Damage).toBe(40);
 
-    vi.spyOn(player2, "getAbility").mockReturnValue(allAbilities[Abilities.FRIEND_GUARD]);
+    game.field.mockAbility(player2, Abilities.FRIEND_GUARD);
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SPLASH, 1);

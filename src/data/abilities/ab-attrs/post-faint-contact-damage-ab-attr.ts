@@ -1,14 +1,14 @@
+import { PostFaintAbAttr } from "#app/data/abilities/ab-attrs/post-faint-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { Move } from "#app/data/moves/move";
-import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#enums/hit-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { BooleanHolder, toDmgValue } from "#app/utils";
-import i18next from "i18next";
-import { PostFaintAbAttr } from "./post-faint-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { HitResult } from "#enums/hit-result";
+import { MoveFlags } from "#enums/move-flags";
+import i18next from "i18next";
 
 /**
  * Attribute that damages an attacker for a fraction of its HP if the attacker KO's the user with a contact move.
@@ -50,9 +50,11 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
       }
       if (!simulated) {
         const abilityDamage = toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio));
-        attacker.damageAndUpdate(abilityDamage, HitResult.OTHER, false, false, true);
-        // TODO: This should be handled by `damage()`
-        attacker.turnData.damageTaken += abilityDamage;
+        attacker.damageAndUpdate(abilityDamage, {
+          result: HitResult.OTHER,
+          preventEndure: true,
+          ignoreDynamaxReduction: true,
+        });
       }
       return true;
     }

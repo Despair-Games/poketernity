@@ -1,8 +1,6 @@
-import { type Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#enums/hit-result";
-import { globalScene } from "#app/global-scene";
 import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
+import { type Pokemon } from "#app/field/pokemon";
 
 /**
  * Attribute to split HP evenly between the user and target.
@@ -14,15 +12,11 @@ export class HpSplitAttr extends MoveEffectAttr {
     const hpValue = Math.floor((target.hp + user.hp) / 2);
     [user, target].forEach((p) => {
       if (p.hp < hpValue) {
-        const healing = p.heal(hpValue - p.hp);
-        if (healing) {
-          globalScene.damageNumberHandler.add(p, healing, HitResult.HEAL);
-        }
+        p.heal(hpValue - p.hp);
       } else if (p.hp > hpValue) {
-        const damage = p.damage(p.hp - hpValue, true);
-        if (damage) {
-          globalScene.damageNumberHandler.add(p, damage);
-        }
+        // Neither ignoring nor not ignoring the dynamax damage reduction is correct,
+        // but there's no alternative to picking one of them.
+        p.damageAndUpdate(p.hp - hpValue, { ignoreSegments: true, ignoreDynamaxReduction: true });
       }
       p.updateInfo();
     });

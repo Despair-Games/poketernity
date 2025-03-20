@@ -48,7 +48,6 @@ export class HitHealAttr extends MoveEffectAttr {
         healAmount = 0;
         message = "";
       } else {
-        user.turnData.damageTaken += healAmount;
         healAmount = healAmount * -1;
         message = "";
       }

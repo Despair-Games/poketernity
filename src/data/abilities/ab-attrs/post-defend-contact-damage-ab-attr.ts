@@ -1,12 +1,12 @@
+import { PostDefendAbAttr } from "#app/data/abilities/ab-attrs/post-defend-ab-attr";
 import type { Move } from "#app/data/moves/move";
-import { MoveFlags } from "#enums/move-flags";
 import type { Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#enums/hit-result";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { toDmgValue } from "#app/utils";
-import i18next from "i18next";
-import { PostDefendAbAttr } from "./post-defend-ab-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { HitResult } from "#enums/hit-result";
+import { MoveFlags } from "#enums/move-flags";
+import i18next from "i18next";
 
 export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
   private readonly damageRatio: number;
@@ -23,9 +23,10 @@ export class PostDefendContactDamageAbAttr extends PostDefendAbAttr {
       && move.checkFlag(MoveFlags.MAKES_CONTACT, attacker, pokemon)
       && !attacker.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)
     ) {
-      attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), HitResult.OTHER);
-      // TODO: This should be handled by `damage()`
-      attacker.turnData.damageTaken += toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio));
+      attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), {
+        result: HitResult.OTHER,
+        ignoreDynamaxReduction: true,
+      });
       return true;
     }
 

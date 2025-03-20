@@ -1,28 +1,32 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { type BattlerTag } from "#app/data/battler-tags";
+import { type BattlerTag } from "#app/data/battler-tags/battler-tag";
 import { type MovePhase } from "#app/phases/move-phase";
 import { type GameOverPhase } from "./game-over-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import { type SkyDropTag } from "#app/data/battler-tags";
-import type { BattlerIndex } from "#enums/battler-index";
-import { BattleType } from "#enums/battle-type";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { allMoves } from "#app/data/data-lists";
 import { FRIENDSHIP_LOSS_FROM_FAINT } from "#app/data/balance/starters";
-import { type DestinyBondTag, type GrudgeTag } from "#app/data/battler-tags";
-import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
+import type { DestinyBondTag } from "#app/data/battler-tags/destiny-bond-tag";
+import type { GrudgeTag } from "#app/data/battler-tags/grudge-tag";
+import { type SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
+import { allMoves } from "#app/data/data-lists";
 import { classicFinalBossDialogue } from "#app/data/dialogue";
 import { PostVictoryStatStageChangeAttr } from "#app/data/moves/move-attrs/post-victory-stat-stage-change-attr";
 import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
-import type { Pokemon, EnemyPokemon } from "#app/field/pokemon";
-import { HitResult } from "#enums/hit-result";
+import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonInstantReviveModifier } from "#app/modifier/modifier";
 import { isNullOrUndefined } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { BattleType } from "#enums/battle-type";
+import type { BattlerIndex } from "#enums/battler-index";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { HitResult } from "#enums/hit-result";
+import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
 import { PokemonPhase } from "./abstract-pokemon-phase";
@@ -31,9 +35,6 @@ import { SwitchPhase } from "./switch-phase";
 import { SwitchSummonPhase } from "./switch-summon-phase";
 import { ToggleDoublePositionPhase } from "./toggle-double-position-phase";
 import { VictoryPhase } from "./victory-phase";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { PhaseId } from "#enums/phase-id";
 
 /**
  * Handles the effects of a pokemon fainting:
