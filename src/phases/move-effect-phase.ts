@@ -570,7 +570,7 @@ export class MoveEffectPhase extends HitCheckPhase {
     applyAbAttrs(AbAttrFlag.POST_ATTACK, user, false, target, move);
 
     // Apply Grip Claw's chance to steal an item from the target
-    if (move.isAttackMove()) {
+    if (move.isAttackMove(user, target)) {
       globalScene.applyModifiers(ContactHeldItemTransferChanceModifier, this.isPlayer, user, target);
     }
   }

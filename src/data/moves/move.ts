@@ -253,7 +253,10 @@ export abstract class Move implements Localizable {
     return false;
   }
 
-  isAttackMove(): this is AttackMove {
+  isAttackMove(user?: Pokemon, target?: Pokemon): this is AttackMove {
+    if (user && target) {
+      return [MoveCategory.PHYSICAL, MoveCategory.SPECIAL].includes(user.getMoveCategory(target, this));
+    }
     return this.category === MoveCategory.PHYSICAL || this.category === MoveCategory.SPECIAL;
   }
 
