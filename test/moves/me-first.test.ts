@@ -53,7 +53,7 @@ describe("Moves - Me First", () => {
     expect(tackle.calculateBattlePower).toHaveReturnedWith(40);
   });
 
-  it("should put the user in a frenzy if Outrage is copied", async () => {
+  it("should put the user in a frenzy if a frenzy move is copied", async () => {
     game.override.enemySpecies(Species.BASTIODON);
     await game.classicMode.startBattle([Species.BASTIODON]);
 
