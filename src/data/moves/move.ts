@@ -254,18 +254,18 @@ export abstract class Move implements Localizable {
   }
 
   isAttackMove(user?: Pokemon, target?: Pokemon): this is AttackMove {
-    if (user && target) {
-      return [MoveCategory.PHYSICAL, MoveCategory.SPECIAL].includes(user.getMoveCategory(target, this));
-    }
-    return this.category === MoveCategory.PHYSICAL || this.category === MoveCategory.SPECIAL;
+    const moveCategory = !!user && !!target ? user.getMoveCategory(target, this) : this.category;
+    return moveCategory === MoveCategory.PHYSICAL || moveCategory === MoveCategory.SPECIAL;
   }
 
-  isStatusMove(): this is StatusMove {
-    return this.category === MoveCategory.STATUS;
+  isStatusMove(user?: Pokemon, target?: Pokemon): this is StatusMove {
+    const moveCategory = !!user && !!target ? user.getMoveCategory(target, this) : this.category;
+    return moveCategory === MoveCategory.STATUS;
   }
 
-  isSelfStatusMove(): this is SelfStatusMove {
-    return this.category === MoveCategory.STATUS && this.moveTarget === MoveTarget.USER;
+  isSelfStatusMove(user?: Pokemon, target?: Pokemon): this is SelfStatusMove {
+    const moveCategory = !!user && !!target ? user.getMoveCategory(target, this) : this.category;
+    return moveCategory === MoveCategory.STATUS && this.moveTarget === MoveTarget.USER;
   }
 
   /**
