@@ -757,6 +757,10 @@ export abstract class Move implements Localizable {
 
     applyAbAttrs(AbAttrFlag.MOVE_TYPE_CHANGE, source, true, this, target, undefined, typeChangeMovePowerMultiplier);
 
+    applyMoveAttrs(VariablePowerAttr, source, target, this, power);
+
+    applyAbAttrs(AbAttrFlag.VARIABLE_MOVE_POWER, source, simulated, this, target, power);
+
     const sourceTeraType = source.getTeraType();
     if (
       sourceTeraType !== ElementalType.UNKNOWN
@@ -768,8 +772,6 @@ export abstract class Move implements Localizable {
     ) {
       power.value = 60;
     }
-
-    applyAbAttrs(AbAttrFlag.VARIABLE_MOVE_POWER, source, simulated, this, target, power);
 
     if (source.getAlly()) {
       applyAbAttrs(AbAttrFlag.ALLY_MOVE_CATEGORY_POWER_BOOST, source.getAlly(), simulated, this, target, power);
@@ -802,8 +804,6 @@ export abstract class Move implements Localizable {
     if (typeBoost) {
       power.value *= typeBoost.boostValue;
     }
-
-    applyMoveAttrs(VariablePowerAttr, source, target, this, power);
 
     if (!this.hasAttr(TypelessAttr)) {
       globalScene.arena.applyTags([...WeakenMoveTypeArenaTagTypes], simulated, this.type, power);
