@@ -1,47 +1,51 @@
-import { BattlerIndex } from "#enums/battler-index";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { FOG_ACCURACY_MULTIPLIER } from "#app/constants";
+import type { AllyMoveCategoryPowerBoostAbAttr } from "#app/data/abilities/ab-attrs/ally-move-category-power-boost-ab-attr";
+import type { FieldMoveTypePowerBoostAbAttr } from "#app/data/abilities/ab-attrs/field-move-type-power-boost-ab-attr";
+import type { MoveTypeChangeAbAttr } from "#app/data/abilities/ab-attrs/move-type-change-ab-attr";
+import type { UserFieldMoveTypePowerBoostAbAttr } from "#app/data/abilities/ab-attrs/user-field-move-type-power-boost-ab-attr";
+import type { VariableMovePowerAbAttr } from "#app/data/abilities/ab-attrs/variable-move-power-ab-attr";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import { type TypeBoostTag } from "#app/data/battler-tags/type-boost-tag";
+import { allMoves } from "#app/data/data-lists";
+import type { ChargingAttackMove } from "#app/data/moves/charging-attack-move";
+import type { ChargingSelfStatusMove } from "#app/data/moves/charging-self-status-move";
+import { GMaxPowerAttr } from "#app/data/moves/move-attrs/gmax-power-attr";
+import { IncrementMovePriorityAttr } from "#app/data/moves/move-attrs/increment-move-priority-attr";
+import type { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
+import { MultiHitAttr } from "#app/data/moves/move-attrs/multi-hit-attr";
+import { OneHitKOAccuracyAttr } from "#app/data/moves/move-attrs/one-hit-ko-accuracy-attr";
+import { SacrificialAttr } from "#app/data/moves/move-attrs/sacrificial-attr";
+import { StatStageChangeAttr } from "#app/data/moves/move-attrs/stat-stage-change-attr";
+import { TypelessAttr } from "#app/data/moves/move-attrs/typeless-attr";
+import { UseHigherAttackingStatAttr } from "#app/data/moves/move-attrs/use-higher-attacking-stat-attr";
+import { VariableAccuracyAttr } from "#app/data/moves/move-attrs/variable-accuracy-attr";
+import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
+import { VariableTargetAttr } from "#app/data/moves/move-attrs/variable-target-attr";
+import { MoveCondition } from "#app/data/moves/move-conditions/move-condition";
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";
 import { AttackTypeBoosterModifier } from "#app/modifier/modifier";
 import type { AbstractConstructor, Constructor, nil } from "#app/utils";
 import { BooleanHolder, NumberHolder } from "#app/utils";
-import { Abilities } from "#enums/abilities";
-import { ArenaTagType } from "#enums/arena-tag-type";
 import { WeakenMoveTypeArenaTagTypes } from "#app/utils/arena-tag-type-utils";
+import { applyMoveAttrs } from "#app/utils/move-utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { Abilities } from "#enums/abilities";
+import { ArenaTagSide } from "#enums/arena-tag-side";
+import { ArenaTagType } from "#enums/arena-tag-type";
+import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { ElementalType } from "#enums/elemental-type";
 import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
-import { MoveTarget } from "#enums/move-target";
 import { MoveId } from "#enums/move-id";
-import { ElementalType } from "#enums/elemental-type";
+import { MoveTarget } from "#enums/move-target";
+import type { Species } from "#enums/species";
+import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
-import { type FieldMoveTypePowerBoostAbAttr } from "#app/data/abilities/ab-attrs/field-move-type-power-boost-ab-attr";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { type TypeBoostTag } from "#app/data/battler-tags/type-boost-tag";
-import { IncrementMovePriorityAttr } from "#app/data/moves/move-attrs/increment-move-priority-attr";
-import type { MoveAttr } from "#app/data/moves/move-attrs/move-attr";
-import { MultiHitAttr } from "#app/data/moves/move-attrs/multi-hit-attr";
-import { OneHitKOAccuracyAttr } from "#app/data/moves/move-attrs/one-hit-ko-accuracy-attr";
-import { SacrificialAttr } from "#app/data/moves/move-attrs/sacrificial-attr";
-import { TypelessAttr } from "#app/data/moves/move-attrs/typeless-attr";
-import { VariableAccuracyAttr } from "#app/data/moves/move-attrs/variable-accuracy-attr";
-import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-attr";
-import { VariableTargetAttr } from "#app/data/moves/move-attrs/variable-target-attr";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
-import { MoveCondition } from "#app/data/moves/move-conditions/move-condition";
-import { Stat } from "#enums/stat";
-import { allMoves } from "#app/data/data-lists";
-import { UseHigherAttackingStatAttr } from "#app/data/moves/move-attrs/use-higher-attacking-stat-attr";
-import { GMaxPowerAttr } from "#app/data/moves/move-attrs/gmax-power-attr";
-import type { Species } from "#enums/species";
-import { StatStageChangeAttr } from "#app/data/moves/move-attrs/stat-stage-change-attr";
-import { ArenaTagSide } from "#enums/arena-tag-side";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { applyMoveAttrs } from "#app/utils/move-utils";
-import type { ChargingAttackMove } from "#app/data/moves/charging-attack-move";
-import type { ChargingSelfStatusMove } from "#app/data/moves/charging-self-status-move";
-import { FOG_ACCURACY_MULTIPLIER } from "#app/constants";
 
 export abstract class Move implements Localizable {
   public id: MoveId;
@@ -755,11 +759,19 @@ export abstract class Move implements Localizable {
     const power = new NumberHolder(this.power);
     const typeChangeMovePowerMultiplier = new NumberHolder(1);
 
-    applyAbAttrs(AbAttrFlag.MOVE_TYPE_CHANGE, source, true, this, target, undefined, typeChangeMovePowerMultiplier);
+    applyAbAttrs<MoveTypeChangeAbAttr>(
+      AbAttrFlag.MOVE_TYPE_CHANGE,
+      source,
+      true,
+      this,
+      target,
+      undefined,
+      typeChangeMovePowerMultiplier,
+    );
 
     applyMoveAttrs(VariablePowerAttr, source, target, this, power);
 
-    applyAbAttrs(AbAttrFlag.VARIABLE_MOVE_POWER, source, simulated, this, target, power);
+    applyAbAttrs<VariableMovePowerAbAttr>(AbAttrFlag.VARIABLE_MOVE_POWER, source, simulated, this, target, power);
 
     const sourceTeraType = source.getTeraType();
     if (
@@ -774,7 +786,14 @@ export abstract class Move implements Localizable {
     }
 
     if (source.getAlly()) {
-      applyAbAttrs(AbAttrFlag.ALLY_MOVE_CATEGORY_POWER_BOOST, source.getAlly(), simulated, this, target, power);
+      applyAbAttrs<AllyMoveCategoryPowerBoostAbAttr>(
+        AbAttrFlag.ALLY_MOVE_CATEGORY_POWER_BOOST,
+        source.getAlly(),
+        simulated,
+        this,
+        target,
+        power,
+      );
     }
 
     const fieldAuras = new Set(
@@ -782,7 +801,7 @@ export abstract class Move implements Localizable {
         .getField(true)
         .map(
           (p) =>
-            p.getAbilityAttrs(AbAttrFlag.FIELD_MOVE_TYPE_POWER_BOOST).filter((attr) => {
+            p.getAbilityAttrs<FieldMoveTypePowerBoostAbAttr>(AbAttrFlag.FIELD_MOVE_TYPE_POWER_BOOST).filter((attr) => {
               const condition = attr.getCondition();
               return !condition || condition(p);
             }) as FieldMoveTypePowerBoostAbAttr[],
@@ -795,7 +814,14 @@ export abstract class Move implements Localizable {
 
     const alliedField: Pokemon[] = source.getField();
     alliedField.forEach((p) =>
-      applyAbAttrs(AbAttrFlag.USER_FIELD_MOVE_TYPE_POWER_BOOST, p, simulated, this, target, power),
+      applyAbAttrs<UserFieldMoveTypePowerBoostAbAttr>(
+        AbAttrFlag.USER_FIELD_MOVE_TYPE_POWER_BOOST,
+        p,
+        simulated,
+        this,
+        target,
+        power,
+      ),
     );
 
     power.value *= typeChangeMovePowerMultiplier.value;
