@@ -11,9 +11,9 @@ import i18next from "i18next";
  * with {@link https://bulbapedia.bulbagarden.net/wiki/Snatch_(move) | Snatch}.
  * @extends BattlerTag
  */
-export class SnatchTag extends BattlerTag {
+export class SnatchingTag extends BattlerTag {
   constructor() {
-    super(BattlerTagType.SNATCH, BattlerTagLapseType.TURN_END, 1);
+    super(BattlerTagType.SNATCHING, BattlerTagLapseType.TURN_END, 1);
   }
 
   override onAdd(pokemon: Pokemon) {

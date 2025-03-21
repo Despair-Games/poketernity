@@ -1218,7 +1218,7 @@ export function initMoves() {
     new SelfStatusMove(MoveId.GRUDGE, ElementalType.GHOST, -1, 5, -1, 0, 3)
       .attr(AddBattlerTagAttr, BattlerTagType.GRUDGE, true, { turnCountMin: 1 }),
     new SelfStatusMove(MoveId.SNATCH, ElementalType.DARK, -1, 10, -1, 4, 3)
-      .attr(AddBattlerTagAttr, BattlerTagType.SNATCH, true, { failOnOverlap: true }),
+      .attr(AddBattlerTagAttr, BattlerTagType.SNATCHING, true, { failOnOverlap: true }),
     new AttackMove(MoveId.SECRET_POWER, ElementalType.NORMAL, MoveCategory.PHYSICAL, 70, 100, 20, 30, 0, 3)
       .makesContact(false)
       .attr(SecretPowerAttr),
