@@ -187,8 +187,7 @@ export class MoveEffectPhase extends HitCheckPhase {
       // Moves are logged as a SUCCESS if at least one target was successfully hit
       this.moveHistoryEntry.result = MoveResult.SUCCESS;
     } else {
-      user.turnData.hitCount = 1;
-      user.turnData.hitsLeft = 1;
+      user.stopMultiHit();
 
       // If all targets were missed, log the move as a MISS.
       // Otherwise, log the move as a FAIL.
