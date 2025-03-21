@@ -1,21 +1,22 @@
-import { type EnemyPokemon, type Pokemon } from "#app/field/pokemon";
-import { BooleanHolder, toDmgValue } from "#app/utils";
-import { Abilities } from "#enums/abilities";
-import { SwitchType } from "#enums/switch-type";
-import { PostDamageAbAttr } from "./post-damage-ab-attr";
+import type { ForceSwitchOutImmunityAbAttr } from "#app/data/abilities/ab-attrs/force-switch-out-immunity-ab-attr";
+import { PostDamageAbAttr } from "#app/data/abilities/ab-attrs/post-damage-ab-attr";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { allMoves } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { type EnemyPokemon, type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
-import { BattleType } from "#enums/battle-type";
-import i18next from "i18next";
+import { BooleanHolder, toDmgValue } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { Abilities } from "#enums/abilities";
+import { BattleType } from "#enums/battle-type";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";
+import { SwitchType } from "#enums/switch-type";
+import i18next from "i18next";
 
 /**
  * Ability attribute for forcing a Pokémon to switch out after its health drops below half.
@@ -220,7 +221,12 @@ class ForceSwitchOutHelper {
 
     if (player) {
       const blockedByAbility = new BooleanHolder(false);
-      applyAbAttrs(AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY, pokemon, false, blockedByAbility);
+      applyAbAttrs<ForceSwitchOutImmunityAbAttr>(
+        AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY,
+        pokemon,
+        false,
+        blockedByAbility,
+      );
       return !blockedByAbility.value;
     }
 
@@ -257,7 +263,7 @@ class ForceSwitchOutHelper {
    */
   public getFailedText(target: Pokemon): string | null {
     const blockedByAbility = new BooleanHolder(false);
-    applyAbAttrs(AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY, target, false, blockedByAbility);
+    applyAbAttrs<ForceSwitchOutImmunityAbAttr>(AbAttrFlag.FORCE_SWITCH_OUT_IMMUNITY, target, false, blockedByAbility);
     return blockedByAbility.value
       ? i18next.t("moveTriggers:cannotBeSwitchedOut", { pokemonName: getPokemonNameWithAffix(target) })
       : null;

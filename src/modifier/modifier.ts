@@ -1,30 +1,15 @@
+import type { CommanderAbAttr } from "#app/data/abilities/ab-attrs/commander-ab-attr";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
+import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
 import { getBerryEffectFunc, getBerryPredicate } from "#app/data/berry";
 import { getLevelTotalExp } from "#app/data/exp";
 import { MAX_PER_TYPE_POKEBALLS } from "#app/data/pokeball";
 import { SpeciesFormChangeLapseTeraTrigger, SpeciesFormChangeTeraTrigger } from "#app/data/pokemon-forms";
 import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
-import { type FormChangeItem } from "#enums/form-change-item";
-import { type Pokemon, type PlayerPokemon } from "#app/field/pokemon";
+import { type PlayerPokemon, type Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import Overrides from "#app/overrides";
-import { EvolutionPhase } from "#app/phases/evolution-phase";
-import { LearnMovePhase } from "#app/phases/learn-move-phase";
-import { LearnMoveType } from "#enums/learn-move-type";
-import { LevelUpPhase } from "#app/phases/level-up-phase";
-import { achvs } from "#app/system/achievements";
-import type { VoucherType } from "#enums/voucher-type";
-import { addTextObject } from "#app/ui/text/text-utils";
-import { TextStyle } from "#enums/text-style";
-import { BooleanHolder, hslToHex, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
-import { BerryType } from "#enums/berry-type";
-import type { Nature } from "#enums/nature";
-import type { PokeballType } from "#enums/pokeball";
-import { Species } from "#enums/species";
-import { type PermanentStat, type TempBattleStat, BATTLE_STATS, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
-import { StatusEffect } from "#enums/status-effect";
-import { ElementalType } from "#enums/elemental-type";
-import i18next from "i18next";
 import {
   type AttackTypeBoosterModifierType,
   type DoubleBattleChanceBoosterModifierType,
@@ -37,15 +22,31 @@ import {
   type PokemonFriendshipBoosterModifierType,
   type TerastallizeModifierType,
   type TmModifierType,
-} from "./modifier-type";
+} from "#app/modifier/modifier-type";
+import { modifierTypes } from "#app/modifier/modifier-types";
+import Overrides from "#app/overrides";
+import { EvolutionPhase } from "#app/phases/evolution-phase";
+import { LearnMovePhase } from "#app/phases/learn-move-phase";
+import { LevelUpPhase } from "#app/phases/level-up-phase";
+import { achvs } from "#app/system/achievements";
+import { addTextObject } from "#app/ui/text/text-utils";
+import { BooleanHolder, hslToHex, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
 import { getModifierType } from "#app/utils/modifier-type-utils";
-import { modifierTypes } from "./modifier-types";
-import { ModifierPoolType } from "#enums/modifier-pool-type";
-import { FRIENDSHIP_GAIN_FROM_RARE_CANDY } from "#app/data/balance/starters";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { globalScene } from "#app/global-scene";
-import { BattlerTagType } from "#enums/battler-tag-type";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { BerryType } from "#enums/berry-type";
+import { ElementalType } from "#enums/elemental-type";
+import { type FormChangeItem } from "#enums/form-change-item";
+import { LearnMoveType } from "#enums/learn-move-type";
+import { ModifierPoolType } from "#enums/modifier-pool-type";
+import type { Nature } from "#enums/nature";
+import type { PokeballType } from "#enums/pokeball";
+import { Species } from "#enums/species";
+import { type PermanentStat, type TempBattleStat, BATTLE_STATS, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
+import { StatusEffect } from "#enums/status-effect";
+import { TextStyle } from "#enums/text-style";
+import type { VoucherType } from "#enums/voucher-type";
+import i18next from "i18next";
 
 const iconOverflowIndex = 24;
 
@@ -2071,7 +2072,7 @@ export class PokemonInstantReviveModifier extends PokemonHeldItemModifier {
 
     // Reapply Commander on the Pokemon's side of the field, if applicable
     const field = pokemon.getField();
-    field.forEach((p) => applyAbAttrs(AbAttrFlag.COMMANDER, p, false));
+    field.forEach((p) => applyAbAttrs<CommanderAbAttr>(AbAttrFlag.COMMANDER, p, false));
     return true;
   }
 

@@ -1,15 +1,16 @@
+import type { PostTurnAbAttr } from "#app/data/abilities/ab-attrs/post-turn-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { TurnEndEvent } from "#app/events/battle-scene";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { TurnHealModifier, TurnHeldItemTransferModifier, TurnStatusEffectModifier } from "#app/modifier/modifier";
+import { FieldPhase } from "#app/phases/abstract-field-phase";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
+import { PhaseId } from "#enums/phase-id";
 import { TerrainType } from "#enums/terrain-type";
 import i18next from "i18next";
-import { FieldPhase } from "./abstract-field-phase";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { PhaseId } from "#enums/phase-id";
 
 export class TurnEndPhase extends FieldPhase {
   override readonly id = PhaseId.TURN_END;
@@ -34,7 +35,7 @@ export class TurnEndPhase extends FieldPhase {
             message: i18next.t("battle:turnEndHpRestore", { pokemonName: getPokemonNameWithAffix(pokemon) }),
           });
         }
-        applyAbAttrs(AbAttrFlag.POST_TURN, pokemon, false);
+        applyAbAttrs<PostTurnAbAttr>(AbAttrFlag.POST_TURN, pokemon, false);
       }
 
       globalScene.applyModifiers(TurnStatusEffectModifier, pokemon.isPlayer(), pokemon);

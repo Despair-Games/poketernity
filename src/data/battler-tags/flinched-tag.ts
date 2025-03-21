@@ -1,3 +1,4 @@
+import type { FlinchEffectAbAttr } from "#app/data/abilities/ab-attrs/flinch-effect-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { Pokemon } from "#app/field/pokemon";
@@ -26,7 +27,7 @@ export class FlinchedTag extends BattlerTag {
   override onAdd(pokemon: Pokemon): void {
     super.onAdd(pokemon);
 
-    applyAbAttrs(AbAttrFlag.FLINCH_EFFECT, pokemon, false);
+    applyAbAttrs<FlinchEffectAbAttr>(AbAttrFlag.FLINCH_EFFECT, pokemon, false);
   }
 
   /**

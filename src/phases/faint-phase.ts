@@ -1,11 +1,14 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { type BattlerTag } from "#app/data/battler-tags/battler-tag";
+import { type GameOverPhase } from "#app/phases/game-over-phase";
 import { type MovePhase } from "#app/phases/move-phase";
-import { type GameOverPhase } from "./game-over-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
+import type { PostFaintAbAttr } from "#app/data/abilities/ab-attrs/post-faint-ab-attr";
+import type { PostKnockOutAbAttr } from "#app/data/abilities/ab-attrs/post-knock-out-ab-attr";
+import type { PostVictoryAbAttr } from "#app/data/abilities/ab-attrs/post-victory-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { FRIENDSHIP_LOSS_FROM_FAINT } from "#app/data/balance/starters";
 import type { DestinyBondTag } from "#app/data/battler-tags/destiny-bond-tag";
@@ -19,6 +22,12 @@ import type { EnemyPokemon, Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonInstantReviveModifier } from "#app/modifier/modifier";
+import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
+import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
+import { SwitchPhase } from "#app/phases/switch-phase";
+import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
+import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
+import { VictoryPhase } from "#app/phases/victory-phase";
 import { isNullOrUndefined } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattleType } from "#enums/battle-type";
@@ -29,12 +38,6 @@ import { HitResult } from "#enums/hit-result";
 import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
 import i18next from "i18next";
-import { PokemonPhase } from "./abstract-pokemon-phase";
-import { DamageAnimPhase } from "./damage-anim-phase";
-import { SwitchPhase } from "./switch-phase";
-import { SwitchSummonPhase } from "./switch-summon-phase";
-import { ToggleDoublePositionPhase } from "./toggle-double-position-phase";
-import { VictoryPhase } from "./victory-phase";
 
 /**
  * Handles the effects of a pokemon fainting:
@@ -162,18 +165,24 @@ export class FaintPhase extends PokemonPhase {
 
     if (this.source && pokemon.turnData?.attacksReceived?.length) {
       const lastAttack = pokemon.turnData.attacksReceived[0];
-      applyAbAttrs(AbAttrFlag.POST_FAINT, pokemon, false, this.source, allMoves.get(lastAttack.moveId));
+      applyAbAttrs<PostFaintAbAttr>(
+        AbAttrFlag.POST_FAINT,
+        pokemon,
+        false,
+        this.source,
+        allMoves.get(lastAttack.moveId),
+      );
     } else {
       //If killed by indirect damage, apply post-faint abilities without providing the source of fatal damage
-      applyAbAttrs(AbAttrFlag.POST_FAINT, pokemon, false);
+      applyAbAttrs<PostFaintAbAttr>(AbAttrFlag.POST_FAINT, pokemon, false);
     }
 
     const alivePlayField = globalScene.getField(true);
-    alivePlayField.forEach((p) => applyAbAttrs(AbAttrFlag.POST_KNOCK_OUT, p, false, pokemon));
+    alivePlayField.forEach((p) => applyAbAttrs<PostKnockOutAbAttr>(AbAttrFlag.POST_KNOCK_OUT, p, false, pokemon));
     if (pokemon.turnData?.attacksReceived?.length) {
       const defeatSource = globalScene.getPokemonById(pokemon.turnData.attacksReceived[0].sourceId);
       if (defeatSource?.isOnField()) {
-        applyAbAttrs(AbAttrFlag.POST_VICTORY, defeatSource, false);
+        applyAbAttrs<PostVictoryAbAttr>(AbAttrFlag.POST_VICTORY, defeatSource, false);
         // TODO: Refactor Fell Stinger
         const pvmove = allMoves.get(pokemon.turnData.attacksReceived[0].moveId);
         const pvattrs = pvmove.getAttrs(PostVictoryStatStageChangeAttr);
