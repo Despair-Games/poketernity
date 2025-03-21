@@ -134,8 +134,7 @@ class ForceSwitchOutHelper {
    * @returns `true` if the switch is successful
    */
   public switchOutLogic(switchOutTarget: Pokemon): boolean {
-    const { currentBattle } = globalScene;
-    const { battleType, trainer, waveIndex } = currentBattle;
+    const { battleType, double, trainer, waveIndex } = globalScene.currentBattle;
     /**
      * If the switch-out target is a player-controlled Pokémon, the function checks:
      * - Whether there are available party members to switch in.
@@ -191,7 +190,7 @@ class ForceSwitchOutHelper {
           500,
         );
 
-        if (currentBattle.double && allyPokemon) {
+        if (double && allyPokemon) {
           globalScene.redirectPokemonMoves(switchOutTarget, allyPokemon);
         }
       }

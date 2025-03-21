@@ -3024,10 +3024,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     applyAbFunc(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER, this, simulated, source, move, receivedDamageMultiplier);
 
     /** Additionally apply friend guard damage reduction if ally has it. */
-    if (globalScene.currentBattle.double && this.getAlly()?.isActive(true)) {
+    const allyPokemon = this.getAlly();
+    if (globalScene.currentBattle.double && allyPokemon && allyPokemon.isActive(true)) {
       applyAbFunc(
         AbAttrFlag.ALLIED_FIELD_DAMAGE_REDUCTION,
-        this.getAlly()!,
+        allyPokemon,
         simulated,
         source,
         move,

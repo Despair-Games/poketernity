@@ -36,8 +36,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
   }
 
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
-    const { currentBattle } = globalScene;
-    const { battleType, double, trainer, waveIndex } = currentBattle;
+    const { battleType, double, trainer, waveIndex } = globalScene.currentBattle;
     // Check if the move category is not STATUS or if the switch out condition is not met
     if (!this.getSwitchOutCondition()(user, target, move)) {
       return false;
