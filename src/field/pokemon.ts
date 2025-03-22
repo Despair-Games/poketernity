@@ -137,7 +137,6 @@ import {
   TempCritBoosterModifier,
   TempStatStageBoosterModifier,
   type PokemonHeldItemModifier,
-  type TerastallizeModifier,
 } from "#app/modifier/modifier";
 import Overrides from "#app/overrides";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
@@ -269,6 +268,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public pokerus: boolean;
   public switchOutStatus: boolean;
   public evoCounter: number;
+  public teraType: ElementalType;
+  public terastallized: boolean = false;
 
   private summonDataPrimer: PokemonSummonData | null;
 
@@ -312,6 +313,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     }
 
     this.species = species;
+    // TODO: this should be able to be type2 as well
+    this.teraType = species.type1;
     this.pokeball = dataSource?.pokeball || PokeballType.POKEBALL;
     this.level = level;
     this.switchOutStatus = false;
@@ -469,7 +472,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       ret.setPipeline(globalScene.spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
         hasShadow,
-        teraColor: getTypeRgb(this.getTeraType()),
+        teraColor: getTypeRgb(this.teraType),
       });
       return ret;
     };
@@ -785,7 +788,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   updateSpritePipelineData(): void {
     [this.getSprite(), this.getTintSprite()]
       .filter((s) => !!s)
-      .map((s) => (s.pipelineData["teraColor"] = getTypeRgb(this.getTeraType())));
+      .map((s) => (s.pipelineData["teraColor"] = getTypeRgb(this.teraType)));
     this.updateInfo(true);
   }
 
@@ -1376,15 +1379,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public getTypes(includeTeraType = false, forDefend: boolean = false, baseOnly: boolean = false): ElementalType[] {
     const types: ElementalType[] = [];
 
-    if (includeTeraType) {
-      const teraType = this.getTeraType();
-      if (teraType !== ElementalType.UNKNOWN) {
+    if (includeTeraType && this.terastallized) {
+      const teraType = this.teraType;
         types.push(teraType);
         if (forDefend) {
           return types;
         }
       }
-    }
 
     if (!types.length || !includeTeraType) {
       if (!baseOnly && this.summonData?.types && this.summonData.types.length > 0) {
@@ -1698,26 +1699,6 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return Math.max(minWeight, weight.value);
   }
 
-  /**
-   * @returns the pokemon's current tera {@linkcode ElementalType}, or `Type.UNKNOWN` if the pokemon is not terastallized
-   */
-  public getTeraType(): ElementalType {
-    // I don't think this should be possible anymore, please report if you encounter this. --NightKev
-    if (globalScene === undefined) {
-      console.warn("Pokemon.getTeraType(): Global scene is not defined!");
-      return ElementalType.UNKNOWN;
-    }
-    const teraModifier = globalScene.findModifier(
-      (m) => m.isTerastallizeModifier() && m.pokemonId === this.id && m.getBattlesLeft() > 0,
-      this.isPlayer(),
-    ) as TerastallizeModifier;
-    return teraModifier?.teraType ?? ElementalType.UNKNOWN;
-  }
-
-  public isTerastallized(): boolean {
-    return this.getTeraType() !== ElementalType.UNKNOWN;
-  }
-
   public isGrounded(): boolean {
     // Note: This code is also copied in `GroundedTag.onAdd()`, to check whether or not the Pokemon
     // was grounded before receiving the `GroundedTag`.
@@ -1931,7 +1912,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     move?: Move,
   ): TypeDamageMultiplier {
     if (moveType === ElementalType.STELLAR) {
-      return this.isTerastallized() ? 2 : 1;
+      return this.terastallized ? 2 : 1;
     }
     const types = this.getTypes(true, true);
     const arena = globalScene.arena;
