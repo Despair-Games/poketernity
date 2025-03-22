@@ -490,14 +490,7 @@ export class RunInfoUiHandler extends UiHandler {
     // Determining which Terastallize Modifier belongs to which Pokemon
     // Creates a dictionary {PokemonId: TeraShardType}
     const teraPokemon = {};
-    this.runInfo.enemyModifiers.forEach((m) => {
-      const modifier = m.toModifier(this.modifiersModule[m.className]);
-      if (modifier instanceof Modifier.TerastallizeModifier) {
-        const teraDetails = modifier?.getArgs();
-        const pkmnId = teraDetails[0];
-        teraPokemon[pkmnId] = teraDetails[1];
-      }
-    });
+    // TODO: get tera'd pokemon
 
     // Creates the Pokemon icons + level information and adds it to enemyContainer
     // 2 Rows x 3 Columns
