@@ -1711,7 +1711,7 @@ export default class BattleScene extends SceneBase {
       tone: [0.0, 0.0, 0.0, 0.0],
       hasShadow: hasShadow,
       ignoreOverride: ignoreOverride,
-      teraColor: pokemon ? getTypeRgb(pokemon.getTeraType()) : undefined,
+      teraColor: pokemon ? getTypeRgb(pokemon.teraType) : undefined,
     });
     this.spriteSparkleHandler.add(sprite);
     return sprite;
@@ -2029,13 +2029,8 @@ export default class BattleScene extends SceneBase {
     const soundName = modifier.type.soundName;
     const modifiersToRemove: PersistentModifier[] = [];
     if (modifier.isPersistentModifier()) {
-      if (modifier.isTerastallizeModifier()) {
-        modifiersToRemove.push(
-          ...this.findModifiers((m) => m.isTerastallizeModifier() && m.pokemonId === modifier.pokemonId),
-        );
-      }
       if ((modifier as PersistentModifier).add(this.modifiers, virtual)) {
-        if (modifier.isPokemonFormChangeItemModifier() || modifier.isTerastallizeModifier()) {
+        if (modifier.isPokemonFormChangeItemModifier()) {
           const pokemon = this.getPokemonById(modifier.pokemonId);
           if (pokemon) {
             success = modifier.apply(pokemon, true);
@@ -2103,13 +2098,8 @@ export default class BattleScene extends SceneBase {
 
   addEnemyModifier(modifier: PersistentModifier, ignoreUpdate?: boolean, instant?: boolean): void {
     const modifiersToRemove: PersistentModifier[] = [];
-    if (modifier.isTerastallizeModifier()) {
-      modifiersToRemove.push(
-        ...this.findModifiers((m) => m.isTerastallizeModifier() && m.pokemonId === modifier.pokemonId, false),
-      );
-    }
     if ((modifier as PersistentModifier).add(this.enemyModifiers, false)) {
-      if (modifier.isPokemonFormChangeItemModifier() || modifier.isTerastallizeModifier()) {
+      if (modifier.isPokemonFormChangeItemModifier()) {
         const pokemon = this.getPokemonById(modifier.pokemonId);
         if (pokemon) {
           modifier.apply(pokemon, true);
@@ -2383,7 +2373,7 @@ export default class BattleScene extends SceneBase {
     const modifierIndex = modifiers.indexOf(modifier);
     if (modifierIndex > -1) {
       modifiers.splice(modifierIndex, 1);
-      if (modifier.isPokemonFormChangeItemModifier() || modifier.isTerastallizeModifier()) {
+      if (modifier.isPokemonFormChangeItemModifier()) {
         const pokemon = this.getPokemonById(modifier.pokemonId);
         if (pokemon) {
           modifier.apply(pokemon, false);
@@ -2632,7 +2622,7 @@ export default class BattleScene extends SceneBase {
               name: p.name,
               form: p.getFormKey(),
               types: p.getTypes().map((type) => ElementalType[type]),
-              teraType: p.getTeraType() !== ElementalType.UNKNOWN ? ElementalType[p.getTeraType()] : "",
+              teraType: ElementalType[p.teraType],
               level: p.level,
               currentHP: p.hp,
               maxHP: p.getMaxHp(),
