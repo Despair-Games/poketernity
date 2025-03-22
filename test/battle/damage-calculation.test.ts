@@ -1,6 +1,8 @@
 import { allMoves } from "#app/data/data-lists";
 import { Abilities } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
+import { BattlerIndex } from "#enums/battler-index";
+import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -112,5 +114,71 @@ describe("Battle Mechanics - Damage Calculation", () => {
     } else {
       expect(charizard.hp).toBe(charizard.getMaxHp() / 2);
     }
+  });
+});
+
+describe("Base Power Calculation", () => {
+  let phaserGame: Phaser.Game;
+  let game: GameManager;
+
+  beforeAll(() => {
+    phaserGame = new Phaser.Game({
+      type: Phaser.HEADLESS,
+    });
+  });
+
+  afterEach(() => {
+    game.phaseInterceptor.restoreOg();
+  });
+
+  beforeEach(() => {
+    game = new GameManager(phaserGame);
+    game.override
+      .battleType("single")
+      .enemySpecies(Species.SNORLAX)
+      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyMoveset(MoveId.SPLASH)
+      .startingLevel(100)
+      .enemyLevel(100)
+      .disableCrits();
+  });
+
+  it("calculates move modifiers before ability modifiers", async () => {
+    game.override.ability(Abilities.AERILATE);
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const crushGrip = allMoves.get(MoveId.CRUSH_GRIP);
+    vi.spyOn(crushGrip, "calculateBattlePower");
+
+    game.move.use(MoveId.CRUSH_GRIP);
+    await game.toNextTurn();
+
+    expect(crushGrip.calculateBattlePower).toHaveLastReturnedWith(144);
+  });
+
+  it("calculates Tera power boost after Technician boost", async () => {
+    game.override.ability(Abilities.TECHNICIAN).startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.NORMAL }]);
+    await game.classicMode.startBattle([Species.FEEBAS]);
+
+    const tackle = allMoves.get(MoveId.TACKLE);
+    vi.spyOn(tackle, "calculateBattlePower");
+
+    game.move.use(MoveId.TACKLE);
+    await game.toNextTurn();
+
+    expect(tackle.calculateBattlePower).toHaveLastReturnedWith(60);
+
+    const enemy = game.field.getEnemyPokemon();
+    enemy.heal(1000);
+
+    const wrap = allMoves.get(MoveId.WRAP);
+    vi.spyOn(wrap, "calculateBattlePower");
+
+    game.move.use(MoveId.WRAP);
+    game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
+    await game.move.forceHit();
+    await game.toNextTurn();
+
+    expect(wrap.calculateBattlePower).toHaveLastReturnedWith(60);
   });
 });

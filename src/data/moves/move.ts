@@ -1,9 +1,13 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { FOG_ACCURACY_MULTIPLIER } from "#app/constants";
+import type { AllyMoveCategoryPowerBoostAbAttr } from "#app/data/abilities/ab-attrs/ally-move-category-power-boost-ab-attr";
 import type { ChangeMovePriorityAbAttr } from "#app/data/abilities/ab-attrs/change-move-priority-ab-attr";
-import { type FieldMoveTypePowerBoostAbAttr } from "#app/data/abilities/ab-attrs/field-move-type-power-boost-ab-attr";
+import type { FieldMoveTypePowerBoostAbAttr } from "#app/data/abilities/ab-attrs/field-move-type-power-boost-ab-attr";
 import type { InfiltratorAbAttr } from "#app/data/abilities/ab-attrs/infiltrator-ab-attr";
 import type { MoveAbilityBypassAbAttr } from "#app/data/abilities/ab-attrs/move-ability-bypass-ab-attr";
+import type { MoveTypeChangeAbAttr } from "#app/data/abilities/ab-attrs/move-type-change-ab-attr";
+import type { UserFieldMoveTypePowerBoostAbAttr } from "#app/data/abilities/ab-attrs/user-field-move-type-power-boost-ab-attr";
+import type { VariableMovePowerAbAttr } from "#app/data/abilities/ab-attrs/variable-move-power-ab-attr";
 import type { WonderSkinAbAttr } from "#app/data/abilities/ab-attrs/wonder-skin-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { type TypeBoostTag } from "#app/data/battler-tags/type-boost-tag";
@@ -764,7 +768,19 @@ export abstract class Move implements Localizable {
     const power = new NumberHolder(this.power);
     const typeChangeMovePowerMultiplier = new NumberHolder(1);
 
-    applyAbAttrs(AbAttrFlag.MOVE_TYPE_CHANGE, source, true, this, target, undefined, typeChangeMovePowerMultiplier);
+    applyAbAttrs<MoveTypeChangeAbAttr>(
+      AbAttrFlag.MOVE_TYPE_CHANGE,
+      source,
+      true,
+      this,
+      target,
+      undefined,
+      typeChangeMovePowerMultiplier,
+    );
+
+    applyMoveAttrs(VariablePowerAttr, source, target, this, power);
+
+    applyAbAttrs<VariableMovePowerAbAttr>(AbAttrFlag.VARIABLE_MOVE_POWER, source, simulated, this, target, power);
 
     const sourceTeraType = source.getTeraType();
     if (
@@ -778,10 +794,15 @@ export abstract class Move implements Localizable {
       power.value = 60;
     }
 
-    applyAbAttrs(AbAttrFlag.VARIABLE_MOVE_POWER, source, simulated, this, target, power);
-
     if (source.getAlly()) {
-      applyAbAttrs(AbAttrFlag.ALLY_MOVE_CATEGORY_POWER_BOOST, source.getAlly(), simulated, this, target, power);
+      applyAbAttrs<AllyMoveCategoryPowerBoostAbAttr>(
+        AbAttrFlag.ALLY_MOVE_CATEGORY_POWER_BOOST,
+        source.getAlly(),
+        simulated,
+        this,
+        target,
+        power,
+      );
     }
 
     const fieldAuras = new Set(
@@ -789,7 +810,7 @@ export abstract class Move implements Localizable {
         .getField(true)
         .map(
           (p) =>
-            p.getAbilityAttrs(AbAttrFlag.FIELD_MOVE_TYPE_POWER_BOOST).filter((attr) => {
+            p.getAbilityAttrs<FieldMoveTypePowerBoostAbAttr>(AbAttrFlag.FIELD_MOVE_TYPE_POWER_BOOST).filter((attr) => {
               const condition = attr.getCondition();
               return !condition || condition(p);
             }) as FieldMoveTypePowerBoostAbAttr[],
@@ -802,7 +823,14 @@ export abstract class Move implements Localizable {
 
     const alliedField: Pokemon[] = source.getField();
     alliedField.forEach((p) =>
-      applyAbAttrs(AbAttrFlag.USER_FIELD_MOVE_TYPE_POWER_BOOST, p, simulated, this, target, power),
+      applyAbAttrs<UserFieldMoveTypePowerBoostAbAttr>(
+        AbAttrFlag.USER_FIELD_MOVE_TYPE_POWER_BOOST,
+        p,
+        simulated,
+        this,
+        target,
+        power,
+      ),
     );
 
     power.value *= typeChangeMovePowerMultiplier.value;
@@ -811,8 +839,6 @@ export abstract class Move implements Localizable {
     if (typeBoost) {
       power.value *= typeBoost.boostValue;
     }
-
-    applyMoveAttrs(VariablePowerAttr, source, target, this, power);
 
     if (!this.hasAttr(TypelessAttr)) {
       globalScene.arena.applyTags([...WeakenMoveTypeArenaTagTypes], simulated, this.type, power);
