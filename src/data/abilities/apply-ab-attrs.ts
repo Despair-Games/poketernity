@@ -103,7 +103,7 @@ function applyAbAttrsInternal<TAttr extends AbAttr = never>(
   return messages;
 }
 
-function applyRevealedAbAttrs<TAttr extends AbAttr>(
+function applyRevealedAbAttrs<TAttr extends AbAttr = never>(
   abAttrFlag: AbAttrFlag,
   ...params: Parameters<TAttr["apply"]>
 ): string[] {
