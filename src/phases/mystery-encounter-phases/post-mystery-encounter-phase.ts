@@ -8,11 +8,8 @@ import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-d
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
-import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import { isNullOrUndefined } from "#app/utils";
 import { PhaseId } from "#enums/phase-id";
-import { UiMode } from "#enums/ui-mode";
-
 /**
  * Will handle (in order):
  * - {@linkcode MysteryEncounterOption.onPostOptionPhase} logic (based on an option that was selected)
@@ -78,7 +75,7 @@ export class PostMysteryEncounterPhase extends Phase {
         }
 
         i++;
-        ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+        ui.setMessageMode();
         if (title) {
           ui.showDialogue(text ?? "", title, null, nextAction, 0, i === 1 ? this.FIRST_DIALOGUE_PROMPT_DELAY : 0);
         } else {

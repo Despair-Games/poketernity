@@ -3,7 +3,6 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { settings } from "#app/system/settings/settings-manager";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
-import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type { BattlerIndex } from "#enums/battler-index";
 import { CommonColor } from "#enums/color";
@@ -68,7 +67,7 @@ export class ScanIvsPhase extends PokemonPhase {
         () => {
           const options: ConfirmModeConfig = {
             yesHandler: () => {
-              ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+              ui.setMessageMode();
               ui.clearText();
               new CommonBattleAnim(CommonAnim.LOCK_ON, pokemon, pokemon).play(false, () => {
                 ui.getMessageHandler()
@@ -77,7 +76,7 @@ export class ScanIvsPhase extends PokemonPhase {
               });
             },
             noHandler: () => {
-              ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+              ui.setMessageMode();
               ui.clearText();
               this.end();
             },

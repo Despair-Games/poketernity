@@ -13,7 +13,6 @@ import { FieldPhase } from "#app/phases/abstract-field-phase";
 import type { TurnCommand } from "#app/turn-command-manager";
 import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
 import type { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
-import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import { isNullOrUndefined } from "#app/utils";
 import { MoveLockTagTypes, TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { isFieldTargeted } from "#app/utils/move-utils";
@@ -171,7 +170,7 @@ export class CommandPhase extends FieldPhase {
     };
     const failCatchRun = (i18nKey: string): void => {
       ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
-      ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+      ui.setMessageMode();
       ui.showText(i18next.t(i18nKey), null, () => failCatchRunCallback(), null, true);
     };
 
@@ -237,7 +236,7 @@ export class CommandPhase extends FieldPhase {
           success = true;
         } else if (cursor < pokemon.getMoveset().length) {
           const move = pokemon.getMoveset()[cursor];
-          ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+          ui.setMessageMode();
 
           let errorMessageKey: string;
           if (pokemon.isMoveRestricted(move.moveId, pokemon)) {
@@ -355,7 +354,7 @@ export class CommandPhase extends FieldPhase {
           }
         } else if (trappedAbMessages.length > 0) {
           if (!isSwitch) {
-            ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+            ui.setMessageMode();
           }
           showNoEscapeText(trappedAbMessages[0]);
         } else {
@@ -366,7 +365,7 @@ export class CommandPhase extends FieldPhase {
 
           if (!isSwitch) {
             ui.setMode<CommandUiHandler>(UiMode.COMMAND, this.fieldIndex);
-            ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+            ui.setMessageMode();
           }
 
           const getNoEscapeText = (tag?: TrappedTag | SkyDropTag | FairyLockTag) => {
@@ -412,6 +411,6 @@ export class CommandPhase extends FieldPhase {
   }
 
   public override end(): void {
-    globalScene.ui.setMode<MessageUiHandler>(UiMode.MESSAGE).then(() => super.end());
+    globalScene.ui.setMessageMode().then(() => super.end());
   }
 }

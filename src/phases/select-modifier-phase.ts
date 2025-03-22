@@ -23,7 +23,6 @@ import {
 import Overrides from "#app/overrides";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
-import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { SHOP_OPTIONS_ROW_LIMIT } from "#app/ui/handlers/modifier-select-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
@@ -115,7 +114,7 @@ export class SelectModifierPhase extends BattlePhase {
         const skipRewardConfirmOptions: ConfirmModeConfig = {
           yesHandler: () => {
             ui.revertMode();
-            ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+            ui.setMessageMode();
             super.end();
           },
           noHandler: () => {
@@ -156,7 +155,7 @@ export class SelectModifierPhase extends BattlePhase {
                 );
 
                 ui.clearText();
-                ui.setMode<MessageUiHandler>(UiMode.MESSAGE).then(() => super.end());
+                ui.setMessageMode().then(() => super.end());
 
                 if (!Overrides.WAIVE_SHOP_FEES_OVERRIDE) {
                   globalScene.money -= rerollCost;
@@ -235,7 +234,7 @@ export class SelectModifierPhase extends BattlePhase {
         case 1:
           if (this.typeOptions.length === 0) {
             ui.clearText();
-            ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+            ui.setMessageMode();
             super.end();
             return true;
           }
@@ -289,7 +288,7 @@ export class SelectModifierPhase extends BattlePhase {
           }
         } else {
           ui.clearText();
-          ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+          ui.setMessageMode();
           super.end();
         }
       };

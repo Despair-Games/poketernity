@@ -10,7 +10,6 @@ import { modifierTypes } from "#app/modifier/modifier-types";
 import { Phase } from "#app/phase";
 import { api } from "#app/plugins/api/api";
 import { vouchers } from "#app/system/voucher";
-import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-ui-handler";
 import type { TitleUiHandler } from "#app/ui/handlers/title-ui-handler";
@@ -84,7 +83,7 @@ export class TitlePhase extends Phase {
         handler: () => {
           const setModeAndEnd = (gameMode: GameModes): void => {
             this.gameMode = gameMode;
-            ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+            ui.setMessageMode();
             ui.clearText();
             this.end();
           };
@@ -131,7 +130,7 @@ export class TitlePhase extends Phase {
             );
           } else {
             this.gameMode = GameModes.CLASSIC;
-            ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+            ui.setMessageMode();
             ui.clearText();
             this.end();
           }
@@ -178,7 +177,7 @@ export class TitlePhase extends Phase {
     const { gameData, ui } = globalScene;
 
     globalScene.sessionSlotId = slotId > -1 || !loggedInUser ? slotId : loggedInUser.lastSessionSlot;
-    ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+    ui.setMessageMode();
     ui.resetModeChain();
 
     gameData

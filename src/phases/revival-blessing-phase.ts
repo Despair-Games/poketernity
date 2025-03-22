@@ -3,7 +3,6 @@ import { globalScene } from "#app/global-scene";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-phase";
-import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import { toDmgValue } from "#app/utils";
 import { PartyFilterFainted } from "#app/utils/party-ui-utils";
@@ -64,7 +63,7 @@ export class RevivalBlessingPhase extends BattlePhase {
             }
           }
         }
-        globalScene.ui.setMode<MessageUiHandler>(UiMode.MESSAGE).then(() => this.end());
+        globalScene.ui.setMessageMode().then(() => this.end());
       },
       PartyFilterFainted,
     );

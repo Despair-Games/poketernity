@@ -6,7 +6,6 @@ import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
 import type { LoadingModalUiHandler } from "#app/ui/handlers/loading-modal-ui-handler";
 import type { LoginFormUiHandler } from "#app/ui/handlers/login-form-ui-handler";
-import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import type { RegistrationFormUiHandler } from "#app/ui/handlers/registration-form-ui-handler";
 import { executeIf, getCookie, removeCookie } from "#app/utils";
 import { PhaseId } from "#enums/phase-id";
@@ -113,7 +112,7 @@ export class LoginPhase extends Phase {
           if (success || bypassLogin) {
             this.end();
           } else {
-            ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+            ui.setMessageMode();
             ui.showText(i18next.t("menu:failedToLoadSaveData"));
           }
         });
@@ -122,7 +121,7 @@ export class LoginPhase extends Phase {
   }
 
   public override end(): void {
-    globalScene.ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+    globalScene.ui.setMessageMode();
 
     if (settings.display.playerGender === PlayerGender.UNSET) {
       globalScene.unshiftPhase(new SelectGenderPhase());

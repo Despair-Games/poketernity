@@ -1,7 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
 import { settings } from "#app/system/settings/settings-manager";
-import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { PhaseId } from "#enums/phase-id";
@@ -47,7 +46,7 @@ export class SelectGenderPhase extends Phase {
   }
 
   public override end(): void {
-    globalScene.ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+    globalScene.ui.setMessageMode();
     super.end();
   }
 }

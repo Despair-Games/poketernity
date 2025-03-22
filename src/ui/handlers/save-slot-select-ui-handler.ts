@@ -113,7 +113,7 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
                 this.saveSlotSelectCallback = null;
                 ui.revertMode();
                 ui.showText("", 0);
-                ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+                ui.setMessageMode();
                 originalCallback && originalCallback(cursor);
               };
               if (this.sessionSlots[cursor].hasData) {

@@ -487,6 +487,10 @@ export class UI extends Phaser.GameObjects.Container {
     return this.mode;
   }
 
+  setMessageMode(): Promise<void> {
+    return this.setMode<MessageUiHandler>(UiMode.MESSAGE);
+  }
+
   setMode<THandler extends UiHandler = never>(mode: UiMode, ...args: Parameters<THandler["show"]>): Promise<void> {
     return this.setModeInternal<THandler>(mode, true, false, false, ...args);
   }

@@ -10,7 +10,6 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { UiHandler } from "./abstract-ui-handler";
 import type { CommandUiHandler } from "./command-ui-handler";
-import type { MessageUiHandler } from "./message-ui-handler";
 
 /**
  * TODO: This should extend AbstractOptionSelectUiHandler
@@ -89,7 +88,7 @@ export class BallUiHandler extends UiHandler {
         if (globalScene.pokeballCounts[this.cursor]) {
           if (commandPhase.handleCommand(BattleCommand.BALL, this.cursor)) {
             globalScene.ui.setMode<CommandUiHandler>(UiMode.COMMAND, commandPhase.getFieldIndex());
-            globalScene.ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+            globalScene.ui.setMessageMode();
             success = true;
           }
         } else {

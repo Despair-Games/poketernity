@@ -11,7 +11,6 @@ import { getEncounterText } from "#app/data/mystery-encounters/utils/encounter-d
 import type { OptionSelectSettings } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import type { MysteryEncounterUiHandler } from "#app/ui/handlers/mystery-encounter-ui-handler";
 import { isNullOrUndefined } from "#app/utils";
 import { PhaseId } from "#enums/phase-id";
@@ -131,7 +130,7 @@ export class MysteryEncounterPhase extends Phase {
     const optionSelectDialogue = currentBattle?.mysteryEncounter?.selectedOption?.dialogue;
     if (optionSelectDialogue?.selected && optionSelectDialogue.selected.length > 0) {
       // Handle intermediate dialogue (between player selection event and the onOptionSelect logic)
-      ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+      ui.setMessageMode();
       const selectedDialogue = optionSelectDialogue.selected;
       let i = 0;
       const showNextDialogue = (): void => {
@@ -161,6 +160,6 @@ export class MysteryEncounterPhase extends Phase {
    * Ends phase
    */
   public override end(): void {
-    globalScene.ui.setMode<MessageUiHandler>(UiMode.MESSAGE).then(() => super.end());
+    globalScene.ui.setMessageMode().then(() => super.end());
   }
 }

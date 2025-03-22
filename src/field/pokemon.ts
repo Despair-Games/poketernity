@@ -159,7 +159,6 @@ import { timedEventManager } from "#app/timed-event-manager";
 import type { TurnCommand } from "#app/turn-command-manager";
 import type { BattleInfo } from "#app/ui/components/battle-info";
 import { EnemyBattleInfo, PlayerBattleInfo } from "#app/ui/components/battle-info";
-import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import {
   BooleanHolder,
@@ -4402,7 +4401,7 @@ export class PlayerPokemon extends Pokemon {
               PhaseId.MOVE_END,
             );
           }
-          globalScene.ui.setMode<MessageUiHandler>(UiMode.MESSAGE).then(resolve);
+          globalScene.ui.setMessageMode().then(resolve);
         },
         PartyFilterNonFainted,
       );

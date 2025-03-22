@@ -1,7 +1,6 @@
 import { biomeLinks, getBiomeName } from "#app/data/balance/biomes";
 import { globalScene } from "#app/global-scene";
 import { MapModifier, MoneyInterestModifier } from "#app/modifier/modifier";
-import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { randSeedInt } from "#app/utils";
@@ -65,7 +64,7 @@ export class SelectBiomePhase extends BattlePhase {
           const ret: OptionSelectItem = {
             label: getBiomeName(b),
             handler: () => {
-              ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+              ui.setMessageMode();
               setNextBiome(b);
               return true;
             },

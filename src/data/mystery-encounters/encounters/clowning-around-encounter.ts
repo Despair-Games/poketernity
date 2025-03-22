@@ -27,7 +27,6 @@ import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
-import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import { randSeedInt, randSeedShuffle } from "#app/utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
@@ -422,7 +421,7 @@ async function handleSwapAbility() {
     await showEncounterDialogue(`${namespace}:option.1.apply_ability_dialogue`, `${namespace}:speaker`);
     await showEncounterText(`${namespace}:option.1.apply_ability_message`);
 
-    await globalScene.ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+    await globalScene.ui.setMessageMode();
     await showEncounterText(`${namespace}:option.1.ability_prompt`, null, 500, false);
     displayYesNoOptions(resolve);
   });
@@ -447,11 +446,11 @@ function onYesAbilitySwap(resolve) {
 
     applyAbilityOverrideToPokemon(pokemon, encounter.misc.ability);
     encounter.setDialogueToken("chosenPokemon", pokemon.getNameToRender());
-    globalScene.ui.setMode<MessageUiHandler>(UiMode.MESSAGE).then(() => resolve(true));
+    globalScene.ui.setMessageMode().then(() => resolve(true));
   };
 
   const onPokemonNotSelected = () => {
-    globalScene.ui.setMode<MessageUiHandler>(UiMode.MESSAGE).then(() => {
+    globalScene.ui.setMessageMode().then(() => {
       displayYesNoOptions(resolve);
     });
   };

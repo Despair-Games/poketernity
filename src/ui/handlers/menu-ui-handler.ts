@@ -29,7 +29,6 @@ import type { EggGachaUiHandler } from "./egg-gacha-ui-handler";
 import type { EggListUiHandler } from "./egg-list-ui-handler";
 import type { GameStatsUiHandler } from "./game-stats-ui-handler";
 import type { LoadingModalUiHandler } from "./loading-modal-ui-handler";
-import type { MessageUiHandler } from "./message-ui-handler";
 import { OptionSelectUiHandler } from "./option-select-ui-handler";
 import type { RunHistoryUiHandler } from "./run-history-ui-handler";
 import type { TestDialogueUiHandler } from "./test-dialogue-ui-handler";
@@ -691,7 +690,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
       ui.playSelect();
       ui.revertMode().then((result) => {
         if (!result) {
-          ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
+          ui.setMessageMode();
         }
       });
       return true;
