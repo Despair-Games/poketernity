@@ -6,28 +6,28 @@ import type { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --
 
-import type { Pokemon } from "../field/pokemon";
 import { allMoves } from "#app/data/data-lists";
-import { MoveCategory } from "#enums/move-category";
-import { ElementalType } from "#enums/elemental-type";
-import type { AbstractConstructor, nil } from "#app/utils";
-import { AbilityId } from "#enums/ability-id";
-import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species-id";
-import { getPokemonNameWithAffix } from "#app/messages";
-import i18next from "i18next";
-import { WeatherType } from "#enums/weather-type";
-import { SpeciesFormKey } from "#enums/species-form-key";
-import { globalScene } from "#app/global-scene";
-import { FormChangeItem } from "#enums/form-change-item";
-import { SpeciesFormChangeTrigger } from "#app/data/species-form-change-triggers/species-form-change-trigger";
-import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
+import { MeloettaFormChangePostMoveTrigger } from "#app/data/species-form-change-triggers/meloetta-form-change-post-move-trigger";
+import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
 import { SpeciesFormChangeCompoundTrigger } from "#app/data/species-form-change-triggers/species-form-change-compound-trigger";
 import { SpeciesFormChangeItemTrigger } from "#app/data/species-form-change-triggers/species-form-change-item-trigger";
-import { SpeciesFormChangeActiveTrigger } from "#app/data/species-form-change-triggers/species-form-change-active-trigger";
+import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
 import { SpeciesFormChangeMoveLearnedTrigger } from "#app/data/species-form-change-triggers/species-form-change-move-learned-trigger";
 import { SpeciesFormChangePreMoveTrigger } from "#app/data/species-form-change-triggers/species-form-change-pre-move-trigger";
-import { MeloettaFormChangePostMoveTrigger } from "#app/data/species-form-change-triggers/meloetta-form-change-post-move-trigger";
+import { SpeciesFormChangeTrigger } from "#app/data/species-form-change-triggers/species-form-change-trigger";
+import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import { getPokemonNameWithAffix } from "#app/messages";
+import type { AbstractConstructor, nil } from "#app/utils";
+import { AbilityId } from "#enums/ability-id";
+import { ElementalType } from "#enums/elemental-type";
+import { FormChangeItem } from "#enums/form-change-item";
+import { MoveCategory } from "#enums/move-category";
+import { MoveId } from "#enums/move-id";
+import { SpeciesId } from "#enums/species-id";
+import { SpeciesFormKey } from "#enums/species-form-key";
+import { WeatherType } from "#enums/weather-type";
+import i18next from "i18next";
 
 export type SpeciesFormChangeConditionPredicate = (p: Pokemon) => boolean;
 export type SpeciesFormChangeConditionEnforceFunc = (p: Pokemon) => void;
@@ -169,7 +169,7 @@ export class SpeciesDefaultFormMatchTrigger extends SpeciesFormChangeTrigger {
  */
 export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeTrigger {
   /** The Tera type that triggers the form change */
-  private teraType: ElementalType;
+  private readonly teraType: ElementalType;
 
   constructor(teraType: ElementalType) {
     super();
@@ -182,9 +182,7 @@ export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeTrigger {
    * @returns `true` if the Pokémon can change forms, `false` otherwise
    */
   override canChange(pokemon: Pokemon): boolean {
-    return !!globalScene.findModifier(
-      (m) => m.isTerastallizeModifier() && m.pokemonId === pokemon.id && m.teraType === this.teraType,
-    );
+    return pokemon.terastallized && pokemon.teraType === this.teraType;
   }
 }
 
@@ -195,7 +193,7 @@ export class SpeciesFormChangeTeraTrigger extends SpeciesFormChangeTrigger {
  */
 export class SpeciesFormChangeLapseTeraTrigger extends SpeciesFormChangeTrigger {
   override canChange(pokemon: Pokemon): boolean {
-    return !!globalScene.findModifier((m) => m.isTerastallizeModifier() && m.pokemonId === pokemon.id);
+    return !pokemon.terastallized; // TODO: is this correct?
   }
 }
 
