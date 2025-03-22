@@ -58,6 +58,7 @@ import { TextInterceptor } from "#test/test-utils/TextInterceptor";
 import { AES, enc } from "crypto-js";
 import fs from "fs";
 import { expect, vi } from "vitest";
+import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 
 /**
  * Class to manage the game state and transitions between phases.
@@ -138,7 +139,7 @@ export class GameManager {
    * @param mode - The mode to set.
    */
   setMode(mode: UiMode) {
-    this.scene.ui?.setMode(mode);
+    this.scene.ui?.setMode<UiHandler>(mode);
   }
 
   /**

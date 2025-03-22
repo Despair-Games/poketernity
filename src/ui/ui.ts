@@ -487,26 +487,32 @@ export class UI extends Phaser.GameObjects.Container {
     return this.mode;
   }
 
-  setMode<THandler extends UiHandler>(mode: UiMode, ...args: Parameters<THandler["show"]>): Promise<void> {
+  setMode<THandler extends UiHandler = never>(mode: UiMode, ...args: Parameters<THandler["show"]>): Promise<void> {
     return this.setModeInternal<THandler>(mode, true, false, false, ...args);
   }
 
-  setModeForceTransition<THandler extends UiHandler>(
+  setModeForceTransition<THandler extends UiHandler = never>(
     mode: UiMode,
     ...args: Parameters<THandler["show"]>
   ): Promise<void> {
     return this.setModeInternal<THandler>(mode, true, true, false, ...args);
   }
 
-  setModeWithoutClear<THandler extends UiHandler>(mode: UiMode, ...args: Parameters<THandler["show"]>): Promise<void> {
+  setModeWithoutClear<THandler extends UiHandler = never>(
+    mode: UiMode,
+    ...args: Parameters<THandler["show"]>
+  ): Promise<void> {
     return this.setModeInternal<THandler>(mode, false, false, false, ...args);
   }
 
-  setOverlayMode<THandler extends UiHandler>(mode: UiMode, ...args: Parameters<THandler["show"]>): Promise<void> {
+  setOverlayMode<THandler extends UiHandler = never>(
+    mode: UiMode,
+    ...args: Parameters<THandler["show"]>
+  ): Promise<void> {
     return this.setModeInternal<THandler>(mode, false, false, true, ...args);
   }
 
-  private setModeInternal<THandler extends UiHandler>(
+  private setModeInternal<THandler extends UiHandler = never>(
     mode: UiMode,
     clear: boolean,
     forceTransition: boolean,

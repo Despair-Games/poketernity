@@ -9,15 +9,16 @@ import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import { achvs } from "#app/system/achievements";
+import type { FormChangeSceneUiHandler } from "#app/ui/handlers/form-change-scene-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
-import { UiMode } from "#enums/ui-mode";
 import { fixedNumber } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { PhaseId } from "#enums/phase-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
+import { UiMode } from "#enums/ui-mode";
 import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
 import { EndEvolutionPhase } from "./end-evolution-phase";
 import { LearnMovePhase } from "./learn-move-phase";
-import { PhaseId } from "#enums/phase-id";
 
 /**
  * A phase for handling certain form changes for player Pokemon.
@@ -54,7 +55,7 @@ export class FormChangePhase extends FormChangeBasePhase {
     if (!this.modal) {
       return super.setMode();
     }
-    return globalScene.ui.setOverlayMode(UiMode.FORM_CHANGE_SCENE);
+    return globalScene.ui.setOverlayMode<FormChangeSceneUiHandler>(UiMode.FORM_CHANGE_SCENE);
   }
 
   public override doFormChange(): void {

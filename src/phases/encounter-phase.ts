@@ -39,6 +39,7 @@ import { ToggleDoublePositionPhase } from "#app/phases/toggle-double-position-ph
 import { achvs } from "#app/system/achievements";
 import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
+import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import { randSeedInt, randSeedItem } from "#app/utils";
 import { loadEncounterAnimAssets } from "#app/utils/anim-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -309,7 +310,7 @@ export class EncounterPhase extends BattlePhase {
         });
       }
 
-      ui.setMode(UiMode.MESSAGE).then(() => {
+      ui.setMode<MessageUiHandler>(UiMode.MESSAGE).then(() => {
         if (!this.loaded) {
           // Set weather before session gets saved to ensure it's properly added to session data
           this.trySetWeatherIfNewBiome();

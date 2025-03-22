@@ -1,5 +1,6 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
+import type { GameChallengesUiHandler } from "#app/ui/handlers/challenges-select-ui-handler";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
 
@@ -11,6 +12,6 @@ export class SelectChallengePhase extends Phase {
 
     globalScene.audioManager.playBgm("menu");
 
-    globalScene.ui.setMode(UiMode.CHALLENGE_SELECT);
+    globalScene.ui.setMode<GameChallengesUiHandler>(UiMode.CHALLENGE_SELECT);
   }
 }

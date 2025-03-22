@@ -14,6 +14,8 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { PokemonPhase } from "#app/phases/abstract-pokemon-phase";
 import { VictoryPhase } from "#app/phases/victory-phase";
 import { achvs } from "#app/system/achievements";
+import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
+import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import type { SummaryUiHandler } from "#app/ui/handlers/summary-ui-handler";
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
@@ -324,7 +326,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                       SummaryUiMode.DEFAULT,
                       SummaryUiPage.PROFILE,
                       () => {
-                        ui.setMode(UiMode.MESSAGE).then(() => {
+                        ui.setMode<MessageUiHandler>(UiMode.MESSAGE).then(() => {
                           promptRelease();
                         });
                       },
@@ -341,7 +343,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                       PartyUiMode.RELEASE,
                       this.fieldIndex,
                       (slotIndex: number, _option: PartyOption) => {
-                        ui.setMode(UiMode.MESSAGE).then(() => {
+                        ui.setMode<MessageUiHandler>(UiMode.MESSAGE).then(() => {
                           if (slotIndex < PLAYER_PARTY_MAX_SIZE) {
                             addToParty(slotIndex);
                           } else {
@@ -356,7 +358,7 @@ export class AttemptCapturePhase extends PokemonPhase {
                 {
                   label: i18next.t("menu:no"),
                   handler: () => {
-                    ui.setMode(UiMode.MESSAGE).then(() => {
+                    ui.setMode<MessageUiHandler>(UiMode.MESSAGE).then(() => {
                       removePokemon();
                       end();
                     });
@@ -371,7 +373,7 @@ export class AttemptCapturePhase extends PokemonPhase {
             };
             const promptRelease = (): void => {
               ui.showText(i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }), null, () => {
-                ui.setMode(UiMode.OPTION_SELECT, addToPartyMenuConfig);
+                ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, addToPartyMenuConfig);
               });
             };
             promptRelease();

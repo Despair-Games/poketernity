@@ -1,4 +1,5 @@
 import { globalScene } from "#app/global-scene";
+import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
 import { PartyOption } from "#enums/party-option";
@@ -90,7 +91,7 @@ export class SwitchPhase extends BattlePhase {
           const switchType = option === PartyOption.PASS_BATON ? SwitchType.BATON_PASS : this.switchType;
           globalScene.unshiftPhase(new SwitchSummonPhase(switchType, fieldIndex, slotIndex, this.doReturn));
         }
-        ui.setMode(UiMode.MESSAGE).then(() => super.end());
+        ui.setMode<MessageUiHandler>(UiMode.MESSAGE).then(() => super.end());
       },
       PartyFilterNonFainted,
     );

@@ -170,7 +170,7 @@ export class MysteryEncounterUiHandler extends UiHandler {
             slideInDescription: false,
           };
           globalScene.ui.setMode<PartyUiHandler>(UiMode.PARTY, PartyUiMode.CHECK, -1, () => {
-            globalScene.ui.setMode(UiMode.MYSTERY_ENCOUNTER, overrideSettings);
+            globalScene.ui.setMode<MysteryEncounterUiHandler>(UiMode.MYSTERY_ENCOUNTER, overrideSettings);
             setTimeout(() => {
               this.setCursor(this.viewPartyIndex);
               this.unblockInput();

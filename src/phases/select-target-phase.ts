@@ -1,5 +1,6 @@
 import { allMoves } from "#app/data/data-lists";
 import { globalScene } from "#app/global-scene";
+import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import type { TargetSelectUiHandler } from "#app/ui/handlers/target-select-ui-handler";
 import type { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
@@ -27,7 +28,7 @@ export class SelectTargetPhase extends PokemonPhase {
     const moveId = turnCommand?.turnMove?.move.id ?? MoveId.NONE;
 
     const targetSelectedCallback = (targets: BattlerIndex[]) => {
-      ui.setMode(UiMode.MESSAGE);
+      ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
 
       const user = globalScene.getFieldPokemonByBattlerIndex(this.fieldIndex);
       const firstTarget = globalScene.getFieldPokemonByBattlerIndex(targets[0]);

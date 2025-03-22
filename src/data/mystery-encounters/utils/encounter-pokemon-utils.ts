@@ -22,6 +22,8 @@ import { modifierTypes } from "#app/modifier/modifier-types";
 import { VictoryPhase } from "#app/phases/victory-phase";
 import { achvs } from "#app/system/achievements";
 import { settings } from "#app/system/settings/settings-manager";
+import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
+import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import type { SummaryUiHandler } from "#app/ui/handlers/summary-ui-handler";
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
@@ -703,7 +705,7 @@ export async function catchPokemon(
               {
                 label: i18next.t("partyUiHandler:SUMMARY"),
                 handler: () => {
-                  globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
+                  globalScene.ui.setMode<MessageUiHandler>(UiMode.MESSAGE).then(() => {
                     removePokemon();
                     end();
                   });
@@ -731,7 +733,7 @@ export async function catchPokemon(
                     SummaryUiMode.DEFAULT,
                     SummaryUiPage.PROFILE,
                     () => {
-                      globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
+                      globalScene.ui.setMode<MessageUiHandler>(UiMode.MESSAGE).then(() => {
                         promptRelease();
                       });
                     },
@@ -748,7 +750,7 @@ export async function catchPokemon(
                     PartyUiMode.RELEASE,
                     0,
                     (slotIndex: number, _option: PartyOption) => {
-                      globalScene.ui.setMode(UiMode.MESSAGE).then(() => {
+                      globalScene.ui.setMode<MessageUiHandler>(UiMode.MESSAGE).then(() => {
                         if (slotIndex < 6) {
                           addToParty(slotIndex);
                         } else {
@@ -771,7 +773,7 @@ export async function catchPokemon(
               i18next.t("battle:partyFull", { pokemonName: pokemon.getNameToRender() }),
               null,
               () => {
-                globalScene.ui.setMode(UiMode.OPTION_SELECT, addToPartyMenuConfig);
+                globalScene.ui.setMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, addToPartyMenuConfig);
               },
             );
           };

@@ -43,6 +43,7 @@ import { UiMode } from "#enums/ui-mode";
 import { argbFromRgba } from "@material/material-color-utilities";
 import i18next from "i18next";
 import type { PartyUiHandler } from "./party-ui-handler";
+import type { MessageUiHandler } from "./message-ui-handler";
 
 /** Holds all objects related to an ability for each iteration */
 interface abilityContainer {
@@ -554,7 +555,7 @@ export class SummaryUiHandler extends UiHandler {
           }
 
           if (!fromPartyMode) {
-            ui.setMode(UiMode.MESSAGE);
+            ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
           } else {
             ui.setMode<PartyUiHandler>(UiMode.PARTY);
           }

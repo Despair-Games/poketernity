@@ -1,18 +1,21 @@
 import { updateUserInfo } from "#app/account";
-import { bypassLogin } from "#app/constants";
-import { SESSION_ID_COOKIE } from "#app/constants";
+import { bypassLogin, SESSION_ID_COOKIE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
+import { settings } from "#app/system/settings/settings-manager";
 import { handleTutorial } from "#app/tutorial";
+import type { LoadingModalUiHandler } from "#app/ui/handlers/loading-modal-ui-handler";
+import type { LoginFormUiHandler } from "#app/ui/handlers/login-form-ui-handler";
+import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
+import type { RegistrationFormUiHandler } from "#app/ui/handlers/registration-form-ui-handler";
+import { executeIf, getCookie, removeCookie } from "#app/utils";
+import { PhaseId } from "#enums/phase-id";
+import { PlayerGender } from "#enums/player-gender";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
-import { executeIf, getCookie, removeCookie } from "#app/utils";
 import i18next from "i18next";
 import { SelectGenderPhase } from "./select-gender-phase";
 import { UnavailablePhase } from "./unavailable-phase";
-import { settings } from "#app/system/settings/settings-manager";
-import { PlayerGender } from "#enums/player-gender";
-import { PhaseId } from "#enums/phase-id";
 
 export class LoginPhase extends Phase {
   override readonly id = PhaseId.LOGIN;
@@ -32,7 +35,7 @@ export class LoginPhase extends Phase {
 
     const hasSession = !!getCookie(SESSION_ID_COOKIE);
 
-    ui.setMode(UiMode.LOADING, { buttonActions: [] });
+    ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
     executeIf(bypassLogin || hasSession, updateUserInfo).then((response) => {
       const success = response ? response[0] : false;
       const statusCode = response ? response[1] : null;
@@ -55,7 +58,7 @@ export class LoginPhase extends Phase {
             });
           };
 
-          ui.setMode(UiMode.LOGIN_FORM, {
+          ui.setMode<LoginFormUiHandler>(UiMode.LOGIN_FORM, {
             buttonActions: [
               (): void => {
                 ui.playSelect();
@@ -63,7 +66,7 @@ export class LoginPhase extends Phase {
               },
               (): void => {
                 globalScene.audioManager.playSound("menu_open");
-                ui.setMode(UiMode.REGISTRATION_FORM, {
+                ui.setMode<RegistrationFormUiHandler>(UiMode.REGISTRATION_FORM, {
                   buttonActions: [
                     (): void => {
                       ui.playSelect();
@@ -110,7 +113,7 @@ export class LoginPhase extends Phase {
           if (success || bypassLogin) {
             this.end();
           } else {
-            ui.setMode(UiMode.MESSAGE);
+            ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
             ui.showText(i18next.t("menu:failedToLoadSaveData"));
           }
         });
@@ -119,7 +122,7 @@ export class LoginPhase extends Phase {
   }
 
   public override end(): void {
-    globalScene.ui.setMode(UiMode.MESSAGE);
+    globalScene.ui.setMode<MessageUiHandler>(UiMode.MESSAGE);
 
     if (settings.display.playerGender === PlayerGender.UNSET) {
       globalScene.unshiftPhase(new SelectGenderPhase());

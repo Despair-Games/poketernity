@@ -50,7 +50,7 @@ describe("UI - Transfer Items", () => {
       handler.setCursor(1);
       handler.processInput(Button.ACTION);
 
-      void game.scene.ui.setModeWithoutClear(UiMode.PARTY, PartyUiMode.MODIFIER_TRANSFER);
+      void game.scene.ui.setModeWithoutClear<PartyUiHandler>(UiMode.PARTY, PartyUiMode.MODIFIER_TRANSFER);
     });
 
     await game.phaseInterceptor.to("BattleEndPhase");
