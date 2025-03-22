@@ -786,7 +786,7 @@ export class SummaryUiHandler extends UiHandler {
         if (types.length > 1) {
           profileContainer.add(getTypeIcon(1, types[1]));
         }
-        if (this.pokemon?.isTerastallized()) {
+        if (this.pokemon?.terastallized) {
           profileContainer.add(getTypeIcon(types.length, this.pokemon.getTeraType(), true));
         }
 

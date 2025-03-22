@@ -1380,7 +1380,7 @@ export function initAbilities() {
       .attr(UncopiableAbilityAbAttr)
       .attr(UnswappableAbilityAbAttr)
       .attr(NoTransformAbilityAbAttr)
-      .condition((pokemon) => !pokemon.isTerastallized()),
+      .condition((pokemon) => !pokemon.terastallized),
     new Ability(AbilityId.QUICK_DRAW, 8)
       .attr(BypassSpeedChanceAbAttr, 30),
     new Ability(AbilityId.UNSEEN_FIST, 8)

@@ -44,7 +44,7 @@ describe("Moves - Tera Starstorm", () => {
     game.move.select(MoveId.TERA_STARSTORM);
     await game.toEndOfTurn();
 
-    expect(terapagos.isTerastallized()).toBe(true);
+    expect(terapagos.terastallized).toBe(true);
     expect(terapagos.getMoveType).toHaveReturnedWith(ElementalType.STELLAR);
   });
 
