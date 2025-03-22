@@ -799,7 +799,7 @@ export abstract class Move implements Localizable {
 
     const sourceTeraType = source.teraType;
     if (
-      sourceTeraType !== ElementalType.UNKNOWN
+      source.terastallized
       && sourceTeraType === this.type
       && power.value < 60
       && this.priority <= 0
