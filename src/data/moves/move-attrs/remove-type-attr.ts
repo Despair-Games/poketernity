@@ -23,7 +23,7 @@ export class RemoveTypeAttr extends MoveEffectAttr {
   }
 
   override applyEffect(user: Pokemon, _target: Pokemon, _move: Move): boolean {
-    if (user.terastallized && user.getTeraType() === this.removedType) {
+    if (user.terastallized && user.teraType === this.removedType) {
       // active tera types cannot be removed
       return false;
     }

@@ -334,7 +334,7 @@ export class SummaryUiHandler extends UiHandler {
     } catch (err: unknown) {
       console.error(`Failed to play animation for ${spriteKey}`, err);
     }
-    this.pokemonSprite.setPipelineData("teraColor", getTypeRgb(this.pokemon.getTeraType()));
+    this.pokemonSprite.setPipelineData("teraColor", getTypeRgb(this.pokemon.teraType));
     this.pokemonSprite.setPipelineData("ignoreTimeTint", true);
     this.pokemonSprite.setPipelineData("spriteKey", this.pokemon.getSpriteKey());
     let key = "spriteColors";
@@ -787,7 +787,7 @@ export class SummaryUiHandler extends UiHandler {
           profileContainer.add(getTypeIcon(1, types[1]));
         }
         if (this.pokemon?.terastallized) {
-          profileContainer.add(getTypeIcon(types.length, this.pokemon.getTeraType(), true));
+          profileContainer.add(getTypeIcon(types.length, this.pokemon.teraType, true));
         }
 
         if (this.pokemon?.getLuck()) {

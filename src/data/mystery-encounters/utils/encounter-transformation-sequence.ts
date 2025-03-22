@@ -69,7 +69,7 @@ export function doPokemonTransformationSequence(
       sprite.setPipeline(globalScene.spritePipeline, {
         tone: [0.0, 0.0, 0.0, 0.0],
         hasShadow: false,
-        teraColor: getTypeRgb(previousPokemon.getTeraType()),
+        teraColor: getTypeRgb(previousPokemon.teraType),
       });
       sprite.setPipelineData("ignoreTimeTint", true);
       sprite.setPipelineData("spriteKey", previousPokemon.getSpriteKey());

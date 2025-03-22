@@ -1856,7 +1856,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
       [],
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.GRASS),
+      new SpeciesFormChangeCondition((p) => p.teraType !== ElementalType.GRASS),
     ),
     new SpeciesFormChange(
       SpeciesId.OGERPON,
@@ -1871,7 +1871,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
       [],
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.WATER),
+      new SpeciesFormChangeCondition((p) => p.teraType !== ElementalType.WATER),
     ),
     new SpeciesFormChange(
       SpeciesId.OGERPON,
@@ -1886,7 +1886,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
       [],
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.FIRE),
+      new SpeciesFormChangeCondition((p) => p.teraType !== ElementalType.FIRE),
     ),
     new SpeciesFormChange(
       SpeciesId.OGERPON,
@@ -1901,7 +1901,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
       [],
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.ROCK),
+      new SpeciesFormChangeCondition((p) => p.teraType !== ElementalType.ROCK),
     ),
   ],
   [SpeciesId.TERAPAGOS]: [
@@ -1919,7 +1919,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       new SpeciesFormChangeLapseTeraTrigger(),
       true,
       [],
-      new SpeciesFormChangeCondition((p) => p.getTeraType() !== ElementalType.STELLAR),
+      new SpeciesFormChangeCondition((p) => p.teraType !== ElementalType.STELLAR),
     ),
   ],
   [SpeciesId.GALAR_DARMANITAN]: [

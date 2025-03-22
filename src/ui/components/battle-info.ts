@@ -336,7 +336,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
     this.genderText.setPositionRelative(this.nameText, nameTextWidth, 0);
     setTextColor(this.genderText, getGenderTextStyle(pokemon.gender));
 
-    this.lastTeraType = pokemon.getTeraType();
+    this.lastTeraType = pokemon.teraType;
 
     this.teraIcon.setPositionRelative(this.nameText, nameTextWidth + this.genderText.displayWidth + 1, 2);
     this.teraIcon.setVisible(this.lastTeraType !== ElementalType.UNKNOWN);
@@ -587,7 +587,7 @@ export class BattleInfo extends Phaser.GameObjects.Container {
         this.genderText.setPositionRelative(this.nameText, this.nameText.displayWidth, 0);
       }
 
-      const teraType = pokemon.getTeraType();
+      const teraType = pokemon.teraType;
       const teraTypeUpdated = this.lastTeraType !== teraType;
 
       if (teraTypeUpdated) {
