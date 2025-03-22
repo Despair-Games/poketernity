@@ -10,6 +10,7 @@ import type { PlayerPokemon } from "#app/field/player-pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import type { AbilityId } from "#enums/ability-id";
 import type { BattlerIndex } from "#enums/battler-index";
+import type { ElementalType } from "#enums/elemental-type";
 import { Stat } from "#enums/stat";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
 import { expect, type MockInstance, vi } from "vitest";
@@ -75,5 +76,15 @@ export class FieldHelper extends GameManagerHelper {
    */
   public mockAbility(pokemon: Pokemon, ability: AbilityId): MockInstance<(baseOnly?: boolean) => Ability> {
     return vi.spyOn(pokemon, "getAbility").mockReturnValue(allAbilities[ability]);
+  }
+
+  /**
+   * Forces a pokemon to be terastallized as the specified {@linkcode Type}.
+   * @param pokemon - The pokemon to terastallize
+   * @param teraType - The type to terastallize it as
+   */
+  public forceTera(pokemon: Pokemon, teraType: ElementalType): void {
+    vi.spyOn(pokemon, "terastallized", "get").mockReturnValue(true);
+    vi.spyOn(pokemon, "teraType", "get").mockReturnValue(teraType);
   }
 }
