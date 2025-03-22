@@ -13,7 +13,7 @@ import type { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 import { TerrainType } from "#enums/terrain-type";
 import i18next from "i18next";
-import { isNullOrUndefined } from "util";
+import { isNullOrUndefined } from "#app/utils";
 import Overrides from "#app/overrides";
 
 /**
