@@ -1242,7 +1242,6 @@ export default class BattleScene extends SceneBase {
         onComplete: () => {
           this.clearPhaseQueue();
 
-          this.ui.destroy();
           this.uiContainer.removeAll(true);
           this.field.removeAll(true);
           this.fieldUI.removeAll(true);
