@@ -54,7 +54,6 @@ export class RecoilAttr extends MoveEffectAttr {
       result: HitResult.OTHER,
       ignoreSegments: true,
       preventEndure: true,
-      ignoreDynamaxReduction: this.useHp,
     });
     globalScene.queueMessage(i18next.t("moveTriggers:hitWithRecoil", { pokemonName: getPokemonNameWithAffix(user) }));
 

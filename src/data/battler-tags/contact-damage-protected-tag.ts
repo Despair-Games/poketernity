@@ -41,7 +41,6 @@ export class ContactDamageProtectedTag extends DamageProtectedTag {
       if (!attacker.hasAbilityWithAttr(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE)) {
         attacker.damageAndUpdate(toDmgValue(attacker.getMaxHp() * (1 / this.damageRatio)), {
           result: HitResult.OTHER,
-          ignoreDynamaxReduction: true,
         });
       }
     }

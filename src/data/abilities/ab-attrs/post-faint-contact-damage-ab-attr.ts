@@ -55,7 +55,6 @@ export class PostFaintContactDamageAbAttr extends PostFaintAbAttr {
         attacker.damageAndUpdate(abilityDamage, {
           result: HitResult.OTHER,
           preventEndure: true,
-          ignoreDynamaxReduction: true,
         });
       }
       return true;
