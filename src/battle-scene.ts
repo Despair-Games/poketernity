@@ -1236,9 +1236,6 @@ export default class BattleScene extends SceneBase {
     }
 
     if (clearScene) {
-      // Reload variant data in case sprite set has changed
-      this.initVariantData();
-
       this.audioManager.fadeOutBgm(250, false);
       this.tweens.add({
         targets: [this.uiContainer],
