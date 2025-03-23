@@ -433,7 +433,6 @@ export class Arena {
     } else {
       globalScene.queueMessage(getWeatherClearMessage(oldWeatherType) ?? "");
       this.weather = null;
-      this.triggerWeatherBasedFormChangesToNormal();
     }
 
     this.eventTarget.dispatchEvent(new WeatherChangedEvent(oldWeatherType, newWeatherType, newWeatherDuration));
