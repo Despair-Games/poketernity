@@ -10,4 +10,5 @@ export enum HitResult {
   MISS,
   OTHER,
   IMMUNE,
+  SELF_KO,
 }
