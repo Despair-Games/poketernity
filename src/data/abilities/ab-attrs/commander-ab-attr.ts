@@ -6,7 +6,7 @@ import { MoveId } from "#enums/move-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
 import { Species } from "#enums/species";
 import { AbAttr } from "./ab-attr";
-import { type SkyDropTag } from "#app/data/battler-tags";
+import { type SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import type { MovePhase } from "#app/phases/move-phase";
 import { PhaseId } from "#enums/phase-id";

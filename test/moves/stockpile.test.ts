@@ -1,15 +1,15 @@
-import { Stat } from "#enums/stat";
-import { type StockpilingTag } from "#app/data/battler-tags";
-import { MoveResult } from "#enums/move-result";
+import type { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
 import { CommandPhase } from "#app/phases/command-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
 import { Abilities } from "#enums/abilities";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
 import { Species } from "#enums/species";
+import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { BattlerTagType } from "#enums/battler-tag-type";
 
 describe("Moves - Stockpile", () => {
   describe("integration tests", () => {

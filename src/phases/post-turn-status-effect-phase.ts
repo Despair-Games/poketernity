@@ -1,3 +1,7 @@
+import type { BlockNonDirectDamageAbAttr } from "#app/data/abilities/ab-attrs/block-non-direct-damage-ab-attr";
+import type { BlockStatusDamageAbAttr } from "#app/data/abilities/ab-attrs/block-status-damage-ab-attr";
+import type { PostDamageAbAttr } from "#app/data/abilities/ab-attrs/post-damage-ab-attr";
+import type { ReduceBurnDamageAbAttr } from "#app/data/abilities/ab-attrs/reduce-burn-damage-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { CommonBattleAnim } from "#app/data/animations/common-battle-anim";
 import { getStatusEffectActivationText } from "#app/data/status-effect";
@@ -31,8 +35,8 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
     pokemon.status!.incrementTurn();
 
     const cancelled = new BooleanHolder(false);
-    applyAbAttrs(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
-    applyAbAttrs(AbAttrFlag.BLOCK_STATUS_DAMAGE, pokemon, false, cancelled);
+    applyAbAttrs<BlockNonDirectDamageAbAttr>(AbAttrFlag.BLOCK_NON_DIRECT_DAMAGE, pokemon, false, cancelled);
+    applyAbAttrs<BlockStatusDamageAbAttr>(AbAttrFlag.BLOCK_STATUS_DAMAGE, pokemon, false, cancelled);
 
     if (cancelled.value) {
       return this.end();
@@ -52,14 +56,14 @@ export class PostTurnStatusEffectPhase extends PokemonPhase {
         break;
       case StatusEffect.BURN:
         damage.value = pokemon.getMaxHp() / 16;
-        applyAbAttrs(AbAttrFlag.REDUCE_BURN_DAMAGE, pokemon, false, damage);
+        applyAbAttrs<ReduceBurnDamageAbAttr>(AbAttrFlag.REDUCE_BURN_DAMAGE, pokemon, false, damage);
         break;
     }
 
     if (damage.value) {
       // Set preventEndure flag to avoid pokemon surviving thanks to focus band, sturdy, endure ...
       pokemon.damageAndUpdate(toDmgValue(damage.value), { preventEndure: true });
-      applyAbAttrs(AbAttrFlag.POST_DAMAGE, pokemon, false, damage.value);
+      applyAbAttrs<PostDamageAbAttr>(AbAttrFlag.POST_DAMAGE, pokemon, false, damage.value);
     }
 
     // TODO: this should be handled by some sort of animation manager instead of instantiating a new `CommonBattleAnim` class

@@ -1,10 +1,15 @@
-import { BattlerIndex } from "#enums/battler-index";
+import type { PokemonTypeChangeAbAttr } from "#app/data/abilities/ab-attrs/pokemon-type-change-ab-attr";
+import type { PostMoveUsedAbAttr } from "#app/data/abilities/ab-attrs/post-move-used-ab-attr";
+import type { RedirectMoveAbAttr } from "#app/data/abilities/ab-attrs/redirect-move-ab-attr";
+import type { ReduceSleepDurationAbAttr } from "#app/data/abilities/ab-attrs/reduce-sleep-duration-ab-attr";
+import type { ReflectMovesAbAttr } from "#app/data/abilities/ab-attrs/reflect-moves-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import type { CenterOfAttentionTag } from "#app/data/battler-tags/center-of-attention-tag";
+import type { ImprisoningTag } from "#app/data/battler-tags/imprisoning-tag";
+import type { MagicCoatTag } from "#app/data/battler-tags/magic-coat-tag";
+import { applyBattlerTags } from "#app/data/battler-tags/utils/apply-battler-tags";
 import { allMoves } from "#app/data/data-lists";
-import { CommonAnim } from "#enums/common-anim";
-import type { ImprisoningTag, MagicCoatTag, CenterOfAttentionTag } from "#app/data/battler-tags";
-import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
-import { applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
+import { getMoveTargets, SelfStatusMove } from "#app/data/moves/move";
 import { BypassRedirectAttr } from "#app/data/moves/move-attrs/bypass-redirect-attr";
 import { BypassSleepAttr } from "#app/data/moves/move-attrs/bypass-sleep-attr";
 import { CopycatAttr } from "#app/data/moves/move-attrs/copycat-attr";
@@ -16,7 +21,6 @@ import { getTerrainBlockMessage } from "#app/data/terrain";
 import { MoveUsedEvent } from "#app/events/battle-scene";
 import { type Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
-import { MoveResult } from "#enums/move-result";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import Overrides from "#app/overrides";
@@ -26,20 +30,21 @@ import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils";
+import { applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { Abilities } from "#enums/abilities";
+import { BattlerIndex } from "#enums/battler-index";
+import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
+import { CommonAnim } from "#enums/common-anim";
+import { ElementalType } from "#enums/elemental-type";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
-import { StatusEffect } from "#enums/status-effect";
-import { ElementalType } from "#enums/elemental-type";
-import i18next from "i18next";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { MoveResult } from "#enums/move-result";
 import { PhaseId } from "#enums/phase-id";
-import { getMoveTargets, SelfStatusMove } from "#app/data/moves/move";
+import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
-import { applyBattlerTags } from "#app/data/apply-battler-tags";
-import type { RedirectMoveAbAttr } from "#app/data/abilities/ab-attrs/redirect-move-ab-attr";
-import type { ReflectMovesAbAttr } from "#app/data/abilities/ab-attrs/reflect-moves-ab-attr";
+import i18next from "i18next";
 
 /**
  * Resolves the following:
@@ -257,7 +262,13 @@ export class MovePhase extends BattlePhase {
         case StatusEffect.SLEEP:
           applyMoveAttrs(BypassSleepAttr, this.pokemon, null, this.move.getMove());
           const turnsRemaining = new NumberHolder(this.pokemon.status!.sleepTurnsRemaining ?? 0);
-          applyAbAttrs(AbAttrFlag.REDUCE_SLEEP_DURATION, this.pokemon, false, statusEffect, turnsRemaining);
+          applyAbAttrs<ReduceSleepDurationAbAttr>(
+            AbAttrFlag.REDUCE_SLEEP_DURATION,
+            this.pokemon,
+            false,
+            statusEffect,
+            turnsRemaining,
+          );
           if (Overrides.STATUS_ACTIVATION_OVERRIDE === true) {
             turnsRemaining.value = Math.max(turnsRemaining.value, 1);
           } else if (Overrides.STATUS_ACTIVATION_OVERRIDE === false) {
@@ -478,12 +489,12 @@ export class MovePhase extends BattlePhase {
      * if the move fails.
      */
     if (success) {
-      applyAbAttrs(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
+      applyAbAttrs<PokemonTypeChangeAbAttr>(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
       this.showPreMoveMessages();
       globalScene.unshiftPhase(new MoveEffectPhase(this.pokemon.getBattlerIndex(), this.targets, this.move));
     } else {
       if ([MoveId.ROAR, MoveId.WHIRLWIND, MoveId.TRICK_OR_TREAT, MoveId.FORESTS_CURSE].includes(this.move.moveId)) {
-        applyAbAttrs(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
+        applyAbAttrs<PokemonTypeChangeAbAttr>(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
       }
 
       this.pokemon.pushMoveHistory({
@@ -521,7 +532,14 @@ export class MovePhase extends BattlePhase {
     // Note that the `!this.followUp` check here prevents an infinite Dancer loop.
     if (this.move.getMove().hasFlag(MoveFlags.DANCE_MOVE) && !this.followUp) {
       globalScene.getField(true).forEach((pokemon) => {
-        applyAbAttrs(AbAttrFlag.POST_MOVE_USED, pokemon, false, this.move, this.pokemon, this.targets);
+        applyAbAttrs<PostMoveUsedAbAttr>(
+          AbAttrFlag.POST_MOVE_USED,
+          pokemon,
+          false,
+          this.move,
+          this.pokemon,
+          this.targets,
+        );
       });
     }
   }
@@ -535,7 +553,7 @@ export class MovePhase extends BattlePhase {
       this.updateLastMoveId(true);
 
       // Protean and Libero apply on the charging turn of charge moves
-      applyAbAttrs(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
+      applyAbAttrs<PokemonTypeChangeAbAttr>(AbAttrFlag.POKEMON_TYPE_CHANGE, this.pokemon, false, this.move.getMove());
 
       globalScene.chargeMove(this.pokemon.getBattlerIndex(), this.targets, this.move);
     } else {
