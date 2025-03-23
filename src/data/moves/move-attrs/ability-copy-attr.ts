@@ -35,7 +35,7 @@ export class AbilityCopyAttr extends MoveEffectAttr {
     );
 
     const allyPokemon = user.getAlly();
-    if (this.copyToPartner && globalScene.currentBattle?.double && allyPokemon?.hp) {
+    if (this.copyToPartner && globalScene.currentBattle?.double && allyPokemon?.isActive(true)) {
       allyPokemon.summonData.ability = target.getAbility().id;
       globalScene.queueMessage(
         i18next.t("moveTriggers:copiedTargetAbility", {

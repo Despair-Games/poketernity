@@ -794,10 +794,11 @@ export abstract class Move implements Localizable {
       power.value = 60;
     }
 
-    if (source.getAlly()) {
+    const allyPokemon = source.getAlly();
+    if (allyPokemon) {
       applyAbAttrs<AllyMoveCategoryPowerBoostAbAttr>(
         AbAttrFlag.ALLY_MOVE_CATEGORY_POWER_BOOST,
-        source.getAlly()!,
+        allyPokemon,
         simulated,
         this,
         target,
