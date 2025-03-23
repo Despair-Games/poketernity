@@ -22,6 +22,7 @@ import {
   DayEvolutionCondition,
   MoveKnownEvoCondition,
   TypeKnownEvoCondition,
+  BabySpeciesFriendshipEvolutionCondition,
 } from "#app/data/pokemon-evolutions";
 import { ElementalType } from "#enums/elemental-type";
 
@@ -49,7 +50,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "partner",
       1,
       null,
-      [new SpeciesFriendshipEvolutionCondition(90)],
+      [new BabySpeciesFriendshipEvolutionCondition()],
       BABY_HAPPINESS_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -58,7 +59,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      [new SpeciesFriendshipEvolutionCondition(90)],
+      [new BabySpeciesFriendshipEvolutionCondition()],
       BABY_HAPPINESS_EVO_LEVEL,
     ),
   ],
@@ -100,7 +101,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.CLEFAIRY,
       1,
       null,
-      [new SpeciesFriendshipEvolutionCondition(70)],
+      [new BabySpeciesFriendshipEvolutionCondition()],
       BABY_HAPPINESS_EVO_LEVEL,
     ),
   ],
@@ -117,7 +118,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.JIGGLYPUFF,
       1,
       null,
-      [new SpeciesFriendshipEvolutionCondition(70)],
+      [new BabySpeciesFriendshipEvolutionCondition()],
       BABY_HAPPINESS_EVO_LEVEL,
     ),
   ],
@@ -126,7 +127,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   ],
   [Species.ZUBAT]: [new SpeciesEvolution(Species.GOLBAT, 22, null, null)],
   [Species.GOLBAT]: [
-    new SpeciesEvolution(Species.CROBAT, 1, null, [new SpeciesFriendshipEvolutionCondition(120)], HAPPINESS_EVO_LEVEL),
+    new SpeciesEvolution(Species.CROBAT, 1, null, [new SpeciesFriendshipEvolutionCondition()], HAPPINESS_EVO_LEVEL),
   ],
   [Species.ODDISH]: [new SpeciesEvolution(Species.GLOOM, 21, null, null)],
   [Species.GLOOM]: [
@@ -239,12 +240,12 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.CHANSEY,
       1,
       null,
-      [new SpeciesFriendshipEvolutionCondition(70)],
+      [new BabySpeciesFriendshipEvolutionCondition()],
       BABY_HAPPINESS_EVO_LEVEL,
     ),
   ],
   [Species.CHANSEY]: [
-    new SpeciesEvolution(Species.BLISSEY, 1, null, [new SpeciesFriendshipEvolutionCondition(200)], HAPPINESS_EVO_LEVEL),
+    new SpeciesEvolution(Species.BLISSEY, 1, null, [new SpeciesFriendshipEvolutionCondition()], HAPPINESS_EVO_LEVEL),
   ],
   [Species.TANGELA]: [
     new SpeciesEvolution(
@@ -305,7 +306,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      [new SpeciesFriendshipEvolutionCondition(120), new TypeKnownEvoCondition(ElementalType.FAIRY)],
+      [new SpeciesFriendshipEvolutionCondition(), new TypeKnownEvoCondition(ElementalType.FAIRY)],
       EEVEE_FAMILY_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -314,7 +315,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      [new SpeciesFriendshipEvolutionCondition(120), new TypeKnownEvoCondition(ElementalType.FAIRY)],
+      [new SpeciesFriendshipEvolutionCondition(), new TypeKnownEvoCondition(ElementalType.FAIRY)],
       EEVEE_FAMILY_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -323,7 +324,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      [new SpeciesFriendshipEvolutionCondition(120), new DayEvolutionCondition()],
+      [new SpeciesFriendshipEvolutionCondition(), new DayEvolutionCondition()],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -332,7 +333,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      [new SpeciesFriendshipEvolutionCondition(120), new DayEvolutionCondition()],
+      [new SpeciesFriendshipEvolutionCondition(), new DayEvolutionCondition()],
       EEVEE_FAMILY_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -341,7 +342,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      [new SpeciesFriendshipEvolutionCondition(120), new NightEvolutionCondition()],
+      [new SpeciesFriendshipEvolutionCondition(), new NightEvolutionCondition()],
       EEVEE_FAMILY_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -350,7 +351,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
       "",
       1,
       null,
-      [new SpeciesFriendshipEvolutionCondition(120), new NightEvolutionCondition()],
+      [new SpeciesFriendshipEvolutionCondition(), new NightEvolutionCondition()],
       EEVEE_FAMILY_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(Species.VAPOREON, "", "", 1, EvolutionItem.WATER_STONE, null, EEVEE_FAMILY_EVO_LEVEL),
@@ -388,7 +389,7 @@ export const gen1pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.OMANYTE]: [new SpeciesEvolution(Species.OMASTAR, 40, null, null)],
   [Species.KABUTO]: [new SpeciesEvolution(Species.KABUTOPS, 40, null, null)],
   [Species.MUNCHLAX]: [
-    new SpeciesEvolution(Species.SNORLAX, 1, null, [new SpeciesFriendshipEvolutionCondition(120)], HAPPINESS_EVO_LEVEL),
+    new SpeciesEvolution(Species.SNORLAX, 1, null, [new SpeciesFriendshipEvolutionCondition()], HAPPINESS_EVO_LEVEL),
   ],
   [Species.DRATINI]: [new SpeciesEvolution(Species.DRAGONAIR, 30, null, null)],
   [Species.DRAGONAIR]: [new SpeciesEvolution(Species.DRAGONITE, 55, null, null)],

@@ -53,7 +53,7 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
     new SpeciesEvolution(Species.GIGALITH, 1, EvolutionItem.LINKING_CORD, null, GENERIC_ITEM_EVO_LEVEL),
   ],
   [Species.WOOBAT]: [
-    new SpeciesEvolution(Species.SWOOBAT, 1, null, [new SpeciesFriendshipEvolutionCondition(90)], HAPPINESS_EVO_LEVEL),
+    new SpeciesEvolution(Species.SWOOBAT, 1, null, [new SpeciesFriendshipEvolutionCondition()], HAPPINESS_EVO_LEVEL),
   ],
   [Species.DRILBUR]: [new SpeciesEvolution(Species.EXCADRILL, 31, null, null)],
   [Species.TIMBURR]: [new SpeciesEvolution(Species.GURDURR, 25, null, null)],
@@ -64,13 +64,7 @@ export const gen5pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.PALPITOAD]: [new SpeciesEvolution(Species.SEISMITOAD, 36, null, null)],
   [Species.SEWADDLE]: [new SpeciesEvolution(Species.SWADLOON, 20, null, null)],
   [Species.SWADLOON]: [
-    new SpeciesEvolution(
-      Species.LEAVANNY,
-      1,
-      null,
-      [new SpeciesFriendshipEvolutionCondition(120)],
-      HAPPINESS_EVO_LEVEL,
-    ),
+    new SpeciesEvolution(Species.LEAVANNY, 1, null, [new SpeciesFriendshipEvolutionCondition()], HAPPINESS_EVO_LEVEL),
   ],
   [Species.VENIPEDE]: [new SpeciesEvolution(Species.WHIRLIPEDE, 22, null, null)],
   [Species.WHIRLIPEDE]: [new SpeciesEvolution(Species.SCOLIPEDE, 30, null, null)],

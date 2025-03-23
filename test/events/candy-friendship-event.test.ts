@@ -49,7 +49,7 @@ describe("Candy Friendship Modifier Event", () => {
     game.phaseInterceptor.restoreOg();
   });
 
-  it("should apply the active event's multiplier in classic mode", async () => {
+  it.todo("should apply the active event's multiplier in classic mode", async () => {
     expect(timedEventManager.getActiveEvent()).toBeDefined();
     expect(timedEventManager.isEventActive(EventModifierType.CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER)).toBeTruthy();
     expect(timedEventManager.getClassicCandyFriendshipMultiplier()).toBe(3);
@@ -68,7 +68,7 @@ describe("Candy Friendship Modifier Event", () => {
     expect(starterData.candyProgress).toBe(FRIENDSHIP_GAIN_FROM_BATTLE * CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER * 3);
   });
 
-  it("should not apply the event's multiplier when it is not active", async () => {
+  it.todo("should not apply the event's multiplier when it is not active", async () => {
     vi.setSystemTime(postEventDate);
     expect(timedEventManager.getActiveEvent()).toBeUndefined();
     expect(timedEventManager.isEventActive(EventModifierType.CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER)).toBeFalsy();
@@ -88,7 +88,7 @@ describe("Candy Friendship Modifier Event", () => {
     expect(starterData.candyProgress).toBe(FRIENDSHIP_GAIN_FROM_BATTLE * CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER);
   });
 
-  it("should not apply the event's multiplier in daily mode", async () => {
+  it.todo("should not apply the event's multiplier in daily mode", async () => {
     vi.spyOn(api.daily, "getSeed").mockResolvedValue("test-seed");
     await api.ping();
 

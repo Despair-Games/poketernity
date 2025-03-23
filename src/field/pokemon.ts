@@ -12,7 +12,7 @@ import type { DamageFunctionOptions } from "#app/@types/DamageFunctionOptions";
 import type { StarterMoveset } from "#app/@types/StarterData";
 import type { TurnMove } from "#app/@types/TurnMove";
 import type { AnySound } from "#app/audio-manager";
-import { DYNAMAX_DAMAGE_TAKEN_FACTOR, PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import { DYNAMAX_DAMAGE_TAKEN_FACTOR, FRIENDSHIP_GAIN_CUTOFF, PLAYER_PARTY_MAX_SIZE } from "#app/constants";
 import type { AbAttr } from "#app/data/abilities/ab-attrs/ab-attr";
 import type { AddSecondStrikeAbAttr } from "#app/data/abilities/ab-attrs/add-second-strike-ab-attr";
 import type { AlliedFieldDamageReductionAbAttr } from "#app/data/abilities/ab-attrs/allied-field-damage-reduction-ab-attr";
@@ -4424,6 +4424,11 @@ export class PlayerPokemon extends Pokemon {
     // Soothe bell multiplier applies here
     globalScene.applyModifier(PokemonFriendshipBoosterModifier, true, this, amount);
 
+    // If the Pokemon's friendship is 100 or higher, the gain is halved
+    if (this.friendship >= FRIENDSHIP_GAIN_CUTOFF) {
+      amount.value /= 2;
+    }
+
     // Add friendship to this PlayerPokemon
     this.friendship = Math.min(this.friendship + amount.value, 255);
     if (this.friendship === 255) {
@@ -4431,7 +4436,8 @@ export class PlayerPokemon extends Pokemon {
     }
 
     // Add to candy progress for this mon's starter species
-    this.addCandyProgress(amount.value);
+    // It was decided to break apart candyProgerss from friendship
+    // this.addCandyProgress(amount.value);
   }
 
   /**

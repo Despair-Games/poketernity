@@ -17,12 +17,12 @@ import {
   type PokemonEvolutions,
   SpeciesFormEvolution,
   SpeciesEvolution,
-  SpeciesFriendshipEvolutionCondition,
   NightEvolutionCondition,
   DayEvolutionCondition,
   MoveKnownEvoCondition,
   SpeciesOwnedEvoCondition,
   RngFormEvoCondition,
+  BabySpeciesFriendshipEvolutionCondition,
 } from "#app/data/pokemon-evolutions";
 
 export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
@@ -45,7 +45,7 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.TOGETIC,
       1,
       null,
-      [new SpeciesFriendshipEvolutionCondition(70)],
+      [new BabySpeciesFriendshipEvolutionCondition()],
       BABY_HAPPINESS_EVO_LEVEL,
     ),
   ],
@@ -61,7 +61,7 @@ export const gen2pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.MARILL,
       1,
       null,
-      [new SpeciesFriendshipEvolutionCondition(70)],
+      [new BabySpeciesFriendshipEvolutionCondition()],
       BABY_HAPPINESS_EVO_LEVEL,
     ),
   ],

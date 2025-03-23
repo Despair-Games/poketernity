@@ -59,13 +59,7 @@ export const gen7pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.WIMPOD]: [new SpeciesEvolution(Species.GOLISOPOD, 30, null, null)],
   [Species.SANDYGAST]: [new SpeciesEvolution(Species.PALOSSAND, 42, null, null)],
   [Species.TYPE_NULL]: [
-    new SpeciesEvolution(
-      Species.SILVALLY,
-      1,
-      null,
-      [new SpeciesFriendshipEvolutionCondition(100)],
-      HAPPINESS_EVO_LEVEL,
-    ),
+    new SpeciesEvolution(Species.SILVALLY, 1, null, [new SpeciesFriendshipEvolutionCondition()], HAPPINESS_EVO_LEVEL),
   ],
   [Species.JANGMO_O]: [new SpeciesEvolution(Species.HAKAMO_O, 35, null, null)],
   [Species.HAKAMO_O]: [new SpeciesEvolution(Species.KOMMO_O, 45, null, null)],
@@ -101,7 +95,7 @@ export const gen7pokemonFamilyEvolutions: PokemonEvolutions = {
       Species.ALOLA_PERSIAN,
       1,
       null,
-      [new SpeciesFriendshipEvolutionCondition(120)],
+      [new SpeciesFriendshipEvolutionCondition()],
       HAPPINESS_EVO_LEVEL,
     ),
   ],
