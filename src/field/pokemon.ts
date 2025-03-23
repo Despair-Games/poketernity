@@ -2643,7 +2643,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return this.isPlayer() ? i18next.t("arenaTag:opposingTeam") : i18next.t("arenaTag:yourTeam");
   }
 
-  getAlly(): Pokemon {
+  /**
+   * @returns The allied {@linkcode Pokemon} or `undefined` if there is no allied pokemon
+   * or the ally is {@linkcode Pokemon.isAllowedInBattle | not allowed} on the field
+   * @see {@linkcode PlayerPokemon.getAlly}
+   */
+  getAlly(): Pokemon | undefined {
     return this.getField()[this.getFieldIndex() ? 0 : 1];
   }
 
@@ -3138,10 +3143,11 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     );
 
     /** Additionally apply friend guard damage reduction if ally has it. */
-    if (globalScene.currentBattle.double && this.getAlly()?.isActive(true)) {
+    const allyPokemon = this.getAlly();
+    if (globalScene.currentBattle.double && allyPokemon?.isActive(true)) {
       applyAbFunc<AlliedFieldDamageReductionAbAttr>(
         AbAttrFlag.ALLIED_FIELD_DAMAGE_REDUCTION,
-        this.getAlly(),
+        allyPokemon,
         simulated,
         source,
         move,
@@ -4334,6 +4340,14 @@ export class PlayerPokemon extends Pokemon {
 
   getBattlerIndex(): BattlerIndex {
     return this.getFieldIndex();
+  }
+
+  override getAlly(): Pokemon | undefined {
+    const ally = super.getAlly();
+    if (ally?.isAllowedInChallenge()) {
+      return ally;
+    }
+    return undefined;
   }
 
   generateCompatibleTms(): void {

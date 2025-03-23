@@ -36,16 +36,18 @@ export class AwaitCombinedPledgeAttr extends OverrideMoveEffectAttr {
     });
 
     if (ret) {
-      const ally = user.getAlly();
-      // "{userPokemonName} is waiting for {allyPokemonName}'s move..."
-      globalScene.queueMessage(
-        i18next.t("moveTriggers:awaitingPledge", {
-          userPokemonName: getPokemonNameWithAffix(user),
-          allyPokemonName: getPokemonNameWithAffix(ally),
-        }),
-      );
-      ally.turnData.combiningPledge = move.id;
-      overridden.value = true;
+      const allyPokemon = user.getAlly();
+      if (allyPokemon) {
+        // "{userPokemonName} is waiting for {allyPokemonName}'s move..."
+        globalScene.queueMessage(
+          i18next.t("moveTriggers:awaitingPledge", {
+            userPokemonName: getPokemonNameWithAffix(user),
+            allyPokemonName: getPokemonNameWithAffix(allyPokemon),
+          }),
+        );
+        allyPokemon.turnData.combiningPledge = move.id;
+        overridden.value = true;
+      }
     }
 
     return ret;

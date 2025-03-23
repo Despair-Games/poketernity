@@ -912,39 +912,36 @@ export default class BattleScene extends SceneBase {
 
   /**
    * Used in doubles battles to redirect moves from one pokemon to another when one faints or is removed from the field
-   * @param removedPokemon {@linkcode Pokemon} the pokemon that is being removed from the field (flee, faint), moves to be redirected FROM
-   * @param allyPokemon {@linkcode Pokemon} the pokemon that will have the moves be redirected TO
+   * @param removedPokemon - The {@linkcode Pokemon} that is being removed from the field (flee, faint), moves to be redirected FROM
+   * @param secondPokemon - The Pokemon that will have the moves be redirected TO
    */
-  redirectPokemonMoves(removedPokemon: Pokemon, allyPokemon: Pokemon): void {
-    // failsafe: if not a double battle just return
-    if (this.currentBattle.double === false) {
+  redirectPokemonMoves(removedPokemon: Pokemon, secondPokemon: Pokemon): void {
+    if (this.currentBattle.double === false || !secondPokemon?.isActive(true)) {
       return;
     }
 
-    if (allyPokemon?.isActive(true)) {
-      const { turnManager } = this.currentBattle;
-      turnManager.redirectMoveCommandTargetsToAlly(removedPokemon);
+    const { turnManager } = this.currentBattle;
+    turnManager.redirectMoveCommandTargetsToAlly(removedPokemon);
 
-      /**
-       * If the removed Pokemon fainted before the turn's first move (e.g. from an entry hazard),
-       * A move phase targeting the removed Pokemon may already be queued. Therefore, in addition
-       * to redirecting commands in the turn manager, we also need to redirect any applicable commands
-       * queued for execution.
-       */
-      let targetingMovePhase: MovePhase | undefined;
-      do {
-        targetingMovePhase = this.findPhase(
-          (mp) =>
-            mp.is<MovePhase>(PhaseId.MOVE)
-            && mp.targets.length === 1
-            && mp.targets[0] === removedPokemon.getBattlerIndex()
-            && mp.pokemon.isPlayer() !== allyPokemon.isPlayer(),
-        );
-        if (targetingMovePhase && targetingMovePhase.targets[0] !== allyPokemon.getBattlerIndex()) {
-          targetingMovePhase.targets[0] = allyPokemon.getBattlerIndex();
-        }
-      } while (targetingMovePhase);
-    }
+    /**
+     * If the removed Pokemon fainted before the turn's first move (e.g. from an entry hazard),
+     * a move phase targeting the removed Pokemon may already be queued. Therefore, in addition
+     * to redirecting commands in the turn manager, we also need to redirect any applicable commands
+     * queued for execution.
+     */
+    let targetingMovePhase: MovePhase | undefined;
+    do {
+      targetingMovePhase = this.findPhase(
+        (mp) =>
+          mp.is<MovePhase>(PhaseId.MOVE)
+          && mp.targets.length === 1
+          && mp.targets[0] === removedPokemon.getBattlerIndex()
+          && mp.pokemon.isPlayer() !== secondPokemon.isPlayer(),
+      );
+      if (targetingMovePhase && targetingMovePhase.targets[0] !== secondPokemon.getBattlerIndex()) {
+        targetingMovePhase.targets[0] = secondPokemon.getBattlerIndex();
+      }
+    } while (targetingMovePhase);
   }
 
   /**
