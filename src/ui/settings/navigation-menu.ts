@@ -44,6 +44,10 @@ export class NavigationManager {
     ];
   }
 
+  public clearMenus() {
+    this.navigationMenus.splice(0, this.navigationMenus.length);
+  }
+
   public reset() {
     this.selectedMode = UiMode.SETTINGS;
     this.updateNavigationMenus();
