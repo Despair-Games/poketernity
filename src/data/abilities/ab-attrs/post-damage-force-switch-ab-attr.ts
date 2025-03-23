@@ -134,8 +134,8 @@ class ForceSwitchOutHelper {
    * @param pokemon The {@linkcode Pokemon} attempting to switch out.
    * @returns `true` if the switch is successful
    */
-  public switchOutLogic(pokemon: Pokemon): boolean {
-    const switchOutTarget = pokemon;
+  public switchOutLogic(switchOutTarget: Pokemon): boolean {
+    const { battleType, double, trainer, waveIndex } = globalScene.currentBattle;
     /**
      * If the switch-out target is a player-controlled Pokémon, the function checks:
      * - Whether there are available party members to switch in.
@@ -158,15 +158,13 @@ class ForceSwitchOutHelper {
        * For non-wild battles, it checks if the opposing party has any available Pokémon to switch in.
        * If yes, the Pokémon leaves the field and a new SwitchSummonPhase is initiated.
        */
-    } else if (globalScene.currentBattle.battleType !== BattleType.WILD) {
+    } else if (battleType !== BattleType.WILD) {
       if (globalScene.getEnemyParty().filter((p) => p.isAllowedInBattle() && !p.isOnField()).length < 1) {
         return false;
       }
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(this.switchType === SwitchType.SWITCH);
-        const summonIndex = globalScene.currentBattle.trainer
-          ? globalScene.currentBattle.trainer.getNextSummonIndex((switchOutTarget as EnemyPokemon).trainerSlot)
-          : 0;
+        const summonIndex = trainer ? trainer.getNextSummonIndex((switchOutTarget as EnemyPokemon).trainerSlot) : 0;
         globalScene.prependToPhase(
           new SwitchSummonPhase(this.switchType, switchOutTarget.getFieldIndex(), summonIndex, false, false),
           PhaseId.MOVE_END,
@@ -178,9 +176,11 @@ class ForceSwitchOutHelper {
        * It will not flee if it is a Mystery Encounter with fleeing disabled (checked in `getSwitchOutCondition()`) or if it is a wave 10x wild boss
        */
     } else {
-      if (!globalScene.currentBattle.waveIndex || globalScene.currentBattle.waveIndex % 10 === 0) {
+      if (waveIndex === 0 || waveIndex % 10 === 0) {
         return false;
       }
+
+      const allyPokemon = switchOutTarget.getAlly();
 
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(false);
@@ -191,13 +191,12 @@ class ForceSwitchOutHelper {
           500,
         );
 
-        if (globalScene.currentBattle.double) {
-          const allyPokemon = switchOutTarget.getAlly();
+        if (double && allyPokemon) {
           globalScene.redirectPokemonMoves(switchOutTarget, allyPokemon);
         }
       }
 
-      if (!switchOutTarget.getAlly()?.isActive(true)) {
+      if (!allyPokemon?.isActive(true)) {
         globalScene.clearEnemyHeldItemModifiers();
 
         if (switchOutTarget.hp) {

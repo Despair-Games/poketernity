@@ -794,10 +794,11 @@ export abstract class Move implements Localizable {
       power.value = 60;
     }
 
-    if (source.getAlly()) {
+    const allyPokemon = source.getAlly();
+    if (allyPokemon) {
       applyAbAttrs<AllyMoveCategoryPowerBoostAbAttr>(
         AbAttrFlag.ALLY_MOVE_CATEGORY_POWER_BOOST,
-        source.getAlly(),
+        allyPokemon,
         simulated,
         this,
         target,
@@ -1026,6 +1027,7 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: Mo
     moveTarget = MoveTarget.NEAR_ENEMY;
   }
   const opponents = user.getOpponents();
+  const allyPokemon = user.getAlly();
 
   let set: Pokemon[] = [];
   let targets: BattlerIndex[] | undefined;
@@ -1041,7 +1043,10 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: Mo
     case MoveTarget.DRAGON_DARTS:
     case MoveTarget.ALL_NEAR_OTHERS:
     case MoveTarget.ALL_OTHERS:
-      set = opponents.concat([user.getAlly()]);
+      set = opponents;
+      if (allyPokemon) {
+        set.push(allyPokemon);
+      }
       multiple = moveTarget === MoveTarget.ALL_NEAR_OTHERS || moveTarget === MoveTarget.ALL_OTHERS;
       break;
     case MoveTarget.NEAR_ENEMY:
@@ -1057,15 +1062,24 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: Mo
       return { targets: [-1 as BattlerIndex], multiple: false };
     case MoveTarget.NEAR_ALLY:
     case MoveTarget.ALLY:
-      set = [user.getAlly()];
+      if (allyPokemon) {
+        set.push(allyPokemon);
+      }
       break;
     case MoveTarget.USER_OR_NEAR_ALLY:
     case MoveTarget.USER_AND_ALLIES:
-      set = [user, user.getAlly()];
+      set = [user];
+      if (allyPokemon) {
+        set.push(allyPokemon);
+      }
       multiple = moveTarget !== MoveTarget.USER_OR_NEAR_ALLY;
       break;
     case MoveTarget.ALL:
-      set = [user, user.getAlly()].concat(opponents);
+      set = [user];
+      if (allyPokemon) {
+        set.push(allyPokemon);
+      }
+      set.push(...opponents);
       multiple = true;
       break;
     case MoveTarget.USER_SIDE:
@@ -1079,7 +1093,14 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: Mo
       targets = [BattlerIndex.BOTH_SIDES];
       break;
     case MoveTarget.CURSE:
-      set = user.getTypes(true).includes(ElementalType.GHOST) ? opponents.concat([user.getAlly()]) : [user];
+      if (user.getTypes(true).includes(ElementalType.GHOST)) {
+        set = opponents;
+        if (allyPokemon) {
+          set.push(allyPokemon);
+        }
+      } else {
+        set = [user];
+      }
       break;
   }
 

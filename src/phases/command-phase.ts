@@ -72,9 +72,12 @@ export class CommandPhase extends FieldPhase {
       if (globalScene.getPlayerField().filter((p) => p.isActive()).length === 1) {
         this.fieldIndex = FieldPosition.CENTER;
       } else {
-        const allyCommand = turnManager.findCommandFromPokemon(pokemon.getAlly());
-        if (allyCommand?.command === BattleCommand.BALL || allyCommand?.command === BattleCommand.RUN) {
-          return this.end();
+        const allyPokemon = pokemon.getAlly();
+        if (allyPokemon) {
+          const allyCommand = turnManager.findCommandFromPokemon(allyPokemon);
+          if (allyCommand?.command === BattleCommand.BALL || allyCommand?.command === BattleCommand.RUN) {
+            return this.end();
+          }
         }
       }
     }

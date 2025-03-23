@@ -49,7 +49,7 @@ export class EnemyCommandPhase extends FieldPhase {
     if (
       battle.double
       && enemyPokemon.hasAbility(Abilities.COMMANDER)
-      && enemyPokemon.getAlly().getTag(BattlerTagType.COMMANDED)
+      && enemyPokemon.getAlly()?.getTag(BattlerTagType.COMMANDED)
     ) {
       return this.end();
     }
