@@ -148,4 +148,4 @@ export const FRIENDSHIP_PER_WAVE = 1;
 /** Value for how much friendship a Pokemon gains on leveling up */
 export const FRIENDSHIP_GAIN_PER_LEVEL_UP = 10;
 /** After this point, happiness gain is halved */
-export const FRIENDSHIP_GAIN_CUTOFF = 100;
+export const FRIENDSHIP_GAIN_CUTOFF = 150;

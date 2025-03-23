@@ -4424,7 +4424,7 @@ export class PlayerPokemon extends Pokemon {
     // Soothe bell multiplier applies here
     globalScene.applyModifier(PokemonFriendshipBoosterModifier, true, this, amount);
 
-    // If the Pokemon's friendship is 100 or higher, the gain is halved
+    // If the Pokemon's friendship is 150 or higher, the gain is halved
     if (this.friendship >= FRIENDSHIP_GAIN_CUTOFF) {
       amount.value /= 2;
     }
