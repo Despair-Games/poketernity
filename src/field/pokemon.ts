@@ -3364,7 +3364,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     const healAmount = Math.min(amount, this.getMaxHp() - this.hp);
     this.hp += healAmount;
     if (!quiet && this.isOnField()) {
-      globalScene.damageNumberHandler.add(this, amount, HitResult.HEAL);
+      globalScene.damageNumberHandler.add(this, healAmount, HitResult.HEAL);
     }
     return healAmount;
   }
