@@ -27,7 +27,7 @@ export class CommanderAbAttr extends AbAttr {
     if (globalScene.currentBattle?.double && pokemon.getAlly()?.species.speciesId === Species.DONDOZO) {
       // If the ally Dondozo is fainted or was previously "commanded" by
       // another Pokemon, this effect cannot apply.
-      if (pokemon.getAlly().isFainted() || pokemon.getAlly().getTag(BattlerTagType.COMMANDED)) {
+      if (pokemon.getAlly()?.isFainted() || pokemon.getAlly()?.getTag(BattlerTagType.COMMANDED)) {
         return false;
       }
 
@@ -39,7 +39,7 @@ export class CommanderAbAttr extends AbAttr {
         // Play an animation of the source jumping into the ally Dondozo's mouth
         globalScene.triggerPokemonBattleAnim(pokemon, PokemonAnimType.COMMANDER_APPLY);
         // Apply boosts from this effect to the ally Dondozo
-        pokemon.getAlly().addTag(BattlerTagType.COMMANDED, 0, MoveId.NONE, pokemon.id);
+        pokemon.getAlly()?.addTag(BattlerTagType.COMMANDED, 0, MoveId.NONE, pokemon.id);
         // Cancel the source Pokemon's next move (if a move is queued)
         this.cancelQueuedMove(pokemon);
       }

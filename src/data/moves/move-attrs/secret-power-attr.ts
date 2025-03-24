@@ -1,18 +1,20 @@
+import type { IgnoreMoveEffectsAbAttr } from "#app/data/abilities/ab-attrs/ignore-move-effects-ab-attr";
+import type { MoveEffectChanceMultiplierAbAttr } from "#app/data/abilities/ab-attrs/move-effect-chance-multiplier-ab-attr";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import { type Move } from "#app/data/moves/move";
+import { AddBattlerTagAttr } from "#app/data/moves/move-attrs/add-battler-tag-attr";
+import { ChanceBasedMoveEffectAttr } from "#app/data/moves/move-attrs/chance-based-move-effect-attr";
+import { StatStageChangeAttr } from "#app/data/moves/move-attrs/stat-stage-change-attr";
+import { StatusEffectAttr } from "#app/data/moves/move-attrs/status-effect-attr";
+import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import { NumberHolder } from "#app/utils";
+import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Biome } from "#enums/biome";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TerrainType } from "#enums/terrain-type";
-import type { Pokemon } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
-import { type Move } from "#app/data/moves/move";
-import { AddBattlerTagAttr } from "./add-battler-tag-attr";
-import { StatStageChangeAttr } from "#app/data/moves/move-attrs/stat-stage-change-attr";
-import { StatusEffectAttr } from "#app/data/moves/move-attrs/status-effect-attr";
-import { NumberHolder } from "#app/utils";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { ChanceBasedMoveEffectAttr } from "./chance-based-move-effect-attr";
-import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
  * Attribute used to determine the Biome/Terrain-based secondary
@@ -136,10 +138,17 @@ export class SecretPowerAttr extends ChanceBasedMoveEffectAttr {
   ): number {
     const moveChance = new NumberHolder(this.effectChanceOverride ?? move.chance);
 
-    applyAbAttrs(AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER, user, false, moveChance, move, showAbility);
+    applyAbAttrs<MoveEffectChanceMultiplierAbAttr>(
+      AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER,
+      user,
+      false,
+      moveChance,
+      move,
+      showAbility,
+    );
 
     if (!selfEffect) {
-      applyAbAttrs(AbAttrFlag.IGNORE_MOVE_EFFECTS, target, false, user, move, moveChance);
+      applyAbAttrs<IgnoreMoveEffectsAbAttr>(AbAttrFlag.IGNORE_MOVE_EFFECTS, target, false, user, move, moveChance);
     }
     return moveChance.value;
   }

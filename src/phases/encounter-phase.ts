@@ -6,6 +6,7 @@ import { type NextEncounterPhase } from "#app/phases/next-encounter-phase";
 // -- end tsdoc imports --
 
 import { ME_WEIGHT_INCREMENT_ON_SPAWN_MISS, PLAYER_PARTY_MAX_SIZE } from "#app/constants";
+import type { SyncEncounterNatureAbAttr } from "#app/data/abilities/ab-attrs/sync-encounter-nature-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { getCharVariantFromDialogue } from "#app/data/dialogue";
 import { initEncounterAnims } from "#app/data/init/init-encounter-anims";
@@ -163,7 +164,12 @@ export class EncounterPhase extends BattlePhase {
             .slice(0, !double ? 1 : 2)
             .reverse()
             .forEach((playerPokemon) => {
-              applyAbAttrs(AbAttrFlag.SYNC_ENCOUNTER_NATURE, playerPokemon, false, currentBattle.enemyParty[e]);
+              applyAbAttrs<SyncEncounterNatureAbAttr>(
+                AbAttrFlag.SYNC_ENCOUNTER_NATURE,
+                playerPokemon,
+                false,
+                currentBattle.enemyParty[e],
+              );
             });
         }
       }

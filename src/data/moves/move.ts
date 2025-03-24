@@ -1,10 +1,14 @@
 import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import { FOG_ACCURACY_MULTIPLIER } from "#app/constants";
 import type { AllyMoveCategoryPowerBoostAbAttr } from "#app/data/abilities/ab-attrs/ally-move-category-power-boost-ab-attr";
+import type { ChangeMovePriorityAbAttr } from "#app/data/abilities/ab-attrs/change-move-priority-ab-attr";
 import type { FieldMoveTypePowerBoostAbAttr } from "#app/data/abilities/ab-attrs/field-move-type-power-boost-ab-attr";
+import type { InfiltratorAbAttr } from "#app/data/abilities/ab-attrs/infiltrator-ab-attr";
+import type { MoveAbilityBypassAbAttr } from "#app/data/abilities/ab-attrs/move-ability-bypass-ab-attr";
 import type { MoveTypeChangeAbAttr } from "#app/data/abilities/ab-attrs/move-type-change-ab-attr";
 import type { UserFieldMoveTypePowerBoostAbAttr } from "#app/data/abilities/ab-attrs/user-field-move-type-power-boost-ab-attr";
 import type { VariableMovePowerAbAttr } from "#app/data/abilities/ab-attrs/variable-move-power-ab-attr";
+import type { WonderSkinAbAttr } from "#app/data/abilities/ab-attrs/wonder-skin-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { type TypeBoostTag } from "#app/data/battler-tags/type-boost-tag";
 import { allMoves } from "#app/data/data-lists";
@@ -27,8 +31,7 @@ import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import type { Localizable } from "#app/interfaces/locales";
 import { AttackTypeBoosterModifier } from "#app/modifier/modifier";
-import type { AbstractConstructor, Constructor, nil } from "#app/utils";
-import { BooleanHolder, NumberHolder } from "#app/utils";
+import { BooleanHolder, NumberHolder, type AbstractConstructor, type Constructor, type nil } from "#app/utils";
 import { WeakenMoveTypeArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
@@ -319,7 +322,7 @@ export abstract class Move implements Localizable {
 
     const bypassed = new BooleanHolder(false);
     // TODO: Allow this to be simulated
-    applyAbAttrs(AbAttrFlag.INFILTRATOR, user, false, bypassed);
+    applyAbAttrs<InfiltratorAbAttr>(AbAttrFlag.INFILTRATOR, user, false, bypassed);
 
     return !bypassed.value && !this.hasFlag(MoveFlags.SOUND_MOVE) && !this.hasFlag(MoveFlags.IGNORE_SUBSTITUTE);
   }
@@ -616,7 +619,13 @@ export abstract class Move implements Localizable {
       case MoveFlags.IGNORE_ABILITIES:
         if (user.hasAbilityWithAttr(AbAttrFlag.MOVE_ABILITY_BYPASS)) {
           const abilityEffectsIgnored = new BooleanHolder(false);
-          applyAbAttrs(AbAttrFlag.MOVE_ABILITY_BYPASS, user, false, abilityEffectsIgnored, this);
+          applyAbAttrs<MoveAbilityBypassAbAttr>(
+            AbAttrFlag.MOVE_ABILITY_BYPASS,
+            user,
+            false,
+            abilityEffectsIgnored,
+            this,
+          );
           if (abilityEffectsIgnored.value) {
             return true;
           }
@@ -726,7 +735,7 @@ export abstract class Move implements Localizable {
     const moveAccuracy = new NumberHolder(this.accuracy);
 
     applyMoveAttrs(VariableAccuracyAttr, user, target, this, moveAccuracy);
-    applyAbAttrs(AbAttrFlag.WONDER_SKIN, target, simulated, user, this, moveAccuracy);
+    applyAbAttrs<WonderSkinAbAttr>(AbAttrFlag.WONDER_SKIN, target, simulated, user, this, moveAccuracy);
 
     if (moveAccuracy.value === -1) {
       return moveAccuracy.value;
@@ -787,10 +796,11 @@ export abstract class Move implements Localizable {
       power.value = 60;
     }
 
-    if (source.getAlly()) {
+    const allyPokemon = source.getAlly();
+    if (allyPokemon) {
       applyAbAttrs<AllyMoveCategoryPowerBoostAbAttr>(
         AbAttrFlag.ALLY_MOVE_CATEGORY_POWER_BOOST,
-        source.getAlly(),
+        allyPokemon,
         simulated,
         this,
         target,
@@ -849,7 +859,7 @@ export abstract class Move implements Localizable {
     const priority = new NumberHolder(this.priority);
 
     applyMoveAttrs(IncrementMovePriorityAttr, user, null, this, priority);
-    applyAbAttrs(AbAttrFlag.CHANGE_MOVE_PRIORITY, user, simulated, this, priority);
+    applyAbAttrs<ChangeMovePriorityAbAttr>(AbAttrFlag.CHANGE_MOVE_PRIORITY, user, simulated, this, priority);
 
     return priority.value;
   }
@@ -1019,6 +1029,7 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: Mo
     moveTarget = MoveTarget.NEAR_ENEMY;
   }
   const opponents = user.getOpponents();
+  const allyPokemon = user.getAlly();
 
   let set: Pokemon[] = [];
   let targets: BattlerIndex[] | undefined;
@@ -1034,7 +1045,10 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: Mo
     case MoveTarget.DRAGON_DARTS:
     case MoveTarget.ALL_NEAR_OTHERS:
     case MoveTarget.ALL_OTHERS:
-      set = opponents.concat([user.getAlly()]);
+      set = opponents;
+      if (allyPokemon) {
+        set.push(allyPokemon);
+      }
       multiple = moveTarget === MoveTarget.ALL_NEAR_OTHERS || moveTarget === MoveTarget.ALL_OTHERS;
       break;
     case MoveTarget.NEAR_ENEMY:
@@ -1050,15 +1064,24 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: Mo
       return { targets: [-1 as BattlerIndex], multiple: false };
     case MoveTarget.NEAR_ALLY:
     case MoveTarget.ALLY:
-      set = [user.getAlly()];
+      if (allyPokemon) {
+        set.push(allyPokemon);
+      }
       break;
     case MoveTarget.USER_OR_NEAR_ALLY:
     case MoveTarget.USER_AND_ALLIES:
-      set = [user, user.getAlly()];
+      set = [user];
+      if (allyPokemon) {
+        set.push(allyPokemon);
+      }
       multiple = moveTarget !== MoveTarget.USER_OR_NEAR_ALLY;
       break;
     case MoveTarget.ALL:
-      set = [user, user.getAlly()].concat(opponents);
+      set = [user];
+      if (allyPokemon) {
+        set.push(allyPokemon);
+      }
+      set.push(...opponents);
       multiple = true;
       break;
     case MoveTarget.USER_SIDE:
@@ -1072,7 +1095,14 @@ export function getMoveTargets(user: Pokemon, moveId: MoveId, replaceTarget?: Mo
       targets = [BattlerIndex.BOTH_SIDES];
       break;
     case MoveTarget.CURSE:
-      set = user.getTypes(true).includes(ElementalType.GHOST) ? opponents.concat([user.getAlly()]) : [user];
+      if (user.getTypes(true).includes(ElementalType.GHOST)) {
+        set = opponents;
+        if (allyPokemon) {
+          set.push(allyPokemon);
+        }
+      } else {
+        set = [user];
+      }
       break;
   }
 
