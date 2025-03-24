@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";

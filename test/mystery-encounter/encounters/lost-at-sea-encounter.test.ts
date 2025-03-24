@@ -4,7 +4,7 @@ import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encount
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {

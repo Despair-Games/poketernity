@@ -1,5 +1,5 @@
 import { allSpecies } from "#app/data/data-lists";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { type PokemonSpeciesForm } from "#app/data/pokemon-species-form";
 import { isNullOrUndefined, randSeedItem } from "#app/utils";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";

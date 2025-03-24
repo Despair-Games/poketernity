@@ -1,7 +1,7 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import Phaser from "phaser";
 import { GameManager } from "#test/test-utils/gameManager";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { MoveId } from "#enums/move-id";
 import { allMoves } from "#app/data/data-lists";
 

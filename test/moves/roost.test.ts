@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { ElementalType } from "#enums/elemental-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { GameManager } from "#test/test-utils/gameManager";

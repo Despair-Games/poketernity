@@ -3,7 +3,7 @@ import { toDmgValue } from "#app/utils";
 import { AbilityId } from "#enums/ability-id";
 import { Challenges } from "#enums/challenges";
 import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TerrainType } from "#enums/terrain-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";

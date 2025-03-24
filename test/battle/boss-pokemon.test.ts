@@ -1,6 +1,6 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { GameManager } from "#test/test-utils/gameManager";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";

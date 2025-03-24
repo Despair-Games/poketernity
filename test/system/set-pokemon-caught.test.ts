@@ -4,7 +4,7 @@ import type { GameData } from "#app/system/game-data";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { Gender } from "#enums/gender";
 import { Nature } from "#enums/nature";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import { describe, beforeAll, afterEach, beforeEach, it, expect } from "vitest";
 

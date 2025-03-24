@@ -1,4 +1,4 @@
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { toDmgValue } from "#app/utils";

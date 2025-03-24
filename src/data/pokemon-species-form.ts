@@ -12,7 +12,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { AbilityId } from "#enums/ability-id";
 import { PokemonRegion } from "#enums/pokemon-regions";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import type { Stat } from "#enums/stat";
 import { argbFromRgba, QuantizerCelebi, rgbaFromArgb } from "@material/material-color-utilities";

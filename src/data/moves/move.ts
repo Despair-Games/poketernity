@@ -45,7 +45,7 @@ import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
 import { MoveTarget } from "#enums/move-target";
-import type { SpeciesId } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";

@@ -12,7 +12,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { UiMode } from "#enums/ui-mode";

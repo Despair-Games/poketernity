@@ -19,7 +19,7 @@ import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { AbilityId } from "#enums/ability-id";

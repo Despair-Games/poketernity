@@ -4,7 +4,7 @@ import { Challenges } from "#enums/challenges";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TerrainType } from "#enums/terrain-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";

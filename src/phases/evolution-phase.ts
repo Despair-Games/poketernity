@@ -18,7 +18,7 @@ import i18next from "i18next";
 import SoundFade from "phaser3-rex-plugins/plugins/soundfade";
 import { FormChangeBasePhase } from "./abstract-form-change-base-phase";
 import { PhaseId } from "#enums/phase-id";
-import type { SpeciesId } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 
 /**

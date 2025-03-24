@@ -15,7 +15,7 @@ import { MoveId } from "#enums/move-id";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PokeballType } from "#enums/pokeball-type";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TimeOfDay } from "#enums/time-of-day";

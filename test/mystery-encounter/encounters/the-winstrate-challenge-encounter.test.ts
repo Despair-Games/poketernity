@@ -2,7 +2,7 @@ import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encount
 import { HUMAN_TRANSITABLE_BIOMES } from "#app/data/mystery-encounters/mystery-encounters";
 import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { runMysteryEncounterToEnd } from "#test/mystery-encounter/encounter-test-utils";

@@ -1,7 +1,7 @@
 import type { ElementalType } from "#enums/elemental-type";
 import { isNullOrUndefined, randSeedInt } from "#app/utils";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { globalScene } from "#app/global-scene";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";

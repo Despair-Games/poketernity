@@ -1,4 +1,4 @@
-import type { SpeciesId } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import { globalScene } from "#app/global-scene";
 import { PlayerPokemon } from "#app/field/pokemon";
 import type { StarterConfig } from "#app/@types/StarterConfig";

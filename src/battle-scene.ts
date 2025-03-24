@@ -181,7 +181,7 @@ import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
 import { PokeballType } from "#enums/pokeball-type";
 import type { PokemonAnimType } from "#enums/pokemon-anim-type";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { TextStyle } from "#enums/text-style";
 import type { TrainerSlot } from "#enums/trainer-slot";

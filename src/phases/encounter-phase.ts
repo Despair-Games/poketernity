@@ -51,7 +51,7 @@ import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PhaseId } from "#enums/phase-id";
 import { PlayerGender } from "#enums/player-gender";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";

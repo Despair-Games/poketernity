@@ -82,7 +82,7 @@ import { Passive as PassiveAttr } from "#enums/passive";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { SortCriteria } from "#enums/sort-criteria";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";

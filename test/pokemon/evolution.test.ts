@@ -1,7 +1,7 @@
 import { pokemonEvolutions } from "#app/data/balance/pokemon-evolutions/init-pokemon-evolutions";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import * as Utils from "#app/utils";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";

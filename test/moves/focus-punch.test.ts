@@ -5,7 +5,7 @@ import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { TurnStartPhase } from "#app/phases/turn-start-phase";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";

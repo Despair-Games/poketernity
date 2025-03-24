@@ -1,6 +1,6 @@
 import { StatBoosterModifier } from "#app/modifier/modifier";
 import { NumberHolder, randItem } from "#app/utils";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phase from "phaser";

@@ -15,7 +15,7 @@ import { IVGraph } from "./iv-graph";
 import { addBBCodeTextObject, addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { addWindow } from "../ui-theme";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 
 interface LanguageSetting {

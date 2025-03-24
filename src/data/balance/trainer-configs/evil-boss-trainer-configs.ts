@@ -5,7 +5,7 @@ import { modifierTypes } from "#app/modifier/modifier-types";
 import { randSeedInt } from "#app/utils";
 import { Gender } from "#enums/gender";
 import { PokeballType } from "#enums/pokeball-type";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 
 const ROCKET_BOSS_TITLE = "Rocket Boss";

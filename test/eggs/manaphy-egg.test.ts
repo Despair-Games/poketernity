@@ -2,7 +2,7 @@ import { EVERYTHING_SAVE_FILE_PATH } from "#test/test-utils/testUtils";
 import { Egg } from "#app/data/egg";
 import { EggSourceType } from "#enums/egg-source-types";
 import { EggTier } from "#enums/egg-type";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";

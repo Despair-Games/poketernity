@@ -4,7 +4,7 @@ import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { argbFromRgba } from "@material/material-color-utilities";
 import { rgbHexToRgba } from "#app/utils";
-import type { SpeciesId } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 
 export class CandyBar extends Phaser.GameObjects.Container {

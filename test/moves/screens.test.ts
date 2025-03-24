@@ -4,7 +4,7 @@ import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";

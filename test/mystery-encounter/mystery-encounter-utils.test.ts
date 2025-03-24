@@ -18,7 +18,7 @@ import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { ElementalType } from "#enums/elemental-type";
 import { MessagePhase } from "#app/phases/message-phase";
 import { GameManager } from "#test/test-utils/gameManager";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";

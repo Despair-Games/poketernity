@@ -13,7 +13,7 @@ import type { Variant } from "#app/data/variant";
 import { loadBattlerTag } from "#app/data/battler-tags/utils/load-battler-tag";
 import type { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
-import type { SpeciesId } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 
 export default class PokemonData {

@@ -10,7 +10,7 @@ import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { PlayerGender } from "#enums/player-gender";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "#app/plugins/i18n";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";

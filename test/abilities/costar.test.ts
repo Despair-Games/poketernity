@@ -1,7 +1,7 @@
 import { Stat } from "#enums/stat";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { CommandPhase } from "#app/phases/command-phase";
 import { MessagePhase } from "#app/phases/message-phase";
 import { GameManager } from "#test/test-utils/gameManager";

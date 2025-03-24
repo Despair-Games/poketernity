@@ -1,4 +1,4 @@
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { GameManager } from "#test/test-utils/gameManager";

@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/data-lists";
 import { getEnumKeys, getEnumValues } from "#app/utils";
 import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 
 export const speciesEggMoves = {
   [SpeciesId.BULBASAUR]: [MoveId.SAPPY_SEED, MoveId.MALIGNANT_CHAIN, MoveId.EARTH_POWER, MoveId.MATCHA_GOTCHA],

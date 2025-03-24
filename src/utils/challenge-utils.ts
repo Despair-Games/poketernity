@@ -7,7 +7,7 @@ import type { BooleanHolder, NumberHolder } from "#app/utils";
 import { ChallengeType } from "#enums/challenge-type";
 import type { MoveId } from "#enums/move-id";
 import type { MoveSourceType } from "#enums/move-source-type";
-import type { SpeciesId } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 
 /**
  * Apply all challenges that modify starter choice.

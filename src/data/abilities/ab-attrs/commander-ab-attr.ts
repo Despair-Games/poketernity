@@ -4,7 +4,7 @@ import { globalScene } from "#app/global-scene";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { AbAttr } from "./ab-attr";
 import { type SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";

@@ -1,6 +1,6 @@
 import type { Localizable } from "#app/interfaces/locales";
 import type { AbilityId } from "#enums/ability-id";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import i18next from "i18next";
 import { randSeedGauss, randSeedItem } from "#app/utils";
 import type { GrowthRate } from "#enums/growth-rates";

@@ -14,7 +14,7 @@ import { shiftCharCodes } from "#app/utils";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtils";
 import Phaser from "phaser";

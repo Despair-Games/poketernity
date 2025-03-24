@@ -16,7 +16,7 @@ import {
   type PokemonEvolutions,
 } from "#app/data/pokemon-evolutions";
 import { EvolutionItem } from "#enums/evolution-item";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 
 export const gen9pokemonFamilyEvolutions: PokemonEvolutions = {
   [SpeciesId.SPRIGATITO]: [new SpeciesEvolution(SpeciesId.FLORAGATO, 16, null, null)],

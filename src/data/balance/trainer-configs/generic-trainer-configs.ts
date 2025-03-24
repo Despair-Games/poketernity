@@ -9,7 +9,7 @@ import {
 import { TrainerSlot } from "#enums/trainer-slot";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";
 import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { ElementalType } from "#enums/elemental-type";
 

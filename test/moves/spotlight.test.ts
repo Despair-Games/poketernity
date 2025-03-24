@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";

@@ -6,7 +6,7 @@ import { isNullOrUndefined } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { PhaseId } from "#enums/phase-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 
 // TODO: This should probably be made into an abstract base class
 export class PokemonAnimPhase extends BattlePhase {

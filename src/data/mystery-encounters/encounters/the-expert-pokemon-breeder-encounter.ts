@@ -15,7 +15,7 @@ import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { BiomeId } from "#enums/biome-id";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { speciesStarterCosts } from "#app/data/balance/starters";
 import { Nature } from "#enums/nature";

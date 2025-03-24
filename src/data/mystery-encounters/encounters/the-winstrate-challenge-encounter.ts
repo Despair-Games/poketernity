@@ -32,7 +32,7 @@ import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Nature } from "#enums/nature";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";

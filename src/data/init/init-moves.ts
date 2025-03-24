@@ -251,7 +251,7 @@ import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { MoveTarget } from "#enums/move-target";
 import { MultiHitType } from "#enums/multi-hit-type";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { BATTLE_STATS, getStatKey, Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { SwitchType } from "#enums/switch-type";

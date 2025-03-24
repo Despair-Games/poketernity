@@ -1,4 +1,4 @@
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 
 export const defaultStarterSpecies: SpeciesId[] = [
   SpeciesId.BULBASAUR,

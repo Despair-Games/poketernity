@@ -1,6 +1,6 @@
 import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#app/data/trainer-config";
 import { TrainerSlot } from "#enums/trainer-slot";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { randInt } from "#app/utils";
 import { TrainerVariant } from "#enums/trainer-variant";

@@ -9,7 +9,7 @@ import {
 import { TrainerSlot } from "#enums/trainer-slot";
 import { PartyMemberStrength } from "#enums/party-member-strength";
 import { PokeballType } from "#enums/pokeball-type";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 
 let t = TrainerType.BUCK;

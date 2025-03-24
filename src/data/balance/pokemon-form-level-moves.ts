@@ -5,7 +5,7 @@ import type { SpeciesFormChange } from "#app/data/pokemon-forms";
 // -- end tsdoc imports --
 
 import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import type { PokemonSpeciesFormLevelMoves } from "./pokemon-level-moves";
 import { EVOLVE_MOVE, FORM_CHANGE_MOVE } from "./pokemon-level-moves";
 

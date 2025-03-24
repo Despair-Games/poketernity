@@ -81,7 +81,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { Nature } from "#enums/nature";
 import { PokeballType } from "#enums/pokeball-type";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { VoucherType } from "#enums/voucher-type";
 import { t } from "i18next";

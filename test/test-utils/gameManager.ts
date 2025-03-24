@@ -37,7 +37,7 @@ import { GameModes } from "#enums/game-modes";
 import { HpBarSpeed } from "#enums/hp-bar-speed";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PlayerGender } from "#enums/player-gender";
-import type { SpeciesId } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import { UiMode } from "#enums/ui-mode";
 import { ErrorInterceptor } from "#test/test-utils/errorInterceptor";
 import { generateStarter, waitUntil } from "#test/test-utils/gameManagerUtils";

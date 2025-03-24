@@ -1,4 +1,4 @@
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { VariantTier } from "#enums/variant-tier";
 
 export const POKERUS_STARTER_COUNT = 5;

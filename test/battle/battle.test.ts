@@ -8,7 +8,7 @@ import { BiomeId } from "#enums/biome-id";
 import { GameModes } from "#enums/game-modes";
 import { MoveId } from "#enums/move-id";
 import { PlayerGender } from "#enums/player-gender";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { UiMode } from "#enums/ui-mode";
 import { GameManager } from "#test/test-utils/gameManager";

@@ -12,7 +12,7 @@ import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import type { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
 import { expect, vi } from "vitest";

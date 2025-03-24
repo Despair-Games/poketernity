@@ -3,7 +3,7 @@ import Phaser from "phaser";
 import { GameManager } from "#test/test-utils/gameManager";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { BerryPhase } from "#app/phases/berry-phase";
 import { PokemonMove } from "#app/field/pokemon-move";
 import { MoveResult } from "#enums/move-result";

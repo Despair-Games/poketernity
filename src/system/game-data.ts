@@ -53,7 +53,7 @@ import ChallengeData from "#app/system/challenge-data";
 import type { Device } from "#enums/devices";
 import { GameDataType } from "#enums/game-data-type";
 import { PlayerGender } from "#enums/player-gender";
-import type { SpeciesId } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import { applyChallenges } from "#app/utils/challenge-utils";
 import { ChallengeType } from "#enums/challenge-type";
 import { WeatherType } from "#enums/weather-type";

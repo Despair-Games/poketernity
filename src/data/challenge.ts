@@ -16,7 +16,7 @@ import { TrainerVariant } from "#enums/trainer-variant";
 import type { GameMode } from "#app/game-mode";
 import { ElementalType } from "#enums/elemental-type";
 import { Challenges } from "#enums/challenges";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import { Nature } from "#enums/nature";
 import type { MoveId } from "#enums/move-id";

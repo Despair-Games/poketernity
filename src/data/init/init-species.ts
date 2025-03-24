@@ -4,7 +4,7 @@ import { PokemonForm } from "../pokemon-form";
 import { AbilityId } from "#enums/ability-id";
 import { GrowthRate } from "#enums/growth-rates";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { ElementalType } from "#enums/elemental-type";
 

@@ -20,7 +20,7 @@ import {
   CombinationPokemonRequirement,
   TypeRequirement,
 } from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { Gender } from "#enums/gender";
 import { ElementalType } from "#enums/elemental-type";

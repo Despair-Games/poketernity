@@ -12,7 +12,7 @@ import { TrainerVariant } from "#enums/trainer-variant";
 import { getIsInitialized, initI18n } from "#app/plugins/i18n";
 import i18next from "i18next";
 import { PartyMemberStrength } from "#enums/party-member-strength";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TrainerType } from "#enums/trainer-type";
 import Overrides from "#app/overrides";
 import { TrainerPoolTier } from "#enums/trainer-pool-tier";

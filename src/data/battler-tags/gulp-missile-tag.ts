@@ -14,7 +14,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { HitResult } from "#enums/hit-result";
 import { MoveId } from "#enums/move-id";
 import { PhaseId } from "#enums/phase-id";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 

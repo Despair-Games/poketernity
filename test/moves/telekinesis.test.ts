@@ -2,7 +2,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { allMoves } from "#app/data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { MoveResult } from "#enums/move-result";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";

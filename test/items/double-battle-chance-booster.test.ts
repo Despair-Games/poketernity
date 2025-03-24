@@ -1,5 +1,5 @@
 import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { DoubleBattleChanceBoosterModifier } from "#app/modifier/modifier";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";

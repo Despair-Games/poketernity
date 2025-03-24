@@ -4,7 +4,7 @@ import { TrainerSlot } from "#enums/trainer-slot";
 import { ElementalType } from "#enums/elemental-type";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import * as Messages from "#app/messages";
 import { TerastallizeModifier, overrideHeldItems } from "#app/modifier/modifier";
 import { GameManager } from "#test/test-utils/gameManager";

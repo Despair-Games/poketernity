@@ -1,5 +1,5 @@
 import { BattleStyle } from "#enums/battle-style";
-import type { SpeciesId } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import { getGameMode } from "#app/game-mode";
 import { GameModes } from "#enums/game-modes";
 import overrides from "#app/overrides";

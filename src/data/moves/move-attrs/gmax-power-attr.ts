@@ -1,4 +1,4 @@
-import type { SpeciesId } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
 import type { Move } from "#app/data/moves/move";

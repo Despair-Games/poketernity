@@ -37,7 +37,7 @@ import { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { PhaseId } from "#enums/phase-id";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";

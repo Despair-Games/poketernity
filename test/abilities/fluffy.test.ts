@@ -2,7 +2,7 @@ import { allMoves } from "#app/data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import type { NumberHolder } from "#app/utils";
 import Phaser from "phaser";

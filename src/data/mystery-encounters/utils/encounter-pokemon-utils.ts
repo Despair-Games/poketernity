@@ -34,7 +34,7 @@ import type { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
 import { PlayerGender } from "#enums/player-gender";
 import type { PokeballType } from "#enums/pokeball-type";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import type { PermanentStat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { SummaryUiMode } from "#enums/summary-ui-mode";

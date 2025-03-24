@@ -13,7 +13,7 @@ import { globalScene } from "#app/global-scene";
 import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { allSpecies } from "#app/data/data-lists";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";

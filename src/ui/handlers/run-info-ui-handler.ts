@@ -32,7 +32,7 @@ import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PlayerGender } from "#enums/player-gender";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { SettingKeyboard } from "#enums/setting-keyboard";
-import type { SpeciesId } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { UiMode } from "#enums/ui-mode";

@@ -17,7 +17,7 @@ import {
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
 import { speciesStarterCosts } from "#app/data/balance/starters";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { PokeballType } from "#enums/pokeball-type";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { PlayerPokemon } from "#app/field/pokemon";

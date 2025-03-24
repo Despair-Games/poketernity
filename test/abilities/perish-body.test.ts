@@ -2,7 +2,7 @@ import type { PerishSongTag } from "#app/data/battler-tags/perish-song-tag";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";

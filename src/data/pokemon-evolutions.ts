@@ -1,5 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { SpeciesId } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import { EvolutionItem } from "#enums/evolution-item";
 import { globalScene } from "#app/global-scene";
 import { TimeOfDay } from "#enums/time-of-day";

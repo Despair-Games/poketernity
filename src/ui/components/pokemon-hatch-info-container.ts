@@ -6,7 +6,7 @@ import { addTextObject } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { speciesEggMoves } from "#app/data/balance/egg-moves";
 import { allMoves } from "#app/data/data-lists";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { getEggTierForSpecies } from "#app/data/egg";
 import { starterColors } from "#app/data/starter-colors";
 import { globalScene } from "#app/global-scene";

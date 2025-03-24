@@ -12,7 +12,7 @@ import type { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-
 import { UiMode } from "#enums/ui-mode";
 import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import i18next from "i18next";
 import Phaser from "phaser";

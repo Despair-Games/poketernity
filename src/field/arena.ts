@@ -33,7 +33,7 @@ import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { CommonAnim } from "#enums/common-anim";
 import type { ElementalType } from "#enums/elemental-type";
 import type { MoveId } from "#enums/move-id";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TerrainType } from "#enums/terrain-type";
 import { TimeOfDay } from "#enums/time-of-day";
 import { TrainerType } from "#enums/trainer-type";

@@ -1,4 +1,4 @@
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { ElementalType } from "#enums/elemental-type";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";

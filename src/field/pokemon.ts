@@ -212,7 +212,7 @@ import { PartyUiMode } from "#enums/party-ui-mode";
 import { PhaseId } from "#enums/phase-id";
 import { PokeballType } from "#enums/pokeball-type";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
-import { SpeciesId } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import {
   BATTLE_STATS,
