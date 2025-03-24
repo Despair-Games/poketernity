@@ -1037,7 +1037,12 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
         } else if (biomeLinks.hasOwnProperty(currentBiome)) {
           currentBiome = biomeLinks[currentBiome] as Biome;
         } else {
-          currentBiome = globalScene.generateRandomBiome(i);
+          // Endless logic
+          if (!(i % 50)) {
+            currentBiome = Biome.END;
+          } else {
+            currentBiome = globalScene.generateRandomBiome(i);
+          }
         }
 
         currentArena = globalScene.newArena(currentBiome);

@@ -2036,7 +2036,7 @@ export default class BattleScene extends SceneBase {
    * TODO: Rewrite this later for weighting?
    */
   generateRandomBiome(_waveIndex: number): Biome {
-    return allBiomes[randSeedInt(allBiomes.keys.length)];
+    return Array.from(allBiomes.keys())[randSeedInt(allBiomes.keys.length)];
   }
 
   toggleInvert(invert: boolean): void {

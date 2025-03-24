@@ -5,7 +5,7 @@ import { TimeOfDay } from "#enums/time-of-day";
 import { WeatherType } from "#enums/weather-type";
 
 /**
- * This file represents all the data of the town biome
+ * This file represents all the data of the end biome
  */
 
 export const endPokemonPool = {

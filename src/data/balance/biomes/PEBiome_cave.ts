@@ -6,7 +6,7 @@ import { TrainerType } from "#enums/trainer-type";
 import { WeatherType } from "#enums/weather-type";
 
 /**
- * This file represents all the data of the town biome
+ * This file represents all the data of the cave biome
  */
 
 export const cavePokemonPool = {
