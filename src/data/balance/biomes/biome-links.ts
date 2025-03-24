@@ -1,9 +1,25 @@
 import { Biome } from "#enums/biome";
 
+/**
+ * TODO
+ * Having a Biome | (Biome | [Biome, number]) [] type is needlessly complex
+ *
+ * Change this to
+ * ```
+ * interface BiomeLinks {
+ *   [key: number /* Biome *\/ ]: number /* Weight *\/;
+ * }
+ * ```
+ */
 interface BiomeLinks {
   [key: number]: Biome | (Biome | [Biome, number])[];
 }
 
+/**
+ * TODO: Should this be kept in this file? Or should these be defined as a variable in PEBiome?
+ *
+ * If the latter, should the const definitions be all in one location here?
+ */
 export const biomeLinks: BiomeLinks = {
   [Biome.TOWN]: Biome.PLAINS,
   [Biome.PLAINS]: [Biome.GRASS, Biome.METROPOLIS, Biome.LAKE],

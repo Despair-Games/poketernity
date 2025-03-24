@@ -152,6 +152,7 @@ import {
   randItem,
   randomString,
   randSeedInt,
+  randSeedItem,
   shiftCharCodes,
 } from "#app/utils";
 import { loadCommonAnimAssets } from "#app/utils/anim-utils";
@@ -2036,7 +2037,7 @@ export default class BattleScene extends SceneBase {
    * TODO: Rewrite this later for weighting?
    */
   generateRandomBiome(_waveIndex: number): Biome {
-    return Array.from(allBiomes.keys())[randSeedInt(allBiomes.keys.length)];
+    return randSeedItem([...allBiomes.keys()]);
   }
 
   toggleInvert(invert: boolean): void {
