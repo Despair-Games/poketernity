@@ -22,7 +22,7 @@ import {
   SLOWPOKE_FAMILY_EVO_LEVEL,
 } from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
 import { MoveId } from "#enums/move-id";
-import { BiomeId } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 
 export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.GROOKEY]: [new SpeciesEvolution(Species.THWACKEY, 16, null, null)],

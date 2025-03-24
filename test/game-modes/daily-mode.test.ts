@@ -1,4 +1,4 @@
-import { BiomeId } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import { MapModifier } from "#app/modifier/modifier";
 import { api } from "#app/plugins/api/api";

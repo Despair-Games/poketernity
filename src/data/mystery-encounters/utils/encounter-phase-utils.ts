@@ -46,7 +46,7 @@ import type { AiType } from "#enums/ai-type";
 import { BattleType } from "#enums/battle-type";
 import { BattlerIndex } from "#enums/battler-index";
 import type { BattlerTagType } from "#enums/battler-tag-type";
-import { BiomeId } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { FieldPosition } from "#enums/field-position";
 import type { Gender } from "#enums/gender";

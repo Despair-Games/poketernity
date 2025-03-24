@@ -1,6 +1,6 @@
 import { Stat } from "#enums/stat";
 import { ElementalType } from "#enums/elemental-type";
-import { BiomeId } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";

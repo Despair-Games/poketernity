@@ -1,6 +1,6 @@
 import { getBiomeKey } from "#app/field/arena";
 import { globalScene } from "#app/global-scene";
-import type { BiomeId } from "#enums/biome";
+import type { BiomeId } from "#enums/biome-id";
 import { PhaseId } from "#enums/phase-id";
 import { BattlePhase } from "./abstract-battle-phase";
 

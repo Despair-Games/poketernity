@@ -4,7 +4,7 @@ import { EncounterPhase } from "#app/phases/encounter-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { settings } from "#app/system/settings/settings-manager";
 import { AbilityId } from "#enums/ability-id";
-import { BiomeId } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { GameModes } from "#enums/game-modes";
 import { MoveId } from "#enums/move-id";
 import { PlayerGender } from "#enums/player-gender";

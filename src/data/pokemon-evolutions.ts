@@ -9,7 +9,7 @@ import { Gender } from "#enums/gender";
 import { randSeedInt } from "#app/utils";
 import { PokeballType } from "#enums/pokeball";
 import { WeatherType } from "#enums/weather-type";
-import type { BiomeId } from "#enums/biome";
+import type { BiomeId } from "#enums/biome-id";
 import { Nature } from "#enums/nature";
 
 /**

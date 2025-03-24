@@ -12,7 +12,7 @@ import type MysteryEncounter from "../mystery-encounter";
 import { MysteryEncounterBuilder } from "../mystery-encounter";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
-import { BiomeId } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
 import { Species } from "#enums/species";
