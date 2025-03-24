@@ -17,7 +17,7 @@ import {
 } from "./modifier-pools";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { isNullOrUndefined } from "#app/utils";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";

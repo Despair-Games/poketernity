@@ -4,7 +4,7 @@ import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { NumberHolder } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";

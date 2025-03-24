@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveResult } from "#enums/move-result";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";

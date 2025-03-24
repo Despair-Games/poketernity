@@ -1,5 +1,5 @@
 import type { Localizable } from "#app/interfaces/locales";
-import type { AbilityId } from "#enums/abilities";
+import type { AbilityId } from "#enums/ability-id";
 import { Species } from "#enums/species";
 import i18next from "i18next";
 import { randSeedGauss, randSeedItem } from "#app/utils";

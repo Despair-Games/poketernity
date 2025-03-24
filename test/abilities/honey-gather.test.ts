@@ -1,6 +1,6 @@
 import { type CommandPhase } from "#app/phases/command-phase";
 import { BattleCommand } from "#enums/battle-command";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";

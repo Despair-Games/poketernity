@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { type PostAttackApplyBattlerTagAbAttr } from "#app/data/abilities/ab-attrs/post-attack-apply-battler-tag-ab-attr";
 import { FlinchAttr } from "#app/data/moves/move-attrs/flinch-attr";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";

@@ -2,7 +2,7 @@ import { allMoves } from "#app/data/data-lists";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { ElementalType } from "#enums/elemental-type";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import * as Messages from "#app/messages";

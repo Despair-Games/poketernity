@@ -1,4 +1,4 @@
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { Species } from "#enums/species";
 
 export const starterPassiveAbilities = {

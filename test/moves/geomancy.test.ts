@@ -1,7 +1,7 @@
 import type { EffectiveStat } from "#enums/stat";
 import { Stat } from "#enums/stat";
 import { MoveResult } from "#enums/move-result";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";

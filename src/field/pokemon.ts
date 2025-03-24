@@ -185,7 +185,7 @@ import { applyMoveAttrs } from "#app/utils/move-utils";
 import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AiType } from "#enums/ai-type";
 import { ArenaTagSide } from "#enums/arena-tag-side";

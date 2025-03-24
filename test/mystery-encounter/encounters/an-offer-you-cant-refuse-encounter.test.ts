@@ -18,7 +18,7 @@ import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { MoveId } from "#enums/move-id";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import i18next from "i18next";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 
 const namespace = "mysteryEncounters/anOfferYouCantRefuse";
 /** Gyarados for Indimidate */

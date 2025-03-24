@@ -1,6 +1,6 @@
 import { allMoves } from "#app/data/data-lists";
 import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";

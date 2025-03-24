@@ -1,6 +1,6 @@
 import type { EncoreTag } from "#app/data/battler-tags/encore-tag";
 import { allMoves } from "#app/data/data-lists";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex } from "#enums/battler-index";

@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryPhase } from "#app/phases/berry-phase";
 import { FaintPhase } from "#app/phases/faint-phase";

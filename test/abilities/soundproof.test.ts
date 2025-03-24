@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveResult } from "#enums/move-result";
 import { MoveId } from "#enums/move-id";

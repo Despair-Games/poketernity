@@ -1,6 +1,6 @@
 import { GameModes } from "#enums/game-modes";
 import { TurnHeldItemTransferModifier } from "#app/modifier/modifier";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { Biome } from "#enums/biome";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";

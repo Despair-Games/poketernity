@@ -6,7 +6,7 @@ import { type globalScene } from "#app/global-scene";
 import type { Ability } from "#app/data/abilities/ability";
 import { allAbilities } from "#app/data/data-lists";
 import type { EnemyPokemon, PlayerPokemon, Pokemon } from "#app/field/pokemon";
-import type { AbilityId } from "#enums/abilities";
+import type { AbilityId } from "#enums/ability-id";
 import type { BattlerIndex } from "#enums/battler-index";
 import { Stat } from "#enums/stat";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";

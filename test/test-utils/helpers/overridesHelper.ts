@@ -3,7 +3,7 @@
 import { GameManager } from "#test/test-utils/gameManager";
 
 import type { Variant } from "#app/data/variant";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import type { ModifierOverride } from "#app/modifier/modifier-type";
 import type { BattleStyle } from "#app/overrides";
 import Overrides, { defaultOverrides } from "#app/overrides";

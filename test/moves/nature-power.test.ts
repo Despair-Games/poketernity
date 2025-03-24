@@ -1,4 +1,4 @@
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { Biome } from "#enums/biome";
 import { MoveId } from "#enums/move-id";

@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { ElementalType } from "#enums/elemental-type";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { Challenges } from "#enums/challenges";
 import { MoveId } from "#enums/move-id";

@@ -1,5 +1,5 @@
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleCommand } from "#enums/battle-command";
 import type { BattlerIndex } from "#enums/battler-index";

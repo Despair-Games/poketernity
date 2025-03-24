@@ -10,7 +10,7 @@ import type { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-
 import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
 import { UiMode } from "#enums/ui-mode";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";

@@ -1,5 +1,5 @@
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";

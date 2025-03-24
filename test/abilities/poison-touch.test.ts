@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { type PostAttackApplyStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/post-attack-apply-status-effect-ab-attr";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";

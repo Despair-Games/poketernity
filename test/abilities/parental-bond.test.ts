@@ -1,7 +1,7 @@
 import { ElementalType } from "#enums/elemental-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { toDmgValue } from "#app/utils";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";

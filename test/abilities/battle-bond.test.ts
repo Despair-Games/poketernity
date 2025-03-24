@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/data-lists";
 import { MultiHitAttr } from "#app/data/moves/move-attrs/multi-hit-attr";
 import { MultiHitType } from "#enums/multi-hit-type";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";

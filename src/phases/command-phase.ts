@@ -14,7 +14,7 @@ import type { TurnCommand } from "#app/turn-command-manager";
 import { isNullOrUndefined } from "#app/utils";
 import { MoveLockTagTypes, TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { isFieldTargeted } from "#app/utils/move-utils";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleCommand } from "#enums/battle-command";

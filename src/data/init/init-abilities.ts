@@ -185,7 +185,7 @@ import { getPokemonNameWithAffix } from "#app/messages";
 import { NumberHolder, toDmgValue } from "#app/utils";
 import { getWeatherCondition } from "#app/utils/ability-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { ElementalType } from "#enums/elemental-type";

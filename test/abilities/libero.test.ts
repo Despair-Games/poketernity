@@ -3,7 +3,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { Weather } from "#app/data/weather";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Biome } from "#enums/biome";
 import { MoveId } from "#enums/move-id";

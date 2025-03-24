@@ -11,7 +11,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { WeatherType } from "#enums/weather-type";
 import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import { isNullOrUndefined } from "#app/utils";
-import type { AbilityId } from "#enums/abilities";
+import type { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";

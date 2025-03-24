@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { Stat } from "#enums/stat";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";

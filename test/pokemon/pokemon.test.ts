@@ -4,7 +4,7 @@ import { GameManager } from "#test/test-utils/gameManager";
 import { PokeballType } from "#enums/pokeball";
 import type BattleScene from "#app/battle-scene";
 import { MoveId } from "#enums/move-id";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 
 describe("Spec - Pokemon", () => {
   let phaserGame: Phaser.Game;

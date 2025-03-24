@@ -11,7 +11,7 @@ import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { shiftCharCodes } from "#app/utils";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";

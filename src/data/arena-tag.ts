@@ -17,7 +17,7 @@ import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { BooleanHolder, isNullOrUndefined, NumberHolder, toDmgValue } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import type { BattlerIndex } from "#enums/battler-index";

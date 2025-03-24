@@ -32,7 +32,7 @@ import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils";
 import { applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";

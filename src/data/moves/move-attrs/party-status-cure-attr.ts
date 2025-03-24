@@ -1,4 +1,4 @@
-import type { AbilityId } from "#enums/abilities";
+import type { AbilityId } from "#enums/ability-id";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";

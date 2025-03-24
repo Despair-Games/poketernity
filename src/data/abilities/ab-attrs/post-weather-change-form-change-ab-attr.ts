@@ -1,6 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { Species } from "#enums/species";
 import type { WeatherType } from "#enums/weather-type";
 import { PostWeatherChangeAbAttr } from "./post-weather-change-ab-attr";

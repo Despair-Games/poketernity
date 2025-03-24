@@ -10,7 +10,7 @@ import type { PokemonForm } from "./pokemon-form";
 import { variantData, type VariantSet, type Variant } from "#app/data/variant";
 import { globalScene } from "#app/global-scene";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { PokemonRegion } from "#enums/pokemon-regions";
 import { Species } from "#enums/species";
 import { SpeciesFormKey } from "#enums/species-form-key";

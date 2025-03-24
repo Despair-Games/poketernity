@@ -2,7 +2,7 @@ import type { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
 import { allMoves } from "#app/data/data-lists";
 import { MovePhase } from "#app/phases/move-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";

@@ -24,7 +24,7 @@ import { initSceneWithoutEncounterPhase } from "#test/test-utils/gameManagerUtil
 import { ModifierTier } from "#enums/modifier-tier";
 import { ClowningAroundEncounter } from "#app/data/mystery-encounters/encounters/clowning-around-encounter";
 import { TrainerType } from "#enums/trainer-type";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { PostMysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/post-mystery-encounter-phase";
 import { Button } from "#enums/buttons";
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";

@@ -1,6 +1,6 @@
 import type { Move } from "#app/data/moves/move";
 import type { Pokemon } from "#app/field/pokemon";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { StatusEffect } from "#enums/status-effect";
 import { ElementalType } from "#enums/elemental-type";
 import { PostDefendAbAttr } from "./post-defend-ab-attr";

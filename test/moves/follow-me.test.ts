@@ -1,6 +1,6 @@
 import { Stat } from "#enums/stat";
 import { BattlerIndex } from "#enums/battler-index";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";

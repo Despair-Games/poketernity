@@ -1,6 +1,6 @@
 import type { Localizable } from "#app/interfaces/locales";
 import type { Constructor } from "#app/utils";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import i18next from "i18next";
 import type { AbAttr } from "./ab-attrs/ab-attr";
 import type { AbAttrCondition } from "#app/@types/AbAttrCondition";

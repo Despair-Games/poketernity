@@ -87,7 +87,7 @@ import { UproarTag } from "#app/data/battler-tags/uproar-tag";
 import { WeatherHighestStatBoostTag } from "#app/data/battler-tags/weather-highest-stat-boost-tag";
 import { WhirlpoolTag } from "#app/data/battler-tags/whirlpool-tag";
 import { WrapTag } from "#app/data/battler-tags/wrap-tag";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { ElementalType } from "#enums/elemental-type";

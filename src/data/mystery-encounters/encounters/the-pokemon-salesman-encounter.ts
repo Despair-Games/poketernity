@@ -27,7 +27,7 @@ import PokemonData from "#app/system/pokemon-data";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 
 /** the i18n namespace for this encounter */

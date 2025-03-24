@@ -1,6 +1,6 @@
 // -- start tsdoc imports --
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { AbilityId } from "./abilities";
+import type { AbilityId } from "./ability-id";
 import type { MoveId } from "./move-id";
 /* eslint-enable @typescript-eslint/no-unused-vars */
 // -- end tsdoc imports --

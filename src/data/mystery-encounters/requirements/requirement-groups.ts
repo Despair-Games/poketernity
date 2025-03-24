@@ -1,5 +1,5 @@
 import { MoveId } from "#enums/move-id";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 
 /**
  * Moves that "steal" things

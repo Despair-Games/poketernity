@@ -1,4 +1,4 @@
-import type { AbilityId } from "#enums/abilities";
+import type { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import { isNullOrUndefined } from "#app/utils";
 import type { Nature } from "#enums/nature";

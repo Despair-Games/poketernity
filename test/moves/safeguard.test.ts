@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allAbilities } from "#app/data/data-lists";
 import { type PostDefendContactApplyStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/post-defend-contact-apply-status-effect-ab-attr";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import { MoveId } from "#enums/move-id";

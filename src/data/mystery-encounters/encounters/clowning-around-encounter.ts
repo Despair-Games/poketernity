@@ -22,7 +22,7 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import {
   applyAbilityOverrideToPokemon,
   applyModifierTypeToPlayerPokemon,

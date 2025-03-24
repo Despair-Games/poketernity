@@ -35,7 +35,7 @@ import { BooleanHolder, NumberHolder, type AbstractConstructor, type Constructor
 import { WeakenMoveTypeArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex } from "#enums/battler-index";

@@ -64,7 +64,7 @@ import {
 } from "#app/utils";
 import { applyChallenges } from "#app/utils/challenge-utils";
 import { getPokemonSpeciesForm, getPokerusStarters } from "#app/utils/pokemon-species-utils";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
 import { ChallengeType } from "#enums/challenge-type";
 import { Device } from "#enums/devices";

@@ -1,7 +1,7 @@
 import type { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import { HighestStatBoostTag } from "#app/data/battler-tags/highest-stat-boost-tag";
 import type { TerrainBattlerTag } from "#app/data/battler-tags/terrain-battler-tag";
-import type { AbilityId } from "#enums/abilities";
+import type { AbilityId } from "#enums/ability-id";
 import type { BattlerTagType } from "#enums/battler-tag-type";
 import type { TerrainType } from "#enums/terrain-type";
 

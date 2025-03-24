@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveResult } from "#enums/move-result";
 import { MovePhase } from "#app/phases/move-phase";
 import { MoveId } from "#enums/move-id";

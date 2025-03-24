@@ -3,7 +3,7 @@ import { MessagePhase } from "#app/phases/message-phase";
 import { MoveHeaderPhase } from "#app/phases/move-header-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { TurnStartPhase } from "#app/phases/turn-start-phase";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";

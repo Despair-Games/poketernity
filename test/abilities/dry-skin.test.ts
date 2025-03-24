@@ -1,5 +1,5 @@
 import { Species } from "#enums/species";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";

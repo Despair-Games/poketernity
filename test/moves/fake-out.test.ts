@@ -5,7 +5,7 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveResult } from "#enums/move-result";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 
 describe("Moves - Fake Out", () => {
   let phaserGame: Phaser.Game;

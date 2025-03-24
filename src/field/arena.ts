@@ -24,7 +24,7 @@ import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { type AbstractConstructor, randSeedInt } from "#app/utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { BattlerIndex } from "#enums/battler-index";

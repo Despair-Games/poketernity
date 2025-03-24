@@ -3,7 +3,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { Species } from "#enums/species";
 import { MovePhase } from "#app/phases/move-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";

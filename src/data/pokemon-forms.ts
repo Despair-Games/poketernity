@@ -11,7 +11,7 @@ import { allMoves } from "#app/data/data-lists";
 import { MoveCategory } from "#enums/move-category";
 import { ElementalType } from "#enums/elemental-type";
 import type { AbstractConstructor, nil } from "#app/utils";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { getPokemonNameWithAffix } from "#app/messages";

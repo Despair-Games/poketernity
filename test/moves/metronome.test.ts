@@ -3,7 +3,7 @@ import type { SemiInvulnerableTag } from "#app/data/battler-tags/semi-invulnerab
 import { allMoves } from "#app/data/data-lists";
 import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
 import { SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";

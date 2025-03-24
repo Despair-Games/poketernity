@@ -27,7 +27,7 @@ import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-u
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import type { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
 import { isNullOrUndefined } from "#app/utils";
-import type { AbilityId } from "#enums/abilities";
+import type { AbilityId } from "#enums/ability-id";
 import { BattleStyle } from "#enums/battle-style";
 import type { BattlerIndex } from "#enums/battler-index";
 import { Button } from "#enums/buttons";

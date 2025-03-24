@@ -3,7 +3,7 @@
 import { type PokeballCounts } from "#app/battle-scene";
 import { Variant } from "#app/data/variant";
 import { type ModifierOverride } from "#app/modifier/modifier-type";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
 import { Biome } from "#enums/biome";
 import { EggTier } from "#enums/egg-type";

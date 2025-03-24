@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { isBetween } from "#app/utils";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";

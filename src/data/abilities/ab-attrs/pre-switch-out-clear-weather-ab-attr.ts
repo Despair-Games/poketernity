@@ -1,6 +1,6 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { WeatherType } from "#enums/weather-type";
 import { PreSwitchOutAbAttr } from "./pre-switch-out-ab-attr";
 

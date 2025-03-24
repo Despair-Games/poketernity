@@ -27,7 +27,7 @@ import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { Stat } from "#enums/stat";
 import type { BerryModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { PhaseId } from "#enums/phase-id";
 
 const namespace = "mysteryEncounters/uncommonBreed";

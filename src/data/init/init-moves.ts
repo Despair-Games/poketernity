@@ -238,7 +238,7 @@ import { isNullOrUndefined } from "#app/utils";
 import { ConditionalProtectArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { SemiInvulnerableBattlerTagTypes, TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { crashDamageFunc } from "#app/utils/move-utils";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleCommand } from "#enums/battle-command";

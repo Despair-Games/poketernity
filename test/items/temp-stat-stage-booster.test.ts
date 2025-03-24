@@ -5,7 +5,7 @@ import Phase from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { MoveId } from "#enums/move-id";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { AbilityId } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { TempStatStageBoosterModifier } from "#app/modifier/modifier";
 import { UiMode } from "#enums/ui-mode";
 import { Button } from "#enums/buttons";
