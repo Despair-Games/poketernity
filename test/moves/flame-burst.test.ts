@@ -1,12 +1,11 @@
-import { BattlerIndex } from "#enums/battler-index";
-import { allAbilities } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
 import type { Pokemon } from "#app/field/pokemon";
+import { Abilities } from "#enums/abilities";
+import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Moves - Flame Burst", () => {
   let phaserGame: Phaser.Game;
@@ -75,7 +74,7 @@ describe("Moves - Flame Burst", () => {
     await game.classicMode.startBattle([Species.PIKACHU, Species.PIKACHU]);
     const [leftEnemy, rightEnemy] = game.scene.getEnemyField();
 
-    vi.spyOn(rightEnemy, "getAbility").mockReturnValue(allAbilities[Abilities.FLASH_FIRE]);
+    game.field.mockAbility(rightEnemy, Abilities.FLASH_FIRE);
 
     game.move.select(MoveId.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
     game.move.select(MoveId.SPLASH, 1);
@@ -89,7 +88,7 @@ describe("Moves - Flame Burst", () => {
     await game.classicMode.startBattle([Species.PIKACHU, Species.PIKACHU]);
     const [leftEnemy, rightEnemy] = game.scene.getEnemyField();
 
-    vi.spyOn(rightEnemy, "getAbility").mockReturnValue(allAbilities[Abilities.MAGIC_GUARD]);
+    game.field.mockAbility(rightEnemy, Abilities.MAGIC_GUARD);
 
     game.move.select(MoveId.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
     game.move.select(MoveId.SPLASH, 1);
@@ -108,8 +107,8 @@ describe("Moves - Flame Burst", () => {
     game.move.select(MoveId.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.forceEnemyMove(MoveId.SUBSTITUTE);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SUBSTITUTE);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
@@ -128,8 +127,8 @@ describe("Moves - Flame Burst", () => {
     game.move.select(MoveId.FLAME_BURST, 0, BattlerIndex.ENEMY_2);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.forceEnemyMove(MoveId.PROTECT);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.PROTECT);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 
@@ -150,8 +149,8 @@ describe("Moves - Flame Burst", () => {
     game.move.select(MoveId.FLAME_BURST, 0, BattlerIndex.ENEMY_2);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.forceEnemyMove(MoveId.ENDURE);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.ENDURE);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY_2]);
 

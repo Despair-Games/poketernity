@@ -1,5 +1,5 @@
 import { type AnimConfig, type AnimFrame } from "#app/data/animations/anim-config";
-import { type SubstituteTag } from "#app/data/battler-tags";
+import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { settings } from "#app/system/settings/settings-manager";

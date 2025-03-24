@@ -1,12 +1,12 @@
 import { Species } from "#enums/species";
 import {
   DayEvolutionCondition,
-  GenderEvolutionCondition,
+  FemaleEvolutionCondition,
+  MaleEvolutionCondition,
   type PokemonEvolutions,
   SpeciesEvolution,
   SpeciesFriendshipEvolutionCondition,
 } from "#app/data/pokemon-evolutions";
-import { Gender } from "#enums/gender";
 import { HAPPINESS_EVO_LEVEL } from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
 
 export const gen4pokemonFamilyEvolutions: PokemonEvolutions = {
@@ -25,10 +25,10 @@ export const gen4pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.CRANIDOS]: [new SpeciesEvolution(Species.RAMPARDOS, 30, null, null)],
   [Species.SHIELDON]: [new SpeciesEvolution(Species.BASTIODON, 30, null, null)],
   [Species.BURMY]: [
-    new SpeciesEvolution(Species.MOTHIM, 20, null, [new GenderEvolutionCondition(Gender.MALE)]),
-    new SpeciesEvolution(Species.WORMADAM, 20, null, [new GenderEvolutionCondition(Gender.FEMALE)]),
+    new SpeciesEvolution(Species.MOTHIM, 20, null, [new MaleEvolutionCondition()]),
+    new SpeciesEvolution(Species.WORMADAM, 20, null, [new FemaleEvolutionCondition()]),
   ],
-  [Species.COMBEE]: [new SpeciesEvolution(Species.VESPIQUEN, 21, null, [new GenderEvolutionCondition(Gender.FEMALE)])],
+  [Species.COMBEE]: [new SpeciesEvolution(Species.VESPIQUEN, 21, null, [new FemaleEvolutionCondition()])],
   [Species.BUIZEL]: [new SpeciesEvolution(Species.FLOATZEL, 26, null, null)],
   [Species.CHERUBI]: [new SpeciesEvolution(Species.CHERRIM, 25, null, null)],
   [Species.SHELLOS]: [new SpeciesEvolution(Species.GASTRODON, 30, null, null)],

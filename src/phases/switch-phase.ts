@@ -1,13 +1,14 @@
 import { globalScene } from "#app/global-scene";
+import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
+import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
 import { PartyOption } from "#enums/party-option";
 import { PartyUiMode } from "#enums/party-ui-mode";
-import { UiMode } from "#enums/ui-mode";
+import { PhaseId } from "#enums/phase-id";
 import { SwitchType } from "#enums/switch-type";
+import { UiMode } from "#enums/ui-mode";
 import { BattlePhase } from "./abstract-battle-phase";
 import { PostSummonPhase } from "./post-summon-phase";
 import { SwitchSummonPhase } from "./switch-summon-phase";
-import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
-import { PhaseId } from "#enums/phase-id";
 
 /**
  * Opens the party selector UI and transitions into a {@linkcode SwitchSummonPhase}
@@ -75,7 +76,7 @@ export class SwitchPhase extends BattlePhase {
     const fieldIndex =
       currentBattle.getBattlerCount() === 1 || globalScene.getPokemonAllowedInBattle().length > 1 ? this.fieldIndex : 0;
 
-    ui.setMode(
+    ui.setMode<PartyUiHandler>(
       UiMode.PARTY,
       this.isModal ? PartyUiMode.FAINT_SWITCH : PartyUiMode.POST_BATTLE_SWITCH,
       fieldIndex,

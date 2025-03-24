@@ -6,65 +6,58 @@ import { type TurnEndPhase } from "#app/phases/turn-end-phase";
 // -- end tsdoc imports --
 
 import { updateUserInfo } from "#app/account";
-import { BattlerIndex } from "#enums/battler-index";
 import BattleScene from "#app/battle-scene";
-import { getMoveTargets } from "#app/data/moves/move";
-import { settings } from "#app/system/settings/settings-manager";
 import type { EnemyPokemon, PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import Trainer from "#app/field/trainer";
 import { getGameMode } from "#app/game-mode";
-import { GameModes } from "#enums/game-modes";
+import { globalScene } from "#app/global-scene";
 import { ModifierTypeOption } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import overrides from "#app/overrides";
 import { EncounterPhase } from "#app/phases/encounter-phase";
-import type { EnemyCommandPhase } from "#app/phases/enemy-command-phase";
 import { FaintPhase } from "#app/phases/faint-phase";
 import { LoginPhase } from "#app/phases/login-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
-import { type SelectTargetPhase } from "#app/phases/select-target-phase";
 import { TitlePhase } from "#app/phases/title-phase";
-import type BattleMessageUiHandler from "#app/ui/battle-message-ui-handler";
-import type CommandUiHandler from "#app/ui/command-ui-handler";
-import type ModifierSelectUiHandler from "#app/ui/modifier-select-ui-handler";
-import type PartyUiHandler from "#app/ui/party-ui-handler";
-import type TargetSelectUiHandler from "#app/ui/target-select-ui-handler";
-import { UiMode } from "#enums/ui-mode";
+import { settings } from "#app/system/settings/settings-manager";
+import type { TurnCommand } from "#app/turn-command-manager";
+import type { BattleMessageUiHandler } from "#app/ui/handlers/battle-message-ui-handler";
+import type { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
+import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
+import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
+import type { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
 import { isNullOrUndefined } from "#app/utils";
+import type { Abilities } from "#enums/abilities";
 import { BattleStyle } from "#enums/battle-style";
+import type { BattlerIndex } from "#enums/battler-index";
 import { Button } from "#enums/buttons";
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
 import { ExpNotification } from "#enums/exp-notification";
+import { GameModes } from "#enums/game-modes";
 import { HpBarSpeed } from "#enums/hp-bar-speed";
-import type { MoveId } from "#enums/move-id";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PlayerGender } from "#enums/player-gender";
 import type { Species } from "#enums/species";
+import { UiMode } from "#enums/ui-mode";
 import { ErrorInterceptor } from "#test/test-utils/errorInterceptor";
 import { generateStarter, waitUntil } from "#test/test-utils/gameManagerUtils";
 import { GameWrapper } from "#test/test-utils/gameWrapper";
 import { ChallengeModeHelper } from "#test/test-utils/helpers/challengeModeHelper";
 import { ClassicModeHelper } from "#test/test-utils/helpers/classicModeHelper";
 import { DailyModeHelper } from "#test/test-utils/helpers/dailyModeHelper";
+import { FieldHelper } from "#test/test-utils/helpers/fieldHelper";
 import { ModifierHelper } from "#test/test-utils/helpers/modifiersHelper";
 import { MoveHelper } from "#test/test-utils/helpers/moveHelper";
 import { OverridesHelper } from "#test/test-utils/helpers/overridesHelper";
-import { FieldHelper } from "#test/test-utils/helpers/fieldHelper";
 import { ReloadHelper } from "#test/test-utils/helpers/reloadHelper";
 import { SettingsHelper } from "#test/test-utils/helpers/settingsHelper";
 import type { InputsHandler } from "#test/test-utils/inputsHandler";
-import type { PhaseInterceptorPhase } from "#test/test-utils/phaseInterceptor";
-import { PhaseInterceptor } from "#test/test-utils/phaseInterceptor";
+import { MockFetch } from "#test/test-utils/mocks/mockFetch";
+import { PhaseInterceptor, type PhaseInterceptorPhase } from "#test/test-utils/phaseInterceptor";
 import { TextInterceptor } from "#test/test-utils/TextInterceptor";
 import { AES, enc } from "crypto-js";
 import fs from "fs";
 import { expect, vi } from "vitest";
-import { globalScene } from "#app/global-scene";
-import type StarterSelectUiHandler from "#app/ui/starter-select-ui-handler";
-import { MockFetch } from "#test/test-utils/mocks/mockFetch";
-import type { TurnCommand } from "#app/turn-command-manager";
-import type { Abilities } from "#enums/abilities";
-import { allAbilities, allMoves } from "#app/data/data-lists";
 
 /**
  * Class to manage the game state and transitions between phases.
@@ -315,38 +308,6 @@ export class GameManager {
     console.log("==================[New Turn]==================");
   }
 
-  /**
-   * Emulate a player's target selection after a move is chosen, usually called automatically by {@linkcode MoveHelper.select}.
-   * Will trigger during the next {@linkcode SelectTargetPhase}
-   * @param targetIndex The index of the attack target, or `undefined` for multi-target attacks
-   * @param movePosition The index of the move in the pokemon's moveset array
-   */
-  selectTarget(movePosition: number, targetIndex?: BattlerIndex) {
-    this.onNextPrompt(
-      "SelectTargetPhase",
-      UiMode.TARGET_SELECT,
-      () => {
-        const handler = this.scene.ui.getHandler() as TargetSelectUiHandler;
-        const move = (this.scene.getCurrentPhase() as SelectTargetPhase)
-          .getPokemon()
-          .getMoveset()
-          [movePosition].getMove();
-        if (!move.isMultiTarget()) {
-          handler.setCursor(targetIndex !== undefined ? targetIndex : BattlerIndex.ENEMY);
-        }
-        if (move.isMultiTarget() && targetIndex !== undefined) {
-          throw new Error(`targetIndex was passed to selectMove() but move ("${move.name}") is not targetted`);
-        }
-        handler.processInput(Button.ACTION);
-      },
-      () =>
-        this.isCurrentPhase("CommandPhase")
-        || this.isCurrentPhase("MovePhase")
-        || this.isCurrentPhase("TurnStartPhase")
-        || this.isCurrentPhase("TurnEndPhase"),
-    );
-  }
-
   /** Faint all opponents currently on the field */
   async doKillOpponents() {
     await this.killPokemon(this.scene.currentBattle.enemyParty[0]);
@@ -383,38 +344,6 @@ export class GameManager {
         || this.isCurrentPhase("NewBattlePhase")
         || this.isCurrentPhase("CheckSwitchPhase"),
     );
-  }
-
-  /**
-   * Forces the next enemy selecting a move to use the given move in its moveset against the
-   * given target (if applicable).
-   * @param moveId {@linkcode MoveId} the move the enemy will use
-   * @param target {@linkcode BattlerIndex} the target on which the enemy will use the given move
-   * @deprecated Use {@linkcode MoveHelper.selectEnemyMove | this.move.selectEnemyMove} instead for
-   * identical functionality, or {@linkcode MoveHelper.forceEnemyMove | this.move.forceEnemyMove} which will
-   * overwrite the enemy pokemon's moveset (and disable the global moveset override if it's active)
-   */
-  async forceEnemyMove(moveId: MoveId, target?: BattlerIndex) {
-    // Wait for the next EnemyCommandPhase to start
-    await this.phaseInterceptor.to("EnemyCommandPhase", false);
-    const enemy = this.scene.getEnemyField()[(this.scene.getCurrentPhase() as EnemyCommandPhase).getFieldIndex()];
-    const legalTargets = getMoveTargets(enemy, moveId);
-
-    vi.spyOn(enemy, "getNextMove").mockReturnValueOnce({
-      move: allMoves.get(moveId),
-      targets:
-        target !== undefined && !legalTargets.multiple && legalTargets.targets.includes(target)
-          ? [target]
-          : enemy.getNextTargets(moveId),
-      type: enemy.getMoveType(allMoves.get(moveId)),
-    });
-
-    /**
-     * Run the EnemyCommandPhase to completion.
-     * This allows this function to be called consecutively to
-     * force a move for each enemy in a double battle.
-     */
-    await this.phaseInterceptor.to("EnemyCommandPhase");
   }
 
   forceEnemyToSwitch() {
@@ -608,13 +537,13 @@ export class GameManager {
    * and {@linkcode OverridesHelper.enemyAbility | override.enemyAbility}.
    * Also, unlike the overrides, this function can only be called after `startBattle()` has finished.
    *
-   * @param speciesId The ID of the species that is to receive the ability.
-   * @param abilityId The ID of the ability to give.
+   * @param speciesId - The ID of the species that is to receive the ability.
+   * @param abilityId - The ID of the ability to give.
    */
   forceSpeciesSpecificAbility(speciesId: Species, abilityId: Abilities): void {
     for (const p of (this.scene.getPlayerParty() as Pokemon[]).concat(this.scene.getEnemyParty())) {
       if (p.species.speciesId === speciesId) {
-        vi.spyOn(p, "getAbility").mockReturnValue(allAbilities[abilityId]);
+        this.field.mockAbility(p, abilityId);
       }
     }
   }

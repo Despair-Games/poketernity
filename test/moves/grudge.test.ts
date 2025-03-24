@@ -37,7 +37,7 @@ describe("Moves - Grudge", () => {
 
     const playerPokemon = game.scene.getPlayerPokemon();
     game.move.select(MoveId.EMBER);
-    await game.forceEnemyMove(MoveId.GRUDGE);
+    await game.move.selectEnemyMove(MoveId.GRUDGE);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 
@@ -51,12 +51,12 @@ describe("Moves - Grudge", () => {
 
     const playerPokemon = game.scene.getPlayerPokemon();
     game.move.select(MoveId.SPLASH);
-    await game.forceEnemyMove(MoveId.GRUDGE);
+    await game.move.selectEnemyMove(MoveId.GRUDGE);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toNextTurn();
 
     game.move.select(MoveId.EMBER);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.selectEnemyMove(MoveId.SPLASH);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toEndOfTurn();
 
@@ -78,7 +78,7 @@ describe("Moves - Grudge", () => {
     const playerPokemon = game.scene.getPlayerPokemon();
 
     game.move.select(MoveId.FALSE_SWIPE);
-    await game.forceEnemyMove(MoveId.GRUDGE);
+    await game.move.selectEnemyMove(MoveId.GRUDGE);
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]);
     await game.toEndOfTurn();
 

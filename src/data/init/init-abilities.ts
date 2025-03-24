@@ -200,6 +200,7 @@ import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
 import { BypassParaSpeedReductionAbAttr } from "#app/data/abilities/ab-attrs/bypass-para-speed-reduction-ab-attr";
 import { MockStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/mock-status-effect-ab-attr";
+import { ReflectMovesAbAttr } from "#app/data/abilities/ab-attrs/reflect-moves-ab-attr";
 
 // prettier-ignore
 export function initAbilities() {
@@ -358,14 +359,14 @@ export function initAbilities() {
     new Ability(Abilities.CUTE_CHARM, 3).attr(PostDefendContactApplyTagChanceAbAttr, 30, BattlerTagType.INFATUATED),
     new Ability(Abilities.PLUS, 3).conditionalAttr(
       (p) =>
-        globalScene.currentBattle.double && [Abilities.PLUS, Abilities.MINUS].some((a) => p.getAlly().hasAbility(a)),
+        globalScene.currentBattle.double && [Abilities.PLUS, Abilities.MINUS].some((a) => p.getAlly()?.hasAbility(a)),
       StatMultiplierAbAttr,
       Stat.SPATK,
       1.5,
     ),
     new Ability(Abilities.MINUS, 3).conditionalAttr(
       (p) =>
-        globalScene.currentBattle.double && [Abilities.PLUS, Abilities.MINUS].some((a) => p.getAlly().hasAbility(a)),
+        globalScene.currentBattle.double && [Abilities.PLUS, Abilities.MINUS].some((a) => p.getAlly()?.hasAbility(a)),
       StatMultiplierAbAttr,
       Stat.SPATK,
       1.5,
@@ -619,7 +620,7 @@ export function initAbilities() {
       .condition((pokemon) => pokemon.getHpRatio() <= 0.5),
     new Ability(Abilities.CURSED_BODY, 5).attr(PostDefendMoveDisableAbAttr, 30).bypassFaint(),
     new Ability(Abilities.HEALER, 5).conditionalAttr(
-      (pokemon) => pokemon.getAlly() && pokemon.randSeedInt(10) < 3,
+      (pokemon) => pokemon.getAlly() !== undefined && pokemon.randSeedInt(10) < 3,
       PostTurnResetStatusAbAttr,
       true,
     ),
@@ -710,7 +711,9 @@ export function initAbilities() {
         1,
       )
       .attr(PostIntimidateStatStageChangeAbAttr, [Stat.SPD], 1),
-    new Ability(Abilities.MAGIC_BOUNCE, 5).ignorable().unimplemented(),
+    new Ability(Abilities.MAGIC_BOUNCE, 5)
+      .attr(ReflectMovesAbAttr)
+      .ignorable(),
     new Ability(Abilities.SAP_SIPPER, 5)
       .attr(TypeImmunityStatStageChangeAbAttr, ElementalType.GRASS, Stat.ATK, 1)
       .ignorable(),

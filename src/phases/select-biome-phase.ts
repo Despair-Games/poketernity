@@ -10,6 +10,7 @@ import { PartyHealPhase } from "./party-heal-phase";
 import { SwitchBiomePhase } from "./switch-biome-phase";
 import { PhaseId } from "#enums/phase-id";
 import { allBiomes } from "#app/data/data-lists";
+import { biomeLinks } from "#app/data/balance/biomes/biome-links";
 
 export class SelectBiomePhase extends BattlePhase {
   override readonly id = PhaseId.SELECT_BIOME;
@@ -40,14 +41,25 @@ export class SelectBiomePhase extends BattlePhase {
       setNextBiome(Biome.END);
     } else if (hasRandomBiomes) {
       setNextBiome(this.generateNextBiome());
-    } else if (Object.entries(allBiomes.get(currentBiome).outgoingPaths).length > 0) {
+    } else if (Array.isArray(biomeLinks[currentBiome])) {
       let biomes: Biome[] = [];
-      biomes = [allBiomes.get(currentBiome).getNextBiome()];
+      globalScene.executeWithSeedOffset(() => {
+        biomes = (biomeLinks[currentBiome] as (Biome | [Biome, number])[])
+          .filter((b) => !Array.isArray(b) || !randSeedInt(b[1]))
+          .map((b) => (!Array.isArray(b) ? b : b[0]));
+      }, waveIndex);
 
-      // User has map
-      if (globalScene.findModifier((m) => m instanceof MapModifier)) {
-        //TODO: fill this with all of current biome's outgoingPaths as options
-        const biomeChoices: Biome[] = biomes;
+      if (biomes.length > 1 && globalScene.findModifier((m) => m instanceof MapModifier)) {
+        let biomeChoices: Biome[] = [];
+        globalScene.executeWithSeedOffset(() => {
+          biomeChoices = (
+            !Array.isArray(biomeLinks[currentBiome])
+              ? [biomeLinks[currentBiome] as Biome]
+              : (biomeLinks[currentBiome] as (Biome | [Biome, number])[])
+          )
+            .filter((b, _i) => !Array.isArray(b) || !randSeedInt(b[1]))
+            .map((b) => (Array.isArray(b) ? b[0] : b));
+        }, waveIndex);
         const biomeSelectItems = biomeChoices.map((b) => {
           const ret: OptionSelectItem = {
             label: getBiomeName(b),
@@ -71,6 +83,8 @@ export class SelectBiomePhase extends BattlePhase {
       } else {
         setNextBiome(biomes[randSeedInt(biomes.length)]);
       }
+    } else if (biomeLinks.hasOwnProperty(currentBiome)) {
+      setNextBiome(biomeLinks[currentBiome]);
     } else {
       setNextBiome(this.generateNextBiome());
     }

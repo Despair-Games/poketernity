@@ -1,16 +1,16 @@
-import { Stat } from "#enums/stat";
-import { type StockpilingTag } from "#app/data/battler-tags";
+import type { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
 import { allMoves } from "#app/data/data-lists";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { MoveResult } from "#enums/move-result";
-import { GameManager } from "#test/test-utils/gameManager";
-import { Abilities } from "#enums/abilities";
-import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { MovePhase } from "#app/phases/move-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
+import { Abilities } from "#enums/abilities";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
+import { Species } from "#enums/species";
+import { Stat } from "#enums/stat";
+import { GameManager } from "#test/test-utils/gameManager";
+import Phaser from "phaser";
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("Moves - Spit Up", () => {
   let phaserGame: Phaser.Game;

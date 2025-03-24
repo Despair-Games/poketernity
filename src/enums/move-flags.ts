@@ -1,3 +1,10 @@
+// -- start tsdoc imports --
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import type { Abilities } from "./abilities";
+import type { MoveId } from "./move-id";
+/* eslint-enable @typescript-eslint/no-unused-vars */
+// -- end tsdoc imports --
+
 export enum MoveFlags {
   NONE = 0,
   MAKES_CONTACT = 1 << 0,
@@ -43,4 +50,9 @@ export enum MoveFlags {
   REDIRECT_COUNTER = 1 << 18,
   /** Flag indicating whether a move is a G-Max Move or not */
   G_MAX_MOVE = 1 << 19,
+  /**
+   * Flag indicating whether a move can be reflected by {@linkcode Abilities.MAGIC_BOUNCE}
+   * or {@linkcode MoveId.MAGIC_COAT}
+   */
+  BOUNCEABLE = 1 << 20,
 }

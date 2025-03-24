@@ -16,7 +16,6 @@ export class PEBiome {
   public trainerPool: Record<BiomePoolTier, TrainerType[]>;
   public weatherPool: Record<WeatherType, number>;
   public terrainPool: Record<TerrainType, number>;
-  public outgoingPaths: Partial<Record<Biome, number>>;
   public bgm: string;
 
   constructor(
@@ -25,7 +24,6 @@ export class PEBiome {
     trainerPool: Record<BiomePoolTier, TrainerType[]>,
     weatherPool: Record<WeatherType, number>,
     terrainPool: Record<TerrainType, number>,
-    outgoingPaths: Partial<Record<Biome, number>>,
     bgm: string,
   ) {
     this.biomeType = biomeType;
@@ -33,12 +31,6 @@ export class PEBiome {
     this.trainerPool = trainerPool;
     this.weatherPool = weatherPool;
     this.terrainPool = terrainPool;
-    this.outgoingPaths = outgoingPaths;
     this.bgm = bgm;
-  }
-
-  getNextBiome() {
-    // TODO: calculate the next biome to go to based off outgoingPaths
-    return Biome.TOWN;
   }
 }

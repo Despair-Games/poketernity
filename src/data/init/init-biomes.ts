@@ -4,21 +4,18 @@ import {
   caveTrainerPool,
   caveWeatherPool,
   caveTerrainPool,
-  caveOutgoingLinks,
 } from "#app/data/balance/biomes/PEBiome_cave";
 import {
   townPokemonPool,
   townTrainerPool,
   townWeatherPool,
   townTerrainPool,
-  townOutgoingLinks,
 } from "#app/data/balance/biomes/PEBiome_town";
 import {
   volcanoPokemonPool,
   volcanoTrainerPool,
   volcanoWeatherPool,
   volcanoTerrainPool,
-  volcanoOutgoingLinks,
 } from "#app/data/balance/biomes/PEBiome_volcano";
 import { allBiomes } from "#app/data/data-lists";
 import { Biome } from "#enums/biome";
@@ -31,7 +28,6 @@ export function initBiomes() {
       townTrainerPool,
       townWeatherPool,
       townTerrainPool,
-      townOutgoingLinks,
       "town",
     ),
     new PEBiome(
@@ -40,7 +36,6 @@ export function initBiomes() {
       volcanoTrainerPool,
       volcanoWeatherPool,
       volcanoTerrainPool,
-      volcanoOutgoingLinks,
       "volcano",
     ),
     new PEBiome(
@@ -49,9 +44,10 @@ export function initBiomes() {
       caveTrainerPool,
       caveWeatherPool,
       caveTerrainPool,
-      caveOutgoingLinks,
       "cave",
     ),
+    // The below are all filler values for now
+    
   ];
 
   for (const pebiome of rawAllBiomes) {

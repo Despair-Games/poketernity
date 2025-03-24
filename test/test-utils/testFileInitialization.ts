@@ -1,14 +1,12 @@
 import { initLoggedInUser } from "#app/account";
 import { SESSION_ID_COOKIE } from "#app/constants";
 import { allMoves } from "#app/data/data-lists";
-import { initBiomes } from "#app/data/balance/biomes";
 import { initEggMoves } from "#app/data/balance/egg-moves";
 import { initPokemonPreEvolutions } from "#app/data/pokemon-pre-evolutions";
 import { initMysteryEncounters } from "#app/data/mystery-encounters/mystery-encounters";
 import { initPokemonForms } from "#app/data/pokemon-forms";
 import { initSpecies } from "#app/data/init/init-species";
 import { initAchievements } from "#app/system/achievements";
-import { initStatsKeys } from "#app/ui/game-stats-ui-handler";
 import { setCookie } from "#app/utils";
 import { blobToString } from "#test/test-utils/gameManagerUtils";
 import { MockConsole } from "#test/test-utils/mocks/mockConsole";
@@ -22,6 +20,7 @@ import { initAbilities } from "#app/data/init/init-abilities";
 import { initMoves } from "#app/data/init/init-moves";
 import { initModifierTypes } from "#app/modifier/init-modifier-types";
 import { initModifierPools } from "#app/modifier/init-modifier-pools";
+import { initBiomes } from "#app/data/init/init-biomes";
 
 /**
  * A function to initialize game data before running any other test-related code.
@@ -34,7 +33,6 @@ export function initDataForTests() {
     initMoves();
     initVouchers();
     initAchievements();
-    initStatsKeys();
     initPokemonPreEvolutions();
     initBiomes();
     initEggMoves();

@@ -1,12 +1,12 @@
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { type Pokemon } from "#app/field/pokemon";
-import { HitResult } from "#enums/hit-result";
-import { getPokemonNameWithAffix } from "#app/messages";
-import type { BooleanHolder } from "#app/utils";
-import i18next from "i18next";
+import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
 import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
-import type { MoveConditionFunc } from "#app/@types/MoveConditionFunc";
+import { type Pokemon } from "#app/field/pokemon";
+import { getPokemonNameWithAffix } from "#app/messages";
+import type { BooleanHolder } from "#app/utils";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { HitResult } from "#enums/hit-result";
+import i18next from "i18next";
 
 /**
  * Attribute to put in a {@link https://bulbapedia.bulbagarden.net/wiki/Substitute_(doll) | Substitute Doll}
@@ -25,7 +25,12 @@ export class AddSubstituteAttr extends MoveEffectAttr {
   }
 
   override applyEffect(user: Pokemon, _target: Pokemon, move: Move): boolean {
-    user.damageAndUpdate(Math.floor(user.getMaxHp() * this.hpCost), HitResult.OTHER, false, true, true);
+    user.damageAndUpdate(Math.floor(user.getMaxHp() * this.hpCost), {
+      result: HitResult.OTHER,
+      ignoreSegments: true,
+      preventEndure: true,
+      ignoreDynamaxReduction: true,
+    });
     user.addTag(BattlerTagType.SUBSTITUTE, 0, move.id, user.id);
     return true;
   }

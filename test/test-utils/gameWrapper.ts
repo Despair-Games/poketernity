@@ -1,7 +1,14 @@
 import BattleScene from "#app/battle-scene";
+import * as constants from "#app/constants";
 import { MoveAnim } from "#app/data/animations/move-anim";
 import { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { MoveId } from "#enums/move-id";
+import { PhaseId } from "#enums/phase-id";
 import { MockClock } from "#test/test-utils/mocks/mockClock";
+import { MockConsole } from "#test/test-utils/mocks/mockConsole";
 import { MockGameObjectCreator } from "#test/test-utils/mocks/mockGameObjectCreator";
 import { MockLoader } from "#test/test-utils/mocks/mockLoader";
 import { MockTextureManager } from "#test/test-utils/mocks/mockTextureManager";
@@ -9,25 +16,18 @@ import fs from "fs";
 import Phaser from "phaser";
 import { vi } from "vitest";
 import { version } from "../../package.json";
-import * as constants from "#app/constants";
 import InputManager = Phaser.Input.InputManager;
 import KeyboardManager = Phaser.Input.Keyboard.KeyboardManager;
 import KeyboardPlugin = Phaser.Input.Keyboard.KeyboardPlugin;
 import GamepadPlugin = Phaser.Input.Gamepad.GamepadPlugin;
 import EventEmitter = Phaser.Events.EventEmitter;
 import UpdateList = Phaser.GameObjects.UpdateList;
-import { MockConsole } from "#test/test-utils/mocks/mockConsole";
-import { globalScene } from "#app/global-scene";
-import type { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { BattlerTagType } from "#enums/battler-tag-type";
-import { MoveId } from "#enums/move-id";
-import { PhaseId } from "#enums/phase-id";
 
 export class GameWrapper {
   public game: Phaser.Game;
   public scene: BattleScene;
 
-  private static originalDamage = Pokemon.prototype.damage;
+  private static originalDamageAndUpdate = Pokemon.prototype.damageAndUpdate;
 
   constructor(phaserGame: Phaser.Game, bypassLoginMockTrue: boolean) {
     Phaser.Math.RND.sow(["test"]);
@@ -46,9 +46,9 @@ export class GameWrapper {
       if (cb) cb();
     };
 
-    Pokemon.prototype.damage = function (...args) {
+    Pokemon.prototype.damageAndUpdate = function (...args) {
       const pokemon: Pokemon = this;
-      const ret = GameWrapper.originalDamage.apply(pokemon, args);
+      const ret = GameWrapper.originalDamageAndUpdate.apply(pokemon, args);
 
       const side = pokemon.isPlayer() ? "Player" : "Enemy";
       const lowHpMoves = [MoveId.FALSE_SWIPE, MoveId.HARD_PRESS];

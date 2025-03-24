@@ -10,6 +10,7 @@ import { HealAttr } from "#app/data/moves/move-attrs/heal-attr";
 export class HealOnAllyAttr extends HealAttr {
   override apply(user: Pokemon, target: Pokemon, move: Move): boolean {
     if (user.getAlly() === target) {
+      user.stopMultiHit();
       super.apply(user, target, move);
       return true;
     }

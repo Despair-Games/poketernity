@@ -1,12 +1,11 @@
-import { BattlerIndex } from "#enums/battler-index";
-import { allAbilities } from "#app/data/data-lists";
 import { Abilities } from "#enums/abilities";
-import { WeatherType } from "#enums/weather-type";
+import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
+import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Abilities - Forecast", () => {
   let phaserGame: Phaser.Game;
@@ -29,7 +28,7 @@ describe("Abilities - Forecast", () => {
 
     game.move.select(MoveId.SPLASH);
 
-    expect(game.scene.getPlayerPokemon()?.formIndex).toBe(form);
+    expect(game.field.getPlayerPokemon().formIndex).toBe(form);
   };
 
   /**
@@ -43,7 +42,7 @@ describe("Abilities - Forecast", () => {
 
     game.move.select(MoveId.SPLASH);
 
-    expect(game.scene.getPlayerPokemon()?.formIndex).toBe(NORMAL_FORM);
+    expect(game.field.getPlayerPokemon().formIndex).toBe(NORMAL_FORM);
   };
 
   beforeAll(() => {
@@ -86,7 +85,7 @@ describe("Abilities - Forecast", () => {
         Species.ALTARIA,
       ]);
 
-      vi.spyOn(game.scene.getPlayerParty()[5], "getAbility").mockReturnValue(allAbilities[Abilities.CLOUD_NINE]);
+      game.field.mockAbility(game.scene.getPlayerParty()[5], Abilities.CLOUD_NINE);
 
       const castform = game.scene.getPlayerField()[0];
       expect(castform.formIndex).toBe(NORMAL_FORM);
@@ -190,8 +189,8 @@ describe("Abilities - Forecast", () => {
     game.move.select(MoveId.RAIN_DANCE);
     await game.toEndOfTurn();
 
-    expect(game.scene.getPlayerPokemon()?.formIndex).toBe(RAINY_FORM);
-    expect(game.scene.getEnemyPokemon()?.formIndex).not.toBe(RAINY_FORM);
+    expect(game.field.getPlayerPokemon().formIndex).toBe(RAINY_FORM);
+    expect(game.field.getEnemyPokemon().formIndex).not.toBe(RAINY_FORM);
   });
 
   it("reverts to Normal Form when Castform loses Forecast, changes form to match the weather when it regains it", async () => {
@@ -288,6 +287,22 @@ describe("Abilities - Forecast", () => {
     expect(castform.formIndex).toBe(RAINY_FORM);
 
     game.doSwitchPokemon(1);
+    await game.toNextTurn();
+
+    expect(castform.formIndex).toBe(NORMAL_FORM);
+  });
+
+  it("should revert to Normal Form after primal weather ends", async () => {
+    game.override.battleType("double").starterForms({ [Species.GROUDON]: 1 }); // Primal Groudon
+
+    await game.classicMode.startBattle([Species.CASTFORM, Species.GROUDON, Species.MAGIKARP]);
+    const castform = game.field.getPlayerPokemon();
+
+    expect(castform.formIndex).toBe(SUNNY_FORM);
+
+    // Switch out Primal Groudon to end weather
+    game.move.use(MoveId.SPLASH, 0);
+    game.doSwitchPokemon(2);
     await game.toNextTurn();
 
     expect(castform.formIndex).toBe(NORMAL_FORM);

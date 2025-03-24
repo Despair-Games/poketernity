@@ -1,18 +1,18 @@
-import UiHandler from "#app/ui/ui-handler";
-import type { UiMode } from "#enums/ui-mode";
-import type { InterfaceConfig } from "#app/inputs-controller";
-import { addWindow } from "#app/ui/ui-theme";
-import { addTextObject, setTextColor } from "#app/ui/text";
-import { TextStyle } from "#enums/text-style";
-import { ScrollBar } from "#app/ui/scroll-bar";
 import { getIconWithSettingName } from "#app/configs/inputs/configHandler";
-import NavigationMenu, { NavigationManager } from "#app/ui/settings/navigationMenu";
-import type { Device } from "#enums/devices";
-import { Button } from "#enums/buttons";
-import i18next from "i18next";
 import { globalScene } from "#app/global-scene";
+import type { InterfaceConfig } from "#app/inputs-controller";
 import { settings } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
+import { ScrollBar } from "#app/ui/components/scroll-bar";
+import { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
+import { NavigationManager, NavigationMenu } from "#app/ui/settings/navigation-menu";
+import { addTextObject, setTextColor } from "#app/ui/text/text-utils";
+import { addWindow } from "#app/ui/ui-theme";
+import { Button } from "#enums/buttons";
+import type { Device } from "#enums/devices";
+import { TextStyle } from "#enums/text-style";
+import type { UiMode } from "#enums/ui-mode";
+import i18next from "i18next";
 
 export interface InputsIcons {
   [key: string]: Phaser.GameObjects.Sprite;
@@ -30,7 +30,7 @@ export interface LayoutConfig {
 /**
  * Abstract class for handling UI elements related to control settings.
  */
-export default abstract class AbstractControlSettingsUiHandler extends UiHandler {
+export abstract class AbstractControlSettingsUiHandler extends UiHandler {
   protected settingsContainer: Phaser.GameObjects.Container;
   protected optionsContainer: Phaser.GameObjects.Container;
   protected navigationContainer: NavigationMenu;
@@ -383,11 +383,10 @@ export default abstract class AbstractControlSettingsUiHandler extends UiHandler
   /**
    * Show the UI with the provided arguments.
    *
-   * @param args - Arguments to be passed to the show method.
    * @returns `true` if successful.
    */
-  override show(args: any[]): boolean {
-    super.show(args);
+  override show(): boolean {
+    super.show();
 
     this.updateNavigationDisplay();
     NavigationManager.getInstance().updateIcons();

@@ -1,6 +1,7 @@
 import type { PokemonSelectFilter } from "#app/@types/PokemonSelectFilter";
 import type Battle from "#app/battle";
 import { ME_AVERAGE_ENCOUNTERS_PER_RUN_TARGET, ME_WEIGHT_INCREMENT_ON_SPAWN_MISS } from "#app/constants";
+import { biomeLinks } from "#app/data/balance/biomes/biome-links";
 import { allTrainerConfigs } from "#app/data/balance/trainer-configs/all-trainer-configs";
 import type { CustomPokemonData } from "#app/data/custom-pokemon-data";
 import { allBiomes } from "#app/data/data-lists";
@@ -38,6 +39,7 @@ import { PartyExpPhase } from "#app/phases/party-exp-phase";
 import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { TrainerVictoryPhase } from "#app/phases/trainer-victory-phase";
 import type PokemonData from "#app/system/pokemon-data";
+import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { isNullOrUndefined, randSeedInt, randomString } from "#app/utils";
 import { loadMoveAnimAssets } from "#app/utils/move-anim-utils";
@@ -540,12 +542,14 @@ export function selectPokemonForOption(
     const modeToSetOnExit = globalScene.ui.getMode();
 
     // Open party screen to choose pokemon
-    globalScene.ui.setMode(
+    globalScene.ui.setMode<PartyUiHandler>(
       UiMode.PARTY,
       PartyUiMode.SELECT,
       -1,
       (slotIndex: number, _option: PartyOption) => {
         if (slotIndex < globalScene.getPlayerParty().length) {
+          // TODO: we should make use of ui.revertMode because
+          // the mode getting set here does not get the parameters it may expect
           globalScene.ui.setMode(modeToSetOnExit).then(() => {
             const pokemon = globalScene.getPlayerParty()[slotIndex];
             const secondaryOptions = onPokemonSelected(pokemon);
@@ -582,6 +586,8 @@ export function selectPokemonForOption(
                     label: i18next.t("menu:cancel"),
                     handler: () => {
                       globalScene.ui.clearText();
+                      // TODO: we should make use of ui.revertMode because
+                      // the mode getting set here does not get the parameters it may expect
                       globalScene.ui.setMode(modeToSetOnExit);
                       resolve(false);
                       return true;
@@ -614,6 +620,8 @@ export function selectPokemonForOption(
             });
           });
         } else {
+          // TODO: we should make use of ui.revertMode because
+          // the mode getting set here does not get the parameters it may expect
           globalScene.ui.setMode(modeToSetOnExit).then(() => {
             if (onPokemonNotSelected) {
               onPokemonNotSelected();
@@ -674,13 +682,15 @@ export function selectOptionThenPokemon(
 
     const selectPokemonAfterOption = (selectedOptionIndex: number) => {
       // Open party screen to choose a Pokemon
-      globalScene.ui.setMode(
+      globalScene.ui.setMode<PartyUiHandler>(
         UiMode.PARTY,
         PartyUiMode.SELECT,
         -1,
         (slotIndex: number, _option: PartyOption) => {
           if (slotIndex < globalScene.getPlayerParty().length) {
             // Pokemon and option selected
+            // TODO: we should make use of ui.revertMode because
+            // the mode getting set here does not get the parameters it may expect
             globalScene.ui.setMode(modeToSetOnExit).then(() => {
               const result: PokemonAndOptionSelected = {
                 selectedPokemonIndex: slotIndex,
@@ -714,6 +724,8 @@ export function selectOptionThenPokemon(
         label: i18next.t("menu:cancel"),
         handler: () => {
           globalScene.ui.clearText();
+          // TODO: we should make use of ui.revertMode because
+          // the mode getting set here does not get the parameters it may expect
           globalScene.ui.setMode(modeToSetOnExit);
           resolve(null);
           return true;
@@ -977,16 +989,16 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
   const numRuns = 1000;
   let run = 0;
   const biomes = Object.keys(Biome).filter((key) => isNaN(Number(key)));
-  // const alwaysPickTheseBiomes = [
-  //   Biome.ISLAND,
-  //   Biome.ABYSS,
-  //   Biome.WASTELAND,
-  //   Biome.FAIRY_CAVE,
-  //   Biome.TEMPLE,
-  //   Biome.LABORATORY,
-  //   Biome.SPACE,
-  //   Biome.WASTELAND,
-  // ];
+  const alwaysPickTheseBiomes = [
+    Biome.ISLAND,
+    Biome.ABYSS,
+    Biome.WASTELAND,
+    Biome.FAIRY_CAVE,
+    Biome.TEMPLE,
+    Biome.LABORATORY,
+    Biome.SPACE,
+    Biome.WASTELAND,
+  ];
 
   const calculateNumEncounters = (): any[] => {
     let encounterRate = baseSpawnWeight; // BASE_MYSTERY_ENCOUNTER_SPAWN_WEIGHT
@@ -1006,15 +1018,30 @@ export function calculateMEAggregateStats(baseSpawnWeight: number) {
 
       // New biome
       if (i % 10 === 1) {
-        const currentBiomeType = globalScene.arena.biomeType;
-        const currentBiome = allBiomes.get(currentBiomeType).getNextBiome();
-        currentArena = globalScene.newArena(currentBiome);
-      } else {
-        if (!(i % 50)) {
-          currentBiome = Biome.END;
+        if (Array.isArray(biomeLinks[currentBiome])) {
+          let biomes: Biome[];
+          globalScene.executeWithSeedOffset(() => {
+            biomes = (biomeLinks[currentBiome] as (Biome | [Biome, number])[])
+              .filter((b) => {
+                return !Array.isArray(b) || !randSeedInt(b[1]);
+              })
+              .map((b) => (!Array.isArray(b) ? b : b[0]));
+          }, i * 100);
+          if (biomes! && biomes.length > 0) {
+            const specialBiomes = biomes.filter((b) => alwaysPickTheseBiomes.includes(b));
+            if (specialBiomes.length > 0) {
+              currentBiome = specialBiomes[randSeedInt(specialBiomes.length)];
+            } else {
+              currentBiome = biomes[randSeedInt(biomes.length)];
+            }
+          }
+        } else if (biomeLinks.hasOwnProperty(currentBiome)) {
+          currentBiome = biomeLinks[currentBiome] as Biome;
         } else {
           currentBiome = globalScene.generateRandomBiome(i);
         }
+
+        currentArena = globalScene.newArena(currentBiome);
       }
 
       // Fixed battle

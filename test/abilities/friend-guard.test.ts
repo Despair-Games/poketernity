@@ -1,12 +1,12 @@
+import { allMoves } from "#app/data/data-lists";
+import { Abilities } from "#enums/abilities";
+import { BattlerIndex } from "#enums/battler-index";
+import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { Abilities } from "#enums/abilities";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { BattlerIndex } from "#enums/battler-index";
-import { allAbilities, allMoves } from "#app/data/data-lists";
-import { MoveCategory } from "#enums/move-category";
 
 describe("Moves - Friend Guard", () => {
   let phaserGame: Phaser.Game;
@@ -27,7 +27,6 @@ describe("Moves - Friend Guard", () => {
     game.override
       .battleType("double")
       .enemyAbility(Abilities.BALL_FETCH)
-      .enemyMoveset([MoveId.TACKLE, MoveId.SPLASH, MoveId.DRAGON_RAGE])
       .enemySpecies(Species.SHUCKLE)
       .moveset([MoveId.SPLASH])
       .startingLevel(100);
@@ -42,8 +41,8 @@ describe("Moves - Friend Guard", () => {
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
     // Get the last return value from `getAttackDamage`
@@ -53,12 +52,12 @@ describe("Moves - Friend Guard", () => {
       Math.floor(player1.getBaseDamage(enemy1, allMoves.get(MoveId.TACKLE), MoveCategory.PHYSICAL)),
     );
 
-    vi.spyOn(player2, "getAbility").mockReturnValue(allAbilities[Abilities.FRIEND_GUARD]);
+    game.field.mockAbility(player2, Abilities.FRIEND_GUARD);
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
     // Get the last return value from `getAttackDamage`
@@ -77,18 +76,18 @@ describe("Moves - Friend Guard", () => {
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER_2);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER_2);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
     const turn1Damage = spy.mock.results[spy.mock.results.length - 1].value.damage;
 
-    vi.spyOn(player2, "getAbility").mockReturnValue(allAbilities[Abilities.FRIEND_GUARD]);
+    game.field.mockAbility(player2, Abilities.FRIEND_GUARD);
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER_2);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.TACKLE, BattlerIndex.PLAYER_2);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
     const turn2Damage = spy.mock.results[spy.mock.results.length - 1].value.damage;
@@ -103,19 +102,19 @@ describe("Moves - Friend Guard", () => {
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.DRAGON_RAGE, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.DRAGON_RAGE, BattlerIndex.PLAYER);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
     const turn1Damage = spy.mock.results[spy.mock.results.length - 1].value.damage;
     expect(turn1Damage).toBe(40);
 
-    vi.spyOn(player2, "getAbility").mockReturnValue(allAbilities[Abilities.FRIEND_GUARD]);
+    game.field.mockAbility(player2, Abilities.FRIEND_GUARD);
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SPLASH, 1);
-    await game.forceEnemyMove(MoveId.DRAGON_RAGE, BattlerIndex.PLAYER);
-    await game.forceEnemyMove(MoveId.SPLASH);
+    await game.move.forceEnemyMove(MoveId.DRAGON_RAGE, BattlerIndex.PLAYER);
+    await game.move.forceEnemyMove(MoveId.SPLASH);
     await game.toNextTurn();
 
     const turn2Damage = spy.mock.results[spy.mock.results.length - 1].value.damage;

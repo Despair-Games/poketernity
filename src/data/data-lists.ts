@@ -4,14 +4,14 @@ import { type MoveId } from "#enums/move-id";
 import type { Ability } from "#app/data/abilities/ability";
 import type { PEBiome } from "#app/data/balance/biomes/PEBiome";
 import type { Biome } from "#enums/biome";
-interface MoveMap<K, V> extends Map<K, V> {
+interface DataMap<K, V> extends Map<K, V> {
   get(key: K): V;
 }
 
 // Initialized as being empty; these will be filled during initialization
 export const allSpecies: PokemonSpecies[] = [];
 // @ts-expect-error - this forcibly overrides `Map`'s `get` function to not type hint a return of `undefined`
-export const allMoves: MoveMap<MoveId, Move> = new Map<MoveId, Move>();
+export const allMoves: DataMap<MoveId, Move> = new Map<MoveId, Move>();
 export const allAbilities: Ability[] = [];
 // @ts-expect-error
-export const allBiomes: MoveMap<Biome, PEBiome> = new Map<Biome, PEBiome>();
+export const allBiomes: DataMap<Biome, PEBiome> = new Map<Biome, PEBiome>();

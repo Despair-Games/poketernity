@@ -1,13 +1,14 @@
-import { MoveCategory } from "#enums/move-category";
-import type { StatusEffect } from "#enums/status-effect";
+import type { ConfusionOnStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/confusion-on-status-effect-ab-attr";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import type { Move } from "#app/data/moves/move";
+import { ChanceBasedMoveEffectAttr } from "#app/data/moves/move-attrs/chance-based-move-effect-attr";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
-import i18next from "i18next";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { Move } from "#app/data/moves/move";
-import { ChanceBasedMoveEffectAttr } from "./chance-based-move-effect-attr";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { MoveCategory } from "#enums/move-category";
+import type { StatusEffect } from "#enums/status-effect";
+import i18next from "i18next";
 
 /**
  * Attribute to add a non-volatile status condition to
@@ -55,7 +56,14 @@ export class StatusEffectAttr extends ChanceBasedMoveEffectAttr {
     }
 
     if (pokemon.trySetStatus(this.effect, true, user, this.turnsRemaining)) {
-      applyAbAttrs(AbAttrFlag.CONFUSION_ON_STATUS_EFFECT, user, false, target, move, this.effect);
+      applyAbAttrs<ConfusionOnStatusEffectAbAttr>(
+        AbAttrFlag.CONFUSION_ON_STATUS_EFFECT,
+        user,
+        false,
+        target,
+        move,
+        this.effect,
+      );
       return true;
     }
 

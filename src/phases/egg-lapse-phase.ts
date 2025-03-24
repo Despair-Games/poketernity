@@ -128,6 +128,8 @@ export class EggLapsePhase extends Phase {
     let newHatchData: EggHatchData;
     globalScene.executeWithSeedOffset(
       () => {
+        // TODO: we should not generate PlayerPokemon objects since they are Phaser graphical objects.
+        // At the very least we should destroy them when we are done with them
         ret = egg.generatePlayerPokemon();
         newHatchData = new EggHatchData(ret, egg.eggMoveIndex);
         newHatchData.setDex();

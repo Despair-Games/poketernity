@@ -109,6 +109,3 @@ export const volcanoTerrainPool = {
   [TerrainType.GRASSY]: 0,
   [TerrainType.PSYCHIC]: 0,
 };
-export const volcanoOutgoingLinks = {
-  [Biome.TOWN]: 100,
-};

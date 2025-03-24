@@ -109,6 +109,3 @@ export const caveTerrainPool = {
   [TerrainType.GRASSY]: 0,
   [TerrainType.PSYCHIC]: 0,
 };
-export const caveOutgoingLinks = {
-  [Biome.TOWN]: 100,
-};

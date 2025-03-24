@@ -35,7 +35,6 @@ export class RepeatMoveAttr extends MoveEffectAttr {
     target
       .getMoveQueue()
       .unshift({ move: lastMove.move, targets: moveTargets, ignorePP: false, type: target.getMoveType(lastMove.move) });
-    target.turnData.extraTurns++;
     globalScene.useMove({
       pokemon: target,
       targets: moveTargets,

@@ -1,12 +1,12 @@
-import { type SubstituteTag } from "#app/data/battler-tags";
-import { MoveResult } from "#enums/move-result";
+import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
 import { Abilities } from "#enums/abilities";
+import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
+import { MoveResult } from "#enums/move-result";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
-import { afterEach, beforeAll, beforeEach, describe, it, expect } from "vitest";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 describe("Moves - Shed Tail", () => {
   let phaserGame: Phaser.Game;
