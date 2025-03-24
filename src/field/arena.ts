@@ -33,7 +33,7 @@ import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { CommonAnim } from "#enums/common-anim";
 import type { ElementalType } from "#enums/elemental-type";
 import type { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { TerrainType } from "#enums/terrain-type";
 import { TimeOfDay } from "#enums/time-of-day";
 import { TrainerType } from "#enums/trainer-type";
@@ -179,9 +179,9 @@ export class Arena {
       ret = globalScene.randomSpecies(waveIndex, level);
     } else {
       const entry = tierPool[randSeedInt(tierPool.length)];
-      let species: Species;
+      let species: SpeciesId;
       if (typeof entry === "number") {
-        species = entry as Species;
+        species = entry as SpeciesId;
       } else {
         // Try and evolve the Pokemon if possible
         const levelThresholds = Object.keys(entry);
@@ -211,7 +211,7 @@ export class Arena {
 
     const newSpeciesId = ret.getEnemySpeciesForLevel(level);
     if (newSpeciesId !== ret.speciesId) {
-      console.log("Replaced", Species[ret.speciesId], "with", Species[newSpeciesId]);
+      console.log("Replaced", SpeciesId[ret.speciesId], "with", SpeciesId[newSpeciesId]);
       ret = getPokemonSpecies(newSpeciesId);
     }
     return ret;
@@ -328,8 +328,8 @@ export class Arena {
    */
   getSpeciesFormIndex(species: PokemonSpecies): number {
     switch (species.speciesId) {
-      case Species.BURMY:
-      case Species.WORMADAM:
+      case SpeciesId.BURMY:
+      case SpeciesId.WORMADAM:
         switch (this.biomeType) {
           case BiomeId.BEACH:
             return 1;
@@ -337,7 +337,7 @@ export class Arena {
             return 2;
         }
         break;
-      case Species.ROTOM:
+      case SpeciesId.ROTOM:
         switch (this.biomeType) {
           case BiomeId.VOLCANO:
             return 1;
@@ -351,7 +351,7 @@ export class Arena {
             return 5;
         }
         break;
-      case Species.LYCANROC:
+      case SpeciesId.LYCANROC:
         const timeOfDay = this.getTimeOfDay();
         switch (timeOfDay) {
           case TimeOfDay.DAY:
@@ -462,8 +462,8 @@ export class Arena {
    */
   triggerWeatherBasedFormChanges(): void {
     globalScene.getField(true).forEach((p) => {
-      const isCastformWithForecast = p.hasAbility(AbilityId.FORECAST) && p.species.speciesId === Species.CASTFORM;
-      const isCherrimWithFlowerGift = p.hasAbility(AbilityId.FLOWER_GIFT) && p.species.speciesId === Species.CHERRIM;
+      const isCastformWithForecast = p.hasAbility(AbilityId.FORECAST) && p.species.speciesId === SpeciesId.CASTFORM;
+      const isCherrimWithFlowerGift = p.hasAbility(AbilityId.FLOWER_GIFT) && p.species.speciesId === SpeciesId.CHERRIM;
 
       if (isCastformWithForecast || isCherrimWithFlowerGift) {
         new ShowAbilityPhase(p.getBattlerIndex());
@@ -478,9 +478,9 @@ export class Arena {
   triggerWeatherBasedFormChangesToNormal(): void {
     globalScene.getField(true).forEach((p) => {
       const isCastformWithForecast =
-        p.hasAbility(AbilityId.FORECAST, false, true) && p.species.speciesId === Species.CASTFORM;
+        p.hasAbility(AbilityId.FORECAST, false, true) && p.species.speciesId === SpeciesId.CASTFORM;
       const isCherrimWithFlowerGift =
-        p.hasAbility(AbilityId.FLOWER_GIFT, false, true) && p.species.speciesId === Species.CHERRIM;
+        p.hasAbility(AbilityId.FLOWER_GIFT, false, true) && p.species.speciesId === SpeciesId.CHERRIM;
 
       if (isCastformWithForecast || isCherrimWithFlowerGift) {
         new ShowAbilityPhase(p.getBattlerIndex());

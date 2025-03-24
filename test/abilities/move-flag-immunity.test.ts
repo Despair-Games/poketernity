@@ -1,6 +1,6 @@
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -28,7 +28,7 @@ describe("Ability Attribute - Move Flag Immunity", () => {
       .moveset([MoveId.SPLASH])
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.BALL_FETCH);
   });
 
@@ -57,7 +57,7 @@ describe("Ability Attribute - Move Flag Immunity", () => {
     async ({ ability, moveFlag, enemyMoveId: enemyMove }) => {
       game.override.ability(ability).enemyMoveset(enemyMove);
 
-      await game.classicMode.startBattle([Species.FEEBAS]);
+      await game.classicMode.startBattle([SpeciesId.FEEBAS]);
       const enemyPokemon = game.scene.getEnemyPokemon()!;
 
       game.move.select(MoveId.SPLASH);

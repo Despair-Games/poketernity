@@ -212,7 +212,7 @@ import { PartyUiMode } from "#enums/party-ui-mode";
 import { PhaseId } from "#enums/phase-id";
 import { PokeballType } from "#enums/pokeball-type";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import {
   BATTLE_STATS,
@@ -256,7 +256,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public friendship: number;
   public metLevel: number;
   public metBiome: BiomeId | -1;
-  public metSpecies: Species;
+  public metSpecies: SpeciesId;
   public metWave: number;
   public luck: number;
   public pauseEvolutions: boolean;
@@ -4038,7 +4038,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       if (
         this.hasAbilityWithAttr(AbAttrFlag.COMMANDER)
         && globalScene.currentBattle.double
-        && this.getAlly()?.species.speciesId === Species.DONDOZO
+        && this.getAlly()?.species.speciesId === SpeciesId.DONDOZO
       ) {
         this.setVisible(false);
       }
@@ -4519,9 +4519,9 @@ export class PlayerPokemon extends Pokemon {
 
   /**
    * @param evolution - The {@linkcode SpeciesFormEvolution} to use
-   * @returns array of {@linkcode Species} of unlocked starters, if any (root species will be last in the array)
+   * @returns array of {@linkcode SpeciesId} of unlocked starters, if any (root species will be last in the array)
    */
-  public evolve(evolution: SpeciesFormEvolution | null): Promise<Species[]> {
+  public evolve(evolution: SpeciesFormEvolution | null): Promise<SpeciesId[]> {
     if (!evolution) {
       return new Promise((resolve) => resolve([]));
     }
@@ -4554,14 +4554,14 @@ export class PlayerPokemon extends Pokemon {
       }
       this.compatibleTms.splice(0, this.compatibleTms.length);
       this.generateCompatibleTms();
-      const updateAndResolve = (unlockedStarters: Species[]) => {
+      const updateAndResolve = (unlockedStarters: SpeciesId[]) => {
         this.loadAssets().then(() => {
           this.calculateStats();
           this.updateInfo(true).then(() => resolve(unlockedStarters));
         });
       };
       // TODO: should this be done in "handleSpecialEvolutions" to keep all species-specific things in the same spot?
-      if (preEvolutionSpecies.speciesId === Species.GIMMIGHOUL) {
+      if (preEvolutionSpecies.speciesId === SpeciesId.GIMMIGHOUL) {
         const evotracker = this.getHeldItems().filter((m) => m instanceof EvoTrackerModifier)[0] ?? null;
         if (evotracker) {
           globalScene.removeModifier(evotracker);
@@ -4581,7 +4581,7 @@ export class PlayerPokemon extends Pokemon {
 
   private handleShedinjaEvolution(evolution: SpeciesFormEvolution) {
     const { speciesId } = this.species;
-    if (speciesId === Species.NINCADA && evolution.speciesId === Species.NINJASK) {
+    if (speciesId === SpeciesId.NINCADA && evolution.speciesId === SpeciesId.NINJASK) {
       const newEvolution = pokemonEvolutions[speciesId][1];
 
       if (newEvolution.conditions?.every((condition) => condition.predicate(this))) {
@@ -4785,7 +4785,7 @@ export class EnemyPokemon extends Pokemon {
 
       this.luck = this.shiny ? this.variant + 1 : 0;
 
-      let preEvolution: Species;
+      let preEvolution: SpeciesId;
       let speciesId = species.speciesId;
       while ((preEvolution = pokemonPreEvolutions[speciesId])) {
         speciesId = preEvolution;
@@ -4826,7 +4826,7 @@ export class EnemyPokemon extends Pokemon {
 
   override generateAndPopulateMoveset(formIndex?: number): void {
     switch (true) {
-      case this.species.speciesId === Species.SMEARGLE:
+      case this.species.speciesId === SpeciesId.SMEARGLE:
         this.moveset = [
           new PokemonMove(MoveId.SKETCH),
           new PokemonMove(MoveId.SKETCH),
@@ -4834,7 +4834,7 @@ export class EnemyPokemon extends Pokemon {
           new PokemonMove(MoveId.SKETCH),
         ];
         break;
-      case this.species.speciesId === Species.ETERNATUS:
+      case this.species.speciesId === SpeciesId.ETERNATUS:
         this.moveset = (formIndex !== undefined ? formIndex : this.formIndex)
           ? [
               new PokemonMove(MoveId.DYNAMAX_CANNON),

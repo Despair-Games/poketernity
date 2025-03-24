@@ -1,7 +1,7 @@
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { AbilityId } from "#enums/ability-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import type { WeatherType } from "#enums/weather-type";
 import { PostWeatherChangeAbAttr } from "./post-weather-change-ab-attr";
 
@@ -23,9 +23,9 @@ export class PostWeatherChangeFormChangeAbAttr extends PostWeatherChangeAbAttr {
 
   override apply(pokemon: Pokemon, simulated: boolean, _weather: WeatherType): boolean {
     const isCastformWithForecast =
-      pokemon.species.speciesId === Species.CASTFORM && this.ability === AbilityId.FORECAST;
+      pokemon.species.speciesId === SpeciesId.CASTFORM && this.ability === AbilityId.FORECAST;
     const isCherrimWithFlowerGift =
-      pokemon.species.speciesId === Species.CHERRIM && this.ability === AbilityId.FLOWER_GIFT;
+      pokemon.species.speciesId === SpeciesId.CHERRIM && this.ability === AbilityId.FLOWER_GIFT;
 
     if (isCastformWithForecast || isCherrimWithFlowerGift) {
       if (simulated) {

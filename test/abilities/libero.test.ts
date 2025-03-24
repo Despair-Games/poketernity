@@ -7,7 +7,7 @@ import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -32,14 +32,14 @@ describe("Abilities - Libero", () => {
     game.override.battleType("single");
     game.override.ability(AbilityId.LIBERO);
     game.override.startingLevel(100);
-    game.override.enemySpecies(Species.RATTATA);
+    game.override.enemySpecies(SpeciesId.RATTATA);
     game.override.enemyMoveset([MoveId.ENDURE, MoveId.ENDURE, MoveId.ENDURE, MoveId.ENDURE]);
   });
 
   test("ability applies and changes a pokemon's type", async () => {
     game.override.moveset([MoveId.SPLASH]);
 
-    await game.startBattle([Species.MAGIKARP]);
+    await game.startBattle([SpeciesId.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
@@ -54,7 +54,7 @@ describe("Abilities - Libero", () => {
   test.skip("ability applies only once per switch in", async () => {
     game.override.moveset([MoveId.SPLASH, MoveId.AGILITY]);
 
-    await game.startBattle([Species.MAGIKARP, Species.BULBASAUR]);
+    await game.startBattle([SpeciesId.MAGIKARP, SpeciesId.BULBASAUR]);
 
     let leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
@@ -90,7 +90,7 @@ describe("Abilities - Libero", () => {
   test("ability applies correctly even if the pokemon's move has a variable type", async () => {
     game.override.moveset([MoveId.WEATHER_BALL]);
 
-    await game.startBattle([Species.MAGIKARP]);
+    await game.startBattle([SpeciesId.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
@@ -110,7 +110,7 @@ describe("Abilities - Libero", () => {
     game.override.moveset([MoveId.TACKLE]);
     game.override.passiveAbility(AbilityId.REFRIGERATE);
 
-    await game.startBattle([Species.MAGIKARP]);
+    await game.startBattle([SpeciesId.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
@@ -128,7 +128,7 @@ describe("Abilities - Libero", () => {
   test("ability applies correctly even if the pokemon's move calls another move", async () => {
     game.override.moveset([MoveId.NATURE_POWER]);
 
-    await game.startBattle([Species.MAGIKARP]);
+    await game.startBattle([SpeciesId.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
@@ -143,7 +143,7 @@ describe("Abilities - Libero", () => {
   test("ability applies correctly even if the pokemon's move is delayed / charging", async () => {
     game.override.moveset([MoveId.DIG]);
 
-    await game.startBattle([Species.MAGIKARP]);
+    await game.startBattle([SpeciesId.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
@@ -158,7 +158,7 @@ describe("Abilities - Libero", () => {
     game.override.moveset([MoveId.TACKLE]);
     game.override.enemyMoveset(MoveId.SPLASH);
 
-    await game.startBattle([Species.MAGIKARP]);
+    await game.startBattle([SpeciesId.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
@@ -176,7 +176,7 @@ describe("Abilities - Libero", () => {
     game.override.moveset([MoveId.TACKLE]);
     game.override.enemyMoveset([MoveId.PROTECT, MoveId.PROTECT, MoveId.PROTECT, MoveId.PROTECT]);
 
-    await game.startBattle([Species.MAGIKARP]);
+    await game.startBattle([SpeciesId.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
@@ -189,9 +189,9 @@ describe("Abilities - Libero", () => {
 
   test("ability applies correctly even if the pokemon's move fails because of type immunity", async () => {
     game.override.moveset([MoveId.TACKLE]);
-    game.override.enemySpecies(Species.GASTLY);
+    game.override.enemySpecies(SpeciesId.GASTLY);
 
-    await game.startBattle([Species.MAGIKARP]);
+    await game.startBattle([SpeciesId.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
@@ -205,7 +205,7 @@ describe("Abilities - Libero", () => {
   test("ability is not applied if pokemon's type is the same as the move's type", async () => {
     game.override.moveset([MoveId.SPLASH]);
 
-    await game.startBattle([Species.MAGIKARP]);
+    await game.startBattle([SpeciesId.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
@@ -220,7 +220,7 @@ describe("Abilities - Libero", () => {
   test("ability is not applied if pokemon is terastallized", async () => {
     game.override.moveset([MoveId.SPLASH]);
 
-    await game.startBattle([Species.MAGIKARP]);
+    await game.startBattle([SpeciesId.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
@@ -236,7 +236,7 @@ describe("Abilities - Libero", () => {
   test("ability is not applied if pokemon uses struggle", async () => {
     game.override.moveset([MoveId.STRUGGLE]);
 
-    await game.startBattle([Species.MAGIKARP]);
+    await game.startBattle([SpeciesId.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
@@ -250,7 +250,7 @@ describe("Abilities - Libero", () => {
   test("ability is not applied if the pokemon's move fails", async () => {
     game.override.moveset([MoveId.BURN_UP]);
 
-    await game.startBattle([Species.MAGIKARP]);
+    await game.startBattle([SpeciesId.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
@@ -263,9 +263,9 @@ describe("Abilities - Libero", () => {
 
   test("ability applies correctly even if the pokemon's Trick-or-Treat fails", async () => {
     game.override.moveset([MoveId.TRICK_OR_TREAT]);
-    game.override.enemySpecies(Species.GASTLY);
+    game.override.enemySpecies(SpeciesId.GASTLY);
 
-    await game.startBattle([Species.MAGIKARP]);
+    await game.startBattle([SpeciesId.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
@@ -279,7 +279,7 @@ describe("Abilities - Libero", () => {
   test("ability applies correctly and the pokemon curses itself", async () => {
     game.override.moveset([MoveId.CURSE]);
 
-    await game.startBattle([Species.MAGIKARP]);
+    await game.startBattle([SpeciesId.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);

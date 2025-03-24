@@ -4,7 +4,7 @@ import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -33,8 +33,8 @@ describe("Moves - Copycat", () => {
       .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .starterSpecies(Species.FEEBAS)
-      .enemySpecies(Species.MAGIKARP)
+      .starterSpecies(SpeciesId.FEEBAS)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });

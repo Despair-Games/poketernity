@@ -1,6 +1,6 @@
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -26,7 +26,7 @@ describe("Ability Attribute - Block Weather Damage", () => {
       .moveset([MoveId.SPLASH])
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
@@ -42,7 +42,7 @@ describe("Ability Attribute - Block Weather Damage", () => {
     { ability: AbilityId.SNOW_CLOAK, abilityName: "Snow Cloak", weatherName: "Hail", weather: WeatherType.HAIL },
   ])("$abilityName should prevent damage from $weatherName", async ({ ability, weather }) => {
     game.override.weather(weather).ability(ability);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.select(MoveId.SPLASH);
     await game.toEndOfTurn();

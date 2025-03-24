@@ -4,7 +4,7 @@ import { Challenges } from "#enums/challenges";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { TerrainType } from "#enums/terrain-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -30,14 +30,14 @@ describe("Moves - Conversion 2", () => {
       .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.BALL_FETCH)
       .startingLevel(100)
       .enemyLevel(100);
   });
 
   it("should change the user's type to a type that resists the target's most recent move", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
 
@@ -54,7 +54,7 @@ describe("Moves - Conversion 2", () => {
   });
 
   it("should change the user's type based on the called move if the target last used Nature Power", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
 
@@ -102,7 +102,7 @@ describe("Moves - Conversion 2", () => {
     async ({ ability, resistingTypes }) => {
       game.override.enemyAbility(ability);
 
-      await game.classicMode.startBattle([Species.FEEBAS]);
+      await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
       const player = game.field.getPlayerPokemon();
 
@@ -119,7 +119,7 @@ describe("Moves - Conversion 2", () => {
   );
 
   it("should change the user's type according to the target move's changed type, if applicable", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
 
@@ -136,7 +136,7 @@ describe("Moves - Conversion 2", () => {
   });
 
   it("should fail if the target's last move was typeless", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -153,7 +153,7 @@ describe("Moves - Conversion 2", () => {
   });
 
   it("should fail if the target's last move was Stellar-type", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -170,7 +170,7 @@ describe("Moves - Conversion 2", () => {
   });
 
   it("should fail if the user is already of all types that resist the target's last move", async () => {
-    await game.classicMode.startBattle([Species.OBSTAGOON]);
+    await game.classicMode.startBattle([SpeciesId.OBSTAGOON]);
 
     const player = game.field.getPlayerPokemon();
 
@@ -187,7 +187,7 @@ describe("Moves - Conversion 2", () => {
   it("should account for Inverse Challenge when determining a resisting type", async () => {
     game.challengeMode.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
 
-    await game.challengeMode.startBattle([Species.FEEBAS]);
+    await game.challengeMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
 

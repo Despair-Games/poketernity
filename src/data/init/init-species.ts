@@ -4,14 +4,14 @@ import { PokemonForm } from "../pokemon-form";
 import { AbilityId } from "#enums/ability-id";
 import { GrowthRate } from "#enums/growth-rates";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import { ElementalType } from "#enums/elemental-type";
 
 export function initSpecies() {
   allSpecies.push(
     new PokemonSpecies(
-      Species.BULBASAUR,
+      SpeciesId.BULBASAUR,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -36,7 +36,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.IVYSAUR,
+      SpeciesId.IVYSAUR,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -61,7 +61,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.VENUSAUR,
+      SpeciesId.VENUSAUR,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -155,7 +155,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.CHARMANDER,
+      SpeciesId.CHARMANDER,
       1,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -180,7 +180,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CHARMELEON,
+      SpeciesId.CHARMELEON,
       1,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -205,7 +205,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CHARIZARD,
+      SpeciesId.CHARIZARD,
       1,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -318,7 +318,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.SQUIRTLE,
+      SpeciesId.SQUIRTLE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -343,7 +343,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.WARTORTLE,
+      SpeciesId.WARTORTLE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -368,7 +368,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BLASTOISE,
+      SpeciesId.BLASTOISE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -460,7 +460,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.CATERPIE,
+      SpeciesId.CATERPIE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -485,7 +485,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.METAPOD,
+      SpeciesId.METAPOD,
       1,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -510,7 +510,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BUTTERFREE,
+      SpeciesId.BUTTERFREE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -582,7 +582,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.WEEDLE,
+      SpeciesId.WEEDLE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -607,7 +607,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.KAKUNA,
+      SpeciesId.KAKUNA,
       1,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -632,7 +632,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BEEDRILL,
+      SpeciesId.BEEDRILL,
       1,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -703,7 +703,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.PIDGEY,
+      SpeciesId.PIDGEY,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -728,7 +728,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PIDGEOTTO,
+      SpeciesId.PIDGEOTTO,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -753,7 +753,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PIDGEOT,
+      SpeciesId.PIDGEOT,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -824,7 +824,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.RATTATA,
+      SpeciesId.RATTATA,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -849,7 +849,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.RATICATE,
+      SpeciesId.RATICATE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -874,7 +874,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.SPEAROW,
+      SpeciesId.SPEAROW,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -899,7 +899,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FEAROW,
+      SpeciesId.FEAROW,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -924,7 +924,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.EKANS,
+      SpeciesId.EKANS,
       1,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -949,7 +949,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ARBOK,
+      SpeciesId.ARBOK,
       1,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -975,7 +975,7 @@ export function initSpecies() {
     ),
     new PokemonSpecies(
       // Cosplay and G-Max Pikachu use Partner Pokemon stats
-      Species.PIKACHU,
+      SpeciesId.PIKACHU,
       1,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -1214,7 +1214,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.RAICHU,
+      SpeciesId.RAICHU,
       1,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -1239,7 +1239,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.SANDSHREW,
+      SpeciesId.SANDSHREW,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -1264,7 +1264,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SANDSLASH,
+      SpeciesId.SANDSLASH,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -1289,7 +1289,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.NIDORAN_F,
+      SpeciesId.NIDORAN_F,
       1,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -1314,7 +1314,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.NIDORINA,
+      SpeciesId.NIDORINA,
       1,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -1339,7 +1339,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.NIDOQUEEN,
+      SpeciesId.NIDOQUEEN,
       1,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -1364,7 +1364,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.NIDORAN_M,
+      SpeciesId.NIDORAN_M,
       1,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -1389,7 +1389,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.NIDORINO,
+      SpeciesId.NIDORINO,
       1,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -1414,7 +1414,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.NIDOKING,
+      SpeciesId.NIDOKING,
       1,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -1439,7 +1439,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CLEFAIRY,
+      SpeciesId.CLEFAIRY,
       1,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -1464,7 +1464,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CLEFABLE,
+      SpeciesId.CLEFABLE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -1489,7 +1489,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.VULPIX,
+      SpeciesId.VULPIX,
       1,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -1514,7 +1514,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.NINETALES,
+      SpeciesId.NINETALES,
       1,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -1539,7 +1539,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.JIGGLYPUFF,
+      SpeciesId.JIGGLYPUFF,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -1564,7 +1564,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.WIGGLYTUFF,
+      SpeciesId.WIGGLYTUFF,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -1589,7 +1589,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ZUBAT,
+      SpeciesId.ZUBAT,
       1,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -1614,7 +1614,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.GOLBAT,
+      SpeciesId.GOLBAT,
       1,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -1639,7 +1639,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.ODDISH,
+      SpeciesId.ODDISH,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -1664,7 +1664,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GLOOM,
+      SpeciesId.GLOOM,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -1689,7 +1689,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.VILEPLUME,
+      SpeciesId.VILEPLUME,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -1714,7 +1714,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.PARAS,
+      SpeciesId.PARAS,
       1,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -1739,7 +1739,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PARASECT,
+      SpeciesId.PARASECT,
       1,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -1764,7 +1764,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.VENONAT,
+      SpeciesId.VENONAT,
       1,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -1789,7 +1789,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.VENOMOTH,
+      SpeciesId.VENOMOTH,
       1,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -1814,7 +1814,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DIGLETT,
+      SpeciesId.DIGLETT,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -1839,7 +1839,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DUGTRIO,
+      SpeciesId.DUGTRIO,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -1864,7 +1864,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MEOWTH,
+      SpeciesId.MEOWTH,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -1935,7 +1935,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.PERSIAN,
+      SpeciesId.PERSIAN,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -1960,7 +1960,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PSYDUCK,
+      SpeciesId.PSYDUCK,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -1985,7 +1985,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GOLDUCK,
+      SpeciesId.GOLDUCK,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -2010,7 +2010,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MANKEY,
+      SpeciesId.MANKEY,
       1,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -2035,7 +2035,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PRIMEAPE,
+      SpeciesId.PRIMEAPE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -2060,7 +2060,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GROWLITHE,
+      SpeciesId.GROWLITHE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -2085,7 +2085,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ARCANINE,
+      SpeciesId.ARCANINE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -2110,7 +2110,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.POLIWAG,
+      SpeciesId.POLIWAG,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -2135,7 +2135,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.POLIWHIRL,
+      SpeciesId.POLIWHIRL,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -2160,7 +2160,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.POLIWRATH,
+      SpeciesId.POLIWRATH,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -2185,7 +2185,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ABRA,
+      SpeciesId.ABRA,
       1,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -2210,7 +2210,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.KADABRA,
+      SpeciesId.KADABRA,
       1,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -2235,7 +2235,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.ALAKAZAM,
+      SpeciesId.ALAKAZAM,
       1,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -2307,7 +2307,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.MACHOP,
+      SpeciesId.MACHOP,
       1,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -2332,7 +2332,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MACHOKE,
+      SpeciesId.MACHOKE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -2357,7 +2357,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MACHAMP,
+      SpeciesId.MACHAMP,
       1,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -2428,7 +2428,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.BELLSPROUT,
+      SpeciesId.BELLSPROUT,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -2453,7 +2453,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.WEEPINBELL,
+      SpeciesId.WEEPINBELL,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -2478,7 +2478,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.VICTREEBEL,
+      SpeciesId.VICTREEBEL,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -2503,7 +2503,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TENTACOOL,
+      SpeciesId.TENTACOOL,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -2528,7 +2528,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TENTACRUEL,
+      SpeciesId.TENTACRUEL,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -2553,7 +2553,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GEODUDE,
+      SpeciesId.GEODUDE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -2578,7 +2578,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GRAVELER,
+      SpeciesId.GRAVELER,
       1,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -2603,7 +2603,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GOLEM,
+      SpeciesId.GOLEM,
       1,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -2628,7 +2628,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PONYTA,
+      SpeciesId.PONYTA,
       1,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -2653,7 +2653,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.RAPIDASH,
+      SpeciesId.RAPIDASH,
       1,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -2678,7 +2678,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SLOWPOKE,
+      SpeciesId.SLOWPOKE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -2703,7 +2703,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SLOWBRO,
+      SpeciesId.SLOWBRO,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -2774,7 +2774,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.MAGNEMITE,
+      SpeciesId.MAGNEMITE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -2799,7 +2799,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MAGNETON,
+      SpeciesId.MAGNETON,
       1,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -2824,7 +2824,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FARFETCHD,
+      SpeciesId.FARFETCHD,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -2849,7 +2849,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DODUO,
+      SpeciesId.DODUO,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -2874,7 +2874,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.DODRIO,
+      SpeciesId.DODRIO,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -2899,7 +2899,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.SEEL,
+      SpeciesId.SEEL,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -2924,7 +2924,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DEWGONG,
+      SpeciesId.DEWGONG,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -2949,7 +2949,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GRIMER,
+      SpeciesId.GRIMER,
       1,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -2974,7 +2974,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MUK,
+      SpeciesId.MUK,
       1,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -2999,7 +2999,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SHELLDER,
+      SpeciesId.SHELLDER,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -3024,7 +3024,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CLOYSTER,
+      SpeciesId.CLOYSTER,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -3049,7 +3049,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GASTLY,
+      SpeciesId.GASTLY,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -3074,7 +3074,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HAUNTER,
+      SpeciesId.HAUNTER,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -3099,7 +3099,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GENGAR,
+      SpeciesId.GENGAR,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -3191,7 +3191,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.ONIX,
+      SpeciesId.ONIX,
       1,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -3216,7 +3216,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DROWZEE,
+      SpeciesId.DROWZEE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -3241,7 +3241,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HYPNO,
+      SpeciesId.HYPNO,
       1,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -3266,7 +3266,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.KRABBY,
+      SpeciesId.KRABBY,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -3291,7 +3291,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.KINGLER,
+      SpeciesId.KINGLER,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -3362,7 +3362,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.VOLTORB,
+      SpeciesId.VOLTORB,
       1,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -3387,7 +3387,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ELECTRODE,
+      SpeciesId.ELECTRODE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -3412,7 +3412,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.EXEGGCUTE,
+      SpeciesId.EXEGGCUTE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -3437,7 +3437,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.EXEGGUTOR,
+      SpeciesId.EXEGGUTOR,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -3462,7 +3462,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CUBONE,
+      SpeciesId.CUBONE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -3487,7 +3487,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MAROWAK,
+      SpeciesId.MAROWAK,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -3512,7 +3512,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HITMONLEE,
+      SpeciesId.HITMONLEE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -3537,7 +3537,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HITMONCHAN,
+      SpeciesId.HITMONCHAN,
       1,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -3562,7 +3562,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LICKITUNG,
+      SpeciesId.LICKITUNG,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -3587,7 +3587,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.KOFFING,
+      SpeciesId.KOFFING,
       1,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -3612,7 +3612,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.WEEZING,
+      SpeciesId.WEEZING,
       1,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -3637,7 +3637,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.RHYHORN,
+      SpeciesId.RHYHORN,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -3662,7 +3662,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.RHYDON,
+      SpeciesId.RHYDON,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -3687,7 +3687,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.CHANSEY,
+      SpeciesId.CHANSEY,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -3712,7 +3712,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TANGELA,
+      SpeciesId.TANGELA,
       1,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -3737,7 +3737,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.KANGASKHAN,
+      SpeciesId.KANGASKHAN,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -3808,7 +3808,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.HORSEA,
+      SpeciesId.HORSEA,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -3833,7 +3833,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SEADRA,
+      SpeciesId.SEADRA,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -3858,7 +3858,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GOLDEEN,
+      SpeciesId.GOLDEEN,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -3883,7 +3883,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.SEAKING,
+      SpeciesId.SEAKING,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -3908,7 +3908,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.STARYU,
+      SpeciesId.STARYU,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -3933,7 +3933,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.STARMIE,
+      SpeciesId.STARMIE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -3958,7 +3958,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MR_MIME,
+      SpeciesId.MR_MIME,
       1,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -3983,7 +3983,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SCYTHER,
+      SpeciesId.SCYTHER,
       1,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -4008,7 +4008,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.JYNX,
+      SpeciesId.JYNX,
       1,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -4033,7 +4033,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ELECTABUZZ,
+      SpeciesId.ELECTABUZZ,
       1,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -4058,7 +4058,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MAGMAR,
+      SpeciesId.MAGMAR,
       1,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -4083,7 +4083,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PINSIR,
+      SpeciesId.PINSIR,
       1,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -4154,7 +4154,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.TAUROS,
+      SpeciesId.TAUROS,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -4179,7 +4179,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MAGIKARP,
+      SpeciesId.MAGIKARP,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -4204,7 +4204,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.GYARADOS,
+      SpeciesId.GYARADOS,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -4276,7 +4276,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.LAPRAS,
+      SpeciesId.LAPRAS,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -4347,7 +4347,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.DITTO,
+      SpeciesId.DITTO,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -4373,7 +4373,7 @@ export function initSpecies() {
     ),
     new PokemonSpecies(
       // G-Max uses Partner Eevee stats
-      Species.EEVEE,
+      SpeciesId.EEVEE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -4468,7 +4468,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.VAPOREON,
+      SpeciesId.VAPOREON,
       1,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -4493,7 +4493,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.JOLTEON,
+      SpeciesId.JOLTEON,
       1,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -4518,7 +4518,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FLAREON,
+      SpeciesId.FLAREON,
       1,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -4543,7 +4543,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PORYGON,
+      SpeciesId.PORYGON,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -4568,7 +4568,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.OMANYTE,
+      SpeciesId.OMANYTE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -4593,7 +4593,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.OMASTAR,
+      SpeciesId.OMASTAR,
       1,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -4618,7 +4618,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.KABUTO,
+      SpeciesId.KABUTO,
       1,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -4643,7 +4643,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.KABUTOPS,
+      SpeciesId.KABUTOPS,
       1,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -4668,7 +4668,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.AERODACTYL,
+      SpeciesId.AERODACTYL,
       1,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -4739,7 +4739,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.SNORLAX,
+      SpeciesId.SNORLAX,
       1,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -4810,7 +4810,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.ARTICUNO,
+      SpeciesId.ARTICUNO,
       1,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.ICE,
@@ -4835,7 +4835,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ZAPDOS,
+      SpeciesId.ZAPDOS,
       1,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.ELECTRIC,
@@ -4860,7 +4860,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MOLTRES,
+      SpeciesId.MOLTRES,
       1,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.FIRE,
@@ -4885,7 +4885,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DRATINI,
+      SpeciesId.DRATINI,
       1,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -4910,7 +4910,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DRAGONAIR,
+      SpeciesId.DRAGONAIR,
       1,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -4935,7 +4935,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DRAGONITE,
+      SpeciesId.DRAGONITE,
       1,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -4960,7 +4960,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MEWTWO,
+      SpeciesId.MEWTWO,
       1,
       SpeciesGroups.LEGENDARY,
       ElementalType.PSYCHIC,
@@ -5052,7 +5052,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.MEW,
+      SpeciesId.MEW,
       1,
       SpeciesGroups.MYTHICAL,
       ElementalType.PSYCHIC,
@@ -5077,7 +5077,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CHIKORITA,
+      SpeciesId.CHIKORITA,
       2,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -5102,7 +5102,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BAYLEEF,
+      SpeciesId.BAYLEEF,
       2,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -5127,7 +5127,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MEGANIUM,
+      SpeciesId.MEGANIUM,
       2,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -5152,7 +5152,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.CYNDAQUIL,
+      SpeciesId.CYNDAQUIL,
       2,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -5177,7 +5177,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.QUILAVA,
+      SpeciesId.QUILAVA,
       2,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -5202,7 +5202,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TYPHLOSION,
+      SpeciesId.TYPHLOSION,
       2,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -5227,7 +5227,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TOTODILE,
+      SpeciesId.TOTODILE,
       2,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -5252,7 +5252,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CROCONAW,
+      SpeciesId.CROCONAW,
       2,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -5277,7 +5277,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FERALIGATR,
+      SpeciesId.FERALIGATR,
       2,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -5302,7 +5302,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SENTRET,
+      SpeciesId.SENTRET,
       2,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -5327,7 +5327,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FURRET,
+      SpeciesId.FURRET,
       2,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -5352,7 +5352,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HOOTHOOT,
+      SpeciesId.HOOTHOOT,
       2,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -5377,7 +5377,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.NOCTOWL,
+      SpeciesId.NOCTOWL,
       2,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -5402,7 +5402,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LEDYBA,
+      SpeciesId.LEDYBA,
       2,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -5427,7 +5427,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.LEDIAN,
+      SpeciesId.LEDIAN,
       2,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -5452,7 +5452,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.SPINARAK,
+      SpeciesId.SPINARAK,
       2,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -5477,7 +5477,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ARIADOS,
+      SpeciesId.ARIADOS,
       2,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -5502,7 +5502,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CROBAT,
+      SpeciesId.CROBAT,
       2,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -5527,7 +5527,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CHINCHOU,
+      SpeciesId.CHINCHOU,
       2,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -5552,7 +5552,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LANTURN,
+      SpeciesId.LANTURN,
       2,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -5577,7 +5577,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PICHU,
+      SpeciesId.PICHU,
       2,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -5651,7 +5651,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.CLEFFA,
+      SpeciesId.CLEFFA,
       2,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -5676,7 +5676,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.IGGLYBUFF,
+      SpeciesId.IGGLYBUFF,
       2,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -5701,7 +5701,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TOGEPI,
+      SpeciesId.TOGEPI,
       2,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -5726,7 +5726,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TOGETIC,
+      SpeciesId.TOGETIC,
       2,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -5751,7 +5751,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.NATU,
+      SpeciesId.NATU,
       2,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -5776,7 +5776,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.XATU,
+      SpeciesId.XATU,
       2,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -5801,7 +5801,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.MAREEP,
+      SpeciesId.MAREEP,
       2,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -5826,7 +5826,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FLAAFFY,
+      SpeciesId.FLAAFFY,
       2,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -5851,7 +5851,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.AMPHAROS,
+      SpeciesId.AMPHAROS,
       2,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -5922,7 +5922,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.BELLOSSOM,
+      SpeciesId.BELLOSSOM,
       2,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -5947,7 +5947,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MARILL,
+      SpeciesId.MARILL,
       2,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -5972,7 +5972,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.AZUMARILL,
+      SpeciesId.AZUMARILL,
       2,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -5997,7 +5997,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SUDOWOODO,
+      SpeciesId.SUDOWOODO,
       2,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -6022,7 +6022,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.POLITOED,
+      SpeciesId.POLITOED,
       2,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -6047,7 +6047,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.HOPPIP,
+      SpeciesId.HOPPIP,
       2,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -6072,7 +6072,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SKIPLOOM,
+      SpeciesId.SKIPLOOM,
       2,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -6097,7 +6097,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.JUMPLUFF,
+      SpeciesId.JUMPLUFF,
       2,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -6122,7 +6122,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.AIPOM,
+      SpeciesId.AIPOM,
       2,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -6147,7 +6147,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.SUNKERN,
+      SpeciesId.SUNKERN,
       2,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -6172,7 +6172,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SUNFLORA,
+      SpeciesId.SUNFLORA,
       2,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -6197,7 +6197,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.YANMA,
+      SpeciesId.YANMA,
       2,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -6222,7 +6222,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.WOOPER,
+      SpeciesId.WOOPER,
       2,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -6247,7 +6247,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.QUAGSIRE,
+      SpeciesId.QUAGSIRE,
       2,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -6272,7 +6272,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.ESPEON,
+      SpeciesId.ESPEON,
       2,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -6297,7 +6297,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.UMBREON,
+      SpeciesId.UMBREON,
       2,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -6322,7 +6322,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MURKROW,
+      SpeciesId.MURKROW,
       2,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -6347,7 +6347,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.SLOWKING,
+      SpeciesId.SLOWKING,
       2,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -6372,7 +6372,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MISDREAVUS,
+      SpeciesId.MISDREAVUS,
       2,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -6397,7 +6397,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.UNOWN,
+      SpeciesId.UNOWN,
       2,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -7095,7 +7095,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.WOBBUFFET,
+      SpeciesId.WOBBUFFET,
       2,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -7120,7 +7120,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.GIRAFARIG,
+      SpeciesId.GIRAFARIG,
       2,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -7145,7 +7145,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.PINECO,
+      SpeciesId.PINECO,
       2,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -7170,7 +7170,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FORRETRESS,
+      SpeciesId.FORRETRESS,
       2,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -7195,7 +7195,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DUNSPARCE,
+      SpeciesId.DUNSPARCE,
       2,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -7220,7 +7220,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GLIGAR,
+      SpeciesId.GLIGAR,
       2,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -7245,7 +7245,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.STEELIX,
+      SpeciesId.STEELIX,
       2,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -7317,7 +7317,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.SNUBBULL,
+      SpeciesId.SNUBBULL,
       2,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -7342,7 +7342,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GRANBULL,
+      SpeciesId.GRANBULL,
       2,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -7367,7 +7367,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.QWILFISH,
+      SpeciesId.QWILFISH,
       2,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -7392,7 +7392,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SCIZOR,
+      SpeciesId.SCIZOR,
       2,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -7464,7 +7464,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.SHUCKLE,
+      SpeciesId.SHUCKLE,
       2,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -7489,7 +7489,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HERACROSS,
+      SpeciesId.HERACROSS,
       2,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -7561,7 +7561,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.SNEASEL,
+      SpeciesId.SNEASEL,
       2,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -7586,7 +7586,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.TEDDIURSA,
+      SpeciesId.TEDDIURSA,
       2,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -7611,7 +7611,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.URSARING,
+      SpeciesId.URSARING,
       2,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -7636,7 +7636,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.SLUGMA,
+      SpeciesId.SLUGMA,
       2,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -7661,7 +7661,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MAGCARGO,
+      SpeciesId.MAGCARGO,
       2,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -7686,7 +7686,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SWINUB,
+      SpeciesId.SWINUB,
       2,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -7711,7 +7711,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PILOSWINE,
+      SpeciesId.PILOSWINE,
       2,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -7736,7 +7736,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.CORSOLA,
+      SpeciesId.CORSOLA,
       2,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -7761,7 +7761,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.REMORAID,
+      SpeciesId.REMORAID,
       2,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -7786,7 +7786,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.OCTILLERY,
+      SpeciesId.OCTILLERY,
       2,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -7811,7 +7811,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.DELIBIRD,
+      SpeciesId.DELIBIRD,
       2,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -7836,7 +7836,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MANTINE,
+      SpeciesId.MANTINE,
       2,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -7861,7 +7861,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SKARMORY,
+      SpeciesId.SKARMORY,
       2,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -7886,7 +7886,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HOUNDOUR,
+      SpeciesId.HOUNDOUR,
       2,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -7911,7 +7911,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HOUNDOOM,
+      SpeciesId.HOUNDOOM,
       2,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -7983,7 +7983,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.KINGDRA,
+      SpeciesId.KINGDRA,
       2,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -8008,7 +8008,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PHANPY,
+      SpeciesId.PHANPY,
       2,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -8033,7 +8033,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DONPHAN,
+      SpeciesId.DONPHAN,
       2,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -8058,7 +8058,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.PORYGON2,
+      SpeciesId.PORYGON2,
       2,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -8083,7 +8083,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.STANTLER,
+      SpeciesId.STANTLER,
       2,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -8108,7 +8108,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SMEARGLE,
+      SpeciesId.SMEARGLE,
       2,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -8133,7 +8133,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TYROGUE,
+      SpeciesId.TYROGUE,
       2,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -8158,7 +8158,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HITMONTOP,
+      SpeciesId.HITMONTOP,
       2,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -8183,7 +8183,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SMOOCHUM,
+      SpeciesId.SMOOCHUM,
       2,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -8208,7 +8208,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ELEKID,
+      SpeciesId.ELEKID,
       2,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -8233,7 +8233,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MAGBY,
+      SpeciesId.MAGBY,
       2,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -8258,7 +8258,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MILTANK,
+      SpeciesId.MILTANK,
       2,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -8283,7 +8283,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BLISSEY,
+      SpeciesId.BLISSEY,
       2,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -8308,7 +8308,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.RAIKOU,
+      SpeciesId.RAIKOU,
       2,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.ELECTRIC,
@@ -8333,7 +8333,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ENTEI,
+      SpeciesId.ENTEI,
       2,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.FIRE,
@@ -8358,7 +8358,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SUICUNE,
+      SpeciesId.SUICUNE,
       2,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.WATER,
@@ -8383,7 +8383,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LARVITAR,
+      SpeciesId.LARVITAR,
       2,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -8408,7 +8408,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PUPITAR,
+      SpeciesId.PUPITAR,
       2,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -8433,7 +8433,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TYRANITAR,
+      SpeciesId.TYRANITAR,
       2,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -8504,7 +8504,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.LUGIA,
+      SpeciesId.LUGIA,
       2,
       SpeciesGroups.LEGENDARY,
       ElementalType.PSYCHIC,
@@ -8529,7 +8529,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HO_OH,
+      SpeciesId.HO_OH,
       2,
       SpeciesGroups.LEGENDARY,
       ElementalType.FIRE,
@@ -8554,7 +8554,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CELEBI,
+      SpeciesId.CELEBI,
       2,
       SpeciesGroups.MYTHICAL,
       ElementalType.PSYCHIC,
@@ -8579,7 +8579,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TREECKO,
+      SpeciesId.TREECKO,
       3,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -8604,7 +8604,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GROVYLE,
+      SpeciesId.GROVYLE,
       3,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -8629,7 +8629,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SCEPTILE,
+      SpeciesId.SCEPTILE,
       3,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -8700,7 +8700,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.TORCHIC,
+      SpeciesId.TORCHIC,
       3,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -8725,7 +8725,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.COMBUSKEN,
+      SpeciesId.COMBUSKEN,
       3,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -8750,7 +8750,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.BLAZIKEN,
+      SpeciesId.BLAZIKEN,
       3,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -8822,7 +8822,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.MUDKIP,
+      SpeciesId.MUDKIP,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -8847,7 +8847,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MARSHTOMP,
+      SpeciesId.MARSHTOMP,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -8872,7 +8872,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SWAMPERT,
+      SpeciesId.SWAMPERT,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -8943,7 +8943,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.POOCHYENA,
+      SpeciesId.POOCHYENA,
       3,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -8968,7 +8968,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MIGHTYENA,
+      SpeciesId.MIGHTYENA,
       3,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -8993,7 +8993,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ZIGZAGOON,
+      SpeciesId.ZIGZAGOON,
       3,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -9018,7 +9018,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LINOONE,
+      SpeciesId.LINOONE,
       3,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -9043,7 +9043,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.WURMPLE,
+      SpeciesId.WURMPLE,
       3,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -9068,7 +9068,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SILCOON,
+      SpeciesId.SILCOON,
       3,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -9093,7 +9093,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BEAUTIFLY,
+      SpeciesId.BEAUTIFLY,
       3,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -9118,7 +9118,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.CASCOON,
+      SpeciesId.CASCOON,
       3,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -9143,7 +9143,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DUSTOX,
+      SpeciesId.DUSTOX,
       3,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -9168,7 +9168,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.LOTAD,
+      SpeciesId.LOTAD,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -9193,7 +9193,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LOMBRE,
+      SpeciesId.LOMBRE,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -9218,7 +9218,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LUDICOLO,
+      SpeciesId.LUDICOLO,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -9243,7 +9243,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.SEEDOT,
+      SpeciesId.SEEDOT,
       3,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -9268,7 +9268,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.NUZLEAF,
+      SpeciesId.NUZLEAF,
       3,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -9293,7 +9293,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.SHIFTRY,
+      SpeciesId.SHIFTRY,
       3,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -9318,7 +9318,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.TAILLOW,
+      SpeciesId.TAILLOW,
       3,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -9343,7 +9343,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SWELLOW,
+      SpeciesId.SWELLOW,
       3,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -9368,7 +9368,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.WINGULL,
+      SpeciesId.WINGULL,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -9393,7 +9393,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PELIPPER,
+      SpeciesId.PELIPPER,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -9418,7 +9418,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.RALTS,
+      SpeciesId.RALTS,
       3,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -9443,7 +9443,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.KIRLIA,
+      SpeciesId.KIRLIA,
       3,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -9468,7 +9468,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GARDEVOIR,
+      SpeciesId.GARDEVOIR,
       3,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -9539,7 +9539,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.SURSKIT,
+      SpeciesId.SURSKIT,
       3,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -9564,7 +9564,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MASQUERAIN,
+      SpeciesId.MASQUERAIN,
       3,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -9589,7 +9589,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SHROOMISH,
+      SpeciesId.SHROOMISH,
       3,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -9614,7 +9614,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BRELOOM,
+      SpeciesId.BRELOOM,
       3,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -9639,7 +9639,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SLAKOTH,
+      SpeciesId.SLAKOTH,
       3,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -9664,7 +9664,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.VIGOROTH,
+      SpeciesId.VIGOROTH,
       3,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -9689,7 +9689,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SLAKING,
+      SpeciesId.SLAKING,
       3,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -9714,7 +9714,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.NINCADA,
+      SpeciesId.NINCADA,
       3,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -9739,7 +9739,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.NINJASK,
+      SpeciesId.NINJASK,
       3,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -9764,7 +9764,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SHEDINJA,
+      SpeciesId.SHEDINJA,
       3,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -9789,7 +9789,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.WHISMUR,
+      SpeciesId.WHISMUR,
       3,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -9814,7 +9814,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LOUDRED,
+      SpeciesId.LOUDRED,
       3,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -9839,7 +9839,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.EXPLOUD,
+      SpeciesId.EXPLOUD,
       3,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -9864,7 +9864,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MAKUHITA,
+      SpeciesId.MAKUHITA,
       3,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -9889,7 +9889,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HARIYAMA,
+      SpeciesId.HARIYAMA,
       3,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -9914,7 +9914,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.AZURILL,
+      SpeciesId.AZURILL,
       3,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -9939,7 +9939,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.NOSEPASS,
+      SpeciesId.NOSEPASS,
       3,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -9964,7 +9964,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SKITTY,
+      SpeciesId.SKITTY,
       3,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -9989,7 +9989,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DELCATTY,
+      SpeciesId.DELCATTY,
       3,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -10014,7 +10014,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SABLEYE,
+      SpeciesId.SABLEYE,
       3,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -10085,7 +10085,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.MAWILE,
+      SpeciesId.MAWILE,
       3,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -10156,7 +10156,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.ARON,
+      SpeciesId.ARON,
       3,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -10181,7 +10181,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LAIRON,
+      SpeciesId.LAIRON,
       3,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -10206,7 +10206,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.AGGRON,
+      SpeciesId.AGGRON,
       3,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -10277,7 +10277,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.MEDITITE,
+      SpeciesId.MEDITITE,
       3,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -10302,7 +10302,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.MEDICHAM,
+      SpeciesId.MEDICHAM,
       3,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -10374,7 +10374,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.ELECTRIKE,
+      SpeciesId.ELECTRIKE,
       3,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -10399,7 +10399,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MANECTRIC,
+      SpeciesId.MANECTRIC,
       3,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -10470,7 +10470,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.PLUSLE,
+      SpeciesId.PLUSLE,
       3,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -10495,7 +10495,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MINUN,
+      SpeciesId.MINUN,
       3,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -10520,7 +10520,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.VOLBEAT,
+      SpeciesId.VOLBEAT,
       3,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -10545,7 +10545,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ILLUMISE,
+      SpeciesId.ILLUMISE,
       3,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -10570,7 +10570,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ROSELIA,
+      SpeciesId.ROSELIA,
       3,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -10595,7 +10595,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.GULPIN,
+      SpeciesId.GULPIN,
       3,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -10620,7 +10620,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.SWALOT,
+      SpeciesId.SWALOT,
       3,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -10645,7 +10645,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.CARVANHA,
+      SpeciesId.CARVANHA,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -10670,7 +10670,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SHARPEDO,
+      SpeciesId.SHARPEDO,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -10741,7 +10741,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.WAILMER,
+      SpeciesId.WAILMER,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -10766,7 +10766,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.WAILORD,
+      SpeciesId.WAILORD,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -10791,7 +10791,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.NUMEL,
+      SpeciesId.NUMEL,
       3,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -10816,7 +10816,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.CAMERUPT,
+      SpeciesId.CAMERUPT,
       3,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -10887,7 +10887,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.TORKOAL,
+      SpeciesId.TORKOAL,
       3,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -10912,7 +10912,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SPOINK,
+      SpeciesId.SPOINK,
       3,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -10937,7 +10937,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GRUMPIG,
+      SpeciesId.GRUMPIG,
       3,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -10962,7 +10962,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SPINDA,
+      SpeciesId.SPINDA,
       3,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -10987,7 +10987,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TRAPINCH,
+      SpeciesId.TRAPINCH,
       3,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -11012,7 +11012,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.VIBRAVA,
+      SpeciesId.VIBRAVA,
       3,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -11037,7 +11037,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FLYGON,
+      SpeciesId.FLYGON,
       3,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -11062,7 +11062,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CACNEA,
+      SpeciesId.CACNEA,
       3,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -11087,7 +11087,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CACTURNE,
+      SpeciesId.CACTURNE,
       3,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -11112,7 +11112,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.SWABLU,
+      SpeciesId.SWABLU,
       3,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -11137,7 +11137,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ALTARIA,
+      SpeciesId.ALTARIA,
       3,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -11208,7 +11208,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.ZANGOOSE,
+      SpeciesId.ZANGOOSE,
       3,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -11233,7 +11233,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SEVIPER,
+      SpeciesId.SEVIPER,
       3,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -11258,7 +11258,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LUNATONE,
+      SpeciesId.LUNATONE,
       3,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -11283,7 +11283,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SOLROCK,
+      SpeciesId.SOLROCK,
       3,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -11308,7 +11308,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BARBOACH,
+      SpeciesId.BARBOACH,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -11333,7 +11333,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.WHISCASH,
+      SpeciesId.WHISCASH,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -11358,7 +11358,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CORPHISH,
+      SpeciesId.CORPHISH,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -11383,7 +11383,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CRAWDAUNT,
+      SpeciesId.CRAWDAUNT,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -11408,7 +11408,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BALTOY,
+      SpeciesId.BALTOY,
       3,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -11433,7 +11433,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CLAYDOL,
+      SpeciesId.CLAYDOL,
       3,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -11458,7 +11458,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LILEEP,
+      SpeciesId.LILEEP,
       3,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -11483,7 +11483,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CRADILY,
+      SpeciesId.CRADILY,
       3,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -11508,7 +11508,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ANORITH,
+      SpeciesId.ANORITH,
       3,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -11533,7 +11533,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ARMALDO,
+      SpeciesId.ARMALDO,
       3,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -11558,7 +11558,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FEEBAS,
+      SpeciesId.FEEBAS,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -11583,7 +11583,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MILOTIC,
+      SpeciesId.MILOTIC,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -11608,7 +11608,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.CASTFORM,
+      SpeciesId.CASTFORM,
       3,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -11721,7 +11721,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.KECLEON,
+      SpeciesId.KECLEON,
       3,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -11746,7 +11746,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SHUPPET,
+      SpeciesId.SHUPPET,
       3,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -11771,7 +11771,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BANETTE,
+      SpeciesId.BANETTE,
       3,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -11842,7 +11842,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.DUSKULL,
+      SpeciesId.DUSKULL,
       3,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -11867,7 +11867,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DUSCLOPS,
+      SpeciesId.DUSCLOPS,
       3,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -11892,7 +11892,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TROPIUS,
+      SpeciesId.TROPIUS,
       3,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -11917,7 +11917,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CHIMECHO,
+      SpeciesId.CHIMECHO,
       3,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -11942,7 +11942,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ABSOL,
+      SpeciesId.ABSOL,
       3,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -12013,7 +12013,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.WYNAUT,
+      SpeciesId.WYNAUT,
       3,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -12038,7 +12038,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SNORUNT,
+      SpeciesId.SNORUNT,
       3,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -12063,7 +12063,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GLALIE,
+      SpeciesId.GLALIE,
       3,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -12134,7 +12134,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.SPHEAL,
+      SpeciesId.SPHEAL,
       3,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -12159,7 +12159,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SEALEO,
+      SpeciesId.SEALEO,
       3,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -12184,7 +12184,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.WALREIN,
+      SpeciesId.WALREIN,
       3,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -12209,7 +12209,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CLAMPERL,
+      SpeciesId.CLAMPERL,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -12234,7 +12234,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HUNTAIL,
+      SpeciesId.HUNTAIL,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -12259,7 +12259,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GOREBYSS,
+      SpeciesId.GOREBYSS,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -12284,7 +12284,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.RELICANTH,
+      SpeciesId.RELICANTH,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -12309,7 +12309,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.LUVDISC,
+      SpeciesId.LUVDISC,
       3,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -12334,7 +12334,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BAGON,
+      SpeciesId.BAGON,
       3,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -12359,7 +12359,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SHELGON,
+      SpeciesId.SHELGON,
       3,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -12384,7 +12384,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SALAMENCE,
+      SpeciesId.SALAMENCE,
       3,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -12455,7 +12455,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.BELDUM,
+      SpeciesId.BELDUM,
       3,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -12480,7 +12480,7 @@ export function initSpecies() {
       false,
     ), //Custom Catchrate, matching Frigibax
     new PokemonSpecies(
-      Species.METANG,
+      SpeciesId.METANG,
       3,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -12505,7 +12505,7 @@ export function initSpecies() {
       false,
     ), //Custom Catchrate, matching Arctibax
     new PokemonSpecies(
-      Species.METAGROSS,
+      SpeciesId.METAGROSS,
       3,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -12576,7 +12576,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.REGIROCK,
+      SpeciesId.REGIROCK,
       3,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.ROCK,
@@ -12601,7 +12601,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.REGICE,
+      SpeciesId.REGICE,
       3,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.ICE,
@@ -12626,7 +12626,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.REGISTEEL,
+      SpeciesId.REGISTEEL,
       3,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.STEEL,
@@ -12651,7 +12651,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LATIAS,
+      SpeciesId.LATIAS,
       3,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.DRAGON,
@@ -12722,7 +12722,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.LATIOS,
+      SpeciesId.LATIOS,
       3,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.DRAGON,
@@ -12793,7 +12793,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.KYOGRE,
+      SpeciesId.KYOGRE,
       3,
       SpeciesGroups.LEGENDARY,
       ElementalType.WATER,
@@ -12864,7 +12864,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.GROUDON,
+      SpeciesId.GROUDON,
       3,
       SpeciesGroups.LEGENDARY,
       ElementalType.GROUND,
@@ -12935,7 +12935,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.RAYQUAZA,
+      SpeciesId.RAYQUAZA,
       3,
       SpeciesGroups.LEGENDARY,
       ElementalType.DRAGON,
@@ -13006,7 +13006,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.JIRACHI,
+      SpeciesId.JIRACHI,
       3,
       SpeciesGroups.MYTHICAL,
       ElementalType.STEEL,
@@ -13031,7 +13031,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DEOXYS,
+      SpeciesId.DEOXYS,
       3,
       SpeciesGroups.MYTHICAL,
       ElementalType.PSYCHIC,
@@ -13144,7 +13144,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.TURTWIG,
+      SpeciesId.TURTWIG,
       4,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -13169,7 +13169,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GROTLE,
+      SpeciesId.GROTLE,
       4,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -13194,7 +13194,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TORTERRA,
+      SpeciesId.TORTERRA,
       4,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -13219,7 +13219,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CHIMCHAR,
+      SpeciesId.CHIMCHAR,
       4,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -13244,7 +13244,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MONFERNO,
+      SpeciesId.MONFERNO,
       4,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -13269,7 +13269,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.INFERNAPE,
+      SpeciesId.INFERNAPE,
       4,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -13294,7 +13294,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PIPLUP,
+      SpeciesId.PIPLUP,
       4,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -13319,7 +13319,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PRINPLUP,
+      SpeciesId.PRINPLUP,
       4,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -13344,7 +13344,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.EMPOLEON,
+      SpeciesId.EMPOLEON,
       4,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -13369,7 +13369,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.STARLY,
+      SpeciesId.STARLY,
       4,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -13394,7 +13394,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.STARAVIA,
+      SpeciesId.STARAVIA,
       4,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -13419,7 +13419,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.STARAPTOR,
+      SpeciesId.STARAPTOR,
       4,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -13444,7 +13444,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.BIDOOF,
+      SpeciesId.BIDOOF,
       4,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -13469,7 +13469,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.BIBAREL,
+      SpeciesId.BIBAREL,
       4,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -13494,7 +13494,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.KRICKETOT,
+      SpeciesId.KRICKETOT,
       4,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -13519,7 +13519,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.KRICKETUNE,
+      SpeciesId.KRICKETUNE,
       4,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -13544,7 +13544,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.SHINX,
+      SpeciesId.SHINX,
       4,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -13569,7 +13569,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.LUXIO,
+      SpeciesId.LUXIO,
       4,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -13594,7 +13594,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.LUXRAY,
+      SpeciesId.LUXRAY,
       4,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -13619,7 +13619,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.BUDEW,
+      SpeciesId.BUDEW,
       4,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -13644,7 +13644,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ROSERADE,
+      SpeciesId.ROSERADE,
       4,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -13669,7 +13669,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.CRANIDOS,
+      SpeciesId.CRANIDOS,
       4,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -13694,7 +13694,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.RAMPARDOS,
+      SpeciesId.RAMPARDOS,
       4,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -13719,7 +13719,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SHIELDON,
+      SpeciesId.SHIELDON,
       4,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -13744,7 +13744,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BASTIODON,
+      SpeciesId.BASTIODON,
       4,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -13769,7 +13769,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BURMY,
+      SpeciesId.BURMY,
       4,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -13867,7 +13867,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.WORMADAM,
+      SpeciesId.WORMADAM,
       4,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -13965,7 +13965,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.MOTHIM,
+      SpeciesId.MOTHIM,
       4,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -13990,7 +13990,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.COMBEE,
+      SpeciesId.COMBEE,
       4,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -14015,7 +14015,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.VESPIQUEN,
+      SpeciesId.VESPIQUEN,
       4,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -14040,7 +14040,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PACHIRISU,
+      SpeciesId.PACHIRISU,
       4,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -14065,7 +14065,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.BUIZEL,
+      SpeciesId.BUIZEL,
       4,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -14090,7 +14090,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.FLOATZEL,
+      SpeciesId.FLOATZEL,
       4,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -14115,7 +14115,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.CHERUBI,
+      SpeciesId.CHERUBI,
       4,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -14140,7 +14140,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CHERRIM,
+      SpeciesId.CHERRIM,
       4,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -14211,7 +14211,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.SHELLOS,
+      SpeciesId.SHELLOS,
       4,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -14285,7 +14285,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.GASTRODON,
+      SpeciesId.GASTRODON,
       4,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -14359,7 +14359,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.AMBIPOM,
+      SpeciesId.AMBIPOM,
       4,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -14384,7 +14384,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.DRIFLOON,
+      SpeciesId.DRIFLOON,
       4,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -14409,7 +14409,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DRIFBLIM,
+      SpeciesId.DRIFBLIM,
       4,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -14434,7 +14434,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BUNEARY,
+      SpeciesId.BUNEARY,
       4,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -14459,7 +14459,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LOPUNNY,
+      SpeciesId.LOPUNNY,
       4,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -14530,7 +14530,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.MISMAGIUS,
+      SpeciesId.MISMAGIUS,
       4,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -14555,7 +14555,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HONCHKROW,
+      SpeciesId.HONCHKROW,
       4,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -14580,7 +14580,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GLAMEOW,
+      SpeciesId.GLAMEOW,
       4,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -14605,7 +14605,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PURUGLY,
+      SpeciesId.PURUGLY,
       4,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -14630,7 +14630,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CHINGLING,
+      SpeciesId.CHINGLING,
       4,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -14655,7 +14655,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.STUNKY,
+      SpeciesId.STUNKY,
       4,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -14680,7 +14680,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SKUNTANK,
+      SpeciesId.SKUNTANK,
       4,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -14705,7 +14705,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BRONZOR,
+      SpeciesId.BRONZOR,
       4,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -14730,7 +14730,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BRONZONG,
+      SpeciesId.BRONZONG,
       4,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -14755,7 +14755,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BONSLY,
+      SpeciesId.BONSLY,
       4,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -14780,7 +14780,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MIME_JR,
+      SpeciesId.MIME_JR,
       4,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -14805,7 +14805,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HAPPINY,
+      SpeciesId.HAPPINY,
       4,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -14830,7 +14830,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CHATOT,
+      SpeciesId.CHATOT,
       4,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -14855,7 +14855,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SPIRITOMB,
+      SpeciesId.SPIRITOMB,
       4,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -14880,7 +14880,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GIBLE,
+      SpeciesId.GIBLE,
       4,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -14905,7 +14905,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.GABITE,
+      SpeciesId.GABITE,
       4,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -14930,7 +14930,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.GARCHOMP,
+      SpeciesId.GARCHOMP,
       4,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -15002,7 +15002,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.MUNCHLAX,
+      SpeciesId.MUNCHLAX,
       4,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -15027,7 +15027,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.RIOLU,
+      SpeciesId.RIOLU,
       4,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -15052,7 +15052,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LUCARIO,
+      SpeciesId.LUCARIO,
       4,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -15123,7 +15123,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.HIPPOPOTAS,
+      SpeciesId.HIPPOPOTAS,
       4,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -15148,7 +15148,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.HIPPOWDON,
+      SpeciesId.HIPPOWDON,
       4,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -15173,7 +15173,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.SKORUPI,
+      SpeciesId.SKORUPI,
       4,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -15198,7 +15198,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DRAPION,
+      SpeciesId.DRAPION,
       4,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -15223,7 +15223,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CROAGUNK,
+      SpeciesId.CROAGUNK,
       4,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -15248,7 +15248,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.TOXICROAK,
+      SpeciesId.TOXICROAK,
       4,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -15273,7 +15273,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.CARNIVINE,
+      SpeciesId.CARNIVINE,
       4,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -15298,7 +15298,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FINNEON,
+      SpeciesId.FINNEON,
       4,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -15323,7 +15323,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.LUMINEON,
+      SpeciesId.LUMINEON,
       4,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -15348,7 +15348,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.MANTYKE,
+      SpeciesId.MANTYKE,
       4,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -15373,7 +15373,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SNOVER,
+      SpeciesId.SNOVER,
       4,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -15398,7 +15398,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.ABOMASNOW,
+      SpeciesId.ABOMASNOW,
       4,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -15470,7 +15470,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.WEAVILE,
+      SpeciesId.WEAVILE,
       4,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -15495,7 +15495,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.MAGNEZONE,
+      SpeciesId.MAGNEZONE,
       4,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -15520,7 +15520,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LICKILICKY,
+      SpeciesId.LICKILICKY,
       4,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -15545,7 +15545,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.RHYPERIOR,
+      SpeciesId.RHYPERIOR,
       4,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -15570,7 +15570,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.TANGROWTH,
+      SpeciesId.TANGROWTH,
       4,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -15595,7 +15595,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.ELECTIVIRE,
+      SpeciesId.ELECTIVIRE,
       4,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -15620,7 +15620,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MAGMORTAR,
+      SpeciesId.MAGMORTAR,
       4,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -15645,7 +15645,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TOGEKISS,
+      SpeciesId.TOGEKISS,
       4,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -15670,7 +15670,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.YANMEGA,
+      SpeciesId.YANMEGA,
       4,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -15695,7 +15695,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LEAFEON,
+      SpeciesId.LEAFEON,
       4,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -15720,7 +15720,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GLACEON,
+      SpeciesId.GLACEON,
       4,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -15745,7 +15745,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GLISCOR,
+      SpeciesId.GLISCOR,
       4,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -15770,7 +15770,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MAMOSWINE,
+      SpeciesId.MAMOSWINE,
       4,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -15795,7 +15795,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.PORYGON_Z,
+      SpeciesId.PORYGON_Z,
       4,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -15820,7 +15820,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GALLADE,
+      SpeciesId.GALLADE,
       4,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -15891,7 +15891,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.PROBOPASS,
+      SpeciesId.PROBOPASS,
       4,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -15916,7 +15916,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DUSKNOIR,
+      SpeciesId.DUSKNOIR,
       4,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -15941,7 +15941,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FROSLASS,
+      SpeciesId.FROSLASS,
       4,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -15966,7 +15966,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ROTOM,
+      SpeciesId.ROTOM,
       4,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -16136,7 +16136,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.UXIE,
+      SpeciesId.UXIE,
       4,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.PSYCHIC,
@@ -16161,7 +16161,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MESPRIT,
+      SpeciesId.MESPRIT,
       4,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.PSYCHIC,
@@ -16186,7 +16186,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.AZELF,
+      SpeciesId.AZELF,
       4,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.PSYCHIC,
@@ -16211,7 +16211,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DIALGA,
+      SpeciesId.DIALGA,
       4,
       SpeciesGroups.LEGENDARY,
       ElementalType.STEEL,
@@ -16282,7 +16282,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.PALKIA,
+      SpeciesId.PALKIA,
       4,
       SpeciesGroups.LEGENDARY,
       ElementalType.WATER,
@@ -16353,7 +16353,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.HEATRAN,
+      SpeciesId.HEATRAN,
       4,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.FIRE,
@@ -16378,7 +16378,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.REGIGIGAS,
+      SpeciesId.REGIGIGAS,
       4,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.NORMAL,
@@ -16403,7 +16403,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GIRATINA,
+      SpeciesId.GIRATINA,
       4,
       SpeciesGroups.LEGENDARY,
       ElementalType.GHOST,
@@ -16474,7 +16474,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.CRESSELIA,
+      SpeciesId.CRESSELIA,
       4,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.PSYCHIC,
@@ -16499,7 +16499,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PHIONE,
+      SpeciesId.PHIONE,
       4,
       SpeciesGroups.MYTHICAL,
       ElementalType.WATER,
@@ -16524,7 +16524,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MANAPHY,
+      SpeciesId.MANAPHY,
       4,
       SpeciesGroups.MYTHICAL,
       ElementalType.WATER,
@@ -16549,7 +16549,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DARKRAI,
+      SpeciesId.DARKRAI,
       4,
       SpeciesGroups.MYTHICAL,
       ElementalType.DARK,
@@ -16574,7 +16574,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SHAYMIN,
+      SpeciesId.SHAYMIN,
       4,
       SpeciesGroups.MYTHICAL,
       ElementalType.GRASS,
@@ -16645,7 +16645,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.ARCEUS,
+      SpeciesId.ARCEUS,
       4,
       SpeciesGroups.MYTHICAL,
       ElementalType.NORMAL,
@@ -17073,7 +17073,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.VICTINI,
+      SpeciesId.VICTINI,
       5,
       SpeciesGroups.MYTHICAL,
       ElementalType.PSYCHIC,
@@ -17098,7 +17098,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SNIVY,
+      SpeciesId.SNIVY,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -17123,7 +17123,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SERVINE,
+      SpeciesId.SERVINE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -17148,7 +17148,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SERPERIOR,
+      SpeciesId.SERPERIOR,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -17173,7 +17173,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TEPIG,
+      SpeciesId.TEPIG,
       5,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -17198,7 +17198,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PIGNITE,
+      SpeciesId.PIGNITE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -17223,7 +17223,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.EMBOAR,
+      SpeciesId.EMBOAR,
       5,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -17248,7 +17248,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.OSHAWOTT,
+      SpeciesId.OSHAWOTT,
       5,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -17273,7 +17273,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DEWOTT,
+      SpeciesId.DEWOTT,
       5,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -17298,7 +17298,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SAMUROTT,
+      SpeciesId.SAMUROTT,
       5,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -17323,7 +17323,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PATRAT,
+      SpeciesId.PATRAT,
       5,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -17348,7 +17348,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.WATCHOG,
+      SpeciesId.WATCHOG,
       5,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -17373,7 +17373,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LILLIPUP,
+      SpeciesId.LILLIPUP,
       5,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -17398,7 +17398,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HERDIER,
+      SpeciesId.HERDIER,
       5,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -17423,7 +17423,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.STOUTLAND,
+      SpeciesId.STOUTLAND,
       5,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -17448,7 +17448,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PURRLOIN,
+      SpeciesId.PURRLOIN,
       5,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -17473,7 +17473,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LIEPARD,
+      SpeciesId.LIEPARD,
       5,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -17498,7 +17498,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PANSAGE,
+      SpeciesId.PANSAGE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -17523,7 +17523,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SIMISAGE,
+      SpeciesId.SIMISAGE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -17548,7 +17548,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PANSEAR,
+      SpeciesId.PANSEAR,
       5,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -17573,7 +17573,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SIMISEAR,
+      SpeciesId.SIMISEAR,
       5,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -17598,7 +17598,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PANPOUR,
+      SpeciesId.PANPOUR,
       5,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -17623,7 +17623,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SIMIPOUR,
+      SpeciesId.SIMIPOUR,
       5,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -17648,7 +17648,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MUNNA,
+      SpeciesId.MUNNA,
       5,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -17673,7 +17673,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MUSHARNA,
+      SpeciesId.MUSHARNA,
       5,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -17698,7 +17698,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PIDOVE,
+      SpeciesId.PIDOVE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -17723,7 +17723,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TRANQUILL,
+      SpeciesId.TRANQUILL,
       5,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -17748,7 +17748,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.UNFEZANT,
+      SpeciesId.UNFEZANT,
       5,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -17773,7 +17773,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.BLITZLE,
+      SpeciesId.BLITZLE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -17798,7 +17798,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ZEBSTRIKA,
+      SpeciesId.ZEBSTRIKA,
       5,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -17823,7 +17823,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ROGGENROLA,
+      SpeciesId.ROGGENROLA,
       5,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -17848,7 +17848,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BOLDORE,
+      SpeciesId.BOLDORE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -17873,7 +17873,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GIGALITH,
+      SpeciesId.GIGALITH,
       5,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -17898,7 +17898,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.WOOBAT,
+      SpeciesId.WOOBAT,
       5,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -17923,7 +17923,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SWOOBAT,
+      SpeciesId.SWOOBAT,
       5,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -17948,7 +17948,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DRILBUR,
+      SpeciesId.DRILBUR,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -17973,7 +17973,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.EXCADRILL,
+      SpeciesId.EXCADRILL,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -17998,7 +17998,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.AUDINO,
+      SpeciesId.AUDINO,
       5,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -18069,7 +18069,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.TIMBURR,
+      SpeciesId.TIMBURR,
       5,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -18094,7 +18094,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GURDURR,
+      SpeciesId.GURDURR,
       5,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -18119,7 +18119,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CONKELDURR,
+      SpeciesId.CONKELDURR,
       5,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -18144,7 +18144,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TYMPOLE,
+      SpeciesId.TYMPOLE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -18169,7 +18169,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PALPITOAD,
+      SpeciesId.PALPITOAD,
       5,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -18194,7 +18194,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SEISMITOAD,
+      SpeciesId.SEISMITOAD,
       5,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -18219,7 +18219,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.THROH,
+      SpeciesId.THROH,
       5,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -18244,7 +18244,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SAWK,
+      SpeciesId.SAWK,
       5,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -18269,7 +18269,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SEWADDLE,
+      SpeciesId.SEWADDLE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -18294,7 +18294,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SWADLOON,
+      SpeciesId.SWADLOON,
       5,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -18319,7 +18319,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LEAVANNY,
+      SpeciesId.LEAVANNY,
       5,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -18344,7 +18344,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.VENIPEDE,
+      SpeciesId.VENIPEDE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -18369,7 +18369,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.WHIRLIPEDE,
+      SpeciesId.WHIRLIPEDE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -18394,7 +18394,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SCOLIPEDE,
+      SpeciesId.SCOLIPEDE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -18419,7 +18419,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.COTTONEE,
+      SpeciesId.COTTONEE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -18444,7 +18444,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.WHIMSICOTT,
+      SpeciesId.WHIMSICOTT,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -18469,7 +18469,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PETILIL,
+      SpeciesId.PETILIL,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -18494,7 +18494,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LILLIGANT,
+      SpeciesId.LILLIGANT,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -18519,7 +18519,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BASCULIN,
+      SpeciesId.BASCULIN,
       5,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -18617,7 +18617,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.SANDILE,
+      SpeciesId.SANDILE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -18642,7 +18642,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.KROKOROK,
+      SpeciesId.KROKOROK,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -18667,7 +18667,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.KROOKODILE,
+      SpeciesId.KROOKODILE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -18692,7 +18692,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DARUMAKA,
+      SpeciesId.DARUMAKA,
       5,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -18717,7 +18717,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DARMANITAN,
+      SpeciesId.DARMANITAN,
       5,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -18788,7 +18788,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.MARACTUS,
+      SpeciesId.MARACTUS,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -18813,7 +18813,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DWEBBLE,
+      SpeciesId.DWEBBLE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -18838,7 +18838,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CRUSTLE,
+      SpeciesId.CRUSTLE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -18863,7 +18863,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SCRAGGY,
+      SpeciesId.SCRAGGY,
       5,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -18888,7 +18888,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SCRAFTY,
+      SpeciesId.SCRAFTY,
       5,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -18913,7 +18913,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SIGILYPH,
+      SpeciesId.SIGILYPH,
       5,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -18938,7 +18938,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.YAMASK,
+      SpeciesId.YAMASK,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -18963,7 +18963,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.COFAGRIGUS,
+      SpeciesId.COFAGRIGUS,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -18988,7 +18988,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TIRTOUGA,
+      SpeciesId.TIRTOUGA,
       5,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -19013,7 +19013,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CARRACOSTA,
+      SpeciesId.CARRACOSTA,
       5,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -19038,7 +19038,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ARCHEN,
+      SpeciesId.ARCHEN,
       5,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -19063,7 +19063,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ARCHEOPS,
+      SpeciesId.ARCHEOPS,
       5,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -19088,7 +19088,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TRUBBISH,
+      SpeciesId.TRUBBISH,
       5,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -19113,7 +19113,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GARBODOR,
+      SpeciesId.GARBODOR,
       5,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -19184,7 +19184,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.ZORUA,
+      SpeciesId.ZORUA,
       5,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -19209,7 +19209,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ZOROARK,
+      SpeciesId.ZOROARK,
       5,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -19234,7 +19234,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MINCCINO,
+      SpeciesId.MINCCINO,
       5,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -19259,7 +19259,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CINCCINO,
+      SpeciesId.CINCCINO,
       5,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -19284,7 +19284,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GOTHITA,
+      SpeciesId.GOTHITA,
       5,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -19309,7 +19309,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GOTHORITA,
+      SpeciesId.GOTHORITA,
       5,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -19334,7 +19334,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GOTHITELLE,
+      SpeciesId.GOTHITELLE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -19359,7 +19359,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SOLOSIS,
+      SpeciesId.SOLOSIS,
       5,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -19384,7 +19384,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DUOSION,
+      SpeciesId.DUOSION,
       5,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -19409,7 +19409,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.REUNICLUS,
+      SpeciesId.REUNICLUS,
       5,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -19434,7 +19434,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DUCKLETT,
+      SpeciesId.DUCKLETT,
       5,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -19459,7 +19459,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SWANNA,
+      SpeciesId.SWANNA,
       5,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -19484,7 +19484,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.VANILLITE,
+      SpeciesId.VANILLITE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -19509,7 +19509,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.VANILLISH,
+      SpeciesId.VANILLISH,
       5,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -19534,7 +19534,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.VANILLUXE,
+      SpeciesId.VANILLUXE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -19559,7 +19559,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DEERLING,
+      SpeciesId.DEERLING,
       5,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -19681,7 +19681,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.SAWSBUCK,
+      SpeciesId.SAWSBUCK,
       5,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -19803,7 +19803,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.EMOLGA,
+      SpeciesId.EMOLGA,
       5,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -19828,7 +19828,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.KARRABLAST,
+      SpeciesId.KARRABLAST,
       5,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -19853,7 +19853,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ESCAVALIER,
+      SpeciesId.ESCAVALIER,
       5,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -19878,7 +19878,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FOONGUS,
+      SpeciesId.FOONGUS,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -19903,7 +19903,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.AMOONGUSS,
+      SpeciesId.AMOONGUSS,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -19928,7 +19928,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FRILLISH,
+      SpeciesId.FRILLISH,
       5,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -19953,7 +19953,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.JELLICENT,
+      SpeciesId.JELLICENT,
       5,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -19978,7 +19978,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.ALOMOMOLA,
+      SpeciesId.ALOMOMOLA,
       5,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -20003,7 +20003,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.JOLTIK,
+      SpeciesId.JOLTIK,
       5,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -20028,7 +20028,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GALVANTULA,
+      SpeciesId.GALVANTULA,
       5,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -20053,7 +20053,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FERROSEED,
+      SpeciesId.FERROSEED,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -20078,7 +20078,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FERROTHORN,
+      SpeciesId.FERROTHORN,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -20103,7 +20103,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.KLINK,
+      SpeciesId.KLINK,
       5,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -20128,7 +20128,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.KLANG,
+      SpeciesId.KLANG,
       5,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -20153,7 +20153,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.KLINKLANG,
+      SpeciesId.KLINKLANG,
       5,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -20178,7 +20178,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TYNAMO,
+      SpeciesId.TYNAMO,
       5,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -20203,7 +20203,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.EELEKTRIK,
+      SpeciesId.EELEKTRIK,
       5,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -20228,7 +20228,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.EELEKTROSS,
+      SpeciesId.EELEKTROSS,
       5,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -20253,7 +20253,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ELGYEM,
+      SpeciesId.ELGYEM,
       5,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -20278,7 +20278,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BEHEEYEM,
+      SpeciesId.BEHEEYEM,
       5,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -20303,7 +20303,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LITWICK,
+      SpeciesId.LITWICK,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -20328,7 +20328,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LAMPENT,
+      SpeciesId.LAMPENT,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -20353,7 +20353,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CHANDELURE,
+      SpeciesId.CHANDELURE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -20378,7 +20378,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.AXEW,
+      SpeciesId.AXEW,
       5,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -20403,7 +20403,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FRAXURE,
+      SpeciesId.FRAXURE,
       5,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -20428,7 +20428,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HAXORUS,
+      SpeciesId.HAXORUS,
       5,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -20453,7 +20453,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CUBCHOO,
+      SpeciesId.CUBCHOO,
       5,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -20478,7 +20478,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BEARTIC,
+      SpeciesId.BEARTIC,
       5,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -20503,7 +20503,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CRYOGONAL,
+      SpeciesId.CRYOGONAL,
       5,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -20528,7 +20528,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SHELMET,
+      SpeciesId.SHELMET,
       5,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -20553,7 +20553,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ACCELGOR,
+      SpeciesId.ACCELGOR,
       5,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -20578,7 +20578,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.STUNFISK,
+      SpeciesId.STUNFISK,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -20603,7 +20603,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MIENFOO,
+      SpeciesId.MIENFOO,
       5,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -20628,7 +20628,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MIENSHAO,
+      SpeciesId.MIENSHAO,
       5,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -20653,7 +20653,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DRUDDIGON,
+      SpeciesId.DRUDDIGON,
       5,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -20678,7 +20678,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GOLETT,
+      SpeciesId.GOLETT,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -20703,7 +20703,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GOLURK,
+      SpeciesId.GOLURK,
       5,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -20728,7 +20728,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PAWNIARD,
+      SpeciesId.PAWNIARD,
       5,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -20753,7 +20753,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BISHARP,
+      SpeciesId.BISHARP,
       5,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -20778,7 +20778,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BOUFFALANT,
+      SpeciesId.BOUFFALANT,
       5,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -20803,7 +20803,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.RUFFLET,
+      SpeciesId.RUFFLET,
       5,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -20828,7 +20828,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BRAVIARY,
+      SpeciesId.BRAVIARY,
       5,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -20853,7 +20853,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.VULLABY,
+      SpeciesId.VULLABY,
       5,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -20878,7 +20878,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MANDIBUZZ,
+      SpeciesId.MANDIBUZZ,
       5,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -20903,7 +20903,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HEATMOR,
+      SpeciesId.HEATMOR,
       5,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -20928,7 +20928,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DURANT,
+      SpeciesId.DURANT,
       5,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -20953,7 +20953,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DEINO,
+      SpeciesId.DEINO,
       5,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -20978,7 +20978,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ZWEILOUS,
+      SpeciesId.ZWEILOUS,
       5,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -21003,7 +21003,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HYDREIGON,
+      SpeciesId.HYDREIGON,
       5,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -21028,7 +21028,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LARVESTA,
+      SpeciesId.LARVESTA,
       5,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -21053,7 +21053,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.VOLCARONA,
+      SpeciesId.VOLCARONA,
       5,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -21078,7 +21078,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.COBALION,
+      SpeciesId.COBALION,
       5,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.STEEL,
@@ -21103,7 +21103,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TERRAKION,
+      SpeciesId.TERRAKION,
       5,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.ROCK,
@@ -21128,7 +21128,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.VIRIZION,
+      SpeciesId.VIRIZION,
       5,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.GRASS,
@@ -21153,7 +21153,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TORNADUS,
+      SpeciesId.TORNADUS,
       5,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.FLYING,
@@ -21224,7 +21224,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.THUNDURUS,
+      SpeciesId.THUNDURUS,
       5,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.ELECTRIC,
@@ -21295,7 +21295,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.RESHIRAM,
+      SpeciesId.RESHIRAM,
       5,
       SpeciesGroups.LEGENDARY,
       ElementalType.DRAGON,
@@ -21320,7 +21320,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ZEKROM,
+      SpeciesId.ZEKROM,
       5,
       SpeciesGroups.LEGENDARY,
       ElementalType.DRAGON,
@@ -21345,7 +21345,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LANDORUS,
+      SpeciesId.LANDORUS,
       5,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.GROUND,
@@ -21416,7 +21416,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.KYUREM,
+      SpeciesId.KYUREM,
       5,
       SpeciesGroups.LEGENDARY,
       ElementalType.DRAGON,
@@ -21508,7 +21508,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.KELDEO,
+      SpeciesId.KELDEO,
       5,
       SpeciesGroups.MYTHICAL,
       ElementalType.WATER,
@@ -21579,7 +21579,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.MELOETTA,
+      SpeciesId.MELOETTA,
       5,
       SpeciesGroups.MYTHICAL,
       ElementalType.NORMAL,
@@ -21653,7 +21653,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.GENESECT,
+      SpeciesId.GENESECT,
       5,
       SpeciesGroups.MYTHICAL,
       ElementalType.BUG,
@@ -21787,7 +21787,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.CHESPIN,
+      SpeciesId.CHESPIN,
       6,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -21812,7 +21812,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.QUILLADIN,
+      SpeciesId.QUILLADIN,
       6,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -21837,7 +21837,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CHESNAUGHT,
+      SpeciesId.CHESNAUGHT,
       6,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -21862,7 +21862,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FENNEKIN,
+      SpeciesId.FENNEKIN,
       6,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -21887,7 +21887,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BRAIXEN,
+      SpeciesId.BRAIXEN,
       6,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -21912,7 +21912,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DELPHOX,
+      SpeciesId.DELPHOX,
       6,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -21937,7 +21937,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FROAKIE,
+      SpeciesId.FROAKIE,
       6,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -22011,7 +22011,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.FROGADIER,
+      SpeciesId.FROGADIER,
       6,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -22085,7 +22085,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.GRENINJA,
+      SpeciesId.GRENINJA,
       6,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -22184,7 +22184,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.BUNNELBY,
+      SpeciesId.BUNNELBY,
       6,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -22209,7 +22209,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DIGGERSBY,
+      SpeciesId.DIGGERSBY,
       6,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -22234,7 +22234,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FLETCHLING,
+      SpeciesId.FLETCHLING,
       6,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -22259,7 +22259,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FLETCHINDER,
+      SpeciesId.FLETCHINDER,
       6,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -22284,7 +22284,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TALONFLAME,
+      SpeciesId.TALONFLAME,
       6,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -22309,7 +22309,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SCATTERBUG,
+      SpeciesId.SCATTERBUG,
       6,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -22815,7 +22815,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.SPEWPA,
+      SpeciesId.SPEWPA,
       6,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -23321,7 +23321,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.VIVILLON,
+      SpeciesId.VIVILLON,
       6,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -23827,7 +23827,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.LITLEO,
+      SpeciesId.LITLEO,
       6,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -23852,7 +23852,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PYROAR,
+      SpeciesId.PYROAR,
       6,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -23877,7 +23877,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.FLABEBE,
+      SpeciesId.FLABEBE,
       6,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -24023,7 +24023,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.FLOETTE,
+      SpeciesId.FLOETTE,
       6,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -24169,7 +24169,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.FLORGES,
+      SpeciesId.FLORGES,
       6,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -24315,7 +24315,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.SKIDDO,
+      SpeciesId.SKIDDO,
       6,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -24340,7 +24340,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GOGOAT,
+      SpeciesId.GOGOAT,
       6,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -24365,7 +24365,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PANCHAM,
+      SpeciesId.PANCHAM,
       6,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -24390,7 +24390,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PANGORO,
+      SpeciesId.PANGORO,
       6,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -24415,7 +24415,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FURFROU,
+      SpeciesId.FURFROU,
       6,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -24681,7 +24681,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.ESPURR,
+      SpeciesId.ESPURR,
       6,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -24706,7 +24706,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MEOWSTIC,
+      SpeciesId.MEOWSTIC,
       6,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -24780,7 +24780,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.HONEDGE,
+      SpeciesId.HONEDGE,
       6,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -24805,7 +24805,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DOUBLADE,
+      SpeciesId.DOUBLADE,
       6,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -24830,7 +24830,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.AEGISLASH,
+      SpeciesId.AEGISLASH,
       6,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -24901,7 +24901,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.SPRITZEE,
+      SpeciesId.SPRITZEE,
       6,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -24926,7 +24926,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.AROMATISSE,
+      SpeciesId.AROMATISSE,
       6,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -24951,7 +24951,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SWIRLIX,
+      SpeciesId.SWIRLIX,
       6,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -24976,7 +24976,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SLURPUFF,
+      SpeciesId.SLURPUFF,
       6,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -25001,7 +25001,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.INKAY,
+      SpeciesId.INKAY,
       6,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -25026,7 +25026,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MALAMAR,
+      SpeciesId.MALAMAR,
       6,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -25051,7 +25051,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BINACLE,
+      SpeciesId.BINACLE,
       6,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -25076,7 +25076,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BARBARACLE,
+      SpeciesId.BARBARACLE,
       6,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -25101,7 +25101,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SKRELP,
+      SpeciesId.SKRELP,
       6,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -25126,7 +25126,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DRAGALGE,
+      SpeciesId.DRAGALGE,
       6,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -25151,7 +25151,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CLAUNCHER,
+      SpeciesId.CLAUNCHER,
       6,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -25176,7 +25176,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CLAWITZER,
+      SpeciesId.CLAWITZER,
       6,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -25201,7 +25201,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HELIOPTILE,
+      SpeciesId.HELIOPTILE,
       6,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -25226,7 +25226,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HELIOLISK,
+      SpeciesId.HELIOLISK,
       6,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -25251,7 +25251,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TYRUNT,
+      SpeciesId.TYRUNT,
       6,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -25276,7 +25276,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TYRANTRUM,
+      SpeciesId.TYRANTRUM,
       6,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -25301,7 +25301,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.AMAURA,
+      SpeciesId.AMAURA,
       6,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -25326,7 +25326,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.AURORUS,
+      SpeciesId.AURORUS,
       6,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -25351,7 +25351,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SYLVEON,
+      SpeciesId.SYLVEON,
       6,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -25376,7 +25376,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HAWLUCHA,
+      SpeciesId.HAWLUCHA,
       6,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -25401,7 +25401,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DEDENNE,
+      SpeciesId.DEDENNE,
       6,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -25426,7 +25426,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CARBINK,
+      SpeciesId.CARBINK,
       6,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -25451,7 +25451,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GOOMY,
+      SpeciesId.GOOMY,
       6,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -25476,7 +25476,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SLIGGOO,
+      SpeciesId.SLIGGOO,
       6,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -25501,7 +25501,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GOODRA,
+      SpeciesId.GOODRA,
       6,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -25526,7 +25526,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.KLEFKI,
+      SpeciesId.KLEFKI,
       6,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -25551,7 +25551,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PHANTUMP,
+      SpeciesId.PHANTUMP,
       6,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -25576,7 +25576,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TREVENANT,
+      SpeciesId.TREVENANT,
       6,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -25601,7 +25601,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PUMPKABOO,
+      SpeciesId.PUMPKABOO,
       6,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -25723,7 +25723,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.GOURGEIST,
+      SpeciesId.GOURGEIST,
       6,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -25845,7 +25845,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.BERGMITE,
+      SpeciesId.BERGMITE,
       6,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -25870,7 +25870,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.AVALUGG,
+      SpeciesId.AVALUGG,
       6,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -25895,7 +25895,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.NOIBAT,
+      SpeciesId.NOIBAT,
       6,
       SpeciesGroups.COMMON,
       ElementalType.FLYING,
@@ -25920,7 +25920,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.NOIVERN,
+      SpeciesId.NOIVERN,
       6,
       SpeciesGroups.COMMON,
       ElementalType.FLYING,
@@ -25945,7 +25945,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.XERNEAS,
+      SpeciesId.XERNEAS,
       6,
       SpeciesGroups.LEGENDARY,
       ElementalType.FAIRY,
@@ -26016,7 +26016,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.YVELTAL,
+      SpeciesId.YVELTAL,
       6,
       SpeciesGroups.LEGENDARY,
       ElementalType.DARK,
@@ -26041,7 +26041,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ZYGARDE,
+      SpeciesId.ZYGARDE,
       6,
       SpeciesGroups.LEGENDARY,
       ElementalType.DRAGON,
@@ -26213,7 +26213,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.DIANCIE,
+      SpeciesId.DIANCIE,
       6,
       SpeciesGroups.MYTHICAL,
       ElementalType.ROCK,
@@ -26284,7 +26284,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.HOOPA,
+      SpeciesId.HOOPA,
       6,
       SpeciesGroups.MYTHICAL,
       ElementalType.PSYCHIC,
@@ -26355,7 +26355,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.VOLCANION,
+      SpeciesId.VOLCANION,
       6,
       SpeciesGroups.MYTHICAL,
       ElementalType.FIRE,
@@ -26380,7 +26380,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ROWLET,
+      SpeciesId.ROWLET,
       7,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -26405,7 +26405,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DARTRIX,
+      SpeciesId.DARTRIX,
       7,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -26430,7 +26430,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DECIDUEYE,
+      SpeciesId.DECIDUEYE,
       7,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -26455,7 +26455,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LITTEN,
+      SpeciesId.LITTEN,
       7,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -26480,7 +26480,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TORRACAT,
+      SpeciesId.TORRACAT,
       7,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -26505,7 +26505,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.INCINEROAR,
+      SpeciesId.INCINEROAR,
       7,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -26530,7 +26530,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.POPPLIO,
+      SpeciesId.POPPLIO,
       7,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -26555,7 +26555,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BRIONNE,
+      SpeciesId.BRIONNE,
       7,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -26580,7 +26580,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PRIMARINA,
+      SpeciesId.PRIMARINA,
       7,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -26605,7 +26605,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PIKIPEK,
+      SpeciesId.PIKIPEK,
       7,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -26630,7 +26630,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TRUMBEAK,
+      SpeciesId.TRUMBEAK,
       7,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -26655,7 +26655,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TOUCANNON,
+      SpeciesId.TOUCANNON,
       7,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -26680,7 +26680,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.YUNGOOS,
+      SpeciesId.YUNGOOS,
       7,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -26705,7 +26705,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GUMSHOOS,
+      SpeciesId.GUMSHOOS,
       7,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -26730,7 +26730,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GRUBBIN,
+      SpeciesId.GRUBBIN,
       7,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -26755,7 +26755,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CHARJABUG,
+      SpeciesId.CHARJABUG,
       7,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -26780,7 +26780,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.VIKAVOLT,
+      SpeciesId.VIKAVOLT,
       7,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -26805,7 +26805,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CRABRAWLER,
+      SpeciesId.CRABRAWLER,
       7,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -26830,7 +26830,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CRABOMINABLE,
+      SpeciesId.CRABOMINABLE,
       7,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -26855,7 +26855,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ORICORIO,
+      SpeciesId.ORICORIO,
       7,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -26977,7 +26977,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.CUTIEFLY,
+      SpeciesId.CUTIEFLY,
       7,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -27002,7 +27002,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.RIBOMBEE,
+      SpeciesId.RIBOMBEE,
       7,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -27027,7 +27027,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ROCKRUFF,
+      SpeciesId.ROCKRUFF,
       7,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -27101,7 +27101,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.LYCANROC,
+      SpeciesId.LYCANROC,
       7,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -27199,7 +27199,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.WISHIWASHI,
+      SpeciesId.WISHIWASHI,
       7,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -27270,7 +27270,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.MAREANIE,
+      SpeciesId.MAREANIE,
       7,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -27295,7 +27295,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TOXAPEX,
+      SpeciesId.TOXAPEX,
       7,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -27320,7 +27320,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MUDBRAY,
+      SpeciesId.MUDBRAY,
       7,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -27345,7 +27345,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MUDSDALE,
+      SpeciesId.MUDSDALE,
       7,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -27370,7 +27370,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DEWPIDER,
+      SpeciesId.DEWPIDER,
       7,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -27395,7 +27395,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ARAQUANID,
+      SpeciesId.ARAQUANID,
       7,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -27420,7 +27420,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FOMANTIS,
+      SpeciesId.FOMANTIS,
       7,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -27445,7 +27445,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LURANTIS,
+      SpeciesId.LURANTIS,
       7,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -27470,7 +27470,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MORELULL,
+      SpeciesId.MORELULL,
       7,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -27495,7 +27495,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SHIINOTIC,
+      SpeciesId.SHIINOTIC,
       7,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -27520,7 +27520,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SALANDIT,
+      SpeciesId.SALANDIT,
       7,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -27545,7 +27545,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SALAZZLE,
+      SpeciesId.SALAZZLE,
       7,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -27570,7 +27570,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.STUFFUL,
+      SpeciesId.STUFFUL,
       7,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -27595,7 +27595,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BEWEAR,
+      SpeciesId.BEWEAR,
       7,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -27620,7 +27620,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BOUNSWEET,
+      SpeciesId.BOUNSWEET,
       7,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -27645,7 +27645,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.STEENEE,
+      SpeciesId.STEENEE,
       7,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -27670,7 +27670,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TSAREENA,
+      SpeciesId.TSAREENA,
       7,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -27695,7 +27695,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.COMFEY,
+      SpeciesId.COMFEY,
       7,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -27720,7 +27720,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ORANGURU,
+      SpeciesId.ORANGURU,
       7,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -27745,7 +27745,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PASSIMIAN,
+      SpeciesId.PASSIMIAN,
       7,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -27770,7 +27770,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.WIMPOD,
+      SpeciesId.WIMPOD,
       7,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -27795,7 +27795,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GOLISOPOD,
+      SpeciesId.GOLISOPOD,
       7,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -27820,7 +27820,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SANDYGAST,
+      SpeciesId.SANDYGAST,
       7,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -27845,7 +27845,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PALOSSAND,
+      SpeciesId.PALOSSAND,
       7,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -27870,7 +27870,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PYUKUMUKU,
+      SpeciesId.PYUKUMUKU,
       7,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -27895,7 +27895,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TYPE_NULL,
+      SpeciesId.TYPE_NULL,
       7,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.NORMAL,
@@ -27920,7 +27920,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SILVALLY,
+      SpeciesId.SILVALLY,
       7,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.NORMAL,
@@ -28327,7 +28327,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.MINIOR,
+      SpeciesId.MINIOR,
       7,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -28696,7 +28696,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.KOMALA,
+      SpeciesId.KOMALA,
       7,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -28721,7 +28721,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TURTONATOR,
+      SpeciesId.TURTONATOR,
       7,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -28746,7 +28746,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TOGEDEMARU,
+      SpeciesId.TOGEDEMARU,
       7,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -28771,7 +28771,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MIMIKYU,
+      SpeciesId.MIMIKYU,
       7,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -28842,7 +28842,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.BRUXISH,
+      SpeciesId.BRUXISH,
       7,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -28867,7 +28867,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DRAMPA,
+      SpeciesId.DRAMPA,
       7,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -28892,7 +28892,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DHELMISE,
+      SpeciesId.DHELMISE,
       7,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -28917,7 +28917,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.JANGMO_O,
+      SpeciesId.JANGMO_O,
       7,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -28942,7 +28942,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HAKAMO_O,
+      SpeciesId.HAKAMO_O,
       7,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -28967,7 +28967,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.KOMMO_O,
+      SpeciesId.KOMMO_O,
       7,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -28992,7 +28992,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TAPU_KOKO,
+      SpeciesId.TAPU_KOKO,
       7,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.ELECTRIC,
@@ -29017,7 +29017,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TAPU_LELE,
+      SpeciesId.TAPU_LELE,
       7,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.PSYCHIC,
@@ -29042,7 +29042,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TAPU_BULU,
+      SpeciesId.TAPU_BULU,
       7,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.GRASS,
@@ -29067,7 +29067,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TAPU_FINI,
+      SpeciesId.TAPU_FINI,
       7,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.WATER,
@@ -29092,7 +29092,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.COSMOG,
+      SpeciesId.COSMOG,
       7,
       SpeciesGroups.LEGENDARY,
       ElementalType.PSYCHIC,
@@ -29117,7 +29117,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.COSMOEM,
+      SpeciesId.COSMOEM,
       7,
       SpeciesGroups.LEGENDARY,
       ElementalType.PSYCHIC,
@@ -29142,7 +29142,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SOLGALEO,
+      SpeciesId.SOLGALEO,
       7,
       SpeciesGroups.LEGENDARY,
       ElementalType.PSYCHIC,
@@ -29167,7 +29167,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LUNALA,
+      SpeciesId.LUNALA,
       7,
       SpeciesGroups.LEGENDARY,
       ElementalType.PSYCHIC,
@@ -29192,7 +29192,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.NIHILEGO,
+      SpeciesId.NIHILEGO,
       7,
       SpeciesGroups.ULTRA_BEAST,
       ElementalType.ROCK,
@@ -29217,7 +29217,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BUZZWOLE,
+      SpeciesId.BUZZWOLE,
       7,
       SpeciesGroups.ULTRA_BEAST,
       ElementalType.BUG,
@@ -29242,7 +29242,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PHEROMOSA,
+      SpeciesId.PHEROMOSA,
       7,
       SpeciesGroups.ULTRA_BEAST,
       ElementalType.BUG,
@@ -29267,7 +29267,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.XURKITREE,
+      SpeciesId.XURKITREE,
       7,
       SpeciesGroups.ULTRA_BEAST,
       ElementalType.ELECTRIC,
@@ -29292,7 +29292,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CELESTEELA,
+      SpeciesId.CELESTEELA,
       7,
       SpeciesGroups.ULTRA_BEAST,
       ElementalType.STEEL,
@@ -29317,7 +29317,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.KARTANA,
+      SpeciesId.KARTANA,
       7,
       SpeciesGroups.ULTRA_BEAST,
       ElementalType.GRASS,
@@ -29342,7 +29342,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GUZZLORD,
+      SpeciesId.GUZZLORD,
       7,
       SpeciesGroups.ULTRA_BEAST,
       ElementalType.DARK,
@@ -29367,7 +29367,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.NECROZMA,
+      SpeciesId.NECROZMA,
       7,
       SpeciesGroups.LEGENDARY,
       ElementalType.PSYCHIC,
@@ -29480,7 +29480,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.MAGEARNA,
+      SpeciesId.MAGEARNA,
       7,
       SpeciesGroups.MYTHICAL,
       ElementalType.STEEL,
@@ -29554,7 +29554,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.MARSHADOW,
+      SpeciesId.MARSHADOW,
       7,
       SpeciesGroups.MYTHICAL,
       ElementalType.FIGHTING,
@@ -29625,7 +29625,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.POIPOLE,
+      SpeciesId.POIPOLE,
       7,
       SpeciesGroups.ULTRA_BEAST,
       ElementalType.POISON,
@@ -29650,7 +29650,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.NAGANADEL,
+      SpeciesId.NAGANADEL,
       7,
       SpeciesGroups.ULTRA_BEAST,
       ElementalType.POISON,
@@ -29675,7 +29675,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.STAKATAKA,
+      SpeciesId.STAKATAKA,
       7,
       SpeciesGroups.ULTRA_BEAST,
       ElementalType.ROCK,
@@ -29700,7 +29700,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BLACEPHALON,
+      SpeciesId.BLACEPHALON,
       7,
       SpeciesGroups.ULTRA_BEAST,
       ElementalType.FIRE,
@@ -29725,7 +29725,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ZERAORA,
+      SpeciesId.ZERAORA,
       7,
       SpeciesGroups.MYTHICAL,
       ElementalType.ELECTRIC,
@@ -29750,7 +29750,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MELTAN,
+      SpeciesId.MELTAN,
       7,
       SpeciesGroups.MYTHICAL,
       ElementalType.STEEL,
@@ -29775,7 +29775,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MELMETAL,
+      SpeciesId.MELMETAL,
       7,
       SpeciesGroups.MYTHICAL,
       ElementalType.STEEL,
@@ -29846,7 +29846,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.GROOKEY,
+      SpeciesId.GROOKEY,
       8,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -29871,7 +29871,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.THWACKEY,
+      SpeciesId.THWACKEY,
       8,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -29896,7 +29896,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.RILLABOOM,
+      SpeciesId.RILLABOOM,
       8,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -29967,7 +29967,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.SCORBUNNY,
+      SpeciesId.SCORBUNNY,
       8,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -29992,7 +29992,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.RABOOT,
+      SpeciesId.RABOOT,
       8,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -30017,7 +30017,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CINDERACE,
+      SpeciesId.CINDERACE,
       8,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -30088,7 +30088,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.SOBBLE,
+      SpeciesId.SOBBLE,
       8,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -30113,7 +30113,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DRIZZILE,
+      SpeciesId.DRIZZILE,
       8,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -30138,7 +30138,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.INTELEON,
+      SpeciesId.INTELEON,
       8,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -30209,7 +30209,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.SKWOVET,
+      SpeciesId.SKWOVET,
       8,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -30234,7 +30234,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GREEDENT,
+      SpeciesId.GREEDENT,
       8,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -30259,7 +30259,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ROOKIDEE,
+      SpeciesId.ROOKIDEE,
       8,
       SpeciesGroups.COMMON,
       ElementalType.FLYING,
@@ -30284,7 +30284,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CORVISQUIRE,
+      SpeciesId.CORVISQUIRE,
       8,
       SpeciesGroups.COMMON,
       ElementalType.FLYING,
@@ -30309,7 +30309,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CORVIKNIGHT,
+      SpeciesId.CORVIKNIGHT,
       8,
       SpeciesGroups.COMMON,
       ElementalType.FLYING,
@@ -30380,7 +30380,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.BLIPBUG,
+      SpeciesId.BLIPBUG,
       8,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -30405,7 +30405,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DOTTLER,
+      SpeciesId.DOTTLER,
       8,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -30430,7 +30430,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ORBEETLE,
+      SpeciesId.ORBEETLE,
       8,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -30501,7 +30501,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.NICKIT,
+      SpeciesId.NICKIT,
       8,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -30526,7 +30526,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.THIEVUL,
+      SpeciesId.THIEVUL,
       8,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -30551,7 +30551,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GOSSIFLEUR,
+      SpeciesId.GOSSIFLEUR,
       8,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -30576,7 +30576,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ELDEGOSS,
+      SpeciesId.ELDEGOSS,
       8,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -30601,7 +30601,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.WOOLOO,
+      SpeciesId.WOOLOO,
       8,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -30626,7 +30626,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DUBWOOL,
+      SpeciesId.DUBWOOL,
       8,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -30651,7 +30651,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CHEWTLE,
+      SpeciesId.CHEWTLE,
       8,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -30676,7 +30676,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DREDNAW,
+      SpeciesId.DREDNAW,
       8,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -30747,7 +30747,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.YAMPER,
+      SpeciesId.YAMPER,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -30772,7 +30772,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BOLTUND,
+      SpeciesId.BOLTUND,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -30797,7 +30797,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ROLYCOLY,
+      SpeciesId.ROLYCOLY,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -30822,7 +30822,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CARKOL,
+      SpeciesId.CARKOL,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -30847,7 +30847,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.COALOSSAL,
+      SpeciesId.COALOSSAL,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -30918,7 +30918,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.APPLIN,
+      SpeciesId.APPLIN,
       8,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -30943,7 +30943,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FLAPPLE,
+      SpeciesId.FLAPPLE,
       8,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -31014,7 +31014,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.APPLETUN,
+      SpeciesId.APPLETUN,
       8,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -31085,7 +31085,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.SILICOBRA,
+      SpeciesId.SILICOBRA,
       8,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -31110,7 +31110,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SANDACONDA,
+      SpeciesId.SANDACONDA,
       8,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -31181,7 +31181,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.CRAMORANT,
+      SpeciesId.CRAMORANT,
       8,
       SpeciesGroups.COMMON,
       ElementalType.FLYING,
@@ -31273,7 +31273,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.ARROKUDA,
+      SpeciesId.ARROKUDA,
       8,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -31298,7 +31298,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BARRASKEWDA,
+      SpeciesId.BARRASKEWDA,
       8,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -31323,7 +31323,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TOXEL,
+      SpeciesId.TOXEL,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -31348,7 +31348,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TOXTRICITY,
+      SpeciesId.TOXTRICITY,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -31443,7 +31443,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.SIZZLIPEDE,
+      SpeciesId.SIZZLIPEDE,
       8,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -31468,7 +31468,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CENTISKORCH,
+      SpeciesId.CENTISKORCH,
       8,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -31539,7 +31539,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.CLOBBOPUS,
+      SpeciesId.CLOBBOPUS,
       8,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -31564,7 +31564,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GRAPPLOCT,
+      SpeciesId.GRAPPLOCT,
       8,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -31589,7 +31589,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SINISTEA,
+      SpeciesId.SINISTEA,
       8,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -31663,7 +31663,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.POLTEAGEIST,
+      SpeciesId.POLTEAGEIST,
       8,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -31737,7 +31737,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.HATENNA,
+      SpeciesId.HATENNA,
       8,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -31762,7 +31762,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HATTREM,
+      SpeciesId.HATTREM,
       8,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -31787,7 +31787,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HATTERENE,
+      SpeciesId.HATTERENE,
       8,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -31858,7 +31858,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.IMPIDIMP,
+      SpeciesId.IMPIDIMP,
       8,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -31883,7 +31883,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MORGREM,
+      SpeciesId.MORGREM,
       8,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -31908,7 +31908,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GRIMMSNARL,
+      SpeciesId.GRIMMSNARL,
       8,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -31979,7 +31979,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.OBSTAGOON,
+      SpeciesId.OBSTAGOON,
       8,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -32004,7 +32004,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PERRSERKER,
+      SpeciesId.PERRSERKER,
       8,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -32029,7 +32029,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CURSOLA,
+      SpeciesId.CURSOLA,
       8,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -32054,7 +32054,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SIRFETCHD,
+      SpeciesId.SIRFETCHD,
       8,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -32079,7 +32079,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MR_RIME,
+      SpeciesId.MR_RIME,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -32104,7 +32104,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.RUNERIGUS,
+      SpeciesId.RUNERIGUS,
       8,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -32129,7 +32129,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MILCERY,
+      SpeciesId.MILCERY,
       8,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -32154,7 +32154,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ALCREMIE,
+      SpeciesId.ALCREMIE,
       8,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -32417,7 +32417,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.FALINKS,
+      SpeciesId.FALINKS,
       8,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -32442,7 +32442,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PINCURCHIN,
+      SpeciesId.PINCURCHIN,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -32467,7 +32467,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SNOM,
+      SpeciesId.SNOM,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -32492,7 +32492,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FROSMOTH,
+      SpeciesId.FROSMOTH,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -32517,7 +32517,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.STONJOURNER,
+      SpeciesId.STONJOURNER,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -32542,7 +32542,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.EISCUE,
+      SpeciesId.EISCUE,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -32613,7 +32613,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.INDEEDEE,
+      SpeciesId.INDEEDEE,
       8,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -32687,7 +32687,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.MORPEKO,
+      SpeciesId.MORPEKO,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -32758,7 +32758,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.CUFANT,
+      SpeciesId.CUFANT,
       8,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -32783,7 +32783,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.COPPERAJAH,
+      SpeciesId.COPPERAJAH,
       8,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -32854,7 +32854,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.DRACOZOLT,
+      SpeciesId.DRACOZOLT,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -32879,7 +32879,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ARCTOZOLT,
+      SpeciesId.ARCTOZOLT,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -32904,7 +32904,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DRACOVISH,
+      SpeciesId.DRACOVISH,
       8,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -32929,7 +32929,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ARCTOVISH,
+      SpeciesId.ARCTOVISH,
       8,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -32954,7 +32954,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DURALUDON,
+      SpeciesId.DURALUDON,
       8,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -33025,7 +33025,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.DREEPY,
+      SpeciesId.DREEPY,
       8,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -33050,7 +33050,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DRAKLOAK,
+      SpeciesId.DRAKLOAK,
       8,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -33075,7 +33075,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DRAGAPULT,
+      SpeciesId.DRAGAPULT,
       8,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -33100,7 +33100,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ZACIAN,
+      SpeciesId.ZACIAN,
       8,
       SpeciesGroups.LEGENDARY,
       ElementalType.FAIRY,
@@ -33171,7 +33171,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.ZAMAZENTA,
+      SpeciesId.ZAMAZENTA,
       8,
       SpeciesGroups.LEGENDARY,
       ElementalType.FIGHTING,
@@ -33242,7 +33242,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.ETERNATUS,
+      SpeciesId.ETERNATUS,
       8,
       SpeciesGroups.LEGENDARY,
       ElementalType.POISON,
@@ -33313,7 +33313,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.KUBFU,
+      SpeciesId.KUBFU,
       8,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.FIGHTING,
@@ -33338,7 +33338,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.URSHIFU,
+      SpeciesId.URSHIFU,
       8,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.FIGHTING,
@@ -33454,7 +33454,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.ZARUDE,
+      SpeciesId.ZARUDE,
       8,
       SpeciesGroups.MYTHICAL,
       ElementalType.DARK,
@@ -33528,7 +33528,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.REGIELEKI,
+      SpeciesId.REGIELEKI,
       8,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.ELECTRIC,
@@ -33553,7 +33553,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.REGIDRAGO,
+      SpeciesId.REGIDRAGO,
       8,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.DRAGON,
@@ -33578,7 +33578,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GLASTRIER,
+      SpeciesId.GLASTRIER,
       8,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.ICE,
@@ -33603,7 +33603,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SPECTRIER,
+      SpeciesId.SPECTRIER,
       8,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.GHOST,
@@ -33628,7 +33628,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CALYREX,
+      SpeciesId.CALYREX,
       8,
       SpeciesGroups.LEGENDARY,
       ElementalType.PSYCHIC,
@@ -33720,7 +33720,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.WYRDEER,
+      SpeciesId.WYRDEER,
       8,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -33745,7 +33745,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.KLEAVOR,
+      SpeciesId.KLEAVOR,
       8,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -33770,7 +33770,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.URSALUNA,
+      SpeciesId.URSALUNA,
       8,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -33795,7 +33795,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BASCULEGION,
+      SpeciesId.BASCULEGION,
       8,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -33870,7 +33870,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.SNEASLER,
+      SpeciesId.SNEASLER,
       8,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -33895,7 +33895,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.OVERQWIL,
+      SpeciesId.OVERQWIL,
       8,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -33920,7 +33920,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ENAMORUS,
+      SpeciesId.ENAMORUS,
       8,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.FAIRY,
@@ -33991,7 +33991,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.SPRIGATITO,
+      SpeciesId.SPRIGATITO,
       9,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -34016,7 +34016,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FLORAGATO,
+      SpeciesId.FLORAGATO,
       9,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -34041,7 +34041,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MEOWSCARADA,
+      SpeciesId.MEOWSCARADA,
       9,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -34066,7 +34066,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FUECOCO,
+      SpeciesId.FUECOCO,
       9,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -34091,7 +34091,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CROCALOR,
+      SpeciesId.CROCALOR,
       9,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -34116,7 +34116,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SKELEDIRGE,
+      SpeciesId.SKELEDIRGE,
       9,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -34141,7 +34141,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.QUAXLY,
+      SpeciesId.QUAXLY,
       9,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -34166,7 +34166,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.QUAXWELL,
+      SpeciesId.QUAXWELL,
       9,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -34191,7 +34191,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.QUAQUAVAL,
+      SpeciesId.QUAQUAVAL,
       9,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -34216,7 +34216,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LECHONK,
+      SpeciesId.LECHONK,
       9,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -34241,7 +34241,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.OINKOLOGNE,
+      SpeciesId.OINKOLOGNE,
       9,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -34315,7 +34315,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.TAROUNTULA,
+      SpeciesId.TAROUNTULA,
       9,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -34340,7 +34340,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SPIDOPS,
+      SpeciesId.SPIDOPS,
       9,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -34365,7 +34365,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.NYMBLE,
+      SpeciesId.NYMBLE,
       9,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -34390,7 +34390,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.LOKIX,
+      SpeciesId.LOKIX,
       9,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -34415,7 +34415,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PAWMI,
+      SpeciesId.PAWMI,
       9,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -34440,7 +34440,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PAWMO,
+      SpeciesId.PAWMO,
       9,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -34465,7 +34465,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PAWMOT,
+      SpeciesId.PAWMOT,
       9,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -34490,7 +34490,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TANDEMAUS,
+      SpeciesId.TANDEMAUS,
       9,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -34515,7 +34515,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MAUSHOLD,
+      SpeciesId.MAUSHOLD,
       9,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -34583,7 +34583,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.FIDOUGH,
+      SpeciesId.FIDOUGH,
       9,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -34608,7 +34608,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DACHSBUN,
+      SpeciesId.DACHSBUN,
       9,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -34633,7 +34633,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SMOLIV,
+      SpeciesId.SMOLIV,
       9,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -34658,7 +34658,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DOLLIV,
+      SpeciesId.DOLLIV,
       9,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -34683,7 +34683,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ARBOLIVA,
+      SpeciesId.ARBOLIVA,
       9,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -34708,7 +34708,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SQUAWKABILLY,
+      SpeciesId.SQUAWKABILLY,
       9,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -34830,7 +34830,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.NACLI,
+      SpeciesId.NACLI,
       9,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -34855,7 +34855,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.NACLSTACK,
+      SpeciesId.NACLSTACK,
       9,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -34880,7 +34880,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GARGANACL,
+      SpeciesId.GARGANACL,
       9,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -34905,7 +34905,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CHARCADET,
+      SpeciesId.CHARCADET,
       9,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -34930,7 +34930,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ARMAROUGE,
+      SpeciesId.ARMAROUGE,
       9,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -34955,7 +34955,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CERULEDGE,
+      SpeciesId.CERULEDGE,
       9,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -34980,7 +34980,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TADBULB,
+      SpeciesId.TADBULB,
       9,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -35005,7 +35005,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BELLIBOLT,
+      SpeciesId.BELLIBOLT,
       9,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -35030,7 +35030,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.WATTREL,
+      SpeciesId.WATTREL,
       9,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -35055,7 +35055,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.KILOWATTREL,
+      SpeciesId.KILOWATTREL,
       9,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -35080,7 +35080,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MASCHIFF,
+      SpeciesId.MASCHIFF,
       9,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -35105,7 +35105,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MABOSSTIFF,
+      SpeciesId.MABOSSTIFF,
       9,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -35130,7 +35130,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SHROODLE,
+      SpeciesId.SHROODLE,
       9,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -35155,7 +35155,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GRAFAIAI,
+      SpeciesId.GRAFAIAI,
       9,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -35180,7 +35180,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BRAMBLIN,
+      SpeciesId.BRAMBLIN,
       9,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -35205,7 +35205,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BRAMBLEGHAST,
+      SpeciesId.BRAMBLEGHAST,
       9,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -35230,7 +35230,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TOEDSCOOL,
+      SpeciesId.TOEDSCOOL,
       9,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -35255,7 +35255,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TOEDSCRUEL,
+      SpeciesId.TOEDSCRUEL,
       9,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -35280,7 +35280,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.KLAWF,
+      SpeciesId.KLAWF,
       9,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -35305,7 +35305,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CAPSAKID,
+      SpeciesId.CAPSAKID,
       9,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -35330,7 +35330,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SCOVILLAIN,
+      SpeciesId.SCOVILLAIN,
       9,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -35355,7 +35355,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.RELLOR,
+      SpeciesId.RELLOR,
       9,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -35380,7 +35380,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.RABSCA,
+      SpeciesId.RABSCA,
       9,
       SpeciesGroups.COMMON,
       ElementalType.BUG,
@@ -35405,7 +35405,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FLITTLE,
+      SpeciesId.FLITTLE,
       9,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -35430,7 +35430,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ESPATHRA,
+      SpeciesId.ESPATHRA,
       9,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -35455,7 +35455,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TINKATINK,
+      SpeciesId.TINKATINK,
       9,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -35480,7 +35480,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TINKATUFF,
+      SpeciesId.TINKATUFF,
       9,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -35505,7 +35505,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TINKATON,
+      SpeciesId.TINKATON,
       9,
       SpeciesGroups.COMMON,
       ElementalType.FAIRY,
@@ -35530,7 +35530,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.WIGLETT,
+      SpeciesId.WIGLETT,
       9,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -35555,7 +35555,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.WUGTRIO,
+      SpeciesId.WUGTRIO,
       9,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -35580,7 +35580,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BOMBIRDIER,
+      SpeciesId.BOMBIRDIER,
       9,
       SpeciesGroups.COMMON,
       ElementalType.FLYING,
@@ -35605,7 +35605,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FINIZEN,
+      SpeciesId.FINIZEN,
       9,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -35630,7 +35630,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PALAFIN,
+      SpeciesId.PALAFIN,
       9,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -35701,7 +35701,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.VAROOM,
+      SpeciesId.VAROOM,
       9,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -35726,7 +35726,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.REVAVROOM,
+      SpeciesId.REVAVROOM,
       9,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -35881,7 +35881,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.CYCLIZAR,
+      SpeciesId.CYCLIZAR,
       9,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -35906,7 +35906,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ORTHWORM,
+      SpeciesId.ORTHWORM,
       9,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -35931,7 +35931,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GLIMMET,
+      SpeciesId.GLIMMET,
       9,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -35956,7 +35956,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GLIMMORA,
+      SpeciesId.GLIMMORA,
       9,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -35981,7 +35981,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GREAVARD,
+      SpeciesId.GREAVARD,
       9,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -36006,7 +36006,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HOUNDSTONE,
+      SpeciesId.HOUNDSTONE,
       9,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -36031,7 +36031,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FLAMIGO,
+      SpeciesId.FLAMIGO,
       9,
       SpeciesGroups.COMMON,
       ElementalType.FLYING,
@@ -36056,7 +36056,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CETODDLE,
+      SpeciesId.CETODDLE,
       9,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -36081,7 +36081,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CETITAN,
+      SpeciesId.CETITAN,
       9,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -36106,7 +36106,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.VELUZA,
+      SpeciesId.VELUZA,
       9,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -36131,7 +36131,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DONDOZO,
+      SpeciesId.DONDOZO,
       9,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -36156,7 +36156,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TATSUGIRI,
+      SpeciesId.TATSUGIRI,
       9,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -36254,7 +36254,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.ANNIHILAPE,
+      SpeciesId.ANNIHILAPE,
       9,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -36279,7 +36279,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CLODSIRE,
+      SpeciesId.CLODSIRE,
       9,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -36304,7 +36304,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FARIGIRAF,
+      SpeciesId.FARIGIRAF,
       9,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -36329,7 +36329,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.DUDUNSPARCE,
+      SpeciesId.DUDUNSPARCE,
       9,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -36399,7 +36399,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.KINGAMBIT,
+      SpeciesId.KINGAMBIT,
       9,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -36424,7 +36424,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GREAT_TUSK,
+      SpeciesId.GREAT_TUSK,
       9,
       SpeciesGroups.PARADOX,
       ElementalType.GROUND,
@@ -36449,7 +36449,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SCREAM_TAIL,
+      SpeciesId.SCREAM_TAIL,
       9,
       SpeciesGroups.PARADOX,
       ElementalType.FAIRY,
@@ -36474,7 +36474,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BRUTE_BONNET,
+      SpeciesId.BRUTE_BONNET,
       9,
       SpeciesGroups.PARADOX,
       ElementalType.GRASS,
@@ -36499,7 +36499,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FLUTTER_MANE,
+      SpeciesId.FLUTTER_MANE,
       9,
       SpeciesGroups.PARADOX,
       ElementalType.GHOST,
@@ -36524,7 +36524,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SLITHER_WING,
+      SpeciesId.SLITHER_WING,
       9,
       SpeciesGroups.PARADOX,
       ElementalType.BUG,
@@ -36549,7 +36549,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.SANDY_SHOCKS,
+      SpeciesId.SANDY_SHOCKS,
       9,
       SpeciesGroups.PARADOX,
       ElementalType.ELECTRIC,
@@ -36574,7 +36574,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.IRON_TREADS,
+      SpeciesId.IRON_TREADS,
       9,
       SpeciesGroups.PARADOX,
       ElementalType.GROUND,
@@ -36599,7 +36599,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.IRON_BUNDLE,
+      SpeciesId.IRON_BUNDLE,
       9,
       SpeciesGroups.PARADOX,
       ElementalType.ICE,
@@ -36624,7 +36624,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.IRON_HANDS,
+      SpeciesId.IRON_HANDS,
       9,
       SpeciesGroups.PARADOX,
       ElementalType.FIGHTING,
@@ -36649,7 +36649,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.IRON_JUGULIS,
+      SpeciesId.IRON_JUGULIS,
       9,
       SpeciesGroups.PARADOX,
       ElementalType.DARK,
@@ -36674,7 +36674,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.IRON_MOTH,
+      SpeciesId.IRON_MOTH,
       9,
       SpeciesGroups.PARADOX,
       ElementalType.FIRE,
@@ -36699,7 +36699,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.IRON_THORNS,
+      SpeciesId.IRON_THORNS,
       9,
       SpeciesGroups.PARADOX,
       ElementalType.ROCK,
@@ -36724,7 +36724,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FRIGIBAX,
+      SpeciesId.FRIGIBAX,
       9,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -36749,7 +36749,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ARCTIBAX,
+      SpeciesId.ARCTIBAX,
       9,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -36774,7 +36774,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BAXCALIBUR,
+      SpeciesId.BAXCALIBUR,
       9,
       SpeciesGroups.COMMON,
       ElementalType.DRAGON,
@@ -36799,7 +36799,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GIMMIGHOUL,
+      SpeciesId.GIMMIGHOUL,
       9,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -36873,7 +36873,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.GHOLDENGO,
+      SpeciesId.GHOLDENGO,
       9,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -36898,7 +36898,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.WO_CHIEN,
+      SpeciesId.WO_CHIEN,
       9,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.DARK,
@@ -36923,7 +36923,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CHIEN_PAO,
+      SpeciesId.CHIEN_PAO,
       9,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.DARK,
@@ -36948,7 +36948,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TING_LU,
+      SpeciesId.TING_LU,
       9,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.DARK,
@@ -36973,7 +36973,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.CHI_YU,
+      SpeciesId.CHI_YU,
       9,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.DARK,
@@ -36998,7 +36998,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ROARING_MOON,
+      SpeciesId.ROARING_MOON,
       9,
       SpeciesGroups.PARADOX,
       ElementalType.DRAGON,
@@ -37023,7 +37023,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.IRON_VALIANT,
+      SpeciesId.IRON_VALIANT,
       9,
       SpeciesGroups.PARADOX,
       ElementalType.FAIRY,
@@ -37048,7 +37048,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.KORAIDON,
+      SpeciesId.KORAIDON,
       9,
       SpeciesGroups.LEGENDARY,
       ElementalType.FIGHTING,
@@ -37194,7 +37194,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.MIRAIDON,
+      SpeciesId.MIRAIDON,
       9,
       SpeciesGroups.LEGENDARY,
       ElementalType.ELECTRIC,
@@ -37340,7 +37340,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.WALKING_WAKE,
+      SpeciesId.WALKING_WAKE,
       9,
       SpeciesGroups.PARADOX,
       ElementalType.WATER,
@@ -37365,7 +37365,7 @@ export function initSpecies() {
       false,
     ), //Custom Catchrate, matching Gouging Fire and Raging Bolt
     new PokemonSpecies(
-      Species.IRON_LEAVES,
+      SpeciesId.IRON_LEAVES,
       9,
       SpeciesGroups.PARADOX,
       ElementalType.GRASS,
@@ -37390,7 +37390,7 @@ export function initSpecies() {
       false,
     ), //Custom Catchrate, matching Iron Boulder and Iron Crown
     new PokemonSpecies(
-      Species.DIPPLIN,
+      SpeciesId.DIPPLIN,
       9,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -37415,7 +37415,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.POLTCHAGEIST,
+      SpeciesId.POLTCHAGEIST,
       9,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -37489,7 +37489,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.SINISTCHA,
+      SpeciesId.SINISTCHA,
       9,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -37557,7 +37557,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.OKIDOGI,
+      SpeciesId.OKIDOGI,
       9,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.POISON,
@@ -37582,7 +37582,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.MUNKIDORI,
+      SpeciesId.MUNKIDORI,
       9,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.POISON,
@@ -37607,7 +37607,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.FEZANDIPITI,
+      SpeciesId.FEZANDIPITI,
       9,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.POISON,
@@ -37632,7 +37632,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.OGERPON,
+      SpeciesId.OGERPON,
       9,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.GRASS,
@@ -37829,7 +37829,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.ARCHALUDON,
+      SpeciesId.ARCHALUDON,
       9,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -37854,7 +37854,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HYDRAPPLE,
+      SpeciesId.HYDRAPPLE,
       9,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -37879,7 +37879,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GOUGING_FIRE,
+      SpeciesId.GOUGING_FIRE,
       9,
       SpeciesGroups.PARADOX,
       ElementalType.FIRE,
@@ -37904,7 +37904,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.RAGING_BOLT,
+      SpeciesId.RAGING_BOLT,
       9,
       SpeciesGroups.PARADOX,
       ElementalType.ELECTRIC,
@@ -37929,7 +37929,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.IRON_BOULDER,
+      SpeciesId.IRON_BOULDER,
       9,
       SpeciesGroups.PARADOX,
       ElementalType.ROCK,
@@ -37954,7 +37954,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.IRON_CROWN,
+      SpeciesId.IRON_CROWN,
       9,
       SpeciesGroups.PARADOX,
       ElementalType.STEEL,
@@ -37979,7 +37979,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.TERAPAGOS,
+      SpeciesId.TERAPAGOS,
       9,
       SpeciesGroups.LEGENDARY,
       ElementalType.NORMAL,
@@ -38071,7 +38071,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.PECHARUNT,
+      SpeciesId.PECHARUNT,
       9,
       SpeciesGroups.MYTHICAL,
       ElementalType.POISON,
@@ -38096,7 +38096,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ALOLA_RATTATA,
+      SpeciesId.ALOLA_RATTATA,
       7,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -38121,7 +38121,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ALOLA_RATICATE,
+      SpeciesId.ALOLA_RATICATE,
       7,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -38146,7 +38146,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ALOLA_RAICHU,
+      SpeciesId.ALOLA_RAICHU,
       7,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -38171,7 +38171,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ALOLA_SANDSHREW,
+      SpeciesId.ALOLA_SANDSHREW,
       7,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -38196,7 +38196,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ALOLA_SANDSLASH,
+      SpeciesId.ALOLA_SANDSLASH,
       7,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -38221,7 +38221,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ALOLA_VULPIX,
+      SpeciesId.ALOLA_VULPIX,
       7,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -38246,7 +38246,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ALOLA_NINETALES,
+      SpeciesId.ALOLA_NINETALES,
       7,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -38271,7 +38271,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ALOLA_DIGLETT,
+      SpeciesId.ALOLA_DIGLETT,
       7,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -38296,7 +38296,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ALOLA_DUGTRIO,
+      SpeciesId.ALOLA_DUGTRIO,
       7,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -38321,7 +38321,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ALOLA_MEOWTH,
+      SpeciesId.ALOLA_MEOWTH,
       7,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -38346,7 +38346,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ALOLA_PERSIAN,
+      SpeciesId.ALOLA_PERSIAN,
       7,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -38371,7 +38371,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ALOLA_GEODUDE,
+      SpeciesId.ALOLA_GEODUDE,
       7,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -38396,7 +38396,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ALOLA_GRAVELER,
+      SpeciesId.ALOLA_GRAVELER,
       7,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -38421,7 +38421,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ALOLA_GOLEM,
+      SpeciesId.ALOLA_GOLEM,
       7,
       SpeciesGroups.COMMON,
       ElementalType.ROCK,
@@ -38446,7 +38446,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ALOLA_GRIMER,
+      SpeciesId.ALOLA_GRIMER,
       7,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -38471,7 +38471,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ALOLA_MUK,
+      SpeciesId.ALOLA_MUK,
       7,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -38496,7 +38496,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ALOLA_EXEGGUTOR,
+      SpeciesId.ALOLA_EXEGGUTOR,
       7,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -38521,7 +38521,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ALOLA_MAROWAK,
+      SpeciesId.ALOLA_MAROWAK,
       7,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -38546,7 +38546,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.ETERNAL_FLOETTE,
+      SpeciesId.ETERNAL_FLOETTE,
       6,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.FAIRY,
@@ -38571,7 +38571,7 @@ export function initSpecies() {
       false,
     ), //Marked as Sub-Legend, for casing purposes
     new PokemonSpecies(
-      Species.GALAR_MEOWTH,
+      SpeciesId.GALAR_MEOWTH,
       8,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -38596,7 +38596,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GALAR_PONYTA,
+      SpeciesId.GALAR_PONYTA,
       8,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -38621,7 +38621,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GALAR_RAPIDASH,
+      SpeciesId.GALAR_RAPIDASH,
       8,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -38646,7 +38646,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GALAR_SLOWPOKE,
+      SpeciesId.GALAR_SLOWPOKE,
       8,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -38671,7 +38671,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GALAR_SLOWBRO,
+      SpeciesId.GALAR_SLOWBRO,
       8,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -38696,7 +38696,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GALAR_FARFETCHD,
+      SpeciesId.GALAR_FARFETCHD,
       8,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -38721,7 +38721,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GALAR_WEEZING,
+      SpeciesId.GALAR_WEEZING,
       8,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -38746,7 +38746,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GALAR_MR_MIME,
+      SpeciesId.GALAR_MR_MIME,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -38771,7 +38771,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GALAR_ARTICUNO,
+      SpeciesId.GALAR_ARTICUNO,
       8,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.PSYCHIC,
@@ -38796,7 +38796,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GALAR_ZAPDOS,
+      SpeciesId.GALAR_ZAPDOS,
       8,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.FIGHTING,
@@ -38821,7 +38821,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GALAR_MOLTRES,
+      SpeciesId.GALAR_MOLTRES,
       8,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.DARK,
@@ -38846,7 +38846,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GALAR_SLOWKING,
+      SpeciesId.GALAR_SLOWKING,
       8,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -38871,7 +38871,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GALAR_CORSOLA,
+      SpeciesId.GALAR_CORSOLA,
       8,
       SpeciesGroups.COMMON,
       ElementalType.GHOST,
@@ -38896,7 +38896,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GALAR_ZIGZAGOON,
+      SpeciesId.GALAR_ZIGZAGOON,
       8,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -38921,7 +38921,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GALAR_LINOONE,
+      SpeciesId.GALAR_LINOONE,
       8,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -38946,7 +38946,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GALAR_DARUMAKA,
+      SpeciesId.GALAR_DARUMAKA,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -38971,7 +38971,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GALAR_DARMANITAN,
+      SpeciesId.GALAR_DARMANITAN,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -39042,7 +39042,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.GALAR_YAMASK,
+      SpeciesId.GALAR_YAMASK,
       8,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -39067,7 +39067,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.GALAR_STUNFISK,
+      SpeciesId.GALAR_STUNFISK,
       8,
       SpeciesGroups.COMMON,
       ElementalType.GROUND,
@@ -39092,7 +39092,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HISUI_GROWLITHE,
+      SpeciesId.HISUI_GROWLITHE,
       8,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -39117,7 +39117,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HISUI_ARCANINE,
+      SpeciesId.HISUI_ARCANINE,
       8,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -39142,7 +39142,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HISUI_VOLTORB,
+      SpeciesId.HISUI_VOLTORB,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -39167,7 +39167,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HISUI_ELECTRODE,
+      SpeciesId.HISUI_ELECTRODE,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ELECTRIC,
@@ -39192,7 +39192,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HISUI_TYPHLOSION,
+      SpeciesId.HISUI_TYPHLOSION,
       8,
       SpeciesGroups.COMMON,
       ElementalType.FIRE,
@@ -39217,7 +39217,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HISUI_QWILFISH,
+      SpeciesId.HISUI_QWILFISH,
       8,
       SpeciesGroups.COMMON,
       ElementalType.DARK,
@@ -39242,7 +39242,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HISUI_SNEASEL,
+      SpeciesId.HISUI_SNEASEL,
       8,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -39267,7 +39267,7 @@ export function initSpecies() {
       true,
     ),
     new PokemonSpecies(
-      Species.HISUI_SAMUROTT,
+      SpeciesId.HISUI_SAMUROTT,
       8,
       SpeciesGroups.COMMON,
       ElementalType.WATER,
@@ -39292,7 +39292,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HISUI_LILLIGANT,
+      SpeciesId.HISUI_LILLIGANT,
       8,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -39317,7 +39317,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HISUI_ZORUA,
+      SpeciesId.HISUI_ZORUA,
       8,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -39342,7 +39342,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HISUI_ZOROARK,
+      SpeciesId.HISUI_ZOROARK,
       8,
       SpeciesGroups.COMMON,
       ElementalType.NORMAL,
@@ -39367,7 +39367,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HISUI_BRAVIARY,
+      SpeciesId.HISUI_BRAVIARY,
       8,
       SpeciesGroups.COMMON,
       ElementalType.PSYCHIC,
@@ -39392,7 +39392,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HISUI_SLIGGOO,
+      SpeciesId.HISUI_SLIGGOO,
       8,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -39417,7 +39417,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HISUI_GOODRA,
+      SpeciesId.HISUI_GOODRA,
       8,
       SpeciesGroups.COMMON,
       ElementalType.STEEL,
@@ -39442,7 +39442,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HISUI_AVALUGG,
+      SpeciesId.HISUI_AVALUGG,
       8,
       SpeciesGroups.COMMON,
       ElementalType.ICE,
@@ -39467,7 +39467,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.HISUI_DECIDUEYE,
+      SpeciesId.HISUI_DECIDUEYE,
       8,
       SpeciesGroups.COMMON,
       ElementalType.GRASS,
@@ -39492,7 +39492,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.PALDEA_TAUROS,
+      SpeciesId.PALDEA_TAUROS,
       9,
       SpeciesGroups.COMMON,
       ElementalType.FIGHTING,
@@ -39590,7 +39590,7 @@ export function initSpecies() {
       ),
     ),
     new PokemonSpecies(
-      Species.PALDEA_WOOPER,
+      SpeciesId.PALDEA_WOOPER,
       9,
       SpeciesGroups.COMMON,
       ElementalType.POISON,
@@ -39615,7 +39615,7 @@ export function initSpecies() {
       false,
     ),
     new PokemonSpecies(
-      Species.BLOODMOON_URSALUNA,
+      SpeciesId.BLOODMOON_URSALUNA,
       9,
       SpeciesGroups.SUBLEGENDARY,
       ElementalType.GROUND,

@@ -45,7 +45,7 @@ import { MoveCategory } from "#enums/move-category";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
 import { MoveTarget } from "#enums/move-target";
-import type { Species } from "#enums/species";
+import type { SpeciesId } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
 import i18next from "i18next";
@@ -582,7 +582,7 @@ export abstract class Move implements Localizable {
    *
    * @returns The {@linkcode Move} that called this function.
    */
-  gMaxMove(signatureSpecies: Species): this {
+  gMaxMove(signatureSpecies: SpeciesId): this {
     this.setFlag(MoveFlags.G_MAX_MOVE, true);
     this.moveTarget = MoveTarget.NEAR_ENEMY;
     this.makesContact(false);

@@ -11,7 +11,7 @@ import type { Arena } from "./field/arena";
 import Overrides from "#app/overrides";
 import { randSeedInt, randSeedItem } from "#app/utils";
 import { BiomeId } from "#enums/biome-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { Challenges } from "#enums/challenges";
 import { globalScene } from "#app/global-scene";
 import { GameModes } from "#enums/game-modes";
@@ -201,7 +201,10 @@ export class GameMode implements GameModeConfig {
     if (this.isDaily && this.isWaveFinal(waveIndex)) {
       const allFinalBossSpecies = allSpecies.filter(
         (s) =>
-          s.isLegendLike() && s.baseTotal >= 600 && s.speciesId !== Species.ETERNATUS && s.speciesId !== Species.ARCEUS,
+          s.isLegendLike()
+          && s.baseTotal >= 600
+          && s.speciesId !== SpeciesId.ETERNATUS
+          && s.speciesId !== SpeciesId.ARCEUS,
       );
       return randSeedItem(allFinalBossSpecies);
     }

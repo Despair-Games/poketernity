@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { AbilityId } from "#enums/ability-id";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -28,11 +28,11 @@ describe("Moves - Throat Chop", () => {
       .ability(AbilityId.BALL_FETCH)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(Array(4).fill(MoveId.THROAT_CHOP))
-      .enemySpecies(Species.MAGIKARP);
+      .enemySpecies(SpeciesId.MAGIKARP);
   });
 
   it("prevents the target from using sound-based moves for two turns", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const enemy = game.scene.getEnemyPokemon()!;
 

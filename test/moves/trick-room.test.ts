@@ -5,7 +5,7 @@ import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -30,7 +30,7 @@ describe("Moves - Trick Room", () => {
       .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
@@ -38,7 +38,7 @@ describe("Moves - Trick Room", () => {
   });
 
   it("should reverse speed order", async () => {
-    await game.classicMode.startBattle([Species.REGIELEKI]);
+    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
 
     game.move.use(MoveId.SPLASH);
     await game.toEndOfTurn();
@@ -60,7 +60,7 @@ describe("Moves - Trick Room", () => {
 
   it("should cancel an active Trick Room if used again", async () => {
     game.override.enemyMoveset([]);
-    await game.classicMode.startBattle([Species.REGIELEKI]);
+    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
 
     game.move.use(MoveId.TRICK_ROOM);
     await game.move.forceEnemyMove(MoveId.TRICK_ROOM);
@@ -76,7 +76,7 @@ describe("Moves - Trick Room", () => {
   });
 
   it("should not reverse move priority order", async () => {
-    await game.classicMode.startBattle([Species.REGIELEKI]);
+    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
 
     game.move.use(MoveId.TRICK_ROOM);
     await game.toNextTurn();
@@ -96,7 +96,7 @@ describe("Moves - Trick Room", () => {
     )[0];
     vi.spyOn(quickDrawAbAttr, "chance", "get").mockReturnValue(100);
 
-    await game.classicMode.startBattle([Species.REGIELEKI]);
+    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
 
     game.move.use(MoveId.TRICK_ROOM);
     await game.toNextTurn();

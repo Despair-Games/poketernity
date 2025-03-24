@@ -3,7 +3,7 @@ import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -35,12 +35,12 @@ describe("Moves - Dragon Rage", () => {
       .moveset([MoveId.DRAGON_RAGE])
       .ability(AbilityId.BALL_FETCH)
       .startingLevel(100)
-      .enemySpecies(Species.SNORLAX)
+      .enemySpecies(SpeciesId.SNORLAX)
       .enemyMoveset(MoveId.SPLASH)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyLevel(100);
 
-    await game.classicMode.startBattle([Species.SNORLAX]);
+    await game.classicMode.startBattle([SpeciesId.SNORLAX]);
 
     partyPokemon = game.field.getPlayerPokemon();
     enemyPokemon = game.field.getEnemyPokemon();

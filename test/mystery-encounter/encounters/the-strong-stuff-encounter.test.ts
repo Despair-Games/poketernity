@@ -1,7 +1,7 @@
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
@@ -33,7 +33,7 @@ import { AbilityId } from "#enums/ability-id";
 import { PhaseId } from "#enums/phase-id";
 
 const namespace = "mysteryEncounters/theStrongStuff";
-const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
+const defaultParty = [SpeciesId.LAPRAS, SpeciesId.GENGAR, SpeciesId.ABRA];
 const defaultBiome = BiomeId.CAVE;
 const defaultWave = 45;
 
@@ -111,7 +111,7 @@ describe("The Strong Stuff - Mystery Encounter", () => {
         disableSwitch: true,
         pokemonConfigs: [
           {
-            species: getPokemonSpecies(Species.SHUCKLE),
+            species: getPokemonSpecies(SpeciesId.SHUCKLE),
             isBoss: true,
             bossSegments: 5,
             shiny: false,
@@ -199,7 +199,7 @@ describe("The Strong Stuff - Mystery Encounter", () => {
       const enemyField = scene.getEnemyField();
       expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       expect(enemyField.length).toBe(1);
-      expect(enemyField[0].species.speciesId).toBe(Species.SHUCKLE);
+      expect(enemyField[0].species.speciesId).toBe(SpeciesId.SHUCKLE);
       expect(enemyField[0].summonData.statStages).toEqual([0, 2, 0, 2, 0, 0, 0]);
       const shuckleItems = enemyField[0].getHeldItems();
       expect(shuckleItems.length).toBe(5);

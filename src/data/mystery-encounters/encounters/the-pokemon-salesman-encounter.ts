@@ -17,7 +17,7 @@ import {
 import type PokemonSpecies from "#app/data/pokemon-species";
 import { getPokemonSpecies, getSpecialSpeciesList } from "#app/utils/pokemon-species-utils";
 import { speciesStarterCosts } from "#app/data/balance/starters";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { PokeballType } from "#enums/pokeball-type";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { PlayerPokemon } from "#app/field/pokemon";
@@ -88,7 +88,7 @@ export const ThePokemonSalesmanEncounter: MysteryEncounter = MysteryEncounterBui
       || species.abilityHidden === AbilityId.NONE
     ) {
       // If no HA mon found or you roll 1%, give shiny Magikarp with random variant
-      species = getPokemonSpecies(Species.MAGIKARP);
+      species = getPokemonSpecies(SpeciesId.MAGIKARP);
       pokemon = new PlayerPokemon(species, 5, 2, species.formIndex, undefined, true);
     } else {
       pokemon = new PlayerPokemon(species, 5, 2, species.formIndex);

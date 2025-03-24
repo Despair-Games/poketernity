@@ -1,6 +1,6 @@
 import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
@@ -21,7 +21,7 @@ import { ModifierTier } from "#enums/modifier-tier";
 import * as Utils from "#app/utils";
 
 const namespace = "mysteryEncounters/globalTradeSystem";
-const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
+const defaultParty = [SpeciesId.LAPRAS, SpeciesId.GENGAR, SpeciesId.ABRA];
 const defaultBiome = BiomeId.CAVE;
 const defaultWave = 45;
 
@@ -71,7 +71,7 @@ describe("Global Trade System - Mystery Encounter", () => {
   });
 
   it("should not loop infinitely when generating trade options for extreme BST non-legendaries", async () => {
-    const extremeBstTeam = [Species.SLAKING, Species.WISHIWASHI, Species.SUNKERN];
+    const extremeBstTeam = [SpeciesId.SLAKING, SpeciesId.WISHIWASHI, SpeciesId.SUNKERN];
     await game.runToMysteryEncounter(MysteryEncounterType.GLOBAL_TRADE_SYSTEM, extremeBstTeam);
 
     expect(GlobalTradeSystemEncounter.encounterType).toBe(MysteryEncounterType.GLOBAL_TRADE_SYSTEM);

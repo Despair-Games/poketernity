@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -26,7 +26,7 @@ describe("Moves - Foul Play", () => {
       .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
@@ -34,7 +34,7 @@ describe("Moves - Foul Play", () => {
   });
 
   it("should use the target's Attack stat to calculate damage", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const foulPlay = allMoves.get(MoveId.FOUL_PLAY);
 
     const player = game.field.getPlayerPokemon();
@@ -53,7 +53,7 @@ describe("Moves - Foul Play", () => {
   });
 
   it("should use the target's Attack stat stages during damage calculation", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const foulPlay = allMoves.get(MoveId.FOUL_PLAY);
 
     const player = game.field.getPlayerPokemon();
@@ -72,7 +72,7 @@ describe("Moves - Foul Play", () => {
   });
 
   it("should only apply the user's Attack stat multipliers from abilities for damage", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const foulPlay = allMoves.get(MoveId.FOUL_PLAY);
 
     const player = game.field.getPlayerPokemon();
@@ -89,7 +89,7 @@ describe("Moves - Foul Play", () => {
   });
 
   it("should apply damage reduction from the user's burn and not the target's", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const foulPlay = allMoves.get(MoveId.FOUL_PLAY);
 
     const player = game.field.getPlayerPokemon();

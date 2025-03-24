@@ -4,7 +4,7 @@ import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -36,7 +36,7 @@ describe("Moves - Screen Moves", () => {
       .startingLevel(1000)
       .enemyAbility(AbilityId.STALL) // So that player always outspeeds enemy's screen move on turn 1
       .enemyLevel(1000)
-      .enemySpecies(Species.MAGIKARP);
+      .enemySpecies(SpeciesId.MAGIKARP);
   });
 
   /**
@@ -56,7 +56,7 @@ describe("Moves - Screen Moves", () => {
     }
     game.override.battleType(battleType);
 
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemyParty = game.scene.getEnemyParty();
 
@@ -89,7 +89,7 @@ describe("Moves - Screen Moves", () => {
   async function testConfusionDamage(): Promise<void> {
     game.override.battleType("single").disableCrits();
 
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.field.getEnemyPokemon();
 

@@ -1,7 +1,7 @@
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
@@ -23,7 +23,7 @@ import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { AbilityId } from "#enums/ability-id";
 
 const namespace = "mysteryEncounters/berriesAbound";
-const defaultParty = [Species.PYUKUMUKU, Species.MAGIKARP, Species.PIKACHU];
+const defaultParty = [SpeciesId.PYUKUMUKU, SpeciesId.MAGIKARP, SpeciesId.PIKACHU];
 const defaultBiome = BiomeId.CAVE;
 const defaultWave = 45;
 

@@ -1,6 +1,6 @@
 import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
@@ -26,7 +26,7 @@ import { LearnMovePhase } from "#app/phases/learn-move-phase";
 import { PhaseId } from "#enums/phase-id";
 
 const namespace = "mysteryEncounters/dancingLessons";
-const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
+const defaultParty = [SpeciesId.LAPRAS, SpeciesId.GENGAR, SpeciesId.ABRA];
 const defaultBiome = BiomeId.PLAINS;
 const defaultWave = 45;
 
@@ -111,7 +111,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
       const enemyField = scene.getEnemyField();
       expect(scene.getCurrentPhase()?.constructor.name).toBe(CommandPhase.name);
       expect(enemyField.length).toBe(1);
-      expect(enemyField[0].species.speciesId).toBe(Species.ORICORIO);
+      expect(enemyField[0].species.speciesId).toBe(SpeciesId.ORICORIO);
       expect(enemyField[0].summonData.statStages).toEqual([1, 1, 1, 1, 0, 0, 0]);
       const moveset = enemyField[0].moveset.map((m) => m.moveId);
       expect(moveset.some((m) => m === MoveId.REVELATION_DANCE)).toBeTruthy();
@@ -208,7 +208,7 @@ describe("Dancing Lessons - Mystery Encounter", () => {
 
       expect(partyCountBefore + 1).toBe(partyCountAfter);
       const oricorio = scene.getPlayerParty()[scene.getPlayerParty().length - 1];
-      expect(oricorio.species.speciesId).toBe(Species.ORICORIO);
+      expect(oricorio.species.speciesId).toBe(SpeciesId.ORICORIO);
       const moveset = oricorio.moveset.map((m) => m.moveId);
       expect(moveset?.some((m) => m === MoveId.REVELATION_DANCE)).toBeTruthy();
       expect(moveset?.some((m) => m === MoveId.DRAGON_DANCE)).toBeTruthy();

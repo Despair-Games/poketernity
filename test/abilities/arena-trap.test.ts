@@ -1,6 +1,6 @@
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -24,7 +24,7 @@ describe("Abilities - Arena Trap", () => {
     game.override
       .moveset(MoveId.SPLASH)
       .ability(AbilityId.ARENA_TRAP)
-      .enemySpecies(Species.RALTS)
+      .enemySpecies(SpeciesId.RALTS)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.TELEPORT);
   });
@@ -64,7 +64,7 @@ describe("Abilities - Arena Trap", () => {
       .enemyMoveset(MoveId.SPLASH)
       .moveset([MoveId.ROAR, MoveId.SPLASH])
       .ability(AbilityId.BALL_FETCH);
-    await game.classicMode.startBattle([Species.MAGIKARP, Species.SUDOWOODO, Species.LUNATONE]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.SUDOWOODO, SpeciesId.LUNATONE]);
 
     const [enemy1, enemy2] = game.scene.getEnemyField();
     const [player1, player2] = game.scene.getPlayerField();

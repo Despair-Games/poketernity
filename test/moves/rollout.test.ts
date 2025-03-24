@@ -3,7 +3,7 @@ import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -28,7 +28,7 @@ describe("Moves - Rollout", () => {
       .disableCrits()
       .battleType("single")
       .ability(AbilityId.NO_GUARD)
-      .enemySpecies(Species.AGGRON)
+      .enemySpecies(SpeciesId.AGGRON)
       .enemyAbility(AbilityId.BALL_FETCH)
       .startingLevel(100)
       .enemyLevel(100)
@@ -39,7 +39,7 @@ describe("Moves - Rollout", () => {
     const moveObj = allMoves.get(MoveId.ROLLOUT);
     const spy = vi.spyOn(moveObj, "calculateBattlePower");
 
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     for (let i = 0; i < 7; i++) {
       game.move.use(MoveId.ROLLOUT);
@@ -54,7 +54,7 @@ describe("Moves - Rollout", () => {
     const moveObj = allMoves.get(MoveId.ROLLOUT);
     vi.spyOn(moveObj, "calculateBattlePower");
 
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.use(MoveId.DEFENSE_CURL);
     await game.toNextTurn();
@@ -66,7 +66,7 @@ describe("Moves - Rollout", () => {
   });
 
   it("should lock the user into the move for 5 turns", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
 
@@ -93,7 +93,7 @@ describe("Moves - Rollout", () => {
   it("should stop its execution if an attack is unsuccessful", async () => {
     game.override.ability(AbilityId.BALL_FETCH);
 
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
 

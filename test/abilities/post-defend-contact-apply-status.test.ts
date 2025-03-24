@@ -1,6 +1,6 @@
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -29,7 +29,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
       .moveset([MoveId.SPLASH])
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.BALL_FETCH);
   });
 
@@ -39,7 +39,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     { abilityName: "Static", ability: AbilityId.STATIC, status: StatusEffect.PARALYSIS },
   ])("$abilityName should status an attacking, applicable Pokemon if contact is made", async ({ ability, status }) => {
     game.override.ability(ability);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon();
     vi.spyOn(
       pokemon!
@@ -63,7 +63,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
     { abilityName: "Flame Body", ability: AbilityId.FLAME_BODY, status: StatusEffect.BURN },
   ])("$abilityName should not activate from a non-contact attack", async ({ ability }) => {
     game.override.ability(ability);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon();
     vi.spyOn(
       pokemon!
@@ -82,8 +82,8 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
   });
 
   it("Static can paralyze a Ground-type Pokemon", async () => {
-    game.override.ability(AbilityId.STATIC).enemySpecies(Species.DIGLETT);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.override.ability(AbilityId.STATIC).enemySpecies(SpeciesId.DIGLETT);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(
       pokemon!

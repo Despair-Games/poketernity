@@ -15,7 +15,7 @@ import { MoveId } from "#enums/move-id";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PokeballType } from "#enums/pokeball-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { TimeOfDay } from "#enums/time-of-day";
@@ -125,7 +125,7 @@ class DefaultOverrides {
    * }
    * ```
    */
-  readonly STARTER_FORM_OVERRIDES: Partial<Record<Species, number>> = {};
+  readonly STARTER_FORM_OVERRIDES: Partial<Record<SpeciesId, number>> = {};
 
   /** default 5 or 20 for Daily */
   readonly STARTING_LEVEL_OVERRIDE: number = 0;
@@ -135,7 +135,7 @@ class DefaultOverrides {
    * default is 0 to not override
    * @example SPECIES_OVERRIDE = Species.Bulbasaur;
    */
-  readonly STARTER_SPECIES_OVERRIDE: Species | number = 0;
+  readonly STARTER_SPECIES_OVERRIDE: SpeciesId | number = 0;
   readonly ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
   readonly PASSIVE_ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
   readonly STATUS_OVERRIDE: StatusEffect = StatusEffect.NONE;
@@ -148,7 +148,7 @@ class DefaultOverrides {
   // ENEMY OVERRIDES
   // --------------------------
 
-  readonly ENEMY_SPECIES_OVERRIDE: Species | number = 0;
+  readonly ENEMY_SPECIES_OVERRIDE: SpeciesId | number = 0;
   readonly ENEMY_LEVEL_OVERRIDE: number = 0;
   readonly ENEMY_ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
   readonly ENEMY_PASSIVE_ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
@@ -158,7 +158,7 @@ class DefaultOverrides {
   readonly ENEMY_SHINY_OVERRIDE: boolean | null = null;
   readonly ENEMY_VARIANT_OVERRIDE: Variant | null = null;
   readonly ENEMY_IVS_OVERRIDE: number | number[] = [];
-  readonly ENEMY_FORM_OVERRIDES: Partial<Record<Species, number>> = {};
+  readonly ENEMY_FORM_OVERRIDES: Partial<Record<SpeciesId, number>> = {};
   /**
    * Override to give the enemy Pokemon a given amount of health segments
    *

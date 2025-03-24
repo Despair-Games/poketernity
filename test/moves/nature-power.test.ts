@@ -2,7 +2,7 @@ import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -28,13 +28,13 @@ describe("Moves - Nature Power", () => {
       .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should call Round in the Town biome", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.select(MoveId.NATURE_POWER);
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -44,7 +44,7 @@ describe("Moves - Nature Power", () => {
 
   it("should call Thunderbolt in electric terrain, overriding the Biome-defined move", async () => {
     game.override.ability(AbilityId.ELECTRIC_SURGE);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.select(MoveId.NATURE_POWER);
     await game.phaseInterceptor.to("MoveEndPhase");
@@ -54,7 +54,7 @@ describe("Moves - Nature Power", () => {
 
   it("should be able to target the user's ally", async () => {
     game.override.battleType("double");
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
 
     game.move.use(MoveId.NATURE_POWER, 0, BattlerIndex.PLAYER_2);
     game.move.use(MoveId.SPLASH, 1);
@@ -68,7 +68,7 @@ describe("Moves - Nature Power", () => {
 
   it("should be able to target multiple Pokemon at once, if applicable for the called move", async () => {
     game.override.battleType("double").startingBiome(BiomeId.VOLCANO); // Volcano -> Lava Plume
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
 
     game.move.use(MoveId.NATURE_POWER, 0, BattlerIndex.PLAYER_2);
     game.move.use(MoveId.SPLASH, 1);

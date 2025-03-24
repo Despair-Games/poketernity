@@ -3,7 +3,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -29,7 +29,7 @@ describe("Moves - Uproar", () => {
       .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.BLISSEY)
+      .enemySpecies(SpeciesId.BLISSEY)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
@@ -37,7 +37,7 @@ describe("Moves - Uproar", () => {
   });
 
   it("should lock the user into using Uproar for the following 2 turns", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
 
@@ -62,7 +62,7 @@ describe("Moves - Uproar", () => {
   });
 
   it("should stop execution after using Uproar has no effect", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
 
@@ -85,7 +85,7 @@ describe("Moves - Uproar", () => {
   it("should wake up all active Pokemon on its initial use", async () => {
     game.override.enemyStatusEffect(StatusEffect.SLEEP).battleType("double");
 
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyField();
 
@@ -98,7 +98,7 @@ describe("Moves - Uproar", () => {
 
   it("should prevent active Pokemon from falling asleep during its execution", async () => {
     game.override.battleType("double");
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
 
     const enemyPokemon = game.scene.getEnemyField();
 
@@ -113,7 +113,7 @@ describe("Moves - Uproar", () => {
   });
 
   it("should not have its execution interrupted by Torment", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
 

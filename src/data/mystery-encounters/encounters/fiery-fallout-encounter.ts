@@ -20,7 +20,7 @@ import {
   CombinationPokemonRequirement,
   TypeRequirement,
 } from "#app/data/mystery-encounters/mystery-encounter-requirements";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { Gender } from "#enums/gender";
 import { ElementalType } from "#enums/elemental-type";
@@ -82,7 +82,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
     const encounter = globalScene.currentBattle.mysteryEncounter!;
 
     // Calculate boss mons
-    const volcaronaSpecies = getPokemonSpecies(Species.VOLCARONA);
+    const volcaronaSpecies = getPokemonSpecies(SpeciesId.VOLCARONA);
     const config: EnemyPartyConfig = {
       pokemonConfigs: [
         {
@@ -118,7 +118,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
       {
         spriteKey: "",
         fileRoot: "",
-        species: Species.VOLCARONA,
+        species: SpeciesId.VOLCARONA,
         repeat: true,
         hidden: true,
         hasShadow: true,
@@ -128,7 +128,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
       {
         spriteKey: "",
         fileRoot: "",
-        species: Species.VOLCARONA,
+        species: SpeciesId.VOLCARONA,
         repeat: true,
         hidden: true,
         hasShadow: true,
@@ -141,7 +141,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
 
     globalScene.arena.trySetWeather(WeatherType.SUNNY, true);
 
-    encounter.setDialogueToken("volcaronaName", getPokemonSpecies(Species.VOLCARONA).getName());
+    encounter.setDialogueToken("volcaronaName", getPokemonSpecies(SpeciesId.VOLCARONA).getName());
 
     return true;
   })
@@ -279,7 +279,7 @@ export const FieryFalloutEncounter: MysteryEncounter = MysteryEncounterBuilder.w
 
         const primary = encounter.options[2].primaryPokemon!;
 
-        setEncounterExp([primary.id], getPokemonSpecies(Species.VOLCARONA).baseExp * 2);
+        setEncounterExp([primary.id], getPokemonSpecies(SpeciesId.VOLCARONA).baseExp * 2);
         leaveEncounterWithoutBattle();
       })
       .build(),

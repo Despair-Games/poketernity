@@ -1,6 +1,6 @@
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -30,13 +30,13 @@ describe("Evolution Phase", () => {
       .battleType("single")
       .disableCrits()
       .enemyLevel(1000)
-      .enemySpecies(Species.BLISSEY)
+      .enemySpecies(SpeciesId.BLISSEY)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should evolve the Pokemon by exactly 1 stage", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicMode.startBattle([SpeciesId.BULBASAUR]);
 
     const pokemon = game.field.getPlayerPokemon();
     expect(pokemon.species.getName()).toBe("Bulbasaur");
@@ -54,7 +54,7 @@ describe("Evolution Phase", () => {
   });
 
   it("should be cancellable", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicMode.startBattle([SpeciesId.BULBASAUR]);
 
     const pokemon = game.field.getPlayerPokemon();
     expect(pokemon.species.getName()).toBe("Bulbasaur");
@@ -84,7 +84,7 @@ describe("Evolution Phase", () => {
   });
 
   it("should allow to pause evolutions after cancelling them", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicMode.startBattle([SpeciesId.BULBASAUR]);
 
     const pokemon = game.field.getPlayerPokemon();
     expect(pokemon.species.getName()).toBe("Bulbasaur");

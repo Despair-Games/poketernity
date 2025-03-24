@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -26,7 +26,7 @@ describe("Abilities - Steely Spirit", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override.battleType("double");
-    game.override.enemySpecies(Species.SHUCKLE);
+    game.override.enemySpecies(SpeciesId.SHUCKLE);
     game.override.enemyAbility(AbilityId.BALL_FETCH);
     game.override.moveset([MoveId.IRON_HEAD, MoveId.SPLASH]);
     game.override.enemyMoveset(MoveId.SPLASH);
@@ -34,7 +34,7 @@ describe("Abilities - Steely Spirit", () => {
   });
 
   it("increases Steel-type moves' power used by the user and its allies by 50%", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU, Species.SHUCKLE]);
+    await game.classicMode.startBattle([SpeciesId.PIKACHU, SpeciesId.SHUCKLE]);
     const boostSource = game.scene.getPlayerField()[1];
     const enemyToCheck = game.scene.getEnemyPokemon()!;
 
@@ -50,7 +50,7 @@ describe("Abilities - Steely Spirit", () => {
   });
 
   it("stacks if multiple users with this ability are on the field.", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU, Species.PIKACHU]);
+    await game.classicMode.startBattle([SpeciesId.PIKACHU, SpeciesId.PIKACHU]);
     const enemyToCheck = game.scene.getEnemyPokemon()!;
 
     game.scene.getPlayerField().forEach((p) => {
@@ -69,7 +69,7 @@ describe("Abilities - Steely Spirit", () => {
   });
 
   it("does not take effect when suppressed", async () => {
-    await game.classicMode.startBattle([Species.PIKACHU, Species.SHUCKLE]);
+    await game.classicMode.startBattle([SpeciesId.PIKACHU, SpeciesId.SHUCKLE]);
     const boostSource = game.scene.getPlayerField()[1];
     const enemyToCheck = game.scene.getEnemyPokemon()!;
 
@@ -94,7 +94,7 @@ describe("Abilities - Steely Spirit", () => {
     const revelationDance = allMoves.get(MoveId.REVELATION_DANCE);
     vi.spyOn(revelationDance, "calculateBattlePower");
 
-    await game.classicMode.startBattle([Species.KLINKLANG]);
+    await game.classicMode.startBattle([SpeciesId.KLINKLANG]);
 
     game.move.select(MoveId.REVELATION_DANCE);
 

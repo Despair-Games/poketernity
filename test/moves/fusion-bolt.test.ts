@@ -1,6 +1,6 @@
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -26,7 +26,7 @@ describe("Moves - Fusion Bolt", () => {
     game.override.moveset([fusionBolt]);
     game.override.startingLevel(1);
 
-    game.override.enemySpecies(Species.RESHIRAM);
+    game.override.enemySpecies(SpeciesId.RESHIRAM);
     game.override.enemyAbility(AbilityId.ROUGH_SKIN);
     game.override.enemyMoveset([MoveId.SPLASH, MoveId.SPLASH, MoveId.SPLASH, MoveId.SPLASH]);
 
@@ -36,7 +36,7 @@ describe("Moves - Fusion Bolt", () => {
   });
 
   it("should not make contact", async () => {
-    await game.startBattle([Species.ZEKROM]);
+    await game.startBattle([SpeciesId.ZEKROM]);
 
     const partyMember = game.scene.getPlayerPokemon()!;
     const initialHp = partyMember.hp;

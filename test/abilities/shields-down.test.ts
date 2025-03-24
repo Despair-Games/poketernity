@@ -2,7 +2,7 @@ import { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 
@@ -34,12 +34,12 @@ describe("Abilities - SHIELDS DOWN", () => {
       coreForm = 7;
     game.override.startingWave(4);
     game.override.starterForms({
-      [Species.MINIOR]: coreForm,
+      [SpeciesId.MINIOR]: coreForm,
     });
 
-    await game.startBattle([Species.MAGIKARP, Species.MINIOR]);
+    await game.startBattle([SpeciesId.MAGIKARP, SpeciesId.MINIOR]);
 
-    const minior = game.scene.getPlayerParty().find((p) => p.species.speciesId === Species.MINIOR)!;
+    const minior = game.scene.getPlayerParty().find((p) => p.species.speciesId === SpeciesId.MINIOR)!;
     expect(minior).not.toBe(undefined);
     expect(minior.formIndex).toBe(coreForm);
 

@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { MoveResult } from "#enums/move-result";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import type { TurnMove } from "#app/@types/TurnMove";
@@ -30,8 +30,8 @@ describe("Moves - Disable", () => {
       .enemyAbility(AbilityId.BALL_FETCH)
       .moveset([MoveId.DISABLE, MoveId.SPLASH])
       .enemyMoveset(MoveId.SPLASH)
-      .starterSpecies(Species.PIKACHU)
-      .enemySpecies(Species.SHUCKLE);
+      .starterSpecies(SpeciesId.PIKACHU)
+      .enemySpecies(SpeciesId.SHUCKLE);
   });
 
   it("restricts moves", async () => {

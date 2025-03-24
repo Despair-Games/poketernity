@@ -1,6 +1,6 @@
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -32,8 +32,8 @@ describe("Abilities - Download", () => {
   });
 
   it("should boost special attack if the enemy's defense is higher", async () => {
-    game.override.enemySpecies(Species.STEELIX);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.override.enemySpecies(SpeciesId.STEELIX);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
 
@@ -44,8 +44,8 @@ describe("Abilities - Download", () => {
   });
 
   it("should boost attack if the enemy's special defense is higher", async () => {
-    game.override.enemySpecies(Species.REGICE);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.override.enemySpecies(SpeciesId.REGICE);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
 

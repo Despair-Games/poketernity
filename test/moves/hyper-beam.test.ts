@@ -2,7 +2,7 @@ import { allMoves } from "#app/data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { BerryPhase } from "#app/phases/berry-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -28,7 +28,7 @@ describe("Moves - Hyper Beam", () => {
 
     game.override.battleType("single");
     game.override.ability(AbilityId.BALL_FETCH);
-    game.override.enemySpecies(Species.SNORLAX);
+    game.override.enemySpecies(SpeciesId.SNORLAX);
     game.override.enemyAbility(AbilityId.BALL_FETCH);
     game.override.enemyMoveset([MoveId.SPLASH]);
     game.override.enemyLevel(100);
@@ -38,7 +38,7 @@ describe("Moves - Hyper Beam", () => {
   });
 
   it("should force the user to recharge on the next turn (and only that turn)", async () => {
-    await game.startBattle([Species.MAGIKARP]);
+    await game.startBattle([SpeciesId.MAGIKARP]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;

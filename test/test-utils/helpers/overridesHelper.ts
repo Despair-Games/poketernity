@@ -12,7 +12,7 @@ import { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
 import type { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { WeatherType } from "#enums/weather-type";
 import { expect, vi } from "vitest";
@@ -57,7 +57,7 @@ export class OverridesHelper extends GameManagerHelper {
    * @param level the (pokemon) level to set
    * @returns `this`
    */
-  public startingLevel(level: Species | number): this {
+  public startingLevel(level: SpeciesId | number): this {
     vi.spyOn(Overrides, "STARTING_LEVEL_OVERRIDE", "get").mockReturnValue(level);
     this.log(`Player Pokemon starting level set to ${level}!`);
     return this;
@@ -86,13 +86,13 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
-   * Override the player (pokemon) {@linkcode Species | species}
-   * @param species the (pokemon) {@linkcode Species | species} to set
+   * Override the player (pokemon) {@linkcode SpeciesId | species}
+   * @param species the (pokemon) {@linkcode SpeciesId | species} to set
    * @returns `this`
    */
-  public starterSpecies(species: Species | number): this {
+  public starterSpecies(species: SpeciesId | number): this {
     vi.spyOn(Overrides, "STARTER_SPECIES_OVERRIDE", "get").mockReturnValue(species);
-    this.log(`Player Pokemon species set to ${Species[species]} (=${species})!`);
+    this.log(`Player Pokemon species set to ${SpeciesId[species]} (=${species})!`);
     return this;
   }
 
@@ -101,10 +101,10 @@ export class OverridesHelper extends GameManagerHelper {
    * @param forms the (pokemon) forms to set
    * @returns `this`
    */
-  public starterForms(forms: Partial<Record<Species, number>>): this {
+  public starterForms(forms: Partial<Record<SpeciesId, number>>): this {
     vi.spyOn(Overrides, "STARTER_FORM_OVERRIDES", "get").mockReturnValue(forms);
     const formsStr = Object.entries(forms)
-      .map(([speciesId, formIndex]) => `${Species[speciesId]}=${formIndex}`)
+      .map(([speciesId, formIndex]) => `${SpeciesId[speciesId]}=${formIndex}`)
       .join(", ");
     this.log(`Player Pokemon form set to: ${formsStr}!`);
     return this;
@@ -115,10 +115,10 @@ export class OverridesHelper extends GameManagerHelper {
    * @param forms the (pokemon) forms to set
    * @returns `this`
    */
-  public enemyForms(forms: Partial<Record<Species, number>>): this {
+  public enemyForms(forms: Partial<Record<SpeciesId, number>>): this {
     vi.spyOn(Overrides, "ENEMY_FORM_OVERRIDES", "get").mockReturnValue(forms);
     const formsStr = Object.entries(forms)
-      .map(([speciesId, formIndex]) => `${Species[speciesId]}=${formIndex}`)
+      .map(([speciesId, formIndex]) => `${SpeciesId[speciesId]}=${formIndex}`)
       .join(", ");
     this.log(`Enemy Pokemon form set to: ${formsStr}!`);
     return this;
@@ -244,13 +244,13 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
-   * Override the enemy (pokemon) {@linkcode Species | species}
-   * @param species the (pokemon) {@linkcode Species | species} to set
+   * Override the enemy (pokemon) {@linkcode SpeciesId | species}
+   * @param species the (pokemon) {@linkcode SpeciesId | species} to set
    * @returns `this`
    */
-  public enemySpecies(species: Species | number): this {
+  public enemySpecies(species: SpeciesId | number): this {
     vi.spyOn(Overrides, "ENEMY_SPECIES_OVERRIDE", "get").mockReturnValue(species);
-    this.log(`Enemy Pokemon species set to ${Species[species]} (=${species})!`);
+    this.log(`Enemy Pokemon species set to ${SpeciesId[species]} (=${species})!`);
     return this;
   }
 

@@ -4,7 +4,7 @@ import { allMoves } from "#app/data/data-lists";
 import { ElementalType } from "#enums/elemental-type";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -30,11 +30,11 @@ describe("Moves - Tera Blast", () => {
     game.override
       .battleType("single")
       .disableCrits()
-      .starterSpecies(Species.FEEBAS)
+      .starterSpecies(SpeciesId.FEEBAS)
       .moveset([MoveId.TERA_BLAST])
       .ability(AbilityId.BALL_FETCH)
       .startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.FIRE }])
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyMoveset(MoveId.SPLASH)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyLevel(20);
@@ -44,7 +44,7 @@ describe("Moves - Tera Blast", () => {
 
   it("changes type to match user's tera type", async () => {
     game.override
-      .enemySpecies(Species.FURRET)
+      .enemySpecies(SpeciesId.FURRET)
       .startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.FIGHTING }]);
     await game.classicMode.startBattle();
     const enemyPokemon = game.scene.getEnemyPokemon()!;

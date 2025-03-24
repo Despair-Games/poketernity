@@ -1,4 +1,4 @@
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -26,10 +26,10 @@ describe("Abilities - Dry Skin", () => {
       .disableCrits()
       .enemyAbility(AbilityId.DRY_SKIN)
       .enemyMoveset(MoveId.SPLASH)
-      .enemySpecies(Species.CHARMANDER)
+      .enemySpecies(SpeciesId.CHARMANDER)
       .ability(AbilityId.BALL_FETCH)
       .moveset([MoveId.SUNNY_DAY, MoveId.RAIN_DANCE, MoveId.SPLASH, MoveId.WATER_GUN])
-      .starterSpecies(Species.CHANDELURE);
+      .starterSpecies(SpeciesId.CHANDELURE);
   });
 
   it("during sunlight, lose 1/8 of maximum health at the end of each turn", async () => {

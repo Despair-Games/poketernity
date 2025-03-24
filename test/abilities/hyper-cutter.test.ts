@@ -1,7 +1,7 @@
 import { Stat } from "#enums/stat";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -26,7 +26,7 @@ describe("Abilities - Hyper Cutter", () => {
       .battleType("single")
       .moveset([MoveId.SAND_ATTACK, MoveId.NOBLE_ROAR, MoveId.DEFOG, MoveId.OCTOLOCK])
       .ability(AbilityId.BALL_FETCH)
-      .enemySpecies(Species.SHUCKLE)
+      .enemySpecies(SpeciesId.SHUCKLE)
       .enemyAbility(AbilityId.HYPER_CUTTER)
       .enemyMoveset(MoveId.SPLASH);
   });

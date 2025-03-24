@@ -1,6 +1,6 @@
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -26,7 +26,7 @@ describe("Primal Weather", () => {
       .battleType("single")
       .ability(AbilityId.BALL_FETCH)
       .enemyAbility(AbilityId.BALL_FETCH)
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -36,7 +36,7 @@ describe("Primal Weather", () => {
     { weatherName: "Strong Winds", ability: AbilityId.DELTA_STREAM, weatherType: WeatherType.STRONG_WINDS },
   ])("$weatherName can't be overwritten by non-primal weather", async ({ ability, weatherType }) => {
     game.override.ability(ability);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     game.move.use(MoveId.SANDSTORM);
     await game.toEndOfTurn();

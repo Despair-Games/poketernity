@@ -3,7 +3,7 @@ import { allAbilities } from "#app/data/data-lists";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
@@ -27,7 +27,7 @@ describe("Abilities - Quick Draw", () => {
     game.override
       .battleType("single")
       .ability(AbilityId.QUICK_DRAW)
-      .enemySpecies(Species.REGIELEKI)
+      .enemySpecies(SpeciesId.REGIELEKI)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
@@ -41,7 +41,7 @@ describe("Abilities - Quick Draw", () => {
   });
 
   test("should cause the source to move first in its priority bracket", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();

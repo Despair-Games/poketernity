@@ -1,7 +1,7 @@
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -27,7 +27,7 @@ describe("Abilities - Lightning Rod", () => {
       .ability(AbilityId.BALL_FETCH)
       .battleType("double")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
@@ -35,7 +35,7 @@ describe("Abilities - Lightning Rod", () => {
   });
 
   it("should redirect single-target moves", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
 
     const enemyPokemon = game.scene.getEnemyField();
 
@@ -50,7 +50,7 @@ describe("Abilities - Lightning Rod", () => {
   });
 
   it("should redirect moves from the source's ally, but not from the source", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
@@ -73,7 +73,7 @@ describe("Abilities - Lightning Rod", () => {
   });
 
   it("should not redirect multi-target moves", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
 
     const enemyPokemon = game.scene.getEnemyField();
 
@@ -91,7 +91,7 @@ describe("Abilities - Lightning Rod", () => {
   it("should not redirect moves boosted by Normalize", async () => {
     game.override.ability(AbilityId.NORMALIZE);
 
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
 
     const enemyPokemon = game.scene.getEnemyField();
 

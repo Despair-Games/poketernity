@@ -6,7 +6,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { toDmgValue } from "#app/utils";
@@ -29,7 +29,7 @@ describe("Moves - Ceaseless Edge", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
-    game.override.enemySpecies(Species.RATTATA);
+    game.override.enemySpecies(SpeciesId.RATTATA);
     game.override.enemyAbility(AbilityId.RUN_AWAY);
     game.override.enemyPassiveAbility(AbilityId.RUN_AWAY);
     game.override.startingLevel(100);
@@ -40,7 +40,7 @@ describe("Moves - Ceaseless Edge", () => {
   });
 
   test("move should hit and apply spikes", async () => {
-    await game.classicMode.startBattle([Species.ILLUMISE]);
+    await game.classicMode.startBattle([SpeciesId.ILLUMISE]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -63,7 +63,7 @@ describe("Moves - Ceaseless Edge", () => {
   test("trainer - move should hit twice, apply two layers of spikes, force switch opponent - opponent takes damage", async () => {
     game.override.startingWave(25).ability(AbilityId.PARENTAL_BOND);
 
-    await game.classicMode.startBattle([Species.ILLUMISE]);
+    await game.classicMode.startBattle([SpeciesId.ILLUMISE]);
 
     game.move.select(MoveId.CEASELESS_EDGE);
     await game.phaseInterceptor.to(MoveEffectPhase, false);

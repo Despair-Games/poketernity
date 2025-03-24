@@ -2,7 +2,7 @@ import { allMoves } from "#app/data/data-lists";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -29,7 +29,7 @@ describe("Abilities - Effect Spore", () => {
       .ability(AbilityId.EFFECT_SPORE)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.BALL_FETCH);
 
     // Force minimum RNG roll so that Effect Spore's RNG roll succeeds
@@ -37,7 +37,7 @@ describe("Abilities - Effect Spore", () => {
   });
 
   it("should have a chance of inflicting a status effect if user is hit with a contact move", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
     vi.spyOn(abilityAttr, "apply");
@@ -54,7 +54,7 @@ describe("Abilities - Effect Spore", () => {
 
   it("should not affect Pokemon with the ability Overcoat", async () => {
     game.override.enemyAbility(AbilityId.OVERCOAT);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
     vi.spyOn(abilityAttr, "apply");
@@ -68,8 +68,8 @@ describe("Abilities - Effect Spore", () => {
   });
 
   it("should not affect Grass-type Pokemon", async () => {
-    game.override.enemySpecies(Species.TREECKO);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    game.override.enemySpecies(SpeciesId.TREECKO);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
     vi.spyOn(abilityAttr, "apply");
@@ -83,7 +83,7 @@ describe("Abilities - Effect Spore", () => {
   });
 
   it("should require contact to activate", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;
     vi.spyOn(abilityAttr, "apply");
@@ -97,7 +97,7 @@ describe("Abilities - Effect Spore", () => {
   });
 
   it("should have correct chances of inflicting sleep (11%), paralysis (10%), and poison (9%)", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;

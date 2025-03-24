@@ -4,7 +4,7 @@ import { timedEventManager } from "#app/timed-event-manager";
 import type { TimedEvent } from "#app/@types/TimedEvent";
 import { EventModifierType } from "#enums/event-modifier-type";
 import { AbilityId } from "#enums/ability-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { MoveId } from "#enums/move-id";
 import { CLASSIC_CANDY_FRIENDSHIP_MULTIPLIER, FRIENDSHIP_GAIN_FROM_BATTLE } from "#app/data/balance/starters";
 import { api } from "#app/plugins/api/api";
@@ -37,9 +37,9 @@ describe("Candy Friendship Modifier Event", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .starterSpecies(Species.VENUSAUR)
+      .starterSpecies(SpeciesId.VENUSAUR)
       .startingLevel(100)
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyMoveset(MoveId.SPLASH)
       .enemyAbility(AbilityId.BALL_FETCH)
       .timedEvents(testEvents, duringEventDate);

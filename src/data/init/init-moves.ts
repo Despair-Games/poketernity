@@ -251,7 +251,7 @@ import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
 import { MoveTarget } from "#enums/move-target";
 import { MultiHitType } from "#enums/multi-hit-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { BATTLE_STATS, getStatKey, Stat } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";
 import { SwitchType } from "#enums/switch-type";
@@ -1780,18 +1780,18 @@ export function initMoves() {
       .condition(
         (_user, target, _move) =>
           ![
-            Species.DIGLETT,
-            Species.DUGTRIO,
-            Species.ALOLA_DIGLETT,
-            Species.ALOLA_DUGTRIO,
-            Species.SANDYGAST,
-            Species.PALOSSAND,
-            Species.WIGLETT,
-            Species.WUGTRIO,
+            SpeciesId.DIGLETT,
+            SpeciesId.DUGTRIO,
+            SpeciesId.ALOLA_DIGLETT,
+            SpeciesId.ALOLA_DUGTRIO,
+            SpeciesId.SANDYGAST,
+            SpeciesId.PALOSSAND,
+            SpeciesId.WIGLETT,
+            SpeciesId.WUGTRIO,
           ].includes(target.species.speciesId),
       )
       .condition(
-        (_user, target, _move) => !(target.species.speciesId === Species.GENGAR && target.getFormKey() === "mega"),
+        (_user, target, _move) => !(target.species.speciesId === SpeciesId.GENGAR && target.getFormKey() === "mega"),
       )
       .condition(
         (_user, target, _move) =>
@@ -3063,110 +3063,110 @@ export function initMoves() {
         StatusEffect.SLEEP,
       ]),
     new AttackMove(MoveId.G_MAX_WILDFIRE, ElementalType.FIRE, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.CHARIZARD)
+      .gMaxMove(SpeciesId.CHARIZARD)
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_WILDFIRE),
     new AttackMove(MoveId.G_MAX_BEFUDDLE, ElementalType.BUG, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.BUTTERFREE)
+      .gMaxMove(SpeciesId.BUTTERFREE)
       .attr(MultiStatusEffectAttr, [StatusEffect.POISON, StatusEffect.PARALYSIS, StatusEffect.SLEEP]),
     new AttackMove(MoveId.G_MAX_VOLT_CRASH, ElementalType.ELECTRIC, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.PIKACHU)
+      .gMaxMove(SpeciesId.PIKACHU)
       .attr(StatusEffectAttr, StatusEffect.PARALYSIS),
     new AttackMove(MoveId.G_MAX_GOLD_RUSH, ElementalType.NORMAL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.MEOWTH)
+      .gMaxMove(SpeciesId.MEOWTH)
       .attr(ConfuseAttr)
       .attr(MoneyAttr), // should gives 100x user level (20x as effective as payday) as money. Rebalance later
     new AttackMove(MoveId.G_MAX_CHI_STRIKE, ElementalType.FIGHTING, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.MACHAMP)
+      .gMaxMove(SpeciesId.MACHAMP)
       .attr(AddBattlerTagAttr, BattlerTagType.CRIT_BOOST_STACKABLE, true),
     new AttackMove(MoveId.G_MAX_TERROR, ElementalType.GHOST, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.GENGAR)
+      .gMaxMove(SpeciesId.GENGAR)
       .attr(AddBattlerTagAttr, BattlerTagType.TRAPPED),
     new AttackMove(MoveId.G_MAX_RESONANCE, ElementalType.ICE, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.LAPRAS)
+      .gMaxMove(SpeciesId.LAPRAS)
       .attr(AddArenaTagAttr, ArenaTagType.AURORA_VEIL, ArenaTagRelativeSide.USER, { turnCount: 5 }),
     new AttackMove(MoveId.G_MAX_CUDDLE, ElementalType.NORMAL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.EEVEE)
+      .gMaxMove(SpeciesId.EEVEE)
       .attr(AddBattlerTagAttr, BattlerTagType.INFATUATED),
     new AttackMove(MoveId.G_MAX_REPLENISH, ElementalType.NORMAL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.SNORLAX)
+      .gMaxMove(SpeciesId.SNORLAX)
       .partial(), // 50% of replenishing user and ally's berries (like recycle)
     new AttackMove(MoveId.G_MAX_MALODOR, ElementalType.POISON, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.GARBODOR)
+      .gMaxMove(SpeciesId.GARBODOR)
       .attr(StatusEffectAttr, StatusEffect.POISON),
     new AttackMove(MoveId.G_MAX_STONESURGE, ElementalType.WATER, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.DREDNAW)
+      .gMaxMove(SpeciesId.DREDNAW)
       .attr(AddEntryHazardTagAttr, ArenaTagType.STEALTH_ROCK),
     new AttackMove(MoveId.G_MAX_WIND_RAGE, ElementalType.FLYING, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.CORVIKNIGHT)
+      .gMaxMove(SpeciesId.CORVIKNIGHT)
       .attr(ClearWeatherAttr, WeatherType.FOG)
       .attr(ClearTerrainAttr)
       .attr(RemoveScreensAttr, false)
       .attr(RemoveEntryHazardAttr, true)
       .attr(RemoveArenaTagsAttr, [ArenaTagType.SAFEGUARD, ArenaTagType.MIST], ArenaTagRelativeSide.TARGET),
     new AttackMove(MoveId.G_MAX_STUN_SHOCK, ElementalType.ELECTRIC, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.TOXTRICITY)
+      .gMaxMove(SpeciesId.TOXTRICITY)
       .attr(MultiStatusEffectAttr, [StatusEffect.POISON, StatusEffect.PARALYSIS]),
     new AttackMove(MoveId.G_MAX_FINALE, ElementalType.FAIRY, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.ALCREMIE)
+      .gMaxMove(SpeciesId.ALCREMIE)
       .attr(HealAttr, 1 / 6),
     new AttackMove(MoveId.G_MAX_DEPLETION, ElementalType.DRAGON, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.DURALUDON)
+      .gMaxMove(SpeciesId.DURALUDON)
       .attr(AttackReducePpMoveAttr, 2),
     new AttackMove(MoveId.G_MAX_GRAVITAS, ElementalType.PSYCHIC, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.ORBEETLE)
+      .gMaxMove(SpeciesId.ORBEETLE)
       .attr(AddArenaTagAttr, ArenaTagType.GRAVITY, ArenaTagRelativeSide.ALL, { turnCount: 5 })
       .edgeCase(), // does not prevent Bounce, Fly, etc. from being selected; only causes the moves to fail.
     new AttackMove(MoveId.G_MAX_VOLCALITH, ElementalType.ROCK, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.COALOSSAL)
+      .gMaxMove(SpeciesId.COALOSSAL)
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_VOLCALITH),
     new AttackMove(MoveId.G_MAX_SANDBLAST, ElementalType.GROUND, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.SANDACONDA)
+      .gMaxMove(SpeciesId.SANDACONDA)
       .attr(TrapAttr, BattlerTagType.G_MAX_SAND_TOMB),
     new AttackMove(MoveId.G_MAX_SNOOZE, ElementalType.DARK, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.GRIMMSNARL)
+      .gMaxMove(SpeciesId.GRIMMSNARL)
       .attr(AddBattlerTagAttr, BattlerTagType.DROWSY, false, { effectChanceOverride: 50 })
       .edgeCase(), // The 50% chance incorrectly gets overridden by Shield Dust, Sheer Force, etc.
     new AttackMove(MoveId.G_MAX_TARTNESS, ElementalType.GRASS, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.FLAPPLE)
+      .gMaxMove(SpeciesId.FLAPPLE)
       .attr(StatStageChangeAttr, [Stat.EVA], -1),
     new AttackMove(MoveId.G_MAX_SWEETNESS, ElementalType.GRASS, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.APPLETUN)
+      .gMaxMove(SpeciesId.APPLETUN)
       .attr(HealStatusEffectAttr, true, getNonVolatileStatusEffects()),
     new AttackMove(MoveId.G_MAX_SMITE, ElementalType.FAIRY, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.HATTERENE)
+      .gMaxMove(SpeciesId.HATTERENE)
       .attr(ConfuseAttr),
     new AttackMove(MoveId.G_MAX_STEELSURGE, ElementalType.STEEL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.COPPERAJAH)
+      .gMaxMove(SpeciesId.COPPERAJAH)
       .attr(AddEntryHazardTagAttr, ArenaTagType.SHARP_STEEL),
     new AttackMove(MoveId.G_MAX_MELTDOWN, ElementalType.STEEL, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.MELMETAL)
+      .gMaxMove(SpeciesId.MELMETAL)
       .attr(AddBattlerTagAttr, BattlerTagType.TORMENT),
     new AttackMove(MoveId.G_MAX_FOAM_BURST, ElementalType.WATER, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.KINGLER)
+      .gMaxMove(SpeciesId.KINGLER)
       .attr(StatStageChangeAttr, [Stat.SPD], -2),
     new AttackMove(MoveId.G_MAX_CENTIFERNO, ElementalType.FIRE, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.CENTISKORCH)
+      .gMaxMove(SpeciesId.CENTISKORCH)
       .attr(TrapAttr, BattlerTagType.G_MAX_FIRE_SPIN),
     new AttackMove(MoveId.G_MAX_VINE_LASH, ElementalType.GRASS, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.VENUSAUR)
+      .gMaxMove(SpeciesId.VENUSAUR)
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_VINE_LASH),
     new AttackMove(MoveId.G_MAX_CANNONADE, ElementalType.WATER, MoveCategory.SPECIAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.BLASTOISE)
+      .gMaxMove(SpeciesId.BLASTOISE)
       .attr(AddArenaTagAttr, ArenaTagType.G_MAX_CANNONADE),
     new AttackMove(MoveId.G_MAX_DRUM_SOLO, ElementalType.GRASS, MoveCategory.PHYSICAL, 110, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.RILLABOOM)
+      .gMaxMove(SpeciesId.RILLABOOM)
       .ignoresAbilities(),
     new AttackMove(MoveId.G_MAX_FIREBALL, ElementalType.FIRE, MoveCategory.PHYSICAL, 110, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.CINDERACE)
+      .gMaxMove(SpeciesId.CINDERACE)
       .ignoresAbilities(),
     new AttackMove(MoveId.G_MAX_HYDROSNIPE, ElementalType.WATER, MoveCategory.SPECIAL, 110, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.INTELEON)
+      .gMaxMove(SpeciesId.INTELEON)
       .ignoresAbilities(),
     new AttackMove(MoveId.G_MAX_ONE_BLOW, ElementalType.DARK, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.URSHIFU)
+      .gMaxMove(SpeciesId.URSHIFU)
       .ignoresProtect(),
     new AttackMove(MoveId.G_MAX_RAPID_FLOW, ElementalType.WATER, MoveCategory.PHYSICAL, 80, -1, 3, -1, 0, 8)
-      .gMaxMove(Species.URSHIFU)
+      .gMaxMove(SpeciesId.URSHIFU)
       .ignoresProtect(),
     new AttackMove(MoveId.TERA_BLAST, ElementalType.NORMAL, MoveCategory.SPECIAL, 80, 100, 10, -1, 0, 9)
       .attr(TeraMoveCategoryAttr)
@@ -3385,7 +3385,7 @@ export function initMoves() {
       .attr(TeraMoveCategoryAttr)
       .attr(TeraStarstormTypeAttr)
       .attr(VariableTargetAttr, (user, _target, _move) =>
-        user.species.speciesId === Species.TERAPAGOS && user.isTerastallized()
+        user.species.speciesId === SpeciesId.TERAPAGOS && user.isTerastallized()
           ? MoveTarget.ALL_NEAR_ENEMIES
           : MoveTarget.NEAR_OTHER,
       ),

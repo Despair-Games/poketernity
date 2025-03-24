@@ -13,13 +13,13 @@ import type { Variant } from "#app/data/variant";
 import { loadBattlerTag } from "#app/data/battler-tags/utils/load-battler-tag";
 import type { BiomeId } from "#enums/biome-id";
 import { MoveId } from "#enums/move-id";
-import type { Species } from "#enums/species";
+import type { SpeciesId } from "#enums/species";
 import { CustomPokemonData } from "#app/data/custom-pokemon-data";
 
 export default class PokemonData {
   public id: number;
   public player: boolean;
-  public species: Species;
+  public species: SpeciesId;
   public nickname: string;
   public formIndex: number;
   public abilityIndex: number;
@@ -40,7 +40,7 @@ export default class PokemonData {
   public friendship: number;
   public metLevel: number;
   public metBiome: BiomeId | -1; // -1 for starters
-  public metSpecies: Species;
+  public metSpecies: SpeciesId;
   public metWave: number; // 0 for unknown (previous saves), -1 for starters
   public luck: number;
   public pauseEvolutions: boolean;

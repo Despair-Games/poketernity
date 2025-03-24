@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { Stat, type BattleStat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -29,7 +29,7 @@ describe("Moves - Spectral Thief", () => {
       .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.SKARMORY)
+      .enemySpecies(SpeciesId.SKARMORY)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.IRON_DEFENSE)
       .startingLevel(100)
@@ -37,7 +37,7 @@ describe("Moves - Spectral Thief", () => {
   });
 
   it("should steal the target's positive stat stages before attacking", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -60,7 +60,7 @@ describe("Moves - Spectral Thief", () => {
   it("should not steal negative stat stages from the target", async () => {
     game.override.enemyMoveset(MoveId.SHELL_SMASH);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -85,7 +85,7 @@ describe("Moves - Spectral Thief", () => {
   it("should steal stat stages even if the target has Clear Body", async () => {
     game.override.enemyAbility(AbilityId.CLEAR_BODY);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -109,7 +109,7 @@ describe("Moves - Spectral Thief", () => {
     async ({ abilityId, multiplier }) => {
       game.override.ability(abilityId);
 
-      await game.classicMode.startBattle([Species.MAGIKARP]);
+      await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
       const player = game.scene.getPlayerPokemon()!;
       const enemy = game.scene.getEnemyPokemon()!;
@@ -128,7 +128,7 @@ describe("Moves - Spectral Thief", () => {
   it("should not activate Defiant when stealing stat stages", async () => {
     game.override.enemyAbility(AbilityId.DEFIANT);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;

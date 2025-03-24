@@ -1,6 +1,6 @@
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -27,7 +27,7 @@ describe("Abilities - Chlorophyll/Swift Swim/Sand Rush/Slush Rush", () => {
       .moveset([MoveId.SPLASH])
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
@@ -57,7 +57,7 @@ describe("Abilities - Chlorophyll/Swift Swim/Sand Rush/Slush Rush", () => {
     { abilityName: "Slush Rush", ability: AbilityId.SLUSH_RUSH, weatherType: WeatherType.SNOW, weatherName: "snow" },
   ])("$abilityName should double the ability holder's speed in $weatherName", async ({ weatherType, ability }) => {
     game.override.ability(ability).weather(weatherType);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const pokemon = game.scene.getPlayerPokemon()!;
 
@@ -71,7 +71,7 @@ describe("Abilities - Chlorophyll/Swift Swim/Sand Rush/Slush Rush", () => {
     { abilityName: "Slush Rush", ability: AbilityId.SLUSH_RUSH },
   ])("$abilityName should not activate without weather", async ({ ability }) => {
     game.override.ability(ability).weather(WeatherType.NONE);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const pokemon = game.scene.getPlayerPokemon()!;
 
@@ -85,7 +85,7 @@ describe("Abilities - Chlorophyll/Swift Swim/Sand Rush/Slush Rush", () => {
     { abilityName: "Slush Rush", ability: AbilityId.SLUSH_RUSH, weather: WeatherType.SNOW },
   ])("$abilityName should not activate if the current weather is being suppressed", async ({ ability, weather }) => {
     game.override.ability(ability).weather(weather).enemyAbility(AbilityId.CLOUD_NINE);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const pokemon = game.scene.getPlayerPokemon()!;
 

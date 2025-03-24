@@ -1,6 +1,6 @@
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -26,7 +26,7 @@ describe("Abilities - Move Flag Power Boost Ability Attr", () => {
     game.override
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
@@ -86,7 +86,7 @@ describe("Abilities - Move Flag Power Boost Ability Attr", () => {
     "$abilityName should boost the damage of specific moves by a factor of $factor",
     async ({ ability, moveId: move, moveFlag, factor }) => {
       game.override.moveset(move).ability(ability);
-      await game.classicMode.startBattle([Species.FEEBAS]);
+      await game.classicMode.startBattle([SpeciesId.FEEBAS]);
       const playerPokemon = game.scene.getPlayerPokemon()!;
       const moveUsed = allMoves.get(move);
       vi.spyOn(moveUsed, "calculateBattlePower");

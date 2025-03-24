@@ -1,7 +1,7 @@
 import { MoveResult } from "#enums/move-result";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -28,13 +28,13 @@ describe("Abilities - Early Bird", () => {
       .ability(AbilityId.EARLY_BIRD)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("reduces Rest's sleep time to 1 turn", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
 
@@ -59,7 +59,7 @@ describe("Abilities - Early Bird", () => {
   });
 
   it("reduces 3-turn sleep to 1 turn", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
     player.trySetStatus(StatusEffect.SLEEP, false, null, 3);
@@ -72,7 +72,7 @@ describe("Abilities - Early Bird", () => {
   });
 
   it("reduces 1-turn sleep to 0 turns", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;
     player.trySetStatus(StatusEffect.SLEEP, false, null, 1);

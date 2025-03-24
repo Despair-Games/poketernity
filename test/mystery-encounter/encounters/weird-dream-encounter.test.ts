@@ -1,7 +1,7 @@
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
@@ -22,7 +22,7 @@ import { ModifierTier } from "#enums/modifier-tier";
 import { Button } from "#enums/buttons";
 
 const namespace = "mysteryEncounters/weirdDream";
-const defaultParty = [Species.MAGBY, Species.HAUNTER, Species.ABRA];
+const defaultParty = [SpeciesId.MAGBY, SpeciesId.HAUNTER, SpeciesId.ABRA];
 const defaultBiome = BiomeId.CAVE;
 const defaultWave = 45;
 

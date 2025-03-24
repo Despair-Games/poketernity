@@ -1,6 +1,6 @@
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { ElementalType } from "#enums/elemental-type";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -29,9 +29,9 @@ describe("Moves - Reflect Type", () => {
     game.override
       .moveset([MoveId.FORESTS_CURSE, MoveId.REFLECT_TYPE])
       .startingLevel(60)
-      .enemySpecies(Species.CHARMANDER)
+      .enemySpecies(SpeciesId.CHARMANDER)
       .enemyMoveset([MoveId.BURN_UP, MoveId.SPLASH]);
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon();
     const enemyPokemon = game.scene.getEnemyPokemon();

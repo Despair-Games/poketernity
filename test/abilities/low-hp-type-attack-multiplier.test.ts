@@ -1,7 +1,7 @@
 import { AbilityId } from "#enums/ability-id";
 import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -27,7 +27,7 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
     game.override
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.SNORLAX)
+      .enemySpecies(SpeciesId.SNORLAX)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
@@ -41,7 +41,7 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
     "$abilityName should multiply the user's attack stat by 1.5 if it uses a physical move of the relevant type at low HP",
     async ({ ability, moveId }) => {
       game.override.ability(ability).moveset(moveId);
-      await game.classicMode.startBattle([Species.MAGIKARP]);
+      await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
       const playerPokemon = game.scene.getPlayerPokemon()!;
       playerPokemon.hp = playerPokemon.getMaxHp() * 0.33 - 1;
       vi.spyOn(playerPokemon, "getEffectiveStat");
@@ -63,7 +63,7 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
     "$abilityName should multiply the user's sp. attack stat by 1.5 if it uses a special move of the relevant type at low HP",
     async ({ ability, moveId }) => {
       game.override.ability(ability).moveset(moveId);
-      await game.classicMode.startBattle([Species.MAGIKARP]);
+      await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
       const playerPokemon = game.scene.getPlayerPokemon()!;
       playerPokemon.hp = playerPokemon.getMaxHp() * 0.33 - 1;
       vi.spyOn(playerPokemon, "getEffectiveStat");
@@ -85,7 +85,7 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
     "$abilityName should not take effect if the ability-holder is above the HP threshold",
     async ({ ability, moveId }) => {
       game.override.ability(ability).moveset(moveId);
-      await game.classicMode.startBattle([Species.MAGIKARP]);
+      await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
       const playerPokemon = game.scene.getPlayerPokemon()!;
       vi.spyOn(playerPokemon, "getEffectiveStat");
 
@@ -108,7 +108,7 @@ describe("Abilities - Overgrow/Blaze/Torrent/Swarm", () => {
     { abilityName: "Swarm", ability: AbilityId.SWARM },
   ])("$abilityName should not take effect if the move used is of an incompatible type", async ({ ability }) => {
     game.override.ability(ability).moveset(MoveId.TACKLE);
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
     playerPokemon.hp = playerPokemon.getMaxHp() * 0.33 - 1;
     vi.spyOn(playerPokemon, "getEffectiveStat");

@@ -2,7 +2,7 @@ import { TUTORIAL_BATTLE_WAVE } from "#app/data/special-waves";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -28,14 +28,14 @@ describe("Abilities - Poison Puppeteer", () => {
       .ability(AbilityId.POISON_PUPPETEER)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyLevel(100)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should confuse the target if the user poisons the target directly", async () => {
-    await game.classicMode.startBattle([Species.MAREANIE]);
+    await game.classicMode.startBattle([SpeciesId.MAREANIE]);
 
     game.move.use(MoveId.MORTAL_SPIN);
     await game.toEndOfTurn();
@@ -46,7 +46,7 @@ describe("Abilities - Poison Puppeteer", () => {
   });
 
   it("should confuse the target if the user badly poisons the target directly", async () => {
-    await game.classicMode.startBattle([Species.MAREANIE]);
+    await game.classicMode.startBattle([SpeciesId.MAREANIE]);
 
     game.move.use(MoveId.TOXIC);
     await game.toEndOfTurn();
@@ -58,7 +58,7 @@ describe("Abilities - Poison Puppeteer", () => {
 
   it("should not confuse the target if the user poisons the target via Toxic Spikes", async () => {
     game.override.startingWave(TUTORIAL_BATTLE_WAVE);
-    await game.classicMode.startBattle([Species.MAREANIE]);
+    await game.classicMode.startBattle([SpeciesId.MAREANIE]);
 
     game.move.use(MoveId.TOXIC_SPIKES);
     await game.toNextTurn();
@@ -73,7 +73,7 @@ describe("Abilities - Poison Puppeteer", () => {
   });
 
   it("should not confuse the target if the user paralyzes the target", async () => {
-    await game.classicMode.startBattle([Species.MAREANIE]);
+    await game.classicMode.startBattle([SpeciesId.MAREANIE]);
 
     game.move.use(MoveId.NUZZLE);
     await game.toEndOfTurn();

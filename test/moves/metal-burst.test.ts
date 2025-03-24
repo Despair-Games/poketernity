@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { MoveResult } from "#enums/move-result";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -29,13 +29,13 @@ describe("Moves - Metal Burst", () => {
       .startingLevel(10)
       .battleType("double")
       .disableCrits()
-      .enemySpecies(Species.PICHU)
+      .enemySpecies(SpeciesId.PICHU)
       .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.TACKLE);
   });
 
   it("should redirect target if intended target faints", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.FEEBAS]);
 
     const [, enemy2] = game.scene.getEnemyField();
 
@@ -56,7 +56,7 @@ describe("Moves - Metal Burst", () => {
   });
 
   it("should not crash if both opponents faint before the move is used", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.ARCEUS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.ARCEUS]);
 
     const [enemy1, enemy2] = game.scene.getEnemyField();
 

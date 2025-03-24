@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -26,12 +26,12 @@ describe("Moves - Alluring Voice", () => {
     game.override
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyAbility(AbilityId.ICE_SCALES)
       .enemyMoveset([MoveId.HOWL])
       .startingLevel(10)
       .enemyLevel(10)
-      .starterSpecies(Species.FEEBAS)
+      .starterSpecies(SpeciesId.FEEBAS)
       .ability(AbilityId.BALL_FETCH)
       .moveset([MoveId.ALLURING_VOICE]);
   });

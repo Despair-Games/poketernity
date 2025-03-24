@@ -6,7 +6,7 @@ import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
@@ -29,7 +29,7 @@ describe("Moves - Astonish", () => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
     game.override.moveset([MoveId.ASTONISH, MoveId.SPLASH]);
-    game.override.enemySpecies(Species.BLASTOISE);
+    game.override.enemySpecies(SpeciesId.BLASTOISE);
     game.override.enemyAbility(AbilityId.INSOMNIA);
     game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
     game.override.startingLevel(100);
@@ -39,7 +39,7 @@ describe("Moves - Astonish", () => {
   });
 
   test("move effect should cancel the target's move on the turn it applies", async () => {
-    await game.startBattle([Species.MEOWSCARADA]);
+    await game.startBattle([SpeciesId.MEOWSCARADA]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;
 

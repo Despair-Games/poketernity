@@ -1,6 +1,6 @@
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -24,7 +24,7 @@ describe("Abilities - Stall", () => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
     game.override.disableCrits();
-    game.override.enemySpecies(Species.REGIELEKI);
+    game.override.enemySpecies(SpeciesId.REGIELEKI);
     game.override.enemyAbility(AbilityId.STALL);
     game.override.enemyMoveset(MoveId.QUICK_ATTACK);
     game.override.moveset([MoveId.QUICK_ATTACK, MoveId.TACKLE]);
@@ -37,7 +37,7 @@ describe("Abilities - Stall", () => {
    **/
 
   it("should cause the source to move last in its priority bracket", async () => {
-    await game.classicMode.startBattle([Species.SHUCKLE]);
+    await game.classicMode.startBattle([SpeciesId.SHUCKLE]);
 
     game.move.select(MoveId.QUICK_ATTACK);
 
@@ -48,7 +48,7 @@ describe("Abilities - Stall", () => {
   });
 
   it("should not cause the source to move after moves in a lower priority bracket", async () => {
-    await game.classicMode.startBattle([Species.SHUCKLE]);
+    await game.classicMode.startBattle([SpeciesId.SHUCKLE]);
 
     game.move.select(MoveId.TACKLE);
 
@@ -59,7 +59,7 @@ describe("Abilities - Stall", () => {
 
   it("multiple Pokemon with Stall should execute moves in speed order", async () => {
     game.override.ability(AbilityId.STALL);
-    await game.classicMode.startBattle([Species.SHUCKLE]);
+    await game.classicMode.startBattle([SpeciesId.SHUCKLE]);
 
     game.move.select(MoveId.QUICK_ATTACK);
 

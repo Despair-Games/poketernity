@@ -1,6 +1,6 @@
 import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -23,7 +23,7 @@ describe("Moves - Bouncy Bubble", () => {
 
     game.override
       .battleType("double")
-      .enemySpecies(Species.ARCEUS)
+      .enemySpecies(SpeciesId.ARCEUS)
       .enemyLevel(100)
       .enemyMoveset([MoveId.SPLASH])
       .enemyAbility(AbilityId.BALL_FETCH)
@@ -33,7 +33,7 @@ describe("Moves - Bouncy Bubble", () => {
   });
 
   it("should heal 100% of damage dealt and be single target", async () => {
-    await game.classicMode.startBattle([Species.CHANSEY]);
+    await game.classicMode.startBattle([SpeciesId.CHANSEY]);
     const user = game.scene.getPlayerPokemon()!;
     const enemy1 = game.scene.getEnemyField()[0];
     const enemy2 = game.scene.getEnemyField()[1];
