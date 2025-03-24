@@ -5,7 +5,7 @@ import { AchvBar } from "#app/ui/components/achv-bar";
 import type { BgmBar } from "#app/ui/components/bgm-bar";
 import { SavingIcon } from "#app/ui/components/saving-icon";
 import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
-import { AchvsUiHandler } from "#app/ui/handlers/achvs-ui-handler";
+import { AchievementsUiHandler } from "#app/ui/handlers/achievements-ui-handler";
 import { AdminUiHandler } from "#app/ui/handlers/admin-ui-handler";
 import { AutoCompleteUiHandler } from "#app/ui/handlers/autocomplete-ui-handler";
 import { BallUiHandler } from "#app/ui/handlers/ball-ui-handler";
@@ -157,7 +157,7 @@ export class UI extends Phaser.GameObjects.Container {
       new GamepadBindingUiHandler(),
       new SettingsKeyboardUiHandler(),
       new KeyboardBindingUiHandler(),
-      new AchvsUiHandler(),
+      new AchievementsUiHandler(),
       new GameStatsUiHandler(),
       new EggListUiHandler(),
       new EggGachaUiHandler(),

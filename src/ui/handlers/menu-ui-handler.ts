@@ -20,7 +20,7 @@ import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import type { SettingsUiHandler } from "../settings/settings-ui-handler";
-import type { AchvsUiHandler } from "./achvs-ui-handler";
+import type { AchievementsUiHandler } from "./achievements-ui-handler";
 import type { AdminUiHandler } from "./admin-ui-handler";
 import { getAdminModeName } from "./admin-ui-handler";
 import type { AwaitableUiHandler } from "./awaitable-ui-handler";
@@ -528,7 +528,7 @@ export class MenuUiHandler extends OptionSelectUiHandler {
         success = true;
         break;
       case MenuOptions.ACHIEVEMENTS:
-        ui.setOverlayMode<AchvsUiHandler>(UiMode.ACHIEVEMENTS);
+        ui.setOverlayMode<AchievementsUiHandler>(UiMode.ACHIEVEMENTS);
         success = true;
         break;
       case MenuOptions.STATS:
