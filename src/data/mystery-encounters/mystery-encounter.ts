@@ -275,7 +275,6 @@ export default class MysteryEncounter implements IMysteryEncounter {
    * You should only need to interact via getter/update methods
    */
   private seedOffset?: number;
-  static TELEPORTING_HIJINKS: MysteryEncounterType | null | undefined;
 
   constructor(encounter: IMysteryEncounter | null) {
     if (!isNullOrUndefined(encounter)) {
