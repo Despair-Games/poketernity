@@ -53,7 +53,7 @@ describe("Moves - Pledge Moves", () => {
     game.move.select(MoveId.FIRE_PLEDGE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     expect(firePledge.calculateBattlePower).toHaveLastReturnedWith(80);
     expect(playerPokemon[0].getMoveType).toHaveLastReturnedWith(ElementalType.FIRE);
@@ -75,7 +75,7 @@ describe("Moves - Pledge Moves", () => {
     game.move.select(MoveId.FIRE_PLEDGE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.FIRE_PLEDGE, 0, BattlerIndex.ENEMY_2);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(firePledge.calculateBattlePower).toHaveLastReturnedWith(80);
     expect(playerPokemon[0].getMoveType).toHaveLastReturnedWith(ElementalType.FIRE);
 
@@ -124,7 +124,7 @@ describe("Moves - Pledge Moves", () => {
 
     // advance to the end of PLAYER_2's move this turn
     for (let i = 0; i < 2; i++) {
-      await game.phaseInterceptor.to("MoveEndPhase");
+      await game.phaseInterceptor.to("PostActionPhase");
     }
     expect(playerPokemon[1].getMoveType).toHaveLastReturnedWith(ElementalType.FIRE);
     expect(grassPledge.calculateBattlePower).toHaveLastReturnedWith(150);
@@ -151,7 +151,7 @@ describe("Moves - Pledge Moves", () => {
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     // advance to the end of PLAYER_2's move this turn
     for (let i = 0; i < 2; i++) {
-      await game.phaseInterceptor.to("MoveEndPhase");
+      await game.phaseInterceptor.to("PostActionPhase");
     }
 
     expect(enemyPokemon[1].hp).toBe(enemyPokemon[1].getMaxHp()); // PLAYER should not have attacked
@@ -182,7 +182,7 @@ describe("Moves - Pledge Moves", () => {
 
     // advance to the end of PLAYER_2's move this turn
     for (let i = 0; i < 2; i++) {
-      await game.phaseInterceptor.to("MoveEndPhase");
+      await game.phaseInterceptor.to("PostActionPhase");
     }
     expect(playerPokemon[1].getMoveType).toHaveLastReturnedWith(ElementalType.WATER);
     expect(firePledge.calculateBattlePower).toHaveLastReturnedWith(150);
@@ -196,7 +196,7 @@ describe("Moves - Pledge Moves", () => {
     game.move.select(MoveId.FIERY_DANCE, 0, BattlerIndex.ENEMY_2);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     // Rainbow effect should increase Fiery Dance's chance of raising Sp. Atk to 100%
     expect(playerPokemon[0].getStatStage(Stat.SPATK)).toBe(1);
@@ -221,7 +221,7 @@ describe("Moves - Pledge Moves", () => {
 
     // advance to the end of PLAYER_2's move this turn
     for (let i = 0; i < 2; i++) {
-      await game.phaseInterceptor.to("MoveEndPhase");
+      await game.phaseInterceptor.to("PostActionPhase");
     }
 
     expect(playerPokemon[1].getMoveType).toHaveLastReturnedWith(ElementalType.GRASS);
@@ -244,7 +244,7 @@ describe("Moves - Pledge Moves", () => {
 
     // PLAYER_2 should act with a combined move immediately after PLAYER as the second move in the turn
     for (let i = 0; i < 2; i++) {
-      await game.phaseInterceptor.to("MoveEndPhase");
+      await game.phaseInterceptor.to("PostActionPhase");
     }
     expect(enemyPokemon[0].hp).toBe(enemyPokemon[0].getMaxHp());
     expect(enemyPokemon[1].hp).toBeLessThan(enemyPokemon[1].getMaxHp());
@@ -306,7 +306,7 @@ describe("Moves - Pledge Moves", () => {
     game.move.select(MoveId.WATER_PLEDGE, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.SPLASH, 1);
 
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     expect(enemyPokemon[0].hp).toBeLessThan(enemyPokemon[0].getMaxHp());
     expect(enemyPokemon[1].getStatStage(Stat.SPATK)).toBe(0);

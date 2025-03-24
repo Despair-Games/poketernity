@@ -103,7 +103,7 @@ describe("Moves - Dive", () => {
 
     await game.toEndOfTurn();
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(playerPokemon.hp).toBeLessThan(playerPokemon.getMaxHp());
     expect(enemyPokemon.battleData.abilitiesApplied[0]).toBe(Abilities.ROUGH_SKIN);
   });
@@ -122,7 +122,7 @@ describe("Moves - Dive", () => {
     await game.phaseInterceptor.to("TurnStartPhase", false);
     game.scene.arena.trySetWeather(WeatherType.HARSH_SUN, false);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(playerPokemon.getLastXMoves(1)[0].result).toBe(MoveResult.FAIL);
     expect(enemyPokemon.hp).toBe(enemyPokemon.getMaxHp());
     expect(playerPokemon.getTag(BattlerTagType.UNDERWATER)).toBeUndefined();

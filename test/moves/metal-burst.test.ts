@@ -47,10 +47,10 @@ describe("Moves - Metal Burst", () => {
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     await game.move.forceHit();
-    await game.phaseInterceptor.to("MoveEndPhase");
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(enemy2.isFullHp()).toBe(false);
   });
@@ -68,9 +68,9 @@ describe("Moves - Metal Burst", () => {
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     await game.move.forceHit();
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     await game.toEndOfTurn();
 
     expect(enemy1.isFainted()).toBe(true);

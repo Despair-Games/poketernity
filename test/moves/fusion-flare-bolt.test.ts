@@ -3,7 +3,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
+import { PostActionPhase } from "#app/phases/post-action-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -101,10 +101,10 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
     await game.phaseInterceptor.to(DamageAnimPhase, false);
     expect(fusionFlare.calculateBattlePower).toHaveLastReturnedWith(100);
 
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
 
     // Skip enemy move; because the enemy is at full HP, Rest should fail
-    await game.phaseInterceptor.runFrom(MovePhase).to(MoveEndPhase);
+    await game.phaseInterceptor.runFrom(MovePhase).to(PostActionPhase);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     expect((game.scene.getCurrentPhase() as MoveEffectPhase).move.moveId).toBe(fusionBolt.id);
@@ -127,9 +127,9 @@ describe("Moves - Fusion Flare and Fusion Bolt", () => {
     await game.phaseInterceptor.to(DamageAnimPhase, false);
     expect(fusionFlare.calculateBattlePower).toHaveLastReturnedWith(100);
 
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
     // Skip enemy move
-    await game.phaseInterceptor.runFrom(MovePhase).to(MoveEndPhase);
+    await game.phaseInterceptor.runFrom(MovePhase).to(PostActionPhase);
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
     expect((game.scene.getCurrentPhase() as MoveEffectPhase).move.moveId).toBe(fusionBolt.id);

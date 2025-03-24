@@ -2,7 +2,7 @@ import { type StatMultiplierAbAttr } from "#app/data/abilities/ab-attrs/stat-mul
 import { allAbilities } from "#app/data/data-lists";
 import { CommandPhase } from "#app/phases/command-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
+import { PostActionPhase } from "#app/phases/post-action-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
@@ -67,7 +67,7 @@ describe("Abilities - Sand Veil", () => {
 
     await game.phaseInterceptor.to(MoveEffectPhase, false);
 
-    await game.phaseInterceptor.to(MoveEndPhase, false);
+    await game.phaseInterceptor.to(PostActionPhase, false);
 
     expect(leadPokemon[0].isFullHp()).toBe(true);
     expect(leadPokemon[1].hp).toBeLessThan(leadPokemon[1].getMaxHp());

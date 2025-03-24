@@ -20,7 +20,7 @@ import { LevelCapPhase } from "#app/phases/level-cap-phase";
 import { LoginPhase } from "#app/phases/login-phase";
 import { MessagePhase } from "#app/phases/message-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
+import { PostActionPhase } from "#app/phases/post-action-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import { NewBattlePhase } from "#app/phases/new-battle-phase";
 import { NewBiomeEncounterPhase } from "#app/phases/new-biome-encounter-phase";
@@ -98,7 +98,7 @@ type PhaseClass =
   | typeof NewBattlePhase
   | typeof VictoryPhase
   | typeof LearnMovePhase
-  | typeof MoveEndPhase
+  | typeof PostActionPhase
   | typeof StatStageChangePhase
   | typeof ShinySparklePhase
   | typeof SelectTargetPhase
@@ -158,7 +158,7 @@ type PhaseString =
   | "NewBattlePhase"
   | "VictoryPhase"
   | "LearnMovePhase"
-  | "MoveEndPhase"
+  | "PostActionPhase"
   | "StatStageChangePhase"
   | "ShinySparklePhase"
   | "SelectTargetPhase"
@@ -242,7 +242,7 @@ export class PhaseInterceptor {
     [NewBattlePhase, this.startPhase],
     [VictoryPhase, this.startPhase],
     [LearnMovePhase, this.startPhase],
-    [MoveEndPhase, this.startPhase],
+    [PostActionPhase, this.startPhase],
     [StatStageChangePhase, this.startPhase],
     [ShinySparklePhase, this.startPhase],
     [SelectTargetPhase, this.startPhase],

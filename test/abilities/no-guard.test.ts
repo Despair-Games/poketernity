@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
+import { PostActionPhase } from "#app/phases/post-action-phase";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -48,7 +48,7 @@ describe("Abilities - No Guard", () => {
     const moveEffectPhase = game.scene.getCurrentPhase() as MoveEffectPhase;
     vi.spyOn(moveEffectPhase, "hitCheck");
 
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
 
     expect(moveEffectPhase.hitCheck).toHaveReturnedWith([HitCheckResult.HIT, 1]);
   });

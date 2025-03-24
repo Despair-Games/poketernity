@@ -73,7 +73,7 @@ describe("Moves - Fake Out", () => {
     const enemy1 = game.scene.getEnemyPokemon()!;
 
     game.move.select(MoveId.FAKE_OUT);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(enemy1.hp).toBeLessThan(enemy1.getMaxHp());
 
@@ -123,7 +123,7 @@ describe("Moves - Fake Out", () => {
 
     game.move.select(MoveId.FAKE_OUT);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemy.hp).toBeLessThan(enemyStartingHp);
     expect(enemy.getTag(BattlerTagType.FLINCHED)).toBeDefined();
     expect(player.turnData.acted).toBeTruthy();
@@ -147,7 +147,7 @@ describe("Moves - Fake Out", () => {
 
     game.move.select(MoveId.FAKE_OUT);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemy.isFullHp()).toBeFalsy();
     expect(enemy.getTag(BattlerTagType.FLINCHED)).toBeDefined();
     expect(player.turnData.acted).toBeTruthy();

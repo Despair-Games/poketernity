@@ -4,7 +4,7 @@ import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { MoveResult } from "#enums/move-result";
 import { BerryPhase } from "#app/phases/berry-phase";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
+import { PostActionPhase } from "#app/phases/post-action-phase";
 import { type MovePhase } from "#app/phases/move-phase";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -49,13 +49,13 @@ describe("Moves - Shell Trap", () => {
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
 
     const movePhase = game.scene.getCurrentPhase();
     expect(movePhase?.is<MovePhase>(PhaseId.MOVE)).toBeTruthy();
     expect((movePhase as MovePhase).pokemon).toBe(playerPokemon[1]);
 
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
     enemyPokemon.forEach((p) => expect(p.hp).toBeLessThan(p.getMaxHp()));
   });
 
@@ -72,7 +72,7 @@ describe("Moves - Shell Trap", () => {
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
 
     const movePhase = game.scene.getCurrentPhase();
     expect(movePhase?.is<MovePhase>(PhaseId.MOVE)).toBeTruthy();
@@ -95,7 +95,7 @@ describe("Moves - Shell Trap", () => {
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER, BattlerIndex.PLAYER_2]);
 
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
 
     const movePhase = game.scene.getCurrentPhase();
     expect(movePhase?.is<MovePhase>(PhaseId.MOVE)).toBeTruthy();
@@ -116,7 +116,7 @@ describe("Moves - Shell Trap", () => {
     game.move.select(MoveId.SHELL_TRAP);
     game.move.select(MoveId.BULLDOZE, 1);
 
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
 
     const movePhase = game.scene.getCurrentPhase();
     expect(movePhase?.is<MovePhase>(PhaseId.MOVE)).toBeTruthy();

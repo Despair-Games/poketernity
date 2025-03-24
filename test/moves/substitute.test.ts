@@ -54,7 +54,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.SUBSTITUTE);
 
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     expect(leadPokemon.hp).toBe(Math.ceil((leadPokemon.getMaxHp() * 3) / 4));
   });
@@ -68,7 +68,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.SUBSTITUTE);
 
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     expect(leadPokemon.hp).toBe(Math.ceil((leadPokemon.getMaxHp() * 3) / 4));
     expect(leadPokemon.getTag(BattlerTagType.SUBSTITUTE)).toBeDefined();
@@ -91,7 +91,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.SUBSTITUTE);
 
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     expect(leadPokemon.hp).toBe(Math.ceil((leadPokemon.getMaxHp() * 3) / 4));
     expect(leadPokemon.getTag(BattlerTagType.SUBSTITUTE)).toBeDefined();
@@ -127,7 +127,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.SUBSTITUTE);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(leadPokemon.getTag(BattlerTagType.SUBSTITUTE)).toBeDefined();
     const postSubHp = leadPokemon.hp;
@@ -148,7 +148,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.SUBSTITUTE);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(leadPokemon.getTag(BattlerTagType.SUBSTITUTE)).toBeDefined();
     const postSubHp = leadPokemon.hp;
@@ -166,12 +166,12 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.SUBSTITUTE);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     await game.toNextTurn();
 
     game.move.select(MoveId.SWORDS_DANCE);
 
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     expect(leadPokemon.getStatStage(Stat.ATK)).toBe(2);
   });
@@ -329,7 +329,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.KNOCK_OFF);
 
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     expect(enemyPokemon.getHeldItems().length).toBe(enemyNumItems);
   });
@@ -347,7 +347,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
     const enemyPostAttackHp = enemyPokemon.hp;
 
     await game.toEndOfTurn();
@@ -479,7 +479,7 @@ describe("Moves - Substitute", () => {
 
     game.move.select(MoveId.BEAK_BLAST);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(enemyPokemon.getStatusEffect(true)).not.toBe(StatusEffect.BURN);
   });
@@ -516,7 +516,7 @@ describe("Moves - Substitute", () => {
 
     game.setTurnOrder([BattlerIndex.ENEMY, BattlerIndex.PLAYER]); // enemy uses Sappy Seed first
     await game.move.forceHit(); // forces Sappy Seed to hit
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(playerPokemon.getTag(BattlerTagType.SEEDED)).toBeUndefined();
   });

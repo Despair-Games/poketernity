@@ -155,9 +155,9 @@ describe("Moves - Fairy Lock", () => {
     game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2, BattlerIndex.PLAYER]);
 
     // Allow all 3 targets to use Memento
-    await game.phaseInterceptor.to("MoveEndPhase");
-    await game.phaseInterceptor.to("MoveEndPhase");
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();

@@ -67,7 +67,7 @@ describe("Moves - Dragon Darts", () => {
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("MoveEndPhase", false);
+    await game.phaseInterceptor.to("PostActionPhase", false);
 
     enemyPokemon.forEach((p) => expect(p.isFullHp()).toBeFalsy());
     expect(player.turnData.hitCount).toBe(2);
@@ -295,7 +295,7 @@ describe("Moves - Dragon Darts", () => {
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     enemyPokemon.forEach((p) => expect(p.isFainted()).toBeTruthy());
     expect(player.turnData.hitCount).toBe(2);

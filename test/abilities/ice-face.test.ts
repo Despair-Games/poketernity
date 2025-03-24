@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
+import { PostActionPhase } from "#app/phases/post-action-phase";
 import { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
@@ -41,7 +41,7 @@ describe("Abilities - Ice Face", () => {
 
     game.move.select(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
 
     const eiscue = game.scene.getEnemyPokemon()!;
 
@@ -71,7 +71,7 @@ describe("Abilities - Ice Face", () => {
     expect(eiscue.hp).lessThan(eiscue.getMaxHp());
     expect(eiscue.formIndex).toBe(noiceForm);
 
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
 
     expect(eiscue.hp).lessThan(eiscue.getMaxHp());
     expect(eiscue.formIndex).toBe(noiceForm);
@@ -83,7 +83,7 @@ describe("Abilities - Ice Face", () => {
 
     game.move.select(MoveId.ICE_BEAM);
 
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
 
     const eiscue = game.scene.getEnemyPokemon()!;
 
@@ -97,7 +97,7 @@ describe("Abilities - Ice Face", () => {
 
     game.move.select(MoveId.TOXIC_THREAD);
 
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
 
     const eiscue = game.scene.getEnemyPokemon()!;
 
@@ -113,7 +113,7 @@ describe("Abilities - Ice Face", () => {
 
     game.move.select(MoveId.QUICK_ATTACK);
 
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
 
     const eiscue = game.scene.getEnemyPokemon()!;
 
@@ -121,7 +121,7 @@ describe("Abilities - Ice Face", () => {
     expect(eiscue.formIndex).toBe(noiceForm);
     expect(eiscue.getTag(BattlerTagType.ICE_FACE)).toBeUndefined();
 
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
 
     expect(eiscue.getTag(BattlerTagType.ICE_FACE)).not.toBeNull();
     expect(eiscue.formIndex).toBe(icefaceForm);

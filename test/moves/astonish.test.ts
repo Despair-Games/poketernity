@@ -2,7 +2,7 @@ import { allMoves } from "#app/data/data-lists";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryPhase } from "#app/phases/berry-phase";
 import { CommandPhase } from "#app/phases/command-phase";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
+import { PostActionPhase } from "#app/phases/post-action-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
@@ -47,7 +47,7 @@ describe("Moves - Astonish", () => {
 
     game.move.select(MoveId.ASTONISH);
 
-    await game.phaseInterceptor.to(MoveEndPhase, false);
+    await game.phaseInterceptor.to(PostActionPhase, false);
 
     expect(enemyPokemon.getTag(BattlerTagType.FLINCHED)).toBeDefined();
 

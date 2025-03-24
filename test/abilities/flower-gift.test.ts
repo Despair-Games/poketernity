@@ -102,10 +102,10 @@ describe("Abilities - Flower Gift", () => {
     await game.phaseInterceptor.to("TurnStartPhase");
     expect(cherrim.formIndex).toBe(SUNSHINE_FORM);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(cherrim.formIndex).toBe(OVERCAST_FORM);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(cherrim.formIndex).toBe(SUNSHINE_FORM);
   });
 

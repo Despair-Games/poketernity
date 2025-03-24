@@ -97,7 +97,7 @@ describe("Abilities - Infiltrator", () => {
 
     game.move.select(MoveId.BABY_DOLL_EYES);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemy.getStatStage(Stat.ATK)).toBe(-1);
     expect(player.battleData.abilitiesApplied[0]).toBe(Abilities.INFILTRATOR);
   });
@@ -112,7 +112,7 @@ describe("Abilities - Infiltrator", () => {
 
     game.move.select(MoveId.BABY_DOLL_EYES);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemy.getStatStage(Stat.ATK)).toBe(-1);
     expect(player.battleData.abilitiesApplied[0]).toBe(Abilities.INFILTRATOR);
   });

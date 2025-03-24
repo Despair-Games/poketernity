@@ -6,7 +6,7 @@ import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { MoveId } from "#enums/move-id";
 import { Stat, BATTLE_STATS } from "#enums/stat";
 import { Abilities } from "#enums/abilities";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
+import { PostActionPhase } from "#app/phases/post-action-phase";
 
 describe("Moves - Power Swap", () => {
   let phaserGame: Phaser.Game;
@@ -43,7 +43,7 @@ describe("Moves - Power Swap", () => {
 
     game.move.select(MoveId.POWER_SWAP);
 
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
 
     for (const s of BATTLE_STATS) {
       expect(player.getStatStage(s)).toBe(0);

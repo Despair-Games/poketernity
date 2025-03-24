@@ -45,7 +45,7 @@ describe("Abilities - Disguise", () => {
 
     game.move.select(MoveId.SHADOW_SNEAK);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(mimikyu.hp).equals(maxHp - disguiseDamage);
     expect(mimikyu.formIndex).toBe(bustedForm);
@@ -60,7 +60,7 @@ describe("Abilities - Disguise", () => {
 
     game.move.select(MoveId.VACUUM_WAVE);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(mimikyu.formIndex).toBe(disguisedForm);
   });
@@ -217,7 +217,7 @@ describe("Abilities - Disguise", () => {
 
     game.move.select(MoveId.TACKLE);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(mimikyu.formIndex).toBe(bustedForm);
     expect(mimikyu.hp).toBe(maxHp - disguiseDamage);

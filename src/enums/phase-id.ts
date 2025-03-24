@@ -3,7 +3,7 @@ export enum PhaseId {
   LOGIN,
   TITLE,
   MOVE,
-  MOVE_END,
+  POST_ACTION,
   WEATHER_EFFECT,
   VICTORY,
   UNLOCK,

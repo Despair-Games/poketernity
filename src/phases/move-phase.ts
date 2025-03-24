@@ -27,7 +27,6 @@ import Overrides from "#app/overrides";
 import { BattlePhase } from "#app/phases/abstract-battle-phase";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { BooleanHolder, isNullOrUndefined, NumberHolder } from "#app/utils";
 import { applyMoveAttrs, isFieldTargeted } from "#app/utils/move-utils";
@@ -59,9 +58,7 @@ import i18next from "i18next";
  * - Handles move failure due to weather or terrain
  * - Handles the Dancer ability
  *
- * If the move is successful then a {@linkcode MoveEffectPhase} is queued.
- * Regardless of success, a {@linkcode MoveEndPhase} is queued.
- *
+ * If the move is successful, then a {@linkcode MoveEffectPhase} is queued.
  * @extends BattlePhase
  */
 export class MovePhase extends BattlePhase {
@@ -584,18 +581,6 @@ export class MovePhase extends BattlePhase {
         globalScene.currentBattle.lastMove = this.move.getMove();
       }
     }
-  }
-
-  /**
-   * Queues a {@linkcode MoveEndPhase} if the move wasn't a {@linkcode followUp},
-   * then ends the phase.
-   */
-  public override end(): void {
-    if (!this.followUp) {
-      globalScene.unshiftPhase(new MoveEndPhase(this.pokemon.getBattlerIndex()));
-    }
-
-    super.end();
   }
 
   /**

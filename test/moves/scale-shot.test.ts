@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
+import { PostActionPhase } from "#app/phases/post-action-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
@@ -56,7 +56,7 @@ describe("Moves - Scale Shot", () => {
     expect(minccino.getStatStage(Stat.SPD)).toBe(0);
 
     //check that stats changed on last hit
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
     expect(minccino.getStatStage(Stat.DEF)).toBe(-1);
     expect(minccino.getStatStage(Stat.SPD)).toBe(1);
   });

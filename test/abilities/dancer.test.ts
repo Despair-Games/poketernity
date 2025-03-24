@@ -48,7 +48,7 @@ describe("Abilities - Dancer", () => {
     expect(currentPhase.pokemon).toBe(oricorio);
     expect(currentPhase.targets).toEqual([BattlerIndex.ENEMY]);
     expect(currentPhase.move.moveId).toBe(MoveId.FEATHER_DANCE);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     await game.phaseInterceptor.to("MovePhase");
     // immediately copies enemy move Victory Dance, and uses it on itself
     await game.phaseInterceptor.to("MovePhase", false);

@@ -40,7 +40,7 @@ export class RepeatMoveAttr extends MoveEffectAttr {
       targets: moveTargets,
       move: movesetMove,
       when: "after",
-      phaseId: PhaseId.MOVE_END,
+      phaseId: PhaseId.POST_ACTION,
     });
     return true;
   }

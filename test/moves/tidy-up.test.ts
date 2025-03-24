@@ -1,6 +1,6 @@
 import { Stat } from "#enums/stat";
 import { ArenaTagType } from "#enums/arena-tag-type";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
+import { PostActionPhase } from "#app/phases/post-action-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
@@ -44,7 +44,7 @@ describe("Moves - Tidy Up", () => {
     game.move.select(MoveId.SPIKES);
     await game.phaseInterceptor.to(TurnEndPhase);
     game.move.select(MoveId.TIDY_UP);
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
     expect(game.scene.arena.getTag(ArenaTagType.SPIKES)).toBeUndefined();
   }, 20000);
 
@@ -56,7 +56,7 @@ describe("Moves - Tidy Up", () => {
     game.move.select(MoveId.STEALTH_ROCK);
     await game.phaseInterceptor.to(TurnEndPhase);
     game.move.select(MoveId.TIDY_UP);
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
     expect(game.scene.arena.getTag(ArenaTagType.STEALTH_ROCK)).toBeUndefined();
   }, 20000);
 
@@ -68,7 +68,7 @@ describe("Moves - Tidy Up", () => {
     game.move.select(MoveId.TOXIC_SPIKES);
     await game.phaseInterceptor.to(TurnEndPhase);
     game.move.select(MoveId.TIDY_UP);
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
     expect(game.scene.arena.getTag(ArenaTagType.TOXIC_SPIKES)).toBeUndefined();
   }, 20000);
 
@@ -81,7 +81,7 @@ describe("Moves - Tidy Up", () => {
     game.move.select(MoveId.STICKY_WEB);
     await game.phaseInterceptor.to(TurnEndPhase);
     game.move.select(MoveId.TIDY_UP);
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
     expect(game.scene.arena.getTag(ArenaTagType.STICKY_WEB)).toBeUndefined();
   }, 20000);
 
@@ -94,7 +94,7 @@ describe("Moves - Tidy Up", () => {
     game.move.select(MoveId.SUBSTITUTE);
     await game.phaseInterceptor.to(TurnEndPhase);
     game.move.select(MoveId.TIDY_UP);
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
 
     const pokemon = [game.scene.getPlayerPokemon()!, game.scene.getEnemyPokemon()!];
     pokemon.forEach((p) => {

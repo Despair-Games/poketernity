@@ -8,8 +8,6 @@ import { Species } from "#enums/species";
 import { AbAttr } from "./ab-attr";
 import { type SkyDropTag } from "#app/data/battler-tags/sky-drop-tag";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import type { MovePhase } from "#app/phases/move-phase";
-import { PhaseId } from "#enums/phase-id";
 
 /**
  * Attribute implementing the effects of {@link https://bulbapedia.bulbagarden.net/wiki/Commander_(Ability) | Commander}.
@@ -55,10 +53,5 @@ export class CommanderAbAttr extends AbAttr {
   private cancelQueuedMove(pokemon: Pokemon): void {
     const { turnManager } = globalScene.currentBattle;
     turnManager.tryRemoveCommand((tc) => tc.pokemon === pokemon);
-    // The first move in the turn is already added to the phase queue at this point.
-    // If this move is from the source Pokemon, the turn manager needs to queue the next valid move command.
-    if (globalScene.tryRemovePhase((phase) => phase.is<MovePhase>(PhaseId.MOVE) && phase.pokemon === pokemon)) {
-      turnManager.scheduleNextValidCommand();
-    }
   }
 }

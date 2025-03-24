@@ -130,7 +130,7 @@ describe("Inverse Battle", () => {
     enemy.hp = enemy.getMaxHp() - 1;
     game.move.select(MoveId.WATER_GUN);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(enemy.hp).toBe(enemy.getMaxHp());
   });
@@ -145,7 +145,7 @@ describe("Inverse Battle", () => {
     game.move.select(MoveId.WILL_O_WISP);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(enemy.getStatusEffect(true)).not.toBe(StatusEffect.BURN);
   });
@@ -159,7 +159,7 @@ describe("Inverse Battle", () => {
 
     game.move.select(MoveId.NUZZLE);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(enemy.getStatusEffect(true)).not.toBe(StatusEffect.PARALYSIS);
   });
@@ -174,7 +174,7 @@ describe("Inverse Battle", () => {
     game.move.select(MoveId.THUNDER_WAVE);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.move.forceHit();
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(enemy.getStatusEffect(true)).toBe(StatusEffect.PARALYSIS);
   });

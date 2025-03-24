@@ -107,7 +107,7 @@ describe("Moves - Octolock", () => {
     game.move.select(MoveId.OCTOLOCK);
 
     // after Octolock - enemy should be trapped
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemyPokemon.findTag((t) => t instanceof TrappedTag)).toBeDefined();
   });
 

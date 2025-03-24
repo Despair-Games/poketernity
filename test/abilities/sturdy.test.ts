@@ -1,6 +1,6 @@
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
+import { PostActionPhase } from "#app/phases/post-action-phase";
 import { Abilities } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -38,7 +38,7 @@ describe("Abilities - Sturdy", () => {
   test("Sturdy activates when user is at full HP", async () => {
     await game.startBattle();
     game.move.select(MoveId.CLOSE_COMBAT);
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
     expect(game.scene.getEnemyParty()[0].hp).toBe(1);
   });
 
@@ -58,7 +58,7 @@ describe("Abilities - Sturdy", () => {
   test("Sturdy pokemon should be immune to OHKO moves", async () => {
     await game.startBattle();
     game.move.select(MoveId.FISSURE);
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
 
     const enemyPokemon: EnemyPokemon = game.scene.getEnemyParty()[0];
     expect(enemyPokemon.isFullHp()).toBe(true);

@@ -1,6 +1,6 @@
 import { Stat } from "#enums/stat";
 import { TerrainType } from "#enums/terrain-type";
-import { MoveEndPhase } from "#app/phases/move-end-phase";
+import { PostActionPhase } from "#app/phases/post-action-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { Abilities } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -118,7 +118,7 @@ describe("Abilities - Sap Sipper", () => {
 
     game.move.select(moveToUse);
 
-    await game.phaseInterceptor.to(MoveEndPhase);
+    await game.phaseInterceptor.to(PostActionPhase);
 
     expect(playerPokemon.getTag(BattlerTagType.SPIKY_SHIELD)).toBeDefined();
 

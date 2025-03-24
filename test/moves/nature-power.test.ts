@@ -37,7 +37,7 @@ describe("Moves - Nature Power", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.NATURE_POWER);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(game.field.getPlayerPokemon().getLastXMoves()[0].move.id).toBe(MoveId.ROUND);
   });
@@ -47,7 +47,7 @@ describe("Moves - Nature Power", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.NATURE_POWER);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(game.field.getPlayerPokemon().getLastXMoves()[0].move.id).toBe(MoveId.THUNDERBOLT);
   });

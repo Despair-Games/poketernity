@@ -92,7 +92,7 @@ describe("Moves - Dragon Cheer", () => {
 
     game.setTurnOrder([BattlerIndex.PLAYER_2, BattlerIndex.PLAYER, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     expect(enemy.getCritStage).toHaveReturnedWith(1); // getCritStage is called on defender
   });
 });

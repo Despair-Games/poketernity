@@ -39,7 +39,7 @@ describe("Moves - Gigaton Hammer", () => {
 
     game.move.select(MoveId.GIGATON_HAMMER);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(enemy1.hp).toBeLessThan(enemy1.getMaxHp());
 
@@ -62,7 +62,7 @@ describe("Moves - Gigaton Hammer", () => {
 
     game.move.select(MoveId.GIGATON_HAMMER);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(enemy1.hp).toBeLessThan(enemy1.getMaxHp());
 

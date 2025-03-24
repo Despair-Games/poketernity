@@ -56,7 +56,7 @@ describe("Abilities - Gulp Missile", () => {
     game.move.select(MoveId.DIVE);
     await game.toNextTurn();
     game.move.select(MoveId.DIVE);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(cramorant.getHpRatio()).toBeGreaterThanOrEqual(0.5);
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)).toBeDefined();
@@ -71,7 +71,7 @@ describe("Abilities - Gulp Missile", () => {
     expect(cramorant.getHpRatio()).toBe(0.49);
 
     game.move.select(MoveId.SURF);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_PIKACHU)).toBeDefined();
     expect(cramorant.formIndex).toBe(GORGING_FORM);
@@ -97,7 +97,7 @@ describe("Abilities - Gulp Missile", () => {
     const cramorant = game.scene.getPlayerPokemon()!;
 
     game.move.select(MoveId.DIVE);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)).toBeDefined();
     expect(cramorant.formIndex).toBe(GULPING_FORM);
@@ -124,7 +124,7 @@ describe("Abilities - Gulp Missile", () => {
     vi.spyOn(cramorant, "getHpRatio").mockReturnValue(0.55);
 
     game.move.select(MoveId.SURF);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)).toBeDefined();
     expect(cramorant.formIndex).toBe(GULPING_FORM);
@@ -146,7 +146,7 @@ describe("Abilities - Gulp Missile", () => {
     vi.spyOn(cramorant, "getHpRatio").mockReturnValue(0.55);
 
     game.move.select(MoveId.SURF);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)).toBeDefined();
     expect(cramorant.formIndex).toBe(GULPING_FORM);
@@ -170,7 +170,7 @@ describe("Abilities - Gulp Missile", () => {
     vi.spyOn(cramorant, "getHpRatio").mockReturnValue(0.45);
 
     game.move.select(MoveId.SURF);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_PIKACHU)).toBeDefined();
     expect(cramorant.formIndex).toBe(GORGING_FORM);
@@ -206,7 +206,7 @@ describe("Abilities - Gulp Missile", () => {
     vi.spyOn(cramorant, "getHpRatio").mockReturnValue(0.55);
 
     game.move.select(MoveId.SURF);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
     const enemyHpPreEffect = enemy.hp;
 
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)).toBeDefined();
@@ -261,7 +261,7 @@ describe("Abilities - Gulp Missile", () => {
     vi.spyOn(cramorant, "getHpRatio").mockReturnValue(0.55);
 
     game.move.select(MoveId.SURF);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)).toBeDefined();
     expect(cramorant.formIndex).toBe(GULPING_FORM);
@@ -281,7 +281,7 @@ describe("Abilities - Gulp Missile", () => {
     vi.spyOn(cramorant, "getHpRatio").mockReturnValue(0.55);
 
     game.move.select(MoveId.SURF);
-    await game.phaseInterceptor.to("MoveEndPhase");
+    await game.phaseInterceptor.to("PostActionPhase");
 
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)).toBeDefined();
     expect(cramorant.formIndex).toBe(GULPING_FORM);
