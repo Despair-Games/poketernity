@@ -8,7 +8,6 @@ import { WeatherType } from "#enums/weather-type";
 /**
  * This file represents all the data of the town biome
  */
-
 export const townPokemonPool = {
   [BiomePoolTier.COMMON]: {
     [TimeOfDay.DAWN]: [],

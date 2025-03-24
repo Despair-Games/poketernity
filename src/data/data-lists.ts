@@ -4,6 +4,7 @@ import { type MoveId } from "#enums/move-id";
 import type { Ability } from "#app/data/abilities/ability";
 import type { PEBiome } from "#app/data/balance/biomes/PEBiome";
 import type { Biome } from "#enums/biome";
+
 interface DataMap<K, V> extends Map<K, V> {
   get(key: K): V;
 }

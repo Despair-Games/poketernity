@@ -8,7 +8,6 @@ import { WeatherType } from "#enums/weather-type";
 /**
  * This file represents all the data of the cave biome
  */
-
 export const cavePokemonPool = {
   [BiomePoolTier.COMMON]: {
     [TimeOfDay.DAWN]: [],

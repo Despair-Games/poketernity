@@ -8,7 +8,6 @@ import { WeatherType } from "#enums/weather-type";
 /**
  * This file represents all the data of the voclano biome
  */
-
 export const volcanoPokemonPool = {
   [BiomePoolTier.COMMON]: {
     [TimeOfDay.DAWN]: [],
