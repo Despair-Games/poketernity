@@ -3930,8 +3930,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     if (effect === StatusEffect.SLEEP || effect === StatusEffect.FREEZE) {
       const currentPhase = globalScene.getCurrentPhase();
       if (currentPhase?.is<MoveEffectPhase>(PhaseId.MOVE_EFFECT) && currentPhase.getUserPokemon() === this) {
-        this.turnData.hitCount = 1;
-        this.turnData.hitsLeft = 1;
+        this.stopMultiHit();
       }
     }
 
@@ -4069,6 +4068,13 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   getExpValue(): number {
     // Logic to factor in victor level has been removed for balancing purposes, so the player doesn't have to focus on EXP maxxing
     return (this.getSpeciesForm().getBaseExp() * this.level) / 5 + 1;
+  }
+
+  stopMultiHit(): void {
+    if (this.turnData) {
+      this.turnData.hitCount = 1;
+      this.turnData.hitsLeft = 1;
+    }
   }
 
   setFrameRate(frameRate: number) {
