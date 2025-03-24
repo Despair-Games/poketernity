@@ -1,6 +1,6 @@
 import { SCREEN_DOUBLES_DMG_FACTOR, SCREEN_SINGLES_DMG_FACTOR } from "#app/constants";
 import type { BattleStyle } from "#app/overrides";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
@@ -32,9 +32,9 @@ describe("Moves - Screen Moves", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.NO_GUARD) // Frost Breath is not 100% accurate
+      .ability(AbilityId.NO_GUARD) // Frost Breath is not 100% accurate
       .startingLevel(1000)
-      .enemyAbility(Abilities.STALL) // So that player always outspeeds enemy's screen move on turn 1
+      .enemyAbility(AbilityId.STALL) // So that player always outspeeds enemy's screen move on turn 1
       .enemyLevel(1000)
       .enemySpecies(Species.MAGIKARP);
   });
@@ -220,7 +220,7 @@ describe("Moves - Screen Moves", () => {
     });
 
     it("should fail if the weather is suppressed by Cloud Nine or Air Lock", async () => {
-      game.override.ability(Abilities.CLOUD_NINE);
+      game.override.ability(AbilityId.CLOUD_NINE);
       await testDamageMultiplier("single", MoveId.EARTHQUAKE, 1);
     });
 

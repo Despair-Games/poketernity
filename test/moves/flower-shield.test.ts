@@ -2,7 +2,7 @@ import { Stat } from "#enums/stat";
 import { ElementalType } from "#enums/elemental-type";
 import { Biome } from "#enums/biome";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -25,8 +25,8 @@ describe("Moves - Flower Shield", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.ability(Abilities.NONE);
-    game.override.enemyAbility(Abilities.NONE);
+    game.override.ability(AbilityId.NONE);
+    game.override.enemyAbility(AbilityId.NONE);
     game.override.battleType("single");
     game.override.moveset([MoveId.FLOWER_SHIELD, MoveId.SPLASH]);
     game.override.enemyMoveset(MoveId.SPLASH);

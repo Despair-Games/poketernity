@@ -1,5 +1,5 @@
 import { StatusEffect } from "#enums/status-effect";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -24,13 +24,13 @@ describe("Moves - Psycho Shift", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.PSYCHO_SHIFT])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .statusEffect(StatusEffect.POISON)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyLevel(20)
-      .enemyAbility(Abilities.SYNCHRONIZE)
+      .enemyAbility(AbilityId.SYNCHRONIZE)
       .enemyMoveset(MoveId.SPLASH);
   });
 

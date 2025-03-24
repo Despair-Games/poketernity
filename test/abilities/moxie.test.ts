@@ -1,6 +1,6 @@
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import Phaser from "phaser";
@@ -29,8 +29,8 @@ describe("Abilities - Moxie", () => {
     const moveToUse = MoveId.AERIAL_ACE;
     game.override.battleType("single");
     game.override.enemySpecies(Species.RATTATA);
-    game.override.enemyAbility(Abilities.MOXIE);
-    game.override.ability(Abilities.MOXIE);
+    game.override.enemyAbility(AbilityId.MOXIE);
+    game.override.ability(AbilityId.MOXIE);
     game.override.startingLevel(2000);
     game.override.moveset([moveToUse]);
     game.override.enemyMoveset(MoveId.SPLASH);

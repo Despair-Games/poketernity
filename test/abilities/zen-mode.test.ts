@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -27,9 +27,9 @@ describe("Abilities - ZEN MODE", () => {
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyLevel(5)
-      .ability(Abilities.ZEN_MODE)
+      .ability(AbilityId.ZEN_MODE)
       .moveset(MoveId.SPLASH)
       .enemyMoveset(MoveId.SEISMIC_TOSS);
   });

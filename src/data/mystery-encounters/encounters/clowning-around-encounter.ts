@@ -22,7 +22,7 @@ import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import {
   applyAbilityOverrideToPokemon,
   applyModifierTypeToPlayerPokemon,
@@ -52,21 +52,21 @@ import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 const namespace = "mysteryEncounters/clowningAround";
 
 const RANDOM_ABILITY_POOL = [
-  Abilities.STURDY,
-  Abilities.PICKUP,
-  Abilities.INTIMIDATE,
-  Abilities.GUTS,
-  Abilities.DROUGHT,
-  Abilities.DRIZZLE,
-  Abilities.SNOW_WARNING,
-  Abilities.SAND_STREAM,
-  Abilities.ELECTRIC_SURGE,
-  Abilities.PSYCHIC_SURGE,
-  Abilities.GRASSY_SURGE,
-  Abilities.MISTY_SURGE,
-  Abilities.MAGICIAN,
-  Abilities.SHEER_FORCE,
-  Abilities.PRANKSTER,
+  AbilityId.STURDY,
+  AbilityId.PICKUP,
+  AbilityId.INTIMIDATE,
+  AbilityId.GUTS,
+  AbilityId.DROUGHT,
+  AbilityId.DRIZZLE,
+  AbilityId.SNOW_WARNING,
+  AbilityId.SAND_STREAM,
+  AbilityId.ELECTRIC_SURGE,
+  AbilityId.PSYCHIC_SURGE,
+  AbilityId.GRASSY_SURGE,
+  AbilityId.MISTY_SURGE,
+  AbilityId.MAGICIAN,
+  AbilityId.SHEER_FORCE,
+  AbilityId.PRANKSTER,
 ];
 
 /**

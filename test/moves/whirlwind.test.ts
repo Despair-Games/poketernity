@@ -2,7 +2,7 @@ import { BattlerTagType } from "#enums/battler-tag-type";
 import { Challenges } from "#enums/challenges";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveResult } from "#enums/move-result";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -26,7 +26,7 @@ describe("Moves - Whirlwind", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("single").enemyAbility(Abilities.BALL_FETCH).enemySpecies(Species.PIDGEY);
+    game.override.battleType("single").enemyAbility(AbilityId.BALL_FETCH).enemySpecies(Species.PIDGEY);
   });
 
   it.each([

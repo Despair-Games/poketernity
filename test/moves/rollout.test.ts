@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
@@ -27,9 +27,9 @@ describe("Moves - Rollout", () => {
     game.override
       .disableCrits()
       .battleType("single")
-      .ability(Abilities.NO_GUARD)
+      .ability(AbilityId.NO_GUARD)
       .enemySpecies(Species.AGGRON)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .startingLevel(100)
       .enemyLevel(100)
       .enemyMoveset(MoveId.SPLASH);
@@ -91,7 +91,7 @@ describe("Moves - Rollout", () => {
   });
 
   it("should stop its execution if an attack is unsuccessful", async () => {
-    game.override.ability(Abilities.BALL_FETCH);
+    game.override.ability(AbilityId.BALL_FETCH);
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 

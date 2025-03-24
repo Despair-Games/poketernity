@@ -1,7 +1,7 @@
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { StatusEffect } from "#enums/status-effect";
 import { MoveResult } from "#enums/move-result";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -32,7 +32,7 @@ describe("Moves - Fly", () => {
       .startingLevel(100)
       .enemySpecies(Species.SNORLAX)
       .enemyLevel(100)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.TACKLE);
 
     vi.spyOn(allMoves.get(MoveId.FLY), "accuracy", "get").mockReturnValue(100);
@@ -63,7 +63,7 @@ describe("Moves - Fly", () => {
   });
 
   it("should not allow the user to evade attacks from Pokemon with No Guard", async () => {
-    game.override.enemyAbility(Abilities.NO_GUARD);
+    game.override.enemyAbility(AbilityId.NO_GUARD);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -78,7 +78,7 @@ describe("Moves - Fly", () => {
   });
 
   it("should not expend PP when the attack phase is cancelled", async () => {
-    game.override.enemyAbility(Abilities.NO_GUARD).enemyMoveset(MoveId.SPORE);
+    game.override.enemyAbility(AbilityId.NO_GUARD).enemyMoveset(MoveId.SPORE);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 

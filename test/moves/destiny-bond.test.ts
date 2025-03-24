@@ -1,7 +1,7 @@
 import type { EntryHazardTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -34,9 +34,9 @@ describe("Moves - Destiny Bond", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .ability(Abilities.UNNERVE) // Pre-emptively prevent flakiness from opponent berries
+      .ability(AbilityId.UNNERVE) // Pre-emptively prevent flakiness from opponent berries
       .enemySpecies(Species.RATTATA)
-      .enemyAbility(Abilities.RUN_AWAY)
+      .enemyAbility(AbilityId.RUN_AWAY)
       .startingLevel(100) // Make sure tested moves KO
       .enemyLevel(5)
       .enemyMoveset(MoveId.DESTINY_BOND);
@@ -115,7 +115,7 @@ describe("Moves - Destiny Bond", () => {
     // Opponent will be reduced to 1 HP by False Swipe, then faint to Sandstorm
     const moveToUse = MoveId.FALSE_SWIPE;
 
-    game.override.moveset(moveToUse).ability(Abilities.SAND_STREAM);
+    game.override.moveset(moveToUse).ability(AbilityId.SAND_STREAM);
     await game.classicMode.startBattle(defaultParty);
 
     const enemyPokemon = game.scene.getEnemyPokemon();

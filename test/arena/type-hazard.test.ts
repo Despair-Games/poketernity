@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -79,7 +79,7 @@ describe("Arena - Type Hazards", () => {
 
   it("should not damage opposing pokemon with magic guard", async () => {
     game.override.startingWave(5);
-    game.override.enemyAbility(Abilities.MAGIC_GUARD);
+    game.override.enemyAbility(AbilityId.MAGIC_GUARD);
     await game.classicMode.startBattle([Species.ABRA, Species.ABRA]);
 
     game.move.select(MoveId.STEALTH_ROCK);

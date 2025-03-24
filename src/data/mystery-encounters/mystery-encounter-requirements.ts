@@ -11,7 +11,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { WeatherType } from "#enums/weather-type";
 import type { PlayerPokemon, Pokemon } from "#app/field/pokemon";
 import { isNullOrUndefined } from "#app/utils";
-import type { Abilities } from "#enums/abilities";
+import type { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
@@ -655,11 +655,11 @@ export class CompatibleMoveRequirement extends EncounterPokemonRequirement {
 }
 
 export class AbilityRequirement extends EncounterPokemonRequirement {
-  requiredAbilities: Abilities[];
+  requiredAbilities: AbilityId[];
   excludeDisallowedPokemon: boolean;
 
   constructor(
-    abilities: Abilities | Abilities[],
+    abilities: AbilityId | AbilityId[],
     excludeDisallowedPokemon: boolean,
     minNumberOfPokemon: number = 1,
     invertQuery: boolean = false,

@@ -2,7 +2,7 @@ import { Stat } from "#enums/stat";
 import { TerrainType } from "#enums/terrain-type";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -33,9 +33,9 @@ describe("Abilities - Sap Sipper", () => {
     game.override
       .battleType("single")
       .disableCrits()
-      .ability(Abilities.SAP_SIPPER)
+      .ability(AbilityId.SAP_SIPPER)
       .enemySpecies(Species.RATTATA)
-      .enemyAbility(Abilities.SAP_SIPPER)
+      .enemyAbility(AbilityId.SAP_SIPPER)
       .enemyMoveset(MoveId.SPLASH);
   });
 

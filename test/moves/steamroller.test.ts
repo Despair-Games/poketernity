@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { DamageCalculationResult } from "#app/field/pokemon";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -25,7 +25,7 @@ describe("Moves - Steamroller", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.moveset([MoveId.STEAMROLLER]).battleType("single").enemyAbility(Abilities.BALL_FETCH);
+    game.override.moveset([MoveId.STEAMROLLER]).battleType("single").enemyAbility(AbilityId.BALL_FETCH);
   });
 
   it("should always hit a minimzed target with double damage", async () => {

@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
 import { Biome } from "#enums/biome";
 import { MoveId } from "#enums/move-id";
@@ -25,11 +25,11 @@ describe("Moves - Nature Power", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.NATURE_POWER])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -43,7 +43,7 @@ describe("Moves - Nature Power", () => {
   });
 
   it("should call Thunderbolt in electric terrain, overriding the Biome-defined move", async () => {
-    game.override.ability(Abilities.ELECTRIC_SURGE);
+    game.override.ability(AbilityId.ELECTRIC_SURGE);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.NATURE_POWER);

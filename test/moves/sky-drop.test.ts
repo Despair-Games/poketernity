@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveResult } from "#enums/move-result";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -26,11 +26,11 @@ describe("Moves - Sky Drop", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.SKY_DROP, MoveId.TACKLE, MoveId.SPLASH])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
@@ -116,7 +116,7 @@ describe("Moves - Sky Drop", () => {
   });
 
   it("No Guard should allow Pokemon to hit other Pokemon under Sky Drop's effect", async () => {
-    game.override.battleType("double").enemyAbility(Abilities.NO_GUARD).enemyMoveset([MoveId.SPLASH, MoveId.TACKLE]);
+    game.override.battleType("double").enemyAbility(AbilityId.NO_GUARD).enemyMoveset([MoveId.SPLASH, MoveId.TACKLE]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 
@@ -173,7 +173,7 @@ describe("Moves - Sky Drop", () => {
   });
 
   it("should do nothing against type-immune targets", async () => {
-    game.override.ability(Abilities.NORMALIZE).enemySpecies(Species.DUSCLOPS);
+    game.override.ability(AbilityId.NORMALIZE).enemySpecies(Species.DUSCLOPS);
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 
@@ -351,7 +351,7 @@ describe("Moves - Sky Drop", () => {
     game.override
       .battleType("double")
       .enemyMoveset([MoveId.SKY_DROP, MoveId.SPLASH])
-      .ability(Abilities.COMMANDER)
+      .ability(AbilityId.COMMANDER)
       .moveset([MoveId.SPLASH, MoveId.FLIP_TURN]);
 
     vi.spyOn(game.scene, "triggerPokemonBattleAnim").mockReturnValue(true);
@@ -386,7 +386,7 @@ describe("Moves - Sky Drop", () => {
   });
 
   it("should fail against a Commanding Tatsugiri", async () => {
-    game.override.battleType("double").ability(Abilities.COMMANDER);
+    game.override.battleType("double").ability(AbilityId.COMMANDER);
 
     vi.spyOn(game.scene, "triggerPokemonBattleAnim").mockReturnValue(true);
 

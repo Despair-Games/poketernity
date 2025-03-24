@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex } from "#enums/battler-index";
@@ -28,11 +28,11 @@ describe("Abilities - Good As Gold", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.SPLASH])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.GOOD_AS_GOLD)
+      .enemyAbility(AbilityId.GOOD_AS_GOLD)
       .enemyMoveset(MoveId.SPLASH);
   });
 

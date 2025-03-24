@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
 import { ShellSideArmCategoryAttr } from "#app/data/moves/move-attrs/shell-side-arm-category-attr";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -31,7 +31,7 @@ describe("Moves - Shell Side Arm", () => {
       .battleType("single")
       .startingLevel(100)
       .enemyLevel(100)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -49,7 +49,7 @@ describe("Moves - Shell Side Arm", () => {
   });
 
   it("should make contact if the move becomes physical", async () => {
-    game.override.enemySpecies(Species.SNORLAX).enemyAbility(Abilities.ROUGH_SKIN);
+    game.override.enemySpecies(Species.SNORLAX).enemyAbility(AbilityId.ROUGH_SKIN);
 
     await game.classicMode.startBattle([Species.RAMPARDOS]);
 
@@ -75,7 +75,7 @@ describe("Moves - Shell Side Arm", () => {
   });
 
   it("should not make contact if the move becomes special", async () => {
-    game.override.enemySpecies(Species.SLOWBRO).enemyAbility(Abilities.ROUGH_SKIN);
+    game.override.enemySpecies(Species.SLOWBRO).enemyAbility(AbilityId.ROUGH_SKIN);
 
     await game.classicMode.startBattle([Species.XURKITREE]);
 
@@ -105,7 +105,7 @@ describe("Moves - Shell Side Arm", () => {
   });
 
   it("should ignore abilities when forecasting damage", async () => {
-    game.override.enemySpecies(Species.SNORLAX).enemyAbility(Abilities.FUR_COAT);
+    game.override.enemySpecies(Species.SNORLAX).enemyAbility(AbilityId.FUR_COAT);
 
     await game.classicMode.startBattle([Species.MANAPHY]);
 

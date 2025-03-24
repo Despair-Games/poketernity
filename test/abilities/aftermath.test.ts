@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -24,12 +24,12 @@ describe("Abilities - Aftermath", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.NO_GUARD)
+      .ability(AbilityId.NO_GUARD)
       .startingLevel(50)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.AFTERMATH)
+      .enemyAbility(AbilityId.AFTERMATH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -56,7 +56,7 @@ describe("Abilities - Aftermath", () => {
   });
 
   it("should not cause the attacker to take damage if the attacker has Long Reach", async () => {
-    game.override.ability(Abilities.LONG_REACH);
+    game.override.ability(AbilityId.LONG_REACH);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const player = game.scene.getPlayerPokemon()!;

@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -27,7 +27,7 @@ describe("Abilities - Steely Spirit", () => {
     game = new GameManager(phaserGame);
     game.override.battleType("double");
     game.override.enemySpecies(Species.SHUCKLE);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
+    game.override.enemyAbility(AbilityId.BALL_FETCH);
     game.override.moveset([MoveId.IRON_HEAD, MoveId.SPLASH]);
     game.override.enemyMoveset(MoveId.SPLASH);
     vi.spyOn(allMoves.get(moveToCheck), "calculateBattlePower");
@@ -38,9 +38,9 @@ describe("Abilities - Steely Spirit", () => {
     const boostSource = game.scene.getPlayerField()[1];
     const enemyToCheck = game.scene.getEnemyPokemon()!;
 
-    game.field.mockAbility(boostSource, Abilities.STEELY_SPIRIT);
+    game.field.mockAbility(boostSource, AbilityId.STEELY_SPIRIT);
 
-    expect(boostSource.hasAbility(Abilities.STEELY_SPIRIT)).toBe(true);
+    expect(boostSource.hasAbility(AbilityId.STEELY_SPIRIT)).toBe(true);
 
     game.move.select(moveToCheck, 0, enemyToCheck.getBattlerIndex());
     game.move.select(MoveId.SPLASH, 1);
@@ -54,10 +54,10 @@ describe("Abilities - Steely Spirit", () => {
     const enemyToCheck = game.scene.getEnemyPokemon()!;
 
     game.scene.getPlayerField().forEach((p) => {
-      game.field.mockAbility(p, Abilities.STEELY_SPIRIT);
+      game.field.mockAbility(p, AbilityId.STEELY_SPIRIT);
     });
 
-    expect(game.scene.getPlayerField().every((p) => p.hasAbility(Abilities.STEELY_SPIRIT))).toBe(true);
+    expect(game.scene.getPlayerField().every((p) => p.hasAbility(AbilityId.STEELY_SPIRIT))).toBe(true);
 
     game.move.select(moveToCheck, 0, enemyToCheck.getBattlerIndex());
     game.move.select(moveToCheck, 1, enemyToCheck.getBattlerIndex());
@@ -73,12 +73,12 @@ describe("Abilities - Steely Spirit", () => {
     const boostSource = game.scene.getPlayerField()[1];
     const enemyToCheck = game.scene.getEnemyPokemon()!;
 
-    game.field.mockAbility(boostSource, Abilities.STEELY_SPIRIT);
-    expect(boostSource.hasAbility(Abilities.STEELY_SPIRIT)).toBe(true);
+    game.field.mockAbility(boostSource, AbilityId.STEELY_SPIRIT);
+    expect(boostSource.hasAbility(AbilityId.STEELY_SPIRIT)).toBe(true);
 
     boostSource.summonData.abilitySuppressed = true;
 
-    expect(boostSource.hasAbility(Abilities.STEELY_SPIRIT)).toBe(false);
+    expect(boostSource.hasAbility(AbilityId.STEELY_SPIRIT)).toBe(false);
     expect(boostSource.summonData.abilitySuppressed).toBe(true);
 
     game.move.select(moveToCheck, 0, enemyToCheck.getBattlerIndex());
@@ -89,7 +89,7 @@ describe("Abilities - Steely Spirit", () => {
   });
 
   it("affects variable-type moves if their resolved type is Steel", async () => {
-    game.override.ability(Abilities.STEELY_SPIRIT).moveset([MoveId.REVELATION_DANCE]);
+    game.override.ability(AbilityId.STEELY_SPIRIT).moveset([MoveId.REVELATION_DANCE]);
 
     const revelationDance = allMoves.get(MoveId.REVELATION_DANCE);
     vi.spyOn(revelationDance, "calculateBattlePower");

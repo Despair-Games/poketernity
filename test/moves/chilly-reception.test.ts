@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { WeatherType } from "#enums/weather-type";
@@ -26,8 +26,8 @@ describe("Moves - Chilly Reception", () => {
       .battleType("single")
       .moveset([MoveId.CHILLY_RECEPTION, MoveId.SNOWSCAPE])
       .enemyMoveset(Array(4).fill(MoveId.SPLASH))
-      .enemyAbility(Abilities.NONE)
-      .ability(Abilities.NONE);
+      .enemyAbility(AbilityId.NONE)
+      .ability(AbilityId.NONE);
   });
 
   it("should still change the weather if user can't switch out", async () => {
@@ -71,7 +71,7 @@ describe("Moves - Chilly Reception", () => {
     game.override
       .battleType("single")
       .enemyMoveset([MoveId.CHILLY_RECEPTION, MoveId.TACKLE])
-      .enemyAbility(Abilities.NONE)
+      .enemyAbility(AbilityId.NONE)
       .moveset(Array(4).fill(MoveId.SPLASH));
 
     await game.classicMode.startBattle([Species.SLOWKING, Species.MEOWTH]);
@@ -88,7 +88,7 @@ describe("Moves - Chilly Reception", () => {
       .battleType("single")
       .startingWave(8)
       .enemyMoveset(Array(4).fill(MoveId.CHILLY_RECEPTION))
-      .enemyAbility(Abilities.NONE)
+      .enemyAbility(AbilityId.NONE)
       .enemySpecies(Species.MAGIKARP)
       .moveset([MoveId.SPLASH, MoveId.THUNDERBOLT]);
 

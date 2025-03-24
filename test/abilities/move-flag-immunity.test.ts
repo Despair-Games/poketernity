@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -29,26 +29,26 @@ describe("Ability Attribute - Move Flag Immunity", () => {
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH);
+      .enemyAbility(AbilityId.BALL_FETCH);
   });
 
   // Flagged moves verified by the all_moves test in the `moves` directory
   it.each([
     {
       abilityName: "Soundproof",
-      ability: Abilities.SOUNDPROOF,
+      ability: AbilityId.SOUNDPROOF,
       moveFlag: MoveFlags.SOUND_MOVE,
       enemyMoveId: MoveId.UPROAR,
     },
     {
       abilityName: "Overcoat",
-      ability: Abilities.OVERCOAT,
+      ability: AbilityId.OVERCOAT,
       moveFlag: MoveFlags.POWDER_MOVE,
       enemyMoveId: MoveId.STUN_SPORE,
     },
     {
       abilityName: "Bulletproof",
-      ability: Abilities.BULLETPROOF,
+      ability: AbilityId.BULLETPROOF,
       moveFlag: MoveFlags.BULLET_MOVE,
       enemyMoveId: MoveId.AURA_SPHERE,
     },

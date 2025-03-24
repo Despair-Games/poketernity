@@ -1,5 +1,5 @@
 import { MoveResult } from "#enums/move-result";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -23,10 +23,10 @@ describe("Abilities - Damp", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.DAMP)
+      .ability(AbilityId.DAMP)
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH);
+      .enemyAbility(AbilityId.BALL_FETCH);
   });
 
   it.each([
@@ -56,7 +56,7 @@ describe("Abilities - Damp", () => {
       .moveset(MoveId.TACKLE)
       .battleType("single")
       .enemyMoveset([MoveId.SPLASH])
-      .enemyAbility(Abilities.AFTERMATH);
+      .enemyAbility(AbilityId.AFTERMATH);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon();
     const enemyPokemon = game.scene.getEnemyPokemon();

@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 import { GameManager } from "#test/test-utils/gameManager";
 import { Species } from "#enums/species";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 import { BerryPhase } from "#app/phases/berry-phase";
@@ -32,7 +32,7 @@ describe("Moves - Mat Block", () => {
 
     game.override.enemySpecies(Species.SNORLAX);
     game.override.enemyMoveset([MoveId.TACKLE]);
-    game.override.enemyAbility(Abilities.INSOMNIA);
+    game.override.enemyAbility(AbilityId.INSOMNIA);
 
     game.override.startingLevel(100);
     game.override.enemyLevel(100);

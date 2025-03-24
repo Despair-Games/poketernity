@@ -35,7 +35,7 @@ import { BooleanHolder, NumberHolder, type AbstractConstructor, type Constructor
 import { WeakenMoveTypeArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { applyMoveAttrs } from "#app/utils/move-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex } from "#enums/battler-index";
@@ -295,7 +295,7 @@ export abstract class Move implements Localizable {
         break;
       case ElementalType.DARK:
         if (
-          user.hasAbility(Abilities.PRANKSTER)
+          user.hasAbility(AbilityId.PRANKSTER)
           && this.category === MoveCategory.STATUS
           && user.isPlayer() !== target.isPlayer()
         ) {
@@ -384,7 +384,7 @@ export abstract class Move implements Localizable {
   /**
    * Sets the {@linkcode MoveFlags.MAKES_CONTACT} flag for the calling Move
    * @param setFlag Default `true`, set to `false` if the move doesn't make contact
-   * @see {@linkcode Abilities.STATIC}
+   * @see {@linkcode AbilityId.STATIC}
    * @returns The {@linkcode Move} that called this function
    */
   makesContact(setFlag: boolean = true): this {
@@ -474,7 +474,7 @@ export abstract class Move implements Localizable {
 
   /**
    * Sets the {@linkcode MoveFlags.RECKLESS_MOVE} flag for the calling Move
-   * @see {@linkcode Abilities.RECKLESS}
+   * @see {@linkcode AbilityId.RECKLESS}
    * @returns The {@linkcode Move} that called this function
    */
   recklessMove(): this {

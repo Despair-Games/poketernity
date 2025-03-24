@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/data-lists";
 import { FlinchAttr } from "#app/data/moves/move-attrs/flinch-attr";
 import { toDmgValue } from "#app/utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex } from "#enums/battler-index";
@@ -35,7 +35,7 @@ describe("Moves - Pledge Moves", () => {
       .moveset([MoveId.FIRE_PLEDGE, MoveId.GRASS_PLEDGE, MoveId.WATER_PLEDGE, MoveId.SPLASH])
       .enemySpecies(Species.SNORLAX)
       .enemyLevel(100)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -140,7 +140,7 @@ describe("Moves - Pledge Moves", () => {
   });
 
   it("Sea of fire should not damage magic guard", async () => {
-    game.override.enemyAbility(Abilities.MAGIC_GUARD);
+    game.override.enemyAbility(AbilityId.MAGIC_GUARD);
     await game.classicMode.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
 
     const enemyPokemon = game.scene.getEnemyField();
@@ -252,7 +252,7 @@ describe("Moves - Pledge Moves", () => {
 
   it("Pledge Moves - 'rainbow' effect should not stack with Serene Grace when applied to flinching moves", async () => {
     game.override
-      .ability(Abilities.SERENE_GRACE)
+      .ability(AbilityId.SERENE_GRACE)
       .moveset([MoveId.FIRE_PLEDGE, MoveId.WATER_PLEDGE, MoveId.IRON_HEAD, MoveId.SPLASH]);
 
     await game.classicMode.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
@@ -299,7 +299,7 @@ describe("Moves - Pledge Moves", () => {
     await game.classicMode.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
 
     const enemyPokemon = game.scene.getEnemyField();
-    game.field.mockAbility(enemyPokemon[1], Abilities.STORM_DRAIN);
+    game.field.mockAbility(enemyPokemon[1], AbilityId.STORM_DRAIN);
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
 

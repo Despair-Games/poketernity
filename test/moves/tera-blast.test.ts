@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { Stat } from "#enums/stat";
 import { allMoves } from "#app/data/data-lists";
 import { ElementalType } from "#enums/elemental-type";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -32,11 +32,11 @@ describe("Moves - Tera Blast", () => {
       .disableCrits()
       .starterSpecies(Species.FEEBAS)
       .moveset([MoveId.TERA_BLAST])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.FIRE }])
       .enemySpecies(Species.MAGIKARP)
       .enemyMoveset(MoveId.SPLASH)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyLevel(20);
 
     vi.spyOn(moveToCheck, "calculateBattlePower");
@@ -89,7 +89,7 @@ describe("Moves - Tera Blast", () => {
   it.todo(
     "uses the higher stat of the user's Atk and SpAtk for damage calculation",
     async () => {
-      game.override.enemyAbility(Abilities.TOXIC_DEBRIS);
+      game.override.enemyAbility(AbilityId.TOXIC_DEBRIS);
       await game.classicMode.startBattle();
 
       const playerPokemon = game.scene.getPlayerPokemon()!;
@@ -98,7 +98,7 @@ describe("Moves - Tera Blast", () => {
 
       game.move.select(MoveId.TERA_BLAST);
       await game.toEndOfTurn();
-      expect(game.scene.getEnemyPokemon()!.battleData.abilitiesApplied).toContain(Abilities.TOXIC_DEBRIS);
+      expect(game.scene.getEnemyPokemon()!.battleData.abilitiesApplied).toContain(AbilityId.TOXIC_DEBRIS);
     },
     20000,
   );

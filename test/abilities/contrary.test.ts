@@ -1,5 +1,5 @@
 import { MoveId } from "#enums/move-id";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -25,8 +25,8 @@ describe("Abilities - Contrary", () => {
     game.override
       .battleType("single")
       .enemySpecies(Species.BULBASAUR)
-      .enemyAbility(Abilities.CONTRARY)
-      .ability(Abilities.INTIMIDATE)
+      .enemyAbility(AbilityId.CONTRARY)
+      .ability(AbilityId.INTIMIDATE)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -40,7 +40,7 @@ describe("Abilities - Contrary", () => {
 
   describe("With Clear Body", () => {
     it("should apply positive effects", async () => {
-      game.override.enemyPassiveAbility(Abilities.CLEAR_BODY).moveset([MoveId.TAIL_WHIP]);
+      game.override.enemyPassiveAbility(AbilityId.CLEAR_BODY).moveset([MoveId.TAIL_WHIP]);
       await game.classicMode.startBattle([Species.SLOWBRO]);
 
       const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -55,9 +55,9 @@ describe("Abilities - Contrary", () => {
 
     it("should block negative effects", async () => {
       game.override
-        .enemyPassiveAbility(Abilities.CLEAR_BODY)
+        .enemyPassiveAbility(AbilityId.CLEAR_BODY)
         .moveset(MoveId.SWAGGER)
-        .passiveAbility(Abilities.NO_GUARD);
+        .passiveAbility(AbilityId.NO_GUARD);
       await game.classicMode.startBattle([Species.SLOWBRO]);
 
       const enemyPokemon = game.scene.getEnemyPokemon()!;

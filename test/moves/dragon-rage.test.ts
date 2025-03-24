@@ -1,5 +1,5 @@
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
@@ -33,11 +33,11 @@ describe("Moves - Dragon Rage", () => {
     game.override
       .battleType("single")
       .moveset([MoveId.DRAGON_RAGE])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .startingLevel(100)
       .enemySpecies(Species.SNORLAX)
       .enemyMoveset(MoveId.SPLASH)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyLevel(100);
 
     await game.classicMode.startBattle([Species.SNORLAX]);
@@ -98,7 +98,7 @@ describe("Moves - Dragon Rage", () => {
 
   it("ignores damage modification from abilities, for example ICE_SCALES", async () => {
     game.override.disableCrits();
-    game.override.enemyAbility(Abilities.ICE_SCALES);
+    game.override.enemyAbility(AbilityId.ICE_SCALES);
 
     game.move.select(MoveId.DRAGON_RAGE);
     await game.toEndOfTurn();

@@ -1,6 +1,6 @@
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -25,10 +25,10 @@ describe("Moves - Aroma Veil", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("double")
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset([MoveId.HEAL_BLOCK, MoveId.IMPRISON, MoveId.SPLASH])
       .enemySpecies(Species.SHUCKLE)
-      .ability(Abilities.AROMA_VEIL)
+      .ability(AbilityId.AROMA_VEIL)
       .moveset(MoveId.SPLASH);
   });
 

@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -27,12 +27,12 @@ describe("Moves - G-Max Chi Strike grants a stackable crit boost", () => {
       .moveset([MoveId.G_MAX_CHI_STRIKE, MoveId.BITE, MoveId.FOCUS_ENERGY, MoveId.BATON_PASS])
       .enemySpecies(Species.BLISSEY)
       .enemyLevel(100)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("G-Max chi strike should grant a non-expiring stackable crit boost", async () => {
-    game.override.enemyAbility(Abilities.PRANKSTER).enemyMoveset([MoveId.SUBSTITUTE]);
+    game.override.enemyAbility(AbilityId.PRANKSTER).enemyMoveset([MoveId.SUBSTITUTE]);
     await game.classicMode.startBattle([Species.MACHAMP]);
 
     const enemy = game.scene.getEnemyField()[0];
@@ -74,7 +74,7 @@ describe("Moves - G-Max Chi Strike grants a stackable crit boost", () => {
   it("G-Max chi strike should grant ally stackable crit boost", async () => {
     game.override
       .battleType("double")
-      .enemyAbility(Abilities.PRANKSTER)
+      .enemyAbility(AbilityId.PRANKSTER)
       .moveset([MoveId.G_MAX_CHI_STRIKE, MoveId.BITE, MoveId.SPLASH, MoveId.DRAGON_CHEER])
       .enemyMoveset([MoveId.SUBSTITUTE]);
     await game.classicMode.startBattle([Species.MACHAMP, Species.SHUCKLE]);
@@ -98,7 +98,7 @@ describe("Moves - G-Max Chi Strike grants a stackable crit boost", () => {
   });
 
   it("G-Max chi strike crit boost is not baton passable", async () => {
-    game.override.enemyAbility(Abilities.PRANKSTER).enemyMoveset([MoveId.SUBSTITUTE]);
+    game.override.enemyAbility(AbilityId.PRANKSTER).enemyMoveset([MoveId.SUBSTITUTE]);
     await game.classicMode.startBattle([Species.MACHAMP, Species.SHUCKLE]);
 
     const enemy = game.scene.getEnemyField()[0];

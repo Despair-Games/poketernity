@@ -1,6 +1,6 @@
 import { allMoves } from "#app/data/data-lists";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -26,9 +26,9 @@ describe("Moves - Hard Press", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
-    game.override.ability(Abilities.BALL_FETCH);
+    game.override.ability(AbilityId.BALL_FETCH);
     game.override.enemySpecies(Species.MUNCHLAX);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
+    game.override.enemyAbility(AbilityId.BALL_FETCH);
     game.override.enemyMoveset(MoveId.SPLASH);
     game.override.moveset([MoveId.HARD_PRESS]);
     vi.spyOn(moveToCheck, "calculateBattlePower");

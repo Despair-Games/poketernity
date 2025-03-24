@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -25,11 +25,11 @@ describe("Abilities - Gale Wings", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.WING_ATTACK])
-      .ability(Abilities.GALE_WINGS)
+      .ability(AbilityId.GALE_WINGS)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -81,7 +81,7 @@ describe("Abilities - Gale Wings", () => {
   });
 
   it("should not boost the priority of originally Normal-type moves transformed by Aerilate", async () => {
-    game.override.moveset(MoveId.TACKLE).passiveAbility(Abilities.AERILATE);
+    game.override.moveset(MoveId.TACKLE).passiveAbility(AbilityId.AERILATE);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
 

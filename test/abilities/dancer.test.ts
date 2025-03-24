@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { type MovePhase } from "#app/phases/move-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -27,7 +27,7 @@ describe("Abilities - Dancer", () => {
       .battleType("double")
       .moveset([MoveId.FEATHER_DANCE, MoveId.SPLASH])
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.DANCER)
+      .enemyAbility(AbilityId.DANCER)
       .enemyMoveset([MoveId.VICTORY_DANCE]);
   });
 

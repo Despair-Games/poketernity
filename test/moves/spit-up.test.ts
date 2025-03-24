@@ -2,7 +2,7 @@ import type { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
 import { allMoves } from "#app/data/data-lists";
 import { MovePhase } from "#app/phases/move-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
@@ -33,11 +33,11 @@ describe("Moves - Spit Up", () => {
 
     game.override.enemySpecies(Species.RATTATA);
     game.override.enemyMoveset(MoveId.SPLASH);
-    game.override.enemyAbility(Abilities.NONE);
+    game.override.enemyAbility(AbilityId.NONE);
     game.override.enemyLevel(2000);
 
     game.override.moveset(new Array(4).fill(spitUp.id));
-    game.override.ability(Abilities.NONE);
+    game.override.ability(AbilityId.NONE);
 
     vi.spyOn(spitUp, "calculateBattlePower");
   });

@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -24,11 +24,11 @@ describe("Abilities - Lightning Rod", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("double")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
@@ -39,7 +39,7 @@ describe("Abilities - Lightning Rod", () => {
 
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.field.mockAbility(enemyPokemon[0], Abilities.LIGHTNING_ROD);
+    game.field.mockAbility(enemyPokemon[0], AbilityId.LIGHTNING_ROD);
 
     game.move.use(MoveId.THUNDER_SHOCK, 0, BattlerIndex.ENEMY_2);
     game.move.use(MoveId.SPLASH, 1);
@@ -55,7 +55,7 @@ describe("Abilities - Lightning Rod", () => {
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.field.mockAbility(playerPokemon[0], Abilities.LIGHTNING_ROD);
+    game.field.mockAbility(playerPokemon[0], AbilityId.LIGHTNING_ROD);
 
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.PLAYER_2, BattlerIndex.ENEMY, BattlerIndex.ENEMY_2]);
     game.move.use(MoveId.THUNDER_SHOCK, 0, BattlerIndex.ENEMY);
@@ -77,7 +77,7 @@ describe("Abilities - Lightning Rod", () => {
 
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.field.mockAbility(enemyPokemon[0], Abilities.LIGHTNING_ROD);
+    game.field.mockAbility(enemyPokemon[0], AbilityId.LIGHTNING_ROD);
 
     game.move.use(MoveId.DISCHARGE, 0);
     game.move.use(MoveId.SPLASH, 1);
@@ -89,13 +89,13 @@ describe("Abilities - Lightning Rod", () => {
   });
 
   it("should not redirect moves boosted by Normalize", async () => {
-    game.override.ability(Abilities.NORMALIZE);
+    game.override.ability(AbilityId.NORMALIZE);
 
     await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 
     const enemyPokemon = game.scene.getEnemyField();
 
-    game.field.mockAbility(enemyPokemon[0], Abilities.LIGHTNING_ROD);
+    game.field.mockAbility(enemyPokemon[0], AbilityId.LIGHTNING_ROD);
 
     game.move.use(MoveId.THUNDER_SHOCK, 0, BattlerIndex.ENEMY_2);
     game.move.use(MoveId.SPLASH, 1);

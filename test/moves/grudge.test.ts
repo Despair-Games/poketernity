@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { BattlerIndex } from "#enums/battler-index";
@@ -24,11 +24,11 @@ describe("Moves - Grudge", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.EMBER, MoveId.SPLASH])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.SHEDINJA)
-      .enemyAbility(Abilities.WONDER_GUARD)
+      .enemyAbility(AbilityId.WONDER_GUARD)
       .enemyMoveset([MoveId.GRUDGE, MoveId.SPLASH]);
   });
 
@@ -70,7 +70,7 @@ describe("Moves - Grudge", () => {
     game.override
       .moveset([MoveId.FALSE_SWIPE])
       .startingLevel(100)
-      .enemyAbility(Abilities.SAND_STREAM)
+      .enemyAbility(AbilityId.SAND_STREAM)
       .enemySpecies(Species.RATTATA);
     await game.classicMode.startBattle([Species.GEODUDE]);
 

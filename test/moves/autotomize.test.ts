@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -25,7 +25,7 @@ describe("Moves - Autotomize", () => {
     game.override
       .moveset([MoveId.AUTOTOMIZE, MoveId.KINGS_SHIELD, MoveId.FALSE_SWIPE])
       .battleType("single")
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -96,7 +96,7 @@ describe("Moves - Autotomize", () => {
     async () => {
       const baseLightGroudonWeight = 475;
       const autotomizeLightGroudonWeight = 425;
-      game.override.ability(Abilities.LIGHT_METAL);
+      game.override.ability(AbilityId.LIGHT_METAL);
       await game.classicMode.startBattle([Species.GROUDON]);
       const playerPokemon = game.scene.getPlayerPokemon()!;
       expect(playerPokemon.getWeight()).toBe(baseLightGroudonWeight);

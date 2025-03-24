@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
@@ -26,11 +26,11 @@ describe("Moves - Uproar", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.BLISSEY)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
@@ -75,7 +75,7 @@ describe("Moves - Uproar", () => {
       ignorePP: true,
     });
 
-    game.override.enemyAbility(Abilities.SOUNDPROOF);
+    game.override.enemyAbility(AbilityId.SOUNDPROOF);
 
     await game.toNextTurn();
     expect(player.getTag(BattlerTagType.UPROAR)).toBeUndefined();

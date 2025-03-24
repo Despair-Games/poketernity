@@ -2,7 +2,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { GameManager } from "#test/test-utils/gameManager";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
 import { toDmgValue } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -28,10 +28,10 @@ describe("BattlerTag - VortexTrapTag", () => {
         .battleType("double")
         .startingLevel(1)
         .moveset([MoveId.FIRE_SPIN, MoveId.G_MAX_CENTIFERNO, MoveId.MEMENTO, MoveId.SPLASH])
-        .ability(Abilities.NO_GUARD)
+        .ability(AbilityId.NO_GUARD)
         .enemySpecies(Species.SHUCKLE)
         .enemyLevel(100)
-        .enemyAbility(Abilities.BALL_FETCH)
+        .enemyAbility(AbilityId.BALL_FETCH)
         .enemyMoveset(MoveId.SPLASH);
     });
 
@@ -107,7 +107,7 @@ describe("BattlerTag - VortexTrapTag", () => {
     });
 
     it("Fire spin cannot damage magic guard but still traps them", async () => {
-      game.override.enemyAbility(Abilities.MAGIC_GUARD);
+      game.override.enemyAbility(AbilityId.MAGIC_GUARD);
       await game.classicMode.startBattle([Species.SUNKERN, Species.SUNKERN]);
 
       game.move.select(MoveId.FIRE_SPIN, 0, BattlerIndex.ENEMY);

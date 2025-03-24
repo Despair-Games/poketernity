@@ -1,6 +1,6 @@
 import type { EncoreTag } from "#app/data/battler-tags/encore-tag";
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex } from "#enums/battler-index";
@@ -31,11 +31,11 @@ describe("Moves - Magic Coat", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.MAGIC_COAT)
       .startingLevel(100)
       .enemyLevel(100);
@@ -123,7 +123,7 @@ describe("Moves - Magic Coat", () => {
   });
 
   it("should not bounce back a move that was just bounced", async () => {
-    game.override.ability(Abilities.MAGIC_BOUNCE);
+    game.override.ability(AbilityId.MAGIC_BOUNCE);
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const player = game.field.getPlayerPokemon();
@@ -137,7 +137,7 @@ describe("Moves - Magic Coat", () => {
   });
 
   it("should receive the stat change after reflecting a move back to a mirror armor user", async () => {
-    game.override.ability(Abilities.MIRROR_ARMOR);
+    game.override.ability(AbilityId.MIRROR_ARMOR);
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const player = game.field.getPlayerPokemon();
@@ -190,7 +190,7 @@ describe("Moves - Magic Coat", () => {
     const enemy = game.field.getEnemyPokemon();
 
     // Give the player MOLD_BREAKER for this turn to bypass Magic Bounce.
-    game.field.mockAbility(player, Abilities.MOLD_BREAKER);
+    game.field.mockAbility(player, AbilityId.MOLD_BREAKER);
 
     // turn 1
     game.move.use(MoveId.ENCORE);
@@ -212,7 +212,7 @@ describe("Moves - Magic Coat", () => {
 
   it("should not cause the bounced move to count for encore", async () => {
     game.override.enemyMoveset([MoveId.GROWL, MoveId.TACKLE]);
-    game.override.enemyAbility(Abilities.MAGIC_BOUNCE);
+    game.override.enemyAbility(AbilityId.MAGIC_BOUNCE);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
     const playerPokemon = game.field.getPlayerPokemon();
@@ -225,7 +225,7 @@ describe("Moves - Magic Coat", () => {
     await game.toNextTurn();
 
     // Give the player MOLD_BREAKER for this turn to bypass Magic Bounce.
-    game.field.mockAbility(playerPokemon, Abilities.MOLD_BREAKER);
+    game.field.mockAbility(playerPokemon, AbilityId.MOLD_BREAKER);
 
     // turn 2
     game.move.use(MoveId.ENCORE);
@@ -283,7 +283,7 @@ describe("Moves - Magic Coat", () => {
 
   it("should respect immunities when bouncing a move", async () => {
     vi.spyOn(allMoves.get(MoveId.THUNDER_WAVE), "accuracy", "get").mockReturnValue(100);
-    game.override.ability(Abilities.SOUNDPROOF);
+    game.override.ability(AbilityId.SOUNDPROOF);
     await game.classicMode.startBattle([Species.PHANPY]);
 
     // Turn 1 - thunder wave immunity test

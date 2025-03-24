@@ -1,6 +1,6 @@
 import { allMoves } from "#app/data/data-lists";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
@@ -26,11 +26,11 @@ describe("Abilities - Effect Spore", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.SPLASH])
-      .ability(Abilities.EFFECT_SPORE)
+      .ability(AbilityId.EFFECT_SPORE)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH);
+      .enemyAbility(AbilityId.BALL_FETCH);
 
     // Force minimum RNG roll so that Effect Spore's RNG roll succeeds
     vi.spyOn(game.scene, "randBattleSeedInt").mockImplementation((_range, min: 0) => min);
@@ -53,7 +53,7 @@ describe("Abilities - Effect Spore", () => {
   });
 
   it("should not affect Pokemon with the ability Overcoat", async () => {
-    game.override.enemyAbility(Abilities.OVERCOAT);
+    game.override.enemyAbility(AbilityId.OVERCOAT);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const abilityAttr = game.scene.getPlayerPokemon()?.getAbilityAttrs(AbAttrFlag.EFFECT_SPORE)[0]!;

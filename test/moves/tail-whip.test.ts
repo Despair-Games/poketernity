@@ -1,6 +1,6 @@
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import Phaser from "phaser";
@@ -27,8 +27,8 @@ describe("Moves - Tail whip", () => {
     const moveToUse = MoveId.TAIL_WHIP;
     game.override.battleType("single");
     game.override.enemySpecies(Species.RATTATA);
-    game.override.enemyAbility(Abilities.INSOMNIA);
-    game.override.ability(Abilities.INSOMNIA);
+    game.override.enemyAbility(AbilityId.INSOMNIA);
+    game.override.ability(AbilityId.INSOMNIA);
     game.override.startingLevel(2000);
     game.override.moveset([moveToUse]);
     game.override.enemyMoveset(MoveId.SPLASH);

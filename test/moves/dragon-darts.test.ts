@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveResult } from "#enums/move-result";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { ElementalType } from "#enums/elemental-type";
@@ -26,11 +26,11 @@ describe("Moves - Dragon Darts", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.SPLASH, MoveId.DRAGON_DARTS, MoveId.FOLLOW_ME])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("double")
       .disableCrits()
       .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
@@ -171,7 +171,7 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should hit Dondozo twice if its ally is a commanding Tatsugiri", async () => {
-    game.override.enemyMoveset([MoveId.DRAGON_DARTS, MoveId.SPLASH]).ability(Abilities.COMMANDER);
+    game.override.enemyMoveset([MoveId.DRAGON_DARTS, MoveId.SPLASH]).ability(AbilityId.COMMANDER);
     vi.spyOn(game.scene, "triggerPokemonBattleAnim").mockReturnValue(true);
 
     await game.classicMode.startBattle([Species.TATSUGIRI, Species.DONDOZO]);
@@ -262,7 +262,7 @@ describe("Moves - Dragon Darts", () => {
   });
 
   it("should not trigger ability effects when redirecting", async () => {
-    game.override.enemyAbility(Abilities.VOLT_ABSORB).moveset([MoveId.DRAGON_DARTS, MoveId.ELECTRIFY]);
+    game.override.enemyAbility(AbilityId.VOLT_ABSORB).moveset([MoveId.DRAGON_DARTS, MoveId.ELECTRIFY]);
 
     await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
 

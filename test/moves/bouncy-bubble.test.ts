@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -26,10 +26,10 @@ describe("Moves - Bouncy Bubble", () => {
       .enemySpecies(Species.ARCEUS)
       .enemyLevel(100)
       .enemyMoveset([MoveId.SPLASH])
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .startingLevel(100)
       .moveset([MoveId.BOUNCY_BUBBLE])
-      .ability(Abilities.BALL_FETCH);
+      .ability(AbilityId.BALL_FETCH);
   });
 
   it("should heal 100% of damage dealt and be single target", async () => {

@@ -3,7 +3,7 @@
 import { GameManager } from "#test/test-utils/gameManager";
 
 import type { Variant } from "#app/data/variant";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import type { ModifierOverride } from "#app/modifier/modifier-type";
 import type { BattleStyle } from "#app/overrides";
 import Overrides, { defaultOverrides } from "#app/overrides";
@@ -136,28 +136,28 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
-   * Override the player (pokemon) {@linkcode Abilities | ability}
+   * Override the player (pokemon) {@linkcode AbilityId | ability}
    *
    * For more fine-grained control over setting specific species to have specific abilities,
    * see {@linkcode GameManager.forceSpeciesSpecificAbility | game.forceSpeciesSpecificAbility}.
    *
-   * @param ability the (pokemon) {@linkcode Abilities | ability} to set
+   * @param ability the (pokemon) {@linkcode AbilityId | ability} to set
    * @returns `this`
    */
-  public ability(ability: Abilities): this {
+  public ability(ability: AbilityId): this {
     vi.spyOn(Overrides, "ABILITY_OVERRIDE", "get").mockReturnValue(ability);
-    this.log(`Player Pokemon ability set to ${Abilities[ability]} (=${ability})!`);
+    this.log(`Player Pokemon ability set to ${AbilityId[ability]} (=${ability})!`);
     return this;
   }
 
   /**
-   * Override the player (pokemon) **passive** {@linkcode Abilities | ability}
-   * @param passiveAbility the (pokemon) **passive** {@linkcode Abilities | ability} to set
+   * Override the player (pokemon) **passive** {@linkcode AbilityId | ability}
+   * @param passiveAbility the (pokemon) **passive** {@linkcode AbilityId | ability} to set
    * @returns `this`
    */
-  public passiveAbility(passiveAbility: Abilities): this {
+  public passiveAbility(passiveAbility: AbilityId): this {
     vi.spyOn(Overrides, "PASSIVE_ABILITY_OVERRIDE", "get").mockReturnValue(passiveAbility);
-    this.log(`Player Pokemon PASSIVE ability set to ${Abilities[passiveAbility]} (=${passiveAbility})!`);
+    this.log(`Player Pokemon PASSIVE ability set to ${AbilityId[passiveAbility]} (=${passiveAbility})!`);
     return this;
   }
 
@@ -255,28 +255,28 @@ export class OverridesHelper extends GameManagerHelper {
   }
 
   /**
-   * Override the enemy (pokemon) {@linkcode Abilities | ability}
+   * Override the enemy (pokemon) {@linkcode AbilityId | ability}
    *
    * For more fine-grained control over setting specific species to have specific abilities,
    * see {@linkcode GameManager.forceSpeciesSpecificAbility | game.forceSpeciesSpecificAbility}.
    *
-   * @param ability the (pokemon) {@linkcode Abilities | ability} to set
+   * @param ability the (pokemon) {@linkcode AbilityId | ability} to set
    * @returns `this`
    */
-  public enemyAbility(ability: Abilities): this {
+  public enemyAbility(ability: AbilityId): this {
     vi.spyOn(Overrides, "ENEMY_ABILITY_OVERRIDE", "get").mockReturnValue(ability);
-    this.log(`Enemy Pokemon ability set to ${Abilities[ability]} (=${ability})!`);
+    this.log(`Enemy Pokemon ability set to ${AbilityId[ability]} (=${ability})!`);
     return this;
   }
 
   /**
-   * Override the enemy (pokemon) **passive** {@linkcode Abilities | ability}
-   * @param passiveAbility the (pokemon) **passive** {@linkcode Abilities | ability} to set
+   * Override the enemy (pokemon) **passive** {@linkcode AbilityId | ability}
+   * @param passiveAbility the (pokemon) **passive** {@linkcode AbilityId | ability} to set
    * @returns `this`
    */
-  public enemyPassiveAbility(passiveAbility: Abilities): this {
+  public enemyPassiveAbility(passiveAbility: AbilityId): this {
     vi.spyOn(Overrides, "ENEMY_PASSIVE_ABILITY_OVERRIDE", "get").mockReturnValue(passiveAbility);
-    this.log(`Enemy Pokemon PASSIVE ability set to ${Abilities[passiveAbility]} (=${passiveAbility})!`);
+    this.log(`Enemy Pokemon PASSIVE ability set to ${AbilityId[passiveAbility]} (=${passiveAbility})!`);
     return this;
   }
 

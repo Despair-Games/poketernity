@@ -2,7 +2,7 @@ import type { AbAttrCondition } from "#app/@types/AbAttrCondition";
 import { type Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { Species } from "#enums/species";
 import type { WeatherType } from "#enums/weather-type";
 
@@ -14,8 +14,8 @@ export function getPokemonWithWeatherBasedForms() {
     .getField(true)
     .filter(
       (p) =>
-        (p.hasAbility(Abilities.FORECAST) && p.species.speciesId === Species.CASTFORM)
-        || (p.hasAbility(Abilities.FLOWER_GIFT) && p.species.speciesId === Species.CHERRIM),
+        (p.hasAbility(AbilityId.FORECAST) && p.species.speciesId === Species.CASTFORM)
+        || (p.hasAbility(AbilityId.FLOWER_GIFT) && p.species.speciesId === Species.CHERRIM),
     );
 }
 

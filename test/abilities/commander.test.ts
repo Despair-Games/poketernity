@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveResult } from "#enums/move-result";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { PokemonAnimType } from "#enums/pokemon-anim-type";
@@ -33,11 +33,11 @@ describe("Abilities - Commander", () => {
       .startingLevel(100)
       .enemyLevel(100)
       .moveset([MoveId.LIQUIDATION, MoveId.MEMENTO, MoveId.SPLASH, MoveId.FLIP_TURN])
-      .ability(Abilities.COMMANDER)
+      .ability(AbilityId.COMMANDER)
       .battleType("double")
       .disableCrits()
       .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.BALL_FETCH);
+      .enemyAbility(AbilityId.BALL_FETCH);
 
     vi.spyOn(game.scene, "triggerPokemonBattleAnim").mockReturnValue(true);
   });

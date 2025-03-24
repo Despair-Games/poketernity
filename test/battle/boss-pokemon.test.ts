@@ -2,7 +2,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { GameManager } from "#test/test-utils/gameManager";
 import { Species } from "#enums/species";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { EFFECTIVE_STATS } from "#enums/stat";
 import type { EnemyPokemon } from "#app/field/pokemon";
@@ -34,7 +34,7 @@ describe("Boss Pokemon / Shields", () => {
       .enemyHeldItems([])
       .startingLevel(1000)
       .moveset([MoveId.FALSE_SWIPE, MoveId.SUPER_FANG, MoveId.SPLASH, MoveId.PSYCHIC])
-      .ability(Abilities.NO_GUARD);
+      .ability(AbilityId.NO_GUARD);
   });
 
   it("Pokemon should get shields based on their Species and level and the current wave", async () => {
@@ -187,7 +187,7 @@ describe("Boss Pokemon / Shields", () => {
   });
 
   it("the boss enduring does not proc an extra stat boost", async () => {
-    game.override.enemyHealthSegments(2).enemyAbility(Abilities.STURDY);
+    game.override.enemyHealthSegments(2).enemyAbility(AbilityId.STURDY);
 
     await game.classicMode.startBattle([Species.MEWTWO]);
 

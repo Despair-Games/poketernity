@@ -238,7 +238,7 @@ import { isNullOrUndefined } from "#app/utils";
 import { ConditionalProtectArenaTagTypes } from "#app/utils/arena-tag-type-utils";
 import { SemiInvulnerableBattlerTagTypes, TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { crashDamageFunc } from "#app/utils/move-utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { ArenaTagRelativeSide } from "#enums/arena-tag-relative-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleCommand } from "#enums/battle-command";
@@ -927,7 +927,7 @@ export function initMoves() {
       .attr(RandomMovesetMoveAttr, invalidSleepTalkMoves)
       .condition(userSleptOrComatoseCondition),
     new StatusMove(MoveId.HEAL_BELL, ElementalType.NORMAL, -1, 5, -1, 0, 2)
-      .attr(PartyStatusCureAttr, i18next.t("moveTriggers:bellChimed"), Abilities.SOUNDPROOF)
+      .attr(PartyStatusCureAttr, i18next.t("moveTriggers:bellChimed"), AbilityId.SOUNDPROOF)
       .soundMove()
       .target(MoveTarget.PARTY),
     new AttackMove(MoveId.RETURN, ElementalType.NORMAL, MoveCategory.PHYSICAL, -1, 100, 20, -1, 0, 2)
@@ -1265,7 +1265,7 @@ export function initMoves() {
       })
       .bulletMove(),
     new StatusMove(MoveId.AROMATHERAPY, ElementalType.GRASS, -1, 5, -1, 0, 3)
-      .attr(PartyStatusCureAttr, i18next.t("moveTriggers:soothingAromaWaftedThroughArea"), Abilities.SAP_SIPPER)
+      .attr(PartyStatusCureAttr, i18next.t("moveTriggers:soothingAromaWaftedThroughArea"), AbilityId.SAP_SIPPER)
       .target(MoveTarget.PARTY),
     new StatusMove(MoveId.FAKE_TEARS, ElementalType.DARK, 100, 20, -1, 0, 3)
       .attr(StatStageChangeAttr, [Stat.SPDEF], -2)
@@ -1511,7 +1511,7 @@ export function initMoves() {
     new AttackMove(MoveId.LAST_RESORT, ElementalType.NORMAL, MoveCategory.PHYSICAL, 140, 100, 5, -1, 0, 4)
       .attr(LastResortAttr),
     new StatusMove(MoveId.WORRY_SEED, ElementalType.GRASS, 100, 10, -1, 0, 4)
-      .attr(AbilityChangeAttr, Abilities.INSOMNIA)
+      .attr(AbilityChangeAttr, AbilityId.INSOMNIA)
       .bounceable(),
     new AttackMove(MoveId.SUCKER_PUNCH, ElementalType.DARK, MoveCategory.PHYSICAL, 70, 100, 5, -1, 1, 4)
       .condition(
@@ -1850,7 +1850,7 @@ export function initMoves() {
     new AttackMove(MoveId.FOUL_PLAY, ElementalType.DARK, MoveCategory.PHYSICAL, 95, 100, 15, -1, 0, 5)
       .attr(TargetAtkUserAtkAttr),
     new StatusMove(MoveId.SIMPLE_BEAM, ElementalType.NORMAL, 100, 15, -1, 0, 5)
-      .attr(AbilityChangeAttr, Abilities.SIMPLE)
+      .attr(AbilityChangeAttr, AbilityId.SIMPLE)
       .bounceable(),
     new StatusMove(MoveId.ENTRAINMENT, ElementalType.NORMAL, 100, 15, -1, 0, 5)
       .condition(failOnMaxCondition)
@@ -2252,7 +2252,7 @@ export function initMoves() {
     new StatusMove(MoveId.MAGNETIC_FLUX, ElementalType.ELECTRIC, -1, 20, -1, 0, 6)
       .attr(StatStageChangeAttr, [Stat.DEF, Stat.SPDEF], 1, false, {
         condition: (_user, target, _move) =>
-          !![Abilities.PLUS, Abilities.MINUS].find((a) => target.hasAbility(a, false)),
+          !![AbilityId.PLUS, AbilityId.MINUS].find((a) => target.hasAbility(a, false)),
       })
       .ignoresSubstitute()
       .target(MoveTarget.USER_AND_ALLIES)
@@ -2260,7 +2260,7 @@ export function initMoves() {
         (user, _target, _move) =>
           [user, user.getAlly()]
             .filter((p) => p?.isActive())
-            .some((p) => [Abilities.PLUS, Abilities.MINUS].some((a) => p?.hasAbility(a, false))),
+            .some((p) => [AbilityId.PLUS, AbilityId.MINUS].some((a) => p?.hasAbility(a, false))),
       ),
     new StatusMove(MoveId.HAPPY_HOUR, ElementalType.NORMAL, -1, 30, -1, 0, 6) // No animation
       .attr(AddArenaTagAttr, ArenaTagType.HAPPY_HOUR, ArenaTagRelativeSide.USER, { failOnOverlap: true })
@@ -2458,7 +2458,7 @@ export function initMoves() {
     new StatusMove(MoveId.GEAR_UP, ElementalType.STEEL, -1, 20, -1, 0, 7)
       .attr(StatStageChangeAttr, [Stat.ATK, Stat.SPATK], 1, false, {
         condition: (_user, target, _move) =>
-          [Abilities.PLUS, Abilities.MINUS].some((a) => target.hasAbility(a, false)),
+          [AbilityId.PLUS, AbilityId.MINUS].some((a) => target.hasAbility(a, false)),
       })
       .ignoresSubstitute()
       .target(MoveTarget.USER_AND_ALLIES)
@@ -2466,7 +2466,7 @@ export function initMoves() {
         (user, _target, _move) =>
           [user, user.getAlly()]
             .filter((p) => p?.isActive())
-            .some((p) => [Abilities.PLUS, Abilities.MINUS].some((a) => p?.hasAbility(a, false))),
+            .some((p) => [AbilityId.PLUS, AbilityId.MINUS].some((a) => p?.hasAbility(a, false))),
       ),
     new AttackMove(MoveId.THROAT_CHOP, ElementalType.DARK, MoveCategory.PHYSICAL, 80, 100, 15, 100, 0, 7)
       .attr(AddBattlerTagAttr, BattlerTagType.THROAT_CHOPPED),
@@ -2683,7 +2683,7 @@ export function initMoves() {
     new AttackMove(MoveId.FREEZY_FROST, ElementalType.ICE, MoveCategory.SPECIAL, 100, 90, 10, -1, 0, 7)
       .attr(ResetStatsAttr, true),
     new AttackMove(MoveId.SPARKLY_SWIRL, ElementalType.FAIRY, MoveCategory.SPECIAL, 120, 85, 5, -1, 0, 7)
-      .attr(PartyStatusCureAttr, null, Abilities.NONE),
+      .attr(PartyStatusCureAttr, null, AbilityId.NONE),
     new AttackMove(MoveId.VEEVEE_VOLLEY, ElementalType.NORMAL, MoveCategory.PHYSICAL, -1, -1, 20, -1, 0, 7)
       .attr(FriendshipPowerAttr),
     new AttackMove(MoveId.DOUBLE_IRON_BASH, ElementalType.STEEL, MoveCategory.PHYSICAL, 60, 100, 5, 30, 0, 7)

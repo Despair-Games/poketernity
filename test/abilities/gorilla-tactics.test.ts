@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -24,11 +24,11 @@ describe("Abilities - Gorilla Tactics", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemySpecies(Species.MAGIKARP)
       .enemyLevel(30)
       .moveset([MoveId.SPLASH, MoveId.TACKLE, MoveId.GROWL])
-      .ability(Abilities.GORILLA_TACTICS);
+      .ability(AbilityId.GORILLA_TACTICS);
   });
 
   it("boosts the Pokémon's Attack by 50%, but limits the Pokémon to using only one move", async () => {

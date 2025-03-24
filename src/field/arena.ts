@@ -24,7 +24,7 @@ import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
 import { type AbstractConstructor, randSeedInt } from "#app/utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import type { ArenaTagType } from "#enums/arena-tag-type";
 import type { BattlerIndex } from "#enums/battler-index";
@@ -462,8 +462,8 @@ export class Arena {
    */
   triggerWeatherBasedFormChanges(): void {
     globalScene.getField(true).forEach((p) => {
-      const isCastformWithForecast = p.hasAbility(Abilities.FORECAST) && p.species.speciesId === Species.CASTFORM;
-      const isCherrimWithFlowerGift = p.hasAbility(Abilities.FLOWER_GIFT) && p.species.speciesId === Species.CHERRIM;
+      const isCastformWithForecast = p.hasAbility(AbilityId.FORECAST) && p.species.speciesId === Species.CASTFORM;
+      const isCherrimWithFlowerGift = p.hasAbility(AbilityId.FLOWER_GIFT) && p.species.speciesId === Species.CHERRIM;
 
       if (isCastformWithForecast || isCherrimWithFlowerGift) {
         new ShowAbilityPhase(p.getBattlerIndex());
@@ -478,9 +478,9 @@ export class Arena {
   triggerWeatherBasedFormChangesToNormal(): void {
     globalScene.getField(true).forEach((p) => {
       const isCastformWithForecast =
-        p.hasAbility(Abilities.FORECAST, false, true) && p.species.speciesId === Species.CASTFORM;
+        p.hasAbility(AbilityId.FORECAST, false, true) && p.species.speciesId === Species.CASTFORM;
       const isCherrimWithFlowerGift =
-        p.hasAbility(Abilities.FLOWER_GIFT, false, true) && p.species.speciesId === Species.CHERRIM;
+        p.hasAbility(AbilityId.FLOWER_GIFT, false, true) && p.species.speciesId === Species.CHERRIM;
 
       if (isCastformWithForecast || isCherrimWithFlowerGift) {
         new ShowAbilityPhase(p.getBattlerIndex());

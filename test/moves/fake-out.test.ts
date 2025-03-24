@@ -5,7 +5,7 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveResult } from "#enums/move-result";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 
 describe("Moves - Fake Out", () => {
   let phaserGame: Phaser.Game;
@@ -131,7 +131,7 @@ describe("Moves - Fake Out", () => {
   });
 
   it("can be used after the user is sent out via Wimp Out", async () => {
-    game.override.ability(Abilities.WIMP_OUT).enemyLevel(100).enemyMoveset(MoveId.FALSE_SWIPE);
+    game.override.ability(AbilityId.WIMP_OUT).enemyLevel(100).enemyMoveset(MoveId.FALSE_SWIPE);
 
     await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 

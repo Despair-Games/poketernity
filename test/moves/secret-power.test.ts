@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { Biome } from "#enums/biome";
 import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
@@ -31,12 +31,12 @@ describe("Moves - Secret Power", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.SECRET_POWER])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyLevel(60)
-      .enemyAbility(Abilities.BALL_FETCH);
+      .enemyAbility(AbilityId.BALL_FETCH);
   });
 
   it("Secret Power checks for an active terrain first then looks at the biome for its secondary effect", async () => {
@@ -62,7 +62,7 @@ describe("Moves - Secret Power", () => {
   it("Secret Power's effect chance is doubled by Serene Grace, but not by the 'rainbow' effect from Fire/Water Pledge", async () => {
     game.override
       .moveset([MoveId.FIRE_PLEDGE, MoveId.WATER_PLEDGE, MoveId.SECRET_POWER, MoveId.SPLASH])
-      .ability(Abilities.SERENE_GRACE)
+      .ability(AbilityId.SERENE_GRACE)
       .enemyMoveset([MoveId.SPLASH])
       .battleType("double");
     await game.classicMode.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
@@ -72,7 +72,7 @@ describe("Moves - Secret Power", () => {
 
     await game.toEndOfTurn();
 
-    const sereneGraceAttr = allAbilities[Abilities.SERENE_GRACE].getAttrs(AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER)[0];
+    const sereneGraceAttr = allAbilities[AbilityId.SERENE_GRACE].getAttrs(AbAttrFlag.MOVE_EFFECT_CHANCE_MULTIPLIER)[0];
     vi.spyOn(sereneGraceAttr, "apply");
 
     let rainbowEffect = game.scene.arena.getTagOnSide(ArenaTagType.WATER_FIRE_PLEDGE, ArenaTagSide.PLAYER);

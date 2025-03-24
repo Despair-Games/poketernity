@@ -1,6 +1,6 @@
 import { allMoves } from "#app/data/data-lists";
 import { UseHigherAttackingStatAttr } from "#app/data/moves/move-attrs/use-higher-attacking-stat-attr";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -26,11 +26,11 @@ describe("Moves - Photon Geyser", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.PHOTON_GEYSER])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
 
     vi.spyOn(photonGeyserAttr, "apply");
@@ -55,7 +55,7 @@ describe("Moves - Photon Geyser", () => {
   });
 
   it("should ignore abilities' effects when resolving move category", async () => {
-    game.override.ability(Abilities.HUGE_POWER);
+    game.override.ability(AbilityId.HUGE_POWER);
 
     await game.classicMode.startBattle([Species.MANAPHY]);
 

@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
 import { ElementalType } from "#enums/elemental-type";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -28,10 +28,10 @@ describe("Abilities - Galvanize", () => {
     game.override
       .battleType("single")
       .startingLevel(100)
-      .ability(Abilities.GALVANIZE)
+      .ability(AbilityId.GALVANIZE)
       .moveset([MoveId.TACKLE, MoveId.REVELATION_DANCE, MoveId.FURY_SWIPES])
       .enemySpecies(Species.DUSCLOPS)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .enemyLevel(100);
   });
@@ -59,7 +59,7 @@ describe("Abilities - Galvanize", () => {
   });
 
   it("should cause Normal-type attacks to activate Volt Absorb", async () => {
-    game.override.enemyAbility(Abilities.VOLT_ABSORB);
+    game.override.enemyAbility(AbilityId.VOLT_ABSORB);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 

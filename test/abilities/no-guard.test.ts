@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { HitCheckResult } from "#enums/hit-check-result";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -27,10 +27,10 @@ describe("Abilities - No Guard", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset(MoveId.ZAP_CANNON)
-      .ability(Abilities.NO_GUARD)
+      .ability(AbilityId.NO_GUARD)
       .enemyLevel(200)
       .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 

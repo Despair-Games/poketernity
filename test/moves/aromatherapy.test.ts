@@ -1,6 +1,6 @@
 import { StatusEffect } from "#enums/status-effect";
 import { CommandPhase } from "#app/phases/command-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -27,7 +27,7 @@ describe("Moves - Aromatherapy", () => {
       .moveset([MoveId.AROMATHERAPY, MoveId.SPLASH])
       .statusEffect(StatusEffect.BURN)
       .battleType("double")
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -77,7 +77,7 @@ describe("Moves - Aromatherapy", () => {
   });
 
   it("should not cure status effect of allies ON FIELD with Sap Sipper, should still cure allies in party", async () => {
-    game.override.ability(Abilities.SAP_SIPPER);
+    game.override.ability(AbilityId.SAP_SIPPER);
     await game.classicMode.startBattle([Species.RATTATA, Species.RATTATA, Species.RATTATA]);
     const [leftPlayer, rightPlayer, partyPokemon] = game.scene.getPlayerParty();
 

@@ -11,7 +11,7 @@ import { SelectModifierPhase } from "#app/phases/select-modifier-phase";
 import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
 import { UiMode } from "#enums/ui-mode";
 import { shiftCharCodes } from "#app/utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -37,7 +37,7 @@ describe("SelectModifierPhase", () => {
 
     game.override
       .moveset([MoveId.FISSURE, MoveId.SPLASH])
-      .ability(Abilities.NO_GUARD)
+      .ability(AbilityId.NO_GUARD)
       .startingLevel(200)
       .enemySpecies(Species.MAGIKARP);
   });

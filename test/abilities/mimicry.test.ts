@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { ElementalType } from "#enums/elemental-type";
@@ -24,14 +24,14 @@ describe("Abilities - Mimicry", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.SPLASH])
-      .ability(Abilities.MIMICRY)
+      .ability(AbilityId.MIMICRY)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP);
   });
 
   it("Mimicry activates after the Pokémon with Mimicry is switched in while terrain is present, or whenever there is a change in terrain", async () => {
-    game.override.enemyAbility(Abilities.MISTY_SURGE);
+    game.override.enemyAbility(AbilityId.MISTY_SURGE);
     await game.classicMode.startBattle([Species.FEEBAS, Species.ABRA]);
 
     const [playerPokemon1, playerPokemon2] = game.scene.getPlayerParty();
@@ -46,7 +46,7 @@ describe("Abilities - Mimicry", () => {
   });
 
   it("Pokemon should revert back to its original, root type once terrain ends", async () => {
-    game.override.moveset([MoveId.SPLASH, MoveId.TRANSFORM]).enemyAbility(Abilities.MIMICRY);
+    game.override.moveset([MoveId.SPLASH, MoveId.TRANSFORM]).enemyAbility(AbilityId.MIMICRY);
     await game.classicMode.startBattle([Species.REGIELEKI]);
 
     const playerPokemon = game.scene.getPlayerPokemon();

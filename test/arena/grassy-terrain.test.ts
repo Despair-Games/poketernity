@@ -1,6 +1,6 @@
 import { allMoves } from "#app/data/data-lists";
 import { toDmgValue } from "#app/utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { Challenges } from "#enums/challenges";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -29,10 +29,10 @@ describe("Arena - Grassy Terrain", () => {
       .disableCrits()
       .enemyLevel(1)
       .enemySpecies(Species.SHUCKLE)
-      .enemyAbility(Abilities.STURDY)
+      .enemyAbility(AbilityId.STURDY)
       .enemyMoveset(MoveId.SPLASH)
       .moveset([MoveId.GRASSY_TERRAIN, MoveId.EARTHQUAKE])
-      .ability(Abilities.NO_GUARD);
+      .ability(AbilityId.NO_GUARD);
   });
 
   it("should halve the damage of Earthquake", async () => {

@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -24,11 +24,11 @@ describe("Abilities - Mirror Armor", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.MIRROR_ARMOR)
+      .enemyAbility(AbilityId.MIRROR_ARMOR)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
@@ -49,7 +49,7 @@ describe("Abilities - Mirror Armor", () => {
   });
 
   it("should reflect abilities' stat-lowering effects onto the source", async () => {
-    game.override.ability(Abilities.INTIMIDATE);
+    game.override.ability(AbilityId.INTIMIDATE);
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 
@@ -107,7 +107,7 @@ describe("Abilities - Mirror Armor", () => {
   });
 
   it("should not reflect stat-lowering effects from another Pokemon's Mirror Armor", async () => {
-    game.override.ability(Abilities.MIRROR_ARMOR);
+    game.override.ability(AbilityId.MIRROR_ARMOR);
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 
@@ -163,12 +163,12 @@ describe("Abilities - Mirror Armor", () => {
   });
 
   it("should not reflect stat-lowering effects targeting the ability source's ally", async () => {
-    game.override.battleType("double").enemyAbility(Abilities.NONE);
+    game.override.battleType("double").enemyAbility(AbilityId.NONE);
 
     await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
 
     const enemyPokemon = game.scene.getEnemyField();
-    game.field.mockAbility(enemyPokemon[0], Abilities.MIRROR_ARMOR);
+    game.field.mockAbility(enemyPokemon[0], AbilityId.MIRROR_ARMOR);
 
     const [player] = game.scene.getPlayerField();
 
@@ -214,7 +214,7 @@ describe("Abilities - Mirror Armor", () => {
   });
 
   it("should be ignored by the attacker's Mold Breaker", async () => {
-    game.override.ability(Abilities.MOLD_BREAKER);
+    game.override.ability(AbilityId.MOLD_BREAKER);
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 
@@ -229,7 +229,7 @@ describe("Abilities - Mirror Armor", () => {
   });
 
   it("reflected stat changes should be blocked by the attacker's Clear Body", async () => {
-    game.override.ability(Abilities.CLEAR_BODY);
+    game.override.ability(AbilityId.CLEAR_BODY);
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 
@@ -239,7 +239,7 @@ describe("Abilities - Mirror Armor", () => {
     game.move.use(MoveId.GROWL);
     await game.toEndOfTurn();
 
-    expect(player.battleData.abilitiesApplied).toContain(Abilities.CLEAR_BODY);
+    expect(player.battleData.abilitiesApplied).toContain(AbilityId.CLEAR_BODY);
     expect(player.getStatStage(Stat.ATK)).toBe(0);
     expect(enemy.getStatStage(Stat.ATK)).toBe(0);
   });

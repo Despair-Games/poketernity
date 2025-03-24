@@ -1,5 +1,5 @@
 import type { PerishSongTag } from "#app/data/battler-tags/perish-song-tag";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -25,11 +25,11 @@ describe("Abilities - Perish Body", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.PECK, MoveId.SPLASH])
-      .ability(Abilities.PERISH_BODY)
+      .ability(AbilityId.PERISH_BODY)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.PERISH_BODY)
+      .enemyAbility(AbilityId.PERISH_BODY)
       .enemyMoveset(MoveId.PECK)
       .enemyLevel(8);
   });

@@ -3,7 +3,7 @@ import { allMoves } from "#app/data/data-lists";
 import { StealHeldItemChanceAttr } from "#app/data/moves/move-attrs/steal-held-item-chance-attr";
 import { type CommandPhase } from "#app/phases/command-phase";
 import { TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleCommand } from "#enums/battle-command";
@@ -41,7 +41,7 @@ describe("Moves - Substitute", () => {
       .battleType("single")
       .moveset([MoveId.SUBSTITUTE, MoveId.SWORDS_DANCE, MoveId.TACKLE, MoveId.SPLASH])
       .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.INSOMNIA)
+      .enemyAbility(AbilityId.INSOMNIA)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
@@ -140,7 +140,7 @@ describe("Moves - Substitute", () => {
 
   it("should be bypassed by attackers with Infiltrator", async () => {
     game.override.enemyMoveset(MoveId.TACKLE);
-    game.override.enemyAbility(Abilities.INFILTRATOR);
+    game.override.enemyAbility(AbilityId.INFILTRATOR);
 
     await game.classicMode.startBattle([Species.BLASTOISE]);
 
@@ -414,7 +414,7 @@ describe("Moves - Substitute", () => {
 
   it("should prevent the source's Rough Skin from activating when hit", async () => {
     game.override.enemyMoveset(MoveId.TACKLE);
-    game.override.ability(Abilities.ROUGH_SKIN);
+    game.override.ability(AbilityId.ROUGH_SKIN);
 
     await game.classicMode.startBattle([Species.BLASTOISE]);
 

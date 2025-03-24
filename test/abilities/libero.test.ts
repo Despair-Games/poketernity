@@ -3,7 +3,7 @@ import { ElementalType } from "#enums/elemental-type";
 import { Weather } from "#app/data/weather";
 import type { PlayerPokemon } from "#app/field/pokemon";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Biome } from "#enums/biome";
 import { MoveId } from "#enums/move-id";
@@ -30,7 +30,7 @@ describe("Abilities - Libero", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
-    game.override.ability(Abilities.LIBERO);
+    game.override.ability(AbilityId.LIBERO);
     game.override.startingLevel(100);
     game.override.enemySpecies(Species.RATTATA);
     game.override.enemyMoveset([MoveId.ENDURE, MoveId.ENDURE, MoveId.ENDURE, MoveId.ENDURE]);
@@ -67,7 +67,7 @@ describe("Abilities - Libero", () => {
     game.move.select(MoveId.AGILITY);
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    expect(leadPokemon.summonData.abilitiesApplied.filter((a) => a === Abilities.LIBERO)).toHaveLength(1);
+    expect(leadPokemon.summonData.abilitiesApplied.filter((a) => a === AbilityId.LIBERO)).toHaveLength(1);
     const leadPokemonType = ElementalType[leadPokemon.getTypes()[0]];
     const moveType = ElementalType[allMoves.get(MoveId.AGILITY).type];
     expect(leadPokemonType).not.toBe(moveType);
@@ -99,7 +99,7 @@ describe("Abilities - Libero", () => {
     game.move.select(MoveId.WEATHER_BALL);
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    expect(leadPokemon.summonData.abilitiesApplied).toContain(Abilities.LIBERO);
+    expect(leadPokemon.summonData.abilitiesApplied).toContain(AbilityId.LIBERO);
     expect(leadPokemon.getTypes()).toHaveLength(1);
     const leadPokemonType = ElementalType[leadPokemon.getTypes()[0]],
       moveType = ElementalType[ElementalType.FIRE];
@@ -108,7 +108,7 @@ describe("Abilities - Libero", () => {
 
   test("ability applies correctly even if the type has changed by another ability", async () => {
     game.override.moveset([MoveId.TACKLE]);
-    game.override.passiveAbility(Abilities.REFRIGERATE);
+    game.override.passiveAbility(AbilityId.REFRIGERATE);
 
     await game.startBattle([Species.MAGIKARP]);
 
@@ -118,7 +118,7 @@ describe("Abilities - Libero", () => {
     game.move.select(MoveId.TACKLE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    expect(leadPokemon.summonData.abilitiesApplied).toContain(Abilities.LIBERO);
+    expect(leadPokemon.summonData.abilitiesApplied).toContain(AbilityId.LIBERO);
     expect(leadPokemon.getTypes()).toHaveLength(1);
     const leadPokemonType = ElementalType[leadPokemon.getTypes()[0]],
       moveType = ElementalType[ElementalType.ICE];
@@ -214,7 +214,7 @@ describe("Abilities - Libero", () => {
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(Abilities.LIBERO);
+    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(AbilityId.LIBERO);
   });
 
   test("ability is not applied if pokemon is terastallized", async () => {
@@ -230,7 +230,7 @@ describe("Abilities - Libero", () => {
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(Abilities.LIBERO);
+    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(AbilityId.LIBERO);
   });
 
   test("ability is not applied if pokemon uses struggle", async () => {
@@ -244,7 +244,7 @@ describe("Abilities - Libero", () => {
     game.move.select(MoveId.STRUGGLE);
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(Abilities.LIBERO);
+    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(AbilityId.LIBERO);
   });
 
   test("ability is not applied if the pokemon's move fails", async () => {
@@ -258,7 +258,7 @@ describe("Abilities - Libero", () => {
     game.move.select(MoveId.BURN_UP);
     await game.phaseInterceptor.to(TurnEndPhase);
 
-    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(Abilities.LIBERO);
+    expect(leadPokemon.summonData.abilitiesApplied).not.toContain(AbilityId.LIBERO);
   });
 
   test("ability applies correctly even if the pokemon's Trick-or-Treat fails", async () => {
@@ -293,7 +293,7 @@ describe("Abilities - Libero", () => {
 });
 
 function testPokemonTypeMatchesDefaultMoveType(pokemon: PlayerPokemon, moveId: MoveId) {
-  expect(pokemon.summonData.abilitiesApplied).toContain(Abilities.LIBERO);
+  expect(pokemon.summonData.abilitiesApplied).toContain(AbilityId.LIBERO);
   expect(pokemon.getTypes()).toHaveLength(1);
   const pokemonType = ElementalType[pokemon.getTypes()[0]],
     moveType = ElementalType[allMoves.get(moveId).type];

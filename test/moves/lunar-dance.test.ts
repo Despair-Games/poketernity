@@ -1,6 +1,6 @@
 import { StatusEffect } from "#enums/status-effect";
 import { CommandPhase } from "#app/phases/command-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -25,7 +25,7 @@ describe("Moves - Lunar Dance", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.battleType("double").enemyAbility(Abilities.BALL_FETCH).enemyMoveset(MoveId.SPLASH);
+    game.override.battleType("double").enemyAbility(AbilityId.BALL_FETCH).enemyMoveset(MoveId.SPLASH);
   });
 
   it("should full restore HP, PP and status of switched in pokemon, then fail second use because no remaining backup pokemon in party", async () => {

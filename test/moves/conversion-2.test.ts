@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
 import { Challenges } from "#enums/challenges";
 import { ElementalType } from "#enums/elemental-type";
@@ -27,11 +27,11 @@ describe("Moves - Conversion 2", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .startingLevel(100)
       .enemyLevel(100);
   });
@@ -75,25 +75,25 @@ describe("Moves - Conversion 2", () => {
   it.each([
     {
       moveType: "Fairy",
-      ability: Abilities.PIXILATE,
+      ability: AbilityId.PIXILATE,
       abilityName: "Pixilate",
       resistingTypes: [ElementalType.STEEL, ElementalType.POISON, ElementalType.FIRE],
     },
     {
       moveType: "Electric",
-      ability: Abilities.GALVANIZE,
+      ability: AbilityId.GALVANIZE,
       abilityName: "Galvanize",
       resistingTypes: [ElementalType.GRASS, ElementalType.ELECTRIC, ElementalType.DRAGON, ElementalType.GROUND],
     },
     {
       moveType: "Flying",
-      ability: Abilities.AERILATE,
+      ability: AbilityId.AERILATE,
       abilityName: "Aerilate",
       resistingTypes: [ElementalType.ROCK, ElementalType.STEEL, ElementalType.ELECTRIC],
     },
     {
       moveType: "Ice",
-      ability: Abilities.REFRIGERATE,
+      ability: AbilityId.REFRIGERATE,
       abilityName: "Refrigerate",
       resistingTypes: [ElementalType.STEEL, ElementalType.FIRE, ElementalType.ICE],
     },

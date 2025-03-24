@@ -3,7 +3,7 @@ import { getGameMode } from "#app/game-mode";
 import { EncounterPhase } from "#app/phases/encounter-phase";
 import { SelectStarterPhase } from "#app/phases/select-starter-phase";
 import { settings } from "#app/system/settings/settings-manager";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { Biome } from "#enums/biome";
 import { GameModes } from "#enums/game-modes";
 import { MoveId } from "#enums/move-id";
@@ -167,7 +167,7 @@ describe("Test Battle Phase", () => {
     game.override.startingLevel(2000);
     game.override.startingWave(3).battleType("single");
     game.override.moveset([MoveId.TACKLE]);
-    game.override.enemyAbility(Abilities.HYDRATION);
+    game.override.enemyAbility(AbilityId.HYDRATION);
     game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
     await game.classicMode.startBattle();
     game.move.select(MoveId.TACKLE);
@@ -180,7 +180,7 @@ describe("Test Battle Phase", () => {
     game.override.startingLevel(5);
     game.override.startingWave(3);
     game.override.moveset([MoveId.TACKLE]);
-    game.override.enemyAbility(Abilities.HYDRATION);
+    game.override.enemyAbility(AbilityId.HYDRATION);
     game.override.enemyMoveset([MoveId.TAIL_WHIP, MoveId.TAIL_WHIP, MoveId.TAIL_WHIP, MoveId.TAIL_WHIP]);
     game.override.battleType("single");
     await game.classicMode.startBattle();
@@ -214,8 +214,8 @@ describe("Test Battle Phase", () => {
   it("2vs1", async () => {
     game.override.battleType("single");
     game.override.enemySpecies(Species.MIGHTYENA);
-    game.override.enemyAbility(Abilities.HYDRATION);
-    game.override.ability(Abilities.HYDRATION);
+    game.override.enemyAbility(AbilityId.HYDRATION);
+    game.override.ability(AbilityId.HYDRATION);
     await game.classicMode.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
     expect(game.scene.getCurrentPhase()!.constructor.name).toBe("CommandPhase");
@@ -224,8 +224,8 @@ describe("Test Battle Phase", () => {
   it("1vs1", async () => {
     game.override.battleType("single");
     game.override.enemySpecies(Species.MIGHTYENA);
-    game.override.enemyAbility(Abilities.HYDRATION);
-    game.override.ability(Abilities.HYDRATION);
+    game.override.enemyAbility(AbilityId.HYDRATION);
+    game.override.ability(AbilityId.HYDRATION);
     await game.classicMode.startBattle([Species.BLASTOISE]);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
     expect(game.scene.getCurrentPhase()!.constructor.name).toBe("CommandPhase");
@@ -234,8 +234,8 @@ describe("Test Battle Phase", () => {
   it("2vs2", async () => {
     game.override.battleType("double");
     game.override.enemySpecies(Species.MIGHTYENA);
-    game.override.enemyAbility(Abilities.HYDRATION);
-    game.override.ability(Abilities.HYDRATION);
+    game.override.enemyAbility(AbilityId.HYDRATION);
+    game.override.ability(AbilityId.HYDRATION);
     game.override.startingWave(3);
     await game.classicMode.startBattle([Species.BLASTOISE, Species.CHARIZARD]);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
@@ -245,8 +245,8 @@ describe("Test Battle Phase", () => {
   it("4vs2", async () => {
     game.override.battleType("double");
     game.override.enemySpecies(Species.MIGHTYENA);
-    game.override.enemyAbility(Abilities.HYDRATION);
-    game.override.ability(Abilities.HYDRATION);
+    game.override.enemyAbility(AbilityId.HYDRATION);
+    game.override.ability(AbilityId.HYDRATION);
     game.override.startingWave(3);
     await game.classicMode.startBattle([Species.BLASTOISE, Species.CHARIZARD, Species.DARKRAI, Species.GABITE]);
     expect(game.scene.ui?.getMode()).toBe(UiMode.COMMAND);
@@ -258,8 +258,8 @@ describe("Test Battle Phase", () => {
     game.override.battleType("single");
     game.override.starterSpecies(Species.MEWTWO);
     game.override.enemySpecies(Species.RATTATA);
-    game.override.enemyAbility(Abilities.HYDRATION);
-    game.override.ability(Abilities.ZEN_MODE);
+    game.override.enemyAbility(AbilityId.HYDRATION);
+    game.override.ability(AbilityId.ZEN_MODE);
     game.override.startingLevel(2000);
     game.override.startingWave(3);
     game.override.moveset([moveToUse]);
@@ -278,8 +278,8 @@ describe("Test Battle Phase", () => {
     game.override.battleType("single");
     game.override.starterSpecies(Species.MEWTWO);
     game.override.enemySpecies(Species.RATTATA);
-    game.override.enemyAbility(Abilities.HYDRATION);
-    game.override.ability(Abilities.ZEN_MODE);
+    game.override.enemyAbility(AbilityId.HYDRATION);
+    game.override.ability(AbilityId.ZEN_MODE);
     game.override.startingLevel(2000);
     game.override.startingWave(3);
     game.override.moveset([moveToUse]);
@@ -297,8 +297,8 @@ describe("Test Battle Phase", () => {
       .battleType("single")
       .starterSpecies(Species.MEWTWO)
       .enemySpecies(Species.RATTATA)
-      .enemyAbility(Abilities.HYDRATION)
-      .ability(Abilities.ZEN_MODE)
+      .enemyAbility(AbilityId.HYDRATION)
+      .ability(AbilityId.ZEN_MODE)
       .startingLevel(2000)
       .startingWave(3)
       .startingBiome(Biome.LAKE)
@@ -350,7 +350,7 @@ describe("Test Battle Phase", () => {
     game.override
       .battleType("single")
       .enemySpecies(Species.SUNKERN)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .startingWave(8)
       .startingLevel(1000)
       .enemyMoveset(MoveId.SPLASH);

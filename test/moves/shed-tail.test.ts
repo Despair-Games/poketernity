@@ -1,5 +1,5 @@
 import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
@@ -28,7 +28,7 @@ describe("Moves - Shed Tail", () => {
       .moveset([MoveId.SHED_TAIL])
       .battleType("single")
       .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 

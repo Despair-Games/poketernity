@@ -2,7 +2,7 @@ import { BattlerIndex } from "#enums/battler-index";
 import { type PostAttackApplyStatusEffectAbAttr } from "#app/data/abilities/ab-attrs/post-attack-apply-status-effect-ab-attr";
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
@@ -28,12 +28,12 @@ describe("Abilities - Toxic Chain", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.TOXIC_CHAIN)
+      .ability(AbilityId.TOXIC_CHAIN)
       .moveset([MoveId.WATER_GUN, MoveId.LEER, MoveId.DRAGON_TAIL, MoveId.TACKLE])
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .enemyLevel(100);
     vi.spyOn(globalScene, "randBattleSeedInt").mockImplementation((_range, min: 0) => min); // Force Toxic RNG rolls to succeed
@@ -131,7 +131,7 @@ describe("Abilities - Toxic Chain", () => {
   });
 
   it("should not apply against a target with Shield Dust, unless the attack ignores abilities", async () => {
-    game.override.enemyAbility(Abilities.SHIELD_DUST).moveset([MoveId.TACKLE, MoveId.MOONGEIST_BEAM]);
+    game.override.enemyAbility(AbilityId.SHIELD_DUST).moveset([MoveId.TACKLE, MoveId.MOONGEIST_BEAM]);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -142,7 +142,7 @@ describe("Abilities - Toxic Chain", () => {
   });
 
   it("should not normally apply against a target with Immunity", async () => {
-    game.override.enemyAbility(Abilities.IMMUNITY);
+    game.override.enemyAbility(AbilityId.IMMUNITY);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -151,7 +151,7 @@ describe("Abilities - Toxic Chain", () => {
   });
 
   it("should not normally apply against a target with active Leaf Guard", async () => {
-    game.override.enemyAbility(Abilities.LEAF_GUARD).enemyMoveset(MoveId.SUNNY_DAY);
+    game.override.enemyAbility(AbilityId.LEAF_GUARD).enemyMoveset(MoveId.SUNNY_DAY);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -174,13 +174,13 @@ describe("Abilities - Toxic Chain", () => {
 
   // TODO: Fix this interaction to pass the test
   it.todo("should still apply against a target with Mummy", async () => {
-    game.override.enemyAbility(Abilities.MUMMY);
+    game.override.enemyAbility(AbilityId.MUMMY);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
     await checkSucceedPoison(MoveId.TACKLE, enemyPokemon);
-    expect(playerPokemon.getAbility().id).toBe(Abilities.MUMMY);
+    expect(playerPokemon.getAbility().id).toBe(AbilityId.MUMMY);
   });
 });

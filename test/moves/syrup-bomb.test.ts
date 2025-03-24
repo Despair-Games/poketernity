@@ -1,6 +1,6 @@
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -27,8 +27,8 @@ describe("Moves - SYRUP BOMB", () => {
     game.override
       .battleType("single")
       .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.BALL_FETCH)
-      .ability(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .startingLevel(30)
       .enemyLevel(100)
       .moveset([MoveId.SYRUP_BOMB, MoveId.SPLASH])
@@ -62,7 +62,7 @@ describe("Moves - SYRUP BOMB", () => {
   });
 
   it("does not affect Pokemon with the ability Bulletproof", async () => {
-    game.override.enemyAbility(Abilities.BULLETPROOF);
+    game.override.enemyAbility(AbilityId.BULLETPROOF);
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const targetPokemon = game.scene.getEnemyPokemon()!;

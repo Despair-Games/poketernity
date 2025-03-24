@@ -27,7 +27,7 @@ import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-u
 import type { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import type { StarterSelectUiHandler } from "#app/ui/handlers/starter-select-ui-handler";
 import { isNullOrUndefined } from "#app/utils";
-import type { Abilities } from "#enums/abilities";
+import type { AbilityId } from "#enums/abilities";
 import { BattleStyle } from "#enums/battle-style";
 import type { BattlerIndex } from "#enums/battler-index";
 import { Button } from "#enums/buttons";
@@ -540,7 +540,7 @@ export class GameManager {
    * @param speciesId - The ID of the species that is to receive the ability.
    * @param abilityId - The ID of the ability to give.
    */
-  forceSpeciesSpecificAbility(speciesId: Species, abilityId: Abilities): void {
+  forceSpeciesSpecificAbility(speciesId: Species, abilityId: AbilityId): void {
     for (const p of (this.scene.getPlayerParty() as Pokemon[]).concat(this.scene.getEnemyParty())) {
       if (p.species.speciesId === speciesId) {
         this.field.mockAbility(p, abilityId);

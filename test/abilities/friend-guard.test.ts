@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
@@ -26,7 +26,7 @@ describe("Moves - Friend Guard", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("double")
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemySpecies(Species.SHUCKLE)
       .moveset([MoveId.SPLASH])
       .startingLevel(100);
@@ -52,7 +52,7 @@ describe("Moves - Friend Guard", () => {
       Math.floor(player1.getBaseDamage(enemy1, allMoves.get(MoveId.TACKLE), MoveCategory.PHYSICAL)),
     );
 
-    game.field.mockAbility(player2, Abilities.FRIEND_GUARD);
+    game.field.mockAbility(player2, AbilityId.FRIEND_GUARD);
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SPLASH, 1);
@@ -82,7 +82,7 @@ describe("Moves - Friend Guard", () => {
 
     const turn1Damage = spy.mock.results[spy.mock.results.length - 1].value.damage;
 
-    game.field.mockAbility(player2, Abilities.FRIEND_GUARD);
+    game.field.mockAbility(player2, AbilityId.FRIEND_GUARD);
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SPLASH, 1);
@@ -109,7 +109,7 @@ describe("Moves - Friend Guard", () => {
     const turn1Damage = spy.mock.results[spy.mock.results.length - 1].value.damage;
     expect(turn1Damage).toBe(40);
 
-    game.field.mockAbility(player2, Abilities.FRIEND_GUARD);
+    game.field.mockAbility(player2, AbilityId.FRIEND_GUARD);
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SPLASH, 1);

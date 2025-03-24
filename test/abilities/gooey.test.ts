@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
@@ -26,7 +26,7 @@ describe("Abilities - Gooey/Tangling Hair", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.TACKLE, MoveId.EMBER, MoveId.DOUBLE_IRON_BASH])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
@@ -34,8 +34,8 @@ describe("Abilities - Gooey/Tangling Hair", () => {
   });
 
   it.each([
-    { abilityName: "Gooey", ability: Abilities.GOOEY },
-    { abilityName: "Tangling Hair", ability: Abilities.TANGLING_HAIR },
+    { abilityName: "Gooey", ability: AbilityId.GOOEY },
+    { abilityName: "Tangling Hair", ability: AbilityId.TANGLING_HAIR },
   ])(
     "$abilityName should decrease the attacker's speed by 1 stage if the attacker uses a contact move",
     async ({ ability }) => {
@@ -52,12 +52,12 @@ describe("Abilities - Gooey/Tangling Hair", () => {
   );
 
   it.each([
-    { abilityName: "Gooey", ability: Abilities.GOOEY },
-    { abilityName: "Tangling Hair", ability: Abilities.TANGLING_HAIR },
+    { abilityName: "Gooey", ability: AbilityId.GOOEY },
+    { abilityName: "Tangling Hair", ability: AbilityId.TANGLING_HAIR },
   ])(
     "$abilityName should not activate if the attacker has the ability Long Reach and uses a contact move",
     async ({ ability }) => {
-      game.override.ability(Abilities.LONG_REACH).enemyAbility(ability);
+      game.override.ability(AbilityId.LONG_REACH).enemyAbility(ability);
       await game.classicMode.startBattle([Species.FEEBAS]);
       const pokemon = game.scene.getPlayerPokemon()!;
 
@@ -70,8 +70,8 @@ describe("Abilities - Gooey/Tangling Hair", () => {
   );
 
   it.each([
-    { abilityName: "Gooey", ability: Abilities.GOOEY },
-    { abilityName: "Tangling Hair", ability: Abilities.TANGLING_HAIR },
+    { abilityName: "Gooey", ability: AbilityId.GOOEY },
+    { abilityName: "Tangling Hair", ability: AbilityId.TANGLING_HAIR },
   ])(
     "$abilityName should not affect the attacker's speed if the attacker does not use a contact move",
     async ({ ability }) => {
@@ -88,8 +88,8 @@ describe("Abilities - Gooey/Tangling Hair", () => {
   );
 
   it.each([
-    { abilityName: "Gooey", ability: Abilities.GOOEY },
-    { abilityName: "Tangling Hair", ability: Abilities.TANGLING_HAIR },
+    { abilityName: "Gooey", ability: AbilityId.GOOEY },
+    { abilityName: "Tangling Hair", ability: AbilityId.TANGLING_HAIR },
   ])("$abilityName should activate per hit of a contact-making multi-strike move", async ({ ability }) => {
     game.override.enemyAbility(ability);
     await game.classicMode.startBattle([Species.FEEBAS]);

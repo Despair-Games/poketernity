@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -22,11 +22,11 @@ describe("Abilities - Suction Cups", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.SUCTION_CUPS)
+      .enemyAbility(AbilityId.SUCTION_CUPS)
       .enemyLevel(100);
   });
 
@@ -42,7 +42,7 @@ describe("Abilities - Suction Cups", () => {
   });
 
   it("should not prevent other Pokemon on the field from being forced to switch out via Wimp Out", async () => {
-    game.override.ability(Abilities.WIMP_OUT);
+    game.override.ability(AbilityId.WIMP_OUT);
     await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
 
     const [feebas, milotic] = game.scene.getPlayerParty();

@@ -1,5 +1,5 @@
 import { Stat } from "#enums/stat";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -27,7 +27,7 @@ describe("Moves - Make It Rain", () => {
     game.override.battleType("double");
     game.override.moveset([MoveId.MAKE_IT_RAIN, MoveId.SPLASH]);
     game.override.enemySpecies(Species.SNORLAX);
-    game.override.enemyAbility(Abilities.INSOMNIA);
+    game.override.enemyAbility(AbilityId.INSOMNIA);
     game.override.enemyMoveset(MoveId.SPLASH);
     game.override.startingLevel(100);
     game.override.enemyLevel(100);

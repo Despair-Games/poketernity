@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -27,11 +27,11 @@ describe("Abilities - Fluffy", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.TACKLE, MoveId.EMBER, MoveId.FIRE_FANG])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.RATTATA)
-      .enemyAbility(Abilities.FLUFFY)
+      .enemyAbility(AbilityId.FLUFFY)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -75,7 +75,7 @@ describe("Abilities - Fluffy", () => {
   });
 
   it("should not alter the damage of contact moves if the attacker has the ability Long Reach", async () => {
-    game.override.ability(Abilities.LONG_REACH);
+    game.override.ability(AbilityId.LONG_REACH);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const enemy = game.scene.getEnemyPokemon()!;
     const abilitySpy = vi.spyOn(enemy.getAbility().getAttrs(AbAttrFlag.RECEIVED_MOVE_DAMAGE_MULTIPLIER)[0], "apply");

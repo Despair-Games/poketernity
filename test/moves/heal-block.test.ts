@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { GameManager } from "#test/test-utils/gameManager";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
@@ -30,8 +30,8 @@ describe("Moves - Heal Block", () => {
     game.override
       .moveset([MoveId.ABSORB, MoveId.WISH, MoveId.SPLASH, MoveId.AQUA_RING])
       .enemyMoveset(MoveId.HEAL_BLOCK)
-      .ability(Abilities.NO_GUARD)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .ability(AbilityId.NO_GUARD)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemySpecies(Species.BLISSEY)
       .disableCrits();
   });
@@ -72,7 +72,7 @@ describe("Moves - Heal Block", () => {
   });
 
   it("should prevent Grassy Terrain from restoring HP", async () => {
-    game.override.enemyAbility(Abilities.GRASSY_SURGE);
+    game.override.enemyAbility(AbilityId.GRASSY_SURGE);
 
     await game.classicMode.startBattle([Species.CHARIZARD]);
 
@@ -101,7 +101,7 @@ describe("Moves - Heal Block", () => {
   });
 
   it("should prevent abilities from restoring HP", async () => {
-    game.override.weather(WeatherType.RAIN).ability(Abilities.RAIN_DISH);
+    game.override.weather(WeatherType.RAIN).ability(AbilityId.RAIN_DISH);
 
     await game.classicMode.startBattle([Species.CHARIZARD]);
 

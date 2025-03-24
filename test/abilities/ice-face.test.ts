@@ -4,7 +4,7 @@ import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -32,7 +32,7 @@ describe("Abilities - Ice Face", () => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
     game.override.enemySpecies(Species.EISCUE);
-    game.override.enemyAbility(Abilities.ICE_FACE);
+    game.override.enemyAbility(AbilityId.ICE_FACE);
     game.override.moveset([MoveId.TACKLE, MoveId.ICE_BEAM, MoveId.TOXIC_THREAD, MoveId.HAIL]);
   });
 
@@ -263,11 +263,11 @@ describe("Abilities - Ice Face", () => {
 
     expect(eiscue.getTag(BattlerTagType.ICE_FACE)).not.toBe(undefined);
     expect(eiscue.formIndex).toBe(icefaceForm);
-    expect(eiscue.hasAbility(Abilities.ICE_FACE)).toBe(true);
+    expect(eiscue.hasAbility(AbilityId.ICE_FACE)).toBe(true);
   });
 
   it("cannot be copied", async () => {
-    game.override.ability(Abilities.TRACE);
+    game.override.ability(AbilityId.TRACE);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -279,6 +279,6 @@ describe("Abilities - Ice Face", () => {
 
     expect(eiscue.getTag(BattlerTagType.ICE_FACE)).not.toBe(undefined);
     expect(eiscue.formIndex).toBe(icefaceForm);
-    expect(game.scene.getPlayerPokemon()!.hasAbility(Abilities.TRACE)).toBe(true);
+    expect(game.scene.getPlayerPokemon()!.hasAbility(AbilityId.TRACE)).toBe(true);
   });
 });

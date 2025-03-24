@@ -1,6 +1,6 @@
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -26,7 +26,7 @@ describe("Moves - Imprison", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset([MoveId.IMPRISON, MoveId.SPLASH, MoveId.GROWL])
       .enemySpecies(Species.SHUCKLE)
       .moveset([MoveId.TRANSFORM, MoveId.SPLASH]);

@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
@@ -28,8 +28,8 @@ describe("Arena - Gravity", () => {
     game.override
       .battleType("single")
       .moveset([MoveId.TACKLE, MoveId.GRAVITY, MoveId.FISSURE])
-      .ability(Abilities.UNNERVE)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .ability(AbilityId.UNNERVE)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemySpecies(Species.SHUCKLE)
       .enemyMoveset(MoveId.SPLASH)
       .enemyLevel(5);

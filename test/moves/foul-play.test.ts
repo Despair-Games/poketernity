@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -23,11 +23,11 @@ describe("Moves - Foul Play", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
@@ -80,7 +80,7 @@ describe("Moves - Foul Play", () => {
 
     const { damage: preDamage } = enemy.getAttackDamage(player, foulPlay);
 
-    game.override.ability(Abilities.HUSTLE).enemyAbility(Abilities.HUGE_POWER);
+    game.override.ability(AbilityId.HUSTLE).enemyAbility(AbilityId.HUGE_POWER);
 
     const { damage: postDamage } = enemy.getAttackDamage(player, foulPlay);
 

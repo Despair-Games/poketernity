@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -30,13 +30,13 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH);
+      .enemyAbility(AbilityId.BALL_FETCH);
   });
 
   it.each([
-    { abilityName: "Flame Body", ability: Abilities.FLAME_BODY, status: StatusEffect.BURN },
-    { abilityName: "Poison Point", ability: Abilities.POISON_POINT, status: StatusEffect.POISON },
-    { abilityName: "Static", ability: Abilities.STATIC, status: StatusEffect.PARALYSIS },
+    { abilityName: "Flame Body", ability: AbilityId.FLAME_BODY, status: StatusEffect.BURN },
+    { abilityName: "Poison Point", ability: AbilityId.POISON_POINT, status: StatusEffect.POISON },
+    { abilityName: "Static", ability: AbilityId.STATIC, status: StatusEffect.PARALYSIS },
   ])("$abilityName should status an attacking, applicable Pokemon if contact is made", async ({ ability, status }) => {
     game.override.ability(ability);
     await game.classicMode.startBattle([Species.FEEBAS]);
@@ -58,9 +58,9 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
   });
 
   it.each([
-    { abilityName: "Poison Point", ability: Abilities.POISON_POINT, status: StatusEffect.POISON },
-    { abilityName: "Static", ability: Abilities.STATIC, status: StatusEffect.PARALYSIS },
-    { abilityName: "Flame Body", ability: Abilities.FLAME_BODY, status: StatusEffect.BURN },
+    { abilityName: "Poison Point", ability: AbilityId.POISON_POINT, status: StatusEffect.POISON },
+    { abilityName: "Static", ability: AbilityId.STATIC, status: StatusEffect.PARALYSIS },
+    { abilityName: "Flame Body", ability: AbilityId.FLAME_BODY, status: StatusEffect.BURN },
   ])("$abilityName should not activate from a non-contact attack", async ({ ability }) => {
     game.override.ability(ability);
     await game.classicMode.startBattle([Species.FEEBAS]);
@@ -82,7 +82,7 @@ describe("Abilities - Flame Body/Poison Point/Static", () => {
   });
 
   it("Static can paralyze a Ground-type Pokemon", async () => {
-    game.override.ability(Abilities.STATIC).enemySpecies(Species.DIGLETT);
+    game.override.ability(AbilityId.STATIC).enemySpecies(Species.DIGLETT);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const pokemon = game.scene.getPlayerPokemon()!;
     vi.spyOn(

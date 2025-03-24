@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { ElementalType } from "#enums/elemental-type";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -28,7 +28,7 @@ describe("Moves - Electrify", () => {
       .battleType("single")
       .startingLevel(100)
       .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.TACKLE)
       .enemyLevel(100);
   });
@@ -50,7 +50,7 @@ describe("Moves - Electrify", () => {
   });
 
   it("should override type changes from abilities", async () => {
-    game.override.enemyAbility(Abilities.PIXILATE);
+    game.override.enemyAbility(AbilityId.PIXILATE);
 
     await game.classicMode.startBattle([Species.EXCADRILL]);
 

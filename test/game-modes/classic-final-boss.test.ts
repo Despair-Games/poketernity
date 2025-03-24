@@ -1,6 +1,6 @@
 import { GameModes } from "#enums/game-modes";
 import { TurnHeldItemTransferModifier } from "#app/modifier/modifier";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { Biome } from "#enums/biome";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -99,7 +99,7 @@ describe("Classic Final Boss", () => {
   });
 
   it("should change form on status damage down to last boss fragment", async () => {
-    game.override.ability(Abilities.NO_GUARD);
+    game.override.ability(AbilityId.NO_GUARD);
 
     await game.runToFinalBossEncounter([Species.BIDOOF], GameModes.CLASSIC);
     await game.phaseInterceptor.to("CommandPhase");

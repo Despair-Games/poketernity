@@ -4,7 +4,7 @@ import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
@@ -32,8 +32,8 @@ describe("Moves - Scale Shot", () => {
       .moveset([MoveId.SCALE_SHOT])
       .battleType("single")
       .disableCrits()
-      .ability(Abilities.NO_GUARD)
-      .passiveAbility(Abilities.SKILL_LINK)
+      .ability(AbilityId.NO_GUARD)
+      .passiveAbility(AbilityId.SKILL_LINK)
       .enemyMoveset(MoveId.SPLASH)
       .enemyLevel(3);
   });

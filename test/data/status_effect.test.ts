@@ -7,7 +7,7 @@ import {
   getStatusEffectOverlapText,
 } from "#app/data/status-effect";
 import { MoveResult } from "#enums/move-result";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
@@ -321,9 +321,9 @@ describe("Status Effects", () => {
       game.override
         .enemySpecies(Species.MAGIKARP)
         .enemyMoveset(MoveId.SPLASH)
-        .enemyAbility(Abilities.BALL_FETCH)
+        .enemyAbility(AbilityId.BALL_FETCH)
         .moveset([MoveId.QUICK_ATTACK])
-        .ability(Abilities.BALL_FETCH)
+        .ability(AbilityId.BALL_FETCH)
         .statusEffect(StatusEffect.PARALYSIS);
     });
 
@@ -357,11 +357,11 @@ describe("Status Effects", () => {
       game = new GameManager(phaserGame);
       game.override
         .moveset([MoveId.SPLASH])
-        .ability(Abilities.BALL_FETCH)
+        .ability(AbilityId.BALL_FETCH)
         .battleType("single")
         .disableCrits()
         .enemySpecies(Species.MAGIKARP)
-        .enemyAbility(Abilities.BALL_FETCH)
+        .enemyAbility(AbilityId.BALL_FETCH)
         .enemyMoveset(MoveId.SPLASH);
     });
 
@@ -413,11 +413,11 @@ describe("Status Effects", () => {
       game = new GameManager(phaserGame);
       game.override
         .moveset([MoveId.SPLASH])
-        .ability(Abilities.BALL_FETCH)
+        .ability(AbilityId.BALL_FETCH)
         .battleType("single")
         .disableCrits()
         .enemySpecies(Species.MAGIKARP)
-        .enemyAbility(Abilities.BALL_FETCH)
+        .enemyAbility(AbilityId.BALL_FETCH)
         .enemyMoveset(MoveId.NUZZLE)
         .enemyLevel(2000);
     });

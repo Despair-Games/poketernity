@@ -1,6 +1,6 @@
 import { Stat } from "#enums/stat";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -30,7 +30,7 @@ describe("Abilities - Defiant", () => {
       .enemyMoveset(MoveId.TICKLE)
       .startingLevel(1)
       .moveset([MoveId.SPLASH, MoveId.CLOSE_COMBAT])
-      .ability(Abilities.DEFIANT);
+      .ability(AbilityId.DEFIANT);
   });
 
   it("lower atk and def by 1 via tickle, then increase atk by 4 via defiant", async () => {

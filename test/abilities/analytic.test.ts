@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { isBetween, toDmgValue } from "#app/utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -25,13 +25,13 @@ describe("Abilities - Analytic", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.SPLASH, MoveId.TACKLE])
-      .ability(Abilities.ANALYTIC)
+      .ability(AbilityId.ANALYTIC)
       .battleType("single")
       .disableCrits()
       .startingLevel(200)
       .enemyLevel(200)
       .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 

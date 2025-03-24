@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/data-lists";
 import { FlinchAttr } from "#app/data/moves/move-attrs/flinch-attr";
 import { StatStageChangeAttr } from "#app/data/moves/move-attrs/stat-stage-change-attr";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -28,11 +28,11 @@ describe("Moves - Triple Arrows", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .moveset([MoveId.TRIPLE_ARROWS])
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.STURDY)
+      .enemyAbility(AbilityId.STURDY)
       .enemyMoveset(MoveId.SPLASH);
 
     vi.spyOn(flinchAttr, "getMoveChance");
@@ -50,7 +50,7 @@ describe("Moves - Triple Arrows", () => {
   });
 
   it("is affected normally by Serene Grace", async () => {
-    game.override.ability(Abilities.SERENE_GRACE);
+    game.override.ability(AbilityId.SERENE_GRACE);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     game.move.select(MoveId.TRIPLE_ARROWS);

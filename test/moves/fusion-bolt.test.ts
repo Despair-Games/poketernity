@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -27,7 +27,7 @@ describe("Moves - Fusion Bolt", () => {
     game.override.startingLevel(1);
 
     game.override.enemySpecies(Species.RESHIRAM);
-    game.override.enemyAbility(Abilities.ROUGH_SKIN);
+    game.override.enemyAbility(AbilityId.ROUGH_SKIN);
     game.override.enemyMoveset([MoveId.SPLASH, MoveId.SPLASH, MoveId.SPLASH, MoveId.SPLASH]);
 
     game.override.battleType("single");

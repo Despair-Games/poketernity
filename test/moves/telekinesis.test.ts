@@ -1,6 +1,6 @@
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { MoveResult } from "#enums/move-result";
@@ -29,7 +29,7 @@ describe("Moves - Telekinesis", () => {
       .battleType("single")
       .enemySpecies(Species.SNORLAX)
       .enemyLevel(60)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset([MoveId.SPLASH]);
   });
 

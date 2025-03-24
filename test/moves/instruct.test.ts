@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
 import type { Pokemon } from "#app/field/pokemon";
 import { MoveResult } from "#enums/move-result";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -34,10 +34,10 @@ describe("Moves - Instruct", () => {
     game.override
       .battleType("single")
       .enemySpecies(Species.SHUCKLE)
-      .enemyAbility(Abilities.NO_GUARD)
+      .enemyAbility(AbilityId.NO_GUARD)
       .enemyLevel(100)
       .startingLevel(100)
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .moveset([MoveId.INSTRUCT, MoveId.SONIC_BOOM, MoveId.SPLASH, MoveId.TORMENT])
       .disableCrits();
   });
@@ -243,7 +243,7 @@ describe("Moves - Instruct", () => {
       .battleType("double")
       .moveset([MoveId.INSTRUCT, MoveId.FIERY_DANCE])
       .enemyMoveset(MoveId.SPLASH)
-      .enemyAbility(Abilities.DANCER);
+      .enemyAbility(AbilityId.DANCER);
     await game.classicMode.startBattle([Species.SHUCKLE, Species.SHUCKLE]);
 
     game.move.select(MoveId.INSTRUCT, BattlerIndex.PLAYER, BattlerIndex.ENEMY);
@@ -257,7 +257,7 @@ describe("Moves - Instruct", () => {
   });
 
   it("should cause multi-hit moves to hit the appropriate number of times in singles", async () => {
-    game.override.enemyAbility(Abilities.SKILL_LINK).enemyMoveset(MoveId.BULLET_SEED);
+    game.override.enemyAbility(AbilityId.SKILL_LINK).enemyMoveset(MoveId.BULLET_SEED);
     await game.classicMode.startBattle([Species.BULBASAUR]);
 
     const player = game.scene.getPlayerPokemon()!;
@@ -282,7 +282,7 @@ describe("Moves - Instruct", () => {
   it("should cause multi-hit moves to hit the appropriate number of times in doubles", async () => {
     game.override
       .battleType("double")
-      .enemyAbility(Abilities.SKILL_LINK)
+      .enemyAbility(AbilityId.SKILL_LINK)
       .enemyMoveset([MoveId.BULLET_SEED, MoveId.SPLASH])
       .enemyLevel(5);
     await game.classicMode.startBattle([Species.BULBASAUR, Species.IVYSAUR]);

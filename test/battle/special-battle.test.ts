@@ -1,6 +1,6 @@
 import { CommandPhase } from "#app/phases/command-phase";
 import { UiMode } from "#enums/ui-mode";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -26,8 +26,8 @@ describe("Test Battle Phase", () => {
     game.override.enemySpecies(Species.RATTATA);
     game.override.startingLevel(2000);
     game.override.moveset([MoveId.TACKLE]);
-    game.override.enemyAbility(Abilities.HYDRATION);
-    game.override.ability(Abilities.HYDRATION);
+    game.override.enemyAbility(AbilityId.HYDRATION);
+    game.override.ability(AbilityId.HYDRATION);
     game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
   });
 

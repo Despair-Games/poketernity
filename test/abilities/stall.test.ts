@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -25,7 +25,7 @@ describe("Abilities - Stall", () => {
     game.override.battleType("single");
     game.override.disableCrits();
     game.override.enemySpecies(Species.REGIELEKI);
-    game.override.enemyAbility(Abilities.STALL);
+    game.override.enemyAbility(AbilityId.STALL);
     game.override.enemyMoveset(MoveId.QUICK_ATTACK);
     game.override.moveset([MoveId.QUICK_ATTACK, MoveId.TACKLE]);
   });
@@ -58,7 +58,7 @@ describe("Abilities - Stall", () => {
   });
 
   it("multiple Pokemon with Stall should execute moves in speed order", async () => {
-    game.override.ability(Abilities.STALL);
+    game.override.ability(AbilityId.STALL);
     await game.classicMode.startBattle([Species.SHUCKLE]);
 
     game.move.select(MoveId.QUICK_ATTACK);

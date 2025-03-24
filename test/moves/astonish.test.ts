@@ -4,7 +4,7 @@ import { BerryPhase } from "#app/phases/berry-phase";
 import { CommandPhase } from "#app/phases/command-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -30,7 +30,7 @@ describe("Moves - Astonish", () => {
     game.override.battleType("single");
     game.override.moveset([MoveId.ASTONISH, MoveId.SPLASH]);
     game.override.enemySpecies(Species.BLASTOISE);
-    game.override.enemyAbility(Abilities.INSOMNIA);
+    game.override.enemyAbility(AbilityId.INSOMNIA);
     game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
     game.override.startingLevel(100);
     game.override.enemyLevel(100);

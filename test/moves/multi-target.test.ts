@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { Species } from "#enums/species";
 import { toDmgValue } from "#app/utils";
 import { MoveId } from "#enums/move-id";
@@ -30,9 +30,9 @@ describe("Multi-target damage reduction", () => {
       .startingLevel(100)
       .enemySpecies(Species.POLIWAG)
       .enemyMoveset(MoveId.SPLASH)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .moveset([MoveId.TACKLE, MoveId.DAZZLING_GLEAM, MoveId.EARTHQUAKE, MoveId.SPLASH])
-      .ability(Abilities.BALL_FETCH);
+      .ability(AbilityId.BALL_FETCH);
   });
 
   it("should reduce d.gleam damage when multiple enemies but not tackle", async () => {

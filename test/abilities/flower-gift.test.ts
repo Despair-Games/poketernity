@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
 import { MoveId } from "#enums/move-id";
@@ -19,7 +19,7 @@ describe("Abilities - Flower Gift", () => {
    * @param game The game manager instance
    * @param ability The ability that is active on the field
    */
-  const testRevertFormAgainstAbility = async (game: GameManager, ability: Abilities) => {
+  const testRevertFormAgainstAbility = async (game: GameManager, ability: AbilityId) => {
     game.override.starterForms({ [Species.CHERRIM]: SUNSHINE_FORM }).enemyAbility(ability);
     await game.classicMode.startBattle([Species.CHERRIM]);
 
@@ -44,7 +44,7 @@ describe("Abilities - Flower Gift", () => {
       .moveset([MoveId.SPLASH, MoveId.RAIN_DANCE, MoveId.SUNNY_DAY, MoveId.SKILL_SWAP])
       .enemySpecies(Species.MAGIKARP)
       .enemyMoveset(MoveId.SPLASH)
-      .enemyAbility(Abilities.BALL_FETCH);
+      .enemyAbility(AbilityId.BALL_FETCH);
   });
 
   // TODO: Uncomment expect statements when the ability is fully implemented - currently does not increase stats of allies
@@ -83,11 +83,11 @@ describe("Abilities - Flower Gift", () => {
   });
 
   it("reverts to Overcast Form if a Pokémon on the field has Air Lock", async () => {
-    await testRevertFormAgainstAbility(game, Abilities.AIR_LOCK);
+    await testRevertFormAgainstAbility(game, AbilityId.AIR_LOCK);
   });
 
   it("reverts to Overcast Form if a Pokémon on the field has Cloud Nine", async () => {
-    await testRevertFormAgainstAbility(game, Abilities.CLOUD_NINE);
+    await testRevertFormAgainstAbility(game, AbilityId.CLOUD_NINE);
   });
 
   it("reverts to Overcast Form when the Pokémon loses Flower Gift, changes form under Harsh Sunlight/Sunny when it regains it", async () => {

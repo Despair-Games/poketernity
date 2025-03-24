@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -29,7 +29,7 @@ describe("Moves - G-Max damage over time arena moves", () => {
       .moveset([MoveId.G_MAX_WILDFIRE, MoveId.G_MAX_VOLCALITH, MoveId.SPLASH])
       .enemySpecies(Species.SHUCKLE)
       .enemyLevel(100)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -72,7 +72,7 @@ describe("Moves - G-Max damage over time arena moves", () => {
   });
 
   it("G-Max moves should not damage magic guard", async () => {
-    game.override.enemyAbility(Abilities.MAGIC_GUARD);
+    game.override.enemyAbility(AbilityId.MAGIC_GUARD);
     await game.classicMode.startBattle([Species.SUNKERN, Species.SUNKERN]);
 
     game.move.select(MoveId.G_MAX_WILDFIRE, 0, BattlerIndex.ENEMY);

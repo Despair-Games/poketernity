@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { GameManager } from "#test/test-utils/gameManager";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -27,9 +27,9 @@ describe("Moves - Baton Pass", () => {
     game.override
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .moveset([MoveId.BATON_PASS, MoveId.NASTY_PLOT, MoveId.SPLASH])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .disableCrits();
   });

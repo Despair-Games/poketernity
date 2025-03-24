@@ -10,7 +10,7 @@ import type { PokemonForm } from "./pokemon-form";
 import { variantData, type VariantSet, type Variant } from "#app/data/variant";
 import { globalScene } from "#app/global-scene";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { PokemonRegion } from "#enums/pokemon-regions";
 import { Species } from "#enums/species";
 import { SpeciesFormKey } from "#enums/species-form-key";
@@ -34,9 +34,9 @@ export abstract class PokemonSpeciesForm {
   readonly type2: ElementalType | null;
   readonly height: number;
   readonly weight: number;
-  readonly ability1: Abilities;
-  readonly ability2: Abilities;
-  readonly abilityHidden: Abilities;
+  readonly ability1: AbilityId;
+  readonly ability2: AbilityId;
+  readonly abilityHidden: AbilityId;
   readonly baseTotal: number;
   readonly baseStats: number[];
   readonly catchRate: number;
@@ -50,9 +50,9 @@ export abstract class PokemonSpeciesForm {
     type2: ElementalType | null,
     height: number,
     weight: number,
-    ability1: Abilities,
-    ability2: Abilities,
-    abilityHidden: Abilities,
+    ability1: AbilityId,
+    ability2: AbilityId,
+    abilityHidden: AbilityId,
     baseTotal: number,
     baseHp: number,
     baseAtk: number,
@@ -72,7 +72,7 @@ export abstract class PokemonSpeciesForm {
     this.height = height;
     this.weight = weight;
     this.ability1 = ability1;
-    this.ability2 = ability2 === Abilities.NONE ? ability1 : ability2;
+    this.ability2 = ability2 === AbilityId.NONE ? ability1 : ability2;
     this.abilityHidden = abilityHidden;
     this.baseTotal = baseTotal;
     this.baseStats = [baseHp, baseAtk, baseDef, baseSpatk, baseSpdef, baseSpd];
@@ -126,7 +126,7 @@ export abstract class PokemonSpeciesForm {
    * @returns Number of abilities
    */
   getAbilityCount(): number {
-    return this.abilityHidden !== Abilities.NONE ? 3 : 2;
+    return this.abilityHidden !== AbilityId.NONE ? 3 : 2;
   }
 
   /**
@@ -134,8 +134,8 @@ export abstract class PokemonSpeciesForm {
    * @param abilityIndex Which ability to get (should only be 0-2)
    * @returns The id of the Ability
    */
-  getAbility(abilityIndex: number): Abilities {
-    let ret: Abilities;
+  getAbility(abilityIndex: number): AbilityId {
+    let ret: AbilityId;
     if (abilityIndex === 0) {
       ret = this.ability1;
     } else if (abilityIndex === 1) {

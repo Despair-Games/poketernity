@@ -1,7 +1,7 @@
 import type { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
 import { MovePhase } from "#app/phases/move-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
@@ -30,11 +30,11 @@ describe("Moves - Swallow", () => {
 
     game.override.enemySpecies(Species.RATTATA);
     game.override.enemyMoveset(MoveId.SPLASH);
-    game.override.enemyAbility(Abilities.NONE);
+    game.override.enemyAbility(AbilityId.NONE);
     game.override.enemyLevel(2000);
 
     game.override.moveset([MoveId.SWALLOW, MoveId.SWALLOW, MoveId.SWALLOW, MoveId.SWALLOW]);
-    game.override.ability(Abilities.NONE);
+    game.override.ability(AbilityId.NONE);
   });
 
   describe("consumes all stockpile stacks to heal (scaling with stacks)", () => {

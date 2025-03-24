@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -7,8 +7,8 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vite
 import { Stat } from "#enums/stat";
 
 describe.each([
-  { abilityName: "Huge Power", ability: Abilities.HUGE_POWER },
-  { abilityName: "Pure Power", ability: Abilities.PURE_POWER },
+  { abilityName: "Huge Power", ability: AbilityId.HUGE_POWER },
+  { abilityName: "Pure Power", ability: AbilityId.PURE_POWER },
 ])("Abilities - $abilityName", ({ ability }) => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
@@ -31,7 +31,7 @@ describe.each([
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
       .enemyLevel(20)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 

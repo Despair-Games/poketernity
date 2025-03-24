@@ -1,5 +1,5 @@
 import type { Localizable } from "#app/interfaces/locales";
-import type { Abilities } from "#enums/abilities";
+import type { AbilityId } from "#enums/abilities";
 import { Species } from "#enums/species";
 import i18next from "i18next";
 import { randSeedGauss, randSeedItem } from "#app/utils";
@@ -34,9 +34,9 @@ export default class PokemonSpecies extends PokemonSpeciesForm implements Locali
     type2: ElementalType | null,
     height: number,
     weight: number,
-    ability1: Abilities,
-    ability2: Abilities,
-    abilityHidden: Abilities,
+    ability1: AbilityId,
+    ability2: AbilityId,
+    abilityHidden: AbilityId,
     baseTotal: number,
     baseHp: number,
     baseAtk: number,

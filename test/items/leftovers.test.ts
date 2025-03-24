@@ -1,6 +1,6 @@
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -25,10 +25,10 @@ describe("Items - Leftovers", () => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
     game.override.startingLevel(2000);
-    game.override.ability(Abilities.UNNERVE);
+    game.override.ability(AbilityId.UNNERVE);
     game.override.moveset([MoveId.SPLASH]);
     game.override.enemySpecies(Species.SHUCKLE);
-    game.override.enemyAbility(Abilities.UNNERVE);
+    game.override.enemyAbility(AbilityId.UNNERVE);
     game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
     game.override.startingHeldItems([{ name: "LEFTOVERS", count: 1 }]);
   });

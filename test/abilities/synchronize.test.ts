@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
@@ -27,9 +27,9 @@ describe("Abilities - Synchronize", () => {
       .battleType("single")
       .startingLevel(100)
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.SYNCHRONIZE)
+      .enemyAbility(AbilityId.SYNCHRONIZE)
       .moveset([MoveId.SPLASH, MoveId.THUNDER_WAVE, MoveId.SPORE, MoveId.PSYCHO_SHIFT])
-      .ability(Abilities.NO_GUARD);
+      .ability(AbilityId.NO_GUARD);
   });
 
   it("does not trigger when no status is applied by opponent Pokemon", async () => {
@@ -67,8 +67,8 @@ describe("Abilities - Synchronize", () => {
 
   it("does not trigger when Pokemon is statused by Toxic Spikes", async () => {
     game.override
-      .ability(Abilities.SYNCHRONIZE)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .ability(AbilityId.SYNCHRONIZE)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(Array(4).fill(MoveId.TOXIC_SPIKES));
 
     await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);

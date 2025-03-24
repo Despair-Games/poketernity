@@ -1,6 +1,6 @@
 import { QuietFormChangePhase } from "#app/phases/quiet-form-change-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -24,7 +24,7 @@ describe("Abilities - SHIELDS DOWN", () => {
     game = new GameManager(phaserGame);
     const moveToUse = MoveId.SPLASH;
     game.override.battleType("single");
-    game.override.ability(Abilities.SHIELDS_DOWN);
+    game.override.ability(AbilityId.SHIELDS_DOWN);
     game.override.moveset([moveToUse]);
     game.override.enemyMoveset([MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE, MoveId.TACKLE]);
   });

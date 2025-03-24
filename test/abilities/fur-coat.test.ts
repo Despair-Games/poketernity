@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
@@ -25,11 +25,11 @@ describe("Abilities - Fur Coat", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.TACKLE, MoveId.PSYSHOCK, MoveId.SWEET_KISS, MoveId.SPLASH])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.FUR_COAT)
+      .enemyAbility(AbilityId.FUR_COAT)
       .enemyMoveset(MoveId.SPLASH);
   });
 

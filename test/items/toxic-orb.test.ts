@@ -1,5 +1,5 @@
 import i18next from "#app/plugins/i18n";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
@@ -26,8 +26,8 @@ describe("Items - Toxic orb", () => {
     game.override
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
-      .ability(Abilities.BALL_FETCH)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .moveset(MoveId.SPLASH)
       .enemyMoveset(MoveId.SPLASH)
       .startingHeldItems([

@@ -5,7 +5,7 @@ import { Species } from "#enums/species";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 
 describe("Moves - Speed Swap", () => {
   let phaserGame: Phaser.Game;
@@ -25,12 +25,12 @@ describe("Moves - Speed Swap", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .enemyAbility(Abilities.NONE)
+      .enemyAbility(AbilityId.NONE)
       .enemyMoveset(MoveId.SPLASH)
       .enemySpecies(Species.MEW)
       .enemyLevel(200)
       .moveset([MoveId.SPEED_SWAP])
-      .ability(Abilities.NONE);
+      .ability(AbilityId.NONE);
   });
 
   it("should swap the user's SPD and the target's SPD stats", async () => {

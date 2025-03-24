@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -23,11 +23,11 @@ describe("Moves - Floral Healing", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.FLORAL_HEALING])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
@@ -47,7 +47,7 @@ describe("Moves - Floral Healing", () => {
   });
 
   it("should heal the target by 2/3 of their maximum HP under Grassy Terrain", async () => {
-    game.override.enemyAbility(Abilities.GRASSY_SURGE);
+    game.override.enemyAbility(AbilityId.GRASSY_SURGE);
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 

@@ -27,7 +27,7 @@ import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
 import { Stat } from "#enums/stat";
 import type { BerryModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { PhaseId } from "#enums/phase-id";
 
 const namespace = "mysteryEncounters/uncommonBreed";
@@ -53,8 +53,8 @@ describe("Uncommon Breed - Mystery Encounter", () => {
       .startingWave(defaultWave)
       .startingBiome(defaultBiome)
       .disableTrainerWaves()
-      .enemyAbility(Abilities.BALL_FETCH)
-      .enemyPassiveAbility(Abilities.BALL_FETCH);
+      .enemyAbility(AbilityId.BALL_FETCH)
+      .enemyPassiveAbility(AbilityId.BALL_FETCH);
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
       new Map<Biome, MysteryEncounterType[]>([[Biome.CAVE, [MysteryEncounterType.UNCOMMON_BREED]]]),

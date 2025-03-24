@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/data-lists";
 import { StatusEffect } from "#enums/status-effect";
 import { CommandPhase } from "#app/phases/command-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -26,9 +26,9 @@ describe("Moves - Sparkly Swirl", () => {
       .enemySpecies(Species.SHUCKLE)
       .enemyLevel(100)
       .enemyMoveset(MoveId.SPLASH)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .moveset([MoveId.SPARKLY_SWIRL, MoveId.SPLASH])
-      .ability(Abilities.BALL_FETCH);
+      .ability(AbilityId.BALL_FETCH);
 
     vi.spyOn(allMoves.get(MoveId.SPARKLY_SWIRL), "accuracy", "get").mockReturnValue(100);
   });

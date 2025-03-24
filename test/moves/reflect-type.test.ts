@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { ElementalType } from "#enums/elemental-type";
@@ -22,7 +22,7 @@ describe("Moves - Reflect Type", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.ability(Abilities.BALL_FETCH).battleType("single").disableCrits().enemyAbility(Abilities.BALL_FETCH);
+    game.override.ability(AbilityId.BALL_FETCH).battleType("single").disableCrits().enemyAbility(AbilityId.BALL_FETCH);
   });
 
   it("will make the user Normal/Grass if targetting a typeless Pokemon affected by Forest's Curse", async () => {

@@ -1,6 +1,6 @@
 import { allAbilities, allMoves } from "#app/data/data-lists";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -25,9 +25,9 @@ describe("Abilities - Wonder Skin", () => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
     game.override.moveset([MoveId.TACKLE, MoveId.CHARM]);
-    game.override.ability(Abilities.BALL_FETCH);
+    game.override.ability(AbilityId.BALL_FETCH);
     game.override.enemySpecies(Species.SHUCKLE);
-    game.override.enemyAbility(Abilities.WONDER_SKIN);
+    game.override.enemyAbility(AbilityId.WONDER_SKIN);
     game.override.enemyMoveset(MoveId.SPLASH);
   });
 
@@ -55,7 +55,7 @@ describe("Abilities - Wonder Skin", () => {
     expect(moveToCheck.calculateBattleAccuracy).toHaveReturnedWith(100);
   });
 
-  const bypassAbilities = [Abilities.MOLD_BREAKER, Abilities.TERAVOLT, Abilities.TURBOBLAZE];
+  const bypassAbilities = [AbilityId.MOLD_BREAKER, AbilityId.TERAVOLT, AbilityId.TURBOBLAZE];
 
   bypassAbilities.forEach((ability) => {
     it(`does not affect pokemon with ${allAbilities[ability].name}`, async () => {

@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { ElementalType } from "#enums/elemental-type";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -26,7 +26,7 @@ describe("Moves - Tera Starstorm", () => {
     game.override
       .moveset([MoveId.TERA_STARSTORM, MoveId.SPLASH])
       .battleType("double")
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .enemyLevel(30)
       .enemySpecies(Species.MAGIKARP)

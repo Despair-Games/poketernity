@@ -1,5 +1,5 @@
 import { WeatherType } from "#enums/weather-type";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -26,7 +26,7 @@ describe("Abilities - Sand Spit", () => {
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.SILICOBRA)
-      .enemyAbility(Abilities.SAND_SPIT)
+      .enemyAbility(AbilityId.SAND_SPIT)
       .enemyMoveset([MoveId.SPLASH])
       .moveset([MoveId.TACKLE, MoveId.WATERFALL, MoveId.SURF, MoveId.GROWL]);
   });

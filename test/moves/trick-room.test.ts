@@ -1,7 +1,7 @@
 import type { BypassSpeedChanceAbAttr } from "#app/data/abilities/ab-attrs/bypass-speed-chance-ab-attr";
 import { allAbilities } from "#app/data/data-lists";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
@@ -27,11 +27,11 @@ describe("Moves - Trick Room", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
@@ -89,9 +89,9 @@ describe("Moves - Trick Room", () => {
   });
 
   it("should not reverse effects which cause Pokemon to move first/last within a priority bracket", async () => {
-    game.override.ability(Abilities.QUICK_DRAW);
+    game.override.ability(AbilityId.QUICK_DRAW);
 
-    const quickDrawAbAttr = allAbilities[Abilities.QUICK_DRAW].getAttrs<BypassSpeedChanceAbAttr>(
+    const quickDrawAbAttr = allAbilities[AbilityId.QUICK_DRAW].getAttrs<BypassSpeedChanceAbAttr>(
       AbAttrFlag.BYPASS_SPEED_CHANCE,
     )[0];
     vi.spyOn(quickDrawAbAttr, "chance", "get").mockReturnValue(100);

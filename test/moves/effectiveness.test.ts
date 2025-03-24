@@ -2,7 +2,7 @@ import { allMoves } from "#app/data/data-lists";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { TrainerSlot } from "#enums/trainer-slot";
 import { ElementalType } from "#enums/elemental-type";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import * as Messages from "#app/messages";
@@ -16,7 +16,7 @@ function testMoveEffectiveness(
   moveId: MoveId,
   targetSpecies: Species,
   expected: number,
-  targetAbility: Abilities = Abilities.BALL_FETCH,
+  targetAbility: AbilityId = AbilityId.BALL_FETCH,
   teraType?: ElementalType,
 ): void {
   // Suppress getPokemonNameWithAffix because it calls on a null battle spec
@@ -46,7 +46,7 @@ describe("Moves - Type Effectiveness", () => {
     game = new GameManager(phaserGame);
     TerastallizeModifier.prototype.apply = (_args) => true;
 
-    game.override.ability(Abilities.BALL_FETCH);
+    game.override.ability(AbilityId.BALL_FETCH);
   });
 
   afterEach(() => {
@@ -75,24 +75,24 @@ describe("Moves - Type Effectiveness", () => {
     testMoveEffectiveness(game, MoveId.THUNDERBOLT, Species.GYARADOS, 4));
 
   it("Electric-type attacks are negated by Volt Absorb", () =>
-    testMoveEffectiveness(game, MoveId.THUNDERBOLT, Species.GYARADOS, 0, Abilities.VOLT_ABSORB));
+    testMoveEffectiveness(game, MoveId.THUNDERBOLT, Species.GYARADOS, 0, AbilityId.VOLT_ABSORB));
 
   it("Electric-type attacks are super-effective against Tera-Water Pokemon", () =>
-    testMoveEffectiveness(game, MoveId.THUNDERBOLT, Species.EXCADRILL, 2, Abilities.BALL_FETCH, ElementalType.WATER));
+    testMoveEffectiveness(game, MoveId.THUNDERBOLT, Species.EXCADRILL, 2, AbilityId.BALL_FETCH, ElementalType.WATER));
 
   it("Powder moves have no effect on Grass-type Pokemon", () =>
     testMoveEffectiveness(game, MoveId.SLEEP_POWDER, Species.AMOONGUSS, 0));
 
   it("Powder moves have no effect on Tera-Grass Pokemon", () =>
-    testMoveEffectiveness(game, MoveId.SLEEP_POWDER, Species.SNORLAX, 0, Abilities.BALL_FETCH, ElementalType.GRASS));
+    testMoveEffectiveness(game, MoveId.SLEEP_POWDER, Species.SNORLAX, 0, AbilityId.BALL_FETCH, ElementalType.GRASS));
 
   it("Prankster-boosted status moves have no effect on Dark-type Pokemon", () => {
-    game.override.ability(Abilities.PRANKSTER);
+    game.override.ability(AbilityId.PRANKSTER);
     testMoveEffectiveness(game, MoveId.BABY_DOLL_EYES, Species.MIGHTYENA, 0);
   });
 
   it("Prankster-boosted status moves have no effect on Tera-Dark Pokemon", () => {
-    game.override.ability(Abilities.PRANKSTER);
-    testMoveEffectiveness(game, MoveId.BABY_DOLL_EYES, Species.SNORLAX, 0, Abilities.BALL_FETCH, ElementalType.DARK);
+    game.override.ability(AbilityId.PRANKSTER);
+    testMoveEffectiveness(game, MoveId.BABY_DOLL_EYES, Species.SNORLAX, 0, AbilityId.BALL_FETCH, ElementalType.DARK);
   });
 });

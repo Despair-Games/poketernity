@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -25,8 +25,8 @@ describe("Battle order", () => {
     game.override
       .battleType("single")
       .enemySpecies(Species.MEWTWO)
-      .enemyAbility(Abilities.INSOMNIA)
-      .ability(Abilities.INSOMNIA)
+      .enemyAbility(AbilityId.INSOMNIA)
+      .ability(AbilityId.INSOMNIA)
       .moveset([MoveId.TACKLE]);
   });
 

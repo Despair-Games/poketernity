@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -24,11 +24,11 @@ describe("Abilities - Anticipation", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.ANTICIPATION)
+      .ability(AbilityId.ANTICIPATION)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH);
+      .enemyAbility(AbilityId.BALL_FETCH);
   });
 
   it("should activate when the opponent has a super-effective move", async () => {
@@ -36,7 +36,7 @@ describe("Abilities - Anticipation", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    expect(playerPokemon.battleData.abilitiesApplied[0]).toBe(Abilities.ANTICIPATION);
+    expect(playerPokemon.battleData.abilitiesApplied[0]).toBe(AbilityId.ANTICIPATION);
   });
 
   it("should activate when the opponent has a 1HKO move", async () => {
@@ -44,7 +44,7 @@ describe("Abilities - Anticipation", () => {
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    expect(playerPokemon.battleData.abilitiesApplied[0]).toBe(Abilities.ANTICIPATION);
+    expect(playerPokemon.battleData.abilitiesApplied[0]).toBe(AbilityId.ANTICIPATION);
   });
 
   it("should not activate when the opponent does not have a super-effective or 1HKO move", async () => {
@@ -69,7 +69,7 @@ describe("Abilities - Anticipation", () => {
     await game.challengeMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
-    expect(playerPokemon.battleData.abilitiesApplied[0]).toBe(Abilities.ANTICIPATION);
+    expect(playerPokemon.battleData.abilitiesApplied[0]).toBe(AbilityId.ANTICIPATION);
   });
 
   it("should ignore Gravity when evaluating move effectiveness", async () => {
@@ -97,7 +97,7 @@ describe("Abilities - Anticipation", () => {
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
     expect(enemyPokemon.getMoveType(enemyPokemon.getMoveset()[0].getMove())).toBe(ElementalType.ELECTRIC);
-    expect(playerPokemon.battleData.abilitiesApplied[0]).toBe(Abilities.ANTICIPATION);
+    expect(playerPokemon.battleData.abilitiesApplied[0]).toBe(AbilityId.ANTICIPATION);
   });
 
   it("should not consider most variable-type moves' calculated type", async () => {

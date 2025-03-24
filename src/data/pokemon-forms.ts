@@ -11,7 +11,7 @@ import { allMoves } from "#app/data/data-lists";
 import { MoveCategory } from "#enums/move-category";
 import { ElementalType } from "#enums/elemental-type";
 import type { AbstractConstructor, nil } from "#app/utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { getPokemonNameWithAffix } from "#app/messages";
@@ -206,11 +206,11 @@ export class SpeciesFormChangeLapseTeraTrigger extends SpeciesFormChangeTrigger 
  */
 export class SpeciesFormChangeWeatherTrigger extends SpeciesFormChangeTrigger {
   /** The ability that  triggers the form change */
-  public ability: Abilities;
+  public ability: AbilityId;
   /** The list of weathers that trigger the form change */
   public weathers: WeatherType[];
 
-  constructor(ability: Abilities, weathers: WeatherType[]) {
+  constructor(ability: AbilityId, weathers: WeatherType[]) {
     super();
     this.ability = ability;
     this.weathers = weathers;
@@ -243,11 +243,11 @@ export class SpeciesFormChangeWeatherTrigger extends SpeciesFormChangeTrigger {
  */
 export class SpeciesFormChangeRevertWeatherFormTrigger extends SpeciesFormChangeTrigger {
   /** The ability that triggers the form change*/
-  public ability: Abilities;
+  public ability: AbilityId;
   /** The list of weathers that will also trigger a form change to original form */
   public weathers: WeatherType[];
 
-  constructor(ability: Abilities, weathers: WeatherType[]) {
+  constructor(ability: AbilityId, weathers: WeatherType[]) {
     super();
     this.ability = ability;
     this.weathers = weathers;
@@ -264,7 +264,7 @@ export class SpeciesFormChangeRevertWeatherFormTrigger extends SpeciesFormChange
       const isWeatherSuppressed = globalScene.arena.weather?.isEffectSuppressed();
       const isAbilitySuppressed = pokemon.summonData.abilitySuppressed;
       const summonDataAbility = pokemon.summonData.ability;
-      const isAbilityChanged = summonDataAbility !== this.ability && summonDataAbility !== Abilities.NONE;
+      const isAbilityChanged = summonDataAbility !== this.ability && summonDataAbility !== AbilityId.NONE;
 
       if (
         globalScene.arena.hasWeather(this.weathers)
@@ -296,7 +296,7 @@ export function getSpeciesFormChangeMessage(pokemon: Pokemon, formChange: Specie
   if (isRevert) {
     return i18next.t("battlePokemonForm:revertChange", { pokemonName: getPokemonNameWithAffix(pokemon) });
   }
-  if (pokemon.getAbility().id === Abilities.DISGUISE) {
+  if (pokemon.getAbility().id === AbilityId.DISGUISE) {
     return i18next.t("battlePokemonForm:disguiseChange");
   }
   return i18next.t("battlePokemonForm:formChange", { preName });
@@ -710,70 +710,70 @@ export const pokemonFormChanges: PokemonFormChanges = {
       Species.CASTFORM,
       "",
       "sunny",
-      new SpeciesFormChangeWeatherTrigger(Abilities.FORECAST, [WeatherType.SUNNY, WeatherType.HARSH_SUN]),
+      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, [WeatherType.SUNNY, WeatherType.HARSH_SUN]),
       true,
     ),
     new SpeciesFormChange(
       Species.CASTFORM,
       "rainy",
       "sunny",
-      new SpeciesFormChangeWeatherTrigger(Abilities.FORECAST, [WeatherType.SUNNY, WeatherType.HARSH_SUN]),
+      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, [WeatherType.SUNNY, WeatherType.HARSH_SUN]),
       true,
     ),
     new SpeciesFormChange(
       Species.CASTFORM,
       "snowy",
       "sunny",
-      new SpeciesFormChangeWeatherTrigger(Abilities.FORECAST, [WeatherType.SUNNY, WeatherType.HARSH_SUN]),
+      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, [WeatherType.SUNNY, WeatherType.HARSH_SUN]),
       true,
     ),
     new SpeciesFormChange(
       Species.CASTFORM,
       "",
       "rainy",
-      new SpeciesFormChangeWeatherTrigger(Abilities.FORECAST, [WeatherType.RAIN, WeatherType.HEAVY_RAIN]),
+      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, [WeatherType.RAIN, WeatherType.HEAVY_RAIN]),
       true,
     ),
     new SpeciesFormChange(
       Species.CASTFORM,
       "sunny",
       "rainy",
-      new SpeciesFormChangeWeatherTrigger(Abilities.FORECAST, [WeatherType.RAIN, WeatherType.HEAVY_RAIN]),
+      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, [WeatherType.RAIN, WeatherType.HEAVY_RAIN]),
       true,
     ),
     new SpeciesFormChange(
       Species.CASTFORM,
       "snowy",
       "rainy",
-      new SpeciesFormChangeWeatherTrigger(Abilities.FORECAST, [WeatherType.RAIN, WeatherType.HEAVY_RAIN]),
+      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, [WeatherType.RAIN, WeatherType.HEAVY_RAIN]),
       true,
     ),
     new SpeciesFormChange(
       Species.CASTFORM,
       "",
       "snowy",
-      new SpeciesFormChangeWeatherTrigger(Abilities.FORECAST, [WeatherType.HAIL, WeatherType.SNOW]),
+      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, [WeatherType.HAIL, WeatherType.SNOW]),
       true,
     ),
     new SpeciesFormChange(
       Species.CASTFORM,
       "sunny",
       "snowy",
-      new SpeciesFormChangeWeatherTrigger(Abilities.FORECAST, [WeatherType.HAIL, WeatherType.SNOW]),
+      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, [WeatherType.HAIL, WeatherType.SNOW]),
       true,
     ),
     new SpeciesFormChange(
       Species.CASTFORM,
       "rainy",
       "snowy",
-      new SpeciesFormChangeWeatherTrigger(Abilities.FORECAST, [WeatherType.HAIL, WeatherType.SNOW]),
+      new SpeciesFormChangeWeatherTrigger(AbilityId.FORECAST, [WeatherType.HAIL, WeatherType.SNOW]),
       true,
     ),
     new SpeciesFormChange(
       Species.CASTFORM,
       "sunny",
       "",
-      new SpeciesFormChangeRevertWeatherFormTrigger(Abilities.FORECAST, [
+      new SpeciesFormChangeRevertWeatherFormTrigger(AbilityId.FORECAST, [
         WeatherType.NONE,
         WeatherType.SANDSTORM,
         WeatherType.STRONG_WINDS,
@@ -785,7 +785,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       Species.CASTFORM,
       "rainy",
       "",
-      new SpeciesFormChangeRevertWeatherFormTrigger(Abilities.FORECAST, [
+      new SpeciesFormChangeRevertWeatherFormTrigger(AbilityId.FORECAST, [
         WeatherType.NONE,
         WeatherType.SANDSTORM,
         WeatherType.STRONG_WINDS,
@@ -797,7 +797,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       Species.CASTFORM,
       "snowy",
       "",
-      new SpeciesFormChangeRevertWeatherFormTrigger(Abilities.FORECAST, [
+      new SpeciesFormChangeRevertWeatherFormTrigger(AbilityId.FORECAST, [
         WeatherType.NONE,
         WeatherType.SANDSTORM,
         WeatherType.STRONG_WINDS,
@@ -914,14 +914,14 @@ export const pokemonFormChanges: PokemonFormChanges = {
       Species.CHERRIM,
       "overcast",
       "sunshine",
-      new SpeciesFormChangeWeatherTrigger(Abilities.FLOWER_GIFT, [WeatherType.SUNNY, WeatherType.HARSH_SUN]),
+      new SpeciesFormChangeWeatherTrigger(AbilityId.FLOWER_GIFT, [WeatherType.SUNNY, WeatherType.HARSH_SUN]),
       true,
     ),
     new SpeciesFormChange(
       Species.CHERRIM,
       "sunshine",
       "overcast",
-      new SpeciesFormChangeRevertWeatherFormTrigger(Abilities.FLOWER_GIFT, [
+      new SpeciesFormChangeRevertWeatherFormTrigger(AbilityId.FLOWER_GIFT, [
         WeatherType.NONE,
         WeatherType.SANDSTORM,
         WeatherType.STRONG_WINDS,
@@ -1224,7 +1224,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       new SpeciesFormChangePreMoveTrigger(MoveId.KINGS_SHIELD),
       true,
       [],
-      new SpeciesFormChangeCondition((p) => p.hasAbility(Abilities.STANCE_CHANGE)),
+      new SpeciesFormChangeCondition((p) => p.hasAbility(AbilityId.STANCE_CHANGE)),
     ),
     new SpeciesFormChange(
       Species.AEGISLASH,
@@ -1233,7 +1233,7 @@ export const pokemonFormChanges: PokemonFormChanges = {
       new SpeciesFormChangePreMoveTrigger((m) => allMoves.get(m).category !== MoveCategory.STATUS),
       true,
       [],
-      new SpeciesFormChangeCondition((p) => p.hasAbility(Abilities.STANCE_CHANGE)),
+      new SpeciesFormChangeCondition((p) => p.hasAbility(AbilityId.STANCE_CHANGE)),
     ),
     new SpeciesFormChange(Species.AEGISLASH, "blade", "shield", new SpeciesFormChangeActiveTrigger(false), true),
   ],

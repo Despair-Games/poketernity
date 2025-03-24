@@ -1,5 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -37,10 +37,10 @@ describe("Moves - Flame Burst", () => {
     game.override.battleType("double");
     game.override.moveset([MoveId.FLAME_BURST, MoveId.SPLASH]);
     game.override.disableCrits();
-    game.override.ability(Abilities.UNNERVE);
+    game.override.ability(AbilityId.UNNERVE);
     game.override.startingWave(4);
     game.override.enemySpecies(Species.SHUCKLE);
-    game.override.enemyAbility(Abilities.BALL_FETCH);
+    game.override.enemyAbility(AbilityId.BALL_FETCH);
     game.override.enemyMoveset([MoveId.SPLASH]);
   });
 
@@ -57,7 +57,7 @@ describe("Moves - Flame Burst", () => {
   });
 
   it("does not inflict damage to the target's ally if the target was not affected by Flame Burst", async () => {
-    game.override.enemyAbility(Abilities.FLASH_FIRE);
+    game.override.enemyAbility(AbilityId.FLASH_FIRE);
 
     await game.classicMode.startBattle([Species.PIKACHU, Species.PIKACHU]);
     const [leftEnemy, rightEnemy] = game.scene.getEnemyField();
@@ -74,7 +74,7 @@ describe("Moves - Flame Burst", () => {
     await game.classicMode.startBattle([Species.PIKACHU, Species.PIKACHU]);
     const [leftEnemy, rightEnemy] = game.scene.getEnemyField();
 
-    game.field.mockAbility(rightEnemy, Abilities.FLASH_FIRE);
+    game.field.mockAbility(rightEnemy, AbilityId.FLASH_FIRE);
 
     game.move.select(MoveId.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
     game.move.select(MoveId.SPLASH, 1);
@@ -88,7 +88,7 @@ describe("Moves - Flame Burst", () => {
     await game.classicMode.startBattle([Species.PIKACHU, Species.PIKACHU]);
     const [leftEnemy, rightEnemy] = game.scene.getEnemyField();
 
-    game.field.mockAbility(rightEnemy, Abilities.MAGIC_GUARD);
+    game.field.mockAbility(rightEnemy, AbilityId.MAGIC_GUARD);
 
     game.move.select(MoveId.FLAME_BURST, 0, leftEnemy.getBattlerIndex());
     game.move.select(MoveId.SPLASH, 1);

@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
@@ -26,8 +26,8 @@ describe("Abilities - Beast Boost", () => {
     game.override
       .battleType("single")
       .enemySpecies(Species.BULBASAUR)
-      .enemyAbility(Abilities.BEAST_BOOST)
-      .ability(Abilities.BEAST_BOOST)
+      .enemyAbility(AbilityId.BEAST_BOOST)
+      .ability(AbilityId.BEAST_BOOST)
       .startingLevel(2000)
       .moveset([MoveId.FLAMETHROWER])
       .enemyMoveset(MoveId.SPLASH);

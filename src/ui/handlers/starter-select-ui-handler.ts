@@ -64,7 +64,7 @@ import {
 } from "#app/utils";
 import { applyChallenges } from "#app/utils/challenge-utils";
 import { getPokemonSpeciesForm, getPokerusStarters } from "#app/utils/pokemon-species-utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { Button } from "#enums/buttons";
 import { ChallengeType } from "#enums/challenge-type";
 import { Device } from "#enums/devices";
@@ -2698,7 +2698,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       // HA Filter
       const speciesHasHiddenAbility =
         container.species.abilityHidden !== container.species.ability1
-        && container.species.abilityHidden !== Abilities.NONE;
+        && container.species.abilityHidden !== AbilityId.NONE;
       const hasHA = starterData.abilityAttr & AbilityAttr.ABILITY_HIDDEN;
       const fitsHA = this.filterBar.getVals(DropDownColumn.MISC).some((misc) => {
         if (misc.val === "HIDDEN_ABILITY" && misc.state === DropDownState.ON) {

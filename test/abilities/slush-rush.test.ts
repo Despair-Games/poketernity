@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { WeatherType } from "#enums/weather-type";
@@ -26,11 +26,11 @@ describe("Abilities - Slush Rush", () => {
     game.override
       .weather(WeatherType.HAIL)
       .moveset([MoveId.SPLASH])
-      .ability(Abilities.SLUSH_RUSH)
+      .ability(AbilityId.SLUSH_RUSH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 

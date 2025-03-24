@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
@@ -28,7 +28,7 @@ describe("Moves - Beat Up", () => {
     game.override.enemySpecies(Species.SNORLAX);
     game.override.enemyLevel(100);
     game.override.enemyMoveset([MoveId.SPLASH]);
-    game.override.enemyAbility(Abilities.INSOMNIA);
+    game.override.enemyAbility(AbilityId.INSOMNIA);
 
     game.override.startingLevel(100);
     game.override.moveset([MoveId.BEAT_UP]);

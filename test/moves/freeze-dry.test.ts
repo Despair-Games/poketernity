@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { ElementalType } from "#enums/elemental-type";
@@ -26,10 +26,10 @@ describe("Moves - Freeze-Dry", () => {
     game.override
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .starterSpecies(Species.FEEBAS)
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .moveset([MoveId.FREEZE_DRY, MoveId.FORESTS_CURSE, MoveId.SOAK]);
   });
 
@@ -145,7 +145,7 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 0.5x damage to water type Terapagos with Tera Shell", async () => {
-    game.override.enemySpecies(Species.TERAPAGOS).enemyAbility(Abilities.TERA_SHELL);
+    game.override.enemySpecies(Species.TERAPAGOS).enemyAbility(AbilityId.TERA_SHELL);
     await game.classicMode.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
@@ -162,7 +162,7 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 2x damage to water type under Normalize", async () => {
-    game.override.ability(Abilities.NORMALIZE);
+    game.override.ability(AbilityId.NORMALIZE);
     await game.classicMode.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
@@ -176,7 +176,7 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 0.25x damage to rock/steel type under Normalize", async () => {
-    game.override.ability(Abilities.NORMALIZE).enemySpecies(Species.SHIELDON);
+    game.override.ability(AbilityId.NORMALIZE).enemySpecies(Species.SHIELDON);
     await game.classicMode.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
@@ -190,7 +190,7 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 0x damage to water/ghost type under Normalize", async () => {
-    game.override.ability(Abilities.NORMALIZE).enemySpecies(Species.JELLICENT);
+    game.override.ability(AbilityId.NORMALIZE).enemySpecies(Species.JELLICENT);
     await game.classicMode.startBattle();
 
     const enemy = game.scene.getEnemyPokemon()!;
@@ -276,7 +276,7 @@ describe("Moves - Freeze-Dry", () => {
   });
 
   it("should deal 2x damage to Water type during inverse battle under Normalize", async () => {
-    game.override.moveset([MoveId.FREEZE_DRY]).ability(Abilities.NORMALIZE).enemySpecies(Species.MAGIKARP);
+    game.override.moveset([MoveId.FREEZE_DRY]).ability(AbilityId.NORMALIZE).enemySpecies(Species.MAGIKARP);
     game.challengeMode.addChallenge(Challenges.INVERSE_BATTLE, 1, 1);
 
     await game.challengeMode.startBattle();

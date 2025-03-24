@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
@@ -25,11 +25,11 @@ describe("Abilities - Quick Feet", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.SPLASH])
-      .ability(Abilities.QUICK_FEET)
+      .ability(AbilityId.QUICK_FEET)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -63,7 +63,7 @@ describe("Abilities - Quick Feet", () => {
   });
 
   it("should synergize with Comatose", async () => {
-    game.override.passiveAbility(Abilities.COMATOSE);
+    game.override.passiveAbility(AbilityId.COMATOSE);
     await game.classicMode.startBattle([Species.FEEBAS]);
     const playerPokemon = game.field.getPlayerPokemon();
     const speedStat = playerPokemon.getStat(Stat.SPD);

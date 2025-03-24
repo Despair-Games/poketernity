@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/data-lists";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { toDmgValue } from "#app/utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveCategory } from "#enums/move-category";
 import { MoveId } from "#enums/move-id";
@@ -28,11 +28,11 @@ describe("Moves - Brick Break", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.BRICK_BREAK])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);

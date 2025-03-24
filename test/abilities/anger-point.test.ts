@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
@@ -26,10 +26,10 @@ describe("Abilities - Anger Point", () => {
     game.override
       .startingLevel(10)
       .moveset([MoveId.SPLASH, MoveId.SUBSTITUTE])
-      .ability(Abilities.ANGER_POINT)
+      .ability(AbilityId.ANGER_POINT)
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.STORM_THROW);
   });
 

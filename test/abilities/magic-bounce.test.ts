@@ -1,6 +1,6 @@
 import type { EncoreTag } from "#app/data/battler-tags/encore-tag";
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex } from "#enums/battler-index";
@@ -30,11 +30,11 @@ describe("Abilities - Magic Bounce", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.MAGIC_BOUNCE)
+      .enemyAbility(AbilityId.MAGIC_BOUNCE)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -53,7 +53,7 @@ describe("Abilities - Magic Bounce", () => {
   });
 
   it("should reflect basic status moves (enemy)", async () => {
-    game.override.ability(Abilities.MAGIC_BOUNCE).enemyAbility(Abilities.BALL_FETCH);
+    game.override.ability(AbilityId.MAGIC_BOUNCE).enemyAbility(AbilityId.BALL_FETCH);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -111,7 +111,7 @@ describe("Abilities - Magic Bounce", () => {
   });
 
   it("should not bounce back a move that was just bounced", async () => {
-    game.override.ability(Abilities.MAGIC_BOUNCE);
+    game.override.ability(AbilityId.MAGIC_BOUNCE);
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const player = game.field.getPlayerPokemon();
@@ -125,7 +125,7 @@ describe("Abilities - Magic Bounce", () => {
   });
 
   it("should receive the stat change after reflecting a move back to a mirror armor user", async () => {
-    game.override.ability(Abilities.MIRROR_ARMOR);
+    game.override.ability(AbilityId.MIRROR_ARMOR);
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const player = game.field.getPlayerPokemon();
@@ -139,7 +139,7 @@ describe("Abilities - Magic Bounce", () => {
   });
 
   it("should not bounce back a move from a mold breaker user", async () => {
-    game.override.ability(Abilities.MOLD_BREAKER);
+    game.override.ability(AbilityId.MOLD_BREAKER);
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
     const player = game.field.getPlayerPokemon();
@@ -211,7 +211,7 @@ describe("Abilities - Magic Bounce", () => {
     const enemy = game.field.getEnemyPokemon();
 
     // Give the player MOLD_BREAKER for this turn to bypass Magic Bounce.
-    game.field.mockAbility(player, Abilities.MOLD_BREAKER);
+    game.field.mockAbility(player, AbilityId.MOLD_BREAKER);
 
     // turn 1
     game.move.use(MoveId.ENCORE);
@@ -233,7 +233,7 @@ describe("Abilities - Magic Bounce", () => {
 
   it("should not cause the bounced move to count for encore", async () => {
     game.override.enemyMoveset([MoveId.GROWL, MoveId.TACKLE]);
-    game.override.enemyAbility(Abilities.MAGIC_BOUNCE);
+    game.override.enemyAbility(AbilityId.MAGIC_BOUNCE);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
     const playerPokemon = game.field.getPlayerPokemon();
@@ -246,7 +246,7 @@ describe("Abilities - Magic Bounce", () => {
     await game.toNextTurn();
 
     // Give the player MOLD_BREAKER for this turn to bypass Magic Bounce.
-    game.field.mockAbility(playerPokemon, Abilities.MOLD_BREAKER);
+    game.field.mockAbility(playerPokemon, AbilityId.MOLD_BREAKER);
 
     // turn 2
     game.move.use(MoveId.ENCORE);
@@ -304,7 +304,7 @@ describe("Abilities - Magic Bounce", () => {
 
   it("should respect immunities when bouncing a move", async () => {
     vi.spyOn(allMoves.get(MoveId.THUNDER_WAVE), "accuracy", "get").mockReturnValue(100);
-    game.override.ability(Abilities.SOUNDPROOF);
+    game.override.ability(AbilityId.SOUNDPROOF);
     await game.classicMode.startBattle([Species.PHANPY]);
 
     // Turn 1 - thunder wave immunity test
@@ -381,7 +381,7 @@ describe("Abilities - Magic Bounce", () => {
     expect(game.field.getEnemyPokemon().getStatusEffect()).toBe(StatusEffect.TOXIC);
     expect(game.field.getPlayerPokemon().status).toBeUndefined();
 
-    game.override.ability(Abilities.NO_GUARD);
+    game.override.ability(AbilityId.NO_GUARD);
     game.move.use(MoveId.CHARM);
     game.setTurnOrder([BattlerIndex.PLAYER, BattlerIndex.ENEMY]);
     await game.toEndOfTurn();

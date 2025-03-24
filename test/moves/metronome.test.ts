@@ -3,7 +3,7 @@ import type { SemiInvulnerableTag } from "#app/data/battler-tags/semi-invulnerab
 import { allMoves } from "#app/data/data-lists";
 import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
 import { SemiInvulnerableBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveId } from "#enums/move-id";
@@ -39,7 +39,7 @@ describe("Moves - Metronome", () => {
       .enemyLevel(100)
       .enemySpecies(Species.SHUCKLE)
       .enemyMoveset(MoveId.SPLASH)
-      .enemyAbility(Abilities.BALL_FETCH);
+      .enemyAbility(AbilityId.BALL_FETCH);
   });
 
   it("should have one semi-invulnerable turn and deal damage on the second turn when a semi-invulnerable move is called", async () => {

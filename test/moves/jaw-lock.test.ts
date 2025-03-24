@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryPhase } from "#app/phases/berry-phase";
 import { FaintPhase } from "#app/phases/faint-phase";
@@ -31,7 +31,7 @@ describe("Moves - Jaw Lock", () => {
     game.override
       .battleType("single")
       .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.INSOMNIA)
+      .enemyAbility(AbilityId.INSOMNIA)
       .enemyMoveset(MoveId.SPLASH)
       .moveset([MoveId.JAW_LOCK, MoveId.SPLASH])
       .startingLevel(100)

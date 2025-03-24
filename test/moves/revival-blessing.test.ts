@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveResult } from "#enums/move-result";
 import { toDmgValue } from "#app/utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -27,11 +27,11 @@ describe("Moves - Revival Blessing", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.SPLASH, MoveId.REVIVAL_BLESSING, MoveId.MEMENTO])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -92,7 +92,7 @@ describe("Moves - Revival Blessing", () => {
     game.override
       .battleType("double")
       .enemyMoveset([MoveId.SPLASH, MoveId.FISSURE])
-      .enemyAbility(Abilities.NO_GUARD)
+      .enemyAbility(AbilityId.NO_GUARD)
       .enemyLevel(100);
     await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC, Species.GYARADOS]);
 

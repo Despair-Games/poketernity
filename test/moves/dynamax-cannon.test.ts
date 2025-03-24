@@ -4,7 +4,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 
 describe("Moves - Dynamax Cannon", () => {
@@ -29,7 +29,7 @@ describe("Moves - Dynamax Cannon", () => {
       .battleType("single")
       .enemySpecies(Species.SNORLAX)
       .enemyForms({ [Species.SNORLAX]: 1 })
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100)
@@ -114,7 +114,7 @@ describe("Moves - Dynamax Cannon", () => {
   });
 
   it("Dynamax cannon cannot be encored", async () => {
-    game.override.enemySpecies(Species.SHUCKLE).enemyAbility(Abilities.STURDY).enemyMoveset(MoveId.ENCORE);
+    game.override.enemySpecies(Species.SHUCKLE).enemyAbility(AbilityId.STURDY).enemyMoveset(MoveId.ENCORE);
     await game.classicMode.startBattle([Species.ETERNATUS]);
 
     game.move.select(dynamaxCannon.id);

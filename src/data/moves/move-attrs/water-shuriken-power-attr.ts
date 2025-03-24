@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { Species } from "#enums/species";
 import type { Pokemon } from "#app/field/pokemon";
 import type { NumberHolder } from "#app/utils";
@@ -13,7 +13,7 @@ import { VariablePowerAttr } from "#app/data/moves/move-attrs/variable-power-att
  */
 export class WaterShurikenPowerAttr extends VariablePowerAttr {
   override apply(user: Pokemon, _target: Pokemon, _move: Move, power: NumberHolder): boolean {
-    if (user.species.speciesId === Species.GRENINJA && user.hasAbility(Abilities.BATTLE_BOND) && user.formIndex === 2) {
+    if (user.species.speciesId === Species.GRENINJA && user.hasAbility(AbilityId.BATTLE_BOND) && user.formIndex === 2) {
       power.value = 20;
       return true;
     }

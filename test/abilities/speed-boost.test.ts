@@ -1,5 +1,5 @@
 import { Stat } from "#enums/stat";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -29,9 +29,9 @@ describe("Abilities - Speed Boost", () => {
     game.override
       .battleType("single")
       .enemySpecies(Species.SHUCKLE)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyLevel(100)
-      .ability(Abilities.SPEED_BOOST)
+      .ability(AbilityId.SPEED_BOOST)
       .enemyMoveset(MoveId.SPLASH)
       .moveset([MoveId.SPLASH, MoveId.U_TURN]);
   });

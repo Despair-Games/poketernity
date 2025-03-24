@@ -1,5 +1,5 @@
 import { GameManager } from "#test/test-utils/gameManager";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { Stat } from "#enums/stat";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -26,9 +26,9 @@ describe("Abilities - Mycelium Might", () => {
     game.override.battleType("single");
     game.override.disableCrits();
     game.override.enemySpecies(Species.SHUCKLE);
-    game.override.enemyAbility(Abilities.CLEAR_BODY);
+    game.override.enemyAbility(AbilityId.CLEAR_BODY);
     game.override.enemyMoveset(MoveId.QUICK_ATTACK);
-    game.override.ability(Abilities.MYCELIUM_MIGHT);
+    game.override.ability(AbilityId.MYCELIUM_MIGHT);
     game.override.moveset([MoveId.QUICK_ATTACK, MoveId.BABY_DOLL_EYES]);
   });
 

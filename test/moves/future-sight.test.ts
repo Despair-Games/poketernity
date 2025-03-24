@@ -1,6 +1,6 @@
 import { allMoves } from "#app/data/data-lists";
 import { MetronomeAttr } from "#app/data/moves/move-attrs/metronome-attr";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
@@ -30,7 +30,7 @@ describe("Moves - Future Sight", () => {
       .moveset([MoveId.FUTURE_SIGHT, MoveId.SPLASH, MoveId.DOOM_DESIRE])
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
@@ -94,7 +94,7 @@ describe("Moves - Future Sight", () => {
   });
 
   it("should inflict damage as a Normal-type move if the user is active with Normalize", async () => {
-    game.override.ability(Abilities.NORMALIZE).enemySpecies(Species.DUSCLOPS);
+    game.override.ability(AbilityId.NORMALIZE).enemySpecies(Species.DUSCLOPS);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -110,7 +110,7 @@ describe("Moves - Future Sight", () => {
   });
 
   it("the target should endure inflicted damage from this move with Sturdy", async () => {
-    game.override.enemyAbility(Abilities.STURDY).enemyLevel(1);
+    game.override.enemyAbility(AbilityId.STURDY).enemyLevel(1);
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 
@@ -207,7 +207,7 @@ describe("Moves - Future Sight", () => {
   });
 
   it("doesn't crash if the user leaves the field and the hit triggers Destiny Bond", async () => {
-    game.override.enemyMoveset([MoveId.DESTINY_BOND, MoveId.SPLASH]).enemyAbility(Abilities.BALL_FETCH).enemyLevel(1);
+    game.override.enemyMoveset([MoveId.DESTINY_BOND, MoveId.SPLASH]).enemyAbility(AbilityId.BALL_FETCH).enemyLevel(1);
     await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
 
     const [feebas, milotic] = game.scene.getPlayerParty();
@@ -230,7 +230,7 @@ describe("Moves - Future Sight", () => {
   });
 
   it("doesn't crash if the user leaves the field and the hit triggers Innards Out", async () => {
-    game.override.enemyAbility(Abilities.INNARDS_OUT).enemyLevel(1);
+    game.override.enemyAbility(AbilityId.INNARDS_OUT).enemyLevel(1);
     await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
 
     const [feebas, milotic] = game.scene.getPlayerParty();

@@ -14,7 +14,7 @@ import type { TurnCommand } from "#app/turn-command-manager";
 import { isNullOrUndefined } from "#app/utils";
 import { MoveLockTagTypes, TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { isFieldTargeted } from "#app/utils/move-utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleCommand } from "#enums/battle-command";
@@ -294,7 +294,7 @@ export class CommandPhase extends FieldPhase {
             } else if (
               targetPokemon.isBoss()
               && targetPokemon.bossSegmentIndex >= 1
-              && !targetPokemon.hasAbility(Abilities.WONDER_GUARD, false, true)
+              && !targetPokemon.hasAbility(AbilityId.WONDER_GUARD, false, true)
               && cursor !== PokeballType.MASTER_BALL
             ) {
               failCatchRun("battle:noPokeballStrong");

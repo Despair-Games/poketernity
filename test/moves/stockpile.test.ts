@@ -1,7 +1,7 @@
 import type { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
 import { CommandPhase } from "#app/phases/command-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
@@ -31,11 +31,11 @@ describe("Moves - Stockpile", () => {
 
       game.override.enemySpecies(Species.RATTATA);
       game.override.enemyMoveset(MoveId.SPLASH);
-      game.override.enemyAbility(Abilities.NONE);
+      game.override.enemyAbility(AbilityId.NONE);
 
       game.override.startingLevel(2000);
       game.override.moveset([MoveId.STOCKPILE, MoveId.SPLASH]);
-      game.override.ability(Abilities.NONE);
+      game.override.ability(AbilityId.NONE);
     });
 
     it("gains a stockpile stack and raises user's DEF and SPDEF stat stages by 1 on each use, fails at max stacks (3)", async () => {

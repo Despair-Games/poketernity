@@ -1,5 +1,5 @@
 import { MoveResult } from "#enums/move-result";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
@@ -25,11 +25,11 @@ describe("Abilities - Early Bird", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.REST, MoveId.BELLY_DRUM, MoveId.SPLASH])
-      .ability(Abilities.EARLY_BIRD)
+      .ability(AbilityId.EARLY_BIRD)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 

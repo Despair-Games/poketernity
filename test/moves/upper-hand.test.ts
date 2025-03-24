@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveResult } from "#enums/move-result";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -25,11 +25,11 @@ describe("Moves - Upper Hand", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset(MoveId.UPPER_HAND)
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.QUICK_ATTACK)
       .startingLevel(100)
       .enemyLevel(100);
@@ -66,7 +66,7 @@ describe("Moves - Upper Hand", () => {
   });
 
   it("should flinch the opponent before they use an attack boosted by Gale Wings", async () => {
-    game.override.enemyAbility(Abilities.GALE_WINGS).enemyMoveset(MoveId.GUST);
+    game.override.enemyAbility(AbilityId.GALE_WINGS).enemyMoveset(MoveId.GUST);
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 
@@ -82,7 +82,7 @@ describe("Moves - Upper Hand", () => {
   });
 
   it("should fail if the target has already moved", async () => {
-    game.override.enemyMoveset(MoveId.FAKE_OUT).enemyAbility(Abilities.SHEER_FORCE);
+    game.override.enemyMoveset(MoveId.FAKE_OUT).enemyAbility(AbilityId.SHEER_FORCE);
 
     await game.classicMode.startBattle([Species.FEEBAS]);
 

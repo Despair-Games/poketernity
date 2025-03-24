@@ -3,7 +3,7 @@
 import { type PokeballCounts } from "#app/battle-scene";
 import { Variant } from "#app/data/variant";
 import { type ModifierOverride } from "#app/modifier/modifier-type";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BerryType } from "#enums/berry-type";
 import { Biome } from "#enums/biome";
 import { EggTier } from "#enums/egg-type";
@@ -136,8 +136,8 @@ class DefaultOverrides {
    * @example SPECIES_OVERRIDE = Species.Bulbasaur;
    */
   readonly STARTER_SPECIES_OVERRIDE: Species | number = 0;
-  readonly ABILITY_OVERRIDE: Abilities = Abilities.NONE;
-  readonly PASSIVE_ABILITY_OVERRIDE: Abilities = Abilities.NONE;
+  readonly ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
+  readonly PASSIVE_ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
   readonly STATUS_OVERRIDE: StatusEffect = StatusEffect.NONE;
   readonly GENDER_OVERRIDE: Gender | null = null;
   readonly MOVESET_OVERRIDE: MoveId | Array<MoveId> = [];
@@ -150,8 +150,8 @@ class DefaultOverrides {
 
   readonly ENEMY_SPECIES_OVERRIDE: Species | number = 0;
   readonly ENEMY_LEVEL_OVERRIDE: number = 0;
-  readonly ENEMY_ABILITY_OVERRIDE: Abilities = Abilities.NONE;
-  readonly ENEMY_PASSIVE_ABILITY_OVERRIDE: Abilities = Abilities.NONE;
+  readonly ENEMY_ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
+  readonly ENEMY_PASSIVE_ABILITY_OVERRIDE: AbilityId = AbilityId.NONE;
   readonly ENEMY_STATUS_OVERRIDE: StatusEffect = StatusEffect.NONE;
   readonly ENEMY_GENDER_OVERRIDE: Gender | null = null;
   readonly ENEMY_MOVESET_OVERRIDE: MoveId | Array<MoveId> = [];

@@ -185,7 +185,7 @@ import { applyMoveAttrs } from "#app/utils/move-utils";
 import { PartyFilterNonFainted } from "#app/utils/party-ui-utils";
 import { getPokemonSpecies, getPokemonSpeciesForm } from "#app/utils/pokemon-species-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { AbilityApplyMode } from "#enums/ability-apply-mode";
 import { AiType } from "#enums/ai-type";
 import { ArenaTagSide } from "#enums/arena-tag-side";
@@ -1143,7 +1143,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
             ret >>= 1;
           }
         }
-        if (this.getTag(BattlerTagType.UNBURDEN) && this.hasAbility(Abilities.UNBURDEN)) {
+        if (this.getTag(BattlerTagType.UNBURDEN) && this.hasAbility(AbilityId.UNBURDEN)) {
           ret *= 2;
         }
         break;
@@ -1172,7 +1172,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       if (s === Stat.HP) {
         statHolder.value = statHolder.value + this.level + 10;
         globalScene.applyModifier(PokemonIncrementingStatModifier, this.isPlayer(), this, s, statHolder);
-        if (this.hasAbility(Abilities.WONDER_GUARD, false, true)) {
+        if (this.hasAbility(AbilityId.WONDER_GUARD, false, true)) {
           statHolder.value = 1;
         }
         if (this.hp > statHolder.value || this.hp === undefined) {
@@ -1466,7 +1466,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
       return allAbilities[this.customPokemonData.ability];
     }
     let abilityId = this.getSpeciesForm(baseOnly).getAbility(this.abilityIndex);
-    if (abilityId === Abilities.NONE) {
+    if (abilityId === AbilityId.NONE) {
       abilityId = this.species.ability1;
     }
     return allAbilities[abilityId];
@@ -1497,7 +1497,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return allAbilities[starterPassiveAbilities[starterSpeciesId]];
   }
 
-  public hasRevealedAbility(abilityId: Abilities) {
+  public hasRevealedAbility(abilityId: AbilityId) {
     return this.battleData?.abilitiesRevealed.includes(abilityId);
   }
 
@@ -1566,8 +1566,8 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
   public hasPassive(): boolean {
     // returns override if valid for current case
     if (
-      (Overrides.PASSIVE_ABILITY_OVERRIDE !== Abilities.NONE && this.isPlayer())
-      || (Overrides.ENEMY_PASSIVE_ABILITY_OVERRIDE !== Abilities.NONE && !this.isPlayer())
+      (Overrides.PASSIVE_ABILITY_OVERRIDE !== AbilityId.NONE && this.isPlayer())
+      || (Overrides.ENEMY_PASSIVE_ABILITY_OVERRIDE !== AbilityId.NONE && !this.isPlayer())
     ) {
       return true;
     }
@@ -1634,12 +1634,12 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
    * Checks whether a pokemon has the specified ability and it's in effect. Accounts for all the various
    * effects which can affect whether an ability will be present or in effect, and both passive and
    * non-passive. This is the primary way to check whether a pokemon has a particular ability.
-   * @param ability The {@linkcode Abilities | ability} to check for
+   * @param ability The {@linkcode AbilityId | ability} to check for
    * @param canApply If false, it doesn't check whether the ability is currently active
    * @param baseOnly If true, it ignores ability changing effects
    * @returns Whether the ability is present and active
    */
-  public hasAbility(ability: Abilities, canApply: boolean = true, baseOnly?: boolean): boolean {
+  public hasAbility(ability: AbilityId, canApply: boolean = true, baseOnly?: boolean): boolean {
     if (this.getAbility(baseOnly).id === ability && (!canApply || this.canApplyAbility())) {
       return true;
     }
@@ -1718,7 +1718,7 @@ export abstract class Pokemon extends Phaser.GameObjects.Container {
     return (
       !!this.getTag(BattlerTagType.IGNORE_FLYING)
       || (!this.isOfType(ElementalType.FLYING, true, true)
-        && !this.hasAbility(Abilities.LEVITATE)
+        && !this.hasAbility(AbilityId.LEVITATE)
         && !this.getTag(BattlerTagType.FLOATING)
         && !this.getTag(...SemiInvulnerableBattlerTagTypes)
         && !this.getTag(BattlerTagType.SKY_DROP))
@@ -4542,7 +4542,7 @@ export class PlayerPokemon extends Pokemon {
       this.generateName();
       if ([0, 1, 2].includes(this.abilityIndex)) {
         // Handles cases where a Pokemon with HA evolves into a Pokemon with no HA
-        if (this.abilityIndex === 2 && this.getSpeciesForm().abilityHidden === Abilities.NONE) {
+        if (this.abilityIndex === 2 && this.getSpeciesForm().abilityHidden === AbilityId.NONE) {
           this.abilityIndex = 0;
         }
       } else {
@@ -5390,14 +5390,14 @@ export class PokemonBattleData {
   /** The berries eaten by the Pokemon */
   public berriesEaten: BerryType[] = [];
   /** The abilities this Pokemon has applied */
-  public abilitiesApplied: Abilities[] = [];
+  public abilitiesApplied: AbilityId[] = [];
   /**
    * The abilities revealed from this Pokemon.
    * This differs from {@linkcode abilitiesApplied} in that
    * effects such as Frisk and Trace can reveal abilities
    * without applying them.
    */
-  public abilitiesRevealed: Abilities[] = [];
+  public abilitiesRevealed: AbilityId[] = [];
 }
 
 export class PokemonBattleSummonData {

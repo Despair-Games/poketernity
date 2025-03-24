@@ -1,5 +1,5 @@
 import { TUTORIAL_BATTLE_WAVE } from "#app/data/special-waves";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -25,11 +25,11 @@ describe("Abilities - Poison Puppeteer", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.POISON_PUPPETEER)
+      .ability(AbilityId.POISON_PUPPETEER)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyLevel(100)
       .enemyMoveset(MoveId.SPLASH);
   });

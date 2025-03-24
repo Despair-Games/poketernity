@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { StatusEffect } from "#enums/status-effect";
@@ -27,7 +27,7 @@ describe("Moves - Nightmare", () => {
       .battleType("single")
       .enemySpecies(Species.RATTATA)
       .enemyMoveset(MoveId.SPLASH)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyStatusEffect(StatusEffect.SLEEP)
       .startingLevel(5)
       .moveset([MoveId.NIGHTMARE, MoveId.SPLASH]);

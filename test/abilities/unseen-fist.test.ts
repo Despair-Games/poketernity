@@ -1,5 +1,5 @@
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -39,7 +39,7 @@ describe("Abilities - Unseen Fist", () => {
     await testUnseenFistHitResult(game, MoveId.ABSORB, MoveId.PROTECT, false));
 
   it("should not apply if the source has Long Reach", async () => {
-    game.override.passiveAbility(Abilities.LONG_REACH);
+    game.override.passiveAbility(AbilityId.LONG_REACH);
     await testUnseenFistHitResult(game, MoveId.QUICK_ATTACK, MoveId.PROTECT, false);
   });
 

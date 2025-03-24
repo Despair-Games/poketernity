@@ -1,7 +1,7 @@
 import { allMoves } from "#app/data/data-lists";
 import { PresentPowerAttr } from "#app/data/moves/move-attrs/present-power-attr";
 import { NumberHolder } from "#app/utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -25,11 +25,11 @@ describe("Moves - Present", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -83,7 +83,7 @@ describe("Moves - Present", () => {
   });
 
   it("should end multi-hit Present, and should not deal damage, if it heals", async () => {
-    game.override.ability(Abilities.PARENTAL_BOND).enemyAbility(Abilities.NO_GUARD);
+    game.override.ability(AbilityId.PARENTAL_BOND).enemyAbility(AbilityId.NO_GUARD);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();

@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { ElementalType } from "#enums/elemental-type";
@@ -24,11 +24,11 @@ describe("Moves - Trick Or Treat", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.FORESTS_CURSE, MoveId.TRICK_OR_TREAT])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 

@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveFlags } from "#enums/move-flags";
 import { MoveResult } from "#enums/move-result";
 import { MoveId } from "#enums/move-id";
@@ -25,11 +25,11 @@ describe("Abilities - Soundproof", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.SOUNDPROOF)
+      .ability(AbilityId.SOUNDPROOF)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 

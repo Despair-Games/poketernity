@@ -27,7 +27,7 @@ import type { SummaryUiHandler } from "#app/ui/handlers/summary-ui-handler";
 import type { OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
 import { isNullOrUndefined, randSeedInt } from "#app/utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import type { Abilities } from "#enums/abilities";
+import type { AbilityId } from "#enums/abilities";
 import type { ElementalType } from "#enums/elemental-type";
 import { Gender } from "#enums/gender";
 import type { PartyOption } from "#enums/party-option";
@@ -1014,7 +1014,7 @@ export function isPokemonValidForEncounterOptionSelection(
  * @param pokemon - The Pokemon with its ability being overriden
  * @param ability - The ability that is overriding
  */
-export function applyAbilityOverrideToPokemon(pokemon: Pokemon, ability: Abilities) {
+export function applyAbilityOverrideToPokemon(pokemon: Pokemon, ability: AbilityId) {
   if (!pokemon.customPokemonData) {
     pokemon.customPokemonData = new CustomPokemonData();
   }

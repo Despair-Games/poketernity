@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -28,13 +28,13 @@ describe("Abilities - Battle Armor/Shell Armor", () => {
       .startingLevel(50)
       .battleType("single")
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.WICKED_BLOW);
   });
 
   it.each([
-    { abilityName: "Battle Armor", ability: Abilities.BATTLE_ARMOR },
-    { abilityName: "Shell Armor", ability: Abilities.SHELL_ARMOR },
+    { abilityName: "Battle Armor", ability: AbilityId.BATTLE_ARMOR },
+    { abilityName: "Shell Armor", ability: AbilityId.SHELL_ARMOR },
   ])("$abilityName prevents all critical hits", async ({ ability }) => {
     game.override.ability(ability);
     await game.classicMode.startBattle([Species.FEEBAS]);

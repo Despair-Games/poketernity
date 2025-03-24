@@ -1,5 +1,5 @@
 import { Stat } from "#enums/stat";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -28,10 +28,10 @@ describe("Moves - Freezy Frost", () => {
       .enemySpecies(Species.RATTATA)
       .enemyLevel(100)
       .enemyMoveset([MoveId.HOWL, MoveId.HOWL, MoveId.HOWL, MoveId.HOWL])
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .startingLevel(100)
       .moveset([MoveId.FREEZY_FROST, MoveId.HOWL, MoveId.SPLASH])
-      .ability(Abilities.BALL_FETCH);
+      .ability(AbilityId.BALL_FETCH);
 
     vi.spyOn(allMoves.get(MoveId.FREEZY_FROST), "accuracy", "get").mockReturnValue(100);
   });

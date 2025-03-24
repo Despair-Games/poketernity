@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -31,7 +31,7 @@ describe("Moves - Rage", () => {
       .disableCrits()
       .enemySpecies(Species.BLISSEY)
       .enemyLevel(100)
-      .enemyAbility(Abilities.NO_GUARD)
+      .enemyAbility(AbilityId.NO_GUARD)
       .enemyMoveset([MoveId.SHADOW_PUNCH, MoveId.RAGE, MoveId.TRIPLE_AXEL, MoveId.TACKLE]);
   });
 

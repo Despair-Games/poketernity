@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -25,10 +25,10 @@ describe("Moves - Glaive Rush", () => {
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset([MoveId.GLAIVE_RUSH])
       .starterSpecies(Species.KLINK)
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .moveset([MoveId.SHADOW_SNEAK, MoveId.AVALANCHE, MoveId.SPLASH, MoveId.GLAIVE_RUSH]);
   });
 
@@ -62,7 +62,7 @@ describe("Moves - Glaive Rush", () => {
   });
 
   it("interacts properly with multi-lens", async () => {
-    game.override.ability(Abilities.PARENTAL_BOND).enemyMoveset([MoveId.AVALANCHE]);
+    game.override.ability(AbilityId.PARENTAL_BOND).enemyMoveset([MoveId.AVALANCHE]);
     await game.classicMode.startBattle();
 
     const player = game.scene.getPlayerPokemon()!;

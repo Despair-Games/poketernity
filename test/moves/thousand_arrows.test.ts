@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryPhase } from "#app/phases/berry-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
@@ -51,7 +51,7 @@ describe("Moves - Thousand Arrows", () => {
 
   it("move should hit and ground targets with Levitate", async () => {
     game.override.enemySpecies(Species.SNORLAX);
-    game.override.enemyAbility(Abilities.LEVITATE);
+    game.override.enemyAbility(AbilityId.LEVITATE);
 
     await game.startBattle([Species.ILLUMISE]);
 

@@ -1,7 +1,7 @@
 import { EntryHazardTag } from "#app/data/arena-tag";
 import { TrappedTag } from "#app/data/battler-tags/trapped-tag";
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
@@ -34,7 +34,7 @@ describe("Moves - Protect", () => {
     game.override.moveset([MoveId.PROTECT]);
     game.override.enemySpecies(Species.SNORLAX);
 
-    game.override.enemyAbility(Abilities.INSOMNIA);
+    game.override.enemyAbility(AbilityId.INSOMNIA);
     game.override.enemyMoveset([MoveId.TACKLE]);
 
     game.override.startingLevel(100);

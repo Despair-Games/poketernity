@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -29,7 +29,7 @@ describe("Moves - Captivate should give -2 spA to valid opponents", () => {
       .moveset([MoveId.CAPTIVATE])
       .enemySpecies(Species.BULBASAUR)
       .enemyLevel(1)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
@@ -50,7 +50,7 @@ describe("Moves - Captivate should give -2 spA to valid opponents", () => {
   });
 
   it("Captivate does not affect oblivious", async () => {
-    game.override.enemyAbility(Abilities.OBLIVIOUS);
+    game.override.enemyAbility(AbilityId.OBLIVIOUS);
     await game.classicMode.startBattle([Species.BULBASAUR]);
     const playerPokemon = game.scene.getPlayerField()[0];
     playerPokemon.gender = Gender.FEMALE;

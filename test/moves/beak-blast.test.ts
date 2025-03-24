@@ -3,7 +3,7 @@ import { StatusEffect } from "#enums/status-effect";
 import { BerryPhase } from "#app/phases/berry-phase";
 import { MovePhase } from "#app/phases/move-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -28,10 +28,10 @@ describe("Moves - Beak Blast", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .ability(Abilities.UNNERVE)
+      .ability(AbilityId.UNNERVE)
       .moveset([MoveId.BEAK_BLAST])
       .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.INSOMNIA)
+      .enemyAbility(AbilityId.INSOMNIA)
       .enemyMoveset([MoveId.TACKLE])
       .startingLevel(100)
       .enemyLevel(100);
@@ -87,7 +87,7 @@ describe("Moves - Beak Blast", () => {
   });
 
   it("should only hit twice with Parental Bond", async () => {
-    game.override.ability(Abilities.PARENTAL_BOND);
+    game.override.ability(AbilityId.PARENTAL_BOND);
     await game.classicMode.startBattle([Species.BLASTOISE]);
 
     const leadPokemon = game.scene.getPlayerPokemon()!;

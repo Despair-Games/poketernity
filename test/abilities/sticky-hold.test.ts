@@ -1,6 +1,6 @@
 import { allMoves } from "#app/data/data-lists";
 import { StealHeldItemChanceAttr } from "#app/data/moves/move-attrs/steal-held-item-chance-attr";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BerryType } from "#enums/berry-type";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -26,11 +26,11 @@ describe("Abilities - Sticky Hold", () => {
     game = new GameManager(phaserGame);
     // We are testing Sticky Hold on the enemy, since Knock Off's item removal is coded to not affect the player.
     game.override
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.STICKY_HOLD)
+      .enemyAbility(AbilityId.STICKY_HOLD)
       .enemyHeldItems([{ name: "BERRY", type: BerryType.LUM }])
       .enemyLevel(100);
   });
@@ -60,7 +60,7 @@ describe("Abilities - Sticky Hold", () => {
   // TODO: Enable this test, and add it to the above test block, once Corrosive Gas is implemented
   it.todo("should prevent the user from losing a held item when hit by the move 'CORROSIVE_GAS'", () => {});
 
-  it.each([Abilities.MAGICIAN, Abilities.PICKPOCKET].map((ability) => ({ ability, name: Abilities[ability] })))(
+  it.each([AbilityId.MAGICIAN, AbilityId.PICKPOCKET].map((ability) => ({ ability, name: AbilityId[ability] })))(
     "should prevent the user's held item from being stolen by the ability $name",
     async ({ ability }) => {
       game.override.ability(ability);

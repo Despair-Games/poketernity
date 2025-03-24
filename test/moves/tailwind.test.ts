@@ -7,7 +7,7 @@ import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
 
 describe("Moves - Tailwind", () => {
@@ -30,7 +30,7 @@ describe("Moves - Tailwind", () => {
       .battleType("double")
       .moveset([MoveId.TAILWIND, MoveId.SPLASH, MoveId.PETAL_BLIZZARD, MoveId.SANDSTORM])
       .enemyMoveset(MoveId.SPLASH)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .startingLevel(100)
       .enemyLevel(100);
   });
@@ -106,7 +106,7 @@ describe("Moves - Tailwind", () => {
   });
 
   it("modifies turn order on the turn it is set", async () => {
-    game.override.battleType("double").enemySpecies(Species.EXCADRILL).ability(Abilities.PRANKSTER);
+    game.override.battleType("double").enemySpecies(Species.EXCADRILL).ability(AbilityId.PRANKSTER);
 
     await game.classicMode.startBattle([Species.WHIMSICOTT, Species.URSALUNA]);
 

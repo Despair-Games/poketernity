@@ -1,5 +1,5 @@
 import { Stat } from "#enums/stat";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -25,9 +25,9 @@ describe("Abilities - Hyper Cutter", () => {
     game.override
       .battleType("single")
       .moveset([MoveId.SAND_ATTACK, MoveId.NOBLE_ROAR, MoveId.DEFOG, MoveId.OCTOLOCK])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .enemySpecies(Species.SHUCKLE)
-      .enemyAbility(Abilities.HYPER_CUTTER)
+      .enemyAbility(AbilityId.HYPER_CUTTER)
       .enemyMoveset(MoveId.SPLASH);
   });
 

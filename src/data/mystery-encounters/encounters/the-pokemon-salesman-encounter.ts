@@ -27,7 +27,7 @@ import PokemonData from "#app/system/pokemon-data";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { SpeciesGroups } from "#enums/pokemon-species-groups";
 
 /** the i18n namespace for this encounter */
@@ -76,7 +76,7 @@ export const ThePokemonSalesmanEncounter: MysteryEncounter = MysteryEncounterBui
     let tries = 0;
 
     // Reroll any species that don't have HAs
-    while ((isNullOrUndefined(species.abilityHidden) || species.abilityHidden === Abilities.NONE) && tries < 5) {
+    while ((isNullOrUndefined(species.abilityHidden) || species.abilityHidden === AbilityId.NONE) && tries < 5) {
       species = getSalesmanSpeciesOffer();
       tries++;
     }
@@ -85,7 +85,7 @@ export const ThePokemonSalesmanEncounter: MysteryEncounter = MysteryEncounterBui
     if (
       randSeedInt(SHINY_MAGIKARP_WEIGHT) === 0
       || isNullOrUndefined(species.abilityHidden)
-      || species.abilityHidden === Abilities.NONE
+      || species.abilityHidden === AbilityId.NONE
     ) {
       // If no HA mon found or you roll 1%, give shiny Magikarp with random variant
       species = getPokemonSpecies(Species.MAGIKARP);

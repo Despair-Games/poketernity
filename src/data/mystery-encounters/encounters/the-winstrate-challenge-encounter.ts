@@ -22,7 +22,7 @@ import { ReturnPhase } from "#app/phases/return-phase";
 import { ShowTrainerPhase } from "#app/phases/show-trainer-phase";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryType } from "#enums/berry-type";
 import { ElementalType } from "#enums/elemental-type";
@@ -207,7 +207,7 @@ function endTrainerBattleAndShowDialogue(): Promise<void> {
         // Only trigger form change when Eiscue is in Noice form
         if (
           pokemon.species.speciesId === Species.EISCUE
-          && pokemon.hasAbility(Abilities.ICE_FACE)
+          && pokemon.hasAbility(AbilityId.ICE_FACE)
           && pokemon.formIndex === 1
         ) {
           globalScene.triggerPokemonFormChange(pokemon, SpeciesFormChangeManualTrigger);

@@ -1,4 +1,4 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -36,7 +36,7 @@ describe("Abilities - Forecast", () => {
    * @param game The game manager instance
    * @param ability The ability that is active on the field
    */
-  const testRevertFormAgainstAbility = async (game: GameManager, ability: Abilities) => {
+  const testRevertFormAgainstAbility = async (game: GameManager, ability: AbilityId) => {
     game.override.starterForms({ [Species.CASTFORM]: SUNNY_FORM }).enemyAbility(ability);
     await game.classicMode.startBattle([Species.CASTFORM]);
 
@@ -61,7 +61,7 @@ describe("Abilities - Forecast", () => {
       .moveset([MoveId.SPLASH, MoveId.RAIN_DANCE, MoveId.SUNNY_DAY, MoveId.TACKLE])
       .enemySpecies(Species.MAGIKARP)
       .enemyMoveset(MoveId.SPLASH)
-      .enemyAbility(Abilities.BALL_FETCH);
+      .enemyAbility(AbilityId.BALL_FETCH);
   });
 
   // TODO: Break apart into individual tests again now that the test framework has been optimized
@@ -85,7 +85,7 @@ describe("Abilities - Forecast", () => {
         Species.ALTARIA,
       ]);
 
-      game.field.mockAbility(game.scene.getPlayerParty()[5], Abilities.CLOUD_NINE);
+      game.field.mockAbility(game.scene.getPlayerParty()[5], AbilityId.CLOUD_NINE);
 
       const castform = game.scene.getPlayerField()[0];
       expect(castform.formIndex).toBe(NORMAL_FORM);
@@ -179,11 +179,11 @@ describe("Abilities - Forecast", () => {
   });
 
   it("reverts to Normal Form if a Pokémon on the field has Air Lock", async () => {
-    await testRevertFormAgainstAbility(game, Abilities.AIR_LOCK);
+    await testRevertFormAgainstAbility(game, AbilityId.AIR_LOCK);
   });
 
   it("has no effect on Pokémon other than Castform", async () => {
-    game.override.enemyAbility(Abilities.FORECAST).enemySpecies(Species.SHUCKLE);
+    game.override.enemyAbility(AbilityId.FORECAST).enemySpecies(Species.SHUCKLE);
     await game.classicMode.startBattle([Species.CASTFORM]);
 
     game.move.select(MoveId.RAIN_DANCE);

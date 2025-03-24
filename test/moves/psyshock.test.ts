@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -23,11 +23,11 @@ describe("Moves - Psyshock", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.FUR_COAT)
+      .enemyAbility(AbilityId.FUR_COAT)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
@@ -41,7 +41,7 @@ describe("Moves - Psyshock", () => {
     game.move.use(MoveId.PSYSHOCK);
     await game.toEndOfTurn();
 
-    expect(enemy.battleData.abilitiesApplied).toContain(Abilities.FUR_COAT);
+    expect(enemy.battleData.abilitiesApplied).toContain(AbilityId.FUR_COAT);
   });
 
   it("should use the user's Sp. Atk stat stages during damage calculation", async () => {

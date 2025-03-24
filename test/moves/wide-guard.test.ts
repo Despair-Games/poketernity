@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
 import { GameManager } from "#test/test-utils/gameManager";
 import { Species } from "#enums/species";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Stat } from "#enums/stat";
 
@@ -27,7 +27,7 @@ describe("Moves - Wide Guard", () => {
       .battleType("double")
       .enemySpecies(Species.SNORLAX)
       .enemyMoveset([MoveId.SWIFT])
-      .enemyAbility(Abilities.INSOMNIA)
+      .enemyAbility(AbilityId.INSOMNIA)
       .startingLevel(100)
       .enemyLevel(100);
   });

@@ -1,6 +1,6 @@
 import { BattlerIndex } from "#enums/battler-index";
 import type { Pokemon } from "#app/field/pokemon";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
@@ -45,7 +45,7 @@ describe("Abilities - Gulp Missile", () => {
       .battleType("single")
       .moveset([MoveId.SURF, MoveId.DIVE, MoveId.SPLASH, MoveId.SUBSTITUTE])
       .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyLevel(5);
   });
 
@@ -197,7 +197,7 @@ describe("Abilities - Gulp Missile", () => {
   });
 
   it("prevents effect damage but inflicts secondary effect on attacker with Magic Guard", async () => {
-    game.override.enemyMoveset(MoveId.TACKLE).enemyAbility(Abilities.MAGIC_GUARD);
+    game.override.enemyMoveset(MoveId.TACKLE).enemyAbility(AbilityId.MAGIC_GUARD);
     await game.classicMode.startBattle([Species.CRAMORANT]);
 
     const cramorant = game.scene.getPlayerPokemon()!;
@@ -236,7 +236,7 @@ describe("Abilities - Gulp Missile", () => {
   });
 
   it("doesn't trigger if user is behind a substitute", async () => {
-    game.override.enemyAbility(Abilities.STURDY);
+    game.override.enemyAbility(AbilityId.STURDY);
     await game.classicMode.startBattle([Species.CRAMORANT]);
 
     game.move.select(MoveId.SURF);
@@ -268,7 +268,7 @@ describe("Abilities - Gulp Missile", () => {
 
     await game.toEndOfTurn();
 
-    expect(cramorant.hasAbility(Abilities.GULP_MISSILE)).toBe(true);
+    expect(cramorant.hasAbility(AbilityId.GULP_MISSILE)).toBe(true);
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)).toBeDefined();
     expect(cramorant.formIndex).toBe(GULPING_FORM);
   });
@@ -288,18 +288,18 @@ describe("Abilities - Gulp Missile", () => {
 
     await game.toEndOfTurn();
 
-    expect(cramorant.hasAbility(Abilities.GULP_MISSILE)).toBe(true);
+    expect(cramorant.hasAbility(AbilityId.GULP_MISSILE)).toBe(true);
     expect(cramorant.getTag(BattlerTagType.GULP_MISSILE_ARROKUDA)).toBeDefined();
     expect(cramorant.formIndex).toBe(GULPING_FORM);
   });
 
   it("cannot be copied", async () => {
-    game.override.enemyAbility(Abilities.TRACE);
+    game.override.enemyAbility(AbilityId.TRACE);
 
     await game.classicMode.startBattle([Species.CRAMORANT]);
     game.move.select(MoveId.SPLASH);
     await game.phaseInterceptor.to("TurnStartPhase");
 
-    expect(game.scene.getEnemyPokemon()?.hasAbility(Abilities.GULP_MISSILE)).toBe(false);
+    expect(game.scene.getEnemyPokemon()?.hasAbility(AbilityId.GULP_MISSILE)).toBe(false);
   });
 });

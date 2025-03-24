@@ -1,5 +1,5 @@
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattlerIndex } from "#enums/battler-index";
 import { ElementalType } from "#enums/elemental-type";
@@ -28,7 +28,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
     game.override
       .battleType("single")
       .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100)
@@ -66,7 +66,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
   });
 
   it("Fixed-damage moves ignore damage multipliers", async () => {
-    game.override.enemySpecies(Species.DRAGONITE).enemyAbility(Abilities.MULTISCALE);
+    game.override.enemySpecies(Species.DRAGONITE).enemyAbility(AbilityId.MULTISCALE);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -77,7 +77,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
   });
 
   it("One-hit KO moves ignore damage multipliers", async () => {
-    game.override.enemySpecies(Species.AGGRON).enemyAbility(Abilities.MULTISCALE);
+    game.override.enemySpecies(Species.AGGRON).enemyAbility(AbilityId.MULTISCALE);
 
     await game.classicMode.startBattle([Species.MAGIKARP]);
 
@@ -88,7 +88,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
   });
 
   it("When the user fails to use Jump Kick with Wonder Guard ability, the damage should be 1.", async () => {
-    game.override.enemySpecies(Species.GASTLY).ability(Abilities.WONDER_GUARD);
+    game.override.enemySpecies(Species.GASTLY).ability(AbilityId.WONDER_GUARD);
 
     await game.classicMode.startBattle([Species.SHEDINJA]);
 
@@ -103,7 +103,7 @@ describe("Battle Mechanics - Damage Calculation", () => {
 
   it("Charizard with odd HP survives Stealth Rock damage twice", async () => {
     game.scene.arena.addTag(ArenaTagType.STEALTH_ROCK, 0, 1, MoveId.STEALTH_ROCK);
-    game.override.seed("Charizard Stealth Rock test").enemySpecies(Species.CHARIZARD).enemyAbility(Abilities.BLAZE);
+    game.override.seed("Charizard Stealth Rock test").enemySpecies(Species.CHARIZARD).enemyAbility(AbilityId.BLAZE);
 
     await game.classicMode.startBattle([Species.PIKACHU]);
 
@@ -136,7 +136,7 @@ describe("Base Power Calculation", () => {
     game.override
       .battleType("single")
       .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100)
@@ -144,7 +144,7 @@ describe("Base Power Calculation", () => {
   });
 
   it("calculates move modifiers before ability modifiers", async () => {
-    game.override.ability(Abilities.AERILATE);
+    game.override.ability(AbilityId.AERILATE);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const crushGrip = allMoves.get(MoveId.CRUSH_GRIP);
@@ -157,7 +157,7 @@ describe("Base Power Calculation", () => {
   });
 
   it("calculates Tera power boost after Technician boost", async () => {
-    game.override.ability(Abilities.TECHNICIAN).startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.NORMAL }]);
+    game.override.ability(AbilityId.TECHNICIAN).startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.NORMAL }]);
     await game.classicMode.startBattle([Species.FEEBAS]);
 
     const tackle = allMoves.get(MoveId.TACKLE);

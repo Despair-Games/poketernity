@@ -1,6 +1,6 @@
 import { ElementalType } from "#enums/elemental-type";
 import { Challenges } from "#enums/challenges";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -25,7 +25,7 @@ describe("Moves - Relic Song", () => {
     game.override
       .moveset([MoveId.RELIC_SONG, MoveId.SPLASH])
       .battleType("single")
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .enemySpecies(Species.MAGIKARP)
       .enemyLevel(100);

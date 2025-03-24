@@ -1,5 +1,5 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/abilities";
 import { CommandPhase } from "#app/phases/command-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { MoveId } from "#enums/move-id";
@@ -28,7 +28,7 @@ describe("Abilities - Pastel Veil", () => {
     game.override
       .battleType("double")
       .moveset([MoveId.TOXIC_THREAD, MoveId.SPLASH])
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemySpecies(Species.SUNKERN)
       .enemyMoveset(MoveId.SPLASH);
   });
@@ -39,7 +39,7 @@ describe("Abilities - Pastel Veil", () => {
     const magikarp = game.scene.getPlayerField()[0];
     ponyta.abilityIndex = 1;
 
-    expect(ponyta.hasAbility(Abilities.PASTEL_VEIL)).toBe(true);
+    expect(ponyta.hasAbility(AbilityId.PASTEL_VEIL)).toBe(true);
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.TOXIC_THREAD, 1, BattlerIndex.PLAYER);
@@ -55,7 +55,7 @@ describe("Abilities - Pastel Veil", () => {
     const magikarp = game.scene.getPlayerField()[0];
     ponyta.abilityIndex = 1;
 
-    expect(ponyta.hasAbility(Abilities.PASTEL_VEIL)).toBe(true);
+    expect(ponyta.hasAbility(AbilityId.PASTEL_VEIL)).toBe(true);
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.TOXIC_THREAD, 1, BattlerIndex.PLAYER);
