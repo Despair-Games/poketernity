@@ -214,7 +214,7 @@ export class LoginFormUiHandler extends FormModalUiHandler {
 
     const onFail = (error) => {
       globalScene.ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
-      globalScene.ui.setModeForceTransition<LoadingModalUiHandler>(
+      globalScene.ui.setModeForceTransition<LoginFormUiHandler>(
         UiMode.LOGIN_FORM,
         Object.assign(config, { errorMessage: error?.trim() }),
       );
