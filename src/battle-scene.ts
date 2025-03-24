@@ -1243,9 +1243,9 @@ export default class BattleScene extends SceneBase {
           this.clearPhaseQueue();
 
           // destroying those containers will call 'container.removeAll(true)', destroying all their children as well
-          this.uiContainer.destroy(true);
-          this.field.destroy(true);
-          this.fieldUI.destroy(true);
+          this.uiContainer.destroy();
+          this.field.destroy();
+          this.fieldUI.destroy();
 
           this.children.removeAll(true);
           this.game.domContainer.innerHTML = "";
