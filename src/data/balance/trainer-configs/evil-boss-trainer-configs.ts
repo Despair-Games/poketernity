@@ -4,7 +4,7 @@ import type { PersistentModifier } from "#app/modifier/modifier";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import { randSeedInt } from "#app/utils";
 import { Gender } from "#enums/gender";
-import { PokeballType } from "#enums/pokeball";
+import { PokeballType } from "#enums/pokeball-type";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
 

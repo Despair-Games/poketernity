@@ -2,7 +2,7 @@ import { BattleType } from "#enums/battle-type";
 import { globalScene } from "#app/global-scene";
 import type { Gender } from "#enums/gender";
 import type { Nature } from "#enums/nature";
-import type { PokeballType } from "#enums/pokeball";
+import type { PokeballType } from "#enums/pokeball-type";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { Status } from "../data/status-effect";
 import { type Pokemon, EnemyPokemon } from "#app/field/pokemon";

@@ -42,7 +42,7 @@ import { getEncounterText, showEncounterText } from "#app/data/mystery-encounter
 import { trainerNamePools } from "#app/data/trainer-names";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
 import { addPokemonDataToDexAndValidateAchievements } from "#app/data/mystery-encounters/utils/encounter-pokemon-utils";
-import type { PokeballType } from "#enums/pokeball";
+import type { PokeballType } from "#enums/pokeball-type";
 import { GAME_HEIGHT, GAME_WIDTH } from "#app/ui-constants";
 import { timedEventManager } from "#app/timed-event-manager";
 import { EventModifierType } from "#enums/event-modifier-type";

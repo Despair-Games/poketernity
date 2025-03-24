@@ -75,7 +75,7 @@ import { ModifierPoolType } from "#enums/modifier-pool-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";
 import { type Nature } from "#enums/nature";
-import { type PokeballType } from "#enums/pokeball";
+import { type PokeballType } from "#enums/pokeball-type";
 import { Species } from "#enums/species";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import type { PermanentStat, TempBattleStat } from "#enums/stat";

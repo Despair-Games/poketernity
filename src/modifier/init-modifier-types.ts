@@ -80,7 +80,7 @@ import { BerryType } from "#enums/berry-type";
 import { ElementalType } from "#enums/elemental-type";
 import { ModifierTier } from "#enums/modifier-tier";
 import { Nature } from "#enums/nature";
-import { PokeballType } from "#enums/pokeball";
+import { PokeballType } from "#enums/pokeball-type";
 import { Species } from "#enums/species";
 import { Stat } from "#enums/stat";
 import { VoucherType } from "#enums/voucher-type";

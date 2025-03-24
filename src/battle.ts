@@ -4,7 +4,7 @@ import { TrainerVariant } from "#enums/trainer-variant";
 import Trainer from "./field/trainer";
 import type { GameMode } from "./game-mode";
 import { MoneyMultiplierModifier, type PokemonHeldItemModifier } from "./modifier/modifier";
-import type { PokeballType } from "#enums/pokeball";
+import type { PokeballType } from "#enums/pokeball-type";
 import { SpeciesFormKey } from "#enums/species-form-key";
 import type { EnemyPokemon, PlayerPokemon } from "#app/field/pokemon";
 import type { Pokemon } from "#app/field/pokemon";

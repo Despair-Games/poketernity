@@ -40,7 +40,7 @@ import { type FormChangeItem } from "#enums/form-change-item";
 import { LearnMoveType } from "#enums/learn-move-type";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
 import type { Nature } from "#enums/nature";
-import type { PokeballType } from "#enums/pokeball";
+import type { PokeballType } from "#enums/pokeball-type";
 import { Species } from "#enums/species";
 import { type PermanentStat, type TempBattleStat, BATTLE_STATS, Stat, TEMP_BATTLE_STATS } from "#enums/stat";
 import { StatusEffect } from "#enums/status-effect";

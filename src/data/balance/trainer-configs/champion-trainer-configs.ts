@@ -2,7 +2,7 @@ import { getRandomPartyMemberFunc, TrainerConfig, type TrainerConfigs } from "#a
 import { TrainerSlot } from "#enums/trainer-slot";
 import { Species } from "#enums/species";
 import { TrainerType } from "#enums/trainer-type";
-import { PokeballType } from "#enums/pokeball";
+import { PokeballType } from "#enums/pokeball-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
 import type { PersistentModifier } from "#app/modifier/modifier";
 import { ElementalType } from "#enums/elemental-type";

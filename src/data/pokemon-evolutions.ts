@@ -7,7 +7,7 @@ import type { MoveId } from "#enums/move-id";
 import { ElementalType } from "#enums/elemental-type";
 import { Gender } from "#enums/gender";
 import { randSeedInt } from "#app/utils";
-import { PokeballType } from "#enums/pokeball";
+import { PokeballType } from "#enums/pokeball-type";
 import { WeatherType } from "#enums/weather-type";
 import type { BiomeId } from "#enums/biome-id";
 import { Nature } from "#enums/nature";
