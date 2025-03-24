@@ -29,7 +29,7 @@ import { MysteryEncounterUiHandler } from "#app/ui/handlers/mystery-encounter-ui
 import { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import { PartyUiHandler } from "#app/ui/handlers/party-ui-handler";
 import { RegistrationFormUiHandler } from "#app/ui/handlers/registration-form-ui-handler";
-import { RenameFormUiHandler } from "#app/ui/handlers/rename-form-ui-handler";
+import { RenamePokemonUiHandler } from "#app/ui/handlers/rename-pokemon-ui-handler";
 import { RunHistoryUiHandler } from "#app/ui/handlers/run-history-ui-handler";
 import { RunInfoUiHandler } from "#app/ui/handlers/run-info-ui-handler";
 import { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-ui-handler";
@@ -167,7 +167,7 @@ export class UI extends Phaser.GameObjects.Container {
       new SessionReloadModalUiHandler(),
       new UnavailableModalUiHandler(),
       new ChallengeSelectUiHandler(),
-      new RenameFormUiHandler(),
+      new RenamePokemonUiHandler(),
       new RunHistoryUiHandler(),
       new RunInfoUiHandler(),
       new TestDialogueUiHandler(),

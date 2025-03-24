@@ -91,7 +91,7 @@ import i18next from "i18next";
 import type BBCodeText from "phaser3-rex-plugins/plugins/bbcodetext";
 import type { ConfirmUiHandler } from "./confirm-ui-handler";
 import type { OptionSelectUiHandler } from "./option-select-ui-handler";
-import type { RenameFormUiHandler } from "./rename-form-ui-handler";
+import type { RenamePokemonUiHandler } from "./rename-pokemon-ui-handler";
 
 type StarterSelectCallback = (starters: StarterConfig[]) => void;
 
@@ -1750,7 +1750,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
               ui.playSelect();
               let nickname = starterAttributes.nickname ? String(starterAttributes.nickname) : "";
               nickname = decodeURIComponent(escape(atob(nickname)));
-              ui.setModeWithoutClear<RenameFormUiHandler>(
+              ui.setModeWithoutClear<RenamePokemonUiHandler>(
                 UiMode.RENAME_POKEMON,
                 {
                   buttonActions: [
