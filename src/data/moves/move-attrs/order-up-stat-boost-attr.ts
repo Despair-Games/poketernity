@@ -2,7 +2,7 @@ import { type EffectiveStat, Stat } from "#enums/stat";
 import type { Pokemon } from "#app/field/pokemon";
 import { globalScene } from "#app/global-scene";
 import { StatStageChangePhase } from "#app/phases/stat-stage-change-phase";
-import { type CommandedTag } from "#app/data/battler-tags";
+import { type CommandedTag } from "#app/data/battler-tags/commanded-tag";
 import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
 import { BattlerTagType } from "#enums/battler-tag-type";

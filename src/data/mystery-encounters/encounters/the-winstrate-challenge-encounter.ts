@@ -1,40 +1,41 @@
-import type { EnemyPartyConfig } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
+import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
+import type { PostBattleInitAbAttr } from "#app/data/abilities/ab-attrs/post-battle-init-ab-attr";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
+import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
+import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
+import { showEncounterDialogue, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
 import {
   generateModifierType,
   generateModifierTypeOption,
   initBattleWithEnemyConfig,
   leaveEncounterWithoutBattle,
   setEncounterRewards,
+  type EnemyPartyConfig,
 } from "#app/data/mystery-encounters/utils/encounter-phase-utils";
-import { transitionMysteryEncounterIntroVisuals } from "../utils/encounter-visuals-utils";
+import { transitionMysteryEncounterIntroVisuals } from "#app/data/mystery-encounters/utils/encounter-visuals-utils";
+import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
+import { globalScene } from "#app/global-scene";
 import type { PokemonHeldItemModifierType } from "#app/modifier/modifier-type";
 import { modifierTypes } from "#app/modifier/modifier-types";
-import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { globalScene } from "#app/global-scene";
-import type MysteryEncounter from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterBuilder } from "#app/data/mystery-encounters/mystery-encounter";
-import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
-import { TrainerType } from "#enums/trainer-type";
-import { Species } from "#enums/species";
-import { Abilities } from "#enums/abilities";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { Nature } from "#enums/nature";
-import { ElementalType } from "#enums/elemental-type";
-import { BerryType } from "#enums/berry-type";
-import { Stat } from "#enums/stat";
-import { SpeciesFormChangeManualTrigger } from "#app/data/species-form-change-triggers/species-form-change-manual-trigger";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import { showEncounterDialogue, showEncounterText } from "#app/data/mystery-encounters/utils/encounter-dialogue-utils";
-import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PartyHealPhase } from "#app/phases/party-heal-phase";
-import { ShowTrainerPhase } from "#app/phases/show-trainer-phase";
 import { ReturnPhase } from "#app/phases/return-phase";
-import i18next from "i18next";
-import { ModifierTier } from "#enums/modifier-tier";
-import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
-import { BattlerTagType } from "#enums/battler-tag-type";
+import { ShowTrainerPhase } from "#app/phases/show-trainer-phase";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { Abilities } from "#enums/abilities";
+import { BattlerTagType } from "#enums/battler-tag-type";
+import { BerryType } from "#enums/berry-type";
+import { ElementalType } from "#enums/elemental-type";
+import { ModifierTier } from "#enums/modifier-tier";
 import { MoveId } from "#enums/move-id";
+import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
+import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
+import { MysteryEncounterType } from "#enums/mystery-encounter-type";
+import { Nature } from "#enums/nature";
+import { Species } from "#enums/species";
+import { Stat } from "#enums/stat";
+import { TrainerType } from "#enums/trainer-type";
+import i18next from "i18next";
 
 /** the i18n namespace for the encounter */
 const namespace = "mysteryEncounters/theWinstrateChallenge";
@@ -213,7 +214,7 @@ function endTrainerBattleAndShowDialogue(): Promise<void> {
         }
 
         pokemon.resetBattleData();
-        applyAbAttrs(AbAttrFlag.POST_BATTLE_INIT, pokemon, false);
+        applyAbAttrs<PostBattleInitAbAttr>(AbAttrFlag.POST_BATTLE_INIT, pokemon, false);
       }
 
       globalScene.unshiftPhase(new ShowTrainerPhase());

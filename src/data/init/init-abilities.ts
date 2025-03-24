@@ -359,14 +359,14 @@ export function initAbilities() {
     new Ability(Abilities.CUTE_CHARM, 3).attr(PostDefendContactApplyTagChanceAbAttr, 30, BattlerTagType.INFATUATED),
     new Ability(Abilities.PLUS, 3).conditionalAttr(
       (p) =>
-        globalScene.currentBattle.double && [Abilities.PLUS, Abilities.MINUS].some((a) => p.getAlly().hasAbility(a)),
+        globalScene.currentBattle.double && [Abilities.PLUS, Abilities.MINUS].some((a) => p.getAlly()?.hasAbility(a)),
       StatMultiplierAbAttr,
       Stat.SPATK,
       1.5,
     ),
     new Ability(Abilities.MINUS, 3).conditionalAttr(
       (p) =>
-        globalScene.currentBattle.double && [Abilities.PLUS, Abilities.MINUS].some((a) => p.getAlly().hasAbility(a)),
+        globalScene.currentBattle.double && [Abilities.PLUS, Abilities.MINUS].some((a) => p.getAlly()?.hasAbility(a)),
       StatMultiplierAbAttr,
       Stat.SPATK,
       1.5,
@@ -620,7 +620,7 @@ export function initAbilities() {
       .condition((pokemon) => pokemon.getHpRatio() <= 0.5),
     new Ability(Abilities.CURSED_BODY, 5).attr(PostDefendMoveDisableAbAttr, 30).bypassFaint(),
     new Ability(Abilities.HEALER, 5).conditionalAttr(
-      (pokemon) => pokemon.getAlly() && pokemon.randSeedInt(10) < 3,
+      (pokemon) => pokemon.getAlly() !== undefined && pokemon.randSeedInt(10) < 3,
       PostTurnResetStatusAbAttr,
       true,
     ),

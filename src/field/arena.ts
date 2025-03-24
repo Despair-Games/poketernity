@@ -1,36 +1,43 @@
-import { globalScene } from "#app/global-scene";
-import type { BiomeTierTrainerPools, PokemonPools } from "#app/data/balance/biomes";
-import { biomePokemonPools, biomeTrainerPools } from "#app/data/balance/biomes";
-import { BiomePoolTier } from "#enums/biome-pool-tier";
-import { type AbstractConstructor, randSeedInt } from "#app/utils";
-import type PokemonSpecies from "#app/data/pokemon-species";
-import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { getWeatherClearMessage, getWeatherStartMessage, PRIMAL_WEATHER, Weather } from "#app/data/weather";
-import { CommonAnim } from "#enums/common-anim";
-import type { ElementalType } from "#enums/elemental-type";
-import type { Move } from "#app/data/moves/move";
+import type { PostTerrainChangeAbAttr } from "#app/data/abilities/ab-attrs/post-terrain-change-ab-attr";
+import type { PostWeatherChangeAbAttr } from "#app/data/abilities/ab-attrs/post-weather-change-ab-attr";
+import type { TerrainEventTypeChangeAbAttr } from "#app/data/abilities/ab-attrs/terrain-event-type-change-ab-attr";
+import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { ArenaTag } from "#app/data/arena-tag";
 import { EntryHazardTag, getArenaTag } from "#app/data/arena-tag";
-import { ArenaTagSide } from "#enums/arena-tag-side";
-import type { BattlerIndex } from "#enums/battler-index";
-import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
-import { TerrainType } from "#enums/terrain-type";
-import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
-import type { Pokemon } from "#app/field/pokemon";
-import Overrides from "#app/overrides";
-import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
-import type { ArenaTagType } from "#enums/arena-tag-type";
-import { Biome } from "#enums/biome";
-import type { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { TimeOfDay } from "#enums/time-of-day";
-import { TrainerType } from "#enums/trainer-type";
-import { Abilities } from "#enums/abilities";
+import {
+  biomePokemonPools,
+  type BiomeTierTrainerPools,
+  biomeTrainerPools,
+  type PokemonPools,
+} from "#app/data/balance/biomes";
+import type { Move } from "#app/data/moves/move";
 import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "#app/data/pokemon-forms";
+import type PokemonSpecies from "#app/data/pokemon-species";
+import { getTerrainClearMessage, getTerrainStartMessage, Terrain } from "#app/data/terrain";
+import { getWeatherClearMessage, getWeatherStartMessage, PRIMAL_WEATHER, Weather } from "#app/data/weather";
+import { TagAddedEvent, TagRemovedEvent, TerrainChangedEvent, WeatherChangedEvent } from "#app/events/arena";
+import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import Overrides from "#app/overrides";
 import { CommonAnimPhase } from "#app/phases/common-anim-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
-import { WeatherType } from "#enums/weather-type";
+import { type AbstractConstructor, randSeedInt } from "#app/utils";
+import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
+import { Abilities } from "#enums/abilities";
+import { ArenaTagSide } from "#enums/arena-tag-side";
+import type { ArenaTagType } from "#enums/arena-tag-type";
+import type { BattlerIndex } from "#enums/battler-index";
+import { Biome } from "#enums/biome";
+import { BiomePoolTier } from "#enums/biome-pool-tier";
+import { CommonAnim } from "#enums/common-anim";
+import type { ElementalType } from "#enums/elemental-type";
+import type { MoveId } from "#enums/move-id";
+import { Species } from "#enums/species";
+import { TerrainType } from "#enums/terrain-type";
+import { TimeOfDay } from "#enums/time-of-day";
+import { TrainerType } from "#enums/trainer-type";
+import { WeatherType } from "#enums/weather-type";
 
 export class Arena {
   public biomeType: Biome;
@@ -444,7 +451,7 @@ export class Arena {
         pokemon.findAndRemoveTags(
           (t) => "weatherTypes" in t && !(t.weatherTypes as WeatherType[]).find((t) => t === newWeatherType),
         );
-        applyAbAttrs(AbAttrFlag.POST_WEATHER_CHANGE, pokemon, false, newWeatherType);
+        applyAbAttrs<PostWeatherChangeAbAttr>(AbAttrFlag.POST_WEATHER_CHANGE, pokemon, false, newWeatherType);
       });
 
     return true;
@@ -517,8 +524,8 @@ export class Arena {
         pokemon.findAndRemoveTags(
           (t) => "terrainTypes" in t && !(t.terrainTypes as TerrainType[]).find((t) => t === terrain),
         );
-        applyAbAttrs(AbAttrFlag.POST_TERRAIN_CHANGE, pokemon, false, terrain);
-        applyAbAttrs(AbAttrFlag.TERRAIN_EVENT_TYPE_CHANGE, pokemon, false, false);
+        applyAbAttrs<PostTerrainChangeAbAttr>(AbAttrFlag.POST_TERRAIN_CHANGE, pokemon, false, terrain);
+        applyAbAttrs<TerrainEventTypeChangeAbAttr>(AbAttrFlag.TERRAIN_EVENT_TYPE_CHANGE, pokemon, false, false);
       });
 
     return true;

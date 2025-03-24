@@ -1,11 +1,12 @@
-import type { Pokemon } from "#app/field/pokemon";
-import { globalScene } from "#app/global-scene";
-import { type BerryModifier, PreserveBerryModifier } from "#app/modifier/modifier";
-import { BooleanHolder } from "#app/utils";
+import type { HealFromBerryUseAbAttr } from "#app/data/abilities/ab-attrs/heal-from-berry-use-ab-attr";
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import { getBerryEffectFunc } from "#app/data/berry";
 import type { Move } from "#app/data/moves/move";
 import { MoveEffectAttr } from "#app/data/moves/move-attrs/move-effect-attr";
+import type { Pokemon } from "#app/field/pokemon";
+import { globalScene } from "#app/global-scene";
+import { type BerryModifier, PreserveBerryModifier } from "#app/modifier/modifier";
+import { BooleanHolder } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 
 /**
@@ -53,6 +54,6 @@ export class EatBerryAttr extends MoveEffectAttr {
 
   eatBerry(consumer: Pokemon, berryOwner?: Pokemon) {
     getBerryEffectFunc(this.chosenBerry!.berryType)(consumer, berryOwner); // consumer eats the berry
-    applyAbAttrs(AbAttrFlag.HEAL_FROM_BERRY_USE, consumer, false);
+    applyAbAttrs<HealFromBerryUseAbAttr>(AbAttrFlag.HEAL_FROM_BERRY_USE, consumer, false);
   }
 }

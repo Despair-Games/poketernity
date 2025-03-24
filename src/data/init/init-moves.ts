@@ -1,4 +1,5 @@
-import { type ShellTrapTag, type StockpilingTag } from "#app/data/battler-tags";
+import type { ShellTrapTag } from "#app/data/battler-tags/shell-trap-tag";
+import type { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
 import { allMoves } from "#app/data/data-lists";
 import { ChargingAttackMove } from "#app/data/moves/charging-attack-move";
 import { ChargingSelfStatusMove } from "#app/data/moves/charging-self-status-move";
@@ -2257,9 +2258,9 @@ export function initMoves() {
       .target(MoveTarget.USER_AND_ALLIES)
       .condition(
         (user, _target, _move) =>
-          !![user, user.getAlly()]
+          [user, user.getAlly()]
             .filter((p) => p?.isActive())
-            .find((p) => !![Abilities.PLUS, Abilities.MINUS].find((a) => p.hasAbility(a, false))),
+            .some((p) => [Abilities.PLUS, Abilities.MINUS].some((a) => p?.hasAbility(a, false))),
       ),
     new StatusMove(MoveId.HAPPY_HOUR, ElementalType.NORMAL, -1, 30, -1, 0, 6) // No animation
       .attr(AddArenaTagAttr, ArenaTagType.HAPPY_HOUR, ArenaTagRelativeSide.USER, { failOnOverlap: true })
@@ -2465,7 +2466,7 @@ export function initMoves() {
         (user, _target, _move) =>
           [user, user.getAlly()]
             .filter((p) => p?.isActive())
-            .some((p) => [Abilities.PLUS, Abilities.MINUS].some((a) => p.hasAbility(a, false))),
+            .some((p) => [Abilities.PLUS, Abilities.MINUS].some((a) => p?.hasAbility(a, false))),
       ),
     new AttackMove(MoveId.THROAT_CHOP, ElementalType.DARK, MoveCategory.PHYSICAL, 80, 100, 15, 100, 0, 7)
       .attr(AddBattlerTagAttr, BattlerTagType.THROAT_CHOPPED),
