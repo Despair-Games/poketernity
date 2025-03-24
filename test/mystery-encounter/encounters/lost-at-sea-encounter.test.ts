@@ -2,7 +2,7 @@ import { LostAtSeaEncounter } from "#app/data/mystery-encounters/encounters/lost
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
 import { getPokemonSpecies } from "#app/utils/pokemon-species-utils";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -22,7 +22,7 @@ import i18next from "i18next";
 const namespace = "mysteryEncounters/lostAtSea";
 /** Blastoise for surf. Pidgeot for fly. Abra for none. */
 const defaultParty = [Species.BLASTOISE, Species.PIDGEOT, Species.ABRA];
-const defaultBiome = Biome.SEA;
+const defaultBiome = BiomeId.SEA;
 const defaultWave = 33;
 
 describe("Lost at Sea - Mystery Encounter", () => {
@@ -43,9 +43,9 @@ describe("Lost at Sea - Mystery Encounter", () => {
     game.override.disableTrainerWaves();
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
-      new Map<Biome, MysteryEncounterType[]>([
-        [Biome.SEA, [MysteryEncounterType.LOST_AT_SEA]],
-        [Biome.MOUNTAIN, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
+      new Map<BiomeId, MysteryEncounterType[]>([
+        [BiomeId.SEA, [MysteryEncounterType.LOST_AT_SEA]],
+        [BiomeId.MOUNTAIN, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
       ]),
     );
   });
@@ -71,7 +71,7 @@ describe("Lost at Sea - Mystery Encounter", () => {
 
   it("should not spawn outside of sea biome", async () => {
     game.override.mysteryEncounterTier(MysteryEncounterTier.COMMON);
-    game.override.startingBiome(Biome.MOUNTAIN);
+    game.override.startingBiome(BiomeId.MOUNTAIN);
     await game.runToMysteryEncounter();
 
     expect(game.scene.currentBattle.mysteryEncounter?.encounterType).not.toBe(MysteryEncounterType.LOST_AT_SEA);

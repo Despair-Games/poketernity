@@ -44,7 +44,7 @@ import { loadEncounterAnimAssets } from "#app/utils/anim-utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
 import { BattleType } from "#enums/battle-type";
 import { BattlerIndex } from "#enums/battler-index";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome";
 import { FieldPosition } from "#enums/field-position";
 import { ImagesFolder } from "#enums/images-folders";
 import { ModifierPoolType } from "#enums/modifier-pool-type";
@@ -145,7 +145,7 @@ export class EncounterPhase extends BattlePhase {
           if (
             globalScene.findModifier((m) => m instanceof BoostBugSpawnModifier)
             && !gameMode.isBoss(waveIndex)
-            && arena.biomeType !== Biome.END
+            && arena.biomeType !== BiomeId.END
             && randSeedInt(10) === 0
           ) {
             enemySpecies = getGoldenBugNetSpecies(level);

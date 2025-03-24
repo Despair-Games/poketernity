@@ -20,7 +20,7 @@ import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleCommand } from "#enums/battle-command";
 import { BattleType } from "#enums/battle-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome";
 import { FieldPosition } from "#enums/field-position";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
@@ -271,7 +271,7 @@ export class CommandPhase extends FieldPhase {
             .some((p) => !globalScene.gameData.dexData[p.species.speciesId].caughtAttr)
           && gameData.getStarterCount((d) => !!d.caughtAttr) < Object.keys(speciesStarterCosts).length - 1;
 
-        if (arena.biomeType === Biome.END && (!gameMode.isClassic || gameMode.isFreshStartChallenge() || notInDex)) {
+        if (arena.biomeType === BiomeId.END && (!gameMode.isClassic || gameMode.isFreshStartChallenge() || notInDex)) {
           failCatchRun("battle:noPokeballForce");
         } else if (battleType === BattleType.TRAINER) {
           failCatchRun("battle:noPokeballTrainer");
@@ -314,7 +314,7 @@ export class CommandPhase extends FieldPhase {
         }
         break;
       case BattleCommand.RUN:
-        if (arena.biomeType === Biome.END || mysteryEncounter?.fleeAllowed === false) {
+        if (arena.biomeType === BiomeId.END || mysteryEncounter?.fleeAllowed === false) {
           failCatchRun("battle:noEscapeForce");
           break;
         } else if (

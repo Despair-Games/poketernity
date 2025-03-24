@@ -164,7 +164,7 @@ import type { AchvCategory } from "#enums/achv-category";
 import { BattleType } from "#enums/battle-type";
 import type { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome";
 import type { ChargeAnim } from "#enums/charge-anim";
 import { CommonColor, ShadowColor } from "#enums/color";
 import { ElementalType } from "#enums/elemental-type";
@@ -1191,7 +1191,7 @@ export default class BattleScene extends SceneBase {
 
     [this.luckLabelText, this.luckText].map((t) => t.setVisible(false));
 
-    this.newArena(Overrides.STARTING_BIOME_OVERRIDE || Biome.TOWN);
+    this.newArena(Overrides.STARTING_BIOME_OVERRIDE || BiomeId.TOWN);
 
     this.field.setVisible(true);
 
@@ -1473,8 +1473,8 @@ export default class BattleScene extends SceneBase {
     return this.currentBattle;
   }
 
-  newArena(biome: Biome): Arena {
-    this.arena = new Arena(biome, Biome[biome].toLowerCase());
+  newArena(biome: BiomeId): Arena {
+    this.arena = new Arena(biome, BiomeId[biome].toLowerCase());
     this.eventTarget.dispatchEvent(new NewArenaEvent());
 
     this.arenaBg.pipelineData = { terrainColorRatio: this.arena.getBgTerrainColorRatioForBiome() };
@@ -2036,10 +2036,10 @@ export default class BattleScene extends SceneBase {
     return filteredSpecies[randSeedInt(filteredSpecies.length)];
   }
 
-  generateRandomBiome(waveIndex: number): Biome {
+  generateRandomBiome(waveIndex: number): BiomeId {
     const relWave = waveIndex % 250;
-    const biomes = getEnumValues(Biome).slice(1, getEnumValues(Biome).filter((b) => b >= 40).length * -1);
-    const maxDepth = biomeDepths[Biome.END][0] - 2;
+    const biomes = getEnumValues(BiomeId).slice(1, getEnumValues(BiomeId).filter((b) => b >= 40).length * -1);
+    const maxDepth = biomeDepths[BiomeId.END][0] - 2;
     const depthWeights = new Array(maxDepth + 1)
       .fill(null)
       .map((_, i: number) => ((1 - Math.min(Math.abs(i / (maxDepth - 1) - relWave / 250) + 0.25, 1)) / 0.75) * 250);

@@ -1,6 +1,6 @@
 import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -67,7 +67,7 @@ describe("Moves - Nature Power", () => {
   });
 
   it("should be able to target multiple Pokemon at once, if applicable for the called move", async () => {
-    game.override.battleType("double").startingBiome(Biome.VOLCANO); // Volcano -> Lava Plume
+    game.override.battleType("double").startingBiome(BiomeId.VOLCANO); // Volcano -> Lava Plume
     await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
 
     game.move.use(MoveId.NATURE_POWER, 0, BattlerIndex.PLAYER_2);

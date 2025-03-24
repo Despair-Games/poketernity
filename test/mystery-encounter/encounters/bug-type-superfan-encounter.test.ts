@@ -1,5 +1,5 @@
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -28,7 +28,7 @@ import { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-han
 
 const namespace = "mysteryEncounters/bugTypeSuperfan";
 const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.WEEDLE];
-const defaultBiome = Biome.CAVE;
+const defaultBiome = BiomeId.CAVE;
 const defaultWave = 24;
 
 const POOL_1_POKEMON = [
@@ -163,7 +163,7 @@ describe("Bug-Type Superfan - Mystery Encounter", () => {
     game.override.disableTrainerWaves();
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
-      new Map<Biome, MysteryEncounterType[]>([[Biome.CAVE, [MysteryEncounterType.BUG_TYPE_SUPERFAN]]]),
+      new Map<BiomeId, MysteryEncounterType[]>([[BiomeId.CAVE, [MysteryEncounterType.BUG_TYPE_SUPERFAN]]]),
     );
   });
 

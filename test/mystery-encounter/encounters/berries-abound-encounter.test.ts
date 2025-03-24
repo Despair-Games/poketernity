@@ -1,5 +1,5 @@
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { Species } from "#enums/species";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -24,7 +24,7 @@ import { AbilityId } from "#enums/ability-id";
 
 const namespace = "mysteryEncounters/berriesAbound";
 const defaultParty = [Species.PYUKUMUKU, Species.MAGIKARP, Species.PIKACHU];
-const defaultBiome = Biome.CAVE;
+const defaultBiome = BiomeId.CAVE;
 const defaultWave = 45;
 
 describe("Berries Abound - Mystery Encounter", () => {
@@ -51,7 +51,7 @@ describe("Berries Abound - Mystery Encounter", () => {
       .enemyPassiveAbility(AbilityId.BALL_FETCH);
 
     vi.spyOn(MysteryEncounters, "mysteryEncountersByBiome", "get").mockReturnValue(
-      new Map<Biome, MysteryEncounterType[]>([[Biome.CAVE, [MysteryEncounterType.BERRIES_ABOUND]]]),
+      new Map<BiomeId, MysteryEncounterType[]>([[BiomeId.CAVE, [MysteryEncounterType.BERRIES_ABOUND]]]),
     );
   });
 

@@ -5,7 +5,7 @@ import type { PlayerPokemon } from "#app/field/pokemon";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome";
 import { MoveId } from "#enums/move-id";
 import { Species } from "#enums/species";
 import { WeatherType } from "#enums/weather-type";
@@ -133,7 +133,7 @@ describe("Abilities - Libero", () => {
     const leadPokemon = game.scene.getPlayerPokemon()!;
     expect(leadPokemon).not.toBe(undefined);
 
-    game.scene.arena.biomeType = Biome.MOUNTAIN;
+    game.scene.arena.biomeType = BiomeId.MOUNTAIN;
     game.move.select(MoveId.NATURE_POWER);
     await game.phaseInterceptor.to(TurnEndPhase);
 

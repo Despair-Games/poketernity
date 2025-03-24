@@ -22,7 +22,7 @@ import {
   SLOWPOKE_FAMILY_EVO_LEVEL,
 } from "#app/data/balance/pokemon-evolutions/enemy-pokemon-evolution-levels";
 import { MoveId } from "#enums/move-id";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome";
 
 export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
   [Species.GROOKEY]: [new SpeciesEvolution(Species.THWACKEY, 16, null, null)],
@@ -101,7 +101,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "vanilla-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      [new BiomeEvoCondition([Biome.TOWN, Biome.PLAINS, Biome.GRASS, Biome.TALL_GRASS, Biome.METROPOLIS])],
+      [new BiomeEvoCondition([BiomeId.TOWN, BiomeId.PLAINS, BiomeId.GRASS, BiomeId.TALL_GRASS, BiomeId.METROPOLIS])],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -110,7 +110,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "ruby-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      [new BiomeEvoCondition([Biome.BADLANDS, Biome.VOLCANO, Biome.GRAVEYARD, Biome.FACTORY, Biome.SLUM])],
+      [new BiomeEvoCondition([BiomeId.BADLANDS, BiomeId.VOLCANO, BiomeId.GRAVEYARD, BiomeId.FACTORY, BiomeId.SLUM])],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -119,7 +119,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "matcha-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      [new BiomeEvoCondition([Biome.FOREST, Biome.SWAMP, Biome.MEADOW, Biome.JUNGLE])],
+      [new BiomeEvoCondition([BiomeId.FOREST, BiomeId.SWAMP, BiomeId.MEADOW, BiomeId.JUNGLE])],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -128,7 +128,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "mint-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      [new BiomeEvoCondition([Biome.SEA, Biome.BEACH, Biome.LAKE, Biome.SEABED])],
+      [new BiomeEvoCondition([BiomeId.SEA, BiomeId.BEACH, BiomeId.LAKE, BiomeId.SEABED])],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -137,7 +137,15 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "lemon-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      [new BiomeEvoCondition([Biome.DESERT, Biome.POWER_PLANT, Biome.DOJO, Biome.RUINS, Biome.CONSTRUCTION_SITE])],
+      [
+        new BiomeEvoCondition([
+          BiomeId.DESERT,
+          BiomeId.POWER_PLANT,
+          BiomeId.DOJO,
+          BiomeId.RUINS,
+          BiomeId.CONSTRUCTION_SITE,
+        ]),
+      ],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -146,7 +154,15 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "salted-cream",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      [new BiomeEvoCondition([Biome.MOUNTAIN, Biome.CAVE, Biome.ICE_CAVE, Biome.FAIRY_CAVE, Biome.SNOWY_FOREST])],
+      [
+        new BiomeEvoCondition([
+          BiomeId.MOUNTAIN,
+          BiomeId.CAVE,
+          BiomeId.ICE_CAVE,
+          BiomeId.FAIRY_CAVE,
+          BiomeId.SNOWY_FOREST,
+        ]),
+      ],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -155,7 +171,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "ruby-swirl",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      [new BiomeEvoCondition([Biome.WASTELAND, Biome.LABORATORY])],
+      [new BiomeEvoCondition([BiomeId.WASTELAND, BiomeId.LABORATORY])],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -164,7 +180,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "caramel-swirl",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      [new BiomeEvoCondition([Biome.TEMPLE, Biome.ISLAND])],
+      [new BiomeEvoCondition([BiomeId.TEMPLE, BiomeId.ISLAND])],
       GENERIC_ITEM_EVO_LEVEL,
     ),
     new SpeciesFormEvolution(
@@ -173,7 +189,7 @@ export const gen8pokemonFamilyEvolutions: PokemonEvolutions = {
       "rainbow-swirl",
       1,
       EvolutionItem.STRAWBERRY_SWEET,
-      [new BiomeEvoCondition([Biome.SPACE, Biome.ABYSS, Biome.END])],
+      [new BiomeEvoCondition([BiomeId.SPACE, BiomeId.ABYSS, BiomeId.END])],
       GENERIC_ITEM_EVO_LEVEL,
     ),
   ],

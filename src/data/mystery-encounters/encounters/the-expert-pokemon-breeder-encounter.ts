@@ -12,7 +12,7 @@ import type MysteryEncounter from "../mystery-encounter";
 import { MysteryEncounterBuilder } from "../mystery-encounter";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { CLASSIC_MODE_MYSTERY_ENCOUNTER_WAVES } from "#app/constants";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome";
 import { TrainerType } from "#enums/trainer-type";
 import i18next from "i18next";
 import { Species } from "#enums/species";
@@ -465,7 +465,7 @@ function getPartyConfig(): EnemyPartyConfig {
     ],
   };
 
-  if (globalScene.arena.isInBiome(Biome.SPACE)) {
+  if (globalScene.arena.isInBiome(BiomeId.SPACE)) {
     // All 3 members always Cleffa line, but different configs
     baseConfig.pokemonConfigs!.push(
       {

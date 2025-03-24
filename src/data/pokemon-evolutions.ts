@@ -9,7 +9,7 @@ import { Gender } from "#enums/gender";
 import { randSeedInt } from "#app/utils";
 import { PokeballType } from "#enums/pokeball";
 import { WeatherType } from "#enums/weather-type";
-import type { Biome } from "#enums/biome";
+import type { BiomeId } from "#enums/biome";
 import { Nature } from "#enums/nature";
 
 /**
@@ -351,7 +351,7 @@ export class GoodraEvoCondition extends SpeciesEvolutionCondition {
  * Only used for Alcremie forms
  */
 export class BiomeEvoCondition extends SpeciesEvolutionCondition {
-  constructor(requiredBiomes: Biome[]) {
+  constructor(requiredBiomes: BiomeId[]) {
     super(() => globalScene.arena.isInBiome(requiredBiomes));
     this.description = "Needs to be in certain biomes";
   }

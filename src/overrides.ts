@@ -5,7 +5,7 @@ import { Variant } from "#app/data/variant";
 import { type ModifierOverride } from "#app/modifier/modifier-type";
 import { AbilityId } from "#enums/ability-id";
 import { BerryType } from "#enums/berry-type";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome";
 import { EggTier } from "#enums/egg-type";
 import { ElementalType } from "#enums/elemental-type";
 import { EvolutionItem } from "#enums/evolution-item";
@@ -76,7 +76,7 @@ class DefaultOverrides {
    */
   readonly BATTLE_TYPE_OVERRIDE: BattleStyle | null = null;
   readonly STARTING_WAVE_OVERRIDE: number = 0;
-  readonly STARTING_BIOME_OVERRIDE: Biome = Biome.TOWN;
+  readonly STARTING_BIOME_OVERRIDE: BiomeId = BiomeId.TOWN;
   readonly ARENA_TINT_OVERRIDE: TimeOfDay | null = null;
   /** Multiplies XP gained by this value including 0. Set to null to ignore the override */
   readonly XP_MULTIPLIER_OVERRIDE: number | null = null;
