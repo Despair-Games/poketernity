@@ -1,4 +1,3 @@
-import { Biome } from "#enums/biome";
 import { BiomePoolTier } from "#enums/biome-pool-tier";
 import { Species } from "#enums/species";
 import { TerrainType } from "#enums/terrain-type";

@@ -4,10 +4,7 @@ import type { TerrainEventTypeChangeAbAttr } from "#app/data/abilities/ab-attrs/
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { ArenaTag } from "#app/data/arena-tag";
 import { EntryHazardTag, getArenaTag } from "#app/data/arena-tag";
-import {
-  type BiomeTierTrainerPools,
-  type PokemonPools,
-} from "#app/data/balance/biomes";
+import { type BiomeTierTrainerPools, type PokemonPools } from "#app/data/balance/biomes";
 import { allBiomes } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
 import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "#app/data/pokemon-forms";

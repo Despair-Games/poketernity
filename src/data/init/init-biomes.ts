@@ -22,14 +22,7 @@ import { Biome } from "#enums/biome";
 
 export function initBiomes() {
   const rawAllBiomes = [
-    new PEBiome(
-      Biome.TOWN,
-      townPokemonPool,
-      townTrainerPool,
-      townWeatherPool,
-      townTerrainPool,
-      "town",
-    ),
+    new PEBiome(Biome.TOWN, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
     new PEBiome(
       Biome.VOLCANO,
       volcanoPokemonPool,
@@ -38,16 +31,8 @@ export function initBiomes() {
       volcanoTerrainPool,
       "volcano",
     ),
-    new PEBiome(
-      Biome.CAVE,
-      cavePokemonPool,
-      caveTrainerPool,
-      caveWeatherPool,
-      caveTerrainPool,
-      "cave",
-    ),
+    new PEBiome(Biome.CAVE, cavePokemonPool, caveTrainerPool, caveWeatherPool, caveTerrainPool, "cave"),
     // The below are all filler values for now
-    
   ];
 
   for (const pebiome of rawAllBiomes) {
