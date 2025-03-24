@@ -44,8 +44,11 @@ export class NavigationManager {
     ];
   }
 
+  /**
+   * Clear all references to {@linkcode NavigationMenu}s, allowing them to be garbage collected.
+   */
   public clearMenus() {
-    this.navigationMenus.splice(0, this.navigationMenus.length);
+    this.navigationMenus = [];
   }
 
   public reset() {
