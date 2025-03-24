@@ -10,13 +10,13 @@ import { AdminUiHandler } from "#app/ui/handlers/admin-ui-handler";
 import { AutoCompleteUiHandler } from "#app/ui/handlers/autocomplete-ui-handler";
 import { BallUiHandler } from "#app/ui/handlers/ball-ui-handler";
 import { BattleMessageUiHandler } from "#app/ui/handlers/battle-message-ui-handler";
-import { GameChallengesUiHandler } from "#app/ui/handlers/challenges-select-ui-handler";
+import { ChallengeSelectUiHandler } from "#app/ui/handlers/challenges-select-ui-handler";
 import { CommandUiHandler } from "#app/ui/handlers/command-ui-handler";
 import { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import { EggGachaUiHandler } from "#app/ui/handlers/egg-gacha-ui-handler";
 import { EggHatchSceneUiHandler } from "#app/ui/handlers/egg-hatch-scene-ui-handler";
 import { EggListUiHandler } from "#app/ui/handlers/egg-list-ui-handler";
-import { EggSummaryUiHandler } from "#app/ui/handlers/egg-summary-ui-handler";
+import { EggHatchSummaryUiHandler } from "#app/ui/handlers/egg-hatch-summary-ui-handler";
 import { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
 import { FormChangeSceneUiHandler } from "#app/ui/handlers/form-change-scene-ui-handler";
 import { GameStatsUiHandler } from "#app/ui/handlers/game-stats-ui-handler";
@@ -144,7 +144,7 @@ export class UI extends Phaser.GameObjects.Container {
       new StarterSelectUiHandler(),
       new FormChangeSceneUiHandler(),
       new EggHatchSceneUiHandler(),
-      new EggSummaryUiHandler(),
+      new EggHatchSummaryUiHandler(),
       new ConfirmUiHandler(),
       new OptionSelectUiHandler(),
       new MenuUiHandler(),
@@ -166,7 +166,7 @@ export class UI extends Phaser.GameObjects.Container {
       new LoadingModalUiHandler(),
       new SessionReloadModalUiHandler(),
       new UnavailableModalUiHandler(),
-      new GameChallengesUiHandler(),
+      new ChallengeSelectUiHandler(),
       new RenameFormUiHandler(),
       new RunHistoryUiHandler(),
       new RunInfoUiHandler(),

@@ -1,7 +1,7 @@
 import type { EggHatchData } from "#app/data/egg-hatch-data";
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import type { EggSummaryUiHandler } from "#app/ui/handlers/egg-summary-ui-handler";
+import type { EggHatchSummaryUiHandler } from "#app/ui/handlers/egg-hatch-summary-ui-handler";
 import type { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import { PhaseId } from "#enums/phase-id";
 import { UiMode } from "#enums/ui-mode";
@@ -30,7 +30,7 @@ export class EggSummaryPhase extends Phase {
     const updateNextPokemon = (i: number): void => {
       if (i >= this.eggHatchData.length) {
         globalScene.ui
-          .setModeForceTransition<EggSummaryUiHandler>(UiMode.EGG_HATCH_SUMMARY, this.eggHatchData)
+          .setModeForceTransition<EggHatchSummaryUiHandler>(UiMode.EGG_HATCH_SUMMARY, this.eggHatchData)
           .then(() => {
             globalScene.audioManager.fadeOutBgm(undefined, false);
           });

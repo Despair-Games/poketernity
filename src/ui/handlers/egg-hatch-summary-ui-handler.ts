@@ -26,7 +26,7 @@ const iconSize = 18;
  * Handles navigation and display of each pokemon as a list
  * Also handles display of the pokemon-hatch-info-container
  */
-export class EggSummaryUiHandler extends MessageUiHandler {
+export class EggHatchSummaryUiHandler extends MessageUiHandler {
   /** holds all elements in the scene */
   private eggHatchContainer: Phaser.GameObjects.Container;
   /** holds the icon containers and info container */
