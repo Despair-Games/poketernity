@@ -4,7 +4,7 @@ import type { TerrainEventTypeChangeAbAttr } from "#app/data/abilities/ab-attrs/
 import { applyAbAttrs } from "#app/data/abilities/apply-ab-attrs";
 import type { ArenaTag } from "#app/data/arena-tag";
 import { EntryHazardTag, getArenaTag } from "#app/data/arena-tag";
-import { type BiomeTierTrainerPools, type PokemonPools } from "#app/data/balance/biomes";
+import type { PokemonPools, BiomeTierTrainerPools } from "#app/data/balance/biomes";
 import { allBiomes } from "#app/data/data-lists";
 import type { Move } from "#app/data/moves/move";
 import { SpeciesFormChangeRevertWeatherFormTrigger, SpeciesFormChangeWeatherTrigger } from "#app/data/pokemon-forms";
@@ -179,21 +179,6 @@ export class Arena {
       let species: Species;
       if (typeof entry === "number") {
         species = entry as Species;
-      } else {
-        // Try and evolve the Pokemon if possible
-        const levelThresholds = Object.keys(entry);
-        for (let l = levelThresholds.length - 1; l >= 0; l--) {
-          const levelThreshold = parseInt(levelThresholds[l]);
-          if (level >= levelThreshold) {
-            const speciesIds = entry[levelThreshold];
-            if (speciesIds.length > 1) {
-              species = speciesIds[randSeedInt(speciesIds.length)];
-            } else {
-              species = speciesIds[0];
-            }
-            break;
-          }
-        }
       }
 
       ret = getPokemonSpecies(species!);
