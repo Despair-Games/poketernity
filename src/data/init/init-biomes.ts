@@ -5,6 +5,7 @@ import {
   caveWeatherPool,
   caveTerrainPool,
 } from "#app/data/balance/biomes/PEBiome_cave";
+import { endPokemonPool, endTerrainPool, endTrainerPool, endWeatherPool } from "#app/data/balance/biomes/PEBiome_end";
 import {
   townPokemonPool,
   townTrainerPool,
@@ -37,7 +38,7 @@ export function initBiomes() {
     new PEBiome(Biome.LAKE, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
     new PEBiome(Biome.ICE_CAVE, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
     new PEBiome(Biome.SNOWY_FOREST, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
-    new PEBiome(Biome.END, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
+    new PEBiome(Biome.END, endPokemonPool, endTrainerPool, endWeatherPool, endTerrainPool, "end"),
     new PEBiome(Biome.GRASS, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
     new PEBiome(Biome.CAVE, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
     new PEBiome(Biome.PLAINS, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
@@ -48,6 +49,8 @@ export function initBiomes() {
     new PEBiome(Biome.LABORATORY, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
     new PEBiome(Biome.FAIRY_CAVE, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
     new PEBiome(Biome.WASTELAND, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
+    new PEBiome(Biome.ISLAND, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
+    new PEBiome(Biome.DOJO, townPokemonPool, townTrainerPool, townWeatherPool, townTerrainPool, "town"),
   ];
 
   for (const pebiome of rawAllBiomes) {
