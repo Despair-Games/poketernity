@@ -9,7 +9,6 @@ import { BattlePhase } from "./abstract-battle-phase";
 import { PartyHealPhase } from "./party-heal-phase";
 import { SwitchBiomePhase } from "./switch-biome-phase";
 import { PhaseId } from "#enums/phase-id";
-import { allBiomes } from "#app/data/data-lists";
 import { biomeLinks } from "#app/data/balance/biomes/biome-links";
 
 export class SelectBiomePhase extends BattlePhase {
