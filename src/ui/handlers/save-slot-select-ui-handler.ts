@@ -16,6 +16,7 @@ import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { MessageUiHandler } from "./message-ui-handler";
 import type { RunInfoUiHandler } from "./run-info-ui-handler";
+import type { ConfirmUiHandler } from "./confirm-ui-handler";
 
 const SESSION_SLOTS_COUNT = 5;
 const SLOTS_ON_SCREEN = 3;
@@ -112,7 +113,7 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
                 this.saveSlotSelectCallback = null;
                 ui.revertMode();
                 ui.showText("", 0);
-                ui.setMode(UiMode.MESSAGE);
+                ui.setMessageMode();
                 originalCallback && originalCallback(cursor);
               };
               if (this.sessionSlots[cursor].hasData) {
@@ -135,7 +136,7 @@ export class SaveSlotSelectUiHandler extends MessageUiHandler {
                   inputDelay: import.meta.env.DEV ? 300 : 2000,
                 };
                 ui.showText(i18next.t("saveSlotSelectUiHandler:overwriteData"), null, () => {
-                  ui.setOverlayMode(UiMode.CONFIRM, overwriteDataOptions);
+                  ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, overwriteDataOptions);
                 });
               } else if (this.sessionSlots[cursor].hasData === false) {
                 saveAndCallback();

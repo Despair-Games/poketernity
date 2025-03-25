@@ -1,6 +1,6 @@
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { Abilities } from "#enums/abilities";
+import { SpeciesId } from "#enums/species-id";
+import { AbilityId } from "#enums/ability-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -26,14 +26,14 @@ describe("Moves - Imprison", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset([MoveId.IMPRISON, MoveId.SPLASH, MoveId.GROWL])
-      .enemySpecies(Species.SHUCKLE)
+      .enemySpecies(SpeciesId.SHUCKLE)
       .moveset([MoveId.TRANSFORM, MoveId.SPLASH]);
   });
 
   it("should prevent opponents from using moves shared by the user", async () => {
-    await game.classicMode.startBattle([Species.REGIELEKI]);
+    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -55,7 +55,7 @@ describe("Moves - Imprison", () => {
   it("should not prevent allies from using moves shared by the user", async () => {
     game.override.battleType("double").moveset([MoveId.IMPRISON, MoveId.SPLASH]).enemyMoveset(MoveId.SPLASH);
 
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
@@ -76,7 +76,7 @@ describe("Moves - Imprison", () => {
       .enemyMoveset([MoveId.SPLASH, MoveId.SLEEP_TALK])
       .enemyStatusEffect(StatusEffect.SLEEP);
 
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemyPokemon = game.field.getEnemyPokemon();
 
@@ -94,7 +94,7 @@ describe("Moves - Imprison", () => {
       .moveset([]) // Moves are set manually for this test
       .enemyMoveset([MoveId.SPLASH, MoveId.CELEBRATE]);
 
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
 
     const [feebas, magikarp] = game.scene.getPlayerField();
     const enemyPokemon = game.scene.getEnemyField();
@@ -125,7 +125,7 @@ describe("Moves - Imprison", () => {
   it("should disable matching moves for opponents that enter the field afterward", async () => {
     game.override.moveset([MoveId.SPLASH, MoveId.GROWL]);
 
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
 
     game.move.select(MoveId.SPLASH);
     await game.move.selectEnemyMove(MoveId.IMPRISON);

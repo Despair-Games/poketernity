@@ -2,7 +2,7 @@ import type { TurnMove } from "#app/@types/TurnMove";
 import type { BattlerTag } from "#app/data/battler-tags/battler-tag";
 import type { PokemonSpeciesForm } from "#app/data/pokemon-species-form";
 import type { PokemonMove } from "#app/field/pokemon-move";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import type { Gender } from "#enums/gender";
 
@@ -12,10 +12,10 @@ export class PokemonSummonData {
   public moveQueue: TurnMove[] = [];
   public tags: BattlerTag[] = [];
   public abilitySuppressed: boolean = false;
-  public abilitiesApplied: Abilities[] = [];
+  public abilitiesApplied: AbilityId[] = [];
   public speciesForm: PokemonSpeciesForm | null;
-  public ability: Abilities = Abilities.NONE;
-  public passiveAbility: Abilities = Abilities.NONE;
+  public ability: AbilityId = AbilityId.NONE;
+  public passiveAbility: AbilityId = AbilityId.NONE;
   public gender: Gender;
   public stats: number[] = [0, 0, 0, 0, 0, 0];
   public moveset: PokemonMove[];

@@ -10,8 +10,11 @@ import { modifierTypes } from "#app/modifier/modifier-types";
 import { Phase } from "#app/phase";
 import { api } from "#app/plugins/api/api";
 import { vouchers } from "#app/system/voucher";
+import type { OptionSelectUiHandler } from "#app/ui/handlers/option-select-ui-handler";
 import type { SaveSlotSelectUiHandler } from "#app/ui/handlers/save-slot-select-ui-handler";
+import type { TitleUiHandler } from "#app/ui/handlers/title-ui-handler";
 import type { OptionSelectItem, OptionSelectModeConfig } from "#app/ui/interfaces/option-select-config";
+import type { SettingsUiHandler } from "#app/ui/settings/settings-ui-handler";
 import { BattleType } from "#enums/battle-type";
 import { GameModes } from "#enums/game-modes";
 import { Gender } from "#enums/gender";
@@ -80,7 +83,7 @@ export class TitlePhase extends Phase {
         handler: () => {
           const setModeAndEnd = (gameMode: GameModes): void => {
             this.gameMode = gameMode;
-            ui.setMode(UiMode.MESSAGE);
+            ui.setMessageMode();
             ui.clearText();
             this.end();
           };
@@ -120,14 +123,14 @@ export class TitlePhase extends Phase {
             });
 
             ui.showText(i18next.t("menu:selectGameMode"), null, () =>
-              ui.setOverlayMode(UiMode.OPTION_SELECT, {
+              ui.setOverlayMode<OptionSelectUiHandler>(UiMode.OPTION_SELECT, {
                 options: options,
                 yOffset: 48,
               }),
             );
           } else {
             this.gameMode = GameModes.CLASSIC;
-            ui.setMode(UiMode.MESSAGE);
+            ui.setMessageMode();
             ui.clearText();
             this.end();
           }
@@ -157,7 +160,7 @@ export class TitlePhase extends Phase {
       {
         label: i18next.t("menu:settings"),
         handler: () => {
-          ui.setOverlayMode(UiMode.SETTINGS);
+          ui.setOverlayMode<SettingsUiHandler>(UiMode.SETTINGS);
           return true;
         },
         keepOpen: true,
@@ -167,14 +170,14 @@ export class TitlePhase extends Phase {
       options: options,
       blockCancelButton: true,
     };
-    globalScene.ui.setMode(UiMode.TITLE, config);
+    globalScene.ui.setMode<TitleUiHandler>(UiMode.TITLE, config);
   }
 
   public loadSaveSlot(slotId: number): void {
     const { gameData, ui } = globalScene;
 
     globalScene.sessionSlotId = slotId > -1 || !loggedInUser ? slotId : loggedInUser.lastSessionSlot;
-    ui.setMode(UiMode.MESSAGE);
+    ui.setMessageMode();
     ui.resetModeChain();
 
     gameData

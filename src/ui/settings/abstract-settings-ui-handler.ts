@@ -4,6 +4,7 @@ import { globalScene } from "#app/global-scene";
 import { settings as settingsManager } from "#app/system/settings/settings-manager";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_SCALE } from "#app/ui-constants";
 import { ScrollBar } from "#app/ui/components/scroll-bar";
+import type { ConfirmUiHandler } from "#app/ui/handlers/confirm-ui-handler";
 import { MessageUiHandler } from "#app/ui/handlers/message-ui-handler";
 import type { ConfirmModeConfig } from "#app/ui/interfaces/confirm-menu-config";
 import type { InputsIcons } from "#app/ui/settings/abstract-control-settings-ui-handler";
@@ -461,7 +462,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
           canBypassInputDelay: true,
         };
         globalScene.ui.showText(confirmationMessage, null, () => {
-          globalScene.ui.setOverlayMode(UiMode.CONFIRM, confirmSettingOptions);
+          globalScene.ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, confirmSettingOptions);
         });
       } else {
         this.handleSaveSetting<typeof value>(uiItem, value);
@@ -597,7 +598,7 @@ export class AbstractSettingsUiHandler extends MessageUiHandler {
       },
     };
     this.showText(text, undefined, () => {
-      globalScene.ui.setOverlayMode(UiMode.CONFIRM, config);
+      globalScene.ui.setOverlayMode<ConfirmUiHandler>(UiMode.CONFIRM, config);
     });
   }
 

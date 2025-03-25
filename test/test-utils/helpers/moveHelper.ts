@@ -1,4 +1,4 @@
-import { BattlerIndex } from "#enums/battler-index";
+import { allMoves } from "#app/data/data-lists";
 import { getMoveTargets } from "#app/data/moves/move";
 import { type Pokemon } from "#app/field/pokemon";
 import { PokemonMove } from "#app/field/pokemon-move";
@@ -6,16 +6,17 @@ import Overrides from "#app/overrides";
 import { type CommandPhase } from "#app/phases/command-phase";
 import { type EnemyCommandPhase } from "#app/phases/enemy-command-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
+import type { SelectTargetPhase } from "#app/phases/select-target-phase";
+import type { FightUiHandler } from "#app/ui/handlers/fight-ui-handler";
+import type { TargetSelectUiHandler } from "#app/ui/handlers/target-select-ui-handler";
 import { BattleCommand } from "#enums/battle-command";
-import { UiMode } from "#enums/ui-mode";
+import { BattlerIndex } from "#enums/battler-index";
+import { Button } from "#enums/buttons";
 import { MoveId } from "#enums/move-id";
+import { UiMode } from "#enums/ui-mode";
 import { getMovePosition } from "#test/test-utils/gameManagerUtils";
 import { GameManagerHelper } from "#test/test-utils/helpers/gameManagerHelper";
 import { vi } from "vitest";
-import { allMoves } from "#app/data/data-lists";
-import type { TargetSelectUiHandler } from "#app/ui/handlers/target-select-ui-handler";
-import type { SelectTargetPhase } from "#app/phases/select-target-phase";
-import { Button } from "#enums/buttons";
 
 /**
  * Helper to handle a Pokemon's move
@@ -58,7 +59,10 @@ export class MoveHelper extends GameManagerHelper {
     const movePosition = getMovePosition(this.game.scene, pkmIndex, moveId);
 
     this.game.onNextPrompt("CommandPhase", UiMode.COMMAND, () => {
-      this.game.scene.ui.setMode(UiMode.FIGHT, (this.game.scene.getCurrentPhase() as CommandPhase).getFieldIndex());
+      this.game.scene.ui.setMode<FightUiHandler>(
+        UiMode.FIGHT,
+        (this.game.scene.getCurrentPhase() as CommandPhase).getFieldIndex(),
+      );
     });
     this.game.onNextPrompt("CommandPhase", UiMode.FIGHT, () => {
       (this.game.scene.getCurrentPhase() as CommandPhase).handleCommand(BattleCommand.FIGHT, movePosition, false);

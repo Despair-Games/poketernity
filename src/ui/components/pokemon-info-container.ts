@@ -15,7 +15,7 @@ import { IVGraph } from "./iv-graph";
 import { addBBCodeTextObject, addTextObject, setTextColor } from "#app/ui/text/text-utils";
 import { TextStyle } from "#enums/text-style";
 import { addWindow } from "../ui-theme";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { DEFAULT_LANGUAGE_KEY } from "#app/system/settings/supported-languages";
 
 interface LanguageSetting {
@@ -249,17 +249,17 @@ export class PokemonInfoContainer extends Phaser.GameObjects.Container {
 
       const formKey = pokemon.species?.forms?.[pokemon.formIndex!]?.formKey;
       const formText = capitalizeString(formKey, "-", false, false) || "";
-      const speciesName = capitalizeString(Species[pokemon.species.speciesId], "_", true, false);
+      const speciesName = capitalizeString(SpeciesId[pokemon.species.speciesId], "_", true, false);
 
       let formName = "";
-      if (pokemon.species.speciesId === Species.ARCEUS) {
+      if (pokemon.species.speciesId === SpeciesId.ARCEUS) {
         formName = i18next.t(`pokemonInfo:Type.${formText?.toUpperCase()}`);
       } else {
         const i18key = `pokemonForm:${speciesName}${formText}`;
         if (i18next.exists(i18key)) {
           formName = i18next.t(i18key);
         } else {
-          const rootSpeciesName = capitalizeString(Species[pokemon.species.getRootSpeciesId()], "_", true, false);
+          const rootSpeciesName = capitalizeString(SpeciesId[pokemon.species.getRootSpeciesId()], "_", true, false);
           const i18RootKey = `pokemonForm:${rootSpeciesName}${formText}`;
           formName = i18next.exists(i18RootKey) ? i18next.t(i18RootKey) : formText;
         }

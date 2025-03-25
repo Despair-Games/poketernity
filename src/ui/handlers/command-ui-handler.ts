@@ -11,6 +11,8 @@ import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { UiHandler } from "./abstract-ui-handler";
+import type { BallUiHandler } from "./ball-ui-handler";
+import type { FightUiHandler } from "./fight-ui-handler";
 import type { PartyUiHandler } from "./party-ui-handler";
 
 export class CommandUiHandler extends UiHandler {
@@ -90,12 +92,12 @@ export class CommandUiHandler extends UiHandler {
         switch (cursor) {
           // Fight
           case BattleCommand.FIGHT:
-            ui.setMode(UiMode.FIGHT, (globalScene.getCurrentPhase() as CommandPhase).getFieldIndex());
+            ui.setMode<FightUiHandler>(UiMode.FIGHT, (globalScene.getCurrentPhase() as CommandPhase).getFieldIndex());
             success = true;
             break;
           // Ball
           case BattleCommand.BALL:
-            ui.setModeWithoutClear(UiMode.BALL);
+            ui.setModeWithoutClear<BallUiHandler>(UiMode.BALL);
             success = true;
             break;
           // Pokemon

@@ -1,8 +1,8 @@
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
 import { HUMAN_TRANSITABLE_BIOMES } from "#app/data/mystery-encounters/mystery-encounters";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { runMysteryEncounterToEnd } from "#test/mystery-encounter/encounter-test-utils";
@@ -26,8 +26,8 @@ import { PartyHealPhase } from "#app/phases/party-heal-phase";
 import { VictoryPhase } from "#app/phases/victory-phase";
 
 const namespace = "mysteryEncounters/theWinstrateChallenge";
-const defaultParty = [Species.LAPRAS, Species.GENGAR, Species.ABRA];
-const defaultBiome = Biome.CAVE;
+const defaultParty = [SpeciesId.LAPRAS, SpeciesId.GENGAR, SpeciesId.ABRA];
+const defaultBiome = BiomeId.CAVE;
 const defaultWave = 45;
 
 describe("The Winstrate Challenge - Mystery Encounter", () => {
@@ -47,7 +47,9 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
     game.override.startingBiome(defaultBiome);
     game.override.disableTrainerWaves();
 
-    const biomeMap = new Map<Biome, MysteryEncounterType[]>([[Biome.VOLCANO, [MysteryEncounterType.FIGHT_OR_FLIGHT]]]);
+    const biomeMap = new Map<BiomeId, MysteryEncounterType[]>([
+      [BiomeId.VOLCANO, [MysteryEncounterType.FIGHT_OR_FLIGHT]],
+    ]);
     HUMAN_TRANSITABLE_BIOMES.forEach((biome) => {
       biomeMap.set(biome, [MysteryEncounterType.THE_WINSTRATE_CHALLENGE]);
     });
@@ -83,7 +85,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
 
   it("should not spawn outside of HUMAN_TRANSITABLE_BIOMES", async () => {
     game.override.mysteryEncounterTier(MysteryEncounterTier.GREAT);
-    game.override.startingBiome(Biome.VOLCANO);
+    game.override.startingBiome(BiomeId.VOLCANO);
     await game.runToMysteryEncounter();
 
     expect(scene.currentBattle?.mysteryEncounter?.encounterType).not.toBe(MysteryEncounterType.THE_WINSTRATE_CHALLENGE);
@@ -109,7 +111,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
         trainerType: TrainerType.VITO,
         pokemonConfigs: [
           {
-            species: getPokemonSpecies(Species.HISUI_ELECTRODE),
+            species: getPokemonSpecies(SpeciesId.HISUI_ELECTRODE),
             isBoss: false,
             abilityIndex: 0, // Soundproof
             nature: Nature.MODEST,
@@ -117,7 +119,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
             modifierConfigs: expect.any(Array),
           },
           {
-            species: getPokemonSpecies(Species.SWALOT),
+            species: getPokemonSpecies(SpeciesId.SWALOT),
             isBoss: false,
             abilityIndex: 2, // Gluttony
             nature: Nature.QUIET,
@@ -125,7 +127,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
             modifierConfigs: expect.any(Array),
           },
           {
-            species: getPokemonSpecies(Species.DODRIO),
+            species: getPokemonSpecies(SpeciesId.DODRIO),
             isBoss: false,
             abilityIndex: 2, // Tangled Feet
             nature: Nature.JOLLY,
@@ -133,7 +135,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
             modifierConfigs: expect.any(Array),
           },
           {
-            species: getPokemonSpecies(Species.ALAKAZAM),
+            species: getPokemonSpecies(SpeciesId.ALAKAZAM),
             isBoss: false,
             formIndex: 1,
             nature: Nature.BOLD,
@@ -141,7 +143,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
             modifierConfigs: expect.any(Array),
           },
           {
-            species: getPokemonSpecies(Species.DARMANITAN),
+            species: getPokemonSpecies(SpeciesId.DARMANITAN),
             isBoss: false,
             abilityIndex: 0, // Sheer Force
             nature: Nature.IMPISH,
@@ -154,7 +156,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
         trainerType: TrainerType.VICKY,
         pokemonConfigs: [
           {
-            species: getPokemonSpecies(Species.MEDICHAM),
+            species: getPokemonSpecies(SpeciesId.MEDICHAM),
             isBoss: false,
             formIndex: 1,
             nature: Nature.IMPISH,
@@ -167,7 +169,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
         trainerType: TrainerType.VIVI,
         pokemonConfigs: [
           {
-            species: getPokemonSpecies(Species.SEAKING),
+            species: getPokemonSpecies(SpeciesId.SEAKING),
             isBoss: false,
             abilityIndex: 3, // Lightning Rod
             nature: Nature.ADAMANT,
@@ -175,7 +177,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
             modifierConfigs: expect.any(Array),
           },
           {
-            species: getPokemonSpecies(Species.BRELOOM),
+            species: getPokemonSpecies(SpeciesId.BRELOOM),
             isBoss: false,
             abilityIndex: 1, // Poison Heal
             nature: Nature.JOLLY,
@@ -183,7 +185,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
             modifierConfigs: expect.any(Array),
           },
           {
-            species: getPokemonSpecies(Species.CAMERUPT),
+            species: getPokemonSpecies(SpeciesId.CAMERUPT),
             isBoss: false,
             formIndex: 1,
             nature: Nature.CALM,
@@ -196,7 +198,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
         trainerType: TrainerType.VICTORIA,
         pokemonConfigs: [
           {
-            species: getPokemonSpecies(Species.ROSERADE),
+            species: getPokemonSpecies(SpeciesId.ROSERADE),
             isBoss: false,
             abilityIndex: 0, // Natural Cure
             nature: Nature.CALM,
@@ -204,7 +206,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
             modifierConfigs: expect.any(Array),
           },
           {
-            species: getPokemonSpecies(Species.GARDEVOIR),
+            species: getPokemonSpecies(SpeciesId.GARDEVOIR),
             isBoss: false,
             formIndex: 1,
             nature: Nature.TIMID,
@@ -217,7 +219,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
         trainerType: TrainerType.VICTOR,
         pokemonConfigs: [
           {
-            species: getPokemonSpecies(Species.SWELLOW),
+            species: getPokemonSpecies(SpeciesId.SWELLOW),
             isBoss: false,
             abilityIndex: 0, // Guts
             nature: Nature.ADAMANT,
@@ -225,7 +227,7 @@ describe("The Winstrate Challenge - Mystery Encounter", () => {
             modifierConfigs: expect.any(Array),
           },
           {
-            species: getPokemonSpecies(Species.OBSTAGOON),
+            species: getPokemonSpecies(SpeciesId.OBSTAGOON),
             isBoss: false,
             abilityIndex: 1, // Guts
             nature: Nature.ADAMANT,

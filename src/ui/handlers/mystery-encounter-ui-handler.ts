@@ -12,7 +12,7 @@ import { Button } from "#enums/buttons";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { PartyUiMode } from "#enums/party-ui-mode";
-import { PokeballType } from "#enums/pokeball";
+import { PokeballType } from "#enums/pokeball-type";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { WindowVariant } from "#enums/window-variant";
@@ -170,7 +170,7 @@ export class MysteryEncounterUiHandler extends UiHandler {
             slideInDescription: false,
           };
           globalScene.ui.setMode<PartyUiHandler>(UiMode.PARTY, PartyUiMode.CHECK, -1, () => {
-            globalScene.ui.setMode(UiMode.MYSTERY_ENCOUNTER, overrideSettings);
+            globalScene.ui.setMode<MysteryEncounterUiHandler>(UiMode.MYSTERY_ENCOUNTER, overrideSettings);
             setTimeout(() => {
               this.setCursor(this.viewPartyIndex);
               this.unblockInput();

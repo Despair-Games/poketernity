@@ -32,7 +32,7 @@ import type { MysteryEncounterType } from "#enums/mystery-encounter-type";
 import { PlayerGender } from "#enums/player-gender";
 import { RunDisplayMode } from "#enums/run-display-mode";
 import { SettingKeyboard } from "#enums/setting-keyboard";
-import type { Species } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
 import { TrainerVariant } from "#enums/trainer-variant";
 import { UiMode } from "#enums/ui-mode";
@@ -955,7 +955,7 @@ export class RunInfoUiHandler extends UiHandler {
       const pokemonSprite: Phaser.GameObjects.Sprite = globalScene.add.sprite(60 + 40 * i, 40 + row * 80, "pkmn__sub");
       pokemonSprite.setPipeline(globalScene.spritePipeline, { tone: [0.0, 0.0, 0.0, 0.0], ignoreTimeTint: true });
       this.hallofFameContainer.add(pokemonSprite);
-      const speciesLoaded: Map<Species, boolean> = new Map<Species, boolean>();
+      const speciesLoaded: Map<SpeciesId, boolean> = new Map<SpeciesId, boolean>();
       speciesLoaded.set(id, false);
 
       const female = pkmn.gender === 1;

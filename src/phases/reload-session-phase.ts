@@ -1,8 +1,9 @@
 import { globalScene } from "#app/global-scene";
 import { Phase } from "#app/phase";
-import { UiMode } from "#enums/ui-mode";
+import type { SessionReloadModalUiHandler } from "#app/ui/handlers/session-reload-modal-ui-handler";
 import { fixedNumber } from "#app/utils";
 import { PhaseId } from "#enums/phase-id";
+import { UiMode } from "#enums/ui-mode";
 
 export class ReloadSessionPhase extends Phase {
   override readonly id = PhaseId.RELOAD_SESSION;
@@ -18,7 +19,7 @@ export class ReloadSessionPhase extends Phase {
   public override start(): void {
     const { gameData, time, ui } = globalScene;
 
-    ui.setMode(UiMode.SESSION_RELOAD);
+    ui.setMode<SessionReloadModalUiHandler>(UiMode.SESSION_RELOAD);
 
     let delayElapsed = false;
     let loaded = false;

@@ -8,6 +8,7 @@ import { Button } from "#enums/buttons";
 import { TextStyle } from "#enums/text-style";
 import { UiMode } from "#enums/ui-mode";
 import { FormModalUiHandler } from "./form-modal-ui-handler";
+import type { LoadingModalUiHandler } from "./loading-modal-ui-handler";
 
 type AdminUiHandlerService = "discord" | "google";
 type AdminUiHandlerServiceMode = "Link" | "Unlink";
@@ -139,10 +140,11 @@ export class AdminUiHandler extends FormModalUiHandler {
       const adminSearchResult: AdminSearchInfo = this.convertInputsToAdmin(); // this converts the input texts into a single object for use later
       const validFields = this.areFieldsValid(this.adminMode);
       if (validFields.error) {
-        globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] }); // this is here to force a loading screen to allow the admin tool to reopen again if there's an error
+        // this is here to force a loading screen to allow the admin tool to reopen again if there's an error
+        globalScene.ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
         return this.showMessage(validFields.errorMessage ?? "", adminSearchResult, true);
       }
-      globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
+      globalScene.ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
       if (this.adminMode === AdminMode.LINK) {
         this.adminLinkUnlink(adminSearchResult, "discord", "Link") // calls server to link discord
           .then((response) => {
@@ -168,7 +170,7 @@ export class AdminUiHandler extends FormModalUiHandler {
   }
 
   showMessage(message: string, adminResult: AdminSearchInfo, isError: boolean) {
-    globalScene.ui.setMode(
+    globalScene.ui.setMode<AdminUiHandler>(
       UiMode.ADMIN,
       Object.assign(this.config, { errorMessage: message?.trim() }),
       this.adminMode,
@@ -216,18 +218,19 @@ export class AdminUiHandler extends FormModalUiHandler {
               const mode = adminResult[aR] === "" ? "Link" : "Unlink"; // this figures out if we're linking or unlinking a service
               const validFields = this.areFieldsValid(this.adminMode, service);
               if (validFields.error) {
-                globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] }); // this is here to force a loading screen to allow the admin tool to reopen again if there's an error
+                // this is here to force a loading screen to allow the admin tool to reopen again if there's an error
+                globalScene.ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
                 return this.showMessage(validFields.errorMessage ?? "", adminResult, true);
               }
               this.adminLinkUnlink(this.convertInputsToAdmin(), service as AdminUiHandlerService, mode).then(
                 (response) => {
                   // attempts to link/unlink depending on the service
                   if (response.error) {
-                    globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
+                    globalScene.ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
                     return this.showMessage(response.errorType, adminResult, true); // fail
                   } else {
                     // success, reload panel with new results
-                    globalScene.ui.setMode(UiMode.LOADING, { buttonActions: [] });
+                    globalScene.ui.setMode<LoadingModalUiHandler>(UiMode.LOADING, { buttonActions: [] });
                     this.adminSearch(adminResult).then((response) => {
                       if (response.error) {
                         return this.showMessage(response.errorType, adminResult, true);

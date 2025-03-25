@@ -1,9 +1,9 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { BerryPhase } from "#app/phases/berry-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -25,7 +25,7 @@ describe("Moves - Thousand Arrows", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
-    game.override.enemySpecies(Species.TOGETIC);
+    game.override.enemySpecies(SpeciesId.TOGETIC);
     game.override.startingLevel(100);
     game.override.enemyLevel(100);
     game.override.moveset([MoveId.THOUSAND_ARROWS]);
@@ -33,7 +33,7 @@ describe("Moves - Thousand Arrows", () => {
   });
 
   it("move should hit and ground Flying-type targets", async () => {
-    await game.startBattle([Species.ILLUMISE]);
+    await game.startBattle([SpeciesId.ILLUMISE]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -50,10 +50,10 @@ describe("Moves - Thousand Arrows", () => {
   });
 
   it("move should hit and ground targets with Levitate", async () => {
-    game.override.enemySpecies(Species.SNORLAX);
-    game.override.enemyAbility(Abilities.LEVITATE);
+    game.override.enemySpecies(SpeciesId.SNORLAX);
+    game.override.enemyAbility(AbilityId.LEVITATE);
 
-    await game.startBattle([Species.ILLUMISE]);
+    await game.startBattle([SpeciesId.ILLUMISE]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -70,9 +70,9 @@ describe("Moves - Thousand Arrows", () => {
   });
 
   it("move should hit and ground targets under the effects of Magnet Rise", async () => {
-    game.override.enemySpecies(Species.SNORLAX);
+    game.override.enemySpecies(SpeciesId.SNORLAX);
 
-    await game.startBattle([Species.ILLUMISE]);
+    await game.startBattle([SpeciesId.ILLUMISE]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 

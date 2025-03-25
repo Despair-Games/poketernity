@@ -1,6 +1,6 @@
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { Abilities } from "#enums/abilities";
+import { SpeciesId } from "#enums/species-id";
+import { AbilityId } from "#enums/ability-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -24,14 +24,14 @@ describe("Moves - Taunt", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset([MoveId.TAUNT, MoveId.SPLASH])
-      .enemySpecies(Species.SHUCKLE)
+      .enemySpecies(SpeciesId.SHUCKLE)
       .moveset([MoveId.GROWL]);
   });
 
   it("Pokemon should not be able to use Status Moves", async () => {
-    await game.classicMode.startBattle([Species.REGIELEKI]);
+    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 

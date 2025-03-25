@@ -1,9 +1,9 @@
 import type { SubstituteTag } from "#app/data/battler-tags/substitute-tag";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -27,13 +27,13 @@ describe("Moves - Shed Tail", () => {
     game.override
       .moveset([MoveId.SHED_TAIL])
       .battleType("single")
-      .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.SNORLAX)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("transfers a Substitute doll to the switched in Pokemon", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP, Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.FEEBAS]);
 
     const magikarp = game.scene.getPlayerPokemon()!;
 
@@ -57,7 +57,7 @@ describe("Moves - Shed Tail", () => {
   });
 
   it("should fail if no ally is available to switch in", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const magikarp = game.scene.getPlayerPokemon()!;
     expect(game.scene.getPlayerParty().length).toBe(1);

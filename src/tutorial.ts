@@ -6,6 +6,7 @@ import i18next from "i18next";
 import { settings } from "#app/system/settings/settings-manager";
 import type { UiHandler } from "#app/ui/handlers/abstract-ui-handler";
 import type { ModifierSelectUiHandler } from "#app/ui/handlers/modifier-select-ui-handler";
+import type { MessageUiHandler } from "./ui/handlers/message-ui-handler";
 
 const tutorialHandlers = {
   [Tutorial.INTRO]: () => {
@@ -83,7 +84,7 @@ const tutorialHandlers = {
   [Tutorial.SELECT_ITEM]: () => {
     // TODO: fix up that tutorial up so that ModifierSelectUiHandler is not called like this
     return new Promise<void>((resolve) => {
-      globalScene.ui.setModeWithoutClear(UiMode.MESSAGE).then(() => {
+      globalScene.ui.setModeWithoutClear<MessageUiHandler>(UiMode.MESSAGE).then(() => {
         globalScene.ui.showText(
           i18next.t("tutorial:selectItem"),
           null,

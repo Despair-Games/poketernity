@@ -1,4 +1,4 @@
-import { FRIENDSHIP_PER_WAVE } from "#app/constants";
+import { FRIENDSHIP_GAIN_PER_WAVE } from "#app/constants";
 import { globalScene } from "#app/global-scene";
 import { PhaseId } from "#enums/phase-id";
 import { EncounterPhase } from "./encounter-phase";
@@ -22,7 +22,7 @@ export class NextEncounterPhase extends EncounterPhase {
       if (pokemon) {
         pokemon.resetBattleData();
         if (!pokemon.isFainted()) {
-          pokemon.addFriendship(FRIENDSHIP_PER_WAVE);
+          pokemon.addFriendship(FRIENDSHIP_GAIN_PER_WAVE);
         }
       }
     }

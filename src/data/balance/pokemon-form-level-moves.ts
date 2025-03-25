@@ -5,7 +5,7 @@ import type { SpeciesFormChange } from "#app/data/pokemon-forms";
 // -- end tsdoc imports --
 
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import type { PokemonSpeciesFormLevelMoves } from "./pokemon-level-moves";
 import { EVOLVE_MOVE, FORM_CHANGE_MOVE } from "./pokemon-level-moves";
 
@@ -15,7 +15,7 @@ import { EVOLVE_MOVE, FORM_CHANGE_MOVE } from "./pokemon-level-moves";
  * {@link SpeciesFormChange.movesToLearn | data stored in `pokemon-forms.ts`}.
  */
 export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
-  [Species.VENUSAUR]: {
+  [SpeciesId.VENUSAUR]: {
     2: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_VINE_LASH],
@@ -38,7 +38,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [58, MoveId.SOLAR_BEAM],
     ],
   },
-  [Species.CHARIZARD]: {
+  [SpeciesId.CHARIZARD]: {
     3: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_WILDFIRE],
@@ -59,7 +59,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [62, MoveId.FLARE_BLITZ],
     ],
   },
-  [Species.BLASTOISE]: {
+  [SpeciesId.BLASTOISE]: {
     2: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_CANNONADE],
@@ -80,7 +80,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [56, MoveId.WAVE_CRASH],
     ],
   },
-  [Species.BUTTERFREE]: {
+  [SpeciesId.BUTTERFREE]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_BEFUDDLE],
@@ -104,7 +104,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [44, MoveId.QUIVER_DANCE],
     ],
   },
-  [Species.PIKACHU]: {
+  [SpeciesId.PIKACHU]: {
     // Custom
     1: [
       // Partner
@@ -309,7 +309,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [48, MoveId.PIKA_PAPOW],
     ],
   },
-  [Species.MEOWTH]: {
+  [SpeciesId.MEOWTH]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_GOLD_RUSH],
@@ -329,7 +329,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [44, MoveId.PLAY_ROUGH],
     ],
   },
-  [Species.MACHAMP]: {
+  [SpeciesId.MACHAMP]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_CHI_STRIKE],
@@ -352,7 +352,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [66, MoveId.DOUBLE_EDGE],
     ],
   },
-  [Species.GENGAR]: {
+  [SpeciesId.GENGAR]: {
     2: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_TERROR],
@@ -376,7 +376,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [60, MoveId.DREAM_EATER],
     ],
   },
-  [Species.KINGLER]: {
+  [SpeciesId.KINGLER]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_FOAM_BURST],
@@ -399,7 +399,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [60, MoveId.GUILLOTINE],
     ],
   },
-  [Species.LAPRAS]: {
+  [SpeciesId.LAPRAS]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_RESONANCE],
@@ -420,7 +420,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [65, MoveId.SHEER_COLD],
     ],
   },
-  [Species.EEVEE]: {
+  [SpeciesId.EEVEE]: {
     // Custom
     1: [
       // Partner
@@ -478,7 +478,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [55, MoveId.LAST_RESORT],
     ],
   },
-  [Species.SNORLAX]: {
+  [SpeciesId.SNORLAX]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_REPLENISH],
@@ -512,7 +512,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [56, MoveId.GIGA_IMPACT],
     ],
   },
-  [Species.DEOXYS]: {
+  [SpeciesId.DEOXYS]: {
     1: [
       // Attack form
       [1, MoveId.CONFUSION], // Custom
@@ -570,7 +570,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [73, MoveId.EXTREME_SPEED],
     ],
   },
-  [Species.WORMADAM]: {
+  [SpeciesId.WORMADAM]: {
     1: [
       // Sand cloak
       [EVOLVE_MOVE, MoveId.QUIVER_DANCE],
@@ -617,7 +617,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [50, MoveId.BUG_BUZZ],
     ],
   },
-  [Species.ROTOM]: {
+  [SpeciesId.ROTOM]: {
     1: [
       // Heat
       [1, MoveId.OVERHEAT],
@@ -704,7 +704,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [55, MoveId.UPROAR],
     ],
   },
-  [Species.SHAYMIN]: {
+  [SpeciesId.SHAYMIN]: {
     1: [
       // Sky form
       [1, MoveId.LEAFAGE], // Custom
@@ -722,7 +722,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [100, MoveId.SEED_FLARE],
     ],
   },
-  [Species.GARBODOR]: {
+  [SpeciesId.GARBODOR]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_MALODOR],
@@ -747,7 +747,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [48, MoveId.EXPLOSION],
     ],
   },
-  [Species.KYUREM]: {
+  [SpeciesId.KYUREM]: {
     1: [
       // Kyurem-Black
       [1, MoveId.DRAGON_BREATH],
@@ -785,7 +785,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [88, MoveId.SHEER_COLD],
     ],
   },
-  [Species.MEOWSTIC]: {
+  [SpeciesId.MEOWSTIC]: {
     1: [
       // Female
       [1, MoveId.SCRATCH],
@@ -809,7 +809,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [59, MoveId.FUTURE_SIGHT],
     ],
   },
-  [Species.HOOPA]: {
+  [SpeciesId.HOOPA]: {
     1: [
       // Unbound
       [1, MoveId.CONFUSION],
@@ -830,7 +830,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [85, MoveId.HYPERSPACE_FURY],
     ],
   },
-  [Species.GRENINJA]: {
+  [SpeciesId.GRENINJA]: {
     1: [
       // Battle-Bond
       // TODO: The only difference between this and regular Greninja is being unable to learn Mat Block. Should this be changed?
@@ -858,7 +858,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [68, MoveId.HYDRO_PUMP],
     ],
   },
-  [Species.LYCANROC]: {
+  [SpeciesId.LYCANROC]: {
     1: [
       // Midnight
       [EVOLVE_MOVE, MoveId.COUNTER],
@@ -907,7 +907,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [60, MoveId.STONE_EDGE],
     ],
   },
-  [Species.NECROZMA]: {
+  [SpeciesId.NECROZMA]: {
     1: [
       // Dusk Mane
       [FORM_CHANGE_MOVE, MoveId.SUNSTEEL_STRIKE],
@@ -973,7 +973,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [88, MoveId.PRISMATIC_LASER],
     ],
   },
-  [Species.MELMETAL]: {
+  [SpeciesId.MELMETAL]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_MELTDOWN],
@@ -994,7 +994,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [96, MoveId.HYPER_BEAM],
     ],
   },
-  [Species.CORVIKNIGHT]: {
+  [SpeciesId.CORVIKNIGHT]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_WIND_RAGE],
@@ -1015,7 +1015,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [50, MoveId.BRAVE_BIRD],
     ],
   },
-  [Species.ORBEETLE]: {
+  [SpeciesId.ORBEETLE]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_GRAVITAS],
@@ -1037,7 +1037,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [48, MoveId.PSYCHIC_TERRAIN],
     ],
   },
-  [Species.DREDNAW]: {
+  [SpeciesId.DREDNAW]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_STONESURGE],
@@ -1057,7 +1057,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [66, MoveId.HEAD_SMASH],
     ],
   },
-  [Species.COALOSSAL]: {
+  [SpeciesId.COALOSSAL]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_VOLCALITH],
@@ -1076,7 +1076,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [63, MoveId.STONE_EDGE],
     ],
   },
-  [Species.FLAPPLE]: {
+  [SpeciesId.FLAPPLE]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_TARTNESS],
@@ -1100,7 +1100,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [44, MoveId.DRAGON_RUSH],
     ],
   },
-  [Species.APPLETUN]: {
+  [SpeciesId.APPLETUN]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_SWEETNESS],
@@ -1124,7 +1124,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [44, MoveId.ENERGY_BALL],
     ],
   },
-  [Species.SANDACONDA]: {
+  [SpeciesId.SANDACONDA]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_SANDBLAST],
@@ -1143,7 +1143,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [51, MoveId.SAND_TOMB],
     ],
   },
-  [Species.TOXTRICITY]: {
+  [SpeciesId.TOXTRICITY]: {
     1: [
       // Low-Key
       [EVOLVE_MOVE, MoveId.SPARK],
@@ -1199,7 +1199,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [52, MoveId.MAGNETIC_FLUX],
     ],
   },
-  [Species.CENTISKORCH]: {
+  [SpeciesId.CENTISKORCH]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_CENTIFERNO],
@@ -1219,7 +1219,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [67, MoveId.BURN_UP],
     ],
   },
-  [Species.HATTERENE]: {
+  [SpeciesId.HATTERENE]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_SMITE],
@@ -1239,7 +1239,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [64, MoveId.MAGIC_POWDER],
     ],
   },
-  [Species.GRIMMSNARL]: {
+  [SpeciesId.GRIMMSNARL]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_SNOOZE],
@@ -1262,7 +1262,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [64, MoveId.HAMMER_ARM],
     ],
   },
-  [Species.ALCREMIE]: {
+  [SpeciesId.ALCREMIE]: {
     9: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_FINALE],
@@ -1281,7 +1281,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [50, MoveId.ENTRAINMENT],
     ],
   },
-  [Species.INDEEDEE]: {
+  [SpeciesId.INDEEDEE]: {
     1: [
       // Female
       [1, MoveId.STORED_POWER],
@@ -1298,7 +1298,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [50, MoveId.PSYCHIC_TERRAIN],
     ],
   },
-  [Species.COPPERAJAH]: {
+  [SpeciesId.COPPERAJAH]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_STEELSURGE],
@@ -1318,7 +1318,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [65, MoveId.SUPERPOWER],
     ],
   },
-  [Species.DURALUDON]: {
+  [SpeciesId.DURALUDON]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_DEPLETION],
@@ -1337,7 +1337,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [66, MoveId.HYPER_BEAM],
     ],
   },
-  [Species.ZACIAN]: {
+  [SpeciesId.ZACIAN]: {
     1: [
       // Crowned
       [1, MoveId.BITE],
@@ -1356,7 +1356,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [88, MoveId.GIGA_IMPACT],
     ],
   },
-  [Species.ZAMAZENTA]: {
+  [SpeciesId.ZAMAZENTA]: {
     1: [
       // Crowned
       [1, MoveId.BITE],
@@ -1374,7 +1374,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [88, MoveId.GIGA_IMPACT],
     ],
   },
-  [Species.RILLABOOM]: {
+  [SpeciesId.RILLABOOM]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_DRUM_SOLO],
@@ -1396,7 +1396,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [62, MoveId.BOOMBURST],
     ],
   },
-  [Species.CINDERACE]: {
+  [SpeciesId.CINDERACE]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_FIREBALL],
@@ -1416,7 +1416,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [62, MoveId.COURT_CHANGE],
     ],
   },
-  [Species.INTELEON]: {
+  [SpeciesId.INTELEON]: {
     1: [
       // G-Max
       [FORM_CHANGE_MOVE, MoveId.G_MAX_HYDROSNIPE],
@@ -1436,7 +1436,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [62, MoveId.HYDRO_PUMP],
     ],
   },
-  [Species.ETERNATUS]: {
+  [SpeciesId.ETERNATUS]: {
     1: [
       // E-Max
       [1, MoveId.AGILITY],
@@ -1456,7 +1456,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [88, MoveId.ETERNABEAM],
     ],
   },
-  [Species.URSHIFU]: {
+  [SpeciesId.URSHIFU]: {
     1: [
       // Rapid Strike Style
       [EVOLVE_MOVE, MoveId.SURGING_STRIKES],
@@ -1520,7 +1520,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [52, MoveId.FOCUS_PUNCH],
     ],
   },
-  [Species.CALYREX]: {
+  [SpeciesId.CALYREX]: {
     1: [
       // Ice Rider
       [FORM_CHANGE_MOVE, MoveId.GLACIAL_LANCE],
@@ -1590,7 +1590,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [88, MoveId.FUTURE_SIGHT],
     ],
   },
-  [Species.OINKOLOGNE]: {
+  [SpeciesId.OINKOLOGNE]: {
     1: [
       // FEmale
       [1, MoveId.TACKLE],
@@ -1610,7 +1610,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [51, MoveId.BELCH],
     ],
   },
-  [Species.REVAVROOM]: {
+  [SpeciesId.REVAVROOM]: {
     1: [
       // Segin
       [EVOLVE_MOVE, MoveId.WICKED_TORQUE],
@@ -1717,7 +1717,7 @@ export const pokemonFormLevelMoves: PokemonSpeciesFormLevelMoves = {
       [58, MoveId.GUNK_SHOT],
     ],
   },
-  [Species.PALDEA_TAUROS]: {
+  [SpeciesId.PALDEA_TAUROS]: {
     1: [
       // Blaze breed
       [1, MoveId.TACKLE],

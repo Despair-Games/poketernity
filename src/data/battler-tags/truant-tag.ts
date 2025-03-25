@@ -4,7 +4,7 @@ import { globalScene } from "#app/global-scene";
 import { getPokemonNameWithAffix } from "#app/messages";
 import type { MovePhase } from "#app/phases/move-phase";
 import { ShowAbilityPhase } from "#app/phases/show-ability-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagLapseType } from "#enums/battler-tag-lapse-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
@@ -17,14 +17,14 @@ import i18next from "i18next";
  */
 export class TruantTag extends AbilityBattlerTag {
   constructor() {
-    super(BattlerTagType.TRUANT, Abilities.TRUANT, BattlerTagLapseType.MOVE, 1);
+    super(BattlerTagType.TRUANT, AbilityId.TRUANT, BattlerTagLapseType.MOVE, 1);
   }
 
   override lapse(pokemon: Pokemon, lapseType: BattlerTagLapseType): boolean {
-    if (!pokemon.hasAbility(Abilities.TRUANT)) {
+    if (!pokemon.hasAbility(AbilityId.TRUANT)) {
       return super.lapse(pokemon, lapseType);
     }
-    const passive = pokemon.getAbility().id !== Abilities.TRUANT;
+    const passive = pokemon.getAbility().id !== AbilityId.TRUANT;
 
     const lastMove = pokemon.getLastXMoves().find(() => true);
 

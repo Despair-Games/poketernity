@@ -1,6 +1,6 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -28,12 +28,12 @@ describe("Form Change Phase", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
       .startingLevel(100)
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingModifier([{ name: "DYNAMAX_BAND" }, { name: "MEGA_BRACELET" }]);
   });
@@ -68,7 +68,7 @@ describe("Form Change Phase", () => {
   }
 
   it("should not be cancellable", async () => {
-    await game.classicMode.startBattle([Species.ZACIAN]);
+    await game.classicMode.startBattle([SpeciesId.ZACIAN]);
 
     // Before the form change: Should be Hero form
     const zacian = game.scene.getPlayerParty()[0];
@@ -108,34 +108,34 @@ describe("Form Change Phase", () => {
 
   it("should allow a G-Max Pokemon to learn its respective G-Max move at any level", async () => {
     game.override.startingLevel(1);
-    await game.classicMode.startBattle([Species.RILLABOOM]);
+    await game.classicMode.startBattle([SpeciesId.RILLABOOM]);
     await testMoveLearning(SpeciesFormKey.GIGANTAMAX, MoveId.G_MAX_DRUM_SOLO, true);
   });
 
   it("should not cause a Mega-evolving Pokemon to learn a move", async () => {
-    await game.classicMode.startBattle([Species.BEEDRILL]);
+    await game.classicMode.startBattle([SpeciesId.BEEDRILL]);
     await testMoveLearning(SpeciesFormKey.MEGA, MoveId.TWINEEDLE, false);
   });
 
   it("should allow learning certain moves at a high enough level", async () => {
     // For example, Hoopa-Unbound learns Hyperspace Fury at level 85
     game.override.startingLevel(85);
-    await game.classicMode.startBattle([Species.HOOPA]);
+    await game.classicMode.startBattle([SpeciesId.HOOPA]);
     await testMoveLearning("unbound", MoveId.HYPERSPACE_FURY, true);
   });
 
   it("should not allow learning certain moves if not at a high enough level", async () => {
     // For example, Hoopa-Unbound learns Hyperspace Fury at level 85
     game.override.startingLevel(84);
-    await game.classicMode.startBattle([Species.HOOPA]);
+    await game.classicMode.startBattle([SpeciesId.HOOPA]);
     await testMoveLearning("unbound", MoveId.HYPERSPACE_FURY, false);
   });
 
   it("should not cause a Pokemon to learn moves when deactivating and reactivating Form Change Items", async () => {
     game.override
-      .starterForms({ [Species.RILLABOOM]: 1 })
+      .starterForms({ [SpeciesId.RILLABOOM]: 1 })
       .startingHeldItems([{ name: "FORM_CHANGE_ITEM", type: FormChangeItem.MAX_MUSHROOMS }]);
-    await game.classicMode.startBattle([Species.RILLABOOM]);
+    await game.classicMode.startBattle([SpeciesId.RILLABOOM]);
 
     // Before the form change: Should be G-Max form
     const rillaboom = game.scene.getPlayerParty()[0];

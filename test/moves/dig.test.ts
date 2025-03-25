@@ -1,9 +1,9 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { MoveResult } from "#enums/move-result";
 import { describe, beforeAll, afterEach, beforeEach, it, expect } from "vitest";
@@ -29,14 +29,14 @@ describe("Moves - Dig", () => {
       .moveset(MoveId.DIG)
       .battleType("single")
       .startingLevel(100)
-      .enemySpecies(Species.SNORLAX)
+      .enemySpecies(SpeciesId.SNORLAX)
       .enemyLevel(100)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.TACKLE);
   });
 
   it("should make the user semi-invulnerable, then attack over 2 turns", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -60,9 +60,9 @@ describe("Moves - Dig", () => {
   });
 
   it("should not allow the user to evade attacks from Pokemon with No Guard", async () => {
-    game.override.enemyAbility(Abilities.NO_GUARD);
+    game.override.enemyAbility(AbilityId.NO_GUARD);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
@@ -75,9 +75,9 @@ describe("Moves - Dig", () => {
   });
 
   it("should not expend PP when the attack phase is cancelled", async () => {
-    game.override.enemyAbility(Abilities.NO_GUARD).enemyMoveset(MoveId.SPORE);
+    game.override.enemyAbility(AbilityId.NO_GUARD).enemyMoveset(MoveId.SPORE);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
@@ -92,7 +92,7 @@ describe("Moves - Dig", () => {
   });
 
   it("should cause the user to take double damage from Earthquake", async () => {
-    await game.classicMode.startBattle([Species.DONDOZO]);
+    await game.classicMode.startBattle([SpeciesId.DONDOZO]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;

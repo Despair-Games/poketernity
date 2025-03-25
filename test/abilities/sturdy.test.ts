@@ -1,9 +1,9 @@
 import type { EnemyPokemon } from "#app/field/pokemon";
 import { DamageAnimPhase } from "#app/phases/damage-anim-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, test } from "vitest";
@@ -26,13 +26,13 @@ describe("Abilities - Sturdy", () => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
 
-    game.override.starterSpecies(Species.LUCARIO);
+    game.override.starterSpecies(SpeciesId.LUCARIO);
     game.override.startingLevel(100);
     game.override.moveset([MoveId.CLOSE_COMBAT, MoveId.FISSURE]);
 
-    game.override.enemySpecies(Species.ARON);
+    game.override.enemySpecies(SpeciesId.ARON);
     game.override.enemyLevel(5);
-    game.override.enemyAbility(Abilities.STURDY);
+    game.override.enemyAbility(AbilityId.STURDY);
   });
 
   test("Sturdy activates when user is at full HP", async () => {
@@ -64,8 +64,8 @@ describe("Abilities - Sturdy", () => {
     expect(enemyPokemon.isFullHp()).toBe(true);
   });
 
-  test("Sturdy is ignored by pokemon with `Abilities.MOLD_BREAKER`", async () => {
-    game.override.ability(Abilities.MOLD_BREAKER);
+  test("Sturdy is ignored by pokemon with Mold Breaker", async () => {
+    game.override.ability(AbilityId.MOLD_BREAKER);
 
     await game.startBattle();
     game.move.select(MoveId.CLOSE_COMBAT);

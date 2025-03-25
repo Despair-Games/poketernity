@@ -1,7 +1,7 @@
 import { BattlerIndex } from "#enums/battler-index";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { allMoves } from "#app/data/data-lists";
@@ -27,16 +27,16 @@ describe("Abilities - Serene Grace", () => {
     game.override
       .disableCrits()
       .battleType("single")
-      .ability(Abilities.SERENE_GRACE)
+      .ability(AbilityId.SERENE_GRACE)
       .moveset([MoveId.AIR_SLASH])
-      .enemySpecies(Species.ALOLA_GEODUDE)
+      .enemySpecies(SpeciesId.ALOLA_GEODUDE)
       .enemyLevel(10)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset([MoveId.SPLASH]);
   });
 
   it("Serene Grace should double the secondary effect chance of a move", async () => {
-    await game.classicMode.startBattle([Species.SHUCKLE]);
+    await game.classicMode.startBattle([SpeciesId.SHUCKLE]);
 
     const airSlashMove = allMoves.get(MoveId.AIR_SLASH);
     const airSlashFlinchAttr = airSlashMove.getAttrs(FlinchAttr)[0];

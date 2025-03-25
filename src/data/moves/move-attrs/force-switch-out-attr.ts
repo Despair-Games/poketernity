@@ -37,6 +37,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
   }
 
   override applyEffect(user: Pokemon, target: Pokemon, move: Move): boolean {
+    const { battleType, double, trainer, waveIndex } = globalScene.currentBattle;
     // Check if the move category is not STATUS or if the switch out condition is not met
     if (!this.getSwitchOutCondition()(user, target, move)) {
       return false;
@@ -93,7 +94,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         }
       }
       return false;
-    } else if (globalScene.currentBattle.battleType !== BattleType.WILD) {
+    } else if (battleType !== BattleType.WILD) {
       // Switch out logic for enemy trainers
       // Find indices of off-field Pokemon that are eligible to be switched into
       const eligibleNewIndices: number[] = [];
@@ -121,9 +122,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
             new SwitchSummonPhase(
               this.switchType,
               switchOutTarget.getFieldIndex(),
-              globalScene.currentBattle.trainer
-                ? globalScene.currentBattle.trainer.getNextSummonIndex((switchOutTarget as EnemyPokemon).trainerSlot)
-                : 0,
+              trainer ? trainer.getNextSummonIndex((switchOutTarget as EnemyPokemon).trainerSlot) : 0,
               false,
               false,
             ),
@@ -146,7 +145,7 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         }
       }
 
-      if (globalScene.currentBattle.waveIndex % 10 === 0) {
+      if (waveIndex % 10 === 0) {
         return false;
       }
 
@@ -154,6 +153,8 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
       if (this.selfSwitch && !user.isPlayer() && move.category !== MoveCategory.STATUS) {
         return false;
       }
+
+      const allyPokemon = switchOutTarget.getAlly();
 
       if (switchOutTarget.hp > 0) {
         switchOutTarget.leaveField(false);
@@ -165,13 +166,12 @@ export class ForceSwitchOutAttr extends MoveEffectAttr {
         );
 
         // in double battles redirect potential moves off fled pokemon
-        if (globalScene.currentBattle.double) {
-          const allyPokemon = switchOutTarget.getAlly();
+        if (double && allyPokemon) {
           globalScene.redirectPokemonMoves(switchOutTarget, allyPokemon);
         }
       }
 
-      if (!switchOutTarget.getAlly()?.isActive(true)) {
+      if (!allyPokemon?.isActive(true)) {
         globalScene.clearEnemyHeldItemModifiers();
 
         if (switchOutTarget.hp) {

@@ -1,9 +1,14 @@
 import type { PlayerPokemon } from "#app/field/pokemon";
 import type { InputFieldConfig, ModalConfig } from "#app/ui/interfaces/modal-config";
+import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 import { FormModalUiHandler } from "./form-modal-ui-handler";
 
-export class RenameFormUiHandler extends FormModalUiHandler {
+export class RenamePokemonUiHandler extends FormModalUiHandler {
+  constructor() {
+    super(UiMode.RENAME_POKEMON);
+  }
+
   getModalTitle(): string {
     return i18next.t("menu:renamePokemon");
   }

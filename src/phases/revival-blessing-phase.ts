@@ -54,7 +54,7 @@ export class RevivalBlessingPhase extends BattlePhase {
                 new SwitchSummonPhase(SwitchType.SWITCH, pokemon.getFieldIndex(), slotIndex, false, true),
               );
               globalScene.unshiftPhase(new ToggleDoublePositionPhase(true));
-            } else if (allyPokemon.isFainted()) {
+            } else if (allyPokemon?.isFainted()) {
               // Revived party pokemon, and ally pokemon is fainted
               globalScene.unshiftPhase(
                 new SwitchSummonPhase(SwitchType.SWITCH, allyPokemon.getFieldIndex(), slotIndex, false, true),
@@ -63,7 +63,7 @@ export class RevivalBlessingPhase extends BattlePhase {
             }
           }
         }
-        globalScene.ui.setMode(UiMode.MESSAGE).then(() => this.end());
+        globalScene.ui.setMessageMode().then(() => this.end());
       },
       PartyFilterFainted,
     );

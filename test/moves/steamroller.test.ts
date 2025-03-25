@@ -2,9 +2,9 @@ import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import type { DamageCalculationResult } from "#app/field/pokemon";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -25,12 +25,12 @@ describe("Moves - Steamroller", () => {
 
   beforeEach(() => {
     game = new GameManager(phaserGame);
-    game.override.moveset([MoveId.STEAMROLLER]).battleType("single").enemyAbility(Abilities.BALL_FETCH);
+    game.override.moveset([MoveId.STEAMROLLER]).battleType("single").enemyAbility(AbilityId.BALL_FETCH);
   });
 
   it("should always hit a minimzed target with double damage", async () => {
-    game.override.enemySpecies(Species.DITTO).enemyMoveset(MoveId.MINIMIZE);
-    await game.classicMode.startBattle([Species.IRON_BOULDER]);
+    game.override.enemySpecies(SpeciesId.DITTO).enemyMoveset(MoveId.MINIMIZE);
+    await game.classicMode.startBattle([SpeciesId.IRON_BOULDER]);
 
     const ditto = game.scene.getEnemyPokemon()!;
     vi.spyOn(ditto, "getAttackDamage");

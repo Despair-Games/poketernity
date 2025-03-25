@@ -144,8 +144,12 @@ export const G_MAX_FORM_KEYS = Object.freeze([
 ]) as readonly string[];
 
 /** Each wave, all unfainted Pokemon gain this much happiness */
-export const FRIENDSHIP_PER_WAVE = 1;
+export const FRIENDSHIP_GAIN_PER_WAVE = 1;
 /** Value for how much friendship a Pokemon gains on leveling up */
 export const FRIENDSHIP_GAIN_PER_LEVEL_UP = 10;
-/** After this point, happiness gain is halved */
+/** After this point, friendship gain is halved (rounded down) */
 export const FRIENDSHIP_GAIN_CUTOFF = 150;
+/** Additional friendship gained from rare candy */
+export const FRIENDSHIP_FROM_CANDY = 5;
+/** Penalty for losing friendship on faint. Used in  */
+export const FRIENDSHIP_LOST_FROM_FAINTING = 10;

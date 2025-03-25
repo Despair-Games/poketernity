@@ -4,9 +4,9 @@ import { CommandPhase } from "#app/phases/command-phase";
 import { MoveEffectPhase } from "#app/phases/move-effect-phase";
 import { MoveEndPhase } from "#app/phases/move-end-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { WeatherType } from "#enums/weather-type";
 import { GameManager } from "#test/test-utils/gameManager";
@@ -30,8 +30,8 @@ describe("Abilities - Sand Veil", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override.moveset([MoveId.SPLASH]);
-    game.override.enemySpecies(Species.MEOWSCARADA);
-    game.override.enemyAbility(Abilities.INSOMNIA);
+    game.override.enemySpecies(SpeciesId.MEOWSCARADA);
+    game.override.enemyAbility(AbilityId.INSOMNIA);
     game.override.enemyMoveset([MoveId.TWISTER, MoveId.TWISTER, MoveId.TWISTER, MoveId.TWISTER]);
     game.override.startingLevel(100);
     game.override.enemyLevel(100);
@@ -39,13 +39,13 @@ describe("Abilities - Sand Veil", () => {
   });
 
   test("ability should increase the evasiveness of the source", async () => {
-    await game.startBattle([Species.SNORLAX, Species.BLISSEY]);
+    await game.startBattle([SpeciesId.SNORLAX, SpeciesId.BLISSEY]);
 
     const leadPokemon = game.scene.getPlayerField();
 
-    game.field.mockAbility(leadPokemon[0], Abilities.SAND_VEIL);
+    game.field.mockAbility(leadPokemon[0], AbilityId.SAND_VEIL);
 
-    const sandVeilAttr = allAbilities[Abilities.SAND_VEIL].getAttrs<StatMultiplierAbAttr>(
+    const sandVeilAttr = allAbilities[AbilityId.SAND_VEIL].getAttrs<StatMultiplierAbAttr>(
       AbAttrFlag.STAT_MULTIPLIER,
     )[0];
     vi.spyOn(sandVeilAttr, "apply").mockImplementation((_pokemon, _simulated, stat, statValue) => {
@@ -56,8 +56,8 @@ describe("Abilities - Sand Veil", () => {
       return false;
     });
 
-    expect(leadPokemon[0].hasAbility(Abilities.SAND_VEIL)).toBe(true);
-    expect(leadPokemon[1].hasAbility(Abilities.SAND_VEIL)).toBe(false);
+    expect(leadPokemon[0].hasAbility(AbilityId.SAND_VEIL)).toBe(true);
+    expect(leadPokemon[1].hasAbility(AbilityId.SAND_VEIL)).toBe(false);
 
     game.move.select(MoveId.SPLASH);
 

@@ -1,8 +1,8 @@
 import { GameManager } from "#test/test-utils/gameManager";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { Stat } from "#enums/stat";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { BattlerIndex } from "#enums/battler-index";
@@ -25,10 +25,10 @@ describe("Abilities - Mycelium Might", () => {
     game = new GameManager(phaserGame);
     game.override.battleType("single");
     game.override.disableCrits();
-    game.override.enemySpecies(Species.SHUCKLE);
-    game.override.enemyAbility(Abilities.CLEAR_BODY);
+    game.override.enemySpecies(SpeciesId.SHUCKLE);
+    game.override.enemyAbility(AbilityId.CLEAR_BODY);
     game.override.enemyMoveset(MoveId.QUICK_ATTACK);
-    game.override.ability(Abilities.MYCELIUM_MIGHT);
+    game.override.ability(AbilityId.MYCELIUM_MIGHT);
     game.override.moveset([MoveId.QUICK_ATTACK, MoveId.BABY_DOLL_EYES]);
   });
 
@@ -40,7 +40,7 @@ describe("Abilities - Mycelium Might", () => {
    **/
 
   it("should make the source move last in its priority bracket and ignore protective abilities when using a status move", async () => {
-    await game.classicMode.startBattle([Species.REGIELEKI]);
+    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
 
@@ -55,7 +55,7 @@ describe("Abilities - Mycelium Might", () => {
 
   it("should still go first if a status move that is in a higher priority bracket than the opponent's move is used", async () => {
     game.override.enemyMoveset(MoveId.TACKLE);
-    await game.classicMode.startBattle([Species.REGIELEKI]);
+    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
 
@@ -68,7 +68,7 @@ describe("Abilities - Mycelium Might", () => {
   });
 
   it("should not affect non-status moves", async () => {
-    await game.classicMode.startBattle([Species.REGIELEKI]);
+    await game.classicMode.startBattle([SpeciesId.REGIELEKI]);
 
     game.move.select(MoveId.QUICK_ATTACK);
 

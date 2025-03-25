@@ -1,5 +1,5 @@
 import type { Pokemon } from "#app/field/pokemon";
-import type { Species } from "#enums/species";
+import type { SpeciesId } from "#enums/species-id";
 import { EvolutionItem } from "#enums/evolution-item";
 import { globalScene } from "#app/global-scene";
 import { TimeOfDay } from "#enums/time-of-day";
@@ -7,17 +7,17 @@ import type { MoveId } from "#enums/move-id";
 import { ElementalType } from "#enums/elemental-type";
 import { Gender } from "#enums/gender";
 import { randSeedInt } from "#app/utils";
-import { PokeballType } from "#enums/pokeball";
+import { PokeballType } from "#enums/pokeball-type";
 import { WeatherType } from "#enums/weather-type";
-import type { Biome } from "#enums/biome";
+import type { BiomeId } from "#enums/biome-id";
 import { Nature } from "#enums/nature";
 
 /**
  * Pokemon Evolution tuple type consisting of:
- * @property 0 {@linkcode Species} The species of the Pokemon.
+ * @property 0 {@linkcode SpeciesId} The species of the Pokemon.
  * @property 1 The level at which the Pokemon evolves.
  */
-export type EvolutionLevel = [species: Species, level: number];
+export type EvolutionLevel = [species: SpeciesId, level: number];
 
 export type EvolutionConditionPredicate = (p: Pokemon) => boolean;
 
@@ -25,11 +25,11 @@ export interface PokemonEvolutions {
   [key: string]: SpeciesFormEvolution[];
 }
 export interface PokemonPreEvolutions {
-  [key: string]: Species;
+  [key: string]: SpeciesId;
 }
 
 export class SpeciesFormEvolution {
-  public speciesId: Species;
+  public speciesId: SpeciesId;
   public preFormKey: string | null;
   public evoFormKey: string | null;
   public level: number;
@@ -47,7 +47,7 @@ export class SpeciesFormEvolution {
    * @param enemyEvolveLevel The level at which enemy spawns will undergo this evolution. Default: Equal to `level`.
    */
   constructor(
-    speciesId: Species,
+    speciesId: SpeciesId,
     preFormKey: string | null,
     evoFormKey: string | null,
     level: number,
@@ -67,7 +67,7 @@ export class SpeciesFormEvolution {
 
 export class SpeciesEvolution extends SpeciesFormEvolution {
   constructor(
-    speciesId: Species,
+    speciesId: SpeciesId,
     level: number,
     item: EvolutionItem | null,
     conditions: SpeciesEvolutionCondition[] | null,
@@ -252,7 +252,7 @@ export class RngFormEvoCondition extends SpeciesEvolutionCondition {
  * Accelgor (Shelmet)
  */
 export class SpeciesOwnedEvoCondition extends SpeciesEvolutionCondition {
-  constructor(requiredSpecies: Species) {
+  constructor(requiredSpecies: SpeciesId) {
     super(() => !!globalScene.gameData.dexData[requiredSpecies].caughtAttr);
     // Todo: find efficient way to get species name from Species
     this.description = "requires owning " + requiredSpecies;
@@ -351,7 +351,7 @@ export class GoodraEvoCondition extends SpeciesEvolutionCondition {
  * Only used for Alcremie forms
  */
 export class BiomeEvoCondition extends SpeciesEvolutionCondition {
-  constructor(requiredBiomes: Biome[]) {
+  constructor(requiredBiomes: BiomeId[]) {
     super(() => globalScene.arena.isInBiome(requiredBiomes));
     this.description = "Needs to be in certain biomes";
   }

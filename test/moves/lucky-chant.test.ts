@@ -1,7 +1,7 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { GameManager } from "#test/test-utils/gameManager";
 
@@ -25,15 +25,15 @@ describe("Moves - Lucky Chant", () => {
     game.override
       .battleType("single")
       .moveset([MoveId.LUCKY_CHANT, MoveId.SPLASH, MoveId.FOLLOW_ME])
-      .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.INSOMNIA)
+      .enemySpecies(SpeciesId.SNORLAX)
+      .enemyAbility(AbilityId.INSOMNIA)
       .enemyMoveset([MoveId.FLOWER_TRICK])
       .startingLevel(100)
       .enemyLevel(5);
   });
 
   it("should prevent critical hits from moves", async () => {
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
@@ -48,7 +48,7 @@ describe("Moves - Lucky Chant", () => {
   it("should prevent critical hits against the user's ally", async () => {
     game.override.battleType("double");
 
-    await game.classicMode.startBattle([Species.CHARIZARD, Species.BLASTOISE]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD, SpeciesId.BLASTOISE]);
 
     const playerPokemon = game.scene.getPlayerField();
 
@@ -67,7 +67,7 @@ describe("Moves - Lucky Chant", () => {
   it("should prevent critical hits from field effects", async () => {
     game.override.enemyMoveset([MoveId.TACKLE]);
 
-    await game.classicMode.startBattle([Species.CHARIZARD]);
+    await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
     const enemyPokemon = game.scene.getEnemyPokemon()!;
