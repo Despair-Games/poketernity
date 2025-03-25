@@ -3,9 +3,9 @@ import { getGameMode } from "#app/game-mode";
 import { GameModes } from "#enums/game-modes";
 import { BattleEndPhase } from "#app/phases/battle-end-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -32,15 +32,15 @@ describe("Double Battles", () => {
       .battleType("double")
       .moveset(MoveId.SPLASH)
       .enemyMoveset(MoveId.SPLASH)
-      .enemySpecies(Species.MAGIKARP)
-      .ability(Abilities.BALL_FETCH)
-      .enemyAbility(Abilities.BALL_FETCH);
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .ability(AbilityId.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH);
   });
 
   // double-battle player's pokemon both fainted in same round, then revive one, and next double battle summons two player's pokemon successfully.
   // (There were bugs that either only summon one when can summon two, player stuck in switchPhase etc)
   it("3v2 edge case: player summons 2 pokemon on the next battle after being fainted and revived", async () => {
-    await game.classicMode.startBattle([Species.BULBASAUR, Species.CHARIZARD, Species.SQUIRTLE]);
+    await game.classicMode.startBattle([SpeciesId.BULBASAUR, SpeciesId.CHARIZARD, SpeciesId.SQUIRTLE]);
 
     game.move.select(MoveId.SPLASH);
     game.move.select(MoveId.SPLASH, 1);
@@ -55,7 +55,7 @@ describe("Double Battles", () => {
     await game.phaseInterceptor.to(BattleEndPhase);
     game.doSelectModifier();
 
-    const charizard = game.scene.getPlayerParty().findIndex((p) => p.species.speciesId === Species.CHARIZARD);
+    const charizard = game.scene.getPlayerParty().findIndex((p) => p.species.speciesId === SpeciesId.CHARIZARD);
     game.doRevivePokemon(charizard);
 
     await game.phaseInterceptor.to(TurnInitPhase);
@@ -74,7 +74,7 @@ describe("Double Battles", () => {
     game.override.battleType(null);
 
     // Play through endless, waves 1 to 9, counting number of double battles from waves 2 to 9
-    await game.classicMode.startBattle([Species.BULBASAUR]);
+    await game.classicMode.startBattle([SpeciesId.BULBASAUR]);
     game.scene.gameMode = getGameMode(GameModes.ENDLESS);
 
     for (let i = 0; i < DOUBLE_CHANCE; i++) {
@@ -96,7 +96,7 @@ describe("Double Battles", () => {
   });
 
   it("shouldn't hit itself if ally dies before move", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MILOTIC]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MILOTIC]);
 
     const [, milotic] = game.scene.getPlayerField();
 

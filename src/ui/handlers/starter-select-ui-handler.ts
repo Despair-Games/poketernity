@@ -64,7 +64,7 @@ import {
 } from "#app/utils";
 import { applyChallenges } from "#app/utils/challenge-utils";
 import { getPokemonSpeciesForm, getPokerusStarters } from "#app/utils/pokemon-species-utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { Button } from "#enums/buttons";
 import { ChallengeType } from "#enums/challenge-type";
 import { Device } from "#enums/devices";
@@ -82,7 +82,7 @@ import { Passive as PassiveAttr } from "#enums/passive";
 import { PokemonIconAnimMode } from "#enums/pokemon-icon-anim-mode";
 import { SettingKeyboard } from "#enums/setting-keyboard";
 import { SortCriteria } from "#enums/sort-criteria";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { TextStyle } from "#enums/text-style";
 import { Tutorial } from "#enums/tutorial";
 import { UiMode } from "#enums/ui-mode";
@@ -275,7 +275,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
   private allSpecies: PokemonSpecies[] = [];
   private lastSpecies: PokemonSpecies;
-  private speciesLoaded: Map<Species, boolean> = new Map<Species, boolean>();
+  private speciesLoaded: Map<SpeciesId, boolean> = new Map<SpeciesId, boolean>();
   public starterSpecies: PokemonSpecies[] = [];
   private pokerusSpecies: PokemonSpecies[] = [];
   private starterAttr: bigint[] = [];
@@ -643,7 +643,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
     this.startCursorObj.setOrigin(0, 0);
     this.starterSelectContainer.add(this.startCursorObj);
 
-    const starterSpecies: Species[] = [];
+    const starterSpecies: SpeciesId[] = [];
 
     const starterBoxContainer = globalScene.add.container(speciesContainerX + 6, 9);
 
@@ -2361,9 +2361,9 @@ export class StarterSelectUiHandler extends MessageUiHandler {
 
   /**
    * Update the starter moveset for the given species, if it is part of the selected starters.
-   * @param speciesId the {@linkcode Species} to consider
+   * @param speciesId the {@linkcode SpeciesId} to consider
    */
-  private updateSelectedStarterMoveset(speciesId: Species): void {
+  private updateSelectedStarterMoveset(speciesId: SpeciesId): void {
     if (!this.starterMoveset) {
       return;
     }
@@ -2698,7 +2698,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
       // HA Filter
       const speciesHasHiddenAbility =
         container.species.abilityHidden !== container.species.ability1
-        && container.species.abilityHidden !== Abilities.NONE;
+        && container.species.abilityHidden !== AbilityId.NONE;
       const hasHA = starterData.abilityAttr & AbilityAttr.ABILITY_HIDDEN;
       const fitsHA = this.filterBar.getVals(DropDownColumn.MISC).some((misc) => {
         if (misc.val === "HIDDEN_ABILITY" && misc.state === DropDownState.ON) {
@@ -3019,7 +3019,7 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         this.pokemonPassiveLabelText.setVisible(true);
         this.pokemonNatureLabelText.setVisible(true);
         this.pokemonCaughtCountText.setText(`${this.speciesStarterDexEntry.caughtCount}`);
-        if (species.speciesId === Species.MANAPHY || species.speciesId === Species.PHIONE) {
+        if (species.speciesId === SpeciesId.MANAPHY || species.speciesId === SpeciesId.PHIONE) {
           this.pokemonHatchedIcon.setFrame("manaphy");
         } else {
           this.pokemonHatchedIcon.setFrame(getEggTierForSpecies(species));
@@ -3515,9 +3515,9 @@ export class StarterSelectUiHandler extends MessageUiHandler {
         const speciesForm = getPokemonSpeciesForm(species.speciesId, formIndex!); // TODO: is the bang correct?
         const formText = capitalizeString(species?.forms[formIndex!]?.formKey, "-", false, false); // TODO: is the bang correct?
 
-        const speciesName = capitalizeString(Species[species.speciesId], "_", true, false);
+        const speciesName = capitalizeString(SpeciesId[species.speciesId], "_", true, false);
 
-        if (species.speciesId === Species.ARCEUS) {
+        if (species.speciesId === SpeciesId.ARCEUS) {
           this.pokemonFormText.setText(i18next.t(`pokemonInfo:Type.${formText?.toUpperCase()}`));
         } else {
           this.pokemonFormText.setText(formText ? i18next.t(`pokemonForm:${speciesName}${formText}`) : "");

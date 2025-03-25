@@ -1,8 +1,8 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat, type BattleStat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -26,18 +26,18 @@ describe("Moves - Spectral Thief", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.SPECTRAL_THIEF])
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.SKARMORY)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.SKARMORY)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.IRON_DEFENSE)
       .startingLevel(100)
       .enemyLevel(100);
   });
 
   it("should steal the target's positive stat stages before attacking", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -60,7 +60,7 @@ describe("Moves - Spectral Thief", () => {
   it("should not steal negative stat stages from the target", async () => {
     game.override.enemyMoveset(MoveId.SHELL_SMASH);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -83,9 +83,9 @@ describe("Moves - Spectral Thief", () => {
   });
 
   it("should steal stat stages even if the target has Clear Body", async () => {
-    game.override.enemyAbility(Abilities.CLEAR_BODY);
+    game.override.enemyAbility(AbilityId.CLEAR_BODY);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -98,18 +98,18 @@ describe("Moves - Spectral Thief", () => {
 
     expect(player.getStatStage(Stat.DEF)).toBe(2);
     expect(enemy.getStatStage(Stat.DEF)).toBe(0);
-    expect(enemy.battleData.abilitiesApplied.includes(Abilities.CLEAR_BODY)).toBeFalsy();
+    expect(enemy.battleData.abilitiesApplied.includes(AbilityId.CLEAR_BODY)).toBeFalsy();
   });
 
   it.each([
-    { abilityName: "Simple", abilityId: Abilities.SIMPLE, multiplier: 2 },
-    { abilityName: "Contrary", abilityId: Abilities.CONTRARY, multiplier: -1 },
+    { abilityName: "Simple", abilityId: AbilityId.SIMPLE, multiplier: 2 },
+    { abilityName: "Contrary", abilityId: AbilityId.CONTRARY, multiplier: -1 },
   ])(
     "$abilityName should multiply the stolen stat stages from this effect by $multiplier",
     async ({ abilityId, multiplier }) => {
       game.override.ability(abilityId);
 
-      await game.classicMode.startBattle([Species.MAGIKARP]);
+      await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
       const player = game.scene.getPlayerPokemon()!;
       const enemy = game.scene.getEnemyPokemon()!;
@@ -126,9 +126,9 @@ describe("Moves - Spectral Thief", () => {
   );
 
   it("should not activate Defiant when stealing stat stages", async () => {
-    game.override.enemyAbility(Abilities.DEFIANT);
+    game.override.enemyAbility(AbilityId.DEFIANT);
 
-    await game.classicMode.startBattle([Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP]);
 
     const player = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;
@@ -142,6 +142,6 @@ describe("Moves - Spectral Thief", () => {
     expect(player.getStatStage(Stat.DEF)).toBe(2);
     expect(enemy.getStatStage(Stat.DEF)).toBe(0);
     expect(enemy.getStatStage(Stat.ATK)).toBe(0);
-    expect(enemy.battleData.abilitiesApplied.includes(Abilities.DEFIANT)).toBeFalsy();
+    expect(enemy.battleData.abilitiesApplied.includes(AbilityId.DEFIANT)).toBeFalsy();
   });
 });

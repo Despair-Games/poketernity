@@ -44,6 +44,13 @@ export class NavigationManager {
     ];
   }
 
+  /**
+   * Clear all references to {@linkcode NavigationMenu}s, allowing them to be garbage collected.
+   */
+  public clearMenus() {
+    this.navigationMenus = [];
+  }
+
   public reset() {
     this.selectedMode = UiMode.SETTINGS;
     this.updateNavigationMenus();

@@ -14,18 +14,18 @@ import type { TurnCommand } from "#app/turn-command-manager";
 import { isNullOrUndefined } from "#app/utils";
 import { MoveLockTagTypes, TrappedBattlerTagTypes } from "#app/utils/battler-tag-type-utils";
 import { isFieldTargeted } from "#app/utils/move-utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleCommand } from "#enums/battle-command";
 import { BattleType } from "#enums/battle-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { FieldPosition } from "#enums/field-position";
 import { MoveId } from "#enums/move-id";
 import { MysteryEncounterMode } from "#enums/mystery-encounter-mode";
 import { PhaseId } from "#enums/phase-id";
-import { PokeballType } from "#enums/pokeball";
+import { PokeballType } from "#enums/pokeball-type";
 import { UiMode } from "#enums/ui-mode";
 import i18next from "i18next";
 
@@ -271,7 +271,7 @@ export class CommandPhase extends FieldPhase {
             .some((p) => !globalScene.gameData.dexData[p.species.speciesId].caughtAttr)
           && gameData.getStarterCount((d) => !!d.caughtAttr) < Object.keys(speciesStarterCosts).length - 1;
 
-        if (arena.biomeType === Biome.END && (!gameMode.isClassic || gameMode.isFreshStartChallenge() || notInDex)) {
+        if (arena.biomeType === BiomeId.END && (!gameMode.isClassic || gameMode.isFreshStartChallenge() || notInDex)) {
           failCatchRun("battle:noPokeballForce");
         } else if (battleType === BattleType.TRAINER) {
           failCatchRun("battle:noPokeballTrainer");
@@ -294,7 +294,7 @@ export class CommandPhase extends FieldPhase {
             } else if (
               targetPokemon.isBoss()
               && targetPokemon.bossSegmentIndex >= 1
-              && !targetPokemon.hasAbility(Abilities.WONDER_GUARD, false, true)
+              && !targetPokemon.hasAbility(AbilityId.WONDER_GUARD, false, true)
               && cursor !== PokeballType.MASTER_BALL
             ) {
               failCatchRun("battle:noPokeballStrong");
@@ -314,7 +314,7 @@ export class CommandPhase extends FieldPhase {
         }
         break;
       case BattleCommand.RUN:
-        if (arena.biomeType === Biome.END || mysteryEncounter?.fleeAllowed === false) {
+        if (arena.biomeType === BiomeId.END || mysteryEncounter?.fleeAllowed === false) {
           failCatchRun("battle:noEscapeForce");
           break;
         } else if (

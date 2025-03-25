@@ -1,6 +1,6 @@
 import { StatBoosterModifier } from "#app/modifier/modifier";
 import { NumberHolder, randItem } from "#app/utils";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phase from "phaser";
@@ -26,7 +26,7 @@ describe("Items - Eviolite", () => {
   });
 
   it("should provide 50% boost to DEF and SPDEF for unevolved, unfused pokemon", async () => {
-    await game.classicMode.startBattle([Species.PICHU]);
+    await game.classicMode.startBattle([SpeciesId.PICHU]);
 
     const partyMember = game.scene.getPlayerPokemon()!;
 
@@ -47,7 +47,7 @@ describe("Items - Eviolite", () => {
   });
 
   it("should not provide a boost for fully evolved, unfused pokemon", async () => {
-    await game.classicMode.startBattle([Species.RAICHU]);
+    await game.classicMode.startBattle([SpeciesId.RAICHU]);
 
     const partyMember = game.scene.getPlayerPokemon()!;
 
@@ -69,13 +69,13 @@ describe("Items - Eviolite", () => {
 
   it("should not provide a boost for Gigantamax Pokémon", async () => {
     game.override.starterForms({
-      [Species.PIKACHU]: 8,
-      [Species.EEVEE]: 2,
-      [Species.DURALUDON]: 1,
-      [Species.MEOWTH]: 1,
+      [SpeciesId.PIKACHU]: 8,
+      [SpeciesId.EEVEE]: 2,
+      [SpeciesId.DURALUDON]: 1,
+      [SpeciesId.MEOWTH]: 1,
     });
 
-    const gMaxablePokemon = [Species.PIKACHU, Species.EEVEE, Species.DURALUDON, Species.MEOWTH];
+    const gMaxablePokemon = [SpeciesId.PIKACHU, SpeciesId.EEVEE, SpeciesId.DURALUDON, SpeciesId.MEOWTH];
 
     await game.classicMode.startBattle([randItem(gMaxablePokemon)]);
 

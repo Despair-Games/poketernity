@@ -1,8 +1,8 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -24,15 +24,15 @@ describe("Abilities - Gorilla Tactics", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .enemyAbility(Abilities.BALL_FETCH)
-      .enemySpecies(Species.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyLevel(30)
       .moveset([MoveId.SPLASH, MoveId.TACKLE, MoveId.GROWL])
-      .ability(Abilities.GORILLA_TACTICS);
+      .ability(AbilityId.GORILLA_TACTICS);
   });
 
   it("boosts the Pokémon's Attack by 50%, but limits the Pokémon to using only one move", async () => {
-    await game.classicMode.startBattle([Species.GALAR_DARMANITAN]);
+    await game.classicMode.startBattle([SpeciesId.GALAR_DARMANITAN]);
 
     const darmanitan = game.scene.getPlayerPokemon()!;
     const initialAtkStat = darmanitan.getStat(Stat.ATK);
@@ -49,7 +49,7 @@ describe("Abilities - Gorilla Tactics", () => {
   });
 
   it("should struggle if the only usable move is disabled", async () => {
-    await game.classicMode.startBattle([Species.GALAR_DARMANITAN]);
+    await game.classicMode.startBattle([SpeciesId.GALAR_DARMANITAN]);
 
     const darmanitan = game.scene.getPlayerPokemon()!;
     const enemy = game.scene.getEnemyPokemon()!;

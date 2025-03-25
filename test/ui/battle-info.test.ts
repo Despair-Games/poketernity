@@ -1,7 +1,7 @@
 import { ExpGainsSpeed } from "#enums/exp-gains-speed";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { ExpPhase } from "#app/phases/exp-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -32,9 +32,9 @@ describe("UI - Battle Info", () => {
     game.override
       .moveset([MoveId.GUILLOTINE, MoveId.SPLASH])
       .battleType("single")
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
-      .enemySpecies(Species.CATERPIE);
+      .enemySpecies(SpeciesId.CATERPIE);
   });
 
   it.each([ExpGainsSpeed.FAST, ExpGainsSpeed.FASTER, ExpGainsSpeed.SKIP])(
@@ -43,7 +43,7 @@ describe("UI - Battle Info", () => {
       game.settings.expGainsSpeed(expGainsSpeed);
       vi.spyOn(Math, "pow");
 
-      await game.classicMode.startBattle([Species.CHARIZARD]);
+      await game.classicMode.startBattle([SpeciesId.CHARIZARD]);
 
       game.move.select(MoveId.SPLASH);
       await game.doKillOpponents();

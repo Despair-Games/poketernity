@@ -1,10 +1,10 @@
 import { BattlerIndex } from "#enums/battler-index";
 import type { EntryHazardTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -29,15 +29,15 @@ describe("Moves - Toxic Spikes", () => {
     game.override
       .battleType("single")
       .startingWave(5)
-      .enemySpecies(Species.RATTATA)
-      .enemyAbility(Abilities.BALL_FETCH)
-      .ability(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.RATTATA)
+      .enemyAbility(AbilityId.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .moveset([MoveId.TOXIC_SPIKES, MoveId.SPLASH, MoveId.ROAR, MoveId.COURT_CHANGE]);
   });
 
   it("should not affect the opponent if they do not switch", async () => {
-    await game.classicMode.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
+    await game.classicMode.startBattle([SpeciesId.MIGHTYENA, SpeciesId.POOCHYENA]);
 
     const enemy = game.scene.getEnemyField()[0];
 
@@ -53,7 +53,7 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("should poison the opponent if they switch into 1 layer", async () => {
-    await game.classicMode.startBattle([Species.MIGHTYENA]);
+    await game.classicMode.startBattle([SpeciesId.MIGHTYENA]);
 
     game.move.select(MoveId.TOXIC_SPIKES);
     await game.toNextTurn();
@@ -67,7 +67,7 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("should badly poison the opponent if they switch into 2 layers", async () => {
-    await game.classicMode.startBattle([Species.MIGHTYENA]);
+    await game.classicMode.startBattle([SpeciesId.MIGHTYENA]);
 
     game.move.select(MoveId.TOXIC_SPIKES);
     await game.toNextTurn();
@@ -82,7 +82,7 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("should be removed if a grounded poison pokemon switches in", async () => {
-    await game.classicMode.startBattle([Species.MUK, Species.PIDGEY]);
+    await game.classicMode.startBattle([SpeciesId.MUK, SpeciesId.PIDGEY]);
 
     const muk = game.scene.getPlayerPokemon()!;
 
@@ -106,7 +106,7 @@ describe("Moves - Toxic Spikes", () => {
 
   it("shouldn't create multiple layers per use in doubles", async () => {
     game.override.battleType("double");
-    await game.classicMode.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
+    await game.classicMode.startBattle([SpeciesId.MIGHTYENA, SpeciesId.POOCHYENA]);
 
     game.move.select(MoveId.TOXIC_SPIKES, 0);
     game.move.select(MoveId.SPLASH, 1);
@@ -120,7 +120,7 @@ describe("Moves - Toxic Spikes", () => {
   it("should persist through reload", async () => {
     game.override.startingWave(1);
 
-    await game.classicMode.startBattle([Species.MIGHTYENA]);
+    await game.classicMode.startBattle([SpeciesId.MIGHTYENA]);
 
     game.move.select(MoveId.TOXIC_SPIKES);
     await game.toNextTurn();
@@ -136,7 +136,7 @@ describe("Moves - Toxic Spikes", () => {
   });
 
   it("should apply even if the target is fainted", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemyPokemon = game.field.getEnemyPokemon();
 

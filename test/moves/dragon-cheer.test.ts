@@ -1,8 +1,8 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { ElementalType } from "#enums/elemental-type";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { Abilities } from "#enums/abilities";
+import { SpeciesId } from "#enums/species-id";
+import { AbilityId } from "#enums/ability-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -24,14 +24,14 @@ describe("Moves - Dragon Cheer", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("double")
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .enemyLevel(20)
       .moveset([MoveId.DRAGON_CHEER, MoveId.TACKLE, MoveId.SPLASH]);
   });
 
   it("increases the user's allies' critical hit ratio by one stage", async () => {
-    await game.classicMode.startBattle([Species.DRAGONAIR, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.DRAGONAIR, SpeciesId.MAGIKARP]);
 
     const enemy = game.scene.getEnemyField()[0];
 
@@ -48,7 +48,7 @@ describe("Moves - Dragon Cheer", () => {
   });
 
   it("increases the user's Dragon-type allies' critical hit ratio by two stages", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP, Species.DRAGONAIR]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.DRAGONAIR]);
 
     const enemy = game.scene.getEnemyField()[0];
 
@@ -65,7 +65,7 @@ describe("Moves - Dragon Cheer", () => {
   });
 
   it("applies the effect based on the allies' type upon use of the move, and do not change if the allies' type changes later in battle", async () => {
-    await game.classicMode.startBattle([Species.DRAGONAIR, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.DRAGONAIR, SpeciesId.MAGIKARP]);
 
     const magikarp = game.scene.getPlayerField()[1];
     const enemy = game.scene.getEnemyField()[0];

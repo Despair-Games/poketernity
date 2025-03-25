@@ -1,9 +1,9 @@
 import { type BypassSpeedChanceAbAttr } from "#app/data/abilities/ab-attrs/bypass-speed-chance-ab-attr";
 import { allAbilities } from "#app/data/data-lists";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
@@ -26,22 +26,22 @@ describe("Abilities - Quick Draw", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .ability(Abilities.QUICK_DRAW)
-      .enemySpecies(Species.REGIELEKI)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .ability(AbilityId.QUICK_DRAW)
+      .enemySpecies(SpeciesId.REGIELEKI)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
 
     vi.spyOn(
-      allAbilities[Abilities.QUICK_DRAW].getAttrs<BypassSpeedChanceAbAttr>(AbAttrFlag.BYPASS_SPEED_CHANCE)[0],
+      allAbilities[AbilityId.QUICK_DRAW].getAttrs<BypassSpeedChanceAbAttr>(AbAttrFlag.BYPASS_SPEED_CHANCE)[0],
       "chance",
       "get",
     ).mockReturnValue(100);
   });
 
   test("should cause the source to move first in its priority bracket", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
     const enemy = game.field.getEnemyPokemon();
@@ -50,7 +50,7 @@ describe("Abilities - Quick Draw", () => {
     await game.toEndOfTurn();
 
     expect(player.turnData.order).toBeLessThan(enemy.turnData.order);
-    expect(player.battleData.abilitiesApplied).toContain(Abilities.QUICK_DRAW);
+    expect(player.battleData.abilitiesApplied).toContain(AbilityId.QUICK_DRAW);
   });
 
   test("should not apply when the source uses a status move", async () => {
@@ -63,7 +63,7 @@ describe("Abilities - Quick Draw", () => {
     await game.toEndOfTurn();
 
     expect(player.turnData.order).toBeGreaterThan(enemy.turnData.order);
-    expect(player.battleData.abilitiesApplied).not.toContain(Abilities.QUICK_DRAW);
+    expect(player.battleData.abilitiesApplied).not.toContain(AbilityId.QUICK_DRAW);
   });
 
   test("should not cause the source to move before higher-priority moves", async () => {
@@ -77,6 +77,6 @@ describe("Abilities - Quick Draw", () => {
     await game.toEndOfTurn();
 
     expect(player.turnData.order).toBeGreaterThan(enemy.turnData.order);
-    expect(player.battleData.abilitiesApplied).contain(Abilities.QUICK_DRAW);
+    expect(player.battleData.abilitiesApplied).contain(AbilityId.QUICK_DRAW);
   });
 });

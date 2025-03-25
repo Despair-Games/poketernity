@@ -9,7 +9,7 @@ import { PostActionPhase } from "#app/phases/post-action-phase";
 import { TurnEndPhase } from "#app/phases/turn-end-phase";
 import { WeatherEffectPhase } from "#app/phases/weather-effect-phase";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { BattleCommand } from "#enums/battle-command";
 import type { BattlerIndex } from "#enums/battler-index";
@@ -464,7 +464,7 @@ export class TurnCommandManager {
       if (playerActivePokemon.length > 1) {
         const fasterPokemon = playerActivePokemon.sort((a, b) => b.getStat(Stat.SPD) - a.getStat(Stat.SPD))[0];
 
-        const hasRunAway = playerActivePokemon.find((p) => p.hasAbility(Abilities.RUN_AWAY));
+        const hasRunAway = playerActivePokemon.find((p) => p.hasAbility(AbilityId.RUN_AWAY));
         runningPokemon = hasRunAway ?? fasterPokemon;
       }
     }

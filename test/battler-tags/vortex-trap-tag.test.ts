@@ -1,8 +1,8 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { GameManager } from "#test/test-utils/gameManager";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
-import { Abilities } from "#enums/abilities";
+import { SpeciesId } from "#enums/species-id";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { toDmgValue } from "#app/utils";
 import { BattlerTagType } from "#enums/battler-tag-type";
@@ -28,15 +28,15 @@ describe("BattlerTag - VortexTrapTag", () => {
         .battleType("double")
         .startingLevel(1)
         .moveset([MoveId.FIRE_SPIN, MoveId.G_MAX_CENTIFERNO, MoveId.MEMENTO, MoveId.SPLASH])
-        .ability(Abilities.NO_GUARD)
-        .enemySpecies(Species.SHUCKLE)
+        .ability(AbilityId.NO_GUARD)
+        .enemySpecies(SpeciesId.SHUCKLE)
         .enemyLevel(100)
-        .enemyAbility(Abilities.BALL_FETCH)
+        .enemyAbility(AbilityId.BALL_FETCH)
         .enemyMoveset(MoveId.SPLASH);
     });
 
     it("Fire spin should trap and damage a single target until the user leaves", async () => {
-      await game.classicMode.startBattle([Species.SUNKERN, Species.SUNKERN]);
+      await game.classicMode.startBattle([SpeciesId.SUNKERN, SpeciesId.SUNKERN]);
 
       game.move.select(MoveId.FIRE_SPIN, 0, BattlerIndex.ENEMY);
       game.move.select(MoveId.SPLASH, 1);
@@ -78,8 +78,8 @@ describe("BattlerTag - VortexTrapTag", () => {
     });
 
     it("Fire spin cannot trap ghost types but still damages them", async () => {
-      game.override.enemySpecies(Species.GENGAR);
-      await game.classicMode.startBattle([Species.SUNKERN, Species.SUNKERN]);
+      game.override.enemySpecies(SpeciesId.GENGAR);
+      await game.classicMode.startBattle([SpeciesId.SUNKERN, SpeciesId.SUNKERN]);
 
       game.move.select(MoveId.FIRE_SPIN, 0, BattlerIndex.ENEMY);
       game.move.select(MoveId.SPLASH, 1);
@@ -107,8 +107,8 @@ describe("BattlerTag - VortexTrapTag", () => {
     });
 
     it("Fire spin cannot damage magic guard but still traps them", async () => {
-      game.override.enemyAbility(Abilities.MAGIC_GUARD);
-      await game.classicMode.startBattle([Species.SUNKERN, Species.SUNKERN]);
+      game.override.enemyAbility(AbilityId.MAGIC_GUARD);
+      await game.classicMode.startBattle([SpeciesId.SUNKERN, SpeciesId.SUNKERN]);
 
       game.move.select(MoveId.FIRE_SPIN, 0, BattlerIndex.ENEMY);
       game.move.select(MoveId.SPLASH, 1);
@@ -136,7 +136,7 @@ describe("BattlerTag - VortexTrapTag", () => {
     });
 
     it("G-Max centiferno affects both enemies and even after user leaves", async () => {
-      await game.classicMode.startBattle([Species.SUNKERN, Species.SUNKERN]);
+      await game.classicMode.startBattle([SpeciesId.SUNKERN, SpeciesId.SUNKERN]);
 
       game.move.select(MoveId.G_MAX_CENTIFERNO, 0, BattlerIndex.ENEMY);
       game.move.select(MoveId.SPLASH, 1);

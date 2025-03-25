@@ -10,7 +10,7 @@ import { SwitchPhase } from "#app/phases/switch-phase";
 import { SwitchSummonPhase } from "#app/phases/switch-summon-phase";
 import { BooleanHolder, toDmgValue } from "#app/utils";
 import { AbAttrFlag } from "#enums/ab-attr-flag";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattleType } from "#enums/battle-type";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
@@ -70,7 +70,7 @@ export class PostDamageForceSwitchAbAttr extends PostDamageAbAttr {
         if (forbiddenDefendingMoves.includes(enemyLastMoveUsed.move.id) || pokemon.getTag(BattlerTagType.SKY_DROP)) {
           return false;
           // Will not activate if the Pokémon's HP falls below half by a move affected by Sheer Force.
-        } else if (allMoves.get(enemyLastMoveUsed.move.id).chance >= 0 && source.hasAbility(Abilities.SHEER_FORCE)) {
+        } else if (allMoves.get(enemyLastMoveUsed.move.id).chance >= 0 && source.hasAbility(AbilityId.SHEER_FORCE)) {
           return false;
           // Activate only after the last hit of multistrike moves
         } else if (source.turnData.hitsLeft > 1) {

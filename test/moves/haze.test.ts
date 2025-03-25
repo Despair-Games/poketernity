@@ -1,8 +1,8 @@
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
@@ -25,18 +25,18 @@ describe("Moves - Haze", () => {
 
       game.override.battleType("single");
 
-      game.override.enemySpecies(Species.RATTATA);
+      game.override.enemySpecies(SpeciesId.RATTATA);
       game.override.enemyLevel(100);
       game.override.enemyMoveset(MoveId.SPLASH);
-      game.override.enemyAbility(Abilities.NONE);
+      game.override.enemyAbility(AbilityId.NONE);
 
       game.override.startingLevel(100);
       game.override.moveset([MoveId.HAZE, MoveId.SWORDS_DANCE, MoveId.CHARM, MoveId.SPLASH]);
-      game.override.ability(Abilities.NONE);
+      game.override.ability(AbilityId.NONE);
     });
 
     it("should reset all stat changes of all Pokemon on field", async () => {
-      await game.startBattle([Species.RATTATA]);
+      await game.startBattle([SpeciesId.RATTATA]);
       const user = game.scene.getPlayerPokemon()!;
       const enemy = game.scene.getEnemyPokemon()!;
 

@@ -1,6 +1,6 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -23,15 +23,15 @@ describe("Moves - Spikes", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .enemySpecies(Species.MAGIKARP)
-      .enemyAbility(Abilities.BALL_FETCH)
-      .ability(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.MAGIKARP)
+      .enemyAbility(AbilityId.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .moveset([MoveId.SPIKES, MoveId.SPLASH, MoveId.ROAR]);
   });
 
   it("should not damage the team that set them", async () => {
-    await game.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
+    await game.startBattle([SpeciesId.MIGHTYENA, SpeciesId.POOCHYENA]);
 
     game.move.select(MoveId.SPIKES);
     await game.toNextTurn();
@@ -51,7 +51,7 @@ describe("Moves - Spikes", () => {
 
   it("should damage opposing pokemon that are forced to switch in", async () => {
     game.override.startingWave(5);
-    await game.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
+    await game.startBattle([SpeciesId.MIGHTYENA, SpeciesId.POOCHYENA]);
 
     game.move.select(MoveId.SPIKES);
     await game.toNextTurn();
@@ -65,7 +65,7 @@ describe("Moves - Spikes", () => {
 
   it("should damage opposing pokemon that choose to switch in", async () => {
     game.override.startingWave(5);
-    await game.startBattle([Species.MIGHTYENA, Species.POOCHYENA]);
+    await game.startBattle([SpeciesId.MIGHTYENA, SpeciesId.POOCHYENA]);
 
     game.move.select(MoveId.SPIKES);
     await game.toNextTurn();

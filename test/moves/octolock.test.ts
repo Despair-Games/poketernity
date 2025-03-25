@@ -1,7 +1,7 @@
 import { TrappedTag } from "#app/data/battler-tags/trapped-tag";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -26,16 +26,16 @@ describe("Moves - Octolock", () => {
 
     game.override
       .battleType("single")
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .enemyMoveset(MoveId.SPLASH)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .startingLevel(2000)
       .moveset([MoveId.OCTOLOCK, MoveId.SPLASH, MoveId.TRICK_OR_TREAT])
-      .ability(Abilities.BALL_FETCH);
+      .ability(AbilityId.BALL_FETCH);
   });
 
   it("lowers DEF and SPDEF stat stages of the target Pokemon by 1 each turn", async () => {
-    await game.classicMode.startBattle([Species.GRAPPLOCT]);
+    await game.classicMode.startBattle([SpeciesId.GRAPPLOCT]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -55,8 +55,8 @@ describe("Moves - Octolock", () => {
   });
 
   it("if target pokemon has BIG_PECKS, should only lower SPDEF stat stage by 1", async () => {
-    game.override.enemyAbility(Abilities.BIG_PECKS);
-    await game.classicMode.startBattle([Species.GRAPPLOCT]);
+    game.override.enemyAbility(AbilityId.BIG_PECKS);
+    await game.classicMode.startBattle([SpeciesId.GRAPPLOCT]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -69,8 +69,8 @@ describe("Moves - Octolock", () => {
   });
 
   it("if target pokemon has WHITE_SMOKE, should not reduce any stat stages", async () => {
-    game.override.enemyAbility(Abilities.WHITE_SMOKE);
-    await game.classicMode.startBattle([Species.GRAPPLOCT]);
+    game.override.enemyAbility(AbilityId.WHITE_SMOKE);
+    await game.classicMode.startBattle([SpeciesId.GRAPPLOCT]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -83,8 +83,8 @@ describe("Moves - Octolock", () => {
   });
 
   it("if target pokemon has CLEAR_BODY, should not reduce any stat stages", async () => {
-    game.override.enemyAbility(Abilities.CLEAR_BODY);
-    await game.classicMode.startBattle([Species.GRAPPLOCT]);
+    game.override.enemyAbility(AbilityId.CLEAR_BODY);
+    await game.classicMode.startBattle([SpeciesId.GRAPPLOCT]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -97,7 +97,7 @@ describe("Moves - Octolock", () => {
   });
 
   it("traps the target pokemon", async () => {
-    await game.classicMode.startBattle([Species.GRAPPLOCT]);
+    await game.classicMode.startBattle([SpeciesId.GRAPPLOCT]);
 
     const enemyPokemon = game.scene.getEnemyPokemon()!;
 
@@ -113,7 +113,7 @@ describe("Moves - Octolock", () => {
 
   it("does not work on ghost type pokemon", async () => {
     game.override.enemyMoveset(MoveId.OCTOLOCK);
-    await game.classicMode.startBattle([Species.GASTLY]);
+    await game.classicMode.startBattle([SpeciesId.GASTLY]);
 
     const playerPokemon = game.scene.getPlayerPokemon()!;
 
@@ -130,7 +130,7 @@ describe("Moves - Octolock", () => {
   });
 
   it("does not work on pokemon with added ghost type via Trick-or-Treat", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
 

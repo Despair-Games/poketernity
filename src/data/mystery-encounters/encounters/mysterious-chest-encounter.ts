@@ -22,7 +22,7 @@ import { MoveId } from "#enums/move-id";
 import { MysteryEncounterOptionMode } from "#enums/mystery-encounter-option-mode";
 import { MysteryEncounterTier } from "#enums/mystery-encounter-tier";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 
 /** i18n namespace for encounter */
 const namespace = "mysteryEncounters/mysteriousChest";
@@ -84,7 +84,7 @@ export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilde
       disableSwitch: true,
       pokemonConfigs: [
         {
-          species: getPokemonSpecies(Species.GIMMIGHOUL),
+          species: getPokemonSpecies(SpeciesId.GIMMIGHOUL),
           formIndex: 0,
           isBoss: true,
           moveSet: [MoveId.NASTY_PLOT, MoveId.SHADOW_BALL, MoveId.POWER_GEM, MoveId.THIEF],
@@ -94,7 +94,7 @@ export const MysteriousChestEncounter: MysteryEncounter = MysteryEncounterBuilde
 
     encounter.enemyPartyConfigs = [config];
 
-    encounter.setDialogueToken("gimmighoulName", getPokemonSpecies(Species.GIMMIGHOUL).getName());
+    encounter.setDialogueToken("gimmighoulName", getPokemonSpecies(SpeciesId.GIMMIGHOUL).getName());
     encounter.setDialogueToken("trapPercent", TRAP_PERCENT.toString());
     encounter.setDialogueToken("commonPercent", COMMON_REWARDS_PERCENT.toString());
     encounter.setDialogueToken("ultraPercent", ULTRA_REWARDS_PERCENT.toString());

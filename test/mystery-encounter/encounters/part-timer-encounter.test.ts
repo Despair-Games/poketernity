@@ -1,7 +1,7 @@
 import * as MysteryEncounters from "#app/data/mystery-encounters/mystery-encounters";
-import { Biome } from "#enums/biome";
+import { BiomeId } from "#enums/biome-id";
 import { MysteryEncounterType } from "#enums/mystery-encounter-type";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import * as EncounterPhaseUtils from "#app/data/mystery-encounters/utils/encounter-phase-utils";
@@ -20,8 +20,8 @@ import { MysteryEncounterPhase } from "#app/phases/mystery-encounter-phases/myst
 
 const namespace = "mysteryEncounters/partTimer";
 // Pyukumuku for lowest speed, Regieleki for highest speed, Feebas for lowest "bulk", Melmetal for highest "bulk"
-const defaultParty = [Species.PYUKUMUKU, Species.REGIELEKI, Species.FEEBAS, Species.MELMETAL];
-const defaultBiome = Biome.PLAINS;
+const defaultParty = [SpeciesId.PYUKUMUKU, SpeciesId.REGIELEKI, SpeciesId.FEEBAS, SpeciesId.MELMETAL];
+const defaultBiome = BiomeId.PLAINS;
 const defaultWave = 37;
 
 describe("Part-Timer - Mystery Encounter", () => {
@@ -41,8 +41,8 @@ describe("Part-Timer - Mystery Encounter", () => {
     game.override.startingBiome(defaultBiome);
     game.override.disableTrainerWaves();
 
-    const biomeMap = new Map<Biome, MysteryEncounterType[]>([
-      [Biome.VOLCANO, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
+    const biomeMap = new Map<BiomeId, MysteryEncounterType[]>([
+      [BiomeId.VOLCANO, [MysteryEncounterType.MYSTERIOUS_CHALLENGERS]],
     ]);
     CIVILIZATION_ENCOUNTER_BIOMES.forEach((biome) => {
       biomeMap.set(biome, [MysteryEncounterType.PART_TIMER]);
@@ -77,7 +77,7 @@ describe("Part-Timer - Mystery Encounter", () => {
 
   it("should not spawn outside of CIVILIZATION_ENCOUNTER_BIOMES", async () => {
     game.override.mysteryEncounterTier(MysteryEncounterTier.COMMON);
-    game.override.startingBiome(Biome.VOLCANO);
+    game.override.startingBiome(BiomeId.VOLCANO);
     await game.runToMysteryEncounter();
 
     expect(scene.currentBattle?.mysteryEncounter?.encounterType).not.toBe(MysteryEncounterType.PART_TIMER);

@@ -1,9 +1,9 @@
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerIndex } from "#enums/battler-index";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { StatusEffect } from "#enums/status-effect";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -26,18 +26,18 @@ describe("Moves - Uproar", () => {
   beforeEach(() => {
     game = new GameManager(phaserGame);
     game.override
-      .ability(Abilities.BALL_FETCH)
+      .ability(AbilityId.BALL_FETCH)
       .battleType("single")
       .disableCrits()
-      .enemySpecies(Species.BLISSEY)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.BLISSEY)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .startingLevel(100)
       .enemyLevel(100);
   });
 
   it("should lock the user into using Uproar for the following 2 turns", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
 
@@ -62,7 +62,7 @@ describe("Moves - Uproar", () => {
   });
 
   it("should stop execution after using Uproar has no effect", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
 
@@ -75,7 +75,7 @@ describe("Moves - Uproar", () => {
       ignorePP: true,
     });
 
-    game.override.enemyAbility(Abilities.SOUNDPROOF);
+    game.override.enemyAbility(AbilityId.SOUNDPROOF);
 
     await game.toNextTurn();
     expect(player.getTag(BattlerTagType.UPROAR)).toBeUndefined();
@@ -85,7 +85,7 @@ describe("Moves - Uproar", () => {
   it("should wake up all active Pokemon on its initial use", async () => {
     game.override.enemyStatusEffect(StatusEffect.SLEEP).battleType("double");
 
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const enemyPokemon = game.scene.getEnemyField();
 
@@ -98,7 +98,7 @@ describe("Moves - Uproar", () => {
 
   it("should prevent active Pokemon from falling asleep during its execution", async () => {
     game.override.battleType("double");
-    await game.classicMode.startBattle([Species.FEEBAS, Species.MAGIKARP]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS, SpeciesId.MAGIKARP]);
 
     const enemyPokemon = game.scene.getEnemyField();
 
@@ -113,7 +113,7 @@ describe("Moves - Uproar", () => {
   });
 
   it("should not have its execution interrupted by Torment", async () => {
-    await game.classicMode.startBattle([Species.FEEBAS]);
+    await game.classicMode.startBattle([SpeciesId.FEEBAS]);
 
     const player = game.field.getPlayerPokemon();
 

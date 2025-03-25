@@ -1,10 +1,10 @@
 import type { EntryHazardTag } from "#app/data/arena-tag";
 import { ArenaTagSide } from "#enums/arena-tag-side";
 import { allMoves } from "#app/data/data-lists";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { ArenaTagType } from "#enums/arena-tag-type";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
@@ -16,7 +16,7 @@ describe("Moves - Destiny Bond", () => {
   let phaserGame: Phaser.Game;
   let game: GameManager;
 
-  const defaultParty = [Species.BULBASAUR, Species.SQUIRTLE];
+  const defaultParty = [SpeciesId.BULBASAUR, SpeciesId.SQUIRTLE];
   const enemyFirst = [BattlerIndex.ENEMY, BattlerIndex.PLAYER];
   const playerFirst = [BattlerIndex.PLAYER, BattlerIndex.ENEMY];
 
@@ -34,9 +34,9 @@ describe("Moves - Destiny Bond", () => {
     game = new GameManager(phaserGame);
     game.override
       .battleType("single")
-      .ability(Abilities.UNNERVE) // Pre-emptively prevent flakiness from opponent berries
-      .enemySpecies(Species.RATTATA)
-      .enemyAbility(Abilities.RUN_AWAY)
+      .ability(AbilityId.UNNERVE) // Pre-emptively prevent flakiness from opponent berries
+      .enemySpecies(SpeciesId.RATTATA)
+      .enemyAbility(AbilityId.RUN_AWAY)
       .startingLevel(100) // Make sure tested moves KO
       .enemyLevel(5)
       .enemyMoveset(MoveId.DESTINY_BOND);
@@ -115,7 +115,7 @@ describe("Moves - Destiny Bond", () => {
     // Opponent will be reduced to 1 HP by False Swipe, then faint to Sandstorm
     const moveToUse = MoveId.FALSE_SWIPE;
 
-    game.override.moveset(moveToUse).ability(Abilities.SAND_STREAM);
+    game.override.moveset(moveToUse).ability(AbilityId.SAND_STREAM);
     await game.classicMode.startBattle(defaultParty);
 
     const enemyPokemon = game.scene.getEnemyPokemon();
@@ -158,7 +158,7 @@ describe("Moves - Destiny Bond", () => {
 
   it("should not KO an ally", async () => {
     game.override.moveset([MoveId.DESTINY_BOND, MoveId.CRUNCH]).battleType("double");
-    await game.classicMode.startBattle([Species.SHEDINJA, Species.BULBASAUR, Species.SQUIRTLE]);
+    await game.classicMode.startBattle([SpeciesId.SHEDINJA, SpeciesId.BULBASAUR, SpeciesId.SQUIRTLE]);
 
     const enemyPokemon0 = game.scene.getEnemyField()[0];
     const enemyPokemon1 = game.scene.getEnemyField()[1];

@@ -1,8 +1,8 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { isBetween, toDmgValue } from "#app/utils";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
@@ -25,18 +25,18 @@ describe("Abilities - Analytic", () => {
     game = new GameManager(phaserGame);
     game.override
       .moveset([MoveId.SPLASH, MoveId.TACKLE])
-      .ability(Abilities.ANALYTIC)
+      .ability(AbilityId.ANALYTIC)
       .battleType("single")
       .disableCrits()
       .startingLevel(200)
       .enemyLevel(200)
-      .enemySpecies(Species.SNORLAX)
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemySpecies(SpeciesId.SNORLAX)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH);
   });
 
   it("should increase damage if the user moves last", async () => {
-    await game.classicMode.startBattle([Species.ARCEUS]);
+    await game.classicMode.startBattle([SpeciesId.ARCEUS]);
 
     const enemy = game.scene.getEnemyPokemon()!;
 
@@ -54,7 +54,7 @@ describe("Abilities - Analytic", () => {
 
   it("should increase damage only if the user moves last in doubles", async () => {
     game.override.battleType("double");
-    await game.classicMode.startBattle([Species.GENGAR, Species.SHUCKLE]);
+    await game.classicMode.startBattle([SpeciesId.GENGAR, SpeciesId.SHUCKLE]);
 
     const [enemy] = game.scene.getEnemyField();
 

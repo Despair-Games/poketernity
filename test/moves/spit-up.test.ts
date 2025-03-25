@@ -2,11 +2,11 @@ import type { StockpilingTag } from "#app/data/battler-tags/stockpiling-tag";
 import { allMoves } from "#app/data/data-lists";
 import { MovePhase } from "#app/phases/move-phase";
 import { TurnInitPhase } from "#app/phases/turn-init-phase";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { BattlerTagType } from "#enums/battler-tag-type";
 import { MoveId } from "#enums/move-id";
 import { MoveResult } from "#enums/move-result";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { Stat } from "#enums/stat";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
@@ -31,13 +31,13 @@ describe("Moves - Spit Up", () => {
 
     game.override.battleType("single");
 
-    game.override.enemySpecies(Species.RATTATA);
+    game.override.enemySpecies(SpeciesId.RATTATA);
     game.override.enemyMoveset(MoveId.SPLASH);
-    game.override.enemyAbility(Abilities.NONE);
+    game.override.enemyAbility(AbilityId.NONE);
     game.override.enemyLevel(2000);
 
     game.override.moveset(new Array(4).fill(spitUp.id));
-    game.override.ability(Abilities.NONE);
+    game.override.ability(AbilityId.NONE);
 
     vi.spyOn(spitUp, "calculateBattlePower");
   });
@@ -47,7 +47,7 @@ describe("Moves - Spit Up", () => {
       const stacksToSetup = 1;
       const expectedPower = 100;
 
-      await game.startBattle([Species.ABOMASNOW]);
+      await game.startBattle([SpeciesId.ABOMASNOW]);
 
       const pokemon = game.scene.getPlayerPokemon()!;
       pokemon.addTag(BattlerTagType.STOCKPILING);
@@ -69,7 +69,7 @@ describe("Moves - Spit Up", () => {
       const stacksToSetup = 2;
       const expectedPower = 200;
 
-      await game.startBattle([Species.ABOMASNOW]);
+      await game.startBattle([SpeciesId.ABOMASNOW]);
 
       const pokemon = game.scene.getPlayerPokemon()!;
       pokemon.addTag(BattlerTagType.STOCKPILING);
@@ -92,7 +92,7 @@ describe("Moves - Spit Up", () => {
       const stacksToSetup = 3;
       const expectedPower = 300;
 
-      await game.startBattle([Species.ABOMASNOW]);
+      await game.startBattle([SpeciesId.ABOMASNOW]);
 
       const pokemon = game.scene.getPlayerPokemon()!;
       pokemon.addTag(BattlerTagType.STOCKPILING);
@@ -114,7 +114,7 @@ describe("Moves - Spit Up", () => {
   });
 
   it("fails without stacks", async () => {
-    await game.startBattle([Species.ABOMASNOW]);
+    await game.startBattle([SpeciesId.ABOMASNOW]);
 
     const pokemon = game.scene.getPlayerPokemon()!;
 
@@ -130,7 +130,7 @@ describe("Moves - Spit Up", () => {
 
   describe("restores stat boosts granted by stacks", () => {
     it("decreases stats based on stored values (both boosts equal)", async () => {
-      await game.startBattle([Species.ABOMASNOW]);
+      await game.startBattle([SpeciesId.ABOMASNOW]);
 
       const pokemon = game.scene.getPlayerPokemon()!;
       pokemon.addTag(BattlerTagType.STOCKPILING);
@@ -157,7 +157,7 @@ describe("Moves - Spit Up", () => {
     });
 
     it("decreases stats based on stored values (different boosts)", async () => {
-      await game.startBattle([Species.ABOMASNOW]);
+      await game.startBattle([SpeciesId.ABOMASNOW]);
 
       const pokemon = game.scene.getPlayerPokemon()!;
       pokemon.addTag(BattlerTagType.STOCKPILING);

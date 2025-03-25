@@ -1,4 +1,4 @@
-import type { Abilities } from "#enums/abilities";
+import type { AbilityId } from "#enums/ability-id";
 import type { ElementalType } from "#enums/elemental-type";
 import { isNullOrUndefined } from "#app/utils";
 import type { Nature } from "#enums/nature";
@@ -9,8 +9,8 @@ import type { Nature } from "#enums/nature";
  */
 export class CustomPokemonData {
   public spriteScale: number;
-  public ability: Abilities | -1;
-  public passive: Abilities | -1;
+  public ability: AbilityId | -1;
+  public passive: AbilityId | -1;
   public nature: Nature | -1;
   public types: ElementalType[];
 

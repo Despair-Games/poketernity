@@ -1,8 +1,8 @@
 import { BattlerIndex } from "#enums/battler-index";
 import { ElementalType } from "#enums/elemental-type";
-import { Abilities } from "#enums/abilities";
+import { AbilityId } from "#enums/ability-id";
 import { MoveId } from "#enums/move-id";
-import { Species } from "#enums/species";
+import { SpeciesId } from "#enums/species-id";
 import { GameManager } from "#test/test-utils/gameManager";
 import Phaser from "phaser";
 import { afterEach, beforeAll, beforeEach, describe, it, expect, vi } from "vitest";
@@ -26,16 +26,16 @@ describe("Moves - Tera Starstorm", () => {
     game.override
       .moveset([MoveId.TERA_STARSTORM, MoveId.SPLASH])
       .battleType("double")
-      .enemyAbility(Abilities.BALL_FETCH)
+      .enemyAbility(AbilityId.BALL_FETCH)
       .enemyMoveset(MoveId.SPLASH)
       .enemyLevel(30)
-      .enemySpecies(Species.MAGIKARP)
+      .enemySpecies(SpeciesId.MAGIKARP)
       .startingHeldItems([{ name: "TERA_SHARD", type: ElementalType.FIRE }]);
   });
 
   it("changes type to Stellar when used by Terapagos in its Stellar Form", async () => {
     game.override.battleType("single");
-    await game.classicMode.startBattle([Species.TERAPAGOS]);
+    await game.classicMode.startBattle([SpeciesId.TERAPAGOS]);
 
     const terapagos = game.scene.getPlayerPokemon()!;
 
@@ -49,7 +49,7 @@ describe("Moves - Tera Starstorm", () => {
   });
 
   it("targets both opponents in a double battle when used by Terapagos in its Stellar Form", async () => {
-    await game.classicMode.startBattle([Species.MAGIKARP, Species.TERAPAGOS]);
+    await game.classicMode.startBattle([SpeciesId.MAGIKARP, SpeciesId.TERAPAGOS]);
 
     game.move.select(MoveId.TERA_STARSTORM, 0, BattlerIndex.ENEMY);
     game.move.select(MoveId.TERA_STARSTORM, 1);
